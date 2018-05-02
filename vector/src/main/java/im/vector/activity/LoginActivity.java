@@ -83,6 +83,7 @@ import im.vector.UnrecognizedCertHandler;
 import im.vector.activity.util.RequestCodesKt;
 import im.vector.receiver.VectorRegistrationReceiver;
 import im.vector.receiver.VectorUniversalLinkReceiver;
+import im.vector.repositories.ServerUrlsRepository;
 import im.vector.services.EventStreamService;
 import im.vector.util.PhoneNumberUtils;
 
@@ -106,9 +107,6 @@ public class LoginActivity extends MXCActionBarActivity implements RegistrationM
     private static final int MODE_FORGOT_PASSWORD = 3;
     private static final int MODE_FORGOT_PASSWORD_WAITING_VALIDATION = 4;
     private static final int MODE_ACCOUNT_CREATION_THREE_PID = 5;
-
-    public static final String HOME_SERVER_URL_PREF = "home_server_url";
-    public static final String IDENTITY_SERVER_URL_PREF = "identity_server_url";
 
     // saved parameters index
 
@@ -436,9 +434,14 @@ public class LoginActivity extends MXCActionBarActivity implements RegistrationM
         if (null != savedInstanceState) {
             restoreSavedData(savedInstanceState);
         } else {
-            SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(LoginActivity.this);
-            mHomeServerText.setText(preferences.getString(HOME_SERVER_URL_PREF, getResources().getString(R.string.default_hs_server_url)));
-            mIdentityServerText.setText(preferences.getString(IDENTITY_SERVER_URL_PREF, getResources().getString(R.string.default_identity_server_url)));
+            mHomeServerText.setText(ServerUrlsRepository.INSTANCE.getLastHomeServerUrl(this));
+            mIdentityServerText.setText(ServerUrlsRepository.INSTANCE.getLastIdentityServerUrl(this));
+        }
+
+        // If home server url or identity server url are not the default ones, check the mUseCustomHomeServersCheckbox
+        if (!ServerUrlsRepository.INSTANCE.isDefaultHomeServerUrl(this, mHomeServerText.getText().toString())
+                || !ServerUrlsRepository.INSTANCE.isDefaultIdentityServerUrl(this, mIdentityServerText.getText().toString())) {
+            mUseCustomHomeServersCheckbox.setChecked(true);
         }
 
         mLoginButton.setOnClickListener(new View.OnClickListener() {
@@ -498,7 +501,7 @@ public class LoginActivity extends MXCActionBarActivity implements RegistrationM
             @Override
             public boolean onEditorAction(TextView view, int actionId, KeyEvent event) {
                 if (actionId == EditorInfo.IME_ACTION_DONE) {
-                    onIdentityserverUrlUpdate(true);
+                    onIdentityServerUrlUpdate(true);
                     return true;
                 }
 
@@ -510,7 +513,7 @@ public class LoginActivity extends MXCActionBarActivity implements RegistrationM
         mIdentityServerText.setOnFocusChangeListener(new View.OnFocusChangeListener() {
             public void onFocusChange(View v, boolean hasFocus) {
                 if (!hasFocus) {
-                    onIdentityserverUrlUpdate(true);
+                    onIdentityServerUrlUpdate(true);
                 }
             }
         });
@@ -533,7 +536,7 @@ public class LoginActivity extends MXCActionBarActivity implements RegistrationM
                         // reset the HS urls.
                         mHomeServerUrl = null;
                         mIdentityServerUrl = null;
-                        onIdentityserverUrlUpdate(false);
+                        onIdentityServerUrlUpdate(false);
                         onHomeServerUrlUpdate(false);
                         refreshDisplay();
                     }
@@ -565,11 +568,6 @@ public class LoginActivity extends MXCActionBarActivity implements RegistrationM
                 if (!TextUtils.equals(cleanedUrl, s.toString())) {
                     mHomeServerText.setText(cleanedUrl);
                     mHomeServerText.setSelection(cleanedUrl.length());
-                } else {
-                    SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(LoginActivity.this);
-                    SharedPreferences.Editor editor = preferences.edit();
-                    editor.putString(HOME_SERVER_URL_PREF, cleanedUrl);
-                    editor.apply();
                 }
             }
 
@@ -592,11 +590,6 @@ public class LoginActivity extends MXCActionBarActivity implements RegistrationM
                 if (!TextUtils.equals(cleanedUrl, s.toString())) {
                     mIdentityServerText.setText(cleanedUrl);
                     mIdentityServerText.setSelection(cleanedUrl.length());
-                } else {
-                    SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(LoginActivity.this);
-                    SharedPreferences.Editor editor = preferences.edit();
-                    editor.putString(IDENTITY_SERVER_URL_PREF, cleanedUrl);
-                    editor.apply();
                 }
             }
 
@@ -613,10 +606,9 @@ public class LoginActivity extends MXCActionBarActivity implements RegistrationM
     /**
      * The server URLs have been updated from a receiver
      */
-    public void onServerUrlsUpdate() {
-        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(LoginActivity.this);
-        mHomeServerText.setText(preferences.getString(HOME_SERVER_URL_PREF, getResources().getString(R.string.default_hs_server_url)));
-        mIdentityServerText.setText(preferences.getString(IDENTITY_SERVER_URL_PREF, getResources().getString(R.string.default_identity_server_url)));
+    public void onServerUrlsUpdateFromReferrer() {
+        mHomeServerText.setText(ServerUrlsRepository.INSTANCE.getLastHomeServerUrl(this));
+        mIdentityServerText.setText(ServerUrlsRepository.INSTANCE.getLastIdentityServerUrl(this));
 
         if (!mUseCustomHomeServersCheckbox.isChecked()) {
             mUseCustomHomeServersCheckbox.performClick();
@@ -627,7 +619,7 @@ public class LoginActivity extends MXCActionBarActivity implements RegistrationM
      * @return the home server Url according to custom HS checkbox
      */
     private String getHomeServerUrl() {
-        String url = PreferenceManager.getDefaultSharedPreferences(LoginActivity.this).getString(HOME_SERVER_URL_PREF, getResources().getString(R.string.default_hs_server_url));
+        String url = ServerUrlsRepository.INSTANCE.getDefaultHomeServerUrl(this);
 
         if (mUseCustomHomeServersCheckbox.isChecked()) {
             url = mHomeServerText.getText().toString().trim();
@@ -644,7 +636,7 @@ public class LoginActivity extends MXCActionBarActivity implements RegistrationM
      * @return the identity server URL according to custom HS checkbox
      */
     private String getIdentityServerUrl() {
-        String url = PreferenceManager.getDefaultSharedPreferences(LoginActivity.this).getString(IDENTITY_SERVER_URL_PREF, getResources().getString(R.string.default_identity_server_url));
+        String url = ServerUrlsRepository.INSTANCE.getDefaultIdentityServerUrl(this);
 
         if (mUseCustomHomeServersCheckbox.isChecked()) {
             url = mIdentityServerText.getText().toString().trim();
@@ -719,7 +711,7 @@ public class LoginActivity extends MXCActionBarActivity implements RegistrationM
      * @param checkFlowOnUpdate check the flow on IS update
      * @return true if the IS url has been updated
      */
-    private boolean onIdentityserverUrlUpdate(boolean checkFlowOnUpdate) {
+    private boolean onIdentityServerUrlUpdate(boolean checkFlowOnUpdate) {
         if (!TextUtils.equals(mIdentityServerUrl, getIdentityServerUrl())) {
             mIdentityServerUrl = getIdentityServerUrl();
             mRegistrationResponse = null;
@@ -850,6 +842,15 @@ public class LoginActivity extends MXCActionBarActivity implements RegistrationM
         }
 
         startActivity(intent);
+    }
+
+    private void saveServerUrlsIfCustomValuesHasBeenEntered() {
+        // Save urls if not using default
+        if (mUseCustomHomeServersCheckbox.isChecked()) {
+            ServerUrlsRepository.INSTANCE.saveServerUrls(this,
+                    mHomeServerText.getText().toString().trim(),
+                    mIdentityServerText.getText().toString().trim());
+        }
     }
 
     /**
@@ -1526,7 +1527,7 @@ public class LoginActivity extends MXCActionBarActivity implements RegistrationM
      * Dismiss the keyboard and save the updated values
      */
     private void onClick() {
-        onIdentityserverUrlUpdate(false);
+        onIdentityServerUrlUpdate(false);
         onHomeServerUrlUpdate(false);
         checkFlows();
 
@@ -1538,7 +1539,7 @@ public class LoginActivity extends MXCActionBarActivity implements RegistrationM
      * The user clicks on the login button
      */
     private void onLoginClick() {
-        if (onHomeServerUrlUpdate(true) || onIdentityserverUrlUpdate(true)) {
+        if (onHomeServerUrlUpdate(true) || onIdentityServerUrlUpdate(true)) {
             mIsPendingLogin = true;
             Log.d(LOG_TAG, "## onLoginClick() : The user taps on login but the IS/HS did not loos the focus");
             return;
@@ -1619,6 +1620,9 @@ public class LoginActivity extends MXCActionBarActivity implements RegistrationM
                 @Override
                 public void onSuccess(HomeServerConnectionConfig c) {
                     enableLoadingScreen(false);
+
+                    saveServerUrlsIfCustomValuesHasBeenEntered();
+
                     goToSplash();
                     LoginActivity.this.finish();
                 }
@@ -1663,7 +1667,7 @@ public class LoginActivity extends MXCActionBarActivity implements RegistrationM
     /**
      * Check the homeserver flows.
      * i.e checks if this login page is enough to perform a registration.
-     * else switcth to a fallback page
+     * else switch to a fallback page
      */
     private void checkLoginFlows() {
         // check only login flows
@@ -2051,6 +2055,9 @@ public class LoginActivity extends MXCActionBarActivity implements RegistrationM
                 // let's go...
                 MXSession session = Matrix.getInstance(getApplicationContext()).createSession(hsConfig);
                 Matrix.getInstance(getApplicationContext()).addSession(session);
+
+                saveServerUrlsIfCustomValuesHasBeenEntered();
+
                 goToSplash();
                 finish();
             } else if ((resultCode == RESULT_CANCELED) && (RequestCodesKt.FALLBACK_LOGIN_ACTIVITY_REQUEST_CODE == requestCode)) {
@@ -2063,10 +2070,10 @@ public class LoginActivity extends MXCActionBarActivity implements RegistrationM
     }
 
     /*
-    * *********************************************************************************************
-    * Account creation - Threepid
-    * *********************************************************************************************
-    */
+     * *********************************************************************************************
+     * Account creation - Threepid
+     * *********************************************************************************************
+     */
 
     /**
      * Init the view asking for email and/or phone number depending on supported registration flows
@@ -2281,10 +2288,10 @@ public class LoginActivity extends MXCActionBarActivity implements RegistrationM
     }
 
     /*
-    * *********************************************************************************************
-    * Account creation - Listeners
-    * *********************************************************************************************
-    */
+     * *********************************************************************************************
+     * Account creation - Listeners
+     * *********************************************************************************************
+     */
 
     @Override
     public void onRegistrationSuccess(String warningMessage) {
@@ -2297,6 +2304,8 @@ public class LoginActivity extends MXCActionBarActivity implements RegistrationM
                     .setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
+                            saveServerUrlsIfCustomValuesHasBeenEntered();
+
                             goToSplash();
                             finish();
                         }
@@ -2329,6 +2338,8 @@ public class LoginActivity extends MXCActionBarActivity implements RegistrationM
                     onError(e.getMessage());
                 }
             });
+
+            saveServerUrlsIfCustomValuesHasBeenEntered();
 
             goToSplash();
             finish();
