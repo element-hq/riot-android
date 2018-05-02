@@ -38,7 +38,7 @@ import java.util.List;
 import java.util.Set;
 
 import im.vector.R;
-import im.vector.activity.LoginActivity;
+import im.vector.repositories.ServerUrlsRepository;
 
 public class PreferencesManager {
 
@@ -185,9 +185,9 @@ public class PreferencesManager {
     public static void clearPreferences(Context context) {
         Set<String> keysToKeep = new HashSet<>(mKeysToKeepAfterLogout);
 
-        // home server url
-        keysToKeep.add(LoginActivity.HOME_SERVER_URL_PREF);
-        keysToKeep.add(LoginActivity.IDENTITY_SERVER_URL_PREF);
+        // home server urls
+        keysToKeep.add(ServerUrlsRepository.HOME_SERVER_URL_PREF);
+        keysToKeep.add(ServerUrlsRepository.IDENTITY_SERVER_URL_PREF);
 
         // theme
         keysToKeep.add(ThemeUtils.APPLICATION_THEME_KEY);

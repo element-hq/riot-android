@@ -50,7 +50,7 @@ import im.vector.R;
 /**
  * LockScreenActivity is displayed within the notification to send a message without opening the application.
  */
-public class LockScreenActivity extends RiotBaseActivity { // do NOT extend from UC*Activity, we do not want to login on this screen!
+public class LockScreenActivity extends RiotAppCompatActivity { // do NOT extend from UC*Activity, we do not want to login on this screen!
     private static final String LOG_TAG = LockScreenActivity.class.getSimpleName();
 
     public static final String EXTRA_SENDER_NAME = "extra_sender_name";
