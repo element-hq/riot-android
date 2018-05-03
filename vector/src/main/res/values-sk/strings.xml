@@ -928,4 +928,23 @@ Neznáme zariadenia:</string>
     <string name="notice_avatar">Obrázok oznámenia</string>
     <string name="avatar">Obrázok</string>
 
-</resources>
+<string name="settings_notification_privacy">Súkromie oznámení</string>
+    <string name="settings_notification_privacy_warning">Riot.im ostane spustený na pozadí, aby bol obsah správ oznámení zachovaný v súkromí. Zmenou tejto voľby môžete predlžiť výdrž pri napájaní z batérie.</string>
+    <string name="settings_notification_privacy_power_saving">Nastavenia šetrenia energie</string>
+    <string name="settings_notification_privacy_low_detail">Stručné oznámenia</string>
+    <string name="settings_notification_privacy_reduced">Nižšia úroveň súkromia</string>
+    <string name="settings_notification_privacy_normal">Normálne</string>
+    <string name="settings_notification_privacy_need_permission">Aplikácia vyžaduje povolenie bežať na pozadí</string>
+    <string name="settings_notification_privacy_no_permission">Aplikácia <b>ne</b>vyžaduje povolenie bežať na pozadí</string>
+    <string name="settings_notification_privacy_gcm">• Oznámenia sú zasielané prostredníctvom cloudových služieb Google</string>
+    <string name="settings_notification_privacy_metadata">• Oznámenia neobsahujú text správy, len meta údaje</string>
+    <string name="settings_notification_privacy_secure_message_content">• Obsah správy oznámení je <b>bezpečne prevzatý priamo z domovského servera Matrix</b></string>
+    <string name="settings_notification_privacy_nosecure_message_content">• Oznámenia obsahujú <b>meta údaje aj obsah správy</b></string>
+    <string name="settings_notification_privacy_message_content_not_shown">• Súčasťou oznámení <b>nebude zobrazený obsah správ</b></string>
+
+    <string name="startup_notification_privacy_title">Súkromie oznámení</string>
+    <string name="startup_notification_privacy_message">Riot dokáže ostať spustený na pozadí bezpečne v súkromí spravovať vaše oznámenia (môže to mať vplyv na spotrebu energie).</string>
+    <string name="startup_notification_privacy_button_grant">Potvrdiť</string>
+    <string name="startup_notification_privacy_button_other">Vyberte inú voľbu</string>
+
+    </resources>
