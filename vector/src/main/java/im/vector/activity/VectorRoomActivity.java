@@ -1206,11 +1206,6 @@ public class VectorRoomActivity extends MXCActionBarActivity implements MatrixMe
         final VectorAutoCompleteTextView editText = findViewById (R.id.editText_messageBox);
         final ImageView emojiButton = findViewById (R.id.room_sending_message_emoji);
 
-        emojiButton.setColorFilter (
-            ContextCompat.getColor (this, R.color.emoji_icons)
-            , PorterDuff.Mode.SRC_IN
-        );
-
         ViewGroup rootView = findViewById (R.id.activity_vector_room_root_view);
         emojiButton.setOnClickListener (
             new View.OnClickListener () {
