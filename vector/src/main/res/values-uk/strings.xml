@@ -271,7 +271,9 @@
     <string name="permissions_rationale_msg_record_audio_explanation">\n\nБудь ласка, надайте його у наступному виринаючому вікні, щоб мати змогу здійснити дзвінок.</string>
     <string name="permissions_rationale_msg_camera_and_audio">Для здійснення відеодзвінків потрібен доступ до камери та мікрофону.\n\nБудь ласка, надайте його у наступних виринаючих вікнах, щоб мати змогу їх здійснити.</string>
     <string name="permissions_rationale_msg_contacts">Riot потребує доступу до ваших контактів, щоб знайти інших користувачів Matrix за їх email та номерами телефонів.\n\nБудь ласка, надайте його у наступному виринаючому діалозі, щоб знати, які з контактів теж використовують Riot.</string>
-    <string name="permissions_msg_contacts_warning_other_androids">Riot потребує доступу до ваших контактів, щоб знайти інших користувачів Matrix за їх email та номерами телефонів.\n\nНадати Riot доступ до контактів?</string>
+    <string name="permissions_msg_contacts_warning_other_androids">Riot потребує доступу до ваших контактів, щоб знайти інших користувачів Matrix по email чи за номерами телефонів.
+
+Надати Riot доступ до ваших контактів?</string>
 
     <string name="permissions_action_not_performed_missing_permissions">Вибачте.. Дію не виконано через нестачу дозволів</string>
 
@@ -789,4 +791,45 @@
     <string name="command_error">Помилка виконання команди</string>
     <string name="unrecognized_command">Команду %s не розпізнано</string>
 
-</resources>
+<string name="title_activity_group_details">Відомості про спільноу</string>
+
+    <string name="loading">Завантаження...</string>
+
+    <string name="action_exit">Вихід</string>
+    <string name="actions">Дії</string>
+    <string name="bottom_action_groups">Спільноти</string>
+
+    <string name="home_filter_placeholder_groups">Пошук спільнот</string>
+
+    <string name="groups_invite_header">Запросити</string>
+    <string name="groups_header">Спільноти</string>
+    <string name="no_group_placeholder">Нема груп</string>
+
+    <string name="send_bug_report_rage_shake">"Струсити  пристрій, щоб повідомити про помилку"</string>
+
+    <string name="start_new_chat_prompt_msg">Ви дійсно хочете почати новий чат з %s?</string>
+    <string name="start_voice_call_prompt_msg">Ви впевнені, що бажаєте почати голосовий виклик?</string>
+    <string name="start_video_call_prompt_msg">Ви впевнені, що бажаєте почати відео виклик?</string>
+
+    <string name="groups_list">Список груп</string>
+
+    <plurals name="membership_changes">
+	<item quantity="one">"1 зміна  членства"</item>
+	<item quantity="few">%d зміни членства</item>
+	<item quantity="many">%d змін членства</item>
+	<item quantity="other"/>
+</plurals>
+
+    <string name="list_members">Список учасників</string>
+    <string name="open_chat_header">Відкрити заголовок</string>
+    <string name="room_sync_in_progress">Синхронізація...</string>
+    <string name="room_displayname_many_members">%1$s та %2$s</string>
+    <string name="room_settings_all_messages_noisy">Всі повідомлення (гучно)</string>
+    <string name="room_settings_all_messages">Всі повідомлення</string>
+    <string name="room_settings_mention_only">Тільки упоминания</string>
+    <string name="room_settings_mute">Без звука</string>
+    <string name="room_settings_add_homescreen_shortcut">Добавити ярлик на головний екран</string>
+
+    <string name="settings_notification_privacy">Конфіденційність повідомлення</string>
+    <string name="settings_notification_privacy_normal">Нормальний</string>
+    </resources>
