@@ -21,6 +21,7 @@ import android.content.Context;
 import android.support.v4.content.ContextCompat;
 import android.text.SpannableString;
 import android.text.TextUtils;
+import android.text.style.BackgroundColorSpan;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
@@ -67,7 +68,8 @@ public class VectorSearchMessagesListAdapter extends VectorMessagesAdapter {
 
         setNotifyOnChange(true);
         mDisplayRoomName = displayRoomName;
-        mSearchHighlightMessageTextColor = ContextCompat.getColor(context, R.color.vector_green_color);
+
+        mBackgroundColorSpan = new BackgroundColorSpan(ContextCompat.getColor(mContext, R.color.vector_green_color));
     }
 
     /**
@@ -133,7 +135,10 @@ public class VectorSearchMessagesListAdapter extends VectorMessagesAdapter {
             }
 
             try {
-                highlightPattern(bodyTextView, new SpannableString(text), mPattern);
+                CharSequence strBuilder = mHelper.highlightPattern(new SpannableString(text), null, mPattern, mBackgroundColorSpan, false);
+
+                bodyTextView.setText(strBuilder);
+                mHelper.applyLinkMovementMethod(bodyTextView);
             } catch (Exception e) {
                 // an exception might be triggered with HTML content
                 // Indeed, the formatting can fail because of the single line display.

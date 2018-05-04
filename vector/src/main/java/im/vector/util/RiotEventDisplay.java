@@ -22,6 +22,7 @@ import android.text.TextUtils;
 import com.google.gson.JsonObject;
 
 import org.matrix.androidsdk.data.RoomState;
+import org.matrix.androidsdk.interfaces.HtmlConverter;
 import org.matrix.androidsdk.rest.model.Event;
 import org.matrix.androidsdk.rest.model.EventContent;
 
@@ -44,6 +45,11 @@ public class RiotEventDisplay extends EventDisplay {
     private static final String LOG_TAG = RiotEventDisplay.class.getSimpleName();
 
     private static final Map<String, Event> mClosingWidgetEventByStateKey = new HashMap<>();
+
+    // constructor
+    public RiotEventDisplay(Context context, Event event, RoomState roomState, HtmlConverter htmlConverter) {
+        super(context, event, roomState, htmlConverter);
+    }
 
     // constructor
     public RiotEventDisplay(Context context, Event event, RoomState roomState) {

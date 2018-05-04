@@ -19,6 +19,7 @@ package im.vector.adapters;
 import android.content.Context;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
+import android.support.annotation.Nullable;
 import android.text.Html;
 import android.text.Spannable;
 import android.text.SpannableStringBuilder;
@@ -616,7 +617,7 @@ class VectorMessagesAdapterHelper {
     /**
      * Show the sticker description view
      *
-     * @param view base view
+     * @param view           base view
      * @param stickerMessage the sticker message
      */
     public void showStickerDescription(View view, StickerMessage stickerMessage) {
@@ -884,8 +885,15 @@ class VectorMessagesAdapterHelper {
         }
 
         textView.setBackgroundColor(ThemeUtils.getColor(mContext, R.attr.markdown_block_background_color));
+    }
 
-        if (null != mLinkMovementMethod) {
+    /**
+     * Apply link movement method to the TextView if not null
+     *
+     * @param textView
+     */
+    void applyLinkMovementMethod(@Nullable final TextView textView) {
+        if (textView != null && mLinkMovementMethod != null) {
             textView.setMovementMethod(mLinkMovementMethod);
         }
     }
@@ -893,19 +901,14 @@ class VectorMessagesAdapterHelper {
     /**
      * Highlight the pattern in the text.
      *
-     * @param textView           the textview
      * @param text               the text to display
      * @param htmlFormattedText  the html formatted text
      * @param pattern            the  pattern
      * @param highLightTextStyle the highlight text style
      * @param isHighlighted      true when the message is highlighted
+     * @return TODO
      */
-    void highlightPattern(TextView textView, Spannable text, String htmlFormattedText, String pattern, CharacterStyle highLightTextStyle, boolean isHighlighted) {
-        // sanity check
-        if (null == textView) {
-            return;
-        }
-
+    CharSequence highlightPattern(Spannable text, String htmlFormattedText, String pattern, CharacterStyle highLightTextStyle, boolean isHighlighted) {
         if (!TextUtils.isEmpty(pattern) && !TextUtils.isEmpty(text) && (text.length() >= pattern.length())) {
 
             String lowerText = text.toString().toLowerCase(VectorApp.getApplicationLocale());
@@ -970,11 +973,8 @@ class VectorMessagesAdapterHelper {
         }
 
         MatrixURLSpan.refreshMatrixSpans(strBuilder, mEventsListener);
-        textView.setText(strBuilder);
 
-        if (null != mLinkMovementMethod) {
-            textView.setMovementMethod(mLinkMovementMethod);
-        }
+        return strBuilder;
     }
 
     /**
@@ -1119,10 +1119,10 @@ class VectorMessagesAdapterHelper {
     }
 
     /*
-  * *********************************************************************************************
-  *  Url preview managements
-  * *********************************************************************************************
-  */
+     * *********************************************************************************************
+     *  Url preview managements
+     * *********************************************************************************************
+     */
     private final Map<String, List<String>> mExtractedUrls = new HashMap<>();
     private final Map<String, URLPreview> mUrlsPreview = new HashMap<>();
     private final Set<String> mPendingUrls = new HashSet<>();
