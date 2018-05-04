@@ -58,6 +58,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.bumptech.glide.Glide;
 import com.google.i18n.phonenumbers.NumberParseException;
 import com.google.i18n.phonenumbers.PhoneNumberUtil;
 import com.google.i18n.phonenumbers.Phonenumber;
@@ -454,6 +455,7 @@ public class VectorSettingsPreferencesFragment extends PreferenceFragment implem
                         @Override
                         protected Void doInBackground(Void... params) {
                             mSession.getMediasCache().clear();
+                            Glide.get(getActivity()).clearDiskCache();
                             return null;
                         }
 
