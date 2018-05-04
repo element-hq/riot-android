@@ -902,13 +902,12 @@ class VectorMessagesAdapterHelper {
      * Highlight the pattern in the text.
      *
      * @param text               the text to display
-     * @param htmlFormattedText  the html formatted text
      * @param pattern            the  pattern
      * @param highLightTextStyle the highlight text style
      * @param isHighlighted      true when the message is highlighted
-     * @return TODO
+     * @return CharSequence of the text with highlighted pattern
      */
-    CharSequence highlightPattern(Spannable text, String htmlFormattedText, String pattern, CharacterStyle highLightTextStyle, boolean isHighlighted) {
+    CharSequence highlightPattern(Spannable text, String pattern, CharacterStyle highLightTextStyle, boolean isHighlighted) {
         if (!TextUtils.isEmpty(pattern) && !TextUtils.isEmpty(text) && (text.length() >= pattern.length())) {
 
             String lowerText = text.toString().toLowerCase(VectorApp.getApplicationLocale());
@@ -925,6 +924,22 @@ class VectorMessagesAdapterHelper {
             }
         }
 
+        SpannableStringBuilder strBuilder = new SpannableStringBuilder(text);
+        URLSpan[] urls = strBuilder.getSpans(0, text.length(), URLSpan.class);
+
+        if ((null != urls) && (urls.length > 0)) {
+            for (URLSpan span : urls) {
+                makeLinkClickable(strBuilder, span, isHighlighted);
+            }
+        }
+
+        MatrixURLSpan.refreshMatrixSpans(strBuilder, mEventsListener);
+
+        return strBuilder;
+    }
+
+
+    CharSequence convertToHtml(String htmlFormattedText) {
         final HtmlTagHandler htmlTagHandler = new HtmlTagHandler();
         htmlTagHandler.mContext = mContext;
         htmlTagHandler.setCodeBlockBackgroundColor(ThemeUtils.getColor(mContext, R.attr.markdown_block_background_color));
@@ -950,7 +965,8 @@ class VectorMessagesAdapterHelper {
                     ;
 
                 // search latest non \n character
-                for (; (markEnd >= 0) && ('\n' == sequence.charAt(markEnd)); markEnd--) ;
+                for (; (markEnd >= 0) && ('\n' == sequence.charAt(markEnd)); markEnd--)
+                    ;
 
                 // empty string ?
                 if (markEnd < markStart) {
@@ -960,21 +976,10 @@ class VectorMessagesAdapterHelper {
                 }
             }
         } else {
-            sequence = text;
+            sequence = "";
         }
 
-        SpannableStringBuilder strBuilder = new SpannableStringBuilder(sequence);
-        URLSpan[] urls = strBuilder.getSpans(0, text.length(), URLSpan.class);
-
-        if ((null != urls) && (urls.length > 0)) {
-            for (URLSpan span : urls) {
-                makeLinkClickable(strBuilder, span, isHighlighted);
-            }
-        }
-
-        MatrixURLSpan.refreshMatrixSpans(strBuilder, mEventsListener);
-
-        return strBuilder;
+        return sequence;
     }
 
     /**
@@ -1047,6 +1052,7 @@ class VectorMessagesAdapterHelper {
      * @param html the html to sanitize
      * @return the sanitised HTML
      */
+    @Nullable
     String getSanitisedHtml(final String html) {
         // sanity checks
         if (TextUtils.isEmpty(html)) {

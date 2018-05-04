@@ -135,7 +135,7 @@ public class VectorSearchMessagesListAdapter extends VectorMessagesAdapter {
             }
 
             try {
-                CharSequence strBuilder = mHelper.highlightPattern(new SpannableString(text), null, mPattern, mBackgroundColorSpan, false);
+                CharSequence strBuilder = mHelper.highlightPattern(new SpannableString(text), mPattern, mBackgroundColorSpan, false);
 
                 bodyTextView.setText(strBuilder);
                 mHelper.applyLinkMovementMethod(bodyTextView);
