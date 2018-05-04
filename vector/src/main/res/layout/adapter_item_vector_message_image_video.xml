@@ -82,7 +82,7 @@
                         <RelativeLayout
                             android:layout_gravity="right"
                             android:id="@+id/messagesAdapter_image_layout"
-                            android:layout_width="wrap_content"
+                            android:layout_width="match_parent"
                             android:layout_height="wrap_content">
 
                             <!-- the media -->

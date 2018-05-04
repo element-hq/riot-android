@@ -286,6 +286,7 @@ class VectorMessagesAdapterMediasHelper {
             Glide.with(mContext)
                     .load(downloadId)
                     .apply(new RequestOptions()
+                            .placeholder(R.drawable.sticker_placeholder)
                             .override(maxImageWidth, maxImageHeight)
                             .fitCenter()
                     )
