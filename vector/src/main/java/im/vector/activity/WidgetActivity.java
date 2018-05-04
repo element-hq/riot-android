@@ -67,20 +67,17 @@ public class WidgetActivity extends RiotAppCompatActivity {
     // the room
     private Room mRoom;
 
-    @BindView(R.id.back_icon_container)
+    @BindView(R.id.widget_back_icon)
     View mBackToAppIcon;
 
-    @BindView(R.id.close_widget_icon_container)
+    @BindView(R.id.widget_close_icon)
     View mCloseWidgetIcon;
 
     @BindView(R.id.widget_web_view)
     WebView mWidgetWebView;
 
-    @BindView(R.id.widget_type_text_view)
+    @BindView(R.id.widget_title)
     TextView mWidgetTypeTextView;
-
-    @BindView(R.id.widget_progress_layout)
-    View waitingView;
 
     /**
      * Widget events listener
@@ -103,6 +100,8 @@ public class WidgetActivity extends RiotAppCompatActivity {
 
         setContentView(R.layout.activity_widget);
         ButterKnife.bind(this);
+
+        setWaitingView(findViewById(R.id.widget_progress_layout));
 
         mWidget = (Widget) getIntent().getSerializableExtra(EXTRA_WIDGET_ID);
 
