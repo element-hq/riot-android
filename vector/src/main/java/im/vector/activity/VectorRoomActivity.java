@@ -215,7 +215,6 @@ public class VectorRoomActivity extends MXCActionBarActivity implements MatrixMe
     private MXLatestChatMessageCache mLatestChatMessageCache;
 
     private View mSendingMessagesLayout;
-    private View mSendButtonLayout;
     private ImageView mSendImageView;
     private VectorAutoCompleteTextView mEditText;
     private ImageView mAvatarImageView;
@@ -694,8 +693,7 @@ public class VectorRoomActivity extends MXCActionBarActivity implements MatrixMe
 
         mSendingMessagesLayout = findViewById(R.id.room_sending_message_layout);
         mSendImageView = findViewById(R.id.room_send_image_view);
-        mSendButtonLayout = findViewById(R.id.room_send_image_view);
-        mSendButtonLayout.setOnClickListener(new View.OnClickListener() {
+        mSendImageView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 if (!TextUtils.isEmpty(mEditText.getText())) {
@@ -903,8 +901,8 @@ public class VectorRoomActivity extends MXCActionBarActivity implements MatrixMe
                     mStopCallLayout.performClick();
                 } else if (mStartCallLayout.getVisibility() == View.VISIBLE) {
                     mStartCallLayout.performClick();
-                } else if (mSendButtonLayout.getVisibility() == View.VISIBLE) {
-                    mSendButtonLayout.performClick();
+                } else if (mSendImageView.getVisibility() == View.VISIBLE) {
+                    mSendImageView.performClick();
                 }
             }
         });
@@ -1931,7 +1929,7 @@ public class VectorRoomActivity extends MXCActionBarActivity implements MatrixMe
 
         // ensure that a message is not sent twice
         // markdownToHtml seems being slow in some cases
-        mSendButtonLayout.setEnabled(false);
+        mSendImageView.setEnabled(false);
         mIsMarkDowning = true;
 
         VectorApp.markdownToHtml(mEditText.getText().toString().trim(), new VectorMarkdownParser.IVectorMarkdownParserListener() {
@@ -1940,7 +1938,7 @@ public class VectorRoomActivity extends MXCActionBarActivity implements MatrixMe
                 VectorRoomActivity.this.runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
-                        mSendButtonLayout.setEnabled(true);
+                        mSendImageView.setEnabled(true);
                         mIsMarkDowning = false;
                         enableActionBarHeader(HIDE_ACTION_BAR_HEADER);
                         sendMessage(text, TextUtils.equals(text, HTMLText) ? null : HTMLText, Message.FORMAT_MATRIX_HTML);
