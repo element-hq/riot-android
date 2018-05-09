@@ -35,6 +35,7 @@ import android.webkit.WebSettings
 import android.webkit.WebView
 import android.webkit.WebViewClient
 import android.widget.TextView
+import androidx.core.view.isInvisible
 import androidx.core.view.isVisible
 
 import org.matrix.androidsdk.MXSession
@@ -224,9 +225,8 @@ class WidgetActivity : RiotAppCompatActivity() {
         val canCloseWidget = null == WidgetsManager.getSharedInstance().checkWidgetPermission(mSession, mRoom)
 
         // close widget button
-        mCloseWidgetIcon.isVisible = canCloseWidget
+        mCloseWidgetIcon.isInvisible = !canCloseWidget
     }
-
 
     /**
      * Load the widget call
