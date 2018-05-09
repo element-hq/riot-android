@@ -85,6 +85,10 @@ class WidgetActivity : RiotAppCompatActivity() {
         }
     }
 
+    /** =========================================================================================
+     * LIFE CYCLE
+     * ========================================================================================== */
+
     @SuppressLint("NewApi")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -121,18 +125,48 @@ class WidgetActivity : RiotAppCompatActivity() {
 
         mWidgetTypeTextView.text = mWidget!!.humanName
 
-        configureWebViewAndLoadURL()
+        configureWebView()
+
+        loadUrl()
     }
 
-    /**
-     * Refresh the status bar
-     */
-    private fun refreshStatusBar() {
-        val canCloseWidget = null == WidgetsManager.getSharedInstance().checkWidgetPermission(mSession, mRoom)
+    override fun onDestroy() {
+        mWidgetWebView.let {
+            (it.parent as ViewGroup).removeView(it)
+            it.removeAllViews()
+            it.destroy()
+        }
 
-        // close widget button
-        mCloseWidgetIcon.isVisible = canCloseWidget
+        super.onDestroy()
     }
+
+    override fun onResume() {
+        super.onResume()
+
+        WidgetsManager.addListener(mWidgetListener)
+
+        mWidgetWebView.let {
+            it.resumeTimers()
+            it.onResume()
+        }
+
+        refreshStatusBar()
+    }
+
+    override fun onPause() {
+        super.onPause()
+
+        mWidgetWebView.let {
+            it.pauseTimers()
+            it.onPause()
+        }
+
+        WidgetsManager.removeListener(mWidgetListener)
+    }
+
+    /** =========================================================================================
+     * UI EVENTS
+     * ========================================================================================== */
 
     @OnClick(R.id.widget_close_icon)
     internal fun onCloseClick() {
@@ -179,11 +213,26 @@ class WidgetActivity : RiotAppCompatActivity() {
         }
     }
 
+    /** =========================================================================================
+     * PRIVATE
+     * ========================================================================================== */
+
+    /**
+     * Refresh the status bar
+     */
+    private fun refreshStatusBar() {
+        val canCloseWidget = null == WidgetsManager.getSharedInstance().checkWidgetPermission(mSession, mRoom)
+
+        // close widget button
+        mCloseWidgetIcon.isVisible = canCloseWidget
+    }
+
+
     /**
      * Load the widget call
      */
     @SuppressLint("NewApi")
-    private fun configureWebViewAndLoadURL() {
+    private fun configureWebView() {
         mWidgetWebView.let {
             // xml value seems ignored
             it.setBackgroundColor(0)
@@ -238,7 +287,9 @@ class WidgetActivity : RiotAppCompatActivity() {
                 cookieManager.setAcceptThirdPartyCookies(mWidgetWebView, true)
             }
         }
+    }
 
+    private fun loadUrl() {
         showWaitingView()
         WidgetsManager.getFormattedWidgetUrl(this, mWidget!!, object : ApiCallback<String> {
             override fun onSuccess(url: String) {
@@ -266,39 +317,9 @@ class WidgetActivity : RiotAppCompatActivity() {
         })
     }
 
-    override fun onPause() {
-        super.onPause()
-
-        mWidgetWebView.let {
-            it.pauseTimers()
-            it.onPause()
-        }
-
-        WidgetsManager.removeListener(mWidgetListener)
-    }
-
-    override fun onResume() {
-        super.onResume()
-
-        WidgetsManager.addListener(mWidgetListener)
-
-        mWidgetWebView.let {
-            it.resumeTimers()
-            it.onResume()
-        }
-
-        refreshStatusBar()
-    }
-
-    override fun onDestroy() {
-        mWidgetWebView.let {
-            (it.parent as ViewGroup).removeView(it)
-            it.removeAllViews()
-            it.destroy()
-        }
-
-        super.onDestroy()
-    }
+    /** =========================================================================================
+     * companion
+     * ========================================================================================== */
 
     companion object {
         private val LOG_TAG = WidgetActivity::class.java.simpleName
