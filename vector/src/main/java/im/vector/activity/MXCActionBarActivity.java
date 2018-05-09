@@ -1,5 +1,6 @@
 /*
  * Copyright 2014 OpenMarket Ltd
+ * Copyright 2018 New Vector Ltd
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -39,7 +40,7 @@ import im.vector.VectorApp;
 /**
  * extends ActionBarActivity to manage the rageshake
  */
-public class MXCActionBarActivity extends RiotAppCompatActivity {
+public abstract class MXCActionBarActivity extends RiotAppCompatActivity {
     public static final String EXTRA_MATRIX_ID = "MXCActionBarActivity.EXTRA_MATRIX_ID";
 
     MXSession mSession = null;

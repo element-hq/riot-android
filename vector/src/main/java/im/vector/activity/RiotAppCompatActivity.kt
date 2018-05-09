@@ -18,10 +18,14 @@
 package im.vector.activity
 
 import android.content.Context
+import android.os.Bundle
 import android.support.annotation.CallSuper
+import android.support.annotation.LayoutRes
 import android.support.v7.app.AppCompatActivity
 import android.view.View
 import androidx.core.view.isVisible
+import butterknife.ButterKnife
+import butterknife.Unbinder
 
 import im.vector.VectorApp
 import org.matrix.androidsdk.util.Log
@@ -31,8 +35,41 @@ import org.matrix.androidsdk.util.Log
  */
 abstract class RiotAppCompatActivity : AppCompatActivity() {
 
+    /** =========================================================================================
+     * DATA
+     * ========================================================================================== */
+
+    private var unBinder: Unbinder? = null
+
+    private var savedInstanceState: Bundle? = null
+
+    /** =========================================================================================
+     * LIFE CYCLE
+     * ========================================================================================== */
+
     override fun attachBaseContext(base: Context) {
         super.attachBaseContext(VectorApp.getLocalisedContext(base))
+    }
+
+    final override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+
+        doBeforeSetContentView()
+
+        setContentView(getLayoutRes())
+
+        unBinder = ButterKnife.bind(this)
+
+        this.savedInstanceState = savedInstanceState
+
+        initUiAndData()
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+
+        unBinder?.unbind()
+        unBinder = null
     }
 
     @CallSuper
@@ -54,7 +91,22 @@ abstract class RiotAppCompatActivity : AppCompatActivity() {
         }
     }
 
+    /** =========================================================================================
+     * ABSTRACT METHODS
+     * ========================================================================================== */
+
+    @LayoutRes
+    abstract fun getLayoutRes(): Int
+
+    /** =========================================================================================
+     * OPEN METHODS
+     * ========================================================================================== */
+
     open fun displayInFullscreen() = false
+
+    open fun doBeforeSetContentView() = Unit
+
+    open fun initUiAndData() = Unit
 
     //==============================================================================================
     // Handle loading view (also called waiting view or spinner view)
@@ -82,6 +134,31 @@ abstract class RiotAppCompatActivity : AppCompatActivity() {
     fun hideWaitingView() {
         waitingView?.isVisible = false
     }
+
+    /** =========================================================================================
+     * PROTECTED METHODS
+     * ========================================================================================== */
+
+    /**
+     * Get the saved instance state.
+     * Ensure {@link isFirstCreation()} returns false before calling this
+     *
+     * @return
+     */
+    protected fun getSavedInstanceState(): Bundle {
+        return savedInstanceState!!
+    }
+
+    /**
+     * Is first creation
+     *
+     * @return true if Activity is created for the first time (and not restored by the system)
+     */
+    protected fun isFirstCreation() = savedInstanceState == null
+
+    /** =========================================================================================
+     * PRIVATE METHODS
+     * ========================================================================================== */
 
     /**
      * Force to render the activity in fullscreen

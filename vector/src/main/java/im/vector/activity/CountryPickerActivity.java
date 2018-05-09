@@ -1,5 +1,6 @@
 /*
  * Copyright 2017 Vector Creations Ltd
+ * Copyright 2018 New Vector Ltd
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -19,7 +20,6 @@ package im.vector.activity;
 import android.app.SearchManager;
 import android.content.Context;
 import android.content.Intent;
-import android.os.Bundle;
 import android.support.v4.view.MenuItemCompat;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -69,12 +69,14 @@ public class CountryPickerActivity extends RiotAppCompatActivity implements Coun
     */
 
     @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
+    public int getLayoutRes() {
+        return R.layout.activity_country_picker;
+    }
 
+    @Override
+    public void initUiAndData() {
         // required to have the right translated title
         setTitle(R.string.settings_select_country);
-        setContentView(R.layout.activity_country_picker);
 
         Toolbar toolbar = findViewById(R.id.toolbar);
         if (toolbar != null) {

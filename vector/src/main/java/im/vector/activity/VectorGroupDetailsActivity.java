@@ -133,9 +133,12 @@ public class VectorGroupDetailsActivity extends MXCActionBarActivity {
     };
 
     @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
+    public int getLayoutRes() {
+        return R.layout.activity_vector_group_details;
+    }
 
+    @Override
+    public void initUiAndData() {
         if (CommonActivityUtils.shouldRestartApp(this)) {
             Log.e(LOG_TAG, "Restart the application.");
             CommonActivityUtils.restartApp(this);
@@ -182,8 +185,6 @@ public class VectorGroupDetailsActivity extends MXCActionBarActivity {
             Log.d(LOG_TAG, "## onCreate() : displaying " + groupId);
         }
 
-        setContentView(R.layout.activity_vector_group_details);
-
         // UI widgets binding & init fields
         setWaitingView(findViewById(R.id.group_loading_layout));
 
@@ -207,7 +208,7 @@ public class VectorGroupDetailsActivity extends MXCActionBarActivity {
         if (intent.hasExtra(EXTRA_TAB_INDEX)) {
             mPager.setCurrentItem(getIntent().getIntExtra(EXTRA_TAB_INDEX, 0));
         } else {
-            mPager.setCurrentItem((null != savedInstanceState) ? savedInstanceState.getInt(EXTRA_TAB_INDEX, 0) : 0);
+            mPager.setCurrentItem(isFirstCreation() ? 0 : getSavedInstanceState().getInt(EXTRA_TAB_INDEX, 0));
         }
         layout.setupWithViewPager(mPager);
 

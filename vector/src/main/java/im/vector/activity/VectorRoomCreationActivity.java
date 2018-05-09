@@ -114,11 +114,12 @@ public class VectorRoomCreationActivity extends MXCActionBarActivity {
     private ArrayList<ParticipantAdapterItem> mParticipants = new ArrayList<>();
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
+    public int getLayoutRes() {
+        return R.layout.activity_vector_room_creation;
+    }
 
-        setContentView(R.layout.activity_vector_room_creation);
-
+    @Override
+    public void initUiAndData() {
         if (CommonActivityUtils.shouldRestartApp(this)) {
             Log.e(LOG_TAG, "onCreate : Restart the application.");
             CommonActivityUtils.restartApp(this);
@@ -141,9 +142,9 @@ public class VectorRoomCreationActivity extends MXCActionBarActivity {
         mAdapter = new VectorRoomCreationAdapter(this, R.layout.adapter_item_vector_creation_add_member, R.layout.adapter_item_vector_add_participants, mSession);
 
         // init the content
-        if ((null != savedInstanceState) && savedInstanceState.containsKey(PARTICIPANTS_LIST)) {
+        if (!isFirstCreation() && getSavedInstanceState().containsKey(PARTICIPANTS_LIST)) {
             mParticipants.clear();
-            mParticipants = new ArrayList<>((List<ParticipantAdapterItem>) savedInstanceState.getSerializable(PARTICIPANTS_LIST));
+            mParticipants = new ArrayList<>((List<ParticipantAdapterItem>) getSavedInstanceState().getSerializable(PARTICIPANTS_LIST));
         } else {
             mParticipants.add(new ParticipantAdapterItem(mSession.getMyUser()));
         }

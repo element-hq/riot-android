@@ -1,5 +1,6 @@
 /*
  * Copyright 2016 OpenMarket Ltd
+ * Copyright 2018 New Vector Ltd
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,11 +19,9 @@ package im.vector.activity;
 
 import android.content.Intent;
 import android.support.v4.app.FragmentManager;
-import android.os.Bundle;
-
-import org.matrix.androidsdk.util.Log;
 
 import org.matrix.androidsdk.MXSession;
+import org.matrix.androidsdk.util.Log;
 
 import im.vector.R;
 import im.vector.fragments.VectorPublicRoomsListFragment;
@@ -37,11 +36,13 @@ public class VectorPublicRoomsActivity extends MXCActionBarActivity {
     private static final String TAG_FRAGMENT_PUBLIC_ROOMS_LIST = "VectorPublicRoomsActivity.TAG_FRAGMENT_PUBLIC_ROOMS_LIST";
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
+    public int getLayoutRes() {
+        return R.layout.activity_vector_public_rooms;
+    }
 
+    @Override
+    public void initUiAndData() {
         setTitle(R.string.directory_title);
-        setContentView(R.layout.activity_vector_public_rooms);
 
         if (CommonActivityUtils.shouldRestartApp(this)) {
             CommonActivityUtils.restartApp(this);

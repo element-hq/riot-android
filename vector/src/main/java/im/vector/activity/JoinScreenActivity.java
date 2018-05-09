@@ -1,5 +1,6 @@
 /*
  * Copyright 2015 OpenMarket Ltd
+ * Copyright 2018 New Vector Ltd
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,17 +18,16 @@
 package im.vector.activity;
 
 import android.content.Intent;
-import android.os.Bundle;
 import android.text.TextUtils;
-
-import org.matrix.androidsdk.util.Log;
 
 import org.matrix.androidsdk.MXSession;
 import org.matrix.androidsdk.data.Room;
 import org.matrix.androidsdk.rest.callback.ApiCallback;
 import org.matrix.androidsdk.rest.model.MatrixError;
+import org.matrix.androidsdk.util.Log;
 
 import im.vector.Matrix;
+import im.vector.R;
 
 /**
  * JoinScreenActivity is a dummy activity to join / reject a room invitation
@@ -42,11 +42,13 @@ public class JoinScreenActivity extends RiotAppCompatActivity {
     // boolean : true to reject the room invitation
     public static final String EXTRA_REJECT = "EXTRA_REJECT";
 
+    @Override
+    public int getLayoutRes() {
+        return R.layout.activity_empty;
+    }
 
     @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-
+    public void initUiAndData() {
         // keep the theme ?
 
         Intent intent = getIntent();

@@ -1,5 +1,6 @@
 /*
  * Copyright 2015 OpenMarket Ltd
+ * Copyright 2018 New Vector Ltd
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -20,11 +21,7 @@ import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.net.http.SslError;
-import android.os.Bundle;
 import android.text.TextUtils;
-
-import org.matrix.androidsdk.util.Log;
-
 import android.view.KeyEvent;
 import android.webkit.SslErrorHandler;
 import android.webkit.ValueCallback;
@@ -35,10 +32,12 @@ import com.google.gson.Gson;
 import com.google.gson.internal.LinkedTreeMap;
 import com.google.gson.reflect.TypeToken;
 
-import im.vector.R;
+import org.matrix.androidsdk.util.Log;
 
 import java.net.URLDecoder;
 import java.util.HashMap;
+
+import im.vector.R;
 
 /**
  * FallbackLoginActivity is the fallback login activity
@@ -53,14 +52,16 @@ public class FallbackLoginActivity extends RiotAppCompatActivity {
     private String mHomeServerUrl = null;
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
+    public int getLayoutRes() {
+        return R.layout.activity_login_fallback;
+    }
 
+    @Override
+    public void initUiAndData() {
         setTitle(R.string.login);
-        setContentView(R.layout.activity_login_fallback);
+
         mWebView = findViewById(R.id.account_creation_webview);
         mWebView.getSettings().setJavaScriptEnabled(true);
-
 
         Intent intent = getIntent();
         mHomeServerUrl = "https://matrix.org/";

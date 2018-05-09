@@ -71,10 +71,13 @@ public class VectorUnifiedSearchActivity extends VectorBaseSearchActivity implem
     private int mPosition;
 
     @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
+    public int getLayoutRes() {
+        return R.layout.activity_vector_unified_search;
+    }
 
-        setContentView(R.layout.activity_vector_unified_search);
+    @Override
+    public void initUiAndData() {
+        super.initUiAndData();
 
         if (CommonActivityUtils.shouldRestartApp(this)) {
             Log.e(LOG_TAG, "Restart the application.");
@@ -143,12 +146,12 @@ public class VectorUnifiedSearchActivity extends VectorBaseSearchActivity implem
         if ((null != getIntent()) && getIntent().hasExtra(EXTRA_TAB_INDEX)) {
             mPosition = getIntent().getIntExtra(EXTRA_TAB_INDEX, 0);
         } else {
-            mPosition = (null != savedInstanceState) ? savedInstanceState.getInt(KEY_STATE_CURRENT_TAB_INDEX, 0) : 0;
+            mPosition = isFirstCreation() ? 0 : getSavedInstanceState().getInt(KEY_STATE_CURRENT_TAB_INDEX, 0);
         }
         mViewPager.setCurrentItem(mPosition);
 
         // restore the searched pattern
-        mPatternToSearchEditText.setText((null != savedInstanceState) ? savedInstanceState.getString(KEY_STATE_SEARCH_PATTERN, null) : null);
+        mPatternToSearchEditText.setText(isFirstCreation() ? null:  getSavedInstanceState().getString(KEY_STATE_SEARCH_PATTERN, null));
     }
 
     @Override

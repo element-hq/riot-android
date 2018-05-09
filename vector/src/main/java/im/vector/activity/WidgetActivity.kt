@@ -90,14 +90,10 @@ class WidgetActivity : RiotAppCompatActivity() {
      * LIFE CYCLE
      * ========================================================================================== */
 
+    override fun getLayoutRes() = R.layout.activity_widget
+
     @SuppressLint("NewApi")
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-
-        setContentView(R.layout.activity_widget)
-
-        ButterKnife.bind(this)
-
+    override fun initUiAndData() {
         waitingView = findViewById(R.id.widget_progress_layout)
 
         mWidget = intent.getSerializableExtra(EXTRA_WIDGET_ID) as Widget

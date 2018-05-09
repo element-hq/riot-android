@@ -1120,9 +1120,12 @@ public class VectorMemberDetailsActivity extends MXCActionBarActivity implements
     }
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
+    public int getLayoutRes() {
+        return R.layout.activity_member_details;
+    }
 
+    @Override
+    public void initUiAndData() {
         if (CommonActivityUtils.shouldRestartApp(this)) {
             Log.e(LOG_TAG, "Restart the application");
             CommonActivityUtils.restartApp(this);
@@ -1143,9 +1146,6 @@ public class VectorMemberDetailsActivity extends MXCActionBarActivity implements
         } else {
             // check if the user is a member of the room
             checkRoomMemberStatus();
-
-            // setup UI view and bind the widgets
-            setContentView(R.layout.activity_member_details);
 
             // use a toolbar instead of the actionbar
             // to be able to display a large header
@@ -1246,7 +1246,7 @@ public class VectorMemberDetailsActivity extends MXCActionBarActivity implements
             // update the UI
             updateUi();
 
-            if ((null != savedInstanceState) && savedInstanceState.getBoolean(AVATAR_FULLSCREEN_MODE, false)) {
+            if (!isFirstCreation() && getSavedInstanceState().getBoolean(AVATAR_FULLSCREEN_MODE, false)) {
                 displayFullScreenAvatar();
             }
         }

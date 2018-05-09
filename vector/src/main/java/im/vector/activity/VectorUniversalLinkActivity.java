@@ -1,5 +1,6 @@
 /*
  * Copyright 2016 OpenMarket Ltd
+ * Copyright 2018 New Vector Ltd
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -51,9 +52,13 @@ public class VectorUniversalLinkActivity extends RiotAppCompatActivity {
     private static final String LOG_TAG = VectorUniversalLinkActivity.class.getSimpleName();
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
+    public int getLayoutRes() {
+        // display a spinner while binding the email
+        return R.layout.activity_vector_universal_link_activity;
+    }
 
+    @Override
+    public void initUiAndData() {
         String intentAction = VectorUniversalLinkReceiver.BROADCAST_ACTION_UNIVERSAL_LINK;
 
         try {
@@ -90,8 +95,6 @@ public class VectorUniversalLinkActivity extends RiotAppCompatActivity {
                     }
                 } else {
                     intentAction = null;
-                    // display a spinner while binding the email
-                    setContentView(R.layout.activity_vector_universal_link_activity);
                     emailBinding(intentUri, mailRegParams);
                 }
             } else {

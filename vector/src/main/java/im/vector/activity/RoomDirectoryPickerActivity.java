@@ -20,15 +20,11 @@ package im.vector.activity;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.os.Bundle;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
-
-import org.matrix.androidsdk.util.Log;
-
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -41,6 +37,7 @@ import org.matrix.androidsdk.rest.callback.ApiCallback;
 import org.matrix.androidsdk.rest.model.MatrixError;
 import org.matrix.androidsdk.rest.model.pid.ThirdPartyProtocol;
 import org.matrix.androidsdk.rest.model.pid.ThirdPartyProtocolInstance;
+import org.matrix.androidsdk.util.Log;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -82,11 +79,13 @@ public class RoomDirectoryPickerActivity extends RiotAppCompatActivity implement
     */
 
     @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
+    public int getLayoutRes() {
+        return R.layout.activity_room_directory_picker;
+    }
 
+    @Override
+    public void initUiAndData() {
         setTitle(R.string.select_room_directory);
-        setContentView(R.layout.activity_room_directory_picker);
 
         setWaitingView(findViewById(R.id.room_directory_loading));
 

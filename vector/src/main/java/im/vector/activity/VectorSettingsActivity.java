@@ -1,5 +1,6 @@
 /*
  * Copyright 2016 OpenMarket Ltd
+ * Copyright 2018 New Vector Ltd
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -36,9 +37,12 @@ public class VectorSettingsActivity extends MXCActionBarActivity {
     private VectorSettingsPreferencesFragment mFragment;
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
+    public int getLayoutRes() {
+        return R.layout.activity_vector_settings;
+    }
 
+    @Override
+    public void initUiAndData() {
         // required to have the right translated title
         setTitle(R.string.title_activity_settings);
 
@@ -53,8 +57,6 @@ public class VectorSettingsActivity extends MXCActionBarActivity {
             finish();
             return;
         }
-
-        setContentView(R.layout.activity_vector_settings);
 
         // display the fragment
         mFragment = VectorSettingsPreferencesFragment.newInstance(session.getMyUserId());
@@ -75,6 +77,7 @@ public class VectorSettingsActivity extends MXCActionBarActivity {
     protected void onActivityResult(int requestCode, int resultCode, final Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         // pass the result to the fragment
+        // FIXME This is not necessary, if Fragment.startActivityForResult is used (and it should be used)
         mFragment.onActivityResult(requestCode, resultCode, data);
     }
 

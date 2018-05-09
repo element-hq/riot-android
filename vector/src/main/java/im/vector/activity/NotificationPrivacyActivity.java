@@ -21,19 +21,14 @@ import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Build;
-import android.os.Bundle;
 import android.provider.Settings;
 import android.support.v7.widget.Toolbar;
-import android.text.Layout;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.RadioButton;
 import android.widget.TextView;
 
-import org.matrix.androidsdk.util.Log;
-
 import butterknife.BindView;
-import butterknife.ButterKnife;
 import im.vector.Matrix;
 import im.vector.R;
 import im.vector.gcm.GcmRegistrationManager;
@@ -85,12 +80,13 @@ public class NotificationPrivacyActivity extends RiotAppCompatActivity  {
     }
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
+    public int getLayoutRes() {
+        return R.layout.activity_notification_privacy;
+    }
 
+    @Override
+    public void initUiAndData() {
         setTitle(R.string.settings_notification_privacy);
-        setContentView(R.layout.activity_notification_privacy);
-        ButterKnife.bind(this);
 
         Toolbar toolbar = findViewById(R.id.toolbar);
         if (toolbar != null) {

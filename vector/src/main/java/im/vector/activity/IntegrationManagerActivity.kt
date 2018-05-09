@@ -22,17 +22,13 @@ import android.content.Context
 import android.content.Intent
 import android.graphics.Bitmap
 import android.os.Build
-import android.os.Bundle
 import android.text.TextUtils
-import android.webkit.ConsoleMessage
-import android.webkit.JavascriptInterface
-import android.webkit.PermissionRequest
-import android.webkit.WebChromeClient
-import android.webkit.WebView
-import android.webkit.WebViewClient
-
+import android.webkit.*
+import butterknife.BindView
 import com.google.gson.reflect.TypeToken
-
+import im.vector.Matrix
+import im.vector.R
+import im.vector.widgets.WidgetsManager
 import org.matrix.androidsdk.MXSession
 import org.matrix.androidsdk.data.Room
 import org.matrix.androidsdk.rest.callback.ApiCallback
@@ -41,19 +37,9 @@ import org.matrix.androidsdk.rest.model.MatrixError
 import org.matrix.androidsdk.rest.model.RoomMember
 import org.matrix.androidsdk.util.JsonUtils
 import org.matrix.androidsdk.util.Log
-
 import java.io.InputStreamReader
 import java.net.URLEncoder
-import java.util.ArrayList
-import java.util.Arrays
-import java.util.HashMap
-import java.util.HashSet
-
-import butterknife.BindView
-import butterknife.ButterKnife
-import im.vector.Matrix
-import im.vector.R
-import im.vector.widgets.WidgetsManager
+import java.util.*
 
 class IntegrationManagerActivity : RiotAppCompatActivity() {
 
@@ -116,12 +102,9 @@ class IntegrationManagerActivity : RiotAppCompatActivity() {
         }
     }
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
+    override fun getLayoutRes() = R.layout.activity_integration_manager
 
-        setContentView(R.layout.activity_integration_manager)
-        ButterKnife.bind(this)
-
+    override fun initUiAndData() {
         waitingView = findViewById(R.id.integration_progress_layout)
 
         val intent = intent

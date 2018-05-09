@@ -28,7 +28,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.RelativeLayout;
 
-
 import org.jitsi.meet.sdk.JitsiMeetView;
 import org.jitsi.meet.sdk.JitsiMeetViewListener;
 import org.matrix.androidsdk.MXSession;
@@ -40,7 +39,6 @@ import org.matrix.androidsdk.util.Log;
 import java.util.Map;
 
 import butterknife.BindView;
-import butterknife.ButterKnife;
 import im.vector.Matrix;
 import im.vector.R;
 import im.vector.widgets.Widget;
@@ -112,13 +110,13 @@ public class JitsiCallActivity extends RiotAppCompatActivity {
     };
 
     @Override
+    public int getLayoutRes() {
+        return R.layout.activity_jitsi_call;
+    }
+
+    @Override
     @SuppressLint("NewApi")
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-
-        setContentView(R.layout.activity_jitsi_call);
-        ButterKnife.bind(this);
-
+    public void initUiAndData() {
         mWidget = (Widget) getIntent().getSerializableExtra(EXTRA_WIDGET_ID);
         mIsVideoCall = getIntent().getBooleanExtra(EXTRA_ENABLE_VIDEO, true);
 

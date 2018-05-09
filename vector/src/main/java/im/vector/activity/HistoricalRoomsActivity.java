@@ -20,7 +20,6 @@ package im.vector.activity;
 import android.app.SearchManager;
 import android.content.Context;
 import android.os.AsyncTask;
-import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
 import android.support.v7.widget.DividerItemDecoration;
@@ -50,7 +49,6 @@ import java.util.Iterator;
 import java.util.List;
 
 import butterknife.BindView;
-import butterknife.ButterKnife;
 import im.vector.Matrix;
 import im.vector.R;
 import im.vector.adapters.AbsAdapter;
@@ -97,13 +95,14 @@ public class HistoricalRoomsActivity extends RiotAppCompatActivity implements Se
      */
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
+    public int getLayoutRes() {
+        return R.layout.activity_historical;
+    }
 
+    @Override
+    public void initUiAndData() {
         // required to have the right translated title
         setTitle(R.string.title_activity_historical);
-        setContentView(R.layout.activity_historical);
-        ButterKnife.bind(this);
 
         if (CommonActivityUtils.shouldRestartApp(this)) {
             Log.e(LOG_TAG, "Restart the application.");

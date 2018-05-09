@@ -556,11 +556,12 @@ public class VectorRoomActivity extends MXCActionBarActivity implements MatrixMe
     //================================================================================
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
+    public int getLayoutRes() {
+        return R.layout.activity_vector_room;
+    }
 
-        setContentView(R.layout.activity_vector_room);
-
+    @Override
+    public void initUiAndData() {
         setWaitingView(findViewById(R.id.main_progress_layout));
 
         if (CommonActivityUtils.shouldRestartApp(this)) {
@@ -968,7 +969,7 @@ public class VectorRoomActivity extends MXCActionBarActivity implements MatrixMe
             // if there is a saved instance, it means that onSaveInstanceState has been called.
             // theses parameters must only be used at activity creation.
             // The activity might have been created after being killed by android while the application is in background
-            if (null == savedInstanceState) {
+            if (isFirstCreation()) {
                 final Intent mediaIntent = intent.getParcelableExtra(EXTRA_ROOM_INTENT);
 
                 // sanity check
