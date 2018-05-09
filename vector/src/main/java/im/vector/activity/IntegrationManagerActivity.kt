@@ -20,6 +20,7 @@ package im.vector.activity
 import android.annotation.SuppressLint
 import android.content.Context
 import android.content.Intent
+import android.graphics.Bitmap
 import android.os.Build
 import android.os.Bundle
 import android.text.TextUtils
@@ -209,7 +210,13 @@ class IntegrationManagerActivity : RiotAppCompatActivity() {
             }
 
             it.webViewClient = object : WebViewClient() {
+                override fun onPageStarted(view: WebView?, url: String?, favicon: Bitmap?) {
+                    showWaitingView()
+                }
+
                 override fun onPageFinished(view: WebView, url: String) {
+                    hideWaitingView()
+
                     val js = getJSCodeToInject(this@IntegrationManagerActivity)
 
                     if (null != js) {
@@ -714,6 +721,10 @@ class IntegrationManagerActivity : RiotAppCompatActivity() {
     private fun getMembershipCount(eventData: Map<String, Any>) {
         sendIntegerResponse(mRoom!!.joinedMembers.size, eventData)
     }
+
+    /** =========================================================================================
+     * companion
+     * ========================================================================================== */
 
     companion object {
         private val LOG_TAG = IntegrationManagerActivity::class.java.simpleName
