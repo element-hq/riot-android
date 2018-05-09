@@ -303,31 +303,9 @@ public class IntegrationManagerActivity extends RiotAppCompatActivity {
         return code;
     }
 
-    /**
-     * Force to render the activity in fullscreen
-     */
-    private void displayInFullScreen() {
-        getWindow().getDecorView().setSystemUiVisibility(
-                View.SYSTEM_UI_FLAG_LAYOUT_STABLE
-                        | View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
-                        | View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
-                        | View.SYSTEM_UI_FLAG_HIDE_NAVIGATION
-                        | View.SYSTEM_UI_FLAG_FULLSCREEN
-                        | View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY);
-    }
-
     @Override
-    protected void onResume() {
-        super.onResume();
-        displayInFullScreen();
-    }
-
-    @Override
-    public void onWindowFocusChanged(boolean hasFocus) {
-        super.onWindowFocusChanged(hasFocus);
-        if (hasFocus) {
-            displayInFullScreen();
-        }
+    public boolean displayInFullscreen() {
+        return true;
     }
 
     /*
