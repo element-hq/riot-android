@@ -62,7 +62,6 @@ import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -89,11 +88,11 @@ import org.matrix.androidsdk.rest.callback.ApiCallback;
 import org.matrix.androidsdk.rest.callback.SimpleApiCallback;
 import org.matrix.androidsdk.rest.model.Event;
 import org.matrix.androidsdk.rest.model.MatrixError;
-import org.matrix.androidsdk.rest.model.message.Message;
 import org.matrix.androidsdk.rest.model.PowerLevels;
-import org.matrix.androidsdk.rest.model.publicroom.PublicRoom;
 import org.matrix.androidsdk.rest.model.RoomMember;
 import org.matrix.androidsdk.rest.model.User;
+import org.matrix.androidsdk.rest.model.message.Message;
+import org.matrix.androidsdk.rest.model.publicroom.PublicRoom;
 import org.matrix.androidsdk.util.JsonUtils;
 import org.matrix.androidsdk.util.Log;
 import org.matrix.androidsdk.util.ResourceUtils;
@@ -232,7 +231,7 @@ public class VectorRoomActivity extends MXCActionBarActivity implements MatrixMe
     private TextView mActionBarCustomTitle;
     private TextView mActionBarCustomTopic;
     private ImageView mActionBarCustomArrowImageView;
-    private RelativeLayout mRoomHeaderView;
+    private ViewGroup mRoomHeaderView;
     private TextView mActionBarHeaderRoomName;
 
     private View mActionBarHeaderActiveMembersLayout;
@@ -695,7 +694,7 @@ public class VectorRoomActivity extends MXCActionBarActivity implements MatrixMe
 
         mSendingMessagesLayout = findViewById(R.id.room_sending_message_layout);
         mSendImageView = findViewById(R.id.room_send_image_view);
-        mSendButtonLayout = findViewById(R.id.room_send_layout);
+        mSendButtonLayout = findViewById(R.id.room_send_image_view);
         mSendButtonLayout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -846,7 +845,7 @@ public class VectorRoomActivity extends MXCActionBarActivity implements MatrixMe
             }
         });
 
-        mStartCallLayout = findViewById(R.id.room_start_call_layout);
+        mStartCallLayout = findViewById(R.id.room_start_call_image_view);
         mStartCallLayout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -886,7 +885,7 @@ public class VectorRoomActivity extends MXCActionBarActivity implements MatrixMe
             }
         });
 
-        mStopCallLayout = findViewById(R.id.room_end_call_layout);
+        mStopCallLayout = findViewById(R.id.room_end_call_image_view);
         mStopCallLayout.setOnClickListener(new View.OnClickListener() {
                                                @Override
                                                public void onClick(View v) {
