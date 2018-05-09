@@ -211,6 +211,42 @@ public class VectorMessagesAdapter extends AbstractMessagesAdapter {
 
     private VectorImageGetter mImageGetter;
 
+    private HtmlToolbox mHtmlToolbox = new HtmlToolbox() {
+        @Override
+        public String convert(String html) {
+            String sanitised = mHelper.getSanitisedHtml(html);
+
+            if (sanitised != null) {
+                return sanitised;
+            }
+
+            return html;
+        }
+
+        @Nullable
+        @Override
+        public Html.ImageGetter getImageGetter() {
+            return mImageGetter;
+        }
+
+        @Nullable
+        @Override
+        public Html.TagHandler getTagHandler(String html) {
+            // the links are not yet supported by ConsoleHtmlTagHandler
+            // the markdown tables are not properly supported
+            boolean isCustomizable = !html.contains("<a href=") && !html.contains("<table>");
+
+            if (isCustomizable) {
+                final HtmlTagHandler htmlTagHandler = new HtmlTagHandler();
+                htmlTagHandler.mContext = mContext;
+                htmlTagHandler.setCodeBlockBackgroundColor(ThemeUtils.getColor(mContext, R.attr.markdown_block_background_color));
+                return htmlTagHandler;
+            }
+
+            return null;
+        }
+    };
+
     /**
      * Creates a messages adapter with the default layouts.
      */
@@ -1172,41 +1208,7 @@ public class VectorMessagesAdapter extends AbstractMessagesAdapter {
 
                 RoomState roomState = row.getRoomState();
 
-                EventDisplay display = new RiotEventDisplay(mContext, event, roomState, new HtmlToolbox() {
-                    @Override
-                    public String convert(String html) {
-                        String sanitised = mHelper.getSanitisedHtml(html);
-
-                        if (sanitised != null) {
-                            return sanitised;
-                        }
-
-                        return html;
-                    }
-
-                    @Nullable
-                    @Override
-                    public Html.ImageGetter getImageGetter() {
-                        return mImageGetter;
-                    }
-
-                    @Nullable
-                    @Override
-                    public Html.TagHandler getTagHandler(String html) {
-                        // the links are not yet supported by ConsoleHtmlTagHandler
-                        // the markdown tables are not properly supported
-                        boolean isCustomizable = !html.contains("<a href=") && !html.contains("<table>");
-
-                        if (isCustomizable) {
-                            final HtmlTagHandler htmlTagHandler = new HtmlTagHandler();
-                            htmlTagHandler.mContext = mContext;
-                            htmlTagHandler.setCodeBlockBackgroundColor(ThemeUtils.getColor(mContext, R.attr.markdown_block_background_color));
-                            return htmlTagHandler;
-                        }
-
-                        return null;
-                    }
-                });
+                EventDisplay display = new RiotEventDisplay(mContext, event, roomState, mHtmlToolbox);
                 CharSequence textualDisplay = display.getTextualDisplay();
 
                 SpannableString body = new SpannableString((null == textualDisplay) ? "" : textualDisplay);
