@@ -1046,9 +1046,9 @@ public class VectorRoomActivity extends MXCActionBarActivity implements MatrixMe
             }
 
             private void displayWidget(Widget widget) {
-                final Intent intent = new Intent(VectorRoomActivity.this, WidgetActivity.class);
-                intent.putExtra(WidgetActivity.EXTRA_WIDGET_ID, widget);
-                VectorRoomActivity.this.startActivity(intent);
+                Intent intent =  WidgetActivity.Companion.newInstance(VectorRoomActivity.this, widget);
+
+                startActivity(intent);
             }
 
             @Override
