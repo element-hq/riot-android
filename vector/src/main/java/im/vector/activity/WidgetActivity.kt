@@ -45,6 +45,7 @@ import org.matrix.androidsdk.util.Log
 
 import butterknife.BindView
 import butterknife.ButterKnife
+import butterknife.OnClick
 import im.vector.Matrix
 import im.vector.R
 import im.vector.widgets.Widget
@@ -63,9 +64,6 @@ class WidgetActivity : RiotAppCompatActivity() {
 
     // the room
     private var mRoom: Room? = null
-
-    @BindView(R.id.widget_back_icon)
-    lateinit var mBackToAppIcon: View
 
     @BindView(R.id.widget_close_icon)
     lateinit var mCloseWidgetIcon: View
@@ -122,8 +120,8 @@ class WidgetActivity : RiotAppCompatActivity() {
         }
 
         mWidgetTypeTextView.text = mWidget!!.humanName
-        refreshStatusBar()
-        loadURL()
+
+        configureWebViewAndLoadURL()
     }
 
     /**
@@ -134,48 +132,50 @@ class WidgetActivity : RiotAppCompatActivity() {
 
         // close widget button
         mCloseWidgetIcon.isVisible = canCloseWidget
+    }
 
-        mCloseWidgetIcon.setOnClickListener {
-            AlertDialog.Builder(this)
-                    .setMessage(R.string.widget_delete_message_confirmation)
-                    .setPositiveButton(R.string.remove) { dialog, which ->
-                        dialog.dismiss()
-                        showWaitingView()
-                        WidgetsManager.getSharedInstance().closeWidget(mSession, mRoom, mWidget!!.widgetId, object : ApiCallback<Void> {
-                            override fun onSuccess(info: Void) {
-                                hideWaitingView()
-                                finish()
-                            }
+    @OnClick(R.id.widget_close_icon)
+    internal fun onCloseClick() {
+        AlertDialog.Builder(this)
+                .setMessage(R.string.widget_delete_message_confirmation)
+                .setPositiveButton(R.string.remove) { dialog, which ->
+                    dialog.dismiss()
+                    showWaitingView()
+                    WidgetsManager.getSharedInstance().closeWidget(mSession, mRoom, mWidget!!.widgetId, object : ApiCallback<Void> {
+                        override fun onSuccess(info: Void) {
+                            hideWaitingView()
+                            finish()
+                        }
 
-                            private fun onError(errorMessage: String) {
-                                hideWaitingView()
-                                CommonActivityUtils.displayToast(this@WidgetActivity, errorMessage)
-                            }
+                        private fun onError(errorMessage: String) {
+                            hideWaitingView()
+                            CommonActivityUtils.displayToast(this@WidgetActivity, errorMessage)
+                        }
 
-                            override fun onNetworkError(e: Exception) {
-                                onError(e.localizedMessage)
-                            }
+                        override fun onNetworkError(e: Exception) {
+                            onError(e.localizedMessage)
+                        }
 
-                            override fun onMatrixError(e: MatrixError) {
-                                onError(e.localizedMessage)
-                            }
+                        override fun onMatrixError(e: MatrixError) {
+                            onError(e.localizedMessage)
+                        }
 
-                            override fun onUnexpectedError(e: Exception) {
-                                onError(e.localizedMessage)
-                            }
-                        })
-                    }
-                    .setNegativeButton(R.string.cancel) { dialog, which -> dialog.dismiss() }
-                    .create()
-                    .show()
-        }
+                        override fun onUnexpectedError(e: Exception) {
+                            onError(e.localizedMessage)
+                        }
+                    })
+                }
+                .setNegativeButton(R.string.cancel) { dialog, which -> dialog.dismiss() }
+                .create()
+                .show()
+    }
 
-        mBackToAppIcon.setOnClickListener {
-            if (mWidgetWebView.canGoBack()) {
-                mWidgetWebView.goBack()
-            } else {
-                finish()
-            }
+    @OnClick(R.id.widget_back_icon)
+    internal fun onBackClicked() {
+        if (mWidgetWebView.canGoBack()) {
+            mWidgetWebView.goBack()
+        } else {
+            finish()
         }
     }
 
@@ -183,8 +183,7 @@ class WidgetActivity : RiotAppCompatActivity() {
      * Load the widget call
      */
     @SuppressLint("NewApi")
-    private fun loadURL() {
-
+    private fun configureWebViewAndLoadURL() {
         mWidgetWebView.let {
             // xml value seems ignored
             it.setBackgroundColor(0)
@@ -266,7 +265,6 @@ class WidgetActivity : RiotAppCompatActivity() {
             }
         })
     }
-
 
     override fun onPause() {
         super.onPause()
