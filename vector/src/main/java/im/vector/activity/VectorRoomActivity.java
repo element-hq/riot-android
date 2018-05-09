@@ -1046,7 +1046,7 @@ public class VectorRoomActivity extends MXCActionBarActivity implements MatrixMe
             }
 
             private void displayWidget(Widget widget) {
-                Intent intent =  WidgetActivity.Companion.newInstance(VectorRoomActivity.this, widget);
+                Intent intent =  WidgetActivity.Companion.getIntent(VectorRoomActivity.this, widget);
 
                 startActivity(intent);
             }
@@ -1576,9 +1576,7 @@ public class VectorRoomActivity extends MXCActionBarActivity implements MatrixMe
             finish();
             return true;
         } else if (id == R.id.ic_action_matrix_apps) {
-            final Intent intent = new Intent(this, IntegrationManagerActivity.class);
-            intent.putExtra(IntegrationManagerActivity.Companion.getEXTRA_SESSION_ID(), mMyUserId);
-            intent.putExtra(IntegrationManagerActivity.Companion.getEXTRA_ROOM_ID(), mRoom.getRoomId());
+            final Intent intent = IntegrationManagerActivity.Companion.getIntent(this, mMyUserId, mRoom.getRoomId());
             startActivity(intent);
         } else if (id == R.id.ic_action_search_in_room) {
             try {

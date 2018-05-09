@@ -23,16 +23,13 @@ import android.content.Intent
 import android.os.Build
 import android.os.Bundle
 import android.text.TextUtils
-import android.view.View
 import android.webkit.ConsoleMessage
 import android.webkit.JavascriptInterface
 import android.webkit.PermissionRequest
 import android.webkit.WebChromeClient
-import android.webkit.WebSettings
 import android.webkit.WebView
 import android.webkit.WebViewClient
 
-import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 
 import org.matrix.androidsdk.MXSession
@@ -40,14 +37,11 @@ import org.matrix.androidsdk.data.Room
 import org.matrix.androidsdk.rest.callback.ApiCallback
 import org.matrix.androidsdk.rest.model.Event
 import org.matrix.androidsdk.rest.model.MatrixError
-import org.matrix.androidsdk.rest.model.PowerLevels
 import org.matrix.androidsdk.rest.model.RoomMember
 import org.matrix.androidsdk.util.JsonUtils
 import org.matrix.androidsdk.util.Log
 
-import java.io.InputStream
 import java.io.InputStreamReader
-import java.io.Reader
 import java.net.URLEncoder
 import java.util.ArrayList
 import java.util.Arrays
@@ -58,7 +52,6 @@ import butterknife.BindView
 import butterknife.ButterKnife
 import im.vector.Matrix
 import im.vector.R
-import im.vector.widgets.Widget
 import im.vector.widgets.WidgetsManager
 
 class IntegrationManagerActivity : RiotAppCompatActivity() {
@@ -78,27 +71,26 @@ class IntegrationManagerActivity : RiotAppCompatActivity() {
      *
      * @return the integration URL
      */
-    private val interfaceUrl: String?
-        get() {
-            try {
-                var url = WidgetsManager.INTEGRATION_UI_URL + "?" +
-                        "scalar_token=" + URLEncoder.encode(mScalarToken, "utf-8") + "&" +
-                        "room_id=" + URLEncoder.encode(mRoom!!.roomId, "utf-8")
+    private fun buildInterfaceUrl(): String? {
+        try {
+            var url = WidgetsManager.INTEGRATION_UI_URL + "?" +
+                    "scalar_token=" + URLEncoder.encode(mScalarToken, "utf-8") + "&" +
+                    "room_id=" + URLEncoder.encode(mRoom!!.roomId, "utf-8")
 
-                if (null != mScreenId) {
-                    url += "&screen=" + URLEncoder.encode(mScreenId, "utf-8")
-                }
-
-                if (null != mWidgetId) {
-                    url += "&integ_id=" + URLEncoder.encode(mWidgetId, "utf-8")
-                }
-                return url
-            } catch (e: Exception) {
-                Log.e(LOG_TAG, "## getInterfaceUrl() failed " + e.message)
+            if (null != mScreenId) {
+                url += "&screen=" + URLEncoder.encode(mScreenId, "utf-8")
             }
 
-            return null
+            if (null != mWidgetId) {
+                url += "&integ_id=" + URLEncoder.encode(mWidgetId, "utf-8")
+            }
+            return url
+        } catch (e: Exception) {
+            Log.e(LOG_TAG, "## buildInterfaceUrl() failed " + e.message)
         }
+
+        return null
+    }
 
     // private class
     private inner class IntegrationWebAppInterface internal constructor() {
@@ -112,7 +104,7 @@ class IntegrationManagerActivity : RiotAppCompatActivity() {
                 objectAsMap = gson.fromJson(eventData, object : TypeToken<Map<String, Map<String, Any>>>() {
 
                 }.type)
-                this@IntegrationManagerActivity.runOnUiThread {
+                runOnUiThread {
                     Log.d(LOG_TAG, "onScalarEvent : $objectAsMap")
                     onScalarMessage(objectAsMap)
                 }
@@ -132,7 +124,7 @@ class IntegrationManagerActivity : RiotAppCompatActivity() {
         waitingView = findViewById(R.id.integration_progress_layout)
 
         val intent = intent
-        mSession = Matrix.getInstance(this)!!.getSession(intent.getStringExtra(EXTRA_SESSION_ID))
+        mSession = Matrix.getInstance(this)!!.getSession(intent.getStringExtra(EXTRA_MATRIX_ID))
 
         if (null == mSession || !mSession!!.isAlive) {
             Log.e(LOG_TAG, "## onCreate() : invalid session")
@@ -155,7 +147,7 @@ class IntegrationManagerActivity : RiotAppCompatActivity() {
 
             private fun onError(errorMessage: String) {
                 CommonActivityUtils.displayToast(this@IntegrationManagerActivity, errorMessage)
-                this@IntegrationManagerActivity.finish()
+                finish()
             }
 
             override fun onNetworkError(e: Exception) {
@@ -174,68 +166,68 @@ class IntegrationManagerActivity : RiotAppCompatActivity() {
 
     @SuppressLint("NewApi")
     private fun launchUrl() {
-        val url = interfaceUrl
+        val url = buildInterfaceUrl()
 
         if (null == url) {
-            this.finish()
+            finish()
             return
         }
 
-        mWebView!!.addJavascriptInterface(IntegrationWebAppInterface(), "Android")
+        mWebView.let {
+            it.addJavascriptInterface(IntegrationWebAppInterface(), "Android")
 
-        // Permission requests
-        mWebView!!.webChromeClient = object : WebChromeClient() {
-            override fun onPermissionRequest(request: PermissionRequest) {
-                this@IntegrationManagerActivity.runOnUiThread { request.grant(request.resources) }
-            }
+            // Permission requests
+            it.webChromeClient = object : WebChromeClient() {
+                override fun onPermissionRequest(request: PermissionRequest) {
+                    runOnUiThread { request.grant(request.resources) }
+                }
 
-            override fun onConsoleMessage(consoleMessage: ConsoleMessage): Boolean {
-                Log.e(LOG_TAG, "## onConsoleMessage() : " + consoleMessage.message() + " line " + consoleMessage.lineNumber() + " source Id" + consoleMessage.sourceId())
-                return super.onConsoleMessage(consoleMessage)
-            }
-        }
-
-        val settings = mWebView!!.settings
-
-        // Enable Javascript
-        settings.javaScriptEnabled = true
-
-        // Use WideViewport and Zoom out if there is no viewport defined
-        settings.useWideViewPort = true
-        settings.loadWithOverviewMode = true
-
-        // Enable pinch to zoom without the zoom buttons
-        settings.builtInZoomControls = true
-
-        // Allow use of Local Storage
-        settings.domStorageEnabled = true
-
-        settings.allowFileAccessFromFileURLs = true
-        settings.allowUniversalAccessFromFileURLs = true
-
-        settings.displayZoomControls = false
-
-        mWebView!!.webViewClient = object : WebViewClient() {
-            override fun onPageFinished(view: WebView, url: String) {
-                val js = getJSCodeToInject(this@IntegrationManagerActivity)
-
-                if (null != js) {
-                    this@IntegrationManagerActivity.runOnUiThread { mWebView!!.loadUrl("javascript:$js") }
+                override fun onConsoleMessage(consoleMessage: ConsoleMessage): Boolean {
+                    Log.e(LOG_TAG, "## onConsoleMessage() : " + consoleMessage.message() + " line " + consoleMessage.lineNumber() + " source Id" + consoleMessage.sourceId())
+                    return super.onConsoleMessage(consoleMessage)
                 }
             }
-        }
 
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            val cookieManager = android.webkit.CookieManager.getInstance()
-            cookieManager.setAcceptThirdPartyCookies(mWebView, true)
-        }
+            it.settings.let {
+                // Enable Javascript
+                it.javaScriptEnabled = true
 
-        mWebView!!.loadUrl(url)
+                // Use WideViewport and Zoom out if there is no viewport defined
+                it.useWideViewPort = true
+                it.loadWithOverviewMode = true
+
+                // Enable pinch to zoom without the zoom buttons
+                it.builtInZoomControls = true
+
+                // Allow use of Local Storage
+                it.domStorageEnabled = true
+
+                it.allowFileAccessFromFileURLs = true
+                it.allowUniversalAccessFromFileURLs = true
+
+                it.displayZoomControls = false
+            }
+
+            it.webViewClient = object : WebViewClient() {
+                override fun onPageFinished(view: WebView, url: String) {
+                    val js = getJSCodeToInject(this@IntegrationManagerActivity)
+
+                    if (null != js) {
+                        runOnUiThread { mWebView.loadUrl("javascript:$js") }
+                    }
+                }
+            }
+
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                val cookieManager = android.webkit.CookieManager.getInstance()
+                cookieManager.setAcceptThirdPartyCookies(mWebView, true)
+            }
+
+            it.loadUrl(url)
+        }
     }
 
-    override fun displayInFullscreen(): Boolean {
-        return true
-    }
+    override fun displayInFullscreen() = true
 
     /*
      * *********************************************************************************************
@@ -262,69 +254,40 @@ class IntegrationManagerActivity : RiotAppCompatActivity() {
         }
 
         try {
-            val roomIdInEvent = eventData["room_id"] as String
-            val userId = eventData["user_id"] as String
-            val action = eventData["action"] as String
+            val roomIdInEvent = eventData["room_id"] as String?
+            val userId = eventData["user_id"] as String?
+            val action = eventData["action"] as String?
 
-            if (TextUtils.equals(action, "close_scalar")) {
-                finish()
-                return
-            }
+            when {
+                TextUtils.equals(action, "close_scalar") -> finish()
 
-            if (null == roomIdInEvent) {
-                sendError(getString(R.string.widget_integration_missing_room_id), eventData)
-                return
-            }
+            // other APIs requires a roomId
+                null == roomIdInEvent -> sendError(getString(R.string.widget_integration_missing_room_id), eventData)
 
-            if (!TextUtils.equals(roomIdInEvent, mRoom!!.roomId)) {
-                sendError(getString(R.string.widget_integration_room_not_visible), eventData)
-                return
-            }
+            // Room ids must match
+                !TextUtils.equals(roomIdInEvent, mRoom!!.roomId) -> sendError(getString(R.string.widget_integration_room_not_visible), eventData)
 
             // These APIs don't require userId
-            if (TextUtils.equals(action, "join_rules_state")) {
-                getJoinRules(eventData)
-                return
-            } else if (TextUtils.equals(action, "set_plumbing_state")) {
-                setPlumbingState(eventData)
-                return
-            } else if (TextUtils.equals(action, "get_membership_count")) {
-                getMembershipCount(eventData)
-                return
-            } else if (TextUtils.equals(action, "set_widget")) {
-                setWidget(eventData)
-                return
-            } else if (TextUtils.equals(action, "get_widgets")) {
-                getWidgets(eventData)
-                return
-            } else if (TextUtils.equals(action, "can_send_event")) {
-                canSendEvent(eventData)
-                return
+                TextUtils.equals(action, "join_rules_state") -> getJoinRules(eventData)
+                TextUtils.equals(action, "set_plumbing_state") -> setPlumbingState(eventData)
+                TextUtils.equals(action, "get_membership_count") -> getMembershipCount(eventData)
+                TextUtils.equals(action, "set_widget") -> setWidget(eventData)
+                TextUtils.equals(action, "get_widgets") -> getWidgets(eventData)
+                TextUtils.equals(action, "can_send_event") -> canSendEvent(eventData)
+            // For the next APIs, a userId is required
+                null == userId -> sendError(getString(R.string.widget_integration_missing_user_id), eventData)
+                TextUtils.equals(action, "membership_state") -> getMembershipState(userId, eventData)
+                TextUtils.equals(action, "invite") -> inviteUser(userId, eventData)
+                TextUtils.equals(action, "bot_options") -> getBotOptions(userId, eventData)
+                TextUtils.equals(action, "set_bot_options") -> setBotOptions(userId, eventData)
+                TextUtils.equals(action, "set_bot_power") -> setBotPower(userId, eventData)
+                else -> Log.e(LOG_TAG, "## onScalarMessage() : Unhandled postMessage event with action $action : $JSData")
             }
 
-            if (null == userId) {
-                sendError(getString(R.string.widget_integration_missing_user_id), eventData)
-                return
-            }
-
-            if (TextUtils.equals(action, "membership_state")) {
-                getMembershipState(userId, eventData)
-            } else if (TextUtils.equals(action, "invite")) {
-                inviteUser(userId, eventData)
-            } else if (TextUtils.equals(action, "bot_options")) {
-                getBotOptions(userId, eventData)
-            } else if (TextUtils.equals(action, "set_bot_options")) {
-                setBotOptions(userId, eventData)
-            } else if (TextUtils.equals(action, "set_bot_power")) {
-                setBotPower(userId, eventData)
-            } else {
-                Log.e(LOG_TAG, "## onScalarMessage() : Unhandled postMessage event with action $action : $JSData")
-            }
         } catch (e: Exception) {
             Log.e(LOG_TAG, "## onScalarMessage() : failed " + e.message)
             sendError(getString(R.string.widget_integration_failed_to_send_request), eventData)
         }
-
     }
 
     /*
@@ -345,14 +308,13 @@ class IntegrationManagerActivity : RiotAppCompatActivity() {
 
             // call the javascript method
             if (Build.VERSION.SDK_INT < Build.VERSION_CODES.KITKAT) {
-                mWebView!!.loadUrl("javascript:$functionLine")
+                mWebView.loadUrl("javascript:$functionLine")
             } else {
-                mWebView!!.evaluateJavascript(functionLine, null)
+                mWebView.evaluateJavascript(functionLine, null)
             }
         } catch (e: Exception) {
             Log.e(LOG_TAG, "## sendResponse() failed " + e.message)
         }
-
     }
 
     /**
@@ -471,16 +433,16 @@ class IntegrationManagerActivity : RiotAppCompatActivity() {
      * @param eventData the modular data
      */
     private fun inviteUser(userId: String, eventData: Map<String, Any>) {
-        val descriptioon = "Received request to invite " + userId + " into room " + mRoom!!.roomId
+        val description = "Received request to invite " + userId + " into room " + mRoom!!.roomId
 
-        Log.d(LOG_TAG, descriptioon)
+        Log.d(LOG_TAG, description)
 
         val member = mRoom!!.getMember(userId)
 
         if (null != member && TextUtils.equals(member.membership, RoomMember.MEMBERSHIP_JOIN)) {
             sendObjectResponse(HashMap(mSucceedResponse), eventData)
         } else {
-            mRoom!!.invite(userId, IntegrationManagerApiCallback(eventData, descriptioon))
+            mRoom!!.invite(userId, IntegrationManagerApiCallback(eventData, description))
         }
     }
 
@@ -492,19 +454,16 @@ class IntegrationManagerActivity : RiotAppCompatActivity() {
     private fun setWidget(eventData: Map<String, Any>) {
         Log.d(LOG_TAG, "Received request to set widget in room " + mRoom!!.roomId)
 
-        val widget_id: String?
-        val widgetType: String?
-        val widgetUrl: String?
-        val widgetName: String? // optional
-        val widgetData: Map<Any, Any>? // optional
+        val widgetId = eventData["widget_id"] as String?
+        val widgetType = eventData["type"] as String?
+        val widgetUrl = eventData["url"] as String?
 
-        widget_id = eventData["widget_id"] as String
-        widgetType = eventData["type"] as String
-        widgetUrl = eventData["url"] as String
-        widgetName = eventData["name"] as String
-        widgetData = eventData["data"] as Map<Any, Any>
+        // optional
+        val widgetName = eventData["name"] as String?
+        // optional
+        val widgetData = eventData["data"] as Map<Any, Any>?
 
-        if (null == widget_id) {
+        if (null == widgetId) {
             sendError(getString(R.string.widget_integration_unable_to_create), eventData)
             return
         }
@@ -529,7 +488,11 @@ class IntegrationManagerActivity : RiotAppCompatActivity() {
             }
         }
 
-        mSession!!.roomsApiClient.sendStateEvent(mRoom!!.roomId, WidgetsManager.WIDGET_EVENT_TYPE, widget_id, widgetEventContent, IntegrationManagerApiCallback(eventData, "## setWidget()"))
+        mSession!!.roomsApiClient.sendStateEvent(mRoom!!.roomId,
+                WidgetsManager.WIDGET_EVENT_TYPE,
+                widgetId,
+                widgetEventContent,
+                IntegrationManagerApiCallback(eventData, "## setWidget()"))
     }
 
     /**
@@ -580,12 +543,10 @@ class IntegrationManagerActivity : RiotAppCompatActivity() {
 
         val userPowerLevel = powerLevels!!.getUserPowerLevel(mSession!!.myUserId)
 
-        val canSend: Boolean
-
-        if (isState) {
-            canSend = userPowerLevel >= powerLevels.minimumPowerLevelForSendingEventAsStateEvent(eventType)
+        val canSend = if (isState) {
+            userPowerLevel >= powerLevels.minimumPowerLevelForSendingEventAsStateEvent(eventType)
         } else {
-            canSend = userPowerLevel >= powerLevels.minimumPowerLevelForSendingEventAsMessage(eventType)
+            userPowerLevel >= powerLevels.minimumPowerLevelForSendingEventAsMessage(eventType)
         }
 
         if (canSend) {
@@ -666,7 +627,11 @@ class IntegrationManagerActivity : RiotAppCompatActivity() {
         val params = HashMap<String, Any>()
         params["status"] = status
 
-        mSession!!.roomsApiClient.sendStateEvent(mRoom!!.roomId, Event.EVENT_TYPE_ROOM_PLUMBING, null, params, IntegrationManagerApiCallback(eventData, description))
+        mSession!!.roomsApiClient.sendStateEvent(mRoom!!.roomId,
+                Event.EVENT_TYPE_ROOM_PLUMBING,
+                null,
+                params,
+                IntegrationManagerApiCallback(eventData, description))
     }
 
     /**
@@ -713,7 +678,11 @@ class IntegrationManagerActivity : RiotAppCompatActivity() {
         val content = eventData["content"] as Map<String, Any>
         val stateKey = "_$userId"
 
-        mSession!!.roomsApiClient.sendStateEvent(mRoom!!.roomId, Event.EVENT_TYPE_ROOM_BOT_OPTIONS, stateKey, content, IntegrationManagerApiCallback(eventData, description))
+        mSession!!.roomsApiClient.sendStateEvent(mRoom!!.roomId,
+                Event.EVENT_TYPE_ROOM_BOT_OPTIONS,
+                stateKey,
+                content,
+                IntegrationManagerApiCallback(eventData, description))
     }
 
     /**
@@ -752,17 +721,23 @@ class IntegrationManagerActivity : RiotAppCompatActivity() {
         /**
          * the parameters
          */
-        val EXTRA_SESSION_ID = "EXTRA_SESSION_ID"
-        val EXTRA_ROOM_ID = "EXTRA_ROOM_ID"
-        private val EXTRA_WIDGET_ID = "EXTRA_WIDGET_ID"
-        private val EXTRA_SCREEN_ID = "EXTRA_SCREEN_ID"
+        private const val EXTRA_MATRIX_ID = "EXTRA_MATRIX_ID"
+        private const val EXTRA_ROOM_ID = "EXTRA_ROOM_ID"
+        private const val EXTRA_WIDGET_ID = "EXTRA_WIDGET_ID"
+        private const val EXTRA_SCREEN_ID = "EXTRA_SCREEN_ID"
+
+        fun getIntent(context: Context, matrixId: String, roomId: String): Intent {
+            return Intent(context, IntegrationManagerActivity::class.java)
+                    .apply {
+                        putExtra(EXTRA_MATRIX_ID, matrixId)
+                        putExtra(EXTRA_ROOM_ID, roomId)
+                    }
+        }
 
         // success result
         // must be copied else the conversion to string does not work
-        private val mSucceedResponse = object : HashMap<String, Boolean>() {
-            init {
-                put("success", true)
-            }
+        private val mSucceedResponse = HashMap<String, Boolean>().apply {
+            put("success", true)
         }
 
         /**
@@ -775,21 +750,21 @@ class IntegrationManagerActivity : RiotAppCompatActivity() {
             var code: String? = null
 
             try {
-                val `is` = context.assets.open("integrationManager.js")
+                val inputStream = context.assets.open("integrationManager.js")
                 val buffer = CharArray(1024)
                 val out = StringBuilder()
 
-                val `in` = InputStreamReader(`is`, "UTF-8")
+                val inputStreamReader = InputStreamReader(inputStream, "UTF-8")
                 while (true) {
-                    val rsz = `in`.read(buffer, 0, buffer.size)
+                    val rsz = inputStreamReader.read(buffer, 0, buffer.size)
                     if (rsz < 0)
                         break
                     out.append(buffer, 0, rsz)
                 }
                 code = out.toString()
 
-                `in`.close()
-                `is`.close()
+                inputStreamReader.close()
+                inputStream.close()
             } catch (e: Exception) {
                 Log.e(LOG_TAG, "## getJSCodeToInject() failed : " + e.message)
             }
@@ -800,15 +775,15 @@ class IntegrationManagerActivity : RiotAppCompatActivity() {
         /**
          * Convert an object to a map
          *
-         * @param object the object to convert
+         * @param `object` the object to convert
          * @return the event as a map
          */
-        private fun getObjectAsJsonMap(`object`: Any): Map<String, Any>? {
+        private fun getObjectAsJsonMap(any: Any): Map<String, Any>? {
             val gson = JsonUtils.getGson(false)
             var objectAsMap: Map<String, Any>? = null
 
             try {
-                val stringifiedEvent = gson.toJson(`object`)
+                val stringifiedEvent = gson.toJson(any)
                 objectAsMap = gson.fromJson<Map<String, Any>>(stringifiedEvent, object : TypeToken<HashMap<String, Any>>() {
 
                 }.type)

@@ -329,7 +329,7 @@ class WidgetActivity : RiotAppCompatActivity() {
          */
         private const val EXTRA_WIDGET_ID = "EXTRA_WIDGET_ID"
 
-        fun newInstance(context: Context, widget: Widget): Intent {
+        fun getIntent(context: Context, widget: Widget): Intent {
             return Intent(context, WidgetActivity::class.java)
                     .apply {
                         putExtra(EXTRA_WIDGET_ID, widget)
