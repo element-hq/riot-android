@@ -1577,8 +1577,8 @@ public class VectorRoomActivity extends MXCActionBarActivity implements MatrixMe
             return true;
         } else if (id == R.id.ic_action_matrix_apps) {
             final Intent intent = new Intent(this, IntegrationManagerActivity.class);
-            intent.putExtra(IntegrationManagerActivity.EXTRA_SESSION_ID, mMyUserId);
-            intent.putExtra(IntegrationManagerActivity.EXTRA_ROOM_ID, mRoom.getRoomId());
+            intent.putExtra(IntegrationManagerActivity.Companion.getEXTRA_SESSION_ID(), mMyUserId);
+            intent.putExtra(IntegrationManagerActivity.Companion.getEXTRA_ROOM_ID(), mRoom.getRoomId());
             startActivity(intent);
         } else if (id == R.id.ic_action_search_in_room) {
             try {
