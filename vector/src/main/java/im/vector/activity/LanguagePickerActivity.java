@@ -65,9 +65,12 @@ public class LanguagePickerActivity extends RiotAppCompatActivity implements Lan
     }
 
     @Override
-    public void initUiAndData() {
-        setTitle(R.string.settings_select_language);
+    public int getTitleRes() {
+        return R.string.settings_select_language;
+    }
 
+    @Override
+    public void initUiAndData() {
         Toolbar toolbar = findViewById(R.id.toolbar);
         if (toolbar != null) {
             setSupportActionBar(toolbar);

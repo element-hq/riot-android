@@ -84,9 +84,12 @@ public class RoomDirectoryPickerActivity extends RiotAppCompatActivity implement
     }
 
     @Override
-    public void initUiAndData() {
-        setTitle(R.string.select_room_directory);
+    public int getTitleRes() {
+        return R.string.select_room_directory;
+    }
 
+    @Override
+    public void initUiAndData() {
         setWaitingView(findViewById(R.id.room_directory_loading));
 
         Toolbar toolbar = findViewById(R.id.toolbar);

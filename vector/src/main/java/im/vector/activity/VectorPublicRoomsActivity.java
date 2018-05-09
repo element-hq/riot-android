@@ -41,9 +41,12 @@ public class VectorPublicRoomsActivity extends MXCActionBarActivity {
     }
 
     @Override
-    public void initUiAndData() {
-        setTitle(R.string.directory_title);
+    public int getTitleRes() {
+        return R.string.directory_title;
+    }
 
+    @Override
+    public void initUiAndData() {
         if (CommonActivityUtils.shouldRestartApp(this)) {
             CommonActivityUtils.restartApp(this);
             Log.d(LOG_TAG, "onCreate : restart the application");

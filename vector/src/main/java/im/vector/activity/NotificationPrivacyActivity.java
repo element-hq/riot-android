@@ -85,9 +85,12 @@ public class NotificationPrivacyActivity extends RiotAppCompatActivity  {
     }
 
     @Override
-    public void initUiAndData() {
-        setTitle(R.string.settings_notification_privacy);
+    public int getTitleRes() {
+        return R.string.settings_notification_privacy;
+    }
 
+    @Override
+    public void initUiAndData() {
         Toolbar toolbar = findViewById(R.id.toolbar);
         if (toolbar != null) {
             setSupportActionBar(toolbar);

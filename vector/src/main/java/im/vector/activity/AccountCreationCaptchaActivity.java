@@ -87,10 +87,12 @@ public class AccountCreationCaptchaActivity extends RiotAppCompatActivity {
     }
 
     @Override
-    public void initUiAndData() {
-        // required to have the right translated title
-        setTitle(R.string.create_account);
+    public int getTitleRes() {
+        return R.string.create_account;
+    }
 
+    @Override
+    public void initUiAndData() {
         final WebView webView = findViewById(R.id.account_creation_webview);
         webView.getSettings().setJavaScriptEnabled(true);
 

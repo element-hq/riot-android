@@ -18,7 +18,6 @@ package im.vector.activity;
 
 import android.content.Intent;
 import android.content.pm.PackageManager;
-import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.view.MenuItem;
 
@@ -42,10 +41,12 @@ public class VectorSettingsActivity extends MXCActionBarActivity {
     }
 
     @Override
-    public void initUiAndData() {
-        // required to have the right translated title
-        setTitle(R.string.title_activity_settings);
+    public int getTitleRes() {
+        return R.string.title_activity_settings;
+    }
 
+    @Override
+    public void initUiAndData() {
         Intent intent = getIntent();
         MXSession session = getSession(intent);
 

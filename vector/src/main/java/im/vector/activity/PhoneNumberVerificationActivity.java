@@ -84,9 +84,12 @@ public class PhoneNumberVerificationActivity extends RiotAppCompatActivity imple
     }
 
     @Override
-    public void initUiAndData() {
-        setTitle(R.string.settings_phone_number_verification);
+    public int getTitleRes() {
+        return R.string.settings_phone_number_verification;
+    }
 
+    @Override
+    public void initUiAndData() {
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         if (null != getSupportActionBar()) {

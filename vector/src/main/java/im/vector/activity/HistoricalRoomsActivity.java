@@ -100,10 +100,12 @@ public class HistoricalRoomsActivity extends RiotAppCompatActivity implements Se
     }
 
     @Override
-    public void initUiAndData() {
-        // required to have the right translated title
-        setTitle(R.string.title_activity_historical);
+    public int getTitleRes() {
+        return R.string.title_activity_historical;
+    }
 
+    @Override
+    public void initUiAndData() {
         if (CommonActivityUtils.shouldRestartApp(this)) {
             Log.e(LOG_TAG, "Restart the application.");
             CommonActivityUtils.restartApp(this);

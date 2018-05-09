@@ -98,9 +98,12 @@ public class PhoneNumberAdditionActivity extends RiotAppCompatActivity implement
     }
 
     @Override
-    public void initUiAndData() {
-        setTitle(R.string.settings_add_phone_number);
+    public int getTitleRes() {
+        return R.string.settings_add_phone_number;
+    }
 
+    @Override
+    public void initUiAndData() {
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         if (null != getSupportActionBar()) {

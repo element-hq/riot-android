@@ -57,9 +57,12 @@ public class FallbackLoginActivity extends RiotAppCompatActivity {
     }
 
     @Override
-    public void initUiAndData() {
-        setTitle(R.string.login);
+    public int getTitleRes() {
+        return R.string.login;
+    }
 
+    @Override
+    public void initUiAndData() {
         mWebView = findViewById(R.id.account_creation_webview);
         mWebView.getSettings().setJavaScriptEnabled(true);
 

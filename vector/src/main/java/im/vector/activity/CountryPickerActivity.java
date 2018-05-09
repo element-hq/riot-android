@@ -74,10 +74,12 @@ public class CountryPickerActivity extends RiotAppCompatActivity implements Coun
     }
 
     @Override
-    public void initUiAndData() {
-        // required to have the right translated title
-        setTitle(R.string.settings_select_country);
+    public int getTitleRes() {
+        return R.string.settings_select_country;
+    }
 
+    @Override
+    public void initUiAndData() {
         Toolbar toolbar = findViewById(R.id.toolbar);
         if (toolbar != null) {
             setSupportActionBar(toolbar);

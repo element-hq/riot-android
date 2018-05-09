@@ -21,6 +21,7 @@ import android.content.Context
 import android.os.Bundle
 import android.support.annotation.CallSuper
 import android.support.annotation.LayoutRes
+import android.support.annotation.StringRes
 import android.support.v7.app.AppCompatActivity
 import android.view.View
 import androidx.core.view.isVisible
@@ -55,6 +56,11 @@ abstract class RiotAppCompatActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
 
         doBeforeSetContentView()
+
+        val titleRes = getTitleRes()
+        if(titleRes != -1) {
+            setTitle(titleRes)
+        }
 
         setContentView(getLayoutRes())
 
@@ -107,6 +113,9 @@ abstract class RiotAppCompatActivity : AppCompatActivity() {
     open fun doBeforeSetContentView() = Unit
 
     open fun initUiAndData() = Unit
+
+    @StringRes
+    open fun getTitleRes() = -1
 
     //==============================================================================================
     // Handle loading view (also called waiting view or spinner view)
