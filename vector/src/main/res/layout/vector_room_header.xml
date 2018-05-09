@@ -83,10 +83,10 @@
             android:layout_toLeftOf="@+id/action_bar_header_room_members_text_view">
 
             <ImageView
-                android:contentDescription="@string/list_members"
                 android:layout_width="20dp"
                 android:layout_height="match_parent"
                 android:layout_alignParentRight="true"
+                android:contentDescription="@string/list_members"
                 android:src="@drawable/ic_list_white_24dp" />
         </RelativeLayout>
 
@@ -100,9 +100,9 @@
             android:layout_toRightOf="@+id/action_bar_header_room_members_text_view">
 
             <ImageView
-                android:contentDescription="@string/invite"
                 android:layout_width="20dp"
                 android:layout_height="match_parent"
+                android:contentDescription="@string/invite"
                 android:src="@drawable/ic_add_circle_outline_white_24dp" />
         </RelativeLayout>
     </RelativeLayout>

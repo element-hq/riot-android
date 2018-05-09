@@ -1,8 +1,8 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    xmlns:tools="http://schemas.android.com/tools">
+    android:layout_height="match_parent">
 
     <RelativeLayout
         android:id="@+id/room_action_bar"
@@ -14,25 +14,27 @@
             android:id="@+id/action_bar_header"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:visibility="gone" >
+            android:visibility="gone">
+
             <include layout="@layout/vector_room_header" />
         </RelativeLayout>
 
         <android.support.v7.widget.Toolbar
             android:id="@+id/room_toolbar"
-            android:layout_alignParentTop="true"
+            style="@style/VectorToolbarStyle"
             android:layout_width="match_parent"
             android:layout_height="?attr/actionBarSize"
-            app:contentInsetEnd="0dp"
-            app:contentInsetStart="0dp"
+            android:layout_alignParentTop="true"
             android:background="?attr/primary_color"
-            style="@style/VectorToolbarStyle">
+            app:contentInsetEnd="0dp"
+            app:contentInsetStart="0dp">
 
             <RelativeLayout
                 android:id="@+id/action_custom_bar_header"
-                android:background="@android:color/transparent"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content">
+                android:layout_height="wrap_content"
+                android:background="@android:color/transparent">
+
                 <include layout="@layout/vector_message_action_bar_custo_layout" />
             </RelativeLayout>
 
@@ -41,37 +43,36 @@
 
     <ProgressBar
         android:id="@+id/room_sync_in_progress"
-        android:contentDescription="@string/room_sync_in_progress"
         style="@style/Widget.AppCompat.ProgressBar.Horizontal"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:visibility="visible"
-        android:background="?attr/primary_color"
         android:layout_below="@+id/room_action_bar"
-        android:indeterminate="true"/>
+        android:background="?attr/primary_color"
+        android:contentDescription="@string/room_sync_in_progress"
+        android:indeterminate="true"
+        android:visibility="visible" />
 
     <LinearLayout
         android:id="@+id/room_preview_info_layout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical"
+        android:layout_below="@+id/room_sync_in_progress"
         android:background="?attr/riot_primary_background_color"
-        android:layout_below="@+id/room_sync_in_progress">
+        android:orientation="vertical">
 
         <View
             android:layout_width="match_parent"
-            android:layout_height="16dp">
-        </View>
+            android:layout_height="16dp"></View>
 
         <TextView
             android:id="@+id/room_preview_invitation_textview"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:textSize="14sp"
+            android:layout_marginLeft="20dp"
+            android:layout_marginRight="20dp"
             android:text="A text here"
             android:textColor="?attr/riot_primary_text_color"
-            android:layout_marginLeft="20dp"
-            android:layout_marginRight="20dp" />
+            android:textSize="14sp" />
 
         <RelativeLayout
             android:id="@+id/preview_actions_bar"
@@ -82,24 +83,24 @@
 
             <Button
                 android:id="@+id/button_join_room"
-                android:layout_centerVertical="true"
-                android:layout_alignParentLeft="true"
-                android:layout_marginRight="16dp"
                 android:layout_width="94dp"
                 android:layout_height="36dp"
+                android:layout_alignParentLeft="true"
+                android:layout_centerVertical="true"
+                android:layout_marginRight="16dp"
                 android:background="@color/vector_green_color"
-                android:textColor="@android:color/white"
-                android:text="@string/join_room"/>
+                android:text="@string/join_room"
+                android:textColor="@android:color/white" />
 
             <Button
                 android:id="@+id/button_decline"
-                android:layout_centerVertical="true"
-                android:layout_centerHorizontal="true"
                 android:layout_width="94dp"
                 android:layout_height="36dp"
-                android:textColor="@color/vector_fuchsia_color"
+                android:layout_centerHorizontal="true"
+                android:layout_centerVertical="true"
                 android:background="@android:color/white"
-                android:text="@string/cancel"/>
+                android:text="@string/cancel"
+                android:textColor="@color/vector_fuchsia_color" />
         </RelativeLayout>
 
         <TextView
@@ -108,25 +109,25 @@
             android:layout_height="wrap_content"
             android:layout_marginLeft="20dp"
             android:layout_marginRight="20dp"
-            android:textSize="14sp"
             android:text=""
-            android:textColor="@color/vector_silver_color"/>
+            android:textColor="@color/vector_silver_color"
+            android:textSize="14sp" />
 
     </LinearLayout>
 
     <im.vector.view.VectorPendingCallView
         android:id="@+id/room_pending_call_view"
-        android:layout_below="@+id/room_preview_info_layout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:visibility="gone"/>
+        android:layout_below="@+id/room_preview_info_layout"
+        android:visibility="gone" />
 
     <im.vector.view.VectorOngoingConferenceCallView
         android:id="@+id/room_ongoing_conference_call_view"
-        android:layout_below="@+id/room_pending_call_view"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:visibility="gone"/>
+        android:layout_below="@+id/room_pending_call_view"
+        android:visibility="gone" />
 
     <im.vector.view.ActiveWidgetsBanner
         android:id="@+id/room_pending_widgets_view"
@@ -168,19 +169,18 @@
 
         <ImageView
             android:id="@+id/close_jump_to_first_unread"
-            android:contentDescription="@string/action_close"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:layout_alignBottom="@+id/jump_to_first_unread_label"
             android:layout_alignParentRight="true"
             android:layout_alignTop="@+id/jump_to_first_unread_label"
+            android:contentDescription="@string/action_close"
             android:paddingLeft="16dp"
             android:paddingRight="16dp"
             android:src="@drawable/vector_leave_room_black"
             android:tint="?attr/message_text_color" />
 
         <ProgressBar
-            android:contentDescription="@string/loading"
             android:id="@+id/jump_to_read_spinner"
             style="@style/Widget.AppCompat.ProgressBar"
             android:layout_width="wrap_content"
@@ -189,6 +189,7 @@
             android:layout_alignParentRight="true"
             android:layout_alignTop="@+id/jump_to_first_unread_label"
             android:layout_margin="2dp"
+            android:contentDescription="@string/loading"
             android:indeterminate="true"
             android:paddingRight="2dp" />
 
@@ -209,20 +210,20 @@
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:background="?attr/riot_primary_background_color"
-            android:paddingTop="0dp"
-            android:paddingBottom="0dp"
-            android:layout_alignParentTop="true"
             android:layout_alignParentLeft="true"
-            android:layout_alignParentStart="true">
+            android:layout_alignParentStart="true"
+            android:layout_alignParentTop="true"
+            android:background="?attr/riot_primary_background_color"
+            android:paddingBottom="0dp"
+            android:paddingTop="0dp">
 
             <ImageView
                 android:id="@+id/search_background_imageview"
-                android:background="#FFFFFFFF"
-                android:layout_height="match_parent"
                 android:layout_width="match_parent"
-                android:layout_alignParentTop="true"
+                android:layout_height="match_parent"
                 android:layout_alignParentLeft="true"
+                android:layout_alignParentTop="true"
+                android:background="#FFFFFFFF"
                 android:src="@drawable/vector_search_bg"
                 android:visibility="gone" />
 
@@ -231,39 +232,40 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/search_no_results"
-                android:textStyle="bold"
                 android:textSize="17sp"
+                android:textStyle="bold"
                 android:visibility="gone" />
 
             <RelativeLayout
                 android:id="@+id/room_bottom_layout"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="16dp"
-                android:layout_alignParentBottom="true">
+                android:layout_alignParentBottom="true"
+                android:layout_marginLeft="16dp">
 
                 <RelativeLayout
                     android:id="@+id/room_self_avatar_container"
-                    android:layout_marginTop="8dp"
-                    android:layout_marginBottom="8dp"
                     android:layout_width="wrap_content"
-                    android:layout_height="wrap_content">
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="8dp"
+                    android:layout_marginTop="8dp">
 
-                    <include layout="@layout/vector_room_round_avatar"
+                    <include
+                        android:id="@+id/room_self_avatar"
+                        layout="@layout/vector_room_round_avatar"
                         android:layout_width="40dp"
                         android:layout_height="40dp"
-                        android:layout_centerVertical="true"
-                        android:id="@+id/room_self_avatar"/>
+                        android:layout_centerVertical="true" />
                 </RelativeLayout>
 
                 <LinearLayout
                     android:id="@+id/room_sending_message_layout"
-                    android:layout_alignParentRight="true"
-                    android:layout_toRightOf="@id/room_self_avatar_container"
-                    android:layout_centerInParent="true"
                     android:layout_width="wrap_content"
-                    android:minHeight="56dp"
-                    android:layout_height="wrap_content">
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentRight="true"
+                    android:layout_centerInParent="true"
+                    android:layout_toRightOf="@id/room_self_avatar_container"
+                    android:minHeight="56dp">
 
                     <RelativeLayout
                         android:layout_width="20dp"
@@ -280,19 +282,19 @@
                     </RelativeLayout>
 
                     <im.vector.view.VectorAutoCompleteTextView
+                        android:id="@+id/editText_messageBox"
                         android:layout_width="0dp"
-                        android:layout_weight="1"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center_vertical"
-                        android:inputType="textCapSentences|textMultiLine"
-                        android:textSize="14sp"
+                        android:layout_weight="1"
+                        android:background="@android:color/transparent"
                         android:dropDownAnchor="@+id/room_sending_message_layout"
                         android:hint="@string/room_message_placeholder_not_encrypted"
-                        android:id="@+id/editText_messageBox"
+                        android:inputType="textCapSentences|textMultiLine"
                         android:textColor="?attr/riot_primary_text_color"
-                        android:background="@android:color/transparent"
+                        android:textColorHint="?attr/default_text_hint_color"
                         android:textCursorDrawable="@drawable/searches_cursor_background"
-                        android:textColorHint="?attr/default_text_hint_color"/>
+                        android:textSize="14sp" />
 
                     <View
                         android:id="@+id/room_button_margin_left"
@@ -310,7 +312,7 @@
                             android:layout_width="24dp"
                             android:layout_height="24dp"
                             android:layout_centerInParent="true"
-                            android:src="@drawable/ic_material_file"/>
+                            android:src="@drawable/ic_material_file" />
 
                     </RelativeLayout>
 
@@ -325,8 +327,8 @@
                             android:layout_width="24dp"
                             android:layout_height="match_parent"
                             android:layout_centerInParent="true"
-                            android:src="@drawable/voice_call_start_green"
-                            android:contentDescription="@string/call_connecting"/>
+                            android:contentDescription="@string/call_connecting"
+                            android:src="@drawable/voice_call_start_green" />
                     </RelativeLayout>
 
                     <RelativeLayout
@@ -340,8 +342,8 @@
                             android:layout_width="24dp"
                             android:layout_height="24dp"
                             android:layout_centerVertical="true"
-                            android:src="@drawable/voice_call_end_fushia"
-                            android:contentDescription="@string/call_ended"/>
+                            android:contentDescription="@string/call_ended"
+                            android:src="@drawable/voice_call_end_fushia" />
                     </RelativeLayout>
 
                     <View
@@ -352,16 +354,16 @@
 
                 <TextView
                     android:id="@+id/room_cannot_post_textview"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentRight="true"
                     android:layout_centerVertical="true"
                     android:layout_marginLeft="16dp"
                     android:layout_marginRight="16dp"
-                    android:layout_alignParentRight="true"
                     android:layout_toRightOf="@id/room_self_avatar_container"
                     android:text="@string/room_do_not_have_permission_to_post"
-                    android:textSize="14sp"
                     android:textColor="?attr/riot_primary_text_color"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
+                    android:textSize="14sp"
                     android:visibility="gone" />
             </RelativeLayout>
 
@@ -369,8 +371,8 @@
                 android:id="@+id/bottom_separator"
                 android:layout_width="match_parent"
                 android:layout_height="1dp"
-                android:layout_alignParentLeft="true"
                 android:layout_above="@id/room_bottom_layout"
+                android:layout_alignParentLeft="true"
                 android:background="?attr/room_activity_divider_color" />
 
             <RelativeLayout
@@ -398,18 +400,18 @@
                     android:layout_centerVertical="true"
                     android:layout_marginLeft="68dp"
                     android:layout_marginRight="13dp"
+                    android:accessibilityLiveRegion="polite"
                     android:text="a text here "
-                    android:textColor="?attr/room_notification_text_color"
-                    android:accessibilityLiveRegion="polite" />
+                    android:textColor="?attr/room_notification_text_color" />
 
             </RelativeLayout>
 
             <View
                 android:id="@+id/room_notification_separator"
                 android:layout_width="match_parent"
-                android:layout_marginLeft="13dp"
                 android:layout_height="1dp"
                 android:layout_above="@id/room_notifications_area"
+                android:layout_marginLeft="13dp"
                 android:background="?attr/room_activity_divider_color" />
 
             <RelativeLayout
@@ -422,39 +424,40 @@
 
             <ProgressBar
                 android:id="@+id/loading_room_paginate_back_progress"
-                android:contentDescription="@string/loading"
-                android:layout_height="40dp"
                 android:layout_width="match_parent"
-                android:visibility="gone"
-                android:indeterminate="true" />
+                android:layout_height="40dp"
+                android:contentDescription="@string/loading"
+                android:indeterminate="true"
+                android:visibility="gone" />
 
             <ProgressBar
                 android:id="@+id/loading_room_paginate_forward_progress"
-                android:contentDescription="@string/loading"
-                android:layout_height="40dp"
                 android:layout_width="match_parent"
-                android:layout_alignParentLeft="true"
+                android:layout_height="40dp"
                 android:layout_alignBottom="@id/anchor_fragment_messages"
-                android:visibility="gone"
-                android:indeterminate="true" />
+                android:layout_alignParentLeft="true"
+                android:contentDescription="@string/loading"
+                android:indeterminate="true"
+                android:visibility="gone" />
         </RelativeLayout>
     </RelativeLayout>
 
     <RelativeLayout
         android:id="@+id/main_progress_layout"
-        android:layout_alignTop="@+id/room_preview_info_layout"
-        android:layout_alignParentLeft="true"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:layout_alignParentLeft="true"
+        android:layout_alignTop="@+id/room_preview_info_layout"
         android:background="?attr/waiting_background_color"
         android:visibility="gone">
+
         <ProgressBar
             android:id="@+id/medias_processing_progress"
-            android:contentDescription="@string/loading"
-            android:layout_height="40dp"
             android:layout_width="40dp"
+            android:layout_height="40dp"
             android:layout_centerHorizontal="true"
             android:layout_centerVertical="true"
+            android:contentDescription="@string/loading"
             android:indeterminate="true" />
     </RelativeLayout>
 </RelativeLayout>
