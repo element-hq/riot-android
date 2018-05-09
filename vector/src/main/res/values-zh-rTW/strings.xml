@@ -409,4 +409,11 @@
     <string name="ssl_remain_offline">忽略</string>
     <string name="ssl_fingerprint_hash">指紋（%s）：</string>
     <string name="ssl_could_not_verify">無法驗證遠端伺服器的身份。</string>
+    <plurals name="membership_changes">
+	<item quantity="other">%d 會員變動</item>
+</plurals>
+
+    <string name="ssl_cert_not_trust">這可能表示有人正惡意的攔截你的流量，或你的手機不信任由遠端伺服器提供的憑證。</string>
+    <string name="ssl_cert_new_account_expl">如果伺服器管理員說這是在預料之中的，確保底下的指紋與他們所提供的指紋符合。</string>
+    <string name="ssl_unexpected_existing_expl">你的手機曾經信任的憑證已經變動。這非常不尋常。建議你不要接受此新的憑證。</string>
     </resources>
