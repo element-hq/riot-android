@@ -3,7 +3,7 @@
     <!-- use to retrieve the supported languages list -->
     <!-- should the same value as the file name -->
     <string name="resouces_language">el</string>
-    <string name="resouces_country">EL</string>
+    <string name="resouces_country">ΕΛ</string>
 
 
     <string name="cancel">Ακύρωση</string>
@@ -41,4 +41,19 @@
 
     <string name="_continue">Συνέχεια</string>
 
+    <string name="notification_sync_in_progress">Γίνεται συγχρονισμός</string>
+    <string name="notification_noisy_notifications">Ηχητικές ειδοποιήσεις</string>
+    <string name="notification_silent_notifications">Αθόρυβες ειδοποιήσεις</string>
+
+    <string name="title_activity_home">Μηνύματα</string>
+    <string name="title_activity_room">Δωμάτιο</string>
+    <string name="title_activity_settings">Ρυθμίσεις</string>
+    <string name="title_activity_member_details">Πληροφορίες μέλους</string>
+    <string name="title_activity_historical">Ιστορικό</string>
+    <string name="title_activity_bug_report">Αναφορά σφάλματος</string>
+    <string name="title_activity_group_details">Πληροφορίες κοινότητας</string>
+
+    <string name="loading">Φόρτωση...</string>
+
+    <string name="save">Αποθήκευση</string>
     </resources>
