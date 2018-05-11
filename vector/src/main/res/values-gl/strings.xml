@@ -39,4 +39,66 @@
     <string name="active_call">Chamada activa</string>
     <string name="ongoing_conference_call_voice">voz</string>
     <string name="ongoing_conference_call_video">vídeo</string>
+    <string name="notification_listen_for_events">A escoita de eventos</string>
+    <string name="forward">Adiante</string>
+    <string name="report_content">Informar sobre contido</string>
+    <string name="ongoing_conference_call">" Conferencia en curso. Únase con vídeo ou voz."</string>
+    <string name="cannot_start_call">Non se pode iniciar a chamada, inténteo máis tarde</string>
+    <string name="missing_permissions_warning">Debido a falta de permisos, poderían faltar algunhas características...</string>
+    <string name="missing_permissions_to_start_conf_call">Precisa permiso para convidar a iniciar unha conferencia en esta sala</string>
+    <string name="missing_permissions_title_to_start_conf_call">Non puido iniciar a chamada</string>
+    <string name="device_information">Información do dispositivo</string>
+    <string name="room_no_conference_call_in_encrypted_rooms">As chamadas de conferencia non están soportadas en salas cifradas</string>
+    <string name="send_anyway">Enviar igualmente</string>
+    <string name="or">ou</string>
+    <string name="and">e</string>
+    <string name="invite">Convidar</string>
+    <string name="offline">Fora de liña</string>
+
+    <string name="action_exit">accións</string>
+    <string name="actions">Accións</string>
+    <string name="action_sign_out">Desconectar</string>
+    <string name="action_sign_out_confirmation">Por seguridade, a desconexión eliminará calquer chave de cifrado extremo-a-extremo facendo o historial de conversas cifradas ilexible si volta a conectarse.
+Escolla exportar para facer copia de seguridade das chaves antes de desconectar.</string>
+    <string name="action_voice_call">Chamada de voz</string>
+    <string name="action_video_call">Chamada de vídeo</string>
+    <string name="action_global_search">Busca global</string>
+    <string name="action_mark_all_as_read">Marcar todo como lido</string>
+    <string name="action_historical">Histórico</string>
+    <string name="action_quick_reply">Resposta rápida</string>
+    <string name="action_open">Abrir</string>
+    <string name="action_close">Pechar</string>
+    <string name="copied_to_clipboard">Copiado ao portapapeis</string>
+    <string name="disable">Desactivar</string>
+
+    <string name="dialog_title_confirmation">Confirmación</string>
+    <string name="dialog_title_warning">Aviso</string>
+
+    <string name="bottom_action_home">Inicio</string>
+    <string name="bottom_action_favourites">Favoritas</string>
+    <string name="bottom_action_people">Xente</string>
+    <string name="bottom_action_rooms">Salas</string>
+    <string name="bottom_action_groups">Comunidades</string>
+
+    <string name="home_filter_placeholder_home">Buscar salas</string>
+    <string name="home_filter_placeholder_favorites">Buscar favoritas</string>
+    <string name="home_filter_placeholder_people">Buscar xente</string>
+    <string name="home_filter_placeholder_rooms">Buscar salas</string>
+    <string name="home_filter_placeholder_groups">Buscar comunidades</string>
+
+    <string name="invitations_header">Convites</string>
+    <string name="low_priority_header">Baixa prioridade</string>
+
+    <string name="direct_chats_header">Conversas</string>
+    <string name="local_address_book_header">Axenda local de enderezos</string>
+    <string name="user_directory_header">Directorio de usuaria</string>
+    <string name="matrix_only_filter">Só contactos Matrix</string>
+    <string name="no_conversation_placeholder">Sin conversas</string>
+    <string name="no_contact_access_placeholder">Non permiteu a Riot acceder aos contactos locais</string>
+    <string name="no_result_placeholder">Sin resultados</string>
+
+    <string name="rooms_header">Salas</string>
+    <string name="rooms_directory_header">Directorio de salas</string>
+    <string name="no_room_placeholder">Sin salas</string>
+    <string name="no_public_room_placeholder">Sin salas públicas accesibles</string>
     </resources>
