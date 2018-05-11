@@ -21,12 +21,16 @@ import android.content.Context
 import android.os.Bundle
 import android.support.annotation.CallSuper
 import android.support.annotation.LayoutRes
+import android.support.annotation.Nullable
 import android.support.annotation.StringRes
 import android.support.v7.app.AppCompatActivity
+import android.support.v7.widget.Toolbar
 import android.view.View
 import androidx.core.view.isVisible
+import butterknife.BindView
 import butterknife.ButterKnife
 import butterknife.Unbinder
+import im.vector.R
 
 import im.vector.VectorApp
 import org.matrix.androidsdk.util.Log
@@ -45,6 +49,15 @@ abstract class RiotAppCompatActivity : AppCompatActivity() {
     private var savedInstanceState: Bundle? = null
 
     /** =========================================================================================
+     * UI
+     * ========================================================================================== */
+
+    // TODO Maintenance: Toolbar is bound here now. Use this member in children Activities
+    @Nullable
+    @BindView(R.id.toolbar)
+    protected lateinit var toolbar: Toolbar
+
+    /** =========================================================================================
      * LIFE CYCLE
      * ========================================================================================== */
 
@@ -57,11 +70,6 @@ abstract class RiotAppCompatActivity : AppCompatActivity() {
 
         doBeforeSetContentView()
 
-        val titleRes = getTitleRes()
-        if(titleRes != -1) {
-            setTitle(titleRes)
-        }
-
         setContentView(getLayoutRes())
 
         unBinder = ButterKnife.bind(this)
@@ -69,6 +77,15 @@ abstract class RiotAppCompatActivity : AppCompatActivity() {
         this.savedInstanceState = savedInstanceState
 
         initUiAndData()
+
+        val titleRes = getTitleRes()
+        if (titleRes != -1) {
+            supportActionBar?.let {
+                it.setTitle(titleRes)
+            } ?: run {
+                setTitle(titleRes)
+            }
+        }
     }
 
     override fun onDestroy() {
@@ -164,6 +181,18 @@ abstract class RiotAppCompatActivity : AppCompatActivity() {
      * @return true if Activity is created for the first time (and not restored by the system)
      */
     protected fun isFirstCreation() = savedInstanceState == null
+
+    /**
+     * Configure the Toolbar. It MUST be present in your layout with id "toolbar"
+     */
+    protected fun configureToolbar() {
+        setSupportActionBar(toolbar)
+
+        supportActionBar?.let {
+            it.setDisplayShowHomeEnabled(true)
+            it.setDisplayHomeAsUpEnabled(true)
+        }
+    }
 
     /** =========================================================================================
      * PRIVATE METHODS
