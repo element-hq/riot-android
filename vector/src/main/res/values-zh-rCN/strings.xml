@@ -226,7 +226,7 @@
     <string name="auth_repeat_password_placeholder">重复密码</string>
     <string name="auth_use_server_options">使用自定义服务器选项（高级）</string>
     <string name="auth_email_validation_message">请检查您的电子邮箱以继续注册</string>
-    <string name="auth_recaptcha_message">此主服务器想确认你不是机器人</string>
+    <string name="auth_recaptcha_message">此主服务器想确保您不是机器人</string>
     <string name="auth_reset_password_email_validation_message">一封电子邮件已经发送至 %s. 一旦你点击了里面的链接，点击下面。</string>
     <string name="auth_reset_password_error_unauthorized">邮箱验证失败：请确保你已点击邮件中的链接</string>
     <string name="auth_reset_password_success_message">你的密码已被重置。
@@ -405,9 +405,9 @@
     <string name="encryption_information_verify">验证</string>
     <string name="encryption_information_unverify">取消验证</string>
     <string name="encryption_information_verify_device">验证设备</string>
-    <string name="encryption_information_verify_key_match">我验证密钥匹配</string>
+    <string name="encryption_information_verify_key_match">我验证此密钥匹配</string>
 
-    <string name="unknown_devices_alert_title">聊天室有未知设备</string>
+    <string name="unknown_devices_alert_title">聊天室包含未知设备</string>
 <string name="later">稍后再说</string>
     <string name="permalink">永久链接</string>
     <string name="rename">重命名</string>
@@ -548,9 +548,9 @@
     <string name="encryption_information_block">列入黑名单</string>
     <string name="encryption_information_unblock">移出黑名单</string>
 
-    <string name="e2e_enabling_on_app_update">Riot 现在支持端对端加密，但你需要再次登录来启用它。
+    <string name="e2e_enabling_on_app_update">Riot 目前支持端对端加密，但是您需要重新登录以启用它。
 
-你可以现在或稍后从应用设置中做这件事。</string>
+您可以现在重新登录，也可以之后再从应用程序设置中选择开启。</string>
 
     <string name="ok">确认</string>
     <string name="redact">撤回</string>
@@ -909,4 +909,8 @@
     <string name="room_settings_add_new_group">新的社区ID (如 +foo:matrix.org)</string>
     <string name="group_no_long_description">社区管理员没有提供这个社区的具体描述。</string>
 
+    <string name="settings_notification_privacy_normal">普通</string>
+    <string name="settings_notification_privacy_power_saving">省电模式</string>
+    <string name="settings_notification_privacy_low_detail">简化模式（Low detail notifications）</string>
+    <string name="settings_notification_privacy_reduced">非隐私模式（Reduced privacy）</string>
     </resources>
