@@ -1002,12 +1002,12 @@ class VectorMessagesAdapterHelper {
             // A message is displayable as long as it has a body
             // Redacted messages should not be displayed
             Message message = JsonUtils.toMessage(event.getContent());
-            return !TextUtils.isEmpty(message.body) || !event.isRedacted() || TextUtils.equals(message.msgtype, Message.MSGTYPE_EMOTE);
+            return !event.isRedacted() && (!TextUtils.isEmpty(message.body) || TextUtils.equals(message.msgtype, Message.MSGTYPE_EMOTE));
         } else if (Event.EVENT_TYPE_STICKER.equals(eventType)) {
             // A sticker is displayable as long as it has a body
             // Redacted stickers should not be displayed
             StickerMessage stickerMessage = JsonUtils.toStickerMessage(event.getContent());
-            return !TextUtils.isEmpty(stickerMessage.body) || !event.isRedacted();
+            return !TextUtils.isEmpty(stickerMessage.body) && !event.isRedacted();
         } else if (Event.EVENT_TYPE_STATE_ROOM_TOPIC.equals(eventType)
                 || Event.EVENT_TYPE_STATE_ROOM_NAME.equals(eventType)) {
             EventDisplay display = new RiotEventDisplay(context, event, roomState);
