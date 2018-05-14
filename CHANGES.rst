@@ -1,3 +1,9 @@
+Changes in Riot 0.8.8 (2018-05-13)
+===================================================
+
+Bug Fix:
+ * Background sync cannot be enabled on F-Droid Riot app (#2196)
+
 Changes in Riot 0.8.7 (2018-04-25)
 ===================================================
 
