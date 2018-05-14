@@ -101,14 +101,12 @@ Customise your application settings with a custom google play link
 It is possible to set some default values to Riot with some extra parameters to the google play link.
 
 - Use the https://developers.google.com/analytics/devguides/collection/android/v4/campaigns URL generator (at the bottom)
-
-Set "Campaign Source"
-Set "Campaign Content" with the extra parameters (e.g. is=http://my__is.org&hs=http://my_hs.org)
-Generate the customised link
-
-- Supported extra parameters
-is : identidy server URL
-hs : home server URL
+- Set "Campaign Content" with the extra parameters (e.g. is=http://my__is.org%26hs=http://my_hs.org). Please notice the usage of **%26** to escape the **&**
+- Supported extra parameters:
+   - is : identity server URL
+   - hs : home server URL
+- Generate the customised link
+- The application may have to be installed from the Play Store website (and not from the Play Store application) for this feature to work properly.
 
 FAQ
 ===
