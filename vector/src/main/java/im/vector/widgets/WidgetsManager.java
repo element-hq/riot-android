@@ -128,8 +128,8 @@ public class WidgetsManager {
      *
      * @param session     the session.
      * @param room        the room to check.
-     * @param widgetTypes the the widget types
-     * @param excludedTypes the the excluded widget types
+     * @param widgetTypes the widget types
+     * @param excludedTypes the excluded widget types
      * @return the active widgets list
      */
     private List<Widget> getActiveWidgets(final MXSession session, final Room room, final Set<String> widgetTypes, final Set<String> excludedTypes) {
