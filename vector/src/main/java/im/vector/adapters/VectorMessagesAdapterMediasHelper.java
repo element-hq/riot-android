@@ -288,6 +288,7 @@ class VectorMessagesAdapterMediasHelper {
                     .apply(new RequestOptions()
                             .override(maxImageWidth, maxImageHeight)
                             .fitCenter()
+                            .placeholder(R.drawable.sticker_placeholder)
                     )
                     .into(imageView);
         }

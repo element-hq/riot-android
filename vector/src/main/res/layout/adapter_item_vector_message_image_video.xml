@@ -2,6 +2,7 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical">
 
     <include layout="@layout/vector_message_header"
@@ -73,25 +74,26 @@
                         android:src="@drawable/e2e_verified" />
 
                     <FrameLayout
+                        android:id="@+id/messagesAdapter_body_layout"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
-                        android:paddingRight="4dp"
-                        android:id="@+id/messagesAdapter_body_layout">
+                        android:paddingRight="4dp">
 
                         <RelativeLayout
-                            android:layout_gravity="right"
                             android:id="@+id/messagesAdapter_image_layout"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content">
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:layout_gravity="right">
 
                             <!-- the media -->
                             <ImageView
+                                android:id="@+id/messagesAdapter_image"
                                 android:layout_height="match_parent"
                                 android:layout_width="match_parent"
                                 android:layout_marginLeft="4dp"
-                                android:id="@+id/messagesAdapter_image"
-                                android:adjustViewBounds="true" />
+                                android:adjustViewBounds="true"
+                                android:scaleType="center" />
 
                             <!-- the media type -->
                             <ImageView
