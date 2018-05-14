@@ -610,7 +610,7 @@
     <!-- analytics -->
     <string name="settings_analytics">Analytics</string>
     <string name="settings_opt_out_of_analytics">Opt out of analytics</string>
-    <string name="settings_opt_out_of_analytics_summary">Riot collects anonymous analytics to allow us to improve the application.</string>
+    <string name="settings_opt_out_of_analytics_summary">Riot collects anonymous analytics to allow us to improve the application. Requires a restart.</string>
 
     <string name="settings_data_save_mode">Data save mode</string>
 
