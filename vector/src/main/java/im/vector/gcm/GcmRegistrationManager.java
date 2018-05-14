@@ -29,21 +29,15 @@ import android.os.Looper;
 import android.text.TextUtils;
 
 import org.matrix.androidsdk.HomeServerConnectionConfig;
-import org.matrix.androidsdk.rest.callback.SimpleApiCallback;
-import org.matrix.androidsdk.rest.client.PushersRestClient;
-import org.matrix.androidsdk.util.Log;
-
 import org.matrix.androidsdk.MXSession;
 import org.matrix.androidsdk.data.Pusher;
 import org.matrix.androidsdk.listeners.IMXNetworkEventListener;
 import org.matrix.androidsdk.rest.callback.ApiCallback;
+import org.matrix.androidsdk.rest.callback.SimpleApiCallback;
+import org.matrix.androidsdk.rest.client.PushersRestClient;
 import org.matrix.androidsdk.rest.model.MatrixError;
 import org.matrix.androidsdk.rest.model.PushersResponse;
-
-import im.vector.Matrix;
-import im.vector.R;
-import im.vector.activity.CommonActivityUtils;
-import im.vector.util.PreferencesManager;
+import org.matrix.androidsdk.util.Log;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -51,6 +45,11 @@ import java.util.List;
 import java.util.Map;
 import java.util.Timer;
 import java.util.TimerTask;
+
+import im.vector.Matrix;
+import im.vector.R;
+import im.vector.activity.CommonActivityUtils;
+import im.vector.util.PreferencesManager;
 
 /**
  * Helper class to store the GCM registration ID in {@link SharedPreferences}
@@ -1128,12 +1127,9 @@ public final class GcmRegistrationManager {
         boolean isContentSendingAllowed = isContentSendingAllowed();
         boolean isBackgroundSyncAllowed = isBackgroundSyncAllowed();
 
-        if (isContentSendingAllowed && !isBackgroundSyncAllowed)
-        {
+        if (isContentSendingAllowed && !isBackgroundSyncAllowed) {
             notificationPrivacy = NotificationPrivacy.REDUCED;
-        }
-        else if (!isContentSendingAllowed && isBackgroundSyncAllowed)
-        {
+        } else if (!isContentSendingAllowed && isBackgroundSyncAllowed) {
             notificationPrivacy = NotificationPrivacy.NORMAL;
         }
 
@@ -1218,10 +1214,10 @@ public final class GcmRegistrationManager {
      * @return true if the background sync is allowed
      */
     public boolean isBackgroundSyncAllowed() {
-        // first check if the application has the "run in background" permission.
+        // If using GCM, first check if the application has the "run in background" permission.
         // No permission, no background sync
-        if (!PreferencesManager.isIgnoringBatteryOptimizations(mContext))
-        {
+        if (hasRegistrationToken()
+                && !PreferencesManager.isIgnoringBatteryOptimizations(mContext)) {
             return false;
         }
 
