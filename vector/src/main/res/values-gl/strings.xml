@@ -1,0 +1,42 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<resources><string name="resouces_language">en</string>
+    <string name="resouces_country">US</string>
+
+    <string name="light_theme">Tema claro</string>
+    <string name="dark_theme">Tema escuro</string>
+    <string name="black_them">Tema negro</string>
+
+    <string name="notification_sync_in_progress">Sincronizando</string>
+    <string name="notification_noisy_notifications">Notificacións con son</string>
+    <string name="notification_silent_notifications">Notificacións silenciosas</string>
+
+    <string name="title_activity_home">Mensaxes</string>
+    <string name="title_activity_room">Canle</string>
+    <string name="title_activity_settings">Configuración</string>
+    <string name="title_activity_member_details">Detalles dos membros</string>
+    <string name="title_activity_historical">Histórico</string>
+    <string name="title_activity_bug_report">Informar de erros</string>
+    <string name="title_activity_group_details">Detalles da comunidade</string>
+
+    <string name="loading">Cargando...</string>
+
+    <string name="ok">Aceptar</string>
+    <string name="cancel">Cancelar</string>
+    <string name="save">Gardar</string>
+    <string name="leave">Saír</string>
+    <string name="send">Enviar</string>
+    <string name="copy">Copiar</string>
+    <string name="resend">Enviar de novo</string>
+    <string name="redact">Redactar</string>
+    <string name="quote">Citar</string>
+    <string name="share">Compartir</string>
+    <string name="later">Despois</string>
+    <string name="permalink">Ligazón permanente</string>
+    <string name="view_source">Ver a fonte</string>
+    <string name="view_decrypted_source">Ver a fonte descifrada</string>
+    <string name="delete">Borrar</string>
+    <string name="rename">Renomear</string>
+    <string name="active_call">Chamada activa</string>
+    <string name="ongoing_conference_call_voice">voz</string>
+    <string name="ongoing_conference_call_video">vídeo</string>
+    </resources>

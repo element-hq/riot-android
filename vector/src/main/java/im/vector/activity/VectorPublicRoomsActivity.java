@@ -56,7 +56,7 @@ public class VectorPublicRoomsActivity extends MXCActionBarActivity {
 
         Intent intent = getIntent();
 
-        MXSession session = getSession(this, intent);
+        MXSession session = getSession(intent);
 
         FragmentManager fm = getSupportFragmentManager();
         VectorPublicRoomsListFragment vectorPublicRoomsListFragment = (VectorPublicRoomsListFragment) fm.findFragmentByTag(TAG_FRAGMENT_PUBLIC_ROOMS_LIST);

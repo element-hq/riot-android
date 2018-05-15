@@ -50,7 +50,7 @@ import java.util.HashMap;
 /**
  * AccountCreationCaptchaActivity displays a webview to check captchas.
  */
-public class AccountCreationCaptchaActivity extends RiotBaseActivity {
+public class AccountCreationCaptchaActivity extends RiotAppCompatActivity {
     private static final String LOG_TAG = AccountCreationCaptchaActivity.class.getSimpleName();
 
     public static final String EXTRA_HOME_SERVER_URL = "AccountCreationCaptchaActivity.EXTRA_HOME_SERVER_URL";

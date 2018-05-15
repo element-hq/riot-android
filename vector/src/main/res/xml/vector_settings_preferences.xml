@@ -120,10 +120,12 @@
         android:title="@string/settings_home_display">
 
         <im.vector.preference.VectorSwitchPreference
+            android:defaultValue="true"
             android:key="SETTINGS_PIN_MISSED_NOTIFICATIONS_PREFERENCE_KEY"
             android:title="@string/settings_pin_missed_notifications" />
 
         <im.vector.preference.VectorSwitchPreference
+            android:defaultValue="true"
             android:key="SETTINGS_PIN_UNREAD_MESSAGES_PREFERENCE_KEY"
             android:title="@string/settings_pin_unread_messages" />
 
@@ -140,12 +142,9 @@
 
     <im.vector.preference.VectorDividerCategory />
 
-    <PreferenceCategory android:title="@string/settings_notifications">
-
-        <im.vector.preference.VectorCustomActionEditTextPreference
-            android:dialogTitle="@string/settings_notification_ringtone"
-            android:key="SETTINGS_NOTIFICATION_RINGTONE_SELECTION_PREFERENCE_KEY"
-            android:title="@string/settings_notification_ringtone" />
+    <PreferenceCategory
+        android:key="SETTINGS_NOTIFICATIONS_KEY"
+        android:title="@string/settings_notifications">
 
         <im.vector.preference.VectorSwitchPreference
             android:key="SETTINGS_ENABLE_ALL_NOTIF_PREFERENCE_KEY"
@@ -155,6 +154,16 @@
             android:dependency="SETTINGS_ENABLE_ALL_NOTIF_PREFERENCE_KEY"
             android:key="SETTINGS_ENABLE_THIS_DEVICE_PREFERENCE_KEY"
             android:title="@string/settings_enable_this_device" />
+
+        <im.vector.preference.VectorCustomActionEditTextPreference
+            android:dialogTitle="@string/settings_notification_privacy"
+            android:key="SETTINGS_NOTIFICATION_PRIVACY_PREFERENCE_KEY"
+            android:title="@string/settings_notification_privacy" />
+
+        <im.vector.preference.VectorCustomActionEditTextPreference
+            android:dialogTitle="@string/settings_notification_ringtone"
+            android:key="SETTINGS_NOTIFICATION_RINGTONE_SELECTION_PREFERENCE_KEY"
+            android:title="@string/settings_notification_ringtone" />
 
         <im.vector.preference.VectorSwitchPreference
             android:dependency="SETTINGS_ENABLE_ALL_NOTIF_PREFERENCE_KEY"
@@ -198,7 +207,8 @@
 
     </PreferenceCategory>
 
-    <im.vector.preference.VectorDividerCategory />
+    <im.vector.preference.VectorDividerCategory
+        android:key="SETTINGS_BACKGROUND_SYNC_DIVIDER_PREFERENCE_KEY"/>
 
     <PreferenceCategory
         android:key="SETTINGS_BACKGROUND_SYNC_PREFERENCE_KEY"
@@ -211,12 +221,6 @@
         <im.vector.preference.VectorSwitchPreference
             android:key="SETTINGS_ENABLE_BACKGROUND_SYNC_PREFERENCE_KEY"
             android:title="@string/settings_enable_background_sync" />
-
-        <im.vector.preference.VectorSwitchPreference
-            android:defaultValue="true"
-            android:key="SETTINGS_ENABLE_CONTENT_SENDING_PREFERENCE_KEY"
-            android:summary="@string/settings_enable_content_sending_summary"
-            android:title="@string/settings_enable_content_sending" />
 
         <EditTextPreference
             android:focusable="true"
@@ -273,10 +277,12 @@
             android:title="@string/settings_data_save_mode" />
 
         <im.vector.preference.VectorSwitchPreference
+            android:defaultValue="true"
             android:key="SETTINGS_USE_JITSI_CONF_PREFERENCE_KEY"
             android:title="@string/settings_labs_create_conference_with_jitsi" />
 
         <im.vector.preference.VectorSwitchPreference
+            android:defaultValue="true"
             android:key="SETTINGS_USE_MATRIX_APPS_PREFERENCE_KEY"
             android:title="@string/settings_labs_matrix_apps" />
 
@@ -357,6 +363,7 @@
         android:title="@string/settings_analytics">
 
         <im.vector.preference.VectorSwitchPreference
+            android:defaultValue="@bool/default_settings_disable_analytics"
             android:key="SETTINGS_DISABLE_PIWIK_SETTINGS_PREFERENCE_KEY"
             android:summary="@string/settings_opt_out_of_analytics_summary"
             android:title="@string/settings_opt_out_of_analytics" />
@@ -364,7 +371,6 @@
         <im.vector.preference.VectorSwitchPreference
             android:key="SETTINGS_USE_RAGE_SHAKE_KEY"
             android:title="@string/send_bug_report_rage_shake" />
-
 
     </PreferenceCategory>
 

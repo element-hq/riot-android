@@ -99,7 +99,7 @@ public class VectorRegistrationReceiver extends BroadcastReceiver {
 
     /**
      * Parse the URL sent in the email validation.
-     * This flow flow is part of the registration process {@see <a href="http://matrix.org/speculator/spec/HEAD/identity_service.html">Indenty spec server</a>}:
+     * This flow is part of the registration process {@see <a href="http://matrix.org/speculator/spec/HEAD/identity_service.html">Indenty spec server</a>}:
      * https://vector.im/_matrix/identity/api/v1/validate/email/submitToken?token=172230&client_secret=3a164877-1f6a-4aa3-a056-0dc20ebe6392&sid=3672&nextLink=https%3A//vector.im/develop/%23/register%3Fclient_secret%3D3a164877-1f6a-4aa3-a056-0dc20ebe6392%26hs_url%3Dhttps%3A//matrix.org%26is_url%3Dhttps%3A//vector.im%26session_id%3DipLKXEvRArNFZkDVpIZvqJMa%26sid%3D3672
      *
      * @param uri the uri to parse
@@ -113,13 +113,13 @@ public class VectorRegistrationReceiver extends BroadcastReceiver {
             if ((null == uri) || TextUtils.isEmpty(uri.getPath())) {
                 Log.e(LOG_TAG, "## parseMailRegistrationLink : null");
             } else if (!SUPPORTED_PATH_ACCOUNT_EMAIL_VALIDATION.equals(uri.getPath())) {
-                Log.e(LOG_TAG, "## parseUniversalLink : not supported");
+                Log.e(LOG_TAG, "## parseMailRegistrationLink(): not supported");
             } else {
                 String uriFragment, host = uri.getHost();
                 Log.i(LOG_TAG, "## parseMailRegistrationLink(): host=" + host);
 
                 if (!mSupportedHosts.contains(host)) {
-                    Log.e(LOG_TAG, "## parseUniversalLink : unsupported host =" + host);
+                    Log.e(LOG_TAG, "## parseMailRegistrationLink(): unsupported host =" + host);
                     return null;
                 }
 
@@ -144,7 +144,7 @@ public class VectorRegistrationReceiver extends BroadcastReceiver {
                     try {
                         value = URLDecoder.decode(value, "UTF-8");
                     } catch (Exception e) {
-                        Log.e(LOG_TAG, "## parseUniversalLink : Exception - parse query params Msg=" + e.getLocalizedMessage());
+                        Log.e(LOG_TAG, "## parseMailRegistrationLink(): Exception - parse query params Msg=" + e.getLocalizedMessage());
                     }
                     mapParams.put(name, value);
                 }
@@ -166,7 +166,7 @@ public class VectorRegistrationReceiver extends BroadcastReceiver {
             }
         } catch (Exception e) {
             mapParams = null;
-            Log.e(LOG_TAG, "## parseUniversalLink : Exception - Msg=" + e.getLocalizedMessage());
+            Log.e(LOG_TAG, "## parseMailRegistrationLink(): Exception - Msg=" + e.getLocalizedMessage());
         }
 
         return mapParams;

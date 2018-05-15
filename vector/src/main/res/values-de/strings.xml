@@ -32,7 +32,7 @@
     <string name="rename">Umbenennen</string>
     <string name="report_content">Inhalt melden</string>
     <string name="active_call">Aktives Gespräch</string>
-    <string name="ongoing_conference_call">" Konferenzgespräch läuft. Per Sprach-Chat oder per Video-Chat beitreten."</string>
+    <string name="ongoing_conference_call">" Konferenzgespräch läuft. Per Sprache oder Video beitreten."</string>
     <string name="ongoing_conference_call_voice">Sprache</string>
     <string name="ongoing_conference_call_video">Video</string>
     <string name="cannot_start_call">Das Gespräch kann nicht gestartet werden, bitte später erneut versuchen</string>
@@ -503,7 +503,7 @@ Bist du sicher?</string>
     <string name="settings_contacts_app_permission">Kontaktzugriffsberechtigung</string>
     <string name="settings_contacts_phonebook_country">Telefonbuch-Land</string>
     <string name="settings_home_display">Startseite</string>
-    <string name="settings_pin_missed_notifications">Räume mit verpassten Benachrichtigungen anheften</string>
+    <string name="settings_pin_missed_notifications">Räume mit ungelesenen Benachrichtigungen anheften</string>
     <string name="settings_pin_unread_messages">Räume mit ungelesenen Nachrichten anheften</string>
     <string name="settings_devices_list">Geräte</string>
     <string name="devices_details_dialog_title">Geräte-Details</string>
@@ -672,7 +672,7 @@ Verschlüsselte Nachrichten werden auf Matrix-Clients, auf denen die Verschlüss
     <string name="encryption_import_room_keys_summary">Schlüssel aus lokaler Datei importieren</string>
     <string name="encryption_import_import">Importieren</string>
     <string name="encryption_never_send_to_unverified_devices_title">Nur für verifizierte Geräte verschlüsseln</string>
-    <string name="encryption_never_send_to_unverified_devices_summary">Von diesem Gerät aus keine verschlüsselten Nachrichten an unbestätigte Geräte senden</string>
+    <string name="encryption_never_send_to_unverified_devices_summary">Von diesem Gerät aus keine verschlüsselten Nachrichten an nicht verifizierte Geräte senden</string>
 
     <string name="encryption_information_not_verified">NICHT verifiziert</string>
     <string name="encryption_information_verified">Verifiziert</string>
@@ -757,7 +757,7 @@ Unbekannte Geräte:</string>
     <string name="widget_creation_failure">Widget konnte nicht erstellt werden</string>
     <string name="event_formatter_widget_added">%1$s hinzugefügt von %2$s</string>
     <string name="event_formatter_widget_removed">%1$s entfernt von %2$s</string>
-    <string name="settings_labs_create_conference_with_jitsi">Konferenzgespräche mit jitsi aufbauen</string>
+    <string name="settings_labs_create_conference_with_jitsi">Konferenzgespräche mit jitsi durchführen</string>
     <string name="widget_delete_message_confirmation">Soll das Widget wirklich gelöscht werden?</string>
 
     // Widget Integration Manager
@@ -788,7 +788,7 @@ Unbekannte Geräte:</string>
     <string name="start_verification">Verifizierung starten</string>
     <string name="call">Anruf</string>
     <string name="notification_noisy_notifications">Laute Benachrichtigungen</string>
-    <string name="notification_silent_notifications">Leise Benachrichtigungen</string>
+    <string name="notification_silent_notifications">Lautlose Benachrichtigungen</string>
 
     <string name="option_take_photo">Foto aufnehmen</string>
     <string name="option_take_video">Video aufnehmen</string>
@@ -957,7 +957,24 @@ Unbekannte Geräte:</string>
     <string name="open_chat_header">Öffne Chat-Kopf</string>
     <string name="receipt_avatar">Lesebestätigungs-Profilbild</string>
     <string name="notice_avatar">Notiz-Avatar</string>
-    <string name="settings_enable_content_sending">Behalte detailierte Benachrichtigungen</string>
-    <string name="settings_enable_content_sending_summary">Aktiviere diese Option, wenn die Hintergrundsynchronisierung für detaillierte Benachrichtigungen deaktiviert wurde. Dies führt dazu, dass unverschlüsselter Nachrichten-Inhalt durch Google-Server geleitet wird</string>
+    <string name="settings_notification_privacy">Datenschutz für Benachrichtigungen</string>
+    <string name="settings_notification_privacy_warning">Riot.im läuft im Hintergrund um den Benachrichtigungsinhalt privat zu halten. Du kannst diese Option ändern um den Stromverbrauch zu reduzieren.</string>
+    <string name="settings_notification_privacy_normal">Normal</string>
+    <string name="settings_notification_privacy_power_saving">Energiesparoptionen</string>
+    <string name="settings_notification_privacy_low_detail">Informationsarme Benachrichtigung</string>
+    <string name="settings_notification_privacy_reduced">Verringerter Datenschutz</string>
+    <string name="settings_notification_privacy_need_permission">Dies App braucht die Berechtigung im Hintergrund zu laufen</string>
+    <string name="settings_notification_privacy_no_permission">Die App braucht die Berechtigung im Hintergrund zu laufen <b>nicht</b></string>
+    <string name="settings_notification_privacy_gcm">• Benachrichtigungen werden über Google Cloud Messaging versendet</string>
+    <string name="settings_notification_privacy_metadata">• Benachrichtigungen enthalten nur Metadaten</string>
+    <string name="settings_notification_privacy_secure_message_content">• Der Nachrichteninhalt der Benachrichtigung wird <b>sicher vom Matrix-Heimserver abgerufen</b></string>
+    <string name="settings_notification_privacy_nosecure_message_content">• Benachrichtigungen enthalten <b>Metadaten und Nachrichteninhalte</b></string>
+    <string name="settings_notification_privacy_message_content_not_shown">• Benachrichtigungen werden <b>den Nachrichteninhalt nicht anzeigen</b></string>
+
+    <string name="startup_notification_privacy_title">Benachrichtungs-Datenschutz</string>
+    <string name="startup_notification_privacy_message">Riot.im kann im Hintergrund laufen um deine Benachrichtigungen sicher und privat zu verwalten (dies kann den Energieverbrauch beeinflussen).</string>
+    <string name="startup_notification_privacy_button_grant">Berechtigung gewähren</string>
+    <string name="startup_notification_privacy_button_other">Wähle eine andere Option</string>
+
     </resources>
 

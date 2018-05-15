@@ -19,6 +19,7 @@ package im.vector.activity;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.support.annotation.Nullable;
 import android.support.v4.app.DialogFragment;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
@@ -59,18 +60,18 @@ public class MXCActionBarActivity extends RiotAppCompatActivity {
     /**
      * Return the used MXSession from an intent.
      *
-     * @param context the application context
      * @param intent  the intent
-     * @return the MXSession if it exists.
+     * @return the MXSession if it exists, or null.
      */
-    static MXSession getSession(Context context, Intent intent) {
+    @Nullable
+    protected MXSession getSession(Intent intent) {
         String matrixId = null;
 
         if (intent.hasExtra(EXTRA_MATRIX_ID)) {
             matrixId = intent.getStringExtra(EXTRA_MATRIX_ID);
         }
 
-        return Matrix.getInstance(context).getSession(matrixId);
+        return Matrix.getInstance(this).getSession(matrixId);
     }
 
     public MXSession getSession() {
