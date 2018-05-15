@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="20dp"
     android:layout_height="20dp"
     android:contentDescription="@string/notice_avatar">
@@ -9,13 +10,14 @@
         android:id="@+id/avatar_img"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:scaleType="centerCrop"
+        android:adjustViewBounds="true"
         android:background="@color/riot_primary_background_color_light"
-        android:adjustViewBounds="true"/>
+        android:scaleType="centerCrop"
+        tools:src="@drawable/icon_person" />
 
     <ImageView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:src="?avatar_mask"/>
+        android:src="?avatar_mask" />
 
 </FrameLayout>
