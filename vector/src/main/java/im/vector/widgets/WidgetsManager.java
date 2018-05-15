@@ -48,6 +48,7 @@ import java.util.UUID;
 import im.vector.Matrix;
 import im.vector.R;
 import im.vector.VectorApp;
+
 public class WidgetsManager {
     private static final String LOG_TAG = WidgetsManager.class.getSimpleName();
 
@@ -57,6 +58,11 @@ public class WidgetsManager {
     public static final String WIDGET_EVENT_TYPE = "im.vector.modular.widgets";
 
     /**
+     * The type for widget in user account
+     */
+    public static final String WIDGET_USER_EVENT_TYPE = "m.widgets";
+
+    /**
      * Known types widgets.
      */
     private static final String WIDGET_TYPE_JITSI = "jitsi";
@@ -64,12 +70,13 @@ public class WidgetsManager {
     /**
      * Integration rest url
      */
-    private static final String INTEGRATION_REST_URL = "https://scalar.vector.im";
+    private static final String INTEGRATION_REST_URL = "https://scalar-staging.riot.im/scalar";
+    // "https://scalar.vector.im";
 
     /**
      * Integration ui url
      */
-    public static final String INTEGRATION_UI_URL = "https://scalar-staging.riot.im/scalar-web/";
+    public static final String INTEGRATION_UI_URL = "https://scalar-staging.riot.im/scalar-web";
 
     /**
      * Widget preferences

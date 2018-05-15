@@ -104,6 +104,7 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
+import java.util.Map;
 import java.util.Timer;
 import java.util.TimerTask;
 
@@ -111,6 +112,7 @@ import im.vector.Matrix;
 import im.vector.R;
 import im.vector.VectorApp;
 import im.vector.ViewedRoomTracker;
+import im.vector.activity.util.RequestCodesKt;
 import im.vector.fragments.VectorMessageListFragment;
 import im.vector.fragments.VectorUnknownDevicesFragment;
 import im.vector.notifications.NotificationUtils;
@@ -426,7 +428,7 @@ public class VectorRoomActivity extends MXCActionBarActivity implements MatrixMe
                     String eventType = event.getType();
                     Log.d(LOG_TAG, "Received event type: " + eventType);
 
-                    switch(eventType) {
+                    switch (eventType) {
                         case Event.EVENT_TYPE_STATE_ROOM_NAME:
                         case Event.EVENT_TYPE_STATE_ROOM_ALIASES:
                         case Event.EVENT_TYPE_STATE_ROOM_MEMBER:
@@ -715,24 +717,28 @@ public class VectorRoomActivity extends MXCActionBarActivity implements MatrixMe
                     if (PreferencesManager.useNativeCamera(VectorRoomActivity.this)) {
                         messages = new Integer[]{
                                 R.string.option_send_files,
+                                R.string.option_send_sticker,
                                 R.string.option_take_photo,
                                 R.string.option_take_video,
                         };
 
                         icons = new Integer[]{
                                 R.drawable.ic_material_file,
+                                R.drawable.ic_material_file,// TODO BMA Icon for Stickers
                                 R.drawable.ic_material_camera,
-                                R.drawable.ic_material_videocam
+                                R.drawable.ic_material_videocam,
                         };
                     } else {
                         messages = new Integer[]{
                                 R.string.option_send_files,
-                                R.string.option_take_photo_video
+                                R.string.option_send_sticker,
+                                R.string.option_take_photo_video,
                         };
 
                         icons = new Integer[]{
-                                R.drawable.ic_material_file,  // R.string.option_send_files
-                                R.drawable.ic_material_camera, // R.string.option_take_photo
+                                R.drawable.ic_material_file,
+                                R.drawable.ic_material_file,// TODO BMA Icon for Stickers
+                                R.drawable.ic_material_camera,
                         };
                     }
 
@@ -746,6 +752,8 @@ public class VectorRoomActivity extends MXCActionBarActivity implements MatrixMe
 
                             if (selectedVal == R.string.option_send_files) {
                                 VectorRoomActivity.this.launchFileSelectionIntent();
+                            } else if (selectedVal == R.string.option_send_sticker) {
+                                startStickerChoiceActivity();
                             } else if (selectedVal == R.string.option_take_photo_video) {
                                 if (CommonActivityUtils.checkPermissions(CommonActivityUtils.REQUEST_CODE_PERMISSION_TAKE_PHOTO, VectorRoomActivity.this)) {
                                     launchCamera();
@@ -1044,7 +1052,7 @@ public class VectorRoomActivity extends MXCActionBarActivity implements MatrixMe
             }
 
             private void displayWidget(Widget widget) {
-                Intent intent =  WidgetActivity.Companion.getIntent(VectorRoomActivity.this, widget);
+                Intent intent = WidgetActivity.Companion.getIntent(VectorRoomActivity.this, widget);
 
                 startActivity(intent);
             }
@@ -1385,10 +1393,13 @@ public class VectorRoomActivity extends MXCActionBarActivity implements MatrixMe
         super.onActivityResult(requestCode, resultCode, data);
 
         if (resultCode == RESULT_OK) {
-            switch(requestCode) {
+            switch (requestCode) {
                 case REQUEST_FILES_REQUEST_CODE:
                 case TAKE_IMAGE_REQUEST_CODE:
                     sendMediasIntent(data);
+                    break;
+                case RequestCodesKt.CHOOSE_STICKER_REQUEST_CODE:
+                    sendSticker(data);
                     break;
                 case GET_MENTION_REQUEST_CODE:
                     insertUserDisplayNameInTextEditor(data.getStringExtra(VectorMemberDetailsActivity.RESULT_MENTION_ID));
@@ -2024,6 +2035,15 @@ public class VectorRoomActivity extends MXCActionBarActivity implements MatrixMe
         }
     }
 
+    /**
+     * Send a sticker
+     *
+     * @param data
+     */
+    private void sendSticker(Intent data) {
+
+    }
+
     //================================================================================
     // typing
     //================================================================================
@@ -2219,6 +2239,35 @@ public class VectorRoomActivity extends MXCActionBarActivity implements MatrixMe
         }
         fileIntent.setType("*/*");
         startActivityForResult(fileIntent, REQUEST_FILES_REQUEST_CODE);
+    }
+
+    private void startStickerChoiceActivity() {
+        Map<String, Object> userWidgets = mSession.getUserWidgets();
+
+        String stickerWidgetUrl = null;
+
+        // Search for sticker
+        for (Object o : userWidgets.values()) {
+            if (o instanceof Map) {
+                Object content = ((Map) o).get("content");
+                if (content != null && content instanceof Map) {
+                    Object type = ((Map) content).get("type");
+                    if (type != null && type instanceof String && type.equals("m.stickerpicker")) {
+                        stickerWidgetUrl = (String) ((Map) content).get("url");
+                        break;
+                    }
+                }
+            }
+        }
+
+        if (TextUtils.isEmpty(stickerWidgetUrl)) {
+            // TODO BMA String
+            Toast.makeText(this, "Please configure the matrix integration", Toast.LENGTH_SHORT).show();
+        } else {
+            Intent intent = ChooseStickerActivity.Companion.getIntent(this, mMyUserId, mRoom.getRoomId(), stickerWidgetUrl);
+
+            startActivityForResult(intent, RequestCodesKt.CHOOSE_STICKER_REQUEST_CODE);
+        }
     }
 
     /**
@@ -2987,9 +3036,9 @@ public class VectorRoomActivity extends MXCActionBarActivity implements MatrixMe
     /**
      * Trap the clicked URL.
      *
-     * @param strBuilder    the input string
-     * @param span          the URL
-     * @param value         roomAlias, roomId, groupId, eventId, etc.
+     * @param strBuilder the input string
+     * @param span       the URL
+     * @param value      roomAlias, roomId, groupId, eventId, etc.
      */
     public void makeLinkClickable(SpannableStringBuilder strBuilder, final URLSpan span, final String value) {
         int start = strBuilder.getSpanStart(span);
@@ -3010,7 +3059,6 @@ public class VectorRoomActivity extends MXCActionBarActivity implements MatrixMe
             strBuilder.removeSpan(span);
         }
     }
-
 
 
     /**

@@ -22,12 +22,14 @@ import android.content.Context
 import android.content.Intent
 import android.graphics.Bitmap
 import android.os.Build
+import android.support.annotation.CallSuper
 import android.text.TextUtils
 import android.webkit.*
 import butterknife.BindView
 import com.google.gson.reflect.TypeToken
 import im.vector.Matrix
 import im.vector.R
+import im.vector.types.ScalarEventData
 import im.vector.widgets.WidgetsManager
 import org.matrix.androidsdk.MXSession
 import org.matrix.androidsdk.data.Room
@@ -41,12 +43,19 @@ import java.io.InputStreamReader
 import java.net.URLEncoder
 import java.util.*
 
-class IntegrationManagerActivity : RiotAppCompatActivity() {
+open class IntegrationManagerActivity : RiotAppCompatActivity() {
+
+    /* ==========================================================================================
+     * UI
+     * ========================================================================================== */
 
     @BindView(R.id.integration_webview)
     lateinit var mWebView: WebView
 
-    // parameters
+    /* ==========================================================================================
+     * parameters
+     * ========================================================================================== */
+
     private var mSession: MXSession? = null
     private var mRoom: Room? = null
     private var mWidgetId: String? = null
@@ -60,7 +69,7 @@ class IntegrationManagerActivity : RiotAppCompatActivity() {
      */
     private fun buildInterfaceUrl(): String? {
         try {
-            var url = WidgetsManager.INTEGRATION_UI_URL + "?" +
+            var url = getBaseUrl() + "?" +
                     "scalar_token=" + URLEncoder.encode(mScalarToken, "utf-8") + "&" +
                     "room_id=" + URLEncoder.encode(mRoom!!.roomId, "utf-8")
 
@@ -69,6 +78,7 @@ class IntegrationManagerActivity : RiotAppCompatActivity() {
             }
 
             if (null != mWidgetId) {
+                // 'widgetId' ?
                 url += "&integ_id=" + URLEncoder.encode(mWidgetId, "utf-8")
             }
             return url
@@ -79,20 +89,20 @@ class IntegrationManagerActivity : RiotAppCompatActivity() {
         return null
     }
 
+    protected open fun getBaseUrl() = WidgetsManager.INTEGRATION_UI_URL
+
     // private class
     private inner class IntegrationWebAppInterface internal constructor() {
 
         @JavascriptInterface
         fun onScalarEvent(eventData: String) {
-            val gson = JsonUtils.getGson(false)
-            val objectAsMap: Map<String, Map<String, Any>>
+            Log.d(LOG_TAG, "onScalarEvent : $eventData")
 
             try {
-                objectAsMap = gson.fromJson(eventData, object : TypeToken<Map<String, Map<String, Any>>>() {
+                val objectAsMap = JsonUtils.getGson(false)
+                        .fromJson<ScalarEventData>(eventData, object : TypeToken<ScalarEventData>() {}.type)
 
-                }.type)
                 runOnUiThread {
-                    Log.d(LOG_TAG, "onScalarEvent : $objectAsMap")
                     onScalarMessage(objectAsMap)
                 }
             } catch (e: Exception) {
@@ -104,6 +114,7 @@ class IntegrationManagerActivity : RiotAppCompatActivity() {
 
     override fun getLayoutRes() = R.layout.activity_integration_manager
 
+    @CallSuper
     override fun initUiAndData() {
         waitingView = findViewById(R.id.integration_progress_layout)
 
@@ -167,7 +178,7 @@ class IntegrationManagerActivity : RiotAppCompatActivity() {
                 }
 
                 override fun onConsoleMessage(consoleMessage: ConsoleMessage): Boolean {
-                    Log.e(LOG_TAG, "## onConsoleMessage() : " + consoleMessage.message() + " line " + consoleMessage.lineNumber() + " source Id" + consoleMessage.sourceId())
+                    Log.e(LOG_TAG, "## onConsoleMessage() : " + consoleMessage.message() + " line " + consoleMessage.lineNumber() + " source Id " + consoleMessage.sourceId())
                     return super.onConsoleMessage(consoleMessage)
                 }
             }
@@ -194,6 +205,8 @@ class IntegrationManagerActivity : RiotAppCompatActivity() {
 
             it.webViewClient = object : WebViewClient() {
                 override fun onPageStarted(view: WebView?, url: String?, favicon: Bitmap?) {
+                    Log.d(LOG_TAG, "## onPageStarted - Url: $url")
+
                     showWaitingView()
                 }
 
@@ -230,7 +243,7 @@ class IntegrationManagerActivity : RiotAppCompatActivity() {
      *
      * @param JSData the js data request
      */
-    private fun onScalarMessage(JSData: Map<String, Map<String, Any>>?) {
+    protected open fun onScalarMessage(JSData: ScalarEventData?) {
         if (null == JSData) {
             Log.e(LOG_TAG, "## onScalarMessage() : invalid JSData")
             return
@@ -247,9 +260,14 @@ class IntegrationManagerActivity : RiotAppCompatActivity() {
             val roomIdInEvent = eventData["room_id"] as String?
             val userId = eventData["user_id"] as String?
             val action = eventData["action"] as String?
+            val userWidget = eventData["userWidget"] as Boolean?
 
             when {
-                TextUtils.equals(action, "close_scalar") -> finish()
+                action == "close_scalar" -> finish()
+
+            // User widget
+                userWidget == true
+                        && action == "set_widget" -> setWidget(eventData, true)
 
             // other APIs requires a roomId
                 null == roomIdInEvent -> sendError(getString(R.string.widget_integration_missing_room_id), eventData)
@@ -258,19 +276,22 @@ class IntegrationManagerActivity : RiotAppCompatActivity() {
                 !TextUtils.equals(roomIdInEvent, mRoom!!.roomId) -> sendError(getString(R.string.widget_integration_room_not_visible), eventData)
 
             // These APIs don't require userId
-                TextUtils.equals(action, "join_rules_state") -> getJoinRules(eventData)
-                TextUtils.equals(action, "set_plumbing_state") -> setPlumbingState(eventData)
-                TextUtils.equals(action, "get_membership_count") -> getMembershipCount(eventData)
-                TextUtils.equals(action, "set_widget") -> setWidget(eventData)
-                TextUtils.equals(action, "get_widgets") -> getWidgets(eventData)
-                TextUtils.equals(action, "can_send_event") -> canSendEvent(eventData)
+                action == "join_rules_state" -> getJoinRules(eventData)
+                action == "set_plumbing_state" -> setPlumbingState(eventData)
+                action == "get_membership_count" -> getMembershipCount(eventData)
+                action == "set_widget" -> setWidget(eventData)
+                action == "get_widgets" -> getWidgets(eventData)
+                action == "can_send_event" -> canSendEvent(eventData)
+
             // For the next APIs, a userId is required
                 null == userId -> sendError(getString(R.string.widget_integration_missing_user_id), eventData)
-                TextUtils.equals(action, "membership_state") -> getMembershipState(userId, eventData)
-                TextUtils.equals(action, "invite") -> inviteUser(userId, eventData)
-                TextUtils.equals(action, "bot_options") -> getBotOptions(userId, eventData)
-                TextUtils.equals(action, "set_bot_options") -> setBotOptions(userId, eventData)
-                TextUtils.equals(action, "set_bot_power") -> setBotPower(userId, eventData)
+
+                action == "membership_state" -> getMembershipState(userId, eventData)
+                action == "invite" -> inviteUser(userId, eventData)
+                action == "bot_options" -> getBotOptions(userId, eventData)
+                action == "set_bot_options" -> setBotOptions(userId, eventData)
+                action == "set_bot_power" -> setBotPower(userId, eventData)
+
                 else -> Log.e(LOG_TAG, "## onScalarMessage() : Unhandled postMessage event with action $action : $JSData")
             }
 
@@ -390,8 +411,8 @@ class IntegrationManagerActivity : RiotAppCompatActivity() {
      * Api callbacks
      *
      * @param <T> the callback type
-    </T> */
-    inner class IntegrationManagerApiCallback<T>(internal val mEventData: Map<String, Any>, internal val mDescription: String) : ApiCallback<T> {
+     */
+    inner class IntegrationManagerApiCallback<T>(private val mEventData: Map<String, Any>, private val mDescription: String) : ApiCallback<T> {
 
         override fun onSuccess(info: T) {
             Log.d(LOG_TAG, "$mDescription succeeds")
@@ -441,8 +462,12 @@ class IntegrationManagerActivity : RiotAppCompatActivity() {
      *
      * @param eventData the modular data
      */
-    private fun setWidget(eventData: Map<String, Any>) {
-        Log.d(LOG_TAG, "Received request to set widget in room " + mRoom!!.roomId)
+    private fun setWidget(eventData: Map<String, Any>, isUserWidget: Boolean = false) {
+        if (isUserWidget) {
+            Log.d(LOG_TAG, "Received request to set widget for user")
+        } else {
+            Log.d(LOG_TAG, "Received request to set widget in room " + mRoom!!.roomId)
+        }
 
         val widgetId = eventData["widget_id"] as String?
         val widgetType = eventData["type"] as String?
@@ -478,11 +503,27 @@ class IntegrationManagerActivity : RiotAppCompatActivity() {
             }
         }
 
-        mSession!!.roomsApiClient.sendStateEvent(mRoom!!.roomId,
-                WidgetsManager.WIDGET_EVENT_TYPE,
-                widgetId,
-                widgetEventContent,
-                IntegrationManagerApiCallback(eventData, "## setWidget()"))
+        if (isUserWidget) {
+            val addUserWidgetBody = HashMap<String, Any>().apply {
+                put(widgetId, HashMap<String, Any>().apply {
+                    put("content", widgetEventContent)
+
+                    put("state_key", widgetId)
+                    put("id", widgetId)
+                    put("sender", mSession!!.myUserId)
+                    put("type", "m.widget")
+                })
+            }
+
+            mSession!!.addUserWidget(addUserWidgetBody,
+                    IntegrationManagerApiCallback(eventData, "## setWidget()"))
+        } else {
+            mSession!!.roomsApiClient.sendStateEvent(mRoom!!.roomId,
+                    WidgetsManager.WIDGET_EVENT_TYPE,
+                    widgetId,
+                    widgetEventContent,
+                    IntegrationManagerApiCallback(eventData, "## setWidget()"))
+        }
     }
 
     /**
@@ -503,6 +544,9 @@ class IntegrationManagerActivity : RiotAppCompatActivity() {
                 responseData.add(map)
             }
         }
+
+        // Add user Widgets
+        responseData.add(mSession!!.userWidgets)
 
         Log.d(LOG_TAG, "## getWidgets() returns $responseData")
 
@@ -705,7 +749,7 @@ class IntegrationManagerActivity : RiotAppCompatActivity() {
         sendIntegerResponse(mRoom!!.joinedMembers.size, eventData)
     }
 
-    /** =========================================================================================
+    /* ==========================================================================================
      * companion
      * ========================================================================================== */
 
@@ -715,9 +759,9 @@ class IntegrationManagerActivity : RiotAppCompatActivity() {
         /**
          * the parameters
          */
-        private const val EXTRA_MATRIX_ID = "EXTRA_MATRIX_ID"
-        private const val EXTRA_ROOM_ID = "EXTRA_ROOM_ID"
-        private const val EXTRA_WIDGET_ID = "EXTRA_WIDGET_ID"
+        internal const val EXTRA_MATRIX_ID = "EXTRA_MATRIX_ID"
+        internal const val EXTRA_ROOM_ID = "EXTRA_ROOM_ID"
+        internal const val EXTRA_WIDGET_ID = "EXTRA_WIDGET_ID"
         private const val EXTRA_SCREEN_ID = "EXTRA_SCREEN_ID"
 
         fun getIntent(context: Context, matrixId: String, roomId: String): Intent {

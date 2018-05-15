@@ -25,6 +25,7 @@ import android.support.annotation.Nullable
 import android.support.annotation.StringRes
 import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.Toolbar
+import android.view.MenuItem
 import android.view.View
 import androidx.core.view.isVisible
 import butterknife.BindView
@@ -40,7 +41,7 @@ import org.matrix.androidsdk.util.Log
  */
 abstract class RiotAppCompatActivity : AppCompatActivity() {
 
-    /** =========================================================================================
+    /* ==========================================================================================
      * DATA
      * ========================================================================================== */
 
@@ -48,7 +49,7 @@ abstract class RiotAppCompatActivity : AppCompatActivity() {
 
     private var savedInstanceState: Bundle? = null
 
-    /** =========================================================================================
+    /* ==========================================================================================
      * UI
      * ========================================================================================== */
 
@@ -57,7 +58,7 @@ abstract class RiotAppCompatActivity : AppCompatActivity() {
     @BindView(R.id.toolbar)
     protected lateinit var toolbar: Toolbar
 
-    /** =========================================================================================
+    /* ==========================================================================================
      * LIFE CYCLE
      * ========================================================================================== */
 
@@ -114,14 +115,29 @@ abstract class RiotAppCompatActivity : AppCompatActivity() {
         }
     }
 
-    /** =========================================================================================
+    /* ==========================================================================================
+     * MENU MANAGEMENT
+     * ========================================================================================== */
+
+    // TODO Maintenance: 'home' menu is managed here now, remove similar mangement from children
+    override fun onOptionsItemSelected(item: MenuItem?): Boolean {
+        if (item!!.itemId == android.R.id.home) {
+            setResult(RESULT_CANCELED)
+            finish()
+            return true
+        }
+
+        return super.onOptionsItemSelected(item)
+    }
+
+    /* ==========================================================================================
      * ABSTRACT METHODS
      * ========================================================================================== */
 
     @LayoutRes
     abstract fun getLayoutRes(): Int
 
-    /** =========================================================================================
+    /* ==========================================================================================
      * OPEN METHODS
      * ========================================================================================== */
 
@@ -161,7 +177,7 @@ abstract class RiotAppCompatActivity : AppCompatActivity() {
         waitingView?.isVisible = false
     }
 
-    /** =========================================================================================
+    /* ==========================================================================================
      * PROTECTED METHODS
      * ========================================================================================== */
 
@@ -194,7 +210,7 @@ abstract class RiotAppCompatActivity : AppCompatActivity() {
         }
     }
 
-    /** =========================================================================================
+    /* ==========================================================================================
      * PRIVATE METHODS
      * ========================================================================================== */
 

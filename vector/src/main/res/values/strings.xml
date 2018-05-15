@@ -25,6 +25,7 @@
     <string name="title_activity_historical">Historical</string>
     <string name="title_activity_bug_report">Bug report</string>
     <string name="title_activity_group_details">Community details</string>
+    <string name="title_activity_choose_sticker">Send a sticker</string>
 
     <!-- splash screen accessibility -->
     <string name="loading">Loading...</string>
@@ -164,6 +165,7 @@
     <string name="start_video_call_prompt_msg">Are you sure that you want to start a video call?</string>
 
     <string name="option_send_files">Send files</string>
+    <string name="option_send_sticker">Send sticker</string>
     <string name="option_take_photo_video">Take photo or video</string>
     <string name="option_take_photo">Take photo</string>
     <string name="option_take_video">Take video</string>
