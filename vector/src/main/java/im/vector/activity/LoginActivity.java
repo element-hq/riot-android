@@ -1230,6 +1230,7 @@ public class LoginActivity extends MXCActionBarActivity implements RegistrationM
                     enableLoadingScreen(false);
                     setActionButtonsEnabled(false);
                     showMainLayout();
+                    refreshDisplay();
                     Toast.makeText(getApplicationContext(), errorMessage, Toast.LENGTH_LONG).show();
                 }
 
@@ -1381,6 +1382,7 @@ public class LoginActivity extends MXCActionBarActivity implements RegistrationM
                             if (mMode == MODE_ACCOUNT_CREATION) {
                                 showMainLayout();
                                 enableLoadingScreen(false);
+                                refreshDisplay();
                                 Toast.makeText(getApplicationContext(), errorMessage, Toast.LENGTH_LONG).show();
                             }
                         }
@@ -2352,9 +2354,11 @@ public class LoginActivity extends MXCActionBarActivity implements RegistrationM
 
     @Override
     public void onRegistrationFailed(String message) {
+        cancelEmailPolling();
         Log.e(LOG_TAG, "## onRegistrationFailed(): " + message);
         showMainLayout();
         enableLoadingScreen(false);
+        refreshDisplay();
         Toast.makeText(this, R.string.login_error_unable_register, Toast.LENGTH_LONG).show();
     }
 
