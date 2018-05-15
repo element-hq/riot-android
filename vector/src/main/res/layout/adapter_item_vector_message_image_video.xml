@@ -3,7 +3,6 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical">
 
     <include
@@ -88,31 +87,18 @@
 
                         <RelativeLayout
                             android:id="@+id/messagesAdapter_image_layout"
-<<<<<<< develop
-                            android:layout_width="match_parent"
-                            android:layout_height="match_parent"
-=======
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
->>>>>>> Use tools:visibility="visible" for gone Views in XML and format those XML files
                             android:layout_gravity="right">
 
                             <!-- the media -->
                             <ImageView
                                 android:id="@+id/messagesAdapter_image"
-<<<<<<< develop
-                                android:layout_height="match_parent"
-=======
->>>>>>> Use tools:visibility="visible" for gone Views in XML and format those XML files
                                 android:layout_width="match_parent"
                                 android:layout_height="match_parent"
                                 android:layout_marginLeft="4dp"
-<<<<<<< develop
                                 android:adjustViewBounds="true"
                                 android:scaleType="center" />
-=======
-                                android:adjustViewBounds="true" />
->>>>>>> Use tools:visibility="visible" for gone Views in XML and format those XML files
 
                             <!-- the media type -->
                             <ImageView
