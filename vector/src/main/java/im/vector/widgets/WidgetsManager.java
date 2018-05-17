@@ -71,7 +71,6 @@ public class WidgetsManager {
      * Integration rest url
      */
     private static final String INTEGRATION_REST_URL = "https://scalar-staging.riot.im/scalar";
-    // "https://scalar.vector.im";
 
     /**
      * Integration ui url

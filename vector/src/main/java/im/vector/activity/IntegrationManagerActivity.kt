@@ -794,7 +794,7 @@ open class IntegrationManagerActivity : RiotAppCompatActivity() {
             var code: String? = null
 
             try {
-                val inputStream = context.assets.open("integrationManager.js")
+                val inputStream = context.assets.open("postMessageAPI.js")
                 val buffer = CharArray(1024)
                 val out = StringBuilder()
 
