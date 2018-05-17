@@ -96,7 +96,7 @@ open class IntegrationManagerActivity : RiotAppCompatActivity() {
 
         @JavascriptInterface
         fun onScalarEvent(eventData: String) {
-            Log.d(LOG_TAG, "onScalarEvent : $eventData")
+            Log.d(LOG_TAG, "BRIDGE onScalarEvent : $eventData")
 
             try {
                 val objectAsMap = JsonUtils.getGson(false)
@@ -284,6 +284,7 @@ open class IntegrationManagerActivity : RiotAppCompatActivity() {
                 action == "can_send_event" -> canSendEvent(eventData)
 
             // For the next APIs, a userId is required
+            // FIXME Unknown action is not treated properly then
                 null == userId -> sendError(getString(R.string.widget_integration_missing_user_id), eventData)
 
                 action == "membership_state" -> getMembershipState(userId, eventData)
@@ -316,6 +317,8 @@ open class IntegrationManagerActivity : RiotAppCompatActivity() {
     private fun sendResponse(jsString: String, eventData: Map<String, Any>) {
         try {
             val functionLine = "sendResponseFromRiotAndroid('" + eventData["_id"] + "' , " + jsString + ");"
+
+            Log.v(LOG_TAG, "BRIDGE sendResponse: $functionLine")
 
             // call the javascript method
             if (Build.VERSION.SDK_INT < Build.VERSION_CODES.KITKAT) {
@@ -546,7 +549,10 @@ open class IntegrationManagerActivity : RiotAppCompatActivity() {
         }
 
         // Add user Widgets
-        responseData.add(mSession!!.userWidgets)
+        mSession!!.userWidgets
+                .forEach {
+                    responseData.add(it.value as Map<String, Any>)
+                }
 
         Log.d(LOG_TAG, "## getWidgets() returns $responseData")
 
