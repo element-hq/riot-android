@@ -22,11 +22,11 @@ import android.view.Menu
 import android.view.MenuItem
 import androidx.core.widget.toast
 import im.vector.R
-import im.vector.types.ScalarEventData
 import im.vector.util.ThemeUtils
 import org.matrix.androidsdk.util.Log
+import java.net.URLEncoder
 
-class ChooseStickerActivity : IntegrationManagerActivity() {
+class ChooseStickerActivity : AbstractScalarActivity() {
 
     /* ==========================================================================================
      * DATA
@@ -50,30 +50,32 @@ class ChooseStickerActivity : IntegrationManagerActivity() {
         configureToolbar()
     }
 
-    override fun displayInFullscreen() = false
+    /**
+     * Compute the URL
+     *
+     * @return the URL
+     */
+    override fun buildInterfaceUrl(scalarToken: String): String? {
+        try {
+            var url =mWidgetUrl + "?" +
+                    "scalar_token=" + URLEncoder.encode(scalarToken, "utf-8") + "&" +
+                    "room_id=" + URLEncoder.encode(mRoom!!.roomId, "utf-8")
 
-    override fun getBaseUrl() = mWidgetUrl
+            // TODO Add widget ID
+
+            return url
+        } catch (e: Exception) {
+            Log.e(LOG_TAG, "## buildInterfaceUrl() failed " + e.message)
+        }
+
+        return null
+    }
 
     /**
-     * Manage the modular requests
-     *
-     * @param JSData the js data request
+     * A Scalar message has been received, deals with it and send the response
      */
-    override fun onScalarMessage(JSData: ScalarEventData?) {
-        if (null == JSData) {
-            Log.e(LOG_TAG, "## onScalarMessage() : invalid JSData")
-            return
-        }
-
-        val eventData = JSData["event.data"]
-
-        if (null == eventData) {
-            Log.e(LOG_TAG, "## onScalarMessage() : invalid JSData")
-            return
-        }
-
-        // TODO BMA New Scalar event?
-        super.onScalarMessage(JSData)
+    override fun dealsWithScalarMessage(eventData: Map<String, Any>) {
+        // TODO
     }
 
     /* ==========================================================================================

@@ -28,6 +28,7 @@ import com.google.gson.reflect.TypeToken
 import im.vector.Matrix
 import im.vector.R
 import im.vector.types.ScalarEventData
+import im.vector.util.toJsonMap
 import im.vector.widgets.WidgetsManager
 import org.matrix.androidsdk.MXSession
 import org.matrix.androidsdk.data.Room
@@ -39,7 +40,7 @@ import java.io.InputStreamReader
 import java.util.*
 
 /**
- * Parent class for all Activity managing Scalar Webview
+ * Parent class for all Activities managing Scalar Webview
  *
  * This class manage the communication (JS Bridge) with the WebView.
  *
@@ -58,8 +59,8 @@ abstract class AbstractScalarActivity : RiotAppCompatActivity() {
      * parameters
      * ========================================================================================== */
 
-    private var mSession: MXSession? = null
-    private var mRoom: Room? = null
+    protected var mSession: MXSession? = null
+    protected var mRoom: Room? = null
 
     /* ==========================================================================================
      * DATA
@@ -86,13 +87,9 @@ abstract class AbstractScalarActivity : RiotAppCompatActivity() {
             return
         }
 
-        waitingView = findViewById(R.id.integration_progress_layout)
-
         initWebView()
 
         mRoom = mSession!!.dataHandler.getRoom(intent.getStringExtra(EXTRA_ROOM_ID))
-
-        showWaitingView()
 
         WidgetsManager.getScalarToken(this, mSession!!, object : ApiCallback<String> {
             override fun onSuccess(scalarToken: String) {
@@ -237,28 +234,6 @@ abstract class AbstractScalarActivity : RiotAppCompatActivity() {
     }
 
     /**
-     * Convert an object to a map
-     *
-     * @param `object` the object to convert
-     * @return the event as a map
-     */
-    private fun getObjectAsJsonMap(any: Any): Map<String, Any>? {
-        val gson = JsonUtils.getGson(false)
-        var objectAsMap: Map<String, Any>? = null
-
-        try {
-            val stringifiedEvent = gson.toJson(any)
-            objectAsMap = gson.fromJson<Map<String, Any>>(stringifiedEvent, object : TypeToken<HashMap<String, Any>>() {
-
-            }.type)
-        } catch (e: Exception) {
-            Log.e(LOG_TAG, "## getObjectAsJsonMap() failed " + e.message)
-        }
-
-        return objectAsMap
-    }
-
-    /**
      * Manage the modular requests
      *
      * @param JSData the js data request
@@ -284,6 +259,9 @@ abstract class AbstractScalarActivity : RiotAppCompatActivity() {
         }
     }
 
+    /**
+     * A Scalar message has been received, deals with it and send the response
+     */
     abstract fun dealsWithScalarMessage(eventData: Map<String, Any>)
 
     /*
@@ -298,7 +276,7 @@ abstract class AbstractScalarActivity : RiotAppCompatActivity() {
      * @param jsString  the response data
      * @param eventData the modular data
      */
-    protected fun sendResponse(jsString: String, eventData: Map<String, Any>) {
+    private fun sendResponse(jsString: String, eventData: Map<String, Any>) {
         try {
             val functionLine = "sendResponseFromRiotAndroid('" + eventData["_id"] + "' , " + jsString + ");"
 
@@ -384,22 +362,41 @@ abstract class AbstractScalarActivity : RiotAppCompatActivity() {
      * @param object    the object to send
      * @param eventData the modular data
      */
-    protected fun sendObjectAsJsonMap(`object`: Any, eventData: Map<String, Any>) {
-        sendObjectResponse(getObjectAsJsonMap(`object`), eventData)
+    protected fun sendObjectAsJsonMap(any: Any, eventData: Map<String, Any>) {
+        sendObjectResponse(any.toJsonMap(), eventData)
     }
 
-    /*
-     * *********************************************************************************************
-     * Modular postMessage methods
-     * *********************************************************************************************
-     */
+    /* ==========================================================================================
+     * INNER CLASSES
+     * ========================================================================================== */
+
+    private inner class IntegrationWebAppInterface internal constructor() {
+        @JavascriptInterface
+        fun onScalarEvent(eventData: String) {
+            Log.d(LOG_TAG, "BRIDGE onScalarEvent : $eventData")
+
+            try {
+                val objectAsMap = JsonUtils.getGson(false)
+                        .fromJson<ScalarEventData>(eventData, object : TypeToken<ScalarEventData>() {}.type)
+
+                runOnUiThread {
+                    onScalarMessage(objectAsMap)
+                }
+            } catch (e: Exception) {
+                Log.e(LOG_TAG, "## onScalarEvent() failed " + e.message)
+            }
+
+        }
+    }
 
     /**
      * Api callbacks
      *
      * @param <T> the callback type
      */
-    inner class IntegrationManagerApiCallback<T>(private val mEventData: Map<String, Any>, private val mDescription: String) : ApiCallback<T> {
+    protected inner class IntegrationManagerApiCallback<T>(private val mEventData: Map<String, Any>,
+                                                           private val mDescription: String) :
+            ApiCallback<T> {
 
         override fun onSuccess(info: T) {
             Log.d(LOG_TAG, "$mDescription succeeds")
@@ -443,30 +440,6 @@ abstract class AbstractScalarActivity : RiotAppCompatActivity() {
                         putExtra(EXTRA_MATRIX_ID, matrixId)
                         putExtra(EXTRA_ROOM_ID, roomId)
                     }
-        }
-    }
-
-    /* ==========================================================================================
-     * INNER CLASSES
-     * ========================================================================================== */
-
-    private inner class IntegrationWebAppInterface internal constructor() {
-
-        @JavascriptInterface
-        fun onScalarEvent(eventData: String) {
-            Log.d(LOG_TAG, "BRIDGE onScalarEvent : $eventData")
-
-            try {
-                val objectAsMap = JsonUtils.getGson(false)
-                        .fromJson<ScalarEventData>(eventData, object : TypeToken<ScalarEventData>() {}.type)
-
-                runOnUiThread {
-                    onScalarMessage(objectAsMap)
-                }
-            } catch (e: Exception) {
-                Log.e(LOG_TAG, "## onScalarEvent() failed " + e.message)
-            }
-
         }
     }
 }

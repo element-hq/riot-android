@@ -5,7 +5,7 @@
     android:background="@android:color/black">
 
     <WebView
-        android:id="@+id/integration_webview"
+        android:id="@+id/scalar_webview"
         android:layout_width="match_parent"
         android:layout_height="match_parent" />
 
