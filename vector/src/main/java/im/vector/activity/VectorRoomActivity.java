@@ -2245,6 +2245,7 @@ public class VectorRoomActivity extends MXCActionBarActivity implements MatrixMe
         Map<String, Object> userWidgets = mSession.getUserWidgets();
 
         String stickerWidgetUrl = null;
+        String stickerWidgetId = null;
 
         // Search for sticker
         for (Object o : userWidgets.values()) {
@@ -2254,6 +2255,7 @@ public class VectorRoomActivity extends MXCActionBarActivity implements MatrixMe
                     Object type = ((Map) content).get("type");
                     if (type != null && type instanceof String && type.equals("m.stickerpicker")) {
                         stickerWidgetUrl = (String) ((Map) content).get("url");
+                        stickerWidgetId = (String) ((Map) o).get("id");
                         break;
                     }
                 }
@@ -2264,7 +2266,7 @@ public class VectorRoomActivity extends MXCActionBarActivity implements MatrixMe
             // TODO BMA String
             Toast.makeText(this, "Please configure the matrix integration", Toast.LENGTH_SHORT).show();
         } else {
-            Intent intent = ChooseStickerActivity.Companion.getIntent(this, mMyUserId, mRoom.getRoomId(), stickerWidgetUrl);
+            Intent intent = ChooseStickerActivity.Companion.getIntent(this, mMyUserId, mRoom.getRoomId(), stickerWidgetUrl, stickerWidgetId);
 
             startActivityForResult(intent, RequestCodesKt.CHOOSE_STICKER_REQUEST_CODE);
         }

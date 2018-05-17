@@ -33,6 +33,7 @@ class ChooseStickerActivity : AbstractScalarActivity() {
      * ========================================================================================== */
 
     private lateinit var mWidgetUrl: String
+    private lateinit var mWidgetId: String
 
     /* ==========================================================================================
      * IMPLEMENT METHODS
@@ -44,10 +45,11 @@ class ChooseStickerActivity : AbstractScalarActivity() {
 
     override fun initUiAndData() {
         mWidgetUrl = intent.getStringExtra(EXTRA_WIDGET_URL)
-
-        super.initUiAndData()
+        mWidgetId = intent.getStringExtra(EXTRA_WIDGET_ID)
 
         configureToolbar()
+
+        super.initUiAndData()
     }
 
     /**
@@ -57,13 +59,10 @@ class ChooseStickerActivity : AbstractScalarActivity() {
      */
     override fun buildInterfaceUrl(scalarToken: String): String? {
         try {
-            var url =mWidgetUrl + "?" +
-                    "scalar_token=" + URLEncoder.encode(scalarToken, "utf-8") + "&" +
-                    "room_id=" + URLEncoder.encode(mRoom!!.roomId, "utf-8")
-
-            // TODO Add widget ID
-
-            return url
+            return mWidgetUrl + "?" +
+                    "scalar_token=" + URLEncoder.encode(scalarToken, "utf-8") +
+                    "&room_id=" + URLEncoder.encode(mRoom!!.roomId, "utf-8") +
+                    "&widgetId=" + URLEncoder.encode(mWidgetId, "utf-8")
         } catch (e: Exception) {
             Log.e(LOG_TAG, "## buildInterfaceUrl() failed " + e.message)
         }
@@ -110,13 +109,15 @@ class ChooseStickerActivity : AbstractScalarActivity() {
          * the parameters
          */
         private const val EXTRA_WIDGET_URL = "EXTRA_WIDGET_URL"
+        private const val EXTRA_WIDGET_ID = "EXTRA_WIDGET_ID"
 
-        fun getIntent(context: Context, matrixId: String, roomId: String, widgetUrl: String): Intent {
+        fun getIntent(context: Context, matrixId: String, roomId: String, widgetUrl: String, widgetId: String): Intent {
             return Intent(context, ChooseStickerActivity::class.java)
                     .apply {
                         putExtra(EXTRA_MATRIX_ID, matrixId)
                         putExtra(EXTRA_ROOM_ID, roomId)
                         putExtra(EXTRA_WIDGET_URL, widgetUrl)
+                        putExtra(EXTRA_WIDGET_ID, widgetId)
                     }
         }
     }
