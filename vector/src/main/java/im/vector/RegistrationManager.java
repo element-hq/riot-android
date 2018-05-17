@@ -255,6 +255,12 @@ public class RegistrationManager {
                         @Override
                         public void onThreePidRequested(ThreePid pid) {
                             if (!TextUtils.isEmpty(pid.sid)) {
+                                // The session id for the email validation has just been received.
+                                // We trigger here a new registration request without delay to attach the current username
+                                // and the pwd to the registration session.
+                                attemptRegistration(context, listener);
+
+                                // Notify the listener to wait for the email validation
                                 listener.onWaitingEmailValidation();
                             }
                         }

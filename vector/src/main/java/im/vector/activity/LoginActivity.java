@@ -2368,11 +2368,6 @@ public class LoginActivity extends MXCActionBarActivity implements RegistrationM
     public void onWaitingEmailValidation() {
         Log.d(LOG_TAG, "## onWaitingEmailValidation");
 
-        // The session id for the email validation has just been received.
-        // We trigger here a new registration request without delay to attach the current username
-        // and the pwd to the registration session.
-        RegistrationManager.getInstance().attemptRegistration(this, this);
-
         // Prompt the user to check his email
         hideMainLayoutAndToast(getResources().getString(R.string.auth_email_validation_message));
         enableLoadingScreen(true);
