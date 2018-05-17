@@ -26,7 +26,9 @@ import android.text.TextUtils;
 import android.widget.Toast;
 
 import org.matrix.androidsdk.HomeServerConnectionConfig;
+import org.matrix.androidsdk.MXSession;
 import org.matrix.androidsdk.rest.callback.ApiCallback;
+import org.matrix.androidsdk.rest.callback.SimpleApiCallback;
 import org.matrix.androidsdk.rest.model.MatrixError;
 import org.matrix.androidsdk.ssl.Fingerprint;
 import org.matrix.androidsdk.util.Log;
@@ -58,16 +60,34 @@ public class VectorUniversalLinkActivity extends RiotAppCompatActivity {
             // dispatch on the right receiver
             if (VectorRegistrationReceiver.SUPPORTED_PATH_ACCOUNT_EMAIL_VALIDATION.equals(getIntent().getData().getPath())) {
 
+                // We consider here an email validation
                 Uri intentUri = getIntent().getData();
-                // account registration URL set in a mail:
+
                 HashMap<String, String> mailRegParams = VectorRegistrationReceiver.parseMailRegistrationLink(intentUri);
 
-                // when there is a next link, assume it is a new account creation
-                if (mailRegParams.containsKey(VectorRegistrationReceiver.KEY_MAIL_VALIDATION_NEXT_LINK) || (null == Matrix.getInstance(this).getDefaultSession())) {
-                    // logout current session, before starting any mail validation
-                    // to have the LoginActivity always in a "no credentials state".
-                    CommonActivityUtils.logout(this, false);
-                    intentAction = VectorRegistrationReceiver.BROADCAST_ACTION_REGISTRATION;
+                // Assume it is a new account creation when there is a next link, or when no session is already available.
+                MXSession session = Matrix.getInstance(this).getDefaultSession();
+                if (mailRegParams.containsKey(VectorRegistrationReceiver.KEY_MAIL_VALIDATION_NEXT_LINK) || (null == session)) {
+                    if (null != session) {
+                        Log.d(LOG_TAG, "## onCreate(): logout the current sessions, before finalizing an account creation based on an email validation");
+
+                        // This logout is asynchronous, pursue the action in the callback to have the LoginActivity in a "no credentials state".
+                        intentAction = null;
+                        final Intent myBroadcastIntent = new Intent(this, VectorRegistrationReceiver.class);
+                        myBroadcastIntent.setAction(VectorRegistrationReceiver.BROADCAST_ACTION_REGISTRATION);
+                        myBroadcastIntent.setData(getIntent().getData());
+
+                        CommonActivityUtils.logout(VectorUniversalLinkActivity.this, Matrix.getMXSessions(VectorUniversalLinkActivity.this), true, new SimpleApiCallback<Void>() {
+                            @Override
+                            public void onSuccess(Void info) {
+                                Log.d(LOG_TAG, "## onCreate(): logout succeeded");
+                                sendBroadcast(myBroadcastIntent);
+                                finish();
+                            }
+                        });
+                    } else {
+                        intentAction = VectorRegistrationReceiver.BROADCAST_ACTION_REGISTRATION;
+                    }
                 } else {
                     intentAction = null;
                     // display a spinner while binding the email
