@@ -98,30 +98,31 @@ class IntegrationManagerActivity : AbstractScalarActivity() {
     override fun dealsWithScalarMessage(eventData: Map<String, Any>): Boolean {
         val action = eventData["action"] as String?
 
+        // Do something depending on action (please add new actions following alphabetical order)
         when (action) {
-            "close_scalar" -> finish()
-                    .also { return true }
-            "join_rules_state" -> getJoinRules(eventData)
-                    .also { return true }
-            "set_plumbing_state" -> setPlumbingState(eventData)
-                    .also { return true }
-            "get_membership_count" -> getMembershipCount(eventData)
-                    .also { return true }
-            "set_widget" -> setWidget(eventData)
-                    .also { return true }
-            "get_widgets" -> getWidgets(eventData)
+            "bot_options" -> getBotOptions(eventData)
                     .also { return true }
             "can_send_event" -> canSendEvent(eventData)
                     .also { return true }
-            "membership_state" -> getMembershipState(eventData)
+            "close_scalar" -> finish()
+                    .also { return true }
+            "get_membership_count" -> getMembershipCount(eventData)
+                    .also { return true }
+            "get_widgets" -> getWidgets(eventData)
                     .also { return true }
             "invite" -> inviteUser(eventData)
                     .also { return true }
-            "bot_options" -> getBotOptions(eventData)
+            "join_rules_state" -> getJoinRules(eventData)
+                    .also { return true }
+            "membership_state" -> getMembershipState(eventData)
                     .also { return true }
             "set_bot_options" -> setBotOptions(eventData)
                     .also { return true }
             "set_bot_power" -> setBotPower(eventData)
+                    .also { return true }
+            "set_plumbing_state" -> setPlumbingState(eventData)
+                    .also { return true }
+            "set_widget" -> setWidget(eventData)
                     .also { return true }
         }
 
