@@ -207,6 +207,8 @@ public class RegistrationManager {
                 @Override
                 public void onRegistrationSuccess() {
                     // The registration could not succeed without password.
+                    // Keep calling listener (the error case) as a fallback,
+                    listener.onUsernameAvailabilityChecked(false);
                 }
 
                 @Override
