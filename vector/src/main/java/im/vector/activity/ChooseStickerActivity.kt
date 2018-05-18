@@ -16,11 +16,13 @@
 
 package im.vector.activity
 
+import android.app.Activity
 import android.content.Context
 import android.content.Intent
 import android.view.Menu
 import android.view.MenuItem
 import androidx.core.widget.toast
+import com.google.gson.Gson
 import im.vector.R
 import im.vector.types.JsonDict
 import im.vector.util.ThemeUtils
@@ -111,7 +113,35 @@ class ChooseStickerActivity : AbstractWidgetActivity() {
      * ========================================================================================== */
 
     private fun sendSticker(eventData: JsonDict<Any>) {
-        // TODO
+        Log.d(LOG_TAG, "Received request send sticker")
+
+        val data = eventData["data"]
+
+        if (data == null) {
+            sendError(getString(R.string.widget_integration_missing_parameter), eventData)
+            return
+        }
+
+        val content = (data as JsonDict<Any>)["content"]
+
+        if (content == null) {
+            sendError(getString(R.string.widget_integration_missing_parameter), eventData)
+            return
+        }
+
+        val json = Gson().toJson(content)
+
+        // Send the response to be polite (since the Activity will be finished)
+        sendSuccess(eventData)
+
+        // Ok send the result back to the calling Activity
+        val intent = Intent().apply {
+            // Serialize the JSON object
+            putExtra(EXTRA_OUT_CONTENT, json)
+        }
+
+        setResult(Activity.RESULT_OK, intent)
+        finish()
     }
 
     /* ==========================================================================================
@@ -135,6 +165,16 @@ class ChooseStickerActivity : AbstractWidgetActivity() {
                         putExtra(EXTRA_WIDGET_URL, widgetUrl)
                         putExtra(EXTRA_WIDGET_ID, widgetId)
                     }
+        }
+
+        /* ==========================================================================================
+         * The result
+         * ========================================================================================== */
+
+        private const val EXTRA_OUT_CONTENT = "EXTRA_OUT_CONTENT"
+
+        fun getResultContent(intent: Intent): String {
+            return intent.getStringExtra(EXTRA_OUT_CONTENT)
         }
     }
 }

@@ -65,6 +65,8 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.gson.JsonParser;
+
 import org.matrix.androidsdk.MXSession;
 import org.matrix.androidsdk.call.IMXCall;
 import org.matrix.androidsdk.call.IMXCallListener;
@@ -1309,6 +1311,7 @@ public class VectorRoomActivity extends MXCActionBarActivity implements MatrixMe
                 mIgnoreTextUpdate = false;
             }
 
+            // FIXME Check why this call is done twice
             mVectorMessageListFragment.setIsRoomEncrypted(mRoom.isEncrypted());
 
             boolean canSendEncryptedEvent = mRoom.isEncrypted() && mSession.isCryptoEnabled();
@@ -2041,7 +2044,14 @@ public class VectorRoomActivity extends MXCActionBarActivity implements MatrixMe
      * @param data
      */
     private void sendSticker(Intent data) {
+        String contentStr = ChooseStickerActivity.Companion.getResultContent(data);
 
+        Event event = new Event(Event.EVENT_TYPE_STICKER,
+                new JsonParser().parse(contentStr).getAsJsonObject(),
+                mSession.getCredentials().userId,
+                mRoom.getRoomId());
+
+        mVectorMessageListFragment.sendEvent(event, Event.EVENT_TYPE_STICKER);
     }
 
     //================================================================================
