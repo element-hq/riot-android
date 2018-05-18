@@ -29,6 +29,7 @@ import im.vector.Matrix
 import im.vector.R
 import im.vector.types.JsonDict
 import im.vector.types.WidgetEventData
+import im.vector.util.readAssetFile
 import im.vector.util.toJsonMap
 import im.vector.widgets.WidgetsManager
 import org.matrix.androidsdk.MXSession
@@ -37,7 +38,6 @@ import org.matrix.androidsdk.rest.callback.ApiCallback
 import org.matrix.androidsdk.rest.model.MatrixError
 import org.matrix.androidsdk.util.JsonUtils
 import org.matrix.androidsdk.util.Log
-import java.io.InputStreamReader
 import java.util.*
 
 /**
@@ -157,7 +157,7 @@ abstract class AbstractWidgetActivity : RiotAppCompatActivity() {
                 override fun onPageFinished(view: WebView, url: String) {
                     hideWaitingView()
 
-                    val js = getJSCodeToInject(this@AbstractWidgetActivity)
+                    val js = readAssetFile("postMessageAPI.js")
 
                     if (null != js) {
                         runOnUiThread { mWebView.loadUrl("javascript:$js") }
@@ -190,38 +190,6 @@ abstract class AbstractWidgetActivity : RiotAppCompatActivity() {
      * Private methods
      * *********************************************************************************************
      */
-
-    /**
-     * Read the JS code to inject from the resource directory.
-     *
-     * @param context the context
-     * @return the JS code to inject
-     */
-    private fun getJSCodeToInject(context: Context): String? {
-        var code: String? = null
-
-        try {
-            val inputStream = context.assets.open("postMessageAPI.js")
-            val buffer = CharArray(1024)
-            val out = StringBuilder()
-
-            val inputStreamReader = InputStreamReader(inputStream, "UTF-8")
-            while (true) {
-                val rsz = inputStreamReader.read(buffer, 0, buffer.size)
-                if (rsz < 0)
-                    break
-                out.append(buffer, 0, rsz)
-            }
-            code = out.toString()
-
-            inputStreamReader.close()
-            inputStream.close()
-        } catch (e: Exception) {
-            Log.e(LOG_TAG, "## getJSCodeToInject() failed : " + e.message)
-        }
-
-        return code
-    }
 
     /**
      * Manage the request from the Javascript
