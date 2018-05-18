@@ -82,7 +82,6 @@ class IntegrationManagerActivity : AbstractWidgetActivity() {
             }
 
             if (null != mWidgetId) {
-                // 'widgetId' ?
                 url += "&integ_id=" + URLEncoder.encode(mWidgetId, "utf-8")
             }
             return url
@@ -161,7 +160,7 @@ class IntegrationManagerActivity : AbstractWidgetActivity() {
         val member = mRoom!!.getMember(userId)
 
         if (null != member && TextUtils.equals(member.membership, RoomMember.MEMBERSHIP_JOIN)) {
-            sendObjectResponse(HashMap(mSucceedResponse), eventData)
+            sendSuccess(eventData)
         } else {
             mRoom!!.invite(userId, WidgetApiCallback(eventData, description))
         }

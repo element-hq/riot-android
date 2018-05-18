@@ -64,17 +64,6 @@ abstract class AbstractWidgetActivity : RiotAppCompatActivity() {
     protected var mRoom: Room? = null
 
     /* ==========================================================================================
-     * DATA
-     * ========================================================================================== */
-
-    // success result
-    // must be copied else the conversion to string does not work
-    protected val mSucceedResponse = HashMap<String, Boolean>().apply {
-        put("success", true)
-    }
-
-
-    /* ==========================================================================================
      * LIFE CYCLE
      * ========================================================================================== */
 
@@ -344,6 +333,16 @@ abstract class AbstractWidgetActivity : RiotAppCompatActivity() {
     }
 
     /**
+     * Send success
+     *
+     * @param eventData the modular data
+     */
+    protected fun sendSuccess(eventData: JsonDict<Any>) {
+        sendObjectResponse(HashMap<String, Boolean>().apply { put("success", true) },
+                eventData)
+    }
+
+    /**
      * Send an error
      *
      * @param message   the error message
@@ -405,7 +404,7 @@ abstract class AbstractWidgetActivity : RiotAppCompatActivity() {
 
         override fun onSuccess(info: T) {
             Log.d(LOG_TAG, "$mDescription succeeds")
-            sendObjectResponse(HashMap(mSucceedResponse), mEventData)
+            sendSuccess(mEventData)
         }
 
         private fun onError(error: String) {
