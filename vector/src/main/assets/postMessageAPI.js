@@ -1,14 +1,14 @@
-var android_scalar_events = {};
+var android_widget_events = {};
 
 var sendObjectMessageToRiotAndroid = function(parameters) {
-    Android.onScalarEvent(JSON.stringify(parameters));
+    Android.onWidgetEvent(JSON.stringify(parameters));
 };
 
-var onScalarMessageToRiotAndroid = function(event) {
-    console.log("onScalarMessageToRiotAndroid " + event.data._id);
+var onWidgetMessageToRiotAndroid = function(event) {
+    console.log("onWidgetMessageToRiotAndroid " + event.data._id);
 
-    if (android_scalar_events[event.data._id]) {
-        console.log("onScalarMessageToRiotAndroid : already managed");
+    if (android_widget_events[event.data._id]) {
+        console.log("onWidgetMessageToRiotAndroid : already managed");
         return;
     }
 
@@ -16,14 +16,14 @@ var onScalarMessageToRiotAndroid = function(event) {
         event.origin = event.originalEvent.origin;
     }
 
-    android_scalar_events[event.data._id] = event;
+    android_widget_events[event.data._id] = event;
 
-    console.log("onScalarMessageToRiotAndroid : manage " + event.data);
+    console.log("onWidgetMessageToRiotAndroid : manage " + event.data);
     sendObjectMessageToRiotAndroid({'event.data': event.data});
 };
 
 var sendResponseFromRiotAndroid = function(eventId, res) {
-    var event = android_scalar_events[eventId];
+    var event = android_widget_events[eventId];
 
     console.log("sendResponseFromRiotAndroid to " + event.data.action + " for "+ eventId + ": " + JSON.stringify(res));
 
@@ -34,9 +34,9 @@ var sendResponseFromRiotAndroid = function(eventId, res) {
     console.log("sendResponseFromRiotAndroid  ---> " + data);
 
     event.source.postMessage(data, event.origin);
-    android_scalar_events[eventId] = true;
+    android_widget_events[eventId] = true;
 
     console.log("sendResponseFromRiotAndroid to done");
 };
 
-window.addEventListener('message', onScalarMessageToRiotAndroid, false);
+window.addEventListener('message', onWidgetMessageToRiotAndroid, false);

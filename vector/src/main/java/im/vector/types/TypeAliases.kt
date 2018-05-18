@@ -24,7 +24,7 @@ package im.vector.types
 typealias JsonDict<T> = Map<String, T>
 
 /* ==========================================================================================
- * Types for Scalar event
+ * Types for Widget event
  * ========================================================================================== */
 
 // Example of data:
@@ -35,5 +35,5 @@ typealias JsonDict<T> = Map<String, T>
 //       "_id": "1526370173321-0.55myregve98-1"
 //   }
 // }
-typealias ScalarEventData = JsonDict<JsonDict<Any>>
+typealias WidgetEventData = JsonDict<JsonDict<Any>>
 

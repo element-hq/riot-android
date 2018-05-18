@@ -32,7 +32,7 @@ import org.matrix.androidsdk.util.Log
 import java.net.URLEncoder
 import java.util.*
 
-class IntegrationManagerActivity : AbstractScalarActivity() {
+class IntegrationManagerActivity : AbstractWidgetActivity() {
 
     /* ==========================================================================================
      * parameters
@@ -93,9 +93,9 @@ class IntegrationManagerActivity : AbstractScalarActivity() {
     }
 
     /**
-     * A Scalar message has been received, deals with it and send the response
+     * A Widget message has been received, deals with it and send the response
      */
-    override fun dealsWithScalarMessage(eventData: Map<String, Any>): Boolean {
+    override fun dealsWithWidgetRequest(eventData: Map<String, Any>): Boolean {
         val action = eventData["action"] as String?
 
         // Do something depending on action (please add new actions following alphabetical order)
@@ -162,7 +162,7 @@ class IntegrationManagerActivity : AbstractScalarActivity() {
         if (null != member && TextUtils.equals(member.membership, RoomMember.MEMBERSHIP_JOIN)) {
             sendObjectResponse(HashMap(mSucceedResponse), eventData)
         } else {
-            mRoom!!.invite(userId, IntegrationManagerApiCallback(eventData, description))
+            mRoom!!.invite(userId, WidgetApiCallback(eventData, description))
         }
     }
 
@@ -231,13 +231,13 @@ class IntegrationManagerActivity : AbstractScalarActivity() {
             }
 
             mSession!!.addUserWidget(addUserWidgetBody,
-                    IntegrationManagerApiCallback(eventData, "## setWidget()"))
+                    WidgetApiCallback(eventData, "## setWidget()"))
         } else {
             mSession!!.roomsApiClient.sendStateEvent(mRoom!!.roomId,
                     WidgetsManager.WIDGET_EVENT_TYPE,
                     widgetId,
                     widgetEventContent,
-                    IntegrationManagerApiCallback(eventData, "## setWidget()"))
+                    WidgetApiCallback(eventData, "## setWidget()"))
         }
     }
 
@@ -404,7 +404,7 @@ class IntegrationManagerActivity : AbstractScalarActivity() {
                 Event.EVENT_TYPE_ROOM_PLUMBING,
                 null,
                 params,
-                IntegrationManagerApiCallback(eventData, description))
+                WidgetApiCallback(eventData, description))
     }
 
     /**
@@ -465,7 +465,7 @@ class IntegrationManagerActivity : AbstractScalarActivity() {
                 Event.EVENT_TYPE_ROOM_BOT_OPTIONS,
                 stateKey,
                 content,
-                IntegrationManagerApiCallback(eventData, description))
+                WidgetApiCallback(eventData, description))
     }
 
     /**
@@ -487,7 +487,7 @@ class IntegrationManagerActivity : AbstractScalarActivity() {
         val level = eventData["level"] as Int
 
         if (level >= 0) {
-            mRoom!!.updateUserPowerLevels(userId, level, IntegrationManagerApiCallback(eventData, description))
+            mRoom!!.updateUserPowerLevels(userId, level, WidgetApiCallback(eventData, description))
         } else {
             Log.e(LOG_TAG, "## setBotPower() : Power level must be positive integer.")
             sendError(getString(R.string.widget_integration_positive_power_level), eventData)

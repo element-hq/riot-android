@@ -26,7 +26,7 @@ import im.vector.util.ThemeUtils
 import org.matrix.androidsdk.util.Log
 import java.net.URLEncoder
 
-class ChooseStickerActivity : AbstractScalarActivity() {
+class ChooseStickerActivity : AbstractWidgetActivity() {
 
     /* ==========================================================================================
      * DATA
@@ -71,9 +71,9 @@ class ChooseStickerActivity : AbstractScalarActivity() {
     }
 
     /**
-     * A Scalar message has been received, deals with it and send the response
+     * A Widget message has been received, deals with it and send the response
      */
-    override fun dealsWithScalarMessage(eventData: Map<String, Any>): Boolean {
+    override fun dealsWithWidgetRequest(eventData: Map<String, Any>): Boolean {
         val action = eventData["action"] as String?
 
         when (action) {

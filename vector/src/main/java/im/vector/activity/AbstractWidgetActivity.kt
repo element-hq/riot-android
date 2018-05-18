@@ -27,7 +27,7 @@ import butterknife.BindView
 import com.google.gson.reflect.TypeToken
 import im.vector.Matrix
 import im.vector.R
-import im.vector.types.ScalarEventData
+import im.vector.types.WidgetEventData
 import im.vector.util.toJsonMap
 import im.vector.widgets.WidgetsManager
 import org.matrix.androidsdk.MXSession
@@ -40,19 +40,19 @@ import java.io.InputStreamReader
 import java.util.*
 
 /**
- * Parent class for all Activities managing Scalar Webview
+ * Parent class for all Activities managing Widget Webview
  *
  * This class manage the communication (JS Bridge) with the WebView.
  *
- * Layout MUST contains a WebView with ID 'scalar_webview'
+ * Layout MUST contains a WebView with ID 'widget_webview'
  */
-abstract class AbstractScalarActivity : RiotAppCompatActivity() {
+abstract class AbstractWidgetActivity : RiotAppCompatActivity() {
 
     /* ==========================================================================================
      * UI
      * ========================================================================================== */
 
-    @BindView(R.id.scalar_webview)
+    @BindView(R.id.widget_webview)
     lateinit var mWebView: WebView
 
     /* ==========================================================================================
@@ -98,7 +98,7 @@ abstract class AbstractScalarActivity : RiotAppCompatActivity() {
             }
 
             private fun onError(errorMessage: String) {
-                CommonActivityUtils.displayToast(this@AbstractScalarActivity, errorMessage)
+                CommonActivityUtils.displayToast(this@AbstractWidgetActivity, errorMessage)
                 finish()
             }
 
@@ -123,7 +123,7 @@ abstract class AbstractScalarActivity : RiotAppCompatActivity() {
     @SuppressLint("NewApi")
     private fun initWebView() {
         mWebView.let {
-            it.addJavascriptInterface(IntegrationWebAppInterface(), "Android")
+            it.addJavascriptInterface(WidgetWebAppInterface(), "Android")
 
             // Permission requests
             it.webChromeClient = object : WebChromeClient() {
@@ -167,7 +167,7 @@ abstract class AbstractScalarActivity : RiotAppCompatActivity() {
                 override fun onPageFinished(view: WebView, url: String) {
                     hideWaitingView()
 
-                    val js = getJSCodeToInject(this@AbstractScalarActivity)
+                    val js = getJSCodeToInject(this@AbstractWidgetActivity)
 
                     if (null != js) {
                         runOnUiThread { mWebView.loadUrl("javascript:$js") }
@@ -234,39 +234,39 @@ abstract class AbstractScalarActivity : RiotAppCompatActivity() {
     }
 
     /**
-     * Manage the modular requests
+     * Manage the request from the Javascript
      *
      * @param JSData the js data request
      */
-    private fun onScalarMessage(JSData: ScalarEventData?) {
+    private fun onWidgetMessage(JSData: WidgetEventData?) {
         if (null == JSData) {
-            Log.e(LOG_TAG, "## onScalarMessage() : invalid JSData")
+            Log.e(LOG_TAG, "## onWidgetMessage() : invalid JSData")
             return
         }
 
         val eventData = JSData["event.data"]
 
         if (null == eventData) {
-            Log.e(LOG_TAG, "## onScalarMessage() : invalid JSData")
+            Log.e(LOG_TAG, "## onWidgetMessage() : invalid JSData")
             return
         }
 
         try {
-            if (!dealsWithScalarMessage(eventData)) {
+            if (!dealsWithWidgetRequest(eventData)) {
                 sendError(getString(R.string.widget_integration_failed_to_send_request), eventData)
             }
         } catch (e: Exception) {
-            Log.e(LOG_TAG, "## onScalarMessage() : failed " + e.message)
+            Log.e(LOG_TAG, "## onWidgetMessage() : failed " + e.message)
             sendError(getString(R.string.widget_integration_failed_to_send_request), eventData)
         }
     }
 
     /**
-     * A Scalar message has been received, deals with it and send the response
+     * A Widget message has been received, deals with it and send the response
      *
      * @return true if the message is handled (it means an answer has been sent), false if not
      */
-    abstract fun dealsWithScalarMessage(eventData: Map<String, Any>): Boolean
+    abstract fun dealsWithWidgetRequest(eventData: Map<String, Any>): Boolean
 
     /*
      * *********************************************************************************************
@@ -374,20 +374,20 @@ abstract class AbstractScalarActivity : RiotAppCompatActivity() {
      * INNER CLASSES
      * ========================================================================================== */
 
-    private inner class IntegrationWebAppInterface internal constructor() {
+    private inner class WidgetWebAppInterface internal constructor() {
         @JavascriptInterface
-        fun onScalarEvent(eventData: String) {
-            Log.d(LOG_TAG, "BRIDGE onScalarEvent : $eventData")
+        fun onWidgetEvent(eventData: String) {
+            Log.d(LOG_TAG, "BRIDGE onWidgetEvent : $eventData")
 
             try {
                 val objectAsMap = JsonUtils.getGson(false)
-                        .fromJson<ScalarEventData>(eventData, object : TypeToken<ScalarEventData>() {}.type)
+                        .fromJson<WidgetEventData>(eventData, object : TypeToken<WidgetEventData>() {}.type)
 
                 runOnUiThread {
-                    onScalarMessage(objectAsMap)
+                    onWidgetMessage(objectAsMap)
                 }
             } catch (e: Exception) {
-                Log.e(LOG_TAG, "## onScalarEvent() failed " + e.message)
+                Log.e(LOG_TAG, "## onWidgetEvent() failed " + e.message)
             }
 
         }
@@ -398,8 +398,8 @@ abstract class AbstractScalarActivity : RiotAppCompatActivity() {
      *
      * @param <T> the callback type
      */
-    protected inner class IntegrationManagerApiCallback<T>(private val mEventData: Map<String, Any>,
-                                                           private val mDescription: String) :
+    protected inner class WidgetApiCallback<T>(private val mEventData: Map<String, Any>,
+                                               private val mDescription: String) :
             ApiCallback<T> {
 
         override fun onSuccess(info: T) {
@@ -430,7 +430,7 @@ abstract class AbstractScalarActivity : RiotAppCompatActivity() {
      * ========================================================================================== */
 
     companion object {
-        private val LOG_TAG = AbstractScalarActivity::class.java.simpleName
+        private val LOG_TAG = AbstractWidgetActivity::class.java.simpleName
 
         /**
          * the parameters
@@ -439,7 +439,7 @@ abstract class AbstractScalarActivity : RiotAppCompatActivity() {
         internal const val EXTRA_ROOM_ID = "EXTRA_ROOM_ID"
 
         fun getIntent(context: Context, matrixId: String, roomId: String): Intent {
-            return Intent(context, AbstractScalarActivity::class.java)
+            return Intent(context, AbstractWidgetActivity::class.java)
                     .apply {
                         putExtra(EXTRA_MATRIX_ID, matrixId)
                         putExtra(EXTRA_ROOM_ID, roomId)
