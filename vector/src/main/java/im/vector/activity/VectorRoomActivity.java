@@ -726,7 +726,7 @@ public class VectorRoomActivity extends MXCActionBarActivity implements MatrixMe
 
                         icons = new Integer[]{
                                 R.drawable.ic_material_file,
-                                R.drawable.ic_material_file,// TODO BMA Icon for Stickers
+                                R.drawable.ic_send_sticker,
                                 R.drawable.ic_material_camera,
                                 R.drawable.ic_material_videocam,
                         };
@@ -739,7 +739,7 @@ public class VectorRoomActivity extends MXCActionBarActivity implements MatrixMe
 
                         icons = new Integer[]{
                                 R.drawable.ic_material_file,
-                                R.drawable.ic_material_file,// TODO BMA Icon for Stickers
+                                R.drawable.ic_send_sticker,
                                 R.drawable.ic_material_camera,
                         };
                     }
