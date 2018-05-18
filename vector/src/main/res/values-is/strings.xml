@@ -704,4 +704,40 @@ Til að halda áfram skaltu setja inn lykilorðið þitt.</string>
     <string name="joined">Skráður</string>
     <string name="invited">Boðið</string>
     <string name="rejoin">Taka þátt aftur</string>
+    <string name="read_receipts_list">Lesa lista yfir leskvittanir</string>
+
+    <string name="room_preview_invitation_format">Þér hefur verið boðið af %s að taka þátt í þessari spjallrás</string>
+    <string name="room_participants_remove_prompt_msg">Ertu viss um að þú viljir fjarlægja %s úr þessu spjalli?</string>
+    <string name="room_participants_invite_prompt_msg">Ertu viss um að þú viljir bjóða %s á þetta spjall?</string>
+    <string name="room_participants_kick_prompt_msg">Ertu viss um að þú viljir sparka þessum notanda út af þessu spjalli?</string>
+    <string name="room_participants_ban_prompt_msg">Ertu viss um að þú viljir banna þennan notanda á þessu spjalli?</string>
+
+    <string name="people_search_invite_by_id"><u>Bjóða miðað við auðkenni</u></string>
+    <string name="people_search_local_contacts">TENGILIÐIR Á TÆKI (%d)</string>
+    <string name="people_search_invite_by_id_dialog_title">Bjóða notendum miðað við auðkenni</string>
+    <string name="room_displayname_invite_from">Boð frá %s</string>
+    <string name="room_recents_join_room_prompt">Settu inn auðkenni eða samheiti spjallrásar</string>
+
+    <string name="directory_search_room_for">%1$d spjallrás fannst fyrir %2$s</string>
+    <plurals name="directory_search_rooms_for">
+	<item quantity="one">%1$s spjallrás fannst fyrir %2$s</item>
+	<item quantity="other">%1$s spjallrásir fundust fyrir %2$s</item>
+</plurals>
+    <string name="settings_notification_privacy_need_permission">Forritið þarf heimild til að keyra í bakgrunni</string>
+    <string name="settings_notification_privacy_no_permission">Forritið <b>þarf ekki</b> heimild til að keyra í bakgrunni</string>
+    <string name="settings_notification_privacy_gcm">• Tilkynningar eru sendar í gegnum Google Cloud Messaging</string>
+    <string name="settings_notification_privacy_metadata">• Tilkynningar innihalda einungis lýsigögn</string>
+    <string name="settings_notification_privacy_secure_message_content">• Efni skilaboða í tilkynningum er <b>staðsett beint og öruggt á Matrix heimavefþjóninum</b></string>
+    <string name="settings_notification_privacy_nosecure_message_content">• Tilkynningar innihalda <b>efni skilaboða og lýsigögn</b></string>
+    <string name="settings_notification_privacy_message_content_not_shown">• Tilkynningar munu <b>ekki birta efni skilaboða</b></string>
+
+    <string name="settings_containing_my_display_name">Skilaboð innihalda birtingarnafn mitt</string>
+    <string name="settings_containing_my_user_name">Skilaboð innihalda notandanafn mitt</string>
+    <string name="settings_messages_in_one_to_one">Skilaboð í maður-á-mann spjalli</string>
+    <string name="settings_messages_in_group_chat">Skilaboð í hópaspjalli</string>
+    <string name="settings_set_sync_timeout">Samstillingarbeiðni rann út á tíma</string>
+    <string name="settings_notifications_targets">Markmið tilkynninga</string>
+    <string name="settings_contacts_phonebook_country">Land símaskrár</string>
+    <string name="room_settings_addresses_invalid_format_dialog_title">Ógilt snið samnefnis</string>
+    <string name="directory_server_fail_to_retrieve_server">Netþjónninn gæti verið undir miklu álagi eða ekki til taks</string>
     </resources>
