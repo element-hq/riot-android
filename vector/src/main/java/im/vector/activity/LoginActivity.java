@@ -756,6 +756,7 @@ public class LoginActivity extends MXCActionBarActivity implements RegistrationM
         mMainLayout.setVisibility(View.VISIBLE);
 
         // cancel the registration flow
+        cancelEmailPolling();
         mEmailValidationExtraParams = null;
         mRegistrationResponse = null;
         showMainLayout();
@@ -2355,6 +2356,7 @@ public class LoginActivity extends MXCActionBarActivity implements RegistrationM
     @Override
     public void onRegistrationFailed(String message) {
         cancelEmailPolling();
+        mEmailValidationExtraParams = null;
         Log.e(LOG_TAG, "## onRegistrationFailed(): " + message);
         showMainLayout();
         enableLoadingScreen(false);
@@ -2365,9 +2367,12 @@ public class LoginActivity extends MXCActionBarActivity implements RegistrationM
     @Override
     public void onWaitingEmailValidation() {
         Log.d(LOG_TAG, "## onWaitingEmailValidation");
+
+        // Prompt the user to check his email
         hideMainLayoutAndToast(getResources().getString(R.string.auth_email_validation_message));
         enableLoadingScreen(true);
 
+        // Loop to know whether the email has been checked
         mRegisterPollingRunnable = new Runnable() {
             @Override
             public void run() {
