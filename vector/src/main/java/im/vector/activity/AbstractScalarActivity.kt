@@ -252,7 +252,9 @@ abstract class AbstractScalarActivity : RiotAppCompatActivity() {
         }
 
         try {
-            dealsWithScalarMessage(eventData)
+            if (!dealsWithScalarMessage(eventData)) {
+                sendError(getString(R.string.widget_integration_failed_to_send_request), eventData)
+            }
         } catch (e: Exception) {
             Log.e(LOG_TAG, "## onScalarMessage() : failed " + e.message)
             sendError(getString(R.string.widget_integration_failed_to_send_request), eventData)
@@ -261,8 +263,10 @@ abstract class AbstractScalarActivity : RiotAppCompatActivity() {
 
     /**
      * A Scalar message has been received, deals with it and send the response
+     *
+     * @return true if the message is handled (it means an answer has been sent), false if not
      */
-    abstract fun dealsWithScalarMessage(eventData: Map<String, Any>)
+    abstract fun dealsWithScalarMessage(eventData: Map<String, Any>): Boolean
 
     /*
      * *********************************************************************************************

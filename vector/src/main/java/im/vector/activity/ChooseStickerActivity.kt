@@ -73,8 +73,15 @@ class ChooseStickerActivity : AbstractScalarActivity() {
     /**
      * A Scalar message has been received, deals with it and send the response
      */
-    override fun dealsWithScalarMessage(eventData: Map<String, Any>) {
-        // TODO
+    override fun dealsWithScalarMessage(eventData: Map<String, Any>): Boolean {
+        val action = eventData["action"] as String?
+
+        when (action) {
+            "m.sticker" -> sendSticker(eventData)
+                    .also { return true }
+        }
+
+        return false
     }
 
     /* ==========================================================================================
@@ -96,6 +103,14 @@ class ChooseStickerActivity : AbstractScalarActivity() {
         }
 
         return super.onOptionsItemSelected(item)
+    }
+
+    /* ==========================================================================================
+     * Private methods
+     * ========================================================================================== */
+
+    private fun sendSticker(eventData: Map<String, Any>) {
+        // TODO
     }
 
     /* ==========================================================================================

@@ -95,45 +95,37 @@ class IntegrationManagerActivity : AbstractScalarActivity() {
     /**
      * A Scalar message has been received, deals with it and send the response
      */
-    override fun dealsWithScalarMessage(eventData: Map<String, Any>) {
-        val roomIdInEvent = eventData["room_id"] as String?
-        val userId = eventData["user_id"] as String?
+    override fun dealsWithScalarMessage(eventData: Map<String, Any>): Boolean {
         val action = eventData["action"] as String?
-        val userWidget = eventData["userWidget"] as Boolean?
 
-        when {
-            action == "close_scalar" -> finish()
-
-        // User widget
-            userWidget == true
-                    && action == "set_widget" -> setWidget(eventData, true)
-
-        // other APIs requires a roomId
-            null == roomIdInEvent -> sendError(getString(R.string.widget_integration_missing_room_id), eventData)
-
-        // Room ids must match
-            !TextUtils.equals(roomIdInEvent, mRoom!!.roomId) -> sendError(getString(R.string.widget_integration_room_not_visible), eventData)
-
-        // These APIs don't require userId
-            action == "join_rules_state" -> getJoinRules(eventData)
-            action == "set_plumbing_state" -> setPlumbingState(eventData)
-            action == "get_membership_count" -> getMembershipCount(eventData)
-            action == "set_widget" -> setWidget(eventData)
-            action == "get_widgets" -> getWidgets(eventData)
-            action == "can_send_event" -> canSendEvent(eventData)
-
-        // For the next APIs, a userId is required
-        // FIXME Unknown action is not treated properly then
-            null == userId -> sendError(getString(R.string.widget_integration_missing_user_id), eventData)
-
-            action == "membership_state" -> getMembershipState(userId, eventData)
-            action == "invite" -> inviteUser(userId, eventData)
-            action == "bot_options" -> getBotOptions(userId, eventData)
-            action == "set_bot_options" -> setBotOptions(userId, eventData)
-            action == "set_bot_power" -> setBotPower(userId, eventData)
-
-            else -> Log.e(LOG_TAG, "## dealsWithScalarMessage() : Unhandled postMessage event with action $action")
+        when (action) {
+            "close_scalar" -> finish()
+                    .also { return true }
+            "join_rules_state" -> getJoinRules(eventData)
+                    .also { return true }
+            "set_plumbing_state" -> setPlumbingState(eventData)
+                    .also { return true }
+            "get_membership_count" -> getMembershipCount(eventData)
+                    .also { return true }
+            "set_widget" -> setWidget(eventData)
+                    .also { return true }
+            "get_widgets" -> getWidgets(eventData)
+                    .also { return true }
+            "can_send_event" -> canSendEvent(eventData)
+                    .also { return true }
+            "membership_state" -> getMembershipState(eventData)
+                    .also { return true }
+            "invite" -> inviteUser(eventData)
+                    .also { return true }
+            "bot_options" -> getBotOptions(eventData)
+                    .also { return true }
+            "set_bot_options" -> setBotOptions(eventData)
+                    .also { return true }
+            "set_bot_power" -> setBotPower(eventData)
+                    .also { return true }
         }
+
+        return false
     }
 
     /*
@@ -151,10 +143,15 @@ class IntegrationManagerActivity : AbstractScalarActivity() {
     /**
      * Invite an user to this room
      *
-     * @param userId    the user id
      * @param eventData the modular data
      */
-    private fun inviteUser(userId: String, eventData: Map<String, Any>) {
+    private fun inviteUser(eventData: Map<String, Any>) {
+        if (checkRoomId(eventData) || checkUserId(eventData)) {
+            return
+        }
+
+        val userId = eventData["user_id"] as String
+
         val description = "Received request to invite " + userId + " into room " + mRoom!!.roomId
 
         Log.d(LOG_TAG, description)
@@ -173,10 +170,16 @@ class IntegrationManagerActivity : AbstractScalarActivity() {
      *
      * @param eventData the modular data
      */
-    private fun setWidget(eventData: Map<String, Any>, isUserWidget: Boolean = false) {
-        if (isUserWidget) {
+    private fun setWidget(eventData: Map<String, Any>) {
+        val userWidget = eventData["userWidget"] as Boolean?
+
+        if (userWidget == true) {
             Log.d(LOG_TAG, "Received request to set widget for user")
         } else {
+            if (checkRoomId(eventData)) {
+                return
+            }
+
             Log.d(LOG_TAG, "Received request to set widget in room " + mRoom!!.roomId)
         }
 
@@ -214,7 +217,7 @@ class IntegrationManagerActivity : AbstractScalarActivity() {
             }
         }
 
-        if (isUserWidget) {
+        if (userWidget == true) {
             val addUserWidgetBody = HashMap<String, Any>().apply {
                 put(widgetId, HashMap<String, Any>().apply {
                     put("content", widgetEventContent)
@@ -243,6 +246,10 @@ class IntegrationManagerActivity : AbstractScalarActivity() {
      * @param eventData the modular data
      */
     private fun getWidgets(eventData: Map<String, Any>) {
+        if (checkRoomId(eventData)) {
+            return
+        }
+
         Log.d(LOG_TAG, "Received request to get widget in room " + mRoom!!.roomId)
 
         val widgets = WidgetsManager.getSharedInstance().getActiveWidgets(mSession, mRoom)
@@ -273,6 +280,10 @@ class IntegrationManagerActivity : AbstractScalarActivity() {
      * @param eventData the modular data
      */
     private fun canSendEvent(eventData: Map<String, Any>) {
+        if (checkRoomId(eventData)) {
+            return
+        }
+
         Log.d(LOG_TAG, "Received request canSendEvent in room " + mRoom!!.roomId)
 
         val member = mRoom!!.liveState.getMember(mSession!!.myUserId)
@@ -309,10 +320,15 @@ class IntegrationManagerActivity : AbstractScalarActivity() {
     /**
      * Provides the membership state
      *
-     * @param userId    the user id
      * @param eventData the modular data
      */
-    private fun getMembershipState(userId: String, eventData: Map<String, Any>) {
+    private fun getMembershipState(eventData: Map<String, Any>) {
+        if (checkRoomId(eventData) || checkUserId(eventData)) {
+            return
+        }
+
+        val userId = eventData["user_id"] as String
+
         Log.d(LOG_TAG, "membership_state of " + userId + " in room " + mRoom!!.roomId + " requested")
 
         mRoom!!.getMemberEvent(userId, object : ApiCallback<Event> {
@@ -349,6 +365,10 @@ class IntegrationManagerActivity : AbstractScalarActivity() {
      * @param eventData the modular data
      */
     private fun getJoinRules(eventData: Map<String, Any>) {
+        if (checkRoomId(eventData)) {
+            return
+        }
+
         Log.d(LOG_TAG, "Received request join rules  in room " + mRoom!!.roomId)
         val joinedEvents = mRoom!!.liveState.getStateEvents(HashSet(Arrays.asList(Event.EVENT_TYPE_STATE_ROOM_JOIN_RULES)))
 
@@ -367,6 +387,10 @@ class IntegrationManagerActivity : AbstractScalarActivity() {
      * @param eventData the modular data
      */
     private fun setPlumbingState(eventData: Map<String, Any>) {
+        if (checkRoomId(eventData)) {
+            return
+        }
+
         val description = "Received request to set plumbing state to status " + eventData["status"] + " in room " + mRoom!!.roomId + " requested"
         Log.d(LOG_TAG, description)
 
@@ -385,10 +409,15 @@ class IntegrationManagerActivity : AbstractScalarActivity() {
     /**
      * Retrieve the latest botOptions event
      *
-     * @param userId    the userID
      * @param eventData the modular data
      */
-    private fun getBotOptions(userId: String, eventData: Map<String, Any>) {
+    private fun getBotOptions(eventData: Map<String, Any>) {
+        if (checkRoomId(eventData) || checkUserId(eventData)) {
+            return
+        }
+
+        val userId = eventData["user_id"] as String
+
         Log.d(LOG_TAG, "Received request to get options for bot " + userId + " in room " + mRoom!!.roomId + " requested")
 
         val stateEvents = mRoom!!.liveState.getStateEvents(HashSet(Arrays.asList(Event.EVENT_TYPE_ROOM_BOT_OPTIONS)))
@@ -416,10 +445,15 @@ class IntegrationManagerActivity : AbstractScalarActivity() {
     /**
      * Update the bot options
      *
-     * @param userId    the userID
      * @param eventData the modular data
      */
-    private fun setBotOptions(userId: String, eventData: Map<String, Any>) {
+    private fun setBotOptions(eventData: Map<String, Any>) {
+        if (checkRoomId(eventData) || checkUserId(eventData)) {
+            return
+        }
+
+        val userId = eventData["user_id"] as String
+
         val description = "Received request to set options for bot " + userId + " in room " + mRoom!!.roomId
         Log.d(LOG_TAG, description)
 
@@ -436,10 +470,15 @@ class IntegrationManagerActivity : AbstractScalarActivity() {
     /**
      * Update the bot power levels
      *
-     * @param userId    the userID
      * @param eventData the modular data
      */
-    private fun setBotPower(userId: String, eventData: Map<String, Any>) {
+    private fun setBotPower(eventData: Map<String, Any>) {
+        if (checkRoomId(eventData) || checkUserId(eventData)) {
+            return
+        }
+
+        val userId = eventData["user_id"] as String
+
         val description = "Received request to set power level to " + eventData["level"] + " for bot " + userId + " in room " + mRoom!!.roomId
 
         Log.d(LOG_TAG, description)
@@ -460,7 +499,55 @@ class IntegrationManagerActivity : AbstractScalarActivity() {
      * @param eventData the modular data
      */
     private fun getMembershipCount(eventData: Map<String, Any>) {
+        if (checkRoomId(eventData)) {
+            return
+        }
+
         sendIntegerResponse(mRoom!!.joinedMembers.size, eventData)
+    }
+
+    /**
+     * Check if roomId is present in the event and match
+     * Send response and return true in case of error
+     *
+     * @return true in case of error
+     */
+    private fun checkRoomId(eventData: Map<String, Any>): Boolean {
+        val roomIdInEvent = eventData["room_id"] as String?
+
+        // Check if param is present
+        if (null == roomIdInEvent) {
+            sendError(getString(R.string.widget_integration_missing_room_id), eventData)
+            return true
+        }
+
+        // Room ids must match
+        if (!TextUtils.equals(roomIdInEvent, mRoom!!.roomId)) {
+            sendError(getString(R.string.widget_integration_room_not_visible), eventData)
+            return true
+        }
+
+        // OK
+        return false
+    }
+
+    /**
+     * Check if userId is present in the event
+     * Send response and return true in case of error
+     *
+     * @return true in case of error
+     */
+    private fun checkUserId(eventData: Map<String, Any>): Boolean {
+        val userIdInEvent = eventData["user_id"] as String?
+
+        // Check if param is present
+        if (null == userIdInEvent) {
+            sendError(getString(R.string.widget_integration_missing_user_id), eventData)
+            return true
+        }
+
+        // OK
+        return false
     }
 
     /* ==========================================================================================
