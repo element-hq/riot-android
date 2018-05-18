@@ -22,6 +22,7 @@ import android.content.Intent
 import android.support.annotation.CallSuper
 import android.text.TextUtils
 import im.vector.R
+import im.vector.types.JsonDict
 import im.vector.util.toJsonMap
 import im.vector.widgets.WidgetsManager
 import org.matrix.androidsdk.rest.callback.ApiCallback
@@ -95,7 +96,7 @@ class IntegrationManagerActivity : AbstractWidgetActivity() {
     /**
      * A Widget message has been received, deals with it and send the response
      */
-    override fun dealsWithWidgetRequest(eventData: Map<String, Any>): Boolean {
+    override fun dealsWithWidgetRequest(eventData: JsonDict<Any>): Boolean {
         val action = eventData["action"] as String?
 
         // Do something depending on action (please add new actions following alphabetical order)
@@ -146,7 +147,7 @@ class IntegrationManagerActivity : AbstractWidgetActivity() {
      *
      * @param eventData the modular data
      */
-    private fun inviteUser(eventData: Map<String, Any>) {
+    private fun inviteUser(eventData: JsonDict<Any>) {
         if (checkRoomId(eventData) || checkUserId(eventData)) {
             return
         }
@@ -171,7 +172,7 @@ class IntegrationManagerActivity : AbstractWidgetActivity() {
      *
      * @param eventData the modular data
      */
-    private fun setWidget(eventData: Map<String, Any>) {
+    private fun setWidget(eventData: JsonDict<Any>) {
         val userWidget = eventData["userWidget"] as Boolean?
 
         if (userWidget == true) {
@@ -246,7 +247,7 @@ class IntegrationManagerActivity : AbstractWidgetActivity() {
      *
      * @param eventData the modular data
      */
-    private fun getWidgets(eventData: Map<String, Any>) {
+    private fun getWidgets(eventData: JsonDict<Any>) {
         if (checkRoomId(eventData)) {
             return
         }
@@ -254,7 +255,7 @@ class IntegrationManagerActivity : AbstractWidgetActivity() {
         Log.d(LOG_TAG, "Received request to get widget in room " + mRoom!!.roomId)
 
         val widgets = WidgetsManager.getSharedInstance().getActiveWidgets(mSession, mRoom)
-        val responseData = ArrayList<Map<String, Any>>()
+        val responseData = ArrayList<JsonDict<Any>>()
 
         for (widget in widgets) {
             val map = widget.widgetEvent.toJsonMap()
@@ -267,7 +268,7 @@ class IntegrationManagerActivity : AbstractWidgetActivity() {
         // Add user Widgets
         mSession!!.userWidgets
                 .forEach {
-                    responseData.add(it.value as Map<String, Any>)
+                    responseData.add(it.value as JsonDict<Any>)
                 }
 
         Log.d(LOG_TAG, "## getWidgets() returns $responseData")
@@ -280,7 +281,7 @@ class IntegrationManagerActivity : AbstractWidgetActivity() {
      *
      * @param eventData the modular data
      */
-    private fun canSendEvent(eventData: Map<String, Any>) {
+    private fun canSendEvent(eventData: JsonDict<Any>) {
         if (checkRoomId(eventData)) {
             return
         }
@@ -323,7 +324,7 @@ class IntegrationManagerActivity : AbstractWidgetActivity() {
      *
      * @param eventData the modular data
      */
-    private fun getMembershipState(eventData: Map<String, Any>) {
+    private fun getMembershipState(eventData: JsonDict<Any>) {
         if (checkRoomId(eventData) || checkUserId(eventData)) {
             return
         }
@@ -365,7 +366,7 @@ class IntegrationManagerActivity : AbstractWidgetActivity() {
      *
      * @param eventData the modular data
      */
-    private fun getJoinRules(eventData: Map<String, Any>) {
+    private fun getJoinRules(eventData: JsonDict<Any>) {
         if (checkRoomId(eventData)) {
             return
         }
@@ -387,7 +388,7 @@ class IntegrationManagerActivity : AbstractWidgetActivity() {
      *
      * @param eventData the modular data
      */
-    private fun setPlumbingState(eventData: Map<String, Any>) {
+    private fun setPlumbingState(eventData: JsonDict<Any>) {
         if (checkRoomId(eventData)) {
             return
         }
@@ -412,7 +413,7 @@ class IntegrationManagerActivity : AbstractWidgetActivity() {
      *
      * @param eventData the modular data
      */
-    private fun getBotOptions(eventData: Map<String, Any>) {
+    private fun getBotOptions(eventData: JsonDict<Any>) {
         if (checkRoomId(eventData) || checkUserId(eventData)) {
             return
         }
@@ -448,7 +449,7 @@ class IntegrationManagerActivity : AbstractWidgetActivity() {
      *
      * @param eventData the modular data
      */
-    private fun setBotOptions(eventData: Map<String, Any>) {
+    private fun setBotOptions(eventData: JsonDict<Any>) {
         if (checkRoomId(eventData) || checkUserId(eventData)) {
             return
         }
@@ -458,7 +459,7 @@ class IntegrationManagerActivity : AbstractWidgetActivity() {
         val description = "Received request to set options for bot " + userId + " in room " + mRoom!!.roomId
         Log.d(LOG_TAG, description)
 
-        val content = eventData["content"] as Map<String, Any>
+        val content = eventData["content"] as JsonDict<Any>
         val stateKey = "_$userId"
 
         mSession!!.roomsApiClient.sendStateEvent(mRoom!!.roomId,
@@ -473,7 +474,7 @@ class IntegrationManagerActivity : AbstractWidgetActivity() {
      *
      * @param eventData the modular data
      */
-    private fun setBotPower(eventData: Map<String, Any>) {
+    private fun setBotPower(eventData: JsonDict<Any>) {
         if (checkRoomId(eventData) || checkUserId(eventData)) {
             return
         }
@@ -499,7 +500,7 @@ class IntegrationManagerActivity : AbstractWidgetActivity() {
      *
      * @param eventData the modular data
      */
-    private fun getMembershipCount(eventData: Map<String, Any>) {
+    private fun getMembershipCount(eventData: JsonDict<Any>) {
         if (checkRoomId(eventData)) {
             return
         }
@@ -513,7 +514,7 @@ class IntegrationManagerActivity : AbstractWidgetActivity() {
      *
      * @return true in case of error
      */
-    private fun checkRoomId(eventData: Map<String, Any>): Boolean {
+    private fun checkRoomId(eventData: JsonDict<Any>): Boolean {
         val roomIdInEvent = eventData["room_id"] as String?
 
         // Check if param is present
@@ -538,7 +539,7 @@ class IntegrationManagerActivity : AbstractWidgetActivity() {
      *
      * @return true in case of error
      */
-    private fun checkUserId(eventData: Map<String, Any>): Boolean {
+    private fun checkUserId(eventData: JsonDict<Any>): Boolean {
         val userIdInEvent = eventData["user_id"] as String?
 
         // Check if param is present

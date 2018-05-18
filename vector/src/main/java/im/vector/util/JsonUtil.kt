@@ -17,6 +17,7 @@
 package im.vector.util
 
 import com.google.gson.reflect.TypeToken
+import im.vector.types.JsonDict
 import org.matrix.androidsdk.util.JsonUtils
 import org.matrix.androidsdk.util.Log
 import java.util.*
@@ -25,16 +26,15 @@ import java.util.*
 /**
  * Convert an object to a map
  *
- * @param `object` the object to convert
- * @return the event as a map
+ * @return the event as a map, or null in case of failure
  */
-fun Any.toJsonMap(): Map<String, Any>? {
+fun Any.toJsonMap(): JsonDict<Any>? {
     val gson = JsonUtils.getGson(false)
-    var objectAsMap: Map<String, Any>? = null
+    var objectAsMap: JsonDict<Any>? = null
 
     try {
         val stringifiedEvent = gson.toJson(this)
-        objectAsMap = gson.fromJson<Map<String, Any>>(stringifiedEvent, object : TypeToken<HashMap<String, Any>>() {
+        objectAsMap = gson.fromJson<JsonDict<Any>>(stringifiedEvent, object : TypeToken<HashMap<String, Any>>() {
 
         }.type)
     } catch (e: Exception) {

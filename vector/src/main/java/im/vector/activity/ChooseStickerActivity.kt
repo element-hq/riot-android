@@ -22,6 +22,7 @@ import android.view.Menu
 import android.view.MenuItem
 import androidx.core.widget.toast
 import im.vector.R
+import im.vector.types.JsonDict
 import im.vector.util.ThemeUtils
 import org.matrix.androidsdk.util.Log
 import java.net.URLEncoder
@@ -73,7 +74,7 @@ class ChooseStickerActivity : AbstractWidgetActivity() {
     /**
      * A Widget message has been received, deals with it and send the response
      */
-    override fun dealsWithWidgetRequest(eventData: Map<String, Any>): Boolean {
+    override fun dealsWithWidgetRequest(eventData: JsonDict<Any>): Boolean {
         val action = eventData["action"] as String?
 
         when (action) {
@@ -109,7 +110,7 @@ class ChooseStickerActivity : AbstractWidgetActivity() {
      * Private methods
      * ========================================================================================== */
 
-    private fun sendSticker(eventData: Map<String, Any>) {
+    private fun sendSticker(eventData: JsonDict<Any>) {
         // TODO
     }
 

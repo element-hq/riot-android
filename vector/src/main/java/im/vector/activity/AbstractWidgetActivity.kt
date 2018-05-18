@@ -27,6 +27,7 @@ import butterknife.BindView
 import com.google.gson.reflect.TypeToken
 import im.vector.Matrix
 import im.vector.R
+import im.vector.types.JsonDict
 import im.vector.types.WidgetEventData
 import im.vector.util.toJsonMap
 import im.vector.widgets.WidgetsManager
@@ -266,7 +267,7 @@ abstract class AbstractWidgetActivity : RiotAppCompatActivity() {
      *
      * @return true if the message is handled (it means an answer has been sent), false if not
      */
-    abstract fun dealsWithWidgetRequest(eventData: Map<String, Any>): Boolean
+    abstract fun dealsWithWidgetRequest(eventData: JsonDict<Any>): Boolean
 
     /*
      * *********************************************************************************************
@@ -280,7 +281,7 @@ abstract class AbstractWidgetActivity : RiotAppCompatActivity() {
      * @param jsString  the response data
      * @param eventData the modular data
      */
-    private fun sendResponse(jsString: String, eventData: Map<String, Any>) {
+    private fun sendResponse(jsString: String, eventData: JsonDict<Any>) {
         try {
             val functionLine = "sendResponseFromRiotAndroid('" + eventData["_id"] + "' , " + jsString + ");"
 
@@ -303,7 +304,7 @@ abstract class AbstractWidgetActivity : RiotAppCompatActivity() {
      * @param response  the response
      * @param eventData the modular data
      */
-    protected fun sendBoolResponse(response: Boolean, eventData: Map<String, Any>) {
+    protected fun sendBoolResponse(response: Boolean, eventData: JsonDict<Any>) {
         sendResponse(if (response) "true" else "false", eventData)
     }
 
@@ -313,7 +314,7 @@ abstract class AbstractWidgetActivity : RiotAppCompatActivity() {
      * @param response  the response
      * @param eventData the modular data
      */
-    protected fun sendIntegerResponse(response: Int, eventData: Map<String, Any>) {
+    protected fun sendIntegerResponse(response: Int, eventData: JsonDict<Any>) {
         sendResponse(response.toString() + "", eventData)
     }
 
@@ -323,7 +324,7 @@ abstract class AbstractWidgetActivity : RiotAppCompatActivity() {
      * @param response  the response
      * @param eventData the modular data
      */
-    protected fun sendObjectResponse(response: Any?, eventData: Map<String, Any>) {
+    protected fun sendObjectResponse(response: Any?, eventData: JsonDict<Any>) {
         var jsString: String? = null
 
         if (null != response) {
@@ -348,7 +349,7 @@ abstract class AbstractWidgetActivity : RiotAppCompatActivity() {
      * @param message   the error message
      * @param eventData the modular data
      */
-    protected fun sendError(message: String, eventData: Map<String, Any>) {
+    protected fun sendError(message: String, eventData: JsonDict<Any>) {
         Log.e(LOG_TAG, "## sendError() : eventData $eventData failed $message")
 
         // TODO: JS has an additional optional parameter: nestedError
@@ -366,7 +367,7 @@ abstract class AbstractWidgetActivity : RiotAppCompatActivity() {
      * @param object    the object to send
      * @param eventData the modular data
      */
-    protected fun sendObjectAsJsonMap(any: Any, eventData: Map<String, Any>) {
+    protected fun sendObjectAsJsonMap(any: Any, eventData: JsonDict<Any>) {
         sendObjectResponse(any.toJsonMap(), eventData)
     }
 
@@ -398,7 +399,7 @@ abstract class AbstractWidgetActivity : RiotAppCompatActivity() {
      *
      * @param <T> the callback type
      */
-    protected inner class WidgetApiCallback<T>(private val mEventData: Map<String, Any>,
+    protected inner class WidgetApiCallback<T>(private val mEventData: JsonDict<Any>,
                                                private val mDescription: String) :
             ApiCallback<T> {
 
