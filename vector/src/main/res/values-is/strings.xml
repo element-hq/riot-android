@@ -740,4 +740,54 @@ Til að halda áfram skaltu setja inn lykilorðið þitt.</string>
     <string name="settings_contacts_phonebook_country">Land símaskrár</string>
     <string name="room_settings_addresses_invalid_format_dialog_title">Ógilt snið samnefnis</string>
     <string name="directory_server_fail_to_retrieve_server">Netþjónninn gæti verið undir miklu álagi eða ekki til taks</string>
+    <string name="missing_permissions_warning">Þar sem ýmsar heimildir vantar, eru sumir eiginleikar ekki tiltækir...</string>
+    <string name="no_contact_access_placeholder">Þú heimilaðir Riot ekki aðgang að tengiliðum á tækinu</string>
+    <string name="send_bug_report_rage_shake">Hristu ákveðið til að senda villutilkynningu</string>
+
+    <string name="send_bug_report_sent">Það tókst að senda villuskýrsluna</string>
+    <string name="send_bug_report_failed">Mistókst að senda villuskýrsluna (%s)</string>
+    <string name="auth_recaptcha_message">Þessi heimavefþjónn vill ganga úr skugga um að þú sért ekki vélmenni</string>
+    <string name="auth_reset_password_message">Til að endursetja lykilorðið þitt, settu þá inn tölvupóstfangið sem tengt er notandaaðgangnum þínum:</string>
+    <string name="auth_reset_password_missing_email">Það þarf að setja inn tölvupóstfangið sem tengt er notandaaðgangnum þínum.</string>
+    <string name="auth_reset_password_email_validation_message">Tölvupóstur hefur verið sendur á %s. Þegar þú ert búin/n að fylgja tenglinum sem sá póstur inniheldur, smelltu þá hér fyrir neðan.</string>
+    <string name="auth_reset_password_error_unauthorized">Gat ekki sannprófað tölvupóstfang: gakktu úr skugga um að þú hafir smellt á tengilinn í tölvupóstinum</string>
+    <string name="call_error_ice_failed">Tenging gagnamiðils mistókst</string>
+    <string name="permissions_action_not_performed_missing_permissions">Því miður, aðgerðin var ekki framkvæmd þar sem nauðsynlegar heimildir vantaði</string>
+
+    <string name="room_participants_power_level_prompt">Þú getur ekki afturkallað þessa aðgerð, þar sem þú ert að gefa notandanum jafn mikil völd og þú hefur sjálf/ur.
+Ertu alveg viss?</string>
+
+    <string name="people_search_invite_by_id_dialog_description">Settu inn eitt eða fleir tölvupóstföng eða Matrix auðkenni</string>
+    <string name="room_unsent_messages_notification">Skilaboð ekki send. %1$s eða %2$s núna?</string>
+    <string name="room_unknown_devices_messages_notification">Skilaboð ekki send vegna þess að vart var við óþekkt tæki. %1$s eða %2$s núna?</string>
+    <string name="room_displayname_room_invite">Boð á spjallrás</string>
+    <string name="settings_notification_privacy_warning">Riot.im keyrir í bakgrunni til að halda efni tilkynninga út af fyrir sig. YÞú getur breytt þessum valkosti til að minnka rafhlöðunotkun.</string>
+    <string name="settings_notification_privacy_low_detail">Tilkynningar án smáatriða</string>
+    <string name="settings_set_sync_delay">Hlé milli tveggja samstillingarbeiðna</string>
+    <string name="settings_keep_media">Halda gögnum</string>
+
+    <string name="settings_hide_join_leave_messages">Fela taka-þátt/hætta skilaboð (hefur ekki áhrif á boð/spörk/bönn)</string>
+    <string name="settings_hide_avatar_display_name_changes_messages">Fela breytingar á auðkennismynd og birtingarnafni</string>
+    <string name="startup_notification_privacy_message">Riot getur keyrt í bakgrunni og stýrt tilkynningum á öruggan hátt (getur haft áhrif á rafhlöðunotkun).</string>
+    <string name="settings_opt_out_of_analytics_summary">Riot safnar nafnlausum greiningargögnum til að gera okkur kleift að bæta forritið.</string>
+
+    <string name="account_email_validation_message">Skoðaðu tölvupóstinn þinn og smelltu á tengilinn sem hann inniheldur. Þegar því er lokið skaltu smella á að halda áfram.</string>
+    <string name="account_email_validation_error">Tókst ekki að sannreyna tölvupóstfang. Skoðaðu tölvupóstinn þinn og smelltu á tengilinn sem hann inniheldur. Þegar því er lokið skaltu smella á að halda áfram</string>
+    <string name="room_settings_room_access_entry_only_invited">Aðeins fólk sem hefur verið boðið</string>
+    <string name="room_settings_addresses_invalid_format_dialog_body">\'%s\' er ekki gilt snið fyrir samnefni</string>
+    <string name="room_settings_addresses_e2e_encryption_warning">Virkja dulritun 
+(aðvörun: er ekki hægt að gera aftur óvirkt!)</string>
+    <string name="encryption_export_saved_as">E2E-dulritunarlyklar spjallrásar hafa verið vistaðir í \'%s\'</string>
+
+    <string name="encryption_never_send_to_unverified_devices_title">Aðeins dulrita til sannvottaðra tækja</string>
+    <string name="encryption_never_send_to_unverified_devices_summary">Aldrei senda dulrituð skilaboð af þessu tæki til ósannvottaðra tækja</string>
+
+    <string name="widget_integration_positive_power_level">Völd verða að vera jákvæð heiltala.</string>
+    <string name="you_added_a_new_device">Þú bættir við nýju tæki \'%s\', sem er að krefjast dulritunarlykla.</string>
+    <string name="your_unverified_device_requesting">ósannvottaða tækið þitt \'%s\' er að krefjast dulritunarlykla.</string>
+    <string name="conference_call_warning_message">Ráðstefnusamtöl eru í þróun og gætu verið óáreiðanleg.</string>
+
+    // slash commands
+    <string name="group_no_long_description">Kerfisstjóri samfélagsins hefur ekki gefið upp ítarlega lýsingu fyrir þetta samfélag.</string>
+
     </resources>
