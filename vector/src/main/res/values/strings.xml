@@ -170,6 +170,11 @@
     <string name="option_take_photo">Take photo</string>
     <string name="option_take_video">Take video</string>
 
+
+    <!-- No sticker application dialog -->
+    <string name="no_sticker_application_dialog_title">Send sticker</string>
+    <string name="no_sticker_application_dialog_content">Please first add the sticker pack from the matrix application manager.\nDo you want to open the matrix application manager now?</string>
+
     <!-- Authentication -->
     <string name="auth_login">Log in</string>
     <string name="auth_register">Register</string>

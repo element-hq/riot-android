@@ -1588,8 +1588,7 @@ public class VectorRoomActivity extends MXCActionBarActivity implements MatrixMe
             finish();
             return true;
         } else if (id == R.id.ic_action_matrix_apps) {
-            final Intent intent = IntegrationManagerActivity.Companion.getIntent(this, mMyUserId, mRoom.getRoomId());
-            startActivity(intent);
+            openIntegrationManagerActivity();
         } else if (id == R.id.ic_action_search_in_room) {
             try {
                 enableActionBarHeader(HIDE_ACTION_BAR_HEADER);
@@ -1663,6 +1662,14 @@ public class VectorRoomActivity extends MXCActionBarActivity implements MatrixMe
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+    /**
+     * Open Integration Manager activity
+     */
+    private void openIntegrationManagerActivity() {
+        final Intent intent = IntegrationManagerActivity.Companion.getIntent(this, mMyUserId, mRoom.getRoomId());
+        startActivity(intent);
     }
 
     /**
@@ -2273,8 +2280,20 @@ public class VectorRoomActivity extends MXCActionBarActivity implements MatrixMe
         }
 
         if (TextUtils.isEmpty(stickerWidgetUrl)) {
-            // TODO BMA String
-            Toast.makeText(this, "Please configure the matrix integration", Toast.LENGTH_SHORT).show();
+            // The Sticker pack is not installed yet. Propose the user to install it
+            new AlertDialog.Builder(this)
+                    .setTitle(R.string.no_sticker_application_dialog_title)
+                    .setMessage(R.string.no_sticker_application_dialog_content)
+                    .setPositiveButton(R.string.action_open, new DialogInterface.OnClickListener() {
+
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            // Open integration manager
+                            openIntegrationManagerActivity();
+                        }
+                    })
+                    .setNegativeButton(R.string.cancel, null)
+                    .show();
         } else {
             Intent intent = ChooseStickerActivity.Companion.getIntent(this, mMyUserId, mRoom.getRoomId(), stickerWidgetUrl, stickerWidgetId);
 
