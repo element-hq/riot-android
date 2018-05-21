@@ -235,7 +235,7 @@ public class Matrix {
         String buildNumber = mAppContext.getResources().getString(R.string.build_number);
 
         if ((useBuildNumber) && !TextUtils.equals(buildNumber, "0")) {
-            gitVersion = "#" + buildNumber;
+            gitVersion = "b" + buildNumber;
             longformat = false;
         }
 
