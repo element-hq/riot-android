@@ -351,19 +351,7 @@ public class LoginActivity extends MXCActionBarActivity implements RegistrationM
         CommonActivityUtils.onApplicationStarted(this);
 
         Intent intent = getIntent();
-        Bundle receivedBundle = (null != intent) ? getIntent().getExtras() : null;
 
-        // resume the application
-        if (null != receivedBundle) {
-            if (receivedBundle.containsKey(VectorUniversalLinkReceiver.EXTRA_UNIVERSAL_LINK_URI)) {
-                mUniversalLinkUri = receivedBundle.getParcelable(VectorUniversalLinkReceiver.EXTRA_UNIVERSAL_LINK_URI);
-                Log.d(LOG_TAG, "## onCreate() Login activity started by universal link");
-                // activity has been launched from an universal link
-            } else if (receivedBundle.containsKey(VectorRegistrationReceiver.EXTRA_EMAIL_VALIDATION_PARAMS)) {
-                Log.d(LOG_TAG, "## onCreate() Login activity started by email verification for registration");
-                processEmailValidationExtras(receivedBundle);
-            }
-        }
         // already registered
         if (hasCredentials()) {
             if ((null != intent) && (intent.getFlags() & Intent.FLAG_ACTIVITY_BROUGHT_TO_FRONT) == 0) {
@@ -601,6 +589,20 @@ public class LoginActivity extends MXCActionBarActivity implements RegistrationM
 
         // set the handler used by the register to poll the server response
         mHandler = new Handler(getMainLooper());
+
+        // Check whether the application has been resumed from an universal link
+        Bundle receivedBundle = (null != intent) ? getIntent().getExtras() : null;
+        if (null != receivedBundle) {
+            if (receivedBundle.containsKey(VectorUniversalLinkReceiver.EXTRA_UNIVERSAL_LINK_URI)) {
+                mUniversalLinkUri = receivedBundle.getParcelable(VectorUniversalLinkReceiver.EXTRA_UNIVERSAL_LINK_URI);
+                Log.d(LOG_TAG, "## onCreate() Login activity started by universal link");
+            } else if (receivedBundle.containsKey(VectorRegistrationReceiver.EXTRA_EMAIL_VALIDATION_PARAMS)) {
+                Log.d(LOG_TAG, "## onCreate() Login activity started by email verification for registration");
+                if (processEmailValidationExtras(receivedBundle)) {
+                    checkIfMailValidationPending();
+                }
+            }
+        }
     }
 
     /**
@@ -754,6 +756,7 @@ public class LoginActivity extends MXCActionBarActivity implements RegistrationM
         mMainLayout.setVisibility(View.VISIBLE);
 
         // cancel the registration flow
+        cancelEmailPolling();
         mEmailValidationExtraParams = null;
         mRegistrationResponse = null;
         showMainLayout();
@@ -808,7 +811,9 @@ public class LoginActivity extends MXCActionBarActivity implements RegistrationM
      */
     private boolean hasCredentials() {
         try {
-            return Matrix.getInstance(this).getDefaultSession() != null;
+            MXSession session = Matrix.getInstance(this).getDefaultSession();
+            return ((null != session) && session.isAlive());
+
         } catch (Exception e) {
             Log.e(LOG_TAG, "## Exception: " + e.getMessage());
         }
@@ -1226,6 +1231,7 @@ public class LoginActivity extends MXCActionBarActivity implements RegistrationM
                     enableLoadingScreen(false);
                     setActionButtonsEnabled(false);
                     showMainLayout();
+                    refreshDisplay();
                     Toast.makeText(getApplicationContext(), errorMessage, Toast.LENGTH_LONG).show();
                 }
 
@@ -1377,6 +1383,7 @@ public class LoginActivity extends MXCActionBarActivity implements RegistrationM
                             if (mMode == MODE_ACCOUNT_CREATION) {
                                 showMainLayout();
                                 enableLoadingScreen(false);
+                                refreshDisplay();
                                 Toast.makeText(getApplicationContext(), errorMessage, Toast.LENGTH_LONG).show();
                             }
                         }
@@ -2348,18 +2355,24 @@ public class LoginActivity extends MXCActionBarActivity implements RegistrationM
 
     @Override
     public void onRegistrationFailed(String message) {
+        cancelEmailPolling();
+        mEmailValidationExtraParams = null;
         Log.e(LOG_TAG, "## onRegistrationFailed(): " + message);
         showMainLayout();
         enableLoadingScreen(false);
+        refreshDisplay();
         Toast.makeText(this, R.string.login_error_unable_register, Toast.LENGTH_LONG).show();
     }
 
     @Override
     public void onWaitingEmailValidation() {
         Log.d(LOG_TAG, "## onWaitingEmailValidation");
+
+        // Prompt the user to check his email
         hideMainLayoutAndToast(getResources().getString(R.string.auth_email_validation_message));
         enableLoadingScreen(true);
 
+        // Loop to know whether the email has been checked
         mRegisterPollingRunnable = new Runnable() {
             @Override
             public void run() {

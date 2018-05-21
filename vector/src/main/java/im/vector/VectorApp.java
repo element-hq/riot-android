@@ -44,6 +44,8 @@ import android.util.Pair;
 import com.vanniktech.emoji.one.EmojiOneProvider;
 import com.vanniktech.emoji.EmojiManager;
 
+import com.facebook.stetho.Stetho;
+
 import org.matrix.androidsdk.MXSession;
 import org.matrix.androidsdk.util.Log;
 import org.piwik.sdk.Piwik;
@@ -193,6 +195,10 @@ public class VectorApp extends MultiDexApplication {
     public void onCreate() {
         Log.d(LOG_TAG, "onCreate");
         super.onCreate();
+
+        if (BuildConfig.DEBUG) {
+            Stetho.initializeWithDefaults(this);
+        }
 
         instance = this;
         mCallsManager = new CallsManager(this);
@@ -1194,6 +1200,7 @@ public class VectorApp extends MultiDexApplication {
 
     /**
      * Set the visit variable
+     *
      * @param trackMe
      * @param id
      * @param name
@@ -1260,6 +1267,7 @@ public class VectorApp extends MultiDexApplication {
 
     /**
      * A new activity has been resumed
+     *
      * @param activity the new activity
      */
     private void onNewScreen(Activity activity) {
@@ -1267,7 +1275,7 @@ public class VectorApp extends MultiDexApplication {
             Tracker tracker = getPiwikTracker();
             if (null != tracker) {
                 try {
-                    TrackHelper.Screen screen = TrackHelper.track().screen("/android/" +   Matrix.getApplicationName() + "/" + this.getString(R.string.flavor_description) + "/" + SHORT_VERSION + "/"+ activity.getClass().getName().replace(".", "/"));
+                    TrackHelper.Screen screen = TrackHelper.track().screen("/android/" + Matrix.getApplicationName() + "/" + this.getString(R.string.flavor_description) + "/" + SHORT_VERSION + "/" + activity.getClass().getName().replace(".", "/"));
                     addCustomVariables(screen).with(tracker);
                 } catch (Throwable t) {
                     Log.e(LOG_TAG, "## onNewScreen() : failed " + t.getMessage());

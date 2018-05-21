@@ -8,4 +8,7 @@
 
     <dimen name="chat_avatar_size">40dp</dimen>
     <dimen name="member_list_avatar_size">60dp</dimen>
+
+    <dimen name="quote_width">4dp</dimen>
+    <dimen name="quote_gap">8dp</dimen>
 </resources>

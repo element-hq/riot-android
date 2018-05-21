@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<merge xmlns:android="http://schemas.android.com/apk/res/android">
+<merge xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools">
 
     <View
         android:id="@+id/message_read_marker"
@@ -7,5 +8,6 @@
         android:layout_height="2dp"
         android:layout_marginBottom="2dp"
         android:background="?attr/unread_marker_line_color"
-        android:visibility="gone" />
+        android:visibility="gone"
+        tools:visibility="visible" />
 </merge>
