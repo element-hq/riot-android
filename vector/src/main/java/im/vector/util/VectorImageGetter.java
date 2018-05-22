@@ -126,12 +126,18 @@ public class VectorImageGetter implements Html.ImageGetter {
         @Override
         protected Bitmap doInBackground(Object... params) {
             mSource = (String) params[0];
-            Log.d(LOG_TAG, "## doInBackground() : " + mSource);
-            try {
-                return BitmapFactory.decodeStream(new URL(mSession.getContentManager().getDownloadableUrl(mSource)).openConnection().getInputStream());
-            } catch (Throwable t) {
-                Log.e(LOG_TAG, "## ImageDownloader() failed " + t.getMessage());
+            // Check whether this source is a valid Matrix media content URI, and convert it in an actual url.
+            String downloadableUrl = mSession.getContentManager().getDownloadableUrl(mSource);
+            if (null != downloadableUrl)
+            {
+                Log.d(LOG_TAG, "## doInBackground() : " + mSource);
+                try {
+                    return BitmapFactory.decodeStream(new URL(downloadableUrl).openConnection().getInputStream());
+                } catch (Throwable t) {
+                    Log.e(LOG_TAG, "## ImageDownloader() failed " + t.getMessage());
+                }
             }
+
 
             return null;
         }
