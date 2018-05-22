@@ -21,7 +21,6 @@ import android.content.Context
 import android.content.Intent
 import android.view.Menu
 import android.view.MenuItem
-import androidx.core.widget.toast
 import com.google.gson.Gson
 import im.vector.R
 import im.vector.types.JsonDict
@@ -102,7 +101,17 @@ class ChooseStickerActivity : AbstractWidgetActivity() {
 
     override fun onOptionsItemSelected(item: MenuItem?): Boolean {
         when (item?.itemId) {
-            R.id.menu_settings -> toast("Settings TODO").also { return true }
+            R.id.menu_settings -> {
+                val intent = IntegrationManagerActivity.getIntent(context = this,
+                        matrixId = mSession!!.myUserId,
+                        roomId = mRoom!!.roomId,
+                        widgetId = mWidgetId,
+                        screenId = "type_$WIDGET_NAME")
+
+                startActivity(intent)
+
+                return true
+            }
         }
 
         return super.onOptionsItemSelected(item)
@@ -151,9 +160,16 @@ class ChooseStickerActivity : AbstractWidgetActivity() {
     companion object {
         private val LOG_TAG = ChooseStickerActivity::class.java.simpleName
 
-        /**
-         * the parameters
-         */
+        /* ==========================================================================================
+         * Const
+         * ========================================================================================== */
+
+        const val WIDGET_NAME = "m.stickerpicker"
+
+        /* ==========================================================================================
+         * Parameters
+         * ========================================================================================== */
+
         private const val EXTRA_WIDGET_URL = "EXTRA_WIDGET_URL"
         private const val EXTRA_WIDGET_ID = "EXTRA_WIDGET_ID"
 
@@ -168,7 +184,7 @@ class ChooseStickerActivity : AbstractWidgetActivity() {
         }
 
         /* ==========================================================================================
-         * The result
+         * Result
          * ========================================================================================== */
 
         private const val EXTRA_OUT_CONTENT = "EXTRA_OUT_CONTENT"

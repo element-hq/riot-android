@@ -1668,7 +1668,7 @@ public class VectorRoomActivity extends MXCActionBarActivity implements MatrixMe
      * Open Integration Manager activity
      */
     private void openIntegrationManagerActivity() {
-        final Intent intent = IntegrationManagerActivity.Companion.getIntent(this, mMyUserId, mRoom.getRoomId());
+        final Intent intent = IntegrationManagerActivity.Companion.getIntent(this, mMyUserId, mRoom.getRoomId(), null, null);
         startActivity(intent);
     }
 
@@ -2270,7 +2270,7 @@ public class VectorRoomActivity extends MXCActionBarActivity implements MatrixMe
                 Object content = ((Map) o).get("content");
                 if (content != null && content instanceof Map) {
                     Object type = ((Map) content).get("type");
-                    if (type != null && type instanceof String && type.equals("m.stickerpicker")) {
+                    if (type != null && type instanceof String && type.equals(ChooseStickerActivity.WIDGET_NAME)) {
                         stickerWidgetUrl = (String) ((Map) content).get("url");
                         stickerWidgetId = (String) ((Map) o).get("id");
                         break;

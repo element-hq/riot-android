@@ -77,13 +77,14 @@ class IntegrationManagerActivity : AbstractWidgetActivity() {
                     "scalar_token=" + URLEncoder.encode(scalarToken, "utf-8") + "&" +
                     "room_id=" + URLEncoder.encode(mRoom!!.roomId, "utf-8")
 
+            if (null != mWidgetId) {
+                url += "&integ_id=" + URLEncoder.encode(mWidgetId, "utf-8")
+            }
+
             if (null != mScreenId) {
                 url += "&screen=" + URLEncoder.encode(mScreenId, "utf-8")
             }
 
-            if (null != mWidgetId) {
-                url += "&integ_id=" + URLEncoder.encode(mWidgetId, "utf-8")
-            }
             return url
         } catch (e: Exception) {
             Log.e(LOG_TAG, "## buildInterfaceUrl() failed " + e.message)
@@ -566,11 +567,17 @@ class IntegrationManagerActivity : AbstractWidgetActivity() {
         internal const val EXTRA_WIDGET_ID = "EXTRA_WIDGET_ID"
         private const val EXTRA_SCREEN_ID = "EXTRA_SCREEN_ID"
 
-        fun getIntent(context: Context, matrixId: String, roomId: String): Intent {
+        fun getIntent(context: Context,
+                      matrixId: String,
+                      roomId: String,
+                      widgetId: String? = null,
+                      screenId: String? = null): Intent {
             return Intent(context, IntegrationManagerActivity::class.java)
                     .apply {
                         putExtra(EXTRA_MATRIX_ID, matrixId)
                         putExtra(EXTRA_ROOM_ID, roomId)
+                        putExtra(EXTRA_WIDGET_ID, widgetId)
+                        putExtra(EXTRA_SCREEN_ID, screenId)
                     }
         }
     }
