@@ -34,6 +34,7 @@ import butterknife.Unbinder
 import im.vector.R
 
 import im.vector.VectorApp
+import im.vector.util.AssetReader
 import org.matrix.androidsdk.util.Log
 
 /**
@@ -61,6 +62,13 @@ abstract class RiotAppCompatActivity : AppCompatActivity() {
     /* ==========================================================================================
      * LIFE CYCLE
      * ========================================================================================== */
+
+    @CallSuper
+    override fun onLowMemory() {
+        super.onLowMemory()
+
+        AssetReader.clearCache()
+    }
 
     override fun attachBaseContext(base: Context) {
         super.attachBaseContext(VectorApp.getLocalisedContext(base))

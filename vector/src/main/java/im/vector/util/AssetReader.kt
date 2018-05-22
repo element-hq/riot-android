@@ -21,33 +21,56 @@ import org.matrix.androidsdk.util.Log
 import java.io.InputStreamReader
 
 /**
- * Read an asset from resource and return a String or null in cas of error.
- *
- * @param assetFilename Asset filename
- * @return the content of the asset file
+ * Singleton to read asset files
  */
-fun Context.readAssetFile(assetFilename: String): String? {
-    var assetContent: String? = null
+object AssetReader {
 
-    try {
-        val inputStream = assets.open(assetFilename)
-        val buffer = CharArray(1024)
-        val out = StringBuilder()
+    /* ==========================================================================================
+     * CACHE
+     * ========================================================================================== */
+    private val cache = HashMap<String, String>()
 
-        val inputStreamReader = InputStreamReader(inputStream, "UTF-8")
-        while (true) {
-            val rsz = inputStreamReader.read(buffer, 0, buffer.size)
-            if (rsz < 0)
-                break
-            out.append(buffer, 0, rsz)
+    /**
+     * Read an asset from resource and return a String or null in cas of error.
+     *
+     * @param assetFilename Asset filename
+     * @return the content of the asset file
+     */
+    fun readAssetFile(context: Context, assetFilename: String): String? {
+        // Check if it is available in cache
+        if (cache.contains(assetFilename)) {
+            return cache[assetFilename]
         }
-        assetContent = out.toString()
 
-        inputStreamReader.close()
-        inputStream.close()
-    } catch (e: Exception) {
-        Log.e("AssetReader", "## readAssetFile() failed : " + e.message)
+        var assetContent: String? = null
+
+        try {
+            val inputStream = context.assets.open(assetFilename)
+            val buffer = CharArray(1024)
+            val out = StringBuilder()
+
+            val inputStreamReader = InputStreamReader(inputStream, "UTF-8")
+            while (true) {
+                val rsz = inputStreamReader.read(buffer, 0, buffer.size)
+                if (rsz < 0)
+                    break
+                out.append(buffer, 0, rsz)
+            }
+            assetContent = out.toString()
+
+            // Keep in cache
+            cache[assetFilename] = assetContent
+
+            inputStreamReader.close()
+            inputStream.close()
+        } catch (e: Exception) {
+            Log.e("AssetReader", "## readAssetFile() failed : " + e.message)
+        }
+
+        return assetContent
     }
 
-    return assetContent
+    fun clearCache() {
+        cache.clear()
+    }
 }

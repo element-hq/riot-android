@@ -29,7 +29,7 @@ import im.vector.Matrix
 import im.vector.R
 import im.vector.types.JsonDict
 import im.vector.types.WidgetEventData
-import im.vector.util.readAssetFile
+import im.vector.util.AssetReader
 import im.vector.util.toJsonMap
 import im.vector.widgets.WidgetsManager
 import org.matrix.androidsdk.MXSession
@@ -157,7 +157,7 @@ abstract class AbstractWidgetActivity : RiotAppCompatActivity() {
                 override fun onPageFinished(view: WebView, url: String) {
                     hideWaitingView()
 
-                    val js = readAssetFile("postMessageAPI.js")
+                    val js = AssetReader.readAssetFile(this@AbstractWidgetActivity, "postMessageAPI.js")
 
                     if (null != js) {
                         runOnUiThread { mWebView.loadUrl("javascript:$js") }
