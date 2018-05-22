@@ -2281,10 +2281,14 @@ public class VectorRoomActivity extends MXCActionBarActivity implements MatrixMe
 
         if (TextUtils.isEmpty(stickerWidgetUrl)) {
             // The Sticker picker widget is not installed yet. Propose the user to install it
-            new AlertDialog.Builder(this)
-                    .setTitle(R.string.no_sticker_application_dialog_title)
-                    .setMessage(R.string.no_sticker_application_dialog_content)
-                    .setPositiveButton(R.string.action_open, new DialogInterface.OnClickListener() {
+            AlertDialog.Builder builder = new AlertDialog.Builder(this);
+
+            // Use the builder context
+            View v = LayoutInflater.from(builder.getContext()).inflate(R.layout.no_sticker_pack_dialog, null);
+
+            builder
+                    .setView(v)
+                    .setPositiveButton(R.string.yes, new DialogInterface.OnClickListener() {
 
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
@@ -2292,7 +2296,7 @@ public class VectorRoomActivity extends MXCActionBarActivity implements MatrixMe
                             openIntegrationManagerActivity();
                         }
                     })
-                    .setNegativeButton(R.string.cancel, null)
+                    .setNegativeButton(R.string.no, null)
                     .show();
         } else {
             Intent intent = StickerPickerActivity.Companion.getIntent(this, mMyUserId, mRoom.getRoomId(), stickerWidgetUrl, stickerWidgetId);
