@@ -755,7 +755,7 @@ public class VectorRoomActivity extends MXCActionBarActivity implements MatrixMe
                             if (selectedVal == R.string.option_send_files) {
                                 VectorRoomActivity.this.launchFileSelectionIntent();
                             } else if (selectedVal == R.string.option_send_sticker) {
-                                startStickerChoiceActivity();
+                                startStickerPickerActivity();
                             } else if (selectedVal == R.string.option_take_photo_video) {
                                 if (CommonActivityUtils.checkPermissions(CommonActivityUtils.REQUEST_CODE_PERMISSION_TAKE_PHOTO, VectorRoomActivity.this)) {
                                     launchCamera();
@@ -1401,7 +1401,7 @@ public class VectorRoomActivity extends MXCActionBarActivity implements MatrixMe
                 case TAKE_IMAGE_REQUEST_CODE:
                     sendMediasIntent(data);
                     break;
-                case RequestCodesKt.CHOOSE_STICKER_REQUEST_CODE:
+                case RequestCodesKt.STICKER_PICKER_ACTIVITY_REQUEST_CODE:
                     sendSticker(data);
                     break;
                 case GET_MENTION_REQUEST_CODE:
@@ -2051,7 +2051,7 @@ public class VectorRoomActivity extends MXCActionBarActivity implements MatrixMe
      * @param data
      */
     private void sendSticker(Intent data) {
-        String contentStr = ChooseStickerActivity.Companion.getResultContent(data);
+        String contentStr = StickerPickerActivity.Companion.getResultContent(data);
 
         Event event = new Event(Event.EVENT_TYPE_STICKER,
                 new JsonParser().parse(contentStr).getAsJsonObject(),
@@ -2258,19 +2258,19 @@ public class VectorRoomActivity extends MXCActionBarActivity implements MatrixMe
         startActivityForResult(fileIntent, REQUEST_FILES_REQUEST_CODE);
     }
 
-    private void startStickerChoiceActivity() {
+    private void startStickerPickerActivity() {
+        // Search for the sticker picker widget in the user account
         Map<String, Object> userWidgets = mSession.getUserWidgets();
 
         String stickerWidgetUrl = null;
         String stickerWidgetId = null;
 
-        // Search for sticker
         for (Object o : userWidgets.values()) {
             if (o instanceof Map) {
                 Object content = ((Map) o).get("content");
                 if (content != null && content instanceof Map) {
                     Object type = ((Map) content).get("type");
-                    if (type != null && type instanceof String && type.equals(ChooseStickerActivity.WIDGET_NAME)) {
+                    if (type != null && type instanceof String && type.equals(StickerPickerActivity.WIDGET_NAME)) {
                         stickerWidgetUrl = (String) ((Map) content).get("url");
                         stickerWidgetId = (String) ((Map) o).get("id");
                         break;
@@ -2280,7 +2280,7 @@ public class VectorRoomActivity extends MXCActionBarActivity implements MatrixMe
         }
 
         if (TextUtils.isEmpty(stickerWidgetUrl)) {
-            // The Sticker pack is not installed yet. Propose the user to install it
+            // The Sticker picker widget is not installed yet. Propose the user to install it
             new AlertDialog.Builder(this)
                     .setTitle(R.string.no_sticker_application_dialog_title)
                     .setMessage(R.string.no_sticker_application_dialog_content)
@@ -2295,9 +2295,9 @@ public class VectorRoomActivity extends MXCActionBarActivity implements MatrixMe
                     .setNegativeButton(R.string.cancel, null)
                     .show();
         } else {
-            Intent intent = ChooseStickerActivity.Companion.getIntent(this, mMyUserId, mRoom.getRoomId(), stickerWidgetUrl, stickerWidgetId);
+            Intent intent = StickerPickerActivity.Companion.getIntent(this, mMyUserId, mRoom.getRoomId(), stickerWidgetUrl, stickerWidgetId);
 
-            startActivityForResult(intent, RequestCodesKt.CHOOSE_STICKER_REQUEST_CODE);
+            startActivityForResult(intent, RequestCodesKt.STICKER_PICKER_ACTIVITY_REQUEST_CODE);
         }
     }
 

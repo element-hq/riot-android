@@ -28,7 +28,7 @@ import im.vector.util.ThemeUtils
 import org.matrix.androidsdk.util.Log
 import java.net.URLEncoder
 
-class ChooseStickerActivity : AbstractWidgetActivity() {
+class StickerPickerActivity : AbstractWidgetActivity() {
 
     /* ==========================================================================================
      * DATA
@@ -158,7 +158,7 @@ class ChooseStickerActivity : AbstractWidgetActivity() {
      * ========================================================================================== */
 
     companion object {
-        private val LOG_TAG = ChooseStickerActivity::class.java.simpleName
+        private val LOG_TAG = StickerPickerActivity::class.java.simpleName
 
         /* ==========================================================================================
          * Const
@@ -174,7 +174,7 @@ class ChooseStickerActivity : AbstractWidgetActivity() {
         private const val EXTRA_WIDGET_ID = "EXTRA_WIDGET_ID"
 
         fun getIntent(context: Context, matrixId: String, roomId: String, widgetUrl: String, widgetId: String): Intent {
-            return Intent(context, ChooseStickerActivity::class.java)
+            return Intent(context, StickerPickerActivity::class.java)
                     .apply {
                         putExtra(EXTRA_MATRIX_ID, matrixId)
                         putExtra(EXTRA_ROOM_ID, roomId)

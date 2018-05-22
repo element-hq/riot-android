@@ -238,7 +238,7 @@
             android:configChanges="orientation|screenSize"
             android:theme="@style/AppTheme.NoActionBar.FullScreen" />
         <activity
-            android:name=".activity.ChooseStickerActivity"
+            android:name=".activity.StickerPickerActivity"
             android:configChanges="orientation|screenSize"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
