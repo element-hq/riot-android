@@ -201,7 +201,7 @@
             android:excludeFromRecents="true"
             android:launchMode="singleTop"
             android:taskAffinity=""
-            android:theme="@android:style/Theme.Holo.Light.Dialog" />
+            android:theme="@style/Theme.AppCompat.Light.Dialog" />
         <activity
             android:name=".activity.JoinScreenActivity"
             android:clearTaskOnLaunch="true"
@@ -209,7 +209,7 @@
             android:excludeFromRecents="true"
             android:launchMode="singleTop"
             android:taskAffinity=""
-            android:theme="@android:style/Theme.Holo.Light.Dialog" />
+            android:theme="@style/Theme.AppCompat.Light.Dialog" />
         <activity
             android:name=".activity.VectorMediasViewerActivity"
             android:configChanges="orientation|screenSize"
@@ -341,7 +341,7 @@
         </activity>
         <activity
             android:name=".activity.VectorFakeRoomPreviewActivity"
-            android:theme="@android:style/Theme.NoDisplay" />
+            android:theme="@style/Theme.AppCompat.NoActionBar" />
         <activity
             android:name=".activity.PhoneNumberAdditionActivity"
             android:configChanges="orientation|screenSize"
@@ -443,7 +443,7 @@
         <!-- Shared items -->
         <activity
             android:name=".activity.VectorSharedFilesActivity"
-            android:theme="@android:style/Theme.NoDisplay">
+            android:theme="@style/Theme.AppCompat.NoActionBar">
             <intent-filter>
                 <action android:name="android.intent.action.SEND" />
                 <category android:name="android.intent.category.DEFAULT" />
