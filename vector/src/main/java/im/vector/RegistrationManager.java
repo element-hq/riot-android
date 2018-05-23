@@ -570,10 +570,19 @@ public class RegistrationManager {
      * Add email three pid to singleton values
      * It will be processed later on
      *
-     * @param email
+     * @param emailThreePid
      */
-    public void addEmailThreePid(final String email) {
-        mEmail = new ThreePid(email, ThreePid.MEDIUM_EMAIL);
+    public void addEmailThreePid(final ThreePid emailThreePid) {
+        mEmail = emailThreePid;
+    }
+
+    /**
+     * Get the current email three pid (if any).
+     *
+     * @return the corresponding three pid
+     */
+    public ThreePid getEmailThreePid() {
+        return mEmail;
     }
 
     /**
