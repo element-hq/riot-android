@@ -19,6 +19,7 @@ package im.vector.dialogs
 import android.app.Activity
 import android.app.AlertDialog
 import android.os.Bundle
+import im.vector.Matrix
 import im.vector.R
 import im.vector.activity.SimpleWebViewActivity
 import im.vector.activity.interfaces.Restorable
@@ -58,12 +59,14 @@ class ConsentNotGivenHelper(private val activity: Activity, savedInstanceState: 
         isDialogDisplayed = true
 
         AlertDialog.Builder(activity)
-                .setMessage(matrixError.localizedMessage)
-                .setPositiveButton(R.string.action_open) { _, _ ->
-                    openWebView(matrixError.consent_uri)
+                .setTitle(R.string.settings_app_term_conditions)
+                .setMessage(activity.getString(R.string.dialog_user_consent_content,
+                        Matrix.getInstance(activity).defaultSession.homeServerConfig.homeserverUri.host))
+                .setPositiveButton(R.string.dialog_user_consent_submit) { _, _ ->
+                    openWebViewActivity(matrixError.consent_uri)
                     isDialogDisplayed = false
                 }
-                .setNegativeButton(R.string.cancel) { _, _ ->
+                .setNegativeButton(R.string.later) { _, _ ->
                     isDialogDisplayed = false
                 }
                 .setOnCancelListener { isDialogDisplayed = false }
@@ -82,8 +85,10 @@ class ConsentNotGivenHelper(private val activity: Activity, savedInstanceState: 
      * Private
      * ========================================================================================== */
 
-    private fun openWebView(consentUri: String) {
-        activity.startActivity(SimpleWebViewActivity.getIntent(activity, consentUri))
+    private fun openWebViewActivity(consentUri: String) {
+        activity.startActivity(SimpleWebViewActivity.getIntent(activity,
+                consentUri,
+                R.string.settings_app_term_conditions))
     }
 
     /* ==========================================================================================

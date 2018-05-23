@@ -950,4 +950,8 @@
     <string name="notice_avatar">Notice avatar</string>
     <string name="avatar">Avatar</string>
 
+    <!-- Consent modal -->
+    <string name="dialog_user_consent_content">To continue using the %1$s homeserver you must review and agree to the terms and conditions.</string>
+    <string name="dialog_user_consent_submit">Review now</string>
+
 </resources>

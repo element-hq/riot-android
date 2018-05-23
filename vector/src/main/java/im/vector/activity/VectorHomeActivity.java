@@ -243,7 +243,7 @@ public class VectorHomeActivity extends RiotAppCompatActivity implements SearchV
     // floating action bar dialog
     private AlertDialog mFabDialog;
 
-     /*
+    /*
      * *********************************************************************************************
      * Static methods
      * *********************************************************************************************
@@ -1363,7 +1363,11 @@ public class VectorHomeActivity extends RiotAppCompatActivity implements SearchV
 
             @Override
             public void onMatrixError(final MatrixError e) {
-                onError(e.getLocalizedMessage());
+                if (MatrixError.M_CONSENT_NOT_GIVEN.equals(e.errcode)) {
+                    getConsentNotGivenHelper().displayDialog(e);
+                } else {
+                    onError(e.getLocalizedMessage());
+                }
             }
 
             @Override
@@ -1552,7 +1556,7 @@ public class VectorHomeActivity extends RiotAppCompatActivity implements SearchV
     /**
      * Create the room forget / leave callback
      *
-     * @param roomId the room id
+     * @param roomId            the room id
      * @param onSuccessCallback the success callback
      * @return the asynchronous callback
      */
@@ -1603,7 +1607,8 @@ public class VectorHomeActivity extends RiotAppCompatActivity implements SearchV
 
     /**
      * Trigger the room forget
-     * @param roomId the room id
+     *
+     * @param roomId            the room id
      * @param onSuccessCallback the success asynchronous callback
      */
     public void onForgetRoom(final String roomId, final SimpleApiCallback<Void> onSuccessCallback) {
@@ -1618,7 +1623,7 @@ public class VectorHomeActivity extends RiotAppCompatActivity implements SearchV
     /**
      * Trigger the room leave / invitation reject.
      *
-     * @param roomId the room id
+     * @param roomId            the room id
      * @param onSuccessCallback the success asynchronous callback
      */
     public void onRejectInvitation(final String roomId, final SimpleApiCallback<Void> onSuccessCallback) {
@@ -1765,7 +1770,7 @@ public class VectorHomeActivity extends RiotAppCompatActivity implements SearchV
                         break;
                     }
 
-                    case R.id.sliding_menu_exit : {
+                    case R.id.sliding_menu_exit: {
                         if (null != EventStreamService.getInstance()) {
                             EventStreamService.getInstance().stopNow();
                         }
