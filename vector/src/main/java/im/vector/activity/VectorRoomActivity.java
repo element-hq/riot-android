@@ -2058,7 +2058,7 @@ public class VectorRoomActivity extends MXCActionBarActivity implements MatrixMe
                 mSession.getCredentials().userId,
                 mRoom.getRoomId());
 
-        mVectorMessageListFragment.sendEvent(event, Event.EVENT_TYPE_STICKER);
+        mVectorMessageListFragment.sendStickerMessage(event);
     }
 
     //================================================================================
