@@ -1452,6 +1452,13 @@ public class VectorRoomActivity extends MXCActionBarActivity implements MatrixMe
         });
     }
 
+    @Override
+    public void onConsentNotGiven(Event event, MatrixError matrixError) {
+        refreshNotificationsArea();
+
+        getConsentNotGivenHelper().displayDialog(matrixError);
+    }
+
     //================================================================================
     // IOnScrollListener
     //================================================================================

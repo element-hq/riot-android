@@ -375,8 +375,10 @@
             android:name=".activity.NotificationPrivacyActivity"
             android:configChanges="orientation|screenSize"
             android:label="@string/settings_notification_privacy"
-            android:theme="@style/CountryPickerTheme" >
-        </activity>
+            android:theme="@style/CountryPickerTheme" />
+        <activity
+            android:name=".activity.SimpleWebViewActivity"
+            android:theme="@style/AppTheme.NoActionBar" />
 
         <!-- broadcast receiver -->
         <receiver

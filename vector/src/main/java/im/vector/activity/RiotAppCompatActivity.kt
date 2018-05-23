@@ -35,6 +35,8 @@ import im.vector.R
 
 import im.vector.VectorApp
 import im.vector.util.AssetReader
+import im.vector.activity.interfaces.Restorable
+import im.vector.dialogs.ConsentNotGivenHelper
 import org.matrix.androidsdk.util.Log
 
 /**
@@ -232,5 +234,33 @@ abstract class RiotAppCompatActivity : AppCompatActivity() {
                 or View.SYSTEM_UI_FLAG_HIDE_NAVIGATION
                 or View.SYSTEM_UI_FLAG_FULLSCREEN
                 or View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY)
+    }
+
+    /* ==========================================================================================
+     * Save state management
+     * ========================================================================================== */
+
+    // Set of restorable object
+    private val restorables = HashSet<Restorable>()
+
+    @CallSuper
+    override fun onSaveInstanceState(outState: Bundle) {
+        super.onSaveInstanceState(outState)
+
+        restorables.forEach {
+            it.saveState(outState)
+        }
+    }
+
+    protected fun addToRestorables(restorable: Restorable) = restorables.add(restorable)
+
+    /* ==========================================================================================
+     * User Consent
+     * ========================================================================================== */
+
+    protected val consentNotGivenHelper by lazy {
+        // TODO UC When send sticker PR will be merged: use getSavedInstanceState() instead of null
+        ConsentNotGivenHelper(this, null)
+                .apply { addToRestorables(this) }
     }
 }
