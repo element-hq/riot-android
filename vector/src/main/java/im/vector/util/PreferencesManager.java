@@ -133,13 +133,13 @@ public class PreferencesManager {
 
     // Analytics keys (Piwik, Matomo, etc.)
     public static final String SETTINGS_USE_ANALYTICS_KEY = "SETTINGS_USE_ANALYTICS_KEY";
-    public static final String SETTINGS_AUTHORIZATION_TO_USE_ANALYTICS_REQUESTED = "SETTINGS_AUTHORIZATION_TO_USE_ANALYTICS_REQUESTED";
 
     public static final String SETTINGS_USE_RAGE_SHAKE_KEY = "SETTINGS_USE_RAGE_SHAKE_KEY";
 
     private static final String SETTINGS_DISPLAY_ALL_EVENTS_KEY = "SETTINGS_DISPLAY_ALL_EVENTS_KEY";
 
     private static final String DID_ASK_TO_IGNORE_BATTERY_OPTIMIZATIONS_KEY = "DID_ASK_TO_IGNORE_BATTERY_OPTIMIZATIONS_KEY";
+    private static final String DID_ASK_TO_USE_ANALYTICS_TRACKING_KEY = "DID_ASK_TO_USE_ANALYTICS_TRACKING_KEY";
 
     private static final int MEDIA_SAVING_3_DAYS = 0;
     private static final int MEDIA_SAVING_1_WEEK = 1;
@@ -647,7 +647,7 @@ public class PreferencesManager {
      * @return true if the authorization to use the analytics tracking has been requested
      */
     public static boolean authorizationToUseAnalyticsRequested(Context context) {
-        return PreferenceManager.getDefaultSharedPreferences(context).getBoolean(SETTINGS_AUTHORIZATION_TO_USE_ANALYTICS_REQUESTED, false);
+        return PreferenceManager.getDefaultSharedPreferences(context).getBoolean(DID_ASK_TO_USE_ANALYTICS_TRACKING_KEY, false);
     }
 
     /**
@@ -658,7 +658,7 @@ public class PreferencesManager {
     public static void setAuthorizationToUseAnalyticsRequest(Context context) {
         SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(context);
         SharedPreferences.Editor editor = preferences.edit();
-        editor.putBoolean(SETTINGS_AUTHORIZATION_TO_USE_ANALYTICS_REQUESTED, true);
+        editor.putBoolean(DID_ASK_TO_USE_ANALYTICS_TRACKING_KEY, true);
         editor.apply();
     }
 

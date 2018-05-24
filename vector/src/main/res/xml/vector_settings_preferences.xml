@@ -358,7 +358,7 @@
         <im.vector.preference.VectorSwitchPreference
             android:defaultValue="false"
             android:key="SETTINGS_USE_ANALYTICS_KEY"
-            android:summary="@string/settings_opt_in_of_analytics_summary"
+            android:summary="@string/settings_opt_out_of_analytics_summary"
             android:title="@string/settings_opt_in_of_analytics" />
 
         <im.vector.preference.VectorSwitchPreference

@@ -834,17 +834,14 @@ public class VectorSettingsPreferencesFragment extends PreferenceFragment implem
 
         // Analytics tracking managment
         final CheckBoxPreference useAnalyticsModePref = (CheckBoxPreference) findPreference(PreferencesManager.SETTINGS_USE_ANALYTICS_KEY);
-        final boolean mIsUsedAnalytics = PreferencesManager.useAnalytics(appContext);
 
         // On if the analytics tracking is activated
-        useAnalyticsModePref.setChecked(mIsUsedAnalytics);
+        useAnalyticsModePref.setChecked(PreferencesManager.useAnalytics(appContext));
 
         useAnalyticsModePref.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
             @Override
             public boolean onPreferenceChange(Preference preference, Object newValue) {
-
-                PreferencesManager.setUseAnalytics(appContext, !(Boolean) newValue);
-
+                PreferencesManager.setUseAnalytics(appContext, (boolean) newValue);
                 return true;
             }
         });
@@ -858,9 +855,7 @@ public class VectorSettingsPreferencesFragment extends PreferenceFragment implem
         useRageShakeModePref.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
             @Override
             public boolean onPreferenceChange(Preference preference, Object newValue) {
-
                 PreferencesManager.setUseRageshake(appContext, (boolean) newValue);
-
                 return true;
             }
         });

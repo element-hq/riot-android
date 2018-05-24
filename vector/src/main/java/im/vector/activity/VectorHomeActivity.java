@@ -304,9 +304,8 @@ public class VectorHomeActivity extends RiotAppCompatActivity implements SearchV
         }
 
         // Check whether the user has agreed to the use of analytics tracking
-        boolean authorizationToUseAnalyticsIsRequested = PreferencesManager.authorizationToUseAnalyticsRequested(this);
 
-        if (!authorizationToUseAnalyticsIsRequested) {
+        if (!PreferencesManager.authorizationToUseAnalyticsRequested(this)) {
             promptForAnalyticsTracking();
         }
 
@@ -655,7 +654,6 @@ public class VectorHomeActivity extends RiotAppCompatActivity implements SearchV
      * Display a dialog to let the user chooses if he would like to use analytics tracking
      */
     private void promptForAnalyticsTracking() {
-
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setMessage(R.string.settings_opt_in_of_analytics_prompt);
         builder.setPositiveButton(R.string.settings_opt_in_of_analytics_ok, new DialogInterface.OnClickListener() {
@@ -670,13 +668,12 @@ public class VectorHomeActivity extends RiotAppCompatActivity implements SearchV
                         setAnalyticsAuthorization(false);
                     }
                 })
-                .create()
                 .show();
     }
 
     private void setAnalyticsAuthorization(boolean useAnalytics) {
-        PreferencesManager.setUseAnalytics(VectorHomeActivity.this, useAnalytics);
-        PreferencesManager.setAuthorizationToUseAnalyticsRequest(VectorHomeActivity.this);
+        PreferencesManager.setUseAnalytics(this, useAnalytics);
+        PreferencesManager.setAuthorizationToUseAnalyticsRequest(this);
     }
 
     @Override
