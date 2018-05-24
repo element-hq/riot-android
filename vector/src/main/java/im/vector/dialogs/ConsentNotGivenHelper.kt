@@ -51,8 +51,8 @@ class ConsentNotGivenHelper(private val activity: Activity, savedInstanceState: 
         }
 
         // Check required parameter
-        if (matrixError.consent_uri == null) {
-            Log.e(LOG_TAG, "Missing required parameter consent_uri")
+        if (matrixError.consentUri == null) {
+            Log.e(LOG_TAG, "Missing required parameter 'consent_uri'")
             return
         }
 
@@ -63,7 +63,7 @@ class ConsentNotGivenHelper(private val activity: Activity, savedInstanceState: 
                 .setMessage(activity.getString(R.string.dialog_user_consent_content,
                         Matrix.getInstance(activity).defaultSession.homeServerConfig.homeserverUri.host))
                 .setPositiveButton(R.string.dialog_user_consent_submit) { _, _ ->
-                    openWebViewActivity(matrixError.consent_uri)
+                    openWebViewActivity(matrixError.consentUri)
                     isDialogDisplayed = false
                 }
                 .setNegativeButton(R.string.later) { _, _ ->
