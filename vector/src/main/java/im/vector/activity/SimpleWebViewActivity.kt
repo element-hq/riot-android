@@ -19,9 +19,7 @@ package im.vector.activity
 import android.content.Context
 import android.content.Intent
 import android.os.Build
-import android.os.Bundle
 import android.support.annotation.StringRes
-import android.support.v7.widget.Toolbar
 import android.webkit.WebChromeClient
 import android.webkit.WebView
 import android.webkit.WebViewClient
@@ -34,10 +32,6 @@ class SimpleWebViewActivity : RiotAppCompatActivity() {
      * UI
      * ========================================================================================== */
 
-    // TODO UC: use tool bar mapped in parent class
-    @BindView(R.id.simple_webview_toolbar)
-    lateinit var toolbar: Toolbar
-
     @BindView(R.id.simple_webview)
     lateinit var webView: WebView
 
@@ -45,21 +39,10 @@ class SimpleWebViewActivity : RiotAppCompatActivity() {
      * Life cycle
      * ========================================================================================== */
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_simple_web_view)
+    override fun getLayoutRes() = R.layout.activity_simple_web_view
 
-        // TODO Call
-        // configureToolbar()
-        // TODO Remove this
-        setSupportActionBar(findViewById(R.id.simple_webview_toolbar))
-
-        // TODO Add back in toolbar
-
-
-        // TODO UC When Sticker will be merged: remove this line
-        webView = findViewById(R.id.simple_webview)
-
+    override fun initUiAndData() {
+        configureToolbar()
 
         webView.settings.let {
             // Enable Javascript

@@ -32,11 +32,10 @@ import butterknife.BindView
 import butterknife.ButterKnife
 import butterknife.Unbinder
 import im.vector.R
-
 import im.vector.VectorApp
-import im.vector.util.AssetReader
 import im.vector.activity.interfaces.Restorable
 import im.vector.dialogs.ConsentNotGivenHelper
+import im.vector.util.AssetReader
 import org.matrix.androidsdk.util.Log
 
 /**
@@ -259,8 +258,7 @@ abstract class RiotAppCompatActivity : AppCompatActivity() {
      * ========================================================================================== */
 
     val consentNotGivenHelper by lazy {
-        // TODO UC When send sticker PR will be merged: use getSavedInstanceState() instead of null
-        ConsentNotGivenHelper(this, null)
+        ConsentNotGivenHelper(this, savedInstanceState)
                 .apply { addToRestorables(this) }
     }
 }

@@ -7,7 +7,7 @@
     tools:context="im.vector.activity.SimpleWebViewActivity">
 
     <android.support.v7.widget.Toolbar
-        android:id="@+id/simple_webview_toolbar"
+        android:id="@+id/toolbar"
         style="@style/VectorToolbarStyle"
         android:layout_width="match_parent"
         android:layout_height="?attr/actionBarSize"
@@ -19,6 +19,6 @@
         android:layout_width="match_parent"
         android:layout_height="0dp"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/simple_webview_toolbar" />
+        app:layout_constraintTop_toBottomOf="@+id/toolbar" />
 
 </android.support.constraint.ConstraintLayout>
