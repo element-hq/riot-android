@@ -606,6 +606,9 @@
     <string name="settings_disable_markdown">Disable markdown formatting when sending</string>
     <string name="settings_vibrate_on_mention">Vibrate when mentioning</string>
 
+    <string name="settings_deactivate_account_section">Deactivate account</string>
+    <string name="settings_deactivate_my_account">Deactivate my account</string>
+
     <!-- startup -->
     <string name="startup_notification_privacy_title">Notification Privacy</string>
     <string name="startup_notification_privacy_message">Riot can run in the background to manage your notifications securely and privately (this might affect battery usage).</string>

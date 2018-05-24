@@ -385,7 +385,7 @@ public class VectorSettingsPreferencesFragment extends PreferenceFragment implem
         // third party notice
         EditTextPreference thirdPartyNotices = (EditTextPreference) findPreference(PreferencesManager.SETTINGS_THIRD_PARTY_NOTICES_PREFERENCE_KEY);
 
-        if (null != termConditionsPreference) {
+        if (null != thirdPartyNotices) {
             thirdPartyNotices.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
                 @Override
                 public boolean onPreferenceClick(Preference preference) {
@@ -398,7 +398,7 @@ public class VectorSettingsPreferencesFragment extends PreferenceFragment implem
         // copyright
         EditTextPreference copyrightNotices = (EditTextPreference) findPreference(PreferencesManager.SETTINGS_COPYRIGHT_PREFERENCE_KEY);
 
-        if (null != termConditionsPreference) {
+        if (null != copyrightNotices) {
             copyrightNotices.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
                 @Override
                 public boolean onPreferenceClick(Preference preference) {
@@ -859,6 +859,19 @@ public class VectorSettingsPreferencesFragment extends PreferenceFragment implem
                 return true;
             }
         });
+
+        // deactivate account
+        EditTextPreference deactivateAccountPref = (EditTextPreference) findPreference(PreferencesManager.SETTINGS_DEACTIVATE_ACCOUNT_KEY);
+
+        if (null != deactivateAccountPref) {
+            deactivateAccountPref.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
+                @Override
+                public boolean onPreferenceClick(Preference preference) {
+                    Toast.makeText(getActivity(), "todo", Toast.LENGTH_SHORT).show();
+                    return false;
+                }
+            });
+        }
 
         addButtons();
         refreshPushersList();
