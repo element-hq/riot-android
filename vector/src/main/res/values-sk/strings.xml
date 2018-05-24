@@ -752,8 +752,8 @@ Neznáme zariadenia:</string>
     <string name="option_take_video">Poslať video</string>
 
     <string name="settings_analytics">Štatistika</string>
-    <string name="settings_opt_in_of_analytics">Odhlásiť sa zo zasielania štatistiky</string>
-    <string name="settings_opt_in_of_analytics_summary">Riot zbiera anonymné štatistiky, ktoré nám umožňujú aplikáciu ďalej vylepšovať.</string>
+    <string name="settings_opt_out_of_analytics">Odhlásiť sa zo zasielania štatistiky</string>
+    <string name="settings_opt_out_of_analytics_summary">Riot zbiera anonymné štatistiky, ktoré nám umožňujú aplikáciu ďalej vylepšovať.</string>
 
 
     <string name="settings_labs_native_camera">Používať vstavaný fotoaparát a kameru</string>

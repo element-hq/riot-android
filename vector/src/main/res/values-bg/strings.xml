@@ -491,8 +491,8 @@
     <string name="settings_hide_avatar_display_name_changes_messages">Скриване на информацията за промените на аватара и името</string>
     <string name="settings_disable_markdown">Изключи markdown при изпращане</string>
     <string name="settings_analytics">Статистика</string>
-    <string name="settings_opt_in_of_analytics">Отказване от събиране на статистически данни</string>
-    <string name="settings_opt_in_of_analytics_summary">Riot събира анонимни статистики, за да ни позволи да подобрим приложението.</string>
+    <string name="settings_opt_out_of_analytics">Отказване от събиране на статистически данни</string>
+    <string name="settings_opt_out_of_analytics_summary">Riot събира анонимни статистики, за да ни позволи да подобрим приложението.</string>
 
     <string name="devices_details_dialog_title">Информация за устройството</string>
     <string name="devices_details_id_title">ID</string>

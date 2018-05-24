@@ -518,8 +518,8 @@
 
     <!-- analytics -->
     <string name="settings_analytics">Телеметрія</string>
-    <string name="settings_opt_in_of_analytics">Вимкнути телеметрію</string>
-    <string name="settings_opt_in_of_analytics_summary">Riot збирає анонімну статистику задля покращення застосунку.</string>
+    <string name="settings_opt_out_of_analytics">Вимкнути телеметрію</string>
+    <string name="settings_opt_out_of_analytics_summary">Riot збирає анонімну статистику задля покращення застосунку.</string>
 
     <string name="settings_disable_markdown">Вимкнути розмітку Markdown</string>
     <string name="settings_data_save_mode">Режим економії трафіку</string>

@@ -501,12 +501,13 @@ Da li ste sigurani?</string>
     <string name="settings_hide_avatar_display_name_changes_messages">Sakrij avatar i promjene imena</string>
 
     <string name="settings_analytics">Analiza</string>
-    <string name="settings_opt_in_of_analytics">Isključite se iz analize</string>
+    <string name="settings_opt_out_of_analytics">Isključite se iz analize</string>
     <string name="attachment_remaining_time_seconds">%d s</string>
     <string name="attachment_remaining_time_minutes">%1$a %2$i</string>
 
     <string name="format_time_s">s</string>
-    <string name="settings_opt_in_of_analytics_summary">Hepek prikuplja anonimnu analitiku kako bi nam omogućio poboljšanje aplikacije.</string>
+    <string name="settings_opt_out_of_analytics_summary">Hepek prikuplja anonimnu analitiku kako bi nam omogućio poboljšanje aplikacije.</string>
+
 
     <string name="settings_disable_markdown">Onemogućite formatiranje oznaka</string>
     <string name="settings_data_save_mode">Način spremanja podataka</string>
