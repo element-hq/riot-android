@@ -827,8 +827,8 @@ Permetti a Riot di accedere ai tuoi contatti?</string>
     <string name="settings_vibrate_on_mention">Vibra quando ti citano</string>
 
     <string name="settings_analytics">Statistiche</string>
-    <string name="settings_opt_out_of_analytics">Rifiuta le statistiche</string>
-    <string name="settings_opt_out_of_analytics_summary">Riot raccoglie statistiche d\'uso anonime per consentirci di migliorare l\'applicazione.</string>
+    <string name="settings_opt_in_of_analytics">Rifiuta le statistiche</string>
+    <string name="settings_opt_in_of_analytics_summary">Riot raccoglie statistiche d\'uso anonime per consentirci di migliorare l\'applicazione.</string>
 
     <string name="room_settings_room_notifications_title">Notifiche</string>
     <string name="room_settings_add_new_group">Nuovo ID della comunità (es. +foo:matrix.org)</string>

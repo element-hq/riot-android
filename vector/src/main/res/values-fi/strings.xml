@@ -774,8 +774,8 @@ Voit tehdä sen nyt tai myöhemmin sovelluksen asetuksissa.</string>
     <string name="settings_hide_avatar_display_name_changes_messages">Piilota kuvan ja näyttönimen muutokset</string>
 
     <string name="settings_analytics">Analytiikka</string>
-    <string name="settings_opt_out_of_analytics">Älä jaa analytiikkatietoja</string>
-    <string name="settings_opt_out_of_analytics_summary">Riot kerää anonyymiä analytiikkaa sovelluksen parantamiseksi.</string>
+    <string name="settings_opt_in_of_analytics">Älä jaa analytiikkatietoja</string>
+    <string name="settings_opt_in_of_analytics_summary">Riot kerää anonyymiä analytiikkaa sovelluksen parantamiseksi.</string>
 
 
     <string name="widget_no_power_to_manage">Tarvitse oikeudet pienoissovellusten hallintaan tässä huoneessa</string>

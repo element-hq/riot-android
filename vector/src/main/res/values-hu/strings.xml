@@ -752,8 +752,8 @@ Ismeretlen eszközök:</string>
     <string name="option_take_video">Videófelvétel</string>
 
     <string name="settings_analytics">Elemzés</string>
-    <string name="settings_opt_out_of_analytics">Analitikai adatgyűjtés kikapcsolása</string>
-    <string name="settings_opt_out_of_analytics_summary">A Riot névtelen elemzést gyűjt az alkalmazás fejlesztésének érdekében.</string>
+    <string name="settings_opt_in_of_analytics">Analitikai adatgyűjtés kikapcsolása</string>
+    <string name="settings_opt_in_of_analytics_summary">A Riot névtelen elemzést gyűjt az alkalmazás fejlesztésének érdekében.</string>
 
 
     <string name="settings_labs_native_camera">Beépített kamera használata</string>

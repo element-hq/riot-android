@@ -746,8 +746,8 @@
     <string name="settings_vibrate_on_mention">هُزّ الجهاز عند الإشارة إليّ</string>
 
     <string name="settings_analytics">التحاليل</string>
-    <string name="settings_opt_out_of_analytics">انسحب من التحاليل</string>
-    <string name="settings_opt_out_of_analytics_summary">يجمع Riot تحاليل مجهّلة ليُتاح لنا تحسين جودة التطبيق.</string>
+    <string name="settings_opt_in_of_analytics">انسحب من التحاليل</string>
+    <string name="settings_opt_in_of_analytics_summary">يجمع Riot تحاليل مجهّلة ليُتاح لنا تحسين جودة التطبيق.</string>
 
     <string name="devices_details_last_seen_format">‏⁨%1$s⁩ في ⁨%2$s⁩</string>
     <string name="devices_delete_dialog_text">تطلب هذه العملية تخويلا إضافيا.

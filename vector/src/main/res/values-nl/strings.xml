@@ -765,8 +765,8 @@ Je kan het nu of later doen vanaf de applicatie instellingen.</string>
     <string name="settings_containing_my_display_name">Berichten die mijn weergavenaam bevat</string>
     <string name="settings_containing_my_user_name">Berichten dat mijn gebruikersnaam bevat</string>
     <string name="settings_analytics">Analytics</string>
-    <string name="settings_opt_out_of_analytics">Analytics uitzetten</string>
-    <string name="settings_opt_out_of_analytics_summary">Riot verzamelt anonieme statistische gegevens om de applicatie te verbeteren.</string>
+    <string name="settings_opt_in_of_analytics">Analytics uitzetten</string>
+    <string name="settings_opt_in_of_analytics_summary">Riot verzamelt anonieme statistische gegevens om de applicatie te verbeteren.</string>
 
 
     <string name="settings_labs_native_camera">Gebruik de systeem camera</string>

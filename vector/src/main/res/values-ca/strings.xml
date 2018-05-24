@@ -539,8 +539,8 @@
 
     <!-- analytics -->
     <string name="settings_analytics">Analítiques</string>
-    <string name="settings_opt_out_of_analytics">No acceptis analítiques</string>
-    <string name="settings_opt_out_of_analytics_summary">Riot recull analítiques anònimes per ajudar a millorar l\'aplicació.</string>
+    <string name="settings_opt_in_of_analytics">No acceptis analítiques</string>
+    <string name="settings_opt_in_of_analytics_summary">Riot recull analítiques anònimes per ajudar a millorar l\'aplicació.</string>
 
     <string name="settings_data_save_mode">Mode de desament de dades</string>
 

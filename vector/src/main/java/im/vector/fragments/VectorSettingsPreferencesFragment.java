@@ -831,6 +831,23 @@ public class VectorSettingsPreferencesFragment extends PreferenceFragment implem
                 return true;
             }
         });
+
+        // Analytics tracking managment
+        final CheckBoxPreference useAnalyticsModePref = (CheckBoxPreference) findPreference(PreferencesManager.SETTINGS_USE_ANALYTICS_KEY);
+        final boolean mIsUsedAnalytics = PreferencesManager.useAnalytics(appContext);
+
+        // On if the analytics tracking is activated
+        useAnalyticsModePref.setChecked(mIsUsedAnalytics);
+
+        useAnalyticsModePref.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
+            @Override
+            public boolean onPreferenceChange(Preference preference, Object newValue) {
+
+                PreferencesManager.setUseAnalytics(appContext, !(Boolean) newValue);
+
+                return true;
+            }
+        });
         
         // Rageshake Managment
         final CheckBoxPreference useRageShakeModePref = (CheckBoxPreference) findPreference(PreferencesManager.SETTINGS_USE_RAGE_SHAKE_KEY);

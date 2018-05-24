@@ -770,8 +770,8 @@
     <string name="notification_silent_notifications">静默通知</string>
 
     <string name="settings_analytics">数据收集</string>
-    <string name="settings_opt_out_of_analytics">退出统计分析计划</string>
-    <string name="settings_opt_out_of_analytics_summary">Riot 会收集匿名统计数据来帮助我们改进程序。</string>
+    <string name="settings_opt_in_of_analytics">退出统计分析计划</string>
+    <string name="settings_opt_in_of_analytics_summary">Riot 会收集匿名统计数据来帮助我们改进程序。</string>
 
 
     <string name="notification_noisy">通知并振铃</string>

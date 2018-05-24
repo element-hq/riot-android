@@ -740,8 +740,8 @@ Jesteś pewien?</string>
     <string name="settings_vibrate_on_mention">Wibruj gdy ktoś wspomni o tobie</string>
 
     <string name="settings_analytics">Analityka</string>
-    <string name="settings_opt_out_of_analytics">Wypisz się z analityki</string>
-    <string name="settings_opt_out_of_analytics_summary">Riot zbiera anonimowe informacje które pozwolą ulepszyć aplikację.</string>
+    <string name="settings_opt_in_of_analytics">Wypisz się z analityki</string>
+    <string name="settings_opt_in_of_analytics_summary">Riot zbiera anonimowe informacje które pozwolą ulepszyć aplikację.</string>
 
     <string name="settings_home_server">Serwer Domowy</string>
     <string name="settings_identity_server">Serwer Tożsamości</string>

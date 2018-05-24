@@ -112,7 +112,6 @@ public class PreferencesManager {
 
     private static final String SETTINGS_PIN_UNREAD_MESSAGES_PREFERENCE_KEY = "SETTINGS_PIN_UNREAD_MESSAGES_PREFERENCE_KEY";
     private static final String SETTINGS_PIN_MISSED_NOTIFICATIONS_PREFERENCE_KEY = "SETTINGS_PIN_MISSED_NOTIFICATIONS_PREFERENCE_KEY";
-    private static final String SETTINGS_DISABLE_PIWIK_SETTINGS_PREFERENCE_KEY = "SETTINGS_DISABLE_PIWIK_SETTINGS_PREFERENCE_KEY";
 
     public static final String SETTINGS_DATA_SAVE_MODE_PREFERENCE_KEY = "SETTINGS_DATA_SAVE_MODE_PREFERENCE_KEY";
     public static final String SETTINGS_START_ON_BOOT_PREFERENCE_KEY = "SETTINGS_START_ON_BOOT_PREFERENCE_KEY";
@@ -131,6 +130,10 @@ public class PreferencesManager {
     public static final String SETTINGS_SHOW_URL_PREVIEW_KEY = "SETTINGS_SHOW_URL_PREVIEW_KEY";
 
     private static final String SETTINGS_VIBRATE_ON_MENTION_KEY = "SETTINGS_VIBRATE_ON_MENTION_KEY";
+
+    // Analytics keys (Piwik, Matomo, etc.)
+    public static final String SETTINGS_USE_ANALYTICS_KEY = "SETTINGS_USE_ANALYTICS_KEY";
+    public static final String SETTINGS_AUTHORIZATION_TO_USE_ANALYTICS_REQUESTED = "SETTINGS_AUTHORIZATION_TO_USE_ANALYTICS_REQUESTED";
 
     public static final String SETTINGS_USE_RAGE_SHAKE_KEY = "SETTINGS_USE_RAGE_SHAKE_KEY";
 
@@ -628,17 +631,6 @@ public class PreferencesManager {
     }
 
     /**
-     * Tells if Piwik can be used
-     *
-     * @param context the context
-     * @return true to use it
-     */
-    public static boolean trackWithPiwik(Context context) {
-        return !PreferenceManager.getDefaultSharedPreferences(context).getBoolean(SETTINGS_DISABLE_PIWIK_SETTINGS_PREFERENCE_KEY,
-                context.getResources().getBoolean(R.bool.default_settings_disable_analytics));
-    }
-
-    /**
      * Tells if the phone must vibrate when mentioning
      *
      * @param context the context
@@ -646,6 +638,51 @@ public class PreferencesManager {
      */
     public static boolean vibrateWhenMentioning(Context context) {
         return PreferenceManager.getDefaultSharedPreferences(context).getBoolean(SETTINGS_VIBRATE_ON_MENTION_KEY, false);
+    }
+
+    /**
+     * Tells if the authorization to use the analytics tracking has been requested (piwik, matomo, etc.).
+     *
+     * @param context the context
+     * @return true if the authorization to use the analytics tracking has been requested
+     */
+    public static boolean authorizationToUseAnalyticsRequested(Context context) {
+        return PreferenceManager.getDefaultSharedPreferences(context).getBoolean(SETTINGS_AUTHORIZATION_TO_USE_ANALYTICS_REQUESTED, false);
+    }
+
+    /**
+     * Update the analytics tracking authorization request status.
+     *
+     * @param context   the context
+     */
+    public static void setAuthorizationToUseAnalyticsRequest(Context context) {
+        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(context);
+        SharedPreferences.Editor editor = preferences.edit();
+        editor.putBoolean(SETTINGS_AUTHORIZATION_TO_USE_ANALYTICS_REQUESTED, true);
+        editor.apply();
+    }
+
+    /**
+     * Tells if the analytics tracking is authorized (piwik, matomo, etc.).
+     *
+     * @param context the context
+     * @return true if the analytics tracking is authorized
+     */
+    public static boolean useAnalytics(Context context) {
+        return PreferenceManager.getDefaultSharedPreferences(context).getBoolean(SETTINGS_USE_ANALYTICS_KEY, false);
+    }
+
+    /**
+     * Update the analytics tracking  status.
+     *
+     * @param context   the context
+     * @param useAnalytics true to enable the analytics tracking
+     */
+    public static void setUseAnalytics(Context context, boolean useAnalytics) {
+        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(context);
+        SharedPreferences.Editor editor = preferences.edit();
+        editor.putBoolean(SETTINGS_USE_ANALYTICS_KEY, useAnalytics);
+        editor.apply();
     }
 
     /**

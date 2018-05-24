@@ -537,8 +537,8 @@ Vai vēlies turpināt?</string>
     <string name="settings_vibrate_on_mention">Vibrācija, kad pieminējums</string>
 
     <string name="settings_analytics">Analītika</string>
-    <string name="settings_opt_out_of_analytics">Atteikties no analītikas</string>
-    <string name="settings_opt_out_of_analytics_summary">Riot vāc anonīmu analītiku, lai ļautu padarīt šo atklātā koda programmu vēl labāku.</string>
+    <string name="settings_opt_in_of_analytics">Atteikties no analītikas</string>
+    <string name="settings_opt_in_of_analytics_summary">Riot vāc anonīmu analītiku, lai ļautu padarīt šo atklātā koda programmu vēl labāku.</string>
 
     <string name="settings_data_save_mode">Trafika ekonomijas režīms</string>
 

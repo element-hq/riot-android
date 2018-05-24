@@ -754,8 +754,8 @@ Appareils inconnus :</string>
     <string name="option_take_video">Prendre une vidéo</string>
 
     <string name="settings_analytics">Statistiques d\'utilisation</string>
-    <string name="settings_opt_out_of_analytics">Ne pas envoyer de données</string>
-    <string name="settings_opt_out_of_analytics_summary">Riot collecte des données anonymes pour nous permettre d\'améliorer l\'application.</string>
+    <string name="settings_opt_in_of_analytics">Autoriser l\'envoi de données</string>
+    <string name="settings_opt_in_of_analytics_summary">Riot collecte des données anonymes pour nous permettre d\'améliorer l\'application.</string>
 
 
     <string name="settings_labs_native_camera">Utiliser la caméra native</string>
