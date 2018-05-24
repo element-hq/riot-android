@@ -60,8 +60,6 @@ class IntegrationManagerActivity : AbstractWidgetActivity() {
         super.initUiAndData()
     }
 
-    override fun displayInFullscreen() = true
-
     /* ==========================================================================================
      * IMPLEMENTS METHOD
      * ========================================================================================== */
