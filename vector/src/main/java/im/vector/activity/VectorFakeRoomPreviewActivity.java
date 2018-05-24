@@ -1,5 +1,6 @@
 /*
  * Copyright 2016 OpenMarket Ltd
+ * Copyright 2018 New Vector Ltd
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,14 +19,13 @@ package im.vector.activity;
 
 import android.annotation.SuppressLint;
 import android.content.Intent;
-import android.os.Bundle;
-
-import org.matrix.androidsdk.util.Log;
 
 import org.matrix.androidsdk.MXSession;
 import org.matrix.androidsdk.data.RoomPreviewData;
+import org.matrix.androidsdk.util.Log;
 
 import im.vector.Matrix;
+import im.vector.R;
 
 /**
  * Dummy activity used to trigger the room activity in preview mode,
@@ -42,9 +42,12 @@ public class VectorFakeRoomPreviewActivity extends RiotAppCompatActivity {
     private static final String LOG_TAG = VectorFakeRoomPreviewActivity.class.getSimpleName();
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
+    public int getLayoutRes() {
+        return R.layout.activity_empty;
+    }
 
+    @Override
+    public void initUiAndData() {
         // keep theme ?
 
         Intent receivedIntent = getIntent();

@@ -1,5 +1,6 @@
 /*
  * Copyright 2016 OpenMarket Ltd
+ * Copyright 2018 New Vector Ltd
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -29,6 +30,7 @@ import java.io.File;
 import java.util.ArrayList;
 
 import im.vector.Matrix;
+import im.vector.R;
 
 /**
  * Dummy activity used to manage the shared
@@ -39,9 +41,12 @@ public class VectorSharedFilesActivity extends RiotAppCompatActivity {
     private final String SHARED_FOLDER = "VectorShared";
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
+    public int getLayoutRes() {
+        return R.layout.activity_empty;
+    }
 
+    @Override
+    public void initUiAndData() {
         // retrieve the current intent
         Intent anIntent = getIntent();
 

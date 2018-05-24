@@ -19,7 +19,6 @@ package im.vector.activity;
 
 import android.content.Context;
 import android.content.Intent;
-import android.os.Bundle;
 import android.support.design.widget.TextInputEditText;
 import android.support.design.widget.TextInputLayout;
 import android.support.v7.widget.Toolbar;
@@ -92,13 +91,19 @@ public class PhoneNumberAdditionActivity extends RiotAppCompatActivity implement
      * Activity lifecycle
      * *********************************************************************************************
      */
+
     @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
+    public int getLayoutRes() {
+        return R.layout.activity_phone_number_addition;
+    }
 
-        setTitle(R.string.settings_add_phone_number);
-        setContentView(R.layout.activity_phone_number_addition);
+    @Override
+    public int getTitleRes() {
+        return R.string.settings_add_phone_number;
+    }
 
+    @Override
+    public void initUiAndData() {
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         if (null != getSupportActionBar()) {

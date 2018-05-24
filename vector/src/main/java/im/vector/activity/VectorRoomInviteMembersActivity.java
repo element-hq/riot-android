@@ -148,8 +148,13 @@ public class VectorRoomInviteMembersActivity extends VectorBaseSearchActivity {
     };
 
     @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
+    public int getLayoutRes() {
+        return R.layout.activity_vector_invite_members;
+    }
+
+    @Override
+    public void initUiAndData() {
+        super.initUiAndData();
 
         if (CommonActivityUtils.shouldRestartApp(this)) {
             Log.e(LOG_TAG, "Restart the application.");
@@ -188,9 +193,6 @@ public class VectorRoomInviteMembersActivity extends VectorBaseSearchActivity {
 
         // tell if a confirmation dialog must be displayed.
         mAddConfirmationDialog = intent.getBooleanExtra(EXTRA_ADD_CONFIRMATION_DIALOG, false);
-
-        //
-        setContentView(R.layout.activity_vector_invite_members);
 
         // the user defines a
         if (null != mPatternToSearchEditText) {

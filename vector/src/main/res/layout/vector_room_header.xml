@@ -1,48 +1,40 @@
 <?xml version="1.0" encoding="utf-8"?>
-
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:background="?attr/primary_color">
+    android:background="?attr/primary_color"
+    android:orientation="vertical">
 
-    <RelativeLayout
-        android:id="@+id/room_avatar_container"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="16dp">
-
-        <include
-            android:id="@+id/room_avatar"
-            layout="@layout/vector_room_header_round_avatar"
-            android:layout_width="84dp"
-            android:layout_height="84dp" />
-    </RelativeLayout>
+    <include
+        android:id="@+id/room_avatar"
+        layout="@layout/vector_room_header_round_avatar"
+        android:layout_width="84dp"
+        android:layout_height="84dp"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginTop="16dp" />
 
     <!-- keep singleLine="true" because maxLines="1" truncation is not the expected one.-->
     <TextView
         android:id="@+id/action_bar_header_room_title"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@id/room_avatar_container"
-        android:layout_centerHorizontal="true"
-        android:layout_marginBottom="10dp"
-        android:layout_marginLeft="8dp"
-        android:layout_marginRight="8dp"
-        android:layout_marginTop="14dp"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginBottom="2dp"
+        android:layout_marginTop="6dp"
         android:ellipsize="end"
         android:gravity="center_horizontal"
+        android:padding="8dp"
         android:singleLine="true"
-        android:text="a room name here"
         android:textColor="@android:color/white"
-        android:textSize="20sp" />
+        android:textSize="20sp"
+        tools:text="a room name here" />
 
     <TextView
         android:id="@+id/action_bar_header_room_topic"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@id/action_bar_header_room_title"
-        android:layout_centerHorizontal="true"
+        android:layout_gravity="center_horizontal"
         android:layout_marginBottom="10dp"
         android:layout_marginLeft="44dp"
         android:layout_marginRight="44dp"
@@ -50,60 +42,45 @@
         android:ellipsize="end"
         android:gravity="center_horizontal"
         android:maxLines="3"
-        android:text="a topic here"
         android:textColor="#FFFFFF"
-        android:textSize="14sp" />
+        android:textSize="14sp"
+        tools:text="a topic here" />
 
-    <RelativeLayout
+    <LinearLayout
         android:id="@+id/action_bar_header_room_members_layout"
-        android:layout_width="match_parent"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@id/action_bar_header_room_topic"
-        android:layout_marginBottom="19dp">
+        android:layout_gravity="center_horizontal"
+        android:layout_marginBottom="10dp">
+
+        <ImageView
+            android:id="@+id/action_bar_header_room_members_settings_view"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:contentDescription="@string/list_members"
+            android:padding="8dp"
+            android:scaleType="center"
+            android:src="@drawable/ic_list_white_24dp" />
 
         <TextView
             android:id="@+id/action_bar_header_room_members_text_view"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_centerHorizontal="true"
-            android:layout_marginLeft="15dp"
-            android:layout_marginRight="15dp"
+            android:layout_gravity="center_vertical"
             android:ellipsize="end"
-            android:text="a text"
+            android:padding="8dp"
             android:textColor="?attr/default_text_light_color"
-            android:textSize="14sp" />
+            android:textSize="14sp"
+            tools:text="a text" />
 
-        <RelativeLayout
-            android:id="@+id/action_bar_header_room_members_settings_view"
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:layout_alignBottom="@+id/action_bar_header_room_members_text_view"
-            android:layout_alignParentLeft="true"
-            android:layout_alignTop="@+id/action_bar_header_room_members_text_view"
-            android:layout_toLeftOf="@+id/action_bar_header_room_members_text_view">
-
-            <ImageView
-                android:contentDescription="@string/list_members"
-                android:layout_width="20dp"
-                android:layout_height="match_parent"
-                android:layout_alignParentRight="true"
-                android:src="@drawable/ic_list_white_24dp" />
-        </RelativeLayout>
-
-        <RelativeLayout
+        <ImageView
             android:id="@+id/action_bar_header_room_members_invite_view"
             android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:layout_alignBottom="@+id/action_bar_header_room_members_text_view"
-            android:layout_alignParentRight="true"
-            android:layout_alignTop="@+id/action_bar_header_room_members_text_view"
-            android:layout_toRightOf="@+id/action_bar_header_room_members_text_view">
+            android:layout_height="wrap_content"
+            android:contentDescription="@string/invite"
+            android:padding="8dp"
+            android:src="@drawable/ic_add_circle_outline_white_24dp" />
 
-            <ImageView
-                android:contentDescription="@string/invite"
-                android:layout_width="20dp"
-                android:layout_height="match_parent"
-                android:src="@drawable/ic_add_circle_outline_white_24dp" />
-        </RelativeLayout>
-    </RelativeLayout>
-</RelativeLayout>
+    </LinearLayout>
+
+</LinearLayout>

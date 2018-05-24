@@ -1,5 +1,6 @@
 /*
  * Copyright 2016 OpenMarket Ltd
+ * Copyright 2018 New Vector Ltd
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -20,14 +21,9 @@ import android.annotation.SuppressLint;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.graphics.Bitmap;
 import android.net.http.SslError;
 import android.os.Build;
-import android.os.Bundle;
 import android.text.TextUtils;
-
-import org.matrix.androidsdk.util.Log;
-
 import android.view.KeyEvent;
 import android.view.View;
 import android.webkit.SslErrorHandler;
@@ -40,12 +36,13 @@ import android.widget.Toast;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 
-import im.vector.R;
-import im.vector.util.VectorUtils;
+import org.matrix.androidsdk.util.Log;
 
 import java.net.URLDecoder;
 import java.util.Formatter;
 import java.util.HashMap;
+
+import im.vector.R;
 
 /**
  * AccountCreationCaptchaActivity displays a webview to check captchas.
@@ -85,13 +82,17 @@ public class AccountCreationCaptchaActivity extends RiotAppCompatActivity {
             " </html> ";
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
+    public int getLayoutRes() {
+        return R.layout.activity_vector_registration_captcha;
+    }
 
-        // required to have the right translated title
-        setTitle(R.string.create_account);
-        setContentView(R.layout.activity_vector_registration_captcha);
+    @Override
+    public int getTitleRes() {
+        return R.string.create_account;
+    }
 
+    @Override
+    public void initUiAndData() {
         final WebView webView = findViewById(R.id.account_creation_webview);
         webView.getSettings().setJavaScriptEnabled(true);
 

@@ -1,6 +1,7 @@
 /*
  * Copyright 2014 OpenMarket Ltd
  * Copyright 2017 Vector Creations Ltd
+ * Copyright 2018 New Vector Ltd
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,7 +18,6 @@
 
 package im.vector.activity;
 
-import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextUtils;
 import android.text.TextWatcher;
@@ -33,7 +33,6 @@ import android.widget.Toast;
 import org.matrix.androidsdk.util.Log;
 
 import butterknife.BindView;
-import butterknife.ButterKnife;
 import im.vector.R;
 import im.vector.VectorApp;
 import im.vector.util.BugReporter;
@@ -73,12 +72,12 @@ public class BugReportActivity extends MXCActionBarActivity {
     private MenuItem mSendBugReportItem;
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
+    public int getLayoutRes() {
+        return R.layout.activity_bug_report;
+    }
 
-        setContentView(R.layout.activity_bug_report);
-        ButterKnife.bind(this);
-
+    @Override
+    public void initUiAndData() {
         if (null != getSupportActionBar()) {
             getSupportActionBar().setDisplayShowHomeEnabled(true);
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);

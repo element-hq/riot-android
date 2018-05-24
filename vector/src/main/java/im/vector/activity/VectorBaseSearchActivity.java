@@ -1,5 +1,6 @@
 /*
  * Copyright 2014 OpenMarket Ltd
+ * Copyright 2018 New Vector Ltd
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -22,8 +23,8 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.content.pm.ResolveInfo;
-import android.os.Bundle;
 import android.speech.RecognizerIntent;
+import android.support.annotation.CallSuper;
 import android.support.v7.app.ActionBar;
 import android.text.TextUtils;
 import android.text.TextWatcher;
@@ -49,7 +50,7 @@ import im.vector.util.ThemeUtils;
 /**
  * This class defines a base class to manage search in action bar
  */
-public class VectorBaseSearchActivity extends MXCActionBarActivity {
+public abstract class VectorBaseSearchActivity extends MXCActionBarActivity {
     private static final String LOG_TAG = VectorBaseSearchActivity.class.getSimpleName();
 
     public interface IVectorSearchActivity {
@@ -65,9 +66,8 @@ public class VectorBaseSearchActivity extends MXCActionBarActivity {
     private MenuItem mClearEditTextMenuItem;
 
     @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-
+    @CallSuper
+    public void initUiAndData() {
         mActionBar = getSupportActionBar();
         View actionBarView = customizeActionBar();
 

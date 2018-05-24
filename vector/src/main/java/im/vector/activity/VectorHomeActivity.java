@@ -102,7 +102,6 @@ import java.util.Timer;
 import java.util.TimerTask;
 
 import butterknife.BindView;
-import butterknife.ButterKnife;
 import im.vector.Matrix;
 import im.vector.MyPresenceManager;
 import im.vector.PublicRoomsManager;
@@ -264,12 +263,12 @@ public class VectorHomeActivity extends RiotAppCompatActivity implements SearchV
      */
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
+    public int getLayoutRes() {
+        return R.layout.activity_home;
+    }
 
-        setContentView(R.layout.activity_home);
-        ButterKnife.bind(this);
-
+    @Override
+    public void initUiAndData() {
         mFragmentManager = getSupportFragmentManager();
 
         if (CommonActivityUtils.shouldRestartApp(this)) {
@@ -306,7 +305,7 @@ public class VectorHomeActivity extends RiotAppCompatActivity implements SearchV
         // process intent parameters
         final Intent intent = getIntent();
 
-        if (null != savedInstanceState) {
+        if (!isFirstCreation()) {
             // fix issue #1276
             // if there is a saved instance, it means that onSaveInstanceState has been called.
             // theses parameters must only be used once.
@@ -448,10 +447,10 @@ public class VectorHomeActivity extends RiotAppCompatActivity implements SearchV
         }
 
         final View selectedMenu;
-        if (savedInstanceState != null) {
-            selectedMenu = mBottomNavigationView.findViewById(savedInstanceState.getInt(CURRENT_MENU_ID, R.id.bottom_action_home));
-        } else {
+        if (isFirstCreation()) {
             selectedMenu = mBottomNavigationView.findViewById(R.id.bottom_action_home);
+        } else {
+            selectedMenu = mBottomNavigationView.findViewById(getSavedInstanceState().getInt(CURRENT_MENU_ID, R.id.bottom_action_home));
         }
         if (selectedMenu != null) {
             selectedMenu.performClick();

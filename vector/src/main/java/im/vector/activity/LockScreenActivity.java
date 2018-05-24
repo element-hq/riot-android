@@ -1,6 +1,7 @@
 /*
  * Copyright 2015 OpenMarket Ltd
  * Copyright 2017 Vector Creations Ltd
+ * Copyright 2018 New Vector Ltd
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -21,13 +22,8 @@ import android.app.NotificationManager;
 import android.content.Context;
 import android.content.Intent;
 import android.content.res.Configuration;
-import android.os.Bundle;
 import android.text.TextUtils;
 import android.text.TextWatcher;
-
-import org.matrix.androidsdk.crypto.MXCryptoError;
-import org.matrix.androidsdk.util.Log;
-
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
@@ -38,11 +34,13 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import org.matrix.androidsdk.MXSession;
+import org.matrix.androidsdk.crypto.MXCryptoError;
 import org.matrix.androidsdk.data.Room;
 import org.matrix.androidsdk.rest.callback.ApiCallback;
 import org.matrix.androidsdk.rest.model.Event;
 import org.matrix.androidsdk.rest.model.MatrixError;
 import org.matrix.androidsdk.rest.model.message.Message;
+import org.matrix.androidsdk.util.Log;
 
 import im.vector.Matrix;
 import im.vector.R;
@@ -67,17 +65,12 @@ public class LockScreenActivity extends RiotAppCompatActivity { // do NOT extend
     private LinearLayout mMainLayout;
 
     @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
+    public int getLayoutRes() {
+        return R.layout.activity_lock_screen;
+    }
 
-        // keep theme ?
-
-        // kill any running alert
-        if (null != mLockScreenActivity) {
-            mLockScreenActivity.finish();
-        }
-
-        mLockScreenActivity = this;
+    @Override
+    public void doBeforeSetContentView() {
         Window window = getWindow();
         window.addFlags(WindowManager.LayoutParams.FLAG_SHOW_WHEN_LOCKED);
         window.addFlags(WindowManager.LayoutParams.FLAG_FORCE_NOT_FULLSCREEN);
@@ -86,7 +79,18 @@ public class LockScreenActivity extends RiotAppCompatActivity { // do NOT extend
         // dim/turn off depending on user configured values.
         window.addFlags(WindowManager.LayoutParams.FLAG_TURN_SCREEN_ON);
         this.requestWindowFeature(Window.FEATURE_NO_TITLE);
-        setContentView(R.layout.activity_lock_screen);
+    }
+
+    @Override
+    public void initUiAndData() {
+        // keep theme ?
+
+        // kill any running alert
+        if (null != mLockScreenActivity) {
+            mLockScreenActivity.finish();
+        }
+
+        mLockScreenActivity = this;
 
         // remove any pending notifications
         NotificationManager notificationsManager = (NotificationManager) this.getSystemService(Context.NOTIFICATION_SERVICE);

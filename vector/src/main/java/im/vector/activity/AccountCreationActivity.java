@@ -1,5 +1,6 @@
 /*
  * Copyright 2015 OpenMarket Ltd
+ * Copyright 2018 New Vector Ltd
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -20,10 +21,6 @@ import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.net.http.SslError;
-import android.os.Bundle;
-
-import org.matrix.androidsdk.util.Log;
-
 import android.view.KeyEvent;
 import android.webkit.SslErrorHandler;
 import android.webkit.WebView;
@@ -32,10 +29,12 @@ import android.webkit.WebViewClient;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 
-import im.vector.R;
+import org.matrix.androidsdk.util.Log;
 
 import java.net.URLDecoder;
 import java.util.HashMap;
+
+import im.vector.R;
 
 /**
  * AccountCreationActivity is the fallback account creation activity
@@ -60,15 +59,18 @@ public class AccountCreationActivity extends RiotAppCompatActivity {
         CommonActivityUtils.onTrimMemory(this, level);
     }
 
+    @Override
+    public int getLayoutRes() {
+        return R.layout.activity_account_creation;
+    }
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
+    public int getTitleRes() {
+        return R.string.create_account;
+    }
 
-        // required to have the right translated title
-        setTitle(R.string.create_account);
-        setContentView(R.layout.activity_account_creation);
-
+    @Override
+    public void initUiAndData() {
         final WebView webView = findViewById(R.id.account_creation_webview);
         webView.getSettings().setJavaScriptEnabled(true);
 
