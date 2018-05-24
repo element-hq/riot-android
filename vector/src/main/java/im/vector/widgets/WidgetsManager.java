@@ -18,7 +18,6 @@ package im.vector.widgets;
 
 import android.content.Context;
 import android.content.SharedPreferences;
-import android.net.Uri;
 import android.os.Handler;
 import android.os.Looper;
 import android.preference.PreferenceManager;
@@ -26,7 +25,6 @@ import android.text.TextUtils;
 
 import com.google.gson.JsonObject;
 
-import org.matrix.androidsdk.HomeServerConnectionConfig;
 import org.matrix.androidsdk.MXSession;
 import org.matrix.androidsdk.data.Room;
 import org.matrix.androidsdk.rest.callback.ApiCallback;
@@ -66,16 +64,6 @@ public class WidgetsManager {
      * Known types widgets.
      */
     private static final String WIDGET_TYPE_JITSI = "jitsi";
-
-    /**
-     * Integration rest url
-     */
-    private static final String INTEGRATION_REST_URL = "https://scalar-staging.riot.im/scalar";
-
-    /**
-     * Integration ui url
-     */
-    public static final String INTEGRATION_UI_URL = "https://scalar-staging.riot.im/scalar-web";
 
     /**
      * Widget preferences
@@ -554,7 +542,7 @@ public class WidgetsManager {
             session.openIdToken(new ApiCallback<Map<Object, Object>>() {
                 @Override
                 public void onSuccess(Map<Object, Object> tokensMap) {
-                    WidgetsRestClient widgetsRestClient = new WidgetsRestClient(new HomeServerConnectionConfig(Uri.parse(INTEGRATION_REST_URL)));
+                    WidgetsRestClient widgetsRestClient = new WidgetsRestClient(context);
 
                     widgetsRestClient.register(tokensMap, new ApiCallback<Map<String, String>>() {
                         @Override

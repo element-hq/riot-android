@@ -73,7 +73,7 @@ class IntegrationManagerActivity : AbstractWidgetActivity() {
      */
     override fun buildInterfaceUrl(scalarToken: String): String? {
         try {
-            var url = WidgetsManager.INTEGRATION_UI_URL + "?" +
+            var url = getString(R.string.integrations_ui_url) + "?" +
                     "scalar_token=" + URLEncoder.encode(scalarToken, "utf-8") + "&" +
                     "room_id=" + URLEncoder.encode(mRoom!!.roomId, "utf-8")
 

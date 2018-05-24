@@ -16,6 +16,9 @@
  */
 package im.vector.widgets;
 
+import android.content.Context;
+import android.net.Uri;
+
 import org.matrix.androidsdk.HomeServerConnectionConfig;
 import org.matrix.androidsdk.RestClient;
 import org.matrix.androidsdk.rest.callback.ApiCallback;
@@ -23,12 +26,17 @@ import org.matrix.androidsdk.rest.callback.RestAdapterCallback;
 
 import java.util.Map;
 
+import im.vector.R;
+
 class WidgetsRestClient extends RestClient<WidgetsApi> {
     /**
      * {@inheritDoc}
      */
-    public WidgetsRestClient(HomeServerConnectionConfig hsConfig) {
-        super(hsConfig, WidgetsApi.class, "api/", false);
+    public WidgetsRestClient(Context context) {
+        super(new HomeServerConnectionConfig(Uri.parse(context.getString(R.string.integrations_rest_url))),
+                WidgetsApi.class,
+                "api/",
+                false);
     }
 
     /**
