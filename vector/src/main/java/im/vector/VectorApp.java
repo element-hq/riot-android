@@ -303,6 +303,7 @@ public class VectorApp extends MultiDexApplication {
                 Log.d(LOG_TAG, "onActivityPaused " + activity);
                 mLocalesByActivity.put(activity.toString(), getActivityLocaleStatus(activity));
                 setCurrentActivity(null);
+                onAppPause();
             }
 
             @Override
