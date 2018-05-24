@@ -285,8 +285,21 @@ public class VectorRoomDetailsMembersFragment extends VectorBaseFragment {
         }
 
         @Override
-        public void onMatrixError(MatrixError e) {
-            onError(e.getLocalizedMessage());
+        public void onMatrixError(final MatrixError e) {
+            if (getRiotActivity() != null && MatrixError.M_CONSENT_NOT_GIVEN.equals(e.errcode)) {
+                getRiotActivity().runOnUiThread(
+                        new Runnable() {
+                            @Override
+                            public void run() {
+                                mProgressView.setVisibility(View.GONE);
+
+                                getRiotActivity().getConsentNotGivenHelper().displayDialog(e);
+                            }
+                        }
+                );
+            } else {
+                onError(e.getLocalizedMessage());
+            }
         }
 
         @Override
@@ -930,8 +943,21 @@ public class VectorRoomDetailsMembersFragment extends VectorBaseFragment {
                                     }
 
                                     @Override
-                                    public void onMatrixError(MatrixError e) {
-                                        onError(e.getLocalizedMessage());
+                                    public void onMatrixError(final MatrixError e) {
+                                        if (null != getRiotActivity()) {
+                                            getRiotActivity().runOnUiThread(new Runnable() {
+                                                @Override
+                                                public void run() {
+                                                    if (getRiotActivity() != null && MatrixError.M_CONSENT_NOT_GIVEN.equals(e.errcode)) {
+                                                        mProgressView.setVisibility(View.GONE);
+
+                                                        getRiotActivity().getConsentNotGivenHelper().displayDialog(e);
+                                                    } else {
+                                                        onError(e.getLocalizedMessage());
+                                                    }
+                                                }
+                                            });
+                                        }
                                     }
 
                                     @Override
