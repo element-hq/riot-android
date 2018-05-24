@@ -1,12 +1,12 @@
-/* 
+/*
  * Copyright 2016 OpenMarket Ltd
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *     http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -18,9 +18,6 @@ package im.vector.util;
 
 import android.app.AlertDialog;
 import android.text.TextUtils;
-
-import org.matrix.androidsdk.util.Log;
-
 import android.widget.Toast;
 
 import org.matrix.androidsdk.MXSession;
@@ -30,6 +27,7 @@ import org.matrix.androidsdk.data.RoomState;
 import org.matrix.androidsdk.rest.callback.ApiCallback;
 import org.matrix.androidsdk.rest.callback.SimpleApiCallback;
 import org.matrix.androidsdk.rest.model.MatrixError;
+import org.matrix.androidsdk.util.Log;
 
 import java.util.Collection;
 import java.util.HashMap;
@@ -138,6 +136,8 @@ public class SlashComandsParser {
                 public void onMatrixError(MatrixError e) {
                     if (MatrixError.FORBIDDEN.equals(e.errcode)) {
                         Toast.makeText(activity, e.error, Toast.LENGTH_LONG).show();
+                    } else if (MatrixError.M_CONSENT_NOT_GIVEN.equals(e.errcode)) {
+                        activity.getConsentNotGivenHelper().displayDialog(e);
                     }
                 }
             };
@@ -207,7 +207,11 @@ public class SlashComandsParser {
 
                         @Override
                         public void onMatrixError(final MatrixError e) {
-                            Toast.makeText(activity, e.error, Toast.LENGTH_LONG).show();
+                            if (MatrixError.M_CONSENT_NOT_GIVEN.equals(e.errcode)) {
+                                activity.getConsentNotGivenHelper().displayDialog(e);
+                            } else {
+                                Toast.makeText(activity, e.error, Toast.LENGTH_LONG).show();
+                            }
                         }
                     });
                 }

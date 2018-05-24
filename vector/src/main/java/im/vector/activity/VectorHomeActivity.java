@@ -1430,7 +1430,11 @@ public class VectorHomeActivity extends RiotAppCompatActivity implements SearchV
 
                                     @Override
                                     public void onMatrixError(final MatrixError e) {
-                                        onError(e.getLocalizedMessage());
+                                        if (MatrixError.M_CONSENT_NOT_GIVEN.equals(e.errcode)) {
+                                            getConsentNotGivenHelper().displayDialog(e);
+                                        } else {
+                                            onError(e.getLocalizedMessage());
+                                        }
                                     }
 
                                     @Override

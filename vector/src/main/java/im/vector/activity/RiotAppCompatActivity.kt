@@ -258,7 +258,7 @@ abstract class RiotAppCompatActivity : AppCompatActivity() {
      * User Consent
      * ========================================================================================== */
 
-    protected val consentNotGivenHelper by lazy {
+    val consentNotGivenHelper by lazy {
         // TODO UC When send sticker PR will be merged: use getSavedInstanceState() instead of null
         ConsentNotGivenHelper(this, null)
                 .apply { addToRestorables(this) }
