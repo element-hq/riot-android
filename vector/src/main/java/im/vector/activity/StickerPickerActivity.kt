@@ -23,6 +23,7 @@ import android.view.Menu
 import android.view.MenuItem
 import com.google.gson.Gson
 import im.vector.R
+import im.vector.activity.util.INTEGRATION_MANAGER_ACTIVITY_REQUEST_CODE
 import im.vector.types.JsonDict
 import im.vector.util.ThemeUtils
 import org.matrix.androidsdk.util.Log
@@ -81,9 +82,23 @@ class StickerPickerActivity : AbstractWidgetActivity() {
         when (action) {
             "m.sticker" -> sendSticker(eventData)
                     .also { return true }
+            // TODO Deals with action to open integration manager (in parent?)
         }
 
         return false
+    }
+
+    /* ==========================================================================================
+     * Life cycle
+     * ========================================================================================== */
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+
+        when (requestCode) {
+        // Reload the page, user may have add/remove sticker pack
+            INTEGRATION_MANAGER_ACTIVITY_REQUEST_CODE -> mWebView.reload()
+        }
     }
 
     /* ==========================================================================================
@@ -108,7 +123,7 @@ class StickerPickerActivity : AbstractWidgetActivity() {
                         widgetId = mWidgetId,
                         screenId = "type_$WIDGET_NAME")
 
-                startActivity(intent)
+                startActivityForResult(intent, INTEGRATION_MANAGER_ACTIVITY_REQUEST_CODE)
 
                 return true
             }
