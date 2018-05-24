@@ -641,21 +641,21 @@ public class PreferencesManager {
     }
 
     /**
-     * Tells if the authorization to use the analytics tracking has been requested (piwik, matomo, etc.).
+     * Tells if a dialog has been displayed to ask to use the analytics tracking (piwik, matomo, etc.).
      *
      * @param context the context
-     * @return true if the authorization to use the analytics tracking has been requested
+     * @return true if a dialog has been displayed to ask to use the analytics tracking
      */
-    public static boolean authorizationToUseAnalyticsRequested(Context context) {
+    public static boolean didAskToUseAnalytics(Context context) {
         return PreferenceManager.getDefaultSharedPreferences(context).getBoolean(DID_ASK_TO_USE_ANALYTICS_TRACKING_KEY, false);
     }
 
     /**
-     * Update the analytics tracking authorization request status.
+     * Update the analytics tracking ask question status.
      *
      * @param context   the context
      */
-    public static void setAuthorizationToUseAnalyticsRequest(Context context) {
+    public static void setDidAskToUseAnalyticsStatus(Context context) {
         SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(context);
         SharedPreferences.Editor editor = preferences.edit();
         editor.putBoolean(DID_ASK_TO_USE_ANALYTICS_TRACKING_KEY, true);

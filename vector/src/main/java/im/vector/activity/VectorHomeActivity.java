@@ -305,7 +305,7 @@ public class VectorHomeActivity extends RiotAppCompatActivity implements SearchV
 
         // Check whether the user has agreed to the use of analytics tracking
 
-        if (!PreferencesManager.authorizationToUseAnalyticsRequested(this)) {
+        if (!PreferencesManager.didAskToUseAnalytics(this)) {
             promptForAnalyticsTracking();
         }
 
@@ -673,7 +673,7 @@ public class VectorHomeActivity extends RiotAppCompatActivity implements SearchV
 
     private void setAnalyticsAuthorization(boolean useAnalytics) {
         PreferencesManager.setUseAnalytics(this, useAnalytics);
-        PreferencesManager.setAuthorizationToUseAnalyticsRequest(this);
+        PreferencesManager.setDidAskToUseAnalyticsStatus(this);
     }
 
     @Override
