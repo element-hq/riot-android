@@ -31,16 +31,13 @@ import butterknife.Unbinder;
 import im.vector.Matrix;
 import im.vector.activity.VectorGroupDetailsActivity;
 
-public abstract class GroupDetailsBaseFragment extends Fragment {
+public abstract class GroupDetailsBaseFragment extends VectorBaseFragment {
     private static final String LOG_TAG = GroupDetailsBaseFragment.class.getSimpleName();
 
     private static final String CURRENT_FILTER = "CURRENT_FILTER";
 
     protected MXSession mSession;
     protected VectorGroupDetailsActivity mActivity;
-
-    // Butterknife unbinder
-    private Unbinder mUnBinder;
 
     @Override
     public void onActivityCreated(final Bundle savedInstanceState) {
@@ -50,20 +47,6 @@ public abstract class GroupDetailsBaseFragment extends Fragment {
         mActivity = (VectorGroupDetailsActivity) getActivity();
 
         initViews();
-    }
-
-    @Override
-    @CallSuper
-    public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
-        super.onViewCreated(view, savedInstanceState);
-        mUnBinder = ButterKnife.bind(this, view);
-    }
-
-    @Override
-    @CallSuper
-    public void onDestroyView() {
-        super.onDestroyView();
-        mUnBinder.unbind();
     }
 
     @Override

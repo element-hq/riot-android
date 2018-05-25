@@ -19,7 +19,6 @@ package im.vector.activity;
 
 import android.content.Context;
 import android.content.Intent;
-import android.os.Bundle;
 import android.support.design.widget.TextInputEditText;
 import android.support.design.widget.TextInputLayout;
 import android.support.v7.widget.Toolbar;
@@ -62,7 +61,7 @@ public class PhoneNumberAdditionActivity extends RiotAppCompatActivity implement
     private TextInputLayout mCountryLayout;
     private TextInputEditText mPhoneNumber;
     private TextInputLayout mPhoneNumberLayout;
-    
+
     private MXSession mSession;
 
     // Ex "FR"
@@ -75,7 +74,7 @@ public class PhoneNumberAdditionActivity extends RiotAppCompatActivity implement
     // Used to prevent user to submit several times in a row
     private boolean mIsSubmittingPhone;
 
-     /*
+    /*
      * *********************************************************************************************
      * Static methods
      * *********************************************************************************************
@@ -88,17 +87,23 @@ public class PhoneNumberAdditionActivity extends RiotAppCompatActivity implement
     }
 
     /*
-    * *********************************************************************************************
-    * Activity lifecycle
-    * *********************************************************************************************
-    */
+     * *********************************************************************************************
+     * Activity lifecycle
+     * *********************************************************************************************
+     */
+
     @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
+    public int getLayoutRes() {
+        return R.layout.activity_phone_number_addition;
+    }
 
-        setTitle(R.string.settings_add_phone_number);
-        setContentView(R.layout.activity_phone_number_addition);
+    @Override
+    public int getTitleRes() {
+        return R.string.settings_add_phone_number;
+    }
 
+    @Override
+    public void initUiAndData() {
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         if (null != getSupportActionBar()) {
@@ -110,7 +115,7 @@ public class PhoneNumberAdditionActivity extends RiotAppCompatActivity implement
         mCountryLayout = findViewById(R.id.phone_number_country);
         mPhoneNumber = findViewById(R.id.phone_number_value);
         mPhoneNumberLayout = findViewById(R.id.phone_number);
-        waitingView = findViewById(R.id.loading_view);
+        setWaitingView(findViewById(R.id.loading_view));
 
         final Intent intent = getIntent();
         mSession = Matrix.getInstance(this).getSession(intent.getStringExtra(EXTRA_MATRIX_ID));
@@ -190,10 +195,10 @@ public class PhoneNumberAdditionActivity extends RiotAppCompatActivity implement
     }
 
     /*
-    * *********************************************************************************************
-    * Utils
-    * *********************************************************************************************
-    */
+     * *********************************************************************************************
+     * Utils
+     * *********************************************************************************************
+     */
 
     private void initViews() {
         setCountryCode(PhoneNumberUtils.getCountryCode(this));
@@ -273,7 +278,7 @@ public class PhoneNumberAdditionActivity extends RiotAppCompatActivity implement
             mSession.getMyUser().requestPhoneNumberValidationToken(pid, new ApiCallback<Void>() {
                 @Override
                 public void onSuccess(Void info) {
-                    stopWaitingView();
+                    hideWaitingView();
                     Intent intent = PhoneNumberVerificationActivity.getIntent(PhoneNumberAdditionActivity.this,
                             mSession.getCredentials().userId, pid);
                     startActivityForResult(intent, REQUEST_VERIFICATION);
@@ -310,15 +315,15 @@ public class PhoneNumberAdditionActivity extends RiotAppCompatActivity implement
      */
     private void onSubmitPhoneError(final String errorMessage) {
         mIsSubmittingPhone = false;
-        stopWaitingView();
+        hideWaitingView();
         Toast.makeText(this, errorMessage, Toast.LENGTH_SHORT).show();
     }
 
     /*
-    * *********************************************************************************************
-    * Listeners
-    * *********************************************************************************************
-    */
+     * *********************************************************************************************
+     * Listeners
+     * *********************************************************************************************
+     */
 
     @Override
     public void onClick(View v) {

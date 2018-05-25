@@ -49,7 +49,7 @@ import im.vector.adapters.VectorPublicRoomsAdapter;
 import java.util.HashMap;
 import java.util.List;
 
-public class VectorPublicRoomsListFragment extends Fragment {
+public class VectorPublicRoomsListFragment extends VectorBaseFragment {
     private static final String LOG_TAG = VectorPublicRoomsListFragment.class.getSimpleName();
 
     private static final String ARG_LAYOUT_ID = "VectorPublicRoomsListFragment.ARG_LAYOUT_ID";

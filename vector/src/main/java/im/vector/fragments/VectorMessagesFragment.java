@@ -51,6 +51,7 @@ public class VectorMessagesFragment extends MatrixMessagesFragment {
         }
 
         fragment.setArguments(args);
+        // Note: listener and session will be restored by the SDK if Fragment is recreated
         fragment.setMatrixMessagesListener(listener);
         fragment.setMXSession(session);
         return fragment;

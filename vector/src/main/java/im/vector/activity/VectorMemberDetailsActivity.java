@@ -228,7 +228,11 @@ public class VectorMemberDetailsActivity extends MXCActionBarActivity implements
     private final ApiCallback<Void> mRoomActionsListener = new SimpleApiCallback<Void>(this) {
         @Override
         public void onMatrixError(MatrixError e) {
-            Toast.makeText(VectorMemberDetailsActivity.this, e.getLocalizedMessage(), Toast.LENGTH_LONG).show();
+            if (MatrixError.M_CONSENT_NOT_GIVEN.equals(e.errcode)) {
+                getConsentNotGivenHelper().displayDialog(e);
+            } else {
+                Toast.makeText(VectorMemberDetailsActivity.this, e.getLocalizedMessage(), Toast.LENGTH_LONG).show();
+            }
             updateUi();
         }
 
@@ -1120,9 +1124,12 @@ public class VectorMemberDetailsActivity extends MXCActionBarActivity implements
     }
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
+    public int getLayoutRes() {
+        return R.layout.activity_member_details;
+    }
 
+    @Override
+    public void initUiAndData() {
         if (CommonActivityUtils.shouldRestartApp(this)) {
             Log.e(LOG_TAG, "Restart the application");
             CommonActivityUtils.restartApp(this);
@@ -1144,9 +1151,6 @@ public class VectorMemberDetailsActivity extends MXCActionBarActivity implements
             // check if the user is a member of the room
             checkRoomMemberStatus();
 
-            // setup UI view and bind the widgets
-            setContentView(R.layout.activity_member_details);
-
             // use a toolbar instead of the actionbar
             // to be able to display a large header
             android.support.v7.widget.Toolbar toolbar = findViewById(R.id.member_details_toolbar);
@@ -1164,7 +1168,7 @@ public class VectorMemberDetailsActivity extends MXCActionBarActivity implements
 
             mMemberNameTextView = findViewById(R.id.member_details_name);
             mPresenceTextView = findViewById(R.id.member_details_presence);
-            waitingView = findViewById(R.id.member_details_list_view_progress_bar);
+            setWaitingView(findViewById(R.id.member_details_list_view_progress_bar));
 
             // setup the devices list view
             mDevicesListView = findViewById(R.id.member_details_devices_list_view);
@@ -1246,7 +1250,7 @@ public class VectorMemberDetailsActivity extends MXCActionBarActivity implements
             // update the UI
             updateUi();
 
-            if ((null != savedInstanceState) && savedInstanceState.getBoolean(AVATAR_FULLSCREEN_MODE, false)) {
+            if (!isFirstCreation() && getSavedInstanceState().getBoolean(AVATAR_FULLSCREEN_MODE, false)) {
                 displayFullScreenAvatar();
             }
         }
@@ -1507,8 +1511,10 @@ public class VectorMemberDetailsActivity extends MXCActionBarActivity implements
      * @param aIsProgressBarDisplayed true to show the progress bar screen, false to hide it
      */
     private void enableProgressBarView(boolean aIsProgressBarDisplayed) {
-        if (null != waitingView) {
-           waitingView.setVisibility(aIsProgressBarDisplayed ? View.VISIBLE : View.GONE);
+        if(aIsProgressBarDisplayed) {
+            showWaitingView();
+        } else {
+            hideWaitingView();
         }
     }
 

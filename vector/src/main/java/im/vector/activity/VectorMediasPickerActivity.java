@@ -217,13 +217,13 @@ public class VectorMediasPickerActivity extends MXCActionBarActivity implements 
 
     private VideoRecordView mRecordAnimationView;
 
+    @Override
+    public int getLayoutRes() {
+        return R.layout.activity_vector_medias_picker;
+    }
 
     @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-
-        setContentView(R.layout.activity_vector_medias_picker);
-
+    public void initUiAndData() {
         if (CommonActivityUtils.shouldRestartApp(this)) {
             Log.e(LOG_TAG, "Restart the application.");
             CommonActivityUtils.restartApp(this);
@@ -340,9 +340,11 @@ public class VectorMediasPickerActivity extends MXCActionBarActivity implements 
         mHandlerThread.start();
         mFileHandler = new android.os.Handler(mHandlerThread.getLooper());
 
-        if (!restoreInstanceState(savedInstanceState)) {
+        if (isFirstCreation()) {
             // default UI: if a taken image is not in preview, then display: live camera preview + "take picture"/switch/exit buttons
             updateUiConfiguration(UI_SHOW_CAMERA_PREVIEW, IMAGE_ORIGIN_CAMERA);
+        } else {
+            restoreInstanceState(getSavedInstanceState());
         }
 
         // Force screen orientation be managed by the sensor in case user's setting turned off
@@ -420,47 +422,40 @@ public class VectorMediasPickerActivity extends MXCActionBarActivity implements 
      * Restores the saved instance.
      *
      * @param savedInstanceState the savedInstanceState
-     * @return true if some items have been restored
      */
-    private boolean restoreInstanceState(Bundle savedInstanceState) {
-        boolean isRestoredInstance = false;
+    private void restoreInstanceState(@NonNull Bundle savedInstanceState) {
+        mIsAvatarMode = savedInstanceState.getBoolean(KEY_IS_AVATAR_MODE);
+        mIsTakenImageDisplayed = savedInstanceState.getBoolean(KEY_EXTRA_IS_TAKEN_IMAGE_DISPLAYED);
+        mShotPicturePath = savedInstanceState.getString(KEY_EXTRA_TAKEN_IMAGE_CAMERA_URL);
+        mTakenImageOrigin = savedInstanceState.getInt(KEY_EXTRA_TAKEN_IMAGE_ORIGIN);
 
-        if (null != savedInstanceState) {
-            isRestoredInstance = true;
-            mIsAvatarMode = savedInstanceState.getBoolean(KEY_IS_AVATAR_MODE);
-            mIsTakenImageDisplayed = savedInstanceState.getBoolean(KEY_EXTRA_IS_TAKEN_IMAGE_DISPLAYED);
-            mShotPicturePath = savedInstanceState.getString(KEY_EXTRA_TAKEN_IMAGE_CAMERA_URL);
-            mTakenImageOrigin = savedInstanceState.getInt(KEY_EXTRA_TAKEN_IMAGE_ORIGIN);
+        // restore gallery image preview (the image can be saved from the preview even after rotation)
+        Uri uriImage = savedInstanceState.getParcelable(KEY_EXTRA_TAKEN_IMAGE_GALLERY_URI);
+        mImagePreviewImageView.setTag(uriImage);
 
-            // restore gallery image preview (the image can be saved from the preview even after rotation)
-            Uri uriImage = savedInstanceState.getParcelable(KEY_EXTRA_TAKEN_IMAGE_GALLERY_URI);
-            mImagePreviewImageView.setTag(uriImage);
+        mVideoUri = savedInstanceState.getParcelable(KEY_EXTRA_TAKEN_VIDEO_URI);
 
-            mVideoUri = savedInstanceState.getParcelable(KEY_EXTRA_TAKEN_VIDEO_URI);
-
-            // display a preview image?
-            if (mIsTakenImageDisplayed) {
-                Bitmap savedBitmap = VectorApp.getSavedPickerImagePreview();
-                if ((null != savedBitmap) && !mIsAvatarMode) {
-                    // image preview from camera only
-                    mImagePreviewImageView.setImageBitmap(savedBitmap);
-                } else {
-                    // image preview from gallery or camera (mShootedPicturePath)
-                    displayImagePreview(savedBitmap, mShotPicturePath, uriImage, mTakenImageOrigin);
-                }
-            }
-
-            // restore UI display
-            updateUiConfiguration(mIsTakenImageDisplayed, mTakenImageOrigin);
-
-            // general data to be restored
-            mCameraId = savedInstanceState.getInt(KEY_EXTRA_CAMERA_SIDE);
-
-            if (null != mVideoUri) {
-                startVideoPreviewVideo(null);
+        // display a preview image?
+        if (mIsTakenImageDisplayed) {
+            Bitmap savedBitmap = VectorApp.getSavedPickerImagePreview();
+            if ((null != savedBitmap) && !mIsAvatarMode) {
+                // image preview from camera only
+                mImagePreviewImageView.setImageBitmap(savedBitmap);
+            } else {
+                // image preview from gallery or camera (mShootedPicturePath)
+                displayImagePreview(savedBitmap, mShotPicturePath, uriImage, mTakenImageOrigin);
             }
         }
-        return isRestoredInstance;
+
+        // restore UI display
+        updateUiConfiguration(mIsTakenImageDisplayed, mTakenImageOrigin);
+
+        // general data to be restored
+        mCameraId = savedInstanceState.getInt(KEY_EXTRA_CAMERA_SIDE);
+
+        if (null != mVideoUri) {
+            startVideoPreviewVideo(null);
+        }
     }
 
     /**
@@ -842,7 +837,7 @@ public class VectorMediasPickerActivity extends MXCActionBarActivity implements 
      * @param aOrigin          CAMERA or GALLERY
      */
     private void displayImagePreview(final Bitmap bitmap, final String aCameraImageUrl, final Uri aGalleryImageUri, final int aOrigin) {
-        waitingView = findViewById(R.id.medias_preview_progress_bar_layout);
+        setWaitingView(findViewById(R.id.medias_preview_progress_bar_layout));
         showWaitingView();
         mTakeImageView.setEnabled(false);
 
@@ -941,7 +936,7 @@ public class VectorMediasPickerActivity extends MXCActionBarActivity implements 
 
         mTakeImageView.setEnabled(true);
         updateUiConfiguration(UI_SHOW_TAKEN_IMAGE, aOrigin);
-        stopWaitingView();
+        hideWaitingView();
     }
 
     /**

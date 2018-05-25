@@ -19,7 +19,6 @@ package im.vector.activity;
 
 import android.content.Context;
 import android.content.Intent;
-import android.os.Bundle;
 import android.support.design.widget.TextInputEditText;
 import android.support.design.widget.TextInputLayout;
 import android.support.v7.widget.Toolbar;
@@ -29,7 +28,6 @@ import android.text.TextWatcher;
 import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
 import android.view.inputmethod.EditorInfo;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -79,13 +77,19 @@ public class PhoneNumberVerificationActivity extends RiotAppCompatActivity imple
     * Activity lifecycle
     * *********************************************************************************************
     */
+
     @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
+    public int getLayoutRes() {
+        return R.layout.activity_phone_number_verification;
+    }
 
-        setTitle(R.string.settings_phone_number_verification);
-        setContentView(R.layout.activity_phone_number_verification);
+    @Override
+    public int getTitleRes() {
+        return R.string.settings_phone_number_verification;
+    }
 
+    @Override
+    public void initUiAndData() {
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         if (null != getSupportActionBar()) {
@@ -95,7 +99,7 @@ public class PhoneNumberVerificationActivity extends RiotAppCompatActivity imple
 
         mPhoneNumberCode = findViewById(R.id.phone_number_code_value);
         mPhoneNumberCodeLayout = findViewById(R.id.phone_number_code);
-        waitingView = findViewById(R.id.loading_view);
+        setWaitingView(findViewById(R.id.loading_view));
 
         final Intent intent = getIntent();
         mSession = Matrix.getInstance(this).getSession(intent.getStringExtra(EXTRA_MATRIX_ID));
@@ -218,7 +222,7 @@ public class PhoneNumberVerificationActivity extends RiotAppCompatActivity imple
 
     private void onSubmitCodeError(final String errorMessage) {
         mIsSubmittingToken = false;
-        stopWaitingView();
+        hideWaitingView();
         Toast.makeText(this, errorMessage, Toast.LENGTH_SHORT).show();
     }
 

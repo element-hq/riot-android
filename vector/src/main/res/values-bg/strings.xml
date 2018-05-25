@@ -893,4 +893,23 @@
     <string name="receipt_avatar">Профилна снимка</string>
     <string name="notice_avatar">Профилна снимка</string>
     <string name="open_chat_header">Отвори заглавие</string>
+    <string name="settings_notification_privacy_warning">Riot.im работи във фонов режим за да е конфиденциално съдържанието на уведомленията. Може да смените тази настройка, за да намалите консумацията на енергия.</string>
+    <string name="settings_notification_privacy_power_saving">Настройки за енергоспестяване</string>
+    <string name="settings_notification_privacy_low_detail">Не-подробни уведомления</string>
+    <string name="settings_notification_privacy_reduced">Намалена конфиденциалност</string>
+    <string name="settings_notification_privacy_need_permission">Приложението се нуждае от достъп за работа във фонов режим</string>
+    <string name="settings_notification_privacy_no_permission">Приложението <b>не</b> се нуждае от достъп за работа във фонов режим</string>
+    <string name="settings_notification_privacy_gcm">• Уведомления се изпращат чрез Google Cloud Messaging</string>
+    <string name="settings_notification_privacy_metadata">• Уведомленията съдържат само метаданни</string>
+    <string name="settings_notification_privacy_secure_message_content">• Съдържанието на уведомленията се <b>извлича по защитен път директно от Matrix сървъра</b></string>
+    <string name="settings_notification_privacy_nosecure_message_content">• Уведомленията съдържат <b>метаданни и съдържания на съобщения</b></string>
+    <string name="settings_notification_privacy_message_content_not_shown">• Уведомленията <b>няма да показват съдържания на съобщения</b></string>
+
+    <string name="startup_notification_privacy_title">Конфиденциалност на уведомленията</string>
+    <string name="startup_notification_privacy_message">Riot може да работи във фонов режим за да получава уведомления по защитен начин (може да повлияе на използваната енергия).</string>
+    <string name="startup_notification_privacy_button_grant">Разреши достъп</string>
+    <string name="startup_notification_privacy_button_other">Избери друг вариант</string>
+
+    <string name="settings_notification_privacy">Конфиденциалност на уведомленията</string>
+    <string name="settings_notification_privacy_normal">Нормална</string>
     </resources>

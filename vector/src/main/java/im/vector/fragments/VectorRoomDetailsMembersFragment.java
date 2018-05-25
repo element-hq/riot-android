@@ -1,5 +1,6 @@
 /*
  * Copyright 2016 OpenMarket Ltd
+ * Copyright 2018 New Vector Ltd
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -25,7 +26,6 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
-import android.support.v4.app.Fragment;
 import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
 import android.text.TextWatcher;
@@ -75,7 +75,7 @@ import im.vector.adapters.VectorRoomDetailsMembersAdapter;
 import im.vector.util.ThemeUtils;
 import im.vector.util.VectorUtils;
 
-public class VectorRoomDetailsMembersFragment extends Fragment {
+public class VectorRoomDetailsMembersFragment extends VectorBaseFragment {
     private static final String LOG_TAG = VectorRoomDetailsMembersFragment.class.getSimpleName();
 
     // activity request codes
@@ -286,8 +286,21 @@ public class VectorRoomDetailsMembersFragment extends Fragment {
         }
 
         @Override
-        public void onMatrixError(MatrixError e) {
-            onError(e.getLocalizedMessage());
+        public void onMatrixError(final MatrixError e) {
+            if (getRiotActivity() != null && MatrixError.M_CONSENT_NOT_GIVEN.equals(e.errcode)) {
+                getRiotActivity().runOnUiThread(
+                        new Runnable() {
+                            @Override
+                            public void run() {
+                                mProgressView.setVisibility(View.GONE);
+
+                                getRiotActivity().getConsentNotGivenHelper().displayDialog(e);
+                            }
+                        }
+                );
+            } else {
+                onError(e.getLocalizedMessage());
+            }
         }
 
         @Override
@@ -726,9 +739,15 @@ public class VectorRoomDetailsMembersFragment extends Fragment {
 
                     @Override
                     public void onMatrixError(final MatrixError e) {
-                        kickNext();
-                        if (null != getActivity()) {
-                            Toast.makeText(getActivity(), e.getLocalizedMessage(), Toast.LENGTH_SHORT).show();
+                        if (getRiotActivity() != null) {
+                            if (MatrixError.M_CONSENT_NOT_GIVEN.equals(e.errcode)) {
+                                getRiotActivity().getConsentNotGivenHelper().displayDialog(e);
+                            } else {
+                                Toast.makeText(getActivity(), e.getLocalizedMessage(), Toast.LENGTH_SHORT).show();
+                                kickNext();
+                            }
+                        } else {
+                            kickNext();
                         }
                     }
 
@@ -737,7 +756,6 @@ public class VectorRoomDetailsMembersFragment extends Fragment {
                         kickNext();
                     }
                 }
-
         );
     }
 
@@ -926,8 +944,19 @@ public class VectorRoomDetailsMembersFragment extends Fragment {
                                     }
 
                                     @Override
-                                    public void onMatrixError(MatrixError e) {
-                                        onError(e.getLocalizedMessage());
+                                    public void onMatrixError(final MatrixError e) {
+                                        if (getRiotActivity() != null && MatrixError.M_CONSENT_NOT_GIVEN.equals(e.errcode)) {
+                                            getRiotActivity().runOnUiThread(new Runnable() {
+                                                @Override
+                                                public void run() {
+                                                    mProgressView.setVisibility(View.GONE);
+
+                                                    getRiotActivity().getConsentNotGivenHelper().displayDialog(e);
+                                                }
+                                            });
+                                        } else {
+                                            onError(e.getLocalizedMessage());
+                                        }
                                     }
 
                                     @Override

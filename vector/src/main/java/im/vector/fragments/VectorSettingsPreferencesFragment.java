@@ -58,6 +58,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.bumptech.glide.Glide;
 import com.google.i18n.phonenumbers.NumberParseException;
 import com.google.i18n.phonenumbers.PhoneNumberUtil;
 import com.google.i18n.phonenumbers.Phonenumber;
@@ -73,14 +74,14 @@ import org.matrix.androidsdk.listeners.MXEventListener;
 import org.matrix.androidsdk.listeners.MXMediaUploadListener;
 import org.matrix.androidsdk.rest.callback.ApiCallback;
 import org.matrix.androidsdk.rest.callback.SimpleApiCallback;
-import org.matrix.androidsdk.rest.model.group.Group;
-import org.matrix.androidsdk.rest.model.sync.DeviceInfo;
-import org.matrix.androidsdk.rest.model.sync.DevicesListResponse;
 import org.matrix.androidsdk.rest.model.MatrixError;
-import org.matrix.androidsdk.rest.model.pid.ThirdPartyIdentifier;
-import org.matrix.androidsdk.rest.model.pid.ThreePid;
 import org.matrix.androidsdk.rest.model.bingrules.BingRule;
 import org.matrix.androidsdk.rest.model.bingrules.BingRuleSet;
+import org.matrix.androidsdk.rest.model.group.Group;
+import org.matrix.androidsdk.rest.model.pid.ThirdPartyIdentifier;
+import org.matrix.androidsdk.rest.model.pid.ThreePid;
+import org.matrix.androidsdk.rest.model.sync.DeviceInfo;
+import org.matrix.androidsdk.rest.model.sync.DevicesListResponse;
 import org.matrix.androidsdk.util.BingRulesManager;
 import org.matrix.androidsdk.util.Log;
 import org.matrix.androidsdk.util.ResourceUtils;
@@ -101,9 +102,11 @@ import im.vector.R;
 import im.vector.VectorApp;
 import im.vector.activity.CommonActivityUtils;
 import im.vector.activity.CountryPickerActivity;
+import im.vector.activity.DeactivateAccountActivity;
 import im.vector.activity.LanguagePickerActivity;
 import im.vector.activity.NotificationPrivacyActivity;
 import im.vector.activity.PhoneNumberAdditionActivity;
+import im.vector.activity.RiotAppCompatActivity;
 import im.vector.activity.VectorMediasPickerActivity;
 import im.vector.contacts.ContactsManager;
 import im.vector.gcm.GcmRegistrationManager;
@@ -383,7 +386,7 @@ public class VectorSettingsPreferencesFragment extends PreferenceFragment implem
         // third party notice
         EditTextPreference thirdPartyNotices = (EditTextPreference) findPreference(PreferencesManager.SETTINGS_THIRD_PARTY_NOTICES_PREFERENCE_KEY);
 
-        if (null != termConditionsPreference) {
+        if (null != thirdPartyNotices) {
             thirdPartyNotices.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
                 @Override
                 public boolean onPreferenceClick(Preference preference) {
@@ -396,7 +399,7 @@ public class VectorSettingsPreferencesFragment extends PreferenceFragment implem
         // copyright
         EditTextPreference copyrightNotices = (EditTextPreference) findPreference(PreferencesManager.SETTINGS_COPYRIGHT_PREFERENCE_KEY);
 
-        if (null != termConditionsPreference) {
+        if (null != copyrightNotices) {
             copyrightNotices.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
                 @Override
                 public boolean onPreferenceClick(Preference preference) {
@@ -454,6 +457,7 @@ public class VectorSettingsPreferencesFragment extends PreferenceFragment implem
                         @Override
                         protected Void doInBackground(Void... params) {
                             mSession.getMediasCache().clear();
+                            Glide.get(getActivity()).clearDiskCache();
                             return null;
                         }
 
@@ -515,14 +519,14 @@ public class VectorSettingsPreferencesFragment extends PreferenceFragment implem
             }
         });
 
-        final VectorSwitchPreference urlPreviewPreference = (VectorSwitchPreference)findPreference(PreferencesManager.SETTINGS_SHOW_URL_PREVIEW_KEY);
+        final VectorSwitchPreference urlPreviewPreference = (VectorSwitchPreference) findPreference(PreferencesManager.SETTINGS_SHOW_URL_PREVIEW_KEY);
         urlPreviewPreference.setChecked(mSession.isURLPreviewEnabled());
 
         urlPreviewPreference.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
             @Override
             public boolean onPreferenceChange(Preference preference, Object newValue) {
 
-                if ((null != newValue) && ((boolean)newValue != mSession.isURLPreviewEnabled())) {
+                if ((null != newValue) && ((boolean) newValue != mSession.isURLPreviewEnabled())) {
                     displayLoadingView();
                     mSession.setURLPreviewStatus((boolean) newValue, new ApiCallback<Void>() {
                         @Override
@@ -631,8 +635,7 @@ public class VectorSettingsPreferencesFragment extends PreferenceFragment implem
 
             preferenceScreen.removePreference(backgroundSyncDivider);
             preferenceScreen.removePreference(backgroundSyncCategory);
-        }
-        else {
+        } else {
             mSyncRequestTimeoutPreference = (EditTextPreference) findPreference(PreferencesManager.SETTINGS_SET_SYNC_TIMEOUT_PREFERENCE_KEY);
             mSyncRequestDelayPreference = (EditTextPreference) findPreference(PreferencesManager.SETTINGS_SET_SYNC_DELAY_PREFERENCE_KEY);
             final CheckBoxPreference useBackgroundSyncPref = (CheckBoxPreference) findPreference(PreferencesManager.SETTINGS_ENABLE_BACKGROUND_SYNC_PREFERENCE_KEY);
@@ -744,7 +747,7 @@ public class VectorSettingsPreferencesFragment extends PreferenceFragment implem
                                 @Override
                                 public void onClick(DialogInterface dialog, int which) {
                                     dialog.dismiss();
-                                    CommonActivityUtils.logout(getActivity(), true);
+                                    CommonActivityUtils.logout(getActivity());
 
                                 }
                             })
@@ -829,6 +832,20 @@ public class VectorSettingsPreferencesFragment extends PreferenceFragment implem
                 return true;
             }
         });
+
+        // Analytics tracking managment
+        final CheckBoxPreference useAnalyticsModePref = (CheckBoxPreference) findPreference(PreferencesManager.SETTINGS_USE_ANALYTICS_KEY);
+
+        // On if the analytics tracking is activated
+        useAnalyticsModePref.setChecked(PreferencesManager.useAnalytics(appContext));
+
+        useAnalyticsModePref.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
+            @Override
+            public boolean onPreferenceChange(Preference preference, Object newValue) {
+                PreferencesManager.setUseAnalytics(appContext, (boolean) newValue);
+                return true;
+            }
+        });
         
         // Rageshake Managment
         final CheckBoxPreference useRageShakeModePref = (CheckBoxPreference) findPreference(PreferencesManager.SETTINGS_USE_RAGE_SHAKE_KEY);
@@ -839,12 +856,24 @@ public class VectorSettingsPreferencesFragment extends PreferenceFragment implem
         useRageShakeModePref.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
             @Override
             public boolean onPreferenceChange(Preference preference, Object newValue) {
-
                 PreferencesManager.setUseRageshake(appContext, (boolean) newValue);
-
                 return true;
             }
         });
+
+        // deactivate account
+        EditTextPreference deactivateAccountPref = (EditTextPreference) findPreference(PreferencesManager.SETTINGS_DEACTIVATE_ACCOUNT_KEY);
+
+        if (null != deactivateAccountPref) {
+            deactivateAccountPref.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
+                @Override
+                public boolean onPreferenceClick(Preference preference) {
+                    startActivity(DeactivateAccountActivity.Companion.getIntent(getActivity()));
+
+                    return false;
+                }
+            });
+        }
 
         addButtons();
         refreshPushersList();
@@ -1039,7 +1068,9 @@ public class VectorSettingsPreferencesFragment extends PreferenceFragment implem
 
         // If notifications are disabled for the current user account or for the current user device
         // The others notifications settings have to be disable too
-        boolean areNotifAllowed = rules.findDefaultRule(BingRule.RULE_ID_DISABLE_ALL).isEnabled;
+        boolean areNotifAllowed = rules != null
+                && rules.findDefaultRule(BingRule.RULE_ID_DISABLE_ALL) != null
+                && rules.findDefaultRule(BingRule.RULE_ID_DISABLE_ALL).isEnabled;
 
         Preference notificationSoundPreference = preferenceManager.findPreference(PreferencesManager.SETTINGS_NOTIFICATION_RINGTONE_SELECTION_PREFERENCE_KEY);
         notificationSoundPreference.setEnabled(!areNotifAllowed && gcmMgr.areDeviceNotificationsAllowed());
@@ -1364,8 +1395,20 @@ public class VectorSettingsPreferencesFragment extends PreferenceFragment implem
                 }
 
                 @Override
-                public void onMatrixError(MatrixError e) {
-                    onCommonDone(e.getLocalizedMessage());
+                public void onMatrixError(final MatrixError e) {
+                    if (MatrixError.M_CONSENT_NOT_GIVEN.equals(e.errcode)) {
+                        if (null != getActivity()) {
+                            getActivity().runOnUiThread(new Runnable() {
+                                @Override
+                                public void run() {
+                                    hideLoadingView();
+                                    ((RiotAppCompatActivity) getActivity()).getConsentNotGivenHelper().displayDialog(e);
+                                }
+                            });
+                        }
+                    } else {
+                        onCommonDone(e.getLocalizedMessage());
+                    }
                 }
 
                 @Override
@@ -1489,8 +1532,20 @@ public class VectorSettingsPreferencesFragment extends PreferenceFragment implem
                                                 }
 
                                                 @Override
-                                                public void onMatrixError(MatrixError e) {
-                                                    onCommonDone(e.getLocalizedMessage());
+                                                public void onMatrixError(final MatrixError e) {
+                                                    if (MatrixError.M_CONSENT_NOT_GIVEN.equals(e.errcode)) {
+                                                        if (null != getActivity()) {
+                                                            getActivity().runOnUiThread(new Runnable() {
+                                                                @Override
+                                                                public void run() {
+                                                                    hideLoadingView();
+                                                                    ((RiotAppCompatActivity) getActivity()).getConsentNotGivenHelper().displayDialog(e);
+                                                                }
+                                                            });
+                                                        }
+                                                    } else {
+                                                        onCommonDone(e.getLocalizedMessage());
+                                                    }
                                                 }
 
                                                 @Override

@@ -1,17 +1,20 @@
 <?xml version="1.0" encoding="utf-8"?>
-<merge xmlns:android="http://schemas.android.com/apk/res/android">
+<merge xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools">
+
     <TextView
         android:id="@+id/messagesAdapter_timestamp"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="1970/01/01 00:00:00"
         android:textColor="?attr/default_text_light_color"
-        android:textSize="12sp" />
+        android:textSize="12sp"
+        tools:text="1970/01/01 00:00:00" />
 
     <ImageView
         android:id="@+id/messagesAdapter_action_image"
         android:layout_width="15dp"
         android:layout_height="15dp"
+        android:layout_gravity="center_vertical"
         android:src="@drawable/vector_actions_9b" />
 
     <View
@@ -19,5 +22,6 @@
         android:layout_width="1dp"
         android:layout_height="1dp"
         android:contentDescription="@string/actions" />
+
 </merge>
 

@@ -1,5 +1,6 @@
 /*
  * Copyright 2014 OpenMarket Ltd
+ * Copyright 2018 New Vector Ltd
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,7 +19,6 @@ package im.vector.activity;
 
 import android.content.Intent;
 import android.net.Uri;
-import android.os.Bundle;
 import android.support.v4.view.ViewPager;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -113,9 +113,12 @@ public class VectorMediasViewerActivity extends MXCActionBarActivity {
     }
 
     @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
+    public int getLayoutRes() {
+        return R.layout.activity_vector_medias_viewer;
+    }
 
+    @Override
+    public void initUiAndData() {
         if (CommonActivityUtils.shouldRestartApp(this)) {
             Log.d(LOG_TAG, "onCreate : restart the application");
             CommonActivityUtils.restartApp(this);
@@ -148,7 +151,6 @@ public class VectorMediasViewerActivity extends MXCActionBarActivity {
             return;
         }
 
-        setContentView(R.layout.activity_vector_medias_viewer);
         mViewPager = findViewById(R.id.view_pager);
 
         int position = Math.min(intent.getIntExtra(KEY_INFO_LIST_INDEX, 0), mMediasList.size() - 1);

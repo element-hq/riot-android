@@ -19,11 +19,8 @@ package im.vector.receiver;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Bundle;
-import android.preference.PreferenceManager;
-import android.preference.TwoStatePreference;
 import android.text.TextUtils;
 
 import org.matrix.androidsdk.util.Log;
@@ -31,9 +28,8 @@ import org.matrix.androidsdk.util.Log;
 import java.net.URLDecoder;
 
 import im.vector.VectorApp;
-import im.vector.activity.CommonActivityUtils;
 import im.vector.activity.LoginActivity;
-import im.vector.util.PreferencesManager;
+import im.vector.repositories.ServerUrlsRepository;
 
 public class VectorReferrerReceiver extends BroadcastReceiver {
     private static final String LOG_TAG = VectorReferrerReceiver.class.getSimpleName();
@@ -63,8 +59,8 @@ public class VectorReferrerReceiver extends BroadcastReceiver {
                 return;
             }
 
-            String hs = null;
-            String is = null;
+            String hs = "";
+            String is = "";
 
             try {
                 String referrer = (String) extras.get(KEY_REFERRER);
@@ -95,22 +91,11 @@ public class VectorReferrerReceiver extends BroadcastReceiver {
 
 
             if (!TextUtils.isEmpty(hs) || !TextUtils.isEmpty(is)) {
-                SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(context);
-                SharedPreferences.Editor editor = preferences.edit();
-
-                if (!TextUtils.isEmpty(hs)) {
-                    editor.putString(LoginActivity.HOME_SERVER_URL_PREF, hs);
-                }
-
-                if (!TextUtils.isEmpty(is)) {
-                    editor.putString(LoginActivity.IDENTITY_SERVER_URL_PREF, is);
-                }
-
-                editor.commit();
+                ServerUrlsRepository.INSTANCE.setDefaultUrlsFromReferrer(context, hs, is);
 
                 if ((null != VectorApp.getCurrentActivity()) && (VectorApp.getCurrentActivity() instanceof LoginActivity)) {
                     Log.d(LOG_TAG, "## onReceive() : warn loginactivity");
-                    ((LoginActivity)VectorApp.getCurrentActivity()).onServerUrlsUpdate();
+                    ((LoginActivity)VectorApp.getCurrentActivity()).onServerUrlsUpdateFromReferrer();
                 }
             }
         }

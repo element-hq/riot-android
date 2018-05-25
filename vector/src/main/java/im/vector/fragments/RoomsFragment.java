@@ -339,7 +339,7 @@ public class RoomsFragment extends AbsHomeFragment implements AbsHomeFragment.On
                 roomPreviewData.fetchPreviewData(new ApiCallback<Void>() {
                     private void onDone() {
                         if (null != mActivity) {
-                            mActivity.stopWaitingView();
+                            mActivity.hideWaitingView();
                             CommonActivityUtils.previewRoom(getActivity(), roomPreviewData);
                         }
                     }

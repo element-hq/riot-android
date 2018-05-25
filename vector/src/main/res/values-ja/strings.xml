@@ -874,4 +874,10 @@ Riotアプリがあなたの電話帳へアクセスすることを許可しま�
 
     <string name="avatar">アバター</string>
 
-</resources>
+<string name="room_settings_mention_only">呼びかけがあったとき</string>
+    <string name="settings_notification_privacy">通知のプライバシー</string>
+    <string name="settings_notification_privacy_warning">Riot.imは通知のメッセージの内容の秘密を守るため、バックグラウンドで動作します。電池の使用を削減するために、このオプションを変えることができます。</string>
+    <string name="settings_notification_privacy_normal">標準</string>
+    <string name="settings_notification_privacy_power_saving">電力保存オプション</string>
+    <string name="settings_notification_privacy_low_detail">簡単な通知</string>
+    </resources>

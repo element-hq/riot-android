@@ -104,9 +104,12 @@ public class VectorRoomDetailsActivity extends MXCActionBarActivity implements T
     };
 
     @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
+    public int getLayoutRes() {
+        return R.layout.activity_vector_room_details;
+    }
 
+    @Override
+    public void initUiAndData() {
         if (CommonActivityUtils.shouldRestartApp(this)) {
             Log.e(LOG_TAG, "Restart the application.");
             CommonActivityUtils.restartApp(this);
@@ -142,15 +145,13 @@ public class VectorRoomDetailsActivity extends MXCActionBarActivity implements T
         mRoom = mSession.getDataHandler().getRoom(mRoomId);
         int selectedTab = intent.getIntExtra(EXTRA_SELECTED_TAB_ID, -1);
 
-        setContentView(R.layout.activity_vector_room_details);
-
         // UI widgets binding & init fields
-        waitingView = findViewById(R.id.settings_loading_layout);
+        setWaitingView(findViewById(R.id.settings_loading_layout));
         mLoadOldestContentView = findViewById(R.id.search_load_oldest_progress);
 
         // tab creation and restore tabs UI context
         mActionBar = getSupportActionBar();
-        createNavigationTabs(savedInstanceState, selectedTab);
+        createNavigationTabs(selectedTab);
     }
 
     @Override
@@ -269,9 +270,7 @@ public class VectorRoomDetailsActivity extends MXCActionBarActivity implements T
      */
     private void resetUi() {
         // stop "wait while searching" screen
-        if (null != waitingView) {
-            stopWaitingView();
-        }
+        hideWaitingView();
 
         if (null != mLoadOldestContentView) {
             mLoadOldestContentView.setVisibility(View.GONE);
@@ -280,7 +279,7 @@ public class VectorRoomDetailsActivity extends MXCActionBarActivity implements T
 
     // =============================================================================================
     // Tabs logic implementation
-    private void createNavigationTabs(Bundle aSavedInstanceState, int defaultSelectedTab) {
+    private void createNavigationTabs(int defaultSelectedTab) {
         int tabIndexToRestore;
 
         // Set the tabs navigation mode
@@ -318,7 +317,7 @@ public class VectorRoomDetailsActivity extends MXCActionBarActivity implements T
         mActionBar.addTab(tabToBeAdded);
 
         // set the default tab to be displayed
-        tabIndexToRestore = (null != aSavedInstanceState) ? aSavedInstanceState.getInt(KEY_STATE_CURRENT_TAB_INDEX, -1) : -1;
+        tabIndexToRestore = isFirstCreation()? -1 : getSavedInstanceState().getInt(KEY_STATE_CURRENT_TAB_INDEX, -1);
 
         if (-1 == tabIndexToRestore) {
             tabIndexToRestore = defaultSelectedTab;
@@ -432,7 +431,7 @@ public class VectorRoomDetailsActivity extends MXCActionBarActivity implements T
         if (mCurrentTabIndex == tabIndex) {
             Log.d(LOG_TAG, "## onSearchEnd() nbrMsg=" + nbrMessages);
             // stop "wait while searching" screen
-            stopWaitingView();
+            hideWaitingView();
         }
     }
 

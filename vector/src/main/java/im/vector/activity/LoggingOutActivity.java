@@ -1,6 +1,7 @@
 /*
  * Copyright 2014 OpenMarket Ltd
  * Copyright 2017 Vector Creations Ltd
+ * Copyright 2018 New Vector Ltd
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,8 +18,6 @@
 
 package im.vector.activity;
 
-import android.os.Bundle;
-
 import im.vector.R;
 
 /**
@@ -26,8 +25,12 @@ import im.vector.R;
  */
 public class LoggingOutActivity extends MXCActionBarActivity {
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.vector_activity_splash);
+    public int getLayoutRes() {
+        return R.layout.vector_activity_splash;
+    }
+
+    @Override
+    public void initUiAndData() {
+        // Nothing to do
     }
 }

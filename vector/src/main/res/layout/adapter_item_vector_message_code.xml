@@ -1,12 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
+<!-- TODO This layout is nearly the same than adapter_item_vector_message_text_emote_notice.xml. It should be removed -->
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:orientation="vertical">
 
     <include
         layout="@layout/vector_message_header"
-        android:visibility="gone" />
+        android:visibility="gone"
+        tools:visibility="visible" />
 
     <LinearLayout
         android:id="@+id/messagesAdapter_body_view"
@@ -26,7 +29,7 @@
             android:layout_height="match_parent"
             android:layout_marginLeft="5dp"
             android:layout_marginRight="5dp"
-            android:background="#f00" />
+            tools:background="@color/vector_green_color" />
 
         <LinearLayout
             android:layout_width="0dp"
@@ -89,16 +92,19 @@
                             android:id="@+id/messages_container"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:orientation="vertical"
                             android:layout_gravity="left"
                             android:layout_marginLeft="4dp"
                             android:layout_toRightOf="@id/message_adapter_e2e_icon"
-                            />
+                            android:orientation="vertical" />
+
                     </RelativeLayout>
 
                 </FrameLayout>
+
             </LinearLayout>
+
         </LinearLayout>
+
     </LinearLayout>
 
     <include

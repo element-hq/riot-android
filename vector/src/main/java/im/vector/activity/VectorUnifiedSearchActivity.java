@@ -71,10 +71,13 @@ public class VectorUnifiedSearchActivity extends VectorBaseSearchActivity implem
     private int mPosition;
 
     @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
+    public int getLayoutRes() {
+        return R.layout.activity_vector_unified_search;
+    }
 
-        setContentView(R.layout.activity_vector_unified_search);
+    @Override
+    public void initUiAndData() {
+        super.initUiAndData();
 
         if (CommonActivityUtils.shouldRestartApp(this)) {
             Log.e(LOG_TAG, "Restart the application.");
@@ -99,7 +102,7 @@ public class VectorUnifiedSearchActivity extends VectorBaseSearchActivity implem
         // UI widgets binding & init fields
         mBackgroundImageView = findViewById(R.id.search_background_imageview);
         mNoResultsTxtView = findViewById(R.id.search_no_result_textview);
-        waitingView = findViewById(R.id.search_in_progress_view);
+        setWaitingView(findViewById(R.id.search_in_progress_view));
         mLoadOldestContentView = findViewById(R.id.search_load_oldest_progress);
 
         if (null != getIntent()) {
@@ -143,12 +146,12 @@ public class VectorUnifiedSearchActivity extends VectorBaseSearchActivity implem
         if ((null != getIntent()) && getIntent().hasExtra(EXTRA_TAB_INDEX)) {
             mPosition = getIntent().getIntExtra(EXTRA_TAB_INDEX, 0);
         } else {
-            mPosition = (null != savedInstanceState) ? savedInstanceState.getInt(KEY_STATE_CURRENT_TAB_INDEX, 0) : 0;
+            mPosition = isFirstCreation() ? 0 : getSavedInstanceState().getInt(KEY_STATE_CURRENT_TAB_INDEX, 0);
         }
         mViewPager.setCurrentItem(mPosition);
 
         // restore the searched pattern
-        mPatternToSearchEditText.setText((null != savedInstanceState) ? savedInstanceState.getString(KEY_STATE_SEARCH_PATTERN, null) : null);
+        mPatternToSearchEditText.setText(isFirstCreation() ? null:  getSavedInstanceState().getString(KEY_STATE_SEARCH_PATTERN, null));
     }
 
     @Override
@@ -225,9 +228,7 @@ public class VectorUnifiedSearchActivity extends VectorBaseSearchActivity implem
      */
     private void resetUi(boolean showBackgroundImage) {
         // stop "wait while searching" screen
-        if (null != waitingView) {
-            stopWaitingView();
-        }
+        hideWaitingView();
 
         // display the background
         if (null != mBackgroundImageView) {
@@ -253,7 +254,7 @@ public class VectorUnifiedSearchActivity extends VectorBaseSearchActivity implem
         if (mViewPager.getCurrentItem() == tabIndex) {
             Log.d(LOG_TAG, "## onSearchEnd() nbrMsg=" + nbrMessages);
             // stop "wait while searching" screen
-            stopWaitingView();
+            hideWaitingView();
 
             // display the background view if there is no pending such
             mBackgroundImageView.setVisibility(!mPagerAdapter.isSearchInPeoplesFragment(tabIndex)

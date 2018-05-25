@@ -20,15 +20,11 @@ package im.vector.activity;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.os.Bundle;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
-
-import org.matrix.androidsdk.util.Log;
-
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -41,6 +37,7 @@ import org.matrix.androidsdk.rest.callback.ApiCallback;
 import org.matrix.androidsdk.rest.model.MatrixError;
 import org.matrix.androidsdk.rest.model.pid.ThirdPartyProtocol;
 import org.matrix.androidsdk.rest.model.pid.ThirdPartyProtocolInstance;
+import org.matrix.androidsdk.util.Log;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -82,13 +79,18 @@ public class RoomDirectoryPickerActivity extends RiotAppCompatActivity implement
     */
 
     @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
+    public int getLayoutRes() {
+        return R.layout.activity_room_directory_picker;
+    }
 
-        setTitle(R.string.select_room_directory);
-        setContentView(R.layout.activity_room_directory_picker);
+    @Override
+    public int getTitleRes() {
+        return R.string.select_room_directory;
+    }
 
-        waitingView = findViewById(R.id.room_directory_loading);
+    @Override
+    public void initUiAndData() {
+        setWaitingView(findViewById(R.id.room_directory_loading));
 
         Toolbar toolbar = findViewById(R.id.toolbar);
         if (toolbar != null) {
@@ -150,7 +152,7 @@ public class RoomDirectoryPickerActivity extends RiotAppCompatActivity implement
 
         mSession.getEventsApiClient().getThirdPartyServerProtocols(new ApiCallback<Map<String, ThirdPartyProtocol>>() {
             private void onDone(List<RoomDirectoryData> list) {
-                stopWaitingView();
+                hideWaitingView();
                 String userHSName = mSession.getMyUserId().substring(mSession.getMyUserId().indexOf(":") + 1);
 
                 List<String> hsNamesList = Arrays.asList(getResources().getStringArray(R.array.room_directory_servers));
@@ -238,7 +240,7 @@ public class RoomDirectoryPickerActivity extends RiotAppCompatActivity implement
 
                         private void onError(String error) {
                             Log.e(LOG_TAG, "## onSelectDirectoryServer() failed " + error);
-                            stopWaitingView();
+                            hideWaitingView();
                             Toast.makeText(RoomDirectoryPickerActivity.this, R.string.directory_server_fail_to_retrieve_server, Toast.LENGTH_LONG).show();
                         }
 

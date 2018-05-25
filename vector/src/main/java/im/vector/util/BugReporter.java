@@ -47,17 +47,16 @@ import org.matrix.androidsdk.util.Log;
 import android.text.TextUtils;
 import android.view.View;
 
-import com.squareup.okhttp.Call;
-import com.squareup.okhttp.MediaType;
-import com.squareup.okhttp.OkHttpClient;
-import com.squareup.okhttp.Request;
-import com.squareup.okhttp.RequestBody;
-import com.squareup.okhttp.Response;
-
 import im.vector.R;
 import im.vector.VectorApp;
 import im.vector.Matrix;
 import im.vector.activity.BugReportActivity;
+import okhttp3.Call;
+import okhttp3.MediaType;
+import okhttp3.OkHttpClient;
+import okhttp3.Request;
+import okhttp3.RequestBody;
+import okhttp3.Response;
 
 /**
  * BugReporter creates and sends the bug reports.
