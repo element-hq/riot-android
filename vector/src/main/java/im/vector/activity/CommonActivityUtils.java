@@ -341,7 +341,7 @@ public class CommonActivityUtils {
      * @param activity the caller activity
      */
     public static void logout(Activity activity) {
-        logout(activity, true);
+        logout(activity, true, true);
     }
 
     /**
@@ -350,7 +350,7 @@ public class CommonActivityUtils {
      * @param activity      the caller activity
      * @param goToLoginPage true to jump to the login page
      */
-    public static void logout(final Activity activity, final boolean goToLoginPage) {
+    public static void logout(final Activity activity, final boolean goToLoginPage, boolean clearSession) {
         Log.d(LOG_TAG, "## logout() : from " + activity + " goToLoginPage " + goToLoginPage);
 
         // if no activity is provided, use the application context instead.
@@ -379,51 +379,62 @@ public class CommonActivityUtils {
         // reset the GCM
         Matrix.getInstance(context).getSharedGCMRegistrationManager().resetGCMRegistration();
         // clear the preferences when the application goes to the login screen.
+
+        if (clearSession) {
+            if (goToLoginPage) {
+                Matrix.getInstance(context).getSharedGCMRegistrationManager().clearPreferences();
+
+                // display a dummy activity until the logout is done
+                if (null != activity) {
+                    // go to login page
+                    activity.startActivity(new Intent(activity, LoggingOutActivity.class));
+                    activity.finish();
+                } else {
+                    Intent intent = new Intent(context, LoggingOutActivity.class);
+                    intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                    context.startActivity(intent);
+                }
+            }
+
+            // clear credentials
+            Matrix.getInstance(context).clearSessions(context, true, new SimpleApiCallback<Void>() {
+                @Override
+                public void onSuccess(Void info) {
+                    clearData(context, goToLoginPage);
+                }
+            });
+        } else {
+            clearData(context, goToLoginPage);
+        }
+    }
+
+    private static void clearData(Context context, final boolean goToLoginPage) {
+        // ensure that corrupted values are cleared
+        Matrix.getInstance(context).getLoginStorage().clear();
+
+        // clear the tmp store list
+        Matrix.getInstance(context).clearTmpStoresList();
+
+        // reset the contacts
+        PIDsRetriever.getInstance().reset();
+        ContactsManager.getInstance().reset();
+
+        MXMediasCache.clearThumbnailsCache(context);
+
         if (goToLoginPage) {
-            // display a dummy activity until the logout is done
             Matrix.getInstance(context).getSharedGCMRegistrationManager().clearPreferences();
 
-            if (null != activity) {
+            Activity activeActivity = VectorApp.getCurrentActivity();
+            if (null != activeActivity) {
                 // go to login page
-                activity.startActivity(new Intent(activity, LoggingOutActivity.class));
-                activity.finish();
+                activeActivity.startActivity(new Intent(activeActivity, LoginActivity.class));
+                activeActivity.finish();
             } else {
-                Intent intent = new Intent(context, LoggingOutActivity.class);
+                Intent intent = new Intent(context, LoginActivity.class);
                 intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                 context.startActivity(intent);
             }
         }
-
-        // clear credentials
-        Matrix.getInstance(context).clearSessions(context, true, new SimpleApiCallback<Void>() {
-            @Override
-            public void onSuccess(Void info) {
-                // ensure that corrupted values are cleared
-                Matrix.getInstance(context).getLoginStorage().clear();
-
-                // clear the tmp store list
-                Matrix.getInstance(context).clearTmpStoresList();
-
-                // reset the contacts
-                PIDsRetriever.getInstance().reset();
-                ContactsManager.getInstance().reset();
-
-                MXMediasCache.clearThumbnailsCache(context);
-
-                if (goToLoginPage) {
-                    Activity activeActivity = VectorApp.getCurrentActivity();
-                    if (null != activeActivity) {
-                        // go to login page
-                        activeActivity.startActivity(new Intent(activeActivity, LoginActivity.class));
-                        activeActivity.finish();
-                    } else {
-                        Intent intent = new Intent(context, LoginActivity.class);
-                        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-                        context.startActivity(intent);
-                    }
-                }
-            }
-        });
     }
 
     /**

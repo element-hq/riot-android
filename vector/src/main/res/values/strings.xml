@@ -957,4 +957,11 @@
     <string name="dialog_user_consent_content">To continue using the %1$s homeserver you must review and agree to the terms and conditions.</string>
     <string name="dialog_user_consent_submit">Review now</string>
 
+    <!-- Deactivate account screen -->
+    <string name="deactivate_account_title">Deactivate Account</string>
+    <string name="deactivate_account_content">This will make your account permanently unusable. You will not be able to log in, and no one will be able to re-register the same user ID. This will cause your account to leave all rooms it is participating in, and it will remove your account details from your identity server. <b>This action is irreversible</b>.\n\nDeactivating your account <b>does not by default cause us to forget messages you have sent</b>. If you would like us to forget your messages, please tick the box below.\n\nMessage visibility in Matrix is similar to email. Our forgetting your messages means that messages you have sent will not be shared with any new or unregistered users, but registered users who already have access to these messages will still have access to their copy.</string>
+    <string name="deactivate_account_delete_checkbox">Please forget all messages I have sent when my account is deactivated (Warning: this will cause future users to see an incomplete view of conversations)</string>
+    <string name="deactivate_account_prompt_password">To continue, please enter your password:</string>
+    <string name="deactivate_account_submit">Deactivate Account</string>
+
 </resources>

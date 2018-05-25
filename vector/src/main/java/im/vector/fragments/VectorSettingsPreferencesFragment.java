@@ -102,6 +102,7 @@ import im.vector.R;
 import im.vector.VectorApp;
 import im.vector.activity.CommonActivityUtils;
 import im.vector.activity.CountryPickerActivity;
+import im.vector.activity.DeactivateAccountActivity;
 import im.vector.activity.LanguagePickerActivity;
 import im.vector.activity.NotificationPrivacyActivity;
 import im.vector.activity.PhoneNumberAdditionActivity;
@@ -746,7 +747,7 @@ public class VectorSettingsPreferencesFragment extends PreferenceFragment implem
                                 @Override
                                 public void onClick(DialogInterface dialog, int which) {
                                     dialog.dismiss();
-                                    CommonActivityUtils.logout(getActivity(), true);
+                                    CommonActivityUtils.logout(getActivity());
 
                                 }
                             })
@@ -867,7 +868,8 @@ public class VectorSettingsPreferencesFragment extends PreferenceFragment implem
             deactivateAccountPref.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
                 @Override
                 public boolean onPreferenceClick(Preference preference) {
-                    Toast.makeText(getActivity(), "todo", Toast.LENGTH_SHORT).show();
+                    startActivity(DeactivateAccountActivity.Companion.getIntent(getActivity()));
+
                     return false;
                 }
             });
