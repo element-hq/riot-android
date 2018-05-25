@@ -1384,8 +1384,8 @@ public class VectorSettingsPreferencesFragment extends PreferenceFragment implem
                             getActivity().runOnUiThread(new Runnable() {
                                 @Override
                                 public void run() {
-                                    ((RiotAppCompatActivity) getActivity()).getConsentNotGivenHelper().displayDialog(e);
                                     hideLoadingView();
+                                    ((RiotAppCompatActivity) getActivity()).getConsentNotGivenHelper().displayDialog(e);
                                 }
                             });
                         }
@@ -1521,8 +1521,8 @@ public class VectorSettingsPreferencesFragment extends PreferenceFragment implem
                                                             getActivity().runOnUiThread(new Runnable() {
                                                                 @Override
                                                                 public void run() {
-                                                                    ((RiotAppCompatActivity) getActivity()).getConsentNotGivenHelper().displayDialog(e);
                                                                     hideLoadingView();
+                                                                    ((RiotAppCompatActivity) getActivity()).getConsentNotGivenHelper().displayDialog(e);
                                                                 }
                                                             });
                                                         }
