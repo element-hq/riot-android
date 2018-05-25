@@ -22,11 +22,11 @@ import android.widget.CheckBox
 import android.widget.EditText
 import butterknife.BindView
 import butterknife.OnClick
-import com.google.gson.JsonObject
 import im.vector.Matrix
 import im.vector.R
 import org.matrix.androidsdk.MXSession
 import org.matrix.androidsdk.rest.callback.SimpleApiCallback
+import org.matrix.androidsdk.rest.client.LoginRestClient
 import org.matrix.androidsdk.rest.model.MatrixError
 import java.lang.Exception
 
@@ -86,11 +86,12 @@ class DeactivateAccountActivity : RiotAppCompatActivity() {
 
         showWaitingView()
 
-        session.profileApiClient.deactivateAccount(session.myUserId,
+        session.profileApiClient.deactivateAccount(LoginRestClient.LOGIN_FLOW_TYPE_PASSWORD,
+                session.myUserId,
                 password,
                 eraseCheckBox.isChecked,
-                object : SimpleApiCallback<JsonObject>(this) {
-                    override fun onSuccess(info: JsonObject) {
+                object : SimpleApiCallback<Void>(this) {
+                    override fun onSuccess(info: Void) {
                         hideWaitingView()
 
                         CommonActivityUtils.logout(this@DeactivateAccountActivity, true, false)
