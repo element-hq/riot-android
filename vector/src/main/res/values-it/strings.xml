@@ -926,4 +926,23 @@ Permetti a Riot di accedere ai tuoi contatti?</string>
 	<item quantity="other">%d cambi tra i membri</item>
 </plurals>
 
+    <string name="settings_notification_privacy_warning">Riot.im funziona in secondo piano per tenere privato il contenuto delle notifiche. Puoi cambiare questa opzione per ridurre il consumo di batteria.</string>
+    <string name="settings_notification_privacy">Privacy notifiche</string>
+    <string name="settings_notification_privacy_normal">Normale</string>
+    <string name="settings_notification_privacy_power_saving">Opzioni risparmio energetico</string>
+    <string name="settings_notification_privacy_low_detail">Notifiche poco dettagliate</string>
+    <string name="settings_notification_privacy_reduced">Privacy ridotta</string>
+    <string name="settings_notification_privacy_need_permission">L\'app richiede l\'autorizzazione di funzionare in secondo piano</string>
+    <string name="settings_notification_privacy_no_permission">L\'app <b>non</b> richiede l\'autorizzazione di funzionare in secondo piano</string>
+    <string name="settings_notification_privacy_gcm">• Le notifiche vengono inviate via Google Cloud Messaging</string>
+    <string name="settings_notification_privacy_metadata">• Le notifiche contengono solo metadati</string>
+    <string name="settings_notification_privacy_secure_message_content">• Il contenuto della notifica è <b>conservato in modo sicuro direttamente dall\'homeserver di Matrix</b></string>
+    <string name="settings_notification_privacy_nosecure_message_content">• Le notifiche contengono <b>metadati e messaggi</b></string>
+    <string name="settings_notification_privacy_message_content_not_shown">• Le notifiche <b>non mostreranno il contenuto dei messaggi</b></string>
+
+    <string name="startup_notification_privacy_title">Privacy notifiche</string>
+    <string name="startup_notification_privacy_message">Riot può funzionare in secondo piano per gestire le tue notifiche in modo sicuro e privato (può incidere sulla batteria).</string>
+    <string name="startup_notification_privacy_button_grant">Concedi l\'autorizzazione</string>
+    <string name="startup_notification_privacy_button_other">Scegli un\'altra opzione</string>
+
     </resources>

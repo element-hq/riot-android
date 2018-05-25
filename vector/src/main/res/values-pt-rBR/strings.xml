@@ -783,7 +783,7 @@ Você autoriza o Riot a acessar seus contatos?</string>
     <string name="settings_opt_out_of_analytics">Não enviar dados estatísticos de uso</string>
     <string name="settings_opt_out_of_analytics_summary">Riot coleta dados anônimos para podermos melhorar o aplicativo.</string>
 
-    <string name="settings_flair">Flair</string>
+    <string name="settings_flair">Faro</string>
 
     <string name="room_settings_room_notifications_title">Notificações</string>
     <string name="room_settings_no_flair">" Esta sala não está mostrando Flairs para nenhuma comunidade"</string>
@@ -926,4 +926,12 @@ Você autoriza o Riot a acessar seus contatos?</string>
     <string name="notice_avatar">Imagem de notificação</string>
     <string name="avatar">Imagem de perfil</string>
 
-</resources>
+<string name="send_bug_report_rage_shake">Espumando de raiva para reportar bug</string>
+
+    <string name="settings_notification_privacy_normal">Normal</string>
+    <string name="settings_notification_privacy_power_saving">Opções de economia de energia</string>
+    <string name="settings_notification_privacy_low_detail">Notificações de baixo detalhe</string>
+    <string name="settings_notification_privacy_reduced">Privacidade reduzida</string>
+    <string name="settings_notification_privacy_need_permission">O app necessita de permissão para rodar em segundo plano</string>
+    <string name="settings_notification_privacy_no_permission">Os aplicativos <b>não</b> precisam de permissão para rodar em segundo plano</string>
+    </resources>
