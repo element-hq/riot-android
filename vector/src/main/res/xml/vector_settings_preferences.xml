@@ -9,9 +9,7 @@
 
         <im.vector.preference.UserAvatarPreference
             android:key="SETTINGS_PROFILE_PICTURE_PREFERENCE_KEY"
-            android:title="@string/settings_profile_picture">
-
-        </im.vector.preference.UserAvatarPreference>
+            android:title="@string/settings_profile_picture"/>
 
         <EditTextPreference
             android:focusable="true"
@@ -26,9 +24,7 @@
 
     </PreferenceCategory>
 
-    <im.vector.preference.VectorDividerCategory
-        android:key="SETTINGS_CONTACT_DIVIDER_KEYS"
-        android:title="settings_contact_divider" />
+    <im.vector.preference.VectorDividerCategory />
 
     <PreferenceCategory
         android:key="SETTINGS_CONTACT_PREFERENCE_KEYS"
@@ -42,6 +38,7 @@
             android:dialogTitle="@string/settings_select_country"
             android:key="SETTINGS_CONTACTS_PHONEBOOK_COUNTRY_PREFERENCE_KEY"
             android:title="@string/settings_contacts_phonebook_country" />
+
     </PreferenceCategory>
 
     <im.vector.preference.VectorDividerCategory />
@@ -94,8 +91,8 @@
             android:title="@string/settings_disable_markdown" />
 
         <im.vector.preference.VectorSwitchPreference
-            android:title="@string/settings_vibrate_on_mention"
-            android:key="SETTINGS_VIBRATE_ON_MENTION_KEY"/>
+            android:key="SETTINGS_VIBRATE_ON_MENTION_KEY"
+            android:title="@string/settings_vibrate_on_mention" />
 
         <ListPreference
             android:entries="@array/theme_description"
@@ -128,10 +125,7 @@
 
     <PreferenceCategory
         android:key="SETTINGS_GROUPS_FLAIR_KEY"
-        android:title="@string/settings_flair">
-
-
-    </PreferenceCategory>
+        android:title="@string/settings_flair"/>
 
     <im.vector.preference.VectorDividerCategory />
 
@@ -200,8 +194,7 @@
 
     </PreferenceCategory>
 
-    <im.vector.preference.VectorDividerCategory
-        android:key="SETTINGS_BACKGROUND_SYNC_DIVIDER_PREFERENCE_KEY"/>
+    <im.vector.preference.VectorDividerCategory android:key="SETTINGS_BACKGROUND_SYNC_DIVIDER_PREFERENCE_KEY" />
 
     <PreferenceCategory
         android:key="SETTINGS_BACKGROUND_SYNC_PREFERENCE_KEY"
@@ -235,7 +228,7 @@
 
     <PreferenceCategory
         android:key="SETTINGS_NOTIFICATIONS_TARGETS_PREFERENCE_KEY"
-        android:title="@string/settings_notifications_targets"></PreferenceCategory>
+        android:title="@string/settings_notifications_targets" />
 
     <im.vector.preference.VectorDividerCategory
         android:key="SETTINGS_IGNORE_USERS_DIVIDER_PREFERENCE_KEY"
@@ -243,7 +236,7 @@
 
     <PreferenceCategory
         android:key="SETTINGS_IGNORED_USERS_PREFERENCE_KEY"
-        android:title="@string/settings_ignored_users"></PreferenceCategory>
+        android:title="@string/settings_ignored_users" />
 
     <im.vector.preference.VectorDividerCategory />
 
@@ -322,12 +315,11 @@
     </PreferenceCategory>
 
     <im.vector.preference.VectorDividerCategory android:key="SETTINGS_CRYPTOGRAPHY_DIVIDER_PREFERENCE_KEY" />
-    <!-- ************************************************ -->
 
     <!-- devices list: device ids + device names -->
     <PreferenceCategory
         android:key="SETTINGS_DEVICES_LIST_PREFERENCE_KEY"
-        android:title="@string/settings_devices_list"></PreferenceCategory>
+        android:title="@string/settings_devices_list" />
 
     <im.vector.preference.VectorDividerCategory android:key="SETTINGS_DEVICES_DIVIDER_PREFERENCE_KEY" />
 
@@ -414,6 +406,18 @@
         <im.vector.preference.VectorCustomActionEditTextPreference
             android:key="SETTINGS_CLEAR_CACHE_PREFERENCE_KEY"
             android:title="@string/settings_clear_cache" />
+
+    </PreferenceCategory>
+
+    <im.vector.preference.VectorDividerCategory />
+
+    <PreferenceCategory
+        android:key="SETTINGS_OTHERS_PREFERENCE_KEY"
+        android:title="@string/settings_deactivate_account_section">
+
+        <im.vector.preference.VectorCustomActionEditTextPreference
+            android:key="SETTINGS_DEACTIVATE_ACCOUNT_KEY"
+            android:title="@string/settings_deactivate_my_account" />
 
     </PreferenceCategory>
 

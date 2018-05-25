@@ -102,6 +102,7 @@ import im.vector.R;
 import im.vector.VectorApp;
 import im.vector.activity.CommonActivityUtils;
 import im.vector.activity.CountryPickerActivity;
+import im.vector.activity.DeactivateAccountActivity;
 import im.vector.activity.LanguagePickerActivity;
 import im.vector.activity.NotificationPrivacyActivity;
 import im.vector.activity.PhoneNumberAdditionActivity;
@@ -385,7 +386,7 @@ public class VectorSettingsPreferencesFragment extends PreferenceFragment implem
         // third party notice
         EditTextPreference thirdPartyNotices = (EditTextPreference) findPreference(PreferencesManager.SETTINGS_THIRD_PARTY_NOTICES_PREFERENCE_KEY);
 
-        if (null != termConditionsPreference) {
+        if (null != thirdPartyNotices) {
             thirdPartyNotices.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
                 @Override
                 public boolean onPreferenceClick(Preference preference) {
@@ -398,7 +399,7 @@ public class VectorSettingsPreferencesFragment extends PreferenceFragment implem
         // copyright
         EditTextPreference copyrightNotices = (EditTextPreference) findPreference(PreferencesManager.SETTINGS_COPYRIGHT_PREFERENCE_KEY);
 
-        if (null != termConditionsPreference) {
+        if (null != copyrightNotices) {
             copyrightNotices.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
                 @Override
                 public boolean onPreferenceClick(Preference preference) {
@@ -746,7 +747,7 @@ public class VectorSettingsPreferencesFragment extends PreferenceFragment implem
                                 @Override
                                 public void onClick(DialogInterface dialog, int which) {
                                     dialog.dismiss();
-                                    CommonActivityUtils.logout(getActivity(), true);
+                                    CommonActivityUtils.logout(getActivity());
 
                                 }
                             })
@@ -859,6 +860,20 @@ public class VectorSettingsPreferencesFragment extends PreferenceFragment implem
                 return true;
             }
         });
+
+        // deactivate account
+        EditTextPreference deactivateAccountPref = (EditTextPreference) findPreference(PreferencesManager.SETTINGS_DEACTIVATE_ACCOUNT_KEY);
+
+        if (null != deactivateAccountPref) {
+            deactivateAccountPref.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
+                @Override
+                public boolean onPreferenceClick(Preference preference) {
+                    startActivity(DeactivateAccountActivity.Companion.getIntent(getActivity()));
+
+                    return false;
+                }
+            });
+        }
 
         addButtons();
         refreshPushersList();
@@ -1053,7 +1068,9 @@ public class VectorSettingsPreferencesFragment extends PreferenceFragment implem
 
         // If notifications are disabled for the current user account or for the current user device
         // The others notifications settings have to be disable too
-        boolean areNotifAllowed = rules.findDefaultRule(BingRule.RULE_ID_DISABLE_ALL).isEnabled;
+        boolean areNotifAllowed = rules != null
+                && rules.findDefaultRule(BingRule.RULE_ID_DISABLE_ALL) != null
+                && rules.findDefaultRule(BingRule.RULE_ID_DISABLE_ALL).isEnabled;
 
         Preference notificationSoundPreference = preferenceManager.findPreference(PreferencesManager.SETTINGS_NOTIFICATION_RINGTONE_SELECTION_PREFERENCE_KEY);
         notificationSoundPreference.setEnabled(!areNotifAllowed && gcmMgr.areDeviceNotificationsAllowed());
