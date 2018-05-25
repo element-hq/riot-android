@@ -1066,7 +1066,9 @@ public class VectorSettingsPreferencesFragment extends PreferenceFragment implem
 
         // If notifications are disabled for the current user account or for the current user device
         // The others notifications settings have to be disable too
-        boolean areNotifAllowed = rules.findDefaultRule(BingRule.RULE_ID_DISABLE_ALL).isEnabled;
+        boolean areNotifAllowed = rules != null
+                && rules.findDefaultRule(BingRule.RULE_ID_DISABLE_ALL) != null
+                && rules.findDefaultRule(BingRule.RULE_ID_DISABLE_ALL).isEnabled;
 
         Preference notificationSoundPreference = preferenceManager.findPreference(PreferencesManager.SETTINGS_NOTIFICATION_RINGTONE_SELECTION_PREFERENCE_KEY);
         notificationSoundPreference.setEnabled(!areNotifAllowed && gcmMgr.areDeviceNotificationsAllowed());
