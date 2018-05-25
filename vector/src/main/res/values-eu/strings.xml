@@ -744,7 +744,6 @@ Zifratutako mezuak ez dira zifratzea oraindik ezarrita ez duten beste gailuetan 
     <string name="settings_opt_out_of_analytics">Ez hartu parte analitiketan</string>
     <string name="settings_opt_out_of_analytics_summary">Riotek analitika anonimoak biltzen ditu aplikazioa hobetzeko.</string>
 
-
     <string name="settings_labs_native_camera">Erabili kamera natiboa</string>
 
     // share keys
