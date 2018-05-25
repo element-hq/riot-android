@@ -720,27 +720,27 @@ public class VectorRoomActivity extends MXCActionBarActivity implements MatrixMe
                     if (PreferencesManager.useNativeCamera(VectorRoomActivity.this)) {
                         messages = new Integer[]{
                                 R.string.option_send_files,
-                                //R.string.option_send_sticker,
+                                R.string.option_send_sticker,
                                 R.string.option_take_photo,
                                 R.string.option_take_video,
                         };
 
                         icons = new Integer[]{
                                 R.drawable.ic_material_file,
-                                //R.drawable.ic_send_sticker,
+                                R.drawable.ic_send_sticker,
                                 R.drawable.ic_material_camera,
                                 R.drawable.ic_material_videocam,
                         };
                     } else {
                         messages = new Integer[]{
                                 R.string.option_send_files,
-                                //R.string.option_send_sticker,
+                                R.string.option_send_sticker,
                                 R.string.option_take_photo_video,
                         };
 
                         icons = new Integer[]{
                                 R.drawable.ic_material_file,
-                                //R.drawable.ic_send_sticker,
+                                R.drawable.ic_send_sticker,
                                 R.drawable.ic_material_camera,
                         };
                     }
