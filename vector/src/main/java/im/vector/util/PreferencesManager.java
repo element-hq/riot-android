@@ -208,7 +208,7 @@ public class PreferencesManager {
             editor.remove(key);
         }
 
-        editor.commit();
+        editor.apply();
     }
 
     /**
@@ -227,10 +227,10 @@ public class PreferencesManager {
      * @param context the context
      */
     public static void setDidAskUserToIgnoreBatteryOptimizations(Context context, boolean asked) {
-        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(context);
-        SharedPreferences.Editor editor = preferences.edit();
-        editor.putBoolean(DID_ASK_TO_IGNORE_BATTERY_OPTIMIZATIONS_KEY, asked);
-        editor.commit();
+        PreferenceManager.getDefaultSharedPreferences(context)
+                .edit()
+                .putBoolean(DID_ASK_TO_IGNORE_BATTERY_OPTIMIZATIONS_KEY, asked)
+                .apply();
     }
 
     /**
@@ -300,8 +300,7 @@ public class PreferencesManager {
      * @param uri     the new notification ringtone
      */
     public static void setNotificationRingTone(Context context, Uri uri) {
-        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(context);
-        SharedPreferences.Editor editor = preferences.edit();
+        SharedPreferences.Editor editor = PreferenceManager.getDefaultSharedPreferences(context).edit();
 
         String value = "";
 
@@ -317,7 +316,7 @@ public class PreferencesManager {
         }
 
         editor.putString(SETTINGS_NOTIFICATION_RINGTONE_PREFERENCE_KEY, value);
-        editor.commit();
+        editor.apply();
     }
 
     /**
@@ -440,10 +439,10 @@ public class PreferencesManager {
      * @param value   true to start the application on boot
      */
     public static void setAutoStartOnBoot(Context context, boolean value) {
-        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(context);
-        SharedPreferences.Editor editor = preferences.edit();
-        editor.putBoolean(SETTINGS_START_ON_BOOT_PREFERENCE_KEY, value);
-        editor.commit();
+        PreferenceManager.getDefaultSharedPreferences(context)
+                .edit()
+                .putBoolean(SETTINGS_START_ON_BOOT_PREFERENCE_KEY, value)
+                .apply();
     }
 
     /**
@@ -477,10 +476,10 @@ public class PreferencesManager {
      * @param index   the selected period index
      */
     public static void setSelectedMediasSavingPeriod(Context context, int index) {
-        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(context);
-        SharedPreferences.Editor editor = preferences.edit();
-        editor.putInt(SETTINGS_MEDIA_SAVING_PERIOD_SELECTED_KEY, index);
-        editor.commit();
+        PreferenceManager.getDefaultSharedPreferences(context)
+                .edit()
+                .putInt(SETTINGS_MEDIA_SAVING_PERIOD_SELECTED_KEY, index)
+                .apply();
     }
 
     /**
@@ -536,24 +535,24 @@ public class PreferencesManager {
         SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(context);
 
         if (preferences.contains(context.getString(R.string.settings_pin_missed_notifications))) {
-            SharedPreferences.Editor editor = preferences.edit();
-            editor.putBoolean(SETTINGS_PIN_MISSED_NOTIFICATIONS_PREFERENCE_KEY, preferences.getBoolean(context.getString(R.string.settings_pin_missed_notifications), false));
-            editor.remove(context.getString(R.string.settings_pin_missed_notifications));
-            editor.commit();
+            preferences.edit()
+                    .putBoolean(SETTINGS_PIN_MISSED_NOTIFICATIONS_PREFERENCE_KEY, preferences.getBoolean(context.getString(R.string.settings_pin_missed_notifications), false))
+                    .remove(context.getString(R.string.settings_pin_missed_notifications))
+                    .apply();
         }
 
         if (preferences.contains(context.getString(R.string.settings_pin_unread_messages))) {
-            SharedPreferences.Editor editor = preferences.edit();
-            editor.putBoolean(SETTINGS_PIN_UNREAD_MESSAGES_PREFERENCE_KEY, preferences.getBoolean(context.getString(R.string.settings_pin_unread_messages), false));
-            editor.remove(context.getString(R.string.settings_pin_unread_messages));
-            editor.commit();
+            preferences.edit()
+                    .putBoolean(SETTINGS_PIN_UNREAD_MESSAGES_PREFERENCE_KEY, preferences.getBoolean(context.getString(R.string.settings_pin_unread_messages), false))
+                    .remove(context.getString(R.string.settings_pin_unread_messages))
+                    .apply();
         }
 
         if (preferences.contains("MARKDOWN_PREFERENCE_KEY")) {
-            SharedPreferences.Editor editor = preferences.edit();
-            editor.putBoolean(SETTINGS_DISABLE_MARKDOWN_KEY, !preferences.getBoolean("MARKDOWN_PREFERENCE_KEY", false));
-            editor.remove("MARKDOWN_PREFERENCE_KEY");
-            editor.commit();
+            preferences.edit()
+                    .putBoolean(SETTINGS_DISABLE_MARKDOWN_KEY, !preferences.getBoolean("MARKDOWN_PREFERENCE_KEY", false))
+                    .remove("MARKDOWN_PREFERENCE_KEY")
+                    .apply();
         }
     }
 
@@ -574,10 +573,10 @@ public class PreferencesManager {
      * @param isEnabled true to enable the markdown
      */
     public static void setMarkdownEnabled(Context context, boolean isEnabled) {
-        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(context);
-        SharedPreferences.Editor editor = preferences.edit();
-        editor.putBoolean(SETTINGS_DISABLE_MARKDOWN_KEY, !isEnabled);
-        editor.commit();
+        PreferenceManager.getDefaultSharedPreferences(context)
+                .edit()
+                .putBoolean(SETTINGS_DISABLE_MARKDOWN_KEY, !isEnabled)
+                .apply();
     }
 
     /**
@@ -651,15 +650,15 @@ public class PreferencesManager {
     }
 
     /**
-     * Update the analytics tracking ask question status.
+     * To call if the user has been asked for analytics tracking.
      *
      * @param context   the context
      */
-    public static void setDidAskToUseAnalyticsStatus(Context context) {
-        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(context);
-        SharedPreferences.Editor editor = preferences.edit();
-        editor.putBoolean(DID_ASK_TO_USE_ANALYTICS_TRACKING_KEY, true);
-        editor.apply();
+    public static void setDidAskToUseAnalytics(Context context) {
+        PreferenceManager.getDefaultSharedPreferences(context)
+                .edit()
+                .putBoolean(DID_ASK_TO_USE_ANALYTICS_TRACKING_KEY, true)
+                .apply();
     }
 
     /**
@@ -673,16 +672,16 @@ public class PreferencesManager {
     }
 
     /**
-     * Update the analytics tracking  status.
+     * Enable or disable the analytics tracking.
      *
      * @param context   the context
      * @param useAnalytics true to enable the analytics tracking
      */
     public static void setUseAnalytics(Context context, boolean useAnalytics) {
-        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(context);
-        SharedPreferences.Editor editor = preferences.edit();
-        editor.putBoolean(SETTINGS_USE_ANALYTICS_KEY, useAnalytics);
-        editor.apply();
+        PreferenceManager.getDefaultSharedPreferences(context)
+                .edit()
+                .putBoolean(SETTINGS_USE_ANALYTICS_KEY, useAnalytics)
+                .apply();
     }
 
     /**
@@ -702,10 +701,10 @@ public class PreferencesManager {
      * @param isEnabled true to enable the rage shake
      */
     public static void setUseRageshake(Context context, boolean isEnabled) {
-        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(context);
-        SharedPreferences.Editor editor = preferences.edit();
-        editor.putBoolean(SETTINGS_USE_RAGE_SHAKE_KEY, isEnabled);
-        editor.commit();
+        PreferenceManager.getDefaultSharedPreferences(context)
+                .edit()
+                .putBoolean(SETTINGS_USE_RAGE_SHAKE_KEY, isEnabled)
+                .apply();
     }
 
     /**

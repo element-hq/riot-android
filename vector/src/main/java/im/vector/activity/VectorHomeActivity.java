@@ -673,7 +673,7 @@ public class VectorHomeActivity extends RiotAppCompatActivity implements SearchV
 
     private void setAnalyticsAuthorization(boolean useAnalytics) {
         PreferencesManager.setUseAnalytics(this, useAnalytics);
-        PreferencesManager.setDidAskToUseAnalyticsStatus(this);
+        PreferencesManager.setDidAskToUseAnalytics(this);
     }
 
     @Override
