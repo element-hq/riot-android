@@ -1,3 +1,23 @@
+Changes in Riot 0.8.9 (2018-05-25)
+===================================================
+
+Improvements:
+ * GDPR compliance:
+    * Manage M_CONSENT_NOT_GIVEN matrix error
+    * Sending analytics is no opt-in
+    * Possibility to deactivate account (redirected to the web client for the moment)
+ * Reply to feature: display only
+
+Bug Fix:
+ * Background sync cannot be enabled on F-Droid Riot app (#2196)
+
+Build:
+ * Kotlin is enabled on the project
+ * Travis CI has been enabled to build PRs
+
+Note:
+ * Sending stickers is not enabled yet
+
 Changes in Riot 0.8.8 (2018-05-13)
 ===================================================
 
