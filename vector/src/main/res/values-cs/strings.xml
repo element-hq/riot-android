@@ -123,7 +123,7 @@ Zvolte export, chcete-li je zálohovat, než se odhlásíte.</string>
     <string name="send_bug_report_app_crashed">Aplikace naposled spadla. Přejete si nahlásit chybu?</string>
     <string name="send_bug_report_sent">Chyba byla úspešně odeslána</string>
     <string name="send_bug_report_failed">Selhalo odeslání hlášení o chybě (%s)</string>
-    <string name="send_bug_report_progress">Postup</string>
+    <string name="send_bug_report_progress">Postup (%s%%)</string>
 
     <string name="send_files_in">Odeslat do</string>
     <string name="read_receipt">Přečíst</string>
@@ -193,7 +193,7 @@ Zvolte export, chcete-li je zálohovat, než se odhlásíte.</string>
     <string name="auth_reset_password_message">K resetování hesla vložte e-mailovou adresu spojenou s vaším účtem:</string>
     <string name="auth_reset_password_missing_email">Musíte zadat emailovou adresu spojenou s vaším účtem.</string>
     <string name="auth_reset_password_missing_password">Musíte zadat nové heslo.</string>
-    <string name="auth_reset_password_email_validation_message">Na adresu %(emailAddress)s byla odeslána zpráva. Potom, co přejdete na odkaz z této zprávy, klikněte níže.</string>
+    <string name="auth_reset_password_email_validation_message">Na adresu %s byla odeslána zpráva. Potom, co přejdete na odkaz z této zprávy, klikněte níže.</string>
     <string name="auth_reset_password_error_unauthorized">E-mailovou adresu se nepodařilo ověřit. Přesvědčte se, že jste kliknul/a na zaslaný odkaz</string>
     <string name="login_error_must_start_http">URL musí začínat s http[s]://</string>
     <string name="login_error_network_error">Nelze se příhlásit: Síťová chyba</string>
