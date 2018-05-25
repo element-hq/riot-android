@@ -95,7 +95,7 @@ class DeactivateAccountActivity : RiotAppCompatActivity() {
                         hideWaitingView()
 
                         // FIXME this is not working well
-                        CommonActivityUtils.logout(this@DeactivateAccountActivity, true, false)
+                        // CommonActivityUtils.logout(this@DeactivateAccountActivity, true, false)
                     }
 
                     override fun onMatrixError(e: MatrixError) {
