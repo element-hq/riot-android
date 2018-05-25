@@ -945,19 +945,17 @@ public class VectorRoomDetailsMembersFragment extends VectorBaseFragment {
 
                                     @Override
                                     public void onMatrixError(final MatrixError e) {
-                                        if (null != getRiotActivity()) {
+                                        if (getRiotActivity() != null && MatrixError.M_CONSENT_NOT_GIVEN.equals(e.errcode)) {
                                             getRiotActivity().runOnUiThread(new Runnable() {
                                                 @Override
                                                 public void run() {
-                                                    if (getRiotActivity() != null && MatrixError.M_CONSENT_NOT_GIVEN.equals(e.errcode)) {
-                                                        mProgressView.setVisibility(View.GONE);
+                                                    mProgressView.setVisibility(View.GONE);
 
-                                                        getRiotActivity().getConsentNotGivenHelper().displayDialog(e);
-                                                    } else {
-                                                        onError(e.getLocalizedMessage());
-                                                    }
+                                                    getRiotActivity().getConsentNotGivenHelper().displayDialog(e);
                                                 }
                                             });
+                                        } else {
+                                            onError(e.getLocalizedMessage());
                                         }
                                     }
 
