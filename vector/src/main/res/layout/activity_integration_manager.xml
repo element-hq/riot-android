@@ -1,17 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
-
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:id="@+id/call_layout"
+<merge xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@android:color/black">
 
     <WebView
-        android:id="@+id/integration_webview"
+        android:id="@+id/widget_webview"
         android:layout_width="match_parent"
         android:layout_height="match_parent" />
 
-    <RelativeLayout
+    <FrameLayout
         android:id="@+id/integration_progress_layout"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
@@ -19,8 +17,9 @@
         <ProgressBar
             android:layout_width="40dp"
             android:layout_height="40dp"
-            android:layout_centerHorizontal="true"
-            android:layout_centerVertical="true"
+            android:layout_gravity="center"
             android:indeterminate="true" />
-    </RelativeLayout>
-</RelativeLayout>
+
+    </FrameLayout>
+
+</merge>

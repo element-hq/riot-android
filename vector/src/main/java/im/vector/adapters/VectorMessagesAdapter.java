@@ -27,13 +27,16 @@ import android.graphics.drawable.Drawable;
 import android.os.Build;
 import android.os.Handler;
 import android.os.Looper;
+import android.support.annotation.Nullable;
 import android.support.v4.content.ContextCompat;
+import android.text.Html;
 import android.text.Spannable;
 import android.text.SpannableString;
 import android.text.SpannableStringBuilder;
 import android.text.TextUtils;
 import android.text.format.DateUtils;
 import android.text.style.BackgroundColorSpan;
+import android.text.style.QuoteSpan;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -55,6 +58,7 @@ import org.matrix.androidsdk.crypto.data.MXDeviceInfo;
 import org.matrix.androidsdk.data.Room;
 import org.matrix.androidsdk.data.RoomState;
 import org.matrix.androidsdk.db.MXMediasCache;
+import org.matrix.androidsdk.interfaces.HtmlToolbox;
 import org.matrix.androidsdk.rest.model.crypto.EncryptedEventContent;
 import org.matrix.androidsdk.rest.model.Event;
 import org.matrix.androidsdk.rest.model.EventContent;
@@ -67,6 +71,7 @@ import org.matrix.androidsdk.rest.model.message.StickerMessage;
 import org.matrix.androidsdk.util.EventDisplay;
 import org.matrix.androidsdk.util.JsonUtils;
 import org.matrix.androidsdk.util.Log;
+import org.matrix.androidsdk.view.HtmlTagHandler;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
@@ -88,6 +93,7 @@ import im.vector.R;
 import im.vector.VectorApp;
 import im.vector.activity.CommonActivityUtils;
 import im.vector.listeners.IMessagesAdapterActionsListener;
+import im.vector.ui.VectorQuoteSpan;
 import im.vector.util.MatrixLinkMovementMethod;
 import im.vector.util.MatrixURLSpan;
 import im.vector.util.EventGroup;
@@ -165,7 +171,7 @@ public class VectorMessagesAdapter extends AbstractMessagesAdapter {
     private final int mSendingMessageTextColor;
     private final int mEncryptingMessageTextColor;
     private final int mHighlightMessageTextColor;
-    int mSearchHighlightMessageTextColor;
+    protected BackgroundColorSpan mBackgroundColorSpan;
 
     private final int mMaxImageWidth;
     private final int mMaxImageHeight;
@@ -188,7 +194,7 @@ public class VectorMessagesAdapter extends AbstractMessagesAdapter {
     private MatrixLinkMovementMethod mLinkMovementMethod;
 
     private final VectorMessagesAdapterMediasHelper mMediasHelper;
-    final VectorMessagesAdapterHelper mHelper;
+    final protected VectorMessagesAdapterHelper mHelper;
 
     private final Set<String> mHiddenEventIds = new HashSet<>();
 
@@ -202,6 +208,44 @@ public class VectorMessagesAdapter extends AbstractMessagesAdapter {
 
     // the color depends in the theme
     private final Drawable mPadlockDrawable;
+
+    private VectorImageGetter mImageGetter;
+
+    private HtmlToolbox mHtmlToolbox = new HtmlToolbox() {
+        @Override
+        public String convert(String html) {
+            String sanitised = mHelper.getSanitisedHtml(html);
+
+            if (sanitised != null) {
+                return sanitised;
+            }
+
+            return html;
+        }
+
+        @Nullable
+        @Override
+        public Html.ImageGetter getImageGetter() {
+            return mImageGetter;
+        }
+
+        @Nullable
+        @Override
+        public Html.TagHandler getTagHandler(String html) {
+            // the links are not yet supported by ConsoleHtmlTagHandler
+            // the markdown tables are not properly supported
+            boolean isCustomizable = !html.contains("<a href=") && !html.contains("<table>");
+
+            if (isCustomizable) {
+                final HtmlTagHandler htmlTagHandler = new HtmlTagHandler();
+                htmlTagHandler.mContext = mContext;
+                htmlTagHandler.setCodeBlockBackgroundColor(ThemeUtils.getColor(mContext, R.attr.markdown_block_background_color));
+                return htmlTagHandler;
+            }
+
+            return null;
+        }
+    };
 
     /**
      * Creates a messages adapter with the default layouts.
@@ -227,21 +271,21 @@ public class VectorMessagesAdapter extends AbstractMessagesAdapter {
      * Expanded constructor.
      * each message type has its own layout.
      *
-     * @param session                 the dedicated layout.
-     * @param context                 the context
-     * @param textResLayoutId         the text message layout.
-     * @param imageResLayoutId        the image message layout.
-     * @param noticeResLayoutId       the notice message layout.
-     * @param roomMemberResLayoutId   the room member message layout.
-     * @param emoteRestLayoutId       the emote message layout
-     * @param fileResLayoutId         the file message layout
-     * @param mergeResLayoutId        the merge message layout
-     * @param videoResLayoutId        the video message layout
-     * @param emojiResLayoutId        the emoji message layout
-     * @param codeResLayoutId         the code message layout
-     * @param stickerResLayoutId      the sticker message layout
-     * @param hiddenResLayoutId       the hidden message layout
-     * @param mediasCache             the medias cache.
+     * @param session               the dedicated layout.
+     * @param context               the context
+     * @param textResLayoutId       the text message layout.
+     * @param imageResLayoutId      the image message layout.
+     * @param noticeResLayoutId     the notice message layout.
+     * @param roomMemberResLayoutId the room member message layout.
+     * @param emoteRestLayoutId     the emote message layout
+     * @param fileResLayoutId       the file message layout
+     * @param mergeResLayoutId      the merge message layout
+     * @param videoResLayoutId      the video message layout
+     * @param emojiResLayoutId      the emoji message layout
+     * @param codeResLayoutId       the code message layout
+     * @param stickerResLayoutId    the sticker message layout
+     * @param hiddenResLayoutId     the hidden message layout
+     * @param mediasCache           the medias cache.
      */
     VectorMessagesAdapter(MXSession session,
                           Context context,
@@ -283,7 +327,7 @@ public class VectorMessagesAdapter extends AbstractMessagesAdapter {
         mSendingMessageTextColor = getSendingMessageTextColor();
         mEncryptingMessageTextColor = getEncryptingMessageTextColor();
         mHighlightMessageTextColor = getHighlightMessageTextColor();
-        mSearchHighlightMessageTextColor = getSearchHighlightMessageTextColor();
+        mBackgroundColorSpan = new BackgroundColorSpan(getSearchHighlightMessageTextColor());
 
         Point size = new Point(0, 0);
         getScreenSize(size);
@@ -681,7 +725,7 @@ public class VectorMessagesAdapter extends AbstractMessagesAdapter {
         // it seems that the recycled view does not have the right layout.
         // check it
         if (null != convertView) {
-            if (viewType != (int)convertView.getTag()) {
+            if (viewType != (int) convertView.getTag()) {
                 Log.e(LOG_TAG, "## getView() : invalid view type : got " + convertView.getTag() + " instead of " + viewType);
                 convertView = null;
             }
@@ -1146,12 +1190,6 @@ public class VectorMessagesAdapter extends AbstractMessagesAdapter {
             MessageRow row = getItem(position);
             Event event = row.getEvent();
             Message message = JsonUtils.toMessage(event.getContent());
-            RoomState roomState = row.getRoomState();
-
-            EventDisplay display = new RiotEventDisplay(mContext, event, roomState);
-            CharSequence textualDisplay = display.getTextualDisplay();
-
-            SpannableString body = new SpannableString((null == textualDisplay) ? "" : textualDisplay);
 
             boolean shouldHighlighted = (null != mVectorMessagesAdapterEventsListener) && mVectorMessagesAdapterEventsListener.shouldHighlightEvent(event);
 
@@ -1168,9 +1206,24 @@ public class VectorMessagesAdapter extends AbstractMessagesAdapter {
                     return convertView;
                 }
 
-                highlightPattern(bodyTextView, body,
-                        TextUtils.equals(Message.FORMAT_MATRIX_HTML, message.format) ? mHelper.getSanitisedHtml(message.formatted_body) : null,
-                        mPattern, shouldHighlighted);
+                RoomState roomState = row.getRoomState();
+
+                EventDisplay display = new RiotEventDisplay(mContext, event, roomState, mHtmlToolbox);
+                CharSequence textualDisplay = display.getTextualDisplay();
+
+                SpannableString body = new SpannableString((null == textualDisplay) ? "" : textualDisplay);
+
+                // Change to BlockQuote Spannable to customize it
+                replaceQuoteSpans(body);
+
+                CharSequence result = mHelper.highlightPattern(body,
+                        mPattern,
+                        mBackgroundColorSpan,
+                        shouldHighlighted);
+
+                bodyTextView.setText(result);
+
+                mHelper.applyLinkMovementMethod(bodyTextView);
 
                 textViews = new ArrayList<>();
                 textViews.add(bodyTextView);
@@ -1208,6 +1261,25 @@ public class VectorMessagesAdapter extends AbstractMessagesAdapter {
     }
 
     /**
+     * Replace all QuoteSpan instances by instances of VectorQuoteSpan
+     *
+     * @param spannable
+     */
+    private void replaceQuoteSpans(Spannable spannable) {
+        QuoteSpan[] quoteSpans = spannable.getSpans(0, spannable.length(), QuoteSpan.class);
+        for (QuoteSpan quoteSpan : quoteSpans) {
+            int start = spannable.getSpanStart(quoteSpan);
+            int end = spannable.getSpanEnd(quoteSpan);
+            int flags = spannable.getSpanFlags(quoteSpan);
+            spannable.removeSpan(quoteSpan);
+            spannable.setSpan(new VectorQuoteSpan(mContext),
+                    start,
+                    end,
+                    flags);
+        }
+    }
+
+    /**
      * For ROW_TYPE_CODE message which may contain mixture of
      * fenced and inline code blocks and non-code (issue 145)
      */
@@ -1221,23 +1293,31 @@ public class VectorMessagesAdapter extends AbstractMessagesAdapter {
         container.removeAllViews();
 
         final String[] blocks = mHelper.getFencedCodeBlocks(message);
-        final String START_FB = VectorMessagesAdapterHelper.START_FENCED_BLOCK;
-        final String END_FB = VectorMessagesAdapterHelper.END_FENCED_BLOCK;
+
         for (final String block : blocks) {
-            if (block.startsWith(START_FB) && block.endsWith(END_FB)) {
+            // Skip empty block
+            if (TextUtils.isEmpty(block)) {
+                continue;
+            }
+
+            if (block.startsWith(VectorMessagesAdapterHelper.START_FENCED_BLOCK) && block.endsWith(VectorMessagesAdapterHelper.END_FENCED_BLOCK)) {
                 // Fenced block
-                final String minusTags = block
-                        .substring(START_FB.length(), block.length() - END_FB.length())
+                String minusTags = block
+                        .substring(VectorMessagesAdapterHelper.START_FENCED_BLOCK.length(), block.length() - VectorMessagesAdapterHelper.END_FENCED_BLOCK.length())
                         .replace("\n", "<br/>")
                         .replace(" ", "&nbsp;");
                 final View blockView = mLayoutInflater.inflate(R.layout.adapter_item_vector_message_code_block, null);
-                container.addView(blockView);
                 final TextView tv = blockView.findViewById(R.id.messagesAdapter_body);
-                highlightPattern(tv, new SpannableString(minusTags),
-                        TextUtils.equals(Message.FORMAT_MATRIX_HTML, message.format) ? mHelper.getSanitisedHtml(minusTags) : null,
-                        mPattern, shouldHighlighted);
+
+                CharSequence sequence = mHelper.convertToHtml(minusTags);
+
+                tv.setText(sequence);
 
                 mHelper.highlightFencedCode(tv);
+
+                mHelper.applyLinkMovementMethod(tv);
+
+                container.addView(blockView);
                 textViews.add(tv);
 
                 ((View) tv.getParent()).setBackgroundColor(ThemeUtils.getColor(mContext, R.attr.markdown_block_background_color));
@@ -1245,9 +1325,23 @@ public class VectorMessagesAdapter extends AbstractMessagesAdapter {
                 // Not a fenced block
                 final TextView tv = (TextView) mLayoutInflater.inflate(R.layout.adapter_item_vector_message_code_text, null);
 
-                highlightPattern(tv, new SpannableString(block),
-                        TextUtils.equals(Message.FORMAT_MATRIX_HTML, message.format) ? mHelper.getSanitisedHtml(block) : null,
-                        mPattern, shouldHighlighted);
+                String block2 = block;
+                if (TextUtils.equals(Message.FORMAT_MATRIX_HTML, message.format)) {
+                    String sanitased = mHelper.getSanitisedHtml(block2);
+
+                    if (sanitased != null) {
+                        block2 = sanitased;
+                    }
+                }
+
+                CharSequence strBuilder = mHelper.highlightPattern(new SpannableString(block2),
+                        mPattern,
+                        mBackgroundColorSpan,
+                        shouldHighlighted);
+
+                tv.setText(strBuilder);
+
+                mHelper.applyLinkMovementMethod(tv);
 
                 container.addView(tv);
                 textViews.add(tv);
@@ -1432,17 +1526,20 @@ public class VectorMessagesAdapter extends AbstractMessagesAdapter {
 
             String body = "* " + userDisplayName + " " + message.body;
 
-            String htmlString = null;
-
             if (TextUtils.equals(Message.FORMAT_MATRIX_HTML, message.format)) {
-                htmlString = mHelper.getSanitisedHtml(message.formatted_body);
+                String htmlString = mHelper.getSanitisedHtml(message.formatted_body);
 
                 if (null != htmlString) {
-                    htmlString = "* " + userDisplayName + " " + message.formatted_body;
+                    CharSequence sequence = mHelper.convertToHtml(htmlString);
+
+                    body = "* " + userDisplayName + " " + sequence;
                 }
             }
 
-            highlightPattern(emoteTextView, new SpannableString(body), htmlString, null, false);
+            CharSequence strBuilder = mHelper.highlightPattern(new SpannableString(body), null, mBackgroundColorSpan, false);
+
+            emoteTextView.setText(strBuilder);
+            mHelper.applyLinkMovementMethod(emoteTextView);
 
             int textColor;
 
@@ -1637,30 +1734,6 @@ public class VectorMessagesAdapter extends AbstractMessagesAdapter {
         }
 
         return convertView;
-    }
-
-    /**
-     * Highlight a pattern in a text view.
-     *
-     * @param textView the text view
-     * @param text     the text to display
-     * @param pattern  the pattern to highlight
-     */
-    void highlightPattern(TextView textView, Spannable text, String pattern) {
-        highlightPattern(textView, text, null, pattern, false);
-    }
-
-    /**
-     * Highlight a pattern in a text view.
-     *
-     * @param textView          the text view
-     * @param text              the text to display
-     * @param htmlFormattedText the text in HTML format
-     * @param pattern           the pattern to highlight
-     * @param isHighlighted     true when the event is highlighted
-     */
-    private void highlightPattern(TextView textView, Spannable text, String htmlFormattedText, String pattern, boolean isHighlighted) {
-        mHelper.highlightPattern(textView, text, htmlFormattedText, pattern, new BackgroundColorSpan(mSearchHighlightMessageTextColor), isHighlighted);
     }
 
     /**
@@ -1862,7 +1935,7 @@ public class VectorMessagesAdapter extends AbstractMessagesAdapter {
         contentView.findViewById(R.id.messagesAdapter_body_view).setAlpha(alpha);
         contentView.findViewById(R.id.messagesAdapter_avatars_list).setAlpha(alpha);
 
-        View urlsPreviewView =  contentView.findViewById(R.id.messagesAdapter_urls_preview_list);
+        View urlsPreviewView = contentView.findViewById(R.id.messagesAdapter_urls_preview_list);
         if (null != urlsPreviewView) {
             urlsPreviewView.setAlpha(alpha);
         }
@@ -2163,6 +2236,7 @@ public class VectorMessagesAdapter extends AbstractMessagesAdapter {
      * @param imageGetter the image getter
      */
     public void setImageGetter(VectorImageGetter imageGetter) {
+        mImageGetter = imageGetter;
         mHelper.setImageGetter(imageGetter);
     }
 

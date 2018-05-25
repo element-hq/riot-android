@@ -25,15 +25,14 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
-import android.content.SharedPreferences;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Parcelable;
-import android.preference.PreferenceManager;
 import android.support.annotation.ColorInt;
+import android.support.annotation.NonNull;
 import android.support.annotation.StringRes;
 import android.support.design.widget.TextInputEditText;
 import android.support.v4.content.ContextCompat;
@@ -58,10 +57,10 @@ import org.matrix.androidsdk.rest.callback.SimpleApiCallback;
 import org.matrix.androidsdk.rest.client.LoginRestClient;
 import org.matrix.androidsdk.rest.client.ProfileRestClient;
 import org.matrix.androidsdk.rest.model.MatrixError;
-import org.matrix.androidsdk.rest.model.pid.ThreePid;
 import org.matrix.androidsdk.rest.model.login.Credentials;
 import org.matrix.androidsdk.rest.model.login.LoginFlow;
 import org.matrix.androidsdk.rest.model.login.RegistrationFlowResponse;
+import org.matrix.androidsdk.rest.model.pid.ThreePid;
 import org.matrix.androidsdk.ssl.CertUtil;
 import org.matrix.androidsdk.ssl.Fingerprint;
 import org.matrix.androidsdk.ssl.UnrecognizedCertificateException;
@@ -80,8 +79,10 @@ import im.vector.PhoneNumberHandler;
 import im.vector.R;
 import im.vector.RegistrationManager;
 import im.vector.UnrecognizedCertHandler;
+import im.vector.activity.util.RequestCodesKt;
 import im.vector.receiver.VectorRegistrationReceiver;
 import im.vector.receiver.VectorUniversalLinkReceiver;
+import im.vector.repositories.ServerUrlsRepository;
 import im.vector.services.EventStreamService;
 import im.vector.util.PhoneNumberUtils;
 
@@ -90,10 +91,6 @@ import im.vector.util.PhoneNumberUtils;
  */
 public class LoginActivity extends MXCActionBarActivity implements RegistrationManager.RegistrationListener, RegistrationManager.UsernameValidityListener {
     private static final String LOG_TAG = LoginActivity.class.getSimpleName();
-
-    private static final int ACCOUNT_CREATION_ACTIVITY_REQUEST_CODE = 314;
-    private static final int FALLBACK_LOGIN_ACTIVITY_REQUEST_CODE = 315;
-    private static final int CAPTCHA_CREATION_ACTIVITY_REQUEST_CODE = 316;
 
     private final static int REGISTER_POLLING_PERIOD = 10 * 1000;
 
@@ -110,9 +107,6 @@ public class LoginActivity extends MXCActionBarActivity implements RegistrationM
     private static final int MODE_FORGOT_PASSWORD_WAITING_VALIDATION = 4;
     private static final int MODE_ACCOUNT_CREATION_THREE_PID = 5;
 
-    public static final String HOME_SERVER_URL_PREF = "home_server_url";
-    public static final String IDENTITY_SERVER_URL_PREF = "identity_server_url";
-
     // saved parameters index
 
     // login
@@ -124,6 +118,8 @@ public class LoginActivity extends MXCActionBarActivity implements RegistrationM
     private static final String SAVED_CREATION_PASSWORD1 = "SAVED_CREATION_PASSWORD1";
     private static final String SAVED_CREATION_PASSWORD2 = "SAVED_CREATION_PASSWORD2";
     private static final String SAVED_CREATION_REGISTRATION_RESPONSE = "SAVED_CREATION_REGISTRATION_RESPONSE";
+    private static final String SAVED_CREATION_EMAIL_THREEPID = "SAVED_CREATION_EMAIL_THREEPID";
+    private ThreePid mPendingEmailValidation;
 
     // forgot password
     private static final String SAVED_FORGOT_EMAIL_ADDRESS = "SAVED_FORGOT_EMAIL_ADDRESS";
@@ -341,34 +337,23 @@ public class LoginActivity extends MXCActionBarActivity implements RegistrationM
     }
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
+    public int getLayoutRes() {
+        return R.layout.activity_vector_login;
+    }
+
+    @Override
+    public void initUiAndData() {
         if (null == getIntent()) {
             Log.d(LOG_TAG, "## onCreate(): IN with no intent");
         } else {
             Log.d(LOG_TAG, "## onCreate(): IN with flags " + Integer.toHexString(getIntent().getFlags()));
         }
 
-        super.onCreate(savedInstanceState);
-
-        setContentView(R.layout.activity_vector_login);
-
         // warn that the application has started.
         CommonActivityUtils.onApplicationStarted(this);
 
         Intent intent = getIntent();
-        Bundle receivedBundle = (null != intent) ? getIntent().getExtras() : null;
 
-        // resume the application
-        if (null != receivedBundle) {
-            if (receivedBundle.containsKey(VectorUniversalLinkReceiver.EXTRA_UNIVERSAL_LINK_URI)) {
-                mUniversalLinkUri = receivedBundle.getParcelable(VectorUniversalLinkReceiver.EXTRA_UNIVERSAL_LINK_URI);
-                Log.d(LOG_TAG, "## onCreate() Login activity started by universal link");
-                // activity has been launched from an universal link
-            } else if (receivedBundle.containsKey(VectorRegistrationReceiver.EXTRA_EMAIL_VALIDATION_PARAMS)) {
-                Log.d(LOG_TAG, "## onCreate() Login activity started by email verification for registration");
-                processEmailValidationExtras(receivedBundle);
-            }
-        }
         // already registered
         if (hasCredentials()) {
             if ((null != intent) && (intent.getFlags() & Intent.FLAG_ACTIVITY_BROUGHT_TO_FRONT) == 0) {
@@ -436,20 +421,18 @@ public class LoginActivity extends MXCActionBarActivity implements RegistrationM
         mMainLayout = findViewById(R.id.main_input_layout);
         mButtonsView = findViewById(R.id.login_actions_bar);
 
-        if (null != savedInstanceState) {
-            restoreSavedData(savedInstanceState);
+        if (isFirstCreation()) {
+            mHomeServerText.setText(ServerUrlsRepository.INSTANCE.getLastHomeServerUrl(this));
+            mIdentityServerText.setText(ServerUrlsRepository.INSTANCE.getLastIdentityServerUrl(this));
         } else {
-            SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(LoginActivity.this);
-            mHomeServerText.setText(preferences.getString(HOME_SERVER_URL_PREF, getResources().getString(R.string.default_hs_server_url)));
-            mIdentityServerText.setText(preferences.getString(IDENTITY_SERVER_URL_PREF, getResources().getString(R.string.default_identity_server_url)));
+            restoreSavedData(getSavedInstanceState());
         }
 
-        // trap the UI events
-        mLoginMaskView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-            }
-        });
+        // If home server url or identity server url are not the default ones, check the mUseCustomHomeServersCheckbox
+        if (!ServerUrlsRepository.INSTANCE.isDefaultHomeServerUrl(this, mHomeServerText.getText().toString())
+                || !ServerUrlsRepository.INSTANCE.isDefaultIdentityServerUrl(this, mIdentityServerText.getText().toString())) {
+            mUseCustomHomeServersCheckbox.setChecked(true);
+        }
 
         mLoginButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -508,7 +491,7 @@ public class LoginActivity extends MXCActionBarActivity implements RegistrationM
             @Override
             public boolean onEditorAction(TextView view, int actionId, KeyEvent event) {
                 if (actionId == EditorInfo.IME_ACTION_DONE) {
-                    onIdentityserverUrlUpdate(true);
+                    onIdentityServerUrlUpdate(true);
                     return true;
                 }
 
@@ -520,7 +503,7 @@ public class LoginActivity extends MXCActionBarActivity implements RegistrationM
         mIdentityServerText.setOnFocusChangeListener(new View.OnFocusChangeListener() {
             public void onFocusChange(View v, boolean hasFocus) {
                 if (!hasFocus) {
-                    onIdentityserverUrlUpdate(true);
+                    onIdentityServerUrlUpdate(true);
                 }
             }
         });
@@ -543,7 +526,7 @@ public class LoginActivity extends MXCActionBarActivity implements RegistrationM
                         // reset the HS urls.
                         mHomeServerUrl = null;
                         mIdentityServerUrl = null;
-                        onIdentityserverUrlUpdate(false);
+                        onIdentityServerUrlUpdate(false);
                         onHomeServerUrlUpdate(false);
                         refreshDisplay();
                     }
@@ -575,11 +558,6 @@ public class LoginActivity extends MXCActionBarActivity implements RegistrationM
                 if (!TextUtils.equals(cleanedUrl, s.toString())) {
                     mHomeServerText.setText(cleanedUrl);
                     mHomeServerText.setSelection(cleanedUrl.length());
-                } else {
-                    SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(LoginActivity.this);
-                    SharedPreferences.Editor editor = preferences.edit();
-                    editor.putString(HOME_SERVER_URL_PREF, cleanedUrl);
-                    editor.apply();
                 }
             }
 
@@ -602,11 +580,6 @@ public class LoginActivity extends MXCActionBarActivity implements RegistrationM
                 if (!TextUtils.equals(cleanedUrl, s.toString())) {
                     mIdentityServerText.setText(cleanedUrl);
                     mIdentityServerText.setSelection(cleanedUrl.length());
-                } else {
-                    SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(LoginActivity.this);
-                    SharedPreferences.Editor editor = preferences.edit();
-                    editor.putString(IDENTITY_SERVER_URL_PREF, cleanedUrl);
-                    editor.apply();
                 }
             }
 
@@ -618,15 +591,54 @@ public class LoginActivity extends MXCActionBarActivity implements RegistrationM
 
         // set the handler used by the register to poll the server response
         mHandler = new Handler(getMainLooper());
+
+        // Check whether the application has been resumed from an universal link
+        Bundle receivedBundle = (null != intent) ? getIntent().getExtras() : null;
+        if (null != receivedBundle) {
+            if (receivedBundle.containsKey(VectorUniversalLinkReceiver.EXTRA_UNIVERSAL_LINK_URI)) {
+                mUniversalLinkUri = receivedBundle.getParcelable(VectorUniversalLinkReceiver.EXTRA_UNIVERSAL_LINK_URI);
+                Log.d(LOG_TAG, "## onCreate() Login activity started by universal link");
+            } else if (receivedBundle.containsKey(VectorRegistrationReceiver.EXTRA_EMAIL_VALIDATION_PARAMS)) {
+                Log.d(LOG_TAG, "## onCreate() Login activity started by email verification for registration");
+                if (processEmailValidationExtras(receivedBundle)) {
+                    // Reset the pending email validation if any.
+                    mPendingEmailValidation = null;
+
+                    // Finalize the email verification.
+                    checkIfMailValidationPending();
+                }
+            }
+        }
+
+        // Check whether an email validation was pending when the instance was saved.
+        if (null != mPendingEmailValidation) {
+            Log.d(LOG_TAG, "## onCreate() An email validation was pending");
+
+            // Sanity check
+            HomeServerConnectionConfig hsConfig = getHsConfig();
+            if (null != mRegistrationResponse && null != hsConfig && !isFirstCreation()) {
+                // retrieve the name and pwd from store data (we consider here that these inputs have been already checked)
+                String name = getSavedInstanceState().getString(SAVED_CREATION_USER_NAME);
+                String password = getSavedInstanceState().getString(SAVED_CREATION_PASSWORD1);
+
+                Log.d(LOG_TAG, "## onCreate() Resume email validation");
+                // Resume the email validation polling
+                enableLoadingScreen(true);
+                RegistrationManager.getInstance().setSupportedRegistrationFlows(mRegistrationResponse);
+                RegistrationManager.getInstance().setAccountData(name, password);
+                RegistrationManager.getInstance().addEmailThreePid(mPendingEmailValidation);
+                RegistrationManager.getInstance().attemptRegistration(this, this);
+                onWaitingEmailValidation();
+            }
+        }
     }
 
     /**
      * The server URLs have been updated from a receiver
      */
-    public void onServerUrlsUpdate() {
-        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(LoginActivity.this);
-        mHomeServerText.setText(preferences.getString(HOME_SERVER_URL_PREF, getResources().getString(R.string.default_hs_server_url)));
-        mIdentityServerText.setText(preferences.getString(IDENTITY_SERVER_URL_PREF, getResources().getString(R.string.default_identity_server_url)));
+    public void onServerUrlsUpdateFromReferrer() {
+        mHomeServerText.setText(ServerUrlsRepository.INSTANCE.getLastHomeServerUrl(this));
+        mIdentityServerText.setText(ServerUrlsRepository.INSTANCE.getLastIdentityServerUrl(this));
 
         if (!mUseCustomHomeServersCheckbox.isChecked()) {
             mUseCustomHomeServersCheckbox.performClick();
@@ -637,7 +649,7 @@ public class LoginActivity extends MXCActionBarActivity implements RegistrationM
      * @return the home server Url according to custom HS checkbox
      */
     private String getHomeServerUrl() {
-        String url = PreferenceManager.getDefaultSharedPreferences(LoginActivity.this).getString(HOME_SERVER_URL_PREF, getResources().getString(R.string.default_hs_server_url));
+        String url = ServerUrlsRepository.INSTANCE.getDefaultHomeServerUrl(this);
 
         if (mUseCustomHomeServersCheckbox.isChecked()) {
             url = mHomeServerText.getText().toString().trim();
@@ -654,7 +666,7 @@ public class LoginActivity extends MXCActionBarActivity implements RegistrationM
      * @return the identity server URL according to custom HS checkbox
      */
     private String getIdentityServerUrl() {
-        String url = PreferenceManager.getDefaultSharedPreferences(LoginActivity.this).getString(IDENTITY_SERVER_URL_PREF, getResources().getString(R.string.default_identity_server_url));
+        String url = ServerUrlsRepository.INSTANCE.getDefaultIdentityServerUrl(this);
 
         if (mUseCustomHomeServersCheckbox.isChecked()) {
             url = mIdentityServerText.getText().toString().trim();
@@ -729,7 +741,7 @@ public class LoginActivity extends MXCActionBarActivity implements RegistrationM
      * @param checkFlowOnUpdate check the flow on IS update
      * @return true if the IS url has been updated
      */
-    private boolean onIdentityserverUrlUpdate(boolean checkFlowOnUpdate) {
+    private boolean onIdentityServerUrlUpdate(boolean checkFlowOnUpdate) {
         if (!TextUtils.equals(mIdentityServerUrl, getIdentityServerUrl())) {
             mIdentityServerUrl = getIdentityServerUrl();
             mRegistrationResponse = null;
@@ -772,6 +784,7 @@ public class LoginActivity extends MXCActionBarActivity implements RegistrationM
         mMainLayout.setVisibility(View.VISIBLE);
 
         // cancel the registration flow
+        cancelEmailPolling();
         mEmailValidationExtraParams = null;
         mRegistrationResponse = null;
         showMainLayout();
@@ -826,7 +839,9 @@ public class LoginActivity extends MXCActionBarActivity implements RegistrationM
      */
     private boolean hasCredentials() {
         try {
-            return Matrix.getInstance(this).getDefaultSession() != null;
+            MXSession session = Matrix.getInstance(this).getDefaultSession();
+            return ((null != session) && session.isAlive());
+
         } catch (Exception e) {
             Log.e(LOG_TAG, "## Exception: " + e.getMessage());
         }
@@ -860,6 +875,15 @@ public class LoginActivity extends MXCActionBarActivity implements RegistrationM
         }
 
         startActivity(intent);
+    }
+
+    private void saveServerUrlsIfCustomValuesHasBeenEntered() {
+        // Save urls if not using default
+        if (mUseCustomHomeServersCheckbox.isChecked()) {
+            ServerUrlsRepository.INSTANCE.saveServerUrls(this,
+                    mHomeServerText.getText().toString().trim(),
+                    mIdentityServerText.getText().toString().trim());
+        }
     }
 
     /**
@@ -1235,6 +1259,7 @@ public class LoginActivity extends MXCActionBarActivity implements RegistrationM
                     enableLoadingScreen(false);
                     setActionButtonsEnabled(false);
                     showMainLayout();
+                    refreshDisplay();
                     Toast.makeText(getApplicationContext(), errorMessage, Toast.LENGTH_LONG).show();
                 }
 
@@ -1322,7 +1347,7 @@ public class LoginActivity extends MXCActionBarActivity implements RegistrationM
 
             Intent intent = new Intent(LoginActivity.this, AccountCreationActivity.class);
             intent.putExtra(AccountCreationActivity.EXTRA_HOME_SERVER_ID, hs);
-            startActivityForResult(intent, ACCOUNT_CREATION_ACTIVITY_REQUEST_CODE);
+            startActivityForResult(intent, RequestCodesKt.ACCOUNT_CREATION_ACTIVITY_REQUEST_CODE);
         }
     }
 
@@ -1386,6 +1411,7 @@ public class LoginActivity extends MXCActionBarActivity implements RegistrationM
                             if (mMode == MODE_ACCOUNT_CREATION) {
                                 showMainLayout();
                                 enableLoadingScreen(false);
+                                refreshDisplay();
                                 Toast.makeText(getApplicationContext(), errorMessage, Toast.LENGTH_LONG).show();
                             }
                         }
@@ -1536,7 +1562,7 @@ public class LoginActivity extends MXCActionBarActivity implements RegistrationM
      * Dismiss the keyboard and save the updated values
      */
     private void onClick() {
-        onIdentityserverUrlUpdate(false);
+        onIdentityServerUrlUpdate(false);
         onHomeServerUrlUpdate(false);
         checkFlows();
 
@@ -1548,7 +1574,7 @@ public class LoginActivity extends MXCActionBarActivity implements RegistrationM
      * The user clicks on the login button
      */
     private void onLoginClick() {
-        if (onHomeServerUrlUpdate(true) || onIdentityserverUrlUpdate(true)) {
+        if (onHomeServerUrlUpdate(true) || onIdentityServerUrlUpdate(true)) {
             mIsPendingLogin = true;
             Log.d(LOG_TAG, "## onLoginClick() : The user taps on login but the IS/HS did not loos the focus");
             return;
@@ -1629,6 +1655,9 @@ public class LoginActivity extends MXCActionBarActivity implements RegistrationM
                 @Override
                 public void onSuccess(HomeServerConnectionConfig c) {
                     enableLoadingScreen(false);
+
+                    saveServerUrlsIfCustomValuesHasBeenEntered();
+
                     goToSplash();
                     LoginActivity.this.finish();
                 }
@@ -1673,7 +1702,7 @@ public class LoginActivity extends MXCActionBarActivity implements RegistrationM
     /**
      * Check the homeserver flows.
      * i.e checks if this login page is enough to perform a registration.
-     * else switcth to a fallback page
+     * else switch to a fallback page
      */
     private void checkLoginFlows() {
         // check only login flows
@@ -1710,7 +1739,7 @@ public class LoginActivity extends MXCActionBarActivity implements RegistrationM
                             if (!isSupported) {
                                 Intent intent = new Intent(LoginActivity.this, FallbackLoginActivity.class);
                                 intent.putExtra(FallbackLoginActivity.EXTRA_HOME_SERVER_ID, hsConfig.getHomeserverUri().toString());
-                                startActivityForResult(intent, FALLBACK_LOGIN_ACTIVITY_REQUEST_CODE);
+                                startActivityForResult(intent, RequestCodesKt.FALLBACK_LOGIN_ACTIVITY_REQUEST_CODE);
                             } else if (mIsPendingLogin) {
                                 onLoginClick();
                             }
@@ -1759,38 +1788,33 @@ public class LoginActivity extends MXCActionBarActivity implements RegistrationM
      *
      * @param savedInstanceState the instance state
      */
-    private void restoreSavedData(Bundle savedInstanceState) {
-        if (null != savedInstanceState) {
-            mLoginEmailTextView.setText(savedInstanceState.getString(SAVED_LOGIN_EMAIL_ADDRESS));
-            mLoginPasswordTextView.setText(savedInstanceState.getString(SAVED_LOGIN_PASSWORD_ADDRESS));
-            mUseCustomHomeServersCheckbox.setChecked(savedInstanceState.getBoolean(SAVED_IS_SERVER_URL_EXPANDED));
-            mHomeServerText.setText(savedInstanceState.getString(SAVED_HOME_SERVER_URL));
-            mIdentityServerText.setText(savedInstanceState.getString(SAVED_IDENTITY_SERVER_URL));
+    private void restoreSavedData(@NonNull Bundle savedInstanceState) {
+        Log.d(LOG_TAG, "## restoreSavedData(): IN");
 
-            mCreationUsernameTextView.setText(savedInstanceState.getString(SAVED_CREATION_USER_NAME));
-            mCreationPassword1TextView.setText(savedInstanceState.getString(SAVED_CREATION_PASSWORD1));
-            mCreationPassword2TextView.setText(savedInstanceState.getString(SAVED_CREATION_PASSWORD2));
+        mLoginEmailTextView.setText(savedInstanceState.getString(SAVED_LOGIN_EMAIL_ADDRESS));
+        mLoginPasswordTextView.setText(savedInstanceState.getString(SAVED_LOGIN_PASSWORD_ADDRESS));
+        mUseCustomHomeServersCheckbox.setChecked(savedInstanceState.getBoolean(SAVED_IS_SERVER_URL_EXPANDED));
+        mHomeServerText.setText(savedInstanceState.getString(SAVED_HOME_SERVER_URL));
+        mIdentityServerText.setText(savedInstanceState.getString(SAVED_IDENTITY_SERVER_URL));
 
-            mForgotEmailTextView.setText(savedInstanceState.getString(SAVED_FORGOT_EMAIL_ADDRESS));
-            mForgotPassword1TextView.setText(savedInstanceState.getString(SAVED_FORGOT_PASSWORD1));
-            mForgotPassword2TextView.setText(savedInstanceState.getString(SAVED_FORGOT_PASSWORD2));
+        mCreationUsernameTextView.setText(savedInstanceState.getString(SAVED_CREATION_USER_NAME));
+        mCreationPassword1TextView.setText(savedInstanceState.getString(SAVED_CREATION_PASSWORD1));
+        mCreationPassword2TextView.setText(savedInstanceState.getString(SAVED_CREATION_PASSWORD2));
 
-            mRegistrationResponse = (RegistrationFlowResponse) savedInstanceState.getSerializable(SAVED_CREATION_REGISTRATION_RESPONSE);
+        mForgotEmailTextView.setText(savedInstanceState.getString(SAVED_FORGOT_EMAIL_ADDRESS));
+        mForgotPassword1TextView.setText(savedInstanceState.getString(SAVED_FORGOT_PASSWORD1));
+        mForgotPassword2TextView.setText(savedInstanceState.getString(SAVED_FORGOT_PASSWORD2));
 
-            mMode = savedInstanceState.getInt(SAVED_MODE, MODE_LOGIN);
+        mRegistrationResponse = (RegistrationFlowResponse) savedInstanceState.getSerializable(SAVED_CREATION_REGISTRATION_RESPONSE);
 
-            // check if the application has been opened by click on an url
-            if (savedInstanceState.containsKey(VectorUniversalLinkReceiver.EXTRA_UNIVERSAL_LINK_URI)) {
-                mUniversalLinkUri = savedInstanceState.getParcelable(VectorUniversalLinkReceiver.EXTRA_UNIVERSAL_LINK_URI);
-            }
+        mMode = savedInstanceState.getInt(SAVED_MODE, MODE_LOGIN);
+
+        // check if the application has been opened by click on an url
+        if (savedInstanceState.containsKey(VectorUniversalLinkReceiver.EXTRA_UNIVERSAL_LINK_URI)) {
+            mUniversalLinkUri = savedInstanceState.getParcelable(VectorUniversalLinkReceiver.EXTRA_UNIVERSAL_LINK_URI);
         }
-    }
 
-    @Override
-    protected void onRestoreInstanceState(Bundle savedInstanceState) {
-        super.onRestoreInstanceState(savedInstanceState);
-        Log.d(LOG_TAG, "## onRestoreInstanceState(): IN");
-        restoreSavedData(savedInstanceState);
+        mPendingEmailValidation = (ThreePid) savedInstanceState.getSerializable(SAVED_CREATION_EMAIL_THREEPID);
     }
 
     @Override
@@ -1848,6 +1872,15 @@ public class LoginActivity extends MXCActionBarActivity implements RegistrationM
         // check if the application has been opened by click on an url
         if (null != mUniversalLinkUri) {
             savedInstanceState.putParcelable(VectorUniversalLinkReceiver.EXTRA_UNIVERSAL_LINK_URI, mUniversalLinkUri);
+        }
+
+        // check whether an email validation is in progress
+        if (null != mRegisterPollingRunnable) {
+            // Retrieve the current email three pid
+            ThreePid email3pid = RegistrationManager.getInstance().getEmailThreePid();
+            if (null != email3pid) {
+                savedInstanceState.putSerializable(SAVED_CREATION_EMAIL_THREEPID, email3pid);
+            }
         }
 
         savedInstanceState.putInt(SAVED_MODE, mMode);
@@ -2021,7 +2054,7 @@ public class LoginActivity extends MXCActionBarActivity implements RegistrationM
             if (data != null && data.hasExtra(CountryPickerActivity.EXTRA_OUT_COUNTRY_CODE) && mLoginPhoneNumberHandler != null) {
                 mLoginPhoneNumberHandler.setCountryCode(data.getStringExtra(CountryPickerActivity.EXTRA_OUT_COUNTRY_CODE));
             }
-        } else if (CAPTCHA_CREATION_ACTIVITY_REQUEST_CODE == requestCode) {
+        } else if (RequestCodesKt.CAPTCHA_CREATION_ACTIVITY_REQUEST_CODE == requestCode) {
             if (resultCode == RESULT_OK) {
                 Log.d(LOG_TAG, "## onActivityResult(): CAPTCHA_CREATION_ACTIVITY_REQUEST_CODE => RESULT_OK");
                 String captchaResponse = data.getStringExtra("response");
@@ -2035,7 +2068,7 @@ public class LoginActivity extends MXCActionBarActivity implements RegistrationM
                 enableLoadingScreen(false);
                 refreshDisplay();
             }
-        } else if ((ACCOUNT_CREATION_ACTIVITY_REQUEST_CODE == requestCode) || (FALLBACK_LOGIN_ACTIVITY_REQUEST_CODE == requestCode)) {
+        } else if ((RequestCodesKt.ACCOUNT_CREATION_ACTIVITY_REQUEST_CODE == requestCode) || (RequestCodesKt.FALLBACK_LOGIN_ACTIVITY_REQUEST_CODE == requestCode)) {
             if (resultCode == RESULT_OK) {
                 Log.d(LOG_TAG, "## onActivityResult(): ACCOUNT_CREATION_ACTIVITY_REQUEST_CODE => RESULT_OK");
                 String homeServer = data.getStringExtra("homeServer");
@@ -2061,9 +2094,12 @@ public class LoginActivity extends MXCActionBarActivity implements RegistrationM
                 // let's go...
                 MXSession session = Matrix.getInstance(getApplicationContext()).createSession(hsConfig);
                 Matrix.getInstance(getApplicationContext()).addSession(session);
+
+                saveServerUrlsIfCustomValuesHasBeenEntered();
+
                 goToSplash();
                 finish();
-            } else if ((resultCode == RESULT_CANCELED) && (FALLBACK_LOGIN_ACTIVITY_REQUEST_CODE == requestCode)) {
+            } else if ((resultCode == RESULT_CANCELED) && (RequestCodesKt.FALLBACK_LOGIN_ACTIVITY_REQUEST_CODE == requestCode)) {
                 Log.d(LOG_TAG, "## onActivityResult(): RESULT_CANCELED && FALLBACK_LOGIN_ACTIVITY_REQUEST_CODE");
                 // reset the home server to let the user writes a valid one.
                 mHomeServerText.setText("https://");
@@ -2073,10 +2109,10 @@ public class LoginActivity extends MXCActionBarActivity implements RegistrationM
     }
 
     /*
-    * *********************************************************************************************
-    * Account creation - Threepid
-    * *********************************************************************************************
-    */
+     * *********************************************************************************************
+     * Account creation - Threepid
+     * *********************************************************************************************
+     */
 
     /**
      * Init the view asking for email and/or phone number depending on supported registration flows
@@ -2177,7 +2213,7 @@ public class LoginActivity extends MXCActionBarActivity implements RegistrationM
 
         if (!TextUtils.isEmpty(email)) {
             // Communicate email to singleton (will be validated later on)
-            RegistrationManager.getInstance().addEmailThreePid(email);
+            RegistrationManager.getInstance().addEmailThreePid(new ThreePid(email, ThreePid.MEDIUM_EMAIL));
         }
 
         if (mRegistrationPhoneNumberHandler.getPhoneNumber() != null) {
@@ -2285,16 +2321,17 @@ public class LoginActivity extends MXCActionBarActivity implements RegistrationM
      * Cancel the polling for email validation
      */
     private void cancelEmailPolling() {
+        mPendingEmailValidation = null;
         if (mHandler != null && mRegisterPollingRunnable != null) {
             mHandler.removeCallbacks(mRegisterPollingRunnable);
         }
     }
 
     /*
-    * *********************************************************************************************
-    * Account creation - Listeners
-    * *********************************************************************************************
-    */
+     * *********************************************************************************************
+     * Account creation - Listeners
+     * *********************************************************************************************
+     */
 
     @Override
     public void onRegistrationSuccess(String warningMessage) {
@@ -2307,6 +2344,8 @@ public class LoginActivity extends MXCActionBarActivity implements RegistrationM
                     .setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
+                            saveServerUrlsIfCustomValuesHasBeenEntered();
+
                             goToSplash();
                             finish();
                         }
@@ -2340,6 +2379,8 @@ public class LoginActivity extends MXCActionBarActivity implements RegistrationM
                 }
             });
 
+            saveServerUrlsIfCustomValuesHasBeenEntered();
+
             goToSplash();
             finish();
         }
@@ -2347,18 +2388,24 @@ public class LoginActivity extends MXCActionBarActivity implements RegistrationM
 
     @Override
     public void onRegistrationFailed(String message) {
+        cancelEmailPolling();
+        mEmailValidationExtraParams = null;
         Log.e(LOG_TAG, "## onRegistrationFailed(): " + message);
         showMainLayout();
         enableLoadingScreen(false);
+        refreshDisplay();
         Toast.makeText(this, R.string.login_error_unable_register, Toast.LENGTH_LONG).show();
     }
 
     @Override
     public void onWaitingEmailValidation() {
         Log.d(LOG_TAG, "## onWaitingEmailValidation");
+
+        // Prompt the user to check his email
         hideMainLayoutAndToast(getResources().getString(R.string.auth_email_validation_message));
         enableLoadingScreen(true);
 
+        // Loop to know whether the email has been checked
         mRegisterPollingRunnable = new Runnable() {
             @Override
             public void run() {
@@ -2379,7 +2426,7 @@ public class LoginActivity extends MXCActionBarActivity implements RegistrationM
             Intent intent = new Intent(LoginActivity.this, AccountCreationCaptchaActivity.class);
             intent.putExtra(AccountCreationCaptchaActivity.EXTRA_HOME_SERVER_URL, mHomeServerUrl);
             intent.putExtra(AccountCreationCaptchaActivity.EXTRA_SITE_KEY, publicKey);
-            startActivityForResult(intent, CAPTCHA_CREATION_ACTIVITY_REQUEST_CODE);
+            startActivityForResult(intent, RequestCodesKt.CAPTCHA_CREATION_ACTIVITY_REQUEST_CODE);
         } else {
             Log.d(LOG_TAG, "## onWaitingCaptcha(): captcha flow cannot be done");
             Toast.makeText(this, getString(R.string.login_error_unable_register), Toast.LENGTH_SHORT).show();

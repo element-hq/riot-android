@@ -1,6 +1,7 @@
 /*
  * Copyright 2016 OpenMarket Ltd
  * Copyright 2017 Vector Creations Ltd
+ * Copyright 2018 New Vector Ltd
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -32,15 +33,6 @@ import android.os.PowerManager;
 import android.support.annotation.NonNull;
 import android.text.TextUtils;
 import android.util.DisplayMetrics;
-
-import org.matrix.androidsdk.call.CallSoundsManager;
-import org.matrix.androidsdk.call.IMXCallListener;
-import org.matrix.androidsdk.call.MXCallListener;
-import org.matrix.androidsdk.call.VideoLayoutConfiguration;
-import org.matrix.androidsdk.crypto.data.MXDeviceInfo;
-import org.matrix.androidsdk.crypto.data.MXUsersDevicesMap;
-import org.matrix.androidsdk.util.Log;
-
 import android.util.TypedValue;
 import android.view.Display;
 import android.view.Gravity;
@@ -54,7 +46,14 @@ import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 
 import org.matrix.androidsdk.MXSession;
+import org.matrix.androidsdk.call.CallSoundsManager;
 import org.matrix.androidsdk.call.IMXCall;
+import org.matrix.androidsdk.call.IMXCallListener;
+import org.matrix.androidsdk.call.MXCallListener;
+import org.matrix.androidsdk.call.VideoLayoutConfiguration;
+import org.matrix.androidsdk.crypto.data.MXDeviceInfo;
+import org.matrix.androidsdk.crypto.data.MXUsersDevicesMap;
+import org.matrix.androidsdk.util.Log;
 
 import java.util.HashMap;
 import java.util.Timer;
@@ -313,12 +312,12 @@ public class VectorCallViewActivity extends RiotAppCompatActivity implements Sen
     }
 
     @Override
-    public void onCreate(Bundle savedInstanceState) {
-        Log.d(LOG_TAG, "## onCreate(): IN");
-        super.onCreate(savedInstanceState);
+    public int getLayoutRes() {
+        return R.layout.activity_callview;
+    }
 
-        setContentView(R.layout.activity_callview);
-
+    @Override
+    public void initUiAndData() {
         final Intent intent = getIntent();
         if (intent == null) {
             Log.e(LOG_TAG, "Need an intent to view.");
@@ -430,8 +429,8 @@ public class VectorCallViewActivity extends RiotAppCompatActivity implements Sen
             }
         });
 
-        if (null != savedInstanceState) {
-            mLocalVideoLayoutConfig = (VideoLayoutConfiguration) savedInstanceState.getSerializable(EXTRA_LOCAL_FRAME_LAYOUT);
+        if (!isFirstCreation()) {
+            mLocalVideoLayoutConfig = (VideoLayoutConfiguration) getSavedInstanceState().getSerializable(EXTRA_LOCAL_FRAME_LAYOUT);
 
             // check if the layout is not out of bounds
             if (null != mLocalVideoLayoutConfig) {

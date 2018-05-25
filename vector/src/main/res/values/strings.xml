@@ -25,6 +25,7 @@
     <string name="title_activity_historical">Historical</string>
     <string name="title_activity_bug_report">Bug report</string>
     <string name="title_activity_group_details">Community details</string>
+    <string name="title_activity_choose_sticker">Send a sticker</string>
 
     <!-- splash screen accessibility -->
     <string name="loading">Loading...</string>
@@ -164,9 +165,13 @@
     <string name="start_video_call_prompt_msg">Are you sure that you want to start a video call?</string>
 
     <string name="option_send_files">Send files</string>
+    <string name="option_send_sticker">Send sticker</string>
     <string name="option_take_photo_video">Take photo or video</string>
     <string name="option_take_photo">Take photo</string>
     <string name="option_take_video">Take video</string>
+
+    <!-- No sticker application dialog -->
+    <string name="no_sticker_application_dialog_content">You don\'t currently have any stickerpacks enabled.\n\nAdd some now?</string>
 
     <!-- Authentication -->
     <string name="auth_login">Log in</string>
@@ -515,7 +520,7 @@
     <!-- home sliding menu -->
     <string name="room_sliding_menu_messages">Messages</string>
     <string name="room_sliding_menu_settings">Settings</string>
-    <string name="room_sliding_menu_version">Version </string>
+    <string name="room_sliding_menu_version">Version</string>
     <string name="room_sliding_menu_term_and_conditions">Terms &amp; conditions</string>
     <string name="room_sliding_menu_third_party_notices">Third party notices</string>
     <string name="room_sliding_menu_copyright">Copyright</string>
@@ -601,6 +606,9 @@
     <string name="settings_disable_markdown">Disable markdown formatting when sending</string>
     <string name="settings_vibrate_on_mention">Vibrate when mentioning</string>
 
+    <string name="settings_deactivate_account_section">Deactivate account</string>
+    <string name="settings_deactivate_my_account">Deactivate my account</string>
+
     <!-- startup -->
     <string name="startup_notification_privacy_title">Notification Privacy</string>
     <string name="startup_notification_privacy_message">Riot can run in the background to manage your notifications securely and privately (this might affect battery usage).</string>
@@ -611,6 +619,10 @@
     <string name="settings_analytics">Analytics</string>
     <string name="settings_opt_out_of_analytics">Opt out of analytics</string>
     <string name="settings_opt_out_of_analytics_summary">Riot collects anonymous analytics to allow us to improve the application.</string>
+    <string name="settings_opt_in_of_analytics">Send analytics data</string>
+    <string name="settings_opt_in_of_analytics_summary">Riot collects anonymous analytics to allow us to improve the application.</string>
+    <string name="settings_opt_in_of_analytics_prompt">Please enable analytics to help us improve Riot.</string>
+    <string name="settings_opt_in_of_analytics_ok">Yes, I want to help!</string>
 
     <string name="settings_data_save_mode">Data save mode</string>
 
@@ -866,7 +878,7 @@
         <item quantity="other">%d active widgets</item>
     </plurals>
 
-    // Widget Integration Manager
+    <!-- Widget Integration Manager -->
     <string name="widget_integration_unable_to_create">Unable to create widget.</string>
     <string name="widget_integration_failed_to_send_request">Failed to send request.</string>
     <string name="widget_integration_positive_power_level">Power level must be positive integer.</string>
@@ -875,33 +887,35 @@
     <string name="widget_integration_missing_room_id">Missing room_id in request.</string>
     <string name="widget_integration_missing_user_id">Missing user_id in request.</string>
     <string name="widget_integration_room_not_visible">Room %s is not visible.</string>
+    <string name="widget_integration_missing_parameter">A required parameter is missing.</string>
+    <string name="widget_integration_invalid_parameter">A parameter is not valid.</string>
     <string name="settings_labs_matrix_apps">Matrix Apps</string>
     <string name="room_add_matrix_apps">Add Matrix apps</string>
     <string name="settings_labs_native_camera">Use native camera</string>
 
-    // share keys
+    <!-- share keys -->
     <string name="you_added_a_new_device">You added a new device \'%s\', which is requesting encryption keys.</string>
     <string name="your_unverified_device_requesting">Your unverified device  \'%s\' is requesting encryption keys.</string>
     <string name="start_verification">Start verification</string>
     <string name="share_without_verifying">Share without verifying</string>
     <string name="ignore_request">Ignore request</string>
 
-    // conference call
+    <!-- conference call -->
     <string name="conference_call_warning_title">Warning!</string>
     <string name="conference_call_warning_message">Conference calling is in development and may not be reliable.</string>
 
-    // slash commands
+    <!-- slash commands -->
     <string name="command_error">Command error</string>
     <string name="unrecognized_command">Unrecognized command: %s</string>
 
-    // notification statuses
+    <!-- notification statuses -->
     <string name="notification_off">Off</string>
     <string name="notification_on">On</string>
     <string name="notification_noisy">Noisy</string>
 
     <string name="encrypted_message">Encrypted message</string>
 
-    // groups creation
+    <!-- groups creation -->
     <string name="create">Create</string>
     <string name="create_community">Create Community</string>
     <string name="community_name">Community name</string>
@@ -909,7 +923,7 @@
     <string name="community_id">Community Id</string>
     <string name="community_id_hint">example</string>
 
-    // group details
+    <!-- group details -->
     <string name="group_details_home">Home</string>
     <string name="group_details_people">People</string>
     <string name="group_details_rooms">Rooms</string>
@@ -938,5 +952,18 @@
     <string name="receipt_avatar">Receipt avatar</string>
     <string name="notice_avatar">Notice avatar</string>
     <string name="avatar">Avatar</string>
+
+    <!-- Consent modal -->
+    <string name="dialog_user_consent_content">To continue using the %1$s homeserver you must review and agree to the terms and conditions.</string>
+    <string name="dialog_user_consent_submit">Review now</string>
+
+    <!-- Deactivate account screen -->
+    <string name="deactivate_account_title">Deactivate Account</string>
+    <string name="deactivate_account_content">This will make your account permanently unusable. You will not be able to log in, and no one will be able to re-register the same user ID. This will cause your account to leave all rooms it is participating in, and it will remove your account details from your identity server. <b>This action is irreversible</b>.\n\nDeactivating your account <b>does not by default cause us to forget messages you have sent</b>. If you would like us to forget your messages, please tick the box below.\n\nMessage visibility in Matrix is similar to email. Our forgetting your messages means that messages you have sent will not be shared with any new or unregistered users, but registered users who already have access to these messages will still have access to their copy.</string>
+    <string name="deactivate_account_delete_checkbox">Please forget all messages I have sent when my account is deactivated (Warning: this will cause future users to see an incomplete view of conversations)</string>
+    <string name="deactivate_account_prompt_password">To continue, please enter your password:</string>
+    <string name="deactivate_account_submit">Deactivate Account</string>
+
+    <string name="deactivate_account_on_riot_web">Please deactivate via your Riot.im web client (<b>riot.im/app</b>)</string>
 
 </resources>

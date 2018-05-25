@@ -41,6 +41,8 @@ import android.support.v4.content.ContextCompat;
 import android.text.TextUtils;
 import android.util.Pair;
 
+import com.facebook.stetho.Stetho;
+
 import org.matrix.androidsdk.MXSession;
 import org.matrix.androidsdk.util.Log;
 import org.piwik.sdk.Piwik;
@@ -191,6 +193,10 @@ public class VectorApp extends MultiDexApplication {
         Log.d(LOG_TAG, "onCreate");
         super.onCreate();
 
+        if (BuildConfig.DEBUG) {
+            Stetho.initializeWithDefaults(this);
+        }
+
         instance = this;
         mCallsManager = new CallsManager(this);
         mActivityTransitionTimer = null;
@@ -297,6 +303,7 @@ public class VectorApp extends MultiDexApplication {
                 Log.d(LOG_TAG, "onActivityPaused " + activity);
                 mLocalesByActivity.put(activity.toString(), getActivityLocaleStatus(activity));
                 setCurrentActivity(null);
+                onAppPause();
             }
 
             @Override
@@ -1188,6 +1195,7 @@ public class VectorApp extends MultiDexApplication {
 
     /**
      * Set the visit variable
+     *
      * @param trackMe
      * @param id
      * @param name
@@ -1254,14 +1262,15 @@ public class VectorApp extends MultiDexApplication {
 
     /**
      * A new activity has been resumed
+     *
      * @param activity the new activity
      */
     private void onNewScreen(Activity activity) {
-        if (PreferencesManager.trackWithPiwik(this)) {
+        if (PreferencesManager.useAnalytics(this)) {
             Tracker tracker = getPiwikTracker();
             if (null != tracker) {
                 try {
-                    TrackHelper.Screen screen = TrackHelper.track().screen("/android/" +   Matrix.getApplicationName() + "/" + this.getString(R.string.flavor_description) + "/" + SHORT_VERSION + "/"+ activity.getClass().getName().replace(".", "/"));
+                    TrackHelper.Screen screen = TrackHelper.track().screen("/android/" + Matrix.getApplicationName() + "/" + this.getString(R.string.flavor_description) + "/" + SHORT_VERSION + "/" + activity.getClass().getName().replace(".", "/"));
                     addCustomVariables(screen).with(tracker);
                 } catch (Throwable t) {
                     Log.e(LOG_TAG, "## onNewScreen() : failed " + t.getMessage());
@@ -1275,7 +1284,7 @@ public class VectorApp extends MultiDexApplication {
      * The application is paused.
      */
     private void onAppPause() {
-        if (PreferencesManager.trackWithPiwik(this)) {
+        if (PreferencesManager.useAnalytics(this)) {
             Tracker tracker = getPiwikTracker();
             if (null != tracker) {
                 try {

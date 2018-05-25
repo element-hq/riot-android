@@ -19,7 +19,6 @@ package im.vector.activity;
 
 import android.content.Context;
 import android.content.Intent;
-import android.os.Bundle;
 import android.support.design.widget.TextInputEditText;
 import android.support.design.widget.TextInputLayout;
 import android.support.v7.widget.Toolbar;
@@ -78,13 +77,19 @@ public class PhoneNumberVerificationActivity extends RiotAppCompatActivity imple
     * Activity lifecycle
     * *********************************************************************************************
     */
+
     @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
+    public int getLayoutRes() {
+        return R.layout.activity_phone_number_verification;
+    }
 
-        setTitle(R.string.settings_phone_number_verification);
-        setContentView(R.layout.activity_phone_number_verification);
+    @Override
+    public int getTitleRes() {
+        return R.string.settings_phone_number_verification;
+    }
 
+    @Override
+    public void initUiAndData() {
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         if (null != getSupportActionBar()) {
