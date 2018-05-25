@@ -165,6 +165,9 @@ dependencies {
     implementation 'com.jakewharton:butterknife:8.5.1'
     kapt 'com.jakewharton:butterknife-compiler:8.5.1'
 
+    // UI
+    implementation 'com.android.support.constraint:constraint-layout:1.1.0'
+
     // Network
     implementation 'com.squareup.retrofit2:retrofit:2.4.0'
     implementation 'com.squareup.retrofit2:converter-gson:2.4.0'

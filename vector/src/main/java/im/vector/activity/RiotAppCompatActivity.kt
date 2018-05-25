@@ -32,8 +32,9 @@ import butterknife.BindView
 import butterknife.ButterKnife
 import butterknife.Unbinder
 import im.vector.R
-
 import im.vector.VectorApp
+import im.vector.activity.interfaces.Restorable
+import im.vector.dialogs.ConsentNotGivenHelper
 import im.vector.util.AssetReader
 import org.matrix.androidsdk.util.Log
 
@@ -232,5 +233,32 @@ abstract class RiotAppCompatActivity : AppCompatActivity() {
                 or View.SYSTEM_UI_FLAG_HIDE_NAVIGATION
                 or View.SYSTEM_UI_FLAG_FULLSCREEN
                 or View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY)
+    }
+
+    /* ==========================================================================================
+     * Save state management
+     * ========================================================================================== */
+
+    // Set of restorable object
+    private val restorables = HashSet<Restorable>()
+
+    @CallSuper
+    override fun onSaveInstanceState(outState: Bundle) {
+        super.onSaveInstanceState(outState)
+
+        restorables.forEach {
+            it.saveState(outState)
+        }
+    }
+
+    protected fun addToRestorables(restorable: Restorable) = restorables.add(restorable)
+
+    /* ==========================================================================================
+     * User Consent
+     * ========================================================================================== */
+
+    val consentNotGivenHelper by lazy {
+        ConsentNotGivenHelper(this, savedInstanceState)
+                .apply { addToRestorables(this) }
     }
 }

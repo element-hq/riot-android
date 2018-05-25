@@ -74,14 +74,14 @@ import org.matrix.androidsdk.listeners.MXEventListener;
 import org.matrix.androidsdk.listeners.MXMediaUploadListener;
 import org.matrix.androidsdk.rest.callback.ApiCallback;
 import org.matrix.androidsdk.rest.callback.SimpleApiCallback;
-import org.matrix.androidsdk.rest.model.group.Group;
-import org.matrix.androidsdk.rest.model.sync.DeviceInfo;
-import org.matrix.androidsdk.rest.model.sync.DevicesListResponse;
 import org.matrix.androidsdk.rest.model.MatrixError;
-import org.matrix.androidsdk.rest.model.pid.ThirdPartyIdentifier;
-import org.matrix.androidsdk.rest.model.pid.ThreePid;
 import org.matrix.androidsdk.rest.model.bingrules.BingRule;
 import org.matrix.androidsdk.rest.model.bingrules.BingRuleSet;
+import org.matrix.androidsdk.rest.model.group.Group;
+import org.matrix.androidsdk.rest.model.pid.ThirdPartyIdentifier;
+import org.matrix.androidsdk.rest.model.pid.ThreePid;
+import org.matrix.androidsdk.rest.model.sync.DeviceInfo;
+import org.matrix.androidsdk.rest.model.sync.DevicesListResponse;
 import org.matrix.androidsdk.util.BingRulesManager;
 import org.matrix.androidsdk.util.Log;
 import org.matrix.androidsdk.util.ResourceUtils;
@@ -105,6 +105,7 @@ import im.vector.activity.CountryPickerActivity;
 import im.vector.activity.LanguagePickerActivity;
 import im.vector.activity.NotificationPrivacyActivity;
 import im.vector.activity.PhoneNumberAdditionActivity;
+import im.vector.activity.RiotAppCompatActivity;
 import im.vector.activity.VectorMediasPickerActivity;
 import im.vector.contacts.ContactsManager;
 import im.vector.gcm.GcmRegistrationManager;
@@ -517,14 +518,14 @@ public class VectorSettingsPreferencesFragment extends PreferenceFragment implem
             }
         });
 
-        final VectorSwitchPreference urlPreviewPreference = (VectorSwitchPreference)findPreference(PreferencesManager.SETTINGS_SHOW_URL_PREVIEW_KEY);
+        final VectorSwitchPreference urlPreviewPreference = (VectorSwitchPreference) findPreference(PreferencesManager.SETTINGS_SHOW_URL_PREVIEW_KEY);
         urlPreviewPreference.setChecked(mSession.isURLPreviewEnabled());
 
         urlPreviewPreference.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
             @Override
             public boolean onPreferenceChange(Preference preference, Object newValue) {
 
-                if ((null != newValue) && ((boolean)newValue != mSession.isURLPreviewEnabled())) {
+                if ((null != newValue) && ((boolean) newValue != mSession.isURLPreviewEnabled())) {
                     displayLoadingView();
                     mSession.setURLPreviewStatus((boolean) newValue, new ApiCallback<Void>() {
                         @Override
@@ -633,8 +634,7 @@ public class VectorSettingsPreferencesFragment extends PreferenceFragment implem
 
             preferenceScreen.removePreference(backgroundSyncDivider);
             preferenceScreen.removePreference(backgroundSyncCategory);
-        }
-        else {
+        } else {
             mSyncRequestTimeoutPreference = (EditTextPreference) findPreference(PreferencesManager.SETTINGS_SET_SYNC_TIMEOUT_PREFERENCE_KEY);
             mSyncRequestDelayPreference = (EditTextPreference) findPreference(PreferencesManager.SETTINGS_SET_SYNC_DELAY_PREFERENCE_KEY);
             final CheckBoxPreference useBackgroundSyncPref = (CheckBoxPreference) findPreference(PreferencesManager.SETTINGS_ENABLE_BACKGROUND_SYNC_PREFERENCE_KEY);
@@ -1378,8 +1378,20 @@ public class VectorSettingsPreferencesFragment extends PreferenceFragment implem
                 }
 
                 @Override
-                public void onMatrixError(MatrixError e) {
-                    onCommonDone(e.getLocalizedMessage());
+                public void onMatrixError(final MatrixError e) {
+                    if (MatrixError.M_CONSENT_NOT_GIVEN.equals(e.errcode)) {
+                        if (null != getActivity()) {
+                            getActivity().runOnUiThread(new Runnable() {
+                                @Override
+                                public void run() {
+                                    hideLoadingView();
+                                    ((RiotAppCompatActivity) getActivity()).getConsentNotGivenHelper().displayDialog(e);
+                                }
+                            });
+                        }
+                    } else {
+                        onCommonDone(e.getLocalizedMessage());
+                    }
                 }
 
                 @Override
@@ -1503,8 +1515,20 @@ public class VectorSettingsPreferencesFragment extends PreferenceFragment implem
                                                 }
 
                                                 @Override
-                                                public void onMatrixError(MatrixError e) {
-                                                    onCommonDone(e.getLocalizedMessage());
+                                                public void onMatrixError(final MatrixError e) {
+                                                    if (MatrixError.M_CONSENT_NOT_GIVEN.equals(e.errcode)) {
+                                                        if (null != getActivity()) {
+                                                            getActivity().runOnUiThread(new Runnable() {
+                                                                @Override
+                                                                public void run() {
+                                                                    hideLoadingView();
+                                                                    ((RiotAppCompatActivity) getActivity()).getConsentNotGivenHelper().displayDialog(e);
+                                                                }
+                                                            });
+                                                        }
+                                                    } else {
+                                                        onCommonDone(e.getLocalizedMessage());
+                                                    }
                                                 }
 
                                                 @Override
