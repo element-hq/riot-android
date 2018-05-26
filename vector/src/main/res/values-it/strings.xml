@@ -25,6 +25,7 @@
 	<string name="title_activity_historical">Cronologia</string>
 	<string name="title_activity_bug_report">Rapporto errori</string>
 	<string name="title_activity_group_details">Dettagli comunità</string>
+	<string name="title_activity_choose_sticker">Invia un adesivo</string>
 
 	<!-- splash screen accessibility -->
 	<string name="loading">Caricamento…</string>
@@ -163,10 +164,14 @@
 	<string name="start_voice_call_prompt_msg">Sicuro di voler avviare una chiamata audio?</string>
 	<string name="start_video_call_prompt_msg">Sicuro di voler avviare una chiamata video?</string>
 
-	<string name="option_send_files">Invia dei file</string>
+	<string name="option_send_files">Invia file</string>
+	<string name="option_send_sticker">Invia adesivo</string>
 	<string name="option_take_photo_video">Cattura foto o video</string>
 	<string name="option_take_photo">Cattura foto</string>
 	<string name="option_take_video">Cattura video</string>
+
+	<!-- No sticker application dialog -->
+	<string name="no_sticker_application_dialog_content">Attualmente non hai alcun pacco adesivi abilitato.\n\nAggiungerne qualcuno ora?</string>
 
 	<!-- Authentication -->
 	<string name="auth_login">Accedi</string>
@@ -274,7 +279,7 @@
 	<string name="room_info_room_topic">Argomento stanza</string>
 
 	<!-- call string -->
-    <string name="call">Chiamata</string>
+	<string name="call">Chiamata</string>
 	<string name="call_connected">Chiamata connessa</string>
 	<string name="call_connecting">Chiamata in connessione…</string>
 	<string name="call_ended">Chiamata terminata</string>
@@ -320,9 +325,9 @@
 	<string name="reject">Rifiuta</string>
 
 	<!-- Room -->
-    <string name="list_members">Elenca membri</string>
-    <string name="open_chat_header">Leggi intestazione</string>
-    <string name="room_sync_in_progress">Sincronizzando…</string>
+	<string name="list_members">Elenca membri</string>
+	<string name="open_chat_header">Leggi intestazione</string>
+	<string name="room_sync_in_progress">Sincronizzando…</string>
 	<string name="room_jump_to_first_unread">Vai al primo messaggio non letto</string>
 
 	<!-- Room Preview -->
@@ -335,14 +340,14 @@
 	<!-- Chat creation -->
 	<string name="room_creation_title">Nuova chat</string>
 	<string name="room_creation_add_member">Aggiungi membro</string>
-    <plurals name="room_header_active_members_count">
-        <item quantity="one">1 membro attivo</item>
-        <item quantity="other">%d membri attivi</item>
-    </plurals>
-    <plurals name="room_title_members">
-        <item quantity="one">1 membro</item>
-        <item quantity="other">%d membri</item>
-    </plurals>
+	<plurals name="room_header_active_members_count">
+		<item quantity="one">1 membro attivo</item>
+		<item quantity="other">%d membri attivi</item>
+	</plurals>
+	<plurals name="room_title_members">
+		<item quantity="one">1 membro</item>
+		<item quantity="other">%d membri</item>
+	</plurals>
 	<string name="room_title_one_member">1 membro</string>
 	<string name="room_e2e_alert_title">Attenzione!</string>
 	<string name="room_e2e_alert_message">La crittografia da-utente-a-utente è in beta e potrebbe non essere affidabile.\n\nNon dovresti ancora fidarti di essa per proteggere i tuoi dati.\n\nI dispositivi non saranno in grado di decriptare la cronologia prima che entrino nella stanza.\n\nI messaggi criptati non saranno visibili ai riceventi (client) che non hanno ancora implementato la crittografia.</string>
@@ -560,8 +565,8 @@
 	<string name="settings_messages_sent_by_bot">Messaggi inviati da bot</string>
 
 	<string name="settings_start_on_boot">Esegui all\'avvio</string>
-	<string name="settings_background_sync">Sincronizzazione in secondo piano</string>
-	<string name="settings_enable_background_sync">Abilita sync in secondo piano</string>
+	<string name="settings_background_sync">Sincronizzazione in sottofondo</string>
+	<string name="settings_enable_background_sync">Abilita sync in sottofondo</string>
 	<string name="settings_set_sync_timeout">Attesa per una richiesta di sync</string>
 	<string name="settings_set_sync_delay">Pausa tra due richieste di sync</string>
 	<string name="settings_second">secondo</string>
@@ -601,6 +606,9 @@
 	<string name="settings_disable_markdown">Disattiva la formattazione markdown quando si invia</string>
 	<string name="settings_vibrate_on_mention">Vibra quando menzionato</string>
 
+	<string name="settings_deactivate_account_section">Disattiva registrazione</string>
+	<string name="settings_deactivate_my_account">Disattiva il mio account</string>
+
 	<!-- startup -->
 	<string name="startup_notification_privacy_title">Privacy delle notifiche</string>
 	<string name="startup_notification_privacy_message">Riot può essere eseguito in sottofondo per gestire le notifiche in modo sicuro e privato (ciò potrebbe influire sulla durata della batteria).</string>
@@ -611,6 +619,10 @@
 	<string name="settings_analytics">Analisi dati</string>
 	<string name="settings_opt_out_of_analytics">Disattivazione analisi dati</string>
 	<string name="settings_opt_out_of_analytics_summary">Riot raccoglie analisi dati anonime per permetterci di migliorare l'applicazione.</string>
+	<string name="settings_opt_in_of_analytics">Invia analisi dati</string>
+	<string name="settings_opt_in_of_analytics_summary">Riot raccoglie analisi dati anonime per permetterci di migliorare l'applicazione.</string>
+	<string name="settings_opt_in_of_analytics_prompt">Per favore abilita l\'analisi dei dati per aiutarci a migliorare Riot.</string>
+	<string name="settings_opt_in_of_analytics_ok">Sì, voglio aiutare!</string>
 
 	<string name="settings_data_save_mode">Modalità salvataggio dati</string>
 
@@ -645,7 +657,7 @@
 	<string name="settings_old_password">vecchia password</string>
 	<string name="settings_new_password">nuova password</string>
 	<string name="settings_confirm_password">conferma password</string>
-	<string name="settings_fail_to_update_password">Fallito l\'aggiornamento password</string>
+	<string name="settings_fail_to_update_password">Aggiornamento password fallito</string>
 	<string name="settings_password_updated">La tua password è stata aggiornata</string>
 	<string name="settings_unignore_user">Mostra tutti i messaggi di %s?</string>
 
@@ -875,6 +887,8 @@
 	<string name="widget_integration_missing_room_id">room_id mancante nella richiesta.</string>
 	<string name="widget_integration_missing_user_id">user_id mancante nella richiesta.</string>
 	<string name="widget_integration_room_not_visible">La stanza %s non è visibile.</string>
+	<string name="widget_integration_missing_parameter">Manca un parametro richiesto.</string>
+	<string name="widget_integration_invalid_parameter">Un parametro non è valido.</string>
 	<string name="settings_labs_matrix_apps">App Matrix</string>
 	<string name="room_add_matrix_apps">Aggiungi app Matrix</string>
 	<string name="settings_labs_native_camera">Usa fotocamera nativa</string>
@@ -916,7 +930,7 @@
 	<string name="no_users_placeholder">Nessun utente</string>
 
 	<string name="rooms">Stanze</string>
-	<string name="joined">Si è unito</string>
+	<string name="joined">Entrati</string>
 	<string name="invited">Invitato</string>
 	<string name="filter_group_members">Filtra i membri del gruppo</string>
 	<string name="filter_group_rooms">Filtra le stanze del gruppo</string>
@@ -938,5 +952,18 @@
 	<string name="receipt_avatar">Ricevute avatar</string>
 	<string name="notice_avatar">Avviso avatar</string>
 	<string name="avatar">Avatar</string>
+
+	<!-- Consent modal -->
+	<string name="dialog_user_consent_content">Per continuare ad usare il server home %1$s devi controllare ed accettare i termini e le condizioni.</string>
+	<string name="dialog_user_consent_submit">Controlla ora</string>
+
+	<!-- Deactivate account screen -->
+	<string name="deactivate_account_title">Disattiva registrazione</string>
+	<string name="deactivate_account_content">Ciò renderà il tuo account definitivamente inutilizzabile. Non sarai in grado di accedere e nessuno sarà in grado di registrare nuovamente lo stesso ID utente. Ciò comporterà l\'uscita del tuo account da tutte le stanze in cui sta partecipando e rimuoverà i dettagli del tuo account dal tuo server identità. <b>Questa azione è irreversibile</b>.\n\n<b>in via predefinita ciò non comporterà che i messaggi inviati siano dimenticati</b>. Se desideri che i tuoi messaggi siano dimenticati, per favore seleziona la casella qui sotto.\n\nLa visibilità dei messaggi in Matrix è simile alla posta elettronica. Dimenticare i tuoi messaggi significa che i messaggi inviati non verranno condivisi con utenti nuovi o non registrati, ma gli utenti registrati che hanno già avuto accesso a tali messaggi continueranno ad avere accesso alla loro copia.</string>
+	<string name="deactivate_account_delete_checkbox">Chiedo di dimenticare tutti i messaggi che ho inviato appena il mio account sarà disattivato (Attenzione: ciò comporterà che gli utenti futuri vedano delle conversazioni incomplete)</string>
+	<string name="deactivate_account_prompt_password">Per proseguire inserisci la tua password:</string>
+	<string name="deactivate_account_submit">Disattiva l\'account</string>
+
+	<string name="deactivate_account_on_riot_web">Per favore disattiva tramite il tuo Riot.im web client (<b>riot.im/app</b>)</string>
 
 </resources>
