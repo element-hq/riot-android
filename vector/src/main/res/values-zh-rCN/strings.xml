@@ -913,4 +913,24 @@
     <string name="settings_notification_privacy_power_saving">省电模式</string>
     <string name="settings_notification_privacy_low_detail">简化模式（Low detail notifications）</string>
     <string name="settings_notification_privacy_reduced">非隐私模式（Reduced privacy）</string>
-    </resources>
+    <string name="settings_deactivate_account_section">销毁帐户</string>
+    <string name="settings_deactivate_my_account">销毁此帐户</string>
+
+    <string name="settings_opt_in_of_analytics">发送分析资料</string>
+    <string name="settings_opt_in_of_analytics_summary">Riot将会收集匿名资料以完善该应用。</string>
+    <string name="settings_opt_in_of_analytics_prompt">请允许资料分析以协助Riot开发。</string>
+    <string name="settings_opt_in_of_analytics_ok">乐意帮忙</string>
+
+    <string name="deactivate_account_title">销毁帐户</string>
+    <string name="deactivate_account_content">这将会使你的账号永不可用。你将无法登入，也无法再注册同ID的账号。你的账号将会退出所有已加入的聊天室，并且身份服务器上的账号信息也会被删除。<b>此操作不可逆</b>。
+
+销毁账号<b>默认不会删除你曾发送过的消息</b>。若你需要我们删除之，请勾选下面的框。
+
+Matrix上消息的可见性类似于电子邮件，我们对消息的删除意味着这些消息不会被发送给新注册或未注册的用户，但已收到这些消息的注册用户仍然会保有一份这些消息。</string>
+    <string name="deactivate_account_delete_checkbox">请在我销户的同时删除我发送的所有消息（警告：这将会导致未来用户看到残缺的聊天对话）</string>
+    <string name="deactivate_account_prompt_password">请输入密码以继续操作：</string>
+    <string name="deactivate_account_submit">销毁帐户</string>
+
+    <string name="deactivate_account_on_riot_web">请通过Riot.im网页客户端来销毁账户(<b>riot.im/app</b>)</string>
+
+</resources>
