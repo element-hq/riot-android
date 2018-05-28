@@ -179,7 +179,7 @@
     <string name="preview">Forskoðun</string>
     <string name="reject">Hafna</string>
 
-    <string name="list_members">Listi meðlima</string>
+    <string name="list_members">Listi yfir meðlimi</string>
     <string name="open_chat_header">Opna haus</string>
     <string name="room_sync_in_progress">Samstilli...</string>
     <string name="room_preview_try_join_an_unknown_room_default">spjallrás</string>
@@ -284,7 +284,7 @@
     <string name="room_settings_forget">Gleyma</string>
     <string name="room_sliding_menu_messages">Skilaboð</string>
     <string name="room_sliding_menu_settings">Stillingar</string>
-    <string name="room_sliding_menu_version">"Útgáfa "</string>
+    <string name="room_sliding_menu_version">Útgáfa</string>
     <string name="room_sliding_menu_term_and_conditions">Skilmálar og kvaðir</string>
     <string name="room_sliding_menu_third_party_notices">Athugasemdir frá þriðja aðila</string>
     <string name="room_sliding_menu_copyright">Höfundarréttur</string>
@@ -704,7 +704,7 @@ Til að halda áfram skaltu setja inn lykilorðið þitt.</string>
     <string name="joined">Skráður</string>
     <string name="invited">Boðið</string>
     <string name="rejoin">Taka þátt aftur</string>
-    <string name="read_receipts_list">Lesa lista yfir leskvittanir</string>
+    <string name="read_receipts_list">Listi yfir leskvittanir</string>
 
     <string name="room_preview_invitation_format">Þér hefur verið boðið af %s að taka þátt í þessari spjallrás</string>
     <string name="room_participants_remove_prompt_msg">Ertu viss um að þú viljir fjarlægja %s úr þessu spjalli?</string>
@@ -791,6 +791,47 @@ Ertu alveg viss?</string>
     <string name="group_no_long_description">Kerfisstjóri samfélagsins hefur ekki gefið upp ítarlega lýsingu fyrir þetta samfélag.</string>
 
     <string name="directory_server_type_homeserver">Skrifaðu heimanetþjón til að telja upp opinberar spjallrásir á</string>
-    <string name="widget_integration_missing_room_id">Vantar spjallrásarauðkenni í beiðni</string>
-    <string name="widget_integration_missing_user_id">Vantar notandaauðkenni í beiðni</string>
+    <string name="widget_integration_missing_room_id">Vantar spjallrásarauðkenni í beiðni.</string>
+    <string name="widget_integration_missing_user_id">Vantar notandaauðkenni í beiðni.</string>
+    <string name="title_activity_choose_sticker">Senda límmerki</string>
+
+    <string name="auth_reset_password_success_message">Lykilorðið þitt hefur verið endurstillt.
+
+Þú hefur verið skráður út af öllum tækjum og munt ekki lengur fá ýti-tilkynningar. Til að endurvirkja tilkynningar, þarf að skrá sig aftur inn á hverju tæki fyrir sig.</string>
+
+    <string name="login_error_unknown_token">Tiltekið aðgangsteikn þekktist ekki</string>
+    <string name="call_error_user_not_responding">Ekki var svarað á fjartengda endanum.</string>
+    <string name="permissions_rationale_msg_storage">Riot þarf heimild til að nota mynda- og myndskeiðasafn svo hægt sé að senda og vista viðhengi.
+
+Leyfðu aðgang í næsta sprettglugga til þess að geta sent skrár úr símanum.</string>
+    <string name="permissions_rationale_msg_camera">Riot þarf heimild til að nota myndavélina svo hægt sé að taka myndir og hringja myndsímtöl.</string>
+    <string name="permissions_rationale_msg_camera_explanation">
+
+Leyfðu aðgang í næsta sprettglugga til þess að geta hringt.</string>
+    <string name="permissions_rationale_msg_record_audio">Riot þarf heimild til að nota hljóðnemann svo hægt sé að hringja hljóðsímtöl.</string>
+    <string name="permissions_rationale_msg_record_audio_explanation">
+
+Leyfðu aðgang í næsta sprettglugga til þess að geta hringt.</string>
+    <string name="permissions_rationale_msg_camera_and_audio">Riot þarf heimild til að nota myndavélina og hljóðnemann svo hægt sé að hringja myndsímtöl.
+
+Leyfðu aðgang í næstu sprettgluggum til þess að geta hringt.</string>
+    <string name="permissions_rationale_msg_contacts">Riot þarf heimild til að nota tengiliði í nafnaskránni svo hægt sé að finna aðra Matrix-notendur eftir tölvupóstföngum og símanúmerum þeirra.
+
+Leyfðu aðgang í næsta sprettglugga til þess að finna þá notendur í nafnaskránni sem hægt er að hafa samband við úr Riot.</string>
+    <string name="permissions_msg_contacts_warning_other_androids">Riot þarf heimild til að nota tengiliði í nafnaskránni svo hægt sé að finna aðra Matrix-notendur eftir tölvupóstföngum og símanúmerum þeirra.
+
+Leyfa Riot nota tengiliðina ?</string>
+
+    <string name="settings_deactivate_account_section">Gera notandaaðgang óvirkann</string>
+    <string name="settings_deactivate_my_account">Gera notandaaðganginn minn óvirkann</string>
+
+    <string name="settings_opt_in_of_analytics">Senda greiningargögn</string>
+    <string name="settings_opt_in_of_analytics_ok">Já, ég vil hjálpa til</string>
+
+    <string name="dialog_user_consent_submit">Yfirfara núna</string>
+
+    <string name="deactivate_account_title">Gera notandaaðgang óvirkann</string>
+    <string name="deactivate_account_prompt_password">Til að halda áfram, settu inn lykilorðið þitt:</string>
+    <string name="deactivate_account_submit">Gera notandaaðgang óvirkann</string>
+
     </resources>
