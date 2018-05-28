@@ -790,4 +790,7 @@ Ertu alveg viss?</string>
     // slash commands
     <string name="group_no_long_description">Kerfisstjóri samfélagsins hefur ekki gefið upp ítarlega lýsingu fyrir þetta samfélag.</string>
 
+    <string name="directory_server_type_homeserver">Skrifaðu heimanetþjón til að telja upp opinberar spjallrásir á</string>
+    <string name="widget_integration_missing_room_id">Vantar spjallrásarauðkenni í beiðni</string>
+    <string name="widget_integration_missing_user_id">Vantar notandaauðkenni í beiðni</string>
     </resources>
