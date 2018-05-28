@@ -856,4 +856,27 @@ Tölvupóstfang nýtist einnig til að endurstilla lykilorðið þitt.</string>
     <string name="settings_opt_in_of_analytics_summary">Riot safnar nafnlausum greiningargögnum til að gera okkur kleift að bæta forritið.</string>
     <string name="settings_opt_in_of_analytics_prompt">Endilega virkjaðu greiningargögn til að hjálpa okkur að bæta Riot.</string>
     <string name="room_settings_room_access_warning">Til að tengja við spjallrás verður hún að vera með vistfang.</string>
-    </resources>
+    <string name="room_preview_try_join_an_unknown_room">Þú ert að reyna að tengjast %s. Myndirðu vilja gerast meðlimur til að geta tekið þátt í samræðunni?</string>
+    <string name="room_preview_room_interactions_disabled">Þetta er forskoðun á spjallrásinni. Samskipti spjallrásarinnar hafa verið gerð óvirk.</string>
+
+    <string name="settings_home_display">Heimaskjár</string>
+    <string name="settings_pin_missed_notifications">Festa spjallrásir með óskoðuðum tilkynningum</string>
+    <string name="settings_pin_unread_messages">Festa spjallrásir með ólesnum skilaboðum</string>
+    <string name="settings_inline_url_preview">Sjálfgefið virkja forskoðun innfelldra vefslóða</string>
+    <string name="room_settings_room_access_entry_anyone_with_link_apart_guest">Hver sá sem þekkir slóðina á spjallrásina, fyrir utan gesti</string>
+    <string name="room_settings_room_access_entry_anyone_with_link_including_guest">Hver sá sem þekkir slóðina á spjallrásina, að gestum meðtöldum</string>
+
+    <string name="room_settings_labs_warning_message">Þetta eru eiginleikar á tilraunastigi sem gætu bilað á óvæntan hátt. Notist með varúð.</string>
+    <string name="room_settings_labs_end_to_end_warnings">Þú þarft að skrá þig út til að geta virkjað dulritunina.</string>
+    <string name="room_settings_never_send_to_unverified_devices_title">Aðeins dulrita til sannvottaðra tækja</string>
+    <string name="room_settings_never_send_to_unverified_devices_summary">Aldrei senda dulrituð skilaboð af þessu tæki til ósannvottaðra tækja.</string>
+
+    <string name="room_settings_addresses_disable_main_address_prompt_title">Aðvaranir vegna aðalvistfangs</string>
+
+    <string name="room_settings_set_main_address">Setja sem aðalvistfang</string>
+    <string name="room_settings_unset_main_address">Ekki setja sem aðalvistfang</string>
+    <string name="widget_integration_missing_parameter">Nauðsynlegt gildi vantar.</string>
+    <string name="widget_integration_invalid_parameter">Gildið er ekki gilt.</string>
+    <string name="deactivate_account_on_riot_web">Gerðu þetta óvirkt í Riot.im forritinu (<b>riot.im/app</b>)</string>
+
+</resources>
