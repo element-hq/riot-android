@@ -443,7 +443,7 @@ Permetti a Riot di accedere ai tuoi contatti?</string>
     <!-- home sliding menu -->
     <string name="room_sliding_menu_messages">Messaggi</string>
     <string name="room_sliding_menu_settings">Impostazioni</string>
-    <string name="room_sliding_menu_version">Versione </string>
+    <string name="room_sliding_menu_version">Versione</string>
     <string name="room_sliding_menu_term_and_conditions">Termini e condizioni</string>
     <string name="room_sliding_menu_third_party_notices">Avvisi di terze parti</string>
     <string name="room_sliding_menu_copyright">Copyright</string>
@@ -945,4 +945,36 @@ Permetti a Riot di accedere ai tuoi contatti?</string>
     <string name="startup_notification_privacy_button_grant">Concedi l\'autorizzazione</string>
     <string name="startup_notification_privacy_button_other">Scegli un\'altra opzione</string>
 
-    </resources>
+    <string name="title_activity_choose_sticker">Invia un adesivo</string>
+
+    <string name="option_send_sticker">Invia adesivo</string>
+    <string name="no_sticker_application_dialog_content">Non hai ancora alcun pack di adesivi attivo.
+
+Aggiungerne di nuovi?</string>
+
+    <string name="settings_deactivate_account_section">Disattiva account</string>
+    <string name="settings_deactivate_my_account">Disattiva il mio account</string>
+
+    <string name="settings_opt_in_of_analytics">Invia statistiche di utilizzo</string>
+    <string name="settings_opt_in_of_analytics_summary">Riot raccoglie statistiche anonime per permetterci di migliorare l\'applicazione.</string>
+    <string name="settings_opt_in_of_analytics_prompt">Attiva le statistiche per aiutarci a migliorare Riot.</string>
+    <string name="settings_opt_in_of_analytics_ok">Sì, voglio aiutare!</string>
+
+    <string name="widget_integration_missing_parameter">Manca un parametro necessario.</string>
+    <string name="widget_integration_invalid_parameter">Un parametro non è valido.</string>
+    <string name="dialog_user_consent_content">Per continuare a usare l\'homeserver %1$s devi leggere e accettare le condizioni di utilizzo.</string>
+    <string name="dialog_user_consent_submit">Leggi adesso</string>
+
+    <string name="deactivate_account_title">Disattiva account</string>
+    <string name="deactivate_account_content">Il tuo account sarà permanentemente inutilizzabile. Non potrai accedere e nessuno potrà ri-registrare lo stesso ID utente. Il tuo account abbandonerà tutte le stanze a cui partecipa e i dettagli del tuo account saranno rimossi dal server di identità. <b>Questa azione è irreversibile</b>.
+
+Disattivare il tuo account <b>non eliminerà in modo predefinito i messaggi che hai inviato</b>. Se vuoi che noi dimentichiamo i tuoi messaggi, seleziona la casella sotto.
+
+La visibilità dei messaggi in Matrix è simile alle email. Se dimentichiamo i messaggi significa che quelli che hai inviato non verranno condivisi con alcun utente nuovo o non registrato, ma gli utenti registrati che avevano già accesso ai messaggi avranno ancora accesso alla loro copia.</string>
+    <string name="deactivate_account_delete_checkbox">Per favore dimenticate tutti i messaggi che ho inviato quando il mio account viene disattivato (Attenzione: gli utenti futuri vedranno un elenco incompleto di conversazioni)</string>
+    <string name="deactivate_account_prompt_password">Per continuare, inserisci la tua password:</string>
+    <string name="deactivate_account_submit">Disattiva account</string>
+
+    <string name="deactivate_account_on_riot_web">Disattiva usando il client web Riot.im (<b>riot.im/app</b>)</string>
+
+</resources>
