@@ -31,10 +31,12 @@ import androidx.core.view.isVisible
 import butterknife.BindView
 import butterknife.ButterKnife
 import butterknife.Unbinder
+import im.vector.BuildConfig
 import im.vector.R
 import im.vector.VectorApp
 import im.vector.activity.interfaces.Restorable
 import im.vector.dialogs.ConsentNotGivenHelper
+import im.vector.receiver.DebugReceiver
 import im.vector.util.AssetReader
 import org.matrix.androidsdk.util.Log
 
@@ -50,6 +52,9 @@ abstract class RiotAppCompatActivity : AppCompatActivity() {
     private var unBinder: Unbinder? = null
 
     private var savedInstanceState: Bundle? = null
+
+    // For debug only
+    private var debugReceiver: DebugReceiver? = null
 
     /* ==========================================================================================
      * UI
@@ -114,6 +119,23 @@ abstract class RiotAppCompatActivity : AppCompatActivity() {
         }
 
         Log.event(Log.EventTag.NAVIGATION, "onResume Activity " + this.javaClass.simpleName)
+
+        DebugReceiver
+                .getIntentFilter()
+                .takeIf { BuildConfig.DEBUG }
+                ?.let {
+                    debugReceiver = DebugReceiver()
+                    registerReceiver(debugReceiver, it)
+                }
+    }
+
+    override fun onPause() {
+        super.onPause()
+
+        debugReceiver?.let {
+            unregisterReceiver(debugReceiver)
+            debugReceiver = null
+        }
     }
 
     override fun onWindowFocusChanged(hasFocus: Boolean) {
