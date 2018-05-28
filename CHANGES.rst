@@ -8,6 +8,7 @@ Changes in Riot 0.8.9 (2018-05-25)
 ===================================================
 
 Improvements:
+ * Update matrix-sdk.aar lib (v0.9.4).
  * GDPR compliance:
     * Manage M_CONSENT_NOT_GIVEN matrix error
     * Sending analytics is no opt-in
