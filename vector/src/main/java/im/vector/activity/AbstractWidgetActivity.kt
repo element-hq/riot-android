@@ -168,6 +168,11 @@ abstract class AbstractWidgetActivity : RiotAppCompatActivity() {
                 }
 
                 override fun onPageFinished(view: WebView, url: String) {
+                    // Check that the Activity is still alive
+                    if (isDestroyed) {
+                        return
+                    }
+
                     hideWaitingView()
 
                     val js = AssetReader.readAssetFile(this@AbstractWidgetActivity, "postMessageAPI.js")
