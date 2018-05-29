@@ -908,7 +908,7 @@
     <string name="room_settings_add_new_group">新的社区ID（如 +foo:matrix.org）</string>
     <string name="group_no_long_description">社区管理员没有提供这个社区的具体描述。</string>
 
-    <string name="settings_notification_privacy_normal">普通</string>
+    <string name="settings_notification_privacy_normal">标准</string>
     <string name="settings_notification_privacy_power_saving">省电模式</string>
     <string name="settings_notification_privacy_low_detail">简洁模式（Low detail notifications）</string>
     <string name="settings_notification_privacy_reduced">低隐私模式（Reduced privacy）</string>
@@ -942,11 +942,11 @@ Matrix 中的信息可见性类似于电子邮件。我们忘记您的信息意�
     <string name="settings_notification_privacy_secure_message_content">• 通知中的消息内容<b>从 Matrix 主服务器直接安全的获取</b></string>
     <string name="settings_notification_privacy_nosecure_message_content">• 通知含有<b>消息与元数据</b></string>
     <string name="room_settings_no_flair">" 这个聊天室没有显示任何社区的 flair"</string>
-    <string name="widget_integration_missing_parameter">缺少所需的参数</string>
-    <string name="widget_integration_invalid_parameter">无效参数</string>
+    <string name="widget_integration_missing_parameter">缺少所需的参数。</string>
+    <string name="widget_integration_invalid_parameter">无效参数。</string>
     <string name="community_id_hint">样例 ID</string>
 
-    <string name="dialog_user_consent_content">要想继续使用主服务器 %1$s 您必须阅读并同意其服务条款</string>
+    <string name="dialog_user_consent_content">要想继续使用主服务器 %1$s 您必须阅读并同意其服务条款。</string>
     <string name="dialog_user_consent_submit">现在阅读</string>
 
     </resources>
