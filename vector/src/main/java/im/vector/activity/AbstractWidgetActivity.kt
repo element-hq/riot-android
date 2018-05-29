@@ -260,7 +260,7 @@ abstract class AbstractWidgetActivity : RiotAppCompatActivity() {
                     integId = dict["integId"]
 
                     // Add "type_" as a prefix
-                    integId?.let { integId = "type_$integId" }
+                    integType?.let { integType = "type_$integType" }
                 }
 
                 openIntegrationManager(integId, integType)
