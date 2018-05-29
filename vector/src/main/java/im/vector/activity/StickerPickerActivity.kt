@@ -82,10 +82,9 @@ class StickerPickerActivity : AbstractWidgetActivity() {
         when (action) {
             "m.sticker" -> sendSticker(eventData)
                     .also { return true }
-            // TODO Deals with action to open integration manager (in parent?)
         }
 
-        return false
+        return super.dealsWithWidgetRequest(eventData)
     }
 
     /* ==========================================================================================
@@ -117,13 +116,7 @@ class StickerPickerActivity : AbstractWidgetActivity() {
     override fun onOptionsItemSelected(item: MenuItem?): Boolean {
         when (item?.itemId) {
             R.id.menu_settings -> {
-                val intent = IntegrationManagerActivity.getIntent(context = this,
-                        matrixId = mSession!!.myUserId,
-                        roomId = mRoom!!.roomId,
-                        widgetId = mWidgetId,
-                        screenId = "type_$WIDGET_NAME")
-
-                startActivityForResult(intent, INTEGRATION_MANAGER_ACTIVITY_REQUEST_CODE)
+                openIntegrationManager(mWidgetId, "type_$WIDGET_NAME")
 
                 return true
             }

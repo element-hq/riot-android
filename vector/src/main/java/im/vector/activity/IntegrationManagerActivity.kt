@@ -125,7 +125,7 @@ class IntegrationManagerActivity : AbstractWidgetActivity() {
                     .also { return true }
         }
 
-        return false
+        return super.dealsWithWidgetRequest(eventData)
     }
 
     /*

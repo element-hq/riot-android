@@ -27,6 +27,7 @@ import butterknife.BindView
 import com.google.gson.reflect.TypeToken
 import im.vector.Matrix
 import im.vector.R
+import im.vector.activity.util.INTEGRATION_MANAGER_ACTIVITY_REQUEST_CODE
 import im.vector.types.JsonDict
 import im.vector.types.WidgetEventData
 import im.vector.util.AssetReader
@@ -236,7 +237,35 @@ abstract class AbstractWidgetActivity : RiotAppCompatActivity() {
      *
      * @return true if the message is handled (it means an answer has been sent), false if not
      */
-    abstract fun dealsWithWidgetRequest(eventData: JsonDict<Any>): Boolean
+    @CallSuper
+    open fun dealsWithWidgetRequest(eventData: JsonDict<Any>): Boolean {
+        val action = eventData["action"] as String?
+
+        when (action) {
+            "integration_manager_open" -> {
+                var integType: String? = null
+                var integId: String? = null
+
+                val data = eventData["data"]
+
+                data?.let {
+                    val dict = data as JsonDict<String>
+
+                    integType = dict["integType"]
+                    integId = dict["integId"]
+
+                    // Add "type_" as a prefix
+                    integId?.let { integId = "type_$integId" }
+                }
+
+                openIntegrationManager(integId, integType)
+                return true
+            }
+        }
+
+        // Not handled
+        return false
+    }
 
     /*
      * *********************************************************************************************
@@ -348,6 +377,23 @@ abstract class AbstractWidgetActivity : RiotAppCompatActivity() {
      */
     protected fun sendObjectAsJsonMap(any: Any, eventData: JsonDict<Any>) {
         sendObjectResponse(any.toJsonMap(), eventData)
+    }
+
+    /* ==========================================================================================
+     * Protected methods
+     * ========================================================================================== */
+
+    /**
+     * Open integration manager
+     */
+    protected fun openIntegrationManager(widgetId: String?, screenId: String?) {
+        val intent = IntegrationManagerActivity.getIntent(context = this,
+                matrixId = mSession!!.myUserId,
+                roomId = mRoom!!.roomId,
+                widgetId = widgetId,
+                screenId = screenId)
+
+        startActivityForResult(intent, INTEGRATION_MANAGER_ACTIVITY_REQUEST_CODE)
     }
 
     /* ==========================================================================================
