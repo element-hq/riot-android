@@ -1,6 +1,8 @@
 Changes in Riot 0.8.10 (2018-XX-XX)
 ===================================================
 
+Bug Fix:
+ * Gif do not play anymore (#2168)
 
 
 
