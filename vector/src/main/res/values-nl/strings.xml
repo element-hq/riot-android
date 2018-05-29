@@ -58,7 +58,7 @@ Selecteer exporteren om de versleutelingssleutels op te slaan voordat je uitlogt
     <string name="action_quick_reply">Snel reageren</string>
     <string name="action_open">Open</string>
     <string name="action_close">Sluit</string>
-    <string name="copied_to_clipboard">Naar klembord kopïeren</string>
+    <string name="copied_to_clipboard">Naar klembord gekopïeerd</string>
     <string name="disable">Deactiveren</string>
 
     <!-- dialog titles -->
@@ -816,8 +816,8 @@ Je kan het nu of later doen vanaf de applicatie instellingen.</string>
     <string name="groups_list">Groepenlijst</string>
 
     <plurals name="membership_changes">
-	<item quantity="one">1 lidmaatschap verandering</item>
-	<item quantity="other">%d lidmaatschap veranderingen</item>
+	<item quantity="one">1 verandering in lidmaatschap</item>
+	<item quantity="other">%d veranderingen in lidmaatschap</item>
 </plurals>
 
     <string name="list_members">Ledenlijst</string>
