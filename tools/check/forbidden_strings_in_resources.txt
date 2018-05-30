@@ -1,0 +1,37 @@
+# This file list String which are not allowed in source code.
+# Use Perl regex to write forbidden strings
+# Note: line cannot start with a space. Use \s instead.
+# It is possible to specify an authorized number of occurrence with === suffix. Default is 0
+# Example:
+# AuthorizedStringThreeTimes===3
+
+# Rubish from merge
+<<<<<<<
+>>>>>>>
+
+# Hardcoded string
+app\:emptyLabelText=\"[^@]
+android\:text=\"[^@]
+android\:hint=\"[^@]
+android\:title=\"[^@]
+android\:contentDescription=\"[^@]
+app\:ms_floatingLabelText=\"[^@]
+app\:ms_hint=\"[^@]
+
+# do not commit...
+DO NOT COMMIT
+
+# Tab
+\t
+
+# Empty lines and trailing space
+[ ]$
+
+# Use project color
+@android\:color\/
+
+# String in multiline
+<string [^<]*$
+
+# double unbreakable space
+\\u00A0\\u00A0
