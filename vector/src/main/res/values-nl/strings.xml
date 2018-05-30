@@ -963,7 +963,7 @@ Wil je er nu een paar toevoegen?</string>
 
     <string name="widget_integration_missing_parameter">Een vereiste parameter mist.</string>
     <string name="widget_integration_invalid_parameter">Een parameter is niet geldig.</string>
-    <string name="dialog_user_consent_content">Om deze thuisserver verder te blijven gebruiken moet je de voorwaarden lezen en ermee akkoord gaan.</string>
+    <string name="dialog_user_consent_content">Om deze thuisserver verder te blijven gebruiken %1$s moet je de voorwaarden lezen en ermee akkoord gaan.</string>
     <string name="dialog_user_consent_submit">Nu doorlezen</string>
 
     <string name="deactivate_account_title">Account Deactiveren</string>
