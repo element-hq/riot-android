@@ -58,7 +58,7 @@ Selecteer exporteren om de versleutelingssleutels op te slaan voordat je uitlogt
     <string name="action_quick_reply">Snel reageren</string>
     <string name="action_open">Open</string>
     <string name="action_close">Sluit</string>
-    <string name="copied_to_clipboard">Naar klembord kopïeren</string>
+    <string name="copied_to_clipboard">Naar klembord gekopïeerd</string>
     <string name="disable">Deactiveren</string>
 
     <!-- dialog titles -->
@@ -433,7 +433,7 @@ Sta toegang toe op de volgende pop-up om bestanden vanaf je telefoon te sturen.<
     <!-- home sliding menu -->
     <string name="room_sliding_menu_messages">Berichten</string>
     <string name="room_sliding_menu_settings">Instellingen</string>
-    <string name="room_sliding_menu_version">Versie </string>
+    <string name="room_sliding_menu_version">Versie</string>
     <string name="room_sliding_menu_term_and_conditions">Algemene voorwaarden</string>
     <string name="room_sliding_menu_third_party_notices">Derde partij vermeldingen</string>
     <string name="room_sliding_menu_copyright">Copyright</string>
@@ -816,8 +816,8 @@ Je kan het nu of later doen vanaf de applicatie instellingen.</string>
     <string name="groups_list">Groepenlijst</string>
 
     <plurals name="membership_changes">
-	<item quantity="one">1 lidmaatschap verandering</item>
-	<item quantity="other">%d lidmaatschap veranderingen</item>
+	<item quantity="one">1 verandering in lidmaatschap</item>
+	<item quantity="other">%d veranderingen in lidmaatschap</item>
 </plurals>
 
     <string name="list_members">Ledenlijst</string>
@@ -927,4 +927,55 @@ Je kan het nu of later doen vanaf de applicatie instellingen.</string>
 	<item quantity="other">%d ongelezen vermelde berichten</item>
 </plurals>
     <string name="notice_avatar">Vermeldingsavatar</string>
-    </resources>
+    <string name="title_activity_choose_sticker">Verstuur een sticker</string>
+
+    <string name="option_send_sticker">Sticker versturen</string>
+    <string name="no_sticker_application_dialog_content">Je hebt momenteel geen stickerpakketten aan staan.
+
+Wil je er nu een paar toevoegen?</string>
+
+    <string name="settings_notification_privacy">Notificatie privacy</string>
+    <string name="settings_notification_privacy_warning">Riot.im werkt in de achtergrond om de inhoud van de berichten in de notificatie privé te houden. Je kan deze optie uitzetten om batterijverbruik te verminderen.</string>
+    <string name="settings_notification_privacy_normal">Normaal</string>
+    <string name="settings_notification_privacy_power_saving">Energie-besparende Opties</string>
+    <string name="settings_notification_privacy_low_detail">Notificaties met weinig details</string>
+    <string name="settings_notification_privacy_reduced">Gereduceerde privacy</string>
+    <string name="settings_notification_privacy_need_permission">De applicatie heeft toestemming nodig om in de achtergrond te werken</string>
+    <string name="settings_notification_privacy_no_permission">De apps hebben <b>geen</b> toestemming nodig om in de achtergrond te werken</string>
+    <string name="settings_notification_privacy_gcm">• Notifications worden verstuurd via Google Cloud Messaging</string>
+    <string name="settings_notification_privacy_metadata">• Notificaties bevatten alleen metadata</string>
+    <string name="settings_notification_privacy_secure_message_content">• De inhoud van de berichten in de notificatie is <b>veilig overgebracht rechtstreeks vanaf de Matrix thuisserver</b></string>
+    <string name="settings_notification_privacy_nosecure_message_content">• Notificaties bevatten <b>meta- en berichtdata</b></string>
+    <string name="settings_notification_privacy_message_content_not_shown">• Notificaties zullen <b>niet de inhoud van het bericht weergeven</b></string>
+
+    <string name="settings_deactivate_account_section">Account deactiveren</string>
+    <string name="settings_deactivate_my_account">Mijn account deactiveren</string>
+
+    <string name="startup_notification_privacy_title">Notificatie Privacy</string>
+    <string name="startup_notification_privacy_message">Riot kan in de achtergrond werken om je notificaties veilig en privé te beheren (dit kan misschien batterijgebruik aantasten).</string>
+    <string name="startup_notification_privacy_button_grant">Toestemming geven</string>
+    <string name="startup_notification_privacy_button_other">Kies een andere optie</string>
+
+    <string name="settings_opt_in_of_analytics">Statistische gegevens (analytics) versturen</string>
+    <string name="settings_opt_in_of_analytics_summary">Riot verzamelt anonieme gegevens (analytics) om het voor ons mogelijk te maken om de applicatie te verbeteren.</string>
+    <string name="settings_opt_in_of_analytics_prompt">Zet analytics alsjeblieft aan om ons te helpen in het verbeteren van Riot.</string>
+    <string name="settings_opt_in_of_analytics_ok">Ja ik wil helpen!</string>
+
+    <string name="widget_integration_missing_parameter">Een vereiste parameter mist.</string>
+    <string name="widget_integration_invalid_parameter">Een parameter is niet geldig.</string>
+    <string name="dialog_user_consent_content">Om deze thuisserver verder te blijven gebruiken moet je de voorwaarden lezen en ermee akkoord gaan.</string>
+    <string name="dialog_user_consent_submit">Nu doorlezen</string>
+
+    <string name="deactivate_account_title">Account Deactiveren</string>
+    <string name="deactivate_account_content">Dit zal je account voorgoed onbruikbaar maken. Je zal niet meer in kunnen loggen en niemand anders zal met dezelfde gebruikers ID kunnen registreren. Dit zal er voor zorgen dat je account alle ruimtes verlaat waar het momenteel onderdeel van is en het verwijderd de accountgegevens van de identiteitsserver. <b>Deze actie is onomkeerbaar.</b>
+
+Het deactiveren van je account <b>zal er niet standaard voor zorgen dat de berichten die je verzonden hebt vergeten worden.</b> Als je wilt dat wij de berichten vergeten, klikt alsjeblieft op het vakje hieronder.
+
+De zichtbaarheid van berichten in Matrix is hetzelfde als in e-mail. Het vergeten van je berichten betekent dat berichten die je hebt verstuurd niet meer gedeeld worden met nieuwe of ongeregistreerde gebruikers, maar geregistreerde gebruikers die al toegang hebben tot deze berichten zullen alsnog toegang hebben tot hun eigen kopie van het bericht.</string>
+    <string name="deactivate_account_delete_checkbox">Vergeet alle berichten die ik heb verstuurd wanneer mijn account gedeactiveerd is (<b>Waarschuwing:</b> dit zal er voor zorgen dat toekomstige gebruikers een incompleet beeld krijgen van gesprekken)</string>
+    <string name="deactivate_account_prompt_password">Om verder te gaan, voer je wachtwoord in:</string>
+    <string name="deactivate_account_submit">Account Deactiveren</string>
+
+    <string name="deactivate_account_on_riot_web">Gelieve te deactiveren via je Riot.im webapplicatie (<b>riot.im/app</b>)</string>
+
+</resources>

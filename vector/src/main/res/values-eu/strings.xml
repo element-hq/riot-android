@@ -424,7 +424,7 @@ Ziur zaude?</string>
 
     <string name="room_sliding_menu_messages">Mezuak</string>
     <string name="room_sliding_menu_settings">Ezarpenak</string>
-    <string name="room_sliding_menu_version">"Bertsioa: "</string>
+    <string name="room_sliding_menu_version">Bertsioa</string>
     <string name="room_sliding_menu_term_and_conditions">Termino eta baldintzak</string>
     <string name="room_sliding_menu_copyright">Copyright-a</string>
     <string name="room_sliding_menu_privacy_policy">Pribatutasun politika</string>
@@ -926,4 +926,36 @@ Zifratutako mezuak ez dira zifratzea oraindik ezarrita ez duten beste gailuetan 
     <string name="startup_notification_privacy_button_grant">Eman baimena</string>
     <string name="startup_notification_privacy_button_other">Aukeratu beste zerbait</string>
 
+    <string name="title_activity_choose_sticker">Bidali eranskailu bat</string>
+
+    <string name="option_send_sticker">Bidali eranskailua</string>
+    <string name="no_sticker_application_dialog_content">Ez duzu eranskailu multzorik aktibatuta.
+
+Baten bat gehitu orain?</string>
+
+    <string name="settings_deactivate_account_section">Desaktibatu kontua</string>
+    <string name="settings_deactivate_my_account">Desaktibatu nire kontua</string>
+
+    <string name="settings_opt_in_of_analytics">Bidali analitiketarako datuak</string>
+    <string name="settings_opt_in_of_analytics_summary">Riotek analitika anonimoak biltzen ditu aplikazioa hobetzeko.</string>
+    <string name="settings_opt_in_of_analytics_prompt">Gaitu analitikak Riot hobetzera laguntzeko.</string>
+    <string name="settings_opt_in_of_analytics_ok">Bai, lagundu nahi dut!</string>
+
+    <string name="widget_integration_missing_parameter">Behar den parametro bat falta da.</string>
+    <string name="widget_integration_invalid_parameter">Parametro bat baliogabea da.</string>
+    <string name="deactivate_account_submit">Desaktibatu kontua</string>
+
+    <string name="deactivate_account_on_riot_web"><b>riot.im/app</b>)</string>
+
+<string name="dialog_user_consent_content">%1$s hasiera-zerbitzaria erabiltzen jarraitzeko erabilera baldintzak irakurri eta onartu behar dituzu.</string>
+    <string name="dialog_user_consent_submit">Irakurri orain</string>
+
+    <string name="deactivate_account_title">Desaktibatu kontua</string>
+    <string name="deactivate_account_content">Honek kontua behin betirako erabilgaitza bihurtuko du. Ezin izango duzu saioa hasi, eta ezin izango du beste inork ID hori erabili. Kontua dagoen gela guztietatik aterako da, eta kontuaren xehetasunak identitate-zerbitzaritik ezabatuko dira. <b>Ekintza hau ezin da desegin</b>.
+
+Kontua desaktibatzean <b>ez dira zuk bidalitako mezuak ahaztuko.</b> Mezuak ahaztea nahi baduzu markatu beheko kutxa.
+
+Matrix-eko mezuen ikusgaitasuna e-mail sistemaren antekoa da. Guk zure mezuak ahaztean ez dizkiogu erabiltzaile berriei edo izena eman ez dutenei erakutsiko, baina jada zure mezuak jaso diztuzten erregistratutako erabiltzaileen bere kopia izaten jarraituko dute.</string>
+    <string name="deactivate_account_delete_checkbox">Ahaztu bidali ditudan mezu guztiak kontua desaktibatzean (Abisua: Honekin etorkizuneko erabiltzaileek elkarrizketaren bertsio ez oso bat ikusiko dute)</string>
+    <string name="deactivate_account_prompt_password">Jarraitzeko, sartu zure pasahitza:</string>
     </resources>
