@@ -26,9 +26,7 @@ import im.vector.Matrix
 import im.vector.R
 import org.matrix.androidsdk.MXSession
 import org.matrix.androidsdk.rest.callback.SimpleApiCallback
-import org.matrix.androidsdk.rest.client.LoginRestClient
 import org.matrix.androidsdk.rest.model.MatrixError
-import java.lang.Exception
 
 /**
  * Displays the Account deactivation screen.
@@ -86,38 +84,38 @@ class DeactivateAccountActivity : RiotAppCompatActivity() {
 
         showWaitingView()
 
-        session.profileApiClient.deactivateAccount(LoginRestClient.LOGIN_FLOW_TYPE_PASSWORD,
-                session.myUserId,
+        CommonActivityUtils.deactivateAccount(this,
+                session,
                 password,
                 eraseCheckBox.isChecked,
                 object : SimpleApiCallback<Void>(this) {
-                    override fun onSuccess(info: Void) {
+
+                    override fun onSuccess(info: Void?) {
                         hideWaitingView()
 
-                        // FIXME this is not working well
-                        // CommonActivityUtils.logout(this@DeactivateAccountActivity, true, false)
+                        CommonActivityUtils.startLoginActivityNewTask(this@DeactivateAccountActivity)
                     }
 
                     override fun onMatrixError(e: MatrixError) {
+                        hideWaitingView()
+
                         if (e.errcode == MatrixError.FORBIDDEN) {
                             passwordEditText.error = getString(R.string.auth_invalid_login_param)
                         } else {
                             super.onMatrixError(e)
                         }
-
-                        hideWaitingView()
                     }
 
                     override fun onNetworkError(e: Exception) {
-                        super.onNetworkError(e)
-
                         hideWaitingView()
+
+                        super.onNetworkError(e)
                     }
 
                     override fun onUnexpectedError(e: Exception) {
-                        super.onUnexpectedError(e)
-
                         hideWaitingView()
+
+                        super.onUnexpectedError(e)
                     }
                 }
         )
