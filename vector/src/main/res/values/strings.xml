@@ -841,6 +841,9 @@
     <string name="directory_server_all_rooms_on_server">All rooms on %s server</string>
     <string name="directory_server_native_rooms">All native %s rooms</string>
 
+    <!-- Lock screen-->
+    <string name="lock_screen_hint">Type here…</string>
+
     <!-- Notifications -->
     <plurals name="notification_unread_notified_messages">
         <item quantity="one">1 unread notified message</item>
