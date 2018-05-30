@@ -455,13 +455,10 @@ public class CommonActivityUtils {
                     Log.d(LOG_TAG, "## logout(): Exception Msg=" + e.getMessage());
                 }
 
-                // warn that the user logs out
-                Collection<MXSession> sessions = Matrix.getMXSessions(context);
-                for (MXSession session : sessions) {
-                    // Publish to the server that we're now offline
-                    MyPresenceManager.getInstance(context, session).advertiseOffline();
-                    MyPresenceManager.remove(session);
-                }
+                // Publish to the server that we're now offline
+                MyPresenceManager.getInstance(context, mxSession).advertiseOffline();
+                MyPresenceManager.remove(mxSession);
+
                 // clear the preferences
                 PreferencesManager.clearPreferences(context);
 
