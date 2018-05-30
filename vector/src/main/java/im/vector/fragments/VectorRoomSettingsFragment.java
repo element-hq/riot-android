@@ -89,8 +89,6 @@ import im.vector.preference.VectorSwitchPreference;
 import im.vector.util.ThemeUtils;
 import im.vector.util.VectorUtils;
 
-import static android.preference.PreferenceManager.getDefaultSharedPreferences;
-
 public class VectorRoomSettingsFragment extends PreferenceFragment implements SharedPreferences.OnSharedPreferenceChangeListener {
     // internal constants values
     private static final String LOG_TAG = VectorRoomSettingsFragment.class.getSimpleName();
@@ -546,7 +544,7 @@ public class VectorRoomSettingsFragment extends PreferenceFragment implements Sh
 
         try {
             //SharedPreferences prefMgr = getActivity().getSharedPreferences("VectorSettingsFile", Context.MODE_PRIVATE);
-            SharedPreferences prefMgr = getDefaultSharedPreferences(getActivity());
+            SharedPreferences prefMgr = PreferenceManager.getDefaultSharedPreferences(getActivity());
 
             if (aIsListenerEnabled) {
                 prefMgr.registerOnSharedPreferenceChangeListener(this);
