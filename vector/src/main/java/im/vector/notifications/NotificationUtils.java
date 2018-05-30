@@ -195,7 +195,7 @@ public class NotificationUtils {
         builder.setSmallIcon(R.drawable.incoming_call_notification_transparent);
 
         // Display the incoming call notification on the lock screen
-        if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
             builder.setPriority(NotificationCompat.PRIORITY_MAX);
         }
 
@@ -245,7 +245,7 @@ public class NotificationUtils {
         builder.setSmallIcon(R.drawable.incoming_call_notification_transparent);
 
         // Display the incoming call notification on the lock screen
-        if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
             builder.setPriority(NotificationCompat.PRIORITY_MAX);
         }
 

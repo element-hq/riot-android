@@ -20,6 +20,7 @@ package im.vector.activity;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.os.Build;
 import android.support.annotation.Nullable;
 import android.support.v4.app.DialogFragment;
 import android.support.v4.app.Fragment;
@@ -94,7 +95,7 @@ public abstract class MXCActionBarActivity extends RiotAppCompatActivity {
         // ActivityOptionsCompat options = ActivityOptionsCompat.makeSceneTransitionAnimation(...
         // ActivityCompat.startActivity(activity, new Intent(activity, DetailActivity.class),  options.toBundle());
 
-        if (android.os.Build.VERSION.SDK_INT < android.os.Build.VERSION_CODES.LOLLIPOP) {
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP) {
             this.overridePendingTransition(R.anim.anim_slide_in_bottom, R.anim.anim_slide_nothing);
         } else {
             // the animation is enabled in the theme
@@ -110,7 +111,7 @@ public abstract class MXCActionBarActivity extends RiotAppCompatActivity {
         //
         // ActivityOptionsCompat options = ActivityOptionsCompat.makeSceneTransitionAnimation(...
         // ActivityCompat.startActivity(activity, new Intent(activity, DetailActivity.class),  options.toBundle());
-        if (android.os.Build.VERSION.SDK_INT < android.os.Build.VERSION_CODES.LOLLIPOP) {
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP) {
             this.overridePendingTransition(R.anim.anim_slide_nothing, R.anim.anim_slide_out_bottom);
         } else {
             // the animation is enabled in the theme

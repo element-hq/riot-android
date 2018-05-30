@@ -16,6 +16,7 @@
 
 package im.vector.fragments;
 
+import android.os.Build;
 import android.os.Bundle;
 
 import android.support.v4.content.ContextCompat;
@@ -158,7 +159,7 @@ public class GroupDetailsHomeFragment extends GroupDetailsBaseFragment {
     private void refreshLongDescription() {
         if (null != mGroupHtmlTextView) {
             Group group = mActivity.getGroup();
-            if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.N) {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
                 mGroupHtmlTextView.setText(Html.fromHtml(group.getLongDescription(), Html.FROM_HTML_MODE_LEGACY, mImageGetter, null));
             } else {
                 mGroupHtmlTextView.setText(Html.fromHtml(group.getLongDescription(), mImageGetter, null));

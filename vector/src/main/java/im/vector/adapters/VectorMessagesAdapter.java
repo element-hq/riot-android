@@ -2406,7 +2406,7 @@ public class VectorMessagesAdapter extends AbstractMessagesAdapter {
      */
     @SuppressLint("NewApi")
     private void onMessageClick(final Event event, final String textMsg, final View anchorView) {
-        final PopupMenu popup = (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) ? new PopupMenu(mContext, anchorView, Gravity.END) : new PopupMenu(mContext, anchorView);
+        final PopupMenu popup = (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) ? new PopupMenu(mContext, anchorView, Gravity.END) : new PopupMenu(mContext, anchorView);
 
         popup.getMenuInflater().inflate(R.menu.vector_room_message_settings, popup.getMenu());
 

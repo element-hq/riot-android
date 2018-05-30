@@ -101,7 +101,7 @@ public class NotificationPrivacyActivity extends RiotAppCompatActivity  {
         }
 
         // The permission request is only necessary for devices os versions greater than API 23 (M)
-        if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.M){
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M){
             tvNeedPermission.setVisibility(View.VISIBLE);
             tvNoPermission.setVisibility(View.VISIBLE);
         } else{

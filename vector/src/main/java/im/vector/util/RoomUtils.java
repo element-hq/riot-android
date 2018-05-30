@@ -469,7 +469,7 @@ public class RoomUtils {
 
         final PopupMenu popup;
 
-        if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
             popup = new PopupMenu(popmenuContext, actionView, Gravity.END);
         } else {
             popup = new PopupMenu(popmenuContext, actionView);

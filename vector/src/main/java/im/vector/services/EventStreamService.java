@@ -942,14 +942,14 @@ public class EventStreamService extends Service {
         notifBuilder.setContentIntent(pi);
 
         // hide the notification from the status bar
-        if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
             notifBuilder.setPriority(NotificationCompat.PRIORITY_MIN);
         }
 
         Notification notification = notifBuilder.build();
         notification.flags |= Notification.FLAG_NO_CLEAR;
 
-        if (android.os.Build.VERSION.SDK_INT < Build.VERSION_CODES.M) {
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.M) {
             // some devices crash if this field is not set
             // even if it is deprecated
 

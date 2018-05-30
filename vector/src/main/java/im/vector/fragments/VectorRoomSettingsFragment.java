@@ -1560,7 +1560,7 @@ public class VectorRoomSettingsFragment extends PreferenceFragment implements Sh
     @SuppressLint("NewApi")
     private void onAddressLongClick(final String roomAlias, final View anchorView) {
         Context context = getActivity();
-        final PopupMenu popup = (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) ? new PopupMenu(context, anchorView, Gravity.END) : new PopupMenu(context, anchorView);
+        final PopupMenu popup = (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) ? new PopupMenu(context, anchorView, Gravity.END) : new PopupMenu(context, anchorView);
 
         popup.getMenuInflater().inflate(R.menu.vector_room_settings_addresses, popup.getMenu());
 

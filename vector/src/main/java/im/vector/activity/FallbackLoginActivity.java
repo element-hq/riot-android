@@ -21,6 +21,7 @@ import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.net.http.SslError;
+import android.os.Build;
 import android.text.TextUtils;
 import android.view.KeyEvent;
 import android.webkit.SslErrorHandler;
@@ -84,7 +85,7 @@ public class FallbackLoginActivity extends RiotAppCompatActivity {
         // clear the cookies must be cleared
         if ((null != cookieManager) && !cookieManager.hasCookies()) {
             launchWebView();
-        } else if (android.os.Build.VERSION.SDK_INT < android.os.Build.VERSION_CODES.LOLLIPOP) {
+        } else if (Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP) {
             try {
                 cookieManager.removeAllCookie();
             } catch (Exception e) {
