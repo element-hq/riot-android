@@ -27,6 +27,7 @@ import butterknife.BindView
 import com.google.gson.reflect.TypeToken
 import im.vector.Matrix
 import im.vector.R
+import im.vector.activity.util.INTEGRATION_MANAGER_ACTIVITY_REQUEST_CODE
 import im.vector.types.JsonDict
 import im.vector.types.WidgetEventData
 import im.vector.util.AssetReader
@@ -167,6 +168,11 @@ abstract class AbstractWidgetActivity : RiotAppCompatActivity() {
                 }
 
                 override fun onPageFinished(view: WebView, url: String) {
+                    // Check that the Activity is still alive
+                    if (isDestroyed) {
+                        return
+                    }
+
                     hideWaitingView()
 
                     val js = AssetReader.readAssetFile(this@AbstractWidgetActivity, "postMessageAPI.js")
@@ -236,7 +242,42 @@ abstract class AbstractWidgetActivity : RiotAppCompatActivity() {
      *
      * @return true if the message is handled (it means an answer has been sent), false if not
      */
-    abstract fun dealsWithWidgetRequest(eventData: JsonDict<Any>): Boolean
+    @CallSuper
+    open fun dealsWithWidgetRequest(eventData: JsonDict<Any>): Boolean {
+        val action = eventData["action"] as String?
+
+        when (action) {
+            "integration_manager_open" -> {
+                var integType: String? = null
+                var integId: String? = null
+
+                val data = eventData["data"]
+
+                data
+                        .takeIf { it is Map<*, *> }
+                        ?.let {
+                            val dict = data as Map<*, *>
+
+                            dict["integType"]
+                                    .takeIf { it is String }
+                                    ?.let { integType = it as String }
+
+                            dict["integId"]
+                                    .takeIf { it is String }
+                                    ?.let { integId = it as String }
+
+                            // Add "type_" as a prefix
+                            integType?.let { integType = "type_$integType" }
+                        }
+
+                openIntegrationManager(integId, integType)
+                return true
+            }
+        }
+
+        // Not handled
+        return false
+    }
 
     /*
      * *********************************************************************************************
@@ -348,6 +389,23 @@ abstract class AbstractWidgetActivity : RiotAppCompatActivity() {
      */
     protected fun sendObjectAsJsonMap(any: Any, eventData: JsonDict<Any>) {
         sendObjectResponse(any.toJsonMap(), eventData)
+    }
+
+    /* ==========================================================================================
+     * Protected methods
+     * ========================================================================================== */
+
+    /**
+     * Open integration manager
+     */
+    protected fun openIntegrationManager(widgetId: String?, screenId: String?) {
+        val intent = IntegrationManagerActivity.getIntent(context = this,
+                matrixId = mSession!!.myUserId,
+                roomId = mRoom!!.roomId,
+                widgetId = widgetId,
+                screenId = screenId)
+
+        startActivityForResult(intent, INTEGRATION_MANAGER_ACTIVITY_REQUEST_CODE)
     }
 
     /* ==========================================================================================

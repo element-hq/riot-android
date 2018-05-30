@@ -1,6 +1,9 @@
 Changes in Riot 0.8.10 (2018-XX-XX)
 ===================================================
 
+Features:
+ * Send stickers to a Room
+
 Bug Fix:
  * Gif do not play anymore (#2168)
 

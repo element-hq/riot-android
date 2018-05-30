@@ -23,6 +23,7 @@ import android.view.Menu
 import android.view.MenuItem
 import com.google.gson.Gson
 import im.vector.R
+import im.vector.activity.util.INTEGRATION_MANAGER_ACTIVITY_REQUEST_CODE
 import im.vector.types.JsonDict
 import im.vector.util.ThemeUtils
 import org.matrix.androidsdk.util.Log
@@ -83,7 +84,20 @@ class StickerPickerActivity : AbstractWidgetActivity() {
                     .also { return true }
         }
 
-        return false
+        return super.dealsWithWidgetRequest(eventData)
+    }
+
+    /* ==========================================================================================
+     * Life cycle
+     * ========================================================================================== */
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+
+        when (requestCode) {
+        // Reload the page, user may have add/remove sticker pack
+            INTEGRATION_MANAGER_ACTIVITY_REQUEST_CODE -> mWebView.reload()
+        }
     }
 
     /* ==========================================================================================
@@ -102,13 +116,7 @@ class StickerPickerActivity : AbstractWidgetActivity() {
     override fun onOptionsItemSelected(item: MenuItem?): Boolean {
         when (item?.itemId) {
             R.id.menu_settings -> {
-                val intent = IntegrationManagerActivity.getIntent(context = this,
-                        matrixId = mSession!!.myUserId,
-                        roomId = mRoom!!.roomId,
-                        widgetId = mWidgetId,
-                        screenId = "type_$WIDGET_NAME")
-
-                startActivity(intent)
+                openIntegrationManager(mWidgetId, "type_$WIDGET_NAME")
 
                 return true
             }
