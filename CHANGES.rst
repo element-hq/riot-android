@@ -1,3 +1,35 @@
+Changes in Riot 0.8.10 (2018-XX-XX)
+===================================================
+
+Features:
+ * Send stickers to a Room
+
+Bug Fix:
+ * Gif do not play anymore (#2168)
+
+
+
+Changes in Riot 0.8.9 (2018-05-25)
+===================================================
+
+Improvements:
+ * Update matrix-sdk.aar lib (v0.9.4).
+ * GDPR compliance:
+    * Manage M_CONSENT_NOT_GIVEN matrix error
+    * Sending analytics is no opt-in
+    * Possibility to deactivate account (redirected to the web client for the moment)
+ * Reply to feature: display only
+
+Bug Fix:
+ * Background sync cannot be enabled on F-Droid Riot app (#2196)
+
+Build:
+ * Kotlin is enabled on the project
+ * Travis CI has been enabled to build PRs
+
+Note:
+ * Sending stickers is not enabled yet
+
 Changes in Riot 0.8.8 (2018-05-13)
 ===================================================
 

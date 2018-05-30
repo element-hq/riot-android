@@ -36,6 +36,7 @@ import im.vector.VectorApp;
 import im.vector.activity.AccountCreationActivity;
 import im.vector.activity.BugReportActivity;
 import im.vector.activity.CountryPickerActivity;
+import im.vector.activity.DeactivateAccountActivity;
 import im.vector.activity.FallbackLoginActivity;
 import im.vector.activity.HistoricalRoomsActivity;
 import im.vector.activity.LanguagePickerActivity;
@@ -133,8 +134,8 @@ public class ThemeUtils {
                 activity.setTheme(R.style.AppTheme_Dark);
             } else if (activity instanceof AccountCreationActivity) {
                 activity.setTheme(R.style.AppTheme_Dark);
-            } else if (activity instanceof AccountCreationActivity) {
-                activity.setTheme(R.style.AppTheme_Dark);
+            } else if (activity instanceof DeactivateAccountActivity) {
+                activity.setTheme(R.style.AppTheme_NoActionBar_Dark);
             } else if (activity instanceof CountryPickerActivity) {
                 activity.setTheme(R.style.CountryPickerTheme_Dark);
             } else if (activity instanceof FallbackLoginActivity) {
@@ -193,8 +194,8 @@ public class ThemeUtils {
                 activity.setTheme(R.style.AppTheme_Black);
             } else if (activity instanceof AccountCreationActivity) {
                 activity.setTheme(R.style.AppTheme_Black);
-            } else if (activity instanceof AccountCreationActivity) {
-                activity.setTheme(R.style.AppTheme_Black);
+            } else if (activity instanceof DeactivateAccountActivity) {
+                activity.setTheme(R.style.AppTheme_NoActionBar_Black);
             } else if (activity instanceof CountryPickerActivity) {
                 activity.setTheme(R.style.CountryPickerTheme_Black);
             } else if (activity instanceof FallbackLoginActivity) {

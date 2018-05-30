@@ -964,6 +964,4 @@
     <string name="deactivate_account_prompt_password">To continue, please enter your password:</string>
     <string name="deactivate_account_submit">Deactivate Account</string>
 
-    <string name="deactivate_account_on_riot_web">Please deactivate via your Riot.im web client (<b>riot.im/app</b>)</string>
-
 </resources>
