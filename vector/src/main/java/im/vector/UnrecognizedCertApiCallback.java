@@ -41,7 +41,7 @@ public class UnrecognizedCertApiCallback<T> extends SimpleApiCallback<T> {
 
     @Override
     public void onNetworkError(final Exception e) {
-        if(!UnrecognizedCertHandler.handle(mHsConfig, e, new UnrecognizedCertHandler.Callback() {
+        if (!UnrecognizedCertHandler.handle(mHsConfig, e, new UnrecognizedCertHandler.Callback() {
             @Override
             public void onAccept() {
                 onAcceptedCert();

@@ -761,9 +761,9 @@ public class VectorRoomSettingsFragment extends PreferenceFragment implements Sh
         }
 
         // update room directory visibility
-//        if(null != mRoomDirectoryVisibilitySwitch) {
+//        if (null != mRoomDirectoryVisibilitySwitch) {
 //            boolean isRoomPublic = TextUtils.equals(mRoom.getVisibility()/*getLiveState().visibility ou .isPublic()*/, RoomState.DIRECTORY_VISIBILITY_PUBLIC);
-//            if(isRoomPublic !isRoomPublic= mRoomDirectoryVisibilitySwitch.isChecked())
+//            if (isRoomPublic !isRoomPublic= mRoomDirectoryVisibilitySwitch.isChecked())
 //                mRoomDirectoryVisibilitySwitch.setChecked(isRoomPublic);
 //        }
 
@@ -846,8 +846,8 @@ public class VectorRoomSettingsFragment extends PreferenceFragment implements Sh
                     value = resources.getString(R.string.room_settings_tag_pref_entry_value_low_priority);
                     summary = resources.getString(R.string.room_settings_tag_pref_entry_low_priority);
                 /* For further use in case of multiple tags support
-                } else if(!mRoom.getAccountData().getKeys().isEmpty()) {
-                    for(String tag : customTagList){
+                } else if (!mRoom.getAccountData().getKeys().isEmpty()) {
+                    for (String tag : customTagList){
                         summary += (!summary.isEmpty()?" ":"") + tag;
                     }*/
                 } else {

@@ -1511,7 +1511,7 @@ public class VectorMemberDetailsActivity extends MXCActionBarActivity implements
      * @param aIsProgressBarDisplayed true to show the progress bar screen, false to hide it
      */
     private void enableProgressBarView(boolean aIsProgressBarDisplayed) {
-        if(aIsProgressBarDisplayed) {
+        if (aIsProgressBarDisplayed) {
             showWaitingView();
         } else {
             hideWaitingView();

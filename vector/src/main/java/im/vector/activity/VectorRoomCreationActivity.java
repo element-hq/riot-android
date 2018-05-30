@@ -372,7 +372,7 @@ public class VectorRoomCreationActivity extends MXCActionBarActivity {
         CreateRoomParams params = new CreateRoomParams();
 
         List<String> ids = new ArrayList<>();
-        for(ParticipantAdapterItem item : participants) {
+        for (ParticipantAdapterItem item : participants) {
             if (null != item.mUserId) {
                 ids.add(item.mUserId);
             }
