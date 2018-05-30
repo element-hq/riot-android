@@ -16,10 +16,9 @@
 
 package im.vector.receiver
 
-import android.content.BroadcastReceiver
-import android.content.Context
-import android.content.Intent
-import android.content.IntentFilter
+import android.content.*
+import android.preference.PreferenceManager
+import android.util.Log
 import im.vector.util.lsFiles
 
 /**
@@ -30,14 +29,35 @@ class DebugReceiver : BroadcastReceiver() {
     override fun onReceive(context: Context, intent: Intent) {
         when (intent.action) {
             DEBUG_ACTION_DUMP_FILESYSTEM -> lsFiles(context)
+            DEBUG_ACTION_DUMP_PREFERENCES -> dumpPreferences(context)
+        }
+    }
+
+    private fun dumpPreferences(context: Context) {
+        logPrefs("DefaultSharedPreferences", PreferenceManager.getDefaultSharedPreferences(context))
+        logPrefs("Vector.LoginStorage", context.getSharedPreferences("Vector.LoginStorage", Context.MODE_PRIVATE))
+        logPrefs("GcmRegistrationManager", context.getSharedPreferences("GcmRegistrationManager", Context.MODE_PRIVATE))
+    }
+
+    private fun logPrefs(name: String, sharedPreferences: SharedPreferences?) {
+        Log.d(LOG_TAG, "SharedPreferences $name:")
+
+        sharedPreferences?.let { prefs ->
+            prefs.all.keys.forEach { key ->
+                Log.d(LOG_TAG, "$key : ${prefs.all[key]}")
+            }
         }
     }
 
     companion object {
+        private const val LOG_TAG = "DebugReceiver"
+
         private const val DEBUG_ACTION_DUMP_FILESYSTEM = "im.vector.receiver.DEBUG_ACTION_DUMP_FILESYSTEM"
+        private const val DEBUG_ACTION_DUMP_PREFERENCES = "im.vector.receiver.DEBUG_ACTION_DUMP_PREFERENCES"
 
         fun getIntentFilter() = IntentFilter().apply {
             addAction(DEBUG_ACTION_DUMP_FILESYSTEM)
+            addAction(DEBUG_ACTION_DUMP_PREFERENCES)
         }
     }
 }
