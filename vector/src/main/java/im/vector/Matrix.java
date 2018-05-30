@@ -483,7 +483,7 @@ public class Matrix {
                                   final @NonNull ApiCallback<Void> aCallback) {
         Log.d(LOG_TAG, "## deactivateSession() " + session.getMyUserId());
 
-        session.deactivateAccount(context, LoginRestClient.LOGIN_FLOW_TYPE_PASSWORD, session.getMyUserId(), userPassword, eraseUserData, new SimpleApiCallback<Void>(aCallback) {
+        session.deactivateAccount(context, LoginRestClient.LOGIN_FLOW_TYPE_PASSWORD, userPassword, eraseUserData, new SimpleApiCallback<Void>(aCallback) {
             @Override
             public void onSuccess(Void info) {
                 mLoginStorage.removeCredentials(session.getHomeServerConfig());
