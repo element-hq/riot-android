@@ -40,7 +40,10 @@
     <string name="resend">Resend</string>
     <string name="redact">Redact</string>
     <string name="quote">Quote</string>
+    <string name="download">Download</string>
     <string name="share">Share</string>
+    <string name="speak">Speak</string>
+    <string name="clear">Clear</string>
     <string name="later">Later</string>
     <string name="forward">Forward</string>
     <string name="permalink">Permalink</string>

@@ -13,7 +13,8 @@
 app\:emptyLabelText=\"[^@]
 android\:text=\"[^@]
 android\:hint=\"[^@]
-android\:title=\"[^@]
+# (with tolerance for empty string)
+android\:title=\"[^@"]
 android\:contentDescription=\"[^@]
 app\:ms_floatingLabelText=\"[^@]
 app\:ms_hint=\"[^@]
