@@ -930,8 +930,6 @@ Matrix 中的信息可见性类似于电子邮件。我们忘记您的信息意�
     <string name="deactivate_account_prompt_password">请输入您的密码以继续操作：</string>
     <string name="deactivate_account_submit">停用账户</string>
 
-    <string name="deactivate_account_on_riot_web">请用 Riot.im 网页客户端来停用您的账户（<b>riot.im/app</b>）</string>
-
 <string name="title_activity_choose_sticker">发送贴纸</string>
 
     <string name="option_send_sticker">发送贴纸</string>

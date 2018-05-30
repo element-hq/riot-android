@@ -1026,6 +1026,4 @@ Email также позволит вам при необходимости во�
     <string name="deactivate_account_prompt_password">Чтобы продолжить, введите пароль:</string>
     <string name="deactivate_account_submit">Деактивировать аккаунт</string>
 
-    <string name="deactivate_account_on_riot_web">Пожалуйста, деактивируйте через веб-версию Riot.im (<b>riot.im/app</b>)</string>
-
 </resources>

@@ -957,6 +957,4 @@ Matrixban az üzenetek láthatósága hasonlít az e-mailre. Az üzenet törlés
     <string name="deactivate_account_prompt_password">A folytatáshoz add meg a jelszavadat:</string>
     <string name="deactivate_account_submit">Fiók felfüggesztése</string>
 
-    <string name="deactivate_account_on_riot_web">Kérlek a Riot.im web klienssel függeszd fel (<b>riot.im/app</b>)</string>
-
 </resources>

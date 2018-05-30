@@ -976,6 +976,4 @@ De zichtbaarheid van berichten in Matrix is hetzelfde als in e-mail. Het vergete
     <string name="deactivate_account_prompt_password">Om verder te gaan, voer je wachtwoord in:</string>
     <string name="deactivate_account_submit">Account Deactiveren</string>
 
-    <string name="deactivate_account_on_riot_web">Gelieve te deactiveren via je Riot.im webapplicatie (<b>riot.im/app</b>)</string>
-
 </resources>

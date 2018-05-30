@@ -976,6 +976,4 @@ La visibilità dei messaggi in Matrix è simile alle email. Se dimentichiamo i m
     <string name="deactivate_account_prompt_password">Per continuare, inserisci la tua password:</string>
     <string name="deactivate_account_submit">Disattiva account</string>
 
-    <string name="deactivate_account_on_riot_web">Disattiva usando il client web Riot.im (<b>riot.im/app</b>)</string>
-
 </resources>

@@ -945,8 +945,6 @@ Baten bat gehitu orain?</string>
     <string name="widget_integration_invalid_parameter">Parametro bat baliogabea da.</string>
     <string name="deactivate_account_submit">Desaktibatu kontua</string>
 
-    <string name="deactivate_account_on_riot_web"><b>riot.im/app</b>)</string>
-
 <string name="dialog_user_consent_content">%1$s hasiera-zerbitzaria erabiltzen jarraitzeko erabilera baldintzak irakurri eta onartu behar dituzu.</string>
     <string name="dialog_user_consent_submit">Irakurri orain</string>
 

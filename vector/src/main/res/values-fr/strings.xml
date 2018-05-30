@@ -957,6 +957,4 @@ La visibilité des messages dans Matrix est identique à celle des e-mails. Si n
     <string name="deactivate_account_prompt_password">Pour continuer, veuillez renseigner votre mot de passe :</string>
     <string name="deactivate_account_submit">Désactiver le compte</string>
 
-    <string name="deactivate_account_on_riot_web">Veuillez procéder à la désactivation via le client web Riot.im (<b>riot.im/app</b>)</string>
-
 </resources>

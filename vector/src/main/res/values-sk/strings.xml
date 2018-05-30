@@ -977,6 +977,4 @@ Viditeľnosť správ odoslaných cez matrix funguje podobne ako viditeľnosť sp
     <string name="deactivate_account_prompt_password">Aby ste mohli pokračovať, prosím zadajte svoje heslo:</string>
     <string name="deactivate_account_submit">Deaktivovať účet</string>
 
-    <string name="deactivate_account_on_riot_web">Prosím deaktivujte svoj účet cez web klienta riot.im (<b>riot.im/app</b>)</string>
-
 </resources>

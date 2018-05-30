@@ -877,7 +877,6 @@ Tölvupóstfang nýtist einnig til að endurstilla lykilorðið þitt.</string>
     <string name="room_settings_unset_main_address">Ekki setja sem aðalvistfang</string>
     <string name="widget_integration_missing_parameter">Nauðsynlegt gildi vantar.</string>
     <string name="widget_integration_invalid_parameter">Gildið er ekki gilt.</string>
-    <string name="deactivate_account_on_riot_web">Gerðu þetta óvirkt í Riot.im forritinu (<b>riot.im/app</b>)</string>
 
 <string name="settings_dont_send_typings_notifs">Ekki senda skrunandi tilkynningar</string>
     </resources>

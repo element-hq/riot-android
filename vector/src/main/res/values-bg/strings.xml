@@ -942,6 +942,4 @@
     <string name="deactivate_account_prompt_password">За да продължите, моля въведете паролата си:</string>
     <string name="deactivate_account_submit">Деактивирай акаунта</string>
 
-    <string name="deactivate_account_on_riot_web">Моля, деактивирайте чрез уеб версията на Riot.im (<b>riot.im/app</b>)</string>
-
 </resources>
