@@ -534,18 +534,21 @@ public class VectorHomeActivity extends RiotAppCompatActivity implements SearchV
         if ((null != VectorApp.getInstance()) && VectorApp.getInstance().didAppCrash()) {
             // crash reported by a rage shake
             try {
-                final AlertDialog.Builder appCrashedAlert = new AlertDialog.Builder(this);
-                appCrashedAlert.setMessage(getApplicationContext().getString(R.string.send_bug_report_app_crashed)).setPositiveButton(getString(R.string.yes), new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        BugReporter.sendBugReport();
-                    }
-                }).setNegativeButton(getString(R.string.no), new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        BugReporter.deleteCrashFile(VectorHomeActivity.this);
-                    }
-                }).show();
+                new AlertDialog.Builder(this)
+                        .setMessage(getString(R.string.send_bug_report_app_crashed))
+                        .setPositiveButton(getString(R.string.yes), new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                BugReporter.sendBugReport();
+                            }
+                        })
+                        .setNegativeButton(getString(R.string.no), new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                BugReporter.deleteCrashFile(VectorHomeActivity.this);
+                            }
+                        })
+                        .show();
 
                 VectorApp.getInstance().clearAppCrashStatus();
             } catch (Exception e) {
@@ -653,9 +656,9 @@ public class VectorHomeActivity extends RiotAppCompatActivity implements SearchV
      * Display a dialog to let the user chooses if he would like to use analytics tracking
      */
     private void promptForAnalyticsTracking() {
-        AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        builder.setMessage(R.string.settings_opt_in_of_analytics_prompt);
-        builder.setPositiveButton(R.string.settings_opt_in_of_analytics_ok, new DialogInterface.OnClickListener() {
+        new AlertDialog.Builder(this)
+                .setMessage(R.string.settings_opt_in_of_analytics_prompt)
+                .setPositiveButton(R.string.settings_opt_in_of_analytics_ok, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         setAnalyticsAuthorization(true);
