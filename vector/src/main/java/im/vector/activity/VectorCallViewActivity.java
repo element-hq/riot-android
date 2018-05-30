@@ -100,9 +100,9 @@ public class VectorCallViewActivity extends RiotAppCompatActivity implements Sen
     // video screen management
     private Timer mVideoFadingEdgesTimer;
     private TimerTask mVideoFadingEdgesTimerTask;
-    private static final short FADE_IN_DURATION = 250;
-    private static final short FADE_OUT_DURATION = 2000;
-    private static final short VIDEO_FADING_TIMER = 5000;
+    private static final int FADE_IN_DURATION = 250;
+    private static final int FADE_OUT_DURATION = 2000;
+    private static final int VIDEO_FADING_TIMER = 5000;
 
     // video display size
     private VideoLayoutConfiguration mLocalVideoLayoutConfig;
