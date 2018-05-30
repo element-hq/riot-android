@@ -45,6 +45,7 @@ import android.os.Parcelable;
 import android.preference.PreferenceManager;
 import android.support.annotation.AttrRes;
 import android.support.annotation.ColorInt;
+import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
@@ -425,6 +426,77 @@ public class CommonActivityUtils {
                 }
             }
         });
+    }
+
+    /**
+     * Clear all local data after a user account deactivation
+     *
+     * @param context       the application context
+     * @param mxSession     the session to deactivate
+     * @param userPassword  the user password
+     * @param eraseUserData true to also erase all the user data
+     * @param callback      the callback success and failure callback
+     */
+    public static void deactivateAccount(final Context context,
+                                         final MXSession mxSession,
+                                         final String userPassword,
+                                         final boolean eraseUserData,
+                                         final @NonNull ApiCallback<Void> callback) {
+        Matrix.getInstance(context).deactivateSession(context, mxSession, userPassword, eraseUserData, new SimpleApiCallback<Void>(callback) {
+
+            @Override
+            public void onSuccess(Void info) {
+                EventStreamService.removeNotification();
+                stopEventStream(context);
+
+                try {
+                    ShortcutBadger.setBadge(context, 0);
+                } catch (Exception e) {
+                    Log.d(LOG_TAG, "## logout(): Exception Msg=" + e.getMessage());
+                }
+
+                // warn that the user logs out
+                Collection<MXSession> sessions = Matrix.getMXSessions(context);
+                for (MXSession session : sessions) {
+                    // Publish to the server that we're now offline
+                    MyPresenceManager.getInstance(context, session).advertiseOffline();
+                    MyPresenceManager.remove(session);
+                }
+                // clear the preferences
+                PreferencesManager.clearPreferences(context);
+
+                // reset the GCM
+                Matrix.getInstance(context).getSharedGCMRegistrationManager().resetGCMRegistration();
+
+                // clear the preferences
+                Matrix.getInstance(context).getSharedGCMRegistrationManager().clearPreferences();
+
+                // Clear the credentials
+                Matrix.getInstance(context).getLoginStorage().clear();
+
+                // clear the tmp store list
+                Matrix.getInstance(context).clearTmpStoresList();
+
+                // reset the contacts
+                PIDsRetriever.getInstance().reset();
+                ContactsManager.getInstance().reset();
+
+                MXMediasCache.clearThumbnailsCache(context);
+
+                callback.onSuccess(info);
+            }
+        });
+    }
+
+    /**
+     * Start LoginActivity in a new task, and clear any other existing task
+     *
+     * @param activity the current Activity
+     */
+    public static void startLoginActivityNewTask(Activity activity) {
+        Intent intent = new Intent(activity, LoginActivity.class);
+        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+        activity.startActivity(intent);
     }
 
     /**
