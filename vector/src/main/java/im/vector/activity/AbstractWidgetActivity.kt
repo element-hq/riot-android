@@ -253,15 +253,22 @@ abstract class AbstractWidgetActivity : RiotAppCompatActivity() {
 
                 val data = eventData["data"]
 
-                data?.let {
-                    val dict = data as JsonDict<String>
+                data
+                        .takeIf { it is Map<*, *> }
+                        ?.let {
+                            val dict = data as Map<*, *>
 
-                    integType = dict["integType"]
-                    integId = dict["integId"]
+                            dict["integType"]
+                                    .takeIf { it is String }
+                                    ?.let { integType = it as String }
 
-                    // Add "type_" as a prefix
-                    integType?.let { integType = "type_$integType" }
-                }
+                            dict["integId"]
+                                    .takeIf { it is String }
+                                    ?.let { integId = it as String }
+
+                            // Add "type_" as a prefix
+                            integType?.let { integType = "type_$integType" }
+                        }
 
                 openIntegrationManager(integId, integType)
                 return true
