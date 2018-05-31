@@ -135,7 +135,8 @@ abstract class AbstractWidgetActivity : RiotAppCompatActivity() {
                 }
 
                 override fun onConsoleMessage(consoleMessage: ConsoleMessage): Boolean {
-                    Log.e(LOG_TAG, "## onConsoleMessage() : " + consoleMessage.message() + " line " + consoleMessage.lineNumber() + " source Id " + consoleMessage.sourceId())
+                    Log.e(LOG_TAG, "## onConsoleMessage() : " + consoleMessage.message()
+                            + " line " + consoleMessage.lineNumber() + " source Id " + consoleMessage.sourceId())
                     return super.onConsoleMessage(consoleMessage)
                 }
             }

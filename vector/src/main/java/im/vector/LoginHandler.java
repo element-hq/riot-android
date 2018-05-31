@@ -1,6 +1,7 @@
 /*
  * Copyright 2016 OpenMarket Ltd
  * Copyright 2017 Vector Creations Ltd
+ * Copyright 2018 New Vector Ltd
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -31,10 +32,6 @@ import org.matrix.androidsdk.rest.model.login.Credentials;
 import org.matrix.androidsdk.rest.model.login.LoginFlow;
 import org.matrix.androidsdk.rest.model.login.RegistrationParams;
 import org.matrix.androidsdk.rest.model.pid.ThreePid;
-import org.matrix.androidsdk.ssl.CertUtil;
-import org.matrix.androidsdk.ssl.Fingerprint;
-import org.matrix.androidsdk.ssl.UnrecognizedCertificateException;
-import org.matrix.androidsdk.util.Log;
 
 import java.util.Collection;
 import java.util.List;
@@ -51,7 +48,9 @@ public class LoginHandler {
      * @param credentials the credentials
      * @param callback    the callback
      */
-    private void onRegistrationDone(Context appCtx, HomeServerConnectionConfig hsConfig, Credentials credentials, SimpleApiCallback<HomeServerConnectionConfig> callback) {
+    private void onRegistrationDone(Context appCtx,
+                                    HomeServerConnectionConfig hsConfig,
+                                    Credentials credentials, SimpleApiCallback<HomeServerConnectionConfig> callback) {
         // sanity check - GA issue
         if (TextUtils.isEmpty(credentials.userId)) {
             callback.onMatrixError(new MatrixError(MatrixError.FORBIDDEN, "No user id"));
@@ -160,7 +159,9 @@ public class LoginHandler {
      * @param hsConfig the home server config.
      * @param callback the supported flows list callback.
      */
-    public void getSupportedRegistrationFlows(Context ctx, final HomeServerConnectionConfig hsConfig, final SimpleApiCallback<HomeServerConnectionConfig> callback) {
+    public void getSupportedRegistrationFlows(Context ctx,
+                                              final HomeServerConnectionConfig hsConfig,
+                                              final SimpleApiCallback<HomeServerConnectionConfig> callback) {
         register(ctx, hsConfig, new RegistrationParams(), callback);
     }
 
@@ -171,7 +172,10 @@ public class LoginHandler {
      * @param hsConfig the home server config.
      * @param callback the supported flows list callback.
      */
-    private void register(Context ctx, final HomeServerConnectionConfig hsConfig, final RegistrationParams params, final SimpleApiCallback<HomeServerConnectionConfig> callback) {
+    private void register(Context ctx,
+                          final HomeServerConnectionConfig hsConfig,
+                          final RegistrationParams params,
+                          final SimpleApiCallback<HomeServerConnectionConfig> callback) {
         final Context appCtx = ctx.getApplicationContext();
         LoginRestClient client = new LoginRestClient(hsConfig);
 

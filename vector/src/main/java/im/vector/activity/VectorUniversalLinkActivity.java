@@ -22,7 +22,6 @@ import android.app.ActivityManager;
 import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
-import android.os.Bundle;
 import android.text.TextUtils;
 import android.widget.Toast;
 
@@ -82,14 +81,17 @@ public class VectorUniversalLinkActivity extends RiotAppCompatActivity {
                         myBroadcastIntent.setAction(VectorRegistrationReceiver.BROADCAST_ACTION_REGISTRATION);
                         myBroadcastIntent.setData(getIntent().getData());
 
-                        CommonActivityUtils.logout(VectorUniversalLinkActivity.this, Matrix.getMXSessions(VectorUniversalLinkActivity.this), true, new SimpleApiCallback<Void>() {
-                            @Override
-                            public void onSuccess(Void info) {
-                                Log.d(LOG_TAG, "## onCreate(): logout succeeded");
-                                sendBroadcast(myBroadcastIntent);
-                                finish();
-                            }
-                        });
+                        CommonActivityUtils.logout(VectorUniversalLinkActivity.this,
+                                Matrix.getMXSessions(VectorUniversalLinkActivity.this),
+                                true,
+                                new SimpleApiCallback<Void>() {
+                                    @Override
+                                    public void onSuccess(Void info) {
+                                        Log.d(LOG_TAG, "## onCreate(): logout succeeded");
+                                        sendBroadcast(myBroadcastIntent);
+                                        finish();
+                                    }
+                                });
                     } else {
                         intentAction = VectorRegistrationReceiver.BROADCAST_ACTION_REGISTRATION;
                     }
@@ -129,7 +131,8 @@ public class VectorUniversalLinkActivity extends RiotAppCompatActivity {
 
         String ISUrl = uri.getScheme() + "://" + uri.getHost();
 
-        final HomeServerConnectionConfig homeServerConfig = new HomeServerConnectionConfig(Uri.parse(ISUrl), Uri.parse(ISUrl), null, new ArrayList<Fingerprint>(), false);
+        final HomeServerConnectionConfig homeServerConfig =
+                new HomeServerConnectionConfig(Uri.parse(ISUrl), Uri.parse(ISUrl), null, new ArrayList<Fingerprint>(), false);
 
         String token = aMapParams.get(VectorRegistrationReceiver.KEY_MAIL_VALIDATION_TOKEN);
         String clientSecret = aMapParams.get(VectorRegistrationReceiver.KEY_MAIL_VALIDATION_CLIENT_SECRET);
@@ -137,64 +140,65 @@ public class VectorUniversalLinkActivity extends RiotAppCompatActivity {
 
         final LoginHandler loginHandler = new LoginHandler();
 
-        loginHandler.submitEmailTokenValidation(getApplicationContext(), homeServerConfig, token, clientSecret, identityServerSessId, new ApiCallback<Boolean>() {
+        loginHandler.submitEmailTokenValidation(getApplicationContext(), homeServerConfig, token, clientSecret, identityServerSessId,
+                new ApiCallback<Boolean>() {
 
-            private void bringAppToForeground() {
-                final ActivityManager am = (ActivityManager) getSystemService(Context.ACTIVITY_SERVICE);
-                List<ActivityManager.RunningTaskInfo> tasklist = am.getRunningTasks(100);
+                    private void bringAppToForeground() {
+                        final ActivityManager am = (ActivityManager) getSystemService(Context.ACTIVITY_SERVICE);
+                        List<ActivityManager.RunningTaskInfo> tasklist = am.getRunningTasks(100);
 
-                if (!tasklist.isEmpty()) {
-                    int nSize = tasklist.size();
-                    for (int i = 0; i < nSize; i++) {
-                        final ActivityManager.RunningTaskInfo taskinfo = tasklist.get(i);
-                        if (taskinfo.topActivity.getPackageName().equals(getApplicationContext().getPackageName())) {
-                            Log.d(LOG_TAG, "## emailBinding(): bring the app in foreground.");
-                            am.moveTaskToFront(taskinfo.id, 0);
+                        if (!tasklist.isEmpty()) {
+                            int nSize = tasklist.size();
+                            for (int i = 0; i < nSize; i++) {
+                                final ActivityManager.RunningTaskInfo taskinfo = tasklist.get(i);
+                                if (taskinfo.topActivity.getPackageName().equals(getApplicationContext().getPackageName())) {
+                                    Log.d(LOG_TAG, "## emailBinding(): bring the app in foreground.");
+                                    am.moveTaskToFront(taskinfo.id, 0);
+                                }
+                            }
                         }
+
+                        finish();
                     }
-                }
 
-                finish();
-            }
+                    private void errorHandler(final String errorMessage) {
+                        VectorUniversalLinkActivity.this.runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                Toast.makeText(getApplicationContext(), errorMessage, Toast.LENGTH_LONG).show();
+                                bringAppToForeground();
+                            }
+                        });
+                    }
 
-            private void errorHandler(final String errorMessage) {
-                VectorUniversalLinkActivity.this.runOnUiThread(new Runnable() {
                     @Override
-                    public void run() {
-                        Toast.makeText(getApplicationContext(), errorMessage, Toast.LENGTH_LONG).show();
-                        bringAppToForeground();
+                    public void onSuccess(Boolean isSuccess) {
+                        VectorUniversalLinkActivity.this.runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                Log.d(LOG_TAG, "## emailBinding(): succeeds.");
+                                bringAppToForeground();
+                            }
+                        });
+                    }
+
+                    @Override
+                    public void onNetworkError(Exception e) {
+                        Log.d(LOG_TAG, "## emailBinding(): onNetworkError() Msg=" + e.getLocalizedMessage());
+                        errorHandler(getString(R.string.login_error_unable_register) + " : " + e.getLocalizedMessage());
+                    }
+
+                    @Override
+                    public void onMatrixError(MatrixError e) {
+                        Log.d(LOG_TAG, "## emailBinding(): onMatrixError() Msg=" + e.getLocalizedMessage());
+                        errorHandler(getString(R.string.login_error_unable_register) + " : " + e.getLocalizedMessage());
+                    }
+
+                    @Override
+                    public void onUnexpectedError(Exception e) {
+                        Log.d(LOG_TAG, "## emailBinding(): onUnexpectedError() Msg=" + e.getLocalizedMessage());
+                        errorHandler(getString(R.string.login_error_unable_register) + " : " + e.getLocalizedMessage());
                     }
                 });
-            }
-
-            @Override
-            public void onSuccess(Boolean isSuccess) {
-                VectorUniversalLinkActivity.this.runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        Log.d(LOG_TAG, "## emailBinding(): succeeds.");
-                        bringAppToForeground();
-                    }
-                });
-            }
-
-            @Override
-            public void onNetworkError(Exception e) {
-                Log.d(LOG_TAG, "## emailBinding(): onNetworkError() Msg=" + e.getLocalizedMessage());
-                errorHandler(getString(R.string.login_error_unable_register) + " : " + e.getLocalizedMessage());
-            }
-
-            @Override
-            public void onMatrixError(MatrixError e) {
-                Log.d(LOG_TAG, "## emailBinding(): onMatrixError() Msg=" + e.getLocalizedMessage());
-                errorHandler(getString(R.string.login_error_unable_register) + " : " + e.getLocalizedMessage());
-            }
-
-            @Override
-            public void onUnexpectedError(Exception e) {
-                Log.d(LOG_TAG, "## emailBinding(): onUnexpectedError() Msg=" + e.getLocalizedMessage());
-                errorHandler(getString(R.string.login_error_unable_register) + " : " + e.getLocalizedMessage());
-            }
-        });
     }
 }

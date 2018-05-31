@@ -1,5 +1,6 @@
 /*
  * Copyright 2017 Vector Creations Ltd
+ * Copyright 2018 New Vector Ltd
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,9 +19,7 @@ package im.vector.fragments;
 
 import android.os.Build;
 import android.os.Bundle;
-
 import android.support.v4.content.ContextCompat;
-
 import android.text.Html;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
@@ -116,8 +115,10 @@ public class GroupDetailsHomeFragment extends GroupDetailsBaseFragment {
      */
     @Override
     protected void initViews() {
-        mGroupMembersIconView.setImageDrawable(CommonActivityUtils.tintDrawableWithColor(ContextCompat.getDrawable(mActivity, R.drawable.riot_tab_groups), mGroupMembersTextView.getCurrentTextColor()));
-        mGroupRoomsIconView.setImageDrawable(CommonActivityUtils.tintDrawableWithColor(ContextCompat.getDrawable(mActivity, R.drawable.riot_tab_rooms), mGroupMembersTextView.getCurrentTextColor()));
+        mGroupMembersIconView.setImageDrawable(CommonActivityUtils.tintDrawableWithColor(ContextCompat.getDrawable(mActivity, R.drawable.riot_tab_groups),
+                mGroupMembersTextView.getCurrentTextColor()));
+        mGroupRoomsIconView.setImageDrawable(CommonActivityUtils.tintDrawableWithColor(ContextCompat.getDrawable(mActivity, R.drawable.riot_tab_rooms),
+                mGroupMembersTextView.getCurrentTextColor()));
     }
 
     /*

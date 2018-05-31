@@ -168,12 +168,16 @@ public class FallbackLoginActivity extends RiotAppCompatActivity {
                 // avoid infinite onPageFinished call
                 if (url.startsWith("http")) {
                     // Generic method to make a bridge between JS and the UIWebView
-                    final String MXCJavascriptSendObjectMessage = "javascript:window.matrixLogin.sendObjectMessage = function(parameters) { var iframe = document.createElement('iframe');  iframe.setAttribute('src', 'js:' + JSON.stringify(parameters));  document.documentElement.appendChild(iframe); iframe.parentNode.removeChild(iframe); iframe = null; };";
+                    final String MXCJavascriptSendObjectMessage = "javascript:window.matrixLogin.sendObjectMessage = function(parameters) { var i" +
+                            "frame = document.createElement('iframe');  iframe.setAttribute('src', 'js:' + JSON.stringify(parameters));  document" +
+                            ".documentElement.appendChild(iframe); iframe.parentNode.removeChild(iframe); iframe = null; };";
 
                     view.loadUrl(MXCJavascriptSendObjectMessage);
 
                     // The function the fallback page calls when the registration is complete
-                    final String MXCJavascriptOnRegistered = "javascript:window.matrixLogin.onLogin = function(homeserverUrl, userId, accessToken) { matrixLogin.sendObjectMessage({ 'action': 'onLogin', 'homeServer': homeserverUrl,'userId': userId,  'accessToken': accessToken  }); };";
+                    final String MXCJavascriptOnRegistered = "javascript:window.matrixLogin.onLogin = function(homeserverUrl, userId, accessToken" +
+                            ") { matrixLogin.sendObjectMessage({ 'action': 'onLogin', 'homeServer': homeserverUrl,'userId': userId,  'accessToken" +
+                            "': accessToken  }); };";
 
                     view.loadUrl(MXCJavascriptOnRegistered);
                 }

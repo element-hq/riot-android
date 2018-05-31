@@ -1,6 +1,7 @@
 /*
  * Copyright 2016 OpenMarket Ltd
  * Copyright 2017 Vector Creations Ltd
+ * Copyright 2018 New Vector Ltd
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -40,8 +41,8 @@ import org.matrix.androidsdk.rest.callback.ApiCallback;
 import org.matrix.androidsdk.rest.callback.SimpleApiCallback;
 import org.matrix.androidsdk.rest.model.MatrixError;
 import org.matrix.androidsdk.rest.model.RoomMember;
-import org.matrix.androidsdk.rest.model.search.SearchUsersResponse;
 import org.matrix.androidsdk.rest.model.User;
+import org.matrix.androidsdk.rest.model.search.SearchUsersResponse;
 import org.matrix.androidsdk.util.Log;
 
 import java.util.ArrayList;
@@ -145,7 +146,12 @@ public class VectorParticipantsAdapter extends BaseExpandableListAdapter {
      * @param roomId                 the room id.
      * @param withAddIcon            whether we need to display the "+" icon
      */
-    public VectorParticipantsAdapter(Context context, int cellLayoutResourceId, int headerLayoutResourceId, MXSession session, String roomId, boolean withAddIcon) {
+    public VectorParticipantsAdapter(Context context,
+                                     int cellLayoutResourceId,
+                                     int headerLayoutResourceId,
+                                     MXSession session,
+                                     String roomId,
+                                     boolean withAddIcon) {
         mContext = context;
 
         mLayoutInflater = LayoutInflater.from(context);
@@ -474,7 +480,10 @@ public class VectorParticipantsAdapter extends BaseExpandableListAdapter {
      * @param sortRoomContactsList true to sort the room contacts list
      * @param searchListener       the listener
      */
-    private void searchAccountKnownContacts(final ParticipantAdapterItem theFirstEntry, final List<ParticipantAdapterItem> participantItemList, final boolean sortRoomContactsList, final OnParticipantsSearchListener searchListener) {
+    private void searchAccountKnownContacts(final ParticipantAdapterItem theFirstEntry,
+                                            final List<ParticipantAdapterItem> participantItemList,
+                                            final boolean sortRoomContactsList,
+                                            final OnParticipantsSearchListener searchListener) {
         // the list is not anymore limited
         mKnownContactsLimited = false;
 
@@ -584,7 +593,10 @@ public class VectorParticipantsAdapter extends BaseExpandableListAdapter {
      * @param sort                true to sort participantItemList
      * @param searchListener      the search listener
      */
-    private void onKnownContactsSearchEnd(List<ParticipantAdapterItem> participantItemList, final ParticipantAdapterItem theFirstEntry, final boolean sort, final OnParticipantsSearchListener searchListener) {
+    private void onKnownContactsSearchEnd(List<ParticipantAdapterItem> participantItemList,
+                                          final ParticipantAdapterItem theFirstEntry,
+                                          final boolean sort,
+                                          final OnParticipantsSearchListener searchListener) {
         // ensure that the PIDs have been retrieved
         // it might have failed
         ContactsManager.getInstance().retrievePids();
@@ -828,7 +840,8 @@ public class VectorParticipantsAdapter extends BaseExpandableListAdapter {
             return convertView;
         }
 
-        loadingView.setVisibility(groupPosition == mLocalContactsSectionPosition && !ContactsManager.getInstance().arePIDsRetrieved() ? View.VISIBLE : View.GONE);
+        loadingView.setVisibility(groupPosition == mLocalContactsSectionPosition && !ContactsManager.getInstance().arePIDsRetrieved() ?
+                View.VISIBLE : View.GONE);
 
         ImageView imageView = convertView.findViewById(R.id.heading_image);
         View matrixView = convertView.findViewById(R.id.people_header_matrix_contacts_layout);

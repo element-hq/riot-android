@@ -59,7 +59,7 @@ public class PhoneNumberVerificationActivity extends RiotAppCompatActivity imple
     // Used to prevent user to submit several times in a row
     private boolean mIsSubmittingToken;
 
-     /*
+    /*
      * *********************************************************************************************
      * Static methods
      * *********************************************************************************************
@@ -159,8 +159,11 @@ public class PhoneNumberVerificationActivity extends RiotAppCompatActivity imple
                 mPhoneNumberCodeLayout.setError(getString(R.string.settings_phone_number_verification_error_empty_code));
             } else {
                 showWaitingView();
-                mSession.getThirdPidRestClient()
-                        .submitValidationToken(mThreePid.medium, mPhoneNumberCode.getText().toString(), mThreePid.clientSecret, mThreePid.sid, new ApiCallback<Boolean>() {
+                mSession.getThirdPidRestClient().submitValidationToken(mThreePid.medium,
+                        mPhoneNumberCode.getText().toString(),
+                        mThreePid.clientSecret,
+                        mThreePid.sid,
+                        new ApiCallback<Boolean>() {
                             @Override
                             public void onSuccess(Boolean isSuccess) {
                                 if (isSuccess) {

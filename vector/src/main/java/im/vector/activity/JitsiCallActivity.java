@@ -228,7 +228,8 @@ public class JitsiCallActivity extends RiotAppCompatActivity {
         }
 
         RelativeLayout layout = findViewById(R.id.call_layout);
-        RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.MATCH_PARENT, RelativeLayout.LayoutParams.MATCH_PARENT);
+        RelativeLayout.LayoutParams params
+                = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.MATCH_PARENT, RelativeLayout.LayoutParams.MATCH_PARENT);
         params.addRule(RelativeLayout.CENTER_IN_PARENT, RelativeLayout.TRUE);
         layout.setVisibility(View.VISIBLE);
         layout.addView(mJitsiView, 0, params);

@@ -1,5 +1,6 @@
 /*
  * Copyright 2014 OpenMarket Ltd
+ * Copyright 2018 New Vector Ltd
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -79,7 +80,8 @@ public class CallsManager {
     private String mPrevCallState;
     private boolean mIsStoppedByUser;
 
-    private final HeadsetConnectionReceiver.OnHeadsetStatusUpdateListener mOnHeadsetStatusUpdateListener = new HeadsetConnectionReceiver.OnHeadsetStatusUpdateListener() {
+    private final HeadsetConnectionReceiver.OnHeadsetStatusUpdateListener mOnHeadsetStatusUpdateListener
+            = new HeadsetConnectionReceiver.OnHeadsetStatusUpdateListener() {
 
         private void onHeadsetUpdate(boolean isBTHeadsetUpdate) {
             if (null != mActiveCall) {
@@ -229,7 +231,8 @@ public class CallsManager {
                     switch (state) {
                         case IMXCall.CALL_STATE_CREATED:
                             if (mActiveCall.isIncoming()) {
-                                EventStreamService.getInstance().displayIncomingCallNotification(mActiveCall.getSession(), mActiveCall.getRoom(), null, mActiveCall.getCallId(), null);
+                                EventStreamService.getInstance().displayIncomingCallNotification(mActiveCall.getSession(),
+                                        mActiveCall.getRoom(), null, mActiveCall.getCallId(), null);
                                 startRinging();
                             }
                             break;
@@ -244,7 +247,8 @@ public class CallsManager {
                             break;
 
                         case IMXCall.CALL_STATE_CONNECTED:
-                            EventStreamService.getInstance().displayCallInProgressNotification(mActiveCall.getSession(), mActiveCall.getRoom(), mActiveCall.getCallId());
+                            EventStreamService.getInstance().displayCallInProgressNotification(mActiveCall.getSession(),
+                                    mActiveCall.getRoom(), mActiveCall.getCallId());
                             mCallSoundsManager.stopSounds();
                             requestAudioFocus();
 

@@ -378,7 +378,8 @@ public class VectorRoomDetailsActivity extends MXCActionBarActivity implements T
         } else if (fragmentTag.equals(TAG_FRAGMENT_FILES_DETAILS)) {
             mSearchFilesFragment = (VectorSearchRoomFilesListFragment) getSupportFragmentManager().findFragmentByTag(TAG_FRAGMENT_FILES_DETAILS);
             if (null == mSearchFilesFragment) {
-                mSearchFilesFragment = VectorSearchRoomFilesListFragment.newInstance(mSession.getCredentials().userId, mRoomId, org.matrix.androidsdk.R.layout.fragment_matrix_message_list_fragment);
+                mSearchFilesFragment = VectorSearchRoomFilesListFragment.newInstance(mSession.getCredentials().userId,
+                        mRoomId, org.matrix.androidsdk.R.layout.fragment_matrix_message_list_fragment);
                 ft.replace(R.id.room_details_fragment_container, mSearchFilesFragment, TAG_FRAGMENT_FILES_DETAILS);
                 Log.d(LOG_TAG, "## onTabSelected() file frag replace");
             } else {
@@ -491,10 +492,16 @@ public class VectorRoomDetailsActivity extends MXCActionBarActivity implements T
             public void run() {
                 if (null == mRoomSettingsFragment) {
                     mRoomSettingsFragment = VectorRoomSettingsFragment.newInstance(mMatrixId, mRoomId);
-                    getFragmentManager().beginTransaction().replace(R.id.room_details_fragment_container, mRoomSettingsFragment, TAG_FRAGMENT_SETTINGS_ROOM_DETAIL).commit();
+                    getFragmentManager()
+                            .beginTransaction()
+                            .replace(R.id.room_details_fragment_container, mRoomSettingsFragment, TAG_FRAGMENT_SETTINGS_ROOM_DETAIL)
+                            .commit();
                     Log.d(LOG_TAG, "## onTabSelectSettingsFragment() settings frag replace");
                 } else {
-                    getFragmentManager().beginTransaction().attach(mRoomSettingsFragment).commit();
+                    getFragmentManager()
+                            .beginTransaction()
+                            .attach(mRoomSettingsFragment)
+                            .commit();
                     Log.d(LOG_TAG, "## onTabSelectSettingsFragment() settings frag attach");
                 }
             }

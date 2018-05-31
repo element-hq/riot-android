@@ -1,5 +1,6 @@
 /*
  * Copyright 2015 OpenMarket Ltd
+ * Copyright 2018 New Vector Ltd
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -534,12 +535,16 @@ public class VectorRoomSummaryAdapter extends BaseExpandableListAdapter {
                         retValue = 1;
                     } else if ((null == aRightObj) || (null == aRightObj.getLatestReceivedEvent())) {
                         retValue = -1;
-                    } else if ((deltaTimestamp = aRightObj.getLatestReceivedEvent().getOriginServerTs() - aLeftObj.getLatestReceivedEvent().getOriginServerTs()) > 0) {
-                        retValue = 1;
-                    } else if (deltaTimestamp < 0) {
-                        retValue = -1;
                     } else {
-                        retValue = 0;
+                        deltaTimestamp = aRightObj.getLatestReceivedEvent().getOriginServerTs() - aLeftObj.getLatestReceivedEvent().getOriginServerTs();
+
+                        if (deltaTimestamp > 0) {
+                            retValue = 1;
+                        } else if (deltaTimestamp < 0) {
+                            retValue = -1;
+                        } else {
+                            retValue = 0;
+                        }
                     }
 
                     return retValue;
@@ -717,13 +722,15 @@ public class VectorRoomSummaryAdapter extends BaseExpandableListAdapter {
                             value = "> " + PublicRoomsManager.PUBLIC_ROOMS_LIMIT;
                         }
 
-                        roomMsgTxtView.setText(mContext.getResources().getQuantityString(R.plurals.directory_search_rooms_for, mMatchedPublicRoomsCount, value, mSearchedPattern));
+                        roomMsgTxtView.setText(mContext.getResources()
+                                .getQuantityString(R.plurals.directory_search_rooms_for, mMatchedPublicRoomsCount, value, mSearchedPattern));
                     }
                 } else {
                     if (null == mPublicRoomsCount) {
                         roomMsgTxtView.setText(null);
                     } else {
-                        roomMsgTxtView.setText(mContext.getResources().getQuantityString(R.plurals.directory_search_rooms, mPublicRoomsCount, mPublicRoomsCount));
+                        roomMsgTxtView.setText(mContext.getResources()
+                                .getQuantityString(R.plurals.directory_search_rooms, mPublicRoomsCount, mPublicRoomsCount));
                     }
                 }
 

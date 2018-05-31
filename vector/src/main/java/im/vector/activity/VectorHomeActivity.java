@@ -329,7 +329,9 @@ public class VectorHomeActivity extends RiotAppCompatActivity implements SearchV
         } else {
 
             if (intent.hasExtra(EXTRA_CALL_SESSION_ID) && intent.hasExtra(EXTRA_CALL_ID)) {
-                startCall(intent.getStringExtra(EXTRA_CALL_SESSION_ID), intent.getStringExtra(EXTRA_CALL_ID), (MXUsersDevicesMap<MXDeviceInfo>) intent.getSerializableExtra(EXTRA_CALL_UNKNOWN_DEVICES));
+                startCall(intent.getStringExtra(EXTRA_CALL_SESSION_ID),
+                        intent.getStringExtra(EXTRA_CALL_ID),
+                        (MXUsersDevicesMap<MXDeviceInfo>) intent.getSerializableExtra(EXTRA_CALL_UNKNOWN_DEVICES));
                 intent.removeExtra(EXTRA_CALL_SESSION_ID);
                 intent.removeExtra(EXTRA_CALL_ID);
                 intent.removeExtra(EXTRA_CALL_UNKNOWN_DEVICES);
@@ -1228,7 +1230,11 @@ public class VectorHomeActivity extends RiotAppCompatActivity implements SearchV
     private void onFloatingButtonClick() {
         // ignore any action if there is a pending one
         if (!isWaitingViewVisible()) {
-            CharSequence items[] = new CharSequence[]{getString(R.string.room_recents_start_chat), getString(R.string.room_recents_create_room), getString(R.string.room_recents_join_room)};
+            CharSequence items[] = new CharSequence[]{
+                    getString(R.string.room_recents_start_chat),
+                    getString(R.string.room_recents_create_room),
+                    getString(R.string.room_recents_join_room)
+            };
             mFabDialog = new AlertDialog.Builder(this)
                     .setSingleChoiceItems(items, 0, new DialogInterface.OnClickListener() {
                         @Override
@@ -1668,7 +1674,8 @@ public class VectorHomeActivity extends RiotAppCompatActivity implements SearchV
 
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
-                exportButton.setEnabled(!TextUtils.isEmpty(passPhrase1EditText.getText()) && TextUtils.equals(passPhrase1EditText.getText(), passPhrase2EditText.getText()));
+                exportButton.setEnabled(!TextUtils.isEmpty(passPhrase1EditText.getText())
+                        && TextUtils.equals(passPhrase1EditText.getText(), passPhrase2EditText.getText()));
             }
 
             @Override
@@ -1878,7 +1885,8 @@ public class VectorHomeActivity extends RiotAppCompatActivity implements SearchV
         if (null != getSupportActionBar()) {
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
             getSupportActionBar().setHomeButtonEnabled(true);
-            getSupportActionBar().setHomeAsUpIndicator(CommonActivityUtils.tintDrawable(this, ContextCompat.getDrawable(this, R.drawable.ic_material_menu_white), R.attr.primary_control_color));
+            getSupportActionBar().setHomeAsUpIndicator(CommonActivityUtils.tintDrawable(this,
+                    ContextCompat.getDrawable(this, R.drawable.ic_material_menu_white), R.attr.primary_control_color));
         }
 
         Menu menuNav = navigationView.getMenu();
@@ -2091,8 +2099,12 @@ public class VectorHomeActivity extends RiotAppCompatActivity implements SearchV
 
                     // compute the new position
                     FrameLayout.LayoutParams iconViewLayoutParams = (FrameLayout.LayoutParams) iconView.getLayoutParams();
-                    FrameLayout.LayoutParams badgeLayoutParams = new FrameLayout.LayoutParams(FrameLayout.LayoutParams.WRAP_CONTENT, FrameLayout.LayoutParams.WRAP_CONTENT);
-                    badgeLayoutParams.setMargins(iconViewLayoutParams.leftMargin + badgeOffsetX, iconViewLayoutParams.topMargin - badgeOffsetY, iconViewLayoutParams.rightMargin, iconViewLayoutParams.bottomMargin);
+                    FrameLayout.LayoutParams badgeLayoutParams
+                            = new FrameLayout.LayoutParams(FrameLayout.LayoutParams.WRAP_CONTENT, FrameLayout.LayoutParams.WRAP_CONTENT);
+                    badgeLayoutParams.setMargins(iconViewLayoutParams.leftMargin + badgeOffsetX,
+                            iconViewLayoutParams.topMargin - badgeOffsetY,
+                            iconViewLayoutParams.rightMargin,
+                            iconViewLayoutParams.bottomMargin);
                     badgeLayoutParams.gravity = iconViewLayoutParams.gravity;
 
                     ((FrameLayout) iconView.getParent()).addView(badgeView, badgeLayoutParams);

@@ -2,7 +2,7 @@
  * Copyright 2015 OpenMarket Ltd
  * Copyright 2017 Vector Creations Ltd
  * Copyright 2018 New Vector Ltd
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
@@ -81,7 +81,7 @@ import im.vector.util.RiotEventDisplay;
 
 /**
  * A foreground service in charge of controlling whether the event stream is running or not.
- *
+ * <p>
  * It manages messages notifications displayed to the end user. It can also display foreground
  * notifications in some situations to let the app run in background.
  */
@@ -837,7 +837,10 @@ public class EventStreamService extends Service {
         // fdroid
         return (!mGcmRegistrationManager.useGCM() ||
                 // the GCM registration was not done
-                TextUtils.isEmpty(mGcmRegistrationManager.getCurrentRegistrationToken()) && !mGcmRegistrationManager.isServerRegistred()) && mGcmRegistrationManager.isBackgroundSyncAllowed() && mGcmRegistrationManager.areDeviceNotificationsAllowed();
+                TextUtils.isEmpty(mGcmRegistrationManager.getCurrentRegistrationToken())
+                        && !mGcmRegistrationManager.isServerRegistred())
+                && mGcmRegistrationManager.isBackgroundSyncAllowed()
+                && mGcmRegistrationManager.areDeviceNotificationsAllowed();
     }
 
     /**
@@ -855,7 +858,8 @@ public class EventStreamService extends Service {
         }
 
         // call in progress notifications
-        if ((mForegroundNotificationState == ForegroundNotificationState.INCOMING_CALL) || (mForegroundNotificationState == ForegroundNotificationState.CALL_IN_PROGRESS)) {
+        if ((mForegroundNotificationState == ForegroundNotificationState.INCOMING_CALL)
+                || (mForegroundNotificationState == ForegroundNotificationState.CALL_IN_PROGRESS)) {
             Log.d(LOG_TAG, "## refreshForegroundNotification : does nothing as there is a pending call");
             return;
         }
@@ -884,7 +888,7 @@ public class EventStreamService extends Service {
      * And display the foreground service notification (`NOTIF_ID_FOREGROUND_SERVICE`) if required.
      *
      * @param foregroundNotificationState the new state
-     * @param notification an already built notification. Required for `INCOMING_CALL` and `CALL_IN_PROGRESS`
+     * @param notification                an already built notification. Required for `INCOMING_CALL` and `CALL_IN_PROGRESS`
      */
     private void setForegroundNotificationState(ForegroundNotificationState foregroundNotificationState, Notification notification) {
 
@@ -956,7 +960,8 @@ public class EventStreamService extends Service {
             // setLatestEventInfo() is deprecated on Android M, so we try to use
             // reflection at runtime, to avoid compiler error: "Cannot resolve method.."
             try {
-                Method deprecatedMethod = notification.getClass().getMethod("setLatestEventInfo", Context.class, CharSequence.class, CharSequence.class, PendingIntent.class);
+                Method deprecatedMethod = notification.getClass()
+                        .getMethod("setLatestEventInfo", Context.class, CharSequence.class, CharSequence.class, PendingIntent.class);
                 deprecatedMethod.invoke(notification, this, getString(R.string.riot_app_name), subTitle, pi);
             } catch (Exception ex) {
                 Log.e(LOG_TAG, "## buildNotification(): Exception - setLatestEventInfo() Msg=" + ex.getMessage());
@@ -1245,7 +1250,8 @@ public class EventStreamService extends Service {
                     // Reset the unread count by considering the size of the event ids array.
                     mLastBackgroundNotificationUnreadCount = mBackgroundNotificationEventIds.size();
                 }
-                text = context.getResources().getQuantityString(R.plurals.room_new_messages_notification, mLastBackgroundNotificationUnreadCount, mLastBackgroundNotificationUnreadCount);
+                text = context.getResources().getQuantityString(R.plurals.room_new_messages_notification,
+                        mLastBackgroundNotificationUnreadCount, mLastBackgroundNotificationUnreadCount);
             } else {
                 // Add the potential sender name in the header
                 String senderName = (TextUtils.isEmpty(senderDisplayName) ? event.sender : senderDisplayName);
@@ -1369,7 +1375,8 @@ public class EventStreamService extends Service {
 
                         // detect if the event still exists
                         if (null == event) {
-                            Log.e(LOG_TAG, "## refreshMessagesNotification() : the event " + notifiedEvent.mEventId + " in room " + notifiedEvent.mRoomId + " does not exist anymore");
+                            Log.e(LOG_TAG, "## refreshMessagesNotification() : the event " + notifiedEvent.mEventId
+                                    + " in room " + notifiedEvent.mRoomId + " does not exist anymore");
                             mNotifiedEventsByRoomId.remove(roomId);
                         } else if ((event.getOriginServerTs()) > ts) {
                             eventToNotify = notifiedEvent;
@@ -1506,7 +1513,8 @@ public class EventStreamService extends Service {
                     if (null != events) {
                         for (Event event : events) {
                             if (event.getOriginServerTs() < minTs) {
-                                //Log.d(LOG_TAG, "##refreshNotifiedMessagesList() : ignore event " + event.eventId + " in room " + event.roomId + " because of the TS "+ event.getOriginServerTs());
+                                //Log.d(LOG_TAG, "##refreshNotifiedMessagesList() : ignore event "
+                                // + event.eventId + " in room " + event.roomId + " because of the TS "+ event.getOriginServerTs());
                             } else if (Event.EVENT_TYPE_STATE_ROOM_MEMBER.equals(event.getType())) {
                                 try {
                                     if ("invite".equals(event.getContentAsJsonObject().getAsJsonPrimitive("membership").getAsString())) {
@@ -1537,10 +1545,12 @@ public class EventStreamService extends Service {
 
                                     if ((null != rule) && rule.isEnabled && rule.shouldNotify()) {
                                         list.add(new NotifiedEvent(event.roomId, event.eventId, rule, event.getOriginServerTs()));
-                                        //Log.d(LOG_TAG, "## refreshNotifiedMessagesList() : the event " + event.eventId + " in room " + event.roomId + " fulfills " + rule);
+                                        //Log.d(LOG_TAG, "## refreshNotifiedMessagesList() : the event "
+                                        // + event.eventId + " in room " + event.roomId + " fulfills " + rule);
                                     }
                                 } else {
-                                    Log.d(LOG_TAG, "##refreshNotifiedMessagesList() : ignore event " + event.eventId + " in room " + event.roomId + " because of the TS " + (event.originServerTs));
+                                    Log.d(LOG_TAG, "##refreshNotifiedMessagesList() : ignore event " + event.eventId
+                                            + " in room " + event.roomId + " because of the TS " + (event.originServerTs));
                                 }
                             }
 
@@ -1587,7 +1597,8 @@ public class EventStreamService extends Service {
                                     NotifiedEvent event = events.get(i);
 
                                     if (room.isEventRead(event.mEventId) || (event.mOriginServerTs <= minTs)) {
-                                        // Log.d(LOG_TAG, "## refreshNotifiedMessagesList() : the event " + event.mEventId + " in room " + room.getRoomId() + " is read");
+                                        // Log.d(LOG_TAG, "## refreshNotifiedMessagesList() : the event "
+                                        // + event.mEventId + " in room " + room.getRoomId() + " is read");
 
                                         events.remove(i);
                                         isUpdated = true;
@@ -1670,7 +1681,8 @@ public class EventStreamService extends Service {
      */
     public void displayCallInProgressNotification(MXSession session, Room room, String callId) {
         if (null != callId) {
-            Notification notification = NotificationUtils.buildPendingCallNotification(getApplicationContext(), room.getName(session.getCredentials().userId), room.getRoomId(), session.getCredentials().userId, callId);
+            Notification notification = NotificationUtils.buildPendingCallNotification(getApplicationContext(),
+                    room.getName(session.getCredentials().userId), room.getRoomId(), session.getCredentials().userId, callId);
             setForegroundNotificationState(ForegroundNotificationState.CALL_IN_PROGRESS, notification);
             mCallIdInProgress = callId;
         }

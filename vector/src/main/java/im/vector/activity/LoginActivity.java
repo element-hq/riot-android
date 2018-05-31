@@ -380,7 +380,12 @@ public class LoginActivity extends MXCActionBarActivity implements RegistrationM
         mLoginEmailTextView = findViewById(R.id.login_user_name);
         EditText loginPhoneNumber = findViewById(R.id.login_phone_number_value);
         EditText loginPhoneNumberCountryCode = findViewById(R.id.login_phone_number_country);
-        loginPhoneNumberCountryCode.setCompoundDrawablesWithIntrinsicBounds(null, null, CommonActivityUtils.tintDrawable(this, ContextCompat.getDrawable(this, R.drawable.ic_material_expand_more_black), R.attr.settings_icon_tint_color), null);
+        loginPhoneNumberCountryCode.setCompoundDrawablesWithIntrinsicBounds(null,
+                null,
+                CommonActivityUtils.tintDrawable(this,
+                        ContextCompat.getDrawable(this, R.drawable.ic_material_expand_more_black),
+                        R.attr.settings_icon_tint_color),
+                null);
         mLoginPasswordTextView = findViewById(R.id.login_password);
 
         // account creation
@@ -394,7 +399,12 @@ public class LoginActivity extends MXCActionBarActivity implements RegistrationM
         mPhoneNumberLayout = findViewById(R.id.registration_phone_number);
         mPhoneNumber = findViewById(R.id.registration_phone_number_value);
         EditText phoneNumberCountryCode = findViewById(R.id.registration_phone_number_country);
-        phoneNumberCountryCode.setCompoundDrawablesWithIntrinsicBounds(null, null, CommonActivityUtils.tintDrawable(this, ContextCompat.getDrawable(this, R.drawable.ic_material_expand_more_black), R.attr.settings_icon_tint_color), null);
+        phoneNumberCountryCode.setCompoundDrawablesWithIntrinsicBounds(null,
+                null,
+                CommonActivityUtils.tintDrawable(this,
+                        ContextCompat.getDrawable(this, R.drawable.ic_material_expand_more_black),
+                        R.attr.settings_icon_tint_color),
+                null);
         mSubmitThreePidButton = findViewById(R.id.button_submit);
         mSkipThreePidButton = findViewById(R.id.button_skip);
 
@@ -1167,7 +1177,8 @@ public class LoginActivity extends MXCActionBarActivity implements RegistrationM
         Log.d(LOG_TAG, "## processEmailValidationExtras() IN");
 
         if (null != aRegistrationBundle) {
-            mEmailValidationExtraParams = (HashMap<String, String>) aRegistrationBundle.getSerializable(VectorRegistrationReceiver.EXTRA_EMAIL_VALIDATION_PARAMS);
+            mEmailValidationExtraParams =
+                    (HashMap<String, String>) aRegistrationBundle.getSerializable(VectorRegistrationReceiver.EXTRA_EMAIL_VALIDATION_PARAMS);
 
             if (null != mEmailValidationExtraParams) {
                 // login was started in email validation mode
@@ -1246,8 +1257,14 @@ public class LoginActivity extends MXCActionBarActivity implements RegistrationM
      * @param aSessionId      session ID
      * @param aHomeServer     home server url
      */
-    private void submitEmailToken(final String aToken, final String aClientSecret, final String aSid, final String aSessionId, final String aHomeServer, final String aIdentityServer) {
-        final HomeServerConnectionConfig homeServerConfig = mHomeserverConnectionConfig = new HomeServerConnectionConfig(Uri.parse(aHomeServer), Uri.parse(aIdentityServer), null, new ArrayList<Fingerprint>(), false);
+    private void submitEmailToken(final String aToken,
+                                  final String aClientSecret,
+                                  final String aSid,
+                                  final String aSessionId,
+                                  final String aHomeServer,
+                                  final String aIdentityServer) {
+        final HomeServerConnectionConfig homeServerConfig = mHomeserverConnectionConfig =
+                new HomeServerConnectionConfig(Uri.parse(aHomeServer), Uri.parse(aIdentityServer), null, new ArrayList<Fingerprint>(), false);
         RegistrationManager.getInstance().setHsConfig(homeServerConfig);
         Log.d(LOG_TAG, "## submitEmailToken(): IN");
 
@@ -1285,7 +1302,12 @@ public class LoginActivity extends MXCActionBarActivity implements RegistrationM
                             Log.d(LoginActivity.LOG_TAG, "## submitEmailToken(): onSuccess() - registerAfterEmailValidations() started");
                             mMode = MODE_ACCOUNT_CREATION;
                             enableLoadingScreen(true);
-                            RegistrationManager.getInstance().registerAfterEmailValidation(LoginActivity.this, aClientSecret, aSid, aIdentityServer, aSessionId, LoginActivity.this);
+                            RegistrationManager.getInstance().registerAfterEmailValidation(LoginActivity.this,
+                                    aClientSecret,
+                                    aSid,
+                                    aIdentityServer,
+                                    aSessionId,
+                                    LoginActivity.this);
                         }
                     } else {
                         Log.d(LoginActivity.LOG_TAG, "## submitEmailToken(): onSuccess() - failed (success=false)");
@@ -1683,8 +1705,18 @@ public class LoginActivity extends MXCActionBarActivity implements RegistrationM
                     // try with the vector.im HS
                     if (TextUtils.equals(hsUrlString, getString(R.string.vector_im_server_url)) && TextUtils.equals(e.errcode, MatrixError.FORBIDDEN)) {
                         Log.e(LOG_TAG, "onLoginClick : test with matrix.org as HS");
-                        mHomeserverConnectionConfig = new HomeServerConnectionConfig(Uri.parse(getString(R.string.matrix_org_server_url)), Uri.parse(identityUrlString), null, new ArrayList<Fingerprint>(), false);
-                        login(mHomeserverConnectionConfig, getString(R.string.matrix_org_server_url), identityUrlString, username, phoneNumber, phoneNumberCountry, password);
+                        mHomeserverConnectionConfig = new HomeServerConnectionConfig(Uri.parse(getString(R.string.matrix_org_server_url)),
+                                Uri.parse(identityUrlString),
+                                null,
+                                new ArrayList<Fingerprint>(),
+                                false);
+                        login(mHomeserverConnectionConfig,
+                                getString(R.string.matrix_org_server_url),
+                                identityUrlString,
+                                username,
+                                phoneNumber,
+                                phoneNumberCountry,
+                                password);
                     } else {
                         Log.e(LOG_TAG, "onLoginClick : onMatrixError " + e.getLocalizedMessage());
                         enableLoadingScreen(false);
@@ -2008,7 +2040,10 @@ public class LoginActivity extends MXCActionBarActivity implements RegistrationM
         if (null == mHomeserverConnectionConfig) {
             String hsUrlString = getHomeServerUrl();
 
-            if (TextUtils.isEmpty(hsUrlString) || !hsUrlString.startsWith("http") || TextUtils.equals(hsUrlString, "http://") || TextUtils.equals(hsUrlString, "https://")) {
+            if (TextUtils.isEmpty(hsUrlString)
+                    || !hsUrlString.startsWith("http")
+                    || TextUtils.equals(hsUrlString, "http://")
+                    || TextUtils.equals(hsUrlString, "https://")) {
                 Toast.makeText(this, getString(R.string.login_error_must_start_http), Toast.LENGTH_SHORT).show();
                 return null;
             }
@@ -2019,7 +2054,10 @@ public class LoginActivity extends MXCActionBarActivity implements RegistrationM
 
             String identityServerUrlString = getIdentityServerUrl();
 
-            if (TextUtils.isEmpty(identityServerUrlString) || !identityServerUrlString.startsWith("http") || TextUtils.equals(identityServerUrlString, "http://") || TextUtils.equals(identityServerUrlString, "https://")) {
+            if (TextUtils.isEmpty(identityServerUrlString)
+                    || !identityServerUrlString.startsWith("http")
+                    || TextUtils.equals(identityServerUrlString, "http://")
+                    || TextUtils.equals(identityServerUrlString, "https://")) {
                 Toast.makeText(this, getString(R.string.login_error_must_start_http), Toast.LENGTH_SHORT).show();
                 return null;
             }
@@ -2030,7 +2068,11 @@ public class LoginActivity extends MXCActionBarActivity implements RegistrationM
 
             try {
                 mHomeserverConnectionConfig = null;
-                mHomeserverConnectionConfig = new HomeServerConnectionConfig(Uri.parse(hsUrlString), Uri.parse(identityServerUrlString), null, new ArrayList<Fingerprint>(), false);
+                mHomeserverConnectionConfig = new HomeServerConnectionConfig(Uri.parse(hsUrlString),
+                        Uri.parse(identityServerUrlString),
+                        null,
+                        new ArrayList<Fingerprint>(),
+                        false);
             } catch (Exception e) {
                 Log.e(LOG_TAG, "getHsConfig fails " + e.getLocalizedMessage());
             }
@@ -2068,7 +2110,7 @@ public class LoginActivity extends MXCActionBarActivity implements RegistrationM
                 enableLoadingScreen(false);
                 refreshDisplay();
             }
-        } else if ((RequestCodesKt.ACCOUNT_CREATION_ACTIVITY_REQUEST_CODE == requestCode) || (RequestCodesKt.FALLBACK_LOGIN_ACTIVITY_REQUEST_CODE == requestCode)) {
+        } else if (RequestCodesKt.ACCOUNT_CREATION_ACTIVITY_REQUEST_CODE == requestCode || RequestCodesKt.FALLBACK_LOGIN_ACTIVITY_REQUEST_CODE == requestCode) {
             if (resultCode == RESULT_OK) {
                 Log.d(LOG_TAG, "## onActivityResult(): ACCOUNT_CREATION_ACTIVITY_REQUEST_CODE => RESULT_OK");
                 String homeServer = data.getStringExtra("homeServer");
@@ -2219,21 +2261,22 @@ public class LoginActivity extends MXCActionBarActivity implements RegistrationM
         if (mRegistrationPhoneNumberHandler.getPhoneNumber() != null) {
             // Communicate phone number to singleton + start validation process (always phone first)
             enableLoadingScreen(true);
-            RegistrationManager.getInstance().addPhoneNumberThreePid(mRegistrationPhoneNumberHandler.getE164PhoneNumber(), mRegistrationPhoneNumberHandler.getCountryCode(),
-                    new RegistrationManager.ThreePidRequestListener() {
-                        @Override
-                        public void onThreePidRequested(ThreePid pid) {
-                            enableLoadingScreen(false);
-                            if (!TextUtils.isEmpty(pid.sid)) {
-                                onPhoneNumberSidReceived(pid);
-                            }
-                        }
+            RegistrationManager.getInstance()
+                    .addPhoneNumberThreePid(mRegistrationPhoneNumberHandler.getE164PhoneNumber(), mRegistrationPhoneNumberHandler.getCountryCode(),
+                            new RegistrationManager.ThreePidRequestListener() {
+                                @Override
+                                public void onThreePidRequested(ThreePid pid) {
+                                    enableLoadingScreen(false);
+                                    if (!TextUtils.isEmpty(pid.sid)) {
+                                        onPhoneNumberSidReceived(pid);
+                                    }
+                                }
 
-                        @Override
-                        public void onThreePidRequestFailed(@StringRes int errorMessageRes) {
-                            LoginActivity.this.onThreePidRequestFailed(getString(errorMessageRes));
-                        }
-                    });
+                                @Override
+                                public void onThreePidRequestFailed(@StringRes int errorMessageRes) {
+                                    LoginActivity.this.onThreePidRequestFailed(getString(errorMessageRes));
+                                }
+                            });
         } else {
             createAccount();
         }

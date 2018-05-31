@@ -1,5 +1,6 @@
 /*
  * Copyright 2015 OpenMarket Ltd
+ * Copyright 2018 New Vector Ltd
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -28,12 +29,6 @@ import android.media.MediaPlayer;
 import android.net.Uri;
 import android.support.v4.view.PagerAdapter;
 import android.text.TextUtils;
-
-import org.matrix.androidsdk.rest.callback.SimpleApiCallback;
-import org.matrix.androidsdk.rest.model.Event;
-import org.matrix.androidsdk.rest.model.crypto.EncryptedFileInfo;
-import org.matrix.androidsdk.util.Log;
-
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -47,25 +42,26 @@ import android.widget.VideoView;
 import com.google.gson.JsonElement;
 
 import org.matrix.androidsdk.MXSession;
+import org.matrix.androidsdk.db.MXMediasCache;
 import org.matrix.androidsdk.listeners.MXMediaDownloadListener;
+import org.matrix.androidsdk.rest.callback.SimpleApiCallback;
 import org.matrix.androidsdk.rest.model.MatrixError;
+import org.matrix.androidsdk.rest.model.crypto.EncryptedFileInfo;
 import org.matrix.androidsdk.rest.model.message.Message;
 import org.matrix.androidsdk.util.ImageUtils;
 import org.matrix.androidsdk.util.JsonUtils;
+import org.matrix.androidsdk.util.Log;
 import org.matrix.androidsdk.view.PieFractionView;
-
-import im.vector.R;
-
-import org.matrix.androidsdk.db.MXMediasCache;
-
-import im.vector.activity.CommonActivityUtils;
-import im.vector.util.SlidableMediaInfo;
 
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.util.ArrayList;
 import java.util.List;
+
+import im.vector.R;
+import im.vector.activity.CommonActivityUtils;
+import im.vector.util.SlidableMediaInfo;
 
 /**
  * An images slider
@@ -90,7 +86,12 @@ public class VectorMediasViewerAdapter extends PagerAdapter {
 
     private int mAutoPlayItemAt = -1;
 
-    public VectorMediasViewerAdapter(Context context, MXSession session, MXMediasCache mediasCache, List<SlidableMediaInfo> mediaMessagesList, int maxImageWidth, int maxImageHeight) {
+    public VectorMediasViewerAdapter(Context context,
+                                     MXSession session,
+                                     MXMediasCache mediasCache,
+                                     List<SlidableMediaInfo> mediaMessagesList,
+                                     int maxImageWidth,
+                                     int maxImageHeight) {
         this.mContext = context;
         this.mSession = session;
         this.mMediasMessagesList = mediaMessagesList;
@@ -135,14 +136,15 @@ public class VectorMediasViewerAdapter extends PagerAdapter {
                             final VideoView videoView = view.findViewById(R.id.media_slider_videoview);
 
                             if (mMediasCache.isMediaCached(mediaInfo.mMediaUrl, mediaInfo.mMimeType)) {
-                                mMediasCache.createTmpMediaFile(mediaInfo.mMediaUrl, mediaInfo.mMimeType, mediaInfo.mEncryptedFileInfo, new SimpleApiCallback<File>() {
-                                    @Override
-                                    public void onSuccess(File file) {
-                                        if (null != file) {
-                                            playVideo(view, videoView, file, mediaInfo.mMimeType);
-                                        }
-                                    }
-                                });
+                                mMediasCache.createTmpMediaFile(mediaInfo.mMediaUrl, mediaInfo.mMimeType, mediaInfo.mEncryptedFileInfo,
+                                        new SimpleApiCallback<File>() {
+                                            @Override
+                                            public void onSuccess(File file) {
+                                                if (null != file) {
+                                                    playVideo(view, videoView, file, mediaInfo.mMimeType);
+                                                }
+                                            }
+                                        });
                             }
                         }
                         mAutoPlayItemAt = -1;
@@ -175,8 +177,8 @@ public class VectorMediasViewerAdapter extends PagerAdapter {
                 imageInfo.mMimeType = "image/jpeg";
             }
             downloadHighResPict(view, position);
-        // video
-        } else  {
+            // video
+        } else {
             downloadVideo(view, position);
         }
     }
@@ -316,7 +318,13 @@ public class VectorMediasViewerAdapter extends PagerAdapter {
         final SlidableMediaInfo imageInfo = mMediasMessagesList.get(position);
         final String viewportContent = "width=640";
         final String loadingUri = imageInfo.mMediaUrl;
-        final String downloadId = mMediasCache.loadBitmap(mContext, mSession.getHomeServerConfig(), loadingUri, imageInfo.mRotationAngle, imageInfo.mOrientation, imageInfo.mMimeType, imageInfo.mEncryptedFileInfo);
+        final String downloadId = mMediasCache.loadBitmap(mContext,
+                mSession.getHomeServerConfig(),
+                loadingUri,
+                imageInfo.mRotationAngle,
+                imageInfo.mOrientation,
+                imageInfo.mMimeType,
+                imageInfo.mEncryptedFileInfo);
 
         webView.getSettings().setDisplayZoomControls(false);
 
@@ -366,7 +374,8 @@ public class VectorMediasViewerAdapter extends PagerAdapter {
                                             public void run() {
                                                 Uri mediaUri = Uri.parse(newHighResUri);
                                                 // refresh the UI
-                                                loadImage(webView, mediaUri, viewportContent, computeCss(newHighResUri, VectorMediasViewerAdapter.this.mMaxImageWidth, VectorMediasViewerAdapter.this.mMaxImageHeight, imageInfo.mRotationAngle));
+                                                loadImage(webView, mediaUri, viewportContent,
+                                                        computeCss(newHighResUri, mMaxImageWidth, mMaxImageHeight, imageInfo.mRotationAngle));
                                             }
                                         });
                                     }
@@ -640,7 +649,8 @@ public class VectorMediasViewerAdapter extends PagerAdapter {
             });
         } else {
             downloadVideo(mLatestPrimaryView, mLatestPrimaryItemPosition, true);
-            final String downloadId = mMediasCache.downloadMedia(mContext, mSession.getHomeServerConfig(), mediaInfo.mMediaUrl, mediaInfo.mMimeType, mediaInfo.mEncryptedFileInfo);
+            final String downloadId = mMediasCache.downloadMedia(mContext,
+                    mSession.getHomeServerConfig(), mediaInfo.mMediaUrl, mediaInfo.mMimeType, mediaInfo.mEncryptedFileInfo);
 
             if (null != downloadId) {
                 mMediasCache.addDownloadListener(downloadId, new MXMediaDownloadListener() {
@@ -657,19 +667,21 @@ public class VectorMediasViewerAdapter extends PagerAdapter {
                     public void onDownloadComplete(String aDownloadId) {
                         if (aDownloadId.equals(downloadId)) {
                             if (mMediasCache.isMediaCached(mediaInfo.mMediaUrl, mediaInfo.mMimeType)) {
-                                mMediasCache.createTmpMediaFile(mediaInfo.mMediaUrl, mediaInfo.mMimeType, mediaInfo.mEncryptedFileInfo, new SimpleApiCallback<File>() {
-                                    @Override
-                                    public void onSuccess(File file) {
-                                        if (null != file) {
-                                            CommonActivityUtils.saveMediaIntoDownloads(mContext, file, null, mediaInfo.mMimeType, new SimpleApiCallback<String>() {
-                                                @Override
-                                                public void onSuccess(String path) {
-                                                    Toast.makeText(mContext, mContext.getText(R.string.media_slider_saved), Toast.LENGTH_LONG).show();
+                                mMediasCache.createTmpMediaFile(mediaInfo.mMediaUrl, mediaInfo.mMimeType, mediaInfo.mEncryptedFileInfo,
+                                        new SimpleApiCallback<File>() {
+                                            @Override
+                                            public void onSuccess(File file) {
+                                                if (null != file) {
+                                                    CommonActivityUtils.saveMediaIntoDownloads(mContext, file, null, mediaInfo.mMimeType,
+                                                            new SimpleApiCallback<String>() {
+                                                                @Override
+                                                                public void onSuccess(String path) {
+                                                                    Toast.makeText(mContext, R.string.media_slider_saved, Toast.LENGTH_LONG).show();
+                                                                }
+                                                            });
                                                 }
-                                            });
-                                        }
-                                    }
-                                });
+                                            }
+                                        });
                             }
                         }
                     }
@@ -710,7 +722,12 @@ public class VectorMediasViewerAdapter extends PagerAdapter {
      * @param videoUrl      the video Url
      * @param videoMimeType the video mime type
      */
-    private void loadVideo(final int position, final View view, final String thumbnailUrl, final String videoUrl, final String videoMimeType, final EncryptedFileInfo encryptedFileInfo) {
+    private void loadVideo(final int position,
+                           final View view,
+                           final String thumbnailUrl,
+                           final String videoUrl,
+                           final String videoMimeType,
+                           final EncryptedFileInfo encryptedFileInfo) {
         final VideoView videoView = view.findViewById(R.id.media_slider_videoview);
         final ImageView thumbView = view.findViewById(R.id.media_slider_video_thumbnail);
         final ImageView playView = view.findViewById(R.id.media_slider_video_playView);

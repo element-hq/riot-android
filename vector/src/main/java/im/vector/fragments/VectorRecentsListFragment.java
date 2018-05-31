@@ -1,6 +1,7 @@
 /*
  * Copyright 2016 OpenMarket Ltd
  * Copyright 2017 Vector Creations Ltd
+ * Copyright 2018 New Vector Ltd
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -23,7 +24,6 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
-import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
@@ -63,7 +63,10 @@ import im.vector.services.EventStreamService;
 import im.vector.util.RoomUtils;
 import im.vector.view.RecentsExpandableListView;
 
-public class VectorRecentsListFragment extends VectorBaseFragment implements VectorRoomSummaryAdapter.RoomEventListener, RecentsExpandableListView.DragAndDropEventsListener, RoomUtils.MoreActionListener {
+public class VectorRecentsListFragment extends VectorBaseFragment implements
+        VectorRoomSummaryAdapter.RoomEventListener,
+        RecentsExpandableListView.DragAndDropEventsListener,
+        RoomUtils.MoreActionListener {
 
     private static final String KEY_EXPAND_STATE_INVITES_GROUP = "KEY_EXPAND_STATE_INVITES_GROUP";
     private static final String KEY_EXPAND_STATE_ROOMS_GROUP = "KEY_EXPAND_STATE_ROOMS_GROUP";
@@ -174,7 +177,14 @@ public class VectorRecentsListFragment extends VectorBaseFragment implements Vec
         // the chevron is managed in the header view
         mRecentsListView.setGroupIndicator(null);
         // create the adapter
-        mAdapter = new VectorRoomSummaryAdapter(getActivity(), mSession, false, true, R.layout.adapter_item_vector_recent_room, R.layout.adapter_item_vector_recent_header, this, this);
+        mAdapter = new VectorRoomSummaryAdapter(getActivity(),
+                mSession,
+                false,
+                true,
+                R.layout.adapter_item_vector_recent_room,
+                R.layout.adapter_item_vector_recent_header,
+                this,
+                this);
 
         mRecentsListView.setAdapter(mAdapter);
 
@@ -339,7 +349,9 @@ public class VectorRecentsListFragment extends VectorBaseFragment implements Vec
             public void run() {
 
                 // trigger a public room refresh if the list was not initialized or too old (5 mins)
-                if (((null == PublicRoomsManager.getInstance().getPublicRoomsCount()) || ((System.currentTimeMillis() - mLatestPublicRoomsRefresh) < (5 * 60000))) && (!mIsLoadingPublicRooms)) {
+                if (((null == PublicRoomsManager.getInstance().getPublicRoomsCount())
+                        || ((System.currentTimeMillis() - mLatestPublicRoomsRefresh) < (5 * 60000)))
+                        && (!mIsLoadingPublicRooms)) {
                     PublicRoomsManager.getInstance().refreshPublicRoomsCount(mPublicRoomsListener);
                 }
 
@@ -924,7 +936,8 @@ public class VectorRecentsListFragment extends VectorBaseFragment implements Vec
             mDraggedView.setBackgroundColor(ContextCompat.getColor(getContext(), R.color.vector_silver_color));
             mDraggedView.setAlpha(0.3f);
 
-            RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.WRAP_CONTENT, RelativeLayout.LayoutParams.WRAP_CONTENT);
+            RelativeLayout.LayoutParams params
+                    = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.WRAP_CONTENT, RelativeLayout.LayoutParams.WRAP_CONTENT);
             params.addRule(RelativeLayout.ALIGN_PARENT_LEFT, RelativeLayout.TRUE);
             params.addRule(RelativeLayout.ALIGN_PARENT_TOP, RelativeLayout.TRUE);
             mSelectedCellLayout.addView(mDraggedView, params);

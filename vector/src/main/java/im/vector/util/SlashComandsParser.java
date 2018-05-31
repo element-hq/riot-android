@@ -106,7 +106,12 @@ public class SlashComandsParser {
      * @param format        the message format
      * @return true if it is a splash command
      */
-    public static boolean manageSplashCommand(final VectorRoomActivity activity, final MXSession session, final Room room, final String textMessage, final String formattedBody, final String format) {
+    public static boolean manageSplashCommand(final VectorRoomActivity activity,
+                                              final MXSession session,
+                                              final Room room,
+                                              final String textMessage,
+                                              final String formattedBody,
+                                              final String format) {
         boolean isIRCCmd = false;
 
         // sanity checks

@@ -349,7 +349,8 @@ public final class GcmRegistrationManager {
 
                     @Override
                     protected void onPostExecute(String pushKey) {
-                        mRegistrationState = setStoredRegistrationState(((pushKey != null) ? RegistrationState.GCM_REGISTRED : RegistrationState.UNREGISTRATED));
+                        mRegistrationState
+                                = setStoredRegistrationState(((pushKey != null) ? RegistrationState.GCM_REGISTRED : RegistrationState.UNREGISTRATED));
                         setStoredRegistrationToken(pushKey);
 
                         // warn the listener
@@ -918,40 +919,47 @@ public final class GcmRegistrationManager {
      * @param callback the asynchronous callback
      */
     public void unregister(final MXSession session, final Pusher pusher, final ApiCallback<Void> callback) {
-        getPushersRestClient(session).removeHttpPusher(pusher.pushkey, pusher.appId, pusher.profileTag, pusher.lang, pusher.appDisplayName, pusher.deviceDisplayName, pusher.data.get("url"), new ApiCallback<Void>() {
-            @Override
-            public void onSuccess(Void info) {
-                mPushersRestClients.remove(session.getMyUserId());
-                refreshPushersList(new ArrayList<>(Matrix.getInstance(mContext).getSessions()), callback);
-            }
+        getPushersRestClient(session).removeHttpPusher(pusher.pushkey,
+                pusher.appId,
+                pusher.profileTag,
+                pusher.lang,
+                pusher.appDisplayName,
+                pusher.deviceDisplayName,
+                pusher.data.get("url"),
+                new ApiCallback<Void>() {
+                    @Override
+                    public void onSuccess(Void info) {
+                        mPushersRestClients.remove(session.getMyUserId());
+                        refreshPushersList(new ArrayList<>(Matrix.getInstance(mContext).getSessions()), callback);
+                    }
 
-            @Override
-            public void onNetworkError(Exception e) {
-                if (null != callback) {
-                    callback.onNetworkError(e);
-                }
-            }
+                    @Override
+                    public void onNetworkError(Exception e) {
+                        if (null != callback) {
+                            callback.onNetworkError(e);
+                        }
+                    }
 
-            @Override
-            public void onMatrixError(MatrixError e) {
-                if (e.mStatus == 404) {
-                    mPushersRestClients.remove(session.getMyUserId());
-                    // httpPusher is not available on server side anymore so assume the removal was successful
-                    onSuccess(null);
-                    return;
-                }
-                if (null != callback) {
-                    callback.onMatrixError(e);
-                }
-            }
+                    @Override
+                    public void onMatrixError(MatrixError e) {
+                        if (e.mStatus == 404) {
+                            mPushersRestClients.remove(session.getMyUserId());
+                            // httpPusher is not available on server side anymore so assume the removal was successful
+                            onSuccess(null);
+                            return;
+                        }
+                        if (null != callback) {
+                            callback.onMatrixError(e);
+                        }
+                    }
 
-            @Override
-            public void onUnexpectedError(Exception e) {
-                if (null != callback) {
-                    callback.onUnexpectedError(e);
-                }
-            }
-        });
+                    @Override
+                    public void onUnexpectedError(Exception e) {
+                        if (null != callback) {
+                            callback.onUnexpectedError(e);
+                        }
+                    }
+                });
     }
 
     /**
@@ -1041,7 +1049,9 @@ public final class GcmRegistrationManager {
      * Tell if GCM is registred i.e. ready to use
      */
     public boolean isGCMRegistred() {
-        return (mRegistrationState == RegistrationState.GCM_REGISTRED) || (mRegistrationState == RegistrationState.SERVER_REGISTRATING) || (mRegistrationState == RegistrationState.SERVER_REGISTERED);
+        return (mRegistrationState == RegistrationState.GCM_REGISTRED)
+                || (mRegistrationState == RegistrationState.SERVER_REGISTRATING)
+                || (mRegistrationState == RegistrationState.SERVER_REGISTERED);
     }
 
     /**

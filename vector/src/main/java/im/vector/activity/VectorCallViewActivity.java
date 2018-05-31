@@ -293,7 +293,8 @@ public class VectorCallViewActivity extends RiotAppCompatActivity implements Sen
         if (null != mCallView) {
             // insert the call view above the avatar
             RelativeLayout layout = findViewById(R.id.call_layout);
-            RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.MATCH_PARENT, RelativeLayout.LayoutParams.MATCH_PARENT);
+            RelativeLayout.LayoutParams params
+                    = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.MATCH_PARENT, RelativeLayout.LayoutParams.MATCH_PARENT);
             params.addRule(RelativeLayout.CENTER_IN_PARENT, RelativeLayout.TRUE);
             layout.removeView(mCallView);
             layout.setVisibility(View.VISIBLE);
@@ -503,7 +504,8 @@ public class VectorCallViewActivity extends RiotAppCompatActivity implements Sen
         VectorUtils.loadCallAvatar(this, mSession, avatarView, mCall.getRoom());
 
         mIncomingCallTabbar.setVisibility(CallsManager.getSharedInstance().isRinging() && mCall.isIncoming() ? View.VISIBLE : View.GONE);
-        mPermissionCode = mCall.isVideo() ? CommonActivityUtils.REQUEST_CODE_PERMISSION_VIDEO_IP_CALL : CommonActivityUtils.REQUEST_CODE_PERMISSION_AUDIO_IP_CALL;
+        mPermissionCode = mCall.isVideo() ?
+                CommonActivityUtils.REQUEST_CODE_PERMISSION_VIDEO_IP_CALL : CommonActivityUtils.REQUEST_CODE_PERMISSION_AUDIO_IP_CALL;
 
         // the user can only accept if the dedicated permissions are granted
         mAcceptIncomingCallButton.setVisibility(CommonActivityUtils.checkPermissions(mPermissionCode, this) ? View.VISIBLE : View.GONE);
@@ -527,7 +529,10 @@ public class VectorCallViewActivity extends RiotAppCompatActivity implements Sen
         this.runOnUiThread(new Runnable() {
             @Override
             public void run() {
-                CommonActivityUtils.displayUnknownDevicesDialog(mSession, VectorCallViewActivity.this, (MXUsersDevicesMap<MXDeviceInfo>) intent.getSerializableExtra(VectorCallViewActivity.EXTRA_UNKNOWN_DEVICES), null);
+                CommonActivityUtils.displayUnknownDevicesDialog(mSession,
+                        VectorCallViewActivity.this,
+                        (MXUsersDevicesMap<MXDeviceInfo>) intent.getSerializableExtra(VectorCallViewActivity.EXTRA_UNKNOWN_DEVICES),
+                        null);
             }
         });
 
@@ -630,10 +635,12 @@ public class VectorCallViewActivity extends RiotAppCompatActivity implements Sen
 
             if (CommonActivityUtils.REQUEST_CODE_PERMISSION_VIDEO_IP_CALL == aRequestCode) {
                 // the user can only accept if the dedicated permissions are granted
-                mAcceptIncomingCallButton.setVisibility(CommonActivityUtils.onPermissionResultVideoIpCall(this, aPermissions, aGrantResults) ? View.VISIBLE : View.GONE);
+                mAcceptIncomingCallButton.setVisibility(
+                        CommonActivityUtils.onPermissionResultVideoIpCall(this, aPermissions, aGrantResults) ? View.VISIBLE : View.GONE);
             } else {
                 // the user can only accept if the dedicated permissions are granted
-                mAcceptIncomingCallButton.setVisibility(CommonActivityUtils.onPermissionResultAudioIpCall(this, aPermissions, aGrantResults) ? View.VISIBLE : View.GONE);
+                mAcceptIncomingCallButton.setVisibility(
+                        CommonActivityUtils.onPermissionResultAudioIpCall(this, aPermissions, aGrantResults) ? View.VISIBLE : View.GONE);
             }
         }
     }
@@ -859,7 +866,10 @@ public class VectorCallViewActivity extends RiotAppCompatActivity implements Sen
 
         if (null != mButtonsContainerView) {
             if (aOpacity != mButtonsContainerView.getAlpha()) {
-                mButtonsContainerView.animate().alpha(aOpacity).setDuration(aAnimDuration).setInterpolator(new AccelerateInterpolator()).setListener(new AnimatorListenerAdapter() {
+                mButtonsContainerView.animate()
+                        .alpha(aOpacity)
+                        .setDuration(aAnimDuration)
+                        .setInterpolator(new AccelerateInterpolator()).setListener(new AnimatorListenerAdapter() {
                     @Override
                     public void onAnimationEnd(Animator animation) {
                         super.onAnimationEnd(animation);
@@ -981,7 +991,8 @@ public class VectorCallViewActivity extends RiotAppCompatActivity implements Sen
      */
     private void refreshMuteMicButton() {
         // update icon
-        int iconId = CallSoundsManager.getSharedInstance(this).isMicrophoneMute() ? R.drawable.ic_material_mic_off_pink_red : R.drawable.ic_material_mic_off_grey;
+        int iconId = CallSoundsManager.getSharedInstance(this).isMicrophoneMute() ? R.drawable.ic_material_mic_off_pink_red
+                : R.drawable.ic_material_mic_off_grey;
         mMuteMicImageView.setImageResource(iconId);
     }
 
@@ -990,7 +1001,8 @@ public class VectorCallViewActivity extends RiotAppCompatActivity implements Sen
      */
     public void refreshSpeakerButton() {
         // update icon
-        int iconId = CallSoundsManager.getSharedInstance(this).isSpeakerphoneOn() ? R.drawable.ic_material_speaker_phone_pink_red : R.drawable.ic_material_speaker_phone_grey;
+        int iconId = CallSoundsManager.getSharedInstance(this).isSpeakerphoneOn() ? R.drawable.ic_material_speaker_phone_pink_red
+                : R.drawable.ic_material_speaker_phone_grey;
         mSpeakerSelectionView.setImageResource(iconId);
     }
 
@@ -1113,7 +1125,7 @@ public class VectorCallViewActivity extends RiotAppCompatActivity implements Sen
                 if (mCall.isIncoming()) {
                     mCall.answer();
                     mIncomingCallTabbar.setVisibility(View.GONE);
-                 }
+                }
                 break;
             default:
                 // nothing to do..

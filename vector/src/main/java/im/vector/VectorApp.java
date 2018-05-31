@@ -1,6 +1,7 @@
 /*
  * Copyright 2014 OpenMarket Ltd
  * Copyright 2017 Vector Creations Ltd
+ * Copyright 2018 New Vector Ltd
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -172,7 +173,8 @@ public class VectorApp extends MultiDexApplication {
         @Override
         public void onReceive(Context context, Intent intent) {
             if (!TextUtils.equals(Locale.getDefault().toString(), getApplicationLocale().toString())) {
-                Log.d(LOG_TAG, "## onReceive() : the locale has been updated to " + Locale.getDefault().toString() + ", restore the expected value " + getApplicationLocale().toString());
+                Log.d(LOG_TAG, "## onReceive() : the locale has been updated to " + Locale.getDefault().toString()
+                        + ", restore the expected value " + getApplicationLocale().toString());
                 updateApplicationSettings(getApplicationLocale(), getFontScale(), ThemeUtils.getApplicationTheme(context));
 
                 if (null != getCurrentActivity()) {
@@ -282,7 +284,8 @@ public class VectorApp extends MultiDexApplication {
                     String prevActivityLocale = mLocalesByActivity.get(activityKey);
 
                     if (!TextUtils.equals(prevActivityLocale, getActivityLocaleStatus(activity))) {
-                        Log.d(LOG_TAG, "## onActivityResumed() : restart the activity " + activity + " because of the locale update from " + prevActivityLocale + " to " + getActivityLocaleStatus(activity));
+                        Log.d(LOG_TAG, "## onActivityResumed() : restart the activity " + activity
+                                + " because of the locale update from " + prevActivityLocale + " to " + getActivityLocaleStatus(activity));
                         restartActivity(activity);
                         return;
                     }
@@ -290,7 +293,8 @@ public class VectorApp extends MultiDexApplication {
 
                 // it should never happen as there is a broadcast receiver (mLanguageReceiver)
                 if (!TextUtils.equals(Locale.getDefault().toString(), getApplicationLocale().toString())) {
-                    Log.d(LOG_TAG, "## onActivityResumed() : the locale has been updated to " + Locale.getDefault().toString() + ", restore the expected value " + getApplicationLocale().toString());
+                    Log.d(LOG_TAG, "## onActivityResumed() : the locale has been updated to " + Locale.getDefault().toString()
+                            + ", restore the expected value " + getApplicationLocale().toString());
                     updateApplicationSettings(getApplicationLocale(), getFontScale(), ThemeUtils.getApplicationTheme(activity));
                     restartActivity(activity);
                 }
@@ -350,7 +354,8 @@ public class VectorApp extends MultiDexApplication {
     public void onConfigurationChanged(Configuration newConfig) {
         super.onConfigurationChanged(newConfig);
         if (!TextUtils.equals(Locale.getDefault().toString(), getApplicationLocale().toString())) {
-            Log.d(LOG_TAG, "## onConfigurationChanged() : the locale has been updated to " + Locale.getDefault().toString() + ", restore the expected value " + getApplicationLocale().toString());
+            Log.d(LOG_TAG, "## onConfigurationChanged() : the locale has been updated to " + Locale.getDefault().toString()
+                    + ", restore the expected value " + getApplicationLocale().toString());
             updateApplicationSettings(getApplicationLocale(), getFontScale(), ThemeUtils.getApplicationTheme(this));
         }
     }
@@ -457,7 +462,8 @@ public class VectorApp extends MultiDexApplication {
                         // if there is a pending call
                         // the application is not suspended
                         if (!mIsCallingInBackground) {
-                            Log.d(LOG_TAG, "Suspend the application because there was no resumed activity within " + (MAX_ACTIVITY_TRANSITION_TIME_MS / 1000) + " seconds");
+                            Log.d(LOG_TAG, "Suspend the application because there was no resumed activity within "
+                                    + (MAX_ACTIVITY_TRANSITION_TIME_MS / 1000) + " seconds");
                             CommonActivityUtils.displayMemoryInformation(null, " app suspended");
                             suspendApp();
                         } else {
@@ -492,7 +498,8 @@ public class VectorApp extends MultiDexApplication {
             Log.d(LOG_TAG, "## listPermissionStatuses() : list the permissions used by the app");
             for (String permission : permissions) {
                 Log.d(LOG_TAG, "Status of [" + permission + "] : " +
-                        ((PackageManager.PERMISSION_GRANTED == ContextCompat.checkSelfPermission(instance, permission)) ? "PERMISSION_GRANTED" : "PERMISSION_DENIED"));
+                        ((PackageManager.PERMISSION_GRANTED == ContextCompat.checkSelfPermission(instance, permission)) ?
+                                "PERMISSION_GRANTED" : "PERMISSION_DENIED"));
             }
         }
     }
@@ -1145,7 +1152,8 @@ public class VectorApp extends MultiDexApplication {
                 final Locale[] availableLocales = Locale.getAvailableLocales();
 
                 for (Locale locale : availableLocales) {
-                    knownLocalesSet.add(new Pair<>(getString(context, locale, R.string.resouces_language), getString(context, locale, R.string.resouces_country)));
+                    knownLocalesSet.add(new Pair<>(getString(context, locale, R.string.resouces_language),
+                            getString(context, locale, R.string.resouces_country)));
                 }
             } catch (Exception e) {
                 Log.e(LOG_TAG, "## getApplicationLocales() : failed " + e.getMessage());
@@ -1270,7 +1278,10 @@ public class VectorApp extends MultiDexApplication {
             Tracker tracker = getPiwikTracker();
             if (null != tracker) {
                 try {
-                    TrackHelper.Screen screen = TrackHelper.track().screen("/android/" + Matrix.getApplicationName() + "/" + this.getString(R.string.flavor_description) + "/" + SHORT_VERSION + "/" + activity.getClass().getName().replace(".", "/"));
+                    TrackHelper.Screen screen = TrackHelper.track().screen("/android/" + Matrix.getApplicationName()
+                            + "/" + getString(R.string.flavor_description)
+                            + "/" + SHORT_VERSION
+                            + "/" + activity.getClass().getName().replace(".", "/"));
                     addCustomVariables(screen).with(tracker);
                 } catch (Throwable t) {
                     Log.e(LOG_TAG, "## onNewScreen() : failed " + t.getMessage());

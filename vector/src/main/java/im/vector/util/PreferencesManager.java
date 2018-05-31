@@ -74,7 +74,8 @@ public class PreferencesManager {
     public static final String SETTINGS_SET_SYNC_TIMEOUT_PREFERENCE_KEY = "SETTINGS_SET_SYNC_TIMEOUT_PREFERENCE_KEY";
     public static final String SETTINGS_SET_SYNC_DELAY_PREFERENCE_KEY = "SETTINGS_SET_SYNC_DELAY_PREFERENCE_KEY";
     public static final String SETTINGS_ROOM_SETTINGS_LABS_END_TO_END_PREFERENCE_KEY = "SETTINGS_ROOM_SETTINGS_LABS_END_TO_END_PREFERENCE_KEY";
-    public static final String SETTINGS_ROOM_SETTINGS_LABS_END_TO_END_IS_ACTIVE_PREFERENCE_KEY = "SETTINGS_ROOM_SETTINGS_LABS_END_TO_END_IS_ACTIVE_PREFERENCE_KEY";
+    public static final String SETTINGS_ROOM_SETTINGS_LABS_END_TO_END_IS_ACTIVE_PREFERENCE_KEY
+            = "SETTINGS_ROOM_SETTINGS_LABS_END_TO_END_IS_ACTIVE_PREFERENCE_KEY";
     public static final String SETTINGS_PROFILE_PICTURE_PREFERENCE_KEY = "SETTINGS_PROFILE_PICTURE_PREFERENCE_KEY";
     public static final String SETTINGS_CONTACTS_PHONEBOOK_COUNTRY_PREFERENCE_KEY = "SETTINGS_CONTACTS_PHONEBOOK_COUNTRY_PREFERENCE_KEY";
     public static final String SETTINGS_INTERFACE_LANGUAGE_PREFERENCE_KEY = "SETTINGS_INTERFACE_LANGUAGE_PREFERENCE_KEY";
@@ -538,14 +539,16 @@ public class PreferencesManager {
 
         if (preferences.contains(context.getString(R.string.settings_pin_missed_notifications))) {
             preferences.edit()
-                    .putBoolean(SETTINGS_PIN_MISSED_NOTIFICATIONS_PREFERENCE_KEY, preferences.getBoolean(context.getString(R.string.settings_pin_missed_notifications), false))
+                    .putBoolean(SETTINGS_PIN_MISSED_NOTIFICATIONS_PREFERENCE_KEY,
+                            preferences.getBoolean(context.getString(R.string.settings_pin_missed_notifications), false))
                     .remove(context.getString(R.string.settings_pin_missed_notifications))
                     .apply();
         }
 
         if (preferences.contains(context.getString(R.string.settings_pin_unread_messages))) {
             preferences.edit()
-                    .putBoolean(SETTINGS_PIN_UNREAD_MESSAGES_PREFERENCE_KEY, preferences.getBoolean(context.getString(R.string.settings_pin_unread_messages), false))
+                    .putBoolean(SETTINGS_PIN_UNREAD_MESSAGES_PREFERENCE_KEY,
+                            preferences.getBoolean(context.getString(R.string.settings_pin_unread_messages), false))
                     .remove(context.getString(R.string.settings_pin_unread_messages))
                     .apply();
         }

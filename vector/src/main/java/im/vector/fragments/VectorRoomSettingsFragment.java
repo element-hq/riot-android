@@ -1,7 +1,8 @@
 /*
  * Copyright 2016 OpenMarket Ltd
  * Copyright 2017 Vector Creations Ltd
- * 
+ * Copyright 2018 New Vector Ltd
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
@@ -76,7 +77,7 @@ import java.util.Comparator;
 import java.util.List;
 
 import im.vector.Matrix;
-import im.vector.R;;
+import im.vector.R;
 import im.vector.VectorApp;
 import im.vector.activity.CommonActivityUtils;
 import im.vector.activity.VectorMediasPickerActivity;
@@ -88,6 +89,8 @@ import im.vector.preference.VectorListPreference;
 import im.vector.preference.VectorSwitchPreference;
 import im.vector.util.ThemeUtils;
 import im.vector.util.VectorUtils;
+
+;
 
 public class VectorRoomSettingsFragment extends PreferenceFragment implements SharedPreferences.OnSharedPreferenceChangeListener {
     // internal constants values
@@ -714,7 +717,8 @@ public class VectorRoomSettingsFragment extends PreferenceFragment implements Sh
         // room access rules: admin only
         if (null != mRoomAccessRulesListPreference) {
             mRoomAccessRulesListPreference.setEnabled(isAdmin && isConnected);
-            mRoomAccessRulesListPreference.setWarningIconVisible((0 == mRoom.getAliases().size()) && !TextUtils.equals(RoomState.JOIN_RULE_INVITE, mRoom.getLiveState().join_rule));
+            mRoomAccessRulesListPreference.setWarningIconVisible((0 == mRoom.getAliases().size())
+                    && !TextUtils.equals(RoomState.JOIN_RULE_INVITE, mRoom.getLiveState().join_rule));
         }
 
         // room read history: admin only
@@ -804,7 +808,8 @@ public class VectorRoomSettingsFragment extends PreferenceFragment implements Sh
                 // unknown combination value
                 value = null;
                 summary = null;
-                Log.w(LOG_TAG, "## updatePreferenceUiValues(): unknown room access configuration joinRule=" + joinRule + " and guestAccessRule=" + guestAccessRule);
+                Log.w(LOG_TAG, "## updatePreferenceUiValues(): unknown room access configuration joinRule=" + joinRule +
+                        " and guestAccessRule=" + guestAccessRule);
             }
 
             if (null != value) {
@@ -1469,7 +1474,8 @@ public class VectorRoomSettingsFragment extends PreferenceFragment implements Sh
             addAddressPreference.setTitle(R.string.room_settings_add_new_group);
             addAddressPreference.setDialogTitle(R.string.room_settings_add_new_group);
             addAddressPreference.setKey(FLAIR_PREFERENCE_KEY_BASE + "__add");
-            addAddressPreference.setIcon(CommonActivityUtils.tintDrawable(getActivity(), ContextCompat.getDrawable(getActivity(), R.drawable.ic_add_black), R.attr.settings_icon_tint_color));
+            addAddressPreference.setIcon(CommonActivityUtils.tintDrawable(getActivity(),
+                    ContextCompat.getDrawable(getActivity(), R.drawable.ic_add_black), R.attr.settings_icon_tint_color));
 
             addAddressPreference.setOnPreferenceChangeListener(
                     new Preference.OnPreferenceChangeListener() {
@@ -1560,7 +1566,8 @@ public class VectorRoomSettingsFragment extends PreferenceFragment implements Sh
     @SuppressLint("NewApi")
     private void onAddressLongClick(final String roomAlias, final View anchorView) {
         Context context = getActivity();
-        final PopupMenu popup = (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) ? new PopupMenu(context, anchorView, Gravity.END) : new PopupMenu(context, anchorView);
+        final PopupMenu popup = (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) ?
+                new PopupMenu(context, anchorView, Gravity.END) : new PopupMenu(context, anchorView);
 
         popup.getMenuInflater().inflate(R.menu.vector_room_settings_addresses, popup.getMenu());
 
@@ -1742,7 +1749,8 @@ public class VectorRoomSettingsFragment extends PreferenceFragment implements Sh
             addAddressPreference.setTitle(R.string.room_settings_addresses_add_new_address);
             addAddressPreference.setDialogTitle(R.string.room_settings_addresses_add_new_address);
             addAddressPreference.setKey(ADD_ADDRESSES_PREFERENCE_KEY);
-            addAddressPreference.setIcon(CommonActivityUtils.tintDrawable(getActivity(), ContextCompat.getDrawable(getActivity(), R.drawable.ic_add_black), R.attr.settings_icon_tint_color));
+            addAddressPreference.setIcon(CommonActivityUtils.tintDrawable(getActivity(),
+                    ContextCompat.getDrawable(getActivity(), R.drawable.ic_add_black), R.attr.settings_icon_tint_color));
 
             addAddressPreference.setOnPreferenceChangeListener(
                     new Preference.OnPreferenceChangeListener() {
@@ -1814,7 +1822,8 @@ public class VectorRoomSettingsFragment extends PreferenceFragment implements Sh
      */
     private void refreshEndToEnd() {
         // encrypt to unverified devices
-        final CheckBoxPreference sendToUnverifiedDevicesPref = (CheckBoxPreference) findPreference(getString(R.string.room_settings_never_send_to_unverified_devices_title));
+        final CheckBoxPreference sendToUnverifiedDevicesPref =
+                (CheckBoxPreference) findPreference(getString(R.string.room_settings_never_send_to_unverified_devices_title));
 
         // reported by GA
         if (null == sendToUnverifiedDevicesPref) {
@@ -1911,13 +1920,15 @@ public class VectorRoomSettingsFragment extends PreferenceFragment implements Sh
                 VectorCustomActionEditTextPreference isEncryptedPreference = new VectorCustomActionEditTextPreference(getActivity());
                 isEncryptedPreference.setTitle(R.string.room_settings_addresses_e2e_disabled);
                 isEncryptedPreference.setKey(key);
-                isEncryptedPreference.setIcon(CommonActivityUtils.tintDrawable(getActivity(), getResources().getDrawable(R.drawable.e2e_unencrypted), R.attr.settings_icon_tint_color));
+                isEncryptedPreference.setIcon(CommonActivityUtils.tintDrawable(getActivity(),
+                        getResources().getDrawable(R.drawable.e2e_unencrypted), R.attr.settings_icon_tint_color));
                 mAdvandceSettingsCategory.addPreference(isEncryptedPreference);
             } else if (mSession.isCryptoEnabled()) {
                 final VectorSwitchPreference encryptSwitchPreference = new VectorSwitchPreference(getActivity());
                 encryptSwitchPreference.setTitle(R.string.room_settings_addresses_e2e_encryption_warning);
                 encryptSwitchPreference.setKey(key);
-                encryptSwitchPreference.setIcon(CommonActivityUtils.tintDrawable(getActivity(), getResources().getDrawable(R.drawable.e2e_unencrypted), R.attr.settings_icon_tint_color));
+                encryptSwitchPreference.setIcon(CommonActivityUtils.tintDrawable(getActivity(),
+                        getResources().getDrawable(R.drawable.e2e_unencrypted), R.attr.settings_icon_tint_color));
                 encryptSwitchPreference.setChecked(false);
                 mAdvandceSettingsCategory.addPreference(encryptSwitchPreference);
 

@@ -184,7 +184,10 @@ public class CommonActivityUtils {
      * @param clearCredentials true to clear the credentials
      * @param callback         the asynchronous callback
      */
-    private static void logout(final Context context, final Iterator<MXSession> sessions, final boolean clearCredentials, final SimpleApiCallback<Void> callback) {
+    private static void logout(final Context context,
+                               final Iterator<MXSession> sessions,
+                               final boolean clearCredentials,
+                               final SimpleApiCallback<Void> callback) {
         if (!sessions.hasNext()) {
             if (null != callback) {
                 callback.onSuccess(null);
@@ -323,7 +326,8 @@ public class CommonActivityUtils {
             editor.putBoolean(RESTART_IN_PROGRESS_KEY, true);
             editor.commit();
 
-            PendingIntent mPendingIntent = PendingIntent.getActivity(activity, 314159, new Intent(activity, LoginActivity.class), PendingIntent.FLAG_CANCEL_CURRENT);
+            PendingIntent mPendingIntent =
+                    PendingIntent.getActivity(activity, 314159, new Intent(activity, LoginActivity.class), PendingIntent.FLAG_CANCEL_CURRENT);
 
             // so restart the application after 100ms
             AlarmManager mgr = (AlarmManager) activity.getSystemService(Context.ALARM_SERVICE);
@@ -746,17 +750,20 @@ public class CommonActivityUtils {
             // retrieve the permissions to be granted according to the request code bit map
             if (PERMISSION_CAMERA == (aPermissionsToBeGrantedBitMap & PERMISSION_CAMERA)) {
                 permissionType = Manifest.permission.CAMERA;
-                isRequestPermissionRequired |= updatePermissionsToBeGranted(aCallingActivity, permissionListAlreadyDenied, permissionsListToBeGranted, permissionType);
+                isRequestPermissionRequired
+                        |= updatePermissionsToBeGranted(aCallingActivity, permissionListAlreadyDenied, permissionsListToBeGranted, permissionType);
             }
 
             if (PERMISSION_RECORD_AUDIO == (aPermissionsToBeGrantedBitMap & PERMISSION_RECORD_AUDIO)) {
                 permissionType = Manifest.permission.RECORD_AUDIO;
-                isRequestPermissionRequired |= updatePermissionsToBeGranted(aCallingActivity, permissionListAlreadyDenied, permissionsListToBeGranted, permissionType);
+                isRequestPermissionRequired
+                        |= updatePermissionsToBeGranted(aCallingActivity, permissionListAlreadyDenied, permissionsListToBeGranted, permissionType);
             }
 
             if (PERMISSION_WRITE_EXTERNAL_STORAGE == (aPermissionsToBeGrantedBitMap & PERMISSION_WRITE_EXTERNAL_STORAGE)) {
                 permissionType = Manifest.permission.WRITE_EXTERNAL_STORAGE;
-                isRequestPermissionRequired |= updatePermissionsToBeGranted(aCallingActivity, permissionListAlreadyDenied, permissionsListToBeGranted, permissionType);
+                isRequestPermissionRequired
+                        |= updatePermissionsToBeGranted(aCallingActivity, permissionListAlreadyDenied, permissionsListToBeGranted, permissionType);
             }
 
             // the contact book access is requested for any android platforms
@@ -766,7 +773,8 @@ public class CommonActivityUtils {
                 permissionType = Manifest.permission.READ_CONTACTS;
 
                 if (Build.VERSION.SDK_INT >= 23) {
-                    isRequestPermissionRequired |= updatePermissionsToBeGranted(aCallingActivity, permissionListAlreadyDenied, permissionsListToBeGranted, permissionType);
+                    isRequestPermissionRequired
+                            |= updatePermissionsToBeGranted(aCallingActivity, permissionListAlreadyDenied, permissionsListToBeGranted, permissionType);
                 } else {
                     if (!ContactsManager.getInstance().isContactBookAccessRequested()) {
                         isRequestPermissionRequired = true;
@@ -781,7 +789,8 @@ public class CommonActivityUtils {
             if (!permissionListAlreadyDenied.isEmpty()) {
                 if (null != resource) {
                     // add the user info text to be displayed to explain why the permission is required by the App
-                    if (aPermissionsToBeGrantedBitMap == REQUEST_CODE_PERMISSION_VIDEO_IP_CALL || aPermissionsToBeGrantedBitMap == REQUEST_CODE_PERMISSION_AUDIO_IP_CALL) {
+                    if (aPermissionsToBeGrantedBitMap == REQUEST_CODE_PERMISSION_VIDEO_IP_CALL
+                            || aPermissionsToBeGrantedBitMap == REQUEST_CODE_PERMISSION_AUDIO_IP_CALL) {
                         // Permission request for VOIP call
                         if (permissionListAlreadyDenied.contains(Manifest.permission.CAMERA)
                                 && permissionListAlreadyDenied.contains(Manifest.permission.RECORD_AUDIO)) {
@@ -839,10 +848,12 @@ public class CommonActivityUtils {
                     public void onClick(DialogInterface dialog, int which) {
                         if (!finalPermissionsListToBeGranted.isEmpty()) {
                             if (fragment != null) {
-                                fragment.requestPermissions(finalPermissionsListToBeGranted.toArray(new String[finalPermissionsListToBeGranted.size()]), aPermissionsToBeGrantedBitMap);
+                                fragment.requestPermissions(finalPermissionsListToBeGranted.toArray(new String[finalPermissionsListToBeGranted.size()]),
+                                        aPermissionsToBeGrantedBitMap);
                             } else {
                                 ActivityCompat.requestPermissions(aCallingActivity,
-                                        finalPermissionsListToBeGranted.toArray(new String[finalPermissionsListToBeGranted.size()]), aPermissionsToBeGrantedBitMap);
+                                        finalPermissionsListToBeGranted.toArray(new String[finalPermissionsListToBeGranted.size()]),
+                                        aPermissionsToBeGrantedBitMap);
                             }
                         }
                     }
@@ -948,7 +959,10 @@ public class CommonActivityUtils {
      * @param permissionType                   the permission to be checked
      * @return true if the permission requires to be granted, false otherwise
      */
-    private static boolean updatePermissionsToBeGranted(final Activity aCallingActivity, List<String> aPermissionAlreadyDeniedList_out, List<String> aPermissionsListToBeGranted_out, final String permissionType) {
+    private static boolean updatePermissionsToBeGranted(final Activity aCallingActivity,
+                                                        List<String> aPermissionAlreadyDeniedList_out,
+                                                        List<String> aPermissionsListToBeGranted_out,
+                                                        final String permissionType) {
         boolean isRequestPermissionRequested = false;
 
         // add permission to be granted
@@ -1126,7 +1140,11 @@ public class CommonActivityUtils {
      * @param roomAlias    the room alias
      * @param callback     the operation callback
      */
-    public static void previewRoom(final Activity fromActivity, final MXSession session, final String roomId, final String roomAlias, final ApiCallback<Void> callback) {
+    public static void previewRoom(final Activity fromActivity,
+                                   final MXSession session,
+                                   final String roomId,
+                                   final String roomAlias,
+                                   final ApiCallback<Void> callback) {
         previewRoom(fromActivity, session, roomId, new RoomPreviewData(session, roomId, null, roomAlias, null), callback);
     }
 
@@ -1140,7 +1158,11 @@ public class CommonActivityUtils {
      * @param roomPreviewData the room preview data
      * @param callback        the operation callback
      */
-    public static void previewRoom(final Activity fromActivity, final MXSession session, final String roomId, final RoomPreviewData roomPreviewData, final ApiCallback<Void> callback) {
+    public static void previewRoom(final Activity fromActivity,
+                                   final MXSession session,
+                                   final String roomId,
+                                   final RoomPreviewData roomPreviewData,
+                                   final ApiCallback<Void> callback) {
         Room room = session.getDataHandler().getRoom(roomId, false);
 
         // if the room exists
@@ -1234,54 +1256,55 @@ public class CommonActivityUtils {
             return;
         }
 
-        fromActivity.runOnUiThread(new Runnable() {
-                                       @Override
-                                       public void run() {
-                                           // if the activity is not the home activity
-                                           if (!(fromActivity instanceof VectorHomeActivity)) {
-                                               // pop to the home activity
-                                               Log.d(LOG_TAG, "## goToRoomPage(): start VectorHomeActivity..");
-                                               Intent intent = new Intent(fromActivity, VectorHomeActivity.class);
-                                               intent.setFlags(android.content.Intent.FLAG_ACTIVITY_CLEAR_TOP | android.content.Intent.FLAG_ACTIVITY_SINGLE_TOP);
+        fromActivity.runOnUiThread(
+                new Runnable() {
+                    @Override
+                    public void run() {
+                        // if the activity is not the home activity
+                        if (!(fromActivity instanceof VectorHomeActivity)) {
+                            // pop to the home activity
+                            Log.d(LOG_TAG, "## goToRoomPage(): start VectorHomeActivity..");
+                            Intent intent = new Intent(fromActivity, VectorHomeActivity.class);
+                            intent.setFlags(android.content.Intent.FLAG_ACTIVITY_CLEAR_TOP | android.content.Intent.FLAG_ACTIVITY_SINGLE_TOP);
 
-                                               intent.putExtra(VectorHomeActivity.EXTRA_JUMP_TO_ROOM_PARAMS, (Serializable) params);
-                                               fromActivity.startActivity(intent);
-                                           } else {
-                                               // already to the home activity
-                                               // so just need to open the room activity
-                                               Log.d(LOG_TAG, "## goToRoomPage(): already in VectorHomeActivity..");
-                                               Intent intent = new Intent(fromActivity, VectorRoomActivity.class);
+                            intent.putExtra(VectorHomeActivity.EXTRA_JUMP_TO_ROOM_PARAMS, (Serializable) params);
+                            fromActivity.startActivity(intent);
+                        } else {
+                            // already to the home activity
+                            // so just need to open the room activity
+                            Log.d(LOG_TAG, "## goToRoomPage(): already in VectorHomeActivity..");
+                            Intent intent = new Intent(fromActivity, VectorRoomActivity.class);
 
-                                               for (String key : params.keySet()) {
-                                                   Object value = params.get(key);
+                            for (String key : params.keySet()) {
+                                Object value = params.get(key);
 
-                                                   if (value instanceof String) {
-                                                       intent.putExtra(key, (String) value);
-                                                   } else if (value instanceof Boolean) {
-                                                       intent.putExtra(key, (Boolean) value);
-                                                   } else if (value instanceof Parcelable) {
-                                                       intent.putExtra(key, (Parcelable) value);
-                                                   }
-                                               }
+                                if (value instanceof String) {
+                                    intent.putExtra(key, (String) value);
+                                } else if (value instanceof Boolean) {
+                                    intent.putExtra(key, (Boolean) value);
+                                } else if (value instanceof Parcelable) {
+                                    intent.putExtra(key, (Parcelable) value);
+                                }
+                            }
 
-                                               // try to find a displayed room name
-                                               if (null == params.get(VectorRoomActivity.EXTRA_DEFAULT_NAME)) {
+                            // try to find a displayed room name
+                            if (null == params.get(VectorRoomActivity.EXTRA_DEFAULT_NAME)) {
 
-                                                   Room room = finalSession.getDataHandler().getRoom((String) params.get(VectorRoomActivity.EXTRA_ROOM_ID));
+                                Room room = finalSession.getDataHandler().getRoom((String) params.get(VectorRoomActivity.EXTRA_ROOM_ID));
 
-                                                   if ((null != room) && room.isInvited()) {
-                                                       String displayName = VectorUtils.getRoomDisplayName(fromActivity, finalSession, room);
+                                if ((null != room) && room.isInvited()) {
+                                    String displayName = VectorUtils.getRoomDisplayName(fromActivity, finalSession, room);
 
-                                                       if (null != displayName) {
-                                                           intent.putExtra(VectorRoomActivity.EXTRA_DEFAULT_NAME, displayName);
-                                                       }
-                                                   }
-                                               }
+                                    if (null != displayName) {
+                                        intent.putExtra(VectorRoomActivity.EXTRA_DEFAULT_NAME, displayName);
+                                    }
+                                }
+                            }
 
-                                               fromActivity.startActivity(intent);
-                                           }
-                                       }
-                                   }
+                            fromActivity.startActivity(intent);
+                        }
+                    }
+                }
         );
     }
 
@@ -1334,7 +1357,11 @@ public class CommonActivityUtils {
      * @param fromActivity       calling activity
      * @param callback           async response handler
      */
-    public static void setToggleDirectMessageRoom(final MXSession aSession, final String aRoomId, String aParticipantUserId, final Activity fromActivity, final ApiCallback<Void> callback) {
+    public static void setToggleDirectMessageRoom(final MXSession aSession,
+                                                  final String aRoomId,
+                                                  String aParticipantUserId,
+                                                  final Activity fromActivity,
+                                                  final ApiCallback<Void> callback) {
 
         if ((null == aSession) || (null == fromActivity) || TextUtils.isEmpty(aRoomId)) {
             Log.d(LOG_TAG, "## setToggleDirectMessageRoom(): failure - invalid input parameters");
@@ -1652,7 +1679,11 @@ public class CommonActivityUtils {
      * @param callback the asynchronous callback
      */
     @SuppressLint("NewApi")
-    public static void saveMediaIntoDownloads(final Context context, final File srcFile, final String filename, final String mimeType, final SimpleApiCallback<String> callback) {
+    public static void saveMediaIntoDownloads(final Context context,
+                                              final File srcFile,
+                                              final String filename,
+                                              final String mimeType,
+                                              final SimpleApiCallback<String> callback) {
         saveFileInto(srcFile, Environment.DIRECTORY_DOWNLOADS, filename, new ApiCallback<String>() {
             @Override
             public void onSuccess(String fullFilePath) {
@@ -1948,7 +1979,11 @@ public class CommonActivityUtils {
      *
      * @param deviceInfo the device info
      */
-    static public <T> void displayDeviceVerificationDialog(final MXDeviceInfo deviceInfo, final String sender, final MXSession session, Activity activiy, final ApiCallback<Void> callback) {
+    static public <T> void displayDeviceVerificationDialog(final MXDeviceInfo deviceInfo,
+                                                           final String sender,
+                                                           final MXSession session,
+                                                           Activity activiy,
+                                                           final ApiCallback<Void> callback) {
 
         // sanity check
         if ((null == deviceInfo) || (null == sender) || (null == session)) {
@@ -2020,35 +2055,36 @@ public class CommonActivityUtils {
                     String url = session.getMediasCache().saveMedia(stream, "riot-" + System.currentTimeMillis() + ".txt", "text/plain");
                     stream.close();
 
-                    CommonActivityUtils.saveMediaIntoDownloads(appContext, new File(Uri.parse(url).getPath()), "riot-keys.txt", "text/plain", new SimpleApiCallback<String>() {
-                        @Override
-                        public void onSuccess(String path) {
-                            if (null != callback) {
-                                callback.onSuccess(path);
-                            }
-                        }
+                    CommonActivityUtils.saveMediaIntoDownloads(appContext,
+                            new File(Uri.parse(url).getPath()), "riot-keys.txt", "text/plain", new SimpleApiCallback<String>() {
+                                @Override
+                                public void onSuccess(String path) {
+                                    if (null != callback) {
+                                        callback.onSuccess(path);
+                                    }
+                                }
 
-                        @Override
-                        public void onNetworkError(Exception e) {
-                            if (null != callback) {
-                                callback.onNetworkError(e);
-                            }
-                        }
+                                @Override
+                                public void onNetworkError(Exception e) {
+                                    if (null != callback) {
+                                        callback.onNetworkError(e);
+                                    }
+                                }
 
-                        @Override
-                        public void onMatrixError(MatrixError e) {
-                            if (null != callback) {
-                                callback.onMatrixError(e);
-                            }
-                        }
+                                @Override
+                                public void onMatrixError(MatrixError e) {
+                                    if (null != callback) {
+                                        callback.onMatrixError(e);
+                                    }
+                                }
 
-                        @Override
-                        public void onUnexpectedError(Exception e) {
-                            if (null != callback) {
-                                callback.onUnexpectedError(e);
-                            }
-                        }
-                    });
+                                @Override
+                                public void onUnexpectedError(Exception e) {
+                                    if (null != callback) {
+                                        callback.onUnexpectedError(e);
+                                    }
+                                }
+                            });
                 } catch (Exception e) {
                     if (null != callback) {
                         callback.onMatrixError(new MatrixError(null, e.getLocalizedMessage()));
@@ -2089,7 +2125,10 @@ public class CommonActivityUtils {
      * @param unknownDevices the unknown devices list
      * @param listener       optional listener to add an optional "Send anyway" button
      */
-    public static void displayUnknownDevicesDialog(MXSession session, FragmentActivity activity, MXUsersDevicesMap<MXDeviceInfo> unknownDevices, VectorUnknownDevicesFragment.IUnknownDevicesSendAnywayListener listener) {
+    public static void displayUnknownDevicesDialog(MXSession session,
+                                                   FragmentActivity activity,
+                                                   MXUsersDevicesMap<MXDeviceInfo> unknownDevices,
+                                                   VectorUnknownDevicesFragment.IUnknownDevicesSendAnywayListener listener) {
         // sanity checks
         if (activity.isFinishing() || (null == unknownDevices) || (0 == unknownDevices.getMap().size())) {
             return;

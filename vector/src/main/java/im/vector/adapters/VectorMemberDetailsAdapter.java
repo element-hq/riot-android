@@ -1,6 +1,7 @@
 /*
  * Copyright 2016 OpenMarket Ltd
  * Copyright 2017 Vector Creations Ltd
+ * Copyright 2018 New Vector Ltd
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -393,7 +394,8 @@ public class VectorMemberDetailsAdapter extends BaseExpandableListAdapter {
             viewHolder.mActionImageView.setImageResource(currentItem.mIconResourceId);
 
             if (currentItem.mIconResourceId != R.drawable.ic_remove_circle_outline_red) {
-                viewHolder.mActionImageView.setImageDrawable(CommonActivityUtils.tintDrawable(mContext, viewHolder.mActionImageView.getDrawable(), R.attr.settings_icon_tint_color));
+                viewHolder.mActionImageView.setImageDrawable(
+                        CommonActivityUtils.tintDrawable(mContext, viewHolder.mActionImageView.getDrawable(), R.attr.settings_icon_tint_color));
             }
 
             // update the text colour: specific colour is required for the remove action

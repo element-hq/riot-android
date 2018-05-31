@@ -1,5 +1,6 @@
 /*
  * Copyright 2017 Vector Creations Ltd
+ * Copyright 2018 New Vector Ltd
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -39,7 +40,11 @@ public class GroupInvitationViewHolder extends GroupViewHolder {
     }
 
     @Override
-    public void populateViews(final Context context, final MXSession session, final Group group, final AbsAdapter.GroupInvitationListener invitationListener, final boolean isInvitation,
+    public void populateViews(final Context context,
+                              final MXSession session,
+                              final Group group,
+                              final AbsAdapter.GroupInvitationListener invitationListener,
+                              final boolean isInvitation,
                               final AbsAdapter.MoreGroupActionListener moreGroupActionListener) {
         super.populateViews(context, session, group, invitationListener, true, moreGroupActionListener);
 

@@ -1,5 +1,6 @@
 /*
  * Copyright 2017 Vector Creations Ltd
+ * Copyright 2018 New Vector Ltd
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -55,7 +56,9 @@ public class VectorUnknownDevicesFragment extends DialogFragment {
 
     private static IUnknownDevicesSendAnywayListener mListener = null;
 
-    public static VectorUnknownDevicesFragment newInstance(String sessionId, MXUsersDevicesMap<MXDeviceInfo> unknownDevicesMap, IUnknownDevicesSendAnywayListener listener) {
+    public static VectorUnknownDevicesFragment newInstance(String sessionId,
+                                                           MXUsersDevicesMap<MXDeviceInfo> unknownDevicesMap,
+                                                           IUnknownDevicesSendAnywayListener listener) {
         VectorUnknownDevicesFragment f = new VectorUnknownDevicesFragment();
 
         // Supply num input as an argument.
@@ -159,7 +162,8 @@ public class VectorUnknownDevicesFragment extends DialogFragment {
             public void OnVerifyDeviceClick(MXDeviceInfo aDeviceInfo) {
                 switch (aDeviceInfo.mVerified) {
                     case MXDeviceInfo.DEVICE_VERIFICATION_VERIFIED:
-                        mSession.getCrypto().setDeviceVerification(MXDeviceInfo.DEVICE_VERIFICATION_UNVERIFIED, aDeviceInfo.deviceId, aDeviceInfo.userId, mCallback);
+                        mSession.getCrypto()
+                                .setDeviceVerification(MXDeviceInfo.DEVICE_VERIFICATION_UNVERIFIED, aDeviceInfo.deviceId, aDeviceInfo.userId, mCallback);
                         break;
 
                     case MXDeviceInfo.DEVICE_VERIFICATION_UNVERIFIED:
@@ -172,9 +176,11 @@ public class VectorUnknownDevicesFragment extends DialogFragment {
             @Override
             public void OnBlockDeviceClick(MXDeviceInfo aDeviceInfo) {
                 if (aDeviceInfo.mVerified == MXDeviceInfo.DEVICE_VERIFICATION_BLOCKED) {
-                    mSession.getCrypto().setDeviceVerification(MXDeviceInfo.DEVICE_VERIFICATION_UNVERIFIED, aDeviceInfo.deviceId, aDeviceInfo.userId, mCallback);
+                    mSession.getCrypto()
+                            .setDeviceVerification(MXDeviceInfo.DEVICE_VERIFICATION_UNVERIFIED, aDeviceInfo.deviceId, aDeviceInfo.userId, mCallback);
                 } else {
-                    mSession.getCrypto().setDeviceVerification(MXDeviceInfo.DEVICE_VERIFICATION_BLOCKED, aDeviceInfo.deviceId, aDeviceInfo.userId, mCallback);
+                    mSession.getCrypto()
+                            .setDeviceVerification(MXDeviceInfo.DEVICE_VERIFICATION_BLOCKED, aDeviceInfo.deviceId, aDeviceInfo.userId, mCallback);
                 }
                 refresh();
             }

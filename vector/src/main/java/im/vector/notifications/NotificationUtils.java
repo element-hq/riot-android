@@ -1,6 +1,7 @@
 /*
  * Copyright 2016 OpenMarket Ltd
  * Copyright 2017 Vector Creations Ltd
+ * Copyright 2018 New Vector Ltd
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -38,8 +39,13 @@ import android.text.Spannable;
 import android.text.SpannableString;
 import android.text.TextUtils;
 import android.text.style.StyleSpan;
+
 import org.matrix.androidsdk.rest.model.bingrules.BingRule;
 import org.matrix.androidsdk.util.Log;
+
+import java.util.List;
+import java.util.Map;
+import java.util.Random;
 
 import im.vector.Matrix;
 import im.vector.R;
@@ -52,10 +58,6 @@ import im.vector.activity.VectorHomeActivity;
 import im.vector.activity.VectorRoomActivity;
 import im.vector.receiver.DismissNotificationReceiver;
 import im.vector.util.PreferencesManager;
-
-import java.util.List;
-import java.util.Map;
-import java.util.Random;
 
 /**
  * Util class for creating notifications.
@@ -144,7 +146,8 @@ public class NotificationUtils {
         if (null == NOISY_NOTIFICATION_CHANNEL_ID) {
             NOISY_NOTIFICATION_CHANNEL_ID = NOISY_NOTIFICATION_CHANNEL_ID_BASE + System.currentTimeMillis();
 
-            NotificationChannel channel = new NotificationChannel(NOISY_NOTIFICATION_CHANNEL_ID, NOISY_NOTIFICATION_CHANNEL_NAME, NotificationManager.IMPORTANCE_DEFAULT);
+            NotificationChannel channel = new NotificationChannel(NOISY_NOTIFICATION_CHANNEL_ID,
+                    NOISY_NOTIFICATION_CHANNEL_NAME, NotificationManager.IMPORTANCE_DEFAULT);
             channel.setDescription(NOISY_NOTIFICATION_CHANNEL_NAME);
             channel.setSound(PreferencesManager.getNotificationRingTone(context), null);
             channel.enableVibration(true);
@@ -152,21 +155,24 @@ public class NotificationUtils {
         }
 
         if (null == notificationManager.getNotificationChannel(SILENT_NOTIFICATION_CHANNEL_NAME)) {
-            NotificationChannel channel = new NotificationChannel(SILENT_NOTIFICATION_CHANNEL_ID, SILENT_NOTIFICATION_CHANNEL_NAME, NotificationManager.IMPORTANCE_DEFAULT);
+            NotificationChannel channel = new NotificationChannel(SILENT_NOTIFICATION_CHANNEL_ID,
+                    SILENT_NOTIFICATION_CHANNEL_NAME, NotificationManager.IMPORTANCE_DEFAULT);
             channel.setDescription(SILENT_NOTIFICATION_CHANNEL_NAME);
             channel.setSound(null, null);
             notificationManager.createNotificationChannel(channel);
         }
 
         if (null == notificationManager.getNotificationChannel(LISTEN_FOR_EVENTS_NOTIFICATION_CHANNEL_ID)) {
-            NotificationChannel channel = new NotificationChannel(LISTEN_FOR_EVENTS_NOTIFICATION_CHANNEL_ID, LISTEN_FOR_EVENTS_NOTIFICATION_CHANNEL_NAME, NotificationManager.IMPORTANCE_MIN);
+            NotificationChannel channel = new NotificationChannel(LISTEN_FOR_EVENTS_NOTIFICATION_CHANNEL_ID,
+                    LISTEN_FOR_EVENTS_NOTIFICATION_CHANNEL_NAME, NotificationManager.IMPORTANCE_MIN);
             channel.setDescription(LISTEN_FOR_EVENTS_NOTIFICATION_CHANNEL_NAME);
             channel.setSound(null, null);
             notificationManager.createNotificationChannel(channel);
         }
 
         if (null == notificationManager.getNotificationChannel(CALL_NOTIFICATION_CHANNEL_ID)) {
-            NotificationChannel channel = new NotificationChannel(CALL_NOTIFICATION_CHANNEL_ID, CALL_NOTIFICATION_CHANNEL_NAME, NotificationManager.IMPORTANCE_DEFAULT);
+            NotificationChannel channel = new NotificationChannel(CALL_NOTIFICATION_CHANNEL_ID,
+                    CALL_NOTIFICATION_CHANNEL_NAME, NotificationManager.IMPORTANCE_DEFAULT);
             channel.setDescription(CALL_NOTIFICATION_CHANNEL_NAME);
             channel.setSound(null, null);
             notificationManager.createNotificationChannel(channel);
@@ -329,7 +335,8 @@ public class NotificationUtils {
 
         for (RoomNotifications roomNotifications : roomsNotifications.mRoomNotifications) {
             SpannableString notifiedLine = new SpannableString(roomNotifications.mMessagesSummary);
-            notifiedLine.setSpan(new StyleSpan(android.graphics.Typeface.BOLD), 0, roomNotifications.mMessageHeader.length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+            notifiedLine.setSpan(new StyleSpan(android.graphics.Typeface.BOLD),
+                    0, roomNotifications.mMessageHeader.length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
             inboxStyle.addLine(notifiedLine);
         }
 
@@ -345,7 +352,8 @@ public class NotificationUtils {
 
         if (roomsNotifications.mIsInvitationEvent) {
             // for invitation the room preview must be displayed
-            roomIntentTap = CommonActivityUtils.buildIntentPreviewRoom(roomsNotifications.mSessionId, roomsNotifications.mRoomId, context, VectorFakeRoomPreviewActivity.class);
+            roomIntentTap = CommonActivityUtils.buildIntentPreviewRoom(roomsNotifications.mSessionId,
+                    roomsNotifications.mRoomId, context, VectorFakeRoomPreviewActivity.class);
         } else {
             roomIntentTap = new Intent(context, VectorRoomActivity.class);
             roomIntentTap.putExtra(VectorRoomActivity.EXTRA_ROOM_ID, roomsNotifications.mRoomId);
@@ -480,7 +488,8 @@ public class NotificationUtils {
 
             if (roomsNotifications.mIsInvitationEvent) {
                 // for invitation the room preview must be displayed
-                roomIntentTap = CommonActivityUtils.buildIntentPreviewRoom(roomsNotifications.mSessionId, roomsNotifications.mRoomId, context, VectorFakeRoomPreviewActivity.class);
+                roomIntentTap = CommonActivityUtils.buildIntentPreviewRoom(roomsNotifications.mSessionId,
+                        roomsNotifications.mRoomId, context, VectorFakeRoomPreviewActivity.class);
             } else {
                 roomIntentTap = new Intent(context, VectorRoomActivity.class);
                 roomIntentTap.putExtra(VectorRoomActivity.EXTRA_ROOM_ID, roomsNotifications.mRoomId);
@@ -658,7 +667,8 @@ public class NotificationUtils {
             builder.setGroup(context.getString(R.string.riot_app_name));
             builder.setGroupSummary(true);
 
-            builder.setDeleteIntent(PendingIntent.getBroadcast(context.getApplicationContext(), 0, new Intent(context.getApplicationContext(), DismissNotificationReceiver.class), PendingIntent.FLAG_UPDATE_CURRENT));
+            builder.setDeleteIntent(PendingIntent.getBroadcast(context.getApplicationContext(),
+                    0, new Intent(context.getApplicationContext(), DismissNotificationReceiver.class), PendingIntent.FLAG_UPDATE_CURRENT));
 
             try {
                 addTextStyle(context, builder, roomsNotifications);

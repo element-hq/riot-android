@@ -1,5 +1,6 @@
 /*
  * Copyright 2017 Vector Creations Ltd
+ * Copyright 2018 New Vector Ltd
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -48,12 +49,12 @@ import org.matrix.androidsdk.data.store.IMXStore;
 import org.matrix.androidsdk.rest.callback.ApiCallback;
 import org.matrix.androidsdk.rest.model.Event;
 import org.matrix.androidsdk.rest.model.MatrixError;
+import org.matrix.androidsdk.rest.model.ReceiptData;
+import org.matrix.androidsdk.rest.model.RoomMember;
 import org.matrix.androidsdk.rest.model.URLPreview;
 import org.matrix.androidsdk.rest.model.group.Group;
 import org.matrix.androidsdk.rest.model.group.GroupProfile;
 import org.matrix.androidsdk.rest.model.message.Message;
-import org.matrix.androidsdk.rest.model.ReceiptData;
-import org.matrix.androidsdk.rest.model.RoomMember;
 import org.matrix.androidsdk.rest.model.message.StickerMessage;
 import org.matrix.androidsdk.util.EventDisplay;
 import org.matrix.androidsdk.util.JsonUtils;
@@ -759,7 +760,8 @@ class VectorMessagesAdapterHelper {
 
         if (null != downloadProgressLayout) {
             ViewGroup.MarginLayoutParams downloadProgressLayoutParams = (ViewGroup.MarginLayoutParams) downloadProgressLayout.getLayoutParams();
-            downloadProgressLayoutParams.setMargins(marginLeft, downloadProgressLayoutParams.topMargin, downloadProgressLayoutParams.rightMargin, downloadProgressLayoutParams.bottomMargin);
+            downloadProgressLayoutParams.setMargins(marginLeft, downloadProgressLayoutParams.topMargin,
+                    downloadProgressLayoutParams.rightMargin, downloadProgressLayoutParams.bottomMargin);
             downloadProgressLayout.setLayoutParams(downloadProgressLayoutParams);
         }
 
@@ -767,7 +769,8 @@ class VectorMessagesAdapterHelper {
 
         if (null != uploadProgressLayout) {
             ViewGroup.MarginLayoutParams uploadProgressLayoutParams = (ViewGroup.MarginLayoutParams) uploadProgressLayout.getLayoutParams();
-            uploadProgressLayoutParams.setMargins(marginLeft, uploadProgressLayoutParams.topMargin, uploadProgressLayoutParams.rightMargin, uploadProgressLayoutParams.bottomMargin);
+            uploadProgressLayoutParams.setMargins(marginLeft, uploadProgressLayoutParams.topMargin,
+                    uploadProgressLayoutParams.rightMargin, uploadProgressLayoutParams.bottomMargin);
             uploadProgressLayout.setLayoutParams(uploadProgressLayoutParams);
         }
     }
