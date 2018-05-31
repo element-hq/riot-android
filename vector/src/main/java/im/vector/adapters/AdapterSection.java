@@ -16,6 +16,7 @@
 
 package im.vector.adapters;
 
+import android.content.Context;
 import android.text.SpannableString;
 import android.text.TextUtils;
 import android.text.style.ForegroundColorSpan;
@@ -53,8 +54,11 @@ public class AdapterSection<T> {
     private boolean mIsHiddenWhenEmpty;
     private boolean mIsHiddenWhenNoFilter;
 
-    public AdapterSection(String title, int headerSubViewResId, int contentResId, int headerViewType,
+    private Context mContext;
+
+    public AdapterSection(Context context , String title, int headerSubViewResId, int contentResId, int headerViewType,
                           int contentViewType, List<T> items, Comparator<T> comparator) {
+        mContext = context;
         mTitle = title;
         mItems = items;
         mFilteredItems = new ArrayList<>(items);
@@ -117,8 +121,8 @@ public class AdapterSection<T> {
      * @param titleToFormat
      */
     void formatTitle(final String titleToFormat) {
-        SpannableString spannableString = new SpannableString(titleToFormat.toUpperCase());
-        spannableString.setSpan(new ForegroundColorSpan(ThemeUtils.getColor(VectorApp.getInstance(), R.attr.list_header_subtext_color)),
+        SpannableString spannableString = new SpannableString(titleToFormat.toUpperCase(VectorApp.getApplicationLocale()));
+        spannableString.setSpan(new ForegroundColorSpan(ThemeUtils.getColor(mContext, R.attr.list_header_subtext_color)),
                 mTitle.length(), titleToFormat.length(), 0);
         mTitleFormatted = spannableString;
     }

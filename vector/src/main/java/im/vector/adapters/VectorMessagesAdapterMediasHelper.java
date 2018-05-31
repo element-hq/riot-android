@@ -1,5 +1,6 @@
 /*
  * Copyright 2017 Vector Creations Ltd
+ * Copyright 2018 New Vector Ltd
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -29,6 +30,9 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
+import com.bumptech.glide.request.RequestOptions;
 import com.google.gson.JsonElement;
 
 import org.matrix.androidsdk.MXSession;
@@ -37,17 +41,21 @@ import org.matrix.androidsdk.listeners.IMXMediaDownloadListener;
 import org.matrix.androidsdk.listeners.IMXMediaUploadListener;
 import org.matrix.androidsdk.listeners.MXMediaDownloadListener;
 import org.matrix.androidsdk.listeners.MXMediaUploadListener;
-import org.matrix.androidsdk.rest.model.EncryptedFileInfo;
+import org.matrix.androidsdk.rest.model.crypto.EncryptedFileInfo;
 import org.matrix.androidsdk.rest.model.Event;
-import org.matrix.androidsdk.rest.model.FileMessage;
-import org.matrix.androidsdk.rest.model.ImageInfo;
-import org.matrix.androidsdk.rest.model.ImageMessage;
+import org.matrix.androidsdk.rest.model.message.FileMessage;
+import org.matrix.androidsdk.rest.model.message.ImageInfo;
+import org.matrix.androidsdk.rest.model.message.ImageMessage;
 import org.matrix.androidsdk.rest.model.MatrixError;
-import org.matrix.androidsdk.rest.model.Message;
-import org.matrix.androidsdk.rest.model.VideoInfo;
-import org.matrix.androidsdk.rest.model.VideoMessage;
+import org.matrix.androidsdk.rest.model.message.Message;
+import org.matrix.androidsdk.rest.model.message.StickerMessage;
+import org.matrix.androidsdk.rest.model.message.VideoInfo;
+import org.matrix.androidsdk.rest.model.message.VideoMessage;
 import org.matrix.androidsdk.util.JsonUtils;
 import org.matrix.androidsdk.util.Log;
+
+import java.util.HashMap;
+import java.util.Map;
 
 import im.vector.R;
 import im.vector.listeners.IMessagesAdapterActionsListener;
@@ -168,6 +176,10 @@ class VectorMessagesAdapterMediasHelper {
         refreshUploadViews(event, uploadStats, uploadProgressLayout);
     }
 
+    // the image / video bitmaps are set to null if the matching URL is not the same
+    // to avoid flickering
+    private Map<String, String> mUrlByBitmapIndex = new HashMap<>();
+
     /**
      * Manage the image/video download.
      *
@@ -219,7 +231,7 @@ class VectorMessagesAdapterMediasHelper {
                     orientation = imageInfo.orientation;
                 }
             }
-        } else { // video
+        } else if (message instanceof VideoMessage){ // video
             VideoMessage videoMessage = (VideoMessage) message;
             videoMessage.checkMediaUrls();
 
@@ -240,21 +252,49 @@ class VectorMessagesAdapterMediasHelper {
 
         ImageView imageView = convertView.findViewById(R.id.messagesAdapter_image);
 
-        // reset the bitmap
-        imageView.setImageBitmap(null);
+        // reset the bitmap if the url is not the same than before
+        if ((null == thumbUrl) || !TextUtils.equals(imageView.hashCode() + "", mUrlByBitmapIndex.get(thumbUrl))) {
+            imageView.setImageBitmap(null);
+            if (null != thumbUrl) {
+                mUrlByBitmapIndex.put(thumbUrl, imageView.hashCode() + "");
+            }
+        }
 
         RelativeLayout informationLayout = convertView.findViewById(R.id.messagesAdapter_image_layout);
         final FrameLayout.LayoutParams layoutParams = (FrameLayout.LayoutParams) informationLayout.getLayoutParams();
 
         // the thumbnails are always pre - rotated
-        String downloadId = mMediasCache.loadBitmap(mSession.getHomeServerConfig(), imageView, thumbUrl, maxImageWidth, maxImageHeight, rotationAngle, ExifInterface.ORIENTATION_UNDEFINED, "image/jpeg", encryptedFileInfo);
+        String downloadId = null;
+        if (!event.getType().equals(Event.EVENT_TYPE_STICKER)) {
+            downloadId = mMediasCache.loadBitmap(mSession.getHomeServerConfig(), imageView, thumbUrl, maxImageWidth, maxImageHeight, rotationAngle, ExifInterface.ORIENTATION_UNDEFINED, "image/jpeg", encryptedFileInfo);
+        }
 
-        // test if the media is downloading the thumbnail is not downloading
+        // test if the media is downloading when the thumbnail is not downloading
         if (null == downloadId) {
             if (message instanceof VideoMessage) {
                 downloadId = mMediasCache.downloadIdFromUrl(((VideoMessage) message).getUrl());
-            } else {
+            } else if (message instanceof ImageMessage) {
                 downloadId = mMediasCache.downloadIdFromUrl(((ImageMessage) message).getUrl());
+            }
+        }
+
+        // Use Glide library to display stickers into ImageView
+        // Glide support animated gif
+        if (event.getType().equals(Event.EVENT_TYPE_STICKER)) {
+            // Check whether the sticker url is a valid Matrix media content URI, and convert it in an actual url.
+            String downloadableUrl = mSession.getContentManager().getDownloadableUrl(((StickerMessage) message).getUrl());
+            if (null != downloadableUrl) {
+                Glide.with(mContext)
+                        .load(downloadableUrl)
+                        .apply(new RequestOptions()
+                                .override(maxImageWidth, maxImageHeight)
+                                .fitCenter()
+                                .placeholder(R.drawable.sticker_placeholder)
+                        )
+                        .into(imageView);
+            } else {
+                // Display the placeholder
+                imageView.setImageResource(R.drawable.sticker_placeholder);
             }
         }
 
@@ -397,12 +437,13 @@ class VectorMessagesAdapterMediasHelper {
 
         String uploadingUrl;
         final boolean isUploadingThumbnail;
+        boolean isUploadingContent = false;
 
         if (isVideoMessage) {
-            uploadingUrl = ((VideoMessage) message).info.thumbnail_url;
+            uploadingUrl = ((VideoMessage) message).getThumbnailUrl();
             isUploadingThumbnail = ((VideoMessage) message).isThumbnailLocalContent();
         } else {
-            uploadingUrl = ((ImageMessage) message).info.thumbnailUrl;
+            uploadingUrl = ((ImageMessage) message).getThumbnailUrl();
             isUploadingThumbnail = ((ImageMessage) message).isThumbnailLocalContent();
         }
 
@@ -411,11 +452,14 @@ class VectorMessagesAdapterMediasHelper {
         if (isUploadingThumbnail) {
             progress = mSession.getMediasCache().getProgressValueForUploadId(uploadingUrl);
         } else {
-            if (isVideoMessage) {
-                uploadingUrl = ((VideoMessage) message).url;
-            } else {
-                uploadingUrl = ((ImageMessage) message).url;
+            if (message instanceof VideoMessage) {
+                uploadingUrl = ((VideoMessage) message).getUrl();
+                isUploadingContent = ((VideoMessage) message).isLocalContent();
+            } else if (message instanceof ImageMessage){
+                uploadingUrl = ((ImageMessage) message).getUrl();
+                isUploadingContent = ((ImageMessage) message).isLocalContent();
             }
+
             progress = mSession.getMediasCache().getProgressValueForUploadId(uploadingUrl);
         }
 
@@ -478,11 +522,12 @@ class VectorMessagesAdapterMediasHelper {
         uploadSpinner.setVisibility(((progress < 0) && event.isSending()) ? View.VISIBLE : View.GONE);
         refreshUploadViews(event, mSession.getMediasCache().getStatsForUploadId(uploadingUrl), uploadProgressLayout);
 
-        if (!isUploadingThumbnail) {
+        if (isUploadingContent) {
             progress = 10 + (progress * 90 / 100);
-        } else {
+        } else if (isUploadingThumbnail) {
             progress = (progress * 10 / 100);
         }
+
         updateUploadProgress(uploadProgressLayout, progress);
         uploadProgressLayout.setVisibility(((progress >= 0) && event.isSending()) ? View.VISIBLE : View.GONE);
     }

@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/url_preview_layout"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginLeft="76dp"
+    android:layout_marginRight="16dp"
+    android:orientation="horizontal">
+
+    <View
+        android:layout_width="5dp"
+        android:layout_height="match_parent"
+        android:layout_marginLeft="0dp"
+        android:background="@color/vector_silver_color" />
+
+    <RelativeLayout
+        android:id="@+id/url_preview_content_layout"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="1">
+
+        <ImageView
+            android:id="@+id/url_preview_image_view"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:layout_marginLeft="5dp"
+            android:layout_marginRight="10dp" />
+
+        <TextView
+            android:id="@+id/url_preview_title_text_view"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_toRightOf="@+id/url_preview_image_view"
+            android:maxLines="2"
+            android:text="a title"
+            android:linksClickable="true"
+            android:textSize="14sp" />
+
+        <TextView
+            android:id="@+id/url_preview_description_text_view"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/url_preview_title_text_view"
+            android:layout_toRightOf="@+id/url_preview_image_view"
+            android:maxLines="3"
+            android:text="a description"
+            android:textSize="14sp" />
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:id="@+id/url_preview_hide_view"
+        android:layout_width="30dp"
+        android:layout_height="match_parent">
+
+        <ImageView
+            android:id="@+id/url_preview_hide_image_view"
+            android:layout_width="30dp"
+            android:layout_height="30sp"
+            android:src="@drawable/vector_clear_edittext_green" />
+    </RelativeLayout>
+</LinearLayout>

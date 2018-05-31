@@ -21,6 +21,7 @@ import android.support.annotation.IdRes;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
 
+import org.matrix.androidsdk.rest.model.group.Group;
 import org.matrix.androidsdk.util.Log;
 
 import android.util.Pair;
@@ -39,6 +40,7 @@ import java.util.List;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import im.vector.R;
+import im.vector.util.GroupUtils;
 import im.vector.util.RoomUtils;
 import im.vector.util.StickySectionHelper;
 import im.vector.view.SectionView;
@@ -52,6 +54,10 @@ public abstract class AbsAdapter extends AbsFilterableAdapter {
 
     static final int TYPE_ROOM = -3;
 
+    static final int TYPE_GROUP = -4;
+
+    static final int TYPE_GROUP_INVITATION = -5;
+
     // Helper handling the sticky view for each section
     private StickySectionHelper mStickySectionHelper;
 
@@ -59,7 +65,7 @@ public abstract class AbsAdapter extends AbsFilterableAdapter {
     /// Ex <0, section 1 with 2 items>, <3, section 2>
     private final List<Pair<Integer, AdapterSection>> mSections;
 
-    private final AdapterSection<Room> mInviteSection;
+    private AdapterSection<Room> mInviteSection;
 
     /*
      * *********************************************************************************************
@@ -67,18 +73,31 @@ public abstract class AbsAdapter extends AbsFilterableAdapter {
      * *********************************************************************************************
      */
 
-    AbsAdapter(final Context context, final InvitationListener invitationListener, final MoreRoomActionListener moreActionListener) {
+    AbsAdapter(final Context context, final RoomInvitationListener invitationListener, final MoreRoomActionListener moreActionListener) {
         super(context, invitationListener, moreActionListener);
 
         registerAdapterDataObserver(new AdapterDataObserver());
 
         mSections = new ArrayList<>();
 
-        mInviteSection = new AdapterSection<>(context.getString(R.string.room_recents_invites), -1, R.layout.adapter_item_room_view,
+        mInviteSection = new AdapterSection<>(context, context.getString(R.string.room_recents_invites), -1, R.layout.adapter_item_room_view,
                 TYPE_HEADER_DEFAULT, TYPE_ROOM_INVITATION, new ArrayList<Room>(), null);
         mInviteSection.setEmptyViewPlaceholder(null, context.getString(R.string.no_result_placeholder));
         mInviteSection.setIsHiddenWhenEmpty(true);
         addSection(mInviteSection);
+    }
+
+
+    AbsAdapter(final Context context, final GroupInvitationListener invitationListener, final MoreGroupActionListener moreActionListener) {
+        super(context, invitationListener, moreActionListener);
+        registerAdapterDataObserver(new AdapterDataObserver());
+        mSections = new ArrayList<>();
+    }
+
+    AbsAdapter(final Context context) {
+        super(context);
+        registerAdapterDataObserver(new AdapterDataObserver());
+        mSections = new ArrayList<>();
     }
 
     /*
@@ -122,7 +141,7 @@ public abstract class AbsAdapter extends AbsFilterableAdapter {
                 return new HeaderViewHolder(headerItemView);
             case TYPE_ROOM_INVITATION:
                 View invitationView = inflater.inflate(R.layout.adapter_item_room_invite, viewGroup, false);
-                return new InvitationViewHolder(invitationView);
+                return new RoomInvitationViewHolder(invitationView);
             default:
                 return createSubViewHolder(viewGroup, viewType);
         }
@@ -157,9 +176,9 @@ public abstract class AbsAdapter extends AbsFilterableAdapter {
                 }
                 break;
             case TYPE_ROOM_INVITATION:
-                final InvitationViewHolder invitationViewHolder = (InvitationViewHolder) viewHolder;
+                final RoomInvitationViewHolder invitationViewHolder = (RoomInvitationViewHolder) viewHolder;
                 final Room room = (Room) getItemForPosition(position);
-                invitationViewHolder.populateViews(mContext, mSession, room, mInvitationListener, mMoreActionListener);
+                invitationViewHolder.populateViews(mContext, mSession, room, mRoomInvitationListener, mMoreRoomActionListener);
                 break;
             default:
                 populateViewHolder(viewType, viewHolder, position);
@@ -207,12 +226,14 @@ public abstract class AbsAdapter extends AbsFilterableAdapter {
      * @param rooms
      */
     public void setInvitation(final List<Room> rooms) {
-        mInviteSection.setItems(rooms, mCurrentFilterPattern);
-        if (!TextUtils.isEmpty(mCurrentFilterPattern)) {
-            filterRoomSection(mInviteSection, String.valueOf(mCurrentFilterPattern));
-        }
+        if (null != mInviteSection) {
+            mInviteSection.setItems(rooms, mCurrentFilterPattern);
+            if (!TextUtils.isEmpty(mCurrentFilterPattern)) {
+                filterRoomSection(mInviteSection, String.valueOf(mCurrentFilterPattern));
+            }
 
-        updateSections();
+            updateSections();
+        }
     }
 
     /**
@@ -353,13 +374,38 @@ public abstract class AbsAdapter extends AbsFilterableAdapter {
      * @return nb of items matching the filter
      */
     int filterRoomSection(final AdapterSection<Room> section, final String filterPattern) {
-        if (!TextUtils.isEmpty(filterPattern)) {
-            List<Room> filteredRoom = RoomUtils.getFilteredRooms(mContext, mSession, section.getItems(), filterPattern);
-            section.setFilteredItems(filteredRoom, filterPattern);
+        if (null != section) {
+            if (!TextUtils.isEmpty(filterPattern)) {
+                List<Room> filteredRoom = RoomUtils.getFilteredRooms(mContext, mSession, section.getItems(), filterPattern);
+                section.setFilteredItems(filteredRoom, filterPattern);
+            } else {
+                section.resetFilter();
+            }
+            return section.getFilteredItems().size();
         } else {
-            section.resetFilter();
+            return 0;
         }
-        return section.getFilteredItems().size();
+    }
+
+    /**
+     * Filter the given section of groups with the given pattern
+     *
+     * @param section
+     * @param filterPattern
+     * @return nb of items matching the filter
+     */
+    int filterGroupSection(final AdapterSection<Group> section, final String filterPattern) {
+        if (null != section) {
+            if (!TextUtils.isEmpty(filterPattern)) {
+                List<Group> filteredGroups = GroupUtils.getFilteredGroups(section.getItems(), filterPattern);
+                section.setFilteredItems(filteredGroups, filterPattern);
+            } else {
+                section.resetFilter();
+            }
+            return section.getFilteredItems().size();
+        } else {
+            return 0;
+        }
     }
 
     /*
@@ -430,14 +476,24 @@ public abstract class AbsAdapter extends AbsFilterableAdapter {
         }
     }
 
-    public interface InvitationListener {
+    public interface RoomInvitationListener {
         void onPreviewRoom(MXSession session, String roomId);
 
         void onRejectInvitation(MXSession session, String roomId);
     }
 
+    public interface GroupInvitationListener {
+        void onJoinGroup(MXSession session, String groupId);
+
+        void onRejectInvitation(MXSession session, String groupId);
+    }
+
     public interface MoreRoomActionListener {
         void onMoreActionClick(View itemView, Room room);
+    }
+
+    public interface MoreGroupActionListener {
+        void onMoreActionClick(View itemView, Group group);
     }
 
     /*

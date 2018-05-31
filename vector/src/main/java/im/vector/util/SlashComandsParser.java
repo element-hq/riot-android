@@ -1,12 +1,13 @@
-/* 
+/*
  * Copyright 2016 OpenMarket Ltd
- * 
+ * Copyright 2018 New Vector Ltd
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *     http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -16,10 +17,8 @@
 
 package im.vector.util;
 
+import android.app.AlertDialog;
 import android.text.TextUtils;
-
-import org.matrix.androidsdk.util.Log;
-
 import android.widget.Toast;
 
 import org.matrix.androidsdk.MXSession;
@@ -29,10 +28,12 @@ import org.matrix.androidsdk.data.RoomState;
 import org.matrix.androidsdk.rest.callback.ApiCallback;
 import org.matrix.androidsdk.rest.callback.SimpleApiCallback;
 import org.matrix.androidsdk.rest.model.MatrixError;
+import org.matrix.androidsdk.util.Log;
 
 import java.util.Collection;
 import java.util.HashMap;
 
+import im.vector.R;
 import im.vector.VectorApp;
 import im.vector.activity.CommonActivityUtils;
 import im.vector.activity.VectorRoomActivity;
@@ -45,16 +46,52 @@ public class SlashComandsParser {
     // the user can write theses messages to perform some room events
     public static final String CMD_EMOTE = "/me";
 
-    private static final String CMD_CHANGE_DISPLAY_NAME = "/nick";
-    private static final String CMD_JOIN_ROOM = "/join";
-    private static final String CMD_KICK_USER = "/kick";
+    // <user-id> [reason]
     private static final String CMD_BAN_USER = "/ban";
+
+    // <user-id>'
     private static final String CMD_UNBAN_USER = "/unban";
+
+    // <user-id> [<power-level>]
     private static final String CMD_SET_USER_POWER_LEVEL = "/op";
+
+    // <user-id>
     private static final String CMD_RESET_USER_POWER_LEVEL = "/deop";
-    private static final String CMD_TOPIC = "/topic";
+
+    // <user-id>
     private static final String CMD_INVITE = "/invite";
+
+    // <room-alias>
+    private static final String CMD_JOIN_ROOM = "/join";
+
+    // <room-alias>
     private static final String CMD_PART = "/part";
+
+    // <topic>
+    private static final String CMD_TOPIC = "/topic";
+
+    // <user-id> [reason]
+    private static final String CMD_KICK_USER = "/kick";
+
+    // <display-name>
+    private static final String CMD_CHANGE_DISPLAY_NAME = "/nick";
+
+    // <query>
+    private static final String CMD_DDG = "/ddg";
+
+    // <color1> [<color2>]
+    private static final String CMD_TINT = "/tint";
+
+    // <user-id> <device-id> <device-signing-key>
+    private static final String CMD_VERIFY = "/verify";
+
+    // <<user-id>
+    private static final String CMD_IGNORE = "/ignore";
+
+    // <<user-id>
+    private static final String CMD_UNIGNORE = "/unignore";
+
+    // on / off
     private static final String CMD_MARKDOWN = "/markdown";
 
     /**
@@ -80,8 +117,15 @@ public class SlashComandsParser {
 
         // check if it has the IRC marker
         if ((null != textMessage) && (textMessage.startsWith("/"))) {
-
             Log.d(LOG_TAG, "manageSplashCommand : " + textMessage);
+
+            if (textMessage.length() == 1) {
+                return false;
+            }
+
+            if ("/".equals(textMessage.substring(1, 2))) {
+                return false;
+            }
 
             final ApiCallback callback = new SimpleApiCallback<Void>(activity) {
                 @Override
@@ -93,6 +137,8 @@ public class SlashComandsParser {
                 public void onMatrixError(MatrixError e) {
                     if (MatrixError.FORBIDDEN.equals(e.errcode)) {
                         Toast.makeText(activity, e.error, Toast.LENGTH_LONG).show();
+                    } else if (MatrixError.M_CONSENT_NOT_GIVEN.equals(e.errcode)) {
+                        activity.getConsentNotGivenHelper().displayDialog(e);
                     }
                 }
             };
@@ -162,7 +208,11 @@ public class SlashComandsParser {
 
                         @Override
                         public void onMatrixError(final MatrixError e) {
-                            Toast.makeText(activity, e.error, Toast.LENGTH_LONG).show();
+                            if (MatrixError.M_CONSENT_NOT_GIVEN.equals(e.errcode)) {
+                                activity.getConsentNotGivenHelper().displayDialog(e);
+                            } else {
+                                Toast.makeText(activity, e.error, Toast.LENGTH_LONG).show();
+                            }
                         }
                     });
                 }
@@ -254,6 +304,16 @@ public class SlashComandsParser {
                         PreferencesManager.setMarkdownEnabled(VectorApp.getInstance(), false);
                     }
                 }
+            }
+
+            if (!isIRCCmd) {
+                AlertDialog.Builder dialog = new AlertDialog.Builder(activity);
+                dialog.setTitle(R.string.command_error);
+                dialog.setMessage(activity.getString(R.string.unrecognized_command, firstPart));
+                dialog.setPositiveButton(R.string.ok, null);
+                dialog.show();
+                // do not send the command as a message
+                isIRCCmd = true;
             }
         }
 

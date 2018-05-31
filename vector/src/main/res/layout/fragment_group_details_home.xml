@@ -1,0 +1,125 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="10dp"
+        android:layout_marginLeft="20dp"
+        android:layout_marginRight="20dp"
+        android:layout_marginTop="10dp">
+
+        <im.vector.view.VectorCircularImageView
+            android:id="@+id/group_avatar"
+            android:layout_width="@dimen/chat_avatar_size"
+            android:layout_height="@dimen/chat_avatar_size"
+            tools:background="#f00" />
+
+        <RelativeLayout
+            android:id="@+id/group_details_group_view"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="10dp"
+            android:layout_toRightOf="@+id/group_avatar">
+
+            <TextView
+                android:id="@+id/group_name_text_view"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:maxLines="3"
+                android:textSize="18sp"
+                android:textStyle="bold"
+                tools:background="#0f0"
+                tools:text="The group name" />
+
+            <TextView
+                android:id="@+id/group_topic_text_view"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/group_name_text_view"
+                android:maxLines="5"
+                android:textSize="14sp"
+                tools:background="#00f"
+                tools:text="The group topic" />
+
+            <LinearLayout
+                android:id="@+id/group_members_rooms_view"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/group_topic_text_view"
+                android:layout_marginTop="10dp"
+                android:orientation="horizontal"
+                tools:background="#f00">
+
+                <ImageView
+                    android:id="@+id/group_members_icon_view"
+                    android:layout_width="12dp"
+                    android:layout_height="12dp"
+                    android:layout_gravity="center"
+                    android:src="@drawable/riot_tab_groups" />
+
+                <TextView
+                    android:id="@+id/group_members_text_view"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_marginLeft="5dp"
+                    android:textSize="12sp"
+                    tools:text="33 members" />
+
+                <ImageView
+                    android:id="@+id/group_rooms_icon_view"
+                    android:layout_width="12dp"
+                    android:layout_height="12dp"
+                    android:layout_gravity="center"
+                    android:layout_marginLeft="10dp"
+                    android:src="@drawable/riot_tab_rooms" />
+
+                <TextView
+                    android:id="@+id/group_rooms_text_view"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_marginLeft="5dp"
+                    android:textSize="12sp"
+                    tools:text="33 rooms" />
+            </LinearLayout>
+        </RelativeLayout>
+    </RelativeLayout>
+
+    <View
+        android:layout_width="wrap_content"
+        android:layout_height="1dp"
+        android:background="@color/vector_silver_color" />
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="10dp"
+        android:layout_marginLeft="20dp"
+        android:layout_marginRight="20dp"
+        android:layout_marginTop="10dp">
+
+        <TextView
+            android:id="@+id/html_text_view"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            tools:text="an HTML text here" />
+    </ScrollView>
+
+    <TextView
+        android:id="@+id/no_html_text_view"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="10dp"
+        android:layout_marginLeft="20dp"
+        android:layout_marginRight="20dp"
+        android:layout_marginTop="10dp"
+        android:text="@string/group_no_long_description"
+        android:textColor="@color/vector_silver_color" />
+</LinearLayout>

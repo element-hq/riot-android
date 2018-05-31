@@ -23,4 +23,8 @@
         android:textSize="14sp"
         android:textStyle="bold"
         tools:text="One very long sender name for testing purpose" />
+
+    <include
+        android:id="@+id/messagesAdapter_flair_groups_list"
+        layout="@layout/vector_message_flair_groups_list" />
 </merge>

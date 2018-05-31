@@ -1,6 +1,7 @@
 /*
  * Copyright 2016 OpenMarket Ltd
  * Copyright 2017 Vector Creations Ltd
+ * Copyright 2018 New Vector Ltd 
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,7 +17,6 @@
  */
 
 package im.vector;
-
 
 import android.app.Activity;
 import android.app.AlertDialog;
@@ -109,7 +109,7 @@ public class KeyRequestHandler {
 
         requests.add(keyRequest);
 
-        if (null != mCurrentUser) {
+        if (null != mAlertDialog) {
             // ignore for now
             Log.d(LOG_TAG, "## handleKeyRequest() : Key request, but we already have a dialog open");
             return;
@@ -203,19 +203,32 @@ public class KeyRequestHandler {
      * The Key share dialog is closed.
      *
      * @param share true to share the key.
+     * @param ignoreRequests true to make the crypto module forget all keyshare requests coming from the current user's device.
      */
-    private void onDisplayKeyShareDialogClose(boolean share) {
+    private void onDisplayKeyShareDialogClose(boolean share, boolean ignoreRequests) {
         // sanity check
         if (mPendingKeyRequests.containsKey(mCurrentUser)) {
-            if (share) {
-                List<IncomingRoomKeyRequest> requests = mPendingKeyRequests.get(mCurrentUser).get(mCurrentDevice);
 
+            List<IncomingRoomKeyRequest> requests = mPendingKeyRequests.get(mCurrentUser).get(mCurrentDevice);
+
+            if (share) {
                 for (IncomingRoomKeyRequest req : requests) {
                     if (null != req.mShare) {
                         try {
                             req.mShare.run();
                         } catch (Exception e) {
                             Log.e(LOG_TAG, "## onDisplayKeyShareDialogClose() : req.mShare failed " + e.getMessage());
+                        }
+                    }
+                }
+            }
+            else if (ignoreRequests) {
+                for (IncomingRoomKeyRequest req : requests) {
+                    if (null != req.mIgnore) {
+                        try {
+                            req.mIgnore.run();
+                        } catch (Exception e) {
+                            Log.e(LOG_TAG, "## onDisplayKeyShareDialogClose() : req.mIgnore failed " + e.getMessage());
                         }
                     }
                 }
@@ -240,7 +253,7 @@ public class KeyRequestHandler {
      */
     private void initKeyShareDialog() {
         if (null == VectorApp.getCurrentActivity()) {
-            // wait that an activity is ready
+            // wait until an activity is ready
             mCurrentUser = null;
             mCurrentDevice = null;
             return;
@@ -256,7 +269,7 @@ public class KeyRequestHandler {
 
                 if (null == deviceInfo) {
                     Log.e(LOG_TAG, "## displayKeyShareDialog() : No details found for device " + mCurrentUser + ":" + mCurrentDevice);
-                    onDisplayKeyShareDialogClose(false);
+                    onDisplayKeyShareDialogClose(false, false);
                     return;
                 }
 
@@ -274,7 +287,7 @@ public class KeyRequestHandler {
 
             private void onError(String errorMessage) {
                 Log.e(LOG_TAG, "## displayKeyShareDialog : downloadKeys failed " + errorMessage);
-                onDisplayKeyShareDialogClose(false);
+                onDisplayKeyShareDialogClose(false, false);
             }
 
             @Override
@@ -319,19 +332,20 @@ public class KeyRequestHandler {
 
         // set dialog message
         alertDialogBuilder
-                .setCancelable(true)
+                .setCancelable(false)
                 .setNegativeButton(R.string.ignore_request, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         dialog.dismiss();
-                        onDisplayKeyShareDialogClose(false);
+                        onDisplayKeyShareDialogClose(false, true);
+
                     }
                 })
                 .setNeutralButton(R.string.share_without_verifying,
                         new DialogInterface.OnClickListener() {
                             public void onClick(DialogInterface dialog, int id) {
                                 dialog.dismiss();
-                                onDisplayKeyShareDialogClose(true);
+                                onDisplayKeyShareDialogClose(true, false);
                             }
                         })
                 .setPositiveButton(R.string.start_verification,
@@ -343,7 +357,7 @@ public class KeyRequestHandler {
                                     public void onSuccess(Void info) {
                                         if (deviceInfo.isVerified()) {
                                             dialog.dismiss();
-                                            onDisplayKeyShareDialogClose(true);
+                                            onDisplayKeyShareDialogClose(true, false);
                                         } else {
                                             displayKeyShareDialog(session, deviceInfo, wasNewDevice);
                                         }
@@ -359,7 +373,7 @@ public class KeyRequestHandler {
         mAlertDialog.setOnCancelListener(new DialogInterface.OnCancelListener() {
             @Override
             public void onCancel(DialogInterface dialogInterface) {
-                onDisplayKeyShareDialogClose(false);
+                onDisplayKeyShareDialogClose(false, true);
             }
         });
 

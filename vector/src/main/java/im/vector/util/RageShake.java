@@ -41,10 +41,28 @@ public class RageShake implements SensorEventListener {
     // the context
     private Context mContext;
 
+    // the sensor
+    private SensorManager mSensorManager;
+    private Sensor mSensor;
+    private boolean mIsStarted;
+
     /**
      * Constructor
      */
-    public RageShake() {
+    public RageShake(Context context) {
+        mContext = context;
+
+        mSensorManager = (SensorManager) context.getSystemService(Context.SENSOR_SERVICE);
+
+        if (null != mSensorManager) {
+            mSensor = mSensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
+        }
+
+        if (null == mSensor) {
+            Log.e(LOG_TAG, "No accelerometer in this device. Cannot use rage shake.");
+            mSensorManager = null;
+        }
+
         // Samsung devices for some reason seem to be less sensitive than others so the threshold is being
         // lowered for them. A possible lead for a better formula is the fact that the sensitivity detected
         // with the calculated force below seems to relate to the sample rate: The higher the sample rate,
@@ -79,12 +97,7 @@ public class RageShake implements SensorEventListener {
                     .setNeutralButton(R.string.disable, new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
-                            SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(mContext);
-
-                            SharedPreferences.Editor editor = preferences.edit();
-                            editor.putBoolean(mContext.getString(im.vector.R.string.settings_key_use_rage_shake), false);
-                            editor.commit();
-
+                            PreferencesManager.setUseRageshake(mContext, false);
                             dialog.dismiss();
                         }
                     })
@@ -101,19 +114,27 @@ public class RageShake implements SensorEventListener {
         }
     }
 
+
     /**
      * start the sensor detector
      */
-    public void start(Context context) {
-        mContext = context;
-
-        SensorManager sm = (SensorManager) context.getSystemService(Context.SENSOR_SERVICE);
-        Sensor s = sm.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
-        if (s == null) {
-            Log.e(LOG_TAG, "No accelerometer in this device. Cannot use rage shake.");
-            return;
+    public void start() {
+        if ((null != mSensorManager) && PreferencesManager.useRageshake(mContext) && !VectorApp.isAppInBackground() && !mIsStarted) {
+            mIsStarted = true;
+            mLastUpdate = 0;
+            mLastShake = 0;
+            mSensorManager.registerListener(this, mSensor, SensorManager.SENSOR_DELAY_NORMAL);
         }
-        sm.registerListener(this, s, SensorManager.SENSOR_DELAY_NORMAL);
+    }
+
+    /**
+     * Stop the sensor detector
+     */
+    public void stop() {
+        if (null != mSensorManager) {
+            mSensorManager.unregisterListener(this, mSensor);
+        }
+        mIsStarted = false;
     }
 
     @Override
@@ -136,12 +157,6 @@ public class RageShake implements SensorEventListener {
 
     @Override
     public void onSensorChanged(SensorEvent event) {
-        // ignore the sensor events when the application is in background
-        if (VectorApp.isAppInBackground()) {
-            mLastUpdate = 0;
-            return;
-        }
-
         if (event.sensor.getType() != Sensor.TYPE_ACCELEROMETER) {
             return;
         }
@@ -169,9 +184,7 @@ public class RageShake implements SensorEventListener {
                         Log.d(LOG_TAG, "Shaking detected.");
                         mLastShakeTimestamp = System.currentTimeMillis();
 
-                        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(mContext);
-
-                        if (preferences.getBoolean(mContext.getString(im.vector.R.string.settings_key_use_rage_shake), true)) {
+                        if (PreferencesManager.useRageshake(mContext)) {
                             promptForReport();
                         }
                     } else {

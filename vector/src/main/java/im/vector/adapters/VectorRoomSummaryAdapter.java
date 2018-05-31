@@ -50,6 +50,7 @@ import java.util.List;
 import im.vector.Matrix;
 import im.vector.PublicRoomsManager;
 import im.vector.R;
+import im.vector.VectorApp;
 import im.vector.util.RiotEventDisplay;
 import im.vector.util.RoomUtils;
 import im.vector.util.ThemeUtils;
@@ -107,9 +108,6 @@ public class VectorRoomSummaryAdapter extends BaseExpandableListAdapter {
 
     // drag and drop mode
     private boolean mIsDragAndDropMode = false;
-
-    // the direct
-    private List<String> mDirectChatRoomIdsList = new ArrayList<>();
 
     /**
      * Constructor
@@ -222,7 +220,7 @@ public class VectorRoomSummaryAdapter extends BaseExpandableListAdapter {
 
         if (!TextUtils.isEmpty(mSearchedPattern)) {
             String roomName = VectorUtils.getRoomDisplayName(mContext, mMxSession, room);
-            res = (!TextUtils.isEmpty(roomName) && (roomName.toLowerCase().contains(mSearchedPattern)));
+            res = (!TextUtils.isEmpty(roomName) && (roomName.toLowerCase(VectorApp.getApplicationLocale()).contains(mSearchedPattern)));
         }
 
         return res;
@@ -310,7 +308,6 @@ public class VectorRoomSummaryAdapter extends BaseExpandableListAdapter {
             // Retrieve lists of room IDs(strings) according to their tags
             final List<String> favouriteRoomIdList = mMxSession.roomIdsWithTag(RoomTag.ROOM_TAG_FAVOURITE);
             final List<String> lowPriorityRoomIdList = mMxSession.roomIdsWithTag(RoomTag.ROOM_TAG_LOW_PRIORITY);
-            mDirectChatRoomIdsList = mMxSession.getDirectChatRoomIdsList();
 
             // ArrayLists allocations: will contain the RoomSummary objects deduced from roomIdsWithTag()
             ArrayList<RoomSummary> inviteRoomSummaryList = new ArrayList<>();
@@ -713,8 +710,6 @@ public class VectorRoomSummaryAdapter extends BaseExpandableListAdapter {
                 if (!TextUtils.isEmpty(mSearchedPattern)) {
                     if (null == mMatchedPublicRoomsCount) {
                         roomMsgTxtView.setText(mContext.getResources().getString(R.string.directory_searching_title));
-                    } else if (mMatchedPublicRoomsCount < 2) {
-                        roomMsgTxtView.setText(mContext.getResources().getString(R.string.directory_search_room_for, mMatchedPublicRoomsCount, mSearchedPattern));
                     } else {
                         String value = mMatchedPublicRoomsCount.toString();
 
@@ -722,15 +717,13 @@ public class VectorRoomSummaryAdapter extends BaseExpandableListAdapter {
                             value = "> " + PublicRoomsManager.PUBLIC_ROOMS_LIMIT;
                         }
 
-                        roomMsgTxtView.setText(mContext.getResources().getString(R.string.directory_search_rooms_for, value, mSearchedPattern));
+                        roomMsgTxtView.setText(mContext.getResources().getQuantityString(R.plurals.directory_search_rooms_for, mMatchedPublicRoomsCount, value, mSearchedPattern));
                     }
                 } else {
                     if (null == mPublicRoomsCount) {
                         roomMsgTxtView.setText(null);
-                    } else if (mPublicRoomsCount > 1) {
-                        roomMsgTxtView.setText(mContext.getResources().getString(R.string.directory_search_rooms, mPublicRoomsCount));
                     } else {
-                        roomMsgTxtView.setText(mContext.getResources().getString(R.string.directory_search_room, mPublicRoomsCount));
+                        roomMsgTxtView.setText(mContext.getResources().getQuantityString(R.plurals.directory_search_rooms, mPublicRoomsCount, mPublicRoomsCount));
                     }
                 }
 
@@ -811,7 +804,7 @@ public class VectorRoomSummaryAdapter extends BaseExpandableListAdapter {
         }
 
         if (null != childRoom) {
-            directChatIcon.setVisibility(mDirectChatRoomIdsList.indexOf(childRoom.getRoomId()) < 0 ? View.GONE : View.VISIBLE);
+            directChatIcon.setVisibility(RoomUtils.isDirectChat(mMxSession, childRoom.getRoomId()) ? View.VISIBLE: View.GONE);
             encryptedIcon.setVisibility(childRoom.isEncrypted() ? View.VISIBLE : View.GONE);
         } else {
             directChatIcon.setVisibility(View.GONE);
@@ -953,7 +946,7 @@ public class VectorRoomSummaryAdapter extends BaseExpandableListAdapter {
         String trimmedPattern = pattern;
 
         if (null != pattern) {
-            trimmedPattern = pattern.trim().toLowerCase();
+            trimmedPattern = pattern.trim().toLowerCase(VectorApp.getApplicationLocale());
             trimmedPattern = TextUtils.getTrimmedLength(trimmedPattern) == 0 ? null : trimmedPattern;
         }
 

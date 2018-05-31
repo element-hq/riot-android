@@ -21,6 +21,8 @@ import android.net.Uri;
 import org.matrix.androidsdk.crypto.data.MXDeviceInfo;
 import org.matrix.androidsdk.rest.model.Event;
 
+import java.util.List;
+
 /**
  * Actions listeners
  */
@@ -93,6 +95,14 @@ public interface IMessagesAdapterActionsListener {
     void onMoreReadReceiptClick(String eventId);
 
     /**
+     * Define the action to perform when the group flairs is clicked.
+     *
+     * @param userId the user id
+     * @param groupIds the group ids list
+     */
+    void onGroupFlairClick(String userId, List<String> groupIds);
+
+    /**
      * An url has been clicked in a message text.
      *
      * @param uri the uri.
@@ -134,6 +144,13 @@ public interface IMessagesAdapterActionsListener {
      * @param messageId the message id.
      */
     void onMessageIdClick(String messageId);
+
+    /**
+     * A group id has been clicked in a message body.
+     *
+     * @param groupId the group id.
+     */
+    void onGroupIdClick(String groupId);
 
     /**
      * The required indexes are not anymore valid.

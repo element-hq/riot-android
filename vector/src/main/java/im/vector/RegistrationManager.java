@@ -28,7 +28,7 @@ import org.matrix.androidsdk.rest.client.LoginRestClient;
 import org.matrix.androidsdk.rest.client.ProfileRestClient;
 import org.matrix.androidsdk.rest.client.ThirdPidRestClient;
 import org.matrix.androidsdk.rest.model.MatrixError;
-import org.matrix.androidsdk.rest.model.ThreePid;
+import org.matrix.androidsdk.rest.model.pid.ThreePid;
 import org.matrix.androidsdk.rest.model.login.Credentials;
 import org.matrix.androidsdk.rest.model.login.LoginFlow;
 import org.matrix.androidsdk.rest.model.login.RegistrationFlowResponse;
@@ -199,26 +199,40 @@ public class RegistrationManager {
      */
     public void checkUsernameAvailability(final Context context, final UsernameValidityListener listener) {
         if (getLoginRestClient() != null) {
-            final RegistrationParams params = new RegistrationParams();
+            // Trigger a fake registration (without password) to know whether the user name is available or not.
+            RegistrationParams params = new RegistrationParams();
             params.username = mUsername;
-            params.password = mPassword;
 
             register(context, params, new InternalRegistrationListener() {
                 @Override
                 public void onRegistrationSuccess() {
-                    listener.onUsernameAvailabilityChecked(true);
+                    // The registration could not succeed without password.
+                    // Keep calling listener (the error case) as a fallback,
+                    listener.onUsernameAvailabilityChecked(false);
                 }
 
                 @Override
                 public void onRegistrationFailed(String message) {
-                    if (TextUtils.equals(MatrixError.USER_IN_USE, message)) {
-                        listener.onUsernameAvailabilityChecked(false);
-                    } else {
-                        listener.onUsernameAvailabilityChecked(true);
-                    }
+                    listener.onUsernameAvailabilityChecked(!TextUtils.equals(MatrixError.USER_IN_USE, message));
                 }
             });
         }
+    }
+
+    /**
+     * @return true if there is a password flow.
+     */
+    private boolean isPasswordBasedFlowSupported() {
+        if ((null != mRegistrationResponse) && (null != mRegistrationResponse.flows)) {
+            for (LoginFlow flow : mRegistrationResponse.flows) {
+                if (TextUtils.equals(flow.type, LoginRestClient.LOGIN_FLOW_TYPE_PASSWORD) ||
+                        ((null != flow.stages) && flow.stages.contains(LoginRestClient.LOGIN_FLOW_TYPE_PASSWORD))) {
+                    return true;
+                }
+            }
+        }
+
+        return false;
     }
 
     /**
@@ -238,10 +252,17 @@ public class RegistrationManager {
             } else if (mEmail != null && !isCompleted(LoginRestClient.LOGIN_FLOW_TYPE_EMAIL_IDENTITY)) {
                 if (TextUtils.isEmpty(mEmail.sid)) {
                     // Email token needs to be requested before doing validation
+                    Log.d(LOG_TAG, "attemptRegistration: request email validation");
                     requestValidationToken(mEmail, new ThreePidRequestListener() {
                         @Override
                         public void onThreePidRequested(ThreePid pid) {
                             if (!TextUtils.isEmpty(pid.sid)) {
+                                // The session id for the email validation has just been received.
+                                // We trigger here a new registration request without delay to attach the current username
+                                // and the pwd to the registration session.
+                                attemptRegistration(context, listener);
+
+                                // Notify the listener to wait for the email validation
                                 listener.onWaitingEmailValidation();
                             }
                         }
@@ -264,10 +285,24 @@ public class RegistrationManager {
                 registrationType = LoginRestClient.LOGIN_FLOW_TYPE_DUMMY;
                 authParams = new HashMap<>();
                 authParams.put(JSON_KEY_TYPE, LoginRestClient.LOGIN_FLOW_TYPE_DUMMY);
-            } else {
+            } else if (isPasswordBasedFlowSupported()) {
+                // never has been tested
                 registrationType = LoginRestClient.LOGIN_FLOW_TYPE_PASSWORD;
                 authParams = new HashMap<>();
                 authParams.put(JSON_KEY_TYPE, LoginRestClient.LOGIN_FLOW_TYPE_PASSWORD);
+                authParams.put(JSON_KEY_SESSION, mRegistrationResponse.session);
+
+                if (null != mUsername) {
+                    authParams.put("username", mUsername);
+                }
+
+                if (null != mPassword) {
+                    authParams.put("password", mPassword);
+                }
+            } else {
+                // others
+                registrationType = "";
+                authParams = new HashMap<>();
             }
 
             if (TextUtils.equals(registrationType, LoginRestClient.LOGIN_FLOW_TYPE_MSISDN)
@@ -535,10 +570,19 @@ public class RegistrationManager {
      * Add email three pid to singleton values
      * It will be processed later on
      *
-     * @param email
+     * @param emailThreePid
      */
-    public void addEmailThreePid(final String email) {
-        mEmail = new ThreePid(email, ThreePid.MEDIUM_EMAIL);
+    public void addEmailThreePid(final ThreePid emailThreePid) {
+        mEmail = emailThreePid;
+    }
+
+    /**
+     * Get the current email three pid (if any).
+     *
+     * @return the corresponding three pid
+     */
+    public ThreePid getEmailThreePid() {
+        return mEmail;
     }
 
     /**
@@ -873,7 +917,7 @@ public class RegistrationManager {
     private void register(final Context context, final RegistrationParams params, final InternalRegistrationListener listener) {
         if (getLoginRestClient() != null) {
             params.initial_device_display_name = context.getString(R.string.login_mobile_device);
-            mLoginRestClient.register(params, new SimpleApiCallback<Credentials>() {
+            mLoginRestClient.register(params, new UnrecognizedCertApiCallback<Credentials>(mHsConfig) {
                 @Override
                 public void onSuccess(Credentials credentials) {
                     if (TextUtils.isEmpty(credentials.userId)) {
@@ -903,35 +947,12 @@ public class RegistrationManager {
                 }
 
                 @Override
-                public void onNetworkError(final Exception e) {
-                    UnrecognizedCertificateException unrecCertEx = CertUtil.getCertificateException(e);
-                    if (unrecCertEx != null) {
-                        final Fingerprint fingerprint = unrecCertEx.getFingerprint();
-                        Log.d(LOG_TAG, "Found fingerprint: SHA-256: " + fingerprint.getBytesAsHexString());
-
-                        UnrecognizedCertHandler.show(mHsConfig, fingerprint, false, new UnrecognizedCertHandler.Callback() {
-                            @Override
-                            public void onAccept() {
-                                register(context, params, listener);
-                            }
-
-                            @Override
-                            public void onIgnore() {
-                                listener.onRegistrationFailed(e.getLocalizedMessage());
-                            }
-
-                            @Override
-                            public void onReject() {
-                                listener.onRegistrationFailed(e.getLocalizedMessage());
-                            }
-                        });
-                    } else {
-                        listener.onRegistrationFailed(e.getLocalizedMessage());
-                    }
+                public void onAcceptedCert() {
+                    register(context, params, listener);
                 }
 
                 @Override
-                public void onUnexpectedError(Exception e) {
+                public void onTLSOrNetworkError(final Exception e) {
                     listener.onRegistrationFailed(e.getLocalizedMessage());
                 }
 

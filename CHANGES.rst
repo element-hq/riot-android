@@ -1,3 +1,213 @@
+Changes in Riot 0.8.10 (2018-XX-XX)
+===================================================
+
+Features:
+ * Send stickers to a Room
+
+Bug Fix:
+ * Gif do not play anymore (#2168)
+
+
+
+Changes in Riot 0.8.9 (2018-05-25)
+===================================================
+
+Improvements:
+ * Update matrix-sdk.aar lib (v0.9.4).
+ * GDPR compliance:
+    * Manage M_CONSENT_NOT_GIVEN matrix error
+    * Sending analytics is no opt-in
+    * Possibility to deactivate account (redirected to the web client for the moment)
+ * Reply to feature: display only
+
+Bug Fix:
+ * Background sync cannot be enabled on F-Droid Riot app (#2196)
+
+Build:
+ * Kotlin is enabled on the project
+ * Travis CI has been enabled to build PRs
+
+Note:
+ * Sending stickers is not enabled yet
+
+Changes in Riot 0.8.8 (2018-05-13)
+===================================================
+
+Bug Fix:
+ * Background sync cannot be enabled on F-Droid Riot app (#2196)
+
+Changes in Riot 0.8.7 (2018-04-25)
+===================================================
+
+Improvements:
+ * Disable sending analytics by default on the F-Droid version
+
+Bug Fix:
+ * Fix issue on Sticker rendering (#2175)
+ * Fix infinite loader issue (#2178)
+
+Changes in Riot 0.8.6 (2018-04-20)
+===================================================
+
+Features:
+ * Render stickers in the timeline (#2097).
+
+Improvements:
+ * Update matrix-sdk.aar lib (v0.9.3).
+ * Notifications: make them user friendly again (#2130).
+ * Add Notification privacy screen (PR #2152).
+ * Hide "Show devices list" for local contacts who are not matrix users (#2153).
+ * Login Activity: Code cleaning.
+
+Bug Fix:
+ * Tapping on a room pill should not automatically join it (#2098).
+ * Notifications: Make the notification for messages no more sticky (PR #2148).
+
+Build:
+ * Update to SDK 27.
+
+Changes in Riot 0.8.5 (2018-03-31)
+===================================================
+
+Improvements: 
+ * Update matrix-sdk.aar lib (v0.9.2).
+ * Make state event redaction handling gentler with homeserver (#2117).
+
+Changes in Riot 0.8.3 (2018-03-16)
+===================================================
+
+Improvements: 
+ * Login screen : open keyboard form email.
+ * Matrix Apps: Enable them by default (#2022).
+ 
+Bug Fix:
+ * User Settings: background sync setting stays disabled (#2075).
+ * Room: Events with unexpected timestamps get stuck at the bottom of the history (#2081).
+
+Changes in Riot 0.8.2 (2018-03-14)
+===================================================
+ 
+Improvements:
+ * Update matrix-sdk.aar lib (v0.9.1).
+ * User Settings: Add a setting to Re-enable rageshake (#1971).
+ * User Settings: Add a setting "Keep detailed notifications" in Google Play build (#2051).
+ * Docs: Create a doc for notifications to answer to #2044.
+ * Room prewiew: Make room aliases in topic clickable (#1985).
+ * Code: Tidy codebase, thanks to @kaiyou (PR #1784).
+ * Label bunches of actionable room items for screen readers, thanks to @ndarilek  (PR #1976).
+ 
+Bug Fix:
+ * Notifications: Complaints that the "Synchronizing" notification appears too often (#2012).
+ * Notifications Privacy: Riot should never pass events content to GCM (#2051).
+ * File uploads with file name containing a path (matrix-org/matrix-android-sdk#228), thanks to @christarazi (PR #2019).
+ * Fix some plural messages (#1922), thanks to @SafaAlfulaij (PR #1934).
+ 
+Translations:
+  * Bulgarian, added thanks to @rbozhkova.
+
+Changes in Riot 0.8.1 (2018-02-15)
+===================================================
+ 
+Improvements:
+ * Update matrix-sdk.aar lib (v0.9.0).
+ 
+Bug Fix:
+ * URL Preview: We should have it for m.notice too (PR 1975).
+
+Changes in Riot 0.8.00-beta (2018-02-02)
+===================================================
+
+Features:
+
+  * Add a new tab to list the user's communities (vector-im/riot-meta/#114).
+  * Add new screens to display the community details, edition is not supported yet (vector-im/riot-meta/#115, vector-im/riot-meta/#116, vector-im/riot-meta/#117).
+  * Room Settings: handle the related communities in order to show flair for them.
+  * User Settings: Let the user enable his community flair in rooms configured to show it.
+  * Add the url preview feature (PR #1929).
+  
+Improvements:
+
+  * Support the 4 states for the room notification level (all messages (noisy), all messages, mention only, mute).
+  * Add the avatar to the pills displayed in room history (PR #1917).
+  * Set the push server URLs as a resource string (PR #1908).
+  * Improve duplicate events detection (#1907).
+  * Vibrate when long pressing on an user name / avatar to copy his/her name in the edit text.
+  * Improve the notifications management.
+ 
+Bugfixes:
+ 
+  * #1903: Weird room layout.
+  * #1896: Copy source code of a message.
+  * #1821, #1850: Improve the text sharing.
+  * #1920: Phone vibrates when mentioning someone.
+
+Changes in Riot 0.7.09 (2018-01-16)
+===================================================
+  
+Improvements:
+
+  * Update to the latest JITSI libs
+  * Add some scripts to build the required libs.
+ 
+Bugfixes:
+ 
+  * #1859 : After a user redacted their own join event from HQ, Android DoSes us with /context requests.
+
+Changes in Riot 0.7.08 (2018-01-12)
+===================================================
+ 
+Bugfixes:
+
+ * Fix the account creation
+
+Changes in Riot 0.7.07 (2018-01-03)
+===================================================
+ 
+Bugfixes:
+
+ * Improve piwik management.
+ * fix #1802 : Expected status header not present (until we update OkHttp to 3.X)
+ * fix widget management
+ 
+Changes in Riot 0.7.06 (2017-12-06)
+===================================================
+
+Features:
+ 
+ * Update the global notification rules UI to have tree states (off, on, noisy) instead of a toogle (on, off).
+ 
+Improvements:
+ 
+ * Move the bug report dialog to an activity.
+ * Remove Google Analytics.
+ 
+Bugfixes:
+
+ * Fix many issues reported by GA.
+ * Improve the notification management on android 8 devices when the application is in battery optimisation mode.
+ * Fix some invalid avatars while using the autocompletion text.
+ 
+Changes in Riot 0.7.05 (2017-11-28)
+===================================================
+
+Features:
+ 
+ * Add a settings to use the native camera application instead of the in-app one. 
+ * Add piwik.
+ * Display pills(without avatar) on room history.
+ 
+Improvements:
+ 
+ * Improve the notfications on android 8 devices.
+ 
+Bugfixes:
+
+ * Fix many issues reported by GA.
+ * Fix the notification sound management on Android 8 devices.
+ * #1700 : Jump to first unread message didn't jump anywhere, just stayed at the same position where it was before, although there are more unread messages
+ * #1772 : unrecognised / commands shouldn't be relayed to the room.
+ 
+
 Changes in Riot 0.7.04 (2017-11-15)
 ===================================================
 

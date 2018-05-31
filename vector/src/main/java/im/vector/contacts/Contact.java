@@ -303,20 +303,20 @@ public class Contact implements java.io.Serializable {
         boolean matched = false;
 
         if (!TextUtils.isEmpty(mDisplayName)) {
-            matched = (mDisplayName.toLowerCase().contains(pattern));
+            matched = (mDisplayName.toLowerCase(VectorApp.getApplicationLocale()).contains(pattern));
         }
 
         if (!matched) {
             for (String email : mEmails) {
-                matched |= email.toLowerCase().contains(pattern);
+                matched |= email.toLowerCase(VectorApp.getApplicationLocale()).contains(pattern);
             }
         }
 
         if (!matched) {
             for (PhoneNumber pn : mPhoneNumbers) {
-                matched |= pn.mMsisdnPhoneNumber.toLowerCase().contains(pattern)
-                        || pn.mRawPhoneNumber.toLowerCase().contains(pattern)
-                        || (pn.mE164PhoneNumber != null && pn.mE164PhoneNumber.toLowerCase().contains(pattern));
+                matched |= pn.mMsisdnPhoneNumber.toLowerCase(VectorApp.getApplicationLocale()).contains(pattern)
+                        || pn.mRawPhoneNumber.toLowerCase(VectorApp.getApplicationLocale()).contains(pattern)
+                        || (pn.mE164PhoneNumber != null && pn.mE164PhoneNumber.toLowerCase(VectorApp.getApplicationLocale()).contains(pattern));
             }
         }
 

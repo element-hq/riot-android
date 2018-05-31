@@ -1,35 +1,41 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:orientation="vertical">
 
-    <include layout="@layout/vector_message_header"
-        android:visibility="gone" />
+    <include
+        layout="@layout/vector_message_header"
+        android:visibility="gone"
+        tools:visibility="visible" />
 
     <LinearLayout
         android:id="@+id/messagesAdapter_body_view"
-        android:layout_marginLeft="16dp"
-        android:layout_marginRight="16dp"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginLeft="16dp"
+        android:layout_marginRight="16dp"
         android:orientation="horizontal">
 
-        <include layout="@layout/vector_room_round_avatar"
-            android:id="@+id/messagesAdapter_roundAvatar"/>
+        <include
+            android:id="@+id/messagesAdapter_roundAvatar"
+            layout="@layout/vector_room_round_avatar" />
 
-        <View android:id="@+id/messagesAdapter_highlight_message_marker"
-            android:layout_marginLeft="5dp"
+        <View
+            android:id="@+id/messagesAdapter_highlight_message_marker"
             android:layout_width="6dp"
+            android:layout_height="match_parent"
+            android:layout_marginLeft="5dp"
             android:layout_marginRight="5dp"
-            android:layout_height="match_parent" />
+            tools:background="@color/vector_green_color" />
 
         <LinearLayout
-            android:orientation="vertical"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
             android:layout_gravity="center_vertical"
+            android:layout_weight="1"
+            android:orientation="vertical"
             android:paddingBottom="5dp">
 
             <RelativeLayout
@@ -73,72 +79,99 @@
                         android:src="@drawable/e2e_verified" />
 
                     <FrameLayout
+                        android:id="@+id/messagesAdapter_body_layout"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
-                        android:paddingRight="4dp"
-                        android:id="@+id/messagesAdapter_body_layout">
+                        android:paddingRight="4dp">
 
                         <RelativeLayout
-                            android:layout_gravity="right"
                             android:id="@+id/messagesAdapter_image_layout"
                             android:layout_width="wrap_content"
-                            android:layout_height="wrap_content">
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="right">
 
                             <!-- the media -->
                             <ImageView
-                                android:layout_height="match_parent"
-                                android:layout_width="match_parent"
-                                android:layout_marginLeft="4dp"
                                 android:id="@+id/messagesAdapter_image"
-                                android:adjustViewBounds="true" />
+                                android:layout_width="match_parent"
+                                android:layout_height="match_parent"
+                                android:layout_marginLeft="4dp"
+                                android:adjustViewBounds="true"
+                                android:scaleType="center" />
 
                             <!-- the media type -->
                             <ImageView
-                                android:layout_alignLeft="@+id/messagesAdapter_image"
+                                android:id="@+id/messagesAdapter_image_type"
                                 android:layout_width="@dimen/chat_avatar_size"
                                 android:layout_height="@dimen/chat_avatar_size"
-                                android:id="@+id/messagesAdapter_image_type"
-                                android:src="@drawable/filetype_image"/>
+                                android:layout_alignLeft="@+id/messagesAdapter_image"
+                                android:src="@drawable/filetype_image" />
 
                             <!-- the upload fails -->
                             <ImageView
                                 android:id="@+id/media_upload_failed"
-                                android:src="@drawable/file_upload_failed"
-                                android:layout_centerInParent="true"
-                                android:visibility="gone"
                                 android:layout_width="@dimen/chat_avatar_size"
-                                android:layout_height="@dimen/chat_avatar_size"/>
+                                android:layout_height="@dimen/chat_avatar_size"
+                                android:layout_centerInParent="true"
+                                android:src="@drawable/file_upload_failed"
+                                android:visibility="gone" />
 
                             <!-- the thumbnail has been uploaded : sending the message -->
                             <ProgressBar
                                 android:id="@+id/upload_event_spinner"
-                                android:layout_centerInParent="true"
                                 android:layout_width="@dimen/chat_avatar_size"
-                                android:layout_height="@dimen/chat_avatar_size"/>
+                                android:layout_height="@dimen/chat_avatar_size"
+                                android:layout_centerInParent="true" />
                         </RelativeLayout>
                     </FrameLayout>
                 </LinearLayout>
 
-                <include layout="@layout/media_upload_download_progress_layout"
-                    android:layout_width="match_parent"
+                <!-- the descirption of the sticker -->
+                <LinearLayout
+                    android:id="@+id/message_adapter_sticker_layout"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:id="@+id/content_download_progress_layout"/>
+                    android:layout_alignLeft="@+id/messages_adapter_image_layout"
+                    android:layout_marginTop="10dp"
+                    android:orientation="vertical"
+                    android:visibility="gone">
 
-                <include layout="@layout/media_upload_download_progress_layout"
+                    <ImageView
+                        android:id="@+id/message_adapter_sticker_triangle"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="10dp"
+                        android:background="@drawable/sticker_description_triangle" />
+
+                    <TextView
+                        android:id="@+id/message_adapter_sticker_description"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:background="@drawable/sticker_description_background" />
+                </LinearLayout>
+
+                <include
+                    android:id="@+id/content_download_progress_layout"
+                    layout="@layout/media_upload_download_progress_layout"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
+                    android:layout_height="wrap_content" />
 
-                    android:id="@+id/content_upload_progress_layout"/>
+                <include
+                    android:id="@+id/content_upload_progress_layout"
+                    layout="@layout/media_upload_download_progress_layout"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content" />
 
             </LinearLayout>
         </LinearLayout>
     </LinearLayout>
 
-    <include layout="@layout/vector_message_receipts_list"
-        android:id="@+id/messagesAdapter_avatars_list"/>
+    <include
+        android:id="@+id/messagesAdapter_avatars_list"
+        layout="@layout/vector_message_receipts_list" />
 
-    <include layout="@layout/message_separator"/>
+    <include layout="@layout/message_separator" />
 
     <include layout="@layout/message_read_marker" />
 

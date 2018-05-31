@@ -1,5 +1,6 @@
 /*
  * Copyright 2014 OpenMarket Ltd
+ * Copyright 2018 New Vector Ltd
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -19,6 +20,7 @@ package im.vector.activity;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.support.annotation.Nullable;
 import android.support.v4.app.DialogFragment;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
@@ -30,8 +32,6 @@ import android.view.inputmethod.InputMethodManager;
 import org.matrix.androidsdk.MXSession;
 import org.matrix.androidsdk.data.Room;
 
-import java.util.ArrayList;
-
 import im.vector.Matrix;
 import im.vector.MyPresenceManager;
 import im.vector.R;
@@ -40,7 +40,7 @@ import im.vector.VectorApp;
 /**
  * extends ActionBarActivity to manage the rageshake
  */
-public class MXCActionBarActivity extends RiotAppCompatActivity {
+public abstract class MXCActionBarActivity extends RiotAppCompatActivity {
     public static final String EXTRA_MATRIX_ID = "MXCActionBarActivity.EXTRA_MATRIX_ID";
 
     MXSession mSession = null;
@@ -61,18 +61,18 @@ public class MXCActionBarActivity extends RiotAppCompatActivity {
     /**
      * Return the used MXSession from an intent.
      *
-     * @param context the application context
      * @param intent  the intent
-     * @return the MXSession if it exists.
+     * @return the MXSession if it exists, or null.
      */
-    static MXSession getSession(Context context, Intent intent) {
+    @Nullable
+    protected MXSession getSession(Intent intent) {
         String matrixId = null;
 
         if (intent.hasExtra(EXTRA_MATRIX_ID)) {
             matrixId = intent.getStringExtra(EXTRA_MATRIX_ID);
         }
 
-        return Matrix.getInstance(context).getSession(matrixId);
+        return Matrix.getInstance(this).getSession(matrixId);
     }
 
     public MXSession getSession() {

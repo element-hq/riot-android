@@ -32,7 +32,7 @@ import org.matrix.androidsdk.data.RoomSummary;
 import org.matrix.androidsdk.fragments.MatrixMessageListFragment;
 import org.matrix.androidsdk.rest.callback.ApiCallback;
 import org.matrix.androidsdk.rest.model.MatrixError;
-import org.matrix.androidsdk.rest.model.PublicRoom;
+import org.matrix.androidsdk.rest.model.publicroom.PublicRoom;
 
 import java.util.List;
 
@@ -43,7 +43,6 @@ import im.vector.activity.CommonActivityUtils;
 import im.vector.activity.VectorPublicRoomsActivity;
 import im.vector.activity.VectorRoomActivity;
 import im.vector.adapters.VectorRoomSummaryAdapter;
-import im.vector.view.RecentsExpandableListView;
 
 public class VectorSearchRoomsListFragment extends VectorRecentsListFragment {
     // the session

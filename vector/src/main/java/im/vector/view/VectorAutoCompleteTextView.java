@@ -180,7 +180,7 @@ public class VectorAutoCompleteTextView extends AppCompatMultiAutoCompleteTextVi
             final int count = mAdapter.getCount();
 
             for (int i = 0; i < count; i++) {
-                itemView = mAdapter.getView(i, itemView, mMeasureParent);
+                itemView = mAdapter.getView(i, itemView, mMeasureParent, false);
                 itemView.measure(MeasureSpec.UNSPECIFIED, MeasureSpec.UNSPECIFIED);
                 maxWidth = Math.max(maxWidth, itemView.getMeasuredWidth());
             }

@@ -21,6 +21,7 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageInfo;
+import android.support.annotation.NonNull;
 import android.text.TextUtils;
 
 import org.matrix.androidsdk.crypto.IncomingRoomKeyRequest;
@@ -28,6 +29,8 @@ import org.matrix.androidsdk.crypto.IncomingRoomKeyRequestCancellation;
 import org.matrix.androidsdk.crypto.MXCrypto;
 import org.matrix.androidsdk.rest.callback.ApiCallback;
 import org.matrix.androidsdk.rest.callback.SimpleApiCallback;
+import org.matrix.androidsdk.rest.client.LoginRestClient;
+import org.matrix.androidsdk.rest.model.MatrixError;
 import org.matrix.androidsdk.ssl.Fingerprint;
 import org.matrix.androidsdk.ssl.UnrecognizedCertificateException;
 import org.matrix.androidsdk.util.BingRulesManager;
@@ -49,7 +52,6 @@ import org.matrix.androidsdk.rest.model.login.Credentials;
 
 import im.vector.activity.CommonActivityUtils;
 import im.vector.activity.SplashActivity;
-import im.vector.activity.VectorHomeActivity;
 import im.vector.gcm.GcmRegistrationManager;
 import im.vector.services.EventStreamService;
 import im.vector.store.LoginStorage;
@@ -94,11 +96,12 @@ public class Matrix {
 
     // i.e the event has been read from another client
     private static final MXEventListener mLiveEventListener = new MXEventListener() {
+        boolean mClearCacheRequired = false;
+
         @Override
         public void onIgnoredUsersListUpdate() {
             // the application cache will be cleared at next launch if the application is not yet launched
-            // else it will be done when onLiveEventsChunkProcessed will be called in VectorHomeActivity.
-            VectorHomeActivity.mClearCacheRequired = true;
+            mClearCacheRequired = true;
         }
 
         private boolean mRefreshUnreadCounter = false;
@@ -117,7 +120,10 @@ public class Matrix {
             // we need to compute the application badge values
 
             if ((null != instance) && (null != instance.mMXSessions)) {
-                if (mRefreshUnreadCounter) {
+                if (mClearCacheRequired && !VectorApp.isAppInBackground()) {
+                    mClearCacheRequired = false;
+                    instance.reloadSessions(VectorApp.getInstance());
+                } else if (mRefreshUnreadCounter) {
                     GcmRegistrationManager gcmMgr = instance.getSharedGCMRegistrationManager();
 
                     // perform update: if the GCM is not yet available or if GCM registration failed
@@ -231,7 +237,7 @@ public class Matrix {
         String buildNumber = mAppContext.getResources().getString(R.string.build_number);
 
         if ((useBuildNumber) && !TextUtils.equals(buildNumber, "0")) {
-            gitVersion = "#" + buildNumber;
+            gitVersion = "b" + buildNumber;
             longformat = false;
         }
 
@@ -449,7 +455,7 @@ public class Matrix {
                 }
 
                 if (!res) {
-                    Log.e(LOG_TAG, "hasValidSessions : one sesssion has no valid data hanlder");
+                    Log.e(LOG_TAG, "hasValidSessions : one sesssion has no valid data handler");
                 }
             }
         }
@@ -460,6 +466,40 @@ public class Matrix {
     //==============================================================================================================
     // Session management
     //==============================================================================================================
+
+    /**
+     * Deactivate a session.
+     *
+     * @param context       the context.
+     * @param session       the session to deactivate.
+     * @param userPassword  the user password
+     * @param eraseUserData true to also erase all the user data
+     * @param aCallback     the success and failure callback
+     */
+    public void deactivateSession(final Context context,
+                                  final MXSession session,
+                                  final String userPassword,
+                                  final boolean eraseUserData,
+                                  final @NonNull ApiCallback<Void> aCallback) {
+        Log.d(LOG_TAG, "## deactivateSession() " + session.getMyUserId());
+
+        session.deactivateAccount(context, LoginRestClient.LOGIN_FLOW_TYPE_PASSWORD, userPassword, eraseUserData, new SimpleApiCallback<Void>(aCallback) {
+            @Override
+            public void onSuccess(Void info) {
+                mLoginStorage.removeCredentials(session.getHomeServerConfig());
+
+                session.getDataHandler().removeListener(mLiveEventListener);
+
+                VectorApp.removeSyncingSession(session);
+
+                synchronized (LOG_TAG) {
+                    mMXSessions.remove(session);
+                }
+
+                aCallback.onSuccess(info);
+            }
+        });
+    }
 
     /**
      * Clear a session.
@@ -588,11 +628,16 @@ public class Matrix {
         final MXSession session = new MXSession(hsConfig, new MXDataHandler(store, credentials), mAppContext);
 
         session.getDataHandler().setRequestNetworkErrorListener(new MXDataHandler.RequestNetworkErrorListener() {
+
             @Override
-            public void onTokenCorrupted() {
-                if (null != VectorApp.getCurrentActivity()) {
-                    Log.e(LOG_TAG, "## createSession() : onTokenCorrupted");
-                    CommonActivityUtils.logout(VectorApp.getCurrentActivity());
+            public void onConfigurationError(String matrixErrorCode) {
+                Log.e(LOG_TAG, "## createSession() : onConfigurationError " + matrixErrorCode);
+
+                if (TextUtils.equals(matrixErrorCode, MatrixError.UNKNOWN_TOKEN)) {
+                    if (null != VectorApp.getCurrentActivity()) {
+                        Log.e(LOG_TAG, "## createSession() : onTokenCorrupted");
+                        CommonActivityUtils.logout(VectorApp.getCurrentActivity());
+                    }
                 }
             }
 

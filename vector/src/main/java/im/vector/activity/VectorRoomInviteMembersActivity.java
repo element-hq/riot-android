@@ -1,5 +1,6 @@
 /*
  * Copyright 2014 OpenMarket Ltd
+ * Copyright 2018 New Vector Ltd
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -80,9 +81,6 @@ public class VectorRoomInviteMembersActivity extends VectorBaseSearchActivity {
     // main UI items
     private ExpandableListView mListView;
 
-    // load
-    private View mLoadingView;
-
     // participants list
     private List<ParticipantAdapterItem> mHiddenParticipantItems = new ArrayList<>();
 
@@ -150,8 +148,13 @@ public class VectorRoomInviteMembersActivity extends VectorBaseSearchActivity {
     };
 
     @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
+    public int getLayoutRes() {
+        return R.layout.activity_vector_invite_members;
+    }
+
+    @Override
+    public void initUiAndData() {
+        super.initUiAndData();
 
         if (CommonActivityUtils.shouldRestartApp(this)) {
             Log.e(LOG_TAG, "Restart the application.");
@@ -191,15 +194,12 @@ public class VectorRoomInviteMembersActivity extends VectorBaseSearchActivity {
         // tell if a confirmation dialog must be displayed.
         mAddConfirmationDialog = intent.getBooleanExtra(EXTRA_ADD_CONFIRMATION_DIALOG, false);
 
-        //
-        setContentView(R.layout.activity_vector_invite_members);
-
         // the user defines a
         if (null != mPatternToSearchEditText) {
             mPatternToSearchEditText.setHint(R.string.room_participants_invite_search_another_user);
         }
 
-        mLoadingView = findViewById(R.id.search_in_progress_view);
+        setWaitingView(findViewById(R.id.search_in_progress_view));
 
         mListView = findViewById(R.id.room_details_members_list);
         // the chevron is managed in the header view
@@ -277,14 +277,14 @@ public class VectorRoomInviteMembersActivity extends VectorBaseSearchActivity {
 
         // display a spinner while the other room members are listed
         if (!mAdapter.isKnownMembersInitialized()) {
-            mLoadingView.setVisibility(View.VISIBLE);
+            showWaitingView();
         }
 
         // wait that the local contacts are populated
         if (!ContactsManager.getInstance().didPopulateLocalContacts()) {
             Log.d(LOG_TAG, "## onPatternUpdate() : The local contacts are not yet populated");
             mAdapter.reset();
-            mLoadingView.setVisibility(View.VISIBLE);
+            showWaitingView();
             return;
         }
 
@@ -294,7 +294,7 @@ public class VectorRoomInviteMembersActivity extends VectorBaseSearchActivity {
                 mListView.post(new Runnable() {
                     @Override
                     public void run() {
-                        mLoadingView.setVisibility(View.GONE);
+                        hideWaitingView();
                     }
                 });
             }

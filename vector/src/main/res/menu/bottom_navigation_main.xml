@@ -3,26 +3,37 @@
     <!-- define an empty title else lint fails -->
     <item
         android:title=""
+        android:contentDescription="@string/bottom_action_home"
         android:id="@+id/bottom_action_home"
         android:enabled="true"
         android:icon="@drawable/ic_home_black_24dp" />
 
     <item
         android:title=""
+        android:contentDescription="@string/bottom_action_favourites"
         android:id="@+id/bottom_action_favourites"
         android:enabled="true"
         android:icon="@drawable/ic_star_black_24dp" />
 
     <item
         android:title=""
+        android:contentDescription="@string/bottom_action_people"
         android:id="@+id/bottom_action_people"
         android:enabled="true"
         android:icon="@drawable/ic_person_black_24dp" />
 
     <item
         android:title=""
+        android:contentDescription="@string/bottom_action_rooms"
         android:id="@+id/bottom_action_rooms"
         android:enabled="true"
-        android:icon="@drawable/ic_people_black_24dp"/>
+        android:icon="@drawable/riot_tab_rooms"/>
+
+    <item
+        android:title=""
+        android:contentDescription="@string/bottom_action_groups"
+        android:id="@+id/bottom_action_groups"
+        android:enabled="true"
+        android:icon="@drawable/riot_tab_groups"/>
 
 </menu>

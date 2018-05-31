@@ -1,10 +1,10 @@
-<?xml version="1.0" encoding="utf-8"?>
+<?xml version='1.0' encoding='UTF-8'?>
 <resources>
     <!-- use to retrieve the supported languages list -->
     <!-- should the same value as the file name -->
 
-    <string name="resouces_language">uk</string>
-    <string name="resouces_country">UK</string>
+    <string name="resouces_language">en</string>
+    <string name="resouces_country">US</string>
 
     <!-- theme -->
     <string name="light_theme">Світла Тема</string>
@@ -21,6 +21,7 @@
     <string name="title_activity_settings">Налаштування</string>
     <string name="title_activity_member_details">Інформація про учасника</string>
     <string name="title_activity_historical">Історія</string>
+    <string name="title_activity_bug_report">Відгук про помилкуF</string>
 
     <!-- button names -->
     <string name="ok">OK</string>
@@ -219,9 +220,6 @@
     <!-- read receipts list Screen -->
     <string name="read_receipts_list">Перегляд списку вступників</string>
 
-    <!-- Mels -->
-    <string name="membership_changes">%d membership changes</string>
-
     <!-- accounts list Screen -->
 
     <!-- image size selection -->
@@ -245,10 +243,6 @@
     <string name="room_info_room_name">Назва кімнати</string>
     <string name="room_info_room_topic">Тема кімнати</string>
 
-    <!-- Settings keys -->
-    <string name="settings_key_display_all_events">settings_key_display_all_events</string>
-    <string name="settings_key_use_rage_shake">settings_key_use_rage_shake</string>
-
     <!-- call string -->
     <string name="call_connected">Виклик з\'єднано</string>
     <string name="call_connecting">Встановлюється з\'єднання…</string>
@@ -263,11 +257,6 @@
     <string name="call_error_ice_failed">Медіавиклик не вдався</string>
     <string name="call_error_camera_init_failed">Неможливо ініціювати камеру</string>
     <string name="call_error_answered_elsewhere">Дзвінок прийнято іншим пристроєм</string>
-    <string name="call_error_peer_hangup_elsewhere">Дзвінок відхилено іншим пристроєм</string>
-    <string name="call_error_peer_cancelled_call">виклик скасовано</string>
-
-    <string name="action_accept">ПРИЙНЯТИ</string>
-    <string name="action_ignore">ВІДХИЛИТИ</string>
 
     <!-- medias picker string -->
     <string name="media_picker_both_capture_title">Зняти світлину чи відео"</string>
@@ -282,7 +271,9 @@
     <string name="permissions_rationale_msg_record_audio_explanation">\n\nБудь ласка, надайте його у наступному виринаючому вікні, щоб мати змогу здійснити дзвінок.</string>
     <string name="permissions_rationale_msg_camera_and_audio">Для здійснення відеодзвінків потрібен доступ до камери та мікрофону.\n\nБудь ласка, надайте його у наступних виринаючих вікнах, щоб мати змогу їх здійснити.</string>
     <string name="permissions_rationale_msg_contacts">Riot потребує доступу до ваших контактів, щоб знайти інших користувачів Matrix за їх email та номерами телефонів.\n\nБудь ласка, надайте його у наступному виринаючому діалозі, щоб знати, які з контактів теж використовують Riot.</string>
-    <string name="permissions_msg_contacts_warning_other_androids">Riot потребує доступу до ваших контактів, щоб знайти інших користувачів Matrix за їх email та номерами телефонів.\n\nНадати Riot доступ до контактів?</string>
+    <string name="permissions_msg_contacts_warning_other_androids">Riot потребує доступу до ваших контактів, щоб знайти інших користувачів Matrix по email чи за номерами телефонів.
+
+Надати Riot доступ до ваших контактів?</string>
 
     <string name="permissions_action_not_performed_missing_permissions">Вибачте.. Дію не виконано через нестачу дозволів</string>
 
@@ -312,8 +303,6 @@
     <!-- Chat creation -->
     <string name="room_creation_title">Новий Чат</string>
     <string name="room_creation_add_member">Додати учасника</string>
-    <string name="room_header_active_members">%1$d/%2$d активних користувачів</string>
-    <string name="room_title_members">%1$d учасників</string>
     <string name="room_title_one_member">1 учасник</string>
     <string name="room_e2e_alert_title">Увага!</string>
     <string name="room_e2e_alert_message">Скрізне шифрування досі на стадії beta-тестування та може бути ненадійним.</string>
@@ -371,8 +360,8 @@
     <!--  Chat -->
     <string name="room_menu_search">Пошук</string>
     <string name="room_one_user_is_typing">%s друкує…</string>
-    <string name="room_two_users_are_typing">%1$s &#038; %2$s друкують…</string>
-    <string name="room_many_users_are_typing">%1$s &#038; %2$s &#038; та інші друкують…</string>
+    <string name="room_two_users_are_typing">%1$s &amp; %2$s друкують…</string>
+    <string name="room_many_users_are_typing">%1$s &amp; %2$s &amp; та інші друкують…</string>
     <string name="room_message_placeholder_encrypted">Надіслати шифроване повідомлення…</string>
     <string name="room_message_placeholder_not_encrypted">Надіслати повідомлення (нешифроване)…</string>
     <string name="room_offline_notification">Зв\'язок із сервером втрачено.</string>
@@ -385,7 +374,6 @@
     <string name="room_message_file_not_found">Файл не знайдено</string>
     <string name="room_do_not_have_permission_to_post">Ви не маєте права писати повідомлення в цій кімнаті</string>
     <string name="room_new_message_notification">1 нове повідомлення</string>
-    <string name="room_new_messages_notification">%1$d нових повідомлень</string>
 
     <!-- unrecognized SSL certificate -->
     <string name="ssl_trust">Довіряти</string>
@@ -421,7 +409,6 @@
     <string name="room_displayname_invite_from">Запрошення від %s</string>
     <string name="room_displayname_room_invite">Запрошення до кімнати</string>
     <string name="room_displayname_two_members">%1$s і %2$s</string>
-    <string name="room_displayname_more_than_two_members">%1$s та %2$d інші</string>
     <string name="room_displayname_no_title">Порожня кімната</string>
 
     <!-- Search -->
@@ -449,13 +436,10 @@
     <!-- Directory -->
     <string name="directory_search_results_title">Огляд каталогу</string>
     <string name="directory_search_room">%1$d кімната</string>
-    <string name="directory_search_rooms">%1$d кімнати</string>
     <string name="directory_search_room_for">%1$d кімната знайдена для %2$s</string>
-    <string name="directory_search_rooms_for">%1$s кімнат знайдено для %2$s</string>
     <string name="directory_searching_title">Пошук у каталозі...</string>
 
     <!-- home room settings -->
-    <string name="room_settings_notifications">Сповіщення</string>
     <string name="room_settings_favourite">Обране</string>
     <string name="room_settings_de_prioritize">Не терміново</string>
     <string name="room_settings_direct_chat">Прямий Чат</string>
@@ -487,6 +471,8 @@
     <string name="settings_enable_this_device">Увімкнути сповіщення для цього пристрою</string>
     <string name="settings_turn_screen_on">Увімкнути екран на 3 секунди</string>
 
+    <string name="settings_containing_my_display_name">Повідомлення, що містять моє показуване ім\'я</string>
+    <string name="settings_containing_my_user_name">Повідомлення, що містять моє ім\'я користувача</string>
     <string name="settings_messages_in_one_to_one">В особистих чатах</string>
     <string name="settings_messages_in_group_chat">У групових чатах</string>
     <string name="settings_invited_to_room">Запрошення до кімнат</string>
@@ -509,7 +495,7 @@
     <string name="settings_privacy_policy">Політика конфіденційності</string>
     <string name="settings_clear_cache">Очистити кеш</string>
     <string name="settings_clear_medias_cache">Очистити медіа кеш</string>
-    <string name="settings_keep_media">Зберегти медіа</string>
+    <string name="settings_keep_media">Зберігати медіа</string>
 
     <string name="settings_user_settings">Налаштування користувача</string>
     <string name="settings_notifications">Сповіщення</string>
@@ -531,6 +517,11 @@
     <string name="settings_12_24_timestamps">Показувати час надсилання в 12 годинному форматі (e.g. 2:30pm)</string>
     <string name="settings_hide_join_leave_messages">Приховати сповіщення про вступ/вихід з кімнат (не діє на запрошення/кіки/бани)</string>
     <string name="settings_hide_avatar_display_name_changes_messages">Приховати аватари та показувати зміну імен</string>
+
+    <!-- analytics -->
+    <string name="settings_analytics">Телеметрія</string>
+    <string name="settings_opt_out_of_analytics">Вимкнути телеметрію</string>
+    <string name="settings_opt_out_of_analytics_summary">Riot збирає анонімну статистику задля покращення застосунку.</string>
 
     <string name="settings_disable_markdown">Вимкнути розмітку Markdown</string>
     <string name="settings_data_save_mode">Режим економії трафіку</string>
@@ -557,9 +548,9 @@
 
     <string name="account_email_validation_title">Очікування Перевірки</string>
     <string name="account_email_validation_message">Перевірте ваш email та перейдіть за посиланням у листі. Після цього клацніть продовжити.</string>
-    <string name="account_email_validation_error">Не вдалося перевірити поштову адресу. Будь ласка, перевірте ваш email та перейдіть за посиланням у листі. Після цього клацніть продовжити.</string>
+    <string name="account_email_validation_error">Не вдалося перевірити поштову адресу. Будь ласка, перевірте ваш email та перейдіть за посиланням у листі. Після цього натисніть продовжити</string>
     <string name="account_email_already_used_error">Email адреса вже використовується</string>
-    <string name="account_email_not_found_error">Не вдалося надіслати email: адресу не знайдено.</string>
+    <string name="account_email_not_found_error">Не вдалося надіслати email: цю адресу не знайдено</string>
     <string name="account_phone_number_already_used_error">Цей номер вже використовується</string>
 
     <string name="settings_change_password">Змінити пароль</string>
@@ -600,7 +591,6 @@
     <string name="room_settings_topic">Тема</string>
     <string name="room_settings_room_tag">Мітка кімнати</string>
     <string name="room_settings_tag_pref_dialog_title">Позначено як:</string>
-    <string name="room_settings_mute_notifs">Вимкнути сповіщення</string>
 
     <!-- Room settings: Room tag -->
     <string name="room_settings_tag_pref_entry_favourite">Улюблені</string>
@@ -669,14 +659,8 @@
     <!-- Directory -->
     <string name="directory_title">Каталог</string>
 
-    <!-- GA use -->
-    <string name="ga_use_alert_message">Бажаєте допомогти покращити застосунок, автоматично надсилаючи звіти про падіння?</string>
-    <string name="ga_use_settings">Автоматично надсилати звіти про падіння</string>
-    <string name="ga_use_disable_alert_message">Щоб вимкнути звіти про падіння, перезапустіть застосунок.</string>
-
     <!-- matrix error -->
     <string name="failed_to_load_timeline_position">%s намагався завантажити певну точку на шкалі часу цієї кімнати, але не зміг її знайти.</string>
-
 
     <!-- encryption dialog -->
     <string name="encryption_information_title">Дані про наскрізне шифрування</string>
@@ -743,10 +727,6 @@
     <string name="directory_server_all_rooms_on_server">Всі кімнати на сервері %s</string>
     <string name="directory_server_native_rooms">Всі місцеві кімнати %s</string>
 
-    <!-- Notifications -->
-    <string name="notification_unread_notified_messages">%d непрочитаних повідомлень</string>
-    <string name="notification_unread_notified_messages_in_room">%1$d непрочитаних повідомлень у %2$d кімнатах"</string>
-
     <!-- historical -->
     <string name="historical_placeholder">Пошук в історії</string>
 
@@ -767,13 +747,10 @@
     <string name="event_formatter_widget_removed">%1$s видалено %2$s</string>
     <string name="settings_labs_create_conference_with_jitsi">Здійснювати конференц дзвінки через Jitsi</string>
     <string name="widget_delete_message_confirmation">Справді бажаєте видалити віджет?</string>
-    <string name="active_widgets">Активних віджетів: %1$d</string>
 
     // Widget Integration Manager
-    <string name="widget_integration_need_to_be_able_to_invite">Для цього вам треба мати змогу запрошувати користувачів.</string>
     <string name="widget_integration_unable_to_create">Не вдалося створити віджет.</string>
     <string name="widget_integration_failed_to_send_request">Не вдалося надіслати запит.</string>
-    <string name="widget_integration_room_not_recognised">Кімнату не розпізнано.</string>
     <string name="widget_integration_positive_power_level">Рівень доступу має бути більше 0.</string>
     <string name="widget_integration_must_be_in_room">Ви не перебуваєте в цій кімнаті.</string>
     <string name="widget_integration_no_permission_in_room">Ви не маєте дозволу на виконання даної дії у цій кімнаті.</string>
@@ -783,5 +760,76 @@
     <string name="settings_labs_matrix_apps">Застосунки Matrix</string>
 
     <string name="room_add_matrix_apps">Додати застосунки Matrix</string>
-    <string name="add_matrix_apps_not_supported">Не підтримується цим пристроєм</string>
-</resources>
+    <string name="notification_noisy_notifications">Гучне повідомлення</string>
+    <string name="notification_silent_notifications">Тихе повідомлення</string>
+
+    <string name="option_take_photo">Зробити фото</string>
+    <string name="option_take_video">Записати відео</string>
+
+    <string name="call">Виклик</string>
+
+    <string name="settings_theme">Тема</string>
+
+    // conference call
+    <string name="conference_call_warning_title">Увага!</string>
+    <string name="notification_off">Викл</string>
+    <string name="notification_on">Вкл</string>
+    <string name="notification_noisy">Гучно</string>
+
+    <string name="encrypted_message">Закодоване повідомлення</string>
+
+    <string name="settings_labs_native_camera">Використовувати рідну камеру</string>
+
+    // share keys
+    <string name="you_added_a_new_device">Щойно доданий вами пристрій \'%s\' править ключі шифрування.</string>
+    <string name="your_unverified_device_requesting">Ваш неперевірений пристрій  \'%s\' править ключі шифрування.</string>
+    <string name="start_verification">Почати перевірку</string>
+    <string name="share_without_verifying">Поділитись без перевірки</string>
+    <string name="ignore_request">Ігнорувати запит</string>
+
+    // slash commands
+    <string name="command_error">Помилка виконання команди</string>
+    <string name="unrecognized_command">Команду %s не розпізнано</string>
+
+<string name="title_activity_group_details">Відомості про спільноу</string>
+
+    <string name="loading">Завантаження...</string>
+
+    <string name="action_exit">Вихід</string>
+    <string name="actions">Дії</string>
+    <string name="bottom_action_groups">Спільноти</string>
+
+    <string name="home_filter_placeholder_groups">Пошук спільнот</string>
+
+    <string name="groups_invite_header">Запросити</string>
+    <string name="groups_header">Спільноти</string>
+    <string name="no_group_placeholder">Нема груп</string>
+
+    <string name="send_bug_report_rage_shake">"Струсити  пристрій, щоб повідомити про помилку"</string>
+
+    <string name="start_new_chat_prompt_msg">Ви дійсно хочете почати новий чат з %s?</string>
+    <string name="start_voice_call_prompt_msg">Ви впевнені, що бажаєте почати голосовий виклик?</string>
+    <string name="start_video_call_prompt_msg">Ви впевнені, що бажаєте почати відео виклик?</string>
+
+    <string name="groups_list">Список груп</string>
+
+    <plurals name="membership_changes">
+	<item quantity="one">"1 зміна  членства"</item>
+	<item quantity="few">%d зміни членства</item>
+	<item quantity="many">%d змін членства</item>
+	<item quantity="other"/>
+</plurals>
+
+    <string name="list_members">Список учасників</string>
+    <string name="open_chat_header">Відкрити заголовок</string>
+    <string name="room_sync_in_progress">Синхронізація...</string>
+    <string name="room_displayname_many_members">%1$s та %2$s</string>
+    <string name="room_settings_all_messages_noisy">Всі повідомлення (гучно)</string>
+    <string name="room_settings_all_messages">Всі повідомлення</string>
+    <string name="room_settings_mention_only">Тільки упоминания</string>
+    <string name="room_settings_mute">Без звука</string>
+    <string name="room_settings_add_homescreen_shortcut">Добавити ярлик на головний екран</string>
+
+    <string name="settings_notification_privacy">Конфіденційність повідомлення</string>
+    <string name="settings_notification_privacy_normal">Нормальний</string>
+    </resources>

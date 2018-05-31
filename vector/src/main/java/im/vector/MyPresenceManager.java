@@ -39,6 +39,7 @@ public class MyPresenceManager {
             User.PRESENCE_UNAVAILABLE,
             User.PRESENCE_OFFLINE
     };
+
     // We need the reverse structure to associate an order to a given presence state
     private static final Map<String, Integer> presenceOrderMap = new HashMap<>();
 
@@ -100,11 +101,10 @@ public class MyPresenceManager {
      * @return the linked presence manager
      */
     public static synchronized MyPresenceManager getInstance(Context context, MXSession session) {
-        MyPresenceManager instance = instances.get(session);
-        if (instance == null) {
-            instance = createInstance(context, session);
+        if (!instances.containsKey(session)) {
+            createInstance(context, session);
         }
-        return instance;
+        return instances.get(session);
     }
 
     /**

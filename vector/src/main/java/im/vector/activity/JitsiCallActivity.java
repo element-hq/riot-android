@@ -1,5 +1,6 @@
 /*
  * Copyright 2017 Vector Creations Ltd
+ * Copyright 2018 New Vector Ltd
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -27,7 +28,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.RelativeLayout;
 
-
 import org.jitsi.meet.sdk.JitsiMeetView;
 import org.jitsi.meet.sdk.JitsiMeetViewListener;
 import org.matrix.androidsdk.MXSession;
@@ -39,7 +39,6 @@ import org.matrix.androidsdk.util.Log;
 import java.util.Map;
 
 import butterknife.BindView;
-import butterknife.ButterKnife;
 import im.vector.Matrix;
 import im.vector.R;
 import im.vector.widgets.Widget;
@@ -94,7 +93,7 @@ public class JitsiCallActivity extends RiotAppCompatActivity {
     View mConnectingTextView;
 
     @BindView(R.id.jitsi_progress_layout)
-    View mProgressLayout;
+    View waitingView;
 
     /**
      * Widget events listener
@@ -111,13 +110,13 @@ public class JitsiCallActivity extends RiotAppCompatActivity {
     };
 
     @Override
+    public int getLayoutRes() {
+        return R.layout.activity_jitsi_call;
+    }
+
+    @Override
     @SuppressLint("NewApi")
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-
-        setContentView(R.layout.activity_jitsi_call);
-        ButterKnife.bind(this);
-
+    public void initUiAndData() {
         mWidget = (Widget) getIntent().getSerializableExtra(EXTRA_WIDGET_ID);
         mIsVideoCall = getIntent().getBooleanExtra(EXTRA_ENABLE_VIDEO, true);
 
@@ -173,7 +172,7 @@ public class JitsiCallActivity extends RiotAppCompatActivity {
         mCloseWidgetIcon.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                mProgressLayout.setVisibility(View.VISIBLE);
+                showWaitingView();
                 WidgetsManager.getSharedInstance().closeWidget(mSession, mRoom, mWidget.getWidgetId(), new ApiCallback<Void>() {
                     @Override
                     public void onSuccess(Void info) {
@@ -181,7 +180,7 @@ public class JitsiCallActivity extends RiotAppCompatActivity {
                     }
 
                     private void onError(String errorMessage) {
-                        mProgressLayout.setVisibility(View.GONE);
+                        hideWaitingView();
                         CommonActivityUtils.displayToast(JitsiCallActivity.this, errorMessage);
                     }
 
@@ -266,7 +265,7 @@ public class JitsiCallActivity extends RiotAppCompatActivity {
                 JitsiCallActivity.this.runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
-                        mProgressLayout.setVisibility(View.GONE);
+                        hideWaitingView();
                     }
                 });
             }
@@ -274,6 +273,11 @@ public class JitsiCallActivity extends RiotAppCompatActivity {
             @Override
             public void onConferenceWillLeave(Map<String, Object> map) {
                 Log.d(LOG_TAG, "## onConferenceWillLeave() : " + map);
+            }
+
+            @Override
+            public void onLoadConfigError(Map<String, Object> data) {
+                Log.d(LOG_TAG, "## onLoadConfigError() : " + data);
             }
         });
     }
@@ -321,35 +325,18 @@ public class JitsiCallActivity extends RiotAppCompatActivity {
         WidgetsManager.removeListener(mWidgetListener);
     }
 
-    /**
-     * Force to render the activity in fullscreen
-     */
-    private void displayInFullScreen() {
-        getWindow().getDecorView().setSystemUiVisibility(
-                View.SYSTEM_UI_FLAG_LAYOUT_STABLE
-                        | View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
-                        | View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
-                        | View.SYSTEM_UI_FLAG_HIDE_NAVIGATION
-                        | View.SYSTEM_UI_FLAG_FULLSCREEN
-                        | View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY);
+    @Override
+    public boolean displayInFullscreen() {
+        return true;
     }
 
     @Override
     protected void onResume() {
         super.onResume();
 
-        displayInFullScreen();
         JitsiMeetView.onHostResume(this);
         WidgetsManager.addListener(mWidgetListener);
         refreshStatusBar();
-    }
-
-    @Override
-    public void onWindowFocusChanged(boolean hasFocus) {
-        super.onWindowFocusChanged(hasFocus);
-        if (hasFocus) {
-            displayInFullScreen();
-        }
     }
 
     @Override

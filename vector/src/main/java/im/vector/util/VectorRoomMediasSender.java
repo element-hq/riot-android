@@ -1,5 +1,6 @@
 /* 
  * Copyright 2016 OpenMarket Ltd
+ * Copyright 2018 New Vector Ltd
  * 
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -23,7 +24,9 @@ import android.content.DialogInterface;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
+import android.os.Handler;
 import android.os.HandlerThread;
+import android.os.Looper;
 import android.support.v4.app.FragmentManager;
 import android.text.Html;
 import android.text.TextUtils;
@@ -31,11 +34,10 @@ import android.text.TextUtils;
 import org.matrix.androidsdk.data.RoomMediaMessage;
 import org.matrix.androidsdk.util.Log;
 
-import android.view.View;
 import android.widget.Toast;
 
 import org.matrix.androidsdk.db.MXMediasCache;
-import org.matrix.androidsdk.rest.model.Message;
+import org.matrix.androidsdk.rest.model.message.Message;
 import org.matrix.androidsdk.util.ImageUtils;
 import org.matrix.androidsdk.util.ResourceUtils;
 
@@ -153,7 +155,7 @@ public class VectorRoomMediasSender {
                 public void run() {
                     mVectorMessageListFragment.scrollToBottom();
                     mVectorRoomActivity.cancelSelectionMode();
-                    mVectorRoomActivity.setProgressVisibility(View.GONE);
+                    mVectorRoomActivity.hideWaitingView();
                 }
             });
 
@@ -162,7 +164,7 @@ public class VectorRoomMediasSender {
 
         // display a spinner
         mVectorRoomActivity.cancelSelectionMode();
-        mVectorRoomActivity.setProgressVisibility(View.VISIBLE);
+        mVectorRoomActivity.showWaitingView();
 
         Log.d(LOG_TAG, "sendMedias : " + mSharedDataItems.size() + " items to send");
 
@@ -260,29 +262,42 @@ public class VectorRoomMediasSender {
      * @param sharedDataItem the media item.
      */
     private void sendTextMessage(RoomMediaMessage sharedDataItem) {
-        CharSequence sequence = sharedDataItem.getText();
+        final CharSequence sequence = sharedDataItem.getText();
         String htmlText = sharedDataItem.getHtmlText();
-        String text = null;
 
-        if (null == sequence) {
-            if (null != htmlText) {
-                text = Html.fromHtml(htmlText).toString();
-            }
+        // content only text -> insert it in the room editor
+        // to let the user decides to send the message
+        if (!TextUtils.isEmpty(sequence) && (null == htmlText)) {
+            new Handler(Looper.getMainLooper()).post(new Runnable() {
+                @Override
+                public void run() {
+                    mVectorRoomActivity.insertTextInTextEditor(sequence.toString());
+                }
+            });
         } else {
-            text = sequence.toString();
-        }
 
-        Log.d(LOG_TAG, "sendTextMessage " + text);
+            String text = null;
 
-        final String fText = text;
-        final String fHtmlText = htmlText;
-
-        mVectorRoomActivity.runOnUiThread(new Runnable() {
-            @Override
-            public void run() {
-                mVectorRoomActivity.sendMessage(fText, fHtmlText, Message.FORMAT_MATRIX_HTML);
+            if (null == sequence) {
+                if (null != htmlText) {
+                    text = Html.fromHtml(htmlText).toString();
+                }
+            } else {
+                text = sequence.toString();
             }
-        });
+
+            Log.d(LOG_TAG, "sendTextMessage " + text);
+
+            final String fText = text;
+            final String fHtmlText = htmlText;
+
+            mVectorRoomActivity.runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    mVectorRoomActivity.sendMessage(fText, fHtmlText, Message.FORMAT_MATRIX_HTML);
+                }
+            });
+        }
 
         // manage others
         if (mSharedDataItems.size() > 0) {
@@ -739,7 +754,7 @@ public class VectorRoomMediasSender {
                             mVectorRoomActivity.runOnUiThread(new Runnable() {
                                 @Override
                                 public void run() {
-                                    mVectorRoomActivity.setProgressVisibility(View.VISIBLE);
+                                    mVectorRoomActivity.showWaitingView();
 
                                     Thread thread = new Thread(new Runnable() {
                                         @Override

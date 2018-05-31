@@ -1,5 +1,6 @@
 /*
  * Copyright 2017 Vector Creations Ltd
+ * Copyright 2018 New Vector Ltd
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -19,15 +20,11 @@ package im.vector.activity;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.os.Bundle;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
-
-import org.matrix.androidsdk.util.Log;
-
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -38,16 +35,15 @@ import android.widget.Toast;
 import org.matrix.androidsdk.MXSession;
 import org.matrix.androidsdk.rest.callback.ApiCallback;
 import org.matrix.androidsdk.rest.model.MatrixError;
-import org.matrix.androidsdk.rest.model.ThirdPartyProtocol;
-import org.matrix.androidsdk.rest.model.ThirdPartyProtocolInstance;
+import org.matrix.androidsdk.rest.model.pid.ThirdPartyProtocol;
+import org.matrix.androidsdk.rest.model.pid.ThirdPartyProtocolInstance;
+import org.matrix.androidsdk.util.Log;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 
-import butterknife.BindView;
-import butterknife.ButterKnife;
 import im.vector.Matrix;
 import im.vector.R;
 import im.vector.adapters.RoomDirectoryAdapter;
@@ -63,9 +59,6 @@ public class RoomDirectoryPickerActivity extends RiotAppCompatActivity implement
 
     private MXSession mSession;
     private RoomDirectoryAdapter mRoomDirectoryAdapter;
-
-    @BindView(R.id.room_directory_loading)
-    View mLoadingView;
 
      /*
      * *********************************************************************************************
@@ -86,12 +79,18 @@ public class RoomDirectoryPickerActivity extends RiotAppCompatActivity implement
     */
 
     @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
+    public int getLayoutRes() {
+        return R.layout.activity_room_directory_picker;
+    }
 
-        setTitle(R.string.select_room_directory);
-        setContentView(R.layout.activity_room_directory_picker);
-        ButterKnife.bind(this);
+    @Override
+    public int getTitleRes() {
+        return R.string.select_room_directory;
+    }
+
+    @Override
+    public void initUiAndData() {
+        setWaitingView(findViewById(R.id.room_directory_loading));
 
         Toolbar toolbar = findViewById(R.id.toolbar);
         if (toolbar != null) {
@@ -149,20 +148,19 @@ public class RoomDirectoryPickerActivity extends RiotAppCompatActivity implement
      * Refresh the directory servers list.
      */
     private void refreshDirectoryServersList() {
-        mLoadingView.setVisibility(View.VISIBLE);
+       showWaitingView();
 
         mSession.getEventsApiClient().getThirdPartyServerProtocols(new ApiCallback<Map<String, ThirdPartyProtocol>>() {
             private void onDone(List<RoomDirectoryData> list) {
-                mLoadingView.setVisibility(View.GONE);
+                hideWaitingView();
                 String userHSName = mSession.getMyUserId().substring(mSession.getMyUserId().indexOf(":") + 1);
-                String userHSUrl = mSession.getHomeServerConfig().getHomeserverUri().getHost();
 
-                List<String> hsUrlsList = Arrays.asList(getResources().getStringArray(R.array.room_directory_servers));
+                List<String> hsNamesList = Arrays.asList(getResources().getStringArray(R.array.room_directory_servers));
 
                 int insertionIndex = 0;
 
                 // Add user's HS
-                list.add(insertionIndex++, RoomDirectoryData.getIncludeAllServers(mSession, userHSUrl, userHSName));
+                list.add(insertionIndex++, RoomDirectoryData.createIncludingAllNetworks(null, userHSName));
 
                 // Add user's HS but for Matrix public rooms only
                 if (!list.isEmpty()) {
@@ -170,9 +168,10 @@ public class RoomDirectoryPickerActivity extends RiotAppCompatActivity implement
                 }
 
                 // Add custom directory servers
-                for (String hsURL : hsUrlsList) {
-                    if (!TextUtils.equals(userHSUrl, hsURL)) {
-                        list.add(insertionIndex++, RoomDirectoryData.getIncludeAllServers(mSession, hsURL, hsURL));
+                for (String hsName : hsNamesList) {
+                    if (!TextUtils.equals(userHSName, hsName)) {
+                        // Use the server name as a default display name
+                        list.add(insertionIndex++, RoomDirectoryData.createIncludingAllNetworks(hsName, hsName));
                     }
                 }
 
@@ -229,7 +228,7 @@ public class RoomDirectoryPickerActivity extends RiotAppCompatActivity implement
                 final String serverUrl = editText.getText().toString().trim();
 
                 if (!TextUtils.isEmpty(serverUrl)) {
-                    mLoadingView.setVisibility(View.VISIBLE);
+                    showWaitingView();
                     mSession.getEventsApiClient().getPublicRoomsCount(serverUrl, new ApiCallback<Integer>() {
                         @Override
                         public void onSuccess(Integer count) {
@@ -241,7 +240,7 @@ public class RoomDirectoryPickerActivity extends RiotAppCompatActivity implement
 
                         private void onError(String error) {
                             Log.e(LOG_TAG, "## onSelectDirectoryServer() failed " + error);
-                            mLoadingView.setVisibility(View.GONE);
+                            hideWaitingView();
                             Toast.makeText(RoomDirectoryPickerActivity.this, R.string.directory_server_fail_to_retrieve_server, Toast.LENGTH_LONG).show();
                         }
 

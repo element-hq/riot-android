@@ -16,9 +16,10 @@
 
 package im.vector.adapters;
 
+import android.content.Context;
 import android.text.TextUtils;
 
-import org.matrix.androidsdk.rest.model.PublicRoom;
+import org.matrix.androidsdk.rest.model.publicroom.PublicRoom;
 
 import java.util.Comparator;
 import java.util.List;
@@ -32,9 +33,9 @@ class PublicRoomsAdapterSection extends AdapterSection<PublicRoom> {
     // tell if the
     private boolean mHasMoreResults;
 
-    public PublicRoomsAdapterSection(String title, int headerSubViewResId, int contentResId, int headerViewType,
+    public PublicRoomsAdapterSection(Context context, String title, int headerSubViewResId, int contentResId, int headerViewType,
                                      int contentViewType, List<PublicRoom> items, Comparator<PublicRoom> comparator) {
-        super(title, headerSubViewResId, contentResId, headerViewType, contentViewType, items, comparator);
+        super(context, title, headerSubViewResId, contentResId, headerViewType, contentViewType, items, comparator);
     }
 
     @Override

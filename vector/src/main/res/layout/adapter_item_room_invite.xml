@@ -17,7 +17,6 @@
             android:layout_height="@dimen/chat_avatar_size"
             android:layout_centerVertical="true"
             android:layout_marginLeft="16dp"
-            android:layout_toRightOf="@+id/indicator_unread_message"
             tools:src="#22000000" />
 
         <ImageView

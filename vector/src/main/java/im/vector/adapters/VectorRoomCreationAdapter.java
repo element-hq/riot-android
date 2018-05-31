@@ -37,6 +37,7 @@ import java.util.ArrayList;
 
 import im.vector.Matrix;
 import im.vector.R;
+import im.vector.VectorApp;
 import im.vector.util.VectorUtils;
 
 /**
@@ -102,7 +103,7 @@ public class VectorRoomCreationAdapter extends ArrayAdapter<ParticipantAdapterIt
             ParticipantAdapterItem item = getItem(i);
 
             if (!TextUtils.isEmpty(item.mDisplayName)) {
-                mDisplayNamesList.add(item.mDisplayName.toLowerCase());
+                mDisplayNamesList.add(item.mDisplayName.toLowerCase(VectorApp.getApplicationLocale()));
             }
         }
     }

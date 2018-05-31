@@ -140,10 +140,6 @@
     <string name="call_connected">Panggilan terhubung</string>
     <string name="call_connecting">Menyambungkan panggilan…</string>
     <string name="call_ended">Panggilan diakhiri</string>
-    <string name="call_error_peer_cancelled_call">panggilan dibatalkan</string>
-
-    <string name="action_accept">TERIMA</string>
-    <string name="action_ignore">ABAIKAN</string>
 
     <string name="permissions_rationale_popup_title">Informasi</string>
     <string name="media_slider_saved">Tersimpan</string>
@@ -169,7 +165,6 @@
     <string name="largest">Terbesar</string>
     <string name="font_size">Ukuran font</string>
     <string name="tiny">Sangat Kecil</string>
-    <string name="notification_unread_notified_messages">%d notifikasi pesan belum dibaca</string>
     <string name="directory_server_placeholder">URL server Home</string>
     <string name="select_room_directory">Pilih direktori ruang</string>
     <string name="unknown_devices_alert_title">Terdapat perangkat tidak diketahui di ruang</string>
@@ -248,8 +243,6 @@ Mohon maaf untuk ketidaknyamannya.</string>
 
     <string name="read_receipts_list">Baca Daftar Penerimaan</string>
 
-    <string name="membership_changes">%d perubahan keanggotaan</string>
-
     <string name="compression_options">"Kirim sebagai "</string>
     <string name="attachment_remaining_time_seconds">%d d</string>
     <string name="attachment_remaining_time_minutes">%1$dm %2$dd</string>
@@ -264,10 +257,8 @@ Mohon maaf untuk ketidaknyamannya.</string>
 
     <string name="call_error_ice_failed">Hubungan Media Gagal</string>
     <string name="auth_identity_server">Server Identitas</string>
-    <string name="settings_key_display_all_events">pengaturan_tombol_pertunjukan_semua_acara</string>
     <string name="call_error_camera_init_failed">Kamera tidak bisa dibuka</string>
     <string name="call_error_answered_elsewhere">panggilan gagal dijawab di tempat lain</string>
-    <string name="call_error_peer_hangup_elsewhere">panggilan telepon ditutup di suatu tempat</string>
     <string name="media_picker_both_capture_title">Ambil sebuah gambar atau video</string>
     <string name="media_picker_cannot_record_video">Tidak bisa merekam video</string>
 

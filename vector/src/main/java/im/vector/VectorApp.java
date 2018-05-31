@@ -41,12 +41,19 @@ import android.support.v4.content.ContextCompat;
 import android.text.TextUtils;
 import android.util.Pair;
 
+import com.facebook.stetho.Stetho;
+
 import org.matrix.androidsdk.MXSession;
 import org.matrix.androidsdk.util.Log;
+import org.piwik.sdk.Piwik;
+import org.piwik.sdk.QueryParams;
+import org.piwik.sdk.TrackMe;
+import org.piwik.sdk.Tracker;
+import org.piwik.sdk.TrackerConfig;
+import org.piwik.sdk.extra.CustomVariables;
+import org.piwik.sdk.extra.TrackHelper;
 
 import java.io.File;
-import java.io.PrintWriter;
-import java.io.StringWriter;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -70,10 +77,8 @@ import im.vector.activity.VectorMediasPickerActivity;
 import im.vector.activity.WidgetActivity;
 import im.vector.contacts.ContactsManager;
 import im.vector.contacts.PIDsRetriever;
-import im.vector.ga.GAHelper;
 import im.vector.gcm.GcmRegistrationManager;
 import im.vector.services.EventStreamService;
-import im.vector.util.BugReporter;
 import im.vector.util.CallsManager;
 import im.vector.util.PhoneNumberUtils;
 import im.vector.util.PreferencesManager;
@@ -98,7 +103,7 @@ public class VectorApp extends MultiDexApplication {
     /**
      * Rage shake detection to send a bug report.
      */
-    private static final RageShake mRageShake = new RageShake();
+    private RageShake mRageShake;
 
     /**
      * Delay to detect if the application is in background.
@@ -124,6 +129,7 @@ public class VectorApp extends MultiDexApplication {
     public static int VERSION_BUILD = -1;
     private static String VECTOR_VERSION_STRING = "";
     private static String SDK_VERSION_STRING = "";
+    private static String SHORT_VERSION = "";
 
     /**
      * Tells if there a pending call whereas the application is backgrounded.
@@ -187,6 +193,10 @@ public class VectorApp extends MultiDexApplication {
         Log.d(LOG_TAG, "onCreate");
         super.onCreate();
 
+        if (BuildConfig.DEBUG) {
+            Stetho.initializeWithDefaults(this);
+        }
+
         instance = this;
         mCallsManager = new CallsManager(this);
         mActivityTransitionTimer = null;
@@ -208,6 +218,12 @@ public class VectorApp extends MultiDexApplication {
             SDK_VERSION_STRING = "";
         }
 
+        try {
+            PackageInfo pInfo = getPackageManager().getPackageInfo(getPackageName(), 0);
+            SHORT_VERSION = pInfo.versionName;
+        } catch (Exception e) {
+        }
+
         mLogsDirectoryFile = new File(getCacheDir().getAbsolutePath() + "/logs");
 
         org.matrix.androidsdk.util.Log.setLogDirectory(mLogsDirectoryFile);
@@ -224,9 +240,7 @@ public class VectorApp extends MultiDexApplication {
         Log.d(LOG_TAG, "----------------------------------------------------------------");
         Log.d(LOG_TAG, "----------------------------------------------------------------\n\n\n\n");
 
-        GAHelper.initGoogleAnalytics(getApplicationContext());
-
-        mRageShake.start(this);
+        mRageShake = new RageShake(this);
 
         // init the REST client
         MXSession.initUserAgent(getApplicationContext());
@@ -239,6 +253,8 @@ public class VectorApp extends MultiDexApplication {
                 Log.d(LOG_TAG, "onActivityCreated " + activity);
                 mCreatedActivities.add(activity.toString());
                 ThemeUtils.setActivityTheme(activity);
+                // piwik
+                onNewScreen(activity);
             }
 
             @Override
@@ -287,6 +303,7 @@ public class VectorApp extends MultiDexApplication {
                 Log.d(LOG_TAG, "onActivityPaused " + activity);
                 mLocalesByActivity.put(activity.toString(), getActivityLocaleStatus(activity));
                 setCurrentActivity(null);
+                onAppPause();
             }
 
             @Override
@@ -398,6 +415,10 @@ public class VectorApp extends MultiDexApplication {
         PIDsRetriever.getInstance().onAppBackgrounded();
 
         MyPresenceManager.advertiseAllUnavailable();
+
+        mRageShake.stop();
+
+        onAppPause();
     }
 
     /**
@@ -494,9 +515,8 @@ public class VectorApp extends MultiDexApplication {
         }
 
         if (isAppInBackground() && !mIsCallingInBackground) {
-
             // the event stream service has been killed
-            if (null == EventStreamService.getInstance()) {
+            if (EventStreamService.isStopped()) {
                 CommonActivityUtils.startEventStreamService(VectorApp.this);
             } else {
                 CommonActivityUtils.resumeEventStream(VectorApp.this);
@@ -524,9 +544,11 @@ public class VectorApp extends MultiDexApplication {
             }
 
             mCallsManager.checkDeadCalls();
+            Matrix.getInstance(this).getSharedGCMRegistrationManager().onAppResume();
         }
 
         MyPresenceManager.advertiseAllOnline();
+        mRageShake.start();
 
         mIsCallingInBackground = false;
         mIsInBackground = false;
@@ -717,106 +739,6 @@ public class VectorApp extends MultiDexApplication {
         return isSyncing;
     }
 
-    //==============================================================================================================
-    // GA management
-    //==============================================================================================================
-    /**
-     * GA tags
-     */
-    public static final String GOOGLE_ANALYTICS_STATS_CATEGORY = "stats";
-
-    public static final String GOOGLE_ANALYTICS_STATS_ROOMS_ACTION = "rooms";
-    public static final String GOOGLE_ANALYTICS_STARTUP_STORE_PRELOAD_ACTION = "storePreload";
-    public static final String GOOGLE_ANALYTICS_STARTUP_MOUNT_DATA_ACTION = "mountData";
-    public static final String GOOGLE_ANALYTICS_STARTUP_LAUNCH_SCREEN_ACTION = "launchScreen";
-    public static final String GOOGLE_ANALYTICS_STARTUP_CONTACTS_ACTION = "Contacts";
-
-    /**
-     * Send a GA stats
-     *
-     * @param context  the context
-     * @param category the category
-     * @param action   the action
-     * @param label    the label
-     * @param value    the value
-     */
-    public static void sendGAStats(Context context, String category, String action, String label, long value) {
-        GAHelper.sendGAStats(context, category, action, label, value);
-    }
-
-    /**
-     * An uncaught exception has been triggered
-     *
-     * @param threadName the thread name
-     * @param throwable  the throwable
-     * @return the exception description
-     */
-    public static String uncaughtException(String threadName, Throwable throwable) {
-        StringBuilder b = new StringBuilder();
-        String appName = Matrix.getApplicationName();
-
-        b.append(appName + " Build : " + VectorApp.VERSION_BUILD + "\n");
-        b.append(appName + " Version : " + VectorApp.VECTOR_VERSION_STRING + "\n");
-        b.append("SDK Version : " + VectorApp.SDK_VERSION_STRING + "\n");
-        b.append("Phone : " + Build.MODEL.trim() + " (" + Build.VERSION.INCREMENTAL + " " + Build.VERSION.RELEASE + " " + Build.VERSION.CODENAME + ")\n");
-
-        b.append("Memory statuses \n");
-
-        long freeSize = 0L;
-        long totalSize = 0L;
-        long usedSize = -1L;
-        try {
-            Runtime info = Runtime.getRuntime();
-            freeSize = info.freeMemory();
-            totalSize = info.totalMemory();
-            usedSize = totalSize - freeSize;
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        b.append("usedSize   " + (usedSize / 1048576L) + " MB\n");
-        b.append("freeSize   " + (freeSize / 1048576L) + " MB\n");
-        b.append("totalSize   " + (totalSize / 1048576L) + " MB\n");
-
-        b.append("Thread: ");
-        b.append(threadName);
-
-        Activity a = VectorApp.getCurrentActivity();
-        if (a != null) {
-            b.append(", Activity:");
-            b.append(a.getLocalClassName());
-        }
-
-        b.append(", Exception: ");
-
-        StringWriter sw = new StringWriter();
-        PrintWriter pw = new PrintWriter(sw, true);
-        throwable.printStackTrace(pw);
-        b.append(sw.getBuffer().toString());
-        Log.e("FATAL EXCEPTION", b.toString());
-
-        String bugDescription = b.toString();
-
-        if (null != VectorApp.getInstance()) {
-            VectorApp.getInstance().setAppCrashed(bugDescription);
-        }
-
-        return bugDescription;
-    }
-
-    /**
-     * Warn that the application crashed
-     *
-     * @param description the crash description
-     */
-    private void setAppCrashed(String description) {
-        final SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(VectorApp.getInstance());
-        SharedPreferences.Editor editor = preferences.edit();
-        editor.putBoolean(PREFS_CRASH_KEY, true);
-        editor.commit();
-
-        BugReporter.saveCrashReport(this, description);
-    }
-
     /**
      * Tells if the application crashed
      *
@@ -858,7 +780,7 @@ public class VectorApp extends MultiDexApplication {
     private static final String FONT_SCALE_LARGEST = "FONT_SCALE_LARGEST";
     private static final String FONT_SCALE_HUGE = "FONT_SCALE_HUGE";
 
-    private static final Locale mApplicationDefaultLanguage = new Locale("en", "UK");
+    private static final Locale mApplicationDefaultLanguage = new Locale("en", "US");
 
     private static final Map<Float, String> mPrefKeyByFontScale = new LinkedHashMap<Float, String>() {{
         put(0.70f, FONT_SCALE_TINY);
@@ -1262,5 +1184,116 @@ public class VectorApp extends MultiDexApplication {
         }
 
         return res;
+    }
+
+    //==============================================================================================================
+    // Piwik management
+    //==============================================================================================================
+
+    // the piwik tracker
+    private Tracker mPiwikTracker;
+
+    /**
+     * Set the visit variable
+     *
+     * @param trackMe
+     * @param id
+     * @param name
+     * @param value
+     */
+    private static final void visitVariables(TrackMe trackMe, int id, String name, String value) {
+        CustomVariables customVariables = new CustomVariables(trackMe.get(QueryParams.VISIT_SCOPE_CUSTOM_VARIABLES));
+        customVariables.put(id, name, value);
+        trackMe.set(QueryParams.VISIT_SCOPE_CUSTOM_VARIABLES, customVariables.toString());
+    }
+
+    /**
+     * @return the piwik instance
+     */
+    private Tracker getPiwikTracker() {
+        if (mPiwikTracker == null) {
+            try {
+                mPiwikTracker = Piwik.getInstance(this).newTracker(new TrackerConfig("https://piwik.riot.im/", 1, "AndroidPiwikTracker"));
+                // sends the tracking information each minute
+                // the app might be killed in background
+                mPiwikTracker.setDispatchInterval(30 * 1000);
+
+                //
+                TrackMe trackMe = mPiwikTracker.getDefaultTrackMe();
+
+                visitVariables(trackMe, 1, "App Platform", "Android Platform");
+                visitVariables(trackMe, 2, "App Version", SHORT_VERSION);
+                visitVariables(trackMe, 4, "Chosen Language", getApplicationLocale().toString());
+
+                if (null != Matrix.getInstance(this).getDefaultSession()) {
+                    MXSession session = Matrix.getInstance(this).getDefaultSession();
+
+                    visitVariables(trackMe, 7, "Homeserver URL", session.getHomeServerConfig().getHomeserverUri().toString());
+                    visitVariables(trackMe, 8, "Identity Server URL", session.getHomeServerConfig().getIdentityServerUri().toString());
+                }
+            } catch (Throwable t) {
+                Log.e(LOG_TAG, "## getPiwikTracker() : newTracker failed " + t.getMessage());
+            }
+        }
+
+        return mPiwikTracker;
+    }
+
+
+    /**
+     * Add the stats variables to the piwik screen.
+     *
+     * @return the piwik screen
+     */
+    private TrackHelper.Screen addCustomVariables(TrackHelper.Screen screen) {
+        screen.variable(1, "App Platform", "Android Platform");
+        screen.variable(2, "App Version", SHORT_VERSION);
+        screen.variable(4, "Chosen Language", getApplicationLocale().toString());
+
+        if (null != Matrix.getInstance(this).getDefaultSession()) {
+            MXSession session = Matrix.getInstance(this).getDefaultSession();
+
+            screen.variable(7, "Homeserver URL", session.getHomeServerConfig().getHomeserverUri().toString());
+            screen.variable(8, "Identity Server URL", session.getHomeServerConfig().getIdentityServerUri().toString());
+        }
+
+        return screen;
+    }
+
+    /**
+     * A new activity has been resumed
+     *
+     * @param activity the new activity
+     */
+    private void onNewScreen(Activity activity) {
+        if (PreferencesManager.useAnalytics(this)) {
+            Tracker tracker = getPiwikTracker();
+            if (null != tracker) {
+                try {
+                    TrackHelper.Screen screen = TrackHelper.track().screen("/android/" + Matrix.getApplicationName() + "/" + this.getString(R.string.flavor_description) + "/" + SHORT_VERSION + "/" + activity.getClass().getName().replace(".", "/"));
+                    addCustomVariables(screen).with(tracker);
+                } catch (Throwable t) {
+                    Log.e(LOG_TAG, "## onNewScreen() : failed " + t.getMessage());
+                }
+            }
+        }
+    }
+
+
+    /**
+     * The application is paused.
+     */
+    private void onAppPause() {
+        if (PreferencesManager.useAnalytics(this)) {
+            Tracker tracker = getPiwikTracker();
+            if (null != tracker) {
+                try {
+                    // force to send the pending actions
+                    tracker.dispatch();
+                } catch (Throwable t) {
+                    Log.e(LOG_TAG, "## onAppPause() : failed " + t.getMessage());
+                }
+            }
+        }
     }
 }

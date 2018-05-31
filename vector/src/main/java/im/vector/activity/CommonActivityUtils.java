@@ -1,6 +1,7 @@
 /*
  * Copyright 2015 OpenMarket Ltd
  * Copyright 2017 Vector Creations Ltd
+ * Copyright 2018 New Vector Ltd
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -43,7 +44,8 @@ import android.os.Looper;
 import android.os.Parcelable;
 import android.preference.PreferenceManager;
 import android.support.annotation.AttrRes;
-import android.support.design.widget.Snackbar;
+import android.support.annotation.ColorInt;
+import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
@@ -427,6 +429,74 @@ public class CommonActivityUtils {
     }
 
     /**
+     * Clear all local data after a user account deactivation
+     *
+     * @param context       the application context
+     * @param mxSession     the session to deactivate
+     * @param userPassword  the user password
+     * @param eraseUserData true to also erase all the user data
+     * @param callback      the callback success and failure callback
+     */
+    public static void deactivateAccount(final Context context,
+                                         final MXSession mxSession,
+                                         final String userPassword,
+                                         final boolean eraseUserData,
+                                         final @NonNull ApiCallback<Void> callback) {
+        Matrix.getInstance(context).deactivateSession(context, mxSession, userPassword, eraseUserData, new SimpleApiCallback<Void>(callback) {
+
+            @Override
+            public void onSuccess(Void info) {
+                EventStreamService.removeNotification();
+                stopEventStream(context);
+
+                try {
+                    ShortcutBadger.setBadge(context, 0);
+                } catch (Exception e) {
+                    Log.d(LOG_TAG, "## logout(): Exception Msg=" + e.getMessage());
+                }
+
+                // Publish to the server that we're now offline
+                MyPresenceManager.getInstance(context, mxSession).advertiseOffline();
+                MyPresenceManager.remove(mxSession);
+
+                // clear the preferences
+                PreferencesManager.clearPreferences(context);
+
+                // reset the GCM
+                Matrix.getInstance(context).getSharedGCMRegistrationManager().resetGCMRegistration();
+
+                // clear the preferences
+                Matrix.getInstance(context).getSharedGCMRegistrationManager().clearPreferences();
+
+                // Clear the credentials
+                Matrix.getInstance(context).getLoginStorage().clear();
+
+                // clear the tmp store list
+                Matrix.getInstance(context).clearTmpStoresList();
+
+                // reset the contacts
+                PIDsRetriever.getInstance().reset();
+                ContactsManager.getInstance().reset();
+
+                MXMediasCache.clearThumbnailsCache(context);
+
+                callback.onSuccess(info);
+            }
+        });
+    }
+
+    /**
+     * Start LoginActivity in a new task, and clear any other existing task
+     *
+     * @param activity the current Activity
+     */
+    public static void startLoginActivityNewTask(Activity activity) {
+        Intent intent = new Intent(activity, LoginActivity.class);
+        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+        activity.startActivity(intent);
+    }
+
+    /**
      * Remove the http schemes from the URl passed in parameter
      *
      * @param aUrl URL to be parsed
@@ -481,15 +551,18 @@ public class CommonActivityUtils {
     private static void sendEventStreamAction(Context context, EventStreamService.StreamAction action) {
         Context appContext = context.getApplicationContext();
 
-        Log.d(LOG_TAG, "sendEventStreamAction " + action);
-
         if (!isUserLogout(appContext)) {
-            // Fix https://github.com/vector-im/vector-android/issues/230
-            // Only start the service if a session is in progress, otherwise
-            // starting the service is useless
-            Intent killStreamService = new Intent(appContext, EventStreamService.class);
-            killStreamService.putExtra(EventStreamService.EXTRA_STREAM_ACTION, action.ordinal());
-            appContext.startService(killStreamService);
+            Intent eventStreamService = new Intent(appContext, EventStreamService.class);
+
+            if ((action == EventStreamService.StreamAction.CATCHUP) && (EventStreamService.isStopped())) {
+                Log.d(LOG_TAG, "sendEventStreamAction : auto restart");
+                eventStreamService.putExtra(EventStreamService.EXTRA_AUTO_RESTART_ACTION, EventStreamService.EXTRA_AUTO_RESTART_ACTION);
+            } else {
+                Log.d(LOG_TAG, "sendEventStreamAction " + action);
+                eventStreamService.putExtra(EventStreamService.EXTRA_STREAM_ACTION, action.ordinal());
+            }
+
+            appContext.startService(eventStreamService);
         } else {
             Log.d(LOG_TAG, "## sendEventStreamAction(): \"" + action + "\" action not sent - user logged out");
         }
@@ -556,7 +629,7 @@ public class CommonActivityUtils {
         // the events stream service is launched
         // either the application has never be launched
         // or the service has been killed on low memory
-        if (EventStreamService.getInstance() == null) {
+        if (EventStreamService.isStopped()) {
             ArrayList<String> matrixIds = new ArrayList<>();
             Collection<MXSession> sessions = Matrix.getInstance(context.getApplicationContext()).getSessions();
 
@@ -593,6 +666,10 @@ public class CommonActivityUtils {
                     intent.putExtra(EventStreamService.EXTRA_STREAM_ACTION, EventStreamService.StreamAction.START.ordinal());
                     context.startService(intent);
                 }
+            }
+
+            if (null != EventStreamService.getInstance()) {
+                EventStreamService.getInstance().refreshForegroundNotification();
             }
         }
     }
@@ -1579,16 +1656,14 @@ public class CommonActivityUtils {
         saveFileInto(srcFile, Environment.DIRECTORY_DOWNLOADS, filename, new ApiCallback<String>() {
             @Override
             public void onSuccess(String fullFilePath) {
-                if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB) {
-                    if (null != fullFilePath) {
-                        DownloadManager downloadManager = (DownloadManager) context.getSystemService(Context.DOWNLOAD_SERVICE);
+                if (null != fullFilePath) {
+                    DownloadManager downloadManager = (DownloadManager) context.getSystemService(Context.DOWNLOAD_SERVICE);
 
-                        try {
-                            File file = new File(fullFilePath);
-                            downloadManager.addCompletedDownload(file.getName(), file.getName(), true, mimeType, file.getAbsolutePath(), file.length(), true);
-                        } catch (Exception e) {
-                            Log.e(LOG_TAG, "## saveMediaIntoDownloads(): Exception Msg=" + e.getMessage());
-                        }
+                    try {
+                        File file = new File(fullFilePath);
+                        downloadManager.addCompletedDownload(file.getName(), file.getName(), true, mimeType, file.getAbsolutePath(), file.length(), true);
+                    } catch (Exception e) {
+                        Log.e(LOG_TAG, "## saveMediaIntoDownloads(): Exception Msg=" + e.getMessage());
                     }
                 }
 
@@ -2055,18 +2130,28 @@ public class CommonActivityUtils {
     }
 
     /**
-     * Tint the drawable with the menu icon color
+     * Tint the drawable with a theme attribute
      *
-     * @param context  the context
-     * @param drawable the drawable to tint
+     * @param context   the context
+     * @param drawable  the drawable to tint
+     * @param attribute the theme color
      * @return the tinted drawable
      */
     public static Drawable tintDrawable(Context context, Drawable drawable, @AttrRes int attribute) {
-        int color = ThemeUtils.getColor(context, attribute);
+        return tintDrawableWithColor(drawable, ThemeUtils.getColor(context, attribute));
+    }
+
+    /**
+     * Tint the drawable with a color integer
+     *
+     * @param drawable the drawable to tint
+     * @param color    the color
+     * @return the tinted drawable
+     */
+    public static Drawable tintDrawableWithColor(Drawable drawable, @ColorInt int color) {
         Drawable tinted = DrawableCompat.wrap(drawable);
         drawable.mutate();
         DrawableCompat.setTint(tinted, color);
-
         return tinted;
     }
 }

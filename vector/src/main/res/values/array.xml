@@ -34,11 +34,19 @@
         <item>@string/room_settings_read_history_entry_members_only_invited</item>
         <item>@string/room_settings_read_history_entry_members_only_joined</item>
     </string-array>
+
     <string-array name="room_read_history_rules_values">
         <item>@string/room_settings_read_history_entry_value_anyone</item>
         <item>@string/room_settings_read_history_entry_value_members_only_option_time_shared</item>
         <item>@string/room_settings_read_history_entry_value_members_only_invited</item>
         <item>@string/room_settings_read_history_entry_value_members_only_joined</item>
+    </string-array>
+
+    <string-array name="notification_values">
+        <item>@string/room_settings_all_messages_noisy</item>
+        <item>@string/room_settings_all_messages</item>
+        <item>@string/room_settings_mention_only</item>
+        <item>@string/room_settings_mute</item>
     </string-array>
 
 </resources>

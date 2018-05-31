@@ -1,10 +1,17 @@
 #!/bin/bash
+
+# Clean all existing APK
 rm *.apk
-./gradlew clean 
 
-./gradlew lintAppRelease assembleAppMatrixorg
-./gradlew lintAppfdroidRelease assembleAppfdroidMatrixorg
+# Clean
+./gradlew clean
 
-#cp app/build/outputs/apk/app-alpha-matrixorg.apk ./alpha.apk
-cp vector/build/outputs/apk/vector-app-matrixorg.apk ./riotGooglePlay.apk
-cp vector/build/outputs/apk/vector-appfdroid-matrixorg.apk ./riotFDroid.apk
+# Run Lint and build the APK for the PlayStore
+./gradlew lintAppMatrixorg assembleAppMatrixorg --stacktrace
+
+# Run Lint and build the APK for FDroid
+./gradlew lintAppfdroidMatrixorg assembleAppfdroidMatrixorg --stacktrace
+
+# Copy (and rename) the built APKs to the root folder
+cp vector/build/outputs/apk/app/matrixorg/vector-app-matrixorg.apk ./riotGooglePlay.apk
+cp vector/build/outputs/apk/appfdroid/matrixorg/vector-appfdroid-matrixorg.apk ./riotFDroid.apk

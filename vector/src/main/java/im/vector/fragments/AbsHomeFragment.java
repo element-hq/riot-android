@@ -1,5 +1,6 @@
 /*
  * Copyright 2017 Vector Creations Ltd
+ * Copyright 2018 New Vector Ltd
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -32,6 +33,7 @@ import org.matrix.androidsdk.data.Room;
 import org.matrix.androidsdk.data.RoomSummary;
 import org.matrix.androidsdk.data.RoomTag;
 import org.matrix.androidsdk.rest.callback.ApiCallback;
+import org.matrix.androidsdk.rest.callback.SimpleApiCallback;
 import org.matrix.androidsdk.rest.model.MatrixError;
 import org.matrix.androidsdk.util.BingRulesManager;
 import org.matrix.androidsdk.util.Log;
@@ -53,13 +55,10 @@ import im.vector.util.RoomUtils;
 /**
  * Abstract fragment providing the universal search
  */
-public abstract class AbsHomeFragment extends Fragment implements AbsAdapter.InvitationListener, AbsAdapter.MoreRoomActionListener, RoomUtils.MoreActionListener {
+public abstract class AbsHomeFragment extends VectorBaseFragment implements AbsAdapter.RoomInvitationListener, AbsAdapter.MoreRoomActionListener, RoomUtils.MoreActionListener {
 
     private static final String LOG_TAG = AbsHomeFragment.class.getSimpleName();
     private static final String CURRENT_FILTER = "CURRENT_FILTER";
-
-    // Butterknife unbinder
-    private Unbinder mUnBinder;
 
     VectorHomeActivity mActivity;
 
@@ -97,17 +96,12 @@ public abstract class AbsHomeFragment extends Fragment implements AbsAdapter.Inv
 
     @Override
     @CallSuper
-    public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
-        super.onViewCreated(view, savedInstanceState);
-        mUnBinder = ButterKnife.bind(this, view);
-    }
-
-    @Override
-    @CallSuper
     public void onActivityCreated(final Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
 
-        mActivity = (VectorHomeActivity) getActivity();
+        if (getActivity() instanceof VectorHomeActivity) {
+            mActivity = (VectorHomeActivity) getActivity();
+        }
         mSession = Matrix.getInstance(getActivity()).getDefaultSession();
 
         if (savedInstanceState != null && savedInstanceState.containsKey(CURRENT_FILTER)) {
@@ -119,7 +113,7 @@ public abstract class AbsHomeFragment extends Fragment implements AbsAdapter.Inv
     @CallSuper
     public void onResume() {
         super.onResume();
-        if (mPrimaryColor != -1) {
+        if ((mPrimaryColor != -1) && (null != mActivity)) {
             mActivity.updateTabStyle(mPrimaryColor, mSecondaryColor != -1 ? mSecondaryColor : mPrimaryColor);
         }
     }
@@ -145,7 +139,6 @@ public abstract class AbsHomeFragment extends Fragment implements AbsAdapter.Inv
     @CallSuper
     public void onDestroyView() {
         super.onDestroyView();
-        mUnBinder.unbind();
         mCurrentFilter = null;
     }
 
@@ -171,7 +164,7 @@ public abstract class AbsHomeFragment extends Fragment implements AbsAdapter.Inv
     @Override
     public void onRejectInvitation(MXSession session, String roomId) {
         Log.i(LOG_TAG, "onRejectInvitation " + roomId);
-        mActivity.onRejectInvitation(session, roomId);
+        mActivity.onRejectInvitation(roomId, null);
     }
 
     @Override
@@ -184,9 +177,9 @@ public abstract class AbsHomeFragment extends Fragment implements AbsAdapter.Inv
     }
 
     @Override
-    public void onToggleRoomNotifications(MXSession session, String roomId) {
+    public void onUpdateRoomNotificationsState(MXSession session, String roomId, BingRulesManager.RoomNotificationState state) {
         mActivity.showWaitingView();
-        RoomUtils.toggleNotifications(session, roomId, new BingRulesManager.onBingRuleUpdateListener() {
+        session.getDataHandler().getBingRulesManager().updateRoomNotificationState(roomId, state, new BingRulesManager.onBingRuleUpdateListener() {
             @Override
             public void onBingRuleUpdateSuccess() {
                 onRequestDone(null);
@@ -249,13 +242,34 @@ public abstract class AbsHomeFragment extends Fragment implements AbsAdapter.Inv
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 if (mActivity != null && !mActivity.isFinishing()) {
-                    mActivity.onRejectInvitation(session, roomId);
-                    if (mOnRoomChangedListener != null) {
-                        mOnRoomChangedListener.onRoomLeft(roomId);
-                    }
+                    mActivity.onRejectInvitation(roomId, new SimpleApiCallback<Void>() {
+                        @Override
+                        public void onSuccess(Void info) {
+                            if (mOnRoomChangedListener != null) {
+                                mOnRoomChangedListener.onRoomLeft(roomId);
+                            }
+                        }
+                    });
                 }
             }
         });
+    }
+
+    @Override
+    public void onForgetRoom(final MXSession session, final String roomId) {
+        mActivity.onForgetRoom(roomId, new SimpleApiCallback<Void>() {
+            @Override
+            public void onSuccess(Void info) {
+                if (mOnRoomChangedListener != null) {
+                    mOnRoomChangedListener.onRoomForgot(roomId);
+                }
+            }
+        });
+    }
+
+    @Override
+    public void addHomeScreenShortcut(MXSession session, String roomId) {
+        RoomUtils.addHomeScreenShortcut(getActivity(), session, roomId);
     }
 
     /*
@@ -330,6 +344,15 @@ public abstract class AbsHomeFragment extends Fragment implements AbsAdapter.Inv
         }
     }
 
+    /**
+     * Manage the fab actions
+     *
+     * @return true if the fragment has a dedicated action.
+     */
+    public boolean onFabClick() {
+        return false;
+    }
+
     /*
      * *********************************************************************************************
      * Private methods
@@ -378,7 +401,7 @@ public abstract class AbsHomeFragment extends Fragment implements AbsAdapter.Inv
             mActivity.runOnUiThread(new Runnable() {
                 @Override
                 public void run() {
-                    mActivity.stopWaitingView();
+                    mActivity.hideWaitingView();
                     if (!TextUtils.isEmpty(errorMessage)) {
                         Toast.makeText(mActivity, errorMessage, Toast.LENGTH_SHORT).show();
                     }
@@ -398,7 +421,7 @@ public abstract class AbsHomeFragment extends Fragment implements AbsAdapter.Inv
             public void onSuccess(Void info) {
                 // check if the activity is still attached
                 if ((null != mActivity) && !mActivity.isFinishing()) {
-                    mActivity.stopWaitingView();
+                    mActivity.hideWaitingView();
                     mActivity.refreshUnreadBadges();
 
                     // if the fragment is still the active one
@@ -461,5 +484,7 @@ public abstract class AbsHomeFragment extends Fragment implements AbsAdapter.Inv
         void onToggleDirectChat(final String roomId, final boolean isDirectChat);
 
         void onRoomLeft(final String roomId);
+
+        void onRoomForgot(final String roomId);
     }
 }

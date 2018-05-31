@@ -36,7 +36,7 @@ import org.matrix.androidsdk.data.Room;
 import org.matrix.androidsdk.data.RoomPreviewData;
 import org.matrix.androidsdk.rest.callback.ApiCallback;
 import org.matrix.androidsdk.rest.model.MatrixError;
-import org.matrix.androidsdk.rest.model.PublicRoom;
+import org.matrix.androidsdk.rest.model.publicroom.PublicRoom;
 
 import im.vector.Matrix;
 import im.vector.PublicRoomsManager;
@@ -49,7 +49,7 @@ import im.vector.adapters.VectorPublicRoomsAdapter;
 import java.util.HashMap;
 import java.util.List;
 
-public class VectorPublicRoomsListFragment extends Fragment {
+public class VectorPublicRoomsListFragment extends VectorBaseFragment {
     private static final String LOG_TAG = VectorPublicRoomsListFragment.class.getSimpleName();
 
     private static final String ARG_LAYOUT_ID = "VectorPublicRoomsListFragment.ARG_LAYOUT_ID";

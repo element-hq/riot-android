@@ -41,7 +41,7 @@ import org.matrix.androidsdk.data.store.IMXStore;
 import org.matrix.androidsdk.rest.callback.ApiCallback;
 import org.matrix.androidsdk.rest.client.EventsRestClient;
 import org.matrix.androidsdk.rest.model.MatrixError;
-import org.matrix.androidsdk.rest.model.PublicRoom;
+import org.matrix.androidsdk.rest.model.publicroom.PublicRoom;
 import org.matrix.androidsdk.util.Log;
 
 import java.util.ArrayList;
@@ -58,12 +58,13 @@ import im.vector.activity.VectorRoomActivity;
 import im.vector.adapters.AdapterSection;
 import im.vector.adapters.RoomAdapter;
 import im.vector.util.RoomDirectoryData;
+import im.vector.util.RoomUtils;
 import im.vector.view.EmptyViewItemDecoration;
 import im.vector.view.SectionView;
 import im.vector.view.SimpleDividerItemDecoration;
 
 public class RoomsFragment extends AbsHomeFragment implements AbsHomeFragment.OnRoomChangedListener {
-    private static final String LOG_TAG = PeopleFragment.class.getSimpleName();
+    private static final String LOG_TAG = RoomsFragment.class.getSimpleName();
 
     // activity result codes
     private static final int DIRECTORY_SOURCE_ACTIVITY_REQUEST_CODE = 314;
@@ -267,7 +268,6 @@ public class RoomsFragment extends AbsHomeFragment implements AbsHomeFragment.On
 
         // update/retrieve the complete summary list
         List<RoomSummary> roomSummaries = new ArrayList<>(store.getSummaries());
-        HashSet<String> directChatRoomIds = new HashSet<>(mSession.getDirectChatRoomIdsList());
         HashSet<String> lowPriorityRoomIds = new HashSet<>(mSession.roomIdsWithTag(RoomTag.ROOM_TAG_LOW_PRIORITY));
 
         mRooms.clear();
@@ -280,7 +280,7 @@ public class RoomsFragment extends AbsHomeFragment implements AbsHomeFragment.On
                 // test
                 if ((null != room) && // if the room still exists
                         !room.isConferenceUserRoom() && // not a VOIP conference room
-                        !directChatRoomIds.contains(room.getRoomId()) &&
+                        !RoomUtils.isDirectChat(mSession, room.getRoomId()) &&
                         !lowPriorityRoomIds.contains(room.getRoomId())) {
                     mRooms.add(room);
                 }
@@ -339,7 +339,7 @@ public class RoomsFragment extends AbsHomeFragment implements AbsHomeFragment.On
                 roomPreviewData.fetchPreviewData(new ApiCallback<Void>() {
                     private void onDone() {
                         if (null != mActivity) {
-                            mActivity.stopWaitingView();
+                            mActivity.hideWaitingView();
                             CommonActivityUtils.previewRoom(getActivity(), roomPreviewData);
                         }
                     }
@@ -493,7 +493,7 @@ public class RoomsFragment extends AbsHomeFragment implements AbsHomeFragment.On
                 return;
             }
             eventsRestClient.getPublicRoomsCount(
-                    mSelectedRoomDirectory.getServerUrl(),
+                    mSelectedRoomDirectory.getHomeServer(),
                     mSelectedRoomDirectory.getThirdPartyInstanceId(),
                     mSelectedRoomDirectory.isIncludedAllNetworks(),
                     new ApiCallback<Integer>() {
@@ -536,7 +536,7 @@ public class RoomsFragment extends AbsHomeFragment implements AbsHomeFragment.On
             return;
         }
 
-        PublicRoomsManager.getInstance().startPublicRoomsSearch(mSelectedRoomDirectory.getServerUrl(),
+        PublicRoomsManager.getInstance().startPublicRoomsSearch(mSelectedRoomDirectory.getHomeServer(),
                 mSelectedRoomDirectory.getThirdPartyInstanceId(),
                 mSelectedRoomDirectory.isIncludedAllNetworks(),
                 mCurrentFilter, new ApiCallback<List<PublicRoom>>() {
@@ -669,11 +669,15 @@ public class RoomsFragment extends AbsHomeFragment implements AbsHomeFragment.On
 
     @Override
     public void onToggleDirectChat(String roomId, boolean isDirectChat) {
-
     }
 
     @Override
     public void onRoomLeft(String roomId) {
+    }
 
+    @Override
+    public void onRoomForgot(String roomId) {
+        // there is no sync event when a room is forgotten
+        refreshRooms();
     }
 }

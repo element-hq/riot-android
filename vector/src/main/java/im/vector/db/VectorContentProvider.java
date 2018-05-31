@@ -22,8 +22,9 @@ import android.content.Context;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.ParcelFileDescriptor;
-import android.util.Log;
 import android.webkit.MimeTypeMap;
+
+import org.matrix.androidsdk.util.Log;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -97,7 +98,7 @@ public class VectorContentProvider extends ContentProvider {
     @Override
     public String getType(Uri arg0) {
         String type = null;
-        String extension = MimeTypeMap.getFileExtensionFromUrl(arg0.toString().toLowerCase());
+        String extension = MimeTypeMap.getFileExtensionFromUrl(arg0.toString().toLowerCase(VectorApp.getApplicationLocale()));
         if (extension != null) {
             MimeTypeMap mime = MimeTypeMap.getSingleton();
             type = mime.getMimeTypeFromExtension(extension);

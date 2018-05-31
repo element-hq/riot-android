@@ -25,8 +25,8 @@ import org.matrix.androidsdk.MXSession;
 import org.matrix.androidsdk.rest.callback.ApiCallback;
 import org.matrix.androidsdk.rest.callback.SimpleApiCallback;
 import org.matrix.androidsdk.rest.model.MatrixError;
-import org.matrix.androidsdk.rest.model.PublicRoom;
-import org.matrix.androidsdk.rest.model.PublicRoomsResponse;
+import org.matrix.androidsdk.rest.model.publicroom.PublicRoom;
+import org.matrix.androidsdk.rest.model.publicroom.PublicRoomsResponse;
 
 import java.util.ArrayList;
 import java.util.List;

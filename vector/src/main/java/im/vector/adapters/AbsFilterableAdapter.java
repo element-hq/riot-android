@@ -38,21 +38,40 @@ public abstract class AbsFilterableAdapter<T extends RecyclerView.ViewHolder> ex
     CharSequence mCurrentFilterPattern;
     private final Filter mFilter;
 
-    final AbsAdapter.InvitationListener mInvitationListener;
-    final AbsAdapter.MoreRoomActionListener mMoreActionListener;
-
+    AbsAdapter.RoomInvitationListener mRoomInvitationListener;
+    AbsAdapter.GroupInvitationListener mGroupInvitationListener;
+    AbsAdapter.MoreRoomActionListener mMoreRoomActionListener;
+    AbsAdapter.MoreGroupActionListener mMoreGroupActionListener;
     /*
      * *********************************************************************************************
      * Constructor
      * *********************************************************************************************
      */
 
-    AbsFilterableAdapter(final Context context, final AbsAdapter.InvitationListener invitationListener,
+    AbsFilterableAdapter(final Context context) {
+        mContext = context;
+
+        mSession = Matrix.getInstance(context).getDefaultSession();
+        mFilter = createFilter();
+    }
+
+    AbsFilterableAdapter(final Context context, final AbsAdapter.RoomInvitationListener invitationListener,
                          final AbsAdapter.MoreRoomActionListener moreActionListener) {
         mContext = context;
 
-        mInvitationListener = invitationListener;
-        mMoreActionListener = moreActionListener;
+        mRoomInvitationListener = invitationListener;
+        mMoreRoomActionListener = moreActionListener;
+
+        mSession = Matrix.getInstance(context).getDefaultSession();
+        mFilter = createFilter();
+    }
+
+    AbsFilterableAdapter(final Context context, final AbsAdapter.GroupInvitationListener invitationListener,
+                         final AbsAdapter.MoreGroupActionListener moreActionListener) {
+        mContext = context;
+
+        mGroupInvitationListener = invitationListener;
+        mMoreGroupActionListener = moreActionListener;
 
         mSession = Matrix.getInstance(context).getDefaultSession();
         mFilter = createFilter();

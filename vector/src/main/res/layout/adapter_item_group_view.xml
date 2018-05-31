@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/room_view"
+    android:layout_width="match_parent"
+    android:layout_height="74dp">
+
+    <!-- Vertical bar with colour changing to indicate unread messages -->
+    <View
+        android:id="@+id/left_margin"
+        android:layout_width="8dp"
+        android:layout_height="match_parent"
+        android:layout_marginRight="8dp"
+        android:background="@android:color/transparent" />
+
+    <include
+        android:id="@+id/room_avatar_layout"
+        layout="@layout/adapter_item_circular_avatar_room_view"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:layout_centerInParent="true"
+        android:layout_toRightOf="@+id/left_margin" />
+
+    <RelativeLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerVertical="true"
+        android:layout_marginLeft="16dp"
+        android:layout_toRightOf="@+id/room_avatar_layout"
+        android:paddingRight="16dp">
+
+        <TextView
+            android:id="@+id/group_name"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_toLeftOf="@+id/group_members_count"
+            android:ellipsize="end"
+            android:fontFamily="sans-serif-regular"
+            android:maxLines="1"
+            android:textColor="?attr/riot_primary_text_color"
+            android:textSize="16sp"
+            tools:text="Room name a bit long to be displayed completely" />
+
+        <TextView
+            android:id="@+id/group_topic"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/group_name"
+            android:layout_marginTop="3dp"
+            android:ellipsize="end"
+            android:maxLines="1"
+            android:textColor="?attr/default_text_light_color"
+            android:textSize="14sp"
+            tools:text="First message of the room is a bit too long to be displayed" />
+
+        <ImageView
+            android:id="@+id/group_more_action_ic"
+            android:layout_width="15dp"
+            android:layout_height="15dp"
+            android:layout_alignBottom="@+id/group_name"
+            android:layout_alignParentRight="true"
+            android:layout_alignTop="@+id/group_name"
+            android:layout_marginLeft="10dp"
+            android:src="@drawable/vector_actions_9b"
+            android:visibility="visible" />
+
+        <!-- unread count badge -->
+        <TextView
+            android:id="@+id/group_members_count"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignBaseline="@+id/group_name"
+            android:layout_marginLeft="6dp"
+            android:layout_marginRight="5dp"
+            android:layout_toLeftOf="@+id/group_more_action_ic"
+            android:gravity="center"
+            android:minWidth="25dp"
+            android:paddingLeft="4dp"
+            android:paddingRight="4dp"
+            android:textColor="@android:color/white"
+            android:textSize="12sp"
+            tools:background="#AAff00ff"
+            tools:text="3.6K" />
+    </RelativeLayout>
+
+    <View
+        android:id="@+id/group_more_action_anchor"
+        android:layout_width="1dp"
+        android:layout_height="1dp"
+        android:layout_alignParentRight="true"
+        android:layout_marginRight="20dp" />
+
+    <View
+        android:id="@+id/group_more_action_click_area"
+        android:layout_width="40dp"
+        android:layout_height="match_parent"
+        android:layout_alignParentRight="true" />
+
+</RelativeLayout>

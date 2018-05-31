@@ -18,7 +18,6 @@ package im.vector.widgets;
 
 import android.content.Context;
 import android.content.SharedPreferences;
-import android.net.Uri;
 import android.os.Handler;
 import android.os.Looper;
 import android.preference.PreferenceManager;
@@ -26,7 +25,6 @@ import android.text.TextUtils;
 
 import com.google.gson.JsonObject;
 
-import org.matrix.androidsdk.HomeServerConnectionConfig;
 import org.matrix.androidsdk.MXSession;
 import org.matrix.androidsdk.data.Room;
 import org.matrix.androidsdk.rest.callback.ApiCallback;
@@ -48,6 +46,7 @@ import java.util.UUID;
 import im.vector.Matrix;
 import im.vector.R;
 import im.vector.VectorApp;
+
 public class WidgetsManager {
     private static final String LOG_TAG = WidgetsManager.class.getSimpleName();
 
@@ -57,19 +56,14 @@ public class WidgetsManager {
     public static final String WIDGET_EVENT_TYPE = "im.vector.modular.widgets";
 
     /**
+     * The type for widget in user account
+     */
+    public static final String WIDGET_USER_EVENT_TYPE = "m.widgets";
+
+    /**
      * Known types widgets.
      */
     private static final String WIDGET_TYPE_JITSI = "jitsi";
-
-    /**
-     * Integration rest url
-     */
-    private static final String INTEGRATION_REST_URL = "https://scalar.vector.im";
-
-    /**
-     * Integration ui url
-     */
-    public static final String INTEGRATION_UI_URL = "https://scalar-staging.riot.im/scalar-web/";
 
     /**
      * Widget preferences
@@ -128,8 +122,8 @@ public class WidgetsManager {
      *
      * @param session     the session.
      * @param room        the room to check.
-     * @param widgetTypes the the widget types
-     * @param excludedTypes the the excluded widget types
+     * @param widgetTypes the widget types
+     * @param excludedTypes the excluded widget types
      * @return the active widgets list
      */
     private List<Widget> getActiveWidgets(final MXSession session, final Room room, final Set<String> widgetTypes, final Set<String> excludedTypes) {
@@ -333,7 +327,7 @@ public class WidgetsManager {
             widgetSessionId = widgetSessionId.substring(0, 7);
         }
         String roomId = room.getRoomId();
-        String confId = roomId.substring(1, roomId.indexOf(":") - 1) + widgetSessionId.toLowerCase();
+        String confId = roomId.substring(1, roomId.indexOf(":") - 1) + widgetSessionId.toLowerCase(VectorApp.getApplicationLocale());
 
         // TODO: This url may come from scalar API
         // Note: this url can be used as is inside a web container (like iframe for Riot-web)
@@ -548,7 +542,7 @@ public class WidgetsManager {
             session.openIdToken(new ApiCallback<Map<Object, Object>>() {
                 @Override
                 public void onSuccess(Map<Object, Object> tokensMap) {
-                    WidgetsRestClient widgetsRestClient = new WidgetsRestClient(new HomeServerConnectionConfig(Uri.parse(INTEGRATION_REST_URL)));
+                    WidgetsRestClient widgetsRestClient = new WidgetsRestClient(context);
 
                     widgetsRestClient.register(tokensMap, new ApiCallback<Map<String, String>>() {
                         @Override

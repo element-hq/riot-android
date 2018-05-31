@@ -17,11 +17,11 @@
 package im.vector.widgets;
 
 import android.text.TextUtils;
-import android.util.Log;
 
 import com.google.gson.JsonElement;
 
 import org.matrix.androidsdk.util.JsonUtils;
+import org.matrix.androidsdk.util.Log;
 
 import java.io.Serializable;
 import java.util.Map;

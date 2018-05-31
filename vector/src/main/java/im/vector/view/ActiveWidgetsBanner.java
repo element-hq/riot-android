@@ -178,7 +178,7 @@ public class ActiveWidgetsBanner extends RelativeLayout {
                     firstWidget = mActiveWidgets.get(0);
                     mWidgetTypeTextView.setText(firstWidget.getHumanName());
                 } else if (mActiveWidgets.size() > 1) {
-                    mWidgetTypeTextView.setText(mContext.getString(R.string.active_widgets, mActiveWidgets.size()));
+                    mWidgetTypeTextView.setText(mContext.getResources().getQuantityString(R.plurals.active_widgets, mActiveWidgets.size(), mActiveWidgets.size()));
                 }
 
                 if (null != mUpdateListener) {

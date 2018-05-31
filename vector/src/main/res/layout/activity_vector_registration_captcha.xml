@@ -2,41 +2,58 @@
 
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent" >
+    android:layout_height="match_parent">
 
     <RelativeLayout
         android:id="@+id/captcha_logo_layout"
-        android:layout_marginTop="30dp"
-        android:layout_marginBottom="27dp"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="27dp"
+        android:layout_marginTop="30dp">
+
         <ImageView
             android:id="@+id/login_large_logo"
             android:layout_width="100dp"
             android:layout_height="100dp"
 
             android:layout_centerHorizontal="true"
-            android:src="@drawable/logo_login">
-        </ImageView>
+            android:src="@drawable/logo_login"></ImageView>
     </RelativeLayout>
 
     <TextView
         android:id="@+id/account_creation_message"
-        android:layout_below="@id/captcha_logo_layout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:textSize="16sp"
+        android:layout_below="@id/captcha_logo_layout"
         android:layout_marginBottom="10dp"
         android:layout_marginLeft="16dp"
         android:layout_marginRight="16dp"
-        android:text="@string/auth_recaptcha_message" />
+        android:text="@string/auth_recaptcha_message"
+        android:textSize="16sp" />
 
-	<WebView
+    <WebView
         android:id="@+id/account_creation_webview"
-	    android:layout_alignParentBottom="true"
-        android:layout_below="@id/account_creation_message"
         android:layout_width="match_parent"
-	    android:layout_height="0dp"
+        android:layout_height="0dp"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentRight="true"
+        android:layout_below="@id/account_creation_message"
         android:background="#000" />
+
+    <RelativeLayout
+        android:id="@+id/account_creation_webview_loading"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_alignBottom="@id/account_creation_webview"
+        android:layout_below="@id/account_creation_message"
+        android:background="@android:color/transparent">
+
+        <ProgressBar
+            android:layout_width="60dp"
+            android:layout_height="60dp"
+            android:layout_centerInParent="true"
+            android:indeterminate="true" />
+    </RelativeLayout>
 
 </RelativeLayout>

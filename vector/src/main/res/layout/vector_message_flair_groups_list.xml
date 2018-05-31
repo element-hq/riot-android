@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_weight="1"
+    android:layout_width="wrap_content"
+    android:layout_height="match_parent">
+
+    <LinearLayout
+        android:layout_centerVertical="true"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="6dp"
+        android:orientation="horizontal">
+
+        <include
+            android:id="@+id/message_avatar_group_1"
+            layout="@layout/vector_receipt_round_avatar" />
+
+        <include
+            android:id="@+id/message_avatar_group_2"
+            layout="@layout/vector_receipt_round_avatar" />
+
+
+        <include
+            android:id="@+id/message_avatar_group_3"
+            layout="@layout/vector_receipt_round_avatar" />
+
+        <TextView
+            android:id="@+id/message_more_than_expected"
+            android:layout_width="20dp"
+            android:layout_height="match_parent"
+            android:gravity="center"
+            android:text="+999"
+            android:textSize="9sp" />
+    </LinearLayout>
+</RelativeLayout>

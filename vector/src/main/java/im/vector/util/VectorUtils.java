@@ -50,12 +50,15 @@ import android.widget.Toast;
 import org.matrix.androidsdk.MXSession;
 import org.matrix.androidsdk.call.MXCallsManager;
 import org.matrix.androidsdk.data.Room;
+import org.matrix.androidsdk.data.RoomPreviewData;
 import org.matrix.androidsdk.data.RoomState;
 import org.matrix.androidsdk.db.MXMediasCache;
 import org.matrix.androidsdk.rest.callback.ApiCallback;
 import org.matrix.androidsdk.rest.callback.SimpleApiCallback;
 import org.matrix.androidsdk.rest.model.MatrixError;
-import org.matrix.androidsdk.rest.model.PublicRoom;
+import org.matrix.androidsdk.rest.model.group.Group;
+import org.matrix.androidsdk.rest.model.group.GroupProfile;
+import org.matrix.androidsdk.rest.model.publicroom.PublicRoom;
 import org.matrix.androidsdk.rest.model.RoomMember;
 import org.matrix.androidsdk.rest.model.User;
 import org.matrix.androidsdk.util.ImageUtils;
@@ -71,7 +74,6 @@ import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import im.vector.R;
@@ -250,9 +252,9 @@ public class VectorUtils {
 
                     if (TextUtils.equals(member.membership, RoomMember.MEMBERSHIP_INVITE)) {
 
-                        if (!TextUtils.isEmpty(member.getInviterId())) {
+                        if (!TextUtils.isEmpty(member.mSender)) {
                             // extract who invited us to the room
-                            displayName = context.getString(R.string.room_displayname_invite_from, roomState.getMemberName(member.getInviterId()));
+                            displayName = context.getString(R.string.room_displayname_invite_from, roomState.getMemberName(member.mSender));
                         } else {
                             displayName = context.getString(R.string.room_displayname_room_invite);
                         }
@@ -272,7 +274,9 @@ public class VectorUtils {
                 displayName = context.getString(R.string.room_displayname_two_members, roomState.getMemberName(member1.getUserId()), roomState.getMemberName(member2.getUserId()));
             } else {
                 RoomMember member = othersActiveMembers.get(0);
-                displayName = context.getString(R.string.room_displayname_more_than_two_members, roomState.getMemberName(member.getUserId()), othersActiveMembers.size() - 1);
+                displayName = context.getString(R.string.room_displayname_many_members,
+                        roomState.getMemberName(member.getUserId()),
+                        context.getResources().getQuantityString(R.plurals.others, othersActiveMembers.size() - 1, othersActiveMembers.size() - 1));
             }
 
             return displayName;
@@ -376,7 +380,7 @@ public class VectorUtils {
             int idx = 0;
             char initial = name.charAt(idx);
 
-            if ((initial == '@' || initial == '#') && (name.length() > 1)) {
+            if ((initial == '@' || initial == '#' || initial == '+') && (name.length() > 1)) {
                 idx++;
             }
 
@@ -402,7 +406,7 @@ public class VectorUtils {
             firstChar = name.substring(idx, idx + chars);
         }
 
-        return firstChar.toUpperCase();
+        return firstChar.toUpperCase(VectorApp.getApplicationLocale());
     }
 
     /**
@@ -469,6 +473,34 @@ public class VectorUtils {
     public static void loadRoomAvatar(Context context, MXSession session, ImageView imageView, Room room) {
         if (null != room) {
             VectorUtils.loadUserAvatar(context, session, imageView, room.getAvatarUrl(), room.getRoomId(), VectorUtils.getRoomDisplayName(context, session, room));
+        }
+    }
+
+    /**
+     * Set the room avatar in an imageView by consider the room preview data.
+     *
+     * @param context   the context
+     * @param session   the session
+     * @param imageView the image view
+     * @param roomPreviewData the room preview
+     */
+    public static void loadRoomAvatar(Context context, MXSession session, ImageView imageView, RoomPreviewData roomPreviewData) {
+        if (null != roomPreviewData) {
+            VectorUtils.loadUserAvatar(context, session, imageView, roomPreviewData.getRoomAvatarUrl(), roomPreviewData.getRoomId(), roomPreviewData.getRoomName());
+        }
+    }
+
+    /**
+     * Set the group avatar in an imageView.
+     *
+     * @param context   the context
+     * @param session   the session
+     * @param imageView the image view
+     * @param group     the group
+     */
+    public static void loadGroupAvatar(Context context, MXSession session, ImageView imageView, Group group) {
+        if (null != group) {
+            VectorUtils.loadUserAvatar(context, session, imageView, group.getAvatarUrl(), group.getGroupId(), group.getDisplayName());
         }
     }
 
@@ -590,18 +622,20 @@ public class VectorUtils {
             if (null != bitmap) {
                 imageView.setImageBitmap(bitmap);
 
-                final String tag = avatarUrl + userId + displayName;
-                imageView.setTag(tag);
+                if (!TextUtils.isEmpty(avatarUrl)) {
+                    final String tag = avatarUrl + userId + displayName;
+                    imageView.setTag(tag);
 
-                if (!MXMediasCache.isMediaUrlUnreachable(avatarUrl)) {
-                    mImagesThreadHandler.post(new Runnable() {
-                        @Override
-                        public void run() {
-                            if (TextUtils.equals(tag, (String) imageView.getTag())) {
-                                session.getMediasCache().loadAvatarThumbnail(session.getHomeServerConfig(), imageView, avatarUrl, context.getResources().getDimensionPixelSize(R.dimen.profile_avatar_size), bitmap);
+                    if (!MXMediasCache.isMediaUrlUnreachable(avatarUrl)) {
+                        mImagesThreadHandler.post(new Runnable() {
+                            @Override
+                            public void run() {
+                                if (TextUtils.equals(tag, (String) imageView.getTag())) {
+                                    session.getMediasCache().loadAvatarThumbnail(session.getHomeServerConfig(), imageView, avatarUrl, context.getResources().getDimensionPixelSize(R.dimen.profile_avatar_size), bitmap);
+                                }
                             }
-                        }
-                    });
+                        });
+                    }
                 }
             } else {
                 final String tmpTag0 = "00" + avatarUrl + "-" + userId + "--" + displayName;
@@ -615,7 +649,7 @@ public class VectorUtils {
                             imageView.setTag(null);
                             setDefaultMemberAvatar(imageView, userId, displayName);
 
-                            if (!MXMediasCache.isMediaUrlUnreachable(avatarUrl)) {
+                            if (!TextUtils.isEmpty(avatarUrl) && !MXMediasCache.isMediaUrlUnreachable(avatarUrl)) {
                                 final String tmpTag1 = "11" + avatarUrl + "-" + userId + "--" + displayName;
                                 imageView.setTag(tmpTag1);
 

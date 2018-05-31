@@ -4,7 +4,7 @@
     <!-- should the same value as the file name -->
 
     <string name="resouces_language">en</string>
-    <string name="resouces_country">UK</string>
+    <string name="resouces_country">US</string>
 
     <!-- theme -->
     <string name="light_theme">Light Theme</string>
@@ -14,6 +14,8 @@
     <!-- permanent notification subtitle -->
     <string name="notification_sync_in_progress">Synchronising</string>
     <string name="notification_listen_for_events">Listen for events</string>
+    <string name="notification_noisy_notifications">Noisy notifications</string>
+    <string name="notification_silent_notifications">Silent notifications</string>
 
     <!-- titles -->
     <string name="title_activity_home">Messages</string>
@@ -21,6 +23,12 @@
     <string name="title_activity_settings">Settings</string>
     <string name="title_activity_member_details">Member Details</string>
     <string name="title_activity_historical">Historical</string>
+    <string name="title_activity_bug_report">Bug report</string>
+    <string name="title_activity_group_details">Community details</string>
+    <string name="title_activity_choose_sticker">Send a sticker</string>
+
+    <!-- splash screen accessibility -->
+    <string name="loading">Loading...</string>
 
     <!-- button names -->
     <string name="ok">OK</string>
@@ -58,6 +66,8 @@
     <string name="offline">Offline</string>
 
     <!-- actions -->
+    <string name="action_exit">Exit</string>
+    <string name="actions">Actions</string>
     <string name="action_sign_out">Sign out</string>
     <string name="action_sign_out_confirmation">For security, logging out will delete any end-to-end encryption keys making previous encrypted chat history unreadable if you log back in.\nSelect export to backup them before signing out.</string>
     <string name="action_voice_call">Voice Call</string>
@@ -80,12 +90,14 @@
     <string name="bottom_action_favourites">Favourites</string>
     <string name="bottom_action_people">People</string>
     <string name="bottom_action_rooms">Rooms</string>
+    <string name="bottom_action_groups">Communities</string>
 
     <!-- Home screen -->
     <string name="home_filter_placeholder_home">Search for rooms</string>
     <string name="home_filter_placeholder_favorites">Search for favourites</string>
     <string name="home_filter_placeholder_people">Search for people</string>
     <string name="home_filter_placeholder_rooms">Search for rooms</string>
+    <string name="home_filter_placeholder_groups">Search for communities</string>
 
     <!-- Home fragment -->
     <string name="invitations_header">Invites</string>
@@ -110,6 +122,11 @@
         <item quantity="other">%d users</item>
     </plurals>
 
+    <!-- Groups fragment -->
+    <string name="groups_invite_header">Invite</string>
+    <string name="groups_header">Communities</string>
+    <string name="no_group_placeholder">No groups</string>
+
     <string name="send_bug_report_include_logs">Send logs</string>
     <string name="send_bug_report_include_crash_logs">Send crash logs</string>
     <string name="send_bug_report_include_screenshot">Send screenshot</string>
@@ -119,6 +136,7 @@
     <string name="send_bug_report_logs_description">In order to diagnose problems, logs from this client will be sent with this bug report. If you would prefer to only send the text above, please untick:</string>
     <string name="send_bug_report_alert_message">You seem to be shaking the phone in frustration. Would you like to submit a bug report?</string>
     <string name="send_bug_report_app_crashed">The application has crashed last time. Would you like to submit a crash report?</string>
+    <string name="send_bug_report_rage_shake">Rage shake to report bug</string>
 
     <string name="send_bug_report_sent">The bug report has been successfully sent</string>
     <string name="send_bug_report_failed">The bug report failed to be sent (%s)</string>
@@ -143,10 +161,19 @@
     <string name="start_video_call">Start Video Call</string>
 
     <string name="option_send_voice">Send voice</string>
+
+    <string name="start_new_chat_prompt_msg">Are you sure that you want to start a new chat with %s?</string>
+    <string name="start_voice_call_prompt_msg">Are you sure that you want to start a voice call?</string>
+    <string name="start_video_call_prompt_msg">Are you sure that you want to start a video call?</string>
+
     <string name="option_send_files">Send files</string>
+    <string name="option_send_sticker">Send sticker</string>
     <string name="option_take_photo_video">Take photo or video</string>
     <string name="option_take_photo">Take photo</string>
     <string name="option_take_video">Take video</string>
+
+    <!-- No sticker application dialog -->
+    <string name="no_sticker_application_dialog_content">You don\'t currently have any stickerpacks enabled.\n\nAdd some now?</string>
 
     <!-- Authentication -->
     <string name="auth_login">Log in</string>
@@ -221,8 +248,14 @@
     <!-- read receipts list Screen -->
     <string name="read_receipts_list">Read Receipts List</string>
 
+    <!-- flairs list Screen -->
+    <string name="groups_list">Groups List</string>
+
     <!-- Mels -->
-    <string name="membership_changes">%d membership changes</string>
+    <plurals name="membership_changes">
+        <item quantity="one">1 membership change</item>
+        <item quantity="other">%d membership changes</item>
+    </plurals>
 
     <!-- accounts list Screen -->
 
@@ -247,10 +280,6 @@
     <string name="room_info_room_name">Room name</string>
     <string name="room_info_room_topic">Room topic</string>
 
-    <!-- Settings keys -->
-    <string name="settings_key_display_all_events">settings_key_display_all_events</string>
-    <string name="settings_key_use_rage_shake">settings_key_use_rage_shake</string>
-
     <!-- call string -->
     <string name="call">Call</string>
     <string name="call_connected">Call connected</string>
@@ -266,11 +295,6 @@
     <string name="call_error_ice_failed">Media Connection Failed</string>
     <string name="call_error_camera_init_failed">Cannot initialize the camera</string>
     <string name="call_error_answered_elsewhere">call answered elsewhere</string>
-    <string name="call_error_peer_hangup_elsewhere">call hung up elsewhere</string>
-    <string name="call_error_peer_cancelled_call">call cancelled</string>
-
-    <string name="action_accept">ACCEPT</string>
-    <string name="action_ignore">IGNORE</string>
 
     <!-- medias picker string -->
     <string name="media_picker_both_capture_title">Take a picture or a video"</string>
@@ -285,7 +309,7 @@
     <string name="permissions_rationale_msg_record_audio_explanation">\n\nPlease allow access on the next pop-up to be able to make the call.</string>
     <string name="permissions_rationale_msg_camera_and_audio">Riot needs permission to access your camera and your microphone to perform video calls.\n\nPlease allow access on the next pop-ups to be able to make the call.</string>
     <string name="permissions_rationale_msg_contacts">Riot needs permission to access your address book contacts to find other Matrix users based on their email and phone numbers.\n\nPlease allow access on the next pop-up to discover address book users reachable from Riot.</string>
-    <string name="permissions_msg_contacts_warning_other_androids">Riot needs permission to access your address book contacts to find other Matrix users based on their email and phone numbers.\n\nAllow Riot to access your contacts ?</string>
+    <string name="permissions_msg_contacts_warning_other_androids">Riot needs permission to access your address book contact to find other Matrix users based on their email and phone numbers.\n\nAllow Riot to access your contacts ?</string>
 
     <string name="permissions_action_not_performed_missing_permissions">Sorry.. Action not performed, due to missing permissions</string>
 
@@ -303,6 +327,9 @@
     <string name="reject">Reject</string>
 
     <!-- Room -->
+    <string name="list_members">List members</string>
+    <string name="open_chat_header">Open header</string>
+    <string name="room_sync_in_progress">Syncing...</string>
     <string name="room_jump_to_first_unread">Jump to first unread message.</string>
 
     <!-- Room Preview -->
@@ -315,8 +342,14 @@
     <!-- Chat creation -->
     <string name="room_creation_title">New Chat</string>
     <string name="room_creation_add_member">Add member</string>
-    <string name="room_header_active_members">%1$d/%2$d active members</string>
-    <string name="room_title_members">%1$d members</string>
+    <plurals name="room_header_active_members_count">
+        <item quantity="one">1 active members</item>
+        <item quantity="other">%d active members</item>
+    </plurals>
+    <plurals name="room_title_members">
+        <item quantity="one">1 member</item>
+        <item quantity="other">%d members</item>
+    </plurals>
     <string name="room_title_one_member">1 member</string>
     <string name="room_e2e_alert_title">Warning!</string>
     <string name="room_e2e_alert_message">End-to-end encryption is in beta and may not be reliable.\n\nYou should not yet trust it to secure data.\n\nDevices will not yet be able to decrypt history from before they joined the room.\n\nEncrypted messages will not be visible on clients that do not yet implement encryption.</string>
@@ -360,6 +393,8 @@
     <string name="room_participants_power_level_prompt">You will not be able to undo this change as you are promoting the user to have the same power level as yourself.\nAre you sure?</string>
 
     <string name="room_participants_invite_prompt_msg">"Are you sure you want to invite %s to this chat?"</string>
+    <string name="room_participants_kick_prompt_msg">Are you sure that you want to kick this user from this chat?</string>
+    <string name="room_participants_ban_prompt_msg">Are you sure that you want to ban this user from this chat?</string>
 
     <!-- invitation -->
     <string name="people_search_invite_by_id"><u>Invite by ID</u></string>
@@ -388,7 +423,10 @@
     <string name="room_message_file_not_found">File not found</string>
     <string name="room_do_not_have_permission_to_post">You do not have permission to post to this room</string>
     <string name="room_new_message_notification">1 new message</string>
-    <string name="room_new_messages_notification">%1$d new messages</string>
+    <plurals name="room_new_messages_notification">
+        <item quantity="one">1 new message</item>
+        <item quantity="other">%d new messages</item>
+    </plurals>
 
     <!-- unrecognized SSL certificate -->
     <string name="ssl_trust">Trust</string>
@@ -424,7 +462,13 @@
     <string name="room_displayname_invite_from">Invite from %s</string>
     <string name="room_displayname_room_invite">Room Invite</string>
     <string name="room_displayname_two_members">%1$s and %2$s</string>
-    <string name="room_displayname_more_than_two_members">%1$s and %2$d others</string>
+
+    <string name="room_displayname_many_members">%1$s and %2$s</string>
+    <plurals name="others">
+        <item quantity="one">1 other</item>
+        <item quantity="other">%d others</item>
+    </plurals>
+
     <string name="room_displayname_no_title">Empty room</string>
 
     <!-- Search -->
@@ -452,23 +496,33 @@
     <!-- Directory -->
     <string name="directory_search_results_title">Browse directory</string>
     <string name="directory_search_room">%1$d room</string>
-    <string name="directory_search_rooms">%1$d rooms</string>
+    <plurals name="directory_search_rooms">
+        <item quantity="one">1 room</item>
+        <item quantity="other">%d rooms</item>
+    </plurals>
     <string name="directory_search_room_for">%1$d room found for %2$s</string>
-    <string name="directory_search_rooms_for">%1$s rooms found for %2$s</string>
+    <plurals name="directory_search_rooms_for">
+        <item quantity="one">%1$s room found for %2$s</item>
+        <item quantity="other">%1$s rooms found for %2$s</item>
+    </plurals>
     <string name="directory_searching_title">Searching directory..</string>
 
     <!-- home room settings -->
-    <string name="room_settings_notifications">Notifications</string>
+    <string name="room_settings_all_messages_noisy">All messages (noisy)</string>
+    <string name="room_settings_all_messages">All messages</string>
+    <string name="room_settings_mention_only">Mentions only</string>
+    <string name="room_settings_mute">Mute</string>
     <string name="room_settings_favourite">Favourite</string>
     <string name="room_settings_de_prioritize">De-prioritize</string>
     <string name="room_settings_direct_chat">Direct Chat</string>
     <string name="room_settings_leave_conversation">Leave Conversation</string>
     <string name="room_settings_forget">Forget</string>
+    <string name="room_settings_add_homescreen_shortcut">Add Homescreen Shortcut</string>
 
     <!-- home sliding menu -->
     <string name="room_sliding_menu_messages">Messages</string>
     <string name="room_sliding_menu_settings">Settings</string>
-    <string name="room_sliding_menu_version">Version </string>
+    <string name="room_sliding_menu_version">Version</string>
     <string name="room_sliding_menu_term_and_conditions">Terms &amp; conditions</string>
     <string name="room_sliding_menu_third_party_notices">Third party notices</string>
     <string name="room_sliding_menu_copyright">Copyright</string>
@@ -484,6 +538,20 @@
     <string name="settings_add_phone_number">Add phone number</string>
     <string name="settings_summary_app_info_link">Application system info screen</string>
     <string name="settings_title_app_info_link">Application info</string>
+
+    <string name="settings_notification_privacy">Notification privacy</string>
+    <string name="settings_notification_privacy_warning">Riot.im runs in the background to keep your notification message content private. You can change this option to reduce battery usage.</string>
+    <string name="settings_notification_privacy_normal">Normal</string>
+    <string name="settings_notification_privacy_power_saving">Power-saving Options</string>
+    <string name="settings_notification_privacy_low_detail">Low detail notifications</string>
+    <string name="settings_notification_privacy_reduced">Reduced privacy</string>
+    <string name="settings_notification_privacy_need_permission">The app needs permission to run in the background</string>
+    <string name="settings_notification_privacy_no_permission">The apps does <b>not</b> need permission to run in the background</string>
+    <string name="settings_notification_privacy_gcm">• Notifications are sent via Google Cloud Messaging</string>
+    <string name="settings_notification_privacy_metadata">• Notifications only contain meta data</string>
+    <string name="settings_notification_privacy_secure_message_content">• Message content of the notification is <b>located securely direct from the Matrix homeserver</b></string>
+    <string name="settings_notification_privacy_nosecure_message_content">• Notifications contain <b>meta and message data</b></string>
+    <string name="settings_notification_privacy_message_content_not_shown">• Notifications will <b>not show message content</b></string>
 
     <string name="settings_notification_ringtone">Notification sound</string>
     <string name="settings_enable_all_notif">Enable notifications for this account</string>
@@ -530,14 +598,34 @@
     <string name="settings_pin_missed_notifications">Pin rooms with missed notifications</string>
     <string name="settings_pin_unread_messages">Pin rooms with unread messages</string>
     <string name="settings_devices_list">Devices</string>
+    <string name="settings_inline_url_preview">Enable inline URL previews by default</string>
     <string name="settings_hide_read_receipts">Hide read receipts</string>
     <string name="settings_dont_send_typings_notifs">Don\'t send typing notifications</string>
     <string name="settings_always_show_timestamps">Always show message timestamps</string>
     <string name="settings_12_24_timestamps">Show timestamps in 12 hour format (e.g. 2:30pm)</string>
     <string name="settings_hide_join_leave_messages">Hide join/leave messages (invites/kicks/bans unaffected)</string>
     <string name="settings_hide_avatar_display_name_changes_messages">Hide avatar and display name changes</string>
+    <string name="settings_disable_markdown">Disable markdown formatting when sending</string>
+    <string name="settings_vibrate_on_mention">Vibrate when mentioning</string>
 
-    <string name="settings_disable_markdown">Disable markdown formatting</string>
+    <string name="settings_deactivate_account_section">Deactivate account</string>
+    <string name="settings_deactivate_my_account">Deactivate my account</string>
+
+    <!-- startup -->
+    <string name="startup_notification_privacy_title">Notification Privacy</string>
+    <string name="startup_notification_privacy_message">Riot can run in the background to manage your notifications securely and privately (this might affect battery usage).</string>
+    <string name="startup_notification_privacy_button_grant">Grant permission</string>
+    <string name="startup_notification_privacy_button_other">Choose another option</string>
+
+    <!-- analytics -->
+    <string name="settings_analytics">Analytics</string>
+    <string name="settings_opt_out_of_analytics">Opt out of analytics</string>
+    <string name="settings_opt_out_of_analytics_summary">Riot collects anonymous analytics to allow us to improve the application.</string>
+    <string name="settings_opt_in_of_analytics">Send analytics data</string>
+    <string name="settings_opt_in_of_analytics_summary">Riot collects anonymous analytics to allow us to improve the application.</string>
+    <string name="settings_opt_in_of_analytics_prompt">Please enable analytics to help us improve Riot.</string>
+    <string name="settings_opt_in_of_analytics_ok">Yes, I want to help!</string>
+
     <string name="settings_data_save_mode">Data save mode</string>
 
     <string name="devices_details_dialog_title">Device details</string>
@@ -591,6 +679,9 @@
     <string name="settings_phone_number_verification_error">Error while validating your phone number</string>
     <string name="settings_phone_number_code">Code</string>
 
+
+    <string name="settings_flair">Flair</string>
+
     <!-- medias saving settings -->
     <string name="media_saving_period_3_days">3 days</string>
     <string name="media_saving_period_1_week">1 week</string>
@@ -605,7 +696,6 @@
     <string name="room_settings_topic">Topic</string>
     <string name="room_settings_room_tag">Room Tag</string>
     <string name="room_settings_tag_pref_dialog_title">Tagged as:</string>
-    <string name="room_settings_mute_notifs">Mute Notifications</string>
 
     <!-- Room settings: Room tag -->
     <string name="room_settings_tag_pref_entry_favourite">Favourite</string>
@@ -619,6 +709,7 @@
     <!-- room settings : access and visibility -->
     <string name="room_settings_category_access_visibility_title">Access and visibility</string>
     <string name="room_settings_directory_visibility">List this room in room directory</string>
+    <string name="room_settings_room_notifications_title">Notifications</string>
     <string name="room_settings_room_access_rules_pref_title">Room Access</string>
     <string name="room_settings_room_read_history_rules_pref_title">Room History Readability</string>
     <string name="room_settings_room_read_history_rules_pref_dialog_title">Who can read history?</string>
@@ -655,6 +746,12 @@
     <string name="room_settings_addresses_no_local_addresses">This room has no local addresses</string>
     <string name="room_settings_addresses_add_new_address">New address (e.g #foo:matrix.org")</string>
 
+    <string name="room_settings_no_flair"> This room is not showing flair for any communities</string>
+    <string name="room_settings_add_new_group">New community ID (e.g +foo:matrix.org")</string>
+    <string name="room_settings_invalid_group_format_dialog_title">Invalid community ID</string>
+    <string name="room_settings_invalid_group_format_dialog_body">\'%s\' is not a valid community ID</string>
+
+
     <string name="room_settings_addresses_invalid_format_dialog_title">Invalid alias format</string>
     <string name="room_settings_addresses_invalid_format_dialog_body">\'%s\' is not a valid format for an alias</string>
     <string name="room_settings_addresses_disable_main_address_prompt_msg">You will have no main address specified. The default main address for this room will be picked randomly"</string>
@@ -675,14 +772,8 @@
     <string name="directory_title">Directory</string>
     <string name="settings_theme">Theme</string>
 
-    <!-- GA use -->
-    <string name="ga_use_alert_message">Do you want to help improve the application by automatically sending reports of any crashes?</string>
-    <string name="ga_use_settings">Automatically send crash reports</string>
-    <string name="ga_use_disable_alert_message">You need to restart the application to disable the crash reports.</string>
-
     <!-- matrix error -->
     <string name="failed_to_load_timeline_position">%s was trying to load a specific point in this room\'s timeline but was unable to find it.</string>
-
 
     <!-- encryption dialog -->
     <string name="encryption_information_title">End-to-end encryption information</string>
@@ -750,8 +841,19 @@
     <string name="directory_server_native_rooms">All native %s rooms</string>
 
     <!-- Notifications -->
-    <string name="notification_unread_notified_messages">%d unread notified messages</string>
-    <string name="notification_unread_notified_messages_in_room">%1$d unread notified messages in %2$d rooms"</string>
+    <plurals name="notification_unread_notified_messages">
+        <item quantity="one">1 unread notified message</item>
+        <item quantity="other">%d unread notified messages</item>
+    </plurals>
+    <plurals name="notification_unread_notified_messages_in_room_msgs">
+        <item quantity="one">1 unread notified message</item>
+        <item quantity="other">%d unread notified messages</item>
+    </plurals>
+    <plurals name="notification_unread_notified_messages_in_room_rooms">
+        <item quantity="one">1 room</item>
+        <item quantity="other">%d rooms</item>
+    </plurals>
+    <string name="notification_unread_notified_messages_in_room">%1$s in %2$s"</string>
 
     <!-- historical -->
     <string name="historical_placeholder">Search for historical</string>
@@ -773,29 +875,95 @@
     <string name="event_formatter_widget_removed">%1$s removed by %2$s</string>
     <string name="settings_labs_create_conference_with_jitsi">Create conference calls with jitsi</string>
     <string name="widget_delete_message_confirmation">Are you sure you want to delete the widget?</string>
-    <string name="active_widgets">%1$d active widgets</string>
+    <plurals name="active_widgets">
+        <item quantity="one">1 active widget</item>
+        <item quantity="other">%d active widgets</item>
+    </plurals>
 
-    // Widget Integration Manager
-    <string name="widget_integration_need_to_be_able_to_invite">You need to be able to invite users to do that.</string>
+    <!-- Widget Integration Manager -->
     <string name="widget_integration_unable_to_create">Unable to create widget.</string>
     <string name="widget_integration_failed_to_send_request">Failed to send request.</string>
-    <string name="widget_integration_room_not_recognised">This room is not recognised.</string>
     <string name="widget_integration_positive_power_level">Power level must be positive integer.</string>
     <string name="widget_integration_must_be_in_room">You are not in this room.</string>
     <string name="widget_integration_no_permission_in_room">You do not have permission to do that in this room.</string>
     <string name="widget_integration_missing_room_id">Missing room_id in request.</string>
     <string name="widget_integration_missing_user_id">Missing user_id in request.</string>
     <string name="widget_integration_room_not_visible">Room %s is not visible.</string>
+    <string name="widget_integration_missing_parameter">A required parameter is missing.</string>
+    <string name="widget_integration_invalid_parameter">A parameter is not valid.</string>
     <string name="settings_labs_matrix_apps">Matrix Apps</string>
     <string name="room_add_matrix_apps">Add Matrix apps</string>
-    <string name="add_matrix_apps_not_supported">Not supported on this device</string>
     <string name="settings_labs_native_camera">Use native camera</string>
 
-    // share keys
+    <!-- share keys -->
     <string name="you_added_a_new_device">You added a new device \'%s\', which is requesting encryption keys.</string>
     <string name="your_unverified_device_requesting">Your unverified device  \'%s\' is requesting encryption keys.</string>
     <string name="start_verification">Start verification</string>
     <string name="share_without_verifying">Share without verifying</string>
     <string name="ignore_request">Ignore request</string>
+
+    <!-- conference call -->
+    <string name="conference_call_warning_title">Warning!</string>
+    <string name="conference_call_warning_message">Conference calling is in development and may not be reliable.</string>
+
+    <!-- slash commands -->
+    <string name="command_error">Command error</string>
+    <string name="unrecognized_command">Unrecognized command: %s</string>
+
+    <!-- notification statuses -->
+    <string name="notification_off">Off</string>
+    <string name="notification_on">On</string>
+    <string name="notification_noisy">Noisy</string>
+
+    <string name="encrypted_message">Encrypted message</string>
+
+    <!-- groups creation -->
+    <string name="create">Create</string>
+    <string name="create_community">Create Community</string>
+    <string name="community_name">Community name</string>
+    <string name="community_name_hint">Example</string>
+    <string name="community_id">Community Id</string>
+    <string name="community_id_hint">example</string>
+
+    <!-- group details -->
+    <string name="group_details_home">Home</string>
+    <string name="group_details_people">People</string>
+    <string name="group_details_rooms">Rooms</string>
+    <string name="no_users_placeholder">No users</string>
+
+    <string name="rooms">Rooms</string>
+    <string name="joined">Joined</string>
+    <string name="invited">Invited</string>
+    <string name="filter_group_members">Filter group members</string>
+    <string name="filter_group_rooms">Filter group rooms</string>
+
+    <string name="group_one_member">1 member</string>
+    <string name="group_members">%d members</string>
+
+    <string name="group_one_room">1 room</string>
+    <string name="group_rooms">%d rooms</string>
+    <string name="group_no_long_description">The community admin has not provided a long description for this community.</string>
+
+    <string name="has_been_kicked">You have been kicked from %1$s by %2$s</string>
+    <string name="has_been_banned">You have been banned from %1$s by %2$s</string>
+    <string name="reason_colon">Reason: %1$s</string>
+    <string name="rejoin">Rejoin</string>
+    <string name="forget_room">Forget room</string>
+
+    <!-- Miscelaneous image descriptions for accessibility -->
+    <string name="receipt_avatar">Receipt avatar</string>
+    <string name="notice_avatar">Notice avatar</string>
+    <string name="avatar">Avatar</string>
+
+    <!-- Consent modal -->
+    <string name="dialog_user_consent_content">To continue using the %1$s homeserver you must review and agree to the terms and conditions.</string>
+    <string name="dialog_user_consent_submit">Review now</string>
+
+    <!-- Deactivate account screen -->
+    <string name="deactivate_account_title">Deactivate Account</string>
+    <string name="deactivate_account_content">This will make your account permanently unusable. You will not be able to log in, and no one will be able to re-register the same user ID. This will cause your account to leave all rooms it is participating in, and it will remove your account details from your identity server. <b>This action is irreversible</b>.\n\nDeactivating your account <b>does not by default cause us to forget messages you have sent</b>. If you would like us to forget your messages, please tick the box below.\n\nMessage visibility in Matrix is similar to email. Our forgetting your messages means that messages you have sent will not be shared with any new or unregistered users, but registered users who already have access to these messages will still have access to their copy.</string>
+    <string name="deactivate_account_delete_checkbox">Please forget all messages I have sent when my account is deactivated (Warning: this will cause future users to see an incomplete view of conversations)</string>
+    <string name="deactivate_account_prompt_password">To continue, please enter your password:</string>
+    <string name="deactivate_account_submit">Deactivate Account</string>
 
 </resources>
