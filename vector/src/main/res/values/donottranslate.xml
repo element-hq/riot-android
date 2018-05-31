@@ -39,4 +39,7 @@
         <item>@string/dark_theme</item>
         <item>@string/black_them</item>
     </string-array>
+
+    <string name="plus_sign" translatable="false">+</string>
+
 </resources>

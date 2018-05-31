@@ -27,6 +27,8 @@
     <string name="title_activity_group_details">Community details</string>
     <string name="title_activity_choose_sticker">Send a sticker</string>
 
+    <string name="dialog_title_third_party_licences">Third party licences</string>
+
     <!-- splash screen accessibility -->
     <string name="loading">Loading...</string>
 
