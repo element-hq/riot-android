@@ -5,7 +5,7 @@
 # Example:
 # AuthorizedStringThreeTimes===3
 
-# Rubish from merge
+# Rubbish from merge
 <<<<<<<
 >>>>>>>
 
@@ -29,7 +29,8 @@ DO NOT COMMIT
 [ ]$
 
 # Use project color
-@android\:color\/
+# DISABLED
+#@android\:color\/
 
 # String in multiline
 <string [^<]*$

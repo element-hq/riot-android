@@ -6,12 +6,13 @@
 # AuthorizedStringThreeTimes===3
 
 # Use new SecureLinearLayoutManager
-new LinearLayoutManager
+# DISABLED
+#new LinearLayoutManager
 
 # No import static
 import static
 
-# Rubish from merge
+# Rubbish from merge
 <<<<<<<
 >>>>>>>
 
@@ -25,7 +26,7 @@ Succes[^s]
 succes[^s]
 
 # ex: flatMap not at new line
-\}\)\.
+\}\)\.[\w]
 
 # Use int
 protected Integer
@@ -38,9 +39,6 @@ Short\.parseShort
 \(short\)
 private short
 final short
-
-# use value and format it manually
-getFormatted_value\(\)
 
 # Line too long
 .{161}
@@ -55,16 +53,19 @@ while\(
 for\(
 
 # Add space after //
-^\s*//[^\s]
+# DISABLED To re-enable when code will be formatted globally
+#^\s*//[^\s]
 
 # Not usable with unitary test. Use StringUtils
-TextUtils\.isEmpty\(
+# DISABLED
+#TextUtils\.isEmpty\(
 
 # Too many space
 ^      /\*
 
 # No ternary operator
- \?
+# DISABLED
+# \?
 
 # unnecessary parenthesis around numbers, example: " (0)"
  \(\d+\)
@@ -79,7 +80,8 @@ android\.os\.Build\.
 \t
 
 # Empty lines and trailing space
-[ ]$
+# DISABLED To re-enable when code will be formatted globally
+#[ ]$
 
 # Use v4 lib
 android.support.v7.app.NotificationCompat
@@ -94,7 +96,8 @@ setCompoundDrawablePadding\(0\)
 ButterKnife\.findById\(
 
 # Change thread with Rx
-runOnUiThread
+# DISABLED
+#runOnUiThread
 
 # Bad formatting of chain (missing new line)
 \w\.flatMap\(
@@ -105,7 +108,8 @@ runOnUiThread
 \)\.findAll
 
 # Use StandardCharsets.UTF_8.name()
-\"UTF-
+# DISABLED (min API to low)
+#\"UTF-
 
 # Call invalidateMenu(); instead.
 invalidateOptionsMenu
