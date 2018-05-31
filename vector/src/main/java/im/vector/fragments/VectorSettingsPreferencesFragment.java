@@ -2719,7 +2719,7 @@ public class VectorSettingsPreferencesFragment extends PreferenceFragment implem
                     DateFormat dateFormat = DateFormat.getDateInstance(DateFormat.SHORT, Locale.getDefault());
                     lastSeenTime = dateFormat.format(new Date(aDeviceInfo.last_seen_ts)) + ", " + time;
                 }
-                String lastSeenInfo = this.getString(R.string.devices_details_last_seen_format, lastSeenIp, lastSeenTime);
+                String lastSeenInfo = getString(R.string.devices_details_last_seen_format, lastSeenIp, lastSeenTime);
                 textView.setText(lastSeenInfo);
             } else {
                 // hide last time seen section

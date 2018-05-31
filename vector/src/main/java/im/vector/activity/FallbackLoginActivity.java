@@ -155,10 +155,10 @@ public class FallbackLoginActivity extends RiotAppCompatActivity {
                 super.onReceivedError(view, errorCode, description, failingUrl);
 
                 // on error case, close this activity
-                FallbackLoginActivity.this.runOnUiThread(new Runnable() {
+                runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
-                        FallbackLoginActivity.this.finish();
+                        finish();
                     }
                 });
             }
@@ -217,7 +217,7 @@ public class FallbackLoginActivity extends RiotAppCompatActivity {
 
                                 // check if the parameters are defined
                                 if ((null != homeServer) && (null != userId) && (null != accessToken)) {
-                                    FallbackLoginActivity.this.runOnUiThread(new Runnable() {
+                                    runOnUiThread(new Runnable() {
                                         @Override
                                         public void run() {
                                             Intent returnIntent = new Intent();
@@ -227,7 +227,7 @@ public class FallbackLoginActivity extends RiotAppCompatActivity {
                                             returnIntent.putExtra("accessToken", accessToken);
                                             setResult(RESULT_OK, returnIntent);
 
-                                            FallbackLoginActivity.this.finish();
+                                            finish();
                                         }
                                     });
                                 }

@@ -138,7 +138,7 @@ public class VectorCallViewActivity extends RiotAppCompatActivity implements Sen
         @Override
         public void onStateDidChange(String state) {
             final String fState = state;
-            VectorCallViewActivity.this.runOnUiThread(new Runnable() {
+            runOnUiThread(new Runnable() {
                 @Override
                 public void run() {
                     Log.d(LOG_TAG, "## onStateDidChange(): new state=" + fState);
@@ -356,8 +356,8 @@ public class VectorCallViewActivity extends RiotAppCompatActivity implements Sen
         // UI binding
         mHangUpImageView = findViewById(R.id.hang_up_button);
         mSpeakerSelectionView = findViewById(R.id.call_speaker_view);
-        mAvatarView = VectorCallViewActivity.this.findViewById(R.id.call_other_member);
-        mMuteMicImageView = VectorCallViewActivity.this.findViewById(R.id.mute_audio);
+        mAvatarView = findViewById(R.id.call_other_member);
+        mMuteMicImageView = findViewById(R.id.mute_audio);
         mHeaderPendingCallView = findViewById(R.id.header_pending_callview);
         mSwitchRearFrontCameraImageView = findViewById(R.id.call_switch_camera_view);
         mMuteLocalCameraView = findViewById(R.id.mute_local_camera);
@@ -379,12 +379,12 @@ public class VectorCallViewActivity extends RiotAppCompatActivity implements Sen
 
         mainContainerLayoutView.setOnTouchListener(mMainViewTouchListener);
 
-        ImageView roomLinkImageView = VectorCallViewActivity.this.findViewById(R.id.room_chat_link);
+        ImageView roomLinkImageView = findViewById(R.id.room_chat_link);
         roomLinkImageView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 // simulate a back button press
-                VectorCallViewActivity.this.finish();
+                finish();
                 startRoomActivity();
             }
         });
@@ -466,7 +466,7 @@ public class VectorCallViewActivity extends RiotAppCompatActivity implements Sen
             }
         } else {
             // create the callview asap
-            this.runOnUiThread(new Runnable() {
+            runOnUiThread(new Runnable() {
                 @Override
                 public void run() {
                     if (null != mCall.getCallView()) {
@@ -486,6 +486,7 @@ public class VectorCallViewActivity extends RiotAppCompatActivity implements Sen
             });
         }
 
+        // FIXME Use mAvatarView and remove this
         ImageView avatarView = findViewById(R.id.call_other_member);
 
         // the avatar side must be the half of the min screen side
@@ -526,7 +527,7 @@ public class VectorCallViewActivity extends RiotAppCompatActivity implements Sen
             }
         });
 
-        this.runOnUiThread(new Runnable() {
+        runOnUiThread(new Runnable() {
             @Override
             public void run() {
                 CommonActivityUtils.displayUnknownDevicesDialog(mSession,
@@ -556,7 +557,7 @@ public class VectorCallViewActivity extends RiotAppCompatActivity implements Sen
             backButtonView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    VectorCallViewActivity.this.onBackPressed();
+                    onBackPressed();
                 }
             });
 
@@ -708,7 +709,7 @@ public class VectorCallViewActivity extends RiotAppCompatActivity implements Sen
             CallsManager.getSharedInstance().setCallActivity(this);
             CallSoundsManager.getSharedInstance(this).addAudioConfigurationListener(mAudioConfigListener);
         } else {
-            this.finish();
+            finish();
         }
     }
 
@@ -933,7 +934,7 @@ public class VectorCallViewActivity extends RiotAppCompatActivity implements Sen
             screenHeight -= actionBarHeight;
         }
 
-        View mMenuButtonsContainerView = VectorCallViewActivity.this.findViewById(R.id.hang_up_button);
+        View mMenuButtonsContainerView = findViewById(R.id.hang_up_button);
         ViewGroup.LayoutParams layout = mMenuButtonsContainerView.getLayoutParams();
 
         if (0 == mLocalVideoLayoutConfig.mWidth) {

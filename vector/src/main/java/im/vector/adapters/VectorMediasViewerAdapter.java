@@ -92,13 +92,13 @@ public class VectorMediasViewerAdapter extends PagerAdapter {
                                      List<SlidableMediaInfo> mediaMessagesList,
                                      int maxImageWidth,
                                      int maxImageHeight) {
-        this.mContext = context;
-        this.mSession = session;
-        this.mMediasMessagesList = mediaMessagesList;
-        this.mMaxImageWidth = maxImageWidth;
-        this.mMaxImageHeight = maxImageHeight;
-        this.mLayoutInflater = LayoutInflater.from(context);
-        this.mMediasCache = mediasCache;
+        mContext = context;
+        mSession = session;
+        mMediasMessagesList = mediaMessagesList;
+        mMaxImageWidth = maxImageWidth;
+        mMaxImageHeight = maxImageHeight;
+        mLayoutInflater = LayoutInflater.from(context);
+        mMediasCache = mediasCache;
     }
 
     @Override
@@ -251,7 +251,7 @@ public class VectorMediasViewerAdapter extends PagerAdapter {
                     MatrixError error = JsonUtils.toMatrixError(jsonElement);
 
                     if ((null != error) && error.isSupportedErrorCode()) {
-                        Toast.makeText(VectorMediasViewerAdapter.this.mContext, error.getLocalizedMessage(), Toast.LENGTH_LONG).show();
+                        Toast.makeText(mContext, error.getLocalizedMessage(), Toast.LENGTH_LONG).show();
                     }
 
                     downloadFailedView.setVisibility(View.VISIBLE);
@@ -340,7 +340,7 @@ public class VectorMediasViewerAdapter extends PagerAdapter {
                         MatrixError error = JsonUtils.toMatrixError(jsonElement);
 
                         if (null != error) {
-                            Toast.makeText(VectorMediasViewerAdapter.this.mContext, error.getLocalizedMessage(), Toast.LENGTH_LONG).show();
+                            Toast.makeText(mContext, error.getLocalizedMessage(), Toast.LENGTH_LONG).show();
                         }
 
                         downloadFailedView.setVisibility(View.VISIBLE);
@@ -507,7 +507,7 @@ public class VectorMediasViewerAdapter extends PagerAdapter {
                     MatrixError error = JsonUtils.toMatrixError(jsonElement);
 
                     if ((null != error) && error.isSupportedErrorCode()) {
-                        Toast.makeText(VectorMediasViewerAdapter.this.mContext, error.getLocalizedMessage(), Toast.LENGTH_LONG).show();
+                        Toast.makeText(mContext, error.getLocalizedMessage(), Toast.LENGTH_LONG).show();
                     }
                 }
 
@@ -659,7 +659,7 @@ public class VectorMediasViewerAdapter extends PagerAdapter {
                         MatrixError error = JsonUtils.toMatrixError(jsonElement);
 
                         if ((null != error) && error.isSupportedErrorCode()) {
-                            Toast.makeText(VectorMediasViewerAdapter.this.mContext, error.getLocalizedMessage(), Toast.LENGTH_LONG).show();
+                            Toast.makeText(mContext, error.getLocalizedMessage(), Toast.LENGTH_LONG).show();
                         }
                     }
 

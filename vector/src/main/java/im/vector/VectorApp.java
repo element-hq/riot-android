@@ -247,7 +247,7 @@ public class VectorApp extends MultiDexApplication {
         // init the REST client
         MXSession.initUserAgent(getApplicationContext());
 
-        this.registerActivityLifecycleCallbacks(new ActivityLifecycleCallbacks() {
+        registerActivityLifecycleCallbacks(new ActivityLifecycleCallbacks() {
             final Map<String, String> mLocalesByActivity = new HashMap<>();
 
             @Override
@@ -456,7 +456,7 @@ public class VectorApp extends MultiDexApplication {
                     if (null != mCurrentActivity) {
                         Log.e(LOG_TAG, "## startActivityTransitionTimer() : the timer expires but there is an active activity.");
                     } else {
-                        VectorApp.this.mIsInBackground = true;
+                        mIsInBackground = true;
                         mIsCallingInBackground = (null != mCallsManager.getActiveCall());
 
                         // if there is a pending call

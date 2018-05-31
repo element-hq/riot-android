@@ -405,7 +405,7 @@ public class VectorRoomActivity extends MXCActionBarActivity implements
             runOnUiThread(new Runnable() {
                 @Override
                 public void run() {
-                    VectorRoomActivity.this.finish();
+                    finish();
                 }
             });
         }
@@ -422,12 +422,12 @@ public class VectorRoomActivity extends MXCActionBarActivity implements
             intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
 
             intent.putExtra(VectorHomeActivity.EXTRA_JUMP_TO_ROOM_PARAMS, params);
-            VectorRoomActivity.this.startActivity(intent);
+            startActivity(intent);
         }
 
         @Override
         public void onLiveEvent(final Event event, RoomState roomState) {
-            VectorRoomActivity.this.runOnUiThread(new Runnable() {
+            runOnUiThread(new Runnable() {
 
                 @Override
                 public void run() {
@@ -655,7 +655,7 @@ public class VectorRoomActivity extends MXCActionBarActivity implements
         // the user has tapped on the "View" notification button
         if ((null != intent.getAction()) && (intent.getAction().startsWith(NotificationUtils.TAP_TO_VIEW_ACTION))) {
             // remove any pending notifications
-            NotificationManager notificationsManager = (NotificationManager) this.getSystemService(Context.NOTIFICATION_SERVICE);
+            NotificationManager notificationsManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
             notificationsManager.cancelAll();
         }
 
@@ -757,7 +757,7 @@ public class VectorRoomActivity extends MXCActionBarActivity implements
                             Integer selectedVal = messages[position];
 
                             if (selectedVal == R.string.option_send_files) {
-                                VectorRoomActivity.this.launchFileSelectionIntent();
+                                launchFileSelectionIntent();
                             } else if (selectedVal == R.string.option_send_sticker) {
                                 startStickerPickerActivity();
                             } else if (selectedVal == R.string.option_take_photo_video) {
@@ -792,7 +792,7 @@ public class VectorRoomActivity extends MXCActionBarActivity implements
             @Override
             public void afterTextChanged(android.text.Editable s) {
                 if (null != mRoom) {
-                    MXLatestChatMessageCache latestChatMessageCache = VectorRoomActivity.this.mLatestChatMessageCache;
+                    MXLatestChatMessageCache latestChatMessageCache = mLatestChatMessageCache;
                     String textInPlace = latestChatMessageCache.getLatestText(VectorRoomActivity.this, mRoom.getRoomId());
 
                     // check if there is really an update
@@ -825,10 +825,10 @@ public class VectorRoomActivity extends MXCActionBarActivity implements
                     intent.putExtra(VectorCallViewActivity.EXTRA_MATRIX_ID, call.getSession().getCredentials().userId);
                     intent.putExtra(VectorCallViewActivity.EXTRA_CALL_ID, call.getCallId());
 
-                    VectorRoomActivity.this.runOnUiThread(new Runnable() {
+                    runOnUiThread(new Runnable() {
                         @Override
                         public void run() {
-                            VectorRoomActivity.this.startActivity(intent);
+                            startActivity(intent);
                         }
                     });
                 } else {
@@ -1366,10 +1366,10 @@ public class VectorRoomActivity extends MXCActionBarActivity implements
                 intent.putExtra(VectorCallViewActivity.EXTRA_CALL_ID, mCallId);
 
                 enableActionBarHeader(HIDE_ACTION_BAR_HEADER);
-                VectorRoomActivity.this.runOnUiThread(new Runnable() {
+                runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
-                        VectorRoomActivity.this.startActivity(intent);
+                        startActivity(intent);
                     }
                 });
 
@@ -1612,7 +1612,7 @@ public class VectorRoomActivity extends MXCActionBarActivity implements
 
                 final Intent searchIntent = new Intent(VectorRoomActivity.this, VectorUnifiedSearchActivity.class);
                 searchIntent.putExtra(VectorUnifiedSearchActivity.EXTRA_ROOM_ID, mRoom.getRoomId());
-                VectorRoomActivity.this.startActivity(searchIntent);
+                startActivity(searchIntent);
 
             } catch (Exception e) {
                 Log.i(LOG_TAG, "## onOptionsItemSelected(): ");
@@ -1814,7 +1814,7 @@ public class VectorRoomActivity extends MXCActionBarActivity implements
         final Intent intent = new Intent(VectorRoomActivity.this, JitsiCallActivity.class);
         intent.putExtra(JitsiCallActivity.EXTRA_WIDGET_ID, widget);
         intent.putExtra(JitsiCallActivity.EXTRA_ENABLE_VIDEO, aIsVideoCall);
-        VectorRoomActivity.this.startActivity(intent);
+        startActivity(intent);
     }
 
     /**
@@ -1833,7 +1833,7 @@ public class VectorRoomActivity extends MXCActionBarActivity implements
 
                 final Intent intent = new Intent(VectorRoomActivity.this, JitsiCallActivity.class);
                 intent.putExtra(JitsiCallActivity.EXTRA_WIDGET_ID, widget);
-                VectorRoomActivity.this.startActivity(intent);
+                startActivity(intent);
             }
 
             private void onError(String errorMessage) {
@@ -1879,7 +1879,7 @@ public class VectorRoomActivity extends MXCActionBarActivity implements
             @Override
             public void onSuccess(final IMXCall call) {
                 Log.d(LOG_TAG, "## startIpCall(): onSuccess");
-                VectorRoomActivity.this.runOnUiThread(new Runnable() {
+                runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
                         hideWaitingView();
@@ -1889,10 +1889,10 @@ public class VectorRoomActivity extends MXCActionBarActivity implements
                         intent.putExtra(VectorCallViewActivity.EXTRA_MATRIX_ID, mSession.getCredentials().userId);
                         intent.putExtra(VectorCallViewActivity.EXTRA_CALL_ID, call.getCallId());
 
-                        VectorRoomActivity.this.runOnUiThread(new Runnable() {
+                        runOnUiThread(new Runnable() {
                             @Override
                             public void run() {
-                                VectorRoomActivity.this.startActivity(intent);
+                                startActivity(intent);
                             }
                         });
                     }
@@ -1900,7 +1900,7 @@ public class VectorRoomActivity extends MXCActionBarActivity implements
             }
 
             private void onError(final String errorMessage) {
-                VectorRoomActivity.this.runOnUiThread(new Runnable() {
+                runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
                         hideWaitingView();
@@ -1978,7 +1978,7 @@ public class VectorRoomActivity extends MXCActionBarActivity implements
         VectorApp.markdownToHtml(mEditText.getText().toString().trim(), new VectorMarkdownParser.IVectorMarkdownParserListener() {
             @Override
             public void onMarkdownParsed(final String text, final String HTMLText) {
-                VectorRoomActivity.this.runOnUiThread(new Runnable() {
+                runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
                         mSendImageView.setEnabled(true);
@@ -2145,7 +2145,7 @@ public class VectorRoomActivity extends MXCActionBarActivity implements
                                 Log.d(LOG_TAG, "##handleTypingNotification() : send end of typing");
 
                                 // Post a new typing notification
-                                VectorRoomActivity.this.handleTypingNotification(0 != mLastTypingDate);
+                                handleTypingNotification(0 != mLastTypingDate);
                             }
                         }
                     };
@@ -3334,7 +3334,7 @@ public class VectorRoomActivity extends MXCActionBarActivity implements
                             intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
 
                             intent.putExtra(VectorHomeActivity.EXTRA_JUMP_TO_ROOM_PARAMS, params);
-                            VectorRoomActivity.this.startActivity(intent);
+                            startActivity(intent);
                         }
 
                         private void onError(String errorMessage) {
@@ -3375,7 +3375,7 @@ public class VectorRoomActivity extends MXCActionBarActivity implements
                 mRoom.forget(new ApiCallback<Void>() {
                     @Override
                     public void onSuccess(Void info) {
-                        VectorRoomActivity.this.finish();
+                        finish();
                     }
 
                     private void onError(String errorMessage) {
@@ -3516,7 +3516,7 @@ public class VectorRoomActivity extends MXCActionBarActivity implements
                         Log.d(LOG_TAG, "The invitation is declined (unknown room)");
 
                         sRoomPreviewData = null;
-                        VectorRoomActivity.this.finish();
+                        finish();
                     }
                 });
             }
@@ -3564,7 +3564,7 @@ public class VectorRoomActivity extends MXCActionBarActivity implements
                             }
                         });
                     } else {
-                        VectorRoomActivity.this.finish();
+                        finish();
                     }
                 }
             });
@@ -3581,7 +3581,7 @@ public class VectorRoomActivity extends MXCActionBarActivity implements
      */
     private void onDeclined() {
         if (null != sRoomPreviewData) {
-            VectorRoomActivity.this.finish();
+            finish();
             sRoomPreviewData = null;
         }
     }
@@ -3607,7 +3607,7 @@ public class VectorRoomActivity extends MXCActionBarActivity implements
             intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
 
             intent.putExtra(VectorHomeActivity.EXTRA_JUMP_TO_ROOM_PARAMS, params);
-            VectorRoomActivity.this.startActivity(intent);
+            startActivity(intent);
 
             sRoomPreviewData = null;
         }
@@ -3718,7 +3718,7 @@ public class VectorRoomActivity extends MXCActionBarActivity implements
 
                     @Override
                     public void onUploadComplete(final String uploadId, final String contentUri) {
-                        VectorRoomActivity.this.runOnUiThread(new Runnable() {
+                        runOnUiThread(new Runnable() {
                             @Override
                             public void run() {
                                 Log.d(LOG_TAG, "The avatar has been uploaded, update the room avatar");

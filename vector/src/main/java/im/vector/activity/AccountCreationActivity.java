@@ -134,10 +134,10 @@ public class AccountCreationActivity extends RiotAppCompatActivity {
                 super.onReceivedError(view, errorCode, description, failingUrl);
 
                 // on error case, close this activity
-                AccountCreationActivity.this.runOnUiThread(new Runnable() {
+                runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
-                        AccountCreationActivity.this.finish();
+                        finish();
                     }
                 });
             }
@@ -198,7 +198,7 @@ public class AccountCreationActivity extends RiotAppCompatActivity {
 
                             // check the action
                             if (action.equals("onRegistered")) {
-                                AccountCreationActivity.this.runOnUiThread(new Runnable() {
+                                runOnUiThread(new Runnable() {
                                     @Override
                                     public void run() {
                                         Intent returnIntent = new Intent();
@@ -208,7 +208,7 @@ public class AccountCreationActivity extends RiotAppCompatActivity {
                                         returnIntent.putExtra("accessToken", accessToken);
                                         setResult(RESULT_OK, returnIntent);
 
-                                        AccountCreationActivity.this.finish();
+                                        finish();
                                     }
                                 });
                             }

@@ -97,7 +97,7 @@ public class VectorRoomDetailsActivity extends MXCActionBarActivity implements T
                     // pop to the home activity
                     Intent intent = new Intent(VectorRoomDetailsActivity.this, VectorHomeActivity.class);
                     intent.setFlags(android.content.Intent.FLAG_ACTIVITY_CLEAR_TOP | android.content.Intent.FLAG_ACTIVITY_SINGLE_TOP);
-                    VectorRoomDetailsActivity.this.startActivity(intent);
+                    startActivity(intent);
                 }
             });
         }
@@ -240,7 +240,7 @@ public class VectorRoomDetailsActivity extends MXCActionBarActivity implements T
                 // pop to the home activity
                 Intent intent = new Intent(VectorRoomDetailsActivity.this, VectorHomeActivity.class);
                 intent.setFlags(android.content.Intent.FLAG_ACTIVITY_CLEAR_TOP | android.content.Intent.FLAG_ACTIVITY_SINGLE_TOP);
-                VectorRoomDetailsActivity.this.startActivity(intent);
+                startActivity(intent);
                 return;
             }
 
@@ -398,7 +398,7 @@ public class VectorRoomDetailsActivity extends MXCActionBarActivity implements T
         // reset the activity title
         // some fragments update it (VectorRoomDetailsMembersFragment for example)
         if (null != getSupportActionBar()) {
-            getSupportActionBar().setTitle(this.getResources().getString(R.string.room_details_title));
+            getSupportActionBar().setTitle(R.string.room_details_title);
         }
     }
 

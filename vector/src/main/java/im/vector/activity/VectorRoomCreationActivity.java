@@ -176,7 +176,7 @@ public class VectorRoomCreationActivity extends MXCActionBarActivity {
         Intent intent = new Intent(VectorRoomCreationActivity.this, VectorRoomInviteMembersActivity.class);
         intent.putExtra(VectorRoomInviteMembersActivity.EXTRA_MATRIX_ID, mSession.getMyUserId());
         intent.putExtra(VectorRoomInviteMembersActivity.EXTRA_HIDDEN_PARTICIPANT_ITEMS, mParticipants);
-        VectorRoomCreationActivity.this.startActivityForResult(intent, INVITE_USER_REQUEST_CODE);
+        startActivityForResult(intent, INVITE_USER_REQUEST_CODE);
     }
 
     @Override
@@ -225,7 +225,7 @@ public class VectorRoomCreationActivity extends MXCActionBarActivity {
                 mAdapter.sort(mAlphaComparator);
             } else if (1 == mParticipants.size()) {
                 // the user cancels the first user selection so assume he wants to cancel the room creation.
-                this.finish();
+                finish();
             }
         }
     }

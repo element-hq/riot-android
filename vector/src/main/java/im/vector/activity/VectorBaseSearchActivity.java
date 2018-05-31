@@ -84,7 +84,7 @@ public abstract class VectorBaseSearchActivity extends MXCActionBarActivity {
 
         mPatternToSearchEditText.addTextChangedListener(new TextWatcher() {
             public void afterTextChanged(android.text.Editable s) {
-                VectorBaseSearchActivity.this.refreshMenuEntries();
+                refreshMenuEntries();
                 final String fPattern = mPatternToSearchEditText.getText().toString();
 
                 Timer timer = new Timer();
@@ -95,11 +95,11 @@ public abstract class VectorBaseSearchActivity extends MXCActionBarActivity {
                     timer.schedule(new TimerTask() {
                         @Override
                         public void run() {
-                            VectorBaseSearchActivity.this.runOnUiThread(new Runnable() {
+                            runOnUiThread(new Runnable() {
                                 @Override
                                 public void run() {
                                     if (TextUtils.equals(mPatternToSearchEditText.getText().toString(), fPattern)) {
-                                        VectorBaseSearchActivity.this.runOnUiThread(new Runnable() {
+                                        runOnUiThread(new Runnable() {
                                             @Override
                                             public void run() {
                                                 onPatternUpdate(true);
@@ -113,11 +113,11 @@ public abstract class VectorBaseSearchActivity extends MXCActionBarActivity {
                 } catch (Throwable throwable) {
                     Log.e(LOG_TAG, "## failed to start the timer " + throwable.getMessage());
 
-                    VectorBaseSearchActivity.this.runOnUiThread(new Runnable() {
+                    runOnUiThread(new Runnable() {
                         @Override
                         public void run() {
                             if (TextUtils.equals(mPatternToSearchEditText.getText().toString(), fPattern)) {
-                                VectorBaseSearchActivity.this.runOnUiThread(new Runnable() {
+                                runOnUiThread(new Runnable() {
                                     @Override
                                     public void run() {
                                         onPatternUpdate(true);
@@ -261,7 +261,7 @@ public abstract class VectorBaseSearchActivity extends MXCActionBarActivity {
                 builder.setItems(mes, new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int item) {
                         mPatternToSearchEditText.setText(matches.get(item));
-                        VectorBaseSearchActivity.this.runOnUiThread(new Runnable() {
+                        runOnUiThread(new Runnable() {
                             @Override
                             public void run() {
                                 onPatternUpdate(false);

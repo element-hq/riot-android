@@ -390,9 +390,9 @@ public class VectorRoomMediasSender {
 
             ImageSize resized = new ImageSize(this);
 
-            if ((this.mWidth > maxSide) || (this.mHeight > maxSide)) {
-                double ratioX = maxSide / this.mWidth;
-                double ratioY = maxSide / this.mHeight;
+            if ((mWidth > maxSide) || (mHeight > maxSide)) {
+                double ratioX = maxSide / mWidth;
+                double ratioY = maxSide / mHeight;
 
                 double scale = Math.min(ratioX, ratioY);
 

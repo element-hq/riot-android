@@ -128,7 +128,7 @@ public class ActiveWidgetsBanner extends RelativeLayout {
             }
         });
 
-        this.setOnClickListener(new OnClickListener() {
+        setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
                 if (null != mUpdateListener) {

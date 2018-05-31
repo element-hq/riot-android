@@ -310,7 +310,7 @@ public class VectorMemberDetailsAdapter extends BaseExpandableListAdapter {
     public View getGroupView(int groupPosition, boolean isExpanded, View convertView, ViewGroup parent) {
 
         if (null == convertView) {
-            convertView = this.mLayoutInflater.inflate(this.mHeaderLayoutResourceId, null);
+            convertView = mLayoutInflater.inflate(mHeaderLayoutResourceId, null);
         }
 
         ((TextView) convertView.findViewById(R.id.heading)).setText(getGroupTitle(groupPosition));

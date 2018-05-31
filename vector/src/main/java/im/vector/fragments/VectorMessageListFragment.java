@@ -863,8 +863,8 @@ public class VectorMessageListFragment extends MatrixMessageListFragment impleme
                     public void onDownloadError(String downloadId, JsonElement jsonElement) {
                         MatrixError error = JsonUtils.toMatrixError(jsonElement);
 
-                        if ((null != error) && error.isSupportedErrorCode() && (null != VectorMessageListFragment.this.getActivity())) {
-                            Toast.makeText(VectorMessageListFragment.this.getActivity(), error.getLocalizedMessage(), Toast.LENGTH_LONG).show();
+                        if ((null != error) && error.isSupportedErrorCode() && (null != getActivity())) {
+                            Toast.makeText(getActivity(), error.getLocalizedMessage(), Toast.LENGTH_LONG).show();
                         }
                     }
 
@@ -872,7 +872,7 @@ public class VectorMessageListFragment extends MatrixMessageListFragment impleme
                     public void onDownloadComplete(String aDownloadId) {
                         if (aDownloadId.equals(downloadId)) {
 
-                            VectorMessageListFragment.this.getActivity().runOnUiThread(new Runnable() {
+                            getActivity().runOnUiThread(new Runnable() {
                                 @Override
                                 public void run() {
                                     onMediaAction(menuAction, mediaUrl, mediaMimeType, trimmedFileName, encryptedFileInfo);

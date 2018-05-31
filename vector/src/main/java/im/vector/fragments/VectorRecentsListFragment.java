@@ -584,7 +584,7 @@ public class VectorRecentsListFragment extends VectorBaseFragment implements
             @Override
             public void onReceiptEvent(String roomId, List<String> senderIds) {
                 // refresh only if the current user read some messages (to update the unread messages counters)
-                refreshOnChunkEnd |= (senderIds.indexOf(VectorRecentsListFragment.this.mSession.getCredentials().userId) >= 0);
+                refreshOnChunkEnd |= (senderIds.indexOf(mSession.getCredentials().userId) >= 0);
             }
 
             @Override

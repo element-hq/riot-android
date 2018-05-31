@@ -467,7 +467,7 @@ public class EventStreamService extends Service {
         mForegroundNotificationState = ForegroundNotificationState.NONE;
 
         // restart the services after 3 seconds
-        Intent restartServiceIntent = new Intent(getApplicationContext(), this.getClass());
+        Intent restartServiceIntent = new Intent(getApplicationContext(), getClass());
         restartServiceIntent.setPackage(getPackageName());
         restartServiceIntent.putExtra(EXTRA_AUTO_RESTART_ACTION, EXTRA_AUTO_RESTART_ACTION);
         PendingIntent restartPendingIntent = PendingIntent.getService(getApplicationContext(), 1, restartServiceIntent, PendingIntent.FLAG_ONE_SHOT);
@@ -896,7 +896,7 @@ public class EventStreamService extends Service {
             return;
         }
 
-        NotificationManager nm = (NotificationManager) EventStreamService.this.getSystemService(Context.NOTIFICATION_SERVICE);
+        NotificationManager nm = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
 
         mForegroundNotificationState = foregroundNotificationState;
         switch (mForegroundNotificationState) {
@@ -1146,7 +1146,7 @@ public class EventStreamService extends Service {
      * Clear any displayed notification.
      */
     private void clearNotification() {
-        NotificationManager nm = (NotificationManager) EventStreamService.this.getSystemService(Context.NOTIFICATION_SERVICE);
+        NotificationManager nm = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
         try {
             nm.cancelAll();
         } catch (Exception e) {
@@ -1692,7 +1692,7 @@ public class EventStreamService extends Service {
      * Hide the permanent call notifications
      */
     public void hideCallNotifications() {
-        NotificationManager nm = (NotificationManager) EventStreamService.this.getSystemService(Context.NOTIFICATION_SERVICE);
+        NotificationManager nm = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
 
         // hide the foreground notification for calls only if we are in these states 
         if ((ForegroundNotificationState.CALL_IN_PROGRESS == mForegroundNotificationState)

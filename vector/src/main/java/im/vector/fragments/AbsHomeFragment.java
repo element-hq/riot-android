@@ -73,7 +73,7 @@ public abstract class AbsHomeFragment extends VectorBaseFragment implements
         public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
             // warn only if there is dy i.e the list has been really scrolled not refreshed
             if ((null != mActivity) && (0 != dy)) {
-                mActivity.hideFloatingActionButton(AbsHomeFragment.this.getTag());
+                mActivity.hideFloatingActionButton(getTag());
             }
         }
     };

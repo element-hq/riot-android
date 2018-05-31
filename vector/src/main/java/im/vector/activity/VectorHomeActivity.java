@@ -421,7 +421,7 @@ public class VectorHomeActivity extends RiotAppCompatActivity implements SearchV
                 Log.d(LOG_TAG, "Has shared intent");
 
                 if (mSession.getDataHandler().getStore().isReady()) {
-                    this.runOnUiThread(new Runnable() {
+                    runOnUiThread(new Runnable() {
                         @Override
                         public void run() {
                             Log.d(LOG_TAG, "shared intent : The store is ready -> display sendFilesTo");
@@ -449,7 +449,7 @@ public class VectorHomeActivity extends RiotAppCompatActivity implements SearchV
                 Log.e(LOG_TAG, "No loaded session : reload them");
                 // start splash activity and stop here
                 startActivity(new Intent(VectorHomeActivity.this, SplashActivity.class));
-                VectorHomeActivity.this.finish();
+                finish();
                 return;
             }
         }
@@ -524,7 +524,7 @@ public class VectorHomeActivity extends RiotAppCompatActivity implements SearchV
 
         showFloatingActionButton();
 
-        this.runOnUiThread(new Runnable() {
+        runOnUiThread(new Runnable() {
             @Override
             public void run() {
                 refreshSlidingMenu();
@@ -582,7 +582,7 @@ public class VectorHomeActivity extends RiotAppCompatActivity implements SearchV
         // https://github.com/vector-im/vector-android/issues/323
         // the tool bar color is not restored on some devices.
         TypedValue vectorActionBarColor = new TypedValue();
-        this.getTheme().resolveAttribute(R.attr.riot_primary_background_color, vectorActionBarColor, true);
+        getTheme().resolveAttribute(R.attr.riot_primary_background_color, vectorActionBarColor, true);
         mToolbar.setBackgroundResource(vectorActionBarColor.resourceId);
 
         checkDeviceId();
@@ -992,10 +992,10 @@ public class VectorHomeActivity extends RiotAppCompatActivity implements SearchV
                     intent.putExtra(VectorCallViewActivity.EXTRA_MATRIX_ID, call.getSession().getCredentials().userId);
                     intent.putExtra(VectorCallViewActivity.EXTRA_CALL_ID, call.getCallId());
 
-                    VectorHomeActivity.this.runOnUiThread(new Runnable() {
+                    runOnUiThread(new Runnable() {
                         @Override
                         public void run() {
-                            VectorHomeActivity.this.startActivity(intent);
+                            startActivity(intent);
                         }
                     });
                 }
@@ -1284,7 +1284,7 @@ public class VectorHomeActivity extends RiotAppCompatActivity implements SearchV
                                         mFloatingActionButtonTimer = null;
                                     }
                                 }
-                                VectorHomeActivity.this.runOnUiThread(new Runnable() {
+                                runOnUiThread(new Runnable() {
                                     @Override
                                     public void run() {
                                         showFloatingActionButton();
@@ -1300,7 +1300,7 @@ public class VectorHomeActivity extends RiotAppCompatActivity implements SearchV
                             mFloatingActionButtonTimer = null;
                         }
 
-                        VectorHomeActivity.this.runOnUiThread(new Runnable() {
+                        runOnUiThread(new Runnable() {
                             @Override
                             public void run() {
                                 showFloatingActionButton();
@@ -1708,7 +1708,7 @@ public class VectorHomeActivity extends RiotAppCompatActivity implements SearchV
                                 .setPositiveButton(R.string.action_sign_out,
                                         new DialogInterface.OnClickListener() {
                                             public void onClick(DialogInterface dialog, int id) {
-                                                VectorHomeActivity.this.showWaitingView();
+                                                showWaitingView();
                                                 CommonActivityUtils.logout(VectorHomeActivity.this);
                                             }
                                         })
@@ -1733,7 +1733,7 @@ public class VectorHomeActivity extends RiotAppCompatActivity implements SearchV
 
                     @Override
                     public void onSuccess(String filename) {
-                        onDone(VectorHomeActivity.this.getString(R.string.encryption_export_saved_as, filename));
+                        onDone(getString(R.string.encryption_export_saved_as, filename));
                     }
 
                     @Override
@@ -1770,12 +1770,12 @@ public class VectorHomeActivity extends RiotAppCompatActivity implements SearchV
         ) {
 
             public void onDrawerClosed(View view) {
-                switch (VectorHomeActivity.this.mSlidingMenuIndex) {
+                switch (mSlidingMenuIndex) {
                     case R.id.sliding_menu_settings: {
                         // launch the settings activity
                         final Intent settingsIntent = new Intent(VectorHomeActivity.this, VectorSettingsActivity.class);
                         settingsIntent.putExtra(MXCActionBarActivity.EXTRA_MATRIX_ID, mSession.getMyUserId());
-                        VectorHomeActivity.this.startActivity(settingsIntent);
+                        startActivity(settingsIntent);
                         break;
                     }
 
@@ -1788,10 +1788,10 @@ public class VectorHomeActivity extends RiotAppCompatActivity implements SearchV
                         if (null != EventStreamService.getInstance()) {
                             EventStreamService.getInstance().stopNow();
                         }
-                        VectorHomeActivity.this.runOnUiThread(new Runnable() {
+                        runOnUiThread(new Runnable() {
                             @Override
                             public void run() {
-                                VectorHomeActivity.this.finish();
+                                finish();
                                 System.exit(0);
                             }
                         });
@@ -1809,7 +1809,7 @@ public class VectorHomeActivity extends RiotAppCompatActivity implements SearchV
                                 .setPositiveButton(R.string.action_sign_out,
                                         new DialogInterface.OnClickListener() {
                                             public void onClick(DialogInterface dialog, int id) {
-                                                VectorHomeActivity.this.showWaitingView();
+                                                showWaitingView();
                                                 CommonActivityUtils.logout(VectorHomeActivity.this);
                                             }
                                         })
@@ -1818,7 +1818,7 @@ public class VectorHomeActivity extends RiotAppCompatActivity implements SearchV
                                     public void onClick(DialogInterface dialog, int which) {
                                         dialog.cancel();
 
-                                        VectorHomeActivity.this.runOnUiThread(new Runnable() {
+                                        runOnUiThread(new Runnable() {
                                             @Override
                                             public void run() {
                                                 exportKeysAndSignOut();
@@ -1862,7 +1862,7 @@ public class VectorHomeActivity extends RiotAppCompatActivity implements SearchV
                     }
                 }
 
-                VectorHomeActivity.this.mSlidingMenuIndex = -1;
+                mSlidingMenuIndex = -1;
             }
 
             public void onDrawerOpened(View drawerView) {
@@ -1873,7 +1873,7 @@ public class VectorHomeActivity extends RiotAppCompatActivity implements SearchV
             @Override
             public boolean onNavigationItemSelected(MenuItem menuItem) {
                 mDrawerLayout.closeDrawers();
-                VectorHomeActivity.this.mSlidingMenuIndex = menuItem.getItemId();
+                mSlidingMenuIndex = menuItem.getItemId();
                 return true;
             }
         };
@@ -1893,7 +1893,7 @@ public class VectorHomeActivity extends RiotAppCompatActivity implements SearchV
         MenuItem aboutMenuItem = menuNav.findItem(R.id.sliding_menu_version);
 
         if (null != aboutMenuItem) {
-            String version = this.getString(R.string.room_sliding_menu_version) + " " + VectorUtils.getApplicationVersion(this);
+            String version = getString(R.string.room_sliding_menu_version) + " " + VectorUtils.getApplicationVersion(this);
             aboutMenuItem.setTitle(version);
         }
 
@@ -1951,7 +1951,7 @@ public class VectorHomeActivity extends RiotAppCompatActivity implements SearchV
             runOnUiThread(new Runnable() {
                 @Override
                 public void run() {
-                    VectorHomeActivity.this.startActivity(intent);
+                    startActivity(intent);
                 }
             });
         }

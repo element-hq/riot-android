@@ -522,7 +522,7 @@ public class VectorMessagesAdapter extends AbstractMessagesAdapter {
             }
 
             if ((!mIsSearchMode) && refresh) {
-                this.notifyDataSetChanged();
+                notifyDataSetChanged();
             } else {
                 setNotifyOnChange(true);
             }
@@ -681,14 +681,14 @@ public class VectorMessagesAdapter extends AbstractMessagesAdapter {
                 if (null == mLiveMessagesRowList) {
                     // backup live events
                     mLiveMessagesRowList = new ArrayList<>();
-                    for (int pos = 0; pos < this.getCount(); pos++) {
-                        mLiveMessagesRowList.add(this.getItem(pos));
+                    for (int pos = 0; pos < getCount(); pos++) {
+                        mLiveMessagesRowList.add(getItem(pos));
                     }
                 }
             } else if (null != mLiveMessagesRowList) {
                 // clear and restore the cached live events.
-                this.clear();
-                this.addAll(mLiveMessagesRowList);
+                clear();
+                addAll(mLiveMessagesRowList);
                 mLiveMessagesRowList = null;
             }
         }
@@ -803,7 +803,7 @@ public class VectorMessagesAdapter extends AbstractMessagesAdapter {
     @Override
     public void notifyDataSetChanged() {
         // undelivered events must be pushed at the end of the history
-        this.setNotifyOnChange(false);
+        setNotifyOnChange(false);
         List<MessageRow> undeliverableEvents = new ArrayList<>();
 
         for (int i = 0; i < getCount(); i++) {
@@ -830,10 +830,10 @@ public class VectorMessagesAdapter extends AbstractMessagesAdapter {
                 Log.e(LOG_TAG, "## notifyDataSetChanged () : failed to sort undeliverableEvents " + e.getMessage());
             }
 
-            this.addAll(undeliverableEvents);
+            addAll(undeliverableEvents);
         }
 
-        this.setNotifyOnChange(true);
+        setNotifyOnChange(true);
 
         // build event -> date list
         refreshRefreshDateList();
@@ -857,7 +857,7 @@ public class VectorMessagesAdapter extends AbstractMessagesAdapter {
      * Notify the fragment that some bing rules could have been updated.
      */
     public void onBingRulesUpdate() {
-        this.notifyDataSetChanged();
+        notifyDataSetChanged();
     }
 
     /**
@@ -1133,7 +1133,7 @@ public class VectorMessagesAdapter extends AbstractMessagesAdapter {
             }
 
             // not the last message
-            if ((position + 1) < this.getCount()) {
+            if ((position + 1) < getCount()) {
                 Event nextEvent = getItem(position + 1).getEvent();
                 willBeMerged = isMergeableEvent(getItemViewType(nextEvent)) && TextUtils.equals(nextEvent.getSender(), event.getSender());
             }
@@ -1155,7 +1155,7 @@ public class VectorMessagesAdapter extends AbstractMessagesAdapter {
                 tsTextView.setTextColor(ThemeUtils.getColor(mContext, R.attr.default_text_light_color));
             }
 
-            tsTextView.setVisibility((((position + 1) == this.getCount()) || mIsSearchMode || mAlwaysShowTimeStamps) ? View.VISIBLE : View.GONE);
+            tsTextView.setVisibility((((position + 1) == getCount()) || mIsSearchMode || mAlwaysShowTimeStamps) ? View.VISIBLE : View.GONE);
         }
 
         // Sender avatar
@@ -1171,7 +1171,7 @@ public class VectorMessagesAdapter extends AbstractMessagesAdapter {
         View messageSeparatorView = convertView.findViewById(R.id.messagesAdapter_message_separator);
 
         if (null != messageSeparatorView) {
-            messageSeparatorView.setVisibility((willBeMerged || ((position + 1) == this.getCount())) ? View.GONE : View.VISIBLE);
+            messageSeparatorView.setVisibility((willBeMerged || ((position + 1) == getCount())) ? View.GONE : View.VISIBLE);
         }
 
         // display the day separator
@@ -1270,7 +1270,7 @@ public class VectorMessagesAdapter extends AbstractMessagesAdapter {
             }
 
             View textLayout = convertView.findViewById(R.id.messagesAdapter_text_layout);
-            this.manageSubView(position, convertView, textLayout, viewType);
+            manageSubView(position, convertView, textLayout, viewType);
 
             for (final TextView tv : textViews) {
                 addContentViewListeners(convertView, tv, position, viewType);
@@ -1448,7 +1448,7 @@ public class VectorMessagesAdapter extends AbstractMessagesAdapter {
             View imageLayout = convertView.findViewById(R.id.messagesAdapter_image_layout);
             imageLayout.setAlpha(event.isSent() ? 1.0f : 0.5f);
 
-            this.manageSubView(position, convertView, imageLayout, type);
+            manageSubView(position, convertView, imageLayout, type);
 
             ImageView imageView = convertView.findViewById(R.id.messagesAdapter_image);
             addContentViewListeners(convertView, imageView, position, type);
@@ -1498,7 +1498,7 @@ public class VectorMessagesAdapter extends AbstractMessagesAdapter {
             }
 
             View textLayout = convertView.findViewById(R.id.messagesAdapter_text_layout);
-            this.manageSubView(position, convertView, textLayout, viewType);
+            manageSubView(position, convertView, textLayout, viewType);
 
             addContentViewListeners(convertView, noticeTextView, position, viewType);
 
@@ -1581,7 +1581,7 @@ public class VectorMessagesAdapter extends AbstractMessagesAdapter {
             emoteTextView.setTextColor(textColor);
 
             View textLayout = convertView.findViewById(R.id.messagesAdapter_text_layout);
-            this.manageSubView(position, convertView, textLayout, ROW_TYPE_EMOTE);
+            manageSubView(position, convertView, textLayout, ROW_TYPE_EMOTE);
 
             addContentViewListeners(convertView, emoteTextView, position, ROW_TYPE_EMOTE);
 
@@ -1634,7 +1634,7 @@ public class VectorMessagesAdapter extends AbstractMessagesAdapter {
             mMediasHelper.managePendingUpload(convertView, event, ROW_TYPE_FILE, fileMessage.url);
 
             View fileLayout = convertView.findViewById(R.id.messagesAdapter_file_layout);
-            this.manageSubView(position, convertView, fileLayout, ROW_TYPE_FILE);
+            manageSubView(position, convertView, fileLayout, ROW_TYPE_FILE);
 
             addContentViewListeners(convertView, fileTextView, position, ROW_TYPE_FILE);
         } catch (Exception e) {
@@ -1866,7 +1866,7 @@ public class VectorMessagesAdapter extends AbstractMessagesAdapter {
 
         Date latestDate = AdapterUtils.zeroTimeDate(new Date());
 
-        for (int index = 0; index < this.getCount(); index++) {
+        for (int index = 0; index < getCount(); index++) {
             MessageRow row = getItem(index);
             Event event = row.getEvent();
 
@@ -2166,7 +2166,7 @@ public class VectorMessagesAdapter extends AbstractMessagesAdapter {
 
         if (mIsRoomEncrypted && mSession.isCryptoEnabled()) {
             // the key is "userid_deviceid"
-            for (int index = 0; index < this.getCount(); index++) {
+            for (int index = 0; index < getCount(); index++) {
                 MessageRow row = getItem(index);
                 Event event = row.getEvent();
 

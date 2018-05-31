@@ -812,7 +812,7 @@ public class VectorParticipantsAdapter extends BaseExpandableListAdapter {
     @Override
     public View getGroupView(final int groupPosition, final boolean isExpanded, View convertView, final ViewGroup parent) {
         if (null == convertView) {
-            convertView = this.mLayoutInflater.inflate(this.mHeaderLayoutResourceId, null);
+            convertView = mLayoutInflater.inflate(mHeaderLayoutResourceId, null);
         }
 
         TextView sectionNameTxtView = convertView.findViewById(R.id.people_header_text_view);
@@ -975,7 +975,7 @@ public class VectorParticipantsAdapter extends BaseExpandableListAdapter {
                 status = VectorUtils.getUserOnlineStatus(mContext, matchedSession, participant.mUserId, new SimpleApiCallback<Void>() {
                     @Override
                     public void onSuccess(Void info) {
-                        VectorParticipantsAdapter.this.refresh(mFirstEntry, null);
+                        refresh(mFirstEntry, null);
                     }
                 });
             }

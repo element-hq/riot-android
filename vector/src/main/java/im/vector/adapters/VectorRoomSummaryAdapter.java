@@ -469,7 +469,7 @@ public class VectorRoomSummaryAdapter extends BaseExpandableListAdapter {
         RoomSummary roomSummary = getRoomSummaryAt(aGroupPosition, aChildPosition);
 
         if (null != roomSummary) {
-            Room room = this.roomFromRoomSummary(roomSummary);
+            Room room = roomFromRoomSummary(roomSummary);
             if (null != room) {
                 room.sendReadReceipt();
             }
@@ -610,7 +610,7 @@ public class VectorRoomSummaryAdapter extends BaseExpandableListAdapter {
     public View getGroupView(int groupPosition, boolean isExpanded, View convertView, ViewGroup parent) {
 
         if (null == convertView) {
-            convertView = this.mLayoutInflater.inflate(this.mHeaderLayoutResourceId, null);
+            convertView = mLayoutInflater.inflate(mHeaderLayoutResourceId, null);
         }
 
         TextView sectionNameTxtView = convertView.findViewById(R.id.heading);
@@ -963,7 +963,7 @@ public class VectorRoomSummaryAdapter extends BaseExpandableListAdapter {
             mMatchedPublicRoomsCount = null;
 
             // refresh the layout
-            this.notifyDataSetChanged();
+            notifyDataSetChanged();
         }
     }
 

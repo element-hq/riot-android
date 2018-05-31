@@ -674,7 +674,7 @@ public class VectorRoomDetailsMembersFragment extends VectorBaseFragment {
         mRemoveMembersMenuItem.setEnabled(true);
         mSwitchDeletionMenuItem.setEnabled(true);
 
-        setActivityTitle(this.getResources().getString(R.string.room_details_title));
+        setActivityTitle(getString(R.string.room_details_title));
     }
 
     /**

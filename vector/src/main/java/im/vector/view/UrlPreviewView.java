@@ -90,7 +90,7 @@ public class UrlPreviewView extends LinearLayout {
             @Override
             public void onClick(View v) {
                 mIsDismissed = true;
-                UrlPreviewView.this.setVisibility(View.GONE);
+                setVisibility(View.GONE);
 
                 mDismissedUrlsPreviews.add(mUID);
 

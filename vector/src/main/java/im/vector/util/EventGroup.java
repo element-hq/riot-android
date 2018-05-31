@@ -1,5 +1,6 @@
 /*
  * Copyright 2017 Vector Creations Ltd
+ * Copyright 2018 New Vector Ltd
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -22,6 +23,7 @@ import android.text.TextUtils;
 import org.matrix.androidsdk.adapters.MessageRow;
 import org.matrix.androidsdk.call.MXCallsManager;
 import org.matrix.androidsdk.rest.model.Event;
+import org.matrix.androidsdk.util.Log;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -33,8 +35,6 @@ import java.util.Set;
 
 import im.vector.R;
 import im.vector.adapters.AdapterUtils;
-
-import org.matrix.androidsdk.util.Log;
 
 /**
  * A EventGroup is a special event that can contain MessageRows
@@ -105,7 +105,7 @@ public class EventGroup extends Event {
      */
     private void refreshOriginServerTs() {
         if (mRows.size() > 0) {
-            this.originServerTs = mRows.get(0).getEvent().originServerTs;
+            originServerTs = mRows.get(0).getEvent().originServerTs;
         }
     }
 

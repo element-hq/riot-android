@@ -96,7 +96,7 @@ public abstract class MXCActionBarActivity extends RiotAppCompatActivity {
         // ActivityCompat.startActivity(activity, new Intent(activity, DetailActivity.class),  options.toBundle());
 
         if (Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP) {
-            this.overridePendingTransition(R.anim.anim_slide_in_bottom, R.anim.anim_slide_nothing);
+            overridePendingTransition(R.anim.anim_slide_in_bottom, R.anim.anim_slide_nothing);
         } else {
             // the animation is enabled in the theme
         }
@@ -112,7 +112,7 @@ public abstract class MXCActionBarActivity extends RiotAppCompatActivity {
         // ActivityOptionsCompat options = ActivityOptionsCompat.makeSceneTransitionAnimation(...
         // ActivityCompat.startActivity(activity, new Intent(activity, DetailActivity.class),  options.toBundle());
         if (Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP) {
-            this.overridePendingTransition(R.anim.anim_slide_nothing, R.anim.anim_slide_out_bottom);
+            overridePendingTransition(R.anim.anim_slide_nothing, R.anim.anim_slide_out_bottom);
         } else {
             // the animation is enabled in the theme
         }

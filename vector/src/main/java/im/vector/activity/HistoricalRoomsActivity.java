@@ -346,7 +346,7 @@ public class HistoricalRoomsActivity extends RiotAppCompatActivity implements
      * @param errorMessage the localized error message
      */
     private void onRequestDone(final String errorMessage) {
-        if (!this.isFinishing()) {
+        if (!isFinishing()) {
             runOnUiThread(new Runnable() {
                 @Override
                 public void run() {

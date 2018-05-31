@@ -110,7 +110,7 @@ public class RoomDirectoryPickerActivity extends RiotAppCompatActivity implement
 
         // should never happen
         if ((null == mSession) || !mSession.isAlive()) {
-            this.finish();
+            finish();
             return;
         }
 

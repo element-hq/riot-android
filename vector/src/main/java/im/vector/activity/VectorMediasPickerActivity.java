@@ -272,14 +272,14 @@ public class VectorMediasPickerActivity extends MXCActionBarActivity implements 
         mSwitchCameraImageView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                VectorMediasPickerActivity.this.onSwitchCamera();
+                onSwitchCamera();
             }
         });
 
         mTakeImageView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                VectorMediasPickerActivity.this.onClickTakeImage();
+                onClickTakeImage();
             }
         });
 
@@ -567,7 +567,7 @@ public class VectorMediasPickerActivity extends MXCActionBarActivity implements 
             android.hardware.Camera.CameraInfo info = new android.hardware.Camera.CameraInfo();
             android.hardware.Camera.getCameraInfo(mCameraId, info);
 
-            int rotation = this.getWindowManager().getDefaultDisplay().getRotation();
+            int rotation = getWindowManager().getDefaultDisplay().getRotation();
             int degrees = 0;
             switch (rotation) {
                 case Surface.ROTATION_0:
@@ -906,8 +906,8 @@ public class VectorMediasPickerActivity extends MXCActionBarActivity implements 
                 int imageW = newBitmap.getWidth();
                 int imageH = newBitmap.getHeight();
 
-                int screenHeight = this.getWindow().getDecorView().getHeight();
-                int screenWidth = this.getWindow().getDecorView().getWidth();
+                int screenHeight = getWindow().getDecorView().getHeight();
+                int screenWidth = getWindow().getDecorView().getWidth();
 
                 if ((0 == screenHeight) || (0 == screenWidth)) {
                     mImagePreviewImageView.post(new Runnable() {
@@ -1551,7 +1551,7 @@ public class VectorMediasPickerActivity extends MXCActionBarActivity implements 
         android.hardware.Camera.CameraInfo info = new android.hardware.Camera.CameraInfo();
         android.hardware.Camera.getCameraInfo(mCameraId, info);
 
-        int rotation = this.getWindowManager().getDefaultDisplay().getRotation();
+        int rotation = getWindowManager().getDefaultDisplay().getRotation();
         int degrees = 0;
         switch (rotation) {
             case Surface.ROTATION_0:
@@ -1838,7 +1838,7 @@ public class VectorMediasPickerActivity extends MXCActionBarActivity implements 
                         recentMedia.mMimeType = imagesThumbnailsCursor.getString(mimeTypeIndex);
                         recentMedia.mCreationTime = Long.parseLong(dateAsString);
 
-                        recentMedia.mThumbnail = MediaStore.Images.Thumbnails.getThumbnail(this.getContentResolver(),
+                        recentMedia.mThumbnail = MediaStore.Images.Thumbnails.getThumbnail(getContentResolver(),
                                 Long.parseLong(id), MediaStore.Images.Thumbnails.MINI_KIND, null);
                         recentMedia.mFileUri = Uri.parse(MediaStore.Images.Media.EXTERNAL_CONTENT_URI.toString() + "/" + id);
 
@@ -1872,7 +1872,7 @@ public class VectorMediasPickerActivity extends MXCActionBarActivity implements 
             Cursor videoThumbnailsCursor = null;
 
             try {
-                videoThumbnailsCursor = this.getContentResolver().query(MediaStore.Video.Media.EXTERNAL_CONTENT_URI,
+                videoThumbnailsCursor = getContentResolver().query(MediaStore.Video.Media.EXTERNAL_CONTENT_URI,
                         videosProjection, // Which columns to return
                         null,       // Return all image files
                         null,
@@ -1897,7 +1897,7 @@ public class VectorMediasPickerActivity extends MXCActionBarActivity implements 
                             recentMedia.mMimeType = videoThumbnailsCursor.getString(mimeTypeIndex);
                             recentMedia.mCreationTime = Long.parseLong(dateAsString);
 
-                            recentMedia.mThumbnail = MediaStore.Video.Thumbnails.getThumbnail(this.getContentResolver(),
+                            recentMedia.mThumbnail = MediaStore.Video.Thumbnails.getThumbnail(getContentResolver(),
                                     Long.parseLong(id), MediaStore.Video.Thumbnails.MINI_KIND, null);
                             recentMedia.mFileUri = Uri.parse(MediaStore.Video.Media.EXTERNAL_CONTENT_URI.toString() + "/" + id);
 
@@ -1942,7 +1942,7 @@ public class VectorMediasPickerActivity extends MXCActionBarActivity implements 
         Cursor imageThumbnailsCursor = null;
 
         try {
-            imageThumbnailsCursor = this.getContentResolver().query(MediaStore.Images.Media.EXTERNAL_CONTENT_URI,
+            imageThumbnailsCursor = getContentResolver().query(MediaStore.Images.Media.EXTERNAL_CONTENT_URI,
                     null, // no projection
                     null,
                     null,
@@ -1960,7 +1960,7 @@ public class VectorMediasPickerActivity extends MXCActionBarActivity implements 
             Cursor videoThumbnailsCursor = null;
 
             try {
-                videoThumbnailsCursor = this.getContentResolver().query(MediaStore.Video.Media.EXTERNAL_CONTENT_URI,
+                videoThumbnailsCursor = getContentResolver().query(MediaStore.Video.Media.EXTERNAL_CONTENT_URI,
                         null, // no projection
                         null,
                         null,

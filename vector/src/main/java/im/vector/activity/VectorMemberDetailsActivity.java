@@ -169,7 +169,7 @@ public class VectorMemberDetailsActivity extends MXCActionBarActivity implements
     private final MXEventListener mLiveEventsListener = new MXEventListener() {
         @Override
         public void onLiveEvent(final Event event, RoomState roomState) {
-            VectorMemberDetailsActivity.this.runOnUiThread(new Runnable() {
+            runOnUiThread(new Runnable() {
                 @Override
                 public void run() {
                     String eventType = event.getType();
@@ -178,7 +178,7 @@ public class VectorMemberDetailsActivity extends MXCActionBarActivity implements
                     // check if there is a member update
                     if ((Event.EVENT_TYPE_STATE_ROOM_MEMBER.equals(eventType)) || (Event.EVENT_TYPE_STATE_ROOM_POWER_LEVELS.equals(eventType))) {
                         // update only if it is the current user
-                        VectorMemberDetailsActivity.this.runOnUiThread(new Runnable() {
+                        runOnUiThread(new Runnable() {
                             @Override
                             public void run() {
                                 if (checkRoomMemberStatus()) {
@@ -202,7 +202,7 @@ public class VectorMemberDetailsActivity extends MXCActionBarActivity implements
                     // pop to the home activity
                     Intent intent = new Intent(VectorMemberDetailsActivity.this, VectorHomeActivity.class);
                     intent.setFlags(android.content.Intent.FLAG_ACTIVITY_CLEAR_TOP | android.content.Intent.FLAG_ACTIVITY_SINGLE_TOP);
-                    VectorMemberDetailsActivity.this.startActivity(intent);
+                    startActivity(intent);
                 }
             });
         }
@@ -213,7 +213,7 @@ public class VectorMemberDetailsActivity extends MXCActionBarActivity implements
         public void onPresenceUpdate(Event event, final User user) {
             if (mMemberId.equals(user.user_id)) {
                 // Someone's presence has changed, reprocess the whole list
-                VectorMemberDetailsActivity.this.runOnUiThread(new Runnable() {
+                runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
                         // display an avatar it it was not used
@@ -271,7 +271,7 @@ public class VectorMemberDetailsActivity extends MXCActionBarActivity implements
         mSession.mCallsManager.createCallInRoom(mRoom.getRoomId(), isVideo, new ApiCallback<IMXCall>() {
             @Override
             public void onSuccess(final IMXCall call) {
-                VectorMemberDetailsActivity.this.runOnUiThread(new Runnable() {
+                runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
                         final Intent intent = new Intent(VectorMemberDetailsActivity.this, VectorCallViewActivity.class);
@@ -279,10 +279,10 @@ public class VectorMemberDetailsActivity extends MXCActionBarActivity implements
                         intent.putExtra(VectorCallViewActivity.EXTRA_MATRIX_ID, mSession.getCredentials().userId);
                         intent.putExtra(VectorCallViewActivity.EXTRA_CALL_ID, call.getCallId());
 
-                        VectorMemberDetailsActivity.this.runOnUiThread(new Runnable() {
+                        runOnUiThread(new Runnable() {
                             @Override
                             public void run() {
-                                VectorMemberDetailsActivity.this.startActivity(intent);
+                                startActivity(intent);
                             }
                         });
                     }
@@ -364,7 +364,7 @@ public class VectorMemberDetailsActivity extends MXCActionBarActivity implements
 
     @Override
     public void selectRoom(final Room aRoom) {
-        VectorMemberDetailsActivity.this.runOnUiThread(new Runnable() {
+        runOnUiThread(new Runnable() {
             @Override
             public void run() {
                 HashMap<String, Object> params = new HashMap<>();
@@ -404,7 +404,7 @@ public class VectorMemberDetailsActivity extends MXCActionBarActivity implements
                     public void onClick(DialogInterface dialog, int which) {
                         Log.d(LOG_TAG, "## performItemAction(): Start new room - start chat");
 
-                        VectorMemberDetailsActivity.this.runOnUiThread(new Runnable() {
+                        runOnUiThread(new Runnable() {
                             @Override
                             public void run() {
                                 enableProgressBarView(CommonActivityUtils.UTILS_DISPLAY_PROGRESS_BAR);
@@ -1163,7 +1163,7 @@ public class VectorMemberDetailsActivity extends MXCActionBarActivity implements
             // use a toolbar instead of the actionbar
             // to be able to display a large header
             android.support.v7.widget.Toolbar toolbar = findViewById(R.id.member_details_toolbar);
-            this.setSupportActionBar(toolbar);
+            setSupportActionBar(toolbar);
 
             if (null != getSupportActionBar()) {
                 getSupportActionBar().setDisplayHomeAsUpEnabled(true);

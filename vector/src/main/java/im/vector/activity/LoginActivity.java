@@ -858,7 +858,7 @@ public class LoginActivity extends MXCActionBarActivity implements RegistrationM
 
         Log.e(LOG_TAG, "## hasCredentials() : invalid credentials");
 
-        this.runOnUiThread(new Runnable() {
+        runOnUiThread(new Runnable() {
             @Override
             public void run() {
                 try {
@@ -1681,7 +1681,7 @@ public class LoginActivity extends MXCActionBarActivity implements RegistrationM
                     saveServerUrlsIfCustomValuesHasBeenEntered();
 
                     goToSplash();
-                    LoginActivity.this.finish();
+                    finish();
                 }
 
                 @Override

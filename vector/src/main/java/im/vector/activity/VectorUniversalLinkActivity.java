@@ -162,7 +162,7 @@ public class VectorUniversalLinkActivity extends RiotAppCompatActivity {
                     }
 
                     private void errorHandler(final String errorMessage) {
-                        VectorUniversalLinkActivity.this.runOnUiThread(new Runnable() {
+                        runOnUiThread(new Runnable() {
                             @Override
                             public void run() {
                                 Toast.makeText(getApplicationContext(), errorMessage, Toast.LENGTH_LONG).show();
@@ -173,7 +173,7 @@ public class VectorUniversalLinkActivity extends RiotAppCompatActivity {
 
                     @Override
                     public void onSuccess(Boolean isSuccess) {
-                        VectorUniversalLinkActivity.this.runOnUiThread(new Runnable() {
+                        runOnUiThread(new Runnable() {
                             @Override
                             public void run() {
                                 Log.d(LOG_TAG, "## emailBinding(): succeeds.");

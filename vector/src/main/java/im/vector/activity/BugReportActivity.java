@@ -211,7 +211,7 @@ public class BugReportActivity extends MXCActionBarActivity {
                         }
 
                         try {
-                            BugReportActivity.this.finish();
+                            finish();
                         } catch (Exception e) {
                             Log.e(LOG_TAG, "## onUploadSucceed() : failed to dismiss the dialog " + e.getMessage());
                         }

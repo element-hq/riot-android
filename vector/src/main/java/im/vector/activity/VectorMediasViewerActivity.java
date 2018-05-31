@@ -163,8 +163,8 @@ public class VectorMediasViewerActivity extends MXCActionBarActivity {
         mAdapter.autoPlayItemAt(position);
         mViewPager.setCurrentItem(position);
 
-        if (null != VectorMediasViewerActivity.this.getSupportActionBar()) {
-            VectorMediasViewerActivity.this.getSupportActionBar().setTitle(mMediasList.get(position).mFileName);
+        if (null != getSupportActionBar()) {
+            getSupportActionBar().setTitle(mMediasList.get(position).mFileName);
         }
         mViewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
             @Override
@@ -174,8 +174,8 @@ public class VectorMediasViewerActivity extends MXCActionBarActivity {
 
             @Override
             public void onPageSelected(int position) {
-                if (null != VectorMediasViewerActivity.this.getSupportActionBar()) {
-                    VectorMediasViewerActivity.this.getSupportActionBar().setTitle(mMediasList.get(position).mFileName);
+                if (null != getSupportActionBar()) {
+                    getSupportActionBar().setTitle(mMediasList.get(position).mFileName);
                 }
 
                 // disable shared for encrypted files as they are saved in a tmp folder
