@@ -3,6 +3,7 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    xmlns:tools="http://schemas.android.com/tools"
     android:background="?attr/list_header_background_color">
 
     <RelativeLayout
@@ -17,7 +18,7 @@
             android:layout_centerVertical="true"
             android:layout_marginLeft="18dp"
             android:fontFamily="sans-serif-medium"
-            android:text="Header"
+            tools:text="Header"
             android:textColor="?attr/riot_primary_text_color"
             android:textSize="14sp" />
 

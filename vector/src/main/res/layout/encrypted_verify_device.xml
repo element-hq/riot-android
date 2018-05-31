@@ -2,7 +2,8 @@
 
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content">
+    android:layout_height="wrap_content"
+    xmlns:tools="http://schemas.android.com/tools">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -30,7 +31,7 @@
             android:id="@+id/encrypted_device_info_device_name"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="a device name"
+            tools:text="a device name"
             android:textSize="12sp" />
 
         <TextView
@@ -45,7 +46,7 @@
             android:id="@+id/encrypted_device_info_device_id"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="a device id"
+            tools:text="a device id"
             android:textSize="12sp" />
 
         <TextView
@@ -60,7 +61,7 @@
             android:id="@+id/encrypted_device_info_device_key"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="a device key"
+            tools:text="a device key"
             android:textSize="12sp" />
 
         <TextView
