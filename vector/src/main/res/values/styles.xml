@@ -505,7 +505,7 @@
 
         <item name="android:listDivider">@null</item>
     </style>
-    
+
     <!--  ************************  Black theme  **************************** -->
 
     <style name="AppTheme.NoActionBar.Black" parent="@style/Theme.Vector.Black">

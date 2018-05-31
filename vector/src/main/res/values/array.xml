@@ -20,7 +20,7 @@
         <item>@string/room_settings_room_access_entry_anyone_with_link_apart_guest</item>
         <item>@string/room_settings_room_access_entry_anyone_with_link_including_guest</item>
     </string-array>
-    
+
     <string-array name="room_access_rules_values" translatable="false">
         <item>1</item>
         <item>2</item>

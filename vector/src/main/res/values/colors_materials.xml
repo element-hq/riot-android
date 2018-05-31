@@ -14,7 +14,7 @@
      limitations under the License.
 -->
 
-<!-- Colors specific to Material themes. 
+<!-- Colors specific to Material themes.
      Taken from: sdk/platforms/android-L/data/res/values/colors_material.xml -->
 <resources>
     <color name="background_material_dark">#ff212121</color>
