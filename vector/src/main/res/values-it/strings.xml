@@ -148,10 +148,14 @@ Selezionare esporta per fare un backup delle chat prima di disconnettersi.</stri
     <string name="auth_password_placeholder">Password</string>
     <string name="auth_new_password_placeholder">Nuova password</string>
     <string name="auth_user_name_placeholder">Nome utente</string>
-    <string name="auth_add_email_message">"Aggiungi un indirizzo email al tuo account per permettere agli altri di trovarti e per resettare la password."</string>
-    <string name="auth_add_phone_message">"Aggiungi un numero di telefono al tuo account per permettere agli altri di trovarti."</string>
-    <string name="auth_add_email_phone_message">"Aggiungi un indirizzo email e/o un numero di telefono al tuo account per permettere agli altri di trovarti.\n\nL\'indirizzo email ti permetterà anche di resettare la password."</string>
-    <string name="auth_add_email_and_phone_message">"Aggiungi un indirizzo email ed un numero di telefono al tuo account per permettere agli altri di trovarti.\n\nL\'indirizzo email ti permetterà anche di resettare la password."</string>
+    <string name="auth_add_email_message">Aggiungi un indirizzo email al tuo account per farti trovare e per poter resettare la password.</string>
+    <string name="auth_add_phone_message">Aggiungi un numero di telefono al tuo account per farti trovare.</string>
+    <string name="auth_add_email_phone_message">Aggiungi un indirizzo email e/o un numero di telefono al tuo account per farti trovare.
+
+L\'indirizzo email ti permetterà anche di resettare la password.</string>
+    <string name="auth_add_email_and_phone_message">Aggiungi un indirizzo email ed un numero di telefono al tuo account per farti trovare.
+
+L\'indirizzo email ti permetterà anche di resettare la password.</string>
     <string name="auth_email_placeholder">Indirizzo email</string>
     <string name="auth_opt_email_placeholder">Indirizzo email (facoltativo)</string>
     <string name="auth_phone_number_placeholder">Numero di telefono</string>
@@ -159,7 +163,7 @@ Selezionare esporta per fare un backup delle chat prima di disconnettersi.</stri
     <string name="auth_repeat_password_placeholder">Conferma la password</string>
     <string name="auth_repeat_new_password_placeholder">Conferma la nuova password</string>
     <string name="auth_invalid_login_param">Nome utente e/o password non corretti</string>
-    <string name="auth_invalid_user_name">Il nome utente può contenere solo lettere, numeri, punti, trattini e linee</string>
+    <string name="auth_invalid_user_name">Il nome utente può contenere solo lettere, numeri, punti, trattini e linee basse</string>
     <string name="auth_invalid_password">Password troppo breve (min 6)</string>
     <string name="auth_missing_password">Password mancante</string>
     <string name="auth_invalid_email">"Non risulta un indirizzo email valido"</string>
@@ -173,7 +177,9 @@ Selezionare esporta per fare un backup delle chat prima di disconnettersi.</stri
     <string name="auth_forgot_password">Password dimenticata?</string>
     <string name="auth_use_server_options">Usa opzioni server personalizzate (avanzate)</string>
     <string name="auth_email_validation_message">Per favore controlla la tua email per proseguire la registrazione</string>
-    <string name="auth_threepid_warning_message">La registrazione con email e numero di telefono in una volta sola non è ancora supportata (relative API in sviluppo). Sarà utilizzato solo il numero di telefono.\n\nPuoi sempre aggiungere la tua email al tuo profilo dalle impostazioni.</string>
+    <string name="auth_threepid_warning_message">La registrazione con email e numero di telefono in una volta sola non è ancora supportata (relative API in sviluppo). Sarà utilizzato solo il numero di telefono.
+
+Puoi aggiungere la tua email al tuo profilo dalle impostazioni.</string>
     <string name="auth_recaptcha_message">Questo server home vorrebbe assicurarsi che tu non sia un robot</string>
     <string name="auth_username_in_use">Nome utente in uso</string>
     <string name="auth_home_server">Server home:</string>
