@@ -33,7 +33,11 @@ DO NOT COMMIT
 #@android\:color\/
 
 # String in multiline
-<string [^<]*$
+# DISABLED
+#<string [^<]*$
 
 # double unbreakable space
 \\u00A0\\u00A0
+
+# Empty XML tag
+\"><\/

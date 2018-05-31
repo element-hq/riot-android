@@ -288,7 +288,7 @@
         <item name="android:textColorHint">?attr/activity_bottom_gradient_color</item>
     </style>
 
-    <style name="DirectoryPickerTheme" parent="AppTheme.NoActionBar"></style>
+    <style name="DirectoryPickerTheme" parent="AppTheme.NoActionBar"/>
 
     <!-- searches activity -->
     <style name="SearchesAppTheme" parent="AppTheme">
@@ -465,7 +465,7 @@
         <item name="android:textColorHint">?attr/activity_bottom_gradient_color</item>
     </style>
 
-    <style name="DirectoryPickerTheme.Dark" parent="AppTheme.NoActionBar.Dark"></style>
+    <style name="DirectoryPickerTheme.Dark" parent="AppTheme.NoActionBar.Dark"/>
 
     <style name="SearchesAppTheme.Dark" parent="AppTheme.Dark">
         <!-- custom action bar -->
@@ -620,7 +620,7 @@
         <item name="android:textColorHint">?attr/activity_bottom_gradient_color</item>
     </style>
 
-    <style name="DirectoryPickerTheme.Black" parent="AppTheme.NoActionBar.Black"></style>
+    <style name="DirectoryPickerTheme.Black" parent="AppTheme.NoActionBar.Black"/>
 
     <style name="SearchesAppTheme.Black" parent="AppTheme.Black">
         <!-- custom action bar -->
