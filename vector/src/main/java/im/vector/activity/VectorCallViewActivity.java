@@ -486,9 +486,6 @@ public class VectorCallViewActivity extends RiotAppCompatActivity implements Sen
             });
         }
 
-        // FIXME Use mAvatarView and remove this
-        ImageView avatarView = findViewById(R.id.call_other_member);
-
         // the avatar side must be the half of the min screen side
         Display display = getWindowManager().getDefaultDisplay();
         Point size = new Point();
@@ -496,13 +493,13 @@ public class VectorCallViewActivity extends RiotAppCompatActivity implements Sen
 
         int side = Math.min(size.x, size.y) / 2;
 
-        RelativeLayout.LayoutParams avatarLayoutParams = (RelativeLayout.LayoutParams) avatarView.getLayoutParams();
+        RelativeLayout.LayoutParams avatarLayoutParams = (RelativeLayout.LayoutParams) mAvatarView.getLayoutParams();
         avatarLayoutParams.height = side;
         avatarLayoutParams.width = side;
 
-        avatarView.setLayoutParams(avatarLayoutParams);
+        mAvatarView.setLayoutParams(avatarLayoutParams);
 
-        VectorUtils.loadCallAvatar(this, mSession, avatarView, mCall.getRoom());
+        VectorUtils.loadCallAvatar(this, mSession, mAvatarView, mCall.getRoom());
 
         mIncomingCallTabbar.setVisibility(CallsManager.getSharedInstance().isRinging() && mCall.isIncoming() ? View.VISIBLE : View.GONE);
         mPermissionCode = mCall.isVideo() ?
