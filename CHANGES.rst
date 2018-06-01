@@ -1,13 +1,16 @@
-Changes in Riot 0.8.10 (2018-XX-XX)
+Changes in Riot 0.8.10 (2018-01-06)
 ===================================================
+
+Improvements:
+ * Update matrix-sdk.aar lib (v0.9.5).
+ * GDPR compliance:
+    * Account deactivation is now managed natively in a dedicated screen
 
 Features:
  * Send stickers to a Room
 
 Bug Fix:
  * Gif do not play anymore (#2168)
-
-
 
 Changes in Riot 0.8.9 (2018-05-25)
 ===================================================
@@ -16,7 +19,7 @@ Improvements:
  * Update matrix-sdk.aar lib (v0.9.4).
  * GDPR compliance:
     * Manage M_CONSENT_NOT_GIVEN matrix error
-    * Sending analytics is no opt-in
+    * Sending analytics is now opt-in
     * Possibility to deactivate account (redirected to the web client for the moment)
  * Reply to feature: display only
 
