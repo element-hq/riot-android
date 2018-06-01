@@ -286,7 +286,7 @@ Cliquez sur exporter pour les sauvegarder avant de vous déconnecter.</string>
 
     <string name="room_sliding_menu_messages">Messages</string>
     <string name="room_sliding_menu_settings">Paramètres</string>
-    <string name="room_sliding_menu_version">"Version "</string>
+    <string name="room_sliding_menu_version">Version</string>
     <string name="room_sliding_menu_term_and_conditions">Termes et conditions</string>
     <string name="room_sliding_menu_third_party_notices">Licences tierces</string>
     <string name="room_sliding_menu_copyright">Droits d\'auteur</string>
@@ -927,4 +927,34 @@ Appareils inconnus :</string>
     <string name="startup_notification_privacy_button_other">Choisir une autre option</string>
 
     <string name="notice_avatar">Avatar de l\'annonce</string>
-    </resources>
+    <string name="title_activity_choose_sticker">Envoyer un sticker</string>
+
+    <string name="option_send_sticker">Envoyer un sticker</string>
+    <string name="no_sticker_application_dialog_content">Vous n\'avez aucun pack de stickers activé pour le moment.
+
+Voulez-vous en ajouter ?</string>
+
+    <string name="settings_deactivate_account_section">Désactiver le compte</string>
+    <string name="settings_deactivate_my_account">Désactiver mon compte</string>
+
+    <string name="settings_opt_in_of_analytics">Envoyer des données analytiques</string>
+    <string name="settings_opt_in_of_analytics_summary">Riot collecte des données analytiques anonymes pour nous permettre d\'améliorer l\'application.</string>
+    <string name="settings_opt_in_of_analytics_prompt">Veuillez autoriser la collecte des données pour nous aider à améliorer Riot.</string>
+    <string name="settings_opt_in_of_analytics_ok">Oui, je veux aider !</string>
+
+    <string name="widget_integration_missing_parameter">Un paramètre requis est manquant.</string>
+    <string name="widget_integration_invalid_parameter">Un paramètre n\'est pas valide.</string>
+    <string name="dialog_user_consent_content">Pour continuer à utiliser le serveur d\'accueil %1$s, vous devez lire et accepter les conditions générales.</string>
+    <string name="dialog_user_consent_submit">Voir maintenant</string>
+
+    <string name="deactivate_account_title">Désactiver le compte</string>
+    <string name="deactivate_account_content">Votre compte sera inutilisable de façon permanente. Vous ne pourrez plus vous connecter et personne ne pourra se réenregistrer avec le même identifiant d\'utilisateur. Le compte quittera tous les salons auxquels il participe et tous ses détails seront supprimés du serveur d\'identité. <b>Cette action est irréversible. </b>
+
+Désactiver votre compte <b>ne nous fait pas oublier les messages que vous avez envoyés par défaut</b>. Si vous souhaitez que nous oubliions vos messages, cochez la case ci-dessous.
+
+La visibilité des messages dans Matrix est identique à celle des e-mails. Si nous oublions vos messages, cela signifie que les messages que vous avez envoyés ne seront plus partagés avec les nouveaux utilisateurs ou les utilisateurs non enregistrés, mais les utilisateurs enregistrés qui ont déjà accès à ces messages en conserveront leur copie.</string>
+    <string name="deactivate_account_delete_checkbox">Veuillez oublier tous les messages que j\'ai envoyé quand mon compte sera désactivé (Avertissement : les futurs utilisateurs verront une version incomplète des conversations)</string>
+    <string name="deactivate_account_prompt_password">Pour continuer, veuillez renseigner votre mot de passe :</string>
+    <string name="deactivate_account_submit">Désactiver le compte</string>
+
+</resources>

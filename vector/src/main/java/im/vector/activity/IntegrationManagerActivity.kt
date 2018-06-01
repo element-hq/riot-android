@@ -98,6 +98,8 @@ class IntegrationManagerActivity : AbstractWidgetActivity() {
         val action = eventData["action"] as String?
 
         // Do something depending on action (please add new actions following alphabetical order)
+        // FTR: some documentation can be found here:
+        // https://github.com/matrix-org/matrix-react-sdk/blob/master/src/ScalarMessaging.js#L1-L233
         when (action) {
             "bot_options" -> getBotOptions(eventData)
                     .also { return true }
@@ -125,7 +127,7 @@ class IntegrationManagerActivity : AbstractWidgetActivity() {
                     .also { return true }
         }
 
-        return false
+        return super.dealsWithWidgetRequest(eventData)
     }
 
     /*

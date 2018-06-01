@@ -422,7 +422,7 @@ Biztos vagy benne?</string>
 
     <string name="room_sliding_menu_messages">Üzenetek</string>
     <string name="room_sliding_menu_settings">Beállítások</string>
-    <string name="room_sliding_menu_version">"Verzió "</string>
+    <string name="room_sliding_menu_version">Verzió</string>
     <string name="room_sliding_menu_term_and_conditions">Felhasználási feltételek</string>
     <string name="room_sliding_menu_third_party_notices">Harmadik fél közlemények</string>
     <string name="room_sliding_menu_copyright">Szerzői jog</string>
@@ -927,4 +927,34 @@ Ismeretlen eszközök:</string>
     <string name="settings_notification_privacy_message_content_not_shown">• Az értesítések <b>nem mutatják az üzenet tartalmát</b></string>
 
     <string name="startup_notification_privacy_title">Értesítés adatvédelme</string>
-    </resources>
+    <string name="title_activity_choose_sticker">Matrica küldése</string>
+
+    <string name="option_send_sticker">Matrica küldése</string>
+    <string name="no_sticker_application_dialog_content">Nincs semmilyen matrica csomagod.
+
+Hozzáadsz párat most?</string>
+
+    <string name="settings_deactivate_account_section">Fiók felfüggesztése</string>
+    <string name="settings_deactivate_my_account">Függessze fel a fiókomat</string>
+
+    <string name="settings_opt_in_of_analytics">Analitikai adatok küldése</string>
+    <string name="settings_opt_in_of_analytics_summary">Riot anonim analitikai adatokat gyűjt, hogy javítani tudjuk az alkalmazást.</string>
+    <string name="settings_opt_in_of_analytics_prompt">Kérlek engedélyezd az analitikai adatok gyűjtését ezzel segítve a Riot fejlesztését.</string>
+    <string name="settings_opt_in_of_analytics_ok">Igen, segíteni akarok!</string>
+
+    <string name="widget_integration_missing_parameter">A szükséges paraméter hiányzik.</string>
+    <string name="widget_integration_invalid_parameter">Nem érvényes paraméter.</string>
+    <string name="dialog_user_consent_content">A(z) %1$s szerver további használatához el kell olvasnod és el kell fogadnod az általános szerződési feltételeket.</string>
+    <string name="dialog_user_consent_submit">Elolvasom</string>
+
+    <string name="deactivate_account_title">Fiók felfüggesztése</string>
+    <string name="deactivate_account_content">Ez véglegesen használhatatlanná teszi a felhasználói fiókodat. Nem tudsz többé bejelentkezni, és más sem fog tudni regisztrálni ezzel a felhasználói azonosítóval. A felhasználód minden szobából amiben van ki fog lépni és a felhasználói adatod törlésre kerül az \"identity\" szerverről. <b>Ez a művelet visszavonhatatlan</b>
+
+A fiók felfüggesztése <b>alapesetben nem törli azokat az üzeneteket amiket elküldtél</b>. Ha azt szeretnéd, hogy töröljük az üzeneteket, koppints a jelölőnégyzetre alul.
+
+Matrixban az üzenetek láthatósága hasonlít az e-mailre. Az üzenet törlése azt jelenti, hogy az általad küldött üzeneteket nem osztjuk meg új-, vagy nem regisztrált felhasználókkal de azok a regisztrált felhasználók akik már hozzájutottak az üzenetedhez továbbra is elérik a saját másolatukat.</string>
+    <string name="deactivate_account_delete_checkbox">Kérlek töröld az elküldött üzeneteimet a fiók felfüggesztésekor (Figyelem: emiatt a felhasználók részleges beszélgetéseket látnak majd)</string>
+    <string name="deactivate_account_prompt_password">A folytatáshoz add meg a jelszavadat:</string>
+    <string name="deactivate_account_submit">Fiók felfüggesztése</string>
+
+</resources>

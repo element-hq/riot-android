@@ -21,6 +21,7 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageInfo;
+import android.support.annotation.NonNull;
 import android.text.TextUtils;
 
 import org.matrix.androidsdk.crypto.IncomingRoomKeyRequest;
@@ -28,6 +29,7 @@ import org.matrix.androidsdk.crypto.IncomingRoomKeyRequestCancellation;
 import org.matrix.androidsdk.crypto.MXCrypto;
 import org.matrix.androidsdk.rest.callback.ApiCallback;
 import org.matrix.androidsdk.rest.callback.SimpleApiCallback;
+import org.matrix.androidsdk.rest.client.LoginRestClient;
 import org.matrix.androidsdk.rest.model.MatrixError;
 import org.matrix.androidsdk.ssl.Fingerprint;
 import org.matrix.androidsdk.ssl.UnrecognizedCertificateException;
@@ -464,6 +466,40 @@ public class Matrix {
     //==============================================================================================================
     // Session management
     //==============================================================================================================
+
+    /**
+     * Deactivate a session.
+     *
+     * @param context       the context.
+     * @param session       the session to deactivate.
+     * @param userPassword  the user password
+     * @param eraseUserData true to also erase all the user data
+     * @param aCallback     the success and failure callback
+     */
+    public void deactivateSession(final Context context,
+                                  final MXSession session,
+                                  final String userPassword,
+                                  final boolean eraseUserData,
+                                  final @NonNull ApiCallback<Void> aCallback) {
+        Log.d(LOG_TAG, "## deactivateSession() " + session.getMyUserId());
+
+        session.deactivateAccount(context, LoginRestClient.LOGIN_FLOW_TYPE_PASSWORD, userPassword, eraseUserData, new SimpleApiCallback<Void>(aCallback) {
+            @Override
+            public void onSuccess(Void info) {
+                mLoginStorage.removeCredentials(session.getHomeServerConfig());
+
+                session.getDataHandler().removeListener(mLiveEventListener);
+
+                VectorApp.removeSyncingSession(session);
+
+                synchronized (LOG_TAG) {
+                    mMXSessions.remove(session);
+                }
+
+                aCallback.onSuccess(info);
+            }
+        });
+    }
 
     /**
      * Clear a session.

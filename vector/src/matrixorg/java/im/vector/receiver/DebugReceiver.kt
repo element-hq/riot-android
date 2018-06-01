@@ -14,13 +14,23 @@
  * limitations under the License.
  */
 
-package im.vector.activity.util
+package im.vector.receiver
 
-const val ACCOUNT_CREATION_ACTIVITY_REQUEST_CODE = 314
-const val FALLBACK_LOGIN_ACTIVITY_REQUEST_CODE = 315
-const val CAPTCHA_CREATION_ACTIVITY_REQUEST_CODE = 316
+import android.content.BroadcastReceiver
+import android.content.Context
+import android.content.Intent
+import android.content.IntentFilter
 
-const val STICKER_PICKER_ACTIVITY_REQUEST_CODE = 12000
+/**
+ * No Op version
+ */
+class DebugReceiver : BroadcastReceiver() {
 
-const val INTEGRATION_MANAGER_ACTIVITY_REQUEST_CODE = 13000
+    override fun onReceive(context: Context, intent: Intent) {
+        // No op
+    }
 
+    companion object {
+        fun getIntentFilter() = IntentFilter()
+    }
+}

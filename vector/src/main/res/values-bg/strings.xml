@@ -438,7 +438,7 @@
 
     <string name="room_sliding_menu_messages">Съобщения</string>
     <string name="room_sliding_menu_settings">Настройки</string>
-    <string name="room_sliding_menu_version">"Версия "</string>
+    <string name="room_sliding_menu_version">Версия</string>
     <string name="room_sliding_menu_term_and_conditions">Правила и условия</string>
     <string name="room_sliding_menu_third_party_notices">Други известия</string>
     <string name="room_sliding_menu_copyright">Лиценз</string>
@@ -912,4 +912,34 @@
 
     <string name="settings_notification_privacy">Конфиденциалност на уведомленията</string>
     <string name="settings_notification_privacy_normal">Нормална</string>
-    </resources>
+    <string name="title_activity_choose_sticker">Изпращане на стикер</string>
+
+    <string name="option_send_sticker">Изпрати стикер</string>
+    <string name="no_sticker_application_dialog_content">В момента нямате активирани пакети със стикери.
+
+Добавете сега?</string>
+
+    <string name="settings_deactivate_account_section">Деактивиране на акаунт</string>
+    <string name="settings_deactivate_my_account">Деактивирай акаунта ми</string>
+
+    <string name="settings_opt_in_of_analytics">Изпращане на статистически данни</string>
+    <string name="settings_opt_in_of_analytics_summary">Riot събира анонимни статистики за да ни помогне да подобрим приложението.</string>
+    <string name="settings_opt_in_of_analytics_prompt">Моля, включете изпращането на статистики за да ни помогнете да подобрим Riot.</string>
+    <string name="settings_opt_in_of_analytics_ok">Да, искам да помогна!</string>
+
+    <string name="widget_integration_missing_parameter">Липсва задължителен параметър.</string>
+    <string name="widget_integration_invalid_parameter">Невалиден параметър.</string>
+    <string name="dialog_user_consent_content">За да продължите да използвате %1$s трябва да прегледате и да се съгласите с правилата и условията.</string>
+    <string name="dialog_user_consent_submit">Прегледай сега</string>
+
+    <string name="deactivate_account_title">Деактивиране на акаунт</string>
+    <string name="deactivate_account_content">Това ще направи акаунта Ви неизползваем завинаги. Няма да можете да влезете пак, а регистрирането повторно на същия потребителски идентификатор няма да е възможно. Акаунтът Ви да напусне всички стаи, в които участва. Ще бъдат премахнати и данните за акаунта Ви от сървъра за самоличност. <b>Действието е необратимо.</b>
+
+Деактивирането на акаунта Ви <b>по подразбиране не прави така, че изпратените съобщения да бъдат забравени.</b> Ако искате да забравим съобщенията Ви, моля отбележете с отметка по-долу.
+
+Видимостта на съобщенията в Matrix е подобно на имейл системата. Нашето забравяне означава, че: изпратените от Вас съобщения няма да бъдат споделяни с нови или нерегистрирани потребители, но регистрираните потребители имащи достъп до тях ще продължат да имат достъп до своето копие.</string>
+    <string name="deactivate_account_delete_checkbox">Моля, забравете всички изпратени от мен съобщения, когато акаунта ми се деактивира (Внимание: това ще направи бъдещите потребители да имат само частичен поглед върху кореспонденцията)</string>
+    <string name="deactivate_account_prompt_password">За да продължите, моля въведете паролата си:</string>
+    <string name="deactivate_account_submit">Деактивирай акаунта</string>
+
+</resources>

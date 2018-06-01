@@ -432,7 +432,7 @@ Ste si istí?</string>
 
     <string name="room_sliding_menu_messages">Správy</string>
     <string name="room_sliding_menu_settings">Nastavenia</string>
-    <string name="room_sliding_menu_version">"Verzia "</string>
+    <string name="room_sliding_menu_version">Verzia</string>
     <string name="room_sliding_menu_term_and_conditions">Podmienky používania</string>
     <string name="room_sliding_menu_third_party_notices">Poznámky tretích strán</string>
     <string name="room_sliding_menu_copyright">Autorské práva</string>
@@ -947,4 +947,34 @@ Neznáme zariadenia:</string>
     <string name="startup_notification_privacy_button_grant">Potvrdiť</string>
     <string name="startup_notification_privacy_button_other">Vyberte inú voľbu</string>
 
-    </resources>
+    <string name="title_activity_choose_sticker">Odoslať nálepku</string>
+
+    <string name="option_send_sticker">Odoslať nálepku</string>
+    <string name="no_sticker_application_dialog_content">Momentálne nemáte aktívne žiadne balíčky s nálepkami.
+
+Chcete si nejaké pridať teraz?</string>
+
+    <string name="settings_deactivate_account_section">Deaktivovať účet</string>
+    <string name="settings_deactivate_my_account">Deaktivovať môj účet</string>
+
+    <string name="settings_opt_in_of_analytics">Odosielať analytické údaje</string>
+    <string name="settings_opt_in_of_analytics_summary">Riot zbiera anonymné analytické údaje, čo nám umožňuje aplikáciu ďalej zlepšovať.</string>
+    <string name="settings_opt_in_of_analytics_prompt">Prosím povoľte odosielanie analytických údajov a pomôžte nám tak vylepšovať Riot.</string>
+    <string name="settings_opt_in_of_analytics_ok">Áno, chcem pomôcť!</string>
+
+    <string name="widget_integration_missing_parameter">Chýba zadanie povinného argumentu.</string>
+    <string name="widget_integration_invalid_parameter">Argument nie je správny.</string>
+    <string name="dialog_user_consent_content">Ak chcete aj naďalej používať domovský server %1$s , mali by ste si prečítať a odsúhlasiť naše zmluvné podmienky.</string>
+    <string name="dialog_user_consent_submit">Prečítať teraz</string>
+
+    <string name="deactivate_account_title">Deaktivovať účet</string>
+    <string name="deactivate_account_content">Toto spôsobí, že váš účet nebude viac použiteľný. Nebudete sa môcť opätovne prihlásiť a nikto sa nebude môcť znovu zaregistrovať s rovnakým používateľským ID. Deaktiváciou účtu opustíte všetky miestnosti, do ktorých ste kedy vstúpili a vaše kontaktné údaje budú odstránené zo servera totožností. <b>Túto akciu nie je možné vrátiť späť.</b>.
+
+Pri deaktivácii účtu <b>predvolene neodstraňujeme vami odoslané správy.</b> Ak si želáte uplatniť právo zabudnutia, zaškrtnite prosím zodpovedajúce pole nižšie.
+
+Viditeľnosť správ odoslaných cez matrix funguje podobne ako viditeľnosť správ elektronickej pošty. To, že zabudneme vaše správy v skutočnosti znamená, že správy ktoré ste už odoslali nebudú čitateľné pre nových alebo neregistrovaných používateľov, no registrovaní používatelia, ktorí už prístup k vašim správam majú, budú aj naďalej bez zmeny môcť pristupovať k ich vlastným kópiám vašich správ.</string>
+    <string name="deactivate_account_delete_checkbox">Spolu s deaktivovaním účtu si želám odstrániť všetky mnou odoslané správy (Pozor: Môže sa stať, že noví používatelia uvidia neúplnú históriu konverzácií)</string>
+    <string name="deactivate_account_prompt_password">Aby ste mohli pokračovať, prosím zadajte svoje heslo:</string>
+    <string name="deactivate_account_submit">Deaktivovať účet</string>
+
+</resources>
