@@ -448,7 +448,7 @@ Bist du sicher?</string>
     <!-- home sliding menu -->
     <string name="room_sliding_menu_messages">Nachrichten</string>
     <string name="room_sliding_menu_settings">Einstellungen</string>
-    <string name="room_sliding_menu_version">Version </string>
+    <string name="room_sliding_menu_version">Version</string>
     <string name="room_sliding_menu_term_and_conditions">Nutzungsbedingungen</string>
     <string name="room_sliding_menu_third_party_notices">Nutzungshinweise von Drittanbietern</string>
     <string name="room_sliding_menu_copyright">Urheberrechtserklärung</string>
@@ -972,4 +972,34 @@ Unbekannte Geräte:</string>
     <string name="startup_notification_privacy_button_grant">Berechtigung gewähren</string>
     <string name="startup_notification_privacy_button_other">Wähle eine andere Option</string>
 
-    </resources>
+    <string name="title_activity_choose_sticker">Sende einen Sticker</string>
+
+    <string name="option_send_sticker">Sende Sticker</string>
+    <string name="no_sticker_application_dialog_content">Du hast aktuell keine Stickerpackete aktiviert.
+
+Willst du welche hinzufügen?</string>
+
+    <string name="settings_deactivate_account_section">Deaktiviere Account</string>
+    <string name="settings_deactivate_my_account">Deaktivere meinen Account</string>
+
+    <string name="settings_opt_in_of_analytics">Sende Analysedaten</string>
+    <string name="settings_opt_in_of_analytics_summary">Riot sammelt anonyme Analysedaten um uns zu helfen, die App zu verbessern.</string>
+    <string name="settings_opt_in_of_analytics_prompt">Bitte aktive Analysedaten um uns zu helfen Riot zu verbessern.</string>
+    <string name="settings_opt_in_of_analytics_ok">Ja, ich möchte helfen!</string>
+
+    <string name="widget_integration_missing_parameter">Ein benötigter Parameter fehlt.</string>
+    <string name="widget_integration_invalid_parameter">Ein Parameter ist nicht valide.</string>
+    <string name="dialog_user_consent_content">Um %1$s weiter zu verwenden, musst die Geschäftsbedingungen begutachten und ihnen zustimmen.</string>
+    <string name="dialog_user_consent_submit">Jetzt begutachten</string>
+
+    <string name="deactivate_account_title">Account deaktiveren</string>
+    <string name="deactivate_account_content">Dies wir deinen Account permanent unbenutzbar machen. Du wirst dich nicht anmelden können und keiner wird dieselbe Nutzer-ID erneut registrieren könne. Dieser Account wird alle Räume verlassen, in denen er ist und wird deine Account-Daten vom Identitätsserver löschen. <b>Diese Aktion ist irreversibel</b>.
+
+Den Account zu deaktiveren wird standardmäßig <b>keine deiner gesendeten Nachrichten löschen</b>. Wenn du von uns möchtest, dass wir auch deine Nachrichten löschen, wähle die Option unten aus.
+
+Die Sichtbarkeit deiner Nachrichten ist ähnlich zu E-Mails: Wenn wir deine Nachrichten löschen heißt das, dass sie nicht mit neuen oder nicht registrierten Nutzer geteilt werden, aber registrierte Nutzer, die bereits Zugang zu deinen Nachrichten haben, werden Zugriff auf ihre Kopie behalten.</string>
+    <string name="deactivate_account_delete_checkbox">Bitte löscht alle Nachrichten die ich gesendet habe, wenn mein Account deaktiviert wird (Warnung: Zukünftige Nutzer werden eine unvollständige Ansicht auf Konversationen haben)</string>
+    <string name="deactivate_account_prompt_password">Um fortzufahren, bitte Password eingeben:</string>
+    <string name="deactivate_account_submit">Account deaktivieren</string>
+
+</resources>

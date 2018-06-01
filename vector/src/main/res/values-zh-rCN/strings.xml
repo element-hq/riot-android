@@ -11,7 +11,7 @@
     <string name="forward">转发</string>
     <string name="action_voice_call">语音通话</string>
     <string name="action_video_call">视频通话</string>
-    <string name="action_mark_all_as_read">全部标记为已读 (</string>
+    <string name="action_mark_all_as_read">全部标记为已读</string>
     <string name="action_quick_reply">快速回复</string>
     <string name="copied_to_clipboard">复制到剪贴板</string>
     <string name="send_bug_report_include_logs">发送日志</string>
@@ -122,7 +122,7 @@
     <string name="login_error_unable_login">无法登录</string>
     <string name="login_error_registration_network_error">无法注册：网络错误</string>
     <string name="login_error_unable_register">无法注册</string>
-    <string name="login_error_invalid_home_server">输入有效的 URL</string>
+    <string name="login_error_invalid_home_server">请输入有效的 URL</string>
 
     <string name="login_error_forbidden">无效的的用户名/密码</string>
     <string name="login_error_not_json">没有包含有效的 JSON</string>
@@ -227,7 +227,7 @@
     <string name="auth_use_server_options">使用自定义服务器选项（高级）</string>
     <string name="auth_email_validation_message">请检查您的电子邮箱以继续注册</string>
     <string name="auth_recaptcha_message">此主服务器想确认您不是机器人</string>
-    <string name="auth_reset_password_email_validation_message">一封电子邮件已经发送至 %s. 在您点击了里面的链接之后，请点击下面。</string>
+    <string name="auth_reset_password_email_validation_message">一封电子邮件已经发送至 %s。在您点击了里面的链接之后，请点击下面。</string>
     <string name="auth_reset_password_error_unauthorized">邮箱验证失败：请确保您已点击邮件中的链接</string>
     <string name="auth_reset_password_success_message">您的密码已被重置。
 

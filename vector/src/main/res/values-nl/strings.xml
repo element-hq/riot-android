@@ -872,8 +872,8 @@ Je kan het nu of later doen vanaf de applicatie instellingen.</string>
 
 
     <plurals name="notification_unread_notified_messages_in_room_msgs">
-	<item quantity="one">1 ongelezen vermeld bericht</item>
-	<item quantity="other">%d ongelezen vermelde berichten</item>
+	<item quantity="one">1 ongelezen bericht waarin je vermeld staat</item>
+	<item quantity="other">%d ongelezen berichten waarin je vermeld staat</item>
 </plurals>
     <plurals name="notification_unread_notified_messages_in_room_rooms">
 	<item quantity="one">1 ruimte</item>
@@ -923,8 +923,8 @@ Je kan het nu of later doen vanaf de applicatie instellingen.</string>
     <string name="avatar">Avatar</string>
 
 <plurals name="notification_unread_notified_messages">
-	<item quantity="one">1 ongelezen vermeld bericht</item>
-	<item quantity="other">%d ongelezen vermelde berichten</item>
+	<item quantity="one">1 ongelezen bericht waarin je vermeld staat</item>
+	<item quantity="other">%d ongelezen berichten waarin je vermeld staat</item>
 </plurals>
     <string name="notice_avatar">Vermeldingsavatar</string>
     <string name="title_activity_choose_sticker">Verstuur een sticker</string>
