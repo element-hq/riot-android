@@ -1,13 +1,14 @@
 Changes in Riot 0.8.10 (2018-XX-XX)
 ===================================================
 
+Improvements:
+ * Update matrix-sdk.aar lib (v0.9.5).
+
 Features:
  * Send stickers to a Room
 
 Bug Fix:
  * Gif do not play anymore (#2168)
-
-
 
 Changes in Riot 0.8.9 (2018-05-25)
 ===================================================
