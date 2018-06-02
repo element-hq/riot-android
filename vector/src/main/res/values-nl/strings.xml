@@ -113,7 +113,7 @@ Selecteer exporteren om de versleutelingssleutels op te slaan voordat je uitlogt
     <string name="send_bug_report_app_crashed">De applicatie was de vorige keer gecrasht. Wil je een foutmelding indienen?</string>
 
     <string name="send_files_in">Versturen als</string>
-    <string name="read_receipt">Lees</string>
+    <string name="read_receipt">Gelezen</string>
 
     <string name="join_room">Ruimte toetreden</string>
     <string name="username">Gebruikersnaam</string>
@@ -570,7 +570,7 @@ Sta toegang toe op de volgende pop-up om bestanden vanaf je telefoon te sturen.<
     <string name="room_settings_read_history_entry_anyone">Iedereen</string>
     <string name="room_settings_read_history_entry_members_only_option_time_shared">Alleen deelnemers (vanaf de tijd dat deze optie is geselecteerd)</string>
     <string name="room_settings_read_history_entry_members_only_invited">Alleen deelnemers (vanaf de tijd dat ze worden uitgenodigd)</string>
-    <string name="room_settings_read_history_entry_members_only_joined">Alleen deelnemers (vanaf de tijd dat ze deelnemen)</string>
+    <string name="room_settings_read_history_entry_members_only_joined">Alleen deelnemers (vanaf de tijd dat ze toetreden)</string>
 
     <!-- Room settings: "Who can access this room?" (access rule) -->
     <string name="room_settings_room_access_warning">Om naar een ruimte te verwijzen moeten het een adres hebben.</string>
