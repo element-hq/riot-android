@@ -113,12 +113,6 @@ import me.leolin.shortcutbadger.ShortcutBadger;
 public class CommonActivityUtils {
     private static final String LOG_TAG = CommonActivityUtils.class.getSimpleName();
 
-    /**
-     * Schemes
-     */
-    private static final String HTTP_SCHEME = "http://";
-    private static final String HTTPS_SCHEME = "https://";
-
     // global helper constants:
     /**
      * The view is visible
@@ -499,27 +493,6 @@ public class CommonActivityUtils {
         Intent intent = new Intent(activity, LoginActivity.class);
         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
         activity.startActivity(intent);
-    }
-
-    /**
-     * Remove the http schemes from the URl passed in parameter
-     *
-     * @param aUrl URL to be parsed
-     * @return the URL with the scheme removed
-     */
-    public static String removeUrlScheme(String aUrl) {
-        String urlRetValue = aUrl;
-
-        if (null != aUrl) {
-            // remove URL scheme
-            if (aUrl.startsWith(HTTP_SCHEME)) {
-                urlRetValue = aUrl.substring(HTTP_SCHEME.length());
-            } else if (aUrl.startsWith(HTTPS_SCHEME)) {
-                urlRetValue = aUrl.substring(HTTPS_SCHEME.length());
-            }
-        }
-
-        return urlRetValue;
     }
 
     //==============================================================================================================

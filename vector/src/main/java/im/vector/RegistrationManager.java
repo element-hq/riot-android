@@ -48,7 +48,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-import im.vector.activity.CommonActivityUtils;
+import im.vector.util.UrlUtilKt;
 
 public class RegistrationManager {
     private static final String LOG_TAG = RegistrationManager.class.getSimpleName();
@@ -379,7 +379,7 @@ public class RegistrationManager {
         }
 
         RegistrationParams registrationParams = new RegistrationParams();
-        registrationParams.auth = getThreePidAuthParams(aClientSecret, CommonActivityUtils.removeUrlScheme(aIdentityServer),
+        registrationParams.auth = getThreePidAuthParams(aClientSecret, UrlUtilKt.removeUrlScheme(aIdentityServer),
                 aSid, LoginRestClient.LOGIN_FLOW_TYPE_EMAIL_IDENTITY, aSessionId);
 
         // Note: username, password and bind_email must not be set in registrationParams
