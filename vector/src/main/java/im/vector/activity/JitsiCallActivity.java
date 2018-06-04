@@ -29,6 +29,7 @@ import android.view.ViewGroup;
 import android.widget.RelativeLayout;
 import android.widget.Toast;
 
+import org.jetbrains.annotations.NotNull;
 import org.jitsi.meet.sdk.JitsiMeetView;
 import org.jitsi.meet.sdk.JitsiMeetViewListener;
 import org.matrix.androidsdk.MXSession;
@@ -44,6 +45,7 @@ import im.vector.Matrix;
 import im.vector.R;
 import im.vector.widgets.Widget;
 import im.vector.widgets.WidgetsManager;
+import kotlin.Pair;
 
 public class JitsiCallActivity extends RiotAppCompatActivity {
     private static final String LOG_TAG = JitsiCallActivity.class.getSimpleName();
@@ -109,6 +111,12 @@ public class JitsiCallActivity extends RiotAppCompatActivity {
             }
         }
     };
+
+    @NotNull
+    @Override
+    public Pair getOtherThemes() {
+        return new Pair(R.style.AppTheme_NoActionBar_Dark, R.style.AppTheme_NoActionBar_Black);
+    }
 
     @Override
     public int getLayoutRes() {

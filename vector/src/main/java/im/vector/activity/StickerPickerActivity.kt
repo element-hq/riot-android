@@ -42,6 +42,8 @@ class StickerPickerActivity : AbstractWidgetActivity() {
      * IMPLEMENT METHODS
      * ========================================================================================== */
 
+    override fun getOtherThemes() = Pair(R.style.AppTheme_NoActionBar_Dark, R.style.AppTheme_NoActionBar_Black)
+
     override fun getLayoutRes() = R.layout.activity_choose_sticker
 
     override fun getTitleRes() = R.string.title_activity_choose_sticker

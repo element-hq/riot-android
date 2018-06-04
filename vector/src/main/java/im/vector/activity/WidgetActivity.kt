@@ -82,6 +82,8 @@ class WidgetActivity : RiotAppCompatActivity() {
      * LIFE CYCLE
      * ========================================================================================== */
 
+    override fun getOtherThemes() = Pair(R.style.AppTheme_NoActionBar_Dark, R.style.AppTheme_NoActionBar_Black)
+
     override fun getLayoutRes() = R.layout.activity_widget
 
     @SuppressLint("NewApi")
