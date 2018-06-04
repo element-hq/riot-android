@@ -45,6 +45,7 @@ import org.matrix.androidsdk.util.Log;
 
 import im.vector.Matrix;
 import im.vector.R;
+import im.vector.util.ViewUtilKt;
 
 /**
  * LockScreenActivity is displayed within the notification to send a message without opening the application.
@@ -130,7 +131,7 @@ public class LockScreenActivity extends RiotAppCompatActivity { // do NOT extend
 
         // disable send button
         sendButton.setEnabled(false);
-        sendButton.setAlpha(CommonActivityUtils.UTILS_OPACITY_HALF);
+        sendButton.setAlpha(ViewUtilKt.UTILS_OPACITY_HALF);
 
         editText.addTextChangedListener(new TextWatcher() {
             @Override
@@ -147,10 +148,10 @@ public class LockScreenActivity extends RiotAppCompatActivity { // do NOT extend
                 String inputText = editText.getText().toString();
                 if (TextUtils.isEmpty(inputText)) {
                     sendButton.setEnabled(false);
-                    sendButton.setAlpha(CommonActivityUtils.UTILS_OPACITY_HALF);
+                    sendButton.setAlpha(ViewUtilKt.UTILS_OPACITY_HALF);
                 } else {
                     sendButton.setEnabled(true);
-                    sendButton.setAlpha(CommonActivityUtils.UTILS_OPACITY_NONE);
+                    sendButton.setAlpha(ViewUtilKt.UTILS_OPACITY_FULL);
                 }
             }
         });

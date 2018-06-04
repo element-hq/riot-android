@@ -114,18 +114,6 @@ public class CommonActivityUtils {
     private static final String LOG_TAG = CommonActivityUtils.class.getSimpleName();
 
     // global helper constants:
-    /**
-     * The view is visible
-     **/
-    public static final float UTILS_OPACITY_NONE = 1f;
-    /**
-     * The view is half dimmed
-     **/
-    public static final float UTILS_OPACITY_HALF = 0.5f;
-    /**
-     * The view is hidden
-     **/
-    public static final float UTILS_OPACITY_FULL = 0f;
 
     public static final boolean UTILS_DISPLAY_PROGRESS_BAR = true;
     public static final boolean UTILS_HIDE_PROGRESS_BAR = false;
