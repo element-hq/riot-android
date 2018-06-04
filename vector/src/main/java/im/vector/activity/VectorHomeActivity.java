@@ -689,7 +689,7 @@ public class VectorHomeActivity extends RiotAppCompatActivity implements SearchV
 
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.vector_home, menu);
-        CommonActivityUtils.tintMenuIcons(menu, ThemeUtils.getColor(this, R.attr.icon_tint_on_dark_action_bar_color));
+        ThemeUtils.tintMenuIcons(menu, ThemeUtils.getColor(this, R.attr.icon_tint_on_dark_action_bar_color));
         return true;
     }
 
@@ -1885,7 +1885,7 @@ public class VectorHomeActivity extends RiotAppCompatActivity implements SearchV
         if (null != getSupportActionBar()) {
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
             getSupportActionBar().setHomeButtonEnabled(true);
-            getSupportActionBar().setHomeAsUpIndicator(CommonActivityUtils.tintDrawable(this,
+            getSupportActionBar().setHomeAsUpIndicator(ThemeUtils.tintDrawable(this,
                     ContextCompat.getDrawable(this, R.drawable.ic_material_menu_white), R.attr.primary_control_color));
         }
 

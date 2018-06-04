@@ -104,7 +104,7 @@ public class BugReportActivity extends MXCActionBarActivity {
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.bug_report, menu);
 
-        CommonActivityUtils.tintMenuIcons(menu, ThemeUtils.getColor(this, R.attr.icon_tint_on_dark_action_bar_color));
+        ThemeUtils.tintMenuIcons(menu, ThemeUtils.getColor(this, R.attr.icon_tint_on_dark_action_bar_color));
         mSendBugReportItem = menu.findItem(R.id.ic_action_send_bug_report);
 
         refreshSendButton();

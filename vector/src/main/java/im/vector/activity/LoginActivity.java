@@ -85,6 +85,7 @@ import im.vector.receiver.VectorUniversalLinkReceiver;
 import im.vector.repositories.ServerUrlsRepository;
 import im.vector.services.EventStreamService;
 import im.vector.util.PhoneNumberUtils;
+import im.vector.util.ThemeUtils;
 import im.vector.util.ViewUtilKt;
 
 /**
@@ -383,7 +384,7 @@ public class LoginActivity extends MXCActionBarActivity implements RegistrationM
         EditText loginPhoneNumberCountryCode = findViewById(R.id.login_phone_number_country);
         loginPhoneNumberCountryCode.setCompoundDrawablesWithIntrinsicBounds(null,
                 null,
-                CommonActivityUtils.tintDrawable(this,
+                ThemeUtils.tintDrawable(this,
                         ContextCompat.getDrawable(this, R.drawable.ic_material_expand_more_black),
                         R.attr.settings_icon_tint_color),
                 null);
@@ -402,7 +403,7 @@ public class LoginActivity extends MXCActionBarActivity implements RegistrationM
         EditText phoneNumberCountryCode = findViewById(R.id.registration_phone_number_country);
         phoneNumberCountryCode.setCompoundDrawablesWithIntrinsicBounds(null,
                 null,
-                CommonActivityUtils.tintDrawable(this,
+                ThemeUtils.tintDrawable(this,
                         ContextCompat.getDrawable(this, R.drawable.ic_material_expand_more_black),
                         R.attr.settings_icon_tint_color),
                 null);

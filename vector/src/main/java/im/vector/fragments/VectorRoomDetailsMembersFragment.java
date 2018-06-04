@@ -491,7 +491,7 @@ public class VectorRoomDetailsMembersFragment extends VectorBaseFragment {
 
         // Inflate the menu; this adds items to the action bar if it is present.
         getActivity().getMenuInflater().inflate(R.menu.vector_room_details_add_people, menu);
-        CommonActivityUtils.tintMenuIcons(menu, ThemeUtils.getColor(getContext(), R.attr.icon_tint_on_dark_action_bar_color));
+        ThemeUtils.tintMenuIcons(menu, ThemeUtils.getColor(getContext(), R.attr.icon_tint_on_dark_action_bar_color));
 
         mRemoveMembersMenuItem = menu.findItem(R.id.ic_action_room_details_delete);
         mSwitchDeletionMenuItem = menu.findItem(R.id.ic_action_room_details_edition_mode);

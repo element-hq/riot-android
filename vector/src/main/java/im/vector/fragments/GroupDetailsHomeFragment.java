@@ -33,6 +33,7 @@ import org.matrix.androidsdk.rest.model.group.Group;
 import butterknife.BindView;
 import im.vector.R;
 import im.vector.activity.CommonActivityUtils;
+import im.vector.util.ThemeUtils;
 import im.vector.util.VectorImageGetter;
 import im.vector.util.VectorUtils;
 
@@ -115,9 +116,9 @@ public class GroupDetailsHomeFragment extends GroupDetailsBaseFragment {
      */
     @Override
     protected void initViews() {
-        mGroupMembersIconView.setImageDrawable(CommonActivityUtils.tintDrawableWithColor(ContextCompat.getDrawable(mActivity, R.drawable.riot_tab_groups),
+        mGroupMembersIconView.setImageDrawable(ThemeUtils.tintDrawableWithColor(ContextCompat.getDrawable(mActivity, R.drawable.riot_tab_groups),
                 mGroupMembersTextView.getCurrentTextColor()));
-        mGroupRoomsIconView.setImageDrawable(CommonActivityUtils.tintDrawableWithColor(ContextCompat.getDrawable(mActivity, R.drawable.riot_tab_rooms),
+        mGroupRoomsIconView.setImageDrawable(ThemeUtils.tintDrawableWithColor(ContextCompat.getDrawable(mActivity, R.drawable.riot_tab_rooms),
                 mGroupMembersTextView.getCurrentTextColor()));
     }
 

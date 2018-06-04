@@ -271,7 +271,7 @@ public class VectorRoomCreationActivity extends MXCActionBarActivity {
         }
 
         getMenuInflater().inflate(R.menu.vector_room_creation, menu);
-        CommonActivityUtils.tintMenuIcons(menu, ThemeUtils.getColor(this, R.attr.icon_tint_on_dark_action_bar_color));
+        ThemeUtils.tintMenuIcons(menu, ThemeUtils.getColor(this, R.attr.icon_tint_on_dark_action_bar_color));
 
 
         return true;

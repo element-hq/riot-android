@@ -208,7 +208,7 @@ public class VectorMediasViewerActivity extends MXCActionBarActivity {
 
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.vector_medias_viewer, menu);
-        CommonActivityUtils.tintMenuIcons(menu, ThemeUtils.getColor(this, R.attr.icon_tint_on_dark_action_bar_color));
+        ThemeUtils.tintMenuIcons(menu, ThemeUtils.getColor(this, R.attr.icon_tint_on_dark_action_bar_color));
 
         mShareMenuItem = menu.findItem(R.id.ic_action_share);
         if (null != mShareMenuItem) {

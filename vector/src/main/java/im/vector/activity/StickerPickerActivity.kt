@@ -108,7 +108,7 @@ class StickerPickerActivity : AbstractWidgetActivity() {
         menuInflater.inflate(R.menu.vector_choose_sticker, menu)
 
         // TODO Maintenance: this should be done in the parent Activity
-        CommonActivityUtils.tintMenuIcons(menu, ThemeUtils.getColor(this, R.attr.icon_tint_on_dark_action_bar_color))
+        ThemeUtils.tintMenuIcons(menu, ThemeUtils.getColor(this, R.attr.icon_tint_on_dark_action_bar_color))
 
         return true
     }

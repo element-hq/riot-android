@@ -98,7 +98,7 @@ public class CountryPickerActivity extends RiotAppCompatActivity implements Coun
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.menu_country_picker, menu);
-        CommonActivityUtils.tintMenuIcons(menu, ThemeUtils.getColor(this, R.attr.icon_tint_on_dark_action_bar_color));
+        ThemeUtils.tintMenuIcons(menu, ThemeUtils.getColor(this, R.attr.icon_tint_on_dark_action_bar_color));
 
         final MenuItem searchItem = menu.findItem(R.id.action_search);
         if (searchItem != null) {

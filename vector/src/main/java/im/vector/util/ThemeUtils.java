@@ -20,13 +20,17 @@ package im.vector.util;
 import android.app.Activity;
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.graphics.drawable.Drawable;
 import android.preference.PreferenceManager;
 import android.support.annotation.AttrRes;
 import android.support.annotation.ColorInt;
 import android.support.design.widget.TabLayout;
 import android.support.v4.content.ContextCompat;
+import android.support.v4.graphics.drawable.DrawableCompat;
 import android.text.TextUtils;
 import android.util.TypedValue;
+import android.view.Menu;
+import android.view.MenuItem;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -331,5 +335,50 @@ public class ThemeUtils {
             }
         }
         return resourceId;
+    }
+
+    /**
+     * Update the menu icons colors
+     *
+     * @param menu  the menu
+     * @param color the color
+     */
+    public static void tintMenuIcons(Menu menu, int color) {
+        for (int i = 0; i < menu.size(); ++i) {
+            MenuItem item = menu.getItem(i);
+            Drawable drawable = item.getIcon();
+            if (drawable != null) {
+                Drawable wrapped = DrawableCompat.wrap(drawable);
+                drawable.mutate();
+                DrawableCompat.setTint(wrapped, color);
+                item.setIcon(drawable);
+            }
+        }
+    }
+
+    /**
+     * Tint the drawable with a theme attribute
+     *
+     * @param context   the context
+     * @param drawable  the drawable to tint
+     * @param attribute the theme color
+     * @return the tinted drawable
+     */
+    public static Drawable tintDrawable(Context context, Drawable drawable, @AttrRes int attribute) {
+        return tintDrawableWithColor(drawable, getColor(context, attribute));
+    }
+
+    /**
+     * Tint the drawable with a color integer
+     *
+     * @param drawable the drawable to tint
+     * @param color    the color
+     * @return the tinted drawable
+     */
+    public static Drawable tintDrawableWithColor(Drawable drawable, @ColorInt int color) {
+        Drawable tinted = DrawableCompat.wrap(drawable);
+        drawable.mutate();
+        DrawableCompat.setTint(tinted, color);
+        return tinted;
     }
 }

@@ -2046,49 +2046,4 @@ public class CommonActivityUtils {
             Log.e(LOG_TAG, "## displayUnknownDevicesDialog() failed : " + e.getMessage());
         }
     }
-
-    /**
-     * Update the menu icons colors
-     *
-     * @param menu  the menu
-     * @param color the color
-     */
-    public static void tintMenuIcons(Menu menu, int color) {
-        for (int i = 0; i < menu.size(); ++i) {
-            MenuItem item = menu.getItem(i);
-            Drawable drawable = item.getIcon();
-            if (drawable != null) {
-                Drawable wrapped = DrawableCompat.wrap(drawable);
-                drawable.mutate();
-                DrawableCompat.setTint(wrapped, color);
-                item.setIcon(drawable);
-            }
-        }
-    }
-
-    /**
-     * Tint the drawable with a theme attribute
-     *
-     * @param context   the context
-     * @param drawable  the drawable to tint
-     * @param attribute the theme color
-     * @return the tinted drawable
-     */
-    public static Drawable tintDrawable(Context context, Drawable drawable, @AttrRes int attribute) {
-        return tintDrawableWithColor(drawable, ThemeUtils.getColor(context, attribute));
-    }
-
-    /**
-     * Tint the drawable with a color integer
-     *
-     * @param drawable the drawable to tint
-     * @param color    the color
-     * @return the tinted drawable
-     */
-    public static Drawable tintDrawableWithColor(Drawable drawable, @ColorInt int color) {
-        Drawable tinted = DrawableCompat.wrap(drawable);
-        drawable.mutate();
-        DrawableCompat.setTint(tinted, color);
-        return tinted;
-    }
 }

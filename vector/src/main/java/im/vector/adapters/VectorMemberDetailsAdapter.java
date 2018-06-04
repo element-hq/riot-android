@@ -395,7 +395,7 @@ public class VectorMemberDetailsAdapter extends BaseExpandableListAdapter {
 
             if (currentItem.mIconResourceId != R.drawable.ic_remove_circle_outline_red) {
                 viewHolder.mActionImageView.setImageDrawable(
-                        CommonActivityUtils.tintDrawable(mContext, viewHolder.mActionImageView.getDrawable(), R.attr.settings_icon_tint_color));
+                        ThemeUtils.tintDrawable(mContext, viewHolder.mActionImageView.getDrawable(), R.attr.settings_icon_tint_color));
             }
 
             // update the text colour: specific colour is required for the remove action
