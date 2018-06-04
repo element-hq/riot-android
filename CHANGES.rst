@@ -5,7 +5,7 @@ Features:
  -
 
 Improvements:
- -
+ - Add spacing to device keys (#2314)
 
 Bugfix:
  -
