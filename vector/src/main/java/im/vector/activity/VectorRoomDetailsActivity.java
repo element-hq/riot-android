@@ -41,6 +41,7 @@ import im.vector.contacts.ContactsManager;
 import im.vector.fragments.VectorRoomDetailsMembersFragment;
 import im.vector.fragments.VectorRoomSettingsFragment;
 import im.vector.fragments.VectorSearchRoomFilesListFragment;
+import im.vector.util.MatrixSdkExtensionsKt;
 
 /**
  * This class implements the room details screen, using a tab UI pattern.
@@ -370,7 +371,7 @@ public class VectorRoomDetailsActivity extends MXCActionBarActivity implements T
             onTabSelectSettingsFragment();
 
             // remove camera permission request if the user has not enough power level
-            if (!CommonActivityUtils.isPowerLevelEnoughForAvatarUpdate(mRoom, mSession)) {
+            if (!MatrixSdkExtensionsKt.isPowerLevelEnoughForAvatarUpdate(mRoom, mSession)) {
                 permissionToBeGranted &= ~CommonActivityUtils.PERMISSION_CAMERA;
             }
             CommonActivityUtils.checkPermissions(permissionToBeGranted, this);

@@ -641,30 +641,6 @@ public class CommonActivityUtils {
     }
 
     /**
-     * Check if the user power level allows to update the room avatar. This is mainly used to
-     * determine if camera permission must be checked or not.
-     *
-     * @param aRoom    the room
-     * @param aSession the session
-     * @return true if the user power level allows to update the avatar, false otherwise.
-     */
-    public static boolean isPowerLevelEnoughForAvatarUpdate(Room aRoom, MXSession aSession) {
-        boolean canUpdateAvatarWithCamera = false;
-        PowerLevels powerLevels;
-
-        if ((null != aRoom) && (null != aSession)) {
-            if (null != (powerLevels = aRoom.getLiveState().getPowerLevels())) {
-                int powerLevel = powerLevels.getUserPowerLevel(aSession.getMyUserId());
-
-                // check the power level against avatar level
-                canUpdateAvatarWithCamera = (powerLevel >= powerLevels.minimumPowerLevelForSendingEventAsStateEvent(Event.EVENT_TYPE_STATE_ROOM_AVATAR));
-            }
-        }
-
-        return canUpdateAvatarWithCamera;
-    }
-
-    /**
      * Check if the permissions provided in the list are granted.
      * This is an asynchronous method if permissions are requested, the final response
      * is provided in onRequestPermissionsResult(). In this case checkPermissions()

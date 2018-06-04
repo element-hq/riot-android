@@ -16,8 +16,10 @@
 
 package im.vector.util
 
+import org.matrix.androidsdk.MXSession
 import org.matrix.androidsdk.crypto.data.MXDeviceInfo
 import org.matrix.androidsdk.data.Room
+import org.matrix.androidsdk.rest.model.Event
 
 /* ==========================================================================================
  * MXDeviceInfo
@@ -46,14 +48,12 @@ fun Room?.getRoomMaxPowerLevel(): Int {
 
     var maxPowerLevel = 0
 
-    val powerLevels = liveState.powerLevels
-
-    if (null != powerLevels) {
+    liveState.powerLevels?.let {
         var tempPowerLevel: Int
 
         // find out the room member
         for (member in members) {
-            tempPowerLevel = powerLevels.getUserPowerLevel(member.userId)
+            tempPowerLevel = it.getUserPowerLevel(member.userId)
             if (tempPowerLevel > maxPowerLevel) {
                 maxPowerLevel = tempPowerLevel
             }
@@ -62,3 +62,26 @@ fun Room?.getRoomMaxPowerLevel(): Int {
 
     return maxPowerLevel
 }
+
+/**
+ * Check if the user power level allows to update the room avatar. This is mainly used to
+ * determine if camera permission must be checked or not.
+ *
+ * @param aSession the session
+ * @return true if the user power level allows to update the avatar, false otherwise.
+ */
+fun Room.isPowerLevelEnoughForAvatarUpdate(aSession: MXSession?): Boolean {
+    var canUpdateAvatarWithCamera = false
+
+    if (null != aSession) {
+        liveState.powerLevels?.let {
+            val powerLevel = it.getUserPowerLevel(aSession.myUserId)
+
+            // check the power level against avatar level
+            canUpdateAvatarWithCamera = powerLevel >= it.minimumPowerLevelForSendingEventAsStateEvent(Event.EVENT_TYPE_STATE_ROOM_AVATAR)
+        }
+    }
+
+    return canUpdateAvatarWithCamera
+}
+
