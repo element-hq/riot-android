@@ -101,6 +101,7 @@ import im.vector.contacts.PIDsRetriever;
 import im.vector.fragments.VectorUnknownDevicesFragment;
 import im.vector.gcm.GcmRegistrationManager;
 import im.vector.services.EventStreamService;
+import im.vector.util.MatrixSdkExtensionsKt;
 import im.vector.util.PreferencesManager;
 import im.vector.util.ThemeUtils;
 import im.vector.util.VectorUtils;
@@ -1970,7 +1971,7 @@ public class CommonActivityUtils {
         textView.setText(deviceInfo.deviceId);
 
         textView = layout.findViewById(R.id.encrypted_device_info_device_key);
-        textView.setText(deviceInfo.fingerprint());
+        textView.setText(MatrixSdkExtensionsKt.getFingerprintHumanReadable(deviceInfo));
 
         builder.setView(layout);
         builder.setTitle(R.string.encryption_information_verify_device);

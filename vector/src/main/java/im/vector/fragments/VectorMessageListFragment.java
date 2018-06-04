@@ -83,6 +83,7 @@ import im.vector.adapters.VectorMessagesAdapter;
 import im.vector.db.VectorContentProvider;
 import im.vector.listeners.IMessagesAdapterActionsListener;
 import im.vector.receiver.VectorUniversalLinkReceiver;
+import im.vector.util.MatrixSdkExtensionsKt;
 import im.vector.util.PreferencesManager;
 import im.vector.util.SlidableMediaInfo;
 import im.vector.util.ThemeUtils;
@@ -376,7 +377,7 @@ public class VectorMessageListFragment extends MatrixMessageListFragment impleme
 
         textView = layout.findViewById(R.id.encrypted_info_claimed_ed25519_fingerprint_key);
         if (null != deviceInfo) {
-            textView.setText(deviceInfo.fingerprint());
+            textView.setText(MatrixSdkExtensionsKt.getFingerprintHumanReadable(deviceInfo));
         } else {
             textView.setText(getActivity().getString(R.string.encryption_information_none));
         }
@@ -423,7 +424,7 @@ public class VectorMessageListFragment extends MatrixMessageListFragment impleme
             }
 
             textView = layout.findViewById(R.id.encrypted_ed25519_fingerprint);
-            textView.setText(deviceInfo.fingerprint());
+            textView.setText(MatrixSdkExtensionsKt.getFingerprintHumanReadable(deviceInfo));
         } else {
             noDeviceInfoLayout.setVisibility(View.VISIBLE);
             deviceInfoLayout.setVisibility(View.GONE);

@@ -116,6 +116,7 @@ import im.vector.preference.UserAvatarPreference;
 import im.vector.preference.VectorCustomActionEditTextPreference;
 import im.vector.preference.VectorGroupPreference;
 import im.vector.preference.VectorSwitchPreference;
+import im.vector.util.MatrixSdkExtensionsKt;
 import im.vector.util.PhoneNumberUtils;
 import im.vector.util.PreferencesManager;
 import im.vector.util.ThemeUtils;
@@ -2474,7 +2475,7 @@ public class VectorSettingsPreferencesFragment extends PreferenceFragment implem
                         VectorCustomActionEditTextPreference cryptoInfoTextPreference = (VectorCustomActionEditTextPreference) findPreference(PreferencesManager.SETTINGS_ENCRYPTION_INFORMATION_DEVICE_KEY_PREFERENCE_KEY);
 
                         if (null != cryptoInfoTextPreference) {
-                            cryptoInfoTextPreference.setSummary(deviceInfo.fingerprint());
+                            cryptoInfoTextPreference.setSummary(MatrixSdkExtensionsKt.getFingerprintHumanReadable(deviceInfo));
 
                             cryptoInfoTextPreference.setOnPreferenceLongClickListener(new VectorCustomActionEditTextPreference.OnPreferenceLongClickListener() {
                                 @Override
