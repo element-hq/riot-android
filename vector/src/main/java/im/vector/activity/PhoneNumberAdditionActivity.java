@@ -37,6 +37,7 @@ import com.google.i18n.phonenumbers.NumberParseException;
 import com.google.i18n.phonenumbers.PhoneNumberUtil;
 import com.google.i18n.phonenumbers.Phonenumber;
 
+import org.jetbrains.annotations.NotNull;
 import org.matrix.androidsdk.MXSession;
 import org.matrix.androidsdk.rest.callback.ApiCallback;
 import org.matrix.androidsdk.rest.model.MatrixError;
@@ -47,6 +48,7 @@ import im.vector.Matrix;
 import im.vector.R;
 import im.vector.util.PhoneNumberUtils;
 import im.vector.util.ThemeUtils;
+import kotlin.Pair;
 
 public class PhoneNumberAdditionActivity extends RiotAppCompatActivity implements TextView.OnEditorActionListener, TextWatcher, View.OnClickListener {
 
@@ -91,6 +93,12 @@ public class PhoneNumberAdditionActivity extends RiotAppCompatActivity implement
      * Activity lifecycle
      * *********************************************************************************************
      */
+
+    @NotNull
+    @Override
+    public Pair getOtherThemes() {
+        return new Pair(R.style.AppTheme_NoActionBar_Dark, R.style.AppTheme_NoActionBar_Black);
+    }
 
     @Override
     public int getLayoutRes() {

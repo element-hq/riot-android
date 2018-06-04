@@ -45,6 +45,7 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 
+import org.jetbrains.annotations.NotNull;
 import org.matrix.androidsdk.MXSession;
 import org.matrix.androidsdk.call.CallSoundsManager;
 import org.matrix.androidsdk.call.IMXCall;
@@ -66,6 +67,7 @@ import im.vector.util.CallsManager;
 import im.vector.util.VectorUtils;
 import im.vector.util.ViewUtilKt;
 import im.vector.view.VectorPendingCallView;
+import kotlin.Pair;
 
 /**
  * VectorCallViewActivity is the call activity.
@@ -311,6 +313,12 @@ public class VectorCallViewActivity extends RiotAppCompatActivity implements Sen
             // init as GONE, will be displayed according to call states..
             mCall.setVisibility(View.GONE);
         }
+    }
+
+    @NotNull
+    @Override
+    public Pair getOtherThemes() {
+        return new Pair(R.style.CallActivityTheme_Dark, R.style.CallActivityTheme_Black);
     }
 
     @Override

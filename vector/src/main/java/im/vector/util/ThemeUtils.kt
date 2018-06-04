@@ -29,40 +29,10 @@ import android.support.v4.graphics.drawable.DrawableCompat
 import android.text.TextUtils
 import android.util.TypedValue
 import android.view.Menu
-import android.view.MenuItem
-
-import java.util.HashMap
-
 import im.vector.R
 import im.vector.VectorApp
-import im.vector.activity.AccountCreationActivity
-import im.vector.activity.BugReportActivity
-import im.vector.activity.CountryPickerActivity
-import im.vector.activity.DeactivateAccountActivity
-import im.vector.activity.FallbackLoginActivity
-import im.vector.activity.HistoricalRoomsActivity
-import im.vector.activity.LanguagePickerActivity
-import im.vector.activity.LockScreenActivity
-import im.vector.activity.LoggingOutActivity
-import im.vector.activity.LoginActivity
-import im.vector.activity.NotificationPrivacyActivity
-import im.vector.activity.PhoneNumberAdditionActivity
-import im.vector.activity.PhoneNumberVerificationActivity
-import im.vector.activity.RoomDirectoryPickerActivity
-import im.vector.activity.SplashActivity
-import im.vector.activity.VectorBaseSearchActivity
-import im.vector.activity.VectorCallViewActivity
 import im.vector.activity.VectorGroupDetailsActivity
-import im.vector.activity.VectorHomeActivity
-import im.vector.activity.VectorMediasPickerActivity
-import im.vector.activity.VectorMediasViewerActivity
-import im.vector.activity.VectorMemberDetailsActivity
-import im.vector.activity.VectorPublicRoomsActivity
-import im.vector.activity.VectorRoomActivity
-import im.vector.activity.VectorRoomCreationActivity
-import im.vector.activity.VectorRoomDetailsActivity
-import im.vector.activity.VectorSettingsActivity
-import im.vector.activity.VectorUniversalLinkActivity
+import java.util.*
 
 /**
  * Util class for managing themes.
@@ -100,12 +70,10 @@ object ThemeUtils {
                 .putString(APPLICATION_THEME_KEY, aTheme)
                 .apply()
 
-        if (TextUtils.equals(aTheme, THEME_DARK_VALUE)) {
-            VectorApp.getInstance().setTheme(R.style.AppTheme_Dark)
-        } else if (TextUtils.equals(aTheme, THEME_BLACK_VALUE)) {
-            VectorApp.getInstance().setTheme(R.style.AppTheme_Black)
-        } else {
-            VectorApp.getInstance().setTheme(R.style.AppTheme)
+        when (aTheme) {
+            THEME_DARK_VALUE -> VectorApp.getInstance().setTheme(R.style.AppTheme_Dark)
+            THEME_BLACK_VALUE -> VectorApp.getInstance().setTheme(R.style.AppTheme_Black)
+            else -> VectorApp.getInstance().setTheme(R.style.AppTheme)
         }
 
         mColorByAttr.clear()
@@ -116,125 +84,10 @@ object ThemeUtils {
      *
      * @param activity the activity
      */
-    fun setActivityTheme(activity: Activity) {
-        if (TextUtils.equals(getApplicationTheme(activity), THEME_DARK_VALUE)) {
-            if (activity is BugReportActivity) {
-                activity.setTheme(R.style.AppTheme_Dark)
-            } else if (activity is AccountCreationActivity) {
-                activity.setTheme(R.style.AppTheme_Dark)
-            } else if (activity is DeactivateAccountActivity) {
-                activity.setTheme(R.style.AppTheme_NoActionBar_Dark)
-            } else if (activity is CountryPickerActivity) {
-                activity.setTheme(R.style.CountryPickerTheme_Dark)
-            } else if (activity is FallbackLoginActivity) {
-                activity.setTheme(R.style.AppTheme_Dark)
-            } else if (activity is HistoricalRoomsActivity) {
-                activity.setTheme(R.style.HomeActivityTheme_Dark)
-            } else if (activity is LanguagePickerActivity) {
-                activity.setTheme(R.style.CountryPickerTheme_Dark)
-            } else if (activity is NotificationPrivacyActivity) {
-                activity.setTheme(R.style.CountryPickerTheme_Dark)
-            } else if (activity is LoginActivity) {
-                activity.setTheme(R.style.LoginAppTheme_Dark)
-            } else if (activity is PhoneNumberAdditionActivity) {
-                activity.setTheme(R.style.AppTheme_NoActionBar_Dark)
-            } else if (activity is PhoneNumberVerificationActivity) {
-                activity.setTheme(R.style.AppTheme_NoActionBar_Dark)
-            } else if (activity is RoomDirectoryPickerActivity) {
-                activity.setTheme(R.style.DirectoryPickerTheme_Dark)
-            } else if (activity is SplashActivity) {
-                activity.setTheme(R.style.AppTheme_NoActionBar_Dark)
-            } else if (activity is LoggingOutActivity) {
-                activity.setTheme(R.style.AppTheme_NoActionBar_Dark)
-            } else if (activity is VectorBaseSearchActivity) {
-                activity.setTheme(R.style.SearchesAppTheme_Dark)
-            } else if (activity is VectorCallViewActivity) {
-                activity.setTheme(R.style.CallActivityTheme_Dark)
-            } else if (activity is VectorHomeActivity) {
-                activity.setTheme(R.style.HomeActivityTheme_Dark)
-            } else if (activity is VectorMediasPickerActivity) {
-                activity.setTheme(R.style.AppTheme_NoActionBar_FullScreen_Dark)
-            } else if (activity is VectorMediasViewerActivity) {
-                activity.setTheme(R.style.AppTheme_Dark)
-            } else if (activity is VectorMemberDetailsActivity) {
-                activity.setTheme(R.style.AppTheme_NoActionBar_Dark)
-            } else if (activity is VectorPublicRoomsActivity) {
-                activity.setTheme(R.style.AppTheme_Dark)
-            } else if (activity is VectorRoomActivity) {
-                activity.setTheme(R.style.AppTheme_NoActionBar_Dark)
-            } else if (activity is VectorRoomCreationActivity) {
-                activity.setTheme(R.style.AppTheme_Dark)
-            } else if (activity is VectorRoomDetailsActivity) {
-                activity.setTheme(R.style.AppTheme_Dark)
-            } else if (activity is VectorSettingsActivity) {
-                activity.setTheme(R.style.AppTheme_Dark)
-            } else if (activity is VectorUniversalLinkActivity) {
-                activity.setTheme(R.style.AppTheme_Dark)
-            } else if (activity is LockScreenActivity) {
-                activity.setTheme(R.style.Vector_Lock_Dark)
-            } else if (activity is VectorGroupDetailsActivity) {
-                activity.setTheme(R.style.AppTheme_Dark)
-            }
-        }
-
-        if (TextUtils.equals(getApplicationTheme(activity), THEME_BLACK_VALUE)) {
-            if (activity is BugReportActivity) {
-                activity.setTheme(R.style.AppTheme_Black)
-            } else if (activity is AccountCreationActivity) {
-                activity.setTheme(R.style.AppTheme_Black)
-            } else if (activity is DeactivateAccountActivity) {
-                activity.setTheme(R.style.AppTheme_NoActionBar_Black)
-            } else if (activity is CountryPickerActivity) {
-                activity.setTheme(R.style.CountryPickerTheme_Black)
-            } else if (activity is FallbackLoginActivity) {
-                activity.setTheme(R.style.AppTheme_Black)
-            } else if (activity is HistoricalRoomsActivity) {
-                activity.setTheme(R.style.HomeActivityTheme_Black)
-            } else if (activity is LanguagePickerActivity) {
-                activity.setTheme(R.style.CountryPickerTheme_Black)
-            } else if (activity is NotificationPrivacyActivity) {
-                activity.setTheme(R.style.CountryPickerTheme_Black)
-            } else if (activity is LoginActivity) {
-                activity.setTheme(R.style.LoginAppTheme_Black)
-            } else if (activity is PhoneNumberAdditionActivity) {
-                activity.setTheme(R.style.AppTheme_NoActionBar_Black)
-            } else if (activity is PhoneNumberVerificationActivity) {
-                activity.setTheme(R.style.AppTheme_NoActionBar_Black)
-            } else if (activity is RoomDirectoryPickerActivity) {
-                activity.setTheme(R.style.DirectoryPickerTheme_Black)
-            } else if (activity is SplashActivity) {
-                activity.setTheme(R.style.AppTheme_NoActionBar_Black)
-            } else if (activity is LoggingOutActivity) {
-                activity.setTheme(R.style.AppTheme_NoActionBar_Black)
-            } else if (activity is VectorBaseSearchActivity) {
-                activity.setTheme(R.style.SearchesAppTheme_Black)
-            } else if (activity is VectorCallViewActivity) {
-                activity.setTheme(R.style.CallActivityTheme_Black)
-            } else if (activity is VectorHomeActivity) {
-                activity.setTheme(R.style.HomeActivityTheme_Black)
-            } else if (activity is VectorMediasPickerActivity) {
-                activity.setTheme(R.style.AppTheme_NoActionBar_FullScreen_Black)
-            } else if (activity is VectorMediasViewerActivity) {
-                activity.setTheme(R.style.AppTheme_Black)
-            } else if (activity is VectorMemberDetailsActivity) {
-                activity.setTheme(R.style.AppTheme_NoActionBar_Black)
-            } else if (activity is VectorPublicRoomsActivity) {
-                activity.setTheme(R.style.AppTheme_Black)
-            } else if (activity is VectorRoomActivity) {
-                activity.setTheme(R.style.AppTheme_NoActionBar_Black)
-            } else if (activity is VectorRoomCreationActivity) {
-                activity.setTheme(R.style.AppTheme_Black)
-            } else if (activity is VectorRoomDetailsActivity) {
-                activity.setTheme(R.style.AppTheme_Black)
-            } else if (activity is VectorSettingsActivity) {
-                activity.setTheme(R.style.AppTheme_Black)
-            } else if (activity is VectorUniversalLinkActivity) {
-                activity.setTheme(R.style.AppTheme_Black)
-            } else if (activity is LockScreenActivity) {
-                activity.setTheme(R.style.Vector_Lock_Black)
-            } else if (activity is VectorGroupDetailsActivity) {
-                activity.setTheme(R.style.AppTheme_Black)
-            }
+    fun setActivityTheme(activity: Activity, otherThemes: Pair<Int, Int>) {
+        when (getApplicationTheme(activity)) {
+            THEME_DARK_VALUE -> activity.setTheme(otherThemes.first)
+            THEME_BLACK_VALUE -> activity.setTheme(otherThemes.second)
         }
 
         mColorByAttr.clear()

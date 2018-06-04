@@ -30,11 +30,14 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Filter;
 
+import org.jetbrains.annotations.NotNull;
+
 import im.vector.R;
 import im.vector.adapters.CountryAdapter;
 import im.vector.util.CountryPhoneData;
 import im.vector.util.PhoneNumberUtils;
 import im.vector.util.ThemeUtils;
+import kotlin.Pair;
 
 public class CountryPickerActivity extends RiotAppCompatActivity implements CountryAdapter.OnSelectCountryListener, SearchView.OnQueryTextListener {
 
@@ -67,6 +70,12 @@ public class CountryPickerActivity extends RiotAppCompatActivity implements Coun
      * Activity lifecycle
      * *********************************************************************************************
      */
+
+    @NotNull
+    @Override
+    public Pair getOtherThemes() {
+        return new Pair(R.style.CountryPickerTheme_Dark, R.style.CountryPickerTheme_Black);
+    }
 
     @Override
     public int getLayoutRes() {

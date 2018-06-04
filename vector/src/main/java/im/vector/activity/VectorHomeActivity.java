@@ -68,6 +68,7 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import org.jetbrains.annotations.NotNull;
 import org.matrix.androidsdk.MXDataHandler;
 import org.matrix.androidsdk.MXSession;
 import org.matrix.androidsdk.call.IMXCall;
@@ -124,6 +125,7 @@ import im.vector.util.ThemeUtils;
 import im.vector.util.VectorUtils;
 import im.vector.view.UnreadCounterBadgeView;
 import im.vector.view.VectorPendingCallView;
+import kotlin.Pair;
 
 /**
  * Displays the main screen of the app, with rooms the user has joined and the ability to create
@@ -261,6 +263,12 @@ public class VectorHomeActivity extends RiotAppCompatActivity implements SearchV
      * Activity lifecycle
      * *********************************************************************************************
      */
+
+    @NotNull
+    @Override
+    public Pair getOtherThemes() {
+        return new Pair(R.style.HomeActivityTheme_Dark, R.style.HomeActivityTheme_Black);
+    }
 
     @Override
     public int getLayoutRes() {

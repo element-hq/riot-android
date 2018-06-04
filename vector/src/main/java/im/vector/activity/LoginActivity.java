@@ -50,6 +50,7 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import org.jetbrains.annotations.NotNull;
 import org.matrix.androidsdk.HomeServerConnectionConfig;
 import org.matrix.androidsdk.MXSession;
 import org.matrix.androidsdk.rest.callback.ApiCallback;
@@ -87,6 +88,7 @@ import im.vector.services.EventStreamService;
 import im.vector.util.PhoneNumberUtils;
 import im.vector.util.ThemeUtils;
 import im.vector.util.ViewUtilKt;
+import kotlin.Pair;
 
 /**
  * Displays the login screen.
@@ -336,6 +338,12 @@ public class LoginActivity extends MXCActionBarActivity implements RegistrationM
                 checkIfMailValidationPending();
             }
         }
+    }
+
+    @NotNull
+    @Override
+    public Pair getOtherThemes() {
+        return new Pair(R.style.LoginAppTheme_Dark, R.style.LoginAppTheme_Black);
     }
 
     @Override

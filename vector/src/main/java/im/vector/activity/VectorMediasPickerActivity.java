@@ -61,6 +61,7 @@ import android.widget.TableRow;
 import android.widget.Toast;
 import android.widget.VideoView;
 
+import org.jetbrains.annotations.NotNull;
 import org.matrix.androidsdk.util.ImageUtils;
 import org.matrix.androidsdk.util.Log;
 import org.matrix.androidsdk.util.ResourceUtils;
@@ -90,6 +91,7 @@ import im.vector.VectorApp;
 import im.vector.util.ViewUtilKt;
 import im.vector.view.RecentMediaLayout;
 import im.vector.view.VideoRecordView;
+import kotlin.Pair;
 
 /**
  * VectorMediasPickerActivity is used to take a photo or to send an old one.
@@ -217,6 +219,12 @@ public class VectorMediasPickerActivity extends MXCActionBarActivity implements 
     private android.os.Handler mFileHandler;
 
     private VideoRecordView mRecordAnimationView;
+
+    @NotNull
+    @Override
+    public Pair getOtherThemes() {
+        return new Pair(R.style.AppTheme_NoActionBar_FullScreen_Dark, R.style.AppTheme_NoActionBar_FullScreen_Black);
+    }
 
     @Override
     public int getLayoutRes() {

@@ -30,12 +30,15 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Filter;
 
+import org.jetbrains.annotations.NotNull;
+
 import java.util.Locale;
 
 import im.vector.R;
 import im.vector.VectorApp;
 import im.vector.adapters.LanguagesAdapter;
 import im.vector.util.ThemeUtils;
+import kotlin.Pair;
 
 public class LanguagePickerActivity extends RiotAppCompatActivity implements LanguagesAdapter.OnSelectLocaleListener, SearchView.OnQueryTextListener {
 
@@ -58,6 +61,12 @@ public class LanguagePickerActivity extends RiotAppCompatActivity implements Lan
      * Activity lifecycle
      * *********************************************************************************************
      */
+
+    @NotNull
+    @Override
+    public Pair getOtherThemes() {
+        return new Pair(R.style.CountryPickerTheme_Dark, R.style.CountryPickerTheme_Black);
+    }
 
     @Override
     public int getLayoutRes() {

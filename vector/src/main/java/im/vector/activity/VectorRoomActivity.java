@@ -67,6 +67,7 @@ import android.widget.Toast;
 
 import com.google.gson.JsonParser;
 
+import org.jetbrains.annotations.NotNull;
 import org.matrix.androidsdk.MXSession;
 import org.matrix.androidsdk.call.IMXCall;
 import org.matrix.androidsdk.call.IMXCallListener;
@@ -136,6 +137,7 @@ import im.vector.view.VectorOngoingConferenceCallView;
 import im.vector.view.VectorPendingCallView;
 import im.vector.widgets.Widget;
 import im.vector.widgets.WidgetsManager;
+import kotlin.Pair;
 
 /**
  * Displays a single room with messages.
@@ -560,6 +562,12 @@ public class VectorRoomActivity extends MXCActionBarActivity implements
     //================================================================================
     // Activity classes
     //================================================================================
+
+    @NotNull
+    @Override
+    public Pair getOtherThemes() {
+        return new Pair(R.style.AppTheme_NoActionBar_Dark, R.style.AppTheme_NoActionBar_Black);
+    }
 
     @Override
     public int getLayoutRes() {

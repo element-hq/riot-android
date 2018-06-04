@@ -84,7 +84,7 @@ abstract class RiotAppCompatActivity : AppCompatActivity() {
     final override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        //ThemeUtils.setActivityTheme(this, getOtherThemes())
+        ThemeUtils.setActivityTheme(this, getOtherThemes())
 
         doBeforeSetContentView()
 
@@ -171,11 +171,6 @@ abstract class RiotAppCompatActivity : AppCompatActivity() {
     @LayoutRes
     abstract fun getLayoutRes(): Int
 
-    /**
-     * Return a Pair with Dark and Black theme
-     */
-    //abstract fun getOtherThemes(): Pair<Int, Int>
-
     /* ==========================================================================================
      * OPEN METHODS
      * ========================================================================================== */
@@ -188,6 +183,12 @@ abstract class RiotAppCompatActivity : AppCompatActivity() {
 
     @StringRes
     open fun getTitleRes() = -1
+
+    /**
+     * Return a Pair with Dark and Black theme
+     */
+    open fun getOtherThemes(): Pair<Int, Int> = Pair(R.style.AppTheme_Dark, R.style.AppTheme_Black)
+
 
     //==============================================================================================
     // Handle loading view (also called waiting view or spinner view)

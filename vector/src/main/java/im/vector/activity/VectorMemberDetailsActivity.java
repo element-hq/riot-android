@@ -33,6 +33,7 @@ import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import org.jetbrains.annotations.NotNull;
 import org.matrix.androidsdk.MXSession;
 import org.matrix.androidsdk.call.IMXCall;
 import org.matrix.androidsdk.crypto.MXCryptoError;
@@ -65,6 +66,7 @@ import im.vector.fragments.VectorUnknownDevicesFragment;
 import im.vector.util.CallsManager;
 import im.vector.util.MatrixSdkExtensionsKt;
 import im.vector.util.VectorUtils;
+import kotlin.Pair;
 
 /**
  * VectorMemberDetailsActivity displays the member information and allows to perform some dedicated actions.
@@ -1131,6 +1133,12 @@ public class VectorMemberDetailsActivity extends MXCActionBarActivity implements
                 }
             });
         }
+    }
+
+    @NotNull
+    @Override
+    public Pair getOtherThemes() {
+        return new Pair(R.style.AppTheme_NoActionBar_Dark, R.style.AppTheme_NoActionBar_Black);
     }
 
     @Override

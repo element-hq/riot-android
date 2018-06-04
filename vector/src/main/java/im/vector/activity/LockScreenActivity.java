@@ -34,6 +34,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import org.jetbrains.annotations.NotNull;
 import org.matrix.androidsdk.MXSession;
 import org.matrix.androidsdk.crypto.MXCryptoError;
 import org.matrix.androidsdk.data.Room;
@@ -46,6 +47,7 @@ import org.matrix.androidsdk.util.Log;
 import im.vector.Matrix;
 import im.vector.R;
 import im.vector.util.ViewUtilKt;
+import kotlin.Pair;
 
 /**
  * LockScreenActivity is displayed within the notification to send a message without opening the application.
@@ -65,6 +67,12 @@ public class LockScreenActivity extends RiotAppCompatActivity { // do NOT extend
     }
 
     private LinearLayout mMainLayout;
+
+    @NotNull
+    @Override
+    public Pair getOtherThemes() {
+        return new Pair(R.style.Vector_Lock_Dark, R.style.Vector_Lock_Light);
+    }
 
     @Override
     public int getLayoutRes() {
