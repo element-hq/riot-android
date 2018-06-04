@@ -101,14 +101,17 @@ public class BugReportActivity extends MXCActionBarActivity {
     }
 
     @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.bug_report, menu);
+    public int getMenuRes() {
+        return R.menu.bug_report;
+    }
 
-        ThemeUtils.INSTANCE.tintMenuIcons(menu, ThemeUtils.INSTANCE.getColor(this, R.attr.icon_tint_on_dark_action_bar_color));
+    @Override
+    public boolean onPrepareOptionsMenu(Menu menu) {
         mSendBugReportItem = menu.findItem(R.id.ic_action_send_bug_report);
 
         refreshSendButton();
-        return true;
+
+        return super.onPrepareOptionsMenu(menu);
     }
 
     @Override

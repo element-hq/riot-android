@@ -126,10 +126,8 @@ public class RoomDirectoryPickerActivity extends RiotAppCompatActivity implement
     }
 
     @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.menu_directory_server_picker, menu);
-        ThemeUtils.INSTANCE.tintMenuIcons(menu, ThemeUtils.INSTANCE.getColor(this, R.attr.icon_tint_on_dark_action_bar_color));
-        return true;
+    public int getMenuRes() {
+        return R.menu.menu_directory_server_picker;
     }
 
     @Override

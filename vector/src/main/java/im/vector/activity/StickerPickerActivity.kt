@@ -104,14 +104,7 @@ class StickerPickerActivity : AbstractWidgetActivity() {
      * MENU
      * ========================================================================================== */
 
-    override fun onCreateOptionsMenu(menu: Menu): Boolean {
-        menuInflater.inflate(R.menu.vector_choose_sticker, menu)
-
-        // TODO Maintenance: this should be done in the parent Activity
-        ThemeUtils.tintMenuIcons(menu, ThemeUtils.getColor(this, R.attr.icon_tint_on_dark_action_bar_color))
-
-        return true
-    }
+    override fun getMenuRes() = R.menu.vector_choose_sticker
 
     override fun onOptionsItemSelected(item: MenuItem?): Boolean {
         when (item?.itemId) {
