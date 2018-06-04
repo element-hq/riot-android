@@ -60,7 +60,6 @@ import org.matrix.androidsdk.rest.model.crypto.EncryptedFileInfo;
 import org.matrix.androidsdk.rest.model.message.FileMessage;
 import org.matrix.androidsdk.rest.model.message.ImageMessage;
 import org.matrix.androidsdk.rest.model.message.Message;
-import org.matrix.androidsdk.rest.model.message.StickerMessage;
 import org.matrix.androidsdk.rest.model.message.VideoMessage;
 import org.matrix.androidsdk.util.JsonUtils;
 import org.matrix.androidsdk.util.Log;
@@ -445,37 +444,43 @@ public class VectorMessageListFragment extends MatrixMessageListFragment impleme
                 if (deviceInfo.isUnverified() || deviceInfo.isUnknown()) {
                     builder.setNegativeButton(R.string.encryption_information_verify, new DialogInterface.OnClickListener() {
                         public void onClick(DialogInterface dialog, int id) {
-                            CommonActivityUtils.displayDeviceVerificationDialog(deviceInfo, event.getSender(), mSession, getActivity(), mDeviceVerificationCallback);
+                            CommonActivityUtils.displayDeviceVerificationDialog(deviceInfo,
+                                    event.getSender(), mSession, getActivity(), mDeviceVerificationCallback);
                         }
                     });
 
                     builder.setPositiveButton(R.string.encryption_information_block, new DialogInterface.OnClickListener() {
                         public void onClick(DialogInterface dialog, int id) {
-                            mSession.getCrypto().setDeviceVerification(MXDeviceInfo.DEVICE_VERIFICATION_BLOCKED, deviceInfo.deviceId, event.getSender(), mDeviceVerificationCallback);
+                            mSession.getCrypto().setDeviceVerification(MXDeviceInfo.DEVICE_VERIFICATION_BLOCKED,
+                                    deviceInfo.deviceId, event.getSender(), mDeviceVerificationCallback);
                         }
                     });
                 } else if (deviceInfo.isVerified()) {
                     builder.setNegativeButton(R.string.encryption_information_unverify, new DialogInterface.OnClickListener() {
                         public void onClick(DialogInterface dialog, int id) {
-                            mSession.getCrypto().setDeviceVerification(MXDeviceInfo.DEVICE_VERIFICATION_UNVERIFIED, deviceInfo.deviceId, event.getSender(), mDeviceVerificationCallback);
+                            mSession.getCrypto().setDeviceVerification(MXDeviceInfo.DEVICE_VERIFICATION_UNVERIFIED,
+                                    deviceInfo.deviceId, event.getSender(), mDeviceVerificationCallback);
                         }
                     });
 
                     builder.setPositiveButton(R.string.encryption_information_block, new DialogInterface.OnClickListener() {
                         public void onClick(DialogInterface dialog, int id) {
-                            mSession.getCrypto().setDeviceVerification(MXDeviceInfo.DEVICE_VERIFICATION_BLOCKED, deviceInfo.deviceId, event.getSender(), mDeviceVerificationCallback);
+                            mSession.getCrypto().setDeviceVerification(MXDeviceInfo.DEVICE_VERIFICATION_BLOCKED,
+                                    deviceInfo.deviceId, event.getSender(), mDeviceVerificationCallback);
                         }
                     });
                 } else { // BLOCKED
                     builder.setNegativeButton(R.string.encryption_information_verify, new DialogInterface.OnClickListener() {
                         public void onClick(DialogInterface dialog, int id) {
-                            CommonActivityUtils.displayDeviceVerificationDialog(deviceInfo, event.getSender(), mSession, getActivity(), mDeviceVerificationCallback);
+                            CommonActivityUtils.displayDeviceVerificationDialog(deviceInfo,
+                                    event.getSender(), mSession, getActivity(), mDeviceVerificationCallback);
                         }
                     });
 
                     builder.setPositiveButton(R.string.encryption_information_unblock, new DialogInterface.OnClickListener() {
                         public void onClick(DialogInterface dialog, int id) {
-                            mSession.getCrypto().setDeviceVerification(MXDeviceInfo.DEVICE_VERIFICATION_UNVERIFIED, deviceInfo.deviceId, event.getSender(), mDeviceVerificationCallback);
+                            mSession.getCrypto().setDeviceVerification(MXDeviceInfo.DEVICE_VERIFICATION_UNVERIFIED,
+                                    deviceInfo.deviceId, event.getSender(), mDeviceVerificationCallback);
                         }
                     });
                 }
@@ -486,35 +491,38 @@ public class VectorMessageListFragment extends MatrixMessageListFragment impleme
         dialog.show();
 
         if (null == deviceInfo) {
-            mSession.getCrypto().getDeviceList().downloadKeys(Collections.singletonList(event.getSender()), true, new ApiCallback<MXUsersDevicesMap<MXDeviceInfo>>() {
-                @Override
-                public void onSuccess(MXUsersDevicesMap<MXDeviceInfo> info) {
-                    Activity activity = getActivity();
+            mSession.getCrypto()
+                    .getDeviceList()
+                    .downloadKeys(Collections.singletonList(event.getSender()), true, new ApiCallback<MXUsersDevicesMap<MXDeviceInfo>>() {
+                        @Override
+                        public void onSuccess(MXUsersDevicesMap<MXDeviceInfo> info) {
+                            Activity activity = getActivity();
 
-                    if ((null != activity) && !activity.isFinishing() && dialog.isShowing()) {
-                        EncryptedEventContent encryptedEventContent = JsonUtils.toEncryptedEventContent(event.getWireContent().getAsJsonObject());
+                            if ((null != activity) && !activity.isFinishing() && dialog.isShowing()) {
+                                EncryptedEventContent encryptedEventContent = JsonUtils.toEncryptedEventContent(event.getWireContent().getAsJsonObject());
 
-                        MXDeviceInfo deviceInfo = mSession.getCrypto().deviceWithIdentityKey(encryptedEventContent.sender_key, event.getSender(), encryptedEventContent.algorithm);
+                                MXDeviceInfo deviceInfo = mSession.getCrypto()
+                                        .deviceWithIdentityKey(encryptedEventContent.sender_key, event.getSender(), encryptedEventContent.algorithm);
 
-                        if (null != deviceInfo) {
-                            dialog.cancel();
-                            onE2eIconClick(event, deviceInfo);
+                                if (null != deviceInfo) {
+                                    dialog.cancel();
+                                    onE2eIconClick(event, deviceInfo);
+                                }
+                            }
                         }
-                    }
-                }
 
-                @Override
-                public void onNetworkError(Exception e) {
-                }
+                        @Override
+                        public void onNetworkError(Exception e) {
+                        }
 
-                @Override
-                public void onMatrixError(MatrixError e) {
-                }
+                        @Override
+                        public void onMatrixError(MatrixError e) {
+                        }
 
-                @Override
-                public void onUnexpectedError(Exception e) {
-                }
-            });
+                        @Override
+                        public void onUnexpectedError(Exception e) {
+                        }
+                    });
         }
     }
 
@@ -584,7 +592,8 @@ public class VectorMessageListFragment extends MatrixMessageListFragment impleme
                 @Override
                 public void run() {
                     new AlertDialog.Builder(getActivity())
-                            .setMessage((action == R.id.ic_action_vector_cancel_upload) ? R.string.attachment_cancel_upload : R.string.attachment_cancel_download)
+                            .setMessage((action == R.id.ic_action_vector_cancel_upload) ?
+                                    R.string.attachment_cancel_upload : R.string.attachment_cancel_download)
                             .setPositiveButton(R.string.yes, new DialogInterface.OnClickListener() {
                                 @Override
                                 public void onClick(DialogInterface dialog, int which) {
@@ -775,7 +784,11 @@ public class VectorMessageListFragment extends MatrixMessageListFragment impleme
      * @param mediaMimeType the mime type
      * @param filename      the filename
      */
-    void onMediaAction(final int menuAction, final String mediaUrl, final String mediaMimeType, final String filename, final EncryptedFileInfo encryptedFileInfo) {
+    void onMediaAction(final int menuAction,
+                       final String mediaUrl,
+                       final String mediaMimeType,
+                       final String filename,
+                       final EncryptedFileInfo encryptedFileInfo) {
         // Santize file name in case `m.body` contains a path.
         final String trimmedFileName = new File(filename).getName();
 
@@ -841,7 +854,8 @@ public class VectorMessageListFragment extends MatrixMessageListFragment impleme
             });
         } else {
             // else download it
-            final String downloadId = mediasCache.downloadMedia(getActivity().getApplicationContext(), mSession.getHomeServerConfig(), mediaUrl, mediaMimeType, encryptedFileInfo);
+            final String downloadId = mediasCache.downloadMedia(getActivity().getApplicationContext(),
+                    mSession.getHomeServerConfig(), mediaUrl, mediaMimeType, encryptedFileInfo);
             mAdapter.notifyDataSetChanged();
 
             if (null != downloadId) {
@@ -850,8 +864,8 @@ public class VectorMessageListFragment extends MatrixMessageListFragment impleme
                     public void onDownloadError(String downloadId, JsonElement jsonElement) {
                         MatrixError error = JsonUtils.toMatrixError(jsonElement);
 
-                        if ((null != error) && error.isSupportedErrorCode() && (null != VectorMessageListFragment.this.getActivity())) {
-                            Toast.makeText(VectorMessageListFragment.this.getActivity(), error.getLocalizedMessage(), Toast.LENGTH_LONG).show();
+                        if ((null != error) && error.isSupportedErrorCode() && (null != getActivity())) {
+                            Toast.makeText(getActivity(), error.getLocalizedMessage(), Toast.LENGTH_LONG).show();
                         }
                     }
 
@@ -859,7 +873,7 @@ public class VectorMessageListFragment extends MatrixMessageListFragment impleme
                     public void onDownloadComplete(String aDownloadId) {
                         if (aDownloadId.equals(downloadId)) {
 
-                            VectorMessageListFragment.this.getActivity().runOnUiThread(new Runnable() {
+                            getActivity().runOnUiThread(new Runnable() {
                                 @Override
                                 public void run() {
                                     onMediaAction(menuAction, mediaUrl, mediaMimeType, trimmedFileName, encryptedFileInfo);
@@ -878,7 +892,7 @@ public class VectorMessageListFragment extends MatrixMessageListFragment impleme
      */
     @Override
     public boolean isDisplayAllEvents() {
-        return  PreferencesManager.displayAllEvents(getActivity());
+        return PreferencesManager.displayAllEvents(getActivity());
     }
 
     private void setViewVisibility(View view, int visibility) {
@@ -1064,7 +1078,8 @@ public class VectorMessageListFragment extends MatrixMessageListFragment impleme
             // the room is stored in a temporary store
             // so provide an handle to retrieve it
             if (null != getRoomPreviewData()) {
-                roomDetailsIntent.putExtra(VectorMemberDetailsActivity.EXTRA_STORE_ID, new Integer(Matrix.getInstance(getActivity()).addTmpStore(mEventTimeLine.getStore())));
+                roomDetailsIntent.putExtra(VectorMemberDetailsActivity.EXTRA_STORE_ID,
+                        new Integer(Matrix.getInstance(getActivity()).addTmpStore(mEventTimeLine.getStore())));
             }
 
             roomDetailsIntent.putExtra(VectorMemberDetailsActivity.EXTRA_ROOM_ID, mRoom.getRoomId());
@@ -1152,7 +1167,8 @@ public class VectorMessageListFragment extends MatrixMessageListFragment impleme
                     // open the member sheet from the current activity
                     if (universalParams.containsKey(VectorUniversalLinkReceiver.ULINK_MATRIX_USER_ID_KEY)) {
                         Intent roomDetailsIntent = new Intent(getActivity(), VectorMemberDetailsActivity.class);
-                        roomDetailsIntent.putExtra(VectorMemberDetailsActivity.EXTRA_MEMBER_ID, universalParams.get(VectorUniversalLinkReceiver.ULINK_MATRIX_USER_ID_KEY));
+                        roomDetailsIntent.putExtra(VectorMemberDetailsActivity.EXTRA_MEMBER_ID,
+                                universalParams.get(VectorUniversalLinkReceiver.ULINK_MATRIX_USER_ID_KEY));
                         roomDetailsIntent.putExtra(VectorMemberDetailsActivity.EXTRA_MATRIX_ID, mSession.getCredentials().userId);
                         getActivity().startActivityForResult(roomDetailsIntent, VectorRoomActivity.GET_MENTION_REQUEST_CODE);
                     } else {

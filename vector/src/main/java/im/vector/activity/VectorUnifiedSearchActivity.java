@@ -263,7 +263,8 @@ public class VectorUnifiedSearchActivity extends VectorBaseSearchActivity implem
                     : View.GONE);
 
             // display the "no result" text only if the researched text is not empty
-            mNoResultsTxtView.setVisibility(((0 == nbrMessages) && !TextUtils.isEmpty(mPatternToSearchEditText.getText().toString())) ? View.VISIBLE : View.GONE);
+            mNoResultsTxtView.setVisibility(((0 == nbrMessages)
+                    && !TextUtils.isEmpty(mPatternToSearchEditText.getText().toString())) ? View.VISIBLE : View.GONE);
         }
     }
 

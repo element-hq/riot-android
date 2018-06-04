@@ -76,7 +76,7 @@ public class VectorGroupDetailsActivity extends MXCActionBarActivity {
         @Override
         public void onLeaveGroup(String groupId) {
             if ((null != mRoom) && TextUtils.equals(groupId, mGroup.getGroupId())) {
-                VectorGroupDetailsActivity.this.finish();
+                finish();
             }
         }
 

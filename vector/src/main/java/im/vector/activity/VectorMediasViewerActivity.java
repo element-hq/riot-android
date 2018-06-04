@@ -163,8 +163,8 @@ public class VectorMediasViewerActivity extends MXCActionBarActivity {
         mAdapter.autoPlayItemAt(position);
         mViewPager.setCurrentItem(position);
 
-        if (null != VectorMediasViewerActivity.this.getSupportActionBar()) {
-            VectorMediasViewerActivity.this.getSupportActionBar().setTitle(mMediasList.get(position).mFileName);
+        if (null != getSupportActionBar()) {
+            getSupportActionBar().setTitle(mMediasList.get(position).mFileName);
         }
         mViewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
             @Override
@@ -174,8 +174,8 @@ public class VectorMediasViewerActivity extends MXCActionBarActivity {
 
             @Override
             public void onPageSelected(int position) {
-                if (null != VectorMediasViewerActivity.this.getSupportActionBar()) {
-                    VectorMediasViewerActivity.this.getSupportActionBar().setTitle(mMediasList.get(position).mFileName);
+                if (null != getSupportActionBar()) {
+                    getSupportActionBar().setTitle(mMediasList.get(position).mFileName);
                 }
 
                 // disable shared for encrypted files as they are saved in a tmp folder
@@ -236,12 +236,13 @@ public class VectorMediasViewerActivity extends MXCActionBarActivity {
                     }
 
                     if (action == R.id.ic_action_download) {
-                        CommonActivityUtils.saveMediaIntoDownloads(VectorMediasViewerActivity.this, file, mediaInfo.mFileName, mediaInfo.mMimeType, new SimpleApiCallback<String>() {
-                            @Override
-                            public void onSuccess(String savedMediaPath) {
-                                Toast.makeText(VectorApp.getInstance(), getText(R.string.media_slider_saved), Toast.LENGTH_LONG).show();
-                            }
-                        });
+                        CommonActivityUtils.saveMediaIntoDownloads(VectorMediasViewerActivity.this,
+                                file, mediaInfo.mFileName, mediaInfo.mMimeType, new SimpleApiCallback<String>() {
+                                    @Override
+                                    public void onSuccess(String savedMediaPath) {
+                                        Toast.makeText(VectorApp.getInstance(), getText(R.string.media_slider_saved), Toast.LENGTH_LONG).show();
+                                    }
+                                });
                     } else {
                         if (null != mediaInfo.mFileName) {
                             File dstFile = new File(file.getParent(), mediaInfo.mFileName);
@@ -279,7 +280,8 @@ public class VectorMediasViewerActivity extends MXCActionBarActivity {
             });
         } else {
             // else download it
-            final String downloadId = mediasCache.downloadMedia(this, mSession.getHomeServerConfig(), mediaInfo.mMediaUrl, mediaInfo.mMimeType, mediaInfo.mEncryptedFileInfo);
+            final String downloadId = mediasCache.downloadMedia(this,
+                    mSession.getHomeServerConfig(), mediaInfo.mMediaUrl, mediaInfo.mMimeType, mediaInfo.mEncryptedFileInfo);
 
             if (null != downloadId) {
                 mediasCache.addDownloadListener(downloadId, new MXMediaDownloadListener() {

@@ -97,7 +97,7 @@ public class VectorRoomDetailsActivity extends MXCActionBarActivity implements T
                     // pop to the home activity
                     Intent intent = new Intent(VectorRoomDetailsActivity.this, VectorHomeActivity.class);
                     intent.setFlags(android.content.Intent.FLAG_ACTIVITY_CLEAR_TOP | android.content.Intent.FLAG_ACTIVITY_SINGLE_TOP);
-                    VectorRoomDetailsActivity.this.startActivity(intent);
+                    startActivity(intent);
                 }
             });
         }
@@ -240,7 +240,7 @@ public class VectorRoomDetailsActivity extends MXCActionBarActivity implements T
                 // pop to the home activity
                 Intent intent = new Intent(VectorRoomDetailsActivity.this, VectorHomeActivity.class);
                 intent.setFlags(android.content.Intent.FLAG_ACTIVITY_CLEAR_TOP | android.content.Intent.FLAG_ACTIVITY_SINGLE_TOP);
-                VectorRoomDetailsActivity.this.startActivity(intent);
+                startActivity(intent);
                 return;
             }
 
@@ -378,7 +378,8 @@ public class VectorRoomDetailsActivity extends MXCActionBarActivity implements T
         } else if (fragmentTag.equals(TAG_FRAGMENT_FILES_DETAILS)) {
             mSearchFilesFragment = (VectorSearchRoomFilesListFragment) getSupportFragmentManager().findFragmentByTag(TAG_FRAGMENT_FILES_DETAILS);
             if (null == mSearchFilesFragment) {
-                mSearchFilesFragment = VectorSearchRoomFilesListFragment.newInstance(mSession.getCredentials().userId, mRoomId, org.matrix.androidsdk.R.layout.fragment_matrix_message_list_fragment);
+                mSearchFilesFragment = VectorSearchRoomFilesListFragment.newInstance(mSession.getCredentials().userId,
+                        mRoomId, org.matrix.androidsdk.R.layout.fragment_matrix_message_list_fragment);
                 ft.replace(R.id.room_details_fragment_container, mSearchFilesFragment, TAG_FRAGMENT_FILES_DETAILS);
                 Log.d(LOG_TAG, "## onTabSelected() file frag replace");
             } else {
@@ -397,7 +398,7 @@ public class VectorRoomDetailsActivity extends MXCActionBarActivity implements T
         // reset the activity title
         // some fragments update it (VectorRoomDetailsMembersFragment for example)
         if (null != getSupportActionBar()) {
-            getSupportActionBar().setTitle(this.getResources().getString(R.string.room_details_title));
+            getSupportActionBar().setTitle(R.string.room_details_title);
         }
     }
 
@@ -491,10 +492,16 @@ public class VectorRoomDetailsActivity extends MXCActionBarActivity implements T
             public void run() {
                 if (null == mRoomSettingsFragment) {
                     mRoomSettingsFragment = VectorRoomSettingsFragment.newInstance(mMatrixId, mRoomId);
-                    getFragmentManager().beginTransaction().replace(R.id.room_details_fragment_container, mRoomSettingsFragment, TAG_FRAGMENT_SETTINGS_ROOM_DETAIL).commit();
+                    getFragmentManager()
+                            .beginTransaction()
+                            .replace(R.id.room_details_fragment_container, mRoomSettingsFragment, TAG_FRAGMENT_SETTINGS_ROOM_DETAIL)
+                            .commit();
                     Log.d(LOG_TAG, "## onTabSelectSettingsFragment() settings frag replace");
                 } else {
-                    getFragmentManager().beginTransaction().attach(mRoomSettingsFragment).commit();
+                    getFragmentManager()
+                            .beginTransaction()
+                            .attach(mRoomSettingsFragment)
+                            .commit();
                     Log.d(LOG_TAG, "## onTabSelectSettingsFragment() settings frag attach");
                 }
             }

@@ -330,7 +330,7 @@ public class GroupsFragment extends AbsHomeFragment {
         final Context context = getActivity();
         final PopupMenu popup;
 
-        if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
             popup = new PopupMenu(context, actionView, Gravity.END);
         } else {
             popup = new PopupMenu(context, actionView);

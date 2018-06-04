@@ -301,7 +301,7 @@
             android:label="@string/title_activity_group_details"
             android:launchMode="singleTop"
             android:theme="@style/GroupAppTheme"
-            android:windowSoftInputMode="adjustResize"></activity>
+            android:windowSoftInputMode="adjustResize"/>
         <activity android:name=".activity.VectorUniversalLinkActivity">
             <intent-filter>
                 <action android:name="android.intent.action.VIEW" />

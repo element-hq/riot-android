@@ -2,6 +2,7 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="@dimen/navigation_view_height"
+    xmlns:tools="http://schemas.android.com/tools"
     android:background="@color/vector_green_color"
     android:orientation="vertical">
 
@@ -31,7 +32,7 @@
         android:layout_marginTop="39dp"
         android:layout_marginLeft="16dp"
         android:layout_marginRight="20dp"
-        android:text="A displayname here" />
+        tools:text="A displayname here" />
 
     <TextView
         android:id="@+id/home_menu_main_matrix_id"
@@ -43,5 +44,5 @@
         android:layout_marginLeft="16dp"
         android:layout_marginRight="20dp"
         android:layout_marginTop="3dp"
-        android:text="A matrix id here" />
+        tools:text="A matrix id here" />
 </RelativeLayout>

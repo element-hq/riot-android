@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/main_view"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
@@ -54,7 +55,7 @@
                 android:textStyle="bold"
                 android:textSize="14sp"
                 android:textColor="@android:color/white"
-                android:text="Room name - call active"
+                tools:text="Room name - call active"
                 android:id="@+id/pending_call_room_name_textview"/>
 
             <TextView
@@ -62,7 +63,7 @@
                 android:layout_width="wrap_content"
                 android:textSize="14sp"
                 android:textIsSelectable="false"
-                android:text="Elapsed time"
+                tools:text="Elapsed time"
                 android:textColor="@android:color/white"
                 android:id="@+id/pending_call_status_textview"/>
         </LinearLayout>

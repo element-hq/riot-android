@@ -103,7 +103,7 @@ public class JitsiCallActivity extends RiotAppCompatActivity {
         public void onWidgetUpdate(Widget widget) {
             if (TextUtils.equals(widget.getWidgetId(), mWidget.getWidgetId())) {
                 if (!widget.isActive()) {
-                    JitsiCallActivity.this.finish();
+                    finish();
                 }
             }
         }
@@ -126,14 +126,14 @@ public class JitsiCallActivity extends RiotAppCompatActivity {
             mCallUrl = JITSI_SERVER_URL + confId;
         } catch (Exception e) {
             Log.e(LOG_TAG, "## onCreate() failed : " + e.getMessage());
-            this.finish();
+            finish();
             return;
         }
 
         mSession = Matrix.getMXSession(this, mWidget.getSessionId());
         if (null == mSession) {
             Log.e(LOG_TAG, "## onCreate() : undefined session ");
-            this.finish();
+            finish();
             return;
         }
 
@@ -141,7 +141,7 @@ public class JitsiCallActivity extends RiotAppCompatActivity {
         mRoom = mSession.getDataHandler().getRoom(mWidget.getRoomId());
         if (null == mRoom) {
             Log.e(LOG_TAG, "## onCreate() : undefined room " + mWidget.getRoomId());
-            this.finish();
+            finish();
             return;
         }
 
@@ -176,7 +176,7 @@ public class JitsiCallActivity extends RiotAppCompatActivity {
                 WidgetsManager.getSharedInstance().closeWidget(mSession, mRoom, mWidget.getWidgetId(), new ApiCallback<Void>() {
                     @Override
                     public void onSuccess(Void info) {
-                        JitsiCallActivity.this.finish();
+                        finish();
                     }
 
                     private void onError(String errorMessage) {
@@ -205,7 +205,7 @@ public class JitsiCallActivity extends RiotAppCompatActivity {
         mBackToAppIcon.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                JitsiCallActivity.this.finish();
+                finish();
             }
         });
     }
@@ -224,11 +224,12 @@ public class JitsiCallActivity extends RiotAppCompatActivity {
             mJitsiView.loadURLObject(urlObject);
         } catch (Exception e) {
             Log.e(LOG_TAG, "## loadURL() failed : " + e.getMessage());
-            this.finish();
+            finish();
         }
 
         RelativeLayout layout = findViewById(R.id.call_layout);
-        RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.MATCH_PARENT, RelativeLayout.LayoutParams.MATCH_PARENT);
+        RelativeLayout.LayoutParams params
+                = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.MATCH_PARENT, RelativeLayout.LayoutParams.MATCH_PARENT);
         params.addRule(RelativeLayout.CENTER_IN_PARENT, RelativeLayout.TRUE);
         layout.setVisibility(View.VISIBLE);
         layout.addView(mJitsiView, 0, params);
@@ -237,14 +238,14 @@ public class JitsiCallActivity extends RiotAppCompatActivity {
             @Override
             public void onConferenceFailed(Map<String, Object> map) {
                 Log.e(LOG_TAG, "## onConferenceFailed() : " + map);
-                JitsiCallActivity.this.finish();
+                finish();
             }
 
             @Override
             public void onConferenceJoined(Map<String, Object> map) {
                 Log.d(LOG_TAG, "## onConferenceJoined() : " + map);
 
-                JitsiCallActivity.this.runOnUiThread(new Runnable() {
+                runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
                         mConnectingTextView.setVisibility(View.GONE);
@@ -255,14 +256,14 @@ public class JitsiCallActivity extends RiotAppCompatActivity {
             @Override
             public void onConferenceLeft(Map<String, Object> map) {
                 Log.d(LOG_TAG, "## onConferenceLeft() : " + map);
-                JitsiCallActivity.this.finish();
+                finish();
             }
 
             @Override
             public void onConferenceWillJoin(Map<String, Object> map) {
                 Log.d(LOG_TAG, "## onConferenceWillJoin() : " + map);
 
-                JitsiCallActivity.this.runOnUiThread(new Runnable() {
+                runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
                         hideWaitingView();
@@ -290,7 +291,7 @@ public class JitsiCallActivity extends RiotAppCompatActivity {
                 loadURL();
             } else {
                 Log.e(LOG_TAG, "## onActivityResult() : cannot draw overlay");
-                this.finish();
+                finish();
             }
         }
     }

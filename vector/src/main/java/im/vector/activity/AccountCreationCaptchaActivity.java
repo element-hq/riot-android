@@ -173,10 +173,10 @@ public class AccountCreationCaptchaActivity extends RiotAppCompatActivity {
                 Toast.makeText(AccountCreationCaptchaActivity.this, errorMessage, Toast.LENGTH_LONG).show();
                 
                 // on error case, close this activity
-                AccountCreationCaptchaActivity.this.runOnUiThread(new Runnable() {
+                runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
-                        AccountCreationCaptchaActivity.this.finish();
+                        finish();
                     }
                 });
             }
@@ -226,7 +226,7 @@ public class AccountCreationCaptchaActivity extends RiotAppCompatActivity {
                                 returnIntent.putExtra("response", parameters.get("response"));
                                 setResult(RESULT_OK, returnIntent);
 
-                                AccountCreationCaptchaActivity.this.finish();
+                                finish();
                             }
                         }
                     }

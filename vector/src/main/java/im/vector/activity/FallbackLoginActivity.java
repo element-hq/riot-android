@@ -21,6 +21,7 @@ import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.net.http.SslError;
+import android.os.Build;
 import android.text.TextUtils;
 import android.view.KeyEvent;
 import android.webkit.SslErrorHandler;
@@ -84,7 +85,7 @@ public class FallbackLoginActivity extends RiotAppCompatActivity {
         // clear the cookies must be cleared
         if ((null != cookieManager) && !cookieManager.hasCookies()) {
             launchWebView();
-        } else if (android.os.Build.VERSION.SDK_INT < android.os.Build.VERSION_CODES.LOLLIPOP) {
+        } else if (Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP) {
             try {
                 cookieManager.removeAllCookie();
             } catch (Exception e) {
@@ -154,10 +155,10 @@ public class FallbackLoginActivity extends RiotAppCompatActivity {
                 super.onReceivedError(view, errorCode, description, failingUrl);
 
                 // on error case, close this activity
-                FallbackLoginActivity.this.runOnUiThread(new Runnable() {
+                runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
-                        FallbackLoginActivity.this.finish();
+                        finish();
                     }
                 });
             }
@@ -167,12 +168,16 @@ public class FallbackLoginActivity extends RiotAppCompatActivity {
                 // avoid infinite onPageFinished call
                 if (url.startsWith("http")) {
                     // Generic method to make a bridge between JS and the UIWebView
-                    final String MXCJavascriptSendObjectMessage = "javascript:window.matrixLogin.sendObjectMessage = function(parameters) { var iframe = document.createElement('iframe');  iframe.setAttribute('src', 'js:' + JSON.stringify(parameters));  document.documentElement.appendChild(iframe); iframe.parentNode.removeChild(iframe); iframe = null; };";
+                    final String MXCJavascriptSendObjectMessage = "javascript:window.matrixLogin.sendObjectMessage = function(parameters) { var i" +
+                            "frame = document.createElement('iframe');  iframe.setAttribute('src', 'js:' + JSON.stringify(parameters));  document" +
+                            ".documentElement.appendChild(iframe); iframe.parentNode.removeChild(iframe); iframe = null; };";
 
                     view.loadUrl(MXCJavascriptSendObjectMessage);
 
                     // The function the fallback page calls when the registration is complete
-                    final String MXCJavascriptOnRegistered = "javascript:window.matrixLogin.onLogin = function(homeserverUrl, userId, accessToken) { matrixLogin.sendObjectMessage({ 'action': 'onLogin', 'homeServer': homeserverUrl,'userId': userId,  'accessToken': accessToken  }); };";
+                    final String MXCJavascriptOnRegistered = "javascript:window.matrixLogin.onLogin = function(homeserverUrl, userId, accessToken" +
+                            ") { matrixLogin.sendObjectMessage({ 'action': 'onLogin', 'homeServer': homeserverUrl,'userId': userId,  'accessToken" +
+                            "': accessToken  }); };";
 
                     view.loadUrl(MXCJavascriptOnRegistered);
                 }
@@ -212,7 +217,7 @@ public class FallbackLoginActivity extends RiotAppCompatActivity {
 
                                 // check if the parameters are defined
                                 if ((null != homeServer) && (null != userId) && (null != accessToken)) {
-                                    FallbackLoginActivity.this.runOnUiThread(new Runnable() {
+                                    runOnUiThread(new Runnable() {
                                         @Override
                                         public void run() {
                                             Intent returnIntent = new Intent();
@@ -222,7 +227,7 @@ public class FallbackLoginActivity extends RiotAppCompatActivity {
                                             returnIntent.putExtra("accessToken", accessToken);
                                             setResult(RESULT_OK, returnIntent);
 
-                                            FallbackLoginActivity.this.finish();
+                                            finish();
                                         }
                                     });
                                 }

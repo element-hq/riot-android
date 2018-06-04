@@ -15,9 +15,9 @@
             android:id="@+id/login_large_logo"
             android:layout_width="100dp"
             android:layout_height="100dp"
-
             android:layout_centerHorizontal="true"
-            android:src="@drawable/logo_login"></ImageView>
+            android:src="@drawable/logo_login"/>
+
     </RelativeLayout>
 
     <TextView

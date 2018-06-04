@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/wrapper_view"
     android:layout_width="match_parent"
     android:tag="without-divider"
@@ -13,5 +14,5 @@
         android:tag="sticky"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Default section header" />
+        tools:text="Default section header" />
 </LinearLayout>

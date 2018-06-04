@@ -1,6 +1,7 @@
 /*
  * Copyright 2016 OpenMarket Ltd
  * Copyright 2017 Vector Creations Ltd
+ * Copyright 2018 New Vector Ltd
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,6 +18,21 @@
 
 package im.vector.util;
 
+import android.app.Activity;
+import android.content.Context;
+import android.content.Intent;
+import android.content.pm.PackageInfo;
+import android.graphics.Bitmap;
+import android.os.AsyncTask;
+import android.os.Build;
+import android.text.TextUtils;
+import android.view.View;
+
+import org.json.JSONException;
+import org.json.JSONObject;
+import org.matrix.androidsdk.MXSession;
+import org.matrix.androidsdk.util.Log;
+
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileInputStream;
@@ -31,25 +47,9 @@ import java.util.List;
 import java.util.Locale;
 import java.util.zip.GZIPOutputStream;
 
-import android.app.Activity;
-import android.content.Context;
-import android.content.Intent;
-import android.content.pm.PackageInfo;
-import android.graphics.Bitmap;
-import android.os.AsyncTask;
-import android.os.Build;
-
-import org.json.JSONException;
-import org.json.JSONObject;
-import org.matrix.androidsdk.MXSession;
-import org.matrix.androidsdk.util.Log;
-
-import android.text.TextUtils;
-import android.view.View;
-
+import im.vector.Matrix;
 import im.vector.R;
 import im.vector.VectorApp;
-import im.vector.Matrix;
 import im.vector.activity.BugReportActivity;
 import okhttp3.Call;
 import okhttp3.MediaType;
@@ -120,7 +120,12 @@ public class BugReporter {
      * @param theBugDescription the bug description
      * @param listener          the listener
      */
-    public static void sendBugReport(final Context context, final boolean withDevicesLogs, final boolean withCrashLogs, final boolean withScreenshot, final String theBugDescription, final IMXBugReportListener listener) {
+    public static void sendBugReport(final Context context,
+                                     final boolean withDevicesLogs,
+                                     final boolean withCrashLogs,
+                                     final boolean withScreenshot,
+                                     final String theBugDescription,
+                                     final IMXBugReportListener listener) {
         new AsyncTask<Void, Integer, String>() {
 
             // enumerate files to delete
@@ -239,7 +244,8 @@ public class BugReporter {
                                 fos.flush();
                                 fos.close();
 
-                                builder.addFormDataPart("file", logCatScreenshotFile.getName(), RequestBody.create(MediaType.parse("application/octet-stream"), logCatScreenshotFile));
+                                builder.addFormDataPart("file",
+                                        logCatScreenshotFile.getName(), RequestBody.create(MediaType.parse("application/octet-stream"), logCatScreenshotFile));
                             } catch (Exception e) {
                                 Log.e(LOG_TAG, "## saveLogCat() : fail to write logcat" + e.toString());
                             }

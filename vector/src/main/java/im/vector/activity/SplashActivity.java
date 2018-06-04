@@ -102,7 +102,7 @@ public class SplashActivity extends MXCActionBarActivity {
             }
 
             startActivity(intent);
-            SplashActivity.this.finish();
+            finish();
         } else {
             CommonActivityUtils.logout(this);
         }

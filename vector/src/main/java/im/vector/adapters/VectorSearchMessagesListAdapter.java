@@ -178,7 +178,8 @@ public class VectorSearchMessagesListAdapter extends VectorMessagesAdapter {
             }
 
             // message separator is only displayed when a message is not the last message in a day section
-            convertView.findViewById(R.id.messagesAdapter_search_separator_line).setVisibility(!TextUtils.isEmpty(headerMessage(position + 1)) ? View.GONE : View.VISIBLE);
+            convertView.findViewById(R.id.messagesAdapter_search_separator_line)
+                    .setVisibility(!TextUtils.isEmpty(headerMessage(position + 1)) ? View.GONE : View.VISIBLE);
 
             final int fPosition = position;
 

@@ -1,5 +1,6 @@
 /*
  * Copyright 2016 OpenMarket Ltd
+ * Copyright 2018 New Vector Ltd
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -159,9 +160,12 @@ public class BingRulePreference extends VectorCustomActionEditTextPreference {
             } else {
                 rule.isEnabled = true;
                 rule.setNotify(true);
-                rule.setHighlight(!TextUtils.equals(mBingRule.kind, BingRule.KIND_UNDERRIDE) && !TextUtils.equals(rule.ruleId, BingRule.RULE_ID_INVITE_ME) && (NOTIFICATION_NOISY_INDEX == index));
+                rule.setHighlight(!TextUtils.equals(mBingRule.kind, BingRule.KIND_UNDERRIDE)
+                        && !TextUtils.equals(rule.ruleId, BingRule.RULE_ID_INVITE_ME)
+                        && (NOTIFICATION_NOISY_INDEX == index));
                 if (NOTIFICATION_NOISY_INDEX == index) {
-                    rule.setNotificationSound(TextUtils.equals(rule.ruleId, BingRule.RULE_ID_CALL) ? BingRule.ACTION_VALUE_RING : BingRule.ACTION_VALUE_DEFAULT);
+                    rule.setNotificationSound(TextUtils.equals(rule.ruleId, BingRule.RULE_ID_CALL) ?
+                            BingRule.ACTION_VALUE_RING : BingRule.ACTION_VALUE_DEFAULT);
                 } else {
                     rule.removeNotificationSound();
                 }

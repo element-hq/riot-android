@@ -59,7 +59,7 @@ public class PhoneNumberVerificationActivity extends RiotAppCompatActivity imple
     // Used to prevent user to submit several times in a row
     private boolean mIsSubmittingToken;
 
-     /*
+    /*
      * *********************************************************************************************
      * Static methods
      * *********************************************************************************************
@@ -73,10 +73,10 @@ public class PhoneNumberVerificationActivity extends RiotAppCompatActivity imple
     }
 
     /*
-    * *********************************************************************************************
-    * Activity lifecycle
-    * *********************************************************************************************
-    */
+     * *********************************************************************************************
+     * Activity lifecycle
+     * *********************************************************************************************
+     */
 
     @Override
     public int getLayoutRes() {
@@ -143,10 +143,10 @@ public class PhoneNumberVerificationActivity extends RiotAppCompatActivity imple
     }
 
     /*
-    * *********************************************************************************************
-    * Utils
-    * *********************************************************************************************
-    */
+     * *********************************************************************************************
+     * Utils
+     * *********************************************************************************************
+     */
 
     /**
      * Submit code (token) to attach phone number to account
@@ -159,8 +159,11 @@ public class PhoneNumberVerificationActivity extends RiotAppCompatActivity imple
                 mPhoneNumberCodeLayout.setError(getString(R.string.settings_phone_number_verification_error_empty_code));
             } else {
                 showWaitingView();
-                mSession.getThirdPidRestClient()
-                        .submitValidationToken(mThreePid.medium, mPhoneNumberCode.getText().toString(), mThreePid.clientSecret, mThreePid.sid, new ApiCallback<Boolean>() {
+                mSession.getThirdPidRestClient().submitValidationToken(mThreePid.medium,
+                        mPhoneNumberCode.getText().toString(),
+                        mThreePid.clientSecret,
+                        mThreePid.sid,
+                        new ApiCallback<Boolean>() {
                             @Override
                             public void onSuccess(Boolean isSuccess) {
                                 if (isSuccess) {
@@ -227,10 +230,10 @@ public class PhoneNumberVerificationActivity extends RiotAppCompatActivity imple
     }
 
     /*
-    * *********************************************************************************************
-    * Listeners
-    * *********************************************************************************************
-    */
+     * *********************************************************************************************
+     * Listeners
+     * *********************************************************************************************
+     */
 
     @Override
     public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {

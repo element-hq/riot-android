@@ -61,7 +61,11 @@ import im.vector.view.SimpleDividerItemDecoration;
 /**
  * Displays the historical rooms list
  */
-public class HistoricalRoomsActivity extends RiotAppCompatActivity implements SearchView.OnQueryTextListener, HomeRoomAdapter.OnSelectRoomListener, AbsAdapter.MoreRoomActionListener, RoomUtils.HistoricalRoomActionListener {
+public class HistoricalRoomsActivity extends RiotAppCompatActivity implements
+        SearchView.OnQueryTextListener,
+        HomeRoomAdapter.OnSelectRoomListener,
+        AbsAdapter.MoreRoomActionListener,
+        RoomUtils.HistoricalRoomActionListener {
     private static final String LOG_TAG = HistoricalRoomsActivity.class.getSimpleName();
 
     @BindView(R.id.search_view)
@@ -342,7 +346,7 @@ public class HistoricalRoomsActivity extends RiotAppCompatActivity implements Se
      * @param errorMessage the localized error message
      */
     private void onRequestDone(final String errorMessage) {
-        if (!this.isFinishing()) {
+        if (!isFinishing()) {
             runOnUiThread(new Runnable() {
                 @Override
                 public void run() {

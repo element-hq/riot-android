@@ -158,7 +158,8 @@ public class VectorRoomDetailsMembersFragment extends VectorBaseFragment {
     };
 
     //  search result listener
-    private final VectorRoomDetailsMembersAdapter.OnRoomMembersSearchListener mSearchListener = new VectorRoomDetailsMembersAdapter.OnRoomMembersSearchListener() {
+    private final VectorRoomDetailsMembersAdapter.OnRoomMembersSearchListener mSearchListener
+            = new VectorRoomDetailsMembersAdapter.OnRoomMembersSearchListener() {
         @Override
         public void onSearchEnd(final int aSearchCountResult, final boolean aIsSearchPerformed) {
             mParticipantsListView.post(new Runnable() {
@@ -673,7 +674,7 @@ public class VectorRoomDetailsMembersFragment extends VectorBaseFragment {
         mRemoveMembersMenuItem.setEnabled(true);
         mSwitchDeletionMenuItem.setEnabled(true);
 
-        setActivityTitle(this.getResources().getString(R.string.room_details_title));
+        setActivityTitle(getString(R.string.room_details_title));
     }
 
     /**
@@ -830,7 +831,8 @@ public class VectorRoomDetailsMembersFragment extends VectorBaseFragment {
 
         mProgressView = mViewHierarchy.findViewById(R.id.add_participants_progress_view);
         mParticipantsListView = mViewHierarchy.findViewById(R.id.room_details_members_exp_list_view);
-        mAdapter = new VectorRoomDetailsMembersAdapter(getActivity(), R.layout.adapter_item_vector_add_participants, R.layout.adapter_item_vector_recent_header, mSession, mRoom.getRoomId(), mxMediasCache);
+        mAdapter = new VectorRoomDetailsMembersAdapter(getActivity(),
+                R.layout.adapter_item_vector_add_participants, R.layout.adapter_item_vector_recent_header, mSession, mRoom.getRoomId(), mxMediasCache);
         mParticipantsListView.setAdapter(mAdapter);
         // the group indicator is managed in the adapter (group view creation)
         mParticipantsListView.setGroupIndicator(null);

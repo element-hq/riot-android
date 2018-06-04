@@ -27,6 +27,8 @@
     <string name="title_activity_group_details">Community details</string>
     <string name="title_activity_choose_sticker">Send a sticker</string>
 
+    <string name="dialog_title_third_party_licences">Third party licences</string>
+
     <!-- splash screen accessibility -->
     <string name="loading">Loading...</string>
 
@@ -40,7 +42,10 @@
     <string name="resend">Resend</string>
     <string name="redact">Redact</string>
     <string name="quote">Quote</string>
+    <string name="download">Download</string>
     <string name="share">Share</string>
+    <string name="speak">Speak</string>
+    <string name="clear">Clear</string>
     <string name="later">Later</string>
     <string name="forward">Forward</string>
     <string name="permalink">Permalink</string>
@@ -837,6 +842,9 @@
     <string name="directory_server_placeholder">Homeserver URL</string>
     <string name="directory_server_all_rooms_on_server">All rooms on %s server</string>
     <string name="directory_server_native_rooms">All native %s rooms</string>
+
+    <!-- Lock screen-->
+    <string name="lock_screen_hint">Type here…</string>
 
     <!-- Notifications -->
     <plurals name="notification_unread_notified_messages">

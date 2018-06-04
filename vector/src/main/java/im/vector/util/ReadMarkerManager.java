@@ -1,5 +1,6 @@
 /*
  * Copyright 2017 Vector Creations Ltd
+ * Copyright 2018 New Vector Ltd
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -217,7 +218,8 @@ public class ReadMarkerManager implements VectorMessagesAdapter.ReadMarkerListen
      */
     public void onScrollStateChanged(final int scrollState) {
         if (scrollState == AbsListView.OnScrollListener.SCROLL_STATE_IDLE
-                && (mScrollState == AbsListView.OnScrollListener.SCROLL_STATE_FLING || mScrollState == AbsListView.OnScrollListener.SCROLL_STATE_TOUCH_SCROLL)) {
+                && (mScrollState == AbsListView.OnScrollListener.SCROLL_STATE_FLING
+                || mScrollState == AbsListView.OnScrollListener.SCROLL_STATE_TOUCH_SCROLL)) {
             checkUnreadMessage();
         }
 
@@ -488,9 +490,11 @@ public class ReadMarkerManager implements VectorMessagesAdapter.ReadMarkerListen
             Log.d(LOG_TAG, "scrollToAdapterEvent: need to load more events in adapter or eventId is not displayed");
 
             if (mVectorMessageListFragment.getMessageAdapter().getCount() > 0) {
-                final MessageRow firstRow = mVectorMessageListFragment.getMessageAdapter().getItem(0);
+                final MessageRow firstRow = mVectorMessageListFragment.getMessageAdapter()
+                        .getItem(0);
                 final Event firstEvent = firstRow != null ? firstRow.getEvent() : null;
-                final MessageRow lastRow = mVectorMessageListFragment.getMessageAdapter().getItem(mVectorMessageListFragment.getMessageAdapter().getCount() - 1);
+                final MessageRow lastRow = mVectorMessageListFragment.getMessageAdapter()
+                        .getItem(mVectorMessageListFragment.getMessageAdapter().getCount() - 1);
                 final Event lastEvent = lastRow != null ? lastRow.getEvent() : null;
                 if (firstEvent != null && lastEvent != null && event.getOriginServerTs() > firstEvent.getOriginServerTs()
                         && event.getOriginServerTs() < lastEvent.getOriginServerTs()) {
@@ -558,7 +562,8 @@ public class ReadMarkerManager implements VectorMessagesAdapter.ReadMarkerListen
                     Log.v(LOG_TAG, "setReadMarkerToLastVisibleRow currentReadMarkerEvent:" + currentReadMarkerEvent.eventId
                             + " TS:" + currentReadMarkerTs + " closestEvent:" + closestEvent.eventId + " TS:" + closestEvent.getOriginServerTs());
                     if (newReadMarkerTs > currentReadMarkerTs) {
-                        Log.d(LOG_TAG, "setReadMarkerToLastVisibleRow update read marker to:" + newReadMarkerEvent.eventId + " isMessageId:" + MXSession.isMessageId(newReadMarkerEvent.eventId));
+                        Log.d(LOG_TAG, "setReadMarkerToLastVisibleRow update read marker to:" + newReadMarkerEvent.eventId
+                                + " isMessageId:" + MXSession.isMessageId(newReadMarkerEvent.eventId));
                         mRoom.setReadMakerEventId(newReadMarkerEvent.eventId);
                         onReadMarkerChanged(mRoom.getRoomId());
                     }

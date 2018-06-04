@@ -1,5 +1,6 @@
 /*
  * Copyright 2017 Vector Creations Ltd
+ * Copyright 2018 New Vector Ltd
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -68,7 +69,10 @@ public class PeopleAdapter extends AbsAdapter {
      * *********************************************************************************************
      */
 
-    public PeopleAdapter(final Context context, final OnSelectItemListener listener, final RoomInvitationListener invitationListener, final MoreRoomActionListener moreActionListener) {
+    public PeopleAdapter(final Context context,
+                         final OnSelectItemListener listener,
+                         final RoomInvitationListener invitationListener,
+                         final MoreRoomActionListener moreActionListener) {
         super(context, invitationListener, moreActionListener);
         mListener = listener;
 
@@ -76,13 +80,25 @@ public class PeopleAdapter extends AbsAdapter {
         mNoContactAccessPlaceholder = context.getString(R.string.no_contact_access_placeholder);
         mNoResultPlaceholder = context.getString(R.string.no_result_placeholder);
 
-        mDirectChatsSection = new AdapterSection<>(context, context.getString(R.string.direct_chats_header), -1,
-                R.layout.adapter_item_room_view, TYPE_HEADER_DEFAULT, TYPE_ROOM, new ArrayList<Room>(), RoomUtils.getRoomsDateComparator(mSession, false));
+        mDirectChatsSection = new AdapterSection<>(context,
+                context.getString(R.string.direct_chats_header),
+                -1,
+                R.layout.adapter_item_room_view,
+                TYPE_HEADER_DEFAULT,
+                TYPE_ROOM,
+                new ArrayList<Room>(),
+                RoomUtils.getRoomsDateComparator(mSession, false));
         mDirectChatsSection.setEmptyViewPlaceholder(context.getString(R.string.no_conversation_placeholder), context.getString(R.string.no_result_placeholder));
 
-        mLocalContactsSection = new AdapterSection<>(context, context.getString(R.string.local_address_book_header),
-                R.layout.adapter_local_contacts_sticky_header_subview, R.layout.adapter_item_contact_view, TYPE_HEADER_LOCAL_CONTACTS, TYPE_CONTACT, new ArrayList<ParticipantAdapterItem>(), ParticipantAdapterItem.alphaComparator);
-        mLocalContactsSection.setEmptyViewPlaceholder(!ContactsManager.getInstance().isContactBookAccessAllowed() ? mNoContactAccessPlaceholder : mNoResultPlaceholder);
+        mLocalContactsSection = new AdapterSection<>(context,
+                context.getString(R.string.local_address_book_header),
+                R.layout.adapter_local_contacts_sticky_header_subview,
+                R.layout.adapter_item_contact_view,
+                TYPE_HEADER_LOCAL_CONTACTS, TYPE_CONTACT,
+                new ArrayList<ParticipantAdapterItem>(),
+                ParticipantAdapterItem.alphaComparator);
+        mLocalContactsSection.setEmptyViewPlaceholder(!ContactsManager.getInstance().isContactBookAccessAllowed() ?
+                mNoContactAccessPlaceholder : mNoResultPlaceholder);
 
         mKnownContactsSection = new KnownContactsAdapterSection(context, context.getString(R.string.user_directory_header), -1,
                 R.layout.adapter_item_contact_view, TYPE_HEADER_DEFAULT, TYPE_CONTACT, new ArrayList<ParticipantAdapterItem>(), null);
@@ -185,7 +201,8 @@ public class PeopleAdapter extends AbsAdapter {
 
     public void setLocalContacts(final List<ParticipantAdapterItem> localContacts) {
         // updates the placeholder according to the local contacts permissions
-        mLocalContactsSection.setEmptyViewPlaceholder(!ContactsManager.getInstance().isContactBookAccessAllowed() ? mNoContactAccessPlaceholder : mNoResultPlaceholder);
+        mLocalContactsSection.setEmptyViewPlaceholder(!ContactsManager.getInstance().isContactBookAccessAllowed() ?
+                mNoContactAccessPlaceholder : mNoResultPlaceholder);
         mLocalContactsSection.setItems(localContacts, mCurrentFilterPattern);
         if (!TextUtils.isEmpty(mCurrentFilterPattern)) {
             filterLocalContacts(String.valueOf(mCurrentFilterPattern));

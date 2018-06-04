@@ -78,7 +78,7 @@ public class LockScreenActivity extends RiotAppCompatActivity { // do NOT extend
         // this will turn the screen on whilst honouring the screen timeout setting, so it will
         // dim/turn off depending on user configured values.
         window.addFlags(WindowManager.LayoutParams.FLAG_TURN_SCREEN_ON);
-        this.requestWindowFeature(Window.FEATURE_NO_TITLE);
+        requestWindowFeature(Window.FEATURE_NO_TITLE);
     }
 
     @Override
@@ -93,7 +93,7 @@ public class LockScreenActivity extends RiotAppCompatActivity { // do NOT extend
         mLockScreenActivity = this;
 
         // remove any pending notifications
-        NotificationManager notificationsManager = (NotificationManager) this.getSystemService(Context.NOTIFICATION_SERVICE);
+        NotificationManager notificationsManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
         notificationsManager.cancelAll();
 
         Intent intent = getIntent();
@@ -197,7 +197,7 @@ public class LockScreenActivity extends RiotAppCompatActivity { // do NOT extend
                     }
                 });
 
-                LockScreenActivity.this.runOnUiThread(new Runnable() {
+                runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
                         finish();

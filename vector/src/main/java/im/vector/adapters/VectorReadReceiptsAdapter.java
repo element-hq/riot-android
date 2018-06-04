@@ -1,5 +1,6 @@
 /*
  * Copyright 2015 OpenMarket Ltd
+ * Copyright 2018 New Vector Ltd
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -87,7 +88,8 @@ public class VectorReadReceiptsAdapter extends ArrayAdapter<ReceiptData> {
         final String ts = AdapterUtils.tsToString(mContext, receipt.originServerTs, false);
 
         SpannableStringBuilder body = new SpannableStringBuilder(mContext.getString(im.vector.R.string.read_receipt) + " : " + ts);
-        body.setSpan(new android.text.style.StyleSpan(android.graphics.Typeface.BOLD), 0, mContext.getString(im.vector.R.string.read_receipt).length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+        body.setSpan(new android.text.style.StyleSpan(android.graphics.Typeface.BOLD),
+                0, mContext.getString(im.vector.R.string.read_receipt).length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
         tsTextView.setText(body);
 
         userNameTextView.setOnLongClickListener(new View.OnLongClickListener() {
