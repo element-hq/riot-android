@@ -20,7 +20,6 @@ package im.vector.activity;
 
 import android.Manifest;
 import android.annotation.SuppressLint;
-import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.NotificationManager;
 import android.content.ContentValues;
@@ -1022,7 +1021,7 @@ public class VectorRoomActivity extends MXCActionBarActivity implements
 
                                     private void onError(String errorMessage) {
                                         hideWaitingView();
-                                        CommonActivityUtils.displayToast(VectorRoomActivity.this, errorMessage);
+                                        Toast.makeText(VectorRoomActivity.this, errorMessage, Toast.LENGTH_SHORT).show();
                                     }
 
                                     @Override
@@ -1129,7 +1128,7 @@ public class VectorRoomActivity extends MXCActionBarActivity implements
 
                     private void onError(String errorMessage) {
                         hideWaitingView();
-                        CommonActivityUtils.displayToast(VectorRoomActivity.this, errorMessage);
+                        Toast.makeText(VectorRoomActivity.this, errorMessage, Toast.LENGTH_SHORT).show();
                     }
 
                     @Override
@@ -1838,7 +1837,7 @@ public class VectorRoomActivity extends MXCActionBarActivity implements
 
             private void onError(String errorMessage) {
                 hideWaitingView();
-                CommonActivityUtils.displayToast(VectorRoomActivity.this, errorMessage);
+                Toast.makeText(VectorRoomActivity.this, errorMessage, Toast.LENGTH_SHORT).show();
             }
 
             @Override
@@ -1904,8 +1903,8 @@ public class VectorRoomActivity extends MXCActionBarActivity implements
                     @Override
                     public void run() {
                         hideWaitingView();
-                        Activity activity = VectorRoomActivity.this;
-                        CommonActivityUtils.displayToastOnUiThread(activity, activity.getString(R.string.cannot_start_call) + " (" + errorMessage + ")");
+                        Toast.makeText(VectorRoomActivity.this,
+                                getString(R.string.cannot_start_call) + " (" + errorMessage + ")", Toast.LENGTH_SHORT).show();
                     }
                 });
             }
@@ -2473,7 +2472,7 @@ public class VectorRoomActivity extends MXCActionBarActivity implements
                     launchNativeVideoRecorder();
                 }
             } else {
-                CommonActivityUtils.displayToast(this, getString(R.string.missing_permissions_warning));
+                Toast.makeText(this, getString(R.string.missing_permissions_warning), Toast.LENGTH_SHORT).show();
             }
         } else if (aRequestCode == CommonActivityUtils.REQUEST_CODE_PERMISSION_AUDIO_IP_CALL) {
             if (CommonActivityUtils.onPermissionResultAudioIpCall(this, aPermissions, aGrantResults)) {
@@ -3339,7 +3338,7 @@ public class VectorRoomActivity extends MXCActionBarActivity implements
 
                         private void onError(String errorMessage) {
                             Log.d(LOG_TAG, "re join failed " + errorMessage);
-                            CommonActivityUtils.displayToast(VectorRoomActivity.this, errorMessage);
+                            Toast.makeText(VectorRoomActivity.this, errorMessage, Toast.LENGTH_SHORT).show();
                             hideWaitingView();
                         }
 
@@ -3380,7 +3379,7 @@ public class VectorRoomActivity extends MXCActionBarActivity implements
 
                     private void onError(String errorMessage) {
                         Log.d(LOG_TAG, "forget failed " + errorMessage);
-                        CommonActivityUtils.displayToast(VectorRoomActivity.this, errorMessage);
+                        Toast.makeText(VectorRoomActivity.this, errorMessage, Toast.LENGTH_SHORT).show();
                         hideWaitingView();
                     }
 
@@ -3474,7 +3473,7 @@ public class VectorRoomActivity extends MXCActionBarActivity implements
 
                             private void onError(String errorMessage) {
                                 Log.d(LOG_TAG, "The invitation rejection failed " + errorMessage);
-                                CommonActivityUtils.displayToast(VectorRoomActivity.this, errorMessage);
+                                Toast.makeText(VectorRoomActivity.this, errorMessage, Toast.LENGTH_SHORT).show();
                                 hideWaitingView();
                             }
 
@@ -3544,7 +3543,7 @@ public class VectorRoomActivity extends MXCActionBarActivity implements
                             }
 
                             private void onError(String errorMessage) {
-                                CommonActivityUtils.displayToast(VectorRoomActivity.this, errorMessage);
+                                Toast.makeText(VectorRoomActivity.this, errorMessage, Toast.LENGTH_SHORT).show();
                                 hideWaitingView();
                             }
 
@@ -3663,7 +3662,7 @@ public class VectorRoomActivity extends MXCActionBarActivity implements
 
                 private void onDone(String errorMessage) {
                     if (!TextUtils.isEmpty(errorMessage)) {
-                        CommonActivityUtils.displayToast(VectorRoomActivity.this, errorMessage);
+                        Toast.makeText(VectorRoomActivity.this, errorMessage, Toast.LENGTH_SHORT).show();
                     }
                     hideWaitingView();
                 }
@@ -3726,7 +3725,7 @@ public class VectorRoomActivity extends MXCActionBarActivity implements
 
                                     private void onDone(String message) {
                                         if (!TextUtils.isEmpty(message)) {
-                                            CommonActivityUtils.displayToast(VectorRoomActivity.this, message);
+                                            Toast.makeText(VectorRoomActivity.this, message, Toast.LENGTH_SHORT).show();
                                         }
 
                                         hideWaitingView();
@@ -3791,7 +3790,7 @@ public class VectorRoomActivity extends MXCActionBarActivity implements
 
                                     private void onDone(String message) {
                                         if (!TextUtils.isEmpty(message)) {
-                                            CommonActivityUtils.displayToast(VectorRoomActivity.this, message);
+                                            Toast.makeText(VectorRoomActivity.this, message, Toast.LENGTH_SHORT).show();
                                         }
 
                                         hideWaitingView();
@@ -3864,7 +3863,7 @@ public class VectorRoomActivity extends MXCActionBarActivity implements
 
                                     private void onDone(String message) {
                                         if (!TextUtils.isEmpty(message)) {
-                                            CommonActivityUtils.displayToast(VectorRoomActivity.this, message);
+                                            Toast.makeText(VectorRoomActivity.this, message, Toast.LENGTH_SHORT).show();
                                         }
 
                                         hideWaitingView();

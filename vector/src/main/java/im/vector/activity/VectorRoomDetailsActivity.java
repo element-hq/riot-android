@@ -189,7 +189,7 @@ public class VectorRoomDetailsActivity extends MXCActionBarActivity implements T
                     Log.d(LOG_TAG, "## onRequestPermissionsResult(): READ_CONTACTS permission granted");
                 } else {
                     Log.w(LOG_TAG, "## onRequestPermissionsResult(): READ_CONTACTS permission not granted");
-                    CommonActivityUtils.displayToast(this, getString(R.string.missing_permissions_warning));
+                    Toast.makeText(this, R.string.missing_permissions_warning, Toast.LENGTH_SHORT).show();
                 }
 
                 ContactsManager.getInstance().refreshLocalContactsSnapshot();

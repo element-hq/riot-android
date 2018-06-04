@@ -27,6 +27,7 @@ import android.text.TextUtils;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.RelativeLayout;
+import android.widget.Toast;
 
 import org.jitsi.meet.sdk.JitsiMeetView;
 import org.jitsi.meet.sdk.JitsiMeetViewListener;
@@ -181,7 +182,7 @@ public class JitsiCallActivity extends RiotAppCompatActivity {
 
                     private void onError(String errorMessage) {
                         hideWaitingView();
-                        CommonActivityUtils.displayToast(JitsiCallActivity.this, errorMessage);
+                        Toast.makeText(JitsiCallActivity.this, errorMessage, Toast.LENGTH_SHORT).show();
                     }
 
                     @Override

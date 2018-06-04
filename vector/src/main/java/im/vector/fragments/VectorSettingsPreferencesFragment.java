@@ -2774,7 +2774,8 @@ public class VectorSettingsPreferencesFragment extends PreferenceFragment implem
         } else {
             Log.e(LOG_TAG, "## displayDeviceDetailsDialog(): sanity check failure");
             if (null != getActivity())
-                CommonActivityUtils.displayToast(getActivity().getApplicationContext(), "DeviceDetailsDialog cannot be displayed.\nBad input parameters.");
+                // FIXME Hardcoded string
+                Toast.makeText(getActivity(), "DeviceDetailsDialog cannot be displayed.\nBad input parameters.", Toast.LENGTH_SHORT).show();
         }
     }
 
@@ -2908,7 +2909,8 @@ public class VectorSettingsPreferencesFragment extends PreferenceFragment implem
                     public void onClick(DialogInterface dialog, int which) {
                         if (null != mSession) {
                             if (TextUtils.isEmpty(passwordEditText.toString())) {
-                                CommonActivityUtils.displayToast(getActivity().getApplicationContext(), "Password missing..");
+                                // FIXME Hardcoded string
+                                Toast.makeText(getActivity().getApplicationContext(), "Password missing..", Toast.LENGTH_SHORT).show();
                                 return;
                             }
                             mAccountPassword = passwordEditText.getText().toString();

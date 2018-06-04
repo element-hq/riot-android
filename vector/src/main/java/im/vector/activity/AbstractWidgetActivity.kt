@@ -23,6 +23,7 @@ import android.graphics.Bitmap
 import android.os.Build
 import android.support.annotation.CallSuper
 import android.webkit.*
+import androidx.core.widget.toast
 import butterknife.BindView
 import com.google.gson.reflect.TypeToken
 import im.vector.Matrix
@@ -89,7 +90,7 @@ abstract class AbstractWidgetActivity : RiotAppCompatActivity() {
             }
 
             private fun onError(errorMessage: String) {
-                CommonActivityUtils.displayToast(this@AbstractWidgetActivity, errorMessage)
+                toast(errorMessage)
                 finish()
             }
 

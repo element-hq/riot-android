@@ -25,6 +25,7 @@ import android.content.Intent;
 import android.net.Uri;
 import android.support.v4.content.LocalBroadcastManager;
 import android.text.TextUtils;
+import android.widget.Toast;
 
 import org.matrix.androidsdk.MXSession;
 import org.matrix.androidsdk.data.Room;
@@ -348,7 +349,7 @@ public class VectorUniversalLinkReceiver extends BroadcastReceiver {
                 }
 
                 private void onError(String errorMessage) {
-                    CommonActivityUtils.displayToast(aContext, errorMessage);
+                    Toast.makeText(aContext, errorMessage, Toast.LENGTH_SHORT).show();
                     stopHomeActivitySpinner(aContext);
                 }
 

@@ -32,6 +32,7 @@ import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import org.matrix.androidsdk.MXSession;
 import org.matrix.androidsdk.crypto.MXCryptoError;
@@ -176,7 +177,7 @@ public class LockScreenActivity extends RiotAppCompatActivity { // do NOT extend
                     @Override
                     public void onNetworkError(Exception e) {
                         Log.d(LOG_TAG, "Send message : onNetworkError " + e.getMessage());
-                        CommonActivityUtils.displayToast(LockScreenActivity.this, e.getLocalizedMessage());
+                        Toast.makeText(LockScreenActivity.this, e.getLocalizedMessage(), Toast.LENGTH_SHORT).show();
                     }
 
                     @Override
@@ -184,16 +185,16 @@ public class LockScreenActivity extends RiotAppCompatActivity { // do NOT extend
                         Log.d(LOG_TAG, "Send message : onMatrixError " + e.getMessage());
 
                         if (e instanceof MXCryptoError) {
-                            CommonActivityUtils.displayToast(LockScreenActivity.this, ((MXCryptoError) e).getDetailedErrorDescription());
+                            Toast.makeText(LockScreenActivity.this, ((MXCryptoError) e).getDetailedErrorDescription(), Toast.LENGTH_SHORT).show();
                         } else {
-                            CommonActivityUtils.displayToast(LockScreenActivity.this, e.getLocalizedMessage());
+                            Toast.makeText(LockScreenActivity.this, e.getLocalizedMessage(), Toast.LENGTH_SHORT).show();
                         }
                     }
 
                     @Override
                     public void onUnexpectedError(Exception e) {
                         Log.d(LOG_TAG, "Send message : onUnexpectedError " + e.getMessage());
-                        CommonActivityUtils.displayToast(LockScreenActivity.this, e.getLocalizedMessage());
+                        Toast.makeText(LockScreenActivity.this, e.getLocalizedMessage(), Toast.LENGTH_SHORT).show();
                     }
                 });
 

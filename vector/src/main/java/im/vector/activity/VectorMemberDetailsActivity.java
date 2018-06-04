@@ -291,7 +291,7 @@ public class VectorMemberDetailsActivity extends MXCActionBarActivity implements
 
             @Override
             public void onNetworkError(Exception e) {
-                CommonActivityUtils.displayToast(VectorMemberDetailsActivity.this, e.getLocalizedMessage());
+                Toast.makeText(VectorMemberDetailsActivity.this, e.getLocalizedMessage(), Toast.LENGTH_SHORT).show();
                 Log.e(LOG_TAG, "## startCall() failed " + e.getMessage());
             }
 
@@ -315,13 +315,13 @@ public class VectorMemberDetailsActivity extends MXCActionBarActivity implements
                     }
                 }
 
-                CommonActivityUtils.displayToast(VectorMemberDetailsActivity.this, e.getLocalizedMessage());
+                Toast.makeText(VectorMemberDetailsActivity.this, e.getLocalizedMessage(), Toast.LENGTH_SHORT).show();
                 Log.e(LOG_TAG, "## startCall() failed " + e.getMessage());
             }
 
             @Override
             public void onUnexpectedError(Exception e) {
-                CommonActivityUtils.displayToast(VectorMemberDetailsActivity.this, e.getLocalizedMessage());
+                Toast.makeText(VectorMemberDetailsActivity.this, e.getLocalizedMessage(), Toast.LENGTH_SHORT).show();
                 Log.e(LOG_TAG, "## startCall() failed " + e.getMessage());
             }
         });

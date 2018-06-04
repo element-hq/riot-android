@@ -23,34 +23,26 @@ import android.content.Context
 import android.content.Intent
 import android.graphics.Bitmap
 import android.os.Build
-import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
 import android.text.TextUtils
 import android.view.View
 import android.view.ViewGroup
-import android.webkit.PermissionRequest
-import android.webkit.WebChromeClient
-import android.webkit.WebSettings
-import android.webkit.WebView
-import android.webkit.WebViewClient
+import android.webkit.*
 import android.widget.TextView
 import androidx.core.view.isInvisible
-import androidx.core.view.isVisible
-
-import org.matrix.androidsdk.MXSession
-import org.matrix.androidsdk.data.Room
-import org.matrix.androidsdk.rest.callback.ApiCallback
-import org.matrix.androidsdk.rest.model.MatrixError
-import org.matrix.androidsdk.util.Log
-
+import androidx.core.widget.toast
 import butterknife.BindView
-import butterknife.ButterKnife
 import butterknife.OnClick
 import im.vector.Matrix
 import im.vector.R
 import im.vector.widgets.Widget
 import im.vector.widgets.WidgetsManager
+import org.matrix.androidsdk.MXSession
+import org.matrix.androidsdk.data.Room
+import org.matrix.androidsdk.rest.callback.ApiCallback
+import org.matrix.androidsdk.rest.model.MatrixError
+import org.matrix.androidsdk.util.Log
 
 /*
  * This class displays a widget
@@ -180,7 +172,7 @@ class WidgetActivity : RiotAppCompatActivity() {
 
                         private fun onError(errorMessage: String) {
                             hideWaitingView()
-                            CommonActivityUtils.displayToast(this@WidgetActivity, errorMessage)
+                            toast(errorMessage)
                         }
 
                         override fun onNetworkError(e: Exception) {
@@ -295,7 +287,7 @@ class WidgetActivity : RiotAppCompatActivity() {
 
             private fun onError(errorMessage: String) {
                 hideWaitingView()
-                CommonActivityUtils.displayToast(this@WidgetActivity, errorMessage)
+                toast(errorMessage)
                 finish()
             }
 

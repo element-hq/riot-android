@@ -272,7 +272,7 @@ public class VectorMediasViewerActivity extends MXCActionBarActivity {
                                 startActivity(sendIntent);
                             } catch (Exception e) {
                                 Log.e(LOG_TAG, "## onAction : cannot display the media " + mediaUri + " mimeType " + mediaInfo.mMimeType);
-                                CommonActivityUtils.displayToast(VectorMediasViewerActivity.this, e.getLocalizedMessage());
+                                Toast.makeText(VectorMediasViewerActivity.this, e.getLocalizedMessage(), Toast.LENGTH_SHORT).show();
                             }
                         }
                     }

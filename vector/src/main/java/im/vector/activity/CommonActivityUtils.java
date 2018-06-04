@@ -321,7 +321,7 @@ public class CommonActivityUtils {
         // the culprit activity is restarted when System.exit is called.
         // so called it once to fix it
         if (!preferences.getBoolean(RESTART_IN_PROGRESS_KEY, false)) {
-            CommonActivityUtils.displayToast(activity.getApplicationContext(), "Restart the application (low memory)");
+            Toast.makeText(activity, "Restart the application (low memory)", Toast.LENGTH_SHORT).show();
 
             Log.e(LOG_TAG, "Kill the application");
             editor.putBoolean(RESTART_IN_PROGRESS_KEY, true);
@@ -865,7 +865,7 @@ public class CommonActivityUtils {
                 dialog.setOnCancelListener(new DialogInterface.OnCancelListener() {
                     @Override
                     public void onCancel(DialogInterface dialog) {
-                        CommonActivityUtils.displayToast(aCallingActivity, aCallingActivity.getString(R.string.missing_permissions_warning));
+                        Toast.makeText(aCallingActivity, R.string.missing_permissions_warning, Toast.LENGTH_SHORT).show();
                     }
                 });
 
@@ -1000,7 +1000,7 @@ public class CommonActivityUtils {
                 } else {
                     Log.d(LOG_TAG, "## onPermissionResultAudioIpCall(): RECORD_AUDIO permission not granted");
                     if (null != aContext)
-                        CommonActivityUtils.displayToast(aContext, aContext.getString(R.string.permissions_action_not_performed_missing_permissions));
+                        Toast.makeText(aContext, R.string.permissions_action_not_performed_missing_permissions, Toast.LENGTH_SHORT).show();
                 }
             }
         } catch (Exception ex) {
@@ -1053,7 +1053,7 @@ public class CommonActivityUtils {
             } else {
                 Log.w(LOG_TAG, "## onPermissionResultVideoIpCall(): No permissions granted to IP call (video or audio)");
                 if (null != aContext)
-                    CommonActivityUtils.displayToast(aContext, aContext.getString(R.string.permissions_action_not_performed_missing_permissions));
+                    Toast.makeText(aContext, R.string.permissions_action_not_performed_missing_permissions, Toast.LENGTH_SHORT).show();
             }
         } catch (Exception ex) {
             Log.d(LOG_TAG, "## onPermissionResultVideoIpCall(): Exception MSg=" + ex.getMessage());
@@ -1728,37 +1728,6 @@ public class CommonActivityUtils {
                 }
             }
         });
-    }
-
-    //==============================================================================================================
-    // toast utils
-    //==============================================================================================================
-
-    /**
-     * Helper method to display a toast message.
-     *
-     * @param aCallingActivity calling Activity instance
-     * @param aMsgToDisplay    message to display
-     */
-    public static void displayToastOnUiThread(final Activity aCallingActivity, final String aMsgToDisplay) {
-        if (null != aCallingActivity) {
-            aCallingActivity.runOnUiThread(new Runnable() {
-                @Override
-                public void run() {
-                    CommonActivityUtils.displayToast(aCallingActivity.getApplicationContext(), aMsgToDisplay);
-                }
-            });
-        }
-    }
-
-    /**
-     * Display a toast
-     *
-     * @param aContext       the context.
-     * @param aTextToDisplay the text to display.
-     */
-    public static void displayToast(Context aContext, CharSequence aTextToDisplay) {
-        Toast.makeText(aContext, aTextToDisplay, Toast.LENGTH_SHORT).show();
     }
 
     //==============================================================================================================
