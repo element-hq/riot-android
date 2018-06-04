@@ -1731,39 +1731,6 @@ public class CommonActivityUtils {
     }
 
     //==============================================================================================================
-    // room utils
-    //==============================================================================================================
-
-    /**
-     * Helper method to retrieve the max power level contained in the room.
-     * This value is used to indicate what is the power level value required
-     * to be admin of the room.
-     *
-     * @return max power level of the current room
-     */
-    public static int getRoomMaxPowerLevel(Room aRoom) {
-        int maxPowerLevel = 0;
-
-        if (null != aRoom) {
-            PowerLevels powerLevels = aRoom.getLiveState().getPowerLevels();
-
-            if (null != powerLevels) {
-                int tempPowerLevel;
-
-                // find out the room member
-                Collection<RoomMember> members = aRoom.getMembers();
-                for (RoomMember member : members) {
-                    tempPowerLevel = powerLevels.getUserPowerLevel(member.getUserId());
-                    if (tempPowerLevel > maxPowerLevel) {
-                        maxPowerLevel = tempPowerLevel;
-                    }
-                }
-            }
-        }
-        return maxPowerLevel;
-    }
-
-    //==============================================================================================================
     // Application badge (displayed in the launcher)
     //==============================================================================================================
 

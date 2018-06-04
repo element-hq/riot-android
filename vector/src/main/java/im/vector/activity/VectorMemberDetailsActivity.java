@@ -63,6 +63,7 @@ import im.vector.adapters.VectorMemberDetailsAdapter;
 import im.vector.adapters.VectorMemberDetailsDevicesAdapter;
 import im.vector.fragments.VectorUnknownDevicesFragment;
 import im.vector.util.CallsManager;
+import im.vector.util.MatrixSdkExtensionsKt;
 import im.vector.util.VectorUtils;
 
 /**
@@ -933,7 +934,7 @@ public class VectorMemberDetailsActivity extends MXCActionBarActivity implements
 
                     if (TextUtils.equals(membership, RoomMember.MEMBERSHIP_JOIN)) {
                         // if the member is already admin, then disable the action
-                        int maxPowerLevel = CommonActivityUtils.getRoomMaxPowerLevel(mRoom);
+                        int maxPowerLevel = MatrixSdkExtensionsKt.getRoomMaxPowerLevel(mRoom);
 
                         if ((selfPowerLevel == maxPowerLevel) && (memberPowerLevel != maxPowerLevel)) {
                             supportedActions.add(ITEM_ACTION_SET_ADMIN);

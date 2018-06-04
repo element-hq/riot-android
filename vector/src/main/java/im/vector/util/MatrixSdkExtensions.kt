@@ -17,7 +17,48 @@
 package im.vector.util
 
 import org.matrix.androidsdk.crypto.data.MXDeviceInfo
+import org.matrix.androidsdk.data.Room
+
+/* ==========================================================================================
+ * MXDeviceInfo
+ * ========================================================================================== */
 
 fun MXDeviceInfo.getFingerprintHumanReadable() = fingerprint()
         ?.chunked(4)
         ?.joinToString(separator = " ")
+
+
+/* ==========================================================================================
+ * Room
+ * ========================================================================================== */
+
+/**
+ * Helper method to retrieve the max power level contained in the room.
+ * This value is used to indicate what is the power level value required
+ * to be admin of the room.
+ *
+ * @return max power level of the current room
+ */
+fun Room?.getRoomMaxPowerLevel(): Int {
+    if (this == null) {
+        return 0
+    }
+
+    var maxPowerLevel = 0
+
+    val powerLevels = liveState.powerLevels
+
+    if (null != powerLevels) {
+        var tempPowerLevel: Int
+
+        // find out the room member
+        for (member in members) {
+            tempPowerLevel = powerLevels.getUserPowerLevel(member.userId)
+            if (tempPowerLevel > maxPowerLevel) {
+                maxPowerLevel = tempPowerLevel
+            }
+        }
+    }
+
+    return maxPowerLevel
+}
