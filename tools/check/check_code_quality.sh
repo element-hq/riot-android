@@ -1,4 +1,4 @@
-!/usr/bin/env bash
+#!/usr/bin/env bash
 
 #
 # Copyright 2018 New Vector Ltd
@@ -24,7 +24,7 @@ numberOfFiles3=`ls -1U ./vector/src/main/res/drawable-xhdpi | wc -l | sed  "s/ /
 numberOfFiles4=`ls -1U ./vector/src/main/res/drawable-xxhdpi | wc -l | sed  "s/ //g"`
 numberOfFiles5=`ls -1U ./vector/src/main/res/drawable-xXxhdpi | wc -l | sed  "s/ //g"`
 
-if [ $numberOfFiles1 -eq $numberOfFiles5 ] && [ $numberOfFiles2 -eq $numberOfFiles5 ] && [ $numberOfFiles3 -eq $numberOfFiles5 ] && [ $numberOfFiles4 -eq $numberOfFiles5 ]; then
+if [ ${numberOfFiles1} -eq ${numberOfFiles5} ] && [ ${numberOfFiles2} -eq ${numberOfFiles5} ] && [ ${numberOfFiles3} -eq ${numberOfFiles5} ] && [ ${numberOfFiles4} -eq ${numberOfFiles5} ]; then
    resultNbOfDrawable=0
    echo "OK"
 else
@@ -35,9 +35,30 @@ else
 fi
 
 echo
+
+searchForbiddenStringsScript=./tmp/search_forbidden_strings.pl
+
+if [ -f ${searchForbiddenStringsScript} ]; then
+  echo "${searchForbiddenStringsScript} already there"
+else
+  mkdir tmp
+  echo "Get the script"
+  wget https://raw.githubusercontent.com/matrix-org/matrix-dev-tools/develop/bin/search_forbidden_strings.pl -O ${searchForbiddenStringsScript}
+fi
+
+echo
+
+if [ -x ${searchForbiddenStringsScript} ]; then
+  echo "${searchForbiddenStringsScript} is already executable"
+else
+  echo "Make the script executable"
+  chmod u+x ${searchForbiddenStringsScript}
+fi
+
+echo
 echo "Search for forbidden patterns in code..."
 
-./tools/check/search_forbidden_strings.pl ./tools/check/forbidden_strings_in_code.txt \
+${searchForbiddenStringsScript} ./tools/check/forbidden_strings_in_code.txt \
     ./vector/src/app/java \
     ./vector/src/appfdroid/java \
     ./vector/src/main/java
@@ -47,7 +68,7 @@ resultForbiddenStringInCode=$?
 echo
 echo "Search for forbidden patterns in resources..."
 
-./tools/check/search_forbidden_strings.pl ./tools/check/forbidden_strings_in_resources.txt \
+${searchForbiddenStringsScript} ./tools/check/forbidden_strings_in_resources.txt \
     ./vector/src/main/res/layout \
     ./vector/src/main/res/menu \
     ./vector/src/main/res/values \
@@ -63,7 +84,7 @@ ls -1U ./vector/src/main/res/drawable/*.png
 resultTmp=$?
 
 # Inverse the result, cause no file found is an error for ls but this is what we want!
-if [ $resultTmp -eq 0 ]; then
+if [ ${resultTmp} -eq 0 ]; then
    echo "ERROR, png files detected in /drawable"
    resultPngInDrawable=1
 else
@@ -73,7 +94,7 @@ fi
 
 echo
 
-if [ $resultNbOfDrawable -eq 0 ] && [ $resultForbiddenStringInCode -eq 0 ] && [ $resultForbiddenStringInResource -eq 0 ] && [ $resultPngInDrawable -eq 0 ]; then
+if [ ${resultNbOfDrawable} -eq 0 ] && [ ${resultForbiddenStringInCode} -eq 0 ] && [ ${resultForbiddenStringInResource} -eq 0 ] && [ ${resultPngInDrawable} -eq 0 ]; then
    echo "MAIN OK"
 else
    echo "MAIN ERROR"
