@@ -142,7 +142,7 @@ public class VectorUnifiedSearchFragmentPagerAdapter extends FragmentPagerAdapte
     @Override
     public CharSequence getPageTitle(int position) {
         if (null != mFragmentsData && mFragmentsData.get(position) != null) {
-            return mContext.getResources().getString(mFragmentsData.get(position).first);
+            return mContext.getString(mFragmentsData.get(position).first);
         }
 
         return super.getPageTitle(position);

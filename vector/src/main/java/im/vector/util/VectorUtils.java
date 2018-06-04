@@ -901,16 +901,16 @@ public class VectorUtils {
         String formattedString;
 
         if (secondsInterval < 0) {
-            formattedString = "0" + context.getResources().getString(R.string.format_time_s);
+            formattedString = "0" + context.getString(R.string.format_time_s);
         } else {
             if (secondsInterval < 60) {
-                formattedString = secondsInterval + context.getResources().getString(R.string.format_time_s);
+                formattedString = secondsInterval + context.getString(R.string.format_time_s);
             } else if (secondsInterval < 3600) {
-                formattedString = (secondsInterval / 60) + context.getResources().getString(R.string.format_time_m);
+                formattedString = (secondsInterval / 60) + context.getString(R.string.format_time_m);
             } else if (secondsInterval < 86400) {
-                formattedString = (secondsInterval / 3600) + context.getResources().getString(R.string.format_time_h);
+                formattedString = (secondsInterval / 3600) + context.getString(R.string.format_time_h);
             } else {
-                formattedString = (secondsInterval / 86400) + context.getResources().getString(R.string.format_time_d);
+                formattedString = (secondsInterval / 86400) + context.getString(R.string.format_time_d);
             }
         }
 
@@ -998,19 +998,19 @@ public class VectorUtils {
 
         String presenceText = null;
         if (TextUtils.equals(user.presence, User.PRESENCE_ONLINE)) {
-            presenceText = context.getResources().getString(R.string.room_participants_online);
+            presenceText = context.getString(R.string.room_participants_online);
         } else if (TextUtils.equals(user.presence, User.PRESENCE_UNAVAILABLE)) {
-            presenceText = context.getResources().getString(R.string.room_participants_idle);
+            presenceText = context.getString(R.string.room_participants_idle);
         } else if (TextUtils.equals(user.presence, User.PRESENCE_OFFLINE) || (null == user.presence)) {
-            presenceText = context.getResources().getString(R.string.room_participants_offline);
+            presenceText = context.getString(R.string.room_participants_offline);
         }
 
         if (presenceText != null) {
             if ((null != user.currently_active) && user.currently_active) {
-                presenceText += " " + context.getResources().getString(R.string.room_participants_now);
+                presenceText += " " + context.getString(R.string.room_participants_now);
             } else if ((null != user.lastActiveAgo) && (user.lastActiveAgo > 0)) {
                 presenceText += " " + formatSecondsIntervalFloored(context,
-                        user.getAbsoluteLastActiveAgo() / 1000L) + " " + context.getResources().getString(R.string.room_participants_ago);
+                        user.getAbsoluteLastActiveAgo() / 1000L) + " " + context.getString(R.string.room_participants_ago);
             }
         }
 

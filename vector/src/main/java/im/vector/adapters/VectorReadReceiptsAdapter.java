@@ -107,7 +107,7 @@ public class VectorReadReceiptsAdapter extends ArrayAdapter<ReceiptData> {
                 ClipData clip = ClipData.newPlainText("", ts);
                 clipboard.setPrimaryClip(clip);
 
-                Toast.makeText(mContext, mContext.getResources().getString(R.string.copied_to_clipboard), Toast.LENGTH_SHORT).show();
+                Toast.makeText(mContext, mContext.getString(R.string.copied_to_clipboard), Toast.LENGTH_SHORT).show();
                 return true;
             }
         });

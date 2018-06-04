@@ -961,7 +961,7 @@ public class LoginActivity extends MXCActionBarActivity implements RegistrationM
                     enableLoadingScreen(false);
 
                     // refresh the messages
-                    hideMainLayoutAndToast(getResources().getString(R.string.auth_reset_password_email_validation_message, email));
+                    hideMainLayoutAndToast(getString(R.string.auth_reset_password_email_validation_message, email));
 
                     mMode = MODE_FORGOT_PASSWORD_WAITING_VALIDATION;
                     refreshDisplay();
@@ -1057,7 +1057,7 @@ public class LoginActivity extends MXCActionBarActivity implements RegistrationM
                         enableLoadingScreen(false);
 
                         // refresh the messages
-                        hideMainLayoutAndToast(getResources().getString(R.string.auth_reset_password_success_message));
+                        hideMainLayoutAndToast(getString(R.string.auth_reset_password_success_message));
                         mIsPasswordResetted = true;
                         refreshDisplay();
                     }
@@ -1095,7 +1095,7 @@ public class LoginActivity extends MXCActionBarActivity implements RegistrationM
                         if (TextUtils.equals(e.errcode, MatrixError.UNAUTHORIZED)) {
                             Log.d(LOG_TAG, "onForgotOnEmailValidated : failed UNAUTHORIZED");
 
-                            onError(getResources().getString(R.string.auth_reset_password_error_unauthorized), false);
+                            onError(getString(R.string.auth_reset_password_error_unauthorized), false);
                         } else if (TextUtils.equals(e.errcode, MatrixError.NOT_FOUND)) {
                             String hsUrlString = hsConfig.getHomeserverUri().toString();
 
@@ -1142,19 +1142,19 @@ public class LoginActivity extends MXCActionBarActivity implements RegistrationM
 
         if (null != errCode) {
             if (TextUtils.equals(errCode, MatrixError.FORBIDDEN)) {
-                message = getResources().getString(R.string.login_error_forbidden);
+                message = getString(R.string.login_error_forbidden);
             } else if (TextUtils.equals(errCode, MatrixError.UNKNOWN_TOKEN)) {
-                message = getResources().getString(R.string.login_error_unknown_token);
+                message = getString(R.string.login_error_unknown_token);
             } else if (TextUtils.equals(errCode, MatrixError.BAD_JSON)) {
-                message = getResources().getString(R.string.login_error_bad_json);
+                message = getString(R.string.login_error_bad_json);
             } else if (TextUtils.equals(errCode, MatrixError.NOT_JSON)) {
-                message = getResources().getString(R.string.login_error_not_json);
+                message = getString(R.string.login_error_not_json);
             } else if (TextUtils.equals(errCode, MatrixError.LIMIT_EXCEEDED)) {
-                message = getResources().getString(R.string.login_error_limit_exceeded);
+                message = getString(R.string.login_error_limit_exceeded);
             } else if (TextUtils.equals(errCode, MatrixError.USER_IN_USE)) {
-                message = getResources().getString(R.string.login_error_user_in_use);
+                message = getString(R.string.login_error_user_in_use);
             } else if (TextUtils.equals(errCode, MatrixError.LOGIN_EMAIL_URL_NOT_YET)) {
-                message = getResources().getString(R.string.login_error_login_email_not_yet);
+                message = getString(R.string.login_error_login_email_not_yet);
             }
         }
 
@@ -2445,7 +2445,7 @@ public class LoginActivity extends MXCActionBarActivity implements RegistrationM
         Log.d(LOG_TAG, "## onWaitingEmailValidation");
 
         // Prompt the user to check his email
-        hideMainLayoutAndToast(getResources().getString(R.string.auth_email_validation_message));
+        hideMainLayoutAndToast(getString(R.string.auth_email_validation_message));
         enableLoadingScreen(true);
 
         // Loop to know whether the email has been checked

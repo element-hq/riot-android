@@ -1002,89 +1002,89 @@ public class VectorMemberDetailsActivity extends MXCActionBarActivity implements
 
             if (supportedActionsList.indexOf(ITEM_ACTION_START_VOICE_CALL) >= 0) {
                 imageResource = R.drawable.voice_call_black;
-                actionText = getResources().getString(R.string.start_voice_call);
+                actionText = getString(R.string.start_voice_call);
                 callActions.add(new VectorMemberDetailsAdapter.AdapterMemberActionItems(imageResource, actionText, ITEM_ACTION_START_VOICE_CALL));
             }
 
             if (supportedActionsList.indexOf(ITEM_ACTION_START_VIDEO_CALL) >= 0) {
                 imageResource = R.drawable.video_call_black;
-                actionText = getResources().getString(R.string.start_video_call);
+                actionText = getString(R.string.start_video_call);
                 callActions.add(new VectorMemberDetailsAdapter.AdapterMemberActionItems(imageResource, actionText, ITEM_ACTION_START_VIDEO_CALL));
             }
 
             if (supportedActionsList.indexOf(ITEM_ACTION_INVITE) >= 0) {
                 imageResource = R.drawable.ic_person_add_black;
-                actionText = getResources().getString(R.string.room_participants_action_invite);
+                actionText = getString(R.string.room_participants_action_invite);
                 adminActions.add(new VectorMemberDetailsAdapter.AdapterMemberActionItems(imageResource, actionText, ITEM_ACTION_INVITE));
             }
 
             // build the leave item
             if (supportedActionsList.indexOf(ITEM_ACTION_LEAVE) >= 0) {
                 imageResource = R.drawable.vector_leave_room_black;
-                actionText = getResources().getString(R.string.room_participants_action_leave);
+                actionText = getString(R.string.room_participants_action_leave);
                 uncategorizedActions.add(new VectorMemberDetailsAdapter.AdapterMemberActionItems(imageResource, actionText, ITEM_ACTION_LEAVE));
             }
 
             // build the "make admin" item
             if (supportedActionsList.indexOf(ITEM_ACTION_SET_ADMIN) >= 0) {
                 imageResource = R.drawable.ic_verified_user_black;
-                actionText = getResources().getString(R.string.room_participants_action_set_admin);
+                actionText = getString(R.string.room_participants_action_set_admin);
                 adminActions.add(new VectorMemberDetailsAdapter.AdapterMemberActionItems(imageResource, actionText, ITEM_ACTION_SET_ADMIN));
             }
 
             // build the "moderator" item
             if (supportedActionsList.indexOf(ITEM_ACTION_SET_MODERATOR) >= 0) {
                 imageResource = R.drawable.ic_verified_user_black;
-                actionText = getResources().getString(R.string.room_participants_action_set_moderator);
+                actionText = getString(R.string.room_participants_action_set_moderator);
                 adminActions.add(new VectorMemberDetailsAdapter.AdapterMemberActionItems(imageResource, actionText, ITEM_ACTION_SET_MODERATOR));
             }
 
             // build the "default" item
             if (supportedActionsList.indexOf(ITEM_ACTION_SET_DEFAULT_POWER_LEVEL) >= 0) {
                 imageResource = R.drawable.ic_verified_user_black;
-                actionText = getResources().getString(R.string.room_participants_action_set_default_power_level);
+                actionText = getString(R.string.room_participants_action_set_default_power_level);
                 adminActions.add(new VectorMemberDetailsAdapter.AdapterMemberActionItems(imageResource, actionText, ITEM_ACTION_SET_DEFAULT_POWER_LEVEL));
             }
 
             // build the "remove from" item (ban)
             if (supportedActionsList.indexOf(ITEM_ACTION_KICK) >= 0) {
                 imageResource = R.drawable.ic_remove_circle_outline_red;
-                actionText = getResources().getString(R.string.room_participants_action_remove);
+                actionText = getString(R.string.room_participants_action_remove);
                 adminActions.add(new VectorMemberDetailsAdapter.AdapterMemberActionItems(imageResource, actionText, ITEM_ACTION_KICK));
             }
 
             // build the "block" item (block)
             if (supportedActionsList.indexOf(ITEM_ACTION_BAN) >= 0) {
                 imageResource = R.drawable.ic_block_black;
-                actionText = getResources().getString(R.string.room_participants_action_ban);
+                actionText = getString(R.string.room_participants_action_ban);
                 adminActions.add(new VectorMemberDetailsAdapter.AdapterMemberActionItems(imageResource, actionText, ITEM_ACTION_BAN));
             }
 
             // build the "unblock" item (unblock)
             if (supportedActionsList.indexOf(ITEM_ACTION_UNBAN) >= 0) {
                 imageResource = R.drawable.ic_block_black;
-                actionText = getResources().getString(R.string.room_participants_action_unban);
+                actionText = getString(R.string.room_participants_action_unban);
                 adminActions.add(new VectorMemberDetailsAdapter.AdapterMemberActionItems(imageResource, actionText, ITEM_ACTION_UNBAN));
             }
 
             // build the "ignore" item
             if (supportedActionsList.indexOf(ITEM_ACTION_IGNORE) >= 0) {
                 imageResource = R.drawable.ic_person_outline_black;
-                actionText = getResources().getString(R.string.room_participants_action_ignore);
+                actionText = getString(R.string.room_participants_action_ignore);
                 uncategorizedActions.add(new VectorMemberDetailsAdapter.AdapterMemberActionItems(imageResource, actionText, ITEM_ACTION_IGNORE));
             }
 
             // build the "unignore" item
             if (supportedActionsList.indexOf(ITEM_ACTION_UNIGNORE) >= 0) {
                 imageResource = R.drawable.ic_person_black;
-                actionText = getResources().getString(R.string.room_participants_action_unignore);
+                actionText = getString(R.string.room_participants_action_unignore);
                 uncategorizedActions.add(new VectorMemberDetailsAdapter.AdapterMemberActionItems(imageResource, actionText, ITEM_ACTION_UNIGNORE));
             }
 
             // build the "mention" item
             if (supportedActionsList.indexOf(ITEM_ACTION_MENTION) >= 0) {
                 imageResource = R.drawable.ic_comment_black;
-                actionText = getResources().getString(R.string.room_participants_action_mention);
+                actionText = getString(R.string.room_participants_action_mention);
                 uncategorizedActions.add(new VectorMemberDetailsAdapter.AdapterMemberActionItems(imageResource, actionText, ITEM_ACTION_MENTION));
             }
 
@@ -1096,7 +1096,7 @@ public class VectorMemberDetailsActivity extends MXCActionBarActivity implements
             // don't show devices list if the member isn't a matrix user
             if (mUser != null && MXSession.PATTERN_CONTAIN_MATRIX_USER_IDENTIFIER.matcher(mMemberId).matches()) {
                 imageResource = R.drawable.ic_devices_info;
-                actionText = getResources().getString(R.string.room_participants_action_devices_list);
+                actionText = getString(R.string.room_participants_action_devices_list);
                 devicesActions.add(new VectorMemberDetailsAdapter.AdapterMemberActionItems(imageResource, actionText, ITEM_ACTION_DEVICES));
                 mListViewAdapter.setDevicesActionsList(devicesActions);
             }
@@ -1113,7 +1113,7 @@ public class VectorMemberDetailsActivity extends MXCActionBarActivity implements
             }
 
             imageResource = R.drawable.ic_add_black;
-            actionText = getResources().getString(R.string.start_new_chat);
+            actionText = getString(R.string.start_new_chat);
             directMessagesActions.add(new VectorMemberDetailsAdapter.AdapterMemberActionItems(imageResource, actionText, ITEM_ACTION_START_CHAT));
 
             mListViewAdapter.setDirectCallsActionsList(directMessagesActions);

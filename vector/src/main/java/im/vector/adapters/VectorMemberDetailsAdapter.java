@@ -284,13 +284,13 @@ public class VectorMemberDetailsAdapter extends BaseExpandableListAdapter {
      */
     private String getGroupTitle(int groupPosition) {
         if (groupPosition == mAdminGroupPosition) {
-            return mContext.getResources().getString(R.string.room_participants_header_admin_tools);
+            return mContext.getString(R.string.room_participants_header_admin_tools);
         } else if (groupPosition == mCallGroupPosition) {
-            return mContext.getResources().getString(R.string.room_participants_header_call);
+            return mContext.getString(R.string.room_participants_header_call);
         } else if (groupPosition == mDirectCallsGroupPosition) {
-            return mContext.getResources().getString(R.string.room_participants_header_direct_chats);
+            return mContext.getString(R.string.room_participants_header_direct_chats);
         } else if (groupPosition == mDevicesGroupPosition) {
-            return mContext.getResources().getString(R.string.room_participants_header_devices);
+            return mContext.getString(R.string.room_participants_header_devices);
         }
 
         return "???";

@@ -858,7 +858,7 @@ public class VectorRoomSettingsFragment extends PreferenceFragment implements Sh
                 } else {
                     // no tag associated to the room
                     value = resources.getString(R.string.room_settings_tag_pref_entry_value_none);
-                    summary = Html.fromHtml("<i>" + getResources().getString(R.string.room_settings_tag_pref_no_tag) + "</i>").toString();
+                    summary = Html.fromHtml("<i>" + getString(R.string.room_settings_tag_pref_no_tag) + "</i>").toString();
                 }
 
                 mRoomTagListPreference.setValue(value);
@@ -959,13 +959,13 @@ public class VectorRoomSettingsFragment extends PreferenceFragment implements Sh
         if (!TextUtils.equals(newValue, previousValue)) {
             String historyVisibility;
 
-            if (newValue.equals(getResources().getString(R.string.room_settings_read_history_entry_value_anyone))) {
+            if (newValue.equals(getString(R.string.room_settings_read_history_entry_value_anyone))) {
                 historyVisibility = RoomState.HISTORY_VISIBILITY_WORLD_READABLE;
-            } else if (newValue.equals(getResources().getString(R.string.room_settings_read_history_entry_value_members_only_option_time_shared))) {
+            } else if (newValue.equals(getString(R.string.room_settings_read_history_entry_value_members_only_option_time_shared))) {
                 historyVisibility = RoomState.HISTORY_VISIBILITY_SHARED;
-            } else if (newValue.equals(getResources().getString(R.string.room_settings_read_history_entry_value_members_only_invited))) {
+            } else if (newValue.equals(getString(R.string.room_settings_read_history_entry_value_members_only_invited))) {
                 historyVisibility = RoomState.HISTORY_VISIBILITY_INVITED;
-            } else if (newValue.equals(getResources().getString(R.string.room_settings_read_history_entry_value_members_only_joined))) {
+            } else if (newValue.equals(getString(R.string.room_settings_read_history_entry_value_members_only_joined))) {
                 historyVisibility = RoomState.HISTORY_VISIBILITY_JOINED;
             } else {
                 // unknown value
@@ -998,11 +998,11 @@ public class VectorRoomSettingsFragment extends PreferenceFragment implements Sh
             }
 
             if (!newTag.equals(currentTag)) {
-                if (newTag.equals(getResources().getString(R.string.room_settings_tag_pref_entry_value_favourite))) {
+                if (newTag.equals(getString(R.string.room_settings_tag_pref_entry_value_favourite))) {
                     newTag = RoomTag.ROOM_TAG_FAVOURITE;
-                } else if (newTag.equals(getResources().getString(R.string.room_settings_tag_pref_entry_value_low_priority))) {
+                } else if (newTag.equals(getString(R.string.room_settings_tag_pref_entry_value_low_priority))) {
                     newTag = RoomTag.ROOM_TAG_LOW_PRIORITY;
-                } else if (newTag.equals(getResources().getString(R.string.room_settings_tag_pref_entry_value_none))) {
+                } else if (newTag.equals(getString(R.string.room_settings_tag_pref_entry_value_none))) {
                     newTag = null;
                 } else {
                     // unknown tag.. very unlikely

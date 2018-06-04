@@ -2658,7 +2658,7 @@ public class VectorRoomActivity extends MXCActionBarActivity implements
             isAreaVisible = true;
             iconId = R.drawable.error;
             textColor = ContextCompat.getColor(VectorRoomActivity.this, R.color.vector_fuchsia_color);
-            text = new SpannableString(getResources().getString(R.string.room_offline_notification));
+            text = new SpannableString(getString(R.string.room_offline_notification));
         } else if (mIsUnreadPreviewMode) {
             isAreaVisible = true;
             iconId = R.drawable.scrolldown;
@@ -2683,9 +2683,9 @@ public class VectorRoomActivity extends MXCActionBarActivity implements
                 isAreaVisible = true;
                 iconId = R.drawable.error;
 
-                String cancelAll = getResources().getString(R.string.room_prompt_cancel);
-                String resendAll = getResources().getString(R.string.room_prompt_resend);
-                String message = getResources().getString(hasUnknownDeviceEvents ?
+                String cancelAll = getString(R.string.room_prompt_cancel);
+                String resendAll = getString(R.string.room_prompt_resend);
+                String message = getString(hasUnknownDeviceEvents ?
                         R.string.room_unknown_devices_messages_notification : R.string.room_unsent_messages_notification, resendAll, cancelAll);
 
                 int cancelAllPos = message.indexOf(cancelAll);
@@ -3025,7 +3025,7 @@ public class VectorRoomActivity extends MXCActionBarActivity implements
 
             // in context mode, add search to the title.
             if (!TextUtils.isEmpty(mEventId) && !mIsUnreadPreviewMode) {
-                titleToApply = getResources().getText(R.string.search) + " : " + titleToApply;
+                titleToApply = getText(R.string.search) + " : " + titleToApply;
             }
         } else if (null != sRoomPreviewData) {
             titleToApply = sRoomPreviewData.getRoomName();
@@ -3193,7 +3193,7 @@ public class VectorRoomActivity extends MXCActionBarActivity implements
                         String text;
 
                         if (joinedMembersCount == 1) {
-                            text = getResources().getString(R.string.room_title_one_member);
+                            text = getString(R.string.room_title_one_member);
                         } else if (null != sRoomPreviewData) {
                             text = getResources().getQuantityString(R.plurals.room_title_members, joinedMembersCount, joinedMembersCount);
                         } else {
@@ -3456,7 +3456,7 @@ public class VectorRoomActivity extends MXCActionBarActivity implements
                     }
                 }
 
-                invitationTextView.setText(getResources().getString(R.string.room_preview_invitation_format, inviter));
+                invitationTextView.setText(getString(R.string.room_preview_invitation_format, inviter));
 
                 declineButton.setOnClickListener(new View.OnClickListener() {
                     @Override
@@ -3774,7 +3774,7 @@ public class VectorRoomActivity extends MXCActionBarActivity implements
         alertDialogBuilder.setView(dialogView);
 
         TextView titleText = dialogView.findViewById(R.id.dialog_title);
-        titleText.setText(getResources().getString(R.string.room_info_room_name));
+        titleText.setText(R.string.room_info_room_name);
 
         final EditText textInput = dialogView.findViewById(R.id.dialog_edit_text);
         textInput.setText(mRoom.getLiveState().name);
@@ -3847,7 +3847,7 @@ public class VectorRoomActivity extends MXCActionBarActivity implements
         alertDialogBuilder.setView(dialogView);
 
         TextView titleText = dialogView.findViewById(R.id.dialog_title);
-        titleText.setText(getResources().getString(R.string.room_info_room_topic));
+        titleText.setText(R.string.room_info_room_topic);
 
         final EditText textInput = dialogView.findViewById(R.id.dialog_edit_text);
         textInput.setText(mRoom.getLiveState().topic);

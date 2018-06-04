@@ -569,9 +569,9 @@ public class VectorRoomDetailsMembersAdapter extends BaseExpandableListAdapter {
         String retValue;
 
         if (mGroupIndexInvitedMembers == aGroupPosition) {
-            retValue = mContext.getResources().getString(R.string.room_details_people_invited_group_name);
+            retValue = mContext.getString(R.string.room_details_people_invited_group_name);
         } else if (mGroupIndexPresentMembers == aGroupPosition) {
-            retValue = mContext.getResources().getString(R.string.room_details_people_present_group_name);
+            retValue = mContext.getString(R.string.room_details_people_present_group_name);
         } else {
             // unknown section - should not happen
             retValue = "??";

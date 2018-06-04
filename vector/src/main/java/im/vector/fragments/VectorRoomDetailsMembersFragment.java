@@ -865,7 +865,7 @@ public class VectorRoomDetailsMembersFragment extends VectorBaseFragment {
                 ArrayList<String> userIds = mAdapter.getSelectedUserIds();
 
                 if (0 != userIds.size()) {
-                    setActivityTitle(userIds.size() + " " + getActivity().getResources().getString(R.string.room_details_selected));
+                    setActivityTitle(userIds.size() + " " + getString(R.string.room_details_selected));
                 } else {
                     resetActivityTitle();
                 }

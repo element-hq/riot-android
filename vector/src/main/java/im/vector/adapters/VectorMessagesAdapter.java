@@ -1892,9 +1892,9 @@ public class VectorMessagesAdapter extends AbstractMessagesAdapter {
      */
     private String dateDiff(Date date, long nbrDays) {
         if (nbrDays == 0) {
-            return mContext.getResources().getString(R.string.today);
+            return mContext.getString(R.string.today);
         } else if (nbrDays == 1) {
-            return mContext.getResources().getString(R.string.yesterday);
+            return mContext.getString(R.string.yesterday);
         } else if (nbrDays < 7) {
             return (new SimpleDateFormat("EEEE", mLocale)).format(date);
         } else {

@@ -154,7 +154,7 @@ public class VectorGroupsListAdapter extends ArrayAdapter<String> {
                 ClipData clip = ClipData.newPlainText("", groupId);
                 clipboard.setPrimaryClip(clip);
 
-                Toast.makeText(mContext, mContext.getResources().getString(R.string.copied_to_clipboard), Toast.LENGTH_SHORT).show();
+                Toast.makeText(mContext, R.string.copied_to_clipboard, Toast.LENGTH_SHORT).show();
                 return true;
             }
         });
