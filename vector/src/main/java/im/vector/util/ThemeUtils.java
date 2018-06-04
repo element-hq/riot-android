@@ -253,13 +253,6 @@ public class ThemeUtils {
             }
         }
 
-        if (TextUtils.equals(getApplicationTheme(activity), THEME_LIGHT_VALUE)) {
-            // Specific quirk for quick reply screen
-            if (activity instanceof LockScreenActivity) {
-                activity.setTheme(R.style.Vector_Lock_Light);
-            }
-        }
-
         mColorByAttr.clear();
     }
 
