@@ -873,7 +873,7 @@ public class VectorRoomDetailsMembersFragment extends VectorBaseFragment {
 
             @Override
             public void onRemoveClick(final ParticipantAdapterItem participantItem) {
-                String text = getActivity().getString(R.string.room_participants_remove_prompt_msg, participantItem.mDisplayName);
+                String text = getString(R.string.room_participants_remove_prompt_msg, participantItem.mDisplayName);
 
                 // The user is trying to leave with unsaved changes. Warn about that
                 new AlertDialog.Builder(getActivity())
@@ -907,7 +907,7 @@ public class VectorRoomDetailsMembersFragment extends VectorBaseFragment {
                 // The user is trying to leave with unsaved changes. Warn about that
                 new AlertDialog.Builder(getActivity())
                         .setTitle(R.string.room_participants_leave_prompt_title)
-                        .setMessage(getActivity().getString(R.string.room_participants_leave_prompt_msg))
+                        .setMessage(R.string.room_participants_leave_prompt_msg)
                         .setPositiveButton(R.string.leave, new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
