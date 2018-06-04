@@ -104,7 +104,7 @@ class StickerPickerActivity : AbstractWidgetActivity() {
      * MENU
      * ========================================================================================== */
 
-    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
+    override fun onCreateOptionsMenu(menu: Menu): Boolean {
         menuInflater.inflate(R.menu.vector_choose_sticker, menu)
 
         // TODO Maintenance: this should be done in the parent Activity

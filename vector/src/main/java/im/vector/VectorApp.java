@@ -175,7 +175,7 @@ public class VectorApp extends MultiDexApplication {
             if (!TextUtils.equals(Locale.getDefault().toString(), getApplicationLocale().toString())) {
                 Log.d(LOG_TAG, "## onReceive() : the locale has been updated to " + Locale.getDefault().toString()
                         + ", restore the expected value " + getApplicationLocale().toString());
-                updateApplicationSettings(getApplicationLocale(), getFontScale(), ThemeUtils.getApplicationTheme(context));
+                updateApplicationSettings(getApplicationLocale(), getFontScale(), ThemeUtils.INSTANCE.getApplicationTheme(context));
 
                 if (null != getCurrentActivity()) {
                     restartActivity(getCurrentActivity());
@@ -254,7 +254,7 @@ public class VectorApp extends MultiDexApplication {
             public void onActivityCreated(Activity activity, Bundle savedInstanceState) {
                 Log.d(LOG_TAG, "onActivityCreated " + activity);
                 mCreatedActivities.add(activity.toString());
-                ThemeUtils.setActivityTheme(activity);
+                ThemeUtils.INSTANCE.setActivityTheme(activity);
                 // piwik
                 onNewScreen(activity);
             }
@@ -270,7 +270,7 @@ public class VectorApp extends MultiDexApplication {
              * @return the local status value
              */
             private String getActivityLocaleStatus(Activity activity) {
-                return getApplicationLocale().toString() + "_" + getFontScale() + "_" + ThemeUtils.getApplicationTheme(activity);
+                return getApplicationLocale().toString() + "_" + getFontScale() + "_" + ThemeUtils.INSTANCE.getApplicationTheme(activity);
             }
 
             @Override
@@ -295,7 +295,7 @@ public class VectorApp extends MultiDexApplication {
                 if (!TextUtils.equals(Locale.getDefault().toString(), getApplicationLocale().toString())) {
                     Log.d(LOG_TAG, "## onActivityResumed() : the locale has been updated to " + Locale.getDefault().toString()
                             + ", restore the expected value " + getApplicationLocale().toString());
-                    updateApplicationSettings(getApplicationLocale(), getFontScale(), ThemeUtils.getApplicationTheme(activity));
+                    updateApplicationSettings(getApplicationLocale(), getFontScale(), ThemeUtils.INSTANCE.getApplicationTheme(activity));
                     restartActivity(activity);
                 }
 
@@ -356,7 +356,7 @@ public class VectorApp extends MultiDexApplication {
         if (!TextUtils.equals(Locale.getDefault().toString(), getApplicationLocale().toString())) {
             Log.d(LOG_TAG, "## onConfigurationChanged() : the locale has been updated to " + Locale.getDefault().toString()
                     + ", restore the expected value " + getApplicationLocale().toString());
-            updateApplicationSettings(getApplicationLocale(), getFontScale(), ThemeUtils.getApplicationTheme(this));
+            updateApplicationSettings(getApplicationLocale(), getFontScale(), ThemeUtils.INSTANCE.getApplicationTheme(this));
         }
     }
 
@@ -816,7 +816,7 @@ public class VectorApp extends MultiDexApplication {
         Context context = VectorApp.getInstance();
         Locale locale = getApplicationLocale();
         float fontScale = getFontScaleValue();
-        String theme = ThemeUtils.getApplicationTheme(context);
+        String theme = ThemeUtils.INSTANCE.getApplicationTheme(context);
 
         Locale.setDefault(locale);
         Configuration config = new Configuration(context.getResources().getConfiguration());
@@ -825,7 +825,7 @@ public class VectorApp extends MultiDexApplication {
         context.getResources().updateConfiguration(config, context.getResources().getDisplayMetrics());
 
         // init the theme
-        ThemeUtils.setApplicationTheme(context, theme);
+        ThemeUtils.INSTANCE.setApplicationTheme(context, theme);
 
         // init the known locales in background
         AsyncTask<Void, Void, Void> task = new AsyncTask<Void, Void, Void>() {
@@ -1027,7 +1027,7 @@ public class VectorApp extends MultiDexApplication {
      * @param locale
      */
     public static void updateApplicationLocale(Locale locale) {
-        updateApplicationSettings(locale, getFontScale(), ThemeUtils.getApplicationTheme(VectorApp.getInstance()));
+        updateApplicationSettings(locale, getFontScale(), ThemeUtils.INSTANCE.getApplicationTheme(VectorApp.getInstance()));
     }
 
     /**
@@ -1036,8 +1036,8 @@ public class VectorApp extends MultiDexApplication {
      * @param theme the new theme
      */
     public static void updateApplicationTheme(String theme) {
-        ThemeUtils.setApplicationTheme(VectorApp.getInstance(), theme);
-        updateApplicationSettings(getApplicationLocale(), getFontScale(), ThemeUtils.getApplicationTheme(VectorApp.getInstance()));
+        ThemeUtils.INSTANCE.setApplicationTheme(VectorApp.getInstance(), theme);
+        updateApplicationSettings(getApplicationLocale(), getFontScale(), ThemeUtils.INSTANCE.getApplicationTheme(VectorApp.getInstance()));
     }
 
     /**
@@ -1060,7 +1060,7 @@ public class VectorApp extends MultiDexApplication {
         config.fontScale = getFontScaleValue();
         context.getResources().updateConfiguration(config, context.getResources().getDisplayMetrics());
 
-        ThemeUtils.setApplicationTheme(context, theme);
+        ThemeUtils.INSTANCE.setApplicationTheme(context, theme);
         PhoneNumberUtils.onLocaleUpdate();
     }
 

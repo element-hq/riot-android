@@ -367,7 +367,7 @@ public class VectorMemberDetailsAdapter extends BaseExpandableListAdapter {
         // room selection
         if (null != currentItem.mRoom) {
             // room name
-            viewHolder.mActionDescTextView.setTextColor(ThemeUtils.getColor(mContext, R.attr.riot_primary_text_color));
+            viewHolder.mActionDescTextView.setTextColor(ThemeUtils.INSTANCE.getColor(mContext, R.attr.riot_primary_text_color));
             viewHolder.mActionDescTextView.setText(VectorUtils.getRoomDisplayName(mContext, mSession, currentItem.mRoom));
 
             // room avatar
@@ -395,11 +395,11 @@ public class VectorMemberDetailsAdapter extends BaseExpandableListAdapter {
 
             if (currentItem.mIconResourceId != R.drawable.ic_remove_circle_outline_red) {
                 viewHolder.mActionImageView.setImageDrawable(
-                        ThemeUtils.tintDrawable(mContext, viewHolder.mActionImageView.getDrawable(), R.attr.settings_icon_tint_color));
+                        ThemeUtils.INSTANCE.tintDrawable(mContext, viewHolder.mActionImageView.getDrawable(), R.attr.settings_icon_tint_color));
             }
 
             // update the text colour: specific colour is required for the remove action
-            int colourTxt = ThemeUtils.getColor(mContext, R.attr.riot_primary_text_color);
+            int colourTxt = ThemeUtils.INSTANCE.getColor(mContext, R.attr.riot_primary_text_color);
 
             if (VectorMemberDetailsActivity.ITEM_ACTION_KICK == currentItem.mActionType) {
                 colourTxt = ContextCompat.getColor(mContext, R.color.vector_fuchsia_color);

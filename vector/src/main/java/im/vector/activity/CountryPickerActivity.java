@@ -98,7 +98,7 @@ public class CountryPickerActivity extends RiotAppCompatActivity implements Coun
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.menu_country_picker, menu);
-        ThemeUtils.tintMenuIcons(menu, ThemeUtils.getColor(this, R.attr.icon_tint_on_dark_action_bar_color));
+        ThemeUtils.INSTANCE.tintMenuIcons(menu, ThemeUtils.INSTANCE.getColor(this, R.attr.icon_tint_on_dark_action_bar_color));
 
         final MenuItem searchItem = menu.findItem(R.id.action_search);
         if (searchItem != null) {
@@ -111,7 +111,7 @@ public class CountryPickerActivity extends RiotAppCompatActivity implements Coun
             mSearchView.setOnQueryTextListener(this);
 
             SearchView.SearchAutoComplete searchAutoComplete = mSearchView.findViewById(android.support.v7.appcompat.R.id.search_src_text);
-            searchAutoComplete.setHintTextColor(ThemeUtils.getColor(this, R.attr.default_text_hint_color));
+            searchAutoComplete.setHintTextColor(ThemeUtils.INSTANCE.getColor(this, R.attr.default_text_hint_color));
         }
         return true;
     }

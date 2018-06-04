@@ -124,7 +124,7 @@ public class PhoneNumberVerificationActivity extends RiotAppCompatActivity imple
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.menu_phone_number_verification, menu);
-        ThemeUtils.tintMenuIcons(menu, ThemeUtils.getColor(this, R.attr.icon_tint_on_dark_action_bar_color));
+        ThemeUtils.INSTANCE.tintMenuIcons(menu, ThemeUtils.INSTANCE.getColor(this, R.attr.icon_tint_on_dark_action_bar_color));
         return true;
     }
 

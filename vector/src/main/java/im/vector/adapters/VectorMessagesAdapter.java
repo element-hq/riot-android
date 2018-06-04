@@ -261,7 +261,7 @@ public class VectorMessagesAdapter extends AbstractMessagesAdapter {
             if (isCustomizable) {
                 final HtmlTagHandler htmlTagHandler = new HtmlTagHandler();
                 htmlTagHandler.mContext = mContext;
-                htmlTagHandler.setCodeBlockBackgroundColor(ThemeUtils.getColor(mContext, R.attr.markdown_block_background_color));
+                htmlTagHandler.setCodeBlockBackgroundColor(ThemeUtils.INSTANCE.getColor(mContext, R.attr.markdown_block_background_color));
                 return htmlTagHandler;
             }
 
@@ -378,7 +378,7 @@ public class VectorMessagesAdapter extends AbstractMessagesAdapter {
         mAlwaysShowTimeStamps = PreferencesManager.alwaysShowTimeStamps(VectorApp.getInstance());
         mHideReadReceipts = PreferencesManager.hideReadReceipts(VectorApp.getInstance());
 
-        mPadlockDrawable = ThemeUtils.tintDrawable(mContext,
+        mPadlockDrawable = ThemeUtils.INSTANCE.tintDrawable(mContext,
                 ContextCompat.getDrawable(mContext, R.drawable.e2e_unencrypted), R.attr.settings_icon_tint_color);
     }
 
@@ -416,31 +416,31 @@ public class VectorMessagesAdapter extends AbstractMessagesAdapter {
 
     // customization methods
     private int getDefaultMessageTextColor() {
-        return ThemeUtils.getColor(mContext, R.attr.message_text_color);
+        return ThemeUtils.INSTANCE.getColor(mContext, R.attr.message_text_color);
     }
 
     private int getNoticeTextColor() {
-        return ThemeUtils.getColor(mContext, R.attr.notice_text_color);
+        return ThemeUtils.INSTANCE.getColor(mContext, R.attr.notice_text_color);
     }
 
     private int getEncryptingMessageTextColor() {
-        return ThemeUtils.getColor(mContext, R.attr.encrypting_message_text_color);
+        return ThemeUtils.INSTANCE.getColor(mContext, R.attr.encrypting_message_text_color);
     }
 
     private int getSendingMessageTextColor() {
-        return ThemeUtils.getColor(mContext, R.attr.sending_message_text_color);
+        return ThemeUtils.INSTANCE.getColor(mContext, R.attr.sending_message_text_color);
     }
 
     private int getHighlightMessageTextColor() {
-        return ThemeUtils.getColor(mContext, R.attr.highlighted_message_text_color);
+        return ThemeUtils.INSTANCE.getColor(mContext, R.attr.highlighted_message_text_color);
     }
 
     private int getSearchHighlightMessageTextColor() {
-        return ThemeUtils.getColor(mContext, R.attr.highlighted_searched_message_text_color);
+        return ThemeUtils.INSTANCE.getColor(mContext, R.attr.highlighted_searched_message_text_color);
     }
 
     private int getNotSentMessageTextColor() {
-        return ThemeUtils.getColor(mContext, R.attr.unsent_message_text_color);
+        return ThemeUtils.INSTANCE.getColor(mContext, R.attr.unsent_message_text_color);
     }
 
     /*
@@ -1152,7 +1152,7 @@ public class VectorMessagesAdapter extends AbstractMessagesAdapter {
             if (row.getEvent().isUndeliverable() || row.getEvent().isUnkownDevice()) {
                 tsTextView.setTextColor(mNotSentMessageTextColor);
             } else {
-                tsTextView.setTextColor(ThemeUtils.getColor(mContext, R.attr.default_text_light_color));
+                tsTextView.setTextColor(ThemeUtils.INSTANCE.getColor(mContext, R.attr.default_text_light_color));
             }
 
             tsTextView.setVisibility((((position + 1) == getCount()) || mIsSearchMode || mAlwaysShowTimeStamps) ? View.VISIBLE : View.GONE);
@@ -1345,7 +1345,7 @@ public class VectorMessagesAdapter extends AbstractMessagesAdapter {
                 container.addView(blockView);
                 textViews.add(tv);
 
-                ((View) tv.getParent()).setBackgroundColor(ThemeUtils.getColor(mContext, R.attr.markdown_block_background_color));
+                ((View) tv.getParent()).setBackgroundColor(ThemeUtils.INSTANCE.getColor(mContext, R.attr.markdown_block_background_color));
             } else {
                 // Not a fenced block
                 final TextView tv = (TextView) mLayoutInflater.inflate(R.layout.adapter_item_vector_message_code_text, null);
@@ -2459,7 +2459,7 @@ public class VectorMessagesAdapter extends AbstractMessagesAdapter {
         }
 
         Menu menu = popup.getMenu();
-        ThemeUtils.tintMenuIcons(menu, ThemeUtils.getColor(mContext, R.attr.settings_icon_tint_color));
+        ThemeUtils.INSTANCE.tintMenuIcons(menu, ThemeUtils.INSTANCE.getColor(mContext, R.attr.settings_icon_tint_color));
 
         // hide entries
         for (int i = 0; i < menu.size(); i++) {

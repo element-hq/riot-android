@@ -38,6 +38,7 @@ import im.vector.activity.interfaces.Restorable
 import im.vector.dialogs.ConsentNotGivenHelper
 import im.vector.receiver.DebugReceiver
 import im.vector.util.AssetReader
+import im.vector.util.ThemeUtils
 import org.matrix.androidsdk.util.Log
 
 /**
@@ -82,6 +83,8 @@ abstract class RiotAppCompatActivity : AppCompatActivity() {
 
     final override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
+        //ThemeUtils.setActivityTheme(this, getOtherThemes())
 
         doBeforeSetContentView()
 
@@ -167,6 +170,11 @@ abstract class RiotAppCompatActivity : AppCompatActivity() {
 
     @LayoutRes
     abstract fun getLayoutRes(): Int
+
+    /**
+     * Return a Pair with Dark and Black theme
+     */
+    //abstract fun getOtherThemes(): Pair<Int, Int>
 
     /* ==========================================================================================
      * OPEN METHODS

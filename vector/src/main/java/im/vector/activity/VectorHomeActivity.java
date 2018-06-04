@@ -689,7 +689,7 @@ public class VectorHomeActivity extends RiotAppCompatActivity implements SearchV
 
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.vector_home, menu);
-        ThemeUtils.tintMenuIcons(menu, ThemeUtils.getColor(this, R.attr.icon_tint_on_dark_action_bar_color));
+        ThemeUtils.INSTANCE.tintMenuIcons(menu, ThemeUtils.INSTANCE.getColor(this, R.attr.icon_tint_on_dark_action_bar_color));
         return true;
     }
 
@@ -975,8 +975,8 @@ public class VectorHomeActivity extends RiotAppCompatActivity implements SearchV
 
         // Set color of toolbar search view
         EditText edit = mSearchView.findViewById(android.support.v7.appcompat.R.id.search_src_text);
-        edit.setTextColor(ThemeUtils.getColor(this, R.attr.primary_text_color));
-        edit.setHintTextColor(ThemeUtils.getColor(this, R.attr.primary_hint_text_color));
+        edit.setTextColor(ThemeUtils.INSTANCE.getColor(this, R.attr.primary_text_color));
+        edit.setHintTextColor(ThemeUtils.INSTANCE.getColor(this, R.attr.primary_hint_text_color));
     }
 
     /**
@@ -1397,7 +1397,7 @@ public class VectorHomeActivity extends RiotAppCompatActivity implements SearchV
         alertDialogBuilder.setView(dialogView);
 
         final EditText textInput = dialogView.findViewById(R.id.join_room_edit_text);
-        textInput.setTextColor(ThemeUtils.getColor(this, R.attr.riot_primary_text_color));
+        textInput.setTextColor(ThemeUtils.INSTANCE.getColor(this, R.attr.riot_primary_text_color));
 
         // set dialog message
         alertDialogBuilder
@@ -1885,7 +1885,7 @@ public class VectorHomeActivity extends RiotAppCompatActivity implements SearchV
         if (null != getSupportActionBar()) {
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
             getSupportActionBar().setHomeButtonEnabled(true);
-            getSupportActionBar().setHomeAsUpIndicator(ThemeUtils.tintDrawable(this,
+            getSupportActionBar().setHomeAsUpIndicator(ThemeUtils.INSTANCE.tintDrawable(this,
                     ContextCompat.getDrawable(this, R.drawable.ic_material_menu_white), R.attr.primary_control_color));
         }
 

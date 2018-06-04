@@ -116,9 +116,9 @@ public class GroupDetailsHomeFragment extends GroupDetailsBaseFragment {
      */
     @Override
     protected void initViews() {
-        mGroupMembersIconView.setImageDrawable(ThemeUtils.tintDrawableWithColor(ContextCompat.getDrawable(mActivity, R.drawable.riot_tab_groups),
+        mGroupMembersIconView.setImageDrawable(ThemeUtils.INSTANCE.tintDrawableWithColor(ContextCompat.getDrawable(mActivity, R.drawable.riot_tab_groups),
                 mGroupMembersTextView.getCurrentTextColor()));
-        mGroupRoomsIconView.setImageDrawable(ThemeUtils.tintDrawableWithColor(ContextCompat.getDrawable(mActivity, R.drawable.riot_tab_rooms),
+        mGroupRoomsIconView.setImageDrawable(ThemeUtils.INSTANCE.tintDrawableWithColor(ContextCompat.getDrawable(mActivity, R.drawable.riot_tab_rooms),
                 mGroupMembersTextView.getCurrentTextColor()));
     }
 

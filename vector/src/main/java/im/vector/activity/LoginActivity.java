@@ -384,7 +384,7 @@ public class LoginActivity extends MXCActionBarActivity implements RegistrationM
         EditText loginPhoneNumberCountryCode = findViewById(R.id.login_phone_number_country);
         loginPhoneNumberCountryCode.setCompoundDrawablesWithIntrinsicBounds(null,
                 null,
-                ThemeUtils.tintDrawable(this,
+                ThemeUtils.INSTANCE.tintDrawable(this,
                         ContextCompat.getDrawable(this, R.drawable.ic_material_expand_more_black),
                         R.attr.settings_icon_tint_color),
                 null);
@@ -403,7 +403,7 @@ public class LoginActivity extends MXCActionBarActivity implements RegistrationM
         EditText phoneNumberCountryCode = findViewById(R.id.registration_phone_number_country);
         phoneNumberCountryCode.setCompoundDrawablesWithIntrinsicBounds(null,
                 null,
-                ThemeUtils.tintDrawable(this,
+                ThemeUtils.INSTANCE.tintDrawable(this,
                         ContextCompat.getDrawable(this, R.drawable.ic_material_expand_more_black),
                         R.attr.settings_icon_tint_color),
                 null);

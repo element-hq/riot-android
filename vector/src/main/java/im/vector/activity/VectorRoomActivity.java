@@ -749,8 +749,8 @@ public class VectorRoomActivity extends MXCActionBarActivity implements
                     }
 
                     fragment = IconAndTextDialogFragment.newInstance(icons, messages,
-                            ThemeUtils.getColor(VectorRoomActivity.this, R.attr.riot_primary_background_color),
-                            ThemeUtils.getColor(VectorRoomActivity.this, R.attr.riot_primary_text_color));
+                            ThemeUtils.INSTANCE.getColor(VectorRoomActivity.this, R.attr.riot_primary_background_color),
+                            ThemeUtils.INSTANCE.getColor(VectorRoomActivity.this, R.attr.riot_primary_text_color));
                     fragment.setOnClickListener(new IconAndTextDialogFragment.OnItemClickListener() {
                         @Override
                         public void onItemClick(IconAndTextDialogFragment dialogFragment, int position) {
@@ -1576,7 +1576,7 @@ public class VectorRoomActivity extends MXCActionBarActivity implements
         if (TextUtils.isEmpty(mEventId) && (null == sRoomPreviewData)) {
             // Inflate the menu; this adds items to the action bar if it is present.
             getMenuInflater().inflate(R.menu.vector_room, menu);
-            ThemeUtils.tintMenuIcons(menu, ThemeUtils.getColor(this, R.attr.icon_tint_on_dark_action_bar_color));
+            ThemeUtils.INSTANCE.tintMenuIcons(menu, ThemeUtils.INSTANCE.getColor(this, R.attr.icon_tint_on_dark_action_bar_color));
 
             mResendUnsentMenuItem = menu.findItem(R.id.ic_action_room_resend_unsent);
             mResendDeleteMenuItem = menu.findItem(R.id.ic_action_room_delete_unsent);
@@ -1755,8 +1755,8 @@ public class VectorRoomActivity extends MXCActionBarActivity implements
         final Integer[] lTexts = new Integer[]{R.string.action_voice_call, R.string.action_video_call};
 
         IconAndTextDialogFragment fragment = IconAndTextDialogFragment.newInstance(lIcons, lTexts,
-                ThemeUtils.getColor(this, R.attr.riot_primary_background_color),
-                ThemeUtils.getColor(this, R.attr.riot_primary_text_color));
+                ThemeUtils.INSTANCE.getColor(this, R.attr.riot_primary_background_color),
+                ThemeUtils.INSTANCE.getColor(this, R.attr.riot_primary_text_color));
         fragment.setOnClickListener(new IconAndTextDialogFragment.OnItemClickListener() {
             @Override
             public void onItemClick(IconAndTextDialogFragment dialogFragment, int position) {
@@ -2662,7 +2662,7 @@ public class VectorRoomActivity extends MXCActionBarActivity implements
         } else if (mIsUnreadPreviewMode) {
             isAreaVisible = true;
             iconId = R.drawable.scrolldown;
-            textColor = ThemeUtils.getColor(this, R.attr.room_notification_text_color);
+            textColor = ThemeUtils.INSTANCE.getColor(this, R.attr.room_notification_text_color);
 
             mNotificationIconImageView.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -2723,7 +2723,7 @@ public class VectorRoomActivity extends MXCActionBarActivity implements
                     text = new SpannableString(getResources().getQuantityString(R.plurals.room_new_messages_notification, unreadCount, unreadCount));
                 } else {
                     iconId = R.drawable.scrolldown;
-                    textColor = ThemeUtils.getColor(this, R.attr.room_notification_text_color);
+                    textColor = ThemeUtils.INSTANCE.getColor(this, R.attr.room_notification_text_color);
 
                     if (!TextUtils.isEmpty(mLatestTypingMessage)) {
                         text = new SpannableString(mLatestTypingMessage);
@@ -2757,7 +2757,7 @@ public class VectorRoomActivity extends MXCActionBarActivity implements
 
                 iconId = R.drawable.vector_typing;
                 text = new SpannableString(mLatestTypingMessage);
-                textColor = ThemeUtils.getColor(this, R.attr.room_notification_text_color);
+                textColor = ThemeUtils.INSTANCE.getColor(this, R.attr.room_notification_text_color);
             }
         }
 
@@ -3272,7 +3272,7 @@ public class VectorRoomActivity extends MXCActionBarActivity implements
                 // hide the action bar header view and reset the arrow image (arrow reset to down)
                 mActionBarCustomArrowImageView.setImageResource(R.drawable.ic_arrow_drop_down_white);
                 mRoomHeaderView.setVisibility(View.GONE);
-                mToolbar.setBackgroundColor(ThemeUtils.getColor(this, R.attr.primary_color));
+                mToolbar.setBackgroundColor(ThemeUtils.INSTANCE.getColor(this, R.attr.primary_color));
             }
         }
     }

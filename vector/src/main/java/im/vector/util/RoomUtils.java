@@ -366,7 +366,7 @@ public class RoomUtils {
             if (roomSummary.getLatestReceivedEvent() != null) {
                 eventDisplay = new EventDisplay(context, roomSummary.getLatestReceivedEvent(), roomSummary.getLatestRoomState());
                 eventDisplay.setPrependMessagesWithAuthor(true);
-                messageToDisplay = eventDisplay.getTextualDisplay(ThemeUtils.getColor(context, R.attr.room_notification_text_color));
+                messageToDisplay = eventDisplay.getTextualDisplay(ThemeUtils.INSTANCE.getColor(context, R.attr.room_notification_text_color));
             }
 
             // check if this is an invite
@@ -476,7 +476,7 @@ public class RoomUtils {
             popup = new PopupMenu(popmenuContext, actionView);
         }
         popup.getMenuInflater().inflate(R.menu.vector_home_room_settings, popup.getMenu());
-        ThemeUtils.tintMenuIcons(popup.getMenu(), ThemeUtils.getColor(context, R.attr.settings_icon_tint_color));
+        ThemeUtils.INSTANCE.tintMenuIcons(popup.getMenu(), ThemeUtils.INSTANCE.getColor(context, R.attr.settings_icon_tint_color));
 
         if (room.isLeft()) {
             popup.getMenu().setGroupVisible(R.id.active_room_actions, false);

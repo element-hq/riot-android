@@ -213,7 +213,7 @@ public abstract class VectorBaseSearchActivity extends MXCActionBarActivity {
 
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.vector_searches, menu);
-        ThemeUtils.tintMenuIcons(menu, ThemeUtils.getColor(this, R.attr.icon_tint_on_light_action_bar_color));
+        ThemeUtils.INSTANCE.tintMenuIcons(menu, ThemeUtils.INSTANCE.getColor(this, R.attr.icon_tint_on_light_action_bar_color));
 
         mMicroMenuItem = menu.findItem(R.id.ic_action_speak_to_search);
         mClearEditTextMenuItem = menu.findItem(R.id.ic_action_clear_search);
