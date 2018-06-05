@@ -116,6 +116,7 @@ import im.vector.preference.UserAvatarPreference;
 import im.vector.preference.VectorCustomActionEditTextPreference;
 import im.vector.preference.VectorGroupPreference;
 import im.vector.preference.VectorSwitchPreference;
+import im.vector.settings.FontScale;
 import im.vector.util.MatrixSdkExtensionsKt;
 import im.vector.util.PhoneNumberUtils;
 import im.vector.util.PreferencesManager;
@@ -2244,7 +2245,7 @@ public class VectorSettingsPreferencesFragment extends PreferenceFragment implem
 
         VectorCustomActionEditTextPreference textSizePreference
                 = (VectorCustomActionEditTextPreference) findPreference(PreferencesManager.SETTINGS_INTERFACE_TEXT_SIZE_KEY);
-        textSizePreference.setSummary(VectorApp.getFontScaleDescription());
+        textSizePreference.setSummary(FontScale.INSTANCE.getFontScaleDescription());
 
         textSizePreference.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
             @Override
@@ -2280,7 +2281,7 @@ public class VectorSettingsPreferencesFragment extends PreferenceFragment implem
 
         int childCount = linearLayout.getChildCount();
 
-        String scaleText = VectorApp.getFontScale();
+        String scaleText = FontScale.INSTANCE.getFontScalePrefValue();
 
         for (int i = 0; i < childCount; i++) {
             View v = linearLayout.getChildAt(i);
@@ -2293,7 +2294,7 @@ public class VectorSettingsPreferencesFragment extends PreferenceFragment implem
                     @Override
                     public void onClick(View v) {
                         dialog.dismiss();
-                        VectorApp.updateFontScale(checkedTextView.getText().toString());
+                        FontScale.INSTANCE.updateFontScale(checkedTextView.getText().toString());
                         activity.startActivity(activity.getIntent());
                         activity.finish();
                     }
