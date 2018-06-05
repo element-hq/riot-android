@@ -126,6 +126,9 @@ class VectorSettingsPreferencesFragment : PreferenceFragment(), SharedPreference
      * Preferences
      * ========================================================================================== */
 
+    private val mUserSettingsCategory by lazy {
+        findPreference(PreferencesManager.SETTINGS_USER_SETTINGS_PREFERENCE_KEY) as PreferenceCategory
+    }
     private val mUserAvatarPreference by lazy {
         findPreference(PreferencesManager.SETTINGS_PROFILE_PICTURE_PREFERENCE_KEY) as UserAvatarPreference
     }
@@ -135,23 +138,21 @@ class VectorSettingsPreferencesFragment : PreferenceFragment(), SharedPreference
     private val mPasswordPreference by lazy {
         findPreference(PreferencesManager.SETTINGS_CHANGE_PASSWORD_PREFERENCE_KEY)
     }
-    // cryptography
-    private val mCryptographyCategory by lazy {
-        findPreference(PreferencesManager.SETTINGS_CRYPTOGRAPHY_PREFERENCE_KEY) as PreferenceCategory
-    }
-    private val mCryptographyCategoryDivider by lazy {
-        findPreference(PreferencesManager.SETTINGS_CRYPTOGRAPHY_DIVIDER_PREFERENCE_KEY) as PreferenceCategory
-    }
-    // displayed emails
-    private val mUserSettingsCategory by lazy {
-        findPreference(PreferencesManager.SETTINGS_USER_SETTINGS_PREFERENCE_KEY) as PreferenceCategory
-    }
+
     // Local contacts
     private val mContactSettingsCategory by lazy {
         findPreference(PreferencesManager.SETTINGS_CONTACT_PREFERENCE_KEYS) as PreferenceCategory
     }
     private val mContactPhonebookCountryPreference by lazy {
         findPreference(PreferencesManager.SETTINGS_CONTACTS_PHONEBOOK_COUNTRY_PREFERENCE_KEY) as VectorCustomActionEditTextPreference
+    }
+
+    // cryptography
+    private val mCryptographyCategory by lazy {
+        findPreference(PreferencesManager.SETTINGS_CRYPTOGRAPHY_PREFERENCE_KEY) as PreferenceCategory
+    }
+    private val mCryptographyCategoryDivider by lazy {
+        findPreference(PreferencesManager.SETTINGS_CRYPTOGRAPHY_DIVIDER_PREFERENCE_KEY) as PreferenceCategory
     }
     // displayed pushers
     private val mPushersSettingsDivider by lazy {
@@ -282,172 +283,18 @@ class VectorSettingsPreferencesFragment : PreferenceFragment(), SharedPreference
             false
         }
 
+        // User Email and phone
+        refreshEmailsList()
+        refreshPhoneNumbersList()
 
-        // Ringtone
-        mRingtonePreference.onPreferenceClickListener = Preference.OnPreferenceClickListener {
-            val intent = Intent(RingtoneManager.ACTION_RINGTONE_PICKER)
-            intent.putExtra(RingtoneManager.EXTRA_RINGTONE_TYPE, RingtoneManager.TYPE_NOTIFICATION)
+        // Add phone and add email buttons
+        addButtons()
 
-            if (null != PreferencesManager.getNotificationRingTone(activity)) {
-                intent.putExtra(RingtoneManager.EXTRA_RINGTONE_EXISTING_URI, PreferencesManager.getNotificationRingTone(activity))
-            }
-            activity.startActivityForResult(intent, REQUEST_NOTIFICATION_RINGTONE)
-            false
-        }
-        refreshNotificationRingTone()
+        // Contacts
+        setContactsPreferences()
 
-
-        // Notification privacy
-        mNotificationPrivacyPreference.onPreferenceClickListener = Preference.OnPreferenceClickListener {
-            startActivity(NotificationPrivacyActivity.getIntent(activity))
-            true
-        }
-        refreshNotificationPrivacy()
-
-        // application version
-        (findPreference(PreferencesManager.SETTINGS_VERSION_PREFERENCE_KEY) as VectorCustomActionEditTextPreference).let {
-            it.summary = VectorUtils.getApplicationVersion(appContext)
-
-            it.setOnPreferenceLongClickListener {
-                VectorUtils.copyToClipboard(appContext, VectorUtils.getApplicationVersion(appContext))
-                true
-            }
-        }
-
-        // olm version
-        findPreference(PreferencesManager.SETTINGS_OLM_VERSION_PREFERENCE_KEY)
-                .summary = mSession.getCryptoVersion(appContext, false)
-
-        // user account
-        findPreference(PreferencesManager.SETTINGS_LOGGED_IN_PREFERENCE_KEY)
-                .summary = mSession.myUserId
-
-        // home server
-        findPreference(PreferencesManager.SETTINGS_HOME_SERVER_PREFERENCE_KEY)
-                .summary = mSession.homeServerConfig.homeserverUri.toString()
-
-        // identity server
-        findPreference(PreferencesManager.SETTINGS_IDENTITY_SERVER_PREFERENCE_KEY)
-                .summary = mSession.homeServerConfig.identityServerUri.toString()
-
-        // terms & conditions
-        findPreference(PreferencesManager.SETTINGS_APP_TERM_CONDITIONS_PREFERENCE_KEY)
-                .onPreferenceClickListener = Preference.OnPreferenceClickListener {
-            VectorUtils.displayAppTac()
-            false
-        }
-
-        // Themes
-        findPreference(ThemeUtils.APPLICATION_THEME_KEY)
-                .onPreferenceChangeListener = Preference.OnPreferenceChangeListener { preference, newValue ->
-            if (newValue is String) {
-                VectorApp.updateApplicationTheme(newValue)
-                activity.startActivity(activity.intent)
-                activity.finish()
-                true
-            } else {
-                false
-            }
-        }
-
-        // privacy policy
-        findPreference(PreferencesManager.SETTINGS_PRIVACY_POLICY_PREFERENCE_KEY)
-                .onPreferenceClickListener = Preference.OnPreferenceClickListener {
-            VectorUtils.displayAppPrivacyPolicy()
-            false
-        }
-
-        // third party notice
-        findPreference(PreferencesManager.SETTINGS_THIRD_PARTY_NOTICES_PREFERENCE_KEY)
-                .onPreferenceClickListener = Preference.OnPreferenceClickListener {
-            VectorUtils.displayThirdPartyLicenses()
-            false
-        }
-
-        // copyright
-        findPreference(PreferencesManager.SETTINGS_COPYRIGHT_PREFERENCE_KEY)
-                .onPreferenceClickListener = Preference.OnPreferenceClickListener {
-            VectorUtils.displayAppCopyright()
-            false
-        }
-
-        // update keep medias period
-        findPreference(PreferencesManager.SETTINGS_MEDIA_SAVING_PERIOD_KEY).let {
-            it.summary = PreferencesManager.getSelectedMediasSavingPeriodString(activity)
-
-            it.onPreferenceClickListener = Preference.OnPreferenceClickListener {
-                AlertDialog.Builder(activity)
-                        .setSingleChoiceItems(PreferencesManager.getMediasSavingItemsChoicesList(activity),
-                                PreferencesManager.getSelectedMediasSavingPeriod(activity)) { d, n ->
-                            PreferencesManager.setSelectedMediasSavingPeriod(activity, n)
-                            d.cancel()
-
-                            it.summary = PreferencesManager.getSelectedMediasSavingPeriodString(activity)
-                        }
-                        .show()
-                false
-            }
-        }
-
-        // clear medias cache
-        findPreference(PreferencesManager.SETTINGS_CLEAR_MEDIA_CACHE_PREFERENCE_KEY).let {
-            MXMediasCache.getCachesSize(activity, object : SimpleApiCallback<Long>() {
-                override fun onSuccess(size: Long?) {
-                    if (null != activity) {
-                        it.summary = android.text.format.Formatter.formatFileSize(activity, size!!)
-                    }
-                }
-            })
-
-            it.onPreferenceClickListener = Preference.OnPreferenceClickListener {
-                displayLoadingView()
-
-                val task = object : AsyncTask<Void, Void, Void>() {
-                    override fun doInBackground(vararg params: Void): Void? {
-                        mSession.mediasCache.clear()
-                        Glide.get(activity).clearDiskCache()
-                        return null
-                    }
-
-                    override fun onPostExecute(result: Void) {
-                        hideLoadingView()
-
-                        MXMediasCache.getCachesSize(activity, object : SimpleApiCallback<Long>() {
-                            override fun onSuccess(size: Long?) {
-                                it.summary = android.text.format.Formatter.formatFileSize(activity, size!!)
-                            }
-                        })
-                    }
-                }
-
-                try {
-                    task.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR)
-                } catch (e: Exception) {
-                    Log.e(LOG_TAG, "## mSession.getMediasCache().clear() failed " + e.message)
-                    task.cancel(true)
-                    hideLoadingView()
-                }
-
-                false
-            }
-        }
-
-        // clear cache
-        findPreference(PreferencesManager.SETTINGS_CLEAR_CACHE_PREFERENCE_KEY).let {
-            MXSession.getApplicationSizeCaches(activity, object : SimpleApiCallback<Long>() {
-                override fun onSuccess(size: Long?) {
-                    if (null != activity) {
-                        it.summary = android.text.format.Formatter.formatFileSize(activity, size!!)
-                    }
-                }
-            })
-
-            it.onPreferenceClickListener = Preference.OnPreferenceClickListener {
-                displayLoadingView()
-                Matrix.getInstance(appContext).reloadSessions(appContext)
-                false
-            }
-        }
+        // user interface preferences
+        setUserInterfacePreferences()
 
         // Url preview
         (findPreference(PreferencesManager.SETTINGS_SHOW_URL_PREVIEW_KEY) as VectorSwitchPreference).let {
@@ -487,7 +334,44 @@ class VectorSettingsPreferencesFragment : PreferenceFragment(), SharedPreference
             }
         }
 
+        // Themes
+        findPreference(ThemeUtils.APPLICATION_THEME_KEY)
+                .onPreferenceChangeListener = Preference.OnPreferenceChangeListener { preference, newValue ->
+            if (newValue is String) {
+                VectorApp.updateApplicationTheme(newValue)
+                activity.startActivity(activity.intent)
+                activity.finish()
+                true
+            } else {
+                false
+            }
+        }
+
+        // Flair
+        refreshGroupFlairsList()
+
         // push rules
+
+        // Notification privacy
+        mNotificationPrivacyPreference.onPreferenceClickListener = Preference.OnPreferenceClickListener {
+            startActivity(NotificationPrivacyActivity.getIntent(activity))
+            true
+        }
+        refreshNotificationPrivacy()
+
+        // Ringtone
+        mRingtonePreference.onPreferenceClickListener = Preference.OnPreferenceClickListener {
+            val intent = Intent(RingtoneManager.ACTION_RINGTONE_PICKER)
+            intent.putExtra(RingtoneManager.EXTRA_RINGTONE_TYPE, RingtoneManager.TYPE_NOTIFICATION)
+
+            if (null != PreferencesManager.getNotificationRingTone(activity)) {
+                intent.putExtra(RingtoneManager.EXTRA_RINGTONE_EXISTING_URI, PreferencesManager.getNotificationRingTone(activity))
+            }
+            activity.startActivityForResult(intent, REQUEST_NOTIFICATION_RINGTONE)
+            false
+        }
+        refreshNotificationRingTone()
+
         for (resourceText in mPushesRuleByResourceId.keys) {
             val preference = findPreference(resourceText)
 
@@ -586,27 +470,13 @@ class VectorSettingsPreferencesFragment : PreferenceFragment(), SharedPreference
             }
         }
 
-        // preference to start the App info screen, to facilitate App permissions access
-        findPreference(APP_INFO_LINK_PREFERENCE_KEY)
-                .onPreferenceClickListener = Preference.OnPreferenceClickListener {
-            if (null != activity) {
-                val intent = Intent()
-                intent.action = Settings.ACTION_APPLICATION_DETAILS_SETTINGS
-                intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
-                val uri = Uri.fromParts("package", appContext.packageName, null)
-                intent.data = uri
-                activity.applicationContext.startActivity(intent)
-            }
+        // Push target
+        refreshPushersList()
 
-            true
-        }
+        // Ignore users
+        refreshIgnoredUsersList()
 
-        // Contacts
-        setContactsPreferences()
-
-        // user interface preferences
-        setUserInterfacePreferences()
-
+        // Lab
         val useCryptoPref = findPreference(PreferencesManager.SETTINGS_ROOM_SETTINGS_LABS_END_TO_END_PREFERENCE_KEY) as CheckBoxPreference
         val cryptoIsEnabledPref = findPreference(PreferencesManager.SETTINGS_ROOM_SETTINGS_LABS_END_TO_END_IS_ACTIVE_PREFERENCE_KEY)
 
@@ -692,6 +562,26 @@ class VectorSettingsPreferencesFragment : PreferenceFragment(), SharedPreference
             true
         }
 
+        // Device list
+        refreshDevicesList()
+
+        // Advanced settings
+
+        // user account
+        findPreference(PreferencesManager.SETTINGS_LOGGED_IN_PREFERENCE_KEY)
+                .summary = mSession.myUserId
+
+        // home server
+        findPreference(PreferencesManager.SETTINGS_HOME_SERVER_PREFERENCE_KEY)
+                .summary = mSession.homeServerConfig.homeserverUri.toString()
+
+        // identity server
+        findPreference(PreferencesManager.SETTINGS_IDENTITY_SERVER_PREFERENCE_KEY)
+                .summary = mSession.homeServerConfig.identityServerUri.toString()
+
+
+        // Analytics
+
         // Analytics tracking management
         (findPreference(PreferencesManager.SETTINGS_USE_ANALYTICS_KEY) as CheckBoxPreference).let {
             // On if the analytics tracking is activated
@@ -713,6 +603,146 @@ class VectorSettingsPreferencesFragment : PreferenceFragment(), SharedPreference
             }
         }
 
+        // Others
+
+        // preference to start the App info screen, to facilitate App permissions access
+        findPreference(APP_INFO_LINK_PREFERENCE_KEY)
+                .onPreferenceClickListener = Preference.OnPreferenceClickListener {
+            if (null != activity) {
+                val intent = Intent()
+                intent.action = Settings.ACTION_APPLICATION_DETAILS_SETTINGS
+                intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+                val uri = Uri.fromParts("package", appContext.packageName, null)
+                intent.data = uri
+                activity.applicationContext.startActivity(intent)
+            }
+
+            true
+        }
+
+        // application version
+        (findPreference(PreferencesManager.SETTINGS_VERSION_PREFERENCE_KEY) as VectorCustomActionEditTextPreference).let {
+            it.summary = VectorUtils.getApplicationVersion(appContext)
+
+            it.setOnPreferenceLongClickListener {
+                VectorUtils.copyToClipboard(appContext, VectorUtils.getApplicationVersion(appContext))
+                true
+            }
+        }
+
+        // olm version
+        findPreference(PreferencesManager.SETTINGS_OLM_VERSION_PREFERENCE_KEY)
+                .summary = mSession.getCryptoVersion(appContext, false)
+
+
+        // copyright
+        findPreference(PreferencesManager.SETTINGS_COPYRIGHT_PREFERENCE_KEY)
+                .onPreferenceClickListener = Preference.OnPreferenceClickListener {
+            VectorUtils.displayAppCopyright()
+            false
+        }
+
+        // terms & conditions
+        findPreference(PreferencesManager.SETTINGS_APP_TERM_CONDITIONS_PREFERENCE_KEY)
+                .onPreferenceClickListener = Preference.OnPreferenceClickListener {
+            VectorUtils.displayAppTac()
+            false
+        }
+
+        // privacy policy
+        findPreference(PreferencesManager.SETTINGS_PRIVACY_POLICY_PREFERENCE_KEY)
+                .onPreferenceClickListener = Preference.OnPreferenceClickListener {
+            VectorUtils.displayAppPrivacyPolicy()
+            false
+        }
+
+        // third party notice
+        findPreference(PreferencesManager.SETTINGS_THIRD_PARTY_NOTICES_PREFERENCE_KEY)
+                .onPreferenceClickListener = Preference.OnPreferenceClickListener {
+            VectorUtils.displayThirdPartyLicenses()
+            false
+        }
+
+        // update keep medias period
+        findPreference(PreferencesManager.SETTINGS_MEDIA_SAVING_PERIOD_KEY).let {
+            it.summary = PreferencesManager.getSelectedMediasSavingPeriodString(activity)
+
+            it.onPreferenceClickListener = Preference.OnPreferenceClickListener {
+                AlertDialog.Builder(activity)
+                        .setSingleChoiceItems(PreferencesManager.getMediasSavingItemsChoicesList(activity),
+                                PreferencesManager.getSelectedMediasSavingPeriod(activity)) { d, n ->
+                            PreferencesManager.setSelectedMediasSavingPeriod(activity, n)
+                            d.cancel()
+
+                            it.summary = PreferencesManager.getSelectedMediasSavingPeriodString(activity)
+                        }
+                        .show()
+                false
+            }
+        }
+
+        // clear medias cache
+        findPreference(PreferencesManager.SETTINGS_CLEAR_MEDIA_CACHE_PREFERENCE_KEY).let {
+            MXMediasCache.getCachesSize(activity, object : SimpleApiCallback<Long>() {
+                override fun onSuccess(size: Long?) {
+                    if (null != activity) {
+                        it.summary = android.text.format.Formatter.formatFileSize(activity, size!!)
+                    }
+                }
+            })
+
+            it.onPreferenceClickListener = Preference.OnPreferenceClickListener {
+                displayLoadingView()
+
+                val task = object : AsyncTask<Void, Void, Void>() {
+                    override fun doInBackground(vararg params: Void): Void? {
+                        mSession.mediasCache.clear()
+                        Glide.get(activity).clearDiskCache()
+                        return null
+                    }
+
+                    override fun onPostExecute(result: Void) {
+                        hideLoadingView()
+
+                        MXMediasCache.getCachesSize(activity, object : SimpleApiCallback<Long>() {
+                            override fun onSuccess(size: Long?) {
+                                it.summary = android.text.format.Formatter.formatFileSize(activity, size!!)
+                            }
+                        })
+                    }
+                }
+
+                try {
+                    task.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR)
+                } catch (e: Exception) {
+                    Log.e(LOG_TAG, "## mSession.getMediasCache().clear() failed " + e.message)
+                    task.cancel(true)
+                    hideLoadingView()
+                }
+
+                false
+            }
+        }
+
+        // clear cache
+        findPreference(PreferencesManager.SETTINGS_CLEAR_CACHE_PREFERENCE_KEY).let {
+            MXSession.getApplicationSizeCaches(activity, object : SimpleApiCallback<Long>() {
+                override fun onSuccess(size: Long?) {
+                    if (null != activity) {
+                        it.summary = android.text.format.Formatter.formatFileSize(activity, size!!)
+                    }
+                }
+            })
+
+            it.onPreferenceClickListener = Preference.OnPreferenceClickListener {
+                displayLoadingView()
+                Matrix.getInstance(appContext).reloadSessions(appContext)
+                false
+            }
+        }
+
+        // Deactivate accounbt section
+
         // deactivate account
         findPreference(PreferencesManager.SETTINGS_DEACTIVATE_ACCOUNT_KEY)
                 .onPreferenceClickListener = Preference.OnPreferenceClickListener {
@@ -720,14 +750,6 @@ class VectorSettingsPreferencesFragment : PreferenceFragment(), SharedPreference
 
             false
         }
-
-        addButtons()
-        refreshPushersList()
-        refreshEmailsList()
-        refreshPhoneNumbersList()
-        refreshIgnoredUsersList()
-        refreshDevicesList()
-        refreshGroupFlairsList()
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
@@ -1236,13 +1258,13 @@ class VectorSettingsPreferencesFragment : PreferenceFragment(), SharedPreference
         }
     }
 
-    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent) {
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
 
         if (resultCode == Activity.RESULT_OK) {
             when (requestCode) {
                 REQUEST_NOTIFICATION_RINGTONE -> {
-                    PreferencesManager.setNotificationRingTone(activity, data.getParcelableExtra<Parcelable>(RingtoneManager.EXTRA_RINGTONE_PICKED_URI) as Uri)
+                    PreferencesManager.setNotificationRingTone(activity, data?.getParcelableExtra<Parcelable>(RingtoneManager.EXTRA_RINGTONE_PICKED_URI) as Uri)
 
                     // test if the selected ring tone can be played
                     if (null == PreferencesManager.getNotificationRingToneName(activity)) {
