@@ -284,11 +284,11 @@ class VectorSettingsPreferencesFragment : PreferenceFragment(), SharedPreference
         }
 
         // User Email and phone
+        // Add phone and add email buttons first
+        addButtons()
+
         refreshEmailsList()
         refreshPhoneNumbersList()
-
-        // Add phone and add email buttons
-        addButtons()
 
         // Contacts
         setContactsPreferences()
@@ -1811,7 +1811,7 @@ class VectorSettingsPreferencesFragment : PreferenceFragment(), SharedPreference
             mDisplayedPhoneNumber = phoneNumberList
 
             var index = 0
-            val addPhoneBtn = mUserSettingsCategory.findPreference(ADD_PHONE_NUMBER_PREFERENCE_KEY)
+            val addPhoneBtn = mUserSettingsCategory.findPreference(ADD_PHONE_NUMBER_PREFERENCE_KEY)?: return
             var order = addPhoneBtn.order
 
             for (phoneNumber3PID in currentPhoneNumber3PID) {
