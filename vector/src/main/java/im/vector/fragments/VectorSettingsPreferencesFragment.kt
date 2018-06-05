@@ -480,75 +480,76 @@ class VectorSettingsPreferencesFragment : PreferenceFragment(), SharedPreference
         val useCryptoPref = findPreference(PreferencesManager.SETTINGS_ROOM_SETTINGS_LABS_END_TO_END_PREFERENCE_KEY) as CheckBoxPreference
         val cryptoIsEnabledPref = findPreference(PreferencesManager.SETTINGS_ROOM_SETTINGS_LABS_END_TO_END_IS_ACTIVE_PREFERENCE_KEY)
 
-        cryptoIsEnabledPref.isEnabled = false
-
-        if (!mSession.isCryptoEnabled) {
-            useCryptoPref.isChecked = false
-            mLabsCategory.removePreference(cryptoIsEnabledPref)
-        } else {
+        if (mSession.isCryptoEnabled) {
             mLabsCategory.removePreference(useCryptoPref)
-        }
 
-        useCryptoPref.onPreferenceChangeListener = Preference.OnPreferenceChangeListener { preference, newValueAsVoid ->
-            if (TextUtils.isEmpty(mSession.credentials.deviceId)) {
-                AlertDialog.Builder(activity)
-                        .setMessage(R.string.room_settings_labs_end_to_end_warnings)
-                        .setPositiveButton(R.string.logout) { dialog, which ->
-                            dialog.dismiss()
-                            CommonActivityUtils.logout(activity)
-                        }
-                        .setNegativeButton(R.string.cancel) { dialog, which ->
-                            dialog.dismiss()
-                            useCryptoPref.isChecked = false
-                        }
-                        .setOnCancelListener { dialog ->
-                            dialog.dismiss()
-                            useCryptoPref.isChecked = false
-                        }
-                        .create()
-                        .show()
-            } else {
-                val newValue = newValueAsVoid as Boolean
+            cryptoIsEnabledPref.isEnabled = false
+        } else {
+            mLabsCategory.removePreference(cryptoIsEnabledPref)
 
-                if (mSession.isCryptoEnabled != newValue) {
-                    displayLoadingView()
+            useCryptoPref.isChecked = false
 
-                    mSession.enableCrypto(newValue, object : ApiCallback<Void> {
-                        private fun refresh() {
-                            if (null != activity) {
-                                activity.runOnUiThread {
-                                    hideLoadingView()
-                                    useCryptoPref.isChecked = mSession.isCryptoEnabled
+            useCryptoPref.onPreferenceChangeListener = Preference.OnPreferenceChangeListener { preference, newValueAsVoid ->
+                if (TextUtils.isEmpty(mSession.credentials.deviceId)) {
+                    AlertDialog.Builder(activity)
+                            .setMessage(R.string.room_settings_labs_end_to_end_warnings)
+                            .setPositiveButton(R.string.logout) { dialog, which ->
+                                dialog.dismiss()
+                                CommonActivityUtils.logout(activity)
+                            }
+                            .setNegativeButton(R.string.cancel) { dialog, which ->
+                                dialog.dismiss()
+                                useCryptoPref.isChecked = false
+                            }
+                            .setOnCancelListener { dialog ->
+                                dialog.dismiss()
+                                useCryptoPref.isChecked = false
+                            }
+                            .create()
+                            .show()
+                } else {
+                    val newValue = newValueAsVoid as Boolean
 
-                                    if (mSession.isCryptoEnabled) {
-                                        mLabsCategory.removePreference(useCryptoPref)
-                                        mLabsCategory.addPreference(cryptoIsEnabledPref)
+                    if (mSession.isCryptoEnabled != newValue) {
+                        displayLoadingView()
+
+                        mSession.enableCrypto(newValue, object : ApiCallback<Void> {
+                            private fun refresh() {
+                                if (null != activity) {
+                                    activity.runOnUiThread {
+                                        hideLoadingView()
+                                        useCryptoPref.isChecked = mSession.isCryptoEnabled
+
+                                        if (mSession.isCryptoEnabled) {
+                                            mLabsCategory.removePreference(useCryptoPref)
+                                            mLabsCategory.addPreference(cryptoIsEnabledPref)
+                                        }
                                     }
                                 }
                             }
-                        }
 
-                        override fun onSuccess(info: Void) {
-                            useCryptoPref.isEnabled = false
-                            refresh()
-                        }
+                            override fun onSuccess(info: Void) {
+                                useCryptoPref.isEnabled = false
+                                refresh()
+                            }
 
-                        override fun onNetworkError(e: Exception) {
-                            useCryptoPref.isChecked = false
-                        }
+                            override fun onNetworkError(e: Exception) {
+                                useCryptoPref.isChecked = false
+                            }
 
-                        override fun onMatrixError(e: MatrixError) {
-                            useCryptoPref.isChecked = false
-                        }
+                            override fun onMatrixError(e: MatrixError) {
+                                useCryptoPref.isChecked = false
+                            }
 
-                        override fun onUnexpectedError(e: Exception) {
-                            useCryptoPref.isChecked = false
-                        }
-                    })
+                            override fun onUnexpectedError(e: Exception) {
+                                useCryptoPref.isChecked = false
+                            }
+                        })
+                    }
                 }
-            }
 
-            true
+                true
+            }
         }
 
         // SaveMode Management
