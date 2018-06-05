@@ -60,7 +60,7 @@ public class VectorSettingsActivity extends MXCActionBarActivity {
         }
 
         // display the fragment
-        mFragment = VectorSettingsPreferencesFragment.newInstance(session.getMyUserId());
+        mFragment = VectorSettingsPreferencesFragment.Companion.newInstance(session.getMyUserId());
         getFragmentManager().beginTransaction().replace(R.id.vector_settings_page, mFragment).commit();
     }
 
