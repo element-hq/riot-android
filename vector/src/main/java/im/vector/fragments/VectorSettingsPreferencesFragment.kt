@@ -939,47 +939,45 @@ class VectorSettingsPreferencesFragment : PreferenceFragment(), SharedPreference
     }
 
     private fun addButtons() {
-        // TODO Use let
         // display the "add email" entry
-        val addEmailPreference = EditTextPreference(activity)
-        addEmailPreference.setTitle(R.string.settings_add_email_address)
-        addEmailPreference.setDialogTitle(R.string.settings_add_email_address)
-        addEmailPreference.key = ADD_EMAIL_PREFERENCE_KEY
-        addEmailPreference.icon = ThemeUtils.tintDrawable(activity,
-                ContextCompat.getDrawable(activity, R.drawable.ic_add_black)!!, R.attr.settings_icon_tint_color)
-        addEmailPreference.order = 100
-        addEmailPreference.editText.inputType = InputType.TYPE_CLASS_TEXT or InputType.TYPE_TEXT_VARIATION_EMAIL_ADDRESS
+        mUserSettingsCategory.addPreference(
+                EditTextPreference(activity).apply {
+                    setTitle(R.string.settings_add_email_address)
+                    setDialogTitle(R.string.settings_add_email_address)
+                    key = ADD_EMAIL_PREFERENCE_KEY
+                    icon = ThemeUtils.tintDrawable(activity,
+                            ContextCompat.getDrawable(activity, R.drawable.ic_add_black)!!, R.attr.settings_icon_tint_color)
+                    order = 100
+                    editText.inputType = InputType.TYPE_CLASS_TEXT or InputType.TYPE_TEXT_VARIATION_EMAIL_ADDRESS
 
-        addEmailPreference.onPreferenceChangeListener = Preference.OnPreferenceChangeListener { preference, newValue ->
-            val email = if (null == newValue) null else (newValue as String).trim { it <= ' ' }
-
-            activity.runOnUiThread { addEmail(email) }
-
-            false
-        }
-
-        mUserSettingsCategory.addPreference(addEmailPreference)
+                    onPreferenceChangeListener = Preference.OnPreferenceChangeListener { _, newValue ->
+                        addEmail((newValue as String).trim())
+                        false
+                    }
+                }
+        )
 
         // display the "add phone number" entry
-        val addPhoneNumberPreference = Preference(activity)
-        addPhoneNumberPreference.key = ADD_PHONE_NUMBER_PREFERENCE_KEY
-        addPhoneNumberPreference.icon = ThemeUtils.tintDrawable(activity,
-                ContextCompat.getDrawable(activity, R.drawable.ic_add_black)!!, R.attr.settings_icon_tint_color)
-        addPhoneNumberPreference.setTitle(R.string.settings_add_phone_number)
-        addPhoneNumberPreference.order = 200
+        mUserSettingsCategory.addPreference(
+                Preference(activity).apply {
+                    setTitle(R.string.settings_add_phone_number)
+                    key = ADD_PHONE_NUMBER_PREFERENCE_KEY
+                    icon = ThemeUtils.tintDrawable(activity,
+                            ContextCompat.getDrawable(activity, R.drawable.ic_add_black)!!, R.attr.settings_icon_tint_color)
+                    order = 200
 
-        addPhoneNumberPreference.onPreferenceClickListener = Preference.OnPreferenceClickListener {
-            val intent = PhoneNumberAdditionActivity.getIntent(activity, mSession.credentials.userId)
-            startActivityForResult(intent, REQUEST_NEW_PHONE_NUMBER)
-            true
-        }
-
-        mUserSettingsCategory.addPreference(addPhoneNumberPreference)
+                    onPreferenceClickListener = Preference.OnPreferenceClickListener {
+                        val intent = PhoneNumberAdditionActivity.getIntent(activity, mSession.credentials.userId)
+                        startActivityForResult(intent, REQUEST_NEW_PHONE_NUMBER)
+                        true
+                    }
+                }
+        )
     }
 
-    //==============================================================================================================
-    // Update items  methods
-    //==============================================================================================================
+//==============================================================================================================
+// Update items  methods
+//==============================================================================================================
 
     /**
      * Update the password.
@@ -1429,9 +1427,9 @@ class VectorSettingsPreferencesFragment : PreferenceFragment(), SharedPreference
                 .show()
     }
 
-    //==============================================================================================================
-    // ignored users list management
-    //==============================================================================================================
+//==============================================================================================================
+// ignored users list management
+//==============================================================================================================
 
     /**
      * Refresh the ignored users list
@@ -1498,9 +1496,9 @@ class VectorSettingsPreferencesFragment : PreferenceFragment(), SharedPreference
         }
     }
 
-    //==============================================================================================================
-    // pushers list management
-    //==============================================================================================================
+//==============================================================================================================
+// pushers list management
+//==============================================================================================================
 
     /**
      * Refresh the pushers list
@@ -1582,9 +1580,9 @@ class VectorSettingsPreferencesFragment : PreferenceFragment(), SharedPreference
         }
     }
 
-    //==============================================================================================================
-    // Email management
-    //==============================================================================================================
+//==============================================================================================================
+// Email management
+//==============================================================================================================
 
     /**
      * Refresh the emails list
@@ -1774,9 +1772,9 @@ class VectorSettingsPreferencesFragment : PreferenceFragment(), SharedPreference
         alert.show()
     }
 
-    //==============================================================================================================
-    // Phone number management
-    //==============================================================================================================
+//==============================================================================================================
+// Phone number management
+//==============================================================================================================
 
     /**
      * Refresh phone number list
@@ -1855,9 +1853,9 @@ class VectorSettingsPreferencesFragment : PreferenceFragment(), SharedPreference
 
     }
 
-    //==============================================================================================================
-    // contacts management
-    //==============================================================================================================
+//==============================================================================================================
+// contacts management
+//==============================================================================================================
 
     private fun setContactsPreferences() {
         // Permission
@@ -1886,9 +1884,9 @@ class VectorSettingsPreferencesFragment : PreferenceFragment(), SharedPreference
         }
     }
 
-    //==============================================================================================================
-    // user interface management
-    //==============================================================================================================
+//==============================================================================================================
+// user interface management
+//==============================================================================================================
 
     private fun setUserInterfacePreferences() {
         // Selected language
@@ -1945,9 +1943,9 @@ class VectorSettingsPreferencesFragment : PreferenceFragment(), SharedPreference
         }
     }
 
-    //==============================================================================================================
-    // background sync management
-    //==============================================================================================================
+//==============================================================================================================
+// background sync management
+//==============================================================================================================
 
     /**
      * Convert a delay in seconds to string
@@ -2032,9 +2030,9 @@ class VectorSettingsPreferencesFragment : PreferenceFragment(), SharedPreference
     }
 
 
-    //==============================================================================================================
-    // Cryptography
-    //==============================================================================================================
+//==============================================================================================================
+// Cryptography
+//==============================================================================================================
 
     private fun removeCryptographyPreference() {
         if (null != preferenceScreen) {
@@ -2129,9 +2127,9 @@ class VectorSettingsPreferencesFragment : PreferenceFragment(), SharedPreference
         }
     }
 
-    //==============================================================================================================
-    // devices list
-    //==============================================================================================================
+//==============================================================================================================
+// devices list
+//==============================================================================================================
 
     private fun removeDevicesPreference() {
         if (null != preferenceScreen) {
@@ -2620,9 +2618,9 @@ class VectorSettingsPreferencesFragment : PreferenceFragment(), SharedPreference
         }
     }
 
-    //==============================================================================================================
-    // Group flairs management
-    //==============================================================================================================
+//==============================================================================================================
+// Group flairs management
+//==============================================================================================================
 
     /**
      * Force the refresh of the devices list.<br></br>
@@ -2734,9 +2732,9 @@ class VectorSettingsPreferencesFragment : PreferenceFragment(), SharedPreference
         }
     }
 
-    /* ==========================================================================================
-     * Companion
-     * ========================================================================================== */
+/* ==========================================================================================
+ * Companion
+ * ========================================================================================== */
 
     companion object {
         private val LOG_TAG = VectorSettingsPreferencesFragment::class.java.simpleName
