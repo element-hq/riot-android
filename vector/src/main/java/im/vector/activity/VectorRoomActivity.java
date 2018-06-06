@@ -1007,9 +1007,8 @@ public class VectorRoomActivity extends MXCActionBarActivity implements
             }
         }
 
-        if (PreferencesManager.useMatrixApps(this)) {
-            mActiveWidgetsBanner.initRoomInfo(mSession, mRoom);
-        }
+        mActiveWidgetsBanner.initRoomInfo(mSession, mRoom);
+
         mActiveWidgetsBanner.setOnUpdateListener(new ActiveWidgetsBanner.onUpdateListener() {
             @Override
             public void onCloseWidgetClick(final Widget widget) {
@@ -2798,7 +2797,7 @@ public class VectorRoomActivity extends MXCActionBarActivity implements
         }
 
         if (null != mUseMatrixAppsMenuItem) {
-            mUseMatrixAppsMenuItem.setVisible(TextUtils.isEmpty(mEventId) && (null == sRoomPreviewData) && PreferencesManager.useMatrixApps(this));
+            mUseMatrixAppsMenuItem.setVisible(TextUtils.isEmpty(mEventId) && null == sRoomPreviewData);
         }
     }
 
