@@ -48,7 +48,7 @@ succes[^s]
 protected Integer
 
 # Prefer comparison the ascending way, when checking for value in range. Use <=
->= .* &&===1
+>= .* &&===13
 
 # It is no integer for id for bank model
 Short\.parseShort

@@ -401,9 +401,9 @@ public class VectorUtils {
             }
 
             // check if it’s the start of a surrogate pair
-            if (first >= 0xD800 && first <= 0xDBFF && (name.length() > (idx + 1))) {
+            if (0xD800 <= first && first <= 0xDBFF && (name.length() > (idx + 1))) {
                 char second = name.charAt(idx + 1);
-                if (second >= 0xDC00 && second <= 0xDFFF) {
+                if (0xDC00 <= second && second <= 0xDFFF) {
                     chars++;
                 }
             }
