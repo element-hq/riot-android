@@ -400,29 +400,29 @@ public class VectorRoomInviteMembersActivity extends VectorBaseSearchActivity {
     private void displayInviteByUserId() {
         View dialogLayout = getLayoutInflater().inflate(R.layout.dialog_invite_by_id, null);
 
-        final AlertDialog.Builder dialog = new AlertDialog.Builder(this);
-        dialog.setTitle(R.string.people_search_invite_by_id_dialog_title);
-        dialog.setView(dialogLayout);
+        final AlertDialog.Builder builder = new AlertDialog.Builder(this)
+                .setTitle(R.string.people_search_invite_by_id_dialog_title)
+                .setView(dialogLayout);
 
         final VectorAutoCompleteTextView inviteTextView = dialogLayout.findViewById(R.id.invite_by_id_edit_text);
         inviteTextView.initAutoCompletion(mSession);
         inviteTextView.setProvideMatrixIdOnly(true);
 
-        dialog.setPositiveButton(R.string.invite, new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                // will be overridden to avoid dismissing the dialog while displaying the progress
-            }
-        });
+        final AlertDialog inviteDialog = builder
+                .setPositiveButton(R.string.invite, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        // will be overridden to avoid dismissing the dialog while displaying the progress
+                    }
+                })
+                .setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        dialog.dismiss();
+                    }
+                })
+                .show();
 
-        dialog.setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                dialog.dismiss();
-            }
-        });
-
-        final AlertDialog inviteDialog = dialog.show();
         final Button inviteButton = inviteDialog.getButton(AlertDialog.BUTTON_POSITIVE);
 
         if (null != inviteButton) {

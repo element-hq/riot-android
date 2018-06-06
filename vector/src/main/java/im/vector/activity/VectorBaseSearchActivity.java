@@ -268,23 +268,21 @@ public abstract class VectorBaseSearchActivity extends MXCActionBarActivity {
                 onPatternUpdate(false);
             } else if (matches.size() > 1) {
                 // if they are several matches, let the user chooses the right one.
-                AlertDialog.Builder builder = new AlertDialog.Builder(this);
                 String[] mes = matches.toArray(new String[matches.size()]);
 
-                builder.setItems(mes, new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int item) {
-                        mPatternToSearchEditText.setText(matches.get(item));
-                        runOnUiThread(new Runnable() {
-                            @Override
-                            public void run() {
-                                onPatternUpdate(false);
+                new AlertDialog.Builder(this)
+                        .setItems(mes, new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int item) {
+                                mPatternToSearchEditText.setText(matches.get(item));
+                                runOnUiThread(new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        onPatternUpdate(false);
+                                    }
+                                });
                             }
-                        });
-                    }
-                });
-
-                AlertDialog alert = builder.create();
-                alert.show();
+                        })
+                        .show();
             }
         }
         super.onActivityResult(requestCode, resultCode, data);

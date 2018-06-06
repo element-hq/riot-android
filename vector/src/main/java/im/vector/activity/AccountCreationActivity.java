@@ -95,38 +95,32 @@ public class AccountCreationActivity extends RiotAppCompatActivity {
                                            SslError error) {
                 final SslErrorHandler fHander = handler;
 
-                AlertDialog.Builder builder = new AlertDialog.Builder(AccountCreationActivity.this);
-
-                builder.setMessage(R.string.ssl_could_not_verify);
-
-                builder.setPositiveButton(R.string.ssl_trust, new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        fHander.proceed();
-                    }
-                });
-
-                builder.setNegativeButton(R.string.ssl_do_not_trust, new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        fHander.cancel();
-                    }
-                });
-
-                builder.setOnKeyListener(new DialogInterface.OnKeyListener() {
-                    @Override
-                    public boolean onKey(DialogInterface dialog, int keyCode, KeyEvent event) {
-                        if (event.getAction() == KeyEvent.ACTION_UP && keyCode == KeyEvent.KEYCODE_BACK) {
-                            fHander.cancel();
-                            dialog.dismiss();
-                            return true;
-                        }
-                        return false;
-                    }
-                });
-
-                AlertDialog dialog = builder.create();
-                dialog.show();
+                new AlertDialog.Builder(AccountCreationActivity.this)
+                        .setMessage(R.string.ssl_could_not_verify)
+                        .setPositiveButton(R.string.ssl_trust, new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                fHander.proceed();
+                            }
+                        })
+                        .setNegativeButton(R.string.ssl_do_not_trust, new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                fHander.cancel();
+                            }
+                        })
+                        .setOnKeyListener(new DialogInterface.OnKeyListener() {
+                            @Override
+                            public boolean onKey(DialogInterface dialog, int keyCode, KeyEvent event) {
+                                if (event.getAction() == KeyEvent.ACTION_UP && keyCode == KeyEvent.KEYCODE_BACK) {
+                                    fHander.cancel();
+                                    dialog.dismiss();
+                                    return true;
+                                }
+                                return false;
+                            }
+                        })
+                        .show();
             }
 
             @Override

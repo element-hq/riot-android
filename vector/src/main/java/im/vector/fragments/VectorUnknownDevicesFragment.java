@@ -115,7 +115,6 @@ public class VectorUnknownDevicesFragment extends DialogFragment {
 
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
-        AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
         // Get the layout inflater
         LayoutInflater inflater = getActivity().getLayoutInflater();
 
@@ -201,7 +200,9 @@ public class VectorUnknownDevicesFragment extends DialogFragment {
             }
         });
 
-        builder.setView(v).setTitle(R.string.unknown_devices_alert_title);
+        AlertDialog.Builder builder = new AlertDialog.Builder(getActivity())
+                .setView(v)
+                .setTitle(R.string.unknown_devices_alert_title);
 
         if (null != mListener) {
             // Add action buttons

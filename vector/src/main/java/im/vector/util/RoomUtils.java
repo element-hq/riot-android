@@ -60,7 +60,6 @@ import java.util.regex.Pattern;
 
 import im.vector.Matrix;
 import im.vector.R;
-import im.vector.activity.CommonActivityUtils;
 import im.vector.activity.VectorRoomActivity;
 import im.vector.adapters.AdapterUtils;
 
@@ -668,7 +667,6 @@ public class RoomUtils {
                         dialog.dismiss();
                     }
                 })
-                .create()
                 .show();
     }
 

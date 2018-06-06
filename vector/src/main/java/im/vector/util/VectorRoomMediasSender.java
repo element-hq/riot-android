@@ -1,13 +1,13 @@
-/* 
+/*
  * Copyright 2016 OpenMarket Ltd
  * Copyright 2018 New Vector Ltd
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *     http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -753,63 +753,62 @@ public class VectorRoomMediasSender {
 
                     String[] stringsArray = getImagesCompressionTextsList(mVectorRoomActivity, imageSizes, fileSize);
 
-                    final AlertDialog.Builder alert = new AlertDialog.Builder(mVectorRoomActivity);
-                    alert.setTitle(mVectorRoomActivity.getString(im.vector.R.string.compression_options));
-                    alert.setSingleChoiceItems(stringsArray, -1, new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialog, int which) {
-                            final int fPos = which;
-
-                            mImageSizesListDialog.dismiss();
-
-                            mVectorRoomActivity.runOnUiThread(new Runnable() {
+                    mImageSizesListDialog = new AlertDialog.Builder(mVectorRoomActivity)
+                            .setTitle(im.vector.R.string.compression_options)
+                            .setSingleChoiceItems(stringsArray, -1, new DialogInterface.OnClickListener() {
                                 @Override
-                                public void run() {
-                                    mVectorRoomActivity.showWaitingView();
+                                public void onClick(DialogInterface dialog, int which) {
+                                    final int fPos = which;
 
-                                    Thread thread = new Thread(new Runnable() {
+                                    mImageSizesListDialog.dismiss();
+
+                                    mVectorRoomActivity.runOnUiThread(new Runnable() {
                                         @Override
                                         public void run() {
-                                            ImageSize expectedSize = null;
+                                            mVectorRoomActivity.showWaitingView();
 
-                                            // full size
-                                            if (0 != fPos) {
-                                                expectedSize = imageSizes.getImageSizesList().get(fPos);
-                                            }
-
-                                            // stored the compression selected by the user
-                                            mImageCompressionDescription = imageSizes.getImageSizesDescription(mVectorRoomActivity).get(fPos);
-
-                                            final String fImageUrl = resizeImage(anImageUrl, filename, imageSizes.mFullImageSize, expectedSize, rotationAngle);
-
-                                            mVectorRoomActivity.runOnUiThread(new Runnable() {
+                                            Thread thread = new Thread(new Runnable() {
                                                 @Override
                                                 public void run() {
-                                                    mVectorMessageListFragment.sendMediaMessage(new RoomMediaMessage(Uri.parse(fImageUrl),
-                                                            roomMediaMessage.getFileName(mVectorRoomActivity)));
-                                                    aListener.onDone();
+                                                    ImageSize expectedSize = null;
+
+                                                    // full size
+                                                    if (0 != fPos) {
+                                                        expectedSize = imageSizes.getImageSizesList().get(fPos);
+                                                    }
+
+                                                    // stored the compression selected by the user
+                                                    mImageCompressionDescription = imageSizes.getImageSizesDescription(mVectorRoomActivity).get(fPos);
+
+                                                    final String fImageUrl = resizeImage(anImageUrl, filename, imageSizes.mFullImageSize, expectedSize, rotationAngle);
+
+                                                    mVectorRoomActivity.runOnUiThread(new Runnable() {
+                                                        @Override
+                                                        public void run() {
+                                                            mVectorMessageListFragment.sendMediaMessage(new RoomMediaMessage(Uri.parse(fImageUrl),
+                                                                    roomMediaMessage.getFileName(mVectorRoomActivity)));
+                                                            aListener.onDone();
+                                                        }
+                                                    });
                                                 }
                                             });
+
+                                            thread.setPriority(Thread.MIN_PRIORITY);
+                                            thread.start();
                                         }
                                     });
-
-                                    thread.setPriority(Thread.MIN_PRIORITY);
-                                    thread.start();
                                 }
-                            });
-                        }
-                    });
-
-                    mImageSizesListDialog = alert.show();
-                    mImageSizesListDialog.setOnCancelListener(new DialogInterface.OnCancelListener() {
-                        @Override
-                        public void onCancel(DialogInterface dialog) {
-                            mImageSizesListDialog = null;
-                            if (null != aListener) {
-                                aListener.onCancel();
-                            }
-                        }
-                    });
+                            })
+                            .setOnCancelListener(new DialogInterface.OnCancelListener() {
+                                @Override
+                                public void onCancel(DialogInterface dialog) {
+                                    mImageSizesListDialog = null;
+                                    if (null != aListener) {
+                                        aListener.onCancel();
+                                    }
+                                }
+                            })
+                            .show();
                 }
             } catch (Exception e) {
                 Log.e(LOG_TAG, "sendImageMessage failed " + e.getMessage());
