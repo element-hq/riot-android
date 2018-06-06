@@ -16,6 +16,10 @@
 # limitations under the License.
 #
 
+#######################################################################################################################
+# Check drawable quantity
+#######################################################################################################################
+
 echo "Check drawable quantity"
 
 numberOfFiles1=`ls -1U ./vector/src/main/res/drawable-hdpi | wc -l | sed  "s/ //g"`
@@ -35,6 +39,10 @@ else
 fi
 
 echo
+
+#######################################################################################################################
+# Search forbidden pattern
+#######################################################################################################################
 
 searchForbiddenStringsScript=./tmp/search_forbidden_strings.pl
 
@@ -77,6 +85,48 @@ ${searchForbiddenStringsScript} ./tools/check/forbidden_strings_in_resources.txt
 
 resultForbiddenStringInResource=$?
 
+#######################################################################################################################
+# Check files with long lines
+#######################################################################################################################
+
+checkLongFilesScript=./tmp/check_long_files.pl
+
+if [ -f ${checkLongFilesScript} ]; then
+  echo "${checkLongFilesScript} already there"
+else
+  mkdir tmp
+  echo "Get the script"
+  wget https://raw.githubusercontent.com/matrix-org/matrix-dev-tools/develop/bin/check_long_files.pl -O ${checkLongFilesScript}
+fi
+
+echo
+
+if [ -x ${checkLongFilesScript} ]; then
+  echo "${checkLongFilesScript} is already executable"
+else
+  echo "Make the script executable"
+  chmod u+x ${checkLongFilesScript}
+fi
+
+echo
+echo "Search for long files..."
+
+${checkLongFilesScript} 3000 \
+    ./vector/src/app/java \
+    ./vector/src/appfdroid/java \
+    ./vector/src/main/java \
+    ./vector/src/main/res/layout \
+    ./vector/src/main/res/menu \
+    ./vector/src/main/res/values \
+    ./vector/src/main/res/values-v21 \
+    ./vector/src/main/res/values-w820dp
+
+resultLongFiles=$?
+
+#######################################################################################################################
+# search png in drawable folder
+#######################################################################################################################
+
 echo
 echo "Search for png files in /drawable..."
 
@@ -94,7 +144,7 @@ fi
 
 echo
 
-if [ ${resultNbOfDrawable} -eq 0 ] && [ ${resultForbiddenStringInCode} -eq 0 ] && [ ${resultForbiddenStringInResource} -eq 0 ] && [ ${resultPngInDrawable} -eq 0 ]; then
+if [ ${resultNbOfDrawable} -eq 0 ] && [ ${resultForbiddenStringInCode} -eq 0 ] && [ ${resultForbiddenStringInResource} -eq 0 ] && [ ${resultLongFiles} -eq 0 ] && [ ${resultPngInDrawable} -eq 0 ]; then
    echo "MAIN OK"
 else
    echo "MAIN ERROR"
