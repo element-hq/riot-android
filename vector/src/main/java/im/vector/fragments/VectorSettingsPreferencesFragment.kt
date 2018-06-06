@@ -531,7 +531,7 @@ class VectorSettingsPreferencesFragment : PreferenceFragment(), SharedPreference
                                 }
                             }
 
-                            override fun onSuccess(info: Void) {
+                            override fun onSuccess(info: Void?) {
                                 useCryptoPref.isEnabled = false
                                 refresh()
                             }
@@ -688,9 +688,9 @@ class VectorSettingsPreferencesFragment : PreferenceFragment(), SharedPreference
         // clear medias cache
         findPreference(PreferencesManager.SETTINGS_CLEAR_MEDIA_CACHE_PREFERENCE_KEY).let {
             MXMediasCache.getCachesSize(activity, object : SimpleApiCallback<Long>() {
-                override fun onSuccess(size: Long?) {
+                override fun onSuccess(size: Long) {
                     if (null != activity) {
-                        it.summary = android.text.format.Formatter.formatFileSize(activity, size!!)
+                        it.summary = android.text.format.Formatter.formatFileSize(activity, size)
                     }
                 }
             })
@@ -698,19 +698,19 @@ class VectorSettingsPreferencesFragment : PreferenceFragment(), SharedPreference
             it.onPreferenceClickListener = Preference.OnPreferenceClickListener {
                 displayLoadingView()
 
-                val task = object : AsyncTask<Void, Void, Void>() {
-                    override fun doInBackground(vararg params: Void): Void? {
+                val task = object : AsyncTask<Void?, Void?, Void?>() {
+                    override fun doInBackground(vararg params: Void?): Void? {
                         mSession.mediasCache.clear()
                         Glide.get(activity).clearDiskCache()
                         return null
                     }
 
-                    override fun onPostExecute(result: Void) {
+                    override fun onPostExecute(result: Void?) {
                         hideLoadingView()
 
                         MXMediasCache.getCachesSize(activity, object : SimpleApiCallback<Long>() {
-                            override fun onSuccess(size: Long?) {
-                                it.summary = android.text.format.Formatter.formatFileSize(activity, size!!)
+                            override fun onSuccess(size: Long) {
+                                it.summary = android.text.format.Formatter.formatFileSize(activity, size)
                             }
                         })
                     }
@@ -731,9 +731,9 @@ class VectorSettingsPreferencesFragment : PreferenceFragment(), SharedPreference
         // clear cache
         findPreference(PreferencesManager.SETTINGS_CLEAR_CACHE_PREFERENCE_KEY).let {
             MXSession.getApplicationSizeCaches(activity, object : SimpleApiCallback<Long>() {
-                override fun onSuccess(size: Long?) {
+                override fun onSuccess(size: Long) {
                     if (null != activity) {
-                        it.summary = android.text.format.Formatter.formatFileSize(activity, size!!)
+                        it.summary = android.text.format.Formatter.formatFileSize(activity, size)
                     }
                 }
             })
@@ -790,7 +790,7 @@ class VectorSettingsPreferencesFragment : PreferenceFragment(), SharedPreference
             Matrix.getInstance(context)!!.addNetworkEventListener(mNetworkListener)
 
             mSession.myUser.refreshThirdPartyIdentifiers(object : SimpleApiCallback<Void>() {
-                override fun onSuccess(info: Void) {
+                override fun onSuccess(info: Void?) {
                     // ensure that the activity still exists
                     if (null != activity) {
                         // and the result is called in the right thread
@@ -805,7 +805,7 @@ class VectorSettingsPreferencesFragment : PreferenceFragment(), SharedPreference
             Matrix.getInstance(context)!!
                     .sharedGCMRegistrationManager
                     .refreshPushersList(Matrix.getInstance(context)!!.sessions, object : SimpleApiCallback<Void>() {
-                        override fun onSuccess(info: Void) {
+                        override fun onSuccess(info: Void?) {
                             refreshPushersList()
                         }
                     })
@@ -1019,7 +1019,7 @@ class VectorSettingsPreferencesFragment : PreferenceFragment(), SharedPreference
                         }
                     }
 
-                    override fun onSuccess(info: Void) {
+                    override fun onSuccess(info: Void?) {
                         onDone(R.string.settings_password_updated)
                     }
 
@@ -1190,7 +1190,7 @@ class VectorSettingsPreferencesFragment : PreferenceFragment(), SharedPreference
             displayLoadingView()
 
             mSession.myUser.updateDisplayName(value, object : ApiCallback<Void> {
-                override fun onSuccess(info: Void) {
+                override fun onSuccess(info: Void?) {
                     // refresh the settings value
                     PreferenceManager.getDefaultSharedPreferences(activity).edit {
                         putString(PreferencesManager.SETTINGS_DISPLAY_NAME_PREFERENCE_KEY, value)
@@ -1301,7 +1301,7 @@ class VectorSettingsPreferencesFragment : PreferenceFragment(), SharedPreference
                                 override fun onUploadComplete(uploadId: String?, contentUri: String?) {
                                     activity.runOnUiThread {
                                         mSession.myUser.updateAvatarUrl(contentUri, object : ApiCallback<Void> {
-                                            override fun onSuccess(info: Void) {
+                                            override fun onSuccess(info: Void?) {
                                                 onCommonDone(null)
                                                 refreshDisplay()
                                             }
@@ -1401,7 +1401,7 @@ class VectorSettingsPreferencesFragment : PreferenceFragment(), SharedPreference
                     displayLoadingView()
 
                     mSession.myUser.delete3Pid(pid, object : ApiCallback<Void> {
-                        override fun onSuccess(info: Void) {
+                        override fun onSuccess(info: Void?) {
                             when (pid.medium) {
                                 ThreePid.MEDIUM_EMAIL -> refreshEmailsList()
                                 ThreePid.MEDIUM_MSISDN -> refreshPhoneNumbersList()
@@ -1437,7 +1437,8 @@ class VectorSettingsPreferencesFragment : PreferenceFragment(), SharedPreference
     private fun refreshIgnoredUsersList() {
         val ignoredUsersList = mSession.dataHandler.ignoredUserIds
 
-        Collections.sort(ignoredUsersList) { u1, u2 -> u1.toLowerCase(VectorApp.getApplicationLocale()).compareTo(u2.toLowerCase(VectorApp.getApplicationLocale())) }
+        ignoredUsersList.sortWith(Comparator { u1, u2 ->
+            u1.toLowerCase(VectorApp.getApplicationLocale()).compareTo(u2.toLowerCase(VectorApp.getApplicationLocale())) })
 
         val preferenceScreen = preferenceScreen
 
@@ -1467,7 +1468,7 @@ class VectorSettingsPreferencesFragment : PreferenceFragment(), SharedPreference
                                 idsList.add(userId)
 
                                 mSession.unIgnoreUsers(idsList, object : ApiCallback<Void> {
-                                    override fun onSuccess(info: Void) {
+                                    override fun onSuccess(info: Void?) {
                                         onCommonDone(null)
                                     }
 
@@ -1551,7 +1552,7 @@ class VectorSettingsPreferencesFragment : PreferenceFragment(), SharedPreference
 
                                         displayLoadingView()
                                         gcmRegistrationManager.unregister(mSession, pusher, object : ApiCallback<Void> {
-                                            override fun onSuccess(info: Void) {
+                                            override fun onSuccess(info: Void?) {
                                                 refreshPushersList()
                                                 onCommonDone(null)
                                             }
@@ -1695,7 +1696,7 @@ class VectorSettingsPreferencesFragment : PreferenceFragment(), SharedPreference
         displayLoadingView()
 
         mSession.myUser.requestEmailValidationToken(pid, object : ApiCallback<Void> {
-            override fun onSuccess(info: Void) {
+            override fun onSuccess(info: Void?) {
                 if (null != activity) {
                     activity.runOnUiThread { showEmailValidationDialog(pid) }
                 }
@@ -1731,7 +1732,7 @@ class VectorSettingsPreferencesFragment : PreferenceFragment(), SharedPreference
         builder.setPositiveButton(R.string._continue) { dialog, which ->
             dialog.dismiss()
             mSession.myUser.add3Pid(pid, true, object : ApiCallback<Void> {
-                override fun onSuccess(info: Void) {
+                override fun onSuccess(info: Void?) {
                     if (null != activity) {
                         activity.runOnUiThread {
                             hideLoadingView()
@@ -2104,18 +2105,18 @@ class VectorSettingsPreferencesFragment : PreferenceFragment(), SharedPreference
         sendToUnverifiedDevicesPref.isChecked = false
 
         mSession.crypto.getGlobalBlacklistUnverifiedDevices(object : SimpleApiCallback<Boolean>() {
-            override fun onSuccess(status: Boolean?) {
-                sendToUnverifiedDevicesPref.isChecked = status!!
+            override fun onSuccess(status: Boolean) {
+                sendToUnverifiedDevicesPref.isChecked = status
             }
         })
 
         sendToUnverifiedDevicesPref.onPreferenceClickListener = Preference.OnPreferenceClickListener {
             mSession.crypto.getGlobalBlacklistUnverifiedDevices(object : SimpleApiCallback<Boolean>() {
-                override fun onSuccess(status: Boolean?) {
+                override fun onSuccess(status: Boolean) {
                     if (sendToUnverifiedDevicesPref.isChecked != status) {
                         mSession.crypto
                                 .setGlobalBlacklistUnverifiedDevices(sendToUnverifiedDevicesPref.isChecked, object : SimpleApiCallback<Void>() {
-                                    override fun onSuccess(info: Void) {
+                                    override fun onSuccess(info: Void?) {
 
                                     }
                                 })
@@ -2337,7 +2338,7 @@ class VectorSettingsPreferencesFragment : PreferenceFragment(), SharedPreference
                     displayLoadingView()
 
                     mSession.setDeviceName(aDeviceInfoToRename.device_id, input.text.toString(), object : ApiCallback<Void> {
-                        override fun onSuccess(info: Void) {
+                        override fun onSuccess(info: Void?) {
                             // search which preference is updated
                             val count = mDevicesListSettingsCategory.preferenceCount
 
@@ -2383,7 +2384,7 @@ class VectorSettingsPreferencesFragment : PreferenceFragment(), SharedPreference
     private fun deleteDevice(deviceId: String) {
         displayLoadingView()
         mSession.deleteDevice(deviceId, mAccountPassword, object : ApiCallback<Void> {
-            override fun onSuccess(info: Void) {
+            override fun onSuccess(info: Void?) {
                 hideLoadingView()
                 refreshDevicesList() // force settings update
             }
@@ -2593,7 +2594,7 @@ class VectorSettingsPreferencesFragment : PreferenceFragment(), SharedPreference
                 displayLoadingView()
 
                 mSession.crypto.importRoomKeys(data, password, object : ApiCallback<Void> {
-                    override fun onSuccess(info: Void) {
+                    override fun onSuccess(info: Void?) {
                         hideLoadingView()
                     }
 
@@ -2687,16 +2688,16 @@ class VectorSettingsPreferencesFragment : PreferenceFragment(), SharedPreference
                 vectorGroupPreference.isChecked = publicisedGroups.contains(group.groupId)
                 mGroupsFlairCategory.addPreference(vectorGroupPreference)
 
-                vectorGroupPreference.onPreferenceChangeListener = Preference.OnPreferenceChangeListener { preference, newValueAsVoid ->
-                    if (newValueAsVoid is Boolean) {
+                vectorGroupPreference.onPreferenceChangeListener = Preference.OnPreferenceChangeListener { _, newValue ->
+                    if (newValue is Boolean) {
                         val isFlaired = mPublicisedGroups!!.contains(group.groupId)
 
-                        if (newValueAsVoid != isFlaired) {
+                        if (newValue != isFlaired) {
                             displayLoadingView()
-                            mSession.groupsManager.updateGroupPublicity(group.groupId, newValueAsVoid, object : ApiCallback<Void> {
-                                override fun onSuccess(info: Void) {
+                            mSession.groupsManager.updateGroupPublicity(group.groupId, newValue, object : ApiCallback<Void> {
+                                override fun onSuccess(info: Void?) {
                                     hideLoadingView()
-                                    if (newValueAsVoid) {
+                                    if (newValue) {
                                         mPublicisedGroups!!.add(group.groupId)
                                     } else {
                                         mPublicisedGroups!!.remove(group.groupId)

@@ -167,7 +167,7 @@ class WidgetActivity : RiotAppCompatActivity() {
                     dialog.dismiss()
                     showWaitingView()
                     WidgetsManager.getSharedInstance().closeWidget(mSession, mRoom, mWidget!!.widgetId, object : ApiCallback<Void> {
-                        override fun onSuccess(info: Void) {
+                        override fun onSuccess(info: Void?) {
                             hideWaitingView()
                             finish()
                         }
