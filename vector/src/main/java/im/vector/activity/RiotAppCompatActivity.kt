@@ -165,8 +165,8 @@ abstract class RiotAppCompatActivity : AppCompatActivity() {
     }
 
     // TODO Maintenance: 'home' menu is managed here now, remove similar management from children
-    override fun onOptionsItemSelected(item: MenuItem?): Boolean {
-        if (item!!.itemId == android.R.id.home) {
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        if (item.itemId == android.R.id.home) {
             setResult(RESULT_CANCELED)
             finish()
             return true
