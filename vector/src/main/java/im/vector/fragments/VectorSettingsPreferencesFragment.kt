@@ -81,6 +81,7 @@ import java.text.DateFormat
 import java.text.SimpleDateFormat
 import java.util.*
 
+// TODO Extend PreferenceFragmentCompat() from support-v7
 class VectorSettingsPreferencesFragment : PreferenceFragment(), SharedPreferences.OnSharedPreferenceChangeListener {
 
     // members

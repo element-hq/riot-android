@@ -17,10 +17,6 @@ package im.vector.activity
 
 import android.content.Intent
 import android.content.pm.PackageManager
-import android.view.MenuItem
-
-import org.matrix.androidsdk.MXSession
-
 import im.vector.Matrix
 import im.vector.R
 import im.vector.fragments.VectorSettingsPreferencesFragment
@@ -30,8 +26,6 @@ import im.vector.util.VectorUtils
  * Displays the client settings.
  */
 class VectorSettingsActivity : MXCActionBarActivity() {
-    // the UI items
-    private var mFragment: VectorSettingsPreferencesFragment? = null
 
     override fun getLayoutRes(): Int {
         return R.layout.activity_vector_settings
@@ -42,11 +36,10 @@ class VectorSettingsActivity : MXCActionBarActivity() {
     }
 
     override fun initUiAndData() {
-        val intent = intent
         var session = getSession(intent)
 
         if (null == session) {
-            session = Matrix.getInstance(this@VectorSettingsActivity)!!.defaultSession
+            session = Matrix.getInstance(this).defaultSession
         }
 
         if (session == null) {
@@ -54,28 +47,17 @@ class VectorSettingsActivity : MXCActionBarActivity() {
             return
         }
 
-        // display the fragment
-        mFragment = VectorSettingsPreferencesFragment.newInstance(session.myUserId)
-        fragmentManager.beginTransaction().replace(R.id.vector_settings_page, mFragment).commit()
-    }
-
-    override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        when (item.itemId) {
-            android.R.id.home -> {
-                finish()
-                return true
-            }
+        if (isFirstCreation()) {
+            // display the fragment
+            fragmentManager.beginTransaction()
+                    .replace(R.id.vector_settings_page, VectorSettingsPreferencesFragment.newInstance(session.myUserId))
+                    .commit()
         }
-        return super.onOptionsItemSelected(item)
     }
 
-    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent) {
-        super.onActivityResult(requestCode, resultCode, data)
-        // pass the result to the fragment
-        // FIXME This is not necessary, if Fragment.startActivityForResult is used (and it should be used)
-        mFragment!!.onActivityResult(requestCode, resultCode, data)
-    }
-
+    /**
+     * Keep this code here, cause PreferenceFragment does not extend v4 Fragment
+     */
     override fun onRequestPermissionsResult(aRequestCode: Int, aPermissions: Array<String>, aGrantResults: IntArray) {
         if (aRequestCode == CommonActivityUtils.REQUEST_CODE_PERMISSION_TAKE_PHOTO) {
             var granted = false

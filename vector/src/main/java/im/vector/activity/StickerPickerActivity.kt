@@ -108,8 +108,8 @@ class StickerPickerActivity : AbstractWidgetActivity() {
 
     override fun getMenuRes() = R.menu.vector_choose_sticker
 
-    override fun onOptionsItemSelected(item: MenuItem?): Boolean {
-        when (item?.itemId) {
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        when (item.itemId) {
             R.id.menu_settings -> {
                 openIntegrationManager(mWidgetId, "type_$WIDGET_NAME")
 
