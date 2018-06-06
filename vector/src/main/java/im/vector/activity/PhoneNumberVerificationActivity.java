@@ -26,7 +26,6 @@ import android.text.Editable;
 import android.text.TextUtils;
 import android.text.TextWatcher;
 import android.view.KeyEvent;
-import android.view.Menu;
 import android.view.MenuItem;
 import android.view.inputmethod.EditorInfo;
 import android.widget.TextView;
@@ -41,7 +40,6 @@ import org.matrix.androidsdk.util.Log;
 
 import im.vector.Matrix;
 import im.vector.R;
-import im.vector.util.ThemeUtils;
 import kotlin.Pair;
 
 public class PhoneNumberVerificationActivity extends RiotAppCompatActivity implements TextView.OnEditorActionListener, TextWatcher {
@@ -137,9 +135,6 @@ public class PhoneNumberVerificationActivity extends RiotAppCompatActivity imple
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
-            case android.R.id.home:
-                finish();
-                return true;
             case R.id.action_verify_phone_number:
                 submitCode();
                 return true;

@@ -280,33 +280,35 @@ public class VectorRoomCreationActivity extends MXCActionBarActivity {
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        int id = item.getItemId();
-        String existingRoomId;
-
-        if (id == R.id.action_create_room) {
-            if (0 == mParticipants.size()) {
-                createRoom(mParticipants);
-            } else {
-                // the first entry is self so ignore
-                mParticipants.remove(0);
-
-                // standalone case : should be accepted ?
+        switch (item.getItemId()) {
+            case R.id.action_create_room:
                 if (0 == mParticipants.size()) {
                     createRoom(mParticipants);
-                } else if (mParticipants.size() > 1) {
-                    createRoom(mParticipants);
-                } else if (null != (existingRoomId = isDirectChatRoomAlreadyExist(mParticipants.get(0).mUserId))) {
-                    HashMap<String, Object> params = new HashMap<>();
-                    params.put(VectorRoomActivity.EXTRA_MATRIX_ID, mParticipants.get(0).mUserId);
-                    params.put(VectorRoomActivity.EXTRA_ROOM_ID, existingRoomId);
-                    CommonActivityUtils.goToRoomPage(this, mSession, params);
                 } else {
-                    // direct message flow
-                    showWaitingView();
-                    mSession.createDirectMessageRoom(mParticipants.get(0).mUserId, mCreateDirectMessageCallBack);
+                    // the first entry is self so ignore
+                    mParticipants.remove(0);
+
+                    // standalone case : should be accepted ?
+                    if (0 == mParticipants.size()) {
+                        createRoom(mParticipants);
+                    } else if (mParticipants.size() > 1) {
+                        createRoom(mParticipants);
+                    } else {
+                        String existingRoomId = isDirectChatRoomAlreadyExist(mParticipants.get(0).mUserId);
+
+                        if (null != existingRoomId) {
+                            HashMap<String, Object> params = new HashMap<>();
+                            params.put(VectorRoomActivity.EXTRA_MATRIX_ID, mParticipants.get(0).mUserId);
+                            params.put(VectorRoomActivity.EXTRA_ROOM_ID, existingRoomId);
+                            CommonActivityUtils.goToRoomPage(this, mSession, params);
+                        } else {
+                            // direct message flow
+                            showWaitingView();
+                            mSession.createDirectMessageRoom(mParticipants.get(0).mUserId, mCreateDirectMessageCallBack);
+                        }
+                    }
                 }
-            }
-            return true;
+                return true;
         }
 
         return super.onOptionsItemSelected(item);

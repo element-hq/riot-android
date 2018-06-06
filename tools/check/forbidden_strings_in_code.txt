@@ -136,5 +136,5 @@ getActivity\(\)\.getString\(
 # In Kotlin, Void has to be null safe, i.e. use 'Void?' instead of 'Void'
 \: Void\)
 
-
-
+# Home menu click is managed in parent Activity, with one exception
+android\.R\.id\.home===2

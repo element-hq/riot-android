@@ -26,7 +26,6 @@ import android.text.Editable;
 import android.text.TextUtils;
 import android.text.TextWatcher;
 import android.view.KeyEvent;
-import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.inputmethod.EditorInfo;
@@ -47,7 +46,6 @@ import org.matrix.androidsdk.util.Log;
 import im.vector.Matrix;
 import im.vector.R;
 import im.vector.util.PhoneNumberUtils;
-import im.vector.util.ThemeUtils;
 import kotlin.Pair;
 
 public class PhoneNumberAdditionActivity extends RiotAppCompatActivity implements TextView.OnEditorActionListener, TextWatcher, View.OnClickListener {
@@ -150,10 +148,6 @@ public class PhoneNumberAdditionActivity extends RiotAppCompatActivity implement
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
-            case android.R.id.home:
-                setResult(RESULT_CANCELED);
-                finish();
-                return true;
             case R.id.action_add_phone_number:
                 submitPhoneNumber();
                 return true;

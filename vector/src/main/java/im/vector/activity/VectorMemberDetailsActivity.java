@@ -714,12 +714,8 @@ public class VectorMemberDetailsActivity extends MXCActionBarActivity implements
         if (android.R.id.home == item.getItemId()) {
             if (View.VISIBLE == mDevicesListView.getVisibility()) {
                 setScreenDevicesListVisibility(View.GONE);
-            } else {
-                // don't use the default parent activity defined in the manifest file.
-                // close this activity when the home button is pressed
-                onBackPressed();
+                return true;
             }
-            return true;
         }
 
         return super.onOptionsItemSelected(item);

@@ -25,7 +25,6 @@ import android.support.annotation.NonNull;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBar.TabListener;
-import android.view.MenuItem;
 import android.view.View;
 import android.widget.Toast;
 
@@ -196,16 +195,6 @@ public class VectorRoomDetailsActivity extends MXCActionBarActivity implements T
                 ContactsManager.getInstance().refreshLocalContactsSnapshot();
             }
         }
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()) {
-            case android.R.id.home:
-                finish();
-                return true;
-        }
-        return super.onOptionsItemSelected(item);
     }
 
     /**

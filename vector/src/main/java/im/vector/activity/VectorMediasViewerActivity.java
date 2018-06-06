@@ -44,7 +44,6 @@ import im.vector.VectorApp;
 import im.vector.adapters.VectorMediasViewerAdapter;
 import im.vector.db.VectorContentProvider;
 import im.vector.util.SlidableMediaInfo;
-import im.vector.util.ThemeUtils;
 
 /**
  * Display a medias list.
@@ -309,15 +308,10 @@ public class VectorMediasViewerActivity extends MXCActionBarActivity {
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        int id = item.getItemId();
-
         switch (item.getItemId()) {
-            case android.R.id.home:
-                finish();
-                return true;
             case R.id.ic_action_share:
             case R.id.ic_action_download:
-                onAction(mViewPager.getCurrentItem(), id);
+                onAction(mViewPager.getCurrentItem(), item.getItemId());
                 return true;
         }
 

@@ -46,7 +46,6 @@ import java.util.Timer;
 import java.util.TimerTask;
 
 import im.vector.R;
-import im.vector.util.ThemeUtils;
 import kotlin.Pair;
 
 /**
@@ -239,16 +238,16 @@ public abstract class VectorBaseSearchActivity extends MXCActionBarActivity {
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        int id = item.getItemId();
-
-        if (id == R.id.ic_action_speak_to_search) {
-            Intent intent = new Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH);
-            intent.putExtra(RecognizerIntent.EXTRA_LANGUAGE_MODEL, RecognizerIntent.LANGUAGE_MODEL_FREE_FORM);
-            startActivityForResult(intent, SPEECH_REQUEST_CODE);
-
-        } else if (id == R.id.ic_action_clear_search) {
-            mPatternToSearchEditText.setText("");
-            onPatternUpdate(false);
+        switch (item.getItemId()) {
+            case R.id.ic_action_speak_to_search:
+                Intent intent = new Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH);
+                intent.putExtra(RecognizerIntent.EXTRA_LANGUAGE_MODEL, RecognizerIntent.LANGUAGE_MODEL_FREE_FORM);
+                startActivityForResult(intent, SPEECH_REQUEST_CODE);
+                return true;
+            case R.id.ic_action_clear_search:
+                mPatternToSearchEditText.setText("");
+                onPatternUpdate(false);
+                return true;
         }
 
         return super.onOptionsItemSelected(item);

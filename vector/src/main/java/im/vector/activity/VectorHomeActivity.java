@@ -705,8 +705,6 @@ public class VectorHomeActivity extends RiotAppCompatActivity implements SearchV
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        boolean retCode = true;
-
         switch (item.getItemId()) {
             // search in rooms content
             case R.id.ic_action_global_search:
@@ -717,22 +715,13 @@ public class VectorHomeActivity extends RiotAppCompatActivity implements SearchV
                 }
 
                 startActivity(searchIntent);
-                break;
-
-            // search in rooms content
+                return true;
             case R.id.ic_action_historical:
                 startActivity(new Intent(this, HistoricalRoomsActivity.class));
-                break;
-            case R.id.ic_action_mark_all_as_read:
-                // Will be handle by fragments
-                retCode = false;
-                break;
+                return true;
             default:
-                // not handled item, return the super class implementation value
-                retCode = super.onOptionsItemSelected(item);
-                break;
+                return super.onOptionsItemSelected(item);
         }
-        return retCode;
     }
 
     @Override

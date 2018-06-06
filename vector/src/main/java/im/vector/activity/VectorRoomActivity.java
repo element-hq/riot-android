@@ -1608,83 +1608,83 @@ public class VectorRoomActivity extends MXCActionBarActivity implements
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        int id = item.getItemId();
+        switch (item.getItemId()) {
+            case R.id.ic_action_matrix_apps:
+                openIntegrationManagerActivity(null);
+                return true;
+            case R.id.ic_action_search_in_room:
+                try {
+                    enableActionBarHeader(HIDE_ACTION_BAR_HEADER);
 
-        if (id == android.R.id.home) {
-            finish();
-            return true;
-        } else if (id == R.id.ic_action_matrix_apps) {
-            openIntegrationManagerActivity(null);
-        } else if (id == R.id.ic_action_search_in_room) {
-            try {
-                enableActionBarHeader(HIDE_ACTION_BAR_HEADER);
+                    final Intent searchIntent = new Intent(VectorRoomActivity.this, VectorUnifiedSearchActivity.class);
+                    searchIntent.putExtra(VectorUnifiedSearchActivity.EXTRA_ROOM_ID, mRoom.getRoomId());
+                    startActivity(searchIntent);
+                } catch (Exception e) {
+                    Log.i(LOG_TAG, "## onOptionsItemSelected(): ");
+                }
+                return true;
+            case R.id.ic_action_room_settings:
+                launchRoomDetails(VectorRoomDetailsActivity.PEOPLE_TAB_INDEX);
+                return true;
+            case R.id.ic_action_room_resend_unsent:
+                mVectorMessageListFragment.resendUnsentMessages();
+                refreshNotificationsArea();
+                return true;
+            case R.id.ic_action_room_delete_unsent:
+                mVectorMessageListFragment.deleteUnsentEvents();
+                refreshNotificationsArea();
+                return true;
+            case R.id.ic_action_room_leave:
+                if (null != mRoom) {
+                    Log.d(LOG_TAG, "Leave the room " + mRoom.getRoomId());
+                    new AlertDialog.Builder(VectorRoomActivity.this)
+                            .setTitle(R.string.room_participants_leave_prompt_title)
+                            .setMessage(R.string.room_participants_leave_prompt_msg)
+                            .setPositiveButton(R.string.leave, new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialog, int which) {
+                                    dialog.dismiss();
+                                    showWaitingView();
 
-                final Intent searchIntent = new Intent(VectorRoomActivity.this, VectorUnifiedSearchActivity.class);
-                searchIntent.putExtra(VectorUnifiedSearchActivity.EXTRA_ROOM_ID, mRoom.getRoomId());
-                startActivity(searchIntent);
+                                    mRoom.leave(new ApiCallback<Void>() {
+                                        @Override
+                                        public void onSuccess(Void info) {
+                                            Log.d(LOG_TAG, "The room " + mRoom.getRoomId() + " is left");
+                                            // close the activity
+                                            finish();
+                                        }
 
-            } catch (Exception e) {
-                Log.i(LOG_TAG, "## onOptionsItemSelected(): ");
-            }
-        } else if (id == R.id.ic_action_room_settings) {
-            launchRoomDetails(VectorRoomDetailsActivity.PEOPLE_TAB_INDEX);
-        } else if (id == R.id.ic_action_room_resend_unsent) {
-            mVectorMessageListFragment.resendUnsentMessages();
-            refreshNotificationsArea();
-        } else if (id == R.id.ic_action_room_delete_unsent) {
-            mVectorMessageListFragment.deleteUnsentEvents();
-            refreshNotificationsArea();
-        } else if (id == R.id.ic_action_room_leave) {
-            if (null != mRoom) {
-                Log.d(LOG_TAG, "Leave the room " + mRoom.getRoomId());
-                new AlertDialog.Builder(VectorRoomActivity.this)
-                        .setTitle(R.string.room_participants_leave_prompt_title)
-                        .setMessage(R.string.room_participants_leave_prompt_msg)
-                        .setPositiveButton(R.string.leave, new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialog, int which) {
-                                dialog.dismiss();
-                                showWaitingView();
+                                        private void onError(String errorMessage) {
+                                            hideWaitingView();
+                                            Log.e(LOG_TAG, "Cannot leave the room " + mRoom.getRoomId() + " : " + errorMessage);
+                                        }
 
-                                mRoom.leave(new ApiCallback<Void>() {
-                                    @Override
-                                    public void onSuccess(Void info) {
-                                        Log.d(LOG_TAG, "The room " + mRoom.getRoomId() + " is left");
-                                        // close the activity
-                                        finish();
-                                    }
+                                        @Override
+                                        public void onNetworkError(Exception e) {
+                                            onError(e.getLocalizedMessage());
+                                        }
 
-                                    private void onError(String errorMessage) {
-                                        hideWaitingView();
-                                        Log.e(LOG_TAG, "Cannot leave the room " + mRoom.getRoomId() + " : " + errorMessage);
-                                    }
+                                        @Override
+                                        public void onMatrixError(MatrixError e) {
+                                            onError(e.getLocalizedMessage());
+                                        }
 
-                                    @Override
-                                    public void onNetworkError(Exception e) {
-                                        onError(e.getLocalizedMessage());
-                                    }
-
-                                    @Override
-                                    public void onMatrixError(MatrixError e) {
-                                        onError(e.getLocalizedMessage());
-                                    }
-
-                                    @Override
-                                    public void onUnexpectedError(Exception e) {
-                                        onError(e.getLocalizedMessage());
-                                    }
-                                });
-                            }
-                        })
-                        .setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialog, int which) {
-                                dialog.dismiss();
-                            }
-                        })
-                        .create()
-                        .show();
-            }
+                                        @Override
+                                        public void onUnexpectedError(Exception e) {
+                                            onError(e.getLocalizedMessage());
+                                        }
+                                    });
+                                }
+                            })
+                            .setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialog, int which) {
+                                    dialog.dismiss();
+                                }
+                            })
+                            .show();
+                }
+                return true;
         }
 
         return super.onOptionsItemSelected(item);

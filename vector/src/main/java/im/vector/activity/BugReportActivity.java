@@ -36,7 +36,6 @@ import butterknife.BindView;
 import im.vector.R;
 import im.vector.VectorApp;
 import im.vector.util.BugReporter;
-import im.vector.util.ThemeUtils;
 
 /**
  * LoggingOutActivity displays an animation while a session log out is in progress.
@@ -117,9 +116,6 @@ public class BugReportActivity extends MXCActionBarActivity {
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
-            case android.R.id.home:
-                finish();
-                return true;
             case R.id.ic_action_send_bug_report:
                 sendBugReport();
                 return true;
