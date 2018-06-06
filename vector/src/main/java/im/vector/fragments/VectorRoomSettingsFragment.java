@@ -469,7 +469,7 @@ public class VectorRoomSettingsFragment extends PreferenceFragment implements Sh
         }
 
         // seems known issue that the preferences screen does not use the activity theme
-        view.setBackgroundColor(ThemeUtils.getColor(getActivity(), R.attr.riot_primary_background_color));
+        view.setBackgroundColor(ThemeUtils.INSTANCE.getColor(getActivity(), R.attr.riot_primary_background_color));
         return view;
     }
 
@@ -858,7 +858,7 @@ public class VectorRoomSettingsFragment extends PreferenceFragment implements Sh
                 } else {
                     // no tag associated to the room
                     value = resources.getString(R.string.room_settings_tag_pref_entry_value_none);
-                    summary = Html.fromHtml("<i>" + getResources().getString(R.string.room_settings_tag_pref_no_tag) + "</i>").toString();
+                    summary = Html.fromHtml("<i>" + getString(R.string.room_settings_tag_pref_no_tag) + "</i>").toString();
                 }
 
                 mRoomTagListPreference.setValue(value);
@@ -959,13 +959,13 @@ public class VectorRoomSettingsFragment extends PreferenceFragment implements Sh
         if (!TextUtils.equals(newValue, previousValue)) {
             String historyVisibility;
 
-            if (newValue.equals(getResources().getString(R.string.room_settings_read_history_entry_value_anyone))) {
+            if (newValue.equals(getString(R.string.room_settings_read_history_entry_value_anyone))) {
                 historyVisibility = RoomState.HISTORY_VISIBILITY_WORLD_READABLE;
-            } else if (newValue.equals(getResources().getString(R.string.room_settings_read_history_entry_value_members_only_option_time_shared))) {
+            } else if (newValue.equals(getString(R.string.room_settings_read_history_entry_value_members_only_option_time_shared))) {
                 historyVisibility = RoomState.HISTORY_VISIBILITY_SHARED;
-            } else if (newValue.equals(getResources().getString(R.string.room_settings_read_history_entry_value_members_only_invited))) {
+            } else if (newValue.equals(getString(R.string.room_settings_read_history_entry_value_members_only_invited))) {
                 historyVisibility = RoomState.HISTORY_VISIBILITY_INVITED;
-            } else if (newValue.equals(getResources().getString(R.string.room_settings_read_history_entry_value_members_only_joined))) {
+            } else if (newValue.equals(getString(R.string.room_settings_read_history_entry_value_members_only_joined))) {
                 historyVisibility = RoomState.HISTORY_VISIBILITY_JOINED;
             } else {
                 // unknown value
@@ -998,11 +998,11 @@ public class VectorRoomSettingsFragment extends PreferenceFragment implements Sh
             }
 
             if (!newTag.equals(currentTag)) {
-                if (newTag.equals(getResources().getString(R.string.room_settings_tag_pref_entry_value_favourite))) {
+                if (newTag.equals(getString(R.string.room_settings_tag_pref_entry_value_favourite))) {
                     newTag = RoomTag.ROOM_TAG_FAVOURITE;
-                } else if (newTag.equals(getResources().getString(R.string.room_settings_tag_pref_entry_value_low_priority))) {
+                } else if (newTag.equals(getString(R.string.room_settings_tag_pref_entry_value_low_priority))) {
                     newTag = RoomTag.ROOM_TAG_LOW_PRIORITY;
-                } else if (newTag.equals(getResources().getString(R.string.room_settings_tag_pref_entry_value_none))) {
+                } else if (newTag.equals(getString(R.string.room_settings_tag_pref_entry_value_none))) {
                     newTag = null;
                 } else {
                     // unknown tag.. very unlikely
@@ -1474,7 +1474,7 @@ public class VectorRoomSettingsFragment extends PreferenceFragment implements Sh
             addAddressPreference.setTitle(R.string.room_settings_add_new_group);
             addAddressPreference.setDialogTitle(R.string.room_settings_add_new_group);
             addAddressPreference.setKey(FLAIR_PREFERENCE_KEY_BASE + "__add");
-            addAddressPreference.setIcon(CommonActivityUtils.tintDrawable(getActivity(),
+            addAddressPreference.setIcon(ThemeUtils.INSTANCE.tintDrawable(getActivity(),
                     ContextCompat.getDrawable(getActivity(), R.drawable.ic_add_black), R.attr.settings_icon_tint_color));
 
             addAddressPreference.setOnPreferenceChangeListener(
@@ -1589,7 +1589,7 @@ public class VectorRoomSettingsFragment extends PreferenceFragment implements Sh
         }
 
         Menu menu = popup.getMenu();
-        CommonActivityUtils.tintMenuIcons(menu, ThemeUtils.getColor(context, R.attr.icon_tint_on_light_action_bar_color));
+        ThemeUtils.INSTANCE.tintMenuIcons(menu, ThemeUtils.INSTANCE.getColor(context, R.attr.icon_tint_on_light_action_bar_color));
 
         String canonicalAlias = mRoom.getLiveState().alias;
         boolean canUpdateAliases = canUpdateAliases();
@@ -1749,7 +1749,7 @@ public class VectorRoomSettingsFragment extends PreferenceFragment implements Sh
             addAddressPreference.setTitle(R.string.room_settings_addresses_add_new_address);
             addAddressPreference.setDialogTitle(R.string.room_settings_addresses_add_new_address);
             addAddressPreference.setKey(ADD_ADDRESSES_PREFERENCE_KEY);
-            addAddressPreference.setIcon(CommonActivityUtils.tintDrawable(getActivity(),
+            addAddressPreference.setIcon(ThemeUtils.INSTANCE.tintDrawable(getActivity(),
                     ContextCompat.getDrawable(getActivity(), R.drawable.ic_add_black), R.attr.settings_icon_tint_color));
 
             addAddressPreference.setOnPreferenceChangeListener(
@@ -1920,14 +1920,14 @@ public class VectorRoomSettingsFragment extends PreferenceFragment implements Sh
                 VectorCustomActionEditTextPreference isEncryptedPreference = new VectorCustomActionEditTextPreference(getActivity());
                 isEncryptedPreference.setTitle(R.string.room_settings_addresses_e2e_disabled);
                 isEncryptedPreference.setKey(key);
-                isEncryptedPreference.setIcon(CommonActivityUtils.tintDrawable(getActivity(),
+                isEncryptedPreference.setIcon(ThemeUtils.INSTANCE.tintDrawable(getActivity(),
                         getResources().getDrawable(R.drawable.e2e_unencrypted), R.attr.settings_icon_tint_color));
                 mAdvandceSettingsCategory.addPreference(isEncryptedPreference);
             } else if (mSession.isCryptoEnabled()) {
                 final VectorSwitchPreference encryptSwitchPreference = new VectorSwitchPreference(getActivity());
                 encryptSwitchPreference.setTitle(R.string.room_settings_addresses_e2e_encryption_warning);
                 encryptSwitchPreference.setKey(key);
-                encryptSwitchPreference.setIcon(CommonActivityUtils.tintDrawable(getActivity(),
+                encryptSwitchPreference.setIcon(ThemeUtils.INSTANCE.tintDrawable(getActivity(),
                         getResources().getDrawable(R.drawable.e2e_unencrypted), R.attr.settings_icon_tint_color));
                 encryptSwitchPreference.setChecked(false);
                 mAdvandceSettingsCategory.addPreference(encryptSwitchPreference);

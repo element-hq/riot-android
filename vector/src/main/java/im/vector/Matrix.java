@@ -224,7 +224,7 @@ public class Matrix {
             PackageInfo pInfo = mAppContext.getPackageManager().getPackageInfo(mAppContext.getPackageName(), 0);
             versionName = pInfo.versionName;
 
-            flavor = mAppContext.getResources().getString(R.string.short_flavor_description);
+            flavor = mAppContext.getString(R.string.short_flavor_description);
 
             if (!TextUtils.isEmpty(flavor)) {
                 flavor += "-";
@@ -233,8 +233,8 @@ public class Matrix {
             Log.e(LOG_TAG, "## versionName() : failed " + e.getMessage());
         }
 
-        String gitVersion = mAppContext.getResources().getString(R.string.git_revision);
-        String buildNumber = mAppContext.getResources().getString(R.string.build_number);
+        String gitVersion = mAppContext.getString(R.string.git_revision);
+        String buildNumber = mAppContext.getString(R.string.build_number);
 
         if ((useBuildNumber) && !TextUtils.equals(buildNumber, "0")) {
             gitVersion = "b" + buildNumber;
@@ -242,7 +242,7 @@ public class Matrix {
         }
 
         if (longformat) {
-            String date = mAppContext.getResources().getString(R.string.git_revision_date);
+            String date = mAppContext.getString(R.string.git_revision_date);
             versionName += " (" + flavor + gitVersion + "-" + date + ")";
         } else {
             versionName += " (" + flavor + gitVersion + ")";

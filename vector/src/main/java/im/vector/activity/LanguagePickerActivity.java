@@ -30,12 +30,15 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Filter;
 
+import org.jetbrains.annotations.NotNull;
+
 import java.util.Locale;
 
 import im.vector.R;
 import im.vector.VectorApp;
 import im.vector.adapters.LanguagesAdapter;
 import im.vector.util.ThemeUtils;
+import kotlin.Pair;
 
 public class LanguagePickerActivity extends RiotAppCompatActivity implements LanguagesAdapter.OnSelectLocaleListener, SearchView.OnQueryTextListener {
 
@@ -58,6 +61,12 @@ public class LanguagePickerActivity extends RiotAppCompatActivity implements Lan
      * Activity lifecycle
      * *********************************************************************************************
      */
+
+    @NotNull
+    @Override
+    public Pair getOtherThemes() {
+        return new Pair(R.style.CountryPickerTheme_Dark, R.style.CountryPickerTheme_Black);
+    }
 
     @Override
     public int getLayoutRes() {
@@ -83,10 +92,12 @@ public class LanguagePickerActivity extends RiotAppCompatActivity implements Lan
     }
 
     @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.menu_languages_picker, menu);
-        CommonActivityUtils.tintMenuIcons(menu, ThemeUtils.getColor(this, R.attr.icon_tint_on_dark_action_bar_color));
+    public int getMenuRes() {
+        return R.menu.menu_languages_picker;
+    }
 
+    @Override
+    public boolean onPrepareOptionsMenu(Menu menu) {
         final MenuItem searchItem = menu.findItem(R.id.action_search);
         if (searchItem != null) {
             SearchManager searchManager = (SearchManager) getSystemService(Context.SEARCH_SERVICE);
@@ -97,7 +108,7 @@ public class LanguagePickerActivity extends RiotAppCompatActivity implements Lan
             mSearchView.setSearchableInfo(searchManager.getSearchableInfo(getComponentName()));
             mSearchView.setOnQueryTextListener(this);
             SearchView.SearchAutoComplete searchAutoComplete = mSearchView.findViewById(android.support.v7.appcompat.R.id.search_src_text);
-            searchAutoComplete.setHintTextColor(ThemeUtils.getColor(this, R.attr.default_text_hint_color));
+            searchAutoComplete.setHintTextColor(ThemeUtils.INSTANCE.getColor(this, R.attr.default_text_hint_color));
         }
         return true;
     }

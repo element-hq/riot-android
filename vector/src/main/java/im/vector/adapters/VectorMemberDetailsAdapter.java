@@ -284,13 +284,13 @@ public class VectorMemberDetailsAdapter extends BaseExpandableListAdapter {
      */
     private String getGroupTitle(int groupPosition) {
         if (groupPosition == mAdminGroupPosition) {
-            return mContext.getResources().getString(R.string.room_participants_header_admin_tools);
+            return mContext.getString(R.string.room_participants_header_admin_tools);
         } else if (groupPosition == mCallGroupPosition) {
-            return mContext.getResources().getString(R.string.room_participants_header_call);
+            return mContext.getString(R.string.room_participants_header_call);
         } else if (groupPosition == mDirectCallsGroupPosition) {
-            return mContext.getResources().getString(R.string.room_participants_header_direct_chats);
+            return mContext.getString(R.string.room_participants_header_direct_chats);
         } else if (groupPosition == mDevicesGroupPosition) {
-            return mContext.getResources().getString(R.string.room_participants_header_devices);
+            return mContext.getString(R.string.room_participants_header_devices);
         }
 
         return "???";
@@ -367,7 +367,7 @@ public class VectorMemberDetailsAdapter extends BaseExpandableListAdapter {
         // room selection
         if (null != currentItem.mRoom) {
             // room name
-            viewHolder.mActionDescTextView.setTextColor(ThemeUtils.getColor(mContext, R.attr.riot_primary_text_color));
+            viewHolder.mActionDescTextView.setTextColor(ThemeUtils.INSTANCE.getColor(mContext, R.attr.riot_primary_text_color));
             viewHolder.mActionDescTextView.setText(VectorUtils.getRoomDisplayName(mContext, mSession, currentItem.mRoom));
 
             // room avatar
@@ -395,11 +395,11 @@ public class VectorMemberDetailsAdapter extends BaseExpandableListAdapter {
 
             if (currentItem.mIconResourceId != R.drawable.ic_remove_circle_outline_red) {
                 viewHolder.mActionImageView.setImageDrawable(
-                        CommonActivityUtils.tintDrawable(mContext, viewHolder.mActionImageView.getDrawable(), R.attr.settings_icon_tint_color));
+                        ThemeUtils.INSTANCE.tintDrawable(mContext, viewHolder.mActionImageView.getDrawable(), R.attr.settings_icon_tint_color));
             }
 
             // update the text colour: specific colour is required for the remove action
-            int colourTxt = ThemeUtils.getColor(mContext, R.attr.riot_primary_text_color);
+            int colourTxt = ThemeUtils.INSTANCE.getColor(mContext, R.attr.riot_primary_text_color);
 
             if (VectorMemberDetailsActivity.ITEM_ACTION_KICK == currentItem.mActionType) {
                 colourTxt = ContextCompat.getColor(mContext, R.color.vector_fuchsia_color);

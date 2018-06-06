@@ -163,7 +163,7 @@ public class VectorMessageListFragment extends MatrixMessageListFragment impleme
             }
         });
 
-        v.setBackgroundColor(ThemeUtils.getColor(getActivity(), R.attr.riot_primary_background_color));
+        v.setBackgroundColor(ThemeUtils.INSTANCE.getColor(getActivity(), R.attr.riot_primary_background_color));
 
         return v;
     }
@@ -371,14 +371,14 @@ public class VectorMessageListFragment extends MatrixMessageListFragment impleme
         if (null != deviceInfo) {
             textView.setText(encryptedEventContent.sender_key);
         } else {
-            textView.setText(getActivity().getString(R.string.encryption_information_none));
+            textView.setText(R.string.encryption_information_none);
         }
 
         textView = layout.findViewById(R.id.encrypted_info_claimed_ed25519_fingerprint_key);
         if (null != deviceInfo) {
             textView.setText(MatrixSdkExtensionsKt.getFingerprintHumanReadable(deviceInfo));
         } else {
-            textView.setText(getActivity().getString(R.string.encryption_information_none));
+            textView.setText(R.string.encryption_information_none);
         }
 
         textView = layout.findViewById(R.id.encrypted_info_algorithm);
@@ -415,11 +415,11 @@ public class VectorMessageListFragment extends MatrixMessageListFragment impleme
             textView = layout.findViewById(R.id.encrypted_info_verification);
 
             if (deviceInfo.isUnknown() || deviceInfo.isUnverified()) {
-                textView.setText(getActivity().getString(R.string.encryption_information_not_verified));
+                textView.setText(R.string.encryption_information_not_verified);
             } else if (deviceInfo.isVerified()) {
-                textView.setText(getActivity().getString(R.string.encryption_information_verified));
+                textView.setText(R.string.encryption_information_verified);
             } else {
-                textView.setText(getActivity().getString(R.string.encryption_information_blocked));
+                textView.setText(R.string.encryption_information_blocked);
             }
 
             textView = layout.findViewById(R.id.encrypted_ed25519_fingerprint);

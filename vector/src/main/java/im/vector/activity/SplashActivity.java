@@ -20,6 +20,7 @@ package im.vector.activity;
 import android.content.Intent;
 import android.os.Bundle;
 
+import org.jetbrains.annotations.NotNull;
 import org.matrix.androidsdk.MXSession;
 import org.matrix.androidsdk.listeners.IMXEventListener;
 import org.matrix.androidsdk.listeners.MXEventListener;
@@ -36,6 +37,7 @@ import im.vector.VectorApp;
 import im.vector.gcm.GcmRegistrationManager;
 import im.vector.receiver.VectorUniversalLinkReceiver;
 import im.vector.services.EventStreamService;
+import kotlin.Pair;
 
 /**
  * SplashActivity displays a splash while loading and inittializing the client.
@@ -106,6 +108,12 @@ public class SplashActivity extends MXCActionBarActivity {
         } else {
             CommonActivityUtils.logout(this);
         }
+    }
+
+    @NotNull
+    @Override
+    public Pair getOtherThemes() {
+        return new Pair(R.style.AppTheme_NoActionBar_Dark, R.style.AppTheme_NoActionBar_Black);
     }
 
     @Override

@@ -20,7 +20,6 @@ package im.vector.activity;
 
 import android.Manifest;
 import android.annotation.SuppressLint;
-import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.NotificationManager;
 import android.content.ContentValues;
@@ -68,6 +67,7 @@ import android.widget.Toast;
 
 import com.google.gson.JsonParser;
 
+import org.jetbrains.annotations.NotNull;
 import org.matrix.androidsdk.MXSession;
 import org.matrix.androidsdk.call.IMXCall;
 import org.matrix.androidsdk.call.IMXCallListener;
@@ -121,6 +121,7 @@ import im.vector.fragments.VectorUnknownDevicesFragment;
 import im.vector.notifications.NotificationUtils;
 import im.vector.services.EventStreamService;
 import im.vector.util.CallsManager;
+import im.vector.util.MatrixSdkExtensionsKt;
 import im.vector.util.MatrixURLSpan;
 import im.vector.util.PreferencesManager;
 import im.vector.util.ReadMarkerManager;
@@ -136,6 +137,7 @@ import im.vector.view.VectorOngoingConferenceCallView;
 import im.vector.view.VectorPendingCallView;
 import im.vector.widgets.Widget;
 import im.vector.widgets.WidgetsManager;
+import kotlin.Pair;
 
 /**
  * Displays a single room with messages.
@@ -561,6 +563,12 @@ public class VectorRoomActivity extends MXCActionBarActivity implements
     // Activity classes
     //================================================================================
 
+    @NotNull
+    @Override
+    public Pair getOtherThemes() {
+        return new Pair(R.style.AppTheme_NoActionBar_Dark, R.style.AppTheme_NoActionBar_Black);
+    }
+
     @Override
     public int getLayoutRes() {
         return R.layout.activity_vector_room;
@@ -749,8 +757,8 @@ public class VectorRoomActivity extends MXCActionBarActivity implements
                     }
 
                     fragment = IconAndTextDialogFragment.newInstance(icons, messages,
-                            ThemeUtils.getColor(VectorRoomActivity.this, R.attr.riot_primary_background_color),
-                            ThemeUtils.getColor(VectorRoomActivity.this, R.attr.riot_primary_text_color));
+                            ThemeUtils.INSTANCE.getColor(VectorRoomActivity.this, R.attr.riot_primary_background_color),
+                            ThemeUtils.INSTANCE.getColor(VectorRoomActivity.this, R.attr.riot_primary_text_color));
                     fragment.setOnClickListener(new IconAndTextDialogFragment.OnItemClickListener() {
                         @Override
                         public void onItemClick(IconAndTextDialogFragment dialogFragment, int position) {
@@ -1022,7 +1030,7 @@ public class VectorRoomActivity extends MXCActionBarActivity implements
 
                                     private void onError(String errorMessage) {
                                         hideWaitingView();
-                                        CommonActivityUtils.displayToast(VectorRoomActivity.this, errorMessage);
+                                        Toast.makeText(VectorRoomActivity.this, errorMessage, Toast.LENGTH_SHORT).show();
                                     }
 
                                     @Override
@@ -1129,7 +1137,7 @@ public class VectorRoomActivity extends MXCActionBarActivity implements
 
                     private void onError(String errorMessage) {
                         hideWaitingView();
-                        CommonActivityUtils.displayToast(VectorRoomActivity.this, errorMessage);
+                        Toast.makeText(VectorRoomActivity.this, errorMessage, Toast.LENGTH_SHORT).show();
                     }
 
                     @Override
@@ -1564,8 +1572,14 @@ public class VectorRoomActivity extends MXCActionBarActivity implements
     // Menu management
     //================================================================================
 
+
     @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
+    public int getMenuRes() {
+        return R.menu.vector_room;
+    }
+
+    @Override
+    public boolean onPrepareOptionsMenu(Menu menu) {
         // the application is in a weird state
         // GA : mSession is null
         if (CommonActivityUtils.shouldRestartApp(this) || (null == mSession)) {
@@ -1574,10 +1588,6 @@ public class VectorRoomActivity extends MXCActionBarActivity implements
 
         // the menu is only displayed when the current activity does not display a timeline search
         if (TextUtils.isEmpty(mEventId) && (null == sRoomPreviewData)) {
-            // Inflate the menu; this adds items to the action bar if it is present.
-            getMenuInflater().inflate(R.menu.vector_room, menu);
-            CommonActivityUtils.tintMenuIcons(menu, ThemeUtils.getColor(this, R.attr.icon_tint_on_dark_action_bar_color));
-
             mResendUnsentMenuItem = menu.findItem(R.id.ic_action_room_resend_unsent);
             mResendDeleteMenuItem = menu.findItem(R.id.ic_action_room_delete_unsent);
             mSearchInRoomMenuItem = menu.findItem(R.id.ic_action_search_in_room);
@@ -1755,8 +1765,8 @@ public class VectorRoomActivity extends MXCActionBarActivity implements
         final Integer[] lTexts = new Integer[]{R.string.action_voice_call, R.string.action_video_call};
 
         IconAndTextDialogFragment fragment = IconAndTextDialogFragment.newInstance(lIcons, lTexts,
-                ThemeUtils.getColor(this, R.attr.riot_primary_background_color),
-                ThemeUtils.getColor(this, R.attr.riot_primary_text_color));
+                ThemeUtils.INSTANCE.getColor(this, R.attr.riot_primary_background_color),
+                ThemeUtils.INSTANCE.getColor(this, R.attr.riot_primary_text_color));
         fragment.setOnClickListener(new IconAndTextDialogFragment.OnItemClickListener() {
             @Override
             public void onItemClick(IconAndTextDialogFragment dialogFragment, int position) {
@@ -1838,7 +1848,7 @@ public class VectorRoomActivity extends MXCActionBarActivity implements
 
             private void onError(String errorMessage) {
                 hideWaitingView();
-                CommonActivityUtils.displayToast(VectorRoomActivity.this, errorMessage);
+                Toast.makeText(VectorRoomActivity.this, errorMessage, Toast.LENGTH_SHORT).show();
             }
 
             @Override
@@ -1904,8 +1914,8 @@ public class VectorRoomActivity extends MXCActionBarActivity implements
                     @Override
                     public void run() {
                         hideWaitingView();
-                        Activity activity = VectorRoomActivity.this;
-                        CommonActivityUtils.displayToastOnUiThread(activity, activity.getString(R.string.cannot_start_call) + " (" + errorMessage + ")");
+                        Toast.makeText(VectorRoomActivity.this,
+                                getString(R.string.cannot_start_call) + " (" + errorMessage + ")", Toast.LENGTH_SHORT).show();
                     }
                 });
             }
@@ -2473,7 +2483,7 @@ public class VectorRoomActivity extends MXCActionBarActivity implements
                     launchNativeVideoRecorder();
                 }
             } else {
-                CommonActivityUtils.displayToast(this, getString(R.string.missing_permissions_warning));
+                Toast.makeText(this, getString(R.string.missing_permissions_warning), Toast.LENGTH_SHORT).show();
             }
         } else if (aRequestCode == CommonActivityUtils.REQUEST_CODE_PERMISSION_AUDIO_IP_CALL) {
             if (CommonActivityUtils.onPermissionResultAudioIpCall(this, aPermissions, aGrantResults)) {
@@ -2658,11 +2668,11 @@ public class VectorRoomActivity extends MXCActionBarActivity implements
             isAreaVisible = true;
             iconId = R.drawable.error;
             textColor = ContextCompat.getColor(VectorRoomActivity.this, R.color.vector_fuchsia_color);
-            text = new SpannableString(getResources().getString(R.string.room_offline_notification));
+            text = new SpannableString(getString(R.string.room_offline_notification));
         } else if (mIsUnreadPreviewMode) {
             isAreaVisible = true;
             iconId = R.drawable.scrolldown;
-            textColor = ThemeUtils.getColor(this, R.attr.room_notification_text_color);
+            textColor = ThemeUtils.INSTANCE.getColor(this, R.attr.room_notification_text_color);
 
             mNotificationIconImageView.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -2683,9 +2693,9 @@ public class VectorRoomActivity extends MXCActionBarActivity implements
                 isAreaVisible = true;
                 iconId = R.drawable.error;
 
-                String cancelAll = getResources().getString(R.string.room_prompt_cancel);
-                String resendAll = getResources().getString(R.string.room_prompt_resend);
-                String message = getResources().getString(hasUnknownDeviceEvents ?
+                String cancelAll = getString(R.string.room_prompt_cancel);
+                String resendAll = getString(R.string.room_prompt_resend);
+                String message = getString(hasUnknownDeviceEvents ?
                         R.string.room_unknown_devices_messages_notification : R.string.room_unsent_messages_notification, resendAll, cancelAll);
 
                 int cancelAllPos = message.indexOf(cancelAll);
@@ -2723,7 +2733,7 @@ public class VectorRoomActivity extends MXCActionBarActivity implements
                     text = new SpannableString(getResources().getQuantityString(R.plurals.room_new_messages_notification, unreadCount, unreadCount));
                 } else {
                     iconId = R.drawable.scrolldown;
-                    textColor = ThemeUtils.getColor(this, R.attr.room_notification_text_color);
+                    textColor = ThemeUtils.INSTANCE.getColor(this, R.attr.room_notification_text_color);
 
                     if (!TextUtils.isEmpty(mLatestTypingMessage)) {
                         text = new SpannableString(mLatestTypingMessage);
@@ -2757,7 +2767,7 @@ public class VectorRoomActivity extends MXCActionBarActivity implements
 
                 iconId = R.drawable.vector_typing;
                 text = new SpannableString(mLatestTypingMessage);
-                textColor = ThemeUtils.getColor(this, R.attr.room_notification_text_color);
+                textColor = ThemeUtils.INSTANCE.getColor(this, R.attr.room_notification_text_color);
             }
         }
 
@@ -3025,7 +3035,7 @@ public class VectorRoomActivity extends MXCActionBarActivity implements
 
             // in context mode, add search to the title.
             if (!TextUtils.isEmpty(mEventId) && !mIsUnreadPreviewMode) {
-                titleToApply = getResources().getText(R.string.search) + " : " + titleToApply;
+                titleToApply = getText(R.string.search) + " : " + titleToApply;
             }
         } else if (null != sRoomPreviewData) {
             titleToApply = sRoomPreviewData.getRoomName();
@@ -3193,7 +3203,7 @@ public class VectorRoomActivity extends MXCActionBarActivity implements
                         String text;
 
                         if (joinedMembersCount == 1) {
-                            text = getResources().getString(R.string.room_title_one_member);
+                            text = getString(R.string.room_title_one_member);
                         } else if (null != sRoomPreviewData) {
                             text = getResources().getQuantityString(R.plurals.room_title_members, joinedMembersCount, joinedMembersCount);
                         } else {
@@ -3272,7 +3282,7 @@ public class VectorRoomActivity extends MXCActionBarActivity implements
                 // hide the action bar header view and reset the arrow image (arrow reset to down)
                 mActionBarCustomArrowImageView.setImageResource(R.drawable.ic_arrow_drop_down_white);
                 mRoomHeaderView.setVisibility(View.GONE);
-                mToolbar.setBackgroundColor(ThemeUtils.getColor(this, R.attr.primary_color));
+                mToolbar.setBackgroundColor(ThemeUtils.INSTANCE.getColor(this, R.attr.primary_color));
             }
         }
     }
@@ -3339,7 +3349,7 @@ public class VectorRoomActivity extends MXCActionBarActivity implements
 
                         private void onError(String errorMessage) {
                             Log.d(LOG_TAG, "re join failed " + errorMessage);
-                            CommonActivityUtils.displayToast(VectorRoomActivity.this, errorMessage);
+                            Toast.makeText(VectorRoomActivity.this, errorMessage, Toast.LENGTH_SHORT).show();
                             hideWaitingView();
                         }
 
@@ -3380,7 +3390,7 @@ public class VectorRoomActivity extends MXCActionBarActivity implements
 
                     private void onError(String errorMessage) {
                         Log.d(LOG_TAG, "forget failed " + errorMessage);
-                        CommonActivityUtils.displayToast(VectorRoomActivity.this, errorMessage);
+                        Toast.makeText(VectorRoomActivity.this, errorMessage, Toast.LENGTH_SHORT).show();
                         hideWaitingView();
                     }
 
@@ -3456,7 +3466,7 @@ public class VectorRoomActivity extends MXCActionBarActivity implements
                     }
                 }
 
-                invitationTextView.setText(getResources().getString(R.string.room_preview_invitation_format, inviter));
+                invitationTextView.setText(getString(R.string.room_preview_invitation_format, inviter));
 
                 declineButton.setOnClickListener(new View.OnClickListener() {
                     @Override
@@ -3474,7 +3484,7 @@ public class VectorRoomActivity extends MXCActionBarActivity implements
 
                             private void onError(String errorMessage) {
                                 Log.d(LOG_TAG, "The invitation rejection failed " + errorMessage);
-                                CommonActivityUtils.displayToast(VectorRoomActivity.this, errorMessage);
+                                Toast.makeText(VectorRoomActivity.this, errorMessage, Toast.LENGTH_SHORT).show();
                                 hideWaitingView();
                             }
 
@@ -3544,7 +3554,7 @@ public class VectorRoomActivity extends MXCActionBarActivity implements
                             }
 
                             private void onError(String errorMessage) {
-                                CommonActivityUtils.displayToast(VectorRoomActivity.this, errorMessage);
+                                Toast.makeText(VectorRoomActivity.this, errorMessage, Toast.LENGTH_SHORT).show();
                                 hideWaitingView();
                             }
 
@@ -3663,7 +3673,7 @@ public class VectorRoomActivity extends MXCActionBarActivity implements
 
                 private void onDone(String errorMessage) {
                     if (!TextUtils.isEmpty(errorMessage)) {
-                        CommonActivityUtils.displayToast(VectorRoomActivity.this, errorMessage);
+                        Toast.makeText(VectorRoomActivity.this, errorMessage, Toast.LENGTH_SHORT).show();
                     }
                     hideWaitingView();
                 }
@@ -3726,7 +3736,7 @@ public class VectorRoomActivity extends MXCActionBarActivity implements
 
                                     private void onDone(String message) {
                                         if (!TextUtils.isEmpty(message)) {
-                                            CommonActivityUtils.displayToast(VectorRoomActivity.this, message);
+                                            Toast.makeText(VectorRoomActivity.this, message, Toast.LENGTH_SHORT).show();
                                         }
 
                                         hideWaitingView();
@@ -3774,7 +3784,7 @@ public class VectorRoomActivity extends MXCActionBarActivity implements
         alertDialogBuilder.setView(dialogView);
 
         TextView titleText = dialogView.findViewById(R.id.dialog_title);
-        titleText.setText(getResources().getString(R.string.room_info_room_name));
+        titleText.setText(R.string.room_info_room_name);
 
         final EditText textInput = dialogView.findViewById(R.id.dialog_edit_text);
         textInput.setText(mRoom.getLiveState().name);
@@ -3791,7 +3801,7 @@ public class VectorRoomActivity extends MXCActionBarActivity implements
 
                                     private void onDone(String message) {
                                         if (!TextUtils.isEmpty(message)) {
-                                            CommonActivityUtils.displayToast(VectorRoomActivity.this, message);
+                                            Toast.makeText(VectorRoomActivity.this, message, Toast.LENGTH_SHORT).show();
                                         }
 
                                         hideWaitingView();
@@ -3847,7 +3857,7 @@ public class VectorRoomActivity extends MXCActionBarActivity implements
         alertDialogBuilder.setView(dialogView);
 
         TextView titleText = dialogView.findViewById(R.id.dialog_title);
-        titleText.setText(getResources().getString(R.string.room_info_room_topic));
+        titleText.setText(R.string.room_info_room_topic);
 
         final EditText textInput = dialogView.findViewById(R.id.dialog_edit_text);
         textInput.setText(mRoom.getLiveState().topic);
@@ -3864,7 +3874,7 @@ public class VectorRoomActivity extends MXCActionBarActivity implements
 
                                     private void onDone(String message) {
                                         if (!TextUtils.isEmpty(message)) {
-                                            CommonActivityUtils.displayToast(VectorRoomActivity.this, message);
+                                            Toast.makeText(VectorRoomActivity.this, message, Toast.LENGTH_SHORT).show();
                                         }
 
                                         hideWaitingView();
@@ -3920,7 +3930,7 @@ public class VectorRoomActivity extends MXCActionBarActivity implements
                 public void onClick(View v) {
                     // sanity checks : reported by GA
                     if ((null != mRoom) && (null != mRoom.getLiveState())) {
-                        if (CommonActivityUtils.isPowerLevelEnoughForAvatarUpdate(mRoom, mSession)) {
+                        if (MatrixSdkExtensionsKt.isPowerLevelEnoughForAvatarUpdate(mRoom, mSession)) {
                             // need to check if the camera permission has been granted
                             if (CommonActivityUtils.checkPermissions(CommonActivityUtils.REQUEST_CODE_PERMISSION_ROOM_DETAILS, VectorRoomActivity.this)) {
                                 Intent intent = new Intent(VectorRoomActivity.this, VectorMediasPickerActivity.class);

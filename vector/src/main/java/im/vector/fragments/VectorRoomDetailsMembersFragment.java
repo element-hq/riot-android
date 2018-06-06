@@ -491,7 +491,7 @@ public class VectorRoomDetailsMembersFragment extends VectorBaseFragment {
 
         // Inflate the menu; this adds items to the action bar if it is present.
         getActivity().getMenuInflater().inflate(R.menu.vector_room_details_add_people, menu);
-        CommonActivityUtils.tintMenuIcons(menu, ThemeUtils.getColor(getContext(), R.attr.icon_tint_on_dark_action_bar_color));
+        ThemeUtils.INSTANCE.tintMenuIcons(menu, ThemeUtils.INSTANCE.getColor(getContext(), R.attr.icon_tint_on_dark_action_bar_color));
 
         mRemoveMembersMenuItem = menu.findItem(R.id.ic_action_room_details_delete);
         mSwitchDeletionMenuItem = menu.findItem(R.id.ic_action_room_details_edition_mode);
@@ -865,7 +865,7 @@ public class VectorRoomDetailsMembersFragment extends VectorBaseFragment {
                 ArrayList<String> userIds = mAdapter.getSelectedUserIds();
 
                 if (0 != userIds.size()) {
-                    setActivityTitle(userIds.size() + " " + getActivity().getResources().getString(R.string.room_details_selected));
+                    setActivityTitle(userIds.size() + " " + getString(R.string.room_details_selected));
                 } else {
                     resetActivityTitle();
                 }
@@ -873,7 +873,7 @@ public class VectorRoomDetailsMembersFragment extends VectorBaseFragment {
 
             @Override
             public void onRemoveClick(final ParticipantAdapterItem participantItem) {
-                String text = getActivity().getString(R.string.room_participants_remove_prompt_msg, participantItem.mDisplayName);
+                String text = getString(R.string.room_participants_remove_prompt_msg, participantItem.mDisplayName);
 
                 // The user is trying to leave with unsaved changes. Warn about that
                 new AlertDialog.Builder(getActivity())
@@ -907,7 +907,7 @@ public class VectorRoomDetailsMembersFragment extends VectorBaseFragment {
                 // The user is trying to leave with unsaved changes. Warn about that
                 new AlertDialog.Builder(getActivity())
                         .setTitle(R.string.room_participants_leave_prompt_title)
-                        .setMessage(getActivity().getString(R.string.room_participants_leave_prompt_msg))
+                        .setMessage(R.string.room_participants_leave_prompt_msg)
                         .setPositiveButton(R.string.leave, new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {

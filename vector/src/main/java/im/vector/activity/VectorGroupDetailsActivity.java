@@ -203,7 +203,7 @@ public class VectorGroupDetailsActivity extends MXCActionBarActivity {
         mPager.setAdapter(mPagerAdapter);
 
         TabLayout layout = findViewById(R.id.group_tabs);
-        ThemeUtils.setTabLayoutTheme(this, layout);
+        ThemeUtils.INSTANCE.setTabLayoutTheme(this, layout);
 
         if (intent.hasExtra(EXTRA_TAB_INDEX)) {
             mPager.setCurrentItem(getIntent().getIntExtra(EXTRA_TAB_INDEX, 0));

@@ -178,17 +178,17 @@ public class VectorRoomSummaryAdapter extends BaseExpandableListAdapter {
         String retValue;
 
         if (mRoomByAliasGroupPosition == groupPosition) {
-            retValue = mContext.getResources().getString(R.string.room_recents_join);
+            retValue = mContext.getString(R.string.room_recents_join);
         } else if (mDirectoryGroupPosition == groupPosition) {
-            retValue = mContext.getResources().getString(R.string.room_recents_directory);
+            retValue = mContext.getString(R.string.room_recents_directory);
         } else if (mFavouritesGroupPosition == groupPosition) {
-            retValue = mContext.getResources().getString(R.string.room_recents_favourites);
+            retValue = mContext.getString(R.string.room_recents_favourites);
         } else if (mNoTagGroupPosition == groupPosition) {
-            retValue = mContext.getResources().getString(R.string.room_recents_conversations);
+            retValue = mContext.getString(R.string.room_recents_conversations);
         } else if (mLowPriorGroupPosition == groupPosition) {
-            retValue = mContext.getResources().getString(R.string.room_recents_low_priority);
+            retValue = mContext.getString(R.string.room_recents_low_priority);
         } else if (mInvitedGroupPosition == groupPosition) {
-            retValue = mContext.getResources().getString(R.string.room_recents_invites);
+            retValue = mContext.getString(R.string.room_recents_invites);
         } else {
             // unknown section
             retValue = "??";
@@ -667,9 +667,9 @@ public class VectorRoomSummaryAdapter extends BaseExpandableListAdapter {
             return convertView;
         }
 
-        int roomNameBlack = ThemeUtils.getColor(mContext, R.attr.riot_primary_text_color);
+        int roomNameBlack = ThemeUtils.INSTANCE.getColor(mContext, R.attr.riot_primary_text_color);
         int fushiaColor = ContextCompat.getColor(mContext, R.color.vector_fuchsia_color);
-        int vectorDefaultTimeStampColor = ThemeUtils.getColor(mContext, R.attr.default_text_light_color);
+        int vectorDefaultTimeStampColor = ThemeUtils.INSTANCE.getColor(mContext, R.attr.default_text_light_color);
         int vectorGreenColor = ContextCompat.getColor(mContext, R.color.vector_green_color);
         int vectorSilverColor = ContextCompat.getColor(mContext, R.color.vector_silver_color);
 
@@ -710,11 +710,11 @@ public class VectorRoomSummaryAdapter extends BaseExpandableListAdapter {
             encryptedIcon.setVisibility(View.GONE);
 
             if (mDirectoryGroupPosition == groupPosition) {
-                roomNameTxtView.setText(mContext.getResources().getString(R.string.directory_search_results_title));
+                roomNameTxtView.setText(mContext.getString(R.string.directory_search_results_title));
 
                 if (!TextUtils.isEmpty(mSearchedPattern)) {
                     if (null == mMatchedPublicRoomsCount) {
-                        roomMsgTxtView.setText(mContext.getResources().getString(R.string.directory_searching_title));
+                        roomMsgTxtView.setText(mContext.getString(R.string.directory_searching_title));
                     } else {
                         String value = mMatchedPublicRoomsCount.toString();
 
@@ -916,7 +916,7 @@ public class VectorRoomSummaryAdapter extends BaseExpandableListAdapter {
             if (aChildRoomSummary.getLatestReceivedEvent() != null) {
                 eventDisplay = new RiotEventDisplay(mContext, aChildRoomSummary.getLatestReceivedEvent(), aChildRoomSummary.getLatestRoomState());
                 eventDisplay.setPrependMessagesWithAuthor(true);
-                messageToDisplayRetValue = eventDisplay.getTextualDisplay(ThemeUtils.getColor(mContext, R.attr.riot_primary_text_color));
+                messageToDisplayRetValue = eventDisplay.getTextualDisplay(ThemeUtils.INSTANCE.getColor(mContext, R.attr.riot_primary_text_color));
             }
 
             // check if this is an invite

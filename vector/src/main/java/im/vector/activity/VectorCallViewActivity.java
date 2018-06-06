@@ -45,6 +45,7 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 
+import org.jetbrains.annotations.NotNull;
 import org.matrix.androidsdk.MXSession;
 import org.matrix.androidsdk.call.CallSoundsManager;
 import org.matrix.androidsdk.call.IMXCall;
@@ -64,7 +65,9 @@ import im.vector.R;
 import im.vector.VectorApp;
 import im.vector.util.CallsManager;
 import im.vector.util.VectorUtils;
+import im.vector.util.ViewUtilKt;
 import im.vector.view.VectorPendingCallView;
+import kotlin.Pair;
 
 /**
  * VectorCallViewActivity is the call activity.
@@ -310,6 +313,12 @@ public class VectorCallViewActivity extends RiotAppCompatActivity implements Sen
             // init as GONE, will be displayed according to call states..
             mCall.setVisibility(View.GONE);
         }
+    }
+
+    @NotNull
+    @Override
+    public Pair getOtherThemes() {
+        return new Pair(R.style.CallActivityTheme_Dark, R.style.CallActivityTheme_Black);
     }
 
     @Override
@@ -852,7 +861,7 @@ public class VectorCallViewActivity extends RiotAppCompatActivity implements Sen
     /**
      * Set the fading effect on the view above the UI video.
      *
-     * @param aOpacity      UTILS_OPACITY_FULL to fade out, UTILS_OPACITY_NONE to fade in
+     * @param aOpacity      UTILS_OPACITY_NONE to fade out, UTILS_OPACITY_FULL to fade in
      * @param aAnimDuration animation duration in milliseconds
      */
     private void fadeVideoEdge(final float aOpacity, int aAnimDuration) {
@@ -873,7 +882,7 @@ public class VectorCallViewActivity extends RiotAppCompatActivity implements Sen
                         super.onAnimationEnd(animation);
 
                         // set to GONE after the fade out, so buttons can not not be accessed by the user
-                        if (CommonActivityUtils.UTILS_OPACITY_FULL == aOpacity) {
+                        if (ViewUtilKt.UTILS_OPACITY_NONE == aOpacity) {
                             mButtonsContainerView.setVisibility(View.GONE);
                         } else {
                             // restore visibility after fade in
@@ -889,14 +898,14 @@ public class VectorCallViewActivity extends RiotAppCompatActivity implements Sen
      * Remove the views (buttons settings + pending call view) above the video call with a fade out animation.
      */
     private void fadeOutVideoEdge() {
-        fadeVideoEdge(CommonActivityUtils.UTILS_OPACITY_FULL, FADE_OUT_DURATION);
+        fadeVideoEdge(ViewUtilKt.UTILS_OPACITY_NONE, FADE_OUT_DURATION);
     }
 
     /**
      * Restore the views (buttons settings + pending call view) above the video call with a fade in animation.
      */
     private void fadeInVideoEdge() {
-        fadeVideoEdge(CommonActivityUtils.UTILS_OPACITY_NONE, FADE_IN_DURATION);
+        fadeVideoEdge(ViewUtilKt.UTILS_OPACITY_FULL, FADE_IN_DURATION);
     }
 
     //==============================================================================================================

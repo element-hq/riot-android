@@ -116,6 +116,7 @@ import im.vector.preference.UserAvatarPreference;
 import im.vector.preference.VectorCustomActionEditTextPreference;
 import im.vector.preference.VectorGroupPreference;
 import im.vector.preference.VectorSwitchPreference;
+import im.vector.settings.FontScale;
 import im.vector.util.MatrixSdkExtensionsKt;
 import im.vector.util.PhoneNumberUtils;
 import im.vector.util.PreferencesManager;
@@ -1102,7 +1103,7 @@ public class VectorSettingsPreferencesFragment extends PreferenceFragment implem
         addEmailPreference.setTitle(R.string.settings_add_email_address);
         addEmailPreference.setDialogTitle(R.string.settings_add_email_address);
         addEmailPreference.setKey(ADD_EMAIL_PREFERENCE_KEY);
-        addEmailPreference.setIcon(CommonActivityUtils.tintDrawable(getActivity(),
+        addEmailPreference.setIcon(ThemeUtils.INSTANCE.tintDrawable(getActivity(),
                 ContextCompat.getDrawable(getActivity(), R.drawable.ic_add_black), R.attr.settings_icon_tint_color));
         addEmailPreference.setOrder(100);
         addEmailPreference.getEditText().setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_EMAIL_ADDRESS);
@@ -1129,7 +1130,7 @@ public class VectorSettingsPreferencesFragment extends PreferenceFragment implem
         // display the "add phone number" entry
         Preference addPhoneNumberPreference = new Preference(getActivity());
         addPhoneNumberPreference.setKey(ADD_PHONE_NUMBER_PREFERENCE_KEY);
-        addPhoneNumberPreference.setIcon(CommonActivityUtils.tintDrawable(getActivity(),
+        addPhoneNumberPreference.setIcon(ThemeUtils.INSTANCE.tintDrawable(getActivity(),
                 ContextCompat.getDrawable(getActivity(), R.drawable.ic_add_black), R.attr.settings_icon_tint_color));
         addPhoneNumberPreference.setTitle(R.string.settings_add_phone_number);
         addPhoneNumberPreference.setOrder(200);
@@ -2244,7 +2245,7 @@ public class VectorSettingsPreferencesFragment extends PreferenceFragment implem
 
         VectorCustomActionEditTextPreference textSizePreference
                 = (VectorCustomActionEditTextPreference) findPreference(PreferencesManager.SETTINGS_INTERFACE_TEXT_SIZE_KEY);
-        textSizePreference.setSummary(VectorApp.getFontScaleDescription());
+        textSizePreference.setSummary(FontScale.INSTANCE.getFontScaleDescription());
 
         textSizePreference.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
             @Override
@@ -2280,7 +2281,7 @@ public class VectorSettingsPreferencesFragment extends PreferenceFragment implem
 
         int childCount = linearLayout.getChildCount();
 
-        String scaleText = VectorApp.getFontScale();
+        String scaleText = FontScale.INSTANCE.getFontScalePrefValue();
 
         for (int i = 0; i < childCount; i++) {
             View v = linearLayout.getChildAt(i);
@@ -2293,7 +2294,7 @@ public class VectorSettingsPreferencesFragment extends PreferenceFragment implem
                     @Override
                     public void onClick(View v) {
                         dialog.dismiss();
-                        VectorApp.updateFontScale(checkedTextView.getText().toString());
+                        FontScale.INSTANCE.updateFontScale(checkedTextView.getText().toString());
                         activity.startActivity(activity.getIntent());
                         activity.finish();
                     }
@@ -2774,7 +2775,8 @@ public class VectorSettingsPreferencesFragment extends PreferenceFragment implem
         } else {
             Log.e(LOG_TAG, "## displayDeviceDetailsDialog(): sanity check failure");
             if (null != getActivity())
-                CommonActivityUtils.displayToast(getActivity().getApplicationContext(), "DeviceDetailsDialog cannot be displayed.\nBad input parameters.");
+                // FIXME Hardcoded string
+                Toast.makeText(getActivity(), "DeviceDetailsDialog cannot be displayed.\nBad input parameters.", Toast.LENGTH_SHORT).show();
         }
     }
 
@@ -2908,7 +2910,8 @@ public class VectorSettingsPreferencesFragment extends PreferenceFragment implem
                     public void onClick(DialogInterface dialog, int which) {
                         if (null != mSession) {
                             if (TextUtils.isEmpty(passwordEditText.toString())) {
-                                CommonActivityUtils.displayToast(getActivity().getApplicationContext(), "Password missing..");
+                                // FIXME Hardcoded string
+                                Toast.makeText(getActivity().getApplicationContext(), "Password missing..", Toast.LENGTH_SHORT).show();
                                 return;
                             }
                             mAccountPassword = passwordEditText.getText().toString();

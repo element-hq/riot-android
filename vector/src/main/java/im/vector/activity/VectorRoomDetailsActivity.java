@@ -41,6 +41,7 @@ import im.vector.contacts.ContactsManager;
 import im.vector.fragments.VectorRoomDetailsMembersFragment;
 import im.vector.fragments.VectorRoomSettingsFragment;
 import im.vector.fragments.VectorSearchRoomFilesListFragment;
+import im.vector.util.MatrixSdkExtensionsKt;
 
 /**
  * This class implements the room details screen, using a tab UI pattern.
@@ -189,7 +190,7 @@ public class VectorRoomDetailsActivity extends MXCActionBarActivity implements T
                     Log.d(LOG_TAG, "## onRequestPermissionsResult(): READ_CONTACTS permission granted");
                 } else {
                     Log.w(LOG_TAG, "## onRequestPermissionsResult(): READ_CONTACTS permission not granted");
-                    CommonActivityUtils.displayToast(this, getString(R.string.missing_permissions_warning));
+                    Toast.makeText(this, R.string.missing_permissions_warning, Toast.LENGTH_SHORT).show();
                 }
 
                 ContactsManager.getInstance().refreshLocalContactsSnapshot();
@@ -287,7 +288,7 @@ public class VectorRoomDetailsActivity extends MXCActionBarActivity implements T
 
         // People tab creation: display the members of the this room
         ActionBar.Tab tabToBeAdded = mActionBar.newTab();
-        String tabTitle = getResources().getString(R.string.room_details_people);
+        String tabTitle = getString(R.string.room_details_people);
         tabToBeAdded.setText(tabTitle);
         tabToBeAdded.setTabListener(this);
         Bundle tabBundle = new Bundle();
@@ -297,7 +298,7 @@ public class VectorRoomDetailsActivity extends MXCActionBarActivity implements T
 
         // Files tab creation: display the file list in the room history
         tabToBeAdded = mActionBar.newTab();
-        tabTitle = getResources().getString(R.string.room_details_files);
+        tabTitle = getString(R.string.room_details_files);
         tabToBeAdded.setText(tabTitle);
         tabToBeAdded.setTabListener(this);
         tabBundle = new Bundle();
@@ -308,7 +309,7 @@ public class VectorRoomDetailsActivity extends MXCActionBarActivity implements T
 
         // Settings tab creation: the room settings (room photo, name, topic..)
         tabToBeAdded = mActionBar.newTab();
-        tabTitle = getResources().getString(R.string.room_details_settings);
+        tabTitle = getString(R.string.room_details_settings);
         tabToBeAdded.setText(tabTitle);
         tabToBeAdded.setTabListener(this);
         tabBundle = new Bundle();
@@ -370,7 +371,7 @@ public class VectorRoomDetailsActivity extends MXCActionBarActivity implements T
             onTabSelectSettingsFragment();
 
             // remove camera permission request if the user has not enough power level
-            if (!CommonActivityUtils.isPowerLevelEnoughForAvatarUpdate(mRoom, mSession)) {
+            if (!MatrixSdkExtensionsKt.isPowerLevelEnoughForAvatarUpdate(mRoom, mSession)) {
                 permissionToBeGranted &= ~CommonActivityUtils.PERMISSION_CAMERA;
             }
             CommonActivityUtils.checkPermissions(permissionToBeGranted, this);

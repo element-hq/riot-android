@@ -129,3 +129,6 @@ ButterKnife\.findById\(
 
 # Call invalidateMenu(); instead.
 invalidateOptionsMenu
+
+# Directly use getString() in a Fragment
+getActivity\(\)\.getString\(

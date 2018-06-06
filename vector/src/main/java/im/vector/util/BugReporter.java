@@ -262,7 +262,7 @@ public class BugReporter {
                         Log.e(LOG_TAG, "## sendBugReport() : cannot retrieve the appname " + e.getMessage());
                     }
 
-                    builder.addFormDataPart("label", context.getResources().getString(R.string.flavor_description));
+                    builder.addFormDataPart("label", context.getString(R.string.flavor_description));
                     builder.addFormDataPart("label", context.getString(R.string.git_branch_name));
 
                     if (getCrashFile(context).exists()) {
@@ -299,7 +299,7 @@ public class BugReporter {
 
                     // build the request
                     Request request = new Request.Builder()
-                            .url(context.getResources().getString(R.string.bug_report_url))
+                            .url(context.getString(R.string.bug_report_url))
                             .post(requestBody)
                             .build();
 

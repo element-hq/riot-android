@@ -28,10 +28,13 @@ import android.view.View;
 import android.widget.RadioButton;
 import android.widget.TextView;
 
+import org.jetbrains.annotations.NotNull;
+
 import butterknife.BindView;
 import im.vector.Matrix;
 import im.vector.R;
 import im.vector.gcm.GcmRegistrationManager;
+import kotlin.Pair;
 
 /*
  * This activity allows the user to choose a notifications privacy policy.
@@ -77,6 +80,12 @@ public class NotificationPrivacyActivity extends RiotAppCompatActivity  {
 
     public static Intent getIntent(final Context context) {
         return new Intent(context, NotificationPrivacyActivity.class);
+    }
+
+    @NotNull
+    @Override
+    public Pair getOtherThemes() {
+        return new Pair(R.style.CountryPickerTheme_Dark, R.style.CountryPickerTheme_Black);
     }
 
     @Override

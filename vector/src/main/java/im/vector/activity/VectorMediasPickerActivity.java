@@ -61,6 +61,7 @@ import android.widget.TableRow;
 import android.widget.Toast;
 import android.widget.VideoView;
 
+import org.jetbrains.annotations.NotNull;
 import org.matrix.androidsdk.util.ImageUtils;
 import org.matrix.androidsdk.util.Log;
 import org.matrix.androidsdk.util.ResourceUtils;
@@ -87,8 +88,10 @@ import javax.microedition.khronos.egl.EGLSurface;
 
 import im.vector.R;
 import im.vector.VectorApp;
+import im.vector.util.ViewUtilKt;
 import im.vector.view.RecentMediaLayout;
 import im.vector.view.VideoRecordView;
+import kotlin.Pair;
 
 /**
  * VectorMediasPickerActivity is used to take a photo or to send an old one.
@@ -216,6 +219,12 @@ public class VectorMediasPickerActivity extends MXCActionBarActivity implements 
     private android.os.Handler mFileHandler;
 
     private VideoRecordView mRecordAnimationView;
+
+    @NotNull
+    @Override
+    public Pair getOtherThemes() {
+        return new Pair(R.style.AppTheme_NoActionBar_FullScreen_Dark, R.style.AppTheme_NoActionBar_FullScreen_Black);
+    }
 
     @Override
     public int getLayoutRes() {
@@ -2005,7 +2014,7 @@ public class VectorMediasPickerActivity extends MXCActionBarActivity implements 
         final RelativeLayout progressBar = findViewById(R.id.medias_preview_progress_bar_layout);
         progressBar.setVisibility(View.VISIBLE);
         mTakeImageView.setEnabled(false);
-        mTakeImageView.setAlpha(CommonActivityUtils.UTILS_OPACITY_HALF);
+        mTakeImageView.setAlpha(ViewUtilKt.UTILS_OPACITY_HALF);
 
         mMediaStoreMediasList.clear();
 
@@ -2024,7 +2033,7 @@ public class VectorMediasPickerActivity extends MXCActionBarActivity implements 
                         buildGalleryTableLayout();
                         progressBar.setVisibility(View.GONE);
                         mTakeImageView.setEnabled(true);
-                        mTakeImageView.setAlpha(CommonActivityUtils.UTILS_OPACITY_NONE);
+                        mTakeImageView.setAlpha(ViewUtilKt.UTILS_OPACITY_FULL);
                     }
                 });
             }

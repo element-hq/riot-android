@@ -1120,7 +1120,7 @@ public final class GcmRegistrationManager {
             mUseGCM = true;
 
             try {
-                mUseGCM = TextUtils.equals(mContext.getResources().getString(R.string.allow_gcm_use), "true");
+                mUseGCM = TextUtils.equals(mContext.getString(R.string.allow_gcm_use), "true");
             } catch (Exception e) {
                 Log.e(LOG_TAG, "useGCM " + e.getMessage());
             }

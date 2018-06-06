@@ -113,25 +113,7 @@ import me.leolin.shortcutbadger.ShortcutBadger;
 public class CommonActivityUtils {
     private static final String LOG_TAG = CommonActivityUtils.class.getSimpleName();
 
-    /**
-     * Schemes
-     */
-    private static final String HTTP_SCHEME = "http://";
-    private static final String HTTPS_SCHEME = "https://";
-
     // global helper constants:
-    /**
-     * The view is visible
-     **/
-    public static final float UTILS_OPACITY_NONE = 1f;
-    /**
-     * The view is half dimmed
-     **/
-    public static final float UTILS_OPACITY_HALF = 0.5f;
-    /**
-     * The view is hidden
-     **/
-    public static final float UTILS_OPACITY_FULL = 0f;
 
     public static final boolean UTILS_DISPLAY_PROGRESS_BAR = true;
     public static final boolean UTILS_HIDE_PROGRESS_BAR = false;
@@ -321,7 +303,7 @@ public class CommonActivityUtils {
         // the culprit activity is restarted when System.exit is called.
         // so called it once to fix it
         if (!preferences.getBoolean(RESTART_IN_PROGRESS_KEY, false)) {
-            CommonActivityUtils.displayToast(activity.getApplicationContext(), "Restart the application (low memory)");
+            Toast.makeText(activity, "Restart the application (low memory)", Toast.LENGTH_SHORT).show();
 
             Log.e(LOG_TAG, "Kill the application");
             editor.putBoolean(RESTART_IN_PROGRESS_KEY, true);
@@ -501,27 +483,6 @@ public class CommonActivityUtils {
         activity.startActivity(intent);
     }
 
-    /**
-     * Remove the http schemes from the URl passed in parameter
-     *
-     * @param aUrl URL to be parsed
-     * @return the URL with the scheme removed
-     */
-    public static String removeUrlScheme(String aUrl) {
-        String urlRetValue = aUrl;
-
-        if (null != aUrl) {
-            // remove URL scheme
-            if (aUrl.startsWith(HTTP_SCHEME)) {
-                urlRetValue = aUrl.substring(HTTP_SCHEME.length());
-            } else if (aUrl.startsWith(HTTPS_SCHEME)) {
-                urlRetValue = aUrl.substring(HTTPS_SCHEME.length());
-            }
-        }
-
-        return urlRetValue;
-    }
-
     //==============================================================================================================
     // Events stream service
     //==============================================================================================================
@@ -677,30 +638,6 @@ public class CommonActivityUtils {
                 EventStreamService.getInstance().refreshForegroundNotification();
             }
         }
-    }
-
-    /**
-     * Check if the user power level allows to update the room avatar. This is mainly used to
-     * determine if camera permission must be checked or not.
-     *
-     * @param aRoom    the room
-     * @param aSession the session
-     * @return true if the user power level allows to update the avatar, false otherwise.
-     */
-    public static boolean isPowerLevelEnoughForAvatarUpdate(Room aRoom, MXSession aSession) {
-        boolean canUpdateAvatarWithCamera = false;
-        PowerLevels powerLevels;
-
-        if ((null != aRoom) && (null != aSession)) {
-            if (null != (powerLevels = aRoom.getLiveState().getPowerLevels())) {
-                int powerLevel = powerLevels.getUserPowerLevel(aSession.getMyUserId());
-
-                // check the power level against avatar level
-                canUpdateAvatarWithCamera = (powerLevel >= powerLevels.minimumPowerLevelForSendingEventAsStateEvent(Event.EVENT_TYPE_STATE_ROOM_AVATAR));
-            }
-        }
-
-        return canUpdateAvatarWithCamera;
     }
 
     /**
@@ -865,7 +802,7 @@ public class CommonActivityUtils {
                 dialog.setOnCancelListener(new DialogInterface.OnCancelListener() {
                     @Override
                     public void onCancel(DialogInterface dialog) {
-                        CommonActivityUtils.displayToast(aCallingActivity, aCallingActivity.getString(R.string.missing_permissions_warning));
+                        Toast.makeText(aCallingActivity, R.string.missing_permissions_warning, Toast.LENGTH_SHORT).show();
                     }
                 });
 
@@ -1000,7 +937,7 @@ public class CommonActivityUtils {
                 } else {
                     Log.d(LOG_TAG, "## onPermissionResultAudioIpCall(): RECORD_AUDIO permission not granted");
                     if (null != aContext)
-                        CommonActivityUtils.displayToast(aContext, aContext.getString(R.string.permissions_action_not_performed_missing_permissions));
+                        Toast.makeText(aContext, R.string.permissions_action_not_performed_missing_permissions, Toast.LENGTH_SHORT).show();
                 }
             }
         } catch (Exception ex) {
@@ -1053,7 +990,7 @@ public class CommonActivityUtils {
             } else {
                 Log.w(LOG_TAG, "## onPermissionResultVideoIpCall(): No permissions granted to IP call (video or audio)");
                 if (null != aContext)
-                    CommonActivityUtils.displayToast(aContext, aContext.getString(R.string.permissions_action_not_performed_missing_permissions));
+                    Toast.makeText(aContext, R.string.permissions_action_not_performed_missing_permissions, Toast.LENGTH_SHORT).show();
             }
         } catch (Exception ex) {
             Log.d(LOG_TAG, "## onPermissionResultVideoIpCall(): Exception MSg=" + ex.getMessage());
@@ -1731,70 +1668,6 @@ public class CommonActivityUtils {
     }
 
     //==============================================================================================================
-    // toast utils
-    //==============================================================================================================
-
-    /**
-     * Helper method to display a toast message.
-     *
-     * @param aCallingActivity calling Activity instance
-     * @param aMsgToDisplay    message to display
-     */
-    public static void displayToastOnUiThread(final Activity aCallingActivity, final String aMsgToDisplay) {
-        if (null != aCallingActivity) {
-            aCallingActivity.runOnUiThread(new Runnable() {
-                @Override
-                public void run() {
-                    CommonActivityUtils.displayToast(aCallingActivity.getApplicationContext(), aMsgToDisplay);
-                }
-            });
-        }
-    }
-
-    /**
-     * Display a toast
-     *
-     * @param aContext       the context.
-     * @param aTextToDisplay the text to display.
-     */
-    public static void displayToast(Context aContext, CharSequence aTextToDisplay) {
-        Toast.makeText(aContext, aTextToDisplay, Toast.LENGTH_SHORT).show();
-    }
-
-    //==============================================================================================================
-    // room utils
-    //==============================================================================================================
-
-    /**
-     * Helper method to retrieve the max power level contained in the room.
-     * This value is used to indicate what is the power level value required
-     * to be admin of the room.
-     *
-     * @return max power level of the current room
-     */
-    public static int getRoomMaxPowerLevel(Room aRoom) {
-        int maxPowerLevel = 0;
-
-        if (null != aRoom) {
-            PowerLevels powerLevels = aRoom.getLiveState().getPowerLevels();
-
-            if (null != powerLevels) {
-                int tempPowerLevel;
-
-                // find out the room member
-                Collection<RoomMember> members = aRoom.getMembers();
-                for (RoomMember member : members) {
-                    tempPowerLevel = powerLevels.getUserPowerLevel(member.getUserId());
-                    if (tempPowerLevel > maxPowerLevel) {
-                        maxPowerLevel = tempPowerLevel;
-                    }
-                }
-            }
-        }
-        return maxPowerLevel;
-    }
-
-    //==============================================================================================================
     // Application badge (displayed in the launcher)
     //==============================================================================================================
 
@@ -2148,50 +2021,5 @@ public class CommonActivityUtils {
         } catch (Exception e) {
             Log.e(LOG_TAG, "## displayUnknownDevicesDialog() failed : " + e.getMessage());
         }
-    }
-
-    /**
-     * Update the menu icons colors
-     *
-     * @param menu  the menu
-     * @param color the color
-     */
-    public static void tintMenuIcons(Menu menu, int color) {
-        for (int i = 0; i < menu.size(); ++i) {
-            MenuItem item = menu.getItem(i);
-            Drawable drawable = item.getIcon();
-            if (drawable != null) {
-                Drawable wrapped = DrawableCompat.wrap(drawable);
-                drawable.mutate();
-                DrawableCompat.setTint(wrapped, color);
-                item.setIcon(drawable);
-            }
-        }
-    }
-
-    /**
-     * Tint the drawable with a theme attribute
-     *
-     * @param context   the context
-     * @param drawable  the drawable to tint
-     * @param attribute the theme color
-     * @return the tinted drawable
-     */
-    public static Drawable tintDrawable(Context context, Drawable drawable, @AttrRes int attribute) {
-        return tintDrawableWithColor(drawable, ThemeUtils.getColor(context, attribute));
-    }
-
-    /**
-     * Tint the drawable with a color integer
-     *
-     * @param drawable the drawable to tint
-     * @param color    the color
-     * @return the tinted drawable
-     */
-    public static Drawable tintDrawableWithColor(Drawable drawable, @ColorInt int color) {
-        Drawable tinted = DrawableCompat.wrap(drawable);
-        drawable.mutate();
-        DrawableCompat.setTint(tinted, color);
-        return tinted;
     }
 }

@@ -77,7 +77,7 @@ public class SectionView extends RelativeLayout {
     private void setup(final AdapterSection section) {
         mSection = section;
 
-        setBackgroundColor(ThemeUtils.getColor(getContext(), R.attr.list_header_background_color));
+        setBackgroundColor(ThemeUtils.INSTANCE.getColor(getContext(), R.attr.list_header_background_color));
         setLayoutParams(new LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT));
 
         // inflate the layout
