@@ -45,6 +45,7 @@ import android.view.ViewGroup
 import android.view.inputmethod.InputMethodManager
 import android.widget.*
 import androidx.core.content.edit
+import androidx.core.widget.toast
 import com.bumptech.glide.Glide
 import com.google.i18n.phonenumbers.NumberParseException
 import com.google.i18n.phonenumbers.PhoneNumberUtil
@@ -55,6 +56,7 @@ import im.vector.activity.*
 import im.vector.contacts.ContactsManager
 import im.vector.gcm.GcmRegistrationManager
 import im.vector.preference.*
+import im.vector.settings.FontScale
 import im.vector.util.*
 import org.matrix.androidsdk.MXSession
 import org.matrix.androidsdk.crypto.data.MXDeviceInfo
@@ -937,13 +939,14 @@ class VectorSettingsPreferencesFragment : PreferenceFragment(), SharedPreference
     }
 
     private fun addButtons() {
+        // TODO Use let
         // display the "add email" entry
         val addEmailPreference = EditTextPreference(activity)
         addEmailPreference.setTitle(R.string.settings_add_email_address)
         addEmailPreference.setDialogTitle(R.string.settings_add_email_address)
         addEmailPreference.key = ADD_EMAIL_PREFERENCE_KEY
-        addEmailPreference.icon = CommonActivityUtils.tintDrawable(activity,
-                ContextCompat.getDrawable(activity, R.drawable.ic_add_black), R.attr.settings_icon_tint_color)
+        addEmailPreference.icon = ThemeUtils.tintDrawable(activity,
+                ContextCompat.getDrawable(activity, R.drawable.ic_add_black)!!, R.attr.settings_icon_tint_color)
         addEmailPreference.order = 100
         addEmailPreference.editText.inputType = InputType.TYPE_CLASS_TEXT or InputType.TYPE_TEXT_VARIATION_EMAIL_ADDRESS
 
@@ -960,8 +963,8 @@ class VectorSettingsPreferencesFragment : PreferenceFragment(), SharedPreference
         // display the "add phone number" entry
         val addPhoneNumberPreference = Preference(activity)
         addPhoneNumberPreference.key = ADD_PHONE_NUMBER_PREFERENCE_KEY
-        addPhoneNumberPreference.icon = CommonActivityUtils.tintDrawable(activity,
-                ContextCompat.getDrawable(activity, R.drawable.ic_add_black), R.attr.settings_icon_tint_color)
+        addPhoneNumberPreference.icon = ThemeUtils.tintDrawable(activity,
+                ContextCompat.getDrawable(activity, R.drawable.ic_add_black)!!, R.attr.settings_icon_tint_color)
         addPhoneNumberPreference.setTitle(R.string.settings_add_phone_number)
         addPhoneNumberPreference.order = 200
 
@@ -1812,7 +1815,7 @@ class VectorSettingsPreferencesFragment : PreferenceFragment(), SharedPreference
             mDisplayedPhoneNumber = phoneNumberList
 
             var index = 0
-            val addPhoneBtn = mUserSettingsCategory.findPreference(ADD_PHONE_NUMBER_PREFERENCE_KEY)?: return
+            val addPhoneBtn = mUserSettingsCategory.findPreference(ADD_PHONE_NUMBER_PREFERENCE_KEY) ?: return
             var order = addPhoneBtn.order
 
             for (phoneNumber3PID in currentPhoneNumber3PID) {
@@ -1897,7 +1900,7 @@ class VectorSettingsPreferencesFragment : PreferenceFragment(), SharedPreference
         }
 
         // Text size
-        textSizePreference.summary = VectorApp.getFontScaleDescription()
+        textSizePreference.summary = FontScale.getFontScaleDescription()
 
         textSizePreference.onPreferenceClickListener = Preference.OnPreferenceClickListener {
             displayTextSizeSelection(activity)
@@ -1924,7 +1927,7 @@ class VectorSettingsPreferencesFragment : PreferenceFragment(), SharedPreference
 
         val childCount = linearLayout.childCount
 
-        val scaleText = VectorApp.getFontScale()
+        val scaleText = FontScale.getFontScalePrefValue()
 
         for (i in 0 until childCount) {
             val v = linearLayout.getChildAt(i)
@@ -1934,7 +1937,7 @@ class VectorSettingsPreferencesFragment : PreferenceFragment(), SharedPreference
 
                 v.setOnClickListener {
                     dialog.dismiss()
-                    VectorApp.updateFontScale(v.text.toString())
+                    FontScale.updateFontScale(v.text.toString())
                     activity.startActivity(activity.intent)
                     activity.finish()
                 }
@@ -2315,8 +2318,8 @@ class VectorSettingsPreferencesFragment : PreferenceFragment(), SharedPreference
             builder.create().show()
         } else {
             Log.e(LOG_TAG, "## displayDeviceDetailsDialog(): sanity check failure")
-            if (null != activity)
-                CommonActivityUtils.displayToast(activity.applicationContext, "DeviceDetailsDialog cannot be displayed.\nBad input parameters.")
+            // FIXME Hardcoded string
+            activity?.applicationContext?.toast("DeviceDetailsDialog cannot be displayed.\nBad input parameters.")
         }
     }
 
@@ -2428,7 +2431,8 @@ class VectorSettingsPreferencesFragment : PreferenceFragment(), SharedPreference
 
                         .setPositiveButton(R.string.devices_delete_submit_button_label, DialogInterface.OnClickListener { dialog, which ->
                             if (TextUtils.isEmpty(passwordEditText.toString())) {
-                                CommonActivityUtils.displayToast(activity.applicationContext, "Password missing..")
+                                // FIXME Hardcoded string
+                                activity.applicationContext.toast("Password missing..")
                                 return@OnClickListener
                             }
                             mAccountPassword = passwordEditText.text.toString()
