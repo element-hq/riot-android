@@ -18,6 +18,8 @@
 
 package im.vector.activity;
 
+import android.animation.Animator;
+import android.animation.AnimatorListenerAdapter;
 import android.annotation.SuppressLint;
 import android.app.AlertDialog;
 import android.app.SearchManager;
@@ -46,7 +48,6 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.graphics.drawable.DrawableCompat;
 import android.support.v4.view.GravityCompat;
-import android.support.v4.view.ViewCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.widget.SearchView;
@@ -490,16 +491,11 @@ public class VectorHomeActivity extends RiotAppCompatActivity implements SearchV
     /**
      * Display the TAB if it is required
      */
-    private void showFloatingActionButton() {
-        if (null != mFloatingActionsMenu) {
-            if ((mCurrentMenuId == R.id.bottom_action_favourites) || (mCurrentMenuId == R.id.bottom_action_groups)) {
-                mFloatingActionsMenu.collapse();
-                mFloatingActionsMenu.setVisibility(View.GONE);
-            } else {
-                mFloatingActionsMenu.collapse();
-                mFloatingActionsMenu.setVisibility(View.VISIBLE);
-//                mFloatingActionButton.show();
-            }
+    private void showFloatingActionMenuIfRequired() {
+        if ((mCurrentMenuId == R.id.bottom_action_favourites) || (mCurrentMenuId == R.id.bottom_action_groups)) {
+            concealFloatingActionMenu();
+        } else {
+            revealFloatingActionMenu();
         }
     }
 
@@ -541,7 +537,7 @@ public class VectorHomeActivity extends RiotAppCompatActivity implements SearchV
             addEventsListener();
         }
 
-        showFloatingActionButton();
+        showFloatingActionMenuIfRequired();
 
         this.runOnUiThread(new Runnable() {
             @Override
@@ -952,7 +948,7 @@ public class VectorHomeActivity extends RiotAppCompatActivity implements SearchV
 
         mCurrentMenuId = item.getItemId();
 
-        showFloatingActionButton();
+        showFloatingActionMenuIfRequired();
 
         if (fragment != null) {
             resetFilter();
@@ -1357,6 +1353,36 @@ public class VectorHomeActivity extends RiotAppCompatActivity implements SearchV
         }
     }
 
+    private void revealFloatingActionMenu() {
+        if (null != mFloatingActionsMenu) {
+            AddFloatingActionButton fab = mFloatingActionsMenu.findViewById(com.getbase.floatingactionbutton.R.id.fab_expand_menu_button);
+            mFloatingActionsMenu.collapse();
+            mFloatingActionsMenu.setVisibility(View.VISIBLE);
+            fab.animate().scaleX(1).scaleY(1).alpha(1).setListener(new AnimatorListenerAdapter() {
+                @Override
+                public void onAnimationEnd(Animator animation) {
+                    super.onAnimationEnd(animation);
+                    mFloatingActionsMenu.setVisibility(View.VISIBLE);
+                }
+            }).start();
+        }
+    }
+
+    private void concealFloatingActionMenu() {
+        if (null != mFloatingActionsMenu) {
+            AddFloatingActionButton fab = mFloatingActionsMenu.findViewById(com.getbase.floatingactionbutton.R.id.fab_expand_menu_button);
+
+            mFloatingActionsMenu.collapse();
+            fab.animate().scaleX(0).scaleY(0).alpha(0).setListener(new AnimatorListenerAdapter() {
+                @Override
+                public void onAnimationEnd(Animator animation) {
+                    super.onAnimationEnd(animation);
+                    mFloatingActionsMenu.setVisibility(View.GONE);
+                }
+            }).start();
+        }
+    }
+
     /**
      * Hide the floating action button for 1 second
      *
@@ -1374,9 +1400,7 @@ public class VectorHomeActivity extends RiotAppCompatActivity implements SearchV
                 }
 
                 if (null != mFloatingActionsMenu) {
-//                    mFloatingActionButton.hide();
-                    mFloatingActionsMenu.setVisibility(View.GONE);
-                    mFloatingActionsMenu.collapse();
+                    concealFloatingActionMenu();
                     try {
                         mFloatingActionButtonTimer = new Timer();
                         mFloatingActionButtonTimer.schedule(new TimerTask() {
@@ -1391,7 +1415,7 @@ public class VectorHomeActivity extends RiotAppCompatActivity implements SearchV
                                 VectorHomeActivity.this.runOnUiThread(new Runnable() {
                                     @Override
                                     public void run() {
-                                        showFloatingActionButton();
+                                        showFloatingActionMenuIfRequired();
                                     }
                                 });
                             }
@@ -1407,7 +1431,7 @@ public class VectorHomeActivity extends RiotAppCompatActivity implements SearchV
                         VectorHomeActivity.this.runOnUiThread(new Runnable() {
                             @Override
                             public void run() {
-                                showFloatingActionButton();
+                                showFloatingActionMenuIfRequired();
                             }
                         });
 
