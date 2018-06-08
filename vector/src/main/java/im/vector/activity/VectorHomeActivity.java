@@ -986,7 +986,6 @@ public class VectorHomeActivity extends RiotAppCompatActivity implements SearchV
 
             menuButton.setColorNormal(primaryColor);
             menuButton.setColorPressed(secondaryColor);
-//            mFloatingActionsMenu.invalidate();
         } catch (Exception ignored) {
 
         }
