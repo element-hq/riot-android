@@ -1065,19 +1065,6 @@ public class VectorHomeActivity extends RiotAppCompatActivity implements SearchV
         mSearchView.setIconifiedByDefault(false);
         mSearchView.setOnQueryTextListener(this);
 
-//        if (null != mFloatingActionButton) {
-//            mFloatingActionButton.setOnClickListener(new View.OnClickListener() {
-//                @Override
-//                public void onClick(View v) {
-//                    Fragment fragment = getSelectedFragment();
-//
-//                    if (!(fragment instanceof AbsHomeFragment) || !((AbsHomeFragment) fragment).onFabClick()) {
-//                        onFloatingButtonClick();
-//                    }
-//                }
-//            });
-//        }
-
         Drawable drawable;
 
         drawable = getResources().getDrawable(R.drawable.ic_person_black_24dp).mutate();
