@@ -1121,6 +1121,7 @@ public class VectorHomeActivity extends RiotAppCompatActivity implements SearchV
             mFabStartChat.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
+                    mFloatingActionsMenu.collapse();
                     invitePeopleToNewRoom();
                 }
             });
@@ -1138,6 +1139,7 @@ public class VectorHomeActivity extends RiotAppCompatActivity implements SearchV
             mFabJoinRoom.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
+                    mFloatingActionsMenu.collapse();
                     joinARoom();
                 }
             });
