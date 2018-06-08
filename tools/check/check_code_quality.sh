@@ -26,7 +26,7 @@ numberOfFiles1=`ls -1U ./vector/src/main/res/drawable-hdpi | wc -l | sed  "s/ //
 numberOfFiles2=`ls -1U ./vector/src/main/res/drawable-mdpi | wc -l | sed  "s/ //g"`
 numberOfFiles3=`ls -1U ./vector/src/main/res/drawable-xhdpi | wc -l | sed  "s/ //g"`
 numberOfFiles4=`ls -1U ./vector/src/main/res/drawable-xxhdpi | wc -l | sed  "s/ //g"`
-numberOfFiles5=`ls -1U ./vector/src/main/res/drawable-xXxhdpi | wc -l | sed  "s/ //g"`
+numberOfFiles5=`ls -1U ./vector/src/main/res/drawable-xxxhdpi | wc -l | sed  "s/ //g"`
 
 if [ ${numberOfFiles1} -eq ${numberOfFiles5} ] && [ ${numberOfFiles2} -eq ${numberOfFiles5} ] && [ ${numberOfFiles3} -eq ${numberOfFiles5} ] && [ ${numberOfFiles4} -eq ${numberOfFiles5} ]; then
    resultNbOfDrawable=0
