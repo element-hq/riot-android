@@ -197,6 +197,9 @@ public class VectorHomeActivity extends RiotAppCompatActivity implements SearchV
     @BindView(R.id.floating_action_menu)
     FloatingActionsMenu mFloatingActionsMenu;
 
+    @BindView(com.getbase.floatingactionbutton.R.id.fab_expand_menu_button)
+    AddFloatingActionButton mFabMain;
+
     @BindView(R.id.button_start_chat)
     FloatingActionButton mFabStartChat;
 
@@ -972,8 +975,6 @@ public class VectorHomeActivity extends RiotAppCompatActivity implements SearchV
     public void updateTabStyle(final int primaryColor, final int secondaryColor) {
         mToolbar.setBackgroundColor(primaryColor);
 
-        AddFloatingActionButton menuButton = mFloatingActionsMenu.findViewById(com.getbase.floatingactionbutton.R.id.fab_expand_menu_button);
-
         Class menuClass = FloatingActionsMenu.class;
         try {
             Field normal = menuClass.getDeclaredField("mAddButtonColorNormal");
@@ -984,8 +985,8 @@ public class VectorHomeActivity extends RiotAppCompatActivity implements SearchV
             normal.set(mFloatingActionsMenu, primaryColor);
             pressed.set(mFloatingActionsMenu, secondaryColor);
 
-            menuButton.setColorNormal(primaryColor);
-            menuButton.setColorPressed(secondaryColor);
+            mFabMain.setColorNormal(primaryColor);
+            mFabMain.setColorPressed(secondaryColor);
         } catch (Exception ignored) {
 
         }
@@ -1333,10 +1334,9 @@ public class VectorHomeActivity extends RiotAppCompatActivity implements SearchV
 
     private void revealFloatingActionMenu() {
         if (null != mFloatingActionsMenu) {
-            AddFloatingActionButton fab = mFloatingActionsMenu.findViewById(com.getbase.floatingactionbutton.R.id.fab_expand_menu_button);
             mFloatingActionsMenu.collapse();
             mFloatingActionsMenu.setVisibility(View.VISIBLE);
-            fab.animate().scaleX(1).scaleY(1).alpha(1).setListener(new AnimatorListenerAdapter() {
+            mFabMain.animate().scaleX(1).scaleY(1).alpha(1).setListener(new AnimatorListenerAdapter() {
                 @Override
                 public void onAnimationEnd(Animator animation) {
                     super.onAnimationEnd(animation);
@@ -1348,10 +1348,8 @@ public class VectorHomeActivity extends RiotAppCompatActivity implements SearchV
 
     private void concealFloatingActionMenu() {
         if (null != mFloatingActionsMenu) {
-            AddFloatingActionButton fab = mFloatingActionsMenu.findViewById(com.getbase.floatingactionbutton.R.id.fab_expand_menu_button);
-
             mFloatingActionsMenu.collapse();
-            fab.animate().scaleX(0).scaleY(0).alpha(0).setListener(new AnimatorListenerAdapter() {
+            mFabMain.animate().scaleX(0).scaleY(0).alpha(0).setListener(new AnimatorListenerAdapter() {
                 @Override
                 public void onAnimationEnd(Animator animation) {
                     super.onAnimationEnd(animation);
@@ -1424,8 +1422,8 @@ public class VectorHomeActivity extends RiotAppCompatActivity implements SearchV
      *
      * @return fab view
      */
-    public FloatingActionButton getFloatingActionButton() {
-        return null;
+    public View getFloatingActionButton() {
+        return mFabMain;
     }
 
     /**
