@@ -36,10 +36,7 @@ import org.matrix.androidsdk.rest.model.pid.ThreePid;
 import java.util.Collection;
 import java.util.List;
 
-
 public class LoginHandler {
-    private static final String LOG_TAG = LoginHandler.class.getSimpleName();
-
     /**
      * The account login / creation succeeds so create the dedicated session and store it.
      *
@@ -86,8 +83,12 @@ public class LoginHandler {
      * @param password           The password;
      * @param callback           The callback.
      */
-    public void login(Context ctx, final HomeServerConnectionConfig hsConfig, final String username,
-                      final String phoneNumber, final String phoneNumberCountry, final String password,
+    public void login(Context ctx,
+                      final HomeServerConnectionConfig hsConfig,
+                      final String username,
+                      final String phoneNumber,
+                      final String phoneNumberCountry,
+                      final String password,
                       final SimpleApiCallback<HomeServerConnectionConfig> callback) {
         final Context appCtx = ctx.getApplicationContext();
 
@@ -114,22 +115,26 @@ public class LoginHandler {
      * @param password
      * @param callback
      */
-    private void callLogin(final Context ctx, final HomeServerConnectionConfig hsConfig, final String username,
-                           final String phoneNumber, final String phoneNumberCountry,
-                           final String password, final SimpleApiCallback<Credentials> callback) {
+    private void callLogin(final Context ctx,
+                           final HomeServerConnectionConfig hsConfig,
+                           final String username,
+                           final String phoneNumber,
+                           final String phoneNumberCountry,
+                           final String password,
+                           final SimpleApiCallback<Credentials> callback) {
         LoginRestClient client = new LoginRestClient(hsConfig);
         String deviceName = ctx.getString(R.string.login_mobile_device);
 
         if (!TextUtils.isEmpty(username)) {
             if (android.util.Patterns.EMAIL_ADDRESS.matcher(username).matches()) {
                 // Login with 3pid
-                client.loginWith3Pid(ThreePid.MEDIUM_EMAIL, username.toLowerCase(VectorApp.getApplicationLocale()), password, deviceName, callback);
+                client.loginWith3Pid(ThreePid.MEDIUM_EMAIL, username.toLowerCase(VectorApp.getApplicationLocale()), password, deviceName, null, callback);
             } else {
                 // Login with user
-                client.loginWithUser(username, password, deviceName, callback);
+                client.loginWithUser(username, password, deviceName, null, callback);
             }
         } else if (!TextUtils.isEmpty(phoneNumber) && !TextUtils.isEmpty(phoneNumberCountry)) {
-            client.loginWithPhoneNumber(phoneNumber, phoneNumberCountry, password, deviceName, callback);
+            client.loginWithPhoneNumber(phoneNumber, phoneNumberCountry, password, deviceName, null, callback);
         }
     }
 
@@ -205,8 +210,11 @@ public class LoginHandler {
      * @param aSid              the server identity session id
      * @param aRespCallback     asynchronous callback response
      */
-    public void submitEmailTokenValidation(final Context aCtx, final HomeServerConnectionConfig aHomeServerConfig,
-                                           final String aToken, final String aClientSecret, final String aSid,
+    public void submitEmailTokenValidation(final Context aCtx,
+                                           final HomeServerConnectionConfig aHomeServerConfig,
+                                           final String aToken,
+                                           final String aClientSecret,
+                                           final String aSid,
                                            final ApiCallback<Boolean> aRespCallback) {
         final ThreePid pid = new ThreePid(null, ThreePid.MEDIUM_EMAIL);
         ThirdPidRestClient restClient = new ThirdPidRestClient(aHomeServerConfig);
