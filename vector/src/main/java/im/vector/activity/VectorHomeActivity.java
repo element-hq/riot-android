@@ -1331,29 +1331,6 @@ public class VectorHomeActivity extends RiotAppCompatActivity implements SearchV
      * *********************************************************************************************
      */
 
-    private void onFloatingButtonClick() {
-        // ignore any action if there is a pending one
-        if (!isWaitingViewVisible()) {
-            CharSequence items[] = new CharSequence[]{getString(R.string.room_recents_start_chat), getString(R.string.room_recents_create_room), getString(R.string.room_recents_join_room)};
-            mFabDialog = new AlertDialog.Builder(this)
-                    .setItems(items, new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface d, int n) {
-                            d.cancel();
-                            if (0 == n) {
-                                invitePeopleToNewRoom();
-                            } else if (1 == n) {
-                                createRoom();
-                            } else {
-                                joinARoom();
-                            }
-                        }
-                    })
-                    .setNegativeButton(R.string.cancel, null)
-                    .show();
-        }
-    }
-
     private void revealFloatingActionMenu() {
         if (null != mFloatingActionsMenu) {
             AddFloatingActionButton fab = mFloatingActionsMenu.findViewById(com.getbase.floatingactionbutton.R.id.fab_expand_menu_button);
