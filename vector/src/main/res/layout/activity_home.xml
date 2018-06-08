@@ -160,6 +160,7 @@
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toRightOf="parent"
             app:layout_constraintBottom_toBottomOf="parent"
+            android:clickable="false"
             android:elevation="10dp"
             android:alpha="0"
             android:background="@android:color/background_dark" />
