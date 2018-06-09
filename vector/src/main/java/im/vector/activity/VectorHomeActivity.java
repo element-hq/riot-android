@@ -30,7 +30,6 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.content.res.ColorStateList;
-import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
@@ -46,7 +45,6 @@ import android.support.design.widget.TextInputEditText;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.content.ContextCompat;
-import android.support.v4.graphics.drawable.DrawableCompat;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
@@ -1065,19 +1063,17 @@ public class VectorHomeActivity extends RiotAppCompatActivity implements SearchV
         mSearchView.setIconifiedByDefault(false);
         mSearchView.setOnQueryTextListener(this);
 
-        Drawable drawable;
+        mFabStartChat.setIconDrawable(CommonActivityUtils.tintDrawableWithColor(
+                getResources().getDrawable(R.drawable.ic_person_black_24dp), getResources().getColor(android.R.color.white)
+        ));
 
-        drawable = getResources().getDrawable(R.drawable.ic_person_black_24dp).mutate();
-        DrawableCompat.setTint(drawable, getResources().getColor(android.R.color.white));
-        mFabStartChat.setIconDrawable(drawable);
+        mFabCreateRoom.setIconDrawable(CommonActivityUtils.tintDrawableWithColor(
+                getResources().getDrawable(R.drawable.ic_add_white), getResources().getColor(android.R.color.white)
+        ));
 
-        drawable = getResources().getDrawable(R.drawable.ic_add_white).mutate();
-        DrawableCompat.setTint(drawable, getResources().getColor(android.R.color.white));
-        mFabCreateRoom.setIconDrawable(drawable);
-
-        drawable = getResources().getDrawable(R.drawable.riot_tab_rooms).mutate();
-        DrawableCompat.setTint(drawable, getResources().getColor(android.R.color.white));
-        mFabJoinRoom.setIconDrawable(drawable);
+        mFabJoinRoom.setIconDrawable(CommonActivityUtils.tintDrawableWithColor(
+                getResources().getDrawable(R.drawable.riot_tab_rooms), getResources().getColor(android.R.color.white)
+        ));
 
         // Pre-Lollipop does not support elevation so cannot have touch guard
         // above bottomNavigationView.
