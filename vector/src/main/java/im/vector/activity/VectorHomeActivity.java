@@ -103,8 +103,6 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
-import java.util.Timer;
-import java.util.TimerTask;
 
 import butterknife.BindView;
 import im.vector.Matrix;
@@ -208,7 +206,7 @@ public class VectorHomeActivity extends RiotAppCompatActivity implements SearchV
     FloatingActionButton mFabJoinRoom;
 
     // mFloatingActionButton is hidden for 1s when there is scroll
-    private Timer mFloatingActionButtonTimer;
+    private Runnable mHideFloatingActionButton;
 
     private MXEventListener mEventsListener;
 
@@ -778,11 +776,9 @@ public class VectorHomeActivity extends RiotAppCompatActivity implements SearchV
             removeEventsListener();
         }
 
-        synchronized (this) {
-            if (null != mFloatingActionButtonTimer) {
-                mFloatingActionButtonTimer.cancel();
-                mFloatingActionButtonTimer = null;
-            }
+        if (mHideFloatingActionButton != null && mFloatingActionsMenu != null) {
+            mFloatingActionsMenu.removeCallbacks(mHideFloatingActionButton);
+            mHideFloatingActionButton = null;
         }
 
         if (mFabDialog != null) {
@@ -937,11 +933,9 @@ public class VectorHomeActivity extends RiotAppCompatActivity implements SearchV
                 break;
         }
 
-        synchronized (this) {
-            if (null != mFloatingActionButtonTimer) {
-                mFloatingActionButtonTimer.cancel();
-                mFloatingActionButtonTimer = null;
-            }
+        if (mHideFloatingActionButton != null && mFloatingActionsMenu != null) {
+            mFloatingActionsMenu.removeCallbacks(mHideFloatingActionButton);
+            mHideFloatingActionButton = null;
         }
 
         // hide waiting view
@@ -1356,37 +1350,28 @@ public class VectorHomeActivity extends RiotAppCompatActivity implements SearchV
             // before the new one is plugged.
             // for example, if the switch is performed while the current list is scrolling.
             if (TextUtils.equals(mCurrentFragmentTag, fragmentTag)) {
-                if (null != mFloatingActionButtonTimer) {
-                    mFloatingActionButtonTimer.cancel();
-                }
-
                 if (null != mFloatingActionsMenu) {
-                    concealFloatingActionMenu();
-                    try {
-                        mFloatingActionButtonTimer = new Timer();
-                        mFloatingActionButtonTimer.schedule(new TimerTask() {
+                    if (mHideFloatingActionButton == null) {
+                        // Avoid repeated calls.
+                        concealFloatingActionMenu();
+                        mHideFloatingActionButton = new Runnable() {
                             @Override
                             public void run() {
-                                synchronized (this) {
-                                    if (null != mFloatingActionButtonTimer) {
-                                        mFloatingActionButtonTimer.cancel();
-                                        mFloatingActionButtonTimer = null;
-                                    }
-                                }
-                                VectorHomeActivity.this.runOnUiThread(new Runnable() {
-                                    @Override
-                                    public void run() {
-                                        showFloatingActionMenuIfRequired();
-                                    }
-                                });
+                                mHideFloatingActionButton = null;
+                                showFloatingActionMenuIfRequired();
                             }
-                        }, 1000);
-                    } catch (Throwable throwable) {
-                        Log.e(LOG_TAG, "failed to init mFloatingActionButtonTimer " + throwable.getMessage());
+                        };
+                    } else {
+                        mFloatingActionsMenu.removeCallbacks(mHideFloatingActionButton);
+                    }
 
-                        if (null != mFloatingActionButtonTimer) {
-                            mFloatingActionButtonTimer.cancel();
-                            mFloatingActionButtonTimer = null;
+                    try {
+                        mFloatingActionsMenu.postDelayed(mHideFloatingActionButton, 1000);
+                    } catch (Throwable throwable) {
+                        Log.e(LOG_TAG, "failed to postDelayed " + throwable.getMessage());
+
+                        if (mHideFloatingActionButton != null && mFloatingActionsMenu != null) {
+                            mFloatingActionsMenu.removeCallbacks(mHideFloatingActionButton);
                         }
 
                         VectorHomeActivity.this.runOnUiThread(new Runnable() {
