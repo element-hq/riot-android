@@ -1,5 +1,6 @@
 /*
  * Copyright 2014 OpenMarket Ltd
+ * Copyright 2018 New Vector Ltd
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -55,7 +56,7 @@ public class VideoRecordProgressView extends View {
                 refreshColor();
             }
 
-            VideoRecordProgressView.this.invalidate();
+            invalidate();
 
             // call me 1 second later
             mUIHandler.postDelayed(this, 1000);
@@ -106,7 +107,7 @@ public class VideoRecordProgressView extends View {
         refreshColor();
         mProgressHandler.run();
 
-        this.invalidate();
+        invalidate();
     }
 
     /**

@@ -28,6 +28,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import org.matrix.androidsdk.MXSession;
 import org.matrix.androidsdk.fragments.MatrixMessageListFragment;
@@ -263,7 +264,8 @@ public class VectorUnifiedSearchActivity extends VectorBaseSearchActivity implem
                     : View.GONE);
 
             // display the "no result" text only if the researched text is not empty
-            mNoResultsTxtView.setVisibility(((0 == nbrMessages) && !TextUtils.isEmpty(mPatternToSearchEditText.getText().toString())) ? View.VISIBLE : View.GONE);
+            mNoResultsTxtView.setVisibility(((0 == nbrMessages)
+                    && !TextUtils.isEmpty(mPatternToSearchEditText.getText().toString())) ? View.VISIBLE : View.GONE);
         }
     }
 
@@ -280,7 +282,7 @@ public class VectorUnifiedSearchActivity extends VectorBaseSearchActivity implem
                 searchAccordingToSelectedTab();
             } else {
                 Log.d(LOG_TAG, "## onRequestPermissionsResult(): READ_CONTACTS permission not granted");
-                CommonActivityUtils.displayToast(this, getString(R.string.missing_permissions_warning));
+                Toast.makeText(this, R.string.missing_permissions_warning, Toast.LENGTH_SHORT).show();
             }
         }
     }

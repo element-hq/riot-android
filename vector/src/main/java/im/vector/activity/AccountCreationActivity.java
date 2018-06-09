@@ -134,10 +134,10 @@ public class AccountCreationActivity extends RiotAppCompatActivity {
                 super.onReceivedError(view, errorCode, description, failingUrl);
 
                 // on error case, close this activity
-                AccountCreationActivity.this.runOnUiThread(new Runnable() {
+                runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
-                        AccountCreationActivity.this.finish();
+                        finish();
                     }
                 });
             }
@@ -147,12 +147,16 @@ public class AccountCreationActivity extends RiotAppCompatActivity {
                 // avoid infinite onPageFinished call
                 if (url.startsWith("http")) {
                     // Generic method to make a bridge between JS and the UIWebView
-                    final String MXCJavascriptSendObjectMessage = "javascript:window.matrixRegistration.sendObjectMessage = function(parameters) { var iframe = document.createElement('iframe');  iframe.setAttribute('src', 'js:' + JSON.stringify(parameters));  document.documentElement.appendChild(iframe); iframe.parentNode.removeChild(iframe); iframe = null; };";
+                    final String MXCJavascriptSendObjectMessage = "javascript:window.matrixRegistration.sendObjectMessage = function(parameters)" +
+                            " { var iframe = document.createElement('iframe');  iframe.setAttribute('src', 'js:' + JSON.stringify(parameters)); " +
+                            " document.documentElement.appendChild(iframe); iframe.parentNode.removeChild(iframe); iframe = null; };";
 
                     view.loadUrl(MXCJavascriptSendObjectMessage);
 
                     // The function the fallback page calls when the registration is complete
-                    final String MXCJavascriptOnRegistered = "javascript:window.matrixRegistration.onRegistered = function(homeserverUrl, userId, accessToken) { matrixRegistration.sendObjectMessage({ 'action': 'onRegistered', 'homeServer': homeserverUrl,'userId': userId,  'accessToken': accessToken  }); };";
+                    final String MXCJavascriptOnRegistered = "javascript:window.matrixRegistration.onRegistered = function(homeserverUrl, userId" +
+                            ", accessToken) { matrixRegistration.sendObjectMessage({ 'action': 'onRegistered', 'homeServer': homeserverUrl,'user" +
+                            "Id': userId,  'accessToken': accessToken  }); };";
 
                     view.loadUrl(MXCJavascriptOnRegistered);
                 }
@@ -178,7 +182,10 @@ public class AccountCreationActivity extends RiotAppCompatActivity {
                     // succeeds to parse parameters
                     if (null != parameters) {
                         // check the required paramaters
-                        if (parameters.containsKey("homeServer") && parameters.containsKey("userId") && parameters.containsKey("accessToken") && parameters.containsKey("action")) {
+                        if (parameters.containsKey("homeServer")
+                                && parameters.containsKey("userId")
+                                && parameters.containsKey("accessToken")
+                                && parameters.containsKey("action")) {
                             final String userId = parameters.get("userId");
                             final String accessToken = parameters.get("accessToken");
                             final String homeServer = parameters.get("homeServer");
@@ -191,7 +198,7 @@ public class AccountCreationActivity extends RiotAppCompatActivity {
 
                             // check the action
                             if (action.equals("onRegistered")) {
-                                AccountCreationActivity.this.runOnUiThread(new Runnable() {
+                                runOnUiThread(new Runnable() {
                                     @Override
                                     public void run() {
                                         Intent returnIntent = new Intent();
@@ -201,7 +208,7 @@ public class AccountCreationActivity extends RiotAppCompatActivity {
                                         returnIntent.putExtra("accessToken", accessToken);
                                         setResult(RESULT_OK, returnIntent);
 
-                                        AccountCreationActivity.this.finish();
+                                        finish();
                                     }
                                 });
                             }

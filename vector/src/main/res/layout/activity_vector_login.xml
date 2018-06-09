@@ -400,7 +400,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:gravity="center_horizontal"
-                android:text="A text here"
+                tools:text="A text here"
                 android:textSize="16sp"
                 android:visibility="gone" />
 

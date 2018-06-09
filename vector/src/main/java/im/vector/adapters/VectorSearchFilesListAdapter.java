@@ -1,6 +1,7 @@
 /*
  * Copyright 2015 OpenMarket Ltd
  * Copyright 2017 Vector Creations Ltd
+ * Copyright 2018 New Vector Ltd
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -29,8 +30,8 @@ import org.matrix.androidsdk.MXSession;
 import org.matrix.androidsdk.adapters.MessageRow;
 import org.matrix.androidsdk.data.Room;
 import org.matrix.androidsdk.db.MXMediasCache;
-import org.matrix.androidsdk.rest.model.crypto.EncryptedFileInfo;
 import org.matrix.androidsdk.rest.model.Event;
+import org.matrix.androidsdk.rest.model.crypto.EncryptedFileInfo;
 import org.matrix.androidsdk.rest.model.message.FileMessage;
 import org.matrix.androidsdk.rest.model.message.ImageMessage;
 import org.matrix.androidsdk.rest.model.message.Message;
@@ -139,7 +140,8 @@ public class VectorSearchFilesListAdapter extends VectorMessagesAdapter {
                 int size = getContext().getResources().getDimensionPixelSize(R.dimen.member_list_avatar_size);
                 mSession.getMediasCache().loadAvatarThumbnail(mSession.getHomeServerConfig(), thumbnailView, thumbUrl, size);
             } else {
-                mSession.getMediasCache().loadBitmap(mSession.getHomeServerConfig(), thumbnailView, thumbUrl, 0, ExifInterface.ORIENTATION_UNDEFINED, null, encryptedFileInfo);
+                mSession.getMediasCache().loadBitmap(mSession.getHomeServerConfig(),
+                        thumbnailView, thumbUrl, 0, ExifInterface.ORIENTATION_UNDEFINED, null, encryptedFileInfo);
             }
         }
 

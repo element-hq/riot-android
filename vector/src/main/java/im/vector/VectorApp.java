@@ -1,6 +1,7 @@
 /*
  * Copyright 2014 OpenMarket Ltd
  * Copyright 2017 Vector Creations Ltd
+ * Copyright 2018 New Vector Ltd
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -62,7 +63,6 @@ import java.util.Comparator;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.HashSet;
-import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
@@ -79,6 +79,7 @@ import im.vector.contacts.ContactsManager;
 import im.vector.contacts.PIDsRetriever;
 import im.vector.gcm.GcmRegistrationManager;
 import im.vector.services.EventStreamService;
+import im.vector.settings.FontScale;
 import im.vector.util.CallsManager;
 import im.vector.util.PhoneNumberUtils;
 import im.vector.util.PreferencesManager;
@@ -172,8 +173,11 @@ public class VectorApp extends MultiDexApplication {
         @Override
         public void onReceive(Context context, Intent intent) {
             if (!TextUtils.equals(Locale.getDefault().toString(), getApplicationLocale().toString())) {
-                Log.d(LOG_TAG, "## onReceive() : the locale has been updated to " + Locale.getDefault().toString() + ", restore the expected value " + getApplicationLocale().toString());
-                updateApplicationSettings(getApplicationLocale(), getFontScale(), ThemeUtils.getApplicationTheme(context));
+                Log.d(LOG_TAG, "## onReceive() : the locale has been updated to " + Locale.getDefault().toString()
+                        + ", restore the expected value " + getApplicationLocale().toString());
+                updateApplicationSettings(getApplicationLocale(),
+                        FontScale.INSTANCE.getFontScalePrefValue(),
+                        ThemeUtils.INSTANCE.getApplicationTheme(context));
 
                 if (null != getCurrentActivity()) {
                     restartActivity(getCurrentActivity());
@@ -245,14 +249,13 @@ public class VectorApp extends MultiDexApplication {
         // init the REST client
         MXSession.initUserAgent(getApplicationContext());
 
-        this.registerActivityLifecycleCallbacks(new ActivityLifecycleCallbacks() {
+        registerActivityLifecycleCallbacks(new ActivityLifecycleCallbacks() {
             final Map<String, String> mLocalesByActivity = new HashMap<>();
 
             @Override
             public void onActivityCreated(Activity activity, Bundle savedInstanceState) {
                 Log.d(LOG_TAG, "onActivityCreated " + activity);
                 mCreatedActivities.add(activity.toString());
-                ThemeUtils.setActivityTheme(activity);
                 // piwik
                 onNewScreen(activity);
             }
@@ -268,7 +271,9 @@ public class VectorApp extends MultiDexApplication {
              * @return the local status value
              */
             private String getActivityLocaleStatus(Activity activity) {
-                return getApplicationLocale().toString() + "_" + getFontScale() + "_" + ThemeUtils.getApplicationTheme(activity);
+                return getApplicationLocale().toString()
+                        + "_" + FontScale.INSTANCE.getFontScalePrefValue()
+                        + "_" + ThemeUtils.INSTANCE.getApplicationTheme(activity);
             }
 
             @Override
@@ -282,7 +287,8 @@ public class VectorApp extends MultiDexApplication {
                     String prevActivityLocale = mLocalesByActivity.get(activityKey);
 
                     if (!TextUtils.equals(prevActivityLocale, getActivityLocaleStatus(activity))) {
-                        Log.d(LOG_TAG, "## onActivityResumed() : restart the activity " + activity + " because of the locale update from " + prevActivityLocale + " to " + getActivityLocaleStatus(activity));
+                        Log.d(LOG_TAG, "## onActivityResumed() : restart the activity " + activity
+                                + " because of the locale update from " + prevActivityLocale + " to " + getActivityLocaleStatus(activity));
                         restartActivity(activity);
                         return;
                     }
@@ -290,8 +296,11 @@ public class VectorApp extends MultiDexApplication {
 
                 // it should never happen as there is a broadcast receiver (mLanguageReceiver)
                 if (!TextUtils.equals(Locale.getDefault().toString(), getApplicationLocale().toString())) {
-                    Log.d(LOG_TAG, "## onActivityResumed() : the locale has been updated to " + Locale.getDefault().toString() + ", restore the expected value " + getApplicationLocale().toString());
-                    updateApplicationSettings(getApplicationLocale(), getFontScale(), ThemeUtils.getApplicationTheme(activity));
+                    Log.d(LOG_TAG, "## onActivityResumed() : the locale has been updated to " + Locale.getDefault().toString()
+                            + ", restore the expected value " + getApplicationLocale().toString());
+                    updateApplicationSettings(getApplicationLocale(),
+                            FontScale.INSTANCE.getFontScalePrefValue(),
+                            ThemeUtils.INSTANCE.getApplicationTheme(activity));
                     restartActivity(activity);
                 }
 
@@ -339,8 +348,8 @@ public class VectorApp extends MultiDexApplication {
         // track external language updates
         // local update from the settings
         // or screen rotation !
-        VectorApp.getInstance().registerReceiver(mLanguageReceiver, new IntentFilter(Intent.ACTION_LOCALE_CHANGED));
-        VectorApp.getInstance().registerReceiver(mLanguageReceiver, new IntentFilter(Intent.ACTION_CONFIGURATION_CHANGED));
+        registerReceiver(mLanguageReceiver, new IntentFilter(Intent.ACTION_LOCALE_CHANGED));
+        registerReceiver(mLanguageReceiver, new IntentFilter(Intent.ACTION_CONFIGURATION_CHANGED));
 
         PreferencesManager.fixMigrationIssues(this);
         initApplicationLocale();
@@ -350,8 +359,11 @@ public class VectorApp extends MultiDexApplication {
     public void onConfigurationChanged(Configuration newConfig) {
         super.onConfigurationChanged(newConfig);
         if (!TextUtils.equals(Locale.getDefault().toString(), getApplicationLocale().toString())) {
-            Log.d(LOG_TAG, "## onConfigurationChanged() : the locale has been updated to " + Locale.getDefault().toString() + ", restore the expected value " + getApplicationLocale().toString());
-            updateApplicationSettings(getApplicationLocale(), getFontScale(), ThemeUtils.getApplicationTheme(this));
+            Log.d(LOG_TAG, "## onConfigurationChanged() : the locale has been updated to " + Locale.getDefault().toString()
+                    + ", restore the expected value " + getApplicationLocale().toString());
+            updateApplicationSettings(getApplicationLocale(),
+                    FontScale.INSTANCE.getFontScalePrefValue(),
+                    ThemeUtils.INSTANCE.getApplicationTheme(this));
         }
     }
 
@@ -451,13 +463,14 @@ public class VectorApp extends MultiDexApplication {
                     if (null != mCurrentActivity) {
                         Log.e(LOG_TAG, "## startActivityTransitionTimer() : the timer expires but there is an active activity.");
                     } else {
-                        VectorApp.this.mIsInBackground = true;
+                        mIsInBackground = true;
                         mIsCallingInBackground = (null != mCallsManager.getActiveCall());
 
                         // if there is a pending call
                         // the application is not suspended
                         if (!mIsCallingInBackground) {
-                            Log.d(LOG_TAG, "Suspend the application because there was no resumed activity within " + (MAX_ACTIVITY_TRANSITION_TIME_MS / 1000) + " seconds");
+                            Log.d(LOG_TAG, "Suspend the application because there was no resumed activity within "
+                                    + (MAX_ACTIVITY_TRANSITION_TIME_MS / 1000) + " seconds");
                             CommonActivityUtils.displayMemoryInformation(null, " app suspended");
                             suspendApp();
                         } else {
@@ -492,7 +505,8 @@ public class VectorApp extends MultiDexApplication {
             Log.d(LOG_TAG, "## listPermissionStatuses() : list the permissions used by the app");
             for (String permission : permissions) {
                 Log.d(LOG_TAG, "Status of [" + permission + "] : " +
-                        ((PackageManager.PERMISSION_GRANTED == ContextCompat.checkSelfPermission(instance, permission)) ? "PERMISSION_GRANTED" : "PERMISSION_DENIED"));
+                        ((PackageManager.PERMISSION_GRANTED == ContextCompat.checkSelfPermission(instance, permission)) ?
+                                "PERMISSION_GRANTED" : "PERMISSION_DENIED"));
             }
         }
     }
@@ -770,37 +784,8 @@ public class VectorApp extends MultiDexApplication {
     private static final String APPLICATION_LOCALE_COUNTRY_KEY = "APPLICATION_LOCALE_COUNTRY_KEY";
     private static final String APPLICATION_LOCALE_VARIANT_KEY = "APPLICATION_LOCALE_VARIANT_KEY";
     private static final String APPLICATION_LOCALE_LANGUAGE_KEY = "APPLICATION_LOCALE_LANGUAGE_KEY";
-    private static final String APPLICATION_FONT_SCALE_KEY = "APPLICATION_FONT_SCALE_KEY";
-
-    private static final String FONT_SCALE_TINY = "FONT_SCALE_TINY";
-    private static final String FONT_SCALE_SMALL = "FONT_SCALE_SMALL";
-    private static final String FONT_SCALE_NORMAL = "FONT_SCALE_NORMAL";
-    private static final String FONT_SCALE_LARGE = "FONT_SCALE_LARGE";
-    private static final String FONT_SCALE_LARGER = "FONT_SCALE_LARGER";
-    private static final String FONT_SCALE_LARGEST = "FONT_SCALE_LARGEST";
-    private static final String FONT_SCALE_HUGE = "FONT_SCALE_HUGE";
 
     private static final Locale mApplicationDefaultLanguage = new Locale("en", "US");
-
-    private static final Map<Float, String> mPrefKeyByFontScale = new LinkedHashMap<Float, String>() {{
-        put(0.70f, FONT_SCALE_TINY);
-        put(0.85f, FONT_SCALE_SMALL);
-        put(1.00f, FONT_SCALE_NORMAL);
-        put(1.15f, FONT_SCALE_LARGE);
-        put(1.30f, FONT_SCALE_LARGER);
-        put(1.45f, FONT_SCALE_LARGEST);
-        put(1.60f, FONT_SCALE_HUGE);
-    }};
-
-    private static final Map<String, Integer> mFontTextScaleIdByPrefKey = new LinkedHashMap<String, Integer>() {{
-        put(FONT_SCALE_TINY, R.string.tiny);
-        put(FONT_SCALE_SMALL, R.string.small);
-        put(FONT_SCALE_NORMAL, R.string.normal);
-        put(FONT_SCALE_LARGE, R.string.large);
-        put(FONT_SCALE_LARGER, R.string.larger);
-        put(FONT_SCALE_LARGEST, R.string.largest);
-        put(FONT_SCALE_HUGE, R.string.huge);
-    }};
 
     /**
      * Init the application locale from the saved one
@@ -808,8 +793,8 @@ public class VectorApp extends MultiDexApplication {
     private static void initApplicationLocale() {
         Context context = VectorApp.getInstance();
         Locale locale = getApplicationLocale();
-        float fontScale = getFontScaleValue();
-        String theme = ThemeUtils.getApplicationTheme(context);
+        float fontScale = FontScale.INSTANCE.getFontScale();
+        String theme = ThemeUtils.INSTANCE.getApplicationTheme(context);
 
         Locale.setDefault(locale);
         Configuration config = new Configuration(context.getResources().getConfiguration());
@@ -818,7 +803,7 @@ public class VectorApp extends MultiDexApplication {
         context.getResources().updateConfiguration(config, context.getResources().getDisplayMetrics());
 
         // init the theme
-        ThemeUtils.setApplicationTheme(context, theme);
+        ThemeUtils.INSTANCE.setApplicationTheme(context, theme);
 
         // init the known locales in background
         AsyncTask<Void, Void, Void> task = new AsyncTask<Void, Void, Void>() {
@@ -831,88 +816,6 @@ public class VectorApp extends MultiDexApplication {
 
         // should never crash
         task.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
-    }
-
-    /**
-     * Get the font scale
-     *
-     * @return the font scale
-     */
-    public static String getFontScale() {
-        Context context = VectorApp.getInstance();
-        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(context);
-        String scalePreferenceKey;
-
-        if (!preferences.contains(APPLICATION_FONT_SCALE_KEY)) {
-            float fontScale = context.getResources().getConfiguration().fontScale;
-
-            scalePreferenceKey = FONT_SCALE_NORMAL;
-
-            if (mPrefKeyByFontScale.containsKey(fontScale)) {
-                scalePreferenceKey = mPrefKeyByFontScale.get(fontScale);
-            }
-
-            SharedPreferences.Editor editor = preferences.edit();
-            editor.putString(APPLICATION_FONT_SCALE_KEY, scalePreferenceKey);
-            editor.commit();
-        } else {
-            scalePreferenceKey = preferences.getString(APPLICATION_FONT_SCALE_KEY, FONT_SCALE_NORMAL);
-        }
-
-        return scalePreferenceKey;
-    }
-
-    /**
-     * Provides the font scale value
-     *
-     * @return the font scale
-     */
-    private static float getFontScaleValue() {
-        String fontScale = getFontScale();
-
-        if (mPrefKeyByFontScale.containsValue(fontScale)) {
-            for (Map.Entry<Float, String> entry : mPrefKeyByFontScale.entrySet()) {
-                if (TextUtils.equals(entry.getValue(), fontScale)) {
-                    return entry.getKey();
-                }
-            }
-        }
-
-        return 1.0f;
-    }
-
-    /**
-     * Provides the font scale description
-     *
-     * @return the font description
-     */
-    public static String getFontScaleDescription() {
-        Context context = VectorApp.getInstance();
-        String fontScale = getFontScale();
-
-        if (mFontTextScaleIdByPrefKey.containsKey(fontScale)) {
-            return context.getString(mFontTextScaleIdByPrefKey.get(fontScale));
-        }
-
-        return context.getString(R.string.normal);
-    }
-
-    /**
-     * Update the font size from the locale description.
-     *
-     * @param fontScaleDescription the font scale description
-     */
-    public static void updateFontScale(String fontScaleDescription) {
-        Context context = VectorApp.getInstance();
-        for (Map.Entry<String, Integer> entry : mFontTextScaleIdByPrefKey.entrySet()) {
-            if (TextUtils.equals(context.getString(entry.getValue()), fontScaleDescription)) {
-                saveFontScale(entry.getKey());
-            }
-        }
-
-        Configuration config = new Configuration(context.getResources().getConfiguration());
-        config.fontScale = getFontScaleValue();
-        context.getResources().updateConfiguration(config, context.getResources().getDisplayMetrics());
     }
 
     /**
@@ -999,28 +902,12 @@ public class VectorApp extends MultiDexApplication {
     }
 
     /**
-     * Save the new font scale
-     *
-     * @param textScale the text scale
-     */
-    private static void saveFontScale(String textScale) {
-        Context context = VectorApp.getInstance();
-
-        if (!TextUtils.isEmpty(textScale)) {
-            SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(context);
-            SharedPreferences.Editor editor = preferences.edit();
-            editor.putString(APPLICATION_FONT_SCALE_KEY, textScale);
-            editor.commit();
-        }
-    }
-
-    /**
      * Update the application locale
      *
      * @param locale
      */
     public static void updateApplicationLocale(Locale locale) {
-        updateApplicationSettings(locale, getFontScale(), ThemeUtils.getApplicationTheme(VectorApp.getInstance()));
+        updateApplicationSettings(locale, FontScale.INSTANCE.getFontScalePrefValue(), ThemeUtils.INSTANCE.getApplicationTheme(VectorApp.getInstance()));
     }
 
     /**
@@ -1029,8 +916,10 @@ public class VectorApp extends MultiDexApplication {
      * @param theme the new theme
      */
     public static void updateApplicationTheme(String theme) {
-        ThemeUtils.setApplicationTheme(VectorApp.getInstance(), theme);
-        updateApplicationSettings(getApplicationLocale(), getFontScale(), ThemeUtils.getApplicationTheme(VectorApp.getInstance()));
+        ThemeUtils.INSTANCE.setApplicationTheme(VectorApp.getInstance(), theme);
+        updateApplicationSettings(getApplicationLocale(),
+                FontScale.INSTANCE.getFontScalePrefValue(),
+                ThemeUtils.INSTANCE.getApplicationTheme(VectorApp.getInstance()));
     }
 
     /**
@@ -1045,15 +934,15 @@ public class VectorApp extends MultiDexApplication {
         Context context = VectorApp.getInstance();
 
         saveApplicationLocale(locale);
-        saveFontScale(textSize);
+        FontScale.INSTANCE.saveFontScale(textSize);
         Locale.setDefault(locale);
 
         Configuration config = new Configuration(context.getResources().getConfiguration());
         config.locale = locale;
-        config.fontScale = getFontScaleValue();
+        config.fontScale = FontScale.INSTANCE.getFontScale();
         context.getResources().updateConfiguration(config, context.getResources().getDisplayMetrics());
 
-        ThemeUtils.setApplicationTheme(context, theme);
+        ThemeUtils.INSTANCE.setApplicationTheme(context, theme);
         PhoneNumberUtils.onLocaleUpdate();
     }
 
@@ -1070,7 +959,7 @@ public class VectorApp extends MultiDexApplication {
             Resources resources = context.getResources();
             Locale locale = getApplicationLocale();
             Configuration configuration = resources.getConfiguration();
-            configuration.fontScale = getFontScaleValue();
+            configuration.fontScale = FontScale.INSTANCE.getFontScale();
 
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
                 configuration.setLocale(locale);
@@ -1145,7 +1034,8 @@ public class VectorApp extends MultiDexApplication {
                 final Locale[] availableLocales = Locale.getAvailableLocales();
 
                 for (Locale locale : availableLocales) {
-                    knownLocalesSet.add(new Pair<>(getString(context, locale, R.string.resouces_language), getString(context, locale, R.string.resouces_country)));
+                    knownLocalesSet.add(new Pair<>(getString(context, locale, R.string.resouces_language),
+                            getString(context, locale, R.string.resouces_country)));
                 }
             } catch (Exception e) {
                 Log.e(LOG_TAG, "## getApplicationLocales() : failed " + e.getMessage());
@@ -1270,7 +1160,10 @@ public class VectorApp extends MultiDexApplication {
             Tracker tracker = getPiwikTracker();
             if (null != tracker) {
                 try {
-                    TrackHelper.Screen screen = TrackHelper.track().screen("/android/" + Matrix.getApplicationName() + "/" + this.getString(R.string.flavor_description) + "/" + SHORT_VERSION + "/" + activity.getClass().getName().replace(".", "/"));
+                    TrackHelper.Screen screen = TrackHelper.track().screen("/android/" + Matrix.getApplicationName()
+                            + "/" + getString(R.string.flavor_description)
+                            + "/" + SHORT_VERSION
+                            + "/" + activity.getClass().getName().replace(".", "/"));
                     addCustomVariables(screen).with(tracker);
                 } catch (Throwable t) {
                     Log.e(LOG_TAG, "## onNewScreen() : failed " + t.getMessage());

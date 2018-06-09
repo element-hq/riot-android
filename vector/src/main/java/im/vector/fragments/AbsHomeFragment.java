@@ -21,7 +21,6 @@ import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.annotation.CallSuper;
 import android.support.annotation.Nullable;
-import android.support.v4.app.Fragment;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
 import android.view.MenuItem;
@@ -42,8 +41,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Set;
 
-import butterknife.ButterKnife;
-import butterknife.Unbinder;
 import im.vector.Matrix;
 import im.vector.R;
 import im.vector.activity.CommonActivityUtils;
@@ -55,7 +52,10 @@ import im.vector.util.RoomUtils;
 /**
  * Abstract fragment providing the universal search
  */
-public abstract class AbsHomeFragment extends VectorBaseFragment implements AbsAdapter.RoomInvitationListener, AbsAdapter.MoreRoomActionListener, RoomUtils.MoreActionListener {
+public abstract class AbsHomeFragment extends VectorBaseFragment implements
+        AbsAdapter.RoomInvitationListener,
+        AbsAdapter.MoreRoomActionListener,
+        RoomUtils.MoreActionListener {
 
     private static final String LOG_TAG = AbsHomeFragment.class.getSimpleName();
     private static final String CURRENT_FILTER = "CURRENT_FILTER";
@@ -73,7 +73,7 @@ public abstract class AbsHomeFragment extends VectorBaseFragment implements AbsA
         public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
             // warn only if there is dy i.e the list has been really scrolled not refreshed
             if ((null != mActivity) && (0 != dy)) {
-                mActivity.hideFloatingActionButton(AbsHomeFragment.this.getTag());
+                mActivity.hideFloatingActionButton(getTag());
             }
         }
     };

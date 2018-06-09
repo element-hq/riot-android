@@ -37,6 +37,7 @@ import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.TextView;
 
+import org.jetbrains.annotations.NotNull;
 import org.matrix.androidsdk.util.Log;
 
 import java.util.ArrayList;
@@ -46,6 +47,7 @@ import java.util.TimerTask;
 
 import im.vector.R;
 import im.vector.util.ThemeUtils;
+import kotlin.Pair;
 
 /**
  * This class defines a base class to manage search in action bar
@@ -64,6 +66,12 @@ public abstract class VectorBaseSearchActivity extends MXCActionBarActivity {
 
     private MenuItem mMicroMenuItem;
     private MenuItem mClearEditTextMenuItem;
+
+    @NotNull
+    @Override
+    public Pair getOtherThemes() {
+        return new Pair(R.style.SearchesAppTheme_Dark, R.style.SearchesAppTheme_Black);
+    }
 
     @Override
     @CallSuper
@@ -84,7 +92,7 @@ public abstract class VectorBaseSearchActivity extends MXCActionBarActivity {
 
         mPatternToSearchEditText.addTextChangedListener(new TextWatcher() {
             public void afterTextChanged(android.text.Editable s) {
-                VectorBaseSearchActivity.this.refreshMenuEntries();
+                refreshMenuEntries();
                 final String fPattern = mPatternToSearchEditText.getText().toString();
 
                 Timer timer = new Timer();
@@ -95,11 +103,11 @@ public abstract class VectorBaseSearchActivity extends MXCActionBarActivity {
                     timer.schedule(new TimerTask() {
                         @Override
                         public void run() {
-                            VectorBaseSearchActivity.this.runOnUiThread(new Runnable() {
+                            runOnUiThread(new Runnable() {
                                 @Override
                                 public void run() {
                                     if (TextUtils.equals(mPatternToSearchEditText.getText().toString(), fPattern)) {
-                                        VectorBaseSearchActivity.this.runOnUiThread(new Runnable() {
+                                        runOnUiThread(new Runnable() {
                                             @Override
                                             public void run() {
                                                 onPatternUpdate(true);
@@ -113,11 +121,11 @@ public abstract class VectorBaseSearchActivity extends MXCActionBarActivity {
                 } catch (Throwable throwable) {
                     Log.e(LOG_TAG, "## failed to start the timer " + throwable.getMessage());
 
-                    VectorBaseSearchActivity.this.runOnUiThread(new Runnable() {
+                    runOnUiThread(new Runnable() {
                         @Override
                         public void run() {
                             if (TextUtils.equals(mPatternToSearchEditText.getText().toString(), fPattern)) {
-                                VectorBaseSearchActivity.this.runOnUiThread(new Runnable() {
+                                runOnUiThread(new Runnable() {
                                     @Override
                                     public void run() {
                                         onPatternUpdate(true);
@@ -205,15 +213,21 @@ public abstract class VectorBaseSearchActivity extends MXCActionBarActivity {
     }
 
     @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
+    public int getMenuRes() {
+        return R.menu.vector_searches;
+    }
+
+    @Override
+    public int getMenuTint() {
+        return R.attr.icon_tint_on_light_action_bar_color;
+    }
+
+    @Override
+    public boolean onPrepareOptionsMenu(Menu menu) {
         // the application is in a weird state
         if (CommonActivityUtils.shouldRestartApp(this)) {
             return false;
         }
-
-        // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.vector_searches, menu);
-        CommonActivityUtils.tintMenuIcons(menu, ThemeUtils.getColor(this, R.attr.icon_tint_on_light_action_bar_color));
 
         mMicroMenuItem = menu.findItem(R.id.ic_action_speak_to_search);
         mClearEditTextMenuItem = menu.findItem(R.id.ic_action_clear_search);
@@ -261,7 +275,7 @@ public abstract class VectorBaseSearchActivity extends MXCActionBarActivity {
                 builder.setItems(mes, new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int item) {
                         mPatternToSearchEditText.setText(matches.get(item));
-                        VectorBaseSearchActivity.this.runOnUiThread(new Runnable() {
+                        runOnUiThread(new Runnable() {
                             @Override
                             public void run() {
                                 onPatternUpdate(false);

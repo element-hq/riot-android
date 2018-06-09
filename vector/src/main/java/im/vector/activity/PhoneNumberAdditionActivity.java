@@ -37,6 +37,7 @@ import com.google.i18n.phonenumbers.NumberParseException;
 import com.google.i18n.phonenumbers.PhoneNumberUtil;
 import com.google.i18n.phonenumbers.Phonenumber;
 
+import org.jetbrains.annotations.NotNull;
 import org.matrix.androidsdk.MXSession;
 import org.matrix.androidsdk.rest.callback.ApiCallback;
 import org.matrix.androidsdk.rest.model.MatrixError;
@@ -47,6 +48,7 @@ import im.vector.Matrix;
 import im.vector.R;
 import im.vector.util.PhoneNumberUtils;
 import im.vector.util.ThemeUtils;
+import kotlin.Pair;
 
 public class PhoneNumberAdditionActivity extends RiotAppCompatActivity implements TextView.OnEditorActionListener, TextWatcher, View.OnClickListener {
 
@@ -92,6 +94,12 @@ public class PhoneNumberAdditionActivity extends RiotAppCompatActivity implement
      * *********************************************************************************************
      */
 
+    @NotNull
+    @Override
+    public Pair getOtherThemes() {
+        return new Pair(R.style.AppTheme_NoActionBar_Dark, R.style.AppTheme_NoActionBar_Black);
+    }
+
     @Override
     public int getLayoutRes() {
         return R.layout.activity_phone_number_addition;
@@ -135,10 +143,8 @@ public class PhoneNumberAdditionActivity extends RiotAppCompatActivity implement
     }
 
     @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.menu_phone_number_addition, menu);
-        CommonActivityUtils.tintMenuIcons(menu, ThemeUtils.getColor(this, R.attr.icon_tint_on_dark_action_bar_color));
-        return true;
+    public int getMenuRes() {
+        return R.menu.menu_phone_number_addition;
     }
 
     @Override

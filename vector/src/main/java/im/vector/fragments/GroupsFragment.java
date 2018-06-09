@@ -330,13 +330,13 @@ public class GroupsFragment extends AbsHomeFragment {
         final Context context = getActivity();
         final PopupMenu popup;
 
-        if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
             popup = new PopupMenu(context, actionView, Gravity.END);
         } else {
             popup = new PopupMenu(context, actionView);
         }
         popup.getMenuInflater().inflate(R.menu.vector_home_group_settings, popup.getMenu());
-        CommonActivityUtils.tintMenuIcons(popup.getMenu(), ThemeUtils.getColor(context, R.attr.settings_icon_tint_color));
+        ThemeUtils.INSTANCE.tintMenuIcons(popup.getMenu(), ThemeUtils.INSTANCE.getColor(context, R.attr.settings_icon_tint_color));
 
 
         popup.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {

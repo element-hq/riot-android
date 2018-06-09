@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/url_preview_layout"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
@@ -33,7 +34,7 @@
             android:layout_height="wrap_content"
             android:layout_toRightOf="@+id/url_preview_image_view"
             android:maxLines="2"
-            android:text="a title"
+            tools:text="a title"
             android:linksClickable="true"
             android:textSize="14sp" />
 
@@ -44,7 +45,7 @@
             android:layout_below="@+id/url_preview_title_text_view"
             android:layout_toRightOf="@+id/url_preview_image_view"
             android:maxLines="3"
-            android:text="a description"
+            tools:text="a description"
             android:textSize="14sp" />
     </RelativeLayout>
 

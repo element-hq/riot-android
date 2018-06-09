@@ -5,13 +5,16 @@ Features:
  -
 
 Improvements:
- -
+ - Add spacing to device keys (#2314)
 
 Bugfix:
  -
 
 Translations:
  -
+
+Build:
+ - Add script to check code quality
 
 Changes in Riot 0.8.10 (2018-01-06)
 ===================================================

@@ -3,6 +3,7 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="74dp"
+    xmlns:tools="http://schemas.android.com/tools"
     android:orientation="horizontal">
 
     <LinearLayout
@@ -103,7 +104,7 @@
             android:layout_toLeftOf="@id/filtered_list_actions_list"
             android:layout_toRightOf="@id/filtered_list_avatar"
             android:singleLine="true"
-            android:text="A member name"
+            tools:text="A member name"
             android:textColor="?attr/default_text_dark_color"
             android:textSize="16sp"
             android:textStyle="bold" />
@@ -118,7 +119,7 @@
             android:layout_toLeftOf="@id/filtered_list_actions_list"
             android:maxLines="1"
             android:ellipsize="end"
-            android:text="A member status"
+            tools:text="A member status"
             android:textColor="?attr/default_text_light_color"
             android:textSize="14sp" />
 

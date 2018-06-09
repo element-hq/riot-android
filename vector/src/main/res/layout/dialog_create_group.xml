@@ -1,6 +1,7 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    xmlns:tools="http://schemas.android.com/tools"
     android:orientation="vertical">
 
     <TextView
@@ -35,7 +36,7 @@
             android:layout_height="wrap_content"
             android:layout_centerVertical="true"
             android:background="@color/vector_silver_color"
-            android:text="+"
+            android:text="@string/plus_sign"
             android:textSize="18sp" />
 
         <TextView
@@ -45,7 +46,7 @@
             android:layout_alignParentRight="true"
             android:layout_centerVertical="true"
             android:background="@color/vector_silver_color"
-            android:text=":a_server_name.org"
+            tools:text=":a_server_name.org"
             android:textSize="18sp" />
 
         <EditText
