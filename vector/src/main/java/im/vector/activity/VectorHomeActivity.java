@@ -59,6 +59,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.ViewPropertyAnimator;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
@@ -1328,27 +1329,30 @@ public class VectorHomeActivity extends RiotAppCompatActivity implements SearchV
 
     private void revealFloatingActionMenu() {
          if (null != mFloatingActionsMenu) {
-        mFloatingActionsMenu.collapse();
-            mFloatingActionsMenu.setVisibility(View.VISIBLE);
-            mFabMain.animate().scaleX(1).scaleY(1).alpha(1).setListener( new AnimatorListenerAdapter() {
-                        @Override
-                        public void onAnimationEnd(Animator animation) {
-                    super.onAnimationEnd(animation) ;
-                            mFloatingActionsMenu.setVisibility(View.VISIBLE);
-                            }
-            }).start();
-        }
+             mFloatingActionsMenu.collapse();
+             mFloatingActionsMenu.setVisibility(View.VISIBLE);
+             ViewPropertyAnimator animator = mFabMain.animate().scaleX(1).scaleY(1).alpha(1).setListener(new AnimatorListenerAdapter() {
+                 @Override
+                 public void onAnimationEnd(Animator animation) {
+                     super.onAnimationEnd(animation);
+                     mFloatingActionsMenu.setVisibility(View.VISIBLE);
+                 }
+             });
+             animator.start();
+         }
     }
-                                private void concealFloatingActionMenu(){
-                             if (null != mFloatingActionsMenu) {
-                                mFloatingActionsMenu.collapse();
-                            mFabMain.animate().scaleX(0).scaleY(0).alpha(0).setListener(new AnimatorListenerAdapter() {
-                                @Override
-                            public void onAnimationEnd(Animator animation) {
-                        super.onAnimationEnd(animation);
+
+    private void concealFloatingActionMenu(){
+        if (null != mFloatingActionsMenu) {
+            mFloatingActionsMenu.collapse();
+            ViewPropertyAnimator animator = mFabMain.animate().scaleX(0).scaleY(0).alpha(0).setListener(new AnimatorListenerAdapter() {
+                @Override
+                public void onAnimationEnd(Animator animation) {
+                    super.onAnimationEnd(animation);
                     mFloatingActionsMenu.setVisibility(View.GONE);
-                    }
-                    }).start();
+                }
+            });
+            animator.start();
         }
     }
 
