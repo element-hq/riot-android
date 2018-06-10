@@ -1072,15 +1072,15 @@ public class VectorHomeActivity extends RiotAppCompatActivity implements SearchV
         mSearchView.setIconifiedByDefault(false);
         mSearchView.setOnQueryTextListener(this);
 
-        mFabStartChat.setIconDrawable(CommonActivityUtils.tintDrawableWithColor(
+        mFabStartChat.setIconDrawable(ThemeUtils.INSTANCE.tintDrawableWithColor(
                 getResources().getDrawable(R.drawable.ic_person_black_24dp), getResources().getColor(android.R.color.white)
         ));
 
-        mFabCreateRoom.setIconDrawable(CommonActivityUtils.tintDrawableWithColor(
+        mFabCreateRoom.setIconDrawable(ThemeUtils.INSTANCE.tintDrawableWithColor(
                 getResources().getDrawable(R.drawable.ic_add_white), getResources().getColor(android.R.color.white)
         ));
 
-        mFabJoinRoom.setIconDrawable(CommonActivityUtils.tintDrawableWithColor(
+        mFabJoinRoom.setIconDrawable(ThemeUtils.INSTANCE.tintDrawableWithColor(
                 getResources().getDrawable(R.drawable.riot_tab_rooms), getResources().getColor(android.R.color.white)
         ));
 
