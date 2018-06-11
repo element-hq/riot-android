@@ -1636,7 +1636,7 @@ public class LoginActivity extends MXCActionBarActivity implements RegistrationM
             return;
         }
 
-        if (!identityUrlString.startsWith("http")) {
+        if (!identityUrlString.startsWith("http") && !TextUtils.isEmpty(identityUrlString)) {
             Toast.makeText(this, getString(R.string.login_error_must_start_http), Toast.LENGTH_SHORT).show();
             return;
         }
@@ -2064,8 +2064,7 @@ public class LoginActivity extends MXCActionBarActivity implements RegistrationM
 
             String identityServerUrlString = getIdentityServerUrl();
 
-            if (TextUtils.isEmpty(identityServerUrlString)
-                    || !identityServerUrlString.startsWith("http")
+            if (!identityServerUrlString.startsWith("http")
                     || TextUtils.equals(identityServerUrlString, "http://")
                     || TextUtils.equals(identityServerUrlString, "https://")) {
                 Toast.makeText(this, getString(R.string.login_error_must_start_http), Toast.LENGTH_SHORT).show();
