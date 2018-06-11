@@ -200,7 +200,9 @@ Selecteer exporteren om de versleutelingssleutels op te slaan voordat je uitlogt
     <string name="login_error_login_email_not_yet">Er is nog niet op de link in de e-mail geklikt</string>
 
     <!-- crypto warnings -->
-    <string name="e2e_need_log_in_again">Je moet opnieuw inloggen om eind-tot-eind versleuteling sleutels te genereren voor dit apparaat en om de publieke sleutel naar de thuisserver te sturen.\nDit is eenmalig.\nExcuses voor het ongemak.</string>
+    <string name="e2e_need_log_in_again">Je moet opnieuw inloggen om end-to-endbeveiligingssleutels te genereren voor dit apparaat en om de publieke sleutel naar de thuisserver te sturen.
+Dit is eenmalig.
+Excuses voor het ongemak.</string>
 
     <!-- read receipts list Screen -->
     <string name="read_receipts_list">Gelezen berichten</string>
@@ -290,7 +292,13 @@ Sta toegang toe op de volgende pop-up om bestanden vanaf je telefoon te sturen.<
     <string name="room_creation_add_member">Deelnemer toevoegen</string>
     <string name="room_title_one_member">1 deelnemer</string>
     <string name="room_e2e_alert_title">Waarschuwing!</string>
-    <string name="room_e2e_alert_message">Eind-tot-eind versleuteling is nog in beta en kan onbetrouwbaar zijn.\n\nHet is beter om het nog niet met gevoelige gegevens te vertrouwen.\n\nApparaten kunnen nog niet de geschiedenis van voordat ze de ruimte betraden ontsleutelen.\n\nVersleutelde berichten zullen nog niet zichtbaar zijn op applicaties die geen versleuteling ondersteunen.</string>
+    <string name="room_e2e_alert_message">End-to-endbeveiliging is in bèta en kan onbetrouwbaar zijn.
+
+Het is beter om het nog niet met gevoelige gegevens te vertrouwen.
+
+Apparaten kunnen de geschiedenis van voordat ze de ruimte betraden nog niet ontsleutelen.
+
+Versleutelde berichten zullen nog niet zichtbaar zijn op programma\'s die geen versleuteling ondersteunen.</string>
 
     <!--  Time -->
     <string name="format_time_s">s</string>
@@ -587,9 +595,9 @@ Sta toegang toe op de volgende pop-up om bestanden vanaf je telefoon te sturen.<
     <string name="room_settings_addresses_pref_title">Adressen</string>
     <string name="room_settings_labs_pref_title">Labs</string>
     <string name="room_settings_labs_warning_message">Dit zijn experimentele functies die op onverwachte manieren kunnen breken. Wees behoedzaam bij het gebruik van deze functies.</string>
-    <string name="room_settings_labs_end_to_end">Eind-tot-Eind Versleuteling</string>
+    <string name="room_settings_labs_end_to_end">End-to-endbeveiliging</string>
     <string name="room_settings_labs_end_to_end_warnings">Je moet uitloggen om de versleuteling aan te zetten.</string>
-    <string name="room_settings_labs_end_to_end_is_active">Eind-tot-Eind versleuteling is actief</string>
+    <string name="room_settings_labs_end_to_end_is_active">End-to-endbeveiliging is actief</string>
     <string name="room_settings_never_send_to_unverified_devices_title">Alleen naar geverifieerde apparaten versturen</string>
     <string name="room_settings_never_send_to_unverified_devices_summary">Nooit in deze ruimte niet geverifieerde apparaten berichten sturen vanaf dit apparaat.</string>
 
@@ -611,7 +619,15 @@ Sta toegang toe op de volgende pop-up om bestanden vanaf je telefoon te sturen.<
     <string name="room_settings_addresses_e2e_disabled">Versleuteling is uit in deze ruimte.</string>
     <string name="room_settings_addresses_e2e_encryption_warning">Zet versleuteling aan \n(waarschuwing: dit kan niet meer uitgezet worden!)</string>
     <string name="room_settings_addresses_e2e_prompt_title">Waarschuwing!</string>
-    <string name="room_settings_addresses_e2e_prompt_message">Eind-tot-eind versleuteling is experimenteel en kan onbetrouwbaar zijn.\n\nHet is beter om het nog niet met gevoelige gegevens te vertrouwen.\n\nApparaten kunnen nog niet de geschiedenis van voordat ze de ruimte betraden kunnen ontsleutelen.\n\nZodra de versleuteling aan staat kan het niet meer worden uitgezet (voor nu).\n\nVersleutelde berichten zullen nog niet zichtbaar zijn op applicaties die geen versleuteling ondersteunen.</string>
+    <string name="room_settings_addresses_e2e_prompt_message">End-to-endbeveiliging is experimenteel en kan onbetrouwbaar zijn.
+
+Het is beter om het nog niet met gevoelige gegevens te vertrouwen.
+
+Apparaten kunnen de geschiedenis van voordat ze de ruimte betraden nog niet ontsleutelen.
+
+Zodra de versleuteling aan staat kan het (voorlopig) niet worden uitgezet.
+
+Versleutelde berichten zullen nog niet zichtbaar zijn op programma\'s die geen versleuteling ondersteunen.</string>
 
     <!-- Directory -->
     <string name="directory_title">Adresboek</string>
@@ -620,12 +636,12 @@ Sta toegang toe op de volgende pop-up om bestanden vanaf je telefoon te sturen.<
     <string name="failed_to_load_timeline_position">%s probeerde een specifiek punt in de geschiedenis van deze ruimte te laden, maar kon het niet vinden.</string>
 
     <!-- encryption dialog -->
-    <string name="encryption_information_title">Eind-tot-eind versleuteling informatie</string>
+    <string name="encryption_information_title">Informatie over end-to-endbeveilig</string>
 
-    <string name="encryption_information_device_info">Evenement informatie</string>
-    <string name="encryption_information_user_id">Gebruiker id</string>
-    <string name="encryption_information_curve25519_identity_key">Curve25519 identiteitssleutel</string>
-    <string name="encryption_information_claimed_ed25519_fingerprint_key">Geclaimde Ed25519 vingerafdrukssleutel</string>
+    <string name="encryption_information_device_info">Evenementsinformatie</string>
+    <string name="encryption_information_user_id">Gebruikers-ID</string>
+    <string name="encryption_information_curve25519_identity_key">Curve25519-identiteitssleutel</string>
+    <string name="encryption_information_claimed_ed25519_fingerprint_key">Geclaimde Ed25519-sleutel-vingerafdruk</string>
     <string name="encryption_information_algorithm">Algoritme</string>
     <string name="encryption_information_session_id">Sessie ID</string>
     <string name="encryption_information_decryption_error">Ontsleutelingsfout</string>
@@ -670,9 +686,9 @@ Sta toegang toe op de volgende pop-up om bestanden vanaf je telefoon te sturen.<
     <string name="encryption_information_verify_device_warning2">Als het overeenkomt, druk op de verifïeren knop hieronder. Als het niet overeenkomt, dan onderschept iemand anders het apparaat en wil je waarschijnlijk in plaats daar van op de blokkeren knop drukken.\nIn de toekomst zal dit verificatie proces wat meer worden vermakkelijkt.</string>
     <string name="encryption_information_verify_key_match">Ik verifïeer dat de sleutels overeenkomen</string>
 
-    <string name="e2e_enabling_on_app_update">Riot ondersteund nu eind-tot-eind versleuteling maar je moet opnieuw inloggen om het aan te zetten.
+    <string name="e2e_enabling_on_app_update">Riot ondersteunt nu end-to-endbeveiliging maar je moet opnieuw inloggen om het aan te zetten.
 
-Je kan het nu of later doen vanaf de applicatie instellingen.</string>
+Je kan het nu, of later, doen vanuit de programma-instellingen.</string>
 
     <!-- unknown devices management -->
     <string name="unknown_devices_alert_title">Deze ruimte bevat onbekende apparaten</string>
