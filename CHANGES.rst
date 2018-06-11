@@ -11,7 +11,7 @@ Other changes:
  - Remove "Matrix application" activation from the Lab section in the settings (#2341)
 
 Bugfix:
- -
+ - Remove black borders on 18:9 phone (#2063)
 
 Translations:
  -

@@ -101,6 +101,11 @@
         android:theme="@style/AppTheme"
         tools:replace="allowBackup,label">
 
+        <!-- No limit for screen ratio: avoid black strips -->
+        <meta-data
+            android:name="android.max_aspect"
+            android:value="9.9"/>
+
         <!-- activities list starts here -->
         <activity
             android:name=".activity.LoginActivity"
