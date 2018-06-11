@@ -261,9 +261,6 @@ public class VectorHomeActivity extends RiotAppCompatActivity implements SearchV
     private List<Room> mDirectChatInvitations;
     private List<Room> mRoomInvitations;
 
-    // floating action bar dialog
-    private AlertDialog mFabDialog;
-
     /*
      * *********************************************************************************************
      * Static methods
@@ -795,12 +792,6 @@ public class VectorHomeActivity extends RiotAppCompatActivity implements SearchV
         if (mHideFloatingActionButton != null && mFloatingActionsMenu != null) {
             mFloatingActionsMenu.removeCallbacks(mHideFloatingActionButton);
             mHideFloatingActionButton = null;
-        }
-
-        if (mFabDialog != null) {
-            // Prevent leak after orientation changed
-            mFabDialog.dismiss();
-            mFabDialog = null;
         }
 
         removeBadgeEventsListener();
