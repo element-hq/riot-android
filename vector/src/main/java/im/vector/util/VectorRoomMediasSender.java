@@ -780,7 +780,8 @@ public class VectorRoomMediasSender {
                                                     // stored the compression selected by the user
                                                     mImageCompressionDescription = imageSizes.getImageSizesDescription(mVectorRoomActivity).get(fPos);
 
-                                                    final String fImageUrl = resizeImage(anImageUrl, filename, imageSizes.mFullImageSize, expectedSize, rotationAngle);
+                                                    final String fImageUrl
+                                                            = resizeImage(anImageUrl, filename, imageSizes.mFullImageSize, expectedSize, rotationAngle);
 
                                                     mVectorRoomActivity.runOnUiThread(new Runnable() {
                                                         @Override
