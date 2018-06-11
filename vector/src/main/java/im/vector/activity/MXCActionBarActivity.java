@@ -42,6 +42,7 @@ import im.vector.VectorApp;
  * extends ActionBarActivity to manage the rageshake
  */
 public abstract class MXCActionBarActivity extends RiotAppCompatActivity {
+    // TODO Make this protected
     public static final String EXTRA_MATRIX_ID = "MXCActionBarActivity.EXTRA_MATRIX_ID";
 
     MXSession mSession = null;

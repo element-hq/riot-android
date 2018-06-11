@@ -7,6 +7,9 @@ Features:
 Improvements:
  - Add spacing to device keys (#2314)
 
+Other changes:
+ - Remove "Matrix application" activation from the Lab section in the settings (#2341)
+
 Bugfix:
  -
 

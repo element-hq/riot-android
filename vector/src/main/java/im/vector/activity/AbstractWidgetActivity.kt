@@ -442,7 +442,7 @@ abstract class AbstractWidgetActivity : RiotAppCompatActivity() {
                                                private val mDescription: String) :
             ApiCallback<T> {
 
-        override fun onSuccess(info: T) {
+        override fun onSuccess(info: T?) {
             Log.d(LOG_TAG, "$mDescription succeeds")
             sendSuccess(mEventData)
         }

@@ -1035,7 +1035,8 @@ class VectorMessagesAdapterHelper {
             EventDisplay display = new RiotEventDisplay(context, event, roomState);
             return event.hasContentFields() && (display.getTextualDisplay() != null);
         } else if (TextUtils.equals(WidgetsManager.WIDGET_EVENT_TYPE, event.getType())) {
-            return PreferencesManager.useMatrixApps(context);
+            // Matrix apps are enabled
+            return true;
         }
         return false;
     }

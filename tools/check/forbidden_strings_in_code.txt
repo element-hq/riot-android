@@ -132,3 +132,9 @@ invalidateOptionsMenu
 
 # Directly use getString() in a Fragment
 getActivity\(\)\.getString\(
+
+# In Kotlin, Void has to be null safe, i.e. use 'Void?' instead of 'Void'
+\: Void\)
+
+
+
