@@ -1093,7 +1093,6 @@ public class VectorHomeActivity extends RiotAppCompatActivity implements SearchV
                 public void onMenuExpanded() {
                     touchGuard.setAlpha(0.6f);
 
-                    touchGuard.setClickable(true);
                     touchGuard.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
@@ -1106,8 +1105,8 @@ public class VectorHomeActivity extends RiotAppCompatActivity implements SearchV
                 public void onMenuCollapsed() {
                     touchGuard.setAlpha(0);
 
-                    touchGuard.setClickable(false);
                     touchGuard.setOnClickListener(null);
+                    touchGuard.setClickable(false);
                 }
             });
         }
