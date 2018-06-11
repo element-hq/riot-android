@@ -54,8 +54,6 @@ else
   wget https://raw.githubusercontent.com/matrix-org/matrix-dev-tools/develop/bin/search_forbidden_strings.pl -O ${searchForbiddenStringsScript}
 fi
 
-echo
-
 if [ -x ${searchForbiddenStringsScript} ]; then
   echo "${searchForbiddenStringsScript} is already executable"
 else
@@ -99,8 +97,6 @@ else
   wget https://raw.githubusercontent.com/matrix-org/matrix-dev-tools/develop/bin/check_long_files.pl -O ${checkLongFilesScript}
 fi
 
-echo
-
 if [ -x ${checkLongFilesScript} ]; then
   echo "${checkLongFilesScript} is already executable"
 else
@@ -111,7 +107,8 @@ fi
 echo
 echo "Search for long files..."
 
-${checkLongFilesScript} 3000 \
+# TODO Decrease this limit in a near future...
+${checkLongFilesScript} 4100 \
     ./vector/src/app/java \
     ./vector/src/appfdroid/java \
     ./vector/src/main/java \
