@@ -2063,8 +2063,7 @@ public class LoginActivity extends MXCActionBarActivity implements RegistrationM
             }
 
             String identityServerUrlString = getIdentityServerUrl();
-
-            if (!identityServerUrlString.startsWith("http")
+            if ((!TextUtils.isEmpty(identityServerUrlString) && !identityServerUrlString.startsWith("http"))
                     || TextUtils.equals(identityServerUrlString, "http://")
                     || TextUtils.equals(identityServerUrlString, "https://")) {
                 Toast.makeText(this, getString(R.string.login_error_must_start_http), Toast.LENGTH_SHORT).show();
