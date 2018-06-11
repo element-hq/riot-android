@@ -545,14 +545,14 @@ public class VectorHomeActivity extends RiotAppCompatActivity implements SearchV
             // crash reported by a rage shake
             try {
                 new AlertDialog.Builder(this)
-                        .setMessage(getString(R.string.send_bug_report_app_crashed))
-                        .setPositiveButton(getString(R.string.yes), new DialogInterface.OnClickListener() {
+                        .setMessage(R.string.send_bug_report_app_crashed)
+                        .setPositiveButton(R.string.yes, new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
                                 BugReporter.sendBugReport();
                             }
                         })
-                        .setNegativeButton(getString(R.string.no), new DialogInterface.OnClickListener() {
+                        .setNegativeButton(R.string.no, new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
                                 BugReporter.deleteCrashFile(VectorHomeActivity.this);
@@ -629,36 +629,32 @@ public class VectorHomeActivity extends RiotAppCompatActivity implements SearchV
             // by default, use GCM and low detail notifications
             gcmMgr.setNotificationPrivacy(GcmRegistrationManager.NotificationPrivacy.LOW_DETAIL);
 
-            AlertDialog.Builder builder = new AlertDialog.Builder(this);
-            builder.setTitle(R.string.startup_notification_privacy_title);
-            builder.setMessage(R.string.startup_notification_privacy_message);
+            new AlertDialog.Builder(this)
+                    .setTitle(R.string.startup_notification_privacy_title)
+                    .setMessage(R.string.startup_notification_privacy_message)
+                    .setPositiveButton(R.string.startup_notification_privacy_button_grant, new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
 
-            builder.setPositiveButton(R.string.startup_notification_privacy_button_grant, new DialogInterface.OnClickListener() {
-                @Override
-                public void onClick(DialogInterface dialog, int which) {
+                            Log.d(LOG_TAG, "checkNotificationPrivacySetting: user wants to grant the IgnoreBatteryOptimizations permission");
 
-                    Log.d(LOG_TAG, "checkNotificationPrivacySetting: user wants to grant the IgnoreBatteryOptimizations permission");
+                            // use NotificationPrivacyActivity in case we need to display the IgnoreBatteryOptimizations
+                            // grant permission dialog
+                            NotificationPrivacyActivity.setNotificationPrivacy(VectorHomeActivity.this,
+                                    GcmRegistrationManager.NotificationPrivacy.NORMAL);
+                        }
+                    })
+                    .setNegativeButton(R.string.startup_notification_privacy_button_other, new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
 
-                    // use NotificationPrivacyActivity in case we need to display the IgnoreBatteryOptimizations
-                    // grant permission dialog
-                    NotificationPrivacyActivity.setNotificationPrivacy(VectorHomeActivity.this,
-                            GcmRegistrationManager.NotificationPrivacy.NORMAL);
-                }
-            });
+                            Log.d(LOG_TAG, "checkNotificationPrivacySetting: user opens notification policy setting screen");
 
-            builder.setNegativeButton(R.string.startup_notification_privacy_button_other, new DialogInterface.OnClickListener() {
-                @Override
-                public void onClick(DialogInterface dialog, int which) {
-
-                    Log.d(LOG_TAG, "checkNotificationPrivacySetting: user opens notification policy setting screen");
-
-                    // open the notification policy setting screen
-                    startActivity(NotificationPrivacyActivity.getIntent(VectorHomeActivity.this));
-                }
-            });
-
-            AlertDialog dialog = builder.create();
-            dialog.show();
+                            // open the notification policy setting screen
+                            startActivity(NotificationPrivacyActivity.getIntent(VectorHomeActivity.this));
+                        }
+                    })
+                    .show();
         }
     }
 
@@ -705,8 +701,6 @@ public class VectorHomeActivity extends RiotAppCompatActivity implements SearchV
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        boolean retCode = true;
-
         switch (item.getItemId()) {
             // search in rooms content
             case R.id.ic_action_global_search:
@@ -717,22 +711,13 @@ public class VectorHomeActivity extends RiotAppCompatActivity implements SearchV
                 }
 
                 startActivity(searchIntent);
-                break;
-
-            // search in rooms content
+                return true;
             case R.id.ic_action_historical:
                 startActivity(new Intent(this, HistoricalRoomsActivity.class));
-                break;
-            case R.id.ic_action_mark_all_as_read:
-                // Will be handle by fragments
-                retCode = false;
-                break;
+                return true;
             default:
-                // not handled item, return the super class implementation value
-                retCode = super.onOptionsItemSelected(item);
-                break;
+                return super.onOptionsItemSelected(item);
         }
-        return retCode;
     }
 
     @Override
@@ -1170,12 +1155,8 @@ public class VectorHomeActivity extends RiotAppCompatActivity implements SearchV
                 editor.putBoolean(isFirstCryptoAlertKey, false);
                 editor.commit();
 
-                AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(this);
-                alertDialogBuilder.setMessage(getString(R.string.e2e_need_log_in_again));
-
-                // set dialog message
-                alertDialogBuilder
-                        .setCancelable(true)
+                new AlertDialog.Builder(this)
+                        .setMessage(R.string.e2e_need_log_in_again)
                         .setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
@@ -1186,11 +1167,8 @@ public class VectorHomeActivity extends RiotAppCompatActivity implements SearchV
                                     public void onClick(DialogInterface dialog, int id) {
                                         CommonActivityUtils.logout(VectorApp.getCurrentActivity());
                                     }
-                                });
-                // create alert dialog
-                AlertDialog alertDialog = alertDialogBuilder.create();
-                // show it
-                alertDialog.show();
+                                })
+                        .show();
             }
         }
     }
@@ -1410,7 +1388,7 @@ public class VectorHomeActivity extends RiotAppCompatActivity implements SearchV
         textInput.setTextColor(ThemeUtils.INSTANCE.getColor(this, R.attr.riot_primary_text_color));
 
         // set dialog message
-        alertDialogBuilder
+        AlertDialog alertDialog = alertDialogBuilder
                 .setCancelable(false)
                 .setPositiveButton(R.string.join,
                         new DialogInterface.OnClickListener() {
@@ -1468,13 +1446,8 @@ public class VectorHomeActivity extends RiotAppCompatActivity implements SearchV
                             public void onClick(DialogInterface dialog, int id) {
                                 dialog.cancel();
                             }
-                        });
-
-        // create alert dialog
-        AlertDialog alertDialog = alertDialogBuilder.create();
-
-        // show it
-        alertDialog.show();
+                        })
+                .show();
 
         final Button joinButton = alertDialog.getButton(AlertDialog.BUTTON_POSITIVE);
 
@@ -1669,9 +1642,9 @@ public class VectorHomeActivity extends RiotAppCompatActivity implements SearchV
      */
     private void exportKeysAndSignOut() {
         View dialogLayout = getLayoutInflater().inflate(R.layout.dialog_export_e2e_keys, null);
-        AlertDialog.Builder dialog = new AlertDialog.Builder(this);
-        dialog.setTitle(R.string.encryption_export_room_keys);
-        dialog.setView(dialogLayout);
+        AlertDialog.Builder builder = new AlertDialog.Builder(this)
+                .setTitle(R.string.encryption_export_room_keys)
+                .setView(dialogLayout);
 
         final TextInputEditText passPhrase1EditText = dialogLayout.findViewById(R.id.dialog_e2e_keys_passphrase_edit_text);
         final TextInputEditText passPhrase2EditText = dialogLayout.findViewById(R.id.dialog_e2e_keys_confirm_passphrase_edit_text);
@@ -1699,7 +1672,7 @@ public class VectorHomeActivity extends RiotAppCompatActivity implements SearchV
 
         exportButton.setEnabled(false);
 
-        final AlertDialog exportDialog = dialog.show();
+        final AlertDialog exportDialog = builder.show();
 
         exportButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -1709,11 +1682,9 @@ public class VectorHomeActivity extends RiotAppCompatActivity implements SearchV
                 CommonActivityUtils.exportKeys(mSession, passPhrase1EditText.getText().toString(), new ApiCallback<String>() {
                     private void onDone(String message) {
                         hideWaitingView();
-                        AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(VectorHomeActivity.this);
-                        alertDialogBuilder.setMessage(message);
 
-                        // set dialog message
-                        alertDialogBuilder
+                        new AlertDialog.Builder(VectorHomeActivity.this)
+                                .setMessage(message)
                                 .setCancelable(false)
                                 .setPositiveButton(R.string.action_sign_out,
                                         new DialogInterface.OnClickListener() {
@@ -1727,18 +1698,8 @@ public class VectorHomeActivity extends RiotAppCompatActivity implements SearchV
                                             public void onClick(DialogInterface dialog, int id) {
                                                 dialog.cancel();
                                             }
-                                        });
-
-                        // create alert dialog
-                        AlertDialog alertDialog = alertDialogBuilder.create();
-
-                        // A crash has been reported by GA
-                        try {
-                            // show it
-                            alertDialog.show();
-                        } catch (Exception e) {
-                            Log.e(LOG_TAG, "## exportKeysAndSignOut() failed " + e.getMessage());
-                        }
+                                        })
+                                .show();
                     }
 
                     @Override
@@ -1810,11 +1771,8 @@ public class VectorHomeActivity extends RiotAppCompatActivity implements SearchV
                     }
 
                     case R.id.sliding_menu_sign_out: {
-                        AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(VectorHomeActivity.this);
-                        alertDialogBuilder.setMessage(getString(R.string.action_sign_out_confirmation));
-
-                        // set dialog message
-                        alertDialogBuilder
+                        new AlertDialog.Builder(VectorHomeActivity.this)
+                                .setMessage(R.string.action_sign_out_confirmation)
                                 .setCancelable(false)
                                 .setPositiveButton(R.string.action_sign_out,
                                         new DialogInterface.OnClickListener() {
@@ -1841,12 +1799,8 @@ public class VectorHomeActivity extends RiotAppCompatActivity implements SearchV
                                             public void onClick(DialogInterface dialog, int id) {
                                                 dialog.cancel();
                                             }
-                                        });
-
-                        // create alert dialog
-                        AlertDialog alertDialog = alertDialogBuilder.create();
-                        // show it
-                        alertDialog.show();
+                                        })
+                                .show();
 
                         break;
                     }
@@ -2276,7 +2230,6 @@ public class VectorHomeActivity extends RiotAppCompatActivity implements SearchV
                                 dialog.dismiss();
                             }
                         })
-                        .create()
                         .show();
             }
         }

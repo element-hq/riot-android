@@ -275,7 +275,7 @@ class VectorSettingsPreferencesFragment : PreferenceFragment(), SharedPreference
         mDisplayNamePreference.let {
             it.summary = mSession.myUser.displayname
             it.onPreferenceChangeListener = Preference.OnPreferenceChangeListener { preference, newValue ->
-                onDisplayNameClick(if (null == newValue) null else (newValue as String).trim { it <= ' ' })
+                onDisplayNameClick(if (null == newValue) null else (newValue as String).trim())
                 false
             }
         }
@@ -508,7 +508,6 @@ class VectorSettingsPreferencesFragment : PreferenceFragment(), SharedPreference
                                 dialog.dismiss()
                                 useCryptoPref.isChecked = false
                             }
-                            .create()
                             .show()
                 } else {
                     val newValue = newValueAsVoid as Boolean
@@ -975,84 +974,79 @@ class VectorSettingsPreferencesFragment : PreferenceFragment(), SharedPreference
         )
     }
 
-//==============================================================================================================
-// Update items  methods
-//==============================================================================================================
+    //==============================================================================================================
+    // Update items  methods
+    //==============================================================================================================
 
     /**
      * Update the password.
      */
     private fun onPasswordUpdateClick() {
         activity.runOnUiThread {
-            val alertDialog = AlertDialog.Builder(activity)
             val view = activity.layoutInflater.inflate(R.layout.fragment_dialog_change_password, null)
-            alertDialog.setView(view)
-            alertDialog.setTitle(getString(R.string.settings_change_password))
 
             val oldPasswordText = view.findViewById<EditText>(R.id.change_password_old_pwd_text)
             val newPasswordText = view.findViewById<EditText>(R.id.change_password_new_pwd_text)
             val confirmNewPasswordText = view.findViewById<EditText>(R.id.change_password_confirm_new_pwd_text)
 
-            // Setting Positive "Yes" Button
-            alertDialog.setPositiveButton(R.string.save) { dialog, which ->
-                if (null != activity) {
-                    val imm = activity.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
-                    imm.hideSoftInputFromWindow(view.applicationWindowToken, 0)
-                }
-
-                val oldPwd = oldPasswordText.text.toString().trim { it <= ' ' }
-                val newPwd = newPasswordText.text.toString().trim { it <= ' ' }
-
-                displayLoadingView()
-
-                mSession.updatePassword(oldPwd, newPwd, object : ApiCallback<Void> {
-                    private fun onDone(textId: Int) {
-                        // check the activity still exists
+            val dialog = AlertDialog.Builder(activity)
+                    .setView(view)
+                    .setTitle(R.string.settings_change_password)
+                    .setPositiveButton(R.string.save) { dialog, which ->
                         if (null != activity) {
-                            // and the code is called in the right thread
-                            activity.runOnUiThread {
-                                hideLoadingView()
-                                Toast.makeText(activity,
-                                        getString(textId),
-                                        Toast.LENGTH_LONG).show()
+                            val imm = activity.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+                            imm.hideSoftInputFromWindow(view.applicationWindowToken, 0)
+                        }
+
+                        val oldPwd = oldPasswordText.text.toString().trim()
+                        val newPwd = newPasswordText.text.toString().trim()
+
+                        displayLoadingView()
+
+                        mSession.updatePassword(oldPwd, newPwd, object : ApiCallback<Void> {
+                            private fun onDone(textId: Int) {
+                                // check the activity still exists
+                                if (null != activity) {
+                                    // and the code is called in the right thread
+                                    activity.runOnUiThread {
+                                        hideLoadingView()
+                                        Toast.makeText(activity,
+                                                getString(textId),
+                                                Toast.LENGTH_LONG).show()
+                                    }
+                                }
                             }
+
+                            override fun onSuccess(info: Void?) {
+                                onDone(R.string.settings_password_updated)
+                            }
+
+                            override fun onNetworkError(e: Exception) {
+                                onDone(R.string.settings_fail_to_update_password)
+                            }
+
+                            override fun onMatrixError(e: MatrixError) {
+                                onDone(R.string.settings_fail_to_update_password)
+                            }
+
+                            override fun onUnexpectedError(e: Exception) {
+                                onDone(R.string.settings_fail_to_update_password)
+                            }
+                        })
+                    }
+                    .setNegativeButton(R.string.cancel) { dialog, which ->
+                        if (null != activity) {
+                            val imm = activity.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+                            imm.hideSoftInputFromWindow(view.applicationWindowToken, 0)
                         }
                     }
-
-                    override fun onSuccess(info: Void?) {
-                        onDone(R.string.settings_password_updated)
+                    .setOnCancelListener {
+                        if (null != activity) {
+                            val imm = activity.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+                            imm.hideSoftInputFromWindow(view.applicationWindowToken, 0)
+                        }
                     }
-
-                    override fun onNetworkError(e: Exception) {
-                        onDone(R.string.settings_fail_to_update_password)
-                    }
-
-                    override fun onMatrixError(e: MatrixError) {
-                        onDone(R.string.settings_fail_to_update_password)
-                    }
-
-                    override fun onUnexpectedError(e: Exception) {
-                        onDone(R.string.settings_fail_to_update_password)
-                    }
-                })
-            }
-
-            // Setting Negative "NO" Button
-            alertDialog.setNegativeButton(R.string.cancel) { dialog, which ->
-                if (null != activity) {
-                    val imm = activity.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
-                    imm.hideSoftInputFromWindow(view.applicationWindowToken, 0)
-                }
-            }
-
-            val dialog = alertDialog.show()
-
-            dialog.setOnCancelListener {
-                if (null != activity) {
-                    val imm = activity.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
-                    imm.hideSoftInputFromWindow(view.applicationWindowToken, 0)
-                }
-            }
+                    .show()
 
             val saveButton = dialog.getButton(AlertDialog.BUTTON_POSITIVE)
             saveButton.isEnabled = false
@@ -1061,9 +1055,9 @@ class VectorSettingsPreferencesFragment : PreferenceFragment(), SharedPreference
                 override fun beforeTextChanged(s: CharSequence, start: Int, count: Int, after: Int) {}
 
                 override fun onTextChanged(s: CharSequence, start: Int, before: Int, count: Int) {
-                    val oldPwd = oldPasswordText.text.toString().trim { it <= ' ' }
-                    val newPwd = newPasswordText.text.toString().trim { it <= ' ' }
-                    val newConfirmPwd = confirmNewPasswordText.text.toString().trim { it <= ' ' }
+                    val oldPwd = oldPasswordText.text.toString().trim()
+                    val newPwd = newPasswordText.text.toString().trim()
+                    val newConfirmPwd = confirmNewPasswordText.text.toString().trim()
 
                     saveButton.isEnabled = oldPwd.length > 0 && newPwd.length > 0 && TextUtils.equals(newPwd, newConfirmPwd)
                 }
@@ -1423,7 +1417,6 @@ class VectorSettingsPreferencesFragment : PreferenceFragment(), SharedPreference
                     })
                 }
                 .setNegativeButton(R.string.cancel) { dialog, which -> dialog.dismiss() }
-                .create()
                 .show()
     }
 
@@ -1438,7 +1431,8 @@ class VectorSettingsPreferencesFragment : PreferenceFragment(), SharedPreference
         val ignoredUsersList = mSession.dataHandler.ignoredUserIds
 
         ignoredUsersList.sortWith(Comparator { u1, u2 ->
-            u1.toLowerCase(VectorApp.getApplicationLocale()).compareTo(u2.toLowerCase(VectorApp.getApplicationLocale())) })
+            u1.toLowerCase(VectorApp.getApplicationLocale()).compareTo(u2.toLowerCase(VectorApp.getApplicationLocale()))
+        })
 
         val preferenceScreen = preferenceScreen
 
@@ -1486,7 +1480,6 @@ class VectorSettingsPreferencesFragment : PreferenceFragment(), SharedPreference
                                 })
                             }
                             .setNegativeButton(R.string.no) { dialog, which -> dialog.dismiss() }
-                            .create()
                             .show()
 
                     false
@@ -1543,10 +1536,9 @@ class VectorSettingsPreferencesFragment : PreferenceFragment(), SharedPreference
                     // the user cannot remove the self device target
                     if (!isThisDeviceTarget) {
                         preference.setOnPreferenceLongClickListener {
-                            val dialogMessage = getString(R.string.settings_delete_notification_targets_confirmation)
                             AlertDialog.Builder(activity)
                                     .setTitle(R.string.dialog_title_confirmation)
-                                    .setMessage(dialogMessage)
+                                    .setMessage(R.string.settings_delete_notification_targets_confirmation)
                                     .setPositiveButton(R.string.remove) { dialog, which ->
                                         dialog.dismiss()
 
@@ -1571,7 +1563,6 @@ class VectorSettingsPreferencesFragment : PreferenceFragment(), SharedPreference
                                         })
                                     }
                                     .setNegativeButton(R.string.cancel) { dialog, which -> dialog.dismiss() }
-                                    .create()
                                     .show()
                             true
                         }
@@ -1622,7 +1613,8 @@ class VectorSettingsPreferencesFragment : PreferenceFragment(), SharedPreference
             mDisplayedEmails = newEmailsList
 
             var index = 0
-            val addEmailBtn = mUserSettingsCategory.findPreference(ADD_EMAIL_PREFERENCE_KEY) ?: return
+            val addEmailBtn = mUserSettingsCategory.findPreference(ADD_EMAIL_PREFERENCE_KEY)
+                    ?: return
 
             // reported by GA
 
@@ -1726,51 +1718,48 @@ class VectorSettingsPreferencesFragment : PreferenceFragment(), SharedPreference
      * @param pid the used pid.
      */
     private fun showEmailValidationDialog(pid: ThreePid) {
-        val builder = AlertDialog.Builder(activity)
-        builder.setTitle(R.string.account_email_validation_title)
-        builder.setMessage(R.string.account_email_validation_message)
-        builder.setPositiveButton(R.string._continue) { dialog, which ->
-            dialog.dismiss()
-            mSession.myUser.add3Pid(pid, true, object : ApiCallback<Void> {
-                override fun onSuccess(info: Void?) {
-                    if (null != activity) {
-                        activity.runOnUiThread {
-                            hideLoadingView()
-                            refreshEmailsList()
-                        }
-                    }
-                }
-
-                override fun onNetworkError(e: Exception) {
-                    onCommonDone(e.localizedMessage)
-                }
-
-                override fun onMatrixError(e: MatrixError) {
-                    if (TextUtils.equals(e.errcode, MatrixError.THREEPID_AUTH_FAILED)) {
-                        if (null != activity) {
-                            activity.runOnUiThread {
-                                hideLoadingView()
-                                Toast.makeText(activity, getString(R.string.account_email_validation_error), Toast.LENGTH_SHORT).show()
+        AlertDialog.Builder(activity)
+                .setTitle(R.string.account_email_validation_title)
+                .setMessage(R.string.account_email_validation_message)
+                .setPositiveButton(R.string._continue) { dialog, which ->
+                    dialog.dismiss()
+                    mSession.myUser.add3Pid(pid, true, object : ApiCallback<Void> {
+                        override fun onSuccess(info: Void?) {
+                            if (null != activity) {
+                                activity.runOnUiThread {
+                                    hideLoadingView()
+                                    refreshEmailsList()
+                                }
                             }
                         }
-                    } else {
-                        onCommonDone(e.localizedMessage)
-                    }
+
+                        override fun onNetworkError(e: Exception) {
+                            onCommonDone(e.localizedMessage)
+                        }
+
+                        override fun onMatrixError(e: MatrixError) {
+                            if (TextUtils.equals(e.errcode, MatrixError.THREEPID_AUTH_FAILED)) {
+                                if (null != activity) {
+                                    activity.runOnUiThread {
+                                        hideLoadingView()
+                                        Toast.makeText(activity, getString(R.string.account_email_validation_error), Toast.LENGTH_SHORT).show()
+                                    }
+                                }
+                            } else {
+                                onCommonDone(e.localizedMessage)
+                            }
+                        }
+
+                        override fun onUnexpectedError(e: Exception) {
+                            onCommonDone(e.localizedMessage)
+                        }
+                    })
                 }
-
-                override fun onUnexpectedError(e: Exception) {
-                    onCommonDone(e.localizedMessage)
+                .setNegativeButton(R.string.cancel) { dialog, which ->
+                    dialog.dismiss()
+                    hideLoadingView()
                 }
-            })
-        }
-
-        builder.setNegativeButton(R.string.cancel) { dialog, which ->
-            dialog.dismiss()
-            hideLoadingView()
-        }
-
-        val alert = builder.create()
-        alert.show()
+                .show()
     }
 
 //==============================================================================================================
@@ -1814,7 +1803,8 @@ class VectorSettingsPreferencesFragment : PreferenceFragment(), SharedPreference
             mDisplayedPhoneNumber = phoneNumberList
 
             var index = 0
-            val addPhoneBtn = mUserSettingsCategory.findPreference(ADD_PHONE_NUMBER_PREFERENCE_KEY) ?: return
+            val addPhoneBtn = mUserSettingsCategory.findPreference(ADD_PHONE_NUMBER_PREFERENCE_KEY)
+                    ?: return
             var order = addPhoneBtn.order
 
             for (phoneNumber3PID in currentPhoneNumber3PID) {
@@ -1908,19 +1898,16 @@ class VectorSettingsPreferencesFragment : PreferenceFragment(), SharedPreference
     }
 
     private fun displayTextSizeSelection(activity: Activity) {
-        val builder = AlertDialog.Builder(activity)
         val inflater = activity.layoutInflater
 
         val layout = inflater.inflate(R.layout.text_size_selection, null)
-        builder.setTitle(R.string.font_size)
-        builder.setView(layout)
 
-        builder.setPositiveButton(R.string.ok) { dialog, id -> }
-
-        builder.setNegativeButton(R.string.cancel) { dialog, id -> }
-
-        val dialog = builder.create()
-        dialog.show()
+        val dialog = AlertDialog.Builder(activity)
+                .setTitle(R.string.font_size)
+                .setView(layout)
+                .setPositiveButton(R.string.ok) { dialog, id -> }
+                .setNegativeButton(R.string.cancel) { dialog, id -> }
+                .show()
 
         val linearLayout = layout.findViewById<LinearLayout>(R.id.text_selection_group_view)
 
@@ -2294,10 +2281,9 @@ class VectorSettingsPreferencesFragment : PreferenceFragment(), SharedPreference
 
             // title & icon
             builder.setTitle(R.string.devices_details_dialog_title)
-            builder.setIcon(android.R.drawable.ic_dialog_info)
-            builder.setView(layout)
-
-            builder.setPositiveButton(R.string.rename) { dialog, which -> displayDeviceRenameDialog(aDeviceInfo) }
+                    .setIcon(android.R.drawable.ic_dialog_info)
+                    .setView(layout)
+                    .setPositiveButton(R.string.rename) { dialog, which -> displayDeviceRenameDialog(aDeviceInfo) }
 
             // disable the deletion for our own device
             if (!TextUtils.equals(mSession.crypto.myDevice.deviceId, aDeviceInfo.device_id)) {
@@ -2305,16 +2291,14 @@ class VectorSettingsPreferencesFragment : PreferenceFragment(), SharedPreference
             }
 
             builder.setNeutralButton(R.string.cancel) { dialog, which -> dialog.dismiss() }
-
-            builder.setOnKeyListener(DialogInterface.OnKeyListener { dialog, keyCode, event ->
-                if (event.action == KeyEvent.ACTION_UP && keyCode == KeyEvent.KEYCODE_BACK) {
-                    dialog.cancel()
-                    return@OnKeyListener true
-                }
-                false
-            })
-
-            builder.create().show()
+                    .setOnKeyListener(DialogInterface.OnKeyListener { dialog, keyCode, event ->
+                        if (event.action == KeyEvent.ACTION_UP && keyCode == KeyEvent.KEYCODE_BACK) {
+                            dialog.cancel()
+                            return@OnKeyListener true
+                        }
+                        false
+                    })
+                    .show()
         } else {
             Log.e(LOG_TAG, "## displayDeviceDetailsDialog(): sanity check failure")
             // FIXME Hardcoded string
@@ -2461,9 +2445,9 @@ class VectorSettingsPreferencesFragment : PreferenceFragment(), SharedPreference
      */
     private fun exportKeys() {
         val dialogLayout = activity.layoutInflater.inflate(R.layout.dialog_export_e2e_keys, null)
-        val dialog = AlertDialog.Builder(activity)
-        dialog.setTitle(R.string.encryption_export_room_keys)
-        dialog.setView(dialogLayout)
+        val builder = AlertDialog.Builder(activity)
+                .setTitle(R.string.encryption_export_room_keys)
+                .setView(dialogLayout)
 
         val passPhrase1EditText = dialogLayout.findViewById<TextInputEditText>(R.id.dialog_e2e_keys_passphrase_edit_text)
         val passPhrase2EditText = dialogLayout.findViewById<TextInputEditText>(R.id.dialog_e2e_keys_confirm_passphrase_edit_text)
@@ -2487,7 +2471,7 @@ class VectorSettingsPreferencesFragment : PreferenceFragment(), SharedPreference
 
         exportButton.isEnabled = false
 
-        val exportDialog = dialog.show()
+        val exportDialog = builder.show()
 
         exportButton.setOnClickListener {
             displayLoadingView()
@@ -2544,9 +2528,9 @@ class VectorSettingsPreferencesFragment : PreferenceFragment(), SharedPreference
         if (sharedDataItems.size > 0) {
             val sharedDataItem = sharedDataItems[0]
             val dialogLayout = activity.layoutInflater.inflate(R.layout.dialog_import_e2e_keys, null)
-            val dialog = AlertDialog.Builder(activity)
-            dialog.setTitle(R.string.encryption_import_room_keys)
-            dialog.setView(dialogLayout)
+            val builder = AlertDialog.Builder(activity)
+                    .setTitle(R.string.encryption_import_room_keys)
+                    .setView(dialogLayout)
 
             val passPhraseEditText = dialogLayout.findViewById<TextInputEditText>(R.id.dialog_e2e_keys_passphrase_edit_text)
             val importButton = dialogLayout.findViewById<Button>(R.id.dialog_e2e_keys_import_button)
@@ -2567,7 +2551,7 @@ class VectorSettingsPreferencesFragment : PreferenceFragment(), SharedPreference
 
             importButton.isEnabled = false
 
-            val importDialog = dialog.show()
+            val importDialog = builder.show()
             val appContext = activity.applicationContext
 
             importButton.setOnClickListener(View.OnClickListener {

@@ -502,11 +502,8 @@ public class VectorMemberDetailsActivity extends MXCActionBarActivity implements
                 break;
 
             case ITEM_ACTION_IGNORE: {
-                AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(this);
-                alertDialogBuilder.setMessage(getString(R.string.room_participants_action_ignore) + " ?");
-
-                // set dialog message
-                alertDialogBuilder
+                new AlertDialog.Builder(this)
+                        .setMessage(getString(R.string.room_participants_action_ignore) + " ?")
                         .setCancelable(false)
                         .setPositiveButton(R.string.ok,
                                 new DialogInterface.OnClickListener() {
@@ -553,22 +550,15 @@ public class VectorMemberDetailsActivity extends MXCActionBarActivity implements
                                     public void onClick(DialogInterface dialog, int id) {
                                         dialog.cancel();
                                     }
-                                });
-
-                // create alert dialog
-                AlertDialog alertDialog = alertDialogBuilder.create();
-                // show it
-                alertDialog.show();
+                                })
+                        .show();
 
                 break;
             }
 
             case ITEM_ACTION_UNIGNORE: {
-                AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(this);
-                alertDialogBuilder.setMessage(getString(R.string.room_participants_action_unignore) + " ?");
-
-                // set dialog message
-                alertDialogBuilder
+                new AlertDialog.Builder(this)
+                        .setMessage(getString(R.string.room_participants_action_unignore) + " ?")
                         .setCancelable(false)
                         .setPositiveButton(R.string.ok,
                                 new DialogInterface.OnClickListener() {
@@ -615,12 +605,8 @@ public class VectorMemberDetailsActivity extends MXCActionBarActivity implements
                                     public void onClick(DialogInterface dialog, int id) {
                                         dialog.cancel();
                                     }
-                                });
-
-                // create alert dialog
-                AlertDialog alertDialog = alertDialogBuilder.create();
-                // show it
-                alertDialog.show();
+                                })
+                        .show();
                 break;
             }
             case ITEM_ACTION_MENTION:
@@ -714,12 +700,8 @@ public class VectorMemberDetailsActivity extends MXCActionBarActivity implements
         if (android.R.id.home == item.getItemId()) {
             if (View.VISIBLE == mDevicesListView.getVisibility()) {
                 setScreenDevicesListVisibility(View.GONE);
-            } else {
-                // don't use the default parent activity defined in the manifest file.
-                // close this activity when the home button is pressed
-                onBackPressed();
+                return true;
             }
-            return true;
         }
 
         return super.onOptionsItemSelected(item);
@@ -788,7 +770,6 @@ public class VectorMemberDetailsActivity extends MXCActionBarActivity implements
                             dialog.dismiss();
                         }
                     })
-                    .create()
                     .show();
         } else {
             mRoom.updateUserPowerLevels(userId, newPowerLevel, callback);

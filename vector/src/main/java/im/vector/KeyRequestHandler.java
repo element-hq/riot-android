@@ -328,11 +328,8 @@ public class KeyRequestHandler {
         String dialogText = wasNewDevice ? activity.getString(R.string.you_added_a_new_device, deviceName)
                 : activity.getString(R.string.your_unverified_device_requesting, deviceName);
 
-        AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(activity);
-        alertDialogBuilder.setMessage(dialogText);
-
-        // set dialog message
-        alertDialogBuilder
+        mAlertDialog = new AlertDialog.Builder(activity)
+                .setMessage(dialogText)
                 .setCancelable(false)
                 .setNegativeButton(R.string.ignore_request, new DialogInterface.OnClickListener() {
                     @Override
@@ -365,20 +362,13 @@ public class KeyRequestHandler {
                                     }
                                 });
                             }
-                        });
-
-
-        // create alert dialog
-        mAlertDialog = alertDialogBuilder.create();
-
-        mAlertDialog.setOnCancelListener(new DialogInterface.OnCancelListener() {
-            @Override
-            public void onCancel(DialogInterface dialogInterface) {
-                onDisplayKeyShareDialogClose(false, true);
-            }
-        });
-
-        // show it
-        mAlertDialog.show();
+                        })
+                .setOnCancelListener(new DialogInterface.OnCancelListener() {
+                    @Override
+                    public void onCancel(DialogInterface dialogInterface) {
+                        onDisplayKeyShareDialogClose(false, true);
+                    }
+                })
+                .show();
     }
 }

@@ -29,7 +29,6 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.content.res.Configuration;
-import android.content.res.Resources;
 import android.graphics.Color;
 import android.net.Uri;
 import android.os.Build;
@@ -871,31 +870,29 @@ public class VectorRoomActivity extends MXCActionBarActivity implements
             public void onClick(View v) {
                 if ((null != mRoom) && mRoom.isEncrypted() && (mRoom.getActiveMembers().size() > 2)) {
                     // display the dialog with the info text
-                    AlertDialog.Builder permissionsInfoDialog = new AlertDialog.Builder(VectorRoomActivity.this);
-                    Resources resource = getResources();
-                    permissionsInfoDialog.setMessage(resource.getString(R.string.room_no_conference_call_in_encrypted_rooms));
-                    permissionsInfoDialog.setIcon(android.R.drawable.ic_dialog_alert);
-                    permissionsInfoDialog.setPositiveButton(resource.getString(R.string.ok), null);
-                    permissionsInfoDialog.show();
-
+                    new AlertDialog.Builder(VectorRoomActivity.this)
+                            .setMessage(R.string.room_no_conference_call_in_encrypted_rooms)
+                            .setIcon(android.R.drawable.ic_dialog_alert)
+                            .setPositiveButton(R.string.ok, null)
+                            .show();
                 } else if (isUserAllowedToStartConfCall()) {
                     if (mRoom.getActiveMembers().size() > 2) {
-                        AlertDialog.Builder startConfDialog = new AlertDialog.Builder(VectorRoomActivity.this);
-                        startConfDialog.setTitle(R.string.conference_call_warning_title);
-                        startConfDialog.setMessage(R.string.conference_call_warning_message);
-                        startConfDialog.setIcon(android.R.drawable.ic_dialog_alert);
-                        startConfDialog.setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialog, int which) {
-                                if (PreferencesManager.useJitsiConfCall(VectorRoomActivity.this)) {
-                                    startJitsiCall(true);
-                                } else {
-                                    displayVideoCallIpDialog();
-                                }
-                            }
-                        });
-                        startConfDialog.setNegativeButton(R.string.cancel, null);
-                        startConfDialog.show();
+                        new AlertDialog.Builder(VectorRoomActivity.this)
+                                .setTitle(R.string.conference_call_warning_title)
+                                .setMessage(R.string.conference_call_warning_message)
+                                .setIcon(android.R.drawable.ic_dialog_alert)
+                                .setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
+                                    @Override
+                                    public void onClick(DialogInterface dialog, int which) {
+                                        if (PreferencesManager.useJitsiConfCall(VectorRoomActivity.this)) {
+                                            startJitsiCall(true);
+                                        } else {
+                                            displayVideoCallIpDialog();
+                                        }
+                                    }
+                                })
+                                .setNegativeButton(R.string.cancel, null)
+                                .show();
                     } else {
                         displayVideoCallIpDialog();
                     }
@@ -1055,7 +1052,6 @@ public class VectorRoomActivity extends MXCActionBarActivity implements
                                 dialog.dismiss();
                             }
                         })
-                        .create()
                         .show();
             }
 
@@ -1608,83 +1604,83 @@ public class VectorRoomActivity extends MXCActionBarActivity implements
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        int id = item.getItemId();
+        switch (item.getItemId()) {
+            case R.id.ic_action_matrix_apps:
+                openIntegrationManagerActivity(null);
+                return true;
+            case R.id.ic_action_search_in_room:
+                try {
+                    enableActionBarHeader(HIDE_ACTION_BAR_HEADER);
 
-        if (id == android.R.id.home) {
-            finish();
-            return true;
-        } else if (id == R.id.ic_action_matrix_apps) {
-            openIntegrationManagerActivity(null);
-        } else if (id == R.id.ic_action_search_in_room) {
-            try {
-                enableActionBarHeader(HIDE_ACTION_BAR_HEADER);
+                    final Intent searchIntent = new Intent(VectorRoomActivity.this, VectorUnifiedSearchActivity.class);
+                    searchIntent.putExtra(VectorUnifiedSearchActivity.EXTRA_ROOM_ID, mRoom.getRoomId());
+                    startActivity(searchIntent);
+                } catch (Exception e) {
+                    Log.i(LOG_TAG, "## onOptionsItemSelected(): ");
+                }
+                return true;
+            case R.id.ic_action_room_settings:
+                launchRoomDetails(VectorRoomDetailsActivity.PEOPLE_TAB_INDEX);
+                return true;
+            case R.id.ic_action_room_resend_unsent:
+                mVectorMessageListFragment.resendUnsentMessages();
+                refreshNotificationsArea();
+                return true;
+            case R.id.ic_action_room_delete_unsent:
+                mVectorMessageListFragment.deleteUnsentEvents();
+                refreshNotificationsArea();
+                return true;
+            case R.id.ic_action_room_leave:
+                if (null != mRoom) {
+                    Log.d(LOG_TAG, "Leave the room " + mRoom.getRoomId());
+                    new AlertDialog.Builder(VectorRoomActivity.this)
+                            .setTitle(R.string.room_participants_leave_prompt_title)
+                            .setMessage(R.string.room_participants_leave_prompt_msg)
+                            .setPositiveButton(R.string.leave, new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialog, int which) {
+                                    dialog.dismiss();
+                                    showWaitingView();
 
-                final Intent searchIntent = new Intent(VectorRoomActivity.this, VectorUnifiedSearchActivity.class);
-                searchIntent.putExtra(VectorUnifiedSearchActivity.EXTRA_ROOM_ID, mRoom.getRoomId());
-                startActivity(searchIntent);
+                                    mRoom.leave(new ApiCallback<Void>() {
+                                        @Override
+                                        public void onSuccess(Void info) {
+                                            Log.d(LOG_TAG, "The room " + mRoom.getRoomId() + " is left");
+                                            // close the activity
+                                            finish();
+                                        }
 
-            } catch (Exception e) {
-                Log.i(LOG_TAG, "## onOptionsItemSelected(): ");
-            }
-        } else if (id == R.id.ic_action_room_settings) {
-            launchRoomDetails(VectorRoomDetailsActivity.PEOPLE_TAB_INDEX);
-        } else if (id == R.id.ic_action_room_resend_unsent) {
-            mVectorMessageListFragment.resendUnsentMessages();
-            refreshNotificationsArea();
-        } else if (id == R.id.ic_action_room_delete_unsent) {
-            mVectorMessageListFragment.deleteUnsentEvents();
-            refreshNotificationsArea();
-        } else if (id == R.id.ic_action_room_leave) {
-            if (null != mRoom) {
-                Log.d(LOG_TAG, "Leave the room " + mRoom.getRoomId());
-                new AlertDialog.Builder(VectorRoomActivity.this)
-                        .setTitle(R.string.room_participants_leave_prompt_title)
-                        .setMessage(R.string.room_participants_leave_prompt_msg)
-                        .setPositiveButton(R.string.leave, new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialog, int which) {
-                                dialog.dismiss();
-                                showWaitingView();
+                                        private void onError(String errorMessage) {
+                                            hideWaitingView();
+                                            Log.e(LOG_TAG, "Cannot leave the room " + mRoom.getRoomId() + " : " + errorMessage);
+                                        }
 
-                                mRoom.leave(new ApiCallback<Void>() {
-                                    @Override
-                                    public void onSuccess(Void info) {
-                                        Log.d(LOG_TAG, "The room " + mRoom.getRoomId() + " is left");
-                                        // close the activity
-                                        finish();
-                                    }
+                                        @Override
+                                        public void onNetworkError(Exception e) {
+                                            onError(e.getLocalizedMessage());
+                                        }
 
-                                    private void onError(String errorMessage) {
-                                        hideWaitingView();
-                                        Log.e(LOG_TAG, "Cannot leave the room " + mRoom.getRoomId() + " : " + errorMessage);
-                                    }
+                                        @Override
+                                        public void onMatrixError(MatrixError e) {
+                                            onError(e.getLocalizedMessage());
+                                        }
 
-                                    @Override
-                                    public void onNetworkError(Exception e) {
-                                        onError(e.getLocalizedMessage());
-                                    }
-
-                                    @Override
-                                    public void onMatrixError(MatrixError e) {
-                                        onError(e.getLocalizedMessage());
-                                    }
-
-                                    @Override
-                                    public void onUnexpectedError(Exception e) {
-                                        onError(e.getLocalizedMessage());
-                                    }
-                                });
-                            }
-                        })
-                        .setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialog, int which) {
-                                dialog.dismiss();
-                            }
-                        })
-                        .create()
-                        .show();
-            }
+                                        @Override
+                                        public void onUnexpectedError(Exception e) {
+                                            onError(e.getLocalizedMessage());
+                                        }
+                                    });
+                                }
+                            })
+                            .setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialog, int which) {
+                                    dialog.dismiss();
+                                }
+                            })
+                            .show();
+                }
+                return true;
         }
 
         return super.onOptionsItemSelected(item);
@@ -1736,19 +1732,12 @@ public class VectorRoomActivity extends MXCActionBarActivity implements
      */
     private void displayConfCallNotAllowed() {
         // display the dialog with the info text
-        AlertDialog.Builder permissionsInfoDialog = new AlertDialog.Builder(VectorRoomActivity.this);
-        Resources resource = getResources();
-
-        if ((null != resource)) {
-            permissionsInfoDialog.setTitle(resource.getString(R.string.missing_permissions_title_to_start_conf_call));
-            permissionsInfoDialog.setMessage(resource.getString(R.string.missing_permissions_to_start_conf_call));
-
-            permissionsInfoDialog.setIcon(android.R.drawable.ic_dialog_alert);
-            permissionsInfoDialog.setPositiveButton(resource.getString(R.string.ok), null);
-            permissionsInfoDialog.show();
-        } else {
-            Log.e(LOG_TAG, "## displayConfCallNotAllowed(): impossible to create dialog");
-        }
+        new AlertDialog.Builder(VectorRoomActivity.this)
+                .setTitle(R.string.missing_permissions_title_to_start_conf_call)
+                .setMessage(R.string.missing_permissions_to_start_conf_call)
+                .setIcon(android.R.drawable.ic_dialog_alert)
+                .setPositiveButton(R.string.ok, null)
+                .show();
     }
 
     /**
@@ -3834,13 +3823,8 @@ public class VectorRoomActivity extends MXCActionBarActivity implements
                             public void onClick(DialogInterface dialog, int id) {
                                 dialog.cancel();
                             }
-                        });
-
-        // create alert dialog
-        AlertDialog alertDialog = alertDialogBuilder.create();
-
-        // show it
-        alertDialog.show();
+                        })
+                .show();
     }
 
     /**
@@ -3907,13 +3891,8 @@ public class VectorRoomActivity extends MXCActionBarActivity implements
                             public void onClick(DialogInterface dialog, int id) {
                                 dialog.cancel();
                             }
-                        });
-
-        // create alert dialog
-        AlertDialog alertDialog = alertDialogBuilder.create();
-
-        // show it
-        alertDialog.show();
+                        })
+                .show();
     }
 
     /**
@@ -4040,16 +4019,16 @@ public class VectorRoomActivity extends MXCActionBarActivity implements
                 editor.putBoolean(E2E_WARNINGS_PREFERENCES, false);
                 editor.commit();
 
-                android.support.v7.app.AlertDialog.Builder builder = new android.support.v7.app.AlertDialog.Builder(this);
-                builder.setTitle(R.string.room_e2e_alert_title);
-                builder.setMessage(R.string.room_e2e_alert_message);
-                builder.setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        // NOP
-                    }
-                });
-                builder.create().show();
+                new android.support.v7.app.AlertDialog.Builder(this)
+                        .setTitle(R.string.room_e2e_alert_title)
+                        .setMessage(R.string.room_e2e_alert_message)
+                        .setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                // NOP
+                            }
+                        })
+                        .show();
             }
         }
     }

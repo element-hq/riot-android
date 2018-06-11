@@ -545,11 +545,8 @@ public class VectorMessageListFragment extends MatrixMessageListFragment impleme
             getActivity().runOnUiThread(new Runnable() {
                 @Override
                 public void run() {
-                    AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(getActivity());
-                    alertDialogBuilder.setMessage(getString(R.string.redact) + " ?");
-
-                    // set dialog message
-                    alertDialogBuilder
+                    new AlertDialog.Builder(getActivity())
+                            .setMessage(getString(R.string.redact) + " ?")
                             .setCancelable(false)
                             .setPositiveButton(R.string.ok,
                                     new DialogInterface.OnClickListener() {
@@ -572,12 +569,8 @@ public class VectorMessageListFragment extends MatrixMessageListFragment impleme
                                         public void onClick(DialogInterface dialog, int id) {
                                             dialog.cancel();
                                         }
-                                    });
-
-                    // create alert dialog
-                    AlertDialog alertDialog = alertDialogBuilder.create();
-                    // show it
-                    alertDialog.show();
+                                    })
+                            .show();
                 }
             });
         } else if (action == R.id.ic_action_vector_copy) {
@@ -614,7 +607,6 @@ public class VectorMessageListFragment extends MatrixMessageListFragment impleme
                                     dialog.dismiss();
                                 }
                             })
-                            .create()
                             .show();
                 }
             });
@@ -692,22 +684,20 @@ public class VectorMessageListFragment extends MatrixMessageListFragment impleme
             getActivity().runOnUiThread(new Runnable() {
                 @Override
                 public void run() {
-                    AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
-
                     View view = getActivity().getLayoutInflater().inflate(R.layout.dialog_event_content, null);
                     TextView textview = view.findViewById(R.id.event_content_text_view);
 
                     Gson gson = new GsonBuilder().setPrettyPrinting().create();
                     textview.setText(gson.toJson(JsonUtils.toJson((action == R.id.ic_action_view_source) ? event : event.getClearEvent())));
-                    builder.setView(view);
 
-                    builder.setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
-                        public void onClick(DialogInterface dialog, int id) {
-                            dialog.cancel();
-                        }
-                    });
-
-                    builder.create().show();
+                    new AlertDialog.Builder(getActivity())
+                            .setView(view)
+                            .setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
+                                public void onClick(DialogInterface dialog, int id) {
+                                    dialog.cancel();
+                                }
+                            })
+                            .show();
                 }
             });
         } else if (action == R.id.ic_action_device_verification) {
@@ -721,59 +711,55 @@ public class VectorMessageListFragment extends MatrixMessageListFragment impleme
      * @param event the event to report
      */
     private void onMessageReport(final Event event) {
-        AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
-        builder.setTitle(R.string.room_event_action_report_prompt_reason);
-
         // add a text input
         final EditText input = new EditText(getActivity());
-        builder.setView(input);
 
-
-        builder.setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                final String reason = input.getText().toString();
-
-                mRoom.report(event.eventId, -100, reason, new SimpleApiCallback<Void>(getActivity()) {
+        new AlertDialog.Builder(getActivity())
+                .setTitle(R.string.room_event_action_report_prompt_reason)
+                .setView(input)
+                .setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
                     @Override
-                    public void onSuccess(Void info) {
-                        new AlertDialog.Builder(getActivity())
-                                .setMessage(R.string.room_event_action_report_prompt_ignore_user)
-                                .setPositiveButton(R.string.yes, new DialogInterface.OnClickListener() {
-                                    @Override
-                                    public void onClick(DialogInterface dialog, int which) {
-                                        dialog.dismiss();
+                    public void onClick(DialogInterface dialog, int which) {
+                        final String reason = input.getText().toString();
 
-                                        ArrayList<String> userIdsList = new ArrayList<>();
-                                        userIdsList.add(event.sender);
-
-                                        mSession.ignoreUsers(userIdsList, new SimpleApiCallback<Void>() {
+                        mRoom.report(event.eventId, -100, reason, new SimpleApiCallback<Void>(getActivity()) {
+                            @Override
+                            public void onSuccess(Void info) {
+                                new AlertDialog.Builder(getActivity())
+                                        .setMessage(R.string.room_event_action_report_prompt_ignore_user)
+                                        .setPositiveButton(R.string.yes, new DialogInterface.OnClickListener() {
                                             @Override
-                                            public void onSuccess(Void info) {
-                                            }
-                                        });
-                                    }
-                                })
-                                .setNegativeButton(R.string.no, new DialogInterface.OnClickListener() {
-                                    @Override
-                                    public void onClick(DialogInterface dialog, int which) {
-                                        dialog.dismiss();
-                                    }
-                                })
-                                .create()
-                                .show();
-                    }
-                });
-            }
-        });
-        builder.setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                dialog.cancel();
-            }
-        });
+                                            public void onClick(DialogInterface dialog, int which) {
+                                                dialog.dismiss();
 
-        builder.show();
+                                                ArrayList<String> userIdsList = new ArrayList<>();
+                                                userIdsList.add(event.sender);
+
+                                                mSession.ignoreUsers(userIdsList, new SimpleApiCallback<Void>() {
+                                                    @Override
+                                                    public void onSuccess(Void info) {
+                                                    }
+                                                });
+                                            }
+                                        })
+                                        .setNegativeButton(R.string.no, new DialogInterface.OnClickListener() {
+                                            @Override
+                                            public void onClick(DialogInterface dialog, int which) {
+                                                dialog.dismiss();
+                                            }
+                                        })
+                                        .show();
+                            }
+                        });
+                    }
+                })
+                .setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        dialog.cancel();
+                    }
+                })
+                .show();
     }
 
     /***

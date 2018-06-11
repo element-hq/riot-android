@@ -500,9 +500,9 @@ public class EventStreamService extends Service {
             // stop the foreground service on devices which respects battery optimizations
             // during the initial syncing
             // and if the GCM registration was done
-            if (!PreferencesManager.isIgnoringBatteryOptimizations(getApplicationContext()) &&
-                    (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) &&
-                    (mForegroundNotificationState == ForegroundNotificationState.INITIAL_SYNCING)
+            if (!PreferencesManager.isIgnoringBatteryOptimizations(getApplicationContext())
+                    && (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O)
+                    && (mForegroundNotificationState == ForegroundNotificationState.INITIAL_SYNCING)
                     && Matrix.getInstance(getApplicationContext()).getSharedGCMRegistrationManager().hasRegistrationToken()) {
                 setForegroundNotificationState(ForegroundNotificationState.NONE, null);
             }

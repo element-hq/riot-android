@@ -401,9 +401,9 @@ public class VectorUtils {
             }
 
             // check if it’s the start of a surrogate pair
-            if (first >= 0xD800 && first <= 0xDBFF && (name.length() > (idx + 1))) {
+            if (0xD800 <= first && first <= 0xDBFF && (name.length() > (idx + 1))) {
                 char second = name.charAt(idx + 1);
-                if (second >= 0xDC00 && second <= 0xDFFF) {
+                if (0xDC00 <= second && second <= 0xDFFF) {
                     chars++;
                 }
             }
@@ -486,9 +486,9 @@ public class VectorUtils {
     /**
      * Set the room avatar in an imageView by consider the room preview data.
      *
-     * @param context   the context
-     * @param session   the session
-     * @param imageView the image view
+     * @param context         the context
+     * @param session         the session
+     * @param imageView       the image view
      * @param roomPreviewData the room preview
      */
     public static void loadRoomAvatar(Context context, MXSession session, ImageView imageView, RoomPreviewData roomPreviewData) {
@@ -767,9 +767,7 @@ public class VectorUtils {
                                     mMainAboutDialog = null;
                                 }
                             })
-                            .create();
-
-                    mMainAboutDialog.show();
+                            .show();
                 }
             });
         }
@@ -782,8 +780,6 @@ public class VectorUtils {
      * @param url     the url to open
      */
     private static void displayInWebview(final Context context, String url) {
-        AlertDialog.Builder alert = new AlertDialog.Builder(context);
-
         WebView wv = new WebView(context);
         wv.loadUrl(url);
         wv.setWebViewClient(new WebViewClient() {
@@ -795,9 +791,10 @@ public class VectorUtils {
             }
         });
 
-        alert.setView(wv);
-        alert.setPositiveButton(android.R.string.ok, null);
-        alert.show();
+        new AlertDialog.Builder(context)
+                .setView(wv)
+                .setPositiveButton(android.R.string.ok, null)
+                .show();
     }
 
     /**

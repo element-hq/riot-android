@@ -26,7 +26,6 @@ import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
-import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.EditText;
@@ -49,7 +48,6 @@ import im.vector.Matrix;
 import im.vector.R;
 import im.vector.adapters.RoomDirectoryAdapter;
 import im.vector.util.RoomDirectoryData;
-import im.vector.util.ThemeUtils;
 import kotlin.Pair;
 
 public class RoomDirectoryPickerActivity extends RiotAppCompatActivity implements RoomDirectoryAdapter.OnSelectRoomDirectoryListener {
@@ -132,14 +130,9 @@ public class RoomDirectoryPickerActivity extends RiotAppCompatActivity implement
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        if (item.getItemId() == android.R.id.home) {
-            setResult(RESULT_CANCELED);
-            finish();
-            return true;
-        }
-
         if (item.getItemId() == R.id.action_add_custom_hs) {
             displayCustomDirectoryDialog();
+            return true;
         }
 
         return super.onOptionsItemSelected(item);

@@ -191,7 +191,6 @@ class WidgetActivity : RiotAppCompatActivity() {
                     })
                 }
                 .setNegativeButton(R.string.cancel) { dialog, which -> dialog.dismiss() }
-                .create()
                 .show()
     }
 

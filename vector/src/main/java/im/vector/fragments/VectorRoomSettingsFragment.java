@@ -377,7 +377,7 @@ public class VectorRoomSettingsFragment extends PreferenceFragment implements Sh
                     // leave room
                     new AlertDialog.Builder(getActivity())
                             .setTitle(R.string.room_participants_leave_prompt_title)
-                            .setMessage(getString(R.string.room_participants_leave_prompt_msg))
+                            .setMessage(R.string.room_participants_leave_prompt_msg)
                             .setPositiveButton(R.string.leave, new DialogInterface.OnClickListener() {
                                 @Override
                                 public void onClick(DialogInterface dialog, int which) {
@@ -433,7 +433,6 @@ public class VectorRoomSettingsFragment extends PreferenceFragment implements Sh
                                     dialog.dismiss();
                                 }
                             })
-                            .create()
                             .show();
                     return true;
                 }
@@ -1486,12 +1485,11 @@ public class VectorRoomSettingsFragment extends PreferenceFragment implements Sh
                             // ignore empty alias
                             if (!TextUtils.isEmpty(groupId)) {
                                 if (!MXSession.isGroupId(groupId)) {
-                                    AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
-                                    builder.setTitle(R.string.room_settings_invalid_group_format_dialog_title);
-                                    builder.setMessage(getString(R.string.room_settings_invalid_group_format_dialog_body, groupId));
-                                    builder.setPositiveButton(R.string.ok, null);
-                                    AlertDialog dialog = builder.create();
-                                    dialog.show();
+                                    new AlertDialog.Builder(getActivity())
+                                            .setTitle(R.string.room_settings_invalid_group_format_dialog_title)
+                                            .setMessage(getString(R.string.room_settings_invalid_group_format_dialog_body, groupId))
+                                            .setPositiveButton(R.string.ok, null)
+                                            .show();
                                 } else if (!groups.contains(groupId)) {
                                     getActivity().runOnUiThread(new Runnable() {
                                         @Override
@@ -1603,27 +1601,23 @@ public class VectorRoomSettingsFragment extends PreferenceFragment implements Sh
             @Override
             public boolean onMenuItemClick(final MenuItem item) {
                 if (item.getItemId() == R.id.ic_action_vector_unset_main_address) {
-                    AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
-                    builder.setMessage(R.string.room_settings_addresses_disable_main_address_prompt_msg);
-                    builder.setTitle(R.string.room_settings_addresses_disable_main_address_prompt_title);
-
-                    builder.setPositiveButton(R.string.yes, new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialog, int which) {
-                            displayLoadingView();
-                            mRoom.updateCanonicalAlias(null, mAliasUpdatesCallback);
-                        }
-                    });
-
-                    builder.setNegativeButton(R.string.no, new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialog, int which) {
-                            // nothing
-                        }
-                    });
-
-                    AlertDialog dialog = builder.create();
-                    dialog.show();
+                    new AlertDialog.Builder(getActivity())
+                            .setMessage(R.string.room_settings_addresses_disable_main_address_prompt_msg)
+                            .setTitle(R.string.room_settings_addresses_disable_main_address_prompt_title)
+                            .setPositiveButton(R.string.yes, new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialog, int which) {
+                                    displayLoadingView();
+                                    mRoom.updateCanonicalAlias(null, mAliasUpdatesCallback);
+                                }
+                            })
+                            .setNegativeButton(R.string.no, new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialog, int which) {
+                                    // nothing
+                                }
+                            })
+                            .show();
                 } else if (item.getItemId() == R.id.ic_action_vector_set_as_main_address) {
                     displayLoadingView();
                     mRoom.updateCanonicalAlias(roomAlias, mAliasUpdatesCallback);
@@ -1761,18 +1755,15 @@ public class VectorRoomSettingsFragment extends PreferenceFragment implements Sh
                             // ignore empty alias
                             if (!TextUtils.isEmpty(newAddress)) {
                                 if (!MXSession.isRoomAlias(newAddress)) {
-                                    AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
-                                    builder.setTitle(R.string.room_settings_addresses_invalid_format_dialog_title);
-                                    builder.setMessage(getString(R.string.room_settings_addresses_invalid_format_dialog_body, newAddress));
-
-                                    builder.setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
-                                        @Override
-                                        public void onClick(DialogInterface dialog, int which) {
-                                        }
-                                    });
-
-                                    AlertDialog dialog = builder.create();
-                                    dialog.show();
+                                    new AlertDialog.Builder(getActivity())
+                                            .setTitle(R.string.room_settings_addresses_invalid_format_dialog_title)
+                                            .setMessage(getString(R.string.room_settings_addresses_invalid_format_dialog_body, newAddress))
+                                            .setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
+                                                @Override
+                                                public void onClick(DialogInterface dialog, int which) {
+                                                }
+                                            })
+                                            .show();
                                 } else if (aliases.indexOf(newAddress) < 0) {
                                     getActivity().runOnUiThread(new Runnable() {
                                         @Override
@@ -1984,7 +1975,6 @@ public class VectorRoomSettingsFragment extends PreferenceFragment implements Sh
                                             encryptSwitchPreference.setChecked(false);
                                         }
                                     })
-                                    .create()
                                     .show();
                         }
                         return true;

@@ -24,7 +24,6 @@ import android.app.Activity;
 import android.app.ActivityManager;
 import android.app.AlarmManager;
 import android.app.AlertDialog;
-import android.app.Dialog;
 import android.app.DownloadManager;
 import android.app.PendingIntent;
 import android.content.ActivityNotFoundException;
@@ -33,8 +32,6 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
-import android.content.res.Resources;
-import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Build;
@@ -43,20 +40,15 @@ import android.os.Handler;
 import android.os.Looper;
 import android.os.Parcelable;
 import android.preference.PreferenceManager;
-import android.support.annotation.AttrRes;
-import android.support.annotation.ColorInt;
 import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.content.ContextCompat;
-import android.support.v4.graphics.drawable.DrawableCompat;
 import android.text.TextUtils;
 import android.util.Pair;
 import android.view.LayoutInflater;
-import android.view.Menu;
-import android.view.MenuItem;
 import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -71,9 +63,7 @@ import org.matrix.androidsdk.data.RoomSummary;
 import org.matrix.androidsdk.db.MXMediasCache;
 import org.matrix.androidsdk.rest.callback.ApiCallback;
 import org.matrix.androidsdk.rest.callback.SimpleApiCallback;
-import org.matrix.androidsdk.rest.model.Event;
 import org.matrix.androidsdk.rest.model.MatrixError;
-import org.matrix.androidsdk.rest.model.PowerLevels;
 import org.matrix.androidsdk.rest.model.RoomMember;
 import org.matrix.androidsdk.util.Log;
 
@@ -103,7 +93,6 @@ import im.vector.gcm.GcmRegistrationManager;
 import im.vector.services.EventStreamService;
 import im.vector.util.MatrixSdkExtensionsKt;
 import im.vector.util.PreferencesManager;
-import im.vector.util.ThemeUtils;
 import im.vector.util.VectorUtils;
 import me.leolin.shortcutbadger.ShortcutBadger;
 
@@ -681,7 +670,6 @@ public class CommonActivityUtils {
             List<String> permissionsListToBeGranted = new ArrayList<>();
             final List<String> finalPermissionsListToBeGranted;
             boolean isRequestPermissionRequired = false;
-            Resources resource = aCallingActivity.getResources();
             String explanationMessage = "";
             String permissionType;
 
@@ -725,87 +713,76 @@ public class CommonActivityUtils {
 
             // if some permissions were already denied: display a dialog to the user before asking again..
             if (!permissionListAlreadyDenied.isEmpty()) {
-                if (null != resource) {
-                    // add the user info text to be displayed to explain why the permission is required by the App
-                    if (aPermissionsToBeGrantedBitMap == REQUEST_CODE_PERMISSION_VIDEO_IP_CALL
-                            || aPermissionsToBeGrantedBitMap == REQUEST_CODE_PERMISSION_AUDIO_IP_CALL) {
-                        // Permission request for VOIP call
-                        if (permissionListAlreadyDenied.contains(Manifest.permission.CAMERA)
-                                && permissionListAlreadyDenied.contains(Manifest.permission.RECORD_AUDIO)) {
-                            // Both missing
-                            explanationMessage += resource.getString(R.string.permissions_rationale_msg_camera_and_audio);
-                        } else if (permissionListAlreadyDenied.contains(Manifest.permission.RECORD_AUDIO)) {
-                            // Audio missing
-                            explanationMessage += resource.getString(R.string.permissions_rationale_msg_record_audio);
-                            explanationMessage += resource.getString(R.string.permissions_rationale_msg_record_audio_explanation);
-                        } else if (permissionListAlreadyDenied.contains(Manifest.permission.CAMERA)) {
-                            // Camera missing
-                            explanationMessage += resource.getString(R.string.permissions_rationale_msg_camera);
-                            explanationMessage += resource.getString(R.string.permissions_rationale_msg_camera_explanation);
-                        }
-                    } else {
-                        for (String permissionAlreadyDenied : permissionListAlreadyDenied) {
-                            if (Manifest.permission.CAMERA.equals(permissionAlreadyDenied)) {
-                                if (!TextUtils.isEmpty(explanationMessage)) {
-                                    explanationMessage += "\n\n";
-                                }
-                                explanationMessage += resource.getString(R.string.permissions_rationale_msg_camera);
-                            } else if (Manifest.permission.RECORD_AUDIO.equals(permissionAlreadyDenied)) {
-                                if (!TextUtils.isEmpty(explanationMessage)) {
-                                    explanationMessage += "\n\n";
-                                }
-                                explanationMessage += resource.getString(R.string.permissions_rationale_msg_record_audio);
-                            } else if (Manifest.permission.WRITE_EXTERNAL_STORAGE.equals(permissionAlreadyDenied)) {
-                                if (!TextUtils.isEmpty(explanationMessage)) {
-                                    explanationMessage += "\n\n";
-                                }
-                                explanationMessage += resource.getString(R.string.permissions_rationale_msg_storage);
-                            } else if (Manifest.permission.READ_CONTACTS.equals(permissionAlreadyDenied)) {
-                                if (!TextUtils.isEmpty(explanationMessage)) {
-                                    explanationMessage += "\n\n";
-                                }
-                                explanationMessage += resource.getString(R.string.permissions_rationale_msg_contacts);
-                            } else {
-                                Log.d(LOG_TAG, "## checkPermissions(): already denied permission not supported");
+                if (aPermissionsToBeGrantedBitMap == REQUEST_CODE_PERMISSION_VIDEO_IP_CALL
+                        || aPermissionsToBeGrantedBitMap == REQUEST_CODE_PERMISSION_AUDIO_IP_CALL) {
+                    // Permission request for VOIP call
+                    if (permissionListAlreadyDenied.contains(Manifest.permission.CAMERA)
+                            && permissionListAlreadyDenied.contains(Manifest.permission.RECORD_AUDIO)) {
+                        // Both missing
+                        explanationMessage += aCallingActivity.getString(R.string.permissions_rationale_msg_camera_and_audio);
+                    } else if (permissionListAlreadyDenied.contains(Manifest.permission.RECORD_AUDIO)) {
+                        // Audio missing
+                        explanationMessage += aCallingActivity.getString(R.string.permissions_rationale_msg_record_audio);
+                        explanationMessage += aCallingActivity.getString(R.string.permissions_rationale_msg_record_audio_explanation);
+                    } else if (permissionListAlreadyDenied.contains(Manifest.permission.CAMERA)) {
+                        // Camera missing
+                        explanationMessage += aCallingActivity.getString(R.string.permissions_rationale_msg_camera);
+                        explanationMessage += aCallingActivity.getString(R.string.permissions_rationale_msg_camera_explanation);
+                    }
+                } else {
+                    for (String permissionAlreadyDenied : permissionListAlreadyDenied) {
+                        if (Manifest.permission.CAMERA.equals(permissionAlreadyDenied)) {
+                            if (!TextUtils.isEmpty(explanationMessage)) {
+                                explanationMessage += "\n\n";
                             }
+                            explanationMessage += aCallingActivity.getString(R.string.permissions_rationale_msg_camera);
+                        } else if (Manifest.permission.RECORD_AUDIO.equals(permissionAlreadyDenied)) {
+                            if (!TextUtils.isEmpty(explanationMessage)) {
+                                explanationMessage += "\n\n";
+                            }
+                            explanationMessage += aCallingActivity.getString(R.string.permissions_rationale_msg_record_audio);
+                        } else if (Manifest.permission.WRITE_EXTERNAL_STORAGE.equals(permissionAlreadyDenied)) {
+                            if (!TextUtils.isEmpty(explanationMessage)) {
+                                explanationMessage += "\n\n";
+                            }
+                            explanationMessage += aCallingActivity.getString(R.string.permissions_rationale_msg_storage);
+                        } else if (Manifest.permission.READ_CONTACTS.equals(permissionAlreadyDenied)) {
+                            if (!TextUtils.isEmpty(explanationMessage)) {
+                                explanationMessage += "\n\n";
+                            }
+                            explanationMessage += aCallingActivity.getString(R.string.permissions_rationale_msg_contacts);
+                        } else {
+                            Log.d(LOG_TAG, "## checkPermissions(): already denied permission not supported");
                         }
                     }
-                } else { // fall back if resource is null.. very unlikely
-                    explanationMessage = "You are about to be asked to grant permissions..\n\n";
                 }
 
                 // display the dialog with the info text
-                AlertDialog.Builder permissionsInfoDialog = new AlertDialog.Builder(aCallingActivity);
-                if (null != resource) {
-                    permissionsInfoDialog.setTitle(R.string.permissions_rationale_popup_title);
-                }
-
-                permissionsInfoDialog.setMessage(explanationMessage);
-                permissionsInfoDialog.setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        if (!finalPermissionsListToBeGranted.isEmpty()) {
-                            if (fragment != null) {
-                                fragment.requestPermissions(finalPermissionsListToBeGranted.toArray(new String[finalPermissionsListToBeGranted.size()]),
-                                        aPermissionsToBeGrantedBitMap);
-                            } else {
-                                ActivityCompat.requestPermissions(aCallingActivity,
-                                        finalPermissionsListToBeGranted.toArray(new String[finalPermissionsListToBeGranted.size()]),
-                                        aPermissionsToBeGrantedBitMap);
+                new AlertDialog.Builder(aCallingActivity)
+                        .setTitle(R.string.permissions_rationale_popup_title)
+                        .setMessage(explanationMessage)
+                        .setOnCancelListener(new DialogInterface.OnCancelListener() {
+                            @Override
+                            public void onCancel(DialogInterface dialog) {
+                                Toast.makeText(aCallingActivity, R.string.missing_permissions_warning, Toast.LENGTH_SHORT).show();
                             }
-                        }
-                    }
-                });
-
-                Dialog dialog = permissionsInfoDialog.show();
-
-                dialog.setOnCancelListener(new DialogInterface.OnCancelListener() {
-                    @Override
-                    public void onCancel(DialogInterface dialog) {
-                        Toast.makeText(aCallingActivity, R.string.missing_permissions_warning, Toast.LENGTH_SHORT).show();
-                    }
-                });
-
+                        })
+                        .setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                if (!finalPermissionsListToBeGranted.isEmpty()) {
+                                    if (fragment != null) {
+                                        fragment.requestPermissions(finalPermissionsListToBeGranted.toArray(new String[finalPermissionsListToBeGranted.size()]),
+                                                aPermissionsToBeGrantedBitMap);
+                                    } else {
+                                        ActivityCompat.requestPermissions(aCallingActivity,
+                                                finalPermissionsListToBeGranted.toArray(new String[finalPermissionsListToBeGranted.size()]),
+                                                aPermissionsToBeGrantedBitMap);
+                                    }
+                                }
+                            }
+                        })
+                        .show();
             } else {
                 // some permissions are not granted, ask permissions
                 if (isRequestPermissionRequired) {
@@ -813,43 +790,35 @@ public class CommonActivityUtils {
 
                     // for android < M, we use a custom dialog to request the contacts book access.
                     if (permissionsListToBeGranted.contains(Manifest.permission.READ_CONTACTS) && (Build.VERSION.SDK_INT < 23)) {
-                        AlertDialog.Builder permissionsInfoDialog = new AlertDialog.Builder(aCallingActivity);
-                        permissionsInfoDialog.setIcon(android.R.drawable.ic_dialog_info);
-
-                        if (null != resource) {
-                            permissionsInfoDialog.setTitle(resource.getString(R.string.permissions_rationale_popup_title));
-                        }
-
-                        permissionsInfoDialog.setMessage(resource.getString(R.string.permissions_msg_contacts_warning_other_androids));
-
-                        // gives the contacts book access
-                        permissionsInfoDialog.setPositiveButton(aCallingActivity.getString(R.string.yes), new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialog, int which) {
-                                ContactsManager.getInstance().setIsContactBookAccessAllowed(true);
-                                if (fragment != null) {
-                                    fragment.requestPermissions(fPermissionsArrayToBeGranted, aPermissionsToBeGrantedBitMap);
-                                } else {
-                                    ActivityCompat.requestPermissions(aCallingActivity, fPermissionsArrayToBeGranted, aPermissionsToBeGrantedBitMap);
-                                }
-                            }
-                        });
-
-                        // or reject it
-                        permissionsInfoDialog.setNegativeButton(aCallingActivity.getString(R.string.no), new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialog, int which) {
-                                ContactsManager.getInstance().setIsContactBookAccessAllowed(false);
-                                if (fragment != null) {
-                                    fragment.requestPermissions(fPermissionsArrayToBeGranted, aPermissionsToBeGrantedBitMap);
-                                } else {
-                                    ActivityCompat.requestPermissions(aCallingActivity, fPermissionsArrayToBeGranted, aPermissionsToBeGrantedBitMap);
-                                }
-                            }
-                        });
-
-                        permissionsInfoDialog.show();
-
+                        new AlertDialog.Builder(aCallingActivity)
+                                .setIcon(android.R.drawable.ic_dialog_info)
+                                .setTitle(R.string.permissions_rationale_popup_title)
+                                .setMessage(R.string.permissions_msg_contacts_warning_other_androids)
+                                // gives the contacts book access
+                                .setPositiveButton(R.string.yes, new DialogInterface.OnClickListener() {
+                                    @Override
+                                    public void onClick(DialogInterface dialog, int which) {
+                                        ContactsManager.getInstance().setIsContactBookAccessAllowed(true);
+                                        if (fragment != null) {
+                                            fragment.requestPermissions(fPermissionsArrayToBeGranted, aPermissionsToBeGrantedBitMap);
+                                        } else {
+                                            ActivityCompat.requestPermissions(aCallingActivity, fPermissionsArrayToBeGranted, aPermissionsToBeGrantedBitMap);
+                                        }
+                                    }
+                                })
+                                // or reject it
+                                .setNegativeButton(R.string.no, new DialogInterface.OnClickListener() {
+                                    @Override
+                                    public void onClick(DialogInterface dialog, int which) {
+                                        ContactsManager.getInstance().setIsContactBookAccessAllowed(false);
+                                        if (fragment != null) {
+                                            fragment.requestPermissions(fPermissionsArrayToBeGranted, aPermissionsToBeGrantedBitMap);
+                                        } else {
+                                            ActivityCompat.requestPermissions(aCallingActivity, fPermissionsArrayToBeGranted, aPermissionsToBeGrantedBitMap);
+                                        }
+                                    }
+                                })
+                                .show();
                     } else {
                         if (fragment != null) {
                             fragment.requestPermissions(fPermissionsArrayToBeGranted, aPermissionsToBeGrantedBitMap);
@@ -1395,44 +1364,42 @@ public class CommonActivityUtils {
             }
         });
 
-        AlertDialog.Builder builderSingle = new AlertDialog.Builder(fromActivity);
-        builderSingle.setTitle(fromActivity.getText(R.string.send_files_in));
-
         VectorRoomsSelectionAdapter adapter = new VectorRoomsSelectionAdapter(fromActivity, R.layout.adapter_item_vector_recent_room, session);
         adapter.addAll(mergedSummaries);
 
-        builderSingle.setNegativeButton(fromActivity.getText(R.string.cancel),
-                new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        dialog.dismiss();
-                    }
-                });
-
         final ArrayList<RoomSummary> fMergedSummaries = mergedSummaries;
 
-        builderSingle.setAdapter(adapter,
-                new DialogInterface.OnClickListener() {
-
-                    @Override
-                    public void onClick(DialogInterface dialog, final int which) {
-                        dialog.dismiss();
-                        fromActivity.runOnUiThread(new Runnable() {
+        new AlertDialog.Builder(fromActivity)
+                .setTitle(R.string.send_files_in)
+                .setNegativeButton(R.string.cancel,
+                        new DialogInterface.OnClickListener() {
                             @Override
-                            public void run() {
-                                RoomSummary summary = fMergedSummaries.get(which);
-
-                                HashMap<String, Object> params = new HashMap<>();
-                                params.put(VectorRoomActivity.EXTRA_MATRIX_ID, session.getMyUserId());
-                                params.put(VectorRoomActivity.EXTRA_ROOM_ID, summary.getRoomId());
-                                params.put(VectorRoomActivity.EXTRA_ROOM_INTENT, intent);
-
-                                CommonActivityUtils.goToRoomPage(fromActivity, session, params);
+                            public void onClick(DialogInterface dialog, int which) {
+                                dialog.dismiss();
                             }
-                        });
-                    }
-                });
-        builderSingle.show();
+                        })
+                .setAdapter(adapter,
+                        new DialogInterface.OnClickListener() {
+
+                            @Override
+                            public void onClick(DialogInterface dialog, final int which) {
+                                dialog.dismiss();
+                                fromActivity.runOnUiThread(new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        RoomSummary summary = fMergedSummaries.get(which);
+
+                                        HashMap<String, Object> params = new HashMap<>();
+                                        params.put(VectorRoomActivity.EXTRA_MATRIX_ID, session.getMyUserId());
+                                        params.put(VectorRoomActivity.EXTRA_ROOM_ID, summary.getRoomId());
+                                        params.put(VectorRoomActivity.EXTRA_ROOM_INTENT, intent);
+
+                                        CommonActivityUtils.goToRoomPage(fromActivity, session, params);
+                                    }
+                                });
+                            }
+                        })
+                .show();
     }
 
     //==============================================================================================================
@@ -1881,26 +1848,24 @@ public class CommonActivityUtils {
         textView = layout.findViewById(R.id.encrypted_device_info_device_key);
         textView.setText(MatrixSdkExtensionsKt.getFingerprintHumanReadable(deviceInfo));
 
-        builder.setView(layout);
-        builder.setTitle(R.string.encryption_information_verify_device);
-
-        builder.setPositiveButton(R.string.encryption_information_verify_key_match, new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                session.getCrypto().setDeviceVerification(MXDeviceInfo.DEVICE_VERIFICATION_VERIFIED, deviceInfo.deviceId, sender, callback);
-            }
-        });
-
-        builder.setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                if (null != callback) {
-                    callback.onSuccess(null);
-                }
-            }
-        });
-
-        builder.create().show();
+        builder
+                .setView(layout)
+                .setTitle(R.string.encryption_information_verify_device)
+                .setPositiveButton(R.string.encryption_information_verify_key_match, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        session.getCrypto().setDeviceVerification(MXDeviceInfo.DEVICE_VERIFICATION_VERIFIED, deviceInfo.deviceId, sender, callback);
+                    }
+                })
+                .setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        if (null != callback) {
+                            callback.onSuccess(null);
+                        }
+                    }
+                })
+                .show();
     }
 
     /**

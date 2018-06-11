@@ -48,7 +48,7 @@ succes[^s]
 protected Integer
 
 # Prefer comparison the ascending way, when checking for value in range. Use <=
->= .* &&===1
+>= .* &&===13
 
 # It is no integer for id for bank model
 Short\.parseShort
@@ -136,5 +136,8 @@ getActivity\(\)\.getString\(
 # In Kotlin, Void has to be null safe, i.e. use 'Void?' instead of 'Void'
 \: Void\)
 
+# Home menu click is managed in parent Activity, with one exception
+android\.R\.id\.home===2
 
-
+# Kotlin conversion tools introduce this, but is can be replace by trim()
+trim \{ it \<\= \' \' \}

@@ -710,7 +710,6 @@ public class VectorMediasViewerAdapter extends PagerAdapter {
                         dialog.dismiss();
                     }
                 })
-                .create()
                 .show();
     }
 

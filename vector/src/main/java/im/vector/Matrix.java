@@ -844,7 +844,7 @@ public class Matrix {
      * @return the store
      */
     public IMXStore getTmpStore(int storeIndex) {
-        if ((storeIndex >= 0) && (storeIndex < mTmpStores.size())) {
+        if ((0 <= storeIndex) && (storeIndex < mTmpStores.size())) {
             return mTmpStores.get(storeIndex);
         }
 
