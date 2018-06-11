@@ -275,7 +275,7 @@ class VectorSettingsPreferencesFragment : PreferenceFragment(), SharedPreference
         mDisplayNamePreference.let {
             it.summary = mSession.myUser.displayname
             it.onPreferenceChangeListener = Preference.OnPreferenceChangeListener { preference, newValue ->
-                onDisplayNameClick(if (null == newValue) null else (newValue as String).trim { it <= ' ' })
+                onDisplayNameClick(if (null == newValue) null else (newValue as String).trim())
                 false
             }
         }
@@ -1055,9 +1055,9 @@ class VectorSettingsPreferencesFragment : PreferenceFragment(), SharedPreference
                 override fun beforeTextChanged(s: CharSequence, start: Int, count: Int, after: Int) {}
 
                 override fun onTextChanged(s: CharSequence, start: Int, before: Int, count: Int) {
-                    val oldPwd = oldPasswordText.text.toString().trim { it <= ' ' }
-                    val newPwd = newPasswordText.text.toString().trim { it <= ' ' }
-                    val newConfirmPwd = confirmNewPasswordText.text.toString().trim { it <= ' ' }
+                    val oldPwd = oldPasswordText.text.toString().trim()
+                    val newPwd = newPasswordText.text.toString().trim()
+                    val newConfirmPwd = confirmNewPasswordText.text.toString().trim()
 
                     saveButton.isEnabled = oldPwd.length > 0 && newPwd.length > 0 && TextUtils.equals(newPwd, newConfirmPwd)
                 }

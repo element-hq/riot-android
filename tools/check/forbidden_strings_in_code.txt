@@ -138,3 +138,6 @@ getActivity\(\)\.getString\(
 
 # Home menu click is managed in parent Activity, with one exception
 android\.R\.id\.home===2
+
+# Kotlin conversion tools introduce this, but is can be replace by trim()
+trim \{ it \<\= \' \' \}
