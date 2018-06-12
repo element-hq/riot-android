@@ -18,7 +18,6 @@
 
 package im.vector.services;
 
-import android.annotation.SuppressLint;
 import android.app.AlarmManager;
 import android.app.Notification;
 import android.app.NotificationManager;
@@ -32,7 +31,6 @@ import android.os.HandlerThread;
 import android.os.IBinder;
 import android.os.PowerManager;
 import android.os.SystemClock;
-import android.support.v4.app.NotificationCompat;
 import android.support.v4.app.NotificationManagerCompat;
 import android.text.Spannable;
 import android.text.SpannableString;
@@ -52,7 +50,6 @@ import org.matrix.androidsdk.util.BingRulesManager;
 import org.matrix.androidsdk.util.EventDisplay;
 import org.matrix.androidsdk.util.Log;
 
-import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
@@ -69,7 +66,6 @@ import im.vector.Matrix;
 import im.vector.R;
 import im.vector.VectorApp;
 import im.vector.ViewedRoomTracker;
-import im.vector.activity.VectorHomeActivity;
 import im.vector.gcm.GcmRegistrationManager;
 import im.vector.notifications.NotificationUtils;
 import im.vector.notifications.NotifiedEvent;
@@ -906,10 +902,10 @@ public class EventStreamService extends Service {
                 stopForeground(true);
                 break;
             case INITIAL_SYNCING:
-                notification = buildForegroundServiceNotification(getString(R.string.notification_sync_in_progress));
+                notification = NotificationUtils.buildForegroundServiceNotification(this, R.string.notification_sync_in_progress);
                 break;
             case LISTENING_FOR_EVENTS:
-                notification = buildForegroundServiceNotification(getString(R.string.notification_listen_for_events));
+                notification = NotificationUtils.buildForegroundServiceNotification(this, R.string.notification_listen_for_events);
                 break;
             case INCOMING_CALL:
             case CALL_IN_PROGRESS:
@@ -924,51 +920,6 @@ public class EventStreamService extends Service {
             // display the stick foreground notification
             startForeground(NOTIF_ID_FOREGROUND_SERVICE, notification);
         }
-    }
-
-    /**
-     * @return the polling thread listener notification
-     */
-    @SuppressLint("NewApi")
-    private Notification buildForegroundServiceNotification(String subTitle) {
-        // build the pending intent go to the home screen if this is clicked.
-        Intent i = new Intent(this, VectorHomeActivity.class);
-        i.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP);
-        PendingIntent pi = PendingIntent.getActivity(this, 0, i, 0);
-
-        // build the notification builder
-        NotificationUtils.addNotificationChannels(this);
-        NotificationCompat.Builder notifBuilder = new NotificationCompat.Builder(this, NotificationUtils.LISTEN_FOR_EVENTS_NOTIFICATION_CHANNEL_ID);
-        notifBuilder.setSmallIcon(R.drawable.permanent_notification_transparent);
-        notifBuilder.setWhen(System.currentTimeMillis());
-        notifBuilder.setContentTitle(getString(R.string.riot_app_name));
-        notifBuilder.setContentText(subTitle);
-        notifBuilder.setContentIntent(pi);
-
-        // hide the notification from the status bar
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
-            notifBuilder.setPriority(NotificationCompat.PRIORITY_MIN);
-        }
-
-        Notification notification = notifBuilder.build();
-        notification.flags |= Notification.FLAG_NO_CLEAR;
-
-        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.M) {
-            // some devices crash if this field is not set
-            // even if it is deprecated
-
-            // setLatestEventInfo() is deprecated on Android M, so we try to use
-            // reflection at runtime, to avoid compiler error: "Cannot resolve method.."
-            try {
-                Method deprecatedMethod = notification.getClass()
-                        .getMethod("setLatestEventInfo", Context.class, CharSequence.class, CharSequence.class, PendingIntent.class);
-                deprecatedMethod.invoke(notification, this, getString(R.string.riot_app_name), subTitle, pi);
-            } catch (Exception ex) {
-                Log.e(LOG_TAG, "## buildNotification(): Exception - setLatestEventInfo() Msg=" + ex.getMessage());
-            }
-        }
-
-        return notification;
     }
 
     /**

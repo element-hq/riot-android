@@ -32,6 +32,7 @@ import android.net.Uri;
 import android.os.Build;
 import android.os.PowerManager;
 import android.support.annotation.ColorInt;
+import android.support.annotation.StringRes;
 import android.support.v4.app.NotificationCompat;
 import android.support.v4.app.TaskStackBuilder;
 import android.support.v4.content.ContextCompat;
@@ -43,6 +44,7 @@ import android.text.style.StyleSpan;
 import org.matrix.androidsdk.rest.model.bingrules.BingRule;
 import org.matrix.androidsdk.util.Log;
 
+import java.lang.reflect.Method;
 import java.util.List;
 import java.util.Map;
 import java.util.Random;
@@ -177,6 +179,56 @@ public class NotificationUtils {
             channel.setSound(null, null);
             notificationManager.createNotificationChannel(channel);
         }
+    }
+
+    /**
+     * Build a polling thread listener notification
+     *
+     * @param context       Android context
+     * @param subTitleResId subtitle string resource Id of the notification
+     * @return the polling thread listener notification
+     */
+    @SuppressLint("NewApi")
+    public static Notification buildForegroundServiceNotification(Context context, @StringRes int subTitleResId) {
+        // build the pending intent go to the home screen if this is clicked.
+        Intent i = new Intent(context, VectorHomeActivity.class);
+        i.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP);
+        PendingIntent pi = PendingIntent.getActivity(context, 0, i, 0);
+
+        // build the notification builder
+        addNotificationChannels(context);
+
+        NotificationCompat.Builder notifBuilder = new NotificationCompat.Builder(context, NotificationUtils.LISTEN_FOR_EVENTS_NOTIFICATION_CHANNEL_ID);
+        notifBuilder.setSmallIcon(R.drawable.permanent_notification_transparent);
+        notifBuilder.setWhen(System.currentTimeMillis());
+        notifBuilder.setContentTitle(context.getString(R.string.riot_app_name));
+        notifBuilder.setContentText(context.getString(subTitleResId));
+        notifBuilder.setContentIntent(pi);
+
+        // hide the notification from the status bar
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
+            notifBuilder.setPriority(NotificationCompat.PRIORITY_MIN);
+        }
+
+        Notification notification = notifBuilder.build();
+        notification.flags |= Notification.FLAG_NO_CLEAR;
+
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.M) {
+            // some devices crash if this field is not set
+            // even if it is deprecated
+
+            // setLatestEventInfo() is deprecated on Android M, so we try to use
+            // reflection at runtime, to avoid compiler error: "Cannot resolve method.."
+            try {
+                Method deprecatedMethod = notification.getClass()
+                        .getMethod("setLatestEventInfo", Context.class, CharSequence.class, CharSequence.class, PendingIntent.class);
+                deprecatedMethod.invoke(notification, context, context.getString(R.string.riot_app_name), context.getString(subTitleResId), pi);
+            } catch (Exception ex) {
+                Log.e(LOG_TAG, "## buildNotification(): Exception - setLatestEventInfo() Msg=" + ex.getMessage());
+            }
+        }
+
+        return notification;
     }
 
     /**
@@ -574,8 +626,8 @@ public class NotificationUtils {
     /**
      * Build a notification from the cached RoomsNotifications instance.
      *
-     * @param context                the context
-     * @param isBackground           true if it is background notification
+     * @param context      the context
+     * @param isBackground true if it is background notification
      * @return the notification
      */
     public static Notification buildMessageNotification(Context context, boolean isBackground) {
@@ -588,7 +640,7 @@ public class NotificationUtils {
                 notification = buildMessageNotification(context, roomsNotifications, new BingRule(), isBackground);
             }
         } catch (Exception e) {
-            Log.e(LOG_TAG, "## buildMessageNotification() : failed " +  e.getMessage());
+            Log.e(LOG_TAG, "## buildMessageNotification() : failed " + e.getMessage());
         }
 
         return notification;
@@ -616,7 +668,7 @@ public class NotificationUtils {
             // cache the value
             RoomsNotifications.saveRoomNotifications(context, roomsNotifications);
         } catch (Exception e) {
-            Log.e(LOG_TAG, "## buildMessageNotification() : failed " +  e.getMessage());
+            Log.e(LOG_TAG, "## buildMessageNotification() : failed " + e.getMessage());
         }
 
         return notification;
@@ -626,16 +678,16 @@ public class NotificationUtils {
     /**
      * Build a notification
      *
-     * @param context                the context
+     * @param context            the context
      * @param roomsNotifications the rooms notifications
-     * @param bingRule          the bing rule
-     * @param isBackground           true if it is background notification
+     * @param bingRule           the bing rule
+     * @param isBackground       true if it is background notification
      * @return the notification
      */
     private static Notification buildMessageNotification(Context context,
-                                                        RoomsNotifications roomsNotifications,
-                                                        BingRule bingRule,
-                                                        boolean isBackground) {
+                                                         RoomsNotifications roomsNotifications,
+                                                         BingRule bingRule,
+                                                         boolean isBackground) {
         try {
             Bitmap largeBitmap = null;
 
