@@ -17,7 +17,6 @@
 
 package im.vector.util;
 
-import android.app.AlertDialog;
 import android.content.ClipDescription;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -28,6 +27,7 @@ import android.os.Handler;
 import android.os.HandlerThread;
 import android.os.Looper;
 import android.support.v4.app.FragmentManager;
+import android.support.v7.app.AlertDialog;
 import android.text.Html;
 import android.text.TextUtils;
 import android.widget.Toast;

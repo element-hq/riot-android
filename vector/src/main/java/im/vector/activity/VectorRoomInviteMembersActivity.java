@@ -17,11 +17,11 @@
 
 package im.vector.activity;
 
-import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.support.annotation.NonNull;
+import android.support.v7.app.AlertDialog;
 import android.text.Editable;
 import android.text.TextUtils;
 import android.text.TextWatcher;
@@ -348,8 +348,8 @@ public class VectorRoomInviteMembersActivity extends VectorBaseSearchActivity {
 
         // a confirmation dialog has been requested
         if (mAddConfirmationDialog && (displayNames.size() > 0)) {
-            android.support.v7.app.AlertDialog.Builder builder = new android.support.v7.app.AlertDialog.Builder(VectorRoomInviteMembersActivity.this);
-            builder.setTitle(R.string.dialog_title_confirmation);
+            AlertDialog.Builder builder = new AlertDialog.Builder(this)
+                    .setTitle(R.string.dialog_title_confirmation);
 
             String message = "";
 
@@ -363,27 +363,25 @@ public class VectorRoomInviteMembersActivity extends VectorBaseSearchActivity {
                 message += displayNames.get(displayNames.size() - 2) + " " + getText(R.string.and) + " " + displayNames.get(displayNames.size() - 1);
             }
 
-            builder.setMessage(getString(R.string.room_participants_invite_prompt_msg, message));
-            builder.setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
-                @Override
-                public void onClick(DialogInterface dialog, int which) {
-                    // returns the selected users
-                    Intent intent = new Intent();
-                    intent.putExtra(EXTRA_OUT_SELECTED_USER_IDS, userIds);
-                    intent.putExtra(EXTRA_OUT_SELECTED_PARTICIPANT_ITEMS, participantAdapterItems);
-                    setResult(RESULT_OK, intent);
-                    finish();
-                }
-            });
-
-            builder.setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
-                @Override
-                public void onClick(DialogInterface dialog, int which) {
-                    // nothing to do
-                }
-            });
-
-            builder.show();
+            builder.setMessage(getString(R.string.room_participants_invite_prompt_msg, message))
+                    .setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            // returns the selected users
+                            Intent intent = new Intent();
+                            intent.putExtra(EXTRA_OUT_SELECTED_USER_IDS, userIds);
+                            intent.putExtra(EXTRA_OUT_SELECTED_PARTICIPANT_ITEMS, participantAdapterItems);
+                            setResult(RESULT_OK, intent);
+                            finish();
+                        }
+                    })
+                    .setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            // nothing to do
+                        }
+                    })
+                    .show();
         } else {
             // returns the selected users
             Intent intent = new Intent();

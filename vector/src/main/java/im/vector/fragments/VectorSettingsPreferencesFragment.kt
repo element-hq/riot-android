@@ -18,7 +18,6 @@ package im.vector.fragments
 
 import android.annotation.SuppressLint
 import android.app.Activity
-import android.app.AlertDialog
 import android.content.Context
 import android.content.DialogInterface
 import android.content.Intent
@@ -34,6 +33,7 @@ import android.preference.*
 import android.provider.Settings
 import android.support.design.widget.TextInputEditText
 import android.support.v4.content.ContextCompat
+import android.support.v7.app.AlertDialog
 import android.text.Editable
 import android.text.InputType
 import android.text.TextUtils
@@ -2244,7 +2244,7 @@ class VectorSettingsPreferencesFragment : PreferenceFragment(), SharedPreference
      * @param aDeviceInfo the device information
      */
     private fun displayDeviceDetailsDialog(aDeviceInfo: DeviceInfo?) {
-        val builder = android.support.v7.app.AlertDialog.Builder(activity)
+        val builder = AlertDialog.Builder(activity)
         val inflater = activity.layoutInflater
         val layout = inflater.inflate(R.layout.devices_details_settings, null)
 
@@ -2407,7 +2407,7 @@ class VectorSettingsPreferencesFragment : PreferenceFragment(), SharedPreference
                 val layout = inflater.inflate(R.layout.devices_settings_delete, null)
                 val passwordEditText = layout.findViewById<EditText>(R.id.delete_password)
 
-                android.support.v7.app.AlertDialog.Builder(activity)
+                AlertDialog.Builder(activity)
                         .setIcon(android.R.drawable.ic_dialog_alert)
                         .setTitle(R.string.devices_delete_dialog_title)
                         .setView(layout)

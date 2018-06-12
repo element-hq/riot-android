@@ -135,3 +135,6 @@ android\.R\.id\.home===2
 
 ### Kotlin conversion tools introduce this, but is can be replace by trim()
 trim \{ it \<\= \' \' \}
+
+# Use AlertDialog form v7 compat lib
+android\.app\.AlertDialog

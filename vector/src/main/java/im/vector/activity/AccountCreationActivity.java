@@ -17,10 +17,10 @@
 
 package im.vector.activity;
 
-import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.net.http.SslError;
+import android.support.v7.app.AlertDialog;
 import android.view.KeyEvent;
 import android.webkit.SslErrorHandler;
 import android.webkit.WebView;
