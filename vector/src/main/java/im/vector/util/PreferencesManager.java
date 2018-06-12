@@ -236,7 +236,7 @@ public class PreferencesManager {
 
     /**
      * Tells if the application ignores battery optimizations.
-     *
+     * <p>
      * Ignoring them allows the app to run in background to make background sync with the homeserver.
      * This user option appears on Android M but Android O enforces its usage and kills apps not
      * authorised by the user to run in background.
@@ -645,7 +645,7 @@ public class PreferencesManager {
     /**
      * To call if the user has been asked for analytics tracking.
      *
-     * @param context   the context
+     * @param context the context
      */
     public static void setDidAskToUseAnalytics(Context context) {
         PreferenceManager.getDefaultSharedPreferences(context)
@@ -667,7 +667,7 @@ public class PreferencesManager {
     /**
      * Enable or disable the analytics tracking.
      *
-     * @param context   the context
+     * @param context      the context
      * @param useAnalytics true to enable the analytics tracking
      */
     public static void setUseAnalytics(Context context, boolean useAnalytics) {

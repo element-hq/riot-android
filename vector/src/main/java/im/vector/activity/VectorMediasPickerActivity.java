@@ -1141,10 +1141,10 @@ public class VectorMediasPickerActivity extends MXCActionBarActivity implements 
         String nameRetValue = "VectorImage_" + new SimpleDateFormat("yyyy-MM-dd_hhmmss").format(new Date()) + ".jpg";
 
         // save new name in preference
-        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(context);
-        SharedPreferences.Editor editor = preferences.edit();
-        editor.putString(KEY_PREFERENCE_CAMERA_IMAGE_NAME, nameRetValue);
-        editor.commit();
+        PreferenceManager.getDefaultSharedPreferences(context)
+                .edit()
+                .putString(KEY_PREFERENCE_CAMERA_IMAGE_NAME, nameRetValue)
+                .apply();
 
         return nameRetValue;
     }

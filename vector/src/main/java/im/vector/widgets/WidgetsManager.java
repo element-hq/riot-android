@@ -18,7 +18,6 @@
 package im.vector.widgets;
 
 import android.content.Context;
-import android.content.SharedPreferences;
 import android.os.Handler;
 import android.os.Looper;
 import android.preference.PreferenceManager;
@@ -554,10 +553,10 @@ public class WidgetsManager {
                             String token = response.get("scalar_token");
 
                             if (null != token) {
-                                SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(context);
-                                SharedPreferences.Editor editor = preferences.edit();
-                                editor.putString(preferenceKey, token);
-                                editor.commit();
+                                PreferenceManager.getDefaultSharedPreferences(context)
+                                        .edit()
+                                        .putString(preferenceKey, token)
+                                        .apply();
                             }
 
                             if (null != callback) {

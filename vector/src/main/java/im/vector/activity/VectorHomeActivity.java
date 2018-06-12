@@ -305,9 +305,10 @@ public class VectorHomeActivity extends RiotAppCompatActivity implements SearchV
 
             // TODO add some dedicated actions here
 
-            SharedPreferences.Editor editor = preferences.edit();
-            editor.putInt("VERSION_BUILD", VectorApp.VERSION_BUILD);
-            editor.commit();
+            preferences
+                    .edit()
+                    .putInt("VERSION_BUILD", VectorApp.VERSION_BUILD)
+                    .apply();
         }
 
         // Check whether the user has agreed to the use of analytics tracking
@@ -1151,9 +1152,10 @@ public class VectorHomeActivity extends RiotAppCompatActivity implements SearchV
             SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(this);
 
             if (preferences.getBoolean(isFirstCryptoAlertKey, true)) {
-                SharedPreferences.Editor editor = preferences.edit();
-                editor.putBoolean(isFirstCryptoAlertKey, false);
-                editor.commit();
+                preferences
+                        .edit()
+                        .putBoolean(isFirstCryptoAlertKey, false)
+                        .apply();
 
                 new AlertDialog.Builder(this)
                         .setMessage(R.string.e2e_need_log_in_again)
@@ -2210,9 +2212,10 @@ public class VectorHomeActivity extends RiotAppCompatActivity implements SearchV
         final SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(this);
 
         if (preferences.getBoolean(NO_DEVICE_ID_WARNING_KEY, true)) {
-            SharedPreferences.Editor editor = preferences.edit();
-            editor.putBoolean(NO_DEVICE_ID_WARNING_KEY, false);
-            editor.commit();
+            preferences
+                    .edit()
+                    .putBoolean(NO_DEVICE_ID_WARNING_KEY, false)
+                    .apply();
 
             if (TextUtils.isEmpty(mSession.getCredentials().deviceId)) {
                 new AlertDialog.Builder(VectorHomeActivity.this)

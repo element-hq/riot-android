@@ -768,10 +768,10 @@ public class VectorApp extends MultiDexApplication {
      * Clear the crash status
      */
     public void clearAppCrashStatus() {
-        final SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(VectorApp.getInstance());
-        SharedPreferences.Editor editor = preferences.edit();
-        editor.remove(PREFS_CRASH_KEY);
-        editor.commit();
+        PreferenceManager.getDefaultSharedPreferences(VectorApp.getInstance())
+                .edit()
+                .remove(PREFS_CRASH_KEY)
+                .apply();
     }
 
     //==============================================================================================================
@@ -873,9 +873,8 @@ public class VectorApp extends MultiDexApplication {
      */
     private static void saveApplicationLocale(Locale locale) {
         Context context = VectorApp.getInstance();
-        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(context);
 
-        SharedPreferences.Editor editor = preferences.edit();
+        SharedPreferences.Editor editor = PreferenceManager.getDefaultSharedPreferences(context).edit();
 
         String language = locale.getLanguage();
         if (!TextUtils.isEmpty(language)) {
@@ -898,7 +897,7 @@ public class VectorApp extends MultiDexApplication {
             editor.remove(APPLICATION_LOCALE_VARIANT_KEY);
         }
 
-        editor.commit();
+        editor.apply();
     }
 
     /**

@@ -1107,7 +1107,10 @@ public final class GcmRegistrationManager {
      * Clear the GCM preferences
      */
     public void clearPreferences() {
-        getGcmSharedPreferences().edit().clear().commit();
+        getGcmSharedPreferences()
+                .edit()
+                .clear()
+                .apply();
     }
 
     /**
@@ -1185,11 +1188,10 @@ public final class GcmRegistrationManager {
      * @param areAllowed true to enable the device notifications.
      */
     public void setDeviceNotificationsAllowed(boolean areAllowed) {
-        if (!getGcmSharedPreferences().edit()
+        getGcmSharedPreferences()
+                .edit()
                 .putBoolean(PREFS_ALLOW_NOTIFICATIONS, areAllowed)
-                .commit()) {
-            Log.e(LOG_TAG, "## setDeviceNotificationsAllowed () : commit failed");
-        }
+                .apply();
 
         if (!useGCM()) {
             // when GCM is disabled, enable / disable the "Listen for events" notifications
@@ -1210,11 +1212,10 @@ public final class GcmRegistrationManager {
      * @param flag true to enable the device notifications.
      */
     public void setScreenTurnedOn(boolean flag) {
-        if (!getGcmSharedPreferences().edit()
+        getGcmSharedPreferences()
+                .edit()
                 .putBoolean(PREFS_TURN_SCREEN_ON, flag)
-                .commit()) {
-            Log.e(LOG_TAG, "## setScreenTurnedOn() : commit failed");
-        }
+                .apply();
     }
 
     /**
@@ -1243,11 +1244,10 @@ public final class GcmRegistrationManager {
      * @param isAllowed true to allow the background sync.
      */
     public void setBackgroundSyncAllowed(boolean isAllowed) {
-        if (!getGcmSharedPreferences().edit()
+        getGcmSharedPreferences()
+                .edit()
                 .putBoolean(PREFS_ALLOW_BACKGROUND_SYNC, isAllowed)
-                .commit()) {
-            Log.e(LOG_TAG, "## setBackgroundSyncAllowed() : commit failed");
-        }
+                .apply();
 
         // when GCM is disabled, enable / disable the "Listen for events" notifications
         CommonActivityUtils.onGcmUpdate(mContext);
@@ -1275,11 +1275,10 @@ public final class GcmRegistrationManager {
      * @param isAllowed true to allow the content sending.
      */
     public void setContentSendingAllowed(boolean isAllowed) {
-        if (!getGcmSharedPreferences().edit()
+        getGcmSharedPreferences()
+                .edit()
                 .putBoolean(PREFS_ALLOW_SENDING_CONTENT_TO_GCM, isAllowed)
-                .commit()) {
-            Log.e(LOG_TAG, "## setContentSendingAllowed() : commit failed");
-        }
+                .apply();
     }
 
     /**
@@ -1293,11 +1292,10 @@ public final class GcmRegistrationManager {
      * @param syncDelay the new sync delay in ms.
      */
     public void setBackgroundSyncTimeOut(int syncDelay) {
-        if (!getGcmSharedPreferences().edit()
+        getGcmSharedPreferences()
+                .edit()
                 .putInt(PREFS_SYNC_TIMEOUT, syncDelay)
-                .commit()) {
-            Log.e(LOG_TAG, "## setBackgroundSyncTimeOut() : commit failed");
-        }
+                .apply();
     }
 
     /**
@@ -1329,11 +1327,10 @@ public final class GcmRegistrationManager {
             syncDelay = Math.max(syncDelay, 1000);
         }
 
-        if (!getGcmSharedPreferences().edit()
+        getGcmSharedPreferences()
+                .edit()
                 .putInt(PREFS_SYNC_DELAY, syncDelay)
-                .commit()) {
-            Log.e(LOG_TAG, "## setBackgroundSyncDelay() : commit failed");
-        }
+                .apply();
     }
 
     //================================================================================
@@ -1366,11 +1363,11 @@ public final class GcmRegistrationManager {
      */
     private void clearOldStoredRegistrationToken() {
         Log.d(LOG_TAG, "Remove old registration token");
-        if (!getGcmSharedPreferences().edit()
+
+        getGcmSharedPreferences()
+                .edit()
                 .remove(PREFS_PUSHER_REGISTRATION_TOKEN_KEY)
-                .commit()) {
-            Log.e(LOG_TAG, "## setStoredRegistrationToken() : commit failed");
-        }
+                .apply();
     }
 
     /**
@@ -1381,11 +1378,10 @@ public final class GcmRegistrationManager {
     private void setStoredRegistrationToken(String registrationToken) {
         Log.d(LOG_TAG, "Saving registration token");
 
-        if (!getGcmSharedPreferences().edit()
+        getGcmSharedPreferences()
+                .edit()
                 .putString(PREFS_PUSHER_REGISTRATION_TOKEN_KEY_FCM, registrationToken)
-                .commit()) {
-            Log.e(LOG_TAG, "## setStoredRegistrationToken() : commit failed");
-        }
+                .apply();
     }
 
     /**
@@ -1407,11 +1403,10 @@ public final class GcmRegistrationManager {
                 (RegistrationState.SERVER_REGISTRATING != state) &&
                 (RegistrationState.SERVER_UNREGISTRATING != state)) {
 
-            if (!getGcmSharedPreferences().edit()
+            getGcmSharedPreferences()
+                    .edit()
                     .putInt(PREFS_PUSHER_REGISTRATION_STATUS, state.ordinal())
-                    .commit()) {
-                Log.e(LOG_TAG, "## setStoredRegistrationState() : commit failed");
-            }
+                    .apply();
         }
 
         return state;

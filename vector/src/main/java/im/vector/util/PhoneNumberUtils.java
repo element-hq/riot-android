@@ -183,10 +183,10 @@ public class PhoneNumberUtils {
      * @param countryCode the country code
      */
     public static void setCountryCode(final Context context, final String countryCode) {
-        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(context);
-        SharedPreferences.Editor editor = preferences.edit();
-        editor.putString(COUNTRY_CODE_PREF_KEY, countryCode);
-        editor.commit();
+        PreferenceManager.getDefaultSharedPreferences(context)
+                .edit()
+                .putString(COUNTRY_CODE_PREF_KEY, countryCode)
+                .apply();
     }
 
     /**

@@ -6,6 +6,7 @@ Features:
 
 Improvements:
  - Add spacing to device keys (#2314)
+ - use apply() instead of commit() to save shared prefs (#2231)
 
 Other changes:
  - Remove "Matrix application" activation from the Lab section in the settings (#2341)

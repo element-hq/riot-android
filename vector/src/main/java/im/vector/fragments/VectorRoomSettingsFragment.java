@@ -1885,10 +1885,10 @@ public class VectorRoomSettingsFragment extends PreferenceFragment implements Sh
         }
 
         // remove the preference because it might switch from a SwitchPreference to  VectorCustomActionEditTextPreference
-        final SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(getActivity());
-        SharedPreferences.Editor editor = preferences.edit();
-        editor.remove(key);
-        editor.commit();
+        PreferenceManager.getDefaultSharedPreferences(getActivity())
+                .edit()
+                .remove(key)
+                .apply();
 
         if (mRoom.isEncrypted()) {
             VectorCustomActionEditTextPreference isEncryptedPreference = new VectorCustomActionEditTextPreference(getActivity());

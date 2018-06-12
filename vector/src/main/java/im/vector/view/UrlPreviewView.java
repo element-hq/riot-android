@@ -17,7 +17,6 @@
 package im.vector.view;
 
 import android.content.Context;
-import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
 import android.text.Html;
 import android.text.method.LinkMovementMethod;
@@ -94,11 +93,10 @@ public class UrlPreviewView extends LinearLayout {
 
                 mDismissedUrlsPreviews.add(mUID);
 
-                SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(VectorApp.getInstance());
-                SharedPreferences.Editor editor = preferences.edit();
-
-                editor.putStringSet(DISMISSED_URL_PREVIEWS_PREF_KEY, mDismissedUrlsPreviews);
-                editor.commit();
+                PreferenceManager.getDefaultSharedPreferences(VectorApp.getInstance())
+                        .edit()
+                        .putStringSet(DISMISSED_URL_PREVIEWS_PREF_KEY, mDismissedUrlsPreviews)
+                        .apply();
             }
         });
     }

@@ -271,11 +271,10 @@ public class CommonActivityUtils {
      * The application has been started
      */
     public static void onApplicationStarted(Activity activity) {
-        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(activity);
-        SharedPreferences.Editor editor = preferences.edit();
-
-        editor.putBoolean(RESTART_IN_PROGRESS_KEY, false);
-        editor.commit();
+        PreferenceManager.getDefaultSharedPreferences(activity)
+                .edit()
+                .putBoolean(RESTART_IN_PROGRESS_KEY, false)
+                .apply();
     }
 
     /**
@@ -286,7 +285,6 @@ public class CommonActivityUtils {
     public static void restartApp(Activity activity) {
         // clear the preferences
         SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(activity);
-        SharedPreferences.Editor editor = preferences.edit();
 
         // use the preference to avoid infinite relaunch on some devices
         // the culprit activity is restarted when System.exit is called.
@@ -295,8 +293,10 @@ public class CommonActivityUtils {
             Toast.makeText(activity, "Restart the application (low memory)", Toast.LENGTH_SHORT).show();
 
             Log.e(LOG_TAG, "Kill the application");
-            editor.putBoolean(RESTART_IN_PROGRESS_KEY, true);
-            editor.commit();
+            preferences
+                    .edit()
+                    .putBoolean(RESTART_IN_PROGRESS_KEY, true)
+                    .apply();
 
             PendingIntent mPendingIntent =
                     PendingIntent.getActivity(activity, 314159, new Intent(activity, LoginActivity.class), PendingIntent.FLAG_CANCEL_CURRENT);
