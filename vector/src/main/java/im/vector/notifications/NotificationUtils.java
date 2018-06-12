@@ -250,7 +250,7 @@ public class NotificationUtils {
         builder.setContentText(context.getString(R.string.call_in_progress));
         builder.setSmallIcon(R.drawable.incoming_call_notification_transparent);
 
-        // Display the incoming call notification on the lock screen
+        // Display the pending call notification on the lock screen
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
             builder.setPriority(NotificationCompat.PRIORITY_MAX);
         }
@@ -434,22 +434,7 @@ public class NotificationUtils {
 
         // do not offer to quick respond if the user did not dismiss the previous one
         if (!LockScreenActivity.isDisplayingALockScreenActivity()) {
-            if (!roomsNotifications.mIsInvitationEvent) {
-
-                // offer to type a quick answer (i.e. without launching the application)
-                Intent quickReplyIntent = new Intent(context, LockScreenActivity.class);
-                quickReplyIntent.putExtra(LockScreenActivity.EXTRA_ROOM_ID, roomsNotifications.mRoomId);
-                quickReplyIntent.putExtra(LockScreenActivity.EXTRA_SENDER_NAME, roomsNotifications.mSenderName);
-                quickReplyIntent.putExtra(LockScreenActivity.EXTRA_MESSAGE_BODY, roomsNotifications.mQuickReplyBody);
-
-                // the action must be unique else the parameters are ignored
-                quickReplyIntent.setAction(QUICK_LAUNCH_ACTION + ((int) (System.currentTimeMillis())));
-                PendingIntent pIntent = PendingIntent.getActivity(context, 0, quickReplyIntent, 0);
-                builder.addAction(
-                        R.drawable.vector_notification_quick_reply,
-                        context.getString(R.string.action_quick_reply),
-                        pIntent);
-            } else {
+            if (roomsNotifications.mIsInvitationEvent) {
                 {
                     // offer to type a quick reject button
                     Intent leaveIntent = new Intent(context, JoinScreenActivity.class);
@@ -481,6 +466,20 @@ public class NotificationUtils {
                             context.getString(R.string.join),
                             pIntent);
                 }
+            } else {
+                // offer to type a quick answer (i.e. without launching the application)
+                Intent quickReplyIntent = new Intent(context, LockScreenActivity.class);
+                quickReplyIntent.putExtra(LockScreenActivity.EXTRA_ROOM_ID, roomsNotifications.mRoomId);
+                quickReplyIntent.putExtra(LockScreenActivity.EXTRA_SENDER_NAME, roomsNotifications.mSenderName);
+                quickReplyIntent.putExtra(LockScreenActivity.EXTRA_MESSAGE_BODY, roomsNotifications.mQuickReplyBody);
+
+                // the action must be unique else the parameters are ignored
+                quickReplyIntent.setAction(QUICK_LAUNCH_ACTION + ((int) (System.currentTimeMillis())));
+                PendingIntent pIntent = PendingIntent.getActivity(context, 0, quickReplyIntent, 0);
+                builder.addAction(
+                        R.drawable.vector_notification_quick_reply,
+                        context.getString(R.string.action_quick_reply),
+                        pIntent);
             }
 
             // Build the pending intent for when the notification is clicked
