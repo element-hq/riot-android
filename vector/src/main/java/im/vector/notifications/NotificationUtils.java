@@ -198,19 +198,20 @@ public class NotificationUtils {
         // build the notification builder
         addNotificationChannels(context);
 
-        NotificationCompat.Builder notifBuilder = new NotificationCompat.Builder(context, NotificationUtils.LISTEN_FOR_EVENTS_NOTIFICATION_CHANNEL_ID);
-        notifBuilder.setSmallIcon(R.drawable.permanent_notification_transparent);
-        notifBuilder.setWhen(System.currentTimeMillis());
-        notifBuilder.setContentTitle(context.getString(R.string.riot_app_name));
-        notifBuilder.setContentText(context.getString(subTitleResId));
-        notifBuilder.setContentIntent(pi);
+        NotificationCompat.Builder builder = new NotificationCompat.Builder(context, LISTEN_FOR_EVENTS_NOTIFICATION_CHANNEL_ID)
+                .setWhen(System.currentTimeMillis())
+                .setContentTitle(context.getString(R.string.riot_app_name))
+                .setContentText(context.getString(subTitleResId))
+                .setSmallIcon(R.drawable.permanent_notification_transparent)
+                .setContentIntent(pi);
 
         // hide the notification from the status bar
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
-            notifBuilder.setPriority(NotificationCompat.PRIORITY_MIN);
+            builder.setPriority(NotificationCompat.PRIORITY_MIN);
         }
 
-        Notification notification = notifBuilder.build();
+        Notification notification = builder.build();
+
         notification.flags |= Notification.FLAG_NO_CLEAR;
 
         if (Build.VERSION.SDK_INT < Build.VERSION_CODES.M) {
@@ -245,12 +246,12 @@ public class NotificationUtils {
     public static Notification buildIncomingCallNotification(Context context, String roomName, String matrixId, String callId) {
         addNotificationChannels(context);
 
-        NotificationCompat.Builder builder = new NotificationCompat.Builder(context, CALL_NOTIFICATION_CHANNEL_ID);
-        builder.setWhen(System.currentTimeMillis());
-
-        builder.setContentTitle(roomName);
-        builder.setContentText(context.getString(R.string.incoming_call));
-        builder.setSmallIcon(R.drawable.incoming_call_notification_transparent);
+        NotificationCompat.Builder builder = new NotificationCompat.Builder(context, CALL_NOTIFICATION_CHANNEL_ID)
+                .setWhen(System.currentTimeMillis())
+                .setContentTitle(roomName)
+                .setContentText(context.getString(R.string.incoming_call))
+                .setSmallIcon(R.drawable.incoming_call_notification_transparent)
+                .setLights(Color.GREEN, 500, 500);
 
         // Display the incoming call notification on the lock screen
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
@@ -258,10 +259,10 @@ public class NotificationUtils {
         }
 
         // clear the activity stack to home activity
-        Intent intent = new Intent(context, VectorHomeActivity.class);
-        intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
-        intent.putExtra(VectorHomeActivity.EXTRA_CALL_SESSION_ID, matrixId);
-        intent.putExtra(VectorHomeActivity.EXTRA_CALL_ID, callId);
+        Intent intent = new Intent(context, VectorHomeActivity.class)
+                .setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP | Intent.FLAG_ACTIVITY_NEW_TASK)
+                .putExtra(VectorHomeActivity.EXTRA_CALL_SESSION_ID, matrixId)
+                .putExtra(VectorHomeActivity.EXTRA_CALL_ID, callId);
 
         // Recreate the back stack
         TaskStackBuilder stackBuilder = TaskStackBuilder.create(context)
@@ -274,9 +275,8 @@ public class NotificationUtils {
         // When using 0, the intent is not created/launched when the user taps on the notification.
         //
         PendingIntent pendingIntent = stackBuilder.getPendingIntent((new Random()).nextInt(1000), PendingIntent.FLAG_UPDATE_CURRENT);
-        builder.setContentIntent(pendingIntent);
 
-        builder.setLights(Color.GREEN, 500, 500);
+        builder.setContentIntent(pendingIntent);
 
         return builder.build();
     }
@@ -295,12 +295,11 @@ public class NotificationUtils {
     public static Notification buildPendingCallNotification(Context context, String roomName, String roomId, String matrixId, String callId) {
         addNotificationChannels(context);
 
-        NotificationCompat.Builder builder = new NotificationCompat.Builder(context, CALL_NOTIFICATION_CHANNEL_ID);
-        builder.setWhen(System.currentTimeMillis());
-
-        builder.setContentTitle(roomName);
-        builder.setContentText(context.getString(R.string.call_in_progress));
-        builder.setSmallIcon(R.drawable.incoming_call_notification_transparent);
+        NotificationCompat.Builder builder = new NotificationCompat.Builder(context, CALL_NOTIFICATION_CHANNEL_ID)
+                .setWhen(System.currentTimeMillis())
+                .setContentTitle(roomName)
+                .setContentText(context.getString(R.string.call_in_progress))
+                .setSmallIcon(R.drawable.incoming_call_notification_transparent);
 
         // Display the pending call notification on the lock screen
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
@@ -308,10 +307,10 @@ public class NotificationUtils {
         }
 
         // Build the pending intent for when the notification is clicked
-        Intent roomIntent = new Intent(context, VectorRoomActivity.class);
-        roomIntent.putExtra(VectorRoomActivity.EXTRA_ROOM_ID, roomId);
-        roomIntent.putExtra(VectorRoomActivity.EXTRA_MATRIX_ID, matrixId);
-        roomIntent.putExtra(VectorRoomActivity.EXTRA_START_CALL_ID, callId);
+        Intent roomIntent = new Intent(context, VectorRoomActivity.class)
+                .putExtra(VectorRoomActivity.EXTRA_ROOM_ID, roomId)
+                .putExtra(VectorRoomActivity.EXTRA_MATRIX_ID, matrixId)
+                .putExtra(VectorRoomActivity.EXTRA_START_CALL_ID, callId);
 
         // Recreate the back stack
         TaskStackBuilder stackBuilder = TaskStackBuilder.create(context)
@@ -323,6 +322,7 @@ public class NotificationUtils {
         // When using 0, the intent is not created/launched when the user taps on the notification.
         //
         PendingIntent pendingIntent = stackBuilder.getPendingIntent((new Random()).nextInt(1000), PendingIntent.FLAG_UPDATE_CURRENT);
+
         builder.setContentIntent(pendingIntent);
 
         return builder.build();
@@ -710,16 +710,15 @@ public class NotificationUtils {
 
             addNotificationChannels(context);
 
-            NotificationCompat.Builder builder = new NotificationCompat.Builder(context, SILENT_NOTIFICATION_CHANNEL_ID);
-            builder.setWhen(roomsNotifications.mContentTs);
-            builder.setContentTitle(roomsNotifications.mContentTitle);
-            builder.setContentText(roomsNotifications.mContentText);
-
-            builder.setGroup(context.getString(R.string.riot_app_name));
-            builder.setGroupSummary(true);
-
-            builder.setDeleteIntent(PendingIntent.getBroadcast(context.getApplicationContext(),
-                    0, new Intent(context.getApplicationContext(), DismissNotificationReceiver.class), PendingIntent.FLAG_UPDATE_CURRENT));
+            NotificationCompat.Builder builder = new NotificationCompat.Builder(context, SILENT_NOTIFICATION_CHANNEL_ID)
+                    .setWhen(roomsNotifications.mContentTs)
+                    .setContentTitle(roomsNotifications.mContentTitle)
+                    .setContentText(roomsNotifications.mContentText)
+                    .setSmallIcon(R.drawable.message_notification_transparent)
+                    .setGroup(context.getString(R.string.riot_app_name))
+                    .setGroupSummary(true)
+                    .setDeleteIntent(PendingIntent.getBroadcast(context.getApplicationContext(),
+                            0, new Intent(context.getApplicationContext(), DismissNotificationReceiver.class), PendingIntent.FLAG_UPDATE_CURRENT));
 
             try {
                 addTextStyle(context, builder, roomsNotifications);
@@ -727,16 +726,15 @@ public class NotificationUtils {
                 Log.e(LOG_TAG, "## buildMessageNotification() : addTextStyle failed " + e.getMessage());
             }
 
-            // only one room : display the large bitmap (it should be the room avatar
+            // only one room : display the large bitmap (it should be the room avatar)
             // several rooms : display the Riot avatar
             if (roomsNotifications.mRoomNotifications.size() == 1) {
                 if (null != largeBitmap) {
-                    largeBitmap = NotificationUtils.createSquareBitmap(largeBitmap);
+                    largeBitmap = createSquareBitmap(largeBitmap);
                     builder.setLargeIcon(largeBitmap);
                 }
             }
 
-            builder.setSmallIcon(R.drawable.message_notification_transparent);
             manageNotificationSound(context, builder, isBackground, bingRule.isDefaultNotificationSound(bingRule.getNotificationSound()));
 
             return builder.build();
@@ -757,13 +755,14 @@ public class NotificationUtils {
     public static Notification buildMessagesListNotification(Context context, List<CharSequence> messagesStrings, BingRule bingRule) {
         try {
             addNotificationChannels(context);
-            NotificationCompat.Builder builder = new NotificationCompat.Builder(context, SILENT_NOTIFICATION_CHANNEL_ID);
-            builder.setWhen(System.currentTimeMillis());
-            builder.setContentTitle("");
-            builder.setContentText(messagesStrings.get(0));
 
-            builder.setGroup(context.getString(R.string.riot_app_name));
-            builder.setGroupSummary(true);
+            NotificationCompat.Builder builder = new NotificationCompat.Builder(context, SILENT_NOTIFICATION_CHANNEL_ID)
+                    .setWhen(System.currentTimeMillis())
+                    .setContentTitle("")
+                    .setContentText(messagesStrings.get(0))
+                    .setSmallIcon(R.drawable.message_notification_transparent)
+                    .setGroup(context.getString(R.string.riot_app_name))
+                    .setGroupSummary(true);
 
             NotificationCompat.InboxStyle inboxStyle = new NotificationCompat.InboxStyle();
 
@@ -771,9 +770,11 @@ public class NotificationUtils {
                 inboxStyle.addLine(messagesStrings.get(i));
             }
 
-            inboxStyle.setBigContentTitle(context.getString(R.string.riot_app_name));
-            inboxStyle.setSummaryText(
-                    context.getResources().getQuantityString(R.plurals.notification_unread_notified_messages, messagesStrings.size(), messagesStrings.size()));
+            inboxStyle.setBigContentTitle(context.getString(R.string.riot_app_name))
+                    .setSummaryText(
+                            context.getResources()
+                                    .getQuantityString(R.plurals.notification_unread_notified_messages, messagesStrings.size(), messagesStrings.size()));
+
             builder.setStyle(inboxStyle);
 
             // open the home activity
@@ -781,9 +782,8 @@ public class NotificationUtils {
             Intent roomIntentTap = new Intent(context, VectorHomeActivity.class);
             roomIntentTap.setAction(TAP_TO_VIEW_ACTION + ((int) (System.currentTimeMillis())));
             stackBuilderTap.addNextIntent(roomIntentTap);
-            builder.setContentIntent(stackBuilderTap.getPendingIntent(0, PendingIntent.FLAG_UPDATE_CURRENT));
 
-            builder.setSmallIcon(R.drawable.message_notification_transparent);
+            builder.setContentIntent(stackBuilderTap.getPendingIntent(0, PendingIntent.FLAG_UPDATE_CURRENT));
 
             manageNotificationSound(context, builder, false, bingRule.isDefaultNotificationSound(bingRule.getNotificationSound()));
 
