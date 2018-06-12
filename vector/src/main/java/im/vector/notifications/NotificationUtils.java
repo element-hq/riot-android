@@ -93,7 +93,7 @@ public class NotificationUtils {
      */
     @SuppressLint("NewApi")
     public static void addNotificationChannels(Context context) {
-        if (Build.VERSION.SDK_INT < 26) {
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.O) {
             return;
         }
 
@@ -557,7 +557,7 @@ public class NotificationUtils {
             if (isBing && (null != PreferencesManager.getNotificationRingTone(context))) {
                 builder.setSound(PreferencesManager.getNotificationRingTone(context));
 
-                if (Build.VERSION.SDK_INT >= 26) {
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
                     builder.setChannelId(NOISY_NOTIFICATION_CHANNEL_ID);
                 }
             }

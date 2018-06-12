@@ -495,7 +495,7 @@ public class VectorApp extends MultiDexApplication {
      * List the used permissions statuses.
      */
     private void listPermissionStatuses() {
-        if (Build.VERSION.SDK_INT >= 23) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             final List<String> permissions = Arrays.asList(
                     android.Manifest.permission.CAMERA,
                     android.Manifest.permission.RECORD_AUDIO,

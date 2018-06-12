@@ -616,7 +616,7 @@ public class ContactsManager implements SharedPreferences.OnSharedPreferenceChan
      * @return true it was requested once
      */
     public boolean isContactBookAccessRequested() {
-        if (Build.VERSION.SDK_INT >= 23) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             return (PackageManager.PERMISSION_GRANTED == ContextCompat.checkSelfPermission(mContext, Manifest.permission.READ_CONTACTS));
         } else {
             SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(mContext);
@@ -630,7 +630,7 @@ public class ContactsManager implements SharedPreferences.OnSharedPreferenceChan
      * @param isAllowed true to allowed the contacts book access.
      */
     public void setIsContactBookAccessAllowed(boolean isAllowed) {
-        if (Build.VERSION.SDK_INT < 23) {
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.M) {
             SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(mContext);
             SharedPreferences.Editor editor = preferences.edit();
             editor.putBoolean(CONTACTS_BOOK_ACCESS_KEY, isAllowed);
@@ -646,7 +646,7 @@ public class ContactsManager implements SharedPreferences.OnSharedPreferenceChan
      * @return true if it was granted.
      */
     public boolean isContactBookAccessAllowed() {
-        if (Build.VERSION.SDK_INT >= 23) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             return (PackageManager.PERMISSION_GRANTED == ContextCompat.checkSelfPermission(mContext, Manifest.permission.READ_CONTACTS));
         } else {
             SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(mContext);
