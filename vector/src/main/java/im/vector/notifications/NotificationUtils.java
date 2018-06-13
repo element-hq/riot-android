@@ -83,6 +83,7 @@ public class NotificationUtils {
     private static final String SILENT_NOTIFICATION_CHANNEL_ID = "DEFAULT_SILENT_NOTIFICATION_CHANNEL_ID";
     private static final String CALL_NOTIFICATION_CHANNEL_ID = "CALL_NOTIFICATION_CHANNEL_ID";
 
+    // FIXME I think there is an issue if the user change the language
     private static String NOISY_NOTIFICATION_CHANNEL_NAME = null;
     private static String SILENT_NOTIFICATION_CHANNEL_NAME = null;
     private static String CALL_NOTIFICATION_CHANNEL_NAME = null;
@@ -706,7 +707,7 @@ public class NotificationUtils {
                 }
             }
 
-            Log.d(LOG_TAG, "prepareNotification : with sound " + bingRule.isDefaultNotificationSound(bingRule.getNotificationSound()));
+            Log.d(LOG_TAG, "prepareNotification : with sound " + BingRule.isDefaultNotificationSound(bingRule.getNotificationSound()));
 
             addNotificationChannels(context);
 
@@ -735,7 +736,7 @@ public class NotificationUtils {
                 }
             }
 
-            manageNotificationSound(context, builder, isBackground, bingRule.isDefaultNotificationSound(bingRule.getNotificationSound()));
+            manageNotificationSound(context, builder, isBackground, BingRule.isDefaultNotificationSound(bingRule.getNotificationSound()));
 
             return builder.build();
         } catch (Exception e) {
@@ -785,7 +786,7 @@ public class NotificationUtils {
 
             builder.setContentIntent(stackBuilderTap.getPendingIntent(0, PendingIntent.FLAG_UPDATE_CURRENT));
 
-            manageNotificationSound(context, builder, false, bingRule.isDefaultNotificationSound(bingRule.getNotificationSound()));
+            manageNotificationSound(context, builder, false, BingRule.isDefaultNotificationSound(bingRule.getNotificationSound()));
 
             return builder.build();
         } catch (Exception e) {
