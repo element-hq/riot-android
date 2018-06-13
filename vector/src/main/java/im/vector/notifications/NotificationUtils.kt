@@ -31,6 +31,7 @@ import android.os.PowerManager
 import android.support.annotation.ColorInt
 import android.support.annotation.StringRes
 import android.support.v4.app.NotificationCompat
+import android.support.v4.app.NotificationManagerCompat
 import android.support.v4.app.TaskStackBuilder
 import android.support.v4.content.ContextCompat
 import android.text.Spannable
@@ -61,7 +62,7 @@ object NotificationUtils {
      * Identifier of the notification used to display messages.
      * Those messages are merged into a single notification.
      */
-    const val NOTIFICATION_ID_MESSAGES = 60
+    private const val NOTIFICATION_ID_MESSAGES = 60
 
     /**
      * Identifier of the foreground notification used to keep the application alive
@@ -76,7 +77,7 @@ object NotificationUtils {
      * ========================================================================================== */
 
     private const val QUICK_LAUNCH_ACTION = "EventStreamService.QUICK_LAUNCH_ACTION"
-    public const val TAP_TO_VIEW_ACTION = "EventStreamService.TAP_TO_VIEW_ACTION"
+    const val TAP_TO_VIEW_ACTION = "EventStreamService.TAP_TO_VIEW_ACTION"
 
     /* ==========================================================================================
      * IDs for channels
@@ -346,6 +347,7 @@ object NotificationUtils {
      *
      * @param bitmap the bitmap to "square"
      * @return the squared bitmap
+     * TODO Move to Bitmap util
      */
     private fun createSquareBitmap(bitmap: Bitmap?): Bitmap? {
         var resizedBitmap: Bitmap? = null
@@ -547,7 +549,7 @@ object NotificationUtils {
             }
 
             // Build the pending intent for when the notification is clicked
-            val roomIntentTap: Intent?
+            val roomIntentTap: Intent
 
             if (roomsNotifications.mIsInvitationEvent) {
                 // for invitation the room preview must be displayed
@@ -558,7 +560,7 @@ object NotificationUtils {
                 roomIntentTap.putExtra(VectorRoomActivity.EXTRA_ROOM_ID, roomsNotifications.mRoomId)
             }
             // the action must be unique else the parameters are ignored
-            roomIntentTap!!.action = TAP_TO_VIEW_ACTION + System.currentTimeMillis().toInt()
+            roomIntentTap.action = TAP_TO_VIEW_ACTION + System.currentTimeMillis().toInt()
 
             // Recreate the back stack
             val stackBuilderTap = TaskStackBuilder.create(context)
@@ -585,7 +587,6 @@ object NotificationUtils {
                 } catch (e: Exception) {
                     Log.e(LOG_TAG, "## addTextStyleWithSeveralRooms() : WearableExtender failed " + e.message)
                 }
-
             }
         }
     }
@@ -807,5 +808,43 @@ object NotificationUtils {
         }
 
         return null
+    }
+
+
+    /**
+     * Show a notification containing messages
+     */
+    fun showNotificationMessage(context: Context, notification: Notification) {
+        NotificationManagerCompat.from(context)
+                .notify(NOTIFICATION_ID_MESSAGES, notification)
+    }
+
+    /**
+     * Cancel the notification containing messages
+     */
+    fun cancelNotificationMessage(context: Context) {
+        NotificationManagerCompat.from(context)
+                .cancel(NOTIFICATION_ID_MESSAGES)
+    }
+
+    /**
+     * Cancel the foreground notification service
+     */
+    fun cancelNotificationForegroundService(context: Context) {
+        NotificationManagerCompat.from(context)
+                .cancel(NOTIFICATION_ID_FOREGROUND_SERVICE)
+    }
+
+    /**
+     * Cancel all the notification
+     */
+    fun cancelAllNotifications(context: Context) {
+        // Keep this try catch (reported by GA)
+        try {
+            NotificationManagerCompat.from(context)
+                    .cancelAll()
+        } catch (e: Exception) {
+            Log.e(LOG_TAG, "## cancelAllNotifications() failed " + e.message)
+        }
     }
 }
