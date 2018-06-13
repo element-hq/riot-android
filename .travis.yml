@@ -46,4 +46,4 @@ before_script:
 script:
   - ./gradlew clean lintAppRelease assembleAppRelease --stacktrace
   - ./tools/check/check_code_quality.sh
-
+  - ./tools/travis/check_pr.sh

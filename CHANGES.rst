@@ -18,6 +18,7 @@ Translations:
 
 Build:
  - Add script to check code quality
+ - Travis will now check if CHANGES.rst has been modified for each PR
 
 Changes in Riot 0.8.10 (2018-01-06)
 ===================================================
