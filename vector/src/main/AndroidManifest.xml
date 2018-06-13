@@ -211,7 +211,7 @@
             android:taskAffinity=""
             android:theme="@style/Vector_Lock_Light" />
         <activity
-            android:name=".activity.JoinScreenActivity"
+            android:name=".activity.JoinRoomActivity"
             android:clearTaskOnLaunch="true"
             android:configChanges="orientation|screenSize"
             android:excludeFromRecents="true"

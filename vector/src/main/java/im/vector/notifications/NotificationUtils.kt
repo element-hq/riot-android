@@ -503,14 +503,11 @@ object NotificationUtils {
             if (roomsNotifications.mIsInvitationEvent) {
                 run {
                     // offer to type a quick reject button
-                    val leaveIntent = Intent(context, JoinScreenActivity::class.java)
-                    leaveIntent.putExtra(JoinScreenActivity.EXTRA_ROOM_ID, roomsNotifications.mRoomId)
-                    leaveIntent.putExtra(JoinScreenActivity.EXTRA_MATRIX_ID, roomsNotifications.mSessionId)
-                    leaveIntent.putExtra(JoinScreenActivity.EXTRA_REJECT, true)
+                    val rejectIntent = JoinRoomActivity.getRejectRoomIntent(context, roomsNotifications.mRoomId, roomsNotifications.mSessionId)
 
                     // the action must be unique else the parameters are ignored
-                    leaveIntent.action = QUICK_LAUNCH_ACTION + System.currentTimeMillis().toInt()
-                    val pIntent = PendingIntent.getActivity(context, 0, leaveIntent, 0)
+                    rejectIntent.action = QUICK_LAUNCH_ACTION + System.currentTimeMillis().toInt()
+                    val pIntent = PendingIntent.getActivity(context, 0, rejectIntent, 0)
                     builder.addAction(
                             R.drawable.vector_notification_reject_invitation,
                             context.getString(R.string.reject),
@@ -519,14 +516,11 @@ object NotificationUtils {
 
                 run {
                     // offer to type a quick accept button
-                    val acceptIntent = Intent(context, JoinScreenActivity::class.java)
-                    acceptIntent.putExtra(JoinScreenActivity.EXTRA_ROOM_ID, roomsNotifications.mRoomId)
-                    acceptIntent.putExtra(JoinScreenActivity.EXTRA_MATRIX_ID, roomsNotifications.mSessionId)
-                    acceptIntent.putExtra(JoinScreenActivity.EXTRA_JOIN, true)
+                    val joinIntent = JoinRoomActivity.getJoinRoomIntent(context, roomsNotifications.mRoomId, roomsNotifications.mSessionId)
 
                     // the action must be unique else the parameters are ignored
-                    acceptIntent.action = QUICK_LAUNCH_ACTION + System.currentTimeMillis().toInt()
-                    val pIntent = PendingIntent.getActivity(context, 0, acceptIntent, 0)
+                    joinIntent.action = QUICK_LAUNCH_ACTION + System.currentTimeMillis().toInt()
+                    val pIntent = PendingIntent.getActivity(context, 0, joinIntent, 0)
                     builder.addAction(
                             R.drawable.vector_notification_accept_invitation,
                             context.getString(R.string.join),
