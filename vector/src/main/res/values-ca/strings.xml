@@ -913,4 +913,7 @@
 </plurals>
 
     // Widget Integration Manager
+    <string name="title_activity_choose_sticker">Envia un adhesiu</string>
+
+    <string name="option_send_sticker">Envia un adhesiu</string>
     </resources>
