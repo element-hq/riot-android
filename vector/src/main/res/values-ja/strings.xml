@@ -880,4 +880,6 @@ Riotアプリがあなたの電話帳へアクセスすることを許可しま�
     <string name="settings_notification_privacy_normal">標準</string>
     <string name="settings_notification_privacy_power_saving">電力保存オプション</string>
     <string name="settings_notification_privacy_low_detail">簡単な通知</string>
+    <string name="settings_notification_privacy_need_permission">このアプリはバックグラウンド動作の権限が必要です。</string>
+    <string name="settings_notification_privacy_gcm">•通知はGoogle Cloud Messaging経由で送られます</string>
     </resources>
