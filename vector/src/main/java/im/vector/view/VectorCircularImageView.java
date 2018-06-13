@@ -39,6 +39,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import im.vector.util.BitmapUtilKt;
+
 /**
  * Display a circular image.
  */
@@ -141,39 +143,8 @@ public class VectorCircularImageView extends android.support.v7.widget.AppCompat
             mConversionImagesThreadHandler.post(new Runnable() {
                 @Override
                 public void run() {
-                    Bitmap squareBitmap = bm;
+                    Bitmap squareBitmap = BitmapUtilKt.createSquareBitmap(bm);
 
-                    if (width == height) {
-                        // nothing to do
-                    }
-                    // larger than high
-                    else if (width > height) {
-                        try {
-                            squareBitmap = Bitmap.createBitmap(
-                                    squareBitmap,
-                                    (width - height) / 2,
-                                    0,
-                                    height,
-                                    height
-                            );
-                        } catch (Exception e) {
-                            Log.e(LOG_TAG, "## setImageBitmap - createBitmap " + e.getMessage());
-                        }
-                    }
-                    // higher than large
-                    else {
-                        try {
-                            squareBitmap = Bitmap.createBitmap(
-                                    squareBitmap,
-                                    0,
-                                    (height - width) / 2,
-                                    width,
-                                    width
-                            );
-                        } catch (Exception e) {
-                            Log.e(LOG_TAG, "## setImageBitmap - createBitmap " + e.getMessage());
-                        }
-                    }
                     try {
                         // create a rounded bitmap
                         final RoundedBitmapDrawable drawable = RoundedBitmapDrawableFactory.create(getResources(), squareBitmap);

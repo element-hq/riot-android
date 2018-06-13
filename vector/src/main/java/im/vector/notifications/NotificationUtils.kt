@@ -44,6 +44,7 @@ import im.vector.VectorApp
 import im.vector.activity.*
 import im.vector.receiver.DismissNotificationReceiver
 import im.vector.util.PreferencesManager
+import im.vector.util.createSquareBitmap
 import org.matrix.androidsdk.rest.model.bingrules.BingRule
 import org.matrix.androidsdk.util.Log
 import java.util.*
@@ -340,48 +341,6 @@ object NotificationUtils {
         builder.setContentIntent(pendingIntent)
 
         return builder.build()
-    }
-
-    /**
-     * Create a square bitmap from another one.
-     * It is centered.
-     *
-     * @param bitmap the bitmap to "square"
-     * @return the squared bitmap
-     * TODO Move to Bitmap util
-     */
-    private fun createSquareBitmap(bitmap: Bitmap?): Bitmap? {
-        var resizedBitmap: Bitmap? = null
-
-        if (null != bitmap) {
-            // convert the bitmap to a square bitmap
-            val width = bitmap.width
-            val height = bitmap.height
-
-            if (width == height) {
-                resizedBitmap = bitmap
-            } else if (width > height) {
-                resizedBitmap = Bitmap.createBitmap(
-                        bitmap,
-                        (width - height) / 2,
-                        0,
-                        height,
-                        height
-                )
-
-            } else {
-                resizedBitmap = Bitmap.createBitmap(
-                        bitmap,
-                        0,
-                        (height - width) / 2,
-                        width,
-                        width
-                )
-            }// higher than large
-            // larger than high
-        }
-
-        return resizedBitmap
     }
 
     /**
@@ -739,8 +698,7 @@ object NotificationUtils {
             // several rooms : display the Riot avatar
             if (roomsNotifications.mRoomNotifications.size == 1) {
                 if (null != largeBitmap) {
-                    largeBitmap = createSquareBitmap(largeBitmap)
-                    builder.setLargeIcon(largeBitmap)
+                    builder.setLargeIcon(largeBitmap.createSquareBitmap())
                 }
             }
 
