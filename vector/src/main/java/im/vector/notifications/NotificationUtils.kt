@@ -151,7 +151,8 @@ object NotificationUtils {
             // the notification sound has been updated
             // need to delete it, to create a new one
             // else the sound won't be updated
-            if ((null == notificationSound) xor (null == expectedSound) || null != notificationSound && !TextUtils.equals(notificationSound.toString(), expectedSound!!.toString())) {
+            if ((null == notificationSound)
+                    xor (null == expectedSound) || null != notificationSound && !TextUtils.equals(notificationSound.toString(), expectedSound!!.toString())) {
                 notificationManager.deleteNotificationChannel(NOISY_NOTIFICATION_CHANNEL_ID)
                 NOISY_NOTIFICATION_CHANNEL_ID = null
             }

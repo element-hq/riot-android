@@ -70,12 +70,17 @@ class JoinRoomActivity : RiotAppCompatActivity() {
             Log.d(LOG_TAG, "## onCreate() : Join the room $roomId")
 
             room.join(object : ApiCallback<Void> {
-                override fun onSuccess(v: Void) {
+                override fun onSuccess(v: Void?) {
                     Log.d(LOG_TAG, "## onCreate() : join succeeds")
+
+                    // TODO It should be great to open the just join room, but this callback is not called fast, because
+                    // TODO Room waits for initial sync and it can be quite long.
+                    /*
                     // Open the just join Room
                     val intent = Intent(this@JoinRoomActivity, VectorRoomActivity::class.java)
                             .putExtra(VectorRoomActivity.EXTRA_ROOM_ID, roomId)
                     startActivity(intent)
+                    */
                 }
 
                 override fun onNetworkError(e: Exception) {
@@ -91,23 +96,23 @@ class JoinRoomActivity : RiotAppCompatActivity() {
                 }
             })
         } else if (reject) {
-            Log.d(LOG_TAG, "## onCreate() : Leave the room $roomId")
+            Log.d(LOG_TAG, "## onCreate() : reject the invitation to room $roomId")
 
             room.leave(object : ApiCallback<Void> {
-                override fun onSuccess(info: Void) {
-                    Log.d(LOG_TAG, "## onCreate() : Leave succeeds")
+                override fun onSuccess(info: Void?) {
+                    Log.d(LOG_TAG, "## onCreate() : reject succeeds")
                 }
 
                 override fun onNetworkError(e: Exception) {
-                    Log.e(LOG_TAG, "## onCreate() : Leave fails " + e.message)
+                    Log.e(LOG_TAG, "## onCreate() : reject fails " + e.message)
                 }
 
                 override fun onMatrixError(e: MatrixError) {
-                    Log.e(LOG_TAG, "## onCreate() : Leave fails " + e.localizedMessage)
+                    Log.e(LOG_TAG, "## onCreate() : reject fails " + e.localizedMessage)
                 }
 
                 override fun onUnexpectedError(e: Exception) {
-                    Log.e(LOG_TAG, "## onCreate() : Leave fails " + e.message)
+                    Log.e(LOG_TAG, "## onCreate() : reject fails " + e.message)
                 }
             })
         }
