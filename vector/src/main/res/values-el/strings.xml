@@ -56,4 +56,6 @@
     <string name="loading">Φόρτωση...</string>
 
     <string name="save">Αποθήκευση</string>
+    <string name="encrypted_message">Κρυπτογραφημένο μήνυμα</string>
+
     </resources>
