@@ -18,8 +18,6 @@
 
 package im.vector.activity;
 
-import android.app.NotificationManager;
-import android.content.Context;
 import android.content.Intent;
 import android.content.res.Configuration;
 import android.text.TextUtils;
@@ -46,6 +44,7 @@ import org.matrix.androidsdk.util.Log;
 
 import im.vector.Matrix;
 import im.vector.R;
+import im.vector.notifications.NotificationUtils;
 import im.vector.util.ViewUtilKt;
 import kotlin.Pair;
 
@@ -103,8 +102,7 @@ public class LockScreenActivity extends RiotAppCompatActivity { // do NOT extend
         mLockScreenActivity = this;
 
         // remove any pending notifications
-        NotificationManager notificationsManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
-        notificationsManager.cancelAll();
+        NotificationUtils.INSTANCE.cancelAllNotifications(this);
 
         Intent intent = getIntent();
 

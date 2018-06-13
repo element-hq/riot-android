@@ -1850,7 +1850,7 @@ class VectorSettingsPreferencesFragment : PreferenceFragment(), SharedPreference
 
     private fun setContactsPreferences() {
         // Permission
-        if (Build.VERSION.SDK_INT >= 23) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             // on Android >= 23, use the system one
             mContactSettingsCategory.removePreference(findPreference(ContactsManager.CONTACTS_BOOK_ACCESS_KEY))
         }

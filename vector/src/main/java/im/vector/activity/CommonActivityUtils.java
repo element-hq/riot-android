@@ -698,7 +698,7 @@ public class CommonActivityUtils {
             if (PERMISSION_READ_CONTACTS == (aPermissionsToBeGrantedBitMap & PERMISSION_READ_CONTACTS)) {
                 permissionType = Manifest.permission.READ_CONTACTS;
 
-                if (Build.VERSION.SDK_INT >= 23) {
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
                     isRequestPermissionRequired
                             |= updatePermissionsToBeGranted(aCallingActivity, permissionListAlreadyDenied, permissionsListToBeGranted, permissionType);
                 } else {

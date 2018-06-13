@@ -18,10 +18,8 @@
 
 package im.vector.services;
 
-import android.annotation.SuppressLint;
 import android.app.AlarmManager;
 import android.app.Notification;
-import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.app.Service;
 import android.content.Context;
@@ -32,8 +30,6 @@ import android.os.HandlerThread;
 import android.os.IBinder;
 import android.os.PowerManager;
 import android.os.SystemClock;
-import android.support.v4.app.NotificationCompat;
-import android.support.v4.app.NotificationManagerCompat;
 import android.text.Spannable;
 import android.text.SpannableString;
 import android.text.TextUtils;
@@ -52,7 +48,6 @@ import org.matrix.androidsdk.util.BingRulesManager;
 import org.matrix.androidsdk.util.EventDisplay;
 import org.matrix.androidsdk.util.Log;
 
-import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
@@ -69,7 +64,6 @@ import im.vector.Matrix;
 import im.vector.R;
 import im.vector.VectorApp;
 import im.vector.ViewedRoomTracker;
-import im.vector.activity.VectorHomeActivity;
 import im.vector.gcm.GcmRegistrationManager;
 import im.vector.notifications.NotificationUtils;
 import im.vector.notifications.NotifiedEvent;
@@ -115,20 +109,6 @@ public class EventStreamService extends Service {
     public static final String EXTRA_AUTO_RESTART_ACTION = "EventStreamService.EXTRA_AUTO_RESTART_ACTION";
 
     /**
-     * Identifier of the notification used to display messages.
-     * Those messages are merged into a single notification.
-     */
-    private static final int NOTIF_ID_MESSAGES = 60;
-
-    /**
-     * Identifier of the foreground notification used to keep the application alive
-     * when it runs in background.
-     * This notification, which is not removable by the end user, displays what
-     * the application is doing while in background.
-     */
-    private static final int NOTIF_ID_FOREGROUND_SERVICE = 61;
-
-    /**
      * States of the foreground service notification.
      */
     public enum ForegroundNotificationState {
@@ -149,7 +129,7 @@ public class EventStreamService extends Service {
     }
 
     /**
-     * The current state of the foreground service notification (`NOTIF_ID_FOREGROUND_SERVICE`).
+     * The current state of the foreground service notification (`NOTIFICATION_ID_FOREGROUND_SERVICE`).
      */
     private static ForegroundNotificationState mForegroundNotificationState = ForegroundNotificationState.NONE;
 
@@ -885,31 +865,28 @@ public class EventStreamService extends Service {
 
     /**
      * Set the new foreground notification state.
-     * And display the foreground service notification (`NOTIF_ID_FOREGROUND_SERVICE`) if required.
+     * And display the foreground service notification (`NOTIFICATION_ID_FOREGROUND_SERVICE`) if required.
      *
      * @param foregroundNotificationState the new state
      * @param notification                an already built notification. Required for `INCOMING_CALL` and `CALL_IN_PROGRESS`
      */
     private void setForegroundNotificationState(ForegroundNotificationState foregroundNotificationState, Notification notification) {
-
         if (foregroundNotificationState == mForegroundNotificationState) {
             return;
         }
-
-        NotificationManager nm = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
 
         mForegroundNotificationState = foregroundNotificationState;
         switch (mForegroundNotificationState) {
             case NONE:
                 // The foreground/ sticky notification can be removed
-                nm.cancel(NOTIF_ID_FOREGROUND_SERVICE);
+                NotificationUtils.INSTANCE.cancelNotificationForegroundService(this);
                 stopForeground(true);
                 break;
             case INITIAL_SYNCING:
-                notification = buildForegroundServiceNotification(getString(R.string.notification_sync_in_progress));
+                notification = NotificationUtils.INSTANCE.buildForegroundServiceNotification(this, R.string.notification_sync_in_progress);
                 break;
             case LISTENING_FOR_EVENTS:
-                notification = buildForegroundServiceNotification(getString(R.string.notification_listen_for_events));
+                notification = NotificationUtils.INSTANCE.buildForegroundServiceNotification(this, R.string.notification_listen_for_events);
                 break;
             case INCOMING_CALL:
             case CALL_IN_PROGRESS:
@@ -922,53 +899,8 @@ public class EventStreamService extends Service {
 
         if (notification != null) {
             // display the stick foreground notification
-            startForeground(NOTIF_ID_FOREGROUND_SERVICE, notification);
+            startForeground(NotificationUtils.NOTIFICATION_ID_FOREGROUND_SERVICE, notification);
         }
-    }
-
-    /**
-     * @return the polling thread listener notification
-     */
-    @SuppressLint("NewApi")
-    private Notification buildForegroundServiceNotification(String subTitle) {
-        // build the pending intent go to the home screen if this is clicked.
-        Intent i = new Intent(this, VectorHomeActivity.class);
-        i.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP);
-        PendingIntent pi = PendingIntent.getActivity(this, 0, i, 0);
-
-        // build the notification builder
-        NotificationUtils.addNotificationChannels(this);
-        NotificationCompat.Builder notifBuilder = new NotificationCompat.Builder(this, NotificationUtils.LISTEN_FOR_EVENTS_NOTIFICATION_CHANNEL_ID);
-        notifBuilder.setSmallIcon(R.drawable.permanent_notification_transparent);
-        notifBuilder.setWhen(System.currentTimeMillis());
-        notifBuilder.setContentTitle(getString(R.string.riot_app_name));
-        notifBuilder.setContentText(subTitle);
-        notifBuilder.setContentIntent(pi);
-
-        // hide the notification from the status bar
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
-            notifBuilder.setPriority(NotificationCompat.PRIORITY_MIN);
-        }
-
-        Notification notification = notifBuilder.build();
-        notification.flags |= Notification.FLAG_NO_CLEAR;
-
-        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.M) {
-            // some devices crash if this field is not set
-            // even if it is deprecated
-
-            // setLatestEventInfo() is deprecated on Android M, so we try to use
-            // reflection at runtime, to avoid compiler error: "Cannot resolve method.."
-            try {
-                Method deprecatedMethod = notification.getClass()
-                        .getMethod("setLatestEventInfo", Context.class, CharSequence.class, CharSequence.class, PendingIntent.class);
-                deprecatedMethod.invoke(notification, this, getString(R.string.riot_app_name), subTitle, pi);
-            } catch (Exception ex) {
-                Log.e(LOG_TAG, "## buildNotification(): Exception - setLatestEventInfo() Msg=" + ex.getMessage());
-            }
-        }
-
-        return notification;
     }
 
     /**
@@ -1146,12 +1078,7 @@ public class EventStreamService extends Service {
      * Clear any displayed notification.
      */
     private void clearNotification() {
-        NotificationManager nm = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
-        try {
-            nm.cancelAll();
-        } catch (Exception e) {
-            Log.e(LOG_TAG, "## clearNotification() failed " + e.getMessage());
-        }
+        NotificationUtils.INSTANCE.cancelAllNotifications(this);
 
         getNotificationsHandler().post(new Runnable() {
             @Override
@@ -1223,8 +1150,8 @@ public class EventStreamService extends Service {
      * @param unreadMessagesCount the unread messages count
      */
     public static void onStaticNotifiedEvent(Context context, Event event, String roomName, String senderDisplayName, int unreadMessagesCount) {
-        final NotificationManagerCompat nm = NotificationManagerCompat.from(context);
-        NotificationUtils.addNotificationChannels(context);
+        // FIXME Remove this call?
+        NotificationUtils.INSTANCE.addNotificationChannels(context);
 
         if ((null != event) && !mBackgroundNotificationEventIds.contains(event.eventId)) {
             mBackgroundNotificationEventIds.add(event.eventId);
@@ -1290,32 +1217,26 @@ public class EventStreamService extends Service {
      * @param rule     the bing rule to use
      */
     private void displayMessagesNotification(final List<CharSequence> messages, final BingRule rule) {
-        NotificationUtils.addNotificationChannels(this);
-        final NotificationManagerCompat nm = NotificationManagerCompat.from(EventStreamService.this);
+        // FIXME Remove this call?
+        NotificationUtils.INSTANCE.addNotificationChannels(this);
 
-        if (!mGcmRegistrationManager.areDeviceNotificationsAllowed() || (null == messages) || (0 == messages.size())) {
-            new Handler(getMainLooper()).post(new Runnable() {
-                @Override
-                public void run() {
-                    nm.cancel(NOTIF_ID_MESSAGES);
+        new Handler(getMainLooper()).post(new Runnable() {
+            @Override
+            public void run() {
+                if (!mGcmRegistrationManager.areDeviceNotificationsAllowed() || (null == messages) || (0 == messages.size())) {
+                    NotificationUtils.INSTANCE.cancelNotificationMessage(EventStreamService.this);
                     RoomsNotifications.deleteCachedRoomNotifications(VectorApp.getInstance());
-                }
-            });
-        } else {
-            new Handler(getMainLooper()).post(new Runnable() {
-                @Override
-                public void run() {
-                    Notification notif = NotificationUtils.buildMessagesListNotification(getApplicationContext(), messages, rule);
+                } else {
+                    Notification notification = NotificationUtils.INSTANCE.buildMessagesListNotification(getApplicationContext(), messages, rule);
 
-                    if (null != notif) {
-                        nm.notify(NOTIF_ID_MESSAGES, notif);
-
+                    if (null != notification) {
+                        NotificationUtils.INSTANCE.showNotificationMessage(EventStreamService.this, notification);
                     } else {
-                        nm.cancel(NOTIF_ID_MESSAGES);
+                        NotificationUtils.INSTANCE.cancelNotificationMessage(EventStreamService.this);
                     }
                 }
-            });
-        }
+            }
+        });
     }
 
     /**
@@ -1328,8 +1249,6 @@ public class EventStreamService extends Service {
         mLastBackgroundNotificationUnreadCount = 0;
         mLastBackgroundNotificationRoomId = null;
         mBackgroundNotificationEventIds.clear();
-
-        final NotificationManagerCompat nm = NotificationManagerCompat.from(EventStreamService.this);
 
         NotifiedEvent eventToNotify = getEventToNotify();
         if (!mGcmRegistrationManager.areDeviceNotificationsAllowed()) {
@@ -1397,14 +1316,14 @@ public class EventStreamService extends Service {
                     public void run() {
                         // check if the notification has not been cancelled
                         if (fNotifiedEventsByRoomId.size() > 0) {
-                            Notification notif = NotificationUtils.buildMessageNotification(getApplicationContext(),
+                            Notification notification = NotificationUtils.INSTANCE.buildMessageNotification(getApplicationContext(),
                                     new HashMap<>(fNotifiedEventsByRoomId),
                                     fEventToNotify,
                                     isBackgroundNotif);
 
                             // the notification cannot be built
-                            if (null != notif) {
-                                nm.notify(NOTIF_ID_MESSAGES, notif);
+                            if (null != notification) {
+                                NotificationUtils.INSTANCE.showNotificationMessage(EventStreamService.this, notification);
                             } else {
                                 displayMessagesNotification(null, null);
                             }
@@ -1652,7 +1571,7 @@ public class EventStreamService extends Service {
         // test if there is no active call
         else if (null == CallsManager.getSharedInstance().getActiveCall()) {
             Log.d(LOG_TAG, "displayIncomingCallNotification : display the dedicated notification");
-            Notification notification = NotificationUtils.buildIncomingCallNotification(
+            Notification notification = NotificationUtils.INSTANCE.buildIncomingCallNotification(
                     EventStreamService.this,
                     RoomsNotifications.getRoomName(getApplicationContext(), session, room, event),
                     session.getMyUserId(),
@@ -1681,7 +1600,7 @@ public class EventStreamService extends Service {
      */
     public void displayCallInProgressNotification(MXSession session, Room room, String callId) {
         if (null != callId) {
-            Notification notification = NotificationUtils.buildPendingCallNotification(getApplicationContext(),
+            Notification notification = NotificationUtils.INSTANCE.buildPendingCallNotification(getApplicationContext(),
                     room.getName(session.getCredentials().userId), room.getRoomId(), session.getCredentials().userId, callId);
             setForegroundNotificationState(ForegroundNotificationState.CALL_IN_PROGRESS, notification);
             mCallIdInProgress = callId;
@@ -1692,9 +1611,7 @@ public class EventStreamService extends Service {
      * Hide the permanent call notifications
      */
     public void hideCallNotifications() {
-        NotificationManager nm = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
-
-        // hide the foreground notification for calls only if we are in these states 
+        // hide the foreground notification for calls only if we are in these states
         if ((ForegroundNotificationState.CALL_IN_PROGRESS == mForegroundNotificationState)
                 || (ForegroundNotificationState.INCOMING_CALL == mForegroundNotificationState)) {
             if (ForegroundNotificationState.CALL_IN_PROGRESS == mForegroundNotificationState) {
@@ -1707,5 +1624,4 @@ public class EventStreamService extends Service {
             refreshForegroundNotification();
         }
     }
-
 }

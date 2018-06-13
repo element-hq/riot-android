@@ -21,7 +21,6 @@ package im.vector.activity;
 import android.Manifest;
 import android.annotation.SuppressLint;
 import android.app.AlertDialog;
-import android.app.NotificationManager;
 import android.content.ContentValues;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -662,8 +661,7 @@ public class VectorRoomActivity extends MXCActionBarActivity implements
         // the user has tapped on the "View" notification button
         if ((null != intent.getAction()) && (intent.getAction().startsWith(NotificationUtils.TAP_TO_VIEW_ACTION))) {
             // remove any pending notifications
-            NotificationManager notificationsManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
-            notificationsManager.cancelAll();
+            NotificationUtils.INSTANCE.cancelAllNotifications(this);
         }
 
         if (mIsUnreadPreviewMode) {
