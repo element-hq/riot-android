@@ -12,6 +12,7 @@ Other changes:
 
 Bugfix:
  - Remove black borders on 18:9 phone (#2063)
+ - Auto dismiss the join/reject room notification when user select an action (#2354)
 
 Translations:
  -
