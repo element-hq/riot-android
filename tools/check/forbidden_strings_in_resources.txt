@@ -21,11 +21,11 @@
 # Example:
 # AuthorizedStringThreeTimes===3
 
-# Rubbish from merge
+### Rubbish from merge. Please delete those lines (sometimes in comment)
 <<<<<<<
 >>>>>>>
 
-# Hardcoded string
+### Hardcoded string are forbidden. Please create a string resource
 app\:emptyLabelText=\"[^@]
 android\:text=\"[^@]
 android\:hint=\"[^@]
@@ -35,13 +35,13 @@ android\:contentDescription=\"[^@]
 app\:ms_floatingLabelText=\"[^@]
 app\:ms_hint=\"[^@]
 
-# do not commit...
+### "DO NOT COMMIT" has been committed
 DO NOT COMMIT
 
-# Tab
+### Tab char is forbidden. Use only spaces
 \t
 
-# Empty lines and trailing space
+### Remove space in empty lines and trailing space
 [ ]$
 
 # Use project color
@@ -52,8 +52,8 @@ DO NOT COMMIT
 # DISABLED
 #<string [^<]*$
 
-# double unbreakable space
+### double unbreakable space looks like an issue in translation
 \\u00A0\\u00A0
 
-# Empty XML tag
+### Empty XML tag. Please use the single tag form (<TagName .../>)
 \"><\/

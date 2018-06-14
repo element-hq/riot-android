@@ -25,44 +25,44 @@
 # DISABLED
 #new LinearLayoutManager
 
-# No import static
+### No import static: use full class name
 import static
 
-# Rubbish from merge
+### Rubbish from merge. Please delete those lines (sometimes in comment)
 <<<<<<<
 >>>>>>>
 
-# carry return before }
+### carry return before "}". Please remove empty lines.
 \n\s*\n\s*\}
 
-# typo
+### typo detected.
 formated
 abtract
 Succes[^s]
 succes[^s]
 
-# ex: flatMap not at new line
+### Please insert line break. ex: .flatMap() not at new line
 \}\)\.[\w]
 
-# Use int
+### Use int instead of Integer
 protected Integer
 
-# Prefer comparison the ascending way, when checking for value in range. Use <=
+### Prefer comparison the ascending way, when checking for value in range. Use <=
 >= .* &&===13
 
-# It is no integer for id for bank model
+### Use int instead of short
 Short\.parseShort
 \(short\)
 private short
 final short
 
-# Line too long
+### Line length is limited to 160 chars. Please split long lines
 .{161}
 
-# do not commit...
+### "DO NOT COMMIT" has been committed
 DO NOT COMMIT
 
-# invalid formatting
+### invalid formatting
 \s{8}/\*\n     \*
 [^\w]if\(
 while\(
@@ -76,50 +76,47 @@ for\(
 # DISABLED
 #TextUtils\.isEmpty\(
 
-# Too many space
+### invalid formatting (too many space char)
 ^      /\*
 
 # No ternary operator
 # DISABLED
 # \?
 
-# unnecessary parenthesis around numbers, example: " (0)"
+### unnecessary parenthesis around numbers, example: " (0)"
  \(\d+\)
 
-# Malformatted comment
+### Malformatted comment
 ^    \*
 
-# import the package
+### import the package, do not use long class name with package
 android\.os\.Build\.
 
-# Tab
+### Tab char is forbidden. Use only spaces
 \t
 
 # Empty lines and trailing space
 # DISABLED To re-enable when code will be formatted globally
 #[ ]$
 
-# Use v4 lib
-android.support.v7.app.NotificationCompat
-
-# Deprecated, use retrofit2.HttpException
+### Deprecated, use retrofit2.HttpException
 import retrofit2\.adapter\.rxjava\.HttpException
 
-# This is generally not necessary, no need to reset the padding if there is no drawable
+### This is generally not necessary, no need to reset the padding if there is no drawable
 setCompoundDrawablePadding\(0\)
 
-# Deprecated use class form SDK API 26
+### Deprecated use class form SDK API 26
 ButterKnife\.findById\(
 
 # Change thread with Rx
 # DISABLED
 #runOnUiThread
 
-# Bad formatting of chain (missing new line)
+### Bad formatting of chain (missing new line)
 \w\.flatMap\(
 \w\.map\(
 
-# Bad formatting of Realm query chain. Insert new line
+### Bad formatting of Realm query chain. Insert new line
 \)\.equalTo
 \)\.findAll
 
@@ -127,17 +124,14 @@ ButterKnife\.findById\(
 # DISABLED (min API to low)
 #\"UTF-
 
-# Call invalidateMenu(); instead.
-invalidateOptionsMenu
-
-# Directly use getString() in a Fragment
+### Directly use getString() in a Fragment
 getActivity\(\)\.getString\(
 
-# In Kotlin, Void has to be null safe, i.e. use 'Void?' instead of 'Void'
+### In Kotlin, Void has to be null safe, i.e. use 'Void?' instead of 'Void'
 \: Void\)
 
-# Home menu click is managed in parent Activity, with one exception
+### Home menu click is managed in parent Activity, with one exception
 android\.R\.id\.home===2
 
-# Kotlin conversion tools introduce this, but is can be replace by trim()
+### Kotlin conversion tools introduce this, but is can be replace by trim()
 trim \{ it \<\= \' \' \}
