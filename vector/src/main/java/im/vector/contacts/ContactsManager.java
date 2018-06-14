@@ -631,10 +631,10 @@ public class ContactsManager implements SharedPreferences.OnSharedPreferenceChan
      */
     public void setIsContactBookAccessAllowed(boolean isAllowed) {
         if (Build.VERSION.SDK_INT < Build.VERSION_CODES.M) {
-            SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(mContext);
-            SharedPreferences.Editor editor = preferences.edit();
-            editor.putBoolean(CONTACTS_BOOK_ACCESS_KEY, isAllowed);
-            editor.commit();
+            PreferenceManager.getDefaultSharedPreferences(mContext)
+                    .edit()
+                    .putBoolean(CONTACTS_BOOK_ACCESS_KEY, isAllowed)
+                    .apply();
         }
         mIsRetrievingPids = false;
         mArePidsRetrieved = false;

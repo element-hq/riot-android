@@ -512,16 +512,16 @@ public class VectorRecentsListFragment extends VectorBaseFragment implements
             } else if (mAdapter.isDirectoryGroupPosition(aGroupPosition)) { // public rooms (search mode)
                 groupKey = KEY_EXPAND_STATE_LOW_PRIORITY_GROUP;
             } else {
-                // unknown group position, just skipp
+                // unknown group position, just skip
                 Log.w(LOG_TAG, "## updateGroupExpandStatus(): Failure - Unknown group: " + aGroupPosition);
                 return;
             }
 
             if (null != (context = getActivity().getApplicationContext())) {
-                SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(context);
-                SharedPreferences.Editor editor = preferences.edit();
-                editor.putBoolean(groupKey, aValue);
-                editor.commit();
+                PreferenceManager.getDefaultSharedPreferences(context)
+                        .edit()
+                        .putBoolean(groupKey, aValue)
+                        .apply();
             }
         }
     }

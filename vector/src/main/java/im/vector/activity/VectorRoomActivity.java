@@ -4013,9 +4013,10 @@ public class VectorRoomActivity extends MXCActionBarActivity implements
             SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(this);
 
             if (!preferences.contains(E2E_WARNINGS_PREFERENCES) && (null != mRoom) && mRoom.isEncrypted()) {
-                SharedPreferences.Editor editor = preferences.edit();
-                editor.putBoolean(E2E_WARNINGS_PREFERENCES, false);
-                editor.commit();
+                preferences
+                        .edit()
+                        .putBoolean(E2E_WARNINGS_PREFERENCES, false)
+                        .apply();
 
                 new android.support.v7.app.AlertDialog.Builder(this)
                         .setTitle(R.string.room_e2e_alert_title)

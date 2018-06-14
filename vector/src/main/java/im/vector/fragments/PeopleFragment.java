@@ -18,7 +18,6 @@
 package im.vector.fragments;
 
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -260,10 +259,10 @@ public class PeopleFragment extends AbsHomeFragment implements ContactsManager.C
             mMatrixUserOnlyCheckbox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
                 @Override
                 public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                    final SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(getActivity());
-                    SharedPreferences.Editor editor = preferences.edit();
-                    editor.putBoolean(MATRIX_USER_ONLY_PREF_KEY, mMatrixUserOnlyCheckbox.isChecked());
-                    editor.commit();
+                    PreferenceManager.getDefaultSharedPreferences(getActivity())
+                            .edit()
+                            .putBoolean(MATRIX_USER_ONLY_PREF_KEY, mMatrixUserOnlyCheckbox.isChecked())
+                            .apply();
 
                     initContactsViews();
                 }
