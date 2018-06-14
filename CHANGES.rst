@@ -2,7 +2,7 @@ Changes in Riot 0.8.11 (2018-XX-XX)
 ===================================================
 
 Features:
- -
+ - Re-request keys manually for encrypted events (#2319)
 
 Improvements:
  - Add spacing to device keys (#2314)

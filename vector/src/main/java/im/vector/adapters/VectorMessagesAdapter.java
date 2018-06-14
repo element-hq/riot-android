@@ -54,6 +54,7 @@ import android.widget.TextView;
 import org.matrix.androidsdk.MXSession;
 import org.matrix.androidsdk.adapters.AbstractMessagesAdapter;
 import org.matrix.androidsdk.adapters.MessageRow;
+import org.matrix.androidsdk.crypto.MXCryptoError;
 import org.matrix.androidsdk.crypto.data.MXDeviceInfo;
 import org.matrix.androidsdk.data.Room;
 import org.matrix.androidsdk.data.RoomState;
@@ -91,11 +92,11 @@ import java.util.regex.Pattern;
 
 import im.vector.R;
 import im.vector.VectorApp;
-import im.vector.activity.CommonActivityUtils;
 import im.vector.listeners.IMessagesAdapterActionsListener;
 import im.vector.ui.VectorQuoteSpan;
 import im.vector.util.EventGroup;
 import im.vector.util.MatrixLinkMovementMethod;
+import im.vector.util.MatrixSdkExtensionsKt;
 import im.vector.util.MatrixURLSpan;
 import im.vector.util.PreferencesManager;
 import im.vector.util.RiotEventDisplay;
@@ -140,6 +141,9 @@ public class VectorMessagesAdapter extends AbstractMessagesAdapter {
 
     // true when the room is encrypted
     public boolean mIsRoomEncrypted;
+
+    // Current sessionId set waiting for an encryption key, after a reRequest from user
+    private Set<String> mSessionIdsWaitingForE2eReRequest = new HashSet<>();
 
     static final int ROW_TYPE_TEXT = 0;
     static final int ROW_TYPE_IMAGE = 1;
@@ -796,6 +800,8 @@ public class VectorMessagesAdapter extends AbstractMessagesAdapter {
         }
 
         displayE2eIcon(inflatedView, position);
+
+        displayE2eReRequest(inflatedView, position);
 
         return inflatedView;
     }
@@ -2152,6 +2158,61 @@ public class VectorMessagesAdapter extends AbstractMessagesAdapter {
                 e2eIconView.setVisibility(View.GONE);
                 if (null != senderMargin) {
                     senderMargin.setVisibility(View.GONE);
+                }
+            }
+        }
+    }
+
+    private void displayE2eReRequest(View inflatedView, int position) {
+        TextView reRequestE2EKeyTextView = inflatedView.findViewById(R.id.messagesAdapter_re_request_e2e_key);
+
+        if (reRequestE2EKeyTextView != null) {
+            MessageRow row = getItem(position);
+            final Event event = row.getEvent();
+
+            final String sessionId = MatrixSdkExtensionsKt.getSessionId(event);
+
+            if (sessionId != null
+                    && event.getCryptoError() != null
+                    && MXCryptoError.UNKNOWN_INBOUND_SESSION_ID_ERROR_CODE.equals(event.getCryptoError().errcode)) {
+
+                reRequestE2EKeyTextView.setVisibility(View.VISIBLE);
+
+                if (mSessionIdsWaitingForE2eReRequest.contains(sessionId)) {
+                    // Request for this session Id has already been sent
+                    reRequestE2EKeyTextView.setText(R.string.e2e_re_request_encryption_key_sent);
+                    reRequestE2EKeyTextView.setOnClickListener(null);
+                    reRequestE2EKeyTextView.setClickable(false);
+                } else {
+                    // Show the link to re-request the key
+                    reRequestE2EKeyTextView.setText(R.string.e2e_re_request_encryption_key);
+
+                    reRequestE2EKeyTextView.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            mSessionIdsWaitingForE2eReRequest.add(sessionId);
+
+                            if (mVectorMessagesAdapterEventsListener != null) {
+                                mVectorMessagesAdapterEventsListener.onEventAction(event, null, R.id.ic_action_re_request_e2e_key);
+                            }
+
+                            // Update the link message (for other events with same sessionId too)
+                            notifyDataSetChanged();
+                        }
+                    });
+                }
+            } else {
+                reRequestE2EKeyTextView.setVisibility(View.GONE);
+                reRequestE2EKeyTextView.setOnClickListener(null);
+
+                if (sessionId != null
+                        && mSessionIdsWaitingForE2eReRequest.contains(sessionId)) {
+                    // We have decrypted one (or more) event!
+                    if (mVectorMessagesAdapterEventsListener != null) {
+                        mVectorMessagesAdapterEventsListener.onEventDecrypted();
+                    }
+
+                    mSessionIdsWaitingForE2eReRequest.remove(sessionId);
                 }
             }
         }

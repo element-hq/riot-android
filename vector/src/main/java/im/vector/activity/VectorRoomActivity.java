@@ -20,7 +20,6 @@ package im.vector.activity;
 
 import android.Manifest;
 import android.annotation.SuppressLint;
-import android.app.AlertDialog;
 import android.content.ContentValues;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -40,6 +39,7 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.content.ContextCompat;
+import android.support.v7.app.AlertDialog;
 import android.text.SpannableString;
 import android.text.SpannableStringBuilder;
 import android.text.TextPaint;
@@ -1767,8 +1767,8 @@ public class VectorRoomActivity extends MXCActionBarActivity implements
                 final boolean finalIsVideoCall = isVideoCall;
                 final int finalRequestCode = requestCode;
 
-                android.support.v7.app.AlertDialog.Builder builder = new android.support.v7.app.AlertDialog.Builder(VectorRoomActivity.this);
-                builder.setTitle(R.string.dialog_title_confirmation);
+                AlertDialog.Builder builder = new AlertDialog.Builder(VectorRoomActivity.this)
+                        .setTitle(R.string.dialog_title_confirmation);
 
                 if (finalIsVideoCall) {
                     builder.setMessage(getString(R.string.start_video_call_prompt_msg));
@@ -1776,23 +1776,22 @@ public class VectorRoomActivity extends MXCActionBarActivity implements
                     builder.setMessage(getString(R.string.start_voice_call_prompt_msg));
                 }
 
-                builder.setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        if (CommonActivityUtils.checkPermissions(finalRequestCode, VectorRoomActivity.this)) {
-                            startIpCall(PreferencesManager.useJitsiConfCall(VectorRoomActivity.this), finalIsVideoCall);
-                        }
-                    }
-                });
-
-                builder.setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        // nothing to do
-                    }
-                });
-
-                builder.show();
+                builder
+                        .setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                if (CommonActivityUtils.checkPermissions(finalRequestCode, VectorRoomActivity.this)) {
+                                    startIpCall(PreferencesManager.useJitsiConfCall(VectorRoomActivity.this), finalIsVideoCall);
+                                }
+                            }
+                        })
+                        .setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                // nothing to do
+                            }
+                        })
+                        .show();
             }
         });
 
@@ -4018,7 +4017,7 @@ public class VectorRoomActivity extends MXCActionBarActivity implements
                         .putBoolean(E2E_WARNINGS_PREFERENCES, false)
                         .apply();
 
-                new android.support.v7.app.AlertDialog.Builder(this)
+                new AlertDialog.Builder(this)
                         .setTitle(R.string.room_e2e_alert_title)
                         .setMessage(R.string.room_e2e_alert_message)
                         .setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {

@@ -85,3 +85,12 @@ fun Room.isPowerLevelEnoughForAvatarUpdate(aSession: MXSession?): Boolean {
     return canUpdateAvatarWithCamera
 }
 
+/* ==========================================================================================
+ * Event
+ * ========================================================================================== */
+
+fun Event.getSessionId() = wireContent
+        ?.takeIf { it.isJsonObject }
+        ?.asJsonObject
+        ?.get("session_id")
+        ?.asString

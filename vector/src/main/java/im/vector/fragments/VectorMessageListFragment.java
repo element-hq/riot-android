@@ -19,13 +19,13 @@
 package im.vector.fragments;
 
 import android.app.Activity;
-import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.Browser;
 import android.support.v4.app.FragmentManager;
+import android.support.v7.app.AlertDialog;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
@@ -114,6 +114,9 @@ public class VectorMessageListFragment extends MatrixMessageListFragment impleme
     private View mMainProgressView;
 
     private VectorImageGetter mVectorImageGetter;
+
+    // Dialog displayed after sending the re-request of e2e key
+    private AlertDialog mReRequestKeyDialog;
 
     public static VectorMessageListFragment newInstance(String matrixId, String roomId, String eventId, String previewMode, int layoutResId) {
         VectorMessageListFragment f = new VectorMessageListFragment();
@@ -355,7 +358,7 @@ public class VectorMessageListFragment extends MatrixMessageListFragment impleme
      * @param deviceInfo the deviceinfo
      */
     public void onE2eIconClick(final Event event, final MXDeviceInfo deviceInfo) {
-        android.support.v7.app.AlertDialog.Builder builder = new android.support.v7.app.AlertDialog.Builder(getActivity());
+        AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
         LayoutInflater inflater = getActivity().getLayoutInflater();
 
         EncryptedEventContent encryptedEventContent = JsonUtils.toEncryptedEventContent(event.getWireContent().getAsJsonObject());
@@ -487,8 +490,7 @@ public class VectorMessageListFragment extends MatrixMessageListFragment impleme
             }
         }
 
-        final android.support.v7.app.AlertDialog dialog = builder.create();
-        dialog.show();
+        final AlertDialog dialog = builder.show();
 
         if (null == deviceInfo) {
             mSession.getCrypto()
@@ -702,6 +704,31 @@ public class VectorMessageListFragment extends MatrixMessageListFragment impleme
             });
         } else if (action == R.id.ic_action_device_verification) {
             onE2eIconClick(event, ((VectorMessagesAdapter) mAdapter).getDeviceInfo(event.eventId));
+        } else if (action == R.id.ic_action_re_request_e2e_key) {
+            mSession.getCrypto().reRequestRoomKeyForEvent(event);
+
+            mReRequestKeyDialog = new AlertDialog.Builder(getActivity())
+                    .setTitle(R.string.e2e_re_request_encryption_key_dialog_title)
+                    .setMessage(R.string.e2e_re_request_encryption_key_dialog_content)
+                    .setPositiveButton(R.string.ok, null)
+                    .setOnDismissListener(new DialogInterface.OnDismissListener() {
+                        @Override
+                        public void onDismiss(DialogInterface dialog) {
+                            mReRequestKeyDialog = null;
+                        }
+                    })
+                    .show();
+        }
+    }
+
+    /**
+     * The event for which the user asked again for the key is now decrypted
+     */
+    @Override
+    public void onEventDecrypted() {
+        // Auto dismiss this dialog when the keys are received
+        if (mReRequestKeyDialog != null) {
+            mReRequestKeyDialog.dismiss();
         }
     }
 

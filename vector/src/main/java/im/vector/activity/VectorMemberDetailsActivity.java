@@ -17,12 +17,12 @@
  */
 package im.vector.activity;
 
-import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.media.ExifInterface;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.support.v7.app.AlertDialog;
 import android.text.TextUtils;
 import android.view.KeyEvent;
 import android.view.MenuItem;
@@ -398,33 +398,30 @@ public class VectorMemberDetailsActivity extends MXCActionBarActivity implements
                 break;
 
             case ITEM_ACTION_START_CHAT:
-                android.support.v7.app.AlertDialog.Builder builder = new android.support.v7.app.AlertDialog.Builder(this);
-                builder.setTitle(R.string.dialog_title_confirmation);
-
-                builder.setMessage(getString(R.string.start_new_chat_prompt_msg, displayName));
-                builder.setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        Log.d(LOG_TAG, "## performItemAction(): Start new room - start chat");
-
-                        runOnUiThread(new Runnable() {
+                new AlertDialog.Builder(this)
+                        .setTitle(R.string.dialog_title_confirmation)
+                        .setMessage(getString(R.string.start_new_chat_prompt_msg, displayName))
+                        .setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
                             @Override
-                            public void run() {
-                                enableProgressBarView(CommonActivityUtils.UTILS_DISPLAY_PROGRESS_BAR);
-                                mSession.createDirectMessageRoom(mMemberId, mCreateDirectMessageCallBack);
+                            public void onClick(DialogInterface dialog, int which) {
+                                Log.d(LOG_TAG, "## performItemAction(): Start new room - start chat");
+
+                                runOnUiThread(new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        enableProgressBarView(CommonActivityUtils.UTILS_DISPLAY_PROGRESS_BAR);
+                                        mSession.createDirectMessageRoom(mMemberId, mCreateDirectMessageCallBack);
+                                    }
+                                });
                             }
-                        });
-                    }
-                });
-
-                builder.setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        // nothing to do
-                    }
-                });
-
-                builder.show();
+                        })
+                        .setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                // nothing to do
+                            }
+                        })
+                        .show();
                 break;
 
             case ITEM_ACTION_START_VIDEO_CALL:

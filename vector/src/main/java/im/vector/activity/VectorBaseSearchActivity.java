@@ -17,7 +17,6 @@
 
 package im.vector.activity;
 
-import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -26,6 +25,7 @@ import android.content.pm.ResolveInfo;
 import android.speech.RecognizerIntent;
 import android.support.annotation.CallSuper;
 import android.support.v7.app.ActionBar;
+import android.support.v7.app.AlertDialog;
 import android.text.TextUtils;
 import android.text.TextWatcher;
 import android.view.KeyEvent;

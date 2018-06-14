@@ -23,7 +23,6 @@ import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.ActivityManager;
 import android.app.AlarmManager;
-import android.app.AlertDialog;
 import android.app.DownloadManager;
 import android.app.PendingIntent;
 import android.content.ActivityNotFoundException;
@@ -46,6 +45,7 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.content.ContextCompat;
+import android.support.v7.app.AlertDialog;
 import android.text.TextUtils;
 import android.util.Pair;
 import android.view.LayoutInflater;
@@ -1832,7 +1832,7 @@ public class CommonActivityUtils {
             return;
         }
 
-        android.support.v7.app.AlertDialog.Builder builder = new android.support.v7.app.AlertDialog.Builder(activiy);
+        AlertDialog.Builder builder = new AlertDialog.Builder(activiy);
         LayoutInflater inflater = activiy.getLayoutInflater();
 
         View layout = inflater.inflate(R.layout.encrypted_verify_device, null);
