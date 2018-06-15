@@ -26,7 +26,7 @@
                 android:layout_centerVertical="true"
                 android:layout_marginLeft="16dp"
                 android:fontFamily="sans-serif-medium"
-                android:text="Header"
+                tools:text="Header"
                 android:textColor="?attr/riot_primary_text_color"
                 android:textSize="14sp" />
 

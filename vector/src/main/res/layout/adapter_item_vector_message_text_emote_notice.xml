@@ -95,7 +95,19 @@
                             android:layout_marginLeft="4dp"
                             android:layout_toRightOf="@id/message_adapter_e2e_icon"
                             android:autoLink="all"
-                            android:text="A body"
+                            android:textIsSelectable="false"
+                            android:textSize="14sp"
+                            tools:text="A body" />
+
+                        <TextView
+                            android:id="@+id/messagesAdapter_re_request_e2e_key"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_alignLeft="@+id/messagesAdapter_body"
+                            android:layout_alignStart="@+id/messagesAdapter_body"
+                            android:layout_below="@+id/messagesAdapter_body"
+                            android:layout_gravity="left"
+                            android:text="@string/e2e_re_request_encryption_key"
                             android:textIsSelectable="false"
                             android:textSize="14sp" />
 

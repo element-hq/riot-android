@@ -101,6 +101,11 @@
         android:theme="@style/AppTheme"
         tools:replace="allowBackup,label">
 
+        <!-- No limit for screen ratio: avoid black strips -->
+        <meta-data
+            android:name="android.max_aspect"
+            android:value="9.9"/>
+
         <!-- activities list starts here -->
         <activity
             android:name=".activity.LoginActivity"
@@ -204,9 +209,9 @@
             android:excludeFromRecents="true"
             android:launchMode="singleTop"
             android:taskAffinity=""
-            android:theme="@style/Theme.AppCompat.Light.Dialog" />
+            android:theme="@style/Vector_Lock_Light" />
         <activity
-            android:name=".activity.JoinScreenActivity"
+            android:name=".activity.JoinRoomActivity"
             android:clearTaskOnLaunch="true"
             android:configChanges="orientation|screenSize"
             android:excludeFromRecents="true"
@@ -301,7 +306,7 @@
             android:label="@string/title_activity_group_details"
             android:launchMode="singleTop"
             android:theme="@style/GroupAppTheme"
-            android:windowSoftInputMode="adjustResize"></activity>
+            android:windowSoftInputMode="adjustResize"/>
         <activity android:name=".activity.VectorUniversalLinkActivity">
             <intent-filter>
                 <action android:name="android.intent.action.VIEW" />

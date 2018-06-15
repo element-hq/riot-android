@@ -19,13 +19,13 @@
 package im.vector.fragments;
 
 import android.app.Activity;
-import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.Browser;
 import android.support.v4.app.FragmentManager;
+import android.support.v7.app.AlertDialog;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
@@ -60,7 +60,6 @@ import org.matrix.androidsdk.rest.model.crypto.EncryptedFileInfo;
 import org.matrix.androidsdk.rest.model.message.FileMessage;
 import org.matrix.androidsdk.rest.model.message.ImageMessage;
 import org.matrix.androidsdk.rest.model.message.Message;
-import org.matrix.androidsdk.rest.model.message.StickerMessage;
 import org.matrix.androidsdk.rest.model.message.VideoMessage;
 import org.matrix.androidsdk.util.JsonUtils;
 import org.matrix.androidsdk.util.Log;
@@ -83,6 +82,7 @@ import im.vector.adapters.VectorMessagesAdapter;
 import im.vector.db.VectorContentProvider;
 import im.vector.listeners.IMessagesAdapterActionsListener;
 import im.vector.receiver.VectorUniversalLinkReceiver;
+import im.vector.util.MatrixSdkExtensionsKt;
 import im.vector.util.PreferencesManager;
 import im.vector.util.SlidableMediaInfo;
 import im.vector.util.ThemeUtils;
@@ -114,6 +114,9 @@ public class VectorMessageListFragment extends MatrixMessageListFragment impleme
     private View mMainProgressView;
 
     private VectorImageGetter mVectorImageGetter;
+
+    // Dialog displayed after sending the re-request of e2e key
+    private AlertDialog mReRequestKeyDialog;
 
     public static VectorMessageListFragment newInstance(String matrixId, String roomId, String eventId, String previewMode, int layoutResId) {
         VectorMessageListFragment f = new VectorMessageListFragment();
@@ -163,7 +166,7 @@ public class VectorMessageListFragment extends MatrixMessageListFragment impleme
             }
         });
 
-        v.setBackgroundColor(ThemeUtils.getColor(getActivity(), R.attr.riot_primary_background_color));
+        v.setBackgroundColor(ThemeUtils.INSTANCE.getColor(getActivity(), R.attr.riot_primary_background_color));
 
         return v;
     }
@@ -355,7 +358,7 @@ public class VectorMessageListFragment extends MatrixMessageListFragment impleme
      * @param deviceInfo the deviceinfo
      */
     public void onE2eIconClick(final Event event, final MXDeviceInfo deviceInfo) {
-        android.support.v7.app.AlertDialog.Builder builder = new android.support.v7.app.AlertDialog.Builder(getActivity());
+        AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
         LayoutInflater inflater = getActivity().getLayoutInflater();
 
         EncryptedEventContent encryptedEventContent = JsonUtils.toEncryptedEventContent(event.getWireContent().getAsJsonObject());
@@ -371,14 +374,14 @@ public class VectorMessageListFragment extends MatrixMessageListFragment impleme
         if (null != deviceInfo) {
             textView.setText(encryptedEventContent.sender_key);
         } else {
-            textView.setText(getActivity().getString(R.string.encryption_information_none));
+            textView.setText(R.string.encryption_information_none);
         }
 
         textView = layout.findViewById(R.id.encrypted_info_claimed_ed25519_fingerprint_key);
         if (null != deviceInfo) {
-            textView.setText(deviceInfo.fingerprint());
+            textView.setText(MatrixSdkExtensionsKt.getFingerprintHumanReadable(deviceInfo));
         } else {
-            textView.setText(getActivity().getString(R.string.encryption_information_none));
+            textView.setText(R.string.encryption_information_none);
         }
 
         textView = layout.findViewById(R.id.encrypted_info_algorithm);
@@ -415,15 +418,15 @@ public class VectorMessageListFragment extends MatrixMessageListFragment impleme
             textView = layout.findViewById(R.id.encrypted_info_verification);
 
             if (deviceInfo.isUnknown() || deviceInfo.isUnverified()) {
-                textView.setText(getActivity().getString(R.string.encryption_information_not_verified));
+                textView.setText(R.string.encryption_information_not_verified);
             } else if (deviceInfo.isVerified()) {
-                textView.setText(getActivity().getString(R.string.encryption_information_verified));
+                textView.setText(R.string.encryption_information_verified);
             } else {
-                textView.setText(getActivity().getString(R.string.encryption_information_blocked));
+                textView.setText(R.string.encryption_information_blocked);
             }
 
             textView = layout.findViewById(R.id.encrypted_ed25519_fingerprint);
-            textView.setText(deviceInfo.fingerprint());
+            textView.setText(MatrixSdkExtensionsKt.getFingerprintHumanReadable(deviceInfo));
         } else {
             noDeviceInfoLayout.setVisibility(View.VISIBLE);
             deviceInfoLayout.setVisibility(View.GONE);
@@ -444,76 +447,84 @@ public class VectorMessageListFragment extends MatrixMessageListFragment impleme
                 if (deviceInfo.isUnverified() || deviceInfo.isUnknown()) {
                     builder.setNegativeButton(R.string.encryption_information_verify, new DialogInterface.OnClickListener() {
                         public void onClick(DialogInterface dialog, int id) {
-                            CommonActivityUtils.displayDeviceVerificationDialog(deviceInfo, event.getSender(), mSession, getActivity(), mDeviceVerificationCallback);
+                            CommonActivityUtils.displayDeviceVerificationDialog(deviceInfo,
+                                    event.getSender(), mSession, getActivity(), mDeviceVerificationCallback);
                         }
                     });
 
                     builder.setPositiveButton(R.string.encryption_information_block, new DialogInterface.OnClickListener() {
                         public void onClick(DialogInterface dialog, int id) {
-                            mSession.getCrypto().setDeviceVerification(MXDeviceInfo.DEVICE_VERIFICATION_BLOCKED, deviceInfo.deviceId, event.getSender(), mDeviceVerificationCallback);
+                            mSession.getCrypto().setDeviceVerification(MXDeviceInfo.DEVICE_VERIFICATION_BLOCKED,
+                                    deviceInfo.deviceId, event.getSender(), mDeviceVerificationCallback);
                         }
                     });
                 } else if (deviceInfo.isVerified()) {
                     builder.setNegativeButton(R.string.encryption_information_unverify, new DialogInterface.OnClickListener() {
                         public void onClick(DialogInterface dialog, int id) {
-                            mSession.getCrypto().setDeviceVerification(MXDeviceInfo.DEVICE_VERIFICATION_UNVERIFIED, deviceInfo.deviceId, event.getSender(), mDeviceVerificationCallback);
+                            mSession.getCrypto().setDeviceVerification(MXDeviceInfo.DEVICE_VERIFICATION_UNVERIFIED,
+                                    deviceInfo.deviceId, event.getSender(), mDeviceVerificationCallback);
                         }
                     });
 
                     builder.setPositiveButton(R.string.encryption_information_block, new DialogInterface.OnClickListener() {
                         public void onClick(DialogInterface dialog, int id) {
-                            mSession.getCrypto().setDeviceVerification(MXDeviceInfo.DEVICE_VERIFICATION_BLOCKED, deviceInfo.deviceId, event.getSender(), mDeviceVerificationCallback);
+                            mSession.getCrypto().setDeviceVerification(MXDeviceInfo.DEVICE_VERIFICATION_BLOCKED,
+                                    deviceInfo.deviceId, event.getSender(), mDeviceVerificationCallback);
                         }
                     });
                 } else { // BLOCKED
                     builder.setNegativeButton(R.string.encryption_information_verify, new DialogInterface.OnClickListener() {
                         public void onClick(DialogInterface dialog, int id) {
-                            CommonActivityUtils.displayDeviceVerificationDialog(deviceInfo, event.getSender(), mSession, getActivity(), mDeviceVerificationCallback);
+                            CommonActivityUtils.displayDeviceVerificationDialog(deviceInfo,
+                                    event.getSender(), mSession, getActivity(), mDeviceVerificationCallback);
                         }
                     });
 
                     builder.setPositiveButton(R.string.encryption_information_unblock, new DialogInterface.OnClickListener() {
                         public void onClick(DialogInterface dialog, int id) {
-                            mSession.getCrypto().setDeviceVerification(MXDeviceInfo.DEVICE_VERIFICATION_UNVERIFIED, deviceInfo.deviceId, event.getSender(), mDeviceVerificationCallback);
+                            mSession.getCrypto().setDeviceVerification(MXDeviceInfo.DEVICE_VERIFICATION_UNVERIFIED,
+                                    deviceInfo.deviceId, event.getSender(), mDeviceVerificationCallback);
                         }
                     });
                 }
             }
         }
 
-        final android.support.v7.app.AlertDialog dialog = builder.create();
-        dialog.show();
+        final AlertDialog dialog = builder.show();
 
         if (null == deviceInfo) {
-            mSession.getCrypto().getDeviceList().downloadKeys(Collections.singletonList(event.getSender()), true, new ApiCallback<MXUsersDevicesMap<MXDeviceInfo>>() {
-                @Override
-                public void onSuccess(MXUsersDevicesMap<MXDeviceInfo> info) {
-                    Activity activity = getActivity();
+            mSession.getCrypto()
+                    .getDeviceList()
+                    .downloadKeys(Collections.singletonList(event.getSender()), true, new ApiCallback<MXUsersDevicesMap<MXDeviceInfo>>() {
+                        @Override
+                        public void onSuccess(MXUsersDevicesMap<MXDeviceInfo> info) {
+                            Activity activity = getActivity();
 
-                    if ((null != activity) && !activity.isFinishing() && dialog.isShowing()) {
-                        EncryptedEventContent encryptedEventContent = JsonUtils.toEncryptedEventContent(event.getWireContent().getAsJsonObject());
+                            if ((null != activity) && !activity.isFinishing() && dialog.isShowing()) {
+                                EncryptedEventContent encryptedEventContent = JsonUtils.toEncryptedEventContent(event.getWireContent().getAsJsonObject());
 
-                        MXDeviceInfo deviceInfo = mSession.getCrypto().deviceWithIdentityKey(encryptedEventContent.sender_key, event.getSender(), encryptedEventContent.algorithm);
+                                MXDeviceInfo deviceInfo = mSession.getCrypto()
+                                        .deviceWithIdentityKey(encryptedEventContent.sender_key, event.getSender(), encryptedEventContent.algorithm);
 
-                        if (null != deviceInfo) {
-                            dialog.cancel();
-                            onE2eIconClick(event, deviceInfo);
+                                if (null != deviceInfo) {
+                                    dialog.cancel();
+                                    onE2eIconClick(event, deviceInfo);
+                                }
+                            }
                         }
-                    }
-                }
 
-                @Override
-                public void onNetworkError(Exception e) {
-                }
+                        @Override
+                        public void onNetworkError(Exception e) {
+                        }
 
-                @Override
-                public void onMatrixError(MatrixError e) {
-                }
+                        @Override
+                        public void onMatrixError(MatrixError e) {
+                        }
 
-                @Override
-                public void onUnexpectedError(Exception e) {
-                }
-            });
+                        @Override
+                        public void onUnexpectedError(Exception e) {
+                        }
+                    });
         }
     }
 
@@ -536,11 +547,8 @@ public class VectorMessageListFragment extends MatrixMessageListFragment impleme
             getActivity().runOnUiThread(new Runnable() {
                 @Override
                 public void run() {
-                    AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(getActivity());
-                    alertDialogBuilder.setMessage(getString(R.string.redact) + " ?");
-
-                    // set dialog message
-                    alertDialogBuilder
+                    new AlertDialog.Builder(getActivity())
+                            .setMessage(getString(R.string.redact) + " ?")
                             .setCancelable(false)
                             .setPositiveButton(R.string.ok,
                                     new DialogInterface.OnClickListener() {
@@ -563,12 +571,8 @@ public class VectorMessageListFragment extends MatrixMessageListFragment impleme
                                         public void onClick(DialogInterface dialog, int id) {
                                             dialog.cancel();
                                         }
-                                    });
-
-                    // create alert dialog
-                    AlertDialog alertDialog = alertDialogBuilder.create();
-                    // show it
-                    alertDialog.show();
+                                    })
+                            .show();
                 }
             });
         } else if (action == R.id.ic_action_vector_copy) {
@@ -583,7 +587,8 @@ public class VectorMessageListFragment extends MatrixMessageListFragment impleme
                 @Override
                 public void run() {
                     new AlertDialog.Builder(getActivity())
-                            .setMessage((action == R.id.ic_action_vector_cancel_upload) ? R.string.attachment_cancel_upload : R.string.attachment_cancel_download)
+                            .setMessage((action == R.id.ic_action_vector_cancel_upload) ?
+                                    R.string.attachment_cancel_upload : R.string.attachment_cancel_download)
                             .setPositiveButton(R.string.yes, new DialogInterface.OnClickListener() {
                                 @Override
                                 public void onClick(DialogInterface dialog, int which) {
@@ -604,7 +609,6 @@ public class VectorMessageListFragment extends MatrixMessageListFragment impleme
                                     dialog.dismiss();
                                 }
                             })
-                            .create()
                             .show();
                 }
             });
@@ -682,26 +686,49 @@ public class VectorMessageListFragment extends MatrixMessageListFragment impleme
             getActivity().runOnUiThread(new Runnable() {
                 @Override
                 public void run() {
-                    AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
-
                     View view = getActivity().getLayoutInflater().inflate(R.layout.dialog_event_content, null);
                     TextView textview = view.findViewById(R.id.event_content_text_view);
 
                     Gson gson = new GsonBuilder().setPrettyPrinting().create();
                     textview.setText(gson.toJson(JsonUtils.toJson((action == R.id.ic_action_view_source) ? event : event.getClearEvent())));
-                    builder.setView(view);
 
-                    builder.setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
-                        public void onClick(DialogInterface dialog, int id) {
-                            dialog.cancel();
-                        }
-                    });
-
-                    builder.create().show();
+                    new AlertDialog.Builder(getActivity())
+                            .setView(view)
+                            .setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
+                                public void onClick(DialogInterface dialog, int id) {
+                                    dialog.cancel();
+                                }
+                            })
+                            .show();
                 }
             });
         } else if (action == R.id.ic_action_device_verification) {
             onE2eIconClick(event, ((VectorMessagesAdapter) mAdapter).getDeviceInfo(event.eventId));
+        } else if (action == R.id.ic_action_re_request_e2e_key) {
+            mSession.getCrypto().reRequestRoomKeyForEvent(event);
+
+            mReRequestKeyDialog = new AlertDialog.Builder(getActivity())
+                    .setTitle(R.string.e2e_re_request_encryption_key_dialog_title)
+                    .setMessage(R.string.e2e_re_request_encryption_key_dialog_content)
+                    .setPositiveButton(R.string.ok, null)
+                    .setOnDismissListener(new DialogInterface.OnDismissListener() {
+                        @Override
+                        public void onDismiss(DialogInterface dialog) {
+                            mReRequestKeyDialog = null;
+                        }
+                    })
+                    .show();
+        }
+    }
+
+    /**
+     * The event for which the user asked again for the key is now decrypted
+     */
+    @Override
+    public void onEventDecrypted() {
+        // Auto dismiss this dialog when the keys are received
+        if (mReRequestKeyDialog != null) {
+            mReRequestKeyDialog.dismiss();
         }
     }
 
@@ -711,59 +738,55 @@ public class VectorMessageListFragment extends MatrixMessageListFragment impleme
      * @param event the event to report
      */
     private void onMessageReport(final Event event) {
-        AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
-        builder.setTitle(R.string.room_event_action_report_prompt_reason);
-
         // add a text input
         final EditText input = new EditText(getActivity());
-        builder.setView(input);
 
-
-        builder.setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                final String reason = input.getText().toString();
-
-                mRoom.report(event.eventId, -100, reason, new SimpleApiCallback<Void>(getActivity()) {
+        new AlertDialog.Builder(getActivity())
+                .setTitle(R.string.room_event_action_report_prompt_reason)
+                .setView(input)
+                .setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
                     @Override
-                    public void onSuccess(Void info) {
-                        new AlertDialog.Builder(getActivity())
-                                .setMessage(R.string.room_event_action_report_prompt_ignore_user)
-                                .setPositiveButton(R.string.yes, new DialogInterface.OnClickListener() {
-                                    @Override
-                                    public void onClick(DialogInterface dialog, int which) {
-                                        dialog.dismiss();
+                    public void onClick(DialogInterface dialog, int which) {
+                        final String reason = input.getText().toString();
 
-                                        ArrayList<String> userIdsList = new ArrayList<>();
-                                        userIdsList.add(event.sender);
-
-                                        mSession.ignoreUsers(userIdsList, new SimpleApiCallback<Void>() {
+                        mRoom.report(event.eventId, -100, reason, new SimpleApiCallback<Void>(getActivity()) {
+                            @Override
+                            public void onSuccess(Void info) {
+                                new AlertDialog.Builder(getActivity())
+                                        .setMessage(R.string.room_event_action_report_prompt_ignore_user)
+                                        .setPositiveButton(R.string.yes, new DialogInterface.OnClickListener() {
                                             @Override
-                                            public void onSuccess(Void info) {
-                                            }
-                                        });
-                                    }
-                                })
-                                .setNegativeButton(R.string.no, new DialogInterface.OnClickListener() {
-                                    @Override
-                                    public void onClick(DialogInterface dialog, int which) {
-                                        dialog.dismiss();
-                                    }
-                                })
-                                .create()
-                                .show();
-                    }
-                });
-            }
-        });
-        builder.setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                dialog.cancel();
-            }
-        });
+                                            public void onClick(DialogInterface dialog, int which) {
+                                                dialog.dismiss();
 
-        builder.show();
+                                                ArrayList<String> userIdsList = new ArrayList<>();
+                                                userIdsList.add(event.sender);
+
+                                                mSession.ignoreUsers(userIdsList, new SimpleApiCallback<Void>() {
+                                                    @Override
+                                                    public void onSuccess(Void info) {
+                                                    }
+                                                });
+                                            }
+                                        })
+                                        .setNegativeButton(R.string.no, new DialogInterface.OnClickListener() {
+                                            @Override
+                                            public void onClick(DialogInterface dialog, int which) {
+                                                dialog.dismiss();
+                                            }
+                                        })
+                                        .show();
+                            }
+                        });
+                    }
+                })
+                .setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        dialog.cancel();
+                    }
+                })
+                .show();
     }
 
     /***
@@ -774,7 +797,11 @@ public class VectorMessageListFragment extends MatrixMessageListFragment impleme
      * @param mediaMimeType the mime type
      * @param filename      the filename
      */
-    void onMediaAction(final int menuAction, final String mediaUrl, final String mediaMimeType, final String filename, final EncryptedFileInfo encryptedFileInfo) {
+    void onMediaAction(final int menuAction,
+                       final String mediaUrl,
+                       final String mediaMimeType,
+                       final String filename,
+                       final EncryptedFileInfo encryptedFileInfo) {
         // Santize file name in case `m.body` contains a path.
         final String trimmedFileName = new File(filename).getName();
 
@@ -840,7 +867,8 @@ public class VectorMessageListFragment extends MatrixMessageListFragment impleme
             });
         } else {
             // else download it
-            final String downloadId = mediasCache.downloadMedia(getActivity().getApplicationContext(), mSession.getHomeServerConfig(), mediaUrl, mediaMimeType, encryptedFileInfo);
+            final String downloadId = mediasCache.downloadMedia(getActivity().getApplicationContext(),
+                    mSession.getHomeServerConfig(), mediaUrl, mediaMimeType, encryptedFileInfo);
             mAdapter.notifyDataSetChanged();
 
             if (null != downloadId) {
@@ -849,8 +877,8 @@ public class VectorMessageListFragment extends MatrixMessageListFragment impleme
                     public void onDownloadError(String downloadId, JsonElement jsonElement) {
                         MatrixError error = JsonUtils.toMatrixError(jsonElement);
 
-                        if ((null != error) && error.isSupportedErrorCode() && (null != VectorMessageListFragment.this.getActivity())) {
-                            Toast.makeText(VectorMessageListFragment.this.getActivity(), error.getLocalizedMessage(), Toast.LENGTH_LONG).show();
+                        if ((null != error) && error.isSupportedErrorCode() && (null != getActivity())) {
+                            Toast.makeText(getActivity(), error.getLocalizedMessage(), Toast.LENGTH_LONG).show();
                         }
                     }
 
@@ -858,7 +886,7 @@ public class VectorMessageListFragment extends MatrixMessageListFragment impleme
                     public void onDownloadComplete(String aDownloadId) {
                         if (aDownloadId.equals(downloadId)) {
 
-                            VectorMessageListFragment.this.getActivity().runOnUiThread(new Runnable() {
+                            getActivity().runOnUiThread(new Runnable() {
                                 @Override
                                 public void run() {
                                     onMediaAction(menuAction, mediaUrl, mediaMimeType, trimmedFileName, encryptedFileInfo);
@@ -877,7 +905,7 @@ public class VectorMessageListFragment extends MatrixMessageListFragment impleme
      */
     @Override
     public boolean isDisplayAllEvents() {
-        return  PreferencesManager.displayAllEvents(getActivity());
+        return PreferencesManager.displayAllEvents(getActivity());
     }
 
     private void setViewVisibility(View view, int visibility) {
@@ -1063,7 +1091,8 @@ public class VectorMessageListFragment extends MatrixMessageListFragment impleme
             // the room is stored in a temporary store
             // so provide an handle to retrieve it
             if (null != getRoomPreviewData()) {
-                roomDetailsIntent.putExtra(VectorMemberDetailsActivity.EXTRA_STORE_ID, new Integer(Matrix.getInstance(getActivity()).addTmpStore(mEventTimeLine.getStore())));
+                roomDetailsIntent.putExtra(VectorMemberDetailsActivity.EXTRA_STORE_ID,
+                        new Integer(Matrix.getInstance(getActivity()).addTmpStore(mEventTimeLine.getStore())));
             }
 
             roomDetailsIntent.putExtra(VectorMemberDetailsActivity.EXTRA_ROOM_ID, mRoom.getRoomId());
@@ -1151,7 +1180,8 @@ public class VectorMessageListFragment extends MatrixMessageListFragment impleme
                     // open the member sheet from the current activity
                     if (universalParams.containsKey(VectorUniversalLinkReceiver.ULINK_MATRIX_USER_ID_KEY)) {
                         Intent roomDetailsIntent = new Intent(getActivity(), VectorMemberDetailsActivity.class);
-                        roomDetailsIntent.putExtra(VectorMemberDetailsActivity.EXTRA_MEMBER_ID, universalParams.get(VectorUniversalLinkReceiver.ULINK_MATRIX_USER_ID_KEY));
+                        roomDetailsIntent.putExtra(VectorMemberDetailsActivity.EXTRA_MEMBER_ID,
+                                universalParams.get(VectorUniversalLinkReceiver.ULINK_MATRIX_USER_ID_KEY));
                         roomDetailsIntent.putExtra(VectorMemberDetailsActivity.EXTRA_MATRIX_ID, mSession.getCredentials().userId);
                         getActivity().startActivityForResult(roomDetailsIntent, VectorRoomActivity.GET_MENTION_REQUEST_CODE);
                     } else {

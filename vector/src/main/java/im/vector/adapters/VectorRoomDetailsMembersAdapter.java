@@ -1,5 +1,6 @@
 /*
  * Copyright 2015 OpenMarket Ltd
+ * Copyright 2018 New Vector Ltd
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -37,8 +38,8 @@ import org.matrix.androidsdk.data.Room;
 import org.matrix.androidsdk.db.MXMediasCache;
 import org.matrix.androidsdk.rest.model.PowerLevels;
 import org.matrix.androidsdk.rest.model.RoomMember;
-import org.matrix.androidsdk.rest.model.pid.RoomThirdPartyInvite;
 import org.matrix.androidsdk.rest.model.User;
+import org.matrix.androidsdk.rest.model.pid.RoomThirdPartyInvite;
 import org.matrix.androidsdk.util.Log;
 
 import java.util.ArrayList;
@@ -180,7 +181,12 @@ public class VectorRoomDetailsMembersAdapter extends BaseExpandableListAdapter {
      * @param aRoomId                      the room id
      * @param aMediasCache                 the medias cache
      */
-    public VectorRoomDetailsMembersAdapter(Context aContext, int aChildLayoutResourceId, int aGroupHeaderLayoutResourceId, MXSession aSession, String aRoomId, MXMediasCache aMediasCache) {
+    public VectorRoomDetailsMembersAdapter(Context aContext,
+                                           int aChildLayoutResourceId,
+                                           int aGroupHeaderLayoutResourceId,
+                                           MXSession aSession,
+                                           String aRoomId,
+                                           MXMediasCache aMediasCache) {
         mContext = aContext;
         mLayoutInflater = LayoutInflater.from(aContext);
         mChildLayoutResourceId = aChildLayoutResourceId;// R.layout.adapter_item_vector_add_participants
@@ -563,9 +569,9 @@ public class VectorRoomDetailsMembersAdapter extends BaseExpandableListAdapter {
         String retValue;
 
         if (mGroupIndexInvitedMembers == aGroupPosition) {
-            retValue = mContext.getResources().getString(R.string.room_details_people_invited_group_name);
+            retValue = mContext.getString(R.string.room_details_people_invited_group_name);
         } else if (mGroupIndexPresentMembers == aGroupPosition) {
-            retValue = mContext.getResources().getString(R.string.room_details_people_present_group_name);
+            retValue = mContext.getString(R.string.room_details_people_present_group_name);
         } else {
             // unknown section - should not happen
             retValue = "??";
@@ -698,7 +704,8 @@ public class VectorRoomDetailsMembersAdapter extends BaseExpandableListAdapter {
             viewHolder.mMemberAvatarImageView.setImageBitmap(participant.getAvatarBitmap());
         } else {
             if (TextUtils.isEmpty(participant.mUserId)) {
-                VectorUtils.loadUserAvatar(mContext, mSession, viewHolder.mMemberAvatarImageView, participant.mAvatarUrl, participant.mDisplayName, participant.mDisplayName);
+                VectorUtils.loadUserAvatar(mContext,
+                        mSession, viewHolder.mMemberAvatarImageView, participant.mAvatarUrl, participant.mDisplayName, participant.mDisplayName);
             } else {
 
                 // try to provide a better display for a participant when the user is known.
@@ -716,7 +723,8 @@ public class VectorRoomDetailsMembersAdapter extends BaseExpandableListAdapter {
                     }
                 }
 
-                VectorUtils.loadUserAvatar(mContext, mSession, viewHolder.mMemberAvatarImageView, participant.mAvatarUrl, participant.mUserId, participant.mDisplayName);
+                VectorUtils.loadUserAvatar(mContext,
+                        mSession, viewHolder.mMemberAvatarImageView, participant.mAvatarUrl, participant.mUserId, participant.mDisplayName);
             }
         }
 
@@ -898,7 +906,7 @@ public class VectorRoomDetailsMembersAdapter extends BaseExpandableListAdapter {
             });
         }
 
-        int backgroundColor = ThemeUtils.getColor(mContext, R.attr.riot_primary_background_color);
+        int backgroundColor = ThemeUtils.INSTANCE.getColor(mContext, R.attr.riot_primary_background_color);
 
         // multi selections mode
         // do not display a checkbox for oneself
@@ -908,7 +916,7 @@ public class VectorRoomDetailsMembersAdapter extends BaseExpandableListAdapter {
             viewHolder.mMultipleSelectionCheckBox.setChecked(mSelectedUserIds.indexOf(participant.mUserId) >= 0);
 
             if (viewHolder.mMultipleSelectionCheckBox.isChecked()) {
-                backgroundColor = ThemeUtils.getColor(mContext, R.attr.multi_selection_background_color);
+                backgroundColor = ThemeUtils.INSTANCE.getColor(mContext, R.attr.multi_selection_background_color);
             }
 
             viewHolder.mMultipleSelectionCheckBox.setOnClickListener(new View.OnClickListener() {
@@ -916,10 +924,10 @@ public class VectorRoomDetailsMembersAdapter extends BaseExpandableListAdapter {
                 public void onClick(View v) {
                     if (viewHolder.mMultipleSelectionCheckBox.isChecked()) {
                         mSelectedUserIds.add(participant.mUserId);
-                        viewHolder.mSwipeCellLayout.setBackgroundColor(ThemeUtils.getColor(mContext, R.attr.multi_selection_background_color));
+                        viewHolder.mSwipeCellLayout.setBackgroundColor(ThemeUtils.INSTANCE.getColor(mContext, R.attr.multi_selection_background_color));
                     } else {
                         mSelectedUserIds.remove(participant.mUserId);
-                        viewHolder.mSwipeCellLayout.setBackgroundColor(ThemeUtils.getColor(mContext, R.attr.riot_primary_background_color));
+                        viewHolder.mSwipeCellLayout.setBackgroundColor(ThemeUtils.INSTANCE.getColor(mContext, R.attr.riot_primary_background_color));
                     }
 
                     if (null != mOnParticipantsListener) {

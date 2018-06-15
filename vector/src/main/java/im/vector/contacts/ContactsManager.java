@@ -1,6 +1,7 @@
 /*
  * Copyright 2015 OpenMarket Ltd
  * Copyright 2017 Vector Creations Ltd
+ * Copyright 2018 New Vector Ltd
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -441,7 +442,8 @@ public class ContactsManager implements SharedPreferences.OnSharedPreferenceChan
                             while (namesCur.moveToNext()) {
                                 String displayName = namesCur.getString(namesCur.getColumnIndex(ContactsContract.Contacts.DISPLAY_NAME_PRIMARY));
                                 String contactId = namesCur.getString(namesCur.getColumnIndex(ContactsContract.CommonDataKinds.StructuredName.CONTACT_ID));
-                                String thumbnailUri = namesCur.getString(namesCur.getColumnIndex(ContactsContract.CommonDataKinds.StructuredName.PHOTO_THUMBNAIL_URI));
+                                String thumbnailUri
+                                        = namesCur.getString(namesCur.getColumnIndex(ContactsContract.CommonDataKinds.StructuredName.PHOTO_THUMBNAIL_URI));
 
                                 if (null != contactId) {
                                     Contact contact = dict.get(contactId);
@@ -614,7 +616,7 @@ public class ContactsManager implements SharedPreferences.OnSharedPreferenceChan
      * @return true it was requested once
      */
     public boolean isContactBookAccessRequested() {
-        if (Build.VERSION.SDK_INT >= 23) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             return (PackageManager.PERMISSION_GRANTED == ContextCompat.checkSelfPermission(mContext, Manifest.permission.READ_CONTACTS));
         } else {
             SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(mContext);
@@ -628,11 +630,11 @@ public class ContactsManager implements SharedPreferences.OnSharedPreferenceChan
      * @param isAllowed true to allowed the contacts book access.
      */
     public void setIsContactBookAccessAllowed(boolean isAllowed) {
-        if (Build.VERSION.SDK_INT < 23) {
-            SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(mContext);
-            SharedPreferences.Editor editor = preferences.edit();
-            editor.putBoolean(CONTACTS_BOOK_ACCESS_KEY, isAllowed);
-            editor.commit();
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.M) {
+            PreferenceManager.getDefaultSharedPreferences(mContext)
+                    .edit()
+                    .putBoolean(CONTACTS_BOOK_ACCESS_KEY, isAllowed)
+                    .apply();
         }
         mIsRetrievingPids = false;
         mArePidsRetrieved = false;
@@ -644,7 +646,7 @@ public class ContactsManager implements SharedPreferences.OnSharedPreferenceChan
      * @return true if it was granted.
      */
     public boolean isContactBookAccessAllowed() {
-        if (Build.VERSION.SDK_INT >= 23) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             return (PackageManager.PERMISSION_GRANTED == ContextCompat.checkSelfPermission(mContext, Manifest.permission.READ_CONTACTS));
         } else {
             SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(mContext);

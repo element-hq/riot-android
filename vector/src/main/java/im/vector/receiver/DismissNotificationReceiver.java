@@ -19,7 +19,6 @@ package im.vector.receiver;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
 
 import im.vector.Matrix;
@@ -59,10 +58,10 @@ public class DismissNotificationReceiver extends BroadcastReceiver {
      * @param ts      the timestamp
      */
     private static void setNotificationDismissTs(Context context, long ts) {
-        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(context);
-        SharedPreferences.Editor editor = preferences.edit();
-        editor.putLong(DISMISS_NOTIFICATIONS_TS_KEY, ts);
-        editor.commit();
+        PreferenceManager.getDefaultSharedPreferences(context)
+                .edit()
+                .putLong(DISMISS_NOTIFICATIONS_TS_KEY, ts)
+                .apply();
     }
 
     /**
@@ -82,10 +81,10 @@ public class DismissNotificationReceiver extends BroadcastReceiver {
      * @param ts      the timestamp
      */
     public static void setLatestNotifiedMessageTs(Context context, long ts) {
-        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(context);
-        SharedPreferences.Editor editor = preferences.edit();
-        editor.putLong(LATEST_NOTIFIED_MESSAGE_TS_KEY, ts);
-        editor.commit();
+        PreferenceManager.getDefaultSharedPreferences(context)
+                .edit()
+                .putLong(LATEST_NOTIFIED_MESSAGE_TS_KEY, ts)
+                .apply();
     }
 }
 

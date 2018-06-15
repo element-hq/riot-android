@@ -36,6 +36,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import org.jetbrains.annotations.NotNull;
 import org.matrix.androidsdk.MXDataHandler;
 import org.matrix.androidsdk.MXSession;
 import org.matrix.androidsdk.data.Room;
@@ -57,11 +58,16 @@ import im.vector.util.RoomUtils;
 import im.vector.util.ThemeUtils;
 import im.vector.view.EmptyViewItemDecoration;
 import im.vector.view.SimpleDividerItemDecoration;
+import kotlin.Pair;
 
 /**
  * Displays the historical rooms list
  */
-public class HistoricalRoomsActivity extends RiotAppCompatActivity implements SearchView.OnQueryTextListener, HomeRoomAdapter.OnSelectRoomListener, AbsAdapter.MoreRoomActionListener, RoomUtils.HistoricalRoomActionListener {
+public class HistoricalRoomsActivity extends RiotAppCompatActivity implements
+        SearchView.OnQueryTextListener,
+        HomeRoomAdapter.OnSelectRoomListener,
+        AbsAdapter.MoreRoomActionListener,
+        RoomUtils.HistoricalRoomActionListener {
     private static final String LOG_TAG = HistoricalRoomsActivity.class.getSimpleName();
 
     @BindView(R.id.search_view)
@@ -93,6 +99,12 @@ public class HistoricalRoomsActivity extends RiotAppCompatActivity implements Se
      * Activity lifecycle
      * *********************************************************************************************
      */
+
+    @NotNull
+    @Override
+    public Pair getOtherThemes() {
+        return new Pair(R.style.HomeActivityTheme_Dark, R.style.HomeActivityTheme_Black);
+    }
 
     @Override
     public int getLayoutRes() {
@@ -196,7 +208,7 @@ public class HistoricalRoomsActivity extends RiotAppCompatActivity implements Se
         mSearchView.setQueryHint(getString(R.string.historical_placeholder));
 
         SearchView.SearchAutoComplete searchAutoComplete = mSearchView.findViewById(android.support.v7.appcompat.R.id.search_src_text);
-        searchAutoComplete.setHintTextColor(ThemeUtils.getColor(this, R.attr.default_text_hint_color));
+        searchAutoComplete.setHintTextColor(ThemeUtils.INSTANCE.getColor(this, R.attr.default_text_hint_color));
     }
 
     /*
@@ -342,7 +354,7 @@ public class HistoricalRoomsActivity extends RiotAppCompatActivity implements Se
      * @param errorMessage the localized error message
      */
     private void onRequestDone(final String errorMessage) {
-        if (!this.isFinishing()) {
+        if (!isFinishing()) {
             runOnUiThread(new Runnable() {
                 @Override
                 public void run() {

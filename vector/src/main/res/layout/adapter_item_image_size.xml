@@ -3,6 +3,7 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    xmlns:tools="http://schemas.android.com/tools"
     android:paddingBottom="5dp">
 
     <LinearLayout
@@ -15,7 +16,7 @@
         android:layout_height="wrap_content"
         android:layout_gravity="center_vertical"
         android:textAppearance="?android:attr/textAppearanceLarge"
-        android:text="A text here"
+        tools:text="A text here"
         android:layout_weight="1"
         android:textStyle="bold"
         android:id="@+id/ImageSizesAdapter_format"/>
@@ -26,7 +27,7 @@
             android:layout_height="wrap_content"
             android:layout_gravity="right|center_vertical"
             android:textAppearance="?android:attr/textAppearanceMedium"
-            android:text="A text here"
+            tools:text="A text here"
             android:id="@+id/ImageSizesAdapter_info"
             android:paddingRight="5dp"
             />

@@ -1,5 +1,6 @@
 /*
  * Copyright 2017 Vector Creations Ltd
+ * Copyright 2018 New Vector Ltd
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,11 +17,11 @@
 
 package im.vector.fragments;
 
-import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.v4.app.DialogFragment;
+import android.support.v7.app.AlertDialog;
 import android.util.Pair;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -55,7 +56,9 @@ public class VectorUnknownDevicesFragment extends DialogFragment {
 
     private static IUnknownDevicesSendAnywayListener mListener = null;
 
-    public static VectorUnknownDevicesFragment newInstance(String sessionId, MXUsersDevicesMap<MXDeviceInfo> unknownDevicesMap, IUnknownDevicesSendAnywayListener listener) {
+    public static VectorUnknownDevicesFragment newInstance(String sessionId,
+                                                           MXUsersDevicesMap<MXDeviceInfo> unknownDevicesMap,
+                                                           IUnknownDevicesSendAnywayListener listener) {
         VectorUnknownDevicesFragment f = new VectorUnknownDevicesFragment();
 
         // Supply num input as an argument.
@@ -112,7 +115,6 @@ public class VectorUnknownDevicesFragment extends DialogFragment {
 
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
-        AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
         // Get the layout inflater
         LayoutInflater inflater = getActivity().getLayoutInflater();
 
@@ -159,7 +161,8 @@ public class VectorUnknownDevicesFragment extends DialogFragment {
             public void OnVerifyDeviceClick(MXDeviceInfo aDeviceInfo) {
                 switch (aDeviceInfo.mVerified) {
                     case MXDeviceInfo.DEVICE_VERIFICATION_VERIFIED:
-                        mSession.getCrypto().setDeviceVerification(MXDeviceInfo.DEVICE_VERIFICATION_UNVERIFIED, aDeviceInfo.deviceId, aDeviceInfo.userId, mCallback);
+                        mSession.getCrypto()
+                                .setDeviceVerification(MXDeviceInfo.DEVICE_VERIFICATION_UNVERIFIED, aDeviceInfo.deviceId, aDeviceInfo.userId, mCallback);
                         break;
 
                     case MXDeviceInfo.DEVICE_VERIFICATION_UNVERIFIED:
@@ -172,9 +175,11 @@ public class VectorUnknownDevicesFragment extends DialogFragment {
             @Override
             public void OnBlockDeviceClick(MXDeviceInfo aDeviceInfo) {
                 if (aDeviceInfo.mVerified == MXDeviceInfo.DEVICE_VERIFICATION_BLOCKED) {
-                    mSession.getCrypto().setDeviceVerification(MXDeviceInfo.DEVICE_VERIFICATION_UNVERIFIED, aDeviceInfo.deviceId, aDeviceInfo.userId, mCallback);
+                    mSession.getCrypto()
+                            .setDeviceVerification(MXDeviceInfo.DEVICE_VERIFICATION_UNVERIFIED, aDeviceInfo.deviceId, aDeviceInfo.userId, mCallback);
                 } else {
-                    mSession.getCrypto().setDeviceVerification(MXDeviceInfo.DEVICE_VERIFICATION_BLOCKED, aDeviceInfo.deviceId, aDeviceInfo.userId, mCallback);
+                    mSession.getCrypto()
+                            .setDeviceVerification(MXDeviceInfo.DEVICE_VERIFICATION_BLOCKED, aDeviceInfo.deviceId, aDeviceInfo.userId, mCallback);
                 }
                 refresh();
             }
@@ -195,7 +200,9 @@ public class VectorUnknownDevicesFragment extends DialogFragment {
             }
         });
 
-        builder.setView(v).setTitle(R.string.unknown_devices_alert_title);
+        AlertDialog.Builder builder = new AlertDialog.Builder(getActivity())
+                .setView(v)
+                .setTitle(R.string.unknown_devices_alert_title);
 
         if (null != mListener) {
             // Add action buttons

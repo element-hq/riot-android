@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:background="?attr/riot_primary_background_color"
     android:layout_width="match_parent"
     android:layout_height="72dp">
@@ -21,7 +22,7 @@
         android:layout_marginRight="12dp"
         android:layout_marginTop="18dp"
         android:fontFamily="sans-serif-light"
-        android:text="370Kb"
+        tools:text="370Kb"
         android:textColor="@color/vector_silver_color"
         android:textSize="12sp" />
 
@@ -37,7 +38,7 @@
         android:fontFamily="sans-serif-regular"
         android:maxLines="1"
         android:ellipsize="end"
-        android:text="File name"
+        tools:text="File name"
         android:textColor="?attr/riot_primary_text_color"
         android:textSize="16sp" />
 
@@ -52,7 +53,7 @@
         android:layout_marginRight="26dp"
         android:maxLines="1"
         android:ellipsize="end"
-        android:text="Room name and date"
+        tools:text="Room name and date"
         android:textColor="?attr/default_text_light_color"
         android:textSize="14sp" />
 

@@ -1,6 +1,7 @@
 /*
  * Copyright 2016 OpenMarket Ltd
  * Copyright 2017 Vector Creations Ltd
+ * Copyright 2018 New Vector Ltd
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -19,14 +20,13 @@ package im.vector;
 
 import android.text.TextUtils;
 
-import org.matrix.androidsdk.util.Log;
-
 import org.matrix.androidsdk.MXSession;
 import org.matrix.androidsdk.rest.callback.ApiCallback;
 import org.matrix.androidsdk.rest.callback.SimpleApiCallback;
 import org.matrix.androidsdk.rest.model.MatrixError;
 import org.matrix.androidsdk.rest.model.publicroom.PublicRoom;
 import org.matrix.androidsdk.rest.model.publicroom.PublicRoomsResponse;
+import org.matrix.androidsdk.util.Log;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -121,86 +121,88 @@ public class PublicRoomsManager {
             return;
         }
 
-        mSession.getEventsApiClient().loadPublicRooms(mRequestServer, mThirdPartyInstanceId, mIncludeAllNetworks, mSearchedPattern, mForwardPaginationToken, PUBLIC_ROOMS_LIMIT, new ApiCallback<PublicRoomsResponse>() {
-            @Override
-            public void onSuccess(PublicRoomsResponse publicRoomsResponse) {
-                // check if the request response is still expected
-                if (TextUtils.equals(fToken, mRequestKey)) {
-                    List<PublicRoom> list = publicRoomsResponse.chunk;
+        mSession.getEventsApiClient()
+                .loadPublicRooms(mRequestServer, mThirdPartyInstanceId, mIncludeAllNetworks, mSearchedPattern, mForwardPaginationToken, PUBLIC_ROOMS_LIMIT,
+                        new ApiCallback<PublicRoomsResponse>() {
+                            @Override
+                            public void onSuccess(PublicRoomsResponse publicRoomsResponse) {
+                                // check if the request response is still expected
+                                if (TextUtils.equals(fToken, mRequestKey)) {
+                                    List<PublicRoom> list = publicRoomsResponse.chunk;
 
-                    // avoid the null case
-                    if (null == list) {
-                        list = new ArrayList<>();
-                    }
+                                    // avoid the null case
+                                    if (null == list) {
+                                        list = new ArrayList<>();
+                                    }
 
-                    Log.d(LOG_TAG, "## launchPublicRoomsRequest() : retrieves " + list.size() + " rooms");
+                                    Log.d(LOG_TAG, "## launchPublicRoomsRequest() : retrieves " + list.size() + " rooms");
 
-                    mForwardPaginationToken = publicRoomsResponse.next_batch;
+                                    mForwardPaginationToken = publicRoomsResponse.next_batch;
 
-                    if (null != callback) {
-                        callback.onSuccess(list);
-                    }
+                                    if (null != callback) {
+                                        callback.onSuccess(list);
+                                    }
 
-                    mRequestKey = null;
-                } else {
-                    Log.d(LOG_TAG, "## launchPublicRoomsRequest() : the request has been cancelled");
-                }
-            }
+                                    mRequestKey = null;
+                                } else {
+                                    Log.d(LOG_TAG, "## launchPublicRoomsRequest() : the request has been cancelled");
+                                }
+                            }
 
-            @Override
-            public void onNetworkError(Exception e) {
-                // check if the request response is still expected
-                if (TextUtils.equals(fToken, mRequestKey)) {
-                    Log.d(LOG_TAG, "## launchPublicRoomsRequest() : onNetworkError " + e.getMessage());
+                            @Override
+                            public void onNetworkError(Exception e) {
+                                // check if the request response is still expected
+                                if (TextUtils.equals(fToken, mRequestKey)) {
+                                    Log.d(LOG_TAG, "## launchPublicRoomsRequest() : onNetworkError " + e.getMessage());
 
-                    if (null != callback) {
-                        callback.onNetworkError(e);
-                    }
-                    mRequestKey = null;
-                } else {
-                    Log.d(LOG_TAG, "## launchPublicRoomsRequest() : the request has been cancelled");
-                }
-            }
+                                    if (null != callback) {
+                                        callback.onNetworkError(e);
+                                    }
+                                    mRequestKey = null;
+                                } else {
+                                    Log.d(LOG_TAG, "## launchPublicRoomsRequest() : the request has been cancelled");
+                                }
+                            }
 
-            @Override
-            public void onMatrixError(MatrixError e) {
-                // check if the request response is still expected
-                if (TextUtils.equals(fToken, mRequestKey)) {
-                    Log.d(LOG_TAG, "## launchPublicRoomsRequest() : MatrixError " + e.getLocalizedMessage());
+                            @Override
+                            public void onMatrixError(MatrixError e) {
+                                // check if the request response is still expected
+                                if (TextUtils.equals(fToken, mRequestKey)) {
+                                    Log.d(LOG_TAG, "## launchPublicRoomsRequest() : MatrixError " + e.getLocalizedMessage());
 
-                    // mRequestServer == null means to search on its own home server
-                    // on some servers, it triggers an "internal server error"
-                    // so try with the server url
-                    if (MatrixError.UNKNOWN.equals(e.errcode) && (null == mRequestServer)) {
-                        mRequestServer = mSession.getHomeServerConfig().getHomeserverUri().getHost();
-                        Log.e(LOG_TAG, "## launchPublicRoomsRequest() : mRequestServer == null fails -> try " + mRequestServer);
-                        launchPublicRoomsRequest(callback);
-                    } else {
-                        if (null != callback) {
-                            callback.onMatrixError(e);
-                        }
-                    }
-                    mRequestKey = null;
-                } else {
-                    Log.d(LOG_TAG, "## launchPublicRoomsRequest() : the request has been cancelled");
-                }
-            }
+                                    // mRequestServer == null means to search on its own home server
+                                    // on some servers, it triggers an "internal server error"
+                                    // so try with the server url
+                                    if (MatrixError.UNKNOWN.equals(e.errcode) && (null == mRequestServer)) {
+                                        mRequestServer = mSession.getHomeServerConfig().getHomeserverUri().getHost();
+                                        Log.e(LOG_TAG, "## launchPublicRoomsRequest() : mRequestServer == null fails -> try " + mRequestServer);
+                                        launchPublicRoomsRequest(callback);
+                                    } else {
+                                        if (null != callback) {
+                                            callback.onMatrixError(e);
+                                        }
+                                    }
+                                    mRequestKey = null;
+                                } else {
+                                    Log.d(LOG_TAG, "## launchPublicRoomsRequest() : the request has been cancelled");
+                                }
+                            }
 
-            @Override
-            public void onUnexpectedError(Exception e) {
-                // check if the request response is still expected
-                if (TextUtils.equals(fToken, mRequestKey)) {
-                    Log.d(LOG_TAG, "## launchPublicRoomsRequest() : onUnexpectedError " + e.getLocalizedMessage());
+                            @Override
+                            public void onUnexpectedError(Exception e) {
+                                // check if the request response is still expected
+                                if (TextUtils.equals(fToken, mRequestKey)) {
+                                    Log.d(LOG_TAG, "## launchPublicRoomsRequest() : onUnexpectedError " + e.getLocalizedMessage());
 
-                    if (null != callback) {
-                        callback.onUnexpectedError(e);
-                    }
-                    mRequestKey = null;
-                } else {
-                    Log.d(LOG_TAG, "## launchPublicRoomsRequest() : the request has been cancelled");
-                }
-            }
-        });
+                                    if (null != callback) {
+                                        callback.onUnexpectedError(e);
+                                    }
+                                    mRequestKey = null;
+                                } else {
+                                    Log.d(LOG_TAG, "## launchPublicRoomsRequest() : the request has been cancelled");
+                                }
+                            }
+                        });
     }
 
     /**
@@ -212,7 +214,11 @@ public class PublicRoomsManager {
      * @param pattern              the pattern to search
      * @param callback             the asynchronous callback
      */
-    public void startPublicRoomsSearch(final String server, final String thirdPartyInstanceId, final boolean includeAllNetworks, final String pattern, final ApiCallback<List<PublicRoom>> callback) {
+    public void startPublicRoomsSearch(final String server,
+                                       final String thirdPartyInstanceId,
+                                       final boolean includeAllNetworks,
+                                       final String pattern,
+                                       final ApiCallback<List<PublicRoom>> callback) {
         Log.d(LOG_TAG, "## startPublicRoomsSearch() " + " : server " + server + " pattern " + pattern);
 
         // on android, a request cannot be cancelled
@@ -236,7 +242,8 @@ public class PublicRoomsManager {
      * @return true if the pagination starts
      */
     public boolean forwardPaginate(final ApiCallback<List<PublicRoom>> callback) {
-        Log.d(LOG_TAG, "## forwardPaginate() " + " : server " + mRequestServer + " pattern " + mSearchedPattern + " mForwardPaginationToken " + mForwardPaginationToken);
+        Log.d(LOG_TAG, "## forwardPaginate() " + " : server " + mRequestServer
+                + " pattern " + mSearchedPattern + " mForwardPaginationToken " + mForwardPaginationToken);
 
         if (isRequestInProgress()) {
             Log.d(LOG_TAG, "## forwardPaginate() : a request is already in progress");

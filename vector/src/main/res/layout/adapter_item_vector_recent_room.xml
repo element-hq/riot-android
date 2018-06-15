@@ -3,6 +3,7 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    xmlns:tools="http://schemas.android.com/tools"
     android:background="?attr/riot_primary_background_color"
     android:orientation="vertical">
 
@@ -93,7 +94,7 @@
                     android:layout_toLeftOf="@+id/roomSummaryAdapter_unread_count"
                     android:fontFamily="sans-serif-regular"
                     android:singleLine="true"
-                    android:text="Room Name"
+                    tools:text="Room Name"
                     android:textColor="?attr/riot_primary_text_color"
                     android:textSize="16sp" />
 
@@ -111,7 +112,7 @@
                     android:minWidth="25dp"
                     android:paddingLeft="7dp"
                     android:paddingRight="7dp"
-                    android:text="XXX"
+                    tools:text="XXX"
                     android:textColor="@android:color/white"
                     android:textSize="14sp"
                     android:visibility="gone" />
@@ -125,7 +126,7 @@
                     android:layout_alignParentBottom="true"
                     android:layout_toLeftOf="@+id/roomSummaryAdapter_action_image"
                     android:fontFamily="sans-serif-light"
-                    android:text="Jan 1 00:00"
+                    tools:text="Jan 1 00:00"
                     android:textColor="?attr/default_text_light_color"
                     android:textSize="12sp" />
 
@@ -196,7 +197,7 @@
                     android:layout_toLeftOf="@+id/roomSummaryAdapter_word_readable"
                     android:maxLines="1"
                     android:ellipsize="end"
-                    android:text="last room message"
+                    tools:text="last room message"
                     android:textColor="?attr/default_text_light_color"
                     android:textSize="14sp" />
 

@@ -18,12 +18,21 @@
 
 package im.vector.activity;
 
+import org.jetbrains.annotations.NotNull;
+
 import im.vector.R;
+import kotlin.Pair;
 
 /**
  * LoggingOutActivity displays an animation while a session log out is in progress.
  */
 public class LoggingOutActivity extends MXCActionBarActivity {
+    @NotNull
+    @Override
+    public Pair getOtherThemes() {
+        return new Pair(R.style.AppTheme_NoActionBar_Dark, R.style.AppTheme_NoActionBar_Black);
+    }
+
     @Override
     public int getLayoutRes() {
         return R.layout.vector_activity_splash;

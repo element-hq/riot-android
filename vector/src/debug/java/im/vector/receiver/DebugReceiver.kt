@@ -19,6 +19,8 @@ package im.vector.receiver
 import android.content.*
 import android.preference.PreferenceManager
 import android.util.Log
+import androidx.core.content.edit
+import im.vector.Matrix
 import im.vector.util.lsFiles
 
 /**
@@ -27,9 +29,12 @@ import im.vector.util.lsFiles
 class DebugReceiver : BroadcastReceiver() {
 
     override fun onReceive(context: Context, intent: Intent) {
+        Log.d(LOG_TAG, "Received debug action: ${intent.action}")
+
         when (intent.action) {
             DEBUG_ACTION_DUMP_FILESYSTEM -> lsFiles(context)
             DEBUG_ACTION_DUMP_PREFERENCES -> dumpPreferences(context)
+            DEBUG_ACTION_ALTER_SCALAR_TOKEN -> alterScalarToken(context)
         }
     }
 
@@ -49,15 +54,23 @@ class DebugReceiver : BroadcastReceiver() {
         }
     }
 
+    private fun alterScalarToken(context: Context) {
+        PreferenceManager.getDefaultSharedPreferences(context).edit {
+            putString("SCALAR_TOKEN_PREFERENCE_KEY" + Matrix.getInstance(context).defaultSession.myUserId, "bad_token")
+        }
+    }
+
     companion object {
         private const val LOG_TAG = "DebugReceiver"
 
         private const val DEBUG_ACTION_DUMP_FILESYSTEM = "im.vector.receiver.DEBUG_ACTION_DUMP_FILESYSTEM"
         private const val DEBUG_ACTION_DUMP_PREFERENCES = "im.vector.receiver.DEBUG_ACTION_DUMP_PREFERENCES"
+        private const val DEBUG_ACTION_ALTER_SCALAR_TOKEN = "im.vector.receiver.DEBUG_ACTION_ALTER_SCALAR_TOKEN"
 
         fun getIntentFilter() = IntentFilter().apply {
             addAction(DEBUG_ACTION_DUMP_FILESYSTEM)
             addAction(DEBUG_ACTION_DUMP_PREFERENCES)
+            addAction(DEBUG_ACTION_ALTER_SCALAR_TOKEN)
         }
     }
 }

@@ -72,7 +72,8 @@ public class VectorPublicRoomsActivity extends MXCActionBarActivity {
                 pattern = intent.getStringExtra(EXTRA_SEARCHED_PATTERN);
             }
 
-            vectorPublicRoomsListFragment = VectorPublicRoomsListFragment.newInstance(session.getMyUserId(), R.layout.fragment_vector_public_rooms_list, pattern);
+            vectorPublicRoomsListFragment = VectorPublicRoomsListFragment
+                    .newInstance(session.getMyUserId(), R.layout.fragment_vector_public_rooms_list, pattern);
             fm.beginTransaction().add(R.id.layout_public__rooms_list, vectorPublicRoomsListFragment, TAG_FRAGMENT_PUBLIC_ROOMS_LIST).commit();
         }
     }

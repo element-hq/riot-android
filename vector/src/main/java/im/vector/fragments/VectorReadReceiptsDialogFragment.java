@@ -1,5 +1,6 @@
 /*
  * Copyright 2015 OpenMarket Ltd
+ * Copyright 2018 New Vector Ltd
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -99,7 +100,8 @@ public class VectorReadReceiptsDialogFragment extends DialogFragment {
         ListView listView = v.findViewById(R.id.listView_members);
 
         final Room room = mSession.getDataHandler().getRoom(mRoomId);
-        VectorReadReceiptsAdapter adapter = new VectorReadReceiptsAdapter(getActivity(), R.layout.adapter_item_read_receipt, mSession, room, getMXMediasCache());
+        VectorReadReceiptsAdapter adapter =
+                new VectorReadReceiptsAdapter(getActivity(), R.layout.adapter_item_read_receipt, mSession, room, getMXMediasCache());
 
         adapter.addAll(new ArrayList<>(mSession.getDataHandler().getStore().getEventReceipts(mRoomId, mEventId, true, true)));
         listView.setAdapter(adapter);

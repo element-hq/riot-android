@@ -38,7 +38,7 @@ public class SimpleDividerItemDecoration extends DividerItemDecoration {
 
     public SimpleDividerItemDecoration(final Context context, final int orientation, final int leftMargin) {
         super(context, orientation);
-        mDivider = ContextCompat.getDrawable(context, ThemeUtils.getResourceId(context, R.drawable.line_divider_light));
+        mDivider = ContextCompat.getDrawable(context, ThemeUtils.INSTANCE.getResourceId(context, R.drawable.line_divider_light));
         mLeftMargin = leftMargin;
         mOrientation = orientation;
     }

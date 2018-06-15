@@ -1,6 +1,7 @@
 /* 
  * Copyright 2016 OpenMarket Ltd
- * 
+ * Copyright 2018 New Vector Ltd
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
@@ -35,6 +36,7 @@ import org.matrix.androidsdk.MXSession;
 import org.matrix.androidsdk.data.Room;
 import org.matrix.androidsdk.rest.model.RoomMember;
 import org.matrix.androidsdk.rest.model.User;
+import org.matrix.androidsdk.util.Log;
 
 import java.lang.reflect.Field;
 import java.util.ArrayList;
@@ -44,8 +46,6 @@ import java.util.List;
 
 import im.vector.R;
 import im.vector.adapters.AutoCompletedUserAdapter;
-
-import org.matrix.androidsdk.util.Log;
 
 /**
  * Custom AppCompatMultiAutoCompleteTextView to display matrix id / displayname
@@ -74,12 +74,12 @@ public class VectorAutoCompleteTextView extends AppCompatMultiAutoCompleteTextVi
 
     public VectorAutoCompleteTextView(Context context, AttributeSet attrs) {
         super(context, attrs);
-        this.setInputType(this.getInputType() & (this.getInputType() ^ InputType.TYPE_TEXT_FLAG_AUTO_COMPLETE));
+        setInputType(getInputType() & (getInputType() ^ InputType.TYPE_TEXT_FLAG_AUTO_COMPLETE));
     }
 
     public VectorAutoCompleteTextView(Context context, AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
-        this.setInputType(this.getInputType() & (this.getInputType() ^ InputType.TYPE_TEXT_FLAG_AUTO_COMPLETE));
+        setInputType(getInputType() & (getInputType() ^ InputType.TYPE_TEXT_FLAG_AUTO_COMPLETE));
     }
 
     /**
@@ -225,8 +225,8 @@ public class VectorAutoCompleteTextView extends AppCompatMultiAutoCompleteTextVi
         // fix a samsung keyboard issue
         // "Joh" -> user selects "John" -> "John :" -> the user taps h -> "John : Johh"
         // by this way, the predictive texts list seems being deleted
-        this.setInputType(this.getInputType() & (this.getInputType() & (~InputType.TYPE_TEXT_FLAG_AUTO_COMPLETE)));
-        this.setInputType(this.getInputType() & (this.getInputType() ^ InputType.TYPE_TEXT_FLAG_AUTO_COMPLETE));
+        setInputType(getInputType() & (getInputType() & (~InputType.TYPE_TEXT_FLAG_AUTO_COMPLETE)));
+        setInputType(getInputType() & (getInputType() ^ InputType.TYPE_TEXT_FLAG_AUTO_COMPLETE));
     }
 
     @Override

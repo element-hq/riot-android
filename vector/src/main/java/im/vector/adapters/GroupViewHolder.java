@@ -1,5 +1,6 @@
 /*
  * Copyright 2017 Vector Creations Ltd
+ * Copyright 2018 New Vector Ltd
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -72,7 +73,11 @@ public class GroupViewHolder extends RecyclerView.ViewHolder {
      * @param isInvitation            true if it is an invitation
      * @param moreGroupActionListener the more actions listener
      */
-    public void populateViews(final Context context, final MXSession session, final Group group, final AbsAdapter.GroupInvitationListener invitationListener, final boolean isInvitation,
+    public void populateViews(final Context context,
+                              final MXSession session,
+                              final Group group,
+                              final AbsAdapter.GroupInvitationListener invitationListener,
+                              final boolean isInvitation,
                               final AbsAdapter.MoreGroupActionListener moreGroupActionListener) {
         // sanity check
         if (null == group) {

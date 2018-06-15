@@ -43,4 +43,7 @@ before_script:
   - /bin/sh ./set_debug_env.sh
 
 # Just build the project for now
-script: ./gradlew clean lintAppRelease assembleAppRelease --stacktrace
+script:
+  - ./gradlew clean lintAppRelease assembleAppRelease --stacktrace
+  - ./tools/check/check_code_quality.sh
+  - ./tools/travis/check_pr.sh

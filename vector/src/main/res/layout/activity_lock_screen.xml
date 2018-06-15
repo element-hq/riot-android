@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/lock_main_layout"
     android:layout_width="200dp"
     android:layout_height="wrap_content"
@@ -13,10 +14,10 @@
         android:paddingLeft="5dp"
         android:paddingRight="5dp"
         android:paddingTop="5dp"
-        android:text="Room name"
         android:textAppearance="?android:attr/textAppearanceMedium"
         android:textColor="?attr/riot_primary_text_color"
-        android:textStyle="bold" />
+        android:textStyle="bold"
+        tools:text="Room name" />
 
     <View
         android:id="@+id/lock_screen_separator"
@@ -31,10 +32,10 @@
         android:paddingLeft="5dp"
         android:paddingRight="5dp"
         android:paddingTop="5dp"
-        android:text="SENDER"
         android:textAppearance="?android:attr/textAppearanceSmall"
         android:textColor="?attr/riot_primary_text_color"
-        android:textStyle="bold" />
+        android:textStyle="bold"
+        tools:text="SENDER" />
 
     <TextView
         android:id="@+id/lock_screen_body"
@@ -43,10 +44,10 @@
         android:layout_marginTop="10dp"
         android:paddingLeft="5dp"
         android:paddingRight="5dp"
-        android:text="A message body goes here"
         android:textAppearance="?android:attr/textAppearanceSmall"
         android:textColor="?attr/message_text_color"
-        android:textIsSelectable="false" />
+        android:textIsSelectable="false"
+        tools:text="A message body goes here" />
 
     <LinearLayout
         android:id="@+id/lock_screen_chat_send_area"
@@ -61,8 +62,8 @@
             android:layout_height="wrap_content"
             android:layout_gravity="left"
             android:layout_weight="1"
+            android:hint="@string/lock_screen_hint"
             android:inputType="textCapSentences"
-            android:hint="Type here..."
             android:textAppearance="?android:attr/textAppearanceMedium" />
 
         <ImageButton

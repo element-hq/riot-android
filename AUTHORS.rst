@@ -39,3 +39,6 @@ Chris Tarazi <tarazichris at gmail.com>
  
 Safa AlFulaij <safa1996alfulaij at gmail.com>
  * PR #1934: Fix some plural messages.
+
+Isa Cichon <isa4 at posteo.net>
+ *  Add spacing to device keys

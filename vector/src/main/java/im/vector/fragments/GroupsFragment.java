@@ -1,5 +1,6 @@
 /*
  * Copyright 2017 Vector Creations Ltd
+ * Copyright 2018 New Vector Ltd
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,13 +18,13 @@
 package im.vector.fragments;
 
 import android.annotation.SuppressLint;
-import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.content.ContextCompat;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -54,12 +55,10 @@ import org.matrix.androidsdk.util.Log;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
-
 import java.util.List;
 
 import butterknife.BindView;
 import im.vector.R;
-import im.vector.activity.CommonActivityUtils;
 import im.vector.activity.VectorGroupDetailsActivity;
 import im.vector.adapters.AbsAdapter;
 import im.vector.adapters.GroupAdapter;
@@ -330,13 +329,13 @@ public class GroupsFragment extends AbsHomeFragment {
         final Context context = getActivity();
         final PopupMenu popup;
 
-        if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
             popup = new PopupMenu(context, actionView, Gravity.END);
         } else {
             popup = new PopupMenu(context, actionView);
         }
         popup.getMenuInflater().inflate(R.menu.vector_home_group_settings, popup.getMenu());
-        CommonActivityUtils.tintMenuIcons(popup.getMenu(), ThemeUtils.getColor(context, R.attr.settings_icon_tint_color));
+        ThemeUtils.INSTANCE.tintMenuIcons(popup.getMenu(), ThemeUtils.INSTANCE.getColor(context, R.attr.settings_icon_tint_color));
 
 
         popup.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
@@ -375,9 +374,7 @@ public class GroupsFragment extends AbsHomeFragment {
 
     @Override
     public boolean onFabClick() {
-        AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(getActivity());
         View dialogView = getActivity().getLayoutInflater().inflate(R.layout.dialog_create_group, null);
-        alertDialogBuilder.setView(dialogView);
 
         final EditText nameEditText = dialogView.findViewById(R.id.community_name_edit_text);
         final EditText idEditText = dialogView.findViewById(R.id.community_id_edit_text);
@@ -385,8 +382,8 @@ public class GroupsFragment extends AbsHomeFragment {
         TextView hsNameView = dialogView.findViewById(R.id.community_hs_name_text_view);
         hsNameView.setText(":" + hostName);
 
-        // set dialog message
-        alertDialogBuilder
+        AlertDialog alertDialog = new AlertDialog.Builder(getActivity())
+                .setView(dialogView)
                 .setCancelable(false)
                 .setTitle(R.string.create_community)
                 .setPositiveButton(R.string.create, new DialogInterface.OnClickListener() {
@@ -437,13 +434,8 @@ public class GroupsFragment extends AbsHomeFragment {
                     public void onClick(DialogInterface dialog, int which) {
                         dialog.dismiss();
                     }
-                });
-
-        // create alert dialog
-        AlertDialog alertDialog = alertDialogBuilder.create();
-
-        // show it
-        alertDialog.show();
+                })
+                .show();
 
         final Button createButton = alertDialog.getButton(AlertDialog.BUTTON_POSITIVE);
 

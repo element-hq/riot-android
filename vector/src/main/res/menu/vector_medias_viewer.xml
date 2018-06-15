@@ -4,12 +4,12 @@
     tools:context="org.matrix.vector.activity.RoomActivity">
 
     <item android:id="@+id/ic_action_share"
-        android:title="Share"
+        android:title="@string/share"
         android:icon="@drawable/ic_share_white"
         app:showAsAction="always" />
 
     <item android:id="@+id/ic_action_download"
-        android:title="Download"
+        android:title="@string/download"
         android:icon="@drawable/ic_file_download_white"
         app:showAsAction="always" />
 </menu>

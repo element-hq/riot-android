@@ -1,5 +1,6 @@
 /*
  * Copyright 2016 OpenMarket Ltd
+ * Copyright 2018 New Vector Ltd
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -24,14 +25,14 @@ import android.content.Intent;
 import android.net.Uri;
 import android.support.v4.content.LocalBroadcastManager;
 import android.text.TextUtils;
-
-import org.matrix.androidsdk.util.Log;
+import android.widget.Toast;
 
 import org.matrix.androidsdk.MXSession;
 import org.matrix.androidsdk.data.Room;
 import org.matrix.androidsdk.data.RoomPreviewData;
 import org.matrix.androidsdk.rest.callback.ApiCallback;
 import org.matrix.androidsdk.rest.model.MatrixError;
+import org.matrix.androidsdk.util.Log;
 
 import java.net.URLDecoder;
 import java.util.ArrayList;
@@ -93,7 +94,8 @@ public class VectorUniversalLinkReceiver extends BroadcastReceiver {
     public static final String ULINK_GUEST_USER_ID_KEY = "guest_user_id";*/
 
     // supported paths list
-    private static final List<String> mSupportedVectorLinkPaths = Arrays.asList(SUPPORTED_PATH_BETA, SUPPORTED_PATH_DEVELOP, SUPPORTED_PATH_APP, SUPPORTED_PATH_STAGING);
+    private static final List<String> mSupportedVectorLinkPaths
+            = Arrays.asList(SUPPORTED_PATH_BETA, SUPPORTED_PATH_DEVELOP, SUPPORTED_PATH_APP, SUPPORTED_PATH_STAGING);
 
     // the session
     private MXSession mSession;
@@ -155,7 +157,8 @@ public class VectorUniversalLinkReceiver extends BroadcastReceiver {
             }
 
             if (null != intentUri) {
-                Log.d(LOG_TAG, "## onCreate() intentUri - host=" + intentUri.getHost() + " path=" + intentUri.getPath() + " queryParams=" + intentUri.getQuery());
+                Log.d(LOG_TAG, "## onCreate() intentUri - host=" + intentUri.getHost()
+                        + " path=" + intentUri.getPath() + " queryParams=" + intentUri.getQuery());
                 //intentUri.getEncodedSchemeSpecificPart() = //vector.im/beta/  intentUri.getSchemeSpecificPart() = //vector.im/beta/
 
                 HashMap<String, String> params = parseUniversalLink(intentUri);
@@ -346,7 +349,7 @@ public class VectorUniversalLinkReceiver extends BroadcastReceiver {
                 }
 
                 private void onError(String errorMessage) {
-                    CommonActivityUtils.displayToast(aContext, errorMessage);
+                    Toast.makeText(aContext, errorMessage, Toast.LENGTH_SHORT).show();
                     stopHomeActivitySpinner(aContext);
                 }
 

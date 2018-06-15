@@ -122,7 +122,7 @@ public class AdapterSection<T> {
      */
     void formatTitle(final String titleToFormat) {
         SpannableString spannableString = new SpannableString(titleToFormat.toUpperCase(VectorApp.getApplicationLocale()));
-        spannableString.setSpan(new ForegroundColorSpan(ThemeUtils.getColor(mContext, R.attr.list_header_subtext_color)),
+        spannableString.setSpan(new ForegroundColorSpan(ThemeUtils.INSTANCE.getColor(mContext, R.attr.list_header_subtext_color)),
                 mTitle.length(), titleToFormat.length(), 0);
         mTitleFormatted = spannableString;
     }

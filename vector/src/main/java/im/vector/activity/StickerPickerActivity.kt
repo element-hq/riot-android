@@ -42,6 +42,8 @@ class StickerPickerActivity : AbstractWidgetActivity() {
      * IMPLEMENT METHODS
      * ========================================================================================== */
 
+    override fun getOtherThemes() = Pair(R.style.AppTheme_NoActionBar_Dark, R.style.AppTheme_NoActionBar_Black)
+
     override fun getLayoutRes() = R.layout.activity_choose_sticker
 
     override fun getTitleRes() = R.string.title_activity_choose_sticker
@@ -104,17 +106,10 @@ class StickerPickerActivity : AbstractWidgetActivity() {
      * MENU
      * ========================================================================================== */
 
-    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
-        menuInflater.inflate(R.menu.vector_choose_sticker, menu)
+    override fun getMenuRes() = R.menu.vector_choose_sticker
 
-        // TODO Maintenance: this should be done in the parent Activity
-        CommonActivityUtils.tintMenuIcons(menu, ThemeUtils.getColor(this, R.attr.icon_tint_on_dark_action_bar_color))
-
-        return true
-    }
-
-    override fun onOptionsItemSelected(item: MenuItem?): Boolean {
-        when (item?.itemId) {
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        when (item.itemId) {
             R.id.menu_settings -> {
                 openIntegrationManager(mWidgetId, "type_$WIDGET_NAME")
 

@@ -173,4 +173,9 @@ public interface IMessagesAdapterActionsListener {
      * @param deviceInfo the deviceinfo
      */
     void onE2eIconClick(final Event event, final MXDeviceInfo deviceInfo);
+
+    /**
+     * The event for which the user asked again for the key is now decrypted
+     */
+    void onEventDecrypted();
 }

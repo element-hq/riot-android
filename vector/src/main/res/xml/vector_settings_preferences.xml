@@ -268,11 +268,6 @@
             android:title="@string/settings_labs_create_conference_with_jitsi" />
 
         <im.vector.preference.VectorSwitchPreference
-            android:defaultValue="true"
-            android:key="SETTINGS_USE_MATRIX_APPS_PREFERENCE_KEY"
-            android:title="@string/settings_labs_matrix_apps" />
-
-        <im.vector.preference.VectorSwitchPreference
             android:key="SETTINGS_USE_NATIVE_CAMERA_PREFERENCE_KEY"
             android:title="@string/settings_labs_native_camera" />
 

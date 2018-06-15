@@ -31,7 +31,6 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
-import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.bumptech.glide.request.RequestOptions;
 import com.google.gson.JsonElement;
 
@@ -41,12 +40,12 @@ import org.matrix.androidsdk.listeners.IMXMediaDownloadListener;
 import org.matrix.androidsdk.listeners.IMXMediaUploadListener;
 import org.matrix.androidsdk.listeners.MXMediaDownloadListener;
 import org.matrix.androidsdk.listeners.MXMediaUploadListener;
-import org.matrix.androidsdk.rest.model.crypto.EncryptedFileInfo;
 import org.matrix.androidsdk.rest.model.Event;
+import org.matrix.androidsdk.rest.model.MatrixError;
+import org.matrix.androidsdk.rest.model.crypto.EncryptedFileInfo;
 import org.matrix.androidsdk.rest.model.message.FileMessage;
 import org.matrix.androidsdk.rest.model.message.ImageInfo;
 import org.matrix.androidsdk.rest.model.message.ImageMessage;
-import org.matrix.androidsdk.rest.model.MatrixError;
 import org.matrix.androidsdk.rest.model.message.Message;
 import org.matrix.androidsdk.rest.model.message.StickerMessage;
 import org.matrix.androidsdk.rest.model.message.VideoInfo;
@@ -76,7 +75,12 @@ class VectorMessagesAdapterMediasHelper {
     private final int mNotSentMessageTextColor;
     private final int mDefaultMessageTextColor;
 
-    VectorMessagesAdapterMediasHelper(Context context, MXSession session, int maxImageWidth, int maxImageHeight, int notSentMessageTextColor, int defaultMessageTextColor) {
+    VectorMessagesAdapterMediasHelper(Context context,
+                                      MXSession session,
+                                      int maxImageWidth,
+                                      int maxImageHeight,
+                                      int notSentMessageTextColor,
+                                      int defaultMessageTextColor) {
         mContext = context;
         mSession = session;
         mMaxImageWidth = maxImageWidth;
@@ -243,7 +247,9 @@ class VectorMessagesAdapterMediasHelper {
             VideoInfo videoinfo = videoMessage.info;
 
             if (null != videoinfo) {
-                if ((null != videoMessage.info.thumbnail_info) && (null != videoMessage.info.thumbnail_info.w) && (null != videoMessage.info.thumbnail_info.h)) {
+                if (null != videoMessage.info.thumbnail_info
+                        && null != videoMessage.info.thumbnail_info.w
+                        && null != videoMessage.info.thumbnail_info.h) {
                     thumbWidth = videoMessage.info.thumbnail_info.w;
                     thumbHeight = videoMessage.info.thumbnail_info.h;
                 }
@@ -266,7 +272,9 @@ class VectorMessagesAdapterMediasHelper {
         // the thumbnails are always pre - rotated
         String downloadId = null;
         if (!event.getType().equals(Event.EVENT_TYPE_STICKER)) {
-            downloadId = mMediasCache.loadBitmap(mSession.getHomeServerConfig(), imageView, thumbUrl, maxImageWidth, maxImageHeight, rotationAngle, ExifInterface.ORIENTATION_UNDEFINED, "image/jpeg", encryptedFileInfo);
+            downloadId = mMediasCache.loadBitmap(mSession.getHomeServerConfig(),
+                    imageView, thumbUrl, maxImageWidth, maxImageHeight, rotationAngle,
+                    ExifInterface.ORIENTATION_UNDEFINED, "image/jpeg", encryptedFileInfo);
         }
 
         // test if the media is downloading when the thumbnail is not downloading
@@ -431,7 +439,9 @@ class VectorMessagesAdapterMediasHelper {
         if (!mSession.getMyUserId().equals(event.getSender()) || event.isUndeliverable() || !hasContentInfo) {
             uploadProgressLayout.setVisibility(View.GONE);
             uploadSpinner.setVisibility(View.GONE);
-            showUploadFailure(convertView, isVideoMessage ? VectorMessagesAdapter.ROW_TYPE_VIDEO : VectorMessagesAdapter.ROW_TYPE_IMAGE, event.isUndeliverable());
+            showUploadFailure(convertView,
+                    isVideoMessage ? VectorMessagesAdapter.ROW_TYPE_VIDEO : VectorMessagesAdapter.ROW_TYPE_IMAGE,
+                    event.isUndeliverable());
             return;
         }
 

@@ -39,6 +39,8 @@ class SimpleWebViewActivity : RiotAppCompatActivity() {
      * Life cycle
      * ========================================================================================== */
 
+    override fun getOtherThemes() = Pair(R.style.AppTheme_NoActionBar_Dark, R.style.AppTheme_NoActionBar_Black)
+
     override fun getLayoutRes() = R.layout.activity_simple_web_view
 
     override fun initUiAndData() {
@@ -88,6 +90,18 @@ class SimpleWebViewActivity : RiotAppCompatActivity() {
         }
 
         webView.loadUrl(url)
+    }
+
+    /* ==========================================================================================
+     * UI event
+     * ========================================================================================== */
+
+    override fun onBackPressed() {
+        if (webView.canGoBack()) {
+            webView.goBack()
+        } else {
+            super.onBackPressed()
+        }
     }
 
     /* ==========================================================================================

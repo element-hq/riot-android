@@ -1,6 +1,7 @@
 /**
  * Copyright 2015 Google Inc. All Rights Reserved.
  * Copyright 2017 Vector Creations Ltd
+ * Copyright 2018 New Vector Ltd
  * <p>
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,15 +18,14 @@
 
 package im.vector.gcm;
 
-import org.matrix.androidsdk.data.Room;
-import org.matrix.androidsdk.util.Log;
-
 import com.google.firebase.messaging.FirebaseMessagingService;
 import com.google.firebase.messaging.RemoteMessage;
 import com.google.gson.JsonParser;
 
 import org.matrix.androidsdk.MXSession;
+import org.matrix.androidsdk.data.Room;
 import org.matrix.androidsdk.rest.model.Event;
+import org.matrix.androidsdk.util.Log;
 
 import java.util.Collection;
 import java.util.Map;
@@ -156,7 +156,8 @@ public class MatrixGcmListenerService extends FirebaseMessagingService {
                         for (MXSession session : sessions) {
                             if (session.getDataHandler().getStore().isReady()) {
                                 if (null != session.getDataHandler().getStore().getEvent(eventId, roomId)) {
-                                    Log.e(LOG_TAG, "## onMessageReceivedInternal() : ignore the event " + eventId + " in room " + roomId + "because it is already known");
+                                    Log.e(LOG_TAG, "## onMessageReceivedInternal() : ignore the event " + eventId
+                                            + " in room " + roomId + "because it is already known");
                                     return;
                                 }
                             }

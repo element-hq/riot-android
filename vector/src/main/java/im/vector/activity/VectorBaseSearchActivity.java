@@ -17,7 +17,6 @@
 
 package im.vector.activity;
 
-import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -26,6 +25,7 @@ import android.content.pm.ResolveInfo;
 import android.speech.RecognizerIntent;
 import android.support.annotation.CallSuper;
 import android.support.v7.app.ActionBar;
+import android.support.v7.app.AlertDialog;
 import android.text.TextUtils;
 import android.text.TextWatcher;
 import android.view.KeyEvent;
@@ -37,6 +37,7 @@ import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.TextView;
 
+import org.jetbrains.annotations.NotNull;
 import org.matrix.androidsdk.util.Log;
 
 import java.util.ArrayList;
@@ -45,7 +46,7 @@ import java.util.Timer;
 import java.util.TimerTask;
 
 import im.vector.R;
-import im.vector.util.ThemeUtils;
+import kotlin.Pair;
 
 /**
  * This class defines a base class to manage search in action bar
@@ -64,6 +65,12 @@ public abstract class VectorBaseSearchActivity extends MXCActionBarActivity {
 
     private MenuItem mMicroMenuItem;
     private MenuItem mClearEditTextMenuItem;
+
+    @NotNull
+    @Override
+    public Pair getOtherThemes() {
+        return new Pair(R.style.SearchesAppTheme_Dark, R.style.SearchesAppTheme_Black);
+    }
 
     @Override
     @CallSuper
@@ -84,7 +91,7 @@ public abstract class VectorBaseSearchActivity extends MXCActionBarActivity {
 
         mPatternToSearchEditText.addTextChangedListener(new TextWatcher() {
             public void afterTextChanged(android.text.Editable s) {
-                VectorBaseSearchActivity.this.refreshMenuEntries();
+                refreshMenuEntries();
                 final String fPattern = mPatternToSearchEditText.getText().toString();
 
                 Timer timer = new Timer();
@@ -95,11 +102,11 @@ public abstract class VectorBaseSearchActivity extends MXCActionBarActivity {
                     timer.schedule(new TimerTask() {
                         @Override
                         public void run() {
-                            VectorBaseSearchActivity.this.runOnUiThread(new Runnable() {
+                            runOnUiThread(new Runnable() {
                                 @Override
                                 public void run() {
                                     if (TextUtils.equals(mPatternToSearchEditText.getText().toString(), fPattern)) {
-                                        VectorBaseSearchActivity.this.runOnUiThread(new Runnable() {
+                                        runOnUiThread(new Runnable() {
                                             @Override
                                             public void run() {
                                                 onPatternUpdate(true);
@@ -113,11 +120,11 @@ public abstract class VectorBaseSearchActivity extends MXCActionBarActivity {
                 } catch (Throwable throwable) {
                     Log.e(LOG_TAG, "## failed to start the timer " + throwable.getMessage());
 
-                    VectorBaseSearchActivity.this.runOnUiThread(new Runnable() {
+                    runOnUiThread(new Runnable() {
                         @Override
                         public void run() {
                             if (TextUtils.equals(mPatternToSearchEditText.getText().toString(), fPattern)) {
-                                VectorBaseSearchActivity.this.runOnUiThread(new Runnable() {
+                                runOnUiThread(new Runnable() {
                                     @Override
                                     public void run() {
                                         onPatternUpdate(true);
@@ -205,15 +212,21 @@ public abstract class VectorBaseSearchActivity extends MXCActionBarActivity {
     }
 
     @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
+    public int getMenuRes() {
+        return R.menu.vector_searches;
+    }
+
+    @Override
+    public int getMenuTint() {
+        return R.attr.icon_tint_on_light_action_bar_color;
+    }
+
+    @Override
+    public boolean onPrepareOptionsMenu(Menu menu) {
         // the application is in a weird state
         if (CommonActivityUtils.shouldRestartApp(this)) {
             return false;
         }
-
-        // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.vector_searches, menu);
-        CommonActivityUtils.tintMenuIcons(menu, ThemeUtils.getColor(this, R.attr.icon_tint_on_light_action_bar_color));
 
         mMicroMenuItem = menu.findItem(R.id.ic_action_speak_to_search);
         mClearEditTextMenuItem = menu.findItem(R.id.ic_action_clear_search);
@@ -225,16 +238,16 @@ public abstract class VectorBaseSearchActivity extends MXCActionBarActivity {
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        int id = item.getItemId();
-
-        if (id == R.id.ic_action_speak_to_search) {
-            Intent intent = new Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH);
-            intent.putExtra(RecognizerIntent.EXTRA_LANGUAGE_MODEL, RecognizerIntent.LANGUAGE_MODEL_FREE_FORM);
-            startActivityForResult(intent, SPEECH_REQUEST_CODE);
-
-        } else if (id == R.id.ic_action_clear_search) {
-            mPatternToSearchEditText.setText("");
-            onPatternUpdate(false);
+        switch (item.getItemId()) {
+            case R.id.ic_action_speak_to_search:
+                Intent intent = new Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH);
+                intent.putExtra(RecognizerIntent.EXTRA_LANGUAGE_MODEL, RecognizerIntent.LANGUAGE_MODEL_FREE_FORM);
+                startActivityForResult(intent, SPEECH_REQUEST_CODE);
+                return true;
+            case R.id.ic_action_clear_search:
+                mPatternToSearchEditText.setText("");
+                onPatternUpdate(false);
+                return true;
         }
 
         return super.onOptionsItemSelected(item);
@@ -255,23 +268,21 @@ public abstract class VectorBaseSearchActivity extends MXCActionBarActivity {
                 onPatternUpdate(false);
             } else if (matches.size() > 1) {
                 // if they are several matches, let the user chooses the right one.
-                AlertDialog.Builder builder = new AlertDialog.Builder(this);
                 String[] mes = matches.toArray(new String[matches.size()]);
 
-                builder.setItems(mes, new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int item) {
-                        mPatternToSearchEditText.setText(matches.get(item));
-                        VectorBaseSearchActivity.this.runOnUiThread(new Runnable() {
-                            @Override
-                            public void run() {
-                                onPatternUpdate(false);
+                new AlertDialog.Builder(this)
+                        .setItems(mes, new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int item) {
+                                mPatternToSearchEditText.setText(matches.get(item));
+                                runOnUiThread(new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        onPatternUpdate(false);
+                                    }
+                                });
                             }
-                        });
-                    }
-                });
-
-                AlertDialog alert = builder.create();
-                alert.show();
+                        })
+                        .show();
             }
         }
         super.onActivityResult(requestCode, resultCode, data);

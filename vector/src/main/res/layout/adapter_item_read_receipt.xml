@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 
-<RelativeLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/internal_container"
     android:background="?attr/riot_primary_background_color"
     android:layout_width="match_parent"
@@ -37,7 +37,7 @@
             android:textSize="16sp"
             android:fontFamily="sans-serif-regular"
             android:textColor="?attr/riot_primary_text_color"
-            android:text="Some Person's Name" />
+            tools:text="Some Person's Name" />
 
         <!-- keep singleLine="true" because maxLines="1" truncation is not the expected one.-->
         <TextView
@@ -49,7 +49,7 @@
             android:layout_marginTop="3dp"
             android:layout_marginRight="26dp"
             android:textColor="?attr/default_text_light_color"
-            android:text="A date here" />
+            tools:text="A date here" />
     </LinearLayout>
 
     <View

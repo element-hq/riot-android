@@ -1,7 +1,7 @@
 /*
  * Copyright 2016 OpenMarket Ltd
  * Copyright 2017 Vector Creations Ltd
- * Copyright 2018 New Vector Ltd 
+ * Copyright 2018 New Vector Ltd
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -19,8 +19,8 @@
 package im.vector;
 
 import android.app.Activity;
-import android.app.AlertDialog;
 import android.content.DialogInterface;
+import android.support.v7.app.AlertDialog;
 import android.text.TextUtils;
 
 import org.matrix.androidsdk.MXSession;
@@ -202,7 +202,7 @@ public class KeyRequestHandler {
     /**
      * The Key share dialog is closed.
      *
-     * @param share true to share the key.
+     * @param share          true to share the key.
      * @param ignoreRequests true to make the crypto module forget all keyshare requests coming from the current user's device.
      */
     private void onDisplayKeyShareDialogClose(boolean share, boolean ignoreRequests) {
@@ -221,8 +221,7 @@ public class KeyRequestHandler {
                         }
                     }
                 }
-            }
-            else if (ignoreRequests) {
+            } else if (ignoreRequests) {
                 for (IncomingRoomKeyRequest req : requests) {
                     if (null != req.mIgnore) {
                         try {
@@ -274,12 +273,13 @@ public class KeyRequestHandler {
                 }
 
                 if (deviceInfo.isUnknown()) {
-                    session.getCrypto().setDeviceVerification(MXDeviceInfo.DEVICE_VERIFICATION_UNVERIFIED, mCurrentDevice, mCurrentUser, new SimpleApiCallback<Void>() {
-                        @Override
-                        public void onSuccess(Void info) {
-                            displayKeyShareDialog(session, deviceInfo, true);
-                        }
-                    });
+                    session.getCrypto()
+                            .setDeviceVerification(MXDeviceInfo.DEVICE_VERIFICATION_UNVERIFIED, mCurrentDevice, mCurrentUser, new SimpleApiCallback<Void>() {
+                                @Override
+                                public void onSuccess(Void info) {
+                                    displayKeyShareDialog(session, deviceInfo, true);
+                                }
+                            });
                 } else {
                     displayKeyShareDialog(session, deviceInfo, false);
                 }
@@ -325,13 +325,11 @@ public class KeyRequestHandler {
         final Activity activity = VectorApp.getCurrentActivity();
 
         String deviceName = TextUtils.isEmpty(deviceInfo.displayName()) ? deviceInfo.deviceId : deviceInfo.displayName();
-        String dialogText = wasNewDevice ? activity.getString(R.string.you_added_a_new_device, deviceName) : activity.getString(R.string.your_unverified_device_requesting, deviceName);
+        String dialogText = wasNewDevice ? activity.getString(R.string.you_added_a_new_device, deviceName)
+                : activity.getString(R.string.your_unverified_device_requesting, deviceName);
 
-        AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(activity);
-        alertDialogBuilder.setMessage(dialogText);
-
-        // set dialog message
-        alertDialogBuilder
+        mAlertDialog = new AlertDialog.Builder(activity)
+                .setMessage(dialogText)
                 .setCancelable(false)
                 .setNegativeButton(R.string.ignore_request, new DialogInterface.OnClickListener() {
                     @Override
@@ -364,20 +362,13 @@ public class KeyRequestHandler {
                                     }
                                 });
                             }
-                        });
-
-
-        // create alert dialog
-        mAlertDialog = alertDialogBuilder.create();
-
-        mAlertDialog.setOnCancelListener(new DialogInterface.OnCancelListener() {
-            @Override
-            public void onCancel(DialogInterface dialogInterface) {
-                onDisplayKeyShareDialogClose(false, true);
-            }
-        });
-
-        // show it
-        mAlertDialog.show();
+                        })
+                .setOnCancelListener(new DialogInterface.OnCancelListener() {
+                    @Override
+                    public void onCancel(DialogInterface dialogInterface) {
+                        onDisplayKeyShareDialogClose(false, true);
+                    }
+                })
+                .show();
     }
 }
