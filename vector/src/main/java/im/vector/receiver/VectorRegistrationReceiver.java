@@ -30,6 +30,7 @@ import java.net.URLDecoder;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 import im.vector.activity.LoginActivity;
@@ -86,11 +87,11 @@ public class VectorRegistrationReceiver extends BroadcastReceiver {
                 // test if URI path is allowed
                 if (SUPPORTED_PATH_ACCOUNT_EMAIL_VALIDATION.equals(intentUri.getPath())) {
                     // account registration URL set in a mail:
-                    HashMap<String, String> mailRegParams = parseMailRegistrationLink(intentUri);
+                    Map<String, String> mailRegParams = parseMailRegistrationLink(intentUri);
 
                     // build Login intent
                     Intent intent = new Intent(aContext, LoginActivity.class);
-                    intent.putExtra(EXTRA_EMAIL_VALIDATION_PARAMS, mailRegParams);
+                    intent.putExtra(EXTRA_EMAIL_VALIDATION_PARAMS, (HashMap) mailRegParams);
                     intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
                     aContext.startActivity(intent);
                 } else {
@@ -113,8 +114,8 @@ public class VectorRegistrationReceiver extends BroadcastReceiver {
      * @param uri the uri to parse
      * @return the parameters extracted from the the URI.
      */
-    public static HashMap<String, String> parseMailRegistrationLink(Uri uri) {
-        HashMap<String, String> mapParams = new HashMap<>();
+    public static Map<String, String> parseMailRegistrationLink(Uri uri) {
+        Map<String, String> mapParams = new HashMap<>();
 
         try {
             // sanity check

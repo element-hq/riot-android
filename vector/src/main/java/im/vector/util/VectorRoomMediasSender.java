@@ -124,7 +124,7 @@ public class VectorRoomMediasSender {
      *
      * @param sharedDataItems the media URIs
      */
-    public void sendMedias(final ArrayList<RoomMediaMessage> sharedDataItems) {
+    public void sendMedias(final List<RoomMediaMessage> sharedDataItems) {
         if (null != sharedDataItems) {
             mSharedDataItems = new ArrayList<>(sharedDataItems);
             sendMedias();
@@ -431,7 +431,7 @@ public class VectorRoomMediasSender {
          * @return the image sizes list.
          */
         public List<ImageSize> getImageSizesList() {
-            ArrayList<ImageSize> imagesSizesList = new ArrayList<>();
+            List<ImageSize> imagesSizesList = new ArrayList<>();
 
             if (null != mFullImageSize) {
                 imagesSizesList.add(mFullImageSize);
@@ -459,7 +459,7 @@ public class VectorRoomMediasSender {
          * @return the list of compression description
          */
         public List<String> getImageSizesDescription(Context context) {
-            ArrayList<String> imagesSizesDescriptionList = new ArrayList<>();
+            List<String> imagesSizesDescriptionList = new ArrayList<>();
 
             if (null != mFullImageSize) {
                 imagesSizesDescriptionList.add(context.getString(R.string.compression_opt_list_original));
@@ -590,7 +590,7 @@ public class VectorRoomMediasSender {
      * @param imageSize       the image size.
      * @param fileSize        the file size (in bytes)
      */
-    private static void addDialogEntry(Context context, ArrayList<String> textsList, String descriptionText, ImageSize imageSize, int fileSize) {
+    private static void addDialogEntry(Context context, List<String> textsList, String descriptionText, ImageSize imageSize, int fileSize) {
         if ((null != imageSize) && (null != textsList)) {
             textsList.add(descriptionText + ": "
                     + android.text.format.Formatter.formatFileSize(context, fileSize) + " (" + imageSize.mWidth + "x" + imageSize.mHeight + ")");
@@ -606,7 +606,7 @@ public class VectorRoomMediasSender {
      * @return the texts list to display
      */
     private static String[] getImagesCompressionTextsList(Context context, ImageCompressionSizes imageSizes, int imagefileSize) {
-        final ArrayList<String> textsList = new ArrayList<>();
+        final List<String> textsList = new ArrayList<>();
 
         addDialogEntry(context, textsList, context.getString(R.string.compression_opt_list_original), imageSizes.mFullImageSize,
                 imagefileSize);

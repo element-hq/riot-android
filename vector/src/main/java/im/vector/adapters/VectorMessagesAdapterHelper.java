@@ -77,7 +77,6 @@ import im.vector.VectorApp;
 import im.vector.listeners.IMessagesAdapterActionsListener;
 import im.vector.util.MatrixLinkMovementMethod;
 import im.vector.util.MatrixURLSpan;
-import im.vector.util.PreferencesManager;
 import im.vector.util.RiotEventDisplay;
 import im.vector.util.ThemeUtils;
 import im.vector.util.VectorImageGetter;
@@ -245,7 +244,7 @@ class VectorMessagesAdapterHelper {
 
             groupFlairView.setVisibility(View.VISIBLE);
 
-            ArrayList<ImageView> imageViews = new ArrayList<>();
+            List<ImageView> imageViews = new ArrayList<>();
 
             imageViews.add((ImageView) (groupFlairView.findViewById(R.id.message_avatar_group_1).findViewById(R.id.avatar_img)));
             imageViews.add((ImageView) (groupFlairView.findViewById(R.id.message_avatar_group_2).findViewById(R.id.avatar_img)));
@@ -696,7 +695,7 @@ class VectorMessagesAdapterHelper {
 
         avatarsListView.setVisibility(View.VISIBLE);
 
-        ArrayList<View> imageViews = new ArrayList<>();
+        List<View> imageViews = new ArrayList<>();
 
         imageViews.add(avatarsListView.findViewById(R.id.message_avatar_receipt_1).findViewById(R.id.avatar_img));
         imageViews.add(avatarsListView.findViewById(R.id.message_avatar_receipt_2).findViewById(R.id.avatar_img));
@@ -1045,7 +1044,7 @@ class VectorMessagesAdapterHelper {
     // HTML management
     //================================================================================
 
-    private final HashMap<String, String> mHtmlMap = new HashMap<>();
+    private final Map<String, String> mHtmlMap = new HashMap<>();
 
     /**
      * Retrieves the sanitised html.
@@ -1093,7 +1092,7 @@ class VectorMessagesAdapterHelper {
         String html = htmlString;
         Matcher matcher = mHtmlPatter.matcher(htmlString);
 
-        HashSet<String> tagsToRemove = new HashSet<>();
+        Set<String> tagsToRemove = new HashSet<>();
 
         while (matcher.find()) {
 

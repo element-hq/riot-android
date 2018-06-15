@@ -62,6 +62,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Timer;
 import java.util.TimerTask;
 
@@ -93,7 +94,7 @@ public class VectorRoomDetailsMembersFragment extends VectorBaseFragment {
     private View mProgressView;
     private VectorRoomDetailsMembersAdapter mAdapter;
     private ExpandableListView mParticipantsListView;
-    private HashMap<Integer, Boolean> mIsListViewGroupExpandedMap;
+    private Map<Integer, Boolean> mIsListViewGroupExpandedMap;
 
     private boolean mIsMultiSelectionMode;
     private MenuItem mRemoveMembersMenuItem;
@@ -393,7 +394,7 @@ public class VectorRoomDetailsMembersFragment extends VectorBaseFragment {
     @Override
     public void onSaveInstanceState(Bundle aOutState) {
         super.onSaveInstanceState(aOutState);
-        aOutState.putSerializable(CommonActivityUtils.KEY_GROUPS_EXPANDED_STATE, mIsListViewGroupExpandedMap);
+        aOutState.putSerializable(CommonActivityUtils.KEY_GROUPS_EXPANDED_STATE, (HashMap) mIsListViewGroupExpandedMap);
         aOutState.putString(CommonActivityUtils.KEY_SEARCH_PATTERN, mPatternValue);
         Log.d("RoomDetailsMembersFragment", "## onSaveInstanceState()");
     }
@@ -862,7 +863,7 @@ public class VectorRoomDetailsMembersFragment extends VectorBaseFragment {
 
             @Override
             public void onSelectUserId(String userId) {
-                ArrayList<String> userIds = mAdapter.getSelectedUserIds();
+                List<String> userIds = mAdapter.getSelectedUserIds();
 
                 if (0 != userIds.size()) {
                     setActivityTitle(userIds.size() + " " + getString(R.string.room_details_selected));

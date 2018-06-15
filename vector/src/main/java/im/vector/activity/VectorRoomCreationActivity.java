@@ -43,6 +43,7 @@ import java.util.Collection;
 import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import im.vector.R;
 import im.vector.adapters.ParticipantAdapterItem;
@@ -69,7 +70,7 @@ public class VectorRoomCreationActivity extends MXCActionBarActivity {
     private final ApiCallback<String> mCreateDirectMessageCallBack = new ApiCallback<String>() {
         @Override
         public void onSuccess(final String roomId) {
-            HashMap<String, Object> params = new HashMap<>();
+            Map<String, Object> params = new HashMap<>();
             params.put(VectorRoomActivity.EXTRA_MATRIX_ID, mSession.getMyUserId());
             params.put(VectorRoomActivity.EXTRA_ROOM_ID, roomId);
             params.put(VectorRoomActivity.EXTRA_EXPAND_ROOM_HEADER, true);
@@ -107,7 +108,7 @@ public class VectorRoomCreationActivity extends MXCActionBarActivity {
     };
 
     // displayed participants
-    private ArrayList<ParticipantAdapterItem> mParticipants = new ArrayList<>();
+    private List<ParticipantAdapterItem> mParticipants = new ArrayList<>();
 
     @Override
     public int getLayoutRes() {
@@ -174,7 +175,7 @@ public class VectorRoomCreationActivity extends MXCActionBarActivity {
     private void launchSearchActivity() {
         Intent intent = new Intent(VectorRoomCreationActivity.this, VectorRoomInviteMembersActivity.class);
         intent.putExtra(VectorRoomInviteMembersActivity.EXTRA_MATRIX_ID, mSession.getMyUserId());
-        intent.putExtra(VectorRoomInviteMembersActivity.EXTRA_HIDDEN_PARTICIPANT_ITEMS, mParticipants);
+        intent.putExtra(VectorRoomInviteMembersActivity.EXTRA_HIDDEN_PARTICIPANT_ITEMS, (ArrayList) mParticipants);
         startActivityForResult(intent, INVITE_USER_REQUEST_CODE);
     }
 
@@ -192,7 +193,7 @@ public class VectorRoomCreationActivity extends MXCActionBarActivity {
     public void onSaveInstanceState(Bundle savedInstanceState) {
         // Always call the superclass so it can save the view hierarchy state
         super.onSaveInstanceState(savedInstanceState);
-        savedInstanceState.putSerializable(PARTICIPANTS_LIST, mParticipants);
+        savedInstanceState.putSerializable(PARTICIPANTS_LIST, (ArrayList) mParticipants);
     }
 
     @Override
@@ -297,7 +298,7 @@ public class VectorRoomCreationActivity extends MXCActionBarActivity {
                         String existingRoomId = isDirectChatRoomAlreadyExist(mParticipants.get(0).mUserId);
 
                         if (null != existingRoomId) {
-                            HashMap<String, Object> params = new HashMap<>();
+                            Map<String, Object> params = new HashMap<>();
                             params.put(VectorRoomActivity.EXTRA_MATRIX_ID, mParticipants.get(0).mUserId);
                             params.put(VectorRoomActivity.EXTRA_ROOM_ID, existingRoomId);
                             CommonActivityUtils.goToRoomPage(this, mSession, params);
@@ -329,13 +330,13 @@ public class VectorRoomCreationActivity extends MXCActionBarActivity {
         if (null != mSession) {
             IMXStore store = mSession.getDataHandler().getStore();
 
-            HashMap<String, List<String>> directChatRoomsDict;
+            Map<String, List<String>> directChatRoomsDict;
 
             if (null != store.getDirectChatRoomsDict()) {
                 directChatRoomsDict = new HashMap<>(store.getDirectChatRoomsDict());
 
                 if (directChatRoomsDict.containsKey(aUserId)) {
-                    ArrayList<String> roomIdsList = new ArrayList<>(directChatRoomsDict.get(aUserId));
+                    List<String> roomIdsList = new ArrayList<>(directChatRoomsDict.get(aUserId));
 
                     if (0 != roomIdsList.size()) {
                         for (String roomId : roomIdsList) {
@@ -388,7 +389,7 @@ public class VectorRoomCreationActivity extends MXCActionBarActivity {
                 runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
-                        HashMap<String, Object> params = new HashMap<>();
+                        Map<String, Object> params = new HashMap<>();
                         params.put(VectorRoomActivity.EXTRA_MATRIX_ID, mSession.getMyUserId());
                         params.put(VectorRoomActivity.EXTRA_ROOM_ID, roomId);
                         CommonActivityUtils.goToRoomPage(VectorRoomCreationActivity.this, mSession, params);

@@ -49,6 +49,8 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
 import butterknife.BindView;
 import im.vector.PublicRoomsManager;
@@ -269,7 +271,7 @@ public class RoomsFragment extends AbsHomeFragment implements AbsHomeFragment.On
 
         // update/retrieve the complete summary list
         List<RoomSummary> roomSummaries = new ArrayList<>(store.getSummaries());
-        HashSet<String> lowPriorityRoomIds = new HashSet<>(mSession.roomIdsWithTag(RoomTag.ROOM_TAG_LOW_PRIORITY));
+        Set<String> lowPriorityRoomIds = new HashSet<>(mSession.roomIdsWithTag(RoomTag.ROOM_TAG_LOW_PRIORITY));
 
         mRooms.clear();
 
@@ -320,7 +322,7 @@ public class RoomsFragment extends AbsHomeFragment implements AbsHomeFragment.On
                     CommonActivityUtils.previewRoom(getActivity(), roomPreviewData);
                 } else {
                     Log.d(LOG_TAG, "manageRoom : open the room");
-                    HashMap<String, Object> params = new HashMap<>();
+                    Map<String, Object> params = new HashMap<>();
                     params.put(VectorRoomActivity.EXTRA_MATRIX_ID, mSession.getMyUserId());
                     params.put(VectorRoomActivity.EXTRA_ROOM_ID, publicRoom.roomId);
 

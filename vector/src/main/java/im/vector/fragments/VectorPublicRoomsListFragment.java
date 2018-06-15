@@ -1,7 +1,8 @@
 /*
  * Copyright 2015 OpenMarket Ltd
  * Copyright 2017 Vector Creations Ltd
- * 
+ * Copyright 2018 New Vector Ltd
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
@@ -17,12 +18,8 @@
 
 package im.vector.fragments;
 
-import android.support.v4.app.Fragment;
 import android.os.Bundle;
 import android.text.TextUtils;
-
-import org.matrix.androidsdk.util.Log;
-
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -37,6 +34,11 @@ import org.matrix.androidsdk.data.RoomPreviewData;
 import org.matrix.androidsdk.rest.callback.ApiCallback;
 import org.matrix.androidsdk.rest.model.MatrixError;
 import org.matrix.androidsdk.rest.model.publicroom.PublicRoom;
+import org.matrix.androidsdk.util.Log;
+
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 import im.vector.Matrix;
 import im.vector.PublicRoomsManager;
@@ -45,9 +47,6 @@ import im.vector.VectorApp;
 import im.vector.activity.CommonActivityUtils;
 import im.vector.activity.VectorRoomActivity;
 import im.vector.adapters.VectorPublicRoomsAdapter;
-
-import java.util.HashMap;
-import java.util.List;
 
 public class VectorPublicRoomsListFragment extends VectorBaseFragment {
     private static final String LOG_TAG = VectorPublicRoomsListFragment.class.getSimpleName();
@@ -150,7 +149,7 @@ public class VectorPublicRoomsListFragment extends VectorBaseFragment {
                             CommonActivityUtils.previewRoom(getActivity(), roomPreviewData);
                         } else {
                             Log.d(LOG_TAG, "manageRoom : open the room");
-                            HashMap<String, Object> params = new HashMap<>();
+                            Map<String, Object> params = new HashMap<>();
                             params.put(VectorRoomActivity.EXTRA_MATRIX_ID, mSession.getMyUserId());
                             params.put(VectorRoomActivity.EXTRA_ROOM_ID, publicRoom.roomId);
 

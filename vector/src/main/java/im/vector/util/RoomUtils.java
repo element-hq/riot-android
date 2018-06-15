@@ -56,6 +56,7 @@ import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.regex.Pattern;
 
 import im.vector.Matrix;
@@ -99,7 +100,7 @@ public class RoomUtils {
     public static Comparator<Room> getRoomsDateComparator(final MXSession session, final boolean reverseOrder) {
         return new Comparator<Room>() {
             private Comparator<RoomSummary> mRoomSummaryComparator;
-            private final HashMap<String, RoomSummary> mSummaryByRoomIdMap = new HashMap<>();
+            private final Map<String, RoomSummary> mSummaryByRoomIdMap = new HashMap<>();
 
             /**
              * Retrieve the room summary comparator
@@ -161,7 +162,7 @@ public class RoomUtils {
                                                                 final boolean pinUnreadMessages) {
         return new Comparator<Room>() {
             private Comparator<RoomSummary> mRoomSummaryComparator;
-            private final HashMap<String, RoomSummary> mSummaryByRoomIdMap = new HashMap<>();
+            private final Map<String, RoomSummary> mSummaryByRoomIdMap = new HashMap<>();
 
             /**
              * Retrieve the room summary comparator

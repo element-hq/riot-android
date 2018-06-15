@@ -56,6 +56,7 @@ import java.util.Collection;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Set;
 
 import im.vector.activity.CommonActivityUtils;
 import im.vector.activity.SplashActivity;
@@ -82,14 +83,14 @@ public class Matrix {
     private final LoginStorage mLoginStorage;
 
     // list of session
-    private ArrayList<MXSession> mMXSessions;
+    private List<MXSession> mMXSessions;
 
     // GCM registration manager
     private final GcmRegistrationManager mGCMRegistrationManager;
 
     // list of store : some sessions or activities use tmp stores
     // provide an storage to exchange them
-    private ArrayList<IMXStore> mTmpStores;
+    private List<IMXStore> mTmpStores;
 
     // tell if the client should be logged out
     public boolean mHasBeenDisconnected = false;
@@ -257,7 +258,7 @@ public class Matrix {
      * @param context the application content
      * @return the sessions list
      */
-    public static ArrayList<MXSession> getMXSessions(Context context) {
+    public static List<MXSession> getMXSessions(Context context) {
         if ((null != context) && (null != instance)) {
             return instance.getSessions();
         } else {
@@ -268,8 +269,8 @@ public class Matrix {
     /**
      * @return The list of sessions
      */
-    public ArrayList<MXSession> getSessions() {
-        ArrayList<MXSession> sessions = new ArrayList<>();
+    public List<MXSession> getSessions() {
+        List<MXSession> sessions = new ArrayList<>();
 
         synchronized (LOG_TAG) {
             if (null != mMXSessions) {
@@ -288,13 +289,13 @@ public class Matrix {
      * @return The default session or null.
      */
     public synchronized MXSession getDefaultSession() {
-        ArrayList<MXSession> sessions = getSessions();
+        List<MXSession> sessions = getSessions();
 
         if (sessions.size() > 0) {
             return sessions.get(0);
         }
 
-        ArrayList<HomeServerConnectionConfig> hsConfigList = mLoginStorage.getCredentialsList();
+        List<HomeServerConnectionConfig> hsConfigList = mLoginStorage.getCredentialsList();
 
         // any account ?
         if ((hsConfigList == null) || (hsConfigList.size() == 0)) {
@@ -303,7 +304,7 @@ public class Matrix {
 
         boolean appDidCrash = VectorApp.getInstance().didAppCrash();
 
-        HashSet<String> matrixIds = new HashSet<>();
+        Set<String> matrixIds = new HashSet<>();
         sessions = new ArrayList<>();
 
         for (HomeServerConnectionConfig config : hsConfigList) {
@@ -355,7 +356,7 @@ public class Matrix {
      */
     public synchronized MXSession getSession(String matrixId) {
         if (null != matrixId) {
-            ArrayList<MXSession> sessions;
+            List<MXSession> sessions;
 
             synchronized (this) {
                 sessions = getSessions();
@@ -721,7 +722,7 @@ public class Matrix {
             public void onSuccess(Void info) {
                 synchronized (LOG_TAG) {
                     // build a new sessions list
-                    ArrayList<HomeServerConnectionConfig> configs = mLoginStorage.getCredentialsList();
+                    List<HomeServerConnectionConfig> configs = mLoginStorage.getCredentialsList();
 
                     for (HomeServerConnectionConfig config : configs) {
                         MXSession session = createSession(config);
@@ -761,7 +762,7 @@ public class Matrix {
      * Refresh the sessions push rules.
      */
     public void refreshPushRules() {
-        ArrayList<MXSession> sessions;
+        List<MXSession> sessions;
 
         synchronized (this) {
             sessions = getSessions();

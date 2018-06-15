@@ -140,7 +140,7 @@ public class VectorApp extends MultiDexApplication {
     /**
      * Monitor the created activities to detect memory leaks.
      */
-    private final ArrayList<String> mCreatedActivities = new ArrayList<>();
+    private final List<String> mCreatedActivities = new ArrayList<>();
 
     /**
      * Markdown parser
@@ -402,7 +402,7 @@ public class VectorApp extends MultiDexApplication {
         }
 
         // the sessions are not anymore seen as "online"
-        ArrayList<MXSession> sessions = Matrix.getInstance(this).getSessions();
+        List<MXSession> sessions = Matrix.getInstance(this).getSessions();
 
         for (MXSession session : sessions) {
             if (session.isAlive()) {
@@ -700,7 +700,7 @@ public class VectorApp extends MultiDexApplication {
     /**
      * syncing sessions
      */
-    private static final HashSet<MXSession> mSyncingSessions = new HashSet<>();
+    private static final Set<MXSession> mSyncingSessions = new HashSet<>();
 
     /**
      * Add a session in the syncing sessions list

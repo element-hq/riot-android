@@ -39,6 +39,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 import java.util.Timer;
 import java.util.TimerTask;
@@ -101,7 +102,7 @@ public class VectorUniversalLinkReceiver extends BroadcastReceiver {
     private MXSession mSession;
 
     // the universal link parameters
-    private HashMap<String, String> mParameters;
+    private Map<String, String> mParameters;
 
     public VectorUniversalLinkReceiver() {
     }
@@ -161,7 +162,7 @@ public class VectorUniversalLinkReceiver extends BroadcastReceiver {
                         + " path=" + intentUri.getPath() + " queryParams=" + intentUri.getQuery());
                 //intentUri.getEncodedSchemeSpecificPart() = //vector.im/beta/  intentUri.getSchemeSpecificPart() = //vector.im/beta/
 
-                HashMap<String, String> params = parseUniversalLink(intentUri);
+                Map<String, String> params = parseUniversalLink(intentUri);
 
                 if (null != params) {
 
@@ -377,7 +378,7 @@ public class VectorUniversalLinkReceiver extends BroadcastReceiver {
      * @param context the context.
      */
     private void openRoomActivity(Context context) {
-        HashMap<String, Object> params = new HashMap<>();
+        Map<String, Object> params = new HashMap<>();
 
         params.put(VectorRoomActivity.EXTRA_MATRIX_ID, mSession.getMyUserId());
         params.put(VectorRoomActivity.EXTRA_ROOM_ID, mParameters.get(ULINK_ROOM_ID_OR_ALIAS_KEY));
@@ -390,7 +391,7 @@ public class VectorUniversalLinkReceiver extends BroadcastReceiver {
         Intent intent = new Intent(context, VectorHomeActivity.class);
         intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
 
-        intent.putExtra(VectorHomeActivity.EXTRA_JUMP_TO_ROOM_PARAMS, params);
+        intent.putExtra(VectorHomeActivity.EXTRA_JUMP_TO_ROOM_PARAMS, (HashMap) params);
         context.startActivity(intent);
     }
 
@@ -400,8 +401,8 @@ public class VectorUniversalLinkReceiver extends BroadcastReceiver {
      * @param uri the uri to parse
      * @return the universal link items, null if the universal link is invalid
      */
-    public static HashMap<String, String> parseUniversalLink(Uri uri) {
-        HashMap<String, String> map = null;
+    public static Map<String, String> parseUniversalLink(Uri uri) {
+        Map<String, String> map = null;
 
         try {
             // sanity check
@@ -435,7 +436,7 @@ public class VectorUniversalLinkReceiver extends BroadcastReceiver {
             String temp[] = uriFragment.split("/", 3); // limit to 3 for security concerns (stack overflow injection)
 
             if (!isSupportedHost) {
-                ArrayList<String> compliantList = new ArrayList<>(Arrays.asList(temp));
+                List<String> compliantList = new ArrayList<>(Arrays.asList(temp));
                 compliantList.add(0, "room");
                 temp = compliantList.toArray(new String[compliantList.size()]);
             }

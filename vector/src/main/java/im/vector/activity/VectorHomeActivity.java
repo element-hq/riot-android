@@ -375,7 +375,7 @@ public class VectorHomeActivity extends RiotAppCompatActivity implements SearchV
                 intent.removeExtra(VectorUniversalLinkReceiver.EXTRA_UNIVERSAL_LINK_URI);
 
                 // detect the room could be opened without waiting the next sync
-                HashMap<String, String> params = VectorUniversalLinkReceiver.parseUniversalLink(uri);
+                Map<String, String> params = VectorUniversalLinkReceiver.parseUniversalLink(uri);
 
                 if ((null != params) && params.containsKey(VectorUniversalLinkReceiver.ULINK_ROOM_ID_OR_ALIAS_KEY)) {
                     Log.d(LOG_TAG, "Has a valid universal link");
@@ -1334,7 +1334,7 @@ public class VectorHomeActivity extends RiotAppCompatActivity implements SearchV
                     public void run() {
                         hideWaitingView();
 
-                        HashMap<String, Object> params = new HashMap<>();
+                        Map<String, Object> params = new HashMap<>();
                         params.put(VectorRoomActivity.EXTRA_MATRIX_ID, mSession.getMyUserId());
                         params.put(VectorRoomActivity.EXTRA_ROOM_ID, roomId);
                         params.put(VectorRoomActivity.EXTRA_EXPAND_ROOM_HEADER, true);
@@ -1404,7 +1404,7 @@ public class VectorHomeActivity extends RiotAppCompatActivity implements SearchV
                                     public void onSuccess(String roomId) {
                                         hideWaitingView();
 
-                                        HashMap<String, Object> params = new HashMap<>();
+                                        Map<String, Object> params = new HashMap<>();
                                         params.put(VectorRoomActivity.EXTRA_MATRIX_ID, mSession.getMyUserId());
                                         params.put(VectorRoomActivity.EXTRA_ROOM_ID, roomId);
                                         CommonActivityUtils.goToRoomPage(VectorHomeActivity.this, mSession, params);
@@ -2102,8 +2102,8 @@ public class VectorHomeActivity extends RiotAppCompatActivity implements SearchV
 
         BingRulesManager bingRulesManager = dataHandler.getBingRulesManager();
         Collection<RoomSummary> summaries2 = store.getSummaries();
-        HashMap<Room, RoomSummary> roomSummaryByRoom = new HashMap<>();
-        HashSet<String> directChatInvitations = new HashSet<>();
+        Map<Room, RoomSummary> roomSummaryByRoom = new HashMap<>();
+        Set<String> directChatInvitations = new HashSet<>();
 
         for (RoomSummary summary : summaries2) {
             Room room = store.getRoom(summary.getRoomId());
@@ -2124,7 +2124,7 @@ public class VectorHomeActivity extends RiotAppCompatActivity implements SearchV
 
         for (Integer id : menuIndexes) {
             // use a map because contains is faster
-            HashSet<String> filteredRoomIdsSet = new HashSet<>();
+            Set<String> filteredRoomIdsSet = new HashSet<>();
 
             if (id == R.id.bottom_action_favourites) {
                 List<Room> favRooms = mSession.roomsWithTag(RoomTag.ROOM_TAG_FAVOURITE);
@@ -2147,8 +2147,8 @@ public class VectorHomeActivity extends RiotAppCompatActivity implements SearchV
                     filteredRoomIdsSet.remove(room.getRoomId());
                 }
             } else if (id == R.id.bottom_action_rooms) {
-                HashSet<String> directChatRoomIds = new HashSet<>(mSession.getDataHandler().getDirectChatRoomIdsList());
-                HashSet<String> lowPriorityRoomIds = new HashSet<>(mSession.roomIdsWithTag(RoomTag.ROOM_TAG_LOW_PRIORITY));
+                Set<String> directChatRoomIds = new HashSet<>(mSession.getDataHandler().getDirectChatRoomIdsList());
+                Set<String> lowPriorityRoomIds = new HashSet<>(mSession.roomIdsWithTag(RoomTag.ROOM_TAG_LOW_PRIORITY));
 
                 directChatRoomIds.addAll(directChatInvitations);
 

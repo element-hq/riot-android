@@ -33,6 +33,7 @@ import org.matrix.androidsdk.rest.model.User;
 import org.matrix.androidsdk.util.Log;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import im.vector.Matrix;
 import im.vector.R;
@@ -68,7 +69,7 @@ public class VectorRoomCreationAdapter extends ArrayAdapter<ParticipantAdapterIt
     private final int mAddMemberLayoutResourceId;
 
     // members list display names
-    private final ArrayList<String> mDisplayNamesList = new ArrayList<>();
+    private final List<String> mDisplayNamesList = new ArrayList<>();
 
     // the events listener
     private IRoomCreationAdapterListener mRoomCreationAdapterListener;
@@ -161,7 +162,7 @@ public class VectorRoomCreationAdapter extends ArrayAdapter<ParticipantAdapterIt
         User user = null;
         MXSession matchedSession = null;
         // retrieve the linked user
-        ArrayList<MXSession> sessions = Matrix.getMXSessions(mContext);
+        List<MXSession> sessions = Matrix.getMXSessions(mContext);
 
         for (MXSession session : sessions) {
             if (null == user) {

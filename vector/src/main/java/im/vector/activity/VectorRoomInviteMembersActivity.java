@@ -306,10 +306,10 @@ public class VectorRoomInviteMembersActivity extends VectorBaseSearchActivity {
      *
      * @param participantAdapterItems the selected participants
      */
-    private void finish(final ArrayList<ParticipantAdapterItem> participantAdapterItems) {
+    private void finish(final List<ParticipantAdapterItem> participantAdapterItems) {
         final List<String> hiddenUserIds = new ArrayList<>();
-        final ArrayList<String> userIds = new ArrayList<>();
-        final ArrayList<String> displayNames = new ArrayList<>();
+        final List<String> userIds = new ArrayList<>();
+        final List<String> displayNames = new ArrayList<>();
 
         // list the hidden user Ids
         for (ParticipantAdapterItem item : mHiddenParticipantItems) {
@@ -369,8 +369,8 @@ public class VectorRoomInviteMembersActivity extends VectorBaseSearchActivity {
                         public void onClick(DialogInterface dialog, int which) {
                             // returns the selected users
                             Intent intent = new Intent();
-                            intent.putExtra(EXTRA_OUT_SELECTED_USER_IDS, userIds);
-                            intent.putExtra(EXTRA_OUT_SELECTED_PARTICIPANT_ITEMS, participantAdapterItems);
+                            intent.putExtra(EXTRA_OUT_SELECTED_USER_IDS, (ArrayList) userIds);
+                            intent.putExtra(EXTRA_OUT_SELECTED_PARTICIPANT_ITEMS, (ArrayList) participantAdapterItems);
                             setResult(RESULT_OK, intent);
                             finish();
                         }
@@ -385,8 +385,8 @@ public class VectorRoomInviteMembersActivity extends VectorBaseSearchActivity {
         } else {
             // returns the selected users
             Intent intent = new Intent();
-            intent.putExtra(EXTRA_OUT_SELECTED_USER_IDS, userIds);
-            intent.putExtra(EXTRA_OUT_SELECTED_PARTICIPANT_ITEMS, participantAdapterItems);
+            intent.putExtra(EXTRA_OUT_SELECTED_USER_IDS, (ArrayList) userIds);
+            intent.putExtra(EXTRA_OUT_SELECTED_PARTICIPANT_ITEMS, (ArrayList) participantAdapterItems);
             setResult(RESULT_OK, intent);
             finish();
         }
@@ -430,7 +430,7 @@ public class VectorRoomInviteMembersActivity extends VectorBaseSearchActivity {
                 @Override
                 public void onClick(View v) {
                     String text = inviteTextView.getText().toString();
-                    ArrayList<ParticipantAdapterItem> items = new ArrayList<>();
+                    List<ParticipantAdapterItem> items = new ArrayList<>();
                     List<Pattern> patterns = Arrays.asList(MXSession.PATTERN_CONTAIN_MATRIX_USER_IDENTIFIER, android.util.Patterns.EMAIL_ADDRESS);
 
                     for (Pattern pattern : patterns) {

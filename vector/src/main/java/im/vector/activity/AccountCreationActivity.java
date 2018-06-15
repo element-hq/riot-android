@@ -33,6 +33,7 @@ import org.matrix.androidsdk.util.Log;
 
 import java.net.URLDecoder;
 import java.util.HashMap;
+import java.util.Map;
 
 import im.vector.R;
 
@@ -161,7 +162,7 @@ public class AccountCreationActivity extends RiotAppCompatActivity {
 
                 if ((null != url) && url.startsWith("js:")) {
                     String json = url.substring(3);
-                    HashMap<String, String> parameters = null;
+                    Map<String, String> parameters = null;
 
                     try {
                         // URL decode

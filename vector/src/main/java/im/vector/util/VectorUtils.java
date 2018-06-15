@@ -172,7 +172,7 @@ public class VectorUtils {
         Collection<RoomMember> roomMembers = room.getJoinedMembers();
 
         if (2 == roomMembers.size()) {
-            ArrayList<RoomMember> roomMembersList = new ArrayList<>(roomMembers);
+            List<RoomMember> roomMembersList = new ArrayList<>(roomMembers);
 
             if (TextUtils.equals(roomMembersList.get(0).getUserId(), session.getMyUserId())) {
                 return room.getLiveState().getMemberName(roomMembersList.get(1).getUserId());
@@ -223,8 +223,8 @@ public class VectorUtils {
             String myUserId = session.getMyUserId();
 
             Collection<RoomMember> members = roomState.getDisplayableMembers();
-            ArrayList<RoomMember> othersActiveMembers = new ArrayList<>();
-            ArrayList<RoomMember> activeMembers = new ArrayList<>();
+            List<RoomMember> othersActiveMembers = new ArrayList<>();
+            List<RoomMember> activeMembers = new ArrayList<>();
 
             for (RoomMember member : members) {
                 if (!TextUtils.equals(member.membership, RoomMember.MEMBERSHIP_LEAVE)) {
@@ -296,7 +296,7 @@ public class VectorUtils {
     // avatars cache
     static final private LruCache<String, Bitmap> mAvatarImageByKeyDict = new LruCache<>(20 * 1024 * 1024);
     // the avatars background color
-    static final private ArrayList<Integer> mColorList = new ArrayList<>(Arrays.asList(0xff76cfa6, 0xff50e2c2, 0xfff4c371));
+    static final private List<Integer> mColorList = new ArrayList<>(Arrays.asList(0xff76cfa6, 0xff50e2c2, 0xfff4c371));
 
     /**
      * Provides the avatar background color from a text.
@@ -1066,8 +1066,8 @@ public class VectorUtils {
      * @param adapter            the linked adapter
      * @return visible views map
      */
-    public static HashMap<Integer, List<Integer>> getVisibleChildViews(ExpandableListView expandableListView, BaseExpandableListAdapter adapter) {
-        HashMap<Integer, List<Integer>> map = new HashMap<>();
+    public static Map<Integer, List<Integer>> getVisibleChildViews(ExpandableListView expandableListView, BaseExpandableListAdapter adapter) {
+        Map<Integer, List<Integer>> map = new HashMap<>();
 
         long firstPackedPosition = expandableListView.getExpandableListPosition(expandableListView.getFirstVisiblePosition());
 
@@ -1080,7 +1080,7 @@ public class VectorUtils {
         int lastChildPosition = ExpandableListView.getPackedPositionChild(lastPackedPosition);
 
         for (int groupPos = firstGroupPosition; groupPos <= lastGroupPosition; groupPos++) {
-            ArrayList<Integer> list = new ArrayList<>();
+            List<Integer> list = new ArrayList<>();
 
             int startChildPos = (groupPos == firstGroupPosition) ? firstChildPosition : 0;
             int endChildPos = (groupPos == lastGroupPosition) ? lastChildPosition : adapter.getChildrenCount(groupPos) - 1;
