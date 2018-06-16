@@ -1,3 +1,6 @@
+![Jenkins](https://img.shields.io/jenkins/s/https/matrix.org/jenkins/view/MatrixView/job/VectorAndroidDevelop.svg)
+<a href="https://translate.riot.im/engage/riot-android/?utm_source=widget"><img src="https://translate.riot.im/widgets/riot-android/-/svg-badge.svg" alt="Translation status" /></a>
+
 Riot
 =======
 
