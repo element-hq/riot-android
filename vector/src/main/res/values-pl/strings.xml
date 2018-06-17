@@ -622,9 +622,9 @@ Przepraszamy za trudności.</string>
     <string name="groups_list">Lista grup</string>
 
     <plurals name="membership_changes">
-	<item quantity="one">1 zmiana członkowstwa</item>
-	<item quantity="few">Kilka zmian członkowstwa</item>
-	<item quantity="many">%d zmian członokwstwa</item>
+	<item quantity="one">%d zmiana członkostwa</item>
+	<item quantity="few">%d zmiany członkostwa</item>
+	<item quantity="many">%d zmian członkostwa</item>
 	<item quantity="other"/>
 </plurals>
 
@@ -784,4 +784,12 @@ Jesteś pewien?</string>
     <string name="room_settings_addresses_disable_main_address_prompt_title">Ostrzeżenia głównego adresu</string>
 
     <string name="room_settings_unset_main_address">NIe ustawiaj jako główny adres</string>
+    <string name="encryption_information_decryption_error">Błąd odszyfrowywania</string>
+
+    <string name="encryption_information_device_key">Klucz urządzenia</string>
+    <string name="encryption_export_room_keys">Eksportuj klucze pokoju</string>
+    <string name="encryption_export_room_keys_summary">Eksportuj klucze do pliku lokalnego</string>
+    <string name="rejoin">Dołącz ponownie</string>
+    <string name="forget_room">Zapomnij pokoju</string>
+
     </resources>
