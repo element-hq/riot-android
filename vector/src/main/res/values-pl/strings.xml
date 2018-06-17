@@ -790,6 +790,6 @@ Jesteś pewien?</string>
     <string name="encryption_export_room_keys">Eksportuj klucze pokoju</string>
     <string name="encryption_export_room_keys_summary">Eksportuj klucze do pliku lokalnego</string>
     <string name="rejoin">Dołącz ponownie</string>
-    <string name="forget_room">Zapomnij pokoju</string>
+    <string name="forget_room">Zapomnij pokój</string>
 
     </resources>
