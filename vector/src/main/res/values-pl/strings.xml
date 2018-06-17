@@ -46,7 +46,7 @@ Utwórz kopię zapasową, zanim się wylogujesz.</string>
     <string name="action_video_call">Połączenie wideo</string>
     <string name="action_global_search">Wyszukiwanie globalne</string>
     <string name="action_mark_all_as_read">Oznacz wszystko jako przeczytane</string>
-    <string name="action_historical">Archiwizuj</string>
+    <string name="action_historical">Historyczne</string>
     <string name="action_quick_reply">Szybka odpowiedź</string>
     <string name="action_open">Otwórz</string>
     <string name="action_close">Zamknij</string>
