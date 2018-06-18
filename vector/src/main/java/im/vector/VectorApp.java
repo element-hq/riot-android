@@ -832,8 +832,8 @@ public class VectorApp extends MultiDexApplication {
             locale = Locale.getDefault();
 
             // detect if the default language is used
-            String defaultStringValue = getString(context, mApplicationDefaultLanguage, R.string.resouces_country);
-            if (TextUtils.equals(defaultStringValue, getString(context, locale, R.string.resouces_country))) {
+            String defaultStringValue = getString(context, mApplicationDefaultLanguage, R.string.resources_country_code);
+            if (TextUtils.equals(defaultStringValue, getString(context, locale, R.string.resources_country_code))) {
                 locale = mApplicationDefaultLanguage;
             }
 
@@ -1033,12 +1033,12 @@ public class VectorApp extends MultiDexApplication {
                 final Locale[] availableLocales = Locale.getAvailableLocales();
 
                 for (Locale locale : availableLocales) {
-                    knownLocalesSet.add(new Pair<>(getString(context, locale, R.string.resouces_language),
-                            getString(context, locale, R.string.resouces_country)));
+                    knownLocalesSet.add(new Pair<>(getString(context, locale, R.string.resources_language),
+                            getString(context, locale, R.string.resources_country_code)));
                 }
             } catch (Exception e) {
                 Log.e(LOG_TAG, "## getApplicationLocales() : failed " + e.getMessage());
-                knownLocalesSet.add(new Pair<>(context.getString(R.string.resouces_language), context.getString(R.string.resouces_country)));
+                knownLocalesSet.add(new Pair<>(context.getString(R.string.resources_language), context.getString(R.string.resources_country_code)));
             }
 
             for (Pair<String, String> knownLocale : knownLocalesSet) {

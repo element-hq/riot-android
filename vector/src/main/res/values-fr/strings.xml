@@ -2,8 +2,8 @@
 <resources>
     <!-- use to retrieve the supported languages list -->
     <!-- should the same value as the file name -->
-    <string name="resouces_language">fr</string>
-    <string name="resouces_country">FR</string>
+    <string name="resources_language">fr</string>
+    <string name="resources_country_code">FR</string>
 
     <string name="title_activity_home">Messages</string>
     <string name="title_activity_settings">Paramètres</string>

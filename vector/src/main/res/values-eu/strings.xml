@@ -1,7 +1,7 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <resources>
-    <string name="resouces_language">eu</string>
-    <string name="resouces_country">ES</string>
+    <string name="resources_language">eu</string>
+    <string name="resources_country_code">ES</string>
 
     <string name="title_activity_home">Mezuak</string>
     <string name="title_activity_room">Gela</string>

@@ -26,8 +26,8 @@
     <string name="invite">Pozvat</string>
     <string name="offline">Offline</string>
 
-    <string name="resouces_language">en</string>
-    <string name="resouces_country">US</string>
+    <string name="resources_language">en</string>
+    <string name="resources_country_code">US</string>
 
     <string name="forget_room">Zapomenout místnost</string>
 <string name="notification_sync_in_progress">Synchronizace</string>

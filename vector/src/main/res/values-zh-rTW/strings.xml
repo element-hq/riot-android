@@ -1,6 +1,6 @@
 <?xml version='1.0' encoding='UTF-8'?>
-<resources><string name="resouces_language">zh</string>
-    <string name="resouces_country">TW</string>
+<resources><string name="resources_language">zh</string>
+    <string name="resources_country_code">TW</string>
 
     <string name="light_theme">淺色主題</string>
     <string name="dark_theme">深色主題</string>

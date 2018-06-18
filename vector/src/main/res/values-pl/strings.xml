@@ -119,8 +119,8 @@ Utwórz kopię zapasową, zanim się wylogujesz.</string>
     <string name="start_voice_call">Rozpocznij połączenie telefoniczne</string>
     <string name="start_video_call">Rozpocznij połączenie wideo</string>
 
-    <string name="resouces_language">pl</string>
-    <string name="resouces_country">PL</string>
+    <string name="resources_language">pl</string>
+    <string name="resources_country_code">PL</string>
 
     <string name="identity_url">Adres serwera tożsamości</string>
     <string name="option_send_files">Wyślij pliki</string>

@@ -3,8 +3,8 @@
     <!-- use to retrieve the supported languages list -->
     <!-- should the same value as the file name -->
 
-    <string name="resouces_language">ca</string>
-    <string name="resouces_country">ES</string>
+    <string name="resources_language">ca</string>
+    <string name="resources_country_code">ES</string>
 
     <!-- theme -->
     <string name="light_theme">Tema clar</string>

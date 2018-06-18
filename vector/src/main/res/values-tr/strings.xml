@@ -1,6 +1,6 @@
 <?xml version='1.0' encoding='UTF-8'?>
-<resources><string name="resouces_language">tr</string>
-    <string name="resouces_country">TR</string>
+<resources><string name="resources_language">tr</string>
+    <string name="resources_country_code">TR</string>
 
     <string name="light_theme">Aydınlık Tema</string>
     <string name="dark_theme">Karanlık Tema</string>

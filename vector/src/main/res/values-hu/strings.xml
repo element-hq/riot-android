@@ -2,8 +2,8 @@
 <resources>
     <!-- use to retrieve the supported languages list -->
     <!-- should the same value as the file name -->
-    <string name="resouces_language">hu</string>
-    <string name="resouces_country">HU</string>
+    <string name="resources_language">hu</string>
+    <string name="resources_country_code">HU</string>
 
     <string name="title_activity_home">Üzenetek</string>
     <string name="title_activity_room">Szoba</string>

@@ -1,6 +1,6 @@
 <?xml version='1.0' encoding='UTF-8'?>
-<resources><string name="resouces_language">sk</string>
-    <string name="resouces_country">SK</string>
+<resources><string name="resources_language">sk</string>
+    <string name="resources_country_code">SK</string>
 
     <string name="light_theme">Svetlý vzhľad</string>
     <string name="dark_theme">Tmavý vzhľad</string>

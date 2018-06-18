@@ -2,8 +2,8 @@
 <resources><string name="encrypted_message">Шифровано съобщение</string>
 
     // groups creation
-    <string name="resouces_language">bg</string>
-    <string name="resouces_country">BG</string>
+    <string name="resources_language">bg</string>
+    <string name="resources_country_code">BG</string>
 
     <string name="light_theme">Светла тема</string>
     <string name="dark_theme">Тъмна тема</string>
