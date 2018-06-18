@@ -3,8 +3,8 @@
     <!-- use to retrieve the supported languages list -->
     <!-- should the same value as the file name -->
 
-    <string name="resources_language">en</string>
-    <string name="resources_country_code">US</string>
+    <string name="resources_language">uk</string>
+    <string name="resources_country_code">UA</string>
 
     <!-- theme -->
     <string name="light_theme">Світла Тема</string>
