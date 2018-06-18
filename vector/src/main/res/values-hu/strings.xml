@@ -957,4 +957,18 @@ Matrixban az üzenetek láthatósága hasonlít az e-mailre. Az üzenet törlés
     <string name="deactivate_account_prompt_password">A folytatáshoz add meg a jelszavadat:</string>
     <string name="deactivate_account_submit">Fiók felfüggesztése</string>
 
-</resources>
+<string name="dialog_title_third_party_licences">Licencek harmadik féltől</string>
+
+    <string name="download">Letöltés</string>
+    <string name="speak">Mond</string>
+    <string name="clear">Töröl</string>
+    <string name="e2e_re_request_encryption_key">Végponttól végpontig titkosításhoz használt <u>kulcsok újrakérése</u> a többi eszközödtől.</string>
+
+    <string name="e2e_re_request_encryption_key_sent">Kulcs újrakérve.</string>
+
+    <string name="e2e_re_request_encryption_key_dialog_title">Kérés elküldve</string>
+    <string name="e2e_re_request_encryption_key_dialog_content">Kérlek indítsd el a Riotot egy olyan eszközön ami ezt az üzenetet vissza tudja fejteni, hogy elküldhesse a kulcsot erre az eszközre.</string>
+
+    <string name="lock_screen_hint">Ide írj…</string>
+
+    </resources>
