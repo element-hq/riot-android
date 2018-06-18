@@ -957,4 +957,18 @@ La visibilité des messages dans Matrix est identique à celle des e-mails. Si n
     <string name="deactivate_account_prompt_password">Pour continuer, veuillez renseigner votre mot de passe :</string>
     <string name="deactivate_account_submit">Désactiver le compte</string>
 
-</resources>
+<string name="dialog_title_third_party_licences">Licences tierces</string>
+
+    <string name="download">Télécharger</string>
+    <string name="speak">Parler</string>
+    <string name="clear">Effacer</string>
+    <string name="e2e_re_request_encryption_key"><u>Redemander les clés de chiffrement</u> à vos autres appareils.</string>
+
+    <string name="e2e_re_request_encryption_key_sent">Demande de clé envoyée.</string>
+
+    <string name="e2e_re_request_encryption_key_dialog_title">Demande envoyée</string>
+    <string name="e2e_re_request_encryption_key_dialog_content">Veuillez lancer Riot sur un autre appareil qui peut déchiffrer le message pour qu\'il puisse envoyer les clés à cet appareil.</string>
+
+    <string name="lock_screen_hint">Tapez ici…</string>
+
+    </resources>
