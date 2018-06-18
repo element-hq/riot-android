@@ -21,6 +21,9 @@
 # Example:
 # AuthorizedStringThreeTimes===3
 
+# Extension:java
+# Extension:kt
+
 # Use new SecureLinearLayoutManager
 # DISABLED
 #new LinearLayoutManager
