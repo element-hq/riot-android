@@ -779,7 +779,7 @@ Lo puedes hacer ahora o luego desde las configuraciones de la aplicación.</stri
     <string name="settings_labs_create_conference_with_jitsi">Crear llamada de conferencia con jitsi</string>
     <string name="widget_delete_message_confirmation">¿Estás seguro que quieres eliminar el widget?</string>
 
-    // Widget Integration Manager
+    <!-- Widget Integration Manager -->
     <string name="widget_integration_unable_to_create">El widget no ha podido ser creado.</string>
     <string name="widget_integration_failed_to_send_request">La consulta no ha podido ser enviada.</string>
     <string name="widget_integration_positive_power_level">El nivel de potencia debe ser un número entero positivo.</string>
@@ -792,22 +792,22 @@ Lo puedes hacer ahora o luego desde las configuraciones de la aplicación.</stri
     <string name="room_add_matrix_apps">Añadir Matrix apps</string>
     <string name="settings_labs_native_camera">Usar cámara nativa</string>
 
-    // share keys
+    <!-- share keys -->
     <string name="you_added_a_new_device">Has añadido un nuevo dispositivo \'%s\', que esta solicitando claves de encriptación.</string>
     <string name="your_unverified_device_requesting">Tu dispositivo no validado \'%s\' está solicitando claves de encriptación.</string>
     <string name="start_verification">Empezar verificación</string>
     <string name="share_without_verifying">Compartir sin verificación</string>
     <string name="ignore_request">Ignorar solicitud</string>
 
-    // conference call
+    <!-- conference call -->
     <string name="conference_call_warning_title">Aviso!</string>
     <string name="conference_call_warning_message">Las llamadas de conferencia están en desarrollo y pueden no ser fiables.</string>
 
-    // slash commands
+    <!-- slash commands -->
     <string name="command_error">Error en el comando</string>
     <string name="unrecognized_command">Comando no reconocido: %s</string>
 
-    // notification statuses
+    <!-- notification statuses -->
     <string name="notification_off">Off</string>
     <string name="notification_on">On</string>
     <string name="notification_noisy">Alto</string>
@@ -863,7 +863,7 @@ Lo puedes hacer ahora o luego desde las configuraciones de la aplicación.</stri
     <string name="community_id">ID de la comunidad</string>
     <string name="community_id_hint">ejemplo</string>
 
-    // group details
+    <!-- group details -->
     <string name="group_details_home">Inicio</string>
     <string name="group_details_people">Usuarios</string>
     <string name="group_details_rooms">Salas</string>
@@ -943,7 +943,7 @@ Lo puedes hacer ahora o luego desde las configuraciones de la aplicación.</stri
 	<item quantity="other"/>
 </plurals>
 
-    // Widget Integration Manager
+    <!-- Widget Integration Manager -->
     <string name="title_activity_choose_sticker">Enviar un ticket</string>
 
     <string name="no_sticker_application_dialog_content">Actualmente no tiene ninguna etiqueta habilitada.

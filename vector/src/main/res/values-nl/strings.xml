@@ -758,7 +758,7 @@ Je kan het nu, of later, doen vanuit de programma-instellingen.</string>
     <string name="settings_labs_create_conference_with_jitsi">Maak vergadergesprekken met jitsi</string>
     <string name="widget_delete_message_confirmation">Weet je zeker dat je deze widget wilt verwijderen?</string>
 
-    // Widget Integration Manager
+    <!-- Widget Integration Manager -->
     <string name="widget_integration_unable_to_create">Niet mogelijk om de widget te maken.</string>
     <string name="widget_integration_failed_to_send_request">Niet gelukt om een verzoek te verzenden.</string>
     <string name="widget_integration_positive_power_level">Het machtsniveau moet een positief en heel getal zijn.</string>
@@ -787,22 +787,22 @@ Je kan het nu, of later, doen vanuit de programma-instellingen.</string>
 
     <string name="settings_labs_native_camera">Gebruik de systeem camera</string>
 
-    // share keys
+    <!-- share keys -->
     <string name="you_added_a_new_device">Je hebt een nieuw apparaat toegevoegd \'%s\', dat versleutelingssleutels aanvraagt.</string>
     <string name="your_unverified_device_requesting">Je niet geverifieerde apparaat \'%s\' vraagt versleutelingssleutels aan.</string>
     <string name="start_verification">Verificatie starten</string>
     <string name="share_without_verifying">Delen zonder te verifiëren</string>
     <string name="ignore_request">Verzoek negeren</string>
 
-    // conference call
+    <!-- conference call -->
     <string name="conference_call_warning_title">Waarschuwing!</string>
     <string name="conference_call_warning_message">Vergadergesprekken zijn in ontwikkeling en kunnen dus kuren vertonen.</string>
 
-    // slash commands
+    <!-- slash commands -->
     <string name="command_error">Besturingssignaal fout</string>
     <string name="unrecognized_command">Onbekend besturingssignaal: %s</string>
 
-    // notification statuses
+    <!-- notification statuses -->
     <string name="notification_off">Uit</string>
     <string name="notification_on">Aan</string>
     <string name="notification_noisy">Luidruchtig</string>
@@ -902,7 +902,7 @@ Je kan het nu, of later, doen vanuit de programma-instellingen.</string>
 	<item quantity="other">%d actieve widgets</item>
 </plurals>
 
-    // Widget Integration Manager
+    <!-- Widget Integration Manager -->
     <string name="create">Creëer</string>
     <string name="create_community">Gemeenschap Aanmaken</string>
     <string name="community_name">Gemeenschapsnaam</string>
@@ -910,7 +910,7 @@ Je kan het nu, of later, doen vanuit de programma-instellingen.</string>
     <string name="community_id">Gemeenschaps-ID</string>
     <string name="community_id_hint">voorbeeld</string>
 
-    // group details
+    <!-- group details -->
     <string name="group_details_home">Home</string>
     <string name="group_details_people">Personen</string>
     <string name="group_details_rooms">Ruimtes</string>

@@ -799,7 +799,7 @@ Você autoriza o Riot a acessar seus contatos?</string>
     <string name="settings_labs_create_conference_with_jitsi">Criar chamadas de conferência com jitsi</string>
     <string name="widget_delete_message_confirmation">Você tem certeza que quer apagar este widget?</string>
 
-    // Widget Integration Manager
+    <!-- Widget Integration Manager -->
     <string name="widget_integration_unable_to_create">Impossível criar o widget.</string>
     <string name="widget_integration_failed_to_send_request">O envio do pedido falhou.</string>
     <string name="widget_integration_positive_power_level">O nível de permissões tem que ser um número inteiro positivo.</string>
@@ -812,29 +812,29 @@ Você autoriza o Riot a acessar seus contatos?</string>
     <string name="room_add_matrix_apps">Adicionar aplicativos Matrix</string>
     <string name="settings_labs_native_camera">Usar a câmera nativa</string>
 
-    // share keys
+    <!-- share keys -->
     <string name="you_added_a_new_device">Você adicionou um novo dispositivo \'%s\', que está solicitando as chaves de criptografia.</string>
     <string name="your_unverified_device_requesting">Seu dispositivo não-verificado \'%s\' está solicitando as chaves de criptografia.</string>
     <string name="start_verification">Iniciar a verificação</string>
     <string name="share_without_verifying">Compartilhar sem verificar</string>
     <string name="ignore_request">Ignorar a solicitação</string>
 
-    // conference call
+    <!-- conference call -->
     <string name="conference_call_warning_title">Atenção!</string>
     <string name="conference_call_warning_message">Chamadas de conferência estão em desenvolvimento e portanto podem não ser confiáveis.</string>
 
-    // slash commands
+    <!-- slash commands -->
     <string name="command_error">Erro de comando</string>
     <string name="unrecognized_command">Comando desconhecido: %s</string>
 
-    // notification statuses
+    <!-- notification statuses -->
     <string name="notification_off">Desativado</string>
     <string name="notification_on">Ativado</string>
     <string name="notification_noisy">Alto</string>
 
     <string name="encrypted_message">Mensagem criptografada</string>
 
-    // groups creation
+    <!-- groups creation -->
     <string name="create">Criar</string>
     <string name="create_community">Criar comunidade</string>
     <string name="community_name">Nome da comunidade</string>
@@ -842,7 +842,7 @@ Você autoriza o Riot a acessar seus contatos?</string>
     <string name="community_id">ID da comunidade</string>
     <string name="community_id_hint">exemplo</string>
 
-    // group details
+    <!-- group details -->
     <string name="group_details_home">Início</string>
     <string name="group_details_people">Pessoas</string>
     <string name="group_details_rooms">Salas</string>
@@ -921,7 +921,7 @@ Você autoriza o Riot a acessar seus contatos?</string>
 	<item quantity="other">%d widgets ativos</item>
 </plurals>
 
-    // Widget Integration Manager
+    <!-- Widget Integration Manager -->
     <string name="receipt_avatar">Imagem de recebimento</string>
     <string name="notice_avatar">Imagem de notificação</string>
     <string name="avatar">Imagem de perfil</string>

@@ -21,6 +21,9 @@
 # Example:
 # AuthorizedStringThreeTimes===3
 
+# Extension:xml
+
+
 ### Rubbish from merge. Please delete those lines (sometimes in comment)
 <<<<<<<
 >>>>>>>
@@ -57,3 +60,7 @@ DO NOT COMMIT
 
 ### Empty XML tag. Please use the single tag form (<TagName .../>)
 \"><\/
+
+### Bad comment format in XML resources. Use <!-- --> instead of //
+^\s*\/\/
+

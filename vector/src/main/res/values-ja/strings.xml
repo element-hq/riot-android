@@ -751,18 +751,18 @@ Riotアプリがあなたの電話帳へアクセスすることを許可しま�
     <string name="encryption_information_claimed_ed25519_fingerprint_key">要求されたフィンガープリントキー Ed25519</string>
     <string name="settings_labs_create_conference_with_jitsi">jitsiを用いて会議通話を始める</string>
 
-    // Widget Integration Manager
+    <!-- Widget Integration Manager -->
     <string name="settings_labs_native_camera">端末のカメラを使う</string>
 
-    // share keys
+    <!-- share keys -->
     <string name="conference_call_warning_title">警告！</string>
     <string name="conference_call_warning_message">ビデオ会議は開発中であり、確実でない可能性があります。</string>
 
-    // slash commands
+    <!-- slash commands -->
     <string name="command_error">コマンドエラー</string>
     <string name="unrecognized_command">認識されないコマンド: %s</string>
 
-    // notification statuses
+    <!-- notification statuses -->
     <string name="notification_off">切</string>
     <string name="notification_on">入</string>
     <string name="notification_noisy">音量大</string>
@@ -817,7 +817,7 @@ Riotアプリがあなたの電話帳へアクセスすることを許可しま�
     <string name="community_id">コミュニティID</string>
     <string name="community_id_hint">例</string>
 
-    // group details
+    <!-- group details -->
     <string name="group_details_home">ホーム</string>
     <string name="group_details_people">参加者</string>
     <string name="group_details_rooms">部屋</string>
