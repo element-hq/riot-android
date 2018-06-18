@@ -956,4 +956,18 @@ Kontua desaktibatzean <b>ez dira zuk bidalitako mezuak ahaztuko.</b> Mezuak ahaz
 Matrix-eko mezuen ikusgaitasuna e-mail sistemaren antekoa da. Guk zure mezuak ahaztean ez dizkiogu erabiltzaile berriei edo izena eman ez dutenei erakutsiko, baina jada zure mezuak jaso dituzten erregistratutako erabiltzaileen bere kopia izaten jarraituko dute.</string>
     <string name="deactivate_account_delete_checkbox">Ahaztu bidali ditudan mezu guztiak kontua desaktibatzean (Abisua: Honekin etorkizuneko erabiltzaileek elkarrizketaren bertsio ez oso bat ikusiko dute)</string>
     <string name="deactivate_account_prompt_password">Jarraitzeko, sartu zure pasahitza:</string>
+    <string name="dialog_title_third_party_licences">Hirugarrengoen lizentziak</string>
+
+    <string name="download">Deskargatu</string>
+    <string name="speak">Hitz egin</string>
+    <string name="clear">Garbitu</string>
+    <string name="e2e_re_request_encryption_key"><u>Berriro eskatu zifratze-gakoak</u> zure beste gailuetatik.</string>
+
+    <string name="e2e_re_request_encryption_key_sent">Gako eskaria bidalita.</string>
+
+    <string name="e2e_re_request_encryption_key_dialog_title">Eskaria bidalita</string>
+    <string name="e2e_re_request_encryption_key_dialog_content">Abiatu Riot beste mezua deszifratu dezakeen gailu batean, gailu honetara gakoak bidali ditzan.</string>
+
+    <string name="lock_screen_hint">Idatzi hemen…</string>
+
     </resources>
