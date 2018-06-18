@@ -12,7 +12,7 @@
     <string name="save">保存</string>
     <string name="leave">退室</string>
     <string name="send">送信</string>
-    <string name="copy">複写</string>
+    <string name="copy">コピー</string>
     <string name="resend">再送信</string>
     <string name="redact">削除</string>
     <string name="share">共有</string>
@@ -355,7 +355,7 @@
     <string name="action_sign_out">ログアウト</string>
     <string name="action_sign_out_confirmation">セキュリティを確保するため、ログアウトするとエンドツーエンド暗号鍵がすべて削除され、再度ログインすると暗号化された発言履歴が読み取れなくなります。
 ログアウトする前に暗号鍵を端末の記憶装置へ出力し、保管をしてください。</string>
-    <string name="bottom_action_home">基本画面</string>
+    <string name="bottom_action_home">ホーム</string>
     <string name="no_conversation_placeholder">会話なし</string>
     <string name="no_contact_access_placeholder">端末の電話帳をRiotアプリが読み取ることは許可されていません</string>
     <string name="no_result_placeholder">結果なし</string>
@@ -880,4 +880,6 @@ Riotアプリがあなたの電話帳へアクセスすることを許可しま�
     <string name="settings_notification_privacy_normal">標準</string>
     <string name="settings_notification_privacy_power_saving">電力保存オプション</string>
     <string name="settings_notification_privacy_low_detail">簡単な通知</string>
+    <string name="settings_notification_privacy_need_permission">このアプリはバックグラウンド動作の権限が必要です。</string>
+    <string name="settings_notification_privacy_gcm">•通知はGoogle Cloud Messaging経由で送られます</string>
     </resources>

@@ -448,7 +448,7 @@ Los mensajes cifrados no serán visibles en cuentas que no implementen el cifrad
     <!-- home sliding menu -->
     <string name="room_sliding_menu_messages">Mensajes</string>
     <string name="room_sliding_menu_settings">Configuraciones</string>
-    <string name="room_sliding_menu_version">Versión </string>
+    <string name="room_sliding_menu_version">Versión</string>
     <string name="room_sliding_menu_term_and_conditions">Términos &amp; condiciones</string>
     <string name="room_sliding_menu_third_party_notices">Avisos de partidos terceros</string>
     <string name="room_sliding_menu_copyright">Derechos de autor</string>
@@ -714,7 +714,7 @@ Lo puedes hacer ahora o luego desde las configuraciones de la aplicación.</stri
     <string name="settings_select_language">Elegir el idioma</string>
 
     <string name="settings_start_on_boot">Arrancar al inicio</string>
-    <string name="settings_clear_medias_cache">Limpiar la cache de audiovisuales</string>
+    <string name="settings_clear_medias_cache">Limpiar la cache de archivos</string>
     <string name="settings_keep_media">Mantener los audiovisuales</string>
 
     <string name="settings_hide_read_receipts">Ocultar los marcadores de lectura</string>
@@ -741,15 +741,15 @@ Lo puedes hacer ahora o luego desde las configuraciones de la aplicación.</stri
     <string name="tiny">Muy pequeño</string>
     <string name="larger">Más grande</string>
     <string name="huge">Grandísimo</string>
-<string name="user_directory_header">directorio del usuario</string>
+<string name="user_directory_header">Directorio del usuario</string>
     <string name="people_search_user_directory">DIRECTORIO DEL USUARIO (%s)</string>
-    <string name="light_theme">Tema claro</string>
+    <string name="light_theme">Tema blanco</string>
     <string name="dark_theme">Tema oscuro</string>
     <string name="black_them">Tema negro</string>
 
     <string name="notification_sync_in_progress">Sincronizando</string>
-    <string name="notification_listen_for_events">Escuchando por eventos</string>
-    <string name="notification_noisy_notifications">Notificaciones ruidosas</string>
+    <string name="notification_listen_for_events">Escuchando eventos</string>
+    <string name="notification_noisy_notifications">Todas las notificaciones</string>
     <string name="notification_silent_notifications">Notificaciones silenciosas</string>
 
     <string name="title_activity_bug_report">Informe de error</string>
@@ -765,7 +765,7 @@ Lo puedes hacer ahora o luego desde las configuraciones de la aplicación.</stri
     <string name="settings_containing_my_user_name">Mensajes que contengan mi nombre de usuario</string>
     <string name="settings_12_24_timestamps">Mostrar la hora en formato de 12 horas (ej: 2:30pm)</string>
     <string name="settings_hide_join_leave_messages">Esconder mensajes de unirse/partir (invitaciones/kicks/baneos no son afectados)</string>
-    <string name="settings_hide_avatar_display_name_changes_messages">Esconder cambios de avatar y nombres públicos</string>
+    <string name="settings_hide_avatar_display_name_changes_messages">Esconder cambios de avatar y alias</string>
 
     <string name="settings_analytics">Análisis anónimo de uso</string>
     <string name="settings_opt_out_of_analytics">Darse de baja del análisis anónimo de uso</string>
@@ -775,17 +775,17 @@ Lo puedes hacer ahora o luego desde las configuraciones de la aplicación.</stri
     <string name="widget_no_power_to_manage">Necesitas permisos para administrar los widgets de esta sala</string>
     <string name="widget_creation_failure">La creación del widget ha fallado</string>
     <string name="event_formatter_widget_added">%1$s añadido por %2$s</string>
-    <string name="event_formatter_widget_removed">%1$s removido por %2$s</string>
+    <string name="event_formatter_widget_removed">%1$s eliminado por %2$s</string>
     <string name="settings_labs_create_conference_with_jitsi">Crear llamada de conferencia con jitsi</string>
-    <string name="widget_delete_message_confirmation">¿Estás seguro de querer eliminar el widget?</string>
+    <string name="widget_delete_message_confirmation">¿Estás seguro que quieres eliminar el widget?</string>
 
     // Widget Integration Manager
     <string name="widget_integration_unable_to_create">El widget no ha podido ser creado.</string>
     <string name="widget_integration_failed_to_send_request">La consulta no ha podido ser enviada.</string>
-    <string name="widget_integration_positive_power_level">El nivel de poder tiene que ser un número entero positivo.</string>
+    <string name="widget_integration_positive_power_level">El nivel de potencia debe ser un número entero positivo.</string>
     <string name="widget_integration_must_be_in_room">No estás en esta sala.</string>
     <string name="widget_integration_no_permission_in_room">No tienes suficientes permisos para realizar esa acción en esta sala.</string>
-    <string name="widget_integration_missing_room_id">A la petición le falta el ID de sala.</string>
+    <string name="widget_integration_missing_room_id">A la petición le falta el ID de la sala.</string>
     <string name="widget_integration_missing_user_id">A la petición le falta el ID de usuario.</string>
     <string name="widget_integration_room_not_visible">La sala %s no es visible.</string>
     <string name="settings_labs_matrix_apps">Matrix Apps</string>
@@ -804,7 +804,7 @@ Lo puedes hacer ahora o luego desde las configuraciones de la aplicación.</stri
     <string name="conference_call_warning_message">Las llamadas de conferencia están en desarrollo y pueden no ser fiables.</string>
 
     // slash commands
-    <string name="command_error">Error de comando</string>
+    <string name="command_error">Error en el comando</string>
     <string name="unrecognized_command">Comando no reconocido: %s</string>
 
     // notification statuses
@@ -821,37 +821,37 @@ Lo puedes hacer ahora o luego desde las configuraciones de la aplicación.</stri
     <string name="action_exit">Salir</string>
     <string name="bottom_action_groups">Comunidades</string>
 
-    <string name="home_filter_placeholder_groups">Buscar comunidades</string>
+    <string name="home_filter_placeholder_groups">Buscar en comunidades</string>
 
     <string name="groups_invite_header">Invitar</string>
     <string name="groups_header">Comunidades</string>
     <string name="no_group_placeholder">No hay grupos</string>
 
-    <string name="start_new_chat_prompt_msg">Está seguro que quiere empezar una nueva conversación con %s?</string>
-    <string name="start_voice_call_prompt_msg">Está seguro que quiere empezar una llamada de voz?</string>
-    <string name="start_video_call_prompt_msg">Està seguro que quiere empezar una llamada de vídeo?</string>
+    <string name="start_new_chat_prompt_msg">¿Está seguro que quiere empezar una nueva conversación con %s?</string>
+    <string name="start_voice_call_prompt_msg">¿Está seguro que quiere empezar una llamada de voz?</string>
+    <string name="start_video_call_prompt_msg">¿Està seguro que quiere empezar una llamada de vídeo?</string>
 
     <string name="groups_list">Lista de grupos</string>
 
     <string name="room_participants_kick_prompt_msg">Está seguro que quiere echar este usuario de la conversación?</string>
-    <string name="room_participants_ban_prompt_msg">Está seguro que quiere vetar este usuario de esta convesación?</string>
+    <string name="room_participants_ban_prompt_msg">Está seguro que quiere vetar este usuario de esta conversación?</string>
 
     <string name="room_settings_all_messages_noisy">Todos los mensajes (ruidoso)</string>
     <string name="room_settings_all_messages">Todos los mensajes</string>
-    <string name="room_settings_mention_only">Solo citas</string>
+    <string name="room_settings_mention_only">Solo citaciones</string>
     <string name="room_settings_mute">Silenciar</string>
     <string name="room_settings_add_homescreen_shortcut">Añadir un atajo en la pantalla de inicio</string>
 
-    <string name="settings_inline_url_preview">Habilita las previsualizaciones de las URL por defecto</string>
+    <string name="settings_inline_url_preview">Habilita las pre visualizaciones de las URL por defecto</string>
     <string name="settings_vibrate_on_mention">Vibrar cuando te citen</string>
 
     <string name="settings_flair">Talento</string>
 
     <string name="room_settings_room_notifications_title">Notificaciones</string>
     <string name="room_settings_no_flair">" Esta sala no pertenece a ninguna comunidad"</string>
-    <string name="room_settings_add_new_group">Nueva ID de la comunidad (por ejemplo +foo:matrix.org)</string>
+    <string name="room_settings_add_new_group">Nueva ID de la comunidad (Ej. +foo:matrix.org)</string>
     <string name="room_settings_invalid_group_format_dialog_title">El ID de la comunidad es inválido</string>
-    <string name="forget_room">Olvidar sala</string>
+    <string name="forget_room">Salir de la sala</string>
 <string name="rejoin">Volver a entrar</string>
     <string name="room_settings_invalid_group_format_dialog_body">\'%s\' no es un ID de comunidad válido</string>
 
@@ -872,8 +872,8 @@ Lo puedes hacer ahora o luego desde las configuraciones de la aplicación.</stri
     <string name="rooms">Salas</string>
     <string name="joined">Se ha unido</string>
     <string name="invited">Ha sido invitado</string>
-    <string name="filter_group_members">Filtro de miembros del grupo</string>
-    <string name="filter_group_rooms">Filtro de salas del grupo</string>
+    <string name="filter_group_members">Filtro para miembros del grupo</string>
+    <string name="filter_group_rooms">Filtro para salas de grupo</string>
 
     <string name="group_one_member">1 miembro</string>
     <string name="group_members">%d miembros</string>
@@ -940,8 +940,47 @@ Lo puedes hacer ahora o luego desde las configuraciones de la aplicación.</stri
 
     <plurals name="active_widgets">
 	<item quantity="one">"1  widget activo"</item>
-	<item quantity="other"></item>
+	<item quantity="other"/>
 </plurals>
 
     // Widget Integration Manager
+    <string name="title_activity_choose_sticker">Enviar un ticket</string>
+
+    <string name="no_sticker_application_dialog_content">Actualmente no tiene ninguna etiqueta habilitada.
+Añadir algunos ahora?</string>
+
+    <string name="deactivate_account_title">Desactivar Cuenta</string>
+    <string name="avatar">Foto de perfil</string>
+
+    <string name="receipt_avatar">Recibir avatar</string>
+    <string name="notice_avatar">Aviso de la foto de perfil</string>
+    <string name="dialog_user_consent_content">Para seguir usando el homeserver de %1$s, debe revisar y aceptar los términos y condiciones.</string>
+    <string name="dialog_user_consent_submit">Revisar ahora</string>
+
+    <string name="deactivate_account_content">Esto hará que su cuenta permanezca inutilizable. No podrá iniciar sesión y nadie podrá volver a registrar el mismo ID de usuario. Esto hará que su cuenta salga de todas las salas en las que participa y eliminará los datos de su cuenta de su servidor de identidad. <b> Esta acción es irreversible </b>.
+
+Desactivar su cuenta <b> no hace que borremos los mensajes que ha enviado </b> de forma predeterminada. Si desea que olvidemos sus mensajes, marque la casilla a continuación.
+
+La visibilidad del mensaje en Matrix es similar al correo electrónico. Olvidar sus mensajes significa que los mensajes que ha enviado no se compartirán con ningún usuario nuevo o no registrado, pero los usuarios registrados que ya tengan acceso a estos mensajes seguirán teniendo acceso a su copia.</string>
+    <string name="deactivate_account_delete_checkbox">Borrar todos los mensajes que se ha enviado cuando mi cuenta sea desactivada (Advertencia: esto provocará que los futuros usuarios que vean una vista incompleta de las conversaciones)</string>
+    <string name="deactivate_account_prompt_password">Para continuar, ingrese su contraseña:</string>
+    <string name="deactivate_account_submit">Desactivar cuenta</string>
+
+<string name="settings_notification_privacy">Privacidad de las notificaciones</string>
+    <string name="settings_notification_privacy_warning">Riot.im se ejecuta en segundo plano para mantener privado el contenido del mensaje de la notificación. Puede cambiar esta opción para reducir el uso de la batería.</string>
+    <string name="settings_notification_privacy_normal">Normal</string>
+    <string name="settings_notification_privacy_power_saving">Opciones de ahorro de energía</string>
+    <string name="settings_notification_privacy_low_detail">Notificaciones simples</string>
+    <string name="settings_notification_privacy_reduced">Privacidad reducida</string>
+    <string name="settings_notification_privacy_need_permission">La aplicación necesita permiso para ejecutarse en segundo plano</string>
+    <string name="settings_notification_privacy_no_permission">Las aplicaciones <b> no </b> necesitan permiso para ejecutarse en segundo plano</string>
+    <string name="settings_notification_privacy_gcm">Las notificaciones se envían a través de Google Cloud Messaging</string>
+    <string name="settings_notification_privacy_metadata">• Las notificaciones solo contienen metadatos</string>
+    <string name="settings_notification_privacy_secure_message_content">• El contenido del mensaje de la notificación sera <b> ubicado de forma segura directamente desde Matrix HomeServer </b></string>
+    <string name="settings_notification_privacy_nosecure_message_content">"• Las notificaciones contienen &lt;b&gt; datos de mensajes y metadatos  &lt;/ b&gt;"<b>meta and message data</b></string>
+    <string name="settings_notification_privacy_message_content_not_shown">• Las notificaciones <b> no mostrarán el contenido del mensaje </b></string>
+
+    <string name="settings_deactivate_account_section">Desactivar cuenta</string>
+    <string name="settings_deactivate_my_account">Desactivar mi cuenta</string>
+
     </resources>

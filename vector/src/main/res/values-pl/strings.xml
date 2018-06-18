@@ -46,7 +46,7 @@ Utwórz kopię zapasową, zanim się wylogujesz.</string>
     <string name="action_video_call">Połączenie wideo</string>
     <string name="action_global_search">Wyszukiwanie globalne</string>
     <string name="action_mark_all_as_read">Oznacz wszystko jako przeczytane</string>
-    <string name="action_historical">Archiwizuj</string>
+    <string name="action_historical">Historyczne</string>
     <string name="action_quick_reply">Szybka odpowiedź</string>
     <string name="action_open">Otwórz</string>
     <string name="action_close">Zamknij</string>
@@ -622,9 +622,9 @@ Przepraszamy za trudności.</string>
     <string name="groups_list">Lista grup</string>
 
     <plurals name="membership_changes">
-	<item quantity="one">1 zmiana członkowstwa</item>
-	<item quantity="few">Kilka zmian członkowstwa</item>
-	<item quantity="many">%d zmian członokwstwa</item>
+	<item quantity="one">%d zmiana członkostwa</item>
+	<item quantity="few">%d zmiany członkostwa</item>
+	<item quantity="many">%d zmian członkostwa</item>
 	<item quantity="other"/>
 </plurals>
 
@@ -784,4 +784,12 @@ Jesteś pewien?</string>
     <string name="room_settings_addresses_disable_main_address_prompt_title">Ostrzeżenia głównego adresu</string>
 
     <string name="room_settings_unset_main_address">NIe ustawiaj jako główny adres</string>
+    <string name="encryption_information_decryption_error">Błąd odszyfrowywania</string>
+
+    <string name="encryption_information_device_key">Klucz urządzenia</string>
+    <string name="encryption_export_room_keys">Eksportuj klucze pokoju</string>
+    <string name="encryption_export_room_keys_summary">Eksportuj klucze do pliku lokalnego</string>
+    <string name="rejoin">Dołącz ponownie</string>
+    <string name="forget_room">Zapomnij pokój</string>
+
     </resources>
