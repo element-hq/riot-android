@@ -1002,4 +1002,18 @@ Die Sichtbarkeit deiner Nachrichten ist ähnlich zu E-Mails: Wenn wir deine Nach
     <string name="deactivate_account_prompt_password">Um fortzufahren, bitte Password eingeben:</string>
     <string name="deactivate_account_submit">Account deaktivieren</string>
 
-</resources>
+<string name="dialog_title_third_party_licences">Drittanbieter-Lizenzen</string>
+
+    <string name="download">Download</string>
+    <string name="speak">Sprechen</string>
+    <string name="clear">Löschen</string>
+    <string name="e2e_re_request_encryption_key">Verschlüsselungsschlüssel von deinen anderen Geräten <u>erneut anfragen</u>.</string>
+
+    <string name="e2e_re_request_encryption_key_sent">Schlüsselanfrage gesendet.</string>
+
+    <string name="e2e_re_request_encryption_key_dialog_title">Anfrage gesendet</string>
+    <string name="e2e_re_request_encryption_key_dialog_content">Bitte öffne Riot auf einem anderen Gerät, das die Nachricht entschlüsseln kann, damit es diesem Gerät die Schlüssel senden kann.</string>
+
+    <string name="lock_screen_hint">Hier tippen…</string>
+
+    </resources>
