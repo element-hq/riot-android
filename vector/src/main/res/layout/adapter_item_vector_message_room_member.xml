@@ -82,7 +82,7 @@
                             android:layout_toLeftOf="@+id/message_timestamp_layout"
                             android:layout_toRightOf="@id/message_adapter_e2e_icon"
                             android:autoLink="all"
-                            android:text="A body"
+                            tools:text="A body"
                             android:textIsSelectable="false"
                             android:textSize="14sp" />
                     </RelativeLayout>

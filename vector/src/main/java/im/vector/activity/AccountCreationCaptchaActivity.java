@@ -18,11 +18,11 @@
 package im.vector.activity;
 
 import android.annotation.SuppressLint;
-import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.net.http.SslError;
 import android.os.Build;
+import android.support.v7.app.AlertDialog;
 import android.text.TextUtils;
 import android.view.KeyEvent;
 import android.view.View;
@@ -130,53 +130,47 @@ public class AccountCreationCaptchaActivity extends RiotAppCompatActivity {
             public void onReceivedSslError(final WebView view, final SslErrorHandler handler, final SslError error) {
                 Log.e(LOG_TAG, "## onReceivedSslError() : " + error.getCertificate());
 
-                AlertDialog.Builder builder = new AlertDialog.Builder(AccountCreationCaptchaActivity.this);
-
-                builder.setMessage(R.string.ssl_could_not_verify);
-
-                builder.setPositiveButton(R.string.ssl_trust, new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        Log.d(LOG_TAG, "## onReceivedSslError() : the user trusted");
-                        handler.proceed();
-                    }
-                });
-
-                builder.setNegativeButton(R.string.ssl_do_not_trust, new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        Log.d(LOG_TAG, "## onReceivedSslError() : the user did not trust");
-                        handler.cancel();
-                    }
-                });
-
-                builder.setOnKeyListener(new DialogInterface.OnKeyListener() {
-                    @Override
-                    public boolean onKey(DialogInterface dialog, int keyCode, KeyEvent event) {
-                        if (event.getAction() == KeyEvent.ACTION_UP && keyCode == KeyEvent.KEYCODE_BACK) {
-                            handler.cancel();
-                            Log.d(LOG_TAG, "## onReceivedSslError() : the user dismisses the trust dialog.");
-                            dialog.dismiss();
-                            return true;
-                        }
-                        return false;
-                    }
-                });
-
-                AlertDialog dialog = builder.create();
-                dialog.show();
+                new AlertDialog.Builder(AccountCreationCaptchaActivity.this)
+                        .setMessage(R.string.ssl_could_not_verify)
+                        .setPositiveButton(R.string.ssl_trust, new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                Log.d(LOG_TAG, "## onReceivedSslError() : the user trusted");
+                                handler.proceed();
+                            }
+                        })
+                        .setNegativeButton(R.string.ssl_do_not_trust, new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                Log.d(LOG_TAG, "## onReceivedSslError() : the user did not trust");
+                                handler.cancel();
+                            }
+                        })
+                        .setOnKeyListener(new DialogInterface.OnKeyListener() {
+                            @Override
+                            public boolean onKey(DialogInterface dialog, int keyCode, KeyEvent event) {
+                                if (event.getAction() == KeyEvent.ACTION_UP && keyCode == KeyEvent.KEYCODE_BACK) {
+                                    handler.cancel();
+                                    Log.d(LOG_TAG, "## onReceivedSslError() : the user dismisses the trust dialog.");
+                                    dialog.dismiss();
+                                    return true;
+                                }
+                                return false;
+                            }
+                        })
+                        .show();
             }
 
             // common error message
             private void onError(String errorMessage) {
                 Log.e(LOG_TAG, "## onError() : errorMessage");
                 Toast.makeText(AccountCreationCaptchaActivity.this, errorMessage, Toast.LENGTH_LONG).show();
-                
+
                 // on error case, close this activity
-                AccountCreationCaptchaActivity.this.runOnUiThread(new Runnable() {
+                runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
-                        AccountCreationCaptchaActivity.this.finish();
+                        finish();
                     }
                 });
             }
@@ -226,7 +220,7 @@ public class AccountCreationCaptchaActivity extends RiotAppCompatActivity {
                                 returnIntent.putExtra("response", parameters.get("response"));
                                 setResult(RESULT_OK, returnIntent);
 
-                                AccountCreationCaptchaActivity.this.finish();
+                                finish();
                             }
                         }
                     }

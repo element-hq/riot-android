@@ -4,12 +4,12 @@
     tools:context="org.matrix.vector.activity.RoomActivity">
 
     <item android:id="@+id/ic_action_speak_to_search"
-        android:title="Speak"
+        android:title="@string/speak"
         android:icon="@drawable/vector_micro_green"
         app:showAsAction="always" />
 
     <item android:id="@+id/ic_action_clear_search"
-        android:title="Clear"
+        android:title="@string/clear"
         android:icon="@drawable/vector_clear_edittext_green"
         app:showAsAction="always" />
 </menu>

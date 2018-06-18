@@ -27,6 +27,8 @@
     <string name="title_activity_group_details">Community details</string>
     <string name="title_activity_choose_sticker">Send a sticker</string>
 
+    <string name="dialog_title_third_party_licences">Third party licences</string>
+
     <!-- splash screen accessibility -->
     <string name="loading">Loading...</string>
 
@@ -40,7 +42,10 @@
     <string name="resend">Resend</string>
     <string name="redact">Redact</string>
     <string name="quote">Quote</string>
+    <string name="download">Download</string>
     <string name="share">Share</string>
+    <string name="speak">Speak</string>
+    <string name="clear">Clear</string>
     <string name="later">Later</string>
     <string name="forward">Forward</string>
     <string name="permalink">Permalink</string>
@@ -242,6 +247,14 @@
 
     <!-- crypto warnings -->
     <string name="e2e_need_log_in_again">You need to log back in to generate end-to-end encryption keys for this device and submit the public key to your homeserver.\nThis is a once off.\nSorry for the inconvenience.</string>
+
+    <!-- request again e2e key -->
+    <string name="e2e_re_request_encryption_key"><u>Re-request encryption keys</u> from your other devices.</string>
+
+    <string name="e2e_re_request_encryption_key_sent">Key request sent.</string>
+
+    <string name="e2e_re_request_encryption_key_dialog_title">Request sent</string>
+    <string name="e2e_re_request_encryption_key_dialog_content">Please launch Riot on another device that can decrypt the message so it can send the keys to this device.</string>
 
     <!-- read receipts list Screen -->
     <string name="read_receipts_list">Read Receipts List</string>
@@ -837,6 +850,9 @@
     <string name="directory_server_placeholder">Homeserver URL</string>
     <string name="directory_server_all_rooms_on_server">All rooms on %s server</string>
     <string name="directory_server_native_rooms">All native %s rooms</string>
+
+    <!-- Lock screen-->
+    <string name="lock_screen_hint">Type here…</string>
 
     <!-- Notifications -->
     <plurals name="notification_unread_notified_messages">

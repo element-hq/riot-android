@@ -1,5 +1,6 @@
 /*
  * Copyright 2017 Vector Creations Ltd
+ * Copyright 2018 New Vector Ltd
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,7 +18,6 @@
 package im.vector.util;
 
 import android.annotation.SuppressLint;
-import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -28,12 +28,12 @@ import android.graphics.BitmapFactory;
 import android.graphics.drawable.Icon;
 import android.os.Build;
 import android.support.annotation.NonNull;
+import android.support.v7.app.AlertDialog;
 import android.text.TextUtils;
 import android.view.ContextThemeWrapper;
 import android.view.Gravity;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.ImageView;
 import android.widget.PopupMenu;
 
 import org.matrix.androidsdk.MXSession;
@@ -41,7 +41,6 @@ import org.matrix.androidsdk.data.Room;
 import org.matrix.androidsdk.data.RoomAccountData;
 import org.matrix.androidsdk.data.RoomState;
 import org.matrix.androidsdk.data.RoomSummary;
-import org.matrix.androidsdk.data.store.IMXStore;
 import org.matrix.androidsdk.rest.callback.ApiCallback;
 import org.matrix.androidsdk.rest.model.Event;
 import org.matrix.androidsdk.rest.model.RoomMember;
@@ -57,12 +56,10 @@ import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.regex.Pattern;
 
 import im.vector.Matrix;
 import im.vector.R;
-import im.vector.activity.CommonActivityUtils;
 import im.vector.activity.VectorRoomActivity;
 import im.vector.adapters.AdapterUtils;
 
@@ -159,7 +156,9 @@ public class RoomUtils {
      * @param pinUnreadMessages      whether unread messages should be pinned
      * @return comparator
      */
-    public static Comparator<Room> getNotifCountRoomsComparator(final MXSession session, final boolean pinMissedNotifications, final boolean pinUnreadMessages) {
+    public static Comparator<Room> getNotifCountRoomsComparator(final MXSession session,
+                                                                final boolean pinMissedNotifications,
+                                                                final boolean pinUnreadMessages) {
         return new Comparator<Room>() {
             private Comparator<RoomSummary> mRoomSummaryComparator;
             private final HashMap<String, RoomSummary> mSummaryByRoomIdMap = new HashMap<>();
@@ -170,7 +169,8 @@ public class RoomUtils {
              */
             private Comparator<RoomSummary> getSummaryComparator() {
                 if (null == mRoomSummaryComparator) {
-                    mRoomSummaryComparator = getNotifCountRoomSummaryComparator(session.getDataHandler().getBingRulesManager(), pinMissedNotifications, pinUnreadMessages);
+                    mRoomSummaryComparator
+                            = getNotifCountRoomSummaryComparator(session.getDataHandler().getBingRulesManager(), pinMissedNotifications, pinUnreadMessages);
                 }
                 return mRoomSummaryComparator;
             }
@@ -365,7 +365,7 @@ public class RoomUtils {
             if (roomSummary.getLatestReceivedEvent() != null) {
                 eventDisplay = new EventDisplay(context, roomSummary.getLatestReceivedEvent(), roomSummary.getLatestRoomState());
                 eventDisplay.setPrependMessagesWithAuthor(true);
-                messageToDisplay = eventDisplay.getTextualDisplay(ThemeUtils.getColor(context, R.attr.room_notification_text_color));
+                messageToDisplay = eventDisplay.getTextualDisplay(ThemeUtils.INSTANCE.getColor(context, R.attr.room_notification_text_color));
             }
 
             // check if this is an invite
@@ -469,13 +469,13 @@ public class RoomUtils {
 
         final PopupMenu popup;
 
-        if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
             popup = new PopupMenu(popmenuContext, actionView, Gravity.END);
         } else {
             popup = new PopupMenu(popmenuContext, actionView);
         }
         popup.getMenuInflater().inflate(R.menu.vector_home_room_settings, popup.getMenu());
-        CommonActivityUtils.tintMenuIcons(popup.getMenu(), ThemeUtils.getColor(context, R.attr.settings_icon_tint_color));
+        ThemeUtils.INSTANCE.tintMenuIcons(popup.getMenu(), ThemeUtils.INSTANCE.getColor(context, R.attr.settings_icon_tint_color));
 
         if (room.isLeft()) {
             popup.getMenu().setGroupVisible(R.id.active_room_actions, false);
@@ -566,19 +566,23 @@ public class RoomUtils {
                     public boolean onMenuItemClick(final MenuItem item) {
                         switch (item.getItemId()) {
                             case R.id.ic_action_notifications_noisy:
-                                moreActionListener.onUpdateRoomNotificationsState(session, room.getRoomId(), BingRulesManager.RoomNotificationState.ALL_MESSAGES_NOISY);
+                                moreActionListener.onUpdateRoomNotificationsState(session,
+                                        room.getRoomId(), BingRulesManager.RoomNotificationState.ALL_MESSAGES_NOISY);
                                 break;
 
                             case R.id.ic_action_notifications_all_message:
-                                moreActionListener.onUpdateRoomNotificationsState(session, room.getRoomId(), BingRulesManager.RoomNotificationState.ALL_MESSAGES);
+                                moreActionListener.onUpdateRoomNotificationsState(session,
+                                        room.getRoomId(), BingRulesManager.RoomNotificationState.ALL_MESSAGES);
                                 break;
 
                             case R.id.ic_action_notifications_mention_only:
-                                moreActionListener.onUpdateRoomNotificationsState(session, room.getRoomId(), BingRulesManager.RoomNotificationState.MENTIONS_ONLY);
+                                moreActionListener.onUpdateRoomNotificationsState(session,
+                                        room.getRoomId(), BingRulesManager.RoomNotificationState.MENTIONS_ONLY);
                                 break;
 
                             case R.id.ic_action_notifications_mute:
-                                moreActionListener.onUpdateRoomNotificationsState(session, room.getRoomId(), BingRulesManager.RoomNotificationState.MUTE);
+                                moreActionListener.onUpdateRoomNotificationsState(session,
+                                        room.getRoomId(), BingRulesManager.RoomNotificationState.MUTE);
                                 break;
 
                             case R.id.ic_action_select_fav: {
@@ -663,7 +667,6 @@ public class RoomUtils {
                         dialog.dismiss();
                     }
                 })
-                .create()
                 .show();
     }
 
@@ -745,7 +748,11 @@ public class RoomUtils {
      * @param newTag      the new Tag
      * @param apiCallback the asynchronous callback
      */
-    public static void updateRoomTag(final MXSession session, final String roomId, final Double aTagOrder, final String newTag, final ApiCallback<Void> apiCallback) {
+    public static void updateRoomTag(final MXSession session,
+                                     final String roomId,
+                                     final Double aTagOrder,
+                                     final String newTag,
+                                     final ApiCallback<Void> apiCallback) {
         Room room = session.getDataHandler().getRoom(roomId);
 
         if (null != room) {

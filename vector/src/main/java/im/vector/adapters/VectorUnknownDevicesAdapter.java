@@ -1,5 +1,6 @@
 /*
  * Copyright 2017 Vector Creations Ltd
+ * Copyright 2018 New Vector Ltd
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,9 +18,6 @@
 package im.vector.adapters;
 
 import android.content.Context;
-
-import org.matrix.androidsdk.util.Log;
-
 import android.util.Pair;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -30,6 +28,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import org.matrix.androidsdk.crypto.data.MXDeviceInfo;
+import org.matrix.androidsdk.util.Log;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -145,7 +144,7 @@ public class VectorUnknownDevicesAdapter extends BaseExpandableListAdapter {
     @Override
     public View getGroupView(int groupPosition, boolean isExpanded, View convertView, ViewGroup parent) {
         if (null == convertView) {
-            convertView = this.mLayoutInflater.inflate(R.layout.adapter_item_vector_unknown_devices_header, null);
+            convertView = mLayoutInflater.inflate(R.layout.adapter_item_vector_unknown_devices_header, null);
         }
 
         TextView sectionNameTxtView = convertView.findViewById(R.id.heading);

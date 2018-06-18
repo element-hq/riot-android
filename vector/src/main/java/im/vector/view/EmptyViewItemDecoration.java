@@ -50,7 +50,7 @@ public class EmptyViewItemDecoration extends DividerItemDecoration {
         mTextSize = textSize * density;
         mEmptyViewHeight = emptyViewHeight * density;
         mEmptyViewLeftMargin = emptyViewLeftMargin * density;
-        mTextColor = ThemeUtils.getColor(context, R.attr.list_divider_color);
+        mTextColor = ThemeUtils.INSTANCE.getColor(context, R.attr.list_divider_color);
     }
 
     @Override

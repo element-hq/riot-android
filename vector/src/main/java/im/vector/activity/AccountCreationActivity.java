@@ -17,10 +17,10 @@
 
 package im.vector.activity;
 
-import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.net.http.SslError;
+import android.support.v7.app.AlertDialog;
 import android.view.KeyEvent;
 import android.webkit.SslErrorHandler;
 import android.webkit.WebView;
@@ -95,38 +95,32 @@ public class AccountCreationActivity extends RiotAppCompatActivity {
                                            SslError error) {
                 final SslErrorHandler fHander = handler;
 
-                AlertDialog.Builder builder = new AlertDialog.Builder(AccountCreationActivity.this);
-
-                builder.setMessage(R.string.ssl_could_not_verify);
-
-                builder.setPositiveButton(R.string.ssl_trust, new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        fHander.proceed();
-                    }
-                });
-
-                builder.setNegativeButton(R.string.ssl_do_not_trust, new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        fHander.cancel();
-                    }
-                });
-
-                builder.setOnKeyListener(new DialogInterface.OnKeyListener() {
-                    @Override
-                    public boolean onKey(DialogInterface dialog, int keyCode, KeyEvent event) {
-                        if (event.getAction() == KeyEvent.ACTION_UP && keyCode == KeyEvent.KEYCODE_BACK) {
-                            fHander.cancel();
-                            dialog.dismiss();
-                            return true;
-                        }
-                        return false;
-                    }
-                });
-
-                AlertDialog dialog = builder.create();
-                dialog.show();
+                new AlertDialog.Builder(AccountCreationActivity.this)
+                        .setMessage(R.string.ssl_could_not_verify)
+                        .setPositiveButton(R.string.ssl_trust, new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                fHander.proceed();
+                            }
+                        })
+                        .setNegativeButton(R.string.ssl_do_not_trust, new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                fHander.cancel();
+                            }
+                        })
+                        .setOnKeyListener(new DialogInterface.OnKeyListener() {
+                            @Override
+                            public boolean onKey(DialogInterface dialog, int keyCode, KeyEvent event) {
+                                if (event.getAction() == KeyEvent.ACTION_UP && keyCode == KeyEvent.KEYCODE_BACK) {
+                                    fHander.cancel();
+                                    dialog.dismiss();
+                                    return true;
+                                }
+                                return false;
+                            }
+                        })
+                        .show();
             }
 
             @Override
@@ -134,10 +128,10 @@ public class AccountCreationActivity extends RiotAppCompatActivity {
                 super.onReceivedError(view, errorCode, description, failingUrl);
 
                 // on error case, close this activity
-                AccountCreationActivity.this.runOnUiThread(new Runnable() {
+                runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
-                        AccountCreationActivity.this.finish();
+                        finish();
                     }
                 });
             }
@@ -147,12 +141,16 @@ public class AccountCreationActivity extends RiotAppCompatActivity {
                 // avoid infinite onPageFinished call
                 if (url.startsWith("http")) {
                     // Generic method to make a bridge between JS and the UIWebView
-                    final String MXCJavascriptSendObjectMessage = "javascript:window.matrixRegistration.sendObjectMessage = function(parameters) { var iframe = document.createElement('iframe');  iframe.setAttribute('src', 'js:' + JSON.stringify(parameters));  document.documentElement.appendChild(iframe); iframe.parentNode.removeChild(iframe); iframe = null; };";
+                    final String MXCJavascriptSendObjectMessage = "javascript:window.matrixRegistration.sendObjectMessage = function(parameters)" +
+                            " { var iframe = document.createElement('iframe');  iframe.setAttribute('src', 'js:' + JSON.stringify(parameters)); " +
+                            " document.documentElement.appendChild(iframe); iframe.parentNode.removeChild(iframe); iframe = null; };";
 
                     view.loadUrl(MXCJavascriptSendObjectMessage);
 
                     // The function the fallback page calls when the registration is complete
-                    final String MXCJavascriptOnRegistered = "javascript:window.matrixRegistration.onRegistered = function(homeserverUrl, userId, accessToken) { matrixRegistration.sendObjectMessage({ 'action': 'onRegistered', 'homeServer': homeserverUrl,'userId': userId,  'accessToken': accessToken  }); };";
+                    final String MXCJavascriptOnRegistered = "javascript:window.matrixRegistration.onRegistered = function(homeserverUrl, userId" +
+                            ", accessToken) { matrixRegistration.sendObjectMessage({ 'action': 'onRegistered', 'homeServer': homeserverUrl,'user" +
+                            "Id': userId,  'accessToken': accessToken  }); };";
 
                     view.loadUrl(MXCJavascriptOnRegistered);
                 }
@@ -178,7 +176,10 @@ public class AccountCreationActivity extends RiotAppCompatActivity {
                     // succeeds to parse parameters
                     if (null != parameters) {
                         // check the required paramaters
-                        if (parameters.containsKey("homeServer") && parameters.containsKey("userId") && parameters.containsKey("accessToken") && parameters.containsKey("action")) {
+                        if (parameters.containsKey("homeServer")
+                                && parameters.containsKey("userId")
+                                && parameters.containsKey("accessToken")
+                                && parameters.containsKey("action")) {
                             final String userId = parameters.get("userId");
                             final String accessToken = parameters.get("accessToken");
                             final String homeServer = parameters.get("homeServer");
@@ -191,7 +192,7 @@ public class AccountCreationActivity extends RiotAppCompatActivity {
 
                             // check the action
                             if (action.equals("onRegistered")) {
-                                AccountCreationActivity.this.runOnUiThread(new Runnable() {
+                                runOnUiThread(new Runnable() {
                                     @Override
                                     public void run() {
                                         Intent returnIntent = new Intent();
@@ -201,7 +202,7 @@ public class AccountCreationActivity extends RiotAppCompatActivity {
                                         returnIntent.putExtra("accessToken", accessToken);
                                         setResult(RESULT_OK, returnIntent);
 
-                                        AccountCreationActivity.this.finish();
+                                        finish();
                                     }
                                 });
                             }

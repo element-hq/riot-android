@@ -17,7 +17,7 @@
 
 package im.vector.util;
 
-import android.app.AlertDialog;
+import android.support.v7.app.AlertDialog;
 import android.text.TextUtils;
 import android.widget.Toast;
 
@@ -106,7 +106,12 @@ public class SlashComandsParser {
      * @param format        the message format
      * @return true if it is a splash command
      */
-    public static boolean manageSplashCommand(final VectorRoomActivity activity, final MXSession session, final Room room, final String textMessage, final String formattedBody, final String format) {
+    public static boolean manageSplashCommand(final VectorRoomActivity activity,
+                                              final MXSession session,
+                                              final Room room,
+                                              final String textMessage,
+                                              final String formattedBody,
+                                              final String format) {
         boolean isIRCCmd = false;
 
         // sanity checks
@@ -307,11 +312,11 @@ public class SlashComandsParser {
             }
 
             if (!isIRCCmd) {
-                AlertDialog.Builder dialog = new AlertDialog.Builder(activity);
-                dialog.setTitle(R.string.command_error);
-                dialog.setMessage(activity.getString(R.string.unrecognized_command, firstPart));
-                dialog.setPositiveButton(R.string.ok, null);
-                dialog.show();
+                new AlertDialog.Builder(activity)
+                        .setTitle(R.string.command_error)
+                        .setMessage(activity.getString(R.string.unrecognized_command, firstPart))
+                        .setPositiveButton(R.string.ok, null)
+                        .show();
                 // do not send the command as a message
                 isIRCCmd = true;
             }

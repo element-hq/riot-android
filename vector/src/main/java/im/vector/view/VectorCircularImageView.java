@@ -1,6 +1,7 @@
 /* 
  * Copyright 2016 OpenMarket Ltd
- * 
+ * Copyright 2018 New Vector Ltd
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
@@ -38,6 +39,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import im.vector.util.BitmapUtilKt;
+
 /**
  * Display a circular image.
  */
@@ -64,7 +67,7 @@ public class VectorCircularImageView extends android.support.v7.widget.AppCompat
             final Bitmap b = ((BitmapDrawable) drawable).getBitmap();
 
             if (null != b) {
-                this.post(new Runnable() {
+                post(new Runnable() {
                     @Override
                     public void run() {
                         setImageBitmap(b);
@@ -140,39 +143,8 @@ public class VectorCircularImageView extends android.support.v7.widget.AppCompat
             mConversionImagesThreadHandler.post(new Runnable() {
                 @Override
                 public void run() {
-                    Bitmap squareBitmap = bm;
+                    Bitmap squareBitmap = BitmapUtilKt.createSquareBitmap(bm);
 
-                    if (width == height) {
-                        // nothing to do
-                    }
-                    // larger than high
-                    else if (width > height) {
-                        try {
-                            squareBitmap = Bitmap.createBitmap(
-                                    squareBitmap,
-                                    (width - height) / 2,
-                                    0,
-                                    height,
-                                    height
-                            );
-                        } catch (Exception e) {
-                            Log.e(LOG_TAG, "## setImageBitmap - createBitmap " + e.getMessage());
-                        }
-                    }
-                    // higher than large
-                    else {
-                        try {
-                            squareBitmap = Bitmap.createBitmap(
-                                    squareBitmap,
-                                    0,
-                                    (height - width) / 2,
-                                    width,
-                                    width
-                            );
-                        } catch (Exception e) {
-                            Log.e(LOG_TAG, "## setImageBitmap - createBitmap " + e.getMessage());
-                        }
-                    }
                     try {
                         // create a rounded bitmap
                         final RoundedBitmapDrawable drawable = RoundedBitmapDrawableFactory.create(getResources(), squareBitmap);
@@ -201,7 +173,7 @@ public class VectorCircularImageView extends android.support.v7.widget.AppCompat
                         mUIHandler.post(new Runnable() {
                             @Override
                             public void run() {
-                                VectorCircularImageView.this.setImageBitmap(null);
+                                setImageBitmap(null);
                             }
                         });
                     }

@@ -220,7 +220,7 @@
         <item name="fenced_code_block_background_color">#FF00FF00</item>
     </style>
 
-    <style name="Theme.Vector.EmptyLight" parent="">
+    <style name="Theme.Vector.EmptyLight" parent="Theme.AppCompat.Light.Dialog">
         <item name="primary_color">@color/primary_color_light</item>
         <item name="riot_primary_background_color">@color/riot_primary_background_color_light</item>
         <item name="riot_primary_text_color">@color/riot_primary_text_color_light</item>
@@ -228,7 +228,7 @@
         <item name="message_text_color">?attr/riot_primary_text_color</item>
     </style>
 
-    <style name="Theme.Vector.EmptyDark" parent="">
+    <style name="Theme.Vector.EmptyDark" parent="Theme.AppCompat.Dialog">
         <item name="riot_primary_text_color">@color/riot_primary_text_color_dark</item>
         <item name="riot_primary_background_color">@color/riot_primary_background_color_dark</item>
         <item name="primary_hint_text_color">@color/primary_hint_text_color_dark</item>

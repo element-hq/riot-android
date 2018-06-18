@@ -1,5 +1,6 @@
 /*
  * Copyright 2017 Vector Creations Ltd
+ * Copyright 2018 New Vector Ltd
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -63,9 +64,9 @@ public class BugReporterMultipartBody extends RequestBody {
     private List<Long> mContentLengthSize = null;
 
     private BugReporterMultipartBody(ByteString boundary, List<Part> parts) {
-        this.mBoundary = boundary;
-        this.mContentType = MediaType.parse(FORM + "; boundary=" + boundary.utf8());
-        this.mParts = Util.immutableList(parts);
+        mBoundary = boundary;
+        mContentType = MediaType.parse(FORM + "; boundary=" + boundary.utf8());
+        mParts = Util.immutableList(parts);
     }
 
     @Override

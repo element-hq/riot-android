@@ -14,7 +14,7 @@
         android:layout_height="wrap_content"
         android:background="#22ff0000"
         android:tag="sticky"
-        android:text="Default section header" />
+        tools:text="Default section header" />
 
     <include
         layout="@layout/adapter_local_contacts_sticky_header_subview"

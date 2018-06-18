@@ -1,6 +1,7 @@
 /*
  * Copyright 2016 OpenMarket Ltd
  * Copyright 2017 Vector Creations Ltd
+ * Copyright 2018 New Vector Ltd
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -24,31 +25,37 @@ import android.content.pm.PackageInfo;
 import android.support.annotation.NonNull;
 import android.text.TextUtils;
 
+import org.matrix.androidsdk.HomeServerConnectionConfig;
+import org.matrix.androidsdk.MXDataHandler;
+import org.matrix.androidsdk.MXSession;
 import org.matrix.androidsdk.crypto.IncomingRoomKeyRequest;
 import org.matrix.androidsdk.crypto.IncomingRoomKeyRequestCancellation;
 import org.matrix.androidsdk.crypto.MXCrypto;
+import org.matrix.androidsdk.data.Room;
+import org.matrix.androidsdk.data.RoomState;
+import org.matrix.androidsdk.data.store.IMXStore;
+import org.matrix.androidsdk.data.store.MXFileStore;
+import org.matrix.androidsdk.db.MXLatestChatMessageCache;
+import org.matrix.androidsdk.db.MXMediasCache;
+import org.matrix.androidsdk.listeners.IMXNetworkEventListener;
+import org.matrix.androidsdk.listeners.MXEventListener;
 import org.matrix.androidsdk.rest.callback.ApiCallback;
 import org.matrix.androidsdk.rest.callback.SimpleApiCallback;
 import org.matrix.androidsdk.rest.client.LoginRestClient;
+import org.matrix.androidsdk.rest.model.Event;
 import org.matrix.androidsdk.rest.model.MatrixError;
+import org.matrix.androidsdk.rest.model.login.Credentials;
 import org.matrix.androidsdk.ssl.Fingerprint;
 import org.matrix.androidsdk.ssl.UnrecognizedCertificateException;
 import org.matrix.androidsdk.util.BingRulesManager;
 import org.matrix.androidsdk.util.Log;
 
-import org.matrix.androidsdk.HomeServerConnectionConfig;
-import org.matrix.androidsdk.MXDataHandler;
-import org.matrix.androidsdk.MXSession;
-import org.matrix.androidsdk.data.store.IMXStore;
-import org.matrix.androidsdk.data.store.MXFileStore;
-import org.matrix.androidsdk.data.Room;
-import org.matrix.androidsdk.data.RoomState;
-import org.matrix.androidsdk.db.MXLatestChatMessageCache;
-import org.matrix.androidsdk.db.MXMediasCache;
-import org.matrix.androidsdk.listeners.IMXNetworkEventListener;
-import org.matrix.androidsdk.listeners.MXEventListener;
-import org.matrix.androidsdk.rest.model.Event;
-import org.matrix.androidsdk.rest.model.login.Credentials;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.HashSet;
+import java.util.Iterator;
+import java.util.List;
 
 import im.vector.activity.CommonActivityUtils;
 import im.vector.activity.SplashActivity;
@@ -57,13 +64,6 @@ import im.vector.services.EventStreamService;
 import im.vector.store.LoginStorage;
 import im.vector.util.PreferencesManager;
 import im.vector.widgets.WidgetsManager;
-
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.HashSet;
-import java.util.Iterator;
-import java.util.List;
 
 /**
  * Singleton to control access to the Matrix SDK and providing point of control for MXSessions.
@@ -224,7 +224,7 @@ public class Matrix {
             PackageInfo pInfo = mAppContext.getPackageManager().getPackageInfo(mAppContext.getPackageName(), 0);
             versionName = pInfo.versionName;
 
-            flavor = mAppContext.getResources().getString(R.string.short_flavor_description);
+            flavor = mAppContext.getString(R.string.short_flavor_description);
 
             if (!TextUtils.isEmpty(flavor)) {
                 flavor += "-";
@@ -233,8 +233,8 @@ public class Matrix {
             Log.e(LOG_TAG, "## versionName() : failed " + e.getMessage());
         }
 
-        String gitVersion = mAppContext.getResources().getString(R.string.git_revision);
-        String buildNumber = mAppContext.getResources().getString(R.string.build_number);
+        String gitVersion = mAppContext.getString(R.string.git_revision);
+        String buildNumber = mAppContext.getString(R.string.build_number);
 
         if ((useBuildNumber) && !TextUtils.equals(buildNumber, "0")) {
             gitVersion = "b" + buildNumber;
@@ -242,7 +242,7 @@ public class Matrix {
         }
 
         if (longformat) {
-            String date = mAppContext.getResources().getString(R.string.git_revision_date);
+            String date = mAppContext.getString(R.string.git_revision_date);
             versionName += " (" + flavor + gitVersion + "-" + date + ")";
         } else {
             versionName += " (" + flavor + gitVersion + ")";
@@ -508,7 +508,10 @@ public class Matrix {
      * @param session          the session to clear.
      * @param clearCredentials true to clear the credentials.
      */
-    public synchronized void clearSession(final Context context, final MXSession session, final boolean clearCredentials, final SimpleApiCallback<Void> aCallback) {
+    public synchronized void clearSession(final Context context,
+                                          final MXSession session,
+                                          final boolean clearCredentials,
+                                          final SimpleApiCallback<Void> aCallback) {
         if (!session.isAlive()) {
             Log.e(LOG_TAG, "## clearSession() " + session.getMyUserId() + " is already released");
             return;
@@ -568,7 +571,10 @@ public class Matrix {
      * @param clearCredentials true to clear the credentials.
      * @param callback         the asynchronous callback
      */
-    private synchronized void clearSessions(final Context context, final Iterator<MXSession> iterator, final boolean clearCredentials, final ApiCallback<Void> callback) {
+    private synchronized void clearSessions(final Context context,
+                                            final Iterator<MXSession> iterator,
+                                            final boolean clearCredentials,
+                                            final ApiCallback<Void> callback) {
         if (!iterator.hasNext()) {
             if (null != callback) {
                 callback.onSuccess(null);
@@ -838,7 +844,7 @@ public class Matrix {
      * @return the store
      */
     public IMXStore getTmpStore(int storeIndex) {
-        if ((storeIndex >= 0) && (storeIndex < mTmpStores.size())) {
+        if ((0 <= storeIndex) && (storeIndex < mTmpStores.size())) {
             return mTmpStores.get(storeIndex);
         }
 

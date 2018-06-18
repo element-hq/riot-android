@@ -349,7 +349,8 @@ public final class GcmRegistrationManager {
 
                     @Override
                     protected void onPostExecute(String pushKey) {
-                        mRegistrationState = setStoredRegistrationState(((pushKey != null) ? RegistrationState.GCM_REGISTRED : RegistrationState.UNREGISTRATED));
+                        mRegistrationState
+                                = setStoredRegistrationState(((pushKey != null) ? RegistrationState.GCM_REGISTRED : RegistrationState.UNREGISTRATED));
                         setStoredRegistrationToken(pushKey);
 
                         // warn the listener
@@ -918,40 +919,47 @@ public final class GcmRegistrationManager {
      * @param callback the asynchronous callback
      */
     public void unregister(final MXSession session, final Pusher pusher, final ApiCallback<Void> callback) {
-        getPushersRestClient(session).removeHttpPusher(pusher.pushkey, pusher.appId, pusher.profileTag, pusher.lang, pusher.appDisplayName, pusher.deviceDisplayName, pusher.data.get("url"), new ApiCallback<Void>() {
-            @Override
-            public void onSuccess(Void info) {
-                mPushersRestClients.remove(session.getMyUserId());
-                refreshPushersList(new ArrayList<>(Matrix.getInstance(mContext).getSessions()), callback);
-            }
+        getPushersRestClient(session).removeHttpPusher(pusher.pushkey,
+                pusher.appId,
+                pusher.profileTag,
+                pusher.lang,
+                pusher.appDisplayName,
+                pusher.deviceDisplayName,
+                pusher.data.get("url"),
+                new ApiCallback<Void>() {
+                    @Override
+                    public void onSuccess(Void info) {
+                        mPushersRestClients.remove(session.getMyUserId());
+                        refreshPushersList(new ArrayList<>(Matrix.getInstance(mContext).getSessions()), callback);
+                    }
 
-            @Override
-            public void onNetworkError(Exception e) {
-                if (null != callback) {
-                    callback.onNetworkError(e);
-                }
-            }
+                    @Override
+                    public void onNetworkError(Exception e) {
+                        if (null != callback) {
+                            callback.onNetworkError(e);
+                        }
+                    }
 
-            @Override
-            public void onMatrixError(MatrixError e) {
-                if (e.mStatus == 404) {
-                    mPushersRestClients.remove(session.getMyUserId());
-                    // httpPusher is not available on server side anymore so assume the removal was successful
-                    onSuccess(null);
-                    return;
-                }
-                if (null != callback) {
-                    callback.onMatrixError(e);
-                }
-            }
+                    @Override
+                    public void onMatrixError(MatrixError e) {
+                        if (e.mStatus == 404) {
+                            mPushersRestClients.remove(session.getMyUserId());
+                            // httpPusher is not available on server side anymore so assume the removal was successful
+                            onSuccess(null);
+                            return;
+                        }
+                        if (null != callback) {
+                            callback.onMatrixError(e);
+                        }
+                    }
 
-            @Override
-            public void onUnexpectedError(Exception e) {
-                if (null != callback) {
-                    callback.onUnexpectedError(e);
-                }
-            }
-        });
+                    @Override
+                    public void onUnexpectedError(Exception e) {
+                        if (null != callback) {
+                            callback.onUnexpectedError(e);
+                        }
+                    }
+                });
     }
 
     /**
@@ -1041,7 +1049,9 @@ public final class GcmRegistrationManager {
      * Tell if GCM is registred i.e. ready to use
      */
     public boolean isGCMRegistred() {
-        return (mRegistrationState == RegistrationState.GCM_REGISTRED) || (mRegistrationState == RegistrationState.SERVER_REGISTRATING) || (mRegistrationState == RegistrationState.SERVER_REGISTERED);
+        return (mRegistrationState == RegistrationState.GCM_REGISTRED)
+                || (mRegistrationState == RegistrationState.SERVER_REGISTRATING)
+                || (mRegistrationState == RegistrationState.SERVER_REGISTERED);
     }
 
     /**
@@ -1097,7 +1107,10 @@ public final class GcmRegistrationManager {
      * Clear the GCM preferences
      */
     public void clearPreferences() {
-        getGcmSharedPreferences().edit().clear().commit();
+        getGcmSharedPreferences()
+                .edit()
+                .clear()
+                .apply();
     }
 
     /**
@@ -1110,7 +1123,7 @@ public final class GcmRegistrationManager {
             mUseGCM = true;
 
             try {
-                mUseGCM = TextUtils.equals(mContext.getResources().getString(R.string.allow_gcm_use), "true");
+                mUseGCM = TextUtils.equals(mContext.getString(R.string.allow_gcm_use), "true");
             } catch (Exception e) {
                 Log.e(LOG_TAG, "useGCM " + e.getMessage());
             }
@@ -1175,11 +1188,10 @@ public final class GcmRegistrationManager {
      * @param areAllowed true to enable the device notifications.
      */
     public void setDeviceNotificationsAllowed(boolean areAllowed) {
-        if (!getGcmSharedPreferences().edit()
+        getGcmSharedPreferences()
+                .edit()
                 .putBoolean(PREFS_ALLOW_NOTIFICATIONS, areAllowed)
-                .commit()) {
-            Log.e(LOG_TAG, "## setDeviceNotificationsAllowed () : commit failed");
-        }
+                .apply();
 
         if (!useGCM()) {
             // when GCM is disabled, enable / disable the "Listen for events" notifications
@@ -1200,11 +1212,10 @@ public final class GcmRegistrationManager {
      * @param flag true to enable the device notifications.
      */
     public void setScreenTurnedOn(boolean flag) {
-        if (!getGcmSharedPreferences().edit()
+        getGcmSharedPreferences()
+                .edit()
                 .putBoolean(PREFS_TURN_SCREEN_ON, flag)
-                .commit()) {
-            Log.e(LOG_TAG, "## setScreenTurnedOn() : commit failed");
-        }
+                .apply();
     }
 
     /**
@@ -1233,11 +1244,10 @@ public final class GcmRegistrationManager {
      * @param isAllowed true to allow the background sync.
      */
     public void setBackgroundSyncAllowed(boolean isAllowed) {
-        if (!getGcmSharedPreferences().edit()
+        getGcmSharedPreferences()
+                .edit()
                 .putBoolean(PREFS_ALLOW_BACKGROUND_SYNC, isAllowed)
-                .commit()) {
-            Log.e(LOG_TAG, "## setBackgroundSyncAllowed() : commit failed");
-        }
+                .apply();
 
         // when GCM is disabled, enable / disable the "Listen for events" notifications
         CommonActivityUtils.onGcmUpdate(mContext);
@@ -1265,11 +1275,10 @@ public final class GcmRegistrationManager {
      * @param isAllowed true to allow the content sending.
      */
     public void setContentSendingAllowed(boolean isAllowed) {
-        if (!getGcmSharedPreferences().edit()
+        getGcmSharedPreferences()
+                .edit()
                 .putBoolean(PREFS_ALLOW_SENDING_CONTENT_TO_GCM, isAllowed)
-                .commit()) {
-            Log.e(LOG_TAG, "## setContentSendingAllowed() : commit failed");
-        }
+                .apply();
     }
 
     /**
@@ -1283,11 +1292,10 @@ public final class GcmRegistrationManager {
      * @param syncDelay the new sync delay in ms.
      */
     public void setBackgroundSyncTimeOut(int syncDelay) {
-        if (!getGcmSharedPreferences().edit()
+        getGcmSharedPreferences()
+                .edit()
                 .putInt(PREFS_SYNC_TIMEOUT, syncDelay)
-                .commit()) {
-            Log.e(LOG_TAG, "## setBackgroundSyncTimeOut() : commit failed");
-        }
+                .apply();
     }
 
     /**
@@ -1319,11 +1327,10 @@ public final class GcmRegistrationManager {
             syncDelay = Math.max(syncDelay, 1000);
         }
 
-        if (!getGcmSharedPreferences().edit()
+        getGcmSharedPreferences()
+                .edit()
                 .putInt(PREFS_SYNC_DELAY, syncDelay)
-                .commit()) {
-            Log.e(LOG_TAG, "## setBackgroundSyncDelay() : commit failed");
-        }
+                .apply();
     }
 
     //================================================================================
@@ -1356,11 +1363,11 @@ public final class GcmRegistrationManager {
      */
     private void clearOldStoredRegistrationToken() {
         Log.d(LOG_TAG, "Remove old registration token");
-        if (!getGcmSharedPreferences().edit()
+
+        getGcmSharedPreferences()
+                .edit()
                 .remove(PREFS_PUSHER_REGISTRATION_TOKEN_KEY)
-                .commit()) {
-            Log.e(LOG_TAG, "## setStoredRegistrationToken() : commit failed");
-        }
+                .apply();
     }
 
     /**
@@ -1371,11 +1378,10 @@ public final class GcmRegistrationManager {
     private void setStoredRegistrationToken(String registrationToken) {
         Log.d(LOG_TAG, "Saving registration token");
 
-        if (!getGcmSharedPreferences().edit()
+        getGcmSharedPreferences()
+                .edit()
                 .putString(PREFS_PUSHER_REGISTRATION_TOKEN_KEY_FCM, registrationToken)
-                .commit()) {
-            Log.e(LOG_TAG, "## setStoredRegistrationToken() : commit failed");
-        }
+                .apply();
     }
 
     /**
@@ -1397,11 +1403,10 @@ public final class GcmRegistrationManager {
                 (RegistrationState.SERVER_REGISTRATING != state) &&
                 (RegistrationState.SERVER_UNREGISTRATING != state)) {
 
-            if (!getGcmSharedPreferences().edit()
+            getGcmSharedPreferences()
+                    .edit()
                     .putInt(PREFS_PUSHER_REGISTRATION_STATUS, state.ordinal())
-                    .commit()) {
-                Log.e(LOG_TAG, "## setStoredRegistrationState() : commit failed");
-            }
+                    .apply();
         }
 
         return state;

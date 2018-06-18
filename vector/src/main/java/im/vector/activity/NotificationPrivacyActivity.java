@@ -23,15 +23,17 @@ import android.net.Uri;
 import android.os.Build;
 import android.provider.Settings;
 import android.support.v7.widget.Toolbar;
-import android.view.MenuItem;
 import android.view.View;
 import android.widget.RadioButton;
 import android.widget.TextView;
+
+import org.jetbrains.annotations.NotNull;
 
 import butterknife.BindView;
 import im.vector.Matrix;
 import im.vector.R;
 import im.vector.gcm.GcmRegistrationManager;
+import kotlin.Pair;
 
 /*
  * This activity allows the user to choose a notifications privacy policy.
@@ -79,6 +81,12 @@ public class NotificationPrivacyActivity extends RiotAppCompatActivity  {
         return new Intent(context, NotificationPrivacyActivity.class);
     }
 
+    @NotNull
+    @Override
+    public Pair getOtherThemes() {
+        return new Pair(R.style.CountryPickerTheme_Dark, R.style.CountryPickerTheme_Black);
+    }
+
     @Override
     public int getLayoutRes() {
         return R.layout.activity_notification_privacy;
@@ -101,7 +109,7 @@ public class NotificationPrivacyActivity extends RiotAppCompatActivity  {
         }
 
         // The permission request is only necessary for devices os versions greater than API 23 (M)
-        if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.M){
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M){
             tvNeedPermission.setVisibility(View.VISIBLE);
             tvNoPermission.setVisibility(View.VISIBLE);
         } else{
@@ -140,17 +148,6 @@ public class NotificationPrivacyActivity extends RiotAppCompatActivity  {
     protected void onResume() {
         super.onResume();
         refreshNotificationPrivacy();
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        if (item.getItemId() == android.R.id.home) {
-            setResult(RESULT_CANCELED);
-            finish();
-            return true;
-        }
-
-        return super.onOptionsItemSelected(item);
     }
 
     private void refreshNotificationPrivacy() {

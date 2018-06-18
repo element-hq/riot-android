@@ -27,7 +27,9 @@ import android.text.TextUtils;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.RelativeLayout;
+import android.widget.Toast;
 
+import org.jetbrains.annotations.NotNull;
 import org.jitsi.meet.sdk.JitsiMeetView;
 import org.jitsi.meet.sdk.JitsiMeetViewListener;
 import org.matrix.androidsdk.MXSession;
@@ -43,6 +45,7 @@ import im.vector.Matrix;
 import im.vector.R;
 import im.vector.widgets.Widget;
 import im.vector.widgets.WidgetsManager;
+import kotlin.Pair;
 
 public class JitsiCallActivity extends RiotAppCompatActivity {
     private static final String LOG_TAG = JitsiCallActivity.class.getSimpleName();
@@ -103,11 +106,17 @@ public class JitsiCallActivity extends RiotAppCompatActivity {
         public void onWidgetUpdate(Widget widget) {
             if (TextUtils.equals(widget.getWidgetId(), mWidget.getWidgetId())) {
                 if (!widget.isActive()) {
-                    JitsiCallActivity.this.finish();
+                    finish();
                 }
             }
         }
     };
+
+    @NotNull
+    @Override
+    public Pair getOtherThemes() {
+        return new Pair(R.style.AppTheme_NoActionBar_Dark, R.style.AppTheme_NoActionBar_Black);
+    }
 
     @Override
     public int getLayoutRes() {
@@ -126,14 +135,14 @@ public class JitsiCallActivity extends RiotAppCompatActivity {
             mCallUrl = JITSI_SERVER_URL + confId;
         } catch (Exception e) {
             Log.e(LOG_TAG, "## onCreate() failed : " + e.getMessage());
-            this.finish();
+            finish();
             return;
         }
 
         mSession = Matrix.getMXSession(this, mWidget.getSessionId());
         if (null == mSession) {
             Log.e(LOG_TAG, "## onCreate() : undefined session ");
-            this.finish();
+            finish();
             return;
         }
 
@@ -141,7 +150,7 @@ public class JitsiCallActivity extends RiotAppCompatActivity {
         mRoom = mSession.getDataHandler().getRoom(mWidget.getRoomId());
         if (null == mRoom) {
             Log.e(LOG_TAG, "## onCreate() : undefined room " + mWidget.getRoomId());
-            this.finish();
+            finish();
             return;
         }
 
@@ -176,12 +185,12 @@ public class JitsiCallActivity extends RiotAppCompatActivity {
                 WidgetsManager.getSharedInstance().closeWidget(mSession, mRoom, mWidget.getWidgetId(), new ApiCallback<Void>() {
                     @Override
                     public void onSuccess(Void info) {
-                        JitsiCallActivity.this.finish();
+                        finish();
                     }
 
                     private void onError(String errorMessage) {
                         hideWaitingView();
-                        CommonActivityUtils.displayToast(JitsiCallActivity.this, errorMessage);
+                        Toast.makeText(JitsiCallActivity.this, errorMessage, Toast.LENGTH_SHORT).show();
                     }
 
                     @Override
@@ -205,7 +214,7 @@ public class JitsiCallActivity extends RiotAppCompatActivity {
         mBackToAppIcon.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                JitsiCallActivity.this.finish();
+                finish();
             }
         });
     }
@@ -224,11 +233,12 @@ public class JitsiCallActivity extends RiotAppCompatActivity {
             mJitsiView.loadURLObject(urlObject);
         } catch (Exception e) {
             Log.e(LOG_TAG, "## loadURL() failed : " + e.getMessage());
-            this.finish();
+            finish();
         }
 
         RelativeLayout layout = findViewById(R.id.call_layout);
-        RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.MATCH_PARENT, RelativeLayout.LayoutParams.MATCH_PARENT);
+        RelativeLayout.LayoutParams params
+                = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.MATCH_PARENT, RelativeLayout.LayoutParams.MATCH_PARENT);
         params.addRule(RelativeLayout.CENTER_IN_PARENT, RelativeLayout.TRUE);
         layout.setVisibility(View.VISIBLE);
         layout.addView(mJitsiView, 0, params);
@@ -237,14 +247,14 @@ public class JitsiCallActivity extends RiotAppCompatActivity {
             @Override
             public void onConferenceFailed(Map<String, Object> map) {
                 Log.e(LOG_TAG, "## onConferenceFailed() : " + map);
-                JitsiCallActivity.this.finish();
+                finish();
             }
 
             @Override
             public void onConferenceJoined(Map<String, Object> map) {
                 Log.d(LOG_TAG, "## onConferenceJoined() : " + map);
 
-                JitsiCallActivity.this.runOnUiThread(new Runnable() {
+                runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
                         mConnectingTextView.setVisibility(View.GONE);
@@ -255,14 +265,14 @@ public class JitsiCallActivity extends RiotAppCompatActivity {
             @Override
             public void onConferenceLeft(Map<String, Object> map) {
                 Log.d(LOG_TAG, "## onConferenceLeft() : " + map);
-                JitsiCallActivity.this.finish();
+                finish();
             }
 
             @Override
             public void onConferenceWillJoin(Map<String, Object> map) {
                 Log.d(LOG_TAG, "## onConferenceWillJoin() : " + map);
 
-                JitsiCallActivity.this.runOnUiThread(new Runnable() {
+                runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
                         hideWaitingView();
@@ -290,7 +300,7 @@ public class JitsiCallActivity extends RiotAppCompatActivity {
                 loadURL();
             } else {
                 Log.e(LOG_TAG, "## onActivityResult() : cannot draw overlay");
-                this.finish();
+                finish();
             }
         }
     }

@@ -1,6 +1,7 @@
 /* 
  * Copyright 2016 OpenMarket Ltd
- * 
+ * Copyright 2018 New Vector Ltd
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
@@ -18,22 +19,20 @@ package im.vector.view;
 
 import android.content.Context;
 import android.util.AttributeSet;
-
-import org.matrix.androidsdk.util.Log;
-
 import android.view.View;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
-import im.vector.R;
-import im.vector.widgets.Widget;
-import im.vector.widgets.WidgetsManager;
-
 import org.matrix.androidsdk.MXSession;
 import org.matrix.androidsdk.data.Room;
+import org.matrix.androidsdk.util.Log;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import im.vector.R;
+import im.vector.widgets.Widget;
+import im.vector.widgets.WidgetsManager;
 
 /**
  * This class displays the active widgets
@@ -129,7 +128,7 @@ public class ActiveWidgetsBanner extends RelativeLayout {
             }
         });
 
-        this.setOnClickListener(new OnClickListener() {
+        setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
                 if (null != mUpdateListener) {
@@ -178,7 +177,8 @@ public class ActiveWidgetsBanner extends RelativeLayout {
                     firstWidget = mActiveWidgets.get(0);
                     mWidgetTypeTextView.setText(firstWidget.getHumanName());
                 } else if (mActiveWidgets.size() > 1) {
-                    mWidgetTypeTextView.setText(mContext.getResources().getQuantityString(R.plurals.active_widgets, mActiveWidgets.size(), mActiveWidgets.size()));
+                    mWidgetTypeTextView.setText(mContext.getResources().getQuantityString(R.plurals.active_widgets,
+                            mActiveWidgets.size(), mActiveWidgets.size()));
                 }
 
                 if (null != mUpdateListener) {
@@ -193,7 +193,8 @@ public class ActiveWidgetsBanner extends RelativeLayout {
             setVisibility((mActiveWidgets.size() > 0) ? View.VISIBLE : View.GONE);
 
             // show the close widget button if the user is allowed to do it
-            mCloseWidgetIcon.setVisibility(((null != firstWidget) && (null == WidgetsManager.getSharedInstance().checkWidgetPermission(mSession, mRoom))) ? View.VISIBLE : View.GONE);
+            mCloseWidgetIcon.setVisibility(((null != firstWidget) && (null == WidgetsManager.getSharedInstance().checkWidgetPermission(mSession, mRoom))) ?
+                    View.VISIBLE : View.GONE);
         }
     }
 

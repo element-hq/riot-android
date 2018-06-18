@@ -1,6 +1,7 @@
 /*
  * Copyright 2016 OpenMarket Ltd
  * Copyright 2017 Vector Creations Ltd
+ * Copyright 2018 New Vector Ltd
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -20,6 +21,7 @@ package im.vector.adapters;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.support.v4.content.ContextCompat;
+import android.support.v7.app.AlertDialog;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -34,7 +36,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import im.vector.R;
-import im.vector.activity.CommonActivityUtils;
 import im.vector.activity.VectorMemberDetailsActivity;
 import im.vector.util.ThemeUtils;
 import im.vector.util.VectorUtils;
@@ -283,13 +284,13 @@ public class VectorMemberDetailsAdapter extends BaseExpandableListAdapter {
      */
     private String getGroupTitle(int groupPosition) {
         if (groupPosition == mAdminGroupPosition) {
-            return mContext.getResources().getString(R.string.room_participants_header_admin_tools);
+            return mContext.getString(R.string.room_participants_header_admin_tools);
         } else if (groupPosition == mCallGroupPosition) {
-            return mContext.getResources().getString(R.string.room_participants_header_call);
+            return mContext.getString(R.string.room_participants_header_call);
         } else if (groupPosition == mDirectCallsGroupPosition) {
-            return mContext.getResources().getString(R.string.room_participants_header_direct_chats);
+            return mContext.getString(R.string.room_participants_header_direct_chats);
         } else if (groupPosition == mDevicesGroupPosition) {
-            return mContext.getResources().getString(R.string.room_participants_header_devices);
+            return mContext.getString(R.string.room_participants_header_devices);
         }
 
         return "???";
@@ -309,7 +310,7 @@ public class VectorMemberDetailsAdapter extends BaseExpandableListAdapter {
     public View getGroupView(int groupPosition, boolean isExpanded, View convertView, ViewGroup parent) {
 
         if (null == convertView) {
-            convertView = this.mLayoutInflater.inflate(this.mHeaderLayoutResourceId, null);
+            convertView = mLayoutInflater.inflate(mHeaderLayoutResourceId, null);
         }
 
         ((TextView) convertView.findViewById(R.id.heading)).setText(getGroupTitle(groupPosition));
@@ -366,7 +367,7 @@ public class VectorMemberDetailsAdapter extends BaseExpandableListAdapter {
         // room selection
         if (null != currentItem.mRoom) {
             // room name
-            viewHolder.mActionDescTextView.setTextColor(ThemeUtils.getColor(mContext, R.attr.riot_primary_text_color));
+            viewHolder.mActionDescTextView.setTextColor(ThemeUtils.INSTANCE.getColor(mContext, R.attr.riot_primary_text_color));
             viewHolder.mActionDescTextView.setText(VectorUtils.getRoomDisplayName(mContext, mSession, currentItem.mRoom));
 
             // room avatar
@@ -393,11 +394,12 @@ public class VectorMemberDetailsAdapter extends BaseExpandableListAdapter {
             viewHolder.mActionImageView.setImageResource(currentItem.mIconResourceId);
 
             if (currentItem.mIconResourceId != R.drawable.ic_remove_circle_outline_red) {
-                viewHolder.mActionImageView.setImageDrawable(CommonActivityUtils.tintDrawable(mContext, viewHolder.mActionImageView.getDrawable(), R.attr.settings_icon_tint_color));
+                viewHolder.mActionImageView.setImageDrawable(
+                        ThemeUtils.INSTANCE.tintDrawable(mContext, viewHolder.mActionImageView.getDrawable(), R.attr.settings_icon_tint_color));
             }
 
             // update the text colour: specific colour is required for the remove action
-            int colourTxt = ThemeUtils.getColor(mContext, R.attr.riot_primary_text_color);
+            int colourTxt = ThemeUtils.INSTANCE.getColor(mContext, R.attr.riot_primary_text_color);
 
             if (VectorMemberDetailsActivity.ITEM_ACTION_KICK == currentItem.mActionType) {
                 colourTxt = ContextCompat.getColor(mContext, R.color.vector_fuchsia_color);
@@ -412,29 +414,29 @@ public class VectorMemberDetailsAdapter extends BaseExpandableListAdapter {
                     if (null != mActionListener) {
                         if (VectorMemberDetailsActivity.ITEM_ACTION_KICK == currentItem.mActionType
                                 || VectorMemberDetailsActivity.ITEM_ACTION_BAN == currentItem.mActionType) {
-                            android.support.v7.app.AlertDialog.Builder builder = new android.support.v7.app.AlertDialog.Builder(view.getContext());
-                            builder.setTitle(R.string.dialog_title_confirmation);
+                            AlertDialog.Builder builder = new AlertDialog.Builder(view.getContext())
+                                    .setTitle(R.string.dialog_title_confirmation);
 
                             if (VectorMemberDetailsActivity.ITEM_ACTION_KICK == currentItem.mActionType) {
                                 builder.setMessage(view.getContext().getString(R.string.room_participants_kick_prompt_msg));
                             } else {
                                 builder.setMessage(view.getContext().getString(R.string.room_participants_ban_prompt_msg));
                             }
-                            builder.setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
-                                @Override
-                                public void onClick(DialogInterface dialog, int which) {
-                                    mActionListener.performItemAction(currentItem.mActionType);
-                                }
-                            });
 
-                            builder.setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
-                                @Override
-                                public void onClick(DialogInterface dialog, int which) {
-                                    // nothing to do
-                                }
-                            });
-
-                            builder.show();
+                            builder
+                                    .setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
+                                        @Override
+                                        public void onClick(DialogInterface dialog, int which) {
+                                            mActionListener.performItemAction(currentItem.mActionType);
+                                        }
+                                    })
+                                    .setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
+                                        @Override
+                                        public void onClick(DialogInterface dialog, int which) {
+                                            // nothing to do
+                                        }
+                                    })
+                                    .show();
                         } else {
                             mActionListener.performItemAction(currentItem.mActionType);
                         }

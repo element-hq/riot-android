@@ -18,7 +18,6 @@
 
 package im.vector.activity;
 
-import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.BroadcastReceiver;
 import android.content.Context;
@@ -36,6 +35,7 @@ import android.support.annotation.NonNull;
 import android.support.annotation.StringRes;
 import android.support.design.widget.TextInputEditText;
 import android.support.v4.content.ContextCompat;
+import android.support.v7.app.AlertDialog;
 import android.text.Editable;
 import android.text.TextUtils;
 import android.text.TextWatcher;
@@ -50,6 +50,7 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import org.jetbrains.annotations.NotNull;
 import org.matrix.androidsdk.HomeServerConnectionConfig;
 import org.matrix.androidsdk.MXSession;
 import org.matrix.androidsdk.rest.callback.ApiCallback;
@@ -85,6 +86,9 @@ import im.vector.receiver.VectorUniversalLinkReceiver;
 import im.vector.repositories.ServerUrlsRepository;
 import im.vector.services.EventStreamService;
 import im.vector.util.PhoneNumberUtils;
+import im.vector.util.ThemeUtils;
+import im.vector.util.ViewUtilKt;
+import kotlin.Pair;
 
 /**
  * Displays the login screen.
@@ -336,6 +340,12 @@ public class LoginActivity extends MXCActionBarActivity implements RegistrationM
         }
     }
 
+    @NotNull
+    @Override
+    public Pair getOtherThemes() {
+        return new Pair(R.style.LoginAppTheme_Dark, R.style.LoginAppTheme_Black);
+    }
+
     @Override
     public int getLayoutRes() {
         return R.layout.activity_vector_login;
@@ -380,7 +390,12 @@ public class LoginActivity extends MXCActionBarActivity implements RegistrationM
         mLoginEmailTextView = findViewById(R.id.login_user_name);
         EditText loginPhoneNumber = findViewById(R.id.login_phone_number_value);
         EditText loginPhoneNumberCountryCode = findViewById(R.id.login_phone_number_country);
-        loginPhoneNumberCountryCode.setCompoundDrawablesWithIntrinsicBounds(null, null, CommonActivityUtils.tintDrawable(this, ContextCompat.getDrawable(this, R.drawable.ic_material_expand_more_black), R.attr.settings_icon_tint_color), null);
+        loginPhoneNumberCountryCode.setCompoundDrawablesWithIntrinsicBounds(null,
+                null,
+                ThemeUtils.INSTANCE.tintDrawable(this,
+                        ContextCompat.getDrawable(this, R.drawable.ic_material_expand_more_black),
+                        R.attr.settings_icon_tint_color),
+                null);
         mLoginPasswordTextView = findViewById(R.id.login_password);
 
         // account creation
@@ -394,7 +409,12 @@ public class LoginActivity extends MXCActionBarActivity implements RegistrationM
         mPhoneNumberLayout = findViewById(R.id.registration_phone_number);
         mPhoneNumber = findViewById(R.id.registration_phone_number_value);
         EditText phoneNumberCountryCode = findViewById(R.id.registration_phone_number_country);
-        phoneNumberCountryCode.setCompoundDrawablesWithIntrinsicBounds(null, null, CommonActivityUtils.tintDrawable(this, ContextCompat.getDrawable(this, R.drawable.ic_material_expand_more_black), R.attr.settings_icon_tint_color), null);
+        phoneNumberCountryCode.setCompoundDrawablesWithIntrinsicBounds(null,
+                null,
+                ThemeUtils.INSTANCE.tintDrawable(this,
+                        ContextCompat.getDrawable(this, R.drawable.ic_material_expand_more_black),
+                        R.attr.settings_icon_tint_color),
+                null);
         mSubmitThreePidButton = findViewById(R.id.button_submit);
         mSkipThreePidButton = findViewById(R.id.button_skip);
 
@@ -848,7 +868,7 @@ public class LoginActivity extends MXCActionBarActivity implements RegistrationM
 
         Log.e(LOG_TAG, "## hasCredentials() : invalid credentials");
 
-        this.runOnUiThread(new Runnable() {
+        runOnUiThread(new Runnable() {
             @Override
             public void run() {
                 try {
@@ -951,7 +971,7 @@ public class LoginActivity extends MXCActionBarActivity implements RegistrationM
                     enableLoadingScreen(false);
 
                     // refresh the messages
-                    hideMainLayoutAndToast(getResources().getString(R.string.auth_reset_password_email_validation_message, email));
+                    hideMainLayoutAndToast(getString(R.string.auth_reset_password_email_validation_message, email));
 
                     mMode = MODE_FORGOT_PASSWORD_WAITING_VALIDATION;
                     refreshDisplay();
@@ -1047,7 +1067,7 @@ public class LoginActivity extends MXCActionBarActivity implements RegistrationM
                         enableLoadingScreen(false);
 
                         // refresh the messages
-                        hideMainLayoutAndToast(getResources().getString(R.string.auth_reset_password_success_message));
+                        hideMainLayoutAndToast(getString(R.string.auth_reset_password_success_message));
                         mIsPasswordResetted = true;
                         refreshDisplay();
                     }
@@ -1085,7 +1105,7 @@ public class LoginActivity extends MXCActionBarActivity implements RegistrationM
                         if (TextUtils.equals(e.errcode, MatrixError.UNAUTHORIZED)) {
                             Log.d(LOG_TAG, "onForgotOnEmailValidated : failed UNAUTHORIZED");
 
-                            onError(getResources().getString(R.string.auth_reset_password_error_unauthorized), false);
+                            onError(getString(R.string.auth_reset_password_error_unauthorized), false);
                         } else if (TextUtils.equals(e.errcode, MatrixError.NOT_FOUND)) {
                             String hsUrlString = hsConfig.getHomeserverUri().toString();
 
@@ -1132,19 +1152,19 @@ public class LoginActivity extends MXCActionBarActivity implements RegistrationM
 
         if (null != errCode) {
             if (TextUtils.equals(errCode, MatrixError.FORBIDDEN)) {
-                message = getResources().getString(R.string.login_error_forbidden);
+                message = getString(R.string.login_error_forbidden);
             } else if (TextUtils.equals(errCode, MatrixError.UNKNOWN_TOKEN)) {
-                message = getResources().getString(R.string.login_error_unknown_token);
+                message = getString(R.string.login_error_unknown_token);
             } else if (TextUtils.equals(errCode, MatrixError.BAD_JSON)) {
-                message = getResources().getString(R.string.login_error_bad_json);
+                message = getString(R.string.login_error_bad_json);
             } else if (TextUtils.equals(errCode, MatrixError.NOT_JSON)) {
-                message = getResources().getString(R.string.login_error_not_json);
+                message = getString(R.string.login_error_not_json);
             } else if (TextUtils.equals(errCode, MatrixError.LIMIT_EXCEEDED)) {
-                message = getResources().getString(R.string.login_error_limit_exceeded);
+                message = getString(R.string.login_error_limit_exceeded);
             } else if (TextUtils.equals(errCode, MatrixError.USER_IN_USE)) {
-                message = getResources().getString(R.string.login_error_user_in_use);
+                message = getString(R.string.login_error_user_in_use);
             } else if (TextUtils.equals(errCode, MatrixError.LOGIN_EMAIL_URL_NOT_YET)) {
-                message = getResources().getString(R.string.login_error_login_email_not_yet);
+                message = getString(R.string.login_error_login_email_not_yet);
             }
         }
 
@@ -1167,7 +1187,8 @@ public class LoginActivity extends MXCActionBarActivity implements RegistrationM
         Log.d(LOG_TAG, "## processEmailValidationExtras() IN");
 
         if (null != aRegistrationBundle) {
-            mEmailValidationExtraParams = (HashMap<String, String>) aRegistrationBundle.getSerializable(VectorRegistrationReceiver.EXTRA_EMAIL_VALIDATION_PARAMS);
+            mEmailValidationExtraParams =
+                    (HashMap<String, String>) aRegistrationBundle.getSerializable(VectorRegistrationReceiver.EXTRA_EMAIL_VALIDATION_PARAMS);
 
             if (null != mEmailValidationExtraParams) {
                 // login was started in email validation mode
@@ -1246,8 +1267,14 @@ public class LoginActivity extends MXCActionBarActivity implements RegistrationM
      * @param aSessionId      session ID
      * @param aHomeServer     home server url
      */
-    private void submitEmailToken(final String aToken, final String aClientSecret, final String aSid, final String aSessionId, final String aHomeServer, final String aIdentityServer) {
-        final HomeServerConnectionConfig homeServerConfig = mHomeserverConnectionConfig = new HomeServerConnectionConfig(Uri.parse(aHomeServer), Uri.parse(aIdentityServer), null, new ArrayList<Fingerprint>(), false);
+    private void submitEmailToken(final String aToken,
+                                  final String aClientSecret,
+                                  final String aSid,
+                                  final String aSessionId,
+                                  final String aHomeServer,
+                                  final String aIdentityServer) {
+        final HomeServerConnectionConfig homeServerConfig = mHomeserverConnectionConfig =
+                new HomeServerConnectionConfig(Uri.parse(aHomeServer), Uri.parse(aIdentityServer), null, new ArrayList<Fingerprint>(), false);
         RegistrationManager.getInstance().setHsConfig(homeServerConfig);
         Log.d(LOG_TAG, "## submitEmailToken(): IN");
 
@@ -1285,7 +1312,12 @@ public class LoginActivity extends MXCActionBarActivity implements RegistrationM
                             Log.d(LoginActivity.LOG_TAG, "## submitEmailToken(): onSuccess() - registerAfterEmailValidations() started");
                             mMode = MODE_ACCOUNT_CREATION;
                             enableLoadingScreen(true);
-                            RegistrationManager.getInstance().registerAfterEmailValidation(LoginActivity.this, aClientSecret, aSid, aIdentityServer, aSessionId, LoginActivity.this);
+                            RegistrationManager.getInstance().registerAfterEmailValidation(LoginActivity.this,
+                                    aClientSecret,
+                                    aSid,
+                                    aIdentityServer,
+                                    aSessionId,
+                                    LoginActivity.this);
                         }
                     } else {
                         Log.d(LoginActivity.LOG_TAG, "## submitEmailToken(): onSuccess() - failed (success=false)");
@@ -1659,7 +1691,7 @@ public class LoginActivity extends MXCActionBarActivity implements RegistrationM
                     saveServerUrlsIfCustomValuesHasBeenEntered();
 
                     goToSplash();
-                    LoginActivity.this.finish();
+                    finish();
                 }
 
                 @Override
@@ -1683,8 +1715,18 @@ public class LoginActivity extends MXCActionBarActivity implements RegistrationM
                     // try with the vector.im HS
                     if (TextUtils.equals(hsUrlString, getString(R.string.vector_im_server_url)) && TextUtils.equals(e.errcode, MatrixError.FORBIDDEN)) {
                         Log.e(LOG_TAG, "onLoginClick : test with matrix.org as HS");
-                        mHomeserverConnectionConfig = new HomeServerConnectionConfig(Uri.parse(getString(R.string.matrix_org_server_url)), Uri.parse(identityUrlString), null, new ArrayList<Fingerprint>(), false);
-                        login(mHomeserverConnectionConfig, getString(R.string.matrix_org_server_url), identityUrlString, username, phoneNumber, phoneNumberCountry, password);
+                        mHomeserverConnectionConfig = new HomeServerConnectionConfig(Uri.parse(getString(R.string.matrix_org_server_url)),
+                                Uri.parse(identityUrlString),
+                                null,
+                                new ArrayList<Fingerprint>(),
+                                false);
+                        login(mHomeserverConnectionConfig,
+                                getString(R.string.matrix_org_server_url),
+                                identityUrlString,
+                                username,
+                                phoneNumber,
+                                phoneNumberCountry,
+                                password);
                     } else {
                         Log.e(LOG_TAG, "onLoginClick : onMatrixError " + e.getLocalizedMessage());
                         enableLoadingScreen(false);
@@ -1966,11 +2008,11 @@ public class LoginActivity extends MXCActionBarActivity implements RegistrationM
         mLoginButton.setVisibility(isForgotPasswordMode ? View.GONE : View.VISIBLE);
 
         mForgotPasswordButton.setVisibility((mMode == MODE_FORGOT_PASSWORD) ? View.VISIBLE : View.GONE);
-        mForgotPasswordButton.setAlpha(enabled ? CommonActivityUtils.UTILS_OPACITY_NONE : CommonActivityUtils.UTILS_OPACITY_HALF);
+        mForgotPasswordButton.setAlpha(enabled ? ViewUtilKt.UTILS_OPACITY_FULL : ViewUtilKt.UTILS_OPACITY_HALF);
         mForgotPasswordButton.setEnabled(enabled);
 
         mForgotValidateEmailButton.setVisibility((mMode == MODE_FORGOT_PASSWORD_WAITING_VALIDATION) ? View.VISIBLE : View.GONE);
-        mForgotValidateEmailButton.setAlpha(enabled ? CommonActivityUtils.UTILS_OPACITY_NONE : CommonActivityUtils.UTILS_OPACITY_HALF);
+        mForgotValidateEmailButton.setAlpha(enabled ? ViewUtilKt.UTILS_OPACITY_FULL : ViewUtilKt.UTILS_OPACITY_HALF);
         mForgotValidateEmailButton.setEnabled(enabled);
 
         // other mode : display the login password button
@@ -1979,8 +2021,8 @@ public class LoginActivity extends MXCActionBarActivity implements RegistrationM
         mLoginButton.setEnabled(loginEnabled);
         mRegisterButton.setEnabled(registerEnabled);
 
-        mLoginButton.setAlpha(loginEnabled ? CommonActivityUtils.UTILS_OPACITY_NONE : CommonActivityUtils.UTILS_OPACITY_HALF);
-        mRegisterButton.setAlpha(registerEnabled ? CommonActivityUtils.UTILS_OPACITY_NONE : CommonActivityUtils.UTILS_OPACITY_HALF);
+        mLoginButton.setAlpha(loginEnabled ? ViewUtilKt.UTILS_OPACITY_FULL : ViewUtilKt.UTILS_OPACITY_HALF);
+        mRegisterButton.setAlpha(registerEnabled ? ViewUtilKt.UTILS_OPACITY_FULL : ViewUtilKt.UTILS_OPACITY_HALF);
     }
 
     //==============================================================================================================
@@ -2008,7 +2050,10 @@ public class LoginActivity extends MXCActionBarActivity implements RegistrationM
         if (null == mHomeserverConnectionConfig) {
             String hsUrlString = getHomeServerUrl();
 
-            if (TextUtils.isEmpty(hsUrlString) || !hsUrlString.startsWith("http") || TextUtils.equals(hsUrlString, "http://") || TextUtils.equals(hsUrlString, "https://")) {
+            if (TextUtils.isEmpty(hsUrlString)
+                    || !hsUrlString.startsWith("http")
+                    || TextUtils.equals(hsUrlString, "http://")
+                    || TextUtils.equals(hsUrlString, "https://")) {
                 Toast.makeText(this, getString(R.string.login_error_must_start_http), Toast.LENGTH_SHORT).show();
                 return null;
             }
@@ -2019,7 +2064,10 @@ public class LoginActivity extends MXCActionBarActivity implements RegistrationM
 
             String identityServerUrlString = getIdentityServerUrl();
 
-            if (TextUtils.isEmpty(identityServerUrlString) || !identityServerUrlString.startsWith("http") || TextUtils.equals(identityServerUrlString, "http://") || TextUtils.equals(identityServerUrlString, "https://")) {
+            if (TextUtils.isEmpty(identityServerUrlString)
+                    || !identityServerUrlString.startsWith("http")
+                    || TextUtils.equals(identityServerUrlString, "http://")
+                    || TextUtils.equals(identityServerUrlString, "https://")) {
                 Toast.makeText(this, getString(R.string.login_error_must_start_http), Toast.LENGTH_SHORT).show();
                 return null;
             }
@@ -2030,7 +2078,11 @@ public class LoginActivity extends MXCActionBarActivity implements RegistrationM
 
             try {
                 mHomeserverConnectionConfig = null;
-                mHomeserverConnectionConfig = new HomeServerConnectionConfig(Uri.parse(hsUrlString), Uri.parse(identityServerUrlString), null, new ArrayList<Fingerprint>(), false);
+                mHomeserverConnectionConfig = new HomeServerConnectionConfig(Uri.parse(hsUrlString),
+                        Uri.parse(identityServerUrlString),
+                        null,
+                        new ArrayList<Fingerprint>(),
+                        false);
             } catch (Exception e) {
                 Log.e(LOG_TAG, "getHsConfig fails " + e.getLocalizedMessage());
             }
@@ -2068,7 +2120,7 @@ public class LoginActivity extends MXCActionBarActivity implements RegistrationM
                 enableLoadingScreen(false);
                 refreshDisplay();
             }
-        } else if ((RequestCodesKt.ACCOUNT_CREATION_ACTIVITY_REQUEST_CODE == requestCode) || (RequestCodesKt.FALLBACK_LOGIN_ACTIVITY_REQUEST_CODE == requestCode)) {
+        } else if (RequestCodesKt.ACCOUNT_CREATION_ACTIVITY_REQUEST_CODE == requestCode || RequestCodesKt.FALLBACK_LOGIN_ACTIVITY_REQUEST_CODE == requestCode) {
             if (resultCode == RESULT_OK) {
                 Log.d(LOG_TAG, "## onActivityResult(): ACCOUNT_CREATION_ACTIVITY_REQUEST_CODE => RESULT_OK");
                 String homeServer = data.getStringExtra("homeServer");
@@ -2219,21 +2271,22 @@ public class LoginActivity extends MXCActionBarActivity implements RegistrationM
         if (mRegistrationPhoneNumberHandler.getPhoneNumber() != null) {
             // Communicate phone number to singleton + start validation process (always phone first)
             enableLoadingScreen(true);
-            RegistrationManager.getInstance().addPhoneNumberThreePid(mRegistrationPhoneNumberHandler.getE164PhoneNumber(), mRegistrationPhoneNumberHandler.getCountryCode(),
-                    new RegistrationManager.ThreePidRequestListener() {
-                        @Override
-                        public void onThreePidRequested(ThreePid pid) {
-                            enableLoadingScreen(false);
-                            if (!TextUtils.isEmpty(pid.sid)) {
-                                onPhoneNumberSidReceived(pid);
-                            }
-                        }
+            RegistrationManager.getInstance()
+                    .addPhoneNumberThreePid(mRegistrationPhoneNumberHandler.getE164PhoneNumber(), mRegistrationPhoneNumberHandler.getCountryCode(),
+                            new RegistrationManager.ThreePidRequestListener() {
+                                @Override
+                                public void onThreePidRequested(ThreePid pid) {
+                                    enableLoadingScreen(false);
+                                    if (!TextUtils.isEmpty(pid.sid)) {
+                                        onPhoneNumberSidReceived(pid);
+                                    }
+                                }
 
-                        @Override
-                        public void onThreePidRequestFailed(@StringRes int errorMessageRes) {
-                            LoginActivity.this.onThreePidRequestFailed(getString(errorMessageRes));
-                        }
-                    });
+                                @Override
+                                public void onThreePidRequestFailed(@StringRes int errorMessageRes) {
+                                    LoginActivity.this.onThreePidRequestFailed(getString(errorMessageRes));
+                                }
+                            });
         } else {
             createAccount();
         }
@@ -2402,7 +2455,7 @@ public class LoginActivity extends MXCActionBarActivity implements RegistrationM
         Log.d(LOG_TAG, "## onWaitingEmailValidation");
 
         // Prompt the user to check his email
-        hideMainLayoutAndToast(getResources().getString(R.string.auth_email_validation_message));
+        hideMainLayoutAndToast(getString(R.string.auth_email_validation_message));
         enableLoadingScreen(true);
 
         // Loop to know whether the email has been checked

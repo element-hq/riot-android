@@ -18,39 +18,31 @@
 package im.vector.activity
 
 import android.annotation.SuppressLint
-import android.app.AlertDialog
 import android.content.Context
 import android.content.Intent
 import android.graphics.Bitmap
 import android.os.Build
-import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
+import android.support.v7.app.AlertDialog
 import android.text.TextUtils
 import android.view.View
 import android.view.ViewGroup
-import android.webkit.PermissionRequest
-import android.webkit.WebChromeClient
-import android.webkit.WebSettings
-import android.webkit.WebView
-import android.webkit.WebViewClient
+import android.webkit.*
 import android.widget.TextView
 import androidx.core.view.isInvisible
-import androidx.core.view.isVisible
-
-import org.matrix.androidsdk.MXSession
-import org.matrix.androidsdk.data.Room
-import org.matrix.androidsdk.rest.callback.ApiCallback
-import org.matrix.androidsdk.rest.model.MatrixError
-import org.matrix.androidsdk.util.Log
-
+import androidx.core.widget.toast
 import butterknife.BindView
-import butterknife.ButterKnife
 import butterknife.OnClick
 import im.vector.Matrix
 import im.vector.R
 import im.vector.widgets.Widget
 import im.vector.widgets.WidgetsManager
+import org.matrix.androidsdk.MXSession
+import org.matrix.androidsdk.data.Room
+import org.matrix.androidsdk.rest.callback.ApiCallback
+import org.matrix.androidsdk.rest.model.MatrixError
+import org.matrix.androidsdk.util.Log
 
 /*
  * This class displays a widget
@@ -89,6 +81,8 @@ class WidgetActivity : RiotAppCompatActivity() {
     /* ==========================================================================================
      * LIFE CYCLE
      * ========================================================================================== */
+
+    override fun getOtherThemes() = Pair(R.style.AppTheme_NoActionBar_Dark, R.style.AppTheme_NoActionBar_Black)
 
     override fun getLayoutRes() = R.layout.activity_widget
 
@@ -173,14 +167,14 @@ class WidgetActivity : RiotAppCompatActivity() {
                     dialog.dismiss()
                     showWaitingView()
                     WidgetsManager.getSharedInstance().closeWidget(mSession, mRoom, mWidget!!.widgetId, object : ApiCallback<Void> {
-                        override fun onSuccess(info: Void) {
+                        override fun onSuccess(info: Void?) {
                             hideWaitingView()
                             finish()
                         }
 
                         private fun onError(errorMessage: String) {
                             hideWaitingView()
-                            CommonActivityUtils.displayToast(this@WidgetActivity, errorMessage)
+                            toast(errorMessage)
                         }
 
                         override fun onNetworkError(e: Exception) {
@@ -197,7 +191,6 @@ class WidgetActivity : RiotAppCompatActivity() {
                     })
                 }
                 .setNegativeButton(R.string.cancel) { dialog, which -> dialog.dismiss() }
-                .create()
                 .show()
     }
 
@@ -295,7 +288,7 @@ class WidgetActivity : RiotAppCompatActivity() {
 
             private fun onError(errorMessage: String) {
                 hideWaitingView()
-                CommonActivityUtils.displayToast(this@WidgetActivity, errorMessage)
+                toast(errorMessage)
                 finish()
             }
 

@@ -76,37 +76,37 @@ public class CallUtilities {
             case IMXCall.CALL_STATE_WAIT_LOCAL_MEDIA:
                 if (call.isIncoming()) {
                     if (call.isVideo()) {
-                        return context.getResources().getString(R.string.incoming_video_call);
+                        return context.getString(R.string.incoming_video_call);
                     } else {
-                        return context.getResources().getString(R.string.incoming_voice_call);
+                        return context.getString(R.string.incoming_voice_call);
                     }
                 }
             case IMXCall.CALL_STATE_INVITE_SENT:
             case IMXCall.CALL_STATE_CONNECTING:
             case IMXCall.CALL_STATE_CREATE_ANSWER:
             case IMXCall.CALL_STATE_WAIT_CREATE_OFFER: {
-                return context.getResources().getString(R.string.call_connecting);
+                return context.getString(R.string.call_connecting);
             }
             case IMXCall.CALL_STATE_RINGING:
                 if (call.isIncoming()) {
                     if (call.isVideo()) {
-                        return context.getResources().getString(R.string.incoming_video_call);
+                        return context.getString(R.string.incoming_video_call);
                     } else {
-                        return context.getResources().getString(R.string.incoming_voice_call);
+                        return context.getString(R.string.incoming_voice_call);
                     }
                 } else {
-                    return context.getResources().getString(R.string.call_ring);
+                    return context.getString(R.string.call_ring);
                 }
             case IMXCall.CALL_STATE_CONNECTED:
                 long elapsedTime = call.getCallElapsedTime();
 
                 if (elapsedTime < 0) {
-                    return context.getResources().getString(R.string.call_connected);
+                    return context.getString(R.string.call_connected);
                 } else {
                     return formatSecondsToHMS(elapsedTime);
                 }
             case IMXCall.CALL_STATE_ENDED:
-                return context.getResources().getString(R.string.call_ended);
+                return context.getString(R.string.call_ended);
         }
 
         return null;

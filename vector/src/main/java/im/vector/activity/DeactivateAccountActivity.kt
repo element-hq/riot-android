@@ -53,7 +53,11 @@ class DeactivateAccountActivity : RiotAppCompatActivity() {
      * Life cycle
      * ========================================================================================== */
 
+    override fun getOtherThemes(): Pair<Int, Int> = Pair(R.style.AppTheme_NoActionBar_Dark, R.style.AppTheme_NoActionBar_Black)
+
     override fun getLayoutRes() = R.layout.activity_deactivate_account
+
+    override fun getTitleRes() = R.string.deactivate_account_title
 
     override fun initUiAndData() {
         super.initUiAndData()
@@ -65,8 +69,6 @@ class DeactivateAccountActivity : RiotAppCompatActivity() {
         // Get the session
         session = Matrix.getInstance(this).defaultSession
     }
-
-    override fun getTitleRes() = R.string.deactivate_account_title
 
     /* ==========================================================================================
      * UI Event

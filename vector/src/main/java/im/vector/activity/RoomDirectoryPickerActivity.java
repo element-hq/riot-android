@@ -26,12 +26,12 @@ import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
-import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import org.jetbrains.annotations.NotNull;
 import org.matrix.androidsdk.MXSession;
 import org.matrix.androidsdk.rest.callback.ApiCallback;
 import org.matrix.androidsdk.rest.model.MatrixError;
@@ -48,7 +48,7 @@ import im.vector.Matrix;
 import im.vector.R;
 import im.vector.adapters.RoomDirectoryAdapter;
 import im.vector.util.RoomDirectoryData;
-import im.vector.util.ThemeUtils;
+import kotlin.Pair;
 
 public class RoomDirectoryPickerActivity extends RiotAppCompatActivity implements RoomDirectoryAdapter.OnSelectRoomDirectoryListener {
     // LOG TAG
@@ -73,10 +73,16 @@ public class RoomDirectoryPickerActivity extends RiotAppCompatActivity implement
     }
 
     /*
-    * *********************************************************************************************
-    * Activity lifecycle
-    * *********************************************************************************************
-    */
+     * *********************************************************************************************
+     * Activity lifecycle
+     * *********************************************************************************************
+     */
+
+    @NotNull
+    @Override
+    public Pair getOtherThemes() {
+        return new Pair(R.style.DirectoryPickerTheme_Dark, R.style.DirectoryPickerTheme_Black);
+    }
 
     @Override
     public int getLayoutRes() {
@@ -110,7 +116,7 @@ public class RoomDirectoryPickerActivity extends RiotAppCompatActivity implement
 
         // should never happen
         if ((null == mSession) || !mSession.isAlive()) {
-            this.finish();
+            finish();
             return;
         }
 
@@ -118,22 +124,15 @@ public class RoomDirectoryPickerActivity extends RiotAppCompatActivity implement
     }
 
     @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.menu_directory_server_picker, menu);
-        CommonActivityUtils.tintMenuIcons(menu, ThemeUtils.getColor(this, R.attr.icon_tint_on_dark_action_bar_color));
-        return true;
+    public int getMenuRes() {
+        return R.menu.menu_directory_server_picker;
     }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        if (item.getItemId() == android.R.id.home) {
-            setResult(RESULT_CANCELED);
-            finish();
-            return true;
-        }
-
         if (item.getItemId() == R.id.action_add_custom_hs) {
             displayCustomDirectoryDialog();
+            return true;
         }
 
         return super.onOptionsItemSelected(item);
@@ -272,10 +271,10 @@ public class RoomDirectoryPickerActivity extends RiotAppCompatActivity implement
     }
 
     /*
-    * *********************************************************************************************
-    * UI
-    * *********************************************************************************************
-    */
+     * *********************************************************************************************
+     * UI
+     * *********************************************************************************************
+     */
 
     private void initViews() {
         RecyclerView roomDirectoryRecyclerView = findViewById(R.id.room_directory_recycler_view);
@@ -289,10 +288,10 @@ public class RoomDirectoryPickerActivity extends RiotAppCompatActivity implement
     }
 
     /*
-    * *********************************************************************************************
-    * Listener
-    * *********************************************************************************************
-    */
+     * *********************************************************************************************
+     * Listener
+     * *********************************************************************************************
+     */
 
     @Override
     public void onSelectRoomDirectory(final RoomDirectoryData directoryServerData) {

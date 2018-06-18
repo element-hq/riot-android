@@ -74,7 +74,8 @@ public class PreferencesManager {
     public static final String SETTINGS_SET_SYNC_TIMEOUT_PREFERENCE_KEY = "SETTINGS_SET_SYNC_TIMEOUT_PREFERENCE_KEY";
     public static final String SETTINGS_SET_SYNC_DELAY_PREFERENCE_KEY = "SETTINGS_SET_SYNC_DELAY_PREFERENCE_KEY";
     public static final String SETTINGS_ROOM_SETTINGS_LABS_END_TO_END_PREFERENCE_KEY = "SETTINGS_ROOM_SETTINGS_LABS_END_TO_END_PREFERENCE_KEY";
-    public static final String SETTINGS_ROOM_SETTINGS_LABS_END_TO_END_IS_ACTIVE_PREFERENCE_KEY = "SETTINGS_ROOM_SETTINGS_LABS_END_TO_END_IS_ACTIVE_PREFERENCE_KEY";
+    public static final String SETTINGS_ROOM_SETTINGS_LABS_END_TO_END_IS_ACTIVE_PREFERENCE_KEY
+            = "SETTINGS_ROOM_SETTINGS_LABS_END_TO_END_IS_ACTIVE_PREFERENCE_KEY";
     public static final String SETTINGS_PROFILE_PICTURE_PREFERENCE_KEY = "SETTINGS_PROFILE_PICTURE_PREFERENCE_KEY";
     public static final String SETTINGS_CONTACTS_PHONEBOOK_COUNTRY_PREFERENCE_KEY = "SETTINGS_CONTACTS_PHONEBOOK_COUNTRY_PREFERENCE_KEY";
     public static final String SETTINGS_INTERFACE_LANGUAGE_PREFERENCE_KEY = "SETTINGS_INTERFACE_LANGUAGE_PREFERENCE_KEY";
@@ -118,7 +119,6 @@ public class PreferencesManager {
     public static final String SETTINGS_INTERFACE_TEXT_SIZE_KEY = "SETTINGS_INTERFACE_TEXT_SIZE_KEY";
 
     private static final String SETTINGS_USE_JITSI_CONF_PREFERENCE_KEY = "SETTINGS_USE_JITSI_CONF_PREFERENCE_KEY";
-    private static final String SETTINGS_USE_MATRIX_APPS_PREFERENCE_KEY = "SETTINGS_USE_MATRIX_APPS_PREFERENCE_KEY";
 
     private static final String SETTINGS_NOTIFICATION_RINGTONE_PREFERENCE_KEY = "SETTINGS_NOTIFICATION_RINGTONE_PREFERENCE_KEY";
     public static final String SETTINGS_NOTIFICATION_RINGTONE_SELECTION_PREFERENCE_KEY = "SETTINGS_NOTIFICATION_RINGTONE_SELECTION_PREFERENCE_KEY";
@@ -165,7 +165,6 @@ public class PreferencesManager {
             SETTINGS_START_ON_BOOT_PREFERENCE_KEY,
             SETTINGS_INTERFACE_TEXT_SIZE_KEY,
             SETTINGS_USE_JITSI_CONF_PREFERENCE_KEY,
-            SETTINGS_USE_MATRIX_APPS_PREFERENCE_KEY,
             SETTINGS_NOTIFICATION_RINGTONE_PREFERENCE_KEY,
             SETTINGS_NOTIFICATION_RINGTONE_SELECTION_PREFERENCE_KEY,
 
@@ -237,7 +236,7 @@ public class PreferencesManager {
 
     /**
      * Tells if the application ignores battery optimizations.
-     *
+     * <p>
      * Ignoring them allows the app to run in background to make background sync with the homeserver.
      * This user option appears on Android M but Android O enforces its usage and kills apps not
      * authorised by the user to run in background.
@@ -415,16 +414,6 @@ public class PreferencesManager {
     }
 
     /**
-     * Tells if the matrix apps are supported.
-     *
-     * @param context the context
-     * @return true if the matrix apps are supported.
-     */
-    public static boolean useMatrixApps(Context context) {
-        return PreferenceManager.getDefaultSharedPreferences(context).getBoolean(SETTINGS_USE_MATRIX_APPS_PREFERENCE_KEY, true);
-    }
-
-    /**
      * Tells if the application is started on boot
      *
      * @param context the context
@@ -538,14 +527,16 @@ public class PreferencesManager {
 
         if (preferences.contains(context.getString(R.string.settings_pin_missed_notifications))) {
             preferences.edit()
-                    .putBoolean(SETTINGS_PIN_MISSED_NOTIFICATIONS_PREFERENCE_KEY, preferences.getBoolean(context.getString(R.string.settings_pin_missed_notifications), false))
+                    .putBoolean(SETTINGS_PIN_MISSED_NOTIFICATIONS_PREFERENCE_KEY,
+                            preferences.getBoolean(context.getString(R.string.settings_pin_missed_notifications), false))
                     .remove(context.getString(R.string.settings_pin_missed_notifications))
                     .apply();
         }
 
         if (preferences.contains(context.getString(R.string.settings_pin_unread_messages))) {
             preferences.edit()
-                    .putBoolean(SETTINGS_PIN_UNREAD_MESSAGES_PREFERENCE_KEY, preferences.getBoolean(context.getString(R.string.settings_pin_unread_messages), false))
+                    .putBoolean(SETTINGS_PIN_UNREAD_MESSAGES_PREFERENCE_KEY,
+                            preferences.getBoolean(context.getString(R.string.settings_pin_unread_messages), false))
                     .remove(context.getString(R.string.settings_pin_unread_messages))
                     .apply();
         }
@@ -654,7 +645,7 @@ public class PreferencesManager {
     /**
      * To call if the user has been asked for analytics tracking.
      *
-     * @param context   the context
+     * @param context the context
      */
     public static void setDidAskToUseAnalytics(Context context) {
         PreferenceManager.getDefaultSharedPreferences(context)
@@ -676,7 +667,7 @@ public class PreferencesManager {
     /**
      * Enable or disable the analytics tracking.
      *
-     * @param context   the context
+     * @param context      the context
      * @param useAnalytics true to enable the analytics tracking
      */
     public static void setUseAnalytics(Context context, boolean useAnalytics) {

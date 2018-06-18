@@ -1,6 +1,7 @@
 /* 
  * Copyright 2014 OpenMarket Ltd
- * 
+ * Copyright 2018 New Vector Ltd
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
@@ -16,7 +17,6 @@
 package im.vector.view;
 
 import android.content.Context;
-import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
 import android.text.Html;
 import android.text.method.LinkMovementMethod;
@@ -34,7 +34,6 @@ import java.util.HashSet;
 
 import im.vector.R;
 import im.vector.VectorApp;
-import im.vector.util.PreferencesManager;
 
 /**
  *
@@ -90,15 +89,14 @@ public class UrlPreviewView extends LinearLayout {
             @Override
             public void onClick(View v) {
                 mIsDismissed = true;
-                UrlPreviewView.this.setVisibility(View.GONE);
+                setVisibility(View.GONE);
 
                 mDismissedUrlsPreviews.add(mUID);
 
-                SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(VectorApp.getInstance());
-                SharedPreferences.Editor editor = preferences.edit();
-
-                editor.putStringSet(DISMISSED_URL_PREVIEWS_PREF_KEY, mDismissedUrlsPreviews);
-                editor.commit();
+                PreferenceManager.getDefaultSharedPreferences(VectorApp.getInstance())
+                        .edit()
+                        .putStringSet(DISMISSED_URL_PREVIEWS_PREF_KEY, mDismissedUrlsPreviews)
+                        .apply();
             }
         });
     }
@@ -111,7 +109,8 @@ public class UrlPreviewView extends LinearLayout {
      */
     public static boolean didUrlPreviewDismiss(String uid) {
         if (null == mDismissedUrlsPreviews) {
-            mDismissedUrlsPreviews = new HashSet<>(PreferenceManager.getDefaultSharedPreferences(VectorApp.getInstance()).getStringSet(DISMISSED_URL_PREVIEWS_PREF_KEY, new HashSet<String>()));
+            mDismissedUrlsPreviews = new HashSet<>(PreferenceManager.getDefaultSharedPreferences(VectorApp.getInstance())
+                    .getStringSet(DISMISSED_URL_PREVIEWS_PREF_KEY, new HashSet<String>()));
         }
 
         return mDismissedUrlsPreviews.contains(uid);
@@ -132,7 +131,8 @@ public class UrlPreviewView extends LinearLayout {
             setVisibility(View.GONE);
         } else {
             setVisibility(View.VISIBLE);
-            session.getMediasCache().loadAvatarThumbnail(session.getHomeServerConfig(), mImageView, preview.getThumbnailURL(), context.getResources().getDimensionPixelSize(R.dimen.profile_avatar_size));
+            session.getMediasCache().loadAvatarThumbnail(session.getHomeServerConfig(),
+                    mImageView, preview.getThumbnailURL(), context.getResources().getDimensionPixelSize(R.dimen.profile_avatar_size));
 
             if ((null != preview.getRequestedURL()) && (null != preview.getTitle())) {
                 mTitleTextView.setText(Html.fromHtml("<a href=\"" + preview.getRequestedURL() + "\">" + preview.getTitle() + "</a>"));

@@ -30,8 +30,8 @@ use github's pull request workflow to review the contribution, and either ask
 you to make any refinements needed or merge it and make them ourselves. The
 changes will then land on master when we next do a release.
 
-We use Jenkins for continuous integration (http://matrix.org/jenkins), and
-typically all pull requests get automatically tested Jenkins: if your change breaks the build, Jenkins will yell about it in #matrix-dev:matrix.org so please lurk there and keep an eye open.
+All pull requests are built by TravisCI. Please fix any issue found by TravisCI
+on your PR
 
 Code style
 ~~~~~~~~~~
@@ -53,6 +53,12 @@ change to AUTHORS.rst in your pull request to list yourself and a short
 description of the area(s) you've worked on. Also, we sometimes have swag to
 give away to contributors - if you feel that Matrix-branded apparel is missing
 from your life, please mail us your shipping address to matrix at matrix.org and we'll try to fix it :)
+
+Changelog
+~~~~~~~~~
+
+Please add at least one line on the top of file CHANGES.rst (in the correct section)
+to describe what you've done on the code (bugfix, new feature, etc.)
 
 Sign off
 ~~~~~~~~
