@@ -223,16 +223,14 @@
     </PreferenceCategory>
 
     <im.vector.preference.VectorDividerCategory
-        android:key="SETTINGS_NOTIFICATIONS_TARGET_DIVIDER_PREFERENCE_KEY"
-        android:title="notifications_targets_divider" />
+        android:key="SETTINGS_NOTIFICATIONS_TARGET_DIVIDER_PREFERENCE_KEY" />
 
     <PreferenceCategory
         android:key="SETTINGS_NOTIFICATIONS_TARGETS_PREFERENCE_KEY"
         android:title="@string/settings_notifications_targets" />
 
     <im.vector.preference.VectorDividerCategory
-        android:key="SETTINGS_IGNORE_USERS_DIVIDER_PREFERENCE_KEY"
-        android:title="ignore_users_divider" />
+        android:key="SETTINGS_IGNORE_USERS_DIVIDER_PREFERENCE_KEY" />
 
     <PreferenceCategory
         android:key="SETTINGS_IGNORED_USERS_PREFERENCE_KEY"
