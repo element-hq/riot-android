@@ -728,6 +728,7 @@ public class VectorRoomActivity extends MXCActionBarActivity implements
                     if (PreferencesManager.useNativeCamera(VectorRoomActivity.this)) {
                         messages = new Integer[]{
                                 R.string.option_send_files,
+                                R.string.option_send_voice,
                                 R.string.option_send_sticker,
                                 R.string.option_take_photo,
                                 R.string.option_take_video,
@@ -735,6 +736,7 @@ public class VectorRoomActivity extends MXCActionBarActivity implements
 
                         icons = new Integer[]{
                                 R.drawable.ic_material_file,
+                                R.drawable.vector_micro_green,
                                 R.drawable.ic_send_sticker,
                                 R.drawable.ic_material_camera,
                                 R.drawable.ic_material_videocam,
@@ -742,14 +744,16 @@ public class VectorRoomActivity extends MXCActionBarActivity implements
                     } else {
                         messages = new Integer[]{
                                 R.string.option_send_files,
+                                R.string.option_send_voice,
                                 R.string.option_send_sticker,
                                 R.string.option_take_photo_video,
                         };
 
                         icons = new Integer[]{
-                                R.drawable.ic_material_file,
-                                R.drawable.ic_send_sticker,
-                                R.drawable.ic_material_camera,
+                                R.drawable.ic_material_file,  // R.string.option_send_files
+                                R.drawable.vector_micro_green,
+                                R.string.option_send_sticker,
+                                R.string.option_take_photo_video,
                         };
                     }
 
@@ -763,6 +767,8 @@ public class VectorRoomActivity extends MXCActionBarActivity implements
 
                             if (selectedVal == R.string.option_send_files) {
                                 launchFileSelectionIntent();
+                            } else if (selectedVal == R.string.option_send_voice ) {
+                                launchAudioRecorderIntent();
                             } else if (selectedVal == R.string.option_send_sticker) {
                                 startStickerPickerActivity();
                             } else if (selectedVal == R.string.option_take_photo_video) {
@@ -2258,6 +2264,16 @@ public class VectorRoomActivity extends MXCActionBarActivity implements
             intent.putExtra(VectorRoomInviteMembersActivity.EXTRA_ADD_CONFIRMATION_DIALOG, true);
             startActivityForResult(intent, INVITE_USER_REQUEST_CODE);
         }
+    }
+
+    /**
+     * Launch audio recorder intent
+     */
+    @SuppressLint("NewApi")
+    private void launchAudioRecorderIntent() {
+        enableActionBarHeader(HIDE_ACTION_BAR_HEADER);
+        Intent fileIntent = new Intent( MediaStore.Audio.Media.RECORD_SOUND_ACTION );
+        startActivityForResult(fileIntent, REQUEST_FILES_REQUEST_CODE);
     }
 
     /**
