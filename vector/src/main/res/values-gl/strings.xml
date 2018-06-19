@@ -43,7 +43,7 @@
     <string name="forward">Adiante</string>
     <string name="report_content">Informar sobre contido</string>
     <string name="ongoing_conference_call">Conferencia en curso. Únase con vídeo ou voz.</string>
-    <string name="cannot_start_call">Non se pode iniciar a chamada. Inténteo máis tarde.</string>
+    <string name="cannot_start_call">Non se pode iniciar a chamada, inténteo máis tarde</string>
     <string name="missing_permissions_warning">Debido a falta de permisos, poderían faltar algunhas características...</string>
     <string name="missing_permissions_to_start_conf_call">Precisa permiso para convidar a iniciar unha conferencia en esta sala</string>
     <string name="missing_permissions_title_to_start_conf_call">Non puido iniciar a chamada</string>
@@ -224,7 +224,7 @@ Pode engadir a dirección de correo na sección de configuración de perfil.</st
     <string name="remove">Eliminar</string>
     <string name="reject">Rexeitar</string>
 
-    <string name="room_jump_to_first_unread">Ir a primeira mensaxe non lida.</string>
+    <string name="room_jump_to_first_unread">Ir á primeira mensaxe non lida.</string>
 
     <string name="room_e2e_alert_title">Aviso!</string>
     <string name="room_participants_leave_prompt_title">Deixar a sala</string>
@@ -259,9 +259,9 @@ Pode engadir a dirección de correo na sección de configuración de perfil.</st
     <string name="ssl_remain_offline">Ignorar</string>
     <string name="ssl_fingerprint_example">00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00</string>
 
-    <string name="room_details_people"></string>
+    <string name="room_details_people">Xente</string>
     <string name="room_details_files">Ficheiros</string>
-    <string name="room_details_settings"></string>
+    <string name="room_details_settings">Configuracións</string>
     <string name="search_hint">Busca</string>
     <string name="search_members_hint">Filtrar os participantes da conversa</string>
     <string name="search_no_results">Sen resultados</string>
@@ -311,7 +311,7 @@ Pode engadir a dirección de correo na sección de configuración de perfil.</st
     <string name="settings_user_settings">Configuracións dos usuarios</string>
     <string name="settings_notifications">Notificacións</string>
     <string name="settings_other">Outro</string>
-    <string name="settings_advanced"></string>
+    <string name="settings_advanced">Avanzado</string>
     <string name="settings_cryptography">Criptografía</string>
     <string name="settings_devices_list">Dispositivos</string>
     <string name="settings_inline_url_preview">Activar por defecto as vistas previas en liña de URL</string>
@@ -323,7 +323,7 @@ Pode engadir a dirección de correo na sección de configuración de perfil.</st
     <string name="settings_deactivate_my_account">Desactivar a miña conta</string>
 
     <string name="settings_analytics">Analytics</string>
-    <string name="settings_opt_out_of_analytics_summary"></string>
+    <string name="settings_opt_out_of_analytics_summary">Riot crea informes con datos anónimos que lle permiten mellorar a aplicación.</string>
     <string name="settings_opt_in_of_analytics">Enviar datos de análises</string>
     <string name="settings_opt_in_of_analytics_summary">Riot recolle información analítica anónima para permitirnos mellorar o aplicativo.</string>
     <string name="settings_opt_in_of_analytics_ok">Si, quero axuda</string>
@@ -454,7 +454,7 @@ Pode engadir a dirección de correo na sección de configuración de perfil.</st
     <string name="directory_server_all_rooms_on_server">"Todas as salas do servidor %s "</string>
     <string name="directory_server_native_rooms">Todas as salas de %s nativas</string>
 
-    <string name="lock_screen_hint">Escriba aquí...</string>
+    <string name="lock_screen_hint">Escriba aquí…</string>
 
     <plurals name="notification_unread_notified_messages">
 	<item quantity="one">1 notificación sen ler</item>
@@ -481,7 +481,7 @@ Pode engadir a dirección de correo na sección de configuración de perfil.</st
     <string name="largest">Aínda máis grande</string>
     <string name="huge">Enorme</string>
 
-    <string name="widget_creation_failure">Fallou a creación do trebello.</string>
+    <string name="widget_creation_failure">Fallou a creación do trebello</string>
     <string name="event_formatter_widget_added">%1$s engadido por %2$s</string>
     <string name="event_formatter_widget_removed">%1$s eliminado por %2$s</string>
     <plurals name="active_widgets">
