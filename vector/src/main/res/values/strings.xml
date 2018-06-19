@@ -180,6 +180,10 @@
     <!-- No sticker application dialog -->
     <string name="no_sticker_application_dialog_content">You don\'t currently have any stickerpacks enabled.\n\nAdd some now?</string>
 
+    <!-- External application -->
+    <string name="go_on_with">go on with…</string>
+    <string name="error_no_external_application_found">Sorry, no external application has been found to complete this action.</string>
+
     <!-- Authentication -->
     <string name="auth_login">Log in</string>
     <string name="auth_register">Register</string>
@@ -910,6 +914,7 @@
     <string name="settings_labs_matrix_apps">Matrix Apps</string>
     <string name="room_add_matrix_apps">Add Matrix apps</string>
     <string name="settings_labs_native_camera">Use native camera</string>
+    <string name="settings_labs_enable_send_voice">Send voice message (requires a third party application to record voice messages)</string>
 
     <!-- share keys -->
     <string name="you_added_a_new_device">You added a new device \'%s\', which is requesting encryption keys.</string>

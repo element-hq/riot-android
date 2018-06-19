@@ -271,6 +271,10 @@
             android:key="SETTINGS_USE_NATIVE_CAMERA_PREFERENCE_KEY"
             android:title="@string/settings_labs_native_camera" />
 
+        <im.vector.preference.VectorSwitchPreference
+            android:key="SETTINGS_ENABLE_SEND_VOICE_FEATURE_PREFERENCE_KEY"
+            android:title="@string/settings_labs_enable_send_voice" />
+
     </im.vector.preference.VectorPreferenceCategory>
 
     <im.vector.preference.VectorDividerCategory />
