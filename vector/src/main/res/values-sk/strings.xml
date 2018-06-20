@@ -977,4 +977,14 @@ Viditeľnosť správ odoslaných cez matrix funguje podobne ako viditeľnosť sp
     <string name="deactivate_account_prompt_password">Aby ste mohli pokračovať, prosím zadajte svoje heslo:</string>
     <string name="deactivate_account_submit">Deaktivovať účet</string>
 
-</resources>
+<string name="dialog_title_third_party_licences">Licencie tretích strán</string>
+
+    <string name="download">Stiahnúť</string>
+    <string name="speak">Hovor</string>
+    <string name="clear">Vyčistiť</string>
+    <string name="e2e_re_request_encryption_key_sent">Žiadosť o kľúč zaslaná.</string>
+
+    <string name="e2e_re_request_encryption_key_dialog_title">Žiadosť zaslaná</string>
+    <string name="lock_screen_hint">Píš sem…</string>
+
+    </resources>
