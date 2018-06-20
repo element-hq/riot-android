@@ -526,7 +526,7 @@ Sicuro di procedere?</string>
     <string name="settings_pin_unread_messages">Segna le stanze con messaggi non letti</string>
     <string name="settings_devices_list">Dispositivi</string>
     <string name="settings_hide_read_receipts">Nascondi conferme di lettura</string>
-    <string name="settings_dont_send_typings_notifs">Non inviare notifica di scrittura in corso</string>
+    <string name="settings_dont_send_typings_notifs">Non mostrare agli altri che stai scrivendo</string>
     <string name="settings_always_show_timestamps">Mostra sempre data e orario dei messaggi</string>
     <string name="settings_disable_markdown">Disattiva la formattazione markdown quando si invia</string>
     <string name="settings_data_save_mode">Modalità salvataggio dati</string>
