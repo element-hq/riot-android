@@ -526,8 +526,8 @@ Sicuro di procedere?</string>
     <string name="settings_pin_unread_messages">Segna le stanze con messaggi non letti</string>
     <string name="settings_devices_list">Dispositivi</string>
     <string name="settings_hide_read_receipts">Nascondi conferme di lettura</string>
-    <string name="settings_dont_send_typings_notifs">Non mostrare agli altri che stai scrivendo</string>
-    <string name="settings_always_show_timestamps">Mostra sempre data e orario dei messaggi</string>
+    <string name="settings_dont_send_typings_notifs">Non comunicare che stai scrivendo</string>
+    <string name="settings_always_show_timestamps">Mostra sempre data e ora dei messaggi</string>
     <string name="settings_disable_markdown">Disattiva la formattazione markdown quando si invia</string>
     <string name="settings_data_save_mode">Modalità salvataggio dati</string>
 
@@ -846,7 +846,7 @@ Sicuro di procedere?</string>
     <string name="room_settings_add_homescreen_shortcut">Aggiungi scorciatoia su schermata iniziale</string>
 
     <string name="settings_inline_url_preview">Attiva l\'anteprima degli URL in via predefinita</string>
-    <string name="settings_hide_join_leave_messages">Nascondi i messaggi di entrata/uscita (inviti/kick/ban esclusi)</string>
+    <string name="settings_hide_join_leave_messages">Nascondi messaggi entrato/uscito (non si applica ad inviti/ammonimenti/espulsioni)</string>
     <string name="settings_vibrate_on_mention">Vibra quando ti citano</string>
 
     <string name="settings_analytics">Statistiche</string>
