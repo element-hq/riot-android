@@ -987,4 +987,6 @@ Viditeľnosť správ odoslaných cez matrix funguje podobne ako viditeľnosť sp
     <string name="e2e_re_request_encryption_key_dialog_title">Žiadosť zaslaná</string>
     <string name="lock_screen_hint">Píš sem…</string>
 
+    <string name="e2e_re_request_encryption_key"><u>Znovu požiadať o šifrovacie kľúče</u> z vašich ostatných zariadení.</string>
+
     </resources>
