@@ -561,7 +561,7 @@
     <string name="settings_password_updated">Пароль успішно оновлено</string>
     <string name="settings_unignore_user">Показувати всі повідомлення %s?</string>
 
-    <string name="settings_delete_notification_targets_confirmation">Справді бажаєте видалити цю ціль сповіщень?</string>
+    <string name="settings_delete_notification_targets_confirmation">Ви справді бажаєте видалити цю ціль сповіщень?</string>
 
     <string name="settings_delete_threepid_confirmation">Справді бажаєте видалити %1$s %2$s?</string>
 
@@ -830,7 +830,7 @@
     <string name="room_settings_mute">Без звука</string>
     <string name="room_settings_add_homescreen_shortcut">Добавити ярлик на головний екран</string>
 
-    <string name="settings_notification_privacy">Конфіденційність повідомлення</string>
+    <string name="settings_notification_privacy">Конфіденційність сповіщень</string>
     <string name="settings_notification_privacy_normal">Нормальний</string>
     <string name="title_activity_choose_sticker">Відправити стікер</string>
 
@@ -868,23 +868,23 @@
     <string name="settings_notification_privacy_no_permission">"Программа  "<b>не</b> потребує дозвіл на працю в фоновому режимі</string>
     <string name="settings_notification_privacy_gcm">• Повідомлення відправляються через Google Cloud Messaging</string>
     <string name="settings_notification_privacy_metadata">• Повідомлення містять тільки метаданні</string>
-    <string name="settings_notification_privacy_secure_message_content"><b>"  надійно від Matrix-Homeserver отримано "</b></string>
+    <string name="settings_notification_privacy_secure_message_content">• Зміст сповіщення був <b> надійно віднайдений просто на домашньому сервері Matrix </b></string>
     <string name="dialog_title_third_party_licences">Ліцензії сторонніх виробників</string>
 
     <string name="download">Завантажити</string>
     <string name="speak">Розмовляти</string>
     <string name="clear">Очистити</string>
-    <string name="e2e_re_request_encryption_key"><u>Повторно запросити ключі шифрування</u> с другого вашого пристроя.</string>
+    <string name="e2e_re_request_encryption_key"><u>Вдруге запитати ключі шифрування</u> з інших ваших пристроїв.</string>
 
-    <string name="e2e_re_request_encryption_key_sent">Відправлений запрос ключа.</string>
+    <string name="e2e_re_request_encryption_key_sent">Запит ключа відправлений.</string>
 
-    <string name="e2e_re_request_encryption_key_dialog_title">Запит відправленний</string>
+    <string name="e2e_re_request_encryption_key_dialog_title">Запит відправлений</string>
     <string name="settings_vibrate_on_mention">Вібрація при згадуванні</string>
 
     <string name="settings_deactivate_account_section">Деактивація аккаунта</string>
     <string name="settings_deactivate_my_account">Деактивувати мій аккаунт</string>
 
-    <string name="startup_notification_privacy_title">Конфіденційність повідомлень</string>
+    <string name="startup_notification_privacy_title">Конфіденційність сповіщень</string>
     <string name="startup_notification_privacy_button_grant">Надати дозвіл</string>
     <string name="startup_notification_privacy_button_other">Вибрати другий варіант</string>
 
@@ -893,5 +893,7 @@
 
     <string name="settings_flair">Настрій</string>
 
-    <string name="room_settings_room_notifications_title">Повідомлення</string>
+    <string name="room_settings_room_notifications_title">Сповіщення</string>
+    <string name="e2e_re_request_encryption_key_dialog_content">Для відправлення ключа на цей пристрій, запустіть Riot на іншому пристрої, що може дешифрувати повідомлення.</string>
+
     </resources>
