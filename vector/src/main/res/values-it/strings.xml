@@ -998,4 +998,18 @@ La visibilità dei messaggi in Matrix è simile alle email. Se dimentichiamo i m
     <string name="deactivate_account_prompt_password">Per continuare, inserisci la tua password:</string>
     <string name="deactivate_account_submit">Disattiva account</string>
 
-</resources>
+<string name="dialog_title_third_party_licences">Licenze di terze parti</string>
+
+    <string name="download">Scarica</string>
+    <string name="speak">Parla</string>
+    <string name="clear">Svuota</string>
+    <string name="e2e_re_request_encryption_key"><u>Richiedi di nuovo le chiavi di cifratura</u> dai tuoi altri dispositivi.</string>
+
+    <string name="e2e_re_request_encryption_key_sent">Richiesta chiave inviata.</string>
+
+    <string name="e2e_re_request_encryption_key_dialog_title">Richiesta inviata</string>
+    <string name="e2e_re_request_encryption_key_dialog_content">Avvia Riot su un altro dispositivo che possa decifrare il messaggio, in modo da inviare le chiavi a questo dispositivo.</string>
+
+    <string name="lock_screen_hint">Digita qui…</string>
+
+    </resources>
