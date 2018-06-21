@@ -912,7 +912,7 @@ Sicuro di procedere?</string>
     <string name="community_id_hint">esempio</string>
 
     // group details
-    <string name="group_details_home">Inizio</string>
+    <string name="group_details_home">Home</string>
     <string name="group_details_people">Persone</string>
     <string name="group_details_rooms">Stanze</string>
     <string name="no_users_placeholder">Nessun utente</string>
