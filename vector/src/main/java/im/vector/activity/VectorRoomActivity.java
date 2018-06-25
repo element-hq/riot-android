@@ -2270,7 +2270,6 @@ public class VectorRoomActivity extends MXCActionBarActivity implements
     /**
      * Launch audio recorder intent
      */
-    @SuppressLint("NewApi")
     private void launchAudioRecorderIntent() {
         enableActionBarHeader(HIDE_ACTION_BAR_HEADER);
 
@@ -2288,7 +2287,6 @@ public class VectorRoomActivity extends MXCActionBarActivity implements
     /**
      * Launch the files selection intent
      */
-    @SuppressLint("NewApi")
     private void launchFileSelectionIntent() {
         enableActionBarHeader(HIDE_ACTION_BAR_HEADER);
 
