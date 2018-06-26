@@ -529,7 +529,7 @@ Sicuro di procedere?</string>
     <string name="settings_dont_send_typings_notifs">Non comunicare che stai scrivendo</string>
     <string name="settings_always_show_timestamps">Mostra sempre data e ora dei messaggi</string>
     <string name="settings_disable_markdown">Disattiva la formattazione markdown quando si invia</string>
-    <string name="settings_data_save_mode">Modalità salvataggio dati</string>
+    <string name="settings_data_save_mode">Modalità risparmio banda</string>
 
     <string name="devices_details_dialog_title">Dettagli dispositivo</string>
     <string name="devices_details_id_title">ID</string>
