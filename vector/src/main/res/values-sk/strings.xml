@@ -989,6 +989,6 @@ Viditeľnosť správ odoslaných cez matrix funguje podobne ako viditeľnosť sp
 
     <string name="e2e_re_request_encryption_key"><u>Znovu požiadať o šifrovacie kľúče</u> z vašich ostatných zariadení.</string>
 
-    <string name="e2e_re_request_encryption_key_dialog_content">Prosím spustite Riot na inom zariadení, ktoré dokáže odšifrovať túto správu aby mohlo poslať šifrovacie kľúče na toto zariadenie.</string>
+    <string name="e2e_re_request_encryption_key_dialog_content">Prosím spustite Riot na inom zariadení, ktoré je schopné dešifrovať túto správu, čím sa automaticky spustí prenos chýbajúcich kľúčov na toto zariadenie.</string>
 
     </resources>
