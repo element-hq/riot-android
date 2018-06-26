@@ -943,8 +943,8 @@ Neznáme zariadenia:</string>
     <string name="settings_notification_privacy_message_content_not_shown">• Súčasťou oznámení <b>nebude zobrazený obsah správ</b></string>
 
     <string name="startup_notification_privacy_title">Súkromie oznámení</string>
-    <string name="startup_notification_privacy_message">Riot môže fungovať na pozadí aby spracovával vaše upozornenia bezpečne a v súkromí (môže to ovplyvniť využitie batérie)</string>
-    <string name="startup_notification_privacy_button_grant">Dať povolenie</string>
+    <string name="startup_notification_privacy_message">Riot môže fungovať na pozadí aby spracovával vaše upozornenia bezpečne a v súkromí (môže to ovplyvniť využitie batérie).</string>
+    <string name="startup_notification_privacy_button_grant">Udeliť oprávnenie</string>
     <string name="startup_notification_privacy_button_other">Vyberte inú voľbu</string>
 
     <string name="title_activity_choose_sticker">Odoslať nálepku</string>
@@ -979,13 +979,13 @@ Viditeľnosť správ odoslaných cez matrix funguje podobne ako viditeľnosť sp
 
 <string name="dialog_title_third_party_licences">Licencie tretích strán</string>
 
-    <string name="download">Stiahnúť</string>
-    <string name="speak">Hovor</string>
-    <string name="clear">Vyčistiť</string>
-    <string name="e2e_re_request_encryption_key_sent">Žiadosť o kľúč zaslaná.</string>
+    <string name="download">Stiahnuť</string>
+    <string name="speak">Hovoriť</string>
+    <string name="clear">Vymazať</string>
+    <string name="e2e_re_request_encryption_key_sent">Žiadosť o šifrovacie kľúče bola odoslaná.</string>
 
-    <string name="e2e_re_request_encryption_key_dialog_title">Žiadosť zaslaná</string>
-    <string name="lock_screen_hint">Píš sem…</string>
+    <string name="e2e_re_request_encryption_key_dialog_title">Žiadosť odoslaná</string>
+    <string name="lock_screen_hint">Píšte sem…</string>
 
     <string name="e2e_re_request_encryption_key"><u>Znovu požiadať o šifrovacie kľúče</u> z vašich ostatných zariadení.</string>
 
