@@ -535,7 +535,7 @@ Sicuro di procedere?</string>
     <string name="devices_details_id_title">ID</string>
     <string name="devices_details_name_title">Nome</string>
     <string name="devices_details_device_name">Nome dispositivo</string>
-    <string name="devices_details_last_seen_title">Ultima interazione</string>
+    <string name="devices_details_last_seen_title">Ultima visualizzazione</string>
     <string name="devices_details_last_seen_format">%1$s @ %2$s</string>
     <string name="devices_details_time_format">HH:mm:ss</string>
     <string name="devices_delete_dialog_text">Questa operazione richiede un\'autenticazione aggiuntiva.\nPer proseguire, inserisci la tua password.</string>
