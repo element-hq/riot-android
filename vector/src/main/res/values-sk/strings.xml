@@ -943,8 +943,8 @@ Neznáme zariadenia:</string>
     <string name="settings_notification_privacy_message_content_not_shown">• Súčasťou oznámení <b>nebude zobrazený obsah správ</b></string>
 
     <string name="startup_notification_privacy_title">Súkromie oznámení</string>
-    <string name="startup_notification_privacy_message">Riot dokáže ostať spustený na pozadí bezpečne v súkromí spravovať vaše oznámenia (môže to mať vplyv na spotrebu energie).</string>
-    <string name="startup_notification_privacy_button_grant">Udeliť oprávnenie</string>
+    <string name="startup_notification_privacy_message">Riot môže fungovať na pozadí aby spracovával vaše upozornenia bezpečne a v súkromí (môže to ovplyvniť využitie batérie)</string>
+    <string name="startup_notification_privacy_button_grant">Dať povolenie</string>
     <string name="startup_notification_privacy_button_other">Vyberte inú voľbu</string>
 
     <string name="title_activity_choose_sticker">Odoslať nálepku</string>
