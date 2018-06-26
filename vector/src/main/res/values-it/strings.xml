@@ -771,7 +771,7 @@ Sicuro di procedere?</string>
 
     <string name="settings_containing_my_display_name">Msg contenenti il nome mostrato</string>
     <string name="settings_containing_my_user_name">Msg contenenti il nome utente</string>
-    <string name="settings_hide_avatar_display_name_changes_messages">Non mostrare i cambiamenti di nome e avatar</string>
+    <string name="settings_hide_avatar_display_name_changes_messages">Nascondi cambiamenti del nome mostrato e dell\'avatar</string>
 
     <string name="notification_silent_notifications">Notifiche silenziose</string>
 
@@ -850,7 +850,7 @@ Sicuro di procedere?</string>
     <string name="settings_vibrate_on_mention">Vibra quando ti citano</string>
 
     <string name="settings_analytics">Statistiche</string>
-    <string name="settings_opt_out_of_analytics">Rifiuta le statistiche</string>
+    <string name="settings_opt_out_of_analytics">Non contribuire alle statistiche</string>
     <string name="settings_opt_out_of_analytics_summary">Riot raccoglie statistiche d\'uso anonime per consentirci di migliorare l\'applicazione.</string>
 
     <string name="room_settings_room_notifications_title">Notifiche</string>
@@ -964,7 +964,7 @@ Sicuro di procedere?</string>
     <string name="settings_notification_privacy_message_content_not_shown">• Le notifiche <b>non mostreranno il contenuto del messaggio</b></string>
 
     <string name="startup_notification_privacy_title">Privacy notifiche</string>
-    <string name="startup_notification_privacy_message">Riot può funzionare in secondo piano per gestire le tue notifiche in modo sicuro e privato (può incidere sulla batteria).</string>
+    <string name="startup_notification_privacy_message">Riot può funzionare in sottofondo per gestire le tue notifiche in modo sicuro e privato (ciò può influenzare la durata della batteria).</string>
     <string name="startup_notification_privacy_button_grant">Concedi l\'autorizzazione</string>
     <string name="startup_notification_privacy_button_other">Scegli un\'altra opzione</string>
 
@@ -975,7 +975,7 @@ Sicuro di procedere?</string>
 
 Aggiungerne qualcuno ora?</string>
 
-    <string name="settings_deactivate_account_section">Disattiva account</string>
+    <string name="settings_deactivate_account_section">Disattiva iscrizione</string>
     <string name="settings_deactivate_my_account">Disattiva il mio account</string>
 
     <string name="settings_opt_in_of_analytics">Invia statistiche di utilizzo</string>
