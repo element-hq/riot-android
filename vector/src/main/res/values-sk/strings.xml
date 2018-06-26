@@ -422,7 +422,7 @@ Ste si istí?</string>
     <string name="directory_search_results_title">Prezrieť adresár</string>
     <string name="directory_search_room">%1$d miestnosť</string>
     <string name="directory_search_room_for">Nájdená %1$d room pre %2$s</string>
-    <string name="directory_searching_title">Vyhľadávanie v adresáry..</string>
+    <string name="directory_searching_title">Vyhľadávanie v adresári..</string>
 
     <string name="room_settings_favourite">Do obľúbených</string>
     <string name="room_settings_de_prioritize">Nízka priorita</string>
@@ -496,7 +496,7 @@ Ste si istí?</string>
     <string name="settings_dont_send_typings_notifs">Neposielať oznámenia keď píšete</string>
     <string name="settings_always_show_timestamps">Vždy zobrazovať časovú značku správ</string>
     <string name="settings_12_24_timestamps">Pri zobrazovaní časových značiek používať 12 hodinový formát (napr. 2:30pm)</string>
-    <string name="settings_hide_join_leave_messages">Skryť správy o vstupe a opustení miestnosti (netýka sa pozvaní/vykopnutí/zákazov vstupu)</string>
+    <string name="settings_hide_join_leave_messages">Skryť správy o vstupe a opustení miestnosti (netýka sa pozvaní/vykázaní/zákazov vstupu)</string>
     <string name="settings_hide_avatar_display_name_changes_messages">Skryť zmeny zobrazovaného mena a obrázka v profile</string>
 
     <string name="settings_disable_markdown">Pri odosielaní zakázať formátovanie textu Markdown</string>
@@ -574,7 +574,7 @@ Ak chcete pokračovať, prosím zadajte vaše heslo.</string>
     <string name="room_settings_tag_pref_entry_value_none">none</string>
 
     <string name="room_settings_category_access_visibility_title">Prístup a viditeľnosť</string>
-    <string name="room_settings_directory_visibility">Uverejniť túto miestnosť v adresáry miestností</string>
+    <string name="room_settings_directory_visibility">Uverejniť túto miestnosť v adresári miestností</string>
     <string name="room_settings_room_access_rules_pref_title">Prístup k miestnosti</string>
     <string name="room_settings_room_read_history_rules_pref_title">Čítanie histórie</string>
     <string name="room_settings_room_read_history_rules_pref_dialog_title">Kto môže čítať históriu?</string>
@@ -701,10 +701,10 @@ Neznáme zariadenia:</string>
 
     <string name="select_room_directory">Vyberte adresár miestností</string>
     <string name="directory_server_fail_to_retrieve_server">Server môže byť nedostupný alebo preťažený</string>
-    <string name="directory_server_type_homeserver">Zadajte domovský adresár, z ktorého sa načíta zoznam verejných miestností</string>
+    <string name="directory_server_type_homeserver">Zadajte adresu domovského servera, z ktorého sa načíta zoznam verejných miestností</string>
     <string name="directory_server_placeholder">URL adresa domovského servera</string>
-    <string name="directory_server_all_rooms_on_server">Všetky miestnosti na servery %s</string>
-    <string name="directory_server_native_rooms">Všetky pôvodné Matrix miestnosti na servery %s</string>
+    <string name="directory_server_all_rooms_on_server">Všetky miestnosti na serveri %s</string>
+    <string name="directory_server_native_rooms">Všetky Matrix miestnosti na serveri %s</string>
 
     <string name="historical_placeholder">Hľadať historické</string>
 
@@ -792,7 +792,7 @@ Neznáme zariadenia:</string>
 
     <string name="groups_list">Zoznam komunít</string>
 
-    <string name="room_participants_kick_prompt_msg">Ste si istí, že chcete tohoto používateľa vykopnúť z tejto miestnosti?</string>
+    <string name="room_participants_kick_prompt_msg">Ste si istí, že chcete tohoto používateľa vykázať z tejto miestnosti?</string>
     <string name="room_participants_ban_prompt_msg">Ste si istí, že chcete tomuto používateľovi zakázať vstúpiť do tejto miestnosti?</string>
 
     <string name="room_settings_all_messages_noisy">Všetky správy (hlučné)</string>
@@ -839,7 +839,7 @@ Neznáme zariadenia:</string>
     <string name="group_rooms">%d miestností</string>
     <string name="group_no_long_description">Správca nenastavil dlhý popis tejto komunity.</string>
 
-    <string name="has_been_kicked">Používateľ %2$s vás vykopol z miestnosti %1$s</string>
+    <string name="has_been_kicked">Používateľ %2$s vás vykázal z miestnosti %1$s</string>
     <string name="has_been_banned">Používateľ %2$s vám zakázal vstúpiť do miestnosti %1$s</string>
     <string name="reason_colon">Dôvod: %1$s</string>
     <string name="rejoin">Vstúpiť znovu</string>
@@ -944,7 +944,7 @@ Neznáme zariadenia:</string>
 
     <string name="startup_notification_privacy_title">Súkromie oznámení</string>
     <string name="startup_notification_privacy_message">Riot dokáže ostať spustený na pozadí bezpečne v súkromí spravovať vaše oznámenia (môže to mať vplyv na spotrebu energie).</string>
-    <string name="startup_notification_privacy_button_grant">Potvrdiť</string>
+    <string name="startup_notification_privacy_button_grant">Udeliť oprávnenie</string>
     <string name="startup_notification_privacy_button_other">Vyberte inú voľbu</string>
 
     <string name="title_activity_choose_sticker">Odoslať nálepku</string>
@@ -989,6 +989,6 @@ Viditeľnosť správ odoslaných cez matrix funguje podobne ako viditeľnosť sp
 
     <string name="e2e_re_request_encryption_key"><u>Znovu požiadať o šifrovacie kľúče</u> z vašich ostatných zariadení.</string>
 
-    <string name="e2e_re_request_encryption_key_dialog_content">Prosím spusti Riot na inom zariadení ktoré je schopné dekryptovať túto správu, aby bolo možné poslať kľúče na toto zariadenie.</string>
+    <string name="e2e_re_request_encryption_key_dialog_content">Prosím spustite Riot na inom zariadení, ktoré je schopné dešifrovať túto správu, čím sa automaticky spustí prenos chýbajúcich kľúčov na toto zariadenie.</string>
 
     </resources>
