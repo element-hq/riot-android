@@ -1,5 +1,6 @@
 /*
  * Copyright 2017 Vector Creations Ltd
+ * Copyright 2018 New Vector Ltd
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -203,7 +204,7 @@ public class PhoneNumberUtils {
     /**
      * Phone numbers cache by text.
      */
-    private static final HashMap<String, Object> mPhoneNumberByText = new HashMap<>();
+    private static final Map<String, Object> mPhoneNumberByText = new HashMap<>();
 
     /**
      * Provide libphonenumber phonenumber from an unformatted one.
@@ -243,7 +244,7 @@ public class PhoneNumberUtils {
     /**
      * E164 phone number by unformatted phonenumber
      */
-    private static final HashMap<String, String> mE164PhoneNumberByText = new HashMap<>();
+    private static final Map<String, String> mE164PhoneNumberByText = new HashMap<>();
 
     /**
      * Convert an unformatted phone number to a E164 format one.

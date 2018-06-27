@@ -77,7 +77,7 @@ public class VectorRoomSummaryAdapter extends BaseExpandableListAdapter {
     private final int mHeaderLayoutResourceId;
 
     private final MXSession mMxSession;
-    private ArrayList<ArrayList<RoomSummary>> mSummaryListByGroupPosition;
+    private List<List<RoomSummary>> mSummaryListByGroupPosition;
 
     private int mRoomByAliasGroupPosition = -1; // the user wants to join  by room id or alias
     private int mDirectoryGroupPosition = -1;  // public rooms index
@@ -204,7 +204,7 @@ public class VectorRoomSummaryAdapter extends BaseExpandableListAdapter {
      * @param value the pattern.
      * @param count the number of occurences
      */
-    private void fillList(ArrayList<RoomSummary> list, RoomSummary value, int count) {
+    private void fillList(List<RoomSummary> list, RoomSummary value, int count) {
         for (int i = 0; i < count; i++) {
             list.add(value);
         }
@@ -290,8 +290,8 @@ public class VectorRoomSummaryAdapter extends BaseExpandableListAdapter {
      * @param aRoomSummaryCollection the complete list of RoomSummary objects
      * @return an array of summary lists splitted by sections
      */
-    private ArrayList<ArrayList<RoomSummary>> buildSummariesByGroups(final Collection<RoomSummary> aRoomSummaryCollection) {
-        ArrayList<ArrayList<RoomSummary>> summaryListByGroupsRetValue = new ArrayList<>();
+    private List<List<RoomSummary>> buildSummariesByGroups(final Collection<RoomSummary> aRoomSummaryCollection) {
+        List<List<RoomSummary>> summaryListByGroupsRetValue = new ArrayList<>();
         String roomSummaryId;
 
         // init index with default values
@@ -311,10 +311,10 @@ public class VectorRoomSummaryAdapter extends BaseExpandableListAdapter {
             final List<String> lowPriorityRoomIdList = mMxSession.roomIdsWithTag(RoomTag.ROOM_TAG_LOW_PRIORITY);
 
             // ArrayLists allocations: will contain the RoomSummary objects deduced from roomIdsWithTag()
-            ArrayList<RoomSummary> inviteRoomSummaryList = new ArrayList<>();
-            ArrayList<RoomSummary> favouriteRoomSummaryList = new ArrayList<>(favouriteRoomIdList.size());
-            ArrayList<RoomSummary> lowPriorityRoomSummaryList = new ArrayList<>();
-            ArrayList<RoomSummary> noTagRoomSummaryList = new ArrayList<>(lowPriorityRoomIdList.size());
+            List<RoomSummary> inviteRoomSummaryList = new ArrayList<>();
+            List<RoomSummary> favouriteRoomSummaryList = new ArrayList<>(favouriteRoomIdList.size());
+            List<RoomSummary> lowPriorityRoomSummaryList = new ArrayList<>();
+            List<RoomSummary> noTagRoomSummaryList = new ArrayList<>(lowPriorityRoomIdList.size());
 
             fillList(favouriteRoomSummaryList, dummyRoomSummary, favouriteRoomIdList.size());
             fillList(lowPriorityRoomSummaryList, dummyRoomSummary, lowPriorityRoomIdList.size());
@@ -523,7 +523,7 @@ public class VectorRoomSummaryAdapter extends BaseExpandableListAdapter {
             }
 
             // update/retrieve the complete summary list
-            ArrayList<RoomSummary> roomSummariesCompleteList = new ArrayList<>(dataHandler.getStore().getSummaries());
+            List<RoomSummary> roomSummariesCompleteList = new ArrayList<>(dataHandler.getStore().getSummaries());
 
             // define comparator logic
             Comparator<RoomSummary> summaryComparator = new Comparator<RoomSummary>() {
@@ -1030,8 +1030,8 @@ public class VectorRoomSummaryAdapter extends BaseExpandableListAdapter {
      * @param toChildPosition   the child position destination
      */
     public void moveChildView(int fromGroupPosition, int fromChildPosition, int toGroupPosition, int toChildPosition) {
-        ArrayList<RoomSummary> fromList = mSummaryListByGroupPosition.get(fromGroupPosition);
-        ArrayList<RoomSummary> toList = mSummaryListByGroupPosition.get(toGroupPosition);
+        List<RoomSummary> fromList = mSummaryListByGroupPosition.get(fromGroupPosition);
+        List<RoomSummary> toList = mSummaryListByGroupPosition.get(toGroupPosition);
 
         RoomSummary summary = fromList.get(fromChildPosition);
         fromList.remove(fromChildPosition);

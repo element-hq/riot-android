@@ -962,7 +962,7 @@ public class VectorParticipantsAdapter extends BaseExpandableListAdapter {
             User user = null;
             MXSession matchedSession = null;
             // retrieve the linked user
-            ArrayList<MXSession> sessions = Matrix.getMXSessions(mContext);
+            List<MXSession> sessions = Matrix.getMXSessions(mContext);
 
             for (MXSession session : sessions) {
                 if (null == user) {

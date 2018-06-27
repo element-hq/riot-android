@@ -57,6 +57,7 @@ import org.matrix.androidsdk.crypto.data.MXUsersDevicesMap;
 import org.matrix.androidsdk.util.Log;
 
 import java.util.HashMap;
+import java.util.Map;
 import java.util.Timer;
 import java.util.TimerTask;
 
@@ -795,7 +796,7 @@ public class VectorCallViewActivity extends RiotAppCompatActivity implements Sen
             String roomId = mCall.getRoom().getRoomId();
 
             if (null != VectorApp.getCurrentActivity()) {
-                HashMap<String, Object> params = new HashMap<>();
+                Map<String, Object> params = new HashMap<>();
                 params.put(VectorRoomActivity.EXTRA_MATRIX_ID, mMatrixId);
                 params.put(VectorRoomActivity.EXTRA_ROOM_ID, roomId);
                 CommonActivityUtils.goToRoomPage(VectorApp.getCurrentActivity(), mSession, params);

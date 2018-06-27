@@ -415,7 +415,7 @@ public class VectorRoomActivity extends MXCActionBarActivity implements
 
         @Override
         public void onRoomKick(String roomId) {
-            HashMap<String, Object> params = new HashMap<>();
+            Map<String, Object> params = new HashMap<>();
 
             params.put(VectorRoomActivity.EXTRA_MATRIX_ID, mSession.getMyUserId());
             params.put(VectorRoomActivity.EXTRA_ROOM_ID, mRoom.getRoomId());
@@ -424,7 +424,7 @@ public class VectorRoomActivity extends MXCActionBarActivity implements
             Intent intent = new Intent(VectorRoomActivity.this, VectorHomeActivity.class);
             intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
 
-            intent.putExtra(VectorHomeActivity.EXTRA_JUMP_TO_ROOM_PARAMS, params);
+            intent.putExtra(VectorHomeActivity.EXTRA_JUMP_TO_ROOM_PARAMS, (HashMap) params);
             startActivity(intent);
         }
 
@@ -2032,7 +2032,7 @@ public class VectorRoomActivity extends MXCActionBarActivity implements
             return;
         }
 
-        ArrayList<RoomMediaMessage> sharedDataItems = new ArrayList<>();
+        List<RoomMediaMessage> sharedDataItems = new ArrayList<>();
 
         if (null != intent) {
             sharedDataItems = new ArrayList<>(RoomMediaMessage.listRoomMediaMessages(intent, RoomMediaMessage.class.getClassLoader()));
@@ -2854,7 +2854,7 @@ public class VectorRoomActivity extends MXCActionBarActivity implements
             String myUserId = mSession.getMyUserId();
 
             // get the room member names
-            ArrayList<String> names = new ArrayList<>();
+            List<String> names = new ArrayList<>();
 
             for (int i = 0; i < typingUsers.size(); i++) {
                 RoomMember member = mRoom.getMember(typingUsers.get(i));
@@ -3342,7 +3342,7 @@ public class VectorRoomActivity extends MXCActionBarActivity implements
                         public void onSuccess(String roomId) {
                             hideWaitingView();
 
-                            HashMap<String, Object> params = new HashMap<>();
+                            Map<String, Object> params = new HashMap<>();
 
                             params.put(VectorRoomActivity.EXTRA_MATRIX_ID, mSession.getMyUserId());
                             params.put(VectorRoomActivity.EXTRA_ROOM_ID, mRoom.getRoomId());
@@ -3351,7 +3351,7 @@ public class VectorRoomActivity extends MXCActionBarActivity implements
                             Intent intent = new Intent(VectorRoomActivity.this, VectorHomeActivity.class);
                             intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
 
-                            intent.putExtra(VectorHomeActivity.EXTRA_JUMP_TO_ROOM_PARAMS, params);
+                            intent.putExtra(VectorHomeActivity.EXTRA_JUMP_TO_ROOM_PARAMS, (HashMap) params);
                             startActivity(intent);
                         }
 
@@ -3609,7 +3609,7 @@ public class VectorRoomActivity extends MXCActionBarActivity implements
      */
     private void onJoined() {
         if (null != sRoomPreviewData) {
-            HashMap<String, Object> params = new HashMap<>();
+            Map<String, Object> params = new HashMap<>();
 
             processDirectMessageRoom();
 
@@ -3624,7 +3624,7 @@ public class VectorRoomActivity extends MXCActionBarActivity implements
             Intent intent = new Intent(VectorRoomActivity.this, VectorHomeActivity.class);
             intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
 
-            intent.putExtra(VectorHomeActivity.EXTRA_JUMP_TO_ROOM_PARAMS, params);
+            intent.putExtra(VectorHomeActivity.EXTRA_JUMP_TO_ROOM_PARAMS, (HashMap) params);
             startActivity(intent);
 
             sRoomPreviewData = null;

@@ -43,6 +43,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 import im.vector.Matrix;
@@ -416,7 +417,7 @@ public class ContactsManager implements SharedPreferences.OnSharedPreferenceChan
             public void run() {
                 long t0 = System.currentTimeMillis();
                 ContentResolver cr = mContext.getContentResolver();
-                HashMap<String, Contact> dict = new HashMap<>();
+                Map<String, Contact> dict = new HashMap<>();
 
                 // test if the user allows to access to the contact
                 if (isContactBookAccessAllowed()) {

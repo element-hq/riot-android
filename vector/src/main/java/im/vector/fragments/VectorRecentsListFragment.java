@@ -51,6 +51,7 @@ import org.matrix.androidsdk.util.Log;
 
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import im.vector.Matrix;
 import im.vector.PublicRoomsManager;
@@ -235,7 +236,7 @@ public class VectorRecentsListFragment extends VectorBaseFragment implements
 
                     // launch corresponding room activity
                     if (null != roomId) {
-                        HashMap<String, Object> params = new HashMap<>();
+                        Map<String, Object> params = new HashMap<>();
                         params.put(VectorRoomActivity.EXTRA_MATRIX_ID, session.getMyUserId());
                         params.put(VectorRoomActivity.EXTRA_ROOM_ID, roomId);
 

@@ -28,6 +28,7 @@ import android.widget.ListView;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.List;
 
 import im.vector.R;
 import im.vector.adapters.ImageCompressionDescription;
@@ -52,7 +53,7 @@ public class ImageSizeSelectionDialogFragment extends DialogFragment {
         return f;
     }
 
-    private ArrayList<ImageCompressionDescription> mEntries = null;
+    private List<ImageCompressionDescription> mEntries = null;
     private ImageSizeListener mListener = null;
 
     private void setEntries(Collection<ImageCompressionDescription> entries) {
@@ -69,7 +70,7 @@ public class ImageSizeSelectionDialogFragment extends DialogFragment {
         super.onSaveInstanceState(savedInstanceState);
 
         if (null != mEntries) {
-            savedInstanceState.putSerializable(SELECTIONS_LIST, mEntries);
+            savedInstanceState.putSerializable(SELECTIONS_LIST, (ArrayList) mEntries);
         }
     }
 

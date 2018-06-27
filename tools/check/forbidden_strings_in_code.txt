@@ -21,6 +21,9 @@
 # Example:
 # AuthorizedStringThreeTimes===3
 
+# Extension:java
+# Extension:kt
+
 # Use new SecureLinearLayoutManager
 # DISABLED
 #new LinearLayoutManager
@@ -46,6 +49,9 @@ succes[^s]
 
 ### Use int instead of Integer
 protected Integer
+
+### Use the interface declaration. Example: use type "Map" instead of type "HashMap" to declare variable or parameter
+(private|public|protected|    ) (static )?(final )?(HashMap|HashSet|ArrayList)
 
 ### Prefer comparison the ascending way, when checking for value in range. Use <=
 >= .* &&===13
@@ -136,5 +142,5 @@ android\.R\.id\.home===2
 ### Kotlin conversion tools introduce this, but is can be replace by trim()
 trim \{ it \<\= \' \' \}
 
-# Use AlertDialog form v7 compat lib
+### Use AlertDialog form v7 compat lib
 android\.app\.AlertDialog

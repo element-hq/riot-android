@@ -91,7 +91,7 @@ public class VectorCircularImageView extends android.support.v7.widget.AppCompat
     private static android.os.Handler mConversionImagesThreadHandler = null;
     private static Handler mUIHandler = null;
 
-    private static Map<String, ArrayList<Pair<Object, VectorCircularImageView>>> mPendingConversion = new HashMap<>();
+    private static Map<String, List<Pair<Object, VectorCircularImageView>>> mPendingConversion = new HashMap<>();
 
     /**
      * Update the image drawable with the rounded bitmap.

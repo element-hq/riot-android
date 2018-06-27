@@ -722,7 +722,7 @@ Ismeretlen eszközök:</string>
     <string name="settings_labs_create_conference_with_jitsi">Hozz létre konferencia hívást a jitsi segítségével</string>
     <string name="widget_delete_message_confirmation">Biztos vagy benne hogy törölni akarod ezt a kisalkalmazást?</string>
 
-    // Widget Integration Manager
+    <!-- Widget Integration Manager -->
     <string name="widget_integration_unable_to_create">Kisalkalmazás létrehozása sikertelen.</string>
     <string name="widget_integration_failed_to_send_request">Felkérés elküldése sikertelen.</string>
     <string name="widget_integration_positive_power_level">Az erősségi szintnek egy pozitív egész számnak kell lennie.</string>
@@ -758,17 +758,17 @@ Ismeretlen eszközök:</string>
 
     <string name="settings_labs_native_camera">Beépített kamera használata</string>
 
-    // share keys
+    <!-- share keys -->
     <string name="title_activity_bug_report">Hiba jelentés</string>
 
     <string name="conference_call_warning_title">Figyelmeztetés!</string>
     <string name="conference_call_warning_message">A konferenciabeszélgetés fejlesztés alatt van, elképzelhető, hogy nem működik még megfelelően.</string>
 
-    // slash commands
+    <!-- slash commands -->
     <string name="command_error">Utasítás hiba</string>
     <string name="unrecognized_command">Ismeretlen utasítás: %s</string>
 
-    // notification statuses
+    <!-- notification statuses -->
     <string name="notification_off">Ki</string>
     <string name="notification_on">Be</string>
     <string name="notification_noisy">Hangos</string>
@@ -818,7 +818,7 @@ Ismeretlen eszközök:</string>
     <string name="community_id">Közösség azonosító</string>
     <string name="community_id_hint">példa</string>
 
-    // group details
+    <!-- group details -->
     <string name="group_details_rooms">Szobák</string>
     <string name="group_details_people">Emberek</string>
     <string name="no_users_placeholder">Nincsenek felhasználók</string>
@@ -903,7 +903,7 @@ Ismeretlen eszközök:</string>
 	<item quantity="other">%d aktív kisalkalmazás</item>
 </plurals>
 
-    // Widget Integration Manager
+    <!-- Widget Integration Manager -->
     <string name="avatar">Avatar</string>
 
 <string name="receipt_avatar">Visszaigazolási avatar</string>

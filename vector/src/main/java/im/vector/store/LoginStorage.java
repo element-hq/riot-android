@@ -1,5 +1,6 @@
 /*
  * Copyright 2015 OpenMarket Ltd
+ * Copyright 2018 New Vector Ltd
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -19,14 +20,14 @@ package im.vector.store;
 import android.content.Context;
 import android.content.SharedPreferences;
 
-import org.matrix.androidsdk.util.Log;
-
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.matrix.androidsdk.HomeServerConnectionConfig;
+import org.matrix.androidsdk.util.Log;
 
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Stores login credentials in SharedPreferences.
@@ -49,7 +50,7 @@ public class LoginStorage {
     /**
      * @return the list of home server configurations.
      */
-    public ArrayList<HomeServerConnectionConfig> getCredentialsList() {
+    public List<HomeServerConnectionConfig> getCredentialsList() {
         SharedPreferences prefs = mContext.getSharedPreferences(PREFS_LOGIN, Context.MODE_PRIVATE);
 
         String connectionConfigsString = prefs.getString(PREFS_KEY_CONNECTION_CONFIGS, null);
@@ -63,7 +64,7 @@ public class LoginStorage {
         try {
             JSONArray connectionConfigsStrings = new JSONArray(connectionConfigsString);
 
-            ArrayList<HomeServerConnectionConfig> configList = new ArrayList<>(
+            List<HomeServerConnectionConfig> configList = new ArrayList<>(
                     connectionConfigsStrings.length()
             );
 
@@ -90,11 +91,11 @@ public class LoginStorage {
             SharedPreferences prefs = mContext.getSharedPreferences(PREFS_LOGIN, Context.MODE_PRIVATE);
             SharedPreferences.Editor editor = prefs.edit();
 
-            ArrayList<HomeServerConnectionConfig> configs = getCredentialsList();
+            List<HomeServerConnectionConfig> configs = getCredentialsList();
 
             configs.add(config);
 
-            ArrayList<JSONObject> serialized = new ArrayList<>(configs.size());
+            List<JSONObject> serialized = new ArrayList<>(configs.size());
 
             try {
                 for (HomeServerConnectionConfig c : configs) {
@@ -125,8 +126,8 @@ public class LoginStorage {
             SharedPreferences prefs = mContext.getSharedPreferences(PREFS_LOGIN, Context.MODE_PRIVATE);
             SharedPreferences.Editor editor = prefs.edit();
 
-            ArrayList<HomeServerConnectionConfig> configs = getCredentialsList();
-            ArrayList<JSONObject> serialized = new ArrayList<>(configs.size());
+            List<HomeServerConnectionConfig> configs = getCredentialsList();
+            List<JSONObject> serialized = new ArrayList<>(configs.size());
 
             boolean found = false;
             try {
@@ -163,8 +164,8 @@ public class LoginStorage {
             SharedPreferences prefs = mContext.getSharedPreferences(PREFS_LOGIN, Context.MODE_PRIVATE);
             SharedPreferences.Editor editor = prefs.edit();
 
-            ArrayList<HomeServerConnectionConfig> configs = getCredentialsList();
-            ArrayList<JSONObject> serialized = new ArrayList<>(configs.size());
+            List<HomeServerConnectionConfig> configs = getCredentialsList();
+            List<JSONObject> serialized = new ArrayList<>(configs.size());
 
             boolean found = false;
             try {

@@ -86,6 +86,7 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Locale;
+import java.util.Map;
 import java.util.Set;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -121,7 +122,7 @@ public class VectorMessagesAdapter extends AbstractMessagesAdapter {
 
     // day date of each message
     // the hours, minutes and seconds are removed
-    private ArrayList<Date> mMessagesDateList = new ArrayList<>();
+    private List<Date> mMessagesDateList = new ArrayList<>();
 
     // when the adapter is used in search mode
     // the searched message should be highlighted
@@ -130,14 +131,14 @@ public class VectorMessagesAdapter extends AbstractMessagesAdapter {
 
     // formatted time by event id
     // it avoids computing them several times
-    private final HashMap<String, String> mEventFormattedTsMap = new HashMap<>();
+    private final Map<String, String> mEventFormattedTsMap = new HashMap<>();
 
     // define the e2e icon to use for a dedicated eventId
     // can be a drawable or
-    private HashMap<String, Object> mE2eIconByEventId = new HashMap<>();
+    private Map<String, Object> mE2eIconByEventId = new HashMap<>();
 
     // device info by device id
-    private HashMap<String, MXDeviceInfo> mE2eDeviceByEventId = new HashMap<>();
+    private Map<String, MXDeviceInfo> mE2eDeviceByEventId = new HashMap<>();
 
     // true when the room is encrypted
     public boolean mIsRoomEncrypted;
@@ -160,14 +161,14 @@ public class VectorMessagesAdapter extends AbstractMessagesAdapter {
     static final int NUM_ROW_TYPES = 12;
 
     final Context mContext;
-    private final HashMap<Integer, Integer> mRowTypeToLayoutId = new HashMap<>();
+    private final Map<Integer, Integer> mRowTypeToLayoutId = new HashMap<>();
     final LayoutInflater mLayoutInflater;
 
     // To keep track of events and avoid duplicates. For instance, we add a message event
     // when the current user sends one but it will also come down the event stream
-    private final HashMap<String, MessageRow> mEventRowMap = new HashMap<>();
+    private final Map<String, MessageRow> mEventRowMap = new HashMap<>();
 
-    private final HashMap<String, Integer> mEventType = new HashMap<>();
+    private final Map<String, Integer> mEventType = new HashMap<>();
 
     // the message text colors
     private final int mDefaultMessageTextColor;
@@ -190,7 +191,7 @@ public class VectorMessagesAdapter extends AbstractMessagesAdapter {
     private boolean mIsPreviewMode = false;
     private boolean mIsUnreadViewMode = false;
     private String mPattern = null;
-    private ArrayList<MessageRow> mLiveMessagesRowList = null;
+    private List<MessageRow> mLiveMessagesRowList = null;
 
     // id of the read markers event
     private String mReadReceiptEventId;
@@ -1868,7 +1869,7 @@ public class VectorMessagesAdapter extends AbstractMessagesAdapter {
      */
     private void refreshRefreshDateList() {
         // build messages timestamps
-        ArrayList<Date> dates = new ArrayList<>();
+        List<Date> dates = new ArrayList<>();
 
         Date latestDate = AdapterUtils.zeroTimeDate(new Date());
 
@@ -2222,8 +2223,8 @@ public class VectorMessagesAdapter extends AbstractMessagesAdapter {
      * Found the dedicated icon to display for each event id
      */
     private void manageCryptoEvents() {
-        HashMap<String, Object> e2eIconByEventId = new HashMap<>();
-        HashMap<String, MXDeviceInfo> e2eDeviceInfoByEventId = new HashMap<>();
+        Map<String, Object> e2eIconByEventId = new HashMap<>();
+        Map<String, MXDeviceInfo> e2eDeviceInfoByEventId = new HashMap<>();
 
         if (mIsRoomEncrypted && mSession.isCryptoEnabled()) {
             // the key is "userid_deviceid"

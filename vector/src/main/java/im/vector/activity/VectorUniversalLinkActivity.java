@@ -34,8 +34,8 @@ import org.matrix.androidsdk.ssl.Fingerprint;
 import org.matrix.androidsdk.util.Log;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import im.vector.LoginHandler;
 import im.vector.Matrix;
@@ -67,7 +67,7 @@ public class VectorUniversalLinkActivity extends RiotAppCompatActivity {
                 // We consider here an email validation
                 Uri intentUri = getIntent().getData();
 
-                HashMap<String, String> mailRegParams = VectorRegistrationReceiver.parseMailRegistrationLink(intentUri);
+                Map<String, String> mailRegParams = VectorRegistrationReceiver.parseMailRegistrationLink(intentUri);
 
                 // Assume it is a new account creation when there is a next link, or when no session is already available.
                 MXSession session = Matrix.getInstance(this).getDefaultSession();
@@ -126,7 +126,7 @@ public class VectorUniversalLinkActivity extends RiotAppCompatActivity {
      * @param uri        the uri.
      * @param aMapParams the parsed params
      */
-    private void emailBinding(Uri uri, HashMap<String, String> aMapParams) {
+    private void emailBinding(Uri uri, Map<String, String> aMapParams) {
         Log.d(LOG_TAG, "## emailBinding()");
 
         String ISUrl = uri.getScheme() + "://" + uri.getHost();

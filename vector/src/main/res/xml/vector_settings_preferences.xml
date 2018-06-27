@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
@@ -9,7 +10,7 @@
 
         <im.vector.preference.UserAvatarPreference
             android:key="SETTINGS_PROFILE_PICTURE_PREFERENCE_KEY"
-            android:title="@string/settings_profile_picture"/>
+            android:title="@string/settings_profile_picture" />
 
         <EditTextPreference
             android:focusable="true"
@@ -19,7 +20,7 @@
 
         <im.vector.preference.VectorCustomActionEditTextPreference
             android:key="SETTINGS_CHANGE_PASSWORD_PREFERENCE_KEY"
-            android:summary="********"
+            android:summary="@string/password_hint"
             android:title="@string/settings_change_password" />
 
     </PreferenceCategory>
@@ -125,7 +126,7 @@
 
     <PreferenceCategory
         android:key="SETTINGS_GROUPS_FLAIR_KEY"
-        android:title="@string/settings_flair"/>
+        android:title="@string/settings_flair" />
 
     <im.vector.preference.VectorDividerCategory />
 
@@ -222,17 +223,13 @@
 
     </PreferenceCategory>
 
-    <im.vector.preference.VectorDividerCategory
-        android:key="SETTINGS_NOTIFICATIONS_TARGET_DIVIDER_PREFERENCE_KEY"
-        android:title="notifications_targets_divider" />
+    <im.vector.preference.VectorDividerCategory android:key="SETTINGS_NOTIFICATIONS_TARGET_DIVIDER_PREFERENCE_KEY" />
 
     <PreferenceCategory
         android:key="SETTINGS_NOTIFICATIONS_TARGETS_PREFERENCE_KEY"
         android:title="@string/settings_notifications_targets" />
 
-    <im.vector.preference.VectorDividerCategory
-        android:key="SETTINGS_IGNORE_USERS_DIVIDER_PREFERENCE_KEY"
-        android:title="ignore_users_divider" />
+    <im.vector.preference.VectorDividerCategory android:key="SETTINGS_IGNORE_USERS_DIVIDER_PREFERENCE_KEY" />
 
     <PreferenceCategory
         android:key="SETTINGS_IGNORED_USERS_PREFERENCE_KEY"
@@ -326,18 +323,19 @@
 
         <im.vector.preference.VectorCustomActionEditTextPreference
             android:key="SETTINGS_LOGGED_IN_PREFERENCE_KEY"
-            android:summary="1.2.3"
-            android:title="@string/settings_logged_in" />
+            android:title="@string/settings_logged_in"
+            tools:summary="\@user:matrix.org" />
 
         <im.vector.preference.VectorCustomActionEditTextPreference
             android:key="SETTINGS_HOME_SERVER_PREFERENCE_KEY"
-            android:summary="1.2.3"
-            android:title="@string/settings_home_server" />
+            android:title="@string/settings_home_server"
+            tools:summary="@string/default_hs_server_url" />
 
         <im.vector.preference.VectorCustomActionEditTextPreference
             android:key="SETTINGS_IDENTITY_SERVER_PREFERENCE_KEY"
-            android:summary="1.2.3"
-            android:title="@string/settings_identity_server" />
+            android:title="@string/settings_identity_server"
+            tools:summary="@string/default_identity_server_url" />
+
     </PreferenceCategory>
 
     <im.vector.preference.VectorDividerCategory />
@@ -370,13 +368,13 @@
 
         <im.vector.preference.VectorCustomActionEditTextPreference
             android:key="SETTINGS_VERSION_PREFERENCE_KEY"
-            android:summary="1.2.3"
-            android:title="@string/settings_version" />
+            android:title="@string/settings_version"
+            tools:summary="1.2.3" />
 
         <im.vector.preference.VectorCustomActionEditTextPreference
             android:key="SETTINGS_OLM_VERSION_PREFERENCE_KEY"
-            android:summary="1.2.3"
-            android:title="@string/settings_olm_version" />
+            android:title="@string/settings_olm_version"
+            tools:summary="1.2.3" />
 
         <im.vector.preference.VectorCustomActionEditTextPreference
             android:key="SETTINGS_COPYRIGHT_PREFERENCE_KEY"

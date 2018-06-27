@@ -39,6 +39,7 @@ import org.matrix.androidsdk.util.Log;
 
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 import im.vector.Matrix;
@@ -336,7 +337,7 @@ public abstract class AbsHomeFragment extends VectorBaseFragment implements
             CommonActivityUtils.specificUpdateBadgeUnreadCount(mSession, getContext());
 
             // Launch corresponding room activity
-            HashMap<String, Object> params = new HashMap<>();
+            Map<String, Object> params = new HashMap<>();
             params.put(VectorRoomActivity.EXTRA_MATRIX_ID, mSession.getMyUserId());
             params.put(VectorRoomActivity.EXTRA_ROOM_ID, roomId);
 

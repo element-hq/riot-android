@@ -126,7 +126,7 @@ public class VectorSearchRoomFilesListFragment extends VectorSearchRoomsFilesLis
         remoteRoomHistoryRequest(new ArrayList<Event>(), new ApiCallback<ArrayList<Event>>() {
             @Override
             public void onSuccess(ArrayList<Event> eventsChunk) {
-                ArrayList<MessageRow> messageRows = new ArrayList<>(eventsChunk.size());
+                List<MessageRow> messageRows = new ArrayList<>(eventsChunk.size());
                 RoomState liveState = mRoom.getLiveState();
 
                 for (Event event : eventsChunk) {
@@ -329,7 +329,7 @@ public class VectorSearchRoomFilesListFragment extends VectorSearchRoomsFilesLis
      */
     private void appendEvents(ArrayList<Event> events, List<Event> eventsToAppend) {
         // filter
-        ArrayList<Event> filteredEvents = new ArrayList<>(eventsToAppend.size());
+        List<Event> filteredEvents = new ArrayList<>(eventsToAppend.size());
         for (Event event : eventsToAppend) {
             if (Event.EVENT_TYPE_MESSAGE.equals(event.getType())) {
                 Message message = JsonUtils.toMessage(event.getContent());

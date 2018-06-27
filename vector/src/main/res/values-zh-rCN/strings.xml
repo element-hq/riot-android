@@ -723,7 +723,7 @@
     <string name="settings_labs_create_conference_with_jitsi">用 jitsi 创建会议通话</string>
     <string name="widget_delete_message_confirmation">您确定要删除这个小部件吗？</string>
 
-    // Widget Integration Manager
+    <!-- Widget Integration Manager -->
     <string name="widget_integration_unable_to_create">无法创建小部件。</string>
     <string name="widget_integration_failed_to_send_request">发送请求失败。</string>
     <string name="widget_integration_positive_power_level">特权级别必须是正整数。</string>
@@ -753,15 +753,15 @@
 
     <string name="settings_labs_native_camera">使用原生相机</string>
 
-    // share keys
+    <!-- share keys -->
     <string name="conference_call_warning_title">警告！</string>
     <string name="conference_call_warning_message">会议通话正在开发中，可能不可靠。</string>
 
-    // slash commands
+    <!-- slash commands -->
     <string name="command_error">命令错误</string>
     <string name="unrecognized_command">不可识别的命令：%s</string>
 
-    // notification statuses
+    <!-- notification statuses -->
     <string name="notification_off">关闭</string>
     <string name="notification_on">打开</string>
     <string name="encrypted_message">已加密消息</string>
@@ -857,7 +857,7 @@
 	<item quantity="other">已启用 %d 个小部件</item>
 </plurals>
 
-    // Widget Integration Manager
+    <!-- Widget Integration Manager -->
     <string name="community_name">社区名称</string>
     <string name="community_id">社区 ID</string>
     <string name="group_details_home">主页</string>

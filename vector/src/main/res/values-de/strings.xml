@@ -760,7 +760,7 @@ Unbekannte Geräte:</string>
     <string name="settings_labs_create_conference_with_jitsi">Konferenzgespräche mit jitsi durchführen</string>
     <string name="widget_delete_message_confirmation">Soll das Widget wirklich gelöscht werden?</string>
 
-    // Widget Integration Manager
+    <!-- Widget Integration Manager -->
     <string name="widget_integration_unable_to_create">Widget konnte nicht erstellt werden.</string>
     <string name="widget_integration_positive_power_level">Berechtigungslevel muss eine positive ganze Zahl sein.</string>
     <string name="widget_integration_must_be_in_room">Du bist nicht Mitglied in diesem Raum.</string>
@@ -798,7 +798,7 @@ Unbekannte Geräte:</string>
 
     <string name="settings_labs_native_camera">Systemeigene Kamera verwenden</string>
 
-    // share keys
+    <!-- share keys -->
     <string name="share_without_verifying">Ohne Verifizierung teilen</string>
     <string name="ignore_request">Anfrage ignorieren</string>
 
@@ -809,11 +809,11 @@ Unbekannte Geräte:</string>
     <string name="conference_call_warning_title">Warnung!</string>
     <string name="conference_call_warning_message">Konferenzgespräche werden noch entwickelt und sind vielleicht nicht zuverlässig.</string>
 
-    // slash commands
+    <!-- slash commands -->
     <string name="command_error">Befehlsfehler</string>
     <string name="unrecognized_command">Unbekanntes Kommando: %s</string>
 
-    // notification statuses
+    <!-- notification statuses -->
     <string name="notification_off">Aus</string>
     <string name="notification_on">An</string>
     <string name="notification_noisy">Laut</string>
@@ -863,7 +863,7 @@ Unbekannte Geräte:</string>
     <string name="community_id">Community-ID</string>
     <string name="community_id_hint">Beispiel</string>
 
-    // group details
+    <!-- group details -->
     <string name="group_details_home">Startseite</string>
     <string name="group_details_people">Personen</string>
     <string name="group_details_rooms">Räume</string>
@@ -940,7 +940,7 @@ Unbekannte Geräte:</string>
 	<item quantity="other">%d aktive Widgets</item>
 </plurals>
 
-    // Widget Integration Manager
+    <!-- Widget Integration Manager -->
     <string name="avatar">Profilbild</string>
 
 <plurals name="membership_changes">

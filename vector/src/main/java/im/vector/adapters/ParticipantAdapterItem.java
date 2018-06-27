@@ -1,6 +1,7 @@
 /*
  * Copyright 2015 OpenMarket Ltd
  * Copyright 2017 Vector Creations Ltd
+ * Copyright 2018 New Vector Ltd
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -33,6 +34,7 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.regex.Pattern;
 
 import im.vector.VectorApp;
@@ -61,7 +63,7 @@ public class ParticipantAdapterItem implements java.io.Serializable {
     public Contact mContact;
 
     // search fields
-    private ArrayList<String> mDisplayNameComponents;
+    private List<String> mDisplayNameComponents;
     private String mLowerCaseDisplayName;
     private String mLowerCaseMatrixId;
 
@@ -211,7 +213,7 @@ public class ParticipantAdapterItem implements java.io.Serializable {
             // use a local users cache to avoid crashes while sorting
             // eg the user presence is updated during the search
             final Map<String, User> mUsersMap = new HashMap<>();
-            final HashSet<String> mUnknownUsers = new HashSet<>();
+            final Set<String> mUnknownUsers = new HashSet<>();
 
             private User getUser(String userId) {
                 if (mUsersMap.containsKey(userId)) {
