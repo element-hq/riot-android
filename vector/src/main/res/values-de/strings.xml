@@ -277,7 +277,7 @@ Soll Riot der Zugriff auf deine Kontakte erlaubt werden?</string>
 
     <!-- medias slider string -->
     <string name="media_slider_saved">Gespeichert</string>
-    <string name="media_slider_saved_message">In Downloads speichern</string>
+    <string name="media_slider_saved_message">In Downloads speichern?</string>
     <string name="yes">Ja</string>
     <string name="no">Nein</string>
     <string name="_continue">Fortsetzen</string>
