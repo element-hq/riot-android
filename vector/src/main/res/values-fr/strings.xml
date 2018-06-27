@@ -178,7 +178,7 @@ Cliquez sur exporter pour les sauvegarder avant de vous déconnecter.</string>
     <string name="media_picker_cannot_record_video">Impossible d\'enregistrer une vidéo</string>
 
     <string name="media_slider_saved">Enregistré</string>
-    <string name="media_slider_saved_message">Enregistrer dans les téléchargements</string>
+    <string name="media_slider_saved_message">Enregistrer dans les téléchargements ?</string>
     <string name="yes">OUI</string>
     <string name="no">NON</string>
     <string name="_continue">Continuer</string>
