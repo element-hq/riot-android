@@ -942,4 +942,18 @@
     <string name="deactivate_account_prompt_password">За да продължите, моля въведете паролата си:</string>
     <string name="deactivate_account_submit">Деактивирай акаунта</string>
 
-</resources>
+<string name="dialog_title_third_party_licences">Лицензи от трети страни</string>
+
+    <string name="download">Изтегли</string>
+    <string name="speak">Говори</string>
+    <string name="clear">Изчисти</string>
+    <string name="e2e_re_request_encryption_key"><u>Изисквай повторно ключове за шифроване</u> от другите ми устройства.</string>
+
+    <string name="e2e_re_request_encryption_key_sent">Заявката за ключове беше изпратена.</string>
+
+    <string name="e2e_re_request_encryption_key_dialog_title">Изпратена заявка</string>
+    <string name="e2e_re_request_encryption_key_dialog_content">Моля стартирайте Riot на друго устройство можещо да разшифрова съобщението, за да може то да изпрати ключовете до това устройство.</string>
+
+    <string name="lock_screen_hint">Пишете тук…</string>
+
+    </resources>

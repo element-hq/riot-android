@@ -992,4 +992,18 @@ De zichtbaarheid van berichten in Matrix is hetzelfde als in e-mail. Het vergete
     <string name="deactivate_account_prompt_password">Om verder te gaan, voer je wachtwoord in:</string>
     <string name="deactivate_account_submit">Account Deactiveren</string>
 
-</resources>
+<string name="dialog_title_third_party_licences">Licenties van derde partijen</string>
+
+    <string name="download">Download</string>
+    <string name="speak">Spreek</string>
+    <string name="e2e_re_request_encryption_key"><u>Vraag beveiligingssleutels opnieuw aan</u> van je andere apparaten.</string>
+
+    <string name="e2e_re_request_encryption_key_sent">Sleutel aanvraag verstuurd.</string>
+
+    <string name="e2e_re_request_encryption_key_dialog_title">Aanvraag verstuurd</string>
+    <string name="e2e_re_request_encryption_key_dialog_content">Start Riot alstublieft op een ander apparaat dat het bericht kan ontsleutelen zodat deze de sleutels kan sturen naar dit apparaat.</string>
+
+    <string name="lock_screen_hint">Typ hier…</string>
+
+    <string name="clear">Opschonen</string>
+    </resources>
