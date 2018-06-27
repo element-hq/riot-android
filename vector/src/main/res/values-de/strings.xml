@@ -1016,4 +1016,13 @@ Die Sichtbarkeit deiner Nachrichten ist ähnlich zu E-Mails: Wenn wir deine Nach
 
     <string name="lock_screen_hint">Hier tippen…</string>
 
-    </resources>
+    <string name="option_send_voice">Sende Sprache</string>
+
+    <string name="go_on_with">fortfahren mit…</string>
+    <string name="error_no_external_application_found">Es wurde keine externe Anwendung gefunden, um diese Aktion auszuführen.</string>
+
+    <string name="settings_labs_enable_send_voice">Sprachnachrichten (erfordert eine externe Anwendung um Sprachnachrichten aufzuzeichnen)</string>
+
+    <string name="error_empty_field_your_password">Bitte gebe dein Passwort ein.</string>
+
+</resources>
