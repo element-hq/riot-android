@@ -35,6 +35,8 @@ android\:hint=\"[^@]
 # (with tolerance for empty string)
 android\:title=\"[^@"]
 android\:contentDescription=\"[^@]
+# (with tolerance for summary="%s")
+android\:summary=\"[^@|\%s]
 app\:ms_floatingLabelText=\"[^@]
 app\:ms_hint=\"[^@]
 
