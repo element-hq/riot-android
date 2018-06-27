@@ -7,7 +7,7 @@
     <string name="title_activity_settings">設定</string>
     <string name="title_activity_historical">履歴</string>
 
-    <string name="ok">ＯＫ</string>
+    <string name="ok">OK</string>
     <string name="cancel">取消</string>
     <string name="save">保存</string>
     <string name="leave">退室</string>
@@ -414,7 +414,7 @@
     <string name="login_error_bad_json">不正な形式のJSON</string>
     <string name="login_error_not_json">有効なJSONを含んでいませんでした</string>
     <string name="login_error_limit_exceeded">ログイン要求が多すぎてサーバが対応できません</string>
-    <string name="login_error_login_email_not_yet">まだ電子メールのリンクがクリックされていません</string>
+    <string name="login_error_login_email_not_yet">まだクリックされていないeメールのリンク</string>
 
     <string name="compression_options">"以下の容量で画像を送信 "</string>
     <string name="e2e_need_log_in_again">この端末のエンドツーエンド暗号鍵を生成し、接続先サーバに公開鍵を送信するには、再度ログインする必要があります。
@@ -878,8 +878,10 @@ Riotアプリがあなたの電話帳へアクセスすることを許可しま�
     <string name="settings_notification_privacy">通知のプライバシー</string>
     <string name="settings_notification_privacy_warning">Riot.imは通知のメッセージの内容の秘密を守るため、バックグラウンドで動作します。電池の使用を削減するために、このオプションを変えることができます。</string>
     <string name="settings_notification_privacy_normal">標準</string>
-    <string name="settings_notification_privacy_power_saving">電力保存オプション</string>
+    <string name="settings_notification_privacy_power_saving">省電力設定</string>
     <string name="settings_notification_privacy_low_detail">簡単な通知</string>
-    <string name="settings_notification_privacy_need_permission">このアプリはバックグラウンド動作の権限が必要です。</string>
+    <string name="settings_notification_privacy_need_permission">このアプリはバックグラウンド動作の権限が必要です</string>
     <string name="settings_notification_privacy_gcm">•通知はGoogle Cloud Messaging経由で送られます</string>
+    <string name="settings_notification_privacy_no_permission">このアプリにバックグラウンド動作の権限は<b>必要ありません</b></string>
+    <string name="settings_notification_privacy_metadata">• 通知はメタデータのみを含みます</string>
     </resources>
