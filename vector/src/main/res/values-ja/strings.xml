@@ -884,4 +884,10 @@ Riotアプリがあなたの電話帳へアクセスすることを許可しま�
     <string name="settings_notification_privacy_gcm">•通知はGoogle Cloud Messaging経由で送られます</string>
     <string name="settings_notification_privacy_no_permission">このアプリにバックグラウンド動作の権限は<b>必要ありません</b></string>
     <string name="settings_notification_privacy_metadata">• 通知はメタデータのみを含みます</string>
+    <string name="title_activity_choose_sticker">ステッカーを送る</string>
+
+    <string name="dialog_title_third_party_licences">サードパーティーライセンス</string>
+
+    <string name="download">ダウンロード</string>
+    <string name="speak">話す</string>
     </resources>
