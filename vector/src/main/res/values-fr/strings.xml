@@ -971,4 +971,13 @@ La visibilité des messages dans Matrix est identique à celle des e-mails. Si n
 
     <string name="lock_screen_hint">Tapez ici…</string>
 
-    </resources>
+    <string name="option_send_voice">Envoyer votre voix</string>
+
+    <string name="go_on_with">continuer avec…</string>
+    <string name="error_no_external_application_found">Désolé, aucune application externe n\'a été trouvée pour effectuer cette action.</string>
+
+    <string name="settings_labs_enable_send_voice">Envoyer un message vocal (nécessite une application tierce pour enregistrer des messages vocaux)</string>
+
+    <string name="error_empty_field_your_password">Veuillez renseigner votre mot de passe.</string>
+
+</resources>
