@@ -987,4 +987,6 @@
     <string name="deactivate_account_prompt_password">To continue, please enter your password:</string>
     <string name="deactivate_account_submit">Deactivate Account</string>
 
+    <string name="error_empty_field_your_password">Please enter your password.</string>
+
 </resources>

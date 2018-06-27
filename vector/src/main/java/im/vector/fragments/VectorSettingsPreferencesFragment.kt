@@ -2301,8 +2301,6 @@ class VectorSettingsPreferencesFragment : PreferenceFragment(), SharedPreference
                     .show()
         } else {
             Log.e(LOG_TAG, "## displayDeviceDetailsDialog(): sanity check failure")
-            // FIXME Hardcoded string
-            activity?.applicationContext?.toast("DeviceDetailsDialog cannot be displayed.\nBad input parameters.")
         }
     }
 
@@ -2414,8 +2412,7 @@ class VectorSettingsPreferencesFragment : PreferenceFragment(), SharedPreference
 
                         .setPositiveButton(R.string.devices_delete_submit_button_label, DialogInterface.OnClickListener { dialog, which ->
                             if (TextUtils.isEmpty(passwordEditText.toString())) {
-                                // FIXME Hardcoded string
-                                activity.applicationContext.toast("Password missing..")
+                                activity.applicationContext.toast(R.string.error_empty_field_your_password)
                                 return@OnClickListener
                             }
                             mAccountPassword = passwordEditText.text.toString()
