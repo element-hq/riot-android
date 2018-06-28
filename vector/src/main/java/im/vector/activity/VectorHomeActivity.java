@@ -209,6 +209,9 @@ public class VectorHomeActivity extends RiotAppCompatActivity implements SearchV
     @BindView(R.id.bottom_navigation)
     BottomNavigationView mBottomNavigationView;
 
+    @BindView(R.id.navigation_view)
+    NavigationView navigationView;
+
     // calls
     @BindView(R.id.listView_pending_callview)
     VectorPendingCallView mVectorPendingCallView;
@@ -293,6 +296,8 @@ public class VectorHomeActivity extends RiotAppCompatActivity implements SearchV
         sharedInstance = this;
 
         setupNavigation();
+
+        initSlidingMenu();
 
         mSession = Matrix.getInstance(this).getDefaultSession();
 
@@ -533,12 +538,7 @@ public class VectorHomeActivity extends RiotAppCompatActivity implements SearchV
 
         showFloatingActionButton();
 
-        runOnUiThread(new Runnable() {
-            @Override
-            public void run() {
-                refreshSlidingMenu();
-            }
-        });
+        refreshSlidingMenu();
 
         mVectorPendingCallView.checkPendingCall();
 
@@ -1730,18 +1730,19 @@ public class VectorHomeActivity extends RiotAppCompatActivity implements SearchV
         });
     }
 
-    private void refreshSlidingMenu() {
-        // use a dedicated view
-        NavigationView navigationView = findViewById(R.id.navigation_view);
-
+    void initSlidingMenu() {
         ActionBarDrawerToggle drawerToggle = new ActionBarDrawerToggle(
-                this,                  /* host Activity */
-                mDrawerLayout,         /* DrawerLayout object */
+                /* host Activity */
+                this,
+                /* DrawerLayout object */
+                mDrawerLayout,
                 mToolbar,
-                R.string.action_open,  /* "open drawer" description */
-                R.string.action_close  /* "close drawer" description */
-        ) {
+                /* "open drawer" description */
+                R.string.action_open,
+                /* "close drawer" description */
+                R.string.action_close) {
 
+            @Override
             public void onDrawerClosed(View view) {
                 switch (mSlidingMenuIndex) {
                     case R.id.sliding_menu_settings: {
@@ -1831,6 +1832,7 @@ public class VectorHomeActivity extends RiotAppCompatActivity implements SearchV
                 mSlidingMenuIndex = -1;
             }
 
+            @Override
             public void onDrawerOpened(View drawerView) {
             }
         };
@@ -1854,7 +1856,9 @@ public class VectorHomeActivity extends RiotAppCompatActivity implements SearchV
             getSupportActionBar().setHomeAsUpIndicator(ThemeUtils.INSTANCE.tintDrawable(this,
                     ContextCompat.getDrawable(this, R.drawable.ic_material_menu_white), R.attr.primary_control_color));
         }
+    }
 
+    private void refreshSlidingMenu() {
         Menu menuNav = navigationView.getMenu();
         MenuItem aboutMenuItem = menuNav.findItem(R.id.sliding_menu_version);
 
