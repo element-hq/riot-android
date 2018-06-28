@@ -1006,4 +1006,13 @@ De zichtbaarheid van berichten in Matrix is hetzelfde als in e-mail. Het vergete
     <string name="lock_screen_hint">Typ hier…</string>
 
     <string name="clear">Opschonen</string>
-    </resources>
+    <string name="option_send_voice">Stembericht versturen</string>
+
+    <string name="go_on_with">doorgaan met…</string>
+    <string name="error_no_external_application_found">Sorry, er is geen externe applicatie gevonden om deze actie te voltooien.</string>
+
+    <string name="settings_labs_enable_send_voice">Verstuur stembericht (heeft een externe applicatie nodig om stemberichten op te nemen)</string>
+
+    <string name="error_empty_field_your_password">Vul alstublieft uw wachtwoord in.</string>
+
+</resources>
