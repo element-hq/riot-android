@@ -266,7 +266,7 @@ Sta toegang toe op de volgende pop-up om bestanden vanaf je telefoon te sturen.<
 
     <!-- medias slider string -->
     <string name="media_slider_saved">Opgeslagen</string>
-    <string name="media_slider_saved_message">In downloads opslaan</string>
+    <string name="media_slider_saved_message">In downloads opslaan?</string>
     <string name="yes">JA</string>
     <string name="no">NEE</string>
     <string name="_continue">Ga verder</string>
