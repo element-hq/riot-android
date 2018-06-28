@@ -970,4 +970,13 @@ Matrix-eko mezuen ikusgaitasuna e-mail sistemaren antekoa da. Guk zure mezuak ah
 
     <string name="lock_screen_hint">Idatzi hemen…</string>
 
-    </resources>
+    <string name="option_send_voice">Bidali ahotsa</string>
+
+    <string name="go_on_with">jarraitu honekin…</string>
+    <string name="error_no_external_application_found">Ez da ekintza hau burutzeko kanpo aplikaziorik aurkitu.</string>
+
+    <string name="settings_labs_enable_send_voice">Bidali ahots mezua (Hirugarrengoen kanpo aplikazio bat behar da ahots-mezuak grabatzeko)</string>
+
+    <string name="error_empty_field_your_password">Sartu zure pasahitza.</string>
+
+</resources>
