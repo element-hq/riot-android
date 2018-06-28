@@ -16,7 +16,7 @@ Other changes:
 Bugfix:
  - Remove black borders on 18:9 phone (#2063)
  - Auto dismiss the join/reject room notification when user select an action (#2354)
- - Fix some crashes reported by the PlayStore (#2380, #2382, #2383)
+ - Fix some crashes reported by the PlayStore (#2380, #2382, #2383, #2395)
 
 Translations:
  -
