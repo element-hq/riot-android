@@ -1053,12 +1053,7 @@ public class VectorRoomActivity extends MXCActionBarActivity implements
                                 });
                             }
                         })
-                        .setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialog, int which) {
-                                dialog.dismiss();
-                            }
-                        })
+                        .setNegativeButton(R.string.cancel, null)
                         .show();
             }
 
@@ -1680,12 +1675,7 @@ public class VectorRoomActivity extends MXCActionBarActivity implements
                                     });
                                 }
                             })
-                            .setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
-                                @Override
-                                public void onClick(DialogInterface dialog, int which) {
-                                    dialog.dismiss();
-                                }
-                            })
+                            .setNegativeButton(R.string.cancel, null)
                             .show();
                 }
                 return true;
@@ -1799,12 +1789,7 @@ public class VectorRoomActivity extends MXCActionBarActivity implements
                                 }
                             }
                         })
-                        .setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialog, int which) {
-                                // nothing to do
-                            }
-                        })
+                        .setNegativeButton(R.string.cancel, null)
                         .show();
             }
         });
@@ -2351,7 +2336,6 @@ public class VectorRoomActivity extends MXCActionBarActivity implements
             builder
                     .setView(v)
                     .setPositiveButton(R.string.yes, new DialogInterface.OnClickListener() {
-
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
                             // Open integration manager, to the sticker installation page
@@ -3887,12 +3871,7 @@ public class VectorRoomActivity extends MXCActionBarActivity implements
                                 });
                             }
                         })
-                .setNegativeButton(R.string.cancel,
-                        new DialogInterface.OnClickListener() {
-                            public void onClick(DialogInterface dialog, int id) {
-                                dialog.cancel();
-                            }
-                        })
+                .setNegativeButton(R.string.cancel, null)
                 .show();
     }
 
@@ -3959,12 +3938,7 @@ public class VectorRoomActivity extends MXCActionBarActivity implements
                                 });
                             }
                         })
-                .setNegativeButton(R.string.cancel,
-                        new DialogInterface.OnClickListener() {
-                            public void onClick(DialogInterface dialog, int id) {
-                                dialog.cancel();
-                            }
-                        })
+                .setNegativeButton(R.string.cancel, null)
                 .show();
     }
 
@@ -4096,12 +4070,7 @@ public class VectorRoomActivity extends MXCActionBarActivity implements
                 new AlertDialog.Builder(this)
                         .setTitle(R.string.room_e2e_alert_title)
                         .setMessage(R.string.room_e2e_alert_message)
-                        .setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialog, int which) {
-                                // NOP
-                            }
-                        })
+                        .setPositiveButton(R.string.ok, null)
                         .show();
             }
         }
