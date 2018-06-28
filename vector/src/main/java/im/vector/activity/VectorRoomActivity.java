@@ -214,7 +214,10 @@ public class VectorRoomActivity extends MXCActionBarActivity implements
 
     private VectorMessageListFragment mVectorMessageListFragment;
     private MXSession mSession;
+
+    @Nullable
     private Room mRoom;
+
     private String mMyUserId;
     // the parameter is too big to be sent by the intent
     // so use a static variable to send it
@@ -1050,12 +1053,7 @@ public class VectorRoomActivity extends MXCActionBarActivity implements
                                 });
                             }
                         })
-                        .setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialog, int which) {
-                                dialog.dismiss();
-                            }
-                        })
+                        .setNegativeButton(R.string.cancel, null)
                         .show();
             }
 
@@ -1581,8 +1579,8 @@ public class VectorRoomActivity extends MXCActionBarActivity implements
     @Override
     public boolean onPrepareOptionsMenu(Menu menu) {
         // the application is in a weird state
-        // GA : mSession is null
-        if (CommonActivityUtils.shouldRestartApp(this) || (null == mSession)) {
+        // GA : mSession is null, mRoom is null
+        if (CommonActivityUtils.shouldRestartApp(this) || null == mSession || null == mRoom) {
             return false;
         }
 
@@ -1677,12 +1675,7 @@ public class VectorRoomActivity extends MXCActionBarActivity implements
                                     });
                                 }
                             })
-                            .setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
-                                @Override
-                                public void onClick(DialogInterface dialog, int which) {
-                                    dialog.dismiss();
-                                }
-                            })
+                            .setNegativeButton(R.string.cancel, null)
                             .show();
                 }
                 return true;
@@ -1697,6 +1690,10 @@ public class VectorRoomActivity extends MXCActionBarActivity implements
      * @param screenId to open a specific screen. Can be null
      */
     private void openIntegrationManagerActivity(@Nullable String screenId) {
+        if (mRoom == null) {
+            return;
+        }
+
         final Intent intent = IntegrationManagerActivity.Companion.getIntent(this, mMyUserId, mRoom.getRoomId(), null, screenId);
         startActivity(intent);
     }
@@ -1711,7 +1708,7 @@ public class VectorRoomActivity extends MXCActionBarActivity implements
     private boolean isUserAllowedToStartConfCall() {
         boolean isAllowed = false;
 
-        if (mRoom.isOngoingConferenceCall()) {
+        if (mRoom != null && mRoom.isOngoingConferenceCall()) {
             // if a conf is in progress, the user can join the established conf anyway
             Log.d(LOG_TAG, "## isUserAllowedToStartConfCall(): conference in progress");
             isAllowed = true;
@@ -1792,12 +1789,7 @@ public class VectorRoomActivity extends MXCActionBarActivity implements
                                 }
                             }
                         })
-                        .setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialog, int which) {
-                                // nothing to do
-                            }
-                        })
+                        .setNegativeButton(R.string.cancel, null)
                         .show();
             }
         });
@@ -1868,6 +1860,10 @@ public class VectorRoomActivity extends MXCActionBarActivity implements
      * @param aIsVideoCall true to video call, false to audio call
      */
     private void startIpCall(final boolean useJitsiCall, final boolean aIsVideoCall) {
+        if (mRoom == null) {
+            return;
+        }
+
         if ((mRoom.getActiveMembers().size() > 2) && useJitsiCall) {
             startJitsiCall(aIsVideoCall);
             return;
@@ -2075,6 +2071,10 @@ public class VectorRoomActivity extends MXCActionBarActivity implements
      * @param data
      */
     private void sendSticker(Intent data) {
+        if (mRoom == null) {
+            return;
+        }
+
         String contentStr = StickerPickerActivity.Companion.getResultContent(data);
 
         Event event = new Event(Event.EVENT_TYPE_STICKER,
@@ -2098,6 +2098,10 @@ public class VectorRoomActivity extends MXCActionBarActivity implements
         // the typing notifications are disabled ?
         if (PreferencesManager.dontSendTypingNotifs(this)) {
             Log.d(LOG_TAG, "##handleTypingNotification() : the typing notifs are disabled");
+            return;
+        }
+
+        if (mRoom == null) {
             return;
         }
 
@@ -2215,6 +2219,10 @@ public class VectorRoomActivity extends MXCActionBarActivity implements
     }
 
     private void cancelTypingNotification() {
+        if (mRoom == null) {
+            return;
+        }
+
         if (0 != mLastTypingDate) {
             if (mTypingTimerTask != null) {
                 mTypingTimerTask.cancel();
@@ -2227,8 +2235,7 @@ public class VectorRoomActivity extends MXCActionBarActivity implements
 
             mLastTypingDate = 0;
 
-            mRoom.sendTypingNotification(false, -1, new SimpleApiCallback<Void>(VectorRoomActivity.this) {
-            });
+            mRoom.sendTypingNotification(false, -1, new SimpleApiCallback<Void>(this));
         }
     }
 
@@ -2329,7 +2336,6 @@ public class VectorRoomActivity extends MXCActionBarActivity implements
             builder
                     .setView(v)
                     .setPositiveButton(R.string.yes, new DialogInterface.OnClickListener() {
-
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
                             // Open integration manager, to the sticker installation page
@@ -2339,6 +2345,10 @@ public class VectorRoomActivity extends MXCActionBarActivity implements
                     .setNegativeButton(R.string.no, null)
                     .show();
         } else {
+            if (mRoom == null) {
+                return;
+            }
+
             Intent intent = StickerPickerActivity.Companion.getIntent(this, mMyUserId, mRoom.getRoomId(), stickerWidgetUrl, stickerWidgetId);
 
             startActivityForResult(intent, RequestCodesKt.STICKER_PICKER_ACTIVITY_REQUEST_CODE);
@@ -2814,6 +2824,10 @@ public class VectorRoomActivity extends MXCActionBarActivity implements
      * Refresh the call buttons display.
      */
     private void refreshCallButtons(boolean refreshOngoingConferenceCallView) {
+        if (mRoom == null) {
+            return;
+        }
+
         if ((null == sRoomPreviewData) && (null == mEventId) && canSendMessages()) {
             boolean isCallSupported = mRoom.canPerformCall() && mSession.isVoipCallSupported();
             IMXCall call = CallsManager.getSharedInstance().getActiveCall();
@@ -2847,6 +2861,10 @@ public class VectorRoomActivity extends MXCActionBarActivity implements
      */
     private void onRoomTypings() {
         mLatestTypingMessage = null;
+
+        if (mRoom == null) {
+            return;
+        }
 
         List<String> typingUsers = mRoom.getTypingUsers();
 
@@ -3369,6 +3387,7 @@ public class VectorRoomActivity extends MXCActionBarActivity implements
                         @Override
                         public void onMatrixError(MatrixError e) {
                             if (MatrixError.M_CONSENT_NOT_GIVEN.equals(e.errcode)) {
+                                hideWaitingView();
                                 getConsentNotGivenHelper().displayDialog(e);
                             } else {
                                 onError(e.getLocalizedMessage());
@@ -3573,7 +3592,12 @@ public class VectorRoomActivity extends MXCActionBarActivity implements
 
                             @Override
                             public void onMatrixError(MatrixError e) {
-                                onError(e.getLocalizedMessage());
+                                if (MatrixError.M_CONSENT_NOT_GIVEN.equals(e.errcode)) {
+                                    hideWaitingView();
+                                    getConsentNotGivenHelper().displayDialog(e);
+                                } else {
+                                    onError(e.getLocalizedMessage());
+                                }
                             }
 
                             @Override
@@ -3639,6 +3663,11 @@ public class VectorRoomActivity extends MXCActionBarActivity implements
         Room room = sRoomPreviewData.getSession().getDataHandler().getRoom(sRoomPreviewData.getRoomId());
         if ((null != room) && (room.isDirectChatInvitation())) {
             String myUserId = mSession.getMyUserId();
+
+            if (mRoom == null) {
+                return;
+            }
+
             Collection<RoomMember> members = mRoom.getMembers();
 
             if (2 == members.size()) {
@@ -3674,7 +3703,7 @@ public class VectorRoomActivity extends MXCActionBarActivity implements
     private void onActivityResultRoomInvite(final Intent aData) {
         final List<String> userIds = (List<String>) aData.getSerializableExtra(VectorRoomInviteMembersActivity.EXTRA_OUT_SELECTED_USER_IDS);
 
-        if ((null != userIds) && (userIds.size() > 0)) {
+        if (mRoom != null && (null != userIds) && (userIds.size() > 0)) {
             showWaitingView();
 
             mRoom.invite(userIds, new ApiCallback<Void>() {
@@ -3716,7 +3745,7 @@ public class VectorRoomActivity extends MXCActionBarActivity implements
      */
     private void onActivityResultRoomAvatarUpdate(final Intent aData) {
         // sanity check
-        if (null == mSession) {
+        if (null == mSession || null == mRoom) {
             return;
         }
 
@@ -3784,6 +3813,10 @@ public class VectorRoomActivity extends MXCActionBarActivity implements
      * Assume he wants to update it.
      */
     private void onRoomTitleClick() {
+        if (mRoom == null) {
+            return;
+        }
+
         LayoutInflater inflater = LayoutInflater.from(this);
 
         AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(this);
@@ -3838,12 +3871,7 @@ public class VectorRoomActivity extends MXCActionBarActivity implements
                                 });
                             }
                         })
-                .setNegativeButton(R.string.cancel,
-                        new DialogInterface.OnClickListener() {
-                            public void onClick(DialogInterface dialog, int id) {
-                                dialog.cancel();
-                            }
-                        })
+                .setNegativeButton(R.string.cancel, null)
                 .show();
     }
 
@@ -3852,6 +3880,10 @@ public class VectorRoomActivity extends MXCActionBarActivity implements
      * Assume he wants to update it.
      */
     private void onRoomTopicClick() {
+        if (mRoom == null) {
+            return;
+        }
+
         LayoutInflater inflater = LayoutInflater.from(this);
 
         AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(this);
@@ -3906,12 +3938,7 @@ public class VectorRoomActivity extends MXCActionBarActivity implements
                                 });
                             }
                         })
-                .setNegativeButton(R.string.cancel,
-                        new DialogInterface.OnClickListener() {
-                            public void onClick(DialogInterface dialog, int id) {
-                                dialog.cancel();
-                            }
-                        })
+                .setNegativeButton(R.string.cancel, null)
                 .show();
     }
 
@@ -4043,12 +4070,7 @@ public class VectorRoomActivity extends MXCActionBarActivity implements
                 new AlertDialog.Builder(this)
                         .setTitle(R.string.room_e2e_alert_title)
                         .setMessage(R.string.room_e2e_alert_message)
-                        .setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialog, int which) {
-                                // NOP
-                            }
-                        })
+                        .setPositiveButton(R.string.ok, null)
                         .show();
             }
         }
