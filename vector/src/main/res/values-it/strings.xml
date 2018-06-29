@@ -288,7 +288,7 @@ Consentire a Riot di accedere ai tuoi contatti?</string>
 
     <!-- medias slider string -->
     <string name="media_slider_saved">Salvato</string>
-    <string name="media_slider_saved_message">Salva nei download</string>
+    <string name="media_slider_saved_message">Salvare nei download?</string>
     <string name="yes">SÌ</string>
     <string name="no">NO</string>
     <string name="_continue">Continua</string>
