@@ -971,7 +971,7 @@ Matrixban az üzenetek láthatósága hasonlít az e-mailre. Az üzenet törlés
 
     <string name="lock_screen_hint">Ide írj…</string>
 
-    <string name="option_send_voice">Hang küldése</string>
+    <string name="option_send_voice">Hang üzenet küldése</string>
 
     <string name="go_on_with">tovább ezzel…</string>
     <string name="error_no_external_application_found">Sajnálom, nem található külső alkalmazás a művelethez.</string>
