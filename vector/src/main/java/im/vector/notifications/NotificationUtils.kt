@@ -800,4 +800,19 @@ object NotificationUtils {
             Log.e(LOG_TAG, "## cancelAllNotifications() failed " + e.message)
         }
     }
+
+    /**
+     * Return true it the user has enabled the do not disturb mode
+     */
+    fun isDoNotDisturbModeOn(context: Context): Boolean {
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.M) {
+            return false
+        }
+
+        // We cannot use NotificationManagerCompat here.
+        val setting = (context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager).currentInterruptionFilter
+
+        return setting == NotificationManager.INTERRUPTION_FILTER_NONE
+                || setting == NotificationManager.INTERRUPTION_FILTER_ALARMS
+    }
 }
