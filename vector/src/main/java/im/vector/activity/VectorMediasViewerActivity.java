@@ -71,8 +71,6 @@ public class VectorMediasViewerActivity extends MXCActionBarActivity {
     // the medias list
     private List<SlidableMediaInfo> mMediasList;
 
-    private MenuItem mShareMenuItem;
-
     // the slide effect
     public class DepthPageTransformer implements ViewPager.PageTransformer {
         private static final float MIN_SCALE = 0.75f;
@@ -178,9 +176,7 @@ public class VectorMediasViewerActivity extends MXCActionBarActivity {
                 }
 
                 // disable shared for encrypted files as they are saved in a tmp folder
-                if (null != mShareMenuItem) {
-                    mShareMenuItem.setVisible(null == mMediasList.get(position).mEncryptedFileInfo);
-                }
+                supportInvalidateOptionsMenu();
             }
 
             @Override
@@ -210,9 +206,10 @@ public class VectorMediasViewerActivity extends MXCActionBarActivity {
             return false;
         }
 
-        mShareMenuItem = menu.findItem(R.id.ic_action_share);
-        if (null != mShareMenuItem) {
-            mShareMenuItem.setVisible(null == mMediasList.get(mViewPager.getCurrentItem()).mEncryptedFileInfo);
+        MenuItem shareMenuItem = menu.findItem(R.id.ic_action_share);
+        if (null != shareMenuItem) {
+            // disable shared for encrypted files as they are saved in a tmp folder
+            shareMenuItem.setVisible(null == mMediasList.get(mViewPager.getCurrentItem()).mEncryptedFileInfo);
         }
 
         return true;
