@@ -911,7 +911,9 @@ class VectorSettingsPreferencesFragment : PreferenceFragment(), SharedPreference
             if (null != preference) {
                 if (preference is BingRulePreference) {
                     preference.isEnabled = null != rules && isConnected && gcmMgr.areDeviceNotificationsAllowed()
-                    preference.setBingRule(mSession.dataHandler.pushRules().findDefaultRule(mPushesRuleByResourceId[resourceText]))
+                    mSession.dataHandler.pushRules()?.let {
+                        preference.setBingRule(it.findDefaultRule(mPushesRuleByResourceId[resourceText]))
+                    }
                 } else if (preference is CheckBoxPreference) {
                     if (resourceText == PreferencesManager.SETTINGS_ENABLE_THIS_DEVICE_PREFERENCE_KEY) {
                         preference.isChecked = gcmMgr.areDeviceNotificationsAllowed()
@@ -928,13 +930,11 @@ class VectorSettingsPreferencesFragment : PreferenceFragment(), SharedPreference
 
         // If notifications are disabled for the current user account or for the current user device
         // The others notifications settings have to be disable too
-        val areNotifAllowed = (rules != null
-                && rules.findDefaultRule(BingRule.RULE_ID_DISABLE_ALL) != null
-                && rules.findDefaultRule(BingRule.RULE_ID_DISABLE_ALL).isEnabled)
+        val areNotificationAllowed = rules?.findDefaultRule(BingRule.RULE_ID_DISABLE_ALL)?.isEnabled == true
 
-        mRingtonePreference.isEnabled = !areNotifAllowed && gcmMgr.areDeviceNotificationsAllowed()
+        mRingtonePreference.isEnabled = !areNotificationAllowed && gcmMgr.areDeviceNotificationsAllowed()
 
-        mNotificationPrivacyPreference.isEnabled = !areNotifAllowed && gcmMgr.areDeviceNotificationsAllowed() && gcmMgr.useGCM()
+        mNotificationPrivacyPreference.isEnabled = !areNotificationAllowed && gcmMgr.areDeviceNotificationsAllowed() && gcmMgr.useGCM()
     }
 
     private fun addButtons() {
@@ -1138,7 +1138,7 @@ class VectorSettingsPreferencesFragment : PreferenceFragment(), SharedPreference
         }
 
         val ruleId = mPushesRuleByResourceId[fResourceText]
-        val rule = mSession.dataHandler.pushRules().findDefaultRule(ruleId)
+        val rule = mSession.dataHandler.pushRules()?.findDefaultRule(ruleId)
 
         // check if there is an update
         var curValue = null != rule && rule.isEnabled
@@ -1339,16 +1339,14 @@ class VectorSettingsPreferencesFragment : PreferenceFragment(), SharedPreference
             putString(PreferencesManager.SETTINGS_DISPLAY_NAME_PREFERENCE_KEY, mSession.myUser.displayname)
             putString(PreferencesManager.SETTINGS_VERSION_PREFERENCE_KEY, VectorUtils.getApplicationVersion(activity))
 
-            val mBingRuleSet = mSession.dataHandler.pushRules()
-
-            if (null != mBingRuleSet) {
+            mSession.dataHandler.pushRules()?.let {
                 for (resourceText in mPushesRuleByResourceId.keys) {
                     val preference = findPreference(resourceText)
 
                     if (null != preference && preference is CheckBoxPreference) {
                         val ruleId = mPushesRuleByResourceId[resourceText]
 
-                        val rule = mBingRuleSet.findDefaultRule(ruleId)
+                        val rule = it.findDefaultRule(ruleId)
                         var isEnabled = null != rule && rule.isEnabled
 
                         if (TextUtils.equals(ruleId, BingRule.RULE_ID_DISABLE_ALL) || TextUtils.equals(ruleId, BingRule.RULE_ID_SUPPRESS_BOTS_NOTIFICATIONS)) {
