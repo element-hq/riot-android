@@ -48,6 +48,7 @@ import im.vector.R;
 import im.vector.VectorApp;
 import im.vector.activity.VectorCallViewActivity;
 import im.vector.activity.VectorHomeActivity;
+import im.vector.notifications.NotificationUtils;
 import im.vector.services.EventStreamService;
 
 /**
@@ -532,9 +533,14 @@ public class CallsManager {
     }
 
     /**
-     * Start the ringing tone
+     * Start the ringing tone, if the phone is not in "do not disturb" mode
      */
     private void startRinging() {
+        if (NotificationUtils.INSTANCE.isDoNotDisturbModeOn(mContext)) {
+            Log.w(LOG_TAG, "Do not ring because DO NOT DISTURB MODE is on");
+            return;
+        }
+
         requestAudioFocus();
         mCallSoundsManager.startRinging(R.raw.ring, RING_TONE_START_RINGING);
     }

@@ -9,6 +9,7 @@ Features:
 Improvements:
  - Add spacing to device keys (#2314)
  - use apply() instead of commit() to save shared prefs (#2231)
+ - Do not ring if "Do Not Disturb" is active (#1072)
 
 Other changes:
  - Remove "Matrix application" activation from the Lab section in the settings (#2341)
@@ -16,7 +17,7 @@ Other changes:
 Bugfix:
  - Remove black borders on 18:9 phone (#2063)
  - Auto dismiss the join/reject room notification when user select an action (#2354)
- - Fix some crashes reported by the PlayStore (#2380, #2382, #2383)
+ - Fix some crashes reported by the PlayStore (#2380, #2382, #2383, #2395)
 
 Translations:
  -
