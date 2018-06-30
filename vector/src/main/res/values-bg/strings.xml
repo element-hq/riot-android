@@ -751,7 +751,7 @@
     <string name="permissions_action_not_performed_missing_permissions">Извинете.. Операцията не е извършена поради липсващи разрешения за достъп</string>
 
     <string name="media_slider_saved">Запазено</string>
-    <string name="media_slider_saved_message">Запазено в изтеглени файлове</string>
+    <string name="media_slider_saved_message">Запазване в изтеглени файлове?</string>
     <string name="yes">ДА</string>
     <string name="no">НЕ</string>
     <string name="_continue">Продължи</string>
