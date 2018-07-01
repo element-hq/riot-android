@@ -896,4 +896,6 @@
     <string name="room_settings_room_notifications_title">Сповіщення</string>
     <string name="e2e_re_request_encryption_key_dialog_content">Для відправлення ключа на цей пристрій, запустіть Riot на іншому пристрої, що може дешифрувати повідомлення.</string>
 
+    <string name="error_no_external_application_found">Вибачте, жодного стороннього застосунку не знайдено для завершення цієї дії.</string>
+
     </resources>
