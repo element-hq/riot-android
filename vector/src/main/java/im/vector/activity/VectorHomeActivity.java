@@ -18,6 +18,8 @@
 
 package im.vector.activity;
 
+import android.animation.Animator;
+import android.animation.AnimatorListenerAdapter;
 import android.annotation.SuppressLint;
 import android.app.SearchManager;
 import android.content.BroadcastReceiver;
@@ -37,7 +39,6 @@ import android.support.annotation.NonNull;
 import android.support.design.internal.BottomNavigationItemView;
 import android.support.design.internal.BottomNavigationMenuView;
 import android.support.design.widget.BottomNavigationView;
-import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
 import android.support.design.widget.TextInputEditText;
 import android.support.v4.app.Fragment;
@@ -58,6 +59,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.ViewPropertyAnimator;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
@@ -67,6 +69,10 @@ import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import com.getbase.floatingactionbutton.AddFloatingActionButton;
+import com.getbase.floatingactionbutton.FloatingActionButton;
+import com.getbase.floatingactionbutton.FloatingActionsMenu;
 
 import org.jetbrains.annotations.NotNull;
 import org.matrix.androidsdk.MXDataHandler;
@@ -90,6 +96,7 @@ import org.matrix.androidsdk.util.BingRulesManager;
 import org.matrix.androidsdk.util.Log;
 
 import java.lang.reflect.Field;
+import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
@@ -99,10 +106,9 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
-import java.util.Timer;
-import java.util.TimerTask;
 
 import butterknife.BindView;
+import butterknife.OnClick;
 import im.vector.Matrix;
 import im.vector.MyPresenceManager;
 import im.vector.PublicRoomsManager;
@@ -189,11 +195,23 @@ public class VectorHomeActivity extends RiotAppCompatActivity implements SearchV
     @BindView(R.id.listView_spinner_views)
     View waitingView;
 
-    @BindView(R.id.floating_action_button)
-    FloatingActionButton mFloatingActionButton;
+    @BindView(R.id.floating_action_menu)
+    FloatingActionsMenu mFloatingActionsMenu;
 
-    // mFloatingActionButton is hidden for 1s when there is scroll
-    private Timer mFloatingActionButtonTimer;
+    @BindView(com.getbase.floatingactionbutton.R.id.fab_expand_menu_button)
+    AddFloatingActionButton mFabMain;
+
+    @BindView(R.id.button_start_chat)
+    FloatingActionButton mFabStartChat;
+
+    @BindView(R.id.button_create_room)
+    FloatingActionButton mFabCreateRoom;
+
+    @BindView(R.id.button_join_room)
+    FloatingActionButton mFabJoinRoom;
+
+    // mFloatingActionButton is hidden for 1s when there is scroll. This Runnable will show it again
+    private Runnable mShowFloatingActionButtonRunnable;
 
     private MXEventListener mEventsListener;
 
@@ -222,6 +240,9 @@ public class VectorHomeActivity extends RiotAppCompatActivity implements SearchV
     @BindView(R.id.search_view)
     SearchView mSearchView;
 
+    @BindView(R.id.floating_action_menu_touch_guard)
+    View touchGuard;
+
     private boolean mStorePermissionCheck = false;
 
     // a shared files intent is waiting the store init
@@ -244,9 +265,6 @@ public class VectorHomeActivity extends RiotAppCompatActivity implements SearchV
 
     private List<Room> mDirectChatInvitations;
     private List<Room> mRoomInvitations;
-
-    // floating action bar dialog
-    private AlertDialog mFabDialog;
 
     /*
      * *********************************************************************************************
@@ -486,15 +504,13 @@ public class VectorHomeActivity extends RiotAppCompatActivity implements SearchV
     }
 
     /**
-     * Display the TAB if it is required
+     * Display the Floating Action Menu if it is required
      */
-    private void showFloatingActionButton() {
-        if (null != mFloatingActionButton) {
-            if ((mCurrentMenuId == R.id.bottom_action_favourites) || (mCurrentMenuId == R.id.bottom_action_groups)) {
-                mFloatingActionButton.setVisibility(View.GONE);
-            } else {
-                mFloatingActionButton.show();
-            }
+    private void showFloatingActionMenuIfRequired() {
+        if ((mCurrentMenuId == R.id.bottom_action_favourites) || (mCurrentMenuId == R.id.bottom_action_groups)) {
+            concealFloatingActionMenu();
+        } else {
+            revealFloatingActionMenu();
         }
     }
 
@@ -536,7 +552,7 @@ public class VectorHomeActivity extends RiotAppCompatActivity implements SearchV
             addEventsListener();
         }
 
-        showFloatingActionButton();
+        showFloatingActionMenuIfRequired();
 
         refreshSlidingMenu();
 
@@ -733,6 +749,11 @@ public class VectorHomeActivity extends RiotAppCompatActivity implements SearchV
             return;
         }
 
+        if (mFloatingActionsMenu.isExpanded()) {
+            mFloatingActionsMenu.collapse();
+            return;
+        }
+
         // Clear backstack
         mFragmentManager.popBackStack(null, FragmentManager.POP_BACK_STACK_INCLUSIVE);
 
@@ -761,17 +782,9 @@ public class VectorHomeActivity extends RiotAppCompatActivity implements SearchV
             removeEventsListener();
         }
 
-        synchronized (this) {
-            if (null != mFloatingActionButtonTimer) {
-                mFloatingActionButtonTimer.cancel();
-                mFloatingActionButtonTimer = null;
-            }
-        }
-
-        if (mFabDialog != null) {
-            // Prevent leak after orientation changed
-            mFabDialog.dismiss();
-            mFabDialog = null;
+        if (mShowFloatingActionButtonRunnable != null && mFloatingActionsMenu != null) {
+            mFloatingActionsMenu.removeCallbacks(mShowFloatingActionButtonRunnable);
+            mShowFloatingActionButtonRunnable = null;
         }
 
         removeBadgeEventsListener();
@@ -920,11 +933,9 @@ public class VectorHomeActivity extends RiotAppCompatActivity implements SearchV
                 break;
         }
 
-        synchronized (this) {
-            if (null != mFloatingActionButtonTimer) {
-                mFloatingActionButtonTimer.cancel();
-                mFloatingActionButtonTimer = null;
-            }
+        if (mShowFloatingActionButtonRunnable != null && mFloatingActionsMenu != null) {
+            mFloatingActionsMenu.removeCallbacks(mShowFloatingActionButtonRunnable);
+            mShowFloatingActionButtonRunnable = null;
         }
 
         // hide waiting view
@@ -932,7 +943,7 @@ public class VectorHomeActivity extends RiotAppCompatActivity implements SearchV
 
         mCurrentMenuId = item.getItemId();
 
-        showFloatingActionButton();
+        showFloatingActionMenuIfRequired();
 
         if (fragment != null) {
             resetFilter();
@@ -955,7 +966,30 @@ public class VectorHomeActivity extends RiotAppCompatActivity implements SearchV
      */
     public void updateTabStyle(final int primaryColor, final int secondaryColor) {
         mToolbar.setBackgroundColor(primaryColor);
-        mFloatingActionButton.setBackgroundTintList(ColorStateList.valueOf(primaryColor));
+
+        Class menuClass = FloatingActionsMenu.class;
+        try {
+            Field normal = menuClass.getDeclaredField("mAddButtonColorNormal");
+            normal.setAccessible(true);
+            Field pressed = menuClass.getDeclaredField("mAddButtonColorPressed");
+            pressed.setAccessible(true);
+
+            normal.set(mFloatingActionsMenu, primaryColor);
+            pressed.set(mFloatingActionsMenu, secondaryColor);
+
+            mFabMain.setColorNormal(primaryColor);
+            mFabMain.setColorPressed(secondaryColor);
+        } catch (Exception ignored) {
+
+        }
+
+        mFabJoinRoom.setColorNormal(primaryColor);
+        mFabJoinRoom.setColorPressed(secondaryColor);
+        mFabCreateRoom.setColorNormal(primaryColor);
+        mFabCreateRoom.setColorPressed(secondaryColor);
+        mFabStartChat.setColorNormal(primaryColor);
+        mFabStartChat.setColorPressed(secondaryColor);
+
         mVectorPendingCallView.updateBackgroundColor(primaryColor);
         mSyncInProgressView.setBackgroundColor(primaryColor);
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
@@ -964,7 +998,6 @@ public class VectorHomeActivity extends RiotAppCompatActivity implements SearchV
             mSyncInProgressView.getIndeterminateDrawable().setColorFilter(
                     secondaryColor, android.graphics.PorterDuff.Mode.SRC_IN);
         }
-        mFloatingActionButton.setRippleColor(secondaryColor);
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             getWindow().setStatusBarColor(secondaryColor);
         }
@@ -1023,18 +1056,50 @@ public class VectorHomeActivity extends RiotAppCompatActivity implements SearchV
         mSearchView.setIconifiedByDefault(false);
         mSearchView.setOnQueryTextListener(this);
 
-        if (null != mFloatingActionButton) {
-            mFloatingActionButton.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    Fragment fragment = getSelectedFragment();
+        // Set here background of labels, cause we cannot set attr color in drawable > 21
+        Class menuClass = FloatingActionsMenu.class;
+        try {
+            Field fabLabelStyle = menuClass.getDeclaredField("mLabelsStyle");
+            fabLabelStyle.setAccessible(true);
+            fabLabelStyle.set(mFloatingActionsMenu, ThemeUtils.INSTANCE.getResourceId(this, R.style.Floating_Actions_Menu));
 
-                    if (!(fragment instanceof AbsHomeFragment) || !((AbsHomeFragment) fragment).onFabClick()) {
-                        onFloatingButtonClick();
-                    }
-                }
-            });
+            Method createLabels = menuClass.getDeclaredMethod("createLabels");
+            createLabels.setAccessible(true);
+            createLabels.invoke(mFloatingActionsMenu);
+        } catch (Exception ignored) {
+
         }
+
+        mFabStartChat.setIconDrawable(ThemeUtils.INSTANCE.tintDrawableWithColor(
+                ContextCompat.getDrawable(this, R.drawable.ic_person_black_24dp),
+                ContextCompat.getColor(this, android.R.color.white)
+        ));
+
+        mFabCreateRoom.setIconDrawable(ThemeUtils.INSTANCE.tintDrawableWithColor(
+                ContextCompat.getDrawable(this, R.drawable.ic_add_white),
+                ContextCompat.getColor(this, android.R.color.white)
+        ));
+
+        mFabJoinRoom.setIconDrawable(ThemeUtils.INSTANCE.tintDrawableWithColor(
+                ContextCompat.getDrawable(this, R.drawable.riot_tab_rooms),
+                ContextCompat.getColor(this, android.R.color.white)
+        ));
+
+        mFloatingActionsMenu.setOnFloatingActionsMenuUpdateListener(new FloatingActionsMenu.OnFloatingActionsMenuUpdateListener() {
+            @Override
+            public void onMenuExpanded() {
+                touchGuard.animate().alpha(0.6f);
+
+                touchGuard.setClickable(true);
+            }
+
+            @Override
+            public void onMenuCollapsed() {
+                touchGuard.animate().alpha(0);
+
+                touchGuard.setClickable(false);
+            }
+        });
     }
 
     /**
@@ -1217,30 +1282,32 @@ public class VectorHomeActivity extends RiotAppCompatActivity implements SearchV
      * *********************************************************************************************
      */
 
-    private void onFloatingButtonClick() {
-        // ignore any action if there is a pending one
-        if (!isWaitingViewVisible()) {
-            CharSequence items[] = new CharSequence[]{
-                    getString(R.string.room_recents_start_chat),
-                    getString(R.string.room_recents_create_room),
-                    getString(R.string.room_recents_join_room)
-            };
-            mFabDialog = new AlertDialog.Builder(this)
-                    .setSingleChoiceItems(items, 0, new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface d, int n) {
-                            d.cancel();
-                            if (0 == n) {
-                                invitePeopleToNewRoom();
-                            } else if (1 == n) {
-                                createRoom();
-                            } else {
-                                joinARoom();
-                            }
-                        }
-                    })
-                    .setNegativeButton(R.string.cancel, null)
-                    .show();
+    private void revealFloatingActionMenu() {
+        if (null != mFloatingActionsMenu) {
+            mFloatingActionsMenu.collapse();
+            mFloatingActionsMenu.setVisibility(View.VISIBLE);
+            ViewPropertyAnimator animator = mFabMain.animate().scaleX(1).scaleY(1).alpha(1).setListener(new AnimatorListenerAdapter() {
+                @Override
+                public void onAnimationEnd(Animator animation) {
+                    super.onAnimationEnd(animation);
+                    mFloatingActionsMenu.setVisibility(View.VISIBLE);
+                }
+            });
+            animator.start();
+        }
+    }
+
+    private void concealFloatingActionMenu() {
+        if (null != mFloatingActionsMenu) {
+            mFloatingActionsMenu.collapse();
+            ViewPropertyAnimator animator = mFabMain.animate().scaleX(0).scaleY(0).alpha(0).setListener(new AnimatorListenerAdapter() {
+                @Override
+                public void onAnimationEnd(Animator animation) {
+                    super.onAnimationEnd(animation);
+                    mFloatingActionsMenu.setVisibility(View.GONE);
+                }
+            });
+            animator.start();
         }
     }
 
@@ -1256,44 +1323,34 @@ public class VectorHomeActivity extends RiotAppCompatActivity implements SearchV
             // before the new one is plugged.
             // for example, if the switch is performed while the current list is scrolling.
             if (TextUtils.equals(mCurrentFragmentTag, fragmentTag)) {
-                if (null != mFloatingActionButtonTimer) {
-                    mFloatingActionButtonTimer.cancel();
-                }
-
-                if (null != mFloatingActionButton) {
-                    mFloatingActionButton.hide();
-
-                    try {
-                        mFloatingActionButtonTimer = new Timer();
-                        mFloatingActionButtonTimer.schedule(new TimerTask() {
+                if (null != mFloatingActionsMenu) {
+                    if (mShowFloatingActionButtonRunnable == null) {
+                        // Avoid repeated calls.
+                        concealFloatingActionMenu();
+                        mShowFloatingActionButtonRunnable = new Runnable() {
                             @Override
                             public void run() {
-                                synchronized (this) {
-                                    if (null != mFloatingActionButtonTimer) {
-                                        mFloatingActionButtonTimer.cancel();
-                                        mFloatingActionButtonTimer = null;
-                                    }
-                                }
-                                runOnUiThread(new Runnable() {
-                                    @Override
-                                    public void run() {
-                                        showFloatingActionButton();
-                                    }
-                                });
+                                mShowFloatingActionButtonRunnable = null;
+                                showFloatingActionMenuIfRequired();
                             }
-                        }, 1000);
-                    } catch (Throwable throwable) {
-                        Log.e(LOG_TAG, "failed to init mFloatingActionButtonTimer " + throwable.getMessage());
+                        };
+                    } else {
+                        mFloatingActionsMenu.removeCallbacks(mShowFloatingActionButtonRunnable);
+                    }
 
-                        if (null != mFloatingActionButtonTimer) {
-                            mFloatingActionButtonTimer.cancel();
-                            mFloatingActionButtonTimer = null;
+                    try {
+                        mFloatingActionsMenu.postDelayed(mShowFloatingActionButtonRunnable, 1000);
+                    } catch (Throwable throwable) {
+                        Log.e(LOG_TAG, "failed to postDelayed " + throwable.getMessage());
+
+                        if (mShowFloatingActionButtonRunnable != null && mFloatingActionsMenu != null) {
+                            mFloatingActionsMenu.removeCallbacks(mShowFloatingActionButtonRunnable);
                         }
 
                         runOnUiThread(new Runnable() {
                             @Override
                             public void run() {
-                                showFloatingActionButton();
+                                showFloatingActionMenuIfRequired();
                             }
                         });
 
@@ -1308,8 +1365,8 @@ public class VectorHomeActivity extends RiotAppCompatActivity implements SearchV
      *
      * @return fab view
      */
-    public FloatingActionButton getFloatingActionButton() {
-        return mFloatingActionButton;
+    public View getFloatingActionButton() {
+        return mFabMain;
     }
 
     /**
@@ -2235,6 +2292,33 @@ public class VectorHomeActivity extends RiotAppCompatActivity implements SearchV
                         .show();
             }
         }
+    }
+
+    /* ==========================================================================================
+     * UI Event
+     * ========================================================================================== */
+
+    @OnClick(R.id.floating_action_menu_touch_guard)
+    void touchGuardClicked() {
+        mFloatingActionsMenu.collapse();
+    }
+
+    @OnClick(R.id.button_start_chat)
+    void fabMenuStartChat() {
+        mFloatingActionsMenu.collapse();
+        invitePeopleToNewRoom();
+    }
+
+    @OnClick(R.id.button_create_room)
+    void fabMenuCreateRoom() {
+        mFloatingActionsMenu.collapse();
+        createRoom();
+    }
+
+    @OnClick(R.id.button_join_room)
+    void fabMenuJoinRoom() {
+        mFloatingActionsMenu.collapse();
+        joinARoom();
     }
 
     //==============================================================================================================

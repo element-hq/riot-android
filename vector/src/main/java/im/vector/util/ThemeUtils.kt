@@ -158,10 +158,11 @@ object ThemeUtils {
      * @return the resource Id for the current theme
      */
     fun getResourceId(c: Context, resourceId: Int): Int {
-        if (TextUtils.equals(getApplicationTheme(c), THEME_DARK_VALUE)) {
-
-            if (resourceId == R.drawable.line_divider_light) {
-                return R.drawable.line_divider_dark
+        if (TextUtils.equals(getApplicationTheme(c), THEME_LIGHT_VALUE)) {
+            return when (resourceId) {
+                R.drawable.line_divider_dark -> R.drawable.line_divider_light
+                R.style.Floating_Actions_Menu -> R.style.Floating_Actions_Menu_Light
+                else -> resourceId
             }
         }
         return resourceId
