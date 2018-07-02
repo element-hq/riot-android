@@ -748,6 +748,11 @@ public class VectorHomeActivity extends RiotAppCompatActivity implements SearchV
             return;
         }
 
+        if (mFloatingActionsMenu.isExpanded()) {
+            mFloatingActionsMenu.collapse();
+            return;
+        }
+
         // Clear backstack
         mFragmentManager.popBackStack(null, FragmentManager.POP_BACK_STACK_INCLUSIVE);
 
