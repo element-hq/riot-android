@@ -90,46 +90,45 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:elevation="12dp"
-            app:backgroundTint="@color/vector_fuchsia_color"
             app:borderWidth="0dp"
-            app:elevation="4dp"
-            app:fab_addButtonColorNormal="@color/vector_fuchsia_color"
+            app:elevation="12dp"
             app:fab_expandDirection="up"
-            app:fab_labelStyle="@style/Floating_Actions_Menu"
             app:layout_constraintBottom_toTopOf="@id/bottom_navigation"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintRight_toRightOf="parent">
+            app:layout_constraintRight_toRightOf="parent"
+            tools:backgroundTint="@color/vector_fuchsia_color"
+            tools:fab_addButtonColorNormal="@color/vector_fuchsia_color">
 
             <com.getbase.floatingactionbutton.FloatingActionButton
                 android:id="@+id/button_start_chat"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:tint="@android:color/white"
-                app:fab_colorNormal="@color/vector_fuchsia_color"
-                app:fab_colorPressed="@color/vector_fuchsia_color"
                 app:fab_icon="@drawable/ic_person_black_24dp"
                 app:fab_size="mini"
-                app:fab_title="@string/room_recents_start_chat" />
+                app:fab_title="@string/room_recents_start_chat"
+                tools:fab_colorNormal="@color/vector_fuchsia_color"
+                tools:fab_colorPressed="@color/vector_fuchsia_color" />
 
             <com.getbase.floatingactionbutton.FloatingActionButton
                 android:id="@+id/button_create_room"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                app:fab_colorNormal="@color/vector_fuchsia_color"
-                app:fab_colorPressed="@color/vector_fuchsia_color"
                 app:fab_icon="@drawable/ic_add_white"
                 app:fab_size="mini"
-                app:fab_title="@string/room_recents_create_room" />
+                app:fab_title="@string/room_recents_create_room"
+                tools:fab_colorNormal="@color/vector_fuchsia_color"
+                tools:fab_colorPressed="@color/vector_fuchsia_color" />
 
             <com.getbase.floatingactionbutton.FloatingActionButton
                 android:id="@+id/button_join_room"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                app:fab_colorNormal="@color/vector_fuchsia_color"
-                app:fab_colorPressed="@color/vector_fuchsia_color"
                 app:fab_icon="@drawable/riot_tab_rooms"
                 app:fab_size="mini"
-                app:fab_title="@string/room_recents_join_room" />
+                app:fab_title="@string/room_recents_join_room"
+                tools:fab_colorNormal="@color/vector_fuchsia_color"
+                tools:fab_colorPressed="@color/vector_fuchsia_color" />
 
         </com.getbase.floatingactionbutton.FloatingActionsMenu>
 
@@ -153,7 +152,6 @@
             android:layout_height="0dp"
             android:alpha="0"
             android:background="@android:color/background_dark"
-            android:clickable="false"
             android:elevation="10dp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintLeft_toLeftOf="parent"

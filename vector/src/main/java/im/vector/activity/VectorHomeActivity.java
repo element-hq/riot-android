@@ -96,6 +96,7 @@ import org.matrix.androidsdk.util.BingRulesManager;
 import org.matrix.androidsdk.util.Log;
 
 import java.lang.reflect.Field;
+import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
@@ -1054,6 +1055,20 @@ public class VectorHomeActivity extends RiotAppCompatActivity implements SearchV
         mSearchView.setSearchableInfo(searchManager.getSearchableInfo(getComponentName()));
         mSearchView.setIconifiedByDefault(false);
         mSearchView.setOnQueryTextListener(this);
+
+        // Set here background of labels, cause we cannot set attr color in drawable > 21
+        Class menuClass = FloatingActionsMenu.class;
+        try {
+            Field fabLabelStyle = menuClass.getDeclaredField("mLabelsStyle");
+            fabLabelStyle.setAccessible(true);
+            fabLabelStyle.set(mFloatingActionsMenu, ThemeUtils.INSTANCE.getResourceId(this, R.style.Floating_Actions_Menu));
+
+            Method createLabels = menuClass.getDeclaredMethod("createLabels");
+            createLabels.setAccessible(true);
+            createLabels.invoke(mFloatingActionsMenu);
+        } catch (Exception ignored) {
+
+        }
 
         mFabStartChat.setIconDrawable(ThemeUtils.INSTANCE.tintDrawableWithColor(
                 ContextCompat.getDrawable(this, R.drawable.ic_person_black_24dp),
