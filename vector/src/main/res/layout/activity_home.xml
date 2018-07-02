@@ -19,9 +19,9 @@
             style="@style/VectorToolbarStyle"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintLeft_toLeftOf="parent"
-            app:layout_constraintRight_toRightOf="parent">
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
 
             <!-- The search view is added in the toolbar not in the menu
                  to ensure that the overflow icon menu is not hidden.-->
@@ -29,6 +29,7 @@
                 android:id="@+id/search_view"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent" />
+
         </android.support.v7.widget.Toolbar>
 
         <ProgressBar
@@ -39,9 +40,9 @@
             android:background="@color/vector_green_color"
             android:indeterminate="true"
             android:visibility="gone"
-            app:layout_constraintTop_toBottomOf="@+id/home_toolbar"
             app:layout_constraintLeft_toLeftOf="parent"
-            app:layout_constraintRight_toRightOf="parent"/>
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/home_toolbar" />
 
         <im.vector.view.VectorPendingCallView
             android:id="@+id/listView_pending_callview"
@@ -57,22 +58,22 @@
             android:id="@+id/fragment_container"
             android:layout_width="0dp"
             android:layout_height="0dp"
-            app:layout_constraintTop_toBottomOf="@id/listView_pending_callview"
+            android:background="?attr/riot_primary_background_color"
             app:layout_constraintBottom_toTopOf="@+id/bottom_navigation"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toRightOf="parent"
-            android:background="?attr/riot_primary_background_color" />
+            app:layout_constraintTop_toBottomOf="@id/listView_pending_callview" />
 
         <FrameLayout
             android:id="@+id/listView_spinner_views"
             android:layout_width="0dp"
             android:layout_height="0dp"
-            app:layout_constraintTop_toBottomOf="@id/listView_pending_callview"
+            android:background="?attr/waiting_background_color"
+            android:visibility="gone"
             app:layout_constraintBottom_toTopOf="@+id/bottom_navigation"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toRightOf="parent"
-            android:background="?attr/waiting_background_color"
-            android:visibility="gone">
+            app:layout_constraintTop_toBottomOf="@id/listView_pending_callview">
 
             <ProgressBar
                 android:id="@+id/listView_spinner"
@@ -80,6 +81,7 @@
                 android:layout_height="40dp"
                 android:layout_gravity="center"
                 android:visibility="visible" />
+
         </FrameLayout>
 
         <!-- Elevate button above the touch guard (above lollipop). -->
@@ -87,47 +89,47 @@
             android:id="@+id/floating_action_menu"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            app:layout_constraintRight_toRightOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintBottom_toTopOf="@id/bottom_navigation"
             android:elevation="12dp"
+            app:backgroundTint="@color/vector_fuchsia_color"
+            app:borderWidth="0dp"
+            app:elevation="4dp"
             app:fab_addButtonColorNormal="@color/vector_fuchsia_color"
             app:fab_expandDirection="up"
             app:fab_labelStyle="@style/Floating_Actions_Menu"
-            app:backgroundTint="@color/vector_fuchsia_color"
-            app:borderWidth="0dp"
-            app:elevation="4dp">
+            app:layout_constraintBottom_toTopOf="@id/bottom_navigation"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintRight_toRightOf="parent">
 
             <com.getbase.floatingactionbutton.FloatingActionButton
                 android:id="@+id/button_start_chat"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:tint="@android:color/white"
-                app:fab_size="mini"
                 app:fab_colorNormal="@color/vector_fuchsia_color"
                 app:fab_colorPressed="@color/vector_fuchsia_color"
                 app:fab_icon="@drawable/ic_person_black_24dp"
-                app:fab_title="@string/room_recents_start_chat"/>
+                app:fab_size="mini"
+                app:fab_title="@string/room_recents_start_chat" />
 
             <com.getbase.floatingactionbutton.FloatingActionButton
                 android:id="@+id/button_create_room"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                app:fab_size="mini"
                 app:fab_colorNormal="@color/vector_fuchsia_color"
                 app:fab_colorPressed="@color/vector_fuchsia_color"
                 app:fab_icon="@drawable/ic_add_white"
-                app:fab_title="@string/room_recents_create_room"/>
+                app:fab_size="mini"
+                app:fab_title="@string/room_recents_create_room" />
 
             <com.getbase.floatingactionbutton.FloatingActionButton
                 android:id="@+id/button_join_room"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                app:fab_size="mini"
                 app:fab_colorNormal="@color/vector_fuchsia_color"
                 app:fab_colorPressed="@color/vector_fuchsia_color"
                 app:fab_icon="@drawable/riot_tab_rooms"
-                app:fab_title="@string/room_recents_join_room"/>
+                app:fab_size="mini"
+                app:fab_title="@string/room_recents_join_room" />
 
         </com.getbase.floatingactionbutton.FloatingActionsMenu>
 
@@ -139,24 +141,25 @@
             app:itemBackground="?attr/riot_primary_background_color"
             app:itemIconTint="@color/home_bottom_nav_view_tint"
             app:itemTextColor="@color/home_bottom_nav_view_tint"
-            app:menu="@menu/bottom_navigation_main"
+            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toRightOf="parent"
-            app:layout_constraintBottom_toBottomOf="parent" />
+            app:menu="@menu/bottom_navigation_main" />
 
         <!-- Elevate above BottomNavigationView (above lollipop). -->
         <View
             android:id="@+id/floating_action_menu_touch_guard"
             android:layout_width="0dp"
             android:layout_height="0dp"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintLeft_toLeftOf="parent"
-            app:layout_constraintRight_toRightOf="parent"
-            app:layout_constraintBottom_toBottomOf="parent"
+            android:alpha="0"
+            android:background="@android:color/background_dark"
             android:clickable="false"
             android:elevation="10dp"
-            android:alpha="0"
-            android:background="@android:color/background_dark" />
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
     </android.support.constraint.ConstraintLayout>
 
     <android.support.design.widget.NavigationView
