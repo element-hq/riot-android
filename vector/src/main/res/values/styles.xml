@@ -675,4 +675,9 @@
     </style>
     <style name="Vector_Lock_Black" parent="Vector_Lock_Dark">
     </style>
+
+    <style name="Floating_Actions_Menu">
+        <item name="android:background">@drawable/vector_background_fab_label</item>
+        <item name="android:textColor">?attr/riot_primary_text_color</item>
+    </style>
 </resources>
