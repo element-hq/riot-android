@@ -1056,7 +1056,7 @@ public class VectorHomeActivity extends RiotAppCompatActivity implements SearchV
         mSearchView.setIconifiedByDefault(false);
         mSearchView.setOnQueryTextListener(this);
 
-        // Set here background of labels, cause we cannot set attr color in drawable > 21
+        // Set here background of labels, cause we cannot set attr color in drawable on API < 21
         Class menuClass = FloatingActionsMenu.class;
         try {
             Field fabLabelStyle = menuClass.getDeclaredField("mLabelsStyle");
@@ -1100,6 +1100,8 @@ public class VectorHomeActivity extends RiotAppCompatActivity implements SearchV
                 touchGuard.setClickable(false);
             }
         });
+
+        touchGuard.setClickable(false);
     }
 
     /**
