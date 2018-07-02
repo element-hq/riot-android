@@ -1558,32 +1558,22 @@ public class VectorHomeActivity extends RiotAppCompatActivity implements SearchV
      * @param onSuccessCallback the success callback
      * @return the asynchronous callback
      */
-    private ApiCallback<Void> getForgetLeaveCallback(final String roomId, final SimpleApiCallback<Void> onSuccessCallback) {
+    private ApiCallback<Void> createForgetLeaveCallback(final String roomId, final SimpleApiCallback<Void> onSuccessCallback) {
         return new ApiCallback<Void>() {
             @Override
             public void onSuccess(Void info) {
-                runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        // clear any pending notification for this room
-                        EventStreamService.cancelNotificationsForRoomId(mSession.getMyUserId(), roomId);
-                        hideWaitingView();
+                // clear any pending notification for this room
+                EventStreamService.cancelNotificationsForRoomId(mSession.getMyUserId(), roomId);
+                hideWaitingView();
 
-                        if (null != onSuccessCallback) {
-                            onSuccessCallback.onSuccess(null);
-                        }
-                    }
-                });
+                if (null != onSuccessCallback) {
+                    onSuccessCallback.onSuccess(null);
+                }
             }
 
             private void onError(final String message) {
-                runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        hideWaitingView();
-                        Toast.makeText(VectorHomeActivity.this, message, Toast.LENGTH_LONG).show();
-                    }
-                });
+                hideWaitingView();
+                Toast.makeText(VectorHomeActivity.this, message, Toast.LENGTH_LONG).show();
             }
 
             @Override
@@ -1593,7 +1583,12 @@ public class VectorHomeActivity extends RiotAppCompatActivity implements SearchV
 
             @Override
             public void onMatrixError(MatrixError e) {
-                onError(e.getLocalizedMessage());
+                if (MatrixError.M_CONSENT_NOT_GIVEN.equals(e.errcode)) {
+                    hideWaitingView();
+                    getConsentNotGivenHelper().displayDialog(e);
+                } else {
+                    onError(e.getLocalizedMessage());
+                }
             }
 
             @Override
@@ -1614,7 +1609,7 @@ public class VectorHomeActivity extends RiotAppCompatActivity implements SearchV
 
         if (null != room) {
             showWaitingView();
-            room.forget(getForgetLeaveCallback(roomId, onSuccessCallback));
+            room.forget(createForgetLeaveCallback(roomId, onSuccessCallback));
         }
     }
 
@@ -1629,7 +1624,7 @@ public class VectorHomeActivity extends RiotAppCompatActivity implements SearchV
 
         if (null != room) {
             showWaitingView();
-            room.leave(getForgetLeaveCallback(roomId, onSuccessCallback));
+            room.leave(createForgetLeaveCallback(roomId, onSuccessCallback));
         }
     }
 
