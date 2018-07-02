@@ -84,6 +84,32 @@
 
         </FrameLayout>
 
+        <android.support.design.widget.BottomNavigationView
+            android:id="@+id/bottom_navigation"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:background="?attr/riot_primary_background_color"
+            app:itemBackground="?attr/riot_primary_background_color"
+            app:itemIconTint="@color/home_bottom_nav_view_tint"
+            app:itemTextColor="@color/home_bottom_nav_view_tint"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:menu="@menu/bottom_navigation_main" />
+
+        <!-- Elevate above BottomNavigationView (above lollipop). -->
+        <View
+            android:id="@+id/floating_action_menu_touch_guard"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:alpha="0"
+            android:background="@android:color/background_dark"
+            android:elevation="10dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
         <!-- Elevate button above the touch guard (above lollipop). -->
         <com.getbase.floatingactionbutton.FloatingActionsMenu
             android:id="@+id/floating_action_menu"
@@ -131,32 +157,6 @@
                 tools:fab_colorPressed="@color/vector_fuchsia_color" />
 
         </com.getbase.floatingactionbutton.FloatingActionsMenu>
-
-        <android.support.design.widget.BottomNavigationView
-            android:id="@+id/bottom_navigation"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:background="?attr/riot_primary_background_color"
-            app:itemBackground="?attr/riot_primary_background_color"
-            app:itemIconTint="@color/home_bottom_nav_view_tint"
-            app:itemTextColor="@color/home_bottom_nav_view_tint"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintLeft_toLeftOf="parent"
-            app:layout_constraintRight_toRightOf="parent"
-            app:menu="@menu/bottom_navigation_main" />
-
-        <!-- Elevate above BottomNavigationView (above lollipop). -->
-        <View
-            android:id="@+id/floating_action_menu_touch_guard"
-            android:layout_width="0dp"
-            android:layout_height="0dp"
-            android:alpha="0"
-            android:background="@android:color/background_dark"
-            android:elevation="10dp"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintLeft_toLeftOf="parent"
-            app:layout_constraintRight_toRightOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
 
     </android.support.constraint.ConstraintLayout>
 

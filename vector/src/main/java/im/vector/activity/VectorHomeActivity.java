@@ -1085,32 +1085,21 @@ public class VectorHomeActivity extends RiotAppCompatActivity implements SearchV
                 ContextCompat.getColor(this, android.R.color.white)
         ));
 
-        // Pre-Lollipop does not support elevation so cannot have touch guard
-        // above bottomNavigationView.
-        // TODO Show touchguard on pre lollipop
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            mFloatingActionsMenu.setOnFloatingActionsMenuUpdateListener(new FloatingActionsMenu.OnFloatingActionsMenuUpdateListener() {
-                @Override
-                public void onMenuExpanded() {
-                    touchGuard.setAlpha(0.6f);
+        mFloatingActionsMenu.setOnFloatingActionsMenuUpdateListener(new FloatingActionsMenu.OnFloatingActionsMenuUpdateListener() {
+            @Override
+            public void onMenuExpanded() {
+                touchGuard.animate().alpha(0.6f);
 
-                    touchGuard.setOnClickListener(new View.OnClickListener() {
-                        @Override
-                        public void onClick(View v) {
-                            mFloatingActionsMenu.collapse();
-                        }
-                    });
-                }
+                touchGuard.setClickable(true);
+            }
 
-                @Override
-                public void onMenuCollapsed() {
-                    touchGuard.setAlpha(0);
+            @Override
+            public void onMenuCollapsed() {
+                touchGuard.animate().alpha(0);
 
-                    touchGuard.setOnClickListener(null);
-                    touchGuard.setClickable(false);
-                }
-            });
-        }
+                touchGuard.setClickable(false);
+            }
+        });
     }
 
     /**
@@ -2313,6 +2302,11 @@ public class VectorHomeActivity extends RiotAppCompatActivity implements SearchV
     /* ==========================================================================================
      * UI Event
      * ========================================================================================== */
+
+    @OnClick(R.id.floating_action_menu_touch_guard)
+    void touchGuardClicked() {
+        mFloatingActionsMenu.collapse();
+    }
 
     @OnClick(R.id.button_start_chat)
     void fabMenuStartChat() {
