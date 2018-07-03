@@ -1,13 +1,12 @@
-/* 
- * Copyright 2014 OpenMarket Ltd
+/*
  * Copyright 2018 New Vector Ltd
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *     http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -17,76 +16,57 @@
 package im.vector.view
 
 import android.content.Context
+import android.content.Intent
+import android.net.Uri
 import android.preference.PreferenceManager
+import android.provider.Browser
 import android.text.Html
+import android.text.TextUtils
 import android.text.method.LinkMovementMethod
 import android.util.AttributeSet
 import android.view.View
+import android.widget.FrameLayout
 import android.widget.ImageView
-import android.widget.LinearLayout
 import android.widget.TextView
-
+import androidx.core.content.edit
+import butterknife.BindView
+import butterknife.ButterKnife
+import butterknife.OnClick
+import im.vector.R
+import im.vector.VectorApp
 import org.matrix.androidsdk.MXSession
 import org.matrix.androidsdk.rest.model.URLPreview
 import org.matrix.androidsdk.util.Log
-
-import java.util.HashSet
-
-import im.vector.R
-import im.vector.VectorApp
+import java.util.*
 
 /**
  *
  */
-class UrlPreviewView : LinearLayout {
+class UrlPreviewView @JvmOverloads constructor(
+        context: Context,
+        attrs: AttributeSet? = null,
+        defStyleAttr: Int = 0
+) : FrameLayout(context, attrs, defStyleAttr) {
 
     // private item views
-    private var mImageView: ImageView? = null
-    private var mTitleTextView: TextView? = null
-    private var mDescriptionTextView: TextView? = null
-    private var mCloseView: View? = null
+    @BindView(R.id.url_preview_image_view)
+    lateinit var mImageView: ImageView
 
-    // dismissed when clicking on mCloseView
+    @BindView(R.id.url_preview_title_text_view)
+    lateinit var mTitleTextView: TextView
+
+    @BindView(R.id.url_preview_description_text_view)
+    lateinit var mDescriptionTextView: TextView
+
+    // dismissed when clicking on CloseView
     private var mIsDismissed = false
 
     private var mUID: String? = null
 
-    /**
-     * constructors
-     */
-    constructor(context: Context) : super(context) {
-        initView()
-    }
-
-    constructor(context: Context, attrs: AttributeSet) : super(context, attrs) {
-        initView()
-    }
-
-    constructor(context: Context, attrs: AttributeSet, defStyle: Int) : super(context, attrs, defStyle) {
-        initView()
-    }
-
-    /**
-     * Common initialisation method.
-     */
-    private fun initView() {
+    init {
         View.inflate(context, R.layout.url_preview_view, this)
-        mImageView = findViewById(R.id.url_preview_image_view)
-        mTitleTextView = findViewById(R.id.url_preview_title_text_view)
-        mDescriptionTextView = findViewById(R.id.url_preview_description_text_view)
-        mCloseView = findViewById(R.id.url_preview_hide_image_view)
 
-        mCloseView!!.setOnClickListener {
-            mIsDismissed = true
-            visibility = View.GONE
-
-            mDismissedUrlsPreviews!!.add(mUID)
-
-            PreferenceManager.getDefaultSharedPreferences(VectorApp.getInstance())
-                    .edit()
-                    .putStringSet(DISMISSED_URL_PREVIEWS_PREF_KEY, mDismissedUrlsPreviews)
-                    .apply()
-        }
+        ButterKnife.bind(this)
     }
 
     /**
@@ -107,28 +87,82 @@ class UrlPreviewView : LinearLayout {
             session.mediasCache.loadAvatarThumbnail(session.homeServerConfig,
                     mImageView, preview.thumbnailURL, context.resources.getDimensionPixelSize(R.dimen.profile_avatar_size))
 
-            if (null != preview.requestedURL && null != preview.title) {
-                mTitleTextView!!.text = Html.fromHtml("<a href=\"" + preview.requestedURL + "\">" + preview.title + "</a>")
-            } else if (null != preview.title) {
-                mTitleTextView!!.text = preview.title
-            } else {
-                mTitleTextView!!.text = preview.requestedURL
-            }
-            mTitleTextView!!.movementMethod = LinkMovementMethod.getInstance()
+            mTitleTextView.let {
+                if (null != preview.requestedURL && null != preview.title) {
+                    it.text = Html.fromHtml("<a href=\"" + preview.requestedURL + "\">" + preview.title + "</a>")
+                } else if (null != preview.title) {
+                    it.text = preview.title
+                } else {
+                    it.text = preview.requestedURL
+                }
 
-            mDescriptionTextView!!.text = preview.description
+                it.movementMethod = LinkMovementMethod.getInstance()
+            }
+
+            mDescriptionTextView.let {
+                if (TextUtils.isEmpty(preview.description)) {
+                    it.visibility = View.GONE
+                } else {
+                    it.visibility = View.VISIBLE
+                    it.text = preview.description
+                }
+            }
 
             mUID = uid
+
+            if (preview.requestedURL != null) {
+                if (preview.requestedURL != null) {
+                    mDescriptionTextView.setOnClickListener { openUrl(preview.requestedURL) }
+                    mImageView.setOnClickListener { openUrl(preview.requestedURL) }
+                }
+            } else {
+                mDescriptionTextView.isClickable = false
+                mImageView.isClickable = false
+            }
         }
     }
+
+    private fun openUrl(url: String?) {
+        url?.let {
+            val browserIntent = Intent(Intent.ACTION_VIEW, Uri.parse(it)).apply {
+                putExtra(Browser.EXTRA_APPLICATION_ID, context.packageName)
+            }
+
+            context.startActivity(browserIntent)
+        }
+    }
+
+    /* ==========================================================================================
+     * UI Event
+     * ========================================================================================== */
+
+    @OnClick(R.id.url_preview_hide_image_view)
+    internal fun closeUrlPreview() {
+        mIsDismissed = true
+        visibility = View.GONE
+
+        sDismissedUrlsPreviews.add(mUID)
+
+        PreferenceManager.getDefaultSharedPreferences(VectorApp.getInstance())
+                .edit {
+                    putStringSet(DISMISSED_URL_PREVIEWS_PREF_KEY, sDismissedUrlsPreviews)
+                }
+    }
+
+    /* ==========================================================================================
+     * Companion
+     * ========================================================================================== */
 
     companion object {
         private val LOG_TAG = UrlPreviewView::class.java.simpleName
 
         // save
-        private var mDismissedUrlsPreviews: MutableSet<String>? = null
+        private val sDismissedUrlsPreviews by lazy {
+            HashSet(PreferenceManager.getDefaultSharedPreferences(VectorApp.getInstance())
+                    .getStringSet(DISMISSED_URL_PREVIEWS_PREF_KEY, HashSet()))
+        }
 
-        private val DISMISSED_URL_PREVIEWS_PREF_KEY = "DISMISSED_URL_PREVIEWS_PREF_KEY"
+        private const val DISMISSED_URL_PREVIEWS_PREF_KEY = "DISMISSED_URL_PREVIEWS_PREF_KEY"
 
         /**
          * Tells if the URL preview defines by uid has been dismissed.
@@ -137,12 +171,7 @@ class UrlPreviewView : LinearLayout {
          * @return true if it has been dismissed
          */
         fun didUrlPreviewDismiss(uid: String): Boolean {
-            if (null == mDismissedUrlsPreviews) {
-                mDismissedUrlsPreviews = HashSet(PreferenceManager.getDefaultSharedPreferences(VectorApp.getInstance())
-                        .getStringSet(DISMISSED_URL_PREVIEWS_PREF_KEY, HashSet())!!)
-            }
-
-            return mDismissedUrlsPreviews!!.contains(uid)
+            return sDismissedUrlsPreviews.contains(uid)
         }
     }
 }
