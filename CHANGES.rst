@@ -1,4 +1,4 @@
-Changes in Riot 0.8.11 (2018-XX-XX)
+Changes in Riot 0.8.11 (2018-07-03)
 ===================================================
 
 Features:
@@ -7,6 +7,7 @@ Features:
    To enable in the Labs settings (PR #1762)
 
 Improvements:
+ - Update matrix-sdk.aar lib (v0.9.6).
  - New Floating Action Menu in Home screen (PR #2335)
  - Add spacing to device keys (#2314)
  - use apply() instead of commit() to save shared prefs (#2231)
@@ -23,7 +24,7 @@ Bugfix:
  - Fix issues in UrlPreviews (#2312)
 
 Translations:
- -
+ - Galician thanks to Miguel Branco
 
 Build:
  - Add script to check code quality
