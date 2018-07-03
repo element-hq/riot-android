@@ -126,7 +126,7 @@ import im.vector.util.MatrixURLSpan;
 import im.vector.util.PreferencesManager;
 import im.vector.util.ReadMarkerManager;
 import im.vector.util.RoomUtils;
-import im.vector.util.SlashComandsParser;
+import im.vector.util.SlashCommandsParser;
 import im.vector.util.ThemeUtils;
 import im.vector.util.VectorMarkdownParser;
 import im.vector.util.VectorRoomMediasSender;
@@ -2004,7 +2004,7 @@ public class VectorRoomActivity extends MXCActionBarActivity implements
      */
     public void sendMessage(String body, String formattedBody, String format) {
         if (!TextUtils.isEmpty(body)) {
-            if (!SlashComandsParser.manageSplashCommand(this, mSession, mRoom, body, formattedBody, format)) {
+            if (!SlashCommandsParser.manageSplashCommand(this, mSession, mRoom, body, formattedBody, format)) {
                 cancelSelectionMode();
                 mVectorMessageListFragment.sendTextMessage(body, formattedBody, format);
             }
@@ -2584,7 +2584,7 @@ public class VectorRoomActivity extends MXCActionBarActivity implements
             if (TextUtils.equals(mSession.getMyUser().displayname, text)) {
                 // current user
                 if (TextUtils.isEmpty(mEditText.getText())) {
-                    mEditText.setText(String.format(VectorApp.getApplicationLocale(), "%s ", SlashComandsParser.CMD_EMOTE));
+                    mEditText.setText(String.format(VectorApp.getApplicationLocale(), "%s ", SlashCommandsParser.CMD_EMOTE));
                     mEditText.setSelection(mEditText.getText().length());
                     vibrate = true;
                 }

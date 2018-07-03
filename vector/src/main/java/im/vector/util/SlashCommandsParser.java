@@ -39,9 +39,9 @@ import im.vector.VectorApp;
 import im.vector.activity.CommonActivityUtils;
 import im.vector.activity.VectorRoomActivity;
 
-public class SlashComandsParser {
+public class SlashCommandsParser {
 
-    private static final String LOG_TAG = SlashComandsParser.class.getSimpleName();
+    private static final String LOG_TAG = SlashCommandsParser.class.getSimpleName();
 
     // defines the command line operations
     // the user can write theses messages to perform some room events
@@ -94,6 +94,9 @@ public class SlashComandsParser {
 
     // on / off
     private static final String CMD_MARKDOWN = "/markdown";
+
+    // clear scalar token (waiting for correct 403 management)
+    private static final String CMD_CLEAR_SCALAR_TOKEN = "/clear_scalar_token";
 
     /**
      * check if the text message is an IRC command.
