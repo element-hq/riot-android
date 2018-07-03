@@ -7,6 +7,7 @@ Features:
    To enable in the Labs settings (PR #1762)
 
 Improvements:
+ - Update matrix-sdk.aar lib (v0.9.6).
  - New Floating Action Menu in Home screen (PR #2335)
  - Add spacing to device keys (#2314)
  - use apply() instead of commit() to save shared prefs (#2231)
