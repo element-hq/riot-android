@@ -1,6 +1,6 @@
 <?xml version='1.0' encoding='UTF-8'?>
-<resources><string name="resouces_language">fa</string>
-    <string name="resouces_country">IR</string>
+<resources><string name="resources_language">fa</string>
+    <string name="resources_country_code">IR</string>
 
     <string name="light_theme">قالب روشن</string>
     <string name="dark_theme">قالب تیره</string>

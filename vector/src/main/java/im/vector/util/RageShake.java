@@ -1,5 +1,6 @@
 /*
  * Copyright 2016 OpenMarket Ltd
+ * Copyright 2018 New Vector Ltd
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,16 +17,14 @@
 
 package im.vector.util;
 
-import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
-import android.content.SharedPreferences;
 import android.hardware.Sensor;
 import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
 import android.os.Build;
-import android.preference.PreferenceManager;
+import android.support.v7.app.AlertDialog;
 
 import org.matrix.androidsdk.util.Log;
 
@@ -107,7 +106,6 @@ public class RageShake implements SensorEventListener {
                             dialog.dismiss();
                         }
                     })
-                    .create()
                     .show();
         } catch (Exception e) {
             Log.e(LOG_TAG, "promptForReport " + e.getMessage());

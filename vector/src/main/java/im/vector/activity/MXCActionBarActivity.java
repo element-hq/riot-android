@@ -20,6 +20,7 @@ package im.vector.activity;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.os.Build;
 import android.support.annotation.Nullable;
 import android.support.v4.app.DialogFragment;
 import android.support.v4.app.Fragment;
@@ -41,6 +42,7 @@ import im.vector.VectorApp;
  * extends ActionBarActivity to manage the rageshake
  */
 public abstract class MXCActionBarActivity extends RiotAppCompatActivity {
+    // TODO Make this protected
     public static final String EXTRA_MATRIX_ID = "MXCActionBarActivity.EXTRA_MATRIX_ID";
 
     MXSession mSession = null;
@@ -94,8 +96,8 @@ public abstract class MXCActionBarActivity extends RiotAppCompatActivity {
         // ActivityOptionsCompat options = ActivityOptionsCompat.makeSceneTransitionAnimation(...
         // ActivityCompat.startActivity(activity, new Intent(activity, DetailActivity.class),  options.toBundle());
 
-        if (android.os.Build.VERSION.SDK_INT < android.os.Build.VERSION_CODES.LOLLIPOP) {
-            this.overridePendingTransition(R.anim.anim_slide_in_bottom, R.anim.anim_slide_nothing);
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP) {
+            overridePendingTransition(R.anim.anim_slide_in_bottom, R.anim.anim_slide_nothing);
         } else {
             // the animation is enabled in the theme
         }
@@ -110,8 +112,8 @@ public abstract class MXCActionBarActivity extends RiotAppCompatActivity {
         //
         // ActivityOptionsCompat options = ActivityOptionsCompat.makeSceneTransitionAnimation(...
         // ActivityCompat.startActivity(activity, new Intent(activity, DetailActivity.class),  options.toBundle());
-        if (android.os.Build.VERSION.SDK_INT < android.os.Build.VERSION_CODES.LOLLIPOP) {
-            this.overridePendingTransition(R.anim.anim_slide_nothing, R.anim.anim_slide_out_bottom);
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP) {
+            overridePendingTransition(R.anim.anim_slide_nothing, R.anim.anim_slide_out_bottom);
         } else {
             // the animation is enabled in the theme
         }

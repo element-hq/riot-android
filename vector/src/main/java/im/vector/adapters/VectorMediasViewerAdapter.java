@@ -1,5 +1,6 @@
 /*
  * Copyright 2015 OpenMarket Ltd
+ * Copyright 2018 New Vector Ltd
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,7 +19,6 @@ package im.vector.adapters;
 
 import android.annotation.SuppressLint;
 import android.app.Activity;
-import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.graphics.Bitmap;
@@ -27,13 +27,8 @@ import android.graphics.Point;
 import android.media.MediaPlayer;
 import android.net.Uri;
 import android.support.v4.view.PagerAdapter;
+import android.support.v7.app.AlertDialog;
 import android.text.TextUtils;
-
-import org.matrix.androidsdk.rest.callback.SimpleApiCallback;
-import org.matrix.androidsdk.rest.model.Event;
-import org.matrix.androidsdk.rest.model.crypto.EncryptedFileInfo;
-import org.matrix.androidsdk.util.Log;
-
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -47,25 +42,26 @@ import android.widget.VideoView;
 import com.google.gson.JsonElement;
 
 import org.matrix.androidsdk.MXSession;
+import org.matrix.androidsdk.db.MXMediasCache;
 import org.matrix.androidsdk.listeners.MXMediaDownloadListener;
+import org.matrix.androidsdk.rest.callback.SimpleApiCallback;
 import org.matrix.androidsdk.rest.model.MatrixError;
+import org.matrix.androidsdk.rest.model.crypto.EncryptedFileInfo;
 import org.matrix.androidsdk.rest.model.message.Message;
 import org.matrix.androidsdk.util.ImageUtils;
 import org.matrix.androidsdk.util.JsonUtils;
+import org.matrix.androidsdk.util.Log;
 import org.matrix.androidsdk.view.PieFractionView;
-
-import im.vector.R;
-
-import org.matrix.androidsdk.db.MXMediasCache;
-
-import im.vector.activity.CommonActivityUtils;
-import im.vector.util.SlidableMediaInfo;
 
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.util.ArrayList;
 import java.util.List;
+
+import im.vector.R;
+import im.vector.activity.CommonActivityUtils;
+import im.vector.util.SlidableMediaInfo;
 
 /**
  * An images slider
@@ -74,37 +70,49 @@ public class VectorMediasViewerAdapter extends PagerAdapter {
     private static final String LOG_TAG = VectorMediasViewerAdapter.class.getSimpleName();
 
     private final Context mContext;
+
     private final LayoutInflater mLayoutInflater;
 
+    private final MXSession mSession;
+
+    private final MXMediasCache mMediasCache;
+
     // medias
-    private List<SlidableMediaInfo> mMediasMessagesList = null;
+    private List<SlidableMediaInfo> mMediasMessagesList;
+
     private final int mMaxImageWidth;
     private final int mMaxImageHeight;
+
     private int mLatestPrimaryItemPosition = -1;
     private View mLatestPrimaryView = null;
-    private final MXMediasCache mMediasCache;
-    private final ArrayList<Integer> mHighResMediaIndex = new ArrayList<>();
+
+    private final List<Integer> mHighResMediaIndex = new ArrayList<>();
+
     // current playing video
     private VideoView mPlayingVideoView = null;
-    private final MXSession mSession;
 
     private int mAutoPlayItemAt = -1;
 
-    public VectorMediasViewerAdapter(Context context, MXSession session, MXMediasCache mediasCache, List<SlidableMediaInfo> mediaMessagesList, int maxImageWidth, int maxImageHeight) {
-        this.mContext = context;
-        this.mSession = session;
-        this.mMediasMessagesList = mediaMessagesList;
-        this.mMaxImageWidth = maxImageWidth;
-        this.mMaxImageHeight = maxImageHeight;
-        this.mLayoutInflater = LayoutInflater.from(context);
-        this.mMediasCache = mediasCache;
+    public VectorMediasViewerAdapter(Context context,
+                                     MXSession session,
+                                     MXMediasCache mediasCache,
+                                     List<SlidableMediaInfo> mediaMessagesList,
+                                     int maxImageWidth,
+                                     int maxImageHeight) {
+        mContext = context;
+        mSession = session;
+        mMediasCache = mediasCache;
+        mMediasMessagesList = mediaMessagesList;
+        mMaxImageWidth = maxImageWidth;
+        mMaxImageHeight = maxImageHeight;
+
+        mLayoutInflater = LayoutInflater.from(context);
     }
 
     @Override
     public int getCount() {
         return mMediasMessagesList.size();
     }
-
 
     @Override
     public void setPrimaryItem(ViewGroup container, final int position, Object object) {
@@ -135,14 +143,15 @@ public class VectorMediasViewerAdapter extends PagerAdapter {
                             final VideoView videoView = view.findViewById(R.id.media_slider_videoview);
 
                             if (mMediasCache.isMediaCached(mediaInfo.mMediaUrl, mediaInfo.mMimeType)) {
-                                mMediasCache.createTmpMediaFile(mediaInfo.mMediaUrl, mediaInfo.mMimeType, mediaInfo.mEncryptedFileInfo, new SimpleApiCallback<File>() {
-                                    @Override
-                                    public void onSuccess(File file) {
-                                        if (null != file) {
-                                            playVideo(view, videoView, file, mediaInfo.mMimeType);
-                                        }
-                                    }
-                                });
+                                mMediasCache.createTmpMediaFile(mediaInfo.mMediaUrl, mediaInfo.mMimeType, mediaInfo.mEncryptedFileInfo,
+                                        new SimpleApiCallback<File>() {
+                                            @Override
+                                            public void onSuccess(File file) {
+                                                if (null != file) {
+                                                    playVideo(view, videoView, file, mediaInfo.mMimeType);
+                                                }
+                                            }
+                                        });
                             }
                         }
                         mAutoPlayItemAt = -1;
@@ -168,15 +177,14 @@ public class VectorMediasViewerAdapter extends PagerAdapter {
     private void downloadHighResMedia(final View view, final int position) {
         SlidableMediaInfo imageInfo = mMediasMessagesList.get(position);
 
-        // image
         if (imageInfo.mMessageType.equals(Message.MSGTYPE_IMAGE)) {
-            //
+            // image
             if (TextUtils.isEmpty(imageInfo.mMimeType)) {
                 imageInfo.mMimeType = "image/jpeg";
             }
-            downloadHighResPict(view, position);
-        // video
-        } else  {
+            downloadHighResImage(view, position);
+        } else {
+            // video
             downloadVideo(view, position);
         }
     }
@@ -249,7 +257,7 @@ public class VectorMediasViewerAdapter extends PagerAdapter {
                     MatrixError error = JsonUtils.toMatrixError(jsonElement);
 
                     if ((null != error) && error.isSupportedErrorCode()) {
-                        Toast.makeText(VectorMediasViewerAdapter.this.mContext, error.getLocalizedMessage(), Toast.LENGTH_LONG).show();
+                        Toast.makeText(mContext, error.getLocalizedMessage(), Toast.LENGTH_LONG).show();
                     }
 
                     downloadFailedView.setVisibility(View.VISIBLE);
@@ -308,7 +316,7 @@ public class VectorMediasViewerAdapter extends PagerAdapter {
      * @param view     the slider page view
      * @param position the item position
      */
-    private void downloadHighResPict(final View view, final int position) {
+    private void downloadHighResImage(final View view, final int position) {
         final WebView webView = view.findViewById(R.id.media_slider_image_webview);
         final PieFractionView pieFractionView = view.findViewById(R.id.media_slider_piechart);
         final View downloadFailedView = view.findViewById(R.id.media_download_failed);
@@ -316,7 +324,13 @@ public class VectorMediasViewerAdapter extends PagerAdapter {
         final SlidableMediaInfo imageInfo = mMediasMessagesList.get(position);
         final String viewportContent = "width=640";
         final String loadingUri = imageInfo.mMediaUrl;
-        final String downloadId = mMediasCache.loadBitmap(mContext, mSession.getHomeServerConfig(), loadingUri, imageInfo.mRotationAngle, imageInfo.mOrientation, imageInfo.mMimeType, imageInfo.mEncryptedFileInfo);
+        final String downloadId = mMediasCache.loadBitmap(mContext,
+                mSession.getHomeServerConfig(),
+                loadingUri,
+                imageInfo.mRotationAngle,
+                imageInfo.mOrientation,
+                imageInfo.mMimeType,
+                imageInfo.mEncryptedFileInfo);
 
         webView.getSettings().setDisplayZoomControls(false);
 
@@ -332,7 +346,7 @@ public class VectorMediasViewerAdapter extends PagerAdapter {
                         MatrixError error = JsonUtils.toMatrixError(jsonElement);
 
                         if (null != error) {
-                            Toast.makeText(VectorMediasViewerAdapter.this.mContext, error.getLocalizedMessage(), Toast.LENGTH_LONG).show();
+                            Toast.makeText(mContext, error.getLocalizedMessage(), Toast.LENGTH_LONG).show();
                         }
 
                         downloadFailedView.setVisibility(View.VISIBLE);
@@ -366,7 +380,10 @@ public class VectorMediasViewerAdapter extends PagerAdapter {
                                             public void run() {
                                                 Uri mediaUri = Uri.parse(newHighResUri);
                                                 // refresh the UI
-                                                loadImage(webView, mediaUri, viewportContent, computeCss(newHighResUri, VectorMediasViewerAdapter.this.mMaxImageWidth, VectorMediasViewerAdapter.this.mMaxImageHeight, imageInfo.mRotationAngle));
+                                                loadImageIntoWebView(webView,
+                                                        mediaUri,
+                                                        viewportContent,
+                                                        computeCss(newHighResUri, mMaxImageWidth, mMaxImageHeight, imageInfo.mRotationAngle));
                                             }
                                         });
                                     }
@@ -405,7 +422,7 @@ public class VectorMediasViewerAdapter extends PagerAdapter {
         imageWebView.setOnLongClickListener(new View.OnLongClickListener() {
             @Override
             public boolean onLongClick(View v) {
-                VectorMediasViewerAdapter.this.onLongClick();
+                onLongClickOnMedia();
                 return true;
             }
         });
@@ -413,7 +430,7 @@ public class VectorMediasViewerAdapter extends PagerAdapter {
         thumbView.setOnLongClickListener(new View.OnLongClickListener() {
             @Override
             public boolean onLongClick(View v) {
-                VectorMediasViewerAdapter.this.onLongClick();
+                onLongClickOnMedia();
                 return true;
             }
         });
@@ -472,12 +489,11 @@ public class VectorMediasViewerAdapter extends PagerAdapter {
 
                         String css = computeCss(mediaUri, mMaxImageWidth, mMaxImageHeight, rotationAngle);
                         final String viewportContent = "width=640";
-                        loadImage(imageWebView, Uri.parse(mediaUri), viewportContent, css);
+                        loadImageIntoWebView(imageWebView, Uri.parse(mediaUri), viewportContent, css);
                         container.addView(view, 0);
                     }
                 }
             });
-
         } else {
             loadVideo(position, view, mediaInfo.mThumbnailUrl, mediaUrl, mediaInfo.mMimeType, mediaInfo.mEncryptedFileInfo);
             container.addView(view, 0);
@@ -498,7 +514,7 @@ public class VectorMediasViewerAdapter extends PagerAdapter {
                     MatrixError error = JsonUtils.toMatrixError(jsonElement);
 
                     if ((null != error) && error.isSupportedErrorCode()) {
-                        Toast.makeText(VectorMediasViewerAdapter.this.mContext, error.getLocalizedMessage(), Toast.LENGTH_LONG).show();
+                        Toast.makeText(mContext, error.getLocalizedMessage(), Toast.LENGTH_LONG).show();
                     }
                 }
 
@@ -518,8 +534,12 @@ public class VectorMediasViewerAdapter extends PagerAdapter {
             });
         }
 
-
         return view;
+    }
+
+    @Override
+    public void destroyItem(ViewGroup container, int position, Object object) {
+        container.removeView((View) object);
     }
 
     /**
@@ -619,9 +639,9 @@ public class VectorMediasViewerAdapter extends PagerAdapter {
     }
 
     /**
-     * Download the current video file
+     * Download the current media file, and export it to the Download folder of the device
      */
-    private void downloadMedia() {
+    private void downloadMediaAndExportToDownloads() {
         final SlidableMediaInfo mediaInfo = mMediasMessagesList.get(mLatestPrimaryItemPosition);
 
         if (mMediasCache.isMediaCached(mediaInfo.mMediaUrl, mediaInfo.mMimeType)) {
@@ -632,7 +652,7 @@ public class VectorMediasViewerAdapter extends PagerAdapter {
                         CommonActivityUtils.saveMediaIntoDownloads(mContext, file, null, mediaInfo.mMimeType, new SimpleApiCallback<String>() {
                             @Override
                             public void onSuccess(String path) {
-                                Toast.makeText(mContext, mContext.getText(R.string.media_slider_saved), Toast.LENGTH_LONG).show();
+                                Toast.makeText(mContext, R.string.media_slider_saved, Toast.LENGTH_LONG).show();
                             }
                         });
                     }
@@ -640,7 +660,11 @@ public class VectorMediasViewerAdapter extends PagerAdapter {
             });
         } else {
             downloadVideo(mLatestPrimaryView, mLatestPrimaryItemPosition, true);
-            final String downloadId = mMediasCache.downloadMedia(mContext, mSession.getHomeServerConfig(), mediaInfo.mMediaUrl, mediaInfo.mMimeType, mediaInfo.mEncryptedFileInfo);
+            final String downloadId = mMediasCache.downloadMedia(mContext,
+                    mSession.getHomeServerConfig(),
+                    mediaInfo.mMediaUrl,
+                    mediaInfo.mMimeType,
+                    mediaInfo.mEncryptedFileInfo);
 
             if (null != downloadId) {
                 mMediasCache.addDownloadListener(downloadId, new MXMediaDownloadListener() {
@@ -649,7 +673,7 @@ public class VectorMediasViewerAdapter extends PagerAdapter {
                         MatrixError error = JsonUtils.toMatrixError(jsonElement);
 
                         if ((null != error) && error.isSupportedErrorCode()) {
-                            Toast.makeText(VectorMediasViewerAdapter.this.mContext, error.getLocalizedMessage(), Toast.LENGTH_LONG).show();
+                            Toast.makeText(mContext, error.getLocalizedMessage(), Toast.LENGTH_LONG).show();
                         }
                     }
 
@@ -657,19 +681,21 @@ public class VectorMediasViewerAdapter extends PagerAdapter {
                     public void onDownloadComplete(String aDownloadId) {
                         if (aDownloadId.equals(downloadId)) {
                             if (mMediasCache.isMediaCached(mediaInfo.mMediaUrl, mediaInfo.mMimeType)) {
-                                mMediasCache.createTmpMediaFile(mediaInfo.mMediaUrl, mediaInfo.mMimeType, mediaInfo.mEncryptedFileInfo, new SimpleApiCallback<File>() {
-                                    @Override
-                                    public void onSuccess(File file) {
-                                        if (null != file) {
-                                            CommonActivityUtils.saveMediaIntoDownloads(mContext, file, null, mediaInfo.mMimeType, new SimpleApiCallback<String>() {
-                                                @Override
-                                                public void onSuccess(String path) {
-                                                    Toast.makeText(mContext, mContext.getText(R.string.media_slider_saved), Toast.LENGTH_LONG).show();
+                                mMediasCache.createTmpMediaFile(mediaInfo.mMediaUrl, mediaInfo.mMimeType, mediaInfo.mEncryptedFileInfo,
+                                        new SimpleApiCallback<File>() {
+                                            @Override
+                                            public void onSuccess(File file) {
+                                                if (null != file) {
+                                                    CommonActivityUtils.saveMediaIntoDownloads(mContext, file, null, mediaInfo.mMimeType,
+                                                            new SimpleApiCallback<String>() {
+                                                                @Override
+                                                                public void onSuccess(String path) {
+                                                                    Toast.makeText(mContext, R.string.media_slider_saved, Toast.LENGTH_LONG).show();
+                                                                }
+                                                            });
                                                 }
-                                            });
-                                        }
-                                    }
-                                });
+                                            }
+                                        });
                             }
                         }
                     }
@@ -679,26 +705,18 @@ public class VectorMediasViewerAdapter extends PagerAdapter {
     }
 
     /**
-     * Long click management
+     * Long click management: propose user to save media to the Downloads folder of the device
      */
-    private void onLongClick() {
-        // The user is trying to leave with unsaved changes. Warn about that
+    private void onLongClickOnMedia() {
         new AlertDialog.Builder(mContext)
                 .setMessage(R.string.media_slider_saved_message)
                 .setPositiveButton(R.string.yes, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                        dialog.dismiss();
-                        downloadMedia();
+                        downloadMediaAndExportToDownloads();
                     }
                 })
-                .setNegativeButton(R.string.no, new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        dialog.dismiss();
-                    }
-                })
-                .create()
+                .setNegativeButton(R.string.no, null)
                 .show();
     }
 
@@ -710,7 +728,12 @@ public class VectorMediasViewerAdapter extends PagerAdapter {
      * @param videoUrl      the video Url
      * @param videoMimeType the video mime type
      */
-    private void loadVideo(final int position, final View view, final String thumbnailUrl, final String videoUrl, final String videoMimeType, final EncryptedFileInfo encryptedFileInfo) {
+    private void loadVideo(final int position,
+                           final View view,
+                           final String thumbnailUrl,
+                           final String videoUrl,
+                           final String videoMimeType,
+                           final EncryptedFileInfo encryptedFileInfo) {
         final VideoView videoView = view.findViewById(R.id.media_slider_videoview);
         final ImageView thumbView = view.findViewById(R.id.media_slider_video_thumbnail);
         final ImageView playView = view.findViewById(R.id.media_slider_video_playView);
@@ -770,30 +793,27 @@ public class VectorMediasViewerAdapter extends PagerAdapter {
     }
 
     /**
-     * Update the image page.
+     * Update the image page: build an Html page to display the image.
      *
      * @param webView         the image is rendered in a webview.
      * @param imageUri        the image Uri.
      * @param viewportContent the viewport.
      * @param css             the css.
      */
-    private void loadImage(WebView webView, Uri imageUri, String viewportContent, String css) {
-        String html =
-                "<html><head><meta name='viewport' content='" +
-                        viewportContent +
-                        "'/>" +
-                        "<style type='text/css'>" +
-                        css +
-                        "</style></head>" +
-                        "<body> <div class='wrap'>" + "<img " +
-                        ("src='" + imageUri.toString() + "'") +
-                        " onerror='this.style.display=\"none\"' id='image' " + viewportContent + "/>" + "</div>" +
-                        "</body>" + "</html>";
+    private void loadImageIntoWebView(WebView webView, Uri imageUri, String viewportContent, String css) {
+        String html = "<html>" +
+                "<head>"
+                + "<meta name='viewport' content='" + viewportContent + "'/>"
+                + "<style type='text/css'>" + css + "</style>"
+                + "</head>"
+                + "<body>"
+                + "<div class='wrap'>"
+                + "<img src='" + imageUri.toString() + "' onerror='this.style.display=\"none\"' id='image' " + viewportContent + "/>"
+                + "</div>"
+                + "</body>"
+                + "</html>";
 
-        String mime = "text/html";
-        String encoding = "utf-8";
-
-        webView.loadDataWithBaseURL(null, html, mime, encoding, null);
+        webView.loadDataWithBaseURL(null, html, "text/html", "utf-8", null);
         webView.requestLayout();
     }
 
@@ -889,10 +909,5 @@ public class VectorMediasViewerAdapter extends PagerAdapter {
         WindowManager w = ((Activity) mContext).getWindowManager();
         w.getDefaultDisplay().getSize(size);
         return size;
-    }
-
-    @Override
-    public void destroyItem(ViewGroup container, int position, Object object) {
-        container.removeView((View) object);
     }
 }

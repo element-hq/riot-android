@@ -1,5 +1,6 @@
 /*
  * Copyright 2016 OpenMarket Ltd
+ * Copyright 2018 New Vector Ltd
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,9 +19,6 @@ package im.vector.adapters;
 
 import android.content.Context;
 import android.text.TextUtils;
-
-import org.matrix.androidsdk.util.Log;
-
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -32,8 +30,10 @@ import android.widget.TextView;
 import org.matrix.androidsdk.MXSession;
 import org.matrix.androidsdk.rest.callback.SimpleApiCallback;
 import org.matrix.androidsdk.rest.model.User;
+import org.matrix.androidsdk.util.Log;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import im.vector.Matrix;
 import im.vector.R;
@@ -69,7 +69,7 @@ public class VectorRoomCreationAdapter extends ArrayAdapter<ParticipantAdapterIt
     private final int mAddMemberLayoutResourceId;
 
     // members list display names
-    private final ArrayList<String> mDisplayNamesList = new ArrayList<>();
+    private final List<String> mDisplayNamesList = new ArrayList<>();
 
     // the events listener
     private IRoomCreationAdapterListener mRoomCreationAdapterListener;
@@ -162,7 +162,7 @@ public class VectorRoomCreationAdapter extends ArrayAdapter<ParticipantAdapterIt
         User user = null;
         MXSession matchedSession = null;
         // retrieve the linked user
-        ArrayList<MXSession> sessions = Matrix.getMXSessions(mContext);
+        List<MXSession> sessions = Matrix.getMXSessions(mContext);
 
         for (MXSession session : sessions) {
             if (null == user) {
@@ -175,7 +175,7 @@ public class VectorRoomCreationAdapter extends ArrayAdapter<ParticipantAdapterIt
             status = VectorUtils.getUserOnlineStatus(mContext, matchedSession, participant.mUserId, new SimpleApiCallback<Void>() {
                 @Override
                 public void onSuccess(Void info) {
-                    VectorRoomCreationAdapter.this.notifyDataSetChanged();
+                    notifyDataSetChanged();
                 }
             });
         }

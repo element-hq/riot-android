@@ -1,5 +1,6 @@
 /*
  * Copyright 2016 OpenMarket Ltd
+ * Copyright 2018 New Vector Ltd
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -29,6 +30,7 @@ import java.net.URLDecoder;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 import im.vector.activity.LoginActivity;
@@ -49,8 +51,10 @@ public class VectorRegistrationReceiver extends BroadcastReceiver {
 
     // mail validation url query parameters
     // Examples:
-    // mail validation url = https://vector.im/_matrix/identity/api/v1/validate/email/submitToken?token=815159&client_secret=8033cc24-0312-4c65-a9cd-bb70cea44828&sid=3643&nextLink=...
-    // nextLink = https://vector.im/develop/#/register?client_secret=8033cc24-ĸ-4c65-a9cd-bb70cea44828&hs_url=https://matrix.org&is_url=https://vector.im&session_id=gRVxdjiMTAfHIRUMtiDvaNMa&sid=3643
+    // mail validation url = https://vector.im/_matrix/identity/api/v1/validate/email/submitToken?token=815159
+    //                               &client_secret=8033cc24-0312-4c65-a9cd-bb70cea44828&sid=3643&nextLink=...
+    // nextLink = https://vector.im/develop/#/register?client_secret=8033cc24-ĸ-4c65-a9cd-bb70cea44828&hs_url=https://matrix.org
+    //                               &is_url=https://vector.im&session_id=gRVxdjiMTAfHIRUMtiDvaNMa&sid=3643
     public static final String KEY_MAIL_VALIDATION_TOKEN = "token";
     public static final String KEY_MAIL_VALIDATION_CLIENT_SECRET = "client_secret";
     public static final String KEY_MAIL_VALIDATION_IDENTITY_SERVER_SESSION_ID = "sid";
@@ -83,11 +87,11 @@ public class VectorRegistrationReceiver extends BroadcastReceiver {
                 // test if URI path is allowed
                 if (SUPPORTED_PATH_ACCOUNT_EMAIL_VALIDATION.equals(intentUri.getPath())) {
                     // account registration URL set in a mail:
-                    HashMap<String, String> mailRegParams = parseMailRegistrationLink(intentUri);
+                    Map<String, String> mailRegParams = parseMailRegistrationLink(intentUri);
 
                     // build Login intent
                     Intent intent = new Intent(aContext, LoginActivity.class);
-                    intent.putExtra(EXTRA_EMAIL_VALIDATION_PARAMS, mailRegParams);
+                    intent.putExtra(EXTRA_EMAIL_VALIDATION_PARAMS, (HashMap) mailRegParams);
                     intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
                     aContext.startActivity(intent);
                 } else {
@@ -100,13 +104,18 @@ public class VectorRegistrationReceiver extends BroadcastReceiver {
     /**
      * Parse the URL sent in the email validation.
      * This flow is part of the registration process {@see <a href="http://matrix.org/speculator/spec/HEAD/identity_service.html">Indenty spec server</a>}:
-     * https://vector.im/_matrix/identity/api/v1/validate/email/submitToken?token=172230&client_secret=3a164877-1f6a-4aa3-a056-0dc20ebe6392&sid=3672&nextLink=https%3A//vector.im/develop/%23/register%3Fclient_secret%3D3a164877-1f6a-4aa3-a056-0dc20ebe6392%26hs_url%3Dhttps%3A//matrix.org%26is_url%3Dhttps%3A//vector.im%26session_id%3DipLKXEvRArNFZkDVpIZvqJMa%26sid%3D3672
+     * https://vector.im/_matrix/identity/api/v1/validate/email/submitToken
+     *    ?token=172230
+     *    &client_secret=3a164877-1f6a-4aa3-a056-0dc20ebe6392
+     *    &sid=3672
+     *    &nextLink=https%3A//vector.im/develop/%23/register%3Fclient_secret%3D3a164877-1f6a-4aa3-a056-0dc20ebe6392%26hs_url
+     *              %3Dhttps%3A//matrix.org%26is_url%3Dhttps%3A//vector.im%26session_id%3DipLKXEvRArNFZkDVpIZvqJMa%26sid%3D3672
      *
      * @param uri the uri to parse
      * @return the parameters extracted from the the URI.
      */
-    public static HashMap<String, String> parseMailRegistrationLink(Uri uri) {
-        HashMap<String, String> mapParams = new HashMap<>();
+    public static Map<String, String> parseMailRegistrationLink(Uri uri) {
+        Map<String, String> mapParams = new HashMap<>();
 
         try {
             // sanity check

@@ -3,8 +3,8 @@
     <!-- use to retrieve the supported languages list -->
     <!-- should the same value as the file name -->
 
-    <string name="resouces_language">en</string>
-    <string name="resouces_country">US</string>
+    <string name="resources_language">uk</string>
+    <string name="resources_country_code">UA</string>
 
     <!-- theme -->
     <string name="light_theme">Світла Тема</string>
@@ -31,7 +31,7 @@
     <string name="send">Надіслати</string>
     <string name="copy">Копіювати</string>
     <string name="resend">Надіслати ще раз</string>
-    <string name="redact">Редагувати</string>
+    <string name="redact">Приховати</string>
     <string name="quote">Цитата</string>
     <string name="share">Поділитись</string>
     <string name="later">Пізніше</string>
@@ -449,7 +449,7 @@
     <!-- home sliding menu -->
     <string name="room_sliding_menu_messages">Повідомлення</string>
     <string name="room_sliding_menu_settings">Налаштування</string>
-    <string name="room_sliding_menu_version">Версія </string>
+    <string name="room_sliding_menu_version">Версія</string>
     <string name="room_sliding_menu_term_and_conditions">Умови &amp; положення</string>
     <string name="room_sliding_menu_third_party_notices">Примітки третіх сторін</string>
     <string name="room_sliding_menu_copyright">Copyright</string>
@@ -561,7 +561,7 @@
     <string name="settings_password_updated">Пароль успішно оновлено</string>
     <string name="settings_unignore_user">Показувати всі повідомлення %s?</string>
 
-    <string name="settings_delete_notification_targets_confirmation">Справді бажаєте видалити цю ціль сповіщень?</string>
+    <string name="settings_delete_notification_targets_confirmation">Ви справді бажаєте видалити цю ціль сповіщень?</string>
 
     <string name="settings_delete_threepid_confirmation">Справді бажаєте видалити %1$s %2$s?</string>
 
@@ -748,7 +748,7 @@
     <string name="settings_labs_create_conference_with_jitsi">Здійснювати конференц дзвінки через Jitsi</string>
     <string name="widget_delete_message_confirmation">Справді бажаєте видалити віджет?</string>
 
-    // Widget Integration Manager
+    <!-- Widget Integration Manager -->
     <string name="widget_integration_unable_to_create">Не вдалося створити віджет.</string>
     <string name="widget_integration_failed_to_send_request">Не вдалося надіслати запит.</string>
     <string name="widget_integration_positive_power_level">Рівень доступу має бути більше 0.</string>
@@ -770,7 +770,7 @@
 
     <string name="settings_theme">Тема</string>
 
-    // conference call
+    <!-- conference call -->
     <string name="conference_call_warning_title">Увага!</string>
     <string name="notification_off">Викл</string>
     <string name="notification_on">Вкл</string>
@@ -780,14 +780,14 @@
 
     <string name="settings_labs_native_camera">Використовувати рідну камеру</string>
 
-    // share keys
+    <!-- share keys -->
     <string name="you_added_a_new_device">Щойно доданий вами пристрій \'%s\' править ключі шифрування.</string>
     <string name="your_unverified_device_requesting">Ваш неперевірений пристрій  \'%s\' править ключі шифрування.</string>
     <string name="start_verification">Почати перевірку</string>
     <string name="share_without_verifying">Поділитись без перевірки</string>
     <string name="ignore_request">Ігнорувати запит</string>
 
-    // slash commands
+    <!-- slash commands -->
     <string name="command_error">Помилка виконання команди</string>
     <string name="unrecognized_command">Команду %s не розпізнано</string>
 
@@ -830,6 +830,72 @@
     <string name="room_settings_mute">Без звука</string>
     <string name="room_settings_add_homescreen_shortcut">Добавити ярлик на головний екран</string>
 
-    <string name="settings_notification_privacy">Конфіденційність повідомлення</string>
+    <string name="settings_notification_privacy">Конфіденційність сповіщень</string>
     <string name="settings_notification_privacy_normal">Нормальний</string>
+    <string name="title_activity_choose_sticker">Відправити стікер</string>
+
+    <string name="option_send_sticker">Відправити стікер</string>
+    <string name="no_sticker_application_dialog_content">У вас зараз не має доступних стікерів.
+
+Добавити зараз?</string>
+
+    <plurals name="room_header_active_members_count">
+	<item quantity="one">1 активний участник</item>
+	<item quantity="few">%d активних участника</item>
+	<item quantity="many">%d активних участників</item>
+	<item quantity="other"/>
+</plurals>
+    <plurals name="room_title_members">
+	<item quantity="one">1 участник</item>
+	<item quantity="few">%d участника</item>
+	<item quantity="many">%d участників</item>
+	<item quantity="other"/>
+</plurals>
+    <string name="room_participants_kick_prompt_msg">Ви дійсно хотіли вигнати цього користувача із цього чата?</string>
+    <string name="room_participants_ban_prompt_msg">Ви впевнені, що хочете забанити цього користувача в цьому чаті?</string>
+
+    <plurals name="room_new_messages_notification">
+	<item quantity="one">1 нове повідомлення</item>
+	<item quantity="few">%d нових повідомленя</item>
+	<item quantity="many">%d нових повідомлень</item>
+	<item quantity="other"/>
+</plurals>
+
+    <string name="settings_notification_privacy_power_saving">"Варіанти  енергозабезпечення"</string>
+    <string name="settings_notification_privacy_low_detail">Повідомлення без подробиць</string>
+    <string name="settings_notification_privacy_reduced">Обмежена конфіденційність</string>
+    <string name="settings_notification_privacy_need_permission">Программа потребує дозвіл на працю в фоновому режимі</string>
+    <string name="settings_notification_privacy_no_permission">"Программа  "<b>не</b> потребує дозвіл на працю в фоновому режимі</string>
+    <string name="settings_notification_privacy_gcm">• Повідомлення відправляються через Google Cloud Messaging</string>
+    <string name="settings_notification_privacy_metadata">• Повідомлення містять тільки метаданні</string>
+    <string name="settings_notification_privacy_secure_message_content">• Зміст сповіщення був <b> надійно віднайдений просто на домашньому сервері Matrix </b></string>
+    <string name="dialog_title_third_party_licences">Ліцензії сторонніх виробників</string>
+
+    <string name="download">Завантажити</string>
+    <string name="speak">Розмовляти</string>
+    <string name="clear">Очистити</string>
+    <string name="e2e_re_request_encryption_key"><u>Вдруге запитати ключі шифрування</u> з інших ваших пристроїв.</string>
+
+    <string name="e2e_re_request_encryption_key_sent">Запит ключа відправлений.</string>
+
+    <string name="e2e_re_request_encryption_key_dialog_title">Запит відправлений</string>
+    <string name="settings_vibrate_on_mention">Вібрація при згадуванні</string>
+
+    <string name="settings_deactivate_account_section">Деактивація аккаунта</string>
+    <string name="settings_deactivate_my_account">Деактивувати мій аккаунт</string>
+
+    <string name="startup_notification_privacy_title">Конфіденційність сповіщень</string>
+    <string name="startup_notification_privacy_button_grant">Надати дозвіл</string>
+    <string name="startup_notification_privacy_button_other">Вибрати другий варіант</string>
+
+    <string name="settings_opt_in_of_analytics">Відправлення аналітичних даних</string>
+    <string name="settings_opt_in_of_analytics_ok">Так, я бажаю помогти!</string>
+
+    <string name="settings_flair">Настрій</string>
+
+    <string name="room_settings_room_notifications_title">Сповіщення</string>
+    <string name="e2e_re_request_encryption_key_dialog_content">Для відправлення ключа на цей пристрій, запустіть Riot на іншому пристрої, що може дешифрувати повідомлення.</string>
+
+    <string name="error_no_external_application_found">Вибачте, жодного стороннього застосунку не знайдено для завершення цієї дії.</string>
+
     </resources>

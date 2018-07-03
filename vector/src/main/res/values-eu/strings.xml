@@ -1,7 +1,7 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <resources>
-    <string name="resouces_language">eu</string>
-    <string name="resouces_country">ES</string>
+    <string name="resources_language">eu</string>
+    <string name="resources_country_code">ES</string>
 
     <string name="title_activity_home">Mezuak</string>
     <string name="title_activity_room">Gela</string>
@@ -724,7 +724,7 @@ Zifratutako mezuak ez dira zifratzea oraindik ezarrita ez duten beste gailuetan 
     <string name="settings_labs_create_conference_with_jitsi">Sortu konferentzia deiak jitsi bidez</string>
     <string name="widget_delete_message_confirmation">Ziur trepeta ezabatu nahi duzula?</string>
 
-    // Widget Integration Manager
+    <!-- Widget Integration Manager -->
     <string name="widget_integration_unable_to_create">Ezin izan da trepeta sortu.</string>
     <string name="widget_integration_failed_to_send_request">Eskariaren bidalketak huts egin du.</string>
     <string name="widget_integration_positive_power_level">Botere maila osoko zenbaki positibo bat izan behar da.</string>
@@ -746,22 +746,22 @@ Zifratutako mezuak ez dira zifratzea oraindik ezarrita ez duten beste gailuetan 
 
     <string name="settings_labs_native_camera">Erabili kamera natiboa</string>
 
-    // share keys
+    <!-- share keys -->
     <string name="you_added_a_new_device">\'%s\' gailu berria gehitu duzu, eta zifratze-gakoak eskatzen ari da.</string>
     <string name="your_unverified_device_requesting">Egiaztatu gabeko zure \'%s\' gailua zifratze-gakoak eskatzen ari da.</string>
     <string name="start_verification">Hasi egiaztaketa</string>
     <string name="share_without_verifying">Partekatu egiaztatu gabe</string>
     <string name="ignore_request">Ezikusi eskaria</string>
 
-    // conference call
+    <!-- conference call -->
     <string name="conference_call_warning_title">Abisua!</string>
     <string name="conference_call_warning_message">Konferentzia deiak garapenean daude eta agian ez dabiltza behar bezala.</string>
 
-    // slash commands
+    <!-- slash commands -->
     <string name="command_error">Komandoaren errorea</string>
     <string name="unrecognized_command">Komando ezezaguna: %s</string>
 
-    // notification statuses
+    <!-- notification statuses -->
     <string name="notification_off">Ez</string>
     <string name="notification_on">Bai</string>
     <string name="notification_noisy">Zaratatsua</string>
@@ -818,7 +818,7 @@ Zifratutako mezuak ez dira zifratzea oraindik ezarrita ez duten beste gailuetan 
     <string name="community_id">Komunitatearen IDa</string>
     <string name="community_id_hint">adibidea</string>
 
-    // group details
+    <!-- group details -->
     <string name="group_details_home">Hasiera</string>
     <string name="group_details_people">Jendea</string>
     <string name="group_details_rooms">Gelak</string>
@@ -902,7 +902,7 @@ Zifratutako mezuak ez dira zifratzea oraindik ezarrita ez duten beste gailuetan 
 	<item quantity="other">%d trepeta aktibo</item>
 </plurals>
 
-    // Widget Integration Manager
+    <!-- Widget Integration Manager -->
     <string name="receipt_avatar">Hartzailearen abatarra</string>
     <string name="notice_avatar">Jakinarazpen abatarra</string>
     <string name="avatar">Abatarra</string>
@@ -953,7 +953,30 @@ Baten bat gehitu orain?</string>
 
 Kontua desaktibatzean <b>ez dira zuk bidalitako mezuak ahaztuko.</b> Mezuak ahaztea nahi baduzu markatu beheko kutxa.
 
-Matrix-eko mezuen ikusgaitasuna e-mail sistemaren antekoa da. Guk zure mezuak ahaztean ez dizkiogu erabiltzaile berriei edo izena eman ez dutenei erakutsiko, baina jada zure mezuak jaso diztuzten erregistratutako erabiltzaileen bere kopia izaten jarraituko dute.</string>
+Matrix-eko mezuen ikusgaitasuna e-mail sistemaren antekoa da. Guk zure mezuak ahaztean ez dizkiogu erabiltzaile berriei edo izena eman ez dutenei erakutsiko, baina jada zure mezuak jaso dituzten erregistratutako erabiltzaileen bere kopia izaten jarraituko dute.</string>
     <string name="deactivate_account_delete_checkbox">Ahaztu bidali ditudan mezu guztiak kontua desaktibatzean (Abisua: Honekin etorkizuneko erabiltzaileek elkarrizketaren bertsio ez oso bat ikusiko dute)</string>
     <string name="deactivate_account_prompt_password">Jarraitzeko, sartu zure pasahitza:</string>
-    </resources>
+    <string name="dialog_title_third_party_licences">Hirugarrengoen lizentziak</string>
+
+    <string name="download">Deskargatu</string>
+    <string name="speak">Hitz egin</string>
+    <string name="clear">Garbitu</string>
+    <string name="e2e_re_request_encryption_key"><u>Berriro eskatu zifratze-gakoak</u> zure beste gailuetatik.</string>
+
+    <string name="e2e_re_request_encryption_key_sent">Gako eskaria bidalita.</string>
+
+    <string name="e2e_re_request_encryption_key_dialog_title">Eskaria bidalita</string>
+    <string name="e2e_re_request_encryption_key_dialog_content">Abiatu Riot beste mezua deszifratu dezakeen gailu batean, gailu honetara gakoak bidali ditzan.</string>
+
+    <string name="lock_screen_hint">Idatzi hemen…</string>
+
+    <string name="option_send_voice">Bidali ahotsa</string>
+
+    <string name="go_on_with">jarraitu honekin…</string>
+    <string name="error_no_external_application_found">Ez da ekintza hau burutzeko kanpo aplikaziorik aurkitu.</string>
+
+    <string name="settings_labs_enable_send_voice">Bidali ahots mezua (Hirugarrengoen kanpo aplikazio bat behar da ahots-mezuak grabatzeko)</string>
+
+    <string name="error_empty_field_your_password">Sartu zure pasahitza.</string>
+
+</resources>

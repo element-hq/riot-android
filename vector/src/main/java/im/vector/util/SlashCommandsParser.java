@@ -17,7 +17,7 @@
 
 package im.vector.util;
 
-import android.app.AlertDialog;
+import android.support.v7.app.AlertDialog;
 import android.text.TextUtils;
 import android.widget.Toast;
 
@@ -32,15 +32,17 @@ import org.matrix.androidsdk.util.Log;
 
 import java.util.Collection;
 import java.util.HashMap;
+import java.util.Map;
 
 import im.vector.R;
 import im.vector.VectorApp;
 import im.vector.activity.CommonActivityUtils;
 import im.vector.activity.VectorRoomActivity;
+import im.vector.widgets.WidgetsManager;
 
-public class SlashComandsParser {
+public class SlashCommandsParser {
 
-    private static final String LOG_TAG = SlashComandsParser.class.getSimpleName();
+    private static final String LOG_TAG = SlashCommandsParser.class.getSimpleName();
 
     // defines the command line operations
     // the user can write theses messages to perform some room events
@@ -94,6 +96,9 @@ public class SlashComandsParser {
     // on / off
     private static final String CMD_MARKDOWN = "/markdown";
 
+    // clear scalar token (waiting for correct 403 management)
+    private static final String CMD_CLEAR_SCALAR_TOKEN = "/clear_scalar_token";
+
     /**
      * check if the text message is an IRC command.
      * If it is an IRC command, it is executed
@@ -106,7 +111,12 @@ public class SlashComandsParser {
      * @param format        the message format
      * @return true if it is a splash command
      */
-    public static boolean manageSplashCommand(final VectorRoomActivity activity, final MXSession session, final Room room, final String textMessage, final String formattedBody, final String format) {
+    public static boolean manageSplashCommand(final VectorRoomActivity activity,
+                                              final MXSession session,
+                                              final Room room,
+                                              final String textMessage,
+                                              final String formattedBody,
+                                              final String format) {
         boolean isIRCCmd = false;
 
         // sanity checks
@@ -198,7 +208,7 @@ public class SlashComandsParser {
                         @Override
                         public void onSuccess(String roomId) {
                             if (null != roomId) {
-                                HashMap<String, Object> params = new HashMap<>();
+                                Map<String, Object> params = new HashMap<>();
                                 params.put(VectorRoomActivity.EXTRA_MATRIX_ID, session.getMyUserId());
                                 params.put(VectorRoomActivity.EXTRA_ROOM_ID, roomId);
 
@@ -304,14 +314,20 @@ public class SlashComandsParser {
                         PreferencesManager.setMarkdownEnabled(VectorApp.getInstance(), false);
                     }
                 }
+            } else if (TextUtils.equals(firstPart, CMD_CLEAR_SCALAR_TOKEN)) {
+                isIRCCmd = true;
+
+                WidgetsManager.clearScalarToken(activity, session);
+
+                Toast.makeText(activity, "Scalar token cleared", Toast.LENGTH_SHORT).show();
             }
 
             if (!isIRCCmd) {
-                AlertDialog.Builder dialog = new AlertDialog.Builder(activity);
-                dialog.setTitle(R.string.command_error);
-                dialog.setMessage(activity.getString(R.string.unrecognized_command, firstPart));
-                dialog.setPositiveButton(R.string.ok, null);
-                dialog.show();
+                new AlertDialog.Builder(activity)
+                        .setTitle(R.string.command_error)
+                        .setMessage(activity.getString(R.string.unrecognized_command, firstPart))
+                        .setPositiveButton(R.string.ok, null)
+                        .show();
                 // do not send the command as a message
                 isIRCCmd = true;
             }

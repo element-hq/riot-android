@@ -24,7 +24,6 @@ import android.support.design.widget.TabLayout;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.ActionBar;
 import android.text.TextUtils;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.ProgressBar;
@@ -76,7 +75,7 @@ public class VectorGroupDetailsActivity extends MXCActionBarActivity {
         @Override
         public void onLeaveGroup(String groupId) {
             if ((null != mRoom) && TextUtils.equals(groupId, mGroup.getGroupId())) {
-                VectorGroupDetailsActivity.this.finish();
+                finish();
             }
         }
 
@@ -203,7 +202,7 @@ public class VectorGroupDetailsActivity extends MXCActionBarActivity {
         mPager.setAdapter(mPagerAdapter);
 
         TabLayout layout = findViewById(R.id.group_tabs);
-        ThemeUtils.setTabLayoutTheme(this, layout);
+        ThemeUtils.INSTANCE.setTabLayoutTheme(this, layout);
 
         if (intent.hasExtra(EXTRA_TAB_INDEX)) {
             mPager.setCurrentItem(getIntent().getIntExtra(EXTRA_TAB_INDEX, 0));
@@ -257,16 +256,6 @@ public class VectorGroupDetailsActivity extends MXCActionBarActivity {
     protected void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
         outState.putInt(EXTRA_TAB_INDEX, mPager.getCurrentItem());
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()) {
-            case android.R.id.home:
-                finish();
-                return true;
-        }
-        return super.onOptionsItemSelected(item);
     }
 
     @Override

@@ -2,8 +2,8 @@
 <resources>
     <!-- use to retrieve the supported languages list -->
     <!-- should the same value as the file name -->
-    <string name="resouces_language">pt</string>
-    <string name="resouces_country">PT</string>
+    <string name="resources_language">pt</string>
+    <string name="resources_country_code">PT</string>
 
     <!-- titles -->
     <string name="title_activity_home">Mensagens</string>
@@ -782,7 +782,7 @@ Dispositivos desconhecidos:</string>
     <string name="settings_labs_create_conference_with_jitsi">Criar chamadas de conferência com o jitsi</string>
     <string name="widget_delete_message_confirmation">Tem a certeza que quer remover o widget?</string>
 
-    // Widget Integration Manager
+    <!-- Widget Integration Manager -->
     <string name="widget_integration_unable_to_create">Não foi possível criar o widget.</string>
     <string name="widget_integration_failed_to_send_request">O envio do pedido falhou.</string>
     <string name="widget_integration_positive_power_level">Nível de utilizador tem que ser um inteiro positivo.</string>

@@ -1,18 +1,18 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <resources>
-    <string name="resouces_language">ja</string>
-    <string name="resouces_country">JP</string>
+    <string name="resources_language">ja</string>
+    <string name="resources_country_code">JP</string>
 
     <string name="title_activity_room">部屋</string>
     <string name="title_activity_settings">設定</string>
     <string name="title_activity_historical">履歴</string>
 
-    <string name="ok">ＯＫ</string>
+    <string name="ok">OK</string>
     <string name="cancel">取消</string>
     <string name="save">保存</string>
     <string name="leave">退室</string>
     <string name="send">送信</string>
-    <string name="copy">複写</string>
+    <string name="copy">コピー</string>
     <string name="resend">再送信</string>
     <string name="redact">削除</string>
     <string name="share">共有</string>
@@ -355,7 +355,7 @@
     <string name="action_sign_out">ログアウト</string>
     <string name="action_sign_out_confirmation">セキュリティを確保するため、ログアウトするとエンドツーエンド暗号鍵がすべて削除され、再度ログインすると暗号化された発言履歴が読み取れなくなります。
 ログアウトする前に暗号鍵を端末の記憶装置へ出力し、保管をしてください。</string>
-    <string name="bottom_action_home">基本画面</string>
+    <string name="bottom_action_home">ホーム</string>
     <string name="no_conversation_placeholder">会話なし</string>
     <string name="no_contact_access_placeholder">端末の電話帳をRiotアプリが読み取ることは許可されていません</string>
     <string name="no_result_placeholder">結果なし</string>
@@ -414,7 +414,7 @@
     <string name="login_error_bad_json">不正な形式のJSON</string>
     <string name="login_error_not_json">有効なJSONを含んでいませんでした</string>
     <string name="login_error_limit_exceeded">ログイン要求が多すぎてサーバが対応できません</string>
-    <string name="login_error_login_email_not_yet">まだ電子メールのリンクがクリックされていません</string>
+    <string name="login_error_login_email_not_yet">まだクリックされていないeメールのリンク</string>
 
     <string name="compression_options">"以下の容量で画像を送信 "</string>
     <string name="e2e_need_log_in_again">この端末のエンドツーエンド暗号鍵を生成し、接続先サーバに公開鍵を送信するには、再度ログインする必要があります。
@@ -751,18 +751,18 @@ Riotアプリがあなたの電話帳へアクセスすることを許可しま�
     <string name="encryption_information_claimed_ed25519_fingerprint_key">要求されたフィンガープリントキー Ed25519</string>
     <string name="settings_labs_create_conference_with_jitsi">jitsiを用いて会議通話を始める</string>
 
-    // Widget Integration Manager
+    <!-- Widget Integration Manager -->
     <string name="settings_labs_native_camera">端末のカメラを使う</string>
 
-    // share keys
+    <!-- share keys -->
     <string name="conference_call_warning_title">警告！</string>
     <string name="conference_call_warning_message">ビデオ会議は開発中であり、確実でない可能性があります。</string>
 
-    // slash commands
+    <!-- slash commands -->
     <string name="command_error">コマンドエラー</string>
     <string name="unrecognized_command">認識されないコマンド: %s</string>
 
-    // notification statuses
+    <!-- notification statuses -->
     <string name="notification_off">切</string>
     <string name="notification_on">入</string>
     <string name="notification_noisy">音量大</string>
@@ -817,7 +817,7 @@ Riotアプリがあなたの電話帳へアクセスすることを許可しま�
     <string name="community_id">コミュニティID</string>
     <string name="community_id_hint">例</string>
 
-    // group details
+    <!-- group details -->
     <string name="group_details_home">ホーム</string>
     <string name="group_details_people">参加者</string>
     <string name="group_details_rooms">部屋</string>
@@ -878,6 +878,16 @@ Riotアプリがあなたの電話帳へアクセスすることを許可しま�
     <string name="settings_notification_privacy">通知のプライバシー</string>
     <string name="settings_notification_privacy_warning">Riot.imは通知のメッセージの内容の秘密を守るため、バックグラウンドで動作します。電池の使用を削減するために、このオプションを変えることができます。</string>
     <string name="settings_notification_privacy_normal">標準</string>
-    <string name="settings_notification_privacy_power_saving">電力保存オプション</string>
+    <string name="settings_notification_privacy_power_saving">省電力設定</string>
     <string name="settings_notification_privacy_low_detail">簡単な通知</string>
+    <string name="settings_notification_privacy_need_permission">このアプリはバックグラウンド動作の権限が必要です</string>
+    <string name="settings_notification_privacy_gcm">•通知はGoogle Cloud Messaging経由で送られます</string>
+    <string name="settings_notification_privacy_no_permission">このアプリにバックグラウンド動作の権限は<b>必要ありません</b></string>
+    <string name="settings_notification_privacy_metadata">• 通知はメタデータのみを含みます</string>
+    <string name="title_activity_choose_sticker">ステッカーを送る</string>
+
+    <string name="dialog_title_third_party_licences">サードパーティーライセンス</string>
+
+    <string name="download">ダウンロード</string>
+    <string name="speak">話す</string>
     </resources>

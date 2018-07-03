@@ -3,8 +3,8 @@
     <!-- use to retrieve the supported languages list -->
     <!-- should the same value as the file name -->
 
-    <string name="resouces_language">it</string>
-    <string name="resouces_country">IT</string>
+    <string name="resources_language">it</string>
+    <string name="resources_country_code">IT</string>
 
     <!-- titles -->
     <string name="title_activity_home">Messaggi</string>
@@ -190,7 +190,9 @@ Puoi aggiungere la tua email al tuo profilo dalle impostazioni.</string>
     <string name="auth_reset_password_missing_password">Una nuova password deve essere inserita.</string>
     <string name="auth_reset_password_email_validation_message">Un\'email è stata inviata a %s. Appena avrai seguito il link lì contenuto, clicca qui sotto.</string>
     <string name="auth_reset_password_error_unauthorized">Verifica indirizzo email fallita: assicurati di aver cliccato sul link contenuto nell\'email</string>
-    <string name="auth_reset_password_success_message">La tua password è stata ripristinata.\nSei stato disconnesso da tutti i dispositivi e non riceverai più alcuna notifica. Per riabilitare le notifiche, riconnettiti su ciascun dispositivo.</string>
+    <string name="auth_reset_password_success_message">La tua password è stata ripristinata.
+
+Sei stato disconnesso da tutti i dispositivi e non riceverai più alcuna notifica. Per riabilitare le notifiche, riconnettiti su ciascun dispositivo.</string>
 
     <!-- Login Screen -->
     <string name="login_error_must_start_http">L\'URL deve iniziare con http[s]://</string>
@@ -198,7 +200,7 @@ Puoi aggiungere la tua email al tuo profilo dalle impostazioni.</string>
     <string name="login_error_unable_login">Impossibile accedere</string>
     <string name="login_error_registration_network_error">Impossibile registrarsi: errore di rete</string>
     <string name="login_error_unable_register">Impossibile registrarsi</string>
-    <string name="login_error_unable_register_mail_ownership">Impossibile registrarsi: errore proprietario email</string>
+    <string name="login_error_unable_register_mail_ownership">Impossibile registrarsi: difetto proprietà dell\'email</string>
     <string name="login_error_invalid_home_server">Inserisci un URL valido</string>
 
     <string name="login_error_forbidden">Nome utente/password non validi</string>
@@ -210,7 +212,9 @@ Puoi aggiungere la tua email al tuo profilo dalle impostazioni.</string>
     <string name="login_error_login_email_not_yet">Il link nell\'email non è ancora stato cliccato</string>
 
     <!-- crypto warnings -->
-    <string name="e2e_need_log_in_again">È necessario eseguire nuovamente l\'accesso per generare le chiavi di crittografia da-utente-a-utente per questo dispositivo ed inviare la chiave pubblica al server home.\nSi tratta di un\'evenienza rara.\nCi scusiamo per l\'inconveniente.</string>
+    <string name="e2e_need_log_in_again">È necessario eseguire nuovamente l\'accesso per generare le chiavi di crittografia da-utente-a-utente per questo dispositivo ed inviare la chiave pubblica al server home.
+Ciò può capitare solo una volta.
+Ci scusiamo per l\'inconveniente.</string>
 
     <!-- read receipts list Screen -->
     <string name="read_receipts_list">Elenco ricevute lette</string>
@@ -219,7 +223,7 @@ Puoi aggiungere la tua email al tuo profilo dalle impostazioni.</string>
 
     <!-- image size selection -->
     <string name="compression_options">Invia come </string>
-    <string name="compression_opt_list_original">Originale</string>
+    <string name="compression_opt_list_original">Originario</string>
     <string name="compression_opt_list_large">Grande</string>
     <string name="compression_opt_list_medium">Medio</string>
     <string name="compression_opt_list_small">Piccolo</string>
@@ -228,7 +232,7 @@ Puoi aggiungere la tua email al tuo profilo dalle impostazioni.</string>
     <string name="attachment_cancel_download">"Annullare il download?</string>
     <string name="attachment_cancel_upload">Annullare l\'upload?</string>
     <string name="attachment_remaining_time_seconds">%d s</string>
-    <string name="attachment_remaining_time_minutes">%1$d minuti %2$d secondi</string>
+    <string name="attachment_remaining_time_minutes">%1$dm %2$ds</string>
 
     <!-- room creation dialog Screen -->
     <string name="yesterday">Ieri</string>
@@ -244,37 +248,41 @@ Puoi aggiungere la tua email al tuo profilo dalle impostazioni.</string>
     <string name="call_ended">Chiamata terminata</string>
     <string name="call_ring">Sto chiamando…</string>
     <string name="incoming_call">Chiamata in arrivo</string>
-    <string name="incoming_video_call">Chiamata video in arrivo</string>
+    <string name="incoming_video_call">Videochiamata in arrivo</string>
     <string name="incoming_voice_call">Chiamata voce in arrivo</string>
     <string name="call_in_progress">Chiamata in corso</string>
 
-    <string name="call_error_user_not_responding">Il destinatario non ha risposto.</string>
-    <string name="call_error_ice_failed">Connessione al supporto media fallita</string>
+    <string name="call_error_user_not_responding">Ricezione fallita da parte del destinatario.</string>
+    <string name="call_error_ice_failed">Fallita connessione al supporto multimediale</string>
     <string name="call_error_camera_init_failed">Impossibile avviare la fotocamera</string>
-    <string name="call_error_answered_elsewhere">chiamata risulta risposta altrove</string>
+    <string name="call_error_answered_elsewhere">chiamata risposta altrove</string>
 
     <!-- medias picker string -->
-    <string name="media_picker_both_capture_title">Fai una foto o un video</string>
+    <string name="media_picker_both_capture_title">Cattura foto o video</string>
     <string name="media_picker_cannot_record_video">Impossibile registrare video</string>
 
     <!-- permissions Android M -->
     <string name="permissions_rationale_popup_title">Informazione</string>
-    <string name="permissions_rationale_msg_storage">Riot ha bisogno dell\'autorizzazione di accesso alla tua galleria di foto e video per inviare e salvare allegati.
+    <string name="permissions_rationale_msg_storage">Riot necessita del permesso di accedere alla tua galleria di foto e video per inviare e salvare allegati.
 
 Per favore consenti l\'accesso nella prossima finestra così da poter inviare file dal tuo telefono.</string>
-    <string name="permissions_rationale_msg_camera">Riot ha bisogno dell\'autorizzazione di accesso alla fotocamera per scattare foto e fare video chiamate.</string>
-    <string name="permissions_rationale_msg_camera_explanation">\n\nPer favore abilita l\'autorizzazione sulla prossima finestrella al fine di effettuare la chiamata.</string>
-    <string name="permissions_rationale_msg_record_audio">Riot ha bisogno dell\'autorizzazione di accesso al microfono per eseguire chiamate audio.</string>
-    <string name="permissions_rationale_msg_record_audio_explanation">\n\nPer favore abilita l\'autorizzazione sulla prossima finestrella al fine di effettuare la chiamata.</string>
-    <string name="permissions_rationale_msg_camera_and_audio">Riot ha bisogno dell\'autorizzazione di accesso alla fotocamera ed al microfono per eseguire chiamate video.
+    <string name="permissions_rationale_msg_camera">Riot necessita del permesso di accedere alla fotocamera per scattare foto e fare videochiamate.</string>
+    <string name="permissions_rationale_msg_camera_explanation">
+
+Per favore dai l\'autorizzazione nella prossima finestra al fine di effettuare la chiamata.</string>
+    <string name="permissions_rationale_msg_record_audio">Riot necessita del permesso di accedere al microfono per eseguire chiamate audio.</string>
+    <string name="permissions_rationale_msg_record_audio_explanation">
+
+Per favore dai l\'autorizzazione nella prossima finestra al fine di effettuare la chiamata.</string>
+    <string name="permissions_rationale_msg_camera_and_audio">Riot necessita del permesso di accedere alla fotocamera ed al microfono per eseguire videochiamate.
 
 Per favore consenti l\'accesso nella prossima finestra per potere effettuare la chiamata.</string>
-    <string name="permissions_rationale_msg_contacts">Riot ha bisogno dell\'autorizzazione di accesso alla tua rubrica per trovare altri utenti Matrix basandosi sulla loro email e sul numero di telefono.
+    <string name="permissions_rationale_msg_contacts">Riot necessita del permesso di accedere alla tua rubrica per trovare altri utenti Matrix basandosi sulla loro email e sul numero di telefono.
 
 Per favore consenti l\'accesso nella prossima finestra in modo da scoprire i contatti in rubrica raggiungibili da Riot.</string>
-    <string name="permissions_msg_contacts_warning_other_androids">Riot ha bisogno dell\'autorizzazione di accesso alla tua rubrica per trovare altri utenti Matrix basandosi sulla loro email e sul numero di telefono.
+    <string name="permissions_msg_contacts_warning_other_androids">Riot necessita del permesso di accedere alla tua rubrica per trovare altri utenti Matrix basandosi sulla loro email e sul numero di telefono.
 
-Permetti a Riot di accedere ai tuoi contatti?</string>
+Consentire a Riot di accedere ai tuoi contatti?</string>
 
     <string name="permissions_action_not_performed_missing_permissions">Spiacenti… azione non eseguita a causa di mancate autorizzazioni</string>
 
@@ -292,12 +300,13 @@ Permetti a Riot di accedere ai tuoi contatti?</string>
     <string name="reject">Rifiuta</string>
 
     <!-- Room -->
-    <string name="room_jump_to_first_unread">Vai al primo messaggio non letto.</string>
+    <string name="room_jump_to_first_unread">Primo messaggio non letto.</string>
 
     <!-- Room Preview -->
     <string name="room_preview_invitation_format">Sei stato invitato ad unirti in questa stanza da %s</string>
-    <string name="room_preview_unlinked_email_warning">Questo invito è stato spedito da %s, che non è associato a questo account.\nÈ possibile che tu voglia connetterti con un altro account, o aggiungere questa email a questo tuo account.</string>
-    <string name="room_preview_try_join_an_unknown_room">Stai provando ad accedere a %s. Desideri unirti al fine di partecipare alla discussione?</string>
+    <string name="room_preview_unlinked_email_warning">Questo invito è stato spedito da %s, che non è associato a questo account.
+È possibile che tu voglia connetterti con un altro account, o aggiungere l\'email a questo account.</string>
+    <string name="room_preview_try_join_an_unknown_room">Stai provando ad accedere a %s. Desideri entrare per partecipare alla discussione?</string>
     <string name="room_preview_try_join_an_unknown_room_default">una stanza</string>
     <string name="room_preview_room_interactions_disabled">Questa è l\'anteprima della stanza. Le interazioni con la stanza sono state disabilitate.</string>
 
@@ -306,7 +315,13 @@ Permetti a Riot di accedere ai tuoi contatti?</string>
     <string name="room_creation_add_member">Aggiungi membro</string>
     <string name="room_title_one_member">1 membro</string>
     <string name="room_e2e_alert_title">Attenzione!</string>
-    <string name="room_e2e_alert_message">La crittografia da-utente-a-utente è in beta e potrebbe non essere affidabile.\n\nNon dovresti ancora fidarti di essa per proteggere i tuoi dati.\n\nI dispositivi non saranno in grado di decriptare la cronologia prima che entrino nella stanza.\n\nI messaggi criptati non saranno visibili ai riceventi (client) che non hanno ancora implementato la crittografia.</string>
+    <string name="room_e2e_alert_message">La crittografia da-utente-a-utente è in beta e potrebbe non essere affidabile.
+
+Non dovresti ancora fidarti di essa per proteggere i tuoi dati.
+
+I dispositivi non saranno in grado di decriptare la cronologia prima del loro ingresso nella stanza.
+
+I messaggi criptati non saranno visibili ai riceventi (client) che non hanno ancora implementato la crittografia.</string>
 
     <!--  Time -->
     <string name="format_time_s">s</string>
@@ -334,8 +349,8 @@ Permetti a Riot di accedere ai tuoi contatti?</string>
     <string name="room_participants_action_invite">Invita</string>
     <string name="room_participants_action_leave">Lascia questa stanza</string>
     <string name="room_participants_action_remove">Rimuovi da questa stanza</string>
-    <string name="room_participants_action_ban">Banna</string>
-    <string name="room_participants_action_unban">Rimuovi ban</string>
+    <string name="room_participants_action_ban">Bandisci</string>
+    <string name="room_participants_action_unban">Rimuovi messa al bando</string>
     <string name="room_participants_action_set_default_power_level">Ripristina ad utente normale</string>
     <string name="room_participants_action_set_moderator">Rendi moderatore</string>
     <string name="room_participants_action_set_admin">Rendi amministratore</string>
@@ -344,7 +359,8 @@ Permetti a Riot di accedere ai tuoi contatti?</string>
     <string name="room_participants_invite_search_another_user">ID utente, nome o email</string>
     <string name="room_participants_action_mention">Citazione</string>
     <string name="room_participants_action_devices_list">Mostra elenco dispositivi</string>
-    <string name="room_participants_power_level_prompt">Non potrai annullare questo cambiamento che promuoverà l\'utente al tuo stesso livello di potere.\nSicuro di procedere?</string>
+    <string name="room_participants_power_level_prompt">Non potrai annullare questa modifica in quanto promuoverai l\'utente al tuo stesso livello di potere.
+Sicuro di procedere?</string>
 
     <string name="room_participants_invite_prompt_msg">"Sicuro di voler invitare %s in questa chat?"</string>
 
@@ -362,7 +378,7 @@ Permetti a Riot di accedere ai tuoi contatti?</string>
     <string name="room_menu_search">Cerca</string>
     <string name="room_one_user_is_typing">%s sta scrivendo…</string>
     <string name="room_two_users_are_typing">%1$s &amp; %2$s stanno scrivendo…</string>
-    <string name="room_many_users_are_typing">%1$s , %2$s e altri stanno scrivendo…</string>
+    <string name="room_many_users_are_typing">%1$s &amp; %2$s &amp; altri stanno scrivendo…</string>
     <string name="room_message_placeholder_encrypted">Messaggio criptato…</string>
     <string name="room_message_placeholder_not_encrypted">Messaggio non criptato…</string>
     <string name="room_offline_notification">La connessione al server è stata persa.</string>
@@ -385,7 +401,7 @@ Permetti a Riot di accedere ai tuoi contatti?</string>
     <string name="ssl_could_not_verify">Impossibile verificare l\'identità del server remoto.</string>
     <string name="ssl_cert_not_trust">Ciò potrebbe significare che qualcuno sta intercettando il tuo traffico, oppure il tuo telefono non riconosce come affidabile il certificato fornito dal server remoto.</string>
     <string name="ssl_cert_new_account_expl">Se l\'amministratore del server ha dichiarato che questa anomalia è prevista, assicurati che l\'impronta digitale corrisponda a quella fornita da loro.</string>
-    <string name="ssl_unexpected_existing_expl">Il certificato è cambiato rispetto a quello ritenuto affidabile dal tuo telefono. Ciò è ALTAMENTE INUSUALE. Si raccomanda di NON ACCETTARE questo nuovo certificato.</string>
+    <string name="ssl_unexpected_existing_expl">Il certificato è cambiato rispetto a quello ritenuto affidabile dal tuo telefono. Questo è ESTREMAMENTE INSOLITO. Si raccomanda di NON ACCETTARE questo nuovo certificato.</string>
     <string name="ssl_expected_existing_expl">Il certificato è cambiato da quello precedente ritenuto affidabile ad uno non affidabile. Il server potrebbe aver rinnovato il proprio certificato. Contatta l\'amministratore del server per chiedere l\'impronta digitale prevista.</string>
     <string name="ssl_only_accept">Accetta il certificato SOLO se l\'amministratore ha pubblicato un\'impronta digitale che corrisponda a quella qua sopra.</string>
     <string name="ssl_fingerprint_example">00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00</string>
@@ -403,8 +419,8 @@ Permetti a Riot di accedere ai tuoi contatti?</string>
     <!-- Room events -->
     <string name="room_event_action_report_prompt_reason">Motivo per segnalare questo contenuto</string>
     <string name="room_event_action_report_prompt_ignore_user">Desideri nascondere tutti i messaggi di questo utente?</string>
-    <string name="room_event_action_cancel_upload">Annulla upload</string>
-    <string name="room_event_action_cancel_download">Annulla download</string>
+    <string name="room_event_action_cancel_upload">Annulla caricamento</string>
+    <string name="room_event_action_cancel_download">Annulla scaricamento</string>
 
     <!-- Room display name -->
     <string name="room_displayname_invite_from">Invito da %s</string>
@@ -414,7 +430,7 @@ Permetti a Riot di accedere ai tuoi contatti?</string>
 
     <!-- Search -->
     <string name="search_hint">Cerca</string>
-    <string name="search_members_hint">Filtra i membri della stanza</string>
+    <string name="search_members_hint">Filtra membri della stanza</string>
     <string name="search_no_results">Nessun risultato</string>
     <string name="tab_title_search_rooms">STANZE</string>
     <string name="tab_title_search_messages">MESSAGGI</string>
@@ -422,7 +438,7 @@ Permetti a Riot di accedere ai tuoi contatti?</string>
     <string name="tab_title_search_files">FILE</string>
 
     <!-- Room recents -->
-    <string name="room_recents_join">ENTRATE</string>
+    <string name="room_recents_join">ENTRARE</string>
     <string name="room_recents_directory">ELENCO</string>
     <string name="room_recents_favourites">PREFERITI</string>
     <string name="room_recents_conversations">STANZE</string>
@@ -438,7 +454,7 @@ Permetti a Riot di accedere ai tuoi contatti?</string>
     <string name="directory_search_results_title">Esplora elenco</string>
     <string name="directory_search_room">%1$d stanza</string>
     <string name="directory_search_room_for">%1$d stanza trovata per %2$s</string>
-    <string name="directory_searching_title">Ricerca in corso..</string>
+    <string name="directory_searching_title">Ricerca in corso…</string>
 
     <!-- home room settings -->
     <string name="room_settings_favourite">Preferito</string>
@@ -464,22 +480,22 @@ Permetti a Riot di accedere ai tuoi contatti?</string>
     <string name="settings_add_email_address">Aggiungi indirizzo email</string>
     <string name="settings_phone_number">Telefono</string>
     <string name="settings_add_phone_number">Aggiungi numero di telefono</string>
-    <string name="settings_summary_app_info_link">Vai alla schermata delle informazioni di sistema per quest\'app</string>
+    <string name="settings_summary_app_info_link">Informazioni di sistema per l\'applicazione</string>
     <string name="settings_title_app_info_link">Informazioni applicazione</string>
 
     <string name="settings_enable_all_notif">Abilita notifiche per questo account</string>
     <string name="settings_enable_this_device">Abilita notifiche per questo dispositivo</string>
     <string name="settings_turn_screen_on">Accendi lo schermo per 3 secondi alla notifica</string>
 
-    <string name="settings_messages_in_one_to_one">Messaggi nelle chat a due</string>
-    <string name="settings_messages_in_group_chat">Messaggi nelle chat di gruppo</string>
-    <string name="settings_invited_to_room">Quando ricevi un invito in una stanza</string>
+    <string name="settings_messages_in_one_to_one">Msg nelle chat uno-a-uno</string>
+    <string name="settings_messages_in_group_chat">Msg nelle chat di gruppo</string>
+    <string name="settings_invited_to_room">Quando sono invitato in una stanza</string>
     <string name="settings_call_invitations">Invito ad una chiamata</string>
     <string name="settings_messages_sent_by_bot">Messaggi inviati da bot</string>
 
     <string name="settings_start_on_boot">Esegui all\'avvio</string>
-    <string name="settings_background_sync">Sincronizzazione in secondo piano</string>
-    <string name="settings_enable_background_sync">Abilita sync in secondo piano</string>
+    <string name="settings_background_sync">Sincronizzazione in sottofondo</string>
+    <string name="settings_enable_background_sync">Abilita sync in sottofondo</string>
     <string name="settings_set_sync_timeout">Attesa per una richiesta di sync</string>
     <string name="settings_set_sync_delay">Pausa tra due richieste di sync</string>
     <string name="settings_second">secondo</string>
@@ -510,16 +526,16 @@ Permetti a Riot di accedere ai tuoi contatti?</string>
     <string name="settings_pin_unread_messages">Segna le stanze con messaggi non letti</string>
     <string name="settings_devices_list">Dispositivi</string>
     <string name="settings_hide_read_receipts">Nascondi conferme di lettura</string>
-    <string name="settings_dont_send_typings_notifs">Non inviare notifica di scrittura in corso</string>
-    <string name="settings_always_show_timestamps">Mostra sempre data e orario dei messaggi</string>
+    <string name="settings_dont_send_typings_notifs">Non comunicare che stai scrivendo</string>
+    <string name="settings_always_show_timestamps">Mostra sempre data e ora dei messaggi</string>
     <string name="settings_disable_markdown">Disattiva la formattazione markdown quando si invia</string>
-    <string name="settings_data_save_mode">Modalità salvataggio dati</string>
+    <string name="settings_data_save_mode">Modalità risparmio banda</string>
 
     <string name="devices_details_dialog_title">Dettagli dispositivo</string>
     <string name="devices_details_id_title">ID</string>
     <string name="devices_details_name_title">Nome</string>
     <string name="devices_details_device_name">Nome dispositivo</string>
-    <string name="devices_details_last_seen_title">Ultima interazione</string>
+    <string name="devices_details_last_seen_title">Ultima visualizzazione</string>
     <string name="devices_details_last_seen_format">%1$s @ %2$s</string>
     <string name="devices_details_time_format">HH:mm:ss</string>
     <string name="devices_delete_dialog_text">Questa operazione richiede un\'autenticazione aggiuntiva.\nPer proseguire, inserisci la tua password.</string>
@@ -734,7 +750,7 @@ Permetti a Riot di accedere ai tuoi contatti?</string>
     <string name="black_them">Tema Nero</string>
 
     <string name="notification_sync_in_progress">Sincronizzazione</string>
-    <string name="settings_notification_ringtone">Suono di notifica</string>
+    <string name="settings_notification_ringtone">Suono notifiche</string>
     <string name="settings_12_24_timestamps">Mostra gli orari in formato 12 ore (es. 2:30pm)</string>
     <string name="widget_no_power_to_manage">Hai bisogno dei permessi per gestire i widget in questa stanza</string>
     <string name="event_formatter_widget_added">%1$s aggiunto da %2$s</string>
@@ -742,7 +758,7 @@ Permetti a Riot di accedere ai tuoi contatti?</string>
     <string name="settings_labs_create_conference_with_jitsi">Crea una videoconferenza con jitsi</string>
     <string name="widget_delete_message_confirmation">Sei sicuro di voler eliminare questo widget?</string>
 
-    // Widget Integration Manager
+    <!-- Widget Integration Manager -->
     <string name="widget_integration_unable_to_create">Impossibile creare il widget.</string>
     <string name="widget_integration_failed_to_send_request">Invio della richiesta fallito.</string>
     <string name="widget_integration_must_be_in_room">Non sei in questa stanza.</string>
@@ -753,9 +769,9 @@ Permetti a Riot di accedere ai tuoi contatti?</string>
     <string name="option_take_photo">Cattura foto</string>
     <string name="option_take_video">Cattura video</string>
 
-    <string name="settings_containing_my_display_name">Messaggi che contengono il mio nome</string>
-    <string name="settings_containing_my_user_name">Messaggi che contengono il mio user name</string>
-    <string name="settings_hide_avatar_display_name_changes_messages">Non mostrare i cambiamenti di nome e avatar</string>
+    <string name="settings_containing_my_display_name">Msg contenenti il nome mostrato</string>
+    <string name="settings_containing_my_user_name">Msg contenenti il nome utente</string>
+    <string name="settings_hide_avatar_display_name_changes_messages">Nascondi cambiamenti del nome mostrato e dell\'avatar</string>
 
     <string name="notification_silent_notifications">Notifiche silenziose</string>
 
@@ -801,12 +817,12 @@ Permetti a Riot di accedere ai tuoi contatti?</string>
 	<item quantity="one">1 membro</item>
 	<item quantity="other">%d membri</item>
 </plurals>
-    <string name="room_participants_kick_prompt_msg">Sei sicuro di volere cacciare fuori questo utente dalla chat?</string>
-    <string name="room_participants_ban_prompt_msg">Sei sicuro di volere bandire questo utente dalla chat?</string>
+    <string name="room_participants_kick_prompt_msg">Sei sicuro di voler cacciar fuori questo utente dalla chat?</string>
+    <string name="room_participants_ban_prompt_msg">Sei sicuro di voler proibire l\'accesso alla chat a questo utente?</string>
 
     <plurals name="room_new_messages_notification">
-	<item quantity="one">1 messaggio nuovo</item>
-	<item quantity="other">%d messaggi nuovi</item>
+	<item quantity="one">1 nuovo messaggio</item>
+	<item quantity="other">%d nuovi messaggi</item>
 </plurals>
 
     <string name="room_displayname_many_members">%1$s e %2$s</string>
@@ -827,14 +843,14 @@ Permetti a Riot di accedere ai tuoi contatti?</string>
     <string name="room_settings_all_messages">Tutti i messaggi</string>
     <string name="room_settings_mention_only">Solo le citazioni</string>
     <string name="room_settings_mute">Silenzioso</string>
-    <string name="room_settings_add_homescreen_shortcut">Aggiungi scorciatoia schermata iniziale</string>
+    <string name="room_settings_add_homescreen_shortcut">Aggiungi scorciatoia su schermata iniziale</string>
 
-    <string name="settings_inline_url_preview">Attiva le anteprime URL in modo predefinito</string>
-    <string name="settings_hide_join_leave_messages">Nascondi i messaggi di entrata/uscita (inviti/kick/ban esclusi)</string>
+    <string name="settings_inline_url_preview">Attiva l\'anteprima degli URL in via predefinita</string>
+    <string name="settings_hide_join_leave_messages">Nascondi messaggi entrato/uscito (non si applica ad inviti/ammonimenti/espulsioni)</string>
     <string name="settings_vibrate_on_mention">Vibra quando ti citano</string>
 
     <string name="settings_analytics">Statistiche</string>
-    <string name="settings_opt_out_of_analytics">Rifiuta le statistiche</string>
+    <string name="settings_opt_out_of_analytics">Non contribuire alle statistiche</string>
     <string name="settings_opt_out_of_analytics_summary">Riot raccoglie statistiche d\'uso anonime per consentirci di migliorare l\'applicazione.</string>
 
     <string name="room_settings_room_notifications_title">Notifiche</string>
@@ -863,27 +879,27 @@ Permetti a Riot di accedere ai tuoi contatti?</string>
 	<item quantity="other">%d widget attivi</item>
 </plurals>
 
-    // Widget Integration Manager
+    <!-- Widget Integration Manager -->
     <string name="widget_integration_room_not_visible">La stanza %s non è visibile.</string>
     <string name="settings_labs_matrix_apps">Apps di Matrix</string>
     <string name="settings_labs_native_camera">Usa fotocamera nativa</string>
 
-    // share keys
+    <!-- share keys -->
     <string name="you_added_a_new_device">Hai aggiunto un nuovo dispositivo \'%s\', che sta richiedendo chiavi di cifratura.</string>
     <string name="your_unverified_device_requesting">Il dispositivo non verificato \'%s\' sta richiedendo chiavi di cifratura.</string>
     <string name="start_verification">Inizia la verifica</string>
     <string name="share_without_verifying">Condividi senza verificare</string>
     <string name="ignore_request">Ignora la richiesta</string>
 
-    // conference call
+    <!-- conference call -->
     <string name="conference_call_warning_title">Attenzione!</string>
     <string name="conference_call_warning_message">Le chiamate in conferenza sono in sviluppo e potrebbero essere inaffidabili.</string>
 
-    // slash commands
+    <!-- slash commands -->
     <string name="command_error">Errore di comando</string>
     <string name="unrecognized_command">Comando non riconosciuto: %s</string>
 
-    // notification statuses
+    <!-- notification statuses -->
     <string name="notification_off">Off</string>
     <string name="notification_on">On</string>
     <string name="notification_noisy">Rumoroso</string>
@@ -895,9 +911,8 @@ Permetti a Riot di accedere ai tuoi contatti?</string>
     <string name="community_id">ID della comunità</string>
     <string name="community_id_hint">esempio</string>
 
-    // group details
+    <!-- group details -->
     <string name="group_details_home">Inizio</string>
-    <string name="group_details_people">Persone</string>
     <string name="group_details_rooms">Stanze</string>
     <string name="no_users_placeholder">Nessun utente</string>
 
@@ -929,26 +944,26 @@ Permetti a Riot di accedere ai tuoi contatti?</string>
     <string name="notice_avatar">Avatar notifica</string>
     <string name="receipt_avatar">Avatar ricevuta</string>
     <plurals name="membership_changes">
-	<item quantity="one">1 cambio tra i membri</item>
-	<item quantity="other">%d cambi tra i membri</item>
+	<item quantity="one">1 cambio d\'appartenenza</item>
+	<item quantity="other">%d cambi d\'appartenenza</item>
 </plurals>
 
-    <string name="settings_notification_privacy_warning">Riot.im funziona in secondo piano per tenere privato il contenuto delle notifiche. Puoi cambiare questa opzione per ridurre il consumo di batteria.</string>
-    <string name="settings_notification_privacy">Privacy notifiche</string>
+    <string name="settings_notification_privacy_warning">Riot.im funziona in sottofondo per mantenere privato il contenuto delle notifiche. Puoi cambiare questa opzione per ridurre il consumo della batteria.</string>
+    <string name="settings_notification_privacy">Privacy delle notifiche</string>
     <string name="settings_notification_privacy_normal">Normale</string>
     <string name="settings_notification_privacy_power_saving">Opzioni risparmio energetico</string>
     <string name="settings_notification_privacy_low_detail">Notifiche poco dettagliate</string>
     <string name="settings_notification_privacy_reduced">Privacy ridotta</string>
-    <string name="settings_notification_privacy_need_permission">L\'app richiede l\'autorizzazione di funzionare in secondo piano</string>
-    <string name="settings_notification_privacy_no_permission">L\'app <b>non</b> richiede l\'autorizzazione di funzionare in secondo piano</string>
+    <string name="settings_notification_privacy_need_permission">L\'app richiede il permesso per funzionare in sottofondo</string>
+    <string name="settings_notification_privacy_no_permission">Le app <b>non</b> richiedono il permesso per funzionare in sottofondo</string>
     <string name="settings_notification_privacy_gcm">• Le notifiche vengono inviate via Google Cloud Messaging</string>
     <string name="settings_notification_privacy_metadata">• Le notifiche contengono solo metadati</string>
-    <string name="settings_notification_privacy_secure_message_content">• Il contenuto della notifica è <b>conservato in modo sicuro direttamente dall\'homeserver di Matrix</b></string>
-    <string name="settings_notification_privacy_nosecure_message_content">• Le notifiche contengono <b>metadati e messaggi</b></string>
-    <string name="settings_notification_privacy_message_content_not_shown">• Le notifiche <b>non mostreranno il contenuto dei messaggi</b></string>
+    <string name="settings_notification_privacy_secure_message_content">• Il contenuto del messaggio di una notifica <b>si trova al sicuro direttamente dal server home di Matrix</b></string>
+    <string name="settings_notification_privacy_nosecure_message_content">• Le notifiche contengono <b>dati e metadati sul messaggio</b></string>
+    <string name="settings_notification_privacy_message_content_not_shown">• Le notifiche <b>non mostreranno il contenuto del messaggio</b></string>
 
     <string name="startup_notification_privacy_title">Privacy notifiche</string>
-    <string name="startup_notification_privacy_message">Riot può funzionare in secondo piano per gestire le tue notifiche in modo sicuro e privato (può incidere sulla batteria).</string>
+    <string name="startup_notification_privacy_message">Riot può funzionare in sottofondo per gestire le tue notifiche in modo sicuro e privato (ciò può influenzare la durata della batteria).</string>
     <string name="startup_notification_privacy_button_grant">Concedi l\'autorizzazione</string>
     <string name="startup_notification_privacy_button_other">Scegli un\'altra opzione</string>
 
@@ -959,7 +974,7 @@ Permetti a Riot di accedere ai tuoi contatti?</string>
 
 Aggiungerne qualcuno ora?</string>
 
-    <string name="settings_deactivate_account_section">Disattiva account</string>
+    <string name="settings_deactivate_account_section">Disattiva iscrizione</string>
     <string name="settings_deactivate_my_account">Disattiva il mio account</string>
 
     <string name="settings_opt_in_of_analytics">Invia statistiche di utilizzo</string>
@@ -981,5 +996,29 @@ La visibilità dei messaggi in Matrix è simile alle email. Se dimentichiamo i m
     <string name="deactivate_account_delete_checkbox">Per favore dimenticate tutti i messaggi che ho inviato quando il mio account viene disattivato (Attenzione: gli utenti futuri vedranno un elenco incompleto di conversazioni)</string>
     <string name="deactivate_account_prompt_password">Per continuare, inserisci la tua password:</string>
     <string name="deactivate_account_submit">Disattiva account</string>
+
+<string name="dialog_title_third_party_licences">Licenze di terze parti</string>
+
+    <string name="download">Scarica</string>
+    <string name="speak">Parla</string>
+    <string name="clear">Svuota</string>
+    <string name="e2e_re_request_encryption_key"><u>Richiedi di nuovo le chiavi di cifratura</u> dai tuoi altri dispositivi.</string>
+
+    <string name="e2e_re_request_encryption_key_sent">Richiesta chiave inviata.</string>
+
+    <string name="e2e_re_request_encryption_key_dialog_title">Richiesta inviata</string>
+    <string name="e2e_re_request_encryption_key_dialog_content">Avvia Riot su un altro dispositivo che possa decifrare il messaggio, in modo da inviare le chiavi a questo dispositivo.</string>
+
+    <string name="lock_screen_hint">Digita qui…</string>
+
+    <string name="option_send_voice">Invia voce</string>
+
+    <string name="go_on_with">prosegui con…</string>
+    <string name="error_no_external_application_found">Spiacenti, ma non è stata trovata alcuna applicazione esterna per completare l\'azione.</string>
+
+    <string name="settings_labs_enable_send_voice">Invia messaggio vocale (si richiede un\'applicazione di terze parti per registrare i messaggi vocali)</string>
+
+    <string name="group_details_people">Persone</string>
+    <string name="error_empty_field_your_password">Per favore, inserisci la tua password.</string>
 
 </resources>

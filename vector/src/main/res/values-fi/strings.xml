@@ -2,8 +2,8 @@
 <resources>
     <!-- use to retrieve the supported languages list -->
     <!-- should the same value as the file name -->
-    <string name="resouces_language">fi</string>
-    <string name="resouces_country">FI</string>
+    <string name="resources_language">fi</string>
+    <string name="resources_country_code">FI</string>
 
     <!-- titles -->
     <string name="title_activity_home">Keskustelut</string>
@@ -785,7 +785,7 @@ Voit tehdä sen nyt tai myöhemmin sovelluksen asetuksissa.</string>
     <string name="settings_labs_create_conference_with_jitsi">Luo konferenssipuhelu jitsin avulla</string>
     <string name="widget_delete_message_confirmation">Haluatko varmasti poistaa pienoissovelluksen?</string>
 
-    // Widget Integration Manager
+    <!-- Widget Integration Manager -->
     <string name="widget_integration_unable_to_create">Pienoissovellusta ei voitu luoda.</string>
     <string name="widget_integration_failed_to_send_request">Pyynnön lähetys epäonnistui.</string>
     <string name="widget_integration_positive_power_level">Oikeustason täytyy olla positiivinen luku.</string>
@@ -798,22 +798,22 @@ Voit tehdä sen nyt tai myöhemmin sovelluksen asetuksissa.</string>
     <string name="room_add_matrix_apps">Lisää Matrix sovellus</string>
     <string name="settings_labs_native_camera">Käytä alkuperäistä kamerasovellusta</string>
 
-    // share keys
+    <!-- share keys -->
     <string name="you_added_a_new_device">Lisäsit uuden laitteen \'%s\', joka pyytää salausavaimia.</string>
     <string name="your_unverified_device_requesting">Tunnistamaton laite \'%s\' haluaa salausavaimet.</string>
     <string name="start_verification">Aloita varmennus</string>
     <string name="share_without_verifying">Jaa ilman varmennusta</string>
     <string name="ignore_request">Hylkää pyyntö</string>
 
-    // conference call
+    <!-- conference call -->
     <string name="conference_call_warning_title">Varoitus!</string>
     <string name="conference_call_warning_message">Konferenssipuhelu on yhtä kehitysvaiheessa eikä välttämättä ole luotettava.</string>
 
-    // slash commands
+    <!-- slash commands -->
     <string name="command_error">Virheellinen komento</string>
     <string name="unrecognized_command">Tuntematon komento: %s</string>
 
-    // notification statuses
+    <!-- notification statuses -->
     <string name="notification_off">Off</string>
     <string name="notification_on">On</string>
     <string name="notification_noisy">Äänekäs</string>
@@ -866,7 +866,7 @@ Voit tehdä sen nyt tai myöhemmin sovelluksen asetuksissa.</string>
     <string name="community_id">Yhteisön ID</string>
     <string name="community_id_hint">esimerkki</string>
 
-    // group details
+    <!-- group details -->
     <string name="group_details_home">Koti</string>
     <string name="group_details_people">Ihmiset</string>
     <string name="group_details_rooms">Huoneet</string>

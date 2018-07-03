@@ -3,8 +3,8 @@
     <!-- use to retrieve the supported languages list -->
     <!-- should the same value as the file name -->
 
-    <string name="resouces_language">ca</string>
-    <string name="resouces_country">ES</string>
+    <string name="resources_language">ca</string>
+    <string name="resources_country_code">ES</string>
 
     <!-- theme -->
     <string name="light_theme">Tema clar</string>
@@ -776,7 +776,7 @@
     <string name="settings_labs_create_conference_with_jitsi">Fes conferències amb jitsi</string>
     <string name="widget_delete_message_confirmation">Confirmeu que voleu esborrar el giny?</string>
 
-    // Widget Integration Manager
+    <!-- Widget Integration Manager -->
     <string name="widget_integration_unable_to_create">No s\'ha pogut crear el giny.</string>
     <string name="widget_integration_failed_to_send_request">No s\'ha pogut enviar la sol·licitud.</string>
     <string name="widget_integration_positive_power_level">El nivell de potència ha de ser un enter positiu.</string>
@@ -789,29 +789,29 @@
     <string name="room_add_matrix_apps">Afegeix aplicacions de Matrix</string>
     <string name="settings_labs_native_camera">Utilitza la càmera nativa</string>
 
-    // share keys
+    <!-- share keys -->
     <string name="you_added_a_new_device">El nou dispositiu \'%s\' que heu afegit, sol·licita les claus d\'encriptació.</string>
     <string name="your_unverified_device_requesting">El vostre dispositiu \'%s\' sense verificar, sol·licita les claus d\'encriptació.</string>
     <string name="start_verification">Inicia la verificació</string>
     <string name="share_without_verifying">Comparteix sense verificar</string>
     <string name="ignore_request">Ignora la sol·licitut</string>
 
-    // conference call
+    <!-- conference call -->
     <string name="conference_call_warning_title">Avís!</string>
     <string name="conference_call_warning_message">Les trucades per a conferències estan en desenvolupament i poden no ser fiables.</string>
 
-    // slash commands
+    <!-- slash commands -->
     <string name="command_error">Error de comandament</string>
     <string name="unrecognized_command">Ordre no reconegut: %s</string>
 
-    // notification statuses
+    <!-- notification statuses -->
     <string name="notification_off">Apagat</string>
     <string name="notification_on">Encès</string>
     <string name="notification_noisy">Sorrollós</string>
 
     <string name="encrypted_message">Missatge encriptat</string>
 
-    // groups creation
+    <!-- groups creation -->
     <string name="create">Crea</string>
     <string name="create_community">Crea una comunitat</string>
     <string name="community_name">Nom de la comunitat</string>
@@ -819,7 +819,7 @@
     <string name="community_id">ID de la comunitat</string>
     <string name="community_id_hint">exemple</string>
 
-    // group details
+    <!-- group details -->
     <string name="group_details_home">Inici</string>
     <string name="group_details_people">Usuaris</string>
     <string name="group_details_rooms">Sales</string>
@@ -912,5 +912,8 @@
 	<item quantity="other">%d complements actius</item>
 </plurals>
 
-    // Widget Integration Manager
+    <!-- Widget Integration Manager -->
+    <string name="title_activity_choose_sticker">Envia un adhesiu</string>
+
+    <string name="option_send_sticker">Envia un adhesiu</string>
     </resources>

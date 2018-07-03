@@ -1,6 +1,7 @@
 /*
  * Copyright 2016 OpenMarket Ltd
  * Copyright 2017 Vector Creations Ltd
+ * Copyright 2018 New Vector Ltd
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -147,10 +148,10 @@ public class Contact implements java.io.Serializable {
     private transient Bitmap mThumbnail;
 
     // phone numbers list
-    private final ArrayList<PhoneNumber> mPhoneNumbers = new ArrayList<>();
+    private final List<PhoneNumber> mPhoneNumbers = new ArrayList<>();
 
     // emails list
-    private final ArrayList<String> mEmails = new ArrayList<>();
+    private final List<String> mEmails = new ArrayList<>();
 
     // MXID by medium (email or phone number)
     private final Map<String, MXID> mMXIDsByElement = new HashMap<>();
@@ -335,7 +336,7 @@ public class Contact implements java.io.Serializable {
             return false;
         }
 
-        ArrayList<MXID> matchedMatrixIds = new ArrayList<>();
+        List<MXID> matchedMatrixIds = new ArrayList<>();
 
         for (String email : mEmails) {
             if (email.startsWith(prefix)) {

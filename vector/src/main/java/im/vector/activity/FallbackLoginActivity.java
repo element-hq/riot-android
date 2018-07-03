@@ -17,10 +17,11 @@
 
 package im.vector.activity;
 
-import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.net.http.SslError;
+import android.os.Build;
+import android.support.v7.app.AlertDialog;
 import android.text.TextUtils;
 import android.view.KeyEvent;
 import android.webkit.SslErrorHandler;
@@ -36,6 +37,7 @@ import org.matrix.androidsdk.util.Log;
 
 import java.net.URLDecoder;
 import java.util.HashMap;
+import java.util.Map;
 
 import im.vector.R;
 
@@ -84,7 +86,7 @@ public class FallbackLoginActivity extends RiotAppCompatActivity {
         // clear the cookies must be cleared
         if ((null != cookieManager) && !cookieManager.hasCookies()) {
             launchWebView();
-        } else if (android.os.Build.VERSION.SDK_INT < android.os.Build.VERSION_CODES.LOLLIPOP) {
+        } else if (Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP) {
             try {
                 cookieManager.removeAllCookie();
             } catch (Exception e) {
@@ -115,38 +117,32 @@ public class FallbackLoginActivity extends RiotAppCompatActivity {
                                            SslError error) {
                 final SslErrorHandler fHander = handler;
 
-                AlertDialog.Builder builder = new AlertDialog.Builder(FallbackLoginActivity.this);
-
-                builder.setMessage(R.string.ssl_could_not_verify);
-
-                builder.setPositiveButton(R.string.ssl_trust, new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        fHander.proceed();
-                    }
-                });
-
-                builder.setNegativeButton(R.string.ssl_do_not_trust, new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        fHander.cancel();
-                    }
-                });
-
-                builder.setOnKeyListener(new DialogInterface.OnKeyListener() {
-                    @Override
-                    public boolean onKey(DialogInterface dialog, int keyCode, KeyEvent event) {
-                        if (event.getAction() == KeyEvent.ACTION_UP && keyCode == KeyEvent.KEYCODE_BACK) {
-                            fHander.cancel();
-                            dialog.dismiss();
-                            return true;
-                        }
-                        return false;
-                    }
-                });
-
-                AlertDialog dialog = builder.create();
-                dialog.show();
+                new AlertDialog.Builder(FallbackLoginActivity.this)
+                        .setMessage(R.string.ssl_could_not_verify)
+                        .setPositiveButton(R.string.ssl_trust, new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                fHander.proceed();
+                            }
+                        })
+                        .setNegativeButton(R.string.ssl_do_not_trust, new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                fHander.cancel();
+                            }
+                        })
+                        .setOnKeyListener(new DialogInterface.OnKeyListener() {
+                            @Override
+                            public boolean onKey(DialogInterface dialog, int keyCode, KeyEvent event) {
+                                if (event.getAction() == KeyEvent.ACTION_UP && keyCode == KeyEvent.KEYCODE_BACK) {
+                                    fHander.cancel();
+                                    dialog.dismiss();
+                                    return true;
+                                }
+                                return false;
+                            }
+                        })
+                        .show();
             }
 
             @Override
@@ -154,10 +150,10 @@ public class FallbackLoginActivity extends RiotAppCompatActivity {
                 super.onReceivedError(view, errorCode, description, failingUrl);
 
                 // on error case, close this activity
-                FallbackLoginActivity.this.runOnUiThread(new Runnable() {
+                runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
-                        FallbackLoginActivity.this.finish();
+                        finish();
                     }
                 });
             }
@@ -167,12 +163,16 @@ public class FallbackLoginActivity extends RiotAppCompatActivity {
                 // avoid infinite onPageFinished call
                 if (url.startsWith("http")) {
                     // Generic method to make a bridge between JS and the UIWebView
-                    final String MXCJavascriptSendObjectMessage = "javascript:window.matrixLogin.sendObjectMessage = function(parameters) { var iframe = document.createElement('iframe');  iframe.setAttribute('src', 'js:' + JSON.stringify(parameters));  document.documentElement.appendChild(iframe); iframe.parentNode.removeChild(iframe); iframe = null; };";
+                    final String MXCJavascriptSendObjectMessage = "javascript:window.matrixLogin.sendObjectMessage = function(parameters) { var i" +
+                            "frame = document.createElement('iframe');  iframe.setAttribute('src', 'js:' + JSON.stringify(parameters));  document" +
+                            ".documentElement.appendChild(iframe); iframe.parentNode.removeChild(iframe); iframe = null; };";
 
                     view.loadUrl(MXCJavascriptSendObjectMessage);
 
                     // The function the fallback page calls when the registration is complete
-                    final String MXCJavascriptOnRegistered = "javascript:window.matrixLogin.onLogin = function(homeserverUrl, userId, accessToken) { matrixLogin.sendObjectMessage({ 'action': 'onLogin', 'homeServer': homeserverUrl,'userId': userId,  'accessToken': accessToken  }); };";
+                    final String MXCJavascriptOnRegistered = "javascript:window.matrixLogin.onLogin = function(homeserverUrl, userId, accessToken" +
+                            ") { matrixLogin.sendObjectMessage({ 'action': 'onLogin', 'homeServer': homeserverUrl,'userId': userId,  'accessToken" +
+                            "': accessToken  }); };";
 
                     view.loadUrl(MXCJavascriptOnRegistered);
                 }
@@ -182,7 +182,7 @@ public class FallbackLoginActivity extends RiotAppCompatActivity {
             public boolean shouldOverrideUrlLoading(android.webkit.WebView view, java.lang.String url) {
                 if ((null != url) && url.startsWith("js:")) {
                     String json = url.substring(3);
-                    HashMap<String, Object> serverParams = null;
+                    Map<String, Object> serverParams = null;
 
                     try {
                         // URL decode
@@ -212,7 +212,7 @@ public class FallbackLoginActivity extends RiotAppCompatActivity {
 
                                 // check if the parameters are defined
                                 if ((null != homeServer) && (null != userId) && (null != accessToken)) {
-                                    FallbackLoginActivity.this.runOnUiThread(new Runnable() {
+                                    runOnUiThread(new Runnable() {
                                         @Override
                                         public void run() {
                                             Intent returnIntent = new Intent();
@@ -222,7 +222,7 @@ public class FallbackLoginActivity extends RiotAppCompatActivity {
                                             returnIntent.putExtra("accessToken", accessToken);
                                             setResult(RESULT_OK, returnIntent);
 
-                                            FallbackLoginActivity.this.finish();
+                                            finish();
                                         }
                                     });
                                 }

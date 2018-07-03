@@ -23,6 +23,7 @@ import android.graphics.Bitmap
 import android.os.Build
 import android.support.annotation.CallSuper
 import android.webkit.*
+import androidx.core.widget.toast
 import butterknife.BindView
 import com.google.gson.reflect.TypeToken
 import im.vector.Matrix
@@ -89,7 +90,7 @@ abstract class AbstractWidgetActivity : RiotAppCompatActivity() {
             }
 
             private fun onError(errorMessage: String) {
-                CommonActivityUtils.displayToast(this@AbstractWidgetActivity, errorMessage)
+                toast(errorMessage)
                 finish()
             }
 
@@ -135,7 +136,8 @@ abstract class AbstractWidgetActivity : RiotAppCompatActivity() {
                 }
 
                 override fun onConsoleMessage(consoleMessage: ConsoleMessage): Boolean {
-                    Log.e(LOG_TAG, "## onConsoleMessage() : " + consoleMessage.message() + " line " + consoleMessage.lineNumber() + " source Id " + consoleMessage.sourceId())
+                    Log.e(LOG_TAG, "## onConsoleMessage() : " + consoleMessage.message()
+                            + " line " + consoleMessage.lineNumber() + " source Id " + consoleMessage.sourceId())
                     return super.onConsoleMessage(consoleMessage)
                 }
             }
@@ -440,7 +442,7 @@ abstract class AbstractWidgetActivity : RiotAppCompatActivity() {
                                                private val mDescription: String) :
             ApiCallback<T> {
 
-        override fun onSuccess(info: T) {
+        override fun onSuccess(info: T?) {
             Log.d(LOG_TAG, "$mDescription succeeds")
             sendSuccess(mEventData)
         }

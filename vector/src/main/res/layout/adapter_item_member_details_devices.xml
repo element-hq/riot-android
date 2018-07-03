@@ -3,6 +3,7 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    xmlns:tools="http://schemas.android.com/tools"
     android:background="?attr/riot_primary_background_color">
 
     <TextView
@@ -10,7 +11,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginLeft="16dp"
-        android:text="device name.." />
+        tools:text="device name.." />
 
     <TextView
         android:id="@+id/device_id"
@@ -19,7 +20,7 @@
         android:layout_below="@+id/device_name"
         android:layout_marginLeft="16dp"
         android:layout_marginTop="0dp"
-        android:text="device id.." />
+        tools:text="device id.." />
 
     <ImageView
         android:id="@+id/device_e2e_icon"

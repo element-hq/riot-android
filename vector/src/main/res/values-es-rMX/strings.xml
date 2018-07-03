@@ -2,8 +2,8 @@
 <resources>
     <!-- use to retrieve the supported languages list -->
     <!-- should the same value as the file name -->
-    <string name="resouces_language">es</string>
-    <string name="resouces_country">MX</string>
+    <string name="resources_language">es</string>
+    <string name="resources_country_code">MX</string>
 
     <!-- titles -->
     <string name="title_activity_home">Mensajes</string>

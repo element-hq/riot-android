@@ -2,8 +2,8 @@
 <resources>
     <!-- use to retrieve the supported languages list -->
     <!-- should the same value as the file name -->
-    <string name="resouces_language">el</string>
-    <string name="resouces_country">ΕL</string>
+    <string name="resources_language">el</string>
+    <string name="resources_country_code">ΕL</string>
 
 
     <string name="cancel">Ακύρωση</string>
@@ -56,4 +56,6 @@
     <string name="loading">Φόρτωση...</string>
 
     <string name="save">Αποθήκευση</string>
+    <string name="encrypted_message">Κρυπτογραφημένο μήνυμα</string>
+
     </resources>

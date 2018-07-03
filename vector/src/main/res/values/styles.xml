@@ -288,7 +288,7 @@
         <item name="android:textColorHint">?attr/activity_bottom_gradient_color</item>
     </style>
 
-    <style name="DirectoryPickerTheme" parent="AppTheme.NoActionBar"></style>
+    <style name="DirectoryPickerTheme" parent="AppTheme.NoActionBar"/>
 
     <!-- searches activity -->
     <style name="SearchesAppTheme" parent="AppTheme">
@@ -465,7 +465,7 @@
         <item name="android:textColorHint">?attr/activity_bottom_gradient_color</item>
     </style>
 
-    <style name="DirectoryPickerTheme.Dark" parent="AppTheme.NoActionBar.Dark"></style>
+    <style name="DirectoryPickerTheme.Dark" parent="AppTheme.NoActionBar.Dark"/>
 
     <style name="SearchesAppTheme.Dark" parent="AppTheme.Dark">
         <!-- custom action bar -->
@@ -505,7 +505,7 @@
 
         <item name="android:listDivider">@null</item>
     </style>
-    
+
     <!--  ************************  Black theme  **************************** -->
 
     <style name="AppTheme.NoActionBar.Black" parent="@style/Theme.Vector.Black">
@@ -620,7 +620,7 @@
         <item name="android:textColorHint">?attr/activity_bottom_gradient_color</item>
     </style>
 
-    <style name="DirectoryPickerTheme.Black" parent="AppTheme.NoActionBar.Black"></style>
+    <style name="DirectoryPickerTheme.Black" parent="AppTheme.NoActionBar.Black"/>
 
     <style name="SearchesAppTheme.Black" parent="AppTheme.Black">
         <!-- custom action bar -->
@@ -675,4 +675,14 @@
     </style>
     <style name="Vector_Lock_Black" parent="Vector_Lock_Dark">
     </style>
+
+    <style name="Floating_Actions_Menu">
+        <item name="android:background">@drawable/vector_background_fab_label</item>
+        <item name="android:textColor">?attr/riot_primary_text_color</item>
+    </style>
+
+    <style name="Floating_Actions_Menu.Light">
+        <item name="android:background">@drawable/vector_background_fab_label_light</item>
+    </style>
+
 </resources>

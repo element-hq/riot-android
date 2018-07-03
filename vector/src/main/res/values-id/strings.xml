@@ -1,7 +1,7 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <resources>
-    <string name="resouces_language">id</string>
-    <string name="resouces_country">ID</string>
+    <string name="resources_language">id</string>
+    <string name="resources_country_code">ID</string>
 
     <string name="title_activity_home">Pesan</string>
     <string name="title_activity_room">Ruang</string>

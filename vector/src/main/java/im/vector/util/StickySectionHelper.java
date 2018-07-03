@@ -1,5 +1,6 @@
 /*
  * Copyright 2017 Vector Creations Ltd
+ * Copyright 2018 New Vector Ltd
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,13 +19,12 @@ package im.vector.util;
 
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-
-import org.matrix.androidsdk.util.Log;
-
 import android.util.Pair;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewParent;
+
+import org.matrix.androidsdk.util.Log;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -190,7 +190,8 @@ public class StickySectionHelper extends RecyclerView.OnScrollListener implement
                 SectionView current = sectionViews.get(i).second;
                 //SectionView next = i + 1 < sectionViews.size() ? sectionViews.get(i + 1).second : null;
 
-                current.measure(View.MeasureSpec.makeMeasureSpec(0, View.MeasureSpec.UNSPECIFIED), View.MeasureSpec.makeMeasureSpec(0, View.MeasureSpec.UNSPECIFIED));
+                current.measure(View.MeasureSpec.makeMeasureSpec(0, View.MeasureSpec.UNSPECIFIED),
+                        View.MeasureSpec.makeMeasureSpec(0, View.MeasureSpec.UNSPECIFIED));
                 int sectionHeight = current.getStickyHeaderHeight();
                 if (current.getSection().shouldBeHidden()) {
                     current.setVisibility(View.GONE);
@@ -211,7 +212,8 @@ public class StickySectionHelper extends RecyclerView.OnScrollListener implement
                 SectionView current = sectionViews.get(i).second;
                 //SectionView next = i + 1 < sectionViews.size() ? sectionViews.get(i + 1).second : null;
 
-                current.measure(View.MeasureSpec.makeMeasureSpec(0, View.MeasureSpec.UNSPECIFIED), View.MeasureSpec.makeMeasureSpec(0, View.MeasureSpec.UNSPECIFIED));
+                current.measure(View.MeasureSpec.makeMeasureSpec(0, View.MeasureSpec.UNSPECIFIED),
+                        View.MeasureSpec.makeMeasureSpec(0, View.MeasureSpec.UNSPECIFIED));
                 int sectionHeight = current.getStickyHeaderHeight();
                 current.setFooterTop(mFooterTop - current.getStickyHeaderHeight());
                 current.setFooterBottom(mFooterTop);

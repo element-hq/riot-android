@@ -19,13 +19,13 @@ package im.vector.fragments;
 
 import android.annotation.SuppressLint;
 import android.app.Activity;
-import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
 import android.text.TextWatcher;
@@ -62,6 +62,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Timer;
 import java.util.TimerTask;
 
@@ -93,7 +94,7 @@ public class VectorRoomDetailsMembersFragment extends VectorBaseFragment {
     private View mProgressView;
     private VectorRoomDetailsMembersAdapter mAdapter;
     private ExpandableListView mParticipantsListView;
-    private HashMap<Integer, Boolean> mIsListViewGroupExpandedMap;
+    private Map<Integer, Boolean> mIsListViewGroupExpandedMap;
 
     private boolean mIsMultiSelectionMode;
     private MenuItem mRemoveMembersMenuItem;
@@ -158,7 +159,8 @@ public class VectorRoomDetailsMembersFragment extends VectorBaseFragment {
     };
 
     //  search result listener
-    private final VectorRoomDetailsMembersAdapter.OnRoomMembersSearchListener mSearchListener = new VectorRoomDetailsMembersAdapter.OnRoomMembersSearchListener() {
+    private final VectorRoomDetailsMembersAdapter.OnRoomMembersSearchListener mSearchListener
+            = new VectorRoomDetailsMembersAdapter.OnRoomMembersSearchListener() {
         @Override
         public void onSearchEnd(final int aSearchCountResult, final boolean aIsSearchPerformed) {
             mParticipantsListView.post(new Runnable() {
@@ -392,7 +394,7 @@ public class VectorRoomDetailsMembersFragment extends VectorBaseFragment {
     @Override
     public void onSaveInstanceState(Bundle aOutState) {
         super.onSaveInstanceState(aOutState);
-        aOutState.putSerializable(CommonActivityUtils.KEY_GROUPS_EXPANDED_STATE, mIsListViewGroupExpandedMap);
+        aOutState.putSerializable(CommonActivityUtils.KEY_GROUPS_EXPANDED_STATE, (HashMap) mIsListViewGroupExpandedMap);
         aOutState.putString(CommonActivityUtils.KEY_SEARCH_PATTERN, mPatternValue);
         Log.d("RoomDetailsMembersFragment", "## onSaveInstanceState()");
     }
@@ -490,7 +492,7 @@ public class VectorRoomDetailsMembersFragment extends VectorBaseFragment {
 
         // Inflate the menu; this adds items to the action bar if it is present.
         getActivity().getMenuInflater().inflate(R.menu.vector_room_details_add_people, menu);
-        CommonActivityUtils.tintMenuIcons(menu, ThemeUtils.getColor(getContext(), R.attr.icon_tint_on_dark_action_bar_color));
+        ThemeUtils.INSTANCE.tintMenuIcons(menu, ThemeUtils.INSTANCE.getColor(getContext(), R.attr.icon_tint_on_dark_action_bar_color));
 
         mRemoveMembersMenuItem = menu.findItem(R.id.ic_action_room_details_delete);
         mSwitchDeletionMenuItem = menu.findItem(R.id.ic_action_room_details_edition_mode);
@@ -673,7 +675,7 @@ public class VectorRoomDetailsMembersFragment extends VectorBaseFragment {
         mRemoveMembersMenuItem.setEnabled(true);
         mSwitchDeletionMenuItem.setEnabled(true);
 
-        setActivityTitle(this.getResources().getString(R.string.room_details_title));
+        setActivityTitle(getString(R.string.room_details_title));
     }
 
     /**
@@ -830,7 +832,8 @@ public class VectorRoomDetailsMembersFragment extends VectorBaseFragment {
 
         mProgressView = mViewHierarchy.findViewById(R.id.add_participants_progress_view);
         mParticipantsListView = mViewHierarchy.findViewById(R.id.room_details_members_exp_list_view);
-        mAdapter = new VectorRoomDetailsMembersAdapter(getActivity(), R.layout.adapter_item_vector_add_participants, R.layout.adapter_item_vector_recent_header, mSession, mRoom.getRoomId(), mxMediasCache);
+        mAdapter = new VectorRoomDetailsMembersAdapter(getActivity(),
+                R.layout.adapter_item_vector_add_participants, R.layout.adapter_item_vector_recent_header, mSession, mRoom.getRoomId(), mxMediasCache);
         mParticipantsListView.setAdapter(mAdapter);
         // the group indicator is managed in the adapter (group view creation)
         mParticipantsListView.setGroupIndicator(null);
@@ -860,10 +863,10 @@ public class VectorRoomDetailsMembersFragment extends VectorBaseFragment {
 
             @Override
             public void onSelectUserId(String userId) {
-                ArrayList<String> userIds = mAdapter.getSelectedUserIds();
+                List<String> userIds = mAdapter.getSelectedUserIds();
 
                 if (0 != userIds.size()) {
-                    setActivityTitle(userIds.size() + " " + getActivity().getResources().getString(R.string.room_details_selected));
+                    setActivityTitle(userIds.size() + " " + getString(R.string.room_details_selected));
                 } else {
                     resetActivityTitle();
                 }
@@ -871,12 +874,10 @@ public class VectorRoomDetailsMembersFragment extends VectorBaseFragment {
 
             @Override
             public void onRemoveClick(final ParticipantAdapterItem participantItem) {
-                String text = getActivity().getString(R.string.room_participants_remove_prompt_msg, participantItem.mDisplayName);
-
                 // The user is trying to leave with unsaved changes. Warn about that
                 new AlertDialog.Builder(getActivity())
                         .setTitle(R.string.dialog_title_confirmation)
-                        .setMessage(text)
+                        .setMessage(getString(R.string.room_participants_remove_prompt_msg, participantItem.mDisplayName))
                         .setPositiveButton(R.string.remove, new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
@@ -896,7 +897,6 @@ public class VectorRoomDetailsMembersFragment extends VectorBaseFragment {
                                 dialog.dismiss();
                             }
                         })
-                        .create()
                         .show();
             }
 
@@ -905,7 +905,7 @@ public class VectorRoomDetailsMembersFragment extends VectorBaseFragment {
                 // The user is trying to leave with unsaved changes. Warn about that
                 new AlertDialog.Builder(getActivity())
                         .setTitle(R.string.room_participants_leave_prompt_title)
-                        .setMessage(getActivity().getString(R.string.room_participants_leave_prompt_msg))
+                        .setMessage(R.string.room_participants_leave_prompt_msg)
                         .setPositiveButton(R.string.leave, new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
@@ -973,7 +973,6 @@ public class VectorRoomDetailsMembersFragment extends VectorBaseFragment {
                                 dialog.dismiss();
                             }
                         })
-                        .create()
                         .show();
             }
 

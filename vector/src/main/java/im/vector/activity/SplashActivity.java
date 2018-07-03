@@ -20,6 +20,7 @@ package im.vector.activity;
 import android.content.Intent;
 import android.os.Bundle;
 
+import org.jetbrains.annotations.NotNull;
 import org.matrix.androidsdk.MXSession;
 import org.matrix.androidsdk.listeners.IMXEventListener;
 import org.matrix.androidsdk.listeners.MXEventListener;
@@ -28,6 +29,8 @@ import org.matrix.androidsdk.util.Log;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 import im.vector.ErrorListener;
 import im.vector.Matrix;
@@ -36,6 +39,7 @@ import im.vector.VectorApp;
 import im.vector.gcm.GcmRegistrationManager;
 import im.vector.receiver.VectorUniversalLinkReceiver;
 import im.vector.services.EventStreamService;
+import kotlin.Pair;
 
 /**
  * SplashActivity displays a splash while loading and inittializing the client.
@@ -46,8 +50,8 @@ public class SplashActivity extends MXCActionBarActivity {
     public static final String EXTRA_MATRIX_ID = "EXTRA_MATRIX_ID";
     public static final String EXTRA_ROOM_ID = "EXTRA_ROOM_ID";
 
-    private HashMap<MXSession, IMXEventListener> mListeners;
-    private HashMap<MXSession, IMXEventListener> mDoneListeners;
+    private Map<MXSession, IMXEventListener> mListeners;
+    private Map<MXSession, IMXEventListener> mDoneListeners;
 
     private final long mLaunchTime = System.currentTimeMillis();
 
@@ -56,7 +60,7 @@ public class SplashActivity extends MXCActionBarActivity {
      */
     private boolean hasCorruptedStore() {
         boolean hasCorruptedStore = false;
-        ArrayList<MXSession> sessions = Matrix.getMXSessions(this);
+        List<MXSession> sessions = Matrix.getMXSessions(this);
 
         for (MXSession session : sessions) {
             if (session.isAlive()) {
@@ -94,18 +98,24 @@ public class SplashActivity extends MXCActionBarActivity {
             }
 
             if (getIntent().hasExtra(EXTRA_ROOM_ID) && getIntent().hasExtra(EXTRA_MATRIX_ID)) {
-                HashMap<String, Object> params = new HashMap<>();
+                Map<String, Object> params = new HashMap<>();
 
                 params.put(VectorRoomActivity.EXTRA_MATRIX_ID, getIntent().getStringExtra(EXTRA_MATRIX_ID));
                 params.put(VectorRoomActivity.EXTRA_ROOM_ID, getIntent().getStringExtra(EXTRA_ROOM_ID));
-                intent.putExtra(VectorHomeActivity.EXTRA_JUMP_TO_ROOM_PARAMS, params);
+                intent.putExtra(VectorHomeActivity.EXTRA_JUMP_TO_ROOM_PARAMS, (HashMap) params);
             }
 
             startActivity(intent);
-            SplashActivity.this.finish();
+            finish();
         } else {
             CommonActivityUtils.logout(this);
         }
+    }
+
+    @NotNull
+    @Override
+    public Pair getOtherThemes() {
+        return new Pair(R.style.AppTheme_NoActionBar_Dark, R.style.AppTheme_NoActionBar_Black);
     }
 
     @Override
@@ -126,7 +136,7 @@ public class SplashActivity extends MXCActionBarActivity {
         mListeners = new HashMap<>();
         mDoneListeners = new HashMap<>();
 
-        ArrayList<String> matrixIds = new ArrayList<>();
+        List<String> matrixIds = new ArrayList<>();
 
         for (final MXSession session : sessions) {
             final MXSession fSession = session;

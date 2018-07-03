@@ -1,5 +1,6 @@
 /*
  * Copyright 2016 OpenMarket Ltd
+ * Copyright 2018 New Vector Ltd
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,9 +18,6 @@
 package im.vector.adapters;
 
 import android.content.Context;
-
-import org.matrix.androidsdk.util.Log;
-
 import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -31,6 +29,7 @@ import android.widget.TextView;
 
 import org.matrix.androidsdk.MXSession;
 import org.matrix.androidsdk.crypto.data.MXDeviceInfo;
+import org.matrix.androidsdk.util.Log;
 
 import im.vector.R;
 
@@ -115,8 +114,8 @@ public class VectorMemberDetailsDevicesAdapter extends ArrayAdapter<MXDeviceInfo
             }
 
             if (null != deviceInfo) {
-                this.remove(deviceInfo);
-                this.insert(deviceInfo, 0);
+                remove(deviceInfo);
+                insert(deviceInfo, 0);
             }
 
             setNotifyOnChange(true);

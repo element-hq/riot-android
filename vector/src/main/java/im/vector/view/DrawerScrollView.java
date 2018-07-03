@@ -1,5 +1,6 @@
 /*
  * Copyright 2017 Vector Creations Ltd
+ * Copyright 2018 New Vector Ltd
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -159,11 +160,13 @@ public class DrawerScrollView extends ScrollView {
         for (View v : mHeaders) {
             int viewTop = getTopForViewRelativeOnlyChild(v) - getScrollY() + (clippingToPadding ? 0 : getPaddingTop());
             if (viewTop <= 0) {
-                if (headerThatShouldStick == null || viewTop > (getTopForViewRelativeOnlyChild(headerThatShouldStick) - getScrollY() + (clippingToPadding ? 0 : getPaddingTop()))) {
+                if (headerThatShouldStick == null
+                        || viewTop > (getTopForViewRelativeOnlyChild(headerThatShouldStick) - getScrollY() + (clippingToPadding ? 0 : getPaddingTop()))) {
                     headerThatShouldStick = v;
                 }
             } else {
-                if (approachingView == null || viewTop < (getTopForViewRelativeOnlyChild(approachingView) - getScrollY() + (clippingToPadding ? 0 : getPaddingTop()))) {
+                if (approachingView == null
+                        || viewTop < (getTopForViewRelativeOnlyChild(approachingView) - getScrollY() + (clippingToPadding ? 0 : getPaddingTop()))) {
                     approachingView = v;
                 }
             }
@@ -172,7 +175,11 @@ public class DrawerScrollView extends ScrollView {
         stopStickingCurrentlyStickingViews();
 
         if (headerThatShouldStick != null) {
-            stickyViewTopOffset = approachingView == null ? 0 : Math.min(0, getTopForViewRelativeOnlyChild(approachingView) - getScrollY() + (clippingToPadding ? 0 : getPaddingTop()) - headerThatShouldStick.getHeight());
+            stickyViewTopOffset = approachingView == null ? 0
+                    : Math.min(0,
+                    getTopForViewRelativeOnlyChild(approachingView)
+                            - getScrollY()
+                            + (clippingToPadding ? 0 : getPaddingTop()) - headerThatShouldStick.getHeight());
             if (headerThatShouldStick != mCurrentHeader) {
                 // only compute the left offset when we start sticking.
                 stickyViewLeftOffset = getLeftForViewRelativeOnlyChild(headerThatShouldStick);

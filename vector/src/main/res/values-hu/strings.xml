@@ -2,8 +2,8 @@
 <resources>
     <!-- use to retrieve the supported languages list -->
     <!-- should the same value as the file name -->
-    <string name="resouces_language">hu</string>
-    <string name="resouces_country">HU</string>
+    <string name="resources_language">hu</string>
+    <string name="resources_country_code">HU</string>
 
     <string name="title_activity_home">Üzenetek</string>
     <string name="title_activity_room">Szoba</string>
@@ -722,7 +722,7 @@ Ismeretlen eszközök:</string>
     <string name="settings_labs_create_conference_with_jitsi">Hozz létre konferencia hívást a jitsi segítségével</string>
     <string name="widget_delete_message_confirmation">Biztos vagy benne hogy törölni akarod ezt a kisalkalmazást?</string>
 
-    // Widget Integration Manager
+    <!-- Widget Integration Manager -->
     <string name="widget_integration_unable_to_create">Kisalkalmazás létrehozása sikertelen.</string>
     <string name="widget_integration_failed_to_send_request">Felkérés elküldése sikertelen.</string>
     <string name="widget_integration_positive_power_level">Az erősségi szintnek egy pozitív egész számnak kell lennie.</string>
@@ -758,17 +758,17 @@ Ismeretlen eszközök:</string>
 
     <string name="settings_labs_native_camera">Beépített kamera használata</string>
 
-    // share keys
+    <!-- share keys -->
     <string name="title_activity_bug_report">Hiba jelentés</string>
 
     <string name="conference_call_warning_title">Figyelmeztetés!</string>
     <string name="conference_call_warning_message">A konferenciabeszélgetés fejlesztés alatt van, elképzelhető, hogy nem működik még megfelelően.</string>
 
-    // slash commands
+    <!-- slash commands -->
     <string name="command_error">Utasítás hiba</string>
     <string name="unrecognized_command">Ismeretlen utasítás: %s</string>
 
-    // notification statuses
+    <!-- notification statuses -->
     <string name="notification_off">Ki</string>
     <string name="notification_on">Be</string>
     <string name="notification_noisy">Hangos</string>
@@ -818,7 +818,7 @@ Ismeretlen eszközök:</string>
     <string name="community_id">Közösség azonosító</string>
     <string name="community_id_hint">példa</string>
 
-    // group details
+    <!-- group details -->
     <string name="group_details_rooms">Szobák</string>
     <string name="group_details_people">Emberek</string>
     <string name="no_users_placeholder">Nincsenek felhasználók</string>
@@ -903,7 +903,7 @@ Ismeretlen eszközök:</string>
 	<item quantity="other">%d aktív kisalkalmazás</item>
 </plurals>
 
-    // Widget Integration Manager
+    <!-- Widget Integration Manager -->
     <string name="avatar">Avatar</string>
 
 <string name="receipt_avatar">Visszaigazolási avatar</string>
@@ -956,5 +956,28 @@ Matrixban az üzenetek láthatósága hasonlít az e-mailre. Az üzenet törlés
     <string name="deactivate_account_delete_checkbox">Kérlek töröld az elküldött üzeneteimet a fiók felfüggesztésekor (Figyelem: emiatt a felhasználók részleges beszélgetéseket látnak majd)</string>
     <string name="deactivate_account_prompt_password">A folytatáshoz add meg a jelszavadat:</string>
     <string name="deactivate_account_submit">Fiók felfüggesztése</string>
+
+<string name="dialog_title_third_party_licences">Licencek harmadik féltől</string>
+
+    <string name="download">Letöltés</string>
+    <string name="speak">Mond</string>
+    <string name="clear">Töröl</string>
+    <string name="e2e_re_request_encryption_key">Végponttól végpontig titkosításhoz használt <u>kulcsok újrakérése</u> a többi eszközödtől.</string>
+
+    <string name="e2e_re_request_encryption_key_sent">Kulcs újrakérve.</string>
+
+    <string name="e2e_re_request_encryption_key_dialog_title">Kérés elküldve</string>
+    <string name="e2e_re_request_encryption_key_dialog_content">Kérlek indítsd el a Riotot egy olyan eszközön ami ezt az üzenetet vissza tudja fejteni, hogy elküldhesse a kulcsot erre az eszközre.</string>
+
+    <string name="lock_screen_hint">Ide írj…</string>
+
+    <string name="option_send_voice">Hang üzenet küldése</string>
+
+    <string name="go_on_with">tovább ezzel…</string>
+    <string name="error_no_external_application_found">Sajnálom, nem található külső alkalmazás a művelethez.</string>
+
+    <string name="settings_labs_enable_send_voice">Hang üzenet küldése (külső alkalmazásra van szükség a hang üzenet felvételéhez)</string>
+
+    <string name="error_empty_field_your_password">Kérlek add meg a jelszavad.</string>
 
 </resources>

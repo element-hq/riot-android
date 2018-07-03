@@ -1,6 +1,6 @@
 <?xml version='1.0' encoding='UTF-8'?>
-<resources><string name="resouces_language">is</string>
-    <string name="resouces_country">IS</string>
+<resources><string name="resources_language">is</string>
+    <string name="resources_country_code">IS</string>
 
     <string name="light_theme">Ljóst þema</string>
     <string name="dark_theme">Dökkt þema</string>
@@ -434,7 +434,7 @@
 	<item quantity="other">%d virkir viðmótshlutar</item>
 </plurals>
 
-    // Widget Integration Manager
+    <!-- Widget Integration Manager -->
     <string name="widget_integration_must_be_in_room">Þú ert ekki á þessari spjallrás.</string>
     <string name="widget_integration_no_permission_in_room">Þú hefur ekki réttindi til þess að gera þetta á þessari spjallrás.</string>
     <string name="widget_integration_room_not_visible">Spjallrásin %s er ekki sýnileg.</string>
@@ -442,19 +442,19 @@
     <string name="command_error">Skipanavilla</string>
     <string name="unrecognized_command">Óþekkt skipun: %s</string>
 
-    // notification statuses
+    <!-- notification statuses -->
     <string name="notification_off">Slökkt</string>
     <string name="notification_on">Kveikt</string>
     <string name="notification_noisy">Hávært</string>
 
     <string name="encrypted_message">Dulrituð skilaboð</string>
 
-    // groups creation
+    <!-- groups creation -->
     <string name="create">Búa til</string>
     <string name="community_name_hint">Dæmi</string>
     <string name="community_id_hint">dæmi</string>
 
-    // group details
+    <!-- group details -->
     <string name="group_details_home">Heim</string>
     <string name="group_details_people">Fólk</string>
     <string name="group_details_rooms">Spjallrásir</string>
@@ -517,7 +517,7 @@
     <string name="settings_call_invitations">Boð um samtal</string>
     <string name="settings_labs_native_camera">Nota innbyggða myndavél</string>
 
-    // share keys
+    <!-- share keys -->
     <string name="create_community">Búa til samfélag</string>
     <string name="community_name">Heiti samfélags</string>
     <string name="community_id">Auðkenni samfélags</string>
@@ -562,7 +562,7 @@
     <string name="share_without_verifying">Deila án sannvottunar</string>
     <string name="ignore_request">Hunsa beiðni</string>
 
-    // conference call
+    <!-- conference call -->
     <string name="has_been_kicked">Þér hefur verið sparkað úr %1$s af %2$s</string>
     <string name="has_been_banned">Þú hefur verið settur í bann á %1$s af %2$s</string>
     <string name="room_settings_labs_pref_title">Tilraunir</string>
@@ -787,7 +787,7 @@ Ertu alveg viss?</string>
     <string name="your_unverified_device_requesting">ósannvottaða tækið þitt \'%s\' er að krefjast dulritunarlykla.</string>
     <string name="conference_call_warning_message">Símafundir eru í þróun og gætu verið óáreiðanlegir.</string>
 
-    // slash commands
+    <!-- slash commands -->
     <string name="group_no_long_description">Kerfisstjóri samfélagsins hefur ekki gefið upp ítarlega lýsingu fyrir þetta samfélag.</string>
 
     <string name="directory_server_type_homeserver">Skrifaðu heimanetþjón til að telja upp opinberar spjallrásir á</string>

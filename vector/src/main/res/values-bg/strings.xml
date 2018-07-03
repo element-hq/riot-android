@@ -1,9 +1,9 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <resources><string name="encrypted_message">Шифровано съобщение</string>
 
-    // groups creation
-    <string name="resouces_language">bg</string>
-    <string name="resouces_country">BG</string>
+    <!-- groups creation -->
+    <string name="resources_language">bg</string>
+    <string name="resources_country_code">BG</string>
 
     <string name="light_theme">Светла тема</string>
     <string name="dark_theme">Тъмна тема</string>
@@ -716,7 +716,7 @@
 	<item quantity="other">%d активни приспособления</item>
 </plurals>
 
-    // Widget Integration Manager
+    <!-- Widget Integration Manager -->
     <string name="widget_integration_unable_to_create">Неуспешно създаване на приспособление.</string>
     <string name="widget_integration_failed_to_send_request">Неуспешно изпращане на заявката.</string>
     <string name="widget_integration_positive_power_level">Нивото на достъп трябва да бъде позитивно число.</string>
@@ -841,22 +841,22 @@
 
     <string name="settings_labs_native_camera">Използване на камерата на телефона</string>
 
-    // share keys
+    <!-- share keys -->
     <string name="you_added_a_new_device">Добавихте ново устройство \'%s\', което изисква ключове за шифроване.</string>
     <string name="your_unverified_device_requesting">Вашето непотвърдено устройство \'%s\' изисква ключове за шифроване.</string>
     <string name="start_verification">Започни потвърждението</string>
     <string name="share_without_verifying">Сподели без потвърждение</string>
     <string name="ignore_request">Игнорирай поканата</string>
 
-    // conference call
+    <!-- conference call -->
     <string name="conference_call_warning_title">Внимание!</string>
     <string name="conference_call_warning_message">Груповите разговори са в процес на разработка и не са надеждни.</string>
 
-    // slash commands
+    <!-- slash commands -->
     <string name="command_error">Грешка в командата</string>
     <string name="unrecognized_command">Неразпозната команда: %s</string>
 
-    // notification statuses
+    <!-- notification statuses -->
     <string name="notification_off">Изключено</string>
     <string name="notification_on">Включено</string>
     <string name="notification_noisy">Шумно</string>
@@ -868,7 +868,7 @@
     <string name="community_id">ID на общност</string>
     <string name="community_id_hint">пример</string>
 
-    // group details
+    <!-- group details -->
     <string name="group_details_home">Начало</string>
     <string name="group_details_people">Хора</string>
     <string name="group_details_rooms">Стаи</string>
@@ -941,5 +941,28 @@
     <string name="deactivate_account_delete_checkbox">Моля, забравете всички изпратени от мен съобщения, когато акаунта ми се деактивира (Внимание: това ще направи бъдещите потребители да имат само частичен поглед върху кореспонденцията)</string>
     <string name="deactivate_account_prompt_password">За да продължите, моля въведете паролата си:</string>
     <string name="deactivate_account_submit">Деактивирай акаунта</string>
+
+<string name="dialog_title_third_party_licences">Лицензи от трети страни</string>
+
+    <string name="download">Изтегли</string>
+    <string name="speak">Говори</string>
+    <string name="clear">Изчисти</string>
+    <string name="e2e_re_request_encryption_key"><u>Изисквай повторно ключове за шифроване</u> от другите ми устройства.</string>
+
+    <string name="e2e_re_request_encryption_key_sent">Заявката за ключове беше изпратена.</string>
+
+    <string name="e2e_re_request_encryption_key_dialog_title">Изпратена заявка</string>
+    <string name="e2e_re_request_encryption_key_dialog_content">Моля стартирайте Riot на друго устройство можещо да разшифрова съобщението, за да може то да изпрати ключовете до това устройство.</string>
+
+    <string name="lock_screen_hint">Пишете тук…</string>
+
+    <string name="option_send_voice">Изпрати гласово съобщение</string>
+
+    <string name="go_on_with">продължете с…</string>
+    <string name="error_no_external_application_found">Съжаляваме, не е намерено външно приложение, което да извърши това действие.</string>
+
+    <string name="settings_labs_enable_send_voice">Изпращане на гласови съобщения (изисква външно приложение записващо звукови съобщения)</string>
+
+    <string name="error_empty_field_your_password">Моля, въведете паролата си.</string>
 
 </resources>

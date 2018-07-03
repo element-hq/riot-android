@@ -2,8 +2,8 @@
 <resources>
     <!-- use to retrieve the supported languages list -->
     <!-- should the same value as the file name -->
-    <string name="resouces_language">fr</string>
-    <string name="resouces_country">FR</string>
+    <string name="resources_language">fr</string>
+    <string name="resources_country_code">FR</string>
 
     <string name="title_activity_home">Messages</string>
     <string name="title_activity_settings">Paramètres</string>
@@ -727,7 +727,7 @@ Appareils inconnus :</string>
     <string name="settings_labs_create_conference_with_jitsi">Créer des appels en téléconférence avec jitsi</string>
     <string name="widget_delete_message_confirmation">Voulez-vous vraiment supprimer ce widget ?</string>
 
-    // Widget Integration Manager
+    <!-- Widget Integration Manager -->
     <string name="widget_integration_unable_to_create">Impossible de créer le widget.</string>
     <string name="widget_integration_failed_to_send_request">Échec de l\'envoi de la requête.</string>
     <string name="widget_integration_positive_power_level">Le rang doit être un entier positif.</string>
@@ -758,17 +758,17 @@ Appareils inconnus :</string>
     <string name="settings_opt_out_of_analytics_summary">Riot collecte des données anonymes pour nous permettre d\'améliorer l\'application.</string>
     <string name="settings_labs_native_camera">Utiliser la caméra native</string>
 
-    // share keys
+    <!-- share keys -->
     <string name="title_activity_bug_report">Rapport d\'erreur</string>
 
     <string name="conference_call_warning_title">Attention !</string>
     <string name="conference_call_warning_message">L\'appel en téléconférence est en cours de développement et peut ne pas être fiable.</string>
 
-    // slash commands
+    <!-- slash commands -->
     <string name="command_error">Erreur de commande</string>
     <string name="unrecognized_command">Commande non reconnue : %s</string>
 
-    // notification statuses
+    <!-- notification statuses -->
     <string name="notification_off">Désactivé</string>
     <string name="notification_on">Activé</string>
     <string name="notification_noisy">Notification sonore</string>
@@ -820,7 +820,7 @@ Appareils inconnus :</string>
     <string name="community_id">Identifiant de communauté</string>
     <string name="community_id_hint">Exemple</string>
 
-    // group details
+    <!-- group details -->
     <string name="group_details_home">Accueil</string>
     <string name="group_details_people">Personnes</string>
     <string name="group_details_rooms">Salons</string>
@@ -897,7 +897,7 @@ Appareils inconnus :</string>
 	<item quantity="other">%d gadgets actifs</item>
 </plurals>
 
-    // Widget Integration Manager
+    <!-- Widget Integration Manager -->
     <string name="avatar">Avatar</string>
 
 <plurals name="membership_changes">
@@ -956,5 +956,28 @@ La visibilité des messages dans Matrix est identique à celle des e-mails. Si n
     <string name="deactivate_account_delete_checkbox">Veuillez oublier tous les messages que j\'ai envoyé quand mon compte sera désactivé (Avertissement : les futurs utilisateurs verront une version incomplète des conversations)</string>
     <string name="deactivate_account_prompt_password">Pour continuer, veuillez renseigner votre mot de passe :</string>
     <string name="deactivate_account_submit">Désactiver le compte</string>
+
+<string name="dialog_title_third_party_licences">Licences tierces</string>
+
+    <string name="download">Télécharger</string>
+    <string name="speak">Parler</string>
+    <string name="clear">Effacer</string>
+    <string name="e2e_re_request_encryption_key"><u>Redemander les clés de chiffrement</u> à vos autres appareils.</string>
+
+    <string name="e2e_re_request_encryption_key_sent">Demande de clé envoyée.</string>
+
+    <string name="e2e_re_request_encryption_key_dialog_title">Demande envoyée</string>
+    <string name="e2e_re_request_encryption_key_dialog_content">Veuillez lancer Riot sur un autre appareil qui peut déchiffrer le message pour qu\'il puisse envoyer les clés à cet appareil.</string>
+
+    <string name="lock_screen_hint">Tapez ici…</string>
+
+    <string name="option_send_voice">Envoyer votre voix</string>
+
+    <string name="go_on_with">continuer avec…</string>
+    <string name="error_no_external_application_found">Désolé, aucune application externe n\'a été trouvée pour effectuer cette action.</string>
+
+    <string name="settings_labs_enable_send_voice">Envoyer un message vocal (nécessite une application tierce pour enregistrer des messages vocaux)</string>
+
+    <string name="error_empty_field_your_password">Veuillez renseigner votre mot de passe.</string>
 
 </resources>

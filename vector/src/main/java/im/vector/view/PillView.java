@@ -1,6 +1,7 @@
 /* 
  * Copyright 2014 OpenMarket Ltd
- * 
+ * Copyright 2018 New Vector Ltd
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
@@ -33,8 +34,6 @@ import org.matrix.androidsdk.rest.callback.ApiCallback;
 import org.matrix.androidsdk.rest.model.MatrixError;
 import org.matrix.androidsdk.rest.model.User;
 import org.matrix.androidsdk.util.Log;
-
-import java.lang.ref.WeakReference;
 
 import im.vector.R;
 import im.vector.VectorApp;
@@ -125,13 +124,15 @@ public class PillView extends LinearLayout {
         mAvatarView.setOnUpdateListener(listener);
         mTextView.setText(text.toString());
 
-        TypedArray a = getContext().getTheme().obtainStyledAttributes(new int[]{MXSession.isRoomAlias(text.toString()) ? R.attr.pill_background_room_alias : R.attr.pill_background_user_id});
+        TypedArray a = getContext().getTheme()
+                .obtainStyledAttributes(new int[]{MXSession.isRoomAlias(text.toString()) ? R.attr.pill_background_room_alias : R.attr.pill_background_user_id});
         int attributeResourceId = a.getResourceId(0, 0);
         a.recycle();
 
         mPillLayout.setBackground(ContextCompat.getDrawable(getContext(), attributeResourceId));
 
-        a = getContext().getTheme().obtainStyledAttributes(new int[]{MXSession.isRoomAlias(text.toString()) ? R.attr.pill_text_color_room_alias : R.attr.pill_text_color_user_id});
+        a = getContext().getTheme()
+                .obtainStyledAttributes(new int[]{MXSession.isRoomAlias(text.toString()) ? R.attr.pill_text_color_room_alias : R.attr.pill_text_color_user_id});
         attributeResourceId = a.getResourceId(0, 0);
         a.recycle();
         mTextView.setTextColor(ContextCompat.getColor(getContext(), attributeResourceId));

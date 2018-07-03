@@ -2,8 +2,8 @@
 <resources>
     <!-- use to retrieve the supported languages list -->
     <!-- should the same value as the file name -->
-    <string name="resouces_language">de</string>
-    <string name="resouces_country">DE</string>
+    <string name="resources_language">de</string>
+    <string name="resources_country_code">DE</string>
 
     <!-- titles -->
     <string name="title_activity_home">Nachrichten</string>
@@ -760,7 +760,7 @@ Unbekannte Geräte:</string>
     <string name="settings_labs_create_conference_with_jitsi">Konferenzgespräche mit jitsi durchführen</string>
     <string name="widget_delete_message_confirmation">Soll das Widget wirklich gelöscht werden?</string>
 
-    // Widget Integration Manager
+    <!-- Widget Integration Manager -->
     <string name="widget_integration_unable_to_create">Widget konnte nicht erstellt werden.</string>
     <string name="widget_integration_positive_power_level">Berechtigungslevel muss eine positive ganze Zahl sein.</string>
     <string name="widget_integration_must_be_in_room">Du bist nicht Mitglied in diesem Raum.</string>
@@ -798,7 +798,7 @@ Unbekannte Geräte:</string>
 
     <string name="settings_labs_native_camera">Systemeigene Kamera verwenden</string>
 
-    // share keys
+    <!-- share keys -->
     <string name="share_without_verifying">Ohne Verifizierung teilen</string>
     <string name="ignore_request">Anfrage ignorieren</string>
 
@@ -809,11 +809,11 @@ Unbekannte Geräte:</string>
     <string name="conference_call_warning_title">Warnung!</string>
     <string name="conference_call_warning_message">Konferenzgespräche werden noch entwickelt und sind vielleicht nicht zuverlässig.</string>
 
-    // slash commands
+    <!-- slash commands -->
     <string name="command_error">Befehlsfehler</string>
     <string name="unrecognized_command">Unbekanntes Kommando: %s</string>
 
-    // notification statuses
+    <!-- notification statuses -->
     <string name="notification_off">Aus</string>
     <string name="notification_on">An</string>
     <string name="notification_noisy">Laut</string>
@@ -863,7 +863,7 @@ Unbekannte Geräte:</string>
     <string name="community_id">Community-ID</string>
     <string name="community_id_hint">Beispiel</string>
 
-    // group details
+    <!-- group details -->
     <string name="group_details_home">Startseite</string>
     <string name="group_details_people">Personen</string>
     <string name="group_details_rooms">Räume</string>
@@ -940,7 +940,7 @@ Unbekannte Geräte:</string>
 	<item quantity="other">%d aktive Widgets</item>
 </plurals>
 
-    // Widget Integration Manager
+    <!-- Widget Integration Manager -->
     <string name="avatar">Profilbild</string>
 
 <plurals name="membership_changes">
@@ -1001,5 +1001,28 @@ Die Sichtbarkeit deiner Nachrichten ist ähnlich zu E-Mails: Wenn wir deine Nach
     <string name="deactivate_account_delete_checkbox">Bitte löscht alle Nachrichten die ich gesendet habe, wenn mein Account deaktiviert wird (Warnung: Zukünftige Nutzer werden eine unvollständige Ansicht auf Konversationen haben)</string>
     <string name="deactivate_account_prompt_password">Um fortzufahren, bitte Password eingeben:</string>
     <string name="deactivate_account_submit">Account deaktivieren</string>
+
+<string name="dialog_title_third_party_licences">Drittanbieter-Lizenzen</string>
+
+    <string name="download">Download</string>
+    <string name="speak">Sprechen</string>
+    <string name="clear">Löschen</string>
+    <string name="e2e_re_request_encryption_key">Verschlüsselungsschlüssel von deinen anderen Geräten <u>erneut anfragen</u>.</string>
+
+    <string name="e2e_re_request_encryption_key_sent">Schlüsselanfrage gesendet.</string>
+
+    <string name="e2e_re_request_encryption_key_dialog_title">Anfrage gesendet</string>
+    <string name="e2e_re_request_encryption_key_dialog_content">Bitte öffne Riot auf einem anderen Gerät, das die Nachricht entschlüsseln kann, damit es diesem Gerät die Schlüssel senden kann.</string>
+
+    <string name="lock_screen_hint">Hier tippen…</string>
+
+    <string name="option_send_voice">Sende Sprache</string>
+
+    <string name="go_on_with">fortfahren mit…</string>
+    <string name="error_no_external_application_found">Es wurde keine externe Anwendung gefunden, um diese Aktion auszuführen.</string>
+
+    <string name="settings_labs_enable_send_voice">Sprachnachrichten (erfordert eine externe Anwendung um Sprachnachrichten aufzuzeichnen)</string>
+
+    <string name="error_empty_field_your_password">Bitte gebe dein Passwort ein.</string>
 
 </resources>

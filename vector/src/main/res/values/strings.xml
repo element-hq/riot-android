@@ -3,8 +3,8 @@
     <!-- use to retrieve the supported languages list -->
     <!-- should the same value as the file name -->
 
-    <string name="resouces_language">en</string>
-    <string name="resouces_country">US</string>
+    <string name="resources_language">en</string>
+    <string name="resources_country_code">US</string>
 
     <!-- theme -->
     <string name="light_theme">Light Theme</string>
@@ -27,6 +27,8 @@
     <string name="title_activity_group_details">Community details</string>
     <string name="title_activity_choose_sticker">Send a sticker</string>
 
+    <string name="dialog_title_third_party_licences">Third party licences</string>
+
     <!-- splash screen accessibility -->
     <string name="loading">Loading...</string>
 
@@ -40,7 +42,10 @@
     <string name="resend">Resend</string>
     <string name="redact">Redact</string>
     <string name="quote">Quote</string>
+    <string name="download">Download</string>
     <string name="share">Share</string>
+    <string name="speak">Speak</string>
+    <string name="clear">Clear</string>
     <string name="later">Later</string>
     <string name="forward">Forward</string>
     <string name="permalink">Permalink</string>
@@ -160,6 +165,8 @@
     <string name="start_voice_call">Start Voice Call</string>
     <string name="start_video_call">Start Video Call</string>
 
+    <string name="option_send_voice">Send voice</string>
+
     <string name="start_new_chat_prompt_msg">Are you sure that you want to start a new chat with %s?</string>
     <string name="start_voice_call_prompt_msg">Are you sure that you want to start a voice call?</string>
     <string name="start_video_call_prompt_msg">Are you sure that you want to start a video call?</string>
@@ -172,6 +179,10 @@
 
     <!-- No sticker application dialog -->
     <string name="no_sticker_application_dialog_content">You don\'t currently have any stickerpacks enabled.\n\nAdd some now?</string>
+
+    <!-- External application -->
+    <string name="go_on_with">go on with…</string>
+    <string name="error_no_external_application_found">Sorry, no external application has been found to complete this action.</string>
 
     <!-- Authentication -->
     <string name="auth_login">Log in</string>
@@ -243,6 +254,14 @@
     <!-- crypto warnings -->
     <string name="e2e_need_log_in_again">You need to log back in to generate end-to-end encryption keys for this device and submit the public key to your homeserver.\nThis is a once off.\nSorry for the inconvenience.</string>
 
+    <!-- request again e2e key -->
+    <string name="e2e_re_request_encryption_key"><u>Re-request encryption keys</u> from your other devices.</string>
+
+    <string name="e2e_re_request_encryption_key_sent">Key request sent.</string>
+
+    <string name="e2e_re_request_encryption_key_dialog_title">Request sent</string>
+    <string name="e2e_re_request_encryption_key_dialog_content">Please launch Riot on another device that can decrypt the message so it can send the keys to this device.</string>
+
     <!-- read receipts list Screen -->
     <string name="read_receipts_list">Read Receipts List</string>
 
@@ -313,7 +332,7 @@
 
     <!-- medias slider string -->
     <string name="media_slider_saved">Saved</string>
-    <string name="media_slider_saved_message">Save to downloads</string>
+    <string name="media_slider_saved_message">Save to downloads?</string>
     <string name="yes">YES</string>
     <string name="no">NO</string>
     <string name="_continue">Continue</string>
@@ -838,6 +857,9 @@
     <string name="directory_server_all_rooms_on_server">All rooms on %s server</string>
     <string name="directory_server_native_rooms">All native %s rooms</string>
 
+    <!-- Lock screen-->
+    <string name="lock_screen_hint">Type here…</string>
+
     <!-- Notifications -->
     <plurals name="notification_unread_notified_messages">
         <item quantity="one">1 unread notified message</item>
@@ -892,6 +914,7 @@
     <string name="settings_labs_matrix_apps">Matrix Apps</string>
     <string name="room_add_matrix_apps">Add Matrix apps</string>
     <string name="settings_labs_native_camera">Use native camera</string>
+    <string name="settings_labs_enable_send_voice">Send voice message (requires a third party application to record voice messages)</string>
 
     <!-- share keys -->
     <string name="you_added_a_new_device">You added a new device \'%s\', which is requesting encryption keys.</string>
@@ -963,5 +986,7 @@
     <string name="deactivate_account_delete_checkbox">Please forget all messages I have sent when my account is deactivated (Warning: this will cause future users to see an incomplete view of conversations)</string>
     <string name="deactivate_account_prompt_password">To continue, please enter your password:</string>
     <string name="deactivate_account_submit">Deactivate Account</string>
+
+    <string name="error_empty_field_your_password">Please enter your password.</string>
 
 </resources>

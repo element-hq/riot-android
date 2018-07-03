@@ -1,5 +1,6 @@
 /*
  * Copyright 2017 Vector Creations Ltd
+ * Copyright 2018 New Vector Ltd
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -48,6 +49,8 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
 import butterknife.BindView;
 import im.vector.PublicRoomsManager;
@@ -268,7 +271,7 @@ public class RoomsFragment extends AbsHomeFragment implements AbsHomeFragment.On
 
         // update/retrieve the complete summary list
         List<RoomSummary> roomSummaries = new ArrayList<>(store.getSummaries());
-        HashSet<String> lowPriorityRoomIds = new HashSet<>(mSession.roomIdsWithTag(RoomTag.ROOM_TAG_LOW_PRIORITY));
+        Set<String> lowPriorityRoomIds = new HashSet<>(mSession.roomIdsWithTag(RoomTag.ROOM_TAG_LOW_PRIORITY));
 
         mRooms.clear();
 
@@ -319,7 +322,7 @@ public class RoomsFragment extends AbsHomeFragment implements AbsHomeFragment.On
                     CommonActivityUtils.previewRoom(getActivity(), roomPreviewData);
                 } else {
                     Log.d(LOG_TAG, "manageRoom : open the room");
-                    HashMap<String, Object> params = new HashMap<>();
+                    Map<String, Object> params = new HashMap<>();
                     params.put(VectorRoomActivity.EXTRA_MATRIX_ID, mSession.getMyUserId());
                     params.put(VectorRoomActivity.EXTRA_ROOM_ID, publicRoom.roomId);
 
@@ -439,7 +442,8 @@ public class RoomsFragment extends AbsHomeFragment implements AbsHomeFragment.On
                 @Override
                 public boolean onTouch(View v, MotionEvent event) {
                     if (event.getAction() == MotionEvent.ACTION_DOWN) {
-                        startActivityForResult(RoomDirectoryPickerActivity.getIntent(getActivity(), mSession.getMyUserId()), DIRECTORY_SOURCE_ACTIVITY_REQUEST_CODE);
+                        startActivityForResult(RoomDirectoryPickerActivity.getIntent(getActivity(), mSession.getMyUserId()),
+                                DIRECTORY_SOURCE_ACTIVITY_REQUEST_CODE);
                     }
                     return true;
                 }

@@ -1,5 +1,6 @@
 /*
  * Copyright 2015 OpenMarket Ltd
+ * Copyright 2018 New Vector Ltd
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -25,12 +26,13 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ListView;
 
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
+
 import im.vector.R;
 import im.vector.adapters.ImageCompressionDescription;
 import im.vector.adapters.ImageSizesAdapter;
-
-import java.util.ArrayList;
-import java.util.Collection;
 
 /**
  * A dialog fragment showing a list of image selections string
@@ -51,7 +53,7 @@ public class ImageSizeSelectionDialogFragment extends DialogFragment {
         return f;
     }
 
-    private ArrayList<ImageCompressionDescription> mEntries = null;
+    private List<ImageCompressionDescription> mEntries = null;
     private ImageSizeListener mListener = null;
 
     private void setEntries(Collection<ImageCompressionDescription> entries) {
@@ -68,7 +70,7 @@ public class ImageSizeSelectionDialogFragment extends DialogFragment {
         super.onSaveInstanceState(savedInstanceState);
 
         if (null != mEntries) {
-            savedInstanceState.putSerializable(SELECTIONS_LIST, mEntries);
+            savedInstanceState.putSerializable(SELECTIONS_LIST, (ArrayList) mEntries);
         }
     }
 
@@ -109,7 +111,7 @@ public class ImageSizeSelectionDialogFragment extends DialogFragment {
                 }
 
                 // dismiss the list
-                ImageSizeSelectionDialogFragment.this.dismiss();
+                dismiss();
             }
         });
 

@@ -46,7 +46,7 @@ Utwórz kopię zapasową, zanim się wylogujesz.</string>
     <string name="action_video_call">Połączenie wideo</string>
     <string name="action_global_search">Wyszukiwanie globalne</string>
     <string name="action_mark_all_as_read">Oznacz wszystko jako przeczytane</string>
-    <string name="action_historical">Archiwizuj</string>
+    <string name="action_historical">Historyczne</string>
     <string name="action_quick_reply">Szybka odpowiedź</string>
     <string name="action_open">Otwórz</string>
     <string name="action_close">Zamknij</string>
@@ -119,8 +119,8 @@ Utwórz kopię zapasową, zanim się wylogujesz.</string>
     <string name="start_voice_call">Rozpocznij połączenie telefoniczne</string>
     <string name="start_video_call">Rozpocznij połączenie wideo</string>
 
-    <string name="resouces_language">pl</string>
-    <string name="resouces_country">PL</string>
+    <string name="resources_language">pl</string>
+    <string name="resources_country_code">PL</string>
 
     <string name="identity_url">Adres serwera tożsamości</string>
     <string name="option_send_files">Wyślij pliki</string>
@@ -559,10 +559,10 @@ Wprowadź hasło, aby kontynuować.</string>
     <string name="community_name_hint">Przykład</string>
     <string name="community_id_hint">przykład</string>
 
-    // group details
+    <!-- group details -->
     <string name="encrypted_message">Wiadomość zaszyfrowana</string>
 
-    // groups creation
+    <!-- groups creation -->
     <string name="create">Utwórz</string>
     <string name="notification_on">On</string>
     <string name="notification_off">Off</string>
@@ -622,9 +622,9 @@ Przepraszamy za trudności.</string>
     <string name="groups_list">Lista grup</string>
 
     <plurals name="membership_changes">
-	<item quantity="one">1 zmiana członkowstwa</item>
-	<item quantity="few">Kilka zmian członkowstwa</item>
-	<item quantity="many">%d zmian członokwstwa</item>
+	<item quantity="one">%d zmiana członkostwa</item>
+	<item quantity="few">%d zmiany członkostwa</item>
+	<item quantity="many">%d zmian członkostwa</item>
 	<item quantity="other"/>
 </plurals>
 
@@ -784,4 +784,93 @@ Jesteś pewien?</string>
     <string name="room_settings_addresses_disable_main_address_prompt_title">Ostrzeżenia głównego adresu</string>
 
     <string name="room_settings_unset_main_address">NIe ustawiaj jako główny adres</string>
+    <string name="encryption_information_decryption_error">Błąd odszyfrowywania</string>
+
+    <string name="encryption_information_device_key">Klucz urządzenia</string>
+    <string name="encryption_export_room_keys">Eksportuj klucze pokoju</string>
+    <string name="encryption_export_room_keys_summary">Eksportuj klucze do pliku lokalnego</string>
+    <string name="rejoin">Dołącz ponownie</string>
+    <string name="forget_room">Zapomnij pokój</string>
+
+    <string name="download">Pobierz</string>
+    <string name="clear">Wyczyść</string>
+    <string name="option_send_sticker"/>
+    <string name="e2e_re_request_encryption_key"><u>Poproś ponownie o klucze szyfrujące</u> z innych Twoich urządzeń.</string>
+
+    <string name="e2e_re_request_encryption_key_sent">Prośba o klucz wysłana.</string>
+
+    <string name="e2e_re_request_encryption_key_dialog_title">Prośba wysłana</string>
+    <string name="e2e_re_request_encryption_key_dialog_content">Uruchom proszę Riot na innym urządzeniu, które może odszyfrować wiadomość, aby wysłać klucze do tego urządzenia.</string>
+
+    <string name="settings_notification_privacy">Prywatność powiadomień</string>
+    <string name="settings_notification_privacy_warning">Riot.im działa w tle aby zachować prywatność Twoich powiadomień. Możesz zmienić tę opcję aby zmniejszyć zużycie baterii.</string>
+    <string name="settings_notification_privacy_normal">Standardowa</string>
+    <string name="settings_notification_privacy_power_saving">Opcje oszczędzania energii</string>
+    <string name="settings_notification_privacy_low_detail">Mało szczegółowe powiadomienia</string>
+    <string name="settings_notification_privacy_reduced">Zmniejszona prywatność</string>
+    <string name="settings_notification_privacy_need_permission">Aplikacja wymaga uprawnień do działania w tle</string>
+    <string name="settings_notification_privacy_no_permission">Aplikacja <b>nie</b> wymaga uprawnień do działania w tle</string>
+    <string name="settings_notification_privacy_gcm">• Powiadomienia wysyłane za pomocą Google Cloud Messaging</string>
+    <string name="settings_notification_privacy_metadata">• Powiadomienia zawierają tylko meta-dane</string>
+    <string name="settings_notification_privacy_secure_message_content">• Treść powiadomienia jest <b>bezpiecznie pobierana z domowego serwera Matrix</b></string>
+    <string name="settings_notification_privacy_nosecure_message_content">• Powiadomienia zawierają <b>meta-dane oraz treść wiadomości</b></string>
+    <string name="settings_notification_privacy_message_content_not_shown">• Powiadomienia <b>nie będą pokazywać treści wiadomości</b></string>
+
+    <string name="settings_notifications_targets">Cele powiadomień</string>
+    <string name="settings_deactivate_account_section">Dezaktywuj konto</string>
+    <string name="settings_deactivate_my_account">Dezaktywuj moje konto</string>
+
+    <string name="startup_notification_privacy_title">Prywatność powiadomień</string>
+    <string name="startup_notification_privacy_message">Riot może działać w tle aby bezpiecznie i prywatnie zarządzać Twoimi powiadomieniami (to może mieć wpływ na zużycie baterii).</string>
+    <string name="startup_notification_privacy_button_grant">Nadaj uprawnienie</string>
+    <string name="startup_notification_privacy_button_other">Wybierz inną opcję</string>
+
+    <string name="settings_opt_in_of_analytics">Wysyłaj dane analityczne</string>
+    <string name="settings_opt_in_of_analytics_summary">Riot zbiera anonimowe informacje które pozwolą ulepszyć aplikację.</string>
+    <string name="settings_opt_in_of_analytics_prompt">Włącz proszę dane analityczne, aby pomóc nam ulepszyć Riot.</string>
+    <string name="settings_opt_in_of_analytics_ok">Tak, chcę pomóc!</string>
+
+    <string name="settings_delete_notification_targets_confirmation">Czy na pewno chcesz usunąć ten cel powiadomień?</string>
+
+    <string name="room_settings_room_access_warning">Aby móc stworzyć link do pokoju musi on mieć swój adres.</string>
+    <string name="room_settings_addresses_e2e_prompt_message">Szyfrowanie końcówka-do-końcówki jest w fazie beta i nie jest pewne.
+
+Nie powinieneś ufać mu w celu zabezpieczenia danych.
+
+Urządzenia nie będą w stanie na razie odszyfrować historii sprzed momentu dołączenia do pokoju.
+
+Raz włączone szyfrowanie pokoju nie może zostać wyłączone (na razie).
+
+Szyfrowane wiadomości nie będą widoczne dla klientów którzy nie wspierają jeszcze szyfrowania.</string>
+
+    <string name="failed_to_load_timeline_position">%s próbował załadować konkretny punkt na osi czasu tego pokoju, ale nie był w stanie go znaleźć.</string>
+
+    <string name="encryption_information_title">Informacje o szyfrowaniu końcówka-do-końcówki</string>
+
+    <string name="encryption_information_device_info">Informacje zdarzenia</string>
+    <string name="encryption_information_sender_device_information">Informacja o urządzeniu nadawcy</string>
+    <string name="encryption_export_e2e_room_keys">Eksportuj klucze E2E pokoju</string>
+    <string name="encryption_export_saved_as">Klucze pokoju zostały zapisane w \'%s\'</string>
+
+    <string name="encryption_import_e2e_room_keys">Importuj klucze E2E pokoju</string>
+    <string name="encryption_import_room_keys">Importuj klucze pokoju</string>
+    <string name="encryption_import_room_keys_summary">Importuj klucze z lokalnego pliku</string>
+    <string name="encryption_import_import">Importuj</string>
+    <string name="encryption_never_send_to_unverified_devices_title">Szyfruj wiadomości tylko do zaufanych urządzeń</string>
+    <string name="encryption_never_send_to_unverified_devices_summary">Nigdy nie wysyłaj zaszyfrowanych wiadomości do niezweryfikowanych urządzeń w tym pokoju z tego urządzenia</string>
+
+    <string name="encryption_information_unverify">Usuń weryfikację</string>
+    <string name="encryption_information_verify_device_warning">" Aby sprawdzić czy to urządzenie jest zaufane, skontaktuj się z jego właścicielem używając innych środków (np. osobiście lub telefonicznie) i zapytaj ich czy klucz, który widzą w ustawieniach użytkownika dla tego urządzenia pasuje do klucza poniżej:"</string>
+    <string name="encryption_information_verify_device_warning2">Jeśli klucz pasuje, potwierdź to przyciskiem poniżej. Jeśli nie, to ktoś inny najprawdopodobniej przejmuje lub podszywa się pod to urządzenie i powinieneś dodać urządzenie do czarnej listy.
+W przyszłości proces weryfikacji będzie bardziej skomplikowany.</string>
+    <string name="e2e_enabling_on_app_update">Riot obsługuje już szyfrowanie końcówka-do-końcówki (E2E), ale musisz zalogować się ponownie, aby je włączyć.
+
+Możesz to zrobić teraz lub później z poziomu ustawień aplikacji.</string>
+
+    <string name="unknown_devices_alert_message">Ten pokój zawiera nieznane urządzenia, które nie zostały zweryfikowane.
+Oznacza to brak gwarancji, że urządzenia należą do użytkowników do których twierdzą, że należą.
+Przed kontynuowaniem, zalecamy wykonanie procesu weryfikacji każdego urządzenia, ale możesz ponownie wysłać wiadomość bez weryfikacji, jeśli wolisz.
+
+Nieznane urządzenia:</string>
+
     </resources>

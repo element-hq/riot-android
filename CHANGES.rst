@@ -1,3 +1,35 @@
+Changes in Riot 0.8.11 (2018-07-03)
+===================================================
+
+Features:
+ - Re-request keys manually for encrypted events (#2319)
+ - Add option to send voice message to a room, using a third application to record message.
+   To enable in the Labs settings (PR #1762)
+
+Improvements:
+ - Update matrix-sdk.aar lib (v0.9.6).
+ - New Floating Action Menu in Home screen (PR #2335)
+ - Add spacing to device keys (#2314)
+ - use apply() instead of commit() to save shared prefs (#2231)
+ - Do not ring if "Do Not Disturb" is active (#1072)
+ - Manage the "consent not given" error when declining a room invite
+
+Other changes:
+ - Remove "Matrix application" activation from the Lab section in the settings (#2341)
+
+Bugfix:
+ - Remove black borders on 18:9 phone (#2063)
+ - Auto dismiss the join/reject room notification when user select an action (#2354)
+ - Fix some crashes reported by the PlayStore (#2380, #2382, #2383, #2395)
+ - Fix issues in UrlPreviews (#2312)
+
+Translations:
+ - Galician thanks to Miguel Branco
+
+Build:
+ - Add script to check code quality
+ - Travis will now check if CHANGES.rst has been modified for each PR
+
 Changes in Riot 0.8.10 (2018-01-06)
 ===================================================
 

@@ -1,5 +1,6 @@
 /*
  * Copyright 2016 OpenMarket Ltd
+ * Copyright 2018 New Vector Ltd
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -24,20 +25,21 @@ import android.content.Intent;
 import android.net.Uri;
 import android.support.v4.content.LocalBroadcastManager;
 import android.text.TextUtils;
-
-import org.matrix.androidsdk.util.Log;
+import android.widget.Toast;
 
 import org.matrix.androidsdk.MXSession;
 import org.matrix.androidsdk.data.Room;
 import org.matrix.androidsdk.data.RoomPreviewData;
 import org.matrix.androidsdk.rest.callback.ApiCallback;
 import org.matrix.androidsdk.rest.model.MatrixError;
+import org.matrix.androidsdk.util.Log;
 
 import java.net.URLDecoder;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 import java.util.Timer;
 import java.util.TimerTask;
@@ -93,13 +95,14 @@ public class VectorUniversalLinkReceiver extends BroadcastReceiver {
     public static final String ULINK_GUEST_USER_ID_KEY = "guest_user_id";*/
 
     // supported paths list
-    private static final List<String> mSupportedVectorLinkPaths = Arrays.asList(SUPPORTED_PATH_BETA, SUPPORTED_PATH_DEVELOP, SUPPORTED_PATH_APP, SUPPORTED_PATH_STAGING);
+    private static final List<String> mSupportedVectorLinkPaths
+            = Arrays.asList(SUPPORTED_PATH_BETA, SUPPORTED_PATH_DEVELOP, SUPPORTED_PATH_APP, SUPPORTED_PATH_STAGING);
 
     // the session
     private MXSession mSession;
 
     // the universal link parameters
-    private HashMap<String, String> mParameters;
+    private Map<String, String> mParameters;
 
     public VectorUniversalLinkReceiver() {
     }
@@ -155,10 +158,11 @@ public class VectorUniversalLinkReceiver extends BroadcastReceiver {
             }
 
             if (null != intentUri) {
-                Log.d(LOG_TAG, "## onCreate() intentUri - host=" + intentUri.getHost() + " path=" + intentUri.getPath() + " queryParams=" + intentUri.getQuery());
+                Log.d(LOG_TAG, "## onCreate() intentUri - host=" + intentUri.getHost()
+                        + " path=" + intentUri.getPath() + " queryParams=" + intentUri.getQuery());
                 //intentUri.getEncodedSchemeSpecificPart() = //vector.im/beta/  intentUri.getSchemeSpecificPart() = //vector.im/beta/
 
-                HashMap<String, String> params = parseUniversalLink(intentUri);
+                Map<String, String> params = parseUniversalLink(intentUri);
 
                 if (null != params) {
 
@@ -346,7 +350,7 @@ public class VectorUniversalLinkReceiver extends BroadcastReceiver {
                 }
 
                 private void onError(String errorMessage) {
-                    CommonActivityUtils.displayToast(aContext, errorMessage);
+                    Toast.makeText(aContext, errorMessage, Toast.LENGTH_SHORT).show();
                     stopHomeActivitySpinner(aContext);
                 }
 
@@ -374,7 +378,7 @@ public class VectorUniversalLinkReceiver extends BroadcastReceiver {
      * @param context the context.
      */
     private void openRoomActivity(Context context) {
-        HashMap<String, Object> params = new HashMap<>();
+        Map<String, Object> params = new HashMap<>();
 
         params.put(VectorRoomActivity.EXTRA_MATRIX_ID, mSession.getMyUserId());
         params.put(VectorRoomActivity.EXTRA_ROOM_ID, mParameters.get(ULINK_ROOM_ID_OR_ALIAS_KEY));
@@ -387,7 +391,7 @@ public class VectorUniversalLinkReceiver extends BroadcastReceiver {
         Intent intent = new Intent(context, VectorHomeActivity.class);
         intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
 
-        intent.putExtra(VectorHomeActivity.EXTRA_JUMP_TO_ROOM_PARAMS, params);
+        intent.putExtra(VectorHomeActivity.EXTRA_JUMP_TO_ROOM_PARAMS, (HashMap) params);
         context.startActivity(intent);
     }
 
@@ -397,8 +401,8 @@ public class VectorUniversalLinkReceiver extends BroadcastReceiver {
      * @param uri the uri to parse
      * @return the universal link items, null if the universal link is invalid
      */
-    public static HashMap<String, String> parseUniversalLink(Uri uri) {
-        HashMap<String, String> map = null;
+    public static Map<String, String> parseUniversalLink(Uri uri) {
+        Map<String, String> map = null;
 
         try {
             // sanity check
@@ -432,7 +436,7 @@ public class VectorUniversalLinkReceiver extends BroadcastReceiver {
             String temp[] = uriFragment.split("/", 3); // limit to 3 for security concerns (stack overflow injection)
 
             if (!isSupportedHost) {
-                ArrayList<String> compliantList = new ArrayList<>(Arrays.asList(temp));
+                List<String> compliantList = new ArrayList<>(Arrays.asList(temp));
                 compliantList.add(0, "room");
                 temp = compliantList.toArray(new String[compliantList.size()]);
             }

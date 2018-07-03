@@ -1,5 +1,6 @@
 /*
  * Copyright 2017 Vector Creations Ltd
+ * Copyright 2018 New Vector Ltd
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,7 +18,6 @@
 package im.vector.widgets;
 
 import android.content.Context;
-import android.content.SharedPreferences;
 import android.os.Handler;
 import android.os.Looper;
 import android.preference.PreferenceManager;
@@ -120,9 +120,9 @@ public class WidgetsManager {
     /**
      * List all active widgets in a room.
      *
-     * @param session     the session.
-     * @param room        the room to check.
-     * @param widgetTypes the widget types
+     * @param session       the session.
+     * @param room          the room to check.
+     * @param widgetTypes   the widget types
      * @param excludedTypes the excluded widget types
      * @return the active widgets list
      */
@@ -218,13 +218,15 @@ public class WidgetsManager {
 
     /**
      * Provides the widgets which can be displayed in a webview.
+     *
      * @param session the session
-     * @param room the room
+     * @param room    the room
      * @return the list of active widgets
      */
     public List<Widget> getActiveWebviewWidgets(final MXSession session, final Room room) {
         return getActiveWidgets(session, room, null, new HashSet<>(Arrays.asList(WidgetsManager.WIDGET_TYPE_JITSI)));
     }
+
     /**
      * Check user's power for widgets management in a room.
      *
@@ -332,7 +334,9 @@ public class WidgetsManager {
         // TODO: This url may come from scalar API
         // Note: this url can be used as is inside a web container (like iframe for Riot-web)
         // Riot-iOS does not directly use it but extracts params from it (see `[JitsiViewController openWidget:withVideo:]`)
-        String url = "https://scalar.vector.im/api/widgets/jitsi.html?confId=" + confId + "&isAudioConf=" + (withVideo ? "false" : "true") + "&displayName=$matrix_display_name&avatarUrl=$matrix_avatar_url&email=$matrix_user_id";
+        String url = "https://scalar.vector.im/api/widgets/jitsi.html?confId=" + confId
+                + "&isAudioConf=" + (withVideo ? "false" : "true")
+                + "&displayName=$matrix_display_name&avatarUrl=$matrix_avatar_url&email=$matrix_user_id";
 
         Map<String, Object> params = new HashMap<>();
         params.put("url", url);
@@ -464,7 +468,8 @@ public class WidgetsManager {
 
                 if (mPendingWidgetCreationCallbacks.containsKey(callbackKey)) {
                     try {
-                        mPendingWidgetCreationCallbacks.get(callbackKey).onMatrixError(new WidgetError(WidgetError.WIDGET_CREATION_FAILED_ERROR_CODE, VectorApp.getInstance().getString(R.string.widget_creation_failure)));
+                        mPendingWidgetCreationCallbacks.get(callbackKey).onMatrixError(new WidgetError(WidgetError.WIDGET_CREATION_FAILED_ERROR_CODE,
+                                VectorApp.getInstance().getString(R.string.widget_creation_failure)));
                     } catch (Exception e) {
                         Log.e(LOG_TAG, "## onLiveEvent() : get(callbackKey).onMatrixError failed " + e.getMessage());
                     }
@@ -550,10 +555,10 @@ public class WidgetsManager {
                             String token = response.get("scalar_token");
 
                             if (null != token) {
-                                SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(context);
-                                SharedPreferences.Editor editor = preferences.edit();
-                                editor.putString(preferenceKey, token);
-                                editor.commit();
+                                PreferenceManager.getDefaultSharedPreferences(context)
+                                        .edit()
+                                        .putString(preferenceKey, token)
+                                        .apply();
                             }
 
                             if (null != callback) {
@@ -606,5 +611,20 @@ public class WidgetsManager {
                 }
             });
         }
+    }
+
+    /**
+     * Clear the scalar token of this user, to force a token renewal
+     *
+     * @param context Android context
+     * @param session current session, to retrieve the current user
+     */
+    public static void clearScalarToken(Context context, final MXSession session) {
+        final String preferenceKey = SCALAR_TOKEN_PREFERENCE_KEY + session.getMyUserId();
+
+        PreferenceManager.getDefaultSharedPreferences(context)
+                .edit()
+                .remove(preferenceKey)
+                .apply();
     }
 }

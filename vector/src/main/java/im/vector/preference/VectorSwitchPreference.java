@@ -78,7 +78,7 @@ public class VectorSwitchPreference extends CheckBoxPreference {
 
     @Override
     protected void onBindView(View view) {
-        if (android.os.Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP) {
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP) {
             // Clean listener before invoke SwitchPreference.onBindView
             ViewGroup viewGroup = (ViewGroup) view;
             clearListenerInViewGroup(viewGroup);

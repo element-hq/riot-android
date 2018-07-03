@@ -19,12 +19,10 @@ package im.vector.activity
 
 import android.content.Context
 import android.os.Bundle
-import android.support.annotation.CallSuper
-import android.support.annotation.LayoutRes
-import android.support.annotation.Nullable
-import android.support.annotation.StringRes
+import android.support.annotation.*
 import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.Toolbar
+import android.view.Menu
 import android.view.MenuItem
 import android.view.View
 import androidx.core.view.isVisible
@@ -38,6 +36,7 @@ import im.vector.activity.interfaces.Restorable
 import im.vector.dialogs.ConsentNotGivenHelper
 import im.vector.receiver.DebugReceiver
 import im.vector.util.AssetReader
+import im.vector.util.ThemeUtils
 import org.matrix.androidsdk.util.Log
 
 /**
@@ -82,6 +81,8 @@ abstract class RiotAppCompatActivity : AppCompatActivity() {
 
     final override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
+        ThemeUtils.setActivityTheme(this, getOtherThemes())
 
         doBeforeSetContentView()
 
@@ -150,9 +151,21 @@ abstract class RiotAppCompatActivity : AppCompatActivity() {
      * MENU MANAGEMENT
      * ========================================================================================== */
 
-    // TODO Maintenance: 'home' menu is managed here now, remove similar mangement from children
-    override fun onOptionsItemSelected(item: MenuItem?): Boolean {
-        if (item!!.itemId == android.R.id.home) {
+    final override fun onCreateOptionsMenu(menu: Menu): Boolean {
+        val menuRes = getMenuRes()
+
+        if (menuRes != -1) {
+            menuInflater.inflate(menuRes, menu)
+            ThemeUtils.tintMenuIcons(menu, ThemeUtils.getColor(this, getMenuTint()))
+            return true
+
+        }
+
+        return super.onCreateOptionsMenu(menu)
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        if (item.itemId == android.R.id.home) {
             setResult(RESULT_CANCELED)
             finish()
             return true
@@ -180,6 +193,17 @@ abstract class RiotAppCompatActivity : AppCompatActivity() {
 
     @StringRes
     open fun getTitleRes() = -1
+
+    @MenuRes
+    open fun getMenuRes() = -1
+
+    open fun getMenuTint() = R.attr.icon_tint_on_dark_action_bar_color
+
+    /**
+     * Return a Pair with Dark and Black theme
+     */
+    open fun getOtherThemes(): Pair<Int, Int> = Pair(R.style.AppTheme_Dark, R.style.AppTheme_Black)
+
 
     //==============================================================================================
     // Handle loading view (also called waiting view or spinner view)
