@@ -277,7 +277,7 @@ Email также позволит вам при необходимости во�
     
     <!-- medias slider string -->
     <string name="media_slider_saved">Сохранено</string>
-    <string name="media_slider_saved_message">Сохранить в загрузки</string>
+    <string name="media_slider_saved_message">Сохранить в загрузки?</string>
     <string name="yes">ДА</string>
     <string name="no">НЕТ</string>
     <string name="_continue">Продолжить</string>
