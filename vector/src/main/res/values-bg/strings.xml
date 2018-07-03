@@ -956,4 +956,13 @@
 
     <string name="lock_screen_hint">Пишете тук…</string>
 
-    </resources>
+    <string name="option_send_voice">Изпрати гласово съобщение</string>
+
+    <string name="go_on_with">продължете с…</string>
+    <string name="error_no_external_application_found">Съжаляваме, не е намерено външно приложение, което да извърши това действие.</string>
+
+    <string name="settings_labs_enable_send_voice">Изпращане на гласови съобщения (изисква външно приложение записващо звукови съобщения)</string>
+
+    <string name="error_empty_field_your_password">Моля, въведете паролата си.</string>
+
+</resources>
