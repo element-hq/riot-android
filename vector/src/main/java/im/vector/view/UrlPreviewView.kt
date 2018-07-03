@@ -40,7 +40,7 @@ import org.matrix.androidsdk.util.Log
 import java.util.*
 
 /**
- *
+ * View to display a UrlPreview object
  */
 class UrlPreviewView @JvmOverloads constructor(
         context: Context,
