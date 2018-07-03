@@ -1,4 +1,4 @@
-Changes in Riot 0.8.11 (2018-XX-XX)
+Changes in Riot 0.8.11 (2018-07-03)
 ===================================================
 
 Features:
@@ -24,7 +24,7 @@ Bugfix:
  - Fix issues in UrlPreviews (#2312)
 
 Translations:
- -
+ - Galician thanks to Miguel Branco
 
 Build:
  - Add script to check code quality
