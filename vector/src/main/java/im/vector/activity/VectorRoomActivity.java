@@ -1665,7 +1665,12 @@ public class VectorRoomActivity extends MXCActionBarActivity implements
 
                                         @Override
                                         public void onMatrixError(MatrixError e) {
-                                            onError(e.getLocalizedMessage());
+                                            if (MatrixError.M_CONSENT_NOT_GIVEN.equals(e.errcode)) {
+                                                hideWaitingView();
+                                                getConsentNotGivenHelper().displayDialog(e);
+                                            } else {
+                                                onError(e.getLocalizedMessage());
+                                            }
                                         }
 
                                         @Override
@@ -3522,7 +3527,12 @@ public class VectorRoomActivity extends MXCActionBarActivity implements
 
                             @Override
                             public void onMatrixError(MatrixError e) {
-                                onError(e.getLocalizedMessage());
+                                if (MatrixError.M_CONSENT_NOT_GIVEN.equals(e.errcode)) {
+                                    hideWaitingView();
+                                    getConsentNotGivenHelper().displayDialog(e);
+                                } else {
+                                    onError(e.getLocalizedMessage());
+                                }
                             }
 
                             @Override

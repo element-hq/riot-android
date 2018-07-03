@@ -69,7 +69,7 @@
         <!-- outgoing call background color -->
         <item name="pending_outgoing_view_background_color">#33000000</item>
 
-        <!-- multi selection memeber background color -->
+        <!-- multi selection member background color -->
         <item name="multi_selection_background_color">#FFF2F2F2</item>
 
         <!-- sliding menu icon colors -->
@@ -174,7 +174,7 @@
         <!-- outgoing call background color -->
         <item name="pending_outgoing_view_background_color">#33FFFFFF</item>
 
-        <!-- multi selection memeber background color -->
+        <!-- multi selection member background color -->
         <item name="multi_selection_background_color">#4d4d4d</item>
 
         <!-- sliding menu icon colors -->

@@ -7,17 +7,21 @@
     android:background="#FFFFFFFF"
     android:fitsSystemWindows="true">
 
-    <RelativeLayout
+    <android.support.constraint.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:descendantFocusability="beforeDescendants"
-        android:focusableInTouchMode="true">
+        android:focusableInTouchMode="true"
+        tools:context="org.matrix.vector.activity.VectorHomeActivity">
 
         <android.support.v7.widget.Toolbar
             android:id="@+id/home_toolbar"
             style="@style/VectorToolbarStyle"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
 
             <!-- The search view is added in the toolbar not in the menu
                  to ensure that the overflow icon menu is not hidden.-->
@@ -25,79 +29,136 @@
                 android:id="@+id/search_view"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent" />
+
         </android.support.v7.widget.Toolbar>
 
         <ProgressBar
             android:id="@+id/home_recents_sync_in_progress"
             style="@style/Widget.AppCompat.ProgressBar.Horizontal"
-            android:layout_width="match_parent"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_below="@id/home_toolbar"
             android:background="@color/vector_green_color"
             android:indeterminate="true"
-            android:visibility="gone" />
+            android:visibility="gone"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/home_toolbar" />
 
         <im.vector.view.VectorPendingCallView
             android:id="@+id/listView_pending_callview"
-            android:layout_width="match_parent"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_below="@id/home_recents_sync_in_progress"
-            android:visibility="gone" />
+            android:visibility="gone"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/home_recents_sync_in_progress" />
 
         <!-- The main content view -->
-        <RelativeLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_above="@+id/bottom_navigation"
-            android:layout_below="@+id/listView_pending_callview"
-            tools:context="org.matrix.vector.activity.VectorHomeActivity">
+        <FrameLayout
+            android:id="@+id/fragment_container"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:background="?attr/riot_primary_background_color"
+            app:layout_constraintBottom_toTopOf="@+id/bottom_navigation"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/listView_pending_callview" />
 
-            <FrameLayout
-                android:id="@+id/fragment_container"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:background="?attr/riot_primary_background_color" />
+        <FrameLayout
+            android:id="@+id/listView_spinner_views"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:background="?attr/waiting_background_color"
+            android:visibility="gone"
+            app:layout_constraintBottom_toTopOf="@+id/bottom_navigation"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/listView_pending_callview">
 
-            <android.support.design.widget.FloatingActionButton
-                android:id="@+id/floating_action_button"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignParentBottom="true"
-                android:layout_alignParentRight="true"
-                android:layout_marginBottom="@dimen/floating_action_button_margin"
-                android:layout_marginRight="@dimen/floating_action_button_margin"
-                android:src="@drawable/ic_add_white"
-                app:backgroundTint="@color/vector_fuchsia_color"
-                app:borderWidth="0dp"
-                app:elevation="4dp" />
+            <ProgressBar
+                android:id="@+id/listView_spinner"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:layout_gravity="center"
+                android:visibility="visible" />
 
-            <FrameLayout
-                android:id="@+id/listView_spinner_views"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:background="?attr/waiting_background_color"
-                android:visibility="gone">
-
-                <ProgressBar
-                    android:id="@+id/listView_spinner"
-                    android:layout_width="40dp"
-                    android:layout_height="40dp"
-                    android:layout_gravity="center"
-                    android:visibility="visible" />
-            </FrameLayout>
-        </RelativeLayout>
+        </FrameLayout>
 
         <android.support.design.widget.BottomNavigationView
             android:id="@+id/bottom_navigation"
-            android:layout_width="match_parent"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_alignParentBottom="true"
             android:background="?attr/riot_primary_background_color"
             app:itemBackground="?attr/riot_primary_background_color"
             app:itemIconTint="@color/home_bottom_nav_view_tint"
             app:itemTextColor="@color/home_bottom_nav_view_tint"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
             app:menu="@menu/bottom_navigation_main" />
-    </RelativeLayout>
+
+        <!-- Elevate above BottomNavigationView (above lollipop). -->
+        <View
+            android:id="@+id/floating_action_menu_touch_guard"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:alpha="0"
+            android:background="@android:color/background_dark"
+            android:elevation="10dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <!-- Elevate button above the touch guard (above lollipop). -->
+        <com.getbase.floatingactionbutton.FloatingActionsMenu
+            android:id="@+id/floating_action_menu"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:elevation="12dp"
+            app:borderWidth="0dp"
+            app:elevation="12dp"
+            app:fab_expandDirection="up"
+            app:layout_constraintBottom_toTopOf="@id/bottom_navigation"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            tools:backgroundTint="@color/vector_fuchsia_color"
+            tools:fab_addButtonColorNormal="@color/vector_fuchsia_color">
+
+            <com.getbase.floatingactionbutton.FloatingActionButton
+                android:id="@+id/button_start_chat"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:tint="@android:color/white"
+                app:fab_icon="@drawable/ic_person_black_24dp"
+                app:fab_size="mini"
+                app:fab_title="@string/room_recents_start_chat"
+                tools:fab_colorNormal="@color/vector_fuchsia_color"
+                tools:fab_colorPressed="@color/vector_fuchsia_color" />
+
+            <com.getbase.floatingactionbutton.FloatingActionButton
+                android:id="@+id/button_create_room"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:fab_icon="@drawable/ic_add_white"
+                app:fab_size="mini"
+                app:fab_title="@string/room_recents_create_room"
+                tools:fab_colorNormal="@color/vector_fuchsia_color"
+                tools:fab_colorPressed="@color/vector_fuchsia_color" />
+
+            <com.getbase.floatingactionbutton.FloatingActionButton
+                android:id="@+id/button_join_room"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:fab_icon="@drawable/riot_tab_rooms"
+                app:fab_size="mini"
+                app:fab_title="@string/room_recents_join_room"
+                tools:fab_colorNormal="@color/vector_fuchsia_color"
+                tools:fab_colorPressed="@color/vector_fuchsia_color" />
+
+        </com.getbase.floatingactionbutton.FloatingActionsMenu>
+
+    </android.support.constraint.ConstraintLayout>
 
     <android.support.design.widget.NavigationView
         android:id="@+id/navigation_view"
