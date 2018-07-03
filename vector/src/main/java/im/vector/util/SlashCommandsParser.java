@@ -38,6 +38,7 @@ import im.vector.R;
 import im.vector.VectorApp;
 import im.vector.activity.CommonActivityUtils;
 import im.vector.activity.VectorRoomActivity;
+import im.vector.widgets.WidgetsManager;
 
 public class SlashCommandsParser {
 
@@ -313,6 +314,12 @@ public class SlashCommandsParser {
                         PreferencesManager.setMarkdownEnabled(VectorApp.getInstance(), false);
                     }
                 }
+            } else if (TextUtils.equals(firstPart, CMD_CLEAR_SCALAR_TOKEN)) {
+                isIRCCmd = true;
+
+                WidgetsManager.clearScalarToken(activity, session);
+
+                Toast.makeText(activity, "Scalar token cleared", Toast.LENGTH_SHORT).show();
             }
 
             if (!isIRCCmd) {

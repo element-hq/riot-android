@@ -120,9 +120,9 @@ public class WidgetsManager {
     /**
      * List all active widgets in a room.
      *
-     * @param session     the session.
-     * @param room        the room to check.
-     * @param widgetTypes the widget types
+     * @param session       the session.
+     * @param room          the room to check.
+     * @param widgetTypes   the widget types
      * @param excludedTypes the excluded widget types
      * @return the active widgets list
      */
@@ -218,13 +218,15 @@ public class WidgetsManager {
 
     /**
      * Provides the widgets which can be displayed in a webview.
+     *
      * @param session the session
-     * @param room the room
+     * @param room    the room
      * @return the list of active widgets
      */
     public List<Widget> getActiveWebviewWidgets(final MXSession session, final Room room) {
         return getActiveWidgets(session, room, null, new HashSet<>(Arrays.asList(WidgetsManager.WIDGET_TYPE_JITSI)));
     }
+
     /**
      * Check user's power for widgets management in a room.
      *
@@ -609,5 +611,20 @@ public class WidgetsManager {
                 }
             });
         }
+    }
+
+    /**
+     * Clear the scalar token of this user, to force a token renewal
+     *
+     * @param context Android context
+     * @param session current session, to retrieve the current user
+     */
+    public static void clearScalarToken(Context context, final MXSession session) {
+        final String preferenceKey = SCALAR_TOKEN_PREFERENCE_KEY + session.getMyUserId();
+
+        PreferenceManager.getDefaultSharedPreferences(context)
+                .edit()
+                .remove(preferenceKey)
+                .apply();
     }
 }
