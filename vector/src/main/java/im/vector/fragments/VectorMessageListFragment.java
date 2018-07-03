@@ -83,6 +83,7 @@ import im.vector.adapters.VectorMessagesAdapter;
 import im.vector.db.VectorContentProvider;
 import im.vector.listeners.IMessagesAdapterActionsListener;
 import im.vector.receiver.VectorUniversalLinkReceiver;
+import im.vector.util.ExternalApplicationsUtilKt;
 import im.vector.util.MatrixSdkExtensionsKt;
 import im.vector.util.PreferencesManager;
 import im.vector.util.SlidableMediaInfo;
@@ -1194,9 +1195,7 @@ public class VectorMessageListFragment extends MatrixMessageListFragment impleme
                         getActivity().startActivity(intent);
                     }
                 } else {
-                    Intent intent = new Intent(Intent.ACTION_VIEW, uri);
-                    intent.putExtra(Browser.EXTRA_APPLICATION_ID, getActivity().getPackageName());
-                    getActivity().startActivity(intent);
+                    ExternalApplicationsUtilKt.openUrlInExternalBrowser(getActivity(), uri);
                 }
             }
         } catch (Exception e) {

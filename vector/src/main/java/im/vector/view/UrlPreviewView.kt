@@ -16,10 +16,7 @@
 package im.vector.view
 
 import android.content.Context
-import android.content.Intent
-import android.net.Uri
 import android.preference.PreferenceManager
-import android.provider.Browser
 import android.text.Html
 import android.text.TextUtils
 import android.text.method.LinkMovementMethod
@@ -34,6 +31,7 @@ import butterknife.ButterKnife
 import butterknife.OnClick
 import im.vector.R
 import im.vector.VectorApp
+import im.vector.util.openUrlInExternalBrowser
 import org.matrix.androidsdk.MXSession
 import org.matrix.androidsdk.rest.model.URLPreview
 import org.matrix.androidsdk.util.Log
@@ -112,23 +110,13 @@ class UrlPreviewView @JvmOverloads constructor(
 
             if (preview.requestedURL != null) {
                 if (preview.requestedURL != null) {
-                    mDescriptionTextView.setOnClickListener { openUrl(preview.requestedURL) }
-                    mImageView.setOnClickListener { openUrl(preview.requestedURL) }
+                    mDescriptionTextView.setOnClickListener { openUrlInExternalBrowser(context, preview.requestedURL) }
+                    mImageView.setOnClickListener { openUrlInExternalBrowser(context, preview.requestedURL) }
                 }
             } else {
                 mDescriptionTextView.isClickable = false
                 mImageView.isClickable = false
             }
-        }
-    }
-
-    private fun openUrl(url: String?) {
-        url?.let {
-            val browserIntent = Intent(Intent.ACTION_VIEW, Uri.parse(it)).apply {
-                putExtra(Browser.EXTRA_APPLICATION_ID, context.packageName)
-            }
-
-            context.startActivity(browserIntent)
         }
     }
 

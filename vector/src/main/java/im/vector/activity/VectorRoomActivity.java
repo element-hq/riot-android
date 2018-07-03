@@ -110,7 +110,6 @@ import java.util.Map;
 import java.util.Timer;
 import java.util.TimerTask;
 
-import androidx.core.widget.ToastKt;
 import im.vector.Matrix;
 import im.vector.R;
 import im.vector.VectorApp;
@@ -121,6 +120,7 @@ import im.vector.fragments.VectorUnknownDevicesFragment;
 import im.vector.notifications.NotificationUtils;
 import im.vector.services.EventStreamService;
 import im.vector.util.CallsManager;
+import im.vector.util.ExternalApplicationsUtilKt;
 import im.vector.util.MatrixSdkExtensionsKt;
 import im.vector.util.MatrixURLSpan;
 import im.vector.util.PreferencesManager;
@@ -2285,15 +2285,7 @@ public class VectorRoomActivity extends MXCActionBarActivity implements
     private void launchAudioRecorderIntent() {
         enableActionBarHeader(HIDE_ACTION_BAR_HEADER);
 
-        Intent recordSoundIntent = new Intent(MediaStore.Audio.Media.RECORD_SOUND_ACTION);
-
-        // Create chooser
-        Intent chooserIntent = Intent.createChooser(recordSoundIntent, getString(R.string.go_on_with));
-        try {
-            startActivityForResult(chooserIntent, RECORD_AUDIO_REQUEST_CODE);
-        } catch (ActivityNotFoundException anfe) {
-            ToastKt.toast(this, R.string.error_no_external_application_found, Toast.LENGTH_SHORT);
-        }
+        ExternalApplicationsUtilKt.openSoundRecorder(this, RECORD_AUDIO_REQUEST_CODE);
     }
 
     /**
