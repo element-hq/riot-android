@@ -1133,9 +1133,8 @@ class VectorMessagesAdapterHelper {
      * *********************************************************************************************
      */
     private final Map<String, List<String>> mExtractedUrls = new HashMap<>();
-    private final Map<String, URLPreview> mUrlsPreview = new HashMap<>();
+    private final Map<String, URLPreview> mUrlsPreviews = new HashMap<>();
     private final Set<String> mPendingUrls = new HashSet<>();
-    private final Set<String> mDismissedPreviews = new HashSet<>();
 
     /**
      * Retrieves the webUrl extracted from a text
@@ -1210,19 +1209,19 @@ class VectorMessagesAdapterHelper {
             final String downloadKey = url.hashCode() + "---";
             String displayKey = url + "<----->" + id;
 
-            if (UrlPreviewView.didUrlPreviewDismiss(displayKey)) {
+            if (UrlPreviewView.Companion.didUrlPreviewDismiss(displayKey)) {
                 Log.d(LOG_TAG, "## manageURLPreviews() : " + displayKey + " has been dismissed");
             } else if (mPendingUrls.contains(url)) {
                 // please wait
-            } else if (!mUrlsPreview.containsKey(downloadKey)) {
+            } else if (!mUrlsPreviews.containsKey(downloadKey)) {
                 mPendingUrls.add(url);
                 mSession.getEventsApiClient().getURLPreview(url, System.currentTimeMillis(), new ApiCallback<URLPreview>() {
                     @Override
                     public void onSuccess(URLPreview urlPreview) {
                         mPendingUrls.remove(url);
 
-                        if (!mUrlsPreview.containsKey(downloadKey)) {
-                            mUrlsPreview.put(downloadKey, urlPreview);
+                        if (!mUrlsPreviews.containsKey(downloadKey)) {
+                            mUrlsPreviews.put(downloadKey, urlPreview);
                             mAdapter.notifyDataSetChanged();
                         }
                     }
@@ -1244,7 +1243,7 @@ class VectorMessagesAdapterHelper {
                 });
             } else {
                 UrlPreviewView previewView = new UrlPreviewView(mContext);
-                previewView.setUrlPreview(mContext, mSession, mUrlsPreview.get(downloadKey), displayKey);
+                previewView.setUrlPreview(mContext, mSession, mUrlsPreviews.get(downloadKey), displayKey);
                 urlsPreviewLayout.addView(previewView);
             }
         }

@@ -425,6 +425,7 @@
                 <action android:name="im.vector.receiver.UNIVERSAL_LINK_RESUME" />
             </intent-filter>
         </receiver>
+
         <receiver
             android:name=".receiver.VectorRegistrationReceiver"
             android:exported="false">
@@ -438,13 +439,15 @@
                 <data android:pathPrefix="/_matrix/" />
             </intent-filter>
         </receiver>
+
         <receiver android:name=".receiver.VectorBootReceiver">
             <intent-filter>
                 <action android:name="android.intent.action.BOOT_COMPLETED" />
-                <action android:name="android.intent.action.ACTION_USER_UNLOCKED" />
             </intent-filter>
         </receiver>
+
         <receiver android:name=".receiver.DismissNotificationReceiver" />
+
         <receiver
             android:name=".receiver.VectorReferrerReceiver"
             android:enabled="true"
@@ -472,6 +475,7 @@
         </activity>
 
         <service android:name=".services.EventStreamService" />
+
     </application>
 
 </manifest>

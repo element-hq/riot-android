@@ -140,10 +140,7 @@ public class MatrixURLSpan extends ClickableSpan implements ParcelableSpan {
                 if (null != mActionsListener) {
                     mActionsListener.onURLClick(uri);
                 } else {
-                    Context context = widget.getContext();
-                    Intent intent = new Intent(Intent.ACTION_VIEW, uri);
-                    intent.putExtra(Browser.EXTRA_APPLICATION_ID, context.getPackageName());
-                    context.startActivity(intent);
+                    ExternalApplicationsUtilKt.openUrlInExternalBrowser(widget.getContext(), uri);
                 }
             }
         } catch (Exception e) {

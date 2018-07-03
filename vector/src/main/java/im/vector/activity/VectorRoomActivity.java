@@ -20,8 +20,6 @@ package im.vector.activity;
 
 import android.Manifest;
 import android.annotation.SuppressLint;
-import android.content.ActivityNotFoundException;
-import android.content.ContentValues;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -30,11 +28,9 @@ import android.content.pm.PackageManager;
 import android.content.res.Configuration;
 import android.graphics.Color;
 import android.net.Uri;
-import android.os.Build;
 import android.os.Bundle;
 import android.os.Vibrator;
 import android.preference.PreferenceManager;
-import android.provider.MediaStore;
 import android.support.annotation.ColorInt;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -99,18 +95,14 @@ import org.matrix.androidsdk.util.JsonUtils;
 import org.matrix.androidsdk.util.Log;
 import org.matrix.androidsdk.util.ResourceUtils;
 
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
-import java.util.Locale;
 import java.util.Map;
 import java.util.Timer;
 import java.util.TimerTask;
 
-import androidx.core.widget.ToastKt;
 import im.vector.Matrix;
 import im.vector.R;
 import im.vector.VectorApp;
@@ -121,12 +113,13 @@ import im.vector.fragments.VectorUnknownDevicesFragment;
 import im.vector.notifications.NotificationUtils;
 import im.vector.services.EventStreamService;
 import im.vector.util.CallsManager;
+import im.vector.util.ExternalApplicationsUtilKt;
 import im.vector.util.MatrixSdkExtensionsKt;
 import im.vector.util.MatrixURLSpan;
 import im.vector.util.PreferencesManager;
 import im.vector.util.ReadMarkerManager;
 import im.vector.util.RoomUtils;
-import im.vector.util.SlashComandsParser;
+import im.vector.util.SlashCommandsParser;
 import im.vector.util.ThemeUtils;
 import im.vector.util.VectorMarkdownParser;
 import im.vector.util.VectorRoomMediasSender;
@@ -2004,7 +1997,7 @@ public class VectorRoomActivity extends MXCActionBarActivity implements
      */
     public void sendMessage(String body, String formattedBody, String format) {
         if (!TextUtils.isEmpty(body)) {
-            if (!SlashComandsParser.manageSplashCommand(this, mSession, mRoom, body, formattedBody, format)) {
+            if (!SlashCommandsParser.manageSplashCommand(this, mSession, mRoom, body, formattedBody, format)) {
                 cancelSelectionMode();
                 mVectorMessageListFragment.sendTextMessage(body, formattedBody, format);
             }
@@ -2285,15 +2278,7 @@ public class VectorRoomActivity extends MXCActionBarActivity implements
     private void launchAudioRecorderIntent() {
         enableActionBarHeader(HIDE_ACTION_BAR_HEADER);
 
-        Intent recordSoundIntent = new Intent(MediaStore.Audio.Media.RECORD_SOUND_ACTION);
-
-        // Create chooser
-        Intent chooserIntent = Intent.createChooser(recordSoundIntent, getString(R.string.go_on_with));
-        try {
-            startActivityForResult(chooserIntent, RECORD_AUDIO_REQUEST_CODE);
-        } catch (ActivityNotFoundException anfe) {
-            ToastKt.toast(this, R.string.error_no_external_application_found, Toast.LENGTH_SHORT);
-        }
+        ExternalApplicationsUtilKt.openSoundRecorder(this, RECORD_AUDIO_REQUEST_CODE);
     }
 
     /**
@@ -2302,12 +2287,7 @@ public class VectorRoomActivity extends MXCActionBarActivity implements
     private void launchFileSelectionIntent() {
         enableActionBarHeader(HIDE_ACTION_BAR_HEADER);
 
-        Intent fileIntent = new Intent(Intent.ACTION_GET_CONTENT);
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR2) {
-            fileIntent.putExtra(Intent.EXTRA_ALLOW_MULTIPLE, true);
-        }
-        fileIntent.setType("*/*");
-        startActivityForResult(fileIntent, REQUEST_FILES_REQUEST_CODE);
+        ExternalApplicationsUtilKt.openFileSelection(this, REQUEST_FILES_REQUEST_CODE);
     }
 
     private void startStickerPickerActivity() {
@@ -2366,10 +2346,7 @@ public class VectorRoomActivity extends MXCActionBarActivity implements
     private void launchNativeVideoRecorder() {
         enableActionBarHeader(HIDE_ACTION_BAR_HEADER);
 
-        final Intent captureIntent = new Intent(MediaStore.ACTION_VIDEO_CAPTURE);
-        // lowest quality
-        captureIntent.putExtra(MediaStore.EXTRA_VIDEO_QUALITY, 0);
-        startActivityForResult(captureIntent, TAKE_IMAGE_REQUEST_CODE);
+        ExternalApplicationsUtilKt.openVideoRecorder(this, TAKE_IMAGE_REQUEST_CODE);
     }
 
     /**
@@ -2378,58 +2355,7 @@ public class VectorRoomActivity extends MXCActionBarActivity implements
     private void launchNativeCamera() {
         enableActionBarHeader(HIDE_ACTION_BAR_HEADER);
 
-        final Intent captureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-
-        // the following is a fix for buggy 2.x devices
-        Date date = new Date();
-        SimpleDateFormat formatter = new SimpleDateFormat("yyyyMMddHHmmss", Locale.US);
-        ContentValues values = new ContentValues();
-        values.put(MediaStore.Images.Media.TITLE, CAMERA_VALUE_TITLE + formatter.format(date));
-        // The Galaxy S not only requires the name of the file to output the image to, but will also not
-        // set the mime type of the picture it just took (!!!). We assume that the Galaxy S takes image/jpegs
-        // so the attachment uploader doesn't freak out about there being no mimetype in the content database.
-        values.put(MediaStore.Images.Media.MIME_TYPE, "image/jpeg");
-        Uri dummyUri = null;
-        try {
-            dummyUri = getContentResolver().insert(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, values);
-
-            if (null == dummyUri) {
-                Log.e(LOG_TAG, "Cannot use the external storage media to save image");
-            }
-        } catch (UnsupportedOperationException uoe) {
-            Log.e(LOG_TAG, "Unable to insert camera URI into MediaStore.Images.Media.EXTERNAL_CONTENT_URI" +
-                    " - no SD card? Attempting to insert into device storage.");
-        } catch (Exception e) {
-            Log.e(LOG_TAG, "Unable to insert camera URI into MediaStore.Images.Media.EXTERNAL_CONTENT_URI. " + e);
-        }
-
-        if (null == dummyUri) {
-            try {
-                dummyUri = getContentResolver().insert(MediaStore.Images.Media.INTERNAL_CONTENT_URI, values);
-                if (null == dummyUri) {
-                    Log.e(LOG_TAG, "Cannot use the internal storage to save media to save image");
-                }
-
-            } catch (Exception e) {
-                Log.e(LOG_TAG, "Unable to insert camera URI into internal storage. Giving up. " + e);
-            }
-        }
-
-        if (dummyUri != null) {
-            captureIntent.putExtra(MediaStore.EXTRA_OUTPUT, dummyUri);
-            Log.d(LOG_TAG, "trying to take a photo on " + dummyUri.toString());
-        } else {
-            Log.d(LOG_TAG, "trying to take a photo with no predefined uri");
-        }
-
-        // Store the dummy URI which will be set to a placeholder location. When all is lost on samsung devices,
-        // this will point to the data we're looking for.
-        // Because Activities tend to use a single MediaProvider for all their intents, this field will only be the
-        // *latest* TAKE_PICTURE Uri. This is deemed acceptable as the normal flow is to create the intent then immediately
-        // fire it, meaning onActivityResult/getUri will be the next thing called, not another createIntentFor.
-        mLatestTakePictureCameraUri = dummyUri == null ? null : dummyUri.toString();
-
-        startActivityForResult(captureIntent, TAKE_IMAGE_REQUEST_CODE);
+        mLatestTakePictureCameraUri = ExternalApplicationsUtilKt.openCamera(this, CAMERA_VALUE_TITLE, TAKE_IMAGE_REQUEST_CODE);
     }
 
     /**
@@ -2584,7 +2510,7 @@ public class VectorRoomActivity extends MXCActionBarActivity implements
             if (TextUtils.equals(mSession.getMyUser().displayname, text)) {
                 // current user
                 if (TextUtils.isEmpty(mEditText.getText())) {
-                    mEditText.setText(String.format(VectorApp.getApplicationLocale(), "%s ", SlashComandsParser.CMD_EMOTE));
+                    mEditText.setText(String.format(VectorApp.getApplicationLocale(), "%s ", SlashCommandsParser.CMD_EMOTE));
                     mEditText.setSelection(mEditText.getText().length());
                     vibrate = true;
                 }
