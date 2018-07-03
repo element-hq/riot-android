@@ -983,4 +983,23 @@ La visibilidad del mensaje en Matrix es similar al correo electrónico. Olvidar 
     <string name="settings_deactivate_account_section">Desactivar cuenta</string>
     <string name="settings_deactivate_my_account">Desactivar mi cuenta</string>
 
+    <string name="download">Descargar</string>
+    <string name="settings_opt_in_of_analytics_ok">Sí, ¡quiero ayudar!</string>
+
+    <string name="startup_notification_privacy_button_grant">Conceder permiso</string>
+    <string name="option_send_voice">Enviar audio</string>
+
+    <string name="option_send_sticker">Enviar sticker</string>
+    <string name="widget_integration_invalid_parameter">Un parámetro no es válido.</string>
+    <string name="error_empty_field_your_password">Por favor, introduzca su contraseña.</string>
+
+<string name="settings_labs_enable_send_voice">Enviar mensaje de voz (requiere una aplicación de terceros para grabar los mensajes de voz)</string>
+
+    <string name="startup_notification_privacy_button_other">Elija otra opción</string>
+
+    <string name="widget_integration_missing_parameter">Falta un parámetro requerido.</string>
+    <string name="e2e_re_request_encryption_key_dialog_title">Solicitud enviada</string>
+    <string name="speak">Hablar</string>
+    <string name="e2e_re_request_encryption_key_dialog_content">"Por favor,  inicie Riot en otro dispositivo que pueda descifrar el mensaje para que pueda enviar las claves a este dispositivo."</string>
+
     </resources>
