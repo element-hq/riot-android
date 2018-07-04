@@ -5,7 +5,7 @@ Features:
  -
 
 Improvements:
- -
+ - Improve BugReport screen: display a preview of the screenshot (#2318)
 
 Other changes:
  -

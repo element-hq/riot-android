@@ -25,6 +25,7 @@ import android.content.pm.PackageInfo;
 import android.graphics.Bitmap;
 import android.os.AsyncTask;
 import android.os.Build;
+import android.support.annotation.Nullable;
 import android.text.TextUtils;
 import android.view.View;
 
@@ -409,6 +410,16 @@ public class BugReporter {
     }
 
     private static Bitmap mScreenshot = null;
+
+    /**
+     * Get current Screenshot
+     *
+     * @return screenshot or null if not available
+     */
+    @Nullable
+    public static Bitmap getScreenshot() {
+        return mScreenshot;
+    }
 
     /**
      * Send a bug report either with email or with Vector.

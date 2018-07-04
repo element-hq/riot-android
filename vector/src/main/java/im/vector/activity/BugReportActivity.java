@@ -26,6 +26,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.CheckBox;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -33,6 +34,7 @@ import android.widget.Toast;
 import org.matrix.androidsdk.util.Log;
 
 import butterknife.BindView;
+import butterknife.OnCheckedChanged;
 import im.vector.R;
 import im.vector.VectorApp;
 import im.vector.util.BugReporter;
@@ -55,6 +57,9 @@ public class BugReportActivity extends MXCActionBarActivity {
     @BindView(R.id.bug_report_button_include_screenshot)
     CheckBox mIncludeScreenShotButton;
 
+    @BindView(R.id.bug_report_screenshot_preview)
+    ImageView mScreenShotPreview;
+
     @BindView(R.id.bug_report_progress_view)
     ProgressBar mProgressBar;
 
@@ -67,8 +72,7 @@ public class BugReportActivity extends MXCActionBarActivity {
     @BindView(R.id.bug_report_mask_view)
     View mMaskView;
 
-    //
-    private MenuItem mSendBugReportItem;
+    private boolean mIsSending;
 
     @Override
     public int getLayoutRes() {
@@ -90,13 +94,19 @@ public class BugReportActivity extends MXCActionBarActivity {
 
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
-                refreshSendButton();
+                supportInvalidateOptionsMenu();
             }
 
             @Override
             public void afterTextChanged(Editable s) {
             }
         });
+
+        if (BugReporter.getScreenshot() != null) {
+            mScreenShotPreview.setImageBitmap(BugReporter.getScreenshot());
+        } else {
+            mScreenShotPreview.setVisibility(View.GONE);
+        }
     }
 
     @Override
@@ -106,9 +116,12 @@ public class BugReportActivity extends MXCActionBarActivity {
 
     @Override
     public boolean onPrepareOptionsMenu(Menu menu) {
-        mSendBugReportItem = menu.findItem(R.id.ic_action_send_bug_report);
+        MenuItem sendBugReportItem = menu.findItem(R.id.ic_action_send_bug_report);
 
-        refreshSendButton();
+        boolean isValid = mBugReportText.getText().toString().trim().length() > 10
+                && !mIsSending;
+        sendBugReportItem.setEnabled(isValid);
+        sendBugReportItem.getIcon().setAlpha(isValid ? 255 : 100);
 
         return super.onPrepareOptionsMenu(menu);
     }
@@ -124,30 +137,15 @@ public class BugReportActivity extends MXCActionBarActivity {
     }
 
 
-    @Override
-    protected void onResume() {
-        super.onResume();
-        refreshSendButton();
-    }
-
-    /**
-     * Refresh the send button visibility
-     */
-    private void refreshSendButton() {
-        if ((null != mSendBugReportItem) && (null != mBugReportText)) {
-            boolean isValid = (null != mBugReportText.getText()) && (mBugReportText.getText().toString().trim().length() > 10);
-            mSendBugReportItem.setEnabled(isValid);
-            mSendBugReportItem.getIcon().setAlpha(isValid ? 255 : 100);
-        }
-    }
-
     /**
      * Send the bug report
      */
     private void sendBugReport() {
         mScrollView.setAlpha(0.3f);
         mMaskView.setVisibility(View.VISIBLE);
-        mSendBugReportItem.setEnabled(false);
+
+        mIsSending = true;
+        supportInvalidateOptionsMenu();
 
         mProgressTextView.setVisibility(View.VISIBLE);
         mProgressTextView.setText(getString(R.string.send_bug_report_progress, 0 + ""));
@@ -176,7 +174,9 @@ public class BugReportActivity extends MXCActionBarActivity {
                         mProgressBar.setVisibility(View.GONE);
                         mProgressTextView.setVisibility(View.GONE);
                         mScrollView.setAlpha(1.0f);
-                        mSendBugReportItem.setEnabled(true);
+
+                        mIsSending = false;
+                        supportInvalidateOptionsMenu();
                     }
 
                     @Override
@@ -216,5 +216,18 @@ public class BugReportActivity extends MXCActionBarActivity {
                         }
                     }
                 });
+    }
+
+    /* ==========================================================================================
+     * UI Event
+     * ========================================================================================== */
+
+    @OnCheckedChanged(R.id.bug_report_button_include_screenshot)
+    void onSendScreenshotChanged() {
+        if (mIncludeScreenShotButton.isChecked() && BugReporter.getScreenshot() != null) {
+            mScreenShotPreview.setVisibility(View.VISIBLE);
+        } else {
+            mScreenShotPreview.setVisibility(View.GONE);
+        }
     }
 }
