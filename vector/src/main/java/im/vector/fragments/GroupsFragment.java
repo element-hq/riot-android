@@ -366,7 +366,7 @@ public class GroupsFragment extends AbsHomeFragment {
                 }
             }
         } catch (Exception e) {
-            Log.e(LOG_TAG, "## displayGroupPopupMenu() : failed " + e.getMessage());
+            Log.e(LOG_TAG, "## displayGroupPopupMenu() : failed " + e.getMessage(), e);
         }
 
         popup.show();

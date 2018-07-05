@@ -87,7 +87,7 @@ class IntegrationManagerActivity : AbstractWidgetActivity() {
 
             return url
         } catch (e: Exception) {
-            Log.e(LOG_TAG, "## buildInterfaceUrl() failed " + e.message)
+            Log.e(LOG_TAG, "## buildInterfaceUrl() failed " + e.message, e)
         }
 
         return null
@@ -347,7 +347,7 @@ class IntegrationManagerActivity : AbstractWidgetActivity() {
             }
 
             override fun onNetworkError(e: Exception) {
-                Log.e(LOG_TAG, "membership_state of " + userId + " in room " + mRoom!!.roomId + " failed " + e.message)
+                Log.e(LOG_TAG, "membership_state of " + userId + " in room " + mRoom!!.roomId + " failed " + e.message, e)
                 sendError(getString(R.string.widget_integration_failed_to_send_request), eventData)
             }
 
@@ -357,7 +357,7 @@ class IntegrationManagerActivity : AbstractWidgetActivity() {
             }
 
             override fun onUnexpectedError(e: Exception) {
-                Log.e(LOG_TAG, "membership_state of " + userId + " in room " + mRoom!!.roomId + " failed " + e.message)
+                Log.e(LOG_TAG, "membership_state of " + userId + " in room " + mRoom!!.roomId + " failed " + e.message, e)
                 sendError(getString(R.string.widget_integration_failed_to_send_request), eventData)
             }
         })

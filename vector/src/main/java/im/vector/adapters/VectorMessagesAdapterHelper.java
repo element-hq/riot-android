@@ -297,7 +297,7 @@ class VectorMessagesAdapterHelper {
 
                         @Override
                         public void onNetworkError(Exception e) {
-                            Log.e(LOG_TAG, "## refreshGroupFlairView () : get profile of " + groupId + " failed " + e.getMessage());
+                            Log.e(LOG_TAG, "## refreshGroupFlairView () : get profile of " + groupId + " failed " + e.getMessage(), e);
                             refresh(null);
                         }
 
@@ -309,7 +309,7 @@ class VectorMessagesAdapterHelper {
 
                         @Override
                         public void onUnexpectedError(Exception e) {
-                            Log.e(LOG_TAG, "## refreshGroupFlairView () : get profile of " + groupId + " failed " + e.getMessage());
+                            Log.e(LOG_TAG, "## refreshGroupFlairView () : get profile of " + groupId + " failed " + e.getMessage(), e);
                             refresh(null);
                         }
                     });
@@ -388,7 +388,7 @@ class VectorMessagesAdapterHelper {
 
                 @Override
                 public void onNetworkError(Exception e) {
-                    Log.e(LOG_TAG, "## refreshGroupFlairView failed " + e.getMessage());
+                    Log.e(LOG_TAG, "## refreshGroupFlairView failed " + e.getMessage(), e);
                 }
 
                 @Override
@@ -398,7 +398,7 @@ class VectorMessagesAdapterHelper {
 
                 @Override
                 public void onUnexpectedError(Exception e) {
-                    Log.e(LOG_TAG, "## refreshGroupFlairView failed " + e.getMessage());
+                    Log.e(LOG_TAG, "## refreshGroupFlairView failed " + e.getMessage(), e);
                 }
             });
         }
@@ -1104,7 +1104,7 @@ class VectorMessagesAdapterHelper {
                     tagsToRemove.add(tag);
                 }
             } catch (Exception e) {
-                Log.e(LOG_TAG, "sanitiseHTML failed " + e.getLocalizedMessage());
+                Log.e(LOG_TAG, "sanitiseHTML failed " + e.getLocalizedMessage(), e);
             }
         }
 
@@ -1157,7 +1157,7 @@ class VectorMessagesAdapterHelper {
                         list.add(value);
                     }
                 } catch (Exception e) {
-                    Log.e(LOG_TAG, "## extractWebUrl() " + e.getMessage());
+                    Log.e(LOG_TAG, "## extractWebUrl() " + e.getMessage(), e);
                 }
             }
 

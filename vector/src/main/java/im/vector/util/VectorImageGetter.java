@@ -102,7 +102,7 @@ public class VectorImageGetter implements Html.ImageGetter {
                     new ImageDownloaderTask().execute(source);
                     mPendingDownloads.add(source);
                 } catch (Throwable t) {
-                    Log.e(LOG_TAG, "## getDrawable() failed " + t.getMessage());
+                    Log.e(LOG_TAG, "## getDrawable() failed " + t.getMessage(), t);
                 }
             } else {
                 Log.d(LOG_TAG, "## getDrawable() : " + source + " is downloading");
@@ -134,7 +134,7 @@ public class VectorImageGetter implements Html.ImageGetter {
                 try {
                     return BitmapFactory.decodeStream(new URL(downloadableUrl).openConnection().getInputStream());
                 } catch (Throwable t) {
-                    Log.e(LOG_TAG, "## ImageDownloader() failed " + t.getMessage());
+                    Log.e(LOG_TAG, "## ImageDownloader() failed " + t.getMessage(), t);
                 }
             }
 
@@ -159,7 +159,7 @@ public class VectorImageGetter implements Html.ImageGetter {
                         mListener.onImageDownloaded(mSource);
                     }
                 } catch (Throwable t) {
-                    Log.e(LOG_TAG, "## ImageDownloader() failed " + t.getMessage());
+                    Log.e(LOG_TAG, "## ImageDownloader() failed " + t.getMessage(), t);
                 }
             }
         }

@@ -175,7 +175,7 @@ public class PillView extends LinearLayout {
 
                                 @Override
                                 public void onNetworkError(Exception e) {
-                                    Log.e(LOG_TAG, "## initData() : fetchPreviewData failed " + e.getMessage());
+                                    Log.e(LOG_TAG, "## initData() : fetchPreviewData failed " + e.getMessage(), e);
                                 }
 
                                 @Override
@@ -185,7 +185,7 @@ public class PillView extends LinearLayout {
 
                                 @Override
                                 public void onUnexpectedError(Exception e) {
-                                    Log.e(LOG_TAG, "## initData() : fetchPreviewData failed " + e.getMessage());
+                                    Log.e(LOG_TAG, "## initData() : fetchPreviewData failed " + e.getMessage(), e);
                                 }
                             });
                         }
@@ -194,7 +194,7 @@ public class PillView extends LinearLayout {
 
                 @Override
                 public void onNetworkError(Exception e) {
-                    Log.e(LOG_TAG, "## initData() : roomIdByAlias failed " + e.getMessage());
+                    Log.e(LOG_TAG, "## initData() : roomIdByAlias failed " + e.getMessage(), e);
                 }
 
                 @Override
@@ -204,7 +204,7 @@ public class PillView extends LinearLayout {
 
                 @Override
                 public void onUnexpectedError(Exception e) {
-                    Log.e(LOG_TAG, "## initData() : roomIdByAlias failed " + e.getMessage());
+                    Log.e(LOG_TAG, "## initData() : roomIdByAlias failed " + e.getMessage(), e);
                 }
             });
         }
@@ -244,7 +244,7 @@ public class PillView extends LinearLayout {
                 return new BitmapDrawable(getContext().getResources(), bitmap);
             }
         } catch (Exception e) {
-            Log.e(LOG_TAG, "## getDrawable() : failed " + e.getMessage());
+            Log.e(LOG_TAG, "## getDrawable() : failed " + e.getMessage(), e);
         }
 
         return null;

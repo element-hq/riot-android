@@ -225,7 +225,7 @@ public class VectorSearchMessagesListFragment extends VectorMessageListFragment 
                         try {
                             listener.onSearchSucceed(0);
                         } catch (Exception e) {
-                            Log.e(LOG_TAG, "## searchPattern() : failed " + e.getMessage());
+                            Log.e(LOG_TAG, "## searchPattern() : failed " + e.getMessage(), e);
                         }
                     }
                     mSearchListeners.clear();
@@ -242,7 +242,7 @@ public class VectorSearchMessagesListFragment extends VectorMessageListFragment 
                             try {
                                 listener.onSearchSucceed(mAdapter.getCount());
                             } catch (Exception e) {
-                                Log.e(LOG_TAG, "## searchPattern() : failed " + e.getMessage());
+                                Log.e(LOG_TAG, "## searchPattern() : failed " + e.getMessage(), e);
                             }
                         }
                         mSearchListeners.clear();
@@ -278,7 +278,7 @@ public class VectorSearchMessagesListFragment extends VectorMessageListFragment 
                                 try {
                                     listener.onSearchSucceed(nbrMessages);
                                 } catch (Exception e) {
-                                    Log.e(LOG_TAG, "## searchPattern() : failed " + e.getMessage());
+                                    Log.e(LOG_TAG, "## searchPattern() : failed " + e.getMessage(), e);
                                 }
                             }
                             mSearchListeners.clear();
@@ -301,7 +301,7 @@ public class VectorSearchMessagesListFragment extends VectorMessageListFragment 
                             try {
                                 listener.onSearchFailed();
                             } catch (Exception e) {
-                                Log.e(LOG_TAG, "## searchPattern() : onSearchFailed failed " + e.getMessage());
+                                Log.e(LOG_TAG, "## searchPattern() : onSearchFailed failed " + e.getMessage(), e);
                             }
                         }
                         mSearchListeners.clear();

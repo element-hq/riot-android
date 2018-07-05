@@ -579,7 +579,7 @@ public class VectorHomeActivity extends RiotAppCompatActivity implements SearchV
 
                 VectorApp.getInstance().clearAppCrashStatus();
             } catch (Exception e) {
-                Log.e(LOG_TAG, "## onResume() : appCrashedAlert failed " + e.getMessage());
+                Log.e(LOG_TAG, "## onResume() : appCrashedAlert failed " + e.getMessage(), e);
             }
         }
 
@@ -775,7 +775,7 @@ public class VectorHomeActivity extends RiotAppCompatActivity implements SearchV
         try {
             unregisterReceiver(mBrdRcvStopWaitingView);
         } catch (Exception e) {
-            Log.e(LOG_TAG, "## onPause() : unregisterReceiver fails " + e.getMessage());
+            Log.e(LOG_TAG, "## onPause() : unregisterReceiver fails " + e.getMessage(), e);
         }
 
         if (mSession.isAlive()) {
@@ -953,7 +953,7 @@ public class VectorHomeActivity extends RiotAppCompatActivity implements SearchV
                         .addToBackStack(mCurrentFragmentTag)
                         .commit();
             } catch (Exception e) {
-                Log.e(LOG_TAG, "## updateSelectedFragment() failed : " + e.getMessage());
+                Log.e(LOG_TAG, "## updateSelectedFragment() failed : " + e.getMessage(), e);
             }
         }
     }
@@ -1343,7 +1343,7 @@ public class VectorHomeActivity extends RiotAppCompatActivity implements SearchV
                     try {
                         mFloatingActionsMenu.postDelayed(mShowFloatingActionButtonRunnable, 1000);
                     } catch (Throwable throwable) {
-                        Log.e(LOG_TAG, "failed to postDelayed " + throwable.getMessage());
+                        Log.e(LOG_TAG, "failed to postDelayed " + throwable.getMessage(), throwable);
 
                         if (mShowFloatingActionButtonRunnable != null && mFloatingActionsMenu != null) {
                             mFloatingActionsMenu.removeCallbacks(mShowFloatingActionButtonRunnable);
@@ -2077,7 +2077,7 @@ public class VectorHomeActivity extends RiotAppCompatActivity implements SearchV
                     shiftingMode.setAccessible(false);
 
                 } catch (Exception e) {
-                    Log.e(LOG_TAG, "## removeMenuShiftMode failed " + e.getMessage());
+                    Log.e(LOG_TAG, "## removeMenuShiftMode failed " + e.getMessage(), e);
                 }
             }
         }
@@ -2135,7 +2135,7 @@ public class VectorHomeActivity extends RiotAppCompatActivity implements SearchV
                     mBadgeViewByIndex.put(itemId, badgeView);
                 }
             } catch (Exception e) {
-                Log.e(LOG_TAG, "## addUnreadBadges failed " + e.getMessage());
+                Log.e(LOG_TAG, "## addUnreadBadges failed " + e.getMessage(), e);
             }
         }
 

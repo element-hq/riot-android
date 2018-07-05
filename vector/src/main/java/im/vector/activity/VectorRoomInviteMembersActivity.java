@@ -440,7 +440,7 @@ public class VectorRoomInviteMembersActivity extends VectorBaseSearchActivity {
                                 String userId = text.substring(matcher.start(0), matcher.end(0));
                                 items.add(new ParticipantAdapterItem(userId, null, userId, true));
                             } catch (Exception e) {
-                                Log.e(LOG_TAG, "## displayInviteByUserId() " + e.getMessage());
+                                Log.e(LOG_TAG, "## displayInviteByUserId() " + e.getMessage(), e);
                             }
                         }
                     }

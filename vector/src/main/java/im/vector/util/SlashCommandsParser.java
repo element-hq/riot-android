@@ -158,7 +158,7 @@ public class SlashCommandsParser {
             try {
                 messageParts = textMessage.split("\\s+");
             } catch (Exception e) {
-                Log.e(LOG_TAG, "## manageSplashCommand() : split failed " + e.getMessage());
+                Log.e(LOG_TAG, "## manageSplashCommand() : split failed " + e.getMessage(), e);
             }
 
             // test if the string cut fails
@@ -295,7 +295,7 @@ public class SlashCommandsParser {
                             room.updateUserPowerLevels(userID, Integer.parseInt(powerLevelsAsString), callback);
                         }
                     } catch (Exception e) {
-                        Log.e(LOG_TAG, "mRoom.updateUserPowerLevels " + e.getMessage());
+                        Log.e(LOG_TAG, "mRoom.updateUserPowerLevels " + e.getMessage(), e);
                     }
                 }
             } else if (TextUtils.equals(firstPart, CMD_RESET_USER_POWER_LEVEL)) {

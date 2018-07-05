@@ -520,7 +520,7 @@ public class RoomsFragment extends AbsHomeFragment implements AbsHomeFragment.On
 
                         @Override
                         public void onNetworkError(Exception e) {
-                            Log.e(LOG_TAG, "## startPublicRoomsSearch() : getPublicRoomsCount failed " + e.getMessage());
+                            Log.e(LOG_TAG, "## startPublicRoomsSearch() : getPublicRoomsCount failed " + e.getMessage(), e);
                             onDone(-1);
                         }
 
@@ -532,7 +532,7 @@ public class RoomsFragment extends AbsHomeFragment implements AbsHomeFragment.On
 
                         @Override
                         public void onUnexpectedError(Exception e) {
-                            Log.e(LOG_TAG, "## startPublicRoomsSearch() : getPublicRoomsCount failed " + e.getMessage());
+                            Log.e(LOG_TAG, "## startPublicRoomsSearch() : getPublicRoomsCount failed " + e.getMessage(), e);
                             onDone(-1);
                         }
                     }

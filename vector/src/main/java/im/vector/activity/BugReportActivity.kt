@@ -135,7 +135,7 @@ class BugReportActivity : MXCActionBarActivity() {
                                         VectorApp.getInstance().getString(R.string.send_bug_report_failed, reason), Toast.LENGTH_LONG).show()
                             }
                         } catch (e: Exception) {
-                            Log.e(LOG_TAG, "## onUploadFailed() : failed to display the toast " + e.message)
+                            Log.e(LOG_TAG, "## onUploadFailed() : failed to display the toast " + e.message, e)
                         }
 
                         mMaskView.isVisible = false
@@ -168,13 +168,13 @@ class BugReportActivity : MXCActionBarActivity() {
                         try {
                             VectorApp.getInstance()?.toast(R.string.send_bug_report_sent, Toast.LENGTH_LONG)
                         } catch (e: Exception) {
-                            Log.e(LOG_TAG, "## onUploadSucceed() : failed to dismiss the toast " + e.message)
+                            Log.e(LOG_TAG, "## onUploadSucceed() : failed to dismiss the toast " + e.message, e)
                         }
 
                         try {
                             finish()
                         } catch (e: Exception) {
-                            Log.e(LOG_TAG, "## onUploadSucceed() : failed to dismiss the dialog " + e.message)
+                            Log.e(LOG_TAG, "## onUploadSucceed() : failed to dismiss the dialog " + e.message, e)
                         }
 
                     }

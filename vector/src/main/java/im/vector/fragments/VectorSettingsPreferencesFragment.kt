@@ -716,7 +716,7 @@ class VectorSettingsPreferencesFragment : PreferenceFragment(), SharedPreference
                 try {
                     task.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR)
                 } catch (e: Exception) {
-                    Log.e(LOG_TAG, "## mSession.getMediasCache().clear() failed " + e.message)
+                    Log.e(LOG_TAG, "## mSession.getMediasCache().clear() failed " + e.message, e)
                     task.cancel(true)
                     hideLoadingView()
                 }
@@ -1356,7 +1356,7 @@ class VectorSettingsPreferencesFragment : PreferenceFragment(), SharedPreference
                                 try {
                                     isEnabled = !TextUtils.equals(actions[0] as String, BingRule.ACTION_DONT_NOTIFY)
                                 } catch (e: Exception) {
-                                    Log.e(LOG_TAG, "## refreshPreferences failed " + e.message)
+                                    Log.e(LOG_TAG, "## refreshPreferences failed " + e.message, e)
                                 }
 
                             }
@@ -1972,7 +1972,7 @@ class VectorSettingsPreferencesFragment : PreferenceFragment(), SharedPreference
                 try {
                     newTimeOut = Integer.parseInt(newValue as String)
                 } catch (e: Exception) {
-                    Log.e(LOG_TAG, "## refreshBackgroundSyncPrefs : parseInt failed " + e.message)
+                    Log.e(LOG_TAG, "## refreshBackgroundSyncPrefs : parseInt failed " + e.message, e)
                 }
 
                 if (newTimeOut != timeout) {
@@ -1996,7 +1996,7 @@ class VectorSettingsPreferencesFragment : PreferenceFragment(), SharedPreference
                 try {
                     newDelay = Integer.parseInt(newValue as String)
                 } catch (e: Exception) {
-                    Log.e(LOG_TAG, "## refreshBackgroundSyncPrefs : parseInt failed " + e.message)
+                    Log.e(LOG_TAG, "## refreshBackgroundSyncPrefs : parseInt failed " + e.message, e)
                 }
 
                 if (newDelay != delay) {
@@ -2559,7 +2559,7 @@ class VectorSettingsPreferencesFragment : PreferenceFragment(), SharedPreference
                     try {
                         resource.mContentStream.close()
                     } catch (e2: Exception) {
-                        Log.e(LOG_TAG, "## importKeys() : " + e2.message)
+                        Log.e(LOG_TAG, "## importKeys() : " + e2.message, e2)
                     }
 
                     appContext.toast(e.localizedMessage)

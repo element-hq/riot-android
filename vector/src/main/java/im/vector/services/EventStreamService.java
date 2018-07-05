@@ -942,7 +942,7 @@ public class EventStreamService extends Service {
         try {
             callId = event.getContentAsJsonObject().get("call_id").getAsString();
         } catch (Exception e) {
-            Log.e(LOG_TAG, "prepareNotification : getContentAsJsonObject " + e.getMessage());
+            Log.e(LOG_TAG, "prepareNotification : getContentAsJsonObject " + e.getMessage(), e);
         }
 
         if (!TextUtils.isEmpty(callId)) {
@@ -1054,7 +1054,7 @@ public class EventStreamService extends Service {
                 mNotificationHandlerThread = new HandlerThread("NotificationsService_" + System.currentTimeMillis(), Thread.MIN_PRIORITY);
                 mNotificationHandlerThread.start();
             } catch (Exception e) {
-                Log.e(LOG_TAG, "## getNotificationsHandler failed : " + e.getMessage());
+                Log.e(LOG_TAG, "## getNotificationsHandler failed : " + e.getMessage(), e);
             }
         }
 
@@ -1062,7 +1062,7 @@ public class EventStreamService extends Service {
             try {
                 mNotificationsHandler = new android.os.Handler(mNotificationHandlerThread.getLooper());
             } catch (Exception e) {
-                Log.e(LOG_TAG, "## getNotificationsHandler failed : " + e.getMessage());
+                Log.e(LOG_TAG, "## getNotificationsHandler failed : " + e.getMessage(), e);
             }
         }
 
@@ -1446,7 +1446,7 @@ public class EventStreamService extends Service {
                                         }
                                     }
                                 } catch (Exception e) {
-                                    Log.e(LOG_TAG, "##refreshNotifiedMessagesList() : invitation parsing failed");
+                                    Log.e(LOG_TAG, "##refreshNotifiedMessagesList() : invitation parsing failed", e);
                                 }
                             }
                         }
@@ -1478,7 +1478,7 @@ public class EventStreamService extends Service {
                             }
                         }
                     } catch (Exception e) {
-                        Log.e(LOG_TAG, "##refreshNotifiedMessagesList(): failed checking the unread " + e.getMessage());
+                        Log.e(LOG_TAG, "##refreshNotifiedMessagesList(): failed checking the unread " + e.getMessage(), e);
                     }
                 }
             }
@@ -1539,7 +1539,7 @@ public class EventStreamService extends Service {
                     }
                 }
             } catch (Exception e) {
-                Log.e(LOG_TAG, "##refreshNotifiedMessagesList(): failed while building mNotifiedEventsByRoomId " + e.getMessage());
+                Log.e(LOG_TAG, "##refreshNotifiedMessagesList(): failed while building mNotifiedEventsByRoomId " + e.getMessage(), e);
             }
 
             return isUpdated;

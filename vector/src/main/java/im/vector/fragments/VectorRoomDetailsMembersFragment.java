@@ -223,7 +223,7 @@ public class VectorRoomDetailsMembersFragment extends VectorBaseFragment {
                         try {
                             text = mPatternToSearchEditText.getText().toString();
                         } catch (Exception e) {
-                            Log.e(LOG_TAG, "## afterTextChanged() failed " + e.getMessage());
+                            Log.e(LOG_TAG, "## afterTextChanged() failed " + e.getMessage(), e);
                         }
 
                         if (TextUtils.equals(text, patternValue) && (null != getActivity())) {
@@ -589,7 +589,7 @@ public class VectorRoomDetailsMembersFragment extends VectorBaseFragment {
 
             mRefreshTimer.schedule(mRefreshTimerTask, 1000);
         } catch (Throwable throwable) {
-            Log.e(LOG_TAG, "## delayedUpdateRoomMembersDataModel() failed " + throwable.getMessage());
+            Log.e(LOG_TAG, "## delayedUpdateRoomMembersDataModel() failed " + throwable.getMessage(), throwable);
 
             if (null != mRefreshTimer) {
                 mRefreshTimer.cancel();

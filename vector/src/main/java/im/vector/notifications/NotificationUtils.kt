@@ -239,7 +239,7 @@ object NotificationUtils {
                         .getMethod("setLatestEventInfo", Context::class.java, CharSequence::class.java, CharSequence::class.java, PendingIntent::class.java)
                 deprecatedMethod.invoke(notification, context, context.getString(R.string.riot_app_name), context.getString(subTitleResId), pi)
             } catch (ex: Exception) {
-                Log.e(LOG_TAG, "## buildNotification(): Exception - setLatestEventInfo() Msg=" + ex.message)
+                Log.e(LOG_TAG, "## buildNotification(): Exception - setLatestEventInfo() Msg=" + ex.message, ex)
             }
 
         }
@@ -539,7 +539,7 @@ object NotificationUtils {
                     wearableExtender.addAction(action)
                     builder.extend(wearableExtender)
                 } catch (e: Exception) {
-                    Log.e(LOG_TAG, "## addTextStyleWithSeveralRooms() : WearableExtender failed " + e.message)
+                    Log.e(LOG_TAG, "## addTextStyleWithSeveralRooms() : WearableExtender failed " + e.message, e)
                 }
             }
         }
@@ -607,7 +607,7 @@ object NotificationUtils {
                 notification = buildMessageNotification(context, roomsNotifications, BingRule(), isBackground)
             }
         } catch (e: Exception) {
-            Log.e(LOG_TAG, "## buildMessageNotification() : failed " + e.message)
+            Log.e(LOG_TAG, "## buildMessageNotification() : failed " + e.message, e)
         }
 
         return notification
@@ -635,7 +635,7 @@ object NotificationUtils {
             // cache the value
             RoomsNotifications.saveRoomNotifications(context, roomsNotifications)
         } catch (e: Exception) {
-            Log.e(LOG_TAG, "## buildMessageNotification() : failed " + e.message)
+            Log.e(LOG_TAG, "## buildMessageNotification() : failed " + e.message, e)
         }
 
         return notification
@@ -668,7 +668,7 @@ object NotificationUtils {
                     try {
                         largeBitmap = BitmapFactory.decodeFile(roomsNotifications.mRoomAvatarPath, options)
                     } catch (oom: OutOfMemoryError) {
-                        Log.e(LOG_TAG, "decodeFile failed with an oom")
+                        Log.e(LOG_TAG, "decodeFile failed with an oom", oom)
                     }
 
                 }
@@ -691,7 +691,7 @@ object NotificationUtils {
             try {
                 addTextStyle(context, builder, roomsNotifications)
             } catch (e: Exception) {
-                Log.e(LOG_TAG, "## buildMessageNotification() : addTextStyle failed " + e.message)
+                Log.e(LOG_TAG, "## buildMessageNotification() : addTextStyle failed " + e.message, e)
             }
 
             // only one room : display the large bitmap (it should be the room avatar)
@@ -706,7 +706,7 @@ object NotificationUtils {
 
             return builder.build()
         } catch (e: Exception) {
-            Log.e(LOG_TAG, "## buildMessageNotification() : failed" + e.message)
+            Log.e(LOG_TAG, "## buildMessageNotification() : failed" + e.message, e)
         }
 
         return null
@@ -757,7 +757,7 @@ object NotificationUtils {
 
             return builder.build()
         } catch (e: Exception) {
-            Log.e(LOG_TAG, "## buildMessagesListNotification() : failed" + e.message)
+            Log.e(LOG_TAG, "## buildMessagesListNotification() : failed" + e.message, e)
         }
 
         return null
@@ -797,7 +797,7 @@ object NotificationUtils {
             NotificationManagerCompat.from(context)
                     .cancelAll()
         } catch (e: Exception) {
-            Log.e(LOG_TAG, "## cancelAllNotifications() failed " + e.message)
+            Log.e(LOG_TAG, "## cancelAllNotifications() failed " + e.message, e)
         }
     }
 
