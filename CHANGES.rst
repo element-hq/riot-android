@@ -11,7 +11,7 @@ Other changes:
  -
 
 Bugfix:
- -
+ - Fix issue on vanished favorite and low priority room (#2413)
 
 Translations:
  -
