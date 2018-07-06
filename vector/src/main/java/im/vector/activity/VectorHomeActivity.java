@@ -321,16 +321,15 @@ public class VectorHomeActivity extends RiotAppCompatActivity implements SearchV
 
         // track if the application update
         SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(this);
-        int version = preferences.getInt("VERSION_BUILD", 0);
+        int version = preferences.getInt(PreferencesManager.VERSION_BUILD, 0);
 
         if (version != VectorApp.VERSION_BUILD) {
             Log.d(LOG_TAG, "The application has been updated from version " + version + " to version " + VectorApp.VERSION_BUILD);
 
             // TODO add some dedicated actions here
 
-            preferences
-                    .edit()
-                    .putInt("VERSION_BUILD", VectorApp.VERSION_BUILD)
+            preferences.edit()
+                    .putInt(PreferencesManager.VERSION_BUILD, VectorApp.VERSION_BUILD)
                     .apply();
         }
 
