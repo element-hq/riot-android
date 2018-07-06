@@ -1,23 +1,8 @@
-Changes in Riot 0.8.12 (2018-XX-XX)
+Changes in Riot 0.8.12 (2018-07-06)
 ===================================================
-
-Features:
- -
-
-Improvements:
- -
-
-Other changes:
- -
 
 Bugfix:
  - Fix issue on vanished favorite and low priority room (#2413)
-
-Translations:
- -
-
-Build:
- -
 
 Changes in Riot 0.8.11 (2018-07-03)
 ===================================================
