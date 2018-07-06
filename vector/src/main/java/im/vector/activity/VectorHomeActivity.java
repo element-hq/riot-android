@@ -1292,7 +1292,9 @@ public class VectorHomeActivity extends RiotAppCompatActivity implements SearchV
                 @Override
                 public void onAnimationEnd(Animator animation) {
                     super.onAnimationEnd(animation);
-                    mFloatingActionsMenu.setVisibility(View.VISIBLE);
+                    if (mFloatingActionsMenu != null) {
+                        mFloatingActionsMenu.setVisibility(View.VISIBLE);
+                    }
                 }
             });
             animator.start();
@@ -1306,7 +1308,9 @@ public class VectorHomeActivity extends RiotAppCompatActivity implements SearchV
                 @Override
                 public void onAnimationEnd(Animator animation) {
                     super.onAnimationEnd(animation);
-                    mFloatingActionsMenu.setVisibility(View.GONE);
+                    if (mFloatingActionsMenu != null) {
+                        mFloatingActionsMenu.setVisibility(View.GONE);
+                    }
                 }
             });
             animator.start();
