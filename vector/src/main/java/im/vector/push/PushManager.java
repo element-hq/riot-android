@@ -16,7 +16,7 @@
  * limitations under the License.
  */
 
- package im.vector.push;
+package im.vector.push;
 
 import android.content.Context;
 import android.content.SharedPreferences;
@@ -634,7 +634,7 @@ public abstract class PushManager {
                         // move the self pusher to the top of the list
                         Pusher selfPusher = null;
 
-                        for(Pusher pusher : mPushersList) {
+                        for (Pusher pusher : mPushersList) {
                             if (TextUtils.equals(pusher.pushkey, getPushRegistrationToken())) {
                                 selfPusher = pusher;
                                 break;
@@ -1065,7 +1065,7 @@ public abstract class PushManager {
             mUsePush = true;
 
             try {
-                mUsePush = TextUtils.equals(mContext.getResources().getString(R.string.allow_gcm_use), "true");
+                mUsePush = TextUtils.equals(mContext.getString(R.string.allow_gcm_use), "true");
             } catch (Exception e) {
                 Log.e(LOG_TAG, "usePush " + e.getMessage());
             }

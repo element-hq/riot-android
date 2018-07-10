@@ -8,7 +8,7 @@ Improvements:
  -
 
 Other changes:
- -
+ - refactor push system to allow easier integration of push services besides FCM (#1584)
 
 Bugfix:
  -
