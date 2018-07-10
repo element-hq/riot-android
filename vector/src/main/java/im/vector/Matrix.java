@@ -25,6 +25,7 @@ import android.content.pm.PackageInfo;
 import android.support.annotation.NonNull;
 import android.text.TextUtils;
 
+import org.matrix.androidsdk.BuildConfig;
 import org.matrix.androidsdk.HomeServerConnectionConfig;
 import org.matrix.androidsdk.MXDataHandler;
 import org.matrix.androidsdk.MXSession;
@@ -62,6 +63,7 @@ import im.vector.activity.CommonActivityUtils;
 import im.vector.activity.SplashActivity;
 import im.vector.push.PushManager;
 import im.vector.push.GcmRegistrationManager;
+import im.vector.push.TemplatePushManager;
 import im.vector.services.EventStreamService;
 import im.vector.store.LoginStorage;
 import im.vector.util.PreferencesManager;
@@ -181,7 +183,11 @@ public class Matrix {
         mTmpStores = new ArrayList<>();
 
         //TODO: Change to different Push Manager here
-        mPushManager = new GcmRegistrationManager(mAppContext);
+        if (BuildConfig.FLAVOR.equals("fdroid")) {
+            mPushManager = new TemplatePushManager(mAppContext);
+        } else {
+            mPushManager = new GcmRegistrationManager(mAppContext);
+        }
     }
 
     /**
