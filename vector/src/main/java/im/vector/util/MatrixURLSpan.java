@@ -1,7 +1,7 @@
 /*
  * Copyright 2016 OpenMarket Ltd
  * Copyright 2017 Vector Creations Ltd
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
@@ -36,12 +36,11 @@ import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import im.vector.activity.VectorHomeActivity;
 import im.vector.listeners.IMessagesAdapterActionsListener;
 
 // Class to track some matrix items click}
 public class MatrixURLSpan extends ClickableSpan implements ParcelableSpan {
-    private static final String LOG_TAG = VectorHomeActivity.class.getSimpleName();
+    private static final String LOG_TAG = MatrixURLSpan.class.getSimpleName();
 
     public static final Parcelable.Creator<MatrixURLSpan> CREATOR = new Parcelable.Creator<MatrixURLSpan>() {
         @Override
@@ -55,7 +54,7 @@ public class MatrixURLSpan extends ClickableSpan implements ParcelableSpan {
         }
     };
 
-    // the URL to trakc
+    // the URL to track
     private final String mURL;
 
     // URL regex
@@ -64,21 +63,32 @@ public class MatrixURLSpan extends ClickableSpan implements ParcelableSpan {
     // listener
     private final IMessagesAdapterActionsListener mActionsListener;
 
-    public MatrixURLSpan(String url, Pattern pattern, IMessagesAdapterActionsListener actionsListener) {
+    private MatrixURLSpan(String url, Pattern pattern, IMessagesAdapterActionsListener actionsListener) {
         mURL = url;
         mPattern = pattern;
         mActionsListener = actionsListener;
     }
 
-    public MatrixURLSpan(Parcel src) {
+    private MatrixURLSpan(Parcel src) {
         mURL = src.readString();
         mPattern = null;
         mActionsListener = null;
     }
 
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
     public int getSpanTypeId() {
         return getSpanTypeIdInternal();
     }
+
+    /*
+     * *********************************************************************************************
+     *  Inherited from ParcelableSpan
+     * *********************************************************************************************
+     */
 
     public int getSpanTypeIdInternal() {
         return getClass().hashCode();
@@ -92,12 +102,12 @@ public class MatrixURLSpan extends ClickableSpan implements ParcelableSpan {
         dest.writeString(mURL);
     }
 
-    public int describeContents() {
-        return 0;
-    }
-
-
-    public String getURL() {
+    /*
+     * *********************************************************************************************
+     *  Custom methods
+     * *********************************************************************************************
+     */
+    private String getURL() {
         return mURL;
     }
 
@@ -120,16 +130,17 @@ public class MatrixURLSpan extends ClickableSpan implements ParcelableSpan {
                 if (null != mActionsListener) {
                     mActionsListener.onMessageIdClick(mURL);
                 }
+            } else if (mPattern == MXSession.PATTERN_CONTAIN_MATRIX_GROUP_IDENTIFIER) {
+                if (null != mActionsListener) {
+                    mActionsListener.onGroupIdClick(mURL);
+                }
             } else {
                 Uri uri = Uri.parse(getURL());
 
                 if (null != mActionsListener) {
                     mActionsListener.onURLClick(uri);
                 } else {
-                    Context context = widget.getContext();
-                    Intent intent = new Intent(Intent.ACTION_VIEW, uri);
-                    intent.putExtra(Browser.EXTRA_APPLICATION_ID, context.getPackageName());
-                    context.startActivity(intent);
+                    ExternalApplicationsUtilKt.openUrlInExternalBrowser(widget.getContext(), uri);
                 }
             }
         } catch (Exception e) {
@@ -146,7 +157,8 @@ public class MatrixURLSpan extends ClickableSpan implements ParcelableSpan {
             MXSession.PATTERN_CONTAIN_MATRIX_USER_IDENTIFIER,
             MXSession.PATTERN_CONTAIN_MATRIX_ALIAS,
             MXSession.PATTERN_CONTAIN_MATRIX_ROOM_IDENTIFIER,
-            MXSession.PATTERN_CONTAIN_MATRIX_MESSAGE_IDENTIFIER
+            MXSession.PATTERN_CONTAIN_MATRIX_MESSAGE_IDENTIFIER,
+            MXSession.PATTERN_CONTAIN_MATRIX_GROUP_IDENTIFIER
     );
 
     /**

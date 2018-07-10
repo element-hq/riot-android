@@ -32,7 +32,7 @@ import im.vector.listeners.IMessagesAdapterActionsListener;
 // This class tracks the link click on textview
 public class MatrixLinkMovementMethod extends LinkMovementMethod {
 
-    IMessagesAdapterActionsListener mListener = null;
+    private IMessagesAdapterActionsListener mListener;
 
     public MatrixLinkMovementMethod(IMessagesAdapterActionsListener listener) {
         mListener = listener;

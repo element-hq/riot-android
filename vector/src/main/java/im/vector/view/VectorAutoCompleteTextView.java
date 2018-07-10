@@ -1,6 +1,7 @@
 /* 
  * Copyright 2016 OpenMarket Ltd
- * 
+ * Copyright 2018 New Vector Ltd
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
@@ -35,6 +36,7 @@ import org.matrix.androidsdk.MXSession;
 import org.matrix.androidsdk.data.Room;
 import org.matrix.androidsdk.rest.model.RoomMember;
 import org.matrix.androidsdk.rest.model.User;
+import org.matrix.androidsdk.util.Log;
 
 import java.lang.reflect.Field;
 import java.util.ArrayList;
@@ -45,13 +47,11 @@ import java.util.List;
 import im.vector.R;
 import im.vector.adapters.AutoCompletedUserAdapter;
 
-import org.matrix.androidsdk.util.Log;
-
 /**
  * Custom AppCompatMultiAutoCompleteTextView to display matrix id / displayname
  */
 public class VectorAutoCompleteTextView extends AppCompatMultiAutoCompleteTextView {
-    private static final String LOG_TAG = "VAutoCompleteTextView";
+    private static final String LOG_TAG = VectorAutoCompleteTextView.class.getSimpleName();
 
     // results adapter
     private AutoCompletedUserAdapter mAdapter;
@@ -74,12 +74,12 @@ public class VectorAutoCompleteTextView extends AppCompatMultiAutoCompleteTextVi
 
     public VectorAutoCompleteTextView(Context context, AttributeSet attrs) {
         super(context, attrs);
-        this.setInputType(this.getInputType() & (this.getInputType() ^ InputType.TYPE_TEXT_FLAG_AUTO_COMPLETE));
+        setInputType(getInputType() & (getInputType() ^ InputType.TYPE_TEXT_FLAG_AUTO_COMPLETE));
     }
 
     public VectorAutoCompleteTextView(Context context, AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
-        this.setInputType(this.getInputType() & (this.getInputType() ^ InputType.TYPE_TEXT_FLAG_AUTO_COMPLETE));
+        setInputType(getInputType() & (getInputType() ^ InputType.TYPE_TEXT_FLAG_AUTO_COMPLETE));
     }
 
     /**
@@ -150,7 +150,7 @@ public class VectorAutoCompleteTextView extends AppCompatMultiAutoCompleteTextVi
             try {
                 Field popup = AutoCompleteTextView.class.getDeclaredField("mPopup");
                 popup.setAccessible(true);
-                mListPopupWindow = (android.widget.ListPopupWindow)popup.get(this);
+                mListPopupWindow = (android.widget.ListPopupWindow) popup.get(this);
             } catch (Exception e) {
                 Log.e(LOG_TAG, "## initAutoCompletion() : failed to retrieve mListPopupWindow " + e.getMessage());
             }
@@ -160,6 +160,7 @@ public class VectorAutoCompleteTextView extends AppCompatMultiAutoCompleteTextVi
     /**
      * Tells if the pasted text is always the user matrix id
      * even if the matched pattern is a display name.
+     *
      * @param provideMatrixIdOnly true to always paste an user Id.
      */
     public void setProvideMatrixIdOnly(boolean provideMatrixIdOnly) {
@@ -179,7 +180,7 @@ public class VectorAutoCompleteTextView extends AppCompatMultiAutoCompleteTextVi
             final int count = mAdapter.getCount();
 
             for (int i = 0; i < count; i++) {
-                itemView = mAdapter.getView(i, itemView, mMeasureParent);
+                itemView = mAdapter.getView(i, itemView, mMeasureParent, false);
                 itemView.measure(MeasureSpec.UNSPECIFIED, MeasureSpec.UNSPECIFIED);
                 maxWidth = Math.max(maxWidth, itemView.getMeasuredWidth());
             }
@@ -220,6 +221,12 @@ public class VectorAutoCompleteTextView extends AppCompatMultiAutoCompleteTextVi
                 Log.e(LOG_TAG, "## replaceText() : failed " + e.getMessage());
             }
         }
+
+        // fix a samsung keyboard issue
+        // "Joh" -> user selects "John" -> "John :" -> the user taps h -> "John : Johh"
+        // by this way, the predictive texts list seems being deleted
+        setInputType(getInputType() & (getInputType() & (~InputType.TYPE_TEXT_FLAG_AUTO_COMPLETE)));
+        setInputType(getInputType() & (getInputType() ^ InputType.TYPE_TEXT_FLAG_AUTO_COMPLETE));
     }
 
     @Override
@@ -263,12 +270,12 @@ public class VectorAutoCompleteTextView extends AppCompatMultiAutoCompleteTextVi
                         }
 
                         mAdapter.getFilter().filter(subText, new Filter.FilterListener() {
-                                    @Override
-                                    public void onFilterComplete(int count) {
-                                        adjustPopupSize();
-                                        VectorAutoCompleteTextView.this.onFilterComplete(count);
-                                    }
-                                });
+                            @Override
+                            public void onFilterComplete(int count) {
+                                adjustPopupSize();
+                                VectorAutoCompleteTextView.this.onFilterComplete(count);
+                            }
+                        });
                     }
                 }
             }, 700);

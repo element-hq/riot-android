@@ -1,6 +1,7 @@
 /*
  * Copyright 2016 OpenMarket Ltd
  * Copyright 2017 Vector Creations Ltd
+ * Copyright 2018 New Vector Ltd
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -19,7 +20,6 @@ package im.vector.fragments;
 
 import android.os.Bundle;
 import android.text.TextUtils;
-
 import android.view.View;
 import android.widget.Toast;
 
@@ -28,8 +28,8 @@ import org.matrix.androidsdk.data.RoomState;
 import org.matrix.androidsdk.rest.callback.ApiCallback;
 import org.matrix.androidsdk.rest.model.Event;
 import org.matrix.androidsdk.rest.model.MatrixError;
-import org.matrix.androidsdk.rest.model.Message;
 import org.matrix.androidsdk.rest.model.TokensChunkResponse;
+import org.matrix.androidsdk.rest.model.message.Message;
 import org.matrix.androidsdk.util.JsonUtils;
 import org.matrix.androidsdk.util.Log;
 
@@ -38,9 +38,9 @@ import java.util.Collections;
 import java.util.List;
 
 public class VectorSearchRoomFilesListFragment extends VectorSearchRoomsFilesListFragment {
+    private static final String LOG_TAG = VectorSearchRoomFilesListFragment.class.getSimpleName();
 
-    static final int MESSAGES_PAGINATION_LIMIT = 50;
-    static final String LOG_TAG = "SearchRoomFilesListFrag";
+    private static final int MESSAGES_PAGINATION_LIMIT = 50;
 
     // set to false when there is no more available message in the room history
     private boolean mCanPaginateBack = true;
@@ -85,9 +85,13 @@ public class VectorSearchRoomFilesListFragment extends VectorSearchRoomsFilesLis
         super.cancelCatchingRequests();
         mIsBackPaginating = false;
         mCanPaginateBack = true;
-        mRoom.cancelRemoteHistoryRequest();
-        mNextBatch = mRoom.getLiveState().getToken();
-        mSession.getDataHandler().resetReplayAttackCheckInTimeline(mTimeLineId);
+        if (null != mRoom) {
+            mRoom.cancelRemoteHistoryRequest();
+            mNextBatch = mRoom.getLiveState().getToken();
+        }
+        if (null != mSession) {
+            mSession.getDataHandler().resetReplayAttackCheckInTimeline(mTimeLineId);
+        }
     }
 
     @Override
@@ -122,7 +126,7 @@ public class VectorSearchRoomFilesListFragment extends VectorSearchRoomsFilesLis
         remoteRoomHistoryRequest(new ArrayList<Event>(), new ApiCallback<ArrayList<Event>>() {
             @Override
             public void onSuccess(ArrayList<Event> eventsChunk) {
-                ArrayList<MessageRow> messageRows = new ArrayList<>(eventsChunk.size());
+                List<MessageRow> messageRows = new ArrayList<>(eventsChunk.size());
                 RoomState liveState = mRoom.getLiveState();
 
                 for (Event event : eventsChunk) {
@@ -215,7 +219,7 @@ public class VectorSearchRoomFilesListFragment extends VectorSearchRoomsFilesLis
         remoteRoomHistoryRequest(new ArrayList<Event>(), new ApiCallback<ArrayList<Event>>() {
             @Override
             public void onSuccess(final ArrayList<Event> eventChunks) {
-                VectorSearchRoomFilesListFragment.this.getActivity().runOnUiThread(new Runnable() {
+                getActivity().runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
                         // is there any result to display
@@ -285,7 +289,7 @@ public class VectorSearchRoomFilesListFragment extends VectorSearchRoomsFilesLis
                                 }
                             });
                         }
-                        VectorSearchRoomFilesListFragment.this.hideLoadingBackProgress();
+                        hideLoadingBackProgress();
                     }
                 });
 
@@ -293,7 +297,7 @@ public class VectorSearchRoomFilesListFragment extends VectorSearchRoomsFilesLis
 
             private void onError() {
                 mIsBackPaginating = false;
-                VectorSearchRoomFilesListFragment.this.hideLoadingBackProgress();
+                hideLoadingBackProgress();
             }
 
             // the request will be auto restarted when a valid network will be found
@@ -325,7 +329,7 @@ public class VectorSearchRoomFilesListFragment extends VectorSearchRoomsFilesLis
      */
     private void appendEvents(ArrayList<Event> events, List<Event> eventsToAppend) {
         // filter
-        ArrayList<Event> filteredEvents = new ArrayList<>(eventsToAppend.size());
+        List<Event> filteredEvents = new ArrayList<>(eventsToAppend.size());
         for (Event event : eventsToAppend) {
             if (Event.EVENT_TYPE_MESSAGE.equals(event.getType())) {
                 Message message = JsonUtils.toMessage(event.getContent());
@@ -361,7 +365,7 @@ public class VectorSearchRoomFilesListFragment extends VectorSearchRoomsFilesLis
                         // decrypt the encrypted events
                         if (mRoom.isEncrypted()) {
                             for (Event event : eventsChunk.chunk) {
-                                mSession.getCrypto().decryptEvent(event, mTimeLineId);
+                                mSession.getDataHandler().decryptEvent(event, mTimeLineId);
                             }
                         }
 

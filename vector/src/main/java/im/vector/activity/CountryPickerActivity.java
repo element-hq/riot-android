@@ -1,5 +1,6 @@
 /*
  * Copyright 2017 Vector Creations Ltd
+ * Copyright 2018 New Vector Ltd
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -19,9 +20,7 @@ package im.vector.activity;
 import android.app.SearchManager;
 import android.content.Context;
 import android.content.Intent;
-import android.os.Bundle;
 import android.support.v4.view.MenuItemCompat;
-import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.SearchView;
@@ -31,19 +30,21 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Filter;
 
+import org.jetbrains.annotations.NotNull;
+
 import im.vector.R;
 import im.vector.adapters.CountryAdapter;
 import im.vector.util.CountryPhoneData;
 import im.vector.util.PhoneNumberUtils;
 import im.vector.util.ThemeUtils;
+import kotlin.Pair;
 
-public class CountryPickerActivity extends AppCompatActivity implements CountryAdapter.OnSelectCountryListener, SearchView.OnQueryTextListener {
+public class CountryPickerActivity extends RiotAppCompatActivity implements CountryAdapter.OnSelectCountryListener, SearchView.OnQueryTextListener {
 
-    public static final String EXTRA_IN_WITH_INDICATOR = "EXTRA_IN_WITH_INDICATOR";
-
+    private static final String EXTRA_IN_WITH_INDICATOR = "EXTRA_IN_WITH_INDICATOR";
     public static final String EXTRA_OUT_COUNTRY_NAME = "EXTRA_OUT_COUNTRY_NAME";
     public static final String EXTRA_OUT_COUNTRY_CODE = "EXTRA_OUT_COUNTRY_CODE";
-    public static final String EXTRA_OUT_CALLING_CODE = "EXTRA_OUT_CALLING_CODE";
+    private static final String EXTRA_OUT_CALLING_CODE = "EXTRA_OUT_CALLING_CODE";
 
     private RecyclerView mCountryRecyclerView;
     private View mCountryEmptyView;
@@ -65,20 +66,30 @@ public class CountryPickerActivity extends AppCompatActivity implements CountryA
     }
 
     /*
-    * *********************************************************************************************
-    * Activity lifecycle
-    * *********************************************************************************************
-    */
+     * *********************************************************************************************
+     * Activity lifecycle
+     * *********************************************************************************************
+     */
+
+    @NotNull
+    @Override
+    public Pair getOtherThemes() {
+        return new Pair(R.style.CountryPickerTheme_Dark, R.style.CountryPickerTheme_Black);
+    }
 
     @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
+    public int getLayoutRes() {
+        return R.layout.activity_country_picker;
+    }
 
-        // required to have the right translated title
-        setTitle(R.string.settings_select_country);
-        setContentView(R.layout.activity_country_picker);
+    @Override
+    public int getTitleRes() {
+        return R.string.settings_select_country;
+    }
 
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+    @Override
+    public void initUiAndData() {
+        Toolbar toolbar = findViewById(R.id.toolbar);
         if (toolbar != null) {
             setSupportActionBar(toolbar);
             if (getSupportActionBar() != null) {
@@ -94,10 +105,12 @@ public class CountryPickerActivity extends AppCompatActivity implements CountryA
     }
 
     @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.menu_country_picker, menu);
-        CommonActivityUtils.tintMenuIcons(menu, ThemeUtils.getColor(this, R.attr.icon_tint_on_dark_action_bar_color));
+    public int getMenuRes() {
+        return R.menu.menu_country_picker;
+    }
 
+    @Override
+    public boolean onPrepareOptionsMenu(Menu menu) {
         final MenuItem searchItem = menu.findItem(R.id.action_search);
         if (searchItem != null) {
             SearchManager searchManager = (SearchManager) getSystemService(Context.SEARCH_SERVICE);
@@ -108,21 +121,10 @@ public class CountryPickerActivity extends AppCompatActivity implements CountryA
             mSearchView.setSearchableInfo(searchManager.getSearchableInfo(getComponentName()));
             mSearchView.setOnQueryTextListener(this);
 
-            SearchView.SearchAutoComplete searchAutoComplete = (SearchView.SearchAutoComplete) mSearchView.findViewById(android.support.v7.appcompat.R.id.search_src_text);
-            searchAutoComplete.setHintTextColor(ThemeUtils.getColor(this, R.attr.default_text_hint_color));
+            SearchView.SearchAutoComplete searchAutoComplete = mSearchView.findViewById(android.support.v7.appcompat.R.id.search_src_text);
+            searchAutoComplete.setHintTextColor(ThemeUtils.INSTANCE.getColor(this, R.attr.default_text_hint_color));
         }
         return true;
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        if (item.getItemId() == android.R.id.home) {
-            setResult(RESULT_CANCELED);
-            finish();
-            return true;
-        }
-
-        return super.onOptionsItemSelected(item);
     }
 
     @Override
@@ -134,15 +136,15 @@ public class CountryPickerActivity extends AppCompatActivity implements CountryA
     }
 
     /*
-    * *********************************************************************************************
-    * UI
-    * *********************************************************************************************
-    */
+     * *********************************************************************************************
+     * UI
+     * *********************************************************************************************
+     */
 
     private void initViews() {
         mCountryEmptyView = findViewById(R.id.country_empty_view);
 
-        mCountryRecyclerView = (RecyclerView) findViewById(R.id.country_recycler_view);
+        mCountryRecyclerView = findViewById(R.id.country_recycler_view);
         LinearLayoutManager layoutManager = new LinearLayoutManager(this);
         layoutManager.setOrientation(LinearLayoutManager.VERTICAL);
         mCountryRecyclerView.setLayoutManager(layoutManager);
@@ -160,10 +162,10 @@ public class CountryPickerActivity extends AppCompatActivity implements CountryA
     }
 
     /*
-    * *********************************************************************************************
-    * Listener
-    * *********************************************************************************************
-    */
+     * *********************************************************************************************
+     * Listener
+     * *********************************************************************************************
+     */
 
     @Override
     public void onSelectCountry(CountryPhoneData country) {

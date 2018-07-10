@@ -27,11 +27,10 @@ import im.vector.R;
 
 /**
  * Customize PreferenceCategory class to redefine some attributes.
- *
  */
 public class VectorDividerCategory extends PreferenceCategory {
 
-    private Context mContext;
+    private final Context mContext;
 
     public VectorDividerCategory(Context context) {
         super(context);

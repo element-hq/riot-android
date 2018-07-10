@@ -41,6 +41,7 @@
         <attr name="search_mode_room_name_text_color" format="color" />
         <attr name="unread_marker_line_color" format="color" />
         <attr name="markdown_block_background_color" format="color" />
+        <attr name="fenced_code_block_background_color" format="color" />
         <attr name="room_activity_divider_color" format="color" />
 
         <!-- tab bar colors -->
@@ -89,5 +90,11 @@
         <attr name="vector_tabbar_selected_background" format="reference" />
         <attr name="vector_tabbar_unselected_background" format="reference" />
         <attr name="vector_tabbar_background" format="reference" />
+
+        <attr name="pill_background_user_id" format="reference" />
+        <attr name="pill_background_room_alias" format="reference" />
+        <attr name="pill_text_color_user_id" format="reference" />
+        <attr name="pill_text_color_room_alias" format="reference" />
+
     </declare-styleable>
 </resources>

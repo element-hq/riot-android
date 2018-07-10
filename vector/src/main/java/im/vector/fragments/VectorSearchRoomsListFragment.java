@@ -1,6 +1,7 @@
 /*
  * Copyright 2016 OpenMarket Ltd
  * Copyright 2017 Vector Creations Ltd
+ * Copyright 2018 New Vector Ltd
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -32,7 +33,7 @@ import org.matrix.androidsdk.data.RoomSummary;
 import org.matrix.androidsdk.fragments.MatrixMessageListFragment;
 import org.matrix.androidsdk.rest.callback.ApiCallback;
 import org.matrix.androidsdk.rest.model.MatrixError;
-import org.matrix.androidsdk.rest.model.PublicRoom;
+import org.matrix.androidsdk.rest.model.publicroom.PublicRoom;
 
 import java.util.List;
 
@@ -43,17 +44,14 @@ import im.vector.activity.CommonActivityUtils;
 import im.vector.activity.VectorPublicRoomsActivity;
 import im.vector.activity.VectorRoomActivity;
 import im.vector.adapters.VectorRoomSummaryAdapter;
-import im.vector.view.RecentsExpandableListView;
 
 public class VectorSearchRoomsListFragment extends VectorRecentsListFragment {
-
-    private static final String LOG_TAG = "VectorSrchRListFrag";
-
     // the session
     private MXSession mSession;
 
     /**
      * Static constructor
+     *
      * @param matrixId the matrix id
      * @return a VectorRoomsSearchResultsListFragment instance
      */
@@ -80,11 +78,18 @@ public class VectorSearchRoomsListFragment extends VectorRecentsListFragment {
 
         View v = inflater.inflate(args.getInt(ARG_LAYOUT_ID), container, false);
         mWaitingView = v.findViewById(R.id.listView_spinner_views);
-        mRecentsListView = (RecentsExpandableListView)v.findViewById(R.id.fragment_recents_list);
+        mRecentsListView = v.findViewById(R.id.fragment_recents_list);
         // the chevron is managed in the header view
         mRecentsListView.setGroupIndicator(null);
         // create the adapter
-        mAdapter = new VectorRoomSummaryAdapter(getActivity(), mSession, true, false, R.layout.adapter_item_vector_recent_room, R.layout.adapter_item_vector_recent_header, this, this);
+        mAdapter = new VectorRoomSummaryAdapter(getActivity(),
+                mSession,
+                true,
+                false,
+                R.layout.adapter_item_vector_recent_room,
+                R.layout.adapter_item_vector_recent_header,
+                this,
+                this);
         mRecentsListView.setAdapter(mAdapter);
         mRecentsListView.setVisibility(View.VISIBLE);
 
@@ -190,7 +195,8 @@ public class VectorSearchRoomsListFragment extends VectorRecentsListFragment {
 
     /**
      * Preview the dedicated room if it was not joined.
-     * @param roomId the roomId
+     *
+     * @param roomId    the roomId
      * @param roomAlias the room alias
      */
     private void previewRoom(final String roomId, final String roomAlias) {
@@ -219,7 +225,8 @@ public class VectorSearchRoomsListFragment extends VectorRecentsListFragment {
 
     /**
      * Search a pattern in the room
-     * @param pattern the pattern to search
+     *
+     * @param pattern                the pattern to search
      * @param onSearchResultListener the search listener.
      */
     public void searchPattern(final String pattern, final MatrixMessageListFragment.OnSearchResultListener onSearchResultListener) {
@@ -273,8 +280,9 @@ public class VectorSearchRoomsListFragment extends VectorRecentsListFragment {
 
     /**
      * Update the group visibility preference.
+     *
      * @param aGroupPosition the group position
-     * @param aValue the new value.
+     * @param aValue         the new value.
      */
     protected void updateGroupExpandStatus(int aGroupPosition, boolean aValue) {
         // do nothing

@@ -1,5 +1,6 @@
 /*
  * Copyright 2015 OpenMarket Ltd
+ * Copyright 2018 New Vector Ltd
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,13 +17,10 @@
 
 package im.vector.activity;
 
-import android.app.Activity;
-import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.net.http.SslError;
-import android.os.Bundle;
-import org.matrix.androidsdk.util.Log;
+import android.support.v7.app.AlertDialog;
 import android.view.KeyEvent;
 import android.webkit.SslErrorHandler;
 import android.webkit.WebView;
@@ -31,18 +29,21 @@ import android.webkit.WebViewClient;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 
-import im.vector.R;
+import org.matrix.androidsdk.util.Log;
 
 import java.net.URLDecoder;
 import java.util.HashMap;
+import java.util.Map;
+
+import im.vector.R;
 
 /**
  * AccountCreationActivity is the fallback account creation activity
  */
-public class AccountCreationActivity extends Activity {
-    private static final String LOG_TAG = "ACCreationActivity";
+public class AccountCreationActivity extends RiotAppCompatActivity {
+    private static final String LOG_TAG = AccountCreationActivity.class.getSimpleName();
 
-    public static String EXTRA_HOME_SERVER_ID = "AccountCreationActivity.EXTRA_HOME_SERVER_ID";
+    public static final String EXTRA_HOME_SERVER_ID = "AccountCreationActivity.EXTRA_HOME_SERVER_ID";
 
     // home server url
     private String mHomeServerUrl;
@@ -59,16 +60,19 @@ public class AccountCreationActivity extends Activity {
         CommonActivityUtils.onTrimMemory(this, level);
     }
 
+    @Override
+    public int getLayoutRes() {
+        return R.layout.activity_account_creation;
+    }
 
     @Override
-    protected void onCreate(Bundle savedInstanceState)  {
-        super.onCreate(savedInstanceState);
+    public int getTitleRes() {
+        return R.string.create_account;
+    }
 
-        // required to have the right translated title
-        setTitle(R.string.create_account);
-        setContentView(R.layout.activity_account_creation);
-
-        final WebView webView = (WebView) findViewById(R.id.account_creation_webview);
+    @Override
+    public void initUiAndData() {
+        final WebView webView = findViewById(R.id.account_creation_webview);
         webView.getSettings().setJavaScriptEnabled(true);
 
         Intent intent = getIntent();
@@ -86,44 +90,38 @@ public class AccountCreationActivity extends Activity {
 
         webView.loadUrl(mHomeServerUrl + "_matrix/static/client/register/");
 
-        webView.setWebViewClient(new WebViewClient(){
+        webView.setWebViewClient(new WebViewClient() {
             @Override
             public void onReceivedSslError(WebView view, SslErrorHandler handler,
                                            SslError error) {
                 final SslErrorHandler fHander = handler;
 
-                AlertDialog.Builder builder = new AlertDialog.Builder(AccountCreationActivity.this);
-
-                builder.setMessage(R.string.ssl_could_not_verify);
-
-                builder.setPositiveButton(R.string.ssl_trust, new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        fHander.proceed();
-                    }
-                });
-
-                builder.setNegativeButton(R.string.ssl_do_not_trust, new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        fHander.cancel();
-                    }
-                });
-
-                builder.setOnKeyListener(new DialogInterface.OnKeyListener() {
-                    @Override
-                    public boolean onKey(DialogInterface dialog, int keyCode, KeyEvent event) {
-                        if (event.getAction() == KeyEvent.ACTION_UP && keyCode == KeyEvent.KEYCODE_BACK) {
-                            fHander.cancel();
-                            dialog.dismiss();
-                            return true;
-                        }
-                        return false;
-                    }
-                });
-
-                AlertDialog dialog = builder.create();
-                dialog.show();
+                new AlertDialog.Builder(AccountCreationActivity.this)
+                        .setMessage(R.string.ssl_could_not_verify)
+                        .setPositiveButton(R.string.ssl_trust, new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                fHander.proceed();
+                            }
+                        })
+                        .setNegativeButton(R.string.ssl_do_not_trust, new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                fHander.cancel();
+                            }
+                        })
+                        .setOnKeyListener(new DialogInterface.OnKeyListener() {
+                            @Override
+                            public boolean onKey(DialogInterface dialog, int keyCode, KeyEvent event) {
+                                if (event.getAction() == KeyEvent.ACTION_UP && keyCode == KeyEvent.KEYCODE_BACK) {
+                                    fHander.cancel();
+                                    dialog.dismiss();
+                                    return true;
+                                }
+                                return false;
+                            }
+                        })
+                        .show();
             }
 
             @Override
@@ -131,10 +129,10 @@ public class AccountCreationActivity extends Activity {
                 super.onReceivedError(view, errorCode, description, failingUrl);
 
                 // on error case, close this activity
-                AccountCreationActivity.this.runOnUiThread(new Runnable() {
+                runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
-                        AccountCreationActivity.this.finish();
+                        finish();
                     }
                 });
             }
@@ -144,12 +142,16 @@ public class AccountCreationActivity extends Activity {
                 // avoid infinite onPageFinished call
                 if (url.startsWith("http")) {
                     // Generic method to make a bridge between JS and the UIWebView
-                    final String MXCJavascriptSendObjectMessage = "javascript:window.matrixRegistration.sendObjectMessage = function(parameters) { var iframe = document.createElement('iframe');  iframe.setAttribute('src', 'js:' + JSON.stringify(parameters));  document.documentElement.appendChild(iframe); iframe.parentNode.removeChild(iframe); iframe = null; };";
+                    final String MXCJavascriptSendObjectMessage = "javascript:window.matrixRegistration.sendObjectMessage = function(parameters)" +
+                            " { var iframe = document.createElement('iframe');  iframe.setAttribute('src', 'js:' + JSON.stringify(parameters)); " +
+                            " document.documentElement.appendChild(iframe); iframe.parentNode.removeChild(iframe); iframe = null; };";
 
                     view.loadUrl(MXCJavascriptSendObjectMessage);
 
                     // The function the fallback page calls when the registration is complete
-                    final String MXCJavascriptOnRegistered = "javascript:window.matrixRegistration.onRegistered = function(homeserverUrl, userId, accessToken) { matrixRegistration.sendObjectMessage({ 'action': 'onRegistered', 'homeServer': homeserverUrl,'userId': userId,  'accessToken': accessToken  }); };";
+                    final String MXCJavascriptOnRegistered = "javascript:window.matrixRegistration.onRegistered = function(homeserverUrl, userId" +
+                            ", accessToken) { matrixRegistration.sendObjectMessage({ 'action': 'onRegistered', 'homeServer': homeserverUrl,'user" +
+                            "Id': userId,  'accessToken': accessToken  }); };";
 
                     view.loadUrl(MXCJavascriptOnRegistered);
                 }
@@ -158,14 +160,15 @@ public class AccountCreationActivity extends Activity {
             @Override
             public boolean shouldOverrideUrlLoading(android.webkit.WebView view, java.lang.String url) {
 
-                if ((null != url) &&  url.startsWith("js:")) {
+                if ((null != url) && url.startsWith("js:")) {
                     String json = url.substring(3);
-                    HashMap<String, String> parameters = null;
+                    Map<String, String> parameters = null;
 
                     try {
                         // URL decode
                         json = URLDecoder.decode(json, "UTF-8");
-                        parameters = new Gson().fromJson(json, new TypeToken<HashMap<String, String>>() {}.getType());
+                        parameters = new Gson().fromJson(json, new TypeToken<HashMap<String, String>>() {
+                        }.getType());
 
                     } catch (Exception e) {
                         Log.e(LOG_TAG, "## shouldOverrideUrlLoading() : fromJson failed " + e.getMessage());
@@ -174,20 +177,23 @@ public class AccountCreationActivity extends Activity {
                     // succeeds to parse parameters
                     if (null != parameters) {
                         // check the required paramaters
-                        if (parameters.containsKey("homeServer") && parameters.containsKey("userId") && parameters.containsKey("accessToken") && parameters.containsKey("action")) {
-                            final String userId =  parameters.get("userId");
-                            final String accessToken =  parameters.get("accessToken");
+                        if (parameters.containsKey("homeServer")
+                                && parameters.containsKey("userId")
+                                && parameters.containsKey("accessToken")
+                                && parameters.containsKey("action")) {
+                            final String userId = parameters.get("userId");
+                            final String accessToken = parameters.get("accessToken");
                             final String homeServer = parameters.get("homeServer");
-                            String action =  parameters.get("action");
+                            String action = parameters.get("action");
 
                             // remove the trailing /
                             if (mHomeServerUrl.endsWith("/")) {
-                                mHomeServerUrl = mHomeServerUrl.substring(0, mHomeServerUrl.length()-1);
+                                mHomeServerUrl = mHomeServerUrl.substring(0, mHomeServerUrl.length() - 1);
                             }
 
                             // check the action
                             if (action.equals("onRegistered")) {
-                                AccountCreationActivity.this.runOnUiThread(new Runnable() {
+                                runOnUiThread(new Runnable() {
                                     @Override
                                     public void run() {
                                         Intent returnIntent = new Intent();
@@ -197,7 +203,7 @@ public class AccountCreationActivity extends Activity {
                                         returnIntent.putExtra("accessToken", accessToken);
                                         setResult(RESULT_OK, returnIntent);
 
-                                        AccountCreationActivity.this.finish();
+                                        finish();
                                     }
                                 });
                             }

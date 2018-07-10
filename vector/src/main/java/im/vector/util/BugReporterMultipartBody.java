@@ -1,5 +1,6 @@
 /*
  * Copyright 2017 Vector Creations Ltd
+ * Copyright 2018 New Vector Ltd
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -21,11 +22,10 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
-import com.squareup.okhttp.Headers;
-import com.squareup.okhttp.MediaType;
-import com.squareup.okhttp.RequestBody;
-import com.squareup.okhttp.internal.Util;
-
+import okhttp3.Headers;
+import okhttp3.MediaType;
+import okhttp3.RequestBody;
+import okhttp3.internal.Util;
 import okio.Buffer;
 import okio.BufferedSink;
 import okio.ByteString;
@@ -64,9 +64,9 @@ public class BugReporterMultipartBody extends RequestBody {
     private List<Long> mContentLengthSize = null;
 
     private BugReporterMultipartBody(ByteString boundary, List<Part> parts) {
-        this.mBoundary = boundary;
-        this.mContentType = MediaType.parse(FORM + "; boundary=" + boundary.utf8());
-        this.mParts = Util.immutableList(parts);
+        mBoundary = boundary;
+        mContentType = MediaType.parse(FORM + "; boundary=" + boundary.utf8());
+        mParts = Util.immutableList(parts);
     }
 
     @Override
@@ -188,7 +188,7 @@ public class BugReporterMultipartBody extends RequestBody {
         return byteCount;
     }
 
-    private static StringBuilder appendQuotedString(StringBuilder target, String key) {
+    private static void appendQuotedString(StringBuilder target, String key) {
         target.append('"');
         for (int i = 0, len = key.length(); i < len; i++) {
             char ch = key.charAt(i);
@@ -208,7 +208,6 @@ public class BugReporterMultipartBody extends RequestBody {
             }
         }
         target.append('"');
-        return target;
     }
 
     public static final class Part {

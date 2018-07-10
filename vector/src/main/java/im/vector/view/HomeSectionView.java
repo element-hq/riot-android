@@ -82,7 +82,7 @@ public class HomeSectionView extends RelativeLayout {
     }
 
     @TargetApi(Build.VERSION_CODES.LOLLIPOP)
-    public HomeSectionView(Context context, AttributeSet attrs, int defStyleAttr, int defStyleRes) {
+    private HomeSectionView(Context context, AttributeSet attrs, int defStyleAttr, int defStyleRes) {
         super(context, attrs, defStyleAttr, defStyleRes);
         setup();
     }
@@ -109,7 +109,7 @@ public class HomeSectionView extends RelativeLayout {
         GradientDrawable shape = new GradientDrawable();
         shape.setShape(GradientDrawable.RECTANGLE);
         shape.setCornerRadius(100);
-        shape.setColor(ThemeUtils.getColor(getContext(), R.attr.activity_bottom_gradient_color));
+        shape.setColor(ThemeUtils.INSTANCE.getColor(getContext(), R.attr.activity_bottom_gradient_color));
         mBadge.setBackground(shape);
 
         mHeader.setOnClickListener(new OnClickListener() {
@@ -131,12 +131,15 @@ public class HomeSectionView extends RelativeLayout {
             // reported by GA
             // the adapter value is tested by it seems crashed when calling getBadgeCount
             try {
-                setVisibility(mHideIfEmpty && mAdapter.isEmpty() ? GONE : VISIBLE);
-                final int badgeCount = mAdapter.getBadgeCount();
+                boolean isEmpty = mAdapter.isEmpty();
+                boolean hasNoResult = mAdapter.hasNoResult();
+                int badgeCount = mAdapter.getBadgeCount();
+
+                setVisibility(mHideIfEmpty && isEmpty ? GONE : VISIBLE);
                 mBadge.setText(RoomUtils.formatUnreadMessagesCounter(badgeCount));
                 mBadge.setVisibility(badgeCount == 0 ? GONE : VISIBLE);
-                mRecyclerView.setVisibility(mAdapter.hasNoResult() ? GONE : VISIBLE);
-                mPlaceHolder.setVisibility(mAdapter.hasNoResult() ? VISIBLE : GONE);
+                mRecyclerView.setVisibility(hasNoResult ? GONE : VISIBLE);
+                mPlaceHolder.setVisibility(hasNoResult ? VISIBLE : GONE);
             } catch (Exception e) {
                 Log.e(LOG_TAG, "## onDataUpdated() failed " + e.getMessage());
             }
@@ -190,10 +193,10 @@ public class HomeSectionView extends RelativeLayout {
      * @param invitationListener   listener for invite buttons
      * @param moreActionListener   listener for room menu
      */
-    public void setupRecyclerView(final RecyclerView.LayoutManager layoutManager, @LayoutRes final int itemResId,
-                                  final boolean nestedScrollEnabled, final HomeRoomAdapter.OnSelectRoomListener onSelectRoomListener,
-                                  final AbsAdapter.InvitationListener invitationListener,
-                                  final AbsAdapter.MoreRoomActionListener moreActionListener) {
+    public void setupRoomRecyclerView(final RecyclerView.LayoutManager layoutManager, @LayoutRes final int itemResId,
+                                      final boolean nestedScrollEnabled, final HomeRoomAdapter.OnSelectRoomListener onSelectRoomListener,
+                                      final AbsAdapter.RoomInvitationListener invitationListener,
+                                      final AbsAdapter.MoreRoomActionListener moreActionListener) {
         mRecyclerView.setLayoutManager(layoutManager);
         mRecyclerView.setHasFixedSize(true);
         mRecyclerView.setNestedScrollingEnabled(nestedScrollEnabled);
@@ -256,6 +259,7 @@ public class HomeSectionView extends RelativeLayout {
 
     /**
      * Scrolls the list to display the item first
+     *
      * @param index the item index
      */
     public void scrollToPosition(int index) {

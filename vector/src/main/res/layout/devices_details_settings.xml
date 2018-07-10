@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content">
+    android:layout_height="wrap_content"
+    xmlns:tools="http://schemas.android.com/tools">
 
     <LinearLayout
         android:id="@+id/device_container_layout"
@@ -25,7 +26,7 @@
             android:id="@+id/device_id"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="device id"
+            tools:text="device id"
             android:textSize="12sp" />
 
         <TextView
@@ -41,7 +42,7 @@
             android:id="@+id/device_name"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Name.."
+            tools:text="Name.."
             android:textSize="12sp" />
 
         <TextView
@@ -57,7 +58,7 @@
             android:id="@+id/device_last_seen"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="x.x.x.x @ 01/01 00:00:00"
+            tools:text="x.x.x.x @ 01/01 00:00:00"
             android:textSize="12sp" />
     </LinearLayout>
 </ScrollView>

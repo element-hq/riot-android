@@ -1,9 +1,9 @@
-<?xml version="1.0" encoding="utf-8"?>
+<?xml version='1.0' encoding='UTF-8'?>
 <resources>
     <!-- use to retrieve the supported languages list -->
     <!-- should the same value as the file name -->
-    <string name="resouces_language">nl</string>
-    <string name="resouces_country"></string>
+    <string name="resources_language">nl</string>
+    <string name="resources_country_code">VS</string>
 
     <!-- titles -->
     <string name="title_activity_home">Berichten</string>
@@ -48,7 +48,8 @@
 
     <!-- actions -->
     <string name="action_sign_out">Uitloggen</string>
-    <string name="action_sign_out_confirmation">Uitloggen?</string>
+    <string name="action_sign_out_confirmation">Voor veiligheidsredenen zal het uitloggen alle eind-tot-eind versleutelingssleutels verwijderen. Dit zal ervoor zorgen dat gespreksgeschiedenis onleesbaar is als je weer terug in logt.
+Selecteer exporteren om de versleutelingssleutels op te slaan voordat je uitlogt.</string>
     <string name="action_voice_call">Spraakoproep</string>
     <string name="action_video_call">Videogesprek</string>
     <string name="action_global_search">Globaal zoeken</string>
@@ -57,7 +58,7 @@
     <string name="action_quick_reply">Snel reageren</string>
     <string name="action_open">Open</string>
     <string name="action_close">Sluit</string>
-    <string name="copied_to_clipboard">Naar klembord kopïeren</string>
+    <string name="copied_to_clipboard">Naar klembord gekopïeerd</string>
     <string name="disable">Deactiveren</string>
 
     <!-- dialog titles -->
@@ -112,7 +113,7 @@
     <string name="send_bug_report_app_crashed">De applicatie was de vorige keer gecrasht. Wil je een foutmelding indienen?</string>
 
     <string name="send_files_in">Versturen als</string>
-    <string name="read_receipt">Lees</string>
+    <string name="read_receipt">Gelezen</string>
 
     <string name="join_room">Ruimte toetreden</string>
     <string name="username">Gebruikersnaam</string>
@@ -178,7 +179,7 @@
     <string name="auth_reset_password_missing_email">Het e-mailadres dat aan uw account gekoppeld is moet worden ingevoerd.</string>
     <string name="auth_reset_password_missing_password">Een nieuw wachtwoord moet worden ingevoerd.</string>
     <string name="auth_reset_password_email_validation_message">Een e-mail is naar  %s verstuurd. Zodra je op de link in de e-mail hebt geklikt, klik hieronder.</string>
-    <string name="auth_reset_password_error_unauthorized">Het verifiëren is mislukt: Wees er zeker van dat je op de link in de e-mail hebt geklikt.</string>
+    <string name="auth_reset_password_error_unauthorized">Het verifiëren is mislukt: wees er zeker van dat je op de link in de e-mail hebt geklikt</string>
     <string name="auth_reset_password_success_message">Je wachtwoord is gereset.\n\nJe bent op alle apparaten uitgelogd en zal niet langer push notificaties ontvangen. Om notificaties op nieuw aan te zetten, log op elk apparaat opnieuw in.</string>
 
     <!-- Login Screen -->
@@ -199,13 +200,12 @@
     <string name="login_error_login_email_not_yet">Er is nog niet op de link in de e-mail geklikt</string>
 
     <!-- crypto warnings -->
-    <string name="e2e_need_log_in_again">Je moet opnieuw inloggen om eind-tot-eind versleuteling sleutels te genereren voor dit apparaat en om de publieke sleutel naar de thuisserver te sturen.\nDit is eenmalig.\nExcuses voor het ongemak.</string>
+    <string name="e2e_need_log_in_again">Je moet opnieuw inloggen om end-to-endbeveiligingssleutels te genereren voor dit apparaat en om de publieke sleutel naar de thuisserver te sturen.
+Dit is eenmalig.
+Excuses voor het ongemak.</string>
 
     <!-- read receipts list Screen -->
     <string name="read_receipts_list">Gelezen berichten</string>
-
-    <!-- Mels -->
-    <string name="membership_changes">%d membership changes</string>
 
     <!-- accounts list Screen -->
 
@@ -230,10 +230,6 @@
     <string name="room_info_room_name">Ruimtenaam</string>
     <string name="room_info_room_topic">Ruimte onderwerp</string>
 
-    <!-- Settings keys -->
-    <string name="settings_key_display_all_events">settings_key_display_all_events</string>
-    <string name="settings_key_use_rage_shake">settings_key_use_rage_shake</string>
-
     <!-- call string -->
     <string name="call_connected">Oproep verbonden</string>
     <string name="call_connecting">Oproep is aan het verbinden…</string>
@@ -248,32 +244,29 @@
     <string name="call_error_ice_failed">Media verbinding is mislukt</string>
     <string name="call_error_camera_init_failed">Kan de camera niet initialiseren</string>
     <string name="call_error_answered_elsewhere">oproep ergens anders opgenomen</string>
-    <string name="call_error_peer_hangup_elsewhere">De oproep is ergens anders opgehangen</string>
-    <string name="call_error_peer_cancelled_call">de oproep is geannuleerd</string>
-
-    <string name="action_accept">ACCEPTEREN</string>
-    <string name="action_ignore">NEGEREN</string>
 
     <!-- medias picker string -->
     <string name="media_picker_both_capture_title">Een afbeelding of video maken"</string>
     <string name="media_picker_cannot_record_video">Kan geen video opnemen"</string>
 
     <!-- permissions Android M -->
-    <string name="permissions_rationale_popup_title">%s permissies</string>
-    <string name="permissions_rationale_msg_storage">%s heeft toegang nodig tot je media bestanden om foto\'s te laten zien of op te slaan.\n\n</string>
-    <string name="permissions_rationale_msg_camera">%s heeft toegang nodig tot je camera om afbeeldingen en video oproepen te maken..</string>
+    <string name="permissions_rationale_popup_title">Informatie</string>
+    <string name="permissions_rationale_msg_storage">Riot heeft toegang nodig tot je media bestanden om foto\'s te laten zien of op te slaan.
+
+Sta toegang toe op de volgende pop-up om bestanden vanaf je telefoon te sturen.</string>
+    <string name="permissions_rationale_msg_camera">Riot heeft toegang nodig tot je camera om afbeeldingen en video oproepen te maken..</string>
     <string name="permissions_rationale_msg_camera_explanation">\n\nGeef tijdens de volgende pop-up toegang tot de camera om een oproep te maken.</string>
-    <string name="permissions_rationale_msg_record_audio">%s heeft toegang nodig tot je microfoon om spraakoproepen te maken</string>
+    <string name="permissions_rationale_msg_record_audio">Riot heeft toegang nodig tot je microfoon om spraakoproepen te maken.</string>
     <string name="permissions_rationale_msg_record_audio_explanation">\n\nGeef tijdens de volgende pop-up toegang tot de microfoon om een oproep te maken.</string>
     <string name="permissions_rationale_msg_camera_and_audio">Riot heeft permissie nodig om je camera en microfoon te gebruiken voor videogesprekken.\n\nGeef toegang op de volgende pop-ups om een oproep te maken.</string>
     <string name="permissions_rationale_msg_contacts">Je adresboek e-mails worden geupload om matrix IDs te zoeken.</string>
-    <string name="permissions_msg_contacts_warning_other_androids">Je adresboek e-mails zijn geupload voor het zoeken van matix IDs.\nGeef je %s toegang tot je contacten ?</string>
+    <string name="permissions_msg_contacts_warning_other_androids">Je adresboek e-mails zijn geupload voor het zoeken van matix IDs.\nGeef je Riot toegang tot je contacten ?</string>
 
     <string name="permissions_action_not_performed_missing_permissions">Sorry.. De actie is niet ondernomen door missende permissies</string>
 
     <!-- medias slider string -->
     <string name="media_slider_saved">Opgeslagen</string>
-    <string name="media_slider_saved_message">In downloads opslaan</string>
+    <string name="media_slider_saved_message">In downloads opslaan?</string>
     <string name="yes">JA</string>
     <string name="no">NEE</string>
     <string name="_continue">Ga verder</string>
@@ -297,11 +290,15 @@
     <!-- Chat creation -->
     <string name="room_creation_title">Nieuwe Chat</string>
     <string name="room_creation_add_member">Deelnemer toevoegen</string>
-    <string name="room_header_active_members">%1$d/%2$d actieve deelnemers</string>
-    <string name="room_title_members">%1$d deelnemers</string>
     <string name="room_title_one_member">1 deelnemer</string>
     <string name="room_e2e_alert_title">Waarschuwing!</string>
-    <string name="room_e2e_alert_message">Eind-tot-eind versleuteling is nog in beta en kan onbetrouwbaar zijn.\n\nHet is beter om het nog niet met gevoelige gegevens te vertrouwen.\n\nApparaten kunnen nog niet de geschiedenis van voordat ze de ruimte betraden ontsleutelen.\n\nVersleutelde berichten zullen nog niet zichtbaar zijn op applicaties die geen versleuteling ondersteunen.</string>
+    <string name="room_e2e_alert_message">End-to-endbeveiliging is in bèta en kan onbetrouwbaar zijn.
+
+Het is beter om het nog niet met gevoelige gegevens te vertrouwen.
+
+Apparaten kunnen de geschiedenis van voordat ze de ruimte betraden nog niet ontsleutelen.
+
+Versleutelde berichten zullen nog niet zichtbaar zijn op programma\'s die geen versleuteling ondersteunen.</string>
 
     <!--  Time -->
     <string name="format_time_s">s</string>
@@ -334,7 +331,7 @@
     <string name="room_participants_action_set_default_power_level">Rest naar normale gebruiker</string>
     <string name="room_participants_action_set_moderator">Maak moderator</string>
     <string name="room_participants_action_set_admin">Make beheerder</string>
-    <string name="room_participants_action_ignore">Maak alle berichten van deze gebruiker ontzichtbaar</string>
+    <string name="room_participants_action_ignore">Maak alle berichten van deze gebruiker onzichtbaar</string>
     <string name="room_participants_action_unignore">Maak alle berichten van deze gebruiker zichtbaar</string>
     <string name="room_participants_invite_search_another_user">Zoeken/uitnodigen bij naam, e-mail, id</string>
     <string name="room_participants_action_mention">Vermeld</string>
@@ -355,8 +352,8 @@
     <!--  Chat -->
     <string name="room_menu_search">Zoeken</string>
     <string name="room_one_user_is_typing">%s is aan het typen…</string>
-    <string name="room_two_users_are_typing">%1$s &#038; %2$s zijn aan het typen…</string>
-    <string name="room_many_users_are_typing">%1$s &#038; %2$s &#038; anderen zijn aan het typen…</string>
+    <string name="room_two_users_are_typing">%1$s &amp; %2$s zijn aan het typen…</string>
+    <string name="room_many_users_are_typing">%1$s &amp; %2$s &amp; anderen zijn aan het typen…</string>
     <string name="room_offline_notification">De verbinding met de server is verbroken.</string>
     <string name="room_message_placeholder_encrypted">Verstuur een versleuteld bericht…</string>
     <string name="room_message_placeholder_not_encrypted">Verstuur een bericht (niet versleuteld)…</string>
@@ -369,7 +366,6 @@
     <string name="room_message_file_not_found">Bestand niet gevonden</string>
     <string name="room_do_not_have_permission_to_post">Je hebt niet de permissie om dit naar deze ruimte te sturen</string>
     <string name="room_new_message_notification">1 nieuw bericht</string>
-    <string name="room_new_messages_notification">%1$d nieuwe berichten</string>
 
     <!-- unrecognized SSL certificate -->
     <string name="ssl_trust">Vertrouwen</string>
@@ -397,7 +393,7 @@
 
     <!-- Room events -->
     <string name="room_event_action_report_prompt_reason">Reden voor het aangeven van deze content</string>
-    <string name="room_event_action_report_prompt_ignore_user">Wil je alle berichten van deze gebruiker ontzichtbaar maken?</string>
+    <string name="room_event_action_report_prompt_ignore_user">Wil je alle berichten van deze gebruiker onzichtbaar maken?</string>
     <string name="room_event_action_cancel_upload">Upload annuleren</string>
     <string name="room_event_action_cancel_download">Download annuleren</string>
 
@@ -405,7 +401,6 @@
     <string name="room_displayname_invite_from">Uitnodiging van %s</string>
     <string name="room_displayname_room_invite">Ruimte uitnodiging</string>
     <string name="room_displayname_two_members">%1$s en %2$s</string>
-    <string name="room_displayname_more_than_two_members">%1$s en %2$d anderen</string>
     <string name="room_displayname_no_title">Lege ruimte</string>
 
     <!-- Search -->
@@ -433,13 +428,10 @@
     <!-- Directory -->
     <string name="directory_search_results_title">Adresboek doorbladeren</string>
     <string name="directory_search_room">%1$d ruimte</string>
-    <string name="directory_search_rooms">%1$d ruimtes</string>
     <string name="directory_search_room_for">%1$d ruimte gevonden voor %2$s</string>
-    <string name="directory_search_rooms_for">%1$s ruimtes gevonden voor %2$s</string>
     <string name="directory_searching_title">Adresboek doorzoeken..</string>
 
     <!-- home room settings -->
-    <string name="room_settings_notifications">Notificaties</string>
     <string name="room_settings_favourite">Favoriet</string>
     <string name="room_settings_de_prioritize">De-prioriteren</string>
     <string name="room_settings_direct_chat">Privé chat</string>
@@ -449,7 +441,7 @@
     <!-- home sliding menu -->
     <string name="room_sliding_menu_messages">Berichten</string>
     <string name="room_sliding_menu_settings">Instellingen</string>
-    <string name="room_sliding_menu_version">Versie </string>
+    <string name="room_sliding_menu_version">Versie</string>
     <string name="room_sliding_menu_term_and_conditions">Algemene voorwaarden</string>
     <string name="room_sliding_menu_third_party_notices">Derde partij vermeldingen</string>
     <string name="room_sliding_menu_copyright">Copyright</string>
@@ -470,7 +462,6 @@
     <string name="settings_enable_this_device">Notificaties voor dit apparaat aanzetten</string>
     <string name="settings_turn_screen_on">Het scherm voor drie seconden aanzetten</string>
 
-    <string name="settings_containing_my_name">Naambevattende berichten</string>
     <string name="settings_messages_in_one_to_one">Berichten in privé-chats</string>
     <string name="settings_messages_in_group_chat">Berichten in groepchats</string>
     <string name="settings_invited_to_room">Wanneer ik voor een groep ben uitgenodigd</string>
@@ -565,7 +556,6 @@
     <string name="room_settings_topic">Onderwerp</string>
     <string name="room_settings_room_tag">Ruimte label</string>
     <string name="room_settings_tag_pref_dialog_title">Gelabeld als:</string>
-    <string name="room_settings_mute_notifs">Notificaties dempen</string>
 
     <!-- Room settings: Room tag -->
     <string name="room_settings_tag_pref_entry_favourite">Favoriet</string>
@@ -588,7 +578,7 @@
     <string name="room_settings_read_history_entry_anyone">Iedereen</string>
     <string name="room_settings_read_history_entry_members_only_option_time_shared">Alleen deelnemers (vanaf de tijd dat deze optie is geselecteerd)</string>
     <string name="room_settings_read_history_entry_members_only_invited">Alleen deelnemers (vanaf de tijd dat ze worden uitgenodigd)</string>
-    <string name="room_settings_read_history_entry_members_only_joined">Alleen deelnemers (vanaf de tijd dat ze deelnemen)</string>
+    <string name="room_settings_read_history_entry_members_only_joined">Alleen deelnemers (vanaf de tijd dat ze toetreden)</string>
 
     <!-- Room settings: "Who can access this room?" (access rule) -->
     <string name="room_settings_room_access_warning">Om naar een ruimte te verwijzen moeten het een adres hebben.</string>
@@ -605,9 +595,9 @@
     <string name="room_settings_addresses_pref_title">Adressen</string>
     <string name="room_settings_labs_pref_title">Labs</string>
     <string name="room_settings_labs_warning_message">Dit zijn experimentele functies die op onverwachte manieren kunnen breken. Wees behoedzaam bij het gebruik van deze functies.</string>
-    <string name="room_settings_labs_end_to_end">Eind-tot-Eind Versleuteling</string>
+    <string name="room_settings_labs_end_to_end">End-to-endbeveiliging</string>
     <string name="room_settings_labs_end_to_end_warnings">Je moet uitloggen om de versleuteling aan te zetten.</string>
-    <string name="room_settings_labs_end_to_end_is_active">Eind-tot-Eind versleuteling is actief</string>
+    <string name="room_settings_labs_end_to_end_is_active">End-to-endbeveiliging is actief</string>
     <string name="room_settings_never_send_to_unverified_devices_title">Alleen naar geverifieerde apparaten versturen</string>
     <string name="room_settings_never_send_to_unverified_devices_summary">Nooit in deze ruimte niet geverifieerde apparaten berichten sturen vanaf dit apparaat.</string>
 
@@ -629,27 +619,29 @@
     <string name="room_settings_addresses_e2e_disabled">Versleuteling is uit in deze ruimte.</string>
     <string name="room_settings_addresses_e2e_encryption_warning">Zet versleuteling aan \n(waarschuwing: dit kan niet meer uitgezet worden!)</string>
     <string name="room_settings_addresses_e2e_prompt_title">Waarschuwing!</string>
-    <string name="room_settings_addresses_e2e_prompt_message">Eind-tot-eind versleuteling is experimenteel en kan onbetrouwbaar zijn.\n\nHet is beter om het nog niet met gevoelige gegevens te vertrouwen.\n\nApparaten kunnen nog niet de geschiedenis van voordat ze de ruimte betraden kunnen ontsleutelen.\n\nZodra de versleuteling aan staat kan het niet meer worden uitgezet (voor nu).\n\nVersleutelde berichten zullen nog niet zichtbaar zijn op applicaties die geen versleuteling ondersteunen.</string>
+    <string name="room_settings_addresses_e2e_prompt_message">End-to-endbeveiliging is experimenteel en kan onbetrouwbaar zijn.
+
+Het is beter om het nog niet met gevoelige gegevens te vertrouwen.
+
+Apparaten kunnen de geschiedenis van voordat ze de ruimte betraden nog niet ontsleutelen.
+
+Zodra de versleuteling aan staat kan het (voorlopig) niet worden uitgezet.
+
+Versleutelde berichten zullen nog niet zichtbaar zijn op programma\'s die geen versleuteling ondersteunen.</string>
 
     <!-- Directory -->
     <string name="directory_title">Adresboek</string>
 
-    <!-- GA use -->
-    <string name="ga_use_alert_message">Wil je om ons te helpen met het verbeteren van de applicatie doormiddel van het doorsturen van crashes ?</string>
-    <string name="ga_use_settings">Automatisch crash rapporten versturen</string>
-    <string name="ga_use_disable_alert_message">Je moet de applicatie herstarten om de crash vermeldingen uit te schakelen.</string>
-
     <!-- matrix error -->
     <string name="failed_to_load_timeline_position">%s probeerde een specifiek punt in de geschiedenis van deze ruimte te laden, maar kon het niet vinden.</string>
 
-
     <!-- encryption dialog -->
-    <string name="encryption_information_title">Eind-tot-eind versleuteling informatie</string>
+    <string name="encryption_information_title">Informatie over end-to-endbeveilig</string>
 
-    <string name="encryption_information_device_info">Evenement informatie</string>
-    <string name="encryption_information_user_id">Gebruiker id</string>
-    <string name="encryption_information_curve25519_identity_key">Curve25519 identiteitssleutel</string>
-    <string name="encryption_information_claimed_ed25519_fingerprint_key">Geclaimde Ed25519 vingerafdrukssleutel</string>
+    <string name="encryption_information_device_info">Evenementsinformatie</string>
+    <string name="encryption_information_user_id">Gebruikers-ID</string>
+    <string name="encryption_information_curve25519_identity_key">Curve25519-identiteitssleutel</string>
+    <string name="encryption_information_claimed_ed25519_fingerprint_key">Geclaimde Ed25519-sleutel-vingerafdruk</string>
     <string name="encryption_information_algorithm">Algoritme</string>
     <string name="encryption_information_session_id">Sessie ID</string>
     <string name="encryption_information_decryption_error">Ontsleutelingsfout</string>
@@ -694,7 +686,9 @@
     <string name="encryption_information_verify_device_warning2">Als het overeenkomt, druk op de verifïeren knop hieronder. Als het niet overeenkomt, dan onderschept iemand anders het apparaat en wil je waarschijnlijk in plaats daar van op de blokkeren knop drukken.\nIn de toekomst zal dit verificatie proces wat meer worden vermakkelijkt.</string>
     <string name="encryption_information_verify_key_match">Ik verifïeer dat de sleutels overeenkomen</string>
 
-    <string name="e2e_enabling_on_app_update">Riot ondersteund nu eind-tot-eind sleuteling maar je moet opnieuw inloggen om het aan te zetten.\n\nJe kan het nu of later doen vanaf de applicatie instellingen</string>
+    <string name="e2e_enabling_on_app_update">Riot ondersteunt nu end-to-endbeveiliging maar je moet opnieuw inloggen om het aan te zetten.
+
+Je kan het nu, of later, doen vanuit de programma-instellingen.</string>
 
     <!-- unknown devices management -->
     <string name="unknown_devices_alert_title">Deze ruimte bevat onbekende apparaten</string>
@@ -708,11 +702,317 @@
     <string name="directory_server_all_rooms_on_server">Alle ruimtes op %s server</string>
     <string name="directory_server_native_rooms">Alle lokale %s ruimtes</string>
 
-    <!-- Notifications -->
-    <string name="notification_unread_notified_messages">%d ongelezen genotificeerde berichten</string>
-    <string name="notification_unread_notified_messages_in_room">%1$d ongelezen berichten in %2$d ruimtes</string>
-
     <!-- historical -->
     <string name="historical_placeholder">Zoek voor historisch</string>
-</resources>
+<string name="offline">Offline</string>
 
+    <string name="user_directory_header">Gebruikersadresboek</string>
+    <string name="people_search_user_directory">GEBRUIKERSADRESBOEK (%s)</string>
+    <string name="settings_start_on_boot">Start bij het inschakelen van je telefoon</string>
+    <string name="settings_clear_medias_cache">Media cache vrijmaken</string>
+    <string name="settings_keep_media">Media behouden</string>
+
+    <string name="settings_hide_read_receipts">Leesbewijzen verbergen</string>
+    <string name="settings_dont_send_typings_notifs">Geen typ notificaties versturen</string>
+    <string name="settings_always_show_timestamps">Altijd tijden van berichten weergeven</string>
+    <string name="settings_disable_markdown">Tekst formattering uitzetten wanneer je berichten verstuurd</string>
+    <string name="settings_data_save_mode">Data bespaarmodus</string>
+
+    <string name="settings_user_interface">Gebruikersinterface</string>
+    <string name="settings_interface_language">Interface Taal</string>
+    <string name="settings_select_language">Kies een taal</string>
+
+    <string name="media_saving_period_1_week">1 week</string>
+    <string name="media_saving_period_1_month">1 maand</string>
+    <string name="media_saving_period_forever">Altijd</string>
+
+    <string name="settings_theme">Thema</string>
+
+    <string name="font_size">Tekstgrootte</string>
+    <string name="small">Klein</string>
+    <string name="normal">Normaal</string>
+    <string name="large">Groot</string>
+    <string name="largest">Grootst</string>
+    <string name="media_saving_period_3_days">3 dagen</string>
+    <string name="tiny">Klein</string>
+    <string name="larger">Groter</string>
+    <string name="huge">Gigantisch</string>
+<string name="light_theme">Licht Thema</string>
+    <string name="dark_theme">Donker Thema</string>
+    <string name="black_them">Zwart Thema</string>
+
+    <string name="notification_sync_in_progress">Aan het synchroniseren</string>
+    <string name="notification_listen_for_events">Luisteren voor evenementen</string>
+
+    <string name="login_mobile_device">Mobiel</string>
+
+    <string name="settings_notification_ringtone">Notificatie geluid</string>
+    <string name="settings_12_24_timestamps">Tijdsaanduidingen in 12 uur formaat weergeven (bv. 2:30pm)</string>
+    <string name="settings_hide_join_leave_messages">Toetreden/verlaten berichten verbergen (uitnodigingen/uitzettingen/verbanningen blijven zichtbaar)</string>
+    <string name="settings_hide_avatar_display_name_changes_messages">Profielfoto en weergavenaam veranderingen verbergen</string>
+
+    <string name="widget_no_power_to_manage">Je hebt permissie nodig om widgets in deze ruimte te beheren</string>
+    <string name="widget_creation_failure">Het maken van de widget is niet goed gegaan</string>
+    <string name="event_formatter_widget_added">%1$s is toegevoegd door %2$s</string>
+    <string name="event_formatter_widget_removed">%1$s is verwijderd door %2$s</string>
+    <string name="settings_labs_create_conference_with_jitsi">Maak vergadergesprekken met jitsi</string>
+    <string name="widget_delete_message_confirmation">Weet je zeker dat je deze widget wilt verwijderen?</string>
+
+    <!-- Widget Integration Manager -->
+    <string name="widget_integration_unable_to_create">Niet mogelijk om de widget te maken.</string>
+    <string name="widget_integration_failed_to_send_request">Niet gelukt om een verzoek te verzenden.</string>
+    <string name="widget_integration_positive_power_level">Het machtsniveau moet een positief en heel getal zijn.</string>
+    <string name="widget_integration_must_be_in_room">Je zit niet in deze ruimte.</string>
+    <string name="widget_integration_no_permission_in_room">Je hebt niet de permissie om dat in deze ruimte te doen.</string>
+    <string name="widget_integration_missing_room_id">room_id mist in het verzoek.</string>
+    <string name="widget_integration_missing_user_id">user_id mist in het verzoek.</string>
+    <string name="widget_integration_room_not_visible">Ruimte %s is niet zichtbaar.</string>
+    <string name="settings_labs_matrix_apps">Matrix Apps</string>
+    <string name="room_add_matrix_apps">Matrix Apps toevoegen</string>
+    <string name="notification_noisy_notifications">Geluidgevende notificaties</string>
+    <string name="notification_silent_notifications">Stille notificaties</string>
+
+    <string name="title_activity_bug_report">Foutmelding</string>
+
+    <string name="option_take_photo">Foto maken</string>
+    <string name="option_take_video">Video maken</string>
+
+    <string name="call">Bel</string>
+    <string name="settings_containing_my_display_name">Berichten die mijn weergavenaam bevat</string>
+    <string name="settings_containing_my_user_name">Berichten dat mijn gebruikersnaam bevat</string>
+    <string name="settings_analytics">Analytics</string>
+    <string name="settings_opt_out_of_analytics">Analytics uitzetten</string>
+    <string name="settings_opt_out_of_analytics_summary">Riot verzamelt anonieme statistische gegevens om de applicatie te verbeteren.</string>
+
+
+    <string name="settings_labs_native_camera">Gebruik de systeem camera</string>
+
+    <!-- share keys -->
+    <string name="you_added_a_new_device">Je hebt een nieuw apparaat toegevoegd \'%s\', dat versleutelingssleutels aanvraagt.</string>
+    <string name="your_unverified_device_requesting">Je niet geverifieerde apparaat \'%s\' vraagt versleutelingssleutels aan.</string>
+    <string name="start_verification">Verificatie starten</string>
+    <string name="share_without_verifying">Delen zonder te verifiëren</string>
+    <string name="ignore_request">Verzoek negeren</string>
+
+    <!-- conference call -->
+    <string name="conference_call_warning_title">Waarschuwing!</string>
+    <string name="conference_call_warning_message">Vergadergesprekken zijn in ontwikkeling en kunnen dus kuren vertonen.</string>
+
+    <!-- slash commands -->
+    <string name="command_error">Besturingssignaal fout</string>
+    <string name="unrecognized_command">Onbekend besturingssignaal: %s</string>
+
+    <!-- notification statuses -->
+    <string name="notification_off">Uit</string>
+    <string name="notification_on">Aan</string>
+    <string name="notification_noisy">Luidruchtig</string>
+
+    <string name="encrypted_message">Versleuteld bericht</string>
+
+<string name="title_activity_group_details">Gemeenschap details</string>
+
+    <string name="loading">Laden...</string>
+
+    <string name="action_exit">Afsluiten</string>
+    <string name="actions">Acties</string>
+    <string name="bottom_action_groups">Gemeenschappen</string>
+
+    <string name="home_filter_placeholder_groups">Zoeken voor gemeenschappen</string>
+
+    <string name="groups_invite_header">Uitnodigen</string>
+    <string name="groups_header">Gemeenschappen</string>
+    <string name="no_group_placeholder">Geen groepen</string>
+
+    <string name="send_bug_report_rage_shake">Schudden om een fout te rapporteren</string>
+
+    <string name="start_new_chat_prompt_msg">Weet je zeker dat je een nieuwe chat met %s wilt starten?</string>
+    <string name="start_voice_call_prompt_msg">Weet je zeker dat je een spraakoproep wilt starten?</string>
+    <string name="start_video_call_prompt_msg">Weet je zeker dat je een videogesprek wilt starten?</string>
+
+    <string name="groups_list">Groepenlijst</string>
+
+    <plurals name="membership_changes">
+	<item quantity="one">1 verandering in lidmaatschap</item>
+	<item quantity="other">%d veranderingen in lidmaatschap</item>
+</plurals>
+
+    <string name="list_members">Ledenlijst</string>
+    <string name="open_chat_header">Opschrift openen</string>
+    <string name="room_sync_in_progress">Synchroniseren...</string>
+    <plurals name="room_header_active_members_count">
+	<item quantity="one">1 actief lid</item>
+	<item quantity="other">%d actieve leden</item>
+</plurals>
+    <plurals name="room_title_members">
+	<item quantity="one">1 lid</item>
+	<item quantity="other">%d leden</item>
+</plurals>
+    <string name="room_participants_kick_prompt_msg">Weet je zeker dat je deze gebruiker uit het gesprek wilt verwijderen?</string>
+    <string name="room_participants_ban_prompt_msg">Weet je zeker dat je deze gebruiker uit dit gesprek wilt verbannen?</string>
+
+    <plurals name="room_new_messages_notification">
+	<item quantity="one">1 nieuw bericht</item>
+	<item quantity="other">%d nieuwe berichten</item>
+</plurals>
+
+    <string name="room_displayname_many_members">%1$s en %2$s</string>
+    <plurals name="others">
+	<item quantity="one">1 andere</item>
+	<item quantity="other">%d anderen</item>
+</plurals>
+
+    <plurals name="directory_search_rooms">
+	<item quantity="one">1 ruimte</item>
+	<item quantity="other">%d ruimtes</item>
+</plurals>
+    <plurals name="directory_search_rooms_for">
+	<item quantity="one">%1$s ruimte gevonden voor %2$s</item>
+	<item quantity="other">%1$s ruimtes gevonden voor %2$s</item>
+</plurals>
+    <string name="room_settings_all_messages_noisy">Alle berichten (luid)</string>
+    <string name="room_settings_all_messages">Alle berichten</string>
+    <string name="room_settings_mention_only">Alleen vermeldingen</string>
+    <string name="room_settings_mute">Dempen</string>
+    <string name="room_settings_add_homescreen_shortcut">Thuisscherm snelkoppeling toevoegen</string>
+
+    <string name="settings_inline_url_preview">Inline URL voorvertoning standaard aanzetten</string>
+    <string name="settings_vibrate_on_mention">Trillen bij vermeldingen</string>
+
+    <string name="settings_flair">Badge</string>
+
+    <string name="room_settings_room_notifications_title">Notificaties</string>
+    <string name="room_settings_no_flair">" Deze ruimte geeft geen badges voor gemeenschappen weer"</string>
+    <string name="room_settings_add_new_group">Nieuw gemeenschaps-ID (bv. +foo:matrix.org)</string>
+    <string name="room_settings_invalid_group_format_dialog_title">Ongeldig gemeenschaps-ID</string>
+    <string name="room_settings_invalid_group_format_dialog_body">\'%s\' is niet een geldig gemeenschaps-ID</string>
+
+
+    <plurals name="notification_unread_notified_messages_in_room_msgs">
+	<item quantity="one">1 ongelezen bericht waarin je vermeld staat</item>
+	<item quantity="other">%d ongelezen berichten waarin je vermeld staat</item>
+</plurals>
+    <plurals name="notification_unread_notified_messages_in_room_rooms">
+	<item quantity="one">1 ruimte</item>
+	<item quantity="other">%d ruimtes</item>
+</plurals>
+    <string name="notification_unread_notified_messages_in_room">%1$s in %2$s</string>
+
+    <plurals name="active_widgets">
+	<item quantity="one">1 actieve widget</item>
+	<item quantity="other">%d actieve widgets</item>
+</plurals>
+
+    <!-- Widget Integration Manager -->
+    <string name="create">Creëer</string>
+    <string name="create_community">Gemeenschap Aanmaken</string>
+    <string name="community_name">Gemeenschapsnaam</string>
+    <string name="community_name_hint">Voorbeeld</string>
+    <string name="community_id">Gemeenschaps-ID</string>
+    <string name="community_id_hint">voorbeeld</string>
+
+    <!-- group details -->
+    <string name="group_details_home">Home</string>
+    <string name="group_details_people">Personen</string>
+    <string name="group_details_rooms">Ruimtes</string>
+    <string name="no_users_placeholder">Geen gebruikers</string>
+
+    <string name="rooms">Ruimtes</string>
+    <string name="joined">Toegetreden</string>
+    <string name="invited">Uitgenodigd</string>
+    <string name="filter_group_members">Groepsleden filteren</string>
+    <string name="filter_group_rooms">Groepsruimtes filteren</string>
+
+    <string name="group_one_member">1 lid</string>
+    <string name="group_members">%d leden</string>
+
+    <string name="group_one_room">1 ruimte</string>
+    <string name="group_rooms">%d ruimtes</string>
+    <string name="group_no_long_description">De gemeenschapsadministrator heeft geen lange beschrijving gegeven voor deze gemeenschap.</string>
+
+    <string name="has_been_kicked">Je bent uit %1$s gezet door %2$s</string>
+    <string name="has_been_banned">Je bent verbannen van %1$s door %2$s</string>
+    <string name="reason_colon">Reden: %1$s</string>
+    <string name="rejoin">Opnieuw toetreden</string>
+    <string name="forget_room">Ruimte vergeten</string>
+
+    <string name="receipt_avatar">Ontvangst-avatar</string>
+    <string name="avatar">Avatar</string>
+
+<plurals name="notification_unread_notified_messages">
+	<item quantity="one">1 ongelezen bericht waarin je vermeld staat</item>
+	<item quantity="other">%d ongelezen berichten waarin je vermeld staat</item>
+</plurals>
+    <string name="notice_avatar">Vermeldingsavatar</string>
+    <string name="title_activity_choose_sticker">Verstuur een sticker</string>
+
+    <string name="option_send_sticker">Sticker versturen</string>
+    <string name="no_sticker_application_dialog_content">Je hebt momenteel geen stickerpakketten aan staan.
+
+Wil je er nu een paar toevoegen?</string>
+
+    <string name="settings_notification_privacy">Notificatie privacy</string>
+    <string name="settings_notification_privacy_warning">Riot.im werkt in de achtergrond om de inhoud van de berichten in de notificatie privé te houden. Je kan deze optie uitzetten om batterijverbruik te verminderen.</string>
+    <string name="settings_notification_privacy_normal">Normaal</string>
+    <string name="settings_notification_privacy_power_saving">Energie-besparende Opties</string>
+    <string name="settings_notification_privacy_low_detail">Notificaties met weinig details</string>
+    <string name="settings_notification_privacy_reduced">Gereduceerde privacy</string>
+    <string name="settings_notification_privacy_need_permission">De applicatie heeft toestemming nodig om in de achtergrond te werken</string>
+    <string name="settings_notification_privacy_no_permission">De apps hebben <b>geen</b> toestemming nodig om in de achtergrond te werken</string>
+    <string name="settings_notification_privacy_gcm">• Notifications worden verstuurd via Google Cloud Messaging</string>
+    <string name="settings_notification_privacy_metadata">• Notificaties bevatten alleen metadata</string>
+    <string name="settings_notification_privacy_secure_message_content">• De inhoud van de berichten in de notificatie is <b>veilig overgebracht rechtstreeks vanaf de Matrix thuisserver</b></string>
+    <string name="settings_notification_privacy_nosecure_message_content">• Notificaties bevatten <b>meta- en berichtdata</b></string>
+    <string name="settings_notification_privacy_message_content_not_shown">• Notificaties zullen <b>niet de inhoud van het bericht weergeven</b></string>
+
+    <string name="settings_deactivate_account_section">Account deactiveren</string>
+    <string name="settings_deactivate_my_account">Mijn account deactiveren</string>
+
+    <string name="startup_notification_privacy_title">Notificatie Privacy</string>
+    <string name="startup_notification_privacy_message">Riot kan in de achtergrond werken om je notificaties veilig en privé te beheren (dit kan misschien batterijgebruik aantasten).</string>
+    <string name="startup_notification_privacy_button_grant">Toestemming geven</string>
+    <string name="startup_notification_privacy_button_other">Kies een andere optie</string>
+
+    <string name="settings_opt_in_of_analytics">Statistische gegevens (analytics) versturen</string>
+    <string name="settings_opt_in_of_analytics_summary">Riot verzamelt anonieme gegevens (analytics) om het voor ons mogelijk te maken om de applicatie te verbeteren.</string>
+    <string name="settings_opt_in_of_analytics_prompt">Zet analytics alsjeblieft aan om ons te helpen in het verbeteren van Riot.</string>
+    <string name="settings_opt_in_of_analytics_ok">Ja ik wil helpen!</string>
+
+    <string name="widget_integration_missing_parameter">Een vereiste parameter mist.</string>
+    <string name="widget_integration_invalid_parameter">Een parameter is niet geldig.</string>
+    <string name="dialog_user_consent_content">Om deze thuisserver verder te blijven gebruiken %1$s moet je de voorwaarden lezen en ermee akkoord gaan.</string>
+    <string name="dialog_user_consent_submit">Nu doorlezen</string>
+
+    <string name="deactivate_account_title">Account Deactiveren</string>
+    <string name="deactivate_account_content">Dit zal je account voorgoed onbruikbaar maken. Je zal niet meer in kunnen loggen en niemand anders zal met dezelfde gebruikers ID kunnen registreren. Dit zal er voor zorgen dat je account alle ruimtes verlaat waar het momenteel onderdeel van is en het verwijderd de accountgegevens van de identiteitsserver. <b>Deze actie is onomkeerbaar.</b>
+
+Het deactiveren van je account <b>zal er niet standaard voor zorgen dat de berichten die je verzonden hebt vergeten worden.</b> Als je wilt dat wij de berichten vergeten, klikt alsjeblieft op het vakje hieronder.
+
+De zichtbaarheid van berichten in Matrix is hetzelfde als in e-mail. Het vergeten van je berichten betekent dat berichten die je hebt verstuurd niet meer gedeeld worden met nieuwe of ongeregistreerde gebruikers, maar geregistreerde gebruikers die al toegang hebben tot deze berichten zullen alsnog toegang hebben tot hun eigen kopie van het bericht.</string>
+    <string name="deactivate_account_delete_checkbox">Vergeet alle berichten die ik heb verstuurd wanneer mijn account gedeactiveerd is (<b>Waarschuwing:</b> dit zal er voor zorgen dat toekomstige gebruikers een incompleet beeld krijgen van gesprekken)</string>
+    <string name="deactivate_account_prompt_password">Om verder te gaan, voer je wachtwoord in:</string>
+    <string name="deactivate_account_submit">Account Deactiveren</string>
+
+<string name="dialog_title_third_party_licences">Licenties van derde partijen</string>
+
+    <string name="download">Download</string>
+    <string name="speak">Spreek</string>
+    <string name="e2e_re_request_encryption_key"><u>Vraag beveiligingssleutels opnieuw aan</u> van je andere apparaten.</string>
+
+    <string name="e2e_re_request_encryption_key_sent">Sleutel aanvraag verstuurd.</string>
+
+    <string name="e2e_re_request_encryption_key_dialog_title">Aanvraag verstuurd</string>
+    <string name="e2e_re_request_encryption_key_dialog_content">Start Riot alstublieft op een ander apparaat dat het bericht kan ontsleutelen zodat deze de sleutels kan sturen naar dit apparaat.</string>
+
+    <string name="lock_screen_hint">Typ hier…</string>
+
+    <string name="clear">Opschonen</string>
+    <string name="option_send_voice">Stembericht versturen</string>
+
+    <string name="go_on_with">doorgaan met…</string>
+    <string name="error_no_external_application_found">Sorry, er is geen externe applicatie gevonden om deze actie te voltooien.</string>
+
+    <string name="settings_labs_enable_send_voice">Verstuur stembericht (heeft een externe applicatie nodig om stemberichten op te nemen)</string>
+
+    <string name="error_empty_field_your_password">Vul alstublieft uw wachtwoord in.</string>
+
+</resources>

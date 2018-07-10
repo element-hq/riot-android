@@ -28,7 +28,7 @@ import org.matrix.androidsdk.rest.callback.ApiCallback;
 
 import im.vector.Matrix;
 import im.vector.activity.CommonActivityUtils;
-import im.vector.gcm.GCMHelper;
+import im.vector.push.GCMHelper;
 
 import java.util.ArrayList;
 
@@ -137,11 +137,13 @@ public final class GcmRegistrationManager extends PushManager {
     //================================================================================
     // GCM registration
     //================================================================================
-
+    
     /**
      * Retrieve the GCM registration token.
+     *
      * @return the GCM registration token
      */
+    @Override
     public String getPushRegistrationToken() {
         String registrationToken = getStoredRegistrationToken();
 
@@ -162,7 +164,7 @@ public final class GcmRegistrationManager extends PushManager {
     @Override
     public void clearPreferences() {
         super.clearPreferences();
-        getGcmSharedPreferences().edit().clear().commit();
+        getGcmSharedPreferences().edit().clear().apply();
     }
 
 
@@ -197,11 +199,9 @@ public final class GcmRegistrationManager extends PushManager {
      */
     private void clearOldStoredRegistrationToken() {
         Log.d(LOG_TAG, "Remove old registration token");
-        if (!getGcmSharedPreferences().edit()
+        getPushSharedPreferences().edit()
                 .remove(PREFS_PUSHER_REGISTRATION_TOKEN_KEY)
-                .commit()) {
-            Log.e(LOG_TAG, "## setStoredRegistrationToken() : commit failed");
-        }
+                .apply();
     }
 
     /**
@@ -212,11 +212,9 @@ public final class GcmRegistrationManager extends PushManager {
     protected void setStoredRegistrationToken(String registrationToken) {
         Log.d(LOG_TAG, "Saving registration token");
 
-        if (!getGcmSharedPreferences().edit()
+        getPushSharedPreferences().edit()
                 .putString(PREFS_PUSHER_REGISTRATION_TOKEN_KEY_FCM, registrationToken)
-                .commit()) {
-            Log.e(LOG_TAG, "## setStoredRegistrationToken() : commit failed");
-        }
+                .apply();
     }
 
     /**
@@ -232,7 +230,7 @@ public final class GcmRegistrationManager extends PushManager {
                 protected Void doInBackground(Void... voids) {
                     setStoredRegistrationToken(null);
                     mPushKey = null;
-                    mRegistrationState = RegistrationState.UNREGISTRATED;
+                    mRegistrationState = setStoredRegistrationState(RegistrationState.UNREGISTRATED);
 
                     if (clearRegistrationToken) {
                         GCMHelper.clearRegistrationToken();

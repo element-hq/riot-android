@@ -2,7 +2,8 @@
 
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content">
+    android:layout_height="wrap_content"
+    xmlns:tools="http://schemas.android.com/tools">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -31,7 +32,7 @@
             android:id="@+id/encrypted_info_user_id"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="an user id"
+            tools:text="an user id"
             android:textSize="12sp" />
 
         <TextView
@@ -46,7 +47,7 @@
             android:id="@+id/encrypted_info_curve25519_identity_key"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="a Curve25519 identity key"
+            tools:text="a Curve25519 identity key"
             android:textSize="12sp" />
 
         <TextView
@@ -61,7 +62,7 @@
             android:id="@+id/encrypted_info_claimed_ed25519_fingerprint_key"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="a Claimed Ed25519 fingerprint key"
+            tools:text="a Claimed Ed25519 fingerprint key"
             android:textSize="12sp" />
 
         <TextView
@@ -76,7 +77,7 @@
             android:id="@+id/encrypted_info_algorithm"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="an algorithm"
+            tools:text="an algorithm"
             android:textSize="12sp" />
 
         <TextView
@@ -92,7 +93,7 @@
             android:id="@+id/encrypted_info_decryption_error"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="an error"
+            tools:text="an error"
             android:textSize="12sp" />
 
         <TextView
@@ -107,7 +108,7 @@
             android:id="@+id/encrypted_info_session_id"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="a session id"
+            tools:text="a session id"
             android:textSize="12sp" />
 
         <TextView
@@ -152,7 +153,7 @@
                 android:id="@+id/encrypted_info_name"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="a name"
+                tools:text="a name"
                 android:textSize="12sp" />
 
             <TextView
@@ -167,7 +168,7 @@
                 android:id="@+id/encrypted_info_device_id"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="a device id"
+                tools:text="a device id"
                 android:textSize="12sp" />
 
             <TextView
@@ -182,7 +183,7 @@
                 android:id="@+id/encrypted_info_verification"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="a Verification"
+                tools:text="a Verification"
                 android:textSize="12sp" />
 
             <TextView
@@ -197,7 +198,7 @@
                 android:id="@+id/encrypted_ed25519_fingerprint"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="a Ed25519 fingerprint"
+                tools:text="a Ed25519 fingerprint"
                 android:textSize="12sp" />
         </LinearLayout>
     </LinearLayout>

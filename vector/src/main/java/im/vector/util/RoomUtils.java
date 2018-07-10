@@ -1,5 +1,6 @@
 /*
  * Copyright 2017 Vector Creations Ltd
+ * Copyright 2018 New Vector Ltd
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,12 +18,19 @@
 package im.vector.util;
 
 import android.annotation.SuppressLint;
-import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
+import android.content.pm.ShortcutInfo;
+import android.content.pm.ShortcutManager;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.graphics.drawable.Icon;
 import android.os.Build;
 import android.support.annotation.NonNull;
+import android.support.v7.app.AlertDialog;
 import android.text.TextUtils;
+import android.view.ContextThemeWrapper;
 import android.view.Gravity;
 import android.view.MenuItem;
 import android.view.View;
@@ -33,14 +41,15 @@ import org.matrix.androidsdk.data.Room;
 import org.matrix.androidsdk.data.RoomAccountData;
 import org.matrix.androidsdk.data.RoomState;
 import org.matrix.androidsdk.data.RoomSummary;
-import org.matrix.androidsdk.data.store.IMXStore;
 import org.matrix.androidsdk.rest.callback.ApiCallback;
 import org.matrix.androidsdk.rest.model.Event;
+import org.matrix.androidsdk.rest.model.RoomMember;
 import org.matrix.androidsdk.rest.model.User;
 import org.matrix.androidsdk.util.BingRulesManager;
 import org.matrix.androidsdk.util.EventDisplay;
 import org.matrix.androidsdk.util.Log;
 
+import java.io.File;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
@@ -52,7 +61,7 @@ import java.util.regex.Pattern;
 
 import im.vector.Matrix;
 import im.vector.R;
-import im.vector.activity.CommonActivityUtils;
+import im.vector.activity.VectorRoomActivity;
 import im.vector.adapters.AdapterUtils;
 
 public class RoomUtils {
@@ -60,7 +69,7 @@ public class RoomUtils {
     private static final String LOG_TAG = RoomUtils.class.getSimpleName();
 
     public interface MoreActionListener {
-        void onToggleRoomNotifications(MXSession session, String roomId);
+        void onUpdateRoomNotificationsState(MXSession session, String roomId, BingRulesManager.RoomNotificationState state);
 
         void onToggleDirectChat(MXSession session, String roomId);
 
@@ -71,6 +80,10 @@ public class RoomUtils {
         void moveToLowPriority(MXSession session, String roomId);
 
         void onLeaveRoom(MXSession session, String roomId);
+
+        void onForgetRoom(MXSession session, String roomId);
+
+        void addHomeScreenShortcut(MXSession session, String roomId);
     }
 
     public interface HistoricalRoomActionListener {
@@ -87,7 +100,7 @@ public class RoomUtils {
     public static Comparator<Room> getRoomsDateComparator(final MXSession session, final boolean reverseOrder) {
         return new Comparator<Room>() {
             private Comparator<RoomSummary> mRoomSummaryComparator;
-            private HashMap<String, RoomSummary> mSummaryByRoomIdMap = new HashMap<>();
+            private final Map<String, RoomSummary> mSummaryByRoomIdMap = new HashMap<>();
 
             /**
              * Retrieve the room summary comparator
@@ -144,10 +157,12 @@ public class RoomUtils {
      * @param pinUnreadMessages      whether unread messages should be pinned
      * @return comparator
      */
-    public static Comparator<Room> getNotifCountRoomsComparator(final MXSession session, final boolean pinMissedNotifications, final boolean pinUnreadMessages) {
+    public static Comparator<Room> getNotifCountRoomsComparator(final MXSession session,
+                                                                final boolean pinMissedNotifications,
+                                                                final boolean pinUnreadMessages) {
         return new Comparator<Room>() {
             private Comparator<RoomSummary> mRoomSummaryComparator;
-            private HashMap<String, RoomSummary> mSummaryByRoomIdMap = new HashMap<>();
+            private final Map<String, RoomSummary> mSummaryByRoomIdMap = new HashMap<>();
 
             /**
              * Retrieve the room summary comparator
@@ -155,7 +170,8 @@ public class RoomUtils {
              */
             private Comparator<RoomSummary> getSummaryComparator() {
                 if (null == mRoomSummaryComparator) {
-                    mRoomSummaryComparator = getNotifCountRoomSummaryComparator(session.getDataHandler().getBingRulesManager(), pinMissedNotifications, pinUnreadMessages);
+                    mRoomSummaryComparator
+                            = getNotifCountRoomSummaryComparator(session.getDataHandler().getBingRulesManager(), pinMissedNotifications, pinUnreadMessages);
                 }
                 return mRoomSummaryComparator;
             }
@@ -217,7 +233,7 @@ public class RoomUtils {
      * @param reverseOrder
      * @return ordered list
      */
-    public static Comparator<RoomSummary> getRoomSummaryComparator(final boolean reverseOrder) {
+    private static Comparator<RoomSummary> getRoomSummaryComparator(final boolean reverseOrder) {
         return new Comparator<RoomSummary>() {
             public int compare(RoomSummary leftRoomSummary, RoomSummary rightRoomSummary) {
                 int retValue;
@@ -253,9 +269,9 @@ public class RoomUtils {
      * @param pinUnreadMessages      whether unread messages should be pinned
      * @return comparator
      */
-    public static Comparator<RoomSummary> getNotifCountRoomSummaryComparator(final BingRulesManager bingRulesManager,
-                                                                             final boolean pinMissedNotifications,
-                                                                             final boolean pinUnreadMessages) {
+    private static Comparator<RoomSummary> getNotifCountRoomSummaryComparator(final BingRulesManager bingRulesManager,
+                                                                              final boolean pinMissedNotifications,
+                                                                              final boolean pinUnreadMessages) {
         return new Comparator<RoomSummary>() {
             public int compare(RoomSummary leftRoomSummary, RoomSummary rightRoomSummary) {
                 int retValue;
@@ -296,11 +312,11 @@ public class RoomUtils {
                     retValue = 1;
                 } else if (pinMissedNotifications && (rightNotificationCount == 0) && (leftNotificationCount > 0)) {
                     retValue = -1;
-                } else if(pinUnreadMessages && (rightUnreadCount > 0) && (leftUnreadCount == 0)) {
+                } else if (pinUnreadMessages && (rightUnreadCount > 0) && (leftUnreadCount == 0)) {
                     retValue = 1;
-                } else if(pinUnreadMessages && (rightUnreadCount == 0) && (leftUnreadCount > 0)) {
+                } else if (pinUnreadMessages && (rightUnreadCount == 0) && (leftUnreadCount > 0)) {
                     retValue = -1;
-                } else if ( (deltaTimestamp = rightRoomSummary.getLatestReceivedEvent().getOriginServerTs()
+                } else if ((deltaTimestamp = rightRoomSummary.getLatestReceivedEvent().getOriginServerTs()
                         - leftRoomSummary.getLatestReceivedEvent().getOriginServerTs()) > 0) {
                     retValue = 1;
                 } else if (deltaTimestamp < 0) {
@@ -310,20 +326,6 @@ public class RoomUtils {
                 }
 
                 return retValue;
-            }
-        };
-    }
-
-    /**
-     * Get a comparator to sort tagged rooms
-     *
-     * @param taggedRoomsById
-     * @return comparator
-     */
-    public static Comparator<Room> getTaggedRoomComparator(final List<String> taggedRoomsById) {
-        return new Comparator<Room>() {
-            public int compare(Room r1, Room r2) {
-                return taggedRoomsById.indexOf(r1.getRoomId()) - taggedRoomsById.indexOf(r2.getRoomId());
             }
         };
     }
@@ -364,7 +366,7 @@ public class RoomUtils {
             if (roomSummary.getLatestReceivedEvent() != null) {
                 eventDisplay = new EventDisplay(context, roomSummary.getLatestReceivedEvent(), roomSummary.getLatestRoomState());
                 eventDisplay.setPrependMessagesWithAuthor(true);
-                messageToDisplay = eventDisplay.getTextualDisplay(ThemeUtils.getColor(context, R.attr.room_notification_text_color));
+                messageToDisplay = eventDisplay.getTextualDisplay(ThemeUtils.INSTANCE.getColor(context, R.attr.room_notification_text_color));
             }
 
             // check if this is an invite
@@ -464,18 +466,21 @@ public class RoomUtils {
             return;
         }
 
+        Context popmenuContext = new ContextThemeWrapper(context, R.style.PopMenuStyle);
+
         final PopupMenu popup;
 
-        if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
-            popup = new PopupMenu(context, actionView, Gravity.END);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
+            popup = new PopupMenu(popmenuContext, actionView, Gravity.END);
         } else {
-            popup = new PopupMenu(context, actionView);
+            popup = new PopupMenu(popmenuContext, actionView);
         }
         popup.getMenuInflater().inflate(R.menu.vector_home_room_settings, popup.getMenu());
-        CommonActivityUtils.tintMenuIcons(popup.getMenu(), ThemeUtils.getColor(context, R.attr.settings_icon_tint_color));
+        ThemeUtils.INSTANCE.tintMenuIcons(popup.getMenu(), ThemeUtils.INSTANCE.getColor(context, R.attr.settings_icon_tint_color));
 
         if (room.isLeft()) {
             popup.getMenu().setGroupVisible(R.id.active_room_actions, false);
+            popup.getMenu().setGroupVisible(R.id.add_shortcut_actions, false);
             popup.getMenu().setGroupVisible(R.id.historical_room_actions, true);
 
             if (historicalRoomActionListener != null) {
@@ -491,42 +496,96 @@ public class RoomUtils {
             }
         } else {
             popup.getMenu().setGroupVisible(R.id.active_room_actions, true);
+
+            if (Build.VERSION.SDK_INT < Build.VERSION_CODES.O) {
+                popup.getMenu().setGroupVisible(R.id.add_shortcut_actions, false);
+            } else {
+                ShortcutManager manager = context.getSystemService(ShortcutManager.class);
+
+                if (!manager.isRequestPinShortcutSupported()) {
+                    popup.getMenu().setGroupVisible(R.id.add_shortcut_actions, false);
+                } else {
+                    popup.getMenu().setGroupVisible(R.id.add_shortcut_actions, true);
+                }
+            }
+
             popup.getMenu().setGroupVisible(R.id.historical_room_actions, false);
 
             MenuItem item;
 
-            final BingRulesManager bingRulesManager = session.getDataHandler().getBingRulesManager();
+            BingRulesManager.RoomNotificationState state = session.getDataHandler().getBingRulesManager().getRoomNotificationState(room.getRoomId());
 
-            if (bingRulesManager.isRoomNotificationsDisabled(room.getRoomId())) {
-                item = popup.getMenu().getItem(0);
+            if (BingRulesManager.RoomNotificationState.ALL_MESSAGES_NOISY != state) {
+                item = popup.getMenu().findItem(R.id.ic_action_notifications_noisy);
+                item.setIcon(null);
+            }
+
+            if (BingRulesManager.RoomNotificationState.ALL_MESSAGES != state) {
+                item = popup.getMenu().findItem(R.id.ic_action_notifications_all_message);
+                item.setIcon(null);
+            }
+
+            if (BingRulesManager.RoomNotificationState.MENTIONS_ONLY != state) {
+                item = popup.getMenu().findItem(R.id.ic_action_notifications_mention_only);
+                item.setIcon(null);
+            }
+
+            if (BingRulesManager.RoomNotificationState.MUTE != state) {
+                item = popup.getMenu().findItem(R.id.ic_action_notifications_mute);
                 item.setIcon(null);
             }
 
             if (!isFavorite) {
-                item = popup.getMenu().getItem(1);
+                item = popup.getMenu().findItem(R.id.ic_action_select_fav);
                 item.setIcon(null);
             }
 
             if (!isLowPrior) {
-                item = popup.getMenu().getItem(2);
+                item = popup.getMenu().findItem(R.id.ic_action_select_deprioritize);
                 item.setIcon(null);
             }
 
-            if (session.getDirectChatRoomIdsList().indexOf(room.getRoomId()) < 0) {
-                item = popup.getMenu().getItem(3);
+            if (!room.isDirect()) {
+                item = popup.getMenu().findItem(R.id.ic_action_select_direct_chat);
                 item.setIcon(null);
             }
 
+            RoomMember member = room.getMember(session.getMyUserId());
+            final boolean isBannedKickedRoom = (null != member) && member.kickedOrBanned();
+
+            if (isBannedKickedRoom) {
+                item = popup.getMenu().findItem(R.id.ic_action_select_remove);
+
+                if (null != item) {
+                    item.setTitle(R.string.forget_room);
+                }
+            }
 
             if (moreActionListener != null) {
                 popup.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
                     @Override
                     public boolean onMenuItemClick(final MenuItem item) {
                         switch (item.getItemId()) {
-                            case R.id.ic_action_select_notifications: {
-                                moreActionListener.onToggleRoomNotifications(session, room.getRoomId());
+                            case R.id.ic_action_notifications_noisy:
+                                moreActionListener.onUpdateRoomNotificationsState(session,
+                                        room.getRoomId(), BingRulesManager.RoomNotificationState.ALL_MESSAGES_NOISY);
                                 break;
-                            }
+
+                            case R.id.ic_action_notifications_all_message:
+                                moreActionListener.onUpdateRoomNotificationsState(session,
+                                        room.getRoomId(), BingRulesManager.RoomNotificationState.ALL_MESSAGES);
+                                break;
+
+                            case R.id.ic_action_notifications_mention_only:
+                                moreActionListener.onUpdateRoomNotificationsState(session,
+                                        room.getRoomId(), BingRulesManager.RoomNotificationState.MENTIONS_ONLY);
+                                break;
+
+                            case R.id.ic_action_notifications_mute:
+                                moreActionListener.onUpdateRoomNotificationsState(session,
+                                        room.getRoomId(), BingRulesManager.RoomNotificationState.MUTE);
+                                break;
+
                             case R.id.ic_action_select_fav: {
                                 if (isFavorite) {
                                     moreActionListener.moveToConversations(session, room.getRoomId());
@@ -544,11 +603,19 @@ public class RoomUtils {
                                 break;
                             }
                             case R.id.ic_action_select_remove: {
-                                moreActionListener.onLeaveRoom(session, room.getRoomId());
+                                if (isBannedKickedRoom) {
+                                    moreActionListener.onForgetRoom(session, room.getRoomId());
+                                } else {
+                                    moreActionListener.onLeaveRoom(session, room.getRoomId());
+                                }
                                 break;
                             }
                             case R.id.ic_action_select_direct_chat: {
                                 moreActionListener.onToggleDirectChat(session, room.getRoomId());
+                                break;
+                            }
+                            case R.id.ic_action_add_homescreen_shortcut: {
+                                moreActionListener.addHomeScreenShortcut(session, room.getRoomId());
                                 break;
                             }
                         }
@@ -601,20 +668,92 @@ public class RoomUtils {
                         dialog.dismiss();
                     }
                 })
-                .create()
                 .show();
+    }
+
+    /**
+     * Add a room shortcut to the home screen (Android >= O).
+     *
+     * @param context the context
+     * @param session the session
+     * @param roomId  the room Id
+     */
+    @SuppressLint("NewApi")
+    public static void addHomeScreenShortcut(final Context context, final MXSession session, final String roomId) {
+        // android >=  O only
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.O) {
+            return;
+        }
+
+        ShortcutManager manager = context.getSystemService(ShortcutManager.class);
+
+        if (!manager.isRequestPinShortcutSupported()) {
+            return;
+        }
+
+        Room room = session.getDataHandler().getRoom(roomId);
+
+        if (null == room) {
+            return;
+        }
+
+        String roomName = VectorUtils.getRoomDisplayName(context, session, room);
+
+        Bitmap bitmap = null;
+
+        // try to retrieve the avatar from the medias cache
+        if (!TextUtils.isEmpty(room.getAvatarUrl())) {
+            int size = context.getResources().getDimensionPixelSize(R.dimen.profile_avatar_size);
+
+            // check if the thumbnail is already downloaded
+            File f = session.getMediasCache().thumbnailCacheFile(room.getAvatarUrl(), size);
+
+            if (null != f) {
+                BitmapFactory.Options options = new BitmapFactory.Options();
+                options.inPreferredConfig = Bitmap.Config.ARGB_8888;
+                try {
+                    bitmap = BitmapFactory.decodeFile(f.getPath(), options);
+                } catch (OutOfMemoryError oom) {
+                    Log.e(LOG_TAG, "decodeFile failed with an oom");
+                }
+            }
+        }
+
+        if (null == bitmap) {
+            bitmap = VectorUtils.getAvatar(context, VectorUtils.getAvatarColor(roomId), roomName, true);
+        }
+
+        Icon icon = Icon.createWithBitmap(bitmap);
+
+        Intent intent = new Intent(context, VectorRoomActivity.class);
+        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+        intent.setAction(Intent.ACTION_VIEW);
+        intent.putExtra(VectorRoomActivity.EXTRA_ROOM_ID, roomId);
+
+        ShortcutInfo info = new ShortcutInfo.Builder(context, roomId)
+                .setShortLabel(roomName)
+                .setIcon(icon)
+                .setIntent(intent)
+                .build();
+
+
+        manager.requestPinShortcut(info, null);
     }
 
     /**
      * Update a room Tag
      *
-     * @param session the session
-     * @param roomId the room Id
-     * @param aTagOrder the new tag order
-     * @param newTag the new Tag
+     * @param session     the session
+     * @param roomId      the room Id
+     * @param aTagOrder   the new tag order
+     * @param newTag      the new Tag
      * @param apiCallback the asynchronous callback
      */
-    public static void updateRoomTag(final MXSession session, final String roomId, final Double aTagOrder, final String newTag, final ApiCallback<Void> apiCallback) {
+    public static void updateRoomTag(final MXSession session,
+                                     final String roomId,
+                                     final Double aTagOrder,
+                                     final String newTag,
+                                     final ApiCallback<Void> apiCallback) {
         Room room = session.getDataHandler().getRoom(roomId);
 
         if (null != room) {
@@ -658,37 +797,13 @@ public class RoomUtils {
     }
 
     /**
-     * Enable or disable notifications for the given room
-     *
-     * @param session
-     * @param roomId
-     * @param listener
-     */
-    public static void toggleNotifications(final MXSession session, final String roomId, final BingRulesManager.onBingRuleUpdateListener listener) {
-        BingRulesManager bingRulesManager = session.getDataHandler().getBingRulesManager();
-        bingRulesManager.muteRoomNotifications(roomId, !bingRulesManager.isRoomNotificationsDisabled(roomId), listener);
-    }
-
-    /**
      * Get whether the room of the given is a direct chat
      *
      * @param roomId
      * @return true if direct chat
      */
     public static boolean isDirectChat(final MXSession session, final String roomId) {
-        final IMXStore store = session.getDataHandler().getStore();
-        final Map<String, List<String>> directChatRoomsDict;
-
-        if (store.getDirectChatRoomsDict() != null) {
-            directChatRoomsDict = new HashMap<>(store.getDirectChatRoomsDict());
-
-            if (directChatRoomsDict.containsKey(session.getMyUserId())) {
-                List<String> roomIdsList = new ArrayList<>(directChatRoomsDict.get(session.getMyUserId()));
-                return roomIdsList.contains(roomId);
-            }
-        }
-
-        return false;
+        return (null != roomId) && session.getDataHandler().getDirectChatRoomIdsList().contains(roomId);
     }
 
     /**

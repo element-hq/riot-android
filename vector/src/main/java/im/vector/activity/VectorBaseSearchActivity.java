@@ -1,5 +1,6 @@
 /*
  * Copyright 2014 OpenMarket Ltd
+ * Copyright 2018 New Vector Ltd
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,15 +17,15 @@
 
 package im.vector.activity;
 
-import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.content.pm.ResolveInfo;
-import android.os.Bundle;
 import android.speech.RecognizerIntent;
+import android.support.annotation.CallSuper;
 import android.support.v7.app.ActionBar;
+import android.support.v7.app.AlertDialog;
 import android.text.TextUtils;
 import android.text.TextWatcher;
 import android.view.KeyEvent;
@@ -36,18 +37,21 @@ import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.TextView;
 
-import java.util.ArrayList;
+import org.jetbrains.annotations.NotNull;
+import org.matrix.androidsdk.util.Log;
+
 import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
 
 import im.vector.R;
-import im.vector.util.ThemeUtils;
+import kotlin.Pair;
 
 /**
  * This class defines a base class to manage search in action bar
  */
-public class VectorBaseSearchActivity extends MXCActionBarActivity {
+public abstract class VectorBaseSearchActivity extends MXCActionBarActivity {
+    private static final String LOG_TAG = VectorBaseSearchActivity.class.getSimpleName();
 
     public interface IVectorSearchActivity {
         void refreshSearch();
@@ -55,21 +59,26 @@ public class VectorBaseSearchActivity extends MXCActionBarActivity {
 
     private static final int SPEECH_REQUEST_CODE = 1234;
 
-    protected ActionBar mActionBar;
-    protected EditText mPatternToSearchEditText;
+    private ActionBar mActionBar;
+    EditText mPatternToSearchEditText;
 
     private MenuItem mMicroMenuItem;
     private MenuItem mClearEditTextMenuItem;
 
+    @NotNull
     @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
+    public Pair getOtherThemes() {
+        return new Pair(R.style.SearchesAppTheme_Dark, R.style.SearchesAppTheme_Black);
+    }
 
+    @Override
+    @CallSuper
+    public void initUiAndData() {
         mActionBar = getSupportActionBar();
         View actionBarView = customizeActionBar();
 
         // add the search logic based on the text search input listener
-        mPatternToSearchEditText = (EditText) actionBarView.findViewById(R.id.room_action_bar_edit_text);
+        mPatternToSearchEditText = actionBarView.findViewById(R.id.room_action_bar_edit_text);
         actionBarView.postDelayed(new Runnable() {
             @Override
             public void run() {
@@ -81,31 +90,51 @@ public class VectorBaseSearchActivity extends MXCActionBarActivity {
 
         mPatternToSearchEditText.addTextChangedListener(new TextWatcher() {
             public void afterTextChanged(android.text.Editable s) {
-                VectorBaseSearchActivity.this.refreshMenuEntries();
+                refreshMenuEntries();
                 final String fPattern = mPatternToSearchEditText.getText().toString();
 
                 Timer timer = new Timer();
-                // wait a little delay before refreshing the results.
-                // it avoid UI lags when the user is typing.
-                timer.schedule(new TimerTask() {
-                    @Override
-                    public void run() {
-                        VectorBaseSearchActivity.this.runOnUiThread(new Runnable() {
-                            @Override
-                            public void run() {
-                                if (TextUtils.equals(mPatternToSearchEditText.getText().toString(), fPattern)) {
-                                    VectorBaseSearchActivity.this.runOnUiThread(new Runnable() {
-                                        @Override
-                                        public void run() {
-                                            onPatternUpdate(true);
-                                        }
-                                    });
+
+                try {
+                    // wait a little delay before refreshing the results.
+                    // it avoid UI lags when the user is typing.
+                    timer.schedule(new TimerTask() {
+                        @Override
+                        public void run() {
+                            runOnUiThread(new Runnable() {
+                                @Override
+                                public void run() {
+                                    if (TextUtils.equals(mPatternToSearchEditText.getText().toString(), fPattern)) {
+                                        runOnUiThread(new Runnable() {
+                                            @Override
+                                            public void run() {
+                                                onPatternUpdate(true);
+                                            }
+                                        });
+                                    }
                                 }
+                            });
+                        }
+                    }, 100);
+                } catch (Throwable throwable) {
+                    Log.e(LOG_TAG, "## failed to start the timer " + throwable.getMessage());
+
+                    runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            if (TextUtils.equals(mPatternToSearchEditText.getText().toString(), fPattern)) {
+                                runOnUiThread(new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        onPatternUpdate(true);
+                                    }
+                                });
                             }
-                        });
-                    }
-                }, 100);
+                        }
+                    });
+                }
             }
+
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
             }
 
@@ -139,7 +168,7 @@ public class VectorBaseSearchActivity extends MXCActionBarActivity {
     @Override
     protected void onPause() {
         super.onPause();
-        InputMethodManager imm = (InputMethodManager)getSystemService(Context.INPUT_METHOD_SERVICE);
+        InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
         imm.hideSoftInputFromWindow(mPatternToSearchEditText.getApplicationWindowToken(), 0);
     }
 
@@ -157,14 +186,16 @@ public class VectorBaseSearchActivity extends MXCActionBarActivity {
 
     /**
      * The search pattern has been updated.
+     *
      * @param isTypingUpdate true when the pattern has been updated while typing.
      */
-    protected void onPatternUpdate(boolean isTypingUpdate) {
+    void onPatternUpdate(boolean isTypingUpdate) {
         // do something here
     }
 
     /**
      * Add a custom action bar with a view
+     *
      * @return the action bar inflated view
      */
     private View customizeActionBar() {
@@ -173,22 +204,28 @@ public class VectorBaseSearchActivity extends MXCActionBarActivity {
 
         // add a custom action bar view containing an EditText to input the search text
         ActionBar.LayoutParams layout = new ActionBar.LayoutParams(ActionBar.LayoutParams.MATCH_PARENT, ActionBar.LayoutParams.MATCH_PARENT);
-        View actionBarLayout =  getLayoutInflater().inflate(R.layout.vector_search_action_bar, null);
+        View actionBarLayout = getLayoutInflater().inflate(R.layout.vector_search_action_bar, null);
         mActionBar.setCustomView(actionBarLayout, layout);
 
         return actionBarLayout;
     }
 
     @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
+    public int getMenuRes() {
+        return R.menu.vector_searches;
+    }
+
+    @Override
+    public int getMenuTint() {
+        return R.attr.icon_tint_on_light_action_bar_color;
+    }
+
+    @Override
+    public boolean onPrepareOptionsMenu(Menu menu) {
         // the application is in a weird state
         if (CommonActivityUtils.shouldRestartApp(this)) {
             return false;
         }
-
-        // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.vector_searches, menu);
-        CommonActivityUtils.tintMenuIcons(menu, ThemeUtils.getColor(this, R.attr.icon_tint_on_light_action_bar_color));
 
         mMicroMenuItem = menu.findItem(R.id.ic_action_speak_to_search);
         mClearEditTextMenuItem = menu.findItem(R.id.ic_action_clear_search);
@@ -200,16 +237,16 @@ public class VectorBaseSearchActivity extends MXCActionBarActivity {
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        int id = item.getItemId();
-
-        if (id == R.id.ic_action_speak_to_search) {
-            Intent intent = new Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH);
-            intent.putExtra(RecognizerIntent.EXTRA_LANGUAGE_MODEL, RecognizerIntent.LANGUAGE_MODEL_FREE_FORM);
-            startActivityForResult(intent, SPEECH_REQUEST_CODE);
-
-        } else if (id ==  R.id.ic_action_clear_search) {
-            mPatternToSearchEditText.setText("");
-            onPatternUpdate(false);
+        switch (item.getItemId()) {
+            case R.id.ic_action_speak_to_search:
+                Intent intent = new Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH);
+                intent.putExtra(RecognizerIntent.EXTRA_LANGUAGE_MODEL, RecognizerIntent.LANGUAGE_MODEL_FREE_FORM);
+                startActivityForResult(intent, SPEECH_REQUEST_CODE);
+                return true;
+            case R.id.ic_action_clear_search:
+                mPatternToSearchEditText.setText("");
+                onPatternUpdate(false);
+                return true;
         }
 
         return super.onOptionsItemSelected(item);
@@ -219,10 +256,9 @@ public class VectorBaseSearchActivity extends MXCActionBarActivity {
      * Handle the results from the voice recognition activity.
      */
     @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data)
-    {
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         if ((requestCode == SPEECH_REQUEST_CODE) && (resultCode == RESULT_OK)) {
-            final ArrayList<String> matches = data.getStringArrayListExtra(RecognizerIntent.EXTRA_RESULTS);
+            final List<String> matches = data.getStringArrayListExtra(RecognizerIntent.EXTRA_RESULTS);
 
             // one matched items
             if (matches.size() == 1) {
@@ -231,23 +267,21 @@ public class VectorBaseSearchActivity extends MXCActionBarActivity {
                 onPatternUpdate(false);
             } else if (matches.size() > 1) {
                 // if they are several matches, let the user chooses the right one.
-                AlertDialog.Builder builder = new AlertDialog.Builder(this);
                 String[] mes = matches.toArray(new String[matches.size()]);
 
-                builder.setItems(mes, new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int item) {
-                        mPatternToSearchEditText.setText(matches.get(item));
-                        VectorBaseSearchActivity.this.runOnUiThread(new Runnable() {
-                            @Override
-                            public void run() {
-                                onPatternUpdate(false);
+                new AlertDialog.Builder(this)
+                        .setItems(mes, new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int item) {
+                                mPatternToSearchEditText.setText(matches.get(item));
+                                runOnUiThread(new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        onPatternUpdate(false);
+                                    }
+                                });
                             }
-                        });
-                    }
-                });
-
-                AlertDialog alert = builder.create();
-                alert.show();
+                        })
+                        .show();
             }
         }
         super.onActivityResult(requestCode, resultCode, data);

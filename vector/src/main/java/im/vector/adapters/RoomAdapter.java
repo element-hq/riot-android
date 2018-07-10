@@ -1,5 +1,6 @@
 /*
  * Copyright 2017 Vector Creations Ltd
+ * Copyright 2018 New Vector Ltd
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -30,7 +31,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import org.matrix.androidsdk.data.Room;
-import org.matrix.androidsdk.rest.model.PublicRoom;
+import org.matrix.androidsdk.rest.model.publicroom.PublicRoom;
 import org.matrix.androidsdk.util.Log;
 
 import java.util.ArrayList;
@@ -50,8 +51,8 @@ public class RoomAdapter extends AbsAdapter {
 
     private static final int TYPE_PUBLIC_ROOM = 1;
 
-    private AdapterSection<Room> mRoomsSection;
-    private PublicRoomsAdapterSection mPublicRoomsSection;
+    private final AdapterSection<Room> mRoomsSection;
+    private final PublicRoomsAdapterSection mPublicRoomsSection;
 
     private final OnSelectItemListener mListener;
 
@@ -61,16 +62,19 @@ public class RoomAdapter extends AbsAdapter {
      * *********************************************************************************************
      */
 
-    public RoomAdapter(final Context context, final OnSelectItemListener listener, final InvitationListener invitationListener, final MoreRoomActionListener moreActionListener) {
+    public RoomAdapter(final Context context,
+                       final OnSelectItemListener listener,
+                       final RoomInvitationListener invitationListener,
+                       final MoreRoomActionListener moreActionListener) {
         super(context, invitationListener, moreActionListener);
 
         mListener = listener;
 
-        mRoomsSection = new AdapterSection<>(context.getString(R.string.rooms_header), -1,
+        mRoomsSection = new AdapterSection<>(context, context.getString(R.string.rooms_header), -1,
                 R.layout.adapter_item_room_view, TYPE_HEADER_DEFAULT, TYPE_ROOM, new ArrayList<Room>(), RoomUtils.getRoomsDateComparator(mSession, false));
         mRoomsSection.setEmptyViewPlaceholder(context.getString(R.string.no_room_placeholder), context.getString(R.string.no_result_placeholder));
 
-        mPublicRoomsSection = new PublicRoomsAdapterSection(context.getString(R.string.rooms_directory_header),
+        mPublicRoomsSection = new PublicRoomsAdapterSection(context, context.getString(R.string.rooms_directory_header),
                 R.layout.adapter_public_room_sticky_header_subview, R.layout.adapter_item_public_room_view,
                 TYPE_HEADER_PUBLIC_ROOM, TYPE_PUBLIC_ROOM, new ArrayList<PublicRoom>(), null);
         mPublicRoomsSection.setEmptyViewPlaceholder(context.getString(R.string.no_public_room_placeholder), context.getString(R.string.no_result_placeholder));
@@ -125,7 +129,7 @@ public class RoomAdapter extends AbsAdapter {
             case TYPE_ROOM:
                 final RoomViewHolder roomViewHolder = (RoomViewHolder) viewHolder;
                 final Room room = (Room) getItemForPosition(position);
-                roomViewHolder.populateViews(mContext, mSession, room, false, false, mMoreActionListener);
+                roomViewHolder.populateViews(mContext, mSession, room, false, false, mMoreRoomActionListener);
                 roomViewHolder.itemView.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {

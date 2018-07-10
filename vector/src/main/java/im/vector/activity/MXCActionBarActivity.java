@@ -1,5 +1,6 @@
 /*
  * Copyright 2014 OpenMarket Ltd
+ * Copyright 2018 New Vector Ltd
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -19,19 +20,18 @@ package im.vector.activity;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.os.Build;
+import android.support.annotation.Nullable;
 import android.support.v4.app.DialogFragment;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
-import android.support.v7.app.AppCompatActivity;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 
 import org.matrix.androidsdk.MXSession;
 import org.matrix.androidsdk.data.Room;
-
-import java.util.ArrayList;
 
 import im.vector.Matrix;
 import im.vector.MyPresenceManager;
@@ -41,28 +41,12 @@ import im.vector.VectorApp;
 /**
  * extends ActionBarActivity to manage the rageshake
  */
-public class MXCActionBarActivity extends AppCompatActivity {
-    private static final String LOG_TAG = "MXCActBarActivity";
-
-    public static final String TAG_FRAGMENT_ACCOUNT_SELECTION_DIALOG = "ActionBarActivity.TAG_FRAGMENT_ACCOUNT_SELECTION_DIALOG";
+public abstract class MXCActionBarActivity extends RiotAppCompatActivity {
+    // TODO Make this protected
     public static final String EXTRA_MATRIX_ID = "MXCActionBarActivity.EXTRA_MATRIX_ID";
 
-    protected MXSession mSession = null;
-    protected Room mRoom = null;
-
-    private boolean hasCorruptedStore(Activity activity) {
-        boolean hasCorruptedStore = false;
-        ArrayList<MXSession> sessions = Matrix.getMXSessions(activity);
-
-        if (null != sessions) {
-            for (MXSession session : sessions) {
-                if (session.isAlive()) {
-                    hasCorruptedStore |= session.getDataHandler().getStore().isCorrupted();
-                }
-            }
-        }
-        return hasCorruptedStore;
-    }
+    MXSession mSession = null;
+    Room mRoom = null;
 
     @Override
     public void onLowMemory() {
@@ -78,18 +62,19 @@ public class MXCActionBarActivity extends AppCompatActivity {
 
     /**
      * Return the used MXSession from an intent.
-     * @param context the application context
-     * @param intent the intent
-     * @return the MXSession if it exists.
+     *
+     * @param intent  the intent
+     * @return the MXSession if it exists, or null.
      */
-    public static MXSession getSession(Context context, Intent intent) {
+    @Nullable
+    protected MXSession getSession(Intent intent) {
         String matrixId = null;
 
         if (intent.hasExtra(EXTRA_MATRIX_ID)) {
             matrixId = intent.getStringExtra(EXTRA_MATRIX_ID);
         }
 
-        return Matrix.getInstance(context).getSession(matrixId);
+        return Matrix.getInstance(this).getSession(matrixId);
     }
 
     public MXSession getSession() {
@@ -111,8 +96,8 @@ public class MXCActionBarActivity extends AppCompatActivity {
         // ActivityOptionsCompat options = ActivityOptionsCompat.makeSceneTransitionAnimation(...
         // ActivityCompat.startActivity(activity, new Intent(activity, DetailActivity.class),  options.toBundle());
 
-        if (android.os.Build.VERSION.SDK_INT < android.os.Build.VERSION_CODES.LOLLIPOP) {
-            this.overridePendingTransition(R.anim.anim_slide_in_bottom, R.anim.anim_slide_nothing);
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP) {
+            overridePendingTransition(R.anim.anim_slide_in_bottom, R.anim.anim_slide_nothing);
         } else {
             // the animation is enabled in the theme
         }
@@ -127,8 +112,8 @@ public class MXCActionBarActivity extends AppCompatActivity {
         //
         // ActivityOptionsCompat options = ActivityOptionsCompat.makeSceneTransitionAnimation(...
         // ActivityCompat.startActivity(activity, new Intent(activity, DetailActivity.class),  options.toBundle());
-       if (android.os.Build.VERSION.SDK_INT < android.os.Build.VERSION_CODES.LOLLIPOP) {
-            this.overridePendingTransition(R.anim.anim_slide_nothing, R.anim.anim_slide_out_bottom);
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP) {
+            overridePendingTransition(R.anim.anim_slide_nothing, R.anim.anim_slide_out_bottom);
         } else {
             // the animation is enabled in the theme
         }
@@ -148,9 +133,10 @@ public class MXCActionBarActivity extends AppCompatActivity {
 
     /**
      * Dismiss any opened dialog.
+     *
      * @param activity the parent activity.
      */
-    public static void dismissDialogs(FragmentActivity activity) {
+    private static void dismissDialogs(FragmentActivity activity) {
         // close any opened dialog
         FragmentManager fm = activity.getSupportFragmentManager();
         java.util.List<android.support.v4.app.Fragment> fragments = fm.getFragments();
@@ -193,6 +179,7 @@ public class MXCActionBarActivity extends AppCompatActivity {
 
     /**
      * Dismiss the soft keyboard if one view in the activity has the focus.
+     *
      * @param activity the activity
      */
     public static void dismissKeyboard(Activity activity) {

@@ -27,6 +27,7 @@ import android.widget.TextView;
 import org.matrix.androidsdk.MXSession;
 
 import im.vector.R;
+import im.vector.VectorApp;
 import im.vector.activity.VectorRoomActivity;
 import im.vector.util.VectorUtils;
 import im.vector.view.VectorCircularImageView;
@@ -44,16 +45,16 @@ import java.util.List;
  */
 public class AutoCompletedUserAdapter extends ArrayAdapter<User> {
     // the context
-    protected Context mContext;
+    private final Context mContext;
 
     // the layout inflater
-    private LayoutInflater mLayoutInflater;
+    private final LayoutInflater mLayoutInflater;
 
     // the layout to draw items
-    private int mLayoutResourceId;
+    private final int mLayoutResourceId;
 
     // the session
-    private MXSession mSession;
+    private final MXSession mSession;
 
     // the filter
     private android.widget.Filter mFilter;
@@ -77,7 +78,7 @@ public class AutoCompletedUserAdapter extends ArrayAdapter<User> {
         }
     };
 
-    private static final Comparator<User> mUserComparatorByDisplayname =  new Comparator<User>() {
+    private static final Comparator<User> mUserComparatorByDisplayname = new Comparator<User>() {
         @Override
         public int compare(User user1, User user2) {
             String displayName1 = TextUtils.isEmpty(user1.displayname) ? user1.user_id : user1.displayname;
@@ -108,6 +109,7 @@ public class AutoCompletedUserAdapter extends ArrayAdapter<User> {
     /**
      * Tells if the pasted text is always the user matrix id
      * even if the matched pattern is a display name.
+     *
      * @param provideMatrixIdOnly true to always paste an user Id.
      */
     public void setProvideMatrixIdOnly(boolean provideMatrixIdOnly) {
@@ -117,16 +119,32 @@ public class AutoCompletedUserAdapter extends ArrayAdapter<User> {
 
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
+        return getView(position, convertView, parent, true);
+    }
+
+    /**
+     * Get the updated view for a specified position.
+     *
+     * @param position the position
+     * @param convertView the convert view
+     * @param parent the parent view
+     * @param loadAvatar true to refresh the avatar
+     *
+     * @return the view
+     */
+    public View getView(int position, View convertView, ViewGroup parent, boolean loadAvatar) {
         if (convertView == null) {
             convertView = mLayoutInflater.inflate(mLayoutResourceId, parent, false);
         }
 
         User user = getItem(position);
 
-        VectorCircularImageView avatarView = (VectorCircularImageView) convertView.findViewById(R.id.item_user_auto_complete_avatar);
-        TextView userNameTextView = (TextView) convertView.findViewById(R.id.item_user_auto_complete_name);
+        if (loadAvatar) {
+            VectorCircularImageView avatarView = convertView.findViewById(R.id.item_user_auto_complete_avatar);
+            VectorUtils.loadUserAvatar(mContext, mSession, avatarView, user.getAvatarUrl(), user.user_id, user.displayname);
+        }
 
-        VectorUtils.loadUserAvatar(mContext, mSession, avatarView, user.getAvatarUrl(), user.user_id, user.displayname);
+        TextView userNameTextView = convertView.findViewById(R.id.item_user_auto_complete_name);
 
         if (!mIsSearchingMatrixId) {
             String value = user.displayname;
@@ -162,18 +180,18 @@ public class AutoCompletedUserAdapter extends ArrayAdapter<User> {
                 mIsSearchingMatrixId = true;
             } else {
                 newValues = new ArrayList<>();
-                String prefixString = prefix.toString().toLowerCase();
+                String prefixString = prefix.toString().toLowerCase(VectorApp.getApplicationLocale());
                 mIsSearchingMatrixId = prefixString.startsWith("@");
 
                 if (mIsSearchingMatrixId) {
                     for (User user : mUsersList) {
-                        if ((null != user.user_id) && user.user_id.toLowerCase().startsWith(prefixString)) {
+                        if ((null != user.user_id) && user.user_id.toLowerCase(VectorApp.getApplicationLocale()).startsWith(prefixString)) {
                             newValues.add(user);
                         }
                     }
                 } else {
                     for (User user : mUsersList) {
-                        if ((null != user.displayname) && user.displayname.toLowerCase().startsWith(prefixString)) {
+                        if ((null != user.displayname) && user.displayname.toLowerCase(VectorApp.getApplicationLocale()).startsWith(prefixString)) {
                             newValues.add(user);
                         }
                     }

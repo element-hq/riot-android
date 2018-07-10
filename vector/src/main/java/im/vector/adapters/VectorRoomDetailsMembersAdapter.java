@@ -1,5 +1,6 @@
 /*
  * Copyright 2015 OpenMarket Ltd
+ * Copyright 2018 New Vector Ltd
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -37,8 +38,8 @@ import org.matrix.androidsdk.data.Room;
 import org.matrix.androidsdk.db.MXMediasCache;
 import org.matrix.androidsdk.rest.model.PowerLevels;
 import org.matrix.androidsdk.rest.model.RoomMember;
-import org.matrix.androidsdk.rest.model.RoomThirdPartyInvite;
 import org.matrix.androidsdk.rest.model.User;
+import org.matrix.androidsdk.rest.model.pid.RoomThirdPartyInvite;
 import org.matrix.androidsdk.util.Log;
 
 import java.util.ArrayList;
@@ -46,8 +47,11 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 import im.vector.R;
+import im.vector.VectorApp;
 import im.vector.activity.CommonActivityUtils;
 import im.vector.util.ThemeUtils;
 import im.vector.util.VectorUtils;
@@ -59,6 +63,7 @@ public class VectorRoomDetailsMembersAdapter extends BaseExpandableListAdapter {
     public interface OnParticipantsListener {
         /**
          * The user taps on the dedicated "Remove" button
+         *
          * @param aRoomParticipant the participant to remove
          */
         void onRemoveClick(final ParticipantAdapterItem aRoomParticipant);
@@ -70,6 +75,7 @@ public class VectorRoomDetailsMembersAdapter extends BaseExpandableListAdapter {
 
         /**
          * The user selects / deselects a member.
+         *
          * @param userId the selected user id.
          */
         void onSelectUserId(String userId);
@@ -78,12 +84,14 @@ public class VectorRoomDetailsMembersAdapter extends BaseExpandableListAdapter {
          * The user taps on a cell.
          * The standard onClickListener might not work because
          * the upper view is scrollable.
+         *
          * @param aRoomParticipant the clicked participant
          */
         void onClick(final ParticipantAdapterItem aRoomParticipant);
 
         // group expanding state management
         void onGroupCollapsedNotif(int aGroupPosition);
+
         void onGroupExpandedNotif(int aGroupPosition);
     }
 
@@ -91,29 +99,30 @@ public class VectorRoomDetailsMembersAdapter extends BaseExpandableListAdapter {
     public interface OnRoomMembersSearchListener {
         /**
          * The search is ended.
+         *
          * @param aSearchCountResult the number of matched members
          * @param aIsSearchPerformed true if the search has been performed, false otherwise
          */
         void onSearchEnd(final int aSearchCountResult, final boolean aIsSearchPerformed);
     }
 
-    private final String LOG_TAG ="VectorRoomDlsMemAdapt";
+    private final String LOG_TAG = VectorRoomDetailsMembersAdapter.class.getSimpleName();
     private final Context mContext;
     private final LayoutInflater mLayoutInflater;
 
     private View mSwipingCellView;
 
     private final MXSession mSession;
-    private Room mRoom;
+    private final Room mRoom;
     private final int mChildLayoutResourceId;
     private final int mGroupLayoutResourceId;
 
     private boolean mIsMultiSelectionMode;
-    private ArrayList<String> mSelectedUserIds = new ArrayList<>();
+    private List<String> mSelectedUserIds = new ArrayList<>();
 
-    private ArrayList<ArrayList<ParticipantAdapterItem>> mRoomMembersListByGroupPosition;
+    private List<List<ParticipantAdapterItem>> mRoomMembersListByGroupPosition;
 
-    private ArrayList<String> mDisplayNamesList = new ArrayList<>();
+    private List<String> mDisplayNamesList = new ArrayList<>();
 
     private int mGroupIndexInvitedMembers = -1;  // "Invited" index
     private int mGroupIndexPresentMembers = -1; // "Favourites" index
@@ -132,9 +141,9 @@ public class VectorRoomDetailsMembersAdapter extends BaseExpandableListAdapter {
         final TextView mTitleTxtView;
         final ImageView mExpanderLogoImageView;
 
-        GroupViewHolder(View aView){
-            mTitleTxtView = (TextView) aView.findViewById(R.id.heading);
-            mExpanderLogoImageView = (ImageView)aView.findViewById(R.id.heading_image);
+        GroupViewHolder(View aView) {
+            mTitleTxtView = aView.findViewById(R.id.heading);
+            mExpanderLogoImageView = aView.findViewById(R.id.heading_image);
         }
     }
 
@@ -152,28 +161,34 @@ public class VectorRoomDetailsMembersAdapter extends BaseExpandableListAdapter {
         final RelativeLayout mSwipeCellLayout;
         final CheckBox mMultipleSelectionCheckBox;
 
-        ChildMemberViewHolder(View aParentView){
-            mMemberAvatarImageView = (ImageView)aParentView.findViewById(R.id.filtered_list_avatar);
-            mMemberAvatarBadgeImageView  = (ImageView) aParentView.findViewById(R.id.filtered_list_avatar_badge);
-            mMemberNameTextView = (TextView) aParentView.findViewById(R.id.filtered_list_name);
-            mMemberStatusTextView = (TextView) aParentView.findViewById(R.id.filtered_list_status);
+        ChildMemberViewHolder(View aParentView) {
+            mMemberAvatarImageView = aParentView.findViewById(R.id.filtered_list_avatar);
+            mMemberAvatarBadgeImageView = aParentView.findViewById(R.id.filtered_list_avatar_badge);
+            mMemberNameTextView = aParentView.findViewById(R.id.filtered_list_name);
+            mMemberStatusTextView = aParentView.findViewById(R.id.filtered_list_status);
             mHiddenListActionsView = aParentView.findViewById(R.id.filtered_list_actions);
-            mSwipeCellLayout = (RelativeLayout) aParentView.findViewById(R.id.filtered_list_cell);
-            mMultipleSelectionCheckBox = (CheckBox)aParentView.findViewById(R.id.filtered_list_checkbox);
+            mSwipeCellLayout = aParentView.findViewById(R.id.filtered_list_cell);
+            mMultipleSelectionCheckBox = aParentView.findViewById(R.id.filtered_list_checkbox);
             mDeleteActionsView = aParentView.findViewById(R.id.filtered_list_delete_action);
         }
     }
 
     /**
      * Constructor.
-     * @param aContext the context.
-     * @param aChildLayoutResourceId the child layout of the expandable list view
+     *
+     * @param aContext                     the context.
+     * @param aChildLayoutResourceId       the child layout of the expandable list view
      * @param aGroupHeaderLayoutResourceId the group layout of the expandable list view
-     * @param aSession the session
-     * @param aRoomId the room id
-     * @param aMediasCache the medias cache
+     * @param aSession                     the session
+     * @param aRoomId                      the room id
+     * @param aMediasCache                 the medias cache
      */
-    public VectorRoomDetailsMembersAdapter(Context aContext, int aChildLayoutResourceId, int aGroupHeaderLayoutResourceId, MXSession aSession, String aRoomId, MXMediasCache aMediasCache) {
+    public VectorRoomDetailsMembersAdapter(Context aContext,
+                                           int aChildLayoutResourceId,
+                                           int aGroupHeaderLayoutResourceId,
+                                           MXSession aSession,
+                                           String aRoomId,
+                                           MXMediasCache aMediasCache) {
         mContext = aContext;
         mLayoutInflater = LayoutInflater.from(aContext);
         mChildLayoutResourceId = aChildLayoutResourceId;// R.layout.adapter_item_vector_add_participants
@@ -188,8 +203,9 @@ public class VectorRoomDetailsMembersAdapter extends BaseExpandableListAdapter {
 
     /**
      * Search a pattern in the known members list.
-     * @param aPattern the pattern to search
-     * @param searchListener the search listener
+     *
+     * @param aPattern         the pattern to search
+     * @param searchListener   the search listener
      * @param aIsRefreshForced set to tru to force the refresh
      */
     @SuppressLint("LongLogTag")
@@ -198,11 +214,10 @@ public class VectorRoomDetailsMembersAdapter extends BaseExpandableListAdapter {
             // refresh list members without any pattern filter (nominal display)
             mSearchPattern = null;
             updateRoomMembersDataModel(searchListener);
-        }
-        else {
+        } else {
             // new pattern different from previous one?
             if (!aPattern.trim().equals(mSearchPattern) || aIsRefreshForced) {
-                mSearchPattern = aPattern.trim().toLowerCase();
+                mSearchPattern = aPattern.trim().toLowerCase(VectorApp.getApplicationLocale());
                 updateRoomMembersDataModel(searchListener);
             } else {
                 // search pattern is identical, notify listener and exit
@@ -226,6 +241,7 @@ public class VectorRoomDetailsMembersAdapter extends BaseExpandableListAdapter {
 
     /**
      * Update the participants listener
+     *
      * @param onParticipantsListener the listener.
      */
     public void setOnParticipantsListener(OnParticipantsListener onParticipantsListener) {
@@ -235,7 +251,7 @@ public class VectorRoomDetailsMembersAdapter extends BaseExpandableListAdapter {
     /**
      * @return the list of selected user ids
      */
-    public ArrayList<String> getSelectedUserIds() {
+    public List<String> getSelectedUserIds() {
         return mSelectedUserIds;
     }
 
@@ -249,6 +265,7 @@ public class VectorRoomDetailsMembersAdapter extends BaseExpandableListAdapter {
 
     /**
      * Test if the adapter data model is filtered with the search pattern.
+     *
      * @return true if search mode is enabled, false otherwise
      */
     private boolean isSearchModeEnabled() {
@@ -257,6 +274,7 @@ public class VectorRoomDetailsMembersAdapter extends BaseExpandableListAdapter {
 
     /**
      * Compare 2 string and returns sort order.
+     *
      * @param s1 string 1.
      * @param s2 string 2.
      * @return the sort order.
@@ -273,6 +291,7 @@ public class VectorRoomDetailsMembersAdapter extends BaseExpandableListAdapter {
 
     /**
      * Update the data model of the adapter which is based on a set of ParticipantAdapterItem objects.
+     *
      * @param aSearchListener search events listener, set to null if search not enabled
      */
     public void updateRoomMembersDataModel(final OnRoomMembersSearchListener aSearchListener) {
@@ -289,13 +308,13 @@ public class VectorRoomDetailsMembersAdapter extends BaseExpandableListAdapter {
                 ParticipantAdapterItem participantItem;
 
                 final boolean isSearchEnabled = isSearchModeEnabled();
-                final ArrayList<ParticipantAdapterItem> presentMembersList = new ArrayList<>();
-                final ArrayList<ArrayList<ParticipantAdapterItem>> roomMembersListByGroupPosition = new ArrayList<>();
-                final ArrayList<String> displayNamesList = new ArrayList<>();
+                final List<ParticipantAdapterItem> presentMembersList = new ArrayList<>();
+                final List<List<ParticipantAdapterItem>> roomMembersListByGroupPosition = new ArrayList<>();
+                final List<String> displayNamesList = new ArrayList<>();
 
                 // retrieve the room members
-                final ArrayList<ParticipantAdapterItem> actualParticipants = new ArrayList<>();
-                final ArrayList<ParticipantAdapterItem> invitedMembers = new ArrayList<>();
+                final List<ParticipantAdapterItem> actualParticipants = new ArrayList<>();
+                final List<ParticipantAdapterItem> invitedMembers = new ArrayList<>();
 
                 Collection<RoomMember> activeMembers = mRoom.getActiveMembers();
                 String myUserId = mSession.getMyUserId();
@@ -306,7 +325,7 @@ public class VectorRoomDetailsMembersAdapter extends BaseExpandableListAdapter {
                     participantItem = new ParticipantAdapterItem(member);
 
                     // if search is enabled, just skipp the member if pattern does not match
-                    if(isSearchEnabled && (!participantItem.contains(mSearchPattern))){
+                    if (isSearchEnabled && (!participantItem.contains(mSearchPattern))) {
                         continue;
                     }
 
@@ -334,7 +353,7 @@ public class VectorRoomDetailsMembersAdapter extends BaseExpandableListAdapter {
                 for (RoomThirdPartyInvite invite : thirdPartyInvites) {
                     // If the home server has converted the 3pid invite into a room member, do not show it
                     if (null == mRoom.getLiveState().memberWithThirdPartyInviteToken(invite.token)) {
-                        ParticipantAdapterItem participant =  new ParticipantAdapterItem(invite.display_name, "", null, true);
+                        ParticipantAdapterItem participant = new ParticipantAdapterItem(invite.display_name, "", null, true);
 
                         if ((!isSearchEnabled) || participant.contains(mSearchPattern)) {
                             invitedMembers.add(participant);
@@ -346,8 +365,7 @@ public class VectorRoomDetailsMembersAdapter extends BaseExpandableListAdapter {
 
                 // Comparator to order members alphabetically
                 final Comparator<ParticipantAdapterItem> comparator = new Comparator<ParticipantAdapterItem>() {
-
-                    private HashMap<String, User> usersMap = new HashMap<>();
+                    private final Map<String, User> usersMap = new HashMap<>();
 
                     /**
                      * Get an user snapshot from an user id.
@@ -423,7 +441,8 @@ public class VectorRoomDetailsMembersAdapter extends BaseExpandableListAdapter {
 
                         if (isUserA_Active && !isUserB_Active) {
                             return -1;
-                        } if (!isUserA_Active && isUserB_Active) {
+                        }
+                        if (!isUserA_Active && isUserB_Active) {
                             return +1;
                         }
 
@@ -520,11 +539,10 @@ public class VectorRoomDetailsMembersAdapter extends BaseExpandableListAdapter {
     }
 
     /**
-     *
      * @return the participant User Ids except oneself.
      */
-    public ArrayList<String> getUserIdsList() {
-        ArrayList<String> idsListRetValue = new ArrayList<>();
+    public List<String> getUserIdsList() {
+        List<String> idsListRetValue = new ArrayList<>();
 
         if (mGroupIndexPresentMembers >= 0) {
             int listSize = mRoomMembersListByGroupPosition.get(mGroupIndexPresentMembers).size();
@@ -545,6 +563,7 @@ public class VectorRoomDetailsMembersAdapter extends BaseExpandableListAdapter {
 
     /**
      * Compute the name of the group according to its position.
+     *
      * @param aGroupPosition index of the section
      * @return group title corresponding to the index
      */
@@ -552,11 +571,10 @@ public class VectorRoomDetailsMembersAdapter extends BaseExpandableListAdapter {
         String retValue;
 
         if (mGroupIndexInvitedMembers == aGroupPosition) {
-            retValue = mContext.getResources().getString(R.string.room_details_people_invited_group_name);
-        } else if (mGroupIndexPresentMembers== aGroupPosition) {
-            retValue = mContext.getResources().getString(R.string.room_details_people_present_group_name);
-        }
-        else {
+            retValue = mContext.getString(R.string.room_details_people_invited_group_name);
+        } else if (mGroupIndexPresentMembers == aGroupPosition) {
+            retValue = mContext.getString(R.string.room_details_people_present_group_name);
+        } else {
             // unknown section - should not happen
             retValue = "??";
         }
@@ -597,11 +615,11 @@ public class VectorRoomDetailsMembersAdapter extends BaseExpandableListAdapter {
     public int getChildrenCount(int aGroupPosition) {
         int countRetValue = 0;
         try {
-            if ( (null != mRoomMembersListByGroupPosition) && (-1 != aGroupPosition)) {
+            if ((null != mRoomMembersListByGroupPosition) && (-1 != aGroupPosition)) {
                 countRetValue = mRoomMembersListByGroupPosition.get(aGroupPosition).size();
             }
-        } catch(Exception ex) {
-            Log.e(LOG_TAG,"## getChildrenCount(): Exception Msg=" + ex.getMessage());
+        } catch (Exception ex) {
+            Log.e(LOG_TAG, "## getChildrenCount(): Exception Msg=" + ex.getMessage());
         }
 
         return countRetValue;
@@ -615,7 +633,7 @@ public class VectorRoomDetailsMembersAdapter extends BaseExpandableListAdapter {
     @Override
     public Object getChild(int aGroupPosition, int aChildPosition) {
         Object reValueObject = null;
-        if(null != mRoomMembersListByGroupPosition) {
+        if (null != mRoomMembersListByGroupPosition) {
             reValueObject = mRoomMembersListByGroupPosition.get(aGroupPosition).get(aChildPosition);
         }
         return reValueObject;
@@ -643,10 +661,10 @@ public class VectorRoomDetailsMembersAdapter extends BaseExpandableListAdapter {
 
         if (aConvertView == null) {
             aConvertView = mLayoutInflater.inflate(mGroupLayoutResourceId, null);
-            viewHolder =  new GroupViewHolder(aConvertView);
+            viewHolder = new GroupViewHolder(aConvertView);
             aConvertView.setTag(viewHolder);
         } else {
-            viewHolder = (GroupViewHolder)aConvertView.getTag();
+            viewHolder = (GroupViewHolder) aConvertView.getTag();
         }
 
         // set the group title
@@ -654,7 +672,7 @@ public class VectorRoomDetailsMembersAdapter extends BaseExpandableListAdapter {
         viewHolder.mTitleTxtView.setText(titleValue);
 
         // set the expander logo
-        int expanderLogoResId = aIsExpanded?R.drawable.ic_material_expand_more_black:R.drawable.ic_material_expand_less_black;
+        int expanderLogoResId = aIsExpanded ? R.drawable.ic_material_expand_more_black : R.drawable.ic_material_expand_less_black;
         viewHolder.mExpanderLogoImageView.setImageResource(expanderLogoResId);
 
         return aConvertView;
@@ -666,20 +684,16 @@ public class VectorRoomDetailsMembersAdapter extends BaseExpandableListAdapter {
         boolean isActionsMenuHidden;
         final ParticipantAdapterItem participant;
         boolean isSearchMode = isSearchModeEnabled();
-        final boolean isLoggedUserPosition = ((0==aChildPosition) && (mGroupIndexPresentMembers==aGroupPosition));
+        final boolean isLoggedUserPosition = ((0 == aChildPosition) && (mGroupIndexPresentMembers == aGroupPosition));
 
         participant = mRoomMembersListByGroupPosition.get(aGroupPosition).get(aChildPosition);
 
-        // set group/child positions
-        participant.mReferenceGroupPosition = aGroupPosition;
-        participant.mReferenceChildPosition = aChildPosition;
-
         if (aConvertView == null) {
             aConvertView = mLayoutInflater.inflate(mChildLayoutResourceId, aParentView, false);
-            viewHolder =  new ChildMemberViewHolder(aConvertView);
+            viewHolder = new ChildMemberViewHolder(aConvertView);
             aConvertView.setTag(viewHolder);
         } else {
-            viewHolder = (ChildMemberViewHolder)aConvertView.getTag();
+            viewHolder = (ChildMemberViewHolder) aConvertView.getTag();
         }
 
         if (!mSession.isAlive()) {
@@ -692,7 +706,8 @@ public class VectorRoomDetailsMembersAdapter extends BaseExpandableListAdapter {
             viewHolder.mMemberAvatarImageView.setImageBitmap(participant.getAvatarBitmap());
         } else {
             if (TextUtils.isEmpty(participant.mUserId)) {
-                VectorUtils.loadUserAvatar(mContext, mSession, viewHolder.mMemberAvatarImageView, participant.mAvatarUrl, participant.mDisplayName, participant.mDisplayName);
+                VectorUtils.loadUserAvatar(mContext,
+                        mSession, viewHolder.mMemberAvatarImageView, participant.mAvatarUrl, participant.mDisplayName, participant.mDisplayName);
             } else {
 
                 // try to provide a better display for a participant when the user is known.
@@ -710,7 +725,8 @@ public class VectorRoomDetailsMembersAdapter extends BaseExpandableListAdapter {
                     }
                 }
 
-                VectorUtils.loadUserAvatar(mContext, mSession, viewHolder.mMemberAvatarImageView, participant.mAvatarUrl, participant.mUserId, participant.mDisplayName);
+                VectorUtils.loadUserAvatar(mContext,
+                        mSession, viewHolder.mMemberAvatarImageView, participant.mAvatarUrl, participant.mUserId, participant.mDisplayName);
             }
         }
 
@@ -765,7 +781,7 @@ public class VectorRoomDetailsMembersAdapter extends BaseExpandableListAdapter {
                             mOnParticipantsListener.onRemoveClick(participant);
                         }
                     } catch (Exception e) {
-                        Log.e(LOG_TAG,"## Delete action listener: Exception Msg="+e.getMessage());
+                        Log.e(LOG_TAG, "## Delete action listener: Exception Msg=" + e.getMessage());
                     }
                 }
             }
@@ -790,7 +806,7 @@ public class VectorRoomDetailsMembersAdapter extends BaseExpandableListAdapter {
             memberPowerLevel = powerLevels.getUserPowerLevel(participant.mUserId);
             kickPowerLevel = powerLevels.kick;
 
-            if(isLoggedUserPosition) {
+            if (isLoggedUserPosition) {
                 // always offer possibility to leave the room to the logged member
                 isActionsMenuHidden = false;
             } else {
@@ -892,7 +908,7 @@ public class VectorRoomDetailsMembersAdapter extends BaseExpandableListAdapter {
             });
         }
 
-        int backgroundColor = ThemeUtils.getColor(mContext, R.attr.riot_primary_background_color);
+        int backgroundColor = ThemeUtils.INSTANCE.getColor(mContext, R.attr.riot_primary_background_color);
 
         // multi selections mode
         // do not display a checkbox for oneself
@@ -902,7 +918,7 @@ public class VectorRoomDetailsMembersAdapter extends BaseExpandableListAdapter {
             viewHolder.mMultipleSelectionCheckBox.setChecked(mSelectedUserIds.indexOf(participant.mUserId) >= 0);
 
             if (viewHolder.mMultipleSelectionCheckBox.isChecked()) {
-                backgroundColor = ThemeUtils.getColor(mContext, R.attr.multi_selection_background_color);
+                backgroundColor = ThemeUtils.INSTANCE.getColor(mContext, R.attr.multi_selection_background_color);
             }
 
             viewHolder.mMultipleSelectionCheckBox.setOnClickListener(new View.OnClickListener() {
@@ -910,10 +926,10 @@ public class VectorRoomDetailsMembersAdapter extends BaseExpandableListAdapter {
                 public void onClick(View v) {
                     if (viewHolder.mMultipleSelectionCheckBox.isChecked()) {
                         mSelectedUserIds.add(participant.mUserId);
-                        viewHolder.mSwipeCellLayout.setBackgroundColor(ThemeUtils.getColor(mContext, R.attr.multi_selection_background_color));
+                        viewHolder.mSwipeCellLayout.setBackgroundColor(ThemeUtils.INSTANCE.getColor(mContext, R.attr.multi_selection_background_color));
                     } else {
                         mSelectedUserIds.remove(participant.mUserId);
-                        viewHolder.mSwipeCellLayout.setBackgroundColor(ThemeUtils.getColor(mContext, R.attr.riot_primary_background_color));
+                        viewHolder.mSwipeCellLayout.setBackgroundColor(ThemeUtils.INSTANCE.getColor(mContext, R.attr.riot_primary_background_color));
                     }
 
                     if (null != mOnParticipantsListener) {

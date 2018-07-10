@@ -1,5 +1,6 @@
 /*
  * Copyright 2016 OpenMarket Ltd
+ * Copyright 2018 New Vector Ltd
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -23,10 +24,10 @@ import android.support.annotation.NonNull;
 import android.support.design.widget.TabLayout;
 import android.support.v4.view.ViewPager;
 import android.text.TextUtils;
-import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import org.matrix.androidsdk.MXSession;
 import org.matrix.androidsdk.fragments.MatrixMessageListFragment;
@@ -40,8 +41,8 @@ import im.vector.contacts.ContactsManager;
 /**
  * Displays a generic activity search method
  */
-public class VectorUnifiedSearchActivity extends VectorBaseSearchActivity implements VectorBaseSearchActivity.IVectorSearchActivity  {
-    private static final String LOG_TAG = "VectorUniSrchActivity";
+public class VectorUnifiedSearchActivity extends VectorBaseSearchActivity implements VectorBaseSearchActivity.IVectorSearchActivity {
+    private static final String LOG_TAG = VectorUnifiedSearchActivity.class.getSimpleName();
 
     public static final String EXTRA_ROOM_ID = "VectorUnifiedSearchActivity.EXTRA_ROOM_ID";
     public static final String EXTRA_TAB_INDEX = "VectorUnifiedSearchActivity.EXTRA_TAB_INDEX";
@@ -57,14 +58,10 @@ public class VectorUnifiedSearchActivity extends VectorBaseSearchActivity implem
     public static final int SEARCH_PEOPLE_TAB_POSITION = 2;
     public static final int SEARCH_FILES_TAB_POSITION = 3;
 
-    // search fragments
-    private MXSession mSession;
-
     // UI items
     private ImageView mBackgroundImageView;
     private TextView mNoResultsTxtView;
     private View mLoadOldestContentView;
-    private View mWaitWhileSearchInProgressView;
 
     private String mRoomId;
 
@@ -74,10 +71,13 @@ public class VectorUnifiedSearchActivity extends VectorBaseSearchActivity implem
     private int mPosition;
 
     @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
+    public int getLayoutRes() {
+        return R.layout.activity_vector_unified_search;
+    }
 
-        setContentView(R.layout.activity_vector_unified_search);
+    @Override
+    public void initUiAndData() {
+        super.initUiAndData();
 
         if (CommonActivityUtils.shouldRestartApp(this)) {
             Log.e(LOG_TAG, "Restart the application.");
@@ -92,66 +92,66 @@ public class VectorUnifiedSearchActivity extends VectorBaseSearchActivity implem
 
         // the session should be passed in parameter
         // but the current design does not describe how the multi accounts will be managed.
-        mSession = Matrix.getInstance(this).getDefaultSession();
-        if (mSession == null) {
+        MXSession session = Matrix.getInstance(this).getDefaultSession();
+        if (session == null) {
             Log.e(LOG_TAG, "No MXSession.");
             finish();
             return;
         }
 
         // UI widgets binding & init fields
-        mBackgroundImageView = (ImageView)findViewById(R.id.search_background_imageview);
-        mNoResultsTxtView = (TextView)findViewById(R.id.search_no_result_textview);
-        mWaitWhileSearchInProgressView = findViewById(R.id.search_in_progress_view);
+        mBackgroundImageView = findViewById(R.id.search_background_imageview);
+        mNoResultsTxtView = findViewById(R.id.search_no_result_textview);
+        setWaitingView(findViewById(R.id.search_in_progress_view));
         mLoadOldestContentView = findViewById(R.id.search_load_oldest_progress);
 
         if (null != getIntent()) {
             mRoomId = getIntent().getStringExtra(EXTRA_ROOM_ID);
         }
 
-        mPagerAdapter = new VectorUnifiedSearchFragmentPagerAdapter(getSupportFragmentManager(), this, mSession, mRoomId);
+        mPagerAdapter = new VectorUnifiedSearchFragmentPagerAdapter(getSupportFragmentManager(), this, session, mRoomId);
 
         // Get the ViewPager and set it's PagerAdapter so that it can display items
-        mViewPager = (ViewPager) findViewById(R.id.search_view_pager);
+        mViewPager = findViewById(R.id.search_view_pager);
         mViewPager.setAdapter(mPagerAdapter);
 
         mViewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
-                   @Override
-                   public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+            @Override
+            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
 
-                   }
+            }
 
-                   @Override
-                   public void onPageSelected(int position) {
-                       int permissions = mPagerAdapter.getPermissionsRequest(position);
+            @Override
+            public void onPageSelected(int position) {
+                int permissions = mPagerAdapter.getPermissionsRequest(position);
 
-                       if (0 != permissions) {
-                           // Check permission to access contacts
-                           CommonActivityUtils.checkPermissions(permissions, VectorUnifiedSearchActivity.this);
-                       }
-                       searchAccordingToSelectedTab();
-                   }
+                if (0 != permissions) {
+                    // Check permission to access contacts
+                    CommonActivityUtils.checkPermissions(permissions, VectorUnifiedSearchActivity.this);
+                }
+                searchAccordingToSelectedTab();
+            }
 
-                   @Override
-                   public void onPageScrollStateChanged(int state) {
+            @Override
+            public void onPageScrollStateChanged(int state) {
 
-                   }
+            }
         });
 
         // Give the TabLayout the ViewPager
-        TabLayout tabLayout = (TabLayout) findViewById(R.id.search_filter_tabs);
+        TabLayout tabLayout = findViewById(R.id.search_filter_tabs);
         tabLayout.setupWithViewPager(mViewPager);
 
         // the tab i
         if ((null != getIntent()) && getIntent().hasExtra(EXTRA_TAB_INDEX)) {
             mPosition = getIntent().getIntExtra(EXTRA_TAB_INDEX, 0);
-        } else{
-            mPosition = (null != savedInstanceState) ? savedInstanceState.getInt(KEY_STATE_CURRENT_TAB_INDEX, 0) : 0;
+        } else {
+            mPosition = isFirstCreation() ? 0 : getSavedInstanceState().getInt(KEY_STATE_CURRENT_TAB_INDEX, 0);
         }
         mViewPager.setCurrentItem(mPosition);
 
         // restore the searched pattern
-        mPatternToSearchEditText.setText((null != savedInstanceState) ? savedInstanceState.getString(KEY_STATE_SEARCH_PATTERN, null) : null);
+        mPatternToSearchEditText.setText(isFirstCreation() ? null:  getSavedInstanceState().getString(KEY_STATE_SEARCH_PATTERN, null));
     }
 
     @Override
@@ -190,7 +190,7 @@ public class VectorUnifiedSearchActivity extends VectorBaseSearchActivity implem
         });
 
         if (isRemoteSearching) {
-            mWaitWhileSearchInProgressView.setVisibility(View.VISIBLE);
+            showWaitingView();
         }
     }
 
@@ -207,29 +207,17 @@ public class VectorUnifiedSearchActivity extends VectorBaseSearchActivity implem
         searchAccordingToSelectedTab();
     }
 
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()) {
-            // ignore the parent activity from manifest to avoid going to the home history
-            case android.R.id.home:
-                finish();
-                return true;
-        }
-        return super.onOptionsItemSelected(item);
-    }
-
     /**
      * Reset the UI to its init state:
      * - "waiting while searching" screen disabled
      * - background image visible
      * - no results message disabled
+     *
      * @param showBackgroundImage true to display it
      */
     private void resetUi(boolean showBackgroundImage) {
         // stop "wait while searching" screen
-        if (null != mWaitWhileSearchInProgressView) {
-            mWaitWhileSearchInProgressView.setVisibility(View.GONE);
-        }
+        hideWaitingView();
 
         // display the background
         if (null != mBackgroundImageView) {
@@ -247,14 +235,15 @@ public class VectorUnifiedSearchActivity extends VectorBaseSearchActivity implem
 
     /**
      * The search is done.
-     * @param tabIndex the tab index
+     *
+     * @param tabIndex    the tab index
      * @param nbrMessages the number of found messages.
      */
     private void onSearchEnd(int tabIndex, int nbrMessages) {
         if (mViewPager.getCurrentItem() == tabIndex) {
             Log.d(LOG_TAG, "## onSearchEnd() nbrMsg=" + nbrMessages);
             // stop "wait while searching" screen
-            mWaitWhileSearchInProgressView.setVisibility(View.GONE);
+            hideWaitingView();
 
             // display the background view if there is no pending such
             mBackgroundImageView.setVisibility(!mPagerAdapter.isSearchInPeoplesFragment(tabIndex)
@@ -263,7 +252,8 @@ public class VectorUnifiedSearchActivity extends VectorBaseSearchActivity implem
                     : View.GONE);
 
             // display the "no result" text only if the researched text is not empty
-            mNoResultsTxtView.setVisibility(((0 == nbrMessages) && !TextUtils.isEmpty(mPatternToSearchEditText.getText().toString())) ? View.VISIBLE : View.GONE);
+            mNoResultsTxtView.setVisibility(((0 == nbrMessages)
+                    && !TextUtils.isEmpty(mPatternToSearchEditText.getText().toString())) ? View.VISIBLE : View.GONE);
         }
     }
 
@@ -274,13 +264,13 @@ public class VectorUnifiedSearchActivity extends VectorBaseSearchActivity implem
         } else if (aRequestCode == CommonActivityUtils.REQUEST_CODE_PERMISSION_MEMBERS_SEARCH) {
             if (PackageManager.PERMISSION_GRANTED == aGrantResults[0]) {
                 Log.d(LOG_TAG, "## onRequestPermissionsResult(): READ_CONTACTS permission granted");
-				// trigger a contacts book refresh
+                // trigger a contacts book refresh
                 ContactsManager.getInstance().refreshLocalContactsSnapshot();
 
                 searchAccordingToSelectedTab();
             } else {
                 Log.d(LOG_TAG, "## onRequestPermissionsResult(): READ_CONTACTS permission not granted");
-                CommonActivityUtils.displayToast(this, getString(R.string.missing_permissions_warning));
+                Toast.makeText(this, R.string.missing_permissions_warning, Toast.LENGTH_SHORT).show();
             }
         }
     }
@@ -296,7 +286,7 @@ public class VectorUnifiedSearchActivity extends VectorBaseSearchActivity implem
         Log.d(LOG_TAG, "## onSaveInstanceState(): ");
 
         // save current tab
-        int currentIndex =  mViewPager.getCurrentItem();
+        int currentIndex = mViewPager.getCurrentItem();
         outState.putInt(KEY_STATE_CURRENT_TAB_INDEX, currentIndex);
 
         String searchPattern = mPatternToSearchEditText.getText().toString();

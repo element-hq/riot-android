@@ -1,5 +1,6 @@
 /*
  * Copyright 2017 Vector Creations Ltd
+ * Copyright 2018 New Vector Ltd
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -19,10 +20,8 @@ package im.vector.activity;
 import android.app.SearchManager;
 import android.content.Context;
 import android.os.AsyncTask;
-import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
-import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -37,6 +36,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import org.jetbrains.annotations.NotNull;
 import org.matrix.androidsdk.MXDataHandler;
 import org.matrix.androidsdk.MXSession;
 import org.matrix.androidsdk.data.Room;
@@ -50,7 +50,6 @@ import java.util.Iterator;
 import java.util.List;
 
 import butterknife.BindView;
-import butterknife.ButterKnife;
 import im.vector.Matrix;
 import im.vector.R;
 import im.vector.adapters.AbsAdapter;
@@ -59,12 +58,16 @@ import im.vector.util.RoomUtils;
 import im.vector.util.ThemeUtils;
 import im.vector.view.EmptyViewItemDecoration;
 import im.vector.view.SimpleDividerItemDecoration;
+import kotlin.Pair;
 
 /**
  * Displays the historical rooms list
  */
-public class HistoricalRoomsActivity extends AppCompatActivity implements SearchView.OnQueryTextListener, HomeRoomAdapter.OnSelectRoomListener, AbsAdapter.MoreRoomActionListener, RoomUtils.HistoricalRoomActionListener {
-
+public class HistoricalRoomsActivity extends RiotAppCompatActivity implements
+        SearchView.OnQueryTextListener,
+        HomeRoomAdapter.OnSelectRoomListener,
+        AbsAdapter.MoreRoomActionListener,
+        RoomUtils.HistoricalRoomActionListener {
     private static final String LOG_TAG = HistoricalRoomsActivity.class.getSimpleName();
 
     @BindView(R.id.search_view)
@@ -80,13 +83,13 @@ public class HistoricalRoomsActivity extends AppCompatActivity implements Search
     Toolbar mToolbar;
 
     @BindView(R.id.historical_waiting_view)
-    View mWaitingView;
+    View waitingView;
 
     // historical adapter
     private HomeRoomAdapter mHistoricalAdapter;
 
     // pending tasks
-    private List<AsyncTask> mSortingAsyncTasks = new ArrayList<>();
+    private final List<AsyncTask> mSortingAsyncTasks = new ArrayList<>();
 
     // sessions
     private MXSession mSession;
@@ -97,15 +100,24 @@ public class HistoricalRoomsActivity extends AppCompatActivity implements Search
      * *********************************************************************************************
      */
 
+    @NotNull
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
+    public Pair getOtherThemes() {
+        return new Pair(R.style.HomeActivityTheme_Dark, R.style.HomeActivityTheme_Black);
+    }
 
-        // required to have the right translated title
-        setTitle(R.string.title_activity_historical);
-        setContentView(R.layout.activity_historical);
-        ButterKnife.bind(this);
+    @Override
+    public int getLayoutRes() {
+        return R.layout.activity_historical;
+    }
 
+    @Override
+    public int getTitleRes() {
+        return R.string.title_activity_historical;
+    }
+
+    @Override
+    public void initUiAndData() {
         if (CommonActivityUtils.shouldRestartApp(this)) {
             Log.e(LOG_TAG, "Restart the application.");
             CommonActivityUtils.restartApp(this);
@@ -174,13 +186,13 @@ public class HistoricalRoomsActivity extends AppCompatActivity implements Search
 
         SearchManager searchManager = (SearchManager) getSystemService(Context.SEARCH_SERVICE);
         // Remove unwanted left margin
-        LinearLayout searchEditFrame = (LinearLayout) mSearchView.findViewById(R.id.search_edit_frame);
+        LinearLayout searchEditFrame = mSearchView.findViewById(R.id.search_edit_frame);
         if (searchEditFrame != null) {
             ViewGroup.MarginLayoutParams searchEditFrameParams = (ViewGroup.MarginLayoutParams) searchEditFrame.getLayoutParams();
             searchEditFrameParams.leftMargin = 0;
             searchEditFrame.setLayoutParams(searchEditFrameParams);
         }
-        ImageView searchIcon = (ImageView) mSearchView.findViewById(R.id.search_mag_icon);
+        ImageView searchIcon = mSearchView.findViewById(R.id.search_mag_icon);
         if (searchIcon != null) {
             ViewGroup.MarginLayoutParams searchIconParams = (ViewGroup.MarginLayoutParams) searchIcon.getLayoutParams();
             searchIconParams.leftMargin = 0;
@@ -195,8 +207,8 @@ public class HistoricalRoomsActivity extends AppCompatActivity implements Search
         mSearchView.setOnQueryTextListener(this);
         mSearchView.setQueryHint(getString(R.string.historical_placeholder));
 
-        SearchView.SearchAutoComplete searchAutoComplete = (SearchView.SearchAutoComplete) mSearchView.findViewById(android.support.v7.appcompat.R.id.search_src_text);
-        searchAutoComplete.setHintTextColor(ThemeUtils.getColor(this, R.attr.default_text_hint_color));
+        SearchView.SearchAutoComplete searchAutoComplete = mSearchView.findViewById(android.support.v7.appcompat.R.id.search_src_text);
+        searchAutoComplete.setHintTextColor(ThemeUtils.INSTANCE.getColor(this, R.attr.default_text_hint_color));
     }
 
     /*
@@ -210,7 +222,7 @@ public class HistoricalRoomsActivity extends AppCompatActivity implements Search
 
         if (!dataHandler.areLeftRoomsSynced()) {
             mHistoricalAdapter.setRooms(new ArrayList<Room>());
-            mWaitingView.setVisibility(View.VISIBLE);
+            showWaitingView();
             dataHandler.retrieveLeftRooms(new ApiCallback<Void>() {
                 @Override
                 public void onSuccess(Void info) {
@@ -246,7 +258,7 @@ public class HistoricalRoomsActivity extends AppCompatActivity implements Search
      * Init history rooms data
      */
     private void initHistoricalRoomsData() {
-        mWaitingView.setVisibility(View.GONE);
+        hideWaitingView();
         final List<Room> historicalRooms = new ArrayList<>(mSession.getDataHandler().getLeftRooms());
         for (Iterator<Room> iterator = historicalRooms.iterator(); iterator.hasNext(); ) {
             final Room room = iterator.next();
@@ -341,12 +353,12 @@ public class HistoricalRoomsActivity extends AppCompatActivity implements Search
      *
      * @param errorMessage the localized error message
      */
-    protected void onRequestDone(final String errorMessage) {
-        if (!this.isFinishing()) {
+    private void onRequestDone(final String errorMessage) {
+        if (!isFinishing()) {
             runOnUiThread(new Runnable() {
                 @Override
                 public void run() {
-                    mWaitingView.setVisibility(View.GONE);
+                    hideWaitingView();
                     if (!TextUtils.isEmpty(errorMessage)) {
                         Toast.makeText(HistoricalRoomsActivity.this, errorMessage, Toast.LENGTH_SHORT).show();
                     }
@@ -357,7 +369,7 @@ public class HistoricalRoomsActivity extends AppCompatActivity implements Search
 
     @Override
     public void onSelectRoom(Room room, int position) {
-        mWaitingView.setVisibility(View.VISIBLE);
+        showWaitingView();
         CommonActivityUtils.previewRoom(this, mSession, room.getRoomId(), "", new ApiCallback<Void>() {
             @Override
             public void onSuccess(Void info) {
@@ -393,7 +405,7 @@ public class HistoricalRoomsActivity extends AppCompatActivity implements Search
 
     @Override
     public void onForgotRoom(Room room) {
-        mWaitingView.setVisibility(View.VISIBLE);
+        showWaitingView();
 
         room.forget(new ApiCallback<Void>() {
             @Override

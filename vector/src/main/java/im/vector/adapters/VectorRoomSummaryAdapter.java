@@ -1,5 +1,6 @@
 /*
  * Copyright 2015 OpenMarket Ltd
+ * Copyright 2018 New Vector Ltd
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -50,6 +51,8 @@ import java.util.List;
 import im.vector.Matrix;
 import im.vector.PublicRoomsManager;
 import im.vector.R;
+import im.vector.VectorApp;
+import im.vector.util.RiotEventDisplay;
 import im.vector.util.RoomUtils;
 import im.vector.util.ThemeUtils;
 import im.vector.util.VectorUtils;
@@ -58,13 +61,13 @@ import im.vector.util.VectorUtils;
  * An adapter which can display room information.
  */
 public class VectorRoomSummaryAdapter extends BaseExpandableListAdapter {
-    private static final String LOG_TAG = "VRoomSummaryAdapter";
-
     public interface RoomEventListener {
         void onPreviewRoom(MXSession session, String roomId);
+
         void onRejectInvitation(MXSession session, String roomId);
 
         void onGroupCollapsedNotif(int aGroupPosition);
+
         void onGroupExpandedNotif(int aGroupPosition);
     }
 
@@ -74,7 +77,7 @@ public class VectorRoomSummaryAdapter extends BaseExpandableListAdapter {
     private final int mHeaderLayoutResourceId;
 
     private final MXSession mMxSession;
-    private ArrayList<ArrayList<RoomSummary>> mSummaryListByGroupPosition;
+    private List<List<RoomSummary>> mSummaryListByGroupPosition;
 
     private int mRoomByAliasGroupPosition = -1; // the user wants to join  by room id or alias
     private int mDirectoryGroupPosition = -1;  // public rooms index
@@ -107,22 +110,20 @@ public class VectorRoomSummaryAdapter extends BaseExpandableListAdapter {
     // drag and drop mode
     private boolean mIsDragAndDropMode = false;
 
-    // the direct
-    private List<String> mDirectChatRoomIdsList = new ArrayList<>();
-
     /**
      * Constructor
-     * @param aContext the context.
-     * @param session the linked session.
-     * @param isSearchMode true if the adapter is in search mode
+     *
+     * @param aContext                       the context.
+     * @param session                        the linked session.
+     * @param isSearchMode                   true if the adapter is in search mode
      * @param displayDirectoryGroupWhenEmpty true to avoid empty history
-     * @param aChildLayoutResourceId the room child layout
-     * @param aGroupHeaderLayoutResourceId the room section header layout
-     * @param listener the events listener
+     * @param aChildLayoutResourceId         the room child layout
+     * @param aGroupHeaderLayoutResourceId   the room section header layout
+     * @param listener                       the events listener
      */
     public VectorRoomSummaryAdapter(Context aContext, MXSession session, boolean isSearchMode,
                                     boolean displayDirectoryGroupWhenEmpty, int aChildLayoutResourceId,
-                                    int aGroupHeaderLayoutResourceId, RoomEventListener listener, RoomUtils.MoreActionListener moreActionListener)  {
+                                    int aGroupHeaderLayoutResourceId, RoomEventListener listener, RoomUtils.MoreActionListener moreActionListener) {
         // init internal fields
         mContext = aContext;
         mLayoutInflater = LayoutInflater.from(mContext);
@@ -141,6 +142,7 @@ public class VectorRoomSummaryAdapter extends BaseExpandableListAdapter {
 
     /**
      * Set to true to always display the directory group.
+     *
      * @param forceDirectoryGroupDisplay true to always display the directory group.
      */
     public void setForceDirectoryGroupDisplay(boolean forceDirectoryGroupDisplay) {
@@ -150,11 +152,12 @@ public class VectorRoomSummaryAdapter extends BaseExpandableListAdapter {
     /**
      * Provides the formatted timestamp to display.
      * null means that the timestamp text must be hidden.
+     *
      * @param event the event.
-     * @return  the formatted timestamp to display.
+     * @return the formatted timestamp to display.
      */
     private String getFormattedTimestamp(Event event) {
-        String text =  AdapterUtils.tsToString(mContext, event.getOriginServerTs(), false);
+        String text = AdapterUtils.tsToString(mContext, event.getOriginServerTs(), false);
 
         // don't display the today before the time
         String today = mContext.getString(R.string.today) + " ";
@@ -167,6 +170,7 @@ public class VectorRoomSummaryAdapter extends BaseExpandableListAdapter {
 
     /**
      * Compute the name of the group according to its position.
+     *
      * @param groupPosition index of the section
      * @return group title corresponding to the index
      */
@@ -174,54 +178,50 @@ public class VectorRoomSummaryAdapter extends BaseExpandableListAdapter {
         String retValue;
 
         if (mRoomByAliasGroupPosition == groupPosition) {
-            retValue = mContext.getResources().getString(R.string.room_recents_join);
+            retValue = mContext.getString(R.string.room_recents_join);
         } else if (mDirectoryGroupPosition == groupPosition) {
-            retValue = mContext.getResources().getString(R.string.room_recents_directory);
+            retValue = mContext.getString(R.string.room_recents_directory);
         } else if (mFavouritesGroupPosition == groupPosition) {
-            retValue = mContext.getResources().getString(R.string.room_recents_favourites);
-        }
-        else if (mNoTagGroupPosition == groupPosition) {
-            retValue = mContext.getResources().getString(R.string.room_recents_conversations);
-        }
-        else if (mLowPriorGroupPosition == groupPosition) {
-            retValue = mContext.getResources().getString(R.string.room_recents_low_priority);
-        }
-        else if (mInvitedGroupPosition == groupPosition) {
-            retValue = mContext.getResources().getString(R.string.room_recents_invites);
+            retValue = mContext.getString(R.string.room_recents_favourites);
+        } else if (mNoTagGroupPosition == groupPosition) {
+            retValue = mContext.getString(R.string.room_recents_conversations);
+        } else if (mLowPriorGroupPosition == groupPosition) {
+            retValue = mContext.getString(R.string.room_recents_low_priority);
+        } else if (mInvitedGroupPosition == groupPosition) {
+            retValue = mContext.getString(R.string.room_recents_invites);
         } else {
             // unknown section
             retValue = "??";
         }
 
-    return retValue;
+        return retValue;
     }
 
     /**
      * Fullfill an array list with a pattern.
-     * @param list the list to fill.
+     *
+     * @param list  the list to fill.
      * @param value the pattern.
      * @param count the number of occurences
-     * @return the updated list
      */
-    private ArrayList<RoomSummary> fillList(ArrayList<RoomSummary> list, RoomSummary value, int count) {
-        for(int i = 0; i < count; i++) {
+    private void fillList(List<RoomSummary> list, RoomSummary value, int count) {
+        for (int i = 0; i < count; i++) {
             list.add(value);
         }
-
-        return list;
     }
 
     /**
      * Check a room name contains the searched pattern.
+     *
      * @param room the room.
      * @return true of the pattern is found.
      */
     private boolean isMatchedPattern(Room room) {
-        boolean  res = !mIsSearchMode;
+        boolean res = !mIsSearchMode;
 
         if (!TextUtils.isEmpty(mSearchedPattern)) {
             String roomName = VectorUtils.getRoomDisplayName(mContext, mMxSession, room);
-            res = (!TextUtils.isEmpty(roomName) && (roomName.toLowerCase().contains(mSearchedPattern)));
+            res = (!TextUtils.isEmpty(roomName) && (roomName.toLowerCase(VectorApp.getApplicationLocale()).contains(mSearchedPattern)));
         }
 
         return res;
@@ -229,6 +229,7 @@ public class VectorRoomSummaryAdapter extends BaseExpandableListAdapter {
 
     /**
      * Tell if the group position is the join by
+     *
      * @param groupPosition the group position to test.
      * @return true if it is room id group
      */
@@ -238,6 +239,7 @@ public class VectorRoomSummaryAdapter extends BaseExpandableListAdapter {
 
     /**
      * Test if the group position is the directory one.
+     *
      * @param groupPosition the group position to test.
      * @return true if it is directory group.
      */
@@ -262,7 +264,7 @@ public class VectorRoomSummaryAdapter extends BaseExpandableListAdapter {
     @Override
     public void onGroupCollapsed(int groupPosition) {
         super.onGroupCollapsed(groupPosition);
-        if(null != mListener) {
+        if (null != mListener) {
             mListener.onGroupCollapsedNotif(groupPosition);
         }
     }
@@ -270,7 +272,7 @@ public class VectorRoomSummaryAdapter extends BaseExpandableListAdapter {
     @Override
     public void onGroupExpanded(int groupPosition) {
         super.onGroupExpanded(groupPosition);
-        if(null != mListener) {
+        if (null != mListener) {
             mListener.onGroupExpandedNotif(groupPosition);
         }
     }
@@ -284,11 +286,12 @@ public class VectorRoomSummaryAdapter extends BaseExpandableListAdapter {
      * - the rooms with tags ROOM_TAG_NO_TAG (displayed as "ROOMS")
      * The section indexes: mFavouriteSectionIndex, mNoTagSectionIndex and mFavouriteSectionIndex are
      * also computed in this method.
+     *
      * @param aRoomSummaryCollection the complete list of RoomSummary objects
      * @return an array of summary lists splitted by sections
      */
-    private ArrayList<ArrayList<RoomSummary>> buildSummariesByGroups(final Collection<RoomSummary> aRoomSummaryCollection) {
-        ArrayList<ArrayList<RoomSummary>> summaryListByGroupsRetValue = new ArrayList<>();
+    private List<List<RoomSummary>> buildSummariesByGroups(final Collection<RoomSummary> aRoomSummaryCollection) {
+        List<List<RoomSummary>> summaryListByGroupsRetValue = new ArrayList<>();
         String roomSummaryId;
 
         // init index with default values
@@ -299,27 +302,26 @@ public class VectorRoomSummaryAdapter extends BaseExpandableListAdapter {
         mNoTagGroupPosition = -1;
         mLowPriorGroupPosition = -1;
 
-        if(null != aRoomSummaryCollection) {
+        if (null != aRoomSummaryCollection) {
 
             RoomSummary dummyRoomSummary = new RoomSummary();
 
             // Retrieve lists of room IDs(strings) according to their tags
             final List<String> favouriteRoomIdList = mMxSession.roomIdsWithTag(RoomTag.ROOM_TAG_FAVOURITE);
             final List<String> lowPriorityRoomIdList = mMxSession.roomIdsWithTag(RoomTag.ROOM_TAG_LOW_PRIORITY);
-            mDirectChatRoomIdsList = mMxSession.getDirectChatRoomIdsList();
 
             // ArrayLists allocations: will contain the RoomSummary objects deduced from roomIdsWithTag()
-            ArrayList<RoomSummary> inviteRoomSummaryList = new ArrayList<>();
-            ArrayList<RoomSummary> favouriteRoomSummaryList = new ArrayList<>(favouriteRoomIdList.size());
-            ArrayList<RoomSummary> lowPriorityRoomSummaryList = new ArrayList<>();
-            ArrayList<RoomSummary> noTagRoomSummaryList = new ArrayList<>(lowPriorityRoomIdList.size());
+            List<RoomSummary> inviteRoomSummaryList = new ArrayList<>();
+            List<RoomSummary> favouriteRoomSummaryList = new ArrayList<>(favouriteRoomIdList.size());
+            List<RoomSummary> lowPriorityRoomSummaryList = new ArrayList<>();
+            List<RoomSummary> noTagRoomSummaryList = new ArrayList<>(lowPriorityRoomIdList.size());
 
             fillList(favouriteRoomSummaryList, dummyRoomSummary, favouriteRoomIdList.size());
             fillList(lowPriorityRoomSummaryList, dummyRoomSummary, lowPriorityRoomIdList.size());
 
             // Search loop going through all the summaries:
             // here we translate the roomIds (Strings) to their corresponding RoomSummary objects
-            for(RoomSummary roomSummary : aRoomSummaryCollection) {
+            for (RoomSummary roomSummary : aRoomSummaryCollection) {
                 roomSummaryId = roomSummary.getRoomId();
                 Room room = mMxSession.getDataHandler().getStore().getRoom(roomSummaryId);
 
@@ -341,7 +343,7 @@ public class VectorRoomSummaryAdapter extends BaseExpandableListAdapter {
                         } else if ((pos = lowPriorityRoomIdList.indexOf(roomSummaryId)) >= 0) {
                             // update the low priority list
                             // the low priority are ordered
-                            lowPriorityRoomSummaryList.set(pos,roomSummary);
+                            lowPriorityRoomSummaryList.set(pos, roomSummary);
                         } else {
                             // default case: update the no tag list
                             noTagRoomSummaryList.add(roomSummary);
@@ -406,7 +408,7 @@ public class VectorRoomSummaryAdapter extends BaseExpandableListAdapter {
             }
 
             // favourite
-            while(favouriteRoomSummaryList.remove(dummyRoomSummary));
+            while (favouriteRoomSummaryList.remove(dummyRoomSummary)) ;
             if (0 != favouriteRoomSummaryList.size()) {
                 summaryListByGroupsRetValue.add(favouriteRoomSummaryList);
                 mFavouritesGroupPosition = groupIndex; // save section index
@@ -421,7 +423,7 @@ public class VectorRoomSummaryAdapter extends BaseExpandableListAdapter {
             }
 
             // low priority
-            while(lowPriorityRoomSummaryList.remove(dummyRoomSummary));
+            while (lowPriorityRoomSummaryList.remove(dummyRoomSummary)) ;
             if (0 != lowPriorityRoomSummaryList.size()) {
                 summaryListByGroupsRetValue.add(lowPriorityRoomSummaryList);
                 mLowPriorGroupPosition = groupIndex; // save section index
@@ -446,6 +448,7 @@ public class VectorRoomSummaryAdapter extends BaseExpandableListAdapter {
 
     /**
      * Return the summary
+     *
      * @param aGroupPosition group position
      * @param aChildPosition child position
      * @return the corresponding room summary
@@ -456,6 +459,7 @@ public class VectorRoomSummaryAdapter extends BaseExpandableListAdapter {
 
     /**
      * Reset the count of the unread messages of the room set at this particular child position.
+     *
      * @param aGroupPosition group position
      * @param aChildPosition child position
      * @return true if unread count reset was effective, false if unread count was yet reseted
@@ -464,9 +468,9 @@ public class VectorRoomSummaryAdapter extends BaseExpandableListAdapter {
         boolean retCode = false;
         RoomSummary roomSummary = getRoomSummaryAt(aGroupPosition, aChildPosition);
 
-        if(null != roomSummary) {
-            Room room = this.roomFromRoomSummary(roomSummary);
-            if(null != room) {
+        if (null != roomSummary) {
+            Room room = roomFromRoomSummary(roomSummary);
+            if (null != room) {
                 room.sendReadReceipt();
             }
         }
@@ -476,6 +480,7 @@ public class VectorRoomSummaryAdapter extends BaseExpandableListAdapter {
 
     /**
      * Retrieve a Room from a room summary
+     *
      * @param roomSummary the room roomId to retrieve.
      * @return the Room.
      */
@@ -485,14 +490,13 @@ public class VectorRoomSummaryAdapter extends BaseExpandableListAdapter {
         String matrixId;
 
         // sanity check
-        if ((null == roomSummary) || (null == (matrixId=roomSummary.getMatrixId()))) {
+        if ((null == roomSummary) || (null == (matrixId = roomSummary.getMatrixId()))) {
             roomRetValue = null;
         }
         // get session and check if the session is active
-        else if(null == (session=Matrix.getMXSession(mContext, matrixId)) || (!session.isAlive())) {
+        else if (null == (session = Matrix.getMXSession(mContext, matrixId)) || (!session.isAlive())) {
             roomRetValue = null;
-        }
-        else {
+        } else {
             roomRetValue = session.getDataHandler().getStore().getRoom(roomSummary.getRoomId());
         }
 
@@ -513,13 +517,13 @@ public class VectorRoomSummaryAdapter extends BaseExpandableListAdapter {
         if (null != mMxSession) {
             // sanity check
             MXDataHandler dataHandler = mMxSession.getDataHandler();
-            if((null == dataHandler) || (null == dataHandler.getStore())) {
-                Log.w(DBG_CLASS_NAME,"## refreshSummariesList(): unexpected null values - return");
+            if ((null == dataHandler) || (null == dataHandler.getStore())) {
+                Log.w(DBG_CLASS_NAME, "## refreshSummariesList(): unexpected null values - return");
                 return;
             }
 
             // update/retrieve the complete summary list
-            ArrayList<RoomSummary> roomSummariesCompleteList = new ArrayList<>(dataHandler.getStore().getSummaries());
+            List<RoomSummary> roomSummariesCompleteList = new ArrayList<>(dataHandler.getStore().getSummaries());
 
             // define comparator logic
             Comparator<RoomSummary> summaryComparator = new Comparator<RoomSummary>() {
@@ -527,20 +531,20 @@ public class VectorRoomSummaryAdapter extends BaseExpandableListAdapter {
                     int retValue;
                     long deltaTimestamp;
 
-                    if((null == aLeftObj) || (null == aLeftObj.getLatestReceivedEvent())){
+                    if ((null == aLeftObj) || (null == aLeftObj.getLatestReceivedEvent())) {
                         retValue = 1;
-                    }
-                    else if((null == aRightObj) || (null == aRightObj.getLatestReceivedEvent())){
+                    } else if ((null == aRightObj) || (null == aRightObj.getLatestReceivedEvent())) {
                         retValue = -1;
-                    }
-                    else if((deltaTimestamp = aRightObj.getLatestReceivedEvent().getOriginServerTs() - aLeftObj.getLatestReceivedEvent().getOriginServerTs()) > 0) {
-                        retValue = 1;
-                    }
-                    else if (deltaTimestamp < 0) {
-                        retValue = -1;
-                    }
-                    else {
-                        retValue = 0;
+                    } else {
+                        deltaTimestamp = aRightObj.getLatestReceivedEvent().getOriginServerTs() - aLeftObj.getLatestReceivedEvent().getOriginServerTs();
+
+                        if (deltaTimestamp > 0) {
+                            retValue = 1;
+                        } else if (deltaTimestamp < 0) {
+                            retValue = -1;
+                        } else {
+                            retValue = 0;
+                        }
                     }
 
                     return retValue;
@@ -606,16 +610,16 @@ public class VectorRoomSummaryAdapter extends BaseExpandableListAdapter {
     public View getGroupView(int groupPosition, boolean isExpanded, View convertView, ViewGroup parent) {
 
         if (null == convertView) {
-            convertView = this.mLayoutInflater.inflate(this.mHeaderLayoutResourceId, null);
+            convertView = mLayoutInflater.inflate(mHeaderLayoutResourceId, null);
         }
 
-        TextView sectionNameTxtView = (TextView)convertView.findViewById(R.id.heading);
+        TextView sectionNameTxtView = convertView.findViewById(R.id.heading);
 
         if (null != sectionNameTxtView) {
             sectionNameTxtView.setText(getGroupTitle(groupPosition));
         }
 
-        ImageView imageView = (ImageView) convertView.findViewById(R.id.heading_image);
+        ImageView imageView = convertView.findViewById(R.id.heading_image);
 
         if (mIsSearchMode) {
             imageView.setVisibility(View.GONE);
@@ -631,11 +635,12 @@ public class VectorRoomSummaryAdapter extends BaseExpandableListAdapter {
 
     /**
      * Apply a rounded (sides) rectangle as a background to the view provided in aTargetView.
-     * @param aTargetView view to apply the background
+     *
+     * @param aTargetView      view to apply the background
      * @param aBackgroundColor background colour
      */
     private static void setUnreadBackground(View aTargetView, int aBackgroundColor) {
-        if(null != aTargetView) {
+        if (null != aTargetView) {
             GradientDrawable shape = new GradientDrawable();
             shape.setShape(GradientDrawable.RECTANGLE);
             shape.setCornerRadius(100);
@@ -651,7 +656,7 @@ public class VectorRoomSummaryAdapter extends BaseExpandableListAdapter {
     @Override
     public View getChildView(int groupPosition, int childPosition, boolean isLastChild, View convertView, ViewGroup parent) {
         // sanity check
-        if (null == mSummaryListByGroupPosition){
+        if (null == mSummaryListByGroupPosition) {
             return null;
         }
         if (convertView == null) {
@@ -662,29 +667,29 @@ public class VectorRoomSummaryAdapter extends BaseExpandableListAdapter {
             return convertView;
         }
 
-        int roomNameBlack = ThemeUtils.getColor(mContext, R.attr.riot_primary_text_color);
+        int roomNameBlack = ThemeUtils.INSTANCE.getColor(mContext, R.attr.riot_primary_text_color);
         int fushiaColor = ContextCompat.getColor(mContext, R.color.vector_fuchsia_color);
-        int vectorDefaultTimeStampColor = ThemeUtils.getColor(mContext, R.attr.default_text_light_color);
+        int vectorDefaultTimeStampColor = ThemeUtils.INSTANCE.getColor(mContext, R.attr.default_text_light_color);
         int vectorGreenColor = ContextCompat.getColor(mContext, R.color.vector_green_color);
         int vectorSilverColor = ContextCompat.getColor(mContext, R.color.vector_silver_color);
 
         // retrieve the UI items
-        ImageView avatarImageView = (ImageView)convertView.findViewById(R.id.room_avatar);
-        TextView roomNameTxtView = (TextView) convertView.findViewById(R.id.roomSummaryAdapter_roomName);
-        TextView roomMsgTxtView = (TextView) convertView.findViewById(R.id.roomSummaryAdapter_roomMessage);
+        ImageView avatarImageView = convertView.findViewById(R.id.room_avatar);
+        TextView roomNameTxtView = convertView.findViewById(R.id.roomSummaryAdapter_roomName);
+        TextView roomMsgTxtView = convertView.findViewById(R.id.roomSummaryAdapter_roomMessage);
         View bingUnreadMsgView = convertView.findViewById(R.id.bing_indicator_unread_message);
-        TextView timestampTxtView = (TextView) convertView.findViewById(R.id.roomSummaryAdapter_ts);
+        TextView timestampTxtView = convertView.findViewById(R.id.roomSummaryAdapter_ts);
         View separatorView = convertView.findViewById(R.id.recents_separator);
         View separatorGroupView = convertView.findViewById(R.id.recents_groups_separator_line);
         final View actionView = convertView.findViewById(R.id.roomSummaryAdapter_action);
-        final ImageView actionImageView = (ImageView) convertView.findViewById(R.id.roomSummaryAdapter_action_image);
-        TextView unreadCountTxtView = (TextView) convertView.findViewById(R.id.roomSummaryAdapter_unread_count);
+        final ImageView actionImageView = convertView.findViewById(R.id.roomSummaryAdapter_action_image);
+        TextView unreadCountTxtView = convertView.findViewById(R.id.roomSummaryAdapter_unread_count);
         View directChatIcon = convertView.findViewById(R.id.room_avatar_direct_chat_icon);
         View encryptedIcon = convertView.findViewById(R.id.room_avatar_encrypted_icon);
 
         View invitationView = convertView.findViewById(R.id.recents_groups_invitation_group);
-        Button preViewButton = (Button)convertView.findViewById(R.id.recents_invite_preview_button);
-        Button rejectButton = (Button)convertView.findViewById(R.id.recents_invite_reject_button);
+        Button preViewButton = convertView.findViewById(R.id.recents_invite_preview_button);
+        Button rejectButton = convertView.findViewById(R.id.recents_invite_reject_button);
 
         View showMoreView = convertView.findViewById(R.id.roomSummaryAdapter_show_more_layout);
         View actionClickArea = convertView.findViewById(R.id.roomSummaryAdapter_action_click_area);
@@ -705,13 +710,11 @@ public class VectorRoomSummaryAdapter extends BaseExpandableListAdapter {
             encryptedIcon.setVisibility(View.GONE);
 
             if (mDirectoryGroupPosition == groupPosition) {
-                roomNameTxtView.setText(mContext.getResources().getString(R.string.directory_search_results_title));
+                roomNameTxtView.setText(mContext.getString(R.string.directory_search_results_title));
 
                 if (!TextUtils.isEmpty(mSearchedPattern)) {
                     if (null == mMatchedPublicRoomsCount) {
-                        roomMsgTxtView.setText(mContext.getResources().getString(R.string.directory_searching_title));
-                    } else if (mMatchedPublicRoomsCount < 2) {
-                        roomMsgTxtView.setText(mContext.getResources().getString(R.string.directory_search_room_for, mMatchedPublicRoomsCount, mSearchedPattern));
+                        roomMsgTxtView.setText(mContext.getString(R.string.directory_searching_title));
                     } else {
                         String value = mMatchedPublicRoomsCount.toString();
 
@@ -719,15 +722,15 @@ public class VectorRoomSummaryAdapter extends BaseExpandableListAdapter {
                             value = "> " + PublicRoomsManager.PUBLIC_ROOMS_LIMIT;
                         }
 
-                        roomMsgTxtView.setText(mContext.getResources().getString(R.string.directory_search_rooms_for, value, mSearchedPattern));
+                        roomMsgTxtView.setText(mContext.getResources()
+                                .getQuantityString(R.plurals.directory_search_rooms_for, mMatchedPublicRoomsCount, value, mSearchedPattern));
                     }
                 } else {
                     if (null == mPublicRoomsCount) {
                         roomMsgTxtView.setText(null);
-                    } else if (mPublicRoomsCount > 1) {
-                        roomMsgTxtView.setText(mContext.getResources().getString(R.string.directory_search_rooms, mPublicRoomsCount));
                     } else {
-                        roomMsgTxtView.setText(mContext.getResources().getString(R.string.directory_search_room, mPublicRoomsCount));
+                        roomMsgTxtView.setText(mContext.getResources()
+                                .getQuantityString(R.plurals.directory_search_rooms, mPublicRoomsCount, mPublicRoomsCount));
                     }
                 }
 
@@ -743,7 +746,7 @@ public class VectorRoomSummaryAdapter extends BaseExpandableListAdapter {
         showMoreView.setVisibility(View.GONE);
 
         RoomSummary childRoomSummary = mSummaryListByGroupPosition.get(groupPosition).get(childPosition);
-        final Room childRoom =  mMxSession.getDataHandler().getStore().getRoom(childRoomSummary.getRoomId());
+        final Room childRoom = mMxSession.getDataHandler().getStore().getRoom(childRoomSummary.getRoomId());
         int unreadMsgCount = childRoomSummary.getUnreadEventsCount();
         int highlightCount = 0;
         int notificationCount = 0;
@@ -791,11 +794,11 @@ public class VectorRoomSummaryAdapter extends BaseExpandableListAdapter {
         bingUnreadMsgView.setBackgroundColor(bingUnreadColor);
 
         // display the unread badge counter
-        if( (0 != notificationCount)) {
+        if ((0 != notificationCount)) {
             unreadCountTxtView.setVisibility(View.VISIBLE);
             unreadCountTxtView.setText(String.valueOf(notificationCount));
             unreadCountTxtView.setTypeface(null, Typeface.BOLD);
-            setUnreadBackground(unreadCountTxtView,bingUnreadColor);
+            setUnreadBackground(unreadCountTxtView, bingUnreadColor);
         } else {
             unreadCountTxtView.setVisibility(View.GONE);
         }
@@ -808,7 +811,7 @@ public class VectorRoomSummaryAdapter extends BaseExpandableListAdapter {
         }
 
         if (null != childRoom) {
-            directChatIcon.setVisibility(mDirectChatRoomIdsList.indexOf(childRoom.getRoomId()) < 0 ? View.GONE : View.VISIBLE);
+            directChatIcon.setVisibility(RoomUtils.isDirectChat(mMxSession, childRoom.getRoomId()) ? View.VISIBLE: View.GONE);
             encryptedIcon.setVisibility(childRoom.isEncrypted() ? View.VISIBLE : View.GONE);
         } else {
             directChatIcon.setVisibility(View.GONE);
@@ -873,27 +876,25 @@ public class VectorRoomSummaryAdapter extends BaseExpandableListAdapter {
 
     /**
      * Get the displayable name of the user whose ID is passed in aUserId.
+     *
      * @param aMatrixId matrix ID
-     * @param aUserId user ID
+     * @param aUserId   user ID
      * @return the user display name
      */
     private String getMemberDisplayNameFromUserId(String aMatrixId, String aUserId) {
         String displayNameRetValue;
         MXSession session;
 
-        if((null == aMatrixId) || (null == aUserId)){
+        if ((null == aMatrixId) || (null == aUserId)) {
             displayNameRetValue = null;
-        }
-        else if((null == (session = Matrix.getMXSession(mContext, aMatrixId))) || (!session.isAlive())) {
+        } else if ((null == (session = Matrix.getMXSession(mContext, aMatrixId))) || (!session.isAlive())) {
             displayNameRetValue = null;
-        }
-        else {
+        } else {
             User user = session.getDataHandler().getStore().getUser(aUserId);
 
             if ((null != user) && !TextUtils.isEmpty(user.displayname)) {
                 displayNameRetValue = user.displayname;
-            }
-            else {
+            } else {
                 displayNameRetValue = aUserId;
             }
         }
@@ -903,6 +904,7 @@ public class VectorRoomSummaryAdapter extends BaseExpandableListAdapter {
 
     /**
      * Retrieves the text to display for a RoomSummary.
+     *
      * @param aChildRoomSummary the roomSummary.
      * @return the text to display.
      */
@@ -912,9 +914,9 @@ public class VectorRoomSummaryAdapter extends BaseExpandableListAdapter {
 
         if (null != aChildRoomSummary) {
             if (aChildRoomSummary.getLatestReceivedEvent() != null) {
-                eventDisplay = new EventDisplay(mContext, aChildRoomSummary.getLatestReceivedEvent(), aChildRoomSummary.getLatestRoomState());
+                eventDisplay = new RiotEventDisplay(mContext, aChildRoomSummary.getLatestReceivedEvent(), aChildRoomSummary.getLatestRoomState());
                 eventDisplay.setPrependMessagesWithAuthor(true);
-                messageToDisplayRetValue = eventDisplay.getTextualDisplay(ThemeUtils.getColor(mContext, R.attr.riot_primary_text_color));
+                messageToDisplayRetValue = eventDisplay.getTextualDisplay(ThemeUtils.INSTANCE.getColor(mContext, R.attr.riot_primary_text_color));
             }
 
             // check if this is an invite
@@ -926,8 +928,7 @@ public class VectorRoomSummaryAdapter extends BaseExpandableListAdapter {
                 if (null != latestRoomState) {
                     inviterUserId = latestRoomState.getMemberName(inviterUserId);
                     myName = latestRoomState.getMemberName(myName);
-                }
-                else {
+                } else {
                     inviterUserId = getMemberDisplayNameFromUserId(aChildRoomSummary.getMatrixId(), inviterUserId);
                     myName = getMemberDisplayNameFromUserId(aChildRoomSummary.getMatrixId(), myName);
                 }
@@ -945,13 +946,14 @@ public class VectorRoomSummaryAdapter extends BaseExpandableListAdapter {
 
     /**
      * Defines the new searched pattern
+     *
      * @param pattern the new searched pattern
      */
     public void setSearchPattern(String pattern) {
         String trimmedPattern = pattern;
 
         if (null != pattern) {
-            trimmedPattern = pattern.trim().toLowerCase();
+            trimmedPattern = pattern.trim().toLowerCase(VectorApp.getApplicationLocale());
             trimmedPattern = TextUtils.getTrimmedLength(trimmedPattern) == 0 ? null : trimmedPattern;
         }
 
@@ -961,7 +963,7 @@ public class VectorRoomSummaryAdapter extends BaseExpandableListAdapter {
             mMatchedPublicRoomsCount = null;
 
             // refresh the layout
-            this.notifyDataSetChanged();
+            notifyDataSetChanged();
         }
     }
 
@@ -974,6 +976,7 @@ public class VectorRoomSummaryAdapter extends BaseExpandableListAdapter {
 
     /**
      * Update the public rooms list count and refresh the display.
+     *
      * @param roomsListCount the new public rooms count
      */
     public void setPublicRoomsCount(Integer roomsListCount) {
@@ -992,6 +995,7 @@ public class VectorRoomSummaryAdapter extends BaseExpandableListAdapter {
 
     /**
      * Update the matched public rooms list count and refresh the display.
+     *
      * @param roomsListCount the new public rooms count
      */
     public void setMatchedPublicRoomsCount(Integer roomsListCount) {
@@ -1010,6 +1014,7 @@ public class VectorRoomSummaryAdapter extends BaseExpandableListAdapter {
 
     /**
      * Set the drag and drop mode i.e. there is no automatic room summaries lists refresh.
+     *
      * @param isDragAndDropMode the drag and drop mode
      */
     public void setIsDragAndDropMode(boolean isDragAndDropMode) {
@@ -1018,14 +1023,15 @@ public class VectorRoomSummaryAdapter extends BaseExpandableListAdapter {
 
     /**
      * Move a childview in the roomSummary dir tree
+     *
      * @param fromGroupPosition the group position origin
      * @param fromChildPosition the child position origin
-     * @param toGroupPosition the group position destination
-     * @param toChildPosition the child position destination
+     * @param toGroupPosition   the group position destination
+     * @param toChildPosition   the child position destination
      */
     public void moveChildView(int fromGroupPosition, int fromChildPosition, int toGroupPosition, int toChildPosition) {
-        ArrayList<RoomSummary> fromList = mSummaryListByGroupPosition.get(fromGroupPosition);
-        ArrayList<RoomSummary> toList = mSummaryListByGroupPosition.get(toGroupPosition);
+        List<RoomSummary> fromList = mSummaryListByGroupPosition.get(fromGroupPosition);
+        List<RoomSummary> toList = mSummaryListByGroupPosition.get(toGroupPosition);
 
         RoomSummary summary = fromList.get(fromChildPosition);
         fromList.remove(fromChildPosition);
@@ -1039,6 +1045,7 @@ public class VectorRoomSummaryAdapter extends BaseExpandableListAdapter {
 
     /**
      * Tell if a group position is the invited one.
+     *
      * @param groupPos the proup position.
      * @return true if the  group position is the invited one.
      */
@@ -1048,6 +1055,7 @@ public class VectorRoomSummaryAdapter extends BaseExpandableListAdapter {
 
     /**
      * Tell if a group position is the favourite one.
+     *
      * @param groupPos the proup position.
      * @return true if the  group position is the favourite one.
      */
@@ -1057,6 +1065,7 @@ public class VectorRoomSummaryAdapter extends BaseExpandableListAdapter {
 
     /**
      * Tell if a group position is the no tag one.
+     *
      * @param groupPos the proup position.
      * @return true if the  group position is the no tag one.
      */
@@ -1066,6 +1075,7 @@ public class VectorRoomSummaryAdapter extends BaseExpandableListAdapter {
 
     /**
      * Tell if a group position is the low priority one.
+     *
      * @param groupPos the proup position.
      * @return true if the  group position is the low priority one.
      */

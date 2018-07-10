@@ -1,5 +1,6 @@
 /*
  * Copyright 2015 OpenMarket Ltd
+ * Copyright 2018 New Vector Ltd
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,7 +19,6 @@ package im.vector.adapters;
 
 import android.annotation.SuppressLint;
 import android.app.Activity;
-import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.graphics.Bitmap;
@@ -26,13 +26,9 @@ import android.graphics.BitmapFactory;
 import android.graphics.Point;
 import android.media.MediaPlayer;
 import android.net.Uri;
-import android.os.Build;
 import android.support.v4.view.PagerAdapter;
+import android.support.v7.app.AlertDialog;
 import android.text.TextUtils;
-
-import org.matrix.androidsdk.rest.callback.SimpleApiCallback;
-import org.matrix.androidsdk.util.Log;
-import android.view.Display;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -46,18 +42,16 @@ import android.widget.VideoView;
 import com.google.gson.JsonElement;
 
 import org.matrix.androidsdk.MXSession;
+import org.matrix.androidsdk.db.MXMediasCache;
 import org.matrix.androidsdk.listeners.MXMediaDownloadListener;
+import org.matrix.androidsdk.rest.callback.SimpleApiCallback;
 import org.matrix.androidsdk.rest.model.MatrixError;
-import org.matrix.androidsdk.rest.model.Message;
+import org.matrix.androidsdk.rest.model.crypto.EncryptedFileInfo;
+import org.matrix.androidsdk.rest.model.message.Message;
 import org.matrix.androidsdk.util.ImageUtils;
 import org.matrix.androidsdk.util.JsonUtils;
+import org.matrix.androidsdk.util.Log;
 import org.matrix.androidsdk.view.PieFractionView;
-import im.vector.R;
-
-import org.matrix.androidsdk.db.MXMediasCache;
-
-import im.vector.activity.CommonActivityUtils;
-import im.vector.util.SlidableMediaInfo;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -65,37 +59,54 @@ import java.io.FileOutputStream;
 import java.util.ArrayList;
 import java.util.List;
 
+import im.vector.R;
+import im.vector.activity.CommonActivityUtils;
+import im.vector.util.SlidableMediaInfo;
+
 /**
  * An images slider
  */
 public class VectorMediasViewerAdapter extends PagerAdapter {
-    private static final String LOG_TAG = "MediasViewerAdapter";
+    private static final String LOG_TAG = VectorMediasViewerAdapter.class.getSimpleName();
 
-    private Context mContext;
-    private LayoutInflater mLayoutInflater;
+    private final Context mContext;
+
+    private final LayoutInflater mLayoutInflater;
+
+    private final MXSession mSession;
+
+    private final MXMediasCache mMediasCache;
 
     // medias
-    private List<SlidableMediaInfo> mMediasMessagesList = null;
-    private int mMaxImageWidth;
-    private int mMaxImageHeight;
+    private List<SlidableMediaInfo> mMediasMessagesList;
+
+    private final int mMaxImageWidth;
+    private final int mMaxImageHeight;
+
     private int mLatestPrimaryItemPosition = -1;
     private View mLatestPrimaryView = null;
-    private MXMediasCache mMediasCache;
-    private ArrayList<Integer> mHighResMediaIndex = new ArrayList<>();
+
+    private final List<Integer> mHighResMediaIndex = new ArrayList<>();
+
     // current playing video
     private VideoView mPlayingVideoView = null;
-    private MXSession mSession;
 
     private int mAutoPlayItemAt = -1;
 
-    public VectorMediasViewerAdapter(Context context, MXSession session,  MXMediasCache mediasCache, List<SlidableMediaInfo> mediaMessagesList, int maxImageWidth, int maxImageHeight) {
-        this.mContext = context;
-        this.mSession = session;
-        this.mMediasMessagesList = mediaMessagesList;
-        this.mMaxImageWidth = maxImageWidth;
-        this.mMaxImageHeight = maxImageHeight;
-        this.mLayoutInflater = LayoutInflater.from(context);
-        this.mMediasCache = mediasCache;
+    public VectorMediasViewerAdapter(Context context,
+                                     MXSession session,
+                                     MXMediasCache mediasCache,
+                                     List<SlidableMediaInfo> mediaMessagesList,
+                                     int maxImageWidth,
+                                     int maxImageHeight) {
+        mContext = context;
+        mSession = session;
+        mMediasCache = mediasCache;
+        mMediasMessagesList = mediaMessagesList;
+        mMaxImageWidth = maxImageWidth;
+        mMaxImageHeight = maxImageHeight;
+
+        mLayoutInflater = LayoutInflater.from(context);
     }
 
     @Override
@@ -108,8 +119,10 @@ public class VectorMediasViewerAdapter extends PagerAdapter {
         if (mLatestPrimaryItemPosition != position) {
             mLatestPrimaryItemPosition = position;
 
-            final View view = (View)object;
+            final View view = (View) object;
             mLatestPrimaryView = view;
+
+            view.findViewById(R.id.media_download_failed).setVisibility(View.GONE);
 
             view.post(new Runnable() {
                 @Override
@@ -124,13 +137,23 @@ public class VectorMediasViewerAdapter extends PagerAdapter {
                     if (mHighResMediaIndex.indexOf(position) < 0) {
                         downloadHighResMedia(view, position);
                     } else if (position == mAutoPlayItemAt) {
-                        SlidableMediaInfo mediaInfo = mMediasMessagesList.get(position);
+                        final SlidableMediaInfo mediaInfo = mMediasMessagesList.get(position);
 
                         if (mediaInfo.mMessageType.equals(Message.MSGTYPE_VIDEO)) {
-                            final VideoView videoView = (VideoView) view.findViewById(R.id.media_slider_videoview);
-                            playVideo(view, videoView, mediaInfo.mMediaUrl, mediaInfo.mMimeType);
-                        }
+                            final VideoView videoView = view.findViewById(R.id.media_slider_videoview);
 
+                            if (mMediasCache.isMediaCached(mediaInfo.mMediaUrl, mediaInfo.mMimeType)) {
+                                mMediasCache.createTmpMediaFile(mediaInfo.mMediaUrl, mediaInfo.mMimeType, mediaInfo.mEncryptedFileInfo,
+                                        new SimpleApiCallback<File>() {
+                                            @Override
+                                            public void onSuccess(File file) {
+                                                if (null != file) {
+                                                    playVideo(view, videoView, file, mediaInfo.mMimeType);
+                                                }
+                                            }
+                                        });
+                            }
+                        }
                         mAutoPlayItemAt = -1;
                     }
                 }
@@ -139,7 +162,6 @@ public class VectorMediasViewerAdapter extends PagerAdapter {
     }
 
     /**
-     *
      * @param position the position of the item to play.
      */
     public void autoPlayItemAt(int position) {
@@ -148,20 +170,21 @@ public class VectorMediasViewerAdapter extends PagerAdapter {
 
     /**
      * Download the media if it was not yet done
-     * @param view the slider page view
+     *
+     * @param view     the slider page view
      * @param position the item position
      */
     private void downloadHighResMedia(final View view, final int position) {
         SlidableMediaInfo imageInfo = mMediasMessagesList.get(position);
 
-        // image
         if (imageInfo.mMessageType.equals(Message.MSGTYPE_IMAGE)) {
-            //
+            // image
             if (TextUtils.isEmpty(imageInfo.mMimeType)) {
                 imageInfo.mMimeType = "image/jpeg";
             }
-            downloadHighResPict(view, position);
+            downloadHighResImage(view, position);
         } else {
+            // video
             downloadVideo(view, position);
         }
     }
@@ -169,38 +192,47 @@ public class VectorMediasViewerAdapter extends PagerAdapter {
     /**
      * Download the video file.
      * The download will only start if the video should be auto played.
-     * @param view the slider page view
+     *
+     * @param view     the slider page view
      * @param position the item position
      */
-    public void downloadVideo(final View view, final int position) {
+    private void downloadVideo(final View view, final int position) {
         downloadVideo(view, position, false);
     }
 
     /**
      * Download the video file
-     * @param view the slider page view
+     *
+     * @param view     the slider page view
      * @param position the item position
-     * @param force true to do not check the auto playmode
+     * @param force    true to do not check the auto playmode
      */
-    public void downloadVideo(final View view, final int position, boolean force) {
-        final VideoView videoView = (VideoView)view.findViewById(R.id.media_slider_videoview);
-        final ImageView thumbView = (ImageView)view.findViewById(R.id.media_slider_video_thumbnail);
-        final PieFractionView pieFractionView = (PieFractionView)view.findViewById(R.id.media_slider_piechart);
+    private void downloadVideo(final View view, final int position, boolean force) {
+        final VideoView videoView = view.findViewById(R.id.media_slider_videoview);
+        final ImageView thumbView = view.findViewById(R.id.media_slider_video_thumbnail);
+        final PieFractionView pieFractionView = view.findViewById(R.id.media_slider_piechart);
+        final View downloadFailedView = view.findViewById(R.id.media_download_failed);
 
         final SlidableMediaInfo mediaInfo = mMediasMessagesList.get(position);
         final String loadingUri = mediaInfo.mMediaUrl;
         final String thumbnailUrl = mediaInfo.mThumbnailUrl;
 
         // check if the media has been downloaded
-        File file = mMediasCache.mediaCacheFile(loadingUri, mediaInfo.mMimeType);
-        if (null != file) {
-            mHighResMediaIndex.add(position);
-            loadVideo(position, view, thumbnailUrl, Uri.fromFile(file).toString(), mediaInfo.mMimeType);
+        if (mMediasCache.isMediaCached(loadingUri, mediaInfo.mMimeType)) {
+            mMediasCache.createTmpMediaFile(loadingUri, mediaInfo.mMimeType, mediaInfo.mEncryptedFileInfo, new SimpleApiCallback<File>() {
+                @Override
+                public void onSuccess(File file) {
+                    if (null != file) {
+                        mHighResMediaIndex.add(position);
+                        loadVideo(position, view, thumbnailUrl, Uri.fromFile(file).toString(), mediaInfo.mMimeType, mediaInfo.mEncryptedFileInfo);
 
-            if (position == mAutoPlayItemAt) {
-                playVideo(view, videoView, mediaInfo.mMediaUrl, mediaInfo.mMimeType);
-            }
-            mAutoPlayItemAt = -1;
+                        if (position == mAutoPlayItemAt) {
+                            playVideo(view, videoView, file, mediaInfo.mMimeType);
+                        }
+                        mAutoPlayItemAt = -1;
+                    }
+                }
+            });
             return;
         }
 
@@ -211,7 +243,7 @@ public class VectorMediasViewerAdapter extends PagerAdapter {
         }
 
         // else download it
-        String downloadId = mMediasCache.downloadMedia(mContext, mSession.getHomeserverConfig(), loadingUri, mediaInfo.mMimeType, mediaInfo.mEncryptedFileInfo);
+        String downloadId = mMediasCache.downloadMedia(mContext, mSession.getHomeServerConfig(), loadingUri, mediaInfo.mMimeType, mediaInfo.mEncryptedFileInfo);
 
         if (null != downloadId) {
             pieFractionView.setVisibility(View.VISIBLE);
@@ -225,8 +257,10 @@ public class VectorMediasViewerAdapter extends PagerAdapter {
                     MatrixError error = JsonUtils.toMatrixError(jsonElement);
 
                     if ((null != error) && error.isSupportedErrorCode()) {
-                        Toast.makeText(VectorMediasViewerAdapter.this.mContext, error.getLocalizedMessage(), Toast.LENGTH_LONG).show();
+                        Toast.makeText(mContext, error.getLocalizedMessage(), Toast.LENGTH_LONG).show();
                     }
+
+                    downloadFailedView.setVisibility(View.VISIBLE);
                 }
 
                 @Override
@@ -241,25 +275,34 @@ public class VectorMediasViewerAdapter extends PagerAdapter {
                     if (aDownloadId.equals(pieFractionView.getTag())) {
                         pieFractionView.setVisibility(View.GONE);
 
-                        final File mediaFile = mMediasCache.mediaCacheFile(loadingUri, mediaInfo.mMimeType);
 
-                        if (null != mediaFile) {
-                            mHighResMediaIndex.add(position);
-
-                            Uri uri = Uri.fromFile(mediaFile);
-                            final String newHighResUri = uri.toString();
-
-                            thumbView.post(new Runnable() {
+                        // check if the media has been downloaded
+                        if (mMediasCache.isMediaCached(loadingUri, mediaInfo.mMimeType)) {
+                            mMediasCache.createTmpMediaFile(loadingUri, mediaInfo.mMimeType, mediaInfo.mEncryptedFileInfo, new SimpleApiCallback<File>() {
                                 @Override
-                                public void run() {
-                                    loadVideo(position, view, thumbnailUrl, newHighResUri, mediaInfo.mMimeType);
+                                public void onSuccess(final File mediaFile) {
+                                    if (null != mediaFile) {
+                                        mHighResMediaIndex.add(position);
 
-                                    if (position == mAutoPlayItemAt) {
-                                        playVideo(view, videoView, mediaInfo.mMediaUrl, mediaInfo.mMimeType);
-                                        mAutoPlayItemAt = -1;
+                                        Uri uri = Uri.fromFile(mediaFile);
+                                        final String newHighResUri = uri.toString();
+
+                                        thumbView.post(new Runnable() {
+                                            @Override
+                                            public void run() {
+                                                loadVideo(position, view, thumbnailUrl, newHighResUri, mediaInfo.mMimeType, mediaInfo.mEncryptedFileInfo);
+
+                                                if (position == mAutoPlayItemAt) {
+                                                    playVideo(view, videoView, mediaFile, mediaInfo.mMimeType);
+                                                    mAutoPlayItemAt = -1;
+                                                }
+                                            }
+                                        });
                                     }
                                 }
                             });
+                        } else {
+                            downloadFailedView.setVisibility(View.VISIBLE);
                         }
                     }
                 }
@@ -269,16 +312,25 @@ public class VectorMediasViewerAdapter extends PagerAdapter {
 
     /**
      * Download the high res image
-     * @param view the slider page view
+     *
+     * @param view     the slider page view
      * @param position the item position
      */
-    private void downloadHighResPict(final View view, final int position) {
-        final WebView webView = (WebView)view.findViewById(R.id.media_slider_image_webview);
-        final PieFractionView pieFractionView = (PieFractionView)view.findViewById(R.id.media_slider_piechart);
+    private void downloadHighResImage(final View view, final int position) {
+        final WebView webView = view.findViewById(R.id.media_slider_image_webview);
+        final PieFractionView pieFractionView = view.findViewById(R.id.media_slider_piechart);
+        final View downloadFailedView = view.findViewById(R.id.media_download_failed);
+
         final SlidableMediaInfo imageInfo = mMediasMessagesList.get(position);
         final String viewportContent = "width=640";
         final String loadingUri = imageInfo.mMediaUrl;
-        final String downloadId = mMediasCache.loadBitmap(mContext, mSession.getHomeserverConfig(), loadingUri, imageInfo.mRotationAngle, imageInfo.mOrientation, imageInfo.mMimeType, imageInfo.mEncryptedFileInfo);
+        final String downloadId = mMediasCache.loadBitmap(mContext,
+                mSession.getHomeServerConfig(),
+                loadingUri,
+                imageInfo.mRotationAngle,
+                imageInfo.mOrientation,
+                imageInfo.mMimeType,
+                imageInfo.mEncryptedFileInfo);
 
         webView.getSettings().setDisplayZoomControls(false);
 
@@ -287,11 +339,17 @@ public class VectorMediasViewerAdapter extends PagerAdapter {
             pieFractionView.setFraction(mMediasCache.getProgressValueForDownloadId(downloadId));
             mMediasCache.addDownloadListener(downloadId, new MXMediaDownloadListener() {
                 @Override
-                public void onDownloadError(String downloadId, JsonElement jsonElement) {
-                    MatrixError error = JsonUtils.toMatrixError(jsonElement);
+                public void onDownloadError(String aDownloadId, JsonElement jsonElement) {
+                    if (aDownloadId.equals(downloadId)) {
+                        pieFractionView.setVisibility(View.GONE);
 
-                    if ((null != error) && error.isSupportedErrorCode()) {
-                        Toast.makeText(VectorMediasViewerAdapter.this.mContext, error.getLocalizedMessage(), Toast.LENGTH_LONG).show();
+                        MatrixError error = JsonUtils.toMatrixError(jsonElement);
+
+                        if (null != error) {
+                            Toast.makeText(mContext, error.getLocalizedMessage(), Toast.LENGTH_LONG).show();
+                        }
+
+                        downloadFailedView.setVisibility(View.VISIBLE);
                     }
                 }
 
@@ -306,22 +364,33 @@ public class VectorMediasViewerAdapter extends PagerAdapter {
                 public void onDownloadComplete(String aDownloadId) {
                     if (aDownloadId.equals(downloadId)) {
                         pieFractionView.setVisibility(View.GONE);
-                        final File mediaFile = mMediasCache.mediaCacheFile(loadingUri, imageInfo.mMimeType);
 
-                        if (null != mediaFile) {
-                            mHighResMediaIndex.add(position);
-
-                            Uri uri = Uri.fromFile(mediaFile);
-                            final String newHighResUri = uri.toString();
-
-                            webView.post(new Runnable() {
+                        if (mMediasCache.isMediaCached(loadingUri, imageInfo.mMimeType)) {
+                            mMediasCache.createTmpMediaFile(loadingUri, imageInfo.mMimeType, imageInfo.mEncryptedFileInfo, new SimpleApiCallback<File>() {
                                 @Override
-                                public void run() {
-                                    Uri mediaUri = Uri.parse(newHighResUri);
-                                    // refresh the UI
-                                    loadImage(webView, mediaUri, viewportContent, computeCss(newHighResUri, VectorMediasViewerAdapter.this.mMaxImageWidth, VectorMediasViewerAdapter.this.mMaxImageHeight, imageInfo.mRotationAngle));
+                                public void onSuccess(File mediaFile) {
+                                    if (null != mediaFile) {
+                                        mHighResMediaIndex.add(position);
+
+                                        Uri uri = Uri.fromFile(mediaFile);
+                                        final String newHighResUri = uri.toString();
+
+                                        webView.post(new Runnable() {
+                                            @Override
+                                            public void run() {
+                                                Uri mediaUri = Uri.parse(newHighResUri);
+                                                // refresh the UI
+                                                loadImageIntoWebView(webView,
+                                                        mediaUri,
+                                                        viewportContent,
+                                                        computeCss(newHighResUri, mMaxImageWidth, mMaxImageHeight, imageInfo.mRotationAngle));
+                                            }
+                                        });
+                                    }
                                 }
                             });
+                        } else {
+                            downloadFailedView.setVisibility(View.VISIBLE);
                         }
                     }
                 }
@@ -335,23 +404,25 @@ public class VectorMediasViewerAdapter extends PagerAdapter {
     }
 
     @Override
-    public Object instantiateItem(ViewGroup container, final int position) {
-        View view  = mLayoutInflater.inflate(R.layout.adapter_vector_medias_viewer, null, false);
+    public Object instantiateItem(final ViewGroup container, final int position) {
+        final View view = mLayoutInflater.inflate(R.layout.adapter_vector_medias_viewer, null, false);
 
         // hide the pie chart
-        final PieFractionView pieFractionView = (PieFractionView)view.findViewById(R.id.media_slider_piechart);
+        final PieFractionView pieFractionView = view.findViewById(R.id.media_slider_piechart);
         pieFractionView.setVisibility(View.GONE);
 
-        final WebView imageWebView = (WebView)view.findViewById(R.id.media_slider_image_webview);
+        view.findViewById(R.id.media_download_failed).setVisibility(View.GONE);
+
+        final WebView imageWebView = view.findViewById(R.id.media_slider_image_webview);
         final View videoLayout = view.findViewById(R.id.media_slider_videolayout);
-        final ImageView thumbView = (ImageView)view.findViewById(R.id.media_slider_video_thumbnail);
+        final ImageView thumbView = view.findViewById(R.id.media_slider_video_thumbnail);
 
         imageWebView.getSettings().setDisplayZoomControls(false);
 
         imageWebView.setOnLongClickListener(new View.OnLongClickListener() {
             @Override
             public boolean onLongClick(View v) {
-                VectorMediasViewerAdapter.this.onLongClick();
+                onLongClickOnMedia();
                 return true;
             }
         });
@@ -359,7 +430,7 @@ public class VectorMediasViewerAdapter extends PagerAdapter {
         thumbView.setOnLongClickListener(new View.OnLongClickListener() {
             @Override
             public boolean onLongClick(View v) {
-                VectorMediasViewerAdapter.this.onLongClick();
+                onLongClickOnMedia();
                 return true;
             }
         });
@@ -374,7 +445,8 @@ public class VectorMediasViewerAdapter extends PagerAdapter {
 
         if (mediaInfo.mMessageType.equals(Message.MSGTYPE_IMAGE)) {
             imageWebView.setVisibility(View.VISIBLE);
-            imageWebView.setLayerType(View.LAYER_TYPE_SOFTWARE, null);
+            // Do not set layer type, it prevent gif from being played
+            // imageWebView.setLayerType(View.LAYER_TYPE_SOFTWARE, null);
             imageWebView.getSettings().setJavaScriptEnabled(true);
             imageWebView.getSettings().setLoadWithOverviewMode(true);
             imageWebView.getSettings().setUseWideViewPort(true);
@@ -389,38 +461,46 @@ public class VectorMediasViewerAdapter extends PagerAdapter {
             }
 
             final String mimeType = mediaInfo.mMimeType;
-            File mediaFile = mMediasCache.mediaCacheFile(mediaUrl, mimeType);
+            int width = -1;
+            int height = -1;
 
             // is the high picture already downloaded ?
-            if (null != mediaFile) {
+            if (mMediasCache.isMediaCached(mediaUrl, mimeType)) {
                 if (mHighResMediaIndex.indexOf(position) < 0) {
                     mHighResMediaIndex.add(position);
                 }
             } else {
-                // try to retrieve the thumbnail
-                mediaFile = mMediasCache.mediaCacheFile(mediaUrl, mMaxImageWidth, mMaxImageHeight, null);
+                width = mMaxImageWidth;
+                height = mMaxImageHeight;
             }
 
             // the thumbnail is not yet downloaded
-            if (null == mediaFile) {
+            if (!mMediasCache.isMediaCached(mediaUrl, width, height, mimeType)) {
                 // display nothing
                 container.addView(view, 0);
                 return view;
             }
 
-            String mediaUri = "file://" + mediaFile.getPath();
+            mMediasCache.createTmpMediaFile(mediaUrl, width, height, mimeType, mediaInfo.mEncryptedFileInfo, new SimpleApiCallback<File>() {
+                @Override
+                public void onSuccess(File mediaFile) {
+                    if (null != mediaFile) {
+                        String mediaUri = "file://" + mediaFile.getPath();
 
-            String css = computeCss(mediaUri, mMaxImageWidth, mMaxImageHeight, rotationAngle);
-            final String viewportContent = "width=640";
-            loadImage(imageWebView, Uri.parse(mediaUri), viewportContent, css);
-            container.addView(view, 0);
+                        String css = computeCss(mediaUri, mMaxImageWidth, mMaxImageHeight, rotationAngle);
+                        final String viewportContent = "width=640";
+                        loadImageIntoWebView(imageWebView, Uri.parse(mediaUri), viewportContent, css);
+                        container.addView(view, 0);
+                    }
+                }
+            });
         } else {
-            loadVideo(position , view, mediaInfo.mThumbnailUrl, mediaUrl, mediaInfo.mMimeType);
+            loadVideo(position, view, mediaInfo.mThumbnailUrl, mediaUrl, mediaInfo.mMimeType, mediaInfo.mEncryptedFileInfo);
             container.addView(view, 0);
         }
 
         // check if the media is downloading
-        String downloadId = mMediasCache.downloadMedia(mContext, mSession.getHomeserverConfig(), mediaUrl, mediaInfo.mMimeType, mediaInfo.mEncryptedFileInfo);
+        String downloadId = mMediasCache.downloadMedia(mContext, mSession.getHomeServerConfig(), mediaUrl, mediaInfo.mMimeType, mediaInfo.mEncryptedFileInfo);
 
         if (null != downloadId) {
             pieFractionView.setVisibility(View.VISIBLE);
@@ -434,7 +514,7 @@ public class VectorMediasViewerAdapter extends PagerAdapter {
                     MatrixError error = JsonUtils.toMatrixError(jsonElement);
 
                     if ((null != error) && error.isSupportedErrorCode()) {
-                        Toast.makeText(VectorMediasViewerAdapter.this.mContext, error.getLocalizedMessage(), Toast.LENGTH_LONG).show();
+                        Toast.makeText(mContext, error.getLocalizedMessage(), Toast.LENGTH_LONG).show();
                     }
                 }
 
@@ -454,19 +534,24 @@ public class VectorMediasViewerAdapter extends PagerAdapter {
             });
         }
 
-
         return view;
+    }
+
+    @Override
+    public void destroyItem(ViewGroup container, int position, Object object) {
+        container.removeView((View) object);
     }
 
     /**
      * Switch from the video view to the video thumbnail
-     * @param view the page view
-     * @param display trur to display the video thumbnail, false to display the video player
+     *
+     * @param view    the page view
+     * @param display true to display the video thumbnail, false to display the video player
      */
-    private void displayVideoThumbnail(final View view, boolean display){
-        final VideoView videoView = (VideoView)view.findViewById(R.id.media_slider_videoview);
-        final ImageView thumbView = (ImageView)view.findViewById(R.id.media_slider_video_thumbnail);
-        final ImageView playView = (ImageView)view.findViewById(R.id.media_slider_video_playView);
+    private void displayVideoThumbnail(final View view, boolean display) {
+        final VideoView videoView = view.findViewById(R.id.media_slider_videoview);
+        final ImageView thumbView = view.findViewById(R.id.media_slider_video_thumbnail);
+        final ImageView playView = view.findViewById(R.id.media_slider_video_playView);
 
         videoView.setVisibility(display ? View.GONE : View.VISIBLE);
         thumbView.setVisibility(display ? View.VISIBLE : View.GONE);
@@ -479,24 +564,21 @@ public class VectorMediasViewerAdapter extends PagerAdapter {
     public void stopPlayingVideo() {
         if (null != mPlayingVideoView) {
             mPlayingVideoView.stopPlayback();
-            displayVideoThumbnail((View)(mPlayingVideoView.getParent()), true);
+            displayVideoThumbnail((View) (mPlayingVideoView.getParent()), true);
             mPlayingVideoView = null;
         }
     }
 
     /**
      * Play a video.
-     * @param pageView the pageView
-     * @param videoView the video view
-     * @param videoUrl the video Url
-     * @param videoMimeType the video mimetype
+     *
+     * @param pageView      the pageView
+     * @param videoView     the video view
+     * @param videoFile     the video file
+     * @param videoMimeType the video mime type
      */
-    private void playVideo(View pageView, VideoView videoView, String videoUrl, String videoMimeType) {
-        // init the video view only if there is a valid file
-        // check if the media has been downloaded
-        File srcFile = mMediasCache.mediaCacheFile(videoUrl, videoMimeType);
-
-        if ((null != srcFile) && srcFile.exists()) {
+    private void playVideo(View pageView, VideoView videoView, File videoFile, String videoMimeType) {
+        if ((null != videoFile) && videoFile.exists()) {
             try {
                 stopPlayingVideo();
                 String extension = MimeTypeMap.getSingleton().getExtensionFromMimeType(videoMimeType);
@@ -519,7 +601,7 @@ public class VectorMediasViewerAdapter extends PagerAdapter {
                     if (!dstFile.exists()) {
                         dstFile.createNewFile();
 
-                        inputStream = new FileInputStream(srcFile);
+                        inputStream = new FileInputStream(videoFile);
                         outputStream = new FileOutputStream(dstFile);
 
                         byte[] buffer = new byte[1024 * 10];
@@ -557,23 +639,32 @@ public class VectorMediasViewerAdapter extends PagerAdapter {
     }
 
     /**
-     * Download the current video file
+     * Download the current media file, and export it to the Download folder of the device
      */
-    public void downloadMedia() {
+    private void downloadMediaAndExportToDownloads() {
         final SlidableMediaInfo mediaInfo = mMediasMessagesList.get(mLatestPrimaryItemPosition);
-        File file = mMediasCache.mediaCacheFile(mediaInfo.mMediaUrl, mediaInfo.mMimeType);
 
-        if (null != file) {
-            CommonActivityUtils.saveMediaIntoDownloads(mContext, file, null, mediaInfo.mMimeType, new SimpleApiCallback<String>() {
+        if (mMediasCache.isMediaCached(mediaInfo.mMediaUrl, mediaInfo.mMimeType)) {
+            mMediasCache.createTmpMediaFile(mediaInfo.mMediaUrl, mediaInfo.mMimeType, mediaInfo.mEncryptedFileInfo, new SimpleApiCallback<File>() {
                 @Override
-                public void onSuccess(String path) {
-                    Toast.makeText(mContext, mContext.getText(R.string.media_slider_saved), Toast.LENGTH_LONG).show();
+                public void onSuccess(File file) {
+                    if (null != file) {
+                        CommonActivityUtils.saveMediaIntoDownloads(mContext, file, null, mediaInfo.mMimeType, new SimpleApiCallback<String>() {
+                            @Override
+                            public void onSuccess(String path) {
+                                Toast.makeText(mContext, R.string.media_slider_saved, Toast.LENGTH_LONG).show();
+                            }
+                        });
+                    }
                 }
             });
-
         } else {
             downloadVideo(mLatestPrimaryView, mLatestPrimaryItemPosition, true);
-            final String downloadId = mMediasCache.downloadMedia(mContext, mSession.getHomeserverConfig(), mediaInfo.mMediaUrl, mediaInfo.mMimeType, mediaInfo.mEncryptedFileInfo);
+            final String downloadId = mMediasCache.downloadMedia(mContext,
+                    mSession.getHomeServerConfig(),
+                    mediaInfo.mMediaUrl,
+                    mediaInfo.mMimeType,
+                    mediaInfo.mEncryptedFileInfo);
 
             if (null != downloadId) {
                 mMediasCache.addDownloadListener(downloadId, new MXMediaDownloadListener() {
@@ -582,22 +673,29 @@ public class VectorMediasViewerAdapter extends PagerAdapter {
                         MatrixError error = JsonUtils.toMatrixError(jsonElement);
 
                         if ((null != error) && error.isSupportedErrorCode()) {
-                            Toast.makeText(VectorMediasViewerAdapter.this.mContext, error.getLocalizedMessage(), Toast.LENGTH_LONG).show();
+                            Toast.makeText(mContext, error.getLocalizedMessage(), Toast.LENGTH_LONG).show();
                         }
                     }
 
                     @Override
                     public void onDownloadComplete(String aDownloadId) {
                         if (aDownloadId.equals(downloadId)) {
-                            File file = mMediasCache.mediaCacheFile(mediaInfo.mMediaUrl, mediaInfo.mMimeType);
-                            if (null != file) {
-
-                                CommonActivityUtils.saveMediaIntoDownloads(mContext, file, null, mediaInfo.mMimeType, new SimpleApiCallback<String>() {
-                                    @Override
-                                    public void onSuccess(String path) {
-                                        Toast.makeText(mContext, mContext.getText(R.string.media_slider_saved), Toast.LENGTH_LONG).show();
-                                    }
-                                });
+                            if (mMediasCache.isMediaCached(mediaInfo.mMediaUrl, mediaInfo.mMimeType)) {
+                                mMediasCache.createTmpMediaFile(mediaInfo.mMediaUrl, mediaInfo.mMimeType, mediaInfo.mEncryptedFileInfo,
+                                        new SimpleApiCallback<File>() {
+                                            @Override
+                                            public void onSuccess(File file) {
+                                                if (null != file) {
+                                                    CommonActivityUtils.saveMediaIntoDownloads(mContext, file, null, mediaInfo.mMimeType,
+                                                            new SimpleApiCallback<String>() {
+                                                                @Override
+                                                                public void onSuccess(String path) {
+                                                                    Toast.makeText(mContext, R.string.media_slider_saved, Toast.LENGTH_LONG).show();
+                                                                }
+                                                            });
+                                                }
+                                            }
+                                        });
                             }
                         }
                     }
@@ -607,40 +705,38 @@ public class VectorMediasViewerAdapter extends PagerAdapter {
     }
 
     /**
-     * Long click management
+     * Long click management: propose user to save media to the Downloads folder of the device
      */
-    private void onLongClick() {
-        // The user is trying to leave with unsaved changes. Warn about that
+    private void onLongClickOnMedia() {
         new AlertDialog.Builder(mContext)
                 .setMessage(R.string.media_slider_saved_message)
                 .setPositiveButton(R.string.yes, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                        dialog.dismiss();
-                        downloadMedia();
+                        downloadMediaAndExportToDownloads();
                     }
                 })
-                .setNegativeButton(R.string.no, new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        dialog.dismiss();
-                    }
-                })
-                .create()
+                .setNegativeButton(R.string.no, null)
                 .show();
     }
 
     /**
      * Load the video items
-     * @param view the page view
-     * @param thumbnailUrl the thumbnail URL
-     * @param videoUrl the video Url
+     *
+     * @param view          the page view
+     * @param thumbnailUrl  the thumbnail URL
+     * @param videoUrl      the video Url
      * @param videoMimeType the video mime type
      */
-    private void loadVideo(final int position, final View view, final String thumbnailUrl, final String videoUrl, final String videoMimeType) {
-        final VideoView videoView = (VideoView)view.findViewById(R.id.media_slider_videoview);
-        final ImageView thumbView = (ImageView)view.findViewById(R.id.media_slider_video_thumbnail);
-        final ImageView playView = (ImageView)view.findViewById(R.id.media_slider_video_playView);
+    private void loadVideo(final int position,
+                           final View view,
+                           final String thumbnailUrl,
+                           final String videoUrl,
+                           final String videoMimeType,
+                           final EncryptedFileInfo encryptedFileInfo) {
+        final VideoView videoView = view.findViewById(R.id.media_slider_videoview);
+        final ImageView thumbView = view.findViewById(R.id.media_slider_video_thumbnail);
+        final ImageView playView = view.findViewById(R.id.media_slider_video_playView);
 
         displayVideoThumbnail(view, !videoView.isPlaying());
 
@@ -653,7 +749,7 @@ public class VectorMediasViewerAdapter extends PagerAdapter {
         });
 
         // the video is renderer in DSA so trap the on click on the video view parent
-        ((View)videoView.getParent()).setOnClickListener(new View.OnClickListener() {
+        ((View) videoView.getParent()).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 stopPlayingVideo();
@@ -672,17 +768,22 @@ public class VectorMediasViewerAdapter extends PagerAdapter {
         });
 
         // init the thumbnail views
-        mMediasCache.loadBitmap(mSession.getHomeserverConfig(), thumbView, thumbnailUrl, 0, 0, null, null);
+        mMediasCache.loadBitmap(mSession.getHomeServerConfig(), thumbView, thumbnailUrl, 0, 0, null, null);
 
         playView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                // init the video view only if there is a valid file
-                // check if the media has been downloaded
-                File srcFile = mMediasCache.mediaCacheFile(videoUrl, videoMimeType);
+                if (mMediasCache.isMediaCached(videoUrl, videoMimeType)) {
 
-                if (null != srcFile) {
-                    playVideo(view, videoView, videoUrl, videoMimeType);
+                    mMediasCache.createTmpMediaFile(videoUrl, videoMimeType, encryptedFileInfo, new SimpleApiCallback<File>() {
+                        @Override
+                        public void onSuccess(File file) {
+                            if (null != file) {
+                                playVideo(view, videoView, file, videoMimeType);
+                            }
+                        }
+                    });
+
                 } else {
                     mAutoPlayItemAt = position;
                     downloadVideo(view, position);
@@ -692,34 +793,32 @@ public class VectorMediasViewerAdapter extends PagerAdapter {
     }
 
     /**
-     * Update the image page.
-     * @param webView the image is rendered in a webview.
-     * @param imageUri the image Uri.
-     * @param viewportContent  the viewport.
-     * @param css the css.
+     * Update the image page: build an Html page to display the image.
+     *
+     * @param webView         the image is rendered in a webview.
+     * @param imageUri        the image Uri.
+     * @param viewportContent the viewport.
+     * @param css             the css.
      */
-    private void loadImage(WebView webView, Uri imageUri, String viewportContent, String css) {
-        String html =
-                "<html><head><meta name='viewport' content='" +
-                        viewportContent +
-                        "'/>" +
-                        "<style type='text/css'>" +
-                        css +
-                        "</style></head>" +
-                        "<body> <div class='wrap'>" + "<img " +
-                        ( "src='" + imageUri.toString() + "'") +
-                        " onerror='this.style.display=\"none\"' id='image' " + viewportContent + "/>" + "</div>" +
-                        "</body>" + "</html>";
+    private void loadImageIntoWebView(WebView webView, Uri imageUri, String viewportContent, String css) {
+        String html = "<html>" +
+                "<head>"
+                + "<meta name='viewport' content='" + viewportContent + "'/>"
+                + "<style type='text/css'>" + css + "</style>"
+                + "</head>"
+                + "<body>"
+                + "<div class='wrap'>"
+                + "<img src='" + imageUri.toString() + "' onerror='this.style.display=\"none\"' id='image' " + viewportContent + "/>"
+                + "</div>"
+                + "</body>"
+                + "</html>";
 
-        String mime = "text/html";
-        String encoding = "utf-8";
-
-        webView.loadDataWithBaseURL(null, html, mime, encoding, null);
+        webView.loadDataWithBaseURL(null, html, "text/html", "utf-8", null);
         webView.requestLayout();
     }
 
     /**
-     *  Image rendering subroutine
+     * Image rendering subroutine
      */
     private String computeCss(String mediaUrl, int thumbnailWidth, int thumbnailHeight, int rotationAngle) {
         String css = "body { background-color: #000; height: 100%; width: 100%; margin: 0px; padding: 0px; }" +
@@ -768,7 +867,7 @@ public class VectorMediasViewerAdapter extends PagerAdapter {
                 }
 
                 imageWidth = options.outWidth;
-                imageHeight =  options.outHeight;
+                imageHeight = options.outHeight;
 
                 imageStream.close();
                 fullSizeBitmap.recycle();
@@ -788,7 +887,7 @@ public class VectorMediasViewerAdapter extends PagerAdapter {
     private String calcCssRotation(int rot, int imageWidth, int imageHeight) {
         if (rot == 90 || rot == 180 || rot == 270) {
             Point displaySize = getDisplaySize();
-            double scale = Math.min((double)imageWidth / imageHeight, (double)displaySize.y / displaySize.x);
+            double scale = Math.min((double) imageWidth / imageHeight, (double) displaySize.y / displaySize.x);
 
             final String rot180 = "-webkit-transform: rotate(180deg);";
 
@@ -807,21 +906,8 @@ public class VectorMediasViewerAdapter extends PagerAdapter {
     @SuppressLint("NewApi")
     private Point getDisplaySize() {
         Point size = new Point();
-        WindowManager w = ((Activity)mContext).getWindowManager();
-
-        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB)    {
-            w.getDefaultDisplay().getSize(size);
-        } else {
-            Display d = w.getDefaultDisplay();
-            size.x = d.getWidth();
-            size.y = d.getHeight();
-        }
-
+        WindowManager w = ((Activity) mContext).getWindowManager();
+        w.getDefaultDisplay().getSize(size);
         return size;
-    }
-
-    @Override
-    public void destroyItem(ViewGroup container, int position, Object object) {
-        container.removeView((View) object);
     }
 }

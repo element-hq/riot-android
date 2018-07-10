@@ -32,27 +32,46 @@ import im.vector.Matrix;
  */
 public abstract class AbsFilterableAdapter<T extends RecyclerView.ViewHolder> extends RecyclerView.Adapter<T> implements Filterable {
 
-    protected final Context mContext;
-    protected final MXSession mSession;
+    final Context mContext;
+    final MXSession mSession;
 
-    protected CharSequence mCurrentFilterPattern;
-    protected Filter mFilter;
+    CharSequence mCurrentFilterPattern;
+    private final Filter mFilter;
 
-    protected final AbsAdapter.InvitationListener mInvitationListener;
-    protected final AbsAdapter.MoreRoomActionListener mMoreActionListener;
-
+    AbsAdapter.RoomInvitationListener mRoomInvitationListener;
+    AbsAdapter.GroupInvitationListener mGroupInvitationListener;
+    AbsAdapter.MoreRoomActionListener mMoreRoomActionListener;
+    AbsAdapter.MoreGroupActionListener mMoreGroupActionListener;
     /*
      * *********************************************************************************************
      * Constructor
      * *********************************************************************************************
      */
 
-    public AbsFilterableAdapter(final Context context, final AbsAdapter.InvitationListener invitationListener,
-                                final AbsAdapter.MoreRoomActionListener moreActionListener) {
+    AbsFilterableAdapter(final Context context) {
         mContext = context;
 
-        mInvitationListener = invitationListener;
-        mMoreActionListener = moreActionListener;
+        mSession = Matrix.getInstance(context).getDefaultSession();
+        mFilter = createFilter();
+    }
+
+    AbsFilterableAdapter(final Context context, final AbsAdapter.RoomInvitationListener invitationListener,
+                         final AbsAdapter.MoreRoomActionListener moreActionListener) {
+        mContext = context;
+
+        mRoomInvitationListener = invitationListener;
+        mMoreRoomActionListener = moreActionListener;
+
+        mSession = Matrix.getInstance(context).getDefaultSession();
+        mFilter = createFilter();
+    }
+
+    AbsFilterableAdapter(final Context context, final AbsAdapter.GroupInvitationListener invitationListener,
+                         final AbsAdapter.MoreGroupActionListener moreActionListener) {
+        mContext = context;
+
+        mGroupInvitationListener = invitationListener;
+        mMoreGroupActionListener = moreActionListener;
 
         mSession = Matrix.getInstance(context).getDefaultSession();
         mFilter = createFilter();

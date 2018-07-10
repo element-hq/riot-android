@@ -28,7 +28,7 @@ import im.vector.R;
 public class ProgressBarPreference extends Preference {
 
     // members
-    protected Context mContext;
+    private final Context mContext;
 
     public ProgressBarPreference(Context context) {
         super(context);

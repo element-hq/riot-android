@@ -1,0 +1,27 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<resources><string name="resources_language">tr</string>
+    <string name="resources_country_code">TR</string>
+
+    <string name="light_theme">Aydınlık Tema</string>
+    <string name="dark_theme">Karanlık Tema</string>
+    <string name="black_them">Siyah Tema</string>
+
+    <string name="notification_sync_in_progress">Eşzamanlama</string>
+    <string name="notification_listen_for_events">Olayları dinliyor</string>
+    <string name="notification_noisy_notifications">Sesli bildirimler</string>
+    <string name="notification_silent_notifications">Sessiz bildirimler</string>
+
+    <string name="title_activity_home">Mesajlar</string>
+    <string name="title_activity_room">Oda</string>
+    <string name="title_activity_settings">Ayarlar</string>
+    <string name="title_activity_member_details">Üye Detayları</string>
+    <string name="title_activity_historical">Tarihsel</string>
+    <string name="title_activity_bug_report">Hata raporu</string>
+    <string name="title_activity_group_details">Topluluk detayları</string>
+
+    <string name="loading">Yükleniyor...</string>
+
+    <string name="ok">Tamam</string>
+    <string name="cancel">İptal</string>
+    <string name="save">Kayıt</string>
+    </resources>

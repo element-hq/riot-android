@@ -67,7 +67,9 @@ public class LanguagesAdapter extends RecyclerView.Adapter<LanguagesAdapter.Lang
 
     @Override
     public void onBindViewHolder(LanguagesAdapter.LanguageViewHolder viewHolder, int position) {
-        viewHolder.populateViews(mFilteredLocalesList.get(position));
+        if (position < mFilteredLocalesList.size()) {
+            viewHolder.populateViews(mFilteredLocalesList.get(position));
+        }
     }
 
     @Override
@@ -89,8 +91,8 @@ public class LanguagesAdapter extends RecyclerView.Adapter<LanguagesAdapter.Lang
                     final String filterPattern = constraint.toString().trim();
                     Pattern pattern = Pattern.compile(Pattern.quote(filterPattern), Pattern.CASE_INSENSITIVE);
 
-                    for(Locale locale : mLocalesList) {
-                        if (pattern.matcher(VectorApp.localeToString(locale)).find()) {
+                    for (Locale locale : mLocalesList) {
+                        if (pattern.matcher(VectorApp.localeToLocalisedString(locale)).find()) {
                             mFilteredLocalesList.add(locale);
                         }
                     }
@@ -116,15 +118,15 @@ public class LanguagesAdapter extends RecyclerView.Adapter<LanguagesAdapter.Lang
      */
 
     class LanguageViewHolder extends RecyclerView.ViewHolder {
-        TextView vLocaleNameTextView;
+        private final TextView vLocaleNameTextView;
 
         private LanguageViewHolder(final View itemView) {
             super(itemView);
-            vLocaleNameTextView = (TextView) itemView.findViewById(R.id.locale_text_view);
+            vLocaleNameTextView = itemView.findViewById(R.id.locale_text_view);
         }
 
         private void populateViews(final Locale locale) {
-            vLocaleNameTextView.setText(VectorApp.localeToString(locale));
+            vLocaleNameTextView.setText(VectorApp.localeToLocalisedString(locale));
             itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {

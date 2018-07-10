@@ -1,5 +1,6 @@
 /*
  * Copyright 2017 Vector Creations Ltd
+ * Copyright 2018 New Vector Ltd
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -22,6 +23,7 @@ import android.text.TextUtils;
 import org.matrix.androidsdk.adapters.MessageRow;
 import org.matrix.androidsdk.call.MXCallsManager;
 import org.matrix.androidsdk.rest.model.Event;
+import org.matrix.androidsdk.util.Log;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -34,14 +36,11 @@ import java.util.Set;
 import im.vector.R;
 import im.vector.adapters.AdapterUtils;
 
-import org.matrix.androidsdk.util.Log;
-
 /**
  * A EventGroup is a special event that can contain MessageRows
  */
 public class EventGroup extends Event {
-
-    private static final String LOG_TAG = "EventGroup";
+    private static final String LOG_TAG = EventGroup.class.getSimpleName();
 
     // events rows map
     private final Map<String, MessageRow> mRowsMap;
@@ -60,7 +59,7 @@ public class EventGroup extends Event {
      */
     public EventGroup(Set<String> hiddenGroupIds) {
         // defines an MessageRowGroup unique ID
-        eventId =  getClass().getName() + '@' + Integer.toHexString(hashCode()) + "-" + System.currentTimeMillis();
+        eventId = getClass().getName() + '@' + Integer.toHexString(hashCode()) + "-" + System.currentTimeMillis();
 
         // init field
         mRowsMap = new HashMap<>();
@@ -97,7 +96,7 @@ public class EventGroup extends Event {
      * @param row the message row
      * @return true if the messageRow is defined in this group.
      */
-    public boolean contains(MessageRow row) {
+    private boolean contains(MessageRow row) {
         return (null != row) && (null != row.getEvent()) && mRowsMap.containsKey(row.getEvent().eventId);
     }
 
@@ -106,7 +105,7 @@ public class EventGroup extends Event {
      */
     private void refreshOriginServerTs() {
         if (mRows.size() > 0) {
-            this.originServerTs = mRows.get(0).getEvent().originServerTs;
+            originServerTs = mRows.get(0).getEvent().originServerTs;
         }
     }
 
@@ -255,6 +254,7 @@ public class EventGroup extends Event {
 
     /**
      * Provides a message rows list to display unique avatars
+     *
      * @param maxCount the max number of items
      * @return the messages row list
      */
@@ -262,7 +262,7 @@ public class EventGroup extends Event {
         Set<String> senders = new HashSet<>();
         List<MessageRow> rows = new ArrayList<>();
 
-        for(MessageRow row : mRows) {
+        for (MessageRow row : mRows) {
             String rowSender = row.getEvent().sender;
 
             if ((null != rowSender) && !senders.contains(rowSender)) {
@@ -279,6 +279,6 @@ public class EventGroup extends Event {
     }
 
     public java.lang.String toString(Context context) {
-        return context.getString(R.string.membership_changes, mRowsMap.size());
+        return context.getResources().getQuantityString(R.plurals.membership_changes, mRowsMap.size(), mRowsMap.size());
     }
 }

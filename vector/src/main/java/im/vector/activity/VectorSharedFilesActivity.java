@@ -1,5 +1,6 @@
 /*
  * Copyright 2016 OpenMarket Ltd
+ * Copyright 2018 New Vector Ltd
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,32 +17,35 @@
 
 package im.vector.activity;
 
-import android.app.Activity;
 import android.content.Intent;
-import android.os.Bundle;
-import org.matrix.androidsdk.util.Log;
 
 import org.matrix.androidsdk.MXSession;
+import org.matrix.androidsdk.data.RoomMediaMessage;
 import org.matrix.androidsdk.util.ContentUtils;
+import org.matrix.androidsdk.util.Log;
 
 import java.io.File;
 import java.util.ArrayList;
+import java.util.List;
 
 import im.vector.Matrix;
-import im.vector.util.SharedDataItem;
+import im.vector.R;
 
 /**
  * Dummy activity used to manage the shared
  */
-public class VectorSharedFilesActivity extends Activity {
-    private static final String LOG_TAG = "VectorSharedFilesAct";
+public class VectorSharedFilesActivity extends RiotAppCompatActivity {
+    private static final String LOG_TAG = VectorSharedFilesActivity.class.getSimpleName();
 
-    final String SHARED_FOLDER = "VectorShared";
+    private final String SHARED_FOLDER = "VectorShared";
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
+    public int getLayoutRes() {
+        return R.layout.activity_empty;
+    }
 
+    @Override
+    public void initUiAndData() {
         // retrieve the current intent
         Intent anIntent = getIntent();
 
@@ -85,7 +89,7 @@ public class VectorSharedFilesActivity extends Activity {
                 homeIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
                 startActivity(homeIntent);
             }
-        }  else {
+        } else {
             Log.d(LOG_TAG, "onCreate : null intent");
 
             Intent homeIntent = new Intent(this, VectorHomeActivity.class);
@@ -98,7 +102,8 @@ public class VectorSharedFilesActivity extends Activity {
 
     /**
      * Extract the medias list, copy them into a tmp directory and provide them to the home activity
-     * @param intent the intent
+     *
+     * @param intent        the intent
      * @param isAppLaunched true if the application is resumed
      */
     private void launchActivity(Intent intent, boolean isAppLaunched) {
@@ -113,10 +118,10 @@ public class VectorSharedFilesActivity extends Activity {
 
         sharedFolder.mkdir();
 
-        ArrayList<SharedDataItem> cachedFiles = new ArrayList<>(SharedDataItem.listSharedDataItems(intent));
+        List<RoomMediaMessage> cachedFiles = new ArrayList<>(RoomMediaMessage.listRoomMediaMessages(intent));
 
         if (null != cachedFiles) {
-            for(SharedDataItem sharedDataItem : cachedFiles) {
+            for (RoomMediaMessage sharedDataItem : cachedFiles) {
                 sharedDataItem.saveMedia(this, sharedFolder);
             }
         }
@@ -136,8 +141,8 @@ public class VectorSharedFilesActivity extends Activity {
         if (0 != cachedFiles.size()) {
             Intent shareIntent = new Intent();
             shareIntent.setAction(Intent.ACTION_SEND_MULTIPLE);
-            shareIntent.putParcelableArrayListExtra(Intent.EXTRA_STREAM, cachedFiles);
-            shareIntent.setExtrasClassLoader(SharedDataItem.class.getClassLoader());
+            shareIntent.putParcelableArrayListExtra(Intent.EXTRA_STREAM, (ArrayList) cachedFiles);
+            shareIntent.setExtrasClassLoader(RoomMediaMessage.class.getClassLoader());
             shareIntent.setType("*/*");
 
             // files to share

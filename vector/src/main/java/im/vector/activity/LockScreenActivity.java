@@ -1,6 +1,7 @@
 /*
  * Copyright 2015 OpenMarket Ltd
  * Copyright 2017 Vector Creations Ltd
+ * Copyright 2018 New Vector Ltd
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,18 +18,10 @@
 
 package im.vector.activity;
 
-import android.app.Activity;
-import android.app.NotificationManager;
-import android.content.Context;
 import android.content.Intent;
 import android.content.res.Configuration;
-import android.os.Bundle;
 import android.text.TextUtils;
 import android.text.TextWatcher;
-
-import org.matrix.androidsdk.crypto.MXCryptoError;
-import org.matrix.androidsdk.util.Log;
-
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
@@ -37,27 +30,34 @@ import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import org.jetbrains.annotations.NotNull;
 import org.matrix.androidsdk.MXSession;
+import org.matrix.androidsdk.crypto.MXCryptoError;
 import org.matrix.androidsdk.data.Room;
 import org.matrix.androidsdk.rest.callback.ApiCallback;
 import org.matrix.androidsdk.rest.model.Event;
 import org.matrix.androidsdk.rest.model.MatrixError;
-import org.matrix.androidsdk.rest.model.Message;
+import org.matrix.androidsdk.rest.model.message.Message;
+import org.matrix.androidsdk.util.Log;
 
 import im.vector.Matrix;
 import im.vector.R;
+import im.vector.notifications.NotificationUtils;
+import im.vector.util.ViewUtilKt;
+import kotlin.Pair;
 
 /**
  * LockScreenActivity is displayed within the notification to send a message without opening the application.
  */
-public class LockScreenActivity extends Activity { // do NOT extend from UC*Activity, we do not want to login on this screen!
-    public static final String LOG_TAG = "LockScreenActivity";
+public class LockScreenActivity extends RiotAppCompatActivity { // do NOT extend from UC*Activity, we do not want to login on this screen!
+    private static final String LOG_TAG = LockScreenActivity.class.getSimpleName();
 
     public static final String EXTRA_SENDER_NAME = "extra_sender_name";
     public static final String EXTRA_MESSAGE_BODY = "extra_chat_body";
     public static final String EXTRA_ROOM_ID = "extra_room_id";
-    public static final String EXTRA_MATRIX_ID = "extra_matrix_id";
+    private static final String EXTRA_MATRIX_ID = "extra_matrix_id";
 
     private static LockScreenActivity mLockScreenActivity = null;
 
@@ -67,10 +67,31 @@ public class LockScreenActivity extends Activity { // do NOT extend from UC*Acti
 
     private LinearLayout mMainLayout;
 
+    @NotNull
     @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
+    public Pair getOtherThemes() {
+        return new Pair(R.style.Vector_Lock_Dark, R.style.Vector_Lock_Light);
+    }
 
+    @Override
+    public int getLayoutRes() {
+        return R.layout.activity_lock_screen;
+    }
+
+    @Override
+    public void doBeforeSetContentView() {
+        Window window = getWindow();
+        window.addFlags(WindowManager.LayoutParams.FLAG_SHOW_WHEN_LOCKED);
+        window.addFlags(WindowManager.LayoutParams.FLAG_FORCE_NOT_FULLSCREEN);
+        window.addFlags(WindowManager.LayoutParams.FLAG_DISMISS_KEYGUARD);
+        // this will turn the screen on whilst honouring the screen timeout setting, so it will
+        // dim/turn off depending on user configured values.
+        window.addFlags(WindowManager.LayoutParams.FLAG_TURN_SCREEN_ON);
+        requestWindowFeature(Window.FEATURE_NO_TITLE);
+    }
+
+    @Override
+    public void initUiAndData() {
         // keep theme ?
 
         // kill any running alert
@@ -79,19 +100,9 @@ public class LockScreenActivity extends Activity { // do NOT extend from UC*Acti
         }
 
         mLockScreenActivity = this;
-        Window window = getWindow();
-        window.addFlags(WindowManager.LayoutParams.FLAG_SHOW_WHEN_LOCKED);
-        window.addFlags(WindowManager.LayoutParams.FLAG_FORCE_NOT_FULLSCREEN);
-        window.addFlags(WindowManager.LayoutParams.FLAG_DISMISS_KEYGUARD);
-        // this will turn the screen on whilst honouring the screen timeout setting, so it will
-        // dim/turn off depending on user configured values.
-        window.addFlags(WindowManager.LayoutParams.FLAG_TURN_SCREEN_ON);
-        this.requestWindowFeature(Window.FEATURE_NO_TITLE);
-        setContentView(R.layout.activity_lock_screen);
 
         // remove any pending notifications
-        NotificationManager notificationsManager = (NotificationManager) this.getSystemService(Context.NOTIFICATION_SERVICE);
-        notificationsManager.cancelAll();
+        NotificationUtils.INSTANCE.cancelAllNotifications(this);
 
         Intent intent = getIntent();
 
@@ -121,12 +132,12 @@ public class LockScreenActivity extends Activity { // do NOT extend from UC*Acti
         ((TextView) findViewById(R.id.lock_screen_sender)).setText(intent.getStringExtra(EXTRA_SENDER_NAME) + " : ");
         ((TextView) findViewById(R.id.lock_screen_body)).setText(intent.getStringExtra(EXTRA_MESSAGE_BODY));
         ((TextView) findViewById(R.id.lock_screen_room_name)).setText(room.getName(session.getCredentials().userId));
-        final ImageButton sendButton = (ImageButton) findViewById(R.id.lock_screen_sendbutton);
-        final EditText editText = (EditText) findViewById(R.id.lock_screen_edittext);
+        final ImageButton sendButton = findViewById(R.id.lock_screen_sendbutton);
+        final EditText editText = findViewById(R.id.lock_screen_edittext);
 
         // disable send button
         sendButton.setEnabled(false);
-        sendButton.setAlpha(CommonActivityUtils.UTILS_OPACITY_HALF);
+        sendButton.setAlpha(ViewUtilKt.UTILS_OPACITY_HALF);
 
         editText.addTextChangedListener(new TextWatcher() {
             @Override
@@ -143,10 +154,10 @@ public class LockScreenActivity extends Activity { // do NOT extend from UC*Acti
                 String inputText = editText.getText().toString();
                 if (TextUtils.isEmpty(inputText)) {
                     sendButton.setEnabled(false);
-                    sendButton.setAlpha(CommonActivityUtils.UTILS_OPACITY_HALF);
+                    sendButton.setAlpha(ViewUtilKt.UTILS_OPACITY_HALF);
                 } else {
                     sendButton.setEnabled(true);
-                    sendButton.setAlpha(CommonActivityUtils.UTILS_OPACITY_NONE);
+                    sendButton.setAlpha(ViewUtilKt.UTILS_OPACITY_FULL);
                 }
             }
         });
@@ -173,7 +184,7 @@ public class LockScreenActivity extends Activity { // do NOT extend from UC*Acti
                     @Override
                     public void onNetworkError(Exception e) {
                         Log.d(LOG_TAG, "Send message : onNetworkError " + e.getMessage());
-                        CommonActivityUtils.displayToast(LockScreenActivity.this, e.getLocalizedMessage());
+                        Toast.makeText(LockScreenActivity.this, e.getLocalizedMessage(), Toast.LENGTH_SHORT).show();
                     }
 
                     @Override
@@ -181,20 +192,20 @@ public class LockScreenActivity extends Activity { // do NOT extend from UC*Acti
                         Log.d(LOG_TAG, "Send message : onMatrixError " + e.getMessage());
 
                         if (e instanceof MXCryptoError) {
-                            CommonActivityUtils.displayToast(LockScreenActivity.this, ((MXCryptoError) e).getDetailedErrorDescription());
+                            Toast.makeText(LockScreenActivity.this, ((MXCryptoError) e).getDetailedErrorDescription(), Toast.LENGTH_SHORT).show();
                         } else {
-                            CommonActivityUtils.displayToast(LockScreenActivity.this, e.getLocalizedMessage());
+                            Toast.makeText(LockScreenActivity.this, e.getLocalizedMessage(), Toast.LENGTH_SHORT).show();
                         }
                     }
 
                     @Override
                     public void onUnexpectedError(Exception e) {
                         Log.d(LOG_TAG, "Send message : onUnexpectedError " + e.getMessage());
-                        CommonActivityUtils.displayToast(LockScreenActivity.this, e.getLocalizedMessage());
+                        Toast.makeText(LockScreenActivity.this, e.getLocalizedMessage(), Toast.LENGTH_SHORT).show();
                     }
                 });
 
-                LockScreenActivity.this.runOnUiThread(new Runnable() {
+                runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
                         finish();
@@ -203,7 +214,7 @@ public class LockScreenActivity extends Activity { // do NOT extend from UC*Acti
             }
         });
 
-        mMainLayout = (LinearLayout) findViewById(R.id.lock_main_layout);
+        mMainLayout = findViewById(R.id.lock_main_layout);
     }
 
     private void refreshMainLayout() {

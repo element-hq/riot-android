@@ -1,12 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:orientation="vertical">
 
     <include
         layout="@layout/vector_message_header"
-        android:visibility="gone" />
+        android:visibility="gone"
+        tools:visibility="visible" />
 
     <LinearLayout
         android:id="@+id/messagesAdapter_body_view"
@@ -77,12 +79,12 @@
                             android:layout_height="wrap_content"
                             android:layout_gravity="left"
                             android:layout_marginLeft="4dp"
+                            android:layout_toLeftOf="@+id/message_timestamp_layout"
                             android:layout_toRightOf="@id/message_adapter_e2e_icon"
                             android:autoLink="all"
-                            android:text="A body"
+                            tools:text="A body"
                             android:textIsSelectable="false"
-                            android:textSize="14sp"
-                            android:layout_toLeftOf="@+id/message_timestamp_layout" />
+                            android:textSize="14sp" />
                     </RelativeLayout>
 
                 </FrameLayout>

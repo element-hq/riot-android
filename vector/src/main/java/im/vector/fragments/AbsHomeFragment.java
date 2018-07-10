@@ -1,5 +1,6 @@
 /*
  * Copyright 2017 Vector Creations Ltd
+ * Copyright 2018 New Vector Ltd
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -20,7 +21,6 @@ import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.annotation.CallSuper;
 import android.support.annotation.Nullable;
-import android.support.v4.app.Fragment;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
 import android.view.MenuItem;
@@ -32,16 +32,16 @@ import org.matrix.androidsdk.data.Room;
 import org.matrix.androidsdk.data.RoomSummary;
 import org.matrix.androidsdk.data.RoomTag;
 import org.matrix.androidsdk.rest.callback.ApiCallback;
+import org.matrix.androidsdk.rest.callback.SimpleApiCallback;
 import org.matrix.androidsdk.rest.model.MatrixError;
 import org.matrix.androidsdk.util.BingRulesManager;
 import org.matrix.androidsdk.util.Log;
 
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
-import butterknife.ButterKnife;
-import butterknife.Unbinder;
 import im.vector.Matrix;
 import im.vector.R;
 import im.vector.activity.CommonActivityUtils;
@@ -53,34 +53,34 @@ import im.vector.util.RoomUtils;
 /**
  * Abstract fragment providing the universal search
  */
-public abstract class AbsHomeFragment extends Fragment implements AbsAdapter.InvitationListener, AbsAdapter.MoreRoomActionListener, RoomUtils.MoreActionListener {
+public abstract class AbsHomeFragment extends VectorBaseFragment implements
+        AbsAdapter.RoomInvitationListener,
+        AbsAdapter.MoreRoomActionListener,
+        RoomUtils.MoreActionListener {
 
     private static final String LOG_TAG = AbsHomeFragment.class.getSimpleName();
     private static final String CURRENT_FILTER = "CURRENT_FILTER";
 
-    // Butterknife unbinder
-    private Unbinder mUnBinder;
+    VectorHomeActivity mActivity;
 
-    protected VectorHomeActivity mActivity;
+    String mCurrentFilter;
 
-    protected String mCurrentFilter;
+    MXSession mSession;
 
-    protected MXSession mSession;
+    OnRoomChangedListener mOnRoomChangedListener;
 
-    protected OnRoomChangedListener mOnRoomChangedListener;
-
-    protected final RecyclerView.OnScrollListener mScrollListener = new RecyclerView.OnScrollListener() {
+    final RecyclerView.OnScrollListener mScrollListener = new RecyclerView.OnScrollListener() {
         @Override
         public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
             // warn only if there is dy i.e the list has been really scrolled not refreshed
             if ((null != mActivity) && (0 != dy)) {
-                mActivity.hideFloatingActionButton(AbsHomeFragment.this.getTag());
+                mActivity.hideFloatingActionButton(getTag());
             }
         }
     };
 
-    protected int mPrimaryColor = -1;
-    protected int mSecondaryColor = -1;
+    int mPrimaryColor = -1;
+    int mSecondaryColor = -1;
 
     /*
      * *********************************************************************************************
@@ -97,17 +97,12 @@ public abstract class AbsHomeFragment extends Fragment implements AbsAdapter.Inv
 
     @Override
     @CallSuper
-    public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
-        super.onViewCreated(view, savedInstanceState);
-        mUnBinder = ButterKnife.bind(this, view);
-    }
-
-    @Override
-    @CallSuper
     public void onActivityCreated(final Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
 
-        mActivity = (VectorHomeActivity) getActivity();
+        if (getActivity() instanceof VectorHomeActivity) {
+            mActivity = (VectorHomeActivity) getActivity();
+        }
         mSession = Matrix.getInstance(getActivity()).getDefaultSession();
 
         if (savedInstanceState != null && savedInstanceState.containsKey(CURRENT_FILTER)) {
@@ -119,7 +114,7 @@ public abstract class AbsHomeFragment extends Fragment implements AbsAdapter.Inv
     @CallSuper
     public void onResume() {
         super.onResume();
-        if (mPrimaryColor != -1) {
+        if ((mPrimaryColor != -1) && (null != mActivity)) {
             mActivity.updateTabStyle(mPrimaryColor, mSecondaryColor != -1 ? mSecondaryColor : mPrimaryColor);
         }
     }
@@ -145,7 +140,6 @@ public abstract class AbsHomeFragment extends Fragment implements AbsAdapter.Inv
     @CallSuper
     public void onDestroyView() {
         super.onDestroyView();
-        mUnBinder.unbind();
         mCurrentFilter = null;
     }
 
@@ -171,7 +165,7 @@ public abstract class AbsHomeFragment extends Fragment implements AbsAdapter.Inv
     @Override
     public void onRejectInvitation(MXSession session, String roomId) {
         Log.i(LOG_TAG, "onRejectInvitation " + roomId);
-        mActivity.onRejectInvitation(session, roomId);
+        mActivity.onRejectInvitation(roomId, null);
     }
 
     @Override
@@ -184,9 +178,9 @@ public abstract class AbsHomeFragment extends Fragment implements AbsAdapter.Inv
     }
 
     @Override
-    public void onToggleRoomNotifications(MXSession session, String roomId) {
+    public void onUpdateRoomNotificationsState(MXSession session, String roomId, BingRulesManager.RoomNotificationState state) {
         mActivity.showWaitingView();
-        RoomUtils.toggleNotifications(session, roomId, new BingRulesManager.onBingRuleUpdateListener() {
+        session.getDataHandler().getBingRulesManager().updateRoomNotificationState(roomId, state, new BingRulesManager.onBingRuleUpdateListener() {
             @Override
             public void onBingRuleUpdateSuccess() {
                 onRequestDone(null);
@@ -249,13 +243,34 @@ public abstract class AbsHomeFragment extends Fragment implements AbsAdapter.Inv
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 if (mActivity != null && !mActivity.isFinishing()) {
-                    mActivity.onRejectInvitation(session, roomId);
-                    if (mOnRoomChangedListener != null) {
-                        mOnRoomChangedListener.onRoomLeft(roomId);
-                    }
+                    mActivity.onRejectInvitation(roomId, new SimpleApiCallback<Void>() {
+                        @Override
+                        public void onSuccess(Void info) {
+                            if (mOnRoomChangedListener != null) {
+                                mOnRoomChangedListener.onRoomLeft(roomId);
+                            }
+                        }
+                    });
                 }
             }
         });
+    }
+
+    @Override
+    public void onForgetRoom(final MXSession session, final String roomId) {
+        mActivity.onForgetRoom(roomId, new SimpleApiCallback<Void>() {
+            @Override
+            public void onSuccess(Void info) {
+                if (mOnRoomChangedListener != null) {
+                    mOnRoomChangedListener.onRoomForgot(roomId);
+                }
+            }
+        });
+    }
+
+    @Override
+    public void addHomeScreenShortcut(MXSession session, String roomId) {
+        RoomUtils.addHomeScreenShortcut(getActivity(), session, roomId);
     }
 
     /*
@@ -296,7 +311,7 @@ public abstract class AbsHomeFragment extends Fragment implements AbsAdapter.Inv
      *
      * @param room
      */
-    public void openRoom(final Room room) {
+    void openRoom(final Room room) {
         // sanity checks
         // reported by GA
         if ((null == mSession.getDataHandler()) || (null == mSession.getDataHandler().getStore())) {
@@ -322,12 +337,21 @@ public abstract class AbsHomeFragment extends Fragment implements AbsAdapter.Inv
             CommonActivityUtils.specificUpdateBadgeUnreadCount(mSession, getContext());
 
             // Launch corresponding room activity
-            HashMap<String, Object> params = new HashMap<>();
+            Map<String, Object> params = new HashMap<>();
             params.put(VectorRoomActivity.EXTRA_MATRIX_ID, mSession.getMyUserId());
             params.put(VectorRoomActivity.EXTRA_ROOM_ID, roomId);
 
             CommonActivityUtils.goToRoomPage(getActivity(), mSession, params);
         }
+    }
+
+    /**
+     * Manage the fab actions
+     *
+     * @return true if the fragment has a dedicated action.
+     */
+    public boolean onFabClick() {
+        return false;
     }
 
     /*
@@ -378,7 +402,7 @@ public abstract class AbsHomeFragment extends Fragment implements AbsAdapter.Inv
             mActivity.runOnUiThread(new Runnable() {
                 @Override
                 public void run() {
-                    mActivity.stopWaitingView();
+                    mActivity.hideWaitingView();
                     if (!TextUtils.isEmpty(errorMessage)) {
                         Toast.makeText(mActivity, errorMessage, Toast.LENGTH_SHORT).show();
                     }
@@ -398,7 +422,7 @@ public abstract class AbsHomeFragment extends Fragment implements AbsAdapter.Inv
             public void onSuccess(Void info) {
                 // check if the activity is still attached
                 if ((null != mActivity) && !mActivity.isFinishing()) {
-                    mActivity.stopWaitingView();
+                    mActivity.hideWaitingView();
                     mActivity.refreshUnreadBadges();
 
                     // if the fragment is still the active one
@@ -461,5 +485,7 @@ public abstract class AbsHomeFragment extends Fragment implements AbsAdapter.Inv
         void onToggleDirectChat(final String roomId, final boolean isDirectChat);
 
         void onRoomLeft(final String roomId);
+
+        void onRoomForgot(final String roomId);
     }
 }

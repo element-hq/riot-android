@@ -1,0 +1,112 @@
+<merge xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+        <android.support.v7.widget.Toolbar
+            android:id="@+id/toolbar"
+            style="@style/VectorToolbarStyle"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:title="@string/deactivate_account_title" />
+
+        <android.support.v4.widget.NestedScrollView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:padding="16dp">
+
+                <TextView
+                    android:id="@+id/deactivate_account_content"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="@string/deactivate_account_content" />
+
+                <CheckBox
+                    android:id="@+id/deactivate_account_erase_checkbox"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/deactivate_account_content"
+                    android:layout_marginTop="16dp"
+                    android:gravity="top"
+                    android:text="@string/deactivate_account_delete_checkbox" />
+
+                <TextView
+                    android:id="@+id/deactivate_account_prompt_password"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/deactivate_account_erase_checkbox"
+                    android:layout_marginTop="16dp"
+                    android:text="@string/deactivate_account_prompt_password" />
+
+                <EditText
+                    android:id="@+id/deactivate_account_password"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/deactivate_account_prompt_password"
+                    android:layout_marginTop="8dp"
+                    android:hint="@string/auth_password_placeholder"
+                    android:inputType="textPassword"
+                    android:maxLines="1"
+                    android:nextFocusDown="@+id/login_password" />
+
+                <Button
+                    android:id="@+id/deactivate_account_button_submit"
+                    android:layout_width="wrap_content"
+                    android:layout_height="36dp"
+                    android:layout_alignParentRight="true"
+                    android:layout_below="@+id/deactivate_account_password"
+                    android:layout_marginBottom="16dp"
+                    android:layout_marginTop="16dp"
+                    android:background="@color/vector_green_color"
+                    android:paddingEnd="16dp"
+                    android:paddingStart="16dp"
+                    android:text="@string/deactivate_account_submit"
+                    android:textColor="@android:color/white" />
+
+                <Button
+                    android:id="@+id/deactivate_account_button_cancel"
+                    android:layout_width="wrap_content"
+                    android:layout_height="36dp"
+                    android:layout_alignTop="@+id/deactivate_account_button_submit"
+                    android:layout_marginRight="16dp"
+                    android:layout_toLeftOf="@+id/deactivate_account_button_submit"
+                    android:background="@color/vector_green_color"
+                    android:text="@string/cancel"
+                    android:textColor="@android:color/white" />
+
+            </RelativeLayout>
+
+        </android.support.v4.widget.NestedScrollView>
+
+    </LinearLayout>
+
+    <FrameLayout
+        android:id="@+id/waiting_view"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:clickable="true"
+        android:focusable="true"
+        android:visibility="gone"
+        tools:visibility="gone">
+
+        <ProgressBar
+            android:id="@+id/search_progress"
+            android:layout_width="60dp"
+            android:layout_height="60dp"
+            android:layout_gravity="center"
+            android:indeterminate="true" />
+
+    </FrameLayout>
+
+</merge>
+

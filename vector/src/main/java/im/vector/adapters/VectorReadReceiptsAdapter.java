@@ -1,5 +1,6 @@
 /*
  * Copyright 2015 OpenMarket Ltd
+ * Copyright 2018 New Vector Ltd
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -35,6 +36,7 @@ import org.matrix.androidsdk.data.Room;
 import org.matrix.androidsdk.db.MXMediasCache;
 import org.matrix.androidsdk.rest.model.ReceiptData;
 import org.matrix.androidsdk.rest.model.RoomMember;
+
 import im.vector.R;
 import im.vector.activity.VectorMemberDetailsActivity;
 import im.vector.util.VectorUtils;
@@ -44,14 +46,14 @@ import im.vector.util.VectorUtils;
  */
 public class VectorReadReceiptsAdapter extends ArrayAdapter<ReceiptData> {
 
-    protected Context mContext;
-    private LayoutInflater mLayoutInflater;
-    private int mLayoutResourceId;
-    private MXSession mSession;
-    private Room mRoom;
+    private final Context mContext;
+    private final LayoutInflater mLayoutInflater;
+    private final int mLayoutResourceId;
+    private final MXSession mSession;
+    private final Room mRoom;
     //private MXMediasCache mMediasCache;
 
-    public VectorReadReceiptsAdapter(Context context,int layoutResourceId, MXSession session,  Room room, MXMediasCache mediasCache) {
+    public VectorReadReceiptsAdapter(Context context, int layoutResourceId, MXSession session, Room room, MXMediasCache mediasCache) {
         super(context, layoutResourceId);
         mContext = context;
         mLayoutResourceId = layoutResourceId;
@@ -68,8 +70,8 @@ public class VectorReadReceiptsAdapter extends ArrayAdapter<ReceiptData> {
         }
         ReceiptData receipt = getItem(position);
 
-        final TextView userNameTextView = (TextView) convertView.findViewById(R.id.accountAdapter_name);
-        final ImageView imageView = (ImageView) convertView.findViewById(R.id.avatar_img_vector);
+        final TextView userNameTextView = convertView.findViewById(R.id.accountAdapter_name);
+        final ImageView imageView = convertView.findViewById(R.id.avatar_img_vector);
 
         final RoomMember member = mRoom.getMember(receipt.userId);
 
@@ -82,18 +84,19 @@ public class VectorReadReceiptsAdapter extends ArrayAdapter<ReceiptData> {
             VectorUtils.loadRoomMemberAvatar(mContext, mSession, imageView, member);
         }
 
-        TextView tsTextView = (TextView) convertView.findViewById(R.id.read_receipt_ts);
+        TextView tsTextView = convertView.findViewById(R.id.read_receipt_ts);
         final String ts = AdapterUtils.tsToString(mContext, receipt.originServerTs, false);
 
         SpannableStringBuilder body = new SpannableStringBuilder(mContext.getString(im.vector.R.string.read_receipt) + " : " + ts);
-        body.setSpan(new android.text.style.StyleSpan(android.graphics.Typeface.BOLD), 0, mContext.getString(im.vector.R.string.read_receipt).length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+        body.setSpan(new android.text.style.StyleSpan(android.graphics.Typeface.BOLD),
+                0, mContext.getString(im.vector.R.string.read_receipt).length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
         tsTextView.setText(body);
 
         userNameTextView.setOnLongClickListener(new View.OnLongClickListener() {
             @Override
             public boolean onLongClick(View v) {
                 VectorUtils.copyToClipboard(mContext, userNameTextView.getText());
-               return true;
+                return true;
             }
         });
 
@@ -104,7 +107,7 @@ public class VectorReadReceiptsAdapter extends ArrayAdapter<ReceiptData> {
                 ClipData clip = ClipData.newPlainText("", ts);
                 clipboard.setPrimaryClip(clip);
 
-                Toast.makeText(mContext, mContext.getResources().getString(R.string.copied_to_clipboard), Toast.LENGTH_SHORT).show();
+                Toast.makeText(mContext, mContext.getString(R.string.copied_to_clipboard), Toast.LENGTH_SHORT).show();
                 return true;
             }
         });

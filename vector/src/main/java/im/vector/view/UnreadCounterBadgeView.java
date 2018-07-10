@@ -62,7 +62,7 @@ public class UnreadCounterBadgeView extends RelativeLayout {
 
     private void init() {
         inflate(getContext(), R.layout.unread_counter_badge, this);
-        mCounterTextView = (TextView) findViewById(R.id.unread_counter_badge_text_view);
+        mCounterTextView = findViewById(R.id.unread_counter_badge_text_view);
         mParentView = findViewById(R.id.unread_counter_badge_layout);
     }
 
@@ -79,7 +79,7 @@ public class UnreadCounterBadgeView extends RelativeLayout {
     /**
      * Update the badge value and its status
      *
-     * @param text  the new text value
+     * @param text   the new text value
      * @param status the new status
      */
     public void updateText(String text, @Status int status) {

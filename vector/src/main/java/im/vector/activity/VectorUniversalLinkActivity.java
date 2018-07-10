@@ -1,5 +1,6 @@
 /*
  * Copyright 2016 OpenMarket Ltd
+ * Copyright 2018 New Vector Ltd
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,23 +18,24 @@
 package im.vector.activity;
 
 import android.annotation.SuppressLint;
-import android.app.Activity;
 import android.app.ActivityManager;
 import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
-import android.os.Bundle;
+import android.text.TextUtils;
 import android.widget.Toast;
 
-import org.matrix.androidsdk.HomeserverConnectionConfig;
+import org.matrix.androidsdk.HomeServerConnectionConfig;
+import org.matrix.androidsdk.MXSession;
 import org.matrix.androidsdk.rest.callback.ApiCallback;
+import org.matrix.androidsdk.rest.callback.SimpleApiCallback;
 import org.matrix.androidsdk.rest.model.MatrixError;
 import org.matrix.androidsdk.ssl.Fingerprint;
 import org.matrix.androidsdk.util.Log;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import im.vector.LoginHandler;
 import im.vector.Matrix;
@@ -45,44 +47,74 @@ import im.vector.receiver.VectorUniversalLinkReceiver;
  * Dummy activity used to dispatch the vector URL links.
  */
 @SuppressLint("LongLogTag")
-public class VectorUniversalLinkActivity extends Activity {
-    private static final String LOG_TAG = "VectorUniversalLinkActivity";
+public class VectorUniversalLinkActivity extends RiotAppCompatActivity {
+    private static final String LOG_TAG = VectorUniversalLinkActivity.class.getSimpleName();
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
+    public int getLayoutRes() {
+        // display a spinner while binding the email
+        return R.layout.activity_vector_universal_link_activity;
+    }
 
+    @Override
+    public void initUiAndData() {
         String intentAction = VectorUniversalLinkReceiver.BROADCAST_ACTION_UNIVERSAL_LINK;
 
         try {
             // dispatch on the right receiver
             if (VectorRegistrationReceiver.SUPPORTED_PATH_ACCOUNT_EMAIL_VALIDATION.equals(getIntent().getData().getPath())) {
 
+                // We consider here an email validation
                 Uri intentUri = getIntent().getData();
-                // account registration URL set in a mail:
-                HashMap<String, String> mailRegParams = VectorRegistrationReceiver.parseMailRegistrationLink(intentUri);
 
-                // when there is a next link, assume it is a new account creation
-                if (mailRegParams.containsKey(VectorRegistrationReceiver.KEY_MAIL_VALIDATION_NEXT_LINK) || (null == Matrix.getInstance(this).getDefaultSession())) {
-                    // logout current session, before starting any mail validation
-                    // to have the LoginActivity always in a "no credentials state".
-                    CommonActivityUtils.logout(this, false);
-                    intentAction = VectorRegistrationReceiver.BROADCAST_ACTION_REGISTRATION;
+                Map<String, String> mailRegParams = VectorRegistrationReceiver.parseMailRegistrationLink(intentUri);
+
+                // Assume it is a new account creation when there is a next link, or when no session is already available.
+                MXSession session = Matrix.getInstance(this).getDefaultSession();
+                if (mailRegParams.containsKey(VectorRegistrationReceiver.KEY_MAIL_VALIDATION_NEXT_LINK) || (null == session)) {
+                    if (null != session) {
+                        Log.d(LOG_TAG, "## onCreate(): logout the current sessions, before finalizing an account creation based on an email validation");
+
+                        // This logout is asynchronous, pursue the action in the callback to have the LoginActivity in a "no credentials state".
+                        intentAction = null;
+                        final Intent myBroadcastIntent = new Intent(this, VectorRegistrationReceiver.class);
+                        myBroadcastIntent.setAction(VectorRegistrationReceiver.BROADCAST_ACTION_REGISTRATION);
+                        myBroadcastIntent.setData(getIntent().getData());
+
+                        CommonActivityUtils.logout(VectorUniversalLinkActivity.this,
+                                Matrix.getMXSessions(VectorUniversalLinkActivity.this),
+                                true,
+                                new SimpleApiCallback<Void>() {
+                                    @Override
+                                    public void onSuccess(Void info) {
+                                        Log.d(LOG_TAG, "## onCreate(): logout succeeded");
+                                        sendBroadcast(myBroadcastIntent);
+                                        finish();
+                                    }
+                                });
+                    } else {
+                        intentAction = VectorRegistrationReceiver.BROADCAST_ACTION_REGISTRATION;
+                    }
                 } else {
                     intentAction = null;
-                    // display a spinner while binding the email
-                    setContentView(R.layout.activity_vector_universal_link_activity);
                     emailBinding(intentUri, mailRegParams);
                 }
             } else {
                 intentAction = VectorUniversalLinkReceiver.BROADCAST_ACTION_UNIVERSAL_LINK;
             }
-        } catch (Exception ex){
-            Log.e(LOG_TAG,"## onCreate(): Exception - Msg="+ex.getMessage());
+        } catch (Exception ex) {
+            Log.e(LOG_TAG, "## onCreate(): Exception - Msg=" + ex.getMessage());
         }
 
         if (null != intentAction) {
-            Intent myBroadcastIntent = new Intent(intentAction, getIntent().getData());
+            // since android O
+            // set the class to avoid having "Background execution not allowed"
+            Intent myBroadcastIntent = new Intent(this,
+                    TextUtils.equals(intentAction, VectorUniversalLinkReceiver.BROADCAST_ACTION_UNIVERSAL_LINK) ?
+                            VectorUniversalLinkReceiver.class : VectorRegistrationReceiver.class);
+
+            myBroadcastIntent.setAction(intentAction);
+            myBroadcastIntent.setData(getIntent().getData());
             sendBroadcast(myBroadcastIntent);
             finish();
         }
@@ -90,15 +122,17 @@ public class VectorUniversalLinkActivity extends Activity {
 
     /**
      * Email binding management
-     * @param uri the uri.
+     *
+     * @param uri        the uri.
      * @param aMapParams the parsed params
      */
-    private void emailBinding(Uri uri, HashMap<String, String> aMapParams) {
-        Log.d(LOG_TAG,"## emailBinding()");
+    private void emailBinding(Uri uri, Map<String, String> aMapParams) {
+        Log.d(LOG_TAG, "## emailBinding()");
 
         String ISUrl = uri.getScheme() + "://" + uri.getHost();
 
-        final HomeserverConnectionConfig homeServerConfig = new HomeserverConnectionConfig(Uri.parse(ISUrl), Uri.parse(ISUrl), null, new ArrayList<Fingerprint>(), false);
+        final HomeServerConnectionConfig homeServerConfig =
+                new HomeServerConnectionConfig(Uri.parse(ISUrl), Uri.parse(ISUrl), null, new ArrayList<Fingerprint>(), false);
 
         String token = aMapParams.get(VectorRegistrationReceiver.KEY_MAIL_VALIDATION_TOKEN);
         String clientSecret = aMapParams.get(VectorRegistrationReceiver.KEY_MAIL_VALIDATION_CLIENT_SECRET);
@@ -106,64 +140,65 @@ public class VectorUniversalLinkActivity extends Activity {
 
         final LoginHandler loginHandler = new LoginHandler();
 
-        loginHandler.submitEmailTokenValidation(getApplicationContext(), homeServerConfig, token, clientSecret, identityServerSessId, new ApiCallback<Boolean>() {
+        loginHandler.submitEmailTokenValidation(getApplicationContext(), homeServerConfig, token, clientSecret, identityServerSessId,
+                new ApiCallback<Boolean>() {
 
-            private void bringAppToForeground() {
-                final ActivityManager am = (ActivityManager) getSystemService(Context.ACTIVITY_SERVICE);
-                List<ActivityManager.RunningTaskInfo> tasklist = am.getRunningTasks(100);
+                    private void bringAppToForeground() {
+                        final ActivityManager am = (ActivityManager) getSystemService(Context.ACTIVITY_SERVICE);
+                        List<ActivityManager.RunningTaskInfo> tasklist = am.getRunningTasks(100);
 
-                if (!tasklist.isEmpty()) {
-                    int nSize = tasklist.size();
-                    for (int i = 0; i < nSize; i++) {
-                        final ActivityManager.RunningTaskInfo taskinfo = tasklist.get(i);
-                        if (taskinfo.topActivity.getPackageName().equals(getApplicationContext().getPackageName())) {
-                            Log.d(LOG_TAG, "## emailBinding(): bring the app in foreground.");
-                            am.moveTaskToFront(taskinfo.id, 0);
+                        if (!tasklist.isEmpty()) {
+                            int nSize = tasklist.size();
+                            for (int i = 0; i < nSize; i++) {
+                                final ActivityManager.RunningTaskInfo taskinfo = tasklist.get(i);
+                                if (taskinfo.topActivity.getPackageName().equals(getApplicationContext().getPackageName())) {
+                                    Log.d(LOG_TAG, "## emailBinding(): bring the app in foreground.");
+                                    am.moveTaskToFront(taskinfo.id, 0);
+                                }
+                            }
                         }
+
+                        finish();
                     }
-                }
 
-                finish();
-            }
+                    private void errorHandler(final String errorMessage) {
+                        runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                Toast.makeText(getApplicationContext(), errorMessage, Toast.LENGTH_LONG).show();
+                                bringAppToForeground();
+                            }
+                        });
+                    }
 
-            private void errorHandler(final String errorMessage) {
-                VectorUniversalLinkActivity.this.runOnUiThread(new Runnable() {
                     @Override
-                    public void run() {
-                        Toast.makeText(getApplicationContext(), errorMessage, Toast.LENGTH_LONG).show();
-                        bringAppToForeground();
+                    public void onSuccess(Boolean isSuccess) {
+                        runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                Log.d(LOG_TAG, "## emailBinding(): succeeds.");
+                                bringAppToForeground();
+                            }
+                        });
+                    }
+
+                    @Override
+                    public void onNetworkError(Exception e) {
+                        Log.d(LOG_TAG, "## emailBinding(): onNetworkError() Msg=" + e.getLocalizedMessage());
+                        errorHandler(getString(R.string.login_error_unable_register) + " : " + e.getLocalizedMessage());
+                    }
+
+                    @Override
+                    public void onMatrixError(MatrixError e) {
+                        Log.d(LOG_TAG, "## emailBinding(): onMatrixError() Msg=" + e.getLocalizedMessage());
+                        errorHandler(getString(R.string.login_error_unable_register) + " : " + e.getLocalizedMessage());
+                    }
+
+                    @Override
+                    public void onUnexpectedError(Exception e) {
+                        Log.d(LOG_TAG, "## emailBinding(): onUnexpectedError() Msg=" + e.getLocalizedMessage());
+                        errorHandler(getString(R.string.login_error_unable_register) + " : " + e.getLocalizedMessage());
                     }
                 });
-            }
-
-            @Override
-            public void onSuccess(Boolean isSuccess) {
-                VectorUniversalLinkActivity.this.runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        Log.d(LOG_TAG, "## emailBinding(): succeeds.");
-                        bringAppToForeground();
-                    }
-                });
-            }
-
-            @Override
-            public void onNetworkError(Exception e) {
-                Log.d(LOG_TAG, "## emailBinding(): onNetworkError() Msg=" + e.getLocalizedMessage());
-                errorHandler(getString(R.string.login_error_unable_register) + " : " + e.getLocalizedMessage());
-            }
-
-            @Override
-            public void onMatrixError(MatrixError e) {
-                Log.d(LOG_TAG, "## emailBinding(): onMatrixError() Msg=" + e.getLocalizedMessage());
-                errorHandler(getString(R.string.login_error_unable_register) + " : " + e.getLocalizedMessage());
-            }
-
-            @Override
-            public void onUnexpectedError(Exception e) {
-                Log.d(LOG_TAG, "## emailBinding(): onUnexpectedError() Msg=" + e.getLocalizedMessage());
-                errorHandler(getString(R.string.login_error_unable_register) + " : " + e.getLocalizedMessage());
-            }
-        });
     }
 }

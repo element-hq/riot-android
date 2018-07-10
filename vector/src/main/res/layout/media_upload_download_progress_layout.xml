@@ -16,7 +16,6 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="10dp"
-            android:text=""
             android:textSize="10sp" />
 
         <ProgressBar
@@ -28,6 +27,7 @@
             android:max="100"
             android:progress="0"
             android:progressTint="@color/vector_green_color" />
+
     </LinearLayout>
 
     <RelativeLayout
@@ -41,6 +41,7 @@
             android:layout_alignParentBottom="true"
             android:layout_alignParentRight="true"
             android:src="@drawable/vector_cancel_upload_download" />
+
     </RelativeLayout>
 
 </LinearLayout>

@@ -29,15 +29,15 @@ import im.vector.R;
  * An adapter which can display string
  */
 public class ImageSizesAdapter extends ArrayAdapter<ImageCompressionDescription> {
-    protected Context mContext;
-    private LayoutInflater mLayoutInflater;
-    private int mLayoutResourceId;
+    private final Context mContext;
+    private final LayoutInflater mLayoutInflater;
+    private final int mLayoutResourceId;
 
     /**
      * Construct an adapter which will display a list of image size
-     * @param context Activity context
-     * @param layoutResourceId The resource ID of the layout for each item.
      *
+     * @param context          Activity context
+     * @param layoutResourceId The resource ID of the layout for each item.
      */
     public ImageSizesAdapter(Context context, int layoutResourceId) {
         super(context, layoutResourceId);
@@ -54,10 +54,10 @@ public class ImageSizesAdapter extends ArrayAdapter<ImageCompressionDescription>
 
         ImageCompressionDescription imageSizesDescription = getItem(position);
 
-        TextView textView = (TextView)convertView.findViewById(R.id.ImageSizesAdapter_format);
+        TextView textView = convertView.findViewById(R.id.ImageSizesAdapter_format);
         textView.setText(imageSizesDescription.mCompressionText);
 
-        textView = (TextView)convertView.findViewById(R.id.ImageSizesAdapter_info);
+        textView = convertView.findViewById(R.id.ImageSizesAdapter_info);
         textView.setText(imageSizesDescription.mCompressionInfoText);
         return convertView;
     }

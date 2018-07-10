@@ -1,7 +1,8 @@
 /*
  * Copyright 2016 OpenMarket Ltd
  * Copyright 2017 Vector Creations Ltd
- * 
+ * Copyright 2018 New Vector Ltd
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
@@ -18,7 +19,6 @@ package im.vector.util;
 
 import android.annotation.SuppressLint;
 import android.app.Activity;
-import android.app.AlertDialog;
 import android.content.ClipData;
 import android.content.ClipboardManager;
 import android.content.Context;
@@ -36,6 +36,7 @@ import android.os.Handler;
 import android.os.HandlerThread;
 import android.os.Looper;
 import android.support.v4.util.LruCache;
+import android.support.v7.app.AlertDialog;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -50,16 +51,19 @@ import android.widget.Toast;
 import org.matrix.androidsdk.MXSession;
 import org.matrix.androidsdk.call.MXCallsManager;
 import org.matrix.androidsdk.data.Room;
+import org.matrix.androidsdk.data.RoomPreviewData;
 import org.matrix.androidsdk.data.RoomState;
 import org.matrix.androidsdk.db.MXMediasCache;
 import org.matrix.androidsdk.rest.callback.ApiCallback;
 import org.matrix.androidsdk.rest.callback.SimpleApiCallback;
 import org.matrix.androidsdk.rest.model.MatrixError;
-import org.matrix.androidsdk.rest.model.PublicRoom;
 import org.matrix.androidsdk.rest.model.RoomMember;
 import org.matrix.androidsdk.rest.model.User;
+import org.matrix.androidsdk.rest.model.group.Group;
+import org.matrix.androidsdk.rest.model.publicroom.PublicRoom;
 import org.matrix.androidsdk.util.ImageUtils;
 import org.matrix.androidsdk.util.Log;
+import org.matrix.androidsdk.util.ResourceUtils;
 
 import java.io.InputStream;
 import java.util.ArrayList;
@@ -70,7 +74,6 @@ import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import im.vector.R;
@@ -79,7 +82,7 @@ import im.vector.adapters.ParticipantAdapterItem;
 
 public class VectorUtils {
 
-    private static final String LOG_TAG = "VectorUtils";
+    private static final String LOG_TAG = VectorUtils.class.getSimpleName();
 
     //public static final int REQUEST_FILES = 0;
     public static final int TAKE_IMAGE = 1;
@@ -169,7 +172,7 @@ public class VectorUtils {
         Collection<RoomMember> roomMembers = room.getJoinedMembers();
 
         if (2 == roomMembers.size()) {
-            ArrayList<RoomMember> roomMembersList = new ArrayList<>(roomMembers);
+            List<RoomMember> roomMembersList = new ArrayList<>(roomMembers);
 
             if (TextUtils.equals(roomMembersList.get(0).getUserId(), session.getMyUserId())) {
                 return room.getLiveState().getMemberName(roomMembersList.get(1).getUserId());
@@ -195,84 +198,95 @@ public class VectorUtils {
             return null;
         }
 
-        // this algorithm is the one defined in
-        // https://github.com/matrix-org/matrix-js-sdk/blob/develop/lib/models/room.js#L617
-        // calculateRoomName(room, userId)
+        try {
 
-        RoomState roomState = room.getLiveState();
+            // this algorithm is the one defined in
+            // https://github.com/matrix-org/matrix-js-sdk/blob/develop/lib/models/room.js#L617
+            // calculateRoomName(room, userId)
 
-        if (!TextUtils.isEmpty(roomState.name)) {
-            return roomState.name;
-        }
+            RoomState roomState = room.getLiveState();
 
-        String alias = roomState.alias;
+            if (!TextUtils.isEmpty(roomState.name)) {
+                return roomState.name;
+            }
 
-        if (TextUtils.isEmpty(alias) && (roomState.getAliases().size() > 0)) {
-            alias = roomState.getAliases().get(0);
-        }
+            String alias = roomState.alias;
 
-        if (!TextUtils.isEmpty(alias)) {
-            return alias;
-        }
+            if (TextUtils.isEmpty(alias) && (roomState.getAliases().size() > 0)) {
+                alias = roomState.getAliases().get(0);
+            }
 
-        String myUserId = session.getMyUserId();
+            if (!TextUtils.isEmpty(alias)) {
+                return alias;
+            }
 
-        Collection<RoomMember> members = roomState.getDisplayableMembers();
-        ArrayList<RoomMember> othersActiveMembers = new ArrayList<>();
-        ArrayList<RoomMember> activeMembers = new ArrayList<>();
+            String myUserId = session.getMyUserId();
 
-        for (RoomMember member : members) {
-            if (!TextUtils.equals(member.membership, RoomMember.MEMBERSHIP_LEAVE)) {
-                if (!TextUtils.equals(member.getUserId(), myUserId)) {
-                    othersActiveMembers.add(member);
+            Collection<RoomMember> members = roomState.getDisplayableMembers();
+            List<RoomMember> othersActiveMembers = new ArrayList<>();
+            List<RoomMember> activeMembers = new ArrayList<>();
+
+            for (RoomMember member : members) {
+                if (!TextUtils.equals(member.membership, RoomMember.MEMBERSHIP_LEAVE)) {
+                    if (!TextUtils.equals(member.getUserId(), myUserId)) {
+                        othersActiveMembers.add(member);
+                    }
+                    activeMembers.add(member);
                 }
-                activeMembers.add(member);
             }
-        }
 
-        Collections.sort(othersActiveMembers, new Comparator<RoomMember>() {
-            @Override
-            public int compare(RoomMember m1, RoomMember m2) {
-                long diff = m1.getOriginServerTs() - m2.getOriginServerTs();
+            Collections.sort(othersActiveMembers, new Comparator<RoomMember>() {
+                @Override
+                public int compare(RoomMember m1, RoomMember m2) {
+                    long diff = m1.getOriginServerTs() - m2.getOriginServerTs();
 
-                return (diff == 0) ? 0 : ((diff < 0) ? -1 : +1);
-            }
-        });
+                    return (diff == 0) ? 0 : ((diff < 0) ? -1 : +1);
+                }
+            });
 
-        String displayName;
+            String displayName;
 
-        if (othersActiveMembers.size() == 0) {
-            if (activeMembers.size() == 1) {
-                RoomMember member = activeMembers.get(0);
+            if (othersActiveMembers.size() == 0) {
+                if (activeMembers.size() == 1) {
+                    RoomMember member = activeMembers.get(0);
 
-                if (TextUtils.equals(member.membership, RoomMember.MEMBERSHIP_INVITE)) {
+                    if (TextUtils.equals(member.membership, RoomMember.MEMBERSHIP_INVITE)) {
 
-                    if (!TextUtils.isEmpty(member.getInviterId())) {
-                        // extract who invited us to the room
-                        displayName = context.getString(R.string.room_displayname_invite_from, roomState.getMemberName(member.getInviterId()));
+                        if (!TextUtils.isEmpty(member.mSender)) {
+                            // extract who invited us to the room
+                            displayName = context.getString(R.string.room_displayname_invite_from, roomState.getMemberName(member.mSender));
+                        } else {
+                            displayName = context.getString(R.string.room_displayname_room_invite);
+                        }
                     } else {
-                        displayName = context.getString(R.string.room_displayname_room_invite);
+                        displayName = context.getString(R.string.room_displayname_no_title);
                     }
                 } else {
                     displayName = context.getString(R.string.room_displayname_no_title);
                 }
-            } else {
-                displayName = context.getString(R.string.room_displayname_no_title);
-            }
-        } else if (othersActiveMembers.size() == 1) {
-            RoomMember member = othersActiveMembers.get(0);
-            displayName = roomState.getMemberName(member.getUserId());
-        } else if (othersActiveMembers.size() == 2) {
-            RoomMember member1 = othersActiveMembers.get(0);
-            RoomMember member2 = othersActiveMembers.get(1);
+            } else if (othersActiveMembers.size() == 1) {
+                RoomMember member = othersActiveMembers.get(0);
+                displayName = roomState.getMemberName(member.getUserId());
+            } else if (othersActiveMembers.size() == 2) {
+                RoomMember member1 = othersActiveMembers.get(0);
+                RoomMember member2 = othersActiveMembers.get(1);
 
-            displayName = context.getString(R.string.room_displayname_two_members, roomState.getMemberName(member1.getUserId()), roomState.getMemberName(member2.getUserId()));
-        } else {
-            RoomMember member = othersActiveMembers.get(0);
-            displayName = context.getString(R.string.room_displayname_more_than_two_members, roomState.getMemberName(member.getUserId()), othersActiveMembers.size() - 1);
+                displayName = context.getString(R.string.room_displayname_two_members,
+                        roomState.getMemberName(member1.getUserId()), roomState.getMemberName(member2.getUserId()));
+            } else {
+                RoomMember member = othersActiveMembers.get(0);
+                displayName = context.getString(R.string.room_displayname_many_members,
+                        roomState.getMemberName(member.getUserId()),
+                        context.getResources().getQuantityString(R.plurals.others,
+                                othersActiveMembers.size() - 1, othersActiveMembers.size() - 1));
+            }
+
+            return displayName;
+        } catch (Exception e) {
+            Log.e(LOG_TAG, "## getRoomDisplayName() failed " + e.getMessage());
         }
 
-        return displayName;
+        return room.getRoomId();
     }
 
     //==============================================================================================================
@@ -282,7 +296,7 @@ public class VectorUtils {
     // avatars cache
     static final private LruCache<String, Bitmap> mAvatarImageByKeyDict = new LruCache<>(20 * 1024 * 1024);
     // the avatars background color
-    static final private ArrayList<Integer> mColorList = new ArrayList<>(Arrays.asList(0xff76cfa6, 0xff50e2c2, 0xfff4c371));
+    static final private List<Integer> mColorList = new ArrayList<>(Arrays.asList(0xff76cfa6, 0xff50e2c2, 0xfff4c371));
 
     /**
      * Provides the avatar background color from a text.
@@ -349,7 +363,10 @@ public class VectorUtils {
         textPaint.getTextBounds(text, 0, text.length(), textBounds);
 
         // draw the text in center
-        canvas.drawText(text, (canvas.getWidth() - textBounds.width() - textBounds.left) / 2, (canvas.getHeight() + textBounds.height() - textBounds.bottom) / 2, textPaint);
+        canvas.drawText(text,
+                (canvas.getWidth() - textBounds.width() - textBounds.left) / 2,
+                (canvas.getHeight() + textBounds.height() - textBounds.bottom) / 2,
+                textPaint);
 
         // Return the avatar
         return bitmap;
@@ -368,7 +385,7 @@ public class VectorUtils {
             int idx = 0;
             char initial = name.charAt(idx);
 
-            if ((initial == '@' || initial == '#') && (name.length() > 1)) {
+            if ((initial == '@' || initial == '#' || initial == '+') && (name.length() > 1)) {
                 idx++;
             }
 
@@ -384,9 +401,9 @@ public class VectorUtils {
             }
 
             // check if it’s the start of a surrogate pair
-            if (first >= 0xD800 && first <= 0xDBFF && (name.length() > (idx + 1))) {
+            if (0xD800 <= first && first <= 0xDBFF && (name.length() > (idx + 1))) {
                 char second = name.charAt(idx + 1);
-                if (second >= 0xDC00 && second <= 0xDFFF) {
+                if (0xDC00 <= second && second <= 0xDFFF) {
                     chars++;
                 }
             }
@@ -394,7 +411,7 @@ public class VectorUtils {
             firstChar = name.substring(idx, idx + chars);
         }
 
-        return firstChar.toUpperCase();
+        return firstChar.toUpperCase(VectorApp.getApplicationLocale());
     }
 
     /**
@@ -430,7 +447,8 @@ public class VectorUtils {
     private static void setDefaultMemberAvatar(final ImageView imageView, final String userId, final String displayName) {
         // sanity checks
         if (null != imageView && !TextUtils.isEmpty(userId)) {
-            final Bitmap bitmap = VectorUtils.getAvatar(imageView.getContext(), VectorUtils.getAvatarColor(userId), TextUtils.isEmpty(displayName) ? userId : displayName, true);
+            final Bitmap bitmap = VectorUtils.getAvatar(imageView.getContext(),
+                    VectorUtils.getAvatarColor(userId), TextUtils.isEmpty(displayName) ? userId : displayName, true);
 
             if (Looper.getMainLooper().getThread() == Thread.currentThread()) {
                 imageView.setImageBitmap(bitmap);
@@ -451,17 +469,6 @@ public class VectorUtils {
     }
 
     /**
-     * Set the default vector room avatar.
-     *
-     * @param imageView   the image view.
-     * @param roomId      the room id.
-     * @param displayName the room display name.
-     */
-    public static void setDefaultRoomVectorAvatar(ImageView imageView, String roomId, String displayName) {
-        VectorUtils.setDefaultMemberAvatar(imageView, roomId, displayName);
-    }
-
-    /**
      * Set the room avatar in an imageView.
      *
      * @param context   the context
@@ -471,7 +478,38 @@ public class VectorUtils {
      */
     public static void loadRoomAvatar(Context context, MXSession session, ImageView imageView, Room room) {
         if (null != room) {
-            VectorUtils.loadUserAvatar(context, session, imageView, room.getAvatarUrl(), room.getRoomId(), VectorUtils.getRoomDisplayName(context, session, room));
+            VectorUtils.loadUserAvatar(context,
+                    session, imageView, room.getAvatarUrl(), room.getRoomId(), VectorUtils.getRoomDisplayName(context, session, room));
+        }
+    }
+
+    /**
+     * Set the room avatar in an imageView by consider the room preview data.
+     *
+     * @param context         the context
+     * @param session         the session
+     * @param imageView       the image view
+     * @param roomPreviewData the room preview
+     */
+    public static void loadRoomAvatar(Context context, MXSession session, ImageView imageView, RoomPreviewData roomPreviewData) {
+        if (null != roomPreviewData) {
+            VectorUtils.loadUserAvatar(context,
+                    session, imageView, roomPreviewData.getRoomAvatarUrl(), roomPreviewData.getRoomId(), roomPreviewData.getRoomName());
+        }
+    }
+
+    /**
+     * Set the group avatar in an imageView.
+     *
+     * @param context   the context
+     * @param session   the session
+     * @param imageView the image view
+     * @param group     the group
+     */
+    public static void loadGroupAvatar(Context context, MXSession session, ImageView imageView, Group group) {
+        if (null != group) {
+            VectorUtils.loadUserAvatar(context,
+                    session, imageView, group.getAvatarUrl(), group.getGroupId(), group.getDisplayName());
         }
     }
 
@@ -510,7 +548,8 @@ public class VectorUtils {
 
             // if the avatar is already cached, use it
             if (session.getMediasCache().isAvatarThumbnailCached(callAvatarUrl, context.getResources().getDimensionPixelSize(R.dimen.profile_avatar_size))) {
-                session.getMediasCache().loadAvatarThumbnail(session.getHomeserverConfig(), imageView, callAvatarUrl, context.getResources().getDimensionPixelSize(R.dimen.profile_avatar_size));
+                session.getMediasCache().loadAvatarThumbnail(session.getHomeServerConfig(),
+                        imageView, callAvatarUrl, context.getResources().getDimensionPixelSize(R.dimen.profile_avatar_size));
             } else {
                 Bitmap bitmap = null;
 
@@ -520,7 +559,8 @@ public class VectorUtils {
                 }
 
                 // until the dedicated avatar is loaded.
-                session.getMediasCache().loadAvatarThumbnail(session.getHomeserverConfig(), imageView, callAvatarUrl, context.getResources().getDimensionPixelSize(R.dimen.profile_avatar_size), bitmap);
+                session.getMediasCache().loadAvatarThumbnail(session.getHomeServerConfig(),
+                        imageView, callAvatarUrl, context.getResources().getDimensionPixelSize(R.dimen.profile_avatar_size), bitmap);
             }
         }
     }
@@ -568,7 +608,12 @@ public class VectorUtils {
      * @param userId      the user id
      * @param displayName the user display name
      */
-    public static void loadUserAvatar(final Context context, final MXSession session, final ImageView imageView, final String avatarUrl, final String userId, final String displayName) {
+    public static void loadUserAvatar(final Context context,
+                                      final MXSession session,
+                                      final ImageView imageView,
+                                      final String avatarUrl,
+                                      final String userId,
+                                      final String displayName) {
         // sanity check
         if ((null == session) || (null == imageView) || !session.isAlive()) {
             return;
@@ -578,7 +623,8 @@ public class VectorUtils {
         imageView.setTag(null);
 
         if (session.getMediasCache().isAvatarThumbnailCached(avatarUrl, context.getResources().getDimensionPixelSize(R.dimen.profile_avatar_size))) {
-            session.getMediasCache().loadAvatarThumbnail(session.getHomeserverConfig(), imageView, avatarUrl, context.getResources().getDimensionPixelSize(R.dimen.profile_avatar_size));
+            session.getMediasCache().loadAvatarThumbnail(session.getHomeServerConfig(),
+                    imageView, avatarUrl, context.getResources().getDimensionPixelSize(R.dimen.profile_avatar_size));
         } else {
             if (null == mImagesThread) {
                 mImagesThread = new HandlerThread("ImagesThread", Thread.MIN_PRIORITY);
@@ -587,24 +633,28 @@ public class VectorUtils {
                 mUIHandler = new Handler(Looper.getMainLooper());
             }
 
-            final Bitmap bitmap = VectorUtils.getAvatar(imageView.getContext(), VectorUtils.getAvatarColor(userId), TextUtils.isEmpty(displayName) ? userId : displayName, false);
+            final Bitmap bitmap = VectorUtils.getAvatar(imageView.getContext(),
+                    VectorUtils.getAvatarColor(userId), TextUtils.isEmpty(displayName) ? userId : displayName, false);
 
             // test if the default avatar has been computed
             if (null != bitmap) {
                 imageView.setImageBitmap(bitmap);
 
-                final String tag = avatarUrl + userId + displayName;
-                imageView.setTag(tag);
+                if (!TextUtils.isEmpty(avatarUrl)) {
+                    final String tag = avatarUrl + userId + displayName;
+                    imageView.setTag(tag);
 
-                if (!MXMediasCache.isMediaUrlUnreachable(avatarUrl)) {
-                    mImagesThreadHandler.post(new Runnable() {
-                        @Override
-                        public void run() {
-                            if (TextUtils.equals(tag, (String) imageView.getTag())) {
-                                session.getMediasCache().loadAvatarThumbnail(session.getHomeserverConfig(), imageView, avatarUrl, context.getResources().getDimensionPixelSize(R.dimen.profile_avatar_size), bitmap);
+                    if (!MXMediasCache.isMediaUrlUnreachable(avatarUrl)) {
+                        mImagesThreadHandler.post(new Runnable() {
+                            @Override
+                            public void run() {
+                                if (TextUtils.equals(tag, (String) imageView.getTag())) {
+                                    session.getMediasCache().loadAvatarThumbnail(session.getHomeServerConfig(),
+                                            imageView, avatarUrl, context.getResources().getDimensionPixelSize(R.dimen.profile_avatar_size), bitmap);
+                                }
                             }
-                        }
-                    });
+                        });
+                    }
                 }
             } else {
                 final String tmpTag0 = "00" + avatarUrl + "-" + userId + "--" + displayName;
@@ -618,7 +668,7 @@ public class VectorUtils {
                             imageView.setTag(null);
                             setDefaultMemberAvatar(imageView, userId, displayName);
 
-                            if (!MXMediasCache.isMediaUrlUnreachable(avatarUrl)) {
+                            if (!TextUtils.isEmpty(avatarUrl) && !MXMediasCache.isMediaUrlUnreachable(avatarUrl)) {
                                 final String tmpTag1 = "11" + avatarUrl + "-" + userId + "--" + displayName;
                                 imageView.setTag(tmpTag1);
 
@@ -636,8 +686,15 @@ public class VectorUtils {
                                                 public void run() {
                                                     // test if the imageView tag has not been updated
                                                     if (TextUtils.equals(tmptag2, (String) imageView.getTag())) {
-                                                        final Bitmap bitmap = VectorUtils.getAvatar(imageView.getContext(), VectorUtils.getAvatarColor(userId), TextUtils.isEmpty(displayName) ? userId : displayName, false);
-                                                        session.getMediasCache().loadAvatarThumbnail(session.getHomeserverConfig(), imageView, avatarUrl, context.getResources().getDimensionPixelSize(R.dimen.profile_avatar_size), bitmap);
+                                                        final Bitmap bitmap = VectorUtils.getAvatar(imageView.getContext(),
+                                                                VectorUtils.getAvatarColor(userId),
+                                                                TextUtils.isEmpty(displayName) ? userId : displayName,
+                                                                false);
+                                                        session.getMediasCache().loadAvatarThumbnail(session.getHomeServerConfig(),
+                                                                imageView,
+                                                                avatarUrl,
+                                                                context.getResources().getDimensionPixelSize(R.dimen.profile_avatar_size),
+                                                                bitmap);
                                                     }
                                                 }
                                             });
@@ -665,7 +722,7 @@ public class VectorUtils {
      * @return the version. an empty string is not found.
      */
     public static String getApplicationVersion(final Context context) {
-        return im.vector.Matrix.getInstance(context).getVersion(false);
+        return im.vector.Matrix.getInstance(context).getVersion(false, true);
     }
 
     /**
@@ -710,9 +767,7 @@ public class VectorUtils {
                                     mMainAboutDialog = null;
                                 }
                             })
-                            .create();
-
-                    mMainAboutDialog.show();
+                            .show();
                 }
             });
         }
@@ -725,8 +780,6 @@ public class VectorUtils {
      * @param url     the url to open
      */
     private static void displayInWebview(final Context context, String url) {
-        AlertDialog.Builder alert = new AlertDialog.Builder(context);
-
         WebView wv = new WebView(context);
         wv.loadUrl(url);
         wv.setWebViewClient(new WebViewClient() {
@@ -738,9 +791,10 @@ public class VectorUtils {
             }
         });
 
-        alert.setView(wv);
-        alert.setPositiveButton(android.R.string.ok, null);
-        alert.show();
+        new AlertDialog.Builder(context)
+                .setView(wv)
+                .setPositiveButton(android.R.string.ok, null)
+                .show();
     }
 
     /**
@@ -809,14 +863,19 @@ public class VectorUtils {
                         InputStream stream = resource.mContentStream;
                         int rotationAngle = ImageUtils.getRotationAngleForBitmap(context, thumbnailUri);
 
+                        Log.d(LOG_TAG, "## getThumbnailUriFromIntent() :  " + thumbnailUri + " rotationAngle " + rotationAngle);
+
                         String mediaUrl = ImageUtils.scaleAndRotateImage(context, stream, resource.mMimeType, 1024, rotationAngle, mediasCache);
                         thumbnailUri = Uri.parse(mediaUrl);
+                    } else if (null != resource) {
+                        Log.d(LOG_TAG, "## getThumbnailUriFromIntent() : cannot manage " + thumbnailUri + " mMimeType " + resource.mMimeType);
+                    } else {
+                        Log.d(LOG_TAG, "## getThumbnailUriFromIntent() : cannot manage " + thumbnailUri + " --> cannot open the dedicated file");
                     }
 
                     return thumbnailUri;
-
                 } catch (Exception e) {
-                    Log.e(LOG_TAG, "## etThumbnailUriFromIntent failed " + e.getMessage());
+                    Log.e(LOG_TAG, "## getThumbnailUriFromIntent failed " + e.getMessage());
                 }
             }
         }
@@ -839,16 +898,16 @@ public class VectorUtils {
         String formattedString;
 
         if (secondsInterval < 0) {
-            formattedString = "0" + context.getResources().getString(R.string.format_time_s);
+            formattedString = "0" + context.getString(R.string.format_time_s);
         } else {
             if (secondsInterval < 60) {
-                formattedString = secondsInterval + context.getResources().getString(R.string.format_time_s);
+                formattedString = secondsInterval + context.getString(R.string.format_time_s);
             } else if (secondsInterval < 3600) {
-                formattedString = (secondsInterval / 60) + context.getResources().getString(R.string.format_time_m);
+                formattedString = (secondsInterval / 60) + context.getString(R.string.format_time_m);
             } else if (secondsInterval < 86400) {
-                formattedString = (secondsInterval / 3600) + context.getResources().getString(R.string.format_time_h);
+                formattedString = (secondsInterval / 3600) + context.getString(R.string.format_time_h);
             } else {
-                formattedString = (secondsInterval / 86400) + context.getResources().getString(R.string.format_time_d);
+                formattedString = (secondsInterval / 86400) + context.getString(R.string.format_time_d);
             }
         }
 
@@ -865,7 +924,10 @@ public class VectorUtils {
      * @param refreshCallback the presence callback.
      * @return the online status description.
      */
-    public static String getUserOnlineStatus(final Context context, final MXSession session, final String userId, final SimpleApiCallback<Void> refreshCallback) {
+    public static String getUserOnlineStatus(final Context context,
+                                             final MXSession session,
+                                             final String userId,
+                                             final SimpleApiCallback<Void> refreshCallback) {
         // sanity checks
         if ((null == session) || (null == userId)) {
             return null;
@@ -933,18 +995,19 @@ public class VectorUtils {
 
         String presenceText = null;
         if (TextUtils.equals(user.presence, User.PRESENCE_ONLINE)) {
-            presenceText = context.getResources().getString(R.string.room_participants_online);
+            presenceText = context.getString(R.string.room_participants_online);
         } else if (TextUtils.equals(user.presence, User.PRESENCE_UNAVAILABLE)) {
-            presenceText = context.getResources().getString(R.string.room_participants_idle);
+            presenceText = context.getString(R.string.room_participants_idle);
         } else if (TextUtils.equals(user.presence, User.PRESENCE_OFFLINE) || (null == user.presence)) {
-            presenceText = context.getResources().getString(R.string.room_participants_offline);
+            presenceText = context.getString(R.string.room_participants_offline);
         }
 
         if (presenceText != null) {
             if ((null != user.currently_active) && user.currently_active) {
-                presenceText += " " + context.getResources().getString(R.string.room_participants_now);
+                presenceText += " " + context.getString(R.string.room_participants_now);
             } else if ((null != user.lastActiveAgo) && (user.lastActiveAgo > 0)) {
-                presenceText += " " + formatSecondsIntervalFloored(context, user.getAbsoluteLastActiveAgo() / 1000L) + " " + context.getResources().getString(R.string.room_participants_ago);
+                presenceText += " " + formatSecondsIntervalFloored(context,
+                        user.getAbsoluteLastActiveAgo() / 1000L) + " " + context.getString(R.string.room_participants_ago);
             }
         }
 
@@ -990,48 +1053,6 @@ public class VectorUtils {
                     + "[\\p{Alnum}.,%_=?&#\\-+()\\[\\]\\*$~@!:/{};']*)",
             Pattern.CASE_INSENSITIVE | Pattern.MULTILINE | Pattern.DOTALL);
 
-    /**
-     * List the URLs in a text.
-     *
-     * @param text the text to parse
-     * @return the list of URLss
-     */
-    public static List<String> listURLs(String text) {
-        ArrayList<String> URLs = new ArrayList<>();
-
-        // sanity checks
-        if (!TextUtils.isEmpty(text)) {
-            Matcher matcher = mUrlPattern.matcher(text);
-
-            while (matcher.find()) {
-                int matchStart = matcher.start(1);
-                int matchEnd = matcher.end();
-
-                String charBef = "";
-                String charAfter = "";
-
-                if (matchStart > 2) {
-                    charBef = text.substring(matchStart - 2, matchStart);
-                }
-
-                if ((matchEnd - 1) < text.length()) {
-                    charAfter = text.substring(matchEnd - 1, matchEnd);
-                }
-
-                // keep the link between parenthesis, it might be a link [title](link)
-                if (!TextUtils.equals(charAfter, ")") || !TextUtils.equals(charBef, "](")) {
-                    String url = text.substring(matchStart, matchEnd);
-
-                    if (URLs.indexOf(url) < 0) {
-                        URLs.add(url);
-                    }
-                }
-            }
-        }
-
-        return URLs;
-    }
-
     //==============================================================================================================
     // ExpandableListView tools
     //==============================================================================================================
@@ -1045,8 +1066,8 @@ public class VectorUtils {
      * @param adapter            the linked adapter
      * @return visible views map
      */
-    public static HashMap<Integer, List<Integer>> getVisibleChildViews(ExpandableListView expandableListView, BaseExpandableListAdapter adapter) {
-        HashMap<Integer, List<Integer>> map = new HashMap<>();
+    public static Map<Integer, List<Integer>> getVisibleChildViews(ExpandableListView expandableListView, BaseExpandableListAdapter adapter) {
+        Map<Integer, List<Integer>> map = new HashMap<>();
 
         long firstPackedPosition = expandableListView.getExpandableListPosition(expandableListView.getFirstVisiblePosition());
 
@@ -1059,7 +1080,7 @@ public class VectorUtils {
         int lastChildPosition = ExpandableListView.getPackedPositionChild(lastPackedPosition);
 
         for (int groupPos = firstGroupPosition; groupPos <= lastGroupPosition; groupPos++) {
-            ArrayList<Integer> list = new ArrayList<>();
+            List<Integer> list = new ArrayList<>();
 
             int startChildPos = (groupPos == firstGroupPosition) ? firstChildPosition : 0;
             int endChildPos = (groupPos == lastGroupPosition) ? lastChildPosition : adapter.getChildrenCount(groupPos) - 1;

@@ -52,7 +52,7 @@ public class VideoRecordView extends RelativeLayout {
         View.inflate(getContext(), im.vector.R.layout.video_record_view, this);
 
         // retrieve the UI items
-        mVideoRecordProgressView = (VideoRecordProgressView) findViewById(im.vector.R.id.video_record_progress_view);
+        mVideoRecordProgressView = findViewById(im.vector.R.id.video_record_progress_view);
     }
 
     /**
@@ -65,7 +65,7 @@ public class VideoRecordView extends RelativeLayout {
     /**
      * Stop the animation
      */
-    public void stopAnimation() {
+    private void stopAnimation() {
         mVideoRecordProgressView.stopAnimation();
     }
 

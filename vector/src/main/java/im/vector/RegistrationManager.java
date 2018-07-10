@@ -20,7 +20,7 @@ import android.content.Context;
 import android.support.annotation.StringRes;
 import android.text.TextUtils;
 
-import org.matrix.androidsdk.HomeserverConnectionConfig;
+import org.matrix.androidsdk.HomeServerConnectionConfig;
 import org.matrix.androidsdk.MXSession;
 import org.matrix.androidsdk.rest.callback.ApiCallback;
 import org.matrix.androidsdk.rest.callback.SimpleApiCallback;
@@ -28,7 +28,7 @@ import org.matrix.androidsdk.rest.client.LoginRestClient;
 import org.matrix.androidsdk.rest.client.ProfileRestClient;
 import org.matrix.androidsdk.rest.client.ThirdPidRestClient;
 import org.matrix.androidsdk.rest.model.MatrixError;
-import org.matrix.androidsdk.rest.model.ThreePid;
+import org.matrix.androidsdk.rest.model.pid.ThreePid;
 import org.matrix.androidsdk.rest.model.login.Credentials;
 import org.matrix.androidsdk.rest.model.login.LoginFlow;
 import org.matrix.androidsdk.rest.model.login.RegistrationFlowResponse;
@@ -48,17 +48,17 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-import im.vector.activity.CommonActivityUtils;
+import im.vector.util.UrlUtilKt;
 
 public class RegistrationManager {
     private static final String LOG_TAG = RegistrationManager.class.getSimpleName();
 
     private static volatile RegistrationManager sInstance;
 
-    private static String ERROR_MISSING_STAGE = "ERROR_MISSING_STAGE";
-    private static String ERROR_EMPTY_USER_ID = "ERROR_EMPTY_USER_ID";
+    private static final String ERROR_MISSING_STAGE = "ERROR_MISSING_STAGE";
+    private static final String ERROR_EMPTY_USER_ID = "ERROR_EMPTY_USER_ID";
 
-    private static String NEXTLINK_BASE_URL = "https://riot.im/app";
+    private static final String NEXTLINK_BASE_URL = "https://riot.im/app";
 
     // JSON keys used for registration request
     private static final String JSON_KEY_CLIENT_SECRET = "client_secret";
@@ -71,7 +71,7 @@ public class RegistrationManager {
     private static final String JSON_KEY_PUBLIC_KEY = "public_key";
 
     // List of stages supported by the app
-    private static List<String> VECTOR_SUPPORTED_STAGES = Arrays.asList(
+    private static final List<String> VECTOR_SUPPORTED_STAGES = Arrays.asList(
             LoginRestClient.LOGIN_FLOW_TYPE_PASSWORD,
             LoginRestClient.LOGIN_FLOW_TYPE_DUMMY,
             LoginRestClient.LOGIN_FLOW_TYPE_EMAIL_IDENTITY,
@@ -79,7 +79,7 @@ public class RegistrationManager {
             LoginRestClient.LOGIN_FLOW_TYPE_RECAPTCHA);
 
     // Config
-    private HomeserverConnectionConfig mHsConfig;
+    private HomeServerConnectionConfig mHsConfig;
     private LoginRestClient mLoginRestClient;
     private ThirdPidRestClient mThirdPidRestClient;
     private ProfileRestClient mProfileRestClient;
@@ -102,10 +102,10 @@ public class RegistrationManager {
     private boolean mShowThreePidWarning;
 
     /*
-    * *********************************************************************************************
-    * Singleton
-    * *********************************************************************************************
-    */
+     * *********************************************************************************************
+     * Singleton
+     * *********************************************************************************************
+     */
 
     public static RegistrationManager getInstance() {
         if (sInstance == null) {
@@ -118,10 +118,10 @@ public class RegistrationManager {
     }
 
     /*
-    * *********************************************************************************************
-    * Public methods
-    * *********************************************************************************************
-    */
+     * *********************************************************************************************
+     * Public methods
+     * *********************************************************************************************
+     */
 
     /**
      * Reset singleton values to allow a new registration
@@ -152,7 +152,7 @@ public class RegistrationManager {
      *
      * @param hsConfig
      */
-    public void setHsConfig(final HomeserverConnectionConfig hsConfig) {
+    public void setHsConfig(final HomeServerConnectionConfig hsConfig) {
         mHsConfig = hsConfig;
         mLoginRestClient = null;
         mThirdPidRestClient = null;
@@ -199,26 +199,40 @@ public class RegistrationManager {
      */
     public void checkUsernameAvailability(final Context context, final UsernameValidityListener listener) {
         if (getLoginRestClient() != null) {
-            final RegistrationParams params = new RegistrationParams();
+            // Trigger a fake registration (without password) to know whether the user name is available or not.
+            RegistrationParams params = new RegistrationParams();
             params.username = mUsername;
-            params.password = mPassword;
 
             register(context, params, new InternalRegistrationListener() {
                 @Override
                 public void onRegistrationSuccess() {
-                    listener.onUsernameAvailabilityChecked(true);
+                    // The registration could not succeed without password.
+                    // Keep calling listener (the error case) as a fallback,
+                    listener.onUsernameAvailabilityChecked(false);
                 }
 
                 @Override
                 public void onRegistrationFailed(String message) {
-                    if (TextUtils.equals(MatrixError.USER_IN_USE, message)) {
-                        listener.onUsernameAvailabilityChecked(false);
-                    } else {
-                        listener.onUsernameAvailabilityChecked(true);
-                    }
+                    listener.onUsernameAvailabilityChecked(!TextUtils.equals(MatrixError.USER_IN_USE, message));
                 }
             });
         }
+    }
+
+    /**
+     * @return true if there is a password flow.
+     */
+    private boolean isPasswordBasedFlowSupported() {
+        if ((null != mRegistrationResponse) && (null != mRegistrationResponse.flows)) {
+            for (LoginFlow flow : mRegistrationResponse.flows) {
+                if (TextUtils.equals(flow.type, LoginRestClient.LOGIN_FLOW_TYPE_PASSWORD) ||
+                        ((null != flow.stages) && flow.stages.contains(LoginRestClient.LOGIN_FLOW_TYPE_PASSWORD))) {
+                    return true;
+                }
+            }
+        }
+
+        return false;
     }
 
     /**
@@ -238,10 +252,17 @@ public class RegistrationManager {
             } else if (mEmail != null && !isCompleted(LoginRestClient.LOGIN_FLOW_TYPE_EMAIL_IDENTITY)) {
                 if (TextUtils.isEmpty(mEmail.sid)) {
                     // Email token needs to be requested before doing validation
+                    Log.d(LOG_TAG, "attemptRegistration: request email validation");
                     requestValidationToken(mEmail, new ThreePidRequestListener() {
                         @Override
                         public void onThreePidRequested(ThreePid pid) {
                             if (!TextUtils.isEmpty(pid.sid)) {
+                                // The session id for the email validation has just been received.
+                                // We trigger here a new registration request without delay to attach the current username
+                                // and the pwd to the registration session.
+                                attemptRegistration(context, listener);
+
+                                // Notify the listener to wait for the email validation
                                 listener.onWaitingEmailValidation();
                             }
                         }
@@ -264,10 +285,24 @@ public class RegistrationManager {
                 registrationType = LoginRestClient.LOGIN_FLOW_TYPE_DUMMY;
                 authParams = new HashMap<>();
                 authParams.put(JSON_KEY_TYPE, LoginRestClient.LOGIN_FLOW_TYPE_DUMMY);
-            } else {
+            } else if (isPasswordBasedFlowSupported()) {
+                // never has been tested
                 registrationType = LoginRestClient.LOGIN_FLOW_TYPE_PASSWORD;
                 authParams = new HashMap<>();
                 authParams.put(JSON_KEY_TYPE, LoginRestClient.LOGIN_FLOW_TYPE_PASSWORD);
+                authParams.put(JSON_KEY_SESSION, mRegistrationResponse.session);
+
+                if (null != mUsername) {
+                    authParams.put("username", mUsername);
+                }
+
+                if (null != mPassword) {
+                    authParams.put("password", mPassword);
+                }
+            } else {
+                // others
+                registrationType = "";
+                authParams = new HashMap<>();
             }
 
             if (TextUtils.equals(registrationType, LoginRestClient.LOGIN_FLOW_TYPE_MSISDN)
@@ -307,7 +342,7 @@ public class RegistrationManager {
                 @Override
                 public void onRegistrationFailed(String message) {
                     if (TextUtils.equals(ERROR_MISSING_STAGE, message)
-                            && (mPhoneNumber == null || isCompleted(LoginRestClient.LOGIN_FLOW_TYPE_MSISDN))){
+                            && (mPhoneNumber == null || isCompleted(LoginRestClient.LOGIN_FLOW_TYPE_MSISDN))) {
                         if (mEmail != null && !isCompleted(LoginRestClient.LOGIN_FLOW_TYPE_EMAIL_IDENTITY)) {
                             attemptRegistration(context, listener);
                         } else {
@@ -344,7 +379,7 @@ public class RegistrationManager {
         }
 
         RegistrationParams registrationParams = new RegistrationParams();
-        registrationParams.auth = getThreePidAuthParams(aClientSecret, CommonActivityUtils.removeUrlScheme(aIdentityServer),
+        registrationParams.auth = getThreePidAuthParams(aClientSecret, UrlUtilKt.removeUrlScheme(aIdentityServer),
                 aSid, LoginRestClient.LOGIN_FLOW_TYPE_EMAIL_IDENTITY, aSessionId);
 
         // Note: username, password and bind_email must not be set in registrationParams
@@ -405,7 +440,7 @@ public class RegistrationManager {
      * @param stage
      * @return true if completed
      */
-    public boolean isCompleted(final String stage) {
+    private boolean isCompleted(final String stage) {
         return mRegistrationResponse != null && mRegistrationResponse.completed != null && mRegistrationResponse.completed.contains(stage);
     }
 
@@ -425,7 +460,7 @@ public class RegistrationManager {
      * @param stage
      * @return true if required
      */
-    public boolean isRequired(final String stage) {
+    private boolean isRequired(final String stage) {
         return mRequiredStages.contains(stage);
     }
 
@@ -450,7 +485,7 @@ public class RegistrationManager {
     /**
      * @return true if captcha is mandatory for registration and not completed yet
      */
-    public boolean isCaptchaRequired() {
+    private boolean isCaptchaRequired() {
         return mRegistrationResponse != null
                 && isRequired(LoginRestClient.LOGIN_FLOW_TYPE_RECAPTCHA)
                 && (mRegistrationResponse.completed == null || !mRegistrationResponse.completed.contains(LoginRestClient.LOGIN_FLOW_TYPE_RECAPTCHA));
@@ -535,10 +570,19 @@ public class RegistrationManager {
      * Add email three pid to singleton values
      * It will be processed later on
      *
-     * @param email
+     * @param emailThreePid
      */
-    public void addEmailThreePid(final String email) {
-        mEmail = new ThreePid(email, ThreePid.MEDIUM_EMAIL);
+    public void addEmailThreePid(final ThreePid emailThreePid) {
+        mEmail = emailThreePid;
+    }
+
+    /**
+     * Get the current email three pid (if any).
+     *
+     * @return the corresponding three pid
+     */
+    public ThreePid getEmailThreePid() {
+        return mEmail;
     }
 
     /**
@@ -591,10 +635,10 @@ public class RegistrationManager {
     }
 
     /*
-    * *********************************************************************************************
-    * Private methods
-    * *********************************************************************************************
-    */
+     * *********************************************************************************************
+     * Private methods
+     * *********************************************************************************************
+     */
 
     /**
      * Get a login rest client
@@ -872,7 +916,8 @@ public class RegistrationManager {
      */
     private void register(final Context context, final RegistrationParams params, final InternalRegistrationListener listener) {
         if (getLoginRestClient() != null) {
-            mLoginRestClient.register(params, new SimpleApiCallback<Credentials>() {
+            params.initial_device_display_name = context.getString(R.string.login_mobile_device);
+            mLoginRestClient.register(params, new UnrecognizedCertApiCallback<Credentials>(mHsConfig) {
                 @Override
                 public void onSuccess(Credentials credentials) {
                     if (TextUtils.isEmpty(credentials.userId)) {
@@ -895,41 +940,19 @@ public class RegistrationManager {
                                 MXSession session = Matrix.getInstance(context).createSession(mHsConfig);
                                 Matrix.getInstance(context).addSession(session);
                             }
+
                             listener.onRegistrationSuccess();
                         }
                     }
                 }
 
                 @Override
-                public void onNetworkError(final Exception e) {
-                    UnrecognizedCertificateException unrecCertEx = CertUtil.getCertificateException(e);
-                    if (unrecCertEx != null) {
-                        final Fingerprint fingerprint = unrecCertEx.getFingerprint();
-                        Log.d(LOG_TAG, "Found fingerprint: SHA-256: " + fingerprint.getBytesAsHexString());
-
-                        UnrecognizedCertHandler.show(mHsConfig, fingerprint, false, new UnrecognizedCertHandler.Callback() {
-                            @Override
-                            public void onAccept() {
-                                register(context, params, listener);
-                            }
-
-                            @Override
-                            public void onIgnore() {
-                                listener.onRegistrationFailed(e.getLocalizedMessage());
-                            }
-
-                            @Override
-                            public void onReject() {
-                                listener.onRegistrationFailed(e.getLocalizedMessage());
-                            }
-                        });
-                    } else {
-                        listener.onRegistrationFailed(e.getLocalizedMessage());
-                    }
+                public void onAcceptedCert() {
+                    register(context, params, listener);
                 }
 
                 @Override
-                public void onUnexpectedError(Exception e) {
+                public void onTLSOrNetworkError(final Exception e) {
                     listener.onRegistrationFailed(e.getLocalizedMessage());
                 }
 
@@ -959,10 +982,10 @@ public class RegistrationManager {
     }
 
     /*
-    * *********************************************************************************************
-    * Private listeners
-    * *********************************************************************************************
-    */
+     * *********************************************************************************************
+     * Private listeners
+     * *********************************************************************************************
+     */
 
     private interface InternalRegistrationListener {
         void onRegistrationSuccess();
@@ -971,13 +994,14 @@ public class RegistrationManager {
     }
 
     /*
-    * *********************************************************************************************
-    * Public listeners
-    * *********************************************************************************************
-    */
+     * *********************************************************************************************
+     * Public listeners
+     * *********************************************************************************************
+     */
 
     public interface ThreePidRequestListener {
         void onThreePidRequested(ThreePid pid);
+
         void onThreePidRequestFailed(@StringRes int errorMessageRes);
     }
 

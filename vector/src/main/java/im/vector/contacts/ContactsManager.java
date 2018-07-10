@@ -1,6 +1,7 @@
 /*
  * Copyright 2015 OpenMarket Ltd
  * Copyright 2017 Vector Creations Ltd
+ * Copyright 2018 New Vector Ltd
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -42,6 +43,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 import im.vector.Matrix;
@@ -51,8 +53,8 @@ import im.vector.util.PhoneNumberUtils;
 /**
  * Manage the local contacts
  */
-public class ContactsManager implements SharedPreferences.OnSharedPreferenceChangeListener  {
-    private static final String LOG_TAG = "ContactsManager";
+public class ContactsManager implements SharedPreferences.OnSharedPreferenceChangeListener {
+    private static final String LOG_TAG = ContactsManager.class.getSimpleName();
 
     /**
      * Contacts update listener
@@ -81,7 +83,7 @@ public class ContactsManager implements SharedPreferences.OnSharedPreferenceChan
     private List<Contact> mContactsList = null;
 
     // the listeners
-    private ArrayList<ContactsManagerListener> mListeners = null;
+    private final List<ContactsManagerListener> mListeners = new ArrayList<>();
 
     // a contacts population is in progress
     private boolean mIsPopulating = false;
@@ -94,7 +96,7 @@ public class ContactsManager implements SharedPreferences.OnSharedPreferenceChan
     private boolean mRetryPIDsRetrievalOnConnect = false;
 
     // the application context
-    private Context mContext;
+    private final Context mContext;
 
     /**
      * Network events listener
@@ -116,13 +118,11 @@ public class ContactsManager implements SharedPreferences.OnSharedPreferenceChan
          * @param mxid the mxid
          */
         private void onContactPresenceUpdate(Contact contact, Contact.MXID mxid) {
-            if (null != mListeners) {
-                for (ContactsManagerListener listener : mListeners) {
-                    try {
-                        listener.onContactPresenceUpdate(contact, mxid.mMatrixId);
-                    } catch (Exception e) {
-                        Log.e(LOG_TAG, "onContactPresenceUpdate failed " + e.getMessage());
-                    }
+            for (ContactsManagerListener listener : mListeners) {
+                try {
+                    listener.onContactPresenceUpdate(contact, mxid.mMatrixId);
+                } catch (Exception e) {
+                    Log.e(LOG_TAG, "onContactPresenceUpdate failed " + e.getMessage());
                 }
             }
         }
@@ -131,13 +131,11 @@ public class ContactsManager implements SharedPreferences.OnSharedPreferenceChan
          * Warn that some PIDs have been retrieved from the contacts data.
          */
         private void onPIDsUpdate() {
-            if (null != mListeners) {
-                for (ContactsManagerListener listener : mListeners) {
-                    try {
-                        listener.onPIDsUpdate();
-                    } catch (Exception e) {
-                        Log.e(LOG_TAG, "onPIDsUpdate failed " + e.getMessage());
-                    }
+            for (ContactsManagerListener listener : mListeners) {
+                try {
+                    listener.onPIDsUpdate();
+                } catch (Exception e) {
+                    Log.e(LOG_TAG, "onPIDsUpdate failed " + e.getMessage());
                 }
             }
         }
@@ -182,7 +180,7 @@ public class ContactsManager implements SharedPreferences.OnSharedPreferenceChan
 
             MXSession session = Matrix.getInstance(VectorApp.getInstance().getApplicationContext()).getSession(accountId);
 
-            if ((null != session) && (null != mContactsList)) {
+            if ((null != session) && session.isAlive() && (null != mContactsList)) {
                 for (final Contact contact : mContactsList) {
                     Set<String> medias = contact.getMatrixIdMediums();
 
@@ -240,7 +238,7 @@ public class ContactsManager implements SharedPreferences.OnSharedPreferenceChan
     /**
      * Constructor
      */
-    public ContactsManager() {
+    private ContactsManager() {
         mContext = VectorApp.getInstance().getApplicationContext();
         PreferenceManager.getDefaultSharedPreferences(mContext).registerOnSharedPreferenceChangeListener(this);
     }
@@ -269,6 +267,7 @@ public class ContactsManager implements SharedPreferences.OnSharedPreferenceChan
 
     /**
      * Tell if the contacts snapshot list is ready
+     *
      * @return true if the contacts snapshot list is ready
      */
     public boolean didPopulateLocalContacts() {
@@ -291,7 +290,7 @@ public class ContactsManager implements SharedPreferences.OnSharedPreferenceChan
      * reset
      */
     public void reset() {
-        mListeners = null;
+        mListeners.clear();
         clearSnapshot();
     }
 
@@ -316,7 +315,7 @@ public class ContactsManager implements SharedPreferences.OnSharedPreferenceChan
     private void onCountryCodeUpdate() {
         synchronized (LOG_TAG) {
             if (null != mContactsList) {
-                for(Contact contact : mContactsList) {
+                for (Contact contact : mContactsList) {
                     contact.onCountryCodeUpdate();
                 }
             }
@@ -347,11 +346,9 @@ public class ContactsManager implements SharedPreferences.OnSharedPreferenceChan
      * @param listener the listener to add.
      */
     public void addListener(ContactsManagerListener listener) {
-        if (null == mListeners) {
-            mListeners = new ArrayList<>();
+        if (null != listener) {
+            mListeners.add(listener);
         }
-
-        mListeners.add(listener);
     }
 
     /**
@@ -360,7 +357,7 @@ public class ContactsManager implements SharedPreferences.OnSharedPreferenceChan
      * @param listener the listener to remove.
      */
     public void removeListener(ContactsManagerListener listener) {
-        if (null != mListeners) {
+        if (null != listener) {
             mListeners.remove(listener);
         }
     }
@@ -420,7 +417,7 @@ public class ContactsManager implements SharedPreferences.OnSharedPreferenceChan
             public void run() {
                 long t0 = System.currentTimeMillis();
                 ContentResolver cr = mContext.getContentResolver();
-                HashMap<String, Contact> dict = new HashMap<>();
+                Map<String, Contact> dict = new HashMap<>();
 
                 // test if the user allows to access to the contact
                 if (isContactBookAccessAllowed()) {
@@ -446,7 +443,8 @@ public class ContactsManager implements SharedPreferences.OnSharedPreferenceChan
                             while (namesCur.moveToNext()) {
                                 String displayName = namesCur.getString(namesCur.getColumnIndex(ContactsContract.Contacts.DISPLAY_NAME_PRIMARY));
                                 String contactId = namesCur.getString(namesCur.getColumnIndex(ContactsContract.CommonDataKinds.StructuredName.CONTACT_ID));
-                                String thumbnailUri = namesCur.getString(namesCur.getColumnIndex(ContactsContract.CommonDataKinds.StructuredName.PHOTO_THUMBNAIL_URI));
+                                String thumbnailUri
+                                        = namesCur.getString(namesCur.getColumnIndex(ContactsContract.CommonDataKinds.StructuredName.PHOTO_THUMBNAIL_URI));
 
                                 if (null != contactId) {
                                     Contact contact = dict.get(contactId);
@@ -568,15 +566,6 @@ public class ContactsManager implements SharedPreferences.OnSharedPreferenceChan
 
                 long delta = System.currentTimeMillis() - t0;
 
-                if (0 != mContactsList.size()) {
-                    VectorApp.sendGAStats(VectorApp.getInstance(),
-                            VectorApp.GOOGLE_ANALYTICS_STATS_CATEGORY,
-                            VectorApp.GOOGLE_ANALYTICS_STARTUP_CONTACTS_ACTION,
-                            mContactsList.size() + " contacts in " + delta + " ms",
-                            delta
-                    );
-                }
-
                 Log.d(LOG_TAG, "## refreshLocalContactsSnapshot(): retrieve " + mContactsList.size() + " contacts in " + delta + " ms");
 
                 // define the PIDs listener
@@ -595,22 +584,20 @@ public class ContactsManager implements SharedPreferences.OnSharedPreferenceChan
                     // the PIDs retrieval is done on demand.
                 }
 
-                if (null != mListeners) {
-                    Handler handler = new Handler(Looper.getMainLooper());
+                Handler handler = new Handler(Looper.getMainLooper());
 
-                    handler.post(new Runnable() {
-                        @Override
-                        public void run() {
-                            for (ContactsManagerListener listener : mListeners) {
-                                try {
-                                    listener.onRefresh();
-                                } catch (Exception e) {
-                                    Log.e(LOG_TAG, "refreshLocalContactsSnapshot : onRefresh failed" + e.getMessage());
-                                }
+                handler.post(new Runnable() {
+                    @Override
+                    public void run() {
+                        for (ContactsManagerListener listener : mListeners) {
+                            try {
+                                listener.onRefresh();
+                            } catch (Exception e) {
+                                Log.e(LOG_TAG, "refreshLocalContactsSnapshot : onRefresh failed" + e.getMessage());
                             }
                         }
-                    });
-                }
+                    }
+                });
             }
         });
 
@@ -626,10 +613,11 @@ public class ContactsManager implements SharedPreferences.OnSharedPreferenceChan
     /**
      * Tells if the contacts book access has been requested.
      * For android > M devices, it only tells if the permission has been granted.
+     *
      * @return true it was requested once
      */
     public boolean isContactBookAccessRequested() {
-        if (Build.VERSION.SDK_INT >= 23) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             return (PackageManager.PERMISSION_GRANTED == ContextCompat.checkSelfPermission(mContext, Manifest.permission.READ_CONTACTS));
         } else {
             SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(mContext);
@@ -639,14 +627,15 @@ public class ContactsManager implements SharedPreferences.OnSharedPreferenceChan
 
     /**
      * Update the contacts book access.
+     *
      * @param isAllowed true to allowed the contacts book access.
      */
     public void setIsContactBookAccessAllowed(boolean isAllowed) {
-        if (Build.VERSION.SDK_INT < 23) {
-            SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(mContext);
-            SharedPreferences.Editor editor = preferences.edit();
-            editor.putBoolean(CONTACTS_BOOK_ACCESS_KEY, isAllowed);
-            editor.commit();
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.M) {
+            PreferenceManager.getDefaultSharedPreferences(mContext)
+                    .edit()
+                    .putBoolean(CONTACTS_BOOK_ACCESS_KEY, isAllowed)
+                    .apply();
         }
         mIsRetrievingPids = false;
         mArePidsRetrieved = false;
@@ -654,10 +643,11 @@ public class ContactsManager implements SharedPreferences.OnSharedPreferenceChan
 
     /**
      * Tells if the contacts book access has been granted
+     *
      * @return true if it was granted.
      */
     public boolean isContactBookAccessAllowed() {
-        if (Build.VERSION.SDK_INT >= 23) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             return (PackageManager.PERMISSION_GRANTED == ContextCompat.checkSelfPermission(mContext, Manifest.permission.READ_CONTACTS));
         } else {
             SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(mContext);

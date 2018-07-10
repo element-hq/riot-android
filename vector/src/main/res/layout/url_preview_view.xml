@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/url_preview_layout"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginBottom="4dp"
+    android:layout_marginLeft="76dp"
+    android:layout_marginRight="16dp"
+    android:orientation="horizontal">
+
+    <View
+        android:id="@+id/vertical_bar"
+        android:layout_width="4dp"
+        android:layout_height="0dp"
+        android:background="@color/vector_silver_color"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <ImageView
+        android:id="@+id/url_preview_image_view"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:layout_marginLeft="5dp"
+        android:layout_marginStart="5dp"
+        app:layout_constraintStart_toEndOf="@id/vertical_bar"
+        tools:src="@drawable/avatar_mask_dark" />
+
+    <TextView
+        android:id="@+id/url_preview_title_text_view"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="10dp"
+        android:layout_marginStart="10dp"
+        android:linksClickable="true"
+        android:maxLines="2"
+        android:textSize="14sp"
+        app:layout_constraintEnd_toStartOf="@id/url_preview_hide_image_view"
+        app:layout_constraintStart_toEndOf="@id/url_preview_image_view"
+        tools:text="a title" />
+
+    <TextView
+        android:id="@+id/url_preview_description_text_view"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="10dp"
+        android:layout_marginStart="10dp"
+        android:maxLines="3"
+        android:textSize="14sp"
+        app:layout_constraintEnd_toStartOf="@id/url_preview_hide_image_view"
+        app:layout_constraintStart_toEndOf="@id/url_preview_image_view"
+        app:layout_constraintTop_toBottomOf="@id/url_preview_title_text_view"
+        tools:text="a description" />
+
+    <ImageView
+        android:id="@+id/url_preview_hide_image_view"
+        android:layout_width="30dp"
+        android:layout_height="30dp"
+        android:src="@drawable/vector_clear_edittext_green"
+        app:layout_constraintEnd_toEndOf="parent" />
+
+</android.support.constraint.ConstraintLayout>

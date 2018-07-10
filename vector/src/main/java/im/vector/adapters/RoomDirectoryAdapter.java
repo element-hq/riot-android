@@ -1,5 +1,6 @@
 /*
  * Copyright 2017 Vector Creations Ltd
+ * Copyright 2018 New Vector Ltd
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -44,9 +45,9 @@ import im.vector.util.RoomDirectoryData;
 
 public class RoomDirectoryAdapter extends RecyclerView.Adapter<RoomDirectoryAdapter.RoomDirectoryViewHolder> {
 
-    private static final String LOG_TAG = "RoomDirectoryAdapter";
+    private static final String LOG_TAG = RoomDirectoryAdapter.class.getSimpleName();
 
-    private List<RoomDirectoryData> mList;
+    private final List<RoomDirectoryData> mList;
 
     private final OnSelectRoomDirectoryListener mListener;
 
@@ -87,7 +88,9 @@ public class RoomDirectoryAdapter extends RecyclerView.Adapter<RoomDirectoryAdap
 
     @Override
     public void onBindViewHolder(RoomDirectoryAdapter.RoomDirectoryViewHolder viewHolder, int position) {
-        viewHolder.populateViews(mList.get(position));
+        if (position < mList.size()) {
+            viewHolder.populateViews(mList.get(position));
+        }
     }
 
     @Override
@@ -110,9 +113,9 @@ public class RoomDirectoryAdapter extends RecyclerView.Adapter<RoomDirectoryAdap
         private RoomDirectoryViewHolder(final View itemView) {
             super(itemView);
             vMainView = itemView;
-            vAvatarView = (ImageView) itemView.findViewById(R.id.room_directory_avatar);
-            vServerTextView = (TextView) itemView.findViewById(R.id.room_directory_display_name);
-            vDescriptionTextView = (TextView) itemView.findViewById(R.id.room_directory_description);
+            vAvatarView = itemView.findViewById(R.id.room_directory_avatar);
+            vServerTextView = itemView.findViewById(R.id.room_directory_display_name);
+            vDescriptionTextView = itemView.findViewById(R.id.room_directory_description);
         }
 
         private void populateViews(final RoomDirectoryData server) {
@@ -122,14 +125,16 @@ public class RoomDirectoryAdapter extends RecyclerView.Adapter<RoomDirectoryAdap
 
             if (server.isIncludedAllNetworks()) {
                 description = vServerTextView.getContext().getString(R.string.directory_server_all_rooms_on_server, server.getDisplayName());
-            } else if (TextUtils.equals("Matrix",server.getDisplayName())) {
+            } else if (TextUtils.equals("Matrix", server.getDisplayName())) {
                 description = vServerTextView.getContext().getString(R.string.directory_server_native_rooms, server.getDisplayName());
             }
 
             vDescriptionTextView.setText(description);
             vDescriptionTextView.setVisibility(!TextUtils.isEmpty(description) ? View.VISIBLE : View.GONE);
 
-            setAvatar(vAvatarView, server.getAvatarUrl(), server.isIncludedAllNetworks() ? null : vServerTextView.getContext().getResources().getDrawable(R.drawable.network_matrix));
+            setAvatar(vAvatarView,
+                    server.getAvatarUrl(),
+                    server.isIncludedAllNetworks() ? null : vServerTextView.getContext().getResources().getDrawable(R.drawable.network_matrix));
 
             vMainView.setOnClickListener(new View.OnClickListener() {
                 @Override

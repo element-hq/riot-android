@@ -1,0 +1,134 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<resources><string name="resources_language">fa</string>
+    <string name="resources_country_code">IR</string>
+
+    <string name="light_theme">قالب روشن</string>
+    <string name="dark_theme">قالب تیره</string>
+    <string name="black_them">قالب سیاه</string>
+
+    <string name="notification_listen_for_events">گوش دادن به رویدادها</string>
+    <string name="title_activity_home">پیام‌ها</string>
+    <string name="title_activity_room">اتاق</string>
+    <string name="title_activity_settings">تنظیمات</string>
+    <string name="title_activity_member_details">جزئیات اعضا</string>
+    <string name="title_activity_bug_report">گزارش اشکال</string>
+    <string name="loading">بارگذاری...</string>
+
+    <string name="ok">باشه</string>
+    <string name="cancel">انصراف</string>
+    <string name="save">ذخیره</string>
+    <string name="leave">ترک کردن</string>
+    <string name="send">ارسال</string>
+    <string name="copy">کپی</string>
+    <string name="resend">ارسال مجدد</string>
+    <string name="quote">نقل قول</string>
+    <string name="share">اشتراک گذاری</string>
+    <string name="later">بعدا</string>
+    <string name="view_source">مشاهده منبع</string>
+    <string name="delete">حذف</string>
+    <string name="rename">تغییر نام</string>
+    <string name="report_content">گزارش محتوا</string>
+    <string name="active_call">تماس فعال</string>
+    <string name="ongoing_conference_call_voice">صدا</string>
+    <string name="ongoing_conference_call_video">ویدیو</string>
+    <string name="device_information">اطلاعات دستگاه</string>
+    <string name="send_anyway">به هر حال ارسال کنید</string>
+    <string name="or">یا</string>
+    <string name="and">و</string>
+    <string name="invite">دعوت</string>
+    <string name="offline">آفلاین</string>
+
+    <string name="action_exit">خروج</string>
+    <string name="action_sign_out">خروج</string>
+    <string name="action_voice_call">تماس صوتی</string>
+    <string name="action_video_call">تماس تصویری</string>
+    <string name="action_global_search">جستجوی جهانی</string>
+    <string name="action_mark_all_as_read">همه را به عنوان خوانده شده علامت بزن</string>
+    <string name="action_quick_reply">پاسخ سریع</string>
+    <string name="action_open">باز کن</string>
+    <string name="action_close">بستن</string>
+    <string name="copied_to_clipboard">در کلیپ‌بورد کپی شد</string>
+    <string name="disable">غیرفعال</string>
+
+    <string name="dialog_title_warning">هشدار</string>
+
+    <string name="bottom_action_home">خانه</string>
+    <string name="bottom_action_rooms">اتاق‌ها</string>
+    <string name="low_priority_header">اولویت کم</string>
+
+    <string name="direct_chats_header">گفتگو</string>
+    <string name="no_conversation_placeholder">هیچ مکالمه‌ای وجود ندارد</string>
+    <string name="rooms_header">اتاق‌ها</string>
+    <plurals name="public_room_nb_users">
+	<item quantity="one">1 کاربر</item>
+	<item quantity="other">%d کاربر</item>
+</plurals>
+
+    <string name="groups_invite_header">دعوت</string>
+    <string name="no_group_placeholder">هیچ گروهی وجود ندارد</string>
+
+    <string name="send_bug_report">گزارش اشکال</string>
+    <string name="read_receipt">خواندن</string>
+
+    <string name="join_room">عضویت در اتاق</string>
+    <string name="username">نام کاربری</string>
+    <string name="create_account">ثبت نام</string>
+    <string name="login">ورود</string>
+    <string name="logout">خروج</string>
+    <string name="user">کاربر</string>
+    <string name="users">کاربران</string>
+    <string name="search">جستجو</string>
+
+    <string name="start_new_chat">شروع گپ جدید</string>
+    <string name="start_voice_call">شروع تماس صوتی</string>
+    <string name="start_video_call">شروع تماس تصویری</string>
+
+    <string name="option_take_photo_video">عکس یا ویدیو بگیرید</string>
+    <string name="option_take_photo">عکس گرفتن</string>
+    <string name="option_take_video">ویدیو بگیرید</string>
+
+    <string name="auth_login">ورود</string>
+    <string name="auth_register">ثبت نام</string>
+    <string name="auth_submit">ارسال</string>
+    <string name="auth_skip">رد کردن</string>
+    <string name="auth_send_reset_email">ارسال ایمیل مجدد</string>
+    <string name="auth_user_id_placeholder">ایمیل یا نام کاربری</string>
+    <string name="auth_password_placeholder">رمز عبور</string>
+    <string name="auth_new_password_placeholder">رمز عبور جدید</string>
+    <string name="auth_user_name_placeholder">نام کاربری</string>
+    <string name="auth_email_placeholder">آدرس ایمیل</string>
+    <string name="auth_opt_email_placeholder">آدرس ایمیل (اختیاری)</string>
+    <string name="auth_phone_number_placeholder">شماره تلفن</string>
+    <string name="auth_opt_phone_number_placeholder">شماره تلفن (اختیاری)</string>
+    <string name="auth_repeat_password_placeholder">رمز عبور را تکرار کنید</string>
+    <string name="auth_repeat_new_password_placeholder">رمز عبور جدید خود را تأیید کنید</string>
+    <string name="auth_invalid_login_param">نام کاربری و/یا رمز عبور نامعتبر می‌باشد</string>
+    <string name="auth_invalid_password">رمز عبور خیلی کوتاه است (حداقل ۶)</string>
+    <string name="auth_invalid_email">آدرس ایمیل به نظر می‌رسد معتبر نباشد</string>
+    <string name="auth_invalid_phone">شماره تلفن به نظر می‌رسد معتبر نباشد</string>
+    <string name="auth_password_dont_match">رمز عبورها مطابقت ندارد</string>
+    <string name="auth_forgot_password">رمز عبور را فراموش کردید؟</string>
+    <string name="auth_use_server_options">از گزینه‌های سرور سفارشی استفاده کنید (پیشرفته)</string>
+    <string name="auth_email_validation_message">لطفا ایمیل خود را برای ادامه ثبت نام بررسی کنید</string>
+    <string name="auth_reset_password_next_step_button">من آدرس ایمیلم را تایید کرده‌ام</string>
+    <string name="login_error_network_error">امکان ورود به سیستم وجود ندارد: خطای شبکه</string>
+    <string name="login_mobile_device">موبایل</string>
+
+    <string name="login_error_forbidden">نام کاربری/رمز عبور نامعتبر است</string>
+    <string name="login_error_user_in_use">این نام کاربری قبلا استفاده شده است</string>
+    <string name="groups_list">فهرست گروه‌ها</string>
+
+    <string name="compression_options">"ارسال به عنوان "</string>
+    <string name="compression_opt_list_original">اصلی</string>
+    <string name="compression_opt_list_large">بزرگ</string>
+    <string name="compression_opt_list_medium">متوسط</string>
+    <string name="compression_opt_list_small">کوچک</string>
+
+    <string name="attachment_cancel_download">دانلود لغو شود؟</string>
+    <string name="attachment_cancel_upload">آپلود لغو شود؟</string>
+    <string name="attachment_remaining_time_seconds">%d ثانیه</string>
+    <string name="yesterday">دیروز</string>
+    <string name="today">امروز</string>
+
+    <string name="room_info_room_name">نام اتاق</string>
+    </resources>

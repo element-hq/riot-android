@@ -21,14 +21,14 @@
         <item name="primary_control_color">@android:color/white</item>
 
         <!-- application bar text hint color -->
-        <item name="primary_hint_text_color">#BBE7D3</item>
+        <item name="primary_hint_text_color">@color/primary_hint_text_color_light</item>
 
         <!-- default text colors -->
-        <item name="riot_primary_text_color">#FF3C3C3C</item>
-        <item name="default_text_hint_color">#903C3C3C</item>
-        <item name="default_text_light_color">#8E000000</item>
-        <item name="default_button_light_text_color">#FF747474</item>
-        <item name="default_text_dark_color">#FF212121</item>
+        <item name="riot_primary_text_color">@color/riot_primary_text_color_light</item>
+        <item name="default_text_hint_color">@color/default_text_hint_color_light</item>
+        <item name="default_text_light_color">@color/default_text_light_color_light</item>
+        <item name="default_button_light_text_color">@color/default_button_light_text_light</item>
+        <item name="default_text_dark_color">@color/default_text_light_color_light</item>
 
         <!-- room message colors -->
         <item name="unsent_message_text_color">#FFFF4444</item>
@@ -41,13 +41,18 @@
         <item name="search_mode_room_name_text_color">#333C3C3C</item>
         <item name="unread_marker_line_color">@color/vector_green_color</item>
         <item name="markdown_block_background_color">#FFEEEEEE</item>
+        <item name="fenced_code_block_background_color">#FF00FF00</item>
         <item name="room_activity_divider_color">#FFF2F2F2</item>
 
         <!-- tab bar colors -->
         <item name="tab_bar_background_color">?attr/primary_color</item>
         <item name="tab_bar_inverted_background_color">#FFF2F2F2</item>
-        <item name="tab_bar_selected_background_color">@color/tab_bar_selected_background_color_light</item>
-        <item name="tab_bar_unselected_background_color">@color/tab_bar_unselected_background_color_light</item>
+        <item name="tab_bar_selected_background_color">
+            @color/tab_bar_selected_background_color_light
+        </item>
+        <item name="tab_bar_unselected_background_color">
+            @color/tab_bar_unselected_background_color_light
+        </item>
 
         <!-- list colors -->
         <item name="list_header_background_color">#f6f6f6</item>
@@ -64,7 +69,7 @@
         <!-- outgoing call background color -->
         <item name="pending_outgoing_view_background_color">#33000000</item>
 
-        <!-- multi selection memeber background color -->
+        <!-- multi selection member background color -->
         <item name="multi_selection_background_color">#FFF2F2F2</item>
 
         <!-- sliding menu icon colors -->
@@ -85,10 +90,19 @@
         <item name="avatar_mask_room_header">@drawable/avatar_mask_room_header_light</item>
         <item name="avatar_mask_white_stroke">@drawable/avatar_mask_white_stroke_light</item>
         <item name="line_divider">@drawable/line_divider_light</item>
-        <item name="vector_tabbar_selected_background">@drawable/vector_tabbar_selected_background_light</item>
-        <item name="vector_tabbar_unselected_background">@drawable/vector_tabbar_unselected_background_light</item>
+        <item name="vector_tabbar_selected_background">
+            @drawable/vector_tabbar_selected_background_light
+        </item>
+        <item name="vector_tabbar_unselected_background">
+            @drawable/vector_tabbar_unselected_background_light
+        </item>
         <item name="vector_tabbar_background">@drawable/vector_tabbar_background_light</item>
 
+        <item name="pill_background_user_id">@drawable/pill_background_user_id_light</item>
+        <item name="pill_background_room_alias">@drawable/pill_background_room_alias_light</item>
+
+        <item name="pill_text_color_user_id">@color/riot_primary_text_color_light</item>
+        <item name="pill_text_color_room_alias">@android:color/white</item>
     </style>
 
     <!-- DARK THEME COLORS -->
@@ -112,14 +126,14 @@
         <item name="primary_control_color">#5EA584</item>
 
         <!-- application bar text hint color -->
-        <item name="primary_hint_text_color">#BBE7D3</item>
+        <item name="primary_hint_text_color">@color/primary_hint_text_color_dark</item>
 
         <!-- default text colors -->
-        <item name="riot_primary_text_color">#dddddd</item>
-        <item name="default_text_hint_color">#CCDDDDDD</item>
-        <item name="default_text_light_color">#A4A4A4</item>
-        <item name="default_button_light_text_color">#FF747474</item>
-        <item name="default_text_dark_color">#DEDEDE</item>
+        <item name="riot_primary_text_color">@color/riot_primary_text_color_dark</item>
+        <item name="default_text_hint_color">@color/default_text_hint_color_dark</item>
+        <item name="default_text_light_color">@color/default_text_light_color_dark</item>
+        <item name="default_button_light_text_color">@color/default_button_light_text_dark</item>
+        <item name="default_text_dark_color">@color/default_text_light_color_dark</item>
 
         <!-- room message colors -->
         <item name="unsent_message_text_color">#FFFF4444</item>
@@ -132,13 +146,18 @@
         <item name="search_mode_room_name_text_color">#CCC3C3C3</item>
         <item name="unread_marker_line_color">@color/vector_green_color</item>
         <item name="markdown_block_background_color">@android:color/black</item>
+        <item name="fenced_code_block_background_color">#FF00FF00</item>
         <item name="room_activity_divider_color">#565656</item>
 
         <!-- tab bar colors -->
         <item name="tab_bar_background_color">?attr/primary_color</item>
         <item name="tab_bar_inverted_background_color">?attr/primary_color</item>
-        <item name="tab_bar_selected_background_color">@color/tab_bar_selected_background_color_dark</item>
-        <item name="tab_bar_unselected_background_color">@color/tab_bar_unselected_background_color_dark</item>
+        <item name="tab_bar_selected_background_color">
+            @color/tab_bar_selected_background_color_dark
+        </item>
+        <item name="tab_bar_unselected_background_color">
+            @color/tab_bar_unselected_background_color_dark
+        </item>
 
         <!-- list colors -->
         <item name="list_header_background_color">#5A5A5A</item>
@@ -155,7 +174,7 @@
         <!-- outgoing call background color -->
         <item name="pending_outgoing_view_background_color">#33FFFFFF</item>
 
-        <!-- multi selection memeber background color -->
+        <!-- multi selection member background color -->
         <item name="multi_selection_background_color">#4d4d4d</item>
 
         <!-- sliding menu icon colors -->
@@ -176,8 +195,49 @@
         <item name="avatar_mask_room_header">@drawable/avatar_mask_room_header_dark</item>
         <item name="avatar_mask_white_stroke">@drawable/avatar_mask_white_stroke_dark</item>
         <item name="line_divider">@drawable/line_divider_dark</item>
-        <item name="vector_tabbar_selected_background">@drawable/vector_tabbar_selected_background_dark</item>
-        <item name="vector_tabbar_unselected_background">@drawable/vector_tabbar_unselected_background_dark</item>
+        <item name="vector_tabbar_selected_background">
+            @drawable/vector_tabbar_selected_background_dark
+        </item>
+        <item name="vector_tabbar_unselected_background">
+            @drawable/vector_tabbar_unselected_background_dark
+        </item>
         <item name="vector_tabbar_background">@drawable/vector_tabbar_background_dark</item>
+
+        <item name="pill_background_user_id">@drawable/pill_background_user_id_dark</item>
+        <item name="pill_background_room_alias">@drawable/pill_background_room_alias_dark</item>
+
+        <item name="pill_text_color_user_id">@android:color/white</item>
+        <item name="pill_text_color_room_alias">@color/riot_primary_text_color_light</item>
+    </style>
+
+    <!-- BLACK THEME COLORS -->
+    <style name="Theme.Vector.Black" parent="@style/Theme.Vector.Dark">
+        <!-- Only setting the items we need to override to get the background to be pure black, otherwise inheriting -->
+        <item name="riot_primary_background_color">@color/riot_primary_background_color_black</item>
+        <item name="avatar_mask">@drawable/avatar_mask_black</item>
+        <item name="avatar_mask_white_stroke">@drawable/avatar_mask_white_stroke_black</item>
+        <item name="markdown_block_background_color">#FF4D4D4D</item>
+        <item name="fenced_code_block_background_color">#FF00FF00</item>
+    </style>
+
+    <style name="Theme.Vector.EmptyLight" parent="Theme.AppCompat.Light.Dialog">
+        <item name="primary_color">@color/primary_color_light</item>
+        <item name="riot_primary_background_color">@color/riot_primary_background_color_light</item>
+        <item name="riot_primary_text_color">@color/riot_primary_text_color_light</item>
+        <item name="primary_hint_text_color">@color/primary_hint_text_color_light</item>
+        <item name="message_text_color">?attr/riot_primary_text_color</item>
+    </style>
+
+    <style name="Theme.Vector.EmptyDark" parent="Theme.AppCompat.Dialog">
+        <item name="riot_primary_text_color">@color/riot_primary_text_color_dark</item>
+        <item name="riot_primary_background_color">@color/riot_primary_background_color_dark</item>
+        <item name="primary_hint_text_color">@color/primary_hint_text_color_dark</item>
+        <item name="primary_color">@color/primary_color_dark</item>
+        <item name="message_text_color">?attr/riot_primary_text_color</item>
+    </style>
+
+    <style name="Theme.Vector.EmptyBlack" parent="@style/Theme.Vector.EmptyDark">
+        <item name="riot_primary_background_color">@color/riot_primary_background_color_black</item>
+        <item name="primary_color">@color/riot_primary_background_color_black</item>
     </style>
 </resources>

@@ -1,5 +1,6 @@
 /*
  * Copyright 2016 OpenMarket Ltd
+ * Copyright 2018 New Vector Ltd
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,9 +16,9 @@
  */
 
 package im.vector.adapters;
+
 import android.content.Context;
 import android.text.TextUtils;
-import org.matrix.androidsdk.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -29,11 +30,14 @@ import android.widget.TextView;
 import org.matrix.androidsdk.MXSession;
 import org.matrix.androidsdk.rest.callback.SimpleApiCallback;
 import org.matrix.androidsdk.rest.model.User;
+import org.matrix.androidsdk.util.Log;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import im.vector.Matrix;
 import im.vector.R;
+import im.vector.VectorApp;
 import im.vector.util.VectorUtils;
 
 /**
@@ -41,12 +45,13 @@ import im.vector.util.VectorUtils;
  */
 public class VectorRoomCreationAdapter extends ArrayAdapter<ParticipantAdapterItem> {
 
-    private static final String LOG_TAG = "VRoomCreationAdapter";
+    private static final String LOG_TAG = VectorRoomCreationAdapter.class.getSimpleName();
 
     // remove participants listener
     public interface IRoomCreationAdapterListener {
         /**
          * The user taps on the cross button
+         *
          * @param item the number of matched user
          */
         void OnRemoveParticipantClick(ParticipantAdapterItem item);
@@ -64,17 +69,18 @@ public class VectorRoomCreationAdapter extends ArrayAdapter<ParticipantAdapterIt
     private final int mAddMemberLayoutResourceId;
 
     // members list display names
-    private final ArrayList<String> mDisplayNamesList = new ArrayList<>();
+    private final List<String> mDisplayNamesList = new ArrayList<>();
 
     // the events listener
     private IRoomCreationAdapterListener mRoomCreationAdapterListener;
 
     /**
      * Create a room creation adapter.
-     * @param context the context.
+     *
+     * @param context                   the context.
      * @param addMemberLayoutResourceId the add member layout.
-     * @param memberLayoutResourceId the member layout id
-     * @param session the session.
+     * @param memberLayoutResourceId    the member layout id
+     * @param session                   the session.
      */
     public VectorRoomCreationAdapter(Context context, int addMemberLayoutResourceId, int memberLayoutResourceId, MXSession session) {
         super(context, memberLayoutResourceId);
@@ -93,17 +99,18 @@ public class VectorRoomCreationAdapter extends ArrayAdapter<ParticipantAdapterIt
         // list the names to concat user id if several users have the same display name
         mDisplayNamesList.clear();
 
-        for(int i = 0; i < getCount(); i++) {
+        for (int i = 0; i < getCount(); i++) {
             ParticipantAdapterItem item = getItem(i);
 
             if (!TextUtils.isEmpty(item.mDisplayName)) {
-                mDisplayNamesList.add(item.mDisplayName.toLowerCase());
+                mDisplayNamesList.add(item.mDisplayName.toLowerCase(VectorApp.getApplicationLocale()));
             }
         }
     }
 
     /**
      * Defines a listener.
+     *
      * @param aListener the new listener.
      */
     public void setRoomCreationAdapterListener(IRoomCreationAdapterListener aListener) {
@@ -138,10 +145,10 @@ public class VectorRoomCreationAdapter extends ArrayAdapter<ParticipantAdapterIt
         final ParticipantAdapterItem participant = getItem(position);
 
         // retrieve the ui items
-        final ImageView thumbView = (ImageView) convertView.findViewById(R.id.filtered_list_avatar);
-        final TextView nameTextView = (TextView) convertView.findViewById(R.id.filtered_list_name);
-        final TextView statusTextView = (TextView) convertView.findViewById(R.id.filtered_list_status);
-        final ImageView matrixUserBadge =  (ImageView) convertView.findViewById(R.id.filtered_list_matrix_user);
+        final ImageView thumbView = convertView.findViewById(R.id.filtered_list_avatar);
+        final TextView nameTextView = convertView.findViewById(R.id.filtered_list_name);
+        final TextView statusTextView = convertView.findViewById(R.id.filtered_list_status);
+        final ImageView matrixUserBadge = convertView.findViewById(R.id.filtered_list_matrix_user);
 
         // display the avatar
         participant.displayAvatar(mSession, thumbView);
@@ -155,9 +162,9 @@ public class VectorRoomCreationAdapter extends ArrayAdapter<ParticipantAdapterIt
         User user = null;
         MXSession matchedSession = null;
         // retrieve the linked user
-        ArrayList<MXSession> sessions = Matrix.getMXSessions(mContext);
+        List<MXSession> sessions = Matrix.getMXSessions(mContext);
 
-        for(MXSession session : sessions) {
+        for (MXSession session : sessions) {
             if (null == user) {
                 matchedSession = session;
                 user = session.getDataHandler().getUser(participant.mUserId);
@@ -168,7 +175,7 @@ public class VectorRoomCreationAdapter extends ArrayAdapter<ParticipantAdapterIt
             status = VectorUtils.getUserOnlineStatus(mContext, matchedSession, participant.mUserId, new SimpleApiCallback<Void>() {
                 @Override
                 public void onSuccess(Void info) {
-                    VectorRoomCreationAdapter.this.notifyDataSetChanged();
+                    notifyDataSetChanged();
                 }
             });
         }
@@ -179,14 +186,13 @@ public class VectorRoomCreationAdapter extends ArrayAdapter<ParticipantAdapterIt
 
             boolean isMatrixUserId = !android.util.Patterns.EMAIL_ADDRESS.matcher(participant.mUserId).matches();
             matrixUserBadge.setVisibility(isMatrixUserId ? View.VISIBLE : View.GONE);
-        }
-        else {
+        } else {
             statusTextView.setText(status);
             matrixUserBadge.setVisibility(View.GONE);
         }
 
         // the checkbox is not managed here
-        final CheckBox checkBox = (CheckBox)convertView.findViewById(R.id.filtered_list_checkbox);
+        final CheckBox checkBox = convertView.findViewById(R.id.filtered_list_checkbox);
         checkBox.setVisibility(View.GONE);
 
         final View removeParticipantImageView = convertView.findViewById(R.id.filtered_list_remove_button);

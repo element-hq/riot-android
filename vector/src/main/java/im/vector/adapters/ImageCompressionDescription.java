@@ -16,7 +16,7 @@
 
 package im.vector.adapters;
 
-public class ImageCompressionDescription  {
+public class ImageCompressionDescription {
     public String mCompressionText;
     public String mCompressionInfoText;
 }

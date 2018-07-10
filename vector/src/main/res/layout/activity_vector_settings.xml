@@ -3,22 +3,24 @@
     android:layout_height="match_parent">
 
     <FrameLayout
+        android:id="@+id/vector_settings_page"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="?attr/riot_primary_background_color"
-        android:id="@+id/vector_settings_page" />
+        android:background="?attr/riot_primary_background_color" />
 
     <FrameLayout
         android:id="@+id/vector_settings_spinner_views"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:visibility="gone"
-        android:background="?attr/waiting_background_color">
+        android:background="?attr/waiting_background_color"
+        android:visibility="gone">
+
         <ProgressBar
             android:id="@+id/vector_settings_spinner"
             android:layout_width="40dp"
             android:layout_height="40dp"
             android:layout_gravity="center"
-            android:visibility="visible"/>
+            android:visibility="visible" />
     </FrameLayout>
+
 </FrameLayout>
