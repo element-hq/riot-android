@@ -458,7 +458,7 @@
 请在接下来弹出的窗口中授权允许访问。</string>
     <string name="permissions_action_not_performed_missing_permissions">对不起… 因为缺少权限，操作已取消</string>
 
-    <string name="media_slider_saved_message">保存至下载</string>
+    <string name="media_slider_saved_message">保存至下载？</string>
     <string name="remove">移除</string>
     <string name="room_preview_unlinked_email_warning">此邀请已发送至 %s，但没和这个账户关联。
 您可能希望用一个不同的账户登录，或者把这个电子邮箱加入到这个账户。</string>
@@ -969,4 +969,5 @@ Matrix 中的信息可见性类似于电子邮件。我们忘记您的信息意�
 
     <string name="error_empty_field_your_password">请输入您的密码。</string>
 
-</resources>
+<string name="speak">说话</string>
+    </resources>
