@@ -55,7 +55,7 @@ import im.vector.util.PreferencesManager;
  * Helper class to handle the Push notification systems {@link SharedPreferences}
  */
 public abstract class PushManager {
-    private static final String LOG_TAG = GcmRegistrationManager.class.getSimpleName();
+    private static final String LOG_TAG = PushManager.class.getSimpleName();
     private static final String PREFS_PUSH = "PushManager";
 
     // GcmRegistrationManager because of history. TODO: Write migration for old settings to PushManager

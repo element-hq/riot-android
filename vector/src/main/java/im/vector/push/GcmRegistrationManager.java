@@ -37,7 +37,7 @@ import java.util.ArrayList;
  * Helper class to store the GCM registration ID in {@link SharedPreferences}
  */
 public final class GcmRegistrationManager extends PushManager {
-    private static final String LOG_TAG = "GcmRegistrationManager";
+    private static final String LOG_TAG = GcmRegistrationManager.class.getSimpleName();
 
     private static final String PREFS_GCM = "GcmRegistrationManager";
 
@@ -212,7 +212,7 @@ public final class GcmRegistrationManager extends PushManager {
     protected void setStoredRegistrationToken(String registrationToken) {
         Log.d(LOG_TAG, "Saving registration token");
 
-        getPushSharedPreferences().edit()
+        getGcmSharedPreferences().edit()
                 .putString(PREFS_PUSHER_REGISTRATION_TOKEN_KEY_FCM, registrationToken)
                 .apply();
     }
