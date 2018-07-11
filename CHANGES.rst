@@ -5,7 +5,7 @@ Features:
  -
 
 Improvements:
- -
+ - Show "x new messages" in case the event cannot be parsed from Push-notification (#2423)
 
 Other changes:
  -

@@ -1154,11 +1154,13 @@ public class EventStreamService extends Service {
         NotificationUtils.INSTANCE.addNotificationChannels(context);
 
         if ((null != event) && !mBackgroundNotificationEventIds.contains(event.eventId)) {
+            Log.d(LOG_TAG, "## onStaticNotifiedEvent we got a new event");
             mBackgroundNotificationEventIds.add(event.eventId);
             String header = (TextUtils.isEmpty(roomName) ? "" : roomName + ": ");
             String text;
 
             if (null == event.content) {
+                Log.d(LOG_TAG, "## onStaticNotifiedEvent with empty event content");
                 // Check whether the room id is available and a room name has been retrieved
                 if (null != event.roomId && !TextUtils.isEmpty(header)) {
                     // Check whether the previous notification (if any) was from the same room
@@ -1180,6 +1182,7 @@ public class EventStreamService extends Service {
                 text = context.getResources().getQuantityString(R.plurals.room_new_messages_notification,
                         mLastBackgroundNotificationUnreadCount, mLastBackgroundNotificationUnreadCount);
             } else {
+                Log.d(LOG_TAG, "## onStaticNotifiedEvent with event content");
                 // Add the potential sender name in the header
                 String senderName = (TextUtils.isEmpty(senderDisplayName) ? event.sender : senderDisplayName);
                 if (!TextUtils.isEmpty(senderName) && !senderName.equalsIgnoreCase(roomName)) {
@@ -1196,17 +1199,28 @@ public class EventStreamService extends Service {
             }
 
             if (!TextUtils.isEmpty(text)) {
+                Log.d(LOG_TAG, "Show notification with header \"" + header + "\" and text \"" + text + "\"");
                 SpannableString notifiedLine = new SpannableString(header + text);
                 notifiedLine.setSpan(new StyleSpan(android.graphics.Typeface.BOLD), 0, header.length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
 
                 mBackgroundNotificationStrings.add(0, notifiedLine);
                 getInstance().displayMessagesNotification(mBackgroundNotificationStrings, new BingRule(null, null, true, true, true));
+            } else {
+                Log.d(LOG_TAG, "Show notification with header \"" + header + "\" and empty text");
             }
         } else if (0 == unreadMessagesCount) {
+            Log.d(LOG_TAG, "## onStaticNotifiedEvent we got a notification the we don't have unread messages");
             mBackgroundNotificationStrings.clear();
             mLastBackgroundNotificationUnreadCount = 0;
             mLastBackgroundNotificationRoomId = null;
             getInstance().displayMessagesNotification(null, null);
+        } else if (unreadMessagesCount > 0 && mBackgroundNotificationStrings.isEmpty()) {
+            Log.d(LOG_TAG, "## onStaticNotifiedEvent we got a new empty event");
+            String text = context.getResources().getQuantityString(R.plurals.room_new_messages_notification,
+                    unreadMessagesCount, unreadMessagesCount);
+            List<CharSequence> msg = new ArrayList<>();
+            msg.add(text);
+            getInstance().displayMessagesNotification(msg, new BingRule(null, null, false, false, false));
         }
     }
 
