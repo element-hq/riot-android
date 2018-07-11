@@ -2,6 +2,7 @@ Changes in Riot 0.8.13 (2018-XX-XX)
 ===================================================
 
 Features:
+ - allow overwriting DEFAULT_PUSHER_URL via Settings store (#2424)
  -
 
 Improvements:
