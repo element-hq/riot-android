@@ -67,6 +67,7 @@ public final class GcmRegistrationManager {
     private static final String PREFS_PUSHER_REGISTRATION_TOKEN_KEY_FCM = "PREFS_PUSHER_REGISTRATION_TOKEN_KEY_FCM";
     private static final String PREFS_PUSHER_REGISTRATION_TOKEN_KEY = "PREFS_PUSHER_REGISTRATION_TOKEN_KEY";
     private static final String PREFS_PUSHER_REGISTRATION_STATUS = "PREFS_PUSHER_REGISTRATION_STATUS";
+    private static final String PREFS_PUSHER_PUSHER_URL = "PREFS_PUSHER_PUSHER_URL";
 
     private static final String PREFS_SYNC_TIMEOUT = "GcmRegistrationManager.PREFS_SYNC_TIMEOUT";
     private static final String PREFS_SYNC_DELAY = "GcmRegistrationManager.PREFS_SYNC_DELAY";
@@ -602,7 +603,7 @@ public final class GcmRegistrationManager {
         getPushersRestClient(session)
                 .addHttpPusher(mRegistrationToken, DEFAULT_PUSHER_APP_ID, computePushTag(session),
                         mPusherLang, mPusherAppName, mBasePusherDeviceName,
-                        DEFAULT_PUSHER_URL, append, eventIdOnlyPushes, new ApiCallback<Void>() {
+                        getPusherUrl(), append, eventIdOnlyPushes, new ApiCallback<Void>() {
                             @Override
                             public void onSuccess(Void info) {
                                 Log.d(LOG_TAG, "registerToThirdPartyServer succeeded");
@@ -974,7 +975,7 @@ public final class GcmRegistrationManager {
         getPushersRestClient(session)
                 .removeHttpPusher(mRegistrationToken, DEFAULT_PUSHER_APP_ID, computePushTag(session),
                         mPusherLang, mPusherAppName, mBasePusherDeviceName,
-                        DEFAULT_PUSHER_URL, new ApiCallback<Void>() {
+                        getPusherUrl(), new ApiCallback<Void>() {
                             @Override
                             public void onSuccess(Void info) {
                                 Log.d(LOG_TAG, "unregisterSession succeeded");
@@ -1129,6 +1130,21 @@ public final class GcmRegistrationManager {
             }
         }
         return mUseGCM;
+    }
+
+    /**
+     * Get Pusher Url
+     * @return
+     */
+    protected String getPusherUrl(){
+        // Stetho only allows setting values which are already in the store
+        if (!getGcmSharedPreferences().contains(PREFS_PUSHER_PUSHER_URL)) {
+            getGcmSharedPreferences()
+                    .edit()
+                    .putString(PREFS_PUSHER_PUSHER_URL, DEFAULT_PUSHER_URL)
+                    .apply();
+        }
+        return getGcmSharedPreferences().getString(PREFS_PUSHER_PUSHER_URL, DEFAULT_PUSHER_URL);
     }
 
     /**
