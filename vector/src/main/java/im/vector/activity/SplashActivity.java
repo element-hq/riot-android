@@ -38,6 +38,8 @@ import im.vector.ErrorListener;
 import im.vector.Matrix;
 import im.vector.R;
 import im.vector.VectorApp;
+import im.vector.analytics.Event;
+import im.vector.analytics.PiwikAnalytics;
 import im.vector.gcm.GcmRegistrationManager;
 import im.vector.receiver.VectorUniversalLinkReceiver;
 import im.vector.services.EventStreamService;
@@ -80,6 +82,10 @@ public class SplashActivity extends MXCActionBarActivity {
      */
     private void onFinish() {
         Log.e(LOG_TAG, "##onFinish() : start VectorHomeActivity");
+        final long finishTime = System.currentTimeMillis();
+        final long duration = finishTime - mLaunchTime;
+        final Event event = new Event.LaunchScreen(duration);
+        VectorApp.getInstance().getAnalytics().trackEvent(event);
 
         if (!hasCorruptedStore()) {
             // Go to the home page

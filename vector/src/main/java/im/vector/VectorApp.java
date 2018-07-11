@@ -75,6 +75,9 @@ import im.vector.activity.JitsiCallActivity;
 import im.vector.activity.VectorCallViewActivity;
 import im.vector.activity.VectorMediasPickerActivity;
 import im.vector.activity.WidgetActivity;
+import im.vector.analytics.Analytics;
+import im.vector.analytics.AppAnalytics;
+import im.vector.analytics.PiwikAnalytics;
 import im.vector.contacts.ContactsManager;
 import im.vector.contacts.PIDsRetriever;
 import im.vector.gcm.GcmRegistrationManager;
@@ -152,6 +155,8 @@ public class VectorApp extends MultiDexApplication {
      */
     private CallsManager mCallsManager;
 
+    private Analytics mAppAnalytics;
+
     /**
      * @return the current instance
      */
@@ -203,6 +208,8 @@ public class VectorApp extends MultiDexApplication {
 
         instance = this;
         mCallsManager = new CallsManager(this);
+        mAppAnalytics = new AppAnalytics(this, new PiwikAnalytics(this));
+
         mActivityTransitionTimer = null;
         mActivityTransitionTimerTask = null;
 
@@ -353,6 +360,7 @@ public class VectorApp extends MultiDexApplication {
 
         PreferencesManager.fixMigrationIssues(this);
         initApplicationLocale();
+        visitSessionVariables();
     }
 
     @Override
@@ -491,6 +499,7 @@ public class VectorApp extends MultiDexApplication {
         }
     }
 
+
     /**
      * List the used permissions statuses.
      */
@@ -606,6 +615,10 @@ public class VectorApp extends MultiDexApplication {
         if (null != mCurrentActivity) {
             KeyRequestHandler.getSharedInstance().processNextRequest();
         }
+    }
+
+    public Analytics getAnalytics() {
+        return getInstance().mAppAnalytics;
     }
 
     /**
@@ -1076,77 +1089,24 @@ public class VectorApp extends MultiDexApplication {
     }
 
     //==============================================================================================================
-    // Piwik management
+    // Analytics management
     //==============================================================================================================
 
-    // the piwik tracker
-    private Tracker mPiwikTracker;
-
     /**
-     * Set the visit variable
+     * Send session custom variables
      *
-     * @param trackMe
-     * @param id
-     * @param name
-     * @param value
      */
-    private static final void visitVariables(TrackMe trackMe, int id, String name, String value) {
-        CustomVariables customVariables = new CustomVariables(trackMe.get(QueryParams.VISIT_SCOPE_CUSTOM_VARIABLES));
-        customVariables.put(id, name, value);
-        trackMe.set(QueryParams.VISIT_SCOPE_CUSTOM_VARIABLES, customVariables.toString());
-    }
 
-    /**
-     * @return the piwik instance
-     */
-    private Tracker getPiwikTracker() {
-        if (mPiwikTracker == null) {
-            try {
-                mPiwikTracker = Piwik.getInstance(this).newTracker(new TrackerConfig("https://piwik.riot.im/", 1, "AndroidPiwikTracker"));
-                // sends the tracking information each minute
-                // the app might be killed in background
-                mPiwikTracker.setDispatchInterval(30 * 1000);
+    private void visitSessionVariables() {
+        mAppAnalytics.visitVariable(1,"App Platform", "Android Platform");
+        mAppAnalytics.visitVariable(2, "App Version", BuildConfig.VERSION_NAME);
+        mAppAnalytics.visitVariable(4, "Chosen Language", getApplicationLocale().toString());
 
-                //
-                TrackMe trackMe = mPiwikTracker.getDefaultTrackMe();
-
-                visitVariables(trackMe, 1, "App Platform", "Android Platform");
-                visitVariables(trackMe, 2, "App Version", SHORT_VERSION);
-                visitVariables(trackMe, 4, "Chosen Language", getApplicationLocale().toString());
-
-                if (null != Matrix.getInstance(this).getDefaultSession()) {
-                    MXSession session = Matrix.getInstance(this).getDefaultSession();
-
-                    visitVariables(trackMe, 7, "Homeserver URL", session.getHomeServerConfig().getHomeserverUri().toString());
-                    visitVariables(trackMe, 8, "Identity Server URL", session.getHomeServerConfig().getIdentityServerUri().toString());
-                }
-            } catch (Throwable t) {
-                Log.e(LOG_TAG, "## getPiwikTracker() : newTracker failed " + t.getMessage());
-            }
+        final MXSession session = Matrix.getInstance(this).getDefaultSession();
+        if (session != null) {
+            mAppAnalytics.visitVariable(7, "Homeserver URL", session.getHomeServerConfig().getHomeserverUri().toString());
+            mAppAnalytics.visitVariable(8, "Identity Server URL", session.getHomeServerConfig().getIdentityServerUri().toString());
         }
-
-        return mPiwikTracker;
-    }
-
-
-    /**
-     * Add the stats variables to the piwik screen.
-     *
-     * @return the piwik screen
-     */
-    private TrackHelper.Screen addCustomVariables(TrackHelper.Screen screen) {
-        screen.variable(1, "App Platform", "Android Platform");
-        screen.variable(2, "App Version", SHORT_VERSION);
-        screen.variable(4, "Chosen Language", getApplicationLocale().toString());
-
-        if (null != Matrix.getInstance(this).getDefaultSession()) {
-            MXSession session = Matrix.getInstance(this).getDefaultSession();
-
-            screen.variable(7, "Homeserver URL", session.getHomeServerConfig().getHomeserverUri().toString());
-            screen.variable(8, "Identity Server URL", session.getHomeServerConfig().getIdentityServerUri().toString());
-        }
-
-        return screen;
     }
 
     /**
@@ -1154,38 +1114,21 @@ public class VectorApp extends MultiDexApplication {
      *
      * @param activity the new activity
      */
+
     private void onNewScreen(Activity activity) {
-        if (PreferencesManager.useAnalytics(this)) {
-            Tracker tracker = getPiwikTracker();
-            if (null != tracker) {
-                try {
-                    TrackHelper.Screen screen = TrackHelper.track().screen("/android/" + Matrix.getApplicationName()
-                            + "/" + getString(R.string.flavor_description)
-                            + "/" + SHORT_VERSION
-                            + "/" + activity.getClass().getName().replace(".", "/"));
-                    addCustomVariables(screen).with(tracker);
-                } catch (Throwable t) {
-                    Log.e(LOG_TAG, "## onNewScreen() : failed " + t.getMessage());
-                }
-            }
-        }
+        final String screenPath = "/android/" + Matrix.getApplicationName()
+                + "/" + getString(R.string.flavor_description)
+                + "/" + SHORT_VERSION
+                + "/" + activity.getClass().getName().replace(".", "/");
+        mAppAnalytics.trackScreen(screenPath, null);
     }
 
 
     /**
      * The application is paused.
      */
+
     private void onAppPause() {
-        if (PreferencesManager.useAnalytics(this)) {
-            Tracker tracker = getPiwikTracker();
-            if (null != tracker) {
-                try {
-                    // force to send the pending actions
-                    tracker.dispatch();
-                } catch (Throwable t) {
-                    Log.e(LOG_TAG, "## onAppPause() : failed " + t.getMessage());
-                }
-            }
-        }
+        mAppAnalytics.forceDispatch();
     }
 }
