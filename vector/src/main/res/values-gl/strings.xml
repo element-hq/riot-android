@@ -562,7 +562,7 @@ Pode engadir a dirección de correo na sección de configuración de perfil.</st
 
 <string name="option_send_voice">Enviar voz</string>
 
-    <string name="go_on_with">continuar con...</string>
+    <string name="go_on_with">continuar con…</string>
     <string name="error_no_external_application_found">Non se atopou unha aplicación que poida completar iso.</string>
 
     <string name="auth_reset_password_email_validation_message">Enviouse un correo a %s. Unha vez abra a ligazón que contén prema abaixo.</string>
@@ -606,7 +606,7 @@ Pode engadir a dirección de correo na sección de configuración de perfil.</st
 
     <string name="call_connected">Chamada establecida</string>
     <string name="call_ended">Chamada finalizada</string>
-    <string name="call_ring">Chamando...</string>
+    <string name="call_ring">Chamando…</string>
     <string name="incoming_call">Chamada entrante</string>
     <string name="incoming_video_call">Videochamada entrante</string>
     <string name="incoming_voice_call">Chamada de audio entrante</string>
@@ -718,7 +718,7 @@ Seguramente queira conectarse cunha conta distinta, ou engadir este correo a sú
     <string name="encryption_information_verify_device_warning">" Para verificar que se pode confiar neste dispositivo, contacte co seu dono utilizando algún outro medio (ex. en persoa ou chamada de teléfono) e pregúntelle se a clave que ven nos axustes de usuario do se dispositivo coincide coa clave inferior:"</string>
     <string name="you_added_a_new_device">Engadiu un novo dispositivo «%s» que está a solicitar as chaves de cifrado.</string>
     <string name="your_unverified_device_requesting">O seu dispositivo sen verificar «%s» está solicitando as chaves de cifrado.</string>
-    <string name="dialog_user_consent_content">Para continuar usando o servidor %1$s ten que revisar primeiro os seus termos e condicións</string>
+    <string name="dialog_user_consent_content">Para continuar usando o servidor %1$s ten que revisar primeiro os seus termos e condicións.</string>
     <string name="deactivate_account_delete_checkbox">Esquezan todas as mensaxes que eu enviara no momento en que elimine a miña conta. (Aviso: iso suporá que os seguintes participantes só verán unha versión incompleta das conversas.)</string>
     <string name="error_empty_field_your_password">Introduza o seu contrasinal.</string>
 
