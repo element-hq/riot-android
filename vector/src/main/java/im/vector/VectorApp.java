@@ -130,10 +130,8 @@ public class VectorApp extends MultiDexApplication {
     /**
      * Google analytics information.
      */
-    public static int VERSION_BUILD = -1;
     private static String VECTOR_VERSION_STRING = "";
     private static String SDK_VERSION_STRING = "";
-    private static String SHORT_VERSION = "";
 
     /**
      * Tells if there a pending call whereas the application is backgrounded.
@@ -213,28 +211,13 @@ public class VectorApp extends MultiDexApplication {
         mActivityTransitionTimer = null;
         mActivityTransitionTimerTask = null;
 
-        try {
-            PackageInfo packageInfo = getPackageManager().getPackageInfo(getPackageName(), 0);
-            VERSION_BUILD = packageInfo.versionCode;
-        } catch (PackageManager.NameNotFoundException e) {
-            Log.e(LOG_TAG, "fails to retrieve the package info " + e.getMessage());
-        }
-
         VECTOR_VERSION_STRING = Matrix.getInstance(this).getVersion(true, true);
-
         // not the first launch
         if (null != Matrix.getInstance(this).getDefaultSession()) {
             SDK_VERSION_STRING = Matrix.getInstance(this).getDefaultSession().getVersion(true);
         } else {
             SDK_VERSION_STRING = "";
         }
-
-        try {
-            PackageInfo pInfo = getPackageManager().getPackageInfo(getPackageName(), 0);
-            SHORT_VERSION = pInfo.versionName;
-        } catch (Exception e) {
-        }
-
         mLogsDirectoryFile = new File(getCacheDir().getAbsolutePath() + "/logs");
 
         org.matrix.androidsdk.util.Log.setLogDirectory(mLogsDirectoryFile);
@@ -617,8 +600,11 @@ public class VectorApp extends MultiDexApplication {
         }
     }
 
+    /**
+     * @return the analytics app instance
+     */
     public Analytics getAnalytics() {
-        return getInstance().mAppAnalytics;
+        return mAppAnalytics;
     }
 
     /**
@@ -1094,11 +1080,10 @@ public class VectorApp extends MultiDexApplication {
 
     /**
      * Send session custom variables
-     *
      */
 
     private void visitSessionVariables() {
-        mAppAnalytics.visitVariable(1,"App Platform", "Android Platform");
+        mAppAnalytics.visitVariable(1, "App Platform", "Android Platform");
         mAppAnalytics.visitVariable(2, "App Version", BuildConfig.VERSION_NAME);
         mAppAnalytics.visitVariable(4, "Chosen Language", getApplicationLocale().toString());
 
@@ -1118,7 +1103,7 @@ public class VectorApp extends MultiDexApplication {
     private void onNewScreen(Activity activity) {
         final String screenPath = "/android/" + Matrix.getApplicationName()
                 + "/" + getString(R.string.flavor_description)
-                + "/" + SHORT_VERSION
+                + "/" + BuildConfig.VERSION_NAME
                 + "/" + activity.getClass().getName().replace(".", "/");
         mAppAnalytics.trackScreen(screenPath, null);
     }

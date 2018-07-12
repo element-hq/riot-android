@@ -3,6 +3,9 @@ package im.vector.analytics
 import org.matrix.androidsdk.data.metrics.MetricsListener
 import java.util.concurrent.atomic.AtomicBoolean
 
+/**
+ * A proxy implementing the MetricsListener. It does then dispatch the metrics to analytics, with a one time check by session.
+ */
 class MetricsListenerProxy(val analytics: Analytics) : MetricsListener {
 
     private val firstSyncDispatched = AtomicBoolean()
@@ -37,5 +40,4 @@ class MetricsListenerProxy(val analytics: Analytics) : MetricsListener {
             analytics.trackEvent(event)
         }
     }
-
 }

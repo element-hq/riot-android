@@ -5,6 +5,9 @@ import org.piwik.sdk.*
 import org.piwik.sdk.extra.CustomVariables
 import org.piwik.sdk.extra.TrackHelper
 
+/**
+ * A class implenting the Analytics interface for the Piwik solution
+ */
 class PiwikAnalytics(context: Context) : Analytics {
     private val tracker: Tracker
 
@@ -14,11 +17,18 @@ class PiwikAnalytics(context: Context) : Analytics {
     }
 
     override fun trackScreen(screen: String, title: String?) {
-        TrackHelper.track().screen(screen).title(title).with(tracker)
+        TrackHelper.track()
+                .screen(screen)
+                .title(title)
+                .with(tracker)
     }
 
     override fun trackEvent(event: Event) {
-        TrackHelper.track().event(event.category.value, event.category.value).name(event.title).value(event.value).with(tracker)
+        TrackHelper.track()
+                .event(event.category.value, event.category.value)
+                .name(event.title)
+                .value(event.value)
+                .with(tracker)
     }
 
     @Suppress("DEPRECATION")

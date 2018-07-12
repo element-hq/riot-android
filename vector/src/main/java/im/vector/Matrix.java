@@ -631,17 +631,18 @@ public class Matrix {
         final Credentials credentials = hsConfig.getCredentials();
 
         /*if (true) {*/
-        store = new MXFileStore(hsConfig, context).setMetricsListener(metricsListener);
+        store = new MXFileStore(hsConfig, context);
+        store.setMetricsListener(metricsListener);
 
         /*} else {
             store = new MXMemoryStore(hsConfig.getCredentials(), context);
         }*/
 
-        final MXSession session = new MXSession(hsConfig, new MXDataHandler(store, credentials), mAppContext);
+        final MXDataHandler dataHandler = new MXDataHandler(store, credentials);
+        final MXSession session = new MXSession(hsConfig, dataHandler, mAppContext);
         session.setMetricsListener(metricsListener);
-
-
-        session.getDataHandler().setRequestNetworkErrorListener(new MXDataHandler.RequestNetworkErrorListener() {
+        dataHandler.setMetricsListener(metricsListener);
+        dataHandler.setRequestNetworkErrorListener(new MXDataHandler.RequestNetworkErrorListener() {
 
             @Override
             public void onConfigurationError(String matrixErrorCode) {

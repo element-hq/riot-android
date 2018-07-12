@@ -1,9 +1,9 @@
 package im.vector.analytics
 
 import android.content.Context
+import im.vector.BuildConfig
 import im.vector.util.PreferencesManager
 import org.matrix.androidsdk.util.Log
-import org.piwik.sdk.BuildConfig
 
 class AppAnalytics(private val context: Context, private vararg val analytics: Analytics) : Analytics {
 
@@ -42,6 +42,5 @@ class AppAnalytics(private val context: Context, private vararg val analytics: A
             it.forceDispatch()
         }
     }
-
 
 }
