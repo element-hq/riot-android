@@ -11,7 +11,6 @@ class PiwikAnalytics(context: Context) : Analytics {
     init {
         val config = TrackerConfig("https://piwik.riot.im/", 1, "AndroidPiwikTracker")
         tracker = Piwik.getInstance(context).newTracker(config)
-        tracker.dispatchInterval = 30 * 1000
     }
 
     override fun trackScreen(screen: String, title: String?) {
