@@ -1223,7 +1223,9 @@ public class EventStreamService extends Service {
         new Handler(getMainLooper()).post(new Runnable() {
             @Override
             public void run() {
-                if (!mGcmRegistrationManager.areDeviceNotificationsAllowed() || (null == messages) || (0 == messages.size())) {
+                if (!mGcmRegistrationManager.areDeviceNotificationsAllowed()
+                        || null == messages
+                        || messages.isEmpty()) {
                     NotificationUtils.INSTANCE.cancelNotificationMessage(EventStreamService.this);
                     RoomsNotifications.deleteCachedRoomNotifications(VectorApp.getInstance());
                 } else {

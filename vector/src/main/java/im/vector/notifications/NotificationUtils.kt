@@ -566,7 +566,7 @@ object NotificationUtils {
             builder.color = highlightColor
         } else {
             builder.priority = NotificationCompat.PRIORITY_DEFAULT
-            builder.color = Color.TRANSPARENT
+            builder.color = defaultColor
         }
 
         if (!isBackground) {
