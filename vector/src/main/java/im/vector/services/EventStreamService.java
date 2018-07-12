@@ -1150,9 +1150,6 @@ public class EventStreamService extends Service {
      * @param unreadMessagesCount the unread messages count
      */
     public static void onStaticNotifiedEvent(Context context, Event event, String roomName, String senderDisplayName, int unreadMessagesCount) {
-        // FIXME Remove this call?
-        NotificationUtils.INSTANCE.addNotificationChannels(context);
-
         if ((null != event) && !mBackgroundNotificationEventIds.contains(event.eventId)) {
             mBackgroundNotificationEventIds.add(event.eventId);
             String header = (TextUtils.isEmpty(roomName) ? "" : roomName + ": ");
@@ -1217,9 +1214,6 @@ public class EventStreamService extends Service {
      * @param rule     the bing rule to use
      */
     private void displayMessagesNotification(final List<CharSequence> messages, final BingRule rule) {
-        // FIXME Remove this call?
-        NotificationUtils.INSTANCE.addNotificationChannels(this);
-
         new Handler(getMainLooper()).post(new Runnable() {
             @Override
             public void run() {
