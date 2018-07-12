@@ -12,6 +12,7 @@ Other changes:
 
 Bugfix:
  - Fix issue on incoming call screen when "Do not disturb mode" is active (#2417)
+ - Fix issue when selecting sound for notifications in the settings
 
 Translations:
  -

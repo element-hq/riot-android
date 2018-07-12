@@ -370,7 +370,8 @@ class VectorSettingsPreferencesFragment : PreferenceFragment(), SharedPreference
             if (null != PreferencesManager.getNotificationRingTone(activity)) {
                 intent.putExtra(RingtoneManager.EXTRA_RINGTONE_EXISTING_URI, PreferencesManager.getNotificationRingTone(activity))
             }
-            activity.startActivityForResult(intent, REQUEST_NOTIFICATION_RINGTONE)
+
+            startActivityForResult(intent, REQUEST_NOTIFICATION_RINGTONE)
             false
         }
         refreshNotificationRingTone()
