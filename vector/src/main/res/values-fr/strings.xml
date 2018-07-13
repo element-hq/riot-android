@@ -906,7 +906,7 @@ Appareils inconnus :</string>
 </plurals>
 
     <string name="open_chat_header">Développer l\'entête</string>
-    <string name="receipt_avatar">Réception de l\'avatar</string>
+    <string name="receipt_avatar">Avatar de réception</string>
     <string name="settings_notification_privacy">Confidentialité des notifications</string>
     <string name="settings_notification_privacy_warning">Riot.im fonctionne en arrière-plan pour que le contenu du message de notification reste privé. Vous pouvez désactiver cette option pour réduire l\'utilisation de la batterie.</string>
     <string name="settings_notification_privacy_normal">Normal</string>
@@ -926,7 +926,7 @@ Appareils inconnus :</string>
     <string name="startup_notification_privacy_button_grant">Donner la permission</string>
     <string name="startup_notification_privacy_button_other">Choisir une autre option</string>
 
-    <string name="notice_avatar">Avatar de l\'annonce</string>
+    <string name="notice_avatar">Avatar d’avertissement</string>
     <string name="title_activity_choose_sticker">Envoyer un sticker</string>
 
     <string name="option_send_sticker">Envoyer un sticker</string>
