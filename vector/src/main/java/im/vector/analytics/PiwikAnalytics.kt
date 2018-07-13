@@ -6,13 +6,13 @@ import org.piwik.sdk.extra.CustomVariables
 import org.piwik.sdk.extra.TrackHelper
 
 /**
- * A class implenting the Analytics interface for the Piwik solution
+ * A class implementing the Analytics interface for the Piwik solution
  */
 class PiwikAnalytics(context: Context) : Analytics {
     private val tracker: Tracker
 
     init {
-        val config = TrackerConfig("https://piwik.riot.im/", 1, "AndroidPiwikTracker")
+        val config = TrackerConfig("https://piwik.riot.im/", 1, " AndroidPiwikTracker")
         tracker = Piwik.getInstance(context).newTracker(config)
     }
 
@@ -25,7 +25,7 @@ class PiwikAnalytics(context: Context) : Analytics {
 
     override fun trackEvent(event: Event) {
         TrackHelper.track()
-                .event(event.category.value, event.category.value)
+                .event(event.category.value, event.action.value)
                 .name(event.title)
                 .value(event.value)
                 .with(tracker)
