@@ -103,6 +103,7 @@ import java.util.Map;
 import java.util.Timer;
 import java.util.TimerTask;
 
+import butterknife.BindView;
 import im.vector.Matrix;
 import im.vector.R;
 import im.vector.VectorApp;
@@ -223,38 +224,74 @@ public class VectorRoomActivity extends MXCActionBarActivity implements
 
     private MXLatestChatMessageCache mLatestChatMessageCache;
 
-    private View mSendingMessagesLayout;
-    private ImageView mSendImageView;
-    private VectorAutoCompleteTextView mEditText;
+    @BindView(R.id.room_sending_message_layout)
+    View mSendingMessagesLayout;
+
+    @BindView(R.id.room_send_image_view)
+    ImageView mSendImageView;
+
+    @BindView(R.id.editText_messageBox)
+    VectorAutoCompleteTextView mEditText;
+
     private ImageView mAvatarImageView;
-    private View mCanNotPostTextView;
-    private ImageView mE2eImageView;
+
+    @BindView(R.id.room_cannot_post_textview)
+    View mCanNotPostTextView;
+
+    @BindView(R.id.room_encrypted_image_view)
+    ImageView mE2eImageView;
 
     // call
-    private View mStartCallLayout;
-    private View mStopCallLayout;
+    @BindView(R.id.room_start_call_image_view)
+    View mStartCallLayout;
+
+    @BindView(R.id.room_end_call_image_view)
+    View mStopCallLayout;
 
     // action bar header
-    private android.support.v7.widget.Toolbar mToolbar;
-    private TextView mActionBarCustomTitle;
-    private TextView mActionBarCustomTopic;
-    private ImageView mActionBarCustomArrowImageView;
-    private ViewGroup mRoomHeaderView;
-    private TextView mActionBarHeaderRoomName;
+    @BindView(R.id.room_action_bar_title)
+    TextView mActionBarCustomTitle;
 
-    private View mActionBarHeaderActiveMembersLayout;
-    private TextView mActionBarHeaderActiveMembersTextView;
+    @BindView(R.id.room_action_bar_topic)
+    TextView mActionBarCustomTopic;
 
-    private View mActionBarHeaderActiveMembersInviteButton;
-    private View mActionBarHeaderActiveMembersListButton;
+    @BindView(R.id.open_chat_header_arrow)
+    ImageView mActionBarCustomArrowImageView;
 
-    private TextView mActionBarHeaderRoomTopic;
+    // The room header view is displayed by clicking on the title of the action bar
+    @BindView(R.id.action_bar_header)
+    ViewGroup mRoomHeaderView;
+
+    @BindView(R.id.action_bar_header_room_title)
+    TextView mActionBarHeaderRoomName;
+
+    @BindView(R.id.action_bar_header_room_members_layout)
+    View mActionBarHeaderActiveMembersLayout;
+
+    @BindView(R.id.action_bar_header_room_members_text_view)
+    TextView mActionBarHeaderActiveMembersTextView;
+
+    @BindView(R.id.action_bar_header_room_members_invite_view)
+    View mActionBarHeaderActiveMembersInviteButton;
+
+    @BindView(R.id.action_bar_header_room_members_settings_view)
+    View mActionBarHeaderActiveMembersListButton;
+
+    @BindView(R.id.action_bar_header_room_topic)
+    TextView mActionBarHeaderRoomTopic;
+
     private ImageView mActionBarHeaderRoomAvatar;
 
     // notifications area
-    private View mNotificationsArea;
-    private ImageView mNotificationIconImageView;
-    private TextView mNotificationTextView;
+    @BindView(R.id.room_notifications_area)
+    View mNotificationsArea;
+
+    @BindView(R.id.room_notification_icon)
+    ImageView mNotificationIconImageView;
+
+    @BindView(R.id.room_notification_message)
+    TextView mNotificationTextView;
+
     private String mLatestTypingMessage;
     private Boolean mIsScrolledToTheBottom;
     private Event mLatestDisplayedEvent; // the event at the bottom of the list
@@ -262,7 +299,8 @@ public class VectorRoomActivity extends MXCActionBarActivity implements
     private ReadMarkerManager mReadMarkerManager;
 
     // room preview
-    private View mRoomPreviewLayout;
+    @BindView(R.id.room_preview_info_layout)
+    View mRoomPreviewLayout;
 
     private MenuItem mResendUnsentMenuItem;
     private MenuItem mResendDeleteMenuItem;
@@ -273,13 +311,16 @@ public class VectorRoomActivity extends MXCActionBarActivity implements
     private VectorRoomMediasSender mVectorRoomMediasSender;
 
     // pending call
-    private VectorPendingCallView mVectorPendingCallView;
+    @BindView(R.id.room_pending_call_view)
+    VectorPendingCallView mVectorPendingCallView;
 
     // outgoing call
-    private VectorOngoingConferenceCallView mVectorOngoingConferenceCallView;
+    @BindView(R.id.room_ongoing_conference_call_view)
+    VectorOngoingConferenceCallView mVectorOngoingConferenceCallView;
 
     // pending active view
-    private ActiveWidgetsBanner mActiveWidgetsBanner;
+    @BindView(R.id.room_pending_widgets_view)
+    ActiveWidgetsBanner mActiveWidgetsBanner;
 
     // network events
     private final IMXNetworkEventListener mNetworkEventListener = new IMXNetworkEventListener() {
@@ -317,7 +358,8 @@ public class VectorRoomActivity extends MXCActionBarActivity implements
     private boolean mIsUnreadPreviewMode;
 
     // progress bar to warn that the sync is not yet done
-    private View mSyncInProgressView;
+    @BindView(R.id.room_sync_in_progress)
+    View mSyncInProgressView;
 
     // action to do after requesting the camera permission
     private int mCameraPermissionAction;
@@ -612,24 +654,7 @@ public class VectorRoomActivity extends MXCActionBarActivity implements
         }
 
         //setDragEdge(SwipeBackLayout.DragEdge.LEFT);
-
-        // bind the widgets of the room header view. The room header view is displayed by
-        // clicking on the title of the action bar
-        mRoomHeaderView = findViewById(R.id.action_bar_header);
-        mActionBarHeaderRoomTopic = findViewById(R.id.action_bar_header_room_topic);
-        mActionBarHeaderRoomName = findViewById(R.id.action_bar_header_room_title);
-
-        mActionBarHeaderActiveMembersLayout = findViewById(R.id.action_bar_header_room_members_layout);
-        mActionBarHeaderActiveMembersTextView = findViewById(R.id.action_bar_header_room_members_text_view);
-        mActionBarHeaderActiveMembersListButton = findViewById(R.id.action_bar_header_room_members_settings_view);
-        mActionBarHeaderActiveMembersInviteButton = findViewById(R.id.action_bar_header_room_members_invite_view);
         mActionBarHeaderRoomAvatar = mRoomHeaderView.findViewById(R.id.avatar_img);
-        mRoomPreviewLayout = findViewById(R.id.room_preview_info_layout);
-        mVectorPendingCallView = findViewById(R.id.room_pending_call_view);
-        mVectorOngoingConferenceCallView = findViewById(R.id.room_ongoing_conference_call_view);
-        mActiveWidgetsBanner = findViewById(R.id.room_pending_widgets_view);
-        mE2eImageView = findViewById(R.id.room_encrypted_image_view);
-        mSyncInProgressView = findViewById(R.id.room_sync_in_progress);
 
         // hide the header room as soon as the bottom layout (text edit zone) is touched
         findViewById(R.id.room_bottom_layout).setOnTouchListener(new View.OnTouchListener() {
@@ -642,12 +667,7 @@ public class VectorRoomActivity extends MXCActionBarActivity implements
 
         // use a toolbar instead of the actionbar
         // to be able to display an expandable header
-        mToolbar = findViewById(R.id.room_toolbar);
-        setSupportActionBar(mToolbar);
-
-        if (null != getSupportActionBar()) {
-            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        }
+        configureToolbar();
 
         // set the default custom action bar layout,
         // that will be displayed from the custom action bar layout
@@ -672,8 +692,6 @@ public class VectorRoomActivity extends MXCActionBarActivity implements
         } else {
             Log.d(LOG_TAG, "Displaying " + roomId);
         }
-
-        mEditText = findViewById(R.id.editText_messageBox);
 
         // hide the header room as soon as the message input text area is touched
         mEditText.setOnClickListener(new View.OnClickListener() {
@@ -705,8 +723,6 @@ public class VectorRoomActivity extends MXCActionBarActivity implements
 
         mEditText.setAddColonOnFirstItem(true);
 
-        mSendingMessagesLayout = findViewById(R.id.room_sending_message_layout);
-        mSendImageView = findViewById(R.id.room_send_image_view);
         mSendImageView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -848,12 +864,6 @@ public class VectorRoomActivity extends MXCActionBarActivity implements
         });
 
         // notifications area
-        mNotificationsArea = findViewById(R.id.room_notifications_area);
-        mNotificationIconImageView = mNotificationsArea.findViewById(R.id.room_notification_icon);
-        mNotificationTextView = mNotificationsArea.findViewById(R.id.room_notification_message);
-
-        mCanNotPostTextView = findViewById(R.id.room_cannot_post_textview);
-
         // increase the clickable area to open the keyboard.
         // when there is no text, it is quite small and some user thought the edition was disabled.
         findViewById(R.id.room_sending_message_layout).setOnClickListener(new View.OnClickListener() {
@@ -866,7 +876,6 @@ public class VectorRoomActivity extends MXCActionBarActivity implements
             }
         });
 
-        mStartCallLayout = findViewById(R.id.room_start_call_image_view);
         mStartCallLayout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -904,7 +913,6 @@ public class VectorRoomActivity extends MXCActionBarActivity implements
             }
         });
 
-        mStopCallLayout = findViewById(R.id.room_end_call_image_view);
         mStopCallLayout.setOnClickListener(new View.OnClickListener() {
                                                @Override
                                                public void onClick(View v) {
@@ -2934,11 +2942,6 @@ public class VectorRoomActivity extends MXCActionBarActivity implements
      * displayed or not.
      */
     private void setActionBarDefaultCustomLayout() {
-        // binding the widgets of the custom view
-        mActionBarCustomTitle = findViewById(R.id.room_action_bar_title);
-        mActionBarCustomTopic = findViewById(R.id.room_action_bar_topic);
-        mActionBarCustomArrowImageView = findViewById(R.id.open_chat_header_arrow);
-
         // custom header
         View headerTextsContainer = findViewById(R.id.header_texts_container);
 
@@ -3227,7 +3230,6 @@ public class VectorRoomActivity extends MXCActionBarActivity implements
      * @param aIsHeaderViewDisplayed true to show the header view, false to hide
      */
     private void enableActionBarHeader(boolean aIsHeaderViewDisplayed) {
-
         mIsHeaderViewDisplayed = aIsHeaderViewDisplayed;
         if (SHOW_ACTION_BAR_HEADER == aIsHeaderViewDisplayed) {
             dismissKeyboard();
@@ -3243,7 +3245,7 @@ public class VectorRoomActivity extends MXCActionBarActivity implements
             mActionBarCustomArrowImageView.setImageResource(R.drawable.ic_arrow_drop_up_white);
             // enable the header view to make it visible
             mRoomHeaderView.setVisibility(View.VISIBLE);
-            mToolbar.setBackgroundColor(Color.TRANSPARENT);
+            toolbar.setBackgroundColor(Color.TRANSPARENT);
         } else {
             // hide the room header only if it is displayed
             if (View.VISIBLE == mRoomHeaderView.getVisibility()) {
@@ -3260,7 +3262,7 @@ public class VectorRoomActivity extends MXCActionBarActivity implements
                 // hide the action bar header view and reset the arrow image (arrow reset to down)
                 mActionBarCustomArrowImageView.setImageResource(R.drawable.ic_arrow_drop_down_white);
                 mRoomHeaderView.setVisibility(View.GONE);
-                mToolbar.setBackgroundColor(ThemeUtils.INSTANCE.getColor(this, R.attr.primary_color));
+                toolbar.setBackgroundColor(ThemeUtils.INSTANCE.getColor(this, R.attr.primary_color));
             }
         }
     }
