@@ -15,6 +15,7 @@ Bugfix:
  - Fix issue when selecting sound for notifications in the settings
  - Fix issue when changing device name in the settings (#2416)
  - Fix issue on verifying device, update the wording of the description message (#1067)
+ - Messages with code blocks show other HTML as plain text (#2280)
 
 Translations:
  -
