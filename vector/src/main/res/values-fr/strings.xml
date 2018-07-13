@@ -101,7 +101,7 @@ Cliquez sur exporter pour les sauvegarder avant de vous déconnecter.</string>
     <string name="hs_url">URL du serveur d\'accueil</string>
     <string name="identity_url">URL du serveur d\'identité</string>
     <string name="user">utilisateur</string>
-    <string name="users">utilisateurs</string>
+    <string name="users">participants</string>
     <string name="search">Rechercher</string>
 
     <string name="start_new_chat">Nouvelle discussion</string>
@@ -451,8 +451,8 @@ Cliquez sur exporter pour les sauvegarder avant de vous déconnecter.</string>
     <string name="historical_placeholder">Rechercher dans l\'historique</string>
 
 <plurals name="public_room_nb_users">
-	<item quantity="one">%d utilisateur</item>
-	<item quantity="other">%d utilisateurs</item>
+	<item quantity="one">%d participant</item>
+	<item quantity="other">%d participants</item>
 </plurals>
 
     <string name="send_bug_report_description">Veuillez décrire l\'erreur. Qu\'avez-vous fait ? Quel était le comportement attendu ? Que s\'est-il réellement passé ?</string>
