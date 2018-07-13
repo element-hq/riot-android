@@ -538,6 +538,8 @@ public class CallsManager {
     private void startRinging() {
         if (NotificationUtils.INSTANCE.isDoNotDisturbModeOn(mContext)) {
             Log.w(LOG_TAG, "Do not ring because DO NOT DISTURB MODE is on");
+            mCallSoundsManager.startRingingSilently();
+
             return;
         }
 
