@@ -690,10 +690,10 @@ public class Matrix {
             session.enableCryptoWhenStarting();
         }
 
-        session.getDataHandler().addListener(mLiveEventListener);
+        dataHandler.addListener(mLiveEventListener);
         session.setUseDataSaveMode(PreferencesManager.useDataSaveMode(context));
 
-        session.getDataHandler().addListener(new MXEventListener() {
+        dataHandler.addListener(new MXEventListener() {
             @Override
             public void onInitialSyncComplete(String toToken) {
                 if (null != session.getCrypto()) {
