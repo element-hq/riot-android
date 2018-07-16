@@ -83,7 +83,7 @@ public class VectorReferrerReceiver extends BroadcastReceiver {
                     }
                 }
             } catch (Throwable t) {
-                Log.e(LOG_TAG, "## onReceive() : failed " + t.getMessage());
+                Log.e(LOG_TAG, "## onReceive() : failed " + t.getMessage(), t);
             }
 
             Log.d(LOG_TAG, "## onReceive() : HS " + hs);

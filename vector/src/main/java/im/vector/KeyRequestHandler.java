@@ -217,7 +217,7 @@ public class KeyRequestHandler {
                         try {
                             req.mShare.run();
                         } catch (Exception e) {
-                            Log.e(LOG_TAG, "## onDisplayKeyShareDialogClose() : req.mShare failed " + e.getMessage());
+                            Log.e(LOG_TAG, "## onDisplayKeyShareDialogClose() : req.mShare failed " + e.getMessage(), e);
                         }
                     }
                 }
@@ -227,7 +227,7 @@ public class KeyRequestHandler {
                         try {
                             req.mIgnore.run();
                         } catch (Exception e) {
-                            Log.e(LOG_TAG, "## onDisplayKeyShareDialogClose() : req.mIgnore failed " + e.getMessage());
+                            Log.e(LOG_TAG, "## onDisplayKeyShareDialogClose() : req.mIgnore failed " + e.getMessage(), e);
                         }
                     }
                 }

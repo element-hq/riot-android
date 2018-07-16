@@ -57,7 +57,7 @@ public class RiotViewPager extends android.support.v4.view.ViewPager {
         try {
             return super.getChildDrawingOrder(childCount, i);
         } catch (Exception e) {
-            Log.e(LOG_TAG, "## getChildDrawingOrder() failed " + e.getMessage());
+            Log.e(LOG_TAG, "## getChildDrawingOrder() failed " + e.getMessage(), e);
         }
 
         return 0;
@@ -68,7 +68,7 @@ public class RiotViewPager extends android.support.v4.view.ViewPager {
         try {
             super.dispatchDraw(canvas);
         } catch (Exception e) {
-            Log.e(LOG_TAG, "## dispatchDraw() failed " + e.getMessage());
+            Log.e(LOG_TAG, "## dispatchDraw() failed " + e.getMessage(), e);
         }
     }
 }

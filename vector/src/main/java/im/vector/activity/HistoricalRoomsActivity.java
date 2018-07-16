@@ -274,7 +274,7 @@ public class HistoricalRoomsActivity extends RiotAppCompatActivity implements
                     try {
                         Collections.sort(historicalRooms, RoomUtils.getHistoricalRoomsComparator(mSession, false));
                     } catch (Exception e) {
-                        Log.e(LOG_TAG, "## initHistoricalRoomsData() : sort failed " + e.getMessage());
+                        Log.e(LOG_TAG, "## initHistoricalRoomsData() : sort failed " + e.getMessage(), e);
                     }
                 }
                 return null;
@@ -290,7 +290,7 @@ public class HistoricalRoomsActivity extends RiotAppCompatActivity implements
             task.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
             mSortingAsyncTasks.add(task);
         } catch (Exception e) {
-            Log.e(LOG_TAG, "## initHistoricalRoomsData() failed " + e.getMessage());
+            Log.e(LOG_TAG, "## initHistoricalRoomsData() failed " + e.getMessage(), e);
             task.cancel(true);
         }
     }

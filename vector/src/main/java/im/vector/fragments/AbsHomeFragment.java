@@ -123,7 +123,7 @@ public abstract class AbsHomeFragment extends VectorBaseFragment implements
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.ic_action_mark_all_as_read:
-                Log.e(LOG_TAG, "onOptionsItemSelected mark all as read");
+                Log.d(LOG_TAG, "onOptionsItemSelected mark all as read");
                 onMarkAllAsRead();
                 return true;
         }

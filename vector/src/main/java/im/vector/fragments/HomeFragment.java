@@ -328,7 +328,7 @@ public class HomeFragment extends AbsHomeFragment implements HomeRoomAdapter.OnS
         try {
             Collections.sort(rooms, comparator);
         } catch (Exception e) {
-            Log.e(LOG_TAG, "## sortAndDisplay() failed " + e.getMessage());
+            Log.e(LOG_TAG, "## sortAndDisplay() failed " + e.getMessage(), e);
         }
         section.setRooms(rooms);
     }

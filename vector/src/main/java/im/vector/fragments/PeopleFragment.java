@@ -356,7 +356,7 @@ public class PeopleFragment extends AbsHomeFragment implements ContactsManager.C
         try {
             asyncTask.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
         } catch (final Exception e) {
-            Log.e(LOG_TAG, "## initKnownContacts() failed " + e.getMessage());
+            Log.e(LOG_TAG, "## initKnownContacts() failed " + e.getMessage(), e);
             asyncTask.cancel(true);
 
             (new android.os.Handler(Looper.getMainLooper())).postDelayed(new Runnable() {

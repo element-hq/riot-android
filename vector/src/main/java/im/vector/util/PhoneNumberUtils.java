@@ -170,7 +170,7 @@ public class PhoneNumberUtils {
                     setCountryCode(context, countryCode);
                 }
             } catch (Exception e) {
-                Log.e(LOG_TAG, "## getCountryCode failed " + e.getMessage());
+                Log.e(LOG_TAG, "## getCountryCode failed " + e.getMessage(), e);
             }
         }
 
@@ -227,7 +227,7 @@ public class PhoneNumberUtils {
             try {
                 phoneNumber = PhoneNumberUtil.getInstance().parse(text, countryCode);
             } catch (Exception e) {
-                Log.e(LOG_TAG, "## getPhoneNumber() : failed " + e.getMessage());
+                Log.e(LOG_TAG, "## getPhoneNumber() : failed " + e.getMessage(), e);
             }
 
             if (null != phoneNumber) {
@@ -280,7 +280,7 @@ public class PhoneNumberUtils {
                     e164Pn = PhoneNumberUtil.getInstance().format(pn, PhoneNumberUtil.PhoneNumberFormat.E164);
                 }
             } catch (Exception e) {
-                Log.e(LOG_TAG, "## getE164format() failed " + e.getMessage());
+                Log.e(LOG_TAG, "## getE164format() failed " + e.getMessage(), e);
             }
 
             if (e164Pn.startsWith("+")) {

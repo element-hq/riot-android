@@ -849,7 +849,7 @@ public class VectorMessageListFragment extends MatrixMessageListFragment impleme
                         try {
                             mediaUri = VectorContentProvider.absolutePathToUri(getActivity(), file.getAbsolutePath());
                         } catch (Exception e) {
-                            Log.e(LOG_TAG, "onMediaAction VectorContentProvider.absolutePathToUri: " + e.getMessage());
+                            Log.e(LOG_TAG, "onMediaAction VectorContentProvider.absolutePathToUri: " + e.getMessage(), e);
                         }
 
 
@@ -1030,7 +1030,7 @@ public class VectorMessageListFragment extends MatrixMessageListFragment impleme
             // switch in section mode
             ((VectorMessagesAdapter) mAdapter).onEventTap(event.eventId);
         } catch (Exception e) {
-            Log.e(LOG_TAG, "## onRowClick() failed " + e.getMessage());
+            Log.e(LOG_TAG, "## onRowClick() failed " + e.getMessage(), e);
         }
     }
 
@@ -1077,7 +1077,7 @@ public class VectorMessageListFragment extends MatrixMessageListFragment impleme
                 vectorMessagesAdapter.onEventTap(event.eventId);
             }
         } catch (Exception e) {
-            Log.e(LOG_TAG, "## onContentClick() failed " + e.getMessage());
+            Log.e(LOG_TAG, "## onContentClick() failed " + e.getMessage(), e);
         }
     }
 
@@ -1103,7 +1103,7 @@ public class VectorMessageListFragment extends MatrixMessageListFragment impleme
             roomDetailsIntent.putExtra(VectorMemberDetailsActivity.EXTRA_MATRIX_ID, mSession.getCredentials().userId);
             getActivity().startActivityForResult(roomDetailsIntent, VectorRoomActivity.GET_MENTION_REQUEST_CODE);
         } catch (Exception e) {
-            Log.e(LOG_TAG, "## onAvatarClick() failed " + e.getMessage());
+            Log.e(LOG_TAG, "## onAvatarClick() failed " + e.getMessage(), e);
         }
     }
 
@@ -1120,7 +1120,7 @@ public class VectorMessageListFragment extends MatrixMessageListFragment impleme
                     }
                 }
             } catch (Exception e) {
-                Log.e(LOG_TAG, "## onAvatarLongClick() failed " + e.getMessage());
+                Log.e(LOG_TAG, "## onAvatarLongClick() failed " + e.getMessage(), e);
             }
         }
         return true;
@@ -1132,7 +1132,7 @@ public class VectorMessageListFragment extends MatrixMessageListFragment impleme
             try {
                 ((VectorRoomActivity) getActivity()).insertUserDisplayNameInTextEditor(displayName);
             } catch (Exception e) {
-                Log.e(LOG_TAG, "## onSenderNameClick() failed " + e.getMessage());
+                Log.e(LOG_TAG, "## onSenderNameClick() failed " + e.getMessage(), e);
             }
         }
     }
@@ -1153,7 +1153,7 @@ public class VectorMessageListFragment extends MatrixMessageListFragment impleme
             fragment = VectorReadReceiptsDialogFragment.newInstance(mSession.getMyUserId(), mRoom.getRoomId(), eventId);
             fragment.show(fm, TAG_FRAGMENT_RECEIPTS_DIALOG);
         } catch (Exception e) {
-            Log.e(LOG_TAG, "## onMoreReadReceiptClick() failed " + e.getMessage());
+            Log.e(LOG_TAG, "## onMoreReadReceiptClick() failed " + e.getMessage(), e);
         }
     }
 
@@ -1169,7 +1169,7 @@ public class VectorMessageListFragment extends MatrixMessageListFragment impleme
             fragment = VectorUserGroupsDialogFragment.newInstance(mSession.getMyUserId(), userId, groupIds);
             fragment.show(fm, TAG_FRAGMENT_USER_GROUPS_DIALOG);
         } catch (Exception e) {
-            Log.e(LOG_TAG, "## onGroupFlairClick() failed " + e.getMessage());
+            Log.e(LOG_TAG, "## onGroupFlairClick() failed " + e.getMessage(), e);
         }
     }
 
@@ -1199,7 +1199,7 @@ public class VectorMessageListFragment extends MatrixMessageListFragment impleme
                 }
             }
         } catch (Exception e) {
-            Log.e(LOG_TAG, "## onURLClick() failed " + e.getMessage());
+            Log.e(LOG_TAG, "## onURLClick() failed " + e.getMessage(), e);
         }
     }
 
@@ -1213,7 +1213,7 @@ public class VectorMessageListFragment extends MatrixMessageListFragment impleme
             roomDetailsIntent.putExtra(VectorMemberDetailsActivity.EXTRA_MATRIX_ID, mSession.getCredentials().userId);
             startActivity(roomDetailsIntent);
         } catch (Exception e) {
-            Log.e(LOG_TAG, "## onMatrixUserIdClick() failed " + e.getMessage());
+            Log.e(LOG_TAG, "## onMatrixUserIdClick() failed " + e.getMessage(), e);
         }
     }
 
@@ -1222,7 +1222,7 @@ public class VectorMessageListFragment extends MatrixMessageListFragment impleme
         try {
             onURLClick(Uri.parse(VectorUtils.getPermalink(roomAlias, null)));
         } catch (Exception e) {
-            Log.e(LOG_TAG, "onRoomAliasClick failed " + e.getLocalizedMessage());
+            Log.e(LOG_TAG, "onRoomAliasClick failed " + e.getLocalizedMessage(), e);
         }
     }
 
@@ -1231,7 +1231,7 @@ public class VectorMessageListFragment extends MatrixMessageListFragment impleme
         try {
             onURLClick(Uri.parse(VectorUtils.getPermalink(roomId, null)));
         } catch (Exception e) {
-            Log.e(LOG_TAG, "onRoomIdClick failed " + e.getLocalizedMessage());
+            Log.e(LOG_TAG, "onRoomIdClick failed " + e.getLocalizedMessage(), e);
         }
     }
 
@@ -1240,7 +1240,7 @@ public class VectorMessageListFragment extends MatrixMessageListFragment impleme
         try {
             onURLClick(Uri.parse(VectorUtils.getPermalink(mRoom.getRoomId(), messageId)));
         } catch (Exception e) {
-            Log.e(LOG_TAG, "onRoomIdClick failed " + e.getLocalizedMessage());
+            Log.e(LOG_TAG, "onRoomIdClick failed " + e.getLocalizedMessage(), e);
         }
     }
 
@@ -1249,7 +1249,7 @@ public class VectorMessageListFragment extends MatrixMessageListFragment impleme
         try {
             onURLClick(Uri.parse(VectorUtils.getPermalink(groupId, null)));
         } catch (Exception e) {
-            Log.e(LOG_TAG, "onRoomIdClick failed " + e.getLocalizedMessage());
+            Log.e(LOG_TAG, "onRoomIdClick failed " + e.getLocalizedMessage(), e);
         }
     }
 

@@ -158,7 +158,7 @@ public class WidgetsManager {
                         widgetType = jsonObject.get("type").getAsString();
                     }
                 } catch (Exception e) {
-                    Log.e(LOG_TAG, "## getWidgets() failed : " + e.getMessage());
+                    Log.e(LOG_TAG, "## getWidgets() failed : " + e.getMessage(), e);
                 }
 
                 if (null != widgetType) {
@@ -184,7 +184,7 @@ public class WidgetsManager {
 
                     widget = new Widget(session, widgetEvent);
                 } catch (Exception e) {
-                    Log.e(LOG_TAG, "## getWidgets() : widget creation failed " + e.getMessage());
+                    Log.e(LOG_TAG, "## getWidgets() : widget creation failed " + e.getMessage(), e);
                 }
 
                 if (null != widget) {
@@ -423,7 +423,7 @@ public class WidgetsManager {
                 try {
                     listener.onWidgetUpdate(widget);
                 } catch (Exception e) {
-                    Log.e(LOG_TAG, "## onWidgetUpdate failed: " + e.getMessage());
+                    Log.e(LOG_TAG, "## onWidgetUpdate failed: " + e.getMessage(), e);
                 }
             }
         }
@@ -449,7 +449,7 @@ public class WidgetsManager {
             try {
                 widget = new Widget(session, event);
             } catch (Exception e) {
-                Log.e(LOG_TAG, "## onLiveEvent () : widget creation failed " + e.getMessage());
+                Log.e(LOG_TAG, "## onLiveEvent () : widget creation failed " + e.getMessage(), e);
             }
 
             if (null != widget) {
@@ -458,7 +458,7 @@ public class WidgetsManager {
                     try {
                         mPendingWidgetCreationCallbacks.get(callbackKey).onSuccess(widget);
                     } catch (Exception e) {
-                        Log.e(LOG_TAG, "## onLiveEvent() : get(callbackKey).onSuccess failed " + e.getMessage());
+                        Log.e(LOG_TAG, "## onLiveEvent() : get(callbackKey).onSuccess failed " + e.getMessage(), e);
                     }
                 }
 
@@ -471,7 +471,7 @@ public class WidgetsManager {
                         mPendingWidgetCreationCallbacks.get(callbackKey).onMatrixError(new WidgetError(WidgetError.WIDGET_CREATION_FAILED_ERROR_CODE,
                                 VectorApp.getInstance().getString(R.string.widget_creation_failure)));
                     } catch (Exception e) {
-                        Log.e(LOG_TAG, "## onLiveEvent() : get(callbackKey).onMatrixError failed " + e.getMessage());
+                        Log.e(LOG_TAG, "## onLiveEvent() : get(callbackKey).onMatrixError failed " + e.getMessage(), e);
                     }
                 }
             }

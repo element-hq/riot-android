@@ -102,7 +102,7 @@ public class RiotEventDisplay extends EventDisplay {
             }
 
         } catch (Exception e) {
-            Log.e(LOG_TAG, "getTextualDisplay() " + e.getMessage());
+            Log.e(LOG_TAG, "getTextualDisplay() " + e.getMessage(), e);
         }
 
         return text;

@@ -340,7 +340,7 @@ public class CommonActivityUtils {
         try {
             ShortcutBadger.setBadge(context, 0);
         } catch (Exception e) {
-            Log.d(LOG_TAG, "## logout(): Exception Msg=" + e.getMessage());
+            Log.d(LOG_TAG, "## logout(): Exception Msg=" + e.getMessage(), e);
         }
 
         // warn that the user logs out
@@ -428,7 +428,7 @@ public class CommonActivityUtils {
                 try {
                     ShortcutBadger.setBadge(context, 0);
                 } catch (Exception e) {
-                    Log.d(LOG_TAG, "## logout(): Exception Msg=" + e.getMessage());
+                    Log.d(LOG_TAG, "## logout(): Exception Msg=" + e.getMessage(), e);
                 }
 
                 // Publish to the server that we're now offline
@@ -1432,7 +1432,7 @@ public class CommonActivityUtils {
                     } catch (ActivityNotFoundException e) {
                         Toast.makeText(activity, e.getLocalizedMessage(), Toast.LENGTH_LONG).show();
                     } catch (Exception e) {
-                        Log.d(LOG_TAG, "## openMedia(): Exception Msg=" + e.getMessage());
+                        Log.d(LOG_TAG, "## openMedia(): Exception Msg=" + e.getMessage(), e);
                     }
                 }
             });
@@ -1536,7 +1536,7 @@ public class CommonActivityUtils {
                         if (inputStream != null) inputStream.close();
                         if (outputStream != null) outputStream.close();
                     } catch (Exception e) {
-                        Log.e(LOG_TAG, "## saveFileInto(): Exception Msg=" + e.getMessage());
+                        Log.e(LOG_TAG, "## saveFileInto(): Exception Msg=" + e.getMessage(), e);
                         result = new Pair<>(null, e);
                     }
                 }
@@ -1561,7 +1561,7 @@ public class CommonActivityUtils {
         try {
             task.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
         } catch (final Exception e) {
-            Log.e(LOG_TAG, "## saveFileInto() failed " + e.getMessage());
+            Log.e(LOG_TAG, "## saveFileInto() failed " + e.getMessage(), e);
             task.cancel(true);
 
             (new android.os.Handler(Looper.getMainLooper())).post(new Runnable() {
@@ -1599,7 +1599,7 @@ public class CommonActivityUtils {
                         File file = new File(fullFilePath);
                         downloadManager.addCompletedDownload(file.getName(), file.getName(), true, mimeType, file.getAbsolutePath(), file.length(), true);
                     } catch (Exception e) {
-                        Log.e(LOG_TAG, "## saveMediaIntoDownloads(): Exception Msg=" + e.getMessage());
+                        Log.e(LOG_TAG, "## saveMediaIntoDownloads(): Exception Msg=" + e.getMessage(), e);
                     }
                 }
 
@@ -1651,7 +1651,7 @@ public class CommonActivityUtils {
             mBadgeValue = badgeValue;
             ShortcutBadger.setBadge(context, badgeValue);
         } catch (Exception e) {
-            Log.e(LOG_TAG, "## updateBadgeCount(): Exception Msg=" + e.getMessage());
+            Log.e(LOG_TAG, "## updateBadgeCount(): Exception Msg=" + e.getMessage(), e);
         }
     }
 
@@ -1828,7 +1828,7 @@ public class CommonActivityUtils {
 
         // sanity check
         if ((null == deviceInfo) || (null == sender) || (null == session)) {
-            Log.e(LOG_TAG, "## displayDeviceVerificationDialog(): invalid imput parameters");
+            Log.e(LOG_TAG, "## displayDeviceVerificationDialog(): invalid input parameters");
             return;
         }
 
@@ -1984,7 +1984,7 @@ public class CommonActivityUtils {
         try {
             fragment.show(fm, TAG_FRAGMENT_UNKNOWN_DEVICES_DIALOG_DIALOG);
         } catch (Exception e) {
-            Log.e(LOG_TAG, "## displayUnknownDevicesDialog() failed : " + e.getMessage());
+            Log.e(LOG_TAG, "## displayUnknownDevicesDialog() failed : " + e.getMessage(), e);
         }
     }
 }

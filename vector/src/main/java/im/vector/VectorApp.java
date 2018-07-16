@@ -210,7 +210,7 @@ public class VectorApp extends MultiDexApplication {
             PackageInfo packageInfo = getPackageManager().getPackageInfo(getPackageName(), 0);
             VERSION_BUILD = packageInfo.versionCode;
         } catch (PackageManager.NameNotFoundException e) {
-            Log.e(LOG_TAG, "fails to retrieve the package info " + e.getMessage());
+            Log.e(LOG_TAG, "fails to retrieve the package info " + e.getMessage(), e);
         }
 
         VECTOR_VERSION_STRING = Matrix.getInstance(this).getVersion(true, true);
@@ -342,7 +342,7 @@ public class VectorApp extends MultiDexApplication {
             mMarkdownParser = new VectorMarkdownParser(this);
         } catch (Exception e) {
             // reported by GA
-            Log.e(LOG_TAG, "cannot create the mMarkdownParser " + e.getMessage());
+            Log.e(LOG_TAG, "cannot create the mMarkdownParser " + e.getMessage(), e);
         }
 
         // track external language updates
@@ -457,7 +457,7 @@ public class VectorApp extends MultiDexApplication {
                             mActivityTransitionTimer = null;
                         }
                     } catch (Exception e) {
-                        Log.e(LOG_TAG, "## startActivityTransitionTimer() failed " + e.getMessage());
+                        Log.e(LOG_TAG, "## startActivityTransitionTimer() failed " + e.getMessage(), e);
                     }
 
                     if (null != mCurrentActivity) {
@@ -862,7 +862,7 @@ public class VectorApp extends MultiDexApplication {
             Resources resources = packageManager.getResourcesForApplication("android");
             locale = resources.getConfiguration().locale;
         } catch (Exception e) {
-            Log.e(LOG_TAG, "## getDeviceLocale() failed " + e.getMessage());
+            Log.e(LOG_TAG, "## getDeviceLocale() failed " + e.getMessage(), e);
         }
 
         return locale;
@@ -973,7 +973,7 @@ public class VectorApp extends MultiDexApplication {
                 return context;
             }
         } catch (Exception e) {
-            Log.e(LOG_TAG, "## getLocalisedContext() failed : " + e.getMessage());
+            Log.e(LOG_TAG, "## getLocalisedContext() failed : " + e.getMessage(), e);
         }
 
         return context;
@@ -996,7 +996,7 @@ public class VectorApp extends MultiDexApplication {
             try {
                 result = context.createConfigurationContext(config).getText(resourceId).toString();
             } catch (Exception e) {
-                Log.e(LOG_TAG, "## getString() failed : " + e.getMessage());
+                Log.e(LOG_TAG, "## getString() failed : " + e.getMessage(), e);
                 // use the default one
                 result = context.getString(resourceId);
             }
@@ -1037,7 +1037,7 @@ public class VectorApp extends MultiDexApplication {
                             getString(context, locale, R.string.resources_country_code)));
                 }
             } catch (Exception e) {
-                Log.e(LOG_TAG, "## getApplicationLocales() : failed " + e.getMessage());
+                Log.e(LOG_TAG, "## getApplicationLocales() : failed " + e.getMessage(), e);
                 knownLocalesSet.add(new Pair<>(context.getString(R.string.resources_language), context.getString(R.string.resources_country_code)));
             }
 
@@ -1121,7 +1121,7 @@ public class VectorApp extends MultiDexApplication {
                     visitVariables(trackMe, 8, "Identity Server URL", session.getHomeServerConfig().getIdentityServerUri().toString());
                 }
             } catch (Throwable t) {
-                Log.e(LOG_TAG, "## getPiwikTracker() : newTracker failed " + t.getMessage());
+                Log.e(LOG_TAG, "## getPiwikTracker() : newTracker failed " + t.getMessage(), t);
             }
         }
 
@@ -1165,7 +1165,7 @@ public class VectorApp extends MultiDexApplication {
                             + "/" + activity.getClass().getName().replace(".", "/"));
                     addCustomVariables(screen).with(tracker);
                 } catch (Throwable t) {
-                    Log.e(LOG_TAG, "## onNewScreen() : failed " + t.getMessage());
+                    Log.e(LOG_TAG, "## onNewScreen() : failed " + t.getMessage(), t);
                 }
             }
         }
@@ -1183,7 +1183,7 @@ public class VectorApp extends MultiDexApplication {
                     // force to send the pending actions
                     tracker.dispatch();
                 } catch (Throwable t) {
-                    Log.e(LOG_TAG, "## onAppPause() : failed " + t.getMessage());
+                    Log.e(LOG_TAG, "## onAppPause() : failed " + t.getMessage(), t);
                 }
             }
         }

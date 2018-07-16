@@ -153,7 +153,7 @@ public class VectorRegistrationReceiver extends BroadcastReceiver {
                     try {
                         value = URLDecoder.decode(value, "UTF-8");
                     } catch (Exception e) {
-                        Log.e(LOG_TAG, "## parseMailRegistrationLink(): Exception - parse query params Msg=" + e.getLocalizedMessage());
+                        Log.e(LOG_TAG, "## parseMailRegistrationLink(): Exception - parse query params Msg=" + e.getLocalizedMessage(), e);
                     }
                     mapParams.put(name, value);
                 }
@@ -175,7 +175,7 @@ public class VectorRegistrationReceiver extends BroadcastReceiver {
             }
         } catch (Exception e) {
             mapParams = null;
-            Log.e(LOG_TAG, "## parseMailRegistrationLink(): Exception - Msg=" + e.getLocalizedMessage());
+            Log.e(LOG_TAG, "## parseMailRegistrationLink(): Exception - Msg=" + e.getLocalizedMessage(), e);
         }
 
         return mapParams;

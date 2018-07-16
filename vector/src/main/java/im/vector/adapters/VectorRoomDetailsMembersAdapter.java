@@ -471,7 +471,7 @@ public class VectorRoomDetailsMembersAdapter extends BaseExpandableListAdapter {
                 try {
                     Collections.sort(actualParticipants, comparator);
                 } catch (Exception e) {
-                    Log.e(LOG_TAG, "## updateRoomMembersDataModel failed while sorting " + e.getMessage());
+                    Log.e(LOG_TAG, "## updateRoomMembersDataModel failed while sorting " + e.getMessage(), e);
 
                     if (TextUtils.equals(fPattern, mSearchPattern)) {
 
@@ -522,7 +522,7 @@ public class VectorRoomDetailsMembersAdapter extends BaseExpandableListAdapter {
                                 try {
                                     aSearchListener.onSearchEnd(getItemsCount(), isSearchEnabled);
                                 } catch (Exception e) {
-                                    Log.e(LOG_TAG, "## updateRoomMembersDataModel() : onSearchEnd fails " + e.getMessage());
+                                    Log.e(LOG_TAG, "## updateRoomMembersDataModel() : onSearchEnd fails " + e.getMessage(), e);
                                 }
                             }
 
@@ -619,7 +619,7 @@ public class VectorRoomDetailsMembersAdapter extends BaseExpandableListAdapter {
                 countRetValue = mRoomMembersListByGroupPosition.get(aGroupPosition).size();
             }
         } catch (Exception ex) {
-            Log.e(LOG_TAG, "## getChildrenCount(): Exception Msg=" + ex.getMessage());
+            Log.e(LOG_TAG, "## getChildrenCount(): Exception Msg=" + ex.getMessage(), ex);
         }
 
         return countRetValue;
@@ -781,7 +781,7 @@ public class VectorRoomDetailsMembersAdapter extends BaseExpandableListAdapter {
                             mOnParticipantsListener.onRemoveClick(participant);
                         }
                     } catch (Exception e) {
-                        Log.e(LOG_TAG, "## Delete action listener: Exception Msg=" + e.getMessage());
+                        Log.e(LOG_TAG, "## Delete action listener: Exception Msg=" + e.getMessage(), e);
                     }
                 }
             }

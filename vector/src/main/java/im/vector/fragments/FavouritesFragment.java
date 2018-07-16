@@ -258,7 +258,7 @@ public class FavouritesFragment extends AbsHomeFragment implements HomeRoomAdapt
 
                 Collections.sort(mFavorites, favComparator);
             } catch (Exception e) {
-                Log.e(LOG_TAG, "## refreshFavorites() : sort failed with error " + e.getMessage());
+                Log.e(LOG_TAG, "## refreshFavorites() : sort failed with error " + e.getMessage(), e);
             }
         }
 

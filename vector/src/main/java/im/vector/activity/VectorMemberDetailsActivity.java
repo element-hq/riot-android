@@ -296,7 +296,7 @@ public class VectorMemberDetailsActivity extends MXCActionBarActivity implements
             @Override
             public void onNetworkError(Exception e) {
                 Toast.makeText(VectorMemberDetailsActivity.this, e.getLocalizedMessage(), Toast.LENGTH_SHORT).show();
-                Log.e(LOG_TAG, "## startCall() failed " + e.getMessage());
+                Log.e(LOG_TAG, "## startCall() failed " + e.getMessage(), e);
             }
 
             @Override
@@ -326,7 +326,7 @@ public class VectorMemberDetailsActivity extends MXCActionBarActivity implements
             @Override
             public void onUnexpectedError(Exception e) {
                 Toast.makeText(VectorMemberDetailsActivity.this, e.getLocalizedMessage(), Toast.LENGTH_SHORT).show();
-                Log.e(LOG_TAG, "## startCall() failed " + e.getMessage());
+                Log.e(LOG_TAG, "## startCall() failed " + e.getMessage(), e);
             }
         });
     }

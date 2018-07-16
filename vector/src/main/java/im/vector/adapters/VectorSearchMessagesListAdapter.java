@@ -204,7 +204,7 @@ public class VectorSearchMessagesListAdapter extends VectorMessagesAdapter {
                 }
             });
         } catch (Throwable t) {
-            Log.e(LOG_TAG, "## getView() failed " + t.getMessage());
+            Log.e(LOG_TAG, "## getView() failed " + t.getMessage(), t);
         }
 
         return convertView;

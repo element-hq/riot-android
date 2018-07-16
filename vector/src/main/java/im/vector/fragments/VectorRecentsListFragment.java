@@ -926,7 +926,7 @@ public class VectorRecentsListFragment extends VectorBaseFragment implements
             try {
                 mDraggedView = mAdapter.getChildView(groupPos, childPos, false, null, null);
             } catch (Exception e) {
-                Log.e(LOG_TAG, "## startDragAndDrop() : getChildView failed " + e.getMessage());
+                Log.e(LOG_TAG, "## startDragAndDrop() : getChildView failed " + e.getMessage(), e);
                 return;
             }
 

@@ -313,9 +313,8 @@ class VectorSettingsPreferencesFragment : PreferenceFragment(), SharedPreference
                         }
 
                         private fun onError(errorMessage: String) {
-                            if (null != activity) {
-                                Toast.makeText(activity, errorMessage, Toast.LENGTH_SHORT).show()
-                            }
+                            activity?.toast(errorMessage)
+
                             onSuccess(null)
                         }
 
@@ -414,9 +413,8 @@ class VectorSettingsPreferencesFragment : PreferenceFragment(), SharedPreference
                                                             }
 
                                                             override fun onBingRuleUpdateFailure(errorMessage: String) {
-                                                                if (null != activity) {
-                                                                    Toast.makeText(activity, errorMessage, Toast.LENGTH_SHORT).show()
-                                                                }
+                                                                activity?.toast(errorMessage)
+
                                                                 onDone()
                                                             }
                                                         })
@@ -719,7 +717,7 @@ class VectorSettingsPreferencesFragment : PreferenceFragment(), SharedPreference
                 try {
                     task.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR)
                 } catch (e: Exception) {
-                    Log.e(LOG_TAG, "## mSession.getMediasCache().clear() failed " + e.message)
+                    Log.e(LOG_TAG, "## mSession.getMediasCache().clear() failed " + e.message, e)
                     task.cancel(true)
                     hideLoadingView()
                 }
@@ -1011,9 +1009,7 @@ class VectorSettingsPreferencesFragment : PreferenceFragment(), SharedPreference
                                     // and the code is called in the right thread
                                     activity.runOnUiThread {
                                         hideLoadingView()
-                                        Toast.makeText(activity,
-                                                getString(textId),
-                                                Toast.LENGTH_LONG).show()
+                                        activity?.toast(textId, Toast.LENGTH_LONG)
                                     }
                                 }
                             }
@@ -1168,9 +1164,8 @@ class VectorSettingsPreferencesFragment : PreferenceFragment(), SharedPreference
                 }
 
                 override fun onBingRuleUpdateFailure(errorMessage: String) {
-                    if (null != activity) {
-                        Toast.makeText(activity, errorMessage, Toast.LENGTH_SHORT).show()
-                    }
+                    activity?.toast(errorMessage)
+
                     onDone()
                 }
             })
@@ -1362,7 +1357,7 @@ class VectorSettingsPreferencesFragment : PreferenceFragment(), SharedPreference
                                 try {
                                     isEnabled = !TextUtils.equals(actions[0] as String, BingRule.ACTION_DONT_NOTIFY)
                                 } catch (e: Exception) {
-                                    Log.e(LOG_TAG, "## refreshPreferences failed " + e.message)
+                                    Log.e(LOG_TAG, "## refreshPreferences failed " + e.message, e)
                                 }
 
                             }
@@ -1419,9 +1414,9 @@ class VectorSettingsPreferencesFragment : PreferenceFragment(), SharedPreference
                 .show()
     }
 
-//==============================================================================================================
-// ignored users list management
-//==============================================================================================================
+    //==============================================================================================================
+    // ignored users list management
+    //==============================================================================================================
 
     /**
      * Refresh the ignored users list
@@ -1489,9 +1484,9 @@ class VectorSettingsPreferencesFragment : PreferenceFragment(), SharedPreference
         }
     }
 
-//==============================================================================================================
-// pushers list management
-//==============================================================================================================
+    //==============================================================================================================
+    // pushers list management
+    //==============================================================================================================
 
     /**
      * Refresh the pushers list
@@ -1571,9 +1566,9 @@ class VectorSettingsPreferencesFragment : PreferenceFragment(), SharedPreference
         }
     }
 
-//==============================================================================================================
-// Email management
-//==============================================================================================================
+    //==============================================================================================================
+    // Email management
+    //==============================================================================================================
 
     /**
      * Refresh the emails list
@@ -1657,7 +1652,7 @@ class VectorSettingsPreferencesFragment : PreferenceFragment(), SharedPreference
         if (null != activity) {
             activity.runOnUiThread {
                 if (!TextUtils.isEmpty(errorMessage)) {
-                    Toast.makeText(VectorApp.getInstance(), errorMessage, Toast.LENGTH_SHORT).show()
+                    VectorApp.getInstance().toast(errorMessage!!)
                 }
                 hideLoadingView()
             }
@@ -1672,13 +1667,13 @@ class VectorSettingsPreferencesFragment : PreferenceFragment(), SharedPreference
     private fun addEmail(email: String?) {
         // check first if the email syntax is valid
         if (TextUtils.isEmpty(email) || !android.util.Patterns.EMAIL_ADDRESS.matcher(email!!).matches()) {
-            Toast.makeText(activity, getString(R.string.auth_invalid_email), Toast.LENGTH_SHORT).show()
+            activity?.toast(R.string.auth_invalid_email)
             return
         }
 
         // check first if the email syntax is valid
         if (mDisplayedEmails.indexOf(email) >= 0) {
-            Toast.makeText(activity, getString(R.string.auth_email_already_defined), Toast.LENGTH_SHORT).show()
+            activity?.toast(R.string.auth_email_already_defined)
             return
         }
 
@@ -1741,7 +1736,7 @@ class VectorSettingsPreferencesFragment : PreferenceFragment(), SharedPreference
                                 if (null != activity) {
                                     activity.runOnUiThread {
                                         hideLoadingView()
-                                        Toast.makeText(activity, getString(R.string.account_email_validation_error), Toast.LENGTH_SHORT).show()
+                                        activity?.toast(R.string.account_email_validation_error)
                                     }
                                 }
                             } else {
@@ -1761,9 +1756,9 @@ class VectorSettingsPreferencesFragment : PreferenceFragment(), SharedPreference
                 .show()
     }
 
-//==============================================================================================================
-// Phone number management
-//==============================================================================================================
+    //==============================================================================================================
+    // Phone number management
+    //==============================================================================================================
 
     /**
      * Refresh phone number list
@@ -1843,9 +1838,9 @@ class VectorSettingsPreferencesFragment : PreferenceFragment(), SharedPreference
 
     }
 
-//==============================================================================================================
-// contacts management
-//==============================================================================================================
+    //==============================================================================================================
+    // contacts management
+    //==============================================================================================================
 
     private fun setContactsPreferences() {
         // Permission
@@ -1874,9 +1869,9 @@ class VectorSettingsPreferencesFragment : PreferenceFragment(), SharedPreference
         }
     }
 
-//==============================================================================================================
-// user interface management
-//==============================================================================================================
+    //==============================================================================================================
+    // user interface management
+    //==============================================================================================================
 
     private fun setUserInterfacePreferences() {
         // Selected language
@@ -1930,9 +1925,9 @@ class VectorSettingsPreferencesFragment : PreferenceFragment(), SharedPreference
         }
     }
 
-//==============================================================================================================
-// background sync management
-//==============================================================================================================
+    //==============================================================================================================
+    // background sync management
+    //==============================================================================================================
 
     /**
      * Convert a delay in seconds to string
@@ -1978,7 +1973,7 @@ class VectorSettingsPreferencesFragment : PreferenceFragment(), SharedPreference
                 try {
                     newTimeOut = Integer.parseInt(newValue as String)
                 } catch (e: Exception) {
-                    Log.e(LOG_TAG, "## refreshBackgroundSyncPrefs : parseInt failed " + e.message)
+                    Log.e(LOG_TAG, "## refreshBackgroundSyncPrefs : parseInt failed " + e.message, e)
                 }
 
                 if (newTimeOut != timeout) {
@@ -2002,7 +1997,7 @@ class VectorSettingsPreferencesFragment : PreferenceFragment(), SharedPreference
                 try {
                     newDelay = Integer.parseInt(newValue as String)
                 } catch (e: Exception) {
-                    Log.e(LOG_TAG, "## refreshBackgroundSyncPrefs : parseInt failed " + e.message)
+                    Log.e(LOG_TAG, "## refreshBackgroundSyncPrefs : parseInt failed " + e.message, e)
                 }
 
                 if (newDelay != delay) {
@@ -2017,9 +2012,9 @@ class VectorSettingsPreferencesFragment : PreferenceFragment(), SharedPreference
     }
 
 
-//==============================================================================================================
-// Cryptography
-//==============================================================================================================
+    //==============================================================================================================
+    // Cryptography
+    //==============================================================================================================
 
     private fun removeCryptographyPreference() {
         if (null != preferenceScreen) {
@@ -2114,9 +2109,9 @@ class VectorSettingsPreferencesFragment : PreferenceFragment(), SharedPreference
         }
     }
 
-//==============================================================================================================
-// devices list
-//==============================================================================================================
+    //==============================================================================================================
+    // devices list
+    //==============================================================================================================
 
     private fun removeDevicesPreference() {
         if (null != preferenceScreen) {
@@ -2140,7 +2135,7 @@ class VectorSettingsPreferencesFragment : PreferenceFragment(), SharedPreference
 
             mSession.getDevicesList(object : ApiCallback<DevicesListResponse> {
                 override fun onSuccess(info: DevicesListResponse) {
-                    if (0 == info.devices.size) {
+                    if (info.devices.isEmpty()) {
                         removeDevicesPreference()
                     } else {
                         buildDevicesSettings(info.devices)
@@ -2474,7 +2469,8 @@ class VectorSettingsPreferencesFragment : PreferenceFragment(), SharedPreference
 
             CommonActivityUtils.exportKeys(mSession, passPhrase1EditText.text.toString(), object : ApiCallback<String> {
                 override fun onSuccess(filename: String) {
-                    Toast.makeText(VectorApp.getInstance().applicationContext, filename, Toast.LENGTH_SHORT).show()
+                    VectorApp.getInstance().toast(filename)
+
                     hideLoadingView()
                 }
 
@@ -2564,10 +2560,11 @@ class VectorSettingsPreferencesFragment : PreferenceFragment(), SharedPreference
                     try {
                         resource.mContentStream.close()
                     } catch (e2: Exception) {
-                        Log.e(LOG_TAG, "## importKeys() : " + e2.message)
+                        Log.e(LOG_TAG, "## importKeys() : " + e2.message, e2)
                     }
 
-                    Toast.makeText(appContext, e.localizedMessage, Toast.LENGTH_SHORT).show()
+                    appContext.toast(e.localizedMessage)
+
                     return@OnClickListener
                 }
 
@@ -2579,17 +2576,17 @@ class VectorSettingsPreferencesFragment : PreferenceFragment(), SharedPreference
                     }
 
                     override fun onNetworkError(e: Exception) {
-                        Toast.makeText(appContext, e.localizedMessage, Toast.LENGTH_SHORT).show()
+                        appContext.toast(e.localizedMessage)
                         hideLoadingView()
                     }
 
                     override fun onMatrixError(e: MatrixError) {
-                        Toast.makeText(appContext, e.localizedMessage, Toast.LENGTH_SHORT).show()
+                        appContext.toast(e.localizedMessage)
                         hideLoadingView()
                     }
 
                     override fun onUnexpectedError(e: Exception) {
-                        Toast.makeText(appContext, e.localizedMessage, Toast.LENGTH_SHORT).show()
+                        appContext.toast(e.localizedMessage)
                         hideLoadingView()
                     }
                 })
@@ -2599,9 +2596,9 @@ class VectorSettingsPreferencesFragment : PreferenceFragment(), SharedPreference
         }
     }
 
-//==============================================================================================================
-// Group flairs management
-//==============================================================================================================
+    //==============================================================================================================
+    // Group flairs management
+    //==============================================================================================================
 
     /**
      * Force the refresh of the devices list.<br></br>
@@ -2713,9 +2710,9 @@ class VectorSettingsPreferencesFragment : PreferenceFragment(), SharedPreference
         }
     }
 
-/* ==========================================================================================
- * Companion
- * ========================================================================================== */
+    /* ==========================================================================================
+     * Companion
+     * ========================================================================================== */
 
     companion object {
         private val LOG_TAG = VectorSettingsPreferencesFragment::class.java.simpleName

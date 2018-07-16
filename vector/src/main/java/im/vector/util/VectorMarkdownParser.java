@@ -84,7 +84,7 @@ public class VectorMarkdownParser extends WebView {
 
             mIsInitialised = true;
         } catch (Exception e) {
-            Log.e(LOG_TAG, "## initialize() failed " + e.getMessage());
+            Log.e(LOG_TAG, "## initialize() failed " + e.getMessage(), e);
         }
     }
 
@@ -127,7 +127,7 @@ public class VectorMarkdownParser extends WebView {
             }
         } catch (Exception e) {
             mMarkDownWebAppInterface.cancel();
-            Log.e(LOG_TAG, "## markdownToHtml() : failed " + e.getMessage());
+            Log.e(LOG_TAG, "## markdownToHtml() : failed " + e.getMessage(), e);
             listener.onMarkdownParsed(markdownText, text);
         }
     }
@@ -192,14 +192,14 @@ public class VectorMarkdownParser extends WebView {
                             try {
                                 mListener.onMarkdownParsed(mTextToParse, mTextToParse);
                             } catch (Exception e) {
-                                Log.e(LOG_TAG, "## wOnParse() " + e.getMessage());
+                                Log.e(LOG_TAG, "## wOnParse() " + e.getMessage(), e);
                             }
                         }
                         done();
                     }
                 }, 300);
             } catch (Throwable e) {
-                Log.e(LOG_TAG, "## start() : failed to starts " + e.getMessage());
+                Log.e(LOG_TAG, "## start() : failed to starts " + e.getMessage(), e);
             }
         }
 
@@ -207,7 +207,7 @@ public class VectorMarkdownParser extends WebView {
          * Cancel the markdown parser
          */
         public void cancel() {
-            Log.e(LOG_TAG, "## cancel()");
+            Log.d(LOG_TAG, "## cancel()");
             done();
         }
 
@@ -244,7 +244,7 @@ public class VectorMarkdownParser extends WebView {
                 try {
                     mListener.onMarkdownParsed(mTextToParse, HTMLText);
                 } catch (Exception e) {
-                    Log.e(LOG_TAG, "## wOnParse() " + e.getMessage());
+                    Log.e(LOG_TAG, "## wOnParse() " + e.getMessage(), e);
                 }
 
                 done();

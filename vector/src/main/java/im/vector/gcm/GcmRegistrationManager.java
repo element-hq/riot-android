@@ -199,7 +199,7 @@ public final class GcmRegistrationManager {
                     hsConfig.setCredentials(session.getCredentials());
                     pushersRestClient = new PushersRestClient(hsConfig);
                 } catch (Exception e) {
-                    Log.e(LOG_TAG, "## getPushersRestClient() failed " + e.getMessage());
+                    Log.e(LOG_TAG, "## getPushersRestClient() failed " + e.getMessage(), e);
                 }
             }
 
@@ -326,7 +326,7 @@ public final class GcmRegistrationManager {
                 try {
                     gcmRegistrationListener.onGCMRegistrationFailed();
                 } catch (Exception e) {
-                    Log.e(LOG_TAG, "registerToGCM : onPusherRegistered/onPusherRegistrationFailed failed " + e.getMessage());
+                    Log.e(LOG_TAG, "registerToGCM : onPusherRegistered/onPusherRegistrationFailed failed " + e.getMessage(), e);
                 }
             }
             return;
@@ -363,7 +363,7 @@ public final class GcmRegistrationManager {
                                     gcmRegistrationListener.onGCMRegistrationFailed();
                                 }
                             } catch (Exception e) {
-                                Log.e(LOG_TAG, "registerToGCM : onPusherRegistered/onPusherRegistrationFailed failed " + e.getMessage());
+                                Log.e(LOG_TAG, "registerToGCM : onPusherRegistered/onPusherRegistrationFailed failed " + e.getMessage(), e);
                             }
                         }
 
@@ -377,13 +377,13 @@ public final class GcmRegistrationManager {
                     }
                 }.execute();
             } catch (Exception e) {
-                Log.e(LOG_TAG, "## registerToGCM() failed " + e.getMessage());
+                Log.e(LOG_TAG, "## registerToGCM() failed " + e.getMessage(), e);
                 // warn the listener
                 if (null != gcmRegistrationListener) {
                     try {
                         gcmRegistrationListener.onGCMRegistrationFailed();
                     } catch (Exception e2) {
-                        Log.e(LOG_TAG, "registerToGCM : onPusherRegistered/onPusherRegistrationFailed failed " + e2.getMessage());
+                        Log.e(LOG_TAG, "registerToGCM : onPusherRegistered/onPusherRegistrationFailed failed " + e2.getMessage(), e2);
                     }
                 }
                 mRegistrationState = setStoredRegistrationState(RegistrationState.UNREGISTRATED);
@@ -581,7 +581,7 @@ public final class GcmRegistrationManager {
                 try {
                     listener.onThirdPartyRegistrationFailed();
                 } catch (Exception e) {
-                    Log.e(LOG_TAG, "registerToThirdPartyServer failed " + e.getMessage());
+                    Log.e(LOG_TAG, "registerToThirdPartyServer failed " + e.getMessage(), e);
                 }
             }
 
@@ -611,7 +611,7 @@ public final class GcmRegistrationManager {
                                     try {
                                         listener.onThirdPartyRegistered();
                                     } catch (Exception e) {
-                                        Log.e(LOG_TAG, "onSessionRegistered failed " + e.getMessage());
+                                        Log.e(LOG_TAG, "onSessionRegistered failed " + e.getMessage(), e);
                                     }
                                 }
                             }
@@ -627,14 +627,14 @@ public final class GcmRegistrationManager {
                                     try {
                                         listener.onThirdPartyRegistrationFailed();
                                     } catch (Exception e) {
-                                        Log.e(LOG_TAG, "onThirdPartyRegistrationFailed failed " + e.getMessage());
+                                        Log.e(LOG_TAG, "onThirdPartyRegistrationFailed failed " + e.getMessage(), e);
                                     }
                                 }
                             }
 
                             @Override
                             public void onNetworkError(Exception e) {
-                                Log.e(LOG_TAG, "registerToThirdPartyServer onNetworkError " + e.getMessage());
+                                Log.e(LOG_TAG, "registerToThirdPartyServer onNetworkError " + e.getMessage(), e);
                                 new Handler(Looper.getMainLooper()).postDelayed(new Runnable() {
                                     @Override
                                     public void run() {
@@ -658,7 +658,7 @@ public final class GcmRegistrationManager {
 
                             @Override
                             public void onUnexpectedError(Exception e) {
-                                Log.e(LOG_TAG, "registerToThirdPartyServer onUnexpectedError " + e.getMessage());
+                                Log.e(LOG_TAG, "registerToThirdPartyServer onUnexpectedError " + e.getMessage(), e);
                                 onError(e.getMessage());
                             }
                         });
@@ -704,7 +704,7 @@ public final class GcmRegistrationManager {
 
                 @Override
                 public void onNetworkError(Exception e) {
-                    Log.e(LOG_TAG, "refreshPushersList failed " + e.getMessage());
+                    Log.e(LOG_TAG, "refreshPushersList failed " + e.getMessage(), e);
                 }
 
                 @Override
@@ -714,7 +714,7 @@ public final class GcmRegistrationManager {
 
                 @Override
                 public void onUnexpectedError(Exception e) {
-                    Log.e(LOG_TAG, "refreshPushersList failed " + e.getMessage());
+                    Log.e(LOG_TAG, "refreshPushersList failed " + e.getMessage(), e);
                 }
             });
         }
@@ -736,7 +736,7 @@ public final class GcmRegistrationManager {
                 try {
                     listener.onThirdPartyRegistrationFailed();
                 } catch (Exception e) {
-                    Log.e(LOG_TAG, "forceSessionsRegistration failed " + e.getMessage());
+                    Log.e(LOG_TAG, "forceSessionsRegistration failed " + e.getMessage(), e);
                 }
             }
         }
@@ -983,7 +983,7 @@ public final class GcmRegistrationManager {
                                     try {
                                         listener.onThirdPartyUnregistered();
                                     } catch (Exception e) {
-                                        Log.e(LOG_TAG, "unregister : onThirdPartyUnregistered " + e.getMessage());
+                                        Log.e(LOG_TAG, "unregister : onThirdPartyUnregistered " + e.getMessage(), e);
                                     }
                                 }
                             }
@@ -996,7 +996,7 @@ public final class GcmRegistrationManager {
                                         try {
                                             listener.onThirdPartyUnregistrationFailed();
                                         } catch (Exception e) {
-                                            Log.e(LOG_TAG, "unregister : onThirdPartyUnregistrationFailed " + e.getMessage());
+                                            Log.e(LOG_TAG, "unregister : onThirdPartyUnregistrationFailed " + e.getMessage(), e);
                                         }
                                     }
                                 }
@@ -1004,7 +1004,7 @@ public final class GcmRegistrationManager {
 
                             @Override
                             public void onNetworkError(Exception e) {
-                                Log.e(LOG_TAG, "unregisterSession onNetworkError " + e.getMessage());
+                                Log.e(LOG_TAG, "unregisterSession onNetworkError " + e.getMessage(), e);
                                 onError(e.getMessage());
                             }
 
@@ -1021,7 +1021,7 @@ public final class GcmRegistrationManager {
 
                             @Override
                             public void onUnexpectedError(Exception e) {
-                                Log.e(LOG_TAG, "unregisterSession onUnexpectedError " + e.getMessage());
+                                Log.e(LOG_TAG, "unregisterSession onUnexpectedError " + e.getMessage(), e);
                                 onError(e.getMessage());
                             }
                         });
@@ -1125,7 +1125,7 @@ public final class GcmRegistrationManager {
             try {
                 mUseGCM = TextUtils.equals(mContext.getString(R.string.allow_gcm_use), "true");
             } catch (Exception e) {
-                Log.e(LOG_TAG, "useGCM " + e.getMessage());
+                Log.e(LOG_TAG, "useGCM " + e.getMessage(), e);
             }
         }
         return mUseGCM;
@@ -1442,7 +1442,7 @@ public final class GcmRegistrationManager {
                 }
             }.execute();
         } catch (Exception e) {
-            Log.e(LOG_TAG, "## clearGCMData failed " + e.getMessage());
+            Log.e(LOG_TAG, "## clearGCMData failed " + e.getMessage(), e);
 
             if (null != callback) {
                 callback.onUnexpectedError(e);
@@ -1479,7 +1479,7 @@ public final class GcmRegistrationManager {
                 try {
                     listener.onThirdPartyRegistered();
                 } catch (Exception e) {
-                    Log.e(LOG_TAG, "onSessionsRegistered " + e.getMessage());
+                    Log.e(LOG_TAG, "onSessionsRegistered " + e.getMessage(), e);
                 }
             }
 
@@ -1496,7 +1496,7 @@ public final class GcmRegistrationManager {
                 try {
                     listener.onThirdPartyRegistrationFailed();
                 } catch (Exception e) {
-                    Log.e(LOG_TAG, "onSessionsRegistrationFailed " + e.getMessage());
+                    Log.e(LOG_TAG, "onSessionsRegistrationFailed " + e.getMessage(), e);
                 }
             }
 
@@ -1513,7 +1513,7 @@ public final class GcmRegistrationManager {
                 try {
                     listener.onThirdPartyUnregistered();
                 } catch (Exception e) {
-                    Log.e(LOG_TAG, "onSessionUnregistered " + e.getMessage());
+                    Log.e(LOG_TAG, "onSessionUnregistered " + e.getMessage(), e);
                 }
             }
 
@@ -1530,7 +1530,7 @@ public final class GcmRegistrationManager {
                 try {
                     listener.onThirdPartyUnregistrationFailed();
                 } catch (Exception e) {
-                    Log.e(LOG_TAG, "dispatchOnThirdPartyUnregistrationFailed " + e.getMessage());
+                    Log.e(LOG_TAG, "dispatchOnThirdPartyUnregistrationFailed " + e.getMessage(), e);
                 }
             }
 

@@ -194,7 +194,7 @@ public class RoomDirectoryPickerActivity extends RiotAppCompatActivity implement
 
             @Override
             public void onNetworkError(Exception e) {
-                Log.e(LOG_TAG, "## refreshDirectoryServersList() : " + e.getMessage());
+                Log.e(LOG_TAG, "## refreshDirectoryServersList() : " + e.getMessage(), e);
                 onDone(new ArrayList<RoomDirectoryData>());
             }
 
@@ -206,7 +206,7 @@ public class RoomDirectoryPickerActivity extends RiotAppCompatActivity implement
 
             @Override
             public void onUnexpectedError(Exception e) {
-                Log.e(LOG_TAG, "## onUnexpectedError() : " + e.getMessage());
+                Log.e(LOG_TAG, "## onUnexpectedError() : " + e.getMessage(), e);
                 onDone(new ArrayList<RoomDirectoryData>());
             }
         });

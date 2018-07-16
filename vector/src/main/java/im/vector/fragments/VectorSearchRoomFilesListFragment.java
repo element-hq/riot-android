@@ -149,7 +149,7 @@ public class VectorSearchRoomFilesListFragment extends VectorSearchRoomsFilesLis
                     try {
                         listener.onSearchSucceed(messageRows.size());
                     } catch (Exception e) {
-                        Log.e(LOG_TAG, "## remoteRoomHistoryRequest() : onSearchSucceed failed " + e.getMessage());
+                        Log.e(LOG_TAG, "## remoteRoomHistoryRequest() : onSearchSucceed failed " + e.getMessage(), e);
                     }
                 }
 
@@ -167,7 +167,7 @@ public class VectorSearchRoomFilesListFragment extends VectorSearchRoomsFilesLis
                     try {
                         listener.onSearchFailed();
                     } catch (Exception e) {
-                        Log.e(LOG_TAG, "## remoteRoomHistoryRequest() : onSearchFailed failed " + e.getMessage());
+                        Log.e(LOG_TAG, "## remoteRoomHistoryRequest() : onSearchFailed failed " + e.getMessage(), e);
                     }
                 }
 
@@ -257,7 +257,7 @@ public class VectorSearchRoomFilesListFragment extends VectorSearchRoomsFilesLis
                                         try {
                                             listener.onSearchSucceed(eventChunks.size());
                                         } catch (Exception e) {
-                                            Log.e(LOG_TAG, "## backPaginate() : onSearchSucceed failed " + e.getMessage());
+                                            Log.e(LOG_TAG, "## backPaginate() : onSearchSucceed failed " + e.getMessage(), e);
                                         }
                                     }
                                     mSearchListeners.clear();
@@ -283,7 +283,7 @@ public class VectorSearchRoomFilesListFragment extends VectorSearchRoomsFilesLis
                                         try {
                                             listener.onSearchSucceed(0);
                                         } catch (Exception e) {
-                                            Log.e(LOG_TAG, "## backPaginate() : onSearchSucceed failed " + e.getMessage());
+                                            Log.e(LOG_TAG, "## backPaginate() : onSearchSucceed failed " + e.getMessage(), e);
                                         }
                                     }
                                 }

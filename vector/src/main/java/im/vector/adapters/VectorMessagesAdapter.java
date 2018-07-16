@@ -834,7 +834,7 @@ public class VectorMessagesAdapter extends AbstractMessagesAdapter {
                     }
                 });
             } catch (Exception e) {
-                Log.e(LOG_TAG, "## notifyDataSetChanged () : failed to sort undeliverableEvents " + e.getMessage());
+                Log.e(LOG_TAG, "## notifyDataSetChanged () : failed to sort undeliverableEvents " + e.getMessage(), e);
             }
 
             addAll(undeliverableEvents);
@@ -1285,7 +1285,7 @@ public class VectorMessagesAdapter extends AbstractMessagesAdapter {
 
             mHelper.manageURLPreviews(message, convertView, event.eventId);
         } catch (Exception e) {
-            Log.e(LOG_TAG, "## getTextView() failed : " + e.getMessage());
+            Log.e(LOG_TAG, "## getTextView() failed : " + e.getMessage(), e);
         }
 
         return convertView;
@@ -1460,7 +1460,7 @@ public class VectorMessagesAdapter extends AbstractMessagesAdapter {
             ImageView imageView = convertView.findViewById(R.id.messagesAdapter_image);
             addContentViewListeners(convertView, imageView, position, type);
         } catch (Exception e) {
-            Log.e(LOG_TAG, "## getImageVideoView() failed : " + e.getMessage());
+            Log.e(LOG_TAG, "## getImageVideoView() failed : " + e.getMessage(), e);
         }
 
         return convertView;
@@ -1522,7 +1522,7 @@ public class VectorMessagesAdapter extends AbstractMessagesAdapter {
             Message message = JsonUtils.toMessage(msg.getContent());
             mHelper.manageURLPreviews(message, convertView, msg.eventId);
         } catch (Exception e) {
-            Log.e(LOG_TAG, "## getNoticeRoomMemberView() failed : " + e.getMessage());
+            Log.e(LOG_TAG, "## getNoticeRoomMemberView() failed : " + e.getMessage(), e);
         }
 
         return convertView;
@@ -1594,7 +1594,7 @@ public class VectorMessagesAdapter extends AbstractMessagesAdapter {
 
             mHelper.manageURLPreviews(message, convertView, event.eventId);
         } catch (Exception e) {
-            Log.e(LOG_TAG, "## getEmoteView() failed : " + e.getMessage());
+            Log.e(LOG_TAG, "## getEmoteView() failed : " + e.getMessage(), e);
         }
 
         return convertView;
@@ -1645,7 +1645,7 @@ public class VectorMessagesAdapter extends AbstractMessagesAdapter {
 
             addContentViewListeners(convertView, fileTextView, position, ROW_TYPE_FILE);
         } catch (Exception e) {
-            Log.e(LOG_TAG, "## getFileView() failed " + e.getMessage());
+            Log.e(LOG_TAG, "## getFileView() failed " + e.getMessage(), e);
         }
 
         return convertView;
@@ -1764,7 +1764,7 @@ public class VectorMessagesAdapter extends AbstractMessagesAdapter {
             // the message body is dimmed when not selected
             convertView.findViewById(R.id.messagesAdapter_body_view).setAlpha(alpha);
         } catch (Exception e) {
-            Log.e(LOG_TAG, "## getMergeView() failed " + e.getMessage());
+            Log.e(LOG_TAG, "## getMergeView() failed " + e.getMessage(), e);
         }
 
         return convertView;
@@ -2517,7 +2517,7 @@ public class VectorMessagesAdapter extends AbstractMessagesAdapter {
                 }
             }
         } catch (Exception e) {
-            Log.e(LOG_TAG, "onMessageClick : force to display the icons failed " + e.getLocalizedMessage());
+            Log.e(LOG_TAG, "onMessageClick : force to display the icons failed " + e.getLocalizedMessage(), e);
         }
 
         Menu menu = popup.getMenu();
@@ -2616,7 +2616,7 @@ public class VectorMessagesAdapter extends AbstractMessagesAdapter {
         try {
             popup.show();
         } catch (Exception e) {
-            Log.e(LOG_TAG, " popup.show failed " + e.getMessage());
+            Log.e(LOG_TAG, " popup.show failed " + e.getMessage(), e);
         }
     }
 
