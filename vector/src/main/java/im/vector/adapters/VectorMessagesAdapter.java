@@ -1336,14 +1336,11 @@ public class VectorMessagesAdapter extends AbstractMessagesAdapter {
                 String minusTags = block
                         .substring(VectorMessagesAdapterHelper.START_FENCED_BLOCK.length(),
                                 block.length() - VectorMessagesAdapterHelper.END_FENCED_BLOCK.length())
-                        .replace("\n", "<br/>")
-                        .replace(" ", "&nbsp;");
+                        .trim();
                 final View blockView = mLayoutInflater.inflate(R.layout.adapter_item_vector_message_code_block, null);
                 final TextView tv = blockView.findViewById(R.id.messagesAdapter_body);
 
-                CharSequence sequence = mHelper.convertToHtml(minusTags);
-
-                tv.setText(sequence);
+                tv.setText(minusTags);
 
                 mHelper.highlightFencedCode(tv);
 
@@ -1359,14 +1356,22 @@ public class VectorMessagesAdapter extends AbstractMessagesAdapter {
 
                 String block2 = block;
                 if (TextUtils.equals(Message.FORMAT_MATRIX_HTML, message.format)) {
-                    String sanitased = mHelper.getSanitisedHtml(block2);
+                    // Preserve space and new lines
+                    block2 = block2
+                            .trim()
+                            .replace("\n", "<br/>")
+                            .replace(" ", "&nbsp;");
 
-                    if (sanitased != null) {
-                        block2 = sanitased;
+                    String sanitized = mHelper.getSanitisedHtml(block2);
+
+                    if (sanitized != null) {
+                        block2 = sanitized;
                     }
                 }
 
-                CharSequence strBuilder = mHelper.highlightPattern(new SpannableString(block2),
+                CharSequence sequence = mHelper.convertToHtml(block2);
+
+                CharSequence strBuilder = mHelper.highlightPattern(new SpannableString(sequence),
                         mPattern,
                         mBackgroundColorSpan,
                         shouldHighlighted);
