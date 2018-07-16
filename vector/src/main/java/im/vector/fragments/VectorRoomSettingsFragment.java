@@ -554,7 +554,7 @@ public class VectorRoomSettingsFragment extends PreferenceFragment implements Sh
                 prefMgr.unregisterOnSharedPreferenceChangeListener(this);
             }
         } catch (Exception ex) {
-            Log.e(LOG_TAG, "## enableSharedPreferenceListener(): Exception Msg=" + ex.getMessage());
+            Log.e(LOG_TAG, "## enableSharedPreferenceListener(): Exception Msg=" + ex.getMessage(), ex);
         }
     }
 
@@ -781,7 +781,7 @@ public class VectorRoomSettingsFragment extends PreferenceFragment implements Sh
             try {
                 resources = getResources();
             } catch (Exception ex) {
-                Log.e(LOG_TAG, "## updatePreferenceUiValues(): Exception in getResources() - Msg=" + ex.getLocalizedMessage());
+                Log.e(LOG_TAG, "## updatePreferenceUiValues(): Exception in getResources() - Msg=" + ex.getLocalizedMessage(), ex);
                 return;
             }
         }
@@ -1583,7 +1583,7 @@ public class VectorRoomSettingsFragment extends PreferenceFragment implements Sh
                 }
             }
         } catch (Exception e) {
-            Log.e(LOG_TAG, "onMessageClick : force to display the icons failed " + e.getLocalizedMessage());
+            Log.e(LOG_TAG, "onMessageClick : force to display the icons failed " + e.getLocalizedMessage(), e);
         }
 
         Menu menu = popup.getMenu();

@@ -234,7 +234,7 @@ public class Matrix {
                 flavor += "-";
             }
         } catch (Exception e) {
-            Log.e(LOG_TAG, "## versionName() : failed " + e.getMessage());
+            Log.e(LOG_TAG, "## versionName() : failed " + e.getMessage(), e);
         }
 
         String gitVersion = mAppContext.getString(R.string.git_revision);

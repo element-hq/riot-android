@@ -96,7 +96,7 @@ public class VectorCustomActionEditTextPreference extends EditTextPreference {
             }
 
         } catch (Exception e) {
-            Log.e(LOG_TAG, "onBindView " + e.getMessage());
+            Log.e(LOG_TAG, "onBindView " + e.getMessage(), e);
         }
     }
 

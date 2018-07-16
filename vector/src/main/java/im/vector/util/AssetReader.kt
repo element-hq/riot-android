@@ -64,7 +64,7 @@ object AssetReader {
             inputStreamReader.close()
             inputStream.close()
         } catch (e: Exception) {
-            Log.e("AssetReader", "## readAssetFile() failed : " + e.message)
+            Log.e("AssetReader", "## readAssetFile() failed : " + e.message, e)
         }
 
         return assetContent

@@ -90,7 +90,7 @@ public class FallbackLoginActivity extends RiotAppCompatActivity {
             try {
                 cookieManager.removeAllCookie();
             } catch (Exception e) {
-                Log.e(LOG_TAG, " cookieManager.removeAllCookie() fails " + e.getLocalizedMessage());
+                Log.e(LOG_TAG, " cookieManager.removeAllCookie() fails " + e.getLocalizedMessage(), e);
             }
             launchWebView();
         } else {
@@ -102,7 +102,7 @@ public class FallbackLoginActivity extends RiotAppCompatActivity {
                     }
                 });
             } catch (Exception e) {
-                Log.e(LOG_TAG, " cookieManager.removeAllCookie() fails " + e.getLocalizedMessage());
+                Log.e(LOG_TAG, " cookieManager.removeAllCookie() fails " + e.getLocalizedMessage(), e);
                 launchWebView();
             }
         }
@@ -191,7 +191,7 @@ public class FallbackLoginActivity extends RiotAppCompatActivity {
                         }.getType());
 
                     } catch (Exception e) {
-                        Log.e(LOG_TAG, "## shouldOverrideUrlLoading() : fromJson failed " + e.getMessage());
+                        Log.e(LOG_TAG, "## shouldOverrideUrlLoading() : fromJson failed " + e.getMessage(), e);
                     }
 
                     // succeeds to parse parameters
@@ -228,7 +228,7 @@ public class FallbackLoginActivity extends RiotAppCompatActivity {
                                 }
                             }
                         } catch (Exception e) {
-                            Log.e(LOG_TAG, "## shouldOverrideUrlLoading() : failed " + e.getMessage());
+                            Log.e(LOG_TAG, "## shouldOverrideUrlLoading() : failed " + e.getMessage(), e);
                         }
                     }
                     return true;

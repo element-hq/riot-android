@@ -1,32 +1,35 @@
 <?xml version="1.0" encoding="utf-8"?>
 
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="?attr/riot_primary_background_color">
 
-    <LinearLayout
+    <!-- Note: Gif will be loaded by the code -->
+    <ImageView
+        android:id="@+id/animated_logo_image_view"
+        android:layout_width="240dp"
+        android:layout_height="240dp"
+        android:contentDescription="@string/loading"
+        app:layout_constraintBottom_toTopOf="@+id/progress"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_chainStyle="packed"
+        tools:src="@drawable/logo" />
+
+    <ProgressBar
+        android:id="@+id/progress"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:layout_centerInParent="true">
+        android:layout_centerInParent="true"
+        android:contentDescription="@string/loading"
+        android:indeterminate="true"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/animated_logo_image_view" />
 
-        <pl.droidsonroids.gif.GifImageView
-            android:contentDescription="@string/loading"
-            android:id="@+id/animated_logo_image_view"
-            android:layout_width="240dp"
-            android:layout_height="240dp"
-            android:src="@drawable/riot_splash" />
-
-        <RelativeLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content">
-            <ProgressBar
-                android:contentDescription="@string/loading"
-                android:layout_centerInParent="true"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:indeterminate="true"/>
-        </RelativeLayout>
-    </LinearLayout>
-</RelativeLayout>
+</android.support.constraint.ConstraintLayout>

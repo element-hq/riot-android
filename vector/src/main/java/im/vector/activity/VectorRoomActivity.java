@@ -1489,13 +1489,13 @@ public class VectorRoomActivity extends MXCActionBarActivity implements
                             mVectorMessageListFragment.getMessageAdapter().updateReadMarker(mRoom.getReadMarkerEventId(), latestDisplayedEvent.eventId);
                         }
                     } catch (Exception e) {
-                        Log.e(LOG_TAG, "## sendReadReceipt() : failed " + e.getMessage());
+                        Log.e(LOG_TAG, "## sendReadReceipt() : failed " + e.getMessage(), e);
                     }
                 }
 
                 @Override
                 public void onNetworkError(Exception e) {
-                    Log.e(LOG_TAG, "## sendReadReceipt() : failed " + e.getMessage());
+                    Log.e(LOG_TAG, "## sendReadReceipt() : failed " + e.getMessage(), e);
                 }
 
                 @Override
@@ -1505,7 +1505,7 @@ public class VectorRoomActivity extends MXCActionBarActivity implements
 
                 @Override
                 public void onUnexpectedError(Exception e) {
-                    Log.e(LOG_TAG, "## sendReadReceipt() : failed " + e.getMessage());
+                    Log.e(LOG_TAG, "## sendReadReceipt() : failed " + e.getMessage(), e);
                 }
             });
             refreshNotificationsArea();
@@ -1908,7 +1908,7 @@ public class VectorRoomActivity extends MXCActionBarActivity implements
 
             @Override
             public void onNetworkError(Exception e) {
-                Log.e(LOG_TAG, "## startIpCall(): onNetworkError Msg=" + e.getMessage());
+                Log.e(LOG_TAG, "## startIpCall(): onNetworkError Msg=" + e.getMessage(), e);
                 onError(e.getLocalizedMessage());
             }
 
@@ -1939,7 +1939,7 @@ public class VectorRoomActivity extends MXCActionBarActivity implements
 
             @Override
             public void onUnexpectedError(Exception e) {
-                Log.e(LOG_TAG, "## startIpCall(): onUnexpectedError Msg=" + e.getLocalizedMessage());
+                Log.e(LOG_TAG, "## startIpCall(): onUnexpectedError Msg=" + e.getLocalizedMessage(), e);
                 onError(e.getLocalizedMessage());
             }
         });

@@ -142,7 +142,7 @@ public class VectorAutoCompleteTextView extends AppCompatMultiAutoCompleteTextVi
                 mPopupCanBeUpdatedField = AutoCompleteTextView.class.getDeclaredField("mPopupCanBeUpdated");
                 mPopupCanBeUpdatedField.setAccessible(true);
             } catch (Exception e) {
-                Log.e(LOG_TAG, "## initAutoCompletion() : failed to retrieve mPopupCanBeUpdated " + e.getMessage());
+                Log.e(LOG_TAG, "## initAutoCompletion() : failed to retrieve mPopupCanBeUpdated " + e.getMessage(), e);
             }
         }
 
@@ -152,7 +152,7 @@ public class VectorAutoCompleteTextView extends AppCompatMultiAutoCompleteTextVi
                 popup.setAccessible(true);
                 mListPopupWindow = (android.widget.ListPopupWindow) popup.get(this);
             } catch (Exception e) {
-                Log.e(LOG_TAG, "## initAutoCompletion() : failed to retrieve mListPopupWindow " + e.getMessage());
+                Log.e(LOG_TAG, "## initAutoCompletion() : failed to retrieve mListPopupWindow " + e.getMessage(), e);
             }
         }
     }
@@ -218,7 +218,7 @@ public class VectorAutoCompleteTextView extends AppCompatMultiAutoCompleteTextVi
                     editableAfter.replace(0, text.length(), text + ":");
                 }
             } catch (Exception e) {
-                Log.e(LOG_TAG, "## replaceText() : failed " + e.getMessage());
+                Log.e(LOG_TAG, "## replaceText() : failed " + e.getMessage(), e);
             }
         }
 
@@ -247,7 +247,7 @@ public class VectorAutoCompleteTextView extends AppCompatMultiAutoCompleteTextVi
             try {
                 mPopupCanBeUpdatedField.setBoolean(this, true);
             } catch (Exception e) {
-                Log.e(LOG_TAG, "## performFiltering() : mPopupCanBeUpdatedField.setBoolean failed " + e.getMessage());
+                Log.e(LOG_TAG, "## performFiltering() : mPopupCanBeUpdatedField.setBoolean failed " + e.getMessage(), e);
             }
 
             // save the current written pattern
@@ -266,7 +266,7 @@ public class VectorAutoCompleteTextView extends AppCompatMultiAutoCompleteTextVi
                         try {
                             subText = text.subSequence(start, end);
                         } catch (Exception e) {
-                            Log.e(LOG_TAG, "## performFiltering() failed " + e.getMessage());
+                            Log.e(LOG_TAG, "## performFiltering() failed " + e.getMessage(), e);
                         }
 
                         mAdapter.getFilter().filter(subText, new Filter.FilterListener() {

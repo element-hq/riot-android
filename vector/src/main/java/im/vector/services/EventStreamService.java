@@ -942,7 +942,7 @@ public class EventStreamService extends Service {
         try {
             callId = event.getContentAsJsonObject().get("call_id").getAsString();
         } catch (Exception e) {
-            Log.e(LOG_TAG, "prepareNotification : getContentAsJsonObject " + e.getMessage());
+            Log.e(LOG_TAG, "prepareNotification : getContentAsJsonObject " + e.getMessage(), e);
         }
 
         if (!TextUtils.isEmpty(callId)) {
@@ -1054,7 +1054,7 @@ public class EventStreamService extends Service {
                 mNotificationHandlerThread = new HandlerThread("NotificationsService_" + System.currentTimeMillis(), Thread.MIN_PRIORITY);
                 mNotificationHandlerThread.start();
             } catch (Exception e) {
-                Log.e(LOG_TAG, "## getNotificationsHandler failed : " + e.getMessage());
+                Log.e(LOG_TAG, "## getNotificationsHandler failed : " + e.getMessage(), e);
             }
         }
 
@@ -1062,7 +1062,7 @@ public class EventStreamService extends Service {
             try {
                 mNotificationsHandler = new android.os.Handler(mNotificationHandlerThread.getLooper());
             } catch (Exception e) {
-                Log.e(LOG_TAG, "## getNotificationsHandler failed : " + e.getMessage());
+                Log.e(LOG_TAG, "## getNotificationsHandler failed : " + e.getMessage(), e);
             }
         }
 
@@ -1150,9 +1150,6 @@ public class EventStreamService extends Service {
      * @param unreadMessagesCount the unread messages count
      */
     public static void onStaticNotifiedEvent(Context context, Event event, String roomName, String senderDisplayName, int unreadMessagesCount) {
-        // FIXME Remove this call?
-        NotificationUtils.INSTANCE.addNotificationChannels(context);
-
         if ((null != event) && !mBackgroundNotificationEventIds.contains(event.eventId)) {
             mBackgroundNotificationEventIds.add(event.eventId);
             String header = (TextUtils.isEmpty(roomName) ? "" : roomName + ": ");
@@ -1217,13 +1214,12 @@ public class EventStreamService extends Service {
      * @param rule     the bing rule to use
      */
     private void displayMessagesNotification(final List<CharSequence> messages, final BingRule rule) {
-        // FIXME Remove this call?
-        NotificationUtils.INSTANCE.addNotificationChannels(this);
-
         new Handler(getMainLooper()).post(new Runnable() {
             @Override
             public void run() {
-                if (!mGcmRegistrationManager.areDeviceNotificationsAllowed() || (null == messages) || (0 == messages.size())) {
+                if (!mGcmRegistrationManager.areDeviceNotificationsAllowed()
+                        || null == messages
+                        || messages.isEmpty()) {
                     NotificationUtils.INSTANCE.cancelNotificationMessage(EventStreamService.this);
                     RoomsNotifications.deleteCachedRoomNotifications(VectorApp.getInstance());
                 } else {
@@ -1446,7 +1442,7 @@ public class EventStreamService extends Service {
                                         }
                                     }
                                 } catch (Exception e) {
-                                    Log.e(LOG_TAG, "##refreshNotifiedMessagesList() : invitation parsing failed");
+                                    Log.e(LOG_TAG, "##refreshNotifiedMessagesList() : invitation parsing failed", e);
                                 }
                             }
                         }
@@ -1478,7 +1474,7 @@ public class EventStreamService extends Service {
                             }
                         }
                     } catch (Exception e) {
-                        Log.e(LOG_TAG, "##refreshNotifiedMessagesList(): failed checking the unread " + e.getMessage());
+                        Log.e(LOG_TAG, "##refreshNotifiedMessagesList(): failed checking the unread " + e.getMessage(), e);
                     }
                 }
             }
@@ -1539,7 +1535,7 @@ public class EventStreamService extends Service {
                     }
                 }
             } catch (Exception e) {
-                Log.e(LOG_TAG, "##refreshNotifiedMessagesList(): failed while building mNotifiedEventsByRoomId " + e.getMessage());
+                Log.e(LOG_TAG, "##refreshNotifiedMessagesList(): failed while building mNotifiedEventsByRoomId " + e.getMessage(), e);
             }
 
             return isUpdated;

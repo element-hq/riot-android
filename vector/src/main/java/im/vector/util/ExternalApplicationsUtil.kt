@@ -135,9 +135,9 @@ fun openCamera(activity: Activity, titlePrefix: String, requestCode: Int): Strin
         }
     } catch (uoe: UnsupportedOperationException) {
         Log.e(LOG_TAG, "Unable to insert camera URI into MediaStore.Images.Media.EXTERNAL_CONTENT_URI"
-                + " - no SD card? Attempting to insert into device storage.")
+                + " - no SD card? Attempting to insert into device storage.", uoe)
     } catch (e: Exception) {
-        Log.e(LOG_TAG, "Unable to insert camera URI into MediaStore.Images.Media.EXTERNAL_CONTENT_URI. $e")
+        Log.e(LOG_TAG, "Unable to insert camera URI into MediaStore.Images.Media.EXTERNAL_CONTENT_URI. $e", e)
     }
 
     if (null == dummyUri) {
@@ -148,7 +148,7 @@ fun openCamera(activity: Activity, titlePrefix: String, requestCode: Int): Strin
             }
 
         } catch (e: Exception) {
-            Log.e(LOG_TAG, "Unable to insert camera URI into internal storage. Giving up. $e")
+            Log.e(LOG_TAG, "Unable to insert camera URI into internal storage. Giving up. $e", e)
         }
     }
 

@@ -69,7 +69,7 @@ class StickerPickerActivity : AbstractWidgetActivity() {
                     "&room_id=" + URLEncoder.encode(mRoom!!.roomId, "utf-8") +
                     "&widgetId=" + URLEncoder.encode(mWidgetId, "utf-8")
         } catch (e: Exception) {
-            Log.e(LOG_TAG, "## buildInterfaceUrl() failed " + e.message)
+            Log.e(LOG_TAG, "## buildInterfaceUrl() failed " + e.message, e)
         }
 
         return null

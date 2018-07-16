@@ -207,7 +207,7 @@ public class RoomDirectoryAdapter extends RecyclerView.Adapter<RoomDirectoryAdap
                     URL url = new URL(avatarURL);
                     bitmap = BitmapFactory.decodeStream((InputStream) url.getContent());
                 } catch (Exception e) {
-                    Log.e(LOG_TAG, "## downloadAvatar() : cannot load the avatar " + avatarURL);
+                    Log.e(LOG_TAG, "## downloadAvatar() : cannot load the avatar " + avatarURL, e);
                 }
                 return bitmap;
             }
@@ -236,7 +236,7 @@ public class RoomDirectoryAdapter extends RecyclerView.Adapter<RoomDirectoryAdap
         try {
             task.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
         } catch (Exception e) {
-            Log.e(LOG_TAG, "## downloadAvatar() failed " + e.getMessage());
+            Log.e(LOG_TAG, "## downloadAvatar() failed " + e.getMessage(), e);
             task.cancel(true);
         }
     }

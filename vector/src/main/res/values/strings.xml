@@ -137,8 +137,9 @@
     <string name="send_bug_report_include_screenshot">Send screenshot</string>
     <string name="send_bug_report">Bug Report</string>
     <string name="send_bug_report_description">Please describe the bug. What did you do? What did you expect to happen? What actually happened?</string>
+    <string name="send_bug_report_description_in_english">If possible, please write the description in English.</string>
     <string name="send_bug_report_placeholder">Describe your problem here</string>
-    <string name="send_bug_report_logs_description">In order to diagnose problems, logs from this client will be sent with this bug report. If you would prefer to only send the text above, please untick:</string>
+    <string name="send_bug_report_logs_description">In order to diagnose problems, logs from this client will be sent with this bug report. This bug report, including the logs and the screenshot, will not be publicly visible. If you would prefer to only send the text above, please untick:</string>
     <string name="send_bug_report_alert_message">You seem to be shaking the phone in frustration. Would you like to submit a bug report?</string>
     <string name="send_bug_report_app_crashed">The application has crashed last time. Would you like to submit a crash report?</string>
     <string name="send_bug_report_rage_shake">Rage shake to report bug</string>
@@ -840,7 +841,7 @@
 
     <string name="encryption_information_verify_device">Verify device</string>
     <string name="encryption_information_verify_device_warning"> To verify that this device can be trusted, please contact its owner using some other means (e.g. in person or a phone call) and ask them whether the key they see in their User Settings for this device matches the key below:</string>
-    <string name="encryption_information_verify_device_warning2">If it matches, press the verify button below. If it doesn\'t, then someone else is intercepting this device and you probably want to press the block button instead.\nIn future this verification process will be more sophisticated.</string>
+    <string name="encryption_information_verify_device_warning2">If it matches, press the verify button below. \nIf it doesn\'t, then someone else is intercepting this device and you should probably blacklist it.\nIn future this verification process will be more sophisticated.</string>
     <string name="encryption_information_verify_key_match">I verify that the keys match</string>
 
     <string name="e2e_enabling_on_app_update">Riot now supports end-to-end encryption but you need to log in again to enable it.\n\nYou can do it now or later from the application settings.</string>

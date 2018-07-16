@@ -88,7 +88,7 @@ object NotificationUtils {
     private const val LISTEN_FOR_EVENTS_NOTIFICATION_CHANNEL_ID = "LISTEN_FOR_EVENTS_NOTIFICATION_CHANNEL_ID"
 
     private const val NOISY_NOTIFICATION_CHANNEL_ID_BASE = "DEFAULT_NOISY_NOTIFICATION_CHANNEL_ID_BASE"
-    private var NOISY_NOTIFICATION_CHANNEL_ID: String? = null
+    private var noisyNotificationChannelId: String? = null
 
     private const val SILENT_NOTIFICATION_CHANNEL_ID = "DEFAULT_SILENT_NOTIFICATION_CHANNEL_ID"
     private const val CALL_NOTIFICATION_CHANNEL_ID = "CALL_NOTIFICATION_CHANNEL_ID"
@@ -97,55 +97,32 @@ object NotificationUtils {
      * Channel names
      * ========================================================================================== */
 
-    // FIXME I think there is an issue if the user change the language
-    private var NOISY_NOTIFICATION_CHANNEL_NAME: String? = null
-    private var SILENT_NOTIFICATION_CHANNEL_NAME: String? = null
-    private var CALL_NOTIFICATION_CHANNEL_NAME: String? = null
-    private var LISTEN_FOR_EVENTS_NOTIFICATION_CHANNEL_NAME: String? = null
-
     /**
-     * Add a notification groups.
+     * Create notification channels.
      *
      * @param context the context
      */
-    @SuppressLint("NewApi")
-    fun addNotificationChannels(context: Context) {
+    private fun createNotificationChannels(context: Context) {
         if (Build.VERSION.SDK_INT < Build.VERSION_CODES.O) {
             return
-        }
-
-        if (null == NOISY_NOTIFICATION_CHANNEL_NAME) {
-            NOISY_NOTIFICATION_CHANNEL_NAME = context.getString(R.string.notification_noisy_notifications)
-        }
-
-        if (null == SILENT_NOTIFICATION_CHANNEL_NAME) {
-            SILENT_NOTIFICATION_CHANNEL_NAME = context.getString(R.string.notification_silent_notifications)
-        }
-
-        if (null == CALL_NOTIFICATION_CHANNEL_NAME) {
-            CALL_NOTIFICATION_CHANNEL_NAME = context.getString(R.string.call)
-        }
-
-        if (null == LISTEN_FOR_EVENTS_NOTIFICATION_CHANNEL_NAME) {
-            LISTEN_FOR_EVENTS_NOTIFICATION_CHANNEL_NAME = context.getString(R.string.notification_listen_for_events)
         }
 
         val notificationManager = context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
 
         // A notification channel cannot be updated :
         // it must be deleted and created with another channel id
-        if (null == NOISY_NOTIFICATION_CHANNEL_ID) {
-            val channels = notificationManager.notificationChannels
-
-            for (channel in channels) {
+        if (null == noisyNotificationChannelId) {
+            for (channel in notificationManager.notificationChannels) {
                 if (channel.id.startsWith(NOISY_NOTIFICATION_CHANNEL_ID_BASE)) {
-                    NOISY_NOTIFICATION_CHANNEL_ID = channel.id
+                    noisyNotificationChannelId = channel.id
+                    break
                 }
             }
         }
 
-        if (null != NOISY_NOTIFICATION_CHANNEL_ID) {
-            val channel = notificationManager.getNotificationChannel(NOISY_NOTIFICATION_CHANNEL_ID)
+        if (null != noisyNotificationChannelId) {
+            // Check that the notification sound is still the same
+            val channel = notificationManager.getNotificationChannel(noisyNotificationChannelId)
             val notificationSound = channel.sound
             val expectedSound = PreferencesManager.getNotificationRingTone(context)
 
@@ -154,42 +131,46 @@ object NotificationUtils {
             // else the sound won't be updated
             if ((null == notificationSound)
                     xor (null == expectedSound) || null != notificationSound && !TextUtils.equals(notificationSound.toString(), expectedSound!!.toString())) {
-                notificationManager.deleteNotificationChannel(NOISY_NOTIFICATION_CHANNEL_ID)
-                NOISY_NOTIFICATION_CHANNEL_ID = null
+                notificationManager.deleteNotificationChannel(noisyNotificationChannelId)
+                noisyNotificationChannelId = null
             }
         }
 
-        if (null == NOISY_NOTIFICATION_CHANNEL_ID) {
-            NOISY_NOTIFICATION_CHANNEL_ID = NOISY_NOTIFICATION_CHANNEL_ID_BASE + System.currentTimeMillis()
+        if (null == noisyNotificationChannelId) {
+            noisyNotificationChannelId = NOISY_NOTIFICATION_CHANNEL_ID_BASE + "_" + System.currentTimeMillis()
 
-            val channel = NotificationChannel(NOISY_NOTIFICATION_CHANNEL_ID,
-                    NOISY_NOTIFICATION_CHANNEL_NAME, NotificationManager.IMPORTANCE_DEFAULT)
-            channel.description = NOISY_NOTIFICATION_CHANNEL_NAME
+            val channel = NotificationChannel(noisyNotificationChannelId,
+                    context.getString(R.string.notification_noisy_notifications),
+                    NotificationManager.IMPORTANCE_DEFAULT)
+            channel.description = context.getString(R.string.notification_noisy_notifications)
             channel.setSound(PreferencesManager.getNotificationRingTone(context), null)
             channel.enableVibration(true)
             notificationManager.createNotificationChannel(channel)
         }
 
-        if (null == notificationManager.getNotificationChannel(SILENT_NOTIFICATION_CHANNEL_NAME)) {
+        if (null == notificationManager.getNotificationChannel(SILENT_NOTIFICATION_CHANNEL_ID)) {
             val channel = NotificationChannel(SILENT_NOTIFICATION_CHANNEL_ID,
-                    SILENT_NOTIFICATION_CHANNEL_NAME, NotificationManager.IMPORTANCE_DEFAULT)
-            channel.description = SILENT_NOTIFICATION_CHANNEL_NAME
+                    context.getString(R.string.notification_silent_notifications),
+                    NotificationManager.IMPORTANCE_DEFAULT)
+            channel.description = context.getString(R.string.notification_silent_notifications)
             channel.setSound(null, null)
             notificationManager.createNotificationChannel(channel)
         }
 
         if (null == notificationManager.getNotificationChannel(LISTEN_FOR_EVENTS_NOTIFICATION_CHANNEL_ID)) {
             val channel = NotificationChannel(LISTEN_FOR_EVENTS_NOTIFICATION_CHANNEL_ID,
-                    LISTEN_FOR_EVENTS_NOTIFICATION_CHANNEL_NAME, NotificationManager.IMPORTANCE_MIN)
-            channel.description = LISTEN_FOR_EVENTS_NOTIFICATION_CHANNEL_NAME
+                    context.getString(R.string.notification_listen_for_events),
+                    NotificationManager.IMPORTANCE_MIN)
+            channel.description = context.getString(R.string.notification_listen_for_events)
             channel.setSound(null, null)
             notificationManager.createNotificationChannel(channel)
         }
 
         if (null == notificationManager.getNotificationChannel(CALL_NOTIFICATION_CHANNEL_ID)) {
             val channel = NotificationChannel(CALL_NOTIFICATION_CHANNEL_ID,
-                    CALL_NOTIFICATION_CHANNEL_NAME, NotificationManager.IMPORTANCE_DEFAULT)
-            channel.description = CALL_NOTIFICATION_CHANNEL_NAME
+                    context.getString(R.string.call),
+                    NotificationManager.IMPORTANCE_DEFAULT)
+            channel.description = context.getString(R.string.call)
             channel.setSound(null, null)
             notificationManager.createNotificationChannel(channel)
         }
@@ -209,8 +190,7 @@ object NotificationUtils {
         i.flags = Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_SINGLE_TOP
         val pi = PendingIntent.getActivity(context, 0, i, 0)
 
-        // build the notification builder
-        addNotificationChannels(context)
+        createNotificationChannels(context)
 
         val builder = NotificationCompat.Builder(context, LISTEN_FOR_EVENTS_NOTIFICATION_CHANNEL_ID)
                 .setWhen(System.currentTimeMillis())
@@ -239,7 +219,7 @@ object NotificationUtils {
                         .getMethod("setLatestEventInfo", Context::class.java, CharSequence::class.java, CharSequence::class.java, PendingIntent::class.java)
                 deprecatedMethod.invoke(notification, context, context.getString(R.string.riot_app_name), context.getString(subTitleResId), pi)
             } catch (ex: Exception) {
-                Log.e(LOG_TAG, "## buildNotification(): Exception - setLatestEventInfo() Msg=" + ex.message)
+                Log.e(LOG_TAG, "## buildNotification(): Exception - setLatestEventInfo() Msg=" + ex.message, ex)
             }
 
         }
@@ -259,7 +239,7 @@ object NotificationUtils {
      */
     @SuppressLint("NewApi")
     fun buildIncomingCallNotification(context: Context, roomName: String, matrixId: String, callId: String): Notification {
-        addNotificationChannels(context)
+        createNotificationChannels(context)
 
         val builder = NotificationCompat.Builder(context, CALL_NOTIFICATION_CHANNEL_ID)
                 .setWhen(System.currentTimeMillis())
@@ -308,7 +288,7 @@ object NotificationUtils {
      */
     @SuppressLint("NewApi")
     fun buildPendingCallNotification(context: Context, roomName: String, roomId: String, matrixId: String, callId: String): Notification {
-        addNotificationChannels(context)
+        createNotificationChannels(context)
 
         val builder = NotificationCompat.Builder(context, CALL_NOTIFICATION_CHANNEL_ID)
                 .setWhen(System.currentTimeMillis())
@@ -539,7 +519,7 @@ object NotificationUtils {
                     wearableExtender.addAction(action)
                     builder.extend(wearableExtender)
                 } catch (e: Exception) {
-                    Log.e(LOG_TAG, "## addTextStyleWithSeveralRooms() : WearableExtender failed " + e.message)
+                    Log.e(LOG_TAG, "## addTextStyleWithSeveralRooms() : WearableExtender failed " + e.message, e)
                 }
             }
         }
@@ -566,7 +546,7 @@ object NotificationUtils {
             builder.color = highlightColor
         } else {
             builder.priority = NotificationCompat.PRIORITY_DEFAULT
-            builder.color = Color.TRANSPARENT
+            builder.color = defaultColor
         }
 
         if (!isBackground) {
@@ -576,7 +556,11 @@ object NotificationUtils {
                 builder.setSound(PreferencesManager.getNotificationRingTone(context))
 
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-                    builder.setChannelId(NOISY_NOTIFICATION_CHANNEL_ID!!)
+                    builder.setChannelId(noisyNotificationChannelId!!)
+                }
+            } else {
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                    builder.setChannelId(SILENT_NOTIFICATION_CHANNEL_ID)
                 }
             }
 
@@ -586,6 +570,10 @@ object NotificationUtils {
                 val wl = pm.newWakeLock(PowerManager.SCREEN_BRIGHT_WAKE_LOCK or PowerManager.ACQUIRE_CAUSES_WAKEUP, "manageNotificationSound")
                 wl.acquire(3000)
                 wl.release()
+            }
+        } else {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                builder.setChannelId(SILENT_NOTIFICATION_CHANNEL_ID)
             }
         }
     }
@@ -607,7 +595,7 @@ object NotificationUtils {
                 notification = buildMessageNotification(context, roomsNotifications, BingRule(), isBackground)
             }
         } catch (e: Exception) {
-            Log.e(LOG_TAG, "## buildMessageNotification() : failed " + e.message)
+            Log.e(LOG_TAG, "## buildMessageNotification() : failed " + e.message, e)
         }
 
         return notification
@@ -635,7 +623,7 @@ object NotificationUtils {
             // cache the value
             RoomsNotifications.saveRoomNotifications(context, roomsNotifications)
         } catch (e: Exception) {
-            Log.e(LOG_TAG, "## buildMessageNotification() : failed " + e.message)
+            Log.e(LOG_TAG, "## buildMessageNotification() : failed " + e.message, e)
         }
 
         return notification
@@ -668,7 +656,7 @@ object NotificationUtils {
                     try {
                         largeBitmap = BitmapFactory.decodeFile(roomsNotifications.mRoomAvatarPath, options)
                     } catch (oom: OutOfMemoryError) {
-                        Log.e(LOG_TAG, "decodeFile failed with an oom")
+                        Log.e(LOG_TAG, "decodeFile failed with an oom", oom)
                     }
 
                 }
@@ -676,7 +664,7 @@ object NotificationUtils {
 
             Log.d(LOG_TAG, "prepareNotification : with sound " + BingRule.isDefaultNotificationSound(bingRule.notificationSound))
 
-            addNotificationChannels(context)
+            createNotificationChannels(context)
 
             val builder = NotificationCompat.Builder(context, SILENT_NOTIFICATION_CHANNEL_ID)
                     .setWhen(roomsNotifications.mContentTs)
@@ -691,7 +679,7 @@ object NotificationUtils {
             try {
                 addTextStyle(context, builder, roomsNotifications)
             } catch (e: Exception) {
-                Log.e(LOG_TAG, "## buildMessageNotification() : addTextStyle failed " + e.message)
+                Log.e(LOG_TAG, "## buildMessageNotification() : addTextStyle failed " + e.message, e)
             }
 
             // only one room : display the large bitmap (it should be the room avatar)
@@ -706,7 +694,7 @@ object NotificationUtils {
 
             return builder.build()
         } catch (e: Exception) {
-            Log.e(LOG_TAG, "## buildMessageNotification() : failed" + e.message)
+            Log.e(LOG_TAG, "## buildMessageNotification() : failed" + e.message, e)
         }
 
         return null
@@ -722,7 +710,7 @@ object NotificationUtils {
      */
     fun buildMessagesListNotification(context: Context, messagesStrings: List<CharSequence>, bingRule: BingRule): Notification? {
         try {
-            addNotificationChannels(context)
+            createNotificationChannels(context)
 
             val builder = NotificationCompat.Builder(context, SILENT_NOTIFICATION_CHANNEL_ID)
                     .setWhen(System.currentTimeMillis())
@@ -757,7 +745,7 @@ object NotificationUtils {
 
             return builder.build()
         } catch (e: Exception) {
-            Log.e(LOG_TAG, "## buildMessagesListNotification() : failed" + e.message)
+            Log.e(LOG_TAG, "## buildMessagesListNotification() : failed" + e.message, e)
         }
 
         return null
@@ -797,7 +785,7 @@ object NotificationUtils {
             NotificationManagerCompat.from(context)
                     .cancelAll()
         } catch (e: Exception) {
-            Log.e(LOG_TAG, "## cancelAllNotifications() failed " + e.message)
+            Log.e(LOG_TAG, "## cancelAllNotifications() failed " + e.message, e)
         }
     }
 

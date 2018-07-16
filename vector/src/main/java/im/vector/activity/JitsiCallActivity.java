@@ -134,7 +134,7 @@ public class JitsiCallActivity extends RiotAppCompatActivity {
             String confId = uri.getQueryParameter("confId");
             mCallUrl = JITSI_SERVER_URL + confId;
         } catch (Exception e) {
-            Log.e(LOG_TAG, "## onCreate() failed : " + e.getMessage());
+            Log.e(LOG_TAG, "## onCreate() failed : " + e.getMessage(), e);
             finish();
             return;
         }
@@ -232,7 +232,7 @@ public class JitsiCallActivity extends RiotAppCompatActivity {
             urlObject.putString("url", mCallUrl);
             mJitsiView.loadURLObject(urlObject);
         } catch (Exception e) {
-            Log.e(LOG_TAG, "## loadURL() failed : " + e.getMessage());
+            Log.e(LOG_TAG, "## loadURL() failed : " + e.getMessage(), e);
             finish();
         }
 

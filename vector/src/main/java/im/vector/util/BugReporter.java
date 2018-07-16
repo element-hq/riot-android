@@ -25,6 +25,7 @@ import android.content.pm.PackageInfo;
 import android.graphics.Bitmap;
 import android.os.AsyncTask;
 import android.os.Build;
+import android.support.annotation.Nullable;
 import android.text.TextUtils;
 import android.view.View;
 
@@ -247,7 +248,7 @@ public class BugReporter {
                                 builder.addFormDataPart("file",
                                         logCatScreenshotFile.getName(), RequestBody.create(MediaType.parse("application/octet-stream"), logCatScreenshotFile));
                             } catch (Exception e) {
-                                Log.e(LOG_TAG, "## saveLogCat() : fail to write logcat" + e.toString());
+                                Log.e(LOG_TAG, "## saveLogCat() : fail to write logcat" + e.toString(), e);
                             }
                         }
                     }
@@ -259,7 +260,7 @@ public class BugReporter {
                         PackageInfo pInfo = context.getPackageManager().getPackageInfo(context.getPackageName(), 0);
                         builder.addFormDataPart("label", pInfo.versionName);
                     } catch (Exception e) {
-                        Log.e(LOG_TAG, "## sendBugReport() : cannot retrieve the appname " + e.getMessage());
+                        Log.e(LOG_TAG, "## sendBugReport() : cannot retrieve the appname " + e.getMessage(), e);
                     }
 
                     builder.addFormDataPart("label", context.getString(R.string.flavor_description));
@@ -313,7 +314,7 @@ public class BugReporter {
                         response = mBugReportCall.execute();
                         responseCode = response.code();
                     } catch (Exception e) {
-                        Log.e(LOG_TAG, "response " + e.getMessage());
+                        Log.e(LOG_TAG, "response " + e.getMessage(), e);
                         errorMessage = e.getLocalizedMessage();
                     }
 
@@ -343,7 +344,7 @@ public class BugReporter {
                                         JSONObject responseJSON = new JSONObject(serverError);
                                         serverError = responseJSON.getString("error");
                                     } catch (JSONException e) {
-                                        Log.e(LOG_TAG, "doInBackground ; Json conversion failed " + e.getMessage());
+                                        Log.e(LOG_TAG, "doInBackground ; Json conversion failed " + e.getMessage(), e);
                                     }
 
                                     // should never happen
@@ -352,14 +353,14 @@ public class BugReporter {
                                     }
                                 }
                             } catch (Exception e) {
-                                Log.e(LOG_TAG, "## sendBugReport() : failed to parse error " + e.getMessage());
+                                Log.e(LOG_TAG, "## sendBugReport() : failed to parse error " + e.getMessage(), e);
                             } finally {
                                 try {
                                     if (null != is) {
                                         is.close();
                                     }
                                 } catch (Exception e) {
-                                    Log.e(LOG_TAG, "## sendBugReport() : failed to close the error stream " + e.getMessage());
+                                    Log.e(LOG_TAG, "## sendBugReport() : failed to close the error stream " + e.getMessage(), e);
                                 }
                             }
                         }
@@ -377,7 +378,7 @@ public class BugReporter {
                     try {
                         listener.onProgress((null == progress) ? 0 : progress[0]);
                     } catch (Exception e) {
-                        Log.e(LOG_TAG, "## onProgress() : failed " + e.getMessage());
+                        Log.e(LOG_TAG, "## onProgress() : failed " + e.getMessage(), e);
                     }
                 }
             }
@@ -401,7 +402,7 @@ public class BugReporter {
                             listener.onUploadFailed(reason);
                         }
                     } catch (Exception e) {
-                        Log.e(LOG_TAG, "## onPostExecute() : failed " + e.getMessage());
+                        Log.e(LOG_TAG, "## onPostExecute() : failed " + e.getMessage(), e);
                     }
                 }
             }
@@ -409,6 +410,16 @@ public class BugReporter {
     }
 
     private static Bitmap mScreenshot = null;
+
+    /**
+     * Get current Screenshot
+     *
+     * @return screenshot or null if not available
+     */
+    @Nullable
+    public static Bitmap getScreenshot() {
+        return mScreenshot;
+    }
 
     /**
      * Send a bug report either with email or with Vector.
@@ -478,7 +489,7 @@ public class BugReporter {
                 fos.flush();
                 fos.close();
             } catch (Exception e) {
-                Log.e(LOG_TAG, "## saveCrashReport() : fail to write " + e.toString());
+                Log.e(LOG_TAG, "## saveCrashReport() : fail to write " + e.toString(), e);
             }
         }
     }
@@ -504,7 +515,7 @@ public class BugReporter {
                 isr.close();
                 fis.close();
             } catch (Exception e) {
-                Log.e(LOG_TAG, "## getCrashDescription() : fail to read " + e.toString());
+                Log.e(LOG_TAG, "## getCrashDescription() : fail to read " + e.toString(), e);
             }
         }
 
@@ -545,9 +556,9 @@ public class BugReporter {
         try {
             return rootView.getDrawingCache();
         } catch (OutOfMemoryError oom) {
-            Log.e(LOG_TAG, "Cannot get drawing cache for " + VectorApp.getCurrentActivity() + " OOM.");
+            Log.e(LOG_TAG, "Cannot get drawing cache for " + VectorApp.getCurrentActivity() + " OOM.", oom);
         } catch (Exception e) {
-            Log.e(LOG_TAG, "Cannot get snapshot of screen: " + e);
+            Log.e(LOG_TAG, "Cannot get snapshot of screen: " + e, e);
         }
         return null;
     }
@@ -581,9 +592,9 @@ public class BugReporter {
 
             return compressFile(logCatErrFile);
         } catch (OutOfMemoryError error) {
-            Log.e(LOG_TAG, "## saveLogCat() : fail to write logcat" + error.toString());
+            Log.e(LOG_TAG, "## saveLogCat() : fail to write logcat" + error.toString(), error);
         } catch (Exception e) {
-            Log.e(LOG_TAG, "## saveLogCat() : fail to write logcat" + e.toString());
+            Log.e(LOG_TAG, "## saveLogCat() : fail to write logcat" + e.toString(), e);
         }
 
         return null;
@@ -635,13 +646,13 @@ public class BugReporter {
                 streamWriter.append(separator);
             }
         } catch (IOException e) {
-            Log.e(LOG_TAG, "getLog fails with " + e.getLocalizedMessage());
+            Log.e(LOG_TAG, "getLog fails with " + e.getLocalizedMessage(), e);
         } finally {
             if (reader != null) {
                 try {
                     reader.close();
                 } catch (IOException e) {
-                    Log.e(LOG_TAG, "getLog fails with " + e.getLocalizedMessage());
+                    Log.e(LOG_TAG, "getLog fails with " + e.getLocalizedMessage(), e);
                 }
             }
         }
@@ -687,9 +698,9 @@ public class BugReporter {
             Log.d(LOG_TAG, "## compressFile() : " + fin.length() + " compressed to " + dstFile.length() + " bytes");
             return dstFile;
         } catch (Exception e) {
-            Log.e(LOG_TAG, "## compressFile() failed " + e.getMessage());
+            Log.e(LOG_TAG, "## compressFile() failed " + e.getMessage(), e);
         } catch (OutOfMemoryError oom) {
-            Log.e(LOG_TAG, "## compressFile() failed " + oom.getMessage());
+            Log.e(LOG_TAG, "## compressFile() failed " + oom.getMessage(), oom);
         } finally {
             try {
                 if (null != fos) {
@@ -702,7 +713,7 @@ public class BugReporter {
                     inputStream.close();
                 }
             } catch (Exception e) {
-                Log.e(LOG_TAG, "## compressFile() failed to close inputStream " + e.getMessage());
+                Log.e(LOG_TAG, "## compressFile() failed to close inputStream " + e.getMessage(), e);
             }
         }
 

@@ -73,7 +73,7 @@ public class MatrixGcmListenerService extends FirebaseMessagingService {
 
             return event;
         } catch (Exception e) {
-            Log.e(LOG_TAG, "buildEvent fails " + e.getLocalizedMessage());
+            Log.e(LOG_TAG, "buildEvent fails " + e.getLocalizedMessage(), e);
         }
 
         return null;
@@ -164,13 +164,13 @@ public class MatrixGcmListenerService extends FirebaseMessagingService {
                         }
                     }
                 } catch (Exception e) {
-                    Log.e(LOG_TAG, "## onMessageReceivedInternal() : failed to check if the event was already defined " + e.getMessage());
+                    Log.e(LOG_TAG, "## onMessageReceivedInternal() : failed to check if the event was already defined " + e.getMessage(), e);
                 }
             }
 
             CommonActivityUtils.catchupEventStream(MatrixGcmListenerService.this);
         } catch (Exception e) {
-            Log.d(LOG_TAG, "## onMessageReceivedInternal() failed : " + e.getMessage());
+            Log.d(LOG_TAG, "## onMessageReceivedInternal() failed : " + e.getMessage(), e);
         }
     }
 

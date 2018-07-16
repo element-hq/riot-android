@@ -283,7 +283,7 @@ public class VectorUtils {
 
             return displayName;
         } catch (Exception e) {
-            Log.e(LOG_TAG, "## getRoomDisplayName() failed " + e.getMessage());
+            Log.e(LOG_TAG, "## getRoomDisplayName() failed " + e.getMessage(), e);
         }
 
         return room.getRoomId();
@@ -737,7 +737,7 @@ public class VectorUtils {
                     try {
                         mMainAboutDialog.dismiss();
                     } catch (Exception e) {
-                        Log.e(LOG_TAG, "## displayThirdPartyLicenses() : " + e.getMessage());
+                        Log.e(LOG_TAG, "## displayThirdPartyLicenses() : " + e.getMessage(), e);
                     }
                 }
                 mMainAboutDialog = null;
@@ -875,7 +875,7 @@ public class VectorUtils {
 
                     return thumbnailUri;
                 } catch (Exception e) {
-                    Log.e(LOG_TAG, "## getThumbnailUriFromIntent failed " + e.getMessage());
+                    Log.e(LOG_TAG, "## getThumbnailUriFromIntent failed " + e.getMessage(), e);
                 }
             }
         }
@@ -966,14 +966,14 @@ public class VectorUtils {
                         try {
                             refreshCallback.onSuccess(null);
                         } catch (Exception e) {
-                            Log.e(LOG_TAG, "getUserOnlineStatus refreshCallback failed");
+                            Log.e(LOG_TAG, "getUserOnlineStatus refreshCallback failed", e);
                         }
                     }
                 }
 
                 @Override
                 public void onNetworkError(Exception e) {
-                    Log.e(LOG_TAG, "getUserOnlineStatus onNetworkError " + e.getLocalizedMessage());
+                    Log.e(LOG_TAG, "getUserOnlineStatus onNetworkError " + e.getLocalizedMessage(), e);
                 }
 
                 @Override
@@ -983,7 +983,7 @@ public class VectorUtils {
 
                 @Override
                 public void onUnexpectedError(Exception e) {
-                    Log.e(LOG_TAG, "getUserOnlineStatus onUnexpectedError " + e.getLocalizedMessage());
+                    Log.e(LOG_TAG, "getUserOnlineStatus onUnexpectedError " + e.getLocalizedMessage(), e);
                 }
             });
         }

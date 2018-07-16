@@ -169,7 +169,7 @@ public class VectorCircularImageView extends android.support.v7.widget.AppCompat
                             }
                         });
                     } catch (Exception e) {
-                        Log.e(LOG_TAG, "## setImageBitmap - RoundedBitmapDrawableFactory.create " + e.getMessage());
+                        Log.e(LOG_TAG, "## setImageBitmap - RoundedBitmapDrawableFactory.create " + e.getMessage(), e);
                         mUIHandler.post(new Runnable() {
                             @Override
                             public void run() {

@@ -355,7 +355,7 @@ public class PreferencesManager {
             try {
                 uri = Uri.parse(url);
             } catch (Exception e) {
-                Log.e(LOG_TAG, "## getNotificationRingTone() : Uri.parse failed");
+                Log.e(LOG_TAG, "## getNotificationRingTone() : Uri.parse failed", e);
             }
         }
 
@@ -397,7 +397,7 @@ public class PreferencesManager {
                 name = name.substring(0, name.lastIndexOf("."));
             }
         } catch (Exception e) {
-            Log.e(LOG_TAG, "## getNotificationRingToneName() failed() : " + e.getMessage());
+            Log.e(LOG_TAG, "## getNotificationRingToneName() failed() : " + e.getMessage(), e);
         } finally {
             if (cursor != null) {
                 cursor.close();

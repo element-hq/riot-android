@@ -108,7 +108,7 @@ public class RageShake implements SensorEventListener {
                     })
                     .show();
         } catch (Exception e) {
-            Log.e(LOG_TAG, "promptForReport " + e.getMessage());
+            Log.e(LOG_TAG, "promptForReport " + e.getMessage(), e);
         }
     }
 

@@ -92,7 +92,7 @@ public class VectorSwitchPreference extends CheckBoxPreference {
                 textView.setSingleLine(false);
             }
         } catch (Exception e) {
-            Log.e(LOG_TAG, "onBindView " + e.getMessage());
+            Log.e(LOG_TAG, "onBindView " + e.getMessage(), e);
         }
     }
 

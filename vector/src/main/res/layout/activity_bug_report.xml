@@ -1,4 +1,5 @@
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content">
 
@@ -6,10 +7,7 @@
         android:id="@+id/bug_report_body_view"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="10dp"
-        android:layout_marginLeft="10dp"
-        android:layout_marginRight="10dp"
-        android:layout_marginTop="10dp"
+        android:layout_margin="10dp"
         android:orientation="vertical">
 
         <TextView
@@ -20,7 +18,8 @@
             android:layout_marginRight="10dp"
             android:layout_marginTop="10dp"
             android:text="@string/send_bug_report_progress"
-            android:visibility="gone" />
+            android:visibility="gone"
+            tools:visibility="visible" />
 
         <ProgressBar
             android:id="@+id/bug_report_progress_view"
@@ -31,9 +30,10 @@
             android:layout_marginLeft="10dp"
             android:layout_marginRight="10dp"
             android:max="100"
-            android:progress="50"
             android:progressTint="@color/vector_green_color"
-            android:visibility="gone" />
+            android:visibility="gone"
+            tools:progress="70"
+            tools:visibility="visible" />
 
         <ScrollView
             android:id="@+id/bug_report_scrollview"
@@ -70,6 +70,14 @@
                         android:minHeight="40dp"
                         android:textColor="?attr/riot_primary_text_color" />
                 </android.support.design.widget.TextInputLayout>
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="10dp"
+                    android:layout_marginRight="10dp"
+                    android:text="@string/send_bug_report_description_in_english"
+                    android:textSize="12sp" />
 
                 <TextView
                     android:layout_width="match_parent"
@@ -135,6 +143,18 @@
                         android:layout_marginLeft="10dp"
                         android:text="@string/send_bug_report_include_screenshot" />
                 </LinearLayout>
+
+                <ImageView
+                    android:id="@+id/bug_report_screenshot_preview"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_horizontal"
+                    android:layout_marginTop="10dp"
+                    android:adjustViewBounds="true"
+                    android:maxWidth="260dp"
+                    android:scaleType="fitCenter"
+                    tools:src="@drawable/logo" />
+
             </LinearLayout>
         </ScrollView>
     </LinearLayout>
@@ -143,6 +163,7 @@
         android:id="@+id/bug_report_mask_view"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:visibility="gone"
-        android:background="@android:color/transparent" />
+        android:background="@android:color/transparent"
+        android:clickable="true"
+        android:visibility="gone" />
 </FrameLayout>

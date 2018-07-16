@@ -624,7 +624,7 @@ public class ReadMarkerManager implements VectorMessagesAdapter.ReadMarkerListen
                 try {
                     mLastVisibleEvent = mVectorMessageListFragment.getEvent(mVectorMessageListFragment.getMessageListView().getLastVisiblePosition());
                 } catch (Exception e) {
-                    Log.e(LOG_TAG, "## onReadMarkerDisplayed() : crash while retrieving mLastVisibleEvent " + e.getMessage());
+                    Log.e(LOG_TAG, "## onReadMarkerDisplayed() : crash while retrieving mLastVisibleEvent " + e.getMessage(), e);
                 }
             }
 
@@ -634,7 +634,7 @@ public class ReadMarkerManager implements VectorMessagesAdapter.ReadMarkerListen
                 try {
                     mFirstVisibleEvent = mVectorMessageListFragment.getEvent(mVectorMessageListFragment.getMessageListView().getFirstVisiblePosition());
                 } catch (Exception e) {
-                    Log.e(LOG_TAG, "## onReadMarkerDisplayed() : crash while retrieving mFirstVisibleEvent " + e.getMessage());
+                    Log.e(LOG_TAG, "## onReadMarkerDisplayed() : crash while retrieving mFirstVisibleEvent " + e.getMessage(), e);
                 }
             }
 

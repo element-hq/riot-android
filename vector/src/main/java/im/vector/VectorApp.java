@@ -332,7 +332,7 @@ public class VectorApp extends MultiDexApplication {
             mMarkdownParser = new VectorMarkdownParser(this);
         } catch (Exception e) {
             // reported by GA
-            Log.e(LOG_TAG, "cannot create the mMarkdownParser " + e.getMessage());
+            Log.e(LOG_TAG, "cannot create the mMarkdownParser " + e.getMessage(), e);
         }
 
         // track external language updates
@@ -448,7 +448,7 @@ public class VectorApp extends MultiDexApplication {
                             mActivityTransitionTimer = null;
                         }
                     } catch (Exception e) {
-                        Log.e(LOG_TAG, "## startActivityTransitionTimer() failed " + e.getMessage());
+                        Log.e(LOG_TAG, "## startActivityTransitionTimer() failed " + e.getMessage(), e);
                     }
 
                     if (null != mCurrentActivity) {
@@ -861,7 +861,7 @@ public class VectorApp extends MultiDexApplication {
             Resources resources = packageManager.getResourcesForApplication("android");
             locale = resources.getConfiguration().locale;
         } catch (Exception e) {
-            Log.e(LOG_TAG, "## getDeviceLocale() failed " + e.getMessage());
+            Log.e(LOG_TAG, "## getDeviceLocale() failed " + e.getMessage(), e);
         }
 
         return locale;
@@ -972,7 +972,7 @@ public class VectorApp extends MultiDexApplication {
                 return context;
             }
         } catch (Exception e) {
-            Log.e(LOG_TAG, "## getLocalisedContext() failed : " + e.getMessage());
+            Log.e(LOG_TAG, "## getLocalisedContext() failed : " + e.getMessage(), e);
         }
 
         return context;
@@ -995,7 +995,7 @@ public class VectorApp extends MultiDexApplication {
             try {
                 result = context.createConfigurationContext(config).getText(resourceId).toString();
             } catch (Exception e) {
-                Log.e(LOG_TAG, "## getString() failed : " + e.getMessage());
+                Log.e(LOG_TAG, "## getString() failed : " + e.getMessage(), e);
                 // use the default one
                 result = context.getString(resourceId);
             }
@@ -1036,7 +1036,7 @@ public class VectorApp extends MultiDexApplication {
                             getString(context, locale, R.string.resources_country_code)));
                 }
             } catch (Exception e) {
-                Log.e(LOG_TAG, "## getApplicationLocales() : failed " + e.getMessage());
+                Log.e(LOG_TAG, "## getApplicationLocales() : failed " + e.getMessage(), e);
                 knownLocalesSet.add(new Pair<>(context.getString(R.string.resources_language), context.getString(R.string.resources_country_code)));
             }
 
@@ -1081,7 +1081,6 @@ public class VectorApp extends MultiDexApplication {
     /**
      * Send session custom variables
      */
-
     private void visitSessionVariables() {
         mAppAnalytics.visitVariable(1, "App Platform", "Android Platform");
         mAppAnalytics.visitVariable(2, "App Version", BuildConfig.VERSION_NAME);
@@ -1099,7 +1098,6 @@ public class VectorApp extends MultiDexApplication {
      *
      * @param activity the new activity
      */
-
     private void onNewScreen(Activity activity) {
         final String screenPath = "/android/" + Matrix.getApplicationName()
                 + "/" + getString(R.string.flavor_description)
@@ -1108,11 +1106,9 @@ public class VectorApp extends MultiDexApplication {
         mAppAnalytics.trackScreen(screenPath, null);
     }
 
-
     /**
      * The application is paused.
      */
-
     private void onAppPause() {
         mAppAnalytics.forceDispatch();
     }
