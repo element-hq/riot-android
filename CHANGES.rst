@@ -13,6 +13,7 @@ Other changes:
 Bugfix:
  - Fix issue on incoming call screen when "Do not disturb mode" is active (#2417)
  - Fix issue when selecting sound for notifications in the settings
+ - Fix issue when changing device name in the settings (#2416)
 
 Translations:
  -
