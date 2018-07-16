@@ -2329,7 +2329,7 @@ class VectorSettingsPreferencesFragment : PreferenceFragment(), SharedPreference
                             // detect if the updated device is the current account one
                             val pref = findPreference(PreferencesManager.SETTINGS_ENCRYPTION_INFORMATION_DEVICE_ID_PREFERENCE_KEY)
                             if (TextUtils.equals(pref.summary, aDeviceInfoToRename.device_id)) {
-                                findPreference(PreferencesManager.SETTINGS_ENCRYPTION_INFORMATION_DEVICE_ID_PREFERENCE_KEY).summary = input.text
+                                findPreference(PreferencesManager.SETTINGS_ENCRYPTION_INFORMATION_DEVICE_NAME_PREFERENCE_KEY).summary = input.text
                             }
 
                             hideLoadingView()
