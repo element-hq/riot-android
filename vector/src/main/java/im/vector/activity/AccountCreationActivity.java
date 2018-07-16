@@ -171,7 +171,7 @@ public class AccountCreationActivity extends RiotAppCompatActivity {
                         }.getType());
 
                     } catch (Exception e) {
-                        Log.e(LOG_TAG, "## shouldOverrideUrlLoading() : fromJson failed " + e.getMessage());
+                        Log.e(LOG_TAG, "## shouldOverrideUrlLoading() : fromJson failed " + e.getMessage(), e);
                     }
 
                     // succeeds to parse parameters

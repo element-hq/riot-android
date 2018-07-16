@@ -148,7 +148,7 @@ public class VectorOngoingConferenceCallView extends RelativeLayout {
                     try {
                         mCallClickListener.onVoiceCallClick(mActiveWidget);
                     } catch (Exception e) {
-                        Log.e(LOG_TAG, "## initView() : onVoiceCallClick failed " + e.getMessage());
+                        Log.e(LOG_TAG, "## initView() : onVoiceCallClick failed " + e.getMessage(), e);
                     }
                 }
             }
@@ -161,7 +161,7 @@ public class VectorOngoingConferenceCallView extends RelativeLayout {
                     try {
                         mCallClickListener.onVideoCallClick(mActiveWidget);
                     } catch (Exception e) {
-                        Log.e(LOG_TAG, "## initView() : onVideoCallClick failed " + e.getMessage());
+                        Log.e(LOG_TAG, "## initView() : onVideoCallClick failed " + e.getMessage(), e);
                     }
                 }
             }
@@ -202,7 +202,7 @@ public class VectorOngoingConferenceCallView extends RelativeLayout {
                     try {
                         mCallClickListener.onCloseWidgetClick(mActiveWidget);
                     } catch (Exception e) {
-                        Log.e(LOG_TAG, "## initView() : onCloseWidgetClick failed " + e.getMessage());
+                        Log.e(LOG_TAG, "## initView() : onCloseWidgetClick failed " + e.getMessage(), e);
                     }
                 }
             }
@@ -243,7 +243,7 @@ public class VectorOngoingConferenceCallView extends RelativeLayout {
                     try {
                         mCallClickListener.onActiveWidgetUpdate();
                     } catch (Exception e) {
-                        Log.e(LOG_TAG, "## refresh() : onActiveWidgetUpdate failed " + e.getMessage());
+                        Log.e(LOG_TAG, "## refresh() : onActiveWidgetUpdate failed " + e.getMessage(), e);
                     }
                 }
             }

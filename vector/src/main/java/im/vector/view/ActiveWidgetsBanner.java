@@ -122,7 +122,7 @@ public class ActiveWidgetsBanner extends RelativeLayout {
                     try {
                         mUpdateListener.onCloseWidgetClick(mActiveWidgets.get(0));
                     } catch (Exception e) {
-                        Log.e(LOG_TAG, "## initView() : onCloseWidgetClick failed " + e.getMessage());
+                        Log.e(LOG_TAG, "## initView() : onCloseWidgetClick failed " + e.getMessage(), e);
                     }
                 }
             }
@@ -135,7 +135,7 @@ public class ActiveWidgetsBanner extends RelativeLayout {
                     try {
                         mUpdateListener.onClick(mActiveWidgets);
                     } catch (Exception e) {
-                        Log.e(LOG_TAG, "## initView() : onClick failed " + e.getMessage());
+                        Log.e(LOG_TAG, "## initView() : onClick failed " + e.getMessage(), e);
                     }
                 }
             }
@@ -185,7 +185,7 @@ public class ActiveWidgetsBanner extends RelativeLayout {
                     try {
                         mUpdateListener.onActiveWidgetsListUpdate();
                     } catch (Exception e) {
-                        Log.e(LOG_TAG, "## refresh() : onActiveWidgetUpdate failed " + e.getMessage());
+                        Log.e(LOG_TAG, "## refresh() : onActiveWidgetUpdate failed " + e.getMessage(), e);
                     }
                 }
             }

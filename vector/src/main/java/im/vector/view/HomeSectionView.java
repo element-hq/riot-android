@@ -141,7 +141,7 @@ public class HomeSectionView extends RelativeLayout {
                 mRecyclerView.setVisibility(hasNoResult ? GONE : VISIBLE);
                 mPlaceHolder.setVisibility(hasNoResult ? VISIBLE : GONE);
             } catch (Exception e) {
-                Log.e(LOG_TAG, "## onDataUpdated() failed " + e.getMessage());
+                Log.e(LOG_TAG, "## onDataUpdated() failed " + e.getMessage(), e);
             }
         }
     }

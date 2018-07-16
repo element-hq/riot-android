@@ -69,7 +69,7 @@ public class VectorSharedFilesActivity extends RiotAppCompatActivity {
                         isLaunched = session.getDataHandler().getStore().isReady();
                     }
                 } catch (Exception e) {
-                    Log.e(LOG_TAG, "## onCreate() : failed " + e.getMessage());
+                    Log.e(LOG_TAG, "## onCreate() : failed " + e.getMessage(), e);
                 }
 
                 // go to the home screen if the application is launched

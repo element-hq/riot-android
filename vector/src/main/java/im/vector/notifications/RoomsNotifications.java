@@ -159,7 +159,7 @@ public class RoomsNotifications implements Parcelable {
             try {
                 mIsInvitationEvent = "invite".equals(mEvent.getContentAsJsonObject().getAsJsonPrimitive("membership").getAsString());
             } catch (Exception e) {
-                Log.e(LOG_TAG, "RoomsNotifications : invitation parsing failed");
+                Log.e(LOG_TAG, "RoomsNotifications : invitation parsing failed", e);
             }
         }
         // when the event is an invitation one
@@ -512,7 +512,7 @@ public class RoomsNotifications implements Parcelable {
                 fos.write(readData, 0, len);
             }
         } catch (Throwable t) {
-            Log.e(LOG_TAG, "## saveRoomNotifications() failed " + t.getMessage());
+            Log.e(LOG_TAG, "## saveRoomNotifications() failed " + t.getMessage(), t);
         }
 
         try {
@@ -524,7 +524,7 @@ public class RoomsNotifications implements Parcelable {
                 fos.close();
             }
         } catch (Exception e) {
-            Log.e(LOG_TAG, "## saveRoomNotifications() failed " + e.getMessage());
+            Log.e(LOG_TAG, "## saveRoomNotifications() failed " + e.getMessage(), e);
         }
     }
 
@@ -560,7 +560,7 @@ public class RoomsNotifications implements Parcelable {
 
             roomsNotifications = new RoomsNotifications(fos.toByteArray());
         } catch (Throwable t) {
-            Log.e(LOG_TAG, "## loadRoomsNotifications() failed " + t.getMessage());
+            Log.e(LOG_TAG, "## loadRoomsNotifications() failed " + t.getMessage(), t);
         }
 
         try {
@@ -572,7 +572,7 @@ public class RoomsNotifications implements Parcelable {
                 fos.close();
             }
         } catch (Exception e) {
-            Log.e(LOG_TAG, "## loadRoomsNotifications() failed " + e.getMessage());
+            Log.e(LOG_TAG, "## loadRoomsNotifications() failed " + e.getMessage(), e);
         }
 
         return roomsNotifications;

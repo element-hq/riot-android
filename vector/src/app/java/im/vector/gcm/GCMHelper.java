@@ -44,7 +44,7 @@ class GCMHelper {
             registrationToken = FirebaseInstanceId.getInstance().getToken();
             Log.d(LOG_TAG, "## getRegistrationToken(): " + registrationToken);
         } catch (Exception e) {
-            Log.e(LOG_TAG, "## getRegistrationToken() : failed " + e.getMessage());
+            Log.e(LOG_TAG, "## getRegistrationToken() : failed " + e.getMessage(), e);
         }
 
 
@@ -58,7 +58,7 @@ class GCMHelper {
         try {
             FirebaseInstanceId.getInstance().deleteInstanceId();
         } catch (Exception e) {
-            Log.e(LOG_TAG, "##clearRegistrationToken() failed " + e.getMessage());
+            Log.e(LOG_TAG, "##clearRegistrationToken() failed " + e.getMessage(), e);
         }
     }
 }

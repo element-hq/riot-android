@@ -144,7 +144,7 @@ public class MatrixURLSpan extends ClickableSpan implements ParcelableSpan {
                 }
             }
         } catch (Exception e) {
-            Log.e(LOG_TAG, "MatrixURLSpan : on click failed " + e.getLocalizedMessage());
+            Log.e(LOG_TAG, "MatrixURLSpan : on click failed " + e.getLocalizedMessage(), e);
         }
     }
 
@@ -190,7 +190,7 @@ public class MatrixURLSpan extends ClickableSpan implements ParcelableSpan {
                         stringBuilder.setSpan(new MatrixURLSpan(url, pattern, mActionsListener), startPos, endPos, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
                     }
                 } catch (Exception e) {
-                    Log.e(LOG_TAG, "refreshMatrixSpans " + e.getLocalizedMessage());
+                    Log.e(LOG_TAG, "refreshMatrixSpans " + e.getLocalizedMessage(), e);
                 }
             }
         }

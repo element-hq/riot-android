@@ -5,7 +5,7 @@ Features:
  -
 
 Improvements:
- -
+ - Improve BugReport screen: display a preview of the screenshot (#2318)
 
 Other changes:
  - Remove dependency to `android-gif-drawable` lib and use Glide to animate logo on Splashscreen (#2421)
@@ -14,6 +14,7 @@ Bugfix:
  - Fix issue on incoming call screen when "Do not disturb mode" is active (#2417)
  - Fix issue when selecting sound for notifications in the settings
  - Fix issue when changing device name in the settings (#2416)
+ - Fix issue on verifying device, update the wording of the description message (#1067)
 
 Translations:
  -

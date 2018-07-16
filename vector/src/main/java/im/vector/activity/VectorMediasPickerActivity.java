@@ -555,12 +555,12 @@ public class VectorMediasPickerActivity extends MXCActionBarActivity implements 
                 try {
                     mCamera.setPreviewTexture(mSurfaceTexture);
                 } catch (IOException e) {
-                    Log.e(LOG_TAG, "## onSwitchCamera(): setPreviewTexture EXCEPTION Msg=" + e.getMessage());
+                    Log.e(LOG_TAG, "## onSwitchCamera(): setPreviewTexture EXCEPTION Msg=" + e.getMessage(), e);
                 }
 
                 mCamera.startPreview();
             } catch (Exception e) {
-                Log.e(LOG_TAG, "## onSwitchCamera(): cannot init the other camera " + e.getMessage());
+                Log.e(LOG_TAG, "## onSwitchCamera(): cannot init the other camera " + e.getMessage(), e);
                 // assume that only one camera can be used.
                 mSwitchCameraImageView.setVisibility(View.GONE);
                 onSwitchCamera();
@@ -638,7 +638,7 @@ public class VectorMediasPickerActivity extends MXCActionBarActivity implements 
                 try {
                     mCamera.setParameters(params);
                 } catch (Exception e) {
-                    Log.e(LOG_TAG, "## initCameraSettings(): set size fails EXCEPTION Msg=" + e.getMessage());
+                    Log.e(LOG_TAG, "## initCameraSettings(): set size fails EXCEPTION Msg=" + e.getMessage(), e);
                 }
             }
 
@@ -678,7 +678,7 @@ public class VectorMediasPickerActivity extends MXCActionBarActivity implements 
                     try {
                         mCamera.setParameters(params);
                     } catch (Exception e) {
-                        Log.e(LOG_TAG, "## initCameraSettings(): set preview size fails EXCEPTION Msg=" + e.getMessage());
+                        Log.e(LOG_TAG, "## initCameraSettings(): set preview size fails EXCEPTION Msg=" + e.getMessage(), e);
                     }
                 }
             }
@@ -689,7 +689,7 @@ public class VectorMediasPickerActivity extends MXCActionBarActivity implements 
                     params.setFocusMode(Camera.Parameters.FOCUS_MODE_AUTO);
                     mCamera.setParameters(params);
                 } catch (Exception e) {
-                    Log.e(LOG_TAG, "## initCameraSettings(): set auto focus fails EXCEPTION Msg=" + e.getMessage());
+                    Log.e(LOG_TAG, "## initCameraSettings(): set auto focus fails EXCEPTION Msg=" + e.getMessage(), e);
                 }
 
                 // set jpeg quality
@@ -698,13 +698,13 @@ public class VectorMediasPickerActivity extends MXCActionBarActivity implements 
                     params.setJpegQuality(JPEG_QUALITY_MAX);
                     mCamera.setParameters(params);
                 } catch (Exception e) {
-                    Log.e(LOG_TAG, "## initCameraSettings(): set jpeg quality fails EXCEPTION Msg=" + e.getMessage());
+                    Log.e(LOG_TAG, "## initCameraSettings(): set jpeg quality fails EXCEPTION Msg=" + e.getMessage(), e);
                 }
             }
 
             resizeCameraPreviewTexture();
         } catch (Exception e) {
-            Log.e(LOG_TAG, "## ## initCameraSettings(): failed " + e.getMessage());
+            Log.e(LOG_TAG, "## ## initCameraSettings(): failed " + e.getMessage(), e);
         }
     }
 
@@ -903,7 +903,7 @@ public class VectorMediasPickerActivity extends MXCActionBarActivity implements 
                         resource.mContentStream.close();
                     }
                 } catch (Exception e) {
-                    Log.e(LOG_TAG, "fails to retrieve the bitmap from uri " + e.getMessage());
+                    Log.e(LOG_TAG, "fails to retrieve the bitmap from uri " + e.getMessage(), e);
                 }
             }
 
@@ -1073,14 +1073,14 @@ public class VectorMediasPickerActivity extends MXCActionBarActivity implements 
                             }
 
                         } catch (Exception e) {
-                            Log.e(LOG_TAG, "## onPictureTaken(): EXCEPTION Msg=" + e.getMessage());
+                            Log.e(LOG_TAG, "## onPictureTaken(): EXCEPTION Msg=" + e.getMessage(), e);
                         }
                     }
                 }
             });
 
         } catch (Exception e) {
-            Log.e(LOG_TAG, "## takePicture(): EXCEPTION Msg=" + e.getMessage());
+            Log.e(LOG_TAG, "## takePicture(): EXCEPTION Msg=" + e.getMessage(), e);
         }
     }
 
@@ -1123,7 +1123,7 @@ public class VectorMediasPickerActivity extends MXCActionBarActivity implements 
                     takePhoto();
                 }
             } catch (Exception e) {
-                Log.e(LOG_TAG, "## autoFocus(): EXCEPTION Msg=" + e.getMessage());
+                Log.e(LOG_TAG, "## autoFocus(): EXCEPTION Msg=" + e.getMessage(), e);
 
                 // take a photo event if the autofocus fails
                 playShutterSound();
@@ -1193,9 +1193,9 @@ public class VectorMediasPickerActivity extends MXCActionBarActivity implements 
             System.gc();
 
         } catch (OutOfMemoryError e) {
-            Log.e(LOG_TAG, "## createPhotoThumbnail : out of memory");
+            Log.e(LOG_TAG, "## createPhotoThumbnail : out of memory", e);
         } catch (Exception e) {
-            Log.e(LOG_TAG, "## createPhotoThumbnail() Exception Msg=" + e.getMessage());
+            Log.e(LOG_TAG, "## createPhotoThumbnail() Exception Msg=" + e.getMessage(), e);
         }
 
         return bitmapRetValue;
@@ -1226,9 +1226,9 @@ public class VectorMediasPickerActivity extends MXCActionBarActivity implements 
                 System.gc();
 
             } catch (OutOfMemoryError e) {
-                Log.e(LOG_TAG, "## createPhotoThumbnail : out of memory");
+                Log.e(LOG_TAG, "## createPhotoThumbnail : out of memory", e);
             } catch (Exception e) {
-                Log.e(LOG_TAG, "## createPhotoThumbnail() Exception Msg=" + e.getMessage());
+                Log.e(LOG_TAG, "## createPhotoThumbnail() Exception Msg=" + e.getMessage(), e);
             }
 
         }
@@ -1309,7 +1309,7 @@ public class VectorMediasPickerActivity extends MXCActionBarActivity implements 
                     outStream.close();
 
                 } catch (Exception e) {
-                    Log.e(LOG_TAG, "attachImageFromCamera fails to create thumbnail file " + e.getMessage());
+                    Log.e(LOG_TAG, "attachImageFromCamera fails to create thumbnail file " + e.getMessage(), e);
                 }
 
                 // provide the Uri
@@ -1375,7 +1375,7 @@ public class VectorMediasPickerActivity extends MXCActionBarActivity implements 
         try {
             mCamera = Camera.open(mCameraId);
         } catch (Exception e) {
-            Log.e(LOG_TAG, "Cannot open the camera " + mCameraId + " " + e.getMessage());
+            Log.e(LOG_TAG, "Cannot open the camera " + mCameraId + " " + e.getMessage(), e);
         }
 
         // fall back: the camera initialisation failed
@@ -1386,7 +1386,7 @@ public class VectorMediasPickerActivity extends MXCActionBarActivity implements 
                 mCamera = Camera.open((Camera.CameraInfo.CAMERA_FACING_BACK == mCameraId) ?
                         Camera.CameraInfo.CAMERA_FACING_FRONT : Camera.CameraInfo.CAMERA_FACING_BACK);
             } catch (Exception e) {
-                Log.e(LOG_TAG, "Cannot open the camera " + mCameraId + " " + e.getMessage());
+                Log.e(LOG_TAG, "Cannot open the camera " + mCameraId + " " + e.getMessage(), e);
             }
         }
 
@@ -1413,7 +1413,7 @@ public class VectorMediasPickerActivity extends MXCActionBarActivity implements 
                     mCamera.stopPreview();
                     mCamera.release();
                 } catch (Exception e2) {
-                    Log.e(LOG_TAG, "## onSurfaceTextureAvailable() : " + e2.getMessage());
+                    Log.e(LOG_TAG, "## onSurfaceTextureAvailable() : " + e2.getMessage(), e2);
                 }
                 mCamera = null;
             }
@@ -1465,7 +1465,7 @@ public class VectorMediasPickerActivity extends MXCActionBarActivity implements 
                 egl.eglDestroyContext(display, context);
                 egl.eglTerminate(display);
             } catch (Exception e) {
-                Log.e(LOG_TAG, "## onSurfaceTextureSizeChanged() failed " + e.getMessage());
+                Log.e(LOG_TAG, "## onSurfaceTextureSizeChanged() failed " + e.getMessage(), e);
             }
         }
     }
@@ -1524,7 +1524,7 @@ public class VectorMediasPickerActivity extends MXCActionBarActivity implements 
             try {
                 camcorderProfile = CamcorderProfile.get(CamcorderProfile.QUALITY_480P);
             } catch (Exception e) {
-                Log.e(LOG_TAG, "## getCamcorderProfile() : " + e.getMessage());
+                Log.e(LOG_TAG, "## getCamcorderProfile() : " + e.getMessage(), e);
             }
         }
 
@@ -1532,7 +1532,7 @@ public class VectorMediasPickerActivity extends MXCActionBarActivity implements 
             try {
                 camcorderProfile = CamcorderProfile.get(CamcorderProfile.QUALITY_720P);
             } catch (Exception e) {
-                Log.e(LOG_TAG, "## getCamcorderProfile() : " + e.getMessage());
+                Log.e(LOG_TAG, "## getCamcorderProfile() : " + e.getMessage(), e);
             }
         }
 
@@ -1611,19 +1611,19 @@ public class VectorMediasPickerActivity extends MXCActionBarActivity implements 
             try {
                 mMediaRecorder.setAudioSource(MediaRecorder.AudioSource.DEFAULT);
             } catch (Exception e) {
-                Log.e(LOG_TAG, "## startVideoRecord() : setAudioSource fails " + e.getMessage());
+                Log.e(LOG_TAG, "## startVideoRecord() : setAudioSource fails " + e.getMessage(), e);
             }
 
             try {
                 mMediaRecorder.setVideoSource(MediaRecorder.VideoSource.CAMERA);
             } catch (Exception e) {
-                Log.e(LOG_TAG, "## startVideoRecord() : setVideoSource fails " + e.getMessage());
+                Log.e(LOG_TAG, "## startVideoRecord() : setVideoSource fails " + e.getMessage(), e);
             }
 
             try {
                 mMediaRecorder.setProfile(mCamcorderProfile);
             } catch (Exception e) {
-                Log.e(LOG_TAG, "## startVideoRecord() : setProfile fails " + e.getMessage());
+                Log.e(LOG_TAG, "## startVideoRecord() : setProfile fails " + e.getMessage(), e);
             }
 
             File videoFile = new File(getCacheDir().getAbsolutePath(), buildNewVideoName());
@@ -1636,7 +1636,7 @@ public class VectorMediasPickerActivity extends MXCActionBarActivity implements 
             try {
                 mMediaRecorder.prepare();
             } catch (Exception e) {
-                Log.e(LOG_TAG, "## startVideoRecord() : cannot prepare the media recorder " + e.getMessage());
+                Log.e(LOG_TAG, "## startVideoRecord() : cannot prepare the media recorder " + e.getMessage(), e);
                 Toast.makeText(this, getString(R.string.media_picker_cannot_record_video), Toast.LENGTH_SHORT).show();
                 stopVideoRecord();
                 return;
@@ -1646,7 +1646,7 @@ public class VectorMediasPickerActivity extends MXCActionBarActivity implements 
                 mMediaRecorder.start();
                 mIsRecording = true;
             } catch (Exception e) {
-                Log.e(LOG_TAG, "## startVideoRecord() : cannot start the media recorder " + e.getMessage());
+                Log.e(LOG_TAG, "## startVideoRecord() : cannot start the media recorder " + e.getMessage(), e);
                 Toast.makeText(this, getString(R.string.media_picker_cannot_record_video), Toast.LENGTH_SHORT).show();
                 stopVideoRecord();
             }
@@ -1662,7 +1662,7 @@ public class VectorMediasPickerActivity extends MXCActionBarActivity implements 
                 mMediaRecorder.stop();
                 mMediaRecorder.release();
             } catch (Exception e) {
-                Log.e(LOG_TAG, "## releaseMediaRecorder() : mMediaRecorder release failed " + e.getMessage());
+                Log.e(LOG_TAG, "## releaseMediaRecorder() : mMediaRecorder release failed " + e.getMessage(), e);
             }
 
             mMediaRecorder = null;
@@ -1671,7 +1671,7 @@ public class VectorMediasPickerActivity extends MXCActionBarActivity implements 
         try {
             mCamera.reconnect();
         } catch (Exception e) {
-            Log.e(LOG_TAG, "## releaseMediaRecorder() : mCamera reconnect failed " + e.getMessage());
+            Log.e(LOG_TAG, "## releaseMediaRecorder() : mCamera reconnect failed " + e.getMessage(), e);
         }
     }
 
@@ -1828,7 +1828,7 @@ public class VectorMediasPickerActivity extends MXCActionBarActivity implements 
                     null,
                     MediaStore.Images.ImageColumns.DATE_TAKEN + " DESC LIMIT " + GALLERY_TABLE_ITEM_SIZE);
         } catch (Exception e) {
-            Log.e(LOG_TAG, "## listLatestMedias() : " + e.getMessage());
+            Log.e(LOG_TAG, "## listLatestMedias() : " + e.getMessage(), e);
         }
 
         if (null != imagesThumbnailsCursor) {
@@ -1867,7 +1867,7 @@ public class VectorMediasPickerActivity extends MXCActionBarActivity implements 
 
                         mediasList.add(recentMedia);
                     } catch (Exception e) {
-                        Log.e(LOG_TAG, "## listLatestMedias(): Msg=" + e.getMessage());
+                        Log.e(LOG_TAG, "## listLatestMedias(): Msg=" + e.getMessage(), e);
                     }
                 } while (imagesThumbnailsCursor.moveToNext());
             }
@@ -1887,7 +1887,7 @@ public class VectorMediasPickerActivity extends MXCActionBarActivity implements 
                         null,
                         MediaStore.Video.VideoColumns.DATE_TAKEN + " DESC LIMIT " + GALLERY_TABLE_ITEM_SIZE);
             } catch (Exception e) {
-                Log.e(LOG_TAG, "## listLatestMedias(): " + e.getMessage());
+                Log.e(LOG_TAG, "## listLatestMedias(): " + e.getMessage(), e);
             }
 
             if (null != videoThumbnailsCursor) {
@@ -1912,7 +1912,7 @@ public class VectorMediasPickerActivity extends MXCActionBarActivity implements 
 
                             mediasList.add(recentMedia);
                         } catch (Exception e) {
-                            Log.e(LOG_TAG, "## listLatestMedias(): Msg=" + e.getMessage());
+                            Log.e(LOG_TAG, "## listLatestMedias(): Msg=" + e.getMessage(), e);
                         }
                     } while (videoThumbnailsCursor.moveToNext());
                 }
@@ -1957,7 +1957,7 @@ public class VectorMediasPickerActivity extends MXCActionBarActivity implements 
                     null,
                     null);
         } catch (Exception e) {
-            Log.e(LOG_TAG, "## getMediaStoreImageCount() Exception Msg=" + e.getMessage());
+            Log.e(LOG_TAG, "## getMediaStoreImageCount() Exception Msg=" + e.getMessage(), e);
         }
 
         if (null != imageThumbnailsCursor) {
@@ -1975,7 +1975,7 @@ public class VectorMediasPickerActivity extends MXCActionBarActivity implements 
                         null,
                         null);
             } catch (Exception e) {
-                Log.e(LOG_TAG, "## getMediaStoreImageCount() Exception Msg=" + e.getMessage());
+                Log.e(LOG_TAG, "## getMediaStoreImageCount() Exception Msg=" + e.getMessage(), e);
             }
 
             if (null != videoThumbnailsCursor) {

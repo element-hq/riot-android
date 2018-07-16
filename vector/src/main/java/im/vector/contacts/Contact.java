@@ -443,7 +443,7 @@ public class Contact implements java.io.Serializable {
             try {
                 mThumbnail = MediaStore.Images.Media.getBitmap(context.getContentResolver(), Uri.parse(mThumbnailUri));
             } catch (Exception e) {
-                Log.e(LOG_TAG, "getThumbnail " + e.getLocalizedMessage());
+                Log.e(LOG_TAG, "getThumbnail " + e.getLocalizedMessage(), e);
             }
         }
 

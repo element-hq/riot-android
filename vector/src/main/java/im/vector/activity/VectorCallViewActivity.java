@@ -1181,13 +1181,13 @@ public class VectorCallViewActivity extends RiotAppCompatActivity implements Sen
             try {
                 mField = PowerManager.class.getClass().getField("PROXIMITY_SCREEN_OFF_WAKE_LOCK").getInt(null);
             } catch (Throwable ignored) {
-                Log.e(LOG_TAG, "## initScreenManagement " + ignored.getMessage());
+                Log.e(LOG_TAG, "## initScreenManagement " + ignored.getMessage(), ignored);
             }
 
             PowerManager powerManager = (PowerManager) getSystemService(POWER_SERVICE);
             mWakeLock = powerManager.newWakeLock(mField, getLocalClassName());
         } catch (Exception e) {
-            Log.e(LOG_TAG, "## initScreenManagement() : failed " + e.getMessage());
+            Log.e(LOG_TAG, "## initScreenManagement() : failed " + e.getMessage(), e);
         }
     }
 
@@ -1205,7 +1205,7 @@ public class VectorCallViewActivity extends RiotAppCompatActivity implements Sen
                 mIsScreenOff = true;
             }
         } catch (Exception e) {
-            Log.e(LOG_TAG, "## turnScreenOff() failed");
+            Log.e(LOG_TAG, "## turnScreenOff() failed", e);
         }
 
         // set the back light level to the minimum
@@ -1226,7 +1226,7 @@ public class VectorCallViewActivity extends RiotAppCompatActivity implements Sen
                 mWakeLock.release();
             }
         } catch (Exception e) {
-            Log.e(LOG_TAG, "## turnScreenOn() failed");
+            Log.e(LOG_TAG, "## turnScreenOn() failed", e);
         }
 
         mIsScreenOff = false;
