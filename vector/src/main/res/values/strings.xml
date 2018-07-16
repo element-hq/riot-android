@@ -139,7 +139,7 @@
     <string name="send_bug_report_description">Please describe the bug. What did you do? What did you expect to happen? What actually happened?</string>
     <string name="send_bug_report_description_in_english">If possible, please write the description in English.</string>
     <string name="send_bug_report_placeholder">Describe your problem here</string>
-    <string name="send_bug_report_logs_description">In order to diagnose problems, logs from this client will be sent with this bug report. This bug report, inclucing the logs and the screenshot, will not be publicly visible. If you would prefer to only send the text above, please untick:</string>
+    <string name="send_bug_report_logs_description">In order to diagnose problems, logs from this client will be sent with this bug report. This bug report, including the logs and the screenshot, will not be publicly visible. If you would prefer to only send the text above, please untick:</string>
     <string name="send_bug_report_alert_message">You seem to be shaking the phone in frustration. Would you like to submit a bug report?</string>
     <string name="send_bug_report_app_crashed">The application has crashed last time. Would you like to submit a crash report?</string>
     <string name="send_bug_report_rage_shake">Rage shake to report bug</string>
