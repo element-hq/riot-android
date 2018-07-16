@@ -1111,7 +1111,7 @@ public class VectorMessageListFragment extends MatrixMessageListFragment impleme
     public boolean onAvatarLongClick(String userId) {
         if (getActivity() instanceof VectorRoomActivity) {
             try {
-                RoomState state = mRoom.getLiveState();
+                RoomState state = mRoom.getState();
 
                 if (null != state) {
                     String displayName = state.getMemberName(userId);

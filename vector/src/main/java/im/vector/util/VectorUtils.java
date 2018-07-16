@@ -175,9 +175,9 @@ public class VectorUtils {
             List<RoomMember> roomMembersList = new ArrayList<>(roomMembers);
 
             if (TextUtils.equals(roomMembersList.get(0).getUserId(), session.getMyUserId())) {
-                return room.getLiveState().getMemberName(roomMembersList.get(1).getUserId());
+                return room.getState().getMemberName(roomMembersList.get(1).getUserId());
             } else {
-                return room.getLiveState().getMemberName(roomMembersList.get(0).getUserId());
+                return room.getState().getMemberName(roomMembersList.get(0).getUserId());
             }
         } else {
             return getRoomDisplayName(context, session, room);
@@ -204,7 +204,7 @@ public class VectorUtils {
             // https://github.com/matrix-org/matrix-js-sdk/blob/develop/lib/models/room.js#L617
             // calculateRoomName(room, userId)
 
-            RoomState roomState = room.getLiveState();
+            RoomState roomState = room.getState();
 
             if (!TextUtils.isEmpty(roomState.name)) {
                 return roomState.name;
