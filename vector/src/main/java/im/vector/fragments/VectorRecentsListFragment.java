@@ -684,8 +684,8 @@ public class VectorRecentsListFragment extends VectorBaseFragment implements
         String roomAlias = null;
 
         Room room = session.getDataHandler().getRoom(roomId);
-        if ((null != room) && (null != room.getLiveState())) {
-            roomAlias = room.getLiveState().getAlias();
+        if ((null != room) && (null != room.getState())) {
+            roomAlias = room.getState().getAlias();
         }
 
         final RoomPreviewData roomPreviewData = new RoomPreviewData(mSession, roomId, null, roomAlias, null);

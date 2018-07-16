@@ -1711,7 +1711,7 @@ public class VectorRoomActivity extends MXCActionBarActivity implements
             Log.d(LOG_TAG, "## isUserAllowedToStartConfCall(): conference in progress");
             isAllowed = true;
         } else if ((null != mRoom) && (mRoom.getActiveMembers().size() > 2)) {
-            PowerLevels powerLevels = mRoom.getLiveState().getPowerLevels();
+            PowerLevels powerLevels = mRoom.getState().getPowerLevels();
 
             if (null != powerLevels) {
                 // to start a conf call, the user MUST have the power to invite someone (CFU)
@@ -3099,9 +3099,9 @@ public class VectorRoomActivity extends MXCActionBarActivity implements
     private boolean canSendMessages() {
         boolean canSendMessage = false;
 
-        if ((null != mRoom) && (null != mRoom.getLiveState())) {
+        if ((null != mRoom) && (null != mRoom.getState())) {
             canSendMessage = true;
-            PowerLevels powerLevels = mRoom.getLiveState().getPowerLevels();
+            PowerLevels powerLevels = mRoom.getState().getPowerLevels();
 
             if (null != powerLevels) {
                 canSendMessage = powerLevels.maySendMessage(mMyUserId);
@@ -3115,7 +3115,7 @@ public class VectorRoomActivity extends MXCActionBarActivity implements
      * Check if the user can send a message in this room
      */
     private void checkSendEventStatus() {
-        if ((null != mRoom) && (null != mRoom.getLiveState())) {
+        if ((null != mRoom) && (null != mRoom.getState())) {
             boolean canSendMessage = canSendMessages();
             mSendingMessagesLayout.setVisibility(canSendMessage ? View.VISIBLE : View.GONE);
             mCanNotPostTextView.setVisibility(!canSendMessage ? View.VISIBLE : View.GONE);
@@ -3265,10 +3265,10 @@ public class VectorRoomActivity extends MXCActionBarActivity implements
 
         if (TextUtils.equals(member.membership, RoomMember.MEMBERSHIP_BAN)) {
             invitationTextView.setText(getString(R.string.has_been_banned,
-                    VectorUtils.getRoomDisplayName(this, mSession, mRoom), mRoom.getLiveState().getMemberName(member.mSender)));
+                    VectorUtils.getRoomDisplayName(this, mSession, mRoom), mRoom.getState().getMemberName(member.mSender)));
         } else {
             invitationTextView.setText(getString(R.string.has_been_kicked,
-                    VectorUtils.getRoomDisplayName(this, mSession, mRoom), mRoom.getLiveState().getMemberName(member.mSender)));
+                    VectorUtils.getRoomDisplayName(this, mSession, mRoom), mRoom.getState().getMemberName(member.mSender)));
         }
 
         TextView subInvitationTextView = findViewById(R.id.room_preview_subinvitation_textview);
@@ -3764,7 +3764,7 @@ public class VectorRoomActivity extends MXCActionBarActivity implements
         titleText.setText(R.string.room_info_room_name);
 
         final EditText textInput = dialogView.findViewById(R.id.dialog_edit_text);
-        textInput.setText(mRoom.getLiveState().name);
+        textInput.setText(mRoom.getState().name);
 
         // set dialog message
         alertDialogBuilder
@@ -3831,7 +3831,7 @@ public class VectorRoomActivity extends MXCActionBarActivity implements
         titleText.setText(R.string.room_info_room_topic);
 
         final EditText textInput = dialogView.findViewById(R.id.dialog_edit_text);
-        textInput.setText(mRoom.getLiveState().topic);
+        textInput.setText(mRoom.getState().topic);
 
         // set dialog message
         alertDialogBuilder
@@ -3890,7 +3890,7 @@ public class VectorRoomActivity extends MXCActionBarActivity implements
                 @Override
                 public void onClick(View v) {
                     // sanity checks : reported by GA
-                    if ((null != mRoom) && (null != mRoom.getLiveState())) {
+                    if ((null != mRoom) && (null != mRoom.getState())) {
                         if (MatrixSdkExtensionsKt.isPowerLevelEnoughForAvatarUpdate(mRoom, mSession)) {
                             // need to check if the camera permission has been granted
                             if (CommonActivityUtils.checkPermissions(CommonActivityUtils.REQUEST_CODE_PERMISSION_ROOM_DETAILS, VectorRoomActivity.this)) {
@@ -3914,9 +3914,9 @@ public class VectorRoomActivity extends MXCActionBarActivity implements
                 @Override
                 public void onClick(View v) {
                     // sanity checks : reported by GA
-                    if ((null != mRoom) && (null != mRoom.getLiveState())) {
+                    if ((null != mRoom) && (null != mRoom.getState())) {
                         boolean canUpdateTitle = false;
-                        PowerLevels powerLevels = mRoom.getLiveState().getPowerLevels();
+                        PowerLevels powerLevels = mRoom.getState().getPowerLevels();
 
                         if (null != powerLevels) {
                             int powerLevel = powerLevels.getUserPowerLevel(mSession.getMyUserId());
@@ -3941,9 +3941,9 @@ public class VectorRoomActivity extends MXCActionBarActivity implements
                 @Override
                 public void onClick(View v) {
                     // sanity checks : reported by GA
-                    if ((null != mRoom) && (null != mRoom.getLiveState())) {
+                    if ((null != mRoom) && (null != mRoom.getState())) {
                         boolean canUpdateTopic = false;
-                        PowerLevels powerLevels = mRoom.getLiveState().getPowerLevels();
+                        PowerLevels powerLevels = mRoom.getState().getPowerLevels();
 
                         if (null != powerLevels) {
                             int powerLevel = powerLevels.getUserPowerLevel(mSession.getMyUserId());

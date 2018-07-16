@@ -128,7 +128,7 @@ public class WidgetsManager {
      */
     private List<Widget> getActiveWidgets(final MXSession session, final Room room, final Set<String> widgetTypes, final Set<String> excludedTypes) {
         // Get all im.vector.modular.widgets state events in the room
-        List<Event> widgetEvents = room.getLiveState().getStateEvents(new HashSet<>(Arrays.asList(WIDGET_EVENT_TYPE)));
+        List<Event> widgetEvents = room.getState().getStateEvents(new HashSet<>(Arrays.asList(WIDGET_EVENT_TYPE)));
 
         // Widget id -> widget
         Map<String, Widget> widgets = new HashMap<>();
@@ -238,10 +238,10 @@ public class WidgetsManager {
     public WidgetError checkWidgetPermission(MXSession session, Room room) {
         WidgetError error = null;
 
-        if ((null != room) && (null != room.getLiveState()) && (null != room.getLiveState().getPowerLevels())) {
-            int oneSelfPowerLevel = room.getLiveState().getPowerLevels().getUserPowerLevel(session.getMyUserId());
+        if ((null != room) && (null != room.getState()) && (null != room.getState().getPowerLevels())) {
+            int oneSelfPowerLevel = room.getState().getPowerLevels().getUserPowerLevel(session.getMyUserId());
 
-            if (oneSelfPowerLevel < room.getLiveState().getPowerLevels().state_default) {
+            if (oneSelfPowerLevel < room.getState().getPowerLevels().state_default) {
                 error = new WidgetError(WidgetError.WIDGET_NOT_ENOUGH_POWER_ERROR_CODE, VectorApp.getInstance().getString(R.string.widget_no_power_to_manage));
             }
         }

@@ -2569,8 +2569,8 @@ public class VectorMessagesAdapter extends AbstractMessagesAdapter {
                     // need the minimum power level to redact an event
                     Room room = mSession.getDataHandler().getRoom(event.roomId);
 
-                    if ((null != room) && (null != room.getLiveState().getPowerLevels())) {
-                        PowerLevels powerLevels = room.getLiveState().getPowerLevels();
+                    if ((null != room) && (null != room.getState().getPowerLevels())) {
+                        PowerLevels powerLevels = room.getState().getPowerLevels();
                         canBeRedacted = powerLevels.getUserPowerLevel(mSession.getMyUserId()) >= powerLevels.redact;
                     }
                 }

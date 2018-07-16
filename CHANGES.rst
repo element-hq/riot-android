@@ -10,6 +10,7 @@ Improvements:
 
 Other changes:
  - Remove dependency to `android-gif-drawable` lib and use Glide to animate logo on Splashscreen (#2421)
+ - Keep only Room.getState() method and remove Room.getLiveState() because they are similar (matrix-org/matrix-android-sdk#310)
 
 Bugfix:
  - Fix issue on incoming call screen when "Do not disturb mode" is active (#2417)
