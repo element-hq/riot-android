@@ -93,6 +93,7 @@ import org.matrix.androidsdk.rest.model.message.Message;
 import org.matrix.androidsdk.rest.model.publicroom.PublicRoom;
 import org.matrix.androidsdk.util.JsonUtils;
 import org.matrix.androidsdk.util.Log;
+import org.matrix.androidsdk.util.MatrixUtils;
 import org.matrix.androidsdk.util.ResourceUtils;
 
 import java.util.ArrayList;
@@ -1820,8 +1821,11 @@ public class VectorRoomActivity extends MXCActionBarActivity implements
     public void sendMessage(String body, String formattedBody, String format) {
         if (!TextUtils.isEmpty(body)) {
             if (!SlashCommandsParser.manageSplashCommand(this, mSession, mRoom, body, formattedBody, format)) {
+                Event currentSelectedEvent = mVectorMessageListFragment.getCurrentSelectedEvent();
+
                 cancelSelectionMode();
-                mVectorMessageListFragment.sendTextMessage(body, formattedBody, format);
+
+                mVectorMessageListFragment.sendTextMessage(body, formattedBody, currentSelectedEvent, format);
             }
         }
     }
@@ -2896,7 +2900,7 @@ public class VectorRoomActivity extends MXCActionBarActivity implements
             ClickableSpan clickable = new ClickableSpan() {
                 public void onClick(View view) {
                     if (null != mVectorMessageListFragment) {
-                        mVectorMessageListFragment.onURLClick(Uri.parse(VectorUtils.getPermalink(value, null)));
+                        mVectorMessageListFragment.onURLClick(Uri.parse(MatrixUtils.createPermalink(value, null)));
                     }
                 }
             };

@@ -23,7 +23,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
-import android.provider.Browser;
+import android.support.annotation.Nullable;
 import android.support.v4.app.FragmentManager;
 import android.support.v7.app.AlertDialog;
 import android.text.TextUtils;
@@ -63,6 +63,7 @@ import org.matrix.androidsdk.rest.model.message.Message;
 import org.matrix.androidsdk.rest.model.message.VideoMessage;
 import org.matrix.androidsdk.util.JsonUtils;
 import org.matrix.androidsdk.util.Log;
+import org.matrix.androidsdk.util.MatrixUtils;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -329,6 +330,18 @@ public class VectorMessageListFragment extends MatrixMessageListFragment impleme
         if (null != mAdapter) {
             ((VectorMessagesAdapter) mAdapter).cancelSelectionMode();
         }
+    }
+
+    /**
+     * Get the current selected event, or null if no event is selected.
+     */
+    @Nullable
+    public Event getCurrentSelectedEvent() {
+        if (null != mAdapter) {
+            return ((VectorMessagesAdapter) mAdapter).getCurrentSelectedEvent();
+        }
+
+        return null;
     }
 
     private final ApiCallback<Void> mDeviceVerificationCallback = new ApiCallback<Void>() {
@@ -681,7 +694,7 @@ public class VectorMessageListFragment extends MatrixMessageListFragment impleme
                 }
             }
         } else if (action == R.id.ic_action_vector_permalink) {
-            VectorUtils.copyToClipboard(getActivity(), VectorUtils.getPermalink(event.roomId, event.eventId));
+            VectorUtils.copyToClipboard(getActivity(), MatrixUtils.createPermalink(event.roomId, event.eventId));
         } else if (action == R.id.ic_action_vector_report) {
             onMessageReport(event);
         } else if ((action == R.id.ic_action_view_source) || (action == R.id.ic_action_view_decrypted_source)) {
@@ -1032,7 +1045,7 @@ public class VectorMessageListFragment extends MatrixMessageListFragment impleme
             Event event = row.getEvent();
 
             // switch in section mode
-            ((VectorMessagesAdapter) mAdapter).onEventTap(event.eventId);
+            ((VectorMessagesAdapter) mAdapter).onEventTap(event);
         } catch (Exception e) {
             Log.e(LOG_TAG, "## onRowClick() failed " + e.getMessage(), e);
         }
@@ -1078,7 +1091,7 @@ public class VectorMessageListFragment extends MatrixMessageListFragment impleme
                 }
             } else {
                 // switch in section mode
-                vectorMessagesAdapter.onEventTap(event.eventId);
+                vectorMessagesAdapter.onEventTap(event);
             }
         } catch (Exception e) {
             Log.e(LOG_TAG, "## onContentClick() failed " + e.getMessage(), e);
@@ -1224,7 +1237,7 @@ public class VectorMessageListFragment extends MatrixMessageListFragment impleme
     @Override
     public void onRoomAliasClick(String roomAlias) {
         try {
-            onURLClick(Uri.parse(VectorUtils.getPermalink(roomAlias, null)));
+            onURLClick(Uri.parse(MatrixUtils.createPermalink(roomAlias, null)));
         } catch (Exception e) {
             Log.e(LOG_TAG, "onRoomAliasClick failed " + e.getLocalizedMessage(), e);
         }
@@ -1233,7 +1246,7 @@ public class VectorMessageListFragment extends MatrixMessageListFragment impleme
     @Override
     public void onRoomIdClick(String roomId) {
         try {
-            onURLClick(Uri.parse(VectorUtils.getPermalink(roomId, null)));
+            onURLClick(Uri.parse(MatrixUtils.createPermalink(roomId, null)));
         } catch (Exception e) {
             Log.e(LOG_TAG, "onRoomIdClick failed " + e.getLocalizedMessage(), e);
         }
@@ -1242,7 +1255,7 @@ public class VectorMessageListFragment extends MatrixMessageListFragment impleme
     @Override
     public void onMessageIdClick(String messageId) {
         try {
-            onURLClick(Uri.parse(VectorUtils.getPermalink(mRoom.getRoomId(), messageId)));
+            onURLClick(Uri.parse(MatrixUtils.createPermalink(mRoom.getRoomId(), messageId)));
         } catch (Exception e) {
             Log.e(LOG_TAG, "onRoomIdClick failed " + e.getLocalizedMessage(), e);
         }
@@ -1251,7 +1264,7 @@ public class VectorMessageListFragment extends MatrixMessageListFragment impleme
     @Override
     public void onGroupIdClick(String groupId) {
         try {
-            onURLClick(Uri.parse(VectorUtils.getPermalink(groupId, null)));
+            onURLClick(Uri.parse(MatrixUtils.createPermalink(groupId, null)));
         } catch (Exception e) {
             Log.e(LOG_TAG, "onRoomIdClick failed " + e.getLocalizedMessage(), e);
         }

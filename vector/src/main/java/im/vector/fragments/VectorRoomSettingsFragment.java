@@ -66,6 +66,7 @@ import org.matrix.androidsdk.rest.model.PowerLevels;
 import org.matrix.androidsdk.rest.model.RoomMember;
 import org.matrix.androidsdk.util.BingRulesManager;
 import org.matrix.androidsdk.util.Log;
+import org.matrix.androidsdk.util.MatrixUtils;
 import org.matrix.androidsdk.util.ResourceUtils;
 
 import java.lang.reflect.Field;
@@ -1650,7 +1651,7 @@ public class VectorRoomSettingsFragment extends PreferenceFragment implements Sh
                         }
                     });
                 } else if (item.getItemId() == R.id.ic_action_vector_room_url) {
-                    VectorUtils.copyToClipboard(getActivity(), VectorUtils.getPermalink(roomAlias, null));
+                    VectorUtils.copyToClipboard(getActivity(), MatrixUtils.createPermalink(roomAlias, null));
                 } else {
                     VectorUtils.copyToClipboard(getActivity(), roomAlias);
                 }
