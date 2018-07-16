@@ -109,6 +109,7 @@ import java.util.Set;
 
 import butterknife.BindView;
 import butterknife.OnClick;
+import im.vector.BuildConfig;
 import im.vector.Matrix;
 import im.vector.MyPresenceManager;
 import im.vector.PublicRoomsManager;
@@ -323,13 +324,13 @@ public class VectorHomeActivity extends RiotAppCompatActivity implements SearchV
         SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(this);
         int version = preferences.getInt(PreferencesManager.VERSION_BUILD, 0);
 
-        if (version != VectorApp.VERSION_BUILD) {
-            Log.d(LOG_TAG, "The application has been updated from version " + version + " to version " + VectorApp.VERSION_BUILD);
+        if (version != BuildConfig.VERSION_CODE) {
+            Log.d(LOG_TAG, "The application has been updated from version " + version + " to version " + BuildConfig.VERSION_CODE);
 
             // TODO add some dedicated actions here
 
             preferences.edit()
-                    .putInt(PreferencesManager.VERSION_BUILD, VectorApp.VERSION_BUILD)
+                    .putInt(PreferencesManager.VERSION_BUILD, BuildConfig.VERSION_CODE)
                     .apply();
         }
 

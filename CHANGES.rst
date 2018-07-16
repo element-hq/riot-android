@@ -2,9 +2,10 @@ Changes in Riot 0.8.13 (2018-XX-XX)
 ===================================================
 
 Features:
- -
+ - Resurrect performance metrics (#2391)
 
 Improvements:
+ - Piwik: Update the way how stats are reported (#2402)
  - Improve BugReport screen: display a preview of the screenshot (#2318)
 
 Other changes:
