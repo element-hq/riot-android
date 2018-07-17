@@ -3,6 +3,7 @@ Changes in Riot 0.8.13 (2018-XX-XX)
 
 Features:
  - Resurrect performance metrics (#2391)
+ - Telemetry to report incidence of UISIs (#2330)
 
 Improvements:
  - Piwik: Update the way how stats are reported (#2402)
