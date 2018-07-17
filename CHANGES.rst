@@ -3,6 +3,7 @@ Changes in Riot 0.8.13 (2018-XX-XX)
 
 Features:
  - Resurrect performance metrics (#2391)
+ - Telemetry to report incidence of UISIs (#2330)
  - Add a previewer for previewing media before sending it into the room (#1742)
 
 Improvements:

@@ -27,7 +27,7 @@ class AppAnalytics(private val context: Context, private vararg val analytics: A
         }
     }
 
-    override fun trackEvent(event: Event) {
+    override fun trackEvent(event: TrackingEvent) {
         if (!BuildConfig.DEBUG && PreferencesManager.useAnalytics(context)) {
             analytics.forEach {
                 it.trackEvent(event)

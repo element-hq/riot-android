@@ -691,6 +691,8 @@ public class Matrix {
         }
 
         dataHandler.addListener(mLiveEventListener);
+        dataHandler.addListener(VectorApp.getInstance().getDecryptionFailureTracker());
+
         session.setUseDataSaveMode(PreferencesManager.useDataSaveMode(context));
 
         dataHandler.addListener(new MXEventListener() {
