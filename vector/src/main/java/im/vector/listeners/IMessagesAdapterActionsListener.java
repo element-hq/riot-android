@@ -158,7 +158,7 @@ public interface IMessagesAdapterActionsListener {
     void onInvalidIndexes();
 
     /**
-     * An action has been  triggered on an event.
+     * An action has been triggered on an event.
      *
      * @param event   the event.
      * @param textMsg the text message
@@ -170,7 +170,7 @@ public interface IMessagesAdapterActionsListener {
      * the user taps on the e2e icon
      *
      * @param event      the event
-     * @param deviceInfo the deviceinfo
+     * @param deviceInfo the device info
      */
     void onE2eIconClick(final Event event, final MXDeviceInfo deviceInfo);
 
