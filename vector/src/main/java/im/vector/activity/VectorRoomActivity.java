@@ -1225,8 +1225,11 @@ public class VectorRoomActivity extends MXCActionBarActivity implements
      * @param selectedEvent the currently selected event or null if no event is selected
      */
     private void setEditTextHint(@Nullable Event selectedEvent) {
-        if (selectedEvent != null
-                && Event.EVENT_TYPE_MESSAGE.equals(selectedEvent.type)) {
+        if (mRoom == null) {
+            return;
+        }
+
+        if (mRoom.canReplyTo(selectedEvent)) {
             // User can reply to this event
             mEditText.setHint((mRoom.isEncrypted() && mSession.isCryptoEnabled()) ?
                     R.string.room_message_placeholder_reply_to_encrypted : R.string.room_message_placeholder_reply_to_not_encrypted);
