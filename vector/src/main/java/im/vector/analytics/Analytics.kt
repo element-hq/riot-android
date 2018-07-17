@@ -16,7 +16,7 @@ interface Analytics {
      * Method to track an event
      * @param event the event to track
      */
-    fun trackEvent(event: Event)
+    fun trackEvent(event: TrackingEvent)
 
     /**
      * Method to add custom variable to the session
