@@ -225,11 +225,11 @@ class VectorMessagesAdapterHelper {
      */
     private void refreshGroupFlairView(final View groupFlairView, final Event event, final Set<String> groupIdsSet, final String tag) {
         Log.d(LOG_TAG, "## refreshGroupFlairView () : " + event.sender + " allows flair to " + groupIdsSet);
-        Log.d(LOG_TAG, "## refreshGroupFlairView () : room related groups " + mRoom.getLiveState().getRelatedGroups());
+        Log.d(LOG_TAG, "## refreshGroupFlairView () : room related groups " + mRoom.getState().getRelatedGroups());
 
         if (!groupIdsSet.isEmpty()) {
             // keeps only the intersections
-            groupIdsSet.retainAll(mRoom.getLiveState().getRelatedGroups());
+            groupIdsSet.retainAll(mRoom.getState().getRelatedGroups());
         }
 
         Log.d(LOG_TAG, "## refreshGroupFlairView () : group ids to display " + groupIdsSet);
@@ -363,7 +363,7 @@ class VectorMessagesAdapterHelper {
         }
 
         // Check whether there are some related groups to this room
-        if (mRoom.getLiveState().getRelatedGroups().isEmpty()) {
+        if (mRoom.getState().getRelatedGroups().isEmpty()) {
             Log.d(LOG_TAG, "## refreshGroupFlairView () : no related group");
             groupFlairView.setVisibility(View.GONE);
             return;

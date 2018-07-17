@@ -4,6 +4,7 @@ Changes in Riot 0.8.13 (2018-XX-XX)
 Features:
  - Resurrect performance metrics (#2391)
  - Telemetry to report incidence of UISIs (#2330)
+ - Add a previewer for previewing media before sending it into the room (#1742)
 
 Improvements:
  - Piwik: Update the way how stats are reported (#2402)
@@ -11,6 +12,7 @@ Improvements:
 
 Other changes:
  - Remove dependency to `android-gif-drawable` lib and use Glide to animate logo on Splashscreen (#2421)
+ - Keep only Room.getState() method and remove Room.getLiveState() because they are similar (matrix-org/matrix-android-sdk#310)
 
 Bugfix:
  - Fix issue on incoming call screen when "Do not disturb mode" is active (#2417)

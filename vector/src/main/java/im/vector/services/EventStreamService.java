@@ -1358,7 +1358,7 @@ public class EventStreamService extends Service {
 
                     if (null != event) {
                         // test if the message is displayable
-                        EventDisplay eventDisplay = new RiotEventDisplay(getApplicationContext(), event, room.getLiveState());
+                        EventDisplay eventDisplay = new RiotEventDisplay(getApplicationContext(), event, room.getState());
                         eventDisplay.setPrependMessagesWithAuthor(false);
 
                         CharSequence textualDisplay = eventDisplay.getTextualDisplay();

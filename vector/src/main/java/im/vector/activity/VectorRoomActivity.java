@@ -205,6 +205,8 @@ public class VectorRoomActivity extends MXCActionBarActivity implements
     private static final String CAMERA_VALUE_TITLE = "attachment"; // Samsung devices need a filepath to write to or else won't return a Uri (!!!)
     private String mLatestTakePictureCameraUri = null; // has to be String not Uri because of Serializable
 
+    public static final int CONFIRM_MEDIA_REQUEST_CODE = 7;
+
     private VectorMessageListFragment mVectorMessageListFragment;
     private MXSession mSession;
 
@@ -1422,6 +1424,14 @@ public class VectorRoomActivity extends MXCActionBarActivity implements
                 case UNREAD_PREVIEW_REQUEST_CODE:
                     mVectorMessageListFragment.scrollToBottom(0);
                     break;
+                case CONFIRM_MEDIA_REQUEST_CODE:
+                    List<RoomMediaMessage> sharedDataItems =
+                            new ArrayList<>(RoomMediaMessage.listRoomMediaMessages(data, RoomMediaMessage.class.getClassLoader()));
+                    if (0 == sharedDataItems.size()) {
+                        sharedDataItems.add(new RoomMediaMessage(Uri.parse(data.getStringExtra(MediaPreviewerActivity.EXTRA_CAMERA_PICTURE_URI))));
+                    }
+                    mVectorRoomMediasSender.sendMedias(sharedDataItems);
+                    break;
             }
         }
     }
@@ -1711,7 +1721,7 @@ public class VectorRoomActivity extends MXCActionBarActivity implements
             Log.d(LOG_TAG, "## isUserAllowedToStartConfCall(): conference in progress");
             isAllowed = true;
         } else if ((null != mRoom) && (mRoom.getActiveMembers().size() > 2)) {
-            PowerLevels powerLevels = mRoom.getLiveState().getPowerLevels();
+            PowerLevels powerLevels = mRoom.getState().getPowerLevels();
 
             if (null != powerLevels) {
                 // to start a conf call, the user MUST have the power to invite someone (CFU)
@@ -2020,7 +2030,7 @@ public class VectorRoomActivity extends MXCActionBarActivity implements
      * They are listed, checked and sent when it is possible.
      */
     @SuppressLint("NewApi")
-    private void sendMediasIntent(final Intent intent) {
+    private void sendMediasIntent(Intent intent) {
         // sanity check
         if ((null == intent) && (null == mLatestTakePictureCameraUri)) {
             return;
@@ -2030,13 +2040,6 @@ public class VectorRoomActivity extends MXCActionBarActivity implements
 
         if (null != intent) {
             sharedDataItems = new ArrayList<>(RoomMediaMessage.listRoomMediaMessages(intent, RoomMediaMessage.class.getClassLoader()));
-        }
-
-        if (null != mLatestTakePictureCameraUri) {
-            if (0 == sharedDataItems.size()) {
-                sharedDataItems.add(new RoomMediaMessage(Uri.parse(mLatestTakePictureCameraUri)));
-            }
-            mLatestTakePictureCameraUri = null;
         }
 
         // check the extras
@@ -2058,9 +2061,28 @@ public class VectorRoomActivity extends MXCActionBarActivity implements
             }
         }
 
-        if (0 != sharedDataItems.size()) {
+        if (PreferencesManager.previewMediaWhenSending(this)) {
+            if (null != intent) {
+                intent.setClass(this, MediaPreviewerActivity.class);
+            } else {
+                intent = new Intent(this, MediaPreviewerActivity.class);
+            }
+
+            intent.putExtra(MediaPreviewerActivity.EXTRA_ROOM_TITLE, VectorUtils.getRoomDisplayName(this, mSession, mRoom));
+            if (null != mLatestTakePictureCameraUri) {
+                intent.putExtra(MediaPreviewerActivity.EXTRA_CAMERA_PICTURE_URI, mLatestTakePictureCameraUri);
+            }
+            startActivityForResult(intent, CONFIRM_MEDIA_REQUEST_CODE);
+        } else {
+            if (null != mLatestTakePictureCameraUri) {
+                if (0 == sharedDataItems.size()) {
+                    sharedDataItems.add(new RoomMediaMessage(Uri.parse(mLatestTakePictureCameraUri)));
+                }
+            }
             mVectorRoomMediasSender.sendMedias(sharedDataItems);
         }
+
+        mLatestTakePictureCameraUri = null;
     }
 
     /**
@@ -3099,9 +3121,9 @@ public class VectorRoomActivity extends MXCActionBarActivity implements
     private boolean canSendMessages() {
         boolean canSendMessage = false;
 
-        if ((null != mRoom) && (null != mRoom.getLiveState())) {
+        if ((null != mRoom) && (null != mRoom.getState())) {
             canSendMessage = true;
-            PowerLevels powerLevels = mRoom.getLiveState().getPowerLevels();
+            PowerLevels powerLevels = mRoom.getState().getPowerLevels();
 
             if (null != powerLevels) {
                 canSendMessage = powerLevels.maySendMessage(mMyUserId);
@@ -3115,7 +3137,7 @@ public class VectorRoomActivity extends MXCActionBarActivity implements
      * Check if the user can send a message in this room
      */
     private void checkSendEventStatus() {
-        if ((null != mRoom) && (null != mRoom.getLiveState())) {
+        if ((null != mRoom) && (null != mRoom.getState())) {
             boolean canSendMessage = canSendMessages();
             mSendingMessagesLayout.setVisibility(canSendMessage ? View.VISIBLE : View.GONE);
             mCanNotPostTextView.setVisibility(!canSendMessage ? View.VISIBLE : View.GONE);
@@ -3265,10 +3287,10 @@ public class VectorRoomActivity extends MXCActionBarActivity implements
 
         if (TextUtils.equals(member.membership, RoomMember.MEMBERSHIP_BAN)) {
             invitationTextView.setText(getString(R.string.has_been_banned,
-                    VectorUtils.getRoomDisplayName(this, mSession, mRoom), mRoom.getLiveState().getMemberName(member.mSender)));
+                    VectorUtils.getRoomDisplayName(this, mSession, mRoom), mRoom.getState().getMemberName(member.mSender)));
         } else {
             invitationTextView.setText(getString(R.string.has_been_kicked,
-                    VectorUtils.getRoomDisplayName(this, mSession, mRoom), mRoom.getLiveState().getMemberName(member.mSender)));
+                    VectorUtils.getRoomDisplayName(this, mSession, mRoom), mRoom.getState().getMemberName(member.mSender)));
         }
 
         TextView subInvitationTextView = findViewById(R.id.room_preview_subinvitation_textview);
@@ -3764,7 +3786,7 @@ public class VectorRoomActivity extends MXCActionBarActivity implements
         titleText.setText(R.string.room_info_room_name);
 
         final EditText textInput = dialogView.findViewById(R.id.dialog_edit_text);
-        textInput.setText(mRoom.getLiveState().name);
+        textInput.setText(mRoom.getState().name);
 
         // set dialog message
         alertDialogBuilder
@@ -3831,7 +3853,7 @@ public class VectorRoomActivity extends MXCActionBarActivity implements
         titleText.setText(R.string.room_info_room_topic);
 
         final EditText textInput = dialogView.findViewById(R.id.dialog_edit_text);
-        textInput.setText(mRoom.getLiveState().topic);
+        textInput.setText(mRoom.getState().topic);
 
         // set dialog message
         alertDialogBuilder
@@ -3890,7 +3912,7 @@ public class VectorRoomActivity extends MXCActionBarActivity implements
                 @Override
                 public void onClick(View v) {
                     // sanity checks : reported by GA
-                    if ((null != mRoom) && (null != mRoom.getLiveState())) {
+                    if ((null != mRoom) && (null != mRoom.getState())) {
                         if (MatrixSdkExtensionsKt.isPowerLevelEnoughForAvatarUpdate(mRoom, mSession)) {
                             // need to check if the camera permission has been granted
                             if (CommonActivityUtils.checkPermissions(CommonActivityUtils.REQUEST_CODE_PERMISSION_ROOM_DETAILS, VectorRoomActivity.this)) {
@@ -3914,9 +3936,9 @@ public class VectorRoomActivity extends MXCActionBarActivity implements
                 @Override
                 public void onClick(View v) {
                     // sanity checks : reported by GA
-                    if ((null != mRoom) && (null != mRoom.getLiveState())) {
+                    if ((null != mRoom) && (null != mRoom.getState())) {
                         boolean canUpdateTitle = false;
-                        PowerLevels powerLevels = mRoom.getLiveState().getPowerLevels();
+                        PowerLevels powerLevels = mRoom.getState().getPowerLevels();
 
                         if (null != powerLevels) {
                             int powerLevel = powerLevels.getUserPowerLevel(mSession.getMyUserId());
@@ -3941,9 +3963,9 @@ public class VectorRoomActivity extends MXCActionBarActivity implements
                 @Override
                 public void onClick(View v) {
                     // sanity checks : reported by GA
-                    if ((null != mRoom) && (null != mRoom.getLiveState())) {
+                    if ((null != mRoom) && (null != mRoom.getState())) {
                         boolean canUpdateTopic = false;
-                        PowerLevels powerLevels = mRoom.getLiveState().getPowerLevels();
+                        PowerLevels powerLevels = mRoom.getState().getPowerLevels();
 
                         if (null != powerLevels) {
                             int powerLevel = powerLevels.getUserPowerLevel(mSession.getMyUserId());

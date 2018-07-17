@@ -235,7 +235,7 @@ public class SlashCommandsParser {
                     Collection<Room> rooms = session.getDataHandler().getStore().getRooms();
 
                     for (Room r : rooms) {
-                        RoomState state = r.getLiveState();
+                        RoomState state = r.getState();
 
                         if (null != state) {
                             if (TextUtils.equals(state.alias, roomAlias)) {

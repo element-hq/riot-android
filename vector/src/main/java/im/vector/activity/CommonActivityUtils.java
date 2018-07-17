@@ -1020,8 +1020,8 @@ public class CommonActivityUtils {
                 Room room = session.getDataHandler().getRoom(aRoomId);
 
                 // get the room alias (if any) for the preview data
-                if ((null != room) && (null != room.getLiveState())) {
-                    roomAlias = room.getLiveState().getAlias();
+                if ((null != room) && (null != room.getState())) {
+                    roomAlias = room.getState().getAlias();
                 }
 
                 intentRetCode = new Intent(aContext, aTargetActivity);

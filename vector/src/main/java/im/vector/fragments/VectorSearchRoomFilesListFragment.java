@@ -87,7 +87,7 @@ public class VectorSearchRoomFilesListFragment extends VectorSearchRoomsFilesLis
         mCanPaginateBack = true;
         if (null != mRoom) {
             mRoom.cancelRemoteHistoryRequest();
-            mNextBatch = mRoom.getLiveState().getToken();
+            mNextBatch = mRoom.getState().getToken();
         }
         if (null != mSession) {
             mSession.getDataHandler().resetReplayAttackCheckInTimeline(mTimeLineId);
@@ -127,7 +127,7 @@ public class VectorSearchRoomFilesListFragment extends VectorSearchRoomsFilesLis
             @Override
             public void onSuccess(ArrayList<Event> eventsChunk) {
                 List<MessageRow> messageRows = new ArrayList<>(eventsChunk.size());
-                RoomState liveState = mRoom.getLiveState();
+                RoomState liveState = mRoom.getState();
 
                 for (Event event : eventsChunk) {
                     messageRows.add(new MessageRow(event, liveState));
@@ -227,7 +227,7 @@ public class VectorSearchRoomFilesListFragment extends VectorSearchRoomsFilesLis
                             mAdapter.setNotifyOnChange(false);
 
                             for (Event event : eventChunks) {
-                                MessageRow row = new MessageRow(event, mRoom.getLiveState());
+                                MessageRow row = new MessageRow(event, mRoom.getState());
                                 mAdapter.insert(row, 0);
                             }
 
