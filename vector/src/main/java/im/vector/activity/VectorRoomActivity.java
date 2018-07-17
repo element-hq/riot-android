@@ -1132,9 +1132,6 @@ public class VectorRoomActivity extends MXCActionBarActivity implements
                 mIgnoreTextUpdate = false;
             }
 
-            // FIXME Check why this call is done twice
-            mVectorMessageListFragment.setIsRoomEncrypted(mRoom.isEncrypted());
-
             boolean canSendEncryptedEvent = mRoom.isEncrypted() && mSession.isCryptoEnabled();
             mE2eImageView.setImageResource(canSendEncryptedEvent ? R.drawable.e2e_verified : R.drawable.e2e_unencrypted);
             mVectorMessageListFragment.setIsRoomEncrypted(mRoom.isEncrypted());
