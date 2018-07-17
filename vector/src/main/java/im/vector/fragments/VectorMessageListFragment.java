@@ -96,25 +96,33 @@ import im.vector.widgets.WidgetsManager;
 public class VectorMessageListFragment extends MatrixMessageListFragment implements IMessagesAdapterActionsListener {
     private static final String LOG_TAG = VectorMessageListFragment.class.getSimpleName();
 
-    public interface IListFragmentEventListener {
-        void onListTouch();
+    public interface VectorMessageListFragmentListener {
+        void showPreviousEventsLoadingWheel();
+
+        void hidePreviousEventsLoadingWheel();
+
+        void showNextEventsLoadingWheel();
+
+        void hideNextEventsLoadingWheel();
+
+        void showMainLoadingWheel();
+
+        void hideMainLoadingWheel();
+
+        void onSelectedEventChange(@Nullable Event currentSelectedEvent);
     }
 
     private static final String TAG_FRAGMENT_RECEIPTS_DIALOG = "TAG_FRAGMENT_RECEIPTS_DIALOG";
     private static final String TAG_FRAGMENT_USER_GROUPS_DIALOG = "TAG_FRAGMENT_USER_GROUPS_DIALOG";
 
-    private IListFragmentEventListener mHostActivityListener;
+    @Nullable
+    private VectorMessageListFragmentListener mListener;
 
     // onMediaAction actions
     // private static final int ACTION_VECTOR_SHARE = R.id.ic_action_vector_share;
     private static final int ACTION_VECTOR_FORWARD = R.id.ic_action_vector_forward;
     private static final int ACTION_VECTOR_SAVE = R.id.ic_action_vector_save;
     static final int ACTION_VECTOR_OPEN = 123456;
-
-    // spinners
-    private View mBackProgressView;
-    private View mForwardProgressView;
-    private View mMainProgressView;
 
     private VectorImageGetter mVectorImageGetter;
 
@@ -138,6 +146,15 @@ public class VectorMessageListFragment extends MatrixMessageListFragment impleme
 
         f.setArguments(args);
         return f;
+    }
+
+    /**
+     * Update the listener
+     *
+     * @param listener the new listener
+     */
+    public void setListener(@Nullable VectorMessageListFragmentListener listener) {
+        mListener = listener;
     }
 
     @Override
@@ -186,28 +203,6 @@ public class VectorMessageListFragment extends MatrixMessageListFragment impleme
         return getClass().getName() + ".MATRIX_MESSAGE_FRAGMENT_TAG";
     }
 
-    /**
-     * Called when a fragment is first attached to its activity.
-     * {@link #onCreate(Bundle)} will be called after this.
-     *
-     * @param aHostActivity parent activity
-     */
-    @Override
-    public void onAttach(Activity aHostActivity) {
-        super.onAttach(aHostActivity);
-        try {
-            mHostActivityListener = (IListFragmentEventListener) aHostActivity;
-        } catch (ClassCastException e) {
-            // if host activity does not provide the implementation, just ignore it
-            Log.w(LOG_TAG, "## onAttach(): host activity does not implement IListFragmentEventListener " + aHostActivity);
-            mHostActivityListener = null;
-        }
-
-        mBackProgressView = aHostActivity.findViewById(R.id.loading_room_paginate_back_progress);
-        mForwardProgressView = aHostActivity.findViewById(R.id.loading_room_paginate_forward_progress);
-        mMainProgressView = aHostActivity.findViewById(R.id.main_progress_layout);
-    }
-
     @Override
     public void onPause() {
         super.onPause();
@@ -239,20 +234,6 @@ public class VectorMessageListFragment extends MatrixMessageListFragment impleme
         });
     }
 
-    /**
-     * Called when the fragment is no longer attached to its activity.  This
-     * is called after {@link #onDestroy()}.
-     */
-    @Override
-    public void onDetach() {
-        super.onDetach();
-        mHostActivityListener = null;
-
-        mBackProgressView = null;
-        mForwardProgressView = null;
-        mMainProgressView = null;
-    }
-
     @Override
     public MXSession getSession(String matrixId) {
         return Matrix.getMXSession(getActivity(), matrixId);
@@ -282,10 +263,6 @@ public class VectorMessageListFragment extends MatrixMessageListFragment impleme
             mCheckSlideToHide = false;
             MXCActionBarActivity.dismissKeyboard(getActivity());
         }
-
-        // notify host activity
-        if (null != mHostActivityListener)
-            mHostActivityListener.onListTouch();
     }
 
     @Override
@@ -751,6 +728,13 @@ public class VectorMessageListFragment extends MatrixMessageListFragment impleme
         }
     }
 
+    @Override
+    public void onSelectedEventChange(@Nullable Event currentSelectedEvent) {
+        if (mListener != null && isAdded()) {
+            mListener.onSelectedEventChange(currentSelectedEvent);
+        }
+    }
+
     /**
      * The user reports a content problem to the server
      *
@@ -928,40 +912,46 @@ public class VectorMessageListFragment extends MatrixMessageListFragment impleme
         return PreferencesManager.displayAllEvents(getActivity());
     }
 
-    private void setViewVisibility(View view, int visibility) {
-        if ((null != view) && (null != getActivity())) {
-            view.setVisibility(visibility);
+    @Override
+    public void showLoadingBackProgress() {
+        if (mListener != null && isAdded()) {
+            mListener.showPreviousEventsLoadingWheel();
         }
     }
 
     @Override
-    public void showLoadingBackProgress() {
-        setViewVisibility(mBackProgressView, View.VISIBLE);
-    }
-
-    @Override
     public void hideLoadingBackProgress() {
-        setViewVisibility(mBackProgressView, View.GONE);
+        if (mListener != null && isAdded()) {
+            mListener.hidePreviousEventsLoadingWheel();
+        }
     }
 
     @Override
     public void showLoadingForwardProgress() {
-        setViewVisibility(mForwardProgressView, View.VISIBLE);
+        if (mListener != null && isAdded()) {
+            mListener.showNextEventsLoadingWheel();
+        }
     }
 
     @Override
     public void hideLoadingForwardProgress() {
-        setViewVisibility(mForwardProgressView, View.GONE);
+        if (mListener != null && isAdded()) {
+            mListener.hideNextEventsLoadingWheel();
+        }
     }
 
     @Override
     public void showInitLoading() {
-        setViewVisibility(mMainProgressView, View.VISIBLE);
+        if (mListener != null && isAdded()) {
+            mListener.showMainLoadingWheel();
+        }
     }
 
     @Override
     public void hideInitLoading() {
-        setViewVisibility(mMainProgressView, View.GONE);
+        if (mListener != null && isAdded()) {
+            mListener.hideMainLoadingWheel();
+        }
     }
 
     public boolean onRowLongClick(int position) {

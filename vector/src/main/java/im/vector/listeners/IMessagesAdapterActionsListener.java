@@ -17,6 +17,7 @@
 package im.vector.listeners;
 
 import android.net.Uri;
+import android.support.annotation.Nullable;
 
 import org.matrix.androidsdk.crypto.data.MXDeviceInfo;
 import org.matrix.androidsdk.rest.model.Event;
@@ -97,7 +98,7 @@ public interface IMessagesAdapterActionsListener {
     /**
      * Define the action to perform when the group flairs is clicked.
      *
-     * @param userId the user id
+     * @param userId   the user id
      * @param groupIds the group ids list
      */
     void onGroupFlairClick(String userId, List<String> groupIds);
@@ -178,4 +179,11 @@ public interface IMessagesAdapterActionsListener {
      * The event for which the user asked again for the key is now decrypted
      */
     void onEventDecrypted();
+
+    /**
+     * Called when selected event change
+     *
+     * @param currentSelectedEvent the current selected event, or null if no event is selected
+     */
+    void onSelectedEventChange(@Nullable Event currentSelectedEvent);
 }

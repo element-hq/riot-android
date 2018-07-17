@@ -888,6 +888,10 @@ public class VectorMessagesAdapter extends AbstractMessagesAdapter {
                 mSelectedEvent = null;
             }
             notifyDataSetChanged();
+
+            if (mVectorMessagesAdapterEventsListener != null) {
+                mVectorMessagesAdapterEventsListener.onSelectedEventChange(mSelectedEvent);
+            }
         }
     }
 
@@ -908,6 +912,10 @@ public class VectorMessagesAdapter extends AbstractMessagesAdapter {
         if (null != mSelectedEvent) {
             mSelectedEvent = null;
             notifyDataSetChanged();
+
+            if (mVectorMessagesAdapterEventsListener != null) {
+                mVectorMessagesAdapterEventsListener.onSelectedEventChange(mSelectedEvent);
+            }
         }
     }
 
@@ -920,7 +928,8 @@ public class VectorMessagesAdapter extends AbstractMessagesAdapter {
 
     /**
      * Get the current selected event or null if no event is selected
-     * @return
+     *
+     * @return the current selected event or null if no event is selected
      */
     @Nullable
     public Event getCurrentSelectedEvent() {
@@ -2018,8 +2027,8 @@ public class VectorMessagesAdapter extends AbstractMessagesAdapter {
                 public boolean onLongClick(View v) {
                     if (!mIsSearchMode) {
                         onMessageClick(event, getEventText(contentView, event, msgType), contentView.findViewById(R.id.messagesAdapter_action_anchor));
-                        mSelectedEvent = event;
-                        notifyDataSetChanged();
+
+                        onEventTap(event);
                         return true;
                     }
 
@@ -2100,8 +2109,8 @@ public class VectorMessagesAdapter extends AbstractMessagesAdapter {
 
                     if (!mIsSearchMode) {
                         onMessageClick(event, getEventText(contentView, event, msgType), convertView.findViewById(R.id.messagesAdapter_action_anchor));
-                        mSelectedEvent = event;
-                        notifyDataSetChanged();
+
+                        onEventTap(event);
                         return true;
                     }
                 }
@@ -2619,8 +2628,7 @@ public class VectorMessagesAdapter extends AbstractMessagesAdapter {
                 }
 
                 // disable the selection
-                mSelectedEvent = null;
-                notifyDataSetChanged();
+                cancelSelectionMode();
 
                 return true;
             }

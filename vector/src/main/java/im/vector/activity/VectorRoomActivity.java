@@ -142,7 +142,8 @@ import kotlin.Pair;
 public class VectorRoomActivity extends MXCActionBarActivity implements
         MatrixMessageListFragment.IRoomPreviewDataListener,
         MatrixMessageListFragment.IEventSendingListener,
-        MatrixMessageListFragment.IOnScrollListener {
+        MatrixMessageListFragment.IOnScrollListener,
+        VectorMessageListFragment.VectorMessageListFragmentListener {
 
     /**
      * the session
@@ -324,6 +325,14 @@ public class VectorRoomActivity extends MXCActionBarActivity implements
     // pending active view
     @BindView(R.id.room_pending_widgets_view)
     ActiveWidgetsBanner mActiveWidgetsBanner;
+
+    // spinners
+    @BindView(R.id.loading_room_paginate_back_progress)
+    View mBackProgressView;
+    @BindView(R.id.loading_room_paginate_forward_progress)
+    View mForwardProgressView;
+    @BindView(R.id.main_progress_layout)
+    View mMainProgressView;
 
     // network events
     private final IMXNetworkEventListener mNetworkEventListener = new IMXNetworkEventListener() {
@@ -765,6 +774,8 @@ public class VectorRoomActivity extends MXCActionBarActivity implements
             Log.d(LOG_TAG, "Reuse VectorMessageListFragment");
         }
 
+        mVectorMessageListFragment.setListener(this);
+
         mVectorRoomMediasSender = new VectorRoomMediasSender(this, mVectorMessageListFragment, Matrix.getInstance(this).getMediasCache());
 
         manageRoomPreview();
@@ -1105,8 +1116,7 @@ public class VectorRoomActivity extends MXCActionBarActivity implements
             // listen for room name or topic changes
             mRoom.addEventListener(mRoomEventListener);
 
-            mEditText.setHint((mRoom.isEncrypted() && mSession.isCryptoEnabled()) ?
-                    R.string.room_message_placeholder_encrypted : R.string.room_message_placeholder_not_encrypted);
+            setEditTextHint(null);
 
             mSyncInProgressView.setVisibility(VectorApp.isSessionSyncing(mSession) ? View.VISIBLE : View.GONE);
         } else {
@@ -1207,6 +1217,24 @@ public class VectorRoomActivity extends MXCActionBarActivity implements
         }
 
         Log.d(LOG_TAG, "-- Resume the activity");
+    }
+
+    /**
+     * Update the edit text hint. It depends on the encryption and on the currently selected event
+     *
+     * @param selectedEvent the currently selected event or null if no event is selected
+     */
+    private void setEditTextHint(@Nullable Event selectedEvent) {
+        if (selectedEvent != null
+                && Event.EVENT_TYPE_MESSAGE.equals(selectedEvent.type)) {
+            // User can reply to this event
+            mEditText.setHint((mRoom.isEncrypted() && mSession.isCryptoEnabled()) ?
+                    R.string.room_message_placeholder_reply_to_encrypted : R.string.room_message_placeholder_reply_to_not_encrypted);
+        } else {
+            // default hint
+            mEditText.setHint((mRoom.isEncrypted() && mSession.isCryptoEnabled()) ?
+                    R.string.room_message_placeholder_encrypted : R.string.room_message_placeholder_not_encrypted);
+        }
     }
 
     @Override
@@ -2383,6 +2411,46 @@ public class VectorRoomActivity extends MXCActionBarActivity implements
                 mEditText.getText().insert(mEditText.getSelectionStart(), "\n" + quote);
             }
         }
+    }
+
+    /* ==========================================================================================
+     * Implement VectorMessageListFragmentListener
+     * ========================================================================================== */
+
+    @Override
+    public void showPreviousEventsLoadingWheel() {
+        mBackProgressView.setVisibility(View.VISIBLE);
+    }
+
+    @Override
+    public void hidePreviousEventsLoadingWheel() {
+        mBackProgressView.setVisibility(View.GONE);
+    }
+
+    @Override
+    public void showNextEventsLoadingWheel() {
+        mForwardProgressView.setVisibility(View.VISIBLE);
+    }
+
+    @Override
+    public void hideNextEventsLoadingWheel() {
+        mForwardProgressView.setVisibility(View.GONE);
+    }
+
+    @Override
+    public void showMainLoadingWheel() {
+        mMainProgressView.setVisibility(View.VISIBLE);
+    }
+
+    @Override
+    public void hideMainLoadingWheel() {
+        mMainProgressView.setVisibility(View.GONE);
+    }
+
+    @Override
+    public void onSelectedEventChange(@Nullable Event currentSelectedEvent) {
+        // Update hint
+        setEditTextHint(currentSelectedEvent);
     }
 
     //================================================================================
