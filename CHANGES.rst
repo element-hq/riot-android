@@ -17,6 +17,7 @@ Bugfix:
  - Fix issue when changing device name in the settings (#2416)
  - Fix issue on verifying device, update the wording of the description message (#1067)
  - Messages with code blocks show other HTML as plain text (#2280)
+ - Fix some plural and puzzle strings, and remove other unused ones (#2444)
 
 Translations:
  -
