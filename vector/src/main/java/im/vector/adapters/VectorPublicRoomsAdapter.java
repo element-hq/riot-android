@@ -82,13 +82,9 @@ public class VectorPublicRoomsAdapter extends ArrayAdapter<PublicRoom> {
         roomNameTxtView.setText(roomName);
 
         // display the number of users
-        String usersText;
-        if (publicRoom.numJoinedMembers > 1) {
-            usersText = publicRoom.numJoinedMembers + " " + mContext.getString(R.string.users);
-        } else {
-            usersText = publicRoom.numJoinedMembers + " " + mContext.getString(R.string.user);
-        }
-
+        String usersText = mContext.getQuantityString(R.plurals.public_room_nb_users,
+                                                      publicRoom.numJoinedMembers,
+                                                      publicRoom.numJoinedMembers);
         timestampTxtView.setText(usersText);
 
         // separator

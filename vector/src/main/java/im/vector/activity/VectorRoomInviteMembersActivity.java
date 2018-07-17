@@ -352,15 +352,21 @@ public class VectorRoomInviteMembersActivity extends VectorBaseSearchActivity {
                     .setTitle(R.string.dialog_title_confirmation);
 
             String message = "";
+            String msgPartA = "";
+            String msgPartB = "";
 
             if (displayNames.size() == 1) {
                 message = displayNames.get(0);
             } else {
                 for (int i = 0; i < (displayNames.size() - 2); i++) {
-                    message += displayNames.get(i) + ", ";
+                    msgPartA += getString(R.string.room_participants_invite_join_names, displayNames.get(i));
                 }
 
-                message += displayNames.get(displayNames.size() - 2) + " " + getText(R.string.and) + " " + displayNames.get(displayNames.size() - 1);
+                msgPartB = getString(R.string.room_participants_invite_join_names_and,
+                                     displayNames.get(displayNames.size() - 2),
+                                     displayNames.get(displayNames.size() - 1));
+                message = getString(R.string.room_participants_invite_join_names_combined,
+                                    msgPartA, msgPartB);
             }
 
             builder.setMessage(getString(R.string.room_participants_invite_prompt_msg, message))

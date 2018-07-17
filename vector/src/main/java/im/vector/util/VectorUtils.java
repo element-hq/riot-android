@@ -1004,10 +1004,11 @@ public class VectorUtils {
 
         if (presenceText != null) {
             if ((null != user.currently_active) && user.currently_active) {
-                presenceText += " " + context.getString(R.string.room_participants_now);
+                presenceText = context.getString(R.string.room_participants_now, presenceText);
             } else if ((null != user.lastActiveAgo) && (user.lastActiveAgo > 0)) {
-                presenceText += " " + formatSecondsIntervalFloored(context,
-                        user.getAbsoluteLastActiveAgo() / 1000L) + " " + context.getString(R.string.room_participants_ago);
+                presenceText = context.getString(R.string.room_participants_ago, presenceText,
+                                                 formatSecondsIntervalFloored(context,
+                                                    user.getAbsoluteLastActiveAgo() / 1000L));
             }
         }
 
