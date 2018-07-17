@@ -78,6 +78,7 @@ import im.vector.activity.WidgetActivity;
 import im.vector.analytics.Analytics;
 import im.vector.analytics.AppAnalytics;
 import im.vector.analytics.PiwikAnalytics;
+import im.vector.analytics.e2e.DecryptionFailureTracker;
 import im.vector.contacts.ContactsManager;
 import im.vector.contacts.PIDsRetriever;
 import im.vector.gcm.GcmRegistrationManager;
@@ -154,6 +155,7 @@ public class VectorApp extends MultiDexApplication {
     private CallsManager mCallsManager;
 
     private Analytics mAppAnalytics;
+    private DecryptionFailureTracker mDecryptionFailureTracker;
 
     /**
      * @return the current instance
@@ -207,6 +209,7 @@ public class VectorApp extends MultiDexApplication {
         instance = this;
         mCallsManager = new CallsManager(this);
         mAppAnalytics = new AppAnalytics(this, new PiwikAnalytics(this));
+        mDecryptionFailureTracker = new DecryptionFailureTracker(mAppAnalytics);
 
         mActivityTransitionTimer = null;
         mActivityTransitionTimerTask = null;
@@ -605,6 +608,13 @@ public class VectorApp extends MultiDexApplication {
      */
     public Analytics getAnalytics() {
         return mAppAnalytics;
+    }
+
+    /**
+     * @return the DecryptionFailureTracker instance
+     */
+    public DecryptionFailureTracker getDecryptionFailureTracker() {
+        return mDecryptionFailureTracker;
     }
 
     /**
@@ -1110,6 +1120,7 @@ public class VectorApp extends MultiDexApplication {
      * The application is paused.
      */
     private void onAppPause() {
+        mDecryptionFailureTracker.dispatch();
         mAppAnalytics.forceDispatch();
     }
 }
