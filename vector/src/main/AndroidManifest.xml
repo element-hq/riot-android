@@ -388,6 +388,11 @@
             android:name=".activity.SimpleWebViewActivity"
             android:theme="@style/AppTheme.NoActionBar" />
 
+        <activity
+            android:name="im.vector.activity.MediaPreviewerActivity"
+            android:configChanges="orientation|screenSize"
+            android:theme="@style/AppTheme.NoActionBar" />
+
         <!-- broadcast receiver -->
         <receiver
             android:name=".receiver.VectorUniversalLinkReceiver"

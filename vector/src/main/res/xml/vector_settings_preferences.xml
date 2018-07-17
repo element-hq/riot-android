@@ -95,6 +95,10 @@
             android:key="SETTINGS_VIBRATE_ON_MENTION_KEY"
             android:title="@string/settings_vibrate_on_mention" />
 
+        <im.vector.preference.VectorSwitchPreference
+            android:title="@string/settings_preview_media_before_sending"
+            android:key="SETTINGS_PREVIEW_MEDIA_BEFORE_SENDING_KEY"/>
+
         <ListPreference
             android:entries="@array/theme_description"
             android:entryValues="@array/theme_codes"
