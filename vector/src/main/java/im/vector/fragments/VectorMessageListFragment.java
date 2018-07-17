@@ -63,7 +63,7 @@ import org.matrix.androidsdk.rest.model.message.Message;
 import org.matrix.androidsdk.rest.model.message.VideoMessage;
 import org.matrix.androidsdk.util.JsonUtils;
 import org.matrix.androidsdk.util.Log;
-import org.matrix.androidsdk.util.MatrixUtils;
+import org.matrix.androidsdk.util.PermalinkUtils;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -694,7 +694,7 @@ public class VectorMessageListFragment extends MatrixMessageListFragment impleme
                 }
             }
         } else if (action == R.id.ic_action_vector_permalink) {
-            VectorUtils.copyToClipboard(getActivity(), MatrixUtils.createPermalink(event.roomId, event.eventId));
+            VectorUtils.copyToClipboard(getActivity(), PermalinkUtils.createPermalink(event));
         } else if (action == R.id.ic_action_vector_report) {
             onMessageReport(event);
         } else if ((action == R.id.ic_action_view_source) || (action == R.id.ic_action_view_decrypted_source)) {
@@ -1237,7 +1237,7 @@ public class VectorMessageListFragment extends MatrixMessageListFragment impleme
     @Override
     public void onRoomAliasClick(String roomAlias) {
         try {
-            onURLClick(Uri.parse(MatrixUtils.createPermalink(roomAlias, null)));
+            onURLClick(Uri.parse(PermalinkUtils.createPermalink(roomAlias)));
         } catch (Exception e) {
             Log.e(LOG_TAG, "onRoomAliasClick failed " + e.getLocalizedMessage(), e);
         }
@@ -1246,7 +1246,7 @@ public class VectorMessageListFragment extends MatrixMessageListFragment impleme
     @Override
     public void onRoomIdClick(String roomId) {
         try {
-            onURLClick(Uri.parse(MatrixUtils.createPermalink(roomId, null)));
+            onURLClick(Uri.parse(PermalinkUtils.createPermalink(roomId)));
         } catch (Exception e) {
             Log.e(LOG_TAG, "onRoomIdClick failed " + e.getLocalizedMessage(), e);
         }
@@ -1255,7 +1255,7 @@ public class VectorMessageListFragment extends MatrixMessageListFragment impleme
     @Override
     public void onMessageIdClick(String messageId) {
         try {
-            onURLClick(Uri.parse(MatrixUtils.createPermalink(mRoom.getRoomId(), messageId)));
+            onURLClick(Uri.parse(PermalinkUtils.createPermalink(mRoom.getRoomId(), messageId)));
         } catch (Exception e) {
             Log.e(LOG_TAG, "onRoomIdClick failed " + e.getLocalizedMessage(), e);
         }
@@ -1264,7 +1264,7 @@ public class VectorMessageListFragment extends MatrixMessageListFragment impleme
     @Override
     public void onGroupIdClick(String groupId) {
         try {
-            onURLClick(Uri.parse(MatrixUtils.createPermalink(groupId, null)));
+            onURLClick(Uri.parse(PermalinkUtils.createPermalink(groupId)));
         } catch (Exception e) {
             Log.e(LOG_TAG, "onRoomIdClick failed " + e.getLocalizedMessage(), e);
         }
