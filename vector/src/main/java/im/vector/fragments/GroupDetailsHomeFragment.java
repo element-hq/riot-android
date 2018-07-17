@@ -142,8 +142,8 @@ public class GroupDetailsHomeFragment extends GroupDetailsBaseFragment {
         int roomCount = (null != group.getGroupRooms()) ? group.getGroupRooms().getEstimatedRoomCount() : 0;
         int memberCount = (null != group.getGroupUsers()) ? group.getGroupUsers().getEstimatedUsersCount() : 1;
 
-        mGroupRoomsTextView.setText(getResources().getQuantityString(R.string.group_rooms, roomCount, roomCount));
-        mGroupMembersTextView.setText(getResources().getQuantityString(R.string.group_members, memberCount, memberCount));
+        mGroupRoomsTextView.setText(getResources().getQuantityString(R.plurals.group_rooms, roomCount, roomCount));
+        mGroupMembersTextView.setText(getResources().getQuantityString(R.plurals.group_members, memberCount, memberCount));
 
         if (!TextUtils.isEmpty(group.getLongDescription())) {
             mGroupHtmlTextView.setVisibility(View.VISIBLE);
