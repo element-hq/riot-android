@@ -65,6 +65,7 @@ public class RiotEventDisplay extends EventDisplay {
      * @param displayNameColor the display name highlighted color.
      * @return The text or null if it isn't possible.
      */
+    @Override
     public CharSequence getTextualDisplay(Integer displayNameColor) {
         CharSequence text = null;
 

@@ -1,14 +1,17 @@
 /*
- Copyright 2018 New Vector Ltd
- Licensed under the Apache License, Version 2.0 (the "License");
- you may not use this file except in compliance with the License.
- You may obtain a copy of the License at
- http://www.apache.org/licenses/LICENSE-2.0
- Unless required by applicable law or agreed to in writing, software
- distributed under the License is distributed on an "AS IS" BASIS,
- WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- See the License for the specific language governing permissions and
- limitations under the License.
+ * Copyright 2018 New Vector Ltd
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
  */
 
 package im.vector.analytics.e2e
@@ -42,7 +45,7 @@ class DecryptionFailureTracker(
      * The error will be filtered.
      * @param event: The error event
      * @param roomState: The state of the room when the decryption error happened
-     * @param userId: The user id of the current session user
+     * @param userId: The user id of the current session
      */
     fun reportUnableToDecryptError(event: Event, roomState: RoomState, userId: String) {
         if (reportedFailures[event.eventId] != null || trackedEvents.contains(event.eventId)) {
@@ -104,10 +107,11 @@ class DecryptionFailureTracker(
     //endregion
 
     companion object {
-        const val CHECK_PERIOD = 5 * 1000L
+        // Period in ms before checkFailures is called
+        private const val CHECK_PERIOD = 5 * 1000L
         // Give events a chance to be decrypted by waiting `GRACE_PERIOD` before counting
         // and reporting them as failures (in ms)
-        const val GRACE_PERIOD = 60 * 1000L
+        private const val GRACE_PERIOD = 60 * 1000L
     }
 
 
