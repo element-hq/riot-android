@@ -691,7 +691,11 @@ public class VectorMessageListFragment extends MatrixMessageListFragment impleme
                     View view = getActivity().getLayoutInflater().inflate(R.layout.dialog_event_content, null);
                     TextView textview = view.findViewById(R.id.event_content_text_view);
 
-                    Gson gson = new GsonBuilder().setPrettyPrinting().create();
+                    Gson gson = new GsonBuilder()
+                            .disableHtmlEscaping()
+                            .setPrettyPrinting()
+                            .create();
+
                     textview.setText(gson.toJson(JsonUtils.toJson((action == R.id.ic_action_view_source) ? event : event.getClearEvent())));
 
                     new AlertDialog.Builder(getActivity())
