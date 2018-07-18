@@ -9,6 +9,7 @@ Features:
 Improvements:
  - Piwik: Update the way how stats are reported (#2402)
  - Improve BugReport screen: display a preview of the screenshot (#2318)
+ - Improve the display of the sources of the message in the dialog (#2348)
 
 Other changes:
  - Remove dependency to `android-gif-drawable` lib and use Glide to animate logo on Splashscreen (#2421)
