@@ -26,6 +26,7 @@ import im.vector.R;
  */
 public class MediaPreviewAdapter extends RecyclerView.Adapter<MediaPreviewAdapter.MediaItemViewHolder> {
 
+
     private final List<RoomMediaMessage> mImagePreviewList;
     private final EventListener mEventListener;
 
@@ -33,11 +34,12 @@ public class MediaPreviewAdapter extends RecyclerView.Adapter<MediaPreviewAdapte
      * Initialises the adapter and sets member fields.
      *
      * @param imagePreviewList list with RoomMediaMessages to be displayed.
-     * @param mEventListener
+     * @param eventListener    The event listener attached to the adapter
      */
-    public MediaPreviewAdapter(final List<RoomMediaMessage> imagePreviewList, EventListener mEventListener) {
+    public MediaPreviewAdapter(@NonNull final List<RoomMediaMessage> imagePreviewList,
+                               @NonNull final EventListener eventListener) {
         mImagePreviewList = imagePreviewList;
-        this.mEventListener = mEventListener;
+        mEventListener = eventListener;
     }
 
     @Override
@@ -67,7 +69,7 @@ public class MediaPreviewAdapter extends RecyclerView.Adapter<MediaPreviewAdapte
                         .apply(options)
                         .into(holder.mImagePreview);
             } else {
-                holder.mImagePreview.setImageDrawable(ContextCompat.getDrawable(context, R.drawable.filetype_attachment));
+                holder.mImagePreview.setImageResource(R.drawable.filetype_attachment);
                 holder.mImagePreview.setScaleType(ImageView.ScaleType.FIT_CENTER);
             }
         }
@@ -98,9 +100,8 @@ public class MediaPreviewAdapter extends RecyclerView.Adapter<MediaPreviewAdapte
     }
 
     public interface EventListener {
-        void onMediaMessagePreviewClicked(RoomMediaMessage roomMediaMessage);
+        void onMediaMessagePreviewClicked(@NonNull final RoomMediaMessage roomMediaMessage);
     }
-
 
 }
 

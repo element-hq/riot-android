@@ -1425,8 +1425,7 @@ public class VectorRoomActivity extends MXCActionBarActivity implements
                     mVectorMessageListFragment.scrollToBottom(0);
                     break;
                 case CONFIRM_MEDIA_REQUEST_CODE:
-                    List<RoomMediaMessage> sharedDataItems =
-                            new ArrayList<>(RoomMediaMessage.listRoomMediaMessages(data, RoomMediaMessage.class.getClassLoader()));
+                    List<RoomMediaMessage> sharedDataItems = new ArrayList<>(RoomMediaMessage.listRoomMediaMessages(data));
                     if (0 == sharedDataItems.size()) {
                         sharedDataItems.add(new RoomMediaMessage(Uri.parse(data.getStringExtra(MediaPreviewerActivity.EXTRA_CAMERA_PICTURE_URI))));
                     }
@@ -2039,7 +2038,7 @@ public class VectorRoomActivity extends MXCActionBarActivity implements
         List<RoomMediaMessage> sharedDataItems = new ArrayList<>();
 
         if (null != intent) {
-            sharedDataItems = new ArrayList<>(RoomMediaMessage.listRoomMediaMessages(intent, RoomMediaMessage.class.getClassLoader()));
+            sharedDataItems = new ArrayList<>(RoomMediaMessage.listRoomMediaMessages(intent));
         }
 
         // check the extras

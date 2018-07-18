@@ -6,6 +6,7 @@ import android.app.Activity;
 import android.net.Uri;
 import android.os.Build;
 import android.support.annotation.ColorRes;
+import android.support.annotation.NonNull;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -82,31 +83,19 @@ public class MediaPreviewerActivity extends MXCActionBarActivity implements Medi
         final String roomTitle = getIntent().getExtras().getString(EXTRA_ROOM_TITLE);
         getSupportActionBar().setTitle(roomTitle);
         // Resize web content to prevent scrollbars.
-        final List<RoomMediaMessage> sharedDataItems = new ArrayList<>(RoomMediaMessage.listRoomMediaMessages(getIntent(), RoomMediaMessage.class.getClassLoader()));
+        final List<RoomMediaMessage> sharedDataItems = RoomMediaMessage.listRoomMediaMessages(getIntent());
         if (sharedDataItems.isEmpty()) {
-            sharedDataItems.add(new RoomMediaMessage(Uri.parse(getIntent().getStringExtra(EXTRA_CAMERA_PICTURE_URI))));
-        } else {
-            final LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false);
-            mPreviewerRecyclerView.setLayoutManager(linearLayoutManager);
-            final MediaPreviewAdapter mediaPreviewAdapter = new MediaPreviewAdapter(sharedDataItems, this);
-            mPreviewerRecyclerView.setAdapter(mediaPreviewAdapter);
+            final Uri roomMediaUri = Uri.parse(getIntent().getStringExtra(EXTRA_CAMERA_PICTURE_URI));
+            final RoomMediaMessage roomMediaMessage = new RoomMediaMessage(roomMediaUri);
+            sharedDataItems.add(roomMediaMessage);
+        }
+        final LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false);
+        mPreviewerRecyclerView.setLayoutManager(linearLayoutManager);
+        final MediaPreviewAdapter mediaPreviewAdapter = new MediaPreviewAdapter(sharedDataItems, this);
+        mPreviewerRecyclerView.setAdapter(mediaPreviewAdapter);
+
+        if (!sharedDataItems.isEmpty()) {
             updatePreview(sharedDataItems.get(0));
-        }
-    }
-
-    @Override
-    public void onMediaMessagePreviewClicked(final RoomMediaMessage roomMediaMessage) {
-        if (roomMediaMessage != mCurrentRoomMediaMessage) {
-            mCurrentRoomMediaMessage = roomMediaMessage;
-            updatePreview(roomMediaMessage);
-        }
-    }
-
-    void onVideoPreviewClicked() {
-        if (!mPreviewerVideoView.isPlaying()) {
-            mPreviewerVideoView.start();
-        } else {
-            mPreviewerVideoView.pause();
         }
     }
 
@@ -116,10 +105,23 @@ public class MediaPreviewerActivity extends MXCActionBarActivity implements Medi
         finish();
     }
 
+    //region MediaPreviewAdapter.EventListener
+
+    @Override
+    public void onMediaMessagePreviewClicked(@NonNull final RoomMediaMessage roomMediaMessage) {
+        if (roomMediaMessage != mCurrentRoomMediaMessage) {
+            mCurrentRoomMediaMessage = roomMediaMessage;
+            updatePreview(roomMediaMessage);
+        }
+    }
+
+    //endregion
+
+    //region Private methods
+
     private void updatePreview(final RoomMediaMessage roomMediaMessage) {
         mPreviewerVideoView.pause();
         mFileNameView.setText(roomMediaMessage.getFileName(this));
-        
         final String mimeType = roomMediaMessage.getMimeType(this);
         final Uri uri = roomMediaMessage.getUri();
         if (mimeType != null) {
@@ -143,11 +145,13 @@ public class MediaPreviewerActivity extends MXCActionBarActivity implements Medi
         }
     }
 
-    @TargetApi(Build.VERSION_CODES.LOLLIPOP)
-    private void setStatusBarColor(@ColorRes int statusBarColor) {
-        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP)
-            return;
-        //getWindow().setStatusBarColor(ContextCompat.getColor(this, statusBarColor));
+    private void onVideoPreviewClicked() {
+        if (!mPreviewerVideoView.isPlaying()) {
+            mPreviewerVideoView.start();
+        } else {
+            mPreviewerVideoView.pause();
+        }
     }
 
+    //endregion
 }
