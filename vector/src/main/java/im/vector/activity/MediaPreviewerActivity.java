@@ -1,13 +1,9 @@
 package im.vector.activity;
 
 import android.annotation.SuppressLint;
-import android.annotation.TargetApi;
 import android.app.Activity;
 import android.net.Uri;
-import android.os.Build;
-import android.support.annotation.ColorRes;
 import android.support.annotation.NonNull;
-import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.MotionEvent;
@@ -18,18 +14,15 @@ import android.widget.VideoView;
 
 import com.bumptech.glide.Glide;
 
-import org.jetbrains.annotations.NotNull;
 import org.matrix.androidsdk.data.RoomMediaMessage;
 import org.matrix.androidsdk.util.Log;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.BindView;
 import butterknife.OnClick;
 import im.vector.R;
 import im.vector.adapters.MediaPreviewAdapter;
-import kotlin.Pair;
 
 /**
  * Previews media selected to be send.
@@ -82,7 +75,6 @@ public class MediaPreviewerActivity extends MXCActionBarActivity implements Medi
         configureToolbar();
         final String roomTitle = getIntent().getExtras().getString(EXTRA_ROOM_TITLE);
         getSupportActionBar().setTitle(roomTitle);
-        // Resize web content to prevent scrollbars.
         final List<RoomMediaMessage> sharedDataItems = RoomMediaMessage.listRoomMediaMessages(getIntent());
         if (sharedDataItems.isEmpty()) {
             final Uri roomMediaUri = Uri.parse(getIntent().getStringExtra(EXTRA_CAMERA_PICTURE_URI));
