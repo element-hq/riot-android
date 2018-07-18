@@ -424,8 +424,6 @@
 
     <!-- Directory -->
     <string name="directory_search_results_title">Огляд каталогу</string>
-    <string name="directory_search_room">%1$d кімната</string>
-    <string name="directory_search_room_for">%1$d кімната знайдена для %2$s</string>
     <string name="directory_searching_title">Пошук у каталозі...</string>
 
     <!-- home room settings -->

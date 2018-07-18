@@ -461,12 +461,10 @@ Er du sikker?</string>
     <string name="room_recents_join_room_prompt">Indtast ID eller alias på et rum</string>
 
     <string name="directory_search_results_title">Gennemse oversigt</string>
-    <string name="directory_search_room">%1$d rum</string>
     <plurals name="directory_search_rooms">
 	<item quantity="one">1 rum</item>
 	<item quantity="other">%d rum</item>
 </plurals>
-    <string name="directory_search_room_for">%1$d rum fundet for %2$s</string>
     <plurals name="directory_search_rooms_for">
 	<item quantity="one">%1$s rum fundet for %2$s</item>
 	<item quantity="other">%1$s rum fundet for %2$s</item>

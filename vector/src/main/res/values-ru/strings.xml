@@ -427,8 +427,6 @@ Email также позволит вам при необходимости во�
     
     <!-- Directory -->
     <string name="directory_search_results_title">Просмотр каталога</string>
-    <string name="directory_search_room">%1$d комната</string>
-    <string name="directory_search_room_for">%1$d комната найдена для %2$s</string>
     <string name="directory_searching_title">Поиск в каталоге..</string>
 
     <!-- home room settings -->
@@ -872,7 +870,6 @@ Email также позволит вам при необходимости во�
     <string name="filter_group_members">Фильтр участников группы</string>
     <string name="filter_group_rooms">Фильтр комнат группы</string>
 
-    <string name="group_one_room">1 комната</string>
     <string name="group_no_long_description">Администратор сообщества не предоставил подробного описания этого сообщества.</string>
 
     <string name="has_been_kicked">Вас выгнал %2$s из %1$s</string>

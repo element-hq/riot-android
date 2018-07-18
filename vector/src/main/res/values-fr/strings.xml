@@ -575,8 +575,6 @@ En êtes-vous sûr(e) ?</string>
     <string name="room_displayname_two_members">%1$s et %2$s</string>
     <string name="room_recents_join_room_prompt">Saisissez un identifiant ou un alias de salon</string>
 
-    <string name="directory_search_room">%1$d salon</string>
-    <string name="directory_search_room_for">%1$d salon trouvé pour %2$s</string>
     <string name="settings_turn_screen_on">Allumer l\'écran pendant 3 secondes</string>
 
     <string name="settings_invited_to_room">Quand je suis invité sur un salon</string>
@@ -823,7 +821,6 @@ Appareils inconnus :</string>
     <string name="filter_group_members">Filtrer les membres du groupe</string>
     <string name="filter_group_rooms">Filtrer les salons du groupe</string>
 
-    <string name="group_one_room">Un salon</string>
     <string name="group_no_long_description">L\'administrateur de cette communauté n\'a pas encore fourni de description.</string>
 
     <string name="has_been_kicked">%2$s vous a exclu de %1$s</string>

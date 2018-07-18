@@ -429,8 +429,6 @@ Salatut viestit eivät näy sovelluksissa, jotka eivät tue salausta.</string> <
 
     <!-- Directory -->
     <string name="directory_search_results_title">Selaa hakemistoa</string>
-    <string name="directory_search_room">%1$d huone</string>
-    <string name="directory_search_room_for">%1$d huone löydetty hakusanalla "%2$s"</string>
     <string name="directory_searching_title">Haetaan luettelosta..</string>
 
     <!-- home room settings -->
@@ -866,7 +864,6 @@ Voit tehdä sen nyt tai myöhemmin sovelluksen asetuksissa.</string>
     <string name="filter_group_members">Suodata ryhmän jäseniä</string>
     <string name="filter_group_rooms">Suodata ryhmän huoneita</string>
 
-    <string name="group_one_room">1 huone</string>
     <string name="group_no_long_description">Yhteisön pääkäyttäjä ei ole antanut pitkää kuvausta yhteisölle.</string>
 
     <string name="has_been_kicked">Sinut poistettiin %1$s käyttäjän %2$s toimesta</string>

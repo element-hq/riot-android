@@ -263,7 +263,6 @@
     <string name="room_recents_join_room">Taka þátt í spjallrás</string>
     <string name="room_recents_join_room_title">Taka þátt í spjallrás</string>
     <string name="directory_search_results_title">Vafra í möppu</string>
-    <string name="directory_search_room">%1$d spjallrás</string>
     <plurals name="directory_search_rooms">
 	<item quantity="one">1 spjallrás</item>
 	<item quantity="other">%d spjallrásir</item>
@@ -455,7 +454,6 @@
     <string name="filter_group_members">Sía meðlimi hóps</string>
     <string name="filter_group_rooms">Sía spjallrásahópa</string>
 
-    <string name="group_one_room">1 spjallrás</string>
     <string name="reason_colon">Ástæða: %1$s</string>
     <string name="forget_room">Gleyma spjallrás</string>
 
@@ -705,7 +703,6 @@ Til að halda áfram skaltu setja inn lykilorðið þitt.</string>
     <string name="room_displayname_invite_from">Boð frá %s</string>
     <string name="room_recents_join_room_prompt">Settu inn auðkenni eða samheiti spjallrásar</string>
 
-    <string name="directory_search_room_for">%1$d spjallrás fannst fyrir %2$s</string>
     <plurals name="directory_search_rooms_for">
 	<item quantity="one">%1$s spjallrás fannst fyrir %2$s</item>
 	<item quantity="other">%1$s spjallrásir fundust fyrir %2$s</item>

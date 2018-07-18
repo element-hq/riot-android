@@ -476,7 +476,6 @@
     <string name="room_recents_join_room_title">部屋へ参加</string>
     <string name="room_recents_join">参加</string>
     <string name="directory_search_results_title">部屋一覧を見る</string>
-    <string name="directory_search_room">%1$d 部屋</string>
     <string name="room_settings_leave_conversation">退室</string>
     <string name="room_sliding_menu_messages">会話</string>
     <string name="room_sliding_menu_settings">設定</string>
@@ -667,7 +666,6 @@ Riotアプリがあなたの電話帳へアクセスすることを許可しま�
     <string name="room_recents_invites">招待</string>
     <string name="room_recents_join_room_prompt">部屋のIDまたは部屋のエイリアスを入力してください</string>
 
-    <string name="directory_search_room_for">%2$sに%1$d部屋見つかりました</string>
     <string name="directory_searching_title">ディレクトリを検索中..</string>
 
     <string name="room_sliding_menu_third_party_notices">サードパーティのライセンスに関する通知</string>
@@ -820,7 +818,6 @@ Riotアプリがあなたの電話帳へアクセスすることを許可しま�
     <string name="filter_group_members">グループの参加者をフィルタリングする</string>
     <string name="filter_group_rooms">グループの部屋をフィルタリングする</string>
 
-    <string name="group_one_room">1部屋</string>
     <string name="group_no_long_description">管理者はこのコミュニティの詳細を規定していません。</string>
 
     <string name="has_been_kicked">あなたは%2$sによって%1$sから除外されました</string>

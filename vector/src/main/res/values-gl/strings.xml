@@ -231,7 +231,6 @@ Pode engadir a dirección de correo na sección de configuración de perfil.</st
     <string name="room_participants_online">En liña</string>
     <string name="room_participants_offline">Fóra de liña</string>
     <string name="room_participants_idle">En pausa</string>
-    <string name="room_participants_now">agora</string>
     <string name="room_participants_action_invite">Convidar</string>
     <string name="room_participants_action_ban">Bloquear</string>
     <string name="room_participants_action_unban">Non bloquear</string>
@@ -535,7 +534,6 @@ Pode engadir a dirección de correo na sección de configuración de perfil.</st
     <string name="filter_group_members">Filtrar os membros do grupo</string>
     <string name="filter_group_rooms">Filtrar as salas dos grupos</string>
 
-    <string name="group_one_room">1 sala</string>
     <string name="group_no_long_description">O administrador da comunidade non fixo unha descrición longa desta comunidade.</string>
 
     <string name="has_been_kicked">Foi expulsado de %1$s por %2$s</string>

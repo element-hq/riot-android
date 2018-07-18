@@ -423,8 +423,6 @@ Bist du sicher?</string>
 
     <!-- Directory -->
     <string name="directory_search_results_title">Verzeichnis durchsuchen</string>
-    <string name="directory_search_room">%1$d Raum</string>
-    <string name="directory_search_room_for">%1$d Raum gefunden für %2$s</string>
     <string name="directory_searching_title">Verzeichnis wird durchsucht..</string>
 
     <!-- home room settings -->
@@ -864,7 +862,6 @@ Unbekannte Geräte:</string>
     <string name="filter_group_members">Filter Gruppen-Mitglieder</string>
     <string name="filter_group_rooms">Filter Gruppen-Räume</string>
 
-    <string name="group_one_room">1 Raum</string>
     <string name="group_no_long_description">Der Community-Administrator hat keine lange Beschreibung für diese Community zur Verfügung gestellt.</string>
 
     <string name="has_been_kicked">Du wurdest von %2$s aus %1$s gekickt</string>

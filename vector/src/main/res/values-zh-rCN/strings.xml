@@ -475,7 +475,6 @@
     <string name="room_recents_directory">目录</string>
     <string name="room_recents_invites">邀请</string>
     <string name="directory_search_results_title">浏览目录</string>
-    <string name="directory_search_room">%1$d 个聊天室</string>
     <string name="directory_searching_title">搜索目录..</string>
 
     <string name="room_settings_favourite">收藏夹</string>
@@ -571,7 +570,6 @@
     <string name="room_details_people">成员</string>
     <string name="malformed_id">ID 的格式不正确。应该是一个电子邮件地址或 Matrix ID，如 “@localpart:domain”</string>
     <string name="tab_title_search_people">联系人</string>
-    <string name="directory_search_room_for">有 %1$d 个聊天室符合 “%2$s”</string>
     <string name="room_sliding_menu_third_party_notices">第三方通知</string>
     <string name="settings_profile_picture">档案图片</string>
     <string name="settings_third_party_notices">第三方通知</string>
@@ -862,7 +860,6 @@
     <string name="filter_group_members">过滤社区成员</string>
     <string name="filter_group_rooms">过滤社区聊天室</string>
 
-    <string name="group_one_room">1 个聊天室</string>
     <string name="has_been_kicked">您已被 %2$s 从 %1$s 中移除</string>
     <string name="has_been_banned">您已被 %2$s 从 %1$s 中封禁</string>
     <string name="reason_colon">理由：%1$s</string>

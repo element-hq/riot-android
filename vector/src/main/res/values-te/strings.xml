@@ -308,8 +308,6 @@
     <string name="room_recents_join_room_prompt">ఒక గది id లేదా ఒక గది alias టైప్ చేయండి</string>
 
     <string name="directory_search_results_title">డైరెక్టరీలో విహరించండి</string>
-    <string name="directory_search_room">%1$d గది</string>
-    <string name="directory_search_room_for">%2$s కోసం %1$d గది కనుగొనబడింది</string>
     <string name="directory_searching_title">డైరెక్టరీని వెతుకుతున్నాం..</string>
 
     <string name="room_settings_direct_chat">ప్రత్యక్ష చాట్</string>

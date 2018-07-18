@@ -436,8 +436,6 @@ Tem a certeza?</string>
 
     <!-- Directory -->
     <string name="directory_search_results_title">Navegar diretório</string>
-    <string name="directory_search_room">%1$d sala</string>
-    <string name="directory_search_room_for">%1$d sala encontrada para %2$s</string>
     <string name="directory_searching_title">A pesquisar o diretório...</string>
 
     <!-- home room settings -->

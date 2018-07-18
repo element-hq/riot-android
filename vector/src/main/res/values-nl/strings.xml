@@ -416,8 +416,6 @@ Versleutelde berichten zullen nog niet zichtbaar zijn op programma\'s die geen v
 
     <!-- Directory -->
     <string name="directory_search_results_title">Adresboek doorbladeren</string>
-    <string name="directory_search_room">%1$d ruimte</string>
-    <string name="directory_search_room_for">%1$d ruimte gevonden voor %2$s</string>
     <string name="directory_searching_title">Adresboek doorzoeken..</string>
 
     <!-- home room settings -->
@@ -911,7 +909,6 @@ Je kan het nu, of later, doen vanuit de programma-instellingen.</string>
     <string name="filter_group_members">Groepsleden filteren</string>
     <string name="filter_group_rooms">Groepsruimtes filteren</string>
 
-    <string name="group_one_room">1 ruimte</string>
     <string name="group_no_long_description">De gemeenschapsadministrator heeft geen lange beschrijving gegeven voor deze gemeenschap.</string>
 
     <string name="has_been_kicked">Je bent uit %1$s gezet door %2$s</string>

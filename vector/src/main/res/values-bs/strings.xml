@@ -412,8 +412,6 @@ Da li ste sigurani?</string>
     <string name="room_recents_join_room_prompt">Upišite ID sobe ili alias sobe</string>
 
     <string name="directory_search_results_title">Pretražite imenik</string>
-    <string name="directory_search_room">%1$d soba</string>
-    <string name="directory_search_room_for">%1$d soba nađena za %2$s</string>
     <string name="directory_searching_title">Traži direktorij..</string>
 
     <string name="room_settings_favourite">Favorit</string>

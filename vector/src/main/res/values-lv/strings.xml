@@ -439,8 +439,6 @@ Vai vēlies turpināt?</string>
     <string name="room_recents_join_room_prompt">Ievadiet istabas ID vai aliasi</string>
 
     <string name="directory_search_results_title">Skatīt katalogu</string>
-    <string name="directory_search_room">%1$d istaba</string>
-    <string name="directory_search_room_for">%1$d istaba atrasta priekš %2$s</string>
     <string name="directory_searching_title">Meklēju katalogā...</string>
 
     <string name="room_settings_all_messages_noisy">Visas ziņas (ar skaņu)</string>
@@ -885,7 +883,6 @@ Nepazīstamas ierīces:</string>
     <string name="filter_group_members">Grupas biedru filtrs</string>
     <string name="filter_group_rooms">Grupas istabu filtrs</string>
 
-    <string name="group_one_room">1 istaba</string>
     <string name="group_no_long_description">Kopienas admins nav izveidojis šīs kopienas garo aprakstu.</string>
 
     <string name="has_been_kicked">Tevi no %1$s padzina %2$s</string>

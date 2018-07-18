@@ -441,8 +441,6 @@ Sicuro di procedere?</string>
 
     <!-- Directory -->
     <string name="directory_search_results_title">Esplora elenco</string>
-    <string name="directory_search_room">%1$d stanza</string>
-    <string name="directory_search_room_for">%1$d stanza trovata per %2$s</string>
     <string name="directory_searching_title">Ricerca in corso…</string>
 
     <!-- home room settings -->
@@ -911,7 +909,6 @@ Sicuro di procedere?</string>
     <string name="filter_group_members">Filtra i membri del gruppo</string>
     <string name="filter_group_rooms">Filtra le stanze del gruppo</string>
 
-    <string name="group_one_room">1 stanza</string>
     <string name="group_no_long_description">L\'admin della comunità non ha fornito una descrizione estesa per questa comunità.</string>
 
     <string name="has_been_kicked">Sei stato cacciato via da %1$s da %2$s</string>

@@ -415,8 +415,6 @@ Mensajes cifrados no serán visibles en cuentas que no implementan el cifrado.</
 
     <!-- Directory -->
     <string name="directory_search_results_title">Buscar directorio</string>
-    <string name="directory_search_room">%1$d sala</string>
-    <string name="directory_search_room_for">%1$d sala encontrada por %2$s</string>
     <string name="directory_searching_title">Buscando directorio..</string>
 
     <!-- home room settings -->

@@ -439,8 +439,6 @@
 
     <!-- Directory -->
     <string name="directory_search_results_title">Navega pel directpri</string>
-    <string name="directory_search_room">%1$d sala</string>
-    <string name="directory_search_room_for">%1$d sala trobada per %2$s</string>
     <string name="directory_searching_title">Cercant al directori..</string>
 
     <!-- home room settings -->
@@ -820,7 +818,6 @@
     <string name="filter_group_members">Filtre de participants de grups</string>
     <string name="filter_group_rooms">Filte de grups de sales</string>
 
-    <string name="group_one_room">Una sala</string>
     <string name="group_no_long_description">L\'administrador de la comunitat no ha fet una descripció llarga per aquesta comunitat.</string>
 
     <string name="has_been_kicked">%2$s l\'ha fet fora de la sala %1$s</string>

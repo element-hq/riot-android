@@ -403,12 +403,10 @@
     <string name="room_recents_join_room_prompt">Напишете ID или псевдоним на стая</string>
 
     <string name="directory_search_results_title">Прегледай директорията</string>
-    <string name="directory_search_room">%1$d стая</string>
     <plurals name="directory_search_rooms">
 	<item quantity="one">1 стая</item>
 	<item quantity="other">%d стаи</item>
 </plurals>
-    <string name="directory_search_room_for">%1$d стаи намерени за %2$s</string>
     <plurals name="directory_search_rooms_for">
 	<item quantity="one">%1$s стая намерена за %2$s</item>
 	<item quantity="other">%1$s стаи намерени за %2$s</item>
@@ -870,7 +868,6 @@
     <string name="filter_group_members">Филтриране на членовете</string>
     <string name="filter_group_rooms">Филтриране на стаите</string>
 
-    <string name="group_one_room">1 стая</string>
     <string name="group_no_long_description">Администраторът на общността не е предоставил дълго описание за тази общност.</string>
 
     <string name="has_been_kicked">Бяхте изгонен от %1$s от %2$s</string>

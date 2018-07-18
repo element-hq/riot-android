@@ -415,8 +415,6 @@ Você autoriza o Riot a acessar seus contatos?</string>
 
     <!-- Directory -->
     <string name="directory_search_results_title">Pesquisar na lista pública</string>
-    <string name="directory_search_room">%1$d sala</string>
-    <string name="directory_search_room_for">%1$d sala encontrada para %2$s</string>
     <string name="directory_searching_title">Buscando no diretório...</string>
 
     <!-- home room settings -->
@@ -843,7 +841,6 @@ Você autoriza o Riot a acessar seus contatos?</string>
     <string name="filter_group_members">Filtrar integrantes do grupo</string>
     <string name="filter_group_rooms">Filtrar salas de grupo</string>
 
-    <string name="group_one_room">1 sala</string>
     <string name="group_no_long_description">O(A) administrador(a) desta comunidade não definiu uma descrição longa da mesma.</string>
 
     <string name="has_been_kicked">Você foi excluída/o da sala %1$s por %2$s</string>

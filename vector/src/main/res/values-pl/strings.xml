@@ -342,8 +342,6 @@ Przyznaj dostęp w następnym oknie.</string>
     <string name="room_recents_join_room_prompt">Wprowadź ID lub nazwę pokoju</string>
 
     <string name="directory_search_results_title">Przeglądaj katalog</string>
-    <string name="directory_search_room">%1$d pokój</string>
-    <string name="directory_search_room_for">Znaleziono %1$d pokój dla wyniku %2$s</string>
     <string name="directory_searching_title">Wyszukiwanie katalogu..</string>
 
     <string name="room_settings_favourite">Dodaj do ulubionych</string>
@@ -542,7 +540,6 @@ Wprowadź hasło, aby kontynuować.</string>
 <string name="reason_colon">Powód: %1$s</string>
     <string name="has_been_banned">Zostałeś zbanowany z %1$s przez %2$s</string>
     <string name="has_been_kicked">Zostałeś wyrzucony z %1$s przez %2$s</string>
-    <string name="group_one_room">1 pokój</string>
     <string name="group_details_rooms">Pokoje</string>
     <string name="joined">Dołączył</string>
     <string name="group_details_people">Ludzie</string>

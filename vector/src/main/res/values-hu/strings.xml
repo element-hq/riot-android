@@ -400,8 +400,6 @@ Biztos vagy benne?</string>
     <string name="room_recents_join_room_prompt">Írd be a szoba azonosítóját vagy nevét</string>
 
     <string name="directory_search_results_title">Könyvtár böngészése</string>
-    <string name="directory_search_room">%1$d szoba</string>
-    <string name="directory_search_room_for">%2$s kulcsszóra %1$d szobatalálat</string>
     <string name="directory_searching_title">Könyvtár keresése...</string>
 
     <string name="room_settings_favourite">Kedvenc</string>
@@ -819,7 +817,6 @@ Ismeretlen eszközök:</string>
     <string name="filter_group_members">Csoport tagjai szűrése</string>
     <string name="filter_group_rooms">Csoport szobái szűrése</string>
 
-    <string name="group_one_room">1 szoba</string>
     <string name="group_no_long_description">A közösség adminisztrátora nem adott meg hosszú leírást ehhez a közösséghez.</string>
 
     <string name="has_been_kicked">Ki lettél rúgva innen: %1$s, %2$s által</string>
