@@ -1983,14 +1983,14 @@ public class VectorRoomActivity extends MXCActionBarActivity implements
 
         VectorApp.markdownToHtml(mEditText.getText().toString().trim(), new VectorMarkdownParser.IVectorMarkdownParserListener() {
             @Override
-            public void onMarkdownParsed(final String text, final String HTMLText) {
+            public void onMarkdownParsed(final String text, final String htmlText) {
                 runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
                         mSendImageView.setEnabled(true);
                         mIsMarkDowning = false;
                         enableActionBarHeader(HIDE_ACTION_BAR_HEADER);
-                        sendMessage(text, TextUtils.equals(text, HTMLText) ? null : HTMLText, Message.FORMAT_MATRIX_HTML);
+                        sendMessage(text, TextUtils.equals(text, htmlText) ? null : htmlText, Message.FORMAT_MATRIX_HTML);
                         mEditText.setText("");
                     }
                 });
