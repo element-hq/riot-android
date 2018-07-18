@@ -126,8 +126,6 @@ Selezionare esporta per fare un backup delle chat prima di disconnettersi.</stri
     <string name="logout">Disconnetti</string>
     <string name="hs_url">URL server home</string>
     <string name="identity_url">URL server identità</string>
-    <string name="user">utente</string>
-    <string name="users">utenti</string>
     <string name="search">Cerca</string>
 
     <string name="start_new_chat">Inizia nuova chat</string>
@@ -323,12 +321,6 @@ I dispositivi non saranno in grado di decriptare la cronologia prima del loro in
 
 I messaggi criptati non saranno visibili ai riceventi (client) che non hanno ancora implementato la crittografia.</string>
 
-    <!--  Time -->
-    <string name="format_time_s">s</string>
-    <string name="format_time_m">m</string>
-    <string name="format_time_h">o</string>
-    <string name="format_time_d">g</string>
-
     <!--  Chat participants -->
     <string name="room_participants_leave_prompt_title">Lascia stanza</string>
     <string name="room_participants_leave_prompt_msg">Sei sicuro di voler uscire dalla stanza?</string>
@@ -338,8 +330,6 @@ I messaggi criptati non saranno visibili ai riceventi (client) che non hanno anc
     <string name="room_participants_online">Online</string>
     <string name="room_participants_offline">Offline</string>
     <string name="room_participants_idle">Inattivo</string>
-    <string name="room_participants_now">ora</string>
-    <string name="room_participants_ago">fa</string>
 
     <string name="room_participants_header_admin_tools">STRUMENTI ADMIN</string>
     <string name="room_participants_header_call">CHIAMATA</string>
@@ -411,7 +401,6 @@ Sicuro di procedere?</string>
     <string name="room_details_people">Persone</string>
     <string name="room_details_files">File</string>
     <string name="room_details_settings">Impostazioni</string>
-    <string name="room_details_selected">selezionati</string>
     <string name="malformed_id">ID malformato. Dovrebbe essere un indirizzo email o un ID Matrix come \'@localpart:domain\'</string>
     <string name="room_details_people_invited_group_name">INVITATI</string>
     <string name="room_details_people_present_group_name">AGGIUNTI</string>
@@ -922,11 +911,7 @@ Sicuro di procedere?</string>
     <string name="filter_group_members">Filtra i membri del gruppo</string>
     <string name="filter_group_rooms">Filtra le stanze del gruppo</string>
 
-    <string name="group_one_member">1 membro</string>
-    <string name="group_members">%d membri</string>
-
     <string name="group_one_room">1 stanza</string>
-    <string name="group_rooms">%d stanze</string>
     <string name="group_no_long_description">L\'admin della comunità non ha fornito una descrizione estesa per questa comunità.</string>
 
     <string name="has_been_kicked">Sei stato cacciato via da %1$s da %2$s</string>

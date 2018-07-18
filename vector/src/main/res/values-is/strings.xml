@@ -97,8 +97,6 @@
     <string name="create_account">Skrá þig</string>
     <string name="login">Innskráning</string>
     <string name="logout">Útskráning</string>
-    <string name="user">notandi</string>
-    <string name="users">notendur</string>
     <string name="search">Leita</string>
 
     <string name="start_new_chat">Hefja nýtt spjall</string>
@@ -194,10 +192,6 @@
 </plurals>
     <string name="room_title_one_member">1 meðlimur</string>
     <string name="room_e2e_alert_title">Aðvörun!</string>
-    <string name="format_time_s">sek</string>
-    <string name="format_time_m">mín</string>
-    <string name="format_time_h">klst</string>
-    <string name="format_time_d">d</string>
 
     <string name="room_participants_leave_prompt_title">Fara af spjallrás</string>
     <string name="room_participants_leave_prompt_msg">Ertu viss um að þú viljir fara út spjallrásinni?</string>
@@ -206,8 +200,6 @@
     <string name="room_participants_online">Nettengt</string>
     <string name="room_participants_offline">Ónettengt</string>
     <string name="room_participants_idle">Iðjulaust</string>
-    <string name="room_participants_now">núna</string>
-    <string name="room_participants_ago">síðan</string>
 
     <string name="room_participants_header_admin_tools">KERFISSTJÓRNUNARTÓL</string>
     <string name="room_participants_header_call">SAMTAL</string>
@@ -240,7 +232,6 @@
     <string name="room_details_people">Fólk</string>
     <string name="room_details_files">Skrár</string>
     <string name="room_details_settings">Stillingar</string>
-    <string name="room_details_selected">valið</string>
     <string name="room_event_action_cancel_download">Hætta við niðurhal</string>
 
     <string name="room_displayname_two_members">%1$s og %2$s</string>
@@ -464,11 +455,7 @@
     <string name="filter_group_members">Sía meðlimi hóps</string>
     <string name="filter_group_rooms">Sía spjallrásahópa</string>
 
-    <string name="group_one_member">1 meðlimur</string>
-    <string name="group_members">%d meðlimir</string>
-
     <string name="group_one_room">1 spjallrás</string>
-    <string name="group_rooms">%d spjallrásir</string>
     <string name="reason_colon">Ástæða: %1$s</string>
     <string name="forget_room">Gleyma spjallrás</string>
 

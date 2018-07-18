@@ -135,8 +135,6 @@
     <string name="logout">登出</string>
     <string name="hs_url">家伺服器網址</string>
     <string name="identity_url">身份識別伺服器網址</string>
-    <string name="user">使用者</string>
-    <string name="users">使用者</string>
     <string name="search">搜尋</string>
 
     <string name="start_new_chat">開始新聊天</string>
@@ -333,11 +331,6 @@
 
 加密的訊息，無法在還沒被實作加密的客戶端上被看到。</string>
 
-    <string name="format_time_s">秒</string>
-    <string name="format_time_m">分</string>
-    <string name="format_time_h">小時</string>
-    <string name="format_time_d">天</string>
-
     <string name="room_participants_leave_prompt_title">離開聊天室</string>
     <string name="room_participants_leave_prompt_msg">您確定想要離開聊天室？</string>
     <string name="room_participants_remove_prompt_msg">你確定想從此聊天室移除 %s？</string>
@@ -346,8 +339,6 @@
     <string name="room_participants_online">線上</string>
     <string name="room_participants_offline">離線</string>
     <string name="room_participants_idle">閒置</string>
-    <string name="room_participants_now">現在</string>
-    <string name="room_participants_ago">之前</string>
 
     <string name="room_participants_header_admin_tools">管理者工具</string>
     <string name="room_participants_header_call">通話</string>

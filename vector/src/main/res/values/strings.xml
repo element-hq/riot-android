@@ -371,10 +371,22 @@
     <string name="room_e2e_alert_message">End-to-end encryption is in beta and may not be reliable.\n\nYou should not yet trust it to secure data.\n\nDevices will not yet be able to decrypt history from before they joined the room.\n\nEncrypted messages will not be visible on clients that do not yet implement encryption.</string>
 
     <!--  Time -->
-    <string name="format_time_s">s</string>
-    <string name="format_time_m">m</string>
-    <string name="format_time_h">h</string>
-    <string name="format_time_d">d</string>
+    <plurals name="format_time_s">
+        <item quantity="one">1s</item>
+        <item quantity="other">%ds</item>
+    </plurals>
+    <plurals name="format_time_m">
+        <item quantity="one">1m</item>
+        <item quantity="other">%dm</item>
+    </plurals>
+    <plurals name="format_time_h">
+        <item quantity="one">1h</item>
+        <item quantity="other">%dh</item>
+    </plurals>
+    <plurals name="format_time_d">
+        <item quantity="one">1d</item>
+        <item quantity="other">%dd</item>
+    </plurals>
 
     <!--  Chat participants -->
     <string name="room_participants_leave_prompt_title">Leave room</string>
@@ -389,7 +401,7 @@
     <string name="room_participants_now">%1$s now</string>
     <!--
     The first variable is one of "Online", "Offline" or "Idle" states (with or without " now" part).
-    The second variable is the time in seconds.
+    The second variable is the formatted datetime (5s, 5m, 5h, 5d) from format_time_s/m/h/d strings.
     -->
     <string name="room_participants_ago">%1$s %2$s ago</string>
 
@@ -416,11 +428,14 @@
     <string name="room_participants_kick_prompt_msg">Are you sure that you want to kick this user from this chat?</string>
     <string name="room_participants_ban_prompt_msg">Are you sure that you want to ban this user from this chat?</string>
 
-    <!-- The variable can be a single name or a string of names ("A, ""B, ""C and D" > "A, B, C and D) -->
+    <!--
+    The variable can be a single name or a string of names
+    ("Alice, "+"Bob, "+"Charlie and David" > "Alice, Bob, Charlie and David)
+    -->
     <string name="room_participants_invite_prompt_msg">"Are you sure you want to invite %s to this chat?"</string>
-    <!-- The building block of the first part of the string of names ("A, "/"B, ") -->
+    <!-- The building block of the first part of the string of names ("Alice, "/"Bob, ") -->
     <string name="room_participants_invite_join_names">%1$s, </string>
-    <!-- The second part of the string of names ("C and D") -->
+    <!-- The second part of the string of names ("Charlie and David") -->
     <string name="room_participants_invite_join_names_and">%1$s and %2$s</string>
     <!-- First variable is the first part, and second is the second part -->
     <string name="room_participants_invite_join_names_combined">%1$s %2$s</string>

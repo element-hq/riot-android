@@ -121,8 +121,6 @@
     <string name="logout">Odhlásiť sa</string>
     <string name="hs_url">Adresa domovského servera</string>
     <string name="identity_url">Adresa servera totožností</string>
-    <string name="user">používateľ</string>
-    <string name="users">používatelia</string>
     <string name="search">Hľadať</string>
 
     <string name="start_new_chat">Začať novú konverzáciu</string>
@@ -302,11 +300,6 @@ Zariadenia zatiaľ nedokážu dešifrovať správy poslané skôr, než ste na n
 
 Šifrované správy nebudú vôbec zobrazené v klientoch, ktorí zatiaľ nepodporujú šifrovanie.</string>
 
-    <string name="format_time_s">s</string>
-    <string name="format_time_m">m</string>
-    <string name="format_time_h">h</string>
-    <string name="format_time_d">d</string>
-
     <string name="room_participants_leave_prompt_title">Opustiť miestnosť</string>
     <string name="room_participants_leave_prompt_msg">Ste si istí, že chcete opustiť miestnosť?</string>
     <string name="room_participants_remove_prompt_msg">Ste si istí, že chcete používateľa %s vykopnúť z tejto miestnosti?</string>
@@ -315,8 +308,6 @@ Zariadenia zatiaľ nedokážu dešifrovať správy poslané skôr, než ste na n
     <string name="room_participants_online">Prítomný</string>
     <string name="room_participants_offline">Nedostupný</string>
     <string name="room_participants_idle">Nečinný</string>
-    <string name="room_participants_now">teraz</string>
-    <string name="room_participants_ago">pred</string>
 
     <string name="room_participants_header_admin_tools">NÁSTROJE SPRÁVCU</string>
     <string name="room_participants_header_call">HOVOR</string>
@@ -384,7 +375,6 @@ Ste si istí?</string>
     <string name="room_details_people">Ľudia</string>
     <string name="room_details_files">Súbory</string>
     <string name="room_details_settings">Nastavenia</string>
-    <string name="room_details_selected">vybraté</string>
     <string name="malformed_id">Nesprávny formát ID. Mali by ste zadať emailovú adresu alebo Matrix ID ako napríklad \'@lokálnaČasť:doména\'</string>
     <string name="room_details_people_invited_group_name">POZVANÍ</string>
     <string name="room_details_people_present_group_name">VSTÚPILI</string>
@@ -832,11 +822,7 @@ Neznáme zariadenia:</string>
     <string name="filter_group_members">Filtrovať členov komunity</string>
     <string name="filter_group_rooms">Filtrovať miestnosti v komunite</string>
 
-    <string name="group_one_member">1 člen</string>
-    <string name="group_members">%d členov</string>
-
     <string name="group_one_room">1 miestnosť</string>
-    <string name="group_rooms">%d miestností</string>
     <string name="group_no_long_description">Správca nenastavil dlhý popis tejto komunity.</string>
 
     <string name="has_been_kicked">Používateľ %2$s vás vykázal z miestnosti %1$s</string>

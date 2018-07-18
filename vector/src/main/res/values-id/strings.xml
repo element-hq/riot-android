@@ -106,8 +106,6 @@
     <string name="auth_register">Registrasi</string>
     <string name="start_video_call">Mulai Panggilan Video</string>
 
-    <string name="users">pengguna</string>
-    <string name="user">pengguna</string>
     <string name="option_send_files">Kirim file</string>
     <string name="auth_invalid_password">Password terlalu pendek (min 6)</string>
     <string name="auth_email_already_defined">Alamat email ini sudah terdefinisi.</string>

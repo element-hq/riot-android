@@ -99,8 +99,6 @@
     <string name="login">లాగిన్</string>
     <string name="logout">లాగ్ అవుట్ చేయండి</string>
     <string name="hs_url">హోమ్ సర్వర్ URL</string>
-    <string name="user">వాడుకరి</string>
-    <string name="users">వాడుకరులు</string>
     <string name="search">వెతుకు</string>
 
     <string name="start_new_chat">కొత్త సంభాషణను ప్రారంభించండి</string>
@@ -209,10 +207,6 @@
     <string name="room_creation_add_member">సభ్యుని జోడించు</string>
     <string name="room_title_one_member">1 సభ్యుడు</string>
     <string name="room_e2e_alert_title">హెచ్చరిక!</string>
-    <string name="format_time_s">s</string>
-    <string name="format_time_m">m</string>
-    <string name="format_time_h">h</string>
-    <string name="format_time_d">d</string>
 
     <string name="room_participants_leave_prompt_title">గదిని వదలండి</string>
     <string name="room_participants_leave_prompt_msg">మీరు ఖచ్చితంగా గదిని వదిలేయాలనుకుంటున్నారా?</string>
@@ -222,8 +216,6 @@
     <string name="room_participants_online">ఆన్‌లైన్</string>
     <string name="room_participants_offline">ఆఫ్‌లైన్</string>
     <string name="room_participants_idle">స్థిరమైన</string>
-    <string name="room_participants_now">ఇప్పుడు</string>
-    <string name="room_participants_ago">క్రితం</string>
 
     <string name="room_participants_header_admin_tools">అడ్మిన్ పనిముట్లు</string>
     <string name="room_participants_header_call">కాల్</string>
@@ -283,7 +275,6 @@
     <string name="room_details_people">ప్రజలు</string>
     <string name="room_details_files">దస్త్రాలు</string>
     <string name="room_details_settings">అమరికలు</string>
-    <string name="room_details_selected">ఎంపికైనవి</string>
     <string name="room_details_people_invited_group_name">ఆహ్వానించబడిన</string>
     <string name="room_details_people_present_group_name">చేరారు</string>
 

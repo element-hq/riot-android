@@ -111,8 +111,6 @@ Utwórz kopię zapasową, zanim się wylogujesz.</string>
     <string name="login">Zaloguj się</string>
     <string name="logout">Wyloguj</string>
     <string name="hs_url">Adres serwera</string>
-    <string name="user">użytkownik</string>
-    <string name="users">użytkownicy</string>
     <string name="search">Szukaj</string>
 
     <string name="start_new_chat">Rozpocznij nową rozmowę</string>
@@ -244,10 +242,6 @@ Przyznaj dostęp w następnym oknie.</string>
     <string name="room_creation_add_member">Dodaj członka</string>
     <string name="room_title_one_member">1 członek</string>
     <string name="room_e2e_alert_title">Ostrzeżenie!</string>
-    <string name="format_time_s">sek.</string>
-    <string name="format_time_m">min.</string>
-    <string name="format_time_h">godz.</string>
-    <string name="format_time_d">dni</string>
 
     <string name="room_participants_leave_prompt_title">Opuść pokój</string>
     <string name="room_participants_leave_prompt_msg">Czy na pewno chcesz opuścić pokój?</string>
@@ -257,8 +251,6 @@ Przyznaj dostęp w następnym oknie.</string>
     <string name="room_participants_online">Online</string>
     <string name="room_participants_offline">Offline</string>
     <string name="room_participants_idle">Zajęty</string>
-    <string name="room_participants_now">teraz</string>
-    <string name="room_participants_ago">temu</string>
 
     <string name="room_participants_header_admin_tools">NARZĘDZIA ADMINISTRACYJNE</string>
     <string name="room_participants_header_call">DZWOŃ</string>
@@ -316,7 +308,6 @@ Przyznaj dostęp w następnym oknie.</string>
     <string name="room_details_people">Ludzie</string>
     <string name="room_details_files">Pliki</string>
     <string name="room_details_settings">Ustawienia</string>
-    <string name="room_details_selected">zaznaczone</string>
     <string name="room_details_people_invited_group_name">ZAPROSZONO</string>
     <string name="room_details_people_present_group_name">DOŁĄCZONO</string>
 
@@ -551,7 +542,6 @@ Wprowadź hasło, aby kontynuować.</string>
 <string name="reason_colon">Powód: %1$s</string>
     <string name="has_been_banned">Zostałeś zbanowany z %1$s przez %2$s</string>
     <string name="has_been_kicked">Zostałeś wyrzucony z %1$s przez %2$s</string>
-    <string name="group_rooms">%d pokojów</string>
     <string name="group_one_room">1 pokój</string>
     <string name="group_details_rooms">Pokoje</string>
     <string name="joined">Dołączył</string>

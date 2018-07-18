@@ -135,8 +135,6 @@ Zvolte export, chcete-li je zálohovat, než se odhlásíte.</string>
     <string name="logout">Odhlásit se</string>
     <string name="hs_url">Adresa domácího serveru URL</string>
     <string name="identity_url">Adresa serveru identit URL</string>
-    <string name="user">uživatel</string>
-    <string name="users">uživatelé</string>
     <string name="search">Hledat</string>
 
     <string name="start_new_chat">Začít novou konverzaci</string>

@@ -121,8 +121,6 @@
     <string name="logout">Abmelden</string>
     <string name="hs_url">Home-Server-URL</string>
     <string name="identity_url">Identitätsserver-URL</string>
-    <string name="user">Benutzer</string>
-    <string name="users">Benutzer</string>
     <string name="search">Suchen</string>
 
     <string name="start_new_chat">Neuen Chat starten</string>
@@ -306,12 +304,6 @@ Du möchtest dich evtl. mit einem anderen Account anmelden oder diese E-Mail-Adr
     <string name="room_e2e_alert_title">Achtung!</string>
     <string name="room_e2e_alert_message">Ende-zu-Ende-Verschlüsselung ist im Beta-Stadium und funktioniert möglicherweise nicht zuverlässig.\n\nDu solltest noch nicht darauf vertrauen, dass deine Daten richtig abgesichert werden.\n\nGeräte sind noch nicht in der Lage, den Chatverlauf vor dem Hinzufügen des Geräts zu entschlüsseln.\n\nVerschlüsselte Nachrichten werden auf Geräten, die Verschlüsselung noch nicht implementiert haben, nicht sichtbar sein.</string>
 
-    <!--  Time -->
-    <string name="format_time_s">s</string>
-    <string name="format_time_m">m</string>
-    <string name="format_time_h">h</string>
-    <string name="format_time_d">d</string>
-
     <!--  Chat participants -->
     <string name="room_participants_leave_prompt_title">Raum verlassen</string>
     <string name="room_participants_leave_prompt_msg">Bist du sicher, dass du den Raum verlassen möchtest?</string>
@@ -321,8 +313,6 @@ Du möchtest dich evtl. mit einem anderen Account anmelden oder diese E-Mail-Adr
     <string name="room_participants_online">Online</string>
     <string name="room_participants_offline">Offline</string>
     <string name="room_participants_idle">Untätig</string>
-    <string name="room_participants_now">jetzt</string>
-    <string name="room_participants_ago">zuvor</string>
 
     <string name="room_participants_header_admin_tools">ADMIN-WERKZEUGE</string>
     <string name="room_participants_header_call">ANRUFE</string>
@@ -393,7 +383,6 @@ Bist du sicher?</string>
     <string name="room_details_people">Personen</string>
     <string name="room_details_files">Dateien</string>
     <string name="room_details_settings">Einstellungen</string>
-    <string name="room_details_selected">ausgewählt</string>
     <string name="malformed_id">Ungültige ID. Eine E-Mail-Adresse oder eine Matrix-ID (\'@localpart:domain\') ist erforderlich</string>
     <string name="room_details_people_invited_group_name">EINGELADEN</string>
     <string name="room_details_people_present_group_name">TEILNEHMER</string>
@@ -875,11 +864,7 @@ Unbekannte Geräte:</string>
     <string name="filter_group_members">Filter Gruppen-Mitglieder</string>
     <string name="filter_group_rooms">Filter Gruppen-Räume</string>
 
-    <string name="group_one_member">1 Mitglied</string>
-    <string name="group_members">%d Mitglieder</string>
-
     <string name="group_one_room">1 Raum</string>
-    <string name="group_rooms">%d Räume</string>
     <string name="group_no_long_description">Der Community-Administrator hat keine lange Beschreibung für diese Community zur Verfügung gestellt.</string>
 
     <string name="has_been_kicked">Du wurdest von %2$s aus %1$s gekickt</string>

@@ -122,8 +122,6 @@ Selecteer exporteren om de versleutelingssleutels op te slaan voordat je uitlogt
     <string name="logout">Uitloggen</string>
     <string name="hs_url">Thuisserver URL</string>
     <string name="identity_url">Identiteit server URL</string>
-    <string name="user">gebruiker</string>
-    <string name="users">gebruikers</string>
     <string name="search">Zoek</string>
 
     <string name="start_new_chat">Start Nieuwe Chat</string>
@@ -300,12 +298,6 @@ Apparaten kunnen de geschiedenis van voordat ze de ruimte betraden nog niet onts
 
 Versleutelde berichten zullen nog niet zichtbaar zijn op programma\'s die geen versleuteling ondersteunen.</string>
 
-    <!--  Time -->
-    <string name="format_time_s">s</string>
-    <string name="format_time_m">m</string>
-    <string name="format_time_h">u</string>
-    <string name="format_time_d">d</string>
-
     <!--  Chat participants -->
     <string name="room_participants_leave_prompt_title">Ruimte verlaten</string>
     <string name="room_participants_leave_prompt_msg">Weet je zeker dat je de ruimte wilt verlaten?</string>
@@ -315,8 +307,6 @@ Versleutelde berichten zullen nog niet zichtbaar zijn op programma\'s die geen v
     <string name="room_participants_online">Online</string>
     <string name="room_participants_offline">Offline</string>
     <string name="room_participants_idle">Afwezig</string>
-    <string name="room_participants_now">nu</string>
-    <string name="room_participants_ago">geleden</string>
 
     <string name="room_participants_header_admin_tools">BEHEERDER GEREEDSCHAPPEN</string>
     <string name="room_participants_header_call">OPROEP</string>
@@ -386,7 +376,6 @@ Versleutelde berichten zullen nog niet zichtbaar zijn op programma\'s die geen v
     <string name="room_details_people">Personen</string>
     <string name="room_details_files">Bestanden</string>
     <string name="room_details_settings">Instellingen</string>
-    <string name="room_details_selected">geselecteerd</string>
     <string name="malformed_id">Incorrecte ID. Het moet een e-mailadres of een Matrix ID moeten zijn dat lijkt op \'@localpart:domein\'</string>
     <string name="room_details_people_invited_group_name">UITGENODIGD</string>
     <string name="room_details_people_present_group_name">TOEGETREDEN</string>
@@ -922,11 +911,7 @@ Je kan het nu, of later, doen vanuit de programma-instellingen.</string>
     <string name="filter_group_members">Groepsleden filteren</string>
     <string name="filter_group_rooms">Groepsruimtes filteren</string>
 
-    <string name="group_one_member">1 lid</string>
-    <string name="group_members">%d leden</string>
-
     <string name="group_one_room">1 ruimte</string>
-    <string name="group_rooms">%d ruimtes</string>
     <string name="group_no_long_description">De gemeenschapsadministrator heeft geen lange beschrijving gegeven voor deze gemeenschap.</string>
 
     <string name="has_been_kicked">Je bent uit %1$s gezet door %2$s</string>

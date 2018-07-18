@@ -202,10 +202,6 @@
     <string name="room_creation_title">دردشة جديدة</string>
     <string name="room_creation_add_member">أضِف عضوا</string>
     <string name="room_e2e_alert_title">تحذير!</string>
-    <string name="format_time_s">ثا</string>
-    <string name="format_time_m">دق</string>
-    <string name="format_time_h">سا</string>
-    <string name="format_time_d">يوم</string>
 
     <string name="room_participants_leave_prompt_title">ترك الغرفة</string>
     <string name="room_participants_leave_prompt_msg">أمتأكّد من ترك الغرفة؟</string>

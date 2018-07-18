@@ -898,16 +898,24 @@ public class VectorUtils {
         String formattedString;
 
         if (secondsInterval < 0) {
-            formattedString = "0" + context.getString(R.string.format_time_s);
+            formattedString = context.getResources().getQuantityString(R.plurals.format_time_s, 0, 0);
         } else {
             if (secondsInterval < 60) {
-                formattedString = secondsInterval + context.getString(R.string.format_time_s);
+                formattedString = context.getResources().getQuantityString(R.plurals.format_time_s,
+                                                                           secondsInterval,
+                                                                           secondsInterval);
             } else if (secondsInterval < 3600) {
-                formattedString = (secondsInterval / 60) + context.getString(R.string.format_time_m);
+                formattedString = context.getResources().getQuantityString(R.plurals.format_time_m,
+                                                                           secondsInterval / 60,
+                                                                           secondsInterval / 60);
             } else if (secondsInterval < 86400) {
-                formattedString = (secondsInterval / 3600) + context.getString(R.string.format_time_h);
+                formattedString = context.getResources().getQuantityString(R.plurals.format_time_h,
+                                                                           secondsInterval / 3600,
+                                                                           secondsInterval / 3600);
             } else {
-                formattedString = (secondsInterval / 86400) + context.getString(R.string.format_time_d);
+                formattedString = context.getResources().getQuantityString(R.plurals.format_time_d,
+                                                                           secondsInterval / 86400,
+                                                                           secondsInterval / 86400);
             }
         }
 

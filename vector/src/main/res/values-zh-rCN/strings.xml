@@ -47,10 +47,6 @@
     <string name="room_creation_title">新的聊天</string>
     <string name="room_creation_add_member">添加成员</string>
     <string name="room_e2e_alert_title">警告！</string>
-    <string name="format_time_s">秒</string>
-    <string name="format_time_m">分钟</string>
-    <string name="format_time_h">小时</string>
-    <string name="format_time_d">天</string>
 
     <string name="room_participants_leave_prompt_title">退出聊天室</string>
     <string name="room_participants_leave_prompt_msg">您确定要退出聊天室吗？</string>
@@ -208,8 +204,6 @@
     <string name="send_bug_report_include_crash_logs">发送崩溃日志</string>
     <string name="send_bug_report_app_crashed">这个应用上次崩溃了。您要发送一个崩溃报告吗？</string>
 
-    <string name="user">用户</string>
-    <string name="users">用户</string>
     <string name="start_voice_call">开始语音通话</string>
     <string name="start_video_call">开始视频通话</string>
 
@@ -287,7 +281,6 @@
     <string name="ssl_could_not_verify">无法验证远程服务器的身份。</string>
     <string name="room_details_title">聊天室详情</string>
     <string name="room_details_settings">设置</string>
-    <string name="room_details_selected">已选择</string>
     <string name="room_details_people_invited_group_name">已邀请</string>
     <string name="room_details_people_present_group_name">已加入</string>
 
@@ -569,8 +562,6 @@
 允许 Riot 访问您的通讯录？</string>
 
     <string name="room_participants_idle">空闲</string>
-    <string name="room_participants_now">现在</string>
-    <string name="room_participants_ago">以前</string>
 
     <string name="people_search_filter_text">仅 Matrix 用户</string>
     <string name="ssl_unexpected_existing_expl">您的手机曾信任的证书已被更改。这<b>非常反常</b>。建议您<b>不要接受</b>此新证书。</string>
@@ -871,11 +862,7 @@
     <string name="filter_group_members">过滤社区成员</string>
     <string name="filter_group_rooms">过滤社区聊天室</string>
 
-    <string name="group_one_member">1 位成员</string>
-    <string name="group_members">%d 位成员</string>
-
     <string name="group_one_room">1 个聊天室</string>
-    <string name="group_rooms">%d 个聊天室</string>
     <string name="has_been_kicked">您已被 %2$s 从 %1$s 中移除</string>
     <string name="has_been_banned">您已被 %2$s 从 %1$s 中封禁</string>
     <string name="reason_colon">理由：%1$s</string>

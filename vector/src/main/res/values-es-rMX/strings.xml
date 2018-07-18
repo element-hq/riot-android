@@ -122,8 +122,6 @@ Seleccione exportar para crear un archivo de respaldo antes de cerrar la sesión
     <string name="logout">Salir</string>
     <string name="hs_url">Enlace de el Servidor</string>
     <string name="identity_url">Enlace del Servidor Entidad</string>
-    <string name="user">usuario</string>
-    <string name="users">usuarios</string>
     <string name="search">Buscar</string>
 
     <string name="start_new_chat">Comenzar chat nuevo</string>
@@ -299,12 +297,6 @@ Los dispositivos no podrán descifrar el historial de la sala desde antes de ent
 
 Mensajes cifrados no serán visibles en cuentas que no implementan el cifrado.</string>
 
-    <!--  Time -->
-    <string name="format_time_s">s</string>
-    <string name="format_time_m">m</string>
-    <string name="format_time_h">h</string>
-    <string name="format_time_d">d</string>
-
     <!--  Chat participants -->
     <string name="room_participants_leave_prompt_title">Salir de la sala</string>
     <string name="room_participants_leave_prompt_msg">¿Estás seguro que quieres salir de la sala?</string>
@@ -314,8 +306,6 @@ Mensajes cifrados no serán visibles en cuentas que no implementan el cifrado.</
     <string name="room_participants_online">Conectado</string>
     <string name="room_participants_offline">Desconectado</string>
     <string name="room_participants_idle">Ocioso</string>
-    <string name="room_participants_now">ahora</string>
-    <string name="room_participants_ago">en el pasado</string>
 
     <string name="room_participants_header_admin_tools">HERRAMIENTAS DE ADMINISTRADOR</string>
     <string name="room_participants_header_call">LLAMAR</string>
@@ -385,7 +375,6 @@ Mensajes cifrados no serán visibles en cuentas que no implementan el cifrado.</
     <string name="room_details_people">Personas</string>
     <string name="room_details_files">Archivos</string>
     <string name="room_details_settings">Configuraciones</string>
-    <string name="room_details_selected">seleccionado</string>
     <string name="malformed_id">Identificación malformada. Debe ser correo electrónico o identificación de Matrix como \'@localpart:domain\'</string>
     <string name="room_details_people_invited_group_name">INVITADO</string>
     <string name="room_details_people_present_group_name">ENTRO</string>

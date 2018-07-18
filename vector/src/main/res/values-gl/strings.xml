@@ -140,8 +140,6 @@ Escolla exportar para facer copia de seguridade das chaves antes de desconectar.
     <string name="logout">Saír</string>
     <string name="hs_url">URL do servidor local</string>
     <string name="identity_url">URL do servidor de identidade</string>
-    <string name="user">usuario</string>
-    <string name="users">usuarios</string>
     <string name="search">Buscar</string>
 
     <string name="start_new_chat">Iniciar conversa</string>
@@ -537,11 +535,7 @@ Pode engadir a dirección de correo na sección de configuración de perfil.</st
     <string name="filter_group_members">Filtrar os membros do grupo</string>
     <string name="filter_group_rooms">Filtrar as salas dos grupos</string>
 
-    <string name="group_one_member">1 membro</string>
-    <string name="group_members">%d membros</string>
-
     <string name="group_one_room">1 sala</string>
-    <string name="group_rooms">%d salas</string>
     <string name="group_no_long_description">O administrador da comunidade non fixo unha descrición longa desta comunidade.</string>
 
     <string name="has_been_kicked">Foi expulsado de %1$s por %2$s</string>

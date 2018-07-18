@@ -113,10 +113,6 @@
     <string name="room_jump_to_first_unread">最初の未読位置へ移動.</string>
 
     <string name="room_e2e_alert_title">警告！</string>
-    <string name="format_time_s">秒</string>
-    <string name="format_time_m">分</string>
-    <string name="format_time_h">時間</string>
-    <string name="format_time_d">日</string>
 
     <string name="room_participants_leave_prompt_title">部屋を退室</string>
     <string name="room_participants_leave_prompt_msg">本当にこの部屋を退室しますか？</string>
@@ -158,8 +154,6 @@
     <string name="room_creation_add_member">参加者を追加</string>
     <string name="room_title_one_member">1名</string>
     <string name="room_participants_remove_prompt_msg">本当に%sさんを退室させますか?</string>
-    <string name="room_participants_now">現在</string>
-    <string name="room_participants_ago">前</string>
 
     <string name="room_participants_header_devices">端末</string>
 
@@ -532,8 +526,6 @@
     <string name="username">ユーザ名</string>
     <string name="hs_url">接続先サーバ URL</string>
     <string name="identity_url">認証サーバ URL</string>
-    <string name="user">ユーザ</string>
-    <string name="users">ユーザ</string>
     <string name="auth_login">ログイン</string>
     <string name="login_mobile_device">携帯端末</string>
 
@@ -658,7 +650,6 @@ Riotアプリがあなたの電話帳へアクセスすることを許可しま�
     <string name="ssl_unexpected_existing_expl">証明書はあなたの電話に信頼されていたものから変更されています。これはきわめて異常な事態です。この新しい証明書は承認しないことを強く推奨します。</string>
     <string name="ssl_expected_existing_expl">証明書は以前信頼されていたものから信頼されていないものへと変更されています。サーバがその証明書を更新した可能性があります。予測されるフィンガープリントを取得するために、サーバの管理者に連絡してください。</string>
     <string name="ssl_only_accept">サーバの管理者が上のフィンガープリントと一致するものを発行した場合に限り、証明書を承認してください。</string>
-    <string name="room_details_selected">選択済</string>
     <string name="malformed_id">不正な形式のIDです。メールアドレスまたは\'@localpart:domain\'のようなMatrix IDを入力してください</string>
     <string name="room_event_action_report_prompt_reason">このコンテンツを報告する理由</string>
     <string name="room_event_action_report_prompt_ignore_user">このユーザによるすべてのメッセージを非表示にしますか？</string>
@@ -829,11 +820,7 @@ Riotアプリがあなたの電話帳へアクセスすることを許可しま�
     <string name="filter_group_members">グループの参加者をフィルタリングする</string>
     <string name="filter_group_rooms">グループの部屋をフィルタリングする</string>
 
-    <string name="group_one_member">1名</string>
-    <string name="group_members">%d名</string>
-
     <string name="group_one_room">1部屋</string>
-    <string name="group_rooms">%d部屋</string>
     <string name="group_no_long_description">管理者はこのコミュニティの詳細を規定していません。</string>
 
     <string name="has_been_kicked">あなたは%2$sによって%1$sから除外されました</string>

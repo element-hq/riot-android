@@ -112,8 +112,6 @@ A kulcsok mentéséhez kijelentkezés előtt válaszd az exportálás opciót.</
     <string name="logout">Kijelentkezés</string>
     <string name="hs_url">Saját szerver URL</string>
     <string name="identity_url">Identitás szerver URL</string>
-    <string name="user">felhasználó</string>
-    <string name="users">felhasználók</string>
     <string name="search">Keresés</string>
 
     <string name="start_new_chat">Új csevegés indítása</string>
@@ -293,11 +291,6 @@ A készülékeid nem lesznek képesek visszafejteni a előzményeid azelőttről
 
 A titkosított üzenetek nem fognak látszódni azokon a klienseken ahol a titkosítás funkció még nem érhető el.</string>
 
-    <string name="format_time_s">mp</string>
-    <string name="format_time_m">p</string>
-    <string name="format_time_h">ó</string>
-    <string name="format_time_d">n</string>
-
     <string name="room_participants_leave_prompt_title">Szoba elhagyása</string>
     <string name="room_participants_leave_prompt_msg">Biztos el akarod hagyni a szobát?</string>
     <string name="room_participants_remove_prompt_msg">Biztos el akarod távolítani %s -t a csevegésből?</string>
@@ -306,8 +299,6 @@ A titkosított üzenetek nem fognak látszódni azokon a klienseken ahol a titko
     <string name="room_participants_online">Online</string>
     <string name="room_participants_offline">Offline</string>
     <string name="room_participants_idle">Tétlen</string>
-    <string name="room_participants_now">most</string>
-    <string name="room_participants_ago">ezelőtt</string>
 
     <string name="room_participants_header_admin_tools">ADMIN ESZKÖZÖK</string>
     <string name="room_participants_header_call">HÍVÁS</string>
@@ -374,7 +365,6 @@ Biztos vagy benne?</string>
     <string name="room_details_people">Résztvevők</string>
     <string name="room_details_files">Fájlok</string>
     <string name="room_details_settings">Beállítások</string>
-    <string name="room_details_selected">kiválasztva</string>
     <string name="malformed_id">Rossz formátumú azonosító. Vagy e-mail cím vagy Matrix azonosító legyen, mint például „@valakivagyok:domainnev”</string>
     <string name="room_details_people_invited_group_name">MEGHÍVOTT</string>
     <string name="room_details_people_present_group_name">CSATLAKOZOTT</string>
@@ -829,11 +819,7 @@ Ismeretlen eszközök:</string>
     <string name="filter_group_members">Csoport tagjai szűrése</string>
     <string name="filter_group_rooms">Csoport szobái szűrése</string>
 
-    <string name="group_one_member">1 tag</string>
-    <string name="group_members">%d felhasználó</string>
-
     <string name="group_one_room">1 szoba</string>
-    <string name="group_rooms">%d szoba</string>
     <string name="group_no_long_description">A közösség adminisztrátora nem adott meg hosszú leírást ehhez a közösséghez.</string>
 
     <string name="has_been_kicked">Ki lettél rúgva innen: %1$s, %2$s által</string>

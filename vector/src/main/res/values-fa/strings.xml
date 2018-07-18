@@ -75,8 +75,6 @@
     <string name="create_account">ثبت نام</string>
     <string name="login">ورود</string>
     <string name="logout">خروج</string>
-    <string name="user">کاربر</string>
-    <string name="users">کاربران</string>
     <string name="search">جستجو</string>
 
     <string name="start_new_chat">شروع گپ جدید</string>

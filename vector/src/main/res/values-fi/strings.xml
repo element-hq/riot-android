@@ -125,8 +125,6 @@ Valitse \"vie\" varmuuskopioidaksesi avaimet ennen uloskirjautumista.</string>
     <string name="logout">Kirjaudu ulos</string>
     <string name="hs_url">Kotipalvelimen URL</string>
     <string name="identity_url">Identiteettipalvelimen URL</string> <!-- ??? -->
-    <string name="user">käyttäjä</string>
-    <string name="users">käyttäjää</string>
     <string name="search">Etsi</string>
 
     <!-- ??? -->
@@ -312,12 +310,6 @@ Laitteet eivät voi näyttää salattuja viestejä ajalta ennen huoneeseen liitt
 
 Salatut viestit eivät näy sovelluksissa, jotka eivät tue salausta.</string> <!-- ??? -->
 
-    <!--  Time -->
-    <string name="format_time_s">" sek"</string>
-    <string name="format_time_m">" min"</string>
-    <string name="format_time_h">t</string>
-    <string name="format_time_d">" pv"</string>
-
     <!--  Chat participants -->
     <string name="room_participants_leave_prompt_title">Poistu huoneesta</string>
     <string name="room_participants_leave_prompt_msg">Haluatko varmasti poistua huoneesta?</string>
@@ -327,8 +319,6 @@ Salatut viestit eivät näy sovelluksissa, jotka eivät tue salausta.</string> <
     <string name="room_participants_online">Online</string>
     <string name="room_participants_offline">Offline</string>
     <string name="room_participants_idle">Poissa</string>
-    <string name="room_participants_now">nyt</string>
-    <string name="room_participants_ago">sitten</string>
 
     <string name="room_participants_header_admin_tools">YLLÄPITÄJÄN TYÖKALUT</string>
     <string name="room_participants_header_call">PUHELUT</string>
@@ -398,9 +388,7 @@ Salatut viestit eivät näy sovelluksissa, jotka eivät tue salausta.</string> <
     <string name="room_details_people">Henkilöt</string>
     <string name="room_details_files">Tiedostot</string>
     <string name="room_details_settings">Asetukset</string>
-    <!-- ??? -->
-    <!-- ??? -->
-    <string name="room_details_selected">valittu</string>
+
     <string name="malformed_id">Epämuotoinen Matrix-ID. Anna sähköpostiosoite tai Matrix-ID (esim.  \'@tunnus:domain\')</string>
     <string name="room_details_people_invited_group_name">KUTSUTUT</string>
     <string name="room_details_people_present_group_name">JÄSENET</string>
@@ -878,11 +866,7 @@ Voit tehdä sen nyt tai myöhemmin sovelluksen asetuksissa.</string>
     <string name="filter_group_members">Suodata ryhmän jäseniä</string>
     <string name="filter_group_rooms">Suodata ryhmän huoneita</string>
 
-    <string name="group_one_member">1 jäsen</string>
-    <string name="group_members">%d jäsentä</string>
-
     <string name="group_one_room">1 huone</string>
-    <string name="group_rooms">%d huonetta</string>
     <string name="group_no_long_description">Yhteisön pääkäyttäjä ei ole antanut pitkää kuvausta yhteisölle.</string>
 
     <string name="has_been_kicked">Sinut poistettiin %1$s käyttäjän %2$s toimesta</string>
