@@ -902,20 +902,20 @@ public class VectorUtils {
         } else {
             if (secondsInterval < 60) {
                 formattedString = context.getResources().getQuantityString(R.plurals.format_time_s,
-                                                                           secondsInterval,
-                                                                           secondsInterval);
+                                                                           (int) secondsInterval,
+                                                                           (int) secondsInterval);
             } else if (secondsInterval < 3600) {
                 formattedString = context.getResources().getQuantityString(R.plurals.format_time_m,
-                                                                           secondsInterval / 60,
-                                                                           secondsInterval / 60);
+                                                                           (int) (secondsInterval / 60),
+                                                                           (int) (secondsInterval / 60));
             } else if (secondsInterval < 86400) {
                 formattedString = context.getResources().getQuantityString(R.plurals.format_time_h,
-                                                                           secondsInterval / 3600,
-                                                                           secondsInterval / 3600);
+                                                                           (int) (secondsInterval / 3600),
+                                                                           (int) (secondsInterval / 3600));
             } else {
                 formattedString = context.getResources().getQuantityString(R.plurals.format_time_d,
-                                                                           secondsInterval / 86400,
-                                                                           secondsInterval / 86400);
+                                                                           (int) (secondsInterval / 86400),
+                                                                           (int) (secondsInterval / 86400));
             }
         }
 
