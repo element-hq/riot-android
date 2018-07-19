@@ -75,20 +75,8 @@ public class MediaPreviewerActivity extends MXCActionBarActivity implements Medi
         configureToolbar();
         final String roomTitle = getIntent().getExtras().getString(EXTRA_ROOM_TITLE);
         getSupportActionBar().setTitle(roomTitle);
-        final List<RoomMediaMessage> sharedDataItems = RoomMediaMessage.listRoomMediaMessages(getIntent());
-        if (sharedDataItems.isEmpty()) {
-            final Uri roomMediaUri = Uri.parse(getIntent().getStringExtra(EXTRA_CAMERA_PICTURE_URI));
-            final RoomMediaMessage roomMediaMessage = new RoomMediaMessage(roomMediaUri);
-            sharedDataItems.add(roomMediaMessage);
-        }
-        final LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false);
-        mPreviewerRecyclerView.setLayoutManager(linearLayoutManager);
-        final MediaPreviewAdapter mediaPreviewAdapter = new MediaPreviewAdapter(sharedDataItems, this);
-        mPreviewerRecyclerView.setAdapter(mediaPreviewAdapter);
-
-        if (!sharedDataItems.isEmpty()) {
-            updatePreview(sharedDataItems.get(0));
-        }
+        final List<RoomMediaMessage> sharedDataItems = getSharedItems();
+        setupRecyclerView(sharedDataItems);
     }
 
     @OnClick(R.id.media_previewer_send_button)
@@ -135,6 +123,25 @@ public class MediaPreviewerActivity extends MXCActionBarActivity implements Medi
                 mPreviewerImageView.setImageResource(R.drawable.filetype_attachment);
             }
         }
+    }
+
+    private void setupRecyclerView(@NonNull final List<RoomMediaMessage> sharedDataItems) {
+        final LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false);
+        mPreviewerRecyclerView.setLayoutManager(linearLayoutManager);
+        final MediaPreviewAdapter mediaPreviewAdapter = new MediaPreviewAdapter(sharedDataItems, this);
+        mPreviewerRecyclerView.setAdapter(mediaPreviewAdapter);
+        final RoomMediaMessage firstRoomMedia = sharedDataItems.get(0);
+        updatePreview(firstRoomMedia);
+    }
+
+    private List<RoomMediaMessage> getSharedItems() {
+        final List<RoomMediaMessage> sharedDataItems = RoomMediaMessage.listRoomMediaMessages(getIntent());
+        if (sharedDataItems.isEmpty()) {
+            final Uri roomMediaUri = Uri.parse(getIntent().getStringExtra(EXTRA_CAMERA_PICTURE_URI));
+            final RoomMediaMessage roomMediaMessage = new RoomMediaMessage(roomMediaUri);
+            sharedDataItems.add(roomMediaMessage);
+        }
+        return sharedDataItems;
     }
 
     private void onVideoPreviewClicked() {

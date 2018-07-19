@@ -26,7 +26,8 @@
         <ImageView
             android:id="@+id/media_previewer_image_view"
             android:layout_width="match_parent"
-            android:layout_height="match_parent" />
+            android:layout_height="match_parent"
+            android:scaleType="centerInside" />
 
         <VideoView
             android:id="@+id/media_previewer_video_view"
