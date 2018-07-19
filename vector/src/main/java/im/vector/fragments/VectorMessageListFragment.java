@@ -97,18 +97,41 @@ public class VectorMessageListFragment extends MatrixMessageListFragment impleme
     private static final String LOG_TAG = VectorMessageListFragment.class.getSimpleName();
 
     public interface VectorMessageListFragmentListener {
+        /**
+         * Display a spinner to warn the user that a back pagination is in progress.
+         */
         void showPreviousEventsLoadingWheel();
 
+        /**
+         * Dismiss the back pagination progress.
+         */
         void hidePreviousEventsLoadingWheel();
 
+        /**
+         * Display a spinner to warn the user that a forward pagination is in progress.
+         */
         void showNextEventsLoadingWheel();
 
+        /**
+         * Dismiss the forward pagination progress.
+         */
         void hideNextEventsLoadingWheel();
 
+        /**
+         * Display a spinner to warn the user that the initialization is in progress.
+         */
         void showMainLoadingWheel();
 
+        /**
+         * Dismiss the initialization spinner.
+         */
         void hideMainLoadingWheel();
 
+        /**
+         * User has selected/unselected an event
+         *
+         * @param currentSelectedEvent the current selected event, or null if no event is selected
+         */
         void onSelectedEventChange(@Nullable Event currentSelectedEvent);
     }
 
