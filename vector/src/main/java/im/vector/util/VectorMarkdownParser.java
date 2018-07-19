@@ -38,6 +38,8 @@ import java.util.TimerTask;
 public class VectorMarkdownParser extends WebView {
     private static final String LOG_TAG = VectorMarkdownParser.class.getSimpleName();
 
+    private final static int MAX_DELAY_TO_WAIT_FOR_WEBVIEW_RESPONSE_MILLIS = 300;
+
     // tell if the parser is properly initialised
     private boolean mIsInitialised = false;
 
@@ -197,7 +199,7 @@ public class VectorMarkdownParser extends WebView {
                         }
                         done();
                     }
-                }, 300);
+                }, MAX_DELAY_TO_WAIT_FOR_WEBVIEW_RESPONSE_MILLIS);
             } catch (Throwable e) {
                 Log.e(LOG_TAG, "## start() : failed to starts " + e.getMessage(), e);
             }
