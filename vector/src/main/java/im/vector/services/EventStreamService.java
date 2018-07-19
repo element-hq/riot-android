@@ -323,7 +323,7 @@ public class EventStreamService extends Service {
     public int onStartCommand(Intent intent, int flags, int startId) {
         // no intent : restarted by Android
         // EXTRA_AUTO_RESTART_ACTION : restarted by the service itself (
-        if ((null == intent) || intent.hasExtra(EXTRA_AUTO_RESTART_ACTION)) {
+        if (null == intent || intent.hasExtra(EXTRA_AUTO_RESTART_ACTION)) {
             boolean restart = false;
 
             if (StreamAction.AUTO_RESTART == mServiceState) {
@@ -884,7 +884,10 @@ public class EventStreamService extends Service {
             case NONE:
                 // The foreground/ sticky notification can be removed
                 NotificationUtils.INSTANCE.cancelNotificationForegroundService(this);
-                stopForeground(true);
+
+                if (getInstance() != null) {
+                    getInstance().stopForeground(true);
+                }
                 break;
             case INITIAL_SYNCING:
                 notification = NotificationUtils.INSTANCE.buildForegroundServiceNotification(this, R.string.notification_sync_in_progress);
@@ -903,7 +906,9 @@ public class EventStreamService extends Service {
 
         if (notification != null) {
             // display the stick foreground notification
-            startForeground(NotificationUtils.NOTIFICATION_ID_FOREGROUND_SERVICE, notification);
+            if (getInstance() != null) {
+                getInstance().startForeground(NotificationUtils.NOTIFICATION_ID_FOREGROUND_SERVICE, notification);
+            }
         }
     }
 
