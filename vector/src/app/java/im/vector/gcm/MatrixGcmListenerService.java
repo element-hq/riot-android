@@ -188,7 +188,7 @@ public class MatrixGcmListenerService extends FirebaseMessagingService {
         Log.d(LOG_TAG, "## onMessageReceived() from FCM");
 
         // Ensure event stream service is started
-        if(EventStreamService.getInstance() == null) {
+        if (EventStreamService.getInstance() == null) {
             CommonActivityUtils.startEventStreamService(this);
         }
 
