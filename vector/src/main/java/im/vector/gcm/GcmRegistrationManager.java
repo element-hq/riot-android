@@ -22,10 +22,11 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.content.pm.PackageInfo;
 import android.net.Uri;
-import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Handler;
 import android.os.Looper;
+import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.text.TextUtils;
 
 import org.matrix.androidsdk.HomeServerConnectionConfig;
@@ -78,7 +79,7 @@ public final class GcmRegistrationManager {
     /**
      * GCM registration interface
      */
-    public interface GCMRegistrationListener {
+    public interface GcmRegistrationListener {
         // GCM is properly registered.
         void onGCMRegistered();
 
@@ -87,20 +88,14 @@ public final class GcmRegistrationManager {
     }
 
     /**
-     * 3rd party server registration interface
+     * 3rd party server registration listener
      */
     public interface ThirdPartyRegistrationListener {
-        // the third party server is registered
-        void onThirdPartyRegistered();
+        // the third party server is successfully registered/unregistered
+        void onSuccess();
 
-        // the third party server registration fails.
-        void onThirdPartyRegistrationFailed();
-
-        // the third party server is unregister
-        void onThirdPartyUnregistered();
-
-        // the third party server unregistration fails
-        void onThirdPartyUnregistrationFailed();
+        // An error occurred
+        void onError();
     }
 
     private String mPusherAppName = null;
@@ -113,14 +108,32 @@ public final class GcmRegistrationManager {
     public List<Pusher> mPushersList = new ArrayList<>();
 
     /**
-     * Registration steps
+     * Registration steps (Note: do not change the order of enum, cause their ordinal are store in the SharedPrefs)
      */
     private enum RegistrationState {
+        /**
+         * GCM is not registered
+         */
         UNREGISTRATED,
+        /**
+         * GCM registration is started
+         */
         GCM_REGISTRATING,
-        GCM_REGISTRED,
+        /**
+         * GCM is registered, but token has not been sent to the Push server
+         */
+        GCM_REGISTERED,
+        /**
+         * GCM token is currently sent to the Push server
+         */
         SERVER_REGISTRATING,
+        /**
+         * GCM token has been sent to the Push server
+         */
         SERVER_REGISTERED,
+        /**
+         * Push servers is currently un registering
+         */
         SERVER_UNREGISTRATING,
     }
 
@@ -134,7 +147,7 @@ public final class GcmRegistrationManager {
     private RegistrationState mRegistrationState;
 
     // defines the GCM registration token
-    private String mRegistrationToken = null;
+    private String mRegistrationToken;
 
     // 3 states : null not initialized (retrieved by flavor)
     private static Boolean mUseGCM;
@@ -168,7 +181,7 @@ public final class GcmRegistrationManager {
                     // test if the server registration / unregistration should be done
                     if (useGCM()) {
                         // test if the user expect having notifications on his device but it was not yet done
-                        if (areDeviceNotificationsAllowed() && (mRegistrationState == RegistrationState.GCM_REGISTRED)) {
+                        if (areDeviceNotificationsAllowed() && (mRegistrationState == RegistrationState.GCM_REGISTERED)) {
                             register(null);
                         } else if (!areDeviceNotificationsAllowed() && (mRegistrationState == RegistrationState.SERVER_REGISTERED)) {
                             unregister(null);
@@ -233,14 +246,7 @@ public final class GcmRegistrationManager {
 
             addSessionsRegistrationListener(new ThirdPartyRegistrationListener() {
                 @Override
-                public void onThirdPartyRegistered() {
-                }
-
-                @Override
-                public void onThirdPartyRegistrationFailed() {
-                }
-
-                private void onGCMUnregistred() {
+                public void onSuccess() {
                     Log.d(LOG_TAG, "resetGCMRegistration : remove the GCM registration token done");
                     clearOldStoredRegistrationToken();
                     mRegistrationToken = null;
@@ -252,13 +258,9 @@ public final class GcmRegistrationManager {
                 }
 
                 @Override
-                public void onThirdPartyUnregistered() {
-                    onGCMUnregistred();
-                }
-
-                @Override
-                public void onThirdPartyUnregistrationFailed() {
-                    onGCMUnregistred();
+                public void onError() {
+                    // Ignore any error
+                    onSuccess();
                 }
             });
 
@@ -266,7 +268,7 @@ public final class GcmRegistrationManager {
         } else if (mRegistrationState == RegistrationState.UNREGISTRATED) {
             Log.d(LOG_TAG, "checkPusherRegistration : try to register to GCM server");
 
-            registerToGCM(new GCMRegistrationListener() {
+            registerToGcm(new GcmRegistrationListener() {
                 @Override
                 public void onGCMRegistered() {
                     Log.d(LOG_TAG, "checkRegistrations : reregistered");
@@ -278,10 +280,10 @@ public final class GcmRegistrationManager {
                     Log.d(LOG_TAG, "checkRegistrations : onPusherRegistrationFailed");
                 }
             });
-        } else if (mRegistrationState == RegistrationState.GCM_REGISTRED) {
+        } else if (mRegistrationState == RegistrationState.GCM_REGISTERED) {
             // register the 3rd party server
             // the server registration might have failed
-            // so ensure that it will be done when the application is debackgrounded.
+            // so ensure that it will be done when the application is de-backgrounded.
             if (useGCM() && areDeviceNotificationsAllowed()) {
                 register(null);
             }
@@ -299,11 +301,11 @@ public final class GcmRegistrationManager {
      *
      * @return the GCM registration token
      */
-    private String getGCMRegistrationToken() {
+    private String getGcmRegistrationToken() {
         String registrationToken = getStoredRegistrationToken();
 
         if (TextUtils.isEmpty(registrationToken)) {
-            Log.d(LOG_TAG, "## getGCMRegistrationToken() : undefined token -> getting a new one");
+            Log.d(LOG_TAG, "## getGcmRegistrationToken() : undefined token -> getting a new one");
             registrationToken = GCMHelper.getRegistrationToken();
         }
         return registrationToken;
@@ -314,78 +316,48 @@ public final class GcmRegistrationManager {
      *
      * @param gcmRegistrationListener the events listener.
      */
-    private void registerToGCM(final GCMRegistrationListener gcmRegistrationListener) {
-        Log.d(LOG_TAG, "registerToGCM with state " + mRegistrationState);
+    private void registerToGcm(final @NonNull GcmRegistrationListener gcmRegistrationListener) {
+        Log.d(LOG_TAG, "registerToGcm with state " + mRegistrationState);
 
         // do not use GCM
         if (!useGCM()) {
             Log.d(LOG_TAG, "registerPusher : GCM is disabled");
 
             // warn the listener
-            if (null != gcmRegistrationListener) {
-                try {
-                    gcmRegistrationListener.onGCMRegistrationFailed();
-                } catch (Exception e) {
-                    Log.e(LOG_TAG, "registerToGCM : onPusherRegistered/onPusherRegistrationFailed failed " + e.getMessage(), e);
-                }
+            try {
+                gcmRegistrationListener.onGCMRegistrationFailed();
+            } catch (Exception e) {
+                Log.e(LOG_TAG, "registerToGcm : onGCMRegistrationFailed failed " + e.getMessage(), e);
             }
             return;
         }
+
         if (mRegistrationState == RegistrationState.UNREGISTRATED) {
             setAndStoreRegistrationState(RegistrationState.GCM_REGISTRATING);
 
+            String token = getGcmRegistrationToken();
+
+            setAndStoreRegistrationState((token != null ? RegistrationState.GCM_REGISTERED : RegistrationState.UNREGISTRATED));
+
+            setAndStoreRegistrationToken(token);
+
+            // warn the listener
             try {
-                new AsyncTask<Void, Void, String>() {
-                    @Override
-                    protected String doInBackground(Void... voids) {
-                        String registrationToken = getGCMRegistrationToken();
-
-                        if (registrationToken != null) {
-                            mRegistrationToken = registrationToken;
-                        }
-
-                        return registrationToken;
-                    }
-
-                    @Override
-                    protected void onPostExecute(String pushKey) {
-                        setAndStoreRegistrationState(((pushKey != null) ? RegistrationState.GCM_REGISTRED : RegistrationState.UNREGISTRATED));
-                        setStoredRegistrationToken(pushKey);
-
-                        // warn the listener
-                        if (null != gcmRegistrationListener) {
-                            try {
-                                if (pushKey != null) {
-                                    gcmRegistrationListener.onGCMRegistered();
-                                } else {
-                                    // stay in GCM_REGISTRATING state
-                                    gcmRegistrationListener.onGCMRegistrationFailed();
-                                }
-                            } catch (Exception e) {
-                                Log.e(LOG_TAG, "registerToGCM : onPusherRegistered/onPusherRegistrationFailed failed " + e.getMessage(), e);
-                            }
-                        }
-
-                        if (mRegistrationState == RegistrationState.GCM_REGISTRED) {
-                            // register the sessions to the 3rd party server
-                            // this setting should be updated from the listener
-                            if (useGCM()) {
-                                register(null);
-                            }
-                        }
-                    }
-                }.execute();
-            } catch (Exception e) {
-                Log.e(LOG_TAG, "## registerToGCM() failed " + e.getMessage(), e);
-                // warn the listener
-                if (null != gcmRegistrationListener) {
-                    try {
-                        gcmRegistrationListener.onGCMRegistrationFailed();
-                    } catch (Exception e2) {
-                        Log.e(LOG_TAG, "registerToGCM : onPusherRegistered/onPusherRegistrationFailed failed " + e2.getMessage(), e2);
-                    }
+                if (mRegistrationToken != null) {
+                    gcmRegistrationListener.onGCMRegistered();
+                } else {
+                    gcmRegistrationListener.onGCMRegistrationFailed();
                 }
-                setAndStoreRegistrationState(RegistrationState.UNREGISTRATED);
+            } catch (Exception e) {
+                Log.e(LOG_TAG, "registerToGcm : onGCMRegistered/onGCMRegistrationFailed failed " + e.getMessage(), e);
+            }
+
+            if (mRegistrationState == RegistrationState.GCM_REGISTERED) {
+                // register the sessions to the 3rd party server
+                // this setting should be updated from the listener
+                if (useGCM()) {
+                    register(null);
+                }
             }
         } else if (mRegistrationState == RegistrationState.GCM_REGISTRATING) {
             // Please wait
@@ -405,32 +377,24 @@ public final class GcmRegistrationManager {
     /**
      * Reset the GCM registration.
      *
-     * @param newToken the new registration token
+     * @param newToken the new registration token, to register again, or null
      */
-    public void resetGCMRegistration(final String newToken) {
+    public void resetGCMRegistration(final @Nullable String newToken) {
         Log.d(LOG_TAG, "resetGCMRegistration");
 
         if (RegistrationState.SERVER_REGISTERED == mRegistrationState) {
-            Log.d(LOG_TAG, "resetGCMRegistration : unregister before retrieving the new GCM key");
+            Log.d(LOG_TAG, "resetGCMRegistration : unregister server before retrieving the new GCM key");
 
             unregister(new ThirdPartyRegistrationListener() {
                 @Override
-                public void onThirdPartyRegistered() {
-                }
-
-                @Override
-                public void onThirdPartyRegistrationFailed() {
-                }
-
-                @Override
-                public void onThirdPartyUnregistered() {
-                    Log.d(LOG_TAG, "resetGCMRegistration : unregistration is done --> start the registration process");
+                public void onSuccess() {
+                    Log.d(LOG_TAG, "resetGCMRegistration : un-registration is done --> start the registration process");
                     resetGCMRegistration(newToken);
                 }
 
                 @Override
-                public void onThirdPartyUnregistrationFailed() {
-                    Log.d(LOG_TAG, "resetGCMRegistration : unregistration failed.");
+                public void onError() {
+                    Log.d(LOG_TAG, "resetGCMRegistration : un-registration failed.");
                 }
             });
         } else {
@@ -480,7 +444,7 @@ public final class GcmRegistrationManager {
 
         Timer relaunchTimer = new Timer();
 
-        // wait 5 seconds before registering
+        // wait 30 seconds before registering
         relaunchTimer.schedule(new TimerTask() {
             @Override
             public void run() {
@@ -489,27 +453,19 @@ public final class GcmRegistrationManager {
 
                     unregister(new ThirdPartyRegistrationListener() {
                         @Override
-                        public void onThirdPartyRegistered() {
-                        }
+                        public void onSuccess() {
+                            Log.d(LOG_TAG, "500 error: unregister success");
 
-                        @Override
-                        public void onThirdPartyRegistrationFailed() {
-                        }
-
-                        @Override
-                        public void onThirdPartyUnregistered() {
-                            Log.d(LOG_TAG, "500 error : onThirdPartyUnregistered");
-
-                            setStoredRegistrationToken(null);
+                            setAndStoreRegistrationToken(null);
                             setAndStoreRegistrationState(RegistrationState.UNREGISTRATED);
                             register(null);
                         }
 
                         @Override
-                        public void onThirdPartyUnregistrationFailed() {
-                            Log.d(LOG_TAG, "500 error : onThirdPartyUnregistrationFailed");
+                        public void onError() {
+                            Log.d(LOG_TAG, "500 error : unregister error");
 
-                            setStoredRegistrationToken(null);
+                            setAndStoreRegistrationToken(null);
                             setAndStoreRegistrationState(RegistrationState.UNREGISTRATED);
                             register(null);
                         }
@@ -518,7 +474,7 @@ public final class GcmRegistrationManager {
                 } else {
                     Log.d(LOG_TAG, "500 error : no GCM key");
 
-                    setStoredRegistrationToken(null);
+                    setAndStoreRegistrationToken(null);
                     setAndStoreRegistrationState(RegistrationState.UNREGISTRATED);
                     register(null);
                 }
@@ -528,35 +484,13 @@ public final class GcmRegistrationManager {
 
 
     /**
-     * Tells if the registration was done with event id only.
-     *
-     * @return true if the registration was done with event Id only
+     * Force sessions registration
      */
     public void onAppResume() {
         if (mRegistrationState == RegistrationState.SERVER_REGISTERED) {
             Log.d(LOG_TAG, "## onAppResume() : force the GCM registration");
 
-            forceSessionsRegistration(new ThirdPartyRegistrationListener() {
-                @Override
-                public void onThirdPartyRegistered() {
-
-                }
-
-                @Override
-                public void onThirdPartyRegistrationFailed() {
-
-                }
-
-                @Override
-                public void onThirdPartyUnregistered() {
-
-                }
-
-                @Override
-                public void onThirdPartyUnregistrationFailed() {
-
-                }
-            });
+            forceSessionsRegistration(null);
         }
     }
 
@@ -566,7 +500,9 @@ public final class GcmRegistrationManager {
      * @param session  the session to register.
      * @param listener the registration listener
      */
-    private void registerToThirdPartyServer(final MXSession session, final boolean append, final ThirdPartyRegistrationListener listener) {
+    private void registerToThirdPartyServer(final MXSession session,
+                                            final boolean append,
+                                            @NonNull final ThirdPartyRegistrationListener listener) {
         // test if the push server registration is allowed
         if (!areDeviceNotificationsAllowed() || !useGCM() || !session.isAlive()) {
             if (!areDeviceNotificationsAllowed()) {
@@ -577,17 +513,15 @@ public final class GcmRegistrationManager {
                 Log.d(LOG_TAG, "registerPusher : GCM is disabled.");
             }
 
-            if (null != listener) {
-                try {
-                    listener.onThirdPartyRegistrationFailed();
-                } catch (Exception e) {
-                    Log.e(LOG_TAG, "registerToThirdPartyServer failed " + e.getMessage(), e);
-                }
+            try {
+                listener.onError();
+            } catch (Exception e) {
+                Log.e(LOG_TAG, "registerToThirdPartyServer failed " + e.getMessage(), e);
             }
 
-            // fallback to the GCM_REGISTRED state
+            // fallback to the GCM_REGISTERED state
             // thus, the client will try again to register with checkRegistrations.
-            setAndStoreRegistrationState(RegistrationState.GCM_REGISTRED);
+            setAndStoreRegistrationState(RegistrationState.GCM_REGISTERED);
 
             return;
         }
@@ -613,28 +547,24 @@ public final class GcmRegistrationManager {
                     public void onSuccess(Void info) {
                         Log.d(LOG_TAG, "registerToThirdPartyServer succeeded");
 
-                        if (null != listener) {
-                            try {
-                                listener.onThirdPartyRegistered();
-                            } catch (Exception e) {
-                                Log.e(LOG_TAG, "onSessionRegistered failed " + e.getMessage(), e);
-                            }
+                        try {
+                            listener.onSuccess();
+                        } catch (Exception e) {
+                            Log.e(LOG_TAG, "onSessionRegistered failed " + e.getMessage(), e);
                         }
                     }
 
                     private void onError(final String message) {
                         Log.e(LOG_TAG, "registerToThirdPartyServer failed" + session.getMyUserId() + " (" + message + ")");
 
-                        // fallback to the GCM_REGISTRED state
+                        // fallback to the GCM_REGISTERED state
                         // thus, the client will try again to register with checkRegistrations.
-                        setAndStoreRegistrationState(RegistrationState.GCM_REGISTRED);
+                        setAndStoreRegistrationState(RegistrationState.GCM_REGISTERED);
 
-                        if (null != listener) {
-                            try {
-                                listener.onThirdPartyRegistrationFailed();
-                            } catch (Exception e) {
-                                Log.e(LOG_TAG, "onThirdPartyRegistrationFailed failed " + e.getMessage(), e);
-                            }
+                        try {
+                            listener.onError();
+                        } catch (Exception e) {
+                            Log.e(LOG_TAG, "onThirdPartyRegistrationFailed failed " + e.getMessage(), e);
                         }
                     }
 
@@ -674,10 +604,10 @@ public final class GcmRegistrationManager {
      * Refresh the pushers list (i.e the devices which expect to have notification).
      *
      * @param sessions the sessions
-     * @param callback the callback;
+     * @param callback the callback
      */
     public void refreshPushersList(List<MXSession> sessions, final ApiCallback<Void> callback) {
-        if ((null != sessions) && (sessions.size() > 0)) {
+        if (null != sessions && !sessions.isEmpty()) {
             getPushersRestClient(sessions.get(0)).getPushers(new ApiCallback<PushersResponse>() {
 
                 @Override
@@ -691,7 +621,7 @@ public final class GcmRegistrationManager {
                         Pusher selfPusher = null;
 
                         for (Pusher pusher : mPushersList) {
-                            if (TextUtils.equals(pusher.pushkey, getGCMRegistrationToken())) {
+                            if (TextUtils.equals(pusher.pushkey, getGcmRegistrationToken())) {
                                 selfPusher = pusher;
                                 break;
                             }
@@ -732,15 +662,16 @@ public final class GcmRegistrationManager {
      *
      * @param listener the listener
      */
-    public void forceSessionsRegistration(final ThirdPartyRegistrationListener listener) {
-        if ((mRegistrationState == RegistrationState.SERVER_REGISTERED) || (mRegistrationState == RegistrationState.GCM_REGISTRED)) {
-            setAndStoreRegistrationState(RegistrationState.GCM_REGISTRED);
+    public void forceSessionsRegistration(@Nullable ThirdPartyRegistrationListener listener) {
+        if (mRegistrationState == RegistrationState.SERVER_REGISTERED
+                || mRegistrationState == RegistrationState.GCM_REGISTERED) {
+            setAndStoreRegistrationState(RegistrationState.GCM_REGISTERED);
 
             register(listener);
         } else {
             if (null != listener) {
                 try {
-                    listener.onThirdPartyRegistrationFailed();
+                    listener.onError();
                 } catch (Exception e) {
                     Log.e(LOG_TAG, "forceSessionsRegistration failed " + e.getMessage(), e);
                 }
@@ -753,47 +684,59 @@ public final class GcmRegistrationManager {
      *
      * @param listener the registration listener.
      */
-    public void register(final ThirdPartyRegistrationListener listener) {
+    public void register(@Nullable final ThirdPartyRegistrationListener listener) {
         Log.d(LOG_TAG, "register with state " + mRegistrationState);
 
         addSessionsRegistrationListener(listener);
 
-        if (mRegistrationState == RegistrationState.GCM_REGISTRATING) {
-            // please wait
-        } else if (mRegistrationState == RegistrationState.SERVER_REGISTRATING) {
-            // please wait
-        } else if (mRegistrationState == RegistrationState.UNREGISTRATED) {
-            Log.d(LOG_TAG, "register unregistrated : try to register again");
+        switch (mRegistrationState) {
+            case UNREGISTRATED:
+                Log.d(LOG_TAG, "register unregistrated : try to register again");
 
-            // if the registration failed
-            // try to register again
-            registerToGCM(new GCMRegistrationListener() {
-                @Override
-                public void onGCMRegistered() {
-                    Log.d(LOG_TAG, "GCM registration failed again : register on server side");
-                    register(listener);
-                }
+                // if the registration failed
+                // try to register again
+                registerToGcm(new GcmRegistrationListener() {
+                    @Override
+                    public void onGCMRegistered() {
+                        Log.d(LOG_TAG, "GCM registration success: register on server side");
+                        register(listener);
+                    }
 
-                @Override
-                public void onGCMRegistrationFailed() {
-                    Log.d(LOG_TAG, "register unregistrated : GCM registration failed again");
-                    dispatchOnThirdPartyRegistrationFailed();
+                    @Override
+                    public void onGCMRegistrationFailed() {
+                        Log.d(LOG_TAG, "GCM registration failed");
+                        dispatchOnThirdPartyError();
+                    }
+                });
+                break;
+            case GCM_REGISTRATING:
+                // please wait
+                break;
+            case GCM_REGISTERED:
+                // check if the notifications must be displayed
+                if (useGCM()
+                        && areDeviceNotificationsAllowed()
+                        && !TextUtils.isEmpty(mRegistrationToken)) {
+                    setAndStoreRegistrationState(RegistrationState.SERVER_REGISTRATING);
+                    registerToThirdPartyServer(new ArrayList<>(Matrix.getInstance(mContext).getSessions()), 0);
+                } else {
+                    dispatchOnThirdPartyError();
                 }
-            });
-        } else if (mRegistrationState == RegistrationState.SERVER_REGISTERED) {
-            Log.e(LOG_TAG, "register : already registred");
-            dispatchOnThirdPartyRegistered();
-        } else if (mRegistrationState != RegistrationState.GCM_REGISTRED) {
-            Log.e(LOG_TAG, "register : invalid state " + mRegistrationState);
-            dispatchOnThirdPartyRegistrationFailed();
-        } else {
-            // check if the notifications must be displayed
-            if (useGCM() && areDeviceNotificationsAllowed() && !TextUtils.isEmpty(mRegistrationToken)) {
-                setAndStoreRegistrationState(RegistrationState.SERVER_REGISTRATING);
-                registerToThirdPartyServer(new ArrayList<>(Matrix.getInstance(mContext).getSessions()), 0);
-            } else {
-                dispatchOnThirdPartyRegistrationFailed();
-            }
+                break;
+            case SERVER_REGISTRATING:
+                // please wait
+                break;
+            case SERVER_REGISTERED:
+                Log.e(LOG_TAG, "register : already registered");
+                // disable the application start on device boot
+                PreferencesManager.setAutoStartOnBoot(mContext, false);
+
+                dispatchOnThirdPartySuccess();
+                break;
+            case SERVER_UNREGISTRATING:
+                Log.e(LOG_TAG, "register : invalid state " + mRegistrationState);
+                dispatchOnThirdPartyError();
+                break;
         }
     }
 
@@ -808,7 +751,11 @@ public final class GcmRegistrationManager {
         if (index >= sessions.size()) {
             Log.d(LOG_TAG, "registerSessions : all the sessions are registered");
             setAndStoreRegistrationState(RegistrationState.SERVER_REGISTERED);
-            dispatchOnThirdPartyRegistered();
+
+            // disable the application start on device boot
+            PreferencesManager.setAutoStartOnBoot(mContext, false);
+
+            dispatchOnThirdPartySuccess();
 
             // get the pushers list
             refreshPushersList(sessions, null);
@@ -826,27 +773,22 @@ public final class GcmRegistrationManager {
 
         final MXSession session = sessions.get(index);
 
-        registerToThirdPartyServer(session, (index > 0), new ThirdPartyRegistrationListener() {
+        registerToThirdPartyServer(session, index > 0, new ThirdPartyRegistrationListener() {
             @Override
-            public void onThirdPartyRegistered() {
-                Log.d(LOG_TAG, "registerSessions : session " + session.getMyUserId() + " is registred");
+            public void onSuccess() {
+                Log.d(LOG_TAG, "registerSessions : session " + session.getMyUserId() + " is registered");
+
+                // Go on with the next index
                 registerToThirdPartyServer(sessions, index + 1);
             }
 
             @Override
-            public void onThirdPartyRegistrationFailed() {
+            public void onError() {
                 Log.d(LOG_TAG, "registerSessions : onSessionRegistrationFailed " + session.getMyUserId());
 
-                setAndStoreRegistrationState(RegistrationState.GCM_REGISTRED);
-                dispatchOnThirdPartyRegistrationFailed();
-            }
-
-            @Override
-            public void onThirdPartyUnregistered() {
-            }
-
-            @Override
-            public void onThirdPartyUnregistrationFailed() {
+                // fallback to the GCM_REGISTERED state
+                setAndStoreRegistrationState(RegistrationState.GCM_REGISTERED);
+                dispatchOnThirdPartyError();
             }
         });
     }
@@ -865,7 +807,7 @@ public final class GcmRegistrationManager {
             // please wait
         } else if (mRegistrationState != RegistrationState.SERVER_REGISTERED) {
             Log.e(LOG_TAG, "unregisterSessions : invalid state " + mRegistrationState);
-            dispatchOnThirdPartyUnregistrationFailed();
+            dispatchOnThirdPartyError();
         } else {
             setAndStoreRegistrationState(RegistrationState.SERVER_UNREGISTRATING);
             unregister(new ArrayList<>(Matrix.getInstance(mContext).getSessions()), 0);
@@ -881,16 +823,16 @@ public final class GcmRegistrationManager {
     private void unregister(final ArrayList<MXSession> sessions, final int index) {
         // reach this end of the list ?
         if (index >= sessions.size()) {
-            setAndStoreRegistrationState(RegistrationState.GCM_REGISTRED);
+            setAndStoreRegistrationState(RegistrationState.GCM_REGISTERED);
 
-            // trigger a registration if the user disabled them while the unregistration was processing
+            // trigger a registration if the user enabled them while the un-registration was processing
             if (useGCM() && areDeviceNotificationsAllowed() && Matrix.hasValidSessions()) {
                 register(null);
             } else {
                 CommonActivityUtils.onGcmUpdate(mContext);
             }
 
-            dispatchOnThirdPartyUnregistered();
+            dispatchOnThirdPartySuccess();
             return;
         }
 
@@ -898,22 +840,14 @@ public final class GcmRegistrationManager {
 
         unregister(session, new ThirdPartyRegistrationListener() {
             @Override
-            public void onThirdPartyRegistered() {
-            }
-
-            @Override
-            public void onThirdPartyRegistrationFailed() {
-            }
-
-            @Override
-            public void onThirdPartyUnregistered() {
+            public void onSuccess() {
                 unregister(sessions, index + 1);
             }
 
             @Override
-            public void onThirdPartyUnregistrationFailed() {
+            public void onError() {
                 setAndStoreRegistrationState(RegistrationState.SERVER_REGISTERED);
-                dispatchOnThirdPartyUnregistrationFailed();
+                dispatchOnThirdPartyError();
             }
         });
     }
@@ -959,7 +893,7 @@ public final class GcmRegistrationManager {
      * @param session  the session.
      * @param listener the listener
      */
-    public void unregister(final MXSession session, final ThirdPartyRegistrationListener listener) {
+    public void unregister(final MXSession session, @Nullable final ThirdPartyRegistrationListener listener) {
         Log.d(LOG_TAG, "unregister " + session.getMyUserId());
 
         getPushersRestClient(session).removeHttpPusher(mRegistrationToken,
@@ -976,9 +910,9 @@ public final class GcmRegistrationManager {
 
                         if (null != listener) {
                             try {
-                                listener.onThirdPartyUnregistered();
+                                listener.onSuccess();
                             } catch (Exception e) {
-                                Log.e(LOG_TAG, "unregister : onThirdPartyUnregistered " + e.getMessage(), e);
+                                Log.e(LOG_TAG, "unregister : onSuccess() " + e.getMessage(), e);
                             }
                         }
                     }
@@ -989,9 +923,9 @@ public final class GcmRegistrationManager {
 
                             if (null != listener) {
                                 try {
-                                    listener.onThirdPartyUnregistrationFailed();
+                                    listener.onError();
                                 } catch (Exception e) {
-                                    Log.e(LOG_TAG, "unregister : onThirdPartyUnregistrationFailed " + e.getMessage(), e);
+                                    Log.e(LOG_TAG, "unregister : onError() " + e.getMessage(), e);
                                 }
                             }
                         }
@@ -1027,7 +961,7 @@ public final class GcmRegistrationManager {
     //================================================================================
 
     /**
-     * Tells if GCM has a push key.
+     * Tells if GCM has a push token.
      */
     public boolean hasRegistrationToken() {
         return null != mRegistrationToken;
@@ -1041,26 +975,26 @@ public final class GcmRegistrationManager {
     }
 
     /**
-     * Tell if GCM is registred i.e. ready to use
+     * Tell if GCM is registered i.e. ready to use
      */
-    public boolean isGCMRegistred() {
-        return (mRegistrationState == RegistrationState.GCM_REGISTRED)
+    public boolean isGcmRegistered() {
+        return (mRegistrationState == RegistrationState.GCM_REGISTERED)
                 || (mRegistrationState == RegistrationState.SERVER_REGISTRATING)
                 || (mRegistrationState == RegistrationState.SERVER_REGISTERED);
     }
 
     /**
-     * Tells if the GCM is registrered on server
+     * Tells if the GCM is registered on server
      */
-    public boolean isServerRegistred() {
+    public boolean isServerRegistered() {
         return mRegistrationState == RegistrationState.SERVER_REGISTERED;
     }
 
     /**
-     * Tells if the GCM is unregistrered on server
+     * Tells if the GCM is unregistered on server
      */
-    public boolean isServerUnRegistred() {
-        return mRegistrationState == RegistrationState.GCM_REGISTRED;
+    public boolean isServerUnRegistered() {
+        return mRegistrationState == RegistrationState.GCM_REGISTERED;
     }
 
     //================================================================================
@@ -1254,7 +1188,7 @@ public final class GcmRegistrationManager {
      * @return true if the application can be restarted in background
      */
     public boolean canStartAppInBackground() {
-        return isBackgroundSyncAllowed() || (null != getStoredRegistrationToken());
+        return isBackgroundSyncAllowed() || null != getStoredRegistrationToken();
     }
 
     /**
@@ -1370,8 +1304,10 @@ public final class GcmRegistrationManager {
      *
      * @param registrationToken the registration token
      */
-    private void setStoredRegistrationToken(String registrationToken) {
+    private void setAndStoreRegistrationToken(String registrationToken) {
         Log.d(LOG_TAG, "Saving registration token");
+
+        mRegistrationToken = registrationToken;
 
         getGcmSharedPreferences()
                 .edit()
@@ -1412,35 +1348,20 @@ public final class GcmRegistrationManager {
      * @param clearRegistrationToken true to clear the provided GCM token
      * @param callback               the asynchronous callback
      */
-    public void clearGCMData(final boolean clearRegistrationToken, final ApiCallback callback) {
+    public void clearGCMData(boolean clearRegistrationToken, @NonNull ApiCallback<Void> callback) {
         try {
-            new AsyncTask<Void, Void, Void>() {
-                @Override
-                protected Void doInBackground(Void... voids) {
-                    setStoredRegistrationToken(null);
-                    mRegistrationToken = null;
-                    setAndStoreRegistrationState(RegistrationState.UNREGISTRATED);
+            setAndStoreRegistrationToken(null);
+            setAndStoreRegistrationState(RegistrationState.UNREGISTRATED);
 
-                    if (clearRegistrationToken) {
-                        GCMHelper.clearRegistrationToken();
-                    }
-                    return null;
-                }
+            if (clearRegistrationToken) {
+                GCMHelper.clearRegistrationToken();
+            }
 
-                @Override
-                protected void onPostExecute(Void nothing) {
-                    if (null != callback) {
-                        callback.onSuccess(null);
-                    }
-
-                }
-            }.execute();
+            callback.onSuccess(null);
         } catch (Exception e) {
             Log.e(LOG_TAG, "## clearGCMData failed " + e.getMessage(), e);
 
-            if (null != callback) {
-                callback.onUnexpectedError(e);
-            }
+            callback.onUnexpectedError(e);
         }
     }
 
@@ -1455,7 +1376,7 @@ public final class GcmRegistrationManager {
      */
     private void addSessionsRegistrationListener(final ThirdPartyRegistrationListener listener) {
         synchronized (this) {
-            if ((null != listener) && (mThirdPartyRegistrationListeners.indexOf(listener) == -1)) {
+            if (null != listener && !mThirdPartyRegistrationListeners.contains(listener)) {
                 mThirdPartyRegistrationListeners.add(listener);
             }
         }
@@ -1464,16 +1385,13 @@ public final class GcmRegistrationManager {
     /**
      * Dispatch the onThirdPartyRegistered to the listeners.
      */
-    private void dispatchOnThirdPartyRegistered() {
-        // disable the application start on device boot
-        PreferencesManager.setAutoStartOnBoot(mContext, false);
-
+    private void dispatchOnThirdPartySuccess() {
         synchronized (this) {
             for (ThirdPartyRegistrationListener listener : mThirdPartyRegistrationListeners) {
                 try {
-                    listener.onThirdPartyRegistered();
+                    listener.onSuccess();
                 } catch (Exception e) {
-                    Log.e(LOG_TAG, "onSessionsRegistered " + e.getMessage(), e);
+                    Log.e(LOG_TAG, "dispatchOnThirdPartySuccess " + e.getMessage(), e);
                 }
             }
 
@@ -1484,47 +1402,13 @@ public final class GcmRegistrationManager {
     /**
      * Dispatch the onThirdPartyRegistrationFailed to the listeners.
      */
-    private void dispatchOnThirdPartyRegistrationFailed() {
+    private void dispatchOnThirdPartyError() {
         synchronized (this) {
             for (ThirdPartyRegistrationListener listener : mThirdPartyRegistrationListeners) {
                 try {
-                    listener.onThirdPartyRegistrationFailed();
+                    listener.onError();
                 } catch (Exception e) {
-                    Log.e(LOG_TAG, "onSessionsRegistrationFailed " + e.getMessage(), e);
-                }
-            }
-
-            mThirdPartyRegistrationListeners.clear();
-        }
-    }
-
-    /**
-     * Dispatch the onThirdPartyUnregistered to the listeners.
-     */
-    private void dispatchOnThirdPartyUnregistered() {
-        synchronized (this) {
-            for (ThirdPartyRegistrationListener listener : mThirdPartyRegistrationListeners) {
-                try {
-                    listener.onThirdPartyUnregistered();
-                } catch (Exception e) {
-                    Log.e(LOG_TAG, "onSessionUnregistered " + e.getMessage(), e);
-                }
-            }
-
-            mThirdPartyRegistrationListeners.clear();
-        }
-    }
-
-    /**
-     * Dispatch the onThirdPartyUnregistrationFailed to the listeners.
-     */
-    private void dispatchOnThirdPartyUnregistrationFailed() {
-        synchronized (this) {
-            for (ThirdPartyRegistrationListener listener : mThirdPartyRegistrationListeners) {
-                try {
-                    listener.onThirdPartyUnregistrationFailed();
-                } catch (Exception e) {
-                    Log.e(LOG_TAG, "dispatchOnThirdPartyUnregistrationFailed " + e.getMessage(), e);
+                    Log.e(LOG_TAG, "dispatchOnThirdPartyError " + e.getMessage(), e);
                 }
             }
 

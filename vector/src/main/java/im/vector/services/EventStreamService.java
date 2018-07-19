@@ -818,7 +818,7 @@ public class EventStreamService extends Service {
         return (!mGcmRegistrationManager.useGCM() ||
                 // the GCM registration was not done
                 TextUtils.isEmpty(mGcmRegistrationManager.getCurrentRegistrationToken())
-                        && !mGcmRegistrationManager.isServerRegistred())
+                        && !mGcmRegistrationManager.isServerRegistered())
                 && mGcmRegistrationManager.isBackgroundSyncAllowed()
                 && mGcmRegistrationManager.areDeviceNotificationsAllowed();
     }
