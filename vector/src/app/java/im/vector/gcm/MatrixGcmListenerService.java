@@ -145,23 +145,23 @@ public class MatrixGcmListenerService extends FirebaseMessagingService {
             // check if the application has been launched once
             // the first GCM event could have been triggered whereas the application is not yet launched.
             // so it is required to create the sessions and to start/resume event stream
-            if (!mCheckLaunched && (null != Matrix.getInstance(getApplicationContext()).getDefaultSession())) {
+            if (!mCheckLaunched && null != Matrix.getInstance(getApplicationContext()).getDefaultSession()) {
                 CommonActivityUtils.startEventStreamService(this);
                 mCheckLaunched = true;
             }
 
             // check if the event was not yet received
             // a previous catchup might have already retrieved the notified event
-            if ((null != eventId) && (null != roomId)) {
+            if (null != eventId && null != roomId) {
                 try {
                     Collection<MXSession> sessions = Matrix.getInstance(getApplicationContext()).getSessions();
 
-                    if ((null != sessions) && (sessions.size() > 0)) {
+                    if (null != sessions && !sessions.isEmpty()) {
                         for (MXSession session : sessions) {
                             if (session.getDataHandler().getStore().isReady()) {
                                 if (null != session.getDataHandler().getStore().getEvent(eventId, roomId)) {
                                     Log.e(LOG_TAG, "## onMessageReceivedInternal() : ignore the event " + eventId
-                                            + " in room " + roomId + "because it is already known");
+                                            + " in room " + roomId + " because it is already known");
                                     return;
                                 }
                             }
@@ -186,6 +186,11 @@ public class MatrixGcmListenerService extends FirebaseMessagingService {
     @Override
     public void onMessageReceived(RemoteMessage message) {
         Log.d(LOG_TAG, "## onMessageReceived() from FCM");
+
+        // Ensure event stream service is started
+        if(EventStreamService.getInstance() == null) {
+            CommonActivityUtils.startEventStreamService(this);
+        }
 
         final Map<String, String> data = message.getData();
 

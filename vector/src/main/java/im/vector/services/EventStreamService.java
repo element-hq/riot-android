@@ -1210,13 +1210,36 @@ public class EventStreamService extends Service {
                 notifiedLine.setSpan(new StyleSpan(android.graphics.Typeface.BOLD), 0, header.length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
 
                 mBackgroundNotificationStrings.add(0, notifiedLine);
-                getInstance().displayMessagesNotification(mBackgroundNotificationStrings, new BingRule(null, null, true, true, true));
+                displayMessagesNotificationStatic(context, mBackgroundNotificationStrings, new BingRule(null, null, true, true, true));
             }
         } else if (0 == unreadMessagesCount) {
             mBackgroundNotificationStrings.clear();
             mLastBackgroundNotificationUnreadCount = 0;
             mLastBackgroundNotificationRoomId = null;
-            getInstance().displayMessagesNotification(null, null);
+            displayMessagesNotificationStatic(context, null, null);
+        }
+    }
+
+    /**
+     * Display a list of messages in the messages notification, when the EventStreamService is not started.
+     *
+     * @param messages the messages list, null will hide the messages notification.
+     * @param rule     the bing rule to use
+     */
+    private static void displayMessagesNotificationStatic(Context context, List<CharSequence> messages, BingRule rule) {
+        if (!Matrix.getInstance(context).getSharedGCMRegistrationManager().areDeviceNotificationsAllowed()
+                || null == messages
+                || messages.isEmpty()) {
+            NotificationUtils.INSTANCE.cancelNotificationMessage(context);
+            RoomsNotifications.deleteCachedRoomNotifications(VectorApp.getInstance());
+        } else {
+            Notification notification = NotificationUtils.INSTANCE.buildMessagesListNotification(context, messages, rule);
+
+            if (null != notification) {
+                NotificationUtils.INSTANCE.showNotificationMessage(context, notification);
+            } else {
+                NotificationUtils.INSTANCE.cancelNotificationMessage(context);
+            }
         }
     }
 
