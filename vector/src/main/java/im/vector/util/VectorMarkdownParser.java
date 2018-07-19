@@ -33,7 +33,7 @@ import java.util.TimerTask;
 
 /**
  * Markdown parser.
- * This class uses a webview.
+ * This class uses a WebView.
  */
 public class VectorMarkdownParser extends WebView {
     private static final String LOG_TAG = VectorMarkdownParser.class.getSimpleName();

@@ -20,11 +20,10 @@
             tools:visibility="visible" />
 
         <android.support.v7.widget.Toolbar
-            android:id="@+id/room_toolbar"
+            android:id="@+id/toolbar"
             style="@style/VectorToolbarStyle"
             android:layout_width="match_parent"
             android:layout_height="?attr/actionBarSize"
-            android:layout_alignParentTop="true"
             android:background="?attr/primary_color"
             app:contentInsetEnd="0dp"
             app:contentInsetStart="0dp">
