@@ -479,7 +479,7 @@ public class CallsManager {
         if ((null != mActiveCall) && !hasActiveCall) {
             Log.e(LOG_TAG, "## checkDeadCalls() : fix an infinite ringing");
 
-            if (null != EventStreamService.getInstance()) {
+            if (EventStreamService.getInstance() != null) {
                 EventStreamService.getInstance().hideCallNotifications();
             }
 

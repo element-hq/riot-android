@@ -30,6 +30,7 @@ import android.os.HandlerThread;
 import android.os.IBinder;
 import android.os.PowerManager;
 import android.os.SystemClock;
+import android.support.annotation.Nullable;
 import android.text.Spannable;
 import android.text.SpannableString;
 import android.text.TextUtils;
@@ -85,6 +86,7 @@ public class EventStreamService extends Service {
     /**
      * static instance
      */
+    @Nullable
     private static EventStreamService mActiveEventStreamService = null;
 
     /**
@@ -197,6 +199,7 @@ public class EventStreamService extends Service {
     /**
      * @return the event stream instance
      */
+    @Nullable
     public static EventStreamService getInstance() {
         return mActiveEventStreamService;
     }
@@ -543,7 +546,8 @@ public class EventStreamService extends Service {
      * @return true if the service is stopped.
      */
     public static boolean isStopped() {
-        return (null == getInstance()) || (getInstance().mServiceState == StreamAction.STOP);
+        return getInstance() == null
+                || getInstance().mServiceState == StreamAction.STOP;
     }
 
     /**
@@ -661,7 +665,7 @@ public class EventStreamService extends Service {
         Log.d(LOG_TAG, "## start : start the service");
 
         // release previous instance
-        if ((null != mActiveEventStreamService) && (this != mActiveEventStreamService)) {
+        if (null != mActiveEventStreamService && this != mActiveEventStreamService) {
             mActiveEventStreamService.stop();
         }
 
@@ -1149,8 +1153,12 @@ public class EventStreamService extends Service {
      * @param senderDisplayName   the sender display name
      * @param unreadMessagesCount the unread messages count
      */
-    public static void onStaticNotifiedEvent(Context context, Event event, String roomName, String senderDisplayName, int unreadMessagesCount) {
-        if ((null != event) && !mBackgroundNotificationEventIds.contains(event.eventId)) {
+    public static void onStaticNotifiedEvent(Context context,
+                                             @Nullable Event event,
+                                             String roomName,
+                                             String senderDisplayName,
+                                             int unreadMessagesCount) {
+        if (null != event && !mBackgroundNotificationEventIds.contains(event.eventId)) {
             mBackgroundNotificationEventIds.add(event.eventId);
             String header = (TextUtils.isEmpty(roomName) ? "" : roomName + ": ");
             String text;
