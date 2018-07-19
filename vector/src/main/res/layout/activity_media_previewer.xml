@@ -1,80 +1,78 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/riot_primary_background_color_black">
-
-    <ImageView
-        android:id="@+id/image_previewer"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_centerInParent="true"
-        android:scaleType="fitCenter"
-        android:visibility="visible"/>
-
-    <VideoView
-        android:id="@+id/video_previewer"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_centerInParent="true"
-        android:scaleType="fitCenter"
-        android:visibility="visible"/>
-
-    <WebView
-        android:id="@+id/web_previewer"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_centerInParent="true"
-        android:visibility="visible"/>
-
-    <ImageView
-        android:id="@+id/file_previewer"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_centerInParent="true"
-        android:scaleType="fitCenter"
-        android:visibility="visible"
-        android:src="@drawable/filetype_attachment"/>
-
-    <android.support.v7.widget.RecyclerView
-        android:id="@+id/images_preview"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:background="@color/transparent_dark"
-        android:padding="5dip"/>
-
-    <TextView
-        android:id="@+id/file_name"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_above="@id/images_preview"
-        android:textAlignment="center"
-        android:textColor="@color/default_text_dark_color_dark"/>
-
-    <android.support.design.widget.FloatingActionButton
-        android:id="@+id/send_floating_action_button"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:layout_alignParentEnd="true"
-        android:layout_alignParentRight="true"
-        android:layout_margin="16dip"
-        android:src="@drawable/ic_material_send_white"/>
-
-    <!-- Height will be adjusted at Runtime. -->
-    <View
-        android:id="@+id/status_bar_background"
-        android:layout_width="match_parent"
-        android:layout_height="8dp"/>
 
     <android.support.v7.widget.Toolbar
         android:id="@+id/toolbar"
         style="@style/VectorToolbarStyle"
         android:layout_width="match_parent"
         android:layout_height="?attr/actionBarSize"
-        android:layout_below="@id/status_bar_background"
-        android:background="@color/transparent_dark"/>
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
-</RelativeLayout>
+    <FrameLayout
+        android:id="@+id/media_previewer_container"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        app:layout_constraintBottom_toTopOf="@+id/media_previewer_list"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/toolbar">
+
+        <ImageView
+            android:id="@+id/media_previewer_image_view"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:scaleType="centerInside" />
+
+        <VideoView
+            android:id="@+id/media_previewer_video_view"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_gravity="center" />
+    </FrameLayout>
+
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/media_previewer_list"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="8dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginLeft="8dp"
+        android:layout_marginRight="8dp"
+        android:layout_marginStart="8dp"
+        android:background="@color/transparent_dark"
+        android:padding="8dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <TextView
+        android:id="@+id/media_previewer_file_name"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/transparent_dark"
+        android:padding="8dp"
+        android:textAlignment="center"
+        android:textColor="@color/default_text_dark_color_dark"
+        app:layout_constraintBottom_toTopOf="@+id/media_previewer_list"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <android.support.design.widget.FloatingActionButton
+        android:id="@+id/media_previewer_send_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="8dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginRight="8dp"
+        android:src="@drawable/ic_material_send_white"
+        app:layout_constraintBottom_toTopOf="@+id/media_previewer_list"
+        app:layout_constraintEnd_toEndOf="@+id/media_previewer_container" />
+
+
+</android.support.constraint.ConstraintLayout>
