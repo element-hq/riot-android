@@ -263,7 +263,8 @@
                         android:background="@android:color/transparent"
                         android:dropDownAnchor="@+id/room_sending_message_layout"
                         android:hint="@string/room_message_placeholder_not_encrypted"
-                        android:inputType="textCapSentences|textMultiLine"
+                        android:imeOptions="actionDone"
+                        android:inputType="textCapSentences|textImeMultiLine"
                         android:maxHeight="160dp"
                         android:textColor="?attr/riot_primary_text_color"
                         android:textColorHint="?attr/default_text_hint_color"
@@ -424,5 +425,4 @@
             android:indeterminate="true" />
 
     </RelativeLayout>
-
 </RelativeLayout>

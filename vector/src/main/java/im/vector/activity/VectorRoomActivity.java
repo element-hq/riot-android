@@ -721,6 +721,23 @@ public class VectorRoomActivity extends MXCActionBarActivity implements
             }
         });
 
+        mEditText.setOnKeyListener(new View.OnKeyListener() {
+            @Override
+            public boolean onKey(View v, int keyCode, KeyEvent event) {
+                if (event.getAction() == KeyEvent.ACTION_DOWN) {
+                    switch (keyCode) {
+                        case KeyEvent.KEYCODE_DPAD_CENTER:
+                        case KeyEvent.KEYCODE_ENTER:
+                            sendTextMessage();
+                            return true;
+                        default:
+                            break;
+                    }
+                }
+                return false;
+            }
+        });
+
         mEditText.setAddColonOnFirstItem(true);
 
         mEditText.addTextChangedListener(new TextWatcher() {
@@ -4044,5 +4061,3 @@ public class VectorRoomActivity extends MXCActionBarActivity implements
         }
     }
 }
-
-
