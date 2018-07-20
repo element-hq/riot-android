@@ -88,33 +88,6 @@ public class VectorUtils {
     public static final int TAKE_IMAGE = 1;
 
     //==============================================================================================================
-    // permalink methods
-    //==============================================================================================================
-
-    /**
-     * Provides a permalink for a room id and an eventId.
-     * The eventId is optional.
-     *
-     * @param roomIdOrAlias the room id or alias.
-     * @param eventId       the event id (optional)
-     * @return the permalink
-     */
-    public static String getPermalink(String roomIdOrAlias, String eventId) {
-        if (TextUtils.isEmpty(roomIdOrAlias)) {
-            return null;
-        }
-
-        String link = "https://matrix.to/#/" + roomIdOrAlias;
-
-        if (!TextUtils.isEmpty(eventId)) {
-            link += "/" + eventId;
-        }
-
-        // the $ character is not as a part of an url so escape it.
-        return link.replace("$", "%24");
-    }
-
-    //==============================================================================================================
     // Clipboard helper
     //==============================================================================================================
 

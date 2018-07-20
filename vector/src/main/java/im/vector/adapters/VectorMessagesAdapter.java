@@ -112,7 +112,7 @@ public class VectorMessagesAdapter extends AbstractMessagesAdapter {
     private static final String LOG_TAG = VectorMessagesAdapter.class.getSimpleName();
 
     // an event is selected when the user taps on it
-    private String mSelectedEventId;
+    private Event mSelectedEvent;
 
     // events listeners
     IMessagesAdapterActionsListener mVectorMessagesAdapterEventsListener = null;
@@ -877,17 +877,21 @@ public class VectorMessagesAdapter extends AbstractMessagesAdapter {
     /**
      * Toggle the selection mode.
      *
-     * @param eventId the tapped eventID.
+     * @param event the tapped event.
      */
-    public void onEventTap(String eventId) {
+    public void onEventTap(Event event) {
         // the tap to select is only enabled when the adapter is not in search mode.
         if (!mIsSearchMode) {
-            if (null == mSelectedEventId) {
-                mSelectedEventId = eventId;
+            if (null == mSelectedEvent) {
+                mSelectedEvent = event;
             } else {
-                mSelectedEventId = null;
+                mSelectedEvent = null;
             }
             notifyDataSetChanged();
+
+            if (mVectorMessagesAdapterEventsListener != null) {
+                mVectorMessagesAdapterEventsListener.onSelectedEventChange(mSelectedEvent);
+            }
         }
     }
 
@@ -905,9 +909,13 @@ public class VectorMessagesAdapter extends AbstractMessagesAdapter {
      * Cancel the message selection mode
      */
     public void cancelSelectionMode() {
-        if (null != mSelectedEventId) {
-            mSelectedEventId = null;
+        if (null != mSelectedEvent) {
+            mSelectedEvent = null;
             notifyDataSetChanged();
+
+            if (mVectorMessagesAdapterEventsListener != null) {
+                mVectorMessagesAdapterEventsListener.onSelectedEventChange(mSelectedEvent);
+            }
         }
     }
 
@@ -915,7 +923,17 @@ public class VectorMessagesAdapter extends AbstractMessagesAdapter {
      * @return true if there is a selected item.
      */
     public boolean isInSelectionMode() {
-        return null != mSelectedEventId;
+        return null != mSelectedEvent;
+    }
+
+    /**
+     * Get the current selected event or null if no event is selected
+     *
+     * @return the current selected event or null if no event is selected
+     */
+    @Nullable
+    public Event getCurrentSelectedEvent() {
+        return mSelectedEvent;
     }
 
     /**
@@ -1745,7 +1763,7 @@ public class VectorMessagesAdapter extends AbstractMessagesAdapter {
                     event.setIsExpanded(!event.isExpanded());
                     updateHighlightedEventId();
 
-                    if (event.contains(mSelectedEventId)) {
+                    if (mSelectedEvent != null && event.contains(mSelectedEvent.eventId)) {
                         cancelSelectionMode();
                     } else {
                         notifyDataSetChanged();
@@ -1761,8 +1779,8 @@ public class VectorMessagesAdapter extends AbstractMessagesAdapter {
             // display the day separator
             VectorMessagesAdapterHelper.setHeader(convertView, headerMessage(position), position);
 
-            boolean isInSelectionMode = (null != mSelectedEventId);
-            boolean isSelected = TextUtils.equals(event.eventId, mSelectedEventId);
+            boolean isInSelectionMode = (null != mSelectedEvent);
+            boolean isSelected = isInSelectionMode && TextUtils.equals(event.eventId, mSelectedEvent.eventId);
 
             float alpha = (!isInSelectionMode || isSelected) ? 1.0f : 0.2f;
 
@@ -1962,8 +1980,8 @@ public class VectorMessagesAdapter extends AbstractMessagesAdapter {
     private void manageSelectionMode(final View contentView, final Event event, final int msgType) {
         final String eventId = event.eventId;
 
-        boolean isInSelectionMode = (null != mSelectedEventId);
-        boolean isSelected = TextUtils.equals(eventId, mSelectedEventId);
+        boolean isInSelectionMode = (null != mSelectedEvent);
+        boolean isSelected = isInSelectionMode && TextUtils.equals(eventId, mSelectedEvent.eventId);
 
         // display the action icon when selected
         contentView.findViewById(R.id.messagesAdapter_action_image).setVisibility(isSelected ? View.VISIBLE : View.GONE);
@@ -1996,10 +2014,10 @@ public class VectorMessagesAdapter extends AbstractMessagesAdapter {
             contentView.findViewById(R.id.message_timestamp_layout).setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    if (TextUtils.equals(eventId, mSelectedEventId)) {
+                    if (mSelectedEvent != null && TextUtils.equals(eventId, mSelectedEvent.eventId)) {
                         onMessageClick(event, getEventText(contentView, event, msgType), contentView.findViewById(R.id.messagesAdapter_action_anchor));
                     } else {
-                        onEventTap(eventId);
+                        onEventTap(event);
                     }
                 }
             });
@@ -2009,8 +2027,8 @@ public class VectorMessagesAdapter extends AbstractMessagesAdapter {
                 public boolean onLongClick(View v) {
                     if (!mIsSearchMode) {
                         onMessageClick(event, getEventText(contentView, event, msgType), contentView.findViewById(R.id.messagesAdapter_action_anchor));
-                        mSelectedEventId = eventId;
-                        notifyDataSetChanged();
+
+                        onEventTap(event);
                         return true;
                     }
 
@@ -2091,8 +2109,8 @@ public class VectorMessagesAdapter extends AbstractMessagesAdapter {
 
                     if (!mIsSearchMode) {
                         onMessageClick(event, getEventText(contentView, event, msgType), convertView.findViewById(R.id.messagesAdapter_action_anchor));
-                        mSelectedEventId = event.eventId;
-                        notifyDataSetChanged();
+
+                        onEventTap(event);
                         return true;
                     }
                 }
@@ -2610,8 +2628,7 @@ public class VectorMessagesAdapter extends AbstractMessagesAdapter {
                 }
 
                 // disable the selection
-                mSelectedEventId = null;
-                notifyDataSetChanged();
+                cancelSelectionMode();
 
                 return true;
             }

@@ -4,12 +4,14 @@ Changes in Riot 0.8.13 (2018-XX-XX)
 Features:
  - Resurrect performance metrics (#2391)
  - Telemetry to report incidence of UISIs (#2330)
- - Add a previewer for previewing media before sending it into the room (#1742)
+ - Add a previewer for previewing media before sending it into the room (#1742|#2445)
+ - Implements ReplyTo feature (#2390)
 
 Improvements:
  - Piwik: Update the way how stats are reported (#2402)
  - Improve BugReport screen: display a preview of the screenshot (#2318)
  - In the settings, move theme settings just below "language" (#2439)
+ - Improve the display of the sources of the message in the dialog (#2348)
 
 Other changes:
  - Remove dependency to `android-gif-drawable` lib and use Glide to animate logo on Splashscreen (#2421)
@@ -21,6 +23,7 @@ Bugfix:
  - Fix issue when changing device name in the settings (#2416)
  - Fix issue on verifying device, update the wording of the description message (#1067)
  - Messages with code blocks show other HTML as plain text (#2280)
+ - Message with <p> was sometimes not properly formatted (#2275)
 
 Translations:
  -
