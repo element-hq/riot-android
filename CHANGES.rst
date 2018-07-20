@@ -10,6 +10,7 @@ Features:
 Improvements:
  - Piwik: Update the way how stats are reported (#2402)
  - Improve BugReport screen: display a preview of the screenshot (#2318)
+ - In the settings, move theme settings just below "language" (#2439)
  - Improve the display of the sources of the message in the dialog (#2348)
 
 Other changes:
