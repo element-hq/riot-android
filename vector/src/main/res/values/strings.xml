@@ -539,6 +539,10 @@
     <string name="room_settings_forget">Forget</string>
     <string name="room_settings_add_homescreen_shortcut">Add Homescreen Shortcut</string>
 
+    <string name="room_settings_update_notification_rules">The new notification rules will be effective after restarting the application.</string>
+    <string name="restart_app_now">Restart app now</string>
+    <string name="do_not_restart_app">Later</string>
+
     <!-- home sliding menu -->
     <string name="room_sliding_menu_messages">Messages</string>
     <string name="room_sliding_menu_settings">Settings</string>
