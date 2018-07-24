@@ -189,9 +189,6 @@ class VectorSettingsPreferencesFragment : PreferenceFragment(), SharedPreference
     private val mLabsCategory by lazy {
         findPreference(PreferencesManager.SETTINGS_LABS_PREFERENCE_KEY) as PreferenceCategory
     }
-    private val mGroupsFlairCategory by lazy {
-        findPreference(PreferencesManager.SETTINGS_GROUPS_FLAIR_KEY) as PreferenceCategory
-    }
     private val backgroundSyncCategory by lazy {
         findPreference(PreferencesManager.SETTINGS_BACKGROUND_SYNC_PREFERENCE_KEY)
     }
@@ -2606,15 +2603,28 @@ class VectorSettingsPreferencesFragment : PreferenceFragment(), SharedPreference
      * It can be any mobile device, as any browser.
      */
     private fun refreshGroupFlairsList() {
-        // display a spinner while refreshing
-        if (0 == mGroupsFlairCategory.preferenceCount) {
-            val preference = ProgressBarPreference(activity)
-            mGroupsFlairCategory.addPreference(preference)
-        }
 
         mSession.groupsManager.getUserPublicisedGroups(mSession.myUserId, true, object : ApiCallback<Set<String>> {
             override fun onSuccess(publicisedGroups: Set<String>) {
-                buildGroupsList(publicisedGroups)
+                var order = 0
+
+                if (null != mLabsCategory) {
+                    order = mLabsCategory.order
+                }
+
+                val groupFlairCategory = PreferenceCategory(activity)
+                groupFlairCategory.setTitle(R.string.settings_flair)
+                groupFlairCategory.key = PreferencesManager.SETTINGS_GROUPS_FLAIR_KEY
+                groupFlairCategory.order = order + 1
+
+                val dividerCategory = VectorDividerCategory(activity)
+                dividerCategory.order = groupFlairCategory.order - 1
+
+                if (null != publicisedGroups && publicisedGroups.isNotEmpty()) {
+                    preferenceScreen.addItemFromInflater(groupFlairCategory)
+                    preferenceScreen.addItemFromInflater(dividerCategory)
+                    buildGroupsList(publicisedGroups, groupFlairCategory)
+                }
             }
 
             override fun onNetworkError(e: Exception) {
@@ -2636,7 +2646,7 @@ class VectorSettingsPreferencesFragment : PreferenceFragment(), SharedPreference
      *
      * @param publicisedGroups the publicised groups list.
      */
-    private fun buildGroupsList(publicisedGroups: Set<String>) {
+    private fun buildGroupsList(publicisedGroups: Set<String>, groupFlairCategory: PreferenceCategory ) {
         var isNewList = true
 
         if (null != mPublicisedGroups && mPublicisedGroups!!.size == publicisedGroups.size) {
@@ -2651,7 +2661,7 @@ class VectorSettingsPreferencesFragment : PreferenceFragment(), SharedPreference
             mPublicisedGroups = publicisedGroups.toMutableSet()
 
             // clear everything
-            mGroupsFlairCategory.removeAll()
+            groupFlairCategory.removeAll()
 
             for (group in joinedGroups) {
                 val vectorGroupPreference = VectorGroupPreference(activity)
@@ -2663,7 +2673,7 @@ class VectorSettingsPreferencesFragment : PreferenceFragment(), SharedPreference
                 vectorGroupPreference.summary = group.groupId
 
                 vectorGroupPreference.isChecked = publicisedGroups.contains(group.groupId)
-                mGroupsFlairCategory.addPreference(vectorGroupPreference)
+                groupFlairCategory.addPreference(vectorGroupPreference)
 
                 vectorGroupPreference.onPreferenceChangeListener = Preference.OnPreferenceChangeListener { _, newValue ->
                     if (newValue is Boolean) {
