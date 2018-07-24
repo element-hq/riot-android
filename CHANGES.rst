@@ -6,6 +6,7 @@ Features:
  - Telemetry to report incidence of UISIs (#2330)
  - Add a previewer for previewing media before sending it into the room (#1742|#2445)
  - Implements ReplyTo feature (#2390)
+ - Add a setting to allow the user to use the enter key on his keyboard to send message instead of to add a new line (#394)
 
 Improvements:
  - Piwik: Update the way how stats are reported (#2402)
