@@ -1889,7 +1889,6 @@ public class VectorRoomActivity extends MXCActionBarActivity implements
         // check the extras
         if ((0 == sharedDataItems.size()) && (null != intent)) {
             Bundle bundle = intent.getExtras();
-
             // sanity checks
             if (null != bundle) {
                 if (bundle.containsKey(Intent.EXTRA_TEXT)) {
@@ -1904,14 +1903,13 @@ public class VectorRoomActivity extends MXCActionBarActivity implements
                 }
             }
         }
-
         if (PreferencesManager.previewMediaWhenSending(this)) {
             if (null != intent) {
                 intent.setClass(this, MediaPreviewerActivity.class);
             } else {
                 intent = new Intent(this, MediaPreviewerActivity.class);
             }
-
+            intent.setExtrasClassLoader(RoomMediaMessage.class.getClassLoader());
             intent.putExtra(MediaPreviewerActivity.EXTRA_ROOM_TITLE, VectorUtils.getRoomDisplayName(this, mSession, mRoom));
             if (null != mLatestTakePictureCameraUri) {
                 intent.putExtra(MediaPreviewerActivity.EXTRA_CAMERA_PICTURE_URI, mLatestTakePictureCameraUri);
