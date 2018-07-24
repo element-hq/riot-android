@@ -1149,8 +1149,6 @@ public class VectorRoomActivity extends MXCActionBarActivity implements
             mVectorMessageListFragment.setIsRoomEncrypted(mRoom.isEncrypted());
         }
 
-        manageKeyboardOptionsToSendMessage();
-
         manageSendMoreButtons();
 
         updateActionBarTitleAndTopic();
@@ -2323,19 +2321,13 @@ public class VectorRoomActivity extends MXCActionBarActivity implements
      */
     private void manageKeyboardOptionsToSendMessage() {
         if (PreferencesManager.useEnterKeyToSendMessage(this)) {
-            mEditText.setImeOptions(EditorInfo.IME_ACTION_DONE);
-            mEditText.setOnKeyListener(new View.OnKeyListener() {
+            mEditText.setImeOptions(EditorInfo.IME_ACTION_SEND);
+            mEditText.setOnEditorActionListener(new TextView.OnEditorActionListener() {
                 @Override
-                public boolean onKey(View v, int keyCode, KeyEvent event) {
-                    if (event.getAction() == KeyEvent.ACTION_DOWN) {
-                        switch (keyCode) {
-                            case KeyEvent.KEYCODE_DPAD_CENTER:
-                            case KeyEvent.KEYCODE_ENTER:
-                                sendTextMessage();
-                                return true;
-                            default:
-                                break;
-                        }
+                public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
+                    if (actionId  == EditorInfo.IME_ACTION_SEND) {
+                        sendTextMessage();
+                        return true;
                     }
                     return false;
                 }
