@@ -273,6 +273,11 @@
             android:title="@string/settings_labs_native_camera" />
 
         <im.vector.preference.VectorSwitchPreference
+            android:defaultValue="false"
+            android:key="SETTINGS_SEND_MESSAGE_ENTER_KEY"
+            android:title="@string/settings_labs_keyboard_options_to_send_message" />
+
+        <im.vector.preference.VectorSwitchPreference
             android:key="SETTINGS_ENABLE_SEND_VOICE_FEATURE_PREFERENCE_KEY"
             android:title="@string/settings_labs_enable_send_voice" />
 

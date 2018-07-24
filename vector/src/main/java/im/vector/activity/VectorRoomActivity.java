@@ -37,6 +37,7 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AlertDialog;
+import android.text.InputType;
 import android.text.SpannableString;
 import android.text.SpannableStringBuilder;
 import android.text.TextPaint;
@@ -721,22 +722,7 @@ public class VectorRoomActivity extends MXCActionBarActivity implements
             }
         });
 
-        mEditText.setOnKeyListener(new View.OnKeyListener() {
-            @Override
-            public boolean onKey(View v, int keyCode, KeyEvent event) {
-                if (event.getAction() == KeyEvent.ACTION_DOWN) {
-                    switch (keyCode) {
-                        case KeyEvent.KEYCODE_DPAD_CENTER:
-                        case KeyEvent.KEYCODE_ENTER:
-                            sendTextMessage();
-                            return true;
-                        default:
-                            break;
-                    }
-                }
-                return false;
-            }
-        });
+        manageKeyboardOptionsToSendMessage();
 
         mEditText.setAddColonOnFirstItem(true);
 
@@ -767,7 +753,6 @@ public class VectorRoomActivity extends MXCActionBarActivity implements
             public void onTextChanged(CharSequence s, int start, int before, int count) {
             }
         });
-
 
         mMyUserId = mSession.getCredentials().userId;
 
@@ -1163,6 +1148,8 @@ public class VectorRoomActivity extends MXCActionBarActivity implements
             mE2eImageView.setImageResource(canSendEncryptedEvent ? R.drawable.e2e_verified : R.drawable.e2e_unencrypted);
             mVectorMessageListFragment.setIsRoomEncrypted(mRoom.isEncrypted());
         }
+
+        manageKeyboardOptionsToSendMessage();
 
         manageSendMoreButtons();
 
@@ -2327,6 +2314,40 @@ public class VectorRoomActivity extends MXCActionBarActivity implements
             }
         } else {
             Log.w(LOG_TAG, "## onRequestPermissionsResult(): Unknown requestCode =" + aRequestCode);
+        }
+    }
+
+    /**
+     * The user can use enter key on his soft keyboard to add a new line or to send message
+     * depending on the settings he has chosen.
+     */
+    private void manageKeyboardOptionsToSendMessage() {
+        if (PreferencesManager.useEnterKeyToSendMessage(this)) {
+            mEditText.setImeOptions(EditorInfo.IME_ACTION_DONE);
+            mEditText.setOnKeyListener(new View.OnKeyListener() {
+                @Override
+                public boolean onKey(View v, int keyCode, KeyEvent event) {
+                    if (event.getAction() == KeyEvent.ACTION_DOWN) {
+                        switch (keyCode) {
+                            case KeyEvent.KEYCODE_DPAD_CENTER:
+                            case KeyEvent.KEYCODE_ENTER:
+                                sendTextMessage();
+                                return true;
+                            default:
+                                break;
+                        }
+                    }
+                    return false;
+                }
+            });
+        } else {
+            mEditText.setImeOptions(EditorInfo.IME_ACTION_UNSPECIFIED);
+            mEditText.setInputType(InputType.TYPE_TEXT_FLAG_MULTI_LINE);
+            mEditText.setOnKeyListener(null);
+            mEditText.setSingleLine(false);
+            if (mEditText.getText().length() > 0) {
+                mEditText.setText("\n");
+            }
         }
     }
 

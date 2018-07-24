@@ -918,6 +918,7 @@
     <string name="settings_labs_matrix_apps">Matrix Apps</string>
     <string name="room_add_matrix_apps">Add Matrix apps</string>
     <string name="settings_labs_native_camera">Use native camera</string>
+    <string name="settings_labs_keyboard_options_to_send_message">Use keyboard enter key to send message</string>
     <string name="settings_labs_enable_send_voice">Send voice message (requires a third party application to record voice messages)</string>
 
     <!-- share keys -->
