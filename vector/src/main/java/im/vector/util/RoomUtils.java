@@ -689,19 +689,14 @@ public class RoomUtils {
                 .setPositiveButton(R.string.restart_app_now, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                        if (null != EventStreamService.getInstance()) {
-                            EventStreamService.getInstance().stopNow();
-                        }
                         Intent intent = new Intent(context, SplashActivity.class);
                         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                         context.startActivity(intent);
-                        dialog.dismiss();
                     }
                 })
                 .setNegativeButton(R.string.do_not_restart_app, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                        dialog.dismiss();
                     }
                 })
                 .show();
