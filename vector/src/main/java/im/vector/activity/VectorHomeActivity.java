@@ -1817,7 +1817,7 @@ public class VectorHomeActivity extends RiotAppCompatActivity implements SearchV
                     }
 
                     case R.id.sliding_menu_exit: {
-                        if (null != EventStreamService.getInstance()) {
+                        if (EventStreamService.getInstance() != null) {
                             EventStreamService.getInstance().stopNow();
                         }
                         runOnUiThread(new Runnable() {
