@@ -23,6 +23,7 @@ Bugfix:
  - Fix issue on verifying device, update the wording of the description message (#1067)
  - Messages with code blocks show other HTML as plain text (#2280)
  - Message with <p> was sometimes not properly formatted (#2275)
+ - Fix notification issue when Riot is not started (#2451)
 
 Translations:
  -
