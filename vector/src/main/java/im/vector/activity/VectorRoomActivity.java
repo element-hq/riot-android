@@ -801,6 +801,12 @@ public class VectorRoomActivity extends MXCActionBarActivity implements
             @Override
             public void afterTextChanged(android.text.Editable s) {
                 if (null != mRoom) {
+                    if (mEditText.getText().toString().startsWith("@")) {
+                        mEditText.initAutoCompletion(mSession, (null != mRoom) ? mRoom.getRoomId() : null);
+                    } else if (mEditText.getText().toString().startsWith("/")) {
+                        mEditText.initAutoCompletionCommandLine(mSession, null);
+                    }
+
                     MXLatestChatMessageCache latestChatMessageCache = mLatestChatMessageCache;
                     String textInPlace = latestChatMessageCache.getLatestText(VectorRoomActivity.this, mRoom.getRoomId());
 
@@ -1252,7 +1258,8 @@ public class VectorRoomActivity extends MXCActionBarActivity implements
         // to have notifications for this room
         ViewedRoomTracker.getInstance().setViewedRoomId(null);
         ViewedRoomTracker.getInstance().setMatrixId(null);
-        mEditText.initAutoCompletion(mSession, null);
+        //mEditText.initAutoCompletion(mSession, null);
+        //mEditText.initAutoCompletionCommandLine(mSession, null);
     }
 
     @Override
@@ -1388,8 +1395,8 @@ public class VectorRoomActivity extends MXCActionBarActivity implements
         displayE2eRoomAlert();
 
         // init the auto-completion list from the room members
-        mEditText.initAutoCompletion(mSession, (null != mRoom) ? mRoom.getRoomId() : null);
-
+        //mEditText.initAutoCompletion(mSession, (null != mRoom) ? mRoom.getRoomId() : null);
+        //mEditText.initAutoCompletionCommandLine(mSession, (null != mRoom) ? mRoom.getRoomId() : null);
 
         if (mReadMarkerManager != null) {
             mReadMarkerManager.onResume();

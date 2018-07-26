@@ -45,16 +45,21 @@ import java.util.Collection;
 import java.util.List;
 
 import im.vector.R;
+import im.vector.adapters.AutoCompletedCommandLineAdapter;
 import im.vector.adapters.AutoCompletedUserAdapter;
+import im.vector.util.SlashCommandsParser;
 
 /**
  * Custom AppCompatMultiAutoCompleteTextView to display matrix id / displayname
  */
 public class VectorAutoCompleteTextView extends AppCompatMultiAutoCompleteTextView {
+    // TODO verify and update all comments
+
     private static final String LOG_TAG = VectorAutoCompleteTextView.class.getSimpleName();
 
     // results adapter
-    private AutoCompletedUserAdapter mAdapter;
+    private AutoCompletedUserAdapter mAdapterUser;
+    private AutoCompletedCommandLineAdapter mAdapterCommand;
 
     // the pending patter,
     private String mPendingFilter;
@@ -120,6 +125,32 @@ public class VectorAutoCompleteTextView extends AppCompatMultiAutoCompleteTextVi
     }
 
     /**
+     * Build the auto completions list for a room
+     *
+     * @param session the session
+     * @param roomId  the room Id
+     */
+    public void initAutoCompletionCommandLine(MXSession session, String roomId) {
+        List<String> commandLines = new ArrayList<>();
+
+        commandLines.add(SlashCommandsParser.CMD_EMOTE);
+        commandLines.add(SlashCommandsParser.CMD_BAN_USER);
+        commandLines.add(SlashCommandsParser.CMD_UNBAN_USER);
+        commandLines.add(SlashCommandsParser.CMD_SET_USER_POWER_LEVEL);
+        commandLines.add(SlashCommandsParser.CMD_RESET_USER_POWER_LEVEL);
+        commandLines.add(SlashCommandsParser.CMD_INVITE);
+        commandLines.add(SlashCommandsParser.CMD_JOIN_ROOM);
+        commandLines.add(SlashCommandsParser.CMD_PART);
+        commandLines.add(SlashCommandsParser.CMD_TOPIC);
+        commandLines.add(SlashCommandsParser.CMD_KICK_USER);
+        commandLines.add(SlashCommandsParser.CMD_CHANGE_DISPLAY_NAME);
+        commandLines.add(SlashCommandsParser.CMD_MARKDOWN);
+        commandLines.add(SlashCommandsParser.CMD_CLEAR_SCALAR_TOKEN);
+
+        initAutoCompletionCommandLine(session, commandLines);
+    }
+
+    /**
      * Internal method to build the auto completions list.
      *
      * @param session the session
@@ -127,8 +158,8 @@ public class VectorAutoCompleteTextView extends AppCompatMultiAutoCompleteTextVi
      */
     private void initAutoCompletion(MXSession session, Collection<User> users) {
         // build the adapter
-        mAdapter = new AutoCompletedUserAdapter(getContext(), R.layout.item_user_auto_complete, session, users);
-        setAdapter(mAdapter);
+        mAdapterUser = new AutoCompletedUserAdapter(getContext(), R.layout.item_user_auto_complete, session, users);
+        setAdapter(mAdapterUser);
 
         // define the parser
         setTokenizer(new VectorAutoCompleteTokenizer());
@@ -158,13 +189,52 @@ public class VectorAutoCompleteTextView extends AppCompatMultiAutoCompleteTextVi
     }
 
     /**
+     * Internal method to build the auto completions list.
+     *
+     * @param session       the session
+     * @param commandLines  the commands list
+     */
+    private void initAutoCompletionCommandLine(MXSession session, Collection<String> commandLines) {
+        // build the adapter
+        mAdapterCommand = new AutoCompletedCommandLineAdapter(getContext(), R.layout.item_command_auto_complete, session, commandLines);
+        setAdapter(mAdapterCommand);
+
+        // define the parser
+        setTokenizer(new VectorAutoCompleteTokenizer());
+
+        // the minimum number of characters to display the proposals list
+        setThreshold(1);
+
+        // retrieve 2 private members
+        if (null == mPopupCanBeUpdatedField) {
+            try {
+                mPopupCanBeUpdatedField = AutoCompleteTextView.class.getDeclaredField("mPopupCanBeUpdated");
+                mPopupCanBeUpdatedField.setAccessible(true);
+            } catch (Exception e) {
+                Log.e(LOG_TAG, "## initAutoCompletion() : failed to retrieve mPopupCanBeUpdated " + e.getMessage(), e);
+            }
+        }
+
+        if (null == mListPopupWindow) {
+            try {
+                Field popup = AutoCompleteTextView.class.getDeclaredField("mPopup");
+                popup.setAccessible(true);
+                mListPopupWindow = (android.widget.ListPopupWindow) popup.get(this);
+            } catch (Exception e) {
+                Log.e(LOG_TAG, "## initAutoCompletion() : failed to retrieve mListPopupWindow " + e.getMessage(), e);
+            }
+        }
+    }
+
+
+    /**
      * Tells if the pasted text is always the user matrix id
      * even if the matched pattern is a display name.
      *
      * @param provideMatrixIdOnly true to always paste an user Id.
      */
     public void setProvideMatrixIdOnly(boolean provideMatrixIdOnly) {
-        mAdapter.setProvideMatrixIdOnly(provideMatrixIdOnly);
+        mAdapterUser.setProvideMatrixIdOnly(provideMatrixIdOnly);
     }
 
     /**
@@ -177,10 +247,36 @@ public class VectorAutoCompleteTextView extends AppCompatMultiAutoCompleteTextVi
             ViewGroup mMeasureParent = new FrameLayout(getContext());
             View itemView = null;
 
-            final int count = mAdapter.getCount();
+            final int count = mAdapterUser.getCount();
 
             for (int i = 0; i < count; i++) {
-                itemView = mAdapter.getView(i, itemView, mMeasureParent, false);
+                itemView = mAdapterUser.getView(i, itemView, mMeasureParent, false);
+                itemView.measure(MeasureSpec.UNSPECIFIED, MeasureSpec.UNSPECIFIED);
+                maxWidth = Math.max(maxWidth, itemView.getMeasuredWidth());
+            }
+
+            mListPopupWindow.setContentWidth(maxWidth);
+
+            // setDropDownWidth(maxWidth) does not work on some devices
+            // it seems working on android >= 5.1
+            // but it does not on older android platforms
+        }
+    }
+
+    /**
+     * Compute the popup size
+     */
+    private void adjustPopupSizeCommand() {
+        if (null != mListPopupWindow) {
+            int maxWidth = 0;
+
+            ViewGroup mMeasureParent = new FrameLayout(getContext());
+            View itemView = null;
+
+            final int count = mAdapterCommand.getCount();
+
+            for (int i = 0; i < count; i++) {
+                itemView = mAdapterCommand.getView(i, itemView, mMeasureParent);
                 itemView.measure(MeasureSpec.UNSPECIFIED, MeasureSpec.UNSPECIFIED);
                 maxWidth = Math.max(maxWidth, itemView.getMeasuredWidth());
             }
@@ -215,7 +311,10 @@ public class VectorAutoCompleteTextView extends AppCompatMultiAutoCompleteTextVi
                 // check if the inserted becomes was the new first item
                 if ((null != before) && !before.startsWith(text.toString()) &&
                         editableAfter.toString().startsWith(text.toString())) {
-                    editableAfter.replace(0, text.length(), text + ":");
+
+                    if (text.toString().startsWith("@")) {
+                        editableAfter.replace(0, text.length(), text + ":");
+                    }
                 }
             } catch (Exception e) {
                 Log.e(LOG_TAG, "## replaceText() : failed " + e.getMessage(), e);
@@ -253,7 +352,7 @@ public class VectorAutoCompleteTextView extends AppCompatMultiAutoCompleteTextVi
             // save the current written pattern
             mPendingFilter = currentFilter;
 
-            // wait 0.7s before displaying the popup
+            // wait 0.3s before displaying the popup
             new Handler(Looper.getMainLooper()).postDelayed(new Runnable() {
                 @Override
                 public void run() {
@@ -269,16 +368,26 @@ public class VectorAutoCompleteTextView extends AppCompatMultiAutoCompleteTextVi
                             Log.e(LOG_TAG, "## performFiltering() failed " + e.getMessage(), e);
                         }
 
-                        mAdapter.getFilter().filter(subText, new Filter.FilterListener() {
-                            @Override
-                            public void onFilterComplete(int count) {
-                                adjustPopupSize();
-                                VectorAutoCompleteTextView.this.onFilterComplete(count);
-                            }
-                        });
+                        if(subText.toString().startsWith("@")) {
+                            mAdapterUser.getFilter().filter(subText, new Filter.FilterListener() {
+                                @Override
+                                public void onFilterComplete(int count) {
+                                    adjustPopupSize();
+                                    VectorAutoCompleteTextView.this.onFilterComplete(count);
+                                }
+                            });
+                        } else if (subText.toString().startsWith("/")) {
+                            mAdapterCommand.getFilter().filter(subText, new Filter.FilterListener() {
+                                @Override
+                                public void onFilterComplete(int count) {
+                                    adjustPopupSizeCommand();
+                                    VectorAutoCompleteTextView.this.onFilterComplete(count);
+                                }
+                            });
+                        }
                     }
                 }
-            }, 700);
+            }, 300);
         }
     }
 
@@ -327,5 +436,4 @@ public class VectorAutoCompleteTextView extends AppCompatMultiAutoCompleteTextVi
             return text + " ";
         }
     }
-
 }

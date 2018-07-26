@@ -32,6 +32,7 @@ import org.matrix.androidsdk.util.Log;
 
 import java.util.Collection;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import im.vector.R;
@@ -49,34 +50,34 @@ public class SlashCommandsParser {
     public static final String CMD_EMOTE = "/me";
 
     // <user-id> [reason]
-    private static final String CMD_BAN_USER = "/ban";
+    public static final String CMD_BAN_USER = "/ban";
 
     // <user-id>'
-    private static final String CMD_UNBAN_USER = "/unban";
+    public static final String CMD_UNBAN_USER = "/unban";
 
     // <user-id> [<power-level>]
-    private static final String CMD_SET_USER_POWER_LEVEL = "/op";
+    public static final String CMD_SET_USER_POWER_LEVEL = "/op";
 
     // <user-id>
-    private static final String CMD_RESET_USER_POWER_LEVEL = "/deop";
+    public static final String CMD_RESET_USER_POWER_LEVEL = "/deop";
 
     // <user-id>
-    private static final String CMD_INVITE = "/invite";
+    public static final String CMD_INVITE = "/invite";
 
     // <room-alias>
-    private static final String CMD_JOIN_ROOM = "/join";
+    public static final String CMD_JOIN_ROOM = "/join";
 
     // <room-alias>
-    private static final String CMD_PART = "/part";
+    public static final String CMD_PART = "/part";
 
     // <topic>
-    private static final String CMD_TOPIC = "/topic";
+    public static final String CMD_TOPIC = "/topic";
 
     // <user-id> [reason]
-    private static final String CMD_KICK_USER = "/kick";
+    public static final String CMD_KICK_USER = "/kick";
 
     // <display-name>
-    private static final String CMD_CHANGE_DISPLAY_NAME = "/nick";
+    public static final String CMD_CHANGE_DISPLAY_NAME = "/nick";
 
     // <query>
     private static final String CMD_DDG = "/ddg";
@@ -94,10 +95,17 @@ public class SlashCommandsParser {
     private static final String CMD_UNIGNORE = "/unignore";
 
     // on / off
-    private static final String CMD_MARKDOWN = "/markdown";
+    public static final String CMD_MARKDOWN = "/markdown";
 
     // clear scalar token (waiting for correct 403 management)
-    private static final String CMD_CLEAR_SCALAR_TOKEN = "/clear_scalar_token";
+    public static final String CMD_CLEAR_SCALAR_TOKEN = "/clear_scalar_token";
+
+    public String slashCommand;
+    public String parameter;
+    public String description;
+    public List<SlashCommandsParser> slashCommandList;
+
+    //TODO return a list of command lines
 
     /**
      * check if the text message is an IRC command.
