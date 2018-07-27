@@ -525,8 +525,10 @@ public class VectorRoomActivity extends MXCActionBarActivity implements
                             mE2eImageView.setImageResource(canSendEncryptedEvent ? R.drawable.e2e_verified : R.drawable.e2e_unencrypted);
                             mVectorMessageListFragment.setIsRoomEncrypted(mRoom.isEncrypted());
                             break;
+                        case Event.EVENT_TYPE_STATE_ROOM_TOMBSTONE:
+                            checkSendEventStatus();
+                            break;
                     }
-
                     if (!VectorApp.isAppInBackground()) {
                         // do not send read receipt for the typing events
                         // they are ephemeral ones.
