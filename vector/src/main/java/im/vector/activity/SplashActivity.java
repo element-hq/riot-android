@@ -266,7 +266,7 @@ public class SplashActivity extends MXCActionBarActivity {
         // trigger the GCM registration if required
         GcmRegistrationManager gcmRegistrationManager = Matrix.getInstance(getApplicationContext()).getSharedGCMRegistrationManager();
 
-        if (!gcmRegistrationManager.isGCMRegistred()) {
+        if (!gcmRegistrationManager.isGcmRegistered()) {
             gcmRegistrationManager.checkRegistrations();
         } else {
             gcmRegistrationManager.forceSessionsRegistration(null);

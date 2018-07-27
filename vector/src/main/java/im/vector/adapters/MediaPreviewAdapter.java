@@ -1,15 +1,16 @@
 package im.vector.adapters;
 
 import android.content.Context;
-import android.graphics.Bitmap;
-import android.media.MediaMetadataRetriever;
 import android.net.Uri;
-import android.support.v4.content.ContextCompat;
+import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.request.RequestOptions;
 
 import org.matrix.androidsdk.data.RoomMediaMessage;
 
@@ -18,25 +19,70 @@ import java.util.List;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import im.vector.R;
-import im.vector.listeners.ItemPositionChangedListener;
 
 /**
  * Adapter for previews of media files.
  */
 public class MediaPreviewAdapter extends RecyclerView.Adapter<MediaPreviewAdapter.MediaItemViewHolder> {
 
-    List<RoomMediaMessage> mImagePreviewList;
 
-    ItemPositionChangedListener mItemPositionChangedListener;
+    private final List<RoomMediaMessage> mImagePreviewList;
+    private final EventListener mEventListener;
 
     /**
      * Initialises the adapter and sets member fields.
+     *
      * @param imagePreviewList list with RoomMediaMessages to be displayed.
-     * @param itemPositionChangedListener listener that listens for clicks on the items.
+     * @param eventListener    The event listener attached to the adapter
      */
-    public MediaPreviewAdapter(List<RoomMediaMessage> imagePreviewList, ItemPositionChangedListener itemPositionChangedListener) {
+    public MediaPreviewAdapter(@NonNull final List<RoomMediaMessage> imagePreviewList,
+                               @NonNull final EventListener eventListener) {
         mImagePreviewList = imagePreviewList;
-        mItemPositionChangedListener = itemPositionChangedListener;
+        mEventListener = eventListener;
+    }
+
+    @Override
+    public int getItemCount() {
+        return mImagePreviewList.size();
+    }
+
+    @NonNull
+    @Override
+    public MediaItemViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+        final View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.media_preview, parent, false);
+        return new MediaItemViewHolder(view);
+    }
+
+    @Override
+    public void onBindViewHolder(@NonNull MediaItemViewHolder holder, int position) {
+        final Context context = holder.mImagePreview.getContext();
+        final RoomMediaMessage roomMediaMessage = mImagePreviewList.get(position);
+        final String mimeType = roomMediaMessage.getMimeType(context);
+        final Uri uri = roomMediaMessage.getUri();
+        if (mimeType != null) {
+            if (mimeType.startsWith("image") || mimeType.startsWith("video")) {
+                final RequestOptions options = new RequestOptions().frame(0);
+                Glide.with(context)
+                        .asBitmap()
+                        .load(uri)
+                        .apply(options)
+                        .into(holder.mImagePreview);
+            } else {
+                holder.mImagePreview.setImageResource(R.drawable.filetype_attachment);
+                holder.mImagePreview.setScaleType(ImageView.ScaleType.FIT_CENTER);
+            }
+        }
+        holder.itemView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                mEventListener.onMediaMessagePreviewClicked(roomMediaMessage);
+            }
+        });
+    }
+
+    @Override
+    public long getItemId(int position) {
+        return position;
     }
 
     /**
@@ -52,54 +98,10 @@ public class MediaPreviewAdapter extends RecyclerView.Adapter<MediaPreviewAdapte
         }
     }
 
-    @Override
-    public int getItemCount() {
-        // Return the amount of items in the list.
-        return mImagePreviewList.size();
+    public interface EventListener {
+        void onMediaMessagePreviewClicked(@NonNull final RoomMediaMessage roomMediaMessage);
     }
 
-    @Override
-    public MediaItemViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        // Create a new CardItem when needed.
-        View view = LayoutInflater.from(parent.getContext())
-                .inflate(R.layout.media_preview, parent, false);
-        MediaItemViewHolder imageItemViewHolder = new MediaItemViewHolder(view);
-        return imageItemViewHolder;
-    }
-
-    @Override
-    public void onBindViewHolder(MediaItemViewHolder holder, int position) {
-        final Context context = holder.mImagePreview.getContext();
-        String mimeType = mImagePreviewList.get(position).getMimeType(context);
-        Uri uri = mImagePreviewList.get(position).getUri();
-
-        if (mimeType != null) {
-            if (mimeType.startsWith("image")) {
-                holder.mImagePreview.setImageURI(uri);
-            } else if (mimeType.startsWith("video")) {
-                MediaMetadataRetriever mediaMetadataRetriever = new MediaMetadataRetriever();
-                mediaMetadataRetriever.setDataSource(context, uri);
-                Bitmap bitmap = mediaMetadataRetriever.getFrameAtTime();
-                holder.mImagePreview.setImageBitmap(bitmap);
-            } else {
-                holder.mImagePreview.setImageDrawable(ContextCompat.getDrawable(context, R.drawable.filetype_attachment));
-                holder.mImagePreview.setScaleType(ImageView.ScaleType.FIT_CENTER);
-            }
-        }
-
-        final int itemPosition = position;
-
-        // Call the listener (with the item position) when an item is clicked on.
-        holder.itemView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                mItemPositionChangedListener.onItemPositionChangedListener(itemPosition);
-            }
-        });
-    }
-
-    @Override
-    public long getItemId(int position) {
-        return position;
-    }
 }
+
+
