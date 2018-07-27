@@ -27,10 +27,12 @@ import org.matrix.androidsdk.MXSession;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 
 import im.vector.R;
+import im.vector.VectorApp;
 import im.vector.util.SlashCommandsParser;
 
 /**
@@ -131,10 +133,18 @@ public class AutoCompletedCommandLineAdapter extends ArrayAdapter<String> {
                 newValues = new ArrayList<>();
             } else {
                 newValues = new ArrayList<>();
-                for (String command : mCommandLines) {
-                    newValues.add(command);
+                String prefixString = prefix.toString().toLowerCase(VectorApp.getApplicationLocale());
+
+                if (prefixString.startsWith("/")) {
+                    for (String command : mCommandLines) {
+                        if ((null != command) && command.toLowerCase(VectorApp.getApplicationLocale()).startsWith(prefixString)) {
+                            newValues.add(command);
+                        }
+                    }
                 }
             }
+
+            //Collections.sort(newValues, mCommandLinesComparator);
 
             results.values = newValues;
             results.count = newValues.size();
