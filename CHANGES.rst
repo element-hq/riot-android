@@ -5,6 +5,7 @@ Features:
  - Resurrect performance metrics (#2391)
  - Telemetry to report incidence of UISIs (#2330)
  - Add a previewer for previewing media before sending it into the room (#1742)
+ - Add auto completion for slash commands (#2384)
 
 Improvements:
  - Piwik: Update the way how stats are reported (#2402)

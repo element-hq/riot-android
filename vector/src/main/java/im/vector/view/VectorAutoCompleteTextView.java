@@ -53,7 +53,6 @@ import im.vector.util.SlashCommandsParser;
  * Custom AppCompatMultiAutoCompleteTextView to display matrix id / displayname
  */
 public class VectorAutoCompleteTextView extends AppCompatMultiAutoCompleteTextView {
-    // TODO verify and update all comments
 
     private static final String LOG_TAG = VectorAutoCompleteTextView.class.getSimpleName();
 
@@ -97,7 +96,7 @@ public class VectorAutoCompleteTextView extends AppCompatMultiAutoCompleteTextVi
     }
 
     /**
-     * Build the auto completions list for a room
+     * Build the auto completions list of users for a room
      *
      * @param session the session
      * @param roomId  the room Id
@@ -125,33 +124,19 @@ public class VectorAutoCompleteTextView extends AppCompatMultiAutoCompleteTextVi
     }
 
     /**
-     * Build the auto completions list for a room
+     * Build the auto completions list of slash commands for a room
      *
      * @param session the session
      * @param roomId  the room Id
      */
     public void initAutoCompletionCommandLine(MXSession session, String roomId) {
-        List<String> commandLines = new ArrayList<>();
-
-        commandLines.add(SlashCommandsParser.CMD_EMOTE);
-        commandLines.add(SlashCommandsParser.CMD_BAN_USER);
-        commandLines.add(SlashCommandsParser.CMD_UNBAN_USER);
-        commandLines.add(SlashCommandsParser.CMD_SET_USER_POWER_LEVEL);
-        commandLines.add(SlashCommandsParser.CMD_RESET_USER_POWER_LEVEL);
-        commandLines.add(SlashCommandsParser.CMD_INVITE);
-        commandLines.add(SlashCommandsParser.CMD_JOIN_ROOM);
-        commandLines.add(SlashCommandsParser.CMD_PART);
-        commandLines.add(SlashCommandsParser.CMD_TOPIC);
-        commandLines.add(SlashCommandsParser.CMD_KICK_USER);
-        commandLines.add(SlashCommandsParser.CMD_CHANGE_DISPLAY_NAME);
-        commandLines.add(SlashCommandsParser.CMD_MARKDOWN);
-        commandLines.add(SlashCommandsParser.CMD_CLEAR_SCALAR_TOKEN);
+        List<String> commandLines = SlashCommandsParser.getSlashCommandList();
 
         initAutoCompletionCommandLine(session, commandLines);
     }
 
     /**
-     * Internal method to build the auto completions list.
+     * Internal method to build the auto completions list of users.
      *
      * @param session the session
      * @param users   the users list
@@ -189,7 +174,7 @@ public class VectorAutoCompleteTextView extends AppCompatMultiAutoCompleteTextVi
     }
 
     /**
-     * Internal method to build the auto completions list.
+     * Internal method to build the auto completions list of slash commands.
      *
      * @param session       the session
      * @param commandLines  the commands list
@@ -238,7 +223,7 @@ public class VectorAutoCompleteTextView extends AppCompatMultiAutoCompleteTextVi
     }
 
     /**
-     * Compute the popup size
+     * Compute the popup size for list of users.
      */
     private void adjustPopupSize() {
         if (null != mListPopupWindow) {
@@ -264,7 +249,7 @@ public class VectorAutoCompleteTextView extends AppCompatMultiAutoCompleteTextVi
     }
 
     /**
-     * Compute the popup size
+     * Compute the popup size for list od slash commands.
      */
     private void adjustPopupSizeCommand() {
         if (null != mListPopupWindow) {
@@ -282,10 +267,6 @@ public class VectorAutoCompleteTextView extends AppCompatMultiAutoCompleteTextVi
             }
 
             mListPopupWindow.setContentWidth(maxWidth);
-
-            // setDropDownWidth(maxWidth) does not work on some devices
-            // it seems working on android >= 5.1
-            // but it does not on older android platforms
         }
     }
 
@@ -352,7 +333,7 @@ public class VectorAutoCompleteTextView extends AppCompatMultiAutoCompleteTextVi
             // save the current written pattern
             mPendingFilter = currentFilter;
 
-            // wait 0.3s before displaying the popup
+            // wait 0.7s before displaying the popup
             new Handler(Looper.getMainLooper()).postDelayed(new Runnable() {
                 @Override
                 public void run() {
@@ -387,7 +368,7 @@ public class VectorAutoCompleteTextView extends AppCompatMultiAutoCompleteTextVi
                         }
                     }
                 }
-            }, 300);
+            }, 700);
         }
     }
 

@@ -17,7 +17,6 @@
 package im.vector.adapters;
 
 import android.content.Context;
-import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -25,26 +24,20 @@ import android.widget.ArrayAdapter;
 import android.widget.TextView;
 
 import org.matrix.androidsdk.MXSession;
-import org.matrix.androidsdk.rest.model.User;
 
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 
 import im.vector.R;
-import im.vector.VectorApp;
-import im.vector.activity.VectorRoomActivity;
 import im.vector.util.SlashCommandsParser;
 
 /**
- * This class describes a list of auto-completed users
+ * This class describes a list of auto-completed slash commands
  */
 public class AutoCompletedCommandLineAdapter extends ArrayAdapter<String> {
 
-    // TODO verify and update all comments
-    
     // the context
     private final Context mContext;
 
@@ -74,8 +67,9 @@ public class AutoCompletedCommandLineAdapter extends ArrayAdapter<String> {
     };
 
     /**
-     * Construct an adapter which will display a list of users
-     *  @param context           Activity context
+     * Construct an adapter which will display a list of slash commands
+     *
+     * @param context           Activity context
      * @param layoutResourceId  The resource ID of the layout for each item.
      * @param session           The session
      * @param commandLines      The command lines list
@@ -93,9 +87,9 @@ public class AutoCompletedCommandLineAdapter extends ArrayAdapter<String> {
     /**
      * Get the updated view for a specified position.
      *
-     * @param position the position
-     * @param convertView the convert view
-     * @param parent the parent view
+     * @param position      the position
+     * @param convertView   the convert view
+     * @param parent        the parent view
      *
      * @return the view
      */
@@ -105,41 +99,16 @@ public class AutoCompletedCommandLineAdapter extends ArrayAdapter<String> {
         }
 
         String command = getItem(position);
+        String parameter = SlashCommandsParser.getSlashCommandParam(command);
+        String description = SlashCommandsParser.getSlashCommandDescription(command);
 
-        TextView commandNameTextView = convertView.findViewById(R.id.item_command_auto_complete_name);
-        TextView commandParameterTextView = convertView.findViewById(R.id.item_command_auto_complete_parameter);
+        TextView tvCommandName = convertView.findViewById(R.id.item_command_auto_complete_name);
+        TextView tvCommandParameter = convertView.findViewById(R.id.item_command_auto_complete_parameter);
+        TextView tvCommandDescription = convertView.findViewById(R.id.item_command_auto_complete_description);
 
-        commandNameTextView.setText(command);
-
-        switch (command) {
-            case SlashCommandsParser.CMD_BAN_USER:
-            case SlashCommandsParser.CMD_UNBAN_USER:
-            case SlashCommandsParser.CMD_KICK_USER:
-            case SlashCommandsParser.CMD_INVITE:
-            case SlashCommandsParser.CMD_RESET_USER_POWER_LEVEL:
-                commandParameterTextView.setText("<user-id>");
-                break;
-            case SlashCommandsParser.CMD_SET_USER_POWER_LEVEL:
-                commandParameterTextView.setText("<user-id> [<power-level]");
-                break;
-            case SlashCommandsParser.CMD_JOIN_ROOM:
-            case SlashCommandsParser.CMD_PART:
-                commandParameterTextView.setText("<room-alias>");
-                break;
-            case SlashCommandsParser.CMD_EMOTE:
-                commandParameterTextView.setText("<message>");
-                break;
-            case SlashCommandsParser.CMD_CHANGE_DISPLAY_NAME:
-                commandParameterTextView.setText("<dispaly-name>");
-                break;
-            case SlashCommandsParser.CMD_TOPIC:
-                commandParameterTextView.setText("<topic>");
-                break;
-            case SlashCommandsParser.CMD_CLEAR_SCALAR_TOKEN:
-            case SlashCommandsParser.CMD_MARKDOWN:
-                commandParameterTextView.setText("");
-                break;
-        }
+        tvCommandName.setText(command);
+        tvCommandParameter.setText(parameter);
+        tvCommandDescription.setText(description);
 
         return convertView;
     }
