@@ -63,6 +63,7 @@ import im.vector.adapters.PeopleAdapter;
 import im.vector.contacts.Contact;
 import im.vector.contacts.ContactsManager;
 import im.vector.contacts.PIDsRetriever;
+import im.vector.util.HomeRoomsViewModel;
 import im.vector.util.VectorUtils;
 import im.vector.view.EmptyViewItemDecoration;
 import im.vector.view.SimpleDividerItemDecoration;
@@ -81,7 +82,7 @@ public class PeopleFragment extends AbsHomeFragment implements ContactsManager.C
 
     private PeopleAdapter mAdapter;
 
-    private final List<Room> mDirectChats = new ArrayList<>();
+    private List<Room> mDirectChats = new ArrayList<>();
     private final List<ParticipantAdapterItem> mLocalContacts = new ArrayList<>();
     // the known contacts are not sorted
     private final List<ParticipantAdapterItem> mKnownContacts = new ArrayList<>();
@@ -145,10 +146,6 @@ public class PeopleFragment extends AbsHomeFragment implements ContactsManager.C
         super.onResume();
         mSession.getDataHandler().addListener(mEventsListener);
         ContactsManager.getInstance().addListener(this);
-        // Direct chats
-        initDirectChatsData();
-        initDirectChatsViews();
-
         // Local address book
         initContactsData();
         initContactsViews();
@@ -275,38 +272,6 @@ public class PeopleFragment extends AbsHomeFragment implements ContactsManager.C
      * Data management
      * *********************************************************************************************
      */
-
-    /**
-     * Fill the direct chats adapter with data
-     */
-    private void initDirectChatsData() {
-        if ((null == mSession) || (null == mSession.getDataHandler())) {
-            Log.e(LOG_TAG, "## initDirectChatsData() : null session");
-        }
-
-        final List<String> directChatIds = mSession.getDataHandler().getDirectChatRoomIdsList();
-        final MXDataHandler dataHandler = mSession.getDataHandler();
-        final IMXStore store = dataHandler.getStore();
-
-        mDirectChats.clear();
-        if (directChatIds != null && !directChatIds.isEmpty()) {
-            for (String roomId : directChatIds) {
-                Room room = store.getRoom(roomId);
-
-                if ((null != room) && !room.isConferenceUserRoom()) {
-                    // it seems that the server syncs some left rooms
-                    if (null == room.getMember(mSession.getMyUserId())) {
-                        Log.e(LOG_TAG, "## initDirectChatsData(): invalid room " + room.getRoomId() + ", the user is not anymore member of it");
-                    } else {
-                        final Set<String> tags = room.getAccountData().getKeys();
-                        if ((null == tags) || !tags.contains(RoomTag.ROOM_TAG_LOW_PRIORITY)) {
-                            mDirectChats.add(dataHandler.getRoom(roomId));
-                        }
-                    }
-                }
-            }
-        }
-    }
 
     /**
      * Fill the local address book and known contacts adapters with data
@@ -544,13 +509,6 @@ public class PeopleFragment extends AbsHomeFragment implements ContactsManager.C
     }
 
     /**
-     * Init direct chats view with data and update its display
-     */
-    private void initDirectChatsViews() {
-        mAdapter.setRooms(mDirectChats);
-    }
-
-    /**
      * Init contacts views with data and update their display
      */
     private void initContactsViews() {
@@ -566,14 +524,11 @@ public class PeopleFragment extends AbsHomeFragment implements ContactsManager.C
      */
 
     @Override
-    public void onSummariesUpdate() {
-        super.onSummariesUpdate();
-
+    public void onRoomResultUpdated(final HomeRoomsViewModel.Result result) {
         if (isResumed()) {
             mAdapter.setInvitation(mActivity.getRoomInvitations());
-
-            initDirectChatsData();
-            initDirectChatsViews();
+            mDirectChats = result.getDirectChats();
+            mAdapter.setRooms(mDirectChats);
         }
     }
 
