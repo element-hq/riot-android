@@ -40,7 +40,6 @@ import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AlertDialog;
 import android.text.SpannableString;
 import android.text.SpannableStringBuilder;
-import android.text.Spanned;
 import android.text.TextPaint;
 import android.text.TextUtils;
 import android.text.TextWatcher;
@@ -48,7 +47,6 @@ import android.text.method.LinkMovementMethod;
 import android.text.style.ClickableSpan;
 import android.text.style.ForegroundColorSpan;
 import android.text.style.StyleSpan;
-import android.text.style.TypefaceSpan;
 import android.text.style.URLSpan;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
@@ -2637,11 +2635,11 @@ public class VectorRoomActivity extends MXCActionBarActivity implements
                 final String roomLink = PermalinkUtils.createPermalink(roomTombstoneContent.replacementRoom);
                 final ClickableSpan urlSpan = new MatrixURLSpan(roomLink, MXSession.PATTERN_CONTAIN_APP_LINK_PERMALINK_ROOM_ID, mVectorMessageListFragment);
                 final int textColorInt = ThemeUtils.INSTANCE.getColor(this, R.attr.message_text_color);
-                text = new Spanny(getString(R.string.room_tombstone_description),
+                text = new Spanny(getString(R.string.room_tombstone_versioned_description),
                         new StyleSpan(Typeface.BOLD),
                         new ForegroundColorSpan(textColorInt))
                         .append("\n")
-                        .append(getString(R.string.room_tombstone_link), urlSpan, new ForegroundColorSpan(textColorInt));
+                        .append(getString(R.string.room_tombstone_continuation_link), urlSpan, new ForegroundColorSpan(textColorInt));
                 mNotificationTextView.setMovementMethod(LinkMovementMethod.getInstance());
             }
         }
