@@ -16,12 +16,9 @@
  */
 package im.vector.util;
 
-import android.content.Context;
-import android.content.Intent;
 import android.net.Uri;
 import android.os.Parcel;
 import android.os.Parcelable;
-import android.provider.Browser;
 import android.text.ParcelableSpan;
 import android.text.Spannable;
 import android.text.SpannableStringBuilder;
@@ -63,7 +60,7 @@ public class MatrixURLSpan extends ClickableSpan implements ParcelableSpan {
     // listener
     private final IMessagesAdapterActionsListener mActionsListener;
 
-    private MatrixURLSpan(String url, Pattern pattern, IMessagesAdapterActionsListener actionsListener) {
+    public MatrixURLSpan(String url, Pattern pattern, IMessagesAdapterActionsListener actionsListener) {
         mURL = url;
         mPattern = pattern;
         mActionsListener = actionsListener;
