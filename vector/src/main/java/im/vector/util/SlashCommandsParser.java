@@ -77,7 +77,7 @@ public class SlashCommandsParser {
     // <user-id>
     public static final String CMD_INVITE = "/invite";
     public static final String PARAM_INVITE = "<user-id>";
-    public static final String DESC_INVITE = "Invites user with given id to current room";
+    public static final String DESC_INVITE = "Invites user with given id to this room";
 
     // <room-alias>
     public static final String CMD_JOIN_ROOM = "/join";
