@@ -17,7 +17,6 @@
 
 package im.vector.util;
 
-import android.content.res.Resources;
 import android.support.v7.app.AlertDialog;
 import android.text.TextUtils;
 import android.widget.Toast;
@@ -40,7 +39,6 @@ import java.util.Map;
 import im.vector.R;
 import im.vector.VectorApp;
 import im.vector.activity.CommonActivityUtils;
-import im.vector.activity.RiotAppCompatActivity;
 import im.vector.activity.VectorRoomActivity;
 import im.vector.widgets.WidgetsManager;
 
@@ -51,58 +49,59 @@ public class SlashCommandsParser {
     // defines the command line operations
     // the user can write theses messages to perform some room events
     public static final String CMD_EMOTE = "/me";
-    public static final String PARAM_EMOTE ="<message>";
-    public static final String DESC_EMOTE ="Displays action";
+    public static final String PARAM_EMOTE = "<message>";
+    public static final String DESC_EMOTE = VectorApp.getInstance().getString(R.string.command_description_emote);
 
     // <user-id> [reason]
     public static final String CMD_BAN_USER = "/ban";
-    public static final String PARAM_BAN_USER ="<user-id>";
-    public static final String DESC_BAN_USE ="Bans user with given id";
+    public static final String PARAM_BAN_USER = "<user-id>";
+    public static final String DESC_BAN_USE = VectorApp.getInstance().getString(R.string.command_description_ban_user);
+
 
     // <user-id>'
     public static final String CMD_UNBAN_USER = "/unban";
     public static final String PARAM_UNBAN_USER = "<user-id>";
-    public static final String DESC_UNBAN_USER = "Unbans user with given id";
+    public static final String DESC_UNBAN_USER = VectorApp.getInstance().getString(R.string.command_description_unban_user);
 
     // <user-id> [<power-level>]
     public static final String CMD_SET_USER_POWER_LEVEL = "/op";
     public static final String PARAM_SET_USER_POWER_LEVEL = "<user-id> [<power-level>]";
-    public static final String DESC_SET_USER_POWER_LEVEL = "Define the power level of a user";
+    public static final String DESC_SET_USER_POWER_LEVEL = VectorApp.getInstance().getString(R.string.command_description_op_user);
 
     // <user-id>
     public static final String CMD_RESET_USER_POWER_LEVEL = "/deop";
     public static final String PARAM_RESET_USER_POWER_LEVEL = "<user-id>";
-    public static final String DESC_RESET_USER_POWER_LEVEL = "Deops user with given id";
+    public static final String DESC_RESET_USER_POWER_LEVEL = VectorApp.getInstance().getString(R.string.command_description_deop_user);
 
     // <user-id>
     public static final String CMD_INVITE = "/invite";
     public static final String PARAM_INVITE = "<user-id>";
-    public static final String DESC_INVITE = "Invites user with given id to this room";
+    public static final String DESC_INVITE = VectorApp.getInstance().getString(R.string.command_description_invite_user);
 
     // <room-alias>
     public static final String CMD_JOIN_ROOM = "/join";
     public static final String PARAM_JOIN_ROOM = "<room-alias>";
-    public static final String DESC_JOIN_ROOM = "Joins room with given alias";
+    public static final String DESC_JOIN_ROOM = VectorApp.getInstance().getString(R.string.command_description_join_room);
 
     // <room-alias>
     public static final String CMD_PART = "/part";
     public static final String PARAM_PART = "<room-alias>";
-    public static final String DESC_PART = "Leave room";
+    public static final String DESC_PART = VectorApp.getInstance().getString(R.string.command_description_part_room);
 
     // <topic>
     public static final String CMD_TOPIC = "/topic";
     public static final String PARAM_TOPIC = "<topic>";
-    public static final String DESC_TOPIC = "Set the room topic";
+    public static final String DESC_TOPIC = VectorApp.getInstance().getString(R.string.command_description_topic);
 
     // <user-id> [reason]
     public static final String CMD_KICK_USER = "/kick";
     public static final String PARAM_KICK_USER = "<user-id>";
-    public static final String DESC_KICK_USER = "Kicks user with given id";
+    public static final String DESC_KICK_USER = VectorApp.getInstance().getString(R.string.command_description_kick_user);
 
     // <display-name>
     public static final String CMD_CHANGE_DISPLAY_NAME = "/nick";
     public static final String PARAM_CHANGE_DISPLAY_NAME = "<display-name>";
-    public static final String DESC_CHANGE_DISPLAY_NAME = "Changes your display nickname";
+    public static final String DESC_CHANGE_DISPLAY_NAME = VectorApp.getInstance().getString(R.string.command_description_nick);
 
     // <query>
     private static final String CMD_DDG = "/ddg";
@@ -122,12 +121,12 @@ public class SlashCommandsParser {
     // on / off
     public static final String CMD_MARKDOWN = "/markdown";
     public static final String PARAM_MARKDOWN = "";
-    public static final String DESC_MARKDOWN = "On/Off markdown";
+    public static final String DESC_MARKDOWN = VectorApp.getInstance().getString(R.string.command_description_markdown);
 
     // clear scalar token (waiting for correct 403 management)
     public static final String CMD_CLEAR_SCALAR_TOKEN = "/clear_scalar_token";
     public static final String PARAM_CLEAR_SCALAR_TOKEN = "";
-    public static final String DESC_CLEAR_SCALAR_TOKEN = "To fix Matrix Apps management";
+    public static final String DESC_CLEAR_SCALAR_TOKEN = VectorApp.getInstance().getString(R.string.command_description_clear_scalar_token);
 
     public String parameter;
     public String description;
