@@ -1084,6 +1084,7 @@ public class VectorRoomActivity extends MXCActionBarActivity implements
         ViewedRoomTracker.getInstance().setViewedRoomId(null);
         ViewedRoomTracker.getInstance().setMatrixId(null);
         mEditText.initAutoCompletion(mSession, null);
+        //mEditText.initAutoCompletionCommandLine(mSession, null);
     }
 
     @Override
@@ -1216,6 +1217,7 @@ public class VectorRoomActivity extends MXCActionBarActivity implements
 
         // init the auto-completion list from the room members
         mEditText.initAutoCompletion(mSession, (null != mRoom) ? mRoom.getRoomId() : null);
+        //mEditText.initAutoCompletionCommandLine(mSession, null);
 
         if (mReadMarkerManager != null) {
             mReadMarkerManager.onResume();
@@ -2379,7 +2381,7 @@ public class VectorRoomActivity extends MXCActionBarActivity implements
             if (TextUtils.equals(mSession.getMyUser().displayname, text)) {
                 // current user
                 if (TextUtils.isEmpty(mEditText.getText())) {
-                    mEditText.setText(String.format(VectorApp.getApplicationLocale(), "%s ", SlashCommandsParser.CMD_EMOTE));
+                    mEditText.setText(String.format(VectorApp.getApplicationLocale(), "%s ", SlashCommandsParser.SlashCommand.EMOTE.getCommand()));
                     mEditText.setSelection(mEditText.getText().length());
                     vibrate = true;
                 }

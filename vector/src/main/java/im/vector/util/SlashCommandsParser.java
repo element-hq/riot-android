@@ -30,10 +30,8 @@ import org.matrix.androidsdk.rest.callback.SimpleApiCallback;
 import org.matrix.androidsdk.rest.model.MatrixError;
 import org.matrix.androidsdk.util.Log;
 
-import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 import im.vector.R;
@@ -46,62 +44,63 @@ public class SlashCommandsParser {
 
     private static final String LOG_TAG = SlashCommandsParser.class.getSimpleName();
 
-    // defines the command line operations
-    // the user can write theses messages to perform some room events
-    public static final String CMD_EMOTE = "/me";
-    public static final String PARAM_EMOTE = "<message>";
-    public static final String DESC_EMOTE = VectorApp.getInstance().getString(R.string.command_description_emote);
+    public enum SlashCommand {
 
-    // <user-id> [reason]
-    public static final String CMD_BAN_USER = "/ban";
-    public static final String PARAM_BAN_USER = "<user-id>";
-    public static final String DESC_BAN_USE = VectorApp.getInstance().getString(R.string.command_description_ban_user);
+        // defines the command line operations
+        // the user can write theses messages to perform some room events
+        EMOTE("/me", "<message>", VectorApp.getInstance().getString(R.string.command_description_emote)),
+        BAN_USER("/ban", "<user-id>", VectorApp.getInstance().getString(R.string.command_description_ban_user)),
+        UNBAN_USER ("/unban", "<user-id>", VectorApp.getInstance().getString(R.string.command_description_unban_user)),
+        SET_USER_POWER_LEVEL ("/op", "<user-id> [<power-level>]",VectorApp.getInstance().getString(R.string.command_description_op_user)),
+        RESET_USER_POWER_LEVEL ("/deop", "<user-id>", VectorApp.getInstance().getString(R.string.command_description_deop_user)),
+        INVITE ("/invite", "<user-id>", VectorApp.getInstance().getString(R.string.command_description_invite_user)),
+        JOIN_ROOM ("/join", "<room-alias>", VectorApp.getInstance().getString(R.string.command_description_join_room)),
+        PART ("/part", "<room-alias>", VectorApp.getInstance().getString(R.string.command_description_part_room)),
+        TOPIC ("/topic", "<topic>", VectorApp.getInstance().getString(R.string.command_description_topic)),
+        KICK_USER ("/kick", "<user-id>", VectorApp.getInstance().getString(R.string.command_description_kick_user)),
+        CHANGE_DISPLAY_NAME ("/nick", "<display-name>", VectorApp.getInstance().getString(R.string.command_description_nick)),
+        MARKDOWN ("/markdown", "", VectorApp.getInstance().getString(R.string.command_description_markdown)),
+        // clear scalar token (waiting for correct 403 management)
+        CLEAR_SCALAR_TOKEN ("/clear_scalar_token", "", VectorApp.getInstance().getString(R.string.command_description_clear_scalar_token));
 
+        private final String command;
+        private String parameter;
+        private String description;
 
-    // <user-id>'
-    public static final String CMD_UNBAN_USER = "/unban";
-    public static final String PARAM_UNBAN_USER = "<user-id>";
-    public static final String DESC_UNBAN_USER = VectorApp.getInstance().getString(R.string.command_description_unban_user);
+        private  static final Map<String, SlashCommand> lookup = new HashMap<String, SlashCommand>();
 
-    // <user-id> [<power-level>]
-    public static final String CMD_SET_USER_POWER_LEVEL = "/op";
-    public static final String PARAM_SET_USER_POWER_LEVEL = "<user-id> [<power-level>]";
-    public static final String DESC_SET_USER_POWER_LEVEL = VectorApp.getInstance().getString(R.string.command_description_op_user);
+        static {
+            for (SlashCommand slashCommand : SlashCommand.values()) {
+                lookup.put(slashCommand.getCommand(), slashCommand);
+            }
+        }
 
-    // <user-id>
-    public static final String CMD_RESET_USER_POWER_LEVEL = "/deop";
-    public static final String PARAM_RESET_USER_POWER_LEVEL = "<user-id>";
-    public static final String DESC_RESET_USER_POWER_LEVEL = VectorApp.getInstance().getString(R.string.command_description_deop_user);
+        SlashCommand(String command) {
+            this.command = command;
+        }
 
-    // <user-id>
-    public static final String CMD_INVITE = "/invite";
-    public static final String PARAM_INVITE = "<user-id>";
-    public static final String DESC_INVITE = VectorApp.getInstance().getString(R.string.command_description_invite_user);
+        SlashCommand(String command, String parameter, String description) {
+            this.command = command;
+            this.parameter = parameter;
+            this.description = description;
+        }
 
-    // <room-alias>
-    public static final String CMD_JOIN_ROOM = "/join";
-    public static final String PARAM_JOIN_ROOM = "<room-alias>";
-    public static final String DESC_JOIN_ROOM = VectorApp.getInstance().getString(R.string.command_description_join_room);
+        public static SlashCommand get(String command) {
+            return lookup.get(command);
+        }
 
-    // <room-alias>
-    public static final String CMD_PART = "/part";
-    public static final String PARAM_PART = "<room-alias>";
-    public static final String DESC_PART = VectorApp.getInstance().getString(R.string.command_description_part_room);
+        public String getCommand() {
+            return command;
+        }
 
-    // <topic>
-    public static final String CMD_TOPIC = "/topic";
-    public static final String PARAM_TOPIC = "<topic>";
-    public static final String DESC_TOPIC = VectorApp.getInstance().getString(R.string.command_description_topic);
+        public String getParam() {
+            return parameter;
+        }
 
-    // <user-id> [reason]
-    public static final String CMD_KICK_USER = "/kick";
-    public static final String PARAM_KICK_USER = "<user-id>";
-    public static final String DESC_KICK_USER = VectorApp.getInstance().getString(R.string.command_description_kick_user);
-
-    // <display-name>
-    public static final String CMD_CHANGE_DISPLAY_NAME = "/nick";
-    public static final String PARAM_CHANGE_DISPLAY_NAME = "<display-name>";
-    public static final String DESC_CHANGE_DISPLAY_NAME = VectorApp.getInstance().getString(R.string.command_description_nick);
+        public String getDescription() {
+            return description;
+        }
+    }
 
     // <query>
     private static final String CMD_DDG = "/ddg";
@@ -118,101 +117,6 @@ public class SlashCommandsParser {
     // <<user-id>
     private static final String CMD_UNIGNORE = "/unignore";
 
-    // on / off
-    public static final String CMD_MARKDOWN = "/markdown";
-    public static final String PARAM_MARKDOWN = "";
-    public static final String DESC_MARKDOWN = VectorApp.getInstance().getString(R.string.command_description_markdown);
-
-    // clear scalar token (waiting for correct 403 management)
-    public static final String CMD_CLEAR_SCALAR_TOKEN = "/clear_scalar_token";
-    public static final String PARAM_CLEAR_SCALAR_TOKEN = "";
-    public static final String DESC_CLEAR_SCALAR_TOKEN = VectorApp.getInstance().getString(R.string.command_description_clear_scalar_token);
-
-    public String parameter;
-    public String description;
-    public static List<String> mSlashCommandList;
-    public static HashMap<String, String> mSlashCommandParamMap;
-    public static HashMap<String, String> mSlashCommandDescMap;
-
-    public static List<String> getSlashCommandList() {
-        createSlashCommandList();
-        setSlashCommandParameter();
-        setSlashCommandDescription();
-        return mSlashCommandList;
-    }
-
-    public static String getSlashCommandParam(String command) {
-
-        if (mSlashCommandParamMap.containsKey(command)) {
-            return mSlashCommandParamMap.get(command);
-        }
-
-        return null;
-    }
-
-    public static String getSlashCommandDescription(String command) {
-
-        if (mSlashCommandDescMap.containsKey(command)) {
-            return mSlashCommandDescMap.get(command);
-        }
-
-        return null;
-    }
-
-    private static void createSlashCommandList() {
-        mSlashCommandList = new ArrayList<String>();
-
-        mSlashCommandList.add(CMD_EMOTE);
-        mSlashCommandList.add(CMD_CHANGE_DISPLAY_NAME);
-        mSlashCommandList.add(CMD_TOPIC);
-        mSlashCommandList.add(CMD_INVITE);
-        mSlashCommandList.add(CMD_JOIN_ROOM);
-        mSlashCommandList.add(CMD_PART);
-        mSlashCommandList.add(CMD_SET_USER_POWER_LEVEL);
-        mSlashCommandList.add(CMD_RESET_USER_POWER_LEVEL);
-        mSlashCommandList.add(CMD_KICK_USER);
-        mSlashCommandList.add(CMD_BAN_USER);
-        mSlashCommandList.add(CMD_UNBAN_USER);
-        mSlashCommandList.add(CMD_MARKDOWN);
-        mSlashCommandList.add(CMD_CLEAR_SCALAR_TOKEN);
-    }
-
-    private static void setSlashCommandParameter(){
-        mSlashCommandParamMap = new HashMap<>();
-
-        mSlashCommandParamMap.put(CMD_EMOTE, PARAM_EMOTE);
-        mSlashCommandParamMap.put(CMD_CHANGE_DISPLAY_NAME, PARAM_CHANGE_DISPLAY_NAME);
-        mSlashCommandParamMap.put(CMD_TOPIC, PARAM_TOPIC);
-        mSlashCommandParamMap.put(CMD_INVITE, PARAM_INVITE);
-        mSlashCommandParamMap.put(CMD_JOIN_ROOM, PARAM_JOIN_ROOM);
-        mSlashCommandParamMap.put(CMD_PART, PARAM_PART);
-        mSlashCommandParamMap.put(CMD_SET_USER_POWER_LEVEL, PARAM_SET_USER_POWER_LEVEL);
-        mSlashCommandParamMap.put(CMD_RESET_USER_POWER_LEVEL, PARAM_RESET_USER_POWER_LEVEL);
-        mSlashCommandParamMap.put(CMD_KICK_USER, PARAM_KICK_USER);
-        mSlashCommandParamMap.put(CMD_BAN_USER, PARAM_BAN_USER);
-        mSlashCommandParamMap.put(CMD_UNBAN_USER, PARAM_UNBAN_USER);
-        mSlashCommandParamMap.put(CMD_MARKDOWN, PARAM_MARKDOWN);
-        mSlashCommandParamMap.put(CMD_CLEAR_SCALAR_TOKEN, PARAM_CLEAR_SCALAR_TOKEN);
-
-    }
-
-    private static void setSlashCommandDescription() {
-        mSlashCommandDescMap = new HashMap<>();
-
-        mSlashCommandDescMap.put(CMD_EMOTE, DESC_EMOTE);
-        mSlashCommandDescMap.put(CMD_CHANGE_DISPLAY_NAME, DESC_CHANGE_DISPLAY_NAME);
-        mSlashCommandDescMap.put(CMD_TOPIC, DESC_TOPIC);
-        mSlashCommandDescMap.put(CMD_INVITE, DESC_INVITE);
-        mSlashCommandDescMap.put(CMD_JOIN_ROOM, DESC_JOIN_ROOM);
-        mSlashCommandDescMap.put(CMD_PART, DESC_PART);
-        mSlashCommandDescMap.put(CMD_SET_USER_POWER_LEVEL, DESC_SET_USER_POWER_LEVEL);
-        mSlashCommandDescMap.put(CMD_RESET_USER_POWER_LEVEL, DESC_RESET_USER_POWER_LEVEL);
-        mSlashCommandDescMap.put(CMD_KICK_USER, DESC_KICK_USER);
-        mSlashCommandDescMap.put(CMD_BAN_USER, DESC_BAN_USE);
-        mSlashCommandDescMap.put(CMD_UNBAN_USER, DESC_UNBAN_USER);
-        mSlashCommandDescMap.put(CMD_MARKDOWN, DESC_MARKDOWN);
-        mSlashCommandDescMap.put(CMD_CLEAR_SCALAR_TOKEN, DESC_CLEAR_SCALAR_TOKEN);
-    }
 
     /**
      * check if the text message is an IRC command.
@@ -283,39 +187,39 @@ public class SlashCommandsParser {
 
             String firstPart = messageParts[0];
 
-            if (TextUtils.equals(firstPart, CMD_CHANGE_DISPLAY_NAME)) {
+            if (TextUtils.equals(firstPart, SlashCommand.CHANGE_DISPLAY_NAME.getCommand())) {
                 isIRCCmd = true;
 
-                String newDisplayname = textMessage.substring(CMD_CHANGE_DISPLAY_NAME.length()).trim();
+                String newDisplayname = textMessage.substring(SlashCommand.CHANGE_DISPLAY_NAME.getCommand().length()).trim();
 
                 if (newDisplayname.length() > 0) {
                     MyUser myUser = session.getMyUser();
 
                     myUser.updateDisplayName(newDisplayname, callback);
                 }
-            } else if (TextUtils.equals(firstPart, CMD_TOPIC)) {
+            } else if (TextUtils.equals(firstPart, SlashCommand.TOPIC.getCommand())) {
                 isIRCCmd = true;
 
-                String newTopîc = textMessage.substring(CMD_TOPIC.length()).trim();
+                String newTopîc = textMessage.substring(SlashCommand.TOPIC.getCommand().length()).trim();
 
                 if (newTopîc.length() > 0) {
                     room.updateTopic(newTopîc, callback);
                 }
-            } else if (TextUtils.equals(firstPart, CMD_EMOTE)) {
+            } else if (TextUtils.equals(firstPart, SlashCommand.EMOTE.getCommand())) {
                 isIRCCmd = true;
 
-                String newMessage = textMessage.substring(CMD_EMOTE.length()).trim();
+                String newMessage = textMessage.substring(SlashCommand.EMOTE.getCommand().length()).trim();
 
                 if (textMessage.length() > 0) {
-                    if ((null != formattedBody) && formattedBody.length() > CMD_EMOTE.length()) {
-                        activity.sendEmote(newMessage, formattedBody.substring(CMD_EMOTE.length()), format);
+                    if ((null != formattedBody) && formattedBody.length() > SlashCommand.EMOTE.getCommand().length()) {
+                        activity.sendEmote(newMessage, formattedBody.substring(SlashCommand.EMOTE.getCommand().length()), format);
                     } else {
                         activity.sendEmote(newMessage, formattedBody, format);
                     }
                 }
-            } else if (TextUtils.equals(firstPart, CMD_JOIN_ROOM)) {
+            } else if (TextUtils.equals(firstPart, SlashCommand.JOIN_ROOM.getCommand())) {
                 isIRCCmd = true;
-                String roomAlias = textMessage.substring(CMD_JOIN_ROOM.length()).trim();
+                String roomAlias = textMessage.substring(SlashCommand.JOIN_ROOM.getCommand().length()).trim();
 
                 if (roomAlias.length() > 0) {
                     session.joinRoom(roomAlias, new SimpleApiCallback<String>(activity) {
@@ -341,9 +245,9 @@ public class SlashCommandsParser {
                         }
                     });
                 }
-            } else if (TextUtils.equals(firstPart, CMD_PART)) {
+            } else if (TextUtils.equals(firstPart, SlashCommand.PART.getCommand())) {
                 isIRCCmd = true;
-                String roomAlias = textMessage.substring(CMD_PART.length()).trim();
+                String roomAlias = textMessage.substring(SlashCommand.PART.getCommand().length()).trim();
 
                 if (roomAlias.length() > 0) {
                     Room theRoom = null;
@@ -367,22 +271,22 @@ public class SlashCommandsParser {
                         theRoom.leave(callback);
                     }
                 }
-            } else if (TextUtils.equals(firstPart, CMD_INVITE)) {
+            } else if (TextUtils.equals(firstPart, SlashCommand.INVITE.getCommand())) {
                 isIRCCmd = true;
 
                 if (messageParts.length >= 2) {
                     room.invite(messageParts[1], callback);
                 }
-            } else if (TextUtils.equals(firstPart, CMD_KICK_USER)) {
+            } else if (TextUtils.equals(firstPart, SlashCommand.KICK_USER.getCommand())) {
                 isIRCCmd = true;
 
                 if (messageParts.length >= 2) {
                     room.kick(messageParts[1], callback);
                 }
-            } else if (TextUtils.equals(firstPart, CMD_BAN_USER)) {
+            } else if (TextUtils.equals(firstPart, SlashCommand.BAN_USER.getCommand())) {
                 isIRCCmd = true;
 
-                String params = textMessage.substring(CMD_BAN_USER.length()).trim();
+                String params = textMessage.substring(SlashCommand.BAN_USER.getCommand().length()).trim();
                 String[] paramsList = params.split(" ");
 
                 String bannedUserID = paramsList[0];
@@ -391,14 +295,14 @@ public class SlashCommandsParser {
                 if (bannedUserID.length() > 0) {
                     room.ban(bannedUserID, reason, callback);
                 }
-            } else if (TextUtils.equals(firstPart, CMD_UNBAN_USER)) {
+            } else if (TextUtils.equals(firstPart, SlashCommand.UNBAN_USER.getCommand())) {
                 isIRCCmd = true;
 
                 if (messageParts.length >= 2) {
                     room.unban(messageParts[1], callback);
                 }
 
-            } else if (TextUtils.equals(firstPart, CMD_SET_USER_POWER_LEVEL)) {
+            } else if (TextUtils.equals(firstPart, SlashCommand.SET_USER_POWER_LEVEL.getCommand())) {
                 isIRCCmd = true;
 
                 if (messageParts.length >= 3) {
@@ -413,13 +317,13 @@ public class SlashCommandsParser {
                         Log.e(LOG_TAG, "mRoom.updateUserPowerLevels " + e.getMessage(), e);
                     }
                 }
-            } else if (TextUtils.equals(firstPart, CMD_RESET_USER_POWER_LEVEL)) {
+            } else if (TextUtils.equals(firstPart, SlashCommand.RESET_USER_POWER_LEVEL.getCommand())) {
                 isIRCCmd = true;
 
                 if (messageParts.length >= 2) {
                     room.updateUserPowerLevels(messageParts[1], 0, callback);
                 }
-            } else if (TextUtils.equals(firstPart, CMD_MARKDOWN)) {
+            } else if (TextUtils.equals(firstPart, SlashCommand.MARKDOWN.getCommand())) {
                 isIRCCmd = true;
 
                 if (messageParts.length >= 2) {
@@ -429,7 +333,7 @@ public class SlashCommandsParser {
                         PreferencesManager.setMarkdownEnabled(VectorApp.getInstance(), false);
                     }
                 }
-            } else if (TextUtils.equals(firstPart, CMD_CLEAR_SCALAR_TOKEN)) {
+            } else if (TextUtils.equals(firstPart, SlashCommand.CLEAR_SCALAR_TOKEN.getCommand())) {
                 isIRCCmd = true;
 
                 WidgetsManager.clearScalarToken(activity, session);

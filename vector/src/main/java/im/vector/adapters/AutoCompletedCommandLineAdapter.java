@@ -27,7 +27,6 @@ import org.matrix.androidsdk.MXSession;
 
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 
@@ -56,7 +55,7 @@ public class AutoCompletedCommandLineAdapter extends ArrayAdapter<String> {
     private android.widget.Filter mFilter;
 
     // cannot use the parent list
-    private List<String> mCommandLines = new ArrayList<>();
+    private List<SlashCommandsParser.SlashCommand> mCommandLines = new ArrayList<>();
 
     /**
      * Comparators
@@ -74,16 +73,15 @@ public class AutoCompletedCommandLineAdapter extends ArrayAdapter<String> {
      * @param context           Activity context
      * @param layoutResourceId  The resource ID of the layout for each item.
      * @param session           The session
-     * @param commandLines      The command lines list
+     * @param slashCommands      The command lines list
      */
-    public AutoCompletedCommandLineAdapter(Context context, int layoutResourceId, MXSession session, Collection<String> commandLines) {
+    public AutoCompletedCommandLineAdapter(Context context, int layoutResourceId, MXSession session, Collection<SlashCommandsParser.SlashCommand> slashCommands) {
         super(context, layoutResourceId);
         mContext = context;
         mLayoutResourceId = layoutResourceId;
         mLayoutInflater = LayoutInflater.from(mContext);
         mSession = session;
-        addAll(commandLines);
-        mCommandLines = new ArrayList<>(commandLines);
+        mCommandLines = new ArrayList<>(slashCommands);
     }
 
     /**
@@ -100,15 +98,16 @@ public class AutoCompletedCommandLineAdapter extends ArrayAdapter<String> {
             convertView = mLayoutInflater.inflate(mLayoutResourceId, parent, false);
         }
 
-        String command = getItem(position);
-        String parameter = SlashCommandsParser.getSlashCommandParam(command);
-        String description = SlashCommandsParser.getSlashCommandDescription(command);
+        String slashCommand =  getItem(position);
+
+        String parameter = SlashCommandsParser.SlashCommand.get(slashCommand).getParam();
+        String description = SlashCommandsParser.SlashCommand.get(slashCommand).getDescription();
 
         TextView tvCommandName = convertView.findViewById(R.id.item_command_auto_complete_name);
         TextView tvCommandParameter = convertView.findViewById(R.id.item_command_auto_complete_parameter);
         TextView tvCommandDescription = convertView.findViewById(R.id.item_command_auto_complete_description);
 
-        tvCommandName.setText(command);
+        tvCommandName.setText(slashCommand);
         tvCommandParameter.setText(parameter);
         tvCommandDescription.setText(description);
 
@@ -136,9 +135,9 @@ public class AutoCompletedCommandLineAdapter extends ArrayAdapter<String> {
                 String prefixString = prefix.toString().toLowerCase(VectorApp.getApplicationLocale());
 
                 if (prefixString.startsWith("/")) {
-                    for (String command : mCommandLines) {
-                        if ((null != command) && command.toLowerCase(VectorApp.getApplicationLocale()).startsWith(prefixString)) {
-                            newValues.add(command);
+                    for (SlashCommandsParser.SlashCommand slashCommand : mCommandLines) {
+                        if ((null != slashCommand.getCommand()) && slashCommand.getCommand().toLowerCase(VectorApp.getApplicationLocale()).startsWith(prefixString)) {
+                            newValues.add(slashCommand.getCommand());
                         }
                     }
                 }

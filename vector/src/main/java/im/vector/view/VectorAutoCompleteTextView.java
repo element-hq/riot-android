@@ -130,9 +130,11 @@ public class VectorAutoCompleteTextView extends AppCompatMultiAutoCompleteTextVi
      * @param roomId  the room Id
      */
     public void initAutoCompletionCommandLine(MXSession session, String roomId) {
-        List<String> commandLines = SlashCommandsParser.getSlashCommandList();
+        SlashCommandsParser.SlashCommand[] commandLines = SlashCommandsParser.SlashCommand.values();
+        List<SlashCommandsParser.SlashCommand> commands = new ArrayList<SlashCommandsParser.SlashCommand>(Arrays.asList(commandLines));
 
-        initAutoCompletionCommandLine(session, commandLines);
+
+        initAutoCompletionCommandLine(session, commands);
     }
 
     /**
@@ -179,7 +181,7 @@ public class VectorAutoCompleteTextView extends AppCompatMultiAutoCompleteTextVi
      * @param session       the session
      * @param commandLines  the commands list
      */
-    private void initAutoCompletionCommandLine(MXSession session, Collection<String> commandLines) {
+    private void initAutoCompletionCommandLine(MXSession session, Collection<SlashCommandsParser.SlashCommand> commandLines) {
         // build the adapter
         mAdapterCommand = new AutoCompletedCommandLineAdapter(getContext(), R.layout.item_command_auto_complete, session, commandLines);
         setAdapter(mAdapterCommand);
