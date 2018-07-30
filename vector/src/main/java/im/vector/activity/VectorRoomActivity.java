@@ -721,6 +721,10 @@ public class VectorRoomActivity extends MXCActionBarActivity implements
             }
         });
 
+        mRoom = mSession.getDataHandler().getRoom(roomId, false);
+
+        mEditText.initAutoCompletion(mSession, (null != mRoom) ? mRoom.getRoomId() : null);
+        mEditText.initAutoCompletionCommandLine(mSession , null);
         mEditText.setAddColonOnFirstItem(true);
 
         mEditText.addTextChangedListener(new TextWatcher() {
@@ -728,9 +732,13 @@ public class VectorRoomActivity extends MXCActionBarActivity implements
             public void afterTextChanged(android.text.Editable s) {
                 if (null != mRoom) {
                     if (mEditText.getText().toString().startsWith("@")) {
-                        mEditText.initAutoCompletion(mSession, (null != mRoom) ? mRoom.getRoomId() : null);
+                        mEditText.setAdapter(mEditText.mAdapterUser);
+                        // the minimum number of characters to display the proposals list
+                        mEditText.setThreshold(3);
                     } else if (mEditText.getText().toString().startsWith("/")) {
-                        mEditText.initAutoCompletionCommandLine(mSession, null);
+                        mEditText.setAdapter(mEditText.mAdapterCommand);
+                        // the minimum number of characters to display the proposals list
+                        mEditText.setThreshold(1);
                     }
 
                     MXLatestChatMessageCache latestChatMessageCache = mLatestChatMessageCache;
@@ -761,8 +769,6 @@ public class VectorRoomActivity extends MXCActionBarActivity implements
         mMyUserId = mSession.getCredentials().userId;
 
         CommonActivityUtils.resumeEventStream(this);
-
-        mRoom = mSession.getDataHandler().getRoom(roomId, false);
 
         FragmentManager fm = getSupportFragmentManager();
         mVectorMessageListFragment = (VectorMessageListFragment) fm.findFragmentByTag(TAG_FRAGMENT_MATRIX_MESSAGE_LIST);
@@ -1083,8 +1089,6 @@ public class VectorRoomActivity extends MXCActionBarActivity implements
         // to have notifications for this room
         ViewedRoomTracker.getInstance().setViewedRoomId(null);
         ViewedRoomTracker.getInstance().setMatrixId(null);
-        mEditText.initAutoCompletion(mSession, null);
-        //mEditText.initAutoCompletionCommandLine(mSession, null);
     }
 
     @Override
@@ -1200,7 +1204,6 @@ public class VectorRoomActivity extends MXCActionBarActivity implements
                         startActivity(intent);
                     }
                 });
-
             }
 
             mCallId = null;
@@ -1217,7 +1220,7 @@ public class VectorRoomActivity extends MXCActionBarActivity implements
 
         // init the auto-completion list from the room members
         mEditText.initAutoCompletion(mSession, (null != mRoom) ? mRoom.getRoomId() : null);
-        //mEditText.initAutoCompletionCommandLine(mSession, null);
+        mEditText.initAutoCompletionCommandLine(mSession, null);
 
         if (mReadMarkerManager != null) {
             mReadMarkerManager.onResume();

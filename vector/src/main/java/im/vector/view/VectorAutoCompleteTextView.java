@@ -57,8 +57,8 @@ public class VectorAutoCompleteTextView extends AppCompatMultiAutoCompleteTextVi
     private static final String LOG_TAG = VectorAutoCompleteTextView.class.getSimpleName();
 
     // results adapter
-    private AutoCompletedUserAdapter mAdapterUser;
-    private AutoCompletedCommandLineAdapter mAdapterCommand;
+    public AutoCompletedUserAdapter mAdapterUser;
+    public AutoCompletedCommandLineAdapter mAdapterCommand;
 
     // the pending patter,
     private String mPendingFilter;
@@ -133,7 +133,6 @@ public class VectorAutoCompleteTextView extends AppCompatMultiAutoCompleteTextVi
         SlashCommandsParser.SlashCommand[] commandLines = SlashCommandsParser.SlashCommand.values();
         List<SlashCommandsParser.SlashCommand> commands = new ArrayList<SlashCommandsParser.SlashCommand>(Arrays.asList(commandLines));
 
-
         initAutoCompletionCommandLine(session, commands);
     }
 
@@ -146,13 +145,9 @@ public class VectorAutoCompleteTextView extends AppCompatMultiAutoCompleteTextVi
     private void initAutoCompletion(MXSession session, Collection<User> users) {
         // build the adapter
         mAdapterUser = new AutoCompletedUserAdapter(getContext(), R.layout.item_user_auto_complete, session, users);
-        setAdapter(mAdapterUser);
 
         // define the parser
         setTokenizer(new VectorAutoCompleteTokenizer());
-
-        // the minimum number of characters to display the proposals list
-        setThreshold(3);
 
         // retrieve 2 private members
         if (null == mPopupCanBeUpdatedField) {
@@ -184,13 +179,9 @@ public class VectorAutoCompleteTextView extends AppCompatMultiAutoCompleteTextVi
     private void initAutoCompletionCommandLine(MXSession session, Collection<SlashCommandsParser.SlashCommand> commandLines) {
         // build the adapter
         mAdapterCommand = new AutoCompletedCommandLineAdapter(getContext(), R.layout.item_command_auto_complete, session, commandLines);
-        setAdapter(mAdapterCommand);
 
         // define the parser
         setTokenizer(new VectorAutoCompleteTokenizer());
-
-        // the minimum number of characters to display the proposals list
-        setThreshold(1);
 
         // retrieve 2 private members
         if (null == mPopupCanBeUpdatedField) {
@@ -212,7 +203,6 @@ public class VectorAutoCompleteTextView extends AppCompatMultiAutoCompleteTextVi
             }
         }
     }
-
 
     /**
      * Tells if the pasted text is always the user matrix id
