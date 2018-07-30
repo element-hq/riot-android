@@ -813,7 +813,7 @@ public class VectorMessagesAdapter extends AbstractMessagesAdapter {
         }
 
         if (null != inflatedView) {
-            //inflatedView.setBackgroundColor(Color.TRANSPARENT);
+            inflatedView.setBackgroundColor(Color.TRANSPARENT);
             inflatedView.setTag(viewType);
         }
 

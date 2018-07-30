@@ -78,7 +78,7 @@ public class FavouritesFragment extends AbsHomeFragment implements HomeRoomAdapt
         @Override
         public void onRoomTagEvent(String roomId) {
             if (mActivity.isWaitingViewVisible()) {
-                //onRoomTagUpdated(null);
+                onRoomTagUpdated(null);
             }
         }
     };
