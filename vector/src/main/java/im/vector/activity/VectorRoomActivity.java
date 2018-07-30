@@ -27,6 +27,7 @@ import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.content.res.Configuration;
 import android.graphics.Color;
+import android.graphics.Typeface;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Vibrator;
@@ -44,6 +45,8 @@ import android.text.TextUtils;
 import android.text.TextWatcher;
 import android.text.method.LinkMovementMethod;
 import android.text.style.ClickableSpan;
+import android.text.style.ForegroundColorSpan;
+import android.text.style.StyleSpan;
 import android.text.style.URLSpan;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
@@ -60,6 +63,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.binaryfork.spanny.Spanny;
 import com.google.gson.JsonParser;
 
 import org.jetbrains.annotations.NotNull;
@@ -88,6 +92,7 @@ import org.matrix.androidsdk.rest.model.Event;
 import org.matrix.androidsdk.rest.model.MatrixError;
 import org.matrix.androidsdk.rest.model.PowerLevels;
 import org.matrix.androidsdk.rest.model.RoomMember;
+import org.matrix.androidsdk.rest.model.RoomTombstoneContent;
 import org.matrix.androidsdk.rest.model.User;
 import org.matrix.androidsdk.rest.model.message.Message;
 import org.matrix.androidsdk.rest.model.publicroom.PublicRoom;
@@ -241,6 +246,9 @@ public class VectorRoomActivity extends MXCActionBarActivity implements
 
     @BindView(R.id.room_cannot_post_textview)
     View mCanNotPostTextView;
+
+    @BindView(R.id.room_bottom_layout)
+    View mBottomLayout;
 
     @BindView(R.id.room_encrypted_image_view)
     ImageView mE2eImageView;
@@ -515,8 +523,10 @@ public class VectorRoomActivity extends MXCActionBarActivity implements
                             mE2eImageView.setImageResource(canSendEncryptedEvent ? R.drawable.e2e_verified : R.drawable.e2e_unencrypted);
                             mVectorMessageListFragment.setIsRoomEncrypted(mRoom.isEncrypted());
                             break;
+                        case Event.EVENT_TYPE_STATE_ROOM_TOMBSTONE:
+                            checkSendEventStatus();
+                            break;
                     }
-
                     if (!VectorApp.isAppInBackground()) {
                         // do not send read receipt for the typing events
                         // they are ephemeral ones.
@@ -669,7 +679,7 @@ public class VectorRoomActivity extends MXCActionBarActivity implements
         mActionBarHeaderRoomAvatar = mRoomHeaderView.findViewById(R.id.avatar_img);
 
         // hide the header room as soon as the bottom layout (text edit zone) is touched
-        findViewById(R.id.room_bottom_layout).setOnTouchListener(new View.OnTouchListener() {
+        mBottomLayout.setOnTouchListener(new View.OnTouchListener() {
             @Override
             public boolean onTouch(View view, MotionEvent motionEvent) {
                 enableActionBarHeader(HIDE_ACTION_BAR_HEADER);
@@ -794,10 +804,7 @@ public class VectorRoomActivity extends MXCActionBarActivity implements
                 findViewById(R.id.room_notifications_area).setVisibility(View.GONE);
             }
 
-            View v = findViewById(R.id.room_bottom_layout);
-            ViewGroup.LayoutParams params = v.getLayoutParams();
-            params.height = 0;
-            v.setLayoutParams(params);
+            mBottomLayout.getLayoutParams().height = 0;
         }
 
         if ((null == sRoomPreviewData) && hasBeenKicked) {
@@ -2509,7 +2516,7 @@ public class VectorRoomActivity extends MXCActionBarActivity implements
         int iconId = -1;
         @ColorInt int textColor = -1;
         boolean isAreaVisible = false;
-        SpannableString text = new SpannableString("");
+        CharSequence text = new SpannableString("");
         boolean hasUnsentEvent = false;
 
         // remove any listeners
@@ -2554,20 +2561,20 @@ public class VectorRoomActivity extends MXCActionBarActivity implements
                 int cancelAllPos = message.indexOf(cancelAll);
                 int resendAllPos = message.indexOf(resendAll);
 
-                text = new SpannableString(message);
+                SpannableString spannableString = new SpannableString(message);
 
                 // cancelAllPos should always be > 0 but a GA crash reported here
                 if (cancelAllPos >= 0) {
-                    text.setSpan(new cancelAllClickableSpan(), cancelAllPos, cancelAllPos + cancelAll.length(), 0);
+                    spannableString.setSpan(new cancelAllClickableSpan(), cancelAllPos, cancelAllPos + cancelAll.length(), 0);
                 }
 
                 // resendAllPos should always be > 0 but a GA crash reported here
                 if (resendAllPos >= 0) {
-                    text.setSpan(new resendAllClickableSpan(), resendAllPos, resendAllPos + resendAll.length(), 0);
+                    spannableString.setSpan(new resendAllClickableSpan(), resendAllPos, resendAllPos + resendAll.length(), 0);
                 }
-
                 mNotificationTextView.setMovementMethod(LinkMovementMethod.getInstance());
                 textColor = ContextCompat.getColor(VectorRoomActivity.this, R.color.vector_fuchsia_color);
+                text = spannableString;
             } else if ((null != mIsScrolledToTheBottom) && (!mIsScrolledToTheBottom)) {
                 isAreaVisible = true;
 
@@ -2617,10 +2624,23 @@ public class VectorRoomActivity extends MXCActionBarActivity implements
 
             } else if (!TextUtils.isEmpty(mLatestTypingMessage)) {
                 isAreaVisible = true;
-
                 iconId = R.drawable.vector_typing;
                 text = new SpannableString(mLatestTypingMessage);
                 textColor = ThemeUtils.INSTANCE.getColor(this, R.attr.room_notification_text_color);
+            } else if (mRoom.getState().isVersioned()) {
+                isAreaVisible = true;
+                iconId = R.drawable.error;
+
+                final RoomTombstoneContent roomTombstoneContent = mRoom.getState().getRoomTombstoneContent();
+                final String roomLink = PermalinkUtils.createPermalink(roomTombstoneContent.replacementRoom);
+                final ClickableSpan urlSpan = new MatrixURLSpan(roomLink, MXSession.PATTERN_CONTAIN_APP_LINK_PERMALINK_ROOM_ID, mVectorMessageListFragment);
+                final int textColorInt = ThemeUtils.INSTANCE.getColor(this, R.attr.message_text_color);
+                text = new Spanny(getString(R.string.room_tombstone_versioned_description),
+                        new StyleSpan(Typeface.BOLD),
+                        new ForegroundColorSpan(textColorInt))
+                        .append("\n")
+                        .append(getString(R.string.room_tombstone_continuation_link), urlSpan, new ForegroundColorSpan(textColorInt));
+                mNotificationTextView.setMovementMethod(LinkMovementMethod.getInstance());
             }
         }
 
@@ -2663,7 +2683,7 @@ public class VectorRoomActivity extends MXCActionBarActivity implements
             return;
         }
 
-        if ((null == sRoomPreviewData) && (null == mEventId) && canSendMessages()) {
+        if ((null == sRoomPreviewData) && (null == mEventId) && canSendMessages(mRoom.getState())) {
             boolean isCallSupported = mRoom.canPerformCall() && mSession.isVoipCallSupported();
             IMXCall call = CallsManager.getSharedInstance().getActiveCall();
             Widget activeWidget = mVectorOngoingConferenceCallView.getActiveWidget();
@@ -2976,24 +2996,17 @@ public class VectorRoomActivity extends MXCActionBarActivity implements
         }
     }
 
-
     /**
      * Tell if the user can send a message in this room.
      *
      * @return true if the user is allowed to send messages in this room.
      */
-    private boolean canSendMessages() {
-        boolean canSendMessage = false;
-
-        if ((null != mRoom) && (null != mRoom.getState())) {
-            canSendMessage = true;
-            PowerLevels powerLevels = mRoom.getState().getPowerLevels();
-
-            if (null != powerLevels) {
-                canSendMessage = powerLevels.maySendMessage(mMyUserId);
-            }
+    private boolean canSendMessages(@NonNull final RoomState state) {
+        boolean canSendMessage = !state.isVersioned();
+        if (canSendMessage) {
+            final PowerLevels powerLevels = state.getPowerLevels();
+            canSendMessage = (powerLevels != null && powerLevels.maySendMessage(mMyUserId));
         }
-
         return canSendMessage;
     }
 
@@ -3002,9 +3015,17 @@ public class VectorRoomActivity extends MXCActionBarActivity implements
      */
     private void checkSendEventStatus() {
         if ((null != mRoom) && (null != mRoom.getState())) {
-            boolean canSendMessage = canSendMessages();
-            mSendingMessagesLayout.setVisibility(canSendMessage ? View.VISIBLE : View.GONE);
-            mCanNotPostTextView.setVisibility(!canSendMessage ? View.VISIBLE : View.GONE);
+            final RoomState state = mRoom.getState();
+            boolean canSendMessage = canSendMessages(state);
+            if (canSendMessage) {
+                mSendingMessagesLayout.setVisibility(View.VISIBLE);
+                mCanNotPostTextView.setVisibility(View.GONE);
+            } else if (state.isVersioned()) {
+                mBottomLayout.getLayoutParams().height = 0;
+            } else {
+                mSendingMessagesLayout.setVisibility(View.GONE);
+                mCanNotPostTextView.setVisibility(View.VISIBLE);
+            }
         }
     }
 
