@@ -1,5 +1,4 @@
 /*
- * Copyright 2017 Vector Creations Ltd
  * Copyright 2018 New Vector Ltd
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -81,7 +80,8 @@ class HomeRoomsViewModel(private val session: MXSession) {
                     val isJoined = it.hasMembership(RoomMember.MEMBERSHIP_JOIN)
                     val tombstoneContent = it.state.roomTombstoneContent
                     val redirectRoom = session.dataHandler.getRoom(tombstoneContent?.replacementRoom)
-                    val isVersioned = redirectRoom?.hasMembership(RoomMember.MEMBERSHIP_JOIN) ?: false
+                    val isVersioned = redirectRoom?.hasMembership(RoomMember.MEMBERSHIP_JOIN)
+                            ?: false
                     isJoined && !isVersioned && !it.isConferenceUserRoom
                 }
     }
