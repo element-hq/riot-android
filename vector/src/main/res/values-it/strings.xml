@@ -1022,7 +1022,7 @@ La visibilità dei messaggi in Matrix è simile alle email. Se dimentichiamo i m
     <string name="go_on_with">prosegui con…</string>
     <string name="error_no_external_application_found">Spiacenti, ma non è stata trovata alcuna applicazione esterna per completare l\'azione.</string>
 
-    <string name="settings_labs_enable_send_voice">Invia messaggio vocale (si richiede un\'applicazione di terze parti per registrare i messaggi vocali)</string>
+    <string name="settings_labs_enable_send_voice">Invia messaggio vocale (applicazione di terze parti richiesta per registrare i messaggi vocali)</string>
 
     <string name="group_details_people">Persone</string>
     <string name="error_empty_field_your_password">Per favore, inserisci la tua password.</string>
