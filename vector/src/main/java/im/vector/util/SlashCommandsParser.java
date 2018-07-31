@@ -17,6 +17,7 @@
 
 package im.vector.util;
 
+import android.support.annotation.StringRes;
 import android.support.v7.app.AlertDialog;
 import android.text.TextUtils;
 import android.widget.Toast;
@@ -48,24 +49,25 @@ public class SlashCommandsParser {
 
         // defines the command line operations
         // the user can write theses messages to perform some room events
-        EMOTE("/me", "<message>", VectorApp.getInstance().getString(R.string.command_description_emote)),
-        BAN_USER("/ban", "<user-id>", VectorApp.getInstance().getString(R.string.command_description_ban_user)),
-        UNBAN_USER ("/unban", "<user-id>", VectorApp.getInstance().getString(R.string.command_description_unban_user)),
-        SET_USER_POWER_LEVEL ("/op", "<user-id> [<power-level>]",VectorApp.getInstance().getString(R.string.command_description_op_user)),
-        RESET_USER_POWER_LEVEL ("/deop", "<user-id>", VectorApp.getInstance().getString(R.string.command_description_deop_user)),
-        INVITE ("/invite", "<user-id>", VectorApp.getInstance().getString(R.string.command_description_invite_user)),
-        JOIN_ROOM ("/join", "<room-alias>", VectorApp.getInstance().getString(R.string.command_description_join_room)),
-        PART ("/part", "<room-alias>", VectorApp.getInstance().getString(R.string.command_description_part_room)),
-        TOPIC ("/topic", "<topic>", VectorApp.getInstance().getString(R.string.command_description_topic)),
-        KICK_USER ("/kick", "<user-id>", VectorApp.getInstance().getString(R.string.command_description_kick_user)),
-        CHANGE_DISPLAY_NAME ("/nick", "<display-name>", VectorApp.getInstance().getString(R.string.command_description_nick)),
-        MARKDOWN ("/markdown", "", VectorApp.getInstance().getString(R.string.command_description_markdown)),
-        // clear scalar token (waiting for correct 403 management)
-        CLEAR_SCALAR_TOKEN ("/clear_scalar_token", "", VectorApp.getInstance().getString(R.string.command_description_clear_scalar_token));
+        EMOTE("/me", "<message>", R.string.command_description_emote),
+        BAN_USER("/ban", "<user-id>", R.string.command_description_ban_user),
+        UNBAN_USER ("/unban", "<user-id>", R.string.command_description_unban_user),
+        SET_USER_POWER_LEVEL ("/op", "<user-id> [<power-level>]",R.string.command_description_op_user),
+        RESET_USER_POWER_LEVEL ("/deop", "<user-id>", R.string.command_description_deop_user),
+        INVITE ("/invite", "<user-id>", R.string.command_description_invite_user),
+        JOIN_ROOM ("/join", "<room-alias>", R.string.command_description_join_room),
+        PART ("/part", "<room-alias>", R.string.command_description_part_room),
+        TOPIC ("/topic", "<topic>", R.string.command_description_topic),
+        KICK_USER ("/kick", "<user-id>", R.string.command_description_kick_user),
+        CHANGE_DISPLAY_NAME ("/nick", "<display-name>", R.string.command_description_nick),
+        MARKDOWN ("/markdown", "", R.string.command_description_markdown),
+        CLEAR_SCALAR_TOKEN ("/clear_scalar_token", "", R.string.command_description_clear_scalar_token);
 
         private final String command;
         private String parameter;
-        private String description;
+
+        @StringRes
+        private int description;
 
         private  static final Map<String, SlashCommand> lookup = new HashMap<String, SlashCommand>();
 
@@ -79,7 +81,7 @@ public class SlashCommandsParser {
             this.command = command;
         }
 
-        SlashCommand(String command, String parameter, String description) {
+        SlashCommand(String command, String parameter, @StringRes int description) {
             this.command = command;
             this.parameter = parameter;
             this.description = description;
@@ -97,7 +99,7 @@ public class SlashCommandsParser {
             return parameter;
         }
 
-        public String getDescription() {
+        public int getDescription() {
             return description;
         }
     }

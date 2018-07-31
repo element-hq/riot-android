@@ -250,7 +250,7 @@ public class VectorAutoCompleteTextView extends AppCompatMultiAutoCompleteTextVi
             ViewGroup mMeasureParent = new FrameLayout(getContext());
             View itemView = null;
 
-            final int count = mAdapterCommand.getCount();
+            final int count = mAdapterCommand.getViewTypeCount();
 
             for (int i = 0; i < count; i++) {
                 itemView = mAdapterCommand.getView(i, itemView, mMeasureParent);

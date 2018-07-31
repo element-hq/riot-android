@@ -17,6 +17,8 @@
 package im.vector.adapters;
 
 import android.content.Context;
+import android.support.annotation.StringRes;
+import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -30,6 +32,8 @@ import java.util.Collection;
 import java.util.Comparator;
 import java.util.List;
 
+import butterknife.BindView;
+import butterknife.ButterKnife;
 import im.vector.R;
 import im.vector.VectorApp;
 import im.vector.util.SlashCommandsParser;
@@ -94,24 +98,44 @@ public class AutoCompletedCommandLineAdapter extends ArrayAdapter<String> {
      * @return the view
      */
     public View getView(int position, View convertView, ViewGroup parent) {
+        CommandViewHolder viewHolder;
+
         if (convertView == null) {
+            // inflate the layout
             convertView = mLayoutInflater.inflate(mLayoutResourceId, parent, false);
+            viewHolder = new CommandViewHolder(convertView);
+            convertView.setTag(viewHolder);
+        } else {
+            viewHolder = (CommandViewHolder) convertView.getTag();
         }
 
-        String slashCommand =  getItem(position);
+        SlashCommandsParser.SlashCommand slashCommand = SlashCommandsParser.SlashCommand.get(getItem(position));
+        @StringRes int description = slashCommand.getDescription();
 
-        String parameter = SlashCommandsParser.SlashCommand.get(slashCommand).getParam();
-        String description = SlashCommandsParser.SlashCommand.get(slashCommand).getDescription();
-
-        TextView tvCommandName = convertView.findViewById(R.id.item_command_auto_complete_name);
-        TextView tvCommandParameter = convertView.findViewById(R.id.item_command_auto_complete_parameter);
-        TextView tvCommandDescription = convertView.findViewById(R.id.item_command_auto_complete_description);
-
-        tvCommandName.setText(slashCommand);
-        tvCommandParameter.setText(parameter);
-        tvCommandDescription.setText(description);
+        if (null != slashCommand) {
+            viewHolder.tvCommandName.setText(slashCommand.getCommand());
+            viewHolder.tvCommandParameter.setText(slashCommand.getParam());
+            viewHolder.tvCommandDescription.setText(VectorApp.getInstance().getString(description));
+        }
 
         return convertView;
+    }
+
+    static class CommandViewHolder extends RecyclerView.ViewHolder {
+
+        @BindView(R.id.item_command_auto_complete_name)
+        TextView tvCommandName;
+
+        @BindView(R.id.item_command_auto_complete_parameter)
+        TextView tvCommandParameter;
+
+        @BindView(R.id.item_command_auto_complete_description)
+        TextView tvCommandDescription;
+
+        public CommandViewHolder(View itemView) {
+            super(itemView);
+            ButterKnife.bind(this, itemView);
+        }
     }
 
     @Override

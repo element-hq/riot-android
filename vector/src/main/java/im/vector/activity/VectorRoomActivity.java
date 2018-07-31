@@ -334,6 +334,42 @@ public class VectorRoomActivity extends MXCActionBarActivity implements
     @BindView(R.id.main_progress_layout)
     View mMainProgressView;
 
+
+    private enum AutoCompletionMode {
+        USER_MODE("@"),
+        COMMAND_MODE("/");
+
+        private String startChar;
+
+        AutoCompletionMode(String startChar) {
+            this.startChar = startChar;
+        }
+
+        public String getMode() {
+            return startChar;
+        }
+
+        public void setMode(String startChar) {
+            this.startChar = startChar;
+        }
+
+        public static AutoCompletionMode setAutoCompletionModeByMode(String startChar) {
+            AutoCompletionMode autoCompletionMode = null;
+
+            switch (startChar) {
+                case "@":
+                    autoCompletionMode = USER_MODE;
+                    break;
+                case "/":
+                    autoCompletionMode = COMMAND_MODE;
+                    break;
+                default:
+                    break;
+            }
+            return autoCompletionMode;
+        }
+    }
+
     // network events
     private final IMXNetworkEventListener mNetworkEventListener = new IMXNetworkEventListener() {
         @Override
@@ -453,6 +489,10 @@ public class VectorRoomActivity extends MXCActionBarActivity implements
                     updateRoomHeaderAvatar();
                 }
             });
+        }
+
+        private void setAutoCompletion() {
+            // TODO set adapter and threshold
         }
 
         @Override
