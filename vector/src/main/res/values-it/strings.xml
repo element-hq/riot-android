@@ -899,7 +899,7 @@ I messaggi criptati non saranno visibili ai riceventi che non hanno ancora imple
 
     <!-- conference call -->
     <string name="conference_call_warning_title">Attenzione!</string>
-    <string name="conference_call_warning_message">La modalità conferenza e\' in fase di sviluppo e potrebbe non essere affidabile</string>
+    <string name="conference_call_warning_message">La chiamata in conferenza è in fase di sviluppo e potrebbe non essere affidabile.</string>
 
     <!-- slash commands -->
     <string name="command_error">Errore di comando</string>
