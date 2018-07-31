@@ -1910,7 +1910,12 @@ public class VectorRoomActivity extends MXCActionBarActivity implements
                 }
             }
         }
-        if (PreferencesManager.previewMediaWhenSending(this)) {
+        boolean hasItemToShare = !sharedDataItems.isEmpty();
+        boolean isTextOnly = sharedDataItems.size() == 1
+                && "text/plain".equals(sharedDataItems.get(0).getMimeType(this));
+        boolean shouldPreviewMedia = PreferencesManager.previewMediaWhenSending(this);
+
+        if (hasItemToShare && !isTextOnly && shouldPreviewMedia) {
             if (null != intent) {
                 intent.setClass(this, MediaPreviewerActivity.class);
             } else {
