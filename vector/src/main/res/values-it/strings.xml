@@ -906,8 +906,8 @@ I messaggi criptati non saranno visibili ai riceventi che non hanno ancora imple
     <string name="unrecognized_command">Comando non riconosciuto: %s</string>
 
     <!-- notification statuses -->
-    <string name="notification_off">Off</string>
-    <string name="notification_on">On</string>
+    <string name="notification_off">Spento</string>
+    <string name="notification_on">Acceso</string>
     <string name="notification_noisy">Rumoroso</string>
 
     <string name="create">Crea</string>
