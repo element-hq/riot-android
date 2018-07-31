@@ -702,6 +702,7 @@
 
 
     <string name="settings_flair">Flair</string>
+    <string name="settings_without_flair">You are not currently a member of any communities.</string>
 
     <!-- medias saving settings -->
     <string name="media_saving_period_3_days">3 days</string>

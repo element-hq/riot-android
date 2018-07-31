@@ -150,6 +150,11 @@ class VectorSettingsPreferencesFragment : PreferenceFragment(), SharedPreference
         findPreference(PreferencesManager.SETTINGS_CONTACTS_PHONEBOOK_COUNTRY_PREFERENCE_KEY) as VectorCustomActionEditTextPreference
     }
 
+    // Group Flairs
+    private val mGroupsFlairCategory by lazy {
+        findPreference(PreferencesManager.SETTINGS_GROUPS_FLAIR_KEY) as PreferenceCategory
+    }
+
     // cryptography
     private val mCryptographyCategory by lazy {
         findPreference(PreferencesManager.SETTINGS_CRYPTOGRAPHY_PREFERENCE_KEY) as PreferenceCategory
@@ -2603,27 +2608,14 @@ class VectorSettingsPreferencesFragment : PreferenceFragment(), SharedPreference
      * It can be any mobile device, as any browser.
      */
     private fun refreshGroupFlairsList() {
-
         mSession.groupsManager.getUserPublicisedGroups(mSession.myUserId, true, object : ApiCallback<Set<String>> {
             override fun onSuccess(publicisedGroups: Set<String>) {
-                var order = 0
-
-                if (null != mLabsCategory) {
-                    order = mLabsCategory.order
-                }
-
-                val groupFlairCategory = PreferenceCategory(activity)
-                groupFlairCategory.setTitle(R.string.settings_flair)
-                groupFlairCategory.key = PreferencesManager.SETTINGS_GROUPS_FLAIR_KEY
-                groupFlairCategory.order = order + 1
-
-                val dividerCategory = VectorDividerCategory(activity)
-                dividerCategory.order = groupFlairCategory.order - 1
-
-                if (null != publicisedGroups && publicisedGroups.isNotEmpty()) {
-                    preferenceScreen.addItemFromInflater(groupFlairCategory)
-                    preferenceScreen.addItemFromInflater(dividerCategory)
-                    buildGroupsList(publicisedGroups, groupFlairCategory)
+                if (publicisedGroups.isEmpty()){
+                    val vectorGroupPreference = VectorCustomActionEditTextPreference(activity)
+                    vectorGroupPreference.title = resources.getString(R.string.settings_without_flair)
+                    mGroupsFlairCategory.addPreference(vectorGroupPreference)
+                } else {
+                    buildGroupsList(publicisedGroups)
                 }
             }
 
@@ -2646,7 +2638,7 @@ class VectorSettingsPreferencesFragment : PreferenceFragment(), SharedPreference
      *
      * @param publicisedGroups the publicised groups list.
      */
-    private fun buildGroupsList(publicisedGroups: Set<String>, groupFlairCategory: PreferenceCategory ) {
+    private fun buildGroupsList(publicisedGroups: Set<String>)  {
         var isNewList = true
 
         if (null != mPublicisedGroups && mPublicisedGroups!!.size == publicisedGroups.size) {
@@ -2661,7 +2653,7 @@ class VectorSettingsPreferencesFragment : PreferenceFragment(), SharedPreference
             mPublicisedGroups = publicisedGroups.toMutableSet()
 
             // clear everything
-            groupFlairCategory.removeAll()
+            mGroupsFlairCategory.removeAll()
 
             for (group in joinedGroups) {
                 val vectorGroupPreference = VectorGroupPreference(activity)
@@ -2673,7 +2665,7 @@ class VectorSettingsPreferencesFragment : PreferenceFragment(), SharedPreference
                 vectorGroupPreference.summary = group.groupId
 
                 vectorGroupPreference.isChecked = publicisedGroups.contains(group.groupId)
-                groupFlairCategory.addPreference(vectorGroupPreference)
+                mGroupsFlairCategory.addPreference(vectorGroupPreference)
 
                 vectorGroupPreference.onPreferenceChangeListener = Preference.OnPreferenceChangeListener { _, newValue ->
                     if (newValue is Boolean) {

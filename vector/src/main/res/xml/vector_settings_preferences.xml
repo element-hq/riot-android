@@ -129,6 +129,12 @@
     <im.vector.preference.VectorDividerCategory />
 
     <PreferenceCategory
+        android:key="SETTINGS_GROUPS_FLAIR_KEY"
+        android:title="@string/settings_flair"/>
+
+    <im.vector.preference.VectorDividerCategory />
+
+    <PreferenceCategory
         android:key="SETTINGS_NOTIFICATIONS_KEY"
         android:title="@string/settings_notifications">
 
