@@ -14,6 +14,7 @@ import android.widget.VideoView;
 
 import com.bumptech.glide.Glide;
 
+import org.jetbrains.annotations.NotNull;
 import org.matrix.androidsdk.data.RoomMediaMessage;
 import org.matrix.androidsdk.util.Log;
 
@@ -23,6 +24,7 @@ import butterknife.BindView;
 import butterknife.OnClick;
 import im.vector.R;
 import im.vector.adapters.MediaPreviewAdapter;
+import kotlin.Pair;
 
 /**
  * Previews media selected to be send.
@@ -51,6 +53,12 @@ public class MediaPreviewerActivity extends MXCActionBarActivity implements Medi
     @Override
     public int getLayoutRes() {
         return R.layout.activity_media_previewer;
+    }
+
+    @NotNull
+    @Override
+    public Pair<Integer, Integer> getOtherThemes() {
+        return new Pair<>(R.style.AppTheme_NoActionBar_Dark, R.style.AppTheme_NoActionBar_Black);
     }
 
     @SuppressLint("ClickableViewAccessibility")
