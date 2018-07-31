@@ -887,7 +887,7 @@ I messaggi criptati non saranno visibili ai riceventi che non hanno ancora imple
 
     <!-- Widget Integration Manager -->
     <string name="widget_integration_room_not_visible">La stanza %s non è visibile.</string>
-    <string name="settings_labs_matrix_apps">App di Matrix</string>
+    <string name="settings_labs_matrix_apps">Le App Matrix</string>
     <string name="settings_labs_native_camera">Usa fotocamera nativa</string>
 
     <!-- share keys -->
