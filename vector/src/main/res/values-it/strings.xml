@@ -891,7 +891,7 @@ I messaggi criptati non saranno visibili ai riceventi che non hanno ancora imple
     <string name="settings_labs_native_camera">Usa fotocamera nativa</string>
 
     <!-- share keys -->
-    <string name="you_added_a_new_device">Hai aggiunto un nuovo dispositivo \'%s\', che sta richiedendo chiavi di cifratura.</string>
+    <string name="you_added_a_new_device">Hai aggiunto un nuovo dispositivo \'%s\' che sta\' richiedendo le chiavi crittografiche</string>
     <string name="your_unverified_device_requesting">Il dispositivo non verificato \'%s\' sta richiedendo chiavi di cifratura.</string>
     <string name="start_verification">Inizia la verifica</string>
     <string name="share_without_verifying">Condividi senza verificare</string>
