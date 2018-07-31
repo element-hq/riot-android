@@ -26,6 +26,7 @@ Bugfix:
  - Messages with code blocks show other HTML as plain text (#2280)
  - Message with <p> was sometimes not properly formatted (#2275)
  - Fix notification issue when Riot is not started (#2451)
+ - Fix Unable to add Matrix apps (#2466)
 
 Translations:
  -
