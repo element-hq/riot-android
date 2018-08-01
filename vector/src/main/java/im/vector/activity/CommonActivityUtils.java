@@ -1072,7 +1072,7 @@ public class CommonActivityUtils {
                                    final ApiCallback<Void> callback) {
         // Check whether the room exists to handled the cases where the user is invited or he has joined.
         // CAUTION: the room may exist whereas the user membership is neither invited nor joined.
-        Room room = session.getDataHandler().getRoom(roomId, false);
+        final Room room = session.getDataHandler().getRoom(roomId, false);
         if (null != room && room.hasMembership(RoomMember.MEMBERSHIP_INVITE)) {
             Log.d(LOG_TAG, "previewRoom : the user is invited -> display the preview " + VectorApp.getCurrentActivity());
             previewRoom(fromActivity, roomPreviewData);

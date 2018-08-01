@@ -142,7 +142,7 @@ public class VectorPublicRoomsListFragment extends VectorBaseFragment {
 
                     // Check whether the room exists to handled the cases where the user is invited or he has joined.
                     // CAUTION: the room may exist whereas the user membership is neither invited nor joined.
-                    Room room = mSession.getDataHandler().getRoom(publicRoom.roomId, false);
+                    final Room room = mSession.getDataHandler().getRoom(publicRoom.roomId, false);
                     if (null != room && room.hasMembership(RoomMember.MEMBERSHIP_INVITE)) {
                         Log.d(LOG_TAG, "manageRoom : the user is invited -> display the preview " + VectorApp.getCurrentActivity());
                         CommonActivityUtils.previewRoom(getActivity(), roomPreviewData);
