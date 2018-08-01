@@ -412,7 +412,7 @@ Przyznaj dostęp w następnym oknie.</string>
     <string name="settings_hide_read_receipts">Nie pokazuj potwierdzeń o przeczytaniu</string>
     <string name="settings_dont_send_typings_notifs">Nie informuj użytkowników, gdy piszesz</string>
     <string name="settings_always_show_timestamps">Zawsze pokazuj czas wysłania wiadomości</string>
-    <string name="settings_disable_markdown">Wyłącz formatowanie Markdown</string>
+    <string name="settings_disable_markdown">Wyłącz formatowanie Markdown podczas wysyłania</string>
     <string name="settings_data_save_mode">Tryb oszczędzania danych</string>
 
     <string name="devices_details_dialog_title">Szczegóły o urządzeniu</string>
@@ -615,8 +615,8 @@ Zostałeś wylogowany ze wszystkich urządzeń i nie będziesz więcej otrzymywa
 
     <string name="login_error_unknown_token">Wprowadzony token dostępu nie został rozpoznany</string>
     <string name="login_error_bad_json">Uszkodzony JSON</string>
-    <string name="e2e_need_log_in_again">Należy się wylogować w celu wygenerowania nowych kluczy szyfrowania dla tego urządzenia i wysłania ich do twojego serwera głównego.
-Jest to jednorazowa akcja.
+    <string name="e2e_need_log_in_again">Należy się ponownie zalogować w celu wygenerowania kluczy szyfrowania end-to-end dla tego urządzenia i wysłania klucza publicznego do Twojego serwera domowego.
+Jest to jednorazowe działanie.
 Przepraszamy za trudności.</string>
 
     <string name="groups_list">Lista grup</string>
@@ -689,7 +689,7 @@ Jesteś pewien?</string>
 </plurals>
 
     <string name="ssl_cert_not_trust">Może to oznaczać że ktoś zakłóca twoje połączenie, lub Twój telefon nie ufa certyfikatowi dostarczonemu przez zdalny serwer.</string>
-    <string name="ssl_cert_new_account_expl">Jeżeli administrator poinformować że jest to spodziewane, zweryfikuj czy odcisk palca poniżej zgadza się z tym dostarczonym przez nich.</string>
+    <string name="ssl_cert_new_account_expl">Jeśli administrator serwera oświadczył, że jest to oczekiwane, upewnij się, że poniższy odcisk palca odpowiada odciskowi palca dostarczonemu przez niego.</string>
     <string name="ssl_unexpected_existing_expl">Certyfikat różni się od tego zaufanego w twoim telefonie. Serwer mógł odnowić certyfikat. Skontaktuj się z administratorem serwera w celu weryfikacji odcisku palca.</string>
     <string name="ssl_expected_existing_expl">Certyfikat zmienił stan z zaufanego na niezaufany. jest to NIEZWYKLE RZADKIE. Rekomendowane jest NIE AKCEPTOWANIE nowego certyfikatu.</string>
     <string name="ssl_only_accept">akceptuj certyfikat TYLKO wtedy gdy administrator opublikował odcisk palca pasujący do tego powyżej.</string>
@@ -736,20 +736,20 @@ Jesteś pewien?</string>
     <string name="settings_inline_url_preview">"Zezwól na  domyślny podgląd zawartości URL"</string>
     <string name="settings_12_24_timestamps">Pokaż czas w formacie 12 godzinnym (np. 2:30pm)</string>
     <string name="settings_hide_join_leave_messages">Ukryj wiadomości o dołączeniu/wyjściu (zaproszenia, wyproszenia, blokowanie nie zostaną ukryte)</string>
-    <string name="settings_hide_avatar_display_name_changes_messages">Ukryj awatar i zmiany publicznej nazwy użytkownika</string>
+    <string name="settings_hide_avatar_display_name_changes_messages">Ukryj awatar i zmiany wyświetlanej nazwy</string>
     <string name="settings_vibrate_on_mention">Wibruj gdy ktoś wspomni o tobie</string>
 
     <string name="settings_analytics">Analityka</string>
-    <string name="settings_opt_out_of_analytics">Wypisz się z analityki</string>
+    <string name="settings_opt_out_of_analytics">Zrezygnuj z analityki</string>
     <string name="settings_opt_out_of_analytics_summary">Riot zbiera anonimowe informacje które pozwolą ulepszyć aplikację.</string>
 
-    <string name="settings_home_server">Serwer Domowy</string>
+    <string name="settings_home_server">Serwer domowy</string>
     <string name="settings_identity_server">Serwer Tożsamości</string>
 
-    <string name="account_email_validation_message">Sprawdź swoją skrzynkę e-mail i kliknij w link. Następnie kliknij kontynuuj.</string>
+    <string name="account_email_validation_message">Sprawdź pocztę e-mail i kliknij odnośnik, który zawiera. Gdy to zrobisz, kliknij przycisk Kontynuuj.</string>
     <string name="account_email_validation_error">Nie udało się zweryfikować adresu e-mail. Sprawdź swoją skrzynkę i kliknij w link. Gdy to zrobisz, kliknij kontynuuj</string>
     <string name="account_email_not_found_error">Nie udało się wysłać wiadomości: Adres e-mail nie został znaleziony</string>
-    <string name="settings_delete_threepid_confirmation">Czy chcesz usunąć %1$s %2$s?</string>
+    <string name="settings_delete_threepid_confirmation">Czy na pewno chcesz usunąć %1$s %2$s?</string>
 
     <string name="settings_phone_number_error">Nieprawidłowy numer telefonu dla wybranego kraju</string>
     <string name="settings_phone_number_verification_instruction">Wysłaliśmy SMS z kodem aktywacyjnym. Podaj ten kod poniżej.</string>
@@ -780,7 +780,7 @@ Jesteś pewien?</string>
 
     <string name="room_settings_addresses_invalid_format_dialog_title">Nieznany format aliasu</string>
     <string name="room_settings_addresses_invalid_format_dialog_body">\'%s\' jest nieznanym formatem dla aliasu</string>
-    <string name="room_settings_addresses_disable_main_address_prompt_msg">Nie będziesz wykorzystywał głównego adresu. Domyślny adres główny tego pokoju będzie wybierany losowo</string>
+    <string name="room_settings_addresses_disable_main_address_prompt_msg">Nie będziesz mieć podanego głównego adresu. Domyślny adres główny tego pokoju zostanie wybrany losowo</string>
     <string name="room_settings_addresses_disable_main_address_prompt_title">Ostrzeżenia głównego adresu</string>
 
     <string name="room_settings_unset_main_address">NIe ustawiaj jako główny adres</string>
