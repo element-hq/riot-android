@@ -1082,7 +1082,7 @@ public class CommonActivityUtils {
             }
         } else if (null != room && room.hasMembership(RoomMember.MEMBERSHIP_JOIN)) {
             Log.d(LOG_TAG, "previewRoom : the user joined the room -> open the room");
-            Map<String, Object> params = new HashMap<>();
+            final Map<String, Object> params = new HashMap<>();
             params.put(VectorRoomActivity.EXTRA_MATRIX_ID, session.getMyUserId());
             params.put(VectorRoomActivity.EXTRA_ROOM_ID, roomId);
             CommonActivityUtils.goToRoomPage(fromActivity, session, params);

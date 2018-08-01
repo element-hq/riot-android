@@ -275,7 +275,7 @@ public class RoomsFragment extends AbsHomeFragment implements AbsHomeFragment.On
                 CommonActivityUtils.previewRoom(getActivity(), roomPreviewData);
             } else if (null != room && room.hasMembership(RoomMember.MEMBERSHIP_JOIN)) {
                 Log.d(LOG_TAG, "onPublicRoomSelected : the user joined the room -> open the room");
-                Map<String, Object> params = new HashMap<>();
+                final Map<String, Object> params = new HashMap<>();
                 params.put(VectorRoomActivity.EXTRA_MATRIX_ID, mSession.getMyUserId());
                 params.put(VectorRoomActivity.EXTRA_ROOM_ID, publicRoom.roomId);
 
