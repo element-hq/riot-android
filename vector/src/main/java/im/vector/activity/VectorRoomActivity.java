@@ -772,10 +772,11 @@ public class VectorRoomActivity extends MXCActionBarActivity implements
                 if (null != mRoom) {
                     // Auto completion mode management
                     if (!mEditText.getText().toString().isEmpty()) {
+                        // The auto completion mode depends on the first character of the message
                         setAutoCompletionMode(AutoCompletionMode.getAutoCompletionMode(mEditText.getText().toString().substring(0,1)));
                         setAutoCompletionParam(mAutoCompletionMode);
                     }
-                    
+
                     MXLatestChatMessageCache latestChatMessageCache = mLatestChatMessageCache;
                     String textInPlace = latestChatMessageCache.getLatestText(VectorRoomActivity.this, mRoom.getRoomId());
 
