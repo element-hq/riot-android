@@ -3182,9 +3182,15 @@ public class VectorRoomActivity extends MXCActionBarActivity implements
                     VectorUtils.getRoomDisplayName(this, mSession, mRoom), mRoom.getState().getMemberName(member.mSender)));
         }
 
+        // On mobile side, the modal to allow to add a reason to ban/kick someone isn't yet implemented
+        // That's why, we don't display the TextView "Motif :" for now.
         TextView subInvitationTextView = findViewById(R.id.room_preview_subinvitation_textview);
         subInvitationTextView.setText(getString(R.string.reason_colon, member.reason));
-
+        if (null != member.reason) {
+            subInvitationTextView.setText(getString(R.string.reason_colon, member.reason));
+        } else {
+            subInvitationTextView.setText("");
+        }
 
         Button joinButton = findViewById(R.id.button_join_room);
 
