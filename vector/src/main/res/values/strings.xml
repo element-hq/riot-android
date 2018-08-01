@@ -1005,5 +1005,9 @@
     <string name="deactivate_account_submit">Deactivate Account</string>
 
     <string name="error_empty_field_your_password">Please enter your password.</string>
+    <string name="room_tombstone_versioned_description">This room has been replaced and is no longer active</string>
+    <string name="room_tombstone_continuation_link">The conversation continues here</string>
+    <string name="room_tombstone_continuation_description">This room is a continuation of another conversation</string>
+    <string name="room_tombstone_predecessor_link">Click here to see older messages</string>
 
 </resources>
