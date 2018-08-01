@@ -18,7 +18,6 @@ package im.vector.adapters;
 
 import android.content.Context;
 import android.support.annotation.StringRes;
-import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -121,7 +120,7 @@ public class AutoCompletedCommandLineAdapter extends ArrayAdapter<String> {
         return convertView;
     }
 
-    static class CommandViewHolder extends RecyclerView.ViewHolder {
+    static class CommandViewHolder {
 
         @BindView(R.id.item_command_auto_complete_name)
         TextView tvCommandName;
@@ -133,7 +132,6 @@ public class AutoCompletedCommandLineAdapter extends ArrayAdapter<String> {
         TextView tvCommandDescription;
 
         public CommandViewHolder(View itemView) {
-            super(itemView);
             ButterKnife.bind(this, itemView);
         }
     }

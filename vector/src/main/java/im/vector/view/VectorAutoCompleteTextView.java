@@ -47,6 +47,7 @@ import java.util.List;
 import im.vector.R;
 import im.vector.adapters.AutoCompletedCommandLineAdapter;
 import im.vector.adapters.AutoCompletedUserAdapter;
+import im.vector.util.AutoCompletionMode;
 import im.vector.util.SlashCommandsParser;
 
 /**
@@ -72,6 +73,8 @@ public class VectorAutoCompleteTextView extends AppCompatMultiAutoCompleteTextVi
     // add a colon when the inserted text is the first item of the string
     private boolean mAddColonOnFirstItem;
 
+    private AutoCompletionMode mAutoCompletionMode;
+
     public VectorAutoCompleteTextView(Context context) {
         super(context, null);
     }
@@ -84,6 +87,33 @@ public class VectorAutoCompleteTextView extends AppCompatMultiAutoCompleteTextVi
     public VectorAutoCompleteTextView(Context context, AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
         setInputType(getInputType() & (getInputType() ^ InputType.TYPE_TEXT_FLAG_AUTO_COMPLETE));
+    }
+
+    /**
+     * Update the auto completion mode according to the first character of the message.
+     *
+     * @param text  The message text being written.
+     */
+    public void updateAutoCompletionModeForText(String text) {
+        final AutoCompletionMode newMode = AutoCompletionMode.Companion.autoCompletionMode(text);
+        if(newMode == mAutoCompletionMode){
+            return;
+        }
+        mAutoCompletionMode = newMode;
+        switch (newMode) {
+            case USER_MODE:
+                setAdapter(mAdapterUser);
+                setThreshold(3);
+                break;
+            case COMMAND_MODE:
+                setAdapter(mAdapterCommand);
+                setThreshold(1);
+                break;
+            case NONE_MODE:
+            default:
+                setAdapter(null);
+                break;
+        }
     }
 
     /**
@@ -182,6 +212,7 @@ public class VectorAutoCompleteTextView extends AppCompatMultiAutoCompleteTextVi
 
         // define the parser
         setTokenizer(new VectorAutoCompleteTokenizer());
+
 
         // retrieve 2 private members
         if (null == mPopupCanBeUpdatedField) {
