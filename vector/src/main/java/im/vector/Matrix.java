@@ -193,7 +193,7 @@ public class Matrix {
      * @return the shared instance
      */
     public synchronized static Matrix getInstance(Context appContext) {
-        if ((instance == null) && (null != appContext)) {
+        if (instance == null && null != appContext) {
             instance = new Matrix(appContext);
         }
         return instance;

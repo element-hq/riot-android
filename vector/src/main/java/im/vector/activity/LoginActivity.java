@@ -372,7 +372,7 @@ public class LoginActivity extends MXCActionBarActivity implements RegistrationM
                 goToSplash();
             } else {
                 // detect if the application has already been started
-                if (null == EventStreamService.getInstance()) {
+                if (EventStreamService.getInstance() == null) {
                     Log.d(LOG_TAG, "## onCreate(): goToSplash with credentials but there is no event stream service.");
                     goToSplash();
                 } else {

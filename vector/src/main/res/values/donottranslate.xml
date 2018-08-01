@@ -10,11 +10,11 @@
 
     <!-- Widget urls -->
     <string name="integrations_rest_url">"https://scalar-staging.riot.im/scalar"</string>
-    <string name="integrations_ui_url">"https://scalar-staging.riot.im/scalar-web"</string>
+    <string name="integrations_ui_url">"https://scalar-staging.riot.im/scalar-web/"</string>
 
     <!-- empty means to use the active HS url -->
     <!-- set a valid URL like "https://matrix.org" to use a custom one -->
-    <string name="push_server_url" translatable="false"/>
+    <string name="push_server_url" translatable="false" />
 
     <!--string name="settings_room_privacy_label">Privacy</string-->
 
