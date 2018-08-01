@@ -150,6 +150,35 @@ public class VectorRoomActivity extends MXCActionBarActivity implements
         MatrixMessageListFragment.IOnScrollListener,
         VectorMessageListFragment.VectorMessageListFragmentListener {
 
+    private AutoCompletionMode mAutoCompletionMode;
+
+    private enum AutoCompletionMode {
+        USER_MODE("@"),
+        COMMAND_MODE("/");
+
+        private String startChar;
+
+        AutoCompletionMode(String startChar) {
+            this.startChar = startChar;
+        }
+
+        public static AutoCompletionMode getAutoCompletionMode(String startChar) {
+            AutoCompletionMode autoCompletionMode = null;
+
+            switch (startChar) {
+                case "@":
+                    autoCompletionMode = USER_MODE;
+                    break;
+                case "/":
+                    autoCompletionMode = COMMAND_MODE;
+                    break;
+                default:
+                    break;
+            }
+            return autoCompletionMode;
+        }
+    }
+
     /**
      * the session
      **/
@@ -342,42 +371,6 @@ public class VectorRoomActivity extends MXCActionBarActivity implements
     @BindView(R.id.main_progress_layout)
     View mMainProgressView;
 
-
-    private enum AutoCompletionMode {
-        USER_MODE("@"),
-        COMMAND_MODE("/");
-
-        private String startChar;
-
-        AutoCompletionMode(String startChar) {
-            this.startChar = startChar;
-        }
-
-        public String getMode() {
-            return startChar;
-        }
-
-        public void setMode(String startChar) {
-            this.startChar = startChar;
-        }
-
-        public static AutoCompletionMode setAutoCompletionModeByMode(String startChar) {
-            AutoCompletionMode autoCompletionMode = null;
-
-            switch (startChar) {
-                case "@":
-                    autoCompletionMode = USER_MODE;
-                    break;
-                case "/":
-                    autoCompletionMode = COMMAND_MODE;
-                    break;
-                default:
-                    break;
-            }
-            return autoCompletionMode;
-        }
-    }
-
     // network events
     private final IMXNetworkEventListener mNetworkEventListener = new IMXNetworkEventListener() {
         @Override
@@ -497,10 +490,6 @@ public class VectorRoomActivity extends MXCActionBarActivity implements
                     updateRoomHeaderAvatar();
                 }
             });
-        }
-
-        private void setAutoCompletion() {
-            // TODO set adapter and threshold
         }
 
         @Override
@@ -781,16 +770,12 @@ public class VectorRoomActivity extends MXCActionBarActivity implements
             @Override
             public void afterTextChanged(android.text.Editable s) {
                 if (null != mRoom) {
-                    if (mEditText.getText().toString().startsWith("@")) {
-                        mEditText.setAdapter(mEditText.mAdapterUser);
-                        // the minimum number of characters to display the proposals list
-                        mEditText.setThreshold(3);
-                    } else if (mEditText.getText().toString().startsWith("/")) {
-                        mEditText.setAdapter(mEditText.mAdapterCommand);
-                        // the minimum number of characters to display the proposals list
-                        mEditText.setThreshold(1);
+                    // Auto completion mode management
+                    if (!mEditText.getText().toString().isEmpty()) {
+                        setAutoCompletionMode(AutoCompletionMode.getAutoCompletionMode(mEditText.getText().toString().substring(0,1)));
+                        setAutoCompletionParam(mAutoCompletionMode);
                     }
-
+                    
                     MXLatestChatMessageCache latestChatMessageCache = mLatestChatMessageCache;
                     String textInPlace = latestChatMessageCache.getLatestText(VectorRoomActivity.this, mRoom.getRoomId());
 
@@ -1851,6 +1836,33 @@ public class VectorRoomActivity extends MXCActionBarActivity implements
                 onError(e.getLocalizedMessage());
             }
         });
+    }
+
+
+    //================================================================================
+    // Auto completion management
+    //================================================================================
+
+    private void setAutoCompletionMode(AutoCompletionMode autoCompletionMode) {
+        mAutoCompletionMode = autoCompletionMode;
+    }
+
+    private void setAutoCompletionParam(AutoCompletionMode mode) {
+
+        switch (mode) {
+            case USER_MODE:
+                mEditText.setAdapter(mEditText.mAdapterUser);
+                // the minimum number of characters to display the proposals list
+                mEditText.setThreshold(3);
+                break;
+            case COMMAND_MODE:
+                mEditText.setAdapter(mEditText.mAdapterCommand);
+                // the minimum number of characters to display the proposals list
+                mEditText.setThreshold(1);
+                break;
+            default:
+                break;
+        }
     }
 
     //================================================================================
