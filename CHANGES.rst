@@ -6,6 +6,7 @@ Features:
  - Telemetry to report incidence of UISIs (#2330)
  - Add a previewer for previewing media before sending it into the room (#1742|#2445)
  - Implements ReplyTo feature (#2390)
+ - Support Room Versioning (#2441)
 
 Improvements:
  - Piwik: Update the way how stats are reported (#2402)
@@ -25,6 +26,8 @@ Bugfix:
  - Fix issue on verifying device, update the wording of the description message (#1067)
  - Messages with code blocks show other HTML as plain text (#2280)
  - Message with <p> was sometimes not properly formatted (#2275)
+ - Fix notification issue when Riot is not started (#2451)
+ - Fix Unable to add Matrix apps (#2466)
 
 Translations:
  -

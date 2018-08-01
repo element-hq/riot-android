@@ -40,6 +40,7 @@ class DecryptionFailureTracker(
         checkFailures()
     }
 
+
     /**
      * Reports the decryption error to the tracker.
      * The error will be filtered.
@@ -99,8 +100,8 @@ class DecryptionFailureTracker(
         failuresToTrack
                 .groupingBy { it.reason }
                 .eachCount()
-                .forEach { reason, count ->
-                    analytics.trackEvent(TrackingEvent.DecryptionFailure(reason, count))
+                .forEach {
+                    analytics.trackEvent(TrackingEvent.DecryptionFailure(it.component1(), it.component2()))
                 }
     }
 

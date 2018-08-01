@@ -46,6 +46,7 @@ import org.matrix.androidsdk.rest.model.publicroom.PublicRoom;
 import org.matrix.androidsdk.util.Log;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
@@ -60,6 +61,7 @@ import im.vector.activity.RoomDirectoryPickerActivity;
 import im.vector.activity.VectorRoomActivity;
 import im.vector.adapters.AdapterSection;
 import im.vector.adapters.RoomAdapter;
+import im.vector.util.HomeRoomsViewModel;
 import im.vector.util.RoomDirectoryData;
 import im.vector.util.RoomUtils;
 import im.vector.view.EmptyViewItemDecoration;
@@ -91,7 +93,7 @@ public class RoomsFragment extends AbsHomeFragment implements AbsHomeFragment.On
     private RoomDirectoryData mSelectedRoomDirectory;
 
     // rooms list
-    private final List<Room> mRooms = new ArrayList<>();
+    private List<Room> mRooms = new ArrayList<>();
 
     /*
      * *********************************************************************************************
@@ -137,11 +139,7 @@ public class RoomsFragment extends AbsHomeFragment implements AbsHomeFragment.On
     @Override
     public void onResume() {
         super.onResume();
-
-        refreshRooms();
-
         mAdapter.setInvitation(mActivity.getRoomInvitations());
-
         mRecycler.addOnScrollListener(mScrollListener);
     }
 
@@ -207,11 +205,13 @@ public class RoomsFragment extends AbsHomeFragment implements AbsHomeFragment.On
      */
 
     @Override
-    public void onSummariesUpdate() {
-        super.onSummariesUpdate();
-
+    public void onRoomResultUpdated(final HomeRoomsViewModel.Result result) {
         if (isResumed()) {
-            refreshRooms();
+            final List<Room> roomList = new ArrayList<>();
+            roomList.addAll(result.getOtherRooms());
+            roomList.addAll(result.getFavourites());
+            mRooms = roomList;
+            mAdapter.setRooms(mRooms);
             mAdapter.setInvitation(mActivity.getRoomInvitations());
         }
     }
@@ -245,52 +245,6 @@ public class RoomsFragment extends AbsHomeFragment implements AbsHomeFragment.On
         if (spinner != null && spinner instanceof Spinner) {
             mPublicRoomsSelector = (Spinner) spinner;
         }
-    }
-
-    /*
-     * *********************************************************************************************
-     * rooms management
-     * *********************************************************************************************
-     */
-
-    /**
-     * Init the rooms display
-     */
-    private void refreshRooms() {
-        if ((null == mSession) || (null == mSession.getDataHandler())) {
-            Log.e(LOG_TAG, "## refreshRooms() : null session");
-            return;
-        }
-
-        IMXStore store = mSession.getDataHandler().getStore();
-
-        if (null == store) {
-            Log.e(LOG_TAG, "## refreshRooms() : null store");
-            return;
-        }
-
-        // update/retrieve the complete summary list
-        List<RoomSummary> roomSummaries = new ArrayList<>(store.getSummaries());
-        Set<String> lowPriorityRoomIds = new HashSet<>(mSession.roomIdsWithTag(RoomTag.ROOM_TAG_LOW_PRIORITY));
-
-        mRooms.clear();
-
-        for (RoomSummary summary : roomSummaries) {
-            // don't display the invitations
-            if (!summary.isInvited()) {
-                Room room = store.getRoom(summary.getRoomId());
-
-                // test
-                if ((null != room) && // if the room still exists
-                        !room.isConferenceUserRoom() && // not a VOIP conference room
-                        !RoomUtils.isDirectChat(mSession, room.getRoomId()) &&
-                        !lowPriorityRoomIds.contains(room.getRoomId())) {
-                    mRooms.add(room);
-                }
-            }
-        }
-
-        mAdapter.setRooms(mRooms);
     }
 
     /*
@@ -682,6 +636,5 @@ public class RoomsFragment extends AbsHomeFragment implements AbsHomeFragment.On
     @Override
     public void onRoomForgot(String roomId) {
         // there is no sync event when a room is forgotten
-        refreshRooms();
     }
 }

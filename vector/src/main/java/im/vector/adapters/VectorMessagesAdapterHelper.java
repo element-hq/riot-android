@@ -1036,6 +1036,8 @@ class VectorMessagesAdapterHelper {
         } else if (TextUtils.equals(WidgetsManager.WIDGET_EVENT_TYPE, event.getType())) {
             // Matrix apps are enabled
             return true;
+        } else if (Event.EVENT_TYPE_STATE_ROOM_CREATE.equals(eventType)) {
+            return roomState.hasPredecessor();
         }
         return false;
     }

@@ -451,20 +451,11 @@ class VectorSettingsPreferencesFragment : PreferenceFragment(), SharedPreference
 
                     Matrix.getInstance(activity)!!.sharedGCMRegistrationManager
                             .forceSessionsRegistration(object : GcmRegistrationManager.ThirdPartyRegistrationListener {
-
-                                override fun onThirdPartyRegistered() {
+                                override fun onSuccess() {
                                     hideLoadingView()
                                 }
 
-                                override fun onThirdPartyRegistrationFailed() {
-                                    hideLoadingView()
-                                }
-
-                                override fun onThirdPartyUnregistered() {
-                                    hideLoadingView()
-                                }
-
-                                override fun onThirdPartyUnregistrationFailed() {
+                                override fun onError() {
                                     hideLoadingView()
                                 }
                             })
@@ -1094,7 +1085,7 @@ class VectorSettingsPreferencesFragment : PreferenceFragment(), SharedPreference
 
             // when using GCM
             // need to register on servers
-            if (isConnected && gcmMgr.useGCM() && (gcmMgr.isServerRegistred || gcmMgr.isServerUnRegistred)) {
+            if (isConnected && gcmMgr.useGCM() && (gcmMgr.isServerRegistered || gcmMgr.isServerUnRegistered)) {
                 val listener = object : GcmRegistrationManager.ThirdPartyRegistrationListener {
 
                     private fun onDone() {
@@ -1106,27 +1097,19 @@ class VectorSettingsPreferencesFragment : PreferenceFragment(), SharedPreference
                         }
                     }
 
-                    override fun onThirdPartyRegistered() {
+                    override fun onSuccess() {
                         onDone()
                     }
 
-                    override fun onThirdPartyRegistrationFailed() {
-                        gcmMgr.setDeviceNotificationsAllowed(isAllowed)
-                        onDone()
-                    }
-
-                    override fun onThirdPartyUnregistered() {
-                        onDone()
-                    }
-
-                    override fun onThirdPartyUnregistrationFailed() {
+                    override fun onError() {
+                        // Set again the previous state
                         gcmMgr.setDeviceNotificationsAllowed(isAllowed)
                         onDone()
                     }
                 }
 
                 displayLoadingView()
-                if (gcmMgr.isServerRegistred) {
+                if (gcmMgr.isServerRegistered) {
                     gcmMgr.unregister(listener)
                 } else {
                     gcmMgr.register(listener)
