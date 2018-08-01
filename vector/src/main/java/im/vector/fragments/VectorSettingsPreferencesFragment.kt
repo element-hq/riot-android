@@ -2621,7 +2621,7 @@ class VectorSettingsPreferencesFragment : PreferenceFragment(), SharedPreference
      *
      * @param publicisedGroups the publicised groups list.
      */
-    private fun buildGroupsList(publicisedGroups: Set<String>)  {
+    private fun buildGroupsList(publicisedGroups: Set<String>) {
         var isNewList = true
 
         if (null != mPublicisedGroups && mPublicisedGroups!!.size == publicisedGroups.size) {
