@@ -223,7 +223,7 @@ Przyznaj dostęp w następnym oknie.</string>
     <string name="permissions_action_not_performed_missing_permissions">Nie można wykonać operacji, ze względu na brak wymaganych uprawnień</string>
 
     <string name="media_slider_saved">Zapisano</string>
-    <string name="media_slider_saved_message">Zapisz do pobranych</string>
+    <string name="media_slider_saved_message">Zapisać do pobranych?</string>
     <string name="yes">TAK</string>
     <string name="no">NIE</string>
     <string name="_continue">Kontynuuj</string>
@@ -363,7 +363,7 @@ Przyznaj dostęp w następnym oknie.</string>
 
     <string name="room_sliding_menu_messages">Wiadomości</string>
     <string name="room_sliding_menu_settings">Ustawienia</string>
-    <string name="room_sliding_menu_version">"Wersja "</string>
+    <string name="room_sliding_menu_version">Wersja</string>
     <string name="room_sliding_menu_term_and_conditions">Warunki użytkowania</string>
     <string name="room_sliding_menu_copyright">Prawa autorskie</string>
     <string name="room_sliding_menu_privacy_policy">Polityka prywatności</string>
@@ -578,7 +578,7 @@ Wprowadź hasło, aby kontynuować.</string>
     <string name="loading">Wczytywanie...</string>
 
     <string name="action_exit">Opuść</string>
-    <string name="actions">Czynności</string>
+    <string name="actions">Działania</string>
     <string name="bottom_action_groups">Społeczności</string>
 
     <string name="home_filter_placeholder_groups">Odszukaj społeczności</string>
@@ -607,9 +607,9 @@ Adres email pozwoli ci również zresetować hasło.</string>
 Możesz dodać swój adres e-mail w ustawieniach profilu.</string>
     <string name="auth_home_server">Serwer Główny:</string>
     <string name="auth_identity_server">Serwer Uwierzytelnienia:</string>
-    <string name="auth_reset_password_success_message">Twoje hasło zostało zresetowane
+    <string name="auth_reset_password_success_message">Twoje hasło zostało zresetowane.
 
-Zostałeś wylogowany ze wszystkich urządzeń i nie będziesz otrzymywał powiadomień push. By przywrócić powiadomienia, zaloguj się ponownie na każdym urządzeniu.</string>
+Zostałeś wylogowany ze wszystkich urządzeń i nie będziesz więcej otrzymywać powiadomień push. Aby ponownie włączyć powiadomienia, zaloguj się ponownie na każdym urządzeniu.</string>
 
     <string name="login_mobile_device">Numer telefonu</string>
 
@@ -677,10 +677,10 @@ Jesteś pewien?</string>
     <string name="room_participants_ban_prompt_msg">Czy chcesz zablokować tego użytkownika w tej rozmowie?</string>
 
     <string name="login_error_unable_register_mail_ownership">Nie udało się zarejestrować: nie udało się potwierdzić dostępu do adresu e-mail</string>
-    <string name="call_error_answered_elsewhere">Połączenie odebrane gdzie indziej</string>
+    <string name="call_error_answered_elsewhere">połączenie odebrane gdzie indziej</string>
 
-    <string name="room_unsent_messages_notification">"Wiadomość nie wysłana.  %1$s lub %2$s?"</string>
-    <string name="room_unknown_devices_messages_notification">"Wiadomość niewysłana z powodu obecności nieznanych urządzeń.  %1$s or %2$s?"</string>
+    <string name="room_unsent_messages_notification">Wiadomość nie została wysłana. Czy %1$s lub %2$s teraz?</string>
+    <string name="room_unknown_devices_messages_notification">Wiadomość niewysłana z powodu obecności nieznanych urządzeń. Czy %1$s lub %2$s teraz?</string>
     <plurals name="room_new_messages_notification">
 	<item quantity="one">Nowa wiadomość</item>
 	<item quantity="few">Kilka nowych wiadomości</item>
@@ -716,19 +716,19 @@ Jesteś pewien?</string>
 </plurals>
     <string name="room_settings_all_messages_noisy">Wszystkie wiadomości (hałaśliwy)</string>
     <string name="room_settings_all_messages">Wszystkie wiadomości</string>
-    <string name="room_settings_mention_only">Tylko wspominienia</string>
+    <string name="room_settings_mention_only">Tylko wspomnienia</string>
     <string name="room_settings_mute">Wycisz</string>
     <string name="room_settings_add_homescreen_shortcut">Dodaj skrót do ekranu domowego</string>
 
     <string name="room_sliding_menu_third_party_notices">Informacje o trzecich stronach</string>
     <string name="settings_summary_app_info_link">Ekran informacji systemowych aplikacji</string>
     <string name="settings_notification_ringtone">Dźwięk powiadomień</string>
-    <string name="settings_containing_my_display_name">Wiadomości zawierające moją publiczną nazwę użytkownika</string>
+    <string name="settings_containing_my_display_name">Wiadomości zawierające moją wyświetlaną nazwę</string>
     <string name="settings_containing_my_user_name">Wiadomości zawierające moją nazwę użytkownika</string>
     <string name="settings_set_sync_timeout">Żądanie synchronizacji nieudane z powodu przekroczenia limitu czasu</string>
     <string name="settings_set_sync_delay">Opóźnienie między dwoma żądaniami synchronizacji</string>
-    <string name="settings_olm_version">wersja olm</string>
-    <string name="settings_third_party_notices">Informacje o trzecich stronach</string>
+    <string name="settings_olm_version">Wersja olm</string>
+    <string name="settings_third_party_notices">Informacje o stronach trzecich</string>
     <string name="settings_keep_media">Zatrzymaj media</string>
 
     <string name="settings_contacts_phonebook_country">Kraj książki adresowej</string>
@@ -877,7 +877,7 @@ Nieznane urządzenia:</string>
 
     <string name="dialog_title_third_party_licences">Licencje osób trzecich</string>
 
-    <string name="error_no_external_application_found">Niestety, nie znaleziono zewnętrznej aplikacji, która wykona to działanie.</string>
+    <string name="error_no_external_application_found">Niestety, nie znaleziono zewnętrznej aplikacji, która ukończy to działanie.</string>
 
     <plurals name="notification_unread_notified_messages_in_room_rooms">
 	<item quantity="one">1 pokój</item>
@@ -894,4 +894,31 @@ Nieznane urządzenia:</string>
 
     <string name="widget_integration_room_not_visible">Pokój %s nie jest widoczny.</string>
     <string name="settings_labs_native_camera">Użyj natywnej kamery</string>
+    <string name="speak">Mów</string>
+    <string name="option_send_voice">Wyślij głos</string>
+
+    <string name="no_sticker_application_dialog_content">Nie masz obecnie włączonych żadnych pakietów naklejek.
+
+Czy chcesz dodać teraz kilka?</string>
+
+    <string name="go_on_with">zadziałaj poprzez…</string>
+    <string name="encryption_information_curve25519_identity_key">Klucz tożsamości Curve25519</string>
+    <string name="encryption_information_claimed_ed25519_fingerprint_key">Zażądano klucza odcisku palca Ed25519</string>
+    <string name="directory_server_type_homeserver">Wpisz serwer domowy, aby pobrać z niego listę publicznych pokoi</string>
+    <string name="lock_screen_hint">Napisz tutaj…</string>
+
+    <plurals name="notification_unread_notified_messages">
+	<item quantity="one">1 nieprzeczytana wiadomość powiadomienia</item>
+	<item quantity="few">%d nieprzeczytane wiadomości powiadomienia</item>
+	<item quantity="many">%d nieprzeczytanych wiadomości powiadomienia</item>
+	<item quantity="other"/>
+</plurals>
+    <plurals name="notification_unread_notified_messages_in_room_msgs">
+	<item quantity="one">1 nieprzeczytana wiadomość powiadomienia</item>
+	<item quantity="few">%d nieprzeczytane wiadomości powiadomienia</item>
+	<item quantity="many">%d nieprzeczytanych wiadomości powiadomienia</item>
+	<item quantity="other"/>
+</plurals>
+    <string name="notification_unread_notified_messages_in_room">%1$s w %2$s</string>
+
     </resources>
