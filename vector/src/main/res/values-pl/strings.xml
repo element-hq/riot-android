@@ -602,9 +602,9 @@ Adres email pozwoli ci również zresetować hasło.</string>
     <string name="auth_add_email_and_phone_message">Dodaj adres email i nr telefonu do swojego konta, aby umożliwić innym użytkownikom odnalezienie ciebie.
 
 Adres email pozwoli ci również zresetować hasło.</string>
-    <string name="auth_threepid_warning_message">Rejestracja z wykorzystaniem adres e-mail i numeru telefonu jednocześnie nie jest wspierana przez API. Zapisany zostanie tylko numer telefonu.
+    <string name="auth_threepid_warning_message">Rejestracja jednocześnie numerem telefonu i e-mailem nie jest wspierana dopóki nie pojawi się odpowiednie API. Tylko numer telefonu będzie brany pod uwagę.
 
-Możesz dodać swój adres e-mail w ustawieniach profilu.</string>
+Możesz dodać e-mail do swojego profilu w ustawieniach.</string>
     <string name="auth_home_server">Serwer Główny:</string>
     <string name="auth_identity_server">Serwer Uwierzytelnienia:</string>
     <string name="auth_reset_password_success_message">Twoje hasło zostało zresetowane.
