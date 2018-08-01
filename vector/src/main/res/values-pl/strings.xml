@@ -613,7 +613,7 @@ Zostałeś wylogowany ze wszystkich urządzeń i nie będziesz więcej otrzymywa
 
     <string name="login_mobile_device">Numer telefonu</string>
 
-    <string name="login_error_unknown_token">Kod dostępu jest niepoprawny</string>
+    <string name="login_error_unknown_token">Wprowadzony token dostępu nie został rozpoznany</string>
     <string name="login_error_bad_json">Uszkodzony JSON</string>
     <string name="e2e_need_log_in_again">Należy się wylogować w celu wygenerowania nowych kluczy szyfrowania dla tego urządzenia i wysłania ich do twojego serwera głównego.
 Jest to jednorazowa akcja.
@@ -676,7 +676,7 @@ Jesteś pewien?</string>
     <string name="room_participants_kick_prompt_msg">Czy chcesz wyrzucić tego użytkownika z rozmowy?</string>
     <string name="room_participants_ban_prompt_msg">Czy chcesz zablokować tego użytkownika w tej rozmowie?</string>
 
-    <string name="login_error_unable_register_mail_ownership">Nie udało się zarejestrować: nie udało się potwierdzić dostępu do adresu e-mail</string>
+    <string name="login_error_unable_register_mail_ownership">Nie udało się zarejestrować: błąd własności e-maila</string>
     <string name="call_error_answered_elsewhere">połączenie odebrane gdzie indziej</string>
 
     <string name="room_unsent_messages_notification">Wiadomość nie została wysłana. Czy %1$s lub %2$s teraz?</string>
@@ -787,7 +787,7 @@ Jesteś pewien?</string>
     <string name="encryption_information_decryption_error">Błąd odszyfrowywania</string>
 
     <string name="encryption_information_device_key">Klucz urządzenia</string>
-    <string name="encryption_export_room_keys">Eksportuj klucze pokoju</string>
+    <string name="encryption_export_room_keys">Wyeksportuj klucze pokoju</string>
     <string name="encryption_export_room_keys_summary">Eksportuj klucze do pliku lokalnego</string>
     <string name="rejoin">Dołącz ponownie</string>
     <string name="forget_room">Zapomnij pokój</string>
