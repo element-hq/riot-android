@@ -31,6 +31,7 @@ Bugfix:
  - Fix notification issue when Riot is not started (#2451)
  - Fix Unable to add Matrix apps (#2466)
  - Riot auto joined a public room (#2472)
+ - Remove last traces of Firebase analytics (#2481)
 
 Translations:
  -
