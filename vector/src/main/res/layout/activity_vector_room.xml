@@ -73,7 +73,7 @@
 
             <Button
                 android:id="@+id/button_join_room"
-                android:layout_width="94dp"
+                android:layout_width="110dp"
                 android:layout_height="36dp"
                 android:layout_marginRight="16dp"
                 android:background="@color/vector_green_color"
@@ -82,7 +82,7 @@
 
             <Button
                 android:id="@+id/button_decline"
-                android:layout_width="94dp"
+                android:layout_width="110dp"
                 android:layout_height="36dp"
                 android:background="@android:color/white"
                 android:text="@string/cancel"
