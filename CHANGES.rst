@@ -6,6 +6,7 @@ Features:
  - Telemetry to report incidence of UISIs (#2330)
  - Add a previewer for previewing media before sending it into the room (#1742|#2445)
  - Implements ReplyTo feature (#2390)
+ - Add auto completion for slash commands (#2384)
  - Support Room Versioning (#2441)
 
 Improvements:
