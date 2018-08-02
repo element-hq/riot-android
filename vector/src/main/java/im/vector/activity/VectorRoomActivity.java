@@ -63,10 +63,8 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
-
 import com.binaryfork.spanny.Spanny;
 import com.google.gson.JsonParser;
-
 import org.jetbrains.annotations.NotNull;
 import org.matrix.androidsdk.MXSession;
 import org.matrix.androidsdk.call.IMXCall;
@@ -101,7 +99,6 @@ import org.matrix.androidsdk.util.JsonUtils;
 import org.matrix.androidsdk.util.Log;
 import org.matrix.androidsdk.util.PermalinkUtils;
 import org.matrix.androidsdk.util.ResourceUtils;
-
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
@@ -109,7 +106,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Timer;
 import java.util.TimerTask;
-
 import butterknife.BindView;
 import butterknife.OnClick;
 import butterknife.OnTouch;
@@ -151,37 +147,21 @@ public class VectorRoomActivity extends MXCActionBarActivity implements
         MatrixMessageListFragment.IOnScrollListener,
         VectorMessageListFragment.VectorMessageListFragmentListener {
 
-    /**
-     * the session
-     **/
+    // the session
     public static final String EXTRA_MATRIX_ID = MXCActionBarActivity.EXTRA_MATRIX_ID;
-    /**
-     * the room id (string)
-     **/
+    // the room id (string)
     public static final String EXTRA_ROOM_ID = "EXTRA_ROOM_ID";
-    /**
-     * the event id (universal link management - string)
-     **/
+    // the event id (universal link management - string)
     public static final String EXTRA_EVENT_ID = "EXTRA_EVENT_ID";
-    /**
-     * whether the preview is to display unread messages
-     */
+    // whether the preview is to display unread messages
     public static final String EXTRA_IS_UNREAD_PREVIEW_MODE = "EXTRA_IS_UNREAD_PREVIEW_MODE";
-    /**
-     * the forwarded data (list of media uris)
-     **/
+    // the forwarded data (list of media uris)
     public static final String EXTRA_ROOM_INTENT = "EXTRA_ROOM_INTENT";
-    /**
-     * the room is opened in preview mode (string)
-     **/
+    // the room is opened in preview mode (string)
     public static final String EXTRA_ROOM_PREVIEW_ID = "EXTRA_ROOM_PREVIEW_ID";
-    /**
-     * the room alias of the room in preview mode (string)
-     **/
+    // the room alias of the room in preview mode (string)
     public static final String EXTRA_ROOM_PREVIEW_ROOM_ALIAS = "EXTRA_ROOM_PREVIEW_ROOM_ALIAS";
-    /**
-     * expand the room header when the activity is launched (boolean)
-     **/
+    // expand the room header when the activity is launched (boolean)
     public static final String EXTRA_EXPAND_ROOM_HEADER = "EXTRA_EXPAND_ROOM_HEADER";
 
     // display the room information while joining a room.
@@ -385,7 +365,6 @@ public class VectorRoomActivity extends MXCActionBarActivity implements
     // action to do after requesting the camera permission
     private int mCameraPermissionAction;
 
-    /** **/
     private final ApiCallback<Void> mDirectMessageListener = new SimpleApiCallback<Void>(this) {
         @Override
         public void onMatrixError(MatrixError e) {
@@ -3971,7 +3950,6 @@ public class VectorRoomActivity extends MXCActionBarActivity implements
             if (PreferencesManager.useNativeCamera(VectorRoomActivity.this)) {
                 messagesList.add(R.string.option_take_photo);
                 iconsList.add(R.drawable.ic_material_camera);
-
                 messagesList.add(R.string.option_take_video);
                 iconsList.add(R.drawable.ic_material_videocam);
             } else {
@@ -4017,7 +3995,6 @@ public class VectorRoomActivity extends MXCActionBarActivity implements
                     }
                 }
             });
-
             fragment.show(fm, TAG_FRAGMENT_ATTACHMENTS_DIALOG);
         }
     }
@@ -4050,7 +4027,6 @@ public class VectorRoomActivity extends MXCActionBarActivity implements
         if (mEditText.requestFocus()) {
             InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
             imm.showSoftInput(mEditText, InputMethodManager.SHOW_IMPLICIT);
-
         }
     }
 
