@@ -7,6 +7,7 @@ Features:
  - Add a previewer for previewing media before sending it into the room (#1742|#2445)
  - Implements ReplyTo feature (#2390)
  - Add auto completion for slash commands (#2384)
+ - Add a setting to allow the user to use the enter key on his keyboard to send message instead of to add a new line (#394)
  - Support Room Versioning (#2441)
 
 Improvements:
@@ -14,6 +15,8 @@ Improvements:
  - Improve BugReport screen: display a preview of the screenshot (#2318)
  - In the settings, move theme settings just below "language" (#2439)
  - Improve the display of the sources of the message in the dialog (#2348)
+ - Improve the display of the buttons and the reason in the room preview (#2352)
+ - In the flair section on settings, notify the user when he has no flair (#2430)
 
 Other changes:
  - Remove dependency to `android-gif-drawable` lib and use Glide to animate logo on Splashscreen (#2421)
@@ -28,6 +31,7 @@ Bugfix:
  - Message with <p> was sometimes not properly formatted (#2275)
  - Fix notification issue when Riot is not started (#2451)
  - Fix Unable to add Matrix apps (#2466)
+ - Riot auto joined a public room (#2472)
 
 Translations:
  -

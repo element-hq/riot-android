@@ -73,7 +73,7 @@
 
             <Button
                 android:id="@+id/button_join_room"
-                android:layout_width="94dp"
+                android:layout_width="110dp"
                 android:layout_height="36dp"
                 android:layout_marginRight="16dp"
                 android:background="@color/vector_green_color"
@@ -82,7 +82,7 @@
 
             <Button
                 android:id="@+id/button_decline"
-                android:layout_width="94dp"
+                android:layout_width="110dp"
                 android:layout_height="36dp"
                 android:background="@android:color/white"
                 android:text="@string/cancel"
@@ -263,7 +263,7 @@
                         android:background="@android:color/transparent"
                         android:dropDownAnchor="@+id/room_sending_message_layout"
                         android:hint="@string/room_message_placeholder_not_encrypted"
-                        android:inputType="textCapSentences|textMultiLine"
+                        android:inputType="textCapSentences"
                         android:maxHeight="160dp"
                         android:textColor="?attr/riot_primary_text_color"
                         android:textColorHint="?attr/default_text_hint_color"
@@ -426,5 +426,4 @@
             android:indeterminate="true" />
 
     </RelativeLayout>
-
 </RelativeLayout>

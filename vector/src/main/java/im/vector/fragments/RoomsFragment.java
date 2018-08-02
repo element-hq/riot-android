@@ -42,6 +42,7 @@ import org.matrix.androidsdk.data.store.IMXStore;
 import org.matrix.androidsdk.rest.callback.ApiCallback;
 import org.matrix.androidsdk.rest.client.EventsRestClient;
 import org.matrix.androidsdk.rest.model.MatrixError;
+import org.matrix.androidsdk.rest.model.RoomMember;
 import org.matrix.androidsdk.rest.model.publicroom.PublicRoom;
 import org.matrix.androidsdk.util.Log;
 
@@ -266,31 +267,30 @@ public class RoomsFragment extends AbsHomeFragment implements AbsHomeFragment.On
         if (null != publicRoom.roomId) {
             final RoomPreviewData roomPreviewData = new RoomPreviewData(mSession, publicRoom.roomId, null, publicRoom.getAlias(), null);
 
-            Room room = mSession.getDataHandler().getRoom(publicRoom.roomId, false);
+            // Check whether the room exists to handled the cases where the user is invited or he has joined.
+            // CAUTION: the room may exist whereas the user membership is neither invited nor joined.
+            final Room room = mSession.getDataHandler().getRoom(publicRoom.roomId, false);
+            if (null != room && room.hasMembership(RoomMember.MEMBERSHIP_INVITE)) {
+                Log.d(LOG_TAG, "onPublicRoomSelected : the user is invited -> display the preview " + getActivity());
+                CommonActivityUtils.previewRoom(getActivity(), roomPreviewData);
+            } else if (null != room && room.hasMembership(RoomMember.MEMBERSHIP_JOIN)) {
+                Log.d(LOG_TAG, "onPublicRoomSelected : the user joined the room -> open the room");
+                final Map<String, Object> params = new HashMap<>();
+                params.put(VectorRoomActivity.EXTRA_MATRIX_ID, mSession.getMyUserId());
+                params.put(VectorRoomActivity.EXTRA_ROOM_ID, publicRoom.roomId);
 
-            // if the room exists
-            if (null != room) {
-                // either the user is invited
-                if (room.isInvited()) {
-                    Log.d(LOG_TAG, "manageRoom : the user is invited -> display the preview " + getActivity());
-                    CommonActivityUtils.previewRoom(getActivity(), roomPreviewData);
-                } else {
-                    Log.d(LOG_TAG, "manageRoom : open the room");
-                    Map<String, Object> params = new HashMap<>();
-                    params.put(VectorRoomActivity.EXTRA_MATRIX_ID, mSession.getMyUserId());
-                    params.put(VectorRoomActivity.EXTRA_ROOM_ID, publicRoom.roomId);
-
-                    if (!TextUtils.isEmpty(publicRoom.name)) {
-                        params.put(VectorRoomActivity.EXTRA_DEFAULT_NAME, publicRoom.name);
-                    }
-
-                    if (!TextUtils.isEmpty(publicRoom.topic)) {
-                        params.put(VectorRoomActivity.EXTRA_DEFAULT_TOPIC, publicRoom.topic);
-                    }
-
-                    CommonActivityUtils.goToRoomPage(getActivity(), mSession, params);
+                if (!TextUtils.isEmpty(publicRoom.name)) {
+                    params.put(VectorRoomActivity.EXTRA_DEFAULT_NAME, publicRoom.name);
                 }
+
+                if (!TextUtils.isEmpty(publicRoom.topic)) {
+                    params.put(VectorRoomActivity.EXTRA_DEFAULT_TOPIC, publicRoom.topic);
+                }
+
+                CommonActivityUtils.goToRoomPage(getActivity(), mSession, params);
             } else {
+                // Display a preview by default.
+                Log.d(LOG_TAG, "onPublicRoomSelected : display the preview");
                 mActivity.showWaitingView();
 
                 roomPreviewData.fetchPreviewData(new ApiCallback<Void>() {
