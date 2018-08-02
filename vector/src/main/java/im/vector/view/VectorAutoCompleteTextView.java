@@ -372,7 +372,7 @@ public class VectorAutoCompleteTextView extends AppCompatMultiAutoCompleteTextVi
                             Log.e(LOG_TAG, "## performFiltering() failed " + e.getMessage(), e);
                         }
 
-                        if(subText.toString().startsWith("@")) {
+                        if (subText.toString().startsWith("@")) {
                             mAdapterUser.getFilter().filter(subText, new Filter.FilterListener() {
                                 @Override
                                 public void onFilterComplete(int count) {

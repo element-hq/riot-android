@@ -78,7 +78,10 @@ public class AutoCompletedCommandLineAdapter extends ArrayAdapter<String> {
      * @param session           The session
      * @param slashCommands      The command lines list
      */
-    public AutoCompletedCommandLineAdapter(Context context, int layoutResourceId, MXSession session, Collection<SlashCommandsParser.SlashCommand> slashCommands) {
+    public AutoCompletedCommandLineAdapter(Context context,
+                                           int layoutResourceId,
+                                           MXSession session,
+                                           Collection<SlashCommandsParser.SlashCommand> slashCommands) {
         super(context, layoutResourceId);
         mContext = context;
         mLayoutResourceId = layoutResourceId;
@@ -158,7 +161,10 @@ public class AutoCompletedCommandLineAdapter extends ArrayAdapter<String> {
 
                 if (prefixString.startsWith("/")) {
                     for (SlashCommandsParser.SlashCommand slashCommand : mCommandLines) {
-                        if ((null != slashCommand.getCommand()) && slashCommand.getCommand().toLowerCase(VectorApp.getApplicationLocale()).startsWith(prefixString)) {
+                        if ((null != slashCommand.getCommand()) &&
+                                slashCommand.getCommand()
+                                            .toLowerCase(VectorApp.getApplicationLocale())
+                                            .startsWith(prefixString)) {
                             newValues.add(slashCommand.getCommand());
                         }
                     }
