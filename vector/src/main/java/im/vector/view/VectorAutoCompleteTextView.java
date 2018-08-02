@@ -97,7 +97,7 @@ public class VectorAutoCompleteTextView extends AppCompatMultiAutoCompleteTextVi
      * @param text  The message text being written.
      */
     public void updateAutoCompletionModeForText(String text) {
-        final AutoCompletionMode newMode = AutoCompletionMode.Companion.autoCompletionMode(text);
+        final AutoCompletionMode newMode = AutoCompletionMode.Companion.getWithText(text);
         if (newMode == mAutoCompletionMode){
             return;
         }
