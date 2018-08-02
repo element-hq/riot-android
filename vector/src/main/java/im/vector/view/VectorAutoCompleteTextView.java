@@ -136,17 +136,14 @@ public class VectorAutoCompleteTextView extends AppCompatMultiAutoCompleteTextVi
     public void initAutoCompletions(@NonNull final MXSession session, @Nullable Room room) {
         List<User> users = new ArrayList<>();
 
-        if (!TextUtils.isEmpty(room.getRoomId())) {
+        if (null != room) {
+            Collection<RoomMember> members = room.getMembers();
 
-            if (null != room) {
-                Collection<RoomMember> members = room.getMembers();
+            for (RoomMember member : members) {
+                User user = session.getDataHandler().getUser(member.getUserId());
 
-                for (RoomMember member : members) {
-                    User user = session.getDataHandler().getUser(member.getUserId());
-
-                    if (null != user) {
-                        users.add(user);
-                    }
+                if (null != user) {
+                    users.add(user);
                 }
             }
         }
