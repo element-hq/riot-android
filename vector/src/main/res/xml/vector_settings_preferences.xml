@@ -130,7 +130,7 @@
 
     <PreferenceCategory
         android:key="SETTINGS_GROUPS_FLAIR_KEY"
-        android:title="@string/settings_flair" />
+        android:title="@string/settings_flair"/>
 
     <im.vector.preference.VectorDividerCategory />
 
