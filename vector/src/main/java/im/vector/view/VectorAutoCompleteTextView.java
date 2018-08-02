@@ -124,7 +124,8 @@ public class VectorAutoCompleteTextView extends AppCompatMultiAutoCompleteTextVi
      * @param session the session
      */
     public void initAutoCompletion(MXSession session) {
-        initAutoCompletion(session, session.getDataHandler().getStore().getUsers());
+        initAutoCompletion();
+        buildAdapter(session, session.getDataHandler().getStore().getUsers(), null);
     }
 
     /**
@@ -151,76 +152,51 @@ public class VectorAutoCompleteTextView extends AppCompatMultiAutoCompleteTextVi
         SlashCommandsParser.SlashCommand[] commandLines = SlashCommandsParser.SlashCommand.values();
         List<SlashCommandsParser.SlashCommand> commands = new ArrayList<SlashCommandsParser.SlashCommand>(Arrays.asList(commandLines));
 
-        initAutoCompletion(session, users);
-        initAutoCompletionCommandLine(session, commands);
+        initAutoCompletion();
+        buildAdapter(session, users, null);
+        buildAdapter(session, null, commands);
+    }
+
+    private void initAutoCompletion() {
+        // define the parser
+        setTokenizer(new VectorAutoCompleteTokenizer());
+
+        // retrieve 2 private members
+        if (null == mPopupCanBeUpdatedField) {
+            try {
+                mPopupCanBeUpdatedField = AutoCompleteTextView.class.getDeclaredField("mPopupCanBeUpdated");
+                mPopupCanBeUpdatedField.setAccessible(true);
+            } catch (Exception e) {
+                Log.e(LOG_TAG, "## initAutoCompletion() : failed to retrieve mPopupCanBeUpdated " + e.getMessage(), e);
+            }
+        }
+
+        if (null == mListPopupWindow) {
+            try {
+                Field popup = AutoCompleteTextView.class.getDeclaredField("mPopup");
+                popup.setAccessible(true);
+                mListPopupWindow = (android.widget.ListPopupWindow) popup.get(this);
+            } catch (Exception e) {
+                Log.e(LOG_TAG, "## initAutoCompletion() : failed to retrieve mListPopupWindow " + e.getMessage(), e);
+            }
+        }
     }
 
     /**
      * Internal method to build the auto completions list of users.
      *
-     * @param session the session
-     * @param users   the users list
+     * @param session        the session
+     * @param users          the users list
+     * @param commandLines   the commands list
      */
-    private void initAutoCompletion(MXSession session, Collection<User> users) {
+    private void buildAdapter(@NonNull MXSession session,
+                              @Nullable Collection<User> users,
+                              @Nullable Collection<SlashCommandsParser.SlashCommand> commandLines) {
         // build the adapter
-        mAdapterUser = new AutoCompletedUserAdapter(getContext(), R.layout.item_user_auto_complete, session, users);
-
-        // define the parser
-        setTokenizer(new VectorAutoCompleteTokenizer());
-
-        // retrieve 2 private members
-        if (null == mPopupCanBeUpdatedField) {
-            try {
-                mPopupCanBeUpdatedField = AutoCompleteTextView.class.getDeclaredField("mPopupCanBeUpdated");
-                mPopupCanBeUpdatedField.setAccessible(true);
-            } catch (Exception e) {
-                Log.e(LOG_TAG, "## initAutoCompletion() : failed to retrieve mPopupCanBeUpdated " + e.getMessage(), e);
-            }
-        }
-
-        if (null == mListPopupWindow) {
-            try {
-                Field popup = AutoCompleteTextView.class.getDeclaredField("mPopup");
-                popup.setAccessible(true);
-                mListPopupWindow = (android.widget.ListPopupWindow) popup.get(this);
-            } catch (Exception e) {
-                Log.e(LOG_TAG, "## initAutoCompletion() : failed to retrieve mListPopupWindow " + e.getMessage(), e);
-            }
-        }
-    }
-
-    /**
-     * Internal method to build the auto completions list of slash commands.
-     *
-     * @param session       the session
-     * @param commandLines  the commands list
-     */
-    private void initAutoCompletionCommandLine(MXSession session, Collection<SlashCommandsParser.SlashCommand> commandLines) {
-        // build the adapter
-        mAdapterCommand = new AutoCompletedCommandLineAdapter(getContext(), R.layout.item_command_auto_complete, session, commandLines);
-
-        // define the parser
-        setTokenizer(new VectorAutoCompleteTokenizer());
-
-
-        // retrieve 2 private members
-        if (null == mPopupCanBeUpdatedField) {
-            try {
-                mPopupCanBeUpdatedField = AutoCompleteTextView.class.getDeclaredField("mPopupCanBeUpdated");
-                mPopupCanBeUpdatedField.setAccessible(true);
-            } catch (Exception e) {
-                Log.e(LOG_TAG, "## initAutoCompletion() : failed to retrieve mPopupCanBeUpdated " + e.getMessage(), e);
-            }
-        }
-
-        if (null == mListPopupWindow) {
-            try {
-                Field popup = AutoCompleteTextView.class.getDeclaredField("mPopup");
-                popup.setAccessible(true);
-                mListPopupWindow = (android.widget.ListPopupWindow) popup.get(this);
-            } catch (Exception e) {
-                Log.e(LOG_TAG, "## initAutoCompletion() : failed to retrieve mListPopupWindow " + e.getMessage(), e);
-            }
+        if (null == users && null != commandLines) {
+            mAdapterCommand = new AutoCompletedCommandLineAdapter(getContext(), R.layout.item_command_auto_complete, session, commandLines);
+        } else if (null != users && null == commandLines) {
+            mAdapterUser = new AutoCompletedUserAdapter(getContext(), R.layout.item_user_auto_complete, session, users);
         }
     }
 
@@ -235,19 +211,30 @@ public class VectorAutoCompleteTextView extends AppCompatMultiAutoCompleteTextVi
     }
 
     /**
-     * Compute the popup size for list of users.
+     * Compute the popup size for list of users or commands.
      */
-    private void adjustPopupSize() {
+    private void adjustPopupSize(@Nullable AutoCompletedUserAdapter userAdapter,
+                                 @Nullable AutoCompletedCommandLineAdapter commandLineAdapter) {
         if (null != mListPopupWindow) {
             int maxWidth = 0;
+            int count = 0;
 
             ViewGroup mMeasureParent = new FrameLayout(getContext());
             View itemView = null;
 
-            final int count = mAdapterUser.getCount();
+            if (null != userAdapter && null == commandLineAdapter) {
+                count = userAdapter.getCount();
+            } else if (null != commandLineAdapter && null == userAdapter) {
+                count = commandLineAdapter.getCount();
+            }
 
             for (int i = 0; i < count; i++) {
-                itemView = mAdapterUser.getView(i, itemView, mMeasureParent, false);
+                if (null != userAdapter) {
+                    itemView = userAdapter.getView(i, itemView, mMeasureParent, false);
+                }
+                if (null != commandLineAdapter) {
+                    itemView = commandLineAdapter.getView(i, itemView, mMeasureParent);
+                }
                 itemView.measure(MeasureSpec.UNSPECIFIED, MeasureSpec.UNSPECIFIED);
                 maxWidth = Math.max(maxWidth, itemView.getMeasuredWidth());
             }
@@ -257,28 +244,6 @@ public class VectorAutoCompleteTextView extends AppCompatMultiAutoCompleteTextVi
             // setDropDownWidth(maxWidth) does not work on some devices
             // it seems working on android >= 5.1
             // but it does not on older android platforms
-        }
-    }
-
-    /**
-     * Compute the popup size for list od slash commands.
-     */
-    private void adjustPopupSizeCommand() {
-        if (null != mListPopupWindow) {
-            int maxWidth = 0;
-
-            ViewGroup mMeasureParent = new FrameLayout(getContext());
-            View itemView = null;
-
-            final int count = mAdapterCommand.getCount();
-
-            for (int i = 0; i < count; i++) {
-                itemView = mAdapterCommand.getView(i, itemView, mMeasureParent);
-                itemView.measure(MeasureSpec.UNSPECIFIED, MeasureSpec.UNSPECIFIED);
-                maxWidth = Math.max(maxWidth, itemView.getMeasuredWidth());
-            }
-
-            mListPopupWindow.setContentWidth(maxWidth);
         }
     }
 
@@ -365,7 +330,7 @@ public class VectorAutoCompleteTextView extends AppCompatMultiAutoCompleteTextVi
                             mAdapterUser.getFilter().filter(subText, new Filter.FilterListener() {
                                 @Override
                                 public void onFilterComplete(int count) {
-                                    adjustPopupSize();
+                                    adjustPopupSize(mAdapterUser, null);
                                     VectorAutoCompleteTextView.this.onFilterComplete(count);
                                 }
                             });
@@ -373,14 +338,14 @@ public class VectorAutoCompleteTextView extends AppCompatMultiAutoCompleteTextVi
                             mAdapterCommand.getFilter().filter(subText, new Filter.FilterListener() {
                                 @Override
                                 public void onFilterComplete(int count) {
-                                    adjustPopupSizeCommand();
+                                    adjustPopupSize(null, mAdapterCommand);
                                     VectorAutoCompleteTextView.this.onFilterComplete(count);
                                 }
                             });
                         }
                     }
                 }
-            }, 700);
+            }, 500);
         }
     }
 
