@@ -30,6 +30,7 @@ import android.os.HandlerThread;
 import android.os.IBinder;
 import android.os.PowerManager;
 import android.os.SystemClock;
+import android.support.annotation.Nullable;
 import android.text.Spannable;
 import android.text.SpannableString;
 import android.text.TextUtils;
@@ -85,6 +86,7 @@ public class EventStreamService extends Service {
     /**
      * static instance
      */
+    @Nullable
     private static EventStreamService mActiveEventStreamService = null;
 
     /**
@@ -197,6 +199,7 @@ public class EventStreamService extends Service {
     /**
      * @return the event stream instance
      */
+    @Nullable
     public static EventStreamService getInstance() {
         return mActiveEventStreamService;
     }
@@ -320,7 +323,7 @@ public class EventStreamService extends Service {
     public int onStartCommand(Intent intent, int flags, int startId) {
         // no intent : restarted by Android
         // EXTRA_AUTO_RESTART_ACTION : restarted by the service itself (
-        if ((null == intent) || intent.hasExtra(EXTRA_AUTO_RESTART_ACTION)) {
+        if (null == intent || intent.hasExtra(EXTRA_AUTO_RESTART_ACTION)) {
             boolean restart = false;
 
             if (StreamAction.AUTO_RESTART == mServiceState) {
@@ -543,7 +546,8 @@ public class EventStreamService extends Service {
      * @return true if the service is stopped.
      */
     public static boolean isStopped() {
-        return (null == getInstance()) || (getInstance().mServiceState == StreamAction.STOP);
+        return getInstance() == null
+                || getInstance().mServiceState == StreamAction.STOP;
     }
 
     /**
@@ -661,7 +665,7 @@ public class EventStreamService extends Service {
         Log.d(LOG_TAG, "## start : start the service");
 
         // release previous instance
-        if ((null != mActiveEventStreamService) && (this != mActiveEventStreamService)) {
+        if (null != mActiveEventStreamService && this != mActiveEventStreamService) {
             mActiveEventStreamService.stop();
         }
 
@@ -818,7 +822,7 @@ public class EventStreamService extends Service {
         return (!mGcmRegistrationManager.useGCM() ||
                 // the GCM registration was not done
                 TextUtils.isEmpty(mGcmRegistrationManager.getCurrentRegistrationToken())
-                        && !mGcmRegistrationManager.isServerRegistred())
+                        && !mGcmRegistrationManager.isServerRegistered())
                 && mGcmRegistrationManager.isBackgroundSyncAllowed()
                 && mGcmRegistrationManager.areDeviceNotificationsAllowed();
     }
@@ -880,7 +884,10 @@ public class EventStreamService extends Service {
             case NONE:
                 // The foreground/ sticky notification can be removed
                 NotificationUtils.INSTANCE.cancelNotificationForegroundService(this);
-                stopForeground(true);
+
+                if (getInstance() != null) {
+                    getInstance().stopForeground(true);
+                }
                 break;
             case INITIAL_SYNCING:
                 notification = NotificationUtils.INSTANCE.buildForegroundServiceNotification(this, R.string.notification_sync_in_progress);
@@ -899,7 +906,9 @@ public class EventStreamService extends Service {
 
         if (notification != null) {
             // display the stick foreground notification
-            startForeground(NotificationUtils.NOTIFICATION_ID_FOREGROUND_SERVICE, notification);
+            if (getInstance() != null) {
+                getInstance().startForeground(NotificationUtils.NOTIFICATION_ID_FOREGROUND_SERVICE, notification);
+            }
         }
     }
 
@@ -1149,8 +1158,12 @@ public class EventStreamService extends Service {
      * @param senderDisplayName   the sender display name
      * @param unreadMessagesCount the unread messages count
      */
-    public static void onStaticNotifiedEvent(Context context, Event event, String roomName, String senderDisplayName, int unreadMessagesCount) {
-        if ((null != event) && !mBackgroundNotificationEventIds.contains(event.eventId)) {
+    public static void onStaticNotifiedEvent(Context context,
+                                             @Nullable Event event,
+                                             String roomName,
+                                             String senderDisplayName,
+                                             int unreadMessagesCount) {
+        if (null != event && !mBackgroundNotificationEventIds.contains(event.eventId)) {
             mBackgroundNotificationEventIds.add(event.eventId);
             String header = (TextUtils.isEmpty(roomName) ? "" : roomName + ": ");
             String text;
@@ -1197,13 +1210,36 @@ public class EventStreamService extends Service {
                 notifiedLine.setSpan(new StyleSpan(android.graphics.Typeface.BOLD), 0, header.length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
 
                 mBackgroundNotificationStrings.add(0, notifiedLine);
-                getInstance().displayMessagesNotification(mBackgroundNotificationStrings, new BingRule(null, null, true, true, true));
+                displayMessagesNotificationStatic(context, mBackgroundNotificationStrings, new BingRule(null, null, true, true, true));
             }
         } else if (0 == unreadMessagesCount) {
             mBackgroundNotificationStrings.clear();
             mLastBackgroundNotificationUnreadCount = 0;
             mLastBackgroundNotificationRoomId = null;
-            getInstance().displayMessagesNotification(null, null);
+            displayMessagesNotificationStatic(context, null, null);
+        }
+    }
+
+    /**
+     * Display a list of messages in the messages notification, when the EventStreamService is not started.
+     *
+     * @param messages the messages list, null will hide the messages notification.
+     * @param rule     the bing rule to use
+     */
+    private static void displayMessagesNotificationStatic(Context context, List<CharSequence> messages, BingRule rule) {
+        if (!Matrix.getInstance(context).getSharedGCMRegistrationManager().areDeviceNotificationsAllowed()
+                || null == messages
+                || messages.isEmpty()) {
+            NotificationUtils.INSTANCE.cancelNotificationMessage(context);
+            RoomsNotifications.deleteCachedRoomNotifications(VectorApp.getInstance());
+        } else {
+            Notification notification = NotificationUtils.INSTANCE.buildMessagesListNotification(context, messages, rule);
+
+            if (null != notification) {
+                NotificationUtils.INSTANCE.showNotificationMessage(context, notification);
+            } else {
+                NotificationUtils.INSTANCE.cancelNotificationMessage(context);
+            }
         }
     }
 

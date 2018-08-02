@@ -23,6 +23,7 @@ import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Point;
+import android.graphics.Typeface;
 import android.graphics.drawable.Drawable;
 import android.os.Build;
 import android.os.Handler;
@@ -35,8 +36,12 @@ import android.text.SpannableString;
 import android.text.SpannableStringBuilder;
 import android.text.TextUtils;
 import android.text.format.DateUtils;
+import android.text.method.LinkMovementMethod;
 import android.text.style.BackgroundColorSpan;
+import android.text.style.ClickableSpan;
+import android.text.style.ForegroundColorSpan;
 import android.text.style.QuoteSpan;
+import android.text.style.StyleSpan;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -51,6 +56,8 @@ import android.widget.LinearLayout;
 import android.widget.PopupMenu;
 import android.widget.TextView;
 
+import com.binaryfork.spanny.Spanny;
+
 import org.matrix.androidsdk.MXSession;
 import org.matrix.androidsdk.adapters.AbstractMessagesAdapter;
 import org.matrix.androidsdk.adapters.MessageRow;
@@ -63,6 +70,7 @@ import org.matrix.androidsdk.interfaces.HtmlToolbox;
 import org.matrix.androidsdk.rest.model.Event;
 import org.matrix.androidsdk.rest.model.EventContent;
 import org.matrix.androidsdk.rest.model.PowerLevels;
+import org.matrix.androidsdk.rest.model.RoomCreateContent;
 import org.matrix.androidsdk.rest.model.RoomMember;
 import org.matrix.androidsdk.rest.model.crypto.EncryptedEventContent;
 import org.matrix.androidsdk.rest.model.message.FileMessage;
@@ -72,6 +80,7 @@ import org.matrix.androidsdk.rest.model.message.StickerMessage;
 import org.matrix.androidsdk.util.EventDisplay;
 import org.matrix.androidsdk.util.JsonUtils;
 import org.matrix.androidsdk.util.Log;
+import org.matrix.androidsdk.util.PermalinkUtils;
 import org.matrix.androidsdk.view.HtmlTagHandler;
 
 import java.lang.reflect.Field;
@@ -158,7 +167,9 @@ public class VectorMessagesAdapter extends AbstractMessagesAdapter {
     static final int ROW_TYPE_EMOJI = 9;
     static final int ROW_TYPE_CODE = 10;
     static final int ROW_TYPE_STICKER = 11;
-    static final int NUM_ROW_TYPES = 12;
+    static final int ROW_TYPE_VERSIONED_ROOM = 12;
+    static final int NUM_ROW_TYPES = 13;
+
 
     final Context mContext;
     private final Map<Integer, Integer> mRowTypeToLayoutId = new HashMap<>();
@@ -291,6 +302,7 @@ public class VectorMessagesAdapter extends AbstractMessagesAdapter {
                 R.layout.adapter_item_vector_message_code,
                 R.layout.adapter_item_vector_message_image_video,
                 R.layout.adapter_item_vector_hidden_message,
+                R.layout.adapter_item_vector_message_room_versioned,
                 mediasCache);
     }
 
@@ -328,6 +340,7 @@ public class VectorMessagesAdapter extends AbstractMessagesAdapter {
                           int codeResLayoutId,
                           int stickerResLayoutId,
                           int hiddenResLayoutId,
+                          int roomVersionedResLayoutId,
                           MXMediasCache mediasCache) {
         super(context, 0);
         mContext = context;
@@ -343,6 +356,7 @@ public class VectorMessagesAdapter extends AbstractMessagesAdapter {
         mRowTypeToLayoutId.put(ROW_TYPE_CODE, codeResLayoutId);
         mRowTypeToLayoutId.put(ROW_TYPE_STICKER, stickerResLayoutId);
         mRowTypeToLayoutId.put(ROW_TYPE_HIDDEN, hiddenResLayoutId);
+        mRowTypeToLayoutId.put(ROW_TYPE_VERSIONED_ROOM, roomVersionedResLayoutId);
         mMediasCache = mediasCache;
         mLayoutInflater = LayoutInflater.from(mContext);
         // the refresh will be triggered only when it is required
@@ -725,7 +739,7 @@ public class VectorMessagesAdapter extends AbstractMessagesAdapter {
             return ROW_TYPE_TEXT;
         }
 
-        MessageRow row = getItem(position);
+        final MessageRow row = getItem(position);
         return getItemViewType(row.getEvent());
     }
 
@@ -786,6 +800,9 @@ public class VectorMessagesAdapter extends AbstractMessagesAdapter {
                 break;
             case ROW_TYPE_MERGE:
                 inflatedView = getMergeView(position, convertView, parent);
+                break;
+            case ROW_TYPE_VERSIONED_ROOM:
+                inflatedView = getVersionedRoomView(position, convertView, parent);
                 break;
             default:
                 throw new RuntimeException("Unknown item view type for position " + position);
@@ -1091,6 +1108,8 @@ public class VectorMessagesAdapter extends AbstractMessagesAdapter {
 
         } else if (WidgetsManager.WIDGET_EVENT_TYPE.equals(eventType)) {
             return ROW_TYPE_ROOM_MEMBER;
+        } else if (Event.EVENT_TYPE_STATE_ROOM_CREATE.equals(eventType)) {
+            viewType = ROW_TYPE_VERSIONED_ROOM;
         } else {
             throw new RuntimeException("Unknown event type: " + eventType);
         }
@@ -1790,6 +1809,36 @@ public class VectorMessagesAdapter extends AbstractMessagesAdapter {
             Log.e(LOG_TAG, "## getMergeView() failed " + e.getMessage(), e);
         }
 
+        return convertView;
+    }
+
+    /**
+     * Versioned Room management
+     *
+     * @param position    the message position
+     * @param convertView the message view
+     * @param parent      the parent view
+     * @return the updated View
+     */
+    private View getVersionedRoomView(final int position, View convertView, ViewGroup parent) {
+        if (convertView == null) {
+            convertView = mLayoutInflater.inflate(mRowTypeToLayoutId.get(ROW_TYPE_VERSIONED_ROOM), parent, false);
+        }
+        final MessageRow row = getItem(position);
+        final RoomState roomState = row.getRoomState();
+        final RoomCreateContent.Predecessor predecessor = roomState.getRoomCreateContent().predecessor;
+
+        final String roomLink = PermalinkUtils.createPermalink(predecessor.roomId);
+        final ClickableSpan urlSpan = new MatrixURLSpan(roomLink, MXSession.PATTERN_CONTAIN_APP_LINK_PERMALINK_ROOM_ID, mVectorMessagesAdapterEventsListener);
+        final int textColorInt = ContextCompat.getColor(mContext, R.color.riot_primary_text_color_light);
+        final CharSequence text = new Spanny(mContext.getString(R.string.room_tombstone_continuation_description),
+                new StyleSpan(Typeface.BOLD),
+                new ForegroundColorSpan(textColorInt))
+                .append("\n")
+                .append(mContext.getString(R.string.room_tombstone_predecessor_link), urlSpan, new ForegroundColorSpan(textColorInt));
+        final TextView versionedTextView = convertView.findViewById(R.id.messagesAdapter_room_versioned_text);
+        versionedTextView.setMovementMethod(LinkMovementMethod.getInstance());
+        versionedTextView.setText(text);
         return convertView;
     }
 
