@@ -733,8 +733,7 @@ public class VectorRoomActivity extends MXCActionBarActivity implements
 
         mRoom = mSession.getDataHandler().getRoom(roomId, false);
 
-        mEditText.initAutoCompletion(mSession, (null != mRoom) ? mRoom.getRoomId() : null);
-        mEditText.initAutoCompletionCommandLine(mSession , null);
+        mEditText.initAutoCompletions(mSession, (null != mRoom) ? mRoom : null);
         mEditText.setAddColonOnFirstItem(true);
 
         mEditText.addTextChangedListener(new TextWatcher() {
@@ -1222,8 +1221,7 @@ public class VectorRoomActivity extends MXCActionBarActivity implements
         displayE2eRoomAlert();
 
         // init the auto-completion list from the room members
-        mEditText.initAutoCompletion(mSession, (null != mRoom) ? mRoom.getRoomId() : null);
-        mEditText.initAutoCompletionCommandLine(mSession, null);
+        mEditText.initAutoCompletions(mSession, (null != mRoom) ? mRoom : null);
 
         if (mReadMarkerManager != null) {
             mReadMarkerManager.onResume();

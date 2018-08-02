@@ -20,6 +20,8 @@ package im.vector.view;
 import android.content.Context;
 import android.os.Handler;
 import android.os.Looper;
+import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.support.v7.widget.AppCompatMultiAutoCompleteTextView;
 import android.text.Editable;
 import android.text.InputType;
@@ -129,13 +131,12 @@ public class VectorAutoCompleteTextView extends AppCompatMultiAutoCompleteTextVi
      * Build the auto completions list of users for a room
      *
      * @param session the session
-     * @param roomId  the room Id
+     * @param room    the room
      */
-    public void initAutoCompletion(MXSession session, String roomId) {
+    public void initAutoCompletions(@NonNull final MXSession session, @Nullable Room room) {
         List<User> users = new ArrayList<>();
 
-        if (!TextUtils.isEmpty(roomId)) {
-            Room room = session.getDataHandler().getStore().getRoom(roomId);
+        if (!TextUtils.isEmpty(room.getRoomId())) {
 
             if (null != room) {
                 Collection<RoomMember> members = room.getMembers();
@@ -150,19 +151,10 @@ public class VectorAutoCompleteTextView extends AppCompatMultiAutoCompleteTextVi
             }
         }
 
-        initAutoCompletion(session, users);
-    }
-
-    /**
-     * Build the auto completions list of slash commands for a room
-     *
-     * @param session the session
-     * @param roomId  the room Id
-     */
-    public void initAutoCompletionCommandLine(MXSession session, String roomId) {
         SlashCommandsParser.SlashCommand[] commandLines = SlashCommandsParser.SlashCommand.values();
         List<SlashCommandsParser.SlashCommand> commands = new ArrayList<SlashCommandsParser.SlashCommand>(Arrays.asList(commandLines));
 
+        initAutoCompletion(session, users);
         initAutoCompletionCommandLine(session, commands);
     }
 
