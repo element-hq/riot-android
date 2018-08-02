@@ -150,6 +150,11 @@ class VectorSettingsPreferencesFragment : PreferenceFragment(), SharedPreference
         findPreference(PreferencesManager.SETTINGS_CONTACTS_PHONEBOOK_COUNTRY_PREFERENCE_KEY) as VectorCustomActionEditTextPreference
     }
 
+    // Group Flairs
+    private val mGroupsFlairCategory by lazy {
+        findPreference(PreferencesManager.SETTINGS_GROUPS_FLAIR_KEY) as PreferenceCategory
+    }
+
     // cryptography
     private val mCryptographyCategory by lazy {
         findPreference(PreferencesManager.SETTINGS_CRYPTOGRAPHY_PREFERENCE_KEY) as PreferenceCategory
@@ -188,9 +193,6 @@ class VectorSettingsPreferencesFragment : PreferenceFragment(), SharedPreference
     }
     private val mLabsCategory by lazy {
         findPreference(PreferencesManager.SETTINGS_LABS_PREFERENCE_KEY) as PreferenceCategory
-    }
-    private val mGroupsFlairCategory by lazy {
-        findPreference(PreferencesManager.SETTINGS_GROUPS_FLAIR_KEY) as PreferenceCategory
     }
     private val backgroundSyncCategory by lazy {
         findPreference(PreferencesManager.SETTINGS_BACKGROUND_SYNC_PREFERENCE_KEY)
@@ -597,6 +599,16 @@ class VectorSettingsPreferencesFragment : PreferenceFragment(), SharedPreference
         }
 
         // Others
+
+        (findPreference(PreferencesManager.SETTINGS_SEND_MESSAGE_ENTER_KEY) as CheckBoxPreference).let {
+            it.isChecked = PreferencesManager.useEnterKeyToSendMessage(appContext)
+
+            it.onPreferenceChangeListener = Preference.OnPreferenceChangeListener { preference, newValue ->
+                PreferencesManager.setUseEnterKeyToSendMessage(appContext, newValue as Boolean)
+                true
+            }
+        }
+
 
         // preference to start the App info screen, to facilitate App permissions access
         findPreference(APP_INFO_LINK_PREFERENCE_KEY)
@@ -2589,15 +2601,15 @@ class VectorSettingsPreferencesFragment : PreferenceFragment(), SharedPreference
      * It can be any mobile device, as any browser.
      */
     private fun refreshGroupFlairsList() {
-        // display a spinner while refreshing
-        if (0 == mGroupsFlairCategory.preferenceCount) {
-            val preference = ProgressBarPreference(activity)
-            mGroupsFlairCategory.addPreference(preference)
-        }
-
         mSession.groupsManager.getUserPublicisedGroups(mSession.myUserId, true, object : ApiCallback<Set<String>> {
             override fun onSuccess(publicisedGroups: Set<String>) {
-                buildGroupsList(publicisedGroups)
+                if (publicisedGroups.isEmpty()){
+                    val vectorGroupPreference = VectorCustomActionEditTextPreference(activity)
+                    vectorGroupPreference.title = resources.getString(R.string.settings_without_flair)
+                    mGroupsFlairCategory.addPreference(vectorGroupPreference)
+                } else {
+                    buildGroupsList(publicisedGroups)
+                }
             }
 
             override fun onNetworkError(e: Exception) {
