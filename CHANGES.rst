@@ -32,6 +32,7 @@ Bugfix:
  - Fix Unable to add Matrix apps (#2466)
  - Riot auto joined a public room (#2472)
  - Remove last traces of Firebase analytics (#2481)
+ - Restore the back navigation of the back button in the room preview header (#2473)
 
 Translations:
  -
