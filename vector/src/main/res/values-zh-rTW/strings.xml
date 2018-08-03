@@ -416,4 +416,128 @@
     <string name="ssl_cert_not_trust">這可能表示有人正惡意的攔截你的流量，或你的手機不信任由遠端伺服器提供的憑證。</string>
     <string name="ssl_cert_new_account_expl">如果伺服器管理員說這是在預料之中的，確保底下的指紋與他們所提供的指紋符合。</string>
     <string name="ssl_unexpected_existing_expl">你的手機曾經信任的憑證已經變動。這非常不尋常。建議你不要接受此新的憑證。</string>
+    <string name="title_activity_choose_sticker">發送貼圖</string>
+
+    <string name="dialog_title_third_party_licences">第三方開放原始碼授權</string>
+
+    <string name="download">下載</string>
+    <string name="speak">說話</string>
+    <string name="clear">清除</string>
+    <string name="option_send_voice">發送語音訊息</string>
+
+    <string name="option_send_sticker">發送貼圖</string>
+    <string name="no_sticker_application_dialog_content">您目前沒有任何貼圖。
+
+是否添加一些貼圖？</string>
+
+    <string name="go_on_with">使用…打開</string>
+    <string name="error_no_external_application_found">對不起，沒有應用程式可以完成此操作。</string>
+
+    <string name="e2e_re_request_encryption_key">從其他裝置<u>重新請求金鑰</u>。</string>
+
+    <string name="e2e_re_request_encryption_key_sent">已發送金鑰分享請求。</string>
+
+    <string name="e2e_re_request_encryption_key_dialog_title">已發送請求</string>
+    <string name="e2e_re_request_encryption_key_dialog_content">"請在另一個可以解密消息的裝置上啟動  Riot.im, 以便它將金鑰發送到此裝置。"</string>
+
+    <string name="ssl_expected_existing_expl">憑證已從以前受信任的更改為不受信任的憑證。伺服器可能已續訂其憑證。請與伺服器管理員聯繫以尋找所需的指紋。</string>
+    <string name="ssl_only_accept">僅當伺服器管理員發佈的指紋與上面的指紋匹配時才接受此憑證。</string>
+    <string name="ssl_fingerprint_example">00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00</string>
+
+    <string name="room_details_title">聊天室詳情</string>
+    <string name="room_details_people">成員</string>
+    <string name="room_details_files">檔案</string>
+    <string name="room_details_settings">設定</string>
+    <string name="room_details_selected">已選定</string>
+    <string name="malformed_id">ID 格式不正確。ID 應為電子郵件地址或 Matrix ID，如 「@localpart:domain」</string>
+    <string name="room_details_people_invited_group_name">已邀請</string>
+    <string name="room_details_people_present_group_name">已加入</string>
+
+    <string name="room_event_action_report_prompt_reason">報告此內容的原因</string>
+    <string name="room_event_action_report_prompt_ignore_user">是否要隱藏此使用者的所有訊息？</string>
+    <string name="room_event_action_cancel_upload">取消上載</string>
+    <string name="room_event_action_cancel_download">取消下載</string>
+
+    <string name="room_displayname_invite_from">來自%s 的邀請</string>
+    <string name="room_displayname_room_invite">聊天室邀請</string>
+    <string name="room_displayname_two_members">%1$s 和 %2$s</string>
+
+    <string name="room_displayname_many_members">%1$s 和 %2$s</string>
+    <plurals name="others">
+	<item quantity="other">和其他 %d 個人</item>
+</plurals>
+
+    <string name="room_displayname_no_title">空聊天室</string>
+
+    <string name="search_hint">搜尋</string>
+    <string name="search_members_hint">過濾聊天室成員</string>
+    <string name="search_no_results">沒有結果</string>
+    <string name="tab_title_search_rooms">聊天室</string>
+    <string name="tab_title_search_messages">訊息</string>
+    <string name="tab_title_search_people">聯絡人</string>
+    <string name="tab_title_search_files">檔案</string>
+
+    <string name="room_recents_join">加入</string>
+    <string name="room_recents_directory">目錄</string>
+    <string name="room_recents_favourites">收藏夾</string>
+    <string name="room_recents_conversations">聊天室</string>
+    <string name="room_recents_low_priority">低優先度</string>
+    <string name="room_recents_invites">邀請</string>
+    <string name="room_recents_start_chat">開始聊天</string>
+    <string name="room_recents_create_room">新建聊天室</string>
+    <string name="room_recents_join_room">加入聊天室</string>
+    <string name="room_recents_join_room_title">加入聊天室</string>
+    <string name="room_recents_join_room_prompt">輸入聊天室 ID 或者聊天室別名</string>
+
+    <string name="directory_search_results_title">瀏覽目錄</string>
+    <string name="directory_search_room">%1$d 個聊天室</string>
+    <plurals name="directory_search_rooms">
+	<item quantity="other">%1$d 個聊天室</item>
+</plurals>
+    <string name="directory_search_room_for">有 %1$d 個聊天室匹配 “%2$s”</string>
+    <plurals name="directory_search_rooms_for">
+	<item quantity="other">有 %1$d 個聊天室匹配 “%2$s”</item>
+</plurals>
+    <string name="directory_searching_title">搜尋目錄..</string>
+
+    <string name="room_settings_all_messages_noisy">所有訊息（通知並震動）</string>
+    <string name="room_settings_all_messages">所有訊息</string>
+    <string name="room_settings_mention_only">僅限提及</string>
+    <string name="room_settings_mute">靜音</string>
+    <string name="room_settings_favourite">我的最愛</string>
+    <string name="room_settings_de_prioritize">降低優先順序</string>
+    <string name="room_settings_direct_chat">私人聊天</string>
+    <string name="room_settings_leave_conversation">離開對話</string>
+    <string name="room_settings_forget">忘記</string>
+    <string name="room_settings_add_homescreen_shortcut">添加主熒幕快捷方式</string>
+
+    <string name="room_sliding_menu_messages">訊息</string>
+    <string name="room_sliding_menu_settings">設定</string>
+    <string name="room_sliding_menu_version">版本</string>
+    <string name="room_sliding_menu_term_and_conditions">合約條款</string>
+    <string name="room_sliding_menu_third_party_notices">第三方通知</string>
+    <string name="room_sliding_menu_copyright">版權</string>
+    <string name="room_sliding_menu_privacy_policy">隱私權政策</string>
+
+    <string name="settings_profile_picture">個人檔案圖片</string>
+    <string name="settings_display_name">顯示名稱</string>
+    <string name="settings_email_address">電子郵件地址</string>
+    <string name="settings_add_email_address">新增電子郵件地址</string>
+    <string name="settings_phone_number">電話號碼</string>
+    <string name="settings_add_phone_number">添加電話號碼</string>
+    <string name="settings_summary_app_info_link">應用程式系統資訊窗口</string>
+    <string name="settings_title_app_info_link">應用程式資訊</string>
+
+    <string name="settings_notification_privacy">通知隱私</string>
+    <string name="settings_notification_privacy_warning">Riot.im 將在後臺運行以保持通知訊息內容的私密。您可以更改此選項以減少電池使用量。</string>
+    <string name="settings_notification_privacy_normal">一般</string>
+    <string name="settings_notification_privacy_power_saving">節電選項</string>
+    <string name="settings_notification_privacy_low_detail">簡單模式</string>
+    <string name="settings_notification_privacy_reduced">低隱私模式</string>
+    <string name="settings_notification_privacy_need_permission">應用程式需要權限以在後臺運行</string>
+    <string name="settings_notification_privacy_no_permission">此應用程式<b>不</b>需要權限在後臺運行</string>
+    <string name="settings_notification_privacy_gcm">•通知將通過 GCM(Google Cloud Messaging) 發送</string>
+    <string name="settings_notification_privacy_metadata">·通知僅包含中繼資料</string>
+    <string name="settings_notification_privacy_secure_message_content">·通知的消息內容從<b>Matrix homeserver 安全地獲取</b></string>
+    <string name="settings_notification_privacy_nosecure_message_content">• 通知含有<b>訊息與中繼資料</b></string>
     </resources>
