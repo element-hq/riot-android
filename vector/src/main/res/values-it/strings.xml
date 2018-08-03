@@ -918,7 +918,7 @@ I messaggi criptati non saranno visibili ai riceventi che non hanno ancora imple
     <string name="community_id_hint">esempio</string>
 
     <!-- group details -->
-    <string name="group_details_home">Inizio</string>
+    <string name="group_details_home">Home</string>
     <string name="group_details_rooms">Stanze</string>
     <string name="no_users_placeholder">Nessun utente</string>
 
@@ -933,10 +933,10 @@ I messaggi criptati non saranno visibili ai riceventi che non hanno ancora imple
 
     <string name="group_one_room">1 stanza</string>
     <string name="group_rooms">%d stanze</string>
-    <string name="group_no_long_description">L\'admin della comunità non ha fornito una descrizione estesa per questa comunità.</string>
+    <string name="group_no_long_description">L\'amministratore non ha fornito una descrizione estesa per questa comunità.</string>
 
-    <string name="has_been_kicked">Sei stato cacciato via da %1$s da %2$s</string>
-    <string name="has_been_banned">Sei stato bandito da %1$s da %2$s</string>
+    <string name="has_been_kicked">%2$s ti ha buttato fuori da %1$s</string>
+    <string name="has_been_banned">%2$s ti ha bandito da %1$s</string>
     <string name="reason_colon">Motivo: %1$s</string>
     <string name="rejoin">Rientra</string>
     <string name="forget_room">Dimentica la stanza</string>
@@ -947,8 +947,8 @@ I messaggi criptati non saranno visibili ai riceventi che non hanno ancora imple
 
     <string name="room_settings_no_flair">" Questa stanza non mostra predisposizione per alcuna comunità"</string>
     <string name="widget_integration_positive_power_level">Il livello di potere deve essere un intero positivo.</string>
-    <string name="notice_avatar">Avatar notifica</string>
-    <string name="receipt_avatar">Avatar ricevuta</string>
+    <string name="notice_avatar">Notificare avatar</string>
+    <string name="receipt_avatar">Avatar ricevuto</string>
     <plurals name="membership_changes">
 	<item quantity="one">1 cambio d\'appartenenza</item>
 	<item quantity="other">%d cambi d\'appartenenza</item>
@@ -990,16 +990,16 @@ Aggiungerne qualcuno ora?</string>
 
     <string name="widget_integration_missing_parameter">Parametro necessario mancante.</string>
     <string name="widget_integration_invalid_parameter">Un parametro non è valido.</string>
-    <string name="dialog_user_consent_content">Per continuare a usare l\'homeserver %1$s devi leggere e accettare le condizioni di utilizzo.</string>
+    <string name="dialog_user_consent_content">Per continuare ad usare l\'homeserver %1$s devi leggere e accettare i termini e le condizioni di utilizzo.</string>
     <string name="dialog_user_consent_submit">Leggi adesso</string>
 
     <string name="deactivate_account_title">Disattiva account</string>
-    <string name="deactivate_account_content">Il tuo account sarà permanentemente inutilizzabile. Non potrai accedere e nessuno potrà ri-registrare lo stesso ID utente. Il tuo account abbandonerà tutte le stanze a cui partecipa e i dettagli del tuo account saranno rimossi dal server di identità. <b>Questa azione è irreversibile</b>.
+    <string name="deactivate_account_content">Questo renderà il tuo account permanentemente inutilizzabile. Non ci potrai più accedere e nessuno potrà ri-registrare lo stesso ID utente. Il tuo account abbandonerà tutte le stanze a cui partecipa e i dettagli del tuo account saranno rimossi dal server identità. <b>Questa azione è irreversibile</b>.
 
-Disattivare il tuo account <b>non eliminerà in modo predefinito i messaggi che hai inviato</b>. Se vuoi che noi dimentichiamo i tuoi messaggi, seleziona la casella sotto.
+Disattivare il tuo account <b>non eliminerà in modo automatico i messaggi che hai inviato</b>. Se vuoi che siano dimenticati i tuoi messaggi, seleziona la casella qua sotto.
 
-La visibilità dei messaggi in Matrix è simile alle email. Se dimentichiamo i messaggi significa che quelli che hai inviato non verranno condivisi con alcun utente nuovo o non registrato, ma gli utenti registrati che avevano già accesso ai messaggi avranno ancora accesso alla loro copia.</string>
-    <string name="deactivate_account_delete_checkbox">Per favore dimenticate tutti i messaggi che ho inviato quando il mio account viene disattivato (Attenzione: gli utenti futuri vedranno un elenco incompleto di conversazioni)</string>
+La visibilità dei messaggi in Matrix è simile alle email. \"Dimenticare i tuoi messaggi\" significa che quelli che hai inviato non verranno condivisi con alcun utente nuovo o non registrato, ma gli utenti registrati che hanno avuto accesso ai tuoi messaggi avranno ancora accesso alla loro copia.</string>
+    <string name="deactivate_account_delete_checkbox">Per favore dimenticate tutti i messaggi che ho inviato al momento della disattivazione del mio account (Attenzione: gli utenti futuri vedranno un elenco incompleto di conversazioni)</string>
     <string name="deactivate_account_prompt_password">Per continuare, inserisci la tua password:</string>
     <string name="deactivate_account_submit">Disattiva account</string>
 
