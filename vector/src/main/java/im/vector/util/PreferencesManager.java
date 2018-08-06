@@ -116,7 +116,6 @@ public class PreferencesManager {
     private static final String SETTINGS_PIN_UNREAD_MESSAGES_PREFERENCE_KEY = "SETTINGS_PIN_UNREAD_MESSAGES_PREFERENCE_KEY";
     private static final String SETTINGS_PIN_MISSED_NOTIFICATIONS_PREFERENCE_KEY = "SETTINGS_PIN_MISSED_NOTIFICATIONS_PREFERENCE_KEY";
 
-    public static final String SETTINGS_SEND_MESSAGE_ENTER_KEY = "SETTINGS_SEND_MESSAGE_ENTER_KEY";
     public static final String SETTINGS_DATA_SAVE_MODE_PREFERENCE_KEY = "SETTINGS_DATA_SAVE_MODE_PREFERENCE_KEY";
     public static final String SETTINGS_START_ON_BOOT_PREFERENCE_KEY = "SETTINGS_START_ON_BOOT_PREFERENCE_KEY";
     public static final String SETTINGS_INTERFACE_TEXT_SIZE_KEY = "SETTINGS_INTERFACE_TEXT_SIZE_KEY";
@@ -157,7 +156,6 @@ public class PreferencesManager {
 
     // some preferences keys must be kept after a logout
     private static final List<String> mKeysToKeepAfterLogout = Arrays.asList(
-            SETTINGS_SEND_MESSAGE_ENTER_KEY,
             SETTINGS_HIDE_READ_RECEIPTS_KEY,
             SETTINGS_ALWAYS_SHOW_TIMESTAMPS_KEY,
             SETTINGS_12_24_TIMESTAMPS_KEY,
@@ -726,29 +724,6 @@ public class PreferencesManager {
         PreferenceManager.getDefaultSharedPreferences(context)
                 .edit()
                 .putBoolean(SETTINGS_USE_RAGE_SHAKE_KEY, isEnabled)
-                .apply();
-    }
-
-    /**
-     * Tells if the user want to use enter key to send messages
-     *
-     * @param context the context
-     * @return true if the enter key is activated to send message
-     */
-    public static boolean useEnterKeyToSendMessage(Context context) {
-        return PreferenceManager.getDefaultSharedPreferences(context).getBoolean(SETTINGS_SEND_MESSAGE_ENTER_KEY, false);
-    }
-
-    /**
-     * Update the enter key to send message status.
-     *
-     * @param context   the context
-     * @param isEnabled true to enable to press enter key to send message
-     */
-    public static void setUseEnterKeyToSendMessage(Context context, boolean isEnabled) {
-        PreferenceManager.getDefaultSharedPreferences(context)
-                .edit()
-                .putBoolean(SETTINGS_SEND_MESSAGE_ENTER_KEY, isEnabled)
                 .apply();
     }
 

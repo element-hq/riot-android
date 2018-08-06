@@ -598,18 +598,6 @@ class VectorSettingsPreferencesFragment : PreferenceFragment(), SharedPreference
             }
         }
 
-        // Others
-
-        (findPreference(PreferencesManager.SETTINGS_SEND_MESSAGE_ENTER_KEY) as CheckBoxPreference).let {
-            it.isChecked = PreferencesManager.useEnterKeyToSendMessage(appContext)
-
-            it.onPreferenceChangeListener = Preference.OnPreferenceChangeListener { preference, newValue ->
-                PreferencesManager.setUseEnterKeyToSendMessage(appContext, newValue as Boolean)
-                true
-            }
-        }
-
-
         // preference to start the App info screen, to facilitate App permissions access
         findPreference(APP_INFO_LINK_PREFERENCE_KEY)
                 .onPreferenceClickListener = Preference.OnPreferenceClickListener {
