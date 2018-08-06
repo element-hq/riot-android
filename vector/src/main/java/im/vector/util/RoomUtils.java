@@ -61,10 +61,8 @@ import java.util.regex.Pattern;
 
 import im.vector.Matrix;
 import im.vector.R;
-import im.vector.activity.SplashActivity;
 import im.vector.activity.VectorRoomActivity;
 import im.vector.adapters.AdapterUtils;
-import im.vector.services.EventStreamService;
 
 public class RoomUtils {
 
@@ -571,25 +569,21 @@ public class RoomUtils {
                             case R.id.ic_action_notifications_noisy:
                                 moreActionListener.onUpdateRoomNotificationsState(session,
                                         room.getRoomId(), BingRulesManager.RoomNotificationState.ALL_MESSAGES_NOISY);
-                                showBingRulesUpdatingDialog(context);
                                 break;
 
                             case R.id.ic_action_notifications_all_message:
                                 moreActionListener.onUpdateRoomNotificationsState(session,
                                         room.getRoomId(), BingRulesManager.RoomNotificationState.ALL_MESSAGES);
-                                showBingRulesUpdatingDialog(context);
                                 break;
 
                             case R.id.ic_action_notifications_mention_only:
                                 moreActionListener.onUpdateRoomNotificationsState(session,
                                         room.getRoomId(), BingRulesManager.RoomNotificationState.MENTIONS_ONLY);
-                                showBingRulesUpdatingDialog(context);
                                 break;
 
                             case R.id.ic_action_notifications_mute:
                                 moreActionListener.onUpdateRoomNotificationsState(session,
                                         room.getRoomId(), BingRulesManager.RoomNotificationState.MUTE);
-                                showBingRulesUpdatingDialog(context);
                                 break;
 
                             case R.id.ic_action_select_fav: {
@@ -672,31 +666,6 @@ public class RoomUtils {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         dialog.dismiss();
-                    }
-                })
-                .show();
-    }
-
-    /**
-     *  When user wants to update bing rules, display a dialog in order to notify him that he have
-     *  to restart app to complete the updating of notification rules.
-     *
-     * @param context
-     */
-    public static void showBingRulesUpdatingDialog(final Context context) {
-        new AlertDialog.Builder(context)
-                .setMessage(R.string.room_settings_update_notification_rules)
-                .setPositiveButton(R.string.restart_app_now, new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        Intent intent = new Intent(context, SplashActivity.class);
-                        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                        context.startActivity(intent);
-                    }
-                })
-                .setNegativeButton(R.string.do_not_restart_app, new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
                     }
                 })
                 .show();

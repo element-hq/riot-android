@@ -88,7 +88,6 @@ import im.vector.preference.RoomAvatarPreference;
 import im.vector.preference.VectorCustomActionEditTextPreference;
 import im.vector.preference.VectorListPreference;
 import im.vector.preference.VectorSwitchPreference;
-import im.vector.util.RoomUtils;
 import im.vector.util.ThemeUtils;
 import im.vector.util.VectorUtils;
 
@@ -1095,7 +1094,6 @@ public class VectorRoomSettingsFragment extends PreferenceFragment implements Sh
             return;
         }
 
-        final Context context = getActivity();
         String value = mRoomNotificationsPreference.getValue();
         BingRulesManager.RoomNotificationState updatedState;
 
@@ -1118,9 +1116,6 @@ public class VectorRoomSettingsFragment extends PreferenceFragment implements Sh
                         public void onBingRuleUpdateSuccess() {
                             Log.d(LOG_TAG, "##onRoomNotificationsPreferenceChanged(): update succeed");
                             hideLoadingView(UPDATE_UI);
-                            // Here, perhaps it's not necessary to restart app to finalize
-                            // the updating of notifications rules
-                            RoomUtils.showBingRulesUpdatingDialog(context);
                         }
 
                         @Override

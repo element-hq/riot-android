@@ -13,7 +13,7 @@ Improvements:
  - Improve BugReport screen: display a preview of the screenshot (#2318)
  - In the settings, move theme settings just below "language" (#2439)
  - Improve the display of the sources of the message in the dialog (#2348)
- - When user update the notification rules for a room, notify that it will restart the app (#2437)
+ - When user bans or un-bans someone, notify that the app will restart (#2437)
 
 Other changes:
  - Remove dependency to `android-gif-drawable` lib and use Glide to animate logo on Splashscreen (#2421)
