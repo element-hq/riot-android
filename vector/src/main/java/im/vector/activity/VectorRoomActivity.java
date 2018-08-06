@@ -38,6 +38,7 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AlertDialog;
+import android.text.InputType;
 import android.text.SpannableString;
 import android.text.SpannableStringBuilder;
 import android.text.TextPaint;
@@ -731,6 +732,8 @@ public class VectorRoomActivity extends MXCActionBarActivity implements
             }
         });
 
+        manageKeyboardOptionsToSendMessage();
+
         mEditText.setAddColonOnFirstItem(true);
 
         mEditText.addTextChangedListener(new TextWatcher() {
@@ -760,7 +763,6 @@ public class VectorRoomActivity extends MXCActionBarActivity implements
             public void onTextChanged(CharSequence s, int start, int before, int count) {
             }
         });
-
 
         mMyUserId = mSession.getCredentials().userId;
 
@@ -2324,6 +2326,34 @@ public class VectorRoomActivity extends MXCActionBarActivity implements
     }
 
     /**
+     * The user can use enter key on his soft keyboard to add a new line or to send message
+     * depending on the settings he has chosen.
+     */
+    private void manageKeyboardOptionsToSendMessage() {
+        if (PreferencesManager.useEnterKeyToSendMessage(this)) {
+            mEditText.setImeOptions(EditorInfo.IME_ACTION_SEND);
+            mEditText.setOnEditorActionListener(new TextView.OnEditorActionListener() {
+                @Override
+                public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
+                    if (actionId  == EditorInfo.IME_ACTION_SEND) {
+                        sendTextMessage();
+                        return true;
+                    }
+                    return false;
+                }
+            });
+        } else {
+            mEditText.setImeOptions(EditorInfo.IME_ACTION_UNSPECIFIED);
+            mEditText.setInputType(InputType.TYPE_TEXT_FLAG_MULTI_LINE);
+            mEditText.setOnKeyListener(null);
+            mEditText.setSingleLine(false);
+            if (mEditText.getText().length() > 0) {
+                mEditText.setText("\n");
+            }
+        }
+    }
+
+    /**
      * Display UI buttons according to user input text.
      */
     private void manageSendMoreButtons() {
@@ -3182,9 +3212,15 @@ public class VectorRoomActivity extends MXCActionBarActivity implements
                     VectorUtils.getRoomDisplayName(this, mSession, mRoom), mRoom.getState().getMemberName(member.mSender)));
         }
 
+        // On mobile side, the modal to allow to add a reason to ban/kick someone isn't yet implemented
+        // That's why, we don't display the TextView "Motif :" for now.
         TextView subInvitationTextView = findViewById(R.id.room_preview_subinvitation_textview);
-        subInvitationTextView.setText(getString(R.string.reason_colon, member.reason));
-
+        if (!TextUtils.isEmpty(member.reason)) {
+            final String reason = getString(R.string.reason_colon, member.reason);
+            subInvitationTextView.setText(reason);
+        } else {
+            subInvitationTextView.setText(null);
+        }
 
         Button joinButton = findViewById(R.id.button_join_room);
 
@@ -4068,5 +4104,3 @@ public class VectorRoomActivity extends MXCActionBarActivity implements
         }
     }
 }
-
-
