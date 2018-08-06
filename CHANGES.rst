@@ -32,6 +32,7 @@ Bugfix:
  - Fix Unable to add Matrix apps (#2466)
  - Riot auto joined a public room (#2472)
  - Remove last traces of Firebase analytics (#2481)
+ - code blocks are escaped and therefore hard readable (#2484)
 
 Translations:
  -
