@@ -77,10 +77,6 @@ public class SlashCommandsParser {
             }
         }
 
-        SlashCommand(String command) {
-            this.command = command;
-        }
-
         SlashCommand(String command, String parameter, @StringRes int description) {
             this.command = command;
             this.parameter = parameter;
@@ -103,22 +99,6 @@ public class SlashCommandsParser {
             return description;
         }
     }
-
-    // <query>
-    private static final String CMD_DDG = "/ddg";
-
-    // <color1> [<color2>]
-    private static final String CMD_TINT = "/tint";
-
-    // <user-id> <device-id> <device-signing-key>
-    private static final String CMD_VERIFY = "/verify";
-
-    // <<user-id>
-    private static final String CMD_IGNORE = "/ignore";
-
-    // <<user-id>
-    private static final String CMD_UNIGNORE = "/unignore";
-
 
     /**
      * check if the text message is an IRC command.

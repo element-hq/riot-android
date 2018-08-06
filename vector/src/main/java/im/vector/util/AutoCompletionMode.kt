@@ -23,8 +23,8 @@ enum class AutoCompletionMode {
 
     companion object {
         fun getWithText(text:String) = when {
-            text.startsWith("@", true) || text.contains(" @", true)-> USER_MODE
-            text.startsWith("/", true) -> COMMAND_MODE
+            text.startsWith("@") || text.contains(" @")-> USER_MODE
+            text.startsWith("/") -> COMMAND_MODE
             else -> NONE_MODE
         }
     }

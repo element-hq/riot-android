@@ -310,7 +310,7 @@ public class VectorAutoCompleteTextView extends AppCompatMultiAutoCompleteTextVi
             // save the current written pattern
             mPendingFilter = currentFilter;
 
-            // wait 0.7s before displaying the popup
+            // wait 0.5s before displaying the popup
             new Handler(Looper.getMainLooper()).postDelayed(new Runnable() {
                 @Override
                 public void run() {

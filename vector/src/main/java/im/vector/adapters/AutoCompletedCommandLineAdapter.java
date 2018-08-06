@@ -117,7 +117,7 @@ public class AutoCompletedCommandLineAdapter extends ArrayAdapter<String> {
         if (null != slashCommand) {
             viewHolder.tvCommandName.setText(slashCommand.getCommand());
             viewHolder.tvCommandParameter.setText(slashCommand.getParam());
-            viewHolder.tvCommandDescription.setText(VectorApp.getInstance().getString(description));
+            viewHolder.tvCommandDescription.setText(mContext.getString(description));
         }
 
         return convertView;
