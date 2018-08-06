@@ -727,12 +727,9 @@ public class VectorRoomActivity extends MXCActionBarActivity implements
                     sendTextMessage();
                     return true;
                 }
-
                 return false;
             }
         });
-
-        manageKeyboardOptionsToSendMessage();
 
         mEditText.setAddColonOnFirstItem(true);
 
@@ -2322,34 +2319,6 @@ public class VectorRoomActivity extends MXCActionBarActivity implements
             }
         } else {
             Log.w(LOG_TAG, "## onRequestPermissionsResult(): Unknown requestCode =" + aRequestCode);
-        }
-    }
-
-    /**
-     * The user can use enter key on his soft keyboard to add a new line or to send message
-     * depending on the settings he has chosen.
-     */
-    private void manageKeyboardOptionsToSendMessage() {
-        if (PreferencesManager.useEnterKeyToSendMessage(this)) {
-            mEditText.setImeOptions(EditorInfo.IME_ACTION_SEND);
-            mEditText.setOnEditorActionListener(new TextView.OnEditorActionListener() {
-                @Override
-                public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
-                    if (actionId  == EditorInfo.IME_ACTION_SEND) {
-                        sendTextMessage();
-                        return true;
-                    }
-                    return false;
-                }
-            });
-        } else {
-            mEditText.setImeOptions(EditorInfo.IME_ACTION_UNSPECIFIED);
-            mEditText.setInputType(InputType.TYPE_TEXT_FLAG_MULTI_LINE);
-            mEditText.setOnKeyListener(null);
-            mEditText.setSingleLine(false);
-            if (mEditText.getText().length() > 0) {
-                mEditText.setText("\n");
-            }
         }
     }
 

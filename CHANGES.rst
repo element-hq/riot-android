@@ -6,7 +6,6 @@ Features:
  - Telemetry to report incidence of UISIs (#2330)
  - Add a previewer for previewing media before sending it into the room (#1742|#2445)
  - Implements ReplyTo feature (#2390)
- - Add a setting to allow the user to use the enter key on his keyboard to send message instead of to add a new line (#394)
  - Support Room Versioning (#2441)
 
 Improvements:
@@ -16,6 +15,7 @@ Improvements:
  - Improve the display of the sources of the message in the dialog (#2348)
  - Improve the display of the buttons and the reason in the room preview (#2352)
  - In the flair section on settings, notify the user when he has no flair (#2430)
+ - Support external keyboard to send messages for recent devices (#220, #1279)
 
 Other changes:
  - Remove dependency to `android-gif-drawable` lib and use Glide to animate logo on Splashscreen (#2421)
