@@ -109,7 +109,7 @@ public class VectorAutoCompleteTextView extends AppCompatMultiAutoCompleteTextVi
                 break;
             case COMMAND_MODE:
                 setAdapter(mAdapterCommand);
-                setThreshold(1);
+                setThreshold(0);
                 break;
             case NONE_MODE:
             default:
