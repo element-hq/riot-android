@@ -13,6 +13,7 @@ Improvements:
  - Improve BugReport screen: display a preview of the screenshot (#2318)
  - In the settings, move theme settings just below "language" (#2439)
  - Improve the display of the sources of the message in the dialog (#2348)
+ - When user bans or un-bans someone, notify that the app will restart (#2437)
  - Improve the display of the buttons and the reason in the room preview (#2352)
  - In the flair section on settings, notify the user when he has no flair (#2430)
  - Support external keyboard to send messages for recent devices (#220, #1279)
