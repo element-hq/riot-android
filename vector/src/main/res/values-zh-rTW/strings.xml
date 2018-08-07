@@ -12,7 +12,7 @@
     <string name="title_activity_home">信息</string>
     <string name="title_activity_room">聊天室</string>
     <string name="title_activity_settings">設置</string>
-    <string name="title_activity_member_details">成員詳情</string>
+    <string name="title_activity_member_details">會員訊息</string>
     <string name="title_activity_bug_report">錯誤回報</string>
     <string name="cancel">取消</string>
     <string name="ok">確定</string>
@@ -59,8 +59,8 @@
     <string name="action_exit">離開</string>
     <string name="actions">動作</string>
     <string name="action_sign_out">登出</string>
-    <string name="action_sign_out_confirmation">為了安全，登出將會刪除任何的端對端加密金鑰，會造成在你重新登入後，無法讀取先前已加密的歷史聊天。
-在登出前，選擇匯出來備份。</string>
+    <string name="action_sign_out_confirmation">為了安全，登出將會刪除任何的端對端加密金鑰。在你重新登入後，無法讀取先前已加密的歷史聊天。
+在登出前，選擇匯以備份加密金鑰。</string>
     <string name="action_voice_call">語音通話</string>
     <string name="action_video_call">視訊通話</string>
     <string name="action_global_search">全域搜尋</string>
@@ -116,7 +116,7 @@
     <string name="send_bug_report">錯誤回報</string>
     <string name="send_bug_report_description">請描述此錯誤。做了什麼？預期發生什麼？實際發生什麼？</string>
     <string name="send_bug_report_placeholder">在這裡描述你的問題</string>
-    <string name="send_bug_report_logs_description">為了要診斷問題，客戶端的紀錄將會與錯誤回報一起送出。如果您只想送出上方的文字，請取消勾選：</string>
+    <string name="send_bug_report_logs_description">為了診斷問題，客戶端的紀錄將會同錯誤回報一起送出。如果您只想送出上方的文字，請取消勾選：</string>
     <string name="send_bug_report_alert_message">您似乎沮喪的搖晃著手機。想送出錯誤回報？</string>
     <string name="send_bug_report_app_crashed">此應用程式在上次當機。您想送出錯誤回報？</string>
     <string name="send_bug_report_rage_shake">憤怒搖晃來回報錯誤</string>
@@ -184,7 +184,7 @@
     <string name="auth_invalid_phone">這看起來不像有效的電話號碼</string>
     <string name="auth_email_already_defined">此電子郵件位址已經被定義。</string>
     <string name="auth_missing_email">缺少電子郵件位址</string>
-    <string name="auth_missing_phone">缺少電話號碼</string>
+    <string name="auth_missing_phone">缺失電話號碼</string>
     <string name="auth_missing_email_or_phone">缺少電子郵件位址或電話號碼</string>
     <string name="auth_invalid_token">無效的權杖</string>
     <string name="auth_password_dont_match">密碼不符合</string>
@@ -283,12 +283,12 @@
     <string name="permissions_rationale_msg_camera_and_audio">Riot 需要權限來存取相機及麥克風來撥打視訊通話。
 
 為了要通話，請在下個彈跳視窗中允許存取。</string>
-    <string name="permissions_rationale_msg_contacts">Riot 需要權限來存取您的通訊錄，以利用電子郵件及電話號碼來尋找 Matrix 使用者。
+    <string name="permissions_rationale_msg_contacts">Riot 需要權限來存取您的聯絡簿，以利用電子郵件及電話號碼來尋找 Matrix 使用者。
 
-為了發現來自 Riot 通訊錄的使用者，請在下個彈跳視窗允許存取。</string>
+為了尋找聯絡簿中的 Riot.im 的好友，請在下個彈跳視窗允許存取。</string>
     <string name="permissions_msg_contacts_warning_other_androids">Riot 需要權限來存取您的通訊錄，以利用電子郵件及電話號碼來尋找 Matrix 使用者。
 
-允許 Riot 來存取聯絡人？</string>
+是否允許 Riot 存取聯絡人？</string>
 
     <string name="permissions_action_not_performed_missing_permissions">抱歉.. 由於缺少權限，動作沒被執行</string>
 
@@ -309,9 +309,9 @@
     <string name="room_jump_to_first_unread">跳到第一個未讀的訊息。</string>
 
     <string name="room_preview_invitation_format">你已經被 %s 邀請加入此聊天室</string>
-    <string name="room_preview_unlinked_email_warning">邀請已經被傳送給 %s，與此帳號無關連。
-你也許希望以不同帳號登入，或加入電子郵件到此帳號。</string>
-    <string name="room_preview_try_join_an_unknown_room">您正在嘗試存取 %s，您想要加入已參與討論？</string>
+    <string name="room_preview_unlinked_email_warning">邀請已經被傳送給 %s，但與此帳號沒有進行關連。
+你也許希望以不同帳號登入，或將電子郵件加入到此帳號。</string>
+    <string name="room_preview_try_join_an_unknown_room">您正在嘗試存取 %s，您想要加入討論嗎？</string>
     <string name="room_preview_try_join_an_unknown_room_default">聊天室</string>
     <string name="room_preview_room_interactions_disabled">這是聊天室的預覽，聊天室互動已停用。</string>
 
@@ -325,13 +325,13 @@
 </plurals>
     <string name="room_title_one_member">1 個成員</string>
     <string name="room_e2e_alert_title">警告！</string>
-    <string name="room_e2e_alert_message">端對端加密正在測試，它可能會不可靠。
+    <string name="room_e2e_alert_message">端對端加密處於測試狀態，它並不完全可靠。
 
-您還不應該信任它會保護資料。
+您仍不應該信任它會保護資料。
 
-從加入聊天室前，裝置還無法解密歷史訊息。
+裝置將無法解密聊天室的歷史訊息。
 
-加密的訊息，無法在還沒被實作加密的客戶端上被看到。</string>
+尚未啓用加密的客戶端上將無法顯示加密消息。</string>
 
     <string name="format_time_s">秒</string>
     <string name="format_time_m">分</string>
@@ -383,7 +383,7 @@
     <string name="room_menu_search">搜尋</string>
     <string name="room_one_user_is_typing">%s 正在打字…</string>
     <string name="room_two_users_are_typing">%1$s 和 %2$s 正在打字…</string>
-    <string name="room_participants_power_level_prompt">由於你提升此使用者擁有的權限等級與你自己相同，所以，你將無法還原此變更。
+    <string name="room_participants_power_level_prompt">由於您提升此使用者擁有的權限等級與你自己相同，因此您將無法還原此變更。
 你確定？</string>
 
     <string name="room_many_users_are_typing">%1$s 及 %2$s 和其他人正在打字…</string>
@@ -414,7 +414,7 @@
 </plurals>
 
     <string name="ssl_cert_not_trust">這可能表示有人正惡意的攔截你的流量，或你的手機不信任由遠端伺服器提供的憑證。</string>
-    <string name="ssl_cert_new_account_expl">如果伺服器管理員說這是在預料之中的，確保底下的指紋與他們所提供的指紋符合。</string>
+    <string name="ssl_cert_new_account_expl">如果伺服器管理員說這是正常的，請確保底下的指紋與他們所提供的指紋符合。</string>
     <string name="ssl_unexpected_existing_expl">你的手機曾經信任的憑證已經變動。這非常不尋常。建議你不要接受此新的憑證。</string>
     <string name="title_activity_choose_sticker">發送貼圖</string>
 
@@ -438,7 +438,7 @@
     <string name="e2e_re_request_encryption_key_sent">已發送金鑰分享請求。</string>
 
     <string name="e2e_re_request_encryption_key_dialog_title">已發送請求</string>
-    <string name="e2e_re_request_encryption_key_dialog_content">"請在另一個可以解密消息的裝置上啟動  Riot.im, 以便它將金鑰發送到此裝置。"</string>
+    <string name="e2e_re_request_encryption_key_dialog_content">"請在另一個可以解密訊息的裝置上啟動  Riot.im, 以便它將金鑰發送到此裝置。"</string>
 
     <string name="ssl_expected_existing_expl">憑證已從以前受信任的更改為不受信任的憑證。伺服器可能已續訂其憑證。請與伺服器管理員聯繫以尋找所需的指紋。</string>
     <string name="ssl_only_accept">僅當伺服器管理員發佈的指紋與上面的指紋匹配時才接受此憑證。</string>
@@ -449,12 +449,12 @@
     <string name="room_details_files">檔案</string>
     <string name="room_details_settings">設定</string>
     <string name="room_details_selected">已選定</string>
-    <string name="malformed_id">ID 格式不正確。ID 應為電子郵件地址或 Matrix ID，如 「@localpart:domain」</string>
+    <string name="malformed_id">ID 格式不正確。它應該是電子郵件地址或 Matrix ID，如 ‘@localpart:domain’</string>
     <string name="room_details_people_invited_group_name">已邀請</string>
     <string name="room_details_people_present_group_name">已加入</string>
 
     <string name="room_event_action_report_prompt_reason">報告此內容的原因</string>
-    <string name="room_event_action_report_prompt_ignore_user">是否要隱藏此使用者的所有訊息？</string>
+    <string name="room_event_action_report_prompt_ignore_user">您想要隱藏此使用者的所有訊息嗎？</string>
     <string name="room_event_action_cancel_upload">取消上載</string>
     <string name="room_event_action_cancel_download">取消下載</string>
 
@@ -487,7 +487,7 @@
     <string name="room_recents_create_room">新建聊天室</string>
     <string name="room_recents_join_room">加入聊天室</string>
     <string name="room_recents_join_room_title">加入聊天室</string>
-    <string name="room_recents_join_room_prompt">輸入聊天室 ID 或者聊天室別名</string>
+    <string name="room_recents_join_room_prompt">輸入聊天室 ID 或聊天室別名</string>
 
     <string name="directory_search_results_title">瀏覽目錄</string>
     <string name="directory_search_room">%1$d 個聊天室</string>
@@ -530,7 +530,7 @@
 
     <string name="settings_notification_privacy">通知隱私</string>
     <string name="settings_notification_privacy_warning">Riot.im 將在後臺運行以保持通知訊息內容的私密。您可以更改此選項以減少電池使用量。</string>
-    <string name="settings_notification_privacy_normal">一般</string>
+    <string name="settings_notification_privacy_normal">標準</string>
     <string name="settings_notification_privacy_power_saving">節電選項</string>
     <string name="settings_notification_privacy_low_detail">簡單模式</string>
     <string name="settings_notification_privacy_reduced">低隱私模式</string>
@@ -538,7 +538,7 @@
     <string name="settings_notification_privacy_no_permission">此應用程式<b>不</b>需要權限在後臺運行</string>
     <string name="settings_notification_privacy_gcm">•通知將通過 GCM(Google Cloud Messaging) 發送</string>
     <string name="settings_notification_privacy_metadata">·通知僅包含中繼資料</string>
-    <string name="settings_notification_privacy_secure_message_content">·通知的消息內容從<b>Matrix homeserver 安全地獲取</b></string>
+    <string name="settings_notification_privacy_secure_message_content">• 通知的消息內容<b>將從 Matrix 主服務器安全獲取</b></string>
     <string name="settings_notification_privacy_nosecure_message_content">• 通知含有<b>訊息與中繼資料</b></string>
     <string name="settings_notification_privacy_message_content_not_shown">• 通知<b>不會顯示訊息內容</b></string>
 
@@ -601,7 +601,7 @@
     <string name="settings_deactivate_my_account">註銷我的帳號</string>
 
     <string name="startup_notification_privacy_title">通知隱私</string>
-    <string name="startup_notification_privacy_message">Riot 可以在後臺運行以安全以安全的管理通知 (這可能會影響電池的使用)。</string>
+    <string name="startup_notification_privacy_message">Riot 可以在後臺安全隱密地管理通知 (這可能會影響電池的使用)。</string>
     <string name="startup_notification_privacy_button_grant">獲取權限</string>
     <string name="startup_notification_privacy_button_other">選擇其他選項</string>
 
@@ -726,7 +726,7 @@
     <string name="room_settings_no_flair">" 此聊天室並未對任何社群顯示特色"</string>
     <string name="room_settings_add_new_group">新社群地址（如 +foo:matrix.org）</string>
     <string name="room_settings_invalid_group_format_dialog_title">無效的社群地址</string>
-    <string name="room_settings_invalid_group_format_dialog_body">“%s”不是一個有效的社群地址</string>
+    <string name="room_settings_invalid_group_format_dialog_body">“%s”不是一個有效的社群 ID</string>
 
 
     <string name="room_settings_addresses_invalid_format_dialog_title">別名格式錯誤</string>
@@ -867,7 +867,7 @@
     <string name="widget_integration_positive_power_level">權限等級必需為正整數。</string>
     <string name="widget_integration_must_be_in_room">您不在此聊天室。</string>
     <string name="widget_integration_no_permission_in_room">您沒有在這個聊天室做執行此操作的權限。</string>
-    <string name="widget_integration_missing_room_id">在請求中遺失房間地址。</string>
+    <string name="widget_integration_missing_room_id">請求中缺失聊天室地址。</string>
     <string name="widget_integration_missing_user_id">在請求中遺失使用者 ID。</string>
     <string name="widget_integration_room_not_visible">聊天室 %s 不可見。</string>
     <string name="widget_integration_missing_parameter">缺少必需的參數。</string>
