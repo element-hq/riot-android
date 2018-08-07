@@ -715,16 +715,11 @@ public class VectorRoomActivity extends MXCActionBarActivity implements
 
         mRoom = mSession.getDataHandler().getRoom(roomId, false);
 
-        mEditText.initAutoCompletions(mSession, mRoom);
         mEditText.setAddColonOnFirstItem(true);
         mEditText.addTextChangedListener(new TextWatcher() {
             @Override
             public void afterTextChanged(android.text.Editable s) {
                 if (null != mRoom) {
-                    // Auto completion mode management
-                    // The auto completion mode depends on the first character of the message
-                    mEditText.updateAutoCompletionMode();
-
                     MXLatestChatMessageCache latestChatMessageCache = mLatestChatMessageCache;
                     String textInPlace = latestChatMessageCache.getLatestText(VectorRoomActivity.this, mRoom.getRoomId());
 
@@ -746,6 +741,9 @@ public class VectorRoomActivity extends MXCActionBarActivity implements
 
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
+                // Auto completion mode management
+                // The auto completion mode depends on the first character of the message
+                mEditText.updateAutoCompletionMode();
             }
         });
 
