@@ -1015,4 +1015,13 @@ De zichtbaarheid van berichten in Matrix is hetzelfde als in e-mail. Het vergete
 
     <string name="error_empty_field_your_password">Vul alstublieft uw wachtwoord in.</string>
 
-</resources>
+<string name="send_bug_report_description_in_english">Indien mogelijk, schrijf alstublieft een omschrijving in het engels.</string>
+    <string name="room_message_placeholder_reply_to_encrypted">Verstuur een versleutelde reactie…</string>
+    <string name="room_message_placeholder_reply_to_not_encrypted">Verstuur een reactie (onversleuteld)…</string>
+    <string name="settings_preview_media_before_sending">Bekijk media voor het versturen</string>
+
+    <string name="settings_without_flair">Je bent momenteel geen lid van een community.</string>
+
+    <string name="settings_labs_keyboard_options_to_send_message">Gebruik de enterknop van het toetsenbord om een bericht te versturen</string>
+    <string name="command_description_emote">Vertoon actie</string>
+    </resources>
