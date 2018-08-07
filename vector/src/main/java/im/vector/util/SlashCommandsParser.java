@@ -48,7 +48,8 @@ public class SlashCommandsParser {
     public enum SlashCommand {
 
         // defines the command line operations
-        // the user can write theses messages to perform some room events
+        // the user can write theses messages to perform some actions
+        // the list will be displayed in this order
         EMOTE("/me", "<message>", R.string.command_description_emote),
         BAN_USER("/ban", "<user-id>", R.string.command_description_ban_user),
         UNBAN_USER ("/unban", "<user-id>", R.string.command_description_unban_user),

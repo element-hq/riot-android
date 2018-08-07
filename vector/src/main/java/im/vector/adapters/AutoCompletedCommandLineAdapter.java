@@ -18,6 +18,7 @@ package im.vector.adapters;
 
 import android.content.Context;
 import android.support.annotation.StringRes;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -61,16 +62,6 @@ public class AutoCompletedCommandLineAdapter extends ArrayAdapter<String> {
     private List<SlashCommandsParser.SlashCommand> mCommandLines = new ArrayList<>();
 
     /**
-     * Comparators
-     */
-    private static final Comparator<String> mCommandLinesComparator = new Comparator<String>() {
-        @Override
-        public int compare(String command1, String command2) {
-            return command1.compareToIgnoreCase(command2);
-        }
-    };
-
-    /**
      * Construct an adapter which will display a list of slash commands
      *
      * @param context           Activity context
@@ -112,12 +103,11 @@ public class AutoCompletedCommandLineAdapter extends ArrayAdapter<String> {
         }
 
         SlashCommandsParser.SlashCommand slashCommand = SlashCommandsParser.SlashCommand.get(getItem(position));
-        @StringRes int description = slashCommand.getDescription();
 
         if (null != slashCommand) {
             viewHolder.tvCommandName.setText(slashCommand.getCommand());
             viewHolder.tvCommandParameter.setText(slashCommand.getParam());
-            viewHolder.tvCommandDescription.setText(description);
+            viewHolder.tvCommandDescription.setText(slashCommand.getDescription());
         }
         return convertView;
     }
@@ -150,12 +140,9 @@ public class AutoCompletedCommandLineAdapter extends ArrayAdapter<String> {
         @Override
         protected FilterResults performFiltering(CharSequence prefix) {
             FilterResults results = new FilterResults();
-            List<String> newValues;
+            List<String> newValues = new ArrayList<>();
 
-            if (prefix == null || prefix.length() == 0) {
-                newValues = new ArrayList<>();
-            } else {
-                newValues = new ArrayList<>();
+            if (!TextUtils.isEmpty(prefix)) {
                 String prefixString = prefix.toString().toLowerCase(VectorApp.getApplicationLocale());
 
                 if (prefixString.startsWith("/")) {
@@ -169,12 +156,8 @@ public class AutoCompletedCommandLineAdapter extends ArrayAdapter<String> {
                     }
                 }
             }
-
-            //Collections.sort(newValues, mCommandLinesComparator);
-
             results.values = newValues;
             results.count = newValues.size();
-
             return results;
         }
 
@@ -191,8 +174,7 @@ public class AutoCompletedCommandLineAdapter extends ArrayAdapter<String> {
 
         @Override
         public CharSequence convertResultToString(Object resultValue) {
-            String commandLine = (String) resultValue;
-            return commandLine;
+            return (String) resultValue;
         }
     }
 }

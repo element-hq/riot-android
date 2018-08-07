@@ -17,7 +17,6 @@
 package im.vector.util
 
 enum class AutoCompletionMode {
-    NONE_MODE,
     USER_MODE,
     COMMAND_MODE;
 
@@ -25,7 +24,7 @@ enum class AutoCompletionMode {
         fun getWithText(text:String) = when {
             text.startsWith("@") || text.contains(" @")-> USER_MODE
             text.startsWith("/") -> COMMAND_MODE
-            else -> NONE_MODE
+            else -> USER_MODE
         }
     }
 }

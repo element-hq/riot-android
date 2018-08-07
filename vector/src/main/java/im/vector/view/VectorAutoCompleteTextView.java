@@ -75,7 +75,7 @@ public class VectorAutoCompleteTextView extends AppCompatMultiAutoCompleteTextVi
     // add a colon when the inserted text is the first item of the string
     private boolean mAddColonOnFirstItem;
 
-    private AutoCompletionMode mAutoCompletionMode;
+    private AutoCompletionMode mAutoCompletionMode = AutoCompletionMode.USER_MODE;
 
     public VectorAutoCompleteTextView(Context context) {
         super(context, null);
@@ -93,11 +93,9 @@ public class VectorAutoCompleteTextView extends AppCompatMultiAutoCompleteTextVi
 
     /**
      * Update the auto completion mode according to the first character of the message.
-     *
-     * @param text  The message text being written.
      */
-    public void updateAutoCompletionModeForText(String text) {
-        final AutoCompletionMode newMode = AutoCompletionMode.Companion.getWithText(text);
+    public void updateAutoCompletionMode() {
+        final AutoCompletionMode newMode = AutoCompletionMode.Companion.getWithText(getText().toString());
         if (newMode == mAutoCompletionMode){
             return;
         }
@@ -111,10 +109,6 @@ public class VectorAutoCompleteTextView extends AppCompatMultiAutoCompleteTextVi
                 setAdapter(mAdapterCommand);
                 setThreshold(0);
                 break;
-            case NONE_MODE:
-            default:
-                setAdapter(null);
-                break;
         }
     }
 
@@ -125,7 +119,7 @@ public class VectorAutoCompleteTextView extends AppCompatMultiAutoCompleteTextVi
      */
     public void initAutoCompletion(MXSession session) {
         initAutoCompletion();
-        buildAdapter(session, session.getDataHandler().getStore().getUsers(), getSlashCommandList());
+        buildAdapter(session, session.getDataHandler().getStore().getUsers(), null);
     }
 
     /**
@@ -195,11 +189,16 @@ public class VectorAutoCompleteTextView extends AppCompatMultiAutoCompleteTextVi
      * @param commandLines   the commands list
      */
     private void buildAdapter(@NonNull MXSession session,
-                              @NonNull Collection<User> users,
-                              @NonNull Collection<SlashCommandsParser.SlashCommand> commandLines) {
+                              Collection<User> users,
+                              Collection<SlashCommandsParser.SlashCommand> commandLines) {
         // build the adapters
-        mAdapterCommand = new AutoCompletedCommandLineAdapter(getContext(), R.layout.item_command_auto_complete, session, commandLines);
-        mAdapterUser = new AutoCompletedUserAdapter(getContext(), R.layout.item_user_auto_complete, session, users);
+        if (null != commandLines) {
+            mAdapterCommand = new AutoCompletedCommandLineAdapter(getContext(), R.layout.item_command_auto_complete, session, commandLines);
+        }
+
+        if (null != users) {
+            mAdapterUser = new AutoCompletedUserAdapter(getContext(), R.layout.item_user_auto_complete, session, users);
+        }
     }
 
     /**
@@ -328,7 +327,7 @@ public class VectorAutoCompleteTextView extends AppCompatMultiAutoCompleteTextVi
                             Log.e(LOG_TAG, "## performFiltering() failed " + e.getMessage(), e);
                         }
 
-                        if (subText.toString().startsWith("@")) {
+                        if (mAutoCompletionMode == AutoCompletionMode.USER_MODE) {
                             mAdapterUser.getFilter().filter(subText, new Filter.FilterListener() {
                                 @Override
                                 public void onFilterComplete(int count) {
@@ -336,7 +335,7 @@ public class VectorAutoCompleteTextView extends AppCompatMultiAutoCompleteTextVi
                                     VectorAutoCompleteTextView.this.onFilterComplete(count);
                                 }
                             });
-                        } else if (subText.toString().startsWith("/")) {
+                        } else {
                             mAdapterCommand.getFilter().filter(subText, new Filter.FilterListener() {
                                 @Override
                                 public void onFilterComplete(int count) {
