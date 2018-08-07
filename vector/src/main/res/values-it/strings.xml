@@ -508,7 +508,7 @@ Sicuro di procedere?</string>
     <string name="settings_copyright">Copyright</string>
     <string name="settings_privacy_policy">Politica sulla privacy</string>
     <string name="settings_clear_cache">Elimina cache</string>
-    <string name="settings_clear_medias_cache">Elimina cache file media</string>
+    <string name="settings_clear_medias_cache">Cancella media file temporanei</string>
     <string name="settings_keep_media">Conserva file media</string>
 
     <string name="settings_user_settings">Impostazioni utente</string>
