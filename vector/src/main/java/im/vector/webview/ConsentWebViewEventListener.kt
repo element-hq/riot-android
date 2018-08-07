@@ -48,8 +48,8 @@ class ConsentWebViewEventListener(activity: RiotAppCompatActivity, private val d
      * This methods try to create the RiotBot room when the user agreed
      */
     private fun createRiotBotRoom() {
-        safeActivity?.showWaitingView()
         safeActivity?.let {
+            it.showWaitingView()
             Matrix.getInstance(it).defaultSession.createDirectMessageRoom(RIOT_BOT_ID, createRiotBotRoomCallback)
         }
     }
@@ -59,12 +59,12 @@ class ConsentWebViewEventListener(activity: RiotAppCompatActivity, private val d
      */
     private val createRiotBotRoomCallback = object : ApiCallback<String> {
         override fun onSuccess(info: String) {
-            Log.d(LOG_TAG, "## onRegistrationSuccess() : succeed to invite riot-bot")
+            Log.d(LOG_TAG, "## On success : succeed to invite riot-bot")
             safeActivity?.finish()
         }
 
         private fun onError(error: String?) {
-            Log.e(LOG_TAG, "## onRegistrationError() : failed  to invite riot-bot $error")
+            Log.e(LOG_TAG, "## On error : failed  to invite riot-bot $error")
         }
 
         override fun onNetworkError(e: Exception) {

@@ -40,7 +40,7 @@ class DefaultWebViewEventListener : WebViewEventListener {
     }
 
     override fun onPageError(url: String, errorCode: Int, description: String) {
-        Log.v(TAG, "On received error: $url - error: $description")
+        Log.e(TAG, "On received error: $url - errorCode: $errorCode - message: $description")
     }
 
     override fun shouldOverrideUrlLoading(url: String): Boolean {
