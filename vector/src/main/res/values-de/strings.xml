@@ -400,7 +400,9 @@ Bist du sicher?</string>
 
     <!-- Room events -->
     <string name="room_event_action_report_prompt_reason">Grund für das Melden dieses Inhalts</string>
-    <string name="room_event_action_report_prompt_ignore_user">Möchtest du alle Nachrichten dieses Nutzers verbergen?</string>
+    <string name="room_event_action_report_prompt_ignore_user">Möchtest du alle Nachrichten dieses Nutzers verbergen?
+
+Beachte: Diese Aktion wird die App neu starten und einige Zeit brauchen.</string>
     <string name="room_event_action_cancel_upload">Upload abbrechen</string>
     <string name="room_event_action_cancel_download">Download abbrechen</string>
 
@@ -536,7 +538,9 @@ Bist du sicher?</string>
     <string name="settings_confirm_password">Neues Passwort wiederholen</string>
     <string name="settings_fail_to_update_password">Ändern des Passworts fehlgeschlagen</string>
     <string name="settings_password_updated">Dein Passwort wurde aktualisiert</string>
-    <string name="settings_unignore_user">Alle Nachrichten von %s anzeigen?</string>
+    <string name="settings_unignore_user">Alle Nachrichten von %s anzeigen?
+
+Beachte: Diese Aktion wird die App neu starten und einige Zeit brauchen.</string>
 
     <string name="settings_delete_notification_targets_confirmation">Bist du sicher, dass du dieses Benachrichtigungsziel entfernen möchtest?</string>
 
@@ -841,9 +845,7 @@ Unbekannte Geräte:</string>
     <string name="groups_list">Gruppenliste</string>
 
     <string name="room_participants_kick_prompt_msg">Bist du sicher, dass du diesen Nutzer aus diesem Chat kicken möchtest?</string>
-    <string name="room_participants_ban_prompt_msg">Bist du sicher, dass du diesen Nutzer aus diesem Chat verbannen möchtest?
-
-Beachte, dass diese Aktion die App neustarten wird. Das kann etwas dauern.</string>
+    <string name="room_participants_ban_prompt_msg">Bist du sicher, dass du diesen Nutzer aus diesem Chat verbannen möchtest?</string>
 
     <string name="room_settings_all_messages_noisy">Alle Nachrichten (laut)</string>
     <string name="room_settings_all_messages">Alle Nachrichten</string>
@@ -1055,4 +1057,7 @@ Die Sichtbarkeit deiner Nachrichten ist ähnlich zu E-Mails: Wenn wir deine Nach
     <string name="room_tombstone_continuation_description">Dieser Raum ist die Fortsetzung einer anderen Konversation</string>
     <string name="room_tombstone_predecessor_link">Klicke hier um die älteren Nachrichten zu sehen</string>
 
-</resources>
+<string name="room_participants_action_unignore_prompt">Zeige alle Nachrichten dieses Benutzers?
+
+Beachte: Diese Aktion wird die App neu starten und einige Zeit brauchen.</string>
+    </resources>
