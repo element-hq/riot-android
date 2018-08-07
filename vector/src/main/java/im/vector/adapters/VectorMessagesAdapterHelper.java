@@ -225,11 +225,11 @@ class VectorMessagesAdapterHelper {
      */
     private void refreshGroupFlairView(final View groupFlairView, final Event event, final Set<String> groupIdsSet, final String tag) {
         Log.d(LOG_TAG, "## refreshGroupFlairView () : " + event.sender + " allows flair to " + groupIdsSet);
-        Log.d(LOG_TAG, "## refreshGroupFlairView () : room related groups " + mRoom.getLiveState().getRelatedGroups());
+        Log.d(LOG_TAG, "## refreshGroupFlairView () : room related groups " + mRoom.getState().getRelatedGroups());
 
         if (!groupIdsSet.isEmpty()) {
             // keeps only the intersections
-            groupIdsSet.retainAll(mRoom.getLiveState().getRelatedGroups());
+            groupIdsSet.retainAll(mRoom.getState().getRelatedGroups());
         }
 
         Log.d(LOG_TAG, "## refreshGroupFlairView () : group ids to display " + groupIdsSet);
@@ -297,7 +297,7 @@ class VectorMessagesAdapterHelper {
 
                         @Override
                         public void onNetworkError(Exception e) {
-                            Log.e(LOG_TAG, "## refreshGroupFlairView () : get profile of " + groupId + " failed " + e.getMessage());
+                            Log.e(LOG_TAG, "## refreshGroupFlairView () : get profile of " + groupId + " failed " + e.getMessage(), e);
                             refresh(null);
                         }
 
@@ -309,7 +309,7 @@ class VectorMessagesAdapterHelper {
 
                         @Override
                         public void onUnexpectedError(Exception e) {
-                            Log.e(LOG_TAG, "## refreshGroupFlairView () : get profile of " + groupId + " failed " + e.getMessage());
+                            Log.e(LOG_TAG, "## refreshGroupFlairView () : get profile of " + groupId + " failed " + e.getMessage(), e);
                             refresh(null);
                         }
                     });
@@ -363,7 +363,7 @@ class VectorMessagesAdapterHelper {
         }
 
         // Check whether there are some related groups to this room
-        if (mRoom.getLiveState().getRelatedGroups().isEmpty()) {
+        if (mRoom.getState().getRelatedGroups().isEmpty()) {
             Log.d(LOG_TAG, "## refreshGroupFlairView () : no related group");
             groupFlairView.setVisibility(View.GONE);
             return;
@@ -388,7 +388,7 @@ class VectorMessagesAdapterHelper {
 
                 @Override
                 public void onNetworkError(Exception e) {
-                    Log.e(LOG_TAG, "## refreshGroupFlairView failed " + e.getMessage());
+                    Log.e(LOG_TAG, "## refreshGroupFlairView failed " + e.getMessage(), e);
                 }
 
                 @Override
@@ -398,7 +398,7 @@ class VectorMessagesAdapterHelper {
 
                 @Override
                 public void onUnexpectedError(Exception e) {
-                    Log.e(LOG_TAG, "## refreshGroupFlairView failed " + e.getMessage());
+                    Log.e(LOG_TAG, "## refreshGroupFlairView failed " + e.getMessage(), e);
                 }
             });
         }
@@ -1036,6 +1036,8 @@ class VectorMessagesAdapterHelper {
         } else if (TextUtils.equals(WidgetsManager.WIDGET_EVENT_TYPE, event.getType())) {
             // Matrix apps are enabled
             return true;
+        } else if (Event.EVENT_TYPE_STATE_ROOM_CREATE.equals(eventType)) {
+            return roomState.hasPredecessor();
         }
         return false;
     }
@@ -1104,7 +1106,7 @@ class VectorMessagesAdapterHelper {
                     tagsToRemove.add(tag);
                 }
             } catch (Exception e) {
-                Log.e(LOG_TAG, "sanitiseHTML failed " + e.getLocalizedMessage());
+                Log.e(LOG_TAG, "sanitiseHTML failed " + e.getLocalizedMessage(), e);
             }
         }
 
@@ -1133,9 +1135,8 @@ class VectorMessagesAdapterHelper {
      * *********************************************************************************************
      */
     private final Map<String, List<String>> mExtractedUrls = new HashMap<>();
-    private final Map<String, URLPreview> mUrlsPreview = new HashMap<>();
+    private final Map<String, URLPreview> mUrlsPreviews = new HashMap<>();
     private final Set<String> mPendingUrls = new HashSet<>();
-    private final Set<String> mDismissedPreviews = new HashSet<>();
 
     /**
      * Retrieves the webUrl extracted from a text
@@ -1158,7 +1159,7 @@ class VectorMessagesAdapterHelper {
                         list.add(value);
                     }
                 } catch (Exception e) {
-                    Log.e(LOG_TAG, "## extractWebUrl() " + e.getMessage());
+                    Log.e(LOG_TAG, "## extractWebUrl() " + e.getMessage(), e);
                 }
             }
 
@@ -1210,19 +1211,19 @@ class VectorMessagesAdapterHelper {
             final String downloadKey = url.hashCode() + "---";
             String displayKey = url + "<----->" + id;
 
-            if (UrlPreviewView.didUrlPreviewDismiss(displayKey)) {
+            if (UrlPreviewView.Companion.didUrlPreviewDismiss(displayKey)) {
                 Log.d(LOG_TAG, "## manageURLPreviews() : " + displayKey + " has been dismissed");
             } else if (mPendingUrls.contains(url)) {
                 // please wait
-            } else if (!mUrlsPreview.containsKey(downloadKey)) {
+            } else if (!mUrlsPreviews.containsKey(downloadKey)) {
                 mPendingUrls.add(url);
                 mSession.getEventsApiClient().getURLPreview(url, System.currentTimeMillis(), new ApiCallback<URLPreview>() {
                     @Override
                     public void onSuccess(URLPreview urlPreview) {
                         mPendingUrls.remove(url);
 
-                        if (!mUrlsPreview.containsKey(downloadKey)) {
-                            mUrlsPreview.put(downloadKey, urlPreview);
+                        if (!mUrlsPreviews.containsKey(downloadKey)) {
+                            mUrlsPreviews.put(downloadKey, urlPreview);
                             mAdapter.notifyDataSetChanged();
                         }
                     }
@@ -1244,7 +1245,7 @@ class VectorMessagesAdapterHelper {
                 });
             } else {
                 UrlPreviewView previewView = new UrlPreviewView(mContext);
-                previewView.setUrlPreview(mContext, mSession, mUrlsPreview.get(downloadKey), displayKey);
+                previewView.setUrlPreview(mContext, mSession, mUrlsPreviews.get(downloadKey), displayKey);
                 urlsPreviewLayout.addView(previewView);
             }
         }

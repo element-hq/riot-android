@@ -87,7 +87,7 @@ public class VectorSearchRoomFilesListFragment extends VectorSearchRoomsFilesLis
         mCanPaginateBack = true;
         if (null != mRoom) {
             mRoom.cancelRemoteHistoryRequest();
-            mNextBatch = mRoom.getLiveState().getToken();
+            mNextBatch = mRoom.getState().getToken();
         }
         if (null != mSession) {
             mSession.getDataHandler().resetReplayAttackCheckInTimeline(mTimeLineId);
@@ -127,7 +127,7 @@ public class VectorSearchRoomFilesListFragment extends VectorSearchRoomsFilesLis
             @Override
             public void onSuccess(ArrayList<Event> eventsChunk) {
                 List<MessageRow> messageRows = new ArrayList<>(eventsChunk.size());
-                RoomState liveState = mRoom.getLiveState();
+                RoomState liveState = mRoom.getState();
 
                 for (Event event : eventsChunk) {
                     messageRows.add(new MessageRow(event, liveState));
@@ -149,7 +149,7 @@ public class VectorSearchRoomFilesListFragment extends VectorSearchRoomsFilesLis
                     try {
                         listener.onSearchSucceed(messageRows.size());
                     } catch (Exception e) {
-                        Log.e(LOG_TAG, "## remoteRoomHistoryRequest() : onSearchSucceed failed " + e.getMessage());
+                        Log.e(LOG_TAG, "## remoteRoomHistoryRequest() : onSearchSucceed failed " + e.getMessage(), e);
                     }
                 }
 
@@ -167,7 +167,7 @@ public class VectorSearchRoomFilesListFragment extends VectorSearchRoomsFilesLis
                     try {
                         listener.onSearchFailed();
                     } catch (Exception e) {
-                        Log.e(LOG_TAG, "## remoteRoomHistoryRequest() : onSearchFailed failed " + e.getMessage());
+                        Log.e(LOG_TAG, "## remoteRoomHistoryRequest() : onSearchFailed failed " + e.getMessage(), e);
                     }
                 }
 
@@ -227,7 +227,7 @@ public class VectorSearchRoomFilesListFragment extends VectorSearchRoomsFilesLis
                             mAdapter.setNotifyOnChange(false);
 
                             for (Event event : eventChunks) {
-                                MessageRow row = new MessageRow(event, mRoom.getLiveState());
+                                MessageRow row = new MessageRow(event, mRoom.getState());
                                 mAdapter.insert(row, 0);
                             }
 
@@ -257,7 +257,7 @@ public class VectorSearchRoomFilesListFragment extends VectorSearchRoomsFilesLis
                                         try {
                                             listener.onSearchSucceed(eventChunks.size());
                                         } catch (Exception e) {
-                                            Log.e(LOG_TAG, "## backPaginate() : onSearchSucceed failed " + e.getMessage());
+                                            Log.e(LOG_TAG, "## backPaginate() : onSearchSucceed failed " + e.getMessage(), e);
                                         }
                                     }
                                     mSearchListeners.clear();
@@ -283,7 +283,7 @@ public class VectorSearchRoomFilesListFragment extends VectorSearchRoomsFilesLis
                                         try {
                                             listener.onSearchSucceed(0);
                                         } catch (Exception e) {
-                                            Log.e(LOG_TAG, "## backPaginate() : onSearchSucceed failed " + e.getMessage());
+                                            Log.e(LOG_TAG, "## backPaginate() : onSearchSucceed failed " + e.getMessage(), e);
                                         }
                                     }
                                 }

@@ -75,7 +75,7 @@ public class WidgetContent implements Serializable {
         try {
             return JsonUtils.getGson(false).fromJson(jsonObject, WidgetContent.class);
         } catch (Exception e) {
-            Log.e(LOG_TAG, "## toWidgetContent() : failed " + e.getMessage());
+            Log.e(LOG_TAG, "## toWidgetContent() : failed " + e.getMessage(), e);
         }
 
         return new WidgetContent();

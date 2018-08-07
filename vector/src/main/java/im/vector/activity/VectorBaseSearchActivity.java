@@ -117,7 +117,7 @@ public abstract class VectorBaseSearchActivity extends MXCActionBarActivity {
                         }
                     }, 100);
                 } catch (Throwable throwable) {
-                    Log.e(LOG_TAG, "## failed to start the timer " + throwable.getMessage());
+                    Log.e(LOG_TAG, "## failed to start the timer " + throwable.getMessage(), throwable);
 
                     runOnUiThread(new Runnable() {
                         @Override

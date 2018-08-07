@@ -257,7 +257,7 @@ public class VectorMediasViewerActivity extends MXCActionBarActivity {
                         try {
                             mediaUri = VectorContentProvider.absolutePathToUri(VectorMediasViewerActivity.this, file.getAbsolutePath());
                         } catch (Exception e) {
-                            Log.e(LOG_TAG, "onMediaAction onAction.absolutePathToUri: " + e.getMessage());
+                            Log.e(LOG_TAG, "onMediaAction onAction.absolutePathToUri: " + e.getMessage(), e);
                         }
 
                         if (null != mediaUri) {
@@ -268,7 +268,7 @@ public class VectorMediasViewerActivity extends MXCActionBarActivity {
                                 sendIntent.putExtra(Intent.EXTRA_STREAM, mediaUri);
                                 startActivity(sendIntent);
                             } catch (Exception e) {
-                                Log.e(LOG_TAG, "## onAction : cannot display the media " + mediaUri + " mimeType " + mediaInfo.mMimeType);
+                                Log.e(LOG_TAG, "## onAction : cannot display the media " + mediaUri + " mimeType " + mediaInfo.mMimeType, e);
                                 Toast.makeText(VectorMediasViewerActivity.this, e.getLocalizedMessage(), Toast.LENGTH_SHORT).show();
                             }
                         }

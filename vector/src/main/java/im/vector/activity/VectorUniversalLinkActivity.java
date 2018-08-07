@@ -103,7 +103,7 @@ public class VectorUniversalLinkActivity extends RiotAppCompatActivity {
                 intentAction = VectorUniversalLinkReceiver.BROADCAST_ACTION_UNIVERSAL_LINK;
             }
         } catch (Exception ex) {
-            Log.e(LOG_TAG, "## onCreate(): Exception - Msg=" + ex.getMessage());
+            Log.e(LOG_TAG, "## onCreate(): Exception - Msg=" + ex.getMessage(), ex);
         }
 
         if (null != intentAction) {

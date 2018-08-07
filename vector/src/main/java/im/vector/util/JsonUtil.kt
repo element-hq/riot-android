@@ -38,7 +38,7 @@ fun Any.toJsonMap(): JsonDict<Any>? {
 
         }.type)
     } catch (e: Exception) {
-        Log.e("TAG", "## Any.toJsonMap() failed " + e.message)
+        Log.e("TAG", "## Any.toJsonMap() failed " + e.message, e)
     }
 
     return objectAsMap

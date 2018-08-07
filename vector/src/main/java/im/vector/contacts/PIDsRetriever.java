@@ -224,7 +224,7 @@ public class PIDsRetriever {
                 session.lookup3Pids(fRequestedMediums, medias, new ApiCallback<List<String>>() {
                     @Override
                     public void onSuccess(final List<String> pids) {
-                        Log.e(LOG_TAG, "lookup3Pids success " + pids.size());
+                        Log.d(LOG_TAG, "lookup3Pids success " + pids.size());
                         // update the local cache
                         for (int index = 0; index < fRequestedMediums.size(); index++) {
                             String medium = fRequestedMediums.get(index);

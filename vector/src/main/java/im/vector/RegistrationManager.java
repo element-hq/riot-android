@@ -559,7 +559,7 @@ public class RegistrationManager {
                     publicKey = recaptchaParams.get(JSON_KEY_PUBLIC_KEY);
 
                 } catch (Exception e) {
-                    Log.e(LOG_TAG, "getCaptchaPublicKey: " + e.getLocalizedMessage());
+                    Log.e(LOG_TAG, "getCaptchaPublicKey: " + e.getLocalizedMessage(), e);
                 }
             }
         }
@@ -970,7 +970,7 @@ public class RegistrationManager {
                             RegistrationFlowResponse registrationFlowResponse = JsonUtils.toRegistrationFlowResponse(e.mErrorBodyAsString);
                             setRegistrationFlowResponse(registrationFlowResponse);
                         } catch (Exception castExcept) {
-                            Log.e(LOG_TAG, "JsonUtils.toRegistrationFlowResponse " + castExcept.getLocalizedMessage());
+                            Log.e(LOG_TAG, "JsonUtils.toRegistrationFlowResponse " + castExcept.getLocalizedMessage(), castExcept);
                         }
                         listener.onRegistrationFailed(ERROR_MISSING_STAGE);
                     } else {

@@ -150,6 +150,11 @@ class VectorSettingsPreferencesFragment : PreferenceFragment(), SharedPreference
         findPreference(PreferencesManager.SETTINGS_CONTACTS_PHONEBOOK_COUNTRY_PREFERENCE_KEY) as VectorCustomActionEditTextPreference
     }
 
+    // Group Flairs
+    private val mGroupsFlairCategory by lazy {
+        findPreference(PreferencesManager.SETTINGS_GROUPS_FLAIR_KEY) as PreferenceCategory
+    }
+
     // cryptography
     private val mCryptographyCategory by lazy {
         findPreference(PreferencesManager.SETTINGS_CRYPTOGRAPHY_PREFERENCE_KEY) as PreferenceCategory
@@ -188,9 +193,6 @@ class VectorSettingsPreferencesFragment : PreferenceFragment(), SharedPreference
     }
     private val mLabsCategory by lazy {
         findPreference(PreferencesManager.SETTINGS_LABS_PREFERENCE_KEY) as PreferenceCategory
-    }
-    private val mGroupsFlairCategory by lazy {
-        findPreference(PreferencesManager.SETTINGS_GROUPS_FLAIR_KEY) as PreferenceCategory
     }
     private val backgroundSyncCategory by lazy {
         findPreference(PreferencesManager.SETTINGS_BACKGROUND_SYNC_PREFERENCE_KEY)
@@ -313,9 +315,8 @@ class VectorSettingsPreferencesFragment : PreferenceFragment(), SharedPreference
                         }
 
                         private fun onError(errorMessage: String) {
-                            if (null != activity) {
-                                Toast.makeText(activity, errorMessage, Toast.LENGTH_SHORT).show()
-                            }
+                            activity?.toast(errorMessage)
+
                             onSuccess(null)
                         }
 
@@ -370,7 +371,8 @@ class VectorSettingsPreferencesFragment : PreferenceFragment(), SharedPreference
             if (null != PreferencesManager.getNotificationRingTone(activity)) {
                 intent.putExtra(RingtoneManager.EXTRA_RINGTONE_EXISTING_URI, PreferencesManager.getNotificationRingTone(activity))
             }
-            activity.startActivityForResult(intent, REQUEST_NOTIFICATION_RINGTONE)
+
+            startActivityForResult(intent, REQUEST_NOTIFICATION_RINGTONE)
             false
         }
         refreshNotificationRingTone()
@@ -413,9 +415,8 @@ class VectorSettingsPreferencesFragment : PreferenceFragment(), SharedPreference
                                                             }
 
                                                             override fun onBingRuleUpdateFailure(errorMessage: String) {
-                                                                if (null != activity) {
-                                                                    Toast.makeText(activity, errorMessage, Toast.LENGTH_SHORT).show()
-                                                                }
+                                                                activity?.toast(errorMessage)
+
                                                                 onDone()
                                                             }
                                                         })
@@ -450,20 +451,11 @@ class VectorSettingsPreferencesFragment : PreferenceFragment(), SharedPreference
 
                     Matrix.getInstance(activity)!!.sharedGCMRegistrationManager
                             .forceSessionsRegistration(object : GcmRegistrationManager.ThirdPartyRegistrationListener {
-
-                                override fun onThirdPartyRegistered() {
+                                override fun onSuccess() {
                                     hideLoadingView()
                                 }
 
-                                override fun onThirdPartyRegistrationFailed() {
-                                    hideLoadingView()
-                                }
-
-                                override fun onThirdPartyUnregistered() {
-                                    hideLoadingView()
-                                }
-
-                                override fun onThirdPartyUnregistrationFailed() {
+                                override fun onError() {
                                     hideLoadingView()
                                 }
                             })
@@ -606,8 +598,6 @@ class VectorSettingsPreferencesFragment : PreferenceFragment(), SharedPreference
             }
         }
 
-        // Others
-
         // preference to start the App info screen, to facilitate App permissions access
         findPreference(APP_INFO_LINK_PREFERENCE_KEY)
                 .onPreferenceClickListener = Preference.OnPreferenceClickListener {
@@ -718,7 +708,7 @@ class VectorSettingsPreferencesFragment : PreferenceFragment(), SharedPreference
                 try {
                     task.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR)
                 } catch (e: Exception) {
-                    Log.e(LOG_TAG, "## mSession.getMediasCache().clear() failed " + e.message)
+                    Log.e(LOG_TAG, "## mSession.getMediasCache().clear() failed " + e.message, e)
                     task.cancel(true)
                     hideLoadingView()
                 }
@@ -1010,9 +1000,7 @@ class VectorSettingsPreferencesFragment : PreferenceFragment(), SharedPreference
                                     // and the code is called in the right thread
                                     activity.runOnUiThread {
                                         hideLoadingView()
-                                        Toast.makeText(activity,
-                                                getString(textId),
-                                                Toast.LENGTH_LONG).show()
+                                        activity?.toast(textId, Toast.LENGTH_LONG)
                                     }
                                 }
                             }
@@ -1095,7 +1083,7 @@ class VectorSettingsPreferencesFragment : PreferenceFragment(), SharedPreference
 
             // when using GCM
             // need to register on servers
-            if (isConnected && gcmMgr.useGCM() && (gcmMgr.isServerRegistred || gcmMgr.isServerUnRegistred)) {
+            if (isConnected && gcmMgr.useGCM() && (gcmMgr.isServerRegistered || gcmMgr.isServerUnRegistered)) {
                 val listener = object : GcmRegistrationManager.ThirdPartyRegistrationListener {
 
                     private fun onDone() {
@@ -1107,27 +1095,19 @@ class VectorSettingsPreferencesFragment : PreferenceFragment(), SharedPreference
                         }
                     }
 
-                    override fun onThirdPartyRegistered() {
+                    override fun onSuccess() {
                         onDone()
                     }
 
-                    override fun onThirdPartyRegistrationFailed() {
-                        gcmMgr.setDeviceNotificationsAllowed(isAllowed)
-                        onDone()
-                    }
-
-                    override fun onThirdPartyUnregistered() {
-                        onDone()
-                    }
-
-                    override fun onThirdPartyUnregistrationFailed() {
+                    override fun onError() {
+                        // Set again the previous state
                         gcmMgr.setDeviceNotificationsAllowed(isAllowed)
                         onDone()
                     }
                 }
 
                 displayLoadingView()
-                if (gcmMgr.isServerRegistred) {
+                if (gcmMgr.isServerRegistered) {
                     gcmMgr.unregister(listener)
                 } else {
                     gcmMgr.register(listener)
@@ -1167,9 +1147,8 @@ class VectorSettingsPreferencesFragment : PreferenceFragment(), SharedPreference
                 }
 
                 override fun onBingRuleUpdateFailure(errorMessage: String) {
-                    if (null != activity) {
-                        Toast.makeText(activity, errorMessage, Toast.LENGTH_SHORT).show()
-                    }
+                    activity?.toast(errorMessage)
+
                     onDone()
                 }
             })
@@ -1361,7 +1340,7 @@ class VectorSettingsPreferencesFragment : PreferenceFragment(), SharedPreference
                                 try {
                                     isEnabled = !TextUtils.equals(actions[0] as String, BingRule.ACTION_DONT_NOTIFY)
                                 } catch (e: Exception) {
-                                    Log.e(LOG_TAG, "## refreshPreferences failed " + e.message)
+                                    Log.e(LOG_TAG, "## refreshPreferences failed " + e.message, e)
                                 }
 
                             }
@@ -1418,9 +1397,9 @@ class VectorSettingsPreferencesFragment : PreferenceFragment(), SharedPreference
                 .show()
     }
 
-//==============================================================================================================
-// ignored users list management
-//==============================================================================================================
+    //==============================================================================================================
+    // ignored users list management
+    //==============================================================================================================
 
     /**
      * Refresh the ignored users list
@@ -1488,9 +1467,9 @@ class VectorSettingsPreferencesFragment : PreferenceFragment(), SharedPreference
         }
     }
 
-//==============================================================================================================
-// pushers list management
-//==============================================================================================================
+    //==============================================================================================================
+    // pushers list management
+    //==============================================================================================================
 
     /**
      * Refresh the pushers list
@@ -1570,9 +1549,9 @@ class VectorSettingsPreferencesFragment : PreferenceFragment(), SharedPreference
         }
     }
 
-//==============================================================================================================
-// Email management
-//==============================================================================================================
+    //==============================================================================================================
+    // Email management
+    //==============================================================================================================
 
     /**
      * Refresh the emails list
@@ -1656,7 +1635,7 @@ class VectorSettingsPreferencesFragment : PreferenceFragment(), SharedPreference
         if (null != activity) {
             activity.runOnUiThread {
                 if (!TextUtils.isEmpty(errorMessage)) {
-                    Toast.makeText(VectorApp.getInstance(), errorMessage, Toast.LENGTH_SHORT).show()
+                    VectorApp.getInstance().toast(errorMessage!!)
                 }
                 hideLoadingView()
             }
@@ -1671,13 +1650,13 @@ class VectorSettingsPreferencesFragment : PreferenceFragment(), SharedPreference
     private fun addEmail(email: String?) {
         // check first if the email syntax is valid
         if (TextUtils.isEmpty(email) || !android.util.Patterns.EMAIL_ADDRESS.matcher(email!!).matches()) {
-            Toast.makeText(activity, getString(R.string.auth_invalid_email), Toast.LENGTH_SHORT).show()
+            activity?.toast(R.string.auth_invalid_email)
             return
         }
 
         // check first if the email syntax is valid
         if (mDisplayedEmails.indexOf(email) >= 0) {
-            Toast.makeText(activity, getString(R.string.auth_email_already_defined), Toast.LENGTH_SHORT).show()
+            activity?.toast(R.string.auth_email_already_defined)
             return
         }
 
@@ -1740,7 +1719,7 @@ class VectorSettingsPreferencesFragment : PreferenceFragment(), SharedPreference
                                 if (null != activity) {
                                     activity.runOnUiThread {
                                         hideLoadingView()
-                                        Toast.makeText(activity, getString(R.string.account_email_validation_error), Toast.LENGTH_SHORT).show()
+                                        activity?.toast(R.string.account_email_validation_error)
                                     }
                                 }
                             } else {
@@ -1760,9 +1739,9 @@ class VectorSettingsPreferencesFragment : PreferenceFragment(), SharedPreference
                 .show()
     }
 
-//==============================================================================================================
-// Phone number management
-//==============================================================================================================
+    //==============================================================================================================
+    // Phone number management
+    //==============================================================================================================
 
     /**
      * Refresh phone number list
@@ -1842,9 +1821,9 @@ class VectorSettingsPreferencesFragment : PreferenceFragment(), SharedPreference
 
     }
 
-//==============================================================================================================
-// contacts management
-//==============================================================================================================
+    //==============================================================================================================
+    // contacts management
+    //==============================================================================================================
 
     private fun setContactsPreferences() {
         // Permission
@@ -1873,9 +1852,9 @@ class VectorSettingsPreferencesFragment : PreferenceFragment(), SharedPreference
         }
     }
 
-//==============================================================================================================
-// user interface management
-//==============================================================================================================
+    //==============================================================================================================
+    // user interface management
+    //==============================================================================================================
 
     private fun setUserInterfacePreferences() {
         // Selected language
@@ -1929,9 +1908,9 @@ class VectorSettingsPreferencesFragment : PreferenceFragment(), SharedPreference
         }
     }
 
-//==============================================================================================================
-// background sync management
-//==============================================================================================================
+    //==============================================================================================================
+    // background sync management
+    //==============================================================================================================
 
     /**
      * Convert a delay in seconds to string
@@ -1977,7 +1956,7 @@ class VectorSettingsPreferencesFragment : PreferenceFragment(), SharedPreference
                 try {
                     newTimeOut = Integer.parseInt(newValue as String)
                 } catch (e: Exception) {
-                    Log.e(LOG_TAG, "## refreshBackgroundSyncPrefs : parseInt failed " + e.message)
+                    Log.e(LOG_TAG, "## refreshBackgroundSyncPrefs : parseInt failed " + e.message, e)
                 }
 
                 if (newTimeOut != timeout) {
@@ -2001,7 +1980,7 @@ class VectorSettingsPreferencesFragment : PreferenceFragment(), SharedPreference
                 try {
                     newDelay = Integer.parseInt(newValue as String)
                 } catch (e: Exception) {
-                    Log.e(LOG_TAG, "## refreshBackgroundSyncPrefs : parseInt failed " + e.message)
+                    Log.e(LOG_TAG, "## refreshBackgroundSyncPrefs : parseInt failed " + e.message, e)
                 }
 
                 if (newDelay != delay) {
@@ -2016,9 +1995,9 @@ class VectorSettingsPreferencesFragment : PreferenceFragment(), SharedPreference
     }
 
 
-//==============================================================================================================
-// Cryptography
-//==============================================================================================================
+    //==============================================================================================================
+    // Cryptography
+    //==============================================================================================================
 
     private fun removeCryptographyPreference() {
         if (null != preferenceScreen) {
@@ -2113,9 +2092,9 @@ class VectorSettingsPreferencesFragment : PreferenceFragment(), SharedPreference
         }
     }
 
-//==============================================================================================================
-// devices list
-//==============================================================================================================
+    //==============================================================================================================
+    // devices list
+    //==============================================================================================================
 
     private fun removeDevicesPreference() {
         if (null != preferenceScreen) {
@@ -2139,7 +2118,7 @@ class VectorSettingsPreferencesFragment : PreferenceFragment(), SharedPreference
 
             mSession.getDevicesList(object : ApiCallback<DevicesListResponse> {
                 override fun onSuccess(info: DevicesListResponse) {
-                    if (0 == info.devices.size) {
+                    if (info.devices.isEmpty()) {
                         removeDevicesPreference()
                     } else {
                         buildDevicesSettings(info.devices)
@@ -2333,7 +2312,7 @@ class VectorSettingsPreferencesFragment : PreferenceFragment(), SharedPreference
                             // detect if the updated device is the current account one
                             val pref = findPreference(PreferencesManager.SETTINGS_ENCRYPTION_INFORMATION_DEVICE_ID_PREFERENCE_KEY)
                             if (TextUtils.equals(pref.summary, aDeviceInfoToRename.device_id)) {
-                                findPreference(PreferencesManager.SETTINGS_ENCRYPTION_INFORMATION_DEVICE_ID_PREFERENCE_KEY).summary = input.text
+                                findPreference(PreferencesManager.SETTINGS_ENCRYPTION_INFORMATION_DEVICE_NAME_PREFERENCE_KEY).summary = input.text
                             }
 
                             hideLoadingView()
@@ -2473,7 +2452,8 @@ class VectorSettingsPreferencesFragment : PreferenceFragment(), SharedPreference
 
             CommonActivityUtils.exportKeys(mSession, passPhrase1EditText.text.toString(), object : ApiCallback<String> {
                 override fun onSuccess(filename: String) {
-                    Toast.makeText(VectorApp.getInstance().applicationContext, filename, Toast.LENGTH_SHORT).show()
+                    VectorApp.getInstance().toast(filename)
+
                     hideLoadingView()
                 }
 
@@ -2563,10 +2543,11 @@ class VectorSettingsPreferencesFragment : PreferenceFragment(), SharedPreference
                     try {
                         resource.mContentStream.close()
                     } catch (e2: Exception) {
-                        Log.e(LOG_TAG, "## importKeys() : " + e2.message)
+                        Log.e(LOG_TAG, "## importKeys() : " + e2.message, e2)
                     }
 
-                    Toast.makeText(appContext, e.localizedMessage, Toast.LENGTH_SHORT).show()
+                    appContext.toast(e.localizedMessage)
+
                     return@OnClickListener
                 }
 
@@ -2578,17 +2559,17 @@ class VectorSettingsPreferencesFragment : PreferenceFragment(), SharedPreference
                     }
 
                     override fun onNetworkError(e: Exception) {
-                        Toast.makeText(appContext, e.localizedMessage, Toast.LENGTH_SHORT).show()
+                        appContext.toast(e.localizedMessage)
                         hideLoadingView()
                     }
 
                     override fun onMatrixError(e: MatrixError) {
-                        Toast.makeText(appContext, e.localizedMessage, Toast.LENGTH_SHORT).show()
+                        appContext.toast(e.localizedMessage)
                         hideLoadingView()
                     }
 
                     override fun onUnexpectedError(e: Exception) {
-                        Toast.makeText(appContext, e.localizedMessage, Toast.LENGTH_SHORT).show()
+                        appContext.toast(e.localizedMessage)
                         hideLoadingView()
                     }
                 })
@@ -2598,9 +2579,9 @@ class VectorSettingsPreferencesFragment : PreferenceFragment(), SharedPreference
         }
     }
 
-//==============================================================================================================
-// Group flairs management
-//==============================================================================================================
+    //==============================================================================================================
+    // Group flairs management
+    //==============================================================================================================
 
     /**
      * Force the refresh of the devices list.<br></br>
@@ -2616,7 +2597,16 @@ class VectorSettingsPreferencesFragment : PreferenceFragment(), SharedPreference
 
         mSession.groupsManager.getUserPublicisedGroups(mSession.myUserId, true, object : ApiCallback<Set<String>> {
             override fun onSuccess(publicisedGroups: Set<String>) {
-                buildGroupsList(publicisedGroups)
+                // clear everything
+                mGroupsFlairCategory.removeAll()
+
+                if (publicisedGroups.isEmpty()){
+                    val vectorGroupPreference = VectorCustomActionEditTextPreference(activity)
+                    vectorGroupPreference.title = resources.getString(R.string.settings_without_flair)
+                    mGroupsFlairCategory.addPreference(vectorGroupPreference)
+                } else {
+                    buildGroupsList(publicisedGroups)
+                }
             }
 
             override fun onNetworkError(e: Exception) {
@@ -2651,9 +2641,6 @@ class VectorSettingsPreferencesFragment : PreferenceFragment(), SharedPreference
 
             var prefIndex = 0
             mPublicisedGroups = publicisedGroups.toMutableSet()
-
-            // clear everything
-            mGroupsFlairCategory.removeAll()
 
             for (group in joinedGroups) {
                 val vectorGroupPreference = VectorGroupPreference(activity)
@@ -2712,9 +2699,9 @@ class VectorSettingsPreferencesFragment : PreferenceFragment(), SharedPreference
         }
     }
 
-/* ==========================================================================================
- * Companion
- * ========================================================================================== */
+    /* ==========================================================================================
+     * Companion
+     * ========================================================================================== */
 
     companion object {
         private val LOG_TAG = VectorSettingsPreferencesFragment::class.java.simpleName

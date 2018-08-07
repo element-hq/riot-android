@@ -318,7 +318,7 @@ public class VectorRoomDetailsMembersAdapter extends BaseExpandableListAdapter {
 
                 Collection<RoomMember> activeMembers = mRoom.getActiveMembers();
                 String myUserId = mSession.getMyUserId();
-                final PowerLevels powerLevels = mRoom.getLiveState().getPowerLevels();
+                final PowerLevels powerLevels = mRoom.getState().getPowerLevels();
 
                 // search loop to extract the following members: current user, invited, administrator and others
                 for (RoomMember member : activeMembers) {
@@ -348,11 +348,11 @@ public class VectorRoomDetailsMembersAdapter extends BaseExpandableListAdapter {
                 }
 
                 // add 3rd party invite
-                Collection<RoomThirdPartyInvite> thirdPartyInvites = mRoom.getLiveState().thirdPartyInvites();
+                Collection<RoomThirdPartyInvite> thirdPartyInvites = mRoom.getState().thirdPartyInvites();
 
                 for (RoomThirdPartyInvite invite : thirdPartyInvites) {
                     // If the home server has converted the 3pid invite into a room member, do not show it
-                    if (null == mRoom.getLiveState().memberWithThirdPartyInviteToken(invite.token)) {
+                    if (null == mRoom.getState().memberWithThirdPartyInviteToken(invite.token)) {
                         ParticipantAdapterItem participant = new ParticipantAdapterItem(invite.display_name, "", null, true);
 
                         if ((!isSearchEnabled) || participant.contains(mSearchPattern)) {
@@ -471,7 +471,7 @@ public class VectorRoomDetailsMembersAdapter extends BaseExpandableListAdapter {
                 try {
                     Collections.sort(actualParticipants, comparator);
                 } catch (Exception e) {
-                    Log.e(LOG_TAG, "## updateRoomMembersDataModel failed while sorting " + e.getMessage());
+                    Log.e(LOG_TAG, "## updateRoomMembersDataModel failed while sorting " + e.getMessage(), e);
 
                     if (TextUtils.equals(fPattern, mSearchPattern)) {
 
@@ -522,7 +522,7 @@ public class VectorRoomDetailsMembersAdapter extends BaseExpandableListAdapter {
                                 try {
                                     aSearchListener.onSearchEnd(getItemsCount(), isSearchEnabled);
                                 } catch (Exception e) {
-                                    Log.e(LOG_TAG, "## updateRoomMembersDataModel() : onSearchEnd fails " + e.getMessage());
+                                    Log.e(LOG_TAG, "## updateRoomMembersDataModel() : onSearchEnd fails " + e.getMessage(), e);
                                 }
                             }
 
@@ -619,7 +619,7 @@ public class VectorRoomDetailsMembersAdapter extends BaseExpandableListAdapter {
                 countRetValue = mRoomMembersListByGroupPosition.get(aGroupPosition).size();
             }
         } catch (Exception ex) {
-            Log.e(LOG_TAG, "## getChildrenCount(): Exception Msg=" + ex.getMessage());
+            Log.e(LOG_TAG, "## getChildrenCount(): Exception Msg=" + ex.getMessage(), ex);
         }
 
         return countRetValue;
@@ -754,7 +754,7 @@ public class VectorRoomDetailsMembersAdapter extends BaseExpandableListAdapter {
 
         PowerLevels powerLevels = null;
         if (null != mRoom) {
-            if (null != (powerLevels = mRoom.getLiveState().getPowerLevels())) {
+            if (null != (powerLevels = mRoom.getState().getPowerLevels())) {
                 if (powerLevels.getUserPowerLevel(participant.mUserId) >= CommonActivityUtils.UTILS_POWER_LEVEL_ADMIN) {
                     viewHolder.mMemberAvatarBadgeImageView.setVisibility(View.VISIBLE);
                     viewHolder.mMemberAvatarBadgeImageView.setImageResource(R.drawable.admin_icon);
@@ -781,7 +781,7 @@ public class VectorRoomDetailsMembersAdapter extends BaseExpandableListAdapter {
                             mOnParticipantsListener.onRemoveClick(participant);
                         }
                     } catch (Exception e) {
-                        Log.e(LOG_TAG, "## Delete action listener: Exception Msg=" + e.getMessage());
+                        Log.e(LOG_TAG, "## Delete action listener: Exception Msg=" + e.getMessage(), e);
                     }
                 }
             }

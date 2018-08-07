@@ -183,7 +183,7 @@ public class LockScreenActivity extends RiotAppCompatActivity { // do NOT extend
 
                     @Override
                     public void onNetworkError(Exception e) {
-                        Log.d(LOG_TAG, "Send message : onNetworkError " + e.getMessage());
+                        Log.d(LOG_TAG, "Send message : onNetworkError " + e.getMessage(), e);
                         Toast.makeText(LockScreenActivity.this, e.getLocalizedMessage(), Toast.LENGTH_SHORT).show();
                     }
 
@@ -200,7 +200,7 @@ public class LockScreenActivity extends RiotAppCompatActivity { // do NOT extend
 
                     @Override
                     public void onUnexpectedError(Exception e) {
-                        Log.d(LOG_TAG, "Send message : onUnexpectedError " + e.getMessage());
+                        Log.d(LOG_TAG, "Send message : onUnexpectedError " + e.getMessage(), e);
                         Toast.makeText(LockScreenActivity.this, e.getLocalizedMessage(), Toast.LENGTH_SHORT).show();
                     }
                 });

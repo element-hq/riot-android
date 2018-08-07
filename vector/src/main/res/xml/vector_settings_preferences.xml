@@ -53,6 +53,13 @@
             android:key="SETTINGS_INTERFACE_LANGUAGE_PREFERENCE_KEY"
             android:title="@string/settings_interface_language" />
 
+        <ListPreference
+            android:entries="@array/theme_description"
+            android:entryValues="@array/theme_codes"
+            android:key="APPLICATION_THEME_KEY"
+            android:summary="%s"
+            android:title="@string/settings_theme" />
+
         <im.vector.preference.VectorCustomActionEditTextPreference
             android:dialogTitle="@string/font_size"
             android:key="SETTINGS_INTERFACE_TEXT_SIZE_KEY"
@@ -95,12 +102,9 @@
             android:key="SETTINGS_VIBRATE_ON_MENTION_KEY"
             android:title="@string/settings_vibrate_on_mention" />
 
-        <ListPreference
-            android:entries="@array/theme_description"
-            android:entryValues="@array/theme_codes"
-            android:key="APPLICATION_THEME_KEY"
-            android:summary="%s"
-            android:title="@string/settings_theme" />
+        <im.vector.preference.VectorSwitchPreference
+            android:title="@string/settings_preview_media_before_sending"
+            android:key="SETTINGS_PREVIEW_MEDIA_BEFORE_SENDING_KEY"/>
 
     </PreferenceCategory>
 
@@ -126,7 +130,7 @@
 
     <PreferenceCategory
         android:key="SETTINGS_GROUPS_FLAIR_KEY"
-        android:title="@string/settings_flair" />
+        android:title="@string/settings_flair"/>
 
     <im.vector.preference.VectorDividerCategory />
 

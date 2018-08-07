@@ -49,7 +49,7 @@ public class ErrorListener implements ApiFailureCallback {
 
     @Override
     public void onNetworkError(final Exception e) {
-        Log.e(LOG_TAG, "Network error: " + e.getMessage());
+        Log.e(LOG_TAG, "Network error: " + e.getMessage(), e);
 
         // Do not trigger toaster if the application is in background
         if (!VectorApp.isAppInBackground()) {
@@ -76,7 +76,7 @@ public class ErrorListener implements ApiFailureCallback {
 
     @Override
     public void onUnexpectedError(Exception e) {
-        Log.e(LOG_TAG, "Unexpected error: " + e.getMessage());
+        Log.e(LOG_TAG, "Unexpected error: " + e.getMessage(), e);
     }
 
     private void handleNetworkError(Exception e) {

@@ -59,7 +59,7 @@ fun Bitmap.createSquareBitmap(): Bitmap? = when {
             // larger than high
             Bitmap.createBitmap(this, (width - height) / 2, 0, height, height)
         } catch (e: Exception) {
-            Log.e("BitmapUtil", "## createSquareBitmap " + e.message)
+            Log.e("BitmapUtil", "## createSquareBitmap " + e.message, e)
             this
         }
     else ->
@@ -67,7 +67,7 @@ fun Bitmap.createSquareBitmap(): Bitmap? = when {
             // higher than large
             Bitmap.createBitmap(this, 0, (height - width) / 2, width, width)
         } catch (e: Exception) {
-            Log.e("BitmapUtil", "## createSquareBitmap " + e.message)
+            Log.e("BitmapUtil", "## createSquareBitmap " + e.message, e)
             this
         }
 }

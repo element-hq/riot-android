@@ -18,6 +18,8 @@
 
 package im.vector.gcm;
 
+import android.support.annotation.Nullable;
+
 import com.google.firebase.messaging.FirebaseMessagingService;
 import com.google.firebase.messaging.RemoteMessage;
 import com.google.gson.JsonParser;
@@ -54,6 +56,7 @@ public class MatrixGcmListenerService extends FirebaseMessagingService {
      * @param data the GCM data
      * @return the event
      */
+    @Nullable
     private Event parseEvent(Map<String, String> data) {
         // accept only event with room id.
         if ((null == data) || !data.containsKey("room_id") || !data.containsKey("event_id")) {
@@ -73,7 +76,7 @@ public class MatrixGcmListenerService extends FirebaseMessagingService {
 
             return event;
         } catch (Exception e) {
-            Log.e(LOG_TAG, "buildEvent fails " + e.getLocalizedMessage());
+            Log.e(LOG_TAG, "buildEvent fails " + e.getLocalizedMessage(), e);
         }
 
         return null;
@@ -121,13 +124,14 @@ public class MatrixGcmListenerService extends FirebaseMessagingService {
                 Event event = parseEvent(data);
 
                 String roomName = data.get("room_name");
-                if ((null == roomName) && (null != roomId)) {
+                if (null == roomName && null != roomId) {
+                    // Try to get the room name from our store
                     MXSession session = Matrix.getInstance(getApplicationContext()).getDefaultSession();
 
                     if ((null != session) && session.getDataHandler().getStore().isReady()) {
                         Room room = session.getDataHandler().getStore().getRoom(roomId);
                         if (null != room) {
-                            roomName = VectorUtils.getRoomDisplayName(MatrixGcmListenerService.this, session, room);
+                            roomName = VectorUtils.getRoomDisplayName(this, session, room);
                         }
                     }
                 }
@@ -141,36 +145,36 @@ public class MatrixGcmListenerService extends FirebaseMessagingService {
             // check if the application has been launched once
             // the first GCM event could have been triggered whereas the application is not yet launched.
             // so it is required to create the sessions and to start/resume event stream
-            if (!mCheckLaunched && (null != Matrix.getInstance(getApplicationContext()).getDefaultSession())) {
-                CommonActivityUtils.startEventStreamService(MatrixGcmListenerService.this);
+            if (!mCheckLaunched && null != Matrix.getInstance(getApplicationContext()).getDefaultSession()) {
+                CommonActivityUtils.startEventStreamService(this);
                 mCheckLaunched = true;
             }
 
             // check if the event was not yet received
             // a previous catchup might have already retrieved the notified event
-            if ((null != eventId) && (null != roomId)) {
+            if (null != eventId && null != roomId) {
                 try {
                     Collection<MXSession> sessions = Matrix.getInstance(getApplicationContext()).getSessions();
 
-                    if ((null != sessions) && (sessions.size() > 0)) {
+                    if (null != sessions && !sessions.isEmpty()) {
                         for (MXSession session : sessions) {
                             if (session.getDataHandler().getStore().isReady()) {
                                 if (null != session.getDataHandler().getStore().getEvent(eventId, roomId)) {
                                     Log.e(LOG_TAG, "## onMessageReceivedInternal() : ignore the event " + eventId
-                                            + " in room " + roomId + "because it is already known");
+                                            + " in room " + roomId + " because it is already known");
                                     return;
                                 }
                             }
                         }
                     }
                 } catch (Exception e) {
-                    Log.e(LOG_TAG, "## onMessageReceivedInternal() : failed to check if the event was already defined " + e.getMessage());
+                    Log.e(LOG_TAG, "## onMessageReceivedInternal() : failed to check if the event was already defined " + e.getMessage(), e);
                 }
             }
 
-            CommonActivityUtils.catchupEventStream(MatrixGcmListenerService.this);
+            CommonActivityUtils.catchupEventStream(this);
         } catch (Exception e) {
-            Log.d(LOG_TAG, "## onMessageReceivedInternal() failed : " + e.getMessage());
+            Log.d(LOG_TAG, "## onMessageReceivedInternal() failed : " + e.getMessage(), e);
         }
     }
 
@@ -181,6 +185,13 @@ public class MatrixGcmListenerService extends FirebaseMessagingService {
      */
     @Override
     public void onMessageReceived(RemoteMessage message) {
+        Log.d(LOG_TAG, "## onMessageReceived() from FCM");
+
+        // Ensure event stream service is started
+        if (EventStreamService.getInstance() == null) {
+            CommonActivityUtils.startEventStreamService(this);
+        }
+
         final Map<String, String> data = message.getData();
 
         if (null == mUIHandler) {

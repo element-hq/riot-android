@@ -296,7 +296,7 @@ public class VectorMemberDetailsActivity extends MXCActionBarActivity implements
             @Override
             public void onNetworkError(Exception e) {
                 Toast.makeText(VectorMemberDetailsActivity.this, e.getLocalizedMessage(), Toast.LENGTH_SHORT).show();
-                Log.e(LOG_TAG, "## startCall() failed " + e.getMessage());
+                Log.e(LOG_TAG, "## startCall() failed " + e.getMessage(), e);
             }
 
             @Override
@@ -326,7 +326,7 @@ public class VectorMemberDetailsActivity extends MXCActionBarActivity implements
             @Override
             public void onUnexpectedError(Exception e) {
                 Toast.makeText(VectorMemberDetailsActivity.this, e.getLocalizedMessage(), Toast.LENGTH_SHORT).show();
-                Log.e(LOG_TAG, "## startCall() failed " + e.getMessage());
+                Log.e(LOG_TAG, "## startCall() failed " + e.getMessage(), e);
             }
         });
     }
@@ -464,7 +464,7 @@ public class VectorMemberDetailsActivity extends MXCActionBarActivity implements
             case ITEM_ACTION_SET_DEFAULT_POWER_LEVEL:
                 if (null != mRoom) {
                     int defaultPowerLevel = 0;
-                    PowerLevels powerLevels = mRoom.getLiveState().getPowerLevels();
+                    PowerLevels powerLevels = mRoom.getState().getPowerLevels();
 
                     if (null != powerLevels) {
                         defaultPowerLevel = powerLevels.users_default;
@@ -746,7 +746,7 @@ public class VectorMemberDetailsActivity extends MXCActionBarActivity implements
      * @param callback      the callback with the created event
      */
     private void updateUserPowerLevels(final String userId, final int newPowerLevel, final ApiCallback<Void> callback) {
-        PowerLevels powerLevels = mRoom.getLiveState().getPowerLevels();
+        PowerLevels powerLevels = mRoom.getState().getPowerLevels();
         int currentSelfPowerLevel = 0;
 
         if (null != powerLevels) {
@@ -826,7 +826,7 @@ public class VectorMemberDetailsActivity extends MXCActionBarActivity implements
         int adminCount = 0;
 
         if (null != mRoom) {
-            powerLevels = mRoom.getLiveState().getPowerLevels();
+            powerLevels = mRoom.getState().getPowerLevels();
         }
 
         mMemberAvatarBadgeImageView.setVisibility(View.GONE);

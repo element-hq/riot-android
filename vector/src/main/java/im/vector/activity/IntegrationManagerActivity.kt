@@ -87,7 +87,7 @@ class IntegrationManagerActivity : AbstractWidgetActivity() {
 
             return url
         } catch (e: Exception) {
-            Log.e(LOG_TAG, "## buildInterfaceUrl() failed " + e.message)
+            Log.e(LOG_TAG, "## buildInterfaceUrl() failed " + e.message, e)
         }
 
         return null
@@ -290,7 +290,7 @@ class IntegrationManagerActivity : AbstractWidgetActivity() {
 
         Log.d(LOG_TAG, "Received request canSendEvent in room " + mRoom!!.roomId)
 
-        val member = mRoom!!.liveState.getMember(mSession!!.myUserId)
+        val member = mRoom!!.state.getMember(mSession!!.myUserId)
 
         if (null == member || !TextUtils.equals(RoomMember.MEMBERSHIP_JOIN, member.membership)) {
             sendError(getString(R.string.widget_integration_must_be_in_room), eventData)
@@ -302,7 +302,7 @@ class IntegrationManagerActivity : AbstractWidgetActivity() {
 
         Log.d(LOG_TAG, "## canSendEvent() : eventType $eventType isState $isState")
 
-        val powerLevels = mRoom!!.liveState.powerLevels
+        val powerLevels = mRoom!!.state.powerLevels
 
         val userPowerLevel = powerLevels!!.getUserPowerLevel(mSession!!.myUserId)
 
@@ -347,7 +347,7 @@ class IntegrationManagerActivity : AbstractWidgetActivity() {
             }
 
             override fun onNetworkError(e: Exception) {
-                Log.e(LOG_TAG, "membership_state of " + userId + " in room " + mRoom!!.roomId + " failed " + e.message)
+                Log.e(LOG_TAG, "membership_state of " + userId + " in room " + mRoom!!.roomId + " failed " + e.message, e)
                 sendError(getString(R.string.widget_integration_failed_to_send_request), eventData)
             }
 
@@ -357,7 +357,7 @@ class IntegrationManagerActivity : AbstractWidgetActivity() {
             }
 
             override fun onUnexpectedError(e: Exception) {
-                Log.e(LOG_TAG, "membership_state of " + userId + " in room " + mRoom!!.roomId + " failed " + e.message)
+                Log.e(LOG_TAG, "membership_state of " + userId + " in room " + mRoom!!.roomId + " failed " + e.message, e)
                 sendError(getString(R.string.widget_integration_failed_to_send_request), eventData)
             }
         })
@@ -374,7 +374,7 @@ class IntegrationManagerActivity : AbstractWidgetActivity() {
         }
 
         Log.d(LOG_TAG, "Received request join rules  in room " + mRoom!!.roomId)
-        val joinedEvents = mRoom!!.liveState.getStateEvents(HashSet(Arrays.asList(Event.EVENT_TYPE_STATE_ROOM_JOIN_RULES)))
+        val joinedEvents = mRoom!!.state.getStateEvents(HashSet(Arrays.asList(Event.EVENT_TYPE_STATE_ROOM_JOIN_RULES)))
 
         if (joinedEvents.size > 0) {
             Log.d(LOG_TAG, "Received request join rules returns " + joinedEvents[joinedEvents.size - 1])
@@ -424,7 +424,7 @@ class IntegrationManagerActivity : AbstractWidgetActivity() {
 
         Log.d(LOG_TAG, "Received request to get options for bot " + userId + " in room " + mRoom!!.roomId + " requested")
 
-        val stateEvents = mRoom!!.liveState.getStateEvents(HashSet(Arrays.asList(Event.EVENT_TYPE_ROOM_BOT_OPTIONS)))
+        val stateEvents = mRoom!!.state.getStateEvents(HashSet(Arrays.asList(Event.EVENT_TYPE_ROOM_BOT_OPTIONS)))
 
         var botOptionsEvent: Event? = null
         val stateKey = "_$userId"

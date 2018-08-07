@@ -120,15 +120,15 @@ public class WidgetsManager {
     /**
      * List all active widgets in a room.
      *
-     * @param session     the session.
-     * @param room        the room to check.
-     * @param widgetTypes the widget types
+     * @param session       the session.
+     * @param room          the room to check.
+     * @param widgetTypes   the widget types
      * @param excludedTypes the excluded widget types
      * @return the active widgets list
      */
     private List<Widget> getActiveWidgets(final MXSession session, final Room room, final Set<String> widgetTypes, final Set<String> excludedTypes) {
         // Get all im.vector.modular.widgets state events in the room
-        List<Event> widgetEvents = room.getLiveState().getStateEvents(new HashSet<>(Arrays.asList(WIDGET_EVENT_TYPE)));
+        List<Event> widgetEvents = room.getState().getStateEvents(new HashSet<>(Arrays.asList(WIDGET_EVENT_TYPE)));
 
         // Widget id -> widget
         Map<String, Widget> widgets = new HashMap<>();
@@ -158,7 +158,7 @@ public class WidgetsManager {
                         widgetType = jsonObject.get("type").getAsString();
                     }
                 } catch (Exception e) {
-                    Log.e(LOG_TAG, "## getWidgets() failed : " + e.getMessage());
+                    Log.e(LOG_TAG, "## getWidgets() failed : " + e.getMessage(), e);
                 }
 
                 if (null != widgetType) {
@@ -184,7 +184,7 @@ public class WidgetsManager {
 
                     widget = new Widget(session, widgetEvent);
                 } catch (Exception e) {
-                    Log.e(LOG_TAG, "## getWidgets() : widget creation failed " + e.getMessage());
+                    Log.e(LOG_TAG, "## getWidgets() : widget creation failed " + e.getMessage(), e);
                 }
 
                 if (null != widget) {
@@ -218,13 +218,15 @@ public class WidgetsManager {
 
     /**
      * Provides the widgets which can be displayed in a webview.
+     *
      * @param session the session
-     * @param room the room
+     * @param room    the room
      * @return the list of active widgets
      */
     public List<Widget> getActiveWebviewWidgets(final MXSession session, final Room room) {
         return getActiveWidgets(session, room, null, new HashSet<>(Arrays.asList(WidgetsManager.WIDGET_TYPE_JITSI)));
     }
+
     /**
      * Check user's power for widgets management in a room.
      *
@@ -236,10 +238,10 @@ public class WidgetsManager {
     public WidgetError checkWidgetPermission(MXSession session, Room room) {
         WidgetError error = null;
 
-        if ((null != room) && (null != room.getLiveState()) && (null != room.getLiveState().getPowerLevels())) {
-            int oneSelfPowerLevel = room.getLiveState().getPowerLevels().getUserPowerLevel(session.getMyUserId());
+        if ((null != room) && (null != room.getState()) && (null != room.getState().getPowerLevels())) {
+            int oneSelfPowerLevel = room.getState().getPowerLevels().getUserPowerLevel(session.getMyUserId());
 
-            if (oneSelfPowerLevel < room.getLiveState().getPowerLevels().state_default) {
+            if (oneSelfPowerLevel < room.getState().getPowerLevels().state_default) {
                 error = new WidgetError(WidgetError.WIDGET_NOT_ENOUGH_POWER_ERROR_CODE, VectorApp.getInstance().getString(R.string.widget_no_power_to_manage));
             }
         }
@@ -421,7 +423,7 @@ public class WidgetsManager {
                 try {
                     listener.onWidgetUpdate(widget);
                 } catch (Exception e) {
-                    Log.e(LOG_TAG, "## onWidgetUpdate failed: " + e.getMessage());
+                    Log.e(LOG_TAG, "## onWidgetUpdate failed: " + e.getMessage(), e);
                 }
             }
         }
@@ -447,7 +449,7 @@ public class WidgetsManager {
             try {
                 widget = new Widget(session, event);
             } catch (Exception e) {
-                Log.e(LOG_TAG, "## onLiveEvent () : widget creation failed " + e.getMessage());
+                Log.e(LOG_TAG, "## onLiveEvent () : widget creation failed " + e.getMessage(), e);
             }
 
             if (null != widget) {
@@ -456,7 +458,7 @@ public class WidgetsManager {
                     try {
                         mPendingWidgetCreationCallbacks.get(callbackKey).onSuccess(widget);
                     } catch (Exception e) {
-                        Log.e(LOG_TAG, "## onLiveEvent() : get(callbackKey).onSuccess failed " + e.getMessage());
+                        Log.e(LOG_TAG, "## onLiveEvent() : get(callbackKey).onSuccess failed " + e.getMessage(), e);
                     }
                 }
 
@@ -469,7 +471,7 @@ public class WidgetsManager {
                         mPendingWidgetCreationCallbacks.get(callbackKey).onMatrixError(new WidgetError(WidgetError.WIDGET_CREATION_FAILED_ERROR_CODE,
                                 VectorApp.getInstance().getString(R.string.widget_creation_failure)));
                     } catch (Exception e) {
-                        Log.e(LOG_TAG, "## onLiveEvent() : get(callbackKey).onMatrixError failed " + e.getMessage());
+                        Log.e(LOG_TAG, "## onLiveEvent() : get(callbackKey).onMatrixError failed " + e.getMessage(), e);
                     }
                 }
             }
@@ -609,5 +611,20 @@ public class WidgetsManager {
                 }
             });
         }
+    }
+
+    /**
+     * Clear the scalar token of this user, to force a token renewal
+     *
+     * @param context Android context
+     * @param session current session, to retrieve the current user
+     */
+    public static void clearScalarToken(Context context, final MXSession session) {
+        final String preferenceKey = SCALAR_TOKEN_PREFERENCE_KEY + session.getMyUserId();
+
+        PreferenceManager.getDefaultSharedPreferences(context)
+                .edit()
+                .remove(preferenceKey)
+                .apply();
     }
 }

@@ -88,33 +88,6 @@ public class VectorUtils {
     public static final int TAKE_IMAGE = 1;
 
     //==============================================================================================================
-    // permalink methods
-    //==============================================================================================================
-
-    /**
-     * Provides a permalink for a room id and an eventId.
-     * The eventId is optional.
-     *
-     * @param roomIdOrAlias the room id or alias.
-     * @param eventId       the event id (optional)
-     * @return the permalink
-     */
-    public static String getPermalink(String roomIdOrAlias, String eventId) {
-        if (TextUtils.isEmpty(roomIdOrAlias)) {
-            return null;
-        }
-
-        String link = "https://matrix.to/#/" + roomIdOrAlias;
-
-        if (!TextUtils.isEmpty(eventId)) {
-            link += "/" + eventId;
-        }
-
-        // the $ character is not as a part of an url so escape it.
-        return link.replace("$", "%24");
-    }
-
-    //==============================================================================================================
     // Clipboard helper
     //==============================================================================================================
 
@@ -175,9 +148,9 @@ public class VectorUtils {
             List<RoomMember> roomMembersList = new ArrayList<>(roomMembers);
 
             if (TextUtils.equals(roomMembersList.get(0).getUserId(), session.getMyUserId())) {
-                return room.getLiveState().getMemberName(roomMembersList.get(1).getUserId());
+                return room.getState().getMemberName(roomMembersList.get(1).getUserId());
             } else {
-                return room.getLiveState().getMemberName(roomMembersList.get(0).getUserId());
+                return room.getState().getMemberName(roomMembersList.get(0).getUserId());
             }
         } else {
             return getRoomDisplayName(context, session, room);
@@ -204,7 +177,7 @@ public class VectorUtils {
             // https://github.com/matrix-org/matrix-js-sdk/blob/develop/lib/models/room.js#L617
             // calculateRoomName(room, userId)
 
-            RoomState roomState = room.getLiveState();
+            RoomState roomState = room.getState();
 
             if (!TextUtils.isEmpty(roomState.name)) {
                 return roomState.name;
@@ -283,7 +256,7 @@ public class VectorUtils {
 
             return displayName;
         } catch (Exception e) {
-            Log.e(LOG_TAG, "## getRoomDisplayName() failed " + e.getMessage());
+            Log.e(LOG_TAG, "## getRoomDisplayName() failed " + e.getMessage(), e);
         }
 
         return room.getRoomId();
@@ -737,7 +710,7 @@ public class VectorUtils {
                     try {
                         mMainAboutDialog.dismiss();
                     } catch (Exception e) {
-                        Log.e(LOG_TAG, "## displayThirdPartyLicenses() : " + e.getMessage());
+                        Log.e(LOG_TAG, "## displayThirdPartyLicenses() : " + e.getMessage(), e);
                     }
                 }
                 mMainAboutDialog = null;
@@ -875,7 +848,7 @@ public class VectorUtils {
 
                     return thumbnailUri;
                 } catch (Exception e) {
-                    Log.e(LOG_TAG, "## getThumbnailUriFromIntent failed " + e.getMessage());
+                    Log.e(LOG_TAG, "## getThumbnailUriFromIntent failed " + e.getMessage(), e);
                 }
             }
         }
@@ -966,14 +939,14 @@ public class VectorUtils {
                         try {
                             refreshCallback.onSuccess(null);
                         } catch (Exception e) {
-                            Log.e(LOG_TAG, "getUserOnlineStatus refreshCallback failed");
+                            Log.e(LOG_TAG, "getUserOnlineStatus refreshCallback failed", e);
                         }
                     }
                 }
 
                 @Override
                 public void onNetworkError(Exception e) {
-                    Log.e(LOG_TAG, "getUserOnlineStatus onNetworkError " + e.getLocalizedMessage());
+                    Log.e(LOG_TAG, "getUserOnlineStatus onNetworkError " + e.getLocalizedMessage(), e);
                 }
 
                 @Override
@@ -983,7 +956,7 @@ public class VectorUtils {
 
                 @Override
                 public void onUnexpectedError(Exception e) {
-                    Log.e(LOG_TAG, "getUserOnlineStatus onUnexpectedError " + e.getLocalizedMessage());
+                    Log.e(LOG_TAG, "getUserOnlineStatus onUnexpectedError " + e.getLocalizedMessage(), e);
                 }
             });
         }
