@@ -412,7 +412,7 @@
 
     <string name="room_participants_invite_prompt_msg">"Are you sure you want to invite %s to this chat?"</string>
     <string name="room_participants_kick_prompt_msg">Are you sure that you want to kick this user from this chat?</string>
-    <string name="room_participants_ban_prompt_msg">Are you sure that you want to ban this user from this chat?</string>
+    <string name="room_participants_ban_prompt_msg">Are you sure that you want to ban this user from this chat?\n\nNote that this action will restart the app and it may take some time.</string>
 
     <!-- invitation -->
     <string name="people_search_invite_by_id"><u>Invite by ID</u></string>
