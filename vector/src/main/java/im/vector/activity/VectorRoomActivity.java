@@ -1430,6 +1430,7 @@ public class VectorRoomActivity extends MXCActionBarActivity implements
     public boolean onPrepareOptionsMenu(Menu menu) {
         // the application is in a weird state
         // GA : mSession is null, mRoom is null
+        // This is the case in the room preview for public rooms
         if (CommonActivityUtils.shouldRestartApp(this) || null == mSession || null == mRoom) {
             return true;
         }
