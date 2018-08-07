@@ -16,6 +16,7 @@ Improvements:
  - Improve the display of the sources of the message in the dialog (#2348)
  - Improve the display of the buttons and the reason in the room preview (#2352)
  - In the flair section on settings, notify the user when he has no flair (#2430)
+ - Improve GDPR consent webview management (#2491)
 
 Other changes:
  - Remove dependency to `android-gif-drawable` lib and use Glide to animate logo on Splashscreen (#2421)
