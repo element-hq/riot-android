@@ -75,7 +75,7 @@ public class VectorAutoCompleteTextView extends AppCompatMultiAutoCompleteTextVi
     // add a colon when the inserted text is the first item of the string
     private boolean mAddColonOnFirstItem;
 
-    private AutoCompletionMode mAutoCompletionMode = AutoCompletionMode.USER_MODE;
+    private AutoCompletionMode mAutoCompletionMode;
 
     public VectorAutoCompleteTextView(Context context) {
         super(context, null);
@@ -107,7 +107,7 @@ public class VectorAutoCompleteTextView extends AppCompatMultiAutoCompleteTextVi
                 break;
             case COMMAND_MODE:
                 setAdapter(mAdapterCommand);
-                setThreshold(0);
+                setThreshold(1);
                 break;
         }
     }
@@ -199,6 +199,8 @@ public class VectorAutoCompleteTextView extends AppCompatMultiAutoCompleteTextVi
         if (null != users) {
             mAdapterUser = new AutoCompletedUserAdapter(getContext(), R.layout.item_user_auto_complete, session, users);
         }
+
+        updateAutoCompletionMode();
     }
 
     /**
