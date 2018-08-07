@@ -2364,7 +2364,7 @@ public class VectorRoomActivity extends MXCActionBarActivity implements
             if (TextUtils.equals(mSession.getMyUser().displayname, text)) {
                 // current user
                 if (TextUtils.isEmpty(mEditText.getText())) {
-                    mEditText.setText(SlashCommandsParser.SlashCommand.EMOTE.getCommand() + " ");
+                    mEditText.append(SlashCommandsParser.SlashCommand.EMOTE.getCommand() + " ");
                     mEditText.setSelection(mEditText.getText().length());
                     vibrate = true;
                 }
