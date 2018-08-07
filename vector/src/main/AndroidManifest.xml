@@ -391,7 +391,7 @@
             android:label="@string/settings_notification_privacy"
             android:theme="@style/CountryPickerTheme" />
         <activity
-            android:name=".activity.SimpleWebViewActivity"
+            android:name=".activity.VectorWebViewActivity"
             android:theme="@style/AppTheme.NoActionBar" />
 
         <activity

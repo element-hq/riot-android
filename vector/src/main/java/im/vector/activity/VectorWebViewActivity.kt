@@ -22,11 +22,18 @@ import android.os.Build
 import android.support.annotation.StringRes
 import android.webkit.WebChromeClient
 import android.webkit.WebView
-import android.webkit.WebViewClient
 import butterknife.BindView
 import im.vector.R
+import im.vector.webview.VectorWebViewClient
+import im.vector.webview.WebViewMode
 
-class SimpleWebViewActivity : RiotAppCompatActivity() {
+/**
+ * This class is responsible for managing a WebView
+ * It does also have a loading view and a toolbar
+ * It relies on the VectorWebViewClient
+ * This class shouldn't be extended. To add new behaviors, you might create a new WebViewMode and a new WebViewEventListener
+ */
+class VectorWebViewActivity : RiotAppCompatActivity() {
 
     /* ==========================================================================================
      * UI
@@ -35,35 +42,37 @@ class SimpleWebViewActivity : RiotAppCompatActivity() {
     @BindView(R.id.simple_webview)
     lateinit var webView: WebView
 
-    /* ==========================================================================================
+
+    /* =====================================================================@=====================
      * Life cycle
      * ========================================================================================== */
 
     override fun getOtherThemes() = Pair(R.style.AppTheme_NoActionBar_Dark, R.style.AppTheme_NoActionBar_Black)
 
-    override fun getLayoutRes() = R.layout.activity_simple_web_view
+    override fun getLayoutRes() = R.layout.activity_vector_web_view
 
     override fun initUiAndData() {
         configureToolbar()
+        waitingView = findViewById(R.id.simple_webview_loader)
 
-        webView.settings.let {
+        webView.settings.apply {
             // Enable Javascript
-            it.javaScriptEnabled = true
+            javaScriptEnabled = true
 
             // Use WideViewport and Zoom out if there is no viewport defined
-            it.useWideViewPort = true
-            it.loadWithOverviewMode = true
+            useWideViewPort = true
+            loadWithOverviewMode = true
 
             // Enable pinch to zoom without the zoom buttons
-            it.builtInZoomControls = true
+            builtInZoomControls = true
 
             // Allow use of Local Storage
-            it.domStorageEnabled = true
+            domStorageEnabled = true
 
-            it.allowFileAccessFromFileURLs = true
-            it.allowUniversalAccessFromFileURLs = true
+            allowFileAccessFromFileURLs = true
+            allowUniversalAccessFromFileURLs = true
 
-            it.displayZoomControls = false
+            displayZoomControls = false
         }
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
@@ -72,15 +81,14 @@ class SimpleWebViewActivity : RiotAppCompatActivity() {
         }
 
         val url = intent.extras.getString(EXTRA_URL)
-
         val titleRes = intent.extras.getInt(EXTRA_TITLE_RES_ID, INVALID_RES_ID)
-
         if (titleRes != INVALID_RES_ID) {
             setTitle(titleRes)
         }
 
-        webView.webViewClient = WebViewClient()
-
+        val webViewMode = intent.extras.getSerializable(EXTRA_MODE) as WebViewMode
+        val eventListener = webViewMode.eventListener(this)
+        webView.webViewClient = VectorWebViewClient(eventListener)
         webView.webChromeClient = object : WebChromeClient() {
             override fun onReceivedTitle(view: WebView, title: String) {
                 if (titleRes == INVALID_RES_ID) {
@@ -88,7 +96,6 @@ class SimpleWebViewActivity : RiotAppCompatActivity() {
                 }
             }
         }
-
         webView.loadUrl(url)
     }
 
@@ -111,16 +118,22 @@ class SimpleWebViewActivity : RiotAppCompatActivity() {
     companion object {
         private const val EXTRA_URL = "EXTRA_URL"
         private const val EXTRA_TITLE_RES_ID = "EXTRA_TITLE_RES_ID"
+        private const val EXTRA_MODE = "EXTRA_MODE"
 
         // TODO Move this somewhere else
         private const val INVALID_RES_ID = -1
 
-        fun getIntent(context: Context, url: String, @StringRes titleRes: Int = INVALID_RES_ID): Intent {
-            return Intent(context, SimpleWebViewActivity::class.java)
+        fun getIntent(context: Context,
+                      url: String,
+                      @StringRes titleRes: Int = INVALID_RES_ID,
+                      mode: WebViewMode = WebViewMode.DEFAULT): Intent {
+            return Intent(context, VectorWebViewActivity::class.java)
                     .apply {
                         putExtra(EXTRA_URL, url)
                         putExtra(EXTRA_TITLE_RES_ID, titleRes)
+                        putExtra(EXTRA_MODE, mode)
                     }
         }
     }
 }
+
