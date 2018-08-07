@@ -380,7 +380,9 @@ Biztos vagy benne?</string>
     <string name="room_details_people_present_group_name">CSATLAKOZOTT</string>
 
     <string name="room_event_action_report_prompt_reason">A tartalom bejelentésének oka</string>
-    <string name="room_event_action_report_prompt_ignore_user">El akarod rejteni a felhasználó összes üzenetét?</string>
+    <string name="room_event_action_report_prompt_ignore_user">"El akarod rejteni a felhasználó összes üzenetét?
+
+Vedd figyelembe, hogy az alkalmazás újraindul  ami sok időt vehet igénybe."</string>
     <string name="room_event_action_cancel_upload">Feltöltés megszakítása</string>
     <string name="room_event_action_cancel_download">Letöltés megszakítása</string>
 
@@ -502,7 +504,9 @@ A folytatáshoz írd be a jelszavad.</string>
     <string name="settings_confirm_password">ellenőrizd a jelszavad</string>
     <string name="settings_fail_to_update_password">Jelszó frissítése sikertelen</string>
     <string name="settings_password_updated">A jelszavad sikeresen frissítésre került</string>
-    <string name="settings_unignore_user">Az összes üzenet mutatása %s -tól/-től?</string>
+    <string name="settings_unignore_user">"Az összes üzenet mutatása %s -tól/-től?
+
+Vedd figyelembe, hogy az alkalmazás újraindul  ami sok időt vehet igénybe."</string>
 
     <string name="settings_delete_notification_targets_confirmation">Biztos vagy benne hogy el akarod távolítani ezt az értesítés célt?</string>
 
@@ -641,8 +645,8 @@ A titkosított üzenetek nem fognak látszódni azokon a klienseken ahol a titko
 
     <string name="encryption_information_verify_device">Eszköz hitelesítése</string>
     <string name="encryption_information_verify_device_warning">" Hogy ellenőrizni lehessen, hogy ez az eszköz megbízható, kérlek használj más kommunikáció módot a tulajdonossal (pl.: személyesen vagy telefonon keresztül) és kérdezd meg hogy a kulcs amit lát a Felhasználói Beállítások alatt megegyezik-e az alábbi kulccsal:"</string>
-    <string name="encryption_information_verify_device_warning2">Ha egyezik, nyomja meg a hitelesítés gombot. Ha nem, akkor valaki más elfogta ezt az eszközt és nagy valószínűséggel a blokkolás gombot kéne megnyomnia.
-
+    <string name="encryption_information_verify_device_warning2">Ha egyezik, nyomja meg a hitelesítés gombot.
+Ha nem, akkor valaki más elfogta ezt az eszközt és érdemes lenne tiltólistára tenni.
 A jövőben ez a hitelesítési mód kényelmesebbé lesz téve.</string>
     <string name="encryption_information_verify_key_match">Hitelesítem, hogy a kulcsok egyeznek</string>
 
@@ -979,5 +983,35 @@ Matrixban az üzenetek láthatósága hasonlít az e-mailre. Az üzenet törlés
     <string name="settings_labs_enable_send_voice">Hang üzenet küldése (külső alkalmazásra van szükség a hang üzenet felvételéhez)</string>
 
     <string name="error_empty_field_your_password">Kérlek add meg a jelszavad.</string>
+
+<string name="send_bug_report_description_in_english">Kérlek, ha lehetséges a leírást angolul írd.</string>
+    <string name="room_participants_action_unignore_prompt">Mutassuk ennek a felhasználónak minden üzenetét?
+
+Vedd figyelembe, hogy az alkalmazás újraindul ami sok időt vehet igénybe.</string>
+    <string name="room_message_placeholder_reply_to_encrypted">Titkosított válasz küldése…</string>
+    <string name="room_message_placeholder_reply_to_not_encrypted">Válasz küldése (titkosítás nélkül)…</string>
+    <string name="settings_preview_media_before_sending">Média előnézete küldés előtt</string>
+
+    <string name="settings_without_flair">Jelenleg egy közösségnek sem vagy tagja.</string>
+
+    <string name="settings_labs_keyboard_options_to_send_message">Üzenet küldéshez használd a billentyűzet ENTER gombját</string>
+    <string name="command_description_emote">Események megjelenítése</string>
+    <string name="command_description_ban_user">Megadott azonosítójú felhasználó kitiltása</string>
+    <string name="command_description_unban_user">Megadott azonosítójú felhasználó visszaengedése</string>
+    <string name="command_description_op_user">Felhasználó hozzáférési szintjének meghatározása</string>
+    <string name="command_description_deop_user">Meghatározott azonosítójú felhasználó hozzáférési szintjének visszaállítása</string>
+    <string name="command_description_invite_user">Megadott azonosítójú felhasználó meghívása a szobába</string>
+    <string name="command_description_join_room">Megadott becenévvel csatlakozik a szobához</string>
+    <string name="command_description_part_room">Kilépés a szobából</string>
+    <string name="command_description_topic">A szoba témájának beállítása</string>
+    <string name="command_description_kick_user">Megadott azonosítójú felhasználó kirúgása</string>
+    <string name="command_description_nick">Becenév megváltoztatása</string>
+    <string name="command_description_markdown">Markdown ki-,bekapcsolása</string>
+    <string name="command_description_clear_scalar_token">Matrix-kisalkalmazás-token törlése</string>
+
+    <string name="room_tombstone_versioned_description">Ez a szoba le lett cserélve és már nem aktív</string>
+    <string name="room_tombstone_continuation_link">A beszélgetés itt folytatódik</string>
+    <string name="room_tombstone_continuation_description">Ez a szoba a folytatása egy másik beszélgetésnek</string>
+    <string name="room_tombstone_predecessor_link">Régebbi üzenetek megjelenítéséhez kattints ide</string>
 
 </resources>
