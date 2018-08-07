@@ -1051,5 +1051,8 @@ Die Sichtbarkeit deiner Nachrichten ist ähnlich zu E-Mails: Wenn wir deine Nach
     <string name="command_description_clear_scalar_token">Setzt Matrix-App-Token zurück</string>
 
     <string name="room_tombstone_versioned_description">Dieser Raum wurde ersetzt und ist nicht länger aktiv</string>
-    <string name="room_tombstone_continuation_link">Das Gespräch wird hier fortgesetzt</string>
-    </resources>
+    <string name="room_tombstone_continuation_link">Die Konversation wird hier fortgesetzt</string>
+    <string name="room_tombstone_continuation_description">Dieser Raum ist die Fortsetzung einer anderen Konversation</string>
+    <string name="room_tombstone_predecessor_link">Klicke hier um die älteren Nachrichten zu sehen</string>
+
+</resources>
