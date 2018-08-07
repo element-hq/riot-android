@@ -292,7 +292,7 @@
 
     <!-- medias slider string -->
     <string name="media_slider_saved">Desat</string>
-    <string name="media_slider_saved_message">Desa a les baixades</string>
+    <string name="media_slider_saved_message">Desar a baixades?</string>
     <string name="yes">SÍ</string>
     <string name="no">NO</string>
     <string name="_continue">Continua</string>
@@ -465,7 +465,7 @@
     <!-- home sliding menu -->
     <string name="room_sliding_menu_messages">Missatges</string>
     <string name="room_sliding_menu_settings">Configuració</string>
-    <string name="room_sliding_menu_version">Versió </string>
+    <string name="room_sliding_menu_version">Versió</string>
     <string name="room_sliding_menu_term_and_conditions">Termes i condicions</string>
     <string name="room_sliding_menu_third_party_notices">Avisos de terceres parts</string>
     <string name="room_sliding_menu_copyright">Copyright</string>
@@ -916,4 +916,22 @@
     <string name="title_activity_choose_sticker">Envia un adhesiu</string>
 
     <string name="option_send_sticker">Envia un adhesiu</string>
+    <string name="dialog_title_third_party_licences">Llicències de tercers</string>
+
+    <string name="download">Descarregar</string>
+    <string name="speak">Parlar</string>
+    <string name="clear">Netejar</string>
+    <string name="option_send_voice">Enviar veu</string>
+
+    <string name="go_on_with">seguir amb…</string>
+    <string name="error_no_external_application_found">Ho sento, no s\'ha trobat cap aplicació externa per completar l\'acció.</string>
+
+    <string name="e2e_re_request_encryption_key"><u>Tornar a demanar les claus d\'encriptació</u> als teus altres dispositius.</string>
+
+    <string name="e2e_re_request_encryption_key_sent">Petició de clau enviada.</string>
+
+    <string name="e2e_re_request_encryption_key_dialog_title">Sol·licitud enviada</string>
+    <string name="e2e_re_request_encryption_key_dialog_content">Si us plau, engega Riot a un altre dispositiu que pugui desencriptar el missatge de manera que pugui enviar la clau a aquest dispositiu.</string>
+
+    <string name="settings_notification_privacy_normal">Normal</string>
     </resources>

@@ -246,7 +246,7 @@ Baimendu sarbidea hurrengo laster-leihoan deia egin ahal izateko.</string>
     <string name="permissions_action_not_performed_missing_permissions">Ez da ekintza burutu baimenak falta direlako</string>
 
     <string name="media_slider_saved">Gordeta</string>
-    <string name="media_slider_saved_message">Gorde deskargetan</string>
+    <string name="media_slider_saved_message">Gorde deskargetan?</string>
     <string name="yes">BAI</string>
     <string name="no">EZ</string>
     <string name="_continue">Jarraitu</string>

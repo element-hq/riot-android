@@ -101,7 +101,7 @@ Cliquez sur exporter pour les sauvegarder avant de vous déconnecter.</string>
     <string name="hs_url">URL du serveur d\'accueil</string>
     <string name="identity_url">URL du serveur d\'identité</string>
     <string name="user">utilisateur</string>
-    <string name="users">utilisateurs</string>
+    <string name="users">participants</string>
     <string name="search">Rechercher</string>
 
     <string name="start_new_chat">Nouvelle discussion</string>
@@ -178,7 +178,7 @@ Cliquez sur exporter pour les sauvegarder avant de vous déconnecter.</string>
     <string name="media_picker_cannot_record_video">Impossible d\'enregistrer une vidéo</string>
 
     <string name="media_slider_saved">Enregistré</string>
-    <string name="media_slider_saved_message">Enregistrer dans les téléchargements</string>
+    <string name="media_slider_saved_message">Enregistrer dans les téléchargements ?</string>
     <string name="yes">OUI</string>
     <string name="no">NON</string>
     <string name="_continue">Continuer</string>
@@ -451,8 +451,8 @@ Cliquez sur exporter pour les sauvegarder avant de vous déconnecter.</string>
     <string name="historical_placeholder">Rechercher dans l\'historique</string>
 
 <plurals name="public_room_nb_users">
-	<item quantity="one">%d utilisateur</item>
-	<item quantity="other">%d utilisateurs</item>
+	<item quantity="one">%d participant</item>
+	<item quantity="other">%d participants</item>
 </plurals>
 
     <string name="send_bug_report_description">Veuillez décrire l\'erreur. Qu\'avez-vous fait ? Quel était le comportement attendu ? Que s\'est-il réellement passé ?</string>
@@ -906,7 +906,7 @@ Appareils inconnus :</string>
 </plurals>
 
     <string name="open_chat_header">Développer l\'entête</string>
-    <string name="receipt_avatar">Réception de l\'avatar</string>
+    <string name="receipt_avatar">Avatar de réception</string>
     <string name="settings_notification_privacy">Confidentialité des notifications</string>
     <string name="settings_notification_privacy_warning">Riot.im fonctionne en arrière-plan pour que le contenu du message de notification reste privé. Vous pouvez désactiver cette option pour réduire l\'utilisation de la batterie.</string>
     <string name="settings_notification_privacy_normal">Normal</string>
@@ -926,7 +926,7 @@ Appareils inconnus :</string>
     <string name="startup_notification_privacy_button_grant">Donner la permission</string>
     <string name="startup_notification_privacy_button_other">Choisir une autre option</string>
 
-    <string name="notice_avatar">Avatar de l\'annonce</string>
+    <string name="notice_avatar">Avatar d’avertissement</string>
     <string name="title_activity_choose_sticker">Envoyer un sticker</string>
 
     <string name="option_send_sticker">Envoyer un sticker</string>
