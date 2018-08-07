@@ -412,7 +412,7 @@
 
     <string name="room_participants_invite_prompt_msg">"Are you sure you want to invite %s to this chat?"</string>
     <string name="room_participants_kick_prompt_msg">Are you sure that you want to kick this user from this chat?</string>
-    <string name="room_participants_ban_prompt_msg">Are you sure that you want to ban this user from this chat?</string>
+    <string name="room_participants_ban_prompt_msg">Are you sure that you want to ban this user from this chat?\n\nNote that this action will restart the app and it may take some time.</string>
 
     <!-- invitation -->
     <string name="people_search_invite_by_id"><u>Invite by ID</u></string>
@@ -936,6 +936,19 @@
     <!-- slash commands -->
     <string name="command_error">Command error</string>
     <string name="unrecognized_command">Unrecognized command: %s</string>
+    <string name="command_description_emote">Displays action</string>
+    <string name="command_description_ban_user">Bans user with given id</string>
+    <string name="command_description_unban_user">Unbans user with given id</string>
+    <string name="command_description_op_user">Define the power level of a user</string>
+    <string name="command_description_deop_user">Deops user with given id</string>
+    <string name="command_description_invite_user">Invites user with given id to current room</string>
+    <string name="command_description_join_room">Joins room with given alias</string>
+    <string name="command_description_part_room">Leave room</string>
+    <string name="command_description_topic">Set the room topic</string>
+    <string name="command_description_kick_user">Kicks user with given id</string>
+    <string name="command_description_nick">Changes your display nickname</string>
+    <string name="command_description_markdown">On/Off markdown</string>
+    <string name="command_description_clear_scalar_token">To fix Matrix Apps management</string>
 
     <!-- notification statuses -->
     <string name="notification_off">Off</string>

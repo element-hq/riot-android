@@ -598,18 +598,6 @@ class VectorSettingsPreferencesFragment : PreferenceFragment(), SharedPreference
             }
         }
 
-        // Others
-
-        (findPreference(PreferencesManager.SETTINGS_SEND_MESSAGE_ENTER_KEY) as CheckBoxPreference).let {
-            it.isChecked = PreferencesManager.useEnterKeyToSendMessage(appContext)
-
-            it.onPreferenceChangeListener = Preference.OnPreferenceChangeListener { preference, newValue ->
-                PreferencesManager.setUseEnterKeyToSendMessage(appContext, newValue as Boolean)
-                true
-            }
-        }
-
-
         // preference to start the App info screen, to facilitate App permissions access
         findPreference(APP_INFO_LINK_PREFERENCE_KEY)
                 .onPreferenceClickListener = Preference.OnPreferenceClickListener {
@@ -2601,8 +2589,17 @@ class VectorSettingsPreferencesFragment : PreferenceFragment(), SharedPreference
      * It can be any mobile device, as any browser.
      */
     private fun refreshGroupFlairsList() {
+        // display a spinner while refreshing
+        if (0 == mGroupsFlairCategory.preferenceCount) {
+            val preference = ProgressBarPreference(activity)
+            mGroupsFlairCategory.addPreference(preference)
+        }
+
         mSession.groupsManager.getUserPublicisedGroups(mSession.myUserId, true, object : ApiCallback<Set<String>> {
             override fun onSuccess(publicisedGroups: Set<String>) {
+                // clear everything
+                mGroupsFlairCategory.removeAll()
+
                 if (publicisedGroups.isEmpty()){
                     val vectorGroupPreference = VectorCustomActionEditTextPreference(activity)
                     vectorGroupPreference.title = resources.getString(R.string.settings_without_flair)
@@ -2644,9 +2641,6 @@ class VectorSettingsPreferencesFragment : PreferenceFragment(), SharedPreference
 
             var prefIndex = 0
             mPublicisedGroups = publicisedGroups.toMutableSet()
-
-            // clear everything
-            mGroupsFlairCategory.removeAll()
 
             for (group in joinedGroups) {
                 val vectorGroupPreference = VectorGroupPreference(activity)

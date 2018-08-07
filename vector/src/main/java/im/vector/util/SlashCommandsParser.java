@@ -17,6 +17,7 @@
 
 package im.vector.util;
 
+import android.support.annotation.StringRes;
 import android.support.v7.app.AlertDialog;
 import android.text.TextUtils;
 import android.widget.Toast;
@@ -44,60 +45,61 @@ public class SlashCommandsParser {
 
     private static final String LOG_TAG = SlashCommandsParser.class.getSimpleName();
 
-    // defines the command line operations
-    // the user can write theses messages to perform some room events
-    public static final String CMD_EMOTE = "/me";
+    public enum SlashCommand {
 
-    // <user-id> [reason]
-    private static final String CMD_BAN_USER = "/ban";
+        // defines the command line operations
+        // the user can write theses messages to perform some actions
+        // the list will be displayed in this order
+        EMOTE("/me", "<message>", R.string.command_description_emote),
+        BAN_USER("/ban", "<user-id>", R.string.command_description_ban_user),
+        UNBAN_USER ("/unban", "<user-id>", R.string.command_description_unban_user),
+        SET_USER_POWER_LEVEL ("/op", "<user-id> [<power-level>]",R.string.command_description_op_user),
+        RESET_USER_POWER_LEVEL ("/deop", "<user-id>", R.string.command_description_deop_user),
+        INVITE ("/invite", "<user-id>", R.string.command_description_invite_user),
+        JOIN_ROOM ("/join", "<room-alias>", R.string.command_description_join_room),
+        PART ("/part", "<room-alias>", R.string.command_description_part_room),
+        TOPIC ("/topic", "<topic>", R.string.command_description_topic),
+        KICK_USER ("/kick", "<user-id>", R.string.command_description_kick_user),
+        CHANGE_DISPLAY_NAME ("/nick", "<display-name>", R.string.command_description_nick),
+        MARKDOWN ("/markdown", "", R.string.command_description_markdown),
+        CLEAR_SCALAR_TOKEN ("/clear_scalar_token", "", R.string.command_description_clear_scalar_token);
 
-    // <user-id>'
-    private static final String CMD_UNBAN_USER = "/unban";
+        private final String command;
+        private String parameter;
 
-    // <user-id> [<power-level>]
-    private static final String CMD_SET_USER_POWER_LEVEL = "/op";
+        @StringRes
+        private int description;
 
-    // <user-id>
-    private static final String CMD_RESET_USER_POWER_LEVEL = "/deop";
+        private  static final Map<String, SlashCommand> lookup = new HashMap<String, SlashCommand>();
 
-    // <user-id>
-    private static final String CMD_INVITE = "/invite";
+        static {
+            for (SlashCommand slashCommand : SlashCommand.values()) {
+                lookup.put(slashCommand.getCommand(), slashCommand);
+            }
+        }
 
-    // <room-alias>
-    private static final String CMD_JOIN_ROOM = "/join";
+        SlashCommand(String command, String parameter, @StringRes int description) {
+            this.command = command;
+            this.parameter = parameter;
+            this.description = description;
+        }
 
-    // <room-alias>
-    private static final String CMD_PART = "/part";
+        public static SlashCommand get(String command) {
+            return lookup.get(command);
+        }
 
-    // <topic>
-    private static final String CMD_TOPIC = "/topic";
+        public String getCommand() {
+            return command;
+        }
 
-    // <user-id> [reason]
-    private static final String CMD_KICK_USER = "/kick";
+        public String getParam() {
+            return parameter;
+        }
 
-    // <display-name>
-    private static final String CMD_CHANGE_DISPLAY_NAME = "/nick";
-
-    // <query>
-    private static final String CMD_DDG = "/ddg";
-
-    // <color1> [<color2>]
-    private static final String CMD_TINT = "/tint";
-
-    // <user-id> <device-id> <device-signing-key>
-    private static final String CMD_VERIFY = "/verify";
-
-    // <<user-id>
-    private static final String CMD_IGNORE = "/ignore";
-
-    // <<user-id>
-    private static final String CMD_UNIGNORE = "/unignore";
-
-    // on / off
-    private static final String CMD_MARKDOWN = "/markdown";
-
-    // clear scalar token (waiting for correct 403 management)
-    private static final String CMD_CLEAR_SCALAR_TOKEN = "/clear_scalar_token";
+        public int getDescription() {
+            return description;
+        }
+    }
 
     /**
      * check if the text message is an IRC command.
@@ -168,39 +170,39 @@ public class SlashCommandsParser {
 
             String firstPart = messageParts[0];
 
-            if (TextUtils.equals(firstPart, CMD_CHANGE_DISPLAY_NAME)) {
+            if (TextUtils.equals(firstPart, SlashCommand.CHANGE_DISPLAY_NAME.getCommand())) {
                 isIRCCmd = true;
 
-                String newDisplayname = textMessage.substring(CMD_CHANGE_DISPLAY_NAME.length()).trim();
+                String newDisplayname = textMessage.substring(SlashCommand.CHANGE_DISPLAY_NAME.getCommand().length()).trim();
 
                 if (newDisplayname.length() > 0) {
                     MyUser myUser = session.getMyUser();
 
                     myUser.updateDisplayName(newDisplayname, callback);
                 }
-            } else if (TextUtils.equals(firstPart, CMD_TOPIC)) {
+            } else if (TextUtils.equals(firstPart, SlashCommand.TOPIC.getCommand())) {
                 isIRCCmd = true;
 
-                String newTopîc = textMessage.substring(CMD_TOPIC.length()).trim();
+                String newTopîc = textMessage.substring(SlashCommand.TOPIC.getCommand().length()).trim();
 
                 if (newTopîc.length() > 0) {
                     room.updateTopic(newTopîc, callback);
                 }
-            } else if (TextUtils.equals(firstPart, CMD_EMOTE)) {
+            } else if (TextUtils.equals(firstPart, SlashCommand.EMOTE.getCommand())) {
                 isIRCCmd = true;
 
-                String newMessage = textMessage.substring(CMD_EMOTE.length()).trim();
+                String newMessage = textMessage.substring(SlashCommand.EMOTE.getCommand().length()).trim();
 
                 if (textMessage.length() > 0) {
-                    if ((null != formattedBody) && formattedBody.length() > CMD_EMOTE.length()) {
-                        activity.sendEmote(newMessage, formattedBody.substring(CMD_EMOTE.length()), format);
+                    if ((null != formattedBody) && formattedBody.length() > SlashCommand.EMOTE.getCommand().length()) {
+                        activity.sendEmote(newMessage, formattedBody.substring(SlashCommand.EMOTE.getCommand().length()), format);
                     } else {
                         activity.sendEmote(newMessage, formattedBody, format);
                     }
                 }
-            } else if (TextUtils.equals(firstPart, CMD_JOIN_ROOM)) {
+            } else if (TextUtils.equals(firstPart, SlashCommand.JOIN_ROOM.getCommand())) {
                 isIRCCmd = true;
-                String roomAlias = textMessage.substring(CMD_JOIN_ROOM.length()).trim();
+                String roomAlias = textMessage.substring(SlashCommand.JOIN_ROOM.getCommand().length()).trim();
 
                 if (roomAlias.length() > 0) {
                     session.joinRoom(roomAlias, new SimpleApiCallback<String>(activity) {
@@ -226,9 +228,9 @@ public class SlashCommandsParser {
                         }
                     });
                 }
-            } else if (TextUtils.equals(firstPart, CMD_PART)) {
+            } else if (TextUtils.equals(firstPart, SlashCommand.PART.getCommand())) {
                 isIRCCmd = true;
-                String roomAlias = textMessage.substring(CMD_PART.length()).trim();
+                String roomAlias = textMessage.substring(SlashCommand.PART.getCommand().length()).trim();
 
                 if (roomAlias.length() > 0) {
                     Room theRoom = null;
@@ -252,22 +254,22 @@ public class SlashCommandsParser {
                         theRoom.leave(callback);
                     }
                 }
-            } else if (TextUtils.equals(firstPart, CMD_INVITE)) {
+            } else if (TextUtils.equals(firstPart, SlashCommand.INVITE.getCommand())) {
                 isIRCCmd = true;
 
                 if (messageParts.length >= 2) {
                     room.invite(messageParts[1], callback);
                 }
-            } else if (TextUtils.equals(firstPart, CMD_KICK_USER)) {
+            } else if (TextUtils.equals(firstPart, SlashCommand.KICK_USER.getCommand())) {
                 isIRCCmd = true;
 
                 if (messageParts.length >= 2) {
                     room.kick(messageParts[1], callback);
                 }
-            } else if (TextUtils.equals(firstPart, CMD_BAN_USER)) {
+            } else if (TextUtils.equals(firstPart, SlashCommand.BAN_USER.getCommand())) {
                 isIRCCmd = true;
 
-                String params = textMessage.substring(CMD_BAN_USER.length()).trim();
+                String params = textMessage.substring(SlashCommand.BAN_USER.getCommand().length()).trim();
                 String[] paramsList = params.split(" ");
 
                 String bannedUserID = paramsList[0];
@@ -276,14 +278,14 @@ public class SlashCommandsParser {
                 if (bannedUserID.length() > 0) {
                     room.ban(bannedUserID, reason, callback);
                 }
-            } else if (TextUtils.equals(firstPart, CMD_UNBAN_USER)) {
+            } else if (TextUtils.equals(firstPart, SlashCommand.UNBAN_USER.getCommand())) {
                 isIRCCmd = true;
 
                 if (messageParts.length >= 2) {
                     room.unban(messageParts[1], callback);
                 }
 
-            } else if (TextUtils.equals(firstPart, CMD_SET_USER_POWER_LEVEL)) {
+            } else if (TextUtils.equals(firstPart, SlashCommand.SET_USER_POWER_LEVEL.getCommand())) {
                 isIRCCmd = true;
 
                 if (messageParts.length >= 3) {
@@ -298,13 +300,13 @@ public class SlashCommandsParser {
                         Log.e(LOG_TAG, "mRoom.updateUserPowerLevels " + e.getMessage(), e);
                     }
                 }
-            } else if (TextUtils.equals(firstPart, CMD_RESET_USER_POWER_LEVEL)) {
+            } else if (TextUtils.equals(firstPart, SlashCommand.RESET_USER_POWER_LEVEL.getCommand())) {
                 isIRCCmd = true;
 
                 if (messageParts.length >= 2) {
                     room.updateUserPowerLevels(messageParts[1], 0, callback);
                 }
-            } else if (TextUtils.equals(firstPart, CMD_MARKDOWN)) {
+            } else if (TextUtils.equals(firstPart, SlashCommand.MARKDOWN.getCommand())) {
                 isIRCCmd = true;
 
                 if (messageParts.length >= 2) {
@@ -314,7 +316,7 @@ public class SlashCommandsParser {
                         PreferencesManager.setMarkdownEnabled(VectorApp.getInstance(), false);
                     }
                 }
-            } else if (TextUtils.equals(firstPart, CMD_CLEAR_SCALAR_TOKEN)) {
+            } else if (TextUtils.equals(firstPart, SlashCommand.CLEAR_SCALAR_TOKEN.getCommand())) {
                 isIRCCmd = true;
 
                 WidgetsManager.clearScalarToken(activity, session);

@@ -91,8 +91,6 @@ import im.vector.preference.VectorSwitchPreference;
 import im.vector.util.ThemeUtils;
 import im.vector.util.VectorUtils;
 
-;
-
 public class VectorRoomSettingsFragment extends PreferenceFragment implements SharedPreferences.OnSharedPreferenceChangeListener {
     // internal constants values
     private static final String LOG_TAG = VectorRoomSettingsFragment.class.getSimpleName();
