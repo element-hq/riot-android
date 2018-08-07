@@ -125,7 +125,7 @@ public class VectorAutoCompleteTextView extends AppCompatMultiAutoCompleteTextVi
      */
     public void initAutoCompletion(MXSession session) {
         initAutoCompletion();
-        buildAdapter(session, session.getDataHandler().getStore().getUsers(), null);
+        buildAdapter(session, session.getDataHandler().getStore().getUsers(), getSlashCommandList());
     }
 
     /**
@@ -135,6 +135,11 @@ public class VectorAutoCompleteTextView extends AppCompatMultiAutoCompleteTextVi
      * @param room    the room
      */
     public void initAutoCompletions(@NonNull final MXSession session, @Nullable Room room) {
+        initAutoCompletion();
+        buildAdapter(session, getUsersList(session, room), getSlashCommandList());
+    }
+
+    private List<User> getUsersList(@NonNull final MXSession session, @Nullable Room room) {
         List<User> users = new ArrayList<>();
 
         if (null != room) {
@@ -148,13 +153,13 @@ public class VectorAutoCompleteTextView extends AppCompatMultiAutoCompleteTextVi
                 }
             }
         }
+        return users;
+    }
 
+    private List<SlashCommandsParser.SlashCommand> getSlashCommandList() {
         SlashCommandsParser.SlashCommand[] commandLines = SlashCommandsParser.SlashCommand.values();
         List<SlashCommandsParser.SlashCommand> commands = new ArrayList<SlashCommandsParser.SlashCommand>(Arrays.asList(commandLines));
-
-        initAutoCompletion();
-        buildAdapter(session, users, null);
-        buildAdapter(session, null, commands);
+        return commands;
     }
 
     private void initAutoCompletion() {
@@ -183,21 +188,18 @@ public class VectorAutoCompleteTextView extends AppCompatMultiAutoCompleteTextVi
     }
 
     /**
-     * Internal method to build the auto completions list of users.
+     * Internal method to build the auto completions list of users or slash commands.
      *
      * @param session        the session
      * @param users          the users list
      * @param commandLines   the commands list
      */
     private void buildAdapter(@NonNull MXSession session,
-                              @Nullable Collection<User> users,
-                              @Nullable Collection<SlashCommandsParser.SlashCommand> commandLines) {
-        // build the adapter
-        if (null == users && null != commandLines) {
-            mAdapterCommand = new AutoCompletedCommandLineAdapter(getContext(), R.layout.item_command_auto_complete, session, commandLines);
-        } else if (null != users && null == commandLines) {
-            mAdapterUser = new AutoCompletedUserAdapter(getContext(), R.layout.item_user_auto_complete, session, users);
-        }
+                              @NonNull Collection<User> users,
+                              @NonNull Collection<SlashCommandsParser.SlashCommand> commandLines) {
+        // build the adapters
+        mAdapterCommand = new AutoCompletedCommandLineAdapter(getContext(), R.layout.item_command_auto_complete, session, commandLines);
+        mAdapterUser = new AutoCompletedUserAdapter(getContext(), R.layout.item_user_auto_complete, session, users);
     }
 
     /**
@@ -310,7 +312,7 @@ public class VectorAutoCompleteTextView extends AppCompatMultiAutoCompleteTextVi
             // save the current written pattern
             mPendingFilter = currentFilter;
 
-            // wait 0.5s before displaying the popup
+            // wait 0.7s before displaying the popup
             new Handler(Looper.getMainLooper()).postDelayed(new Runnable() {
                 @Override
                 public void run() {
@@ -345,7 +347,7 @@ public class VectorAutoCompleteTextView extends AppCompatMultiAutoCompleteTextVi
                         }
                     }
                 }
-            }, 500);
+            }, 700);
         }
     }
 
