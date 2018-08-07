@@ -692,14 +692,6 @@ public class VectorRoomActivity extends MXCActionBarActivity implements
         // to be able to display an expandable header
         configureToolbar();
 
-        toolbar.setNavigationOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                setResult(RESULT_CANCELED);
-                finish();
-            }
-        });
-
         mCallId = intent.getStringExtra(EXTRA_START_CALL_ID);
         mEventId = intent.getStringExtra(EXTRA_EVENT_ID);
         mDefaultRoomName = intent.getStringExtra(EXTRA_DEFAULT_NAME);
@@ -1439,7 +1431,7 @@ public class VectorRoomActivity extends MXCActionBarActivity implements
         // the application is in a weird state
         // GA : mSession is null, mRoom is null
         if (CommonActivityUtils.shouldRestartApp(this) || null == mSession || null == mRoom) {
-            return false;
+            return true;
         }
 
         // the menu is only displayed when the current activity does not display a timeline search
