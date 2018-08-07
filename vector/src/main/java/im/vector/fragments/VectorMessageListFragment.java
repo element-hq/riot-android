@@ -788,8 +788,7 @@ public class VectorMessageListFragment extends MatrixMessageListFragment impleme
                                                 List<String> userIdsList = new ArrayList<>();
                                                 userIdsList.add(event.sender);
 
-                                                // TODO Remove cast when SDK accept a List
-                                                mSession.ignoreUsers((ArrayList) userIdsList, new SimpleApiCallback<Void>() {
+                                                mSession.ignoreUsers(userIdsList, new SimpleApiCallback<Void>() {
                                                     @Override
                                                     public void onSuccess(Void info) {
                                                     }

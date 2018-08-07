@@ -516,8 +516,7 @@ public class VectorMemberDetailsActivity extends MXCActionBarActivity implements
 
                                         if (0 != idsList.size()) {
                                             enableProgressBarView(CommonActivityUtils.UTILS_DISPLAY_PROGRESS_BAR);
-                                            // TODO Remove cast
-                                            mSession.ignoreUsers((ArrayList) idsList, new ApiCallback<Void>() {
+                                            mSession.ignoreUsers(idsList, new ApiCallback<Void>() {
                                                 @Override
                                                 public void onSuccess(Void info) {
                                                     // do not hide the progress bar to warn the user that something is pending
@@ -572,8 +571,7 @@ public class VectorMemberDetailsActivity extends MXCActionBarActivity implements
 
                                         if (0 != idsList.size()) {
                                             enableProgressBarView(CommonActivityUtils.UTILS_DISPLAY_PROGRESS_BAR);
-                                            // TODO Remove cast when SDK will accept List
-                                            mSession.unIgnoreUsers((ArrayList) idsList, new ApiCallback<Void>() {
+                                            mSession.unIgnoreUsers(idsList, new ApiCallback<Void>() {
                                                 @Override
                                                 public void onSuccess(Void info) {
                                                     // do not hide the progress bar to warn the user that something is pending
