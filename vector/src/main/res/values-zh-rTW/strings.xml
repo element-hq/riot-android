@@ -730,7 +730,7 @@
 
 
     <string name="room_settings_addresses_invalid_format_dialog_title">別名格式錯誤</string>
-    <string name="room_settings_addresses_invalid_format_dialog_body">%@ 不是有效的別名格式</string>
+    <string name="room_settings_addresses_invalid_format_dialog_body">\\\'%s\\\' 不是有效的別名格式</string>
     <string name="room_settings_addresses_disable_main_address_prompt_msg">您沒有指定主地址。 該聊天室的主地址將會隨機選擇</string>
     <string name="room_settings_addresses_disable_main_address_prompt_title">主地址警告</string>
 
