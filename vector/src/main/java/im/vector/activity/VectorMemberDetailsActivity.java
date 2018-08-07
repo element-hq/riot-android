@@ -501,7 +501,7 @@ public class VectorMemberDetailsActivity extends MXCActionBarActivity implements
 
             case ITEM_ACTION_IGNORE: {
                 new AlertDialog.Builder(this)
-                        .setMessage(getString(R.string.room_participants_action_ignore) + " ?")
+                        .setMessage(R.string.room_event_action_report_prompt_ignore_user)
                         .setCancelable(false)
                         .setPositiveButton(R.string.ok,
                                 new DialogInterface.OnClickListener() {
@@ -556,7 +556,7 @@ public class VectorMemberDetailsActivity extends MXCActionBarActivity implements
 
             case ITEM_ACTION_UNIGNORE: {
                 new AlertDialog.Builder(this)
-                        .setMessage(getString(R.string.room_participants_action_unignore) + " ?")
+                        .setMessage(R.string.room_participants_action_unignore_prompt)
                         .setCancelable(false)
                         .setPositiveButton(R.string.ok,
                                 new DialogInterface.OnClickListener() {
