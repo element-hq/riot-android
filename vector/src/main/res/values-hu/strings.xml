@@ -110,7 +110,7 @@ A kulcsok mentéséhez kijelentkezés előtt válaszd az exportálás opciót.</
     <string name="create_account">Regisztráció</string>
     <string name="login">Bejelentkezés</string>
     <string name="logout">Kijelentkezés</string>
-    <string name="hs_url">Saját szerver URL</string>
+    <string name="hs_url">Matrix szerver URL</string>
     <string name="identity_url">Identitás szerver URL</string>
     <string name="user">felhasználó</string>
     <string name="users">felhasználók</string>
@@ -165,9 +165,9 @@ A kulcsok mentéséhez kijelentkezés előtt válaszd az exportálás opciót.</
     <string name="auth_threepid_warning_message">Nem támogatott a regisztráció e-mail címmel és telefonszámmal egyszerre, amíg az api el nem készül. Most csak a telefonszámot használjuk.
 
 Az e-mail címed a beállításoknál adhatod a profilodhoz.</string>
-    <string name="auth_recaptcha_message">A saját szerver szeretné ellenőrizni, hogy nem vagy robot</string>
+    <string name="auth_recaptcha_message">A Matrix szerver szeretné ellenőrizni, hogy nem vagy robot</string>
     <string name="auth_username_in_use">A felhasználónév foglalt</string>
-    <string name="auth_home_server">Saját szerver:</string>
+    <string name="auth_home_server">Matrix szerver:</string>
     <string name="auth_identity_server">Identitásszerver:</string>
     <string name="auth_reset_password_next_step_button">Ellenőriztem az e-mail címemet</string>
     <string name="auth_reset_password_message">A jelszavad visszaállításához add meg a fiókodhoz tartozó e-mail címet:</string>
@@ -195,7 +195,7 @@ Kiléptettünk az összes készülékedről, nem érkezik rájuk új értesíté
     <string name="login_error_user_in_use">Ez a felhasználónév már foglalt</string>
     <string name="login_error_login_email_not_yet">Az e-mailban található linkre még nem lett kattintva</string>
 
-    <string name="e2e_need_log_in_again">Újra be kell jelentkeznie, hogy egy új végtől végig titkosító kulcsot generáljon ehhez az eszközhöz és beküldeni a nyilvános kulcsot a Saját Szervernek.
+    <string name="e2e_need_log_in_again">Újra be kell jelentkeznie, hogy egy új végtől végig titkosító kulcsot generáljon ehhez az eszközhöz és beküldeni a nyilvános kulcsot a Matrix szervernek.
 Ez egy egyszeri dolog.
 Elnézést a kellemetlenségért.</string>
 
@@ -491,7 +491,7 @@ A folytatáshoz írd be a jelszavad.</string>
     <string name="devices_delete_submit_button_label">Küldés</string>
 
     <string name="settings_logged_in">Bejelentkezve mint</string>
-    <string name="settings_home_server">Szervered</string>
+    <string name="settings_home_server">Matrix szerver</string>
     <string name="settings_identity_server">Identitásszerver</string>
 
     <string name="account_email_validation_title">Hitelesítés folyamatban</string>
@@ -663,8 +663,8 @@ Ismeretlen eszközök:</string>
 
     <string name="select_room_directory">Válassz egy szoba könyvtárat</string>
     <string name="directory_server_fail_to_retrieve_server">A szerver lehet nem elérhető vagy túltöltött</string>
-    <string name="directory_server_type_homeserver">Írj be egy saját szervert hogy listázza belőle a nyilvános szobákat</string>
-    <string name="directory_server_placeholder">Saját szerver URL</string>
+    <string name="directory_server_type_homeserver">Írj be egy Matrix szervert hogy listázza belőle a nyilvános szobákat</string>
+    <string name="directory_server_placeholder">Matrix szerver URL</string>
     <string name="directory_server_all_rooms_on_server">Összes szoba a %s szerveren</string>
     <string name="directory_server_native_rooms">Összes anyanyelvi %s szoba</string>
 
@@ -948,7 +948,7 @@ Hozzáadsz párat most?</string>
 
     <string name="widget_integration_missing_parameter">A szükséges paraméter hiányzik.</string>
     <string name="widget_integration_invalid_parameter">Nem érvényes paraméter.</string>
-    <string name="dialog_user_consent_content">A(z) %1$s szerver további használatához el kell olvasnod és el kell fogadnod az általános szerződési feltételeket.</string>
+    <string name="dialog_user_consent_content">A(z) %1$s Matrix szerver további használatához el kell olvasnod és el kell fogadnod az általános szerződési feltételeket.</string>
     <string name="dialog_user_consent_submit">Elolvasom</string>
 
     <string name="deactivate_account_title">Fiók felfüggesztése</string>
