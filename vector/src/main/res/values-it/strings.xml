@@ -108,7 +108,7 @@ Selezionare esporta per fare un backup delle chat prima di disconnettersi.</stri
     <string name="send_bug_report">Rapporto errori</string>
     <string name="send_bug_report_description">Per favore descrivi l\'errore. Cosa hai fatto? Cosa ti aspettavi sarebbe accaduto? Cosa è effettivamente successo?</string>
     <string name="send_bug_report_placeholder">Descrivi qui il problema</string>
-    <string name="send_bug_report_logs_description">Al fine di diagnosticare i problemi, i registri Riot di questo dispositivo saranno inviati con il rapporto dell\'errore. Se preferisci inviare solo il testo soprastante, togli la spunta:</string>
+    <string name="send_bug_report_logs_description">Al fine di diagnosticare i problemi, i registri Riot di questo dispositivo saranno inviati con il rapporto dell\'errore. Questo rapporto, che include i registri ed il fermoimmagine, non sarà pubblicamente visibile. Se preferisci inviare solo il testo soprastante, togli la spunta:</string>
     <string name="send_bug_report_alert_message">Sembra tu stia scuotendo il dispositivo per frustrazione. Desideri segnalare un errore?</string>
     <string name="send_bug_report_app_crashed">L\'applicazione è crashata l\'ultima volta. Desideri inviare un rapporto del crash?</string>
 
@@ -722,7 +722,9 @@ I messaggi criptati non saranno visibili ai riceventi che non hanno ancora imple
 
     <string name="encryption_information_verify_device">Verifica dispositivo</string>
     <string name="encryption_information_verify_device_warning">Per verificare che quel dispositivo è affidabile, contatta il suo proprietario utilizzando altri canali di comunicazione (ad esempio, per persona o per telefono) e chiedigli se nelle Impostazioni, sezione Crittografia, la voce Chiave dispositivo corrisponde al codice riportato qui sotto:</string>
-    <string name="encryption_information_verify_device_warning2">Se esso corrisponde, premi il pulsante qui sotto per confermare la verifica. Se non corrisponde, allora qualcun altro ha intercettato la comunicazione e probabilmente vorrai metterlo nella lista nera piuttosto.\nIn futuro il processo di verifica sarà più sofisticato.</string>
+    <string name="encryption_information_verify_device_warning2">Se esso corrisponde, premi il pulsante qui sotto per confermare la verifica.
+In caso contrario, qualcun altro sta intercettando questo dispositivo e probabilmente dovresti inserirlo nella lista nera.
+In futuro il processo di verifica sarà più sofisticato.</string>
     <string name="encryption_information_verify_key_match">Ho verificato che le chiavi corrispondano</string>
 
     <string name="e2e_enabling_on_app_update">Riot supporta ora la crittografia da-utente-a-utente, ma devi riconnetterti per abilitarla.\n\nPuoi farlo ora o più tardi dalle impostazioni dell\'applicazione.</string>
@@ -824,7 +826,9 @@ I messaggi criptati non saranno visibili ai riceventi che non hanno ancora imple
 	<item quantity="other">%d membri</item>
 </plurals>
     <string name="room_participants_kick_prompt_msg">Sei sicuro di voler cacciar fuori questo utente dalla chat?</string>
-    <string name="room_participants_ban_prompt_msg">Sei sicuro di voler proibire l\'accesso alla chat a questo utente?</string>
+    <string name="room_participants_ban_prompt_msg">Sei sicuro di voler bandire dalla chat questo utente?
+
+Tieni presente che l\'azione riavvierà l\'app e potrebbe impiegarci un po\' di tempo.</string>
 
     <plurals name="room_new_messages_notification">
 	<item quantity="one">1 nuovo messaggio</item>
@@ -1026,5 +1030,32 @@ La visibilità dei messaggi in Matrix è simile alle email. \"Dimenticare i tuoi
 
     <string name="group_details_people">Persone</string>
     <string name="error_empty_field_your_password">Per favore, inserisci la tua password.</string>
+
+<string name="send_bug_report_description_in_english">Se possibile, scrivi la descrizione in inglese, grazie.</string>
+    <string name="room_message_placeholder_reply_to_encrypted">Invia risposta criptata…</string>
+    <string name="room_message_placeholder_reply_to_not_encrypted">Risposta non criptata…</string>
+    <string name="settings_preview_media_before_sending">Mostra file multimediale prima dell\'invio</string>
+
+    <string name="settings_without_flair">Attualmente non sei membro di alcuna comunità.</string>
+
+    <string name="settings_labs_keyboard_options_to_send_message">Usa invio da tastiera per spedire un messaggio</string>
+    <string name="command_description_emote">Mostra l\'azione</string>
+    <string name="command_description_ban_user">Bandisci utente con un dato id</string>
+    <string name="command_description_unban_user">Rimuovi espulsione per un dato id</string>
+    <string name="command_description_op_user">Definisci il livello di potere di un utente</string>
+    <string name="command_description_deop_user">Dimentica utente con un dato id</string>
+    <string name="command_description_invite_user">Invita utente con un dato id nella stanza corrente</string>
+    <string name="command_description_join_room">Entra nella stanza con un determinato alias</string>
+    <string name="command_description_part_room">Lascia la stanza</string>
+    <string name="command_description_topic">Imposta argomento della stanza</string>
+    <string name="command_description_kick_user">Caccia fuori un utente con un dato id</string>
+    <string name="command_description_nick">Cambia il tuo nome visualizzato</string>
+    <string name="command_description_markdown">Markdown attivo / spento</string>
+    <string name="command_description_clear_scalar_token">Per correggere la gestione delle app Matrix</string>
+
+    <string name="room_tombstone_versioned_description">Questa stanza è stata sostituita e non è più attiva</string>
+    <string name="room_tombstone_continuation_link">La conversazione continua qui</string>
+    <string name="room_tombstone_continuation_description">Questa stanza è la continuazione di un\'altra conversazione</string>
+    <string name="room_tombstone_predecessor_link">Clicca qui per vedere i messaggi più vecchi</string>
 
 </resources>
