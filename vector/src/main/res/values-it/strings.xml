@@ -418,7 +418,9 @@ Sicuro di procedere?</string>
 
     <!-- Room events -->
     <string name="room_event_action_report_prompt_reason">Motivo per segnalare questo contenuto</string>
-    <string name="room_event_action_report_prompt_ignore_user">Desideri nascondere tutti i messaggi di questo utente?</string>
+    <string name="room_event_action_report_prompt_ignore_user">Desideri nascondere tutti i messaggi di questo utente?
+
+Tieni presente che questa azione riavvierà l\'app e potrebbe richiedere del tempo.</string>
     <string name="room_event_action_cancel_upload">Annulla caricamento</string>
     <string name="room_event_action_cancel_download">Annulla scaricamento</string>
 
@@ -508,8 +510,8 @@ Sicuro di procedere?</string>
     <string name="settings_copyright">Copyright</string>
     <string name="settings_privacy_policy">Politica sulla privacy</string>
     <string name="settings_clear_cache">Elimina cache</string>
-    <string name="settings_clear_medias_cache">Cancella media file temporanei</string>
-    <string name="settings_keep_media">Conserva file media</string>
+    <string name="settings_clear_medias_cache">Elimina file multimediali temporanei</string>
+    <string name="settings_keep_media">Conserva file multimediali</string>
 
     <string name="settings_user_settings">Impostazioni utente</string>
     <string name="settings_notifications">Notifiche</string>
@@ -564,7 +566,9 @@ Sicuro di procedere?</string>
     <string name="settings_confirm_password">conferma password</string>
     <string name="settings_fail_to_update_password">Fallito l\'aggiornamento password</string>
     <string name="settings_password_updated">La tua password è stata aggiornata</string>
-    <string name="settings_unignore_user">Mostrare tutti i messaggi di %s?</string>
+    <string name="settings_unignore_user">Mostrare tutti i messaggi di %s?
+
+Tieni presente che questa azione riavvierà l\'app e potrebbe richiedere del tempo.</string>
 
     <string name="settings_delete_notification_targets_confirmation">Sicuro di voler rimuovere questo target di notifica?</string>
 
@@ -826,9 +830,7 @@ In futuro il processo di verifica sarà più sofisticato.</string>
 	<item quantity="other">%d membri</item>
 </plurals>
     <string name="room_participants_kick_prompt_msg">Sei sicuro di voler cacciar fuori questo utente dalla chat?</string>
-    <string name="room_participants_ban_prompt_msg">Sei sicuro di voler bandire dalla chat questo utente?
-
-Tieni presente che l\'azione riavvierà l\'app e potrebbe impiegarci un po\' di tempo.</string>
+    <string name="room_participants_ban_prompt_msg">Sei sicuro di voler bandire dalla chat questo utente?</string>
 
     <plurals name="room_new_messages_notification">
 	<item quantity="one">1 nuovo messaggio</item>
@@ -1058,4 +1060,7 @@ La visibilità dei messaggi in Matrix è simile alle email. \"Dimenticare i tuoi
     <string name="room_tombstone_continuation_description">Questa stanza è la continuazione di un\'altra conversazione</string>
     <string name="room_tombstone_predecessor_link">Clicca qui per vedere i messaggi più vecchi</string>
 
-</resources>
+<string name="room_participants_action_unignore_prompt">Mostrare tutti i messaggi di questo utente?
+
+Tieni presente che questa azione riavvierà l\'app e potrebbe richiedere del tempo.</string>
+    </resources>
