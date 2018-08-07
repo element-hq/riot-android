@@ -65,6 +65,7 @@ class ConsentWebViewEventListener(activity: RiotAppCompatActivity, private val d
 
         private fun onError(error: String?) {
             Log.e(LOG_TAG, "## On error : failed  to invite riot-bot $error")
+            safeActivity?.finish()
         }
 
         override fun onNetworkError(e: Exception) {
