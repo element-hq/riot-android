@@ -17,7 +17,7 @@ Improvements:
  - Improve the display of the buttons and the reason in the room preview (#2352)
  - In the flair section on settings, notify the user when he has no flair (#2430)
  - Support external keyboard to send messages for recent devices (#220, #1279)
- - When user bans or un-bans someone, notify that the app will restart (#2437)
+ - When user ignores or un-ignores someone, notify that the app will restart (#2437)
 
 Other changes:
  - Remove dependency to `android-gif-drawable` lib and use Glide to animate logo on Splashscreen (#2421)
