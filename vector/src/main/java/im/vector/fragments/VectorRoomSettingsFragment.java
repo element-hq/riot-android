@@ -353,7 +353,7 @@ public class VectorRoomSettingsFragment extends PreferenceFragment implements Sh
         });
 
         // display the room Id.
-        EditTextPreference roomInternalIdPreference = (EditTextPreference) findPreference(PREF_KEY_ROOM_INTERNAL_ID);
+        Preference roomInternalIdPreference = findPreference(PREF_KEY_ROOM_INTERNAL_ID);
         if (null != roomInternalIdPreference) {
             roomInternalIdPreference.setSummary(mRoom.getRoomId());
 
@@ -367,7 +367,7 @@ public class VectorRoomSettingsFragment extends PreferenceFragment implements Sh
         }
 
         // leave room
-        EditTextPreference leaveRoomPreference = (EditTextPreference) findPreference(PREF_KEY_ROOM_LEAVE);
+        Preference leaveRoomPreference = findPreference(PREF_KEY_ROOM_LEAVE);
 
         if (null != leaveRoomPreference) {
             leaveRoomPreference.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
