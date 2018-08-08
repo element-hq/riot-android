@@ -530,7 +530,7 @@
     <string name="settings_confirm_password">потвърди парола</string>
     <string name="settings_fail_to_update_password">Неуспешно обновяване на парола</string>
     <string name="settings_password_updated">Вашата парола беше обновена</string>
-    <string name="settings_unignore_user">Покажи всички съобщения от %s?
+    <string name="settings_unignore_user">Показване на всички съобщения от %s?
 
 Имайте предвид, че това действие ще рестартира приложението, което може да отнеме известно време.</string>
 
