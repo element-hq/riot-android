@@ -900,7 +900,7 @@ public class VectorUtils {
     public static String getUserOnlineStatus(final Context context,
                                              final MXSession session,
                                              final String userId,
-                                             final SimpleApiCallback<Void> refreshCallback) {
+                                             final ApiCallback<Void> refreshCallback) {
         // sanity checks
         if ((null == session) || (null == userId)) {
             return null;

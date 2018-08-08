@@ -144,7 +144,7 @@ public class CommonActivityUtils {
      * @param clearCredentials true to clear the credentials
      * @param callback         the asynchronous callback
      */
-    public static void logout(Context context, List<MXSession> sessions, boolean clearCredentials, final SimpleApiCallback<Void> callback) {
+    public static void logout(Context context, List<MXSession> sessions, boolean clearCredentials, final ApiCallback<Void> callback) {
         logout(context, sessions.iterator(), clearCredentials, callback);
     }
 
@@ -159,7 +159,7 @@ public class CommonActivityUtils {
     private static void logout(final Context context,
                                final Iterator<MXSession> sessions,
                                final boolean clearCredentials,
-                               final SimpleApiCallback<Void> callback) {
+                               final ApiCallback<Void> callback) {
         if (!sessions.hasNext()) {
             if (null != callback) {
                 callback.onSuccess(null);
@@ -1591,7 +1591,7 @@ public class CommonActivityUtils {
                                               final File srcFile,
                                               final String filename,
                                               final String mimeType,
-                                              final SimpleApiCallback<String> callback) {
+                                              final ApiCallback<String> callback) {
         saveFileInto(srcFile, Environment.DIRECTORY_DOWNLOADS, filename, new ApiCallback<String>() {
             @Override
             public void onSuccess(String fullFilePath) {
