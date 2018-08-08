@@ -1854,7 +1854,7 @@ public class VectorRoomSettingsFragment extends PreferenceFragment implements Sh
                         @Override
                         public void onSuccess(Boolean status) {
                             if (sendToUnverifiedDevicesPref.isChecked() != status) {
-                                SimpleApiCallback<Void> callback = new SimpleApiCallback<Void>() {
+                                ApiCallback<Void> callback = new SimpleApiCallback<Void>() {
                                     @Override
                                     public void onSuccess(Void info) {
                                     }
