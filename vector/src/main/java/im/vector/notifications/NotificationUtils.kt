@@ -243,7 +243,7 @@ object NotificationUtils {
 
         val builder = NotificationCompat.Builder(context, CALL_NOTIFICATION_CHANNEL_ID)
                 .setWhen(System.currentTimeMillis())
-                .setContentTitle(roomName)
+                .setContentTitle(ensureTitleNotEmpty(context, roomName))
                 .setContentText(context.getString(R.string.incoming_call))
                 .setSmallIcon(R.drawable.incoming_call_notification_transparent)
                 .setLights(Color.GREEN, 500, 500)
@@ -292,7 +292,7 @@ object NotificationUtils {
 
         val builder = NotificationCompat.Builder(context, CALL_NOTIFICATION_CHANNEL_ID)
                 .setWhen(System.currentTimeMillis())
-                .setContentTitle(roomName)
+                .setContentTitle(ensureTitleNotEmpty(context, roomName))
                 .setContentText(context.getString(R.string.call_in_progress))
                 .setSmallIcon(R.drawable.incoming_call_notification_transparent)
 
@@ -668,7 +668,7 @@ object NotificationUtils {
 
             val builder = NotificationCompat.Builder(context, SILENT_NOTIFICATION_CHANNEL_ID)
                     .setWhen(roomsNotifications.mContentTs)
-                    .setContentTitle(roomsNotifications.mContentTitle)
+                    .setContentTitle(ensureTitleNotEmpty(context, roomsNotifications.mContentTitle))
                     .setContentText(roomsNotifications.mContentText)
                     .setSmallIcon(R.drawable.message_notification_transparent)
                     .setGroup(context.getString(R.string.riot_app_name))
@@ -714,7 +714,7 @@ object NotificationUtils {
 
             val builder = NotificationCompat.Builder(context, SILENT_NOTIFICATION_CHANNEL_ID)
                     .setWhen(System.currentTimeMillis())
-                    .setContentTitle("")
+                    .setContentTitle(context.getString(R.string.riot_app_name))
                     .setContentText(messagesStrings[0])
                     .setSmallIcon(R.drawable.message_notification_transparent)
                     .setGroup(context.getString(R.string.riot_app_name))
@@ -802,5 +802,13 @@ object NotificationUtils {
 
         return setting == NotificationManager.INTERRUPTION_FILTER_NONE
                 || setting == NotificationManager.INTERRUPTION_FILTER_ALARMS
+    }
+
+    private fun ensureTitleNotEmpty(context: Context, title: String?): CharSequence {
+        if (TextUtils.isEmpty(title)) {
+            return context.getString(R.string.app_name)
+        }
+
+        return title!!
     }
 }

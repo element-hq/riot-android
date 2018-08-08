@@ -38,6 +38,7 @@ Bugfix:
  - code blocks are escaped and therefore hard readable (#2484)
  - Restore the navigation of the back button in the public rooms preview header (#2473)
  - Fix issue on preference screen: device lists was not displayed (#2409)
+ - Ensure notification has a title (#2242)
 
 Translations:
  -
