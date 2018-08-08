@@ -116,7 +116,7 @@
     <string name="send_bug_report">錯誤回報</string>
     <string name="send_bug_report_description">請描述此錯誤。做了什麼？預期發生什麼？實際發生什麼？</string>
     <string name="send_bug_report_placeholder">在這裡描述你的問題</string>
-    <string name="send_bug_report_logs_description">為了診斷問題，客戶端的紀錄將會同錯誤回報一起送出。如果您只想送出上方的文字，請取消勾選：</string>
+    <string name="send_bug_report_logs_description">為了診斷問題，客戶端的紀錄將會同錯誤回報一起送出。這個包含了紀錄與螢幕截圖的錯誤回報將不會公開可見。如果您只想送出上方的文字，請取消勾選：</string>
     <string name="send_bug_report_alert_message">您似乎沮喪的搖晃著手機。想送出錯誤回報？</string>
     <string name="send_bug_report_app_crashed">此應用程式在上次當機。您想送出錯誤回報？</string>
     <string name="send_bug_report_rage_shake">憤怒搖晃來回報錯誤</string>
@@ -454,7 +454,9 @@
     <string name="room_details_people_present_group_name">已加入</string>
 
     <string name="room_event_action_report_prompt_reason">報告此內容的原因</string>
-    <string name="room_event_action_report_prompt_ignore_user">您想要隱藏此使用者的所有訊息嗎？</string>
+    <string name="room_event_action_report_prompt_ignore_user">您想要隱藏此使用者的所有訊息嗎？
+
+注意此動作將會重新啟動應用程式，而其可能需要一點時間。</string>
     <string name="room_event_action_cancel_upload">取消上載</string>
     <string name="room_event_action_cancel_download">取消下載</string>
 
@@ -649,7 +651,9 @@
     <string name="settings_confirm_password">確認密碼</string>
     <string name="settings_fail_to_update_password">更新密碼失敗</string>
     <string name="settings_password_updated">您的密碼已經更新</string>
-    <string name="settings_unignore_user">顯示所有來自 %s 的訊息？</string>
+    <string name="settings_unignore_user">顯示所有來自 %s 的訊息？
+
+注意此動作將會重新啟動應用程式，而其可能需要一點時間。</string>
 
     <string name="settings_delete_notification_targets_confirmation">確實要刪除此通知目標嗎？</string>
 
@@ -806,8 +810,9 @@
 
     <string name="encryption_information_verify_device">驗證裝置</string>
     <string name="encryption_information_verify_device_warning">" 要驗證此裝置是否可信，請使用其他方式（例如：面對面或是打電話）聯絡它的擁有者並詢問他們在使用者設定中看到此裝置的金鑰是否與下列的金鑰相符："</string>
-    <string name="encryption_information_verify_device_warning2">如果匹配, 請按下面的 \"驗證\" 按鈕。如果沒有, 則可能是其他人正在攔截此設備, 您應按下 \"阻止\" 按鈕。
-今後這一核查進程將更加複雜。</string>
+    <string name="encryption_information_verify_device_warning2">如果符合的話，按下下方的驗證按鈕。
+若果沒有得話，那麼其他地方的某個人可能正在攔截這個裝置，您應該將其列入黑名單。
+未來，這個驗證程序會變得更家複雜。</string>
     <string name="encryption_information_verify_key_match">我驗證金鑰相符</string>
 
     <string name="e2e_enabling_on_app_update">Riot 目前支援點對點加密，但您需要重新登入來啟用他。
@@ -944,5 +949,35 @@ Matrix 中的消息可見度類似于電子郵件。我們忘記您的郵件意�
     <string name="deactivate_account_submit">註銷帳戶</string>
 
     <string name="error_empty_field_your_password">請輸入您的密碼。</string>
+
+<string name="send_bug_report_description_in_english">如果可以，請使用英文撰寫描述。</string>
+    <string name="room_participants_action_unignore_prompt">顯示所有從此使用者而來的訊息？
+
+注意此動作將會重新啟動應用程式，而其可能需要一點時間。</string>
+    <string name="room_message_placeholder_reply_to_encrypted">傳送加密回覆……</string>
+    <string name="room_message_placeholder_reply_to_not_encrypted">傳送回覆（未加密）……</string>
+    <string name="settings_preview_media_before_sending">在傳送前預覽媒體</string>
+
+    <string name="settings_without_flair">您目前並非任何社群的成員。</string>
+
+    <string name="settings_labs_keyboard_options_to_send_message">使用鍵盤 Enter 以傳送訊息</string>
+    <string name="command_description_emote">顯示動作</string>
+    <string name="command_description_ban_user">阻擋指定 id 的使用者</string>
+    <string name="command_description_unban_user">取消阻擋指定 id 的使用者</string>
+    <string name="command_description_op_user">定義使用者的權限等級</string>
+    <string name="command_description_deop_user">取消指定 id 的使用者的管理權</string>
+    <string name="command_description_invite_user">邀請指定 id 的使用者到目前的聊天室</string>
+    <string name="command_description_join_room">加入指定別名的聊天室</string>
+    <string name="command_description_part_room">離開聊天室</string>
+    <string name="command_description_topic">設定聊天室主題</string>
+    <string name="command_description_kick_user">踢除指定 id 的使用者</string>
+    <string name="command_description_nick">變更您的顯示暱稱</string>
+    <string name="command_description_markdown">開啟／關閉 markdown</string>
+    <string name="command_description_clear_scalar_token">為了修復 Matrix 應用程式管理</string>
+
+    <string name="room_tombstone_versioned_description">這個聊天室已被取代，且不再活躍</string>
+    <string name="room_tombstone_continuation_link">對話在此繼續</string>
+    <string name="room_tombstone_continuation_description">這個聊天示是其他對話的延續</string>
+    <string name="room_tombstone_predecessor_link">點選這裡以檢視更舊的訊息</string>
 
 </resources>
