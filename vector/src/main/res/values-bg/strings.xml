@@ -335,9 +335,7 @@
     <string name="room_participants_action_devices_list">Покажи списъка с устройства</string>
     <string name="room_participants_invite_prompt_msg">Сигурни ли сте, че искате да поканите %s в този чат?</string>
     <string name="room_participants_kick_prompt_msg">Сигурни ли сте, че искате да изгоните този потребител от чата?</string>
-    <string name="room_participants_ban_prompt_msg">Сигурни ли сте, че искате да блокирате този потребител в чата?
-
-Обърнете внимание, че това действие ще рестартира приложението, което може да отнеме известно време.</string>
+    <string name="room_participants_ban_prompt_msg">Сигурни ли сте, че искате да блокирате този потребител в този чат?</string>
 
     <string name="people_search_filter_text">Само потребители на Matrix</string>
 
@@ -378,7 +376,9 @@
     <string name="malformed_id">Грешно формиранo ID. Трябва да бъде имейл адрес или Matrix ID, например \'@localpart:domain\'</string>
     <string name="room_details_people_invited_group_name">ПОКАНЕНИ</string>
     <string name="room_event_action_report_prompt_reason">Причина за докладване на това съдържание</string>
-    <string name="room_event_action_report_prompt_ignore_user">Искате ли да скриете всички съобщения от този потребител?</string>
+    <string name="room_event_action_report_prompt_ignore_user">Искате ли да скриете всички съобщения от този потребител?
+
+Имайте предвид, че това действие ще рестартира приложението, което може да отнеме известно време.</string>
     <string name="room_event_action_cancel_download">Откажи изтеглянето</string>
 
     <string name="room_event_action_cancel_upload">Откажи качването</string>
@@ -444,7 +444,7 @@
     <string name="room_sliding_menu_term_and_conditions">Правила и условия</string>
     <string name="room_sliding_menu_third_party_notices">Други известия</string>
     <string name="room_sliding_menu_copyright">Лиценз</string>
-    <string name="room_sliding_menu_privacy_policy">Правила за поверителност</string>
+    <string name="room_sliding_menu_privacy_policy">Политика за поверителност</string>
 
     <string name="settings_profile_picture">Профилна снимка</string>
     <string name="settings_display_name">Име/псевдоним</string>
@@ -470,7 +470,7 @@
     <string name="settings_app_term_conditions">Правила и условия</string>
     <string name="settings_third_party_notices">Други известия</string>
     <string name="settings_copyright">Лиценз</string>
-    <string name="settings_privacy_policy">Правила за поверителност</string>
+    <string name="settings_privacy_policy">Политика за поверителност</string>
     <string name="settings_clear_cache">Изчисти кеша</string>
     <string name="settings_user_settings">Настройки на потребителя</string>
     <string name="settings_notifications">Известия</string>
@@ -530,7 +530,9 @@
     <string name="settings_confirm_password">потвърди парола</string>
     <string name="settings_fail_to_update_password">Неуспешно обновяване на парола</string>
     <string name="settings_password_updated">Вашата парола беше обновена</string>
-    <string name="settings_unignore_user">Покажи всички съобщения от %s?</string>
+    <string name="settings_unignore_user">Покажи всички съобщения от %s?
+
+Имайте предвид, че това действие ще рестартира приложението, което може да отнеме известно време.</string>
 
     <string name="settings_delete_threepid_confirmation">Сигурни ли сте, че искате да премахнете %1$s %2$s?</string>
 
@@ -995,4 +997,7 @@
     <string name="room_tombstone_continuation_description">Тази стая е продължение от предишна кореспонденция</string>
     <string name="room_tombstone_predecessor_link">Натиснете тук за да видите по-стари съобщения</string>
 
-</resources>
+<string name="room_participants_action_unignore_prompt">Показване на всички съобщения от този потребител?
+
+Имайте предвид, че това действие ще рестартира приложението, което може да отнеме известно време.</string>
+    </resources>
