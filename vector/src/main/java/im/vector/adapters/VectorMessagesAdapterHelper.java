@@ -20,6 +20,7 @@ package im.vector.adapters;
 import android.content.Context;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
+import android.os.Build;
 import android.support.annotation.Nullable;
 import android.text.Html;
 import android.text.Spannable;
@@ -954,7 +955,14 @@ class VectorMessagesAdapterHelper {
 
             // the links are not yet supported by ConsoleHtmlTagHandler
             // the markdown tables are not properly supported
-            sequence = Html.fromHtml(htmlFormattedText, mImageGetter, isCustomizable ? htmlTagHandler : null);
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+                sequence = Html.fromHtml(htmlFormattedText,
+                        Html.FROM_HTML_SEPARATOR_LINE_BREAK_LIST_ITEM,
+                        mImageGetter,
+                        isCustomizable ? htmlTagHandler : null);
+            } else {
+                sequence = Html.fromHtml(htmlFormattedText, mImageGetter, isCustomizable ? htmlTagHandler : null);
+            }
 
             // sanity check
             if (!TextUtils.isEmpty(sequence)) {

@@ -83,7 +83,7 @@
     <string name="send_bug_report_include_logs">أرسِل السجلات</string>
     <string name="send_bug_report_include_crash_logs">أرسِل سجلات الانهيار</string>
     <string name="send_bug_report_include_screenshot">أرسِل لقطة شاشة</string>
-    <string name="send_bug_report_description">رجاءً صِف المشكلة. ما الذي فعله؟ ما الذي توقعت حدوثه؟ ما الذي حدث؟</string>
+    <string name="send_bug_report_description">رجاءً صِف المشكلة. ما الذي فعلته؟ ما الذي توقعت حدوثه؟ ما الذي حدث؟</string>
     <string name="send_bug_report_placeholder">صِف المشكلة هنا</string>
     <string name="send_bug_report_logs_description">لنقدر على تحليل المشاكل، ستُرسل السجلات من هذا العميل مع بلاغ العلة هذا. إن أردت إرسال النص أعلاه فقط، رجاءً أزل تأشير:</string>
     <string name="send_bug_report_app_crashed">انهار التطبيق في آخر مرة. أتريد إرسال بلاغ انهيار؟</string>
@@ -185,7 +185,7 @@
     <string name="permissions_rationale_popup_title">معلومات</string>
     <string name="permissions_action_not_performed_missing_permissions">نأسف، لم يُنفّذ الإجراء بسبب عدم وجود بعض التصاريح</string>
 
-    <string name="media_slider_saved_message">احفظ في التنزيلات</string>
+    <string name="media_slider_saved_message">أأحفظ في التنزيلات؟</string>
     <string name="yes">نعم</string>
     <string name="no">لا</string>
     <string name="_continue">تابع</string>
@@ -234,9 +234,9 @@
     <string name="room_message_placeholder_encrypted">أرسِل رسالة معمّاة…</string>
     <string name="room_message_placeholder_not_encrypted">أرسِل رسالة (غير معمّاة)…</string>
     <string name="room_offline_notification">فُقد التواصل مع الخادوم.</string>
-    <string name="room_unsent_messages_notification">لم تُرسل الرسائل. أ%1$s أم %2$s الآن؟</string>
-    <string name="room_prompt_resend">أُعيد إرسالها كلها</string>
-    <string name="room_prompt_cancel">أُلغيها كلها</string>
+    <string name="room_unsent_messages_notification">لم تُرسل الرسائل. ماذا أفعل؟ %1$s. ‏%2$s.</string>
+    <string name="room_prompt_resend">أعِد إرسالها كلها</string>
+    <string name="room_prompt_cancel">ألغِها كلها</string>
     <string name="room_resend_unsent_messages">أعِد إرسال الرسائل غير المرسلة</string>
     <string name="room_delete_unsent_messages">احذف الرسائل غير المرسلة</string>
     <string name="room_message_file_not_found">لم يُعثر على الملف</string>
@@ -280,7 +280,7 @@
 
     <string name="room_sliding_menu_messages">الرسائل</string>
     <string name="room_sliding_menu_settings">إعدادات</string>
-    <string name="room_sliding_menu_version">"الإصدارة "</string>
+    <string name="room_sliding_menu_version">الإصدارة</string>
     <string name="room_sliding_menu_copyright">حقوق النسخ</string>
     <string name="room_sliding_menu_privacy_policy">سياسة الخصوصية</string>
 
@@ -387,7 +387,7 @@
     <string name="conference_call_warning_title">تحذير!</string>
     <string name="resources_country_code">العربية</string>
 
-    <string name="room_unknown_devices_messages_notification">لم تُرسل الرسائل بسبب وجود أجهزة مجهولة. أ%1$s أم %2$s الآن؟</string>
+    <string name="room_unknown_devices_messages_notification">لم تُرسل الرسائل بسبب وجود أجهزة مجهولة. ماذا أفعل؟ %1$s. ‏%2$s.</string>
     <string name="room_settings_addresses_invalid_format_dialog_body">ليس ’⁨%s⁩‘ تنسيقا صالحا لاختصار</string>
     <string name="room_settings_addresses_disable_main_address_prompt_msg">لن يُحدّد عنوان رئيسي. سيُنتقى العنوان الرئيسي المبدئي لهذه الغرفة عشوائيا</string>
     <string name="room_settings_addresses_disable_main_address_prompt_title">تحذيرات بشأن العنوان الرئيسي</string>
@@ -529,7 +529,7 @@
     <string name="groups_header">المجتمعات</string>
     <string name="no_group_placeholder">لا مجموعات</string>
 
-    <string name="send_bug_report_rage_shake"/>
+    <string name="send_bug_report_rage_shake">هزّ الجهاز بجنون يُرسل بلاغًا بعلة</string>
 
     <string name="notification_noisy_notifications">الإخطارات المزعجة</string>
     <string name="notification_silent_notifications">الإخطارات الصامتة</string>
@@ -902,4 +902,74 @@
     <string name="and">و</string>
     <string name="groups_invite_header">دعوة</string>
     <string name="send_files_in">أرسل إلى</string>
-    </resources>
+    <string name="title_activity_choose_sticker">أرسِل ملصقا</string>
+
+    <string name="dialog_title_third_party_licences">رُخص الأطراف الثالثة</string>
+
+    <string name="download">نزِّل</string>
+    <string name="option_send_voice">أرسِل صوتًا</string>
+
+    <string name="option_send_sticker">أرسِل ملصقًا</string>
+    <string name="no_sticker_application_dialog_content">ليس ثمة أية حزمة ملصقات مفعّلة حاليًا.
+
+أتريد إضافة حزمة الآن؟</string>
+
+    <string name="error_no_external_application_found">نأسف، لم نجد أي تطبيق خارجي لإكمال هذا الإجراء.</string>
+
+    <string name="e2e_re_request_encryption_key"><u>أعِد طلب مفاتيح التعمية</u>من أجهزتك الأخرى.</string>
+
+    <string name="e2e_re_request_encryption_key_sent">أُرسل طلب المفتاح.</string>
+
+    <string name="e2e_re_request_encryption_key_dialog_title">أُرسل الطلب</string>
+    <string name="e2e_re_request_encryption_key_dialog_content">رجاءً أطلِق Riot في جهاز آخر يقدر على فك تعمية الرسالة ليُرسل المفاتيح إلى هذا الجهاز.</string>
+
+    <string name="speak">انطِق</string>
+    <string name="clear">امسح</string>
+    <string name="room_participants_online">متّصل</string>
+    <string name="room_participants_offline">غير متّصل</string>
+    <string name="room_participants_idle">خامل</string>
+    <string name="room_participants_now">الآن</string>
+    <string name="room_participants_ago"/>
+
+    <string name="settings_notification_privacy">خصوصيّة الإخطارات</string>
+    <string name="settings_notification_privacy_warning">يعمل Riot.im في الخلفية ليُبقي محتوى رسائل الإخطارات خاصًّا. يمكنك تغيير هذا الخيار لتقليل استخدام البطارية.</string>
+    <string name="settings_notification_privacy_normal">طبيعية</string>
+    <string name="settings_notification_privacy_power_saving">خيارات حِفظ الطاقة</string>
+    <string name="settings_notification_privacy_low_detail">إخطارات بتفاصيل أقل</string>
+    <string name="settings_notification_privacy_reduced">خصوصية أقل</string>
+    <string name="settings_notification_privacy_need_permission">يحتاج التطبيق تصريحًا ليعمل في الخلفية</string>
+    <string name="settings_notification_privacy_no_permission"><b>لا</b> تحتاج التطبيقات تصريحًا لتعمل في الخلفية</string>
+    <string name="settings_notification_privacy_gcm">• تُرسل الإخطارات عبر Google Cloud Messaging</string>
+    <string name="settings_notification_privacy_metadata">• تحتوي الإخطارات بيانات وصفية فحسب</string>
+    <string name="settings_notification_privacy_nosecure_message_content">• تحتوي الإخطارات <b>بيانات وصفية وبيانات الرسائل</b></string>
+    <string name="settings_notification_privacy_message_content_not_shown">• سوف <b>لن تعرض الإخطارات محتوى الرسائل</b></string>
+
+    <string name="settings_messages_sent_by_bot">الرسائل التي أرسلها بوت</string>
+
+    <string name="settings_set_sync_timeout">انتهت مهلة طلب المزامنة</string>
+    <string name="settings_deactivate_account_section">ألغِ تنشيط الحساب</string>
+    <string name="settings_deactivate_my_account">ألغِ تنشيط حسابي</string>
+
+    <string name="startup_notification_privacy_title">خصوصيّة الإخطارات</string>
+    <string name="startup_notification_privacy_button_grant">امنح التصريح</string>
+    <string name="startup_notification_privacy_button_other">اختر خيارا آخر</string>
+
+    <string name="settings_opt_in_of_analytics">أرسِل بيانات التحاليل</string>
+    <string name="settings_opt_in_of_analytics_summary">يجمع Riot التحاليل بشكل مجهّل فيتيح لنا ذلك تحسين التطبيق.</string>
+    <string name="settings_opt_in_of_analytics_prompt">رجاءً فعّل التحاليل لمساعدتنا في تحسين Riot.</string>
+    <string name="settings_opt_in_of_analytics_ok">نعم أريد المساعدة!</string>
+
+    <string name="lock_screen_hint">اكتب هنا…</string>
+
+    <string name="widget_integration_missing_parameter">ثمة معامل مطلوب ناقص.</string>
+    <string name="widget_integration_invalid_parameter">ثمة معامل غير صالح.</string>
+    <string name="settings_labs_enable_send_voice">أرسِل رسالة صوتية (يتطلب تطبيقا من طرف ثالث لتسجيل الرسائل الصوتية)</string>
+
+    <string name="dialog_user_consent_content">لمتابعة استخدام خادوم المنزل ⁨%1$s⁩ عليك مراجعة الشروط والقوانين والموافقة عليها.</string>
+    <string name="dialog_user_consent_submit">سأراجعها الآن</string>
+
+    <string name="deactivate_account_title">ألغِ تفعيل الحساب</string>
+    <string name="deactivate_account_prompt_password">رجاءً اكتب كلمة السر للمتابعة:</string>
+    <string name="error_empty_field_your_password">رجاءً اكتب كلمة السر.</string>
+
+</resources>

@@ -405,6 +405,7 @@
     <string name="room_participants_action_set_admin">Make admin</string>
     <string name="room_participants_action_ignore">Hide all messages from this user</string>
     <string name="room_participants_action_unignore">Show all messages from this user</string>
+    <string name="room_participants_action_unignore_prompt">Show all messages from this user?\n\nNote that this action will restart the app and it may take some time.</string>
     <string name="room_participants_invite_search_another_user">User ID, Name or email</string>
     <string name="room_participants_action_mention">Mention</string>
     <string name="room_participants_action_devices_list">Show Device List</string>
@@ -474,7 +475,7 @@
 
     <!-- Room events -->
     <string name="room_event_action_report_prompt_reason">Reason for reporting this content</string>
-    <string name="room_event_action_report_prompt_ignore_user">Do you want to hide all messages from this user?</string>
+    <string name="room_event_action_report_prompt_ignore_user">Do you want to hide all messages from this user?\n\nNote that this action will restart the app and it may take some time.</string>
     <string name="room_event_action_cancel_upload">Cancel Upload</string>
     <string name="room_event_action_cancel_download">Cancel Download</string>
 
@@ -682,7 +683,7 @@
     <string name="settings_confirm_password">confirm password</string>
     <string name="settings_fail_to_update_password">Fail to update password</string>
     <string name="settings_password_updated">Your password has been updated</string>
-    <string name="settings_unignore_user">Show all messages from %s?</string>
+    <string name="settings_unignore_user">Show all messages from %s?\n\nNote that this action will restart the app and it may take some time.</string>
 
     <string name="settings_delete_notification_targets_confirmation">Are you sure you want to remove this notification target?</string>
 
@@ -936,6 +937,19 @@
     <!-- slash commands -->
     <string name="command_error">Command error</string>
     <string name="unrecognized_command">Unrecognized command: %s</string>
+    <string name="command_description_emote">Displays action</string>
+    <string name="command_description_ban_user">Bans user with given id</string>
+    <string name="command_description_unban_user">Unbans user with given id</string>
+    <string name="command_description_op_user">Define the power level of a user</string>
+    <string name="command_description_deop_user">Deops user with given id</string>
+    <string name="command_description_invite_user">Invites user with given id to current room</string>
+    <string name="command_description_join_room">Joins room with given alias</string>
+    <string name="command_description_part_room">Leave room</string>
+    <string name="command_description_topic">Set the room topic</string>
+    <string name="command_description_kick_user">Kicks user with given id</string>
+    <string name="command_description_nick">Changes your display nickname</string>
+    <string name="command_description_markdown">On/Off markdown</string>
+    <string name="command_description_clear_scalar_token">To fix Matrix Apps management</string>
 
     <!-- notification statuses -->
     <string name="notification_off">Off</string>

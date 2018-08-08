@@ -6,7 +6,7 @@ Features:
  - Telemetry to report incidence of UISIs (#2330)
  - Add a previewer for previewing media before sending it into the room (#1742|#2445)
  - Implements ReplyTo feature (#2390)
- - Add a setting to allow the user to use the enter key on his keyboard to send message instead of to add a new line (#394)
+ - Add auto completion for slash commands (#2384)
  - Support Room Versioning (#2441)
 
 Improvements:
@@ -17,6 +17,8 @@ Improvements:
  - Improve the display of the buttons and the reason in the room preview (#2352)
  - In the flair section on settings, notify the user when he has no flair (#2430)
  - Improve GDPR consent webview management (#2491)
+ - Support external keyboard to send messages for recent devices (#220, #1279)
+ - When user ignores or un-ignores someone, notify that the app will restart (#2437)
 
 Other changes:
  - Remove dependency to `android-gif-drawable` lib and use Glide to animate logo on Splashscreen (#2421)
@@ -33,6 +35,8 @@ Bugfix:
  - Fix Unable to add Matrix apps (#2466)
  - Riot auto joined a public room (#2472)
  - Remove last traces of Firebase analytics (#2481)
+ - code blocks are escaped and therefore hard readable (#2484)
+ - Restore the navigation of the back button in the public rooms preview header (#2473)
 
 Translations:
  -

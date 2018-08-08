@@ -1370,17 +1370,19 @@ public class VectorMessagesAdapter extends AbstractMessagesAdapter {
 
             if (block.startsWith(VectorMessagesAdapterHelper.START_FENCED_BLOCK) && block.endsWith(VectorMessagesAdapterHelper.END_FENCED_BLOCK)) {
                 // Fenced block
-                String minusTags = block
+                final String minusTags = block
                         .substring(VectorMessagesAdapterHelper.START_FENCED_BLOCK.length(),
                                 block.length() - VectorMessagesAdapterHelper.END_FENCED_BLOCK.length())
+                        .replace("\n", "<br/>")
+                        .replace(" ", "&nbsp;")
                         .trim();
+
+                final CharSequence htmlReady = mHelper.convertToHtml(minusTags);
                 final View blockView = mLayoutInflater.inflate(R.layout.adapter_item_vector_message_code_block, null);
                 final TextView tv = blockView.findViewById(R.id.messagesAdapter_body);
-
-                tv.setText(minusTags);
+                tv.setText(htmlReady);
 
                 mHelper.highlightFencedCode(tv);
-
                 mHelper.applyLinkMovementMethod(tv);
 
                 container.addView(blockView);
@@ -1390,33 +1392,20 @@ public class VectorMessagesAdapter extends AbstractMessagesAdapter {
             } else {
                 // Not a fenced block
                 final TextView tv = (TextView) mLayoutInflater.inflate(R.layout.adapter_item_vector_message_code_text, null);
-
-                String block2 = block;
+                String block2 = block.trim();
                 if (TextUtils.equals(Message.FORMAT_MATRIX_HTML, message.format)) {
-                    // Preserve space and new lines
-                    block2 = block2
-                            .trim()
-                            .replace("\n", "<br/>")
-                            .replace(" ", "&nbsp;");
-
-                    String sanitized = mHelper.getSanitisedHtml(block2);
-
+                    final String sanitized = mHelper.getSanitisedHtml(block2);
                     if (sanitized != null) {
                         block2 = sanitized;
                     }
                 }
-
-                CharSequence sequence = mHelper.convertToHtml(block2);
-
-                CharSequence strBuilder = mHelper.highlightPattern(new SpannableString(sequence),
+                final CharSequence sequence = mHelper.convertToHtml(block2);
+                final CharSequence strBuilder = mHelper.highlightPattern(new SpannableString(sequence),
                         mPattern,
                         mBackgroundColorSpan,
                         shouldHighlighted);
-
                 tv.setText(strBuilder);
-
                 mHelper.applyLinkMovementMethod(tv);
-
                 container.addView(tv);
                 textViews.add(tv);
             }
