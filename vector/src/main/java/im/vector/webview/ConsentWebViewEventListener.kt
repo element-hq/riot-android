@@ -22,6 +22,7 @@ import im.vector.activity.RiotAppCompatActivity
 import im.vector.util.weak
 import org.matrix.androidsdk.rest.callback.ApiCallback
 import org.matrix.androidsdk.rest.model.MatrixError
+import org.matrix.androidsdk.rest.model.RoomMember
 import org.matrix.androidsdk.util.Log
 
 private const val SUCCESS_URL = "https://matrix.org/_matrix/consent"
@@ -40,17 +41,25 @@ class ConsentWebViewEventListener(activity: RiotAppCompatActivity, private val d
     override fun onPageFinished(url: String) {
         delegate.onPageFinished(url)
         if (TextUtils.equals(url, SUCCESS_URL)) {
-            createRiotBotRoom()
+            createRiotBotRoomIfNeeded()
         }
     }
 
     /**
-     * This methods try to create the RiotBot room when the user agreed
+     * This methods try to create the RiotBot room when the user gives his agreement
      */
-    private fun createRiotBotRoom() {
+    private fun createRiotBotRoomIfNeeded() {
         safeActivity?.let {
-            it.showWaitingView()
-            Matrix.getInstance(it).defaultSession.createDirectMessageRoom(RIOT_BOT_ID, createRiotBotRoomCallback)
+            val session = Matrix.getInstance(it).defaultSession
+            val joinedRooms = session.dataHandler.store.rooms.filter {
+                it.hasMembership(RoomMember.MEMBERSHIP_JOIN)
+            }
+            if (joinedRooms.isEmpty()) {
+                it.showWaitingView()
+                session.createDirectMessageRoom(RIOT_BOT_ID, createRiotBotRoomCallback)
+            } else {
+                it.finish()
+            }
         }
     }
 
