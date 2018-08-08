@@ -24,6 +24,7 @@ import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.helper.ItemTouchHelper;
 import android.text.TextUtils;
 
+import org.matrix.androidsdk.data.comparator.RoomComparatorWithTag;
 import org.matrix.androidsdk.util.Log;
 
 import android.view.LayoutInflater;
@@ -185,6 +186,7 @@ public class FavouritesFragment extends AbsHomeFragment implements HomeRoomAdapt
     public void onRoomResultUpdated(final HomeRoomsViewModel.Result result) {
         if (isResumed() && !VectorApp.isSessionSyncing(mSession)) {
             mFavorites = result.getFavourites();
+            Collections.sort(mFavorites, new RoomComparatorWithTag(RoomTag.ROOM_TAG_FAVOURITE));
             mFavoritesAdapter.setRooms(mFavorites);
             updateRoomsDisplay(mFavorites.size());
             mDragAndDropTouchHelper.attachToRecyclerView(mFavorites.size() > 1 ? mFavoritesRecyclerView : null);
