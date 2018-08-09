@@ -1,3 +1,24 @@
+Changes in Riot 0.8.14 (2018-XX-XX)
+===================================================
+
+Features:
+ -
+
+Improvements:
+ -
+
+Other changes:
+ -
+
+Bugfix:
+ -
+
+Translations:
+ -
+
+Build:
+ -
+
 Changes in Riot 0.8.13 (2018-08-09)
 ===================================================
 
