@@ -150,6 +150,11 @@ class VectorSettingsPreferencesFragment : PreferenceFragment(), SharedPreference
         findPreference(PreferencesManager.SETTINGS_CONTACTS_PHONEBOOK_COUNTRY_PREFERENCE_KEY) as VectorCustomActionEditTextPreference
     }
 
+    // Group Flairs
+    private val mGroupsFlairCategory by lazy {
+        findPreference(PreferencesManager.SETTINGS_GROUPS_FLAIR_KEY) as PreferenceCategory
+    }
+
     // cryptography
     private val mCryptographyCategory by lazy {
         findPreference(PreferencesManager.SETTINGS_CRYPTOGRAPHY_PREFERENCE_KEY) as PreferenceCategory
@@ -188,9 +193,6 @@ class VectorSettingsPreferencesFragment : PreferenceFragment(), SharedPreference
     }
     private val mLabsCategory by lazy {
         findPreference(PreferencesManager.SETTINGS_LABS_PREFERENCE_KEY) as PreferenceCategory
-    }
-    private val mGroupsFlairCategory by lazy {
-        findPreference(PreferencesManager.SETTINGS_GROUPS_FLAIR_KEY) as PreferenceCategory
     }
     private val backgroundSyncCategory by lazy {
         findPreference(PreferencesManager.SETTINGS_BACKGROUND_SYNC_PREFERENCE_KEY)
@@ -449,20 +451,11 @@ class VectorSettingsPreferencesFragment : PreferenceFragment(), SharedPreference
 
                     Matrix.getInstance(activity)!!.sharedGCMRegistrationManager
                             .forceSessionsRegistration(object : GcmRegistrationManager.ThirdPartyRegistrationListener {
-
-                                override fun onThirdPartyRegistered() {
+                                override fun onSuccess() {
                                     hideLoadingView()
                                 }
 
-                                override fun onThirdPartyRegistrationFailed() {
-                                    hideLoadingView()
-                                }
-
-                                override fun onThirdPartyUnregistered() {
-                                    hideLoadingView()
-                                }
-
-                                override fun onThirdPartyUnregistrationFailed() {
+                                override fun onError() {
                                     hideLoadingView()
                                 }
                             })
@@ -604,8 +597,6 @@ class VectorSettingsPreferencesFragment : PreferenceFragment(), SharedPreference
                 true
             }
         }
-
-        // Others
 
         // preference to start the App info screen, to facilitate App permissions access
         findPreference(APP_INFO_LINK_PREFERENCE_KEY)
@@ -1092,7 +1083,7 @@ class VectorSettingsPreferencesFragment : PreferenceFragment(), SharedPreference
 
             // when using GCM
             // need to register on servers
-            if (isConnected && gcmMgr.useGCM() && (gcmMgr.isServerRegistred || gcmMgr.isServerUnRegistred)) {
+            if (isConnected && gcmMgr.useGCM() && (gcmMgr.isServerRegistered || gcmMgr.isServerUnRegistered)) {
                 val listener = object : GcmRegistrationManager.ThirdPartyRegistrationListener {
 
                     private fun onDone() {
@@ -1104,27 +1095,19 @@ class VectorSettingsPreferencesFragment : PreferenceFragment(), SharedPreference
                         }
                     }
 
-                    override fun onThirdPartyRegistered() {
+                    override fun onSuccess() {
                         onDone()
                     }
 
-                    override fun onThirdPartyRegistrationFailed() {
-                        gcmMgr.setDeviceNotificationsAllowed(isAllowed)
-                        onDone()
-                    }
-
-                    override fun onThirdPartyUnregistered() {
-                        onDone()
-                    }
-
-                    override fun onThirdPartyUnregistrationFailed() {
+                    override fun onError() {
+                        // Set again the previous state
                         gcmMgr.setDeviceNotificationsAllowed(isAllowed)
                         onDone()
                     }
                 }
 
                 displayLoadingView()
-                if (gcmMgr.isServerRegistred) {
+                if (gcmMgr.isServerRegistered) {
                     gcmMgr.unregister(listener)
                 } else {
                     gcmMgr.register(listener)
@@ -2614,7 +2597,16 @@ class VectorSettingsPreferencesFragment : PreferenceFragment(), SharedPreference
 
         mSession.groupsManager.getUserPublicisedGroups(mSession.myUserId, true, object : ApiCallback<Set<String>> {
             override fun onSuccess(publicisedGroups: Set<String>) {
-                buildGroupsList(publicisedGroups)
+                // clear everything
+                mGroupsFlairCategory.removeAll()
+
+                if (publicisedGroups.isEmpty()){
+                    val vectorGroupPreference = VectorCustomActionEditTextPreference(activity)
+                    vectorGroupPreference.title = resources.getString(R.string.settings_without_flair)
+                    mGroupsFlairCategory.addPreference(vectorGroupPreference)
+                } else {
+                    buildGroupsList(publicisedGroups)
+                }
             }
 
             override fun onNetworkError(e: Exception) {
@@ -2649,9 +2641,6 @@ class VectorSettingsPreferencesFragment : PreferenceFragment(), SharedPreference
 
             var prefIndex = 0
             mPublicisedGroups = publicisedGroups.toMutableSet()
-
-            // clear everything
-            mGroupsFlairCategory.removeAll()
 
             for (group in joinedGroups) {
                 val vectorGroupPreference = VectorGroupPreference(activity)

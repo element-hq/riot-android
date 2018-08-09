@@ -108,7 +108,7 @@ Selezionare esporta per fare un backup delle chat prima di disconnettersi.</stri
     <string name="send_bug_report">Rapporto errori</string>
     <string name="send_bug_report_description">Per favore descrivi l\'errore. Cosa hai fatto? Cosa ti aspettavi sarebbe accaduto? Cosa è effettivamente successo?</string>
     <string name="send_bug_report_placeholder">Descrivi qui il problema</string>
-    <string name="send_bug_report_logs_description">Al fine di diagnosticare i problemi, i registri Riot di questo dispositivo saranno inviati con il rapporto dell\'errore. Se preferisci inviare solo il testo soprastante, togli la spunta:</string>
+    <string name="send_bug_report_logs_description">Al fine di diagnosticare i problemi, i registri Riot di questo dispositivo saranno inviati con il rapporto dell\'errore. Questo rapporto, che include i registri ed il fermoimmagine, non sarà pubblicamente visibile. Se preferisci inviare solo il testo soprastante, togli la spunta:</string>
     <string name="send_bug_report_alert_message">Sembra tu stia scuotendo il dispositivo per frustrazione. Desideri segnalare un errore?</string>
     <string name="send_bug_report_app_crashed">L\'applicazione è crashata l\'ultima volta. Desideri inviare un rapporto del crash?</string>
 
@@ -286,7 +286,7 @@ Consentire a Riot di accedere ai tuoi contatti?</string>
 
     <!-- medias slider string -->
     <string name="media_slider_saved">Salvato</string>
-    <string name="media_slider_saved_message">Salva nei download</string>
+    <string name="media_slider_saved_message">Salvare nei download?</string>
     <string name="yes">SÌ</string>
     <string name="no">NO</string>
     <string name="_continue">Continua</string>
@@ -551,7 +551,7 @@ Sicuro di procedere?</string>
     <string name="settings_confirm_password">conferma password</string>
     <string name="settings_fail_to_update_password">Fallito l\'aggiornamento password</string>
     <string name="settings_password_updated">La tua password è stata aggiornata</string>
-    <string name="settings_unignore_user">Mostra tutti i messaggi di %s?</string>
+    <string name="settings_unignore_user">Mostrare tutti i messaggi di %s?</string>
 
     <string name="settings_delete_notification_targets_confirmation">Sicuro di voler rimuovere questo target di notifica?</string>
 
@@ -581,14 +581,14 @@ Sicuro di procedere?</string>
     <string name="room_settings_room_photo">Immagine stanza</string>
     <string name="room_settings_room_name">Nome stanza</string>
     <string name="room_settings_topic">Argomento</string>
-    <string name="room_settings_room_tag">Tag stanza</string>
-    <string name="room_settings_tag_pref_dialog_title">Taggata come:</string>
+    <string name="room_settings_room_tag">Etichetta stanza</string>
+    <string name="room_settings_tag_pref_dialog_title">Etichettata come:</string>
 
     <!-- Room settings: Room tag -->
     <string name="room_settings_tag_pref_entry_favourite">Preferito</string>
     <string name="room_settings_tag_pref_entry_low_priority">Bassa priorità</string>
     <string name="room_settings_tag_pref_entry_none">Niente</string>
-    <string name="room_settings_tag_pref_no_tag">non taggato</string>
+    <string name="room_settings_tag_pref_no_tag">non etichettato</string>
     <string name="room_settings_tag_pref_entry_value_favourite">preferito</string>
     <string name="room_settings_tag_pref_entry_value_low_priority">bassa</string>
     <string name="room_settings_tag_pref_entry_value_none">niente</string>
@@ -608,19 +608,19 @@ Sicuro di procedere?</string>
     <string name="room_settings_read_history_entry_members_only_joined">Solo i membri (dal momento in cui entrano nella stanza)</string>
 
     <!-- Room settings: "Who can access this room?" (access rule) -->
-    <string name="room_settings_room_access_warning">Per indirizzare con un link ad una stanza, essa deve avere un indirizzo.</string>
+    <string name="room_settings_room_access_warning">Per indirizzare ad una stanza tramite link, essa deve avere un indirizzo.</string>
     <string name="room_settings_room_access_entry_only_invited">Solo le persone che sono state invitate</string>
     <string name="room_settings_room_access_entry_anyone_with_link_apart_guest">Chiunque conosca il link della stanza, eccetto gli ospiti</string>
     <string name="room_settings_room_access_entry_anyone_with_link_including_guest">Chiunque conosca il link della stanza, compresi gli ospiti</string>
 
     <!-- Room settings: banned users -->
-    <string name="room_settings_banned_users_title">Utenti bannati</string>
+    <string name="room_settings_banned_users_title">Utenti banditi</string>
 
     <!-- advanced -->
     <string name="room_settings_category_advanced_title">Avanzate</string>
     <string name="room_settings_room_internal_id">ID interno della stanza</string>
     <string name="room_settings_addresses_pref_title">Indirizzi</string>
-    <string name="room_settings_labs_pref_title">Sperimentale</string>
+    <string name="room_settings_labs_pref_title">Laboratorio</string>
     <string name="room_settings_labs_warning_message">Queste sono caratteristiche sperimentali che possono fallire in modo inatteso. Usare con cautela.</string>
     <string name="room_settings_labs_end_to_end">Crittografia da-utente-a-utente</string>
     <string name="room_settings_labs_end_to_end_is_active">La crittografia da-utente-a-utente è attiva</string>
@@ -632,8 +632,8 @@ Sicuro di procedere?</string>
     <string name="room_settings_addresses_no_local_addresses">Questa stanza non ha indirizzi locali</string>
     <string name="room_settings_addresses_add_new_address">Nuovo indirizzo (e.g #foo:matrix.org")</string>
 
-    <string name="room_settings_addresses_invalid_format_dialog_title">Formato soprannome (alias) invalido</string>
-    <string name="room_settings_addresses_invalid_format_dialog_body">\'%s\' non è un formato valido per un soprannome (alias)</string>
+    <string name="room_settings_addresses_invalid_format_dialog_title">Formato soprannome non valido</string>
+    <string name="room_settings_addresses_invalid_format_dialog_body">\'%s\' non è un formato valido per un soprannome</string>
     <string name="room_settings_addresses_disable_main_address_prompt_msg">Non avrai un indirizzo principale specificato. L\'indirizzo principale predefinito per questa stanza sarà generato casualmente</string>
     <string name="room_settings_addresses_disable_main_address_prompt_title">Avvisi per l\'indirizzo principale</string>
 
@@ -646,7 +646,13 @@ Sicuro di procedere?</string>
     <string name="room_settings_addresses_e2e_disabled">Crittografia disabilitata in questa stanza.</string>
     <string name="room_settings_addresses_e2e_encryption_warning">Abilita crittografia\n(attenzione: non può più essere disabilitata!)</string>
     <string name="room_settings_addresses_e2e_prompt_title">Attenzione!</string>
-    <string name="room_settings_addresses_e2e_prompt_message">La crittografia da-utente-a-utente è in beta e potrebbe non essere affidabile.\n\nNon dovresti ancora fidarti di essa per proteggere i tuoi dati.\n\nI dispositivi non saranno in grado di decriptare la cronologia prima che entrino nella stanza.\n\nI messaggi criptati non saranno visibili ai riceventi (client) che non hanno ancora implementato la crittografia.</string>
+    <string name="room_settings_addresses_e2e_prompt_message">La crittografia da-utente-a-utente è in fase beta e potrebbe non essere affidabile.
+
+Non dovresti ancora fidarti di essa per proteggere i tuoi dati.
+
+I dispositivi non potranno decriptare la cronologia da prima dell\'ingresso nella stanza.
+
+I messaggi criptati non saranno visibili ai riceventi che non hanno ancora implementato la crittografia.</string>
 
     <!-- Directory -->
     <string name="directory_title">Elenco</string>
@@ -664,7 +670,7 @@ Sicuro di procedere?</string>
     <string name="encryption_information_claimed_ed25519_fingerprint_key">Richiesta chiave per l\'impronta digitale Ed25519</string>
     <string name="encryption_information_algorithm">Algoritmo</string>
     <string name="encryption_information_session_id">ID sessione</string>
-    <string name="encryption_information_decryption_error">Errore decifrazione</string>
+    <string name="encryption_information_decryption_error">Errore decriptazione</string>
 
     <string name="encryption_information_sender_device_information">Informazioni dispositivo mittente</string>
     <string name="encryption_information_device_name">Nome dispositivo</string>
@@ -703,7 +709,9 @@ Sicuro di procedere?</string>
 
     <string name="encryption_information_verify_device">Verifica dispositivo</string>
     <string name="encryption_information_verify_device_warning">Per verificare che quel dispositivo è affidabile, contatta il suo proprietario utilizzando altri canali di comunicazione (ad esempio, per persona o per telefono) e chiedigli se nelle Impostazioni, sezione Crittografia, la voce Chiave dispositivo corrisponde al codice riportato qui sotto:</string>
-    <string name="encryption_information_verify_device_warning2">Se esso corrisponde, premi il pulsante qui sotto per confermare la verifica. Se non corrisponde, allora qualcun altro ha intercettato la comunicazione e probabilmente vorrai metterlo nella lista nera piuttosto.\nIn futuro il processo di verifica sarà più sofisticato.</string>
+    <string name="encryption_information_verify_device_warning2">Se esso corrisponde, premi il pulsante qui sotto per confermare la verifica.
+In caso contrario, qualcun altro sta intercettando questo dispositivo e probabilmente dovresti inserirlo nella lista nera.
+In futuro il processo di verifica sarà più sofisticato.</string>
     <string name="encryption_information_verify_key_match">Ho verificato che le chiavi corrispondano</string>
 
     <string name="e2e_enabling_on_app_update">Riot supporta ora la crittografia da-utente-a-utente, ma devi riconnetterti per abilitarla.\n\nPuoi farlo ora o più tardi dalle impostazioni dell\'applicazione.</string>
@@ -715,7 +723,7 @@ Sicuro di procedere?</string>
     <!-- directory activity  -->
     <string name="select_room_directory">Scegli un elenco di stanze</string>
     <string name="directory_server_fail_to_retrieve_server">Il server potrebbe essere non disponibile o sovraccarico</string>
-    <string name="directory_server_type_homeserver">Digita un server per elencare le sue stanze pubbliche</string>
+    <string name="directory_server_type_homeserver">Digita un server home per elencare le sue stanze pubbliche</string>
     <string name="directory_server_placeholder">URL server home</string>
     <string name="directory_server_all_rooms_on_server">Tutte le stanze sul server home %s</string>
     <string name="directory_server_native_rooms">Tutte le stanze native %s</string>
@@ -752,7 +760,7 @@ Sicuro di procedere?</string>
     <string name="widget_integration_no_permission_in_room">Non hai i permessi per eseguire l\'azione in questa stanza.</string>
     <string name="widget_integration_missing_room_id">room_id mancante nella richiesta.</string>
     <string name="widget_integration_missing_user_id">user_id mancante nella richiesta.</string>
-    <string name="room_add_matrix_apps">Aggiungi una Matrix app</string>
+    <string name="room_add_matrix_apps">Aggiungi una app Matrix</string>
     <string name="option_take_photo">Cattura foto</string>
     <string name="option_take_video">Cattura video</string>
 
@@ -805,7 +813,9 @@ Sicuro di procedere?</string>
 	<item quantity="other">%d membri</item>
 </plurals>
     <string name="room_participants_kick_prompt_msg">Sei sicuro di voler cacciar fuori questo utente dalla chat?</string>
-    <string name="room_participants_ban_prompt_msg">Sei sicuro di voler proibire l\'accesso alla chat a questo utente?</string>
+    <string name="room_participants_ban_prompt_msg">Sei sicuro di voler bandire dalla chat questo utente?
+
+Tieni presente che l\'azione riavvierà l\'app e potrebbe impiegarci un po\' di tempo.</string>
 
     <plurals name="room_new_messages_notification">
 	<item quantity="one">1 nuovo messaggio</item>
@@ -868,27 +878,27 @@ Sicuro di procedere?</string>
 
     <!-- Widget Integration Manager -->
     <string name="widget_integration_room_not_visible">La stanza %s non è visibile.</string>
-    <string name="settings_labs_matrix_apps">Apps di Matrix</string>
+    <string name="settings_labs_matrix_apps">Le App Matrix</string>
     <string name="settings_labs_native_camera">Usa fotocamera nativa</string>
 
     <!-- share keys -->
-    <string name="you_added_a_new_device">Hai aggiunto un nuovo dispositivo \'%s\', che sta richiedendo chiavi di cifratura.</string>
-    <string name="your_unverified_device_requesting">Il dispositivo non verificato \'%s\' sta richiedendo chiavi di cifratura.</string>
+    <string name="you_added_a_new_device">Hai aggiunto un nuovo dispositivo \'%s\' che sta richiedendo le chiavi crittografiche.</string>
+    <string name="your_unverified_device_requesting">Il tuo dispositivo non verificato \'%s\' sta richiedendo le chiavi crittografiche.</string>
     <string name="start_verification">Inizia la verifica</string>
     <string name="share_without_verifying">Condividi senza verificare</string>
     <string name="ignore_request">Ignora la richiesta</string>
 
     <!-- conference call -->
     <string name="conference_call_warning_title">Attenzione!</string>
-    <string name="conference_call_warning_message">Le chiamate in conferenza sono in sviluppo e potrebbero essere inaffidabili.</string>
+    <string name="conference_call_warning_message">La chiamata in conferenza è in fase di sviluppo e potrebbe non essere affidabile.</string>
 
     <!-- slash commands -->
     <string name="command_error">Errore di comando</string>
     <string name="unrecognized_command">Comando non riconosciuto: %s</string>
 
     <!-- notification statuses -->
-    <string name="notification_off">Off</string>
-    <string name="notification_on">On</string>
+    <string name="notification_off">Spento</string>
+    <string name="notification_on">Acceso</string>
     <string name="notification_noisy">Rumoroso</string>
 
     <string name="create">Crea</string>
@@ -899,7 +909,7 @@ Sicuro di procedere?</string>
     <string name="community_id_hint">esempio</string>
 
     <!-- group details -->
-    <string name="group_details_home">Inizio</string>
+    <string name="group_details_home">Home</string>
     <string name="group_details_rooms">Stanze</string>
     <string name="no_users_placeholder">Nessun utente</string>
 
@@ -909,10 +919,10 @@ Sicuro di procedere?</string>
     <string name="filter_group_members">Filtra i membri del gruppo</string>
     <string name="filter_group_rooms">Filtra le stanze del gruppo</string>
 
-    <string name="group_no_long_description">L\'admin della comunità non ha fornito una descrizione estesa per questa comunità.</string>
+<string name="group_no_long_description">L\'amministratore non ha fornito una descrizione estesa per questa comunità.</string>
 
-    <string name="has_been_kicked">Sei stato cacciato via da %1$s da %2$s</string>
-    <string name="has_been_banned">Sei stato bandito da %1$s da %2$s</string>
+    <string name="has_been_kicked">%2$s ti ha buttato fuori da %1$s</string>
+    <string name="has_been_banned">%2$s ti ha bandito da %1$s</string>
     <string name="reason_colon">Motivo: %1$s</string>
     <string name="rejoin">Rientra</string>
     <string name="forget_room">Dimentica la stanza</string>
@@ -922,9 +932,9 @@ Sicuro di procedere?</string>
 <string name="settings_flair">Predisposizione</string>
 
     <string name="room_settings_no_flair">" Questa stanza non mostra predisposizione per alcuna comunità"</string>
-    <string name="widget_integration_positive_power_level">Il livello di poteri deve essere un intero positivo.</string>
-    <string name="notice_avatar">Avatar notifica</string>
-    <string name="receipt_avatar">Avatar ricevuta</string>
+    <string name="widget_integration_positive_power_level">Il livello di potere deve essere un intero positivo.</string>
+    <string name="notice_avatar">Notificare avatar</string>
+    <string name="receipt_avatar">Avatar ricevuto</string>
     <plurals name="membership_changes">
 	<item quantity="one">1 cambio d\'appartenenza</item>
 	<item quantity="other">%d cambi d\'appartenenza</item>
@@ -964,18 +974,18 @@ Aggiungerne qualcuno ora?</string>
     <string name="settings_opt_in_of_analytics_prompt">Attiva le statistiche per aiutarci a migliorare Riot.</string>
     <string name="settings_opt_in_of_analytics_ok">Sì, voglio aiutare!</string>
 
-    <string name="widget_integration_missing_parameter">Manca un parametro necessario.</string>
+    <string name="widget_integration_missing_parameter">Parametro necessario mancante.</string>
     <string name="widget_integration_invalid_parameter">Un parametro non è valido.</string>
-    <string name="dialog_user_consent_content">Per continuare a usare l\'homeserver %1$s devi leggere e accettare le condizioni di utilizzo.</string>
+    <string name="dialog_user_consent_content">Per continuare ad usare l\'homeserver %1$s devi leggere e accettare i termini e le condizioni di utilizzo.</string>
     <string name="dialog_user_consent_submit">Leggi adesso</string>
 
     <string name="deactivate_account_title">Disattiva account</string>
-    <string name="deactivate_account_content">Il tuo account sarà permanentemente inutilizzabile. Non potrai accedere e nessuno potrà ri-registrare lo stesso ID utente. Il tuo account abbandonerà tutte le stanze a cui partecipa e i dettagli del tuo account saranno rimossi dal server di identità. <b>Questa azione è irreversibile</b>.
+    <string name="deactivate_account_content">Questo renderà il tuo account permanentemente inutilizzabile. Non ci potrai più accedere e nessuno potrà ri-registrare lo stesso ID utente. Il tuo account abbandonerà tutte le stanze a cui partecipa e i dettagli del tuo account saranno rimossi dal server identità. <b>Questa azione è irreversibile</b>.
 
-Disattivare il tuo account <b>non eliminerà in modo predefinito i messaggi che hai inviato</b>. Se vuoi che noi dimentichiamo i tuoi messaggi, seleziona la casella sotto.
+Disattivare il tuo account <b>non eliminerà in modo automatico i messaggi che hai inviato</b>. Se vuoi che siano dimenticati i tuoi messaggi, seleziona la casella qua sotto.
 
-La visibilità dei messaggi in Matrix è simile alle email. Se dimentichiamo i messaggi significa che quelli che hai inviato non verranno condivisi con alcun utente nuovo o non registrato, ma gli utenti registrati che avevano già accesso ai messaggi avranno ancora accesso alla loro copia.</string>
-    <string name="deactivate_account_delete_checkbox">Per favore dimenticate tutti i messaggi che ho inviato quando il mio account viene disattivato (Attenzione: gli utenti futuri vedranno un elenco incompleto di conversazioni)</string>
+La visibilità dei messaggi in Matrix è simile alle email. \"Dimenticare i tuoi messaggi\" significa che quelli che hai inviato non verranno condivisi con alcun utente nuovo o non registrato, ma gli utenti registrati che hanno avuto accesso ai tuoi messaggi avranno ancora accesso alla loro copia.</string>
+    <string name="deactivate_account_delete_checkbox">Per favore dimenticate tutti i messaggi che ho inviato al momento della disattivazione del mio account (Attenzione: gli utenti futuri vedranno un elenco incompleto di conversazioni)</string>
     <string name="deactivate_account_prompt_password">Per continuare, inserisci la tua password:</string>
     <string name="deactivate_account_submit">Disattiva account</string>
 
@@ -998,9 +1008,36 @@ La visibilità dei messaggi in Matrix è simile alle email. Se dimentichiamo i m
     <string name="go_on_with">prosegui con…</string>
     <string name="error_no_external_application_found">Spiacenti, ma non è stata trovata alcuna applicazione esterna per completare l\'azione.</string>
 
-    <string name="settings_labs_enable_send_voice">Invia messaggio vocale (si richiede un\'applicazione di terze parti per registrare i messaggi vocali)</string>
+    <string name="settings_labs_enable_send_voice">Invia messaggio vocale (applicazione di terze parti richiesta per registrare i messaggi vocali)</string>
 
     <string name="group_details_people">Persone</string>
     <string name="error_empty_field_your_password">Per favore, inserisci la tua password.</string>
+
+<string name="send_bug_report_description_in_english">Se possibile, scrivi la descrizione in inglese, grazie.</string>
+    <string name="room_message_placeholder_reply_to_encrypted">Invia risposta criptata…</string>
+    <string name="room_message_placeholder_reply_to_not_encrypted">Risposta non criptata…</string>
+    <string name="settings_preview_media_before_sending">Mostra file multimediale prima dell\'invio</string>
+
+    <string name="settings_without_flair">Attualmente non sei membro di alcuna comunità.</string>
+
+    <string name="settings_labs_keyboard_options_to_send_message">Usa invio da tastiera per spedire un messaggio</string>
+    <string name="command_description_emote">Mostra l\'azione</string>
+    <string name="command_description_ban_user">Bandisci utente con un dato id</string>
+    <string name="command_description_unban_user">Rimuovi espulsione per un dato id</string>
+    <string name="command_description_op_user">Definisci il livello di potere di un utente</string>
+    <string name="command_description_deop_user">Dimentica utente con un dato id</string>
+    <string name="command_description_invite_user">Invita utente con un dato id nella stanza corrente</string>
+    <string name="command_description_join_room">Entra nella stanza con un determinato alias</string>
+    <string name="command_description_part_room">Lascia la stanza</string>
+    <string name="command_description_topic">Imposta argomento della stanza</string>
+    <string name="command_description_kick_user">Caccia fuori un utente con un dato id</string>
+    <string name="command_description_nick">Cambia il tuo nome visualizzato</string>
+    <string name="command_description_markdown">Markdown attivo / spento</string>
+    <string name="command_description_clear_scalar_token">Per correggere la gestione delle app Matrix</string>
+
+    <string name="room_tombstone_versioned_description">Questa stanza è stata sostituita e non è più attiva</string>
+    <string name="room_tombstone_continuation_link">La conversazione continua qui</string>
+    <string name="room_tombstone_continuation_description">Questa stanza è la continuazione di un\'altra conversazione</string>
+    <string name="room_tombstone_predecessor_link">Clicca qui per vedere i messaggi più vecchi</string>
 
 </resources>

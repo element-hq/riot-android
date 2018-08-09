@@ -64,6 +64,7 @@ public class VectorSearchMessagesListAdapter extends VectorMessagesAdapter {
                 R.layout.adapter_item_vector_message_code,
                 R.layout.adapter_item_vector_message_image_video,
                 R.layout.adapter_item_vector_hidden_message,
+                R.layout.adapter_item_vector_message_room_versioned,
                 mediasCache);
 
         setNotifyOnChange(true);
@@ -111,7 +112,7 @@ public class VectorSearchMessagesListAdapter extends VectorMessagesAdapter {
             RoomState roomState = row.getRoomState();
 
             if (null == roomState) {
-                roomState = room.getLiveState();
+                roomState = room.getState();
             }
 
             // refresh the avatar
@@ -127,7 +128,7 @@ public class VectorSearchMessagesListAdapter extends VectorMessagesAdapter {
             // display the body
             TextView bodyTextView = convertView.findViewById(R.id.messagesAdapter_body);
             // set the message text
-            EventDisplay display = new RiotEventDisplay(mContext, event, (null != room) ? room.getLiveState() : null);
+            EventDisplay display = new RiotEventDisplay(mContext, event, (null != room) ? room.getState() : null);
             CharSequence text = display.getTextualDisplay();
 
             if (null == text) {

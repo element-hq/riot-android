@@ -23,7 +23,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
-import android.provider.Browser;
+import android.support.annotation.Nullable;
 import android.support.v4.app.FragmentManager;
 import android.support.v7.app.AlertDialog;
 import android.text.TextUtils;
@@ -63,6 +63,7 @@ import org.matrix.androidsdk.rest.model.message.Message;
 import org.matrix.androidsdk.rest.model.message.VideoMessage;
 import org.matrix.androidsdk.util.JsonUtils;
 import org.matrix.androidsdk.util.Log;
+import org.matrix.androidsdk.util.PermalinkUtils;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -95,25 +96,56 @@ import im.vector.widgets.WidgetsManager;
 public class VectorMessageListFragment extends MatrixMessageListFragment implements IMessagesAdapterActionsListener {
     private static final String LOG_TAG = VectorMessageListFragment.class.getSimpleName();
 
-    public interface IListFragmentEventListener {
-        void onListTouch();
+    public interface VectorMessageListFragmentListener {
+        /**
+         * Display a spinner to warn the user that a back pagination is in progress.
+         */
+        void showPreviousEventsLoadingWheel();
+
+        /**
+         * Dismiss the back pagination progress.
+         */
+        void hidePreviousEventsLoadingWheel();
+
+        /**
+         * Display a spinner to warn the user that a forward pagination is in progress.
+         */
+        void showNextEventsLoadingWheel();
+
+        /**
+         * Dismiss the forward pagination progress.
+         */
+        void hideNextEventsLoadingWheel();
+
+        /**
+         * Display a spinner to warn the user that the initialization is in progress.
+         */
+        void showMainLoadingWheel();
+
+        /**
+         * Dismiss the initialization spinner.
+         */
+        void hideMainLoadingWheel();
+
+        /**
+         * User has selected/unselected an event
+         *
+         * @param currentSelectedEvent the current selected event, or null if no event is selected
+         */
+        void onSelectedEventChange(@Nullable Event currentSelectedEvent);
     }
 
     private static final String TAG_FRAGMENT_RECEIPTS_DIALOG = "TAG_FRAGMENT_RECEIPTS_DIALOG";
     private static final String TAG_FRAGMENT_USER_GROUPS_DIALOG = "TAG_FRAGMENT_USER_GROUPS_DIALOG";
 
-    private IListFragmentEventListener mHostActivityListener;
+    @Nullable
+    private VectorMessageListFragmentListener mListener;
 
     // onMediaAction actions
     // private static final int ACTION_VECTOR_SHARE = R.id.ic_action_vector_share;
     private static final int ACTION_VECTOR_FORWARD = R.id.ic_action_vector_forward;
     private static final int ACTION_VECTOR_SAVE = R.id.ic_action_vector_save;
     static final int ACTION_VECTOR_OPEN = 123456;
-
-    // spinners
-    private View mBackProgressView;
-    private View mForwardProgressView;
-    private View mMainProgressView;
 
     private VectorImageGetter mVectorImageGetter;
 
@@ -137,6 +169,15 @@ public class VectorMessageListFragment extends MatrixMessageListFragment impleme
 
         f.setArguments(args);
         return f;
+    }
+
+    /**
+     * Update the listener
+     *
+     * @param listener the new listener
+     */
+    public void setListener(@Nullable VectorMessageListFragmentListener listener) {
+        mListener = listener;
     }
 
     @Override
@@ -185,28 +226,6 @@ public class VectorMessageListFragment extends MatrixMessageListFragment impleme
         return getClass().getName() + ".MATRIX_MESSAGE_FRAGMENT_TAG";
     }
 
-    /**
-     * Called when a fragment is first attached to its activity.
-     * {@link #onCreate(Bundle)} will be called after this.
-     *
-     * @param aHostActivity parent activity
-     */
-    @Override
-    public void onAttach(Activity aHostActivity) {
-        super.onAttach(aHostActivity);
-        try {
-            mHostActivityListener = (IListFragmentEventListener) aHostActivity;
-        } catch (ClassCastException e) {
-            // if host activity does not provide the implementation, just ignore it
-            Log.w(LOG_TAG, "## onAttach(): host activity does not implement IListFragmentEventListener " + aHostActivity);
-            mHostActivityListener = null;
-        }
-
-        mBackProgressView = aHostActivity.findViewById(R.id.loading_room_paginate_back_progress);
-        mForwardProgressView = aHostActivity.findViewById(R.id.loading_room_paginate_forward_progress);
-        mMainProgressView = aHostActivity.findViewById(R.id.main_progress_layout);
-    }
-
     @Override
     public void onPause() {
         super.onPause();
@@ -238,20 +257,6 @@ public class VectorMessageListFragment extends MatrixMessageListFragment impleme
         });
     }
 
-    /**
-     * Called when the fragment is no longer attached to its activity.  This
-     * is called after {@link #onDestroy()}.
-     */
-    @Override
-    public void onDetach() {
-        super.onDetach();
-        mHostActivityListener = null;
-
-        mBackProgressView = null;
-        mForwardProgressView = null;
-        mMainProgressView = null;
-    }
-
     @Override
     public MXSession getSession(String matrixId) {
         return Matrix.getMXSession(getActivity(), matrixId);
@@ -281,10 +286,6 @@ public class VectorMessageListFragment extends MatrixMessageListFragment impleme
             mCheckSlideToHide = false;
             MXCActionBarActivity.dismissKeyboard(getActivity());
         }
-
-        // notify host activity
-        if (null != mHostActivityListener)
-            mHostActivityListener.onListTouch();
     }
 
     @Override
@@ -329,6 +330,18 @@ public class VectorMessageListFragment extends MatrixMessageListFragment impleme
         if (null != mAdapter) {
             ((VectorMessagesAdapter) mAdapter).cancelSelectionMode();
         }
+    }
+
+    /**
+     * Get the current selected event, or null if no event is selected.
+     */
+    @Nullable
+    public Event getCurrentSelectedEvent() {
+        if (null != mAdapter) {
+            return ((VectorMessagesAdapter) mAdapter).getCurrentSelectedEvent();
+        }
+
+        return null;
     }
 
     private final ApiCallback<Void> mDeviceVerificationCallback = new ApiCallback<Void>() {
@@ -681,7 +694,7 @@ public class VectorMessageListFragment extends MatrixMessageListFragment impleme
                 }
             }
         } else if (action == R.id.ic_action_vector_permalink) {
-            VectorUtils.copyToClipboard(getActivity(), VectorUtils.getPermalink(event.roomId, event.eventId));
+            VectorUtils.copyToClipboard(getActivity(), PermalinkUtils.createPermalink(event));
         } else if (action == R.id.ic_action_vector_report) {
             onMessageReport(event);
         } else if ((action == R.id.ic_action_view_source) || (action == R.id.ic_action_view_decrypted_source)) {
@@ -691,7 +704,11 @@ public class VectorMessageListFragment extends MatrixMessageListFragment impleme
                     View view = getActivity().getLayoutInflater().inflate(R.layout.dialog_event_content, null);
                     TextView textview = view.findViewById(R.id.event_content_text_view);
 
-                    Gson gson = new GsonBuilder().setPrettyPrinting().create();
+                    Gson gson = new GsonBuilder()
+                            .disableHtmlEscaping()
+                            .setPrettyPrinting()
+                            .create();
+
                     textview.setText(gson.toJson(JsonUtils.toJson((action == R.id.ic_action_view_source) ? event : event.getClearEvent())));
 
                     new AlertDialog.Builder(getActivity())
@@ -734,6 +751,13 @@ public class VectorMessageListFragment extends MatrixMessageListFragment impleme
         }
     }
 
+    @Override
+    public void onSelectedEventChange(@Nullable Event currentSelectedEvent) {
+        if (mListener != null && isAdded()) {
+            mListener.onSelectedEventChange(currentSelectedEvent);
+        }
+    }
+
     /**
      * The user reports a content problem to the server
      *
@@ -764,8 +788,7 @@ public class VectorMessageListFragment extends MatrixMessageListFragment impleme
                                                 List<String> userIdsList = new ArrayList<>();
                                                 userIdsList.add(event.sender);
 
-                                                // TODO Remove cast when SDK accept a List
-                                                mSession.ignoreUsers((ArrayList) userIdsList, new SimpleApiCallback<Void>() {
+                                                mSession.ignoreUsers(userIdsList, new SimpleApiCallback<Void>() {
                                                     @Override
                                                     public void onSuccess(Void info) {
                                                     }
@@ -911,40 +934,46 @@ public class VectorMessageListFragment extends MatrixMessageListFragment impleme
         return PreferencesManager.displayAllEvents(getActivity());
     }
 
-    private void setViewVisibility(View view, int visibility) {
-        if ((null != view) && (null != getActivity())) {
-            view.setVisibility(visibility);
+    @Override
+    public void showLoadingBackProgress() {
+        if (mListener != null && isAdded()) {
+            mListener.showPreviousEventsLoadingWheel();
         }
     }
 
     @Override
-    public void showLoadingBackProgress() {
-        setViewVisibility(mBackProgressView, View.VISIBLE);
-    }
-
-    @Override
     public void hideLoadingBackProgress() {
-        setViewVisibility(mBackProgressView, View.GONE);
+        if (mListener != null && isAdded()) {
+            mListener.hidePreviousEventsLoadingWheel();
+        }
     }
 
     @Override
     public void showLoadingForwardProgress() {
-        setViewVisibility(mForwardProgressView, View.VISIBLE);
+        if (mListener != null && isAdded()) {
+            mListener.showNextEventsLoadingWheel();
+        }
     }
 
     @Override
     public void hideLoadingForwardProgress() {
-        setViewVisibility(mForwardProgressView, View.GONE);
+        if (mListener != null && isAdded()) {
+            mListener.hideNextEventsLoadingWheel();
+        }
     }
 
     @Override
     public void showInitLoading() {
-        setViewVisibility(mMainProgressView, View.VISIBLE);
+        if (mListener != null && isAdded()) {
+            mListener.showMainLoadingWheel();
+        }
     }
 
     @Override
     public void hideInitLoading() {
-        setViewVisibility(mMainProgressView, View.GONE);
+        if (mListener != null && isAdded()) {
+            mListener.hideMainLoadingWheel();
+        }
     }
 
     public boolean onRowLongClick(int position) {
@@ -1027,8 +1056,8 @@ public class VectorMessageListFragment extends MatrixMessageListFragment impleme
             MessageRow row = mAdapter.getItem(position);
             Event event = row.getEvent();
 
-            // switch in section mode
-            ((VectorMessagesAdapter) mAdapter).onEventTap(event.eventId);
+            // toggle selection mode
+            ((VectorMessagesAdapter) mAdapter).onEventTap(event);
         } catch (Exception e) {
             Log.e(LOG_TAG, "## onRowClick() failed " + e.getMessage(), e);
         }
@@ -1073,8 +1102,8 @@ public class VectorMessageListFragment extends MatrixMessageListFragment impleme
                     onMediaAction(ACTION_VECTOR_OPEN, fileMessage.getUrl(), fileMessage.getMimeType(), fileMessage.body, fileMessage.file);
                 }
             } else {
-                // switch in section mode
-                vectorMessagesAdapter.onEventTap(event.eventId);
+                // toggle selection mode
+                vectorMessagesAdapter.onEventTap(event);
             }
         } catch (Exception e) {
             Log.e(LOG_TAG, "## onContentClick() failed " + e.getMessage(), e);
@@ -1111,7 +1140,7 @@ public class VectorMessageListFragment extends MatrixMessageListFragment impleme
     public boolean onAvatarLongClick(String userId) {
         if (getActivity() instanceof VectorRoomActivity) {
             try {
-                RoomState state = mRoom.getLiveState();
+                RoomState state = mRoom.getState();
 
                 if (null != state) {
                     String displayName = state.getMemberName(userId);
@@ -1220,7 +1249,7 @@ public class VectorMessageListFragment extends MatrixMessageListFragment impleme
     @Override
     public void onRoomAliasClick(String roomAlias) {
         try {
-            onURLClick(Uri.parse(VectorUtils.getPermalink(roomAlias, null)));
+            onURLClick(Uri.parse(PermalinkUtils.createPermalink(roomAlias)));
         } catch (Exception e) {
             Log.e(LOG_TAG, "onRoomAliasClick failed " + e.getLocalizedMessage(), e);
         }
@@ -1229,7 +1258,7 @@ public class VectorMessageListFragment extends MatrixMessageListFragment impleme
     @Override
     public void onRoomIdClick(String roomId) {
         try {
-            onURLClick(Uri.parse(VectorUtils.getPermalink(roomId, null)));
+            onURLClick(Uri.parse(PermalinkUtils.createPermalink(roomId)));
         } catch (Exception e) {
             Log.e(LOG_TAG, "onRoomIdClick failed " + e.getLocalizedMessage(), e);
         }
@@ -1238,7 +1267,7 @@ public class VectorMessageListFragment extends MatrixMessageListFragment impleme
     @Override
     public void onMessageIdClick(String messageId) {
         try {
-            onURLClick(Uri.parse(VectorUtils.getPermalink(mRoom.getRoomId(), messageId)));
+            onURLClick(Uri.parse(PermalinkUtils.createPermalink(mRoom.getRoomId(), messageId)));
         } catch (Exception e) {
             Log.e(LOG_TAG, "onRoomIdClick failed " + e.getLocalizedMessage(), e);
         }
@@ -1247,7 +1276,7 @@ public class VectorMessageListFragment extends MatrixMessageListFragment impleme
     @Override
     public void onGroupIdClick(String groupId) {
         try {
-            onURLClick(Uri.parse(VectorUtils.getPermalink(groupId, null)));
+            onURLClick(Uri.parse(PermalinkUtils.createPermalink(groupId)));
         } catch (Exception e) {
             Log.e(LOG_TAG, "onRoomIdClick failed " + e.getLocalizedMessage(), e);
         }

@@ -232,8 +232,10 @@ public class CallsManager {
                     switch (state) {
                         case IMXCall.CALL_STATE_CREATED:
                             if (mActiveCall.isIncoming()) {
-                                EventStreamService.getInstance().displayIncomingCallNotification(mActiveCall.getSession(),
-                                        mActiveCall.getRoom(), null, mActiveCall.getCallId(), null);
+                                if (EventStreamService.getInstance() != null) {
+                                    EventStreamService.getInstance().displayIncomingCallNotification(mActiveCall.getSession(),
+                                            mActiveCall.getRoom(), null, mActiveCall.getCallId(), null);
+                                }
                                 startRinging();
                             }
                             break;
@@ -248,8 +250,10 @@ public class CallsManager {
                             break;
 
                         case IMXCall.CALL_STATE_CONNECTED:
-                            EventStreamService.getInstance().displayCallInProgressNotification(mActiveCall.getSession(),
-                                    mActiveCall.getRoom(), mActiveCall.getCallId());
+                            if (EventStreamService.getInstance() != null) {
+                                EventStreamService.getInstance().displayCallInProgressNotification(mActiveCall.getSession(),
+                                        mActiveCall.getRoom(), mActiveCall.getCallId());
+                            }
                             mCallSoundsManager.stopSounds();
                             requestAudioFocus();
 
@@ -479,7 +483,7 @@ public class CallsManager {
         if ((null != mActiveCall) && !hasActiveCall) {
             Log.e(LOG_TAG, "## checkDeadCalls() : fix an infinite ringing");
 
-            if (null != EventStreamService.getInstance()) {
+            if (EventStreamService.getInstance() != null) {
                 EventStreamService.getInstance().hideCallNotifications();
             }
 
@@ -653,7 +657,9 @@ public class CallsManager {
             mCallView = null;
             mLocalVideoLayoutConfig = null;
 
-            EventStreamService.getInstance().hideCallNotifications();
+            if (EventStreamService.getInstance() != null) {
+                EventStreamService.getInstance().hideCallNotifications();
+            }
         }
     }
 }

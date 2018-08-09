@@ -10,7 +10,9 @@
     <uses-permission android:name="android.permission.READ_CONTACTS" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
-    <uses-permission android:name="android.permission.READ_LOGS" tools:ignore="ProtectedPermissions"/>
+    <uses-permission
+        android:name="android.permission.READ_LOGS"
+        tools:ignore="ProtectedPermissions" />
 
     <!-- universal links management -->
     <uses-permission android:name="android.permission.REORDER_TASKS" />
@@ -22,11 +24,15 @@
     <uses-permission android:name="android.permission.RECORD_AUDIO" />
     <uses-permission android:name="android.permission.MODIFY_AUDIO_SETTINGS" />
     <!-- required on android 6.0.0 devices -->
-    <uses-permission android:name="android.permission.WRITE_SETTINGS" tools:ignore="ProtectedPermissions"/>
+    <uses-permission
+        android:name="android.permission.WRITE_SETTINGS"
+        tools:ignore="ProtectedPermissions" />
     <uses-permission android:name="android.permission.CHANGE_NETWORK_STATE" />
 
     <!-- shared files from external application -->
-    <uses-permission android:name="android.permission.MANAGE_DOCUMENTS" tools:ignore="ProtectedPermissions"/>
+    <uses-permission
+        android:name="android.permission.MANAGE_DOCUMENTS"
+        tools:ignore="ProtectedPermissions" />
 
     <!-- to be able to turn on display when a notification is received-->
     <uses-permission android:name="android.permission.WAKE_LOCK" />
@@ -35,7 +41,7 @@
     <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
 
     <!-- disable the battery optimisation on some devices to let the background sync works -->
-    <uses-permission android:name="android.permission.REQUEST_IGNORE_BATTERY_OPTIMIZATIONS"/>
+    <uses-permission android:name="android.permission.REQUEST_IGNORE_BATTERY_OPTIMIZATIONS" />
 
     <!-- videocall feature-->
     <!-- android.permission.CAMERA defines android.hardware.camera -->
@@ -47,7 +53,7 @@
     <uses-feature
         android:name="android.hardware.camera.any"
         android:required="false"
-        tools:replace="required"/>
+        tools:replace="required" />
 
     <uses-feature
         android:name="android.hardware.camera.autofocus"
@@ -104,7 +110,7 @@
         <!-- No limit for screen ratio: avoid black strips -->
         <meta-data
             android:name="android.max_aspect"
-            android:value="9.9"/>
+            android:value="9.9" />
 
         <!-- activities list starts here -->
         <activity
@@ -306,7 +312,7 @@
             android:label="@string/title_activity_group_details"
             android:launchMode="singleTop"
             android:theme="@style/GroupAppTheme"
-            android:windowSoftInputMode="adjustResize"/>
+            android:windowSoftInputMode="adjustResize" />
         <activity android:name=".activity.VectorUniversalLinkActivity">
             <intent-filter>
                 <action android:name="android.intent.action.VIEW" />
@@ -385,7 +391,12 @@
             android:label="@string/settings_notification_privacy"
             android:theme="@style/CountryPickerTheme" />
         <activity
-            android:name=".activity.SimpleWebViewActivity"
+            android:name=".activity.VectorWebViewActivity"
+            android:theme="@style/AppTheme.NoActionBar" />
+
+        <activity
+            android:name="im.vector.activity.MediaPreviewerActivity"
+            android:configChanges="orientation|screenSize"
             android:theme="@style/AppTheme.NoActionBar" />
 
         <!-- broadcast receiver -->

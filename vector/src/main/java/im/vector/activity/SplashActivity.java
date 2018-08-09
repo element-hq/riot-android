@@ -42,8 +42,7 @@ import im.vector.ErrorListener;
 import im.vector.Matrix;
 import im.vector.R;
 import im.vector.VectorApp;
-import im.vector.analytics.Event;
-import im.vector.analytics.PiwikAnalytics;
+import im.vector.analytics.TrackingEvent;
 import im.vector.gcm.GcmRegistrationManager;
 import im.vector.receiver.VectorUniversalLinkReceiver;
 import im.vector.services.EventStreamService;
@@ -95,7 +94,7 @@ public class SplashActivity extends MXCActionBarActivity {
         Log.e(LOG_TAG, "##onFinish() : start VectorHomeActivity");
         final long finishTime = System.currentTimeMillis();
         final long duration = finishTime - mLaunchTime;
-        final Event event = new Event.LaunchScreen(duration);
+        final TrackingEvent event = new TrackingEvent.LaunchScreen(duration);
         VectorApp.getInstance().getAnalytics().trackEvent(event);
 
         if (!hasCorruptedStore()) {
@@ -267,7 +266,7 @@ public class SplashActivity extends MXCActionBarActivity {
         // trigger the GCM registration if required
         GcmRegistrationManager gcmRegistrationManager = Matrix.getInstance(getApplicationContext()).getSharedGCMRegistrationManager();
 
-        if (!gcmRegistrationManager.isGCMRegistred()) {
+        if (!gcmRegistrationManager.isGcmRegistered()) {
             gcmRegistrationManager.checkRegistrations();
         } else {
             gcmRegistrationManager.forceSessionsRegistration(null);

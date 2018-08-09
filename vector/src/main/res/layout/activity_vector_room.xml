@@ -20,11 +20,10 @@
             tools:visibility="visible" />
 
         <android.support.v7.widget.Toolbar
-            android:id="@+id/room_toolbar"
+            android:id="@+id/toolbar"
             style="@style/VectorToolbarStyle"
             android:layout_width="match_parent"
             android:layout_height="?attr/actionBarSize"
-            android:layout_alignParentTop="true"
             android:background="?attr/primary_color"
             app:contentInsetEnd="0dp"
             app:contentInsetStart="0dp">
@@ -74,7 +73,7 @@
 
             <Button
                 android:id="@+id/button_join_room"
-                android:layout_width="94dp"
+                android:layout_width="110dp"
                 android:layout_height="36dp"
                 android:layout_marginRight="16dp"
                 android:background="@color/vector_green_color"
@@ -83,7 +82,7 @@
 
             <Button
                 android:id="@+id/button_decline"
-                android:layout_width="94dp"
+                android:layout_width="110dp"
                 android:layout_height="36dp"
                 android:background="@android:color/white"
                 android:text="@string/cancel"
@@ -343,6 +342,8 @@
                 android:layout_height="wrap_content"
                 android:layout_above="@id/bottom_separator"
                 android:minHeight="42dp"
+                android:paddingBottom="8dp"
+                android:paddingTop="8dp"
                 android:visibility="invisible"
                 tools:visibility="visible">
 
@@ -425,5 +426,4 @@
             android:indeterminate="true" />
 
     </RelativeLayout>
-
 </RelativeLayout>

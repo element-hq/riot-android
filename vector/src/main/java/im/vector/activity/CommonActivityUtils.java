@@ -144,7 +144,7 @@ public class CommonActivityUtils {
      * @param clearCredentials true to clear the credentials
      * @param callback         the asynchronous callback
      */
-    public static void logout(Context context, List<MXSession> sessions, boolean clearCredentials, final SimpleApiCallback<Void> callback) {
+    public static void logout(Context context, List<MXSession> sessions, boolean clearCredentials, final ApiCallback<Void> callback) {
         logout(context, sessions.iterator(), clearCredentials, callback);
     }
 
@@ -159,7 +159,7 @@ public class CommonActivityUtils {
     private static void logout(final Context context,
                                final Iterator<MXSession> sessions,
                                final boolean clearCredentials,
-                               final SimpleApiCallback<Void> callback) {
+                               final ApiCallback<Void> callback) {
         if (!sessions.hasNext()) {
             if (null != callback) {
                 callback.onSuccess(null);
@@ -623,7 +623,7 @@ public class CommonActivityUtils {
                 }
             }
 
-            if (null != EventStreamService.getInstance()) {
+            if (EventStreamService.getInstance() != null) {
                 EventStreamService.getInstance().refreshForegroundNotification();
             }
         }
@@ -1020,8 +1020,8 @@ public class CommonActivityUtils {
                 Room room = session.getDataHandler().getRoom(aRoomId);
 
                 // get the room alias (if any) for the preview data
-                if ((null != room) && (null != room.getLiveState())) {
-                    roomAlias = room.getLiveState().getAlias();
+                if ((null != room) && (null != room.getState())) {
+                    roomAlias = room.getState().getAlias();
                 }
 
                 intentRetCode = new Intent(aContext, aTargetActivity);
@@ -1070,26 +1070,29 @@ public class CommonActivityUtils {
                                    final String roomId,
                                    final RoomPreviewData roomPreviewData,
                                    final ApiCallback<Void> callback) {
-        Room room = session.getDataHandler().getRoom(roomId, false);
+        // Check whether the room exists to handled the cases where the user is invited or he has joined.
+        // CAUTION: the room may exist whereas the user membership is neither invited nor joined.
+        final Room room = session.getDataHandler().getRoom(roomId, false);
+        if (null != room && room.hasMembership(RoomMember.MEMBERSHIP_INVITE)) {
+            Log.d(LOG_TAG, "previewRoom : the user is invited -> display the preview " + VectorApp.getCurrentActivity());
+            previewRoom(fromActivity, roomPreviewData);
 
-        // if the room exists
-        if (null != room) {
-            // either the user is invited
-            if (room.isInvited()) {
-                Log.d(LOG_TAG, "previewRoom : the user is invited -> display the preview " + VectorApp.getCurrentActivity());
-                previewRoom(fromActivity, roomPreviewData);
-            } else {
-                Log.d(LOG_TAG, "previewRoom : open the room");
-                Map<String, Object> params = new HashMap<>();
-                params.put(VectorRoomActivity.EXTRA_MATRIX_ID, session.getMyUserId());
-                params.put(VectorRoomActivity.EXTRA_ROOM_ID, roomId);
-                CommonActivityUtils.goToRoomPage(fromActivity, session, params);
+            if (null != callback) {
+                callback.onSuccess(null);
             }
+        } else if (null != room && room.hasMembership(RoomMember.MEMBERSHIP_JOIN)) {
+            Log.d(LOG_TAG, "previewRoom : the user joined the room -> open the room");
+            final Map<String, Object> params = new HashMap<>();
+            params.put(VectorRoomActivity.EXTRA_MATRIX_ID, session.getMyUserId());
+            params.put(VectorRoomActivity.EXTRA_ROOM_ID, roomId);
+            CommonActivityUtils.goToRoomPage(fromActivity, session, params);
 
             if (null != callback) {
                 callback.onSuccess(null);
             }
         } else {
+            // Display a preview by default.
+            Log.d(LOG_TAG, "previewRoom : display the preview");
             roomPreviewData.fetchPreviewData(new ApiCallback<Void>() {
                 private void onDone() {
                     if (null != callback) {
@@ -1588,7 +1591,7 @@ public class CommonActivityUtils {
                                               final File srcFile,
                                               final String filename,
                                               final String mimeType,
-                                              final SimpleApiCallback<String> callback) {
+                                              final ApiCallback<String> callback) {
         saveFileInto(srcFile, Environment.DIRECTORY_DOWNLOADS, filename, new ApiCallback<String>() {
             @Override
             public void onSuccess(String fullFilePath) {

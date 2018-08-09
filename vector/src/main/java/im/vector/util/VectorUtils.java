@@ -88,33 +88,6 @@ public class VectorUtils {
     public static final int TAKE_IMAGE = 1;
 
     //==============================================================================================================
-    // permalink methods
-    //==============================================================================================================
-
-    /**
-     * Provides a permalink for a room id and an eventId.
-     * The eventId is optional.
-     *
-     * @param roomIdOrAlias the room id or alias.
-     * @param eventId       the event id (optional)
-     * @return the permalink
-     */
-    public static String getPermalink(String roomIdOrAlias, String eventId) {
-        if (TextUtils.isEmpty(roomIdOrAlias)) {
-            return null;
-        }
-
-        String link = "https://matrix.to/#/" + roomIdOrAlias;
-
-        if (!TextUtils.isEmpty(eventId)) {
-            link += "/" + eventId;
-        }
-
-        // the $ character is not as a part of an url so escape it.
-        return link.replace("$", "%24");
-    }
-
-    //==============================================================================================================
     // Clipboard helper
     //==============================================================================================================
 
@@ -175,9 +148,9 @@ public class VectorUtils {
             List<RoomMember> roomMembersList = new ArrayList<>(roomMembers);
 
             if (TextUtils.equals(roomMembersList.get(0).getUserId(), session.getMyUserId())) {
-                return room.getLiveState().getMemberName(roomMembersList.get(1).getUserId());
+                return room.getState().getMemberName(roomMembersList.get(1).getUserId());
             } else {
-                return room.getLiveState().getMemberName(roomMembersList.get(0).getUserId());
+                return room.getState().getMemberName(roomMembersList.get(0).getUserId());
             }
         } else {
             return getRoomDisplayName(context, session, room);
@@ -204,7 +177,7 @@ public class VectorUtils {
             // https://github.com/matrix-org/matrix-js-sdk/blob/develop/lib/models/room.js#L617
             // calculateRoomName(room, userId)
 
-            RoomState roomState = room.getLiveState();
+            RoomState roomState = room.getState();
 
             if (!TextUtils.isEmpty(roomState.name)) {
                 return roomState.name;
@@ -935,7 +908,7 @@ public class VectorUtils {
     public static String getUserOnlineStatus(final Context context,
                                              final MXSession session,
                                              final String userId,
-                                             final SimpleApiCallback<Void> refreshCallback) {
+                                             final ApiCallback<Void> refreshCallback) {
         // sanity checks
         if ((null == session) || (null == userId)) {
             return null;

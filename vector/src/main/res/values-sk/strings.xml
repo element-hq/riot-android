@@ -269,7 +269,7 @@ Chcete aplikácii Riot povoliť prístup k vašim kontaktom?</string>
     <string name="permissions_action_not_performed_missing_permissions">Prepáčte, Akciu nie je možné vykonať kvôli chýbajúcim oprávneniam</string>
 
     <string name="media_slider_saved">Uložené</string>
-    <string name="media_slider_saved_message">Uložiť do priečinka stiahnuté</string>
+    <string name="media_slider_saved_message">Uložiť do priečinka stiahnuté?</string>
     <string name="yes">ÁNO</string>
     <string name="no">NIE</string>
     <string name="_continue">Pokračovať</string>
@@ -974,4 +974,13 @@ Viditeľnosť správ odoslaných cez matrix funguje podobne ako viditeľnosť sp
 
     <string name="e2e_re_request_encryption_key_dialog_content">Prosím spustite Riot na inom zariadení, ktoré je schopné dešifrovať túto správu, čím sa automaticky spustí prenos chýbajúcich kľúčov na toto zariadenie.</string>
 
-    </resources>
+    <string name="option_send_voice">Odoslať hlasovú správu</string>
+
+    <string name="go_on_with">Pokračovať v aplikácii…</string>
+    <string name="error_no_external_application_found">Nebola nájdená žiadna vhodná aplikácia na dokončenie tejto akcie.</string>
+
+    <string name="settings_labs_enable_send_voice">Posielanie hlasových správ (vyžaduje externú aplikáciu na nahrávanie zvuku)</string>
+
+    <string name="error_empty_field_your_password">Prosím, vložte svoje heslo.</string>
+
+</resources>

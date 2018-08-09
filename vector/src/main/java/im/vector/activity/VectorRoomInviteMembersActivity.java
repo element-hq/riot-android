@@ -319,7 +319,7 @@ public class VectorRoomInviteMembersActivity extends VectorBaseSearchActivity {
         // if a room is defined
         if (null != mRoom) {
             // the room members must not be added again
-            Collection<RoomMember> members = mRoom.getLiveState().getDisplayableMembers();
+            Collection<RoomMember> members = mRoom.getState().getDisplayableMembers();
             for (RoomMember member : members) {
                 if (TextUtils.equals(member.membership, RoomMember.MEMBERSHIP_JOIN) || TextUtils.equals(member.membership, RoomMember.MEMBERSHIP_INVITE)) {
                     hiddenUserIds.add(member.getUserId());

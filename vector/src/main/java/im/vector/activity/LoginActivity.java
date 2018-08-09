@@ -372,7 +372,7 @@ public class LoginActivity extends MXCActionBarActivity implements RegistrationM
                 goToSplash();
             } else {
                 // detect if the application has already been started
-                if (null == EventStreamService.getInstance()) {
+                if (EventStreamService.getInstance() == null) {
                     Log.d(LOG_TAG, "## onCreate(): goToSplash with credentials but there is no event stream service.");
                     goToSplash();
                 } else {
@@ -2404,35 +2404,7 @@ public class LoginActivity extends MXCActionBarActivity implements RegistrationM
                     })
                     .show();
         } else {
-            // TODo manage multi accounts
-            Matrix.getInstance(this).getDefaultSession().createDirectMessageRoom("@riot-bot:matrix.org", new ApiCallback<String>() {
-                @Override
-                public void onSuccess(String info) {
-                    Log.d(LOG_TAG, "## onRegistrationSuccess() : succeed to invite riot-bot");
-                }
-
-                private void onError(String error) {
-                    Log.e(LOG_TAG, "## onRegistrationSuccess() : failed  to invite riot-bot " + error);
-                }
-
-                @Override
-                public void onNetworkError(Exception e) {
-                    onError(e.getMessage());
-                }
-
-                @Override
-                public void onMatrixError(MatrixError e) {
-                    onError(e.getMessage());
-                }
-
-                @Override
-                public void onUnexpectedError(Exception e) {
-                    onError(e.getMessage());
-                }
-            });
-
             saveServerUrlsIfCustomValuesHasBeenEntered();
-
             goToSplash();
             finish();
         }

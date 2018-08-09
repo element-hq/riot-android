@@ -464,7 +464,7 @@ public class VectorMemberDetailsActivity extends MXCActionBarActivity implements
             case ITEM_ACTION_SET_DEFAULT_POWER_LEVEL:
                 if (null != mRoom) {
                     int defaultPowerLevel = 0;
-                    PowerLevels powerLevels = mRoom.getLiveState().getPowerLevels();
+                    PowerLevels powerLevels = mRoom.getState().getPowerLevels();
 
                     if (null != powerLevels) {
                         defaultPowerLevel = powerLevels.users_default;
@@ -501,7 +501,7 @@ public class VectorMemberDetailsActivity extends MXCActionBarActivity implements
 
             case ITEM_ACTION_IGNORE: {
                 new AlertDialog.Builder(this)
-                        .setMessage(getString(R.string.room_participants_action_ignore) + " ?")
+                        .setMessage(R.string.room_event_action_report_prompt_ignore_user)
                         .setCancelable(false)
                         .setPositiveButton(R.string.ok,
                                 new DialogInterface.OnClickListener() {
@@ -516,8 +516,7 @@ public class VectorMemberDetailsActivity extends MXCActionBarActivity implements
 
                                         if (0 != idsList.size()) {
                                             enableProgressBarView(CommonActivityUtils.UTILS_DISPLAY_PROGRESS_BAR);
-                                            // TODO Remove cast
-                                            mSession.ignoreUsers((ArrayList) idsList, new ApiCallback<Void>() {
+                                            mSession.ignoreUsers(idsList, new ApiCallback<Void>() {
                                                 @Override
                                                 public void onSuccess(Void info) {
                                                     // do not hide the progress bar to warn the user that something is pending
@@ -557,7 +556,7 @@ public class VectorMemberDetailsActivity extends MXCActionBarActivity implements
 
             case ITEM_ACTION_UNIGNORE: {
                 new AlertDialog.Builder(this)
-                        .setMessage(getString(R.string.room_participants_action_unignore) + " ?")
+                        .setMessage(R.string.room_participants_action_unignore_prompt)
                         .setCancelable(false)
                         .setPositiveButton(R.string.ok,
                                 new DialogInterface.OnClickListener() {
@@ -572,8 +571,7 @@ public class VectorMemberDetailsActivity extends MXCActionBarActivity implements
 
                                         if (0 != idsList.size()) {
                                             enableProgressBarView(CommonActivityUtils.UTILS_DISPLAY_PROGRESS_BAR);
-                                            // TODO Remove cast when SDK will accept List
-                                            mSession.unIgnoreUsers((ArrayList) idsList, new ApiCallback<Void>() {
+                                            mSession.unIgnoreUsers(idsList, new ApiCallback<Void>() {
                                                 @Override
                                                 public void onSuccess(Void info) {
                                                     // do not hide the progress bar to warn the user that something is pending
@@ -746,7 +744,7 @@ public class VectorMemberDetailsActivity extends MXCActionBarActivity implements
      * @param callback      the callback with the created event
      */
     private void updateUserPowerLevels(final String userId, final int newPowerLevel, final ApiCallback<Void> callback) {
-        PowerLevels powerLevels = mRoom.getLiveState().getPowerLevels();
+        PowerLevels powerLevels = mRoom.getState().getPowerLevels();
         int currentSelfPowerLevel = 0;
 
         if (null != powerLevels) {
@@ -826,7 +824,7 @@ public class VectorMemberDetailsActivity extends MXCActionBarActivity implements
         int adminCount = 0;
 
         if (null != mRoom) {
-            powerLevels = mRoom.getLiveState().getPowerLevels();
+            powerLevels = mRoom.getState().getPowerLevels();
         }
 
         mMemberAvatarBadgeImageView.setVisibility(View.GONE);

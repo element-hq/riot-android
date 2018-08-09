@@ -42,3 +42,6 @@ Safa AlFulaij <safa1996alfulaij at gmail.com>
 
 Isa Cichon <isa4 at posteo.net>
  *  Add spacing to device keys
+
+Nathan van Beelen <nathan at vanbeelen.org>
+ * PR #1742: Add a media previewer

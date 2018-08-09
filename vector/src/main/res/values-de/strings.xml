@@ -104,7 +104,7 @@
     <string name="send_bug_report">Problem melden</string>
     <string name="send_bug_report_description">Bitte beschreibe das Problem. Was hast du genau gemacht? Was sollte passieren? Was passierte tatsächlich?</string>
     <string name="send_bug_report_placeholder">Problembeschreibung</string>
-    <string name="send_bug_report_logs_description">Um Probleme diagnostizieren zu können, werden Logdateien dieses Matrix-Clients zusammen mit dem Fehlerbericht übermittelt. Wenn du nur den oben eingegebenen Text senden möchtest, bitte die nachfolgenden Haken entsprechend entfernen:</string>
+    <string name="send_bug_report_logs_description">Um Probleme diagnostizieren zu können, werden Protokolle dieses Matrix-Clients zusammen mit dem Fehlerbericht übermittelt. Dieser Fehlerbericht wird, wie die Protokolle und Screenshot, nicht öffentlich sichtbar sein. Wenn du nur den oben eingegebenen Text senden möchtest, bitte die nachfolgenden Haken entsprechend entfernen:</string>
     <string name="send_bug_report_alert_message">Du scheinst dein Telefon frustriert zu schütteln. Möchtest du einen Fehlerbericht senden?</string>
     <string name="send_bug_report_sent">Der Fehlerbericht wurde erfolgreich übermittelt</string>
     <string name="send_bug_report_failed">Der Fehlerbericht konnte nicht übermittelt werden (%s)</string>
@@ -275,7 +275,7 @@ Soll Riot der Zugriff auf deine Kontakte erlaubt werden?</string>
 
     <!-- medias slider string -->
     <string name="media_slider_saved">Gespeichert</string>
-    <string name="media_slider_saved_message">In Downloads speichern</string>
+    <string name="media_slider_saved_message">In Downloads speichern?</string>
     <string name="yes">Ja</string>
     <string name="no">Nein</string>
     <string name="_continue">Fortsetzen</string>
@@ -675,7 +675,8 @@ Verschlüsselte Nachrichten werden auf Matrix-Clients, auf denen die Verschlüss
 
     <string name="encryption_information_verify_device">Gerät verifizieren</string>
     <string name="encryption_information_verify_device_warning">" Um zu verifizieren, dass diesem Gerät vertraut werden kann, kontaktiere bitte den Besitzer des Gerätes über andere Kommunikationsmittel (z. B. persönlich oder telefonisch) und vergewissere dich, ob der Schüssel, den er in seinen Benutzereinstellungen für dieses Gerät sieht, mit folgendem übereinstimmt:"</string>
-    <string name="encryption_information_verify_device_warning2">Wenn er übereinstimmt, drücke unten den Bestätigen-Button. Stimmt er nicht überein, überwacht jemand anderes dieses Gerät und du solltest ggf. den Blockieren-Button drücken.
+    <string name="encryption_information_verify_device_warning2">Wenn er übereinstimmt, drücke unten den Bestätigen-Button.
+Stimmt er nicht überein, überwacht jemand anderes dieses Gerät und du solltest ggf. den Blockieren-Button drücken.
 In Zukunft wird dieser Bestätigungsprozess noch komfortabler gestaltet.</string>
     <string name="encryption_information_verify_key_match">Ja, die Schlüssel stimmen überein</string>
 
@@ -827,7 +828,9 @@ Unbekannte Geräte:</string>
     <string name="groups_list">Gruppenliste</string>
 
     <string name="room_participants_kick_prompt_msg">Bist du sicher, dass du diesen Nutzer aus diesem Chat kicken möchtest?</string>
-    <string name="room_participants_ban_prompt_msg">Bist du sicher, dass du diesen Nutzer aus diesem Chat verbannen möchtest?</string>
+    <string name="room_participants_ban_prompt_msg">Bist du sicher, dass du diesen Nutzer aus diesem Chat verbannen möchtest?
+
+Beachte, dass diese Aktion die App neustarten wird. Das kann etwas dauern.</string>
 
     <string name="room_settings_all_messages_noisy">Alle Nachrichten (laut)</string>
     <string name="room_settings_all_messages">Alle Nachrichten</string>
@@ -1006,5 +1009,32 @@ Die Sichtbarkeit deiner Nachrichten ist ähnlich zu E-Mails: Wenn wir deine Nach
     <string name="settings_labs_enable_send_voice">Sprachnachrichten (erfordert eine externe Anwendung um Sprachnachrichten aufzuzeichnen)</string>
 
     <string name="error_empty_field_your_password">Bitte gebe dein Passwort ein.</string>
+
+<string name="send_bug_report_description_in_english">Wenn möglich, beschreibe bitte in Englisch.</string>
+    <string name="room_message_placeholder_reply_to_encrypted">Sende verschlüsselte Antwort…</string>
+    <string name="room_message_placeholder_reply_to_not_encrypted">Sende unverschlüsselte Antwort…</string>
+    <string name="settings_preview_media_before_sending">Zeige Medien vor dem Senden</string>
+
+    <string name="settings_without_flair">Du bist aktuell kein Mitglied einer Community.</string>
+
+    <string name="settings_labs_keyboard_options_to_send_message">Benutze die Enter-Taste der Tastatur zum Senden</string>
+    <string name="command_description_emote">Zeigt Aktionen</string>
+    <string name="command_description_ban_user">Bannt Benutzer mit angegebener ID</string>
+    <string name="command_description_unban_user">Hebt die Verbannung des Benutzers mit angegebener ID auf</string>
+    <string name="command_description_op_user">Bestimmt das Berechtigungslevel des Benutzers</string>
+    <string name="command_description_deop_user">Setzt Berechtigungen des Benutzers zurück</string>
+    <string name="command_description_invite_user">Lädt Benutzer mit angegebener Kennung in den aktuellen Raum ein</string>
+    <string name="command_description_join_room">Tritt dem Raum mit angegebenen Alias bei</string>
+    <string name="command_description_part_room">Verlasse Raum</string>
+    <string name="command_description_topic">Setzt das Raum-Thema</string>
+    <string name="command_description_kick_user">Kickt Benutzer mit angegebener ID</string>
+    <string name="command_description_nick">Ändert deinen Anzeigenamen</string>
+    <string name="command_description_markdown">(De-)Aktiviert Markdown</string>
+    <string name="command_description_clear_scalar_token">Setzt Matrix-App-Token zurück</string>
+
+    <string name="room_tombstone_versioned_description">Dieser Raum wurde ersetzt und ist nicht länger aktiv</string>
+    <string name="room_tombstone_continuation_link">Die Konversation wird hier fortgesetzt</string>
+    <string name="room_tombstone_continuation_description">Dieser Raum ist die Fortsetzung einer anderen Konversation</string>
+    <string name="room_tombstone_predecessor_link">Klicke hier um die älteren Nachrichten zu sehen</string>
 
 </resources>

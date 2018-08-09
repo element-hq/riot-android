@@ -138,6 +138,8 @@ public class PreferencesManager {
     // Analytics keys (Piwik, Matomo, etc.)
     public static final String SETTINGS_USE_ANALYTICS_KEY = "SETTINGS_USE_ANALYTICS_KEY";
 
+    private static final String SETTINGS_PREVIEW_MEDIA_BEFORE_SENDING_KEY = "SETTINGS_PREVIEW_MEDIA_BEFORE_SENDING_KEY";
+
     public static final String SETTINGS_USE_RAGE_SHAKE_KEY = "SETTINGS_USE_RAGE_SHAKE_KEY";
 
     private static final String SETTINGS_DISPLAY_ALL_EVENTS_KEY = "SETTINGS_DISPLAY_ALL_EVENTS_KEY";
@@ -162,6 +164,7 @@ public class PreferencesManager {
             SETTINGS_HIDE_AVATAR_DISPLAY_NAME_CHANGES_MESSAGES_KEY,
             SETTINGS_MEDIA_SAVING_PERIOD_KEY,
             SETTINGS_MEDIA_SAVING_PERIOD_SELECTED_KEY,
+            SETTINGS_PREVIEW_MEDIA_BEFORE_SENDING_KEY,
 
             SETTINGS_PIN_UNREAD_MESSAGES_PREFERENCE_KEY,
             SETTINGS_PIN_MISSED_NOTIFICATIONS_PREFERENCE_KEY,
@@ -689,6 +692,16 @@ public class PreferencesManager {
                 .edit()
                 .putBoolean(SETTINGS_USE_ANALYTICS_KEY, useAnalytics)
                 .apply();
+    }
+
+    /**
+     * Tells if media should be previewed before sending
+     *
+     * @param context the context
+     * @return true to preview media
+     */
+    public static boolean previewMediaWhenSending(Context context) {
+        return PreferenceManager.getDefaultSharedPreferences(context).getBoolean(SETTINGS_PREVIEW_MEDIA_BEFORE_SENDING_KEY, false);
     }
 
     /**
