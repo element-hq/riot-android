@@ -1,4 +1,4 @@
-Changes in Riot 0.8.13 (2018-XX-XX)
+Changes in Riot 0.8.13 (2018-08-09)
 ===================================================
 
 Features:
@@ -10,6 +10,7 @@ Features:
  - Support Room Versioning (#2441)
 
 Improvements:
+ - Update matrix-sdk.aar lib (v0.9.7).
  - Piwik: Update the way how stats are reported (#2402)
  - Improve BugReport screen: display a preview of the screenshot (#2318)
  - In the settings, move theme settings just below "language" (#2439)
@@ -39,12 +40,6 @@ Bugfix:
  - Restore the navigation of the back button in the public rooms preview header (#2473)
  - Fix issue on preference screen: device lists was not displayed (#2409)
  - Ensure notification has a title (#2242)
-
-Translations:
- -
-
-Build:
- -
 
 Changes in Riot 0.8.12 (2018-07-06)
 ===================================================
