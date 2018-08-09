@@ -1632,7 +1632,7 @@ public class VectorHomeActivity extends RiotAppCompatActivity implements SearchV
      * @param onSuccessCallback the success callback
      * @return the asynchronous callback
      */
-    private ApiCallback<Void> createForgetLeaveCallback(final String roomId, final SimpleApiCallback<Void> onSuccessCallback) {
+    private ApiCallback<Void> createForgetLeaveCallback(final String roomId, final ApiCallback<Void> onSuccessCallback) {
         return new ApiCallback<Void>() {
             @Override
             public void onSuccess(Void info) {
@@ -1678,7 +1678,7 @@ public class VectorHomeActivity extends RiotAppCompatActivity implements SearchV
      * @param roomId            the room id
      * @param onSuccessCallback the success asynchronous callback
      */
-    public void onForgetRoom(final String roomId, final SimpleApiCallback<Void> onSuccessCallback) {
+    public void onForgetRoom(final String roomId, final ApiCallback<Void> onSuccessCallback) {
         Room room = mSession.getDataHandler().getRoom(roomId);
 
         if (null != room) {
@@ -1693,7 +1693,7 @@ public class VectorHomeActivity extends RiotAppCompatActivity implements SearchV
      * @param roomId            the room id
      * @param onSuccessCallback the success asynchronous callback
      */
-    public void onRejectInvitation(final String roomId, final SimpleApiCallback<Void> onSuccessCallback) {
+    public void onRejectInvitation(final String roomId, final ApiCallback<Void> onSuccessCallback) {
         Room room = mSession.getDataHandler().getRoom(roomId);
 
         if (null != room) {

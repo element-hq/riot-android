@@ -16,6 +16,7 @@ Improvements:
  - Improve the display of the sources of the message in the dialog (#2348)
  - Improve the display of the buttons and the reason in the room preview (#2352)
  - In the flair section on settings, notify the user when he has no flair (#2430)
+ - Improve GDPR consent webview management (#2491)
  - Support external keyboard to send messages for recent devices (#220, #1279)
  - When user ignores or un-ignores someone, notify that the app will restart (#2437)
 
@@ -36,6 +37,8 @@ Bugfix:
  - Remove last traces of Firebase analytics (#2481)
  - code blocks are escaped and therefore hard readable (#2484)
  - Restore the navigation of the back button in the public rooms preview header (#2473)
+ - Fix issue on preference screen: device lists was not displayed (#2409)
+ - Ensure notification has a title (#2242)
 
 Translations:
  -

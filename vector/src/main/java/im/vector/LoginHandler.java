@@ -47,7 +47,8 @@ public class LoginHandler {
      */
     private void onRegistrationDone(Context appCtx,
                                     HomeServerConnectionConfig hsConfig,
-                                    Credentials credentials, SimpleApiCallback<HomeServerConnectionConfig> callback) {
+                                    Credentials credentials,
+                                    ApiCallback<HomeServerConnectionConfig> callback) {
         // sanity check - GA issue
         if (TextUtils.isEmpty(credentials.userId)) {
             callback.onMatrixError(new MatrixError(MatrixError.FORBIDDEN, "No user id"));
@@ -89,7 +90,7 @@ public class LoginHandler {
                       final String phoneNumber,
                       final String phoneNumberCountry,
                       final String password,
-                      final SimpleApiCallback<HomeServerConnectionConfig> callback) {
+                      final ApiCallback<HomeServerConnectionConfig> callback) {
         final Context appCtx = ctx.getApplicationContext();
 
         callLogin(ctx, hsConfig, username, phoneNumber, phoneNumberCountry, password, new UnrecognizedCertApiCallback<Credentials>(hsConfig, callback) {
@@ -121,7 +122,7 @@ public class LoginHandler {
                            final String phoneNumber,
                            final String phoneNumberCountry,
                            final String password,
-                           final SimpleApiCallback<Credentials> callback) {
+                           final ApiCallback<Credentials> callback) {
         LoginRestClient client = new LoginRestClient(hsConfig);
         String deviceName = ctx.getString(R.string.login_mobile_device);
 
@@ -145,7 +146,7 @@ public class LoginHandler {
      * @param hsConfig the home server config.
      * @param callback the supported flows list callback.
      */
-    public void getSupportedLoginFlows(Context ctx, final HomeServerConnectionConfig hsConfig, final SimpleApiCallback<List<LoginFlow>> callback) {
+    public void getSupportedLoginFlows(Context ctx, final HomeServerConnectionConfig hsConfig, final ApiCallback<List<LoginFlow>> callback) {
         final Context appCtx = ctx.getApplicationContext();
         LoginRestClient client = new LoginRestClient(hsConfig);
 
@@ -166,7 +167,7 @@ public class LoginHandler {
      */
     public void getSupportedRegistrationFlows(Context ctx,
                                               final HomeServerConnectionConfig hsConfig,
-                                              final SimpleApiCallback<HomeServerConnectionConfig> callback) {
+                                              final ApiCallback<HomeServerConnectionConfig> callback) {
         register(ctx, hsConfig, new RegistrationParams(), callback);
     }
 
@@ -180,7 +181,7 @@ public class LoginHandler {
     private void register(Context ctx,
                           final HomeServerConnectionConfig hsConfig,
                           final RegistrationParams params,
-                          final SimpleApiCallback<HomeServerConnectionConfig> callback) {
+                          final ApiCallback<HomeServerConnectionConfig> callback) {
         final Context appCtx = ctx.getApplicationContext();
         LoginRestClient client = new LoginRestClient(hsConfig);
 

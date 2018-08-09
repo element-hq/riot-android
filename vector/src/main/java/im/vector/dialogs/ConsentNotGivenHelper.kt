@@ -21,8 +21,9 @@ import android.os.Bundle
 import android.support.v7.app.AlertDialog
 import im.vector.Matrix
 import im.vector.R
-import im.vector.activity.SimpleWebViewActivity
+import im.vector.activity.VectorWebViewActivity
 import im.vector.activity.interfaces.Restorable
+import im.vector.webview.WebViewMode
 import org.matrix.androidsdk.rest.model.MatrixError
 import org.matrix.androidsdk.util.Log
 
@@ -86,9 +87,8 @@ class ConsentNotGivenHelper(private val activity: Activity, savedInstanceState: 
      * ========================================================================================== */
 
     private fun openWebViewActivity(consentUri: String) {
-        activity.startActivity(SimpleWebViewActivity.getIntent(activity,
-                consentUri,
-                R.string.settings_app_term_conditions))
+        val intent = VectorWebViewActivity.getIntent(activity, consentUri, R.string.settings_app_term_conditions, WebViewMode.CONSENT)
+        activity.startActivity(intent)
     }
 
     /* ==========================================================================================
