@@ -187,7 +187,7 @@ public class UnrecognizedCertHandler {
 
         dialog.setOnDismissListener(new AlertDialog.OnDismissListener() {
             public void onDismiss(DialogInterface dialog) {
-                Log.e(LOG_TAG, "Dismissed!");
+                Log.d(LOG_TAG, "Dismissed!");
                 openDialogIds.remove(dialogId);
                 emitter.unregister(destroyListener);
             }

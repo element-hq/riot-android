@@ -94,7 +94,7 @@ Hautatu esportatu babes-kopia bat egiteko saioa amaitu aurretik.</string>
     <string name="send_bug_report">Arazte-txostena</string>
     <string name="send_bug_report_description">Azaldu akatsa. Zer egin duzu? Zer espero zenuen? Zer gertatu da benetan?</string>
     <string name="send_bug_report_placeholder">Azaldu zure arazoa hemen</string>
-    <string name="send_bug_report_logs_description">Akatsak aztertzeari begira, bezero honen egunkariak arazte-txosten honekin batera bidaliko dira. Goiko testua besterik ez baduzu bidali nahi, desmarkatu:</string>
+    <string name="send_bug_report_logs_description">Akatsak aztertzeari begira, bezero honen egunkariak arazte-txosten honekin batera bidaliko dira. Arazte-txosten hau, egunkariak eta pantaila-argazkia barne, ez dira publikoki ikusgai egongo. Goiko testua besterik ez baduzu bidali nahi, desmarkatu:</string>
     <string name="send_bug_report_alert_message">Telefonoa amorruz astintzen zabiltzala dirudi. Akats baten berri eman nahi duzu?</string>
     <string name="send_bug_report_app_crashed">Azken aldian aplikazioa kraskatu da. Kraskatze txostena bidali nahi duzu?</string>
 
@@ -246,7 +246,7 @@ Baimendu sarbidea hurrengo laster-leihoan deia egin ahal izateko.</string>
     <string name="permissions_action_not_performed_missing_permissions">Ez da ekintza burutu baimenak falta direlako</string>
 
     <string name="media_slider_saved">Gordeta</string>
-    <string name="media_slider_saved_message">Gorde deskargetan</string>
+    <string name="media_slider_saved_message">Gorde deskargetan?</string>
     <string name="yes">BAI</string>
     <string name="no">EZ</string>
     <string name="_continue">Jarraitu</string>
@@ -382,7 +382,9 @@ Ziur zaude?</string>
     <string name="room_details_people_present_group_name">ELKARTUTA</string>
 
     <string name="room_event_action_report_prompt_reason">Eduki hau salatzeko arrazoia</string>
-    <string name="room_event_action_report_prompt_ignore_user">"Erabiltzaile honen mezu guztiak  ezkutatu nahi dituzu?"</string>
+    <string name="room_event_action_report_prompt_ignore_user">"Erabiltzaile honen mezu guztiak  ezkutatu nahi dituzu?
+
+Kontuan izan ekintza honek aplikazioa berrabiaraziko duela eta denbora bat beharko lukeela."</string>
     <string name="room_event_action_cancel_upload">Utzi igoera</string>
     <string name="room_event_action_cancel_download">Utzi deskarga</string>
 
@@ -515,7 +517,9 @@ Jarraitzeko, idatzi zure pasahitza.</string>
     <string name="settings_confirm_password">berretsi pasahitza</string>
     <string name="settings_fail_to_update_password">Huts egin du pasahitza eguneratzean</string>
     <string name="settings_password_updated">Zure pasahitza eguneratu da</string>
-    <string name="settings_unignore_user">%s erabiltzailearen mezu guztiak erakutsi?</string>
+    <string name="settings_unignore_user">%s erabiltzailearen mezu guztiak erakutsi?
+
+Kontuan izan ekintza honek aplikazioa berrabiaraziko duela eta denbora bat beharko lukeela.</string>
 
     <string name="settings_delete_notification_targets_confirmation">Ziur jakinarazpenen helburu hau kendu nahi duzula?</string>
 
@@ -653,7 +657,8 @@ Jarraitzeko, idatzi zure pasahitza.</string>
 
     <string name="encryption_information_verify_device">Egiaztatu gailua</string>
     <string name="encryption_information_verify_device_warning">" Gailu hau fidagarria dela egiaztatzeko, kontaktatu bere jabea beste medio bat erabiliz (adib. aurrez aurre edo telefonoz deituz) eta galdetu beraien erabiltzaile-ezarpenetan bere gailurako ikusten duen gakoa hemen beheko bera den:"</string>
-    <string name="encryption_information_verify_device_warning2">Bera bada, sakatu beheko egiaztatu botoia. EZ bada, beste inor gailua antzematen dago eta blokeatu botoia sakatu beharko zenuke.
+    <string name="encryption_information_verify_device_warning2">Bat badator bada, sakatu beheko egiaztatu botoia. 
+Ez badator bat, beste inor gailua antzematen dago eta zerrenda beltzean sartu beharko zenuke.
 Etorkizunean egiaztaketa metodoa hobetuko da.</string>
     <string name="encryption_information_verify_key_match">Gakoak bat datozela egiaztatu dut</string>
 
@@ -979,4 +984,34 @@ Matrix-eko mezuen ikusgaitasuna e-mail sistemaren antekoa da. Guk zure mezuak ah
 
     <string name="error_empty_field_your_password">Sartu zure pasahitza.</string>
 
-</resources>
+<string name="send_bug_report_description_in_english">Ahal dela idatzi deskripzioa ingelesez.</string>
+    <string name="room_participants_action_unignore_prompt">Erakutsi erabiltzaile honen mezu guztiak?
+
+Kontuan izan ekintza honek aplikazioa berrabiaraziko duela eta denbora bat beharko lukeela.</string>
+    <string name="room_message_placeholder_reply_to_encrypted">Zifratutako erantzuna bidalita…</string>
+    <string name="room_message_placeholder_reply_to_not_encrypted">Bidali erantzuna (zifratu gabea)…</string>
+    <string name="settings_preview_media_before_sending">Aurreikusi multimedia bidali aurretik</string>
+
+    <string name="settings_without_flair">Ez zara inongo komunitateren kide orain.</string>
+
+    <string name="settings_labs_keyboard_options_to_send_message">Erabili teklatuaren enter tekla mezua bidaltzeko</string>
+    <string name="command_description_emote">Ekintza bistaratzen du</string>
+    <string name="command_description_ban_user">Debekatu id zehatz bat duen erabiltzailea</string>
+    <string name="command_description_unban_user">Kendu debekua id zehatz bat duen erabiltzaileari</string>
+    <string name="command_description_op_user">Zehaztu erabiltzaile baten botere maila</string>
+    <string name="command_description_invite_user">Id zehatz bat duen erabiltzailea oraingo gelara gonbidatzen du</string>
+    <string name="command_description_join_room">Gelara elkartzen da emandako ezizenarekin</string>
+    <string name="command_description_part_room">Atera gelatik</string>
+    <string name="command_description_topic">Ezarri gelaren mintzagaia</string>
+    <string name="command_description_kick_user">Id zehatz bat duen erabiltzailea kanporatzen du</string>
+    <string name="command_description_nick">Zure pantaila-izena aldatzen du</string>
+    <string name="command_description_markdown">Markdown bai/ez</string>
+    <string name="command_description_clear_scalar_token">Matrix aplikazioen kudeaketa konpontzeko</string>
+
+    <string name="room_tombstone_versioned_description">Gela hau ordeztu da eta ez dago jada aktibo</string>
+    <string name="room_tombstone_continuation_link">Elkarrizketak hemen darrai</string>
+    <string name="room_tombstone_continuation_description">Gela hau aurreko elkarrizketa baten jarraipena da</string>
+    <string name="room_tombstone_predecessor_link">Egin klik hemen mezu zaharragoak ikusteko</string>
+
+<string name="command_description_deop_user">Id zehatz bat duen erabiltzaileari maila jaisten dio</string>
+    </resources>

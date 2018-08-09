@@ -48,6 +48,7 @@ import im.vector.activity.CommonActivityUtils;
 import im.vector.activity.VectorHomeActivity;
 import im.vector.activity.VectorRoomActivity;
 import im.vector.adapters.AbsAdapter;
+import im.vector.util.HomeRoomsViewModel;
 import im.vector.util.RoomUtils;
 
 /**
@@ -66,7 +67,6 @@ public abstract class AbsHomeFragment extends VectorBaseFragment implements
     String mCurrentFilter;
 
     MXSession mSession;
-
     OnRoomChangedListener mOnRoomChangedListener;
 
     final RecyclerView.OnScrollListener mScrollListener = new RecyclerView.OnScrollListener() {
@@ -81,6 +81,7 @@ public abstract class AbsHomeFragment extends VectorBaseFragment implements
 
     int mPrimaryColor = -1;
     int mSecondaryColor = -1;
+
 
     /*
      * *********************************************************************************************
@@ -99,12 +100,10 @@ public abstract class AbsHomeFragment extends VectorBaseFragment implements
     @CallSuper
     public void onActivityCreated(final Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-
         if (getActivity() instanceof VectorHomeActivity) {
             mActivity = (VectorHomeActivity) getActivity();
         }
         mSession = Matrix.getInstance(getActivity()).getDefaultSession();
-
         if (savedInstanceState != null && savedInstanceState.containsKey(CURRENT_FILTER)) {
             mCurrentFilter = savedInstanceState.getString(CURRENT_FILTER);
         }
@@ -114,8 +113,12 @@ public abstract class AbsHomeFragment extends VectorBaseFragment implements
     @CallSuper
     public void onResume() {
         super.onResume();
-        if ((mPrimaryColor != -1) && (null != mActivity)) {
-            mActivity.updateTabStyle(mPrimaryColor, mSecondaryColor != -1 ? mSecondaryColor : mPrimaryColor);
+        if (mActivity != null) {
+            if (mPrimaryColor != -1) {
+                mActivity.updateTabStyle(mPrimaryColor, mSecondaryColor != -1 ? mSecondaryColor : mPrimaryColor);
+            }
+            final HomeRoomsViewModel.Result result = mActivity.getRoomsViewModel().getResult();
+            onRoomResultUpdated(result);
         }
     }
 
@@ -123,7 +126,7 @@ public abstract class AbsHomeFragment extends VectorBaseFragment implements
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.ic_action_mark_all_as_read:
-                Log.e(LOG_TAG, "onOptionsItemSelected mark all as read");
+                Log.d(LOG_TAG, "onOptionsItemSelected mark all as read");
                 onMarkAllAsRead();
                 return true;
         }
@@ -302,8 +305,11 @@ public abstract class AbsHomeFragment extends VectorBaseFragment implements
 
     /**
      * A room summary has been updated
+     *
+     * @param result
      */
-    public void onSummariesUpdate() {
+    public void onRoomResultUpdated(final HomeRoomsViewModel.Result result) {
+        //no-op
     }
 
     /**
@@ -424,15 +430,7 @@ public abstract class AbsHomeFragment extends VectorBaseFragment implements
                 if ((null != mActivity) && !mActivity.isFinishing()) {
                     mActivity.hideWaitingView();
                     mActivity.refreshUnreadBadges();
-
-                    // if the fragment is still the active one
-                    if (isResumed()) {
-                        // refresh it
-                        onSummariesUpdate();
-                    } else {
-                        // refresh the displayed one
-                        mActivity.dispatchOnSummariesUpdate();
-                    }
+                    mActivity.onRoomDataUpdated();
                 }
             }
 

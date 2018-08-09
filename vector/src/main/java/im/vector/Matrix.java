@@ -33,6 +33,7 @@ import org.matrix.androidsdk.crypto.IncomingRoomKeyRequestCancellation;
 import org.matrix.androidsdk.crypto.MXCrypto;
 import org.matrix.androidsdk.data.Room;
 import org.matrix.androidsdk.data.RoomState;
+import org.matrix.androidsdk.data.metrics.MetricsListener;
 import org.matrix.androidsdk.data.store.IMXStore;
 import org.matrix.androidsdk.data.store.MXFileStore;
 import org.matrix.androidsdk.db.MXLatestChatMessageCache;
@@ -60,6 +61,8 @@ import java.util.Set;
 
 import im.vector.activity.CommonActivityUtils;
 import im.vector.activity.SplashActivity;
+import im.vector.analytics.MetricsListenerProxy;
+import im.vector.analytics.PiwikAnalytics;
 import im.vector.gcm.GcmRegistrationManager;
 import im.vector.services.EventStreamService;
 import im.vector.store.LoginStorage;
@@ -190,7 +193,7 @@ public class Matrix {
      * @return the shared instance
      */
     public synchronized static Matrix getInstance(Context appContext) {
-        if ((instance == null) && (null != appContext)) {
+        if (instance == null && null != appContext) {
             instance = new Matrix(appContext);
         }
         return instance;
@@ -231,7 +234,7 @@ public class Matrix {
                 flavor += "-";
             }
         } catch (Exception e) {
-            Log.e(LOG_TAG, "## versionName() : failed " + e.getMessage());
+            Log.e(LOG_TAG, "## versionName() : failed " + e.getMessage(), e);
         }
 
         String gitVersion = mAppContext.getString(R.string.git_revision);
@@ -512,7 +515,7 @@ public class Matrix {
     public synchronized void clearSession(final Context context,
                                           final MXSession session,
                                           final boolean clearCredentials,
-                                          final SimpleApiCallback<Void> aCallback) {
+                                          final ApiCallback<Void> aCallback) {
         if (!session.isAlive()) {
             Log.e(LOG_TAG, "## clearSession() " + session.getMyUserId() + " is already released");
             return;
@@ -526,7 +529,7 @@ public class Matrix {
 
         session.getDataHandler().removeListener(mLiveEventListener);
 
-        SimpleApiCallback<Void> callback = new SimpleApiCallback<Void>() {
+        ApiCallback<Void> callback = new SimpleApiCallback<Void>() {
             @Override
             public void onSuccess(Void info) {
                 VectorApp.removeSyncingSession(session);
@@ -624,17 +627,22 @@ public class Matrix {
     private MXSession createSession(final Context context, HomeServerConnectionConfig hsConfig) {
         IMXStore store;
 
-        Credentials credentials = hsConfig.getCredentials();
+        final MetricsListener metricsListener = new MetricsListenerProxy(VectorApp.getInstance().getAnalytics());
+        final Credentials credentials = hsConfig.getCredentials();
 
         /*if (true) {*/
         store = new MXFileStore(hsConfig, context);
+        store.setMetricsListener(metricsListener);
+
         /*} else {
             store = new MXMemoryStore(hsConfig.getCredentials(), context);
         }*/
 
-        final MXSession session = new MXSession(hsConfig, new MXDataHandler(store, credentials), mAppContext);
-
-        session.getDataHandler().setRequestNetworkErrorListener(new MXDataHandler.RequestNetworkErrorListener() {
+        final MXDataHandler dataHandler = new MXDataHandler(store, credentials);
+        final MXSession session = new MXSession(hsConfig, dataHandler, mAppContext);
+        session.setMetricsListener(metricsListener);
+        dataHandler.setMetricsListener(metricsListener);
+        dataHandler.setRequestNetworkErrorListener(new MXDataHandler.RequestNetworkErrorListener() {
 
             @Override
             public void onConfigurationError(String matrixErrorCode) {
@@ -682,10 +690,12 @@ public class Matrix {
             session.enableCryptoWhenStarting();
         }
 
-        session.getDataHandler().addListener(mLiveEventListener);
+        dataHandler.addListener(mLiveEventListener);
+        dataHandler.addListener(VectorApp.getInstance().getDecryptionFailureTracker());
+
         session.setUseDataSaveMode(PreferencesManager.useDataSaveMode(context));
 
-        session.getDataHandler().addListener(new MXEventListener() {
+        dataHandler.addListener(new MXEventListener() {
             @Override
             public void onInitialSyncComplete(String toToken) {
                 if (null != session.getCrypto()) {

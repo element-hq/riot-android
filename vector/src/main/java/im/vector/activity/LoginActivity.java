@@ -263,7 +263,7 @@ public class LoginActivity extends MXCActionBarActivity implements RegistrationM
                     }
                 }
             } catch (Exception e) {
-                Log.e(LOG_TAG, "## BroadcastReceiver onReceive failed " + e.getMessage());
+                Log.e(LOG_TAG, "## BroadcastReceiver onReceive failed " + e.getMessage(), e);
             }
         }
     };
@@ -372,7 +372,7 @@ public class LoginActivity extends MXCActionBarActivity implements RegistrationM
                 goToSplash();
             } else {
                 // detect if the application has already been started
-                if (null == EventStreamService.getInstance()) {
+                if (EventStreamService.getInstance() == null) {
                     Log.d(LOG_TAG, "## onCreate(): goToSplash with credentials but there is no event stream service.");
                     goToSplash();
                 } else {
@@ -711,7 +711,7 @@ public class LoginActivity extends MXCActionBarActivity implements RegistrationM
                 registerReceiver(mNetworkReceiver, new IntentFilter(ConnectivityManager.CONNECTIVITY_ACTION));
                 mIsWaitingNetworkConnection = true;
             } catch (Exception e) {
-                Log.e(LOG_TAG, "## addNetworkStateNotificationListener : " + e.getMessage());
+                Log.e(LOG_TAG, "## addNetworkStateNotificationListener : " + e.getMessage(), e);
             }
         }
     }
@@ -725,7 +725,7 @@ public class LoginActivity extends MXCActionBarActivity implements RegistrationM
                 unregisterReceiver(mNetworkReceiver);
                 mIsWaitingNetworkConnection = false;
             } catch (Exception e) {
-                Log.e(LOG_TAG, "## removeNetworkStateNotificationListener : " + e.getMessage());
+                Log.e(LOG_TAG, "## removeNetworkStateNotificationListener : " + e.getMessage(), e);
             }
         }
     }
@@ -864,7 +864,7 @@ public class LoginActivity extends MXCActionBarActivity implements RegistrationM
             return ((null != session) && session.isAlive());
 
         } catch (Exception e) {
-            Log.e(LOG_TAG, "## Exception: " + e.getMessage());
+            Log.e(LOG_TAG, "## Exception: " + e.getMessage(), e);
         }
 
         Log.e(LOG_TAG, "## hasCredentials() : invalid credentials");
@@ -876,7 +876,7 @@ public class LoginActivity extends MXCActionBarActivity implements RegistrationM
                     // getDefaultSession could trigger an exception if the login data are corrupted
                     CommonActivityUtils.logout(LoginActivity.this);
                 } catch (Exception e) {
-                    Log.w(LOG_TAG, "## Exception: " + e.getMessage());
+                    Log.w(LOG_TAG, "## Exception: " + e.getMessage(), e);
                 }
             }
         });
@@ -1368,7 +1368,7 @@ public class LoginActivity extends MXCActionBarActivity implements RegistrationM
                 Uri hsUri = Uri.parse(hs);
                 validHomeServer = "http".equals(hsUri.getScheme()) || "https".equals(hsUri.getScheme());
             } catch (Exception e) {
-                Log.e(LOG_TAG, "## Exception: " + e.getMessage());
+                Log.e(LOG_TAG, "## Exception: " + e.getMessage(), e);
             }
 
             if (!validHomeServer) {
@@ -1480,7 +1480,7 @@ public class LoginActivity extends MXCActionBarActivity implements RegistrationM
                                         try {
                                             registrationFlowResponse = JsonUtils.toRegistrationFlowResponse(e.mErrorBodyAsString);
                                         } catch (Exception castExcept) {
-                                            Log.e(LOG_TAG, "JsonUtils.toRegistrationFlowResponse " + castExcept.getLocalizedMessage());
+                                            Log.e(LOG_TAG, "JsonUtils.toRegistrationFlowResponse " + castExcept.getLocalizedMessage(), castExcept);
                                         }
                                     } else if (e.mStatus == 403) {
                                         // not supported by the server
@@ -1697,14 +1697,14 @@ public class LoginActivity extends MXCActionBarActivity implements RegistrationM
 
                 @Override
                 public void onNetworkError(Exception e) {
-                    Log.e(LOG_TAG, "onLoginClick : Network Error: " + e.getMessage());
+                    Log.e(LOG_TAG, "onLoginClick : Network Error: " + e.getMessage(), e);
                     enableLoadingScreen(false);
                     Toast.makeText(getApplicationContext(), getString(R.string.login_error_network_error), Toast.LENGTH_LONG).show();
                 }
 
                 @Override
                 public void onUnexpectedError(Exception e) {
-                    Log.e(LOG_TAG, "onLoginClick : onUnexpectedError" + e.getMessage());
+                    Log.e(LOG_TAG, "onLoginClick : onUnexpectedError" + e.getMessage(), e);
                     enableLoadingScreen(false);
                     String msg = getString(R.string.login_error_unable_login) + " : " + e.getMessage();
                     Toast.makeText(getApplicationContext(), msg, Toast.LENGTH_LONG).show();
@@ -2083,7 +2083,7 @@ public class LoginActivity extends MXCActionBarActivity implements RegistrationM
                         new ArrayList<Fingerprint>(),
                         false);
             } catch (Exception e) {
-                Log.e(LOG_TAG, "getHsConfig fails " + e.getLocalizedMessage());
+                Log.e(LOG_TAG, "getHsConfig fails " + e.getLocalizedMessage(), e);
             }
         }
 
@@ -2404,35 +2404,7 @@ public class LoginActivity extends MXCActionBarActivity implements RegistrationM
                     })
                     .show();
         } else {
-            // TODo manage multi accounts
-            Matrix.getInstance(this).getDefaultSession().createDirectMessageRoom("@riot-bot:matrix.org", new ApiCallback<String>() {
-                @Override
-                public void onSuccess(String info) {
-                    Log.d(LOG_TAG, "## onRegistrationSuccess() : succeed to invite riot-bot");
-                }
-
-                private void onError(String error) {
-                    Log.e(LOG_TAG, "## onRegistrationSuccess() : failed  to invite riot-bot " + error);
-                }
-
-                @Override
-                public void onNetworkError(Exception e) {
-                    onError(e.getMessage());
-                }
-
-                @Override
-                public void onMatrixError(MatrixError e) {
-                    onError(e.getMessage());
-                }
-
-                @Override
-                public void onUnexpectedError(Exception e) {
-                    onError(e.getMessage());
-                }
-            });
-
             saveServerUrlsIfCustomValuesHasBeenEntered();
-
             goToSplash();
             finish();
         }

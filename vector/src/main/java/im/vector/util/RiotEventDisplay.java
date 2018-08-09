@@ -22,6 +22,8 @@ import android.text.TextUtils;
 
 import com.google.gson.JsonObject;
 
+import org.matrix.androidsdk.MXSession;
+import org.matrix.androidsdk.crypto.MXCryptoError;
 import org.matrix.androidsdk.data.RoomState;
 import org.matrix.androidsdk.interfaces.HtmlToolbox;
 import org.matrix.androidsdk.rest.model.Event;
@@ -36,7 +38,9 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 
+import im.vector.Matrix;
 import im.vector.R;
+import im.vector.VectorApp;
 import im.vector.widgets.WidgetContent;
 import im.vector.widgets.WidgetsManager;
 
@@ -61,6 +65,7 @@ public class RiotEventDisplay extends EventDisplay {
      * @param displayNameColor the display name highlighted color.
      * @return The text or null if it isn't possible.
      */
+    @Override
     public CharSequence getTextualDisplay(Integer displayNameColor) {
         CharSequence text = null;
 
@@ -100,9 +105,15 @@ public class RiotEventDisplay extends EventDisplay {
             } else {
                 text = super.getTextualDisplay(displayNameColor);
             }
+            if (mEvent.getCryptoError() != null) {
+                final MXSession session = Matrix.getInstance(mContext).getDefaultSession();
+                VectorApp.getInstance()
+                        .getDecryptionFailureTracker()
+                        .reportUnableToDecryptError(mEvent, mRoomState, session.getMyUserId());
+            }
 
         } catch (Exception e) {
-            Log.e(LOG_TAG, "getTextualDisplay() " + e.getMessage());
+            Log.e(LOG_TAG, "getTextualDisplay() " + e.getMessage(), e);
         }
 
         return text;

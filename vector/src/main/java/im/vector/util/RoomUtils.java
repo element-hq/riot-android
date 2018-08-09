@@ -639,7 +639,7 @@ public class RoomUtils {
                 }
             }
         } catch (Exception e) {
-            Log.e(LOG_TAG, "## displayPopupMenu() : failed " + e.getMessage());
+            Log.e(LOG_TAG, "## displayPopupMenu() : failed " + e.getMessage(), e);
         }
 
         popup.show();
@@ -714,7 +714,7 @@ public class RoomUtils {
                 try {
                     bitmap = BitmapFactory.decodeFile(f.getPath(), options);
                 } catch (OutOfMemoryError oom) {
-                    Log.e(LOG_TAG, "decodeFile failed with an oom");
+                    Log.e(LOG_TAG, "decodeFile failed with an oom", oom);
                 }
             }
         }

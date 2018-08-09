@@ -122,7 +122,7 @@ public class ContactsManager implements SharedPreferences.OnSharedPreferenceChan
                 try {
                     listener.onContactPresenceUpdate(contact, mxid.mMatrixId);
                 } catch (Exception e) {
-                    Log.e(LOG_TAG, "onContactPresenceUpdate failed " + e.getMessage());
+                    Log.e(LOG_TAG, "onContactPresenceUpdate failed " + e.getMessage(), e);
                 }
             }
         }
@@ -135,7 +135,7 @@ public class ContactsManager implements SharedPreferences.OnSharedPreferenceChan
                 try {
                     listener.onPIDsUpdate();
                 } catch (Exception e) {
-                    Log.e(LOG_TAG, "onPIDsUpdate failed " + e.getMessage());
+                    Log.e(LOG_TAG, "onPIDsUpdate failed " + e.getMessage(), e);
                 }
             }
         }
@@ -435,7 +435,7 @@ public class ContactsManager implements SharedPreferences.OnSharedPreferenceChan
                                 ContactsContract.Data.MIMETYPE + " = ?",
                                 new String[]{ContactsContract.CommonDataKinds.StructuredName.CONTENT_ITEM_TYPE}, null);
                     } catch (Exception e) {
-                        Log.e(LOG_TAG, "## refreshLocalContactsSnapshot(): Exception - Contact names query Msg=" + e.getMessage());
+                        Log.e(LOG_TAG, "## refreshLocalContactsSnapshot(): Exception - Contact names query Msg=" + e.getMessage(), e);
                     }
 
                     if (namesCur != null) {
@@ -464,7 +464,7 @@ public class ContactsManager implements SharedPreferences.OnSharedPreferenceChan
                                 }
                             }
                         } catch (Exception e) {
-                            Log.e(LOG_TAG, "## refreshLocalContactsSnapshot(): Exception - Contact names query2 Msg=" + e.getMessage());
+                            Log.e(LOG_TAG, "## refreshLocalContactsSnapshot(): Exception - Contact names query2 Msg=" + e.getMessage(), e);
                         }
 
                         namesCur.close();
@@ -481,7 +481,7 @@ public class ContactsManager implements SharedPreferences.OnSharedPreferenceChan
                                 },
                                 null, null, null);
                     } catch (Exception e) {
-                        Log.e(LOG_TAG, "## refreshLocalContactsSnapshot(): Exception - Phone numbers query Msg=" + e.getMessage());
+                        Log.e(LOG_TAG, "## refreshLocalContactsSnapshot(): Exception - Phone numbers query Msg=" + e.getMessage(), e);
                     }
 
                     if (null != phonesCur) {
@@ -505,7 +505,7 @@ public class ContactsManager implements SharedPreferences.OnSharedPreferenceChan
                                 }
                             }
                         } catch (Exception e) {
-                            Log.e(LOG_TAG, "## refreshLocalContactsSnapshot(): Exception - Phone numbers query2 Msg=" + e.getMessage());
+                            Log.e(LOG_TAG, "## refreshLocalContactsSnapshot(): Exception - Phone numbers query2 Msg=" + e.getMessage(), e);
                         }
 
                         phonesCur.close();
@@ -520,7 +520,7 @@ public class ContactsManager implements SharedPreferences.OnSharedPreferenceChan
                                         ContactsContract.CommonDataKinds.Email.CONTACT_ID},
                                 null, null, null);
                     } catch (Exception e) {
-                        Log.e(LOG_TAG, "## refreshLocalContactsSnapshot(): Exception - Emails query Msg=" + e.getMessage());
+                        Log.e(LOG_TAG, "## refreshLocalContactsSnapshot(): Exception - Emails query Msg=" + e.getMessage(), e);
                     }
 
                     if (emailsCur != null) {
@@ -542,7 +542,7 @@ public class ContactsManager implements SharedPreferences.OnSharedPreferenceChan
                                 }
                             }
                         } catch (Exception e) {
-                            Log.e(LOG_TAG, "## refreshLocalContactsSnapshot(): Exception - Emails query2 Msg=" + e.getMessage());
+                            Log.e(LOG_TAG, "## refreshLocalContactsSnapshot(): Exception - Emails query2 Msg=" + e.getMessage(), e);
                         }
 
                         emailsCur.close();
@@ -593,7 +593,7 @@ public class ContactsManager implements SharedPreferences.OnSharedPreferenceChan
                             try {
                                 listener.onRefresh();
                             } catch (Exception e) {
-                                Log.e(LOG_TAG, "refreshLocalContactsSnapshot : onRefresh failed" + e.getMessage());
+                                Log.e(LOG_TAG, "refreshLocalContactsSnapshot : onRefresh failed" + e.getMessage(), e);
                             }
                         }
                     }

@@ -560,4 +560,166 @@ Pode engadir a dirección de correo na sección de configuración de perfil.</st
     <string name="deactivate_account_prompt_password">Para continuar introduza o seu contrasinal:</string>
     <string name="deactivate_account_submit">Desactivar conta</string>
 
+<string name="option_send_voice">Enviar voz</string>
+
+    <string name="go_on_with">continuar con…</string>
+    <string name="error_no_external_application_found">Non se atopou unha aplicación que poida completar iso.</string>
+
+    <string name="auth_reset_password_email_validation_message">Enviouse un correo a %s. Unha vez abra a ligazón que contén prema abaixo.</string>
+    <string name="login_error_must_start_http">A URL ten que comezar con http[s]://</string>
+    <string name="login_error_network_error">Non se puido acceder: erro da rede</string>
+    <string name="login_error_unable_login">Non se puido acceder</string>
+    <string name="login_error_registration_network_error">Non se puido rexistrar: erro da rede</string>
+    <string name="login_error_unable_register">Non se puido rexistrar</string>
+    <string name="login_error_unable_register_mail_ownership">Non se puido rexistrar: erro coa propiedade do correo electrónico</string>
+    <string name="login_error_invalid_home_server">Introduza unha URL válida</string>
+    <string name="login_mobile_device">Móbil</string>
+
+    <string name="login_error_forbidden">Usuario/contrasinal incorrecto</string>
+    <string name="login_error_bad_json">JSON con defectos</string>
+    <string name="login_error_not_json">Non contiña unha JSON correcta</string>
+    <string name="login_error_limit_exceeded">Enviáronse demasiadas peticións</string>
+    <string name="login_error_user_in_use">Este nome de usuario xa se está a usar</string>
+    <string name="login_error_login_email_not_yet">Unha ligazón de correo na que aínda non se premeu</string>
+
+    <string name="e2e_re_request_encryption_key"><u>Volver a pedir as chaves de cifrado</u> do outro dispositivo seu.</string>
+
+    <string name="e2e_re_request_encryption_key_dialog_title">Petición enviada</string>
+    <string name="e2e_re_request_encryption_key_dialog_content">Inicie Riot noutro dispositivo que poida descifrar esta mensaxe e que despois desde alí lle poida enviar as chaves a este dispositivo.</string>
+
+    <plurals name="membership_changes">
+	<item quantity="one">1 cambio de membros</item>
+	<item quantity="other">%d cambio de membros</item>
+</plurals>
+
+    <string name="compression_opt_list_original">Autor Inicial</string>
+    <string name="compression_opt_list_medium">Mediano</string>
+    <string name="compression_opt_list_small">Pequeno</string>
+
+    <string name="attachment_cancel_download">Cancelar a descarga?</string>
+    <string name="attachment_cancel_upload">Cancelar a subida?</string>
+    <string name="attachment_remaining_time_seconds">%d s</string>
+    <string name="attachment_remaining_time_minutes">%1$dm %2$ds</string>
+
+    <string name="room_info_room_name">Nome da sala</string>
+    <string name="room_info_room_topic">Tema da sala</string>
+
+    <string name="call_connected">Chamada establecida</string>
+    <string name="call_ended">Chamada finalizada</string>
+    <string name="call_ring">Chamando…</string>
+    <string name="incoming_call">Chamada entrante</string>
+    <string name="incoming_video_call">Videochamada entrante</string>
+    <string name="incoming_voice_call">Chamada de audio entrante</string>
+    <string name="call_in_progress">Chamada en activo</string>
+
+    <string name="call_error_user_not_responding">Fallou a conexión desde o outro lado.</string>
+    <string name="call_error_camera_init_failed">Non se deu iniciado a cámara</string>
+    <string name="call_error_answered_elsewhere">chamara respondida noutro lugar</string>
+
+    <string name="media_picker_both_capture_title">Saque unha foto ou video</string>
+    <string name="media_picker_cannot_record_video">Non foi posible gravar vídeo</string>
+
+    <string name="permissions_rationale_popup_title">Información</string>
+    <string name="media_slider_saved">Gardado</string>
+    <string name="media_slider_saved_message">Gardar nas descargas?</string>
+    <string name="yes">SI</string>
+    <string name="no">NON</string>
+    <string name="join">Unirse</string>
+    <string name="preview">Vista previa</string>
+    <string name="room_preview_unlinked_email_warning">O convite envióuselle a %s, mais non é alguén que estea asociado con esta conta.
+Seguramente queira conectarse cunha conta distinta, ou engadir este correo a súa conta.</string>
+    <string name="room_preview_try_join_an_unknown_room_default">unha sala</string>
+    <string name="room_preview_room_interactions_disabled">Esta é unha vista previa desta sala. Desactiváronse as interaccións coa sala.</string>
+
+    <string name="room_creation_title">Nova conversa</string>
+    <string name="room_creation_add_member">Engadir membro</string>
+    <plurals name="room_header_active_members_count">
+	<item quantity="one">1 participante activo</item>
+	<item quantity="other">%d participantes activos</item>
+</plurals>
+    <plurals name="room_title_members">
+	<item quantity="one">1 membro</item>
+	<item quantity="other">%d membros</item>
+</plurals>
+    <string name="room_title_one_member">1 membro</string>
+    <string name="format_time_s">s</string>
+    <string name="format_time_m">m</string>
+    <string name="format_time_h">h</string>
+    <string name="format_time_d">d</string>
+
+    <string name="room_participants_ago">atrás</string>
+
+    <string name="room_participants_header_call">Chamar</string>
+    <string name="room_participants_header_devices">DISPOSITIVOS</string>
+
+    <string name="room_participants_action_leave">Deixar a sala</string>
+    <string name="room_participants_action_remove">Borrar desta sala</string>
+    <string name="room_unsent_messages_notification">Mensaxes non enviadas. %1$s ou %2$s agora?</string>
+    <string name="ssl_do_not_trust">Non confiar</string>
+    <string name="ssl_fingerprint_hash">Pegada (%s):</string>
+    <string name="room_details_people_invited_group_name">CONVIDADO</string>
+    <string name="room_details_people_present_group_name">UNIUSE</string>
+
+    <string name="room_event_action_cancel_upload">Cancelar a subida</string>
+    <string name="room_event_action_cancel_download">Cancelar a descarga</string>
+
+    <string name="room_displayname_two_members">%1$s e %2$s</string>
+
+    <string name="room_displayname_many_members">%1$s e %2$s</string>
+    <string name="room_recents_join">UNIRSE</string>
+    <string name="room_recents_directory">DIRECTORIO</string>
+    <string name="room_recents_favourites">FAVORITOS</string>
+    <string name="room_recents_conversations">SALAS</string>
+    <string name="room_recents_low_priority">BAIXA PRIORIDADE</string>
+    <plurals name="directory_search_rooms">
+	<item quantity="one">1 sala</item>
+	<item quantity="other">%d salas</item>
+</plurals>
+    <string name="room_sliding_menu_term_and_conditions">Termos e condicións</string>
+    <string name="settings_notification_privacy">Segredo das notificacións</string>
+    <string name="settings_notification_privacy_warning">Riot.im traballa agochado, en segundo plano, para garantir que o contido das súas mensaxes sexa segredo. Pode cambiar esta opción para que reducir o consumo das baterías.</string>
+    <string name="settings_notification_privacy_normal">Normal</string>
+    <string name="settings_notification_privacy_power_saving">Opcións de aforro de batería</string>
+    <string name="settings_notification_privacy_low_detail">Notificacións con pouco detalle</string>
+    <string name="settings_notification_privacy_reduced">Reducir a privacidade</string>
+    <string name="settings_notification_privacy_need_permission">Esta aplicación necesita de permisos para traballar en segundo plano</string>
+    <string name="settings_notification_privacy_no_permission">Esta aplicación <b>non</b> ten permisos para traballar en segundo plano</string>
+    <string name="settings_notification_privacy_gcm">• Notificacións enviadas a través de Cloud Messaging de Google</string>
+    <string name="settings_notification_privacy_metadata">• Notificacións que só conteñen metadatos</string>
+    <string name="settings_notification_privacy_secure_message_content">• O contido da mensaxe das notificacións está <b>provén dun xeito seguro e directo do servidor local de Matrix</b></string>
+    <string name="settings_notification_privacy_nosecure_message_content">• As notificacións conteñen <b>metadatos e os datos da mensaxe</b></string>
+    <string name="settings_notification_privacy_message_content_not_shown">• As notificacións <b>non van a mostrar o contido da mensaxe</b></string>
+
+    <string name="settings_notification_ringtone">Son das notificacións</string>
+    <string name="settings_enable_this_device">Activar notificacións para este dispositivo</string>
+    <string name="settings_set_sync_timeout">Petición de sincronización esgotada</string>
+    <string name="settings_set_sync_delay">Atraso entre dúas peticións de sincronización</string>
+    <string name="settings_app_term_conditions">Termos e condicións</string>
+    <string name="settings_copyright">Copyright</string>
+    <string name="settings_privacy_policy">Política de privacidade</string>
+    <string name="settings_ignored_users">Usuarios ignorados</string>
+    <string name="settings_notifications_targets">Obxectivos das notificacións</string>
+    <string name="settings_deactivate_account_section">Desactivar conta</string>
+    <string name="startup_notification_privacy_title">Segredo das notificacións</string>
+    <string name="startup_notification_privacy_message">Riot pode estar agochado e seguir traballando na xestión das notificacións dun xeito seguro e privado (inda que iso podería afectar ao uso da batería).</string>
+    <string name="startup_notification_privacy_button_grant">Outorgar permisos</string>
+    <string name="startup_notification_privacy_button_other">Escolla outra opción</string>
+
+    <string name="settings_logged_in">Accedeuse como</string>
+    <string name="settings_identity_server">Servidor de identidade</string>
+
+    <string name="settings_delete_notification_targets_confirmation">Seguro que quere eliminar este tipo de notificacións?</string>
+
+    <string name="room_settings_room_internal_id">O ID interno desta sala é</string>
+    <string name="room_settings_labs_end_to_end_warnings">Precisa saír da aplicación primeiro para poder activar o cifrado.</string>
+    <string name="room_settings_never_send_to_unverified_devices_summary">Nunca enviar mensaxes cifradas aos dispositivos que non estean verificados nesta sala desde este dispositivo.</string>
+
+    <string name="room_settings_addresses_e2e_enabled">O cifrado está activado nesta sala.</string>
+    <string name="encryption_information_verify_device_warning">" Para verificar que se pode confiar neste dispositivo, contacte co seu dono utilizando algún outro medio (ex. en persoa ou chamada de teléfono) e pregúntelle se a clave que ven nos axustes de usuario do se dispositivo coincide coa clave inferior:"</string>
+    <string name="you_added_a_new_device">Engadiu un novo dispositivo «%s» que está a solicitar as chaves de cifrado.</string>
+    <string name="your_unverified_device_requesting">O seu dispositivo sen verificar «%s» está solicitando as chaves de cifrado.</string>
+    <string name="dialog_user_consent_content">Para continuar usando o servidor %1$s ten que revisar primeiro os seus termos e condicións.</string>
+    <string name="deactivate_account_delete_checkbox">Esquezan todas as mensaxes que eu enviara no momento en que elimine a miña conta. (Aviso: iso suporá que os seguintes participantes só verán unha versión incompleta das conversas.)</string>
+    <string name="error_empty_field_your_password">Introduza o seu contrasinal.</string>
+
 </resources>

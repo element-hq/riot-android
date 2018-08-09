@@ -23,6 +23,7 @@ import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Point;
+import android.graphics.Typeface;
 import android.graphics.drawable.Drawable;
 import android.os.Build;
 import android.os.Handler;
@@ -35,8 +36,12 @@ import android.text.SpannableString;
 import android.text.SpannableStringBuilder;
 import android.text.TextUtils;
 import android.text.format.DateUtils;
+import android.text.method.LinkMovementMethod;
 import android.text.style.BackgroundColorSpan;
+import android.text.style.ClickableSpan;
+import android.text.style.ForegroundColorSpan;
 import android.text.style.QuoteSpan;
+import android.text.style.StyleSpan;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -51,6 +56,8 @@ import android.widget.LinearLayout;
 import android.widget.PopupMenu;
 import android.widget.TextView;
 
+import com.binaryfork.spanny.Spanny;
+
 import org.matrix.androidsdk.MXSession;
 import org.matrix.androidsdk.adapters.AbstractMessagesAdapter;
 import org.matrix.androidsdk.adapters.MessageRow;
@@ -63,6 +70,7 @@ import org.matrix.androidsdk.interfaces.HtmlToolbox;
 import org.matrix.androidsdk.rest.model.Event;
 import org.matrix.androidsdk.rest.model.EventContent;
 import org.matrix.androidsdk.rest.model.PowerLevels;
+import org.matrix.androidsdk.rest.model.RoomCreateContent;
 import org.matrix.androidsdk.rest.model.RoomMember;
 import org.matrix.androidsdk.rest.model.crypto.EncryptedEventContent;
 import org.matrix.androidsdk.rest.model.message.FileMessage;
@@ -72,6 +80,7 @@ import org.matrix.androidsdk.rest.model.message.StickerMessage;
 import org.matrix.androidsdk.util.EventDisplay;
 import org.matrix.androidsdk.util.JsonUtils;
 import org.matrix.androidsdk.util.Log;
+import org.matrix.androidsdk.util.PermalinkUtils;
 import org.matrix.androidsdk.view.HtmlTagHandler;
 
 import java.lang.reflect.Field;
@@ -112,7 +121,7 @@ public class VectorMessagesAdapter extends AbstractMessagesAdapter {
     private static final String LOG_TAG = VectorMessagesAdapter.class.getSimpleName();
 
     // an event is selected when the user taps on it
-    private String mSelectedEventId;
+    private Event mSelectedEvent;
 
     // events listeners
     IMessagesAdapterActionsListener mVectorMessagesAdapterEventsListener = null;
@@ -158,7 +167,9 @@ public class VectorMessagesAdapter extends AbstractMessagesAdapter {
     static final int ROW_TYPE_EMOJI = 9;
     static final int ROW_TYPE_CODE = 10;
     static final int ROW_TYPE_STICKER = 11;
-    static final int NUM_ROW_TYPES = 12;
+    static final int ROW_TYPE_VERSIONED_ROOM = 12;
+    static final int NUM_ROW_TYPES = 13;
+
 
     final Context mContext;
     private final Map<Integer, Integer> mRowTypeToLayoutId = new HashMap<>();
@@ -291,6 +302,7 @@ public class VectorMessagesAdapter extends AbstractMessagesAdapter {
                 R.layout.adapter_item_vector_message_code,
                 R.layout.adapter_item_vector_message_image_video,
                 R.layout.adapter_item_vector_hidden_message,
+                R.layout.adapter_item_vector_message_room_versioned,
                 mediasCache);
     }
 
@@ -328,6 +340,7 @@ public class VectorMessagesAdapter extends AbstractMessagesAdapter {
                           int codeResLayoutId,
                           int stickerResLayoutId,
                           int hiddenResLayoutId,
+                          int roomVersionedResLayoutId,
                           MXMediasCache mediasCache) {
         super(context, 0);
         mContext = context;
@@ -343,6 +356,7 @@ public class VectorMessagesAdapter extends AbstractMessagesAdapter {
         mRowTypeToLayoutId.put(ROW_TYPE_CODE, codeResLayoutId);
         mRowTypeToLayoutId.put(ROW_TYPE_STICKER, stickerResLayoutId);
         mRowTypeToLayoutId.put(ROW_TYPE_HIDDEN, hiddenResLayoutId);
+        mRowTypeToLayoutId.put(ROW_TYPE_VERSIONED_ROOM, roomVersionedResLayoutId);
         mMediasCache = mediasCache;
         mLayoutInflater = LayoutInflater.from(mContext);
         // the refresh will be triggered only when it is required
@@ -725,7 +739,7 @@ public class VectorMessagesAdapter extends AbstractMessagesAdapter {
             return ROW_TYPE_TEXT;
         }
 
-        MessageRow row = getItem(position);
+        final MessageRow row = getItem(position);
         return getItemViewType(row.getEvent());
     }
 
@@ -787,6 +801,9 @@ public class VectorMessagesAdapter extends AbstractMessagesAdapter {
             case ROW_TYPE_MERGE:
                 inflatedView = getMergeView(position, convertView, parent);
                 break;
+            case ROW_TYPE_VERSIONED_ROOM:
+                inflatedView = getVersionedRoomView(position, convertView, parent);
+                break;
             default:
                 throw new RuntimeException("Unknown item view type for position " + position);
         }
@@ -834,7 +851,7 @@ public class VectorMessagesAdapter extends AbstractMessagesAdapter {
                     }
                 });
             } catch (Exception e) {
-                Log.e(LOG_TAG, "## notifyDataSetChanged () : failed to sort undeliverableEvents " + e.getMessage());
+                Log.e(LOG_TAG, "## notifyDataSetChanged () : failed to sort undeliverableEvents " + e.getMessage(), e);
             }
 
             addAll(undeliverableEvents);
@@ -877,17 +894,21 @@ public class VectorMessagesAdapter extends AbstractMessagesAdapter {
     /**
      * Toggle the selection mode.
      *
-     * @param eventId the tapped eventID.
+     * @param event the tapped event.
      */
-    public void onEventTap(String eventId) {
+    public void onEventTap(Event event) {
         // the tap to select is only enabled when the adapter is not in search mode.
         if (!mIsSearchMode) {
-            if (null == mSelectedEventId) {
-                mSelectedEventId = eventId;
+            if (null == mSelectedEvent) {
+                mSelectedEvent = event;
             } else {
-                mSelectedEventId = null;
+                mSelectedEvent = null;
             }
             notifyDataSetChanged();
+
+            if (mVectorMessagesAdapterEventsListener != null) {
+                mVectorMessagesAdapterEventsListener.onSelectedEventChange(mSelectedEvent);
+            }
         }
     }
 
@@ -905,9 +926,13 @@ public class VectorMessagesAdapter extends AbstractMessagesAdapter {
      * Cancel the message selection mode
      */
     public void cancelSelectionMode() {
-        if (null != mSelectedEventId) {
-            mSelectedEventId = null;
+        if (null != mSelectedEvent) {
+            mSelectedEvent = null;
             notifyDataSetChanged();
+
+            if (mVectorMessagesAdapterEventsListener != null) {
+                mVectorMessagesAdapterEventsListener.onSelectedEventChange(mSelectedEvent);
+            }
         }
     }
 
@@ -915,7 +940,17 @@ public class VectorMessagesAdapter extends AbstractMessagesAdapter {
      * @return true if there is a selected item.
      */
     public boolean isInSelectionMode() {
-        return null != mSelectedEventId;
+        return null != mSelectedEvent;
+    }
+
+    /**
+     * Get the current selected event or null if no event is selected
+     *
+     * @return the current selected event or null if no event is selected
+     */
+    @Nullable
+    public Event getCurrentSelectedEvent() {
+        return mSelectedEvent;
     }
 
     /**
@@ -1073,6 +1108,8 @@ public class VectorMessagesAdapter extends AbstractMessagesAdapter {
 
         } else if (WidgetsManager.WIDGET_EVENT_TYPE.equals(eventType)) {
             return ROW_TYPE_ROOM_MEMBER;
+        } else if (Event.EVENT_TYPE_STATE_ROOM_CREATE.equals(eventType)) {
+            viewType = ROW_TYPE_VERSIONED_ROOM;
         } else {
             throw new RuntimeException("Unknown event type: " + eventType);
         }
@@ -1285,7 +1322,7 @@ public class VectorMessagesAdapter extends AbstractMessagesAdapter {
 
             mHelper.manageURLPreviews(message, convertView, event.eventId);
         } catch (Exception e) {
-            Log.e(LOG_TAG, "## getTextView() failed : " + e.getMessage());
+            Log.e(LOG_TAG, "## getTextView() failed : " + e.getMessage(), e);
         }
 
         return convertView;
@@ -1333,20 +1370,19 @@ public class VectorMessagesAdapter extends AbstractMessagesAdapter {
 
             if (block.startsWith(VectorMessagesAdapterHelper.START_FENCED_BLOCK) && block.endsWith(VectorMessagesAdapterHelper.END_FENCED_BLOCK)) {
                 // Fenced block
-                String minusTags = block
+                final String minusTags = block
                         .substring(VectorMessagesAdapterHelper.START_FENCED_BLOCK.length(),
                                 block.length() - VectorMessagesAdapterHelper.END_FENCED_BLOCK.length())
                         .replace("\n", "<br/>")
-                        .replace(" ", "&nbsp;");
+                        .replace(" ", "&nbsp;")
+                        .trim();
+
+                final CharSequence htmlReady = mHelper.convertToHtml(minusTags);
                 final View blockView = mLayoutInflater.inflate(R.layout.adapter_item_vector_message_code_block, null);
                 final TextView tv = blockView.findViewById(R.id.messagesAdapter_body);
-
-                CharSequence sequence = mHelper.convertToHtml(minusTags);
-
-                tv.setText(sequence);
+                tv.setText(htmlReady);
 
                 mHelper.highlightFencedCode(tv);
-
                 mHelper.applyLinkMovementMethod(tv);
 
                 container.addView(blockView);
@@ -1356,25 +1392,20 @@ public class VectorMessagesAdapter extends AbstractMessagesAdapter {
             } else {
                 // Not a fenced block
                 final TextView tv = (TextView) mLayoutInflater.inflate(R.layout.adapter_item_vector_message_code_text, null);
-
-                String block2 = block;
+                String block2 = block.trim();
                 if (TextUtils.equals(Message.FORMAT_MATRIX_HTML, message.format)) {
-                    String sanitased = mHelper.getSanitisedHtml(block2);
-
-                    if (sanitased != null) {
-                        block2 = sanitased;
+                    final String sanitized = mHelper.getSanitisedHtml(block2);
+                    if (sanitized != null) {
+                        block2 = sanitized;
                     }
                 }
-
-                CharSequence strBuilder = mHelper.highlightPattern(new SpannableString(block2),
+                final CharSequence sequence = mHelper.convertToHtml(block2);
+                final CharSequence strBuilder = mHelper.highlightPattern(new SpannableString(sequence),
                         mPattern,
                         mBackgroundColorSpan,
                         shouldHighlighted);
-
                 tv.setText(strBuilder);
-
                 mHelper.applyLinkMovementMethod(tv);
-
                 container.addView(tv);
                 textViews.add(tv);
             }
@@ -1460,7 +1491,7 @@ public class VectorMessagesAdapter extends AbstractMessagesAdapter {
             ImageView imageView = convertView.findViewById(R.id.messagesAdapter_image);
             addContentViewListeners(convertView, imageView, position, type);
         } catch (Exception e) {
-            Log.e(LOG_TAG, "## getImageVideoView() failed : " + e.getMessage());
+            Log.e(LOG_TAG, "## getImageVideoView() failed : " + e.getMessage(), e);
         }
 
         return convertView;
@@ -1522,7 +1553,7 @@ public class VectorMessagesAdapter extends AbstractMessagesAdapter {
             Message message = JsonUtils.toMessage(msg.getContent());
             mHelper.manageURLPreviews(message, convertView, msg.eventId);
         } catch (Exception e) {
-            Log.e(LOG_TAG, "## getNoticeRoomMemberView() failed : " + e.getMessage());
+            Log.e(LOG_TAG, "## getNoticeRoomMemberView() failed : " + e.getMessage(), e);
         }
 
         return convertView;
@@ -1594,7 +1625,7 @@ public class VectorMessagesAdapter extends AbstractMessagesAdapter {
 
             mHelper.manageURLPreviews(message, convertView, event.eventId);
         } catch (Exception e) {
-            Log.e(LOG_TAG, "## getEmoteView() failed : " + e.getMessage());
+            Log.e(LOG_TAG, "## getEmoteView() failed : " + e.getMessage(), e);
         }
 
         return convertView;
@@ -1645,7 +1676,7 @@ public class VectorMessagesAdapter extends AbstractMessagesAdapter {
 
             addContentViewListeners(convertView, fileTextView, position, ROW_TYPE_FILE);
         } catch (Exception e) {
-            Log.e(LOG_TAG, "## getFileView() failed " + e.getMessage());
+            Log.e(LOG_TAG, "## getFileView() failed " + e.getMessage(), e);
         }
 
         return convertView;
@@ -1740,7 +1771,7 @@ public class VectorMessagesAdapter extends AbstractMessagesAdapter {
                     event.setIsExpanded(!event.isExpanded());
                     updateHighlightedEventId();
 
-                    if (event.contains(mSelectedEventId)) {
+                    if (mSelectedEvent != null && event.contains(mSelectedEvent.eventId)) {
                         cancelSelectionMode();
                     } else {
                         notifyDataSetChanged();
@@ -1756,17 +1787,47 @@ public class VectorMessagesAdapter extends AbstractMessagesAdapter {
             // display the day separator
             VectorMessagesAdapterHelper.setHeader(convertView, headerMessage(position), position);
 
-            boolean isInSelectionMode = (null != mSelectedEventId);
-            boolean isSelected = TextUtils.equals(event.eventId, mSelectedEventId);
+            boolean isInSelectionMode = (null != mSelectedEvent);
+            boolean isSelected = isInSelectionMode && TextUtils.equals(event.eventId, mSelectedEvent.eventId);
 
             float alpha = (!isInSelectionMode || isSelected) ? 1.0f : 0.2f;
 
             // the message body is dimmed when not selected
             convertView.findViewById(R.id.messagesAdapter_body_view).setAlpha(alpha);
         } catch (Exception e) {
-            Log.e(LOG_TAG, "## getMergeView() failed " + e.getMessage());
+            Log.e(LOG_TAG, "## getMergeView() failed " + e.getMessage(), e);
         }
 
+        return convertView;
+    }
+
+    /**
+     * Versioned Room management
+     *
+     * @param position    the message position
+     * @param convertView the message view
+     * @param parent      the parent view
+     * @return the updated View
+     */
+    private View getVersionedRoomView(final int position, View convertView, ViewGroup parent) {
+        if (convertView == null) {
+            convertView = mLayoutInflater.inflate(mRowTypeToLayoutId.get(ROW_TYPE_VERSIONED_ROOM), parent, false);
+        }
+        final MessageRow row = getItem(position);
+        final RoomState roomState = row.getRoomState();
+        final RoomCreateContent.Predecessor predecessor = roomState.getRoomCreateContent().predecessor;
+
+        final String roomLink = PermalinkUtils.createPermalink(predecessor.roomId);
+        final ClickableSpan urlSpan = new MatrixURLSpan(roomLink, MXSession.PATTERN_CONTAIN_APP_LINK_PERMALINK_ROOM_ID, mVectorMessagesAdapterEventsListener);
+        final int textColorInt = ContextCompat.getColor(mContext, R.color.riot_primary_text_color_light);
+        final CharSequence text = new Spanny(mContext.getString(R.string.room_tombstone_continuation_description),
+                new StyleSpan(Typeface.BOLD),
+                new ForegroundColorSpan(textColorInt))
+                .append("\n")
+                .append(mContext.getString(R.string.room_tombstone_predecessor_link), urlSpan, new ForegroundColorSpan(textColorInt));
+        final TextView versionedTextView = convertView.findViewById(R.id.messagesAdapter_room_versioned_text);
+        versionedTextView.setMovementMethod(LinkMovementMethod.getInstance());
+        versionedTextView.setText(text);
         return convertView;
     }
 
@@ -1957,8 +2018,8 @@ public class VectorMessagesAdapter extends AbstractMessagesAdapter {
     private void manageSelectionMode(final View contentView, final Event event, final int msgType) {
         final String eventId = event.eventId;
 
-        boolean isInSelectionMode = (null != mSelectedEventId);
-        boolean isSelected = TextUtils.equals(eventId, mSelectedEventId);
+        boolean isInSelectionMode = (null != mSelectedEvent);
+        boolean isSelected = isInSelectionMode && TextUtils.equals(eventId, mSelectedEvent.eventId);
 
         // display the action icon when selected
         contentView.findViewById(R.id.messagesAdapter_action_image).setVisibility(isSelected ? View.VISIBLE : View.GONE);
@@ -1991,10 +2052,10 @@ public class VectorMessagesAdapter extends AbstractMessagesAdapter {
             contentView.findViewById(R.id.message_timestamp_layout).setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    if (TextUtils.equals(eventId, mSelectedEventId)) {
+                    if (mSelectedEvent != null && TextUtils.equals(eventId, mSelectedEvent.eventId)) {
                         onMessageClick(event, getEventText(contentView, event, msgType), contentView.findViewById(R.id.messagesAdapter_action_anchor));
                     } else {
-                        onEventTap(eventId);
+                        onEventTap(event);
                     }
                 }
             });
@@ -2004,8 +2065,8 @@ public class VectorMessagesAdapter extends AbstractMessagesAdapter {
                 public boolean onLongClick(View v) {
                     if (!mIsSearchMode) {
                         onMessageClick(event, getEventText(contentView, event, msgType), contentView.findViewById(R.id.messagesAdapter_action_anchor));
-                        mSelectedEventId = eventId;
-                        notifyDataSetChanged();
+
+                        onEventTap(event);
                         return true;
                     }
 
@@ -2086,8 +2147,8 @@ public class VectorMessagesAdapter extends AbstractMessagesAdapter {
 
                     if (!mIsSearchMode) {
                         onMessageClick(event, getEventText(contentView, event, msgType), convertView.findViewById(R.id.messagesAdapter_action_anchor));
-                        mSelectedEventId = event.eventId;
-                        notifyDataSetChanged();
+
+                        onEventTap(event);
                         return true;
                     }
                 }
@@ -2517,7 +2578,7 @@ public class VectorMessagesAdapter extends AbstractMessagesAdapter {
                 }
             }
         } catch (Exception e) {
-            Log.e(LOG_TAG, "onMessageClick : force to display the icons failed " + e.getLocalizedMessage());
+            Log.e(LOG_TAG, "onMessageClick : force to display the icons failed " + e.getLocalizedMessage(), e);
         }
 
         Menu menu = popup.getMenu();
@@ -2564,8 +2625,8 @@ public class VectorMessagesAdapter extends AbstractMessagesAdapter {
                     // need the minimum power level to redact an event
                     Room room = mSession.getDataHandler().getRoom(event.roomId);
 
-                    if ((null != room) && (null != room.getLiveState().getPowerLevels())) {
-                        PowerLevels powerLevels = room.getLiveState().getPowerLevels();
+                    if ((null != room) && (null != room.getState().getPowerLevels())) {
+                        PowerLevels powerLevels = room.getState().getPowerLevels();
                         canBeRedacted = powerLevels.getUserPowerLevel(mSession.getMyUserId()) >= powerLevels.redact;
                     }
                 }
@@ -2605,8 +2666,7 @@ public class VectorMessagesAdapter extends AbstractMessagesAdapter {
                 }
 
                 // disable the selection
-                mSelectedEventId = null;
-                notifyDataSetChanged();
+                cancelSelectionMode();
 
                 return true;
             }
@@ -2616,7 +2676,7 @@ public class VectorMessagesAdapter extends AbstractMessagesAdapter {
         try {
             popup.show();
         } catch (Exception e) {
-            Log.e(LOG_TAG, " popup.show failed " + e.getMessage());
+            Log.e(LOG_TAG, " popup.show failed " + e.getMessage(), e);
         }
     }
 

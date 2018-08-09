@@ -16,12 +16,9 @@
  */
 package im.vector.util;
 
-import android.content.Context;
-import android.content.Intent;
 import android.net.Uri;
 import android.os.Parcel;
 import android.os.Parcelable;
-import android.provider.Browser;
 import android.text.ParcelableSpan;
 import android.text.Spannable;
 import android.text.SpannableStringBuilder;
@@ -63,7 +60,7 @@ public class MatrixURLSpan extends ClickableSpan implements ParcelableSpan {
     // listener
     private final IMessagesAdapterActionsListener mActionsListener;
 
-    private MatrixURLSpan(String url, Pattern pattern, IMessagesAdapterActionsListener actionsListener) {
+    public MatrixURLSpan(String url, Pattern pattern, IMessagesAdapterActionsListener actionsListener) {
         mURL = url;
         mPattern = pattern;
         mActionsListener = actionsListener;
@@ -144,7 +141,7 @@ public class MatrixURLSpan extends ClickableSpan implements ParcelableSpan {
                 }
             }
         } catch (Exception e) {
-            Log.e(LOG_TAG, "MatrixURLSpan : on click failed " + e.getLocalizedMessage());
+            Log.e(LOG_TAG, "MatrixURLSpan : on click failed " + e.getLocalizedMessage(), e);
         }
     }
 
@@ -190,7 +187,7 @@ public class MatrixURLSpan extends ClickableSpan implements ParcelableSpan {
                         stringBuilder.setSpan(new MatrixURLSpan(url, pattern, mActionsListener), startPos, endPos, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
                     }
                 } catch (Exception e) {
-                    Log.e(LOG_TAG, "refreshMatrixSpans " + e.getLocalizedMessage());
+                    Log.e(LOG_TAG, "refreshMatrixSpans " + e.getLocalizedMessage(), e);
                 }
             }
         }

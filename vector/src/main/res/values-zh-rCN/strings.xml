@@ -458,7 +458,7 @@
 请在接下来弹出的窗口中授权允许访问。</string>
     <string name="permissions_action_not_performed_missing_permissions">对不起… 因为缺少权限，操作已取消</string>
 
-    <string name="media_slider_saved_message">保存至下载</string>
+    <string name="media_slider_saved_message">保存至下载？</string>
     <string name="remove">移除</string>
     <string name="room_preview_unlinked_email_warning">此邀请已发送至 %s，但没和这个账户关联。
 您可能希望用一个不同的账户登录，或者把这个电子邮箱加入到这个账户。</string>
@@ -780,9 +780,9 @@
 
     <string name="action_exit">退出</string>
     <string name="groups_invite_header">邀请</string>
-    <string name="start_new_chat_prompt_msg">您确定要和 %s 开始一个新的聊天吗？</string>
-    <string name="start_voice_call_prompt_msg">您确定要开始一个语音通话吗？</string>
-    <string name="start_video_call_prompt_msg">您确定要开始一个视频通话吗？</string>
+    <string name="start_new_chat_prompt_msg">您确定要向 %s 发起新的聊天吗？</string>
+    <string name="start_voice_call_prompt_msg">您确定要发起语音通话吗？</string>
+    <string name="start_video_call_prompt_msg">您确定要发起视频通话吗？</string>
 
     <string name="room_participants_kick_prompt_msg">您确定要从这个聊天中移除这个用户吗？</string>
     <string name="room_participants_ban_prompt_msg">您确定要在这个聊天中封禁这个用户吗？</string>
@@ -947,4 +947,27 @@ Matrix 中的信息可见性类似于电子邮件。我们忘记您的信息意�
     <string name="dialog_user_consent_content">要想继续使用主服务器 %1$s 您必须阅读并同意其服务条款。</string>
     <string name="dialog_user_consent_submit">现在阅读</string>
 
+    <string name="dialog_title_third_party_licences">第三方开源协议</string>
+
+    <string name="download">下载</string>
+    <string name="clear">清除</string>
+    <string name="option_send_voice">发送语音消息</string>
+
+    <string name="go_on_with">使用…打开</string>
+    <string name="error_no_external_application_found">对不起，没有可完成此操作的外部应用。</string>
+
+    <string name="e2e_re_request_encryption_key">从其他设备上 <u>重新请求密钥</u>。</string>
+
+    <string name="e2e_re_request_encryption_key_sent">已发送密钥共享请求。</string>
+
+    <string name="e2e_re_request_encryption_key_dialog_title">已请求</string>
+    <string name="e2e_re_request_encryption_key_dialog_content">请在可解密此消息的设备上启动 Riot.im，以便其将密钥发送至当前设备。</string>
+
+    <string name="lock_screen_hint">在此输入…</string>
+
+    <string name="settings_labs_enable_send_voice">发送语音消息（需要可录制语音的第三方应用）</string>
+
+    <string name="error_empty_field_your_password">请输入您的密码。</string>
+
+<string name="speak">说话</string>
     </resources>

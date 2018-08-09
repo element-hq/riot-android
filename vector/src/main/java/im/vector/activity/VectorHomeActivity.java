@@ -109,6 +109,7 @@ import java.util.Set;
 
 import butterknife.BindView;
 import butterknife.OnClick;
+import im.vector.BuildConfig;
 import im.vector.Matrix;
 import im.vector.MyPresenceManager;
 import im.vector.PublicRoomsManager;
@@ -125,6 +126,7 @@ import im.vector.receiver.VectorUniversalLinkReceiver;
 import im.vector.services.EventStreamService;
 import im.vector.util.BugReporter;
 import im.vector.util.CallsManager;
+import im.vector.util.HomeRoomsViewModel;
 import im.vector.util.PreferencesManager;
 import im.vector.util.RoomUtils;
 import im.vector.util.ThemeUtils;
@@ -219,6 +221,8 @@ public class VectorHomeActivity extends RiotAppCompatActivity implements SearchV
     private int mSlidingMenuIndex = -1;
 
     private MXSession mSession;
+
+    private HomeRoomsViewModel mRoomsViewModel;
 
     @BindView(R.id.home_toolbar)
     Toolbar mToolbar;
@@ -318,18 +322,18 @@ public class VectorHomeActivity extends RiotAppCompatActivity implements SearchV
         initSlidingMenu();
 
         mSession = Matrix.getInstance(this).getDefaultSession();
-
+        mRoomsViewModel = new HomeRoomsViewModel(mSession);
         // track if the application update
         SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(this);
         int version = preferences.getInt(PreferencesManager.VERSION_BUILD, 0);
 
-        if (version != VectorApp.VERSION_BUILD) {
-            Log.d(LOG_TAG, "The application has been updated from version " + version + " to version " + VectorApp.VERSION_BUILD);
+        if (version != BuildConfig.VERSION_CODE) {
+            Log.d(LOG_TAG, "The application has been updated from version " + version + " to version " + BuildConfig.VERSION_CODE);
 
             // TODO add some dedicated actions here
 
             preferences.edit()
-                    .putInt(PreferencesManager.VERSION_BUILD, VectorApp.VERSION_BUILD)
+                    .putInt(PreferencesManager.VERSION_BUILD, BuildConfig.VERSION_CODE)
                     .apply();
         }
 
@@ -578,7 +582,7 @@ public class VectorHomeActivity extends RiotAppCompatActivity implements SearchV
 
                 VectorApp.getInstance().clearAppCrashStatus();
             } catch (Exception e) {
-                Log.e(LOG_TAG, "## onResume() : appCrashedAlert failed " + e.getMessage());
+                Log.e(LOG_TAG, "## onResume() : appCrashedAlert failed " + e.getMessage(), e);
             }
         }
 
@@ -774,7 +778,7 @@ public class VectorHomeActivity extends RiotAppCompatActivity implements SearchV
         try {
             unregisterReceiver(mBrdRcvStopWaitingView);
         } catch (Exception e) {
-            Log.e(LOG_TAG, "## onPause() : unregisterReceiver fails " + e.getMessage());
+            Log.e(LOG_TAG, "## onPause() : unregisterReceiver fails " + e.getMessage(), e);
         }
 
         if (mSession.isAlive()) {
@@ -848,6 +852,14 @@ public class VectorHomeActivity extends RiotAppCompatActivity implements SearchV
             Log.e(LOG_TAG, "## onRequestPermissionsResult(): unknown RequestCode = " + aRequestCode);
         }
     }
+
+    /**
+     * @return
+     */
+    public HomeRoomsViewModel getRoomsViewModel() {
+        return mRoomsViewModel;
+    }
+
 
     /*
      * *********************************************************************************************
@@ -952,7 +964,7 @@ public class VectorHomeActivity extends RiotAppCompatActivity implements SearchV
                         .addToBackStack(mCurrentFragmentTag)
                         .commit();
             } catch (Exception e) {
-                Log.e(LOG_TAG, "## updateSelectedFragment() failed : " + e.getMessage());
+                Log.e(LOG_TAG, "## updateSelectedFragment() failed : " + e.getMessage(), e);
             }
         }
     }
@@ -1346,7 +1358,7 @@ public class VectorHomeActivity extends RiotAppCompatActivity implements SearchV
                     try {
                         mFloatingActionsMenu.postDelayed(mShowFloatingActionButtonRunnable, 1000);
                     } catch (Throwable throwable) {
-                        Log.e(LOG_TAG, "failed to postDelayed " + throwable.getMessage());
+                        Log.e(LOG_TAG, "failed to postDelayed " + throwable.getMessage(), throwable);
 
                         if (mShowFloatingActionButtonRunnable != null && mFloatingActionsMenu != null) {
                             mFloatingActionsMenu.removeCallbacks(mShowFloatingActionButtonRunnable);
@@ -1605,8 +1617,8 @@ public class VectorHomeActivity extends RiotAppCompatActivity implements SearchV
         String roomAlias = null;
 
         Room room = session.getDataHandler().getRoom(roomId);
-        if ((null != room) && (null != room.getLiveState())) {
-            roomAlias = room.getLiveState().getAlias();
+        if ((null != room) && (null != room.getState())) {
+            roomAlias = room.getState().getAlias();
         }
 
         final RoomPreviewData roomPreviewData = new RoomPreviewData(mSession, roomId, null, roomAlias, null);
@@ -1620,7 +1632,7 @@ public class VectorHomeActivity extends RiotAppCompatActivity implements SearchV
      * @param onSuccessCallback the success callback
      * @return the asynchronous callback
      */
-    private ApiCallback<Void> createForgetLeaveCallback(final String roomId, final SimpleApiCallback<Void> onSuccessCallback) {
+    private ApiCallback<Void> createForgetLeaveCallback(final String roomId, final ApiCallback<Void> onSuccessCallback) {
         return new ApiCallback<Void>() {
             @Override
             public void onSuccess(Void info) {
@@ -1666,7 +1678,7 @@ public class VectorHomeActivity extends RiotAppCompatActivity implements SearchV
      * @param roomId            the room id
      * @param onSuccessCallback the success asynchronous callback
      */
-    public void onForgetRoom(final String roomId, final SimpleApiCallback<Void> onSuccessCallback) {
+    public void onForgetRoom(final String roomId, final ApiCallback<Void> onSuccessCallback) {
         Room room = mSession.getDataHandler().getRoom(roomId);
 
         if (null != room) {
@@ -1681,7 +1693,7 @@ public class VectorHomeActivity extends RiotAppCompatActivity implements SearchV
      * @param roomId            the room id
      * @param onSuccessCallback the success asynchronous callback
      */
-    public void onRejectInvitation(final String roomId, final SimpleApiCallback<Void> onSuccessCallback) {
+    public void onRejectInvitation(final String roomId, final ApiCallback<Void> onSuccessCallback) {
         Room room = mSession.getDataHandler().getRoom(roomId);
 
         if (null != room) {
@@ -1816,7 +1828,7 @@ public class VectorHomeActivity extends RiotAppCompatActivity implements SearchV
                     }
 
                     case R.id.sliding_menu_exit: {
-                        if (null != EventStreamService.getInstance()) {
+                        if (EventStreamService.getInstance() != null) {
                             EventStreamService.getInstance().stopNow();
                         }
                         runOnUiThread(new Runnable() {
@@ -2080,7 +2092,7 @@ public class VectorHomeActivity extends RiotAppCompatActivity implements SearchV
                     shiftingMode.setAccessible(false);
 
                 } catch (Exception e) {
-                    Log.e(LOG_TAG, "## removeMenuShiftMode failed " + e.getMessage());
+                    Log.e(LOG_TAG, "## removeMenuShiftMode failed " + e.getMessage(), e);
                 }
             }
         }
@@ -2138,7 +2150,7 @@ public class VectorHomeActivity extends RiotAppCompatActivity implements SearchV
                     mBadgeViewByIndex.put(itemId, badgeView);
                 }
             } catch (Exception e) {
-                Log.e(LOG_TAG, "## addUnreadBadges failed " + e.getMessage());
+                Log.e(LOG_TAG, "## addUnreadBadges failed " + e.getMessage(), e);
             }
         }
 
@@ -2331,13 +2343,13 @@ public class VectorHomeActivity extends RiotAppCompatActivity implements SearchV
     //==============================================================================================================
 
     /**
-     * Warn the displayed fragment about summary updates.
+     * Warn the displayed fragment about room data updates.
      */
-    public void dispatchOnSummariesUpdate() {
-        Fragment fragment = getSelectedFragment();
-
+    public void onRoomDataUpdated() {
+        final HomeRoomsViewModel.Result result = mRoomsViewModel.update();
+        final Fragment fragment = getSelectedFragment();
         if ((null != fragment) && (fragment instanceof AbsHomeFragment)) {
-            ((AbsHomeFragment) fragment).onSummariesUpdate();
+            ((AbsHomeFragment) fragment).onRoomResultUpdated(result);
         }
     }
 
@@ -2351,7 +2363,7 @@ public class VectorHomeActivity extends RiotAppCompatActivity implements SearchV
 
             private void onForceRefresh() {
                 if (View.VISIBLE != mSyncInProgressView.getVisibility()) {
-                    dispatchOnSummariesUpdate();
+                    onRoomDataUpdated();
                 }
             }
 
@@ -2363,13 +2375,13 @@ public class VectorHomeActivity extends RiotAppCompatActivity implements SearchV
             @Override
             public void onInitialSyncComplete(String toToken) {
                 Log.d(LOG_TAG, "## onInitialSyncComplete()");
-                dispatchOnSummariesUpdate();
+                onRoomDataUpdated();
             }
 
             @Override
             public void onLiveEventsChunkProcessed(String fromToken, String toToken) {
                 if ((VectorApp.getCurrentActivity() == VectorHomeActivity.this) && mRefreshOnChunkEnd) {
-                    dispatchOnSummariesUpdate();
+                    onRoomDataUpdated();
                 }
 
                 mRefreshOnChunkEnd = false;
@@ -2445,7 +2457,7 @@ public class VectorHomeActivity extends RiotAppCompatActivity implements SearchV
                     // test if the latest event is refreshed
                     Event latestReceivedEvent = summary.getLatestReceivedEvent();
                     if ((null != latestReceivedEvent) && TextUtils.equals(latestReceivedEvent.eventId, event.eventId)) {
-                        dispatchOnSummariesUpdate();
+                        onRoomDataUpdated();
                     }
                 }
             }

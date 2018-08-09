@@ -223,7 +223,7 @@ public class VectorRoomDetailsMembersFragment extends VectorBaseFragment {
                         try {
                             text = mPatternToSearchEditText.getText().toString();
                         } catch (Exception e) {
-                            Log.e(LOG_TAG, "## afterTextChanged() failed " + e.getMessage());
+                            Log.e(LOG_TAG, "## afterTextChanged() failed " + e.getMessage(), e);
                         }
 
                         if (TextUtils.equals(text, patternValue) && (null != getActivity())) {
@@ -528,7 +528,7 @@ public class VectorRoomDetailsMembersFragment extends VectorBaseFragment {
         if ((null != mRoom) && (null != mSession)) {
             PowerLevels powerLevels;
 
-            if (null != (powerLevels = mRoom.getLiveState().getPowerLevels())) {
+            if (null != (powerLevels = mRoom.getState().getPowerLevels())) {
                 String userId = mSession.getMyUserId();
                 isAdmin = (null != userId) && (powerLevels.getUserPowerLevel(userId) >= CommonActivityUtils.UTILS_POWER_LEVEL_ADMIN);
             }
@@ -589,7 +589,7 @@ public class VectorRoomDetailsMembersFragment extends VectorBaseFragment {
 
             mRefreshTimer.schedule(mRefreshTimerTask, 1000);
         } catch (Throwable throwable) {
-            Log.e(LOG_TAG, "## delayedUpdateRoomMembersDataModel() failed " + throwable.getMessage());
+            Log.e(LOG_TAG, "## delayedUpdateRoomMembersDataModel() failed " + throwable.getMessage(), throwable);
 
             if (null != mRefreshTimer) {
                 mRefreshTimer.cancel();

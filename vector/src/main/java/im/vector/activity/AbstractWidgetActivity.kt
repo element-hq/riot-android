@@ -234,7 +234,7 @@ abstract class AbstractWidgetActivity : RiotAppCompatActivity() {
                 sendError(getString(R.string.widget_integration_failed_to_send_request), eventData)
             }
         } catch (e: Exception) {
-            Log.e(LOG_TAG, "## onWidgetMessage() : failed " + e.message)
+            Log.e(LOG_TAG, "## onWidgetMessage() : failed " + e.message, e)
             sendError(getString(R.string.widget_integration_failed_to_send_request), eventData)
         }
     }
@@ -306,7 +306,7 @@ abstract class AbstractWidgetActivity : RiotAppCompatActivity() {
                 mWebView.evaluateJavascript(functionLine, null)
             }
         } catch (e: Exception) {
-            Log.e(LOG_TAG, "## sendResponse() failed " + e.message)
+            Log.e(LOG_TAG, "## sendResponse() failed " + e.message, e)
         }
     }
 
@@ -343,7 +343,7 @@ abstract class AbstractWidgetActivity : RiotAppCompatActivity() {
             try {
                 jsString = "JSON.parse('" + JsonUtils.getGson(false).toJson(response) + "')"
             } catch (e: Exception) {
-                Log.e(LOG_TAG, "## sendObjectResponse() : toJson failed " + e.message)
+                Log.e(LOG_TAG, "## sendObjectResponse() : toJson failed " + e.message, e)
             }
 
         }
@@ -427,7 +427,7 @@ abstract class AbstractWidgetActivity : RiotAppCompatActivity() {
                     onWidgetMessage(objectAsMap)
                 }
             } catch (e: Exception) {
-                Log.e(LOG_TAG, "## onWidgetEvent() failed " + e.message)
+                Log.e(LOG_TAG, "## onWidgetEvent() failed " + e.message, e)
             }
 
         }

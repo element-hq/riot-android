@@ -105,7 +105,7 @@ Selecteer exporteren om de versleutelingssleutels op te slaan voordat je uitlogt
     <string name="send_bug_report">Foutmelding</string>
     <string name="send_bug_report_description">Beschrijf de fout. Wat deed je? Wat verwachtte je dat er zou gebeuren? Wat gebeurde er echt?</string>
     <string name="send_bug_report_placeholder">Beschrijf hier je probleem</string>
-    <string name="send_bug_report_logs_description">Om het probleem te kunnen diagnoseren, worden logboeken van deze applicatie met de foutmelding verstuurd. Als je liever alleen de bovenstaande tekst verstuurd, haal dan het vinkje weg:</string>
+    <string name="send_bug_report_logs_description">Om het probleem te kunnen diagnosticeren, worden logboeken van deze applicatie met de foutmelding verstuurd. Deze foutmelding, inclusief de logboeken en schermafbeelding, zullen niet publiekelijk zichtbaar zijn. Als je liever alleen de bovenstaande tekst verstuurt, haal dan het vinkje weg:</string>
     <string name="send_bug_report_alert_message">Het ziet er naar uit dat je de telefoon in frustratie schudt. Wil je een foutmelding indienen?</string>
     <string name="send_bug_report_sent">De foutmelding is succesvol verstuurd</string>
     <string name="send_bug_report_failed">Het is niet gelukt de foutmelding te versturen (%s)</string>
@@ -393,7 +393,9 @@ Versleutelde berichten zullen nog niet zichtbaar zijn op programma\'s die geen v
 
     <!-- Room events -->
     <string name="room_event_action_report_prompt_reason">Reden voor het aangeven van deze content</string>
-    <string name="room_event_action_report_prompt_ignore_user">Wil je alle berichten van deze gebruiker onzichtbaar maken?</string>
+    <string name="room_event_action_report_prompt_ignore_user">Wil je alle berichten van deze gebruiker onzichtbaar maken?
+
+Let op: deze actie zal de app opnieuw opstarten, en kan enige tijd kosten.</string>
     <string name="room_event_action_cancel_upload">Upload annuleren</string>
     <string name="room_event_action_cancel_download">Download annuleren</string>
 
@@ -530,7 +532,9 @@ Versleutelde berichten zullen nog niet zichtbaar zijn op programma\'s die geen v
     <string name="settings_confirm_password">wachtwoord bevestigen</string>
     <string name="settings_fail_to_update_password">Wachtwoord wijziging is mislukt</string>
     <string name="settings_password_updated">Je wachtwoord is gewijzigd</string>
-    <string name="settings_unignore_user">Alle berichten van %s laten zien?</string>
+    <string name="settings_unignore_user">Alle berichten van %s laten zien?
+
+Let op: deze actie zal de app opnieuw opstarten, en kan enige tijd kosten.</string>
 
     <string name="settings_delete_notification_targets_confirmation">Weet je zeker dat je dit notificatiedoel wilt verwijderen?</string>
 
@@ -683,7 +687,8 @@ Versleutelde berichten zullen nog niet zichtbaar zijn op programma\'s die geen v
 
     <string name="encryption_information_verify_device">Verifïeer apparaat</string>
     <string name="encryption_information_verify_device_warning"> Om te verifïeren dat dit apparaat vertrouwd kan worden, contacteer de eigenaar via een andere methode (bijv. persoonlijk of via een telefoontje) en vraag diegene of de sleutel die ze zien in hun Gebruikersinstellingen van dit apparaat overeenkomt met de sleutel hieronder:</string>
-    <string name="encryption_information_verify_device_warning2">Als het overeenkomt, druk op de verifïeren knop hieronder. Als het niet overeenkomt, dan onderschept iemand anders het apparaat en wil je waarschijnlijk in plaats daar van op de blokkeren knop drukken.\nIn de toekomst zal dit verificatie proces wat meer worden vermakkelijkt.</string>
+    <string name="encryption_information_verify_device_warning2">Als het overeenkomt, druk op de knop \'verifiëren\' hieronder. Als het niet overeenkomt, dan onderschept iemand anders het apparaat en hoor je deze te blokkeren.
+In de toekomst zal dit verificatieproces wat makkelijker gemaakt worden.</string>
     <string name="encryption_information_verify_key_match">Ik verifïeer dat de sleutels overeenkomen</string>
 
     <string name="e2e_enabling_on_app_update">Riot ondersteunt nu end-to-endbeveiliging maar je moet opnieuw inloggen om het aan te zetten.
@@ -1014,5 +1019,33 @@ De zichtbaarheid van berichten in Matrix is hetzelfde als in e-mail. Het vergete
     <string name="settings_labs_enable_send_voice">Verstuur stembericht (heeft een externe applicatie nodig om stemberichten op te nemen)</string>
 
     <string name="error_empty_field_your_password">Vul alstublieft uw wachtwoord in.</string>
+
+<string name="send_bug_report_description_in_english">Indien mogelijk, schrijf alstublieft een omschrijving in het engels.</string>
+    <string name="room_message_placeholder_reply_to_encrypted">Verstuur een versleutelde reactie…</string>
+    <string name="room_message_placeholder_reply_to_not_encrypted">Verstuur een reactie (onversleuteld)…</string>
+    <string name="settings_preview_media_before_sending">Bekijk media voor het versturen</string>
+
+    <string name="settings_without_flair">Je bent momenteel geen lid van een community.</string>
+
+    <string name="settings_labs_keyboard_options_to_send_message">Gebruik de enterknop van het toetsenbord om een bericht te versturen</string>
+    <string name="command_description_emote">Vertoon actie</string>
+    <string name="room_participants_action_unignore_prompt">Alle berichten van deze gebruiker tonen?
+
+Let op: deze actie zal de app opnieuw opstarten, en kan enige tijd kosten.</string>
+    <string name="command_description_ban_user">Gebruiker met gegeven ID verbannen</string>
+    <string name="command_description_unban_user">Heft de verbanning van de gebruiker met gegeven ID op</string>
+    <string name="command_description_op_user">Machtsniveau van gebruiker instellen</string>
+    <string name="command_description_deop_user">Rechten van gebruiker met gegeven ID afpakken</string>
+    <string name="command_description_invite_user">Gebruiker met gegeven ID in de huidige ruimte uitnodigen</string>
+    <string name="command_description_join_room">Ruimte met gegeven alias toetreden</string>
+    <string name="command_description_part_room">Ruimte verlaten</string>
+    <string name="command_description_topic">Onderwerp van de ruimte instellen</string>
+    <string name="command_description_kick_user">Gebruiker met gegeven ID eruit sturen</string>
+    <string name="command_description_nick">Je weergavenaam aanpassen</string>
+    <string name="command_description_markdown">Markdown aan/uit</string>
+    <string name="room_tombstone_versioned_description">Deze ruimte is vervangen en is niet langer actief</string>
+    <string name="room_tombstone_continuation_link">Het gesprek wordt hier voortgezet</string>
+    <string name="room_tombstone_continuation_description">Deze ruimte is een voortzetting van een ander gesprek</string>
+    <string name="room_tombstone_predecessor_link">Klik hier om oudere berichten te zien</string>
 
 </resources>

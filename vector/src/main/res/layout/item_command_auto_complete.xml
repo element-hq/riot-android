@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:padding="6dp"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <TextView
+        android:id="@+id/item_command_auto_complete_name"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_vertical"
+        android:maxLines="1"
+        android:textColor="?attr/default_text_dark_color"
+        android:textSize="12sp"
+        android:textStyle="bold"
+        tools:text ="/invite"/>
+
+    <TextView
+        android:id="@+id/item_command_auto_complete_parameter"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_vertical"
+        android:layout_marginLeft="5dp"
+        android:layout_toRightOf="@+id/item_command_auto_complete_name"
+        android:maxLines="1"
+        android:textColor="?attr/default_text_dark_color"
+        android:textSize="12sp"
+        android:textStyle="italic"
+        tools:text="&lt;user-id&gt;"/>
+
+    <TextView
+        android:id="@+id/item_command_auto_complete_description"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/item_command_auto_complete_name"
+        android:layout_alignParentLeft="true"
+        android:layout_gravity="center_vertical"
+        android:maxLines="1"
+        android:textColor="@color/vector_dark_grey_color"
+        android:textSize="12sp"
+        tools:text="@string/command_description_invite_user"/>
+
+</RelativeLayout>

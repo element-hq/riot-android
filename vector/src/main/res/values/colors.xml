@@ -41,8 +41,8 @@
     <color name="tab_bar_unselected_background_color_dark">@color/primary_color_dark</color>
 
     <!-- Text Colors -->
-    <color name="primary_hint_text_color_light">#BBE7D3</color>
-    <color name="primary_hint_text_color_dark">#BBE7D3</color>
+    <color name="primary_hint_text_color_light">#EAEAEA</color>
+    <color name="primary_hint_text_color_dark">#EAEAEA</color>
 
     <color name="riot_primary_text_color_light">#FF3C3C3C</color>
     <color name="default_text_hint_color_light">#903C3C3C</color>
@@ -56,5 +56,8 @@
     <!-- Quote Colors -->
     <color name="quote_strip_color">#FFDDDDDD</color>
     <color name="quote_background_color">@android:color/transparent</color>
+    <color name="default_text_dark_color_dark">#DEDEDE</color>
 
+    <!-- Transparent status bar and toolbar colors -->
+    <color name="transparent_dark">#80000000</color>
 </resources>

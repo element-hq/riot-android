@@ -84,7 +84,7 @@ public class VectorContentProvider extends ContentProvider {
                 return ParcelFileDescriptor.open(privateFile, ParcelFileDescriptor.MODE_READ_ONLY);
             }
         } catch (Exception e) {
-            Log.e(LOG_TAG, "## openFile() failed " + e.getMessage());
+            Log.e(LOG_TAG, "## openFile() failed " + e.getMessage(), e);
         }
 
         return null;

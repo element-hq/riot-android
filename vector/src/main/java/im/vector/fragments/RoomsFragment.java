@@ -36,21 +36,17 @@ import android.widget.Toast;
 
 import org.matrix.androidsdk.data.Room;
 import org.matrix.androidsdk.data.RoomPreviewData;
-import org.matrix.androidsdk.data.RoomSummary;
-import org.matrix.androidsdk.data.RoomTag;
-import org.matrix.androidsdk.data.store.IMXStore;
 import org.matrix.androidsdk.rest.callback.ApiCallback;
 import org.matrix.androidsdk.rest.client.EventsRestClient;
 import org.matrix.androidsdk.rest.model.MatrixError;
+import org.matrix.androidsdk.rest.model.RoomMember;
 import org.matrix.androidsdk.rest.model.publicroom.PublicRoom;
 import org.matrix.androidsdk.util.Log;
 
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 
 import butterknife.BindView;
 import im.vector.PublicRoomsManager;
@@ -60,8 +56,8 @@ import im.vector.activity.RoomDirectoryPickerActivity;
 import im.vector.activity.VectorRoomActivity;
 import im.vector.adapters.AdapterSection;
 import im.vector.adapters.RoomAdapter;
+import im.vector.util.HomeRoomsViewModel;
 import im.vector.util.RoomDirectoryData;
-import im.vector.util.RoomUtils;
 import im.vector.view.EmptyViewItemDecoration;
 import im.vector.view.SectionView;
 import im.vector.view.SimpleDividerItemDecoration;
@@ -91,7 +87,7 @@ public class RoomsFragment extends AbsHomeFragment implements AbsHomeFragment.On
     private RoomDirectoryData mSelectedRoomDirectory;
 
     // rooms list
-    private final List<Room> mRooms = new ArrayList<>();
+    private List<Room> mRooms = new ArrayList<>();
 
     /*
      * *********************************************************************************************
@@ -137,11 +133,7 @@ public class RoomsFragment extends AbsHomeFragment implements AbsHomeFragment.On
     @Override
     public void onResume() {
         super.onResume();
-
-        refreshRooms();
-
         mAdapter.setInvitation(mActivity.getRoomInvitations());
-
         mRecycler.addOnScrollListener(mScrollListener);
     }
 
@@ -207,11 +199,10 @@ public class RoomsFragment extends AbsHomeFragment implements AbsHomeFragment.On
      */
 
     @Override
-    public void onSummariesUpdate() {
-        super.onSummariesUpdate();
-
+    public void onRoomResultUpdated(final HomeRoomsViewModel.Result result) {
         if (isResumed()) {
-            refreshRooms();
+            mRooms = result.getOtherRoomsWithFavorites();
+            mAdapter.setRooms(mRooms);
             mAdapter.setInvitation(mActivity.getRoomInvitations());
         }
     }
@@ -249,52 +240,6 @@ public class RoomsFragment extends AbsHomeFragment implements AbsHomeFragment.On
 
     /*
      * *********************************************************************************************
-     * rooms management
-     * *********************************************************************************************
-     */
-
-    /**
-     * Init the rooms display
-     */
-    private void refreshRooms() {
-        if ((null == mSession) || (null == mSession.getDataHandler())) {
-            Log.e(LOG_TAG, "## refreshRooms() : null session");
-            return;
-        }
-
-        IMXStore store = mSession.getDataHandler().getStore();
-
-        if (null == store) {
-            Log.e(LOG_TAG, "## refreshRooms() : null store");
-            return;
-        }
-
-        // update/retrieve the complete summary list
-        List<RoomSummary> roomSummaries = new ArrayList<>(store.getSummaries());
-        Set<String> lowPriorityRoomIds = new HashSet<>(mSession.roomIdsWithTag(RoomTag.ROOM_TAG_LOW_PRIORITY));
-
-        mRooms.clear();
-
-        for (RoomSummary summary : roomSummaries) {
-            // don't display the invitations
-            if (!summary.isInvited()) {
-                Room room = store.getRoom(summary.getRoomId());
-
-                // test
-                if ((null != room) && // if the room still exists
-                        !room.isConferenceUserRoom() && // not a VOIP conference room
-                        !RoomUtils.isDirectChat(mSession, room.getRoomId()) &&
-                        !lowPriorityRoomIds.contains(room.getRoomId())) {
-                    mRooms.add(room);
-                }
-            }
-        }
-
-        mAdapter.setRooms(mRooms);
-    }
-
-    /*
-     * *********************************************************************************************
      * Public rooms management
      * *********************************************************************************************
      */
@@ -312,31 +257,30 @@ public class RoomsFragment extends AbsHomeFragment implements AbsHomeFragment.On
         if (null != publicRoom.roomId) {
             final RoomPreviewData roomPreviewData = new RoomPreviewData(mSession, publicRoom.roomId, null, publicRoom.getAlias(), null);
 
-            Room room = mSession.getDataHandler().getRoom(publicRoom.roomId, false);
+            // Check whether the room exists to handled the cases where the user is invited or he has joined.
+            // CAUTION: the room may exist whereas the user membership is neither invited nor joined.
+            final Room room = mSession.getDataHandler().getRoom(publicRoom.roomId, false);
+            if (null != room && room.hasMembership(RoomMember.MEMBERSHIP_INVITE)) {
+                Log.d(LOG_TAG, "onPublicRoomSelected : the user is invited -> display the preview " + getActivity());
+                CommonActivityUtils.previewRoom(getActivity(), roomPreviewData);
+            } else if (null != room && room.hasMembership(RoomMember.MEMBERSHIP_JOIN)) {
+                Log.d(LOG_TAG, "onPublicRoomSelected : the user joined the room -> open the room");
+                final Map<String, Object> params = new HashMap<>();
+                params.put(VectorRoomActivity.EXTRA_MATRIX_ID, mSession.getMyUserId());
+                params.put(VectorRoomActivity.EXTRA_ROOM_ID, publicRoom.roomId);
 
-            // if the room exists
-            if (null != room) {
-                // either the user is invited
-                if (room.isInvited()) {
-                    Log.d(LOG_TAG, "manageRoom : the user is invited -> display the preview " + getActivity());
-                    CommonActivityUtils.previewRoom(getActivity(), roomPreviewData);
-                } else {
-                    Log.d(LOG_TAG, "manageRoom : open the room");
-                    Map<String, Object> params = new HashMap<>();
-                    params.put(VectorRoomActivity.EXTRA_MATRIX_ID, mSession.getMyUserId());
-                    params.put(VectorRoomActivity.EXTRA_ROOM_ID, publicRoom.roomId);
-
-                    if (!TextUtils.isEmpty(publicRoom.name)) {
-                        params.put(VectorRoomActivity.EXTRA_DEFAULT_NAME, publicRoom.name);
-                    }
-
-                    if (!TextUtils.isEmpty(publicRoom.topic)) {
-                        params.put(VectorRoomActivity.EXTRA_DEFAULT_TOPIC, publicRoom.topic);
-                    }
-
-                    CommonActivityUtils.goToRoomPage(getActivity(), mSession, params);
+                if (!TextUtils.isEmpty(publicRoom.name)) {
+                    params.put(VectorRoomActivity.EXTRA_DEFAULT_NAME, publicRoom.name);
                 }
+
+                if (!TextUtils.isEmpty(publicRoom.topic)) {
+                    params.put(VectorRoomActivity.EXTRA_DEFAULT_TOPIC, publicRoom.topic);
+                }
+
+                CommonActivityUtils.goToRoomPage(getActivity(), mSession, params);
             } else {
+                // Display a preview by default.
+                Log.d(LOG_TAG, "onPublicRoomSelected : display the preview");
                 mActivity.showWaitingView();
 
                 roomPreviewData.fetchPreviewData(new ApiCallback<Void>() {
@@ -520,7 +464,7 @@ public class RoomsFragment extends AbsHomeFragment implements AbsHomeFragment.On
 
                         @Override
                         public void onNetworkError(Exception e) {
-                            Log.e(LOG_TAG, "## startPublicRoomsSearch() : getPublicRoomsCount failed " + e.getMessage());
+                            Log.e(LOG_TAG, "## startPublicRoomsSearch() : getPublicRoomsCount failed " + e.getMessage(), e);
                             onDone(-1);
                         }
 
@@ -532,7 +476,7 @@ public class RoomsFragment extends AbsHomeFragment implements AbsHomeFragment.On
 
                         @Override
                         public void onUnexpectedError(Exception e) {
-                            Log.e(LOG_TAG, "## startPublicRoomsSearch() : getPublicRoomsCount failed " + e.getMessage());
+                            Log.e(LOG_TAG, "## startPublicRoomsSearch() : getPublicRoomsCount failed " + e.getMessage(), e);
                             onDone(-1);
                         }
                     }
@@ -682,6 +626,5 @@ public class RoomsFragment extends AbsHomeFragment implements AbsHomeFragment.On
     @Override
     public void onRoomForgot(String roomId) {
         // there is no sync event when a room is forgotten
-        refreshRooms();
     }
 }

@@ -137,8 +137,9 @@
     <string name="send_bug_report_include_screenshot">Send screenshot</string>
     <string name="send_bug_report">Bug Report</string>
     <string name="send_bug_report_description">Please describe the bug. What did you do? What did you expect to happen? What actually happened?</string>
+    <string name="send_bug_report_description_in_english">If possible, please write the description in English.</string>
     <string name="send_bug_report_placeholder">Describe your problem here</string>
-    <string name="send_bug_report_logs_description">In order to diagnose problems, logs from this client will be sent with this bug report. If you would prefer to only send the text above, please untick:</string>
+    <string name="send_bug_report_logs_description">In order to diagnose problems, logs from this client will be sent with this bug report. This bug report, including the logs and the screenshot, will not be publicly visible. If you would prefer to only send the text above, please untick:</string>
     <string name="send_bug_report_alert_message">You seem to be shaking the phone in frustration. Would you like to submit a bug report?</string>
     <string name="send_bug_report_app_crashed">The application has crashed last time. Would you like to submit a crash report?</string>
     <string name="send_bug_report_rage_shake">Rage shake to report bug</string>
@@ -404,6 +405,7 @@
     <string name="room_participants_action_set_admin">Make admin</string>
     <string name="room_participants_action_ignore">Hide all messages from this user</string>
     <string name="room_participants_action_unignore">Show all messages from this user</string>
+    <string name="room_participants_action_unignore_prompt">Show all messages from this user?\n\nNote that this action will restart the app and it may take some time.</string>
     <string name="room_participants_invite_search_another_user">User ID, Name or email</string>
     <string name="room_participants_action_mention">Mention</string>
     <string name="room_participants_action_devices_list">Show Device List</string>
@@ -430,6 +432,8 @@
     <string name="room_many_users_are_typing">%1$s &#038; %2$s &#038; others are typing…</string>
     <string name="room_message_placeholder_encrypted">Send an encrypted message…</string>
     <string name="room_message_placeholder_not_encrypted">Send a message (unencrypted)…</string>
+    <string name="room_message_placeholder_reply_to_encrypted">Send an encrypted reply…</string>
+    <string name="room_message_placeholder_reply_to_not_encrypted">Send a reply (unencrypted)…</string>
     <string name="room_offline_notification">Connectivity to the server has been lost.</string>
     <string name="room_unsent_messages_notification">Messages not sent. %1$s or %2$s now?</string>
     <string name="room_unknown_devices_messages_notification">Messages not sent due to unknown devices being present. %1$s or %2$s now?</string>
@@ -471,7 +475,7 @@
 
     <!-- Room events -->
     <string name="room_event_action_report_prompt_reason">Reason for reporting this content</string>
-    <string name="room_event_action_report_prompt_ignore_user">Do you want to hide all messages from this user?</string>
+    <string name="room_event_action_report_prompt_ignore_user">Do you want to hide all messages from this user?\n\nNote that this action will restart the app and it may take some time.</string>
     <string name="room_event_action_cancel_upload">Cancel Upload</string>
     <string name="room_event_action_cancel_download">Cancel Download</string>
 
@@ -624,6 +628,7 @@
     <string name="settings_hide_avatar_display_name_changes_messages">Hide avatar and display name changes</string>
     <string name="settings_disable_markdown">Disable markdown formatting when sending</string>
     <string name="settings_vibrate_on_mention">Vibrate when mentioning</string>
+    <string name="settings_preview_media_before_sending">Preview media before sending</string>
 
     <string name="settings_deactivate_account_section">Deactivate account</string>
     <string name="settings_deactivate_my_account">Deactivate my account</string>
@@ -678,7 +683,7 @@
     <string name="settings_confirm_password">confirm password</string>
     <string name="settings_fail_to_update_password">Fail to update password</string>
     <string name="settings_password_updated">Your password has been updated</string>
-    <string name="settings_unignore_user">Show all messages from %s?</string>
+    <string name="settings_unignore_user">Show all messages from %s?\n\nNote that this action will restart the app and it may take some time.</string>
 
     <string name="settings_delete_notification_targets_confirmation">Are you sure you want to remove this notification target?</string>
 
@@ -698,6 +703,7 @@
 
 
     <string name="settings_flair">Flair</string>
+    <string name="settings_without_flair">You are not currently a member of any communities.</string>
 
     <!-- medias saving settings -->
     <string name="media_saving_period_3_days">3 days</string>
@@ -840,7 +846,7 @@
 
     <string name="encryption_information_verify_device">Verify device</string>
     <string name="encryption_information_verify_device_warning"> To verify that this device can be trusted, please contact its owner using some other means (e.g. in person or a phone call) and ask them whether the key they see in their User Settings for this device matches the key below:</string>
-    <string name="encryption_information_verify_device_warning2">If it matches, press the verify button below. If it doesn\'t, then someone else is intercepting this device and you probably want to press the block button instead.\nIn future this verification process will be more sophisticated.</string>
+    <string name="encryption_information_verify_device_warning2">If it matches, press the verify button below. \nIf it doesn\'t, then someone else is intercepting this device and you should probably blacklist it.\nIn future this verification process will be more sophisticated.</string>
     <string name="encryption_information_verify_key_match">I verify that the keys match</string>
 
     <string name="e2e_enabling_on_app_update">Riot now supports end-to-end encryption but you need to log in again to enable it.\n\nYou can do it now or later from the application settings.</string>
@@ -914,6 +920,7 @@
     <string name="settings_labs_matrix_apps">Matrix Apps</string>
     <string name="room_add_matrix_apps">Add Matrix apps</string>
     <string name="settings_labs_native_camera">Use native camera</string>
+    <string name="settings_labs_keyboard_options_to_send_message">Use keyboard enter key to send message</string>
     <string name="settings_labs_enable_send_voice">Send voice message (requires a third party application to record voice messages)</string>
 
     <!-- share keys -->
@@ -930,6 +937,19 @@
     <!-- slash commands -->
     <string name="command_error">Command error</string>
     <string name="unrecognized_command">Unrecognized command: %s</string>
+    <string name="command_description_emote">Displays action</string>
+    <string name="command_description_ban_user">Bans user with given id</string>
+    <string name="command_description_unban_user">Unbans user with given id</string>
+    <string name="command_description_op_user">Define the power level of a user</string>
+    <string name="command_description_deop_user">Deops user with given id</string>
+    <string name="command_description_invite_user">Invites user with given id to current room</string>
+    <string name="command_description_join_room">Joins room with given alias</string>
+    <string name="command_description_part_room">Leave room</string>
+    <string name="command_description_topic">Set the room topic</string>
+    <string name="command_description_kick_user">Kicks user with given id</string>
+    <string name="command_description_nick">Changes your display nickname</string>
+    <string name="command_description_markdown">On/Off markdown</string>
+    <string name="command_description_clear_scalar_token">To fix Matrix Apps management</string>
 
     <!-- notification statuses -->
     <string name="notification_off">Off</string>
@@ -988,5 +1008,9 @@
     <string name="deactivate_account_submit">Deactivate Account</string>
 
     <string name="error_empty_field_your_password">Please enter your password.</string>
+    <string name="room_tombstone_versioned_description">This room has been replaced and is no longer active</string>
+    <string name="room_tombstone_continuation_link">The conversation continues here</string>
+    <string name="room_tombstone_continuation_description">This room is a continuation of another conversation</string>
+    <string name="room_tombstone_predecessor_link">Click here to see older messages</string>
 
 </resources>

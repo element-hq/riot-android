@@ -153,7 +153,7 @@ public class PublicRoomsManager {
                             public void onNetworkError(Exception e) {
                                 // check if the request response is still expected
                                 if (TextUtils.equals(fToken, mRequestKey)) {
-                                    Log.d(LOG_TAG, "## launchPublicRoomsRequest() : onNetworkError " + e.getMessage());
+                                    Log.d(LOG_TAG, "## launchPublicRoomsRequest() : onNetworkError " + e.getMessage(), e);
 
                                     if (null != callback) {
                                         callback.onNetworkError(e);
@@ -318,7 +318,7 @@ public class PublicRoomsManager {
                     public void onNetworkError(Exception e) {
                         super.onNetworkError(e);
                         mCountRefreshInProgress = false;
-                        Log.e(LOG_TAG, "## refreshPublicRoomsCount() : fails to retrieve the public room list " + e.getLocalizedMessage());
+                        Log.e(LOG_TAG, "## refreshPublicRoomsCount() : fails to retrieve the public room list " + e.getLocalizedMessage(), e);
                     }
 
                     @Override
@@ -332,7 +332,7 @@ public class PublicRoomsManager {
                     public void onUnexpectedError(Exception e) {
                         super.onUnexpectedError(e);
                         mCountRefreshInProgress = false;
-                        Log.e(LOG_TAG, "## refreshPublicRoomsCount() : fails to retrieve the public room list " + e.getLocalizedMessage());
+                        Log.e(LOG_TAG, "## refreshPublicRoomsCount() : fails to retrieve the public room list " + e.getLocalizedMessage(), e);
                     }
                 });
             }

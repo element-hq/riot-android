@@ -205,7 +205,7 @@ public class VectorRoomCreationAdapter extends ArrayAdapter<ParticipantAdapterIt
                     try {
                         mRoomCreationAdapterListener.OnRemoveParticipantClick(participant);
                     } catch (Exception e) {
-                        Log.e(LOG_TAG, "## getView() : OnRemoveParticipantClick fails " + e.getMessage());
+                        Log.e(LOG_TAG, "## getView() : OnRemoveParticipantClick fails " + e.getMessage(), e);
                     }
                 }
             }

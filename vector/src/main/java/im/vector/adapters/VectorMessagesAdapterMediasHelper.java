@@ -371,7 +371,7 @@ class VectorMessagesAdapterMediasHelper {
                         try {
                             error = JsonUtils.toMatrixError(jsonElement);
                         } catch (Exception e) {
-                            Log.e(LOG_TAG, "Cannot cast to Matrix error " + e.getLocalizedMessage());
+                            Log.e(LOG_TAG, "Cannot cast to Matrix error " + e.getLocalizedMessage(), e);
                         }
 
                         downloadProgressLayout.setVisibility(View.GONE);
@@ -637,7 +637,7 @@ class VectorMessagesAdapterMediasHelper {
                         try {
                             error = JsonUtils.toMatrixError(jsonElement);
                         } catch (Exception e) {
-                            Log.e(LOG_TAG, "Cannot cast to Matrix error " + e.getLocalizedMessage());
+                            Log.e(LOG_TAG, "Cannot cast to Matrix error " + e.getLocalizedMessage(), e);
                         }
 
                         downloadProgressLayout.setVisibility(View.GONE);

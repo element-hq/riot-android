@@ -18,7 +18,6 @@ package im.vector.preference;
 
 import android.content.Context;
 import android.graphics.Typeface;
-import android.preference.EditTextPreference;
 import android.preference.Preference;
 import android.util.AttributeSet;
 
@@ -28,10 +27,11 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
-// create an EditTextPreference with a dedicated click/long click methods.
+// create a Preference with a dedicated click/long click methods.
 // Android displays by an edit text dialog by default
 // With this class, a custom behaviour can be designed.
-public class VectorCustomActionEditTextPreference extends EditTextPreference {
+// TODO Rename to VectorLongClickablePreference in Sprint 14 (September 2018)
+public class VectorCustomActionEditTextPreference extends Preference {
     private static final String LOG_TAG = VectorCustomActionEditTextPreference.class.getSimpleName();
 
     /**
@@ -96,7 +96,7 @@ public class VectorCustomActionEditTextPreference extends EditTextPreference {
             }
 
         } catch (Exception e) {
-            Log.e(LOG_TAG, "onBindView " + e.getMessage());
+            Log.e(LOG_TAG, "onBindView " + e.getMessage(), e);
         }
     }
 

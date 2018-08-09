@@ -235,7 +235,7 @@ public class VectorUnknownDevicesAdapter extends BaseExpandableListAdapter {
                     try {
                         mListener.OnVerifyDeviceClick(deviceItem);
                     } catch (Exception e) {
-                        Log.e(LOG_TAG, "## getChildView() : OnVerifyDeviceClick fails " + e.getMessage());
+                        Log.e(LOG_TAG, "## getChildView() : OnVerifyDeviceClick fails " + e.getMessage(), e);
                     }
                 }
             }
@@ -248,7 +248,7 @@ public class VectorUnknownDevicesAdapter extends BaseExpandableListAdapter {
                     try {
                         mListener.OnBlockDeviceClick(deviceItem);
                     } catch (Exception e) {
-                        Log.e(LOG_TAG, "## getChildView() : OnBlockDeviceClick fails " + e.getMessage());
+                        Log.e(LOG_TAG, "## getChildView() : OnBlockDeviceClick fails " + e.getMessage(), e);
                     }
                 }
             }

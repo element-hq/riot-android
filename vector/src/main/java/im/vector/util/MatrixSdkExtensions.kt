@@ -48,7 +48,7 @@ fun Room?.getRoomMaxPowerLevel(): Int {
 
     var maxPowerLevel = 0
 
-    liveState.powerLevels?.let {
+    state.powerLevels?.let {
         var tempPowerLevel: Int
 
         // find out the room member
@@ -74,7 +74,7 @@ fun Room.isPowerLevelEnoughForAvatarUpdate(aSession: MXSession?): Boolean {
     var canUpdateAvatarWithCamera = false
 
     if (null != aSession) {
-        liveState.powerLevels?.let {
+        state.powerLevels?.let {
             val powerLevel = it.getUserPowerLevel(aSession.myUserId)
 
             // check the power level against avatar level

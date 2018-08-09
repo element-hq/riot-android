@@ -1,6 +1,7 @@
 /*
  * Copyright 2014 OpenMarket Ltd
  * Copyright 2017 Vector Creations Ltd
+ * Copyright 2018 New Vector Ltd
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -22,21 +23,22 @@ import android.content.Context;
 import android.os.Build;
 import android.text.TextUtils;
 import android.util.AttributeSet;
-
-import org.matrix.androidsdk.util.Log;
-
 import android.webkit.JavascriptInterface;
 import android.webkit.WebView;
+
+import org.matrix.androidsdk.util.Log;
 
 import java.util.Timer;
 import java.util.TimerTask;
 
 /**
  * Markdown parser.
- * This class uses a webview.
+ * This class uses a WebView.
  */
 public class VectorMarkdownParser extends WebView {
     private static final String LOG_TAG = VectorMarkdownParser.class.getSimpleName();
+
+    private final static int MAX_DELAY_TO_WAIT_FOR_WEBVIEW_RESPONSE_MILLIS = 300;
 
     // tell if the parser is properly initialised
     private boolean mIsInitialised = false;
@@ -46,9 +48,9 @@ public class VectorMarkdownParser extends WebView {
          * A markdown text has been parsed.
          *
          * @param text     the text to parse.
-         * @param HTMLText the parsed text
+         * @param htmlText the parsed text
          */
-        void onMarkdownParsed(String text, String HTMLText);
+        void onMarkdownParsed(String text, String htmlText);
     }
 
     /**
@@ -84,7 +86,7 @@ public class VectorMarkdownParser extends WebView {
 
             mIsInitialised = true;
         } catch (Exception e) {
-            Log.e(LOG_TAG, "## initialize() failed " + e.getMessage());
+            Log.e(LOG_TAG, "## initialize() failed " + e.getMessage(), e);
         }
     }
 
@@ -127,7 +129,7 @@ public class VectorMarkdownParser extends WebView {
             }
         } catch (Exception e) {
             mMarkDownWebAppInterface.cancel();
-            Log.e(LOG_TAG, "## markdownToHtml() : failed " + e.getMessage());
+            Log.e(LOG_TAG, "## markdownToHtml() : failed " + e.getMessage(), e);
             listener.onMarkdownParsed(markdownText, text);
         }
     }
@@ -192,14 +194,14 @@ public class VectorMarkdownParser extends WebView {
                             try {
                                 mListener.onMarkdownParsed(mTextToParse, mTextToParse);
                             } catch (Exception e) {
-                                Log.e(LOG_TAG, "## wOnParse() " + e.getMessage());
+                                Log.e(LOG_TAG, "## onMarkdownParsed() " + e.getMessage(), e);
                             }
                         }
                         done();
                     }
-                }, 300);
+                }, MAX_DELAY_TO_WAIT_FOR_WEBVIEW_RESPONSE_MILLIS);
             } catch (Throwable e) {
-                Log.e(LOG_TAG, "## start() : failed to starts " + e.getMessage());
+                Log.e(LOG_TAG, "## start() : failed to starts " + e.getMessage(), e);
             }
         }
 
@@ -207,7 +209,7 @@ public class VectorMarkdownParser extends WebView {
          * Cancel the markdown parser
          */
         public void cancel() {
-            Log.e(LOG_TAG, "## cancel()");
+            Log.d(LOG_TAG, "## cancel()");
             done();
         }
 
@@ -223,28 +225,23 @@ public class VectorMarkdownParser extends WebView {
         }
 
         @JavascriptInterface
-        public void wOnParse(String HTMLText) {
-            if (!TextUtils.isEmpty(HTMLText)) {
-                HTMLText = HTMLText.trim();
+        public void wOnParse(String htmlText) {
+            htmlText = htmlText.trim();
 
-                if (HTMLText.startsWith("<p>")) {
-                    HTMLText = HTMLText.substring("<p>".length());
-                }
-
-                if (HTMLText.endsWith("</p>\n")) {
-                    HTMLText = HTMLText.substring(0, HTMLText.length() - "</p>\n".length());
-                } else if (HTMLText.endsWith("</p>")) {
-                    HTMLText = HTMLText.substring(0, HTMLText.length() - "</p>".length());
-                }
+            if (htmlText.startsWith("<p>")
+                    && htmlText.lastIndexOf("<p>") == 0
+                    && htmlText.endsWith("</p>")) {
+                // Remove a <p> level, only if there is only one <p>
+                htmlText = htmlText.substring("<p>".length(), htmlText.length() - "</p>".length());
             }
 
             if (null != mListener) {
                 Log.d(LOG_TAG, "## wOnParse() : parse done");
 
                 try {
-                    mListener.onMarkdownParsed(mTextToParse, HTMLText);
+                    mListener.onMarkdownParsed(mTextToParse, htmlText);
                 } catch (Exception e) {
-                    Log.e(LOG_TAG, "## wOnParse() " + e.getMessage());
+                    Log.e(LOG_TAG, "## onMarkdownParsed() " + e.getMessage(), e);
                 }
 
                 done();

@@ -257,7 +257,7 @@ public class VectorUniversalLinkReceiver extends BroadcastReceiver {
                     }
                 }, 200);
             } catch (Throwable throwable) {
-                Log.e(LOG_TAG, "## manageRoomOnActivity timer creation failed " + throwable.getMessage());
+                Log.e(LOG_TAG, "## manageRoomOnActivity timer creation failed " + throwable.getMessage(), throwable);
                 manageRoomOnActivity(aContext);
             }
         }
@@ -487,7 +487,7 @@ public class VectorUniversalLinkReceiver extends BroadcastReceiver {
                         try {
                             value = URLDecoder.decode(value, "UTF-8");
                         } catch (Exception e) {
-                            Log.e(LOG_TAG, "## parseUniversalLink : URLDecoder.decode " + e.getMessage());
+                            Log.e(LOG_TAG, "## parseUniversalLink : URLDecoder.decode " + e.getMessage(), e);
                             return null;
                         }
 
@@ -496,7 +496,7 @@ public class VectorUniversalLinkReceiver extends BroadcastReceiver {
                 }
             }
         } catch (Exception e) {
-            Log.e(LOG_TAG, "## parseUniversalLink : crashes " + e.getLocalizedMessage());
+            Log.e(LOG_TAG, "## parseUniversalLink : crashes " + e.getLocalizedMessage(), e);
         }
 
         // check if the parsing succeeds

@@ -150,7 +150,7 @@ public class RoomsNotifications implements Parcelable {
 
         mIsInvitationEvent = false;
 
-        EventDisplay eventDisplay = new RiotEventDisplay(mContext, mEvent, mRoom.getLiveState());
+        EventDisplay eventDisplay = new RiotEventDisplay(mContext, mEvent, mRoom.getState());
         eventDisplay.setPrependMessagesWithAuthor(true);
         CharSequence textualDisplay = eventDisplay.getTextualDisplay();
         String body = !TextUtils.isEmpty(textualDisplay) ? textualDisplay.toString() : "";
@@ -159,7 +159,7 @@ public class RoomsNotifications implements Parcelable {
             try {
                 mIsInvitationEvent = "invite".equals(mEvent.getContentAsJsonObject().getAsJsonPrimitive("membership").getAsString());
             } catch (Exception e) {
-                Log.e(LOG_TAG, "RoomsNotifications : invitation parsing failed");
+                Log.e(LOG_TAG, "RoomsNotifications : invitation parsing failed", e);
             }
         }
         // when the event is an invitation one
@@ -219,7 +219,7 @@ public class RoomsNotifications implements Parcelable {
 
         for (NotifiedEvent notifiedEvent : notifiedEvents) {
             Event event = store.getEvent(notifiedEvent.mEventId, notifiedEvent.mRoomId);
-            EventDisplay eventDisplay = new RiotEventDisplay(mContext, event, mRoom.getLiveState());
+            EventDisplay eventDisplay = new RiotEventDisplay(mContext, event, mRoom.getState());
             eventDisplay.setPrependMessagesWithAuthor(true);
             CharSequence textualDisplay = eventDisplay.getTextualDisplay();
 
@@ -244,7 +244,7 @@ public class RoomsNotifications implements Parcelable {
                 RoomMember member = mRoom.getMember(event.getSender());
                 roomNotifications.mSenderName = (null == member) ? event.getSender() : member.getName();
 
-                EventDisplay eventDisplay = new RiotEventDisplay(mContext, event, mRoom.getLiveState());
+                EventDisplay eventDisplay = new RiotEventDisplay(mContext, event, mRoom.getState());
                 eventDisplay.setPrependMessagesWithAuthor(false);
                 CharSequence textualDisplay = eventDisplay.getTextualDisplay();
                 mQuickReplyBody = !TextUtils.isEmpty(textualDisplay) ? textualDisplay.toString() : "";
@@ -274,7 +274,7 @@ public class RoomsNotifications implements Parcelable {
             String text;
             String header;
 
-            EventDisplay eventDisplay = new RiotEventDisplay(mContext, latestEvent, room.getLiveState());
+            EventDisplay eventDisplay = new RiotEventDisplay(mContext, latestEvent, room.getState());
             eventDisplay.setPrependMessagesWithAuthor(false);
 
             if (room.isInvited()) {
@@ -282,10 +282,10 @@ public class RoomsNotifications implements Parcelable {
                 CharSequence textualDisplay = eventDisplay.getTextualDisplay();
                 text = !TextUtils.isEmpty(textualDisplay) ? textualDisplay.toString() : "";
             } else if (1 == notifiedEvents.size()) {
-                eventDisplay = new RiotEventDisplay(mContext, latestEvent, room.getLiveState());
+                eventDisplay = new RiotEventDisplay(mContext, latestEvent, room.getState());
                 eventDisplay.setPrependMessagesWithAuthor(false);
 
-                header = roomName + ": " + room.getLiveState().getMemberName(latestEvent.getSender()) + " ";
+                header = roomName + ": " + room.getState().getMemberName(latestEvent.getSender()) + " ";
 
                 CharSequence textualDisplay = eventDisplay.getTextualDisplay();
 
@@ -340,10 +340,10 @@ public class RoomsNotifications implements Parcelable {
                 MXSession session = Matrix.getInstance(context).getDefaultSession();
                 String roomName = getRoomName(context, session, room, null);
 
-                EventDisplay eventDisplay = new RiotEventDisplay(context, latestEvent, room.getLiveState());
+                EventDisplay eventDisplay = new RiotEventDisplay(context, latestEvent, room.getState());
                 eventDisplay.setPrependMessagesWithAuthor(false);
 
-                mWearableMessage = roomName + ": " + room.getLiveState().getMemberName(latestEvent.getSender()) + " ";
+                mWearableMessage = roomName + ": " + room.getState().getMemberName(latestEvent.getSender()) + " ";
                 CharSequence textualDisplay = eventDisplay.getTextualDisplay();
 
                 // the event might have been redacted
@@ -512,7 +512,7 @@ public class RoomsNotifications implements Parcelable {
                 fos.write(readData, 0, len);
             }
         } catch (Throwable t) {
-            Log.e(LOG_TAG, "## saveRoomNotifications() failed " + t.getMessage());
+            Log.e(LOG_TAG, "## saveRoomNotifications() failed " + t.getMessage(), t);
         }
 
         try {
@@ -524,7 +524,7 @@ public class RoomsNotifications implements Parcelable {
                 fos.close();
             }
         } catch (Exception e) {
-            Log.e(LOG_TAG, "## saveRoomNotifications() failed " + e.getMessage());
+            Log.e(LOG_TAG, "## saveRoomNotifications() failed " + e.getMessage(), e);
         }
     }
 
@@ -560,7 +560,7 @@ public class RoomsNotifications implements Parcelable {
 
             roomsNotifications = new RoomsNotifications(fos.toByteArray());
         } catch (Throwable t) {
-            Log.e(LOG_TAG, "## loadRoomsNotifications() failed " + t.getMessage());
+            Log.e(LOG_TAG, "## loadRoomsNotifications() failed " + t.getMessage(), t);
         }
 
         try {
@@ -572,7 +572,7 @@ public class RoomsNotifications implements Parcelable {
                 fos.close();
             }
         } catch (Exception e) {
-            Log.e(LOG_TAG, "## loadRoomsNotifications() failed " + e.getMessage());
+            Log.e(LOG_TAG, "## loadRoomsNotifications() failed " + e.getMessage(), e);
         }
 
         return roomsNotifications;

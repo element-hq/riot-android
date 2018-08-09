@@ -143,7 +143,7 @@ public class GroupUtils {
      * @param session      the session
      * @param groupRoom    the group room
      */
-    public static void openGroupRoom(final Activity fromActivity, final MXSession session, final GroupRoom groupRoom, final SimpleApiCallback<Void> callback) {
+    public static void openGroupRoom(final Activity fromActivity, final MXSession session, final GroupRoom groupRoom, final ApiCallback<Void> callback) {
         Room room = session.getDataHandler().getStore().getRoom(groupRoom.roomId);
 
         if ((null == room) || (null == room.getMember(session.getMyUserId()))) {

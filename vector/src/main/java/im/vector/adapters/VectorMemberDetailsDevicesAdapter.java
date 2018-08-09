@@ -194,7 +194,7 @@ public class VectorMemberDetailsDevicesAdapter extends ArrayAdapter<MXDeviceInfo
                     try {
                         mActivityListener.OnVerifyDeviceClick(deviceItem);
                     } catch (Exception e) {
-                        Log.e(LOG_TAG, "## getView() : OnVerifyDeviceClick fails " + e.getMessage());
+                        Log.e(LOG_TAG, "## getView() : OnVerifyDeviceClick fails " + e.getMessage(), e);
                     }
                 }
             }
@@ -207,7 +207,7 @@ public class VectorMemberDetailsDevicesAdapter extends ArrayAdapter<MXDeviceInfo
                     try {
                         mActivityListener.OnBlockDeviceClick(deviceItem);
                     } catch (Exception e) {
-                        Log.e(LOG_TAG, "## getView() : OnBlockDeviceClick fails " + e.getMessage());
+                        Log.e(LOG_TAG, "## getView() : OnBlockDeviceClick fails " + e.getMessage(), e);
                     }
                 }
             }
