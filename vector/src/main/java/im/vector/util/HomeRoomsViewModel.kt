@@ -33,7 +33,17 @@ class HomeRoomsViewModel(private val session: MXSession) {
     data class Result(val favourites: List<Room> = emptyList(),
                       val directChats: List<Room> = emptyList(),
                       val lowPriorities: List<Room> = emptyList(),
-                      val otherRooms: List<Room> = emptyList())
+                      val otherRooms: List<Room> = emptyList()) {
+
+        fun directChatsWithFavorites(): List<Room> {
+            return favourites.filter { it.isDirect } + directChats
+        }
+
+        fun otherRoomsWithFavorites(): List<Room> {
+            return favourites.filter { !it.isDirect } + otherRooms
+        }
+    }
+
 
     /**
      * The last result

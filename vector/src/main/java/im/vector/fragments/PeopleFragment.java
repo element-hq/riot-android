@@ -527,7 +527,7 @@ public class PeopleFragment extends AbsHomeFragment implements ContactsManager.C
     public void onRoomResultUpdated(final HomeRoomsViewModel.Result result) {
         if (isResumed()) {
             mAdapter.setInvitation(mActivity.getRoomInvitations());
-            mDirectChats = result.getDirectChats();
+            mDirectChats = result.directChatsWithFavorites();
             mAdapter.setRooms(mDirectChats);
         }
     }

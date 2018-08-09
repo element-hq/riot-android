@@ -208,10 +208,7 @@ public class RoomsFragment extends AbsHomeFragment implements AbsHomeFragment.On
     @Override
     public void onRoomResultUpdated(final HomeRoomsViewModel.Result result) {
         if (isResumed()) {
-            final List<Room> roomList = new ArrayList<>();
-            roomList.addAll(result.getOtherRooms());
-            roomList.addAll(result.getFavourites());
-            mRooms = roomList;
+            mRooms = result.otherRoomsWithFavorites();
             mAdapter.setRooms(mRooms);
             mAdapter.setInvitation(mActivity.getRoomInvitations());
         }
