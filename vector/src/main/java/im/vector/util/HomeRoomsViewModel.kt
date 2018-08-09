@@ -29,21 +29,30 @@ class HomeRoomsViewModel(private val session: MXSession) {
 
     /**
      * A data class holding the result of filtering and ranking algorithm
+     * A room can't be in multiple lists at the same time.
+     * Order is favourites -> lowPriorities -> directChats -> otherRooms
      */
     data class Result(val favourites: List<Room> = emptyList(),
                       val directChats: List<Room> = emptyList(),
                       val lowPriorities: List<Room> = emptyList(),
                       val otherRooms: List<Room> = emptyList()) {
 
-        fun directChatsWithFavorites(): List<Room> {
-            return favourites.filter { it.isDirect } + directChats
+        /**
+         * Use this method when you need to get all the directChats, favorites included
+         * Low Priorities are always excluded
+         */
+        fun getDirectChatsWithFavorites(): List<Room> {
+            return directChats + favourites.filter { it.isDirect }
         }
 
-        fun otherRoomsWithFavorites(): List<Room> {
-            return favourites.filter { !it.isDirect } + otherRooms
+        /**
+         * Use this method when you need to get all the other rooms, favorites included
+         * Low Priorities are always excluded
+         */
+        fun getOtherRoomsWithFavorites(): List<Room> {
+            return otherRooms + favourites.filter { !it.isDirect }
         }
     }
-
 
     /**
      * The last result

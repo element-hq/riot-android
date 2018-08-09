@@ -36,9 +36,6 @@ import android.widget.Toast;
 
 import org.matrix.androidsdk.data.Room;
 import org.matrix.androidsdk.data.RoomPreviewData;
-import org.matrix.androidsdk.data.RoomSummary;
-import org.matrix.androidsdk.data.RoomTag;
-import org.matrix.androidsdk.data.store.IMXStore;
 import org.matrix.androidsdk.rest.callback.ApiCallback;
 import org.matrix.androidsdk.rest.client.EventsRestClient;
 import org.matrix.androidsdk.rest.model.MatrixError;
@@ -47,12 +44,9 @@ import org.matrix.androidsdk.rest.model.publicroom.PublicRoom;
 import org.matrix.androidsdk.util.Log;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 
 import butterknife.BindView;
 import im.vector.PublicRoomsManager;
@@ -64,7 +58,6 @@ import im.vector.adapters.AdapterSection;
 import im.vector.adapters.RoomAdapter;
 import im.vector.util.HomeRoomsViewModel;
 import im.vector.util.RoomDirectoryData;
-import im.vector.util.RoomUtils;
 import im.vector.view.EmptyViewItemDecoration;
 import im.vector.view.SectionView;
 import im.vector.view.SimpleDividerItemDecoration;
@@ -208,7 +201,7 @@ public class RoomsFragment extends AbsHomeFragment implements AbsHomeFragment.On
     @Override
     public void onRoomResultUpdated(final HomeRoomsViewModel.Result result) {
         if (isResumed()) {
-            mRooms = result.otherRoomsWithFavorites();
+            mRooms = result.getOtherRoomsWithFavorites();
             mAdapter.setRooms(mRooms);
             mAdapter.setInvitation(mActivity.getRoomInvitations());
         }

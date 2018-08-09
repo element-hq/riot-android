@@ -36,10 +36,7 @@ import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.Filter;
 
-import org.matrix.androidsdk.MXDataHandler;
 import org.matrix.androidsdk.data.Room;
-import org.matrix.androidsdk.data.RoomTag;
-import org.matrix.androidsdk.data.store.IMXStore;
 import org.matrix.androidsdk.listeners.MXEventListener;
 import org.matrix.androidsdk.rest.callback.ApiCallback;
 import org.matrix.androidsdk.rest.model.Event;
@@ -52,7 +49,6 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 
 import butterknife.BindView;
 import im.vector.R;
@@ -527,7 +523,7 @@ public class PeopleFragment extends AbsHomeFragment implements ContactsManager.C
     public void onRoomResultUpdated(final HomeRoomsViewModel.Result result) {
         if (isResumed()) {
             mAdapter.setInvitation(mActivity.getRoomInvitations());
-            mDirectChats = result.directChatsWithFavorites();
+            mDirectChats = result.getDirectChatsWithFavorites();
             mAdapter.setRooms(mDirectChats);
         }
     }
