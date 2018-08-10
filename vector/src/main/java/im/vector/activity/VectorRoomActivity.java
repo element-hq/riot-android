@@ -2242,17 +2242,17 @@ public class VectorRoomActivity extends MXCActionBarActivity implements
     }
 
     @Override
-    public void onRequestPermissionsResult(int aRequestCode, @NonNull String[] aPermissions, @NonNull int[] aGrantResults) {
-        if (0 == aPermissions.length) {
-            Log.e(LOG_TAG, "## onRequestPermissionsResult(): cancelled " + aRequestCode);
-        } else if (aRequestCode == PERMISSION_REQUEST_CODE) {
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        if (0 == permissions.length) {
+            Log.e(LOG_TAG, "## onRequestPermissionsResult(): cancelled " + requestCode);
+        } else if (requestCode == PERMISSION_REQUEST_CODE) {
             boolean isCameraPermissionGranted = false;
 
-            for (int i = 0; i < aPermissions.length; i++) {
-                Log.d(LOG_TAG, "## onRequestPermissionsResult(): " + aPermissions[i] + "=" + aGrantResults[i]);
+            for (int i = 0; i < permissions.length; i++) {
+                Log.d(LOG_TAG, "## onRequestPermissionsResult(): " + permissions[i] + "=" + grantResults[i]);
 
-                if (Manifest.permission.CAMERA.equals(aPermissions[i])) {
-                    if (PackageManager.PERMISSION_GRANTED == aGrantResults[i]) {
+                if (Manifest.permission.CAMERA.equals(permissions[i])) {
+                    if (PackageManager.PERMISSION_GRANTED == grantResults[i]) {
                         Log.d(LOG_TAG, "## onRequestPermissionsResult(): CAMERA permission granted");
                         isCameraPermissionGranted = true;
                     } else {
@@ -2269,16 +2269,16 @@ public class VectorRoomActivity extends MXCActionBarActivity implements
             } else {
                 launchRoomDetails(VectorRoomDetailsActivity.SETTINGS_TAB_INDEX);
             }
-        } else if (aRequestCode == PERMISSION_REQUEST_CODE_LAUNCH_CAMERA
-                || aRequestCode == PERMISSION_REQUEST_CODE_LAUNCH_NATIVE_CAMERA
-                || aRequestCode == PERMISSION_REQUEST_CODE_LAUNCH_NATIVE_VIDEO_CAMERA) {
+        } else if (requestCode == PERMISSION_REQUEST_CODE_LAUNCH_CAMERA
+                || requestCode == PERMISSION_REQUEST_CODE_LAUNCH_NATIVE_CAMERA
+                || requestCode == PERMISSION_REQUEST_CODE_LAUNCH_NATIVE_VIDEO_CAMERA) {
             boolean isCameraPermissionGranted = false;
 
-            for (int i = 0; i < aPermissions.length; i++) {
-                Log.d(LOG_TAG, "## onRequestPermissionsResult(): " + aPermissions[i] + "=" + aGrantResults[i]);
+            for (int i = 0; i < permissions.length; i++) {
+                Log.d(LOG_TAG, "## onRequestPermissionsResult(): " + permissions[i] + "=" + grantResults[i]);
 
-                if (Manifest.permission.CAMERA.equals(aPermissions[i])) {
-                    if (PackageManager.PERMISSION_GRANTED == aGrantResults[i]) {
+                if (Manifest.permission.CAMERA.equals(permissions[i])) {
+                    if (PackageManager.PERMISSION_GRANTED == grantResults[i]) {
                         Log.d(LOG_TAG, "## onRequestPermissionsResult(): CAMERA permission granted");
                         isCameraPermissionGranted = true;
                     } else {
@@ -2286,8 +2286,8 @@ public class VectorRoomActivity extends MXCActionBarActivity implements
                     }
                 }
 
-                if (Manifest.permission.WRITE_EXTERNAL_STORAGE.equals(aPermissions[i])) {
-                    if (PackageManager.PERMISSION_GRANTED == aGrantResults[i]) {
+                if (Manifest.permission.WRITE_EXTERNAL_STORAGE.equals(permissions[i])) {
+                    if (PackageManager.PERMISSION_GRANTED == grantResults[i]) {
                         Log.d(LOG_TAG, "## onRequestPermissionsResult(): WRITE_EXTERNAL_STORAGE permission granted");
                     } else {
                         Log.d(LOG_TAG, "## onRequestPermissionsResult(): WRITE_EXTERNAL_STORAGE permission not granted");
@@ -2298,26 +2298,26 @@ public class VectorRoomActivity extends MXCActionBarActivity implements
             // Because external storage permission is not mandatory to launch the camera,
             // external storage permission is not tested.
             if (isCameraPermissionGranted) {
-                if (aRequestCode == PERMISSION_REQUEST_CODE_LAUNCH_CAMERA) {
+                if (requestCode == PERMISSION_REQUEST_CODE_LAUNCH_CAMERA) {
                     launchCamera();
-                } else if (aRequestCode == PERMISSION_REQUEST_CODE_LAUNCH_NATIVE_CAMERA) {
+                } else if (requestCode == PERMISSION_REQUEST_CODE_LAUNCH_NATIVE_CAMERA) {
                     launchNativeCamera();
-                } else if (aRequestCode == PERMISSION_REQUEST_CODE_LAUNCH_NATIVE_VIDEO_CAMERA) {
+                } else if (requestCode == PERMISSION_REQUEST_CODE_LAUNCH_NATIVE_VIDEO_CAMERA) {
                     launchNativeVideoRecorder();
                 }
             } else {
                 Toast.makeText(this, getString(R.string.missing_permissions_warning), Toast.LENGTH_SHORT).show();
             }
-        } else if (aRequestCode == PERMISSION_REQUEST_CODE_AUDIO_CALL) {
-            if (onPermissionResultAudioIpCall(this, aPermissions, aGrantResults)) {
+        } else if (requestCode == PERMISSION_REQUEST_CODE_AUDIO_CALL) {
+            if (onPermissionResultAudioIpCall(this, permissions, grantResults)) {
                 startIpCall(PreferencesManager.useJitsiConfCall(this), false);
             }
-        } else if (aRequestCode == PERMISSION_REQUEST_CODE_VIDEO_CALL) {
-            if (onPermissionResultVideoIpCall(this, aPermissions, aGrantResults)) {
+        } else if (requestCode == PERMISSION_REQUEST_CODE_VIDEO_CALL) {
+            if (onPermissionResultVideoIpCall(this, permissions, grantResults)) {
                 startIpCall(PreferencesManager.useJitsiConfCall(this), true);
             }
         } else {
-            Log.w(LOG_TAG, "## onRequestPermissionsResult(): Unknown requestCode =" + aRequestCode);
+            Log.w(LOG_TAG, "## onRequestPermissionsResult(): Unknown requestCode =" + requestCode);
         }
     }
 
