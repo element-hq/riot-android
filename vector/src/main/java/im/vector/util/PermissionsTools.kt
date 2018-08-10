@@ -230,14 +230,12 @@ private fun checkPermissions(permissionsToBeGrantedBitMap: Int, activity: Activi
                     .setOnCancelListener { Toast.makeText(activity, R.string.missing_permissions_warning, Toast.LENGTH_SHORT).show() }
                     .setPositiveButton(R.string.ok) { _, _ ->
                         if (!finalPermissionsListToBeGranted.isEmpty()) {
-                            if (fragment != null) {
-                                fragment.requestPermissions(finalPermissionsListToBeGranted.toTypedArray(),
-                                        permissionsToBeGrantedBitMap)
-                            } else {
-                                ActivityCompat.requestPermissions(activity,
-                                        finalPermissionsListToBeGranted.toTypedArray(),
-                                        permissionsToBeGrantedBitMap)
-                            }
+                            fragment?.requestPermissions(finalPermissionsListToBeGranted.toTypedArray(), permissionsToBeGrantedBitMap)
+                                    ?: run {
+                                        ActivityCompat.requestPermissions(activity,
+                                                finalPermissionsListToBeGranted.toTypedArray(),
+                                                permissionsToBeGrantedBitMap)
+                                    }
                         }
                     }
                     .show()
@@ -256,28 +254,25 @@ private fun checkPermissions(permissionsToBeGrantedBitMap: Int, activity: Activi
                             // gives the contacts book access
                             .setPositiveButton(R.string.yes) { _, _ ->
                                 ContactsManager.getInstance().setIsContactBookAccessAllowed(true)
-                                if (fragment != null) {
-                                    fragment.requestPermissions(fPermissionsArrayToBeGranted, permissionsToBeGrantedBitMap)
-                                } else {
-                                    ActivityCompat.requestPermissions(activity, fPermissionsArrayToBeGranted, permissionsToBeGrantedBitMap)
-                                }
+                                fragment?.requestPermissions(fPermissionsArrayToBeGranted, permissionsToBeGrantedBitMap)
+                                        ?: run {
+                                            ActivityCompat.requestPermissions(activity, fPermissionsArrayToBeGranted, permissionsToBeGrantedBitMap)
+                                        }
                             }
                             // or reject it
                             .setNegativeButton(R.string.no) { _, _ ->
                                 ContactsManager.getInstance().setIsContactBookAccessAllowed(false)
-                                if (fragment != null) {
-                                    fragment.requestPermissions(fPermissionsArrayToBeGranted, permissionsToBeGrantedBitMap)
-                                } else {
-                                    ActivityCompat.requestPermissions(activity, fPermissionsArrayToBeGranted, permissionsToBeGrantedBitMap)
-                                }
+                                fragment?.requestPermissions(fPermissionsArrayToBeGranted, permissionsToBeGrantedBitMap)
+                                        ?: run {
+                                            ActivityCompat.requestPermissions(activity, fPermissionsArrayToBeGranted, permissionsToBeGrantedBitMap)
+                                        }
                             }
                             .show()
                 } else {
-                    if (fragment != null) {
-                        fragment.requestPermissions(fPermissionsArrayToBeGranted, permissionsToBeGrantedBitMap)
-                    } else {
-                        ActivityCompat.requestPermissions(activity, fPermissionsArrayToBeGranted, permissionsToBeGrantedBitMap)
-                    }
+                    fragment?.requestPermissions(fPermissionsArrayToBeGranted, permissionsToBeGrantedBitMap)
+                            ?: run {
+                                ActivityCompat.requestPermissions(activity, fPermissionsArrayToBeGranted, permissionsToBeGrantedBitMap)
+                            }
                 }
             } else {
                 // permissions were granted, start now..
@@ -328,7 +323,7 @@ private fun updatePermissionsToBeGranted(activity: Activity,
  * @param grantResults permissions granted results
  * @return true if audio IP call is permitted, false otherwise
  */
-fun onPermissionResultAudioIpCall(context: Context?, permissions: Array<String>, grantResults: IntArray): Boolean {
+fun onPermissionResultAudioIpCall(context: Context, permissions: Array<String>, grantResults: IntArray): Boolean {
     var isPermissionGranted = false
 
     try {
@@ -338,8 +333,8 @@ fun onPermissionResultAudioIpCall(context: Context?, permissions: Array<String>,
                 isPermissionGranted = true
             } else {
                 Log.d(LOG_TAG, "## onPermissionResultAudioIpCall(): RECORD_AUDIO permission not granted")
-                if (null != context)
-                    Toast.makeText(context, R.string.permissions_action_not_performed_missing_permissions, Toast.LENGTH_SHORT).show()
+
+                Toast.makeText(context, R.string.permissions_action_not_performed_missing_permissions, Toast.LENGTH_SHORT).show()
             }
         }
     } catch (ex: Exception) {
@@ -359,7 +354,7 @@ fun onPermissionResultAudioIpCall(context: Context?, permissions: Array<String>,
  * @param grantResults permissions granted results
  * @return true if video IP call is permitted, false otherwise
  */
-fun onPermissionResultVideoIpCall(context: Context?, permissions: Array<String>, grantResults: IntArray): Boolean {
+fun onPermissionResultVideoIpCall(context: Context, permissions: Array<String>, grantResults: IntArray): Boolean {
     var isPermissionGranted = false
     var result = 0
 
@@ -391,8 +386,8 @@ fun onPermissionResultVideoIpCall(context: Context?, permissions: Array<String>,
             isPermissionGranted = true
         } else {
             Log.w(LOG_TAG, "## onPermissionResultVideoIpCall(): No permissions granted to IP call (video or audio)")
-            if (null != context)
-                Toast.makeText(context, R.string.permissions_action_not_performed_missing_permissions, Toast.LENGTH_SHORT).show()
+
+            Toast.makeText(context, R.string.permissions_action_not_performed_missing_permissions, Toast.LENGTH_SHORT).show()
         }
     } catch (ex: Exception) {
         Log.d(LOG_TAG, "## onPermissionResultVideoIpCall(): Exception MSg=" + ex.message)
