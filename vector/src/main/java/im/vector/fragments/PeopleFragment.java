@@ -52,7 +52,6 @@ import java.util.List;
 
 import butterknife.BindView;
 import im.vector.R;
-import im.vector.activity.CommonActivityUtils;
 import im.vector.activity.VectorMemberDetailsActivity;
 import im.vector.adapters.ParticipantAdapterItem;
 import im.vector.adapters.PeopleAdapter;
@@ -63,6 +62,9 @@ import im.vector.util.HomeRoomsViewModel;
 import im.vector.util.VectorUtils;
 import im.vector.view.EmptyViewItemDecoration;
 import im.vector.view.SimpleDividerItemDecoration;
+
+import static im.vector.util.PermissionsToolsKt.REQUEST_CODE_PERMISSION_MEMBERS_SEARCH;
+import static im.vector.util.PermissionsToolsKt.checkPermissions;
 
 public class PeopleFragment extends AbsHomeFragment implements ContactsManager.ContactsManagerListener, AbsHomeFragment.OnRoomChangedListener {
     private static final String LOG_TAG = PeopleFragment.class.getSimpleName();
@@ -131,7 +133,7 @@ public class PeopleFragment extends AbsHomeFragment implements ContactsManager.C
         mAdapter.onFilterDone(mCurrentFilter);
 
         if (!ContactsManager.getInstance().isContactBookAccessRequested()) {
-            CommonActivityUtils.checkPermissions(CommonActivityUtils.REQUEST_CODE_PERMISSION_MEMBERS_SEARCH, this);
+            checkPermissions(REQUEST_CODE_PERMISSION_MEMBERS_SEARCH, this);
         }
 
         initKnownContacts();
@@ -168,7 +170,7 @@ public class PeopleFragment extends AbsHomeFragment implements ContactsManager.C
 
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
-        if (requestCode == CommonActivityUtils.REQUEST_CODE_PERMISSION_MEMBERS_SEARCH) {
+        if (requestCode == REQUEST_CODE_PERMISSION_MEMBERS_SEARCH) {
             if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                 ContactsManager.getInstance().refreshLocalContactsSnapshot();
             } else {

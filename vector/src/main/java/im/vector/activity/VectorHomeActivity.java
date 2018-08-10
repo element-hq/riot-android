@@ -135,6 +135,9 @@ import im.vector.view.UnreadCounterBadgeView;
 import im.vector.view.VectorPendingCallView;
 import kotlin.Pair;
 
+import static im.vector.util.PermissionsToolsKt.REQUEST_CODE_PERMISSION_HOME_ACTIVITY;
+import static im.vector.util.PermissionsToolsKt.checkPermissions;
+
 /**
  * Displays the main screen of the app, with rooms the user has joined and the ability to create
  * new rooms.
@@ -588,7 +591,7 @@ public class VectorHomeActivity extends RiotAppCompatActivity implements SearchV
 
         if (!mStorePermissionCheck) {
             mStorePermissionCheck = true;
-            CommonActivityUtils.checkPermissions(CommonActivityUtils.REQUEST_CODE_PERMISSION_HOME_ACTIVITY, this);
+            checkPermissions(REQUEST_CODE_PERMISSION_HOME_ACTIVITY, this);
         }
 
         if (null != mMemberIdToOpen) {
@@ -846,7 +849,7 @@ public class VectorHomeActivity extends RiotAppCompatActivity implements SearchV
         super.onRequestPermissionsResult(aRequestCode, aPermissions, aGrantResults);
         if (0 == aPermissions.length) {
             Log.e(LOG_TAG, "## onRequestPermissionsResult(): cancelled " + aRequestCode);
-        } else if (aRequestCode == CommonActivityUtils.REQUEST_CODE_PERMISSION_HOME_ACTIVITY) {
+        } else if (aRequestCode == REQUEST_CODE_PERMISSION_HOME_ACTIVITY) {
             Log.w(LOG_TAG, "## onRequestPermissionsResult(): REQUEST_CODE_PERMISSION_HOME_ACTIVITY");
         } else {
             Log.e(LOG_TAG, "## onRequestPermissionsResult(): unknown RequestCode = " + aRequestCode);

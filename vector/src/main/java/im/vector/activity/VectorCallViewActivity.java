@@ -70,6 +70,12 @@ import im.vector.util.ViewUtilKt;
 import im.vector.view.VectorPendingCallView;
 import kotlin.Pair;
 
+import static im.vector.util.PermissionsToolsKt.REQUEST_CODE_PERMISSION_AUDIO_IP_CALL;
+import static im.vector.util.PermissionsToolsKt.REQUEST_CODE_PERMISSION_VIDEO_IP_CALL;
+import static im.vector.util.PermissionsToolsKt.checkPermissions;
+import static im.vector.util.PermissionsToolsKt.onPermissionResultAudioIpCall;
+import static im.vector.util.PermissionsToolsKt.onPermissionResultVideoIpCall;
+
 /**
  * VectorCallViewActivity is the call activity.
  */
@@ -512,11 +518,10 @@ public class VectorCallViewActivity extends RiotAppCompatActivity implements Sen
         VectorUtils.loadCallAvatar(this, mSession, mAvatarView, mCall.getRoom());
 
         mIncomingCallTabbar.setVisibility(CallsManager.getSharedInstance().isRinging() && mCall.isIncoming() ? View.VISIBLE : View.GONE);
-        mPermissionCode = mCall.isVideo() ?
-                CommonActivityUtils.REQUEST_CODE_PERMISSION_VIDEO_IP_CALL : CommonActivityUtils.REQUEST_CODE_PERMISSION_AUDIO_IP_CALL;
+        mPermissionCode = mCall.isVideo() ? REQUEST_CODE_PERMISSION_VIDEO_IP_CALL : REQUEST_CODE_PERMISSION_AUDIO_IP_CALL;
 
         // the user can only accept if the dedicated permissions are granted
-        mAcceptIncomingCallButton.setVisibility(CommonActivityUtils.checkPermissions(mPermissionCode, this) ? View.VISIBLE : View.GONE);
+        mAcceptIncomingCallButton.setVisibility(checkPermissions(mPermissionCode, this) ? View.VISIBLE : View.GONE);
         mAcceptIncomingCallButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -641,14 +646,12 @@ public class VectorCallViewActivity extends RiotAppCompatActivity implements Sen
     public void onRequestPermissionsResult(int aRequestCode, @NonNull String[] aPermissions, @NonNull int[] aGrantResults) {
         if (aRequestCode == mPermissionCode) {
 
-            if (CommonActivityUtils.REQUEST_CODE_PERMISSION_VIDEO_IP_CALL == aRequestCode) {
+            if (REQUEST_CODE_PERMISSION_VIDEO_IP_CALL == aRequestCode) {
                 // the user can only accept if the dedicated permissions are granted
-                mAcceptIncomingCallButton.setVisibility(
-                        CommonActivityUtils.onPermissionResultVideoIpCall(this, aPermissions, aGrantResults) ? View.VISIBLE : View.GONE);
+                mAcceptIncomingCallButton.setVisibility(onPermissionResultVideoIpCall(this, aPermissions, aGrantResults) ? View.VISIBLE : View.GONE);
             } else {
                 // the user can only accept if the dedicated permissions are granted
-                mAcceptIncomingCallButton.setVisibility(
-                        CommonActivityUtils.onPermissionResultAudioIpCall(this, aPermissions, aGrantResults) ? View.VISIBLE : View.GONE);
+                mAcceptIncomingCallButton.setVisibility(onPermissionResultAudioIpCall(this, aPermissions, aGrantResults) ? View.VISIBLE : View.GONE);
             }
         }
     }

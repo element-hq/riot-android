@@ -42,6 +42,11 @@ import im.vector.fragments.VectorRoomSettingsFragment;
 import im.vector.fragments.VectorSearchRoomFilesListFragment;
 import im.vector.util.MatrixSdkExtensionsKt;
 
+import static im.vector.util.PermissionsToolsKt.PERMISSION_CAMERA;
+import static im.vector.util.PermissionsToolsKt.REQUEST_CODE_PERMISSION_MEMBER_DETAILS;
+import static im.vector.util.PermissionsToolsKt.REQUEST_CODE_PERMISSION_ROOM_DETAILS;
+import static im.vector.util.PermissionsToolsKt.checkPermissions;
+
 /**
  * This class implements the room details screen, using a tab UI pattern.
  * Each tab is filled in with its corresponding fragment.
@@ -183,7 +188,7 @@ public class VectorRoomDetailsActivity extends MXCActionBarActivity implements T
     public void onRequestPermissionsResult(int aRequestCode, @NonNull String[] aPermissions, @NonNull int[] aGrantResults) {
         if (0 == aPermissions.length) {
             Log.e(LOG_TAG, "## onRequestPermissionsResult(): cancelled " + aRequestCode);
-        } else if (aRequestCode == CommonActivityUtils.REQUEST_CODE_PERMISSION_MEMBER_DETAILS) {
+        } else if (aRequestCode == REQUEST_CODE_PERMISSION_MEMBER_DETAILS) {
             if (Manifest.permission.READ_CONTACTS.equals(aPermissions[0])) {
                 if (PackageManager.PERMISSION_GRANTED == aGrantResults[0]) {
                     Log.d(LOG_TAG, "## onRequestPermissionsResult(): READ_CONTACTS permission granted");
@@ -353,17 +358,17 @@ public class VectorRoomDetailsActivity extends MXCActionBarActivity implements T
 
             if (!mIsContactsPermissionChecked) {
                 mIsContactsPermissionChecked = true;
-                CommonActivityUtils.checkPermissions(CommonActivityUtils.REQUEST_CODE_PERMISSION_MEMBER_DETAILS, this);
+                checkPermissions(REQUEST_CODE_PERMISSION_MEMBER_DETAILS, this);
             }
         } else if (fragmentTag.equals(TAG_FRAGMENT_SETTINGS_ROOM_DETAIL)) {
-            int permissionToBeGranted = CommonActivityUtils.REQUEST_CODE_PERMISSION_ROOM_DETAILS;
+            int permissionToBeGranted = REQUEST_CODE_PERMISSION_ROOM_DETAILS;
             onTabSelectSettingsFragment();
 
             // remove camera permission request if the user has not enough power level
             if (!MatrixSdkExtensionsKt.isPowerLevelEnoughForAvatarUpdate(mRoom, mSession)) {
-                permissionToBeGranted &= ~CommonActivityUtils.PERMISSION_CAMERA;
+                permissionToBeGranted &= ~PERMISSION_CAMERA;
             }
-            CommonActivityUtils.checkPermissions(permissionToBeGranted, this);
+            checkPermissions(permissionToBeGranted, this);
             mCurrentTabIndex = SETTINGS_TAB_INDEX;
         } else if (fragmentTag.equals(TAG_FRAGMENT_FILES_DETAILS)) {
             mSearchFilesFragment = (VectorSearchRoomFilesListFragment) getSupportFragmentManager().findFragmentByTag(TAG_FRAGMENT_FILES_DETAILS);

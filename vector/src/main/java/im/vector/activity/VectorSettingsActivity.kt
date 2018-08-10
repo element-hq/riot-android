@@ -20,6 +20,7 @@ import android.content.pm.PackageManager
 import im.vector.Matrix
 import im.vector.R
 import im.vector.fragments.VectorSettingsPreferencesFragment
+import im.vector.util.REQUEST_CODE_PERMISSION_TAKE_PHOTO
 import im.vector.util.VectorUtils
 
 /**
@@ -59,7 +60,7 @@ class VectorSettingsActivity : MXCActionBarActivity() {
      * Keep this code here, cause PreferenceFragment does not extend v4 Fragment
      */
     override fun onRequestPermissionsResult(aRequestCode: Int, aPermissions: Array<String>, aGrantResults: IntArray) {
-        if (aRequestCode == CommonActivityUtils.REQUEST_CODE_PERMISSION_TAKE_PHOTO) {
+        if (aRequestCode == REQUEST_CODE_PERMISSION_TAKE_PHOTO) {
             var granted = false
 
             for (i in aGrantResults.indices) {

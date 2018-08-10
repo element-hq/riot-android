@@ -69,6 +69,12 @@ import im.vector.util.MatrixSdkExtensionsKt;
 import im.vector.util.VectorUtils;
 import kotlin.Pair;
 
+import static im.vector.util.PermissionsToolsKt.REQUEST_CODE_PERMISSION_AUDIO_IP_CALL;
+import static im.vector.util.PermissionsToolsKt.REQUEST_CODE_PERMISSION_VIDEO_IP_CALL;
+import static im.vector.util.PermissionsToolsKt.checkPermissions;
+import static im.vector.util.PermissionsToolsKt.onPermissionResultAudioIpCall;
+import static im.vector.util.PermissionsToolsKt.onPermissionResultVideoIpCall;
+
 /**
  * VectorMemberDetailsActivity displays the member information and allows to perform some dedicated actions.
  */
@@ -340,13 +346,13 @@ public class VectorMemberDetailsActivity extends MXCActionBarActivity implements
      * @param aIsVideoCall true if video call, false if audio call
      */
     private void startCheckCallPermissions(boolean aIsVideoCall) {
-        int requestCode = CommonActivityUtils.REQUEST_CODE_PERMISSION_AUDIO_IP_CALL;
+        int requestCode = REQUEST_CODE_PERMISSION_AUDIO_IP_CALL;
 
         if (aIsVideoCall) {
-            requestCode = CommonActivityUtils.REQUEST_CODE_PERMISSION_VIDEO_IP_CALL;
+            requestCode = REQUEST_CODE_PERMISSION_VIDEO_IP_CALL;
         }
 
-        if (CommonActivityUtils.checkPermissions(requestCode, this)) {
+        if (checkPermissions(requestCode, this)) {
             startCall(aIsVideoCall);
         }
     }
@@ -355,12 +361,12 @@ public class VectorMemberDetailsActivity extends MXCActionBarActivity implements
     public void onRequestPermissionsResult(int aRequestCode, @NonNull String[] aPermissions, @NonNull int[] aGrantResults) {
         if (0 == aPermissions.length) {
             Log.e(LOG_TAG, "## onRequestPermissionsResult(): cancelled " + aRequestCode);
-        } else if (aRequestCode == CommonActivityUtils.REQUEST_CODE_PERMISSION_AUDIO_IP_CALL) {
-            if (CommonActivityUtils.onPermissionResultAudioIpCall(this, aPermissions, aGrantResults)) {
+        } else if (aRequestCode == REQUEST_CODE_PERMISSION_AUDIO_IP_CALL) {
+            if (onPermissionResultAudioIpCall(this, aPermissions, aGrantResults)) {
                 startCall(false);
             }
-        } else if (aRequestCode == CommonActivityUtils.REQUEST_CODE_PERMISSION_VIDEO_IP_CALL) {
-            if (CommonActivityUtils.onPermissionResultVideoIpCall(this, aPermissions, aGrantResults)) {
+        } else if (aRequestCode == REQUEST_CODE_PERMISSION_VIDEO_IP_CALL) {
+            if (onPermissionResultVideoIpCall(this, aPermissions, aGrantResults)) {
                 startCall(true);
             }
         }

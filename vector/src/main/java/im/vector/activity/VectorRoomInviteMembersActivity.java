@@ -54,6 +54,9 @@ import im.vector.contacts.ContactsManager;
 import im.vector.util.VectorUtils;
 import im.vector.view.VectorAutoCompleteTextView;
 
+import static im.vector.util.PermissionsToolsKt.REQUEST_CODE_PERMISSION_MEMBERS_SEARCH;
+import static im.vector.util.PermissionsToolsKt.checkPermissions;
+
 /**
  * This class provides a way to search other user to invite them in a dedicated room
  */
@@ -235,7 +238,7 @@ public class VectorRoomInviteMembersActivity extends VectorBaseSearchActivity {
         });
 
         // Check permission to access contacts
-        CommonActivityUtils.checkPermissions(CommonActivityUtils.REQUEST_CODE_PERMISSION_MEMBERS_SEARCH, this);
+        checkPermissions(REQUEST_CODE_PERMISSION_MEMBERS_SEARCH, this);
     }
 
     @Override
@@ -256,7 +259,7 @@ public class VectorRoomInviteMembersActivity extends VectorBaseSearchActivity {
     public void onRequestPermissionsResult(int aRequestCode, @NonNull String[] aPermissions, @NonNull int[] aGrantResults) {
         if (0 == aPermissions.length) {
             Log.e(LOG_TAG, "## onRequestPermissionsResult(): cancelled " + aRequestCode);
-        } else if (aRequestCode == CommonActivityUtils.REQUEST_CODE_PERMISSION_MEMBERS_SEARCH) {
+        } else if (aRequestCode == REQUEST_CODE_PERMISSION_MEMBERS_SEARCH) {
             if (PackageManager.PERMISSION_GRANTED == aGrantResults[0]) {
                 Log.d(LOG_TAG, "## onRequestPermissionsResult(): READ_CONTACTS permission granted");
                 ContactsManager.getInstance().refreshLocalContactsSnapshot();

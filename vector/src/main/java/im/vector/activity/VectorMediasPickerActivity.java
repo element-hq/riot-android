@@ -93,6 +93,9 @@ import im.vector.view.RecentMediaLayout;
 import im.vector.view.VideoRecordView;
 import kotlin.Pair;
 
+import static im.vector.util.PermissionsToolsKt.REQUEST_CODE_PERMISSION_VIDEO_RECORDING;
+import static im.vector.util.PermissionsToolsKt.checkPermissions;
+
 /**
  * VectorMediasPickerActivity is used to take a photo or to send an old one.
  */
@@ -296,8 +299,7 @@ public class VectorMediasPickerActivity extends MXCActionBarActivity implements 
             @Override
             public boolean onLongClick(View v) {
                 if (mIsVideoRecordingSupported
-                        && CommonActivityUtils.checkPermissions(CommonActivityUtils.REQUEST_CODE_PERMISSION_VIDEO_RECORDING,
-                        VectorMediasPickerActivity.this)) {
+                        && checkPermissions(REQUEST_CODE_PERMISSION_VIDEO_RECORDING, VectorMediasPickerActivity.this)) {
                     mRecordAnimationView.startAnimation();
                     startVideoRecord();
                 }
