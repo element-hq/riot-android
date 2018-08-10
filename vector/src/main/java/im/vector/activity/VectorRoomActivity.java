@@ -2273,6 +2273,7 @@ public class VectorRoomActivity extends MXCActionBarActivity implements
                 || requestCode == PERMISSION_REQUEST_CODE_LAUNCH_NATIVE_CAMERA
                 || requestCode == PERMISSION_REQUEST_CODE_LAUNCH_NATIVE_VIDEO_CAMERA) {
             boolean isCameraPermissionGranted = false;
+            boolean isWritePermissionGranted = false;
 
             for (int i = 0; i < permissions.length; i++) {
                 Log.d(LOG_TAG, "## onRequestPermissionsResult(): " + permissions[i] + "=" + grantResults[i]);
@@ -2289,6 +2290,7 @@ public class VectorRoomActivity extends MXCActionBarActivity implements
                 if (Manifest.permission.WRITE_EXTERNAL_STORAGE.equals(permissions[i])) {
                     if (PackageManager.PERMISSION_GRANTED == grantResults[i]) {
                         Log.d(LOG_TAG, "## onRequestPermissionsResult(): WRITE_EXTERNAL_STORAGE permission granted");
+                        isWritePermissionGranted = true;
                     } else {
                         Log.d(LOG_TAG, "## onRequestPermissionsResult(): WRITE_EXTERNAL_STORAGE permission not granted");
                     }
@@ -2301,9 +2303,17 @@ public class VectorRoomActivity extends MXCActionBarActivity implements
                 if (requestCode == PERMISSION_REQUEST_CODE_LAUNCH_CAMERA) {
                     launchCamera();
                 } else if (requestCode == PERMISSION_REQUEST_CODE_LAUNCH_NATIVE_CAMERA) {
-                    launchNativeCamera();
+                    if (isWritePermissionGranted) {
+                        launchNativeCamera();
+                    } else {
+                        Toast.makeText(this, getString(R.string.missing_permissions_error), Toast.LENGTH_SHORT).show();
+                    }
                 } else if (requestCode == PERMISSION_REQUEST_CODE_LAUNCH_NATIVE_VIDEO_CAMERA) {
-                    launchNativeVideoRecorder();
+                    if (isWritePermissionGranted) {
+                        launchNativeVideoRecorder();
+                    } else {
+                        Toast.makeText(this, getString(R.string.missing_permissions_error), Toast.LENGTH_SHORT).show();
+                    }
                 }
             } else {
                 Toast.makeText(this, getString(R.string.missing_permissions_warning), Toast.LENGTH_SHORT).show();

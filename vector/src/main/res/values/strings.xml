@@ -55,11 +55,12 @@
     <string name="rename">Rename</string>
     <string name="report_content">Report content</string>
     <string name="active_call">Active call</string>
-    <string name="ongoing_conference_call"> Ongoing conference call. Join as voice or video.</string>
+    <string name="ongoing_conference_call">Ongoing conference call. Join as voice or video.</string>
     <string name="ongoing_conference_call_voice">voice</string>
     <string name="ongoing_conference_call_video">video</string>
     <string name="cannot_start_call">Cannot start the call, please try later</string>
-    <string name="missing_permissions_warning">"Due to missing permissions, some features may be missing..</string>
+    <string name="missing_permissions_warning">"Due to missing permissions, some features may be missing…</string>
+    <string name="missing_permissions_error">"Due to missing permissions, this action is not possible.</string>
     <string name="missing_permissions_to_start_conf_call">You need permission to invite to start a conference in this room</string>
     <string name="missing_permissions_title_to_start_conf_call">Cannot start call</string>
     <string name="device_information">Device information</string>
@@ -769,7 +770,7 @@
     <string name="room_settings_addresses_no_local_addresses">This room has no local addresses</string>
     <string name="room_settings_addresses_add_new_address">New address (e.g #foo:matrix.org")</string>
 
-    <string name="room_settings_no_flair"> This room is not showing flair for any communities</string>
+    <string name="room_settings_no_flair">This room is not showing flair for any communities</string>
     <string name="room_settings_add_new_group">New community ID (e.g +foo:matrix.org")</string>
     <string name="room_settings_invalid_group_format_dialog_title">Invalid community ID</string>
     <string name="room_settings_invalid_group_format_dialog_body">\'%s\' is not a valid community ID</string>
@@ -845,7 +846,7 @@
     <string name="encryption_information_unblock">Unblacklist</string>
 
     <string name="encryption_information_verify_device">Verify device</string>
-    <string name="encryption_information_verify_device_warning"> To verify that this device can be trusted, please contact its owner using some other means (e.g. in person or a phone call) and ask them whether the key they see in their User Settings for this device matches the key below:</string>
+    <string name="encryption_information_verify_device_warning">To verify that this device can be trusted, please contact its owner using some other means (e.g. in person or a phone call) and ask them whether the key they see in their User Settings for this device matches the key below:</string>
     <string name="encryption_information_verify_device_warning2">If it matches, press the verify button below. \nIf it doesn\'t, then someone else is intercepting this device and you should probably blacklist it.\nIn future this verification process will be more sophisticated.</string>
     <string name="encryption_information_verify_key_match">I verify that the keys match</string>
 
