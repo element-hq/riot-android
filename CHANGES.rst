@@ -8,7 +8,7 @@ Improvements:
  -
 
 Other changes:
- -
+ - Upgrade olm-sdk.aar from version 2.2.2 to version 2.3.0
 
 Bugfix:
  -
