@@ -135,10 +135,6 @@ import im.vector.view.UnreadCounterBadgeView;
 import im.vector.view.VectorPendingCallView;
 import kotlin.Pair;
 
-import static im.vector.util.PermissionsToolsKt.PERMISSIONS_FOR_HOME_ACTIVITY;
-import static im.vector.util.PermissionsToolsKt.PERMISSION_REQUEST_CODE;
-import static im.vector.util.PermissionsToolsKt.checkPermissions;
-
 /**
  * Displays the main screen of the app, with rooms the user has joined and the ability to create
  * new rooms.
@@ -250,8 +246,6 @@ public class VectorHomeActivity extends RiotAppCompatActivity implements SearchV
 
     @BindView(R.id.floating_action_menu_touch_guard)
     View touchGuard;
-
-    private boolean mStorePermissionCheck = false;
 
     // a shared files intent is waiting the store init
     private Intent mSharedFilesIntent = null;
@@ -590,11 +584,6 @@ public class VectorHomeActivity extends RiotAppCompatActivity implements SearchV
             }
         }
 
-        if (!mStorePermissionCheck) {
-            mStorePermissionCheck = true;
-            checkPermissions(PERMISSIONS_FOR_HOME_ACTIVITY, this, PERMISSION_REQUEST_CODE);
-        }
-
         if (null != mMemberIdToOpen) {
             Intent startRoomInfoIntent = new Intent(VectorHomeActivity.this, VectorMemberDetailsActivity.class);
             startRoomInfoIntent.putExtra(VectorMemberDetailsActivity.EXTRA_MEMBER_ID, mMemberIdToOpen);
@@ -845,25 +834,12 @@ public class VectorHomeActivity extends RiotAppCompatActivity implements SearchV
 
     }
 
-    @Override
-    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
-        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
-        if (0 == permissions.length) {
-            Log.e(LOG_TAG, "## onRequestPermissionsResult(): cancelled " + requestCode);
-        } else if (requestCode == PERMISSION_REQUEST_CODE) {
-            Log.w(LOG_TAG, "## onRequestPermissionsResult(): PERMISSIONS_FOR_HOME_ACTIVITY");
-        } else {
-            Log.e(LOG_TAG, "## onRequestPermissionsResult(): unknown RequestCode = " + requestCode);
-        }
-    }
-
     /**
      * @return
      */
     public HomeRoomsViewModel getRoomsViewModel() {
         return mRoomsViewModel;
     }
-
 
     /*
      * *********************************************************************************************
