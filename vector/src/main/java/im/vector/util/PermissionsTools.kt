@@ -28,7 +28,6 @@ import android.support.v7.app.AlertDialog
 import android.text.TextUtils
 import android.widget.Toast
 import im.vector.R
-import im.vector.activity.CommonActivityUtils
 import im.vector.contacts.ContactsManager
 import org.matrix.androidsdk.util.Log
 import java.util.*
@@ -84,22 +83,22 @@ fun logPermissionStatuses(context: Context) {
 /**
  * See [.checkPermissions]
  *
- * @param aPermissionsToBeGrantedBitMap
- * @param aCallingActivity
+ * @param permissionsToBeGrantedBitMap
+ * @param activity
  * @return true if the permissions are granted (synchronous flow), false otherwise (asynchronous flow)
  */
-fun checkPermissions(aPermissionsToBeGrantedBitMap: Int, aCallingActivity: Activity): Boolean {
-    return checkPermissions(aPermissionsToBeGrantedBitMap, aCallingActivity, null)
+fun checkPermissions(permissionsToBeGrantedBitMap: Int, activity: Activity): Boolean {
+    return checkPermissions(permissionsToBeGrantedBitMap, activity, null)
 }
 
 /**
  * See [.checkPermissions]
  *
- * @param aPermissionsToBeGrantedBitMap
+ * @param permissionsToBeGrantedBitMap
  * @param fragment
  */
-fun checkPermissions(aPermissionsToBeGrantedBitMap: Int, fragment: Fragment) {
-    checkPermissions(aPermissionsToBeGrantedBitMap, fragment.activity, fragment)
+fun checkPermissions(permissionsToBeGrantedBitMap: Int, fragment: Fragment) {
+    checkPermissions(permissionsToBeGrantedBitMap, fragment.activity, fragment)
 }
 
 /**
@@ -108,34 +107,34 @@ fun checkPermissions(aPermissionsToBeGrantedBitMap: Int, fragment: Fragment) {
  * is provided in onRequestPermissionsResult(). In this case checkPermissions()
  * returns false.
  * <br></br>If checkPermissions() returns true, the permissions were already granted.
- * The permissions to be granted are given as bit map in aPermissionsToBeGrantedBitMap (ex: [.REQUEST_CODE_PERMISSION_TAKE_PHOTO]).
- * <br></br>aPermissionsToBeGrantedBitMap is passed as the request code in onRequestPermissionsResult().
+ * The permissions to be granted are given as bit map in permissionsToBeGrantedBitMap (ex: [.REQUEST_CODE_PERMISSION_TAKE_PHOTO]).
+ * <br></br>permissionsToBeGrantedBitMap is passed as the request code in onRequestPermissionsResult().
  *
  *
  * If a permission was already denied by the user, a popup is displayed to
  * explain why vector needs the corresponding permission.
  *
- * @param aPermissionsToBeGrantedBitMap the permissions bit map to be granted
- * @param aCallingActivity              the calling Activity that is requesting the permissions (or fragment parent)
- * @param fragment                      the calling fragment that is requesting the permissions
+ * @param permissionsToBeGrantedBitMap the permissions bit map to be granted
+ * @param activity                     the calling Activity that is requesting the permissions (or fragment parent)
+ * @param fragment                     the calling fragment that is requesting the permissions
  * @return true if the permissions are granted (synchronous flow), false otherwise (asynchronous flow)
  */
-private fun checkPermissions(aPermissionsToBeGrantedBitMap: Int, aCallingActivity: Activity?, fragment: Fragment?): Boolean {
+private fun checkPermissions(permissionsToBeGrantedBitMap: Int, activity: Activity?, fragment: Fragment?): Boolean {
     var isPermissionGranted = false
 
     // sanity check
-    if (null == aCallingActivity) {
+    if (null == activity) {
         Log.w(LOG_TAG, "## checkPermissions(): invalid input data")
         isPermissionGranted = false
-    } else if (REQUEST_CODE_PERMISSION_BY_PASS == aPermissionsToBeGrantedBitMap) {
+    } else if (REQUEST_CODE_PERMISSION_BY_PASS == permissionsToBeGrantedBitMap) {
         isPermissionGranted = true
-    } else if (REQUEST_CODE_PERMISSION_TAKE_PHOTO != aPermissionsToBeGrantedBitMap
-            && REQUEST_CODE_PERMISSION_AUDIO_IP_CALL != aPermissionsToBeGrantedBitMap
-            && REQUEST_CODE_PERMISSION_VIDEO_IP_CALL != aPermissionsToBeGrantedBitMap
-            && REQUEST_CODE_PERMISSION_MEMBERS_SEARCH != aPermissionsToBeGrantedBitMap
-            && REQUEST_CODE_PERMISSION_HOME_ACTIVITY != aPermissionsToBeGrantedBitMap
-            && REQUEST_CODE_PERMISSION_MEMBER_DETAILS != aPermissionsToBeGrantedBitMap
-            && REQUEST_CODE_PERMISSION_ROOM_DETAILS != aPermissionsToBeGrantedBitMap) {
+    } else if (REQUEST_CODE_PERMISSION_TAKE_PHOTO != permissionsToBeGrantedBitMap
+            && REQUEST_CODE_PERMISSION_AUDIO_IP_CALL != permissionsToBeGrantedBitMap
+            && REQUEST_CODE_PERMISSION_VIDEO_IP_CALL != permissionsToBeGrantedBitMap
+            && REQUEST_CODE_PERMISSION_MEMBERS_SEARCH != permissionsToBeGrantedBitMap
+            && REQUEST_CODE_PERMISSION_HOME_ACTIVITY != permissionsToBeGrantedBitMap
+            && REQUEST_CODE_PERMISSION_MEMBER_DETAILS != permissionsToBeGrantedBitMap
+            && REQUEST_CODE_PERMISSION_ROOM_DETAILS != permissionsToBeGrantedBitMap) {
         Log.w(LOG_TAG, "## checkPermissions(): permissions to be granted are not supported")
         isPermissionGranted = false
     } else {
@@ -147,29 +146,29 @@ private fun checkPermissions(aPermissionsToBeGrantedBitMap: Int, aCallingActivit
         var permissionType: String
 
         // retrieve the permissions to be granted according to the request code bit map
-        if (PERMISSION_CAMERA == aPermissionsToBeGrantedBitMap and PERMISSION_CAMERA) {
+        if (PERMISSION_CAMERA == permissionsToBeGrantedBitMap and PERMISSION_CAMERA) {
             permissionType = Manifest.permission.CAMERA
-            isRequestPermissionRequired = isRequestPermissionRequired or updatePermissionsToBeGranted(aCallingActivity, permissionListAlreadyDenied, permissionsListToBeGranted, permissionType)
+            isRequestPermissionRequired = isRequestPermissionRequired or updatePermissionsToBeGranted(activity, permissionListAlreadyDenied, permissionsListToBeGranted, permissionType)
         }
 
-        if (PERMISSION_RECORD_AUDIO == aPermissionsToBeGrantedBitMap and PERMISSION_RECORD_AUDIO) {
+        if (PERMISSION_RECORD_AUDIO == permissionsToBeGrantedBitMap and PERMISSION_RECORD_AUDIO) {
             permissionType = Manifest.permission.RECORD_AUDIO
-            isRequestPermissionRequired = isRequestPermissionRequired or updatePermissionsToBeGranted(aCallingActivity, permissionListAlreadyDenied, permissionsListToBeGranted, permissionType)
+            isRequestPermissionRequired = isRequestPermissionRequired or updatePermissionsToBeGranted(activity, permissionListAlreadyDenied, permissionsListToBeGranted, permissionType)
         }
 
-        if (PERMISSION_WRITE_EXTERNAL_STORAGE == aPermissionsToBeGrantedBitMap and PERMISSION_WRITE_EXTERNAL_STORAGE) {
+        if (PERMISSION_WRITE_EXTERNAL_STORAGE == permissionsToBeGrantedBitMap and PERMISSION_WRITE_EXTERNAL_STORAGE) {
             permissionType = Manifest.permission.WRITE_EXTERNAL_STORAGE
-            isRequestPermissionRequired = isRequestPermissionRequired or updatePermissionsToBeGranted(aCallingActivity, permissionListAlreadyDenied, permissionsListToBeGranted, permissionType)
+            isRequestPermissionRequired = isRequestPermissionRequired or updatePermissionsToBeGranted(activity, permissionListAlreadyDenied, permissionsListToBeGranted, permissionType)
         }
 
         // the contact book access is requested for any android platforms
         // for android M, we use the system preferences
         // for android < M, we use a dedicated settings
-        if (PERMISSION_READ_CONTACTS == aPermissionsToBeGrantedBitMap and PERMISSION_READ_CONTACTS) {
+        if (PERMISSION_READ_CONTACTS == permissionsToBeGrantedBitMap and PERMISSION_READ_CONTACTS) {
             permissionType = Manifest.permission.READ_CONTACTS
 
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-                isRequestPermissionRequired = isRequestPermissionRequired or updatePermissionsToBeGranted(aCallingActivity, permissionListAlreadyDenied, permissionsListToBeGranted, permissionType)
+                isRequestPermissionRequired = isRequestPermissionRequired or updatePermissionsToBeGranted(activity, permissionListAlreadyDenied, permissionsListToBeGranted, permissionType)
             } else {
                 if (!ContactsManager.getInstance().isContactBookAccessRequested) {
                     isRequestPermissionRequired = true
@@ -182,19 +181,19 @@ private fun checkPermissions(aPermissionsToBeGrantedBitMap: Int, aCallingActivit
 
         // if some permissions were already denied: display a dialog to the user before asking again..
         if (!permissionListAlreadyDenied.isEmpty()) {
-            if (aPermissionsToBeGrantedBitMap == REQUEST_CODE_PERMISSION_VIDEO_IP_CALL || aPermissionsToBeGrantedBitMap == REQUEST_CODE_PERMISSION_AUDIO_IP_CALL) {
+            if (permissionsToBeGrantedBitMap == REQUEST_CODE_PERMISSION_VIDEO_IP_CALL || permissionsToBeGrantedBitMap == REQUEST_CODE_PERMISSION_AUDIO_IP_CALL) {
                 // Permission request for VOIP call
                 if (permissionListAlreadyDenied.contains(Manifest.permission.CAMERA) && permissionListAlreadyDenied.contains(Manifest.permission.RECORD_AUDIO)) {
                     // Both missing
-                    explanationMessage += aCallingActivity.getString(R.string.permissions_rationale_msg_camera_and_audio)
+                    explanationMessage += activity.getString(R.string.permissions_rationale_msg_camera_and_audio)
                 } else if (permissionListAlreadyDenied.contains(Manifest.permission.RECORD_AUDIO)) {
                     // Audio missing
-                    explanationMessage += aCallingActivity.getString(R.string.permissions_rationale_msg_record_audio)
-                    explanationMessage += aCallingActivity.getString(R.string.permissions_rationale_msg_record_audio_explanation)
+                    explanationMessage += activity.getString(R.string.permissions_rationale_msg_record_audio)
+                    explanationMessage += activity.getString(R.string.permissions_rationale_msg_record_audio_explanation)
                 } else if (permissionListAlreadyDenied.contains(Manifest.permission.CAMERA)) {
                     // Camera missing
-                    explanationMessage += aCallingActivity.getString(R.string.permissions_rationale_msg_camera)
-                    explanationMessage += aCallingActivity.getString(R.string.permissions_rationale_msg_camera_explanation)
+                    explanationMessage += activity.getString(R.string.permissions_rationale_msg_camera)
+                    explanationMessage += activity.getString(R.string.permissions_rationale_msg_camera_explanation)
                 }
             } else {
                 for (permissionAlreadyDenied in permissionListAlreadyDenied) {
@@ -202,22 +201,22 @@ private fun checkPermissions(aPermissionsToBeGrantedBitMap: Int, aCallingActivit
                         if (!TextUtils.isEmpty(explanationMessage)) {
                             explanationMessage += "\n\n"
                         }
-                        explanationMessage += aCallingActivity.getString(R.string.permissions_rationale_msg_camera)
+                        explanationMessage += activity.getString(R.string.permissions_rationale_msg_camera)
                     } else if (Manifest.permission.RECORD_AUDIO == permissionAlreadyDenied) {
                         if (!TextUtils.isEmpty(explanationMessage)) {
                             explanationMessage += "\n\n"
                         }
-                        explanationMessage += aCallingActivity.getString(R.string.permissions_rationale_msg_record_audio)
+                        explanationMessage += activity.getString(R.string.permissions_rationale_msg_record_audio)
                     } else if (Manifest.permission.WRITE_EXTERNAL_STORAGE == permissionAlreadyDenied) {
                         if (!TextUtils.isEmpty(explanationMessage)) {
                             explanationMessage += "\n\n"
                         }
-                        explanationMessage += aCallingActivity.getString(R.string.permissions_rationale_msg_storage)
+                        explanationMessage += activity.getString(R.string.permissions_rationale_msg_storage)
                     } else if (Manifest.permission.READ_CONTACTS == permissionAlreadyDenied) {
                         if (!TextUtils.isEmpty(explanationMessage)) {
                             explanationMessage += "\n\n"
                         }
-                        explanationMessage += aCallingActivity.getString(R.string.permissions_rationale_msg_contacts)
+                        explanationMessage += activity.getString(R.string.permissions_rationale_msg_contacts)
                     } else {
                         Log.d(LOG_TAG, "## checkPermissions(): already denied permission not supported")
                     }
@@ -225,19 +224,19 @@ private fun checkPermissions(aPermissionsToBeGrantedBitMap: Int, aCallingActivit
             }
 
             // display the dialog with the info text
-            AlertDialog.Builder(aCallingActivity)
+            AlertDialog.Builder(activity)
                     .setTitle(R.string.permissions_rationale_popup_title)
                     .setMessage(explanationMessage)
-                    .setOnCancelListener { Toast.makeText(aCallingActivity, R.string.missing_permissions_warning, Toast.LENGTH_SHORT).show() }
-                    .setPositiveButton(R.string.ok) { dialog, which ->
+                    .setOnCancelListener { Toast.makeText(activity, R.string.missing_permissions_warning, Toast.LENGTH_SHORT).show() }
+                    .setPositiveButton(R.string.ok) { _, _ ->
                         if (!finalPermissionsListToBeGranted.isEmpty()) {
                             if (fragment != null) {
                                 fragment.requestPermissions(finalPermissionsListToBeGranted.toTypedArray(),
-                                        aPermissionsToBeGrantedBitMap)
+                                        permissionsToBeGrantedBitMap)
                             } else {
-                                ActivityCompat.requestPermissions(aCallingActivity,
+                                ActivityCompat.requestPermissions(activity,
                                         finalPermissionsListToBeGranted.toTypedArray(),
-                                        aPermissionsToBeGrantedBitMap)
+                                        permissionsToBeGrantedBitMap)
                             }
                         }
                     }
@@ -248,35 +247,36 @@ private fun checkPermissions(aPermissionsToBeGrantedBitMap: Int, aCallingActivit
                 val fPermissionsArrayToBeGranted = finalPermissionsListToBeGranted.toTypedArray()
 
                 // for android < M, we use a custom dialog to request the contacts book access.
-                if (permissionsListToBeGranted.contains(Manifest.permission.READ_CONTACTS) && Build.VERSION.SDK_INT < 23) {
-                    AlertDialog.Builder(aCallingActivity)
+                if (permissionsListToBeGranted.contains(Manifest.permission.READ_CONTACTS)
+                        && Build.VERSION.SDK_INT < Build.VERSION_CODES.M) {
+                    AlertDialog.Builder(activity)
                             .setIcon(android.R.drawable.ic_dialog_info)
                             .setTitle(R.string.permissions_rationale_popup_title)
                             .setMessage(R.string.permissions_msg_contacts_warning_other_androids)
                             // gives the contacts book access
-                            .setPositiveButton(R.string.yes) { dialog, which ->
+                            .setPositiveButton(R.string.yes) { _, _ ->
                                 ContactsManager.getInstance().setIsContactBookAccessAllowed(true)
                                 if (fragment != null) {
-                                    fragment.requestPermissions(fPermissionsArrayToBeGranted, aPermissionsToBeGrantedBitMap)
+                                    fragment.requestPermissions(fPermissionsArrayToBeGranted, permissionsToBeGrantedBitMap)
                                 } else {
-                                    ActivityCompat.requestPermissions(aCallingActivity, fPermissionsArrayToBeGranted, aPermissionsToBeGrantedBitMap)
+                                    ActivityCompat.requestPermissions(activity, fPermissionsArrayToBeGranted, permissionsToBeGrantedBitMap)
                                 }
                             }
                             // or reject it
-                            .setNegativeButton(R.string.no) { dialog, which ->
+                            .setNegativeButton(R.string.no) { _, _ ->
                                 ContactsManager.getInstance().setIsContactBookAccessAllowed(false)
                                 if (fragment != null) {
-                                    fragment.requestPermissions(fPermissionsArrayToBeGranted, aPermissionsToBeGrantedBitMap)
+                                    fragment.requestPermissions(fPermissionsArrayToBeGranted, permissionsToBeGrantedBitMap)
                                 } else {
-                                    ActivityCompat.requestPermissions(aCallingActivity, fPermissionsArrayToBeGranted, aPermissionsToBeGrantedBitMap)
+                                    ActivityCompat.requestPermissions(activity, fPermissionsArrayToBeGranted, permissionsToBeGrantedBitMap)
                                 }
                             }
                             .show()
                 } else {
                     if (fragment != null) {
-                        fragment.requestPermissions(fPermissionsArrayToBeGranted, aPermissionsToBeGrantedBitMap)
+                        fragment.requestPermissions(fPermissionsArrayToBeGranted, permissionsToBeGrantedBitMap)
                     } else {
-                        ActivityCompat.requestPermissions(aCallingActivity, fPermissionsArrayToBeGranted, aPermissionsToBeGrantedBitMap)
+                        ActivityCompat.requestPermissions(activity, fPermissionsArrayToBeGranted, permissionsToBeGrantedBitMap)
                     }
                 }
             } else {
@@ -291,55 +291,55 @@ private fun checkPermissions(aPermissionsToBeGrantedBitMap: Int, aCallingActivit
 
 /**
  * Helper method used in [.checkPermissions] to populate the list of the
- * permissions to be granted (aPermissionsListToBeGranted_out) and the list of the permissions already denied (aPermissionAlreadyDeniedList_out).
+ * permissions to be granted (permissionsListToBeGranted_out) and the list of the permissions already denied (permissionAlreadyDeniedList_out).
  *
- * @param aCallingActivity                 calling activity
- * @param aPermissionAlreadyDeniedList_out list to be updated with the permissions already denied by the user
- * @param aPermissionsListToBeGranted_out  list to be updated with the permissions to be granted
- * @param permissionType                   the permission to be checked
+ * @param activity                        calling activity
+ * @param permissionAlreadyDeniedList_out list to be updated with the permissions already denied by the user
+ * @param permissionsListToBeGranted_out  list to be updated with the permissions to be granted
+ * @param permissionType                  the permission to be checked
  * @return true if the permission requires to be granted, false otherwise
  */
-private fun updatePermissionsToBeGranted(aCallingActivity: Activity,
-                                         aPermissionAlreadyDeniedList_out: MutableList<String>,
-                                         aPermissionsListToBeGranted_out: MutableList<String>,
+private fun updatePermissionsToBeGranted(activity: Activity,
+                                         permissionAlreadyDeniedList_out: MutableList<String>,
+                                         permissionsListToBeGranted_out: MutableList<String>,
                                          permissionType: String): Boolean {
     var isRequestPermissionRequested = false
 
     // add permission to be granted
-    aPermissionsListToBeGranted_out.add(permissionType)
+    permissionsListToBeGranted_out.add(permissionType)
 
-    if (PackageManager.PERMISSION_GRANTED != ContextCompat.checkSelfPermission(aCallingActivity.applicationContext, permissionType)) {
+    if (PackageManager.PERMISSION_GRANTED != ContextCompat.checkSelfPermission(activity.applicationContext, permissionType)) {
         isRequestPermissionRequested = true
 
         // add permission to the ones that were already asked to the user
-        if (ActivityCompat.shouldShowRequestPermissionRationale(aCallingActivity, permissionType)) {
-            aPermissionAlreadyDeniedList_out.add(permissionType)
+        if (ActivityCompat.shouldShowRequestPermissionRationale(activity, permissionType)) {
+            permissionAlreadyDeniedList_out.add(permissionType)
         }
     }
     return isRequestPermissionRequested
 }
 
 /**
- * Helper method to process [CommonActivityUtils.REQUEST_CODE_PERMISSION_AUDIO_IP_CALL]
+ * Helper method to process [.REQUEST_CODE_PERMISSION_AUDIO_IP_CALL]
  * on onRequestPermissionsResult() methods.
  *
- * @param aContext      App context
- * @param aPermissions  permissions list
- * @param aGrantResults permissions granted results
+ * @param context      App context
+ * @param permissions  permissions list
+ * @param grantResults permissions granted results
  * @return true if audio IP call is permitted, false otherwise
  */
-fun onPermissionResultAudioIpCall(aContext: Context?, aPermissions: Array<String>, aGrantResults: IntArray): Boolean {
+fun onPermissionResultAudioIpCall(context: Context?, permissions: Array<String>, grantResults: IntArray): Boolean {
     var isPermissionGranted = false
 
     try {
-        if (Manifest.permission.RECORD_AUDIO == aPermissions[0]) {
-            if (PackageManager.PERMISSION_GRANTED == aGrantResults[0]) {
+        if (Manifest.permission.RECORD_AUDIO == permissions[0]) {
+            if (PackageManager.PERMISSION_GRANTED == grantResults[0]) {
                 Log.d(LOG_TAG, "## onPermissionResultAudioIpCall(): RECORD_AUDIO permission granted")
                 isPermissionGranted = true
             } else {
                 Log.d(LOG_TAG, "## onPermissionResultAudioIpCall(): RECORD_AUDIO permission not granted")
-                if (null != aContext)
-                    Toast.makeText(aContext, R.string.permissions_action_not_performed_missing_permissions, Toast.LENGTH_SHORT).show()
+                if (null != context)
+                    Toast.makeText(context, R.string.permissions_action_not_performed_missing_permissions, Toast.LENGTH_SHORT).show()
             }
         }
     } catch (ex: Exception) {
@@ -350,25 +350,25 @@ fun onPermissionResultAudioIpCall(aContext: Context?, aPermissions: Array<String
 }
 
 /**
- * Helper method to process [CommonActivityUtils.REQUEST_CODE_PERMISSION_VIDEO_IP_CALL]
+ * Helper method to process [.REQUEST_CODE_PERMISSION_VIDEO_IP_CALL]
  * on onRequestPermissionsResult() methods.
  * For video IP calls, record audio and camera permissions are both mandatory.
  *
- * @param aContext      App context
- * @param aPermissions  permissions list
- * @param aGrantResults permissions granted results
+ * @param context      App context
+ * @param permissions  permissions list
+ * @param grantResults permissions granted results
  * @return true if video IP call is permitted, false otherwise
  */
-fun onPermissionResultVideoIpCall(aContext: Context?, aPermissions: Array<String>, aGrantResults: IntArray): Boolean {
+fun onPermissionResultVideoIpCall(context: Context?, permissions: Array<String>, grantResults: IntArray): Boolean {
     var isPermissionGranted = false
     var result = 0
 
     try {
-        for (i in aPermissions.indices) {
-            Log.d(LOG_TAG, "## onPermissionResultVideoIpCall(): " + aPermissions[i] + "=" + aGrantResults[i])
+        for (i in permissions.indices) {
+            Log.d(LOG_TAG, "## onPermissionResultVideoIpCall(): " + permissions[i] + "=" + grantResults[i])
 
-            if (Manifest.permission.CAMERA == aPermissions[i]) {
-                if (PackageManager.PERMISSION_GRANTED == aGrantResults[i]) {
+            if (Manifest.permission.CAMERA == permissions[i]) {
+                if (PackageManager.PERMISSION_GRANTED == grantResults[i]) {
                     Log.d(LOG_TAG, "## onPermissionResultVideoIpCall(): CAMERA permission granted")
                     result++
                 } else {
@@ -376,8 +376,8 @@ fun onPermissionResultVideoIpCall(aContext: Context?, aPermissions: Array<String
                 }
             }
 
-            if (Manifest.permission.RECORD_AUDIO == aPermissions[i]) {
-                if (PackageManager.PERMISSION_GRANTED == aGrantResults[i]) {
+            if (Manifest.permission.RECORD_AUDIO == permissions[i]) {
+                if (PackageManager.PERMISSION_GRANTED == grantResults[i]) {
                     Log.d(LOG_TAG, "## onPermissionResultVideoIpCall(): WRITE_EXTERNAL_STORAGE permission granted")
                     result++
                 } else {
@@ -391,8 +391,8 @@ fun onPermissionResultVideoIpCall(aContext: Context?, aPermissions: Array<String
             isPermissionGranted = true
         } else {
             Log.w(LOG_TAG, "## onPermissionResultVideoIpCall(): No permissions granted to IP call (video or audio)")
-            if (null != aContext)
-                Toast.makeText(aContext, R.string.permissions_action_not_performed_missing_permissions, Toast.LENGTH_SHORT).show()
+            if (null != context)
+                Toast.makeText(context, R.string.permissions_action_not_performed_missing_permissions, Toast.LENGTH_SHORT).show()
         }
     } catch (ex: Exception) {
         Log.d(LOG_TAG, "## onPermissionResultVideoIpCall(): Exception MSg=" + ex.message)
