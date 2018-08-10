@@ -69,8 +69,8 @@ import im.vector.util.MatrixSdkExtensionsKt;
 import im.vector.util.VectorUtils;
 import kotlin.Pair;
 
-import static im.vector.util.PermissionsToolsKt.REQUEST_CODE_PERMISSION_AUDIO_IP_CALL;
-import static im.vector.util.PermissionsToolsKt.REQUEST_CODE_PERMISSION_VIDEO_IP_CALL;
+import static im.vector.util.PermissionsToolsKt.PERMISSION_REQUEST_CODE_AUDIO_CALL;
+import static im.vector.util.PermissionsToolsKt.PERMISSION_REQUEST_CODE_VIDEO_CALL;
 import static im.vector.util.PermissionsToolsKt.checkPermissions;
 import static im.vector.util.PermissionsToolsKt.onPermissionResultAudioIpCall;
 import static im.vector.util.PermissionsToolsKt.onPermissionResultVideoIpCall;
@@ -346,27 +346,29 @@ public class VectorMemberDetailsActivity extends MXCActionBarActivity implements
      * @param aIsVideoCall true if video call, false if audio call
      */
     private void startCheckCallPermissions(boolean aIsVideoCall) {
-        int requestCode = REQUEST_CODE_PERMISSION_AUDIO_IP_CALL;
+        final int requestCode;
 
         if (aIsVideoCall) {
-            requestCode = REQUEST_CODE_PERMISSION_VIDEO_IP_CALL;
+            requestCode = PERMISSION_REQUEST_CODE_VIDEO_CALL;
+        } else {
+            requestCode = PERMISSION_REQUEST_CODE_AUDIO_CALL;
         }
 
-        if (checkPermissions(requestCode, this)) {
+        if (checkPermissions(requestCode, this, requestCode)) {
             startCall(aIsVideoCall);
         }
     }
 
     @Override
-    public void onRequestPermissionsResult(int aRequestCode, @NonNull String[] aPermissions, @NonNull int[] aGrantResults) {
-        if (0 == aPermissions.length) {
-            Log.e(LOG_TAG, "## onRequestPermissionsResult(): cancelled " + aRequestCode);
-        } else if (aRequestCode == REQUEST_CODE_PERMISSION_AUDIO_IP_CALL) {
-            if (onPermissionResultAudioIpCall(this, aPermissions, aGrantResults)) {
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        if (0 == permissions.length) {
+            Log.e(LOG_TAG, "## onRequestPermissionsResult(): cancelled " + requestCode);
+        } else if (requestCode == PERMISSION_REQUEST_CODE_AUDIO_CALL) {
+            if (onPermissionResultAudioIpCall(this, permissions, grantResults)) {
                 startCall(false);
             }
-        } else if (aRequestCode == REQUEST_CODE_PERMISSION_VIDEO_IP_CALL) {
-            if (onPermissionResultVideoIpCall(this, aPermissions, aGrantResults)) {
+        } else if (requestCode == PERMISSION_REQUEST_CODE_VIDEO_CALL) {
+            if (onPermissionResultVideoIpCall(this, permissions, grantResults)) {
                 startCall(true);
             }
         }

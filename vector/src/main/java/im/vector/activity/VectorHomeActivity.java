@@ -135,7 +135,8 @@ import im.vector.view.UnreadCounterBadgeView;
 import im.vector.view.VectorPendingCallView;
 import kotlin.Pair;
 
-import static im.vector.util.PermissionsToolsKt.REQUEST_CODE_PERMISSION_HOME_ACTIVITY;
+import static im.vector.util.PermissionsToolsKt.PERMISSIONS_FOR_HOME_ACTIVITY;
+import static im.vector.util.PermissionsToolsKt.PERMISSION_REQUEST_CODE;
 import static im.vector.util.PermissionsToolsKt.checkPermissions;
 
 /**
@@ -591,7 +592,7 @@ public class VectorHomeActivity extends RiotAppCompatActivity implements SearchV
 
         if (!mStorePermissionCheck) {
             mStorePermissionCheck = true;
-            checkPermissions(REQUEST_CODE_PERMISSION_HOME_ACTIVITY, this);
+            checkPermissions(PERMISSIONS_FOR_HOME_ACTIVITY, this, PERMISSION_REQUEST_CODE);
         }
 
         if (null != mMemberIdToOpen) {
@@ -845,14 +846,14 @@ public class VectorHomeActivity extends RiotAppCompatActivity implements SearchV
     }
 
     @Override
-    public void onRequestPermissionsResult(int aRequestCode, @NonNull String[] aPermissions, @NonNull int[] aGrantResults) {
-        super.onRequestPermissionsResult(aRequestCode, aPermissions, aGrantResults);
-        if (0 == aPermissions.length) {
-            Log.e(LOG_TAG, "## onRequestPermissionsResult(): cancelled " + aRequestCode);
-        } else if (aRequestCode == REQUEST_CODE_PERMISSION_HOME_ACTIVITY) {
-            Log.w(LOG_TAG, "## onRequestPermissionsResult(): REQUEST_CODE_PERMISSION_HOME_ACTIVITY");
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        if (0 == permissions.length) {
+            Log.e(LOG_TAG, "## onRequestPermissionsResult(): cancelled " + requestCode);
+        } else if (requestCode == PERMISSION_REQUEST_CODE) {
+            Log.w(LOG_TAG, "## onRequestPermissionsResult(): PERMISSIONS_FOR_HOME_ACTIVITY");
         } else {
-            Log.e(LOG_TAG, "## onRequestPermissionsResult(): unknown RequestCode = " + aRequestCode);
+            Log.e(LOG_TAG, "## onRequestPermissionsResult(): unknown RequestCode = " + requestCode);
         }
     }
 

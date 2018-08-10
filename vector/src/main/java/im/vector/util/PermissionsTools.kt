@@ -39,22 +39,32 @@ private const val LOG_TAG = "PermissionUtils"
 private const val PERMISSIONS_GRANTED = true
 private const val PERMISSIONS_DENIED = !PERMISSIONS_GRANTED
 
+// Permission bit
 private const val PERMISSION_BYPASSED = 0x0
 const val PERMISSION_CAMERA = 0x1
 private const val PERMISSION_WRITE_EXTERNAL_STORAGE = 0x1 shl 1
 private const val PERMISSION_RECORD_AUDIO = 0x1 shl 2
 private const val PERMISSION_READ_CONTACTS = 0x1 shl 3
 
-const val REQUEST_CODE_PERMISSION_AUDIO_IP_CALL = PERMISSION_RECORD_AUDIO
-const val REQUEST_CODE_PERMISSION_VIDEO_IP_CALL = PERMISSION_CAMERA or PERMISSION_RECORD_AUDIO
-const val REQUEST_CODE_PERMISSION_TAKE_PHOTO = PERMISSION_CAMERA or PERMISSION_WRITE_EXTERNAL_STORAGE
-const val REQUEST_CODE_PERMISSION_MEMBERS_SEARCH = PERMISSION_READ_CONTACTS
-const val REQUEST_CODE_PERMISSION_MEMBER_DETAILS = PERMISSION_READ_CONTACTS
-const val REQUEST_CODE_PERMISSION_ROOM_DETAILS = PERMISSION_CAMERA
-const val REQUEST_CODE_PERMISSION_VIDEO_RECORDING = PERMISSION_CAMERA or PERMISSION_RECORD_AUDIO
-const val REQUEST_CODE_PERMISSION_HOME_ACTIVITY = PERMISSION_WRITE_EXTERNAL_STORAGE
+// Permissions sets
+const val PERMISSIONS_FOR_AUDIO_IP_CALL = PERMISSION_RECORD_AUDIO
+const val PERMISSIONS_FOR_VIDEO_IP_CALL = PERMISSION_CAMERA or PERMISSION_RECORD_AUDIO
+const val PERMISSIONS_FOR_TAKING_PHOTO = PERMISSION_CAMERA or PERMISSION_WRITE_EXTERNAL_STORAGE
+const val PERMISSIONS_FOR_MEMBERS_SEARCH = PERMISSION_READ_CONTACTS
+const val PERMISSIONS_FOR_MEMBER_DETAILS = PERMISSION_READ_CONTACTS
+const val PERMISSIONS_FOR_ROOM_DETAILS = PERMISSION_CAMERA
+const val PERMISSIONS_FOR_VIDEO_RECORDING = PERMISSION_CAMERA or PERMISSION_RECORD_AUDIO
+const val PERMISSIONS_FOR_HOME_ACTIVITY = PERMISSION_WRITE_EXTERNAL_STORAGE
 
-private const val REQUEST_CODE_PERMISSION_BY_PASS = PERMISSION_BYPASSED
+private const val PERMISSIONS_EMPTY = PERMISSION_BYPASSED
+
+// Request code to ask permission to the system (arbitrary values)
+const val PERMISSION_REQUEST_CODE = 567
+const val PERMISSION_REQUEST_CODE_LAUNCH_CAMERA = 568
+const val PERMISSION_REQUEST_CODE_LAUNCH_NATIVE_CAMERA = 569
+const val PERMISSION_REQUEST_CODE_LAUNCH_NATIVE_VIDEO_CAMERA = 570
+const val PERMISSION_REQUEST_CODE_AUDIO_CALL = 571
+const val PERMISSION_REQUEST_CODE_VIDEO_CALL = 572
 
 /**
  * Log the used permissions statuses.
@@ -87,8 +97,10 @@ fun logPermissionStatuses(context: Context) {
  * @param activity
  * @return true if the permissions are granted (synchronous flow), false otherwise (asynchronous flow)
  */
-fun checkPermissions(permissionsToBeGrantedBitMap: Int, activity: Activity): Boolean {
-    return checkPermissions(permissionsToBeGrantedBitMap, activity, null)
+fun checkPermissions(permissionsToBeGrantedBitMap: Int,
+                     activity: Activity,
+                     requestCode: Int = PERMISSION_REQUEST_CODE): Boolean {
+    return checkPermissions(permissionsToBeGrantedBitMap, activity, null, requestCode)
 }
 
 /**
@@ -97,8 +109,10 @@ fun checkPermissions(permissionsToBeGrantedBitMap: Int, activity: Activity): Boo
  * @param permissionsToBeGrantedBitMap
  * @param fragment
  */
-fun checkPermissions(permissionsToBeGrantedBitMap: Int, fragment: Fragment) {
-    checkPermissions(permissionsToBeGrantedBitMap, fragment.activity, fragment)
+fun checkPermissions(permissionsToBeGrantedBitMap: Int,
+                     fragment: Fragment,
+                     requestCode: Int = PERMISSION_REQUEST_CODE) {
+    checkPermissions(permissionsToBeGrantedBitMap, fragment.activity, fragment, requestCode)
 }
 
 /**
@@ -107,7 +121,7 @@ fun checkPermissions(permissionsToBeGrantedBitMap: Int, fragment: Fragment) {
  * is provided in onRequestPermissionsResult(). In this case checkPermissions()
  * returns false.
  * <br></br>If checkPermissions() returns true, the permissions were already granted.
- * The permissions to be granted are given as bit map in permissionsToBeGrantedBitMap (ex: [.REQUEST_CODE_PERMISSION_TAKE_PHOTO]).
+ * The permissions to be granted are given as bit map in permissionsToBeGrantedBitMap (ex: [.PERMISSIONS_FOR_TAKING_PHOTO]).
  * <br></br>permissionsToBeGrantedBitMap is passed as the request code in onRequestPermissionsResult().
  *
  *
@@ -119,22 +133,25 @@ fun checkPermissions(permissionsToBeGrantedBitMap: Int, fragment: Fragment) {
  * @param fragment                     the calling fragment that is requesting the permissions
  * @return true if the permissions are granted (synchronous flow), false otherwise (asynchronous flow)
  */
-private fun checkPermissions(permissionsToBeGrantedBitMap: Int, activity: Activity?, fragment: Fragment?): Boolean {
+private fun checkPermissions(permissionsToBeGrantedBitMap: Int,
+                             activity: Activity?,
+                             fragment: Fragment?,
+                             requestCode: Int): Boolean {
     var isPermissionGranted = false
 
     // sanity check
     if (null == activity) {
         Log.w(LOG_TAG, "## checkPermissions(): invalid input data")
         isPermissionGranted = false
-    } else if (REQUEST_CODE_PERMISSION_BY_PASS == permissionsToBeGrantedBitMap) {
+    } else if (PERMISSIONS_EMPTY == permissionsToBeGrantedBitMap) {
         isPermissionGranted = true
-    } else if (REQUEST_CODE_PERMISSION_TAKE_PHOTO != permissionsToBeGrantedBitMap
-            && REQUEST_CODE_PERMISSION_AUDIO_IP_CALL != permissionsToBeGrantedBitMap
-            && REQUEST_CODE_PERMISSION_VIDEO_IP_CALL != permissionsToBeGrantedBitMap
-            && REQUEST_CODE_PERMISSION_MEMBERS_SEARCH != permissionsToBeGrantedBitMap
-            && REQUEST_CODE_PERMISSION_HOME_ACTIVITY != permissionsToBeGrantedBitMap
-            && REQUEST_CODE_PERMISSION_MEMBER_DETAILS != permissionsToBeGrantedBitMap
-            && REQUEST_CODE_PERMISSION_ROOM_DETAILS != permissionsToBeGrantedBitMap) {
+    } else if (PERMISSIONS_FOR_TAKING_PHOTO != permissionsToBeGrantedBitMap
+            && PERMISSIONS_FOR_AUDIO_IP_CALL != permissionsToBeGrantedBitMap
+            && PERMISSIONS_FOR_VIDEO_IP_CALL != permissionsToBeGrantedBitMap
+            && PERMISSIONS_FOR_MEMBERS_SEARCH != permissionsToBeGrantedBitMap
+            && PERMISSIONS_FOR_HOME_ACTIVITY != permissionsToBeGrantedBitMap
+            && PERMISSIONS_FOR_MEMBER_DETAILS != permissionsToBeGrantedBitMap
+            && PERMISSIONS_FOR_ROOM_DETAILS != permissionsToBeGrantedBitMap) {
         Log.w(LOG_TAG, "## checkPermissions(): permissions to be granted are not supported")
         isPermissionGranted = false
     } else {
@@ -181,7 +198,7 @@ private fun checkPermissions(permissionsToBeGrantedBitMap: Int, activity: Activi
 
         // if some permissions were already denied: display a dialog to the user before asking again..
         if (!permissionListAlreadyDenied.isEmpty()) {
-            if (permissionsToBeGrantedBitMap == REQUEST_CODE_PERMISSION_VIDEO_IP_CALL || permissionsToBeGrantedBitMap == REQUEST_CODE_PERMISSION_AUDIO_IP_CALL) {
+            if (permissionsToBeGrantedBitMap == PERMISSIONS_FOR_VIDEO_IP_CALL || permissionsToBeGrantedBitMap == PERMISSIONS_FOR_AUDIO_IP_CALL) {
                 // Permission request for VOIP call
                 if (permissionListAlreadyDenied.contains(Manifest.permission.CAMERA) && permissionListAlreadyDenied.contains(Manifest.permission.RECORD_AUDIO)) {
                     // Both missing
@@ -230,11 +247,11 @@ private fun checkPermissions(permissionsToBeGrantedBitMap: Int, activity: Activi
                     .setOnCancelListener { Toast.makeText(activity, R.string.missing_permissions_warning, Toast.LENGTH_SHORT).show() }
                     .setPositiveButton(R.string.ok) { _, _ ->
                         if (!finalPermissionsListToBeGranted.isEmpty()) {
-                            fragment?.requestPermissions(finalPermissionsListToBeGranted.toTypedArray(), permissionsToBeGrantedBitMap)
+                            fragment?.requestPermissions(finalPermissionsListToBeGranted.toTypedArray(), requestCode)
                                     ?: run {
                                         ActivityCompat.requestPermissions(activity,
                                                 finalPermissionsListToBeGranted.toTypedArray(),
-                                                permissionsToBeGrantedBitMap)
+                                                requestCode)
                                     }
                         }
                     }
@@ -254,24 +271,24 @@ private fun checkPermissions(permissionsToBeGrantedBitMap: Int, activity: Activi
                             // gives the contacts book access
                             .setPositiveButton(R.string.yes) { _, _ ->
                                 ContactsManager.getInstance().setIsContactBookAccessAllowed(true)
-                                fragment?.requestPermissions(fPermissionsArrayToBeGranted, permissionsToBeGrantedBitMap)
+                                fragment?.requestPermissions(fPermissionsArrayToBeGranted, requestCode)
                                         ?: run {
-                                            ActivityCompat.requestPermissions(activity, fPermissionsArrayToBeGranted, permissionsToBeGrantedBitMap)
+                                            ActivityCompat.requestPermissions(activity, fPermissionsArrayToBeGranted, requestCode)
                                         }
                             }
                             // or reject it
                             .setNegativeButton(R.string.no) { _, _ ->
                                 ContactsManager.getInstance().setIsContactBookAccessAllowed(false)
-                                fragment?.requestPermissions(fPermissionsArrayToBeGranted, permissionsToBeGrantedBitMap)
+                                fragment?.requestPermissions(fPermissionsArrayToBeGranted, requestCode)
                                         ?: run {
-                                            ActivityCompat.requestPermissions(activity, fPermissionsArrayToBeGranted, permissionsToBeGrantedBitMap)
+                                            ActivityCompat.requestPermissions(activity, fPermissionsArrayToBeGranted, requestCode)
                                         }
                             }
                             .show()
                 } else {
-                    fragment?.requestPermissions(fPermissionsArrayToBeGranted, permissionsToBeGrantedBitMap)
+                    fragment?.requestPermissions(fPermissionsArrayToBeGranted, requestCode)
                             ?: run {
-                                ActivityCompat.requestPermissions(activity, fPermissionsArrayToBeGranted, permissionsToBeGrantedBitMap)
+                                ActivityCompat.requestPermissions(activity, fPermissionsArrayToBeGranted, requestCode)
                             }
                 }
             } else {
@@ -315,7 +332,7 @@ private fun updatePermissionsToBeGranted(activity: Activity,
 }
 
 /**
- * Helper method to process [.REQUEST_CODE_PERMISSION_AUDIO_IP_CALL]
+ * Helper method to process [.PERMISSIONS_FOR_AUDIO_IP_CALL]
  * on onRequestPermissionsResult() methods.
  *
  * @param context      App context
@@ -345,7 +362,7 @@ fun onPermissionResultAudioIpCall(context: Context, permissions: Array<String>, 
 }
 
 /**
- * Helper method to process [.REQUEST_CODE_PERMISSION_VIDEO_IP_CALL]
+ * Helper method to process [.PERMISSIONS_FOR_VIDEO_IP_CALL]
  * on onRequestPermissionsResult() methods.
  * For video IP calls, record audio and camera permissions are both mandatory.
  *

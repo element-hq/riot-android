@@ -1203,7 +1203,7 @@ class VectorSettingsPreferencesFragment : PreferenceFragment(), SharedPreference
      */
     private fun onUpdateAvatarClick() {
         activity.runOnUiThread {
-            if (checkPermissions(REQUEST_CODE_PERMISSION_TAKE_PHOTO, activity)) {
+            if (checkPermissions(PERMISSIONS_FOR_TAKING_PHOTO, activity)) {
                 val intent = Intent(activity, VectorMediasPickerActivity::class.java)
                 intent.putExtra(VectorMediasPickerActivity.EXTRA_AVATAR_MODE, true)
                 startActivityForResult(intent, VectorUtils.TAKE_IMAGE)

@@ -37,7 +37,7 @@ import im.vector.fragments.VectorSearchPeopleListFragment;
 import im.vector.fragments.VectorSearchRoomsFilesListFragment;
 import im.vector.fragments.VectorSearchRoomsListFragment;
 
-import static im.vector.util.PermissionsToolsKt.REQUEST_CODE_PERMISSION_MEMBERS_SEARCH;
+import static im.vector.util.PermissionsToolsKt.PERMISSIONS_FOR_MEMBERS_SEARCH;
 
 /**
  * Unified search pager adapter
@@ -232,7 +232,7 @@ public class VectorUnifiedSearchFragmentPagerAdapter extends FragmentPagerAdapte
             int titleId = pair == null ? -1 : pair.first;
 
             if (titleId == R.string.tab_title_search_people) {
-                return REQUEST_CODE_PERMISSION_MEMBERS_SEARCH;
+                return PERMISSIONS_FOR_MEMBERS_SEARCH;
             }
         }
 
