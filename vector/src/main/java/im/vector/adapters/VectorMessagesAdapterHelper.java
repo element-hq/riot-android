@@ -1220,7 +1220,7 @@ class VectorMessagesAdapterHelper {
             String displayKey = url + "<----->" + id;
 
             if (!this.mSession.isURLPreviewEnabled()) {
-                if(!mUrlsPreviews.containsKey(downloadKey)) {
+                if (!mUrlsPreviews.containsKey(downloadKey)) {
                     mUrlsPreviews.put(downloadKey, null);
                     mAdapter.notifyDataSetChanged();
                 }
