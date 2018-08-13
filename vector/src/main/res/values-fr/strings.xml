@@ -36,7 +36,6 @@
     <string name="device_information">Informations sur l\'appareil</string>
     <string name="room_no_conference_call_in_encrypted_rooms">Les téléconférences ne sont pas prises en charge dans les salons chiffrés</string>
     <string name="or">ou</string>
-    <string name="and">et</string>
     <string name="invite">Inviter</string>
 
     <string name="action_sign_out">Se déconnecter</string>
@@ -100,8 +99,6 @@ Cliquez sur exporter pour les sauvegarder avant de vous déconnecter.</string>
     <string name="logout">Se déconnecter</string>
     <string name="hs_url">URL du serveur d\'accueil</string>
     <string name="identity_url">URL du serveur d\'identité</string>
-    <string name="user">utilisateur</string>
-    <string name="users">participants</string>
     <string name="search">Rechercher</string>
 
     <string name="start_new_chat">Nouvelle discussion</string>
@@ -193,18 +190,12 @@ Cliquez sur exporter pour les sauvegarder avant de vous déconnecter.</string>
     <string name="room_creation_add_member">Ajouter un membre</string>
     <string name="room_title_one_member">1 membre</string>
     <string name="room_e2e_alert_title">Attention !</string>
-    <string name="format_time_s">s</string>
-    <string name="format_time_m">m</string>
-    <string name="format_time_h">h</string>
-    <string name="format_time_d">j</string>
 
     <string name="room_participants_leave_prompt_title">Quitter le salon</string>
     <string name="room_participants_create">Créer</string>
 
     <string name="room_participants_online">En ligne</string>
     <string name="room_participants_offline">Hors ligne</string>
-    <string name="room_participants_now">maintenant</string>
-    <string name="room_participants_ago">de là</string>
 
     <string name="room_participants_header_admin_tools">OUTILS DE L\'ADMINISTRATEUR</string>
     <string name="room_participants_header_call">APPEL</string>
@@ -245,7 +236,6 @@ Cliquez sur exporter pour les sauvegarder avant de vous déconnecter.</string>
     <string name="room_details_people">Participants</string>
     <string name="room_details_files">Fichiers</string>
     <string name="room_details_settings">Paramètres</string>
-    <string name="room_details_selected">choisi</string>
     <string name="room_details_people_invited_group_name">INVITÉS</string>
     <string name="room_details_people_present_group_name">MEMBRES</string>
 
@@ -586,8 +576,6 @@ Veuillez noter que cette action redémarrera l\'application et pourra prendre un
     <string name="room_displayname_two_members">%1$s et %2$s</string>
     <string name="room_recents_join_room_prompt">Saisissez un identifiant ou un alias de salon</string>
 
-    <string name="directory_search_room">%1$d salon</string>
-    <string name="directory_search_room_for">%1$d salon trouvé pour %2$s</string>
     <string name="settings_turn_screen_on">Allumer l\'écran pendant 3 secondes</string>
 
     <string name="settings_invited_to_room">Quand je suis invité sur un salon</string>
@@ -838,11 +826,6 @@ Appareils inconnus :</string>
     <string name="filter_group_members">Filtrer les membres du groupe</string>
     <string name="filter_group_rooms">Filtrer les salons du groupe</string>
 
-    <string name="group_one_member">Un membre</string>
-    <string name="group_members">%d membres</string>
-
-    <string name="group_one_room">Un salon</string>
-    <string name="group_rooms">%d salons</string>
     <string name="group_no_long_description">L\'administrateur de cette communauté n\'a pas encore fourni de description.</string>
 
     <string name="has_been_kicked">%2$s vous a exclu de %1$s</string>

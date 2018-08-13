@@ -52,7 +52,6 @@
     <string name="room_no_conference_call_in_encrypted_rooms">不支援在加密聊天室的會議通話</string>
     <string name="send_anyway">無論如何都要傳送</string>
     <string name="or">或</string>
-    <string name="and">和</string>
     <string name="invite">邀請</string>
     <string name="offline">離線</string>
 
@@ -103,8 +102,8 @@
     <string name="no_room_placeholder">沒有聊天室</string>
     <string name="no_public_room_placeholder">沒有公開的聊天室</string>
     <plurals name="public_room_nb_users">
-	<item quantity="other">%d 個使用者</item>
-</plurals>
+        <item quantity="other">%d 個使用者</item>
+    </plurals>
 
     <string name="groups_invite_header">邀請</string>
     <string name="groups_header">社群</string>
@@ -135,8 +134,6 @@
     <string name="logout">登出</string>
     <string name="hs_url">家伺服器網址</string>
     <string name="identity_url">身份識別伺服器網址</string>
-    <string name="user">使用者</string>
-    <string name="users">使用者</string>
     <string name="search">搜尋</string>
 
     <string name="start_new_chat">開始新聊天</string>
@@ -333,11 +330,6 @@
 
 尚未啓用加密的客戶端上將無法顯示加密消息。</string>
 
-    <string name="format_time_s">秒</string>
-    <string name="format_time_m">分</string>
-    <string name="format_time_h">小時</string>
-    <string name="format_time_d">天</string>
-
     <string name="room_participants_leave_prompt_title">離開聊天室</string>
     <string name="room_participants_leave_prompt_msg">您確定想要離開聊天室？</string>
     <string name="room_participants_remove_prompt_msg">你確定想從此聊天室移除 %s？</string>
@@ -346,8 +338,6 @@
     <string name="room_participants_online">線上</string>
     <string name="room_participants_offline">離線</string>
     <string name="room_participants_idle">閒置</string>
-    <string name="room_participants_now">現在</string>
-    <string name="room_participants_ago">之前</string>
 
     <string name="room_participants_header_admin_tools">管理者工具</string>
     <string name="room_participants_header_call">通話</string>
@@ -448,7 +438,6 @@
     <string name="room_details_people">成員</string>
     <string name="room_details_files">檔案</string>
     <string name="room_details_settings">設定</string>
-    <string name="room_details_selected">已選定</string>
     <string name="malformed_id">ID 格式不正確。它應該是電子郵件地址或 Matrix ID，如 ‘@localpart:domain’</string>
     <string name="room_details_people_invited_group_name">已邀請</string>
     <string name="room_details_people_present_group_name">已加入</string>
@@ -492,11 +481,9 @@
     <string name="room_recents_join_room_prompt">輸入聊天室 ID 或聊天室別名</string>
 
     <string name="directory_search_results_title">瀏覽目錄</string>
-    <string name="directory_search_room">%1$d 個聊天室</string>
     <plurals name="directory_search_rooms">
 	<item quantity="other">%1$d 個聊天室</item>
 </plurals>
-    <string name="directory_search_room_for">有 %1$d 個聊天室匹配 “%2$s”</string>
     <plurals name="directory_search_rooms_for">
 	<item quantity="other">有 %1$d 個聊天室匹配 “%2$s”</item>
 </plurals>
@@ -918,11 +905,6 @@
     <string name="filter_group_members">篩選社群成員</string>
     <string name="filter_group_rooms">篩選社群聊天室</string>
 
-    <string name="group_one_member">1 位成員</string>
-    <string name="group_members">%d 位成員</string>
-
-    <string name="group_one_room">1 個聊天室</string>
-    <string name="group_rooms">%d 个聊天室</string>
     <string name="group_no_long_description">社群管理員未提供此社群的具體描述。</string>
 
     <string name="has_been_kicked">您已被 %2$s 從 %1$s 踢出</string>

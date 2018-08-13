@@ -20,7 +20,6 @@
     <string name="ongoing_conference_call_voice">suara</string>
     <string name="device_information">Informasi Perangkat</string>
     <string name="or">atau</string>
-    <string name="and">dan</string>
     <string name="invite">Undang</string>
     <string name="action_voice_call">Panggilan Suara</string>
     <string name="action_video_call">Panggilan Video</string>
@@ -106,8 +105,6 @@
     <string name="auth_register">Registrasi</string>
     <string name="start_video_call">Mulai Panggilan Video</string>
 
-    <string name="users">pengguna</string>
-    <string name="user">pengguna</string>
     <string name="option_send_files">Kirim file</string>
     <string name="auth_invalid_password">Password terlalu pendek (min 6)</string>
     <string name="auth_email_already_defined">Alamat email ini sudah terdefinisi.</string>
@@ -187,8 +184,8 @@ Lakukan export agar tercadangkan sebelum Anda keluar.</string>
     <string name="no_conversation_placeholder">Belum ada percakapan</string>
     <string name="no_room_placeholder">Belum ada ruang</string>
     <plurals name="public_room_nb_users">
-	<item quantity="other">%d pengguna</item>
-</plurals>
+        <item quantity="other">%d pengguna</item>
+    </plurals>
 
     <string name="send_bug_report_include_screenshot">Kirim tampilan layar</string>
     <string name="send_bug_report_description">Mohon uraikan bug tersebut. Apa yang Anda lakukan? Apa yang Anda harapkan terjadi? Apa yang sebenarnya terjadi?</string>

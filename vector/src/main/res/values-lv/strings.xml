@@ -41,7 +41,6 @@
     <string name="room_no_conference_call_in_encrypted_rooms">Konferences zvani netiek atbalstīti šifrētās istabās</string>
     <string name="send_anyway">Nosūtīt jebkurā gadījumā</string>
     <string name="or">vai</string>
-    <string name="and">un</string>
     <string name="invite">Uzaicināt</string>
 
     <string name="action_sign_out">Izrakstīties</string>
@@ -85,10 +84,10 @@
     <string name="no_room_placeholder">Nav istabu</string>
     <string name="no_public_room_placeholder">Nav pieejamu publisko istabu</string>
     <plurals name="public_room_nb_users">
-	<item quantity="zero">%d lietotājs</item>
-	<item quantity="one">%d lietotāji</item>
-	<item quantity="other">%d lietotāji</item>
-</plurals>
+        <item quantity="zero">%d lietotājs</item>
+        <item quantity="one">%d lietotāji</item>
+        <item quantity="other">%d lietotāji</item>
+    </plurals>
 
     <string name="send_bug_report_include_logs">Nosūtīt logfailus</string>
     <string name="send_bug_report_include_crash_logs">Nosūtīt sistēmas avārijas logfailus</string>
@@ -114,8 +113,6 @@
     <string name="logout">Izrakstīties</string>
     <string name="hs_url">Bāzes servera URL adrese</string>
     <string name="identity_url">Identitifikācijas servera URL adrese</string>
-    <string name="user">lietotājs</string>
-    <string name="users">lietotāji</string>
     <string name="search">Meklēt</string>
 
     <string name="start_new_chat">Sākt jaunu čatu</string>
@@ -329,11 +326,6 @@ Ierīces nevarēs atšifrēt čata saraksti, kura notikusi, pirms tās pievienot
 
 Šifrētās ziņas nebūs redzamas Riot klientos, kuros nav iedzīvināta šī iespēja.</string>
 
-    <string name="format_time_s">s</string>
-    <string name="format_time_m">m</string>
-    <string name="format_time_h">h</string>
-    <string name="format_time_d">d</string>
-
     <string name="room_participants_leave_prompt_title">Atstāt istabu</string>
     <string name="room_participants_leave_prompt_msg">Vai tiešām vēlies atstāt istabu?</string>
     <string name="room_participants_remove_prompt_msg">Vai tiešām vēlies dzēst (izmest) %s no šī čata?</string>
@@ -342,8 +334,6 @@ Ierīces nevarēs atšifrēt čata saraksti, kura notikusi, pirms tās pievienot
     <string name="room_participants_online">Tiešsaistē</string>
     <string name="room_participants_offline">Nesaistē</string>
     <string name="room_participants_idle">Dīkstāvē</string>
-    <string name="room_participants_now">tagad</string>
-    <string name="room_participants_ago">atpakaļ</string>
 
     <string name="room_participants_header_admin_tools">ADMIN rīki</string>
     <string name="room_participants_header_call">ZVANS</string>
@@ -413,7 +403,6 @@ Vai vēlies turpināt?</string>
     <string name="room_details_people">Cilvēki</string>
     <string name="room_details_files">Faili</string>
     <string name="room_details_settings">Iestatījumi</string>
-    <string name="room_details_selected">izvēlēti</string>
     <string name="malformed_id">Nekorekts ID. Izmantojiet epastu vai Matrix ID formā: \'@localpart:domain\'</string>
     <string name="room_details_people_invited_group_name">UZAICINĀTI</string>
     <string name="room_details_people_present_group_name">PIEVIENOJUŠIES</string>
@@ -449,8 +438,6 @@ Vai vēlies turpināt?</string>
     <string name="room_recents_join_room_prompt">Ievadiet istabas ID vai aliasi</string>
 
     <string name="directory_search_results_title">Skatīt katalogu</string>
-    <string name="directory_search_room">%1$d istaba</string>
-    <string name="directory_search_room_for">%1$d istaba atrasta priekš %2$s</string>
     <string name="directory_searching_title">Meklēju katalogā...</string>
 
     <string name="room_settings_all_messages_noisy">Visas ziņas (ar skaņu)</string>
@@ -895,11 +882,6 @@ Nepazīstamas ierīces:</string>
     <string name="filter_group_members">Grupas biedru filtrs</string>
     <string name="filter_group_rooms">Grupas istabu filtrs</string>
 
-    <string name="group_one_member">1 biedrs</string>
-    <string name="group_members">%d biedri</string>
-
-    <string name="group_one_room">1 istaba</string>
-    <string name="group_rooms">%d istabas</string>
     <string name="group_no_long_description">Kopienas admins nav izveidojis šīs kopienas garo aprakstu.</string>
 
     <string name="has_been_kicked">Tevi no %1$s padzina %2$s</string>

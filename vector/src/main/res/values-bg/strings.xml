@@ -15,11 +15,6 @@
     <string name="title_activity_settings">Настройки</string>
     <string name="ssl_fingerprint_example">00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00</string>
 
-    <string name="format_time_s">сек</string>
-    <string name="format_time_m">мин</string>
-    <string name="format_time_h">ч</string>
-    <string name="format_time_d">д</string>
-
     <string name="compression_options">"Изпратете с размер "</string>
     <string name="compression_opt_list_original">Оригинален</string>
     <string name="compression_opt_list_large">Голям</string>
@@ -67,8 +62,6 @@
     <string name="room_participants_online">Онлайн</string>
     <string name="room_participants_offline">Офлайн</string>
     <string name="room_participants_idle">Неактивен</string>
-    <string name="room_participants_now">сега</string>
-    <string name="room_participants_ago">по-рано</string>
 
     <string name="room_participants_header_admin_tools">ИНСТРУМЕНТИ НА АДМИНИСТРАТОРА</string>
     <string name="room_participants_header_direct_chats">ДИРЕКТНИ ЧАТОВЕ</string>
@@ -127,7 +120,6 @@
     <string name="room_no_conference_call_in_encrypted_rooms">Групови разговори не се поддържат в шифровани стаи</string>
     <string name="send_anyway">Изпрати въпреки това</string>
     <string name="or">или</string>
-    <string name="and">и</string>
     <string name="invite">Покани</string>
     <string name="offline">Офлайн</string>
 
@@ -177,9 +169,9 @@
     <string name="no_room_placeholder">Няма стаи</string>
     <string name="no_public_room_placeholder">Няма налични публични стаи</string>
     <plurals name="public_room_nb_users">
-	<item quantity="one">1 потребител</item>
-	<item quantity="other">%d потребители</item>
-</plurals>
+        <item quantity="one">1 потребител</item>
+        <item quantity="other">%d потребители</item>
+    </plurals>
 
     <string name="groups_invite_header">Покани</string>
     <string name="groups_header">Общности</string>
@@ -207,8 +199,6 @@
     <string name="logout">Изход</string>
     <string name="hs_url">URL на Home сървър</string>
     <string name="identity_url">URL на сървър за самоличност</string>
-    <string name="user">потребител</string>
-    <string name="users">потребители</string>
     <string name="search">Търсене</string>
 
     <string name="start_new_chat">Започни нов чат</string>
@@ -372,7 +362,6 @@
     <string name="room_details_people">Хора</string>
     <string name="room_details_files">Файлове</string>
     <string name="room_details_settings">Настройки</string>
-    <string name="room_details_selected">избран</string>
     <string name="malformed_id">Грешно формиранo ID. Трябва да бъде имейл адрес или Matrix ID, например \'@localpart:domain\'</string>
     <string name="room_details_people_invited_group_name">ПОКАНЕНИ</string>
     <string name="room_event_action_report_prompt_reason">Причина за докладване на това съдържание</string>
@@ -415,12 +404,10 @@
     <string name="room_recents_join_room_prompt">Напишете ID или псевдоним на стая</string>
 
     <string name="directory_search_results_title">Прегледай директорията</string>
-    <string name="directory_search_room">%1$d стая</string>
     <plurals name="directory_search_rooms">
 	<item quantity="one">1 стая</item>
 	<item quantity="other">%d стаи</item>
 </plurals>
-    <string name="directory_search_room_for">%1$d стаи намерени за %2$s</string>
     <plurals name="directory_search_rooms_for">
 	<item quantity="one">%1$s стая намерена за %2$s</item>
 	<item quantity="other">%1$s стаи намерени за %2$s</item>
@@ -885,11 +872,6 @@
     <string name="filter_group_members">Филтриране на членовете</string>
     <string name="filter_group_rooms">Филтриране на стаите</string>
 
-    <string name="group_one_member">1 член</string>
-    <string name="group_members">%d членове</string>
-
-    <string name="group_one_room">1 стая</string>
-    <string name="group_rooms">%d стаи</string>
     <string name="group_no_long_description">Администраторът на общността не е предоставил дълго описание за тази общност.</string>
 
     <string name="has_been_kicked">Бяхте изгонен от %1$s от %2$s</string>

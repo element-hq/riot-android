@@ -57,7 +57,6 @@
     <string name="room_no_conference_call_in_encrypted_rooms">No es poden fer conferències en sales encriptades</string>
     <string name="send_anyway">Envia igualment</string>
     <string name="or">o</string>
-    <string name="and">i</string>
     <string name="invite">Convida</string>
     <string name="offline">Fora de línia</string>
 
@@ -144,8 +143,6 @@
     <string name="logout">Surt</string>
     <string name="hs_url">URL del servidor</string>
     <string name="identity_url">URL de la identitat del servidor</string>
-    <string name="user">usuari</string>
-    <string name="users">usuaris</string>
     <string name="search">Cerca</string>
 
     <string name="start_new_chat">Inicia un xat nou</string>
@@ -320,12 +317,6 @@
     <string name="room_e2e_alert_title">Avís</string>
     <string name="room_e2e_alert_message">El xifrat d\'extrem a extrem està en beta i no és del tot fiable.\n\nNo s\'hi ha de confiar per a dades segures.\n\nEls dispositius encara no poden desxifrar l\'històric de tot allò que ha passat abans d\'unir-te a una sala.\n\nEls missatges xifrats no són visibles per aquells clients que no implementen xifratge.</string>
 
-    <!--  Time -->
-    <string name="format_time_s">s</string>
-    <string name="format_time_m">m</string>
-    <string name="format_time_h">h</string>
-    <string name="format_time_d">d</string>
-
     <!--  Chat participants -->
     <string name="room_participants_leave_prompt_title">Surt de la sala</string>
     <string name="room_participants_leave_prompt_msg">Esteu segur que voleu sortir de la sala?</string>
@@ -335,8 +326,6 @@
     <string name="room_participants_online">En línia</string>
     <string name="room_participants_offline">Fora de línia</string>
     <string name="room_participants_idle">Inactiu</string>
-    <string name="room_participants_now">ara</string>
-    <string name="room_participants_ago">fa</string>
 
     <string name="room_participants_header_admin_tools">EINES D\'ADMINISTRACIÓ</string>
     <string name="room_participants_header_call">TRUCADA</string>
@@ -409,7 +398,6 @@
     <string name="room_details_people">Participants</string>
     <string name="room_details_files">Fitxers</string>
     <string name="room_details_settings">Configuració</string>
-    <string name="room_details_selected">seleccionat</string>
     <string name="malformed_id">L\'ID és incorrecte. Ha de ser una adreça de correu electrònic o un identificador de Matrix com \'@partlocal:domini\'</string>
     <string name="room_details_people_invited_group_name">CONVIDATS</string>
     <string name="room_details_people_present_group_name">S\'HAN UNIT</string>
@@ -450,8 +438,6 @@
 
     <!-- Directory -->
     <string name="directory_search_results_title">Navega pel directpri</string>
-    <string name="directory_search_room">%1$d sala</string>
-    <string name="directory_search_room_for">%1$d sala trobada per %2$s</string>
     <string name="directory_searching_title">Cercant al directori..</string>
 
     <!-- home room settings -->
@@ -831,11 +817,6 @@
     <string name="filter_group_members">Filtre de participants de grups</string>
     <string name="filter_group_rooms">Filte de grups de sales</string>
 
-    <string name="group_one_member">1 membre</string>
-    <string name="group_members">%d membres</string>
-
-    <string name="group_one_room">Una sala</string>
-    <string name="group_rooms">%d sales</string>
     <string name="group_no_long_description">L\'administrador de la comunitat no ha fet una descripció llarga per aquesta comunitat.</string>
 
     <string name="has_been_kicked">%2$s l\'ha fet fora de la sala %1$s</string>

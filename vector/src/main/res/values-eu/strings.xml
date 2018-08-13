@@ -39,7 +39,6 @@
     <string name="room_no_conference_call_in_encrypted_rooms">Konferentzia deiak ez daude onartuta zifratutako geletan</string>
     <string name="send_anyway">Bidali hala ere</string>
     <string name="or">edo</string>
-    <string name="and">eta</string>
     <string name="invite">Gonbidatu</string>
 
     <string name="action_sign_out">Amaitu saioa</string>
@@ -84,9 +83,9 @@ Hautatu esportatu babes-kopia bat egiteko saioa amaitu aurretik.</string>
     <string name="no_room_placeholder">Gelarik ez</string>
     <string name="no_public_room_placeholder">Ez dago gela publikorik eskuragarri</string>
     <plurals name="public_room_nb_users">
-	<item quantity="one">Erabiltzaile 1</item>
-	<item quantity="other">%d erabiltzaile</item>
-</plurals>
+        <item quantity="one">Erabiltzaile 1</item>
+        <item quantity="other">%d erabiltzaile</item>
+    </plurals>
 
     <string name="send_bug_report_include_logs">Bidali egunkariak</string>
     <string name="send_bug_report_include_crash_logs">Bidali kraskatze egunkariak</string>
@@ -112,8 +111,6 @@ Hautatu esportatu babes-kopia bat egiteko saioa amaitu aurretik.</string>
     <string name="logout">Amaitu saioa</string>
     <string name="hs_url">Hasiera zerbitzariaren URL-a</string>
     <string name="identity_url">Identitate zerbitzariaren URLa</string>
-    <string name="user">erabiltzailea</string>
-    <string name="users">erabiltzaileak</string>
     <string name="search">Bilatu</string>
 
     <string name="start_new_chat">Hasi txat berria</string>
@@ -291,11 +288,6 @@ Gailuek ezin izango dute gelara elkartu aurreko historiala deszifratu.
 
 Zifratutako mezuak ez dira zifratzea oraindik ezarrita ez duten beste gailuetan ikusiko.</string>
 
-    <string name="format_time_s">s</string>
-    <string name="format_time_m">m</string>
-    <string name="format_time_h">h</string>
-    <string name="format_time_d">e</string>
-
     <string name="room_participants_leave_prompt_title">Atera gelatik</string>
     <string name="room_participants_leave_prompt_msg">Ziur gelatik atera nahi duzula?</string>
     <string name="room_participants_remove_prompt_msg">Ziur %s txat honetatik kendu nahi duzula?</string>
@@ -304,8 +296,6 @@ Zifratutako mezuak ez dira zifratzea oraindik ezarrita ez duten beste gailuetan 
     <string name="room_participants_online">Konektatuta</string>
     <string name="room_participants_offline">Deskonektatuta</string>
     <string name="room_participants_idle">Inaktibo</string>
-    <string name="room_participants_now">orain</string>
-    <string name="room_participants_ago">duela</string>
 
     <string name="room_participants_header_admin_tools">KUDEAKETA TRESNAK</string>
     <string name="room_participants_header_call">DEIA</string>
@@ -377,7 +367,6 @@ Ziur zaude?</string>
     <string name="room_details_people">Jendea</string>
     <string name="room_details_files">Fitxategiak</string>
     <string name="room_details_settings">Ezarpenak</string>
-    <string name="room_details_selected">hautatuta</string>
     <string name="room_details_people_invited_group_name">GONBIDATUTA</string>
     <string name="room_details_people_present_group_name">ELKARTUTA</string>
 
@@ -414,8 +403,6 @@ Kontuan izan ekintza honek aplikazioa berrabiaraziko duela eta denbora bat behar
     <string name="room_recents_join_room_prompt">Idatzi gelaren IDa edo ezizena</string>
 
     <string name="directory_search_results_title">Arakatu direktorioa</string>
-    <string name="directory_search_room">gela %1$d</string>
-    <string name="directory_search_room_for">gela %1$d aurkitu da %2$s bilaketarako</string>
     <string name="directory_searching_title">Direktorioa bilatzen..</string>
 
     <string name="room_settings_favourite">Gogokoa</string>
@@ -835,11 +822,6 @@ Zifratutako mezuak ez dira zifratzea oraindik ezarrita ez duten beste gailuetan 
     <string name="filter_group_members">Iragazi taldeko kideak</string>
     <string name="filter_group_rooms">Iragazi taldeko gelak</string>
 
-    <string name="group_one_member">kide 1</string>
-    <string name="group_members">%d kide</string>
-
-    <string name="group_one_room">gela 1</string>
-    <string name="group_rooms">%d gela</string>
     <string name="group_no_long_description">Komunitatearen administratzaileak ez du deskripzio luzerik eman komunitate honentzat.</string>
 
     <string name="has_been_kicked">%1$s gelatik kanporatu zaitu %2$s erabiltzaileak</string>

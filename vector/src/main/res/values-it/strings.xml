@@ -44,7 +44,6 @@
     <string name="room_no_conference_call_in_encrypted_rooms">Le chiamate in modalità conferenza non sono supportate nelle stanze criptate</string>
     <string name="send_anyway">Invia comunque</string>
     <string name="or">o</string>
-    <string name="and">e</string>
     <string name="invite">Invita</string>
     <string name="offline">Disconnesso</string>
 
@@ -126,8 +125,6 @@ Selezionare esporta per fare un backup delle chat prima di disconnettersi.</stri
     <string name="logout">Disconnetti</string>
     <string name="hs_url">URL server home</string>
     <string name="identity_url">URL server identità</string>
-    <string name="user">utente</string>
-    <string name="users">utenti</string>
     <string name="search">Cerca</string>
 
     <string name="start_new_chat">Inizia nuova chat</string>
@@ -323,12 +320,6 @@ I dispositivi non saranno in grado di decriptare la cronologia prima del loro in
 
 I messaggi criptati non saranno visibili ai riceventi (client) che non hanno ancora implementato la crittografia.</string>
 
-    <!--  Time -->
-    <string name="format_time_s">s</string>
-    <string name="format_time_m">m</string>
-    <string name="format_time_h">o</string>
-    <string name="format_time_d">g</string>
-
     <!--  Chat participants -->
     <string name="room_participants_leave_prompt_title">Lascia stanza</string>
     <string name="room_participants_leave_prompt_msg">Sei sicuro di voler uscire dalla stanza?</string>
@@ -338,8 +329,6 @@ I messaggi criptati non saranno visibili ai riceventi (client) che non hanno anc
     <string name="room_participants_online">Online</string>
     <string name="room_participants_offline">Offline</string>
     <string name="room_participants_idle">Inattivo</string>
-    <string name="room_participants_now">ora</string>
-    <string name="room_participants_ago">fa</string>
 
     <string name="room_participants_header_admin_tools">STRUMENTI ADMIN</string>
     <string name="room_participants_header_call">CHIAMATA</string>
@@ -411,7 +400,6 @@ Sicuro di procedere?</string>
     <string name="room_details_people">Persone</string>
     <string name="room_details_files">File</string>
     <string name="room_details_settings">Impostazioni</string>
-    <string name="room_details_selected">selezionati</string>
     <string name="malformed_id">ID malformato. Dovrebbe essere un indirizzo email o un ID Matrix come \'@localpart:domain\'</string>
     <string name="room_details_people_invited_group_name">INVITATI</string>
     <string name="room_details_people_present_group_name">AGGIUNTI</string>
@@ -454,8 +442,6 @@ Tieni presente che questa azione riavvierà l\'app e potrebbe richiedere del tem
 
     <!-- Directory -->
     <string name="directory_search_results_title">Esplora elenco</string>
-    <string name="directory_search_room">%1$d stanza</string>
-    <string name="directory_search_room_for">%1$d stanza trovata per %2$s</string>
     <string name="directory_searching_title">Ricerca in corso…</string>
 
     <!-- home room settings -->
@@ -934,11 +920,6 @@ In futuro il processo di verifica sarà più sofisticato.</string>
     <string name="filter_group_members">Filtra i membri del gruppo</string>
     <string name="filter_group_rooms">Filtra le stanze del gruppo</string>
 
-    <string name="group_one_member">1 membro</string>
-    <string name="group_members">%d membri</string>
-
-    <string name="group_one_room">1 stanza</string>
-    <string name="group_rooms">%d stanze</string>
     <string name="group_no_long_description">L\'amministratore non ha fornito una descrizione estesa per questa comunità.</string>
 
     <string name="has_been_kicked">%2$s ti ha buttato fuori da %1$s</string>

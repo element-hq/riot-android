@@ -38,7 +38,6 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AlertDialog;
-import android.text.InputType;
 import android.text.SpannableString;
 import android.text.SpannableStringBuilder;
 import android.text.TextPaint;
@@ -63,8 +62,10 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
+
 import com.binaryfork.spanny.Spanny;
 import com.google.gson.JsonParser;
+
 import org.jetbrains.annotations.NotNull;
 import org.matrix.androidsdk.MXSession;
 import org.matrix.androidsdk.call.IMXCall;
@@ -99,6 +100,7 @@ import org.matrix.androidsdk.util.JsonUtils;
 import org.matrix.androidsdk.util.Log;
 import org.matrix.androidsdk.util.PermalinkUtils;
 import org.matrix.androidsdk.util.ResourceUtils;
+
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
@@ -106,6 +108,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Timer;
 import java.util.TimerTask;
+
 import butterknife.BindView;
 import butterknife.OnClick;
 import butterknife.OnTouch;
@@ -122,6 +125,7 @@ import im.vector.util.CallsManager;
 import im.vector.util.ExternalApplicationsUtilKt;
 import im.vector.util.MatrixSdkExtensionsKt;
 import im.vector.util.MatrixURLSpan;
+import im.vector.util.PermissionsToolsKt;
 import im.vector.util.PreferencesManager;
 import im.vector.util.ReadMarkerManager;
 import im.vector.util.RoomUtils;
@@ -361,9 +365,6 @@ public class VectorRoomActivity extends MXCActionBarActivity implements
     // progress bar to warn that the sync is not yet done
     @BindView(R.id.room_sync_in_progress)
     View mSyncInProgressView;
-
-    // action to do after requesting the camera permission
-    private int mCameraPermissionAction;
 
     private final ApiCallback<Void> mDirectMessageListener = new SimpleApiCallback<Void>(this) {
         @Override
@@ -904,9 +905,10 @@ public class VectorRoomActivity extends MXCActionBarActivity implements
         mVectorOngoingConferenceCallView.initRoomInfo(mSession, mRoom);
         mVectorOngoingConferenceCallView.setCallClickListener(new VectorOngoingConferenceCallView.ICallClickListener() {
             private void startCall(boolean isVideo) {
-                if (CommonActivityUtils.checkPermissions(isVideo ?
-                                CommonActivityUtils.REQUEST_CODE_PERMISSION_VIDEO_IP_CALL : CommonActivityUtils.REQUEST_CODE_PERMISSION_AUDIO_IP_CALL,
-                        VectorRoomActivity.this)) {
+                if (PermissionsToolsKt.checkPermissions(isVideo ? PermissionsToolsKt.PERMISSIONS_FOR_VIDEO_IP_CALL
+                                : PermissionsToolsKt.PERMISSIONS_FOR_AUDIO_IP_CALL,
+                        VectorRoomActivity.this,
+                        isVideo ? PermissionsToolsKt.PERMISSION_REQUEST_CODE_VIDEO_CALL : PermissionsToolsKt.PERMISSION_REQUEST_CODE_AUDIO_CALL)) {
                     startIpCall(false, isVideo);
                 }
             }
@@ -1354,7 +1356,9 @@ public class VectorRoomActivity extends MXCActionBarActivity implements
 
         if ((null != eventAtBottom) && ((null == mLatestDisplayedEvent) || !TextUtils.equals(eventAtBottom.eventId, mLatestDisplayedEvent.eventId))) {
 
-            Log.d(LOG_TAG, "## onScroll firstVisibleItem " + firstVisibleItem + " visibleItemCount " + visibleItemCount + " totalItemCount " + totalItemCount);
+            Log.d(LOG_TAG, "## onScroll firstVisibleItem " + firstVisibleItem
+                    + " visibleItemCount " + visibleItemCount
+                    + " totalItemCount " + totalItemCount);
             mLatestDisplayedEvent = eventAtBottom;
 
             // don't send receive if the app is in background
@@ -1578,8 +1582,8 @@ public class VectorRoomActivity extends MXCActionBarActivity implements
 
     /**
      * Start an IP call with the management of the corresponding permissions.
-     * According to the IP call, the corresponding permissions are asked: {@link CommonActivityUtils#REQUEST_CODE_PERMISSION_AUDIO_IP_CALL}
-     * or {@link CommonActivityUtils#REQUEST_CODE_PERMISSION_VIDEO_IP_CALL}.
+     * According to the IP call, the corresponding permissions are asked: {@link im.vector.util.PermissionsToolsKt#PERMISSIONS_FOR_AUDIO_IP_CALL}
+     * or {@link im.vector.util.PermissionsToolsKt#PERMISSIONS_FOR_VIDEO_IP_CALL}.
      */
     private void displayVideoCallIpDialog() {
         // hide the header room
@@ -1594,21 +1598,25 @@ public class VectorRoomActivity extends MXCActionBarActivity implements
         fragment.setOnClickListener(new IconAndTextDialogFragment.OnItemClickListener() {
             @Override
             public void onItemClick(IconAndTextDialogFragment dialogFragment, int position) {
-                boolean isVideoCall = false;
-                int requestCode = CommonActivityUtils.REQUEST_CODE_PERMISSION_AUDIO_IP_CALL;
+                final boolean isVideoCall;
+                final int permissions;
+                final int requestCode;
 
-                if (1 == position) {
+
+                if (position == 1) {
                     isVideoCall = true;
-                    requestCode = CommonActivityUtils.REQUEST_CODE_PERMISSION_VIDEO_IP_CALL;
+                    permissions = PermissionsToolsKt.PERMISSIONS_FOR_VIDEO_IP_CALL;
+                    requestCode = PermissionsToolsKt.PERMISSION_REQUEST_CODE_VIDEO_CALL;
+                } else {
+                    isVideoCall = false;
+                    permissions = PermissionsToolsKt.PERMISSIONS_FOR_AUDIO_IP_CALL;
+                    requestCode = PermissionsToolsKt.PERMISSION_REQUEST_CODE_AUDIO_CALL;
                 }
-
-                final boolean finalIsVideoCall = isVideoCall;
-                final int finalRequestCode = requestCode;
 
                 AlertDialog.Builder builder = new AlertDialog.Builder(VectorRoomActivity.this)
                         .setTitle(R.string.dialog_title_confirmation);
 
-                if (finalIsVideoCall) {
+                if (isVideoCall) {
                     builder.setMessage(getString(R.string.start_video_call_prompt_msg));
                 } else {
                     builder.setMessage(getString(R.string.start_voice_call_prompt_msg));
@@ -1618,8 +1626,8 @@ public class VectorRoomActivity extends MXCActionBarActivity implements
                         .setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
-                                if (CommonActivityUtils.checkPermissions(finalRequestCode, VectorRoomActivity.this)) {
-                                    startIpCall(PreferencesManager.useJitsiConfCall(VectorRoomActivity.this), finalIsVideoCall);
+                                if (PermissionsToolsKt.checkPermissions(permissions, VectorRoomActivity.this, requestCode)) {
+                                    startIpCall(PreferencesManager.useJitsiConfCall(VectorRoomActivity.this), isVideoCall);
                                 }
                             }
                         })
@@ -2224,17 +2232,17 @@ public class VectorRoomActivity extends MXCActionBarActivity implements
     }
 
     @Override
-    public void onRequestPermissionsResult(int aRequestCode, @NonNull String[] aPermissions, @NonNull int[] aGrantResults) {
-        if (0 == aPermissions.length) {
-            Log.e(LOG_TAG, "## onRequestPermissionsResult(): cancelled " + aRequestCode);
-        } else if (aRequestCode == CommonActivityUtils.REQUEST_CODE_PERMISSION_ROOM_DETAILS) {
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        if (0 == permissions.length) {
+            Log.e(LOG_TAG, "## onRequestPermissionsResult(): cancelled " + requestCode);
+        } else if (requestCode == PermissionsToolsKt.PERMISSION_REQUEST_CODE) {
             boolean isCameraPermissionGranted = false;
 
-            for (int i = 0; i < aPermissions.length; i++) {
-                Log.d(LOG_TAG, "## onRequestPermissionsResult(): " + aPermissions[i] + "=" + aGrantResults[i]);
+            for (int i = 0; i < permissions.length; i++) {
+                Log.d(LOG_TAG, "## onRequestPermissionsResult(): " + permissions[i] + "=" + grantResults[i]);
 
-                if (Manifest.permission.CAMERA.equals(aPermissions[i])) {
-                    if (PackageManager.PERMISSION_GRANTED == aGrantResults[i]) {
+                if (Manifest.permission.CAMERA.equals(permissions[i])) {
+                    if (PackageManager.PERMISSION_GRANTED == grantResults[i]) {
                         Log.d(LOG_TAG, "## onRequestPermissionsResult(): CAMERA permission granted");
                         isCameraPermissionGranted = true;
                     } else {
@@ -2245,20 +2253,23 @@ public class VectorRoomActivity extends MXCActionBarActivity implements
 
             // the user allows to use to the camera.
             if (isCameraPermissionGranted) {
-                Intent intent = new Intent(VectorRoomActivity.this, VectorMediasPickerActivity.class);
+                Intent intent = new Intent(this, VectorMediasPickerActivity.class);
                 intent.putExtra(VectorMediasPickerActivity.EXTRA_AVATAR_MODE, true);
                 startActivityForResult(intent, REQUEST_ROOM_AVATAR_CODE);
             } else {
                 launchRoomDetails(VectorRoomDetailsActivity.SETTINGS_TAB_INDEX);
             }
-        } else if (aRequestCode == CommonActivityUtils.REQUEST_CODE_PERMISSION_TAKE_PHOTO) {
+        } else if (requestCode == PermissionsToolsKt.PERMISSION_REQUEST_CODE_LAUNCH_CAMERA
+                || requestCode == PermissionsToolsKt.PERMISSION_REQUEST_CODE_LAUNCH_NATIVE_CAMERA
+                || requestCode == PermissionsToolsKt.PERMISSION_REQUEST_CODE_LAUNCH_NATIVE_VIDEO_CAMERA) {
             boolean isCameraPermissionGranted = false;
+            boolean isWritePermissionGranted = false;
 
-            for (int i = 0; i < aPermissions.length; i++) {
-                Log.d(LOG_TAG, "## onRequestPermissionsResult(): " + aPermissions[i] + "=" + aGrantResults[i]);
+            for (int i = 0; i < permissions.length; i++) {
+                Log.d(LOG_TAG, "## onRequestPermissionsResult(): " + permissions[i] + "=" + grantResults[i]);
 
-                if (Manifest.permission.CAMERA.equals(aPermissions[i])) {
-                    if (PackageManager.PERMISSION_GRANTED == aGrantResults[i]) {
+                if (Manifest.permission.CAMERA.equals(permissions[i])) {
+                    if (PackageManager.PERMISSION_GRANTED == grantResults[i]) {
                         Log.d(LOG_TAG, "## onRequestPermissionsResult(): CAMERA permission granted");
                         isCameraPermissionGranted = true;
                     } else {
@@ -2266,9 +2277,10 @@ public class VectorRoomActivity extends MXCActionBarActivity implements
                     }
                 }
 
-                if (Manifest.permission.WRITE_EXTERNAL_STORAGE.equals(aPermissions[i])) {
-                    if (PackageManager.PERMISSION_GRANTED == aGrantResults[i]) {
+                if (Manifest.permission.WRITE_EXTERNAL_STORAGE.equals(permissions[i])) {
+                    if (PackageManager.PERMISSION_GRANTED == grantResults[i]) {
                         Log.d(LOG_TAG, "## onRequestPermissionsResult(): WRITE_EXTERNAL_STORAGE permission granted");
+                        isWritePermissionGranted = true;
                     } else {
                         Log.d(LOG_TAG, "## onRequestPermissionsResult(): WRITE_EXTERNAL_STORAGE permission not granted");
                     }
@@ -2278,26 +2290,34 @@ public class VectorRoomActivity extends MXCActionBarActivity implements
             // Because external storage permission is not mandatory to launch the camera,
             // external storage permission is not tested.
             if (isCameraPermissionGranted) {
-                if (R.string.option_take_photo_video == mCameraPermissionAction) {
+                if (requestCode == PermissionsToolsKt.PERMISSION_REQUEST_CODE_LAUNCH_CAMERA) {
                     launchCamera();
-                } else if (R.string.option_take_photo == mCameraPermissionAction) {
-                    launchNativeCamera();
-                } else if (R.string.option_take_video == mCameraPermissionAction) {
-                    launchNativeVideoRecorder();
+                } else if (requestCode == PermissionsToolsKt.PERMISSION_REQUEST_CODE_LAUNCH_NATIVE_CAMERA) {
+                    if (isWritePermissionGranted) {
+                        launchNativeCamera();
+                    } else {
+                        Toast.makeText(this, getString(R.string.missing_permissions_error), Toast.LENGTH_SHORT).show();
+                    }
+                } else if (requestCode == PermissionsToolsKt.PERMISSION_REQUEST_CODE_LAUNCH_NATIVE_VIDEO_CAMERA) {
+                    if (isWritePermissionGranted) {
+                        launchNativeVideoRecorder();
+                    } else {
+                        Toast.makeText(this, getString(R.string.missing_permissions_error), Toast.LENGTH_SHORT).show();
+                    }
                 }
             } else {
                 Toast.makeText(this, getString(R.string.missing_permissions_warning), Toast.LENGTH_SHORT).show();
             }
-        } else if (aRequestCode == CommonActivityUtils.REQUEST_CODE_PERMISSION_AUDIO_IP_CALL) {
-            if (CommonActivityUtils.onPermissionResultAudioIpCall(this, aPermissions, aGrantResults)) {
+        } else if (requestCode == PermissionsToolsKt.PERMISSION_REQUEST_CODE_AUDIO_CALL) {
+            if (PermissionsToolsKt.onPermissionResultAudioIpCall(this, grantResults)) {
                 startIpCall(PreferencesManager.useJitsiConfCall(this), false);
             }
-        } else if (aRequestCode == CommonActivityUtils.REQUEST_CODE_PERMISSION_VIDEO_IP_CALL) {
-            if (CommonActivityUtils.onPermissionResultVideoIpCall(this, aPermissions, aGrantResults)) {
+        } else if (requestCode == PermissionsToolsKt.PERMISSION_REQUEST_CODE_VIDEO_CALL) {
+            if (PermissionsToolsKt.onPermissionResultVideoIpCall(this, grantResults)) {
                 startIpCall(PreferencesManager.useJitsiConfCall(this), true);
             }
         } else {
-            Log.w(LOG_TAG, "## onRequestPermissionsResult(): Unknown requestCode =" + aRequestCode);
+            Log.w(LOG_TAG, "## onRequestPermissionsResult(): Unknown requestCode =" + requestCode);
         }
     }
 
@@ -3780,7 +3800,8 @@ public class VectorRoomActivity extends MXCActionBarActivity implements
         if ((null != mRoom) && (null != mRoom.getState())) {
             if (MatrixSdkExtensionsKt.isPowerLevelEnoughForAvatarUpdate(mRoom, mSession)) {
                 // need to check if the camera permission has been granted
-                if (CommonActivityUtils.checkPermissions(CommonActivityUtils.REQUEST_CODE_PERMISSION_ROOM_DETAILS, VectorRoomActivity.this)) {
+                if (PermissionsToolsKt.checkPermissions(PermissionsToolsKt.PERMISSIONS_FOR_ROOM_DETAILS,
+                       this, PermissionsToolsKt.PERMISSION_REQUEST_CODE)) {
                     Intent intent = new Intent(this, VectorMediasPickerActivity.class);
                     intent.putExtra(VectorMediasPickerActivity.EXTRA_AVATAR_MODE, true);
                     startActivityForResult(intent, REQUEST_ROOM_AVATAR_CODE);
@@ -3941,22 +3962,19 @@ public class VectorRoomActivity extends MXCActionBarActivity implements
                     } else if (selectedVal == R.string.option_send_sticker) {
                         startStickerPickerActivity();
                     } else if (selectedVal == R.string.option_take_photo_video) {
-                        if (CommonActivityUtils.checkPermissions(CommonActivityUtils.REQUEST_CODE_PERMISSION_TAKE_PHOTO, VectorRoomActivity.this)) {
+                        if (PermissionsToolsKt.checkPermissions(PermissionsToolsKt.PERMISSIONS_FOR_TAKING_PHOTO,
+                                VectorRoomActivity.this, PermissionsToolsKt.PERMISSION_REQUEST_CODE_LAUNCH_CAMERA)) {
                             launchCamera();
-                        } else {
-                            mCameraPermissionAction = R.string.option_take_photo_video;
                         }
                     } else if (selectedVal == R.string.option_take_photo) {
-                        if (CommonActivityUtils.checkPermissions(CommonActivityUtils.REQUEST_CODE_PERMISSION_TAKE_PHOTO, VectorRoomActivity.this)) {
+                        if (PermissionsToolsKt.checkPermissions(PermissionsToolsKt.PERMISSIONS_FOR_TAKING_PHOTO,
+                                VectorRoomActivity.this, PermissionsToolsKt.PERMISSION_REQUEST_CODE_LAUNCH_NATIVE_CAMERA)) {
                             launchNativeCamera();
-                        } else {
-                            mCameraPermissionAction = R.string.option_take_photo;
                         }
                     } else if (selectedVal == R.string.option_take_video) {
-                        if (CommonActivityUtils.checkPermissions(CommonActivityUtils.REQUEST_CODE_PERMISSION_TAKE_PHOTO, VectorRoomActivity.this)) {
+                        if (PermissionsToolsKt.checkPermissions(PermissionsToolsKt.PERMISSIONS_FOR_TAKING_PHOTO,
+                                VectorRoomActivity.this, PermissionsToolsKt.PERMISSION_REQUEST_CODE_LAUNCH_NATIVE_VIDEO_CAMERA)) {
                             launchNativeVideoRecorder();
-                        } else {
-                            mCameraPermissionAction = R.string.option_take_video;
                         }
                     }
                 }

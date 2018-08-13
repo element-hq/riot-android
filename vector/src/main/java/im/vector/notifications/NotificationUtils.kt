@@ -196,7 +196,7 @@ object NotificationUtils {
                 .setWhen(System.currentTimeMillis())
                 .setContentTitle(context.getString(R.string.riot_app_name))
                 .setContentText(context.getString(subTitleResId))
-                .setSmallIcon(R.drawable.permanent_notification_transparent)
+                .setSmallIcon(R.drawable.logo_transparent)
                 .setContentIntent(pi)
 
         // hide the notification from the status bar
@@ -512,7 +512,7 @@ object NotificationUtils {
             if (!roomsNotifications.mIsInvitationEvent) {
                 try {
                     val wearableExtender = NotificationCompat.WearableExtender()
-                    val action = NotificationCompat.Action.Builder(R.drawable.message_notification_transparent,
+                    val action = NotificationCompat.Action.Builder(R.drawable.logo_transparent,
                             roomsNotifications.mWearableMessage,
                             stackBuilderTap.getPendingIntent(0, PendingIntent.FLAG_UPDATE_CURRENT))
                             .build()
@@ -670,7 +670,7 @@ object NotificationUtils {
                     .setWhen(roomsNotifications.mContentTs)
                     .setContentTitle(ensureTitleNotEmpty(context, roomsNotifications.mContentTitle))
                     .setContentText(roomsNotifications.mContentText)
-                    .setSmallIcon(R.drawable.message_notification_transparent)
+                    .setSmallIcon(R.drawable.logo_transparent)
                     .setGroup(context.getString(R.string.riot_app_name))
                     .setGroupSummary(true)
                     .setDeleteIntent(PendingIntent.getBroadcast(context.applicationContext,
@@ -716,7 +716,7 @@ object NotificationUtils {
                     .setWhen(System.currentTimeMillis())
                     .setContentTitle(context.getString(R.string.riot_app_name))
                     .setContentText(messagesStrings[0])
-                    .setSmallIcon(R.drawable.message_notification_transparent)
+                    .setSmallIcon(R.drawable.logo_transparent)
                     .setGroup(context.getString(R.string.riot_app_name))
                     .setGroupSummary(true)
 
