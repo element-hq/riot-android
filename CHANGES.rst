@@ -5,7 +5,7 @@ Features:
  -
 
 Improvements:
- -
+ - Do not ask permission to write external storage at startup (#2483)
 
 Other changes:
  - Upgrade olm-sdk.aar from version 2.2.2 to version 2.3.0
