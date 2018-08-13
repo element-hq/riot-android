@@ -16,13 +16,13 @@
 package im.vector.activity
 
 import android.content.Intent
-import android.content.pm.PackageManager
 import im.vector.Matrix
 import im.vector.R
 import im.vector.fragments.VectorSettingsPreferencesFragment
 import im.vector.util.PERMISSION_REQUEST_CODE_EXPORT_KEYS
 import im.vector.util.PERMISSION_REQUEST_CODE_LAUNCH_CAMERA
 import im.vector.util.VectorUtils
+import im.vector.util.allGranted
 
 /**
  * Displays the client settings.
@@ -66,13 +66,7 @@ class VectorSettingsActivity : MXCActionBarActivity() {
      * Keep this code here, cause PreferenceFragment does not extend v4 Fragment
      */
     override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<String>, grantResults: IntArray) {
-        var granted = true
-
-        for (i in grantResults.indices) {
-            granted = granted && (PackageManager.PERMISSION_GRANTED == grantResults[i])
-        }
-
-        if (granted) {
+        if (allGranted(grantResults)) {
             if (requestCode == PERMISSION_REQUEST_CODE_LAUNCH_CAMERA) {
                 val intent = Intent(this, VectorMediasPickerActivity::class.java)
                 intent.putExtra(VectorMediasPickerActivity.EXTRA_AVATAR_MODE, true)

@@ -18,7 +18,6 @@
 package im.vector.activity;
 
 import android.content.Intent;
-import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.support.annotation.NonNull;
 import android.support.v4.view.ViewPager;
@@ -333,13 +332,7 @@ public class VectorMediasViewerActivity extends MXCActionBarActivity {
 
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
-        boolean granted = true;
-
-        for (int i = 0; i < grantResults.length; i++) {
-            granted = granted && (PackageManager.PERMISSION_GRANTED == grantResults[i]);
-        }
-
-        if (granted) {
+        if (PermissionsToolsKt.allGranted(grantResults)) {
             if (requestCode == PermissionsToolsKt.PERMISSION_REQUEST_CODE) {
                 // Request comes from here
                 onAction(mPendingPosition, mPendingAction);

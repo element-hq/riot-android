@@ -417,3 +417,16 @@ fun onPermissionResultVideoIpCall(context: Context, permissions: Array<String>, 
 
     return isPermissionGranted
 }
+
+/**
+ * Return true if all permissions are granted
+ */
+fun allGranted(grantResults: IntArray) : Boolean {
+    var granted = true
+
+    grantResults.forEach {
+        granted = granted && PackageManager.PERMISSION_GRANTED == it
+    }
+
+    return granted
+}

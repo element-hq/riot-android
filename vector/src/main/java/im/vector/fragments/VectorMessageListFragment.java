@@ -21,7 +21,6 @@ package im.vector.fragments;
 import android.app.Activity;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -270,13 +269,7 @@ public class VectorMessageListFragment extends MatrixMessageListFragment impleme
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         if (requestCode == PermissionsToolsKt.PERMISSION_REQUEST_CODE) {
-            boolean granted = true;
-
-            for (int i = 0; i < grantResults.length; i++) {
-                granted = granted && PackageManager.PERMISSION_GRANTED == grantResults[i];
-            }
-
-            if (granted) {
+            if (PermissionsToolsKt.allGranted(grantResults)) {
                 onMediaAction(mPendingMenuAction, mPendingMediaUrl, mPendingMediaMimeType, mPendingFilename, mPendingEncryptedFileInfo);
                 mPendingMediaUrl = null;
                 mPendingMediaMimeType = null;
