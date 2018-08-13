@@ -1219,7 +1219,7 @@ class VectorMessagesAdapterHelper {
             final String downloadKey = url.hashCode() + "---";
             String displayKey = url + "<----->" + id;
 
-            if (!this.mSession.isURLPreviewEnabled()) {
+            if (!mSession.isURLPreviewEnabled()) {
                 if (!mUrlsPreviews.containsKey(downloadKey)) {
                     mUrlsPreviews.put(downloadKey, null);
                     mAdapter.notifyDataSetChanged();
