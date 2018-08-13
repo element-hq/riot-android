@@ -167,17 +167,20 @@ private fun checkPermissions(permissionsToBeGrantedBitMap: Int,
         // retrieve the permissions to be granted according to the request code bit map
         if (PERMISSION_CAMERA == permissionsToBeGrantedBitMap and PERMISSION_CAMERA) {
             val permissionType = Manifest.permission.CAMERA
-            isRequestPermissionRequired = isRequestPermissionRequired or updatePermissionsToBeGranted(activity, permissionListAlreadyDenied, permissionsListToBeGranted, permissionType)
+            isRequestPermissionRequired = isRequestPermissionRequired or
+                    updatePermissionsToBeGranted(activity, permissionListAlreadyDenied, permissionsListToBeGranted, permissionType)
         }
 
         if (PERMISSION_RECORD_AUDIO == permissionsToBeGrantedBitMap and PERMISSION_RECORD_AUDIO) {
             val permissionType = Manifest.permission.RECORD_AUDIO
-            isRequestPermissionRequired = isRequestPermissionRequired or updatePermissionsToBeGranted(activity, permissionListAlreadyDenied, permissionsListToBeGranted, permissionType)
+            isRequestPermissionRequired = isRequestPermissionRequired or
+                    updatePermissionsToBeGranted(activity, permissionListAlreadyDenied, permissionsListToBeGranted, permissionType)
         }
 
         if (PERMISSION_WRITE_EXTERNAL_STORAGE == permissionsToBeGrantedBitMap and PERMISSION_WRITE_EXTERNAL_STORAGE) {
             val permissionType = Manifest.permission.WRITE_EXTERNAL_STORAGE
-            isRequestPermissionRequired = isRequestPermissionRequired or updatePermissionsToBeGranted(activity, permissionListAlreadyDenied, permissionsListToBeGranted, permissionType)
+            isRequestPermissionRequired = isRequestPermissionRequired or
+                    updatePermissionsToBeGranted(activity, permissionListAlreadyDenied, permissionsListToBeGranted, permissionType)
         }
 
         // the contact book access is requested for any android platforms
@@ -187,7 +190,8 @@ private fun checkPermissions(permissionsToBeGrantedBitMap: Int,
             val permissionType = Manifest.permission.READ_CONTACTS
 
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-                isRequestPermissionRequired = isRequestPermissionRequired or updatePermissionsToBeGranted(activity, permissionListAlreadyDenied, permissionsListToBeGranted, permissionType)
+                isRequestPermissionRequired = isRequestPermissionRequired or
+                        updatePermissionsToBeGranted(activity, permissionListAlreadyDenied, permissionsListToBeGranted, permissionType)
             } else {
                 if (!ContactsManager.getInstance().isContactBookAccessRequested) {
                     isRequestPermissionRequired = true
@@ -200,7 +204,8 @@ private fun checkPermissions(permissionsToBeGrantedBitMap: Int,
         if (!permissionListAlreadyDenied.isEmpty()) {
             if (permissionsToBeGrantedBitMap == PERMISSIONS_FOR_VIDEO_IP_CALL || permissionsToBeGrantedBitMap == PERMISSIONS_FOR_AUDIO_IP_CALL) {
                 // Permission request for VOIP call
-                if (permissionListAlreadyDenied.contains(Manifest.permission.CAMERA) && permissionListAlreadyDenied.contains(Manifest.permission.RECORD_AUDIO)) {
+                if (permissionListAlreadyDenied.contains(Manifest.permission.CAMERA)
+                        && permissionListAlreadyDenied.contains(Manifest.permission.RECORD_AUDIO)) {
                     // Both missing
                     explanationMessage += activity.getString(R.string.permissions_rationale_msg_camera_and_audio)
                 } else if (permissionListAlreadyDenied.contains(Manifest.permission.RECORD_AUDIO)) {

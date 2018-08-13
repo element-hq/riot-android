@@ -2434,7 +2434,8 @@ class VectorSettingsPreferencesFragment : PreferenceFragment(), SharedPreference
                 }
 
                 override fun onTextChanged(s: CharSequence, start: Int, before: Int, count: Int) {
-                    exportButton.isEnabled = !TextUtils.isEmpty(passPhrase1EditText.text) && TextUtils.equals(passPhrase1EditText.text, passPhrase2EditText.text)
+                    exportButton.isEnabled = !TextUtils.isEmpty(passPhrase1EditText.text)
+                            && TextUtils.equals(passPhrase1EditText.text, passPhrase2EditText.text)
                 }
 
                 override fun afterTextChanged(s: Editable) {

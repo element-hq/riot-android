@@ -66,14 +66,9 @@ import im.vector.adapters.VectorMemberDetailsDevicesAdapter;
 import im.vector.fragments.VectorUnknownDevicesFragment;
 import im.vector.util.CallsManager;
 import im.vector.util.MatrixSdkExtensionsKt;
+import im.vector.util.PermissionsToolsKt;
 import im.vector.util.VectorUtils;
 import kotlin.Pair;
-
-import static im.vector.util.PermissionsToolsKt.PERMISSION_REQUEST_CODE_AUDIO_CALL;
-import static im.vector.util.PermissionsToolsKt.PERMISSION_REQUEST_CODE_VIDEO_CALL;
-import static im.vector.util.PermissionsToolsKt.checkPermissions;
-import static im.vector.util.PermissionsToolsKt.onPermissionResultAudioIpCall;
-import static im.vector.util.PermissionsToolsKt.onPermissionResultVideoIpCall;
 
 /**
  * VectorMemberDetailsActivity displays the member information and allows to perform some dedicated actions.
@@ -349,12 +344,12 @@ public class VectorMemberDetailsActivity extends MXCActionBarActivity implements
         final int requestCode;
 
         if (aIsVideoCall) {
-            requestCode = PERMISSION_REQUEST_CODE_VIDEO_CALL;
+            requestCode = PermissionsToolsKt.PERMISSION_REQUEST_CODE_VIDEO_CALL;
         } else {
-            requestCode = PERMISSION_REQUEST_CODE_AUDIO_CALL;
+            requestCode = PermissionsToolsKt.PERMISSION_REQUEST_CODE_AUDIO_CALL;
         }
 
-        if (checkPermissions(requestCode, this, requestCode)) {
+        if (PermissionsToolsKt.checkPermissions(requestCode, this, requestCode)) {
             startCall(aIsVideoCall);
         }
     }
@@ -363,12 +358,12 @@ public class VectorMemberDetailsActivity extends MXCActionBarActivity implements
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         if (0 == permissions.length) {
             Log.e(LOG_TAG, "## onRequestPermissionsResult(): cancelled " + requestCode);
-        } else if (requestCode == PERMISSION_REQUEST_CODE_AUDIO_CALL) {
-            if (onPermissionResultAudioIpCall(this, grantResults)) {
+        } else if (requestCode == PermissionsToolsKt.PERMISSION_REQUEST_CODE_AUDIO_CALL) {
+            if (PermissionsToolsKt.onPermissionResultAudioIpCall(this, grantResults)) {
                 startCall(false);
             }
-        } else if (requestCode == PERMISSION_REQUEST_CODE_VIDEO_CALL) {
-            if (onPermissionResultVideoIpCall(this, grantResults)) {
+        } else if (requestCode == PermissionsToolsKt.PERMISSION_REQUEST_CODE_VIDEO_CALL) {
+            if (PermissionsToolsKt.onPermissionResultVideoIpCall(this, grantResults)) {
                 startCall(true);
             }
         }

@@ -59,13 +59,10 @@ import im.vector.contacts.Contact;
 import im.vector.contacts.ContactsManager;
 import im.vector.contacts.PIDsRetriever;
 import im.vector.util.HomeRoomsViewModel;
+import im.vector.util.PermissionsToolsKt;
 import im.vector.util.VectorUtils;
 import im.vector.view.EmptyViewItemDecoration;
 import im.vector.view.SimpleDividerItemDecoration;
-
-import static im.vector.util.PermissionsToolsKt.PERMISSIONS_FOR_MEMBERS_SEARCH;
-import static im.vector.util.PermissionsToolsKt.PERMISSION_REQUEST_CODE;
-import static im.vector.util.PermissionsToolsKt.checkPermissions;
 
 public class PeopleFragment extends AbsHomeFragment implements ContactsManager.ContactsManagerListener, AbsHomeFragment.OnRoomChangedListener {
     private static final String LOG_TAG = PeopleFragment.class.getSimpleName();
@@ -134,7 +131,7 @@ public class PeopleFragment extends AbsHomeFragment implements ContactsManager.C
         mAdapter.onFilterDone(mCurrentFilter);
 
         if (!ContactsManager.getInstance().isContactBookAccessRequested()) {
-            checkPermissions(PERMISSIONS_FOR_MEMBERS_SEARCH, this, PERMISSION_REQUEST_CODE);
+            PermissionsToolsKt.checkPermissions(PermissionsToolsKt.PERMISSIONS_FOR_MEMBERS_SEARCH, this, PermissionsToolsKt.PERMISSION_REQUEST_CODE);
         }
 
         initKnownContacts();
@@ -171,7 +168,7 @@ public class PeopleFragment extends AbsHomeFragment implements ContactsManager.C
 
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
-        if (requestCode == PERMISSION_REQUEST_CODE) {
+        if (requestCode == PermissionsToolsKt.PERMISSION_REQUEST_CODE) {
             if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                 ContactsManager.getInstance().refreshLocalContactsSnapshot();
             } else {

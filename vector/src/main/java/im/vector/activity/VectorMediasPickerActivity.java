@@ -88,14 +88,11 @@ import javax.microedition.khronos.egl.EGLSurface;
 
 import im.vector.R;
 import im.vector.VectorApp;
+import im.vector.util.PermissionsToolsKt;
 import im.vector.util.ViewUtilKt;
 import im.vector.view.RecentMediaLayout;
 import im.vector.view.VideoRecordView;
 import kotlin.Pair;
-
-import static im.vector.util.PermissionsToolsKt.PERMISSIONS_FOR_VIDEO_RECORDING;
-import static im.vector.util.PermissionsToolsKt.PERMISSION_REQUEST_CODE;
-import static im.vector.util.PermissionsToolsKt.checkPermissions;
 
 /**
  * VectorMediasPickerActivity is used to take a photo or to send an old one.
@@ -300,7 +297,9 @@ public class VectorMediasPickerActivity extends MXCActionBarActivity implements 
             @Override
             public boolean onLongClick(View v) {
                 if (mIsVideoRecordingSupported
-                        && checkPermissions(PERMISSIONS_FOR_VIDEO_RECORDING, VectorMediasPickerActivity.this, PERMISSION_REQUEST_CODE)) {
+                        && PermissionsToolsKt.checkPermissions(PermissionsToolsKt.PERMISSIONS_FOR_VIDEO_RECORDING,
+                        VectorMediasPickerActivity.this,
+                        PermissionsToolsKt.PERMISSION_REQUEST_CODE)) {
                     mRecordAnimationView.startAnimation();
                     startVideoRecord();
                 }

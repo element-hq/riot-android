@@ -865,7 +865,8 @@ public class VectorMessageListFragment extends MatrixMessageListFragment impleme
                     }
 
                     if (menuAction == ACTION_VECTOR_SAVE || menuAction == ACTION_VECTOR_OPEN) {
-                        if (PermissionsToolsKt.checkPermissions(PermissionsToolsKt.PERMISSIONS_FOR_WRITING_FILES, VectorMessageListFragment.this, PermissionsToolsKt.PERMISSION_REQUEST_CODE)) {
+                        if (PermissionsToolsKt.checkPermissions(PermissionsToolsKt.PERMISSIONS_FOR_WRITING_FILES,
+                                VectorMessageListFragment.this, PermissionsToolsKt.PERMISSION_REQUEST_CODE)) {
                             CommonActivityUtils.saveMediaIntoDownloads(getActivity(), file, trimmedFileName, mediaMimeType, new SimpleApiCallback<String>() {
                                 @Override
                                 public void onSuccess(String savedMediaPath) {
