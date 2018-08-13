@@ -1218,6 +1218,7 @@ public class CommonActivityUtils {
 
     /**
      * Save a media URI into the download directory
+     * {@link im.vector.util.PermissionsToolsKt#PERMISSIONS_FOR_WRITING_FILES} has to be granted
      *
      * @param context  the context
      * @param srcFile  the source file.
@@ -1511,6 +1512,10 @@ public class CommonActivityUtils {
 
     /**
      * Export the e2e keys for a dedicated session.
+     * {@link im.vector.util.PermissionsToolsKt#PERMISSIONS_FOR_WRITING_FILES} has to be granted
+     *
+     * TODO Export as a Share
+     *
      *
      * @param session  the session
      * @param password the password
@@ -1535,7 +1540,7 @@ public class CommonActivityUtils {
                     String url = session.getMediasCache().saveMedia(stream, "riot-" + System.currentTimeMillis() + ".txt", "text/plain");
                     stream.close();
 
-                    CommonActivityUtils.saveMediaIntoDownloads(appContext,
+                    saveMediaIntoDownloads(appContext,
                             new File(Uri.parse(url).getPath()), "riot-keys.txt", "text/plain", new SimpleApiCallback<String>() {
                                 @Override
                                 public void onSuccess(String path) {

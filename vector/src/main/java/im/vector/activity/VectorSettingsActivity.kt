@@ -20,13 +20,16 @@ import android.content.pm.PackageManager
 import im.vector.Matrix
 import im.vector.R
 import im.vector.fragments.VectorSettingsPreferencesFragment
-import im.vector.util.PERMISSION_REQUEST_CODE
+import im.vector.util.PERMISSION_REQUEST_CODE_EXPORT_KEYS
+import im.vector.util.PERMISSION_REQUEST_CODE_LAUNCH_CAMERA
 import im.vector.util.VectorUtils
 
 /**
  * Displays the client settings.
  */
 class VectorSettingsActivity : MXCActionBarActivity() {
+
+    private lateinit var vectorSettingsPreferencesFragment: VectorSettingsPreferencesFragment
 
     override fun getLayoutRes(): Int {
         return R.layout.activity_vector_settings
@@ -49,10 +52,13 @@ class VectorSettingsActivity : MXCActionBarActivity() {
         }
 
         if (isFirstCreation()) {
+            vectorSettingsPreferencesFragment = VectorSettingsPreferencesFragment.newInstance(session.myUserId)
             // display the fragment
             fragmentManager.beginTransaction()
-                    .replace(R.id.vector_settings_page, VectorSettingsPreferencesFragment.newInstance(session.myUserId))
+                    .replace(R.id.vector_settings_page, vectorSettingsPreferencesFragment, FRAGMENT_TAG)
                     .commit()
+        } else {
+            vectorSettingsPreferencesFragment = fragmentManager.findFragmentByTag(FRAGMENT_TAG) as VectorSettingsPreferencesFragment
         }
     }
 
@@ -60,18 +66,24 @@ class VectorSettingsActivity : MXCActionBarActivity() {
      * Keep this code here, cause PreferenceFragment does not extend v4 Fragment
      */
     override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<String>, grantResults: IntArray) {
-        if (requestCode == PERMISSION_REQUEST_CODE) {
-            var granted = false
+        var granted = true
 
-            for (i in grantResults.indices) {
-                granted = granted or (PackageManager.PERMISSION_GRANTED == grantResults[i])
-            }
+        for (i in grantResults.indices) {
+            granted = granted && (PackageManager.PERMISSION_GRANTED == grantResults[i])
+        }
 
-            if (granted) {
+        if (granted) {
+            if (requestCode == PERMISSION_REQUEST_CODE_LAUNCH_CAMERA) {
                 val intent = Intent(this, VectorMediasPickerActivity::class.java)
                 intent.putExtra(VectorMediasPickerActivity.EXTRA_AVATAR_MODE, true)
                 startActivityForResult(intent, VectorUtils.TAKE_IMAGE)
+            } else if (requestCode == PERMISSION_REQUEST_CODE_EXPORT_KEYS) {
+                vectorSettingsPreferencesFragment.exportKeys()
             }
         }
+    }
+
+    companion object {
+        private const val FRAGMENT_TAG = "VectorSettingsPreferencesFragment"
     }
 }

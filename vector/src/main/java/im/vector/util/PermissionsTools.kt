@@ -65,6 +65,8 @@ const val PERMISSION_REQUEST_CODE_LAUNCH_NATIVE_CAMERA = 569
 const val PERMISSION_REQUEST_CODE_LAUNCH_NATIVE_VIDEO_CAMERA = 570
 const val PERMISSION_REQUEST_CODE_AUDIO_CALL = 571
 const val PERMISSION_REQUEST_CODE_VIDEO_CALL = 572
+const val PERMISSION_REQUEST_CODE_EXPORT_KEYS = 573
+const val PERMISSION_REQUEST_OTHER = 600
 
 /**
  * Log the used permissions statuses.
@@ -108,11 +110,12 @@ fun checkPermissions(permissionsToBeGrantedBitMap: Int,
  *
  * @param permissionsToBeGrantedBitMap
  * @param fragment
+ * @return true if the permissions are granted (synchronous flow), false otherwise (asynchronous flow)
  */
 fun checkPermissions(permissionsToBeGrantedBitMap: Int,
                      fragment: Fragment,
-                     requestCode: Int = PERMISSION_REQUEST_CODE) {
-    checkPermissions(permissionsToBeGrantedBitMap, fragment.activity, fragment, requestCode)
+                     requestCode: Int = PERMISSION_REQUEST_CODE): Boolean {
+    return checkPermissions(permissionsToBeGrantedBitMap, fragment.activity, fragment, requestCode)
 }
 
 /**

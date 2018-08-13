@@ -18,7 +18,9 @@
 package im.vector.activity;
 
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.net.Uri;
+import android.support.annotation.NonNull;
 import android.support.v4.view.ViewPager;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -43,6 +45,7 @@ import im.vector.R;
 import im.vector.VectorApp;
 import im.vector.adapters.VectorMediasViewerAdapter;
 import im.vector.db.VectorContentProvider;
+import im.vector.util.PermissionsToolsKt;
 import im.vector.util.SlidableMediaInfo;
 
 /**
@@ -70,6 +73,10 @@ public class VectorMediasViewerActivity extends MXCActionBarActivity {
 
     // the medias list
     private List<SlidableMediaInfo> mMediasList;
+
+    // Pending data during permission request
+    private int mPendingPosition;
+    private int mPendingAction;
 
     // the slide effect
     public class DepthPageTransformer implements ViewPager.PageTransformer {
@@ -233,13 +240,18 @@ public class VectorMediasViewerActivity extends MXCActionBarActivity {
                     }
 
                     if (action == R.id.ic_action_download) {
-                        CommonActivityUtils.saveMediaIntoDownloads(VectorMediasViewerActivity.this,
-                                file, mediaInfo.mFileName, mediaInfo.mMimeType, new SimpleApiCallback<String>() {
-                                    @Override
-                                    public void onSuccess(String savedMediaPath) {
-                                        Toast.makeText(VectorApp.getInstance(), getText(R.string.media_slider_saved), Toast.LENGTH_LONG).show();
-                                    }
-                                });
+                        if (checkWritePermission(PermissionsToolsKt.PERMISSION_REQUEST_CODE)) {
+                            CommonActivityUtils.saveMediaIntoDownloads(VectorMediasViewerActivity.this,
+                                    file, mediaInfo.mFileName, mediaInfo.mMimeType, new SimpleApiCallback<String>() {
+                                        @Override
+                                        public void onSuccess(String savedMediaPath) {
+                                            Toast.makeText(VectorApp.getInstance(), getText(R.string.media_slider_saved), Toast.LENGTH_LONG).show();
+                                        }
+                                    });
+                        } else {
+                            mPendingPosition = position;
+                            mPendingAction = action;
+                        }
                     } else {
                         if (null != mediaInfo.mFileName) {
                             File dstFile = new File(file.getParent(), mediaInfo.mFileName);
@@ -313,5 +325,28 @@ public class VectorMediasViewerActivity extends MXCActionBarActivity {
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+    public boolean checkWritePermission(int requestCode) {
+        return PermissionsToolsKt.checkPermissions(PermissionsToolsKt.PERMISSIONS_FOR_WRITING_FILES, this, requestCode);
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        boolean granted = true;
+
+        for (int i = 0; i < grantResults.length; i++) {
+            granted = granted && (PackageManager.PERMISSION_GRANTED == grantResults[i]);
+        }
+
+        if (granted) {
+            if (requestCode == PermissionsToolsKt.PERMISSION_REQUEST_CODE) {
+                // Request comes from here
+                onAction(mPendingPosition, mPendingAction);
+            } else if (requestCode == PermissionsToolsKt.PERMISSION_REQUEST_OTHER) {
+                // Request comes from adapter
+                mAdapter.downloadMediaAndExportToDownloads();
+            }
+        }
     }
 }
