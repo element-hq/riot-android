@@ -2319,11 +2319,11 @@ public class VectorRoomActivity extends MXCActionBarActivity implements
                 Toast.makeText(this, getString(R.string.missing_permissions_warning), Toast.LENGTH_SHORT).show();
             }
         } else if (requestCode == PERMISSION_REQUEST_CODE_AUDIO_CALL) {
-            if (onPermissionResultAudioIpCall(this, permissions, grantResults)) {
+            if (onPermissionResultAudioIpCall(this, grantResults)) {
                 startIpCall(PreferencesManager.useJitsiConfCall(this), false);
             }
         } else if (requestCode == PERMISSION_REQUEST_CODE_VIDEO_CALL) {
-            if (onPermissionResultVideoIpCall(this, permissions, grantResults)) {
+            if (onPermissionResultVideoIpCall(this, grantResults)) {
                 startIpCall(PreferencesManager.useJitsiConfCall(this), true);
             }
         } else {

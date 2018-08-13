@@ -364,11 +364,11 @@ public class VectorMemberDetailsActivity extends MXCActionBarActivity implements
         if (0 == permissions.length) {
             Log.e(LOG_TAG, "## onRequestPermissionsResult(): cancelled " + requestCode);
         } else if (requestCode == PERMISSION_REQUEST_CODE_AUDIO_CALL) {
-            if (onPermissionResultAudioIpCall(this, permissions, grantResults)) {
+            if (onPermissionResultAudioIpCall(this, grantResults)) {
                 startCall(false);
             }
         } else if (requestCode == PERMISSION_REQUEST_CODE_VIDEO_CALL) {
-            if (onPermissionResultVideoIpCall(this, permissions, grantResults)) {
+            if (onPermissionResultVideoIpCall(this, grantResults)) {
                 startCall(true);
             }
         }

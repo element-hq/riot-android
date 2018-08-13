@@ -341,29 +341,17 @@ private fun updatePermissionsToBeGranted(activity: Activity,
  * on onRequestPermissionsResult() methods.
  *
  * @param context      App context
- * @param permissions  permissions list
  * @param grantResults permissions granted results
  * @return true if audio IP call is permitted, false otherwise
  */
-fun onPermissionResultAudioIpCall(context: Context, permissions: Array<String>, grantResults: IntArray): Boolean {
-    var isPermissionGranted = false
+fun onPermissionResultAudioIpCall(context: Context, grantResults: IntArray): Boolean {
+    val arePermissionsGranted = allGranted(grantResults)
 
-    try {
-        if (Manifest.permission.RECORD_AUDIO == permissions[0]) {
-            if (PackageManager.PERMISSION_GRANTED == grantResults[0]) {
-                Log.d(LOG_TAG, "## onPermissionResultAudioIpCall(): RECORD_AUDIO permission granted")
-                isPermissionGranted = true
-            } else {
-                Log.d(LOG_TAG, "## onPermissionResultAudioIpCall(): RECORD_AUDIO permission not granted")
-
-                Toast.makeText(context, R.string.permissions_action_not_performed_missing_permissions, Toast.LENGTH_SHORT).show()
-            }
-        }
-    } catch (ex: Exception) {
-        Log.d(LOG_TAG, "## onPermissionResultAudioIpCall(): Exception MSg=" + ex.message)
+    if (!arePermissionsGranted) {
+        Toast.makeText(context, R.string.permissions_action_not_performed_missing_permissions, Toast.LENGTH_SHORT).show()
     }
 
-    return isPermissionGranted
+    return arePermissionsGranted
 }
 
 /**
@@ -372,56 +360,23 @@ fun onPermissionResultAudioIpCall(context: Context, permissions: Array<String>, 
  * For video IP calls, record audio and camera permissions are both mandatory.
  *
  * @param context      App context
- * @param permissions  permissions list
  * @param grantResults permissions granted results
  * @return true if video IP call is permitted, false otherwise
  */
-fun onPermissionResultVideoIpCall(context: Context, permissions: Array<String>, grantResults: IntArray): Boolean {
-    var isPermissionGranted = false
-    var result = 0
+fun onPermissionResultVideoIpCall(context: Context, grantResults: IntArray): Boolean {
+    val arePermissionsGranted = allGranted(grantResults)
 
-    try {
-        for (i in permissions.indices) {
-            Log.d(LOG_TAG, "## onPermissionResultVideoIpCall(): " + permissions[i] + "=" + grantResults[i])
-
-            if (Manifest.permission.CAMERA == permissions[i]) {
-                if (PackageManager.PERMISSION_GRANTED == grantResults[i]) {
-                    Log.d(LOG_TAG, "## onPermissionResultVideoIpCall(): CAMERA permission granted")
-                    result++
-                } else {
-                    Log.w(LOG_TAG, "## onPermissionResultVideoIpCall(): CAMERA permission not granted")
-                }
-            }
-
-            if (Manifest.permission.RECORD_AUDIO == permissions[i]) {
-                if (PackageManager.PERMISSION_GRANTED == grantResults[i]) {
-                    Log.d(LOG_TAG, "## onPermissionResultVideoIpCall(): WRITE_EXTERNAL_STORAGE permission granted")
-                    result++
-                } else {
-                    Log.w(LOG_TAG, "## onPermissionResultVideoIpCall(): RECORD_AUDIO permission not granted")
-                }
-            }
-        }
-
-        // Video over IP requires, both Audio & Video !
-        if (2 == result) {
-            isPermissionGranted = true
-        } else {
-            Log.w(LOG_TAG, "## onPermissionResultVideoIpCall(): No permissions granted to IP call (video or audio)")
-
-            Toast.makeText(context, R.string.permissions_action_not_performed_missing_permissions, Toast.LENGTH_SHORT).show()
-        }
-    } catch (ex: Exception) {
-        Log.d(LOG_TAG, "## onPermissionResultVideoIpCall(): Exception MSg=" + ex.message)
+    if (!arePermissionsGranted) {
+        Toast.makeText(context, R.string.permissions_action_not_performed_missing_permissions, Toast.LENGTH_SHORT).show()
     }
 
-    return isPermissionGranted
+    return arePermissionsGranted
 }
 
 /**
  * Return true if all permissions are granted
  */
-fun allGranted(grantResults: IntArray) : Boolean {
+fun allGranted(grantResults: IntArray): Boolean {
     var granted = true
 
     grantResults.forEach {
