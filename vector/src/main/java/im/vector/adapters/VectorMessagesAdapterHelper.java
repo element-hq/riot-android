@@ -1219,7 +1219,12 @@ class VectorMessagesAdapterHelper {
             final String downloadKey = url.hashCode() + "---";
             String displayKey = url + "<----->" + id;
 
-            if (UrlPreviewView.Companion.didUrlPreviewDismiss(displayKey)) {
+            if (!mSession.isURLPreviewEnabled()) {
+                if (!mUrlsPreviews.containsKey(downloadKey)) {
+                    mUrlsPreviews.put(downloadKey, null);
+                    mAdapter.notifyDataSetChanged();
+                }
+            } else if (UrlPreviewView.Companion.didUrlPreviewDismiss(displayKey)) {
                 Log.d(LOG_TAG, "## manageURLPreviews() : " + displayKey + " has been dismissed");
             } else if (mPendingUrls.contains(url)) {
                 // please wait

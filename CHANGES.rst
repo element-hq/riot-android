@@ -5,7 +5,7 @@ Features:
  -
 
 Improvements:
- -
+ - URL previews are no longer requested from the server when displaying URL previews is disabled (PR #2514)
 
 Other changes:
  - Upgrade olm-sdk.aar from version 2.2.2 to version 2.3.0
