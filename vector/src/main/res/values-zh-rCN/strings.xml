@@ -13,7 +13,7 @@
     <string name="action_video_call">视频通话</string>
     <string name="action_mark_all_as_read">全部标记为已读</string>
     <string name="action_quick_reply">快速回复</string>
-    <string name="copied_to_clipboard">复制到剪贴板</string>
+    <string name="copied_to_clipboard">已复制到剪贴板</string>
     <string name="send_bug_report_include_logs">发送日志</string>
     <string name="send_bug_report_include_screenshot">发送屏幕截图</string>
     <string name="join_room">进入聊天室</string>
@@ -115,7 +115,7 @@
     <string name="auth_identity_server">身份服务器：</string>
     <string name="auth_reset_password_next_step_button">我已经验证了我的电子邮箱地址</string>
     <string name="auth_reset_password_message">要重置您的密码，请输入与您的帐号关联的电子邮箱地址：</string>
-    <string name="auth_reset_password_missing_email">必须输入和您账号关联的邮箱地址。</string>
+    <string name="auth_reset_password_missing_email">必须输入和您账号关联的电子邮箱地址。</string>
     <string name="auth_reset_password_missing_password">必须输入一个新的密码。</string>
     <string name="login_error_must_start_http">URL 必须以 http[s]:// 开头</string>
     <string name="login_error_network_error">无法登录：网络错误</string>
@@ -419,7 +419,7 @@
     <string name="active_call">当前通话</string>
     <string name="ongoing_conference_call">" 正在进行电话会议。以语音或视频的形式加入。"</string>
     <string name="ongoing_conference_call_voice">语音</string>
-    <string name="missing_permissions_to_start_conf_call">在这个聊天室里您需要权限来发送会议邀请</string>
+    <string name="missing_permissions_to_start_conf_call">在这个聊天室里发送会议邀请需要权限</string>
     <string name="send_anyway">依旧发送</string>
     <string name="send_bug_report">问题反馈</string>
     <string name="send_bug_report_logs_description">为了诊断问题，这个客户端的日志会随这个问题反馈发送。问题反馈与其包含的日志和截图不会被公开显示。如果您只想发送上面的文字，请取消选择：</string>
@@ -785,7 +785,7 @@
 
     <string name="action_exit">退出</string>
     <string name="groups_invite_header">邀请</string>
-    <string name="start_new_chat_prompt_msg">您确定要向 %s 发起新的聊天吗？</string>
+    <string name="start_new_chat_prompt_msg">您确定要与 %s 发起新的聊天吗？</string>
     <string name="start_voice_call_prompt_msg">您确定要发起语音通话吗？</string>
     <string name="start_video_call_prompt_msg">您确定要发起视频通话吗？</string>
 
@@ -915,7 +915,7 @@
 
     <string name="settings_notification_privacy_normal">标准</string>
     <string name="settings_notification_privacy_power_saving">省电模式</string>
-    <string name="settings_notification_privacy_low_detail">简洁模式（Low detail notifications）</string>
+    <string name="settings_notification_privacy_low_detail">简洁通知</string>
     <string name="settings_notification_privacy_reduced">低隐私模式（Reduced privacy）</string>
     <string name="settings_deactivate_account_section">停用账户</string>
     <string name="settings_deactivate_my_account">停用我的账户</string>
@@ -952,7 +952,7 @@ Matrix 中的信息可见性类似于电子邮件。我们忘记您的信息意�
     <string name="dialog_user_consent_content">要想继续使用主服务器 %1$s 您必须阅读并同意其服务条款。</string>
     <string name="dialog_user_consent_submit">现在阅读</string>
 
-    <string name="dialog_title_third_party_licences">第三方开源协议</string>
+    <string name="dialog_title_third_party_licences">第三方协议</string>
 
     <string name="download">下载</string>
     <string name="clear">清除</string>
@@ -966,7 +966,7 @@ Matrix 中的信息可见性类似于电子邮件。我们忘记您的信息意�
     <string name="e2e_re_request_encryption_key_sent">已发送密钥共享请求。</string>
 
     <string name="e2e_re_request_encryption_key_dialog_title">已请求</string>
-    <string name="e2e_re_request_encryption_key_dialog_content">请在可解密此消息的设备上启动 Riot.im，以便其将密钥发送至当前设备。</string>
+    <string name="e2e_re_request_encryption_key_dialog_content">请在可解密此消息的设备上启动 Riot，以便其将密钥发送至当前设备。</string>
 
     <string name="lock_screen_hint">在此输入…</string>
 
