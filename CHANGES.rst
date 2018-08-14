@@ -6,9 +6,12 @@ Features:
 
 Improvements:
  - Do not ask permission to write external storage at startup (#2483)
+ - Update settings icon and transparent logo for notifications and navigation drawer (#2492)
+ - URL previews are no longer requested from the server when displaying URL previews is disabled (PR #2514)
 
 Other changes:
  - Upgrade olm-sdk.aar from version 2.2.2 to version 2.3.0
+ - move PieFractionView from the SDK to the client (#2525)
 
 Bugfix:
  -

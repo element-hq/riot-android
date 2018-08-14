@@ -51,7 +51,6 @@ import org.matrix.androidsdk.rest.model.message.Message;
 import org.matrix.androidsdk.util.ImageUtils;
 import org.matrix.androidsdk.util.JsonUtils;
 import org.matrix.androidsdk.util.Log;
-import org.matrix.androidsdk.view.PieFractionView;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -64,6 +63,7 @@ import im.vector.activity.CommonActivityUtils;
 import im.vector.activity.VectorMediasViewerActivity;
 import im.vector.util.PermissionsToolsKt;
 import im.vector.util.SlidableMediaInfo;
+import im.vector.view.PieFractionView;
 
 /**
  * An images slider

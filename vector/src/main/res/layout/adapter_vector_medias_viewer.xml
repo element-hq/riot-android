@@ -35,11 +35,11 @@
     </RelativeLayout>
 
 
-    <org.matrix.androidsdk.view.PieFractionView
+    <im.vector.view.PieFractionView
         android:id="@+id/media_slider_piechart"
         android:layout_centerHorizontal="true"
         android:layout_centerVertical="true"
-        android:alpha="0.2"
+        android:alpha="0.4"
         android:layout_width="160dp"
         android:layout_height="160dp"/>
 
