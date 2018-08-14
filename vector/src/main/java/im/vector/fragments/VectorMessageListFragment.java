@@ -23,6 +23,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.FragmentManager;
 import android.support.v7.app.AlertDialog;
@@ -86,6 +87,7 @@ import im.vector.listeners.IMessagesAdapterActionsListener;
 import im.vector.receiver.VectorUniversalLinkReceiver;
 import im.vector.util.ExternalApplicationsUtilKt;
 import im.vector.util.MatrixSdkExtensionsKt;
+import im.vector.util.PermissionsToolsKt;
 import im.vector.util.PreferencesManager;
 import im.vector.util.SlidableMediaInfo;
 import im.vector.util.ThemeUtils;
@@ -95,6 +97,13 @@ import im.vector.widgets.WidgetsManager;
 
 public class VectorMessageListFragment extends MatrixMessageListFragment implements IMessagesAdapterActionsListener {
     private static final String LOG_TAG = VectorMessageListFragment.class.getSimpleName();
+
+    // Data to wait for permission
+    private int mPendingMenuAction;
+    private String mPendingMediaUrl;
+    private String mPendingMediaMimeType;
+    private String mPendingFilename;
+    private EncryptedFileInfo mPendingEncryptedFileInfo;
 
     public interface VectorMessageListFragmentListener {
         /**
@@ -255,6 +264,19 @@ public class VectorMessageListFragment extends MatrixMessageListFragment impleme
                 mAdapter.notifyDataSetChanged();
             }
         });
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        if (requestCode == PermissionsToolsKt.PERMISSION_REQUEST_CODE) {
+            if (PermissionsToolsKt.allGranted(grantResults)) {
+                onMediaAction(mPendingMenuAction, mPendingMediaUrl, mPendingMediaMimeType, mPendingFilename, mPendingEncryptedFileInfo);
+                mPendingMediaUrl = null;
+                mPendingMediaMimeType = null;
+                mPendingFilename = null;
+                mPendingEncryptedFileInfo = null;
+            }
+        }
     }
 
     @Override
@@ -842,19 +864,28 @@ public class VectorMessageListFragment extends MatrixMessageListFragment impleme
                         return;
                     }
 
-                    if ((menuAction == ACTION_VECTOR_SAVE) || (menuAction == ACTION_VECTOR_OPEN)) {
-                        CommonActivityUtils.saveMediaIntoDownloads(getActivity(), file, trimmedFileName, mediaMimeType, new SimpleApiCallback<String>() {
-                            @Override
-                            public void onSuccess(String savedMediaPath) {
-                                if (null != savedMediaPath) {
-                                    if (menuAction == ACTION_VECTOR_SAVE) {
-                                        Toast.makeText(getActivity(), getText(R.string.media_slider_saved), Toast.LENGTH_LONG).show();
-                                    } else {
-                                        CommonActivityUtils.openMedia(getActivity(), savedMediaPath, mediaMimeType);
+                    if (menuAction == ACTION_VECTOR_SAVE || menuAction == ACTION_VECTOR_OPEN) {
+                        if (PermissionsToolsKt.checkPermissions(PermissionsToolsKt.PERMISSIONS_FOR_WRITING_FILES,
+                                VectorMessageListFragment.this, PermissionsToolsKt.PERMISSION_REQUEST_CODE)) {
+                            CommonActivityUtils.saveMediaIntoDownloads(getActivity(), file, trimmedFileName, mediaMimeType, new SimpleApiCallback<String>() {
+                                @Override
+                                public void onSuccess(String savedMediaPath) {
+                                    if (null != savedMediaPath) {
+                                        if (menuAction == ACTION_VECTOR_SAVE) {
+                                            Toast.makeText(getActivity(), getText(R.string.media_slider_saved), Toast.LENGTH_LONG).show();
+                                        } else {
+                                            CommonActivityUtils.openMedia(getActivity(), savedMediaPath, mediaMimeType);
+                                        }
                                     }
                                 }
-                            }
-                        });
+                            });
+                        } else {
+                            mPendingMenuAction = menuAction;
+                            mPendingMediaUrl = mediaUrl;
+                            mPendingMediaMimeType = mediaMimeType;
+                            mPendingFilename = filename;
+                            mPendingEncryptedFileInfo = encryptedFileInfo;
+                        }
                     } else {
                         if (null != trimmedFileName) {
                             File dstFile = new File(file.getParent(), trimmedFileName);

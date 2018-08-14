@@ -60,6 +60,8 @@ import java.util.List;
 
 import im.vector.R;
 import im.vector.activity.CommonActivityUtils;
+import im.vector.activity.VectorMediasViewerActivity;
+import im.vector.util.PermissionsToolsKt;
 import im.vector.util.SlidableMediaInfo;
 import im.vector.view.PieFractionView;
 
@@ -641,65 +643,67 @@ public class VectorMediasViewerAdapter extends PagerAdapter {
     /**
      * Download the current media file, and export it to the Download folder of the device
      */
-    private void downloadMediaAndExportToDownloads() {
-        final SlidableMediaInfo mediaInfo = mMediasMessagesList.get(mLatestPrimaryItemPosition);
+    public void downloadMediaAndExportToDownloads() {
+        if (((VectorMediasViewerActivity) mContext).checkWritePermission(PermissionsToolsKt.PERMISSION_REQUEST_OTHER)) {
+            final SlidableMediaInfo mediaInfo = mMediasMessagesList.get(mLatestPrimaryItemPosition);
 
-        if (mMediasCache.isMediaCached(mediaInfo.mMediaUrl, mediaInfo.mMimeType)) {
-            mMediasCache.createTmpMediaFile(mediaInfo.mMediaUrl, mediaInfo.mMimeType, mediaInfo.mEncryptedFileInfo, new SimpleApiCallback<File>() {
-                @Override
-                public void onSuccess(File file) {
-                    if (null != file) {
-                        CommonActivityUtils.saveMediaIntoDownloads(mContext, file, null, mediaInfo.mMimeType, new SimpleApiCallback<String>() {
-                            @Override
-                            public void onSuccess(String path) {
-                                Toast.makeText(mContext, R.string.media_slider_saved, Toast.LENGTH_LONG).show();
-                            }
-                        });
-                    }
-                }
-            });
-        } else {
-            downloadVideo(mLatestPrimaryView, mLatestPrimaryItemPosition, true);
-            final String downloadId = mMediasCache.downloadMedia(mContext,
-                    mSession.getHomeServerConfig(),
-                    mediaInfo.mMediaUrl,
-                    mediaInfo.mMimeType,
-                    mediaInfo.mEncryptedFileInfo);
-
-            if (null != downloadId) {
-                mMediasCache.addDownloadListener(downloadId, new MXMediaDownloadListener() {
+            if (mMediasCache.isMediaCached(mediaInfo.mMediaUrl, mediaInfo.mMimeType)) {
+                mMediasCache.createTmpMediaFile(mediaInfo.mMediaUrl, mediaInfo.mMimeType, mediaInfo.mEncryptedFileInfo, new SimpleApiCallback<File>() {
                     @Override
-                    public void onDownloadError(String downloadId, JsonElement jsonElement) {
-                        MatrixError error = JsonUtils.toMatrixError(jsonElement);
-
-                        if ((null != error) && error.isSupportedErrorCode()) {
-                            Toast.makeText(mContext, error.getLocalizedMessage(), Toast.LENGTH_LONG).show();
-                        }
-                    }
-
-                    @Override
-                    public void onDownloadComplete(String aDownloadId) {
-                        if (aDownloadId.equals(downloadId)) {
-                            if (mMediasCache.isMediaCached(mediaInfo.mMediaUrl, mediaInfo.mMimeType)) {
-                                mMediasCache.createTmpMediaFile(mediaInfo.mMediaUrl, mediaInfo.mMimeType, mediaInfo.mEncryptedFileInfo,
-                                        new SimpleApiCallback<File>() {
-                                            @Override
-                                            public void onSuccess(File file) {
-                                                if (null != file) {
-                                                    CommonActivityUtils.saveMediaIntoDownloads(mContext, file, null, mediaInfo.mMimeType,
-                                                            new SimpleApiCallback<String>() {
-                                                                @Override
-                                                                public void onSuccess(String path) {
-                                                                    Toast.makeText(mContext, R.string.media_slider_saved, Toast.LENGTH_LONG).show();
-                                                                }
-                                                            });
-                                                }
-                                            }
-                                        });
-                            }
+                    public void onSuccess(File file) {
+                        if (null != file) {
+                            CommonActivityUtils.saveMediaIntoDownloads(mContext, file, null, mediaInfo.mMimeType, new SimpleApiCallback<String>() {
+                                @Override
+                                public void onSuccess(String path) {
+                                    Toast.makeText(mContext, R.string.media_slider_saved, Toast.LENGTH_LONG).show();
+                                }
+                            });
                         }
                     }
                 });
+            } else {
+                downloadVideo(mLatestPrimaryView, mLatestPrimaryItemPosition, true);
+                final String downloadId = mMediasCache.downloadMedia(mContext,
+                        mSession.getHomeServerConfig(),
+                        mediaInfo.mMediaUrl,
+                        mediaInfo.mMimeType,
+                        mediaInfo.mEncryptedFileInfo);
+
+                if (null != downloadId) {
+                    mMediasCache.addDownloadListener(downloadId, new MXMediaDownloadListener() {
+                        @Override
+                        public void onDownloadError(String downloadId, JsonElement jsonElement) {
+                            MatrixError error = JsonUtils.toMatrixError(jsonElement);
+
+                            if ((null != error) && error.isSupportedErrorCode()) {
+                                Toast.makeText(mContext, error.getLocalizedMessage(), Toast.LENGTH_LONG).show();
+                            }
+                        }
+
+                        @Override
+                        public void onDownloadComplete(String aDownloadId) {
+                            if (aDownloadId.equals(downloadId)) {
+                                if (mMediasCache.isMediaCached(mediaInfo.mMediaUrl, mediaInfo.mMimeType)) {
+                                    mMediasCache.createTmpMediaFile(mediaInfo.mMediaUrl, mediaInfo.mMimeType, mediaInfo.mEncryptedFileInfo,
+                                            new SimpleApiCallback<File>() {
+                                                @Override
+                                                public void onSuccess(File file) {
+                                                    if (null != file) {
+                                                        CommonActivityUtils.saveMediaIntoDownloads(mContext, file, null, mediaInfo.mMimeType,
+                                                                new SimpleApiCallback<String>() {
+                                                                    @Override
+                                                                    public void onSuccess(String path) {
+                                                                        Toast.makeText(mContext, R.string.media_slider_saved, Toast.LENGTH_LONG).show();
+                                                                    }
+                                                                });
+                                                    }
+                                                }
+                                            });
+                                }
+                            }
+                        }
+                    });
+                }
             }
         }
     }

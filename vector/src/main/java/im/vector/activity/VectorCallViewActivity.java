@@ -65,6 +65,7 @@ import im.vector.Matrix;
 import im.vector.R;
 import im.vector.VectorApp;
 import im.vector.util.CallsManager;
+import im.vector.util.PermissionsToolsKt;
 import im.vector.util.VectorUtils;
 import im.vector.util.ViewUtilKt;
 import im.vector.view.VectorPendingCallView;
@@ -133,7 +134,6 @@ public class VectorCallViewActivity extends RiotAppCompatActivity implements Sen
 
     private IMXCall mCall;
     private CallsManager mCallsManager;
-    private int mPermissionCode;
 
     // on Samsung devices, the application is suspended when the screen is turned off
     // so the call must not be suspended
@@ -512,11 +512,12 @@ public class VectorCallViewActivity extends RiotAppCompatActivity implements Sen
         VectorUtils.loadCallAvatar(this, mSession, mAvatarView, mCall.getRoom());
 
         mIncomingCallTabbar.setVisibility(CallsManager.getSharedInstance().isRinging() && mCall.isIncoming() ? View.VISIBLE : View.GONE);
-        mPermissionCode = mCall.isVideo() ?
-                CommonActivityUtils.REQUEST_CODE_PERMISSION_VIDEO_IP_CALL : CommonActivityUtils.REQUEST_CODE_PERMISSION_AUDIO_IP_CALL;
+
+        final int permissions = mCall.isVideo() ? PermissionsToolsKt.PERMISSIONS_FOR_VIDEO_IP_CALL : PermissionsToolsKt.PERMISSIONS_FOR_AUDIO_IP_CALL;
+        final int requestCode = mCall.isVideo() ? PermissionsToolsKt.PERMISSION_REQUEST_CODE_VIDEO_CALL : PermissionsToolsKt.PERMISSION_REQUEST_CODE_AUDIO_CALL;
 
         // the user can only accept if the dedicated permissions are granted
-        mAcceptIncomingCallButton.setVisibility(CommonActivityUtils.checkPermissions(mPermissionCode, this) ? View.VISIBLE : View.GONE);
+        mAcceptIncomingCallButton.setVisibility(PermissionsToolsKt.checkPermissions(permissions, this, requestCode) ? View.VISIBLE : View.GONE);
         mAcceptIncomingCallButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -638,18 +639,13 @@ public class VectorCallViewActivity extends RiotAppCompatActivity implements Sen
     }
 
     @Override
-    public void onRequestPermissionsResult(int aRequestCode, @NonNull String[] aPermissions, @NonNull int[] aGrantResults) {
-        if (aRequestCode == mPermissionCode) {
-
-            if (CommonActivityUtils.REQUEST_CODE_PERMISSION_VIDEO_IP_CALL == aRequestCode) {
-                // the user can only accept if the dedicated permissions are granted
-                mAcceptIncomingCallButton.setVisibility(
-                        CommonActivityUtils.onPermissionResultVideoIpCall(this, aPermissions, aGrantResults) ? View.VISIBLE : View.GONE);
-            } else {
-                // the user can only accept if the dedicated permissions are granted
-                mAcceptIncomingCallButton.setVisibility(
-                        CommonActivityUtils.onPermissionResultAudioIpCall(this, aPermissions, aGrantResults) ? View.VISIBLE : View.GONE);
-            }
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        if (requestCode == PermissionsToolsKt.PERMISSION_REQUEST_CODE_VIDEO_CALL) {
+            // the user can only accept if the dedicated permissions are granted
+            mAcceptIncomingCallButton.setVisibility(PermissionsToolsKt.onPermissionResultVideoIpCall(this, grantResults) ? View.VISIBLE : View.GONE);
+        } else if (requestCode == PermissionsToolsKt.PERMISSION_REQUEST_CODE_AUDIO_CALL) {
+            // the user can only accept if the dedicated permissions are granted
+            mAcceptIncomingCallButton.setVisibility(PermissionsToolsKt.onPermissionResultAudioIpCall(this, grantResults) ? View.VISIBLE : View.GONE);
         }
     }
 
