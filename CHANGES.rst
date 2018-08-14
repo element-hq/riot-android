@@ -5,6 +5,7 @@ Features:
  -
 
 Improvements:
+ - Update settings icon and transparent logo for notifications and navigation drawer (#2492)
  - URL previews are no longer requested from the server when displaying URL previews is disabled (PR #2514)
 
 Other changes:
