@@ -291,7 +291,9 @@
     <string name="room_details_people_invited_group_name">已邀请</string>
     <string name="room_details_people_present_group_name">已加入</string>
 
-    <string name="room_event_action_report_prompt_ignore_user">您要隐藏所有来自这个用户的消息吗？</string>
+    <string name="room_event_action_report_prompt_ignore_user">您要隐藏所有来自这个用户的消息吗？
+
+注意，此操作会重启应用并将花费一些时间。</string>
     <string name="room_event_action_cancel_upload">取消上传</string>
     <string name="room_event_action_cancel_download">取消下载</string>
 
@@ -334,7 +336,9 @@
 请输入您的密码以继续。</string>
     <string name="devices_delete_dialog_title">身份认证</string>
     <string name="settings_old_password">旧密码</string>
-    <string name="settings_unignore_user">显示所有来自 %s 的消息？</string>
+    <string name="settings_unignore_user">显示所有来自 %s 的消息？
+
+注意，此操作会重启应用并将花费一些时间。</string>
 
     <string name="settings_select_country">选择一个国家</string>
 
@@ -418,7 +422,7 @@
     <string name="missing_permissions_to_start_conf_call">在这个聊天室里您需要权限来发送会议邀请</string>
     <string name="send_anyway">依旧发送</string>
     <string name="send_bug_report">问题反馈</string>
-    <string name="send_bug_report_logs_description">为了诊断问题，这个客户端的日志会随这个问题反馈发送。如果您只想发送上面的文字，请取消选择：</string>
+    <string name="send_bug_report_logs_description">为了诊断问题，这个客户端的日志会随这个问题反馈发送。问题反馈与其包含的日志和截图不会被公开显示。如果您只想发送上面的文字，请取消选择：</string>
     <string name="send_bug_report_sent">问题反馈已经成功发送</string>
     <string name="send_bug_report_failed">问题反馈发送失败（%s）</string>
     <string name="read_receipt">阅读</string>
@@ -601,7 +605,8 @@
     <string name="failed_to_load_timeline_position">%s 正在尝试在这个聊天室加载一个特定的时间点，但无法找到它。</string>
     <string name="encryption_information_name">名称</string>
     <string name="encryption_information_verify_device_warning">" 为验证此设备是否可信，请通过其他方式（例如面对面交换或拨打电话）与其拥有者联系，并询问他们该设备的用户设置中的密钥是否与以下密钥匹配："</string>
-    <string name="encryption_information_verify_device_warning2">如果匹配，请点击下面的验证按钮。 如果不匹配，那么这可能说明其他人正在盗用此设备，而您应当点击黑名单按钮。
+    <string name="encryption_information_verify_device_warning2">如果匹配，请点击下面的验证按钮。 
+如果不匹配，那么这可能说明其他人正在盗用此设备，而您应当将其拉入黑名单。
 未来，这个验证过程将会变得更加精致、巧妙一些。</string>
     <string name="unknown_devices_alert_message">这个聊天室包含未经验证的未知设备。
 这意味着设备不能保证属于他们声称的用户。
@@ -970,4 +975,34 @@ Matrix 中的信息可见性类似于电子邮件。我们忘记您的信息意�
     <string name="error_empty_field_your_password">请输入您的密码。</string>
 
 <string name="speak">说话</string>
+    <string name="send_bug_report_description_in_english">请尽可能用英文填写问题描述。</string>
+    <string name="room_participants_action_unignore_prompt">显示来自该用户的所有信息？
+
+注意，此操作会重启应用并将花费一些时间。</string>
+    <string name="room_message_placeholder_reply_to_encrypted">发送加密的回复…</string>
+    <string name="room_message_placeholder_reply_to_not_encrypted">发送回复（未加密）…</string>
+    <string name="settings_preview_media_before_sending">发送前预览媒体文件</string>
+
+    <string name="settings_labs_keyboard_options_to_send_message">使用键盘回车键发送消息</string>
+    <string name="command_description_emote">显示动作</string>
+    <string name="command_description_ban_user">依照 ID 封禁用户</string>
+    <string name="command_description_unban_user">依照 ID 解禁用户</string>
+    <string name="command_description_op_user">设置用户的权限等级</string>
+    <string name="command_description_deop_user">依照 ID 取消用户管理员权限</string>
+    <string name="command_description_invite_user">依照 ID 邀请用户进入当前聊天室</string>
+    <string name="command_description_join_room">依照别名加入聊天室</string>
+    <string name="command_description_part_room">离开聊天室</string>
+    <string name="command_description_topic">设置聊天室主题</string>
+    <string name="command_description_kick_user">依照 ID 踢出用户</string>
+    <string name="command_description_nick">更改您显示的昵称</string>
+    <string name="command_description_markdown">打开/关闭 markdown</string>
+    <string name="command_description_clear_scalar_token">修复 Matrix Apps 管理</string>
+
+    <string name="room_tombstone_versioned_description">这个聊天室已经被替换并且不再活跃</string>
+    <string name="room_tombstone_continuation_link">对话在此继续</string>
+    <string name="room_tombstone_continuation_description">这个聊天室是另一个对话的继续</string>
+    <string name="room_tombstone_predecessor_link">点击此处查看旧消息</string>
+
+<string name="settings_without_flair">您目前不是任何社区的成员。</string>
+
     </resources>
