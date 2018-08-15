@@ -362,7 +362,7 @@ Los mensajes cifrados no serán visibles en cuentas que no implementen el cifrad
     <string name="room_two_users_are_typing">%1$s &amp; %2$s están escribiendo…</string>
     <string name="room_many_users_are_typing">%1$s &amp; %2$s &amp; otros están escribiendo…</string>
     <string name="room_message_placeholder_encrypted">Enviar mensaje cifrado…</string>
-    <string name="room_message_placeholder_not_encrypted">Enviar mensaje (descifrado)…</string>
+    <string name="room_message_placeholder_not_encrypted">Enviar mensaje (sin cifrar)…</string>
     <string name="room_offline_notification">La conexión al servidor se perdió.</string>
     <string name="room_unsent_messages_notification">Mensajes no fueron enviados. ¿ %1$s o %2$s ahora?</string>
     <string name="room_unknown_devices_messages_notification">Mensajes no fueron enviados debido a la precencia de dispositivos no conocidos. ¿ %1$s o %2$s ahora?</string>
@@ -810,9 +810,9 @@ Lo puedes hacer ahora o luego desde las configuraciones de la aplicación.</stri
     <!-- notification statuses -->
     <string name="notification_off">Off</string>
     <string name="notification_on">On</string>
-    <string name="notification_noisy">Alto</string>
+    <string name="notification_noisy">Ruidoso</string>
 
-    <string name="encrypted_message">Mensaje encriptado</string>
+    <string name="encrypted_message">Mensaje cifrado</string>
 
 <string name="title_activity_group_details">Detalles de la comunidad</string>
 
@@ -1019,4 +1019,33 @@ La visibilidad del mensaje en Matrix es similar al correo electrónico. Olvidar 
     <string name="settings_opt_in_of_analytics_prompt">Por favor, active las estadísticas para ayudarnos a mejorar Riot.</string>
     <string name="lock_screen_hint">Escriba aquí…</string>
 
-    </resources>
+    <string name="send_bug_report_description_in_english">Si es posible, escribe la descripción en inglés.</string>
+    <string name="room_participants_action_unignore_prompt">¿Mostrar todos los mensajes de este usuario?
+
+Esta acción reiniciará la aplicación y puede llevar algún tiempo.</string>
+    <string name="room_message_placeholder_reply_to_encrypted">Enviar una respuesta cifrada…</string>
+    <string name="room_message_placeholder_reply_to_not_encrypted">Enviar una respuesta (sin cifrar)…</string>
+    <string name="settings_without_flair">Actualmente no eres miembro de ninguna comunidad.</string>
+
+    <string name="settings_labs_keyboard_options_to_send_message">Usa la tecla Enter para enviar el mensaje</string>
+    <string name="command_description_emote">Muestra la acción</string>
+    <string name="command_description_ban_user">Prohíbe la entrada al usuario con el ID dado</string>
+    <string name="command_description_unban_user">Permite de nuevo la entrada al usuario con el ID dado</string>
+    <string name="command_description_op_user">Define el nivel de poder de un usuario</string>
+    <string name="command_description_invite_user">Invita al usuario con el ID dado a la sala actual</string>
+    <string name="command_description_join_room">Entra en la sala con el alias dado</string>
+    <string name="command_description_part_room">Salir de la sala</string>
+    <string name="command_description_topic">Establecer el tema de la sala</string>
+    <string name="command_description_kick_user">Echar al usuario con el ID dado</string>
+    <string name="command_description_nick">Cambia tu nick mostrado</string>
+    <string name="command_description_markdown">Activar/desactivar Markdown</string>
+    <string name="command_description_clear_scalar_token">Para reparar la gestión de las aplicaciones Matrix</string>
+
+    <string name="settings_preview_media_before_sending">Ver media antes de enviar</string>
+
+    <string name="room_tombstone_versioned_description">Esta sala ha sido reemplazada o ya no está activa</string>
+    <string name="room_tombstone_continuation_link">La conversación continúa aquí</string>
+    <string name="room_tombstone_continuation_description">Esta sala es una continuación de otra conversación</string>
+    <string name="room_tombstone_predecessor_link">Pinchar aquí para ver mensajes más antiguos</string>
+
+</resources>
