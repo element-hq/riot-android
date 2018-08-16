@@ -1085,4 +1085,7 @@ Email также позволит вам при необходимости во�
     <string name="room_tombstone_continuation_description">Эта комната является продолжением другого разговора</string>
     <string name="room_tombstone_predecessor_link">Нажмите здесь для просмотра старых сообщений</string>
 
-</resources>
+<string name="command_description_join_room">Присоединиться к комнате с указанным псевдонимом</string>
+    <string name="command_description_clear_scalar_token">Для исправления управления приложениями Matrix</string>
+
+    </resources>
