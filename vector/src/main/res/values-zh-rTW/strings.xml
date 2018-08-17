@@ -478,11 +478,9 @@
     <string name="room_recents_join_room_prompt">輸入聊天室 ID 或聊天室別名</string>
 
     <string name="directory_search_results_title">瀏覽目錄</string>
-    <string name="directory_search_room">%1$d 個聊天室</string>
     <plurals name="directory_search_rooms">
 	<item quantity="other">%1$d 個聊天室</item>
 </plurals>
-    <string name="directory_search_room_for">有 %1$d 個聊天室匹配 “%2$s”</string>
     <plurals name="directory_search_rooms_for">
 	<item quantity="other">有 %1$d 個聊天室匹配 “%2$s”</item>
 </plurals>
