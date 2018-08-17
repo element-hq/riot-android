@@ -43,7 +43,6 @@
     <string name="room_no_conference_call_in_encrypted_rooms">Vergadergesprekken zijn niet ondersteund in versleutelde ruimtes</string>
     <string name="send_anyway">Toch sturen</string>
     <string name="or">of</string>
-    <string name="and">en</string>
     <string name="invite">Uitnodigen</string>
 
     <!-- actions -->
@@ -94,10 +93,6 @@ Selecteer exporteren om de versleutelingssleutels op te slaan voordat je uitlogt
     <string name="rooms_directory_header">Ruimte adresboek</string>
     <string name="no_room_placeholder">Geen ruimtes</string>
     <string name="no_public_room_placeholder">Geen publieke ruimtes beschikbaar</string>
-    <plurals name="public_room_nb_users">
-        <item quantity="one">1 gebruiker</item>
-        <item quantity="other">%d gebruikers</item>
-    </plurals>
 
     <string name="send_bug_report_include_logs">Logboek versturen</string>
     <string name="send_bug_report_include_crash_logs">Crash logboek versturen</string>

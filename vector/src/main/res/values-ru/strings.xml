@@ -43,7 +43,6 @@
     <string name="room_no_conference_call_in_encrypted_rooms">Конференц звонки не поддерживаются в зашифрованных комнатах</string>
     <string name="send_anyway">Отправить все равно</string>
     <string name="or">или</string>
-    <string name="and">и</string>
     <string name="invite">Приглашение</string>
 
     <!-- actions -->
@@ -94,13 +93,7 @@
     <string name="rooms_directory_header">Список комнат</string>
     <string name="no_room_placeholder">Нет комнат</string>
     <string name="no_public_room_placeholder">Публичные комнаты недоступны</string>
-    <plurals name="public_room_nb_users">
-	<item quantity="one">%d пользователь</item>
-	<item quantity="few">%d пользователя</item>
-	<item quantity="many">%d пользователей</item>
-	<item quantity="other"/>
-</plurals>
-    
+
     <string name="send_bug_report_include_logs">Отправить логи</string>
     <string name="send_bug_report_include_crash_logs">Отправить журналы ошибок</string>
     <string name="send_bug_report_include_screenshot">Отправить скриншот</string>

@@ -29,7 +29,6 @@
     <string name="cannot_start_call">కాల్ను ప్రారంభించలేరు, దయచేసి తరువాత ప్రయత్నించండి</string>
     <string name="device_information">పరికర సమాచారం</string>
     <string name="or">లేదా</string>
-    <string name="and">మరియు</string>
     <string name="action_video_call">విడియో కాల్</string>
     <string name="action_close">మూసివేయు</string>
     <string name="copied_to_clipboard">క్లిప్బోర్డ్కు నకలు చేయబడింది</string>
@@ -61,10 +60,6 @@
     <string name="rooms_directory_header">గది డైరెక్టరీ</string>
     <string name="no_room_placeholder">గదులు లేవు</string>
     <string name="no_public_room_placeholder">బహిరంగ గదులు అందుబాటులో లేవు</string>
-    <plurals name="public_room_nb_users">
-	    <item quantity="one">1 వాడుకరి</item>
-	    <item quantity="other">%d వాడుకరులు</item>
-    </plurals>
 
     <string name="send_bug_report_include_logs">లాగ్లను పంపు</string>
     <string name="send_bug_report_include_crash_logs">క్రాష్ లాగ్లను పంపండి</string>

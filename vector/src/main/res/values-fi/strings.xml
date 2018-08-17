@@ -46,7 +46,6 @@
     <string name="room_no_conference_call_in_encrypted_rooms">Ryhmäpuhelut eivät ole tuettuja salatuissa huoneissa</string>
     <string name="send_anyway">Lähetä silti</string>
     <string name="or">tai</string>
-    <string name="and">ja</string>
     <string name="invite">Kutsu</string>
 
     <!-- actions -->
@@ -97,10 +96,6 @@ Valitse \"vie\" varmuuskopioidaksesi avaimet ennen uloskirjautumista.</string>
     <string name="rooms_directory_header">Huonehakemisto</string>
     <string name="no_room_placeholder">Ei huoneita</string>
     <string name="no_public_room_placeholder">Ei julkisia huoneita saatavilla</string>
-    <plurals name="public_room_nb_users">
-	<item quantity="one">1 käyttäjä</item>
-	<item quantity="other">%d käyttäjää</item>
-</plurals>
 
     <string name="send_bug_report_include_logs">Lähetä lokit</string>
     <string name="send_bug_report_include_crash_logs">Lähetä kaatumislokit</string>

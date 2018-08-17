@@ -48,7 +48,6 @@
     <string name="room_no_conference_call_in_encrypted_rooms">Konferencijski pozivi nisu podržani u šifriranim sobama</string>
     <string name="send_anyway">Ipak pošalji</string>
     <string name="or">ili</string>
-    <string name="and">i</string>
     <string name="invite">Pozovi</string>
     <string name="offline">Offline</string>
 
@@ -94,11 +93,6 @@ Odaberite eksport kako biste napravili rezervu prije odjavljivanja.</string>
     <string name="rooms_directory_header">Imenik soba</string>
     <string name="no_room_placeholder">Nema soba</string>
     <string name="no_public_room_placeholder">Nema dostupnih javnih soba</string>
-    <plurals name="public_room_nb_users">
-	<item quantity="one">Jedan</item>
-	<item quantity="few">Nekoliko</item>
-	<item quantity="other">Drugi</item>
-</plurals>
 
     <string name="send_bug_report_include_logs">Pošaljite zapise</string>
     <string name="send_bug_report_include_crash_logs">Pošaljite keš zapise</string>

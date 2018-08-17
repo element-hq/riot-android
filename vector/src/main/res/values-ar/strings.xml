@@ -71,14 +71,6 @@
     <string name="rooms_directory_header">دليل الغرف</string>
     <string name="no_room_placeholder">لا غرف</string>
     <string name="no_public_room_placeholder">لا غرف عمومية متوفرة</string>
-    <plurals name="public_room_nb_users">
-	<item quantity="zero">لا مستخدمين</item>
-	<item quantity="one">مستخدم واحد</item>
-	<item quantity="two">مستخدمان</item>
-	<item quantity="few">%d مستخدمين</item>
-	<item quantity="many">%d مستخدما</item>
-	<item quantity="other">%d مستخدم</item>
-</plurals>
 
     <string name="send_bug_report_include_logs">أرسِل السجلات</string>
     <string name="send_bug_report_include_crash_logs">أرسِل سجلات الانهيار</string>
@@ -895,7 +887,6 @@
 
     <!-- group details -->
     <string name="title_activity_room">الغرفة</string>
-    <string name="and">و</string>
     <string name="groups_invite_header">دعوة</string>
     <string name="send_files_in">أرسل إلى</string>
     <string name="title_activity_choose_sticker">أرسِل ملصقا</string>
@@ -924,8 +915,6 @@
     <string name="room_participants_online">متّصل</string>
     <string name="room_participants_offline">غير متّصل</string>
     <string name="room_participants_idle">خامل</string>
-    <string name="room_participants_now">الآن</string>
-    <string name="room_participants_ago"/>
 
     <string name="settings_notification_privacy">خصوصيّة الإخطارات</string>
     <string name="settings_notification_privacy_warning">يعمل Riot.im في الخلفية ليُبقي محتوى رسائل الإخطارات خاصًّا. يمكنك تغيير هذا الخيار لتقليل استخدام البطارية.</string>

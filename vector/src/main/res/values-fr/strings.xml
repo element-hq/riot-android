@@ -36,7 +36,6 @@
     <string name="device_information">Informations sur l\'appareil</string>
     <string name="room_no_conference_call_in_encrypted_rooms">Les téléconférences ne sont pas prises en charge dans les salons chiffrés</string>
     <string name="or">ou</string>
-    <string name="and">et</string>
     <string name="invite">Inviter</string>
 
     <string name="action_sign_out">Se déconnecter</string>

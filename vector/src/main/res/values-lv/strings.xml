@@ -41,7 +41,6 @@
     <string name="room_no_conference_call_in_encrypted_rooms">Konferences zvani netiek atbalstīti šifrētās istabās</string>
     <string name="send_anyway">Nosūtīt jebkurā gadījumā</string>
     <string name="or">vai</string>
-    <string name="and">un</string>
     <string name="invite">Uzaicināt</string>
 
     <string name="action_sign_out">Izrakstīties</string>
@@ -84,11 +83,6 @@
     <string name="rooms_directory_header">Istabu katalogs</string>
     <string name="no_room_placeholder">Nav istabu</string>
     <string name="no_public_room_placeholder">Nav pieejamu publisko istabu</string>
-    <plurals name="public_room_nb_users">
-	<item quantity="zero">%d lietotājs</item>
-	<item quantity="one">%d lietotāji</item>
-	<item quantity="other">%d lietotāji</item>
-</plurals>
 
     <string name="send_bug_report_include_logs">Nosūtīt logfailus</string>
     <string name="send_bug_report_include_crash_logs">Nosūtīt sistēmas avārijas logfailus</string>

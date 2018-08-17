@@ -51,7 +51,6 @@
     <string name="room_no_conference_call_in_encrypted_rooms">As chamadas de conferencia non están soportadas en salas cifradas</string>
     <string name="send_anyway">Enviar igualmente</string>
     <string name="or">ou</string>
-    <string name="and">e</string>
     <string name="invite">Convidar</string>
     <string name="offline">Fóra de liña</string>
 
@@ -108,10 +107,6 @@ Escolla exportar para facer copia de seguridade das chaves antes de desconectar.
     <string name="download">Descargar</string>
     <string name="speak">Falar</string>
     <string name="clear">Limpar</string>
-    <plurals name="public_room_nb_users">
-	<item quantity="one">1 usuario</item>
-	<item quantity="other">%d usuarios</item>
-</plurals>
 
     <string name="groups_invite_header">Convidar</string>
     <string name="groups_header">Comunidades</string>
@@ -634,12 +629,6 @@ Seguramente queira conectarse cunha conta distinta, ou engadir este correo a sú
 	<item quantity="other">%d membros</item>
 </plurals>
     <string name="room_title_one_member">1 membro</string>
-    <string name="format_time_s">s</string>
-    <string name="format_time_m">m</string>
-    <string name="format_time_h">h</string>
-    <string name="format_time_d">d</string>
-
-    <string name="room_participants_ago">atrás</string>
 
     <string name="room_participants_header_call">Chamar</string>
     <string name="room_participants_header_devices">DISPOSITIVOS</string>

@@ -67,7 +67,6 @@
     <string name="room_no_conference_call_in_encrypted_rooms">Conference calls are not supported in encrypted rooms</string>
     <string name="send_anyway">Send Anyway</string>
     <string name="or">or</string>
-    <string name="and">and</string>
     <string name="invite">Invite</string>
     <string name="offline">Offline</string>
 

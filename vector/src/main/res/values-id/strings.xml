@@ -20,7 +20,6 @@
     <string name="ongoing_conference_call_voice">suara</string>
     <string name="device_information">Informasi Perangkat</string>
     <string name="or">atau</string>
-    <string name="and">dan</string>
     <string name="invite">Undang</string>
     <string name="action_voice_call">Panggilan Suara</string>
     <string name="action_video_call">Panggilan Video</string>
@@ -184,9 +183,6 @@ Lakukan export agar tercadangkan sebelum Anda keluar.</string>
     <string name="bottom_action_home">Tampilan Awal</string>
     <string name="no_conversation_placeholder">Belum ada percakapan</string>
     <string name="no_room_placeholder">Belum ada ruang</string>
-    <plurals name="public_room_nb_users">
-	<item quantity="other">%d pengguna</item>
-</plurals>
 
     <string name="send_bug_report_include_screenshot">Kirim tampilan layar</string>
     <string name="send_bug_report_description">Mohon uraikan bug tersebut. Apa yang Anda lakukan? Apa yang Anda harapkan terjadi? Apa yang sebenarnya terjadi?</string>

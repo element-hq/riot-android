@@ -599,7 +599,6 @@
 未知设备：</string>
 
     <string name="title_activity_historical">历史消息</string>
-    <string name="and">和</string>
     <string name="invite">邀请</string>
     <string name="action_global_search">全局搜索</string>
     <string name="bottom_action_home">主页</string>
@@ -629,9 +628,6 @@
     <string name="rooms_directory_header">聊天室目录</string>
     <string name="no_room_placeholder">没有聊天室</string>
     <string name="no_public_room_placeholder">没有公开的聊天室</string>
-    <plurals name="public_room_nb_users">
-	<item quantity="other">%d 个用户</item>
-</plurals>
 
     <string name="people_search_invite_by_id_dialog_title">用 ID 邀请用户</string>
     <string name="people_search_invite_by_id_dialog_description">请输入一个或多个邮件地址或 Matrix ID</string>

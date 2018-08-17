@@ -43,9 +43,6 @@
 
     <string name="direct_chats_header">会話</string>
     <string name="no_public_room_placeholder">公開された部屋がありません</string>
-    <plurals name="public_room_nb_users">
-	<item quantity="other">%d 名</item>
-</plurals>
 
     <string name="send_bug_report">不具合報告</string>
     <string name="send_bug_report_description">不具合の内容と状況の説明をお願い致します。あなたは何をしましたか？何が起こると思いますか？実際何が起こったのですか？</string>
@@ -345,7 +342,6 @@
     <string name="missing_permissions_warning">権限が無いため、一部の機能が利用できない可能性があります。</string>
     <string name="missing_permissions_to_start_conf_call">この部屋で会議を開始するためには招待権限が必要です</string>
     <string name="send_anyway">とにかく送る</string>
-    <string name="and">と</string>
     <string name="action_sign_out">ログアウト</string>
     <string name="action_sign_out_confirmation">セキュリティを確保するため、ログアウトするとエンドツーエンド暗号鍵がすべて削除され、再度ログインすると暗号化された発言履歴が読み取れなくなります。
 ログアウトする前に暗号鍵を端末の記憶装置へ出力し、保管をしてください。</string>

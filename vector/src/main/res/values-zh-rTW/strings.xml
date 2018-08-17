@@ -52,7 +52,6 @@
     <string name="room_no_conference_call_in_encrypted_rooms">不支援在加密聊天室的會議通話</string>
     <string name="send_anyway">無論如何都要傳送</string>
     <string name="or">或</string>
-    <string name="and">和</string>
     <string name="invite">邀請</string>
     <string name="offline">離線</string>
 
@@ -102,9 +101,6 @@
     <string name="rooms_directory_header">聊天室目錄</string>
     <string name="no_room_placeholder">沒有聊天室</string>
     <string name="no_public_room_placeholder">沒有公開的聊天室</string>
-    <plurals name="public_room_nb_users">
-	<item quantity="other">%d 個使用者</item>
-</plurals>
 
     <string name="groups_invite_header">邀請</string>
     <string name="groups_header">社群</string>
@@ -439,7 +435,6 @@
     <string name="room_details_people">成員</string>
     <string name="room_details_files">檔案</string>
     <string name="room_details_settings">設定</string>
-    <string name="room_details_selected">已選定</string>
     <string name="malformed_id">ID 格式不正確。它應該是電子郵件地址或 Matrix ID，如 ‘@localpart:domain’</string>
     <string name="room_details_people_invited_group_name">已邀請</string>
     <string name="room_details_people_present_group_name">已加入</string>
@@ -909,11 +904,6 @@
     <string name="filter_group_members">篩選社群成員</string>
     <string name="filter_group_rooms">篩選社群聊天室</string>
 
-    <string name="group_one_member">1 位成員</string>
-    <string name="group_members">%d 位成員</string>
-
-    <string name="group_one_room">1 個聊天室</string>
-    <string name="group_rooms">%d 个聊天室</string>
     <string name="group_no_long_description">社群管理員未提供此社群的具體描述。</string>
 
     <string name="has_been_kicked">您已被 %2$s 從 %1$s 踢出</string>

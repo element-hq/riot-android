@@ -39,7 +39,6 @@
     <string name="room_no_conference_call_in_encrypted_rooms">Titkosított szobákban nem támogatott a konferenciahívás</string>
     <string name="send_anyway">Küldés ennek ellenére</string>
     <string name="or">vagy</string>
-    <string name="and">és</string>
     <string name="invite">Meghívás</string>
 
     <string name="action_sign_out">Kijelentkezés</string>
@@ -83,10 +82,6 @@ A kulcsok mentéséhez kijelentkezés előtt válaszd az exportálás opciót.</
     <string name="rooms_directory_header">Szobalista</string>
     <string name="no_room_placeholder">Nincs szoba</string>
     <string name="no_public_room_placeholder">Nincs elérhető nyilvános szoba</string>
-    <plurals name="public_room_nb_users">
-	<item quantity="one">1 felhasználó</item>
-	<item quantity="other">%d felhasználó</item>
-</plurals>
 
     <string name="send_bug_report_include_logs">Naplófájl küldése</string>
     <string name="send_bug_report_include_crash_logs">Hibanapló küldése</string>

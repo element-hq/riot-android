@@ -120,7 +120,6 @@
     <string name="room_no_conference_call_in_encrypted_rooms">Групови разговори не се поддържат в шифровани стаи</string>
     <string name="send_anyway">Изпрати въпреки това</string>
     <string name="or">или</string>
-    <string name="and">и</string>
     <string name="invite">Покани</string>
     <string name="offline">Офлайн</string>
 
@@ -169,10 +168,6 @@
     <string name="rooms_directory_header">Директория със стаи</string>
     <string name="no_room_placeholder">Няма стаи</string>
     <string name="no_public_room_placeholder">Няма налични публични стаи</string>
-    <plurals name="public_room_nb_users">
-	<item quantity="one">1 потребител</item>
-	<item quantity="other">%d потребители</item>
-</plurals>
 
     <string name="groups_invite_header">Покани</string>
     <string name="groups_header">Общности</string>

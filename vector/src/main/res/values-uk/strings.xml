@@ -54,7 +54,6 @@
     <string name="room_no_conference_call_in_encrypted_rooms">Конференц дзвінки не підтримуються в шифрованих чатах</string>
     <string name="send_anyway">Все одно надіслати</string>
     <string name="or">або</string>
-    <string name="and">і</string>
     <string name="invite">Запрошення</string>
     <string name="offline">Офлайн</string>
 
@@ -106,11 +105,6 @@
     <string name="rooms_directory_header">Каталог кімнат</string>
     <string name="no_room_placeholder">Кімнати відсутні</string>
     <string name="no_public_room_placeholder">Публічні кімнати відсутні</string>
-    <plurals name="public_room_nb_users">
-        <item quantity="one">%d користувач</item>
-        <item quantity="few">%d користувача</item>
-        <item quantity="many">%d користувачів</item>
-    </plurals>
 
     <string name="send_bug_report_include_logs">Надіслати журнали</string>
     <string name="send_bug_report_include_crash_logs">Надіслати журнали помилок</string>
