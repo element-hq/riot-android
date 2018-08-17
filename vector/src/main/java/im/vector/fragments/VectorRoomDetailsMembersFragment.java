@@ -528,7 +528,7 @@ public class VectorRoomDetailsMembersFragment extends VectorBaseFragment {
         if ((null != mRoom) && (null != mSession)) {
             PowerLevels powerLevels;
 
-            if (null != (powerLevels = mRoom.getLiveState().getPowerLevels())) {
+            if (null != (powerLevels = mRoom.getState().getPowerLevels())) {
                 String userId = mSession.getMyUserId();
                 isAdmin = (null != userId) && (powerLevels.getUserPowerLevel(userId) >= CommonActivityUtils.UTILS_POWER_LEVEL_ADMIN);
             }

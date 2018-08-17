@@ -184,7 +184,7 @@
     <string name="send_bug_report">Съобщение за грешка</string>
     <string name="send_bug_report_description">Моля, опишете грешката. Какво направихте? Какво очаквахте да стане? Какво стана всъщност?</string>
     <string name="send_bug_report_placeholder">Опишете своя проблем тук</string>
-    <string name="send_bug_report_logs_description">За да се диагностицират проблемите, логовете от този клиент ще бъдат изпратени с този доклад за грешки. Ако предпочитате да изпратите само текста по-горе, моля, премахнете отметката:</string>
+    <string name="send_bug_report_logs_description">За да се диагностицират проблемите, логовете от този клиент ще бъдат изпратени с този доклад за грешки. Доклада, заедно с логовете и скрийншота, няма да са видими публично. Ако предпочитате да изпратите само текста по-горе, моля, премахнете отметката:</string>
     <string name="send_bug_report_alert_message">Изглежда, че разклащате телефона, което ни кара да мислим, че не сте доволни от Riot. Искате ли да изпратите съобщение за грешка?</string>
     <string name="send_bug_report_app_crashed">Приложението спря да работи последния път. Искате ли да изпратите съобщение за забиване?</string>
     <string name="send_bug_report_rage_shake">Силно разклащане на телефона за изпращане на грешка</string>
@@ -326,7 +326,7 @@
     <string name="room_participants_action_devices_list">Покажи списъка с устройства</string>
     <string name="room_participants_invite_prompt_msg">Сигурни ли сте, че искате да поканите %s в този чат?</string>
     <string name="room_participants_kick_prompt_msg">Сигурни ли сте, че искате да изгоните този потребител от чата?</string>
-    <string name="room_participants_ban_prompt_msg">Сигурни ли сте, че искате да блокирате този потребител в чата?</string>
+    <string name="room_participants_ban_prompt_msg">Сигурни ли сте, че искате да блокирате този потребител в този чат?</string>
 
     <string name="people_search_filter_text">Само потребители на Matrix</string>
 
@@ -366,7 +366,9 @@
     <string name="malformed_id">Грешно формиранo ID. Трябва да бъде имейл адрес или Matrix ID, например \'@localpart:domain\'</string>
     <string name="room_details_people_invited_group_name">ПОКАНЕНИ</string>
     <string name="room_event_action_report_prompt_reason">Причина за докладване на това съдържание</string>
-    <string name="room_event_action_report_prompt_ignore_user">Искате ли да скриете всички съобщения от този потребител?</string>
+    <string name="room_event_action_report_prompt_ignore_user">Искате ли да скриете всички съобщения от този потребител?
+
+Имайте предвид, че това действие ще рестартира приложението, което може да отнеме известно време.</string>
     <string name="room_event_action_cancel_download">Откажи изтеглянето</string>
 
     <string name="room_event_action_cancel_upload">Откажи качването</string>
@@ -430,7 +432,7 @@
     <string name="room_sliding_menu_term_and_conditions">Правила и условия</string>
     <string name="room_sliding_menu_third_party_notices">Други известия</string>
     <string name="room_sliding_menu_copyright">Лиценз</string>
-    <string name="room_sliding_menu_privacy_policy">Правила за поверителност</string>
+    <string name="room_sliding_menu_privacy_policy">Политика за поверителност</string>
 
     <string name="settings_profile_picture">Профилна снимка</string>
     <string name="settings_display_name">Име/псевдоним</string>
@@ -456,7 +458,7 @@
     <string name="settings_app_term_conditions">Правила и условия</string>
     <string name="settings_third_party_notices">Други известия</string>
     <string name="settings_copyright">Лиценз</string>
-    <string name="settings_privacy_policy">Правила за поверителност</string>
+    <string name="settings_privacy_policy">Политика за поверителност</string>
     <string name="settings_clear_cache">Изчисти кеша</string>
     <string name="settings_user_settings">Настройки на потребителя</string>
     <string name="settings_notifications">Известия</string>
@@ -516,7 +518,9 @@
     <string name="settings_confirm_password">потвърди парола</string>
     <string name="settings_fail_to_update_password">Неуспешно обновяване на парола</string>
     <string name="settings_password_updated">Вашата парола беше обновена</string>
-    <string name="settings_unignore_user">Покажи всички съобщения от %s?</string>
+    <string name="settings_unignore_user">Показване на всички съобщения от %s?
+
+Имайте предвид, че това действие ще рестартира приложението, което може да отнеме известно време.</string>
 
     <string name="settings_delete_threepid_confirmation">Сигурни ли сте, че искате да премахнете %1$s %2$s?</string>
 
@@ -666,7 +670,8 @@
 
     <string name="encryption_information_verify_device">Потвърди устройството</string>
     <string name="encryption_information_verify_device_warning">" За да потвърдите, че на това устройство може да се вярва, моля свържете се със собственика му по друг начин (напр. на живо или чрез телефонен разговор) и го попитайте дали ключът, който той вижда в неговите настройки на потребителя за това устройство, съвпада с ключа по-долу:"</string>
-    <string name="encryption_information_verify_device_warning2">Ако съвпада, моля натиснете бутона за потвърждение по-долу. Ако не, то тогава някой друг имитира това устройство и вероятно искате вместо това да натиснете бутона за черен списък.
+    <string name="encryption_information_verify_device_warning2">Ако съвпада, моля натиснете бутона за потвърждение по-долу.
+Ако не съвпада, то тогава някой друг имитира това устройство и вероятно бихте искали да го вкарате в черния списък.
 В бъдеще този процес на потвърждение ще бъде по-лесен.</string>
     <string name="encryption_information_verify_key_match">Потвърждавам, че ключовете съвпадат</string>
 
@@ -739,7 +744,7 @@
     <string name="permissions_action_not_performed_missing_permissions">Извинете.. Операцията не е извършена поради липсващи разрешения за достъп</string>
 
     <string name="media_slider_saved">Запазено</string>
-    <string name="media_slider_saved_message">Запазено в изтеглени файлове</string>
+    <string name="media_slider_saved_message">Запазване в изтеглени файлове?</string>
     <string name="yes">ДА</string>
     <string name="no">НЕ</string>
     <string name="_continue">Продължи</string>
@@ -948,4 +953,34 @@
 
     <string name="error_empty_field_your_password">Моля, въведете паролата си.</string>
 
-</resources>
+<string name="send_bug_report_description_in_english">По възможност, моля въведете описанието на английски.</string>
+    <string name="room_message_placeholder_reply_to_encrypted">Изпрати шифрован отговор…</string>
+    <string name="room_message_placeholder_reply_to_not_encrypted">Изпрати отговор (нешифрован)…</string>
+    <string name="settings_preview_media_before_sending">Преглед на медийни файлове преди изпращане</string>
+
+    <string name="settings_without_flair">В момента не сте член в нито една общност.</string>
+
+    <string name="settings_labs_keyboard_options_to_send_message">Изпращане на съобщения с клавиш Enter</string>
+    <string name="command_description_emote">Показва действие</string>
+    <string name="command_description_ban_user">Блокира потребител с даден идентификатор</string>
+    <string name="command_description_unban_user">Отблокира потребител с даден идентификатор</string>
+    <string name="command_description_op_user">Дефинира нивото на достъп на потребител</string>
+    <string name="command_description_deop_user">Премахва привилегиите на потребител с даден идентификатор</string>
+    <string name="command_description_invite_user">Поканва потребител с даден идентификатор в текущата стая</string>
+    <string name="command_description_join_room">Присъединява се към стая с даден псевдоним</string>
+    <string name="command_description_part_room">Напуска стаята</string>
+    <string name="command_description_topic">Слага тема на стаята</string>
+    <string name="command_description_kick_user">Изгонва потребител с даден идентификатор</string>
+    <string name="command_description_nick">Променя името Ви</string>
+    <string name="command_description_markdown">Включва/изключва markdown</string>
+    <string name="command_description_clear_scalar_token">Поправя управлението на Matrix приспособленията</string>
+
+    <string name="room_tombstone_versioned_description">Тази стая е била заменена с нова и вече не е активна</string>
+    <string name="room_tombstone_continuation_link">Кореспонденцията продължава тук</string>
+    <string name="room_tombstone_continuation_description">Тази стая е продължение от предишна кореспонденция</string>
+    <string name="room_tombstone_predecessor_link">Натиснете тук за да видите по-стари съобщения</string>
+
+<string name="room_participants_action_unignore_prompt">Показване на всички съобщения от този потребител?
+
+Имайте предвид, че това действие ще рестартира приложението, което може да отнеме известно време.</string>
+    </resources>

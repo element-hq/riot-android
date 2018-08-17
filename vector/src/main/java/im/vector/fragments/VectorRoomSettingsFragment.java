@@ -66,6 +66,7 @@ import org.matrix.androidsdk.rest.model.PowerLevels;
 import org.matrix.androidsdk.rest.model.RoomMember;
 import org.matrix.androidsdk.util.BingRulesManager;
 import org.matrix.androidsdk.util.Log;
+import org.matrix.androidsdk.util.PermalinkUtils;
 import org.matrix.androidsdk.util.ResourceUtils;
 
 import java.lang.reflect.Field;
@@ -89,8 +90,6 @@ import im.vector.preference.VectorListPreference;
 import im.vector.preference.VectorSwitchPreference;
 import im.vector.util.ThemeUtils;
 import im.vector.util.VectorUtils;
-
-;
 
 public class VectorRoomSettingsFragment extends PreferenceFragment implements SharedPreferences.OnSharedPreferenceChangeListener {
     // internal constants values
@@ -354,7 +353,7 @@ public class VectorRoomSettingsFragment extends PreferenceFragment implements Sh
         });
 
         // display the room Id.
-        EditTextPreference roomInternalIdPreference = (EditTextPreference) findPreference(PREF_KEY_ROOM_INTERNAL_ID);
+        Preference roomInternalIdPreference = findPreference(PREF_KEY_ROOM_INTERNAL_ID);
         if (null != roomInternalIdPreference) {
             roomInternalIdPreference.setSummary(mRoom.getRoomId());
 
@@ -368,7 +367,7 @@ public class VectorRoomSettingsFragment extends PreferenceFragment implements Sh
         }
 
         // leave room
-        EditTextPreference leaveRoomPreference = (EditTextPreference) findPreference(PREF_KEY_ROOM_LEAVE);
+        Preference leaveRoomPreference = findPreference(PREF_KEY_ROOM_LEAVE);
 
         if (null != leaveRoomPreference) {
             leaveRoomPreference.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
@@ -682,7 +681,7 @@ public class VectorRoomSettingsFragment extends PreferenceFragment implements Sh
 
         // cannot refresh if there is no valid session / room
         if ((null != mRoom) && (null != mSession)) {
-            PowerLevels powerLevels = mRoom.getLiveState().getPowerLevels();
+            PowerLevels powerLevels = mRoom.getState().getPowerLevels();
 
             if (null != powerLevels) {
                 int powerLevel = powerLevels.getUserPowerLevel(mSession.getMyUserId());
@@ -717,7 +716,7 @@ public class VectorRoomSettingsFragment extends PreferenceFragment implements Sh
         if (null != mRoomAccessRulesListPreference) {
             mRoomAccessRulesListPreference.setEnabled(isAdmin && isConnected);
             mRoomAccessRulesListPreference.setWarningIconVisible((0 == mRoom.getAliases().size())
-                    && !TextUtils.equals(RoomState.JOIN_RULE_INVITE, mRoom.getLiveState().join_rule));
+                    && !TextUtils.equals(RoomState.JOIN_RULE_INVITE, mRoom.getState().join_rule));
         }
 
         // room read history: admin only
@@ -751,7 +750,7 @@ public class VectorRoomSettingsFragment extends PreferenceFragment implements Sh
 
         // update the room name preference
         if (null != mRoomNameEditTxt) {
-            value = mRoom.getLiveState().name;
+            value = mRoom.getState().name;
             mRoomNameEditTxt.setSummary(value);
             mRoomNameEditTxt.setText(value);
         }
@@ -765,7 +764,7 @@ public class VectorRoomSettingsFragment extends PreferenceFragment implements Sh
 
         // update room directory visibility
 //        if (null != mRoomDirectoryVisibilitySwitch) {
-//            boolean isRoomPublic = TextUtils.equals(mRoom.getVisibility()/*getLiveState().visibility ou .isPublic()*/, RoomState.DIRECTORY_VISIBILITY_PUBLIC);
+//            boolean isRoomPublic = TextUtils.equals(mRoom.getVisibility()/*getState().visibility ou .isPublic()*/, RoomState.DIRECTORY_VISIBILITY_PUBLIC);
 //            if (isRoomPublic !isRoomPublic= mRoomDirectoryVisibilitySwitch.isChecked())
 //                mRoomDirectoryVisibilitySwitch.setChecked(isRoomPublic);
 //        }
@@ -788,8 +787,8 @@ public class VectorRoomSettingsFragment extends PreferenceFragment implements Sh
 
         // room guest access rules
         if ((null != mRoomAccessRulesListPreference) && (null != resources)) {
-            String joinRule = mRoom.getLiveState().join_rule;
-            String guestAccessRule = mRoom.getLiveState().getGuestAccess();
+            String joinRule = mRoom.getState().join_rule;
+            String guestAccessRule = mRoom.getState().getGuestAccess();
 
             if (RoomState.JOIN_RULE_INVITE.equals(joinRule)/* && RoomState.GUEST_ACCESS_CAN_JOIN.equals(guestAccessRule)*/) {
                 // "Only people who have been invited" requires: {join_rule: "invite"} and {guest_access: "can_join"}
@@ -867,7 +866,7 @@ public class VectorRoomSettingsFragment extends PreferenceFragment implements Sh
 
         // room history readability
         if (null != mRoomHistoryReadabilityRulesListPreference) {
-            value = mRoom.getLiveState().getHistoryVisibility();
+            value = mRoom.getState().getHistoryVisibility();
             summary = null;
 
             if ((null != value) && (null != resources)) {
@@ -952,7 +951,7 @@ public class VectorRoomSettingsFragment extends PreferenceFragment implements Sh
         }
 
         // get new and previous values
-        String previousValue = mRoom.getLiveState().history_visibility;
+        String previousValue = mRoom.getState().history_visibility;
         String newValue = mRoomHistoryReadabilityRulesListPreference.getValue();
 
         if (!TextUtils.equals(newValue, previousValue)) {
@@ -1026,8 +1025,8 @@ public class VectorRoomSettingsFragment extends PreferenceFragment implements Sh
             String guestAccessRuleToApply = null;
 
             // get new and previous values
-            String previousJoinRule = mRoom.getLiveState().join_rule;
-            String previousGuestAccessRule = mRoom.getLiveState().getGuestAccess();
+            String previousJoinRule = mRoom.getState().join_rule;
+            String previousGuestAccessRule = mRoom.getState().getGuestAccess();
             String newValue = mRoomAccessRulesListPreference.getValue();
 
             if (ACCESS_RULES_ONLY_PEOPLE_INVITED.equals(newValue)) {
@@ -1137,7 +1136,7 @@ public class VectorRoomSettingsFragment extends PreferenceFragment implements Sh
         }
 
         // get new and previous values
-        String previousName = mRoom.getLiveState().name;
+        String previousName = mRoom.getState().name;
         String newName = mRoomNameEditTxt.getText();
         // update only, if values are different
         if (!TextUtils.equals(previousName, newName)) {
@@ -1418,7 +1417,7 @@ public class VectorRoomSettingsFragment extends PreferenceFragment implements Sh
     private boolean canUpdateFlair() {
         boolean canUpdateAliases = false;
 
-        PowerLevels powerLevels = mRoom.getLiveState().getPowerLevels();
+        PowerLevels powerLevels = mRoom.getState().getPowerLevels();
 
         if (null != powerLevels) {
             int powerLevel = powerLevels.getUserPowerLevel(mSession.getMyUserId());
@@ -1432,7 +1431,7 @@ public class VectorRoomSettingsFragment extends PreferenceFragment implements Sh
      * Refresh the flair list
      */
     private void refreshFlair() {
-        final List<String> groups = mRoom.getLiveState().getRelatedGroups();
+        final List<String> groups = mRoom.getState().getRelatedGroups();
         Collections.sort(groups, String.CASE_INSENSITIVE_ORDER);
 
         mFlairSettingsCategory.removeAll();
@@ -1589,7 +1588,7 @@ public class VectorRoomSettingsFragment extends PreferenceFragment implements Sh
         Menu menu = popup.getMenu();
         ThemeUtils.INSTANCE.tintMenuIcons(menu, ThemeUtils.INSTANCE.getColor(context, R.attr.icon_tint_on_light_action_bar_color));
 
-        String canonicalAlias = mRoom.getLiveState().alias;
+        String canonicalAlias = mRoom.getState().alias;
         boolean canUpdateAliases = canUpdateAliases();
 
         menu.findItem(R.id.ic_action_vector_delete_alias).setVisible(canUpdateAliases);
@@ -1650,7 +1649,7 @@ public class VectorRoomSettingsFragment extends PreferenceFragment implements Sh
                         }
                     });
                 } else if (item.getItemId() == R.id.ic_action_vector_room_url) {
-                    VectorUtils.copyToClipboard(getActivity(), VectorUtils.getPermalink(roomAlias, null));
+                    VectorUtils.copyToClipboard(getActivity(), PermalinkUtils.createPermalink(roomAlias));
                 } else {
                     VectorUtils.copyToClipboard(getActivity(), roomAlias);
                 }
@@ -1670,7 +1669,7 @@ public class VectorRoomSettingsFragment extends PreferenceFragment implements Sh
     private boolean canUpdateAliases() {
         boolean canUpdateAliases = false;
 
-        PowerLevels powerLevels = mRoom.getLiveState().getPowerLevels();
+        PowerLevels powerLevels = mRoom.getState().getPowerLevels();
 
         if (null != powerLevels) {
             int powerLevel = powerLevels.getUserPowerLevel(mSession.getMyUserId());
@@ -1685,7 +1684,7 @@ public class VectorRoomSettingsFragment extends PreferenceFragment implements Sh
      */
     private void refreshAddresses() {
         final String localSuffix = ":" + mSession.getHomeServerConfig().getHomeserverUri().getHost();
-        final String canonicalAlias = mRoom.getLiveState().alias;
+        final String canonicalAlias = mRoom.getState().alias;
         final List<String> aliases = new ArrayList<>(mRoom.getAliases());
 
         // remove the displayed preferences
@@ -1855,7 +1854,7 @@ public class VectorRoomSettingsFragment extends PreferenceFragment implements Sh
                         @Override
                         public void onSuccess(Boolean status) {
                             if (sendToUnverifiedDevicesPref.isChecked() != status) {
-                                SimpleApiCallback<Void> callback = new SimpleApiCallback<Void>() {
+                                ApiCallback<Void> callback = new SimpleApiCallback<Void>() {
                                     @Override
                                     public void onSuccess(Void info) {
                                     }
@@ -1897,7 +1896,7 @@ public class VectorRoomSettingsFragment extends PreferenceFragment implements Sh
             isEncryptedPreference.setIcon(getResources().getDrawable(R.drawable.e2e_verified));
             mAdvandceSettingsCategory.addPreference(isEncryptedPreference);
         } else {
-            PowerLevels powerLevels = mRoom.getLiveState().getPowerLevels();
+            PowerLevels powerLevels = mRoom.getState().getPowerLevels();
             int myPowerLevel = -1;
             int minimumPowerLevel = 0;
 

@@ -15,28 +15,28 @@ class MetricsListenerProxy(val analytics: Analytics) : MetricsListener {
 
     override fun onInitialSyncFinished(duration: Long) {
         if (!firstSyncDispatched.getAndSet(true)) {
-            val event = Event.InitialSync(duration)
+            val event = TrackingEvent.InitialSync(duration)
             analytics.trackEvent(event)
         }
     }
 
     override fun onIncrementalSyncFinished(duration: Long) {
         if (!incrementalSyncDispatched.getAndSet(true)) {
-            val event = Event.IncrementalSync(duration)
+            val event = TrackingEvent.IncrementalSync(duration)
             analytics.trackEvent(event)
         }
     }
 
     override fun onStorePreloaded(duration: Long) {
         if (!storePreloadDispatched.getAndSet(true)) {
-            val event = Event.StorePreload(duration)
+            val event = TrackingEvent.StorePreload(duration)
             analytics.trackEvent(event)
         }
     }
 
     override fun onRoomsLoaded(nbOfRooms: Int) {
         if (!roomsLoadedDispatched.getAndSet(true)) {
-            val event = Event.Rooms(nbOfRooms)
+            val event = TrackingEvent.Rooms(nbOfRooms)
             analytics.trackEvent(event)
         }
     }

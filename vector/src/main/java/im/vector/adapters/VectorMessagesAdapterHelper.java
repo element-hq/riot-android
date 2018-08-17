@@ -20,6 +20,7 @@ package im.vector.adapters;
 import android.content.Context;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
+import android.os.Build;
 import android.support.annotation.Nullable;
 import android.text.Html;
 import android.text.Spannable;
@@ -225,11 +226,11 @@ class VectorMessagesAdapterHelper {
      */
     private void refreshGroupFlairView(final View groupFlairView, final Event event, final Set<String> groupIdsSet, final String tag) {
         Log.d(LOG_TAG, "## refreshGroupFlairView () : " + event.sender + " allows flair to " + groupIdsSet);
-        Log.d(LOG_TAG, "## refreshGroupFlairView () : room related groups " + mRoom.getLiveState().getRelatedGroups());
+        Log.d(LOG_TAG, "## refreshGroupFlairView () : room related groups " + mRoom.getState().getRelatedGroups());
 
         if (!groupIdsSet.isEmpty()) {
             // keeps only the intersections
-            groupIdsSet.retainAll(mRoom.getLiveState().getRelatedGroups());
+            groupIdsSet.retainAll(mRoom.getState().getRelatedGroups());
         }
 
         Log.d(LOG_TAG, "## refreshGroupFlairView () : group ids to display " + groupIdsSet);
@@ -363,7 +364,7 @@ class VectorMessagesAdapterHelper {
         }
 
         // Check whether there are some related groups to this room
-        if (mRoom.getLiveState().getRelatedGroups().isEmpty()) {
+        if (mRoom.getState().getRelatedGroups().isEmpty()) {
             Log.d(LOG_TAG, "## refreshGroupFlairView () : no related group");
             groupFlairView.setVisibility(View.GONE);
             return;
@@ -954,7 +955,14 @@ class VectorMessagesAdapterHelper {
 
             // the links are not yet supported by ConsoleHtmlTagHandler
             // the markdown tables are not properly supported
-            sequence = Html.fromHtml(htmlFormattedText, mImageGetter, isCustomizable ? htmlTagHandler : null);
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+                sequence = Html.fromHtml(htmlFormattedText,
+                        Html.FROM_HTML_SEPARATOR_LINE_BREAK_LIST_ITEM,
+                        mImageGetter,
+                        isCustomizable ? htmlTagHandler : null);
+            } else {
+                sequence = Html.fromHtml(htmlFormattedText, mImageGetter, isCustomizable ? htmlTagHandler : null);
+            }
 
             // sanity check
             if (!TextUtils.isEmpty(sequence)) {
@@ -1036,6 +1044,8 @@ class VectorMessagesAdapterHelper {
         } else if (TextUtils.equals(WidgetsManager.WIDGET_EVENT_TYPE, event.getType())) {
             // Matrix apps are enabled
             return true;
+        } else if (Event.EVENT_TYPE_STATE_ROOM_CREATE.equals(eventType)) {
+            return roomState.hasPredecessor();
         }
         return false;
     }
@@ -1209,7 +1219,12 @@ class VectorMessagesAdapterHelper {
             final String downloadKey = url.hashCode() + "---";
             String displayKey = url + "<----->" + id;
 
-            if (UrlPreviewView.Companion.didUrlPreviewDismiss(displayKey)) {
+            if (!mSession.isURLPreviewEnabled()) {
+                if (!mUrlsPreviews.containsKey(downloadKey)) {
+                    mUrlsPreviews.put(downloadKey, null);
+                    mAdapter.notifyDataSetChanged();
+                }
+            } else if (UrlPreviewView.Companion.didUrlPreviewDismiss(displayKey)) {
                 Log.d(LOG_TAG, "## manageURLPreviews() : " + displayKey + " has been dismissed");
             } else if (mPendingUrls.contains(url)) {
                 // please wait

@@ -23,7 +23,7 @@ class PiwikAnalytics(context: Context) : Analytics {
                 .with(tracker)
     }
 
-    override fun trackEvent(event: Event) {
+    override fun trackEvent(event: TrackingEvent) {
         TrackHelper.track()
                 .event(event.category.value, event.action.value)
                 .name(event.title)

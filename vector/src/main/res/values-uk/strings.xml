@@ -885,4 +885,6 @@
 
     <string name="error_no_external_application_found">Вибачте, жодного стороннього застосунку не знайдено для завершення цієї дії.</string>
 
+    <string name="option_send_voice">Відправити голосове повідомлення</string>
+
     </resources>

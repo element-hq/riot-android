@@ -193,7 +193,7 @@ public class Matrix {
      * @return the shared instance
      */
     public synchronized static Matrix getInstance(Context appContext) {
-        if ((instance == null) && (null != appContext)) {
+        if (instance == null && null != appContext) {
             instance = new Matrix(appContext);
         }
         return instance;
@@ -515,7 +515,7 @@ public class Matrix {
     public synchronized void clearSession(final Context context,
                                           final MXSession session,
                                           final boolean clearCredentials,
-                                          final SimpleApiCallback<Void> aCallback) {
+                                          final ApiCallback<Void> aCallback) {
         if (!session.isAlive()) {
             Log.e(LOG_TAG, "## clearSession() " + session.getMyUserId() + " is already released");
             return;
@@ -529,7 +529,7 @@ public class Matrix {
 
         session.getDataHandler().removeListener(mLiveEventListener);
 
-        SimpleApiCallback<Void> callback = new SimpleApiCallback<Void>() {
+        ApiCallback<Void> callback = new SimpleApiCallback<Void>() {
             @Override
             public void onSuccess(Void info) {
                 VectorApp.removeSyncingSession(session);
@@ -691,6 +691,8 @@ public class Matrix {
         }
 
         dataHandler.addListener(mLiveEventListener);
+        dataHandler.addListener(VectorApp.getInstance().getDecryptionFailureTracker());
+
         session.setUseDataSaveMode(PreferencesManager.useDataSaveMode(context));
 
         dataHandler.addListener(new MXEventListener() {

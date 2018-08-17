@@ -271,7 +271,7 @@ Disculpe por la inconveniencia.</string>
 
     <!-- medias slider string -->
     <string name="media_slider_saved">Guardado</string>
-    <string name="media_slider_saved_message">Guardar en Descargas</string>
+    <string name="media_slider_saved_message">¿Guardar en descargas?</string>
     <string name="yes">SI</string>
     <string name="no">NO</string>
     <string name="_continue">Continuar</string>
@@ -963,5 +963,41 @@ La visibilidad del mensaje en Matrix es similar al correo electrónico. Olvidar 
 
     <string name="settings_deactivate_account_section">Desactivar cuenta</string>
     <string name="settings_deactivate_my_account">Desactivar mi cuenta</string>
+
+    <string name="download">Descargar</string>
+    <string name="settings_opt_in_of_analytics_ok">Sí, ¡quiero ayudar!</string>
+
+    <string name="startup_notification_privacy_button_grant">Conceder permiso</string>
+    <string name="option_send_voice">Enviar audio</string>
+
+    <string name="option_send_sticker">Enviar sticker</string>
+    <string name="widget_integration_invalid_parameter">Un parámetro no es válido.</string>
+    <string name="error_empty_field_your_password">Por favor, introduzca su contraseña.</string>
+
+<string name="settings_labs_enable_send_voice">Enviar mensaje de voz (requiere una aplicación de terceros para grabar los mensajes de voz)</string>
+
+    <string name="startup_notification_privacy_button_other">Elija otra opción</string>
+
+    <string name="widget_integration_missing_parameter">Falta un parámetro requerido.</string>
+    <string name="e2e_re_request_encryption_key_dialog_title">Solicitud enviada</string>
+    <string name="speak">Hablar</string>
+    <string name="e2e_re_request_encryption_key_dialog_content">"Por favor,  inicie Riot en otro dispositivo que pueda descifrar el mensaje para que pueda enviar las claves a este dispositivo."</string>
+
+    <string name="dialog_title_third_party_licences">Licencias de terceros</string>
+
+    <string name="clear">Limpiar</string>
+    <string name="go_on_with">seguir con…</string>
+    <string name="error_no_external_application_found">Lo sentimos, no se encontró una aplicación externa para completar esta acción.</string>
+
+    <string name="e2e_re_request_encryption_key"><u>Volver a solicitar claves de cifrado</u> de sus otros dispositivos.</string>
+
+    <string name="e2e_re_request_encryption_key_sent">Solicitud de clave enviada.</string>
+
+    <string name="startup_notification_privacy_title">Privacidad de Notificaciones</string>
+    <string name="startup_notification_privacy_message">Riot puede funcionar en segundo plano para gestionar sus notificaciones de forma segura y privada (esto puede afectar al uso de la batería).</string>
+    <string name="settings_opt_in_of_analytics">Enviar información de estadísticas</string>
+    <string name="settings_opt_in_of_analytics_summary">Riot recopila estadísticas anónimas que nos permiten mejorar la aplicación.</string>
+    <string name="settings_opt_in_of_analytics_prompt">Por favor, active las estadísticas para ayudarnos a mejorar Riot.</string>
+    <string name="lock_screen_hint">Escriba aquí…</string>
 
     </resources>

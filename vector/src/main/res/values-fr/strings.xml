@@ -176,7 +176,7 @@ Cliquez sur exporter pour les sauvegarder avant de vous déconnecter.</string>
     <string name="media_picker_cannot_record_video">Impossible d\'enregistrer une vidéo</string>
 
     <string name="media_slider_saved">Enregistré</string>
-    <string name="media_slider_saved_message">Enregistrer dans les téléchargements</string>
+    <string name="media_slider_saved_message">Enregistrer dans les téléchargements ?</string>
     <string name="yes">OUI</string>
     <string name="no">NON</string>
     <string name="_continue">Continuer</string>
@@ -442,12 +442,12 @@ Cliquez sur exporter pour les sauvegarder avant de vous déconnecter.</string>
     <string name="historical_placeholder">Rechercher dans l\'historique</string>
 
 <plurals name="public_room_nb_users">
-	<item quantity="one">%d utilisateur</item>
-	<item quantity="other">%d utilisateurs</item>
+	<item quantity="one">%d participant</item>
+	<item quantity="other">%d participants</item>
 </plurals>
 
     <string name="send_bug_report_description">Veuillez décrire l\'erreur. Qu\'avez-vous fait ? Quel était le comportement attendu ? Que s\'est-il réellement passé ?</string>
-    <string name="send_bug_report_logs_description">Afin de diagnostiquer les problèmes, les journaux de ce client seront envoyés avec ce rapport d\'erreur. Si vous préférez envoyer le texte ci-dessus uniquement, veuillez décochez :</string>
+    <string name="send_bug_report_logs_description">Afin de diagnostiquer les problèmes, les journaux de ce client seront envoyés avec ce rapport d\'erreur. Ce rapport d\'erreur, y compris les journaux et la capture d\'écran, ne seront pas visibles publiquement. Si vous préférez envoyer le texte ci-dessus uniquement, veuillez décochez :</string>
     <string name="send_bug_report_alert_message">Vous semblez secouer le téléphone avec frustration. Souhaitez-vous soumettre un rapport d\'erreur ?</string>
     <string name="send_bug_report_app_crashed">L\'application s\'est arrêtée anormalement la dernière fois. Souhaitez-vous soumettre un rapport d’erreur ?</string>
 
@@ -571,7 +571,9 @@ En êtes-vous sûr(e) ?</string>
     <string name="ssl_expected_existing_expl">Le certificat n\'est plus celui qui a été approuvé par votre téléphone. Le serveur a peut-être renouvelé son certificat. Contactez l\'administrateur du serveur pour lui demander l\'empreinte de son certificat.</string>
     <string name="ssl_only_accept">Acceptez le certificat UNIQUEMENT si l\'administrateur du serveur a publié une empreinte correspondant à celle ci-dessus.</string>
     <string name="malformed_id">Identifiant au mauvais format. Une adresse e-mail ou un identifiant Matrix au format \"@utilisateur:domaine\" est attendu</string>
-    <string name="room_event_action_report_prompt_ignore_user">Voulez-vous cacher tous les messages de cet utilisateur ?</string>
+    <string name="room_event_action_report_prompt_ignore_user">Voulez-vous cacher tous les messages de cet utilisateur ?
+
+Veuillez noter que cette action redémarrera l\'application et pourra prendre un certain temps.</string>
     <string name="room_displayname_two_members">%1$s et %2$s</string>
     <string name="room_recents_join_room_prompt">Saisissez un identifiant ou un alias de salon</string>
 
@@ -586,7 +588,9 @@ Pour continuer, veuillez saisir votre mot de passe.</string>
     <string name="account_email_validation_message">Vérifiez votre e-mail et cliquez sur le lien qu\'il contient. Une fois cela fait, cliquez sur continuer.</string>
     <string name="account_email_validation_error">Impossible de vérifier l\'adresse e-mail. Vérifiez votre e-mail et cliquez sur le lien qu\'il contient. Une fois cela fait, cliquez sur continuer</string>
 
-    <string name="settings_unignore_user">Afficher tous les messages de %s ?</string>
+    <string name="settings_unignore_user">Afficher tous les messages de %s ?
+
+Veuillez noter que cette action redémarrera l\'application et pourra prendre un certain temps.</string>
 
     <string name="settings_delete_notification_targets_confirmation">Voulez-vous vraiment supprimer cette cible de notification ?</string>
 
@@ -640,7 +644,9 @@ Les messages chiffrés ne seront pas visibles sur les clients qui n\'ont pas enc
     <string name="encryption_never_send_to_unverified_devices_summary">Ne jamais envoyer de messages chiffrés aux appareils non vérifiés depuis cet appareil</string>
 
     <string name="encryption_information_verify_device_warning">" Pour vérifier que cet appareil est de confiance, contactez son propriétaire en utilisant un autre moyen (par exemple en personne ou par téléphone) et demandez-lui si la clé qu\'il voit dans ses paramètres utilisateur pour cet appareil correspond à la clé ci-dessous :"</string>
-    <string name="encryption_information_verify_device_warning2">Si elle correspond, appuyez sur le bouton Vérifier ci-dessous. Si ce n\'est pas le cas, quelqu\'un d\'autre intercepte cet appareil et vous devriez probablement le bloquer. À l\'avenir, ce processus de vérification sera plus évolué.</string>
+    <string name="encryption_information_verify_device_warning2">Si elle correspond, appuyez sur le bouton Vérifier ci-dessous.
+Si ce n\'est pas le cas, quelqu\'un d\'autre intercepte cet appareil et vous devriez probablement le bloquer.
+À l\'avenir, ce processus de vérification sera plus évolué.</string>
     <string name="encryption_information_verify_key_match">Je confirme que les clés correspondent</string>
 
     <string name="e2e_enabling_on_app_update">Riot prend désormais en charge le chiffrement de bout en bout, mais vous devez vous reconnecter pour l\'activer.
@@ -890,7 +896,7 @@ Appareils inconnus :</string>
 </plurals>
 
     <string name="open_chat_header">Développer l\'entête</string>
-    <string name="receipt_avatar">Réception de l\'avatar</string>
+    <string name="receipt_avatar">Avatar de réception</string>
     <string name="settings_notification_privacy">Confidentialité des notifications</string>
     <string name="settings_notification_privacy_warning">Riot.im fonctionne en arrière-plan pour que le contenu du message de notification reste privé. Vous pouvez désactiver cette option pour réduire l\'utilisation de la batterie.</string>
     <string name="settings_notification_privacy_normal">Normal</string>
@@ -910,7 +916,7 @@ Appareils inconnus :</string>
     <string name="startup_notification_privacy_button_grant">Donner la permission</string>
     <string name="startup_notification_privacy_button_other">Choisir une autre option</string>
 
-    <string name="notice_avatar">Avatar de l\'annonce</string>
+    <string name="notice_avatar">Avatar d’avertissement</string>
     <string name="title_activity_choose_sticker">Envoyer un sticker</string>
 
     <string name="option_send_sticker">Envoyer un sticker</string>
@@ -963,5 +969,35 @@ La visibilité des messages dans Matrix est identique à celle des e-mails. Si n
     <string name="settings_labs_enable_send_voice">Envoyer un message vocal (nécessite une application tierce pour enregistrer des messages vocaux)</string>
 
     <string name="error_empty_field_your_password">Veuillez renseigner votre mot de passe.</string>
+
+<string name="send_bug_report_description_in_english">Si possible, veuillez écrire la description en anglais.</string>
+    <string name="room_participants_action_unignore_prompt">Afficher tous les messages de cet utilisateur ?
+
+Veuillez noter que cette action redémarrera l\'application et pourra prendre un certain temps.</string>
+    <string name="room_message_placeholder_reply_to_encrypted">Envoyer une réponse chiffrée…</string>
+    <string name="room_message_placeholder_reply_to_not_encrypted">Envoyer une réponse (non chiffrée)…</string>
+    <string name="settings_preview_media_before_sending">Prévisualiser le média avant de l\'envoyer</string>
+
+    <string name="settings_without_flair">Vous n\'êtes pour le moment membre d\'aucune communauté.</string>
+
+    <string name="settings_labs_keyboard_options_to_send_message">Utiliser la touche Entrée du clavier pour envoyer un message</string>
+    <string name="command_description_emote">Affiche une action</string>
+    <string name="command_description_ban_user">Banni l\'utilisateur avec l\'identifiant fourni</string>
+    <string name="command_description_unban_user">Révoque le bannissement du l\'utilisateur avec l\'identifiant fourni</string>
+    <string name="command_description_op_user">Défini le rang d\'un utilisateur</string>
+    <string name="command_description_deop_user">Enlève le rang d\'opérateur de l\'utilisateur avec l\'identifiant fourni</string>
+    <string name="command_description_invite_user">Invite l\'utilisateur avec l\'identifiant fourni dans le salon actuel</string>
+    <string name="command_description_join_room">Rejoint le salon avec l\'alias fourni</string>
+    <string name="command_description_part_room">Quitte le salon</string>
+    <string name="command_description_topic">Défini le sujet du salon</string>
+    <string name="command_description_kick_user">Exclu l\'utilisateur avec l\'identifiant fourni</string>
+    <string name="command_description_nick">Change le surnom affiché</string>
+    <string name="command_description_markdown">Markdown activé/désactivé</string>
+    <string name="command_description_clear_scalar_token">Pour réparer la gestion des applications Matrix</string>
+
+    <string name="room_tombstone_versioned_description">Ce salon a été remplacé et n\'est plus actif</string>
+    <string name="room_tombstone_continuation_link">La conversation continue ici</string>
+    <string name="room_tombstone_continuation_description">Ce salon est la suite d\'une autre conversation</string>
+    <string name="room_tombstone_predecessor_link">Cliquer ici pour voir les vieux messages</string>
 
 </resources>
