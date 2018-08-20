@@ -105,7 +105,7 @@ Seleccione exportar para crear un archivo de respaldo antes de cerrar la sesión
     <string name="send_bug_report">Informe de Error</string>
     <string name="send_bug_report_description">Por favor describe el error. ¿Qué hiciste? ¿Qué esperabas que sucediera? ¿Qué sucedió realmente?</string>
     <string name="send_bug_report_placeholder">Describe tu problema aquí</string>
-    <string name="send_bug_report_logs_description">Para diagnosticar los problemas, informes de este cliente se enviarán junto a este reporte de error. Si prefiere solamente enviar el texto de arriba, desmarque:</string>
+    <string name="send_bug_report_logs_description">Para diagnosticar los problemas, registros de este cliente se enviarán junto a este informe de errores. Este informe, incluidos los registros y la captura de pantalla, no serán visibles públicamente. Si prefiere solamente enviar el texto de arriba, desmarque:</string>
     <string name="send_bug_report_alert_message">Pareces estar temblando de frustración. ¿Te gustaría enviar un reporte de error?</string>
     <string name="send_bug_report_sent">El reporte de error ha sido enviado</string>
     <string name="send_bug_report_failed">El reporte de error no se pudo enviar (%s)</string>
@@ -400,7 +400,9 @@ Los mensajes cifrados no serán visibles en cuentas que no implementen el cifrad
 
     <!-- Room events -->
     <string name="room_event_action_report_prompt_reason">Razón por reportar este contenido</string>
-    <string name="room_event_action_report_prompt_ignore_user">¿Desea ocultar todos los mensajes de este usuario?</string>
+    <string name="room_event_action_report_prompt_ignore_user">¿Desea ocultar todos los mensajes de este usuario?
+
+Tenga en cuenta que esta acción reiniciará la app y puede tardar cierto tiempo.</string>
     <string name="room_event_action_cancel_upload">Cancelar Subida</string>
     <string name="room_event_action_cancel_download">Cancelar Descarga</string>
 
@@ -536,7 +538,9 @@ Los mensajes cifrados no serán visibles en cuentas que no implementen el cifrad
     <string name="settings_confirm_password">confirmar contraseña</string>
     <string name="settings_fail_to_update_password">La actualización de su contraseña falló</string>
     <string name="settings_password_updated">Su contraseña fue actualizada</string>
-    <string name="settings_unignore_user">¿Mostrar todo los mensajes de %s?</string>
+    <string name="settings_unignore_user">¿Mostrar todos los mensajes de %s?
+
+Tenga en cuenta que esta acción reiniciará la app y tardará cierto tiempo.</string>
 
     <string name="settings_delete_notification_targets_confirmation">¿Estás seguro que quieres quitar este objectivo de notificación?</string>
 
@@ -688,7 +692,9 @@ Los mensajes cifrados no serán visibles en cuentas que no implementan el cifrad
 
     <string name="encryption_information_verify_device">Verificar dispositivo</string>
     <string name="encryption_information_verify_device_warning">Para verificar que este dispositivo es confiable, por favor contacte el dueño de este dispositivo por otro medio (e.g. cara-a-cara o por llamada) y verifique que la clave de este dispositivo que ellos ven en su página de configuraciones coincide con el de abajo:</string>
-    <string name="encryption_information_verify_device_warning2">Si coinciden, seleccione Verificar. Si no, otro esta interceptando este dispositivo y vas a querer bloquearlo.\nEn el futuro, este procceso será mas sofisticado.</string>
+    <string name="encryption_information_verify_device_warning2">Si coinciden, seleccione el botón verificar inferior. 
+Si no es así, alguien está interceptando este dispositivo y debería agregarlo a la lista negra.
+En el futuro, este proceso de verificación será mas sofisticado.</string>
     <string name="encryption_information_verify_key_match">Verifico que las claves coinciden</string>
 
     <string name="e2e_enabling_on_app_update">Riot ahora cuenta con cifrado de extremo-a-extremo pero necesitas reentrar tu cuenta para prenderlo.
@@ -834,7 +840,7 @@ Lo puedes hacer ahora o luego desde las configuraciones de la aplicación.</stri
     <string name="groups_list">Lista de grupos</string>
 
     <string name="room_participants_kick_prompt_msg">Está seguro que quiere echar este usuario de la conversación?</string>
-    <string name="room_participants_ban_prompt_msg">Está seguro que quiere vetar este usuario de esta conversación?</string>
+    <string name="room_participants_ban_prompt_msg">¿Está seguro de que quiere vetar a este usuario de esta conversación?</string>
 
     <string name="room_settings_all_messages_noisy">Todos los mensajes (ruidoso)</string>
     <string name="room_settings_all_messages">Todos los mensajes</string>
@@ -1048,4 +1054,5 @@ Esta acción reiniciará la aplicación y puede llevar algún tiempo.</string>
     <string name="room_tombstone_continuation_description">Esta sala es una continuación de otra conversación</string>
     <string name="room_tombstone_predecessor_link">Pinchar aquí para ver mensajes más antiguos</string>
 
-</resources>
+<string name="command_description_deop_user">Degradar usuario con el id dado</string>
+    </resources>
