@@ -67,7 +67,6 @@
     <string name="room_no_conference_call_in_encrypted_rooms">Conference calls are not supported in encrypted rooms</string>
     <string name="send_anyway">Send Anyway</string>
     <string name="or">or</string>
-    <string name="and">and</string>
     <string name="invite">Invite</string>
     <string name="offline">Offline</string>
 
@@ -159,8 +158,6 @@
     <string name="logout">Log out</string>
     <string name="hs_url">Home Server URL</string>
     <string name="identity_url">Identity Server URL</string>
-    <string name="user">user</string>
-    <string name="users">users</string>
     <string name="search">Search</string>
 
     <string name="start_new_chat">Start New Chat</string>
@@ -374,10 +371,22 @@
     <string name="room_e2e_alert_message">End-to-end encryption is in beta and may not be reliable.\n\nYou should not yet trust it to secure data.\n\nDevices will not yet be able to decrypt history from before they joined the room.\n\nEncrypted messages will not be visible on clients that do not yet implement encryption.</string>
 
     <!--  Time -->
-    <string name="format_time_s">s</string>
-    <string name="format_time_m">m</string>
-    <string name="format_time_h">h</string>
-    <string name="format_time_d">d</string>
+    <plurals name="format_time_s">
+        <item quantity="one">1s</item>
+        <item quantity="other">%ds</item>
+    </plurals>
+    <plurals name="format_time_m">
+        <item quantity="one">1m</item>
+        <item quantity="other">%dm</item>
+    </plurals>
+    <plurals name="format_time_h">
+        <item quantity="one">1h</item>
+        <item quantity="other">%dh</item>
+    </plurals>
+    <plurals name="format_time_d">
+        <item quantity="one">1d</item>
+        <item quantity="other">%dd</item>
+    </plurals>
 
     <!--  Chat participants -->
     <string name="room_participants_leave_prompt_title">Leave room</string>
@@ -388,8 +397,13 @@
     <string name="room_participants_online">Online</string>
     <string name="room_participants_offline">Offline</string>
     <string name="room_participants_idle">Idle</string>
-    <string name="room_participants_now">now</string>
-    <string name="room_participants_ago">ago</string>
+    <!--The variable is one of "Online", "Offline" or "Idle" states above.-->
+    <string name="room_participants_now">%1$s now</string>
+    <!--
+    The first variable is one of "Online", "Offline" or "Idle" states (with or without " now" part).
+    The second variable is the formatted datetime (5s, 5m, 5h, 5d) from format_time_s/m/h/d strings.
+    -->
+    <string name="room_participants_ago">%1$s %2$s ago</string>
 
     <string name="room_participants_header_admin_tools">ADMIN TOOLS</string>
     <string name="room_participants_header_call">CALL</string>
@@ -412,9 +426,20 @@
     <string name="room_participants_action_devices_list">Show Device List</string>
     <string name="room_participants_power_level_prompt">You will not be able to undo this change as you are promoting the user to have the same power level as yourself.\nAre you sure?</string>
 
-    <string name="room_participants_invite_prompt_msg">"Are you sure you want to invite %s to this chat?"</string>
     <string name="room_participants_kick_prompt_msg">Are you sure that you want to kick this user from this chat?</string>
     <string name="room_participants_ban_prompt_msg">Are you sure that you want to ban this user from this chat?</string>
+
+    <!--
+    The variable can be a single name or a string of names
+    ("Alice, "+"Bob, "+"Charlie and David" > "Alice, Bob, Charlie and David)
+    -->
+    <string name="room_participants_invite_prompt_msg">"Are you sure you want to invite %s to this chat?"</string>
+    <!-- The building block of the first part of the string of names ("Alice, "/"Bob, ") -->
+    <string name="room_participants_invite_join_names">%1$s, </string>
+    <!-- The second part of the string of names ("Charlie and David") -->
+    <string name="room_participants_invite_join_names_and">%1$s and %2$s</string>
+    <!-- First variable is the first part, and second is the second part -->
+    <string name="room_participants_invite_join_names_combined">%1$s %2$s</string>
 
     <!-- invitation -->
     <string name="people_search_invite_by_id"><u>Invite by ID</u></string>
@@ -469,7 +494,10 @@
     <string name="room_details_people">People</string>
     <string name="room_details_files">Files</string>
     <string name="room_details_settings">Settings</string>
-    <string name="room_details_selected">selected</string>
+    <plurals name="room_details_selected">
+        <item quantity="one">1 selected</item>
+        <item quantity="other">%d selected</item>
+    </plurals>
     <string name="malformed_id">Malformed ID. Should be an email address or a Matrix ID like \'@localpart:domain\'</string>
     <string name="room_details_people_invited_group_name">INVITED</string>
     <string name="room_details_people_present_group_name">JOINED</string>
@@ -517,12 +545,10 @@
 
     <!-- Directory -->
     <string name="directory_search_results_title">Browse directory</string>
-    <string name="directory_search_room">%1$d room</string>
     <plurals name="directory_search_rooms">
         <item quantity="one">1 room</item>
         <item quantity="other">%d rooms</item>
     </plurals>
-    <string name="directory_search_room_for">%1$d room found for %2$s</string>
     <plurals name="directory_search_rooms_for">
         <item quantity="one">%1$s room found for %2$s</item>
         <item quantity="other">%1$s rooms found for %2$s</item>
@@ -979,11 +1005,15 @@
     <string name="filter_group_members">Filter group members</string>
     <string name="filter_group_rooms">Filter group rooms</string>
 
-    <string name="group_one_member">1 member</string>
-    <string name="group_members">%d members</string>
+    <plurals name="group_members">
+        <item quantity="one">1 member</item>
+        <item quantity="other">%d members</item>
+    </plurals>
 
-    <string name="group_one_room">1 room</string>
-    <string name="group_rooms">%d rooms</string>
+    <plurals name="group_rooms">
+        <item quantity="one">1 room</item>
+        <item quantity="other">%d rooms</item>
+    </plurals>
     <string name="group_no_long_description">The community admin has not provided a long description for this community.</string>
 
     <string name="has_been_kicked">You have been kicked from %1$s by %2$s</string>

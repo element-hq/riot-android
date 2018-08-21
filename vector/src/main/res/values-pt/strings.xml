@@ -43,7 +43,6 @@
     <string name="room_no_conference_call_in_encrypted_rooms">Chamadas de conferência não são suportadas em salas cifradas</string>
     <string name="send_anyway">Enviar na mesma</string>
     <string name="or">ou</string>
-    <string name="and">e</string>
     <string name="invite">Convidar</string>
 
     <!-- actions -->
@@ -95,9 +94,9 @@ Selecione exportar para criar uma cópia de segurança antes de terminar sessão
     <string name="no_room_placeholder">Sem salas</string>
     <string name="no_public_room_placeholder">Não existem salas públicas disponíveis</string>
     <plurals name="public_room_nb_users">
-	<item quantity="one">%d utilizador</item>
-	<item quantity="other">%d utilizadores</item>
-</plurals>
+        <item quantity="one">%d utilizador</item>
+        <item quantity="other">%d utilizadores</item>
+    </plurals>
 
     <string name="send_bug_report_include_logs">Enviar logs</string>
     <string name="send_bug_report_include_crash_logs">Enviar logs da falha</string>
@@ -122,8 +121,6 @@ Selecione exportar para criar uma cópia de segurança antes de terminar sessão
     <string name="logout">Sair</string>
     <string name="hs_url">URL do "Home Server"</string>
     <string name="identity_url">URL do "Identity Server"</string>
-    <string name="user">utilizador</string>
-    <string name="users">utilizadores</string>
     <string name="search">Pesquisar</string>
 
     <string name="start_new_chat">Iniciar nova conversa</string>
@@ -319,12 +316,6 @@ Dispositivos ainda não podem decifrar o histórico de mensagens anteriores ao m
 
 Mensagens cifradas não serão visíveis em clientes que ainda não implementaram criptografia.</string>
 
-    <!--  Time -->
-    <string name="format_time_s">s</string>
-    <string name="format_time_m">m</string>
-    <string name="format_time_h">h</string>
-    <string name="format_time_d">d</string>
-
     <!--  Chat participants -->
     <string name="room_participants_leave_prompt_title">Sair da sala</string>
     <string name="room_participants_leave_prompt_msg">Tem a certeza que quer sair da sala?</string>
@@ -334,8 +325,6 @@ Mensagens cifradas não serão visíveis em clientes que ainda não implementara
     <string name="room_participants_online">Online</string>
     <string name="room_participants_offline">Offline</string>
     <string name="room_participants_idle">Inativo</string>
-    <string name="room_participants_now">agora</string>
-    <string name="room_participants_ago">atrás</string>
 
     <string name="room_participants_header_admin_tools">FERRAMENTAS DE ADMINISTRAÇÃO</string>
     <string name="room_participants_header_call">CHAMADA</string>
@@ -406,7 +395,6 @@ Tem a certeza?</string>
     <string name="room_details_people">Pessoas</string>
     <string name="room_details_files">Ficheiros</string>
     <string name="room_details_settings">Definições</string>
-    <string name="room_details_selected">selecionados</string>
     <string name="malformed_id">ID mal formatado. Tem que ser um endereço de e-mail ou um ID Matrix como por exemplo \'@utilizador:domínio\'</string>
     <string name="room_details_people_invited_group_name">CONVIDADOS</string>
     <string name="room_details_people_present_group_name">ENTRARAM</string>
@@ -447,8 +435,6 @@ Tem a certeza?</string>
 
     <!-- Directory -->
     <string name="directory_search_results_title">Navegar diretório</string>
-    <string name="directory_search_room">%1$d sala</string>
-    <string name="directory_search_room_for">%1$d sala encontrada para %2$s</string>
     <string name="directory_searching_title">A pesquisar o diretório...</string>
 
     <!-- home room settings -->

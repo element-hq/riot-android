@@ -45,7 +45,6 @@
     <string name="room_no_conference_call_in_encrypted_rooms">Konferenceopkald er ikke understøttede i krypterede rum</string>
     <string name="send_anyway">Send Alligevel</string>
     <string name="or">eller</string>
-    <string name="and">og</string>
     <string name="invite">Invitér</string>
     <string name="offline">Offline</string>
 
@@ -92,9 +91,9 @@ Vælg eksportér for at backe dem op inden du logger ud.</string>
     <string name="no_room_placeholder">Ingen rum</string>
     <string name="no_public_room_placeholder">Ingen offentlige rum er tilgængelige</string>
     <plurals name="public_room_nb_users">
-	<item quantity="one">1 bruger</item>
-	<item quantity="other">%d brugere</item>
-</plurals>
+        <item quantity="one">1 bruger</item>
+        <item quantity="other">%d brugere</item>
+    </plurals>
 
     <string name="send_bug_report_include_logs">Send logfiler</string>
     <string name="send_bug_report_include_crash_logs">Send crashlogfiler</string>
@@ -120,8 +119,6 @@ Vælg eksportér for at backe dem op inden du logger ud.</string>
     <string name="logout">Log ud</string>
     <string name="hs_url">Home Server URL</string>
     <string name="identity_url">Identity Server URL</string>
-    <string name="user">bruger</string>
-    <string name="users">brugere</string>
     <string name="search">Søg</string>
 
     <string name="start_new_chat">Start Ny Chat</string>
@@ -304,11 +301,6 @@ Din enhed kan endnu ikke kryptere historien fra før du forbandt til rummet.
 
 Krypterede beskeder vil ikke være synlige for klienter der ikke har implementeret kryptering endnu.</string>
 
-    <string name="format_time_s">s</string>
-    <string name="format_time_m">m</string>
-    <string name="format_time_h">t</string>
-    <string name="format_time_d">d</string>
-
     <string name="room_participants_leave_prompt_title">Forlad rum</string>
     <string name="room_participants_leave_prompt_msg">Er du sikker på at du vil forlade rummet?</string>
     <string name="room_participants_remove_prompt_msg">Er du sikker på du vil fjerne %s fra denne chat?</string>
@@ -317,8 +309,6 @@ Krypterede beskeder vil ikke være synlige for klienter der ikke har implementer
     <string name="room_participants_online">Online</string>
     <string name="room_participants_offline">Offline</string>
     <string name="room_participants_idle">Passiv</string>
-    <string name="room_participants_now">nu</string>
-    <string name="room_participants_ago">siden</string>
 
     <string name="room_participants_header_admin_tools">ADMINSTRATIONSVÆRKTØJER</string>
     <string name="room_participants_header_call">OPKALD</string>
@@ -390,7 +380,6 @@ Er du sikker?</string>
     <string name="room_details_people">Personer</string>
     <string name="room_details_files">Filer</string>
     <string name="room_details_settings">Indstillinger</string>
-    <string name="room_details_selected">valgte</string>
     <string name="malformed_id">Ugyldigt ID. Det skal være en e-mail adresse eller et Matrix ID som \'@lokaldel:domæne\'</string>
     <string name="room_details_people_invited_group_name">INVITERET</string>
     <string name="title_activity_group_details">Detaljer om community</string>
@@ -471,12 +460,10 @@ Er du sikker?</string>
     <string name="room_recents_join_room_prompt">Indtast ID eller alias på et rum</string>
 
     <string name="directory_search_results_title">Gennemse oversigt</string>
-    <string name="directory_search_room">%1$d rum</string>
     <plurals name="directory_search_rooms">
 	<item quantity="one">1 rum</item>
 	<item quantity="other">%d rum</item>
 </plurals>
-    <string name="directory_search_room_for">%1$d rum fundet for %2$s</string>
     <plurals name="directory_search_rooms_for">
 	<item quantity="one">%1$s rum fundet for %2$s</item>
 	<item quantity="other">%1$s rum fundet for %2$s</item>

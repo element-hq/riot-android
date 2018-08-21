@@ -43,7 +43,6 @@
     <string name="room_no_conference_call_in_encrypted_rooms">Chamadas de conferência não são permitidas em salas encriptografadas</string>
     <string name="send_anyway">Enviar de qualquer maneira</string>
     <string name="or">ou</string>
-    <string name="and">e</string>
     <string name="invite">Invite</string>
 
     <!-- actions -->
@@ -94,9 +93,9 @@
     <string name="no_room_placeholder">Não há salas</string>
     <string name="no_public_room_placeholder">Não há nenhuma sala pública disponível</string>
     <plurals name="public_room_nb_users">
-	<item quantity="one">1 usuária/o</item>
-	<item quantity="other">%d usuárias/os</item>
-</plurals>
+        <item quantity="one">1 usuária/o</item>
+        <item quantity="other">%d usuárias/os</item>
+    </plurals>
 
     <string name="send_bug_report_include_logs">Enviar logs</string>
     <string name="send_bug_report_include_crash_logs">Enviar logs da falha</string>
@@ -121,8 +120,6 @@
     <string name="logout">Sair</string>
     <string name="hs_url">URL do "Home Server"</string>
     <string name="identity_url">URL do "Identity Server"</string>
-    <string name="user">usuário</string>
-    <string name="users">usuários</string>
     <string name="search">Pesquisar</string>
 
     <string name="start_new_chat">Iniciar nova conversa</string>
@@ -299,12 +296,6 @@ Você autoriza o Riot a acessar seus contatos?</string>
     <string name="room_e2e_alert_title">Atenção!</string>
     <string name="room_e2e_alert_message">Criptografia ponta-a-ponta está em estágio beta de desenvolvimento e portanto pode ainda não ser confiável.\n\nVocê não deve depositar toda sua confiança nela para preservar seus dados.\n\nDispositivos ainda não podem decriptografar as mensagens anteriores ao momento em que você passou a fazer parte da sala.\n\nMensagens criptografadas não serão visíveis em clientes que não implementaram criptografia.</string>
 
-    <!--  Time -->
-    <string name="format_time_s">s</string>
-    <string name="format_time_m">m</string>
-    <string name="format_time_h">h</string>
-    <string name="format_time_d">d</string>
-
     <!--  Chat participants -->
     <string name="room_participants_leave_prompt_title">Deixar a sala</string>
     <string name="room_participants_leave_prompt_msg">Você tem certeza que deseja se retirar da sala?</string>
@@ -314,8 +305,6 @@ Você autoriza o Riot a acessar seus contatos?</string>
     <string name="room_participants_online">Online</string>
     <string name="room_participants_offline">Desconectada/o</string>
     <string name="room_participants_idle">Ocioso</string>
-    <string name="room_participants_now">agora</string>
-    <string name="room_participants_ago">atrás</string>
 
     <string name="room_participants_header_admin_tools">FERRAMENTAS DE ADMINISTRAÇÃO</string>
     <string name="room_participants_header_call">CHAMADA</string>
@@ -385,7 +374,6 @@ Você autoriza o Riot a acessar seus contatos?</string>
     <string name="room_details_people">Pessoas</string>
     <string name="room_details_files">Arquivos</string>
     <string name="room_details_settings">Configurações</string>
-    <string name="room_details_selected">selecionadas</string>
     <string name="malformed_id">ID mal formatado. Tem que ser um endereço de email ou um ID Matrix como por exemplo \'@localpart:domain\'</string>
     <string name="room_details_people_invited_group_name">CONVIDADOS</string>
     <string name="room_details_people_present_group_name">ENTRARAM</string>
@@ -426,8 +414,6 @@ Você autoriza o Riot a acessar seus contatos?</string>
 
     <!-- Directory -->
     <string name="directory_search_results_title">Pesquisar na lista pública</string>
-    <string name="directory_search_room">%1$d sala</string>
-    <string name="directory_search_room_for">%1$d sala encontrada para %2$s</string>
     <string name="directory_searching_title">Buscando no diretório...</string>
 
     <!-- home room settings -->
@@ -854,11 +840,6 @@ Você autoriza o Riot a acessar seus contatos?</string>
     <string name="filter_group_members">Filtrar integrantes do grupo</string>
     <string name="filter_group_rooms">Filtrar salas de grupo</string>
 
-    <string name="group_one_member">1 integrante</string>
-    <string name="group_members">%d integrantes</string>
-
-    <string name="group_one_room">1 sala</string>
-    <string name="group_rooms">%d salas</string>
     <string name="group_no_long_description">O(A) administrador(a) desta comunidade não definiu uma descrição longa da mesma.</string>
 
     <string name="has_been_kicked">Você foi excluída/o da sala %1$s por %2$s</string>

@@ -48,7 +48,6 @@
     <string name="room_no_conference_call_in_encrypted_rooms">Konferencijski pozivi nisu podržani u šifriranim sobama</string>
     <string name="send_anyway">Ipak pošalji</string>
     <string name="or">ili</string>
-    <string name="and">i</string>
     <string name="invite">Pozovi</string>
     <string name="offline">Offline</string>
 
@@ -94,11 +93,6 @@ Odaberite eksport kako biste napravili rezervu prije odjavljivanja.</string>
     <string name="rooms_directory_header">Imenik soba</string>
     <string name="no_room_placeholder">Nema soba</string>
     <string name="no_public_room_placeholder">Nema dostupnih javnih soba</string>
-    <plurals name="public_room_nb_users">
-	<item quantity="one">Jedan</item>
-	<item quantity="few">Nekoliko</item>
-	<item quantity="other">Drugi</item>
-</plurals>
 
     <string name="send_bug_report_include_logs">Pošaljite zapise</string>
     <string name="send_bug_report_include_crash_logs">Pošaljite keš zapise</string>
@@ -124,8 +118,6 @@ Odaberite eksport kako biste napravili rezervu prije odjavljivanja.</string>
     <string name="logout">Odjavi se</string>
     <string name="hs_url">URL lokalnog servera</string>
     <string name="identity_url">URL identitet servera</string>
-    <string name="user">korisnik</string>
-    <string name="users">korisnici</string>
     <string name="search">Traži</string>
 
     <string name="start_new_chat">Započni Novi Razgovor</string>
@@ -304,10 +296,6 @@ Uređaji još uvijek neće moći dešifrirati istoriju prije nego što se pridru
 
 Šifrirane poruke neće biti vidljive na klijentima koji još ne provode šifriranje.</string>
 
-    <string name="format_time_m">m</string>
-    <string name="format_time_h">h</string>
-    <string name="format_time_d">d</string>
-
     <string name="room_participants_leave_prompt_title">Napusti sobu</string>
     <string name="room_participants_leave_prompt_msg">Da li ste sigurni da želite napustiti sobu?</string>
     <string name="room_participants_remove_prompt_msg">Da li ste sigurni da želite ukloniti % iz ovog razgovora?</string>
@@ -316,8 +304,6 @@ Uređaji još uvijek neće moći dešifrirati istoriju prije nego što se pridru
     <string name="room_participants_online">Online</string>
     <string name="room_participants_offline">Offline</string>
     <string name="room_participants_idle">Idle</string>
-    <string name="room_participants_now">sada</string>
-    <string name="room_participants_ago">prije</string>
 
     <string name="room_participants_header_admin_tools">ADMINISTRATORSKI ALATI</string>
     <string name="room_participants_header_call">POZIV</string>
@@ -385,7 +371,6 @@ Da li ste sigurani?</string>
     <string name="room_details_people">Ljudi</string>
     <string name="room_details_files">Fajlovi</string>
     <string name="room_details_settings">Postavke</string>
-    <string name="room_details_selected">označeno</string>
     <string name="malformed_id">Malformirani ID. Trebao bi biti email adresa ili Matrix ID poput \"@localpart: domain\"</string>
     <string name="room_details_people_invited_group_name">POZVAN</string>
     <string name="room_details_people_present_group_name">PRIKLJUČEN</string>
@@ -421,8 +406,6 @@ Da li ste sigurani?</string>
     <string name="room_recents_join_room_prompt">Upišite ID sobe ili alias sobe</string>
 
     <string name="directory_search_results_title">Pretražite imenik</string>
-    <string name="directory_search_room">%1$d soba</string>
-    <string name="directory_search_room_for">%1$d soba nađena za %2$s</string>
     <string name="directory_searching_title">Traži direktorij..</string>
 
     <string name="room_settings_favourite">Favorit</string>
@@ -505,7 +488,6 @@ Da li ste sigurani?</string>
     <string name="attachment_remaining_time_seconds">%d s</string>
     <string name="attachment_remaining_time_minutes">%1$a %2$i</string>
 
-    <string name="format_time_s">s</string>
     <string name="settings_opt_out_of_analytics_summary">Hepek prikuplja anonimnu analitiku kako bi nam omogućio poboljšanje aplikacije.</string>
 
 
