@@ -92,6 +92,10 @@
     <string name="rooms_directory_header">Lista de salas</string>
     <string name="no_room_placeholder">Não há salas</string>
     <string name="no_public_room_placeholder">Não há nenhuma sala pública disponível</string>
+    <plurals name="public_room_nb_users">
+        <item quantity="one">1 usuária/o</item>
+        <item quantity="other">%d usuárias/os</item>
+    </plurals>
 
     <string name="send_bug_report_include_logs">Enviar logs</string>
     <string name="send_bug_report_include_crash_logs">Enviar logs da falha</string>

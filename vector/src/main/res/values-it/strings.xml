@@ -96,6 +96,10 @@ Selezionare esporta per fare un backup delle chat prima di disconnettersi.</stri
     <string name="rooms_directory_header">Elenco stanze</string>
     <string name="no_room_placeholder">Nessuna stanza</string>
     <string name="no_public_room_placeholder">Nessuna stanza pubblica disponibile</string>
+    <plurals name="public_room_nb_users">
+        <item quantity="one">1 utente</item>
+        <item quantity="other">%d utenti</item>
+    </plurals>
 
     <string name="send_bug_report_include_logs">Invia registri</string>
     <string name="send_bug_report_include_crash_logs">Invia registri di crash</string>

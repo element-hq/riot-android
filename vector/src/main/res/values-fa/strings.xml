@@ -58,6 +58,10 @@
     <string name="direct_chats_header">گفتگو</string>
     <string name="no_conversation_placeholder">هیچ مکالمه‌ای وجود ندارد</string>
     <string name="rooms_header">اتاق‌ها</string>
+    <plurals name="public_room_nb_users">
+        <item quantity="one">1 کاربر</item>
+        <item quantity="other">%d کاربر</item>
+    </plurals>
 
     <string name="groups_invite_header">دعوت</string>
     <string name="no_group_placeholder">هیچ گروهی وجود ندارد</string>

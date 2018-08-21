@@ -105,6 +105,11 @@
     <string name="rooms_directory_header">Каталог кімнат</string>
     <string name="no_room_placeholder">Кімнати відсутні</string>
     <string name="no_public_room_placeholder">Публічні кімнати відсутні</string>
+    <plurals name="public_room_nb_users">
+        <item quantity="one">%d користувач</item>
+        <item quantity="few">%d користувача</item>
+        <item quantity="many">%d користувачів</item>
+    </plurals>
 
     <string name="send_bug_report_include_logs">Надіслати журнали</string>
     <string name="send_bug_report_include_crash_logs">Надіслати журнали помилок</string>

@@ -93,6 +93,10 @@ Selecione exportar para criar uma cópia de segurança antes de terminar sessão
     <string name="rooms_directory_header">Lista de salas</string>
     <string name="no_room_placeholder">Sem salas</string>
     <string name="no_public_room_placeholder">Não existem salas públicas disponíveis</string>
+    <plurals name="public_room_nb_users">
+        <item quantity="one">%d utilizador</item>
+        <item quantity="other">%d utilizadores</item>
+    </plurals>
 
     <string name="send_bug_report_include_logs">Enviar logs</string>
     <string name="send_bug_report_include_crash_logs">Enviar logs da falha</string>

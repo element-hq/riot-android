@@ -109,6 +109,10 @@
     <string name="rooms_directory_header">Directori de sales</string>
     <string name="no_room_placeholder">No hi ha cap sala</string>
     <string name="no_public_room_placeholder">No hi ha cap sala pública disponible</string>
+    <plurals name="public_room_nb_users">
+        <item quantity="one">1 usuari</item>
+        <item quantity="other">%d usuaris</item>
+    </plurals>
 
     <!-- Groups fragment -->
     <string name="groups_invite_header">Convida</string>

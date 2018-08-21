@@ -90,6 +90,10 @@ Vælg eksportér for at backe dem op inden du logger ud.</string>
     <string name="rooms_directory_header">Rum katalog</string>
     <string name="no_room_placeholder">Ingen rum</string>
     <string name="no_public_room_placeholder">Ingen offentlige rum er tilgængelige</string>
+    <plurals name="public_room_nb_users">
+        <item quantity="one">1 bruger</item>
+        <item quantity="other">%d brugere</item>
+    </plurals>
 
     <string name="send_bug_report_include_logs">Send logfiler</string>
     <string name="send_bug_report_include_crash_logs">Send crashlogfiler</string>

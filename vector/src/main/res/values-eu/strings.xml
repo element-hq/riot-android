@@ -82,6 +82,10 @@ Hautatu esportatu babes-kopia bat egiteko saioa amaitu aurretik.</string>
     <string name="rooms_directory_header">Gelen direktorioa</string>
     <string name="no_room_placeholder">Gelarik ez</string>
     <string name="no_public_room_placeholder">Ez dago gela publikorik eskuragarri</string>
+    <plurals name="public_room_nb_users">
+        <item quantity="one">Erabiltzaile 1</item>
+        <item quantity="other">%d erabiltzaile</item>
+    </plurals>
 
     <string name="send_bug_report_include_logs">Bidali egunkariak</string>
     <string name="send_bug_report_include_crash_logs">Bidali kraskatze egunkariak</string>

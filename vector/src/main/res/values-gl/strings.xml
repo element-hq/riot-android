@@ -107,6 +107,10 @@ Escolla exportar para facer copia de seguridade das chaves antes de desconectar.
     <string name="download">Descargar</string>
     <string name="speak">Falar</string>
     <string name="clear">Limpar</string>
+    <plurals name="public_room_nb_users">
+        <item quantity="one">1 usuario</item>
+        <item quantity="other">%d usuarios</item>
+    </plurals>
 
     <string name="groups_invite_header">Convidar</string>
     <string name="groups_header">Comunidades</string>

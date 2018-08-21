@@ -93,6 +93,12 @@
     <string name="rooms_directory_header">Список комнат</string>
     <string name="no_room_placeholder">Нет комнат</string>
     <string name="no_public_room_placeholder">Публичные комнаты недоступны</string>
+    <plurals name="public_room_nb_users">
+        <item quantity="one">%d пользователь</item>
+        <item quantity="few">%d пользователя</item>
+        <item quantity="many">%d пользователей</item>
+        <item quantity="other"/>
+    </plurals>
 
     <string name="send_bug_report_include_logs">Отправить логи</string>
     <string name="send_bug_report_include_crash_logs">Отправить журналы ошибок</string>

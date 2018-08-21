@@ -75,6 +75,10 @@
 
     <string name="rooms_header">Spjallrásir</string>
     <string name="no_room_placeholder">Engar spjallrásir</string>
+    <plurals name="public_room_nb_users">
+        <item quantity="one">1 notandi</item>
+        <item quantity="other">%d notendur</item>
+    </plurals>
 
     <string name="groups_invite_header">Bjóða</string>
     <string name="no_group_placeholder">Engir hópar</string>

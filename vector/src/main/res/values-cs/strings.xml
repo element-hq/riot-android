@@ -101,6 +101,12 @@ Zvolte export, chcete-li je zálohovat, než se odhlásíte.</string>
     <string name="rooms_directory_header">Adresář místnosti</string>
     <string name="no_room_placeholder">Žádne místností</string>
     <string name="no_public_room_placeholder">Žádné veřejné mistnosti nejsou k dispozici</string>
+    <plurals name="public_room_nb_users">
+        <item quantity="one">1 uživatel</item>
+        <item quantity="few">%d uživatelé</item>
+        <item quantity="many">%d uživatelé</item>
+        <item quantity="other"/>
+    </plurals>
 
     <string name="groups_invite_header">Pozvat</string>
     <string name="groups_header">Komunity</string>

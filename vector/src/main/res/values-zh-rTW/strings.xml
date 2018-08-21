@@ -101,6 +101,9 @@
     <string name="rooms_directory_header">聊天室目錄</string>
     <string name="no_room_placeholder">沒有聊天室</string>
     <string name="no_public_room_placeholder">沒有公開的聊天室</string>
+    <plurals name="public_room_nb_users">
+        <item quantity="other">%d 個使用者</item>
+    </plurals>
 
     <string name="groups_invite_header">邀請</string>
     <string name="groups_header">社群</string>

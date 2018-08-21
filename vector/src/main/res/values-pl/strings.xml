@@ -80,6 +80,12 @@ Utwórz kopię zapasową, zanim się wylogujesz.</string>
     <string name="rooms_directory_header">Katalog pokojów</string>
     <string name="no_room_placeholder">Brak pokojów</string>
     <string name="no_public_room_placeholder">Nie są dostępne publiczne pokoje</string>
+    <plurals name="public_room_nb_users">
+        <item quantity="one">1 użytkownik</item>
+        <item quantity="few">%d użytkowników</item>
+        <item quantity="many">%d użytkowników</item>
+        <item quantity="other"/>
+    </plurals>
 
     <string name="send_bug_report_include_logs">Wyślij dzienniki</string>
     <string name="send_bug_report_include_crash_logs">Wyślij dzienniki awarii</string>

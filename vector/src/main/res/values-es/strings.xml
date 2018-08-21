@@ -93,6 +93,10 @@ Seleccione exportar para crear un archivo de respaldo antes de cerrar la sesión
     <string name="rooms_directory_header">Directorio de salas</string>
     <string name="no_room_placeholder">No hay salas</string>
     <string name="no_public_room_placeholder">No hay salas públicas disponibles</string>
+    <plurals name="public_room_nb_users">
+        <item quantity="one">1 usuario</item>
+        <item quantity="other">%d usuarios</item>
+    </plurals>
 
     <string name="send_bug_report_include_logs">Enviar informes</string>
     <string name="send_bug_report_include_crash_logs">Mandar informes de fallas</string>

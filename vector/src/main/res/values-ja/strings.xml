@@ -43,6 +43,9 @@
 
     <string name="direct_chats_header">会話</string>
     <string name="no_public_room_placeholder">公開された部屋がありません</string>
+    <plurals name="public_room_nb_users">
+        <item quantity="other">%d 名</item>
+    </plurals>
 
     <string name="send_bug_report">不具合報告</string>
     <string name="send_bug_report_description">不具合の内容と状況の説明をお願い致します。あなたは何をしましたか？何が起こると思いますか？実際何が起こったのですか？</string>
