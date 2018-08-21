@@ -40,7 +40,7 @@ import im.vector.adapters.LanguagesAdapter;
 import im.vector.util.ThemeUtils;
 import kotlin.Pair;
 
-public class LanguagePickerActivity extends RiotAppCompatActivity implements LanguagesAdapter.OnSelectLocaleListener, SearchView.OnQueryTextListener {
+public class LanguagePickerActivity extends VectorAppCompatActivity implements LanguagesAdapter.OnSelectLocaleListener, SearchView.OnQueryTextListener {
 
     private View mLanguagesEmptyView;
     private LanguagesAdapter mAdapter;

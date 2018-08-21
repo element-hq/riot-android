@@ -38,7 +38,7 @@ import im.vector.R;
  * currently displayed.
  */
 @SuppressLint("LongLogTag")
-public class VectorFakeRoomPreviewActivity extends RiotAppCompatActivity {
+public class VectorFakeRoomPreviewActivity extends VectorAppCompatActivity {
     private static final String LOG_TAG = VectorFakeRoomPreviewActivity.class.getSimpleName();
 
     @Override

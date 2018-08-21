@@ -42,7 +42,7 @@ import im.vector.Matrix;
 import im.vector.R;
 import kotlin.Pair;
 
-public class PhoneNumberVerificationActivity extends RiotAppCompatActivity implements TextView.OnEditorActionListener, TextWatcher {
+public class PhoneNumberVerificationActivity extends VectorAppCompatActivity implements TextView.OnEditorActionListener, TextWatcher {
 
     private static final String LOG_TAG = PhoneNumberVerificationActivity.class.getSimpleName();
 

@@ -40,7 +40,7 @@ import kotlin.Pair;
  * The interest is to educate the user on the impacts of his choice of the type of notifications
  * on the privacy policy of his data.
  */
-public class NotificationPrivacyActivity extends RiotAppCompatActivity {
+public class NotificationPrivacyActivity extends VectorAppCompatActivity {
 
     private static final String LOG_TAG = NotificationPrivacyActivity.class.getSimpleName();
 

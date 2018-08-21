@@ -1183,7 +1183,7 @@ class VectorSettingsPreferencesFragment : PreferenceFragment(), SharedPreference
                         if (null != activity) {
                             activity.runOnUiThread {
                                 hideLoadingView()
-                                (activity as RiotAppCompatActivity).consentNotGivenHelper.displayDialog(e)
+                                (activity as VectorAppCompatActivity).consentNotGivenHelper.displayDialog(e)
                             }
                         }
                     } else {
@@ -1288,7 +1288,7 @@ class VectorSettingsPreferencesFragment : PreferenceFragment(), SharedPreference
                                                     if (null != activity) {
                                                         activity.runOnUiThread {
                                                             hideLoadingView()
-                                                            (activity as RiotAppCompatActivity).consentNotGivenHelper.displayDialog(e)
+                                                            (activity as VectorAppCompatActivity).consentNotGivenHelper.displayDialog(e)
                                                         }
                                                     }
                                                 } else {

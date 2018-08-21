@@ -50,7 +50,7 @@ import im.vector.adapters.RoomDirectoryAdapter;
 import im.vector.util.RoomDirectoryData;
 import kotlin.Pair;
 
-public class RoomDirectoryPickerActivity extends RiotAppCompatActivity implements RoomDirectoryAdapter.OnSelectRoomDirectoryListener {
+public class RoomDirectoryPickerActivity extends VectorAppCompatActivity implements RoomDirectoryAdapter.OnSelectRoomDirectoryListener {
     // LOG TAG
     private static final String LOG_TAG = RoomDirectoryPickerActivity.class.getSimpleName();
 
