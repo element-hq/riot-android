@@ -230,7 +230,7 @@ public class VectorMediasViewerActivity extends MXCActionBarActivity {
 
         // check if the media has already been downloaded
         if (mediasCache.isMediaCached(mediaInfo.mMediaUrl, mediaInfo.mMimeType)) {
-            mediasCache.createTmpMediaFile(mediaInfo.mMediaUrl, mediaInfo.mMimeType, mediaInfo.mEncryptedFileInfo, new SimpleApiCallback<File>() {
+            mediasCache.createTmpDecryptedMediaFile(mediaInfo.mMediaUrl, mediaInfo.mMimeType, mediaInfo.mEncryptedFileInfo, new SimpleApiCallback<File>() {
                 @Override
                 public void onSuccess(File file) {
                     // sanity check

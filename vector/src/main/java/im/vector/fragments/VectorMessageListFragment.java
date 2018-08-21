@@ -850,13 +850,13 @@ public class VectorMessageListFragment extends MatrixMessageListFragment impleme
                        final String mediaMimeType,
                        final String filename,
                        final EncryptedFileInfo encryptedFileInfo) {
-        // Santize file name in case `m.body` contains a path.
+        // Sanitize file name in case `m.body` contains a path.
         final String trimmedFileName = new File(filename).getName();
 
         MXMediasCache mediasCache = Matrix.getInstance(getActivity()).getMediasCache();
         // check if the media has already been downloaded
         if (mediasCache.isMediaCached(mediaUrl, mediaMimeType)) {
-            mediasCache.createTmpMediaFile(mediaUrl, mediaMimeType, encryptedFileInfo, new SimpleApiCallback<File>() {
+            mediasCache.createTmpDecryptedMediaFile(mediaUrl, mediaMimeType, encryptedFileInfo, new SimpleApiCallback<File>() {
                 @Override
                 public void onSuccess(File file) {
                     // sanity check
@@ -887,15 +887,18 @@ public class VectorMessageListFragment extends MatrixMessageListFragment impleme
                             mPendingEncryptedFileInfo = encryptedFileInfo;
                         }
                     } else {
-                        if (null != trimmedFileName) {
-                            File dstFile = new File(file.getParent(), trimmedFileName);
+                        File dstFile = new File(file.getParent(), trimmedFileName);
 
-                            if (dstFile.exists()) {
-                                dstFile.delete();
+                        if (dstFile.exists()) {
+                            if (!dstFile.delete()) {
+                                Log.w(LOG_TAG, "Unable to delete file");
                             }
+                        }
 
-                            file.renameTo(dstFile);
+                        if (file.renameTo(dstFile)) {
                             file = dstFile;
+                        } else {
+                            Log.w(LOG_TAG, "Unable to rename file");
                         }
 
                         // shared / forward

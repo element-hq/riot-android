@@ -145,7 +145,7 @@ public class VectorMediasViewerAdapter extends PagerAdapter {
                             final VideoView videoView = view.findViewById(R.id.media_slider_videoview);
 
                             if (mMediasCache.isMediaCached(mediaInfo.mMediaUrl, mediaInfo.mMimeType)) {
-                                mMediasCache.createTmpMediaFile(mediaInfo.mMediaUrl, mediaInfo.mMimeType, mediaInfo.mEncryptedFileInfo,
+                                mMediasCache.createTmpDecryptedMediaFile(mediaInfo.mMediaUrl, mediaInfo.mMimeType, mediaInfo.mEncryptedFileInfo,
                                         new SimpleApiCallback<File>() {
                                             @Override
                                             public void onSuccess(File file) {
@@ -221,7 +221,7 @@ public class VectorMediasViewerAdapter extends PagerAdapter {
 
         // check if the media has been downloaded
         if (mMediasCache.isMediaCached(loadingUri, mediaInfo.mMimeType)) {
-            mMediasCache.createTmpMediaFile(loadingUri, mediaInfo.mMimeType, mediaInfo.mEncryptedFileInfo, new SimpleApiCallback<File>() {
+            mMediasCache.createTmpDecryptedMediaFile(loadingUri, mediaInfo.mMimeType, mediaInfo.mEncryptedFileInfo, new SimpleApiCallback<File>() {
                 @Override
                 public void onSuccess(File file) {
                     if (null != file) {
@@ -280,7 +280,7 @@ public class VectorMediasViewerAdapter extends PagerAdapter {
 
                         // check if the media has been downloaded
                         if (mMediasCache.isMediaCached(loadingUri, mediaInfo.mMimeType)) {
-                            mMediasCache.createTmpMediaFile(loadingUri, mediaInfo.mMimeType, mediaInfo.mEncryptedFileInfo, new SimpleApiCallback<File>() {
+                            mMediasCache.createTmpDecryptedMediaFile(loadingUri, mediaInfo.mMimeType, mediaInfo.mEncryptedFileInfo, new SimpleApiCallback<File>() {
                                 @Override
                                 public void onSuccess(final File mediaFile) {
                                     if (null != mediaFile) {
@@ -368,7 +368,7 @@ public class VectorMediasViewerAdapter extends PagerAdapter {
                         pieFractionView.setVisibility(View.GONE);
 
                         if (mMediasCache.isMediaCached(loadingUri, imageInfo.mMimeType)) {
-                            mMediasCache.createTmpMediaFile(loadingUri, imageInfo.mMimeType, imageInfo.mEncryptedFileInfo, new SimpleApiCallback<File>() {
+                            mMediasCache.createTmpDecryptedMediaFile(loadingUri, imageInfo.mMimeType, imageInfo.mEncryptedFileInfo, new SimpleApiCallback<File>() {
                                 @Override
                                 public void onSuccess(File mediaFile) {
                                     if (null != mediaFile) {
@@ -483,7 +483,7 @@ public class VectorMediasViewerAdapter extends PagerAdapter {
                 return view;
             }
 
-            mMediasCache.createTmpMediaFile(mediaUrl, width, height, mimeType, mediaInfo.mEncryptedFileInfo, new SimpleApiCallback<File>() {
+            mMediasCache.createTmpDecryptedMediaFile(mediaUrl, width, height, mimeType, mediaInfo.mEncryptedFileInfo, new SimpleApiCallback<File>() {
                 @Override
                 public void onSuccess(File mediaFile) {
                     if (null != mediaFile) {
@@ -648,7 +648,7 @@ public class VectorMediasViewerAdapter extends PagerAdapter {
             final SlidableMediaInfo mediaInfo = mMediasMessagesList.get(mLatestPrimaryItemPosition);
 
             if (mMediasCache.isMediaCached(mediaInfo.mMediaUrl, mediaInfo.mMimeType)) {
-                mMediasCache.createTmpMediaFile(mediaInfo.mMediaUrl, mediaInfo.mMimeType, mediaInfo.mEncryptedFileInfo, new SimpleApiCallback<File>() {
+                mMediasCache.createTmpDecryptedMediaFile(mediaInfo.mMediaUrl, mediaInfo.mMimeType, mediaInfo.mEncryptedFileInfo, new SimpleApiCallback<File>() {
                     @Override
                     public void onSuccess(File file) {
                         if (null != file) {
@@ -684,7 +684,7 @@ public class VectorMediasViewerAdapter extends PagerAdapter {
                         public void onDownloadComplete(String aDownloadId) {
                             if (aDownloadId.equals(downloadId)) {
                                 if (mMediasCache.isMediaCached(mediaInfo.mMediaUrl, mediaInfo.mMimeType)) {
-                                    mMediasCache.createTmpMediaFile(mediaInfo.mMediaUrl, mediaInfo.mMimeType, mediaInfo.mEncryptedFileInfo,
+                                    mMediasCache.createTmpDecryptedMediaFile(mediaInfo.mMediaUrl, mediaInfo.mMimeType, mediaInfo.mEncryptedFileInfo,
                                             new SimpleApiCallback<File>() {
                                                 @Override
                                                 public void onSuccess(File file) {
@@ -779,7 +779,7 @@ public class VectorMediasViewerAdapter extends PagerAdapter {
             public void onClick(View v) {
                 if (mMediasCache.isMediaCached(videoUrl, videoMimeType)) {
 
-                    mMediasCache.createTmpMediaFile(videoUrl, videoMimeType, encryptedFileInfo, new SimpleApiCallback<File>() {
+                    mMediasCache.createTmpDecryptedMediaFile(videoUrl, videoMimeType, encryptedFileInfo, new SimpleApiCallback<File>() {
                         @Override
                         public void onSuccess(File file) {
                             if (null != file) {
