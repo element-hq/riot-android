@@ -111,9 +111,9 @@
 
     <string name="title_activity_member_details">Информация</string>
     <string name="view_decrypted_source">Прегледай разшифрования източник</string>
-    <string name="ongoing_conference_call">" Текущ групов разговор. Присъедини се с глас или видео."</string>
+    <string name="ongoing_conference_call">Тече групов разговор. Присъедини се с глас или видео.</string>
     <string name="cannot_start_call">Неуспешно започване на разговора. Моля, опитайте по-късно</string>
-    <string name="missing_permissions_warning">Поради липсващи разрешения, някои функции може да липсват...</string>
+    <string name="missing_permissions_warning">Поради липсващи разрешения, някои функции може да липсват…</string>
     <string name="missing_permissions_to_start_conf_call">Трябва да имате разрешение за изпращане на покани, за да може да започнете групов разговор в тази стая</string>
     <string name="missing_permissions_title_to_start_conf_call">Неуспешно започване на разговор</string>
     <string name="device_information">Информация за устройство</string>
@@ -586,7 +586,7 @@
     <string name="room_settings_addresses_no_local_addresses">Тази стая няма локални адреси</string>
     <string name="room_settings_addresses_add_new_address">Нов адрес (напр. #foo:matrix.org)</string>
 
-    <string name="room_settings_no_flair">" Тази стая не показва значка за нито една общност"</string>
+    <string name="room_settings_no_flair">Тази стая не показва значки за нито една общност</string>
     <string name="room_settings_add_new_group">Нов ID на общност (напр. +foo:matrix.org)</string>
     <string name="room_settings_invalid_group_format_dialog_title">Невалиден ID на общност</string>
     <string name="room_settings_invalid_group_format_dialog_body">\'%s\' е невалиден ID на общност</string>
@@ -668,7 +668,7 @@
     <string name="encryption_information_unblock">Отблокирай</string>
 
     <string name="encryption_information_verify_device">Потвърди устройството</string>
-    <string name="encryption_information_verify_device_warning">" За да потвърдите, че на това устройство може да се вярва, моля свържете се със собственика му по друг начин (напр. на живо или чрез телефонен разговор) и го попитайте дали ключът, който той вижда в неговите настройки на потребителя за това устройство, съвпада с ключа по-долу:"</string>
+    <string name="encryption_information_verify_device_warning">За да потвърдите, че на това устройство може да се вярва, моля свържете се със собственика му по друг начин (напр. на живо или чрез телефонен разговор) и го попитайте дали ключът, който вижда в настройките на потребителя за това устройство, съвпада с ключа по-долу:</string>
     <string name="encryption_information_verify_device_warning2">Ако съвпада, моля натиснете бутона за потвърждение по-долу.
 Ако не съвпада, то тогава някой друг имитира това устройство и вероятно бихте искали да го вкарате в черния списък.
 В бъдеще този процес на потвърждение ще бъде по-лесен.</string>
@@ -982,4 +982,42 @@
 <string name="room_participants_action_unignore_prompt">Показване на всички съобщения от този потребител?
 
 Имайте предвид, че това действие ще рестартира приложението, което може да отнеме известно време.</string>
+    <string name="missing_permissions_error">Поради липсващи разрешения, това действие не е възможно.</string>
+    <plurals name="format_time_s">
+	<item quantity="one">1 сек.</item>
+	<item quantity="other">%d сек.</item>
+</plurals>
+    <plurals name="format_time_m">
+	<item quantity="one">1 мин.</item>
+	<item quantity="other">%d мин.</item>
+</plurals>
+    <plurals name="format_time_h">
+	<item quantity="one">1 ч.</item>
+	<item quantity="other">%d ч.</item>
+</plurals>
+    <plurals name="format_time_d">
+	<item quantity="one">1 ден</item>
+	<item quantity="other">%d дни</item>
+</plurals>
+
+    <string name="room_participants_now">%1$s сега</string>
+    <string name="room_participants_ago">%1$s преди %2$s</string>
+
+    <string name="room_participants_invite_join_names">"%1$s, "</string>
+    <string name="room_participants_invite_join_names_and">%1$s и %2$s</string>
+    <string name="room_participants_invite_join_names_combined">%1$s %2$s</string>
+
+    <plurals name="room_details_selected">
+	<item quantity="one">1 избран</item>
+	<item quantity="other">%d избрани</item>
+</plurals>
+    <plurals name="group_members">
+	<item quantity="one">1 член</item>
+	<item quantity="other">%d членове</item>
+</plurals>
+
+    <plurals name="group_rooms">
+	<item quantity="one">1 стая</item>
+	<item quantity="other">%d стаи</item>
+</plurals>
     </resources>
