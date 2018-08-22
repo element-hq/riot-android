@@ -386,6 +386,16 @@ public class VectorRoomActivity extends MXCActionBarActivity implements
      * Presence and room preview listeners
      */
     private final MXEventListener mGlobalEventListener = new MXEventListener() {
+
+        @Override
+        public void onSyncError(MatrixError matrixError) {
+            super.onSyncError(matrixError);
+            if (MatrixError.RESOURCE_LIMIT_EXCEEDED.equals(matrixError.errcode)) {
+                mResourceLimitExceededError = matrixError;
+                refreshNotificationsArea();
+            }
+        }
+
         @Override
         public void onPresenceUpdate(Event event, User user) {
             // the header displays active members
@@ -418,6 +428,8 @@ public class VectorRoomActivity extends MXCActionBarActivity implements
         @Override
         public void onLiveEventsChunkProcessed(String fromToken, String toToken) {
             mSyncInProgressView.setVisibility(View.GONE);
+            mResourceLimitExceededError = null;
+            refreshNotificationsArea();
         }
     };
 
