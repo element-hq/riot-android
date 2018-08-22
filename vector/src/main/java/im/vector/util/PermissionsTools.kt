@@ -258,9 +258,7 @@ private fun checkPermissions(permissionsToBeGrantedBitMap: Int,
                         if (!permissionsListToBeGranted.isEmpty()) {
                             fragment?.requestPermissions(permissionsListToBeGranted.toTypedArray(), requestCode)
                                     ?: run {
-                                        ActivityCompat.requestPermissions(activity,
-                                                permissionsListToBeGranted.toTypedArray(),
-                                                requestCode)
+                                        ActivityCompat.requestPermissions(activity, permissionsListToBeGranted.toTypedArray(), requestCode)
                                     }
                         }
                     }
