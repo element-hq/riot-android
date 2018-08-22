@@ -82,8 +82,6 @@ import im.vector.R;
 import im.vector.RegistrationManager;
 import im.vector.UnrecognizedCertHandler;
 import im.vector.activity.util.RequestCodesKt;
-import im.vector.dialogs.ConsentNotGivenHelper;
-import im.vector.dialogs.ConsentNotGivenHelperKt;
 import im.vector.dialogs.ResourceLimitDialogHelper;
 import im.vector.receiver.VectorRegistrationReceiver;
 import im.vector.receiver.VectorUniversalLinkReceiver;

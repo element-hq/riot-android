@@ -31,6 +31,7 @@ import org.matrix.androidsdk.util.Log
 import java.text.SimpleDateFormat
 import java.util.*
 
+
 private const val LOG_TAG = "ExternalApplicationsUtil"
 
 /**
@@ -175,4 +176,12 @@ fun openCamera(activity: Activity, titlePrefix: String, requestCode: Int): Strin
     }
 
     return null
+}
+
+fun sendMailTo(address: String, subject: String? = null, message: String? = null, activity: Activity) {
+    val intent = Intent(Intent.ACTION_SENDTO, Uri.fromParts(
+            "mailto", address, null))
+    intent.putExtra(Intent.EXTRA_SUBJECT, subject)
+    intent.putExtra(Intent.EXTRA_TEXT, message)
+    activity.startActivity(intent)
 }

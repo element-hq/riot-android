@@ -17,13 +17,15 @@
 package im.vector.dialogs
 
 import android.app.Activity
-import android.app.AlertDialog
+import android.graphics.Typeface
 import android.os.Bundle
-import android.text.method.LinkMovementMethod
-import android.widget.TextView
+import android.support.v7.app.AlertDialog
+import android.text.style.StyleSpan
+import com.binaryfork.spanny.Spanny
 import im.vector.R
 import im.vector.activity.interfaces.Restorable
 import im.vector.error.ResourceLimitErrorFormatter
+import im.vector.util.sendMailTo
 import org.matrix.androidsdk.rest.model.MatrixError
 import org.matrix.androidsdk.util.Log
 
@@ -50,16 +52,17 @@ class ResourceLimitDialogHelper private constructor(private val activity: Activi
             Log.e(LOG_TAG, "Missing required parameter 'admin_contact'")
             return
         }
-        val dialog = dialogLocker.displayDialog {
-            val message = formatter.format(ResourceLimitErrorFormatter.Mode.NonActive, matrixError)
-            AlertDialog.Builder(activity)
-                    .setIcon(R.drawable.error)
-                    .setTitle(R.string.dialog_title_warning)
+        dialogLocker.displayDialog {
+            val title = Spanny(activity.getString(R.string.resource_limit_exceeded_title), StyleSpan(Typeface.BOLD))
+            val message = formatter.format(matrixError, ResourceLimitErrorFormatter.Mode.NonActive, separator = "\n\n")
+
+            AlertDialog.Builder(activity, R.style.AppTheme_Dialog_Light)
+                    .setTitle(title)
                     .setMessage(message)
-                    .setPositiveButton(R.string.ok, null)
-        }
-        dialog?.apply {
-            findViewById<TextView>(android.R.id.message).movementMethod = LinkMovementMethod.getInstance()
+                    .setPositiveButton(R.string.resource_limit_contact_action) { _, _ ->
+                        sendMailTo(matrixError.adminContact, activity = activity)
+                    }
+                    .setNegativeButton(R.string.cancel, null)
         }
     }
 

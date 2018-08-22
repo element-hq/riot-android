@@ -1304,6 +1304,11 @@ public class VectorRoomActivity extends MXCActionBarActivity implements
         getConsentNotGivenHelper().displayDialog(matrixError);
     }
 
+    @Override
+    public void onResourceLimitExceeded(Event event, MatrixError matrixError) {
+        refreshNotificationsArea();
+    }
+
     //================================================================================
     // IOnScrollListener
     //================================================================================
@@ -3801,7 +3806,7 @@ public class VectorRoomActivity extends MXCActionBarActivity implements
             if (MatrixSdkExtensionsKt.isPowerLevelEnoughForAvatarUpdate(mRoom, mSession)) {
                 // need to check if the camera permission has been granted
                 if (PermissionsToolsKt.checkPermissions(PermissionsToolsKt.PERMISSIONS_FOR_ROOM_DETAILS,
-                       this, PermissionsToolsKt.PERMISSION_REQUEST_CODE)) {
+                        this, PermissionsToolsKt.PERMISSION_REQUEST_CODE)) {
                     Intent intent = new Intent(this, VectorMediasPickerActivity.class);
                     intent.putExtra(VectorMediasPickerActivity.EXTRA_AVATAR_MODE, true);
                     startActivityForResult(intent, REQUEST_ROOM_AVATAR_CODE);

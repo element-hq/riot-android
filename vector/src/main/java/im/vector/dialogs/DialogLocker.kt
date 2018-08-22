@@ -1,7 +1,7 @@
 package im.vector.dialogs
 
-import android.app.AlertDialog
 import android.os.Bundle
+import android.support.v7.app.AlertDialog
 import im.vector.activity.interfaces.Restorable
 import org.matrix.androidsdk.util.Log
 

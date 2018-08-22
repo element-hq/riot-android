@@ -18,9 +18,7 @@ package im.vector.error
 
 import android.content.Context
 import android.support.annotation.StringRes
-import android.support.v4.content.ContextCompat
 import android.text.Html
-import android.text.style.ForegroundColorSpan
 import com.binaryfork.spanny.Spanny
 import im.vector.R
 import org.matrix.androidsdk.rest.model.MatrixError
@@ -34,18 +32,27 @@ class ResourceLimitErrorFormatter(private val context: Context) {
         object NonActive : Mode(R.string.resource_limit_active_mau, R.string.resource_limit_active_default, R.string.resource_limit_active_contact)
     }
 
-    fun format(mode: Mode, matrixError: MatrixError): CharSequence {
-        val contactLink = contactAsLink(matrixError.adminContact)
+    fun format(matrixError: MatrixError,
+               mode: Mode,
+               separator: CharSequence = " ",
+               clickable: Boolean = false): CharSequence {
+
         val error = if (MAU == matrixError.limitType) {
             context.getString(mode.mauErrorRes)
         } else {
             context.getString(mode.defaultErrorRes)
         }
-        val contact = context.getString(mode.contactRes, contactLink)
-        val contactHtml = Html.fromHtml(contact)
+        val contact = if (clickable) {
+            val contactSubString = contactAsLink(matrixError.adminContact)
+            val contactFullString = context.getString(mode.contactRes, contactSubString)
+            Html.fromHtml(contactFullString)
+        } else {
+            val contactSubString = context.getString(R.string.resource_limit_contact_admin)
+            context.getString(mode.contactRes, contactSubString)
+        }
         return Spanny(error)
-                .append(" ")
-                .append(contactHtml)
+                .append(separator)
+                .append(contact)
     }
 
     private fun contactAsLink(email: String): String {
