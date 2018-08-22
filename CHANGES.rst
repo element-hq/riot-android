@@ -15,6 +15,7 @@ Other changes:
 
 Bugfix:
  - Fix media sharing (#2530)
+ - Fix notification sound issue in settings (#2524)
 
 Translations:
  -

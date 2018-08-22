@@ -27,6 +27,7 @@ import android.os.Build;
 import android.os.PowerManager;
 import android.preference.PreferenceManager;
 import android.provider.MediaStore;
+import android.support.annotation.Nullable;
 import android.text.TextUtils;
 
 import org.matrix.androidsdk.util.Log;
@@ -315,9 +316,9 @@ public class PreferencesManager {
      * Update the notification ringtone
      *
      * @param context the context
-     * @param uri     the new notification ringtone
+     * @param uri     the new notification ringtone, or null for no RingTone
      */
-    public static void setNotificationRingTone(Context context, Uri uri) {
+    public static void setNotificationRingTone(Context context, @Nullable Uri uri) {
         SharedPreferences.Editor editor = PreferenceManager.getDefaultSharedPreferences(context).edit();
 
         String value = "";
@@ -341,8 +342,9 @@ public class PreferencesManager {
      * Provides the selected notification ring tone
      *
      * @param context the context
-     * @return the selected ring tone
+     * @return the selected ring tone or null for no RingTone
      */
+    @Nullable
     public static Uri getNotificationRingTone(Context context) {
         String url = PreferenceManager.getDefaultSharedPreferences(context).getString(SETTINGS_NOTIFICATION_RINGTONE_PREFERENCE_KEY, null);
 
@@ -374,8 +376,9 @@ public class PreferencesManager {
      * Provide the notification ringtone filename
      *
      * @param context the context
-     * @return the filename
+     * @return the filename or null if "None" is selected
      */
+    @Nullable
     public static String getNotificationRingToneName(Context context) {
         Uri toneUri = getNotificationRingTone(context);
 
