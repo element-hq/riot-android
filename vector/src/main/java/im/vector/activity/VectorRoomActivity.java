@@ -390,8 +390,9 @@ public class VectorRoomActivity extends MXCActionBarActivity implements
         @Override
         public void onSyncError(MatrixError matrixError) {
             super.onSyncError(matrixError);
-            if (MatrixError.RESOURCE_LIMIT_EXCEEDED.equals(matrixError.errcode)) {
+            if (MatrixError.RESOURCE_LIMIT_EXCEEDED.equals(matrixError.errcode) && mResourceLimitExceededError == null) {
                 mResourceLimitExceededError = matrixError;
+                checkSendEventStatus();
                 refreshNotificationsArea();
             }
         }
@@ -428,8 +429,11 @@ public class VectorRoomActivity extends MXCActionBarActivity implements
         @Override
         public void onLiveEventsChunkProcessed(String fromToken, String toToken) {
             mSyncInProgressView.setVisibility(View.GONE);
-            mResourceLimitExceededError = null;
-            refreshNotificationsArea();
+            if (mResourceLimitExceededError != null) {
+                mResourceLimitExceededError = null;
+                checkSendEventStatus();
+                refreshNotificationsArea();
+            }
         }
     };
 
@@ -2926,6 +2930,9 @@ public class VectorRoomActivity extends MXCActionBarActivity implements
             final PowerLevels powerLevels = state.getPowerLevels();
             canSendMessage = (powerLevels != null && powerLevels.maySendMessage(mMyUserId));
         }
+        if (canSendMessage) {
+            canSendMessage = mResourceLimitExceededError == null;
+        }
         return canSendMessage;
     }
 
@@ -2937,9 +2944,10 @@ public class VectorRoomActivity extends MXCActionBarActivity implements
             final RoomState state = mRoom.getState();
             boolean canSendMessage = canSendMessages(state);
             if (canSendMessage) {
+                mBottomLayout.getLayoutParams().height = ViewGroup.LayoutParams.WRAP_CONTENT;
                 mSendingMessagesLayout.setVisibility(View.VISIBLE);
                 mCanNotPostTextView.setVisibility(View.GONE);
-            } else if (state.isVersioned()) {
+            } else if (state.isVersioned() || mResourceLimitExceededError != null) {
                 mBottomLayout.getLayoutParams().height = 0;
             } else {
                 mSendingMessagesLayout.setVisibility(View.GONE);
