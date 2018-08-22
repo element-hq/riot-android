@@ -35,6 +35,7 @@ class HomeRoomsViewModel(private val session: MXSession) {
     data class Result(val favourites: List<Room> = emptyList(),
                       val directChats: List<Room> = emptyList(),
                       val lowPriorities: List<Room> = emptyList(),
+                      val serverNotices: List<Room> = emptyList(),
                       val otherRooms: List<Room> = emptyList()) {
 
         /**
@@ -68,6 +69,7 @@ class HomeRoomsViewModel(private val session: MXSession) {
         val favourites = ArrayList<Room>()
         val lowPriorities = ArrayList<Room>()
         val directChats = ArrayList<Room>()
+        val serverNotices = ArrayList<Room>()
         val otherRooms = ArrayList<Room>()
 
         val joinedRooms = getJoinedRooms()
@@ -76,16 +78,18 @@ class HomeRoomsViewModel(private val session: MXSession) {
             when {
                 tags.contains(RoomTag.ROOM_TAG_FAVOURITE) -> favourites.add(room)
                 tags.contains(RoomTag.ROOM_TAG_LOW_PRIORITY) -> lowPriorities.add(room)
+                tags.contains(RoomTag.ROOM_SERVER_NOTICE) -> serverNotices.add(room)
                 RoomUtils.isDirectChat(session, room.roomId) -> directChats.add(room)
                 else -> otherRooms.add(room)
             }
         }
 
         result = Result(
-                favourites,
-                directChats,
-                lowPriorities,
-                otherRooms
+                favourites = favourites,
+                directChats = directChats,
+                lowPriorities = lowPriorities,
+                serverNotices = serverNotices,
+                otherRooms = otherRooms
         )
         Log.d("HomeRoomsViewModel", result.toString())
         return result
