@@ -1,6 +1,6 @@
 <?xml version='1.0' encoding='UTF-8'?>
-<resources><string name="resources_language">nn_NO</string>
-    <string name="resources_country_code">Noreg</string>
+<resources><string name="resources_language">nn</string>
+    <string name="resources_country_code">NO</string>
 
     <string name="light_theme">Ljost Preg</string>
     <string name="dark_theme">Dimt Preg</string>
@@ -373,8 +373,8 @@ Enkrypterte meldingar vil ikkje verta synlege hjå klientar som førebels ikkje 
     <string name="room_participants_online">På nett</string>
     <string name="room_participants_offline">Av nett</string>
     <string name="room_participants_idle">Fråverande</string>
-    <string name="room_participants_now">no</string>
-    <string name="room_participants_ago">sia</string>
+    <string name="room_participants_now">%1$s no</string>
+    <string name="room_participants_ago">%1$s %2$s sia</string>
 
     <string name="room_participants_header_admin_tools">ADMINISTRATORVERKTØY</string>
     <string name="room_participants_header_call">RØYSTSAMTALE</string>
