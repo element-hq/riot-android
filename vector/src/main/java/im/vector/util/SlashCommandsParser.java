@@ -183,10 +183,10 @@ public class SlashCommandsParser {
             } else if (TextUtils.equals(firstPart, SlashCommand.TOPIC.getCommand())) {
                 isIRCCmd = true;
 
-                String newTopîc = textMessage.substring(SlashCommand.TOPIC.getCommand().length()).trim();
+                String newTopic = textMessage.substring(SlashCommand.TOPIC.getCommand().length()).trim();
 
-                if (newTopîc.length() > 0) {
-                    room.updateTopic(newTopîc, callback);
+                if (newTopic.length() > 0) {
+                    room.updateTopic(newTopic, callback);
                 }
             } else if (TextUtils.equals(firstPart, SlashCommand.EMOTE.getCommand())) {
                 isIRCCmd = true;

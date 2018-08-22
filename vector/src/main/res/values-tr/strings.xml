@@ -60,7 +60,6 @@
     <string name="room_no_conference_call_in_encrypted_rooms">Konferans görüşmeleri şifreli (encrypted) odalarda desteklenmiyor</string>
     <string name="send_anyway">Ne olursa olsun gönder</string>
     <string name="or">veya</string>
-    <string name="and">ve</string>
     <string name="invite">Davet et</string>
     <string name="offline">Çevrimdışı</string>
 
@@ -143,8 +142,6 @@ Yedekleme için çıkmadan önce, dışa aktarı seçin.</string>
     <string name="login">Giriş yap</string>
     <string name="logout">Çıkış yap</string>
     <string name="hs_url">Ev Sunucusu URL\'si</string>
-    <string name="user">Kullanıcı</string>
-    <string name="users">Kullanıcılar</string>
     <string name="search">Ara</string>
 
     <string name="start_new_chat">Yeni Sohbete Başla</string>
