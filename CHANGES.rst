@@ -2,13 +2,13 @@ Changes in Riot 0.8.14 (2018-XX-XX)
 ===================================================
 
 Features:
- -
 
 Improvements:
  - Do not ask permission to write external storage at startup (#2483)
  - Update settings icon and transparent logo for notifications and navigation drawer (#2492)
  - URL previews are no longer requested from the server when displaying URL previews is disabled (PR #2514)
  - Fix some plural and puzzle strings, and remove other unused ones (#2444)
+ - Manage System Alerts in a dedicated section
 
 Other changes:
  - Upgrade olm-sdk.aar from version 2.2.2 to version 2.3.0
