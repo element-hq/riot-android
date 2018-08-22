@@ -225,7 +225,7 @@ public class VectorMediasViewerActivity extends MXCActionBarActivity {
      * Download the current video file
      */
     private void onAction(final int position, final int action) {
-        MXMediasCache mediasCache = Matrix.getInstance(this).getMediasCache();
+        final MXMediasCache mediasCache = Matrix.getInstance(this).getMediasCache();
         final SlidableMediaInfo mediaInfo = mMediasList.get(position);
 
         // check if the media has already been downloaded
@@ -252,15 +252,12 @@ public class VectorMediasViewerActivity extends MXCActionBarActivity {
                             mPendingAction = action;
                         }
                     } else {
+                        // Move the file to the Share folder, to avoid it to be deleted because the Activity will be paused while the
+                        // user select an application to share the file
                         if (null != mediaInfo.mFileName) {
-                            File dstFile = new File(file.getParent(), mediaInfo.mFileName);
-
-                            if (dstFile.exists()) {
-                                dstFile.delete();
-                            }
-
-                            file.renameTo(dstFile);
-                            file = dstFile;
+                            file = mediasCache.moveToShareFolder(file, mediaInfo.mFileName);
+                        } else {
+                            file = mediasCache.moveToShareFolder(file, file.getName());
                         }
 
                         // shared / forward

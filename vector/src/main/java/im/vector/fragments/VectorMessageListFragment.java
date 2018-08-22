@@ -853,7 +853,7 @@ public class VectorMessageListFragment extends MatrixMessageListFragment impleme
         // Sanitize file name in case `m.body` contains a path.
         final String trimmedFileName = new File(filename).getName();
 
-        MXMediasCache mediasCache = Matrix.getInstance(getActivity()).getMediasCache();
+        final MXMediasCache mediasCache = Matrix.getInstance(getActivity()).getMediasCache();
         // check if the media has already been downloaded
         if (mediasCache.isMediaCached(mediaUrl, mediaMimeType)) {
             mediasCache.createTmpDecryptedMediaFile(mediaUrl, mediaMimeType, encryptedFileInfo, new SimpleApiCallback<File>() {
@@ -887,19 +887,9 @@ public class VectorMessageListFragment extends MatrixMessageListFragment impleme
                             mPendingEncryptedFileInfo = encryptedFileInfo;
                         }
                     } else {
-                        File dstFile = new File(file.getParent(), trimmedFileName);
-
-                        if (dstFile.exists()) {
-                            if (!dstFile.delete()) {
-                                Log.w(LOG_TAG, "Unable to delete file");
-                            }
-                        }
-
-                        if (file.renameTo(dstFile)) {
-                            file = dstFile;
-                        } else {
-                            Log.w(LOG_TAG, "Unable to rename file");
-                        }
+                        // Move the file to the Share folder, to avoid it to be deleted because the Activity will be paused while the
+                        // user select an application to share the file
+                        file = mediasCache.moveToShareFolder(file, trimmedFileName);
 
                         // shared / forward
                         Uri mediaUri = null;
@@ -908,7 +898,6 @@ public class VectorMessageListFragment extends MatrixMessageListFragment impleme
                         } catch (Exception e) {
                             Log.e(LOG_TAG, "onMediaAction VectorContentProvider.absolutePathToUri: " + e.getMessage(), e);
                         }
-
 
                         if (null != mediaUri) {
                             final Intent sendIntent = new Intent();

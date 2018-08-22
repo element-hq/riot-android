@@ -14,7 +14,7 @@ Other changes:
  - move PieFractionView from the SDK to the client (#2525)
 
 Bugfix:
- -
+ - Fix media sharing (#2530)
 
 Translations:
  -
