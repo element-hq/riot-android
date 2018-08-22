@@ -379,9 +379,14 @@ fun onPermissionResultVideoIpCall(context: Context, grantResults: IntArray): Boo
 }
 
 /**
- * Return true if all permissions are granted
+ * Return true if all permissions are granted, false if not or if permission request has been cancelled
  */
 fun allGranted(grantResults: IntArray): Boolean {
+    if (grantResults.isEmpty()) {
+        // A cancellation occurred
+        return false
+    }
+
     var granted = true
 
     grantResults.forEach {
