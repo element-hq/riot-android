@@ -1300,13 +1300,7 @@ public class VectorRoomActivity extends MXCActionBarActivity implements
     @Override
     public void onConsentNotGiven(Event event, MatrixError matrixError) {
         refreshNotificationsArea();
-
         getConsentNotGivenHelper().displayDialog(matrixError);
-    }
-
-    @Override
-    public void onResourceLimitExceeded(Event event, MatrixError matrixError) {
-        refreshNotificationsArea();
     }
 
     //================================================================================
