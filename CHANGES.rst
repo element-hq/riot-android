@@ -16,6 +16,7 @@ Other changes:
 Bugfix:
  - Fix media sharing (#2530)
  - Fix notification sound issue in settings (#2524)
+ - Disable app icon badge for "listen for event" notification (#2104)
 
 Translations:
  -
