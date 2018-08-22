@@ -28,11 +28,11 @@
     <string name="rename">Átnevezés</string>
     <string name="report_content">Tartalom bejelentése</string>
     <string name="active_call">Aktív hívás</string>
-    <string name="ongoing_conference_call">" Folyamatban lévő konferenciahívás. Csatlakozás hanggal vagy videóval."</string>
+    <string name="ongoing_conference_call">Folyamatban lévő konferenciahívás. Csatlakozás hanggal vagy videóval.</string>
     <string name="ongoing_conference_call_voice">hang</string>
     <string name="ongoing_conference_call_video">videó</string>
     <string name="cannot_start_call">Nem sikerült hívást kezdeményezni, próbáld meg később</string>
-    <string name="missing_permissions_warning">Hiányzó engedélyek miatt egyes funkciók talán nem elérhetőek..</string>
+    <string name="missing_permissions_warning">Hiányzó engedélyek miatt egyes funkciók talán nem elérhetőek…</string>
     <string name="missing_permissions_to_start_conf_call">Ezen szobában való értekezlet indításához meghívási jogosultság szükséges</string>
     <string name="missing_permissions_title_to_start_conf_call">Nem sikerült hívást kezdeményezni</string>
     <string name="device_information">Eszközinformáció</string>
@@ -631,7 +631,7 @@ A titkosított üzenetek nem fognak látszódni azokon a klienseken ahol a titko
     <string name="encryption_information_unblock">Eltávolítás feketelistáról</string>
 
     <string name="encryption_information_verify_device">Eszköz hitelesítése</string>
-    <string name="encryption_information_verify_device_warning">" Hogy ellenőrizni lehessen, hogy ez az eszköz megbízható, kérlek használj más kommunikáció módot a tulajdonossal (pl.: személyesen vagy telefonon keresztül) és kérdezd meg hogy a kulcs amit lát a Felhasználói Beállítások alatt megegyezik-e az alábbi kulccsal:"</string>
+    <string name="encryption_information_verify_device_warning">Hogy ellenőrizni lehessen, hogy ez az eszköz megbízható, kérlek használj más kommunikáció módot a tulajdonossal (pl.: személyesen vagy telefonon keresztül) és kérdezd meg hogy a kulcs amit lát a Felhasználói Beállítások alatt megegyezik-e az alábbi kulccsal:</string>
     <string name="encryption_information_verify_device_warning2">Ha egyezik, nyomja meg a hitelesítés gombot.
 Ha nem, akkor valaki más elfogta ezt az eszközt és érdemes lenne tiltólistára tenni.
 A jövőben ez a hitelesítési mód kényelmesebbé lesz téve.</string>
@@ -830,7 +830,7 @@ Ismeretlen eszközök:</string>
 <string name="settings_inline_url_preview">"Üzenetekben URL előnézet engedélyezése alapbeállításként "</string>
     <string name="settings_flair">Kitűző</string>
 
-    <string name="room_settings_no_flair">" Ez a szoba nem mutatja  a közösségek kitűzőit"</string>
+    <string name="room_settings_no_flair">"Ez a szoba nem mutatja  a közösségek kitűzőit"</string>
     <string name="group_details_home">Kezdőlap</string>
     <string name="actions">Műveletek</string>
     <string name="send_bug_report_rage_shake">Rázd meg ha hibát szeretnél bejelenteni</string>
@@ -996,4 +996,42 @@ Vedd figyelembe, hogy az alkalmazás újraindul ami sok időt vehet igénybe.</s
     <string name="room_tombstone_continuation_description">Ez a szoba a folytatása egy másik beszélgetésnek</string>
     <string name="room_tombstone_predecessor_link">Régebbi üzenetek megjelenítéséhez kattints ide</string>
 
-</resources>
+<string name="missing_permissions_error">A műveletet a hiányzó engedélyek miatt nem lehet végrehajtani.</string>
+    <plurals name="format_time_s">
+	<item quantity="one">1mp</item>
+	<item quantity="other">%dmp</item>
+</plurals>
+    <plurals name="format_time_m">
+	<item quantity="one">1p</item>
+	<item quantity="other">%dp</item>
+</plurals>
+    <plurals name="format_time_h">
+	<item quantity="one">1ó</item>
+	<item quantity="other">%dó</item>
+</plurals>
+    <plurals name="format_time_d">
+	<item quantity="one">1n</item>
+	<item quantity="other">%dn</item>
+</plurals>
+
+    <string name="room_participants_now">Most: %1$s</string>
+    <string name="room_participants_ago">%1$s %2$s óta</string>
+
+    <string name="room_participants_invite_join_names">"%1$s "</string>
+    <string name="room_participants_invite_join_names_and">%1$s és %2$s</string>
+    <string name="room_participants_invite_join_names_combined">%2$s %1$s</string>
+
+    <plurals name="room_details_selected">
+	<item quantity="one">1 kiválasztva</item>
+	<item quantity="other">%d kiválasztva</item>
+</plurals>
+    <plurals name="group_members">
+	<item quantity="one">1 tag</item>
+	<item quantity="other">%d tag</item>
+</plurals>
+
+    <plurals name="group_rooms">
+	<item quantity="one">1 szoba</item>
+	<item quantity="other">%d szoba</item>
+</plurals>
+    </resources>
