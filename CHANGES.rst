@@ -2,7 +2,7 @@ Changes in Riot 0.8.14 (2018-XX-XX)
 ===================================================
 
 Features:
- -
+ - Manage server quota notices
 
 Improvements:
  - Do not ask permission to write external storage at startup (#2483)
