@@ -2317,7 +2317,8 @@ public class VectorRoomActivity extends MXCActionBarActivity implements
                 startIpCall(PreferencesManager.useJitsiConfCall(this), true);
             }
         } else {
-            Log.w(LOG_TAG, "## onRequestPermissionsResult(): Unknown requestCode =" + requestCode);
+            // Transmit to Fragment
+            super.onRequestPermissionsResult(requestCode, permissions, grantResults);
         }
     }
 
