@@ -507,7 +507,7 @@ class IntegrationManagerActivity : AbstractWidgetActivity() {
             return
         }
 
-        sendIntegerResponse(mRoom!!.joinedMembers.size, eventData)
+        sendIntegerResponse(mRoom!!.numberOfJoinedMembers, eventData)
     }
 
     /**

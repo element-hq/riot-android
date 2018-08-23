@@ -21,6 +21,7 @@ package im.vector.activity;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.annotation.Nullable;
 import android.text.TextUtils;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -39,7 +40,6 @@ import org.matrix.androidsdk.rest.model.RoomMember;
 import org.matrix.androidsdk.util.Log;
 
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
@@ -289,36 +289,44 @@ public class VectorRoomCreationActivity extends MXCActionBarActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.action_create_room:
-                if (0 == mParticipants.size()) {
+                if (mParticipants.isEmpty()) {
                     createRoom(mParticipants);
                 } else {
                     // the first entry is self so ignore
                     mParticipants.remove(0);
 
                     // standalone case : should be accepted ?
-                    if (0 == mParticipants.size()) {
+                    if (mParticipants.isEmpty()) {
                         createRoom(mParticipants);
                     } else if (mParticipants.size() > 1) {
                         createRoom(mParticipants);
                     } else {
-                        String existingRoomId = isDirectChatRoomAlreadyExist(mParticipants.get(0).mUserId);
-
-                        if (null != existingRoomId) {
-                            Map<String, Object> params = new HashMap<>();
-                            params.put(VectorRoomActivity.EXTRA_MATRIX_ID, mParticipants.get(0).mUserId);
-                            params.put(VectorRoomActivity.EXTRA_ROOM_ID, existingRoomId);
-                            CommonActivityUtils.goToRoomPage(this, mSession, params);
-                        } else {
-                            // direct message flow
-                            showWaitingView();
-                            mSession.createDirectMessageRoom(mParticipants.get(0).mUserId, mCreateDirectMessageCallBack);
-                        }
+                        // 1 other participant
+                        openOrCreateDirectChatRoom(mParticipants.get(0).mUserId);
                     }
                 }
                 return true;
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+    private void openOrCreateDirectChatRoom(final String otherUserId) {
+        doesDirectChatRoomAlreadyExist(otherUserId, new SimpleApiCallback<String>() {
+            @Override
+            public void onSuccess(String existingRoomId) {
+                if (null != existingRoomId) {
+                    Map<String, Object> params = new HashMap<>();
+                    params.put(VectorRoomActivity.EXTRA_MATRIX_ID, otherUserId);
+                    params.put(VectorRoomActivity.EXTRA_ROOM_ID, existingRoomId);
+                    CommonActivityUtils.goToRoomPage(VectorRoomCreationActivity.this, mSession, params);
+                } else {
+                    // direct message flow
+                    showWaitingView();
+                    mSession.createDirectMessageRoom(otherUserId, mCreateDirectMessageCallBack);
+                }
+            }
+        });
     }
 
 
@@ -330,9 +338,9 @@ public class VectorRoomCreationActivity extends MXCActionBarActivity {
      * Return the first direct chat room for a given user ID.
      *
      * @param aUserId user ID to search for
-     * @return a room ID if search succeed, null otherwise.
+     * @param callback callback to return a room ID if search succeed, null otherwise.
      */
-    private String isDirectChatRoomAlreadyExist(String aUserId) {
+    private void doesDirectChatRoomAlreadyExist(final String aUserId, final ApiCallback<String> callback) {
         if (null != mSession) {
             IMXStore store = mSession.getDataHandler().getStore();
 
@@ -344,30 +352,51 @@ public class VectorRoomCreationActivity extends MXCActionBarActivity {
                 if (directChatRoomsDict.containsKey(aUserId)) {
                     List<String> roomIdsList = new ArrayList<>(directChatRoomsDict.get(aUserId));
 
-                    if (0 != roomIdsList.size()) {
-                        for (String roomId : roomIdsList) {
-                            Room room = mSession.getDataHandler().getRoom(roomId, false);
+                    doesDirectChatRoomAlreadyExistRecursive(roomIdsList, 0, aUserId, callback);
+                } else {
+                    callback.onSuccess(null);
+                }
+            } else {
+                callback.onSuccess(null);
+            }
+        } else {
+            callback.onSuccess(null);
+        }
+    }
 
-                            // check if the room is already initialized
-                            if ((null != room) && room.isReady() && !room.isInvited() && !room.isLeaving()) {
-                                // test if the member did not leave the room
-                                Collection<RoomMember> members = room.getActiveMembers();
+    private void doesDirectChatRoomAlreadyExistRecursive(final List<String> roomIdsList,
+                                                         final int index,
+                                                         final String aUserId,
+                                                         final ApiCallback<String> callback) {
+        if (index >= roomIdsList.size()) {
+            Log.d(LOG_TAG, "## doesDirectChatRoomAlreadyExist(): for user=" + aUserId + " no found room");
+            callback.onSuccess(null);
+        } else {
+            Room room = mSession.getDataHandler().getRoom(roomIdsList.get(index), false);
 
-                                for (RoomMember member : members) {
-                                    if (TextUtils.equals(member.getUserId(), aUserId)) {
-                                        Log.d(LOG_TAG, "## isDirectChatRoomAlreadyExist(): for user=" + aUserId + " roomFound=" + roomId);
-                                        return roomId;
-                                    }
-                                }
-
+            // check if the room is already initialized
+            if (room != null && room.isReady() && !room.isInvited() && !room.isLeaving()) {
+                room.getActiveMembersAsync(new SimpleApiCallback<List<RoomMember>>() {
+                    @Override
+                    public void onSuccess(List<RoomMember> members) {
+                        // test if the member did not leave the room
+                        for (RoomMember member : members) {
+                            if (TextUtils.equals(member.getUserId(), aUserId)) {
+                                Log.d(LOG_TAG, "## doesDirectChatRoomAlreadyExist(): for user=" + aUserId + " roomFound=" + roomIdsList.get(index));
+                                callback.onSuccess(roomIdsList.get(index));
+                                return;
                             }
                         }
+
+                        // Try next one
+                        doesDirectChatRoomAlreadyExistRecursive(roomIdsList, index + 1, aUserId, callback);
                     }
-                }
+                });
+            } else {
+                // Try next one
+                doesDirectChatRoomAlreadyExistRecursive(roomIdsList, index + 1, aUserId, callback);
             }
         }
-        Log.d(LOG_TAG, "## isDirectChatRoomAlreadyExist(): for user=" + aUserId + " no found room");
-        return null;
     }
 
     /**

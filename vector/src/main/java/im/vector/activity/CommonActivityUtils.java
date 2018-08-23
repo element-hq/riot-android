@@ -869,6 +869,8 @@ public class CommonActivityUtils {
      * @param aSearchedUserId the searched user ID
      * @return an array containing the found rooms
      */
+    // Commented out as unused
+    /*
     private static List<Room> findOneToOneRoomList(final MXSession aSession, final String aSearchedUserId) {
         List<Room> listRetValue = new ArrayList<>();
         List<RoomMember> roomMembersList;
@@ -894,6 +896,7 @@ public class CommonActivityUtils {
 
         return listRetValue;
     }
+    */
 
     /**
      * Set a room as a direct chat room.<br>

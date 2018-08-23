@@ -36,6 +36,7 @@ import org.matrix.androidsdk.MXDataHandler;
 import org.matrix.androidsdk.MXSession;
 import org.matrix.androidsdk.data.Room;
 import org.matrix.androidsdk.db.MXMediasCache;
+import org.matrix.androidsdk.rest.callback.SimpleApiCallback;
 import org.matrix.androidsdk.rest.model.PowerLevels;
 import org.matrix.androidsdk.rest.model.RoomMember;
 import org.matrix.androidsdk.rest.model.User;
@@ -49,6 +50,8 @@ import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.CountDownLatch;
+import java.util.concurrent.TimeUnit;
 
 import im.vector.R;
 import im.vector.VectorApp;
@@ -316,7 +319,23 @@ public class VectorRoomDetailsMembersAdapter extends BaseExpandableListAdapter {
                 final List<ParticipantAdapterItem> actualParticipants = new ArrayList<>();
                 final List<ParticipantAdapterItem> invitedMembers = new ArrayList<>();
 
-                Collection<RoomMember> activeMembers = mRoom.getActiveMembers();
+                final Collection<RoomMember> activeMembers = new ArrayList<>();
+
+                CountDownLatch latch = new CountDownLatch(1);
+
+                mRoom.getActiveMembersAsync(new SimpleApiCallback<List<RoomMember>>() {
+                    @Override
+                    public void onSuccess(List<RoomMember> members) {
+                        activeMembers.addAll(members);
+                    }
+                });
+
+                try {
+                    latch.await(30, TimeUnit.SECONDS);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+
                 String myUserId = mSession.getMyUserId();
                 final PowerLevels powerLevels = mRoom.getState().getPowerLevels();
 

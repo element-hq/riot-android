@@ -35,6 +35,7 @@ import android.os.Build;
 import android.os.Handler;
 import android.os.HandlerThread;
 import android.os.Looper;
+import android.support.annotation.Nullable;
 import android.support.v4.util.LruCache;
 import android.support.v7.app.AlertDialog;
 import android.text.TextUtils;
@@ -137,23 +138,26 @@ public class VectorUtils {
      * @param room    the room.
      * @return the calling room display name.
      */
-    public static String getCallingRoomDisplayName(Context context, MXSession session, Room room) {
+    @Nullable not used?
+    public static void getCallingRoomDisplayName(Context context,
+                                                 final MXSession session,
+                                                 final Room room,
+                                                 final ApiCallback<String> callback) {
         if ((null == context) || (null == session) || (null == room)) {
-            return null;
-        }
-
-        Collection<RoomMember> roomMembers = room.getJoinedMembers();
-
-        if (2 == roomMembers.size()) {
-            List<RoomMember> roomMembersList = new ArrayList<>(roomMembers);
-
-            if (TextUtils.equals(roomMembersList.get(0).getUserId(), session.getMyUserId())) {
-                return room.getState().getMemberName(roomMembersList.get(1).getUserId());
-            } else {
-                return room.getState().getMemberName(roomMembersList.get(0).getUserId());
-            }
+            callback.onSuccess(null);
+        } else if (room.getNumberOfJoinedMembers() == 2) {
+            room.getJoinedMembersAsync(new SimpleApiCallback<List<RoomMember>>(callback) {
+                @Override
+                public void onSuccess(List<RoomMember> members) {
+                    if (TextUtils.equals(members.get(0).getUserId(), session.getMyUserId())) {
+                        callback.onSuccess(room.getState().getMemberName(members.get(1).getUserId()));
+                    } else {
+                        callback.onSuccess(room.getState().getMemberName(members.get(0).getUserId()));
+                    }
+                }
+            });
         } else {
-            return getRoomDisplayName(context, session, room);
+            callback.onSuccess(getRoomDisplayName(context, session, room));
         }
     }
 
@@ -195,7 +199,9 @@ public class VectorUtils {
 
             String myUserId = session.getMyUserId();
 
-            Collection<RoomMember> members = roomState.getDisplayableMembers();
+            todo
+            // TODO Use Heroes
+            Collection<RoomMember> members = new ArrayList<>(); // TODO roomState.getDisplayableMembers();
             List<RoomMember> othersActiveMembers = new ArrayList<>();
             List<RoomMember> activeMembers = new ArrayList<>();
 
