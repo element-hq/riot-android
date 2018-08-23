@@ -32,6 +32,7 @@ import android.widget.Toast;
 
 import org.matrix.androidsdk.MXPatterns;
 import org.matrix.androidsdk.listeners.MXEventListener;
+import org.matrix.androidsdk.rest.callback.SimpleApiCallback;
 import org.matrix.androidsdk.rest.model.Event;
 import org.matrix.androidsdk.rest.model.RoomMember;
 import org.matrix.androidsdk.rest.model.User;
@@ -39,12 +40,13 @@ import org.matrix.androidsdk.util.Log;
 
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import butterknife.BindView;
+import butterknife.OnClick;
 import im.vector.Matrix;
 import im.vector.R;
 import im.vector.adapters.ParticipantAdapterItem;
@@ -80,7 +82,8 @@ public class VectorRoomInviteMembersActivity extends VectorBaseSearchActivity {
     private String mMatrixId;
 
     // main UI items
-    private ExpandableListView mListView;
+    @BindView(R.id.room_details_members_list)
+    ExpandableListView mListView;
 
     // participants list
     private List<ParticipantAdapterItem> mHiddenParticipantItems = new ArrayList<>();
@@ -202,7 +205,6 @@ public class VectorRoomInviteMembersActivity extends VectorBaseSearchActivity {
 
         setWaitingView(findViewById(R.id.search_in_progress_view));
 
-        mListView = findViewById(R.id.room_details_members_list);
         // the chevron is managed in the header view
         mListView.setGroupIndicator(null);
 
@@ -224,14 +226,6 @@ public class VectorRoomInviteMembersActivity extends VectorBaseSearchActivity {
                     return true;
                 }
                 return false;
-            }
-        });
-
-        View inviteByIdTextView = findViewById(R.id.search_invite_by_id);
-        inviteByIdTextView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                displayInviteByUserId();
             }
         });
 
@@ -309,8 +303,6 @@ public class VectorRoomInviteMembersActivity extends VectorBaseSearchActivity {
      */
     private void finish(final List<ParticipantAdapterItem> participantAdapterItems) {
         final List<String> hiddenUserIds = new ArrayList<>();
-        final List<String> userIds = new ArrayList<>();
-        final List<String> displayNames = new ArrayList<>();
 
         // list the hidden user Ids
         for (ParticipantAdapterItem item : mHiddenParticipantItems) {
@@ -320,13 +312,26 @@ public class VectorRoomInviteMembersActivity extends VectorBaseSearchActivity {
         // if a room is defined
         if (null != mRoom) {
             // the room members must not be added again
-            Collection<RoomMember> members = mRoom.getState().getDisplayableMembers();
-            for (RoomMember member : members) {
-                if (TextUtils.equals(member.membership, RoomMember.MEMBERSHIP_JOIN) || TextUtils.equals(member.membership, RoomMember.MEMBERSHIP_INVITE)) {
-                    hiddenUserIds.add(member.getUserId());
+            mRoom.getState().getDisplayableMembers(new SimpleApiCallback<List<RoomMember>>() {
+                @Override
+                public void onSuccess(List<RoomMember> members) {
+                    for (RoomMember member : members) {
+                        if (TextUtils.equals(member.membership, RoomMember.MEMBERSHIP_JOIN) || TextUtils.equals(member.membership, RoomMember.MEMBERSHIP_INVITE)) {
+                            hiddenUserIds.add(member.getUserId());
+                        }
+                    }
+
+                    finishStep2(participantAdapterItems, hiddenUserIds);
                 }
-            }
+            });
+        } else {
+            finishStep2(participantAdapterItems, hiddenUserIds);
         }
+    }
+
+    private void finishStep2(final List<ParticipantAdapterItem> participantAdapterItems, List<String> hiddenUserIds) {
+        final List<String> userIds = new ArrayList<>();
+        final List<String> displayNames = new ArrayList<>();
 
         // build the output lists
         for (ParticipantAdapterItem item : participantAdapterItems) {
@@ -397,7 +402,8 @@ public class VectorRoomInviteMembersActivity extends VectorBaseSearchActivity {
     /**
      * Display the invitation dialog.
      */
-    private void displayInviteByUserId() {
+    @OnClick(R.id.search_invite_by_id)
+    void displayInviteByUserId() {
         View dialogLayout = getLayoutInflater().inflate(R.layout.dialog_invite_by_id, null);
 
         final AlertDialog.Builder builder = new AlertDialog.Builder(this)

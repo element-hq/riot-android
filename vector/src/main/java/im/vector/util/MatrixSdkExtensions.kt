@@ -52,7 +52,9 @@ fun Room?.getRoomMaxPowerLevel(): Int {
         var tempPowerLevel: Int
 
         // find out the room member
-        for (member in members) {
+        // DO NOT COMMIT
+        todo
+        for (member in state.loadedMembers) {
             tempPowerLevel = it.getUserPowerLevel(member.userId)
             if (tempPowerLevel > maxPowerLevel) {
                 maxPowerLevel = tempPowerLevel

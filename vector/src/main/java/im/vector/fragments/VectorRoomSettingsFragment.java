@@ -73,7 +73,6 @@ import org.matrix.androidsdk.util.ResourceUtils;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
@@ -1304,57 +1303,61 @@ public class VectorRoomSettingsFragment extends PreferenceFragment implements Sh
      * Refresh the banned users list.
      */
     private void refreshBannedMembersList() {
-        List<RoomMember> bannedMembers = new ArrayList<>();
-        Collection<RoomMember> members = mRoom.getMembers();
-
-        if (null != members) {
-            for (RoomMember member : members) {
-                if (TextUtils.equals(member.membership, RoomMember.MEMBERSHIP_BAN)) {
-                    bannedMembers.add(member);
-                }
-            }
-        }
-
-        Collections.sort(bannedMembers, new Comparator<RoomMember>() {
-            @Override
-            public int compare(RoomMember m1, RoomMember m2) {
-                return m1.getUserId().toLowerCase(VectorApp.getApplicationLocale()).compareTo(m2.getUserId().toLowerCase(VectorApp.getApplicationLocale()));
-            }
-        });
-
-        PreferenceScreen preferenceScreen = getPreferenceScreen();
+        final PreferenceScreen preferenceScreen = getPreferenceScreen();
 
         preferenceScreen.removePreference(mBannedMembersSettingsCategoryDivider);
         preferenceScreen.removePreference(mBannedMembersSettingsCategory);
         mBannedMembersSettingsCategory.removeAll();
 
-        if (bannedMembers.size() > 0) {
-            preferenceScreen.addPreference(mBannedMembersSettingsCategoryDivider);
-            preferenceScreen.addPreference(mBannedMembersSettingsCategory);
+        mRoom.getMembersAsync(new SimpleApiCallback<List<RoomMember>>(getActivity()) {
+            @Override
+            public void onSuccess(List<RoomMember> members) {
+                List<RoomMember> bannedMembers = new ArrayList<>();
 
-            for (RoomMember member : bannedMembers) {
-                VectorCustomActionEditTextPreference preference = new VectorCustomActionEditTextPreference(getActivity());
+                if (null != members) {
+                    for (RoomMember member : members) {
+                        if (TextUtils.equals(member.membership, RoomMember.MEMBERSHIP_BAN)) {
+                            bannedMembers.add(member);
+                        }
+                    }
+                }
 
-                final String userId = member.getUserId();
-
-                preference.setTitle(userId);
-                preference.setKey(BANNED_PREFERENCE_KEY_BASE + userId);
-
-                preference.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
+                Collections.sort(bannedMembers, new Comparator<RoomMember>() {
                     @Override
-                    public boolean onPreferenceClick(Preference preference) {
-                        Intent startRoomInfoIntent = new Intent(getActivity(), VectorMemberDetailsActivity.class);
-                        startRoomInfoIntent.putExtra(VectorMemberDetailsActivity.EXTRA_MEMBER_ID, userId);
-                        startRoomInfoIntent.putExtra(VectorMemberDetailsActivity.EXTRA_ROOM_ID, mRoom.getRoomId());
-                        startRoomInfoIntent.putExtra(VectorMemberDetailsActivity.EXTRA_MATRIX_ID, mSession.getCredentials().userId);
-                        getActivity().startActivity(startRoomInfoIntent);
-                        return false;
+                    public int compare(RoomMember m1, RoomMember m2) {
+                        return m1.getUserId().toLowerCase(VectorApp.getApplicationLocale()).compareTo(m2.getUserId().toLowerCase(VectorApp.getApplicationLocale()));
                     }
                 });
 
-                mBannedMembersSettingsCategory.addPreference(preference);
+                if (bannedMembers.size() > 0) {
+                    preferenceScreen.addPreference(mBannedMembersSettingsCategoryDivider);
+                    preferenceScreen.addPreference(mBannedMembersSettingsCategory);
+
+                    for (RoomMember member : bannedMembers) {
+                        VectorCustomActionEditTextPreference preference = new VectorCustomActionEditTextPreference(getActivity());
+
+                        final String userId = member.getUserId();
+
+                        preference.setTitle(userId);
+                        preference.setKey(BANNED_PREFERENCE_KEY_BASE + userId);
+
+                        preference.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
+                            @Override
+                            public boolean onPreferenceClick(Preference preference) {
+                                Intent startRoomInfoIntent = new Intent(getActivity(), VectorMemberDetailsActivity.class);
+                                startRoomInfoIntent.putExtra(VectorMemberDetailsActivity.EXTRA_MEMBER_ID, userId);
+                                startRoomInfoIntent.putExtra(VectorMemberDetailsActivity.EXTRA_ROOM_ID, mRoom.getRoomId());
+                                startRoomInfoIntent.putExtra(VectorMemberDetailsActivity.EXTRA_MATRIX_ID, mSession.getCredentials().userId);
+                                getActivity().startActivity(startRoomInfoIntent);
+                                return false;
+                            }
+                        });
+
+                        mBannedMembersSettingsCategory.addPreference(preference);
+                    }
+                }
             }
-        }
+        });
     }
 
     //================================================================================

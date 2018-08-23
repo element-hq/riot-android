@@ -36,6 +36,8 @@ import android.widget.MultiAutoCompleteTextView;
 
 import org.matrix.androidsdk.MXSession;
 import org.matrix.androidsdk.data.Room;
+import org.matrix.androidsdk.rest.callback.ApiCallback;
+import org.matrix.androidsdk.rest.callback.SimpleApiCallback;
 import org.matrix.androidsdk.rest.model.RoomMember;
 import org.matrix.androidsdk.rest.model.User;
 import org.matrix.androidsdk.util.Log;
@@ -130,24 +132,41 @@ public class VectorAutoCompleteTextView extends AppCompatMultiAutoCompleteTextVi
      */
     public void initAutoCompletions(@NonNull final MXSession session, @Nullable Room room) {
         initAutoCompletion();
-        buildAdapter(session, getUsersList(session, room), getSlashCommandList());
+
+        // First build adapter with empty list
+        buildAdapter(session, new ArrayList<User>(), getSlashCommandList());
+
+        getUsersList(session, room, new SimpleApiCallback<List<User>>() {
+            @Override
+            public void onSuccess(List<User> users) {
+                buildAdapter(session, users, getSlashCommandList());
+            }
+        });
     }
 
-    private List<User> getUsersList(@NonNull final MXSession session, @Nullable Room room) {
-        List<User> users = new ArrayList<>();
+    private void getUsersList(@NonNull final MXSession session,
+                              @Nullable Room room,
+                              ApiCallback<List<User>> callback) {
 
         if (null != room) {
-            Collection<RoomMember> members = room.getMembers();
+            room.getMembersAsync(new SimpleApiCallback<List<RoomMember>>(callback) {
+                @Override
+                public void onSuccess(List<RoomMember> members) {
+                    List<User> users = new ArrayList<>();
 
-            for (RoomMember member : members) {
-                User user = session.getDataHandler().getUser(member.getUserId());
+                    for (RoomMember member : members) {
+                        User user = session.getDataHandler().getUser(member.getUserId());
 
-                if (null != user) {
-                    users.add(user);
+                        if (null != user) {
+                            users.add(user);
+                        }
+                    }
                 }
-            }
+            });
+        } else {
+            // Empty list
+            callback.onSuccess(new ArrayList<User>());
         }
-        return users;
     }
 
     private List<SlashCommandsParser.SlashCommand> getSlashCommandList() {
