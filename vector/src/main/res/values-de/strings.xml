@@ -32,11 +32,11 @@
     <string name="rename">Umbenennen</string>
     <string name="report_content">Inhalt melden</string>
     <string name="active_call">Aktives Gespräch</string>
-    <string name="ongoing_conference_call">" Konferenzgespräch läuft. Per Sprache oder Video beitreten."</string>
+    <string name="ongoing_conference_call">Konferenzgespräch läuft. Per Sprache oder Video beitreten.</string>
     <string name="ongoing_conference_call_voice">Sprache</string>
     <string name="ongoing_conference_call_video">Video</string>
     <string name="cannot_start_call">Das Gespräch kann nicht gestartet werden, bitte später erneut versuchen</string>
-    <string name="missing_permissions_warning">Aufgrund fehlender Berechtigungen stehen eventuell einige Funktionen nicht zur Verfügung..</string>
+    <string name="missing_permissions_warning">Aufgrund fehlender Berechtigungen stehen eventuell einige Funktionen vielleicht nicht zur Verfügung…</string>
     <string name="missing_permissions_to_start_conf_call">Dir fehlt das Recht ein Konferenzgespräch in diesem Raum zu starten</string>
     <string name="missing_permissions_title_to_start_conf_call">Kann Gespräch nicht starten</string>
     <string name="device_information">Geräteinformationen</string>
@@ -678,7 +678,7 @@ Verschlüsselte Nachrichten werden auf Matrix-Clients, auf denen die Verschlüss
     <string name="encryption_information_unblock">Zulassen</string>
 
     <string name="encryption_information_verify_device">Gerät verifizieren</string>
-    <string name="encryption_information_verify_device_warning">" Um zu verifizieren, dass diesem Gerät vertraut werden kann, kontaktiere bitte den Besitzer des Gerätes über andere Kommunikationsmittel (z. B. persönlich oder telefonisch) und vergewissere dich, ob der Schüssel, den er in seinen Benutzereinstellungen für dieses Gerät sieht, mit folgendem übereinstimmt:"</string>
+    <string name="encryption_information_verify_device_warning">Um zu verifizieren, dass diesem Gerät vertraut werden kann, kontaktiere bitte den Besitzer des Gerätes über andere Kommunikationsmittel (z. B. persönlich oder telefonisch) und vergewissere dich, ob der Schüssel, den er in seinen Benutzereinstellungen für dieses Gerät sieht, mit folgendem übereinstimmt:</string>
     <string name="encryption_information_verify_device_warning2">Wenn er übereinstimmt, drücke unten den Bestätigen-Button.
 Stimmt er nicht überein, überwacht jemand anderes dieses Gerät und du solltest ggf. den Blockieren-Button drücken.
 In Zukunft wird dieser Bestätigungsprozess noch komfortabler gestaltet.</string>
@@ -842,7 +842,7 @@ Unbekannte Geräte:</string>
     <string name="settings_vibrate_on_mention">Vibriere beim Erwähnen</string>
 
     <string name="room_settings_room_notifications_title">Benachrichtigungen</string>
-    <string name="room_settings_no_flair">" Dieser Raum zeigt keine Flairs für irgendeine Community"</string>
+    <string name="room_settings_no_flair">Dieser Raum zeigt keine Flairs für irgendeine Community an</string>
     <string name="room_settings_add_new_group">Neue Community-ID (z.B. +foo:matrix.org)</string>
     <string name="room_settings_invalid_group_format_dialog_title">Ungültige Community-ID</string>
     <string name="room_settings_invalid_group_format_dialog_body">\'%s\' ist keine valide Community-ID</string>
@@ -1043,4 +1043,41 @@ Die Sichtbarkeit deiner Nachrichten ist ähnlich zu E-Mails: Wenn wir deine Nach
 
 Beachte: Diese Aktion wird die App neu starten und einige Zeit brauchen.</string>
     <string name="missing_permissions_error">Nicht berechtigt diese Aktion durchzuführen.</string>
+    <plurals name="format_time_s">
+	<item quantity="one">1s</item>
+	<item quantity="other">%ds</item>
+</plurals>
+    <plurals name="format_time_m">
+	<item quantity="one">1m</item>
+	<item quantity="other">%dm</item>
+</plurals>
+    <plurals name="format_time_h">
+	<item quantity="one">1h</item>
+	<item quantity="other">%dh</item>
+</plurals>
+    <plurals name="format_time_d">
+	<item quantity="one">1d</item>
+	<item quantity="other">%dd</item>
+</plurals>
+
+    <string name="room_participants_now">Jetzt %1$s</string>
+    <string name="room_participants_ago">%1$s vor %2$s</string>
+
+    <string name="room_participants_invite_join_names">"%1$s, "</string>
+    <string name="room_participants_invite_join_names_and">%1$s und %2$s</string>
+    <string name="room_participants_invite_join_names_combined">%1$s %2$s</string>
+
+    <plurals name="room_details_selected">
+	<item quantity="one">1 ausgewählt</item>
+	<item quantity="other">%d ausgewählt</item>
+</plurals>
+    <plurals name="group_members">
+	<item quantity="one">1 Mitglied</item>
+	<item quantity="other">%d Mitglieder</item>
+</plurals>
+
+    <plurals name="group_rooms">
+	<item quantity="one">1 Raum</item>
+	<item quantity="other">%d Räume</item>
+</plurals>
     </resources>
