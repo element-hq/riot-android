@@ -41,11 +41,11 @@
     <string name="rename">重新命名</string>
     <string name="report_content">回報內容</string>
     <string name="active_call">進行中的通話</string>
-    <string name="ongoing_conference_call">" 正在進行電話會議，以語音或視訊加入。"</string>
+    <string name="ongoing_conference_call">正在進行電話會議，以語音或視訊加入。</string>
     <string name="ongoing_conference_call_voice">語音</string>
     <string name="ongoing_conference_call_video">視訊</string>
     <string name="cannot_start_call">無法啟用通話，請稍後再試</string>
-    <string name="missing_permissions_warning">由於缺少一些權限，也許會缺少一些功能..</string>
+    <string name="missing_permissions_warning">由於缺少一些權限，也許會缺少一些功能……</string>
     <string name="missing_permissions_to_start_conf_call">在此聊天室內，你需要權限來邀請並開始一個會議</string>
     <string name="missing_permissions_title_to_start_conf_call">無法啟用通話</string>
     <string name="device_information">裝置資訊</string>
@@ -714,7 +714,7 @@
     <string name="room_settings_addresses_no_local_addresses">此房間沒有本機地址</string>
     <string name="room_settings_addresses_add_new_address">新地址 （如 #foo:matrix.org）</string>
 
-    <string name="room_settings_no_flair">" 此聊天室並未對任何社群顯示特色"</string>
+    <string name="room_settings_no_flair">此聊天室並未對任何社群顯示特色</string>
     <string name="room_settings_add_new_group">新社群地址（如 +foo:matrix.org）</string>
     <string name="room_settings_invalid_group_format_dialog_title">無效的社群地址</string>
     <string name="room_settings_invalid_group_format_dialog_body">“%s”不是一個有效的社群 ID</string>
@@ -796,7 +796,7 @@
     <string name="encryption_information_unblock">解除黑名單</string>
 
     <string name="encryption_information_verify_device">驗證裝置</string>
-    <string name="encryption_information_verify_device_warning">" 要驗證此裝置是否可信，請使用其他方式（例如：面對面或是打電話）聯絡它的擁有者並詢問他們在使用者設定中看到此裝置的金鑰是否與下列的金鑰相符："</string>
+    <string name="encryption_information_verify_device_warning">要驗證此裝置是否可信，請使用其他方式（例如：面對面或是打電話）聯絡它的擁有者並詢問他們在使用者設定中看到此裝置的金鑰是否與下列的金鑰相符：</string>
     <string name="encryption_information_verify_device_warning2">如果符合的話，按下下方的驗證按鈕。
 若果沒有得話，那麼其他地方的某個人可能正在攔截這個裝置，您應該將其列入黑名單。
 未來，這個驗證程序會變得更家複雜。</string>
@@ -962,4 +962,35 @@ Matrix 中的消息可見度類似于電子郵件。我們忘記您的郵件意�
     <string name="room_tombstone_continuation_description">這個聊天示是其他對話的延續</string>
     <string name="room_tombstone_predecessor_link">點選這裡以檢視更舊的訊息</string>
 
-</resources>
+<string name="missing_permissions_error">因為沒有權限，此動作無法執行。</string>
+    <plurals name="format_time_s">
+	<item quantity="other">%d 秒</item>
+</plurals>
+    <plurals name="format_time_m">
+	<item quantity="other">%d 分鐘</item>
+</plurals>
+    <plurals name="format_time_h">
+	<item quantity="other">%d 小時</item>
+</plurals>
+    <plurals name="format_time_d">
+	<item quantity="other">%d 天</item>
+</plurals>
+
+    <string name="room_participants_now">目前 %1$s</string>
+    <string name="room_participants_ago">%1$s %2$s 前</string>
+
+    <string name="room_participants_invite_join_names">"%1$s， "</string>
+    <string name="room_participants_invite_join_names_and">%1$s 與 %2$s</string>
+    <string name="room_participants_invite_join_names_combined">%1$s %2$s</string>
+
+    <plurals name="room_details_selected">
+	<item quantity="other">%d 已選取</item>
+</plurals>
+    <plurals name="group_members">
+	<item quantity="other">%d 個成員</item>
+</plurals>
+
+    <plurals name="group_rooms">
+	<item quantity="other">%d 個聊天室</item>
+</plurals>
+    </resources>
