@@ -342,7 +342,7 @@ Bist du sicher?</string>
     <string name="people_search_filter_text">Nur Matrix-Benutzer</string>
 
     <string name="people_search_invite_by_id_dialog_title">Benutzer per ID einladen</string>
-    <string name="people_search_invite_by_id_dialog_description">Bitte gebe eine oder mehrere E-Mail-Adressen oder eine Matrix-ID ein</string>
+    <string name="people_search_invite_by_id_dialog_description">Bitte gib eine oder mehrere E-Mail-Adressen oder eine Matrix-ID ein</string>
     <string name="people_search_invite_by_id_dialog_hint">E-Mail or Matrix-ID</string>
 
     <!--  Chat -->
@@ -501,7 +501,8 @@ Beachte: Diese Aktion wird die App neu starten und einige Zeit brauchen.</string
     <string name="devices_details_last_seen_title">Zuletzt gesehen</string>
     <string name="devices_details_last_seen_format">%1$s @ %2$s</string>
     <string name="devices_details_time_format">HH:mm:ss</string>
-    <string name="devices_delete_dialog_text">Diese Operation benötigt weitere Authentifizierung.\nUm fortzufahren, gebe dein Passwort ein.</string>
+    <string name="devices_delete_dialog_text">Diese Operation benötigt weitere Authentifizierung.
+Um fortzufahren, gib dein Passwort ein.</string>
     <string name="devices_delete_dialog_title">Authentifizierung</string>
     <string name="devices_delete_pswd">Passwort:</string>
     <string name="devices_delete_submit_button_label">Absenden</string>
@@ -698,7 +699,7 @@ Unbekannte Geräte:</string>
     <!-- directory activity  -->
     <string name="select_room_directory">Raum-Verzeichnis auswählen</string>
     <string name="directory_server_fail_to_retrieve_server">Der Server kann nicht verfügbar oder überlastet sein</string>
-    <string name="directory_server_type_homeserver">Gebe einen Heimserver ein um seine öffentlichen Räume aufzulisten</string>
+    <string name="directory_server_type_homeserver">Gib einen Heimserver ein, um seine öffentlichen Räume aufzulisten</string>
     <string name="directory_server_placeholder">Home-Server-URL</string>
     <string name="directory_server_all_rooms_on_server">Alle Räume auf dem %s-Server</string>
     <string name="directory_server_native_rooms">Alle nativen %s-Räume</string>
@@ -1009,7 +1010,7 @@ Die Sichtbarkeit deiner Nachrichten ist ähnlich zu E-Mails: Wenn wir deine Nach
 
     <string name="settings_labs_enable_send_voice">Sprachnachrichten (erfordert eine externe Anwendung um Sprachnachrichten aufzuzeichnen)</string>
 
-    <string name="error_empty_field_your_password">Bitte gebe dein Passwort ein.</string>
+    <string name="error_empty_field_your_password">Bitte gib dein Passwort ein.</string>
 
 <string name="send_bug_report_description_in_english">Wenn möglich, beschreibe bitte in Englisch.</string>
     <string name="room_message_placeholder_reply_to_encrypted">Sende verschlüsselte Antwort…</string>
@@ -1041,4 +1042,5 @@ Die Sichtbarkeit deiner Nachrichten ist ähnlich zu E-Mails: Wenn wir deine Nach
 <string name="room_participants_action_unignore_prompt">Zeige alle Nachrichten dieses Benutzers?
 
 Beachte: Diese Aktion wird die App neu starten und einige Zeit brauchen.</string>
+    <string name="missing_permissions_error">Nicht berechtigt diese Aktion durchzuführen.</string>
     </resources>
