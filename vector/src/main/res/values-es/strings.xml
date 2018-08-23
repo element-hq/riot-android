@@ -30,25 +30,25 @@
     <string name="view_decrypted_source">Mostrar fuente desencriptada</string>
     <string name="delete">Borrar</string>
     <string name="rename">Renombrar</string>
-    <string name="report_content">Reportar contenido</string>
+    <string name="report_content">Denunciar contenido</string>
     <string name="active_call">Llamada activa</string>
-    <string name="ongoing_conference_call">" Llamada de conferencia en proceso. Participar con voz o vídeo."</string>
+    <string name="ongoing_conference_call">" Llamada de conferencia en proceso. Participar con voz o vídeo"</string>
     <string name="ongoing_conference_call_voice">voz</string>
     <string name="ongoing_conference_call_video">vídeo</string>
     <string name="cannot_start_call">No se pudo iniciar la llamada, inténtalo de nuevo más tarde</string>
-    <string name="missing_permissions_warning">Debido a permisos faltantes, algunas características podrían estar ausentes..</string>
+    <string name="missing_permissions_warning">Debido a permisos faltantes, algunas características podrían estar ausentes</string>
     <string name="missing_permissions_to_start_conf_call">Necesitas permiso para realizar una llamada de conferencia en esta sala</string>
     <string name="missing_permissions_title_to_start_conf_call">No se puede iniciar la llamada</string>
     <string name="device_information">Información del dispositivo</string>
-    <string name="room_no_conference_call_in_encrypted_rooms">Las llamadas de conferencia no pueden ser realizadas en salas cifradas</string>
+    <string name="room_no_conference_call_in_encrypted_rooms">Las llamadas de conferencia no se pueden realizar en salas cifradas</string>
     <string name="send_anyway">Enviar de todos modos</string>
     <string name="or">o</string>
     <string name="invite">Invitar</string>
 
     <!-- actions -->
     <string name="action_sign_out">Cerrar la sesión</string>
-    <string name="action_sign_out_confirmation">Para la seguridad, al cerrar la sesión, las claves de cifrado de extremo-a-extremo serán borradas haciendo que el historial sea ilegible.
-Seleccione exportar para crear un archivo de respaldo antes de cerrar la sesión.</string>
+    <string name="action_sign_out_confirmation">Para la seguridad, al cerrar la sesión, las claves de cifrado de extremo-a-extremo se borrarán haciendo que el historial sea ilegible.
+Selecciona exportar para crear un archivo de respaldo antes de cerrar la sesión.</string>
     <string name="action_voice_call">Llamada de Voz</string>
     <string name="action_video_call">Llamada de Vídeo</string>
     <string name="action_global_search">Búsqueda global</string>
@@ -65,7 +65,7 @@ Seleccione exportar para crear un archivo de respaldo antes de cerrar la sesión
     <string name="dialog_title_warning">Advertencia</string>
 
     <!-- Bottom navigation buttons -->
-    <string name="bottom_action_home">Home</string>
+    <string name="bottom_action_home">Inicio</string>
     <string name="bottom_action_favourites">Favoritos</string>
     <string name="bottom_action_people">Personas</string>
     <string name="bottom_action_rooms">Salas</string>
@@ -83,9 +83,9 @@ Seleccione exportar para crear un archivo de respaldo antes de cerrar la sesión
     <!-- People fragment -->
     <string name="direct_chats_header">Conversaciones</string>
     <string name="local_address_book_header">Agenda local de direcciones</string>
-    <string name="matrix_only_filter">Solo contactos de Matrix</string>
+    <string name="matrix_only_filter">Sólo contactos de Matrix</string>
     <string name="no_conversation_placeholder">No hay conversaciones</string>
-    <string name="no_contact_access_placeholder">No has cedido permiso a Riot a acceder a tus contactos locales</string>
+    <string name="no_contact_access_placeholder">No has permitido que Riot lea a tus contactos locales</string>
     <string name="no_result_placeholder">No hay resultados</string>
 
     <!-- Rooms fragment -->
@@ -99,17 +99,17 @@ Seleccione exportar para crear un archivo de respaldo antes de cerrar la sesión
     </plurals>
 
     <string name="send_bug_report_include_logs">Enviar informes</string>
-    <string name="send_bug_report_include_crash_logs">Mandar informes de fallas</string>
+    <string name="send_bug_report_include_crash_logs">Enviar informes de fallas</string>
     <string name="send_bug_report_include_screenshot">Enviar una captura de pantalla</string>
     <string name="send_bug_report">Informe de Error</string>
     <string name="send_bug_report_description">Por favor describe el error. ¿Qué hiciste? ¿Qué esperabas que sucediera? ¿Qué sucedió realmente?</string>
     <string name="send_bug_report_placeholder">Describe tu problema aquí</string>
-    <string name="send_bug_report_logs_description">Para diagnosticar los problemas, registros de este cliente se enviarán junto a este informe de errores. Este informe, incluidos los registros y la captura de pantalla, no serán visibles públicamente. Si prefiere solamente enviar el texto de arriba, desmarque:</string>
+    <string name="send_bug_report_logs_description">Para diagnosticar los problemas, registros de este cliente se enviarán junto a este informe de errores. Este informe, incluidos los registros y la captura de pantalla, no serán visibles públicamente. Si prefieres solamente enviar el texto de arriba, desmarque:</string>
     <string name="send_bug_report_alert_message">Pareces estar temblando de frustración. ¿Te gustaría enviar un reporte de error?</string>
-    <string name="send_bug_report_sent">El reporte de error ha sido enviado</string>
+    <string name="send_bug_report_sent">El reporte de error se ha enviado</string>
     <string name="send_bug_report_failed">El reporte de error no se pudo enviar (%s)</string>
     <string name="send_bug_report_progress">Progreso (%s%%)</string>
-    <string name="send_bug_report_app_crashed">La aplicación se suspenió en la ultima sesión. ¿Te gustaría enviar un informe de fallas?</string>
+    <string name="send_bug_report_app_crashed">La aplicación se suspendió en la última sesión. ¿Te gustaría enviar un informe de fallas?</string>
 
     <string name="send_files_in">Enviar a</string>
     <string name="read_receipt">Leer</string>
@@ -141,8 +141,8 @@ Seleccione exportar para crear un archivo de respaldo antes de cerrar la sesión
     <string name="auth_password_placeholder">Contraseña</string>
     <string name="auth_new_password_placeholder">Contraseña nueva</string>
     <string name="auth_user_name_placeholder">Nombre de usuario</string>
-    <string name="auth_add_email_message">Añadir un correo electrónico a tu cuenta para que otros te descubran, y para que puedas restablecer tu contraseña.</string>
-    <string name="auth_add_phone_message">Añadir número de teléfono a tu cuenta para que otros te descubran.</string>
+    <string name="auth_add_email_message">Añadir un correo electrónico a tu cuenta para que otros te descubran, y para que puedas restablecer tu contraseña</string>
+    <string name="auth_add_phone_message">Añadir número de teléfono a tu cuenta para que otros te descubran</string>
     <string name="auth_add_email_phone_message">Añadir un correo electrónico y/o número de teléfono a tu cuenta para que otros te descubran.
 
 El correo electrónico te permitirá restablecer tu contraseña.</string>
@@ -161,7 +161,7 @@ El correo electrónico te permitirá reiniciar tu contraseña.</string>
     <string name="auth_missing_password">Contraseña ausente</string>
     <string name="auth_invalid_email">"Esto no parece ser un correo electrónico válido"</string>
     <string name="auth_invalid_phone">Esto no parece ser un número de teléfono válido</string>
-    <string name="auth_email_already_defined">Este correo electrónico ya está ocupado.</string>
+    <string name="auth_email_already_defined">Este correo electrónico ya está ocupado</string>
     <string name="auth_missing_email">Correo electrónico ausente</string>
     <string name="auth_missing_phone">Número de teléfono ausente</string>
     <string name="auth_missing_email_or_phone">Correo electrónico o número de teléfono ausente</string>
@@ -238,7 +238,7 @@ Disculpe por la inconveniencia.</string>
 
     <!-- call string -->
     <string name="call_connected">Llamada conectada</string>
-    <string name="call_connecting">La llamada se esá conectando…</string>
+    <string name="call_connecting">La llamada se está conectando…</string>
     <string name="call_ended">Llamada finalizada</string>
     <string name="call_ring">Llamando…</string>
     <string name="incoming_call">Llamada Entrante</string>
@@ -249,11 +249,11 @@ Disculpe por la inconveniencia.</string>
     <string name="call_error_user_not_responding">El lado remoto no pudo contestar.</string>
     <string name="call_error_ice_failed">Conexión de media falló</string>
     <string name="call_error_camera_init_failed">La cámara no se pudo encender</string>
-    <string name="call_error_answered_elsewhere">llamada fue contestada en otra parte</string>
+    <string name="call_error_answered_elsewhere">La llamada fue contestada en otra parte</string>
 
     <!-- medias picker string -->
     <string name="media_picker_both_capture_title">Tomar una foto o grabar un video"</string>
-    <string name="media_picker_cannot_record_video">No pudo grabar video"</string>
+    <string name="media_picker_cannot_record_video">No se pudo grabar video"</string>
 
     <!-- permissions Android M -->
     <string name="permissions_rationale_popup_title">Información</string>
