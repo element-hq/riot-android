@@ -999,7 +999,7 @@ Veuillez noter que cette action redémarrera l\'application et pourra prendre un
     <string name="room_tombstone_continuation_description">Ce salon est la suite d\'une autre conversation</string>
     <string name="room_tombstone_predecessor_link">Cliquer ici pour voir les vieux messages</string>
 
-<string name="missing_permissions_error">Faute de permissions correspondantes, cette action n\'est pas possible.</string>
+<string name="missing_permissions_error">En raison de permissions manquantes, cette action n\'est pas possible.</string>
     <plurals name="format_time_s">
 	<item quantity="one">1 s</item>
 	<item quantity="other">%d s</item>
