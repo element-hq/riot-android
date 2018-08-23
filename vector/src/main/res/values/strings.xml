@@ -1045,4 +1045,22 @@
     <string name="room_tombstone_continuation_description">This room is a continuation of another conversation</string>
     <string name="room_tombstone_predecessor_link">Click here to see older messages</string>
 
+    <!-- Resource limit-->
+    <string name="resource_limit_exceeded_title">Resource Limit Exceeded</string>
+    <string name="resource_limit_contact_action">"Contact Administrator"</string>
+
+    <!-- Will be a link to send an email -->
+    <string name="resource_limit_contact_admin">"contact your service administrator"</string>
+
+    <string name="resource_limit_soft_default">"This homeserver has exceeded one of its resource limits so <b>some users will not be able to log in</b>."</string>
+    <string name="resource_limit_hard_default">"This homeserver has exceeded one of its resource limits."</string>
+
+    <string name="resource_limit_soft_mau"> "This homeserver has hit its Monthly Active User limit so "<b>some users will not be able to log in</b>."</string>
+    <string name="resource_limit_hard_mau">"This homeserver has hit its Monthly Active User limit."</string>
+
+    <!-- Parameter %s will be replaced by the value of string resource_limit_contact_admin -->
+    <string name="resource_limit_soft_contact">"Please %s to get this limit increased."</string>
+    <!-- Parameter %s will be replaced by the value of string resource_limit_contact_admin -->
+    <string name="resource_limit_hard_contact">"Please %s to continue using this service."</string>
+
 </resources>

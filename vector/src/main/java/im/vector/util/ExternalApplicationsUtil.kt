@@ -176,3 +176,19 @@ fun openCamera(activity: Activity, titlePrefix: String, requestCode: Int): Strin
 
     return null
 }
+
+/**
+ * Send an email to address with optional subject and message
+ */
+fun sendMailTo(address: String, subject: String? = null, message: String? = null, activity: Activity) {
+    val intent = Intent(Intent.ACTION_SENDTO, Uri.fromParts(
+            "mailto", address, null))
+    intent.putExtra(Intent.EXTRA_SUBJECT, subject)
+    intent.putExtra(Intent.EXTRA_TEXT, message)
+
+    try {
+        activity.startActivity(intent)
+    } catch (activityNotFoundException: ActivityNotFoundException) {
+        activity.toast(R.string.error_no_external_application_found)
+    }
+}

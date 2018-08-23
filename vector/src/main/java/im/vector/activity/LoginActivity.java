@@ -82,6 +82,7 @@ import im.vector.R;
 import im.vector.RegistrationManager;
 import im.vector.UnrecognizedCertHandler;
 import im.vector.activity.util.RequestCodesKt;
+import im.vector.dialogs.ResourceLimitDialogHelper;
 import im.vector.receiver.VectorRegistrationReceiver;
 import im.vector.receiver.VectorUniversalLinkReceiver;
 import im.vector.repositories.ServerUrlsRepository;
@@ -268,6 +269,8 @@ public class LoginActivity extends MXCActionBarActivity implements RegistrationM
         }
     };
 
+    private ResourceLimitDialogHelper mResourceLimitDialogHelper;
+
     private boolean mIsWaitingNetworkConnection = false;
 
     /**
@@ -443,11 +446,15 @@ public class LoginActivity extends MXCActionBarActivity implements RegistrationM
         mButtonsView = findViewById(R.id.login_actions_bar);
 
         if (isFirstCreation()) {
+            mResourceLimitDialogHelper = new ResourceLimitDialogHelper(this, null);
             mHomeServerText.setText(ServerUrlsRepository.INSTANCE.getLastHomeServerUrl(this));
             mIdentityServerText.setText(ServerUrlsRepository.INSTANCE.getLastIdentityServerUrl(this));
         } else {
-            restoreSavedData(getSavedInstanceState());
+            final Bundle savedInstanceState = getSavedInstanceState();
+            mResourceLimitDialogHelper = new ResourceLimitDialogHelper(this, savedInstanceState);
+            restoreSavedData(savedInstanceState);
         }
+        addToRestorables(mResourceLimitDialogHelper);
 
         // If home server url or identity server url are not the default ones, check the mUseCustomHomeServersCheckbox
         if (!ServerUrlsRepository.INSTANCE.isDefaultHomeServerUrl(this, mHomeServerText.getText().toString())
@@ -1145,13 +1152,16 @@ public class LoginActivity extends MXCActionBarActivity implements RegistrationM
      * @param matrixError the matrix error
      */
     private void onFailureDuringAuthRequest(MatrixError matrixError) {
-        String message = matrixError.getLocalizedMessage();
         enableLoadingScreen(false);
 
-        // detect if it is a Matrix SDK issue
-        String errCode = matrixError.errcode;
+        final String errCode = matrixError.errcode;
 
-        if (null != errCode) {
+        if (MatrixError.RESOURCE_LIMIT_EXCEEDED.equals(errCode)) {
+            Log.e(LOG_TAG, "## onFailureDuringAuthRequest(): RESOURCE_LIMIT_EXCEEDED");
+            mResourceLimitDialogHelper.displayDialog(matrixError);
+        } else {
+            final String message;
+
             if (TextUtils.equals(errCode, MatrixError.FORBIDDEN)) {
                 message = getString(R.string.login_error_forbidden);
             } else if (TextUtils.equals(errCode, MatrixError.UNKNOWN_TOKEN)) {
@@ -1166,11 +1176,13 @@ public class LoginActivity extends MXCActionBarActivity implements RegistrationM
                 message = getString(R.string.login_error_user_in_use);
             } else if (TextUtils.equals(errCode, MatrixError.LOGIN_EMAIL_URL_NOT_YET)) {
                 message = getString(R.string.login_error_login_email_not_yet);
+            } else {
+                message = matrixError.getLocalizedMessage();
             }
-        }
 
-        Log.e(LOG_TAG, "## onFailureDuringAuthRequest(): Msg= \"" + message + "\"");
-        Toast.makeText(getApplicationContext(), message, Toast.LENGTH_LONG).show();
+            Log.e(LOG_TAG, "## onFailureDuringAuthRequest(): Msg= \"" + message + "\"");
+            Toast.makeText(getApplicationContext(), message, Toast.LENGTH_LONG).show();
+        }
     }
 
     /**
