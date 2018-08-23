@@ -48,7 +48,7 @@ import im.vector.R;
 import im.vector.util.PhoneNumberUtils;
 import kotlin.Pair;
 
-public class PhoneNumberAdditionActivity extends RiotAppCompatActivity implements TextView.OnEditorActionListener, TextWatcher, View.OnClickListener {
+public class PhoneNumberAdditionActivity extends VectorAppCompatActivity implements TextView.OnEditorActionListener, TextWatcher, View.OnClickListener {
 
     private static final String LOG_TAG = PhoneNumberAdditionActivity.class.getSimpleName();
 

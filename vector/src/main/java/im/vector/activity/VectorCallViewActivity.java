@@ -74,7 +74,7 @@ import kotlin.Pair;
 /**
  * VectorCallViewActivity is the call activity.
  */
-public class VectorCallViewActivity extends RiotAppCompatActivity implements SensorEventListener {
+public class VectorCallViewActivity extends VectorAppCompatActivity implements SensorEventListener {
     private static final String LOG_TAG = VectorCallViewActivity.class.getSimpleName();
 
     public static final String EXTRA_MATRIX_ID = "CallViewActivity.EXTRA_MATRIX_ID";

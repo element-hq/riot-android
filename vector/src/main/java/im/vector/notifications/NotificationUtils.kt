@@ -163,6 +163,7 @@ object NotificationUtils {
                     NotificationManager.IMPORTANCE_MIN)
             channel.description = context.getString(R.string.notification_listen_for_events)
             channel.setSound(null, null)
+            channel.setShowBadge(false)
             notificationManager.createNotificationChannel(channel)
         }
 

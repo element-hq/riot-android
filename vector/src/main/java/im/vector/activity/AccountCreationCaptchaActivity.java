@@ -48,7 +48,7 @@ import im.vector.R;
 /**
  * AccountCreationCaptchaActivity displays a webview to check captchas.
  */
-public class AccountCreationCaptchaActivity extends RiotAppCompatActivity {
+public class AccountCreationCaptchaActivity extends VectorAppCompatActivity {
     private static final String LOG_TAG = AccountCreationCaptchaActivity.class.getSimpleName();
 
     public static final String EXTRA_HOME_SERVER_URL = "AccountCreationCaptchaActivity.EXTRA_HOME_SERVER_URL";

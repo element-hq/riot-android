@@ -18,7 +18,7 @@ package im.vector.webview
 
 import android.text.TextUtils
 import im.vector.Matrix
-import im.vector.activity.RiotAppCompatActivity
+import im.vector.activity.VectorAppCompatActivity
 import im.vector.util.weak
 import org.matrix.androidsdk.rest.callback.ApiCallback
 import org.matrix.androidsdk.rest.model.MatrixError
@@ -33,10 +33,10 @@ private const val LOG_TAG = "ConsentWebViewEventListener"
  * This class is the Consent implementation of WebViewEventListener.
  * It is used to manage the consent agreement flow.
  */
-class ConsentWebViewEventListener(activity: RiotAppCompatActivity, private val delegate: WebViewEventListener)
+class ConsentWebViewEventListener(activity: VectorAppCompatActivity, private val delegate: WebViewEventListener)
     : WebViewEventListener by delegate {
 
-    private val safeActivity: RiotAppCompatActivity? by weak(activity)
+    private val safeActivity: VectorAppCompatActivity? by weak(activity)
 
     override fun onPageFinished(url: String) {
         delegate.onPageFinished(url)

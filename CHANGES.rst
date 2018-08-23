@@ -16,7 +16,9 @@ Other changes:
  - move PieFractionView from the SDK to the client (#2525)
 
 Bugfix:
- -
+ - Fix media sharing (#2530)
+ - Fix notification sound issue in settings (#2524)
+ - Disable app icon badge for "listen for event" notification (#2104)
 
 Translations:
  -

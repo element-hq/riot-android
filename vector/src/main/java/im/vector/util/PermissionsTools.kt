@@ -258,9 +258,7 @@ private fun checkPermissions(permissionsToBeGrantedBitMap: Int,
                         if (!permissionsListToBeGranted.isEmpty()) {
                             fragment?.requestPermissions(permissionsListToBeGranted.toTypedArray(), requestCode)
                                     ?: run {
-                                        ActivityCompat.requestPermissions(activity,
-                                                permissionsListToBeGranted.toTypedArray(),
-                                                requestCode)
+                                        ActivityCompat.requestPermissions(activity, permissionsListToBeGranted.toTypedArray(), requestCode)
                                     }
                         }
                     }
@@ -379,9 +377,14 @@ fun onPermissionResultVideoIpCall(context: Context, grantResults: IntArray): Boo
 }
 
 /**
- * Return true if all permissions are granted
+ * Return true if all permissions are granted, false if not or if permission request has been cancelled
  */
 fun allGranted(grantResults: IntArray): Boolean {
+    if (grantResults.isEmpty()) {
+        // A cancellation occurred
+        return false
+    }
+
     var granted = true
 
     grantResults.forEach {

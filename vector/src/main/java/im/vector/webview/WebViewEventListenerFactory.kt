@@ -16,13 +16,13 @@
 
 package im.vector.webview
 
-import im.vector.activity.RiotAppCompatActivity
+import im.vector.activity.VectorAppCompatActivity
 
 interface WebViewEventListenerFactory {
 
     /**
      * @return an instance of WebViewEventListener
      */
-    fun eventListener(activity: RiotAppCompatActivity): WebViewEventListener
+    fun eventListener(activity: VectorAppCompatActivity): WebViewEventListener
 
 }

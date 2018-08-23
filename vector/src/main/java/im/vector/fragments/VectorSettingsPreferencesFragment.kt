@@ -1183,7 +1183,7 @@ class VectorSettingsPreferencesFragment : PreferenceFragment(), SharedPreference
                         if (null != activity) {
                             activity.runOnUiThread {
                                 hideLoadingView()
-                                (activity as RiotAppCompatActivity).consentNotGivenHelper.displayDialog(e)
+                                (activity as VectorAppCompatActivity).consentNotGivenHelper.displayDialog(e)
                             }
                         }
                     } else {
@@ -1240,7 +1240,8 @@ class VectorSettingsPreferencesFragment : PreferenceFragment(), SharedPreference
         if (resultCode == Activity.RESULT_OK) {
             when (requestCode) {
                 REQUEST_NOTIFICATION_RINGTONE -> {
-                    PreferencesManager.setNotificationRingTone(activity, data?.getParcelableExtra<Parcelable>(RingtoneManager.EXTRA_RINGTONE_PICKED_URI) as Uri)
+                    PreferencesManager.setNotificationRingTone(activity,
+                            data?.getParcelableExtra<Parcelable>(RingtoneManager.EXTRA_RINGTONE_PICKED_URI) as Uri?)
 
                     // test if the selected ring tone can be played
                     if (null == PreferencesManager.getNotificationRingToneName(activity)) {
@@ -1288,7 +1289,7 @@ class VectorSettingsPreferencesFragment : PreferenceFragment(), SharedPreference
                                                     if (null != activity) {
                                                         activity.runOnUiThread {
                                                             hideLoadingView()
-                                                            (activity as RiotAppCompatActivity).consentNotGivenHelper.displayDialog(e)
+                                                            (activity as VectorAppCompatActivity).consentNotGivenHelper.displayDialog(e)
                                                         }
                                                     }
                                                 } else {

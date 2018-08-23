@@ -145,7 +145,7 @@ public class VectorMediasViewerAdapter extends PagerAdapter {
                             final VideoView videoView = view.findViewById(R.id.media_slider_videoview);
 
                             if (mMediasCache.isMediaCached(mediaInfo.mMediaUrl, mediaInfo.mMimeType)) {
-                                mMediasCache.createTmpMediaFile(mediaInfo.mMediaUrl, mediaInfo.mMimeType, mediaInfo.mEncryptedFileInfo,
+                                mMediasCache.createTmpDecryptedMediaFile(mediaInfo.mMediaUrl, mediaInfo.mMimeType, mediaInfo.mEncryptedFileInfo,
                                         new SimpleApiCallback<File>() {
                                             @Override
                                             public void onSuccess(File file) {
@@ -221,7 +221,7 @@ public class VectorMediasViewerAdapter extends PagerAdapter {
 
         // check if the media has been downloaded
         if (mMediasCache.isMediaCached(loadingUri, mediaInfo.mMimeType)) {
-            mMediasCache.createTmpMediaFile(loadingUri, mediaInfo.mMimeType, mediaInfo.mEncryptedFileInfo, new SimpleApiCallback<File>() {
+            mMediasCache.createTmpDecryptedMediaFile(loadingUri, mediaInfo.mMimeType, mediaInfo.mEncryptedFileInfo, new SimpleApiCallback<File>() {
                 @Override
                 public void onSuccess(File file) {
                     if (null != file) {
@@ -277,32 +277,33 @@ public class VectorMediasViewerAdapter extends PagerAdapter {
                     if (aDownloadId.equals(pieFractionView.getTag())) {
                         pieFractionView.setVisibility(View.GONE);
 
-
                         // check if the media has been downloaded
                         if (mMediasCache.isMediaCached(loadingUri, mediaInfo.mMimeType)) {
-                            mMediasCache.createTmpMediaFile(loadingUri, mediaInfo.mMimeType, mediaInfo.mEncryptedFileInfo, new SimpleApiCallback<File>() {
-                                @Override
-                                public void onSuccess(final File mediaFile) {
-                                    if (null != mediaFile) {
-                                        mHighResMediaIndex.add(position);
+                            mMediasCache.createTmpDecryptedMediaFile(loadingUri, mediaInfo.mMimeType, mediaInfo.mEncryptedFileInfo,
+                                    new SimpleApiCallback<File>() {
+                                        @Override
+                                        public void onSuccess(final File mediaFile) {
+                                            if (null != mediaFile) {
+                                                mHighResMediaIndex.add(position);
 
-                                        Uri uri = Uri.fromFile(mediaFile);
-                                        final String newHighResUri = uri.toString();
+                                                Uri uri = Uri.fromFile(mediaFile);
+                                                final String newHighResUri = uri.toString();
 
-                                        thumbView.post(new Runnable() {
-                                            @Override
-                                            public void run() {
-                                                loadVideo(position, view, thumbnailUrl, newHighResUri, mediaInfo.mMimeType, mediaInfo.mEncryptedFileInfo);
+                                                thumbView.post(new Runnable() {
+                                                    @Override
+                                                    public void run() {
+                                                        loadVideo(position, view, thumbnailUrl, newHighResUri, mediaInfo.mMimeType,
+                                                                mediaInfo.mEncryptedFileInfo);
 
-                                                if (position == mAutoPlayItemAt) {
-                                                    playVideo(view, videoView, mediaFile, mediaInfo.mMimeType);
-                                                    mAutoPlayItemAt = -1;
-                                                }
+                                                        if (position == mAutoPlayItemAt) {
+                                                            playVideo(view, videoView, mediaFile, mediaInfo.mMimeType);
+                                                            mAutoPlayItemAt = -1;
+                                                        }
+                                                    }
+                                                });
                                             }
-                                        });
-                                    }
-                                }
-                            });
+                                        }
+                                    });
                         } else {
                             downloadFailedView.setVisibility(View.VISIBLE);
                         }
@@ -368,29 +369,30 @@ public class VectorMediasViewerAdapter extends PagerAdapter {
                         pieFractionView.setVisibility(View.GONE);
 
                         if (mMediasCache.isMediaCached(loadingUri, imageInfo.mMimeType)) {
-                            mMediasCache.createTmpMediaFile(loadingUri, imageInfo.mMimeType, imageInfo.mEncryptedFileInfo, new SimpleApiCallback<File>() {
-                                @Override
-                                public void onSuccess(File mediaFile) {
-                                    if (null != mediaFile) {
-                                        mHighResMediaIndex.add(position);
+                            mMediasCache.createTmpDecryptedMediaFile(loadingUri, imageInfo.mMimeType, imageInfo.mEncryptedFileInfo,
+                                    new SimpleApiCallback<File>() {
+                                        @Override
+                                        public void onSuccess(File mediaFile) {
+                                            if (null != mediaFile) {
+                                                mHighResMediaIndex.add(position);
 
-                                        Uri uri = Uri.fromFile(mediaFile);
-                                        final String newHighResUri = uri.toString();
+                                                Uri uri = Uri.fromFile(mediaFile);
+                                                final String newHighResUri = uri.toString();
 
-                                        webView.post(new Runnable() {
-                                            @Override
-                                            public void run() {
-                                                Uri mediaUri = Uri.parse(newHighResUri);
-                                                // refresh the UI
-                                                loadImageIntoWebView(webView,
-                                                        mediaUri,
-                                                        viewportContent,
-                                                        computeCss(newHighResUri, mMaxImageWidth, mMaxImageHeight, imageInfo.mRotationAngle));
+                                                webView.post(new Runnable() {
+                                                    @Override
+                                                    public void run() {
+                                                        Uri mediaUri = Uri.parse(newHighResUri);
+                                                        // refresh the UI
+                                                        loadImageIntoWebView(webView,
+                                                                mediaUri,
+                                                                viewportContent,
+                                                                computeCss(newHighResUri, mMaxImageWidth, mMaxImageHeight, imageInfo.mRotationAngle));
+                                                    }
+                                                });
                                             }
-                                        });
-                                    }
-                                }
-                            });
+                                        }
+                                    });
                         } else {
                             downloadFailedView.setVisibility(View.VISIBLE);
                         }
@@ -483,7 +485,7 @@ public class VectorMediasViewerAdapter extends PagerAdapter {
                 return view;
             }
 
-            mMediasCache.createTmpMediaFile(mediaUrl, width, height, mimeType, mediaInfo.mEncryptedFileInfo, new SimpleApiCallback<File>() {
+            mMediasCache.createTmpDecryptedMediaFile(mediaUrl, width, height, mimeType, mediaInfo.mEncryptedFileInfo, new SimpleApiCallback<File>() {
                 @Override
                 public void onSuccess(File mediaFile) {
                     if (null != mediaFile) {
@@ -648,7 +650,7 @@ public class VectorMediasViewerAdapter extends PagerAdapter {
             final SlidableMediaInfo mediaInfo = mMediasMessagesList.get(mLatestPrimaryItemPosition);
 
             if (mMediasCache.isMediaCached(mediaInfo.mMediaUrl, mediaInfo.mMimeType)) {
-                mMediasCache.createTmpMediaFile(mediaInfo.mMediaUrl, mediaInfo.mMimeType, mediaInfo.mEncryptedFileInfo, new SimpleApiCallback<File>() {
+                mMediasCache.createTmpDecryptedMediaFile(mediaInfo.mMediaUrl, mediaInfo.mMimeType, mediaInfo.mEncryptedFileInfo, new SimpleApiCallback<File>() {
                     @Override
                     public void onSuccess(File file) {
                         if (null != file) {
@@ -684,7 +686,7 @@ public class VectorMediasViewerAdapter extends PagerAdapter {
                         public void onDownloadComplete(String aDownloadId) {
                             if (aDownloadId.equals(downloadId)) {
                                 if (mMediasCache.isMediaCached(mediaInfo.mMediaUrl, mediaInfo.mMimeType)) {
-                                    mMediasCache.createTmpMediaFile(mediaInfo.mMediaUrl, mediaInfo.mMimeType, mediaInfo.mEncryptedFileInfo,
+                                    mMediasCache.createTmpDecryptedMediaFile(mediaInfo.mMediaUrl, mediaInfo.mMimeType, mediaInfo.mEncryptedFileInfo,
                                             new SimpleApiCallback<File>() {
                                                 @Override
                                                 public void onSuccess(File file) {
@@ -779,7 +781,7 @@ public class VectorMediasViewerAdapter extends PagerAdapter {
             public void onClick(View v) {
                 if (mMediasCache.isMediaCached(videoUrl, videoMimeType)) {
 
-                    mMediasCache.createTmpMediaFile(videoUrl, videoMimeType, encryptedFileInfo, new SimpleApiCallback<File>() {
+                    mMediasCache.createTmpDecryptedMediaFile(videoUrl, videoMimeType, encryptedFileInfo, new SimpleApiCallback<File>() {
                         @Override
                         public void onSuccess(File file) {
                             if (null != file) {

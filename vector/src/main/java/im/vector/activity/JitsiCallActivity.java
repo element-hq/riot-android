@@ -47,7 +47,7 @@ import im.vector.widgets.Widget;
 import im.vector.widgets.WidgetsManager;
 import kotlin.Pair;
 
-public class JitsiCallActivity extends RiotAppCompatActivity {
+public class JitsiCallActivity extends VectorAppCompatActivity {
     private static final String LOG_TAG = JitsiCallActivity.class.getSimpleName();
 
     /**

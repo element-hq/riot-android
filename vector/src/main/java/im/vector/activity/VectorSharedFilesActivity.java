@@ -34,7 +34,7 @@ import im.vector.R;
 /**
  * Dummy activity used to manage the shared
  */
-public class VectorSharedFilesActivity extends RiotAppCompatActivity {
+public class VectorSharedFilesActivity extends VectorAppCompatActivity {
     private static final String LOG_TAG = VectorSharedFilesActivity.class.getSimpleName();
 
     private final String SHARED_FOLDER = "VectorShared";
