@@ -193,14 +193,19 @@ public class HomeFragment extends AbsHomeFragment implements HomeRoomAdapter.OnS
         mLowPrioritySection.setupRoomRecyclerView(new LinearLayoutManager(getActivity(), LinearLayoutManager.HORIZONTAL, false),
                 R.layout.adapter_item_circular_room_view, true, this, null, null);
 
-        // Low priority
-        mServerNoticesSection.setTitle(R.string.system_alerts);
+        // Server notice
+        mServerNoticesSection.setTitle(R.string.system_alerts_header);
         mServerNoticesSection.setHideIfEmpty(true);
         mServerNoticesSection.setPlaceholders(null, getString(R.string.no_result_placeholder));
         mServerNoticesSection.setupRoomRecyclerView(new LinearLayoutManager(getActivity(), LinearLayoutManager.HORIZONTAL, false),
                 R.layout.adapter_item_circular_room_view, true, this, null, null);
 
-        mHomeSectionViews = Arrays.asList(mInvitationsSection, mFavouritesSection, mDirectChatsSection, mRoomsSection, mLowPrioritySection, mServerNoticesSection);
+        mHomeSectionViews = Arrays.asList(mInvitationsSection,
+                mFavouritesSection,
+                mDirectChatsSection,
+                mRoomsSection,
+                mLowPrioritySection,
+                mServerNoticesSection);
 
         // Add listeners to hide the floating button when needed
         final GestureDetectorCompat gestureDetector = new GestureDetectorCompat(mActivity, new GestureDetector.SimpleOnGestureListener() {

@@ -107,7 +107,7 @@
     <!-- Home fragment -->
     <string name="invitations_header">Invites</string>
     <string name="low_priority_header">Low priority</string>
-    <string name="system_alerts">"System Alerts"</string>
+    <string name="system_alerts_header">"System Alerts"</string>
 
     <!-- People fragment -->
     <string name="direct_chats_header">Conversations</string>

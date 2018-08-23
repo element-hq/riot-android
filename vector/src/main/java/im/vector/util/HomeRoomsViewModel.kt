@@ -24,19 +24,18 @@ import org.matrix.androidsdk.util.Log
 /**
  * This class is responsible for filtering and ranking rooms whenever there is a need to update in the context of the HomeScreens
  */
-
 class HomeRoomsViewModel(private val session: MXSession) {
 
     /**
      * A data class holding the result of filtering and ranking algorithm
      * A room can't be in multiple lists at the same time.
-     * Order is favourites -> lowPriorities -> directChats -> otherRooms
+     * Order is favourites -> directChats -> otherRooms -> lowPriorities -> serverNotices
      */
     data class Result(val favourites: List<Room> = emptyList(),
                       val directChats: List<Room> = emptyList(),
+                      val otherRooms: List<Room> = emptyList(),
                       val lowPriorities: List<Room> = emptyList(),
-                      val serverNotices: List<Room> = emptyList(),
-                      val otherRooms: List<Room> = emptyList()) {
+                      val serverNotices: List<Room> = emptyList()) {
 
         /**
          * Use this method when you need to get all the directChats, favorites included
@@ -67,18 +66,18 @@ class HomeRoomsViewModel(private val session: MXSession) {
     //TODO Take it off the main thread using coroutine
     fun update(): Result {
         val favourites = ArrayList<Room>()
-        val lowPriorities = ArrayList<Room>()
         val directChats = ArrayList<Room>()
-        val serverNotices = ArrayList<Room>()
         val otherRooms = ArrayList<Room>()
+        val lowPriorities = ArrayList<Room>()
+        val serverNotices = ArrayList<Room>()
 
         val joinedRooms = getJoinedRooms()
         for (room in joinedRooms) {
             val tags = room.accountData?.keys ?: emptySet()
             when {
+                tags.contains(RoomTag.ROOM_TAG_SERVER_NOTICE) -> serverNotices.add(room)
                 tags.contains(RoomTag.ROOM_TAG_FAVOURITE) -> favourites.add(room)
                 tags.contains(RoomTag.ROOM_TAG_LOW_PRIORITY) -> lowPriorities.add(room)
-                tags.contains(RoomTag.ROOM_SERVER_NOTICE) -> serverNotices.add(room)
                 RoomUtils.isDirectChat(session, room.roomId) -> directChats.add(room)
                 else -> otherRooms.add(room)
             }
@@ -87,10 +86,9 @@ class HomeRoomsViewModel(private val session: MXSession) {
         result = Result(
                 favourites = favourites,
                 directChats = directChats,
+                otherRooms = otherRooms,
                 lowPriorities = lowPriorities,
-                serverNotices = serverNotices,
-                otherRooms = otherRooms
-        )
+                serverNotices = serverNotices)
         Log.d("HomeRoomsViewModel", result.toString())
         return result
     }
@@ -110,6 +108,4 @@ class HomeRoomsViewModel(private val session: MXSession) {
     }
 
     //endregion
-
-
 }
