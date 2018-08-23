@@ -52,11 +52,13 @@ private const val LOG_TAG = "NotificationAreaView"
  * The view used in VectorRoomActivity to show some information
  * It does have a unique render method
  */
-class NotificationAreaView : RelativeLayout {
+class NotificationAreaView @JvmOverloads constructor(
+        context: Context,
+        attrs: AttributeSet? = null,
+        defStyleAttr: Int = 0
+) : RelativeLayout(context, attrs, defStyleAttr) {
 
-    constructor(context: Context) : this(context, null)
-    constructor(context: Context, attrs: AttributeSet?) : this(context, attrs, 0)
-    constructor(context: Context, attrs: AttributeSet?, defStyleAttr: Int) : super(context, attrs, defStyleAttr) {
+    init {
         setupView()
     }
 
@@ -128,7 +130,7 @@ class NotificationAreaView : RelativeLayout {
     private fun renderResourceLimitExceededError(state: State.ResourceLimitExceededError) {
         visibility = View.VISIBLE
         val resourceLimitErrorFormatter = ResourceLimitErrorFormatter(context)
-        val message = resourceLimitErrorFormatter.format(state.matrixError, ResourceLimitErrorFormatter.Mode.NonActive, clickable = true)
+        val message = resourceLimitErrorFormatter.format(state.matrixError, ResourceLimitErrorFormatter.Mode.Hard, clickable = true)
         messageView.setTextColor(Color.WHITE)
         messageView.text = message
         messageView.movementMethod = LinkMovementMethod.getInstance()
@@ -243,16 +245,34 @@ class NotificationAreaView : RelativeLayout {
     /**
      * The state representing the view
      * It can take one state at a time
+     * Priority of state is managed in {@link VectorRoomActivity.refreshNotificationsArea() }
      */
     sealed class State {
+        // View will be Invisible
         object Default : State()
+
+        // View will be Gone
         object Hidden : State()
+
+        // Resource limit exceeded error will be displayed (only hard for the moment)
         data class ResourceLimitExceededError(val matrixError: MatrixError) : State()
+
+        // Server connection is lost
         object ConnectionError : State()
+
+        // The room is dead
         data class Tombstone(val tombstoneContent: RoomTombstoneContent) : State()
+
+        // Somebody is typing
         data class Typing(val message: String) : State()
+
+        // Some new messages are unread in preview
         object UnreadPreview : State()
+
+        // Some new messages are unread (grey or red)
         data class ScrollToBottom(val unreadCount: Int, val message: String? = null) : State()
+
+        // Some event has been unsent
         data class UnsentEvents(val hasUndeliverableEvents: Boolean, val hasUnknownDeviceEvents: Boolean) : State()
     }
 
@@ -265,6 +285,5 @@ class NotificationAreaView : RelativeLayout {
         fun closeScreen()
         fun jumpToBottom()
     }
-
 }
 

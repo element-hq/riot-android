@@ -1153,14 +1153,16 @@ public class LoginActivity extends MXCActionBarActivity implements RegistrationM
      */
     private void onFailureDuringAuthRequest(MatrixError matrixError) {
         enableLoadingScreen(false);
+
         final String errCode = matrixError.errcode;
+
         if (MatrixError.RESOURCE_LIMIT_EXCEEDED.equals(errCode)) {
+            Log.e(LOG_TAG, "## onFailureDuringAuthRequest(): RESOURCE_LIMIT_EXCEEDED");
             mResourceLimitDialogHelper.displayDialog(matrixError);
         } else {
             final String message;
-            if (errCode == null) {
-                message = matrixError.getLocalizedMessage();
-            } else if (TextUtils.equals(errCode, MatrixError.FORBIDDEN)) {
+
+            if (TextUtils.equals(errCode, MatrixError.FORBIDDEN)) {
                 message = getString(R.string.login_error_forbidden);
             } else if (TextUtils.equals(errCode, MatrixError.UNKNOWN_TOKEN)) {
                 message = getString(R.string.login_error_unknown_token);
@@ -1177,6 +1179,7 @@ public class LoginActivity extends MXCActionBarActivity implements RegistrationM
             } else {
                 message = matrixError.getLocalizedMessage();
             }
+
             Log.e(LOG_TAG, "## onFailureDuringAuthRequest(): Msg= \"" + message + "\"");
             Toast.makeText(getApplicationContext(), message, Toast.LENGTH_LONG).show();
         }

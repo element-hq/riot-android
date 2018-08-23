@@ -52,9 +52,10 @@ class ResourceLimitDialogHelper private constructor(private val activity: Activi
             Log.e(LOG_TAG, "Missing required parameter 'admin_contact'")
             return
         }
+
         dialogLocker.displayDialog {
             val title = Spanny(activity.getString(R.string.resource_limit_exceeded_title), StyleSpan(Typeface.BOLD))
-            val message = formatter.format(matrixError, ResourceLimitErrorFormatter.Mode.NonActive, separator = "\n\n")
+            val message = formatter.format(matrixError, ResourceLimitErrorFormatter.Mode.Hard, separator = "\n\n")
 
             AlertDialog.Builder(activity, R.style.AppTheme_Dialog_Light)
                     .setTitle(title)

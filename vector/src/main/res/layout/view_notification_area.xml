@@ -16,7 +16,7 @@
         android:layout_centerVertical="true"
         android:layout_marginLeft="20dp"
         android:padding="5dp"
-        android:src="@drawable/vector_typing" />
+        tools:src="@drawable/vector_typing" />
 
     <TextView
         android:id="@+id/room_notification_message"

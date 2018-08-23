@@ -23,13 +23,15 @@ import com.binaryfork.spanny.Spanny
 import im.vector.R
 import org.matrix.androidsdk.rest.model.MatrixError
 
-private const val MAU = "monthly_active_user"
-
 class ResourceLimitErrorFormatter(private val context: Context) {
 
+    // 'hard' if the logged in user has been locked out, 'soft' if they haven't
     sealed class Mode(@StringRes val mauErrorRes: Int, @StringRes val defaultErrorRes: Int, @StringRes val contactRes: Int) {
-        object Active : Mode(R.string.resource_limit_not_active_mau, R.string.resource_limit_not_active_default, R.string.resource_limit_not_active_contact)
-        object NonActive : Mode(R.string.resource_limit_active_mau, R.string.resource_limit_active_default, R.string.resource_limit_active_contact)
+        // User can still send message (will be used in a near future)
+        object Soft : Mode(R.string.resource_limit_soft_mau, R.string.resource_limit_soft_default, R.string.resource_limit_soft_contact)
+
+        // User cannot send message anymore
+        object Hard : Mode(R.string.resource_limit_hard_mau, R.string.resource_limit_hard_default, R.string.resource_limit_hard_contact)
     }
 
     fun format(matrixError: MatrixError,
@@ -37,7 +39,7 @@ class ResourceLimitErrorFormatter(private val context: Context) {
                separator: CharSequence = " ",
                clickable: Boolean = false): CharSequence {
 
-        val error = if (MAU == matrixError.limitType) {
+        val error = if (MatrixError.LIMITE_TYPE_MAU == matrixError.limitType) {
             context.getString(mode.mauErrorRes)
         } else {
             context.getString(mode.defaultErrorRes)
@@ -55,10 +57,11 @@ class ResourceLimitErrorFormatter(private val context: Context) {
                 .append(contact)
     }
 
+    /**
+     * Create a HTML link with an email address
+     */
     private fun contactAsLink(email: String): String {
         val contactStr = context.getString(R.string.resource_limit_contact_admin)
         return "<a href=\"mailto:$email\">$contactStr</a>"
     }
-
-
 }

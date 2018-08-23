@@ -389,7 +389,6 @@ public class VectorRoomActivity extends MXCActionBarActivity implements
 
         @Override
         public void onSyncError(MatrixError matrixError) {
-            super.onSyncError(matrixError);
             if (MatrixError.RESOURCE_LIMIT_EXCEEDED.equals(matrixError.errcode) && mResourceLimitExceededError == null) {
                 mResourceLimitExceededError = matrixError;
                 checkSendEventStatus();
@@ -2540,7 +2539,6 @@ public class VectorRoomActivity extends MXCActionBarActivity implements
         }
     }
 
-
     /**
      * Refresh the notifications area.
      */
@@ -2942,8 +2940,8 @@ public class VectorRoomActivity extends MXCActionBarActivity implements
     private void checkSendEventStatus() {
         if ((null != mRoom) && (null != mRoom.getState())) {
             final RoomState state = mRoom.getState();
-            boolean canSendMessage = canSendMessages(state);
-            if (canSendMessage) {
+
+            if (canSendMessages(state)) {
                 mBottomLayout.getLayoutParams().height = ViewGroup.LayoutParams.WRAP_CONTENT;
                 mSendingMessagesLayout.setVisibility(View.VISIBLE);
                 mCanNotPostTextView.setVisibility(View.GONE);
