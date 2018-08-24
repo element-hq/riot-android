@@ -2128,7 +2128,12 @@ public class VectorRoomActivity extends MXCActionBarActivity implements
 
             mLastTypingDate = 0;
 
-            mRoom.sendTypingNotification(false, -1, new SimpleApiCallback<Void>(this));
+            mRoom.sendTypingNotification(false, -1, new SimpleApiCallback<Void>(this) {
+                @Override
+                public void onSuccess(Void info) {
+                    // Ignore
+                }
+            });
         }
     }
 
