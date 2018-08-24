@@ -34,11 +34,11 @@
     <string name="rename">Premenovať</string>
     <string name="report_content">Ohlásiť obsah</string>
     <string name="active_call">Aktívny hovor</string>
-    <string name="ongoing_conference_call">" Prebiehajúci konferenčný hovor. Pripojte sa ako audio alebo video."</string>
+    <string name="ongoing_conference_call">Prebiehajúci konferenčný hovor. Pripojte sa ako audio alebo video.</string>
     <string name="ongoing_conference_call_voice">audio</string>
     <string name="ongoing_conference_call_video">video</string>
     <string name="cannot_start_call">Nie je možné začať hovor. Prosím, skúste to neskôr</string>
-    <string name="missing_permissions_warning">Pretože neboli udelené všetky potrebné oprávnenia, niektoré funkcie môžu byť nedostupné.</string>
+    <string name="missing_permissions_warning">Pretože neboli udelené všetky potrebné oprávnenia, niektoré funkcie môžu byť nedostupné…</string>
     <string name="missing_permissions_to_start_conf_call">Aby ste mohli začať hovor, musíte mať právo pozývať používateľov do miestnosti</string>
     <string name="missing_permissions_title_to_start_conf_call">Nie je možné začať konferenciu</string>
     <string name="device_information">Informácie o zariadení</string>
@@ -102,7 +102,7 @@
     <string name="send_bug_report">Nahlásiť chybu</string>
     <string name="send_bug_report_description">Prosím, Napíšte text hlásenia. Čo ste práve robili? Čo ste očakávali? Čo sa v skutočnosti udialo?</string>
     <string name="send_bug_report_placeholder">Tu popíšte váš problém</string>
-    <string name="send_bug_report_logs_description">S cieľom lepšej diagnostiky problému sa spolu s vašim hlásením odošlú záznami o činnosti programu Riot. Ak si želáte odoslať len text hlásenia, odškrtnite niektoré z nasledujúcich polí:</string>
+    <string name="send_bug_report_logs_description">S cieľom lepšej diagnostiky problému sa spolu s vašim hlásením odošlú záznami o činnosti programu Riot. Toto hlásenie vrátane priložených záznamov a snímky obrazovky nebude verejne dostupné. Ak si želáte odoslať len text hlásenia, odškrtnite niektoré z nasledujúcich polí:</string>
     <string name="send_bug_report_alert_message">Zdá sa, že v zlosti trasiete zariadením. Chceli by ste odoslať hlásenie o chybe?</string>
     <string name="send_bug_report_app_crashed">Posledné spustenie aplikácie skončilo pádom. Chceli by ste odoslať hlásenie o chybe?</string>
 
@@ -379,7 +379,9 @@ Ste si istí?</string>
     <string name="room_details_people_present_group_name">VSTÚPILI</string>
 
     <string name="room_event_action_report_prompt_reason">Dôvod, prečo chcete ohlásiť tento obsah</string>
-    <string name="room_event_action_report_prompt_ignore_user">Želáte si skryť všetky správy, ktoré poslal tento používateľ?</string>
+    <string name="room_event_action_report_prompt_ignore_user">Želáte si skryť všetky správy od tohoto používateľa?
+
+Pozor! Vykonaním tejto akcie reštartujete aplikáciu a opätovné načítanie môže chvíľu trvať.</string>
     <string name="room_event_action_cancel_upload">Zrušiť nahrávanie</string>
     <string name="room_event_action_cancel_download">Zrušiť sťahovanie</string>
 
@@ -523,7 +525,9 @@ Ak chcete pokračovať, prosím zadajte vaše heslo.</string>
     <string name="settings_confirm_password">Potvrdiť heslo</string>
     <string name="settings_fail_to_update_password">Nepodarilo sa zmeniť heslo</string>
     <string name="settings_password_updated">Úspešne ste si zmenili heslo</string>
-    <string name="settings_unignore_user">Zobraziť všetky správy od používateľa %s?</string>
+    <string name="settings_unignore_user">Zobraziť všetky správy od používateľa %s?
+
+Pozor! Vykonaním tejto akcie reštartujete aplikáciu a opätovné načítanie môže chvíľu trvať.</string>
 
     <string name="settings_delete_notification_targets_confirmation">Ste si istí, že chcete odstrániť tento cieľ oznámení?</string>
 
@@ -670,7 +674,7 @@ Ak v miestnosti povolíte šifrovanie, šifrovanie nie je viac možné zakázať
     <string name="encryption_information_unblock">Odstrániť z čiernej listiny</string>
 
     <string name="encryption_information_verify_device">Overiť zariadenie</string>
-    <string name="encryption_information_verify_device_warning">" Ak chcete overiť, či toto zariadenie je skutočne dôverihodné, kontaktujte jeho vlastníka iným spôsobom (napr. osobne alebo cez telefón) a opýtajte sa ho, či kľúč, ktorý má pre toto zariadenie zobrazený v nastaveniach sa zhoduje s kľúčom zobrazeným nižšie:"</string>
+    <string name="encryption_information_verify_device_warning">Ak chcete overiť, či toto zariadenie je skutočne dôverihodné, kontaktujte jeho vlastníka iným spôsobom (napr. osobne alebo cez telefón) a opýtajte sa ho, či kľúč, ktorý má pre toto zariadenie zobrazený v nastaveniach sa zhoduje s kľúčom zobrazeným nižšie:</string>
     <string name="encryption_information_verify_device_warning2">Ak sa kľúče zhodujú, stlačte tlačidlo Overiť nižšie. Ak sa nezhodujú, niekto ďalší odpočúva toto zariadenie a v takomto prípade by ste asi mali namiesto toho stlačiť tlačidlo Pridať na čiernu listinu.
 V budúcnosti plánujeme tento proces overovania zariadení zjednodušiť.</string>
     <string name="encryption_information_verify_key_match">Overil som, kľúče sa zhodujú</string>
@@ -794,7 +798,7 @@ Neznáme zariadenia:</string>
     <string name="settings_flair">Príslušnosť ku komunitám</string>
 
     <string name="room_settings_room_notifications_title">Oznámenia</string>
-    <string name="room_settings_no_flair">" V tejto miestnosti nie je zobrazená príslušnosť k žiadnym komunitám"</string>
+    <string name="room_settings_no_flair">V tejto miestnosti nie je zobrazená príslušnosť ku žiadnym komunitám</string>
     <string name="room_settings_add_new_group">Nové ID komunity (napr. +foo:matrix.org)</string>
     <string name="room_settings_invalid_group_format_dialog_title">Nesprávne ID komunity</string>
     <string name="room_settings_invalid_group_format_dialog_body">\'%s\' nie je platným ID komunity</string>
@@ -981,5 +985,87 @@ Viditeľnosť správ odoslaných cez matrix funguje podobne ako viditeľnosť sp
     <string name="settings_labs_enable_send_voice">Posielanie hlasových správ (vyžaduje externú aplikáciu na nahrávanie zvuku)</string>
 
     <string name="error_empty_field_your_password">Prosím, vložte svoje heslo.</string>
+
+<string name="missing_permissions_error">Túto akciu nie je možné vykonať, pretože neboli udelené všetky potrebné oprávnenia.</string>
+    <string name="send_bug_report_description_in_english">Ak je to možné, prosím popis napíšte v angličtine.</string>
+    <plurals name="format_time_s">
+	<item quantity="one">1s</item>
+	<item quantity="few">%ds</item>
+	<item quantity="many">%ds</item>
+	<item quantity="other"/>
+</plurals>
+    <plurals name="format_time_m">
+	<item quantity="one">1m</item>
+	<item quantity="few">%dm</item>
+	<item quantity="many">%dm</item>
+	<item quantity="other"/>
+</plurals>
+    <plurals name="format_time_h">
+	<item quantity="one">1h</item>
+	<item quantity="few">%dh</item>
+	<item quantity="many">%dh</item>
+	<item quantity="other"/>
+</plurals>
+    <plurals name="format_time_d">
+	<item quantity="one">1d</item>
+	<item quantity="few">%dd</item>
+	<item quantity="many">%dd</item>
+	<item quantity="other"/>
+</plurals>
+
+    <string name="room_participants_now">teraz %1$s</string>
+    <string name="room_participants_ago">%1$s pred %2$s</string>
+
+    <string name="room_participants_action_unignore_prompt">Zobraziť všetky správy od tohoto používateľa?
+
+Pozor! Vykonaním tejto akcie reštartujete aplikáciu a opätovné načítanie môže chvíľu trvať.</string>
+    <string name="room_participants_invite_join_names">"%1$s, "</string>
+    <string name="room_participants_invite_join_names_and">%1$s a %2$s</string>
+    <string name="room_participants_invite_join_names_combined">%1$s %2$s</string>
+
+    <string name="room_message_placeholder_reply_to_encrypted">Odoslať šifrovanú odpoveď…</string>
+    <string name="room_message_placeholder_reply_to_not_encrypted">Odoslať odpoveď (nešifrovanú)…</string>
+    <plurals name="room_details_selected">
+	<item quantity="one">1 vybratý</item>
+	<item quantity="few">%d vybratí</item>
+	<item quantity="many">%d vybratých</item>
+	<item quantity="other"/>
+</plurals>
+    <string name="settings_preview_media_before_sending">Zobraziť náhľad médií pred odoslaním</string>
+
+    <string name="settings_without_flair">Momentálne nie ste členom žiadnych komunít.</string>
+
+    <string name="settings_labs_keyboard_options_to_send_message">Odoslať správu stlačením klávesu enter</string>
+    <string name="command_description_emote">Zobrazí akciu</string>
+    <string name="command_description_ban_user">Zakáže vstup zadanému používateľovi</string>
+    <string name="command_description_unban_user">Povolí vstup zadanému používateľovi</string>
+    <string name="command_description_op_user">Určuje úroveň moci pre zadaného používateľa</string>
+    <string name="command_description_deop_user">Znižuje úroveň moci pre zadaného používateľa</string>
+    <string name="command_description_invite_user">Pozve zadaného používateľa do aktuálnej miestnosti</string>
+    <string name="command_description_join_room">Vstúpi do miestnosti podľa zadaného aliasu</string>
+    <string name="command_description_part_room">Opustí aktuálnu miestnosť</string>
+    <string name="command_description_topic">Nastaví tému aktuálnej miestnosti</string>
+    <string name="command_description_kick_user">Vykáže zadaného používateľa z miestnosti</string>
+    <string name="command_description_nick">Mení vaše zobrazované meno / prezývku</string>
+    <string name="command_description_markdown">Zapína alebo vypína formátovanie textu pomocou markdown</string>
+    <string name="command_description_clear_scalar_token">Užitočné na opravu spravovania aplikácií matrix</string>
+
+    <plurals name="group_members">
+	<item quantity="one">1 člen</item>
+	<item quantity="few">%d členovia</item>
+	<item quantity="many">%d členov</item>
+	<item quantity="other"/>
+</plurals>
+
+    <plurals name="group_rooms">
+	<item quantity="one">1 miestnosť</item>
+	<item quantity="few">%d miestnosti</item>
+	<item quantity="many">%d miestností</item>
+	<item quantity="other"/>
+</plurals>
+    <string name="room_tombstone_versioned_description">Táto miestnosť bola nahradená inou a nie je viac aktívna</string>
+    <string name="room_tombstone_continuation_link">Konverzácia pokračuje tu</string>
+    <string name="room_tombstone_continuation_description">Táto miestnosť je pokračovaním predchádzajúcej konverzácii</string>
+    <string name="room_tombstone_predecessor_link">Staršie správy zobrazíte kliknutím sem</string>
 
 </resources>
