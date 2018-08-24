@@ -7,7 +7,7 @@ import org.matrix.androidsdk.rest.callback.SimpleApiCallback;
 /**
  * Handle certificate errors in API callbacks
  */
-public class UnrecognizedCertApiCallback<T> extends SimpleApiCallback<T> {
+public abstract class UnrecognizedCertApiCallback<T> extends SimpleApiCallback<T> {
 
     private HomeServerConnectionConfig mHsConfig;
     private ApiCallback mCallback;
@@ -27,9 +27,7 @@ public class UnrecognizedCertApiCallback<T> extends SimpleApiCallback<T> {
      *
      * The usual behavior is to play the request again
      */
-    public void onAcceptedCert() {
-
-    }
+    public abstract void onAcceptedCert();
 
     /**
      * The request failed because of an unknown TLS certificate or a network error

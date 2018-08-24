@@ -192,3 +192,16 @@ fun sendMailTo(address: String, subject: String? = null, message: String? = null
         activity.toast(R.string.error_no_external_application_found)
     }
 }
+
+/**
+ * Open an arbitrary uri
+ */
+fun openUri(activity: Activity, uri: String) {
+    val intent = Intent(Intent.ACTION_VIEW, Uri.parse(uri))
+
+    try {
+        activity.startActivity(intent)
+    } catch (activityNotFoundException: ActivityNotFoundException) {
+        activity.toast(R.string.error_no_external_application_found)
+    }
+}

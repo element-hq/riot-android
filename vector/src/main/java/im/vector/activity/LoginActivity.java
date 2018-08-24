@@ -2497,4 +2497,10 @@ public class LoginActivity extends MXCActionBarActivity implements RegistrationM
             }
         }
     }
+
+    @Override
+    public void onResourceLimitExceeded(MatrixError e) {
+        enableLoadingScreen(false);
+        mResourceLimitDialogHelper.displayDialog(e);
+    }
 }

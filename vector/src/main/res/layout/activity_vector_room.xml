@@ -345,6 +345,7 @@
                 android:paddingBottom="8dp"
                 android:paddingTop="8dp"
                 android:visibility="invisible"
+                tools:background="@color/vector_fuchsia_color"
                 tools:visibility="visible" />
 
             <View

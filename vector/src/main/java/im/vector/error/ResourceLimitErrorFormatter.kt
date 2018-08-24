@@ -38,30 +38,31 @@ class ResourceLimitErrorFormatter(private val context: Context) {
                mode: Mode,
                separator: CharSequence = " ",
                clickable: Boolean = false): CharSequence {
-
-        val error = if (MatrixError.LIMITE_TYPE_MAU == matrixError.limitType) {
+        val error = if (MatrixError.LIMIT_TYPE_MAU == matrixError.limitType) {
             context.getString(mode.mauErrorRes)
         } else {
             context.getString(mode.defaultErrorRes)
         }
-        val contact = if (clickable) {
-            val contactSubString = contactAsLink(matrixError.adminContact)
+
+        val contact = if (clickable && matrixError.adminUri != null) {
+            val contactSubString = uriAsLink(matrixError.adminUri!!)
             val contactFullString = context.getString(mode.contactRes, contactSubString)
             Html.fromHtml(contactFullString)
         } else {
             val contactSubString = context.getString(R.string.resource_limit_contact_admin)
             context.getString(mode.contactRes, contactSubString)
         }
+
         return Spanny(error)
                 .append(separator)
                 .append(contact)
     }
 
     /**
-     * Create a HTML link with an email address
+     * Create a HTML link with a uri
      */
-    private fun contactAsLink(email: String): String {
+    private fun uriAsLink(uri: String): String {
         val contactStr = context.getString(R.string.resource_limit_contact_admin)
-        return "<a href=\"mailto:$email\">$contactStr</a>"
+        return "<a href=\"$uri\">$contactStr</a>"
     }
 }

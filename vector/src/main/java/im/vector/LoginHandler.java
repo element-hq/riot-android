@@ -152,6 +152,11 @@ public class LoginHandler {
 
         client.getSupportedLoginFlows(new UnrecognizedCertApiCallback<List<LoginFlow>>(hsConfig, callback) {
             @Override
+            public void onSuccess(List<LoginFlow> info) {
+                callback.onSuccess(info);
+            }
+
+            @Override
             public void onAcceptedCert() {
                 getSupportedLoginFlows(appCtx, hsConfig, callback);
             }
@@ -221,6 +226,11 @@ public class LoginHandler {
         ThirdPidRestClient restClient = new ThirdPidRestClient(aHomeServerConfig);
 
         pid.submitValidationToken(restClient, aToken, aClientSecret, aSid, new UnrecognizedCertApiCallback<Boolean>(aHomeServerConfig, aRespCallback) {
+            @Override
+            public void onSuccess(Boolean info) {
+                aRespCallback.onSuccess(info);
+            }
+
             @Override
             public void onAcceptedCert() {
                 submitEmailTokenValidation(aCtx, aHomeServerConfig, aToken, aClientSecret, aSid, aRespCallback);

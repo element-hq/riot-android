@@ -215,6 +215,12 @@ public class RegistrationManager {
                 public void onRegistrationFailed(String message) {
                     listener.onUsernameAvailabilityChecked(!TextUtils.equals(MatrixError.USER_IN_USE, message));
                 }
+
+                @Override
+                public void onResourceLimitExceeded(MatrixError e) {
+                    // Should not happen, consider user is available, registration will fail later on
+                    listener.onUsernameAvailabilityChecked(true);
+                }
             });
         }
     }
@@ -353,6 +359,11 @@ public class RegistrationManager {
                         listener.onRegistrationFailed(message);
                     }
                 }
+
+                @Override
+                public void onResourceLimitExceeded(MatrixError e) {
+                    listener.onResourceLimitExceeded(e);
+                }
             });
         }
     }
@@ -401,6 +412,11 @@ public class RegistrationManager {
                 } else {
                     listener.onRegistrationFailed(message);
                 }
+            }
+
+            @Override
+            public void onResourceLimitExceeded(MatrixError e) {
+                listener.onResourceLimitExceeded(e);
             }
         });
     }
@@ -973,6 +989,8 @@ public class RegistrationManager {
                             Log.e(LOG_TAG, "JsonUtils.toRegistrationFlowResponse " + castExcept.getLocalizedMessage(), castExcept);
                         }
                         listener.onRegistrationFailed(ERROR_MISSING_STAGE);
+                    } else if (TextUtils.equals(e.errcode, MatrixError.RESOURCE_LIMIT_EXCEEDED)) {
+                        listener.onResourceLimitExceeded(e);
                     } else {
                         listener.onRegistrationFailed("");
                     }
@@ -991,6 +1009,8 @@ public class RegistrationManager {
         void onRegistrationSuccess();
 
         void onRegistrationFailed(String message);
+
+        void onResourceLimitExceeded(MatrixError e);
     }
 
     /*
@@ -1023,5 +1043,7 @@ public class RegistrationManager {
         void onWaitingCaptcha();
 
         void onThreePidRequestFailed(String message);
+
+        void onResourceLimitExceeded(MatrixError e);
     }
 }
