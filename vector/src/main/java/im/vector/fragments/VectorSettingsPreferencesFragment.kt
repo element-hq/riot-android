@@ -2726,7 +2726,7 @@ class VectorSettingsPreferencesFragment : PreferenceFragment(), SharedPreference
         private const val IGNORED_USER_KEY_BASE = "IGNORED_USER_KEY_BASE"
         private const val ADD_EMAIL_PREFERENCE_KEY = "ADD_EMAIL_PREFERENCE_KEY"
         private const val ADD_PHONE_NUMBER_PREFERENCE_KEY = "ADD_PHONE_NUMBER_PREFERENCE_KEY"
-        private const val APP_INFO_LINK_PREFERENCE_KEY = "application_info_link"
+        private const val APP_INFO_LINK_PREFERENCE_KEY = "APP_INFO_LINK_PREFERENCE_KEY"
 
         private const val DUMMY_RULE = "DUMMY_RULE"
         private const val LABEL_UNAVAILABLE_DATA = "none"

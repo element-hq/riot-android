@@ -366,7 +366,7 @@
         android:title="@string/settings_other">
 
         <Preference
-            android:key="application_info_link"
+            android:key="APP_INFO_LINK_PREFERENCE_KEY"
             android:summary="@string/settings_summary_app_info_link"
             android:title="@string/settings_title_app_info_link" />
 
