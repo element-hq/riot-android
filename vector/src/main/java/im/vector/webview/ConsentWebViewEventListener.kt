@@ -16,7 +16,6 @@
 
 package im.vector.webview
 
-import android.text.TextUtils
 import im.vector.Matrix
 import im.vector.activity.VectorAppCompatActivity
 import im.vector.util.weak
@@ -25,7 +24,7 @@ import org.matrix.androidsdk.rest.model.MatrixError
 import org.matrix.androidsdk.rest.model.RoomMember
 import org.matrix.androidsdk.util.Log
 
-private const val SUCCESS_URL = "https://matrix.org/_matrix/consent"
+private const val SUCCESS_URL_SUFFIX = "/_matrix/consent"
 private const val RIOT_BOT_ID = "@riot-bot:matrix.org"
 private const val LOG_TAG = "ConsentWebViewEventListener"
 
@@ -40,7 +39,7 @@ class ConsentWebViewEventListener(activity: VectorAppCompatActivity, private val
 
     override fun onPageFinished(url: String) {
         delegate.onPageFinished(url)
-        if (TextUtils.equals(url, SUCCESS_URL)) {
+        if (url.endsWith(SUCCESS_URL_SUFFIX)) {
             createRiotBotRoomIfNeeded()
         }
     }
