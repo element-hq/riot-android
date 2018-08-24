@@ -410,7 +410,7 @@
     <string name="rename">重命名</string>
     <string name="report_content">举报消息</string>
     <string name="active_call">当前通话</string>
-    <string name="ongoing_conference_call">" 正在进行电话会议。请以语音或视频的形式加入。"</string>
+    <string name="ongoing_conference_call">正在进行电话会议。请以语音或视频的形式加入。</string>
     <string name="ongoing_conference_call_voice">语音</string>
     <string name="missing_permissions_to_start_conf_call">您需要权限才可在此聊天室中发起会议</string>
     <string name="send_anyway">依然发送</string>
@@ -593,7 +593,7 @@
     <string name="room_settings_labs_end_to_end_is_active">端对端加密已激活</string>
     <string name="failed_to_load_timeline_position">%s 正在尝试在这个聊天室加载一个特定的时间点，但无法找到它。</string>
     <string name="encryption_information_name">名称</string>
-    <string name="encryption_information_verify_device_warning">" 为验证此设备是否可信，请通过其他方式（例如面对面交换或拨打电话）与其拥有者联系，并询问他们该设备的用户设置中的密钥是否与以下密钥匹配："</string>
+    <string name="encryption_information_verify_device_warning">为验证此设备是否可信，请通过其他方式（例如面对面交换或拨打电话）与其拥有者联系，并询问他们该设备的用户设置中的密钥是否与以下密钥匹配：</string>
     <string name="encryption_information_verify_device_warning2">如果匹配，请点击下面的验证按钮。 
 如果不匹配，那么这可能说明其他人正在盗用此设备，而您应当将其拉入黑名单。
 未来，这个验证过程将会变得更加精致、巧妙一些。</string>
@@ -924,7 +924,7 @@ Matrix 中的消息可见性类似于电子邮件。我们忘记您的消息意�
 
     <string name="settings_notification_privacy_secure_message_content">• 通知中的消息内容<b>从 Matrix 主服务器直接安全的获取</b></string>
     <string name="settings_notification_privacy_nosecure_message_content">• 通知含有<b>消息与元数据</b></string>
-    <string name="room_settings_no_flair">" 这个聊天室没有显示任何社区的 flair"</string>
+    <string name="room_settings_no_flair">这个聊天室没有显示任何社区的 flair</string>
     <string name="widget_integration_missing_parameter">缺少所需的参数。</string>
     <string name="widget_integration_invalid_parameter">无效参数。</string>
     <string name="community_id_hint">样例 ID</string>
@@ -985,4 +985,39 @@ Matrix 中的消息可见性类似于电子邮件。我们忘记您的消息意�
 
 <string name="settings_without_flair">您目前不是任何社区的成员。</string>
 
+    <string name="missing_permissions_error">由于缺少权限，此操作无法完成。</string>
+    <plurals name="public_room_nb_users">
+	<item quantity="other">%d 个用户</item>
+</plurals>
+
+    <plurals name="format_time_s">
+	<item quantity="other">%d 秒</item>
+</plurals>
+    <plurals name="format_time_m">
+	<item quantity="other">%d 分钟</item>
+</plurals>
+    <plurals name="format_time_h">
+	<item quantity="other">%d 小时</item>
+</plurals>
+    <plurals name="format_time_d">
+	<item quantity="other">%d 天</item>
+</plurals>
+
+    <string name="room_participants_now">现在%1$s</string>
+    <string name="room_participants_ago">%2$s前%1$s</string>
+
+    <string name="room_participants_invite_join_names">"%1$s、 "</string>
+    <string name="room_participants_invite_join_names_and">%1$s 和 %2$s</string>
+    <string name="room_participants_invite_join_names_combined">%1$s%2$s</string>
+
+    <plurals name="room_details_selected">
+	<item quantity="other">已选择 %d 个</item>
+</plurals>
+    <plurals name="group_members">
+	<item quantity="other">%d 个成员</item>
+</plurals>
+
+    <plurals name="group_rooms">
+	<item quantity="other">%d 个聊天室</item>
+</plurals>
     </resources>
