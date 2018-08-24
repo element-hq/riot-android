@@ -260,6 +260,11 @@
             android:title="@string/room_settings_labs_end_to_end_is_active" />
 
         <im.vector.preference.VectorSwitchPreference
+            android:key="SETTINGS_LAZY_LOADING_PREFERENCE_KEY"
+            android:title="@string/settings_lazy_loading_title"
+            android:summary="@string/settings_lazy_loading_description"/>
+
+        <im.vector.preference.VectorSwitchPreference
             android:key="SETTINGS_DATA_SAVE_MODE_PREFERENCE_KEY"
             android:title="@string/settings_data_save_mode" />
 

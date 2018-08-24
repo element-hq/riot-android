@@ -550,6 +550,59 @@ class VectorSettingsPreferencesFragment : PreferenceFragment(), SharedPreference
             }
         }
 
+        // Lazy Loading Management
+        findPreference(PreferencesManager.SETTINGS_LAZY_LOADING_PREFERENCE_KEY)
+                .onPreferenceChangeListener = Preference.OnPreferenceChangeListener { _, newValue ->
+            val bNewValue = newValue as Boolean
+
+            if (!bNewValue) {
+                // Disable LazyLoading, just reload the sessions
+                Matrix.getInstance(appContext).reloadSessions(appContext)
+            } else {
+                // Try to enable LazyLoading
+                displayLoadingView()
+
+                mSession.canEnableLazyLoading(object : SimpleApiCallback<Boolean>() {
+                    override fun onSuccess(info: Boolean?) {
+                        if (info == true) {
+                            // Lazy loading can be enabled
+                            PreferencesManager.setUseLazyLoading(activity, true)
+
+                            // Reload the sessions
+                            Matrix.getInstance(appContext).reloadSessions(appContext)
+                        } else {
+                            // The server does not support lazy loading yet
+                            hideLoadingView()
+
+                            AlertDialog.Builder(activity)
+                                    .setTitle(R.string.dialog_title_error)
+                                    .setMessage(R.string.error_lazy_loading_not_supported_by_home_server)
+                                    .setPositiveButton(R.string.ok) { _, _ -> }
+                                    .show()
+                        }
+                    }
+
+                    override fun onNetworkError(e: Exception) {
+                        hideLoadingView()
+                        activity?.toast(R.string.network_error)
+                    }
+
+                    override fun onMatrixError(e: MatrixError) {
+                        hideLoadingView()
+                        activity?.toast(R.string.network_error)
+                    }
+
+                    override fun onUnexpectedError(e: Exception) {
+                        hideLoadingView()
+                        activity?.toast(R.string.network_error)
+                    }
+                })
+            }
+
+            // Do not update the value now when the user wants to enable the lazy loading
+            !bNewValue
+        }
+
         // SaveMode Management
         findPreference(PreferencesManager.SETTINGS_DATA_SAVE_MODE_PREFERENCE_KEY)
                 .onPreferenceChangeListener = Preference.OnPreferenceChangeListener { _, newValue ->
