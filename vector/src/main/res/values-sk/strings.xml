@@ -1010,7 +1010,7 @@ Viditeľnosť správ odoslaných cez matrix funguje podobne ako viditeľnosť sp
 	<item quantity="one">1d</item>
 	<item quantity="few">%dd</item>
 	<item quantity="many">%dd</item>
-	<item quantity="other"/>
+	<item quantity="other"></item>
 </plurals>
 
     <string name="room_participants_now">teraz %1$s</string>
