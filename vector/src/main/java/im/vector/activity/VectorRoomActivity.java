@@ -225,6 +225,9 @@ public class VectorRoomActivity extends MXCActionBarActivity implements
 
     private ImageView mAvatarImageView;
 
+    @BindView(R.id.bottom_separator)
+    View mBottomSeparator;
+
     @BindView(R.id.room_cannot_post_textview)
     View mCanNotPostTextView;
 
@@ -788,7 +791,7 @@ public class VectorRoomActivity extends MXCActionBarActivity implements
         if ((!TextUtils.isEmpty(mEventId) || (null != sRoomPreviewData)) || hasBeenKicked) {
             if (!mIsUnreadPreviewMode || hasBeenKicked) {
                 mNotificationsArea.setVisibility(View.GONE);
-                findViewById(R.id.bottom_separator).setVisibility(View.GONE);
+                mBottomSeparator.setVisibility(View.GONE);
                 findViewById(R.id.room_notification_separator).setVisibility(View.GONE);
             }
 
@@ -2949,11 +2952,14 @@ public class VectorRoomActivity extends MXCActionBarActivity implements
 
             if (canSendMessages(state)) {
                 mBottomLayout.getLayoutParams().height = ViewGroup.LayoutParams.WRAP_CONTENT;
+                mBottomSeparator.setVisibility(View.VISIBLE);
                 mSendingMessagesLayout.setVisibility(View.VISIBLE);
                 mCanNotPostTextView.setVisibility(View.GONE);
             } else if (state.isVersioned() || mResourceLimitExceededError != null) {
+                mBottomSeparator.setVisibility(View.GONE);
                 mBottomLayout.getLayoutParams().height = 0;
             } else {
+                mBottomSeparator.setVisibility(View.GONE);
                 mSendingMessagesLayout.setVisibility(View.GONE);
                 mCanNotPostTextView.setVisibility(View.VISIBLE);
             }
