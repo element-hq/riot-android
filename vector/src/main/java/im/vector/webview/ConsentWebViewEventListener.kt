@@ -20,6 +20,7 @@ import im.vector.Matrix
 import im.vector.activity.VectorAppCompatActivity
 import im.vector.util.weak
 import org.matrix.androidsdk.rest.callback.ApiCallback
+import org.matrix.androidsdk.rest.callback.SimpleApiCallback
 import org.matrix.androidsdk.rest.model.MatrixError
 import org.matrix.androidsdk.rest.model.RoomMember
 import org.matrix.androidsdk.util.Log
@@ -55,7 +56,14 @@ class ConsentWebViewEventListener(activity: VectorAppCompatActivity, private val
             }
             if (joinedRooms.isEmpty()) {
                 it.showWaitingView()
-                session.createDirectMessageRoom(RIOT_BOT_ID, createRiotBotRoomCallback)
+                // Ensure we can create a Room with riot-bot. Error can be a MatrixError: "Federation denied with matrix.org.", or any other error.
+                session.profileApiClient
+                        .displayname(RIOT_BOT_ID, object : SimpleApiCallback<String>(createRiotBotRoomCallback) {
+                            override fun onSuccess(info: String?) {
+                                // Ok, the Home Server knows riot-Bot, so create a Room with him
+                                session.createDirectMessageRoom(RIOT_BOT_ID, createRiotBotRoomCallback)
+                            }
+                        })
             } else {
                 it.finish()
             }
