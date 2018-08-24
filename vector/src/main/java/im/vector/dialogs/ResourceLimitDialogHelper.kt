@@ -25,9 +25,8 @@ import com.binaryfork.spanny.Spanny
 import im.vector.R
 import im.vector.activity.interfaces.Restorable
 import im.vector.error.ResourceLimitErrorFormatter
-import im.vector.util.sendMailTo
+import im.vector.util.openUri
 import org.matrix.androidsdk.rest.model.MatrixError
-import org.matrix.androidsdk.util.Log
 
 private const val LOG_TAG = "ResourceLimitDialogHelper"
 
@@ -48,22 +47,26 @@ class ResourceLimitDialogHelper private constructor(private val activity: Activi
      * Display the resource limit dialog, if not already displayed
      */
     fun displayDialog(matrixError: MatrixError) {
-        if (matrixError.adminContact == null) {
-            Log.e(LOG_TAG, "Missing required parameter 'admin_contact'")
-            return
-        }
-
         dialogLocker.displayDialog {
             val title = Spanny(activity.getString(R.string.resource_limit_exceeded_title), StyleSpan(Typeface.BOLD))
             val message = formatter.format(matrixError, ResourceLimitErrorFormatter.Mode.Hard, separator = "\n\n")
 
-            AlertDialog.Builder(activity, R.style.AppTheme_Dialog_Light)
+            val builder = AlertDialog.Builder(activity, R.style.AppTheme_Dialog_Light)
                     .setTitle(title)
                     .setMessage(message)
-                    .setPositiveButton(R.string.resource_limit_contact_action) { _, _ ->
-                        sendMailTo(matrixError.adminContact, activity = activity)
-                    }
-                    .setNegativeButton(R.string.cancel, null)
+
+            if (matrixError.adminUri != null) {
+                builder
+                        .setPositiveButton(R.string.resource_limit_contact_action) { _, _ ->
+                            openUri(activity, matrixError.adminUri!!)
+                        }
+                        .setNegativeButton(R.string.cancel, null)
+
+            } else {
+                builder.setPositiveButton(R.string.ok, null)
+            }
+
+            builder
         }
     }
 
