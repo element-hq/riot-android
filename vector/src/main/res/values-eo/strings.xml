@@ -42,4 +42,9 @@
     <string name="view_decrypted_source">Vidi malĉifritan fonton</string>
     <string name="delete">Forigi</string>
     <string name="rename">Renomi</string>
+    <string name="title_activity_member_details">Membro-Detaloj</string>
+    <string name="title_activity_historical">Historia</string>
+    <string name="report_content">Reporti enhavon</string>
+    <string name="active_call">Aktiva alvoko</string>
+    <string name="ongoing_conference_call_voice">voĉo</string>
     </resources>
