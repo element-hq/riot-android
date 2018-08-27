@@ -1852,7 +1852,17 @@ public class VectorRoomActivity extends MXCActionBarActivity implements
         mSendImageView.setEnabled(false);
         mIsMarkDowning = true;
 
-        VectorApp.markdownToHtml(mEditText.getText().toString().trim(), new VectorMarkdownParser.IVectorMarkdownParserListener() {
+        String textToSend = mEditText.getText().toString().trim();
+
+        final boolean handleSlashCommand;
+        if (textToSend.startsWith("\\/")) {
+            handleSlashCommand = false;
+            textToSend = textToSend.substring(1);
+        } else {
+            handleSlashCommand = true;
+        }
+
+        VectorApp.markdownToHtml(textToSend, new VectorMarkdownParser.IVectorMarkdownParserListener() {
             @Override
             public void onMarkdownParsed(final String text, final String htmlText) {
                 runOnUiThread(new Runnable() {
@@ -1861,7 +1871,7 @@ public class VectorRoomActivity extends MXCActionBarActivity implements
                         mSendImageView.setEnabled(true);
                         mIsMarkDowning = false;
                         enableActionBarHeader(HIDE_ACTION_BAR_HEADER);
-                        sendMessage(text, TextUtils.equals(text, htmlText) ? null : htmlText, Message.FORMAT_MATRIX_HTML);
+                        sendMessage(text, TextUtils.equals(text, htmlText) ? null : htmlText, Message.FORMAT_MATRIX_HTML, handleSlashCommand);
                         mEditText.setText("");
                     }
                 });
@@ -1872,13 +1882,15 @@ public class VectorRoomActivity extends MXCActionBarActivity implements
     /**
      * Send a text message with its formatted format
      *
-     * @param body          the text message.
-     * @param formattedBody the formatted message
-     * @param format        the message format
+     * @param body               the text message.
+     * @param formattedBody      the formatted message
+     * @param format             the message format
+     * @param handleSlashCommand true to try to handle a Slash command
      */
-    public void sendMessage(String body, String formattedBody, String format) {
+    public void sendMessage(String body, String formattedBody, String format, boolean handleSlashCommand) {
         if (!TextUtils.isEmpty(body)) {
-            if (!SlashCommandsParser.manageSplashCommand(this, mSession, mRoom, body, formattedBody, format)) {
+            if (!handleSlashCommand
+                    || !SlashCommandsParser.manageSplashCommand(this, mSession, mRoom, body, formattedBody, format)) {
                 Event currentSelectedEvent = mVectorMessageListFragment.getCurrentSelectedEvent();
 
                 cancelSelectionMode();

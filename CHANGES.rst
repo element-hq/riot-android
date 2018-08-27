@@ -14,7 +14,7 @@ Other changes:
  -
 
 Bugfix:
- -
+ - Handle `\/` at the beginning of a message to send a message starting with `/` (#658)
 
 Translations:
  -
