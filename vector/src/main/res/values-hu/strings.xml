@@ -1034,4 +1034,20 @@ Vedd figyelembe, hogy az alkalmazás újraindul ami sok időt vehet igénybe.</s
 	<item quantity="one">1 szoba</item>
 	<item quantity="other">%d szoba</item>
 </plurals>
-    </resources>
+    <string name="system_alerts_header">Rendszer Riasztások</string>
+
+    <string name="resource_limit_exceeded_title">Erőforrás korlát túllépve</string>
+    <string name="resource_limit_contact_action">Kapcsolatfelvétel az adminisztrátorral</string>
+
+    <string name="resource_limit_contact_admin">vedd fel a kapcsolatot a szolgáltatás adminisztrátorával</string>
+
+    <string name="resource_limit_soft_default">Ez a Matrix szerver túllépte valamely erőforrás korlátot így <b>néhány felhasználó nem tud bejelentkezni</b>.</string>
+    <string name="resource_limit_hard_default">Ez a Matrix szerver túllépte egyik erőforrás korlátját.</string>
+
+    <string name="resource_limit_soft_mau"> Ez a Matrix szerver elérte a havi aktív felhasználói korlátját így <b>néhány felhasználó nem tud bejelentkezni</b>.</string>
+    <string name="resource_limit_hard_mau">Ez a Matrix szerver elérte a havi aktív felhasználói korlátját.</string>
+
+    <string name="resource_limit_soft_contact">Kérlek %s, hogy ez a korlát megemelésre kerüljön.</string>
+    <string name="resource_limit_hard_contact">Kérlek %s, hogy tovább tudd használni ezt a szolgáltatást.</string>
+
+</resources>
