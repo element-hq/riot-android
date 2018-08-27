@@ -31,7 +31,7 @@ import org.matrix.androidsdk.rest.model.MatrixError
 /**
  * Displays the Account deactivation screen.
  */
-class DeactivateAccountActivity : RiotAppCompatActivity() {
+class DeactivateAccountActivity : VectorAppCompatActivity() {
 
     /* ==========================================================================================
      * UI

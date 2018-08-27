@@ -49,7 +49,7 @@ import java.util.*
  *
  * Layout MUST contains a WebView with ID 'widget_webview'
  */
-abstract class AbstractWidgetActivity : RiotAppCompatActivity() {
+abstract class AbstractWidgetActivity : VectorAppCompatActivity() {
 
     /* ==========================================================================================
      * UI

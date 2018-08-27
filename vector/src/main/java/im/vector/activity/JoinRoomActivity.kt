@@ -31,7 +31,7 @@ import org.matrix.androidsdk.util.Log
 /**
  * JoinRoomActivity is a dummy activity to join / reject a room invitation
  */
-class JoinRoomActivity : RiotAppCompatActivity() {
+class JoinRoomActivity : VectorAppCompatActivity() {
 
     override fun getLayoutRes() = R.layout.activity_empty
 

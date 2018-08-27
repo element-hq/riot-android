@@ -278,9 +278,11 @@
     <style name="LoginAppTheme" parent="AppTheme.NoActionBar">
         <item name="android:editTextStyle">@style/LoginEditTextStyle</item>
         <item name="android:buttonStyle">@style/LoginButtonStyle</item>
-
         <item name="colorAccent">?attr/editTextColor</item>
     </style>
+
+    <style name="AppTheme.Dialog.Light" parent="Theme.AppCompat.Light.Dialog.Alert" />
+
 
     <style name="CountryPickerTheme" parent="AppTheme.NoActionBar">
         <item name="editTextColor">@android:color/white</item>
@@ -288,7 +290,7 @@
         <item name="android:textColorHint">?attr/activity_bottom_gradient_color</item>
     </style>
 
-    <style name="DirectoryPickerTheme" parent="AppTheme.NoActionBar"/>
+    <style name="DirectoryPickerTheme" parent="AppTheme.NoActionBar" />
 
     <!-- searches activity -->
     <style name="SearchesAppTheme" parent="AppTheme">
@@ -312,7 +314,9 @@
 
         <item name="android:windowFrame">@null</item>
         <item name="android:windowTitleStyle">@style/RtlOverlay.DialogWindowTitle.AppCompat</item>
-        <item name="android:windowTitleBackgroundStyle">@style/Base.DialogWindowTitleBackground.AppCompat</item>
+        <item name="android:windowTitleBackgroundStyle">
+            @style/Base.DialogWindowTitleBackground.AppCompat
+        </item>
         <item name="android:windowBackground">@drawable/abc_dialog_material_background</item>
         <item name="android:windowIsFloating">true</item>
         <item name="android:backgroundDimEnabled">true</item>
@@ -465,7 +469,7 @@
         <item name="android:textColorHint">?attr/activity_bottom_gradient_color</item>
     </style>
 
-    <style name="DirectoryPickerTheme.Dark" parent="AppTheme.NoActionBar.Dark"/>
+    <style name="DirectoryPickerTheme.Dark" parent="AppTheme.NoActionBar.Dark" />
 
     <style name="SearchesAppTheme.Dark" parent="AppTheme.Dark">
         <!-- custom action bar -->
@@ -489,7 +493,9 @@
 
         <item name="android:windowFrame">@null</item>
         <item name="android:windowTitleStyle">@style/RtlOverlay.DialogWindowTitle.AppCompat</item>
-        <item name="android:windowTitleBackgroundStyle">@style/Base.DialogWindowTitleBackground.AppCompat</item>
+        <item name="android:windowTitleBackgroundStyle">
+            @style/Base.DialogWindowTitleBackground.AppCompat
+        </item>
         <item name="android:windowBackground">@drawable/abc_dialog_material_background</item>
         <item name="android:windowIsFloating">true</item>
         <item name="android:backgroundDimEnabled">true</item>
@@ -620,7 +626,7 @@
         <item name="android:textColorHint">?attr/activity_bottom_gradient_color</item>
     </style>
 
-    <style name="DirectoryPickerTheme.Black" parent="AppTheme.NoActionBar.Black"/>
+    <style name="DirectoryPickerTheme.Black" parent="AppTheme.NoActionBar.Black" />
 
     <style name="SearchesAppTheme.Black" parent="AppTheme.Black">
         <!-- custom action bar -->
@@ -644,7 +650,9 @@
 
         <item name="android:windowFrame">@null</item>
         <item name="android:windowTitleStyle">@style/RtlOverlay.DialogWindowTitle.AppCompat</item>
-        <item name="android:windowTitleBackgroundStyle">@style/Base.DialogWindowTitleBackground.AppCompat</item>
+        <item name="android:windowTitleBackgroundStyle">
+            @style/Base.DialogWindowTitleBackground.AppCompat
+        </item>
         <item name="android:windowBackground">@drawable/abc_dialog_material_background</item>
         <item name="android:windowIsFloating">true</item>
         <item name="android:backgroundDimEnabled">true</item>
@@ -667,14 +675,15 @@
         <item name="editTextColor">?attr/riot_primary_text_color</item>
         <item name="android:editTextColor">?attr/riot_primary_text_color</item>
     </style>
+
     <style name="Vector_Lock_Dark" parent="Theme.Vector.EmptyDark">
         <item name="android:background">?attr/riot_primary_background_color</item>
         <item name="android:textColor">?attr/primary_text_color</item>
         <item name="editTextColor">?attr/riot_primary_text_color</item>
         <item name="android:editTextColor">?attr/riot_primary_text_color</item>
     </style>
-    <style name="Vector_Lock_Black" parent="Vector_Lock_Dark">
-    </style>
+
+    <style name="Vector_Lock_Black" parent="Vector_Lock_Dark" />
 
     <style name="Floating_Actions_Menu">
         <item name="android:background">@drawable/vector_background_fab_label</item>

@@ -57,7 +57,6 @@
     <string name="room_no_conference_call_in_encrypted_rooms">Gruppesamtaler er ikkje støtta i enkrypterte rom</string>
     <string name="send_anyway">Send Same kva</string>
     <string name="or">eller</string>
-    <string name="and">og</string>
     <string name="invite">Byd inn</string>
     <string name="offline">Fråkopla</string>
 
@@ -142,8 +141,6 @@ Velg \"hent ut\" for å sikkerheitskopiera dei før du loggar av.</string>
     <string name="logout">Logg av</string>
     <string name="hs_url">Heimtenar-URL</string>
     <string name="identity_url">Identitetstenar-URL</string>
-    <string name="user">brukar</string>
-    <string name="users">brukarar</string>
     <string name="search">Søk</string>
 
     <string name="start_new_chat">Byrj ei Ny Samtale</string>
@@ -360,11 +357,6 @@ Einingar kan ikkje enno dekryptera historia frå før dei kom inn i rommet.
 
 Enkrypterte meldingar vil ikkje verta synlege hjå klientar som førebels ikkje har implementert enkryptering.</string>
 
-    <string name="format_time_s">s</string>
-    <string name="format_time_m">m</string>
-    <string name="format_time_h">h</string>
-    <string name="format_time_d">d</string>
-
     <string name="room_participants_leave_prompt_title">Far frå rom</string>
     <string name="room_participants_leave_prompt_msg">Er du sikker på at du vil fara frå rommet?</string>
     <string name="room_participants_remove_prompt_msg">Er du sikker på at du vil fjerna %s frå denne samtala?</string>
@@ -453,7 +445,6 @@ Er du sikker?</string>
     <string name="room_details_people">Folk</string>
     <string name="room_details_files">Filer</string>
     <string name="room_details_settings">Innstillingar</string>
-    <string name="room_details_selected">valde</string>
     <string name="malformed_id">Misforma ID. Det bør vera ei emailadresse eller ein Matrix-ID som \'@lokaldel:domene\'</string>
     <string name="room_details_people_invited_group_name">BODNE INN</string>
     <string name="room_details_people_present_group_name">KOMEN INN</string>
@@ -498,12 +489,10 @@ Merk at denne handlinga vil starta æppen på nytt og kan taka litt tid.</string
     <string name="room_recents_join_room_prompt">Skriv ein rom-ID eller eit romalias inn</string>
 
     <string name="directory_search_results_title">Sjå gjennom Utvalet</string>
-    <string name="directory_search_room">%1$d rom</string>
     <plurals name="directory_search_rooms">
 	<item quantity="one">1 rom</item>
 	<item quantity="other">%d rom</item>
 </plurals>
-    <string name="directory_search_room_for">Fant %1$d rom for %2$s</string>
     <plurals name="directory_search_rooms_for">
 	<item quantity="one">Fant %1$s rom for %2$s</item>
 	<item quantity="other">Fant %1$s rom for %2$s</item>
@@ -943,11 +932,6 @@ Ukjende einingar:</string>
     <string name="filter_group_members">Filtrer gruppemedlemer</string>
     <string name="filter_group_rooms">Filtrer grupperom</string>
 
-    <string name="group_one_member">1 medlem</string>
-    <string name="group_members">%d medlemer</string>
-
-    <string name="group_one_room">1 rom</string>
-    <string name="group_rooms">%d rom</string>
     <string name="group_no_long_description">Samfunnsadministratoren har ikkje gjeve ei lang skildring for dette samfunnet.</string>
 
     <string name="has_been_kicked">Du vart sparka frå %1$s av %2$s</string>

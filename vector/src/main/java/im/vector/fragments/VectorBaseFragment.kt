@@ -23,7 +23,7 @@ import android.support.v4.app.Fragment
 import android.view.View
 import butterknife.ButterKnife
 import butterknife.Unbinder
-import im.vector.activity.RiotAppCompatActivity
+import im.vector.activity.VectorAppCompatActivity
 import org.matrix.androidsdk.util.Log
 
 
@@ -35,7 +35,7 @@ open class VectorBaseFragment : Fragment() {
     // Butterknife unbinder
     private var mUnBinder: Unbinder? = null
 
-    protected var riotActivity: RiotAppCompatActivity? = null
+    protected var vectorActivity: VectorAppCompatActivity? = null
 
     /* ==========================================================================================
      * Life cycle
@@ -64,12 +64,12 @@ open class VectorBaseFragment : Fragment() {
     override fun onAttach(context: Context?) {
         super.onAttach(context)
 
-        riotActivity = context as RiotAppCompatActivity
+        vectorActivity = context as VectorAppCompatActivity
     }
 
     override fun onDetach() {
         super.onDetach()
 
-        riotActivity = null
+        vectorActivity = null
     }
 }

@@ -193,8 +193,10 @@ public class HomeSectionView extends RelativeLayout {
      * @param invitationListener   listener for invite buttons
      * @param moreActionListener   listener for room menu
      */
-    public void setupRoomRecyclerView(final RecyclerView.LayoutManager layoutManager, @LayoutRes final int itemResId,
-                                      final boolean nestedScrollEnabled, final HomeRoomAdapter.OnSelectRoomListener onSelectRoomListener,
+    public void setupRoomRecyclerView(final RecyclerView.LayoutManager layoutManager,
+                                      @LayoutRes final int itemResId,
+                                      final boolean nestedScrollEnabled,
+                                      final HomeRoomAdapter.OnSelectRoomListener onSelectRoomListener,
                                       final AbsAdapter.RoomInvitationListener invitationListener,
                                       final AbsAdapter.MoreRoomActionListener moreActionListener) {
         mRecyclerView.setLayoutManager(layoutManager);

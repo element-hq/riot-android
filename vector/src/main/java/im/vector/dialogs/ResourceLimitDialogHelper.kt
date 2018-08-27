@@ -17,44 +17,56 @@
 package im.vector.dialogs
 
 import android.app.Activity
+import android.graphics.Typeface
 import android.os.Bundle
 import android.support.v7.app.AlertDialog
-import im.vector.Matrix
+import android.text.style.StyleSpan
+import com.binaryfork.spanny.Spanny
 import im.vector.R
-import im.vector.activity.VectorWebViewActivity
 import im.vector.activity.interfaces.Restorable
-import im.vector.webview.WebViewMode
+import im.vector.error.ResourceLimitErrorFormatter
+import im.vector.util.openUri
 import org.matrix.androidsdk.rest.model.MatrixError
-import org.matrix.androidsdk.util.Log
 
-private const val LOG_TAG = "ConsentNotGivenHelper"
+private const val LOG_TAG = "ResourceLimitDialogHelper"
 
-class ConsentNotGivenHelper private constructor(private val activity: Activity,
-                                                private val dialogLocker: DialogLocker) :
+class ResourceLimitDialogHelper private constructor(private val activity: Activity,
+                                                    private val dialogLocker: DialogLocker) :
+
         Restorable by dialogLocker {
 
     constructor(activity: Activity, savedInstanceState: Bundle?) : this(activity, DialogLocker(savedInstanceState))
+
+    private val formatter = ResourceLimitErrorFormatter(activity)
 
     /* ==========================================================================================
      * Public methods
      * ========================================================================================== */
 
     /**
-     * Display the consent dialog, if not already displayed
+     * Display the resource limit dialog, if not already displayed
      */
     fun displayDialog(matrixError: MatrixError) {
-        if (matrixError.consentUri == null) {
-            Log.e(LOG_TAG, "Missing required parameter 'consent_uri'")
-            return
-        }
         dialogLocker.displayDialog {
-            AlertDialog.Builder(activity)
-                    .setTitle(R.string.settings_app_term_conditions)
-                    .setMessage(activity.getString(R.string.dialog_user_consent_content,
-                            Matrix.getInstance(activity).defaultSession.homeServerConfig.homeserverUri.host))
-                    .setPositiveButton(R.string.dialog_user_consent_submit) { _, _ ->
-                        openWebViewActivity(matrixError.consentUri)
-                    }
+            val title = Spanny(activity.getString(R.string.resource_limit_exceeded_title), StyleSpan(Typeface.BOLD))
+            val message = formatter.format(matrixError, ResourceLimitErrorFormatter.Mode.Hard, separator = "\n\n")
+
+            val builder = AlertDialog.Builder(activity, R.style.AppTheme_Dialog_Light)
+                    .setTitle(title)
+                    .setMessage(message)
+
+            if (matrixError.adminUri != null) {
+                builder
+                        .setPositiveButton(R.string.resource_limit_contact_action) { _, _ ->
+                            openUri(activity, matrixError.adminUri!!)
+                        }
+                        .setNegativeButton(R.string.cancel, null)
+
+            } else {
+                builder.setPositiveButton(R.string.ok, null)
+            }
+
+            builder
         }
     }
 
@@ -62,8 +74,4 @@ class ConsentNotGivenHelper private constructor(private val activity: Activity,
      * Private
      * ========================================================================================== */
 
-    private fun openWebViewActivity(consentUri: String) {
-        val intent = VectorWebViewActivity.getIntent(activity, consentUri, R.string.settings_app_term_conditions, WebViewMode.CONSENT)
-        activity.startActivity(intent)
-    }
 }

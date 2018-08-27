@@ -256,7 +256,7 @@ public class VectorRoomInviteMembersActivity extends VectorBaseSearchActivity {
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         if (0 == permissions.length) {
-            Log.e(LOG_TAG, "## onRequestPermissionsResult(): cancelled " + requestCode);
+            Log.d(LOG_TAG, "## onRequestPermissionsResult(): cancelled " + requestCode);
         } else if (requestCode == PermissionsToolsKt.PERMISSION_REQUEST_CODE) {
             if (PackageManager.PERMISSION_GRANTED == grantResults[0]) {
                 Log.d(LOG_TAG, "## onRequestPermissionsResult(): READ_CONTACTS permission granted");

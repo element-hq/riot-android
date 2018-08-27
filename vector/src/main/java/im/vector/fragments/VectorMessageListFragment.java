@@ -850,13 +850,13 @@ public class VectorMessageListFragment extends MatrixMessageListFragment impleme
                        final String mediaMimeType,
                        final String filename,
                        final EncryptedFileInfo encryptedFileInfo) {
-        // Santize file name in case `m.body` contains a path.
+        // Sanitize file name in case `m.body` contains a path.
         final String trimmedFileName = new File(filename).getName();
 
-        MXMediasCache mediasCache = Matrix.getInstance(getActivity()).getMediasCache();
+        final MXMediasCache mediasCache = Matrix.getInstance(getActivity()).getMediasCache();
         // check if the media has already been downloaded
         if (mediasCache.isMediaCached(mediaUrl, mediaMimeType)) {
-            mediasCache.createTmpMediaFile(mediaUrl, mediaMimeType, encryptedFileInfo, new SimpleApiCallback<File>() {
+            mediasCache.createTmpDecryptedMediaFile(mediaUrl, mediaMimeType, encryptedFileInfo, new SimpleApiCallback<File>() {
                 @Override
                 public void onSuccess(File file) {
                     // sanity check
@@ -887,16 +887,9 @@ public class VectorMessageListFragment extends MatrixMessageListFragment impleme
                             mPendingEncryptedFileInfo = encryptedFileInfo;
                         }
                     } else {
-                        if (null != trimmedFileName) {
-                            File dstFile = new File(file.getParent(), trimmedFileName);
-
-                            if (dstFile.exists()) {
-                                dstFile.delete();
-                            }
-
-                            file.renameTo(dstFile);
-                            file = dstFile;
-                        }
+                        // Move the file to the Share folder, to avoid it to be deleted because the Activity will be paused while the
+                        // user select an application to share the file
+                        file = mediasCache.moveToShareFolder(file, trimmedFileName);
 
                         // shared / forward
                         Uri mediaUri = null;
@@ -905,7 +898,6 @@ public class VectorMessageListFragment extends MatrixMessageListFragment impleme
                         } catch (Exception e) {
                             Log.e(LOG_TAG, "onMediaAction VectorContentProvider.absolutePathToUri: " + e.getMessage(), e);
                         }
-
 
                         if (null != mediaUri) {
                             final Intent sendIntent = new Intent();

@@ -45,7 +45,7 @@ import im.vector.R;
  * FallbackLoginActivity is the fallback login activity
  * i.e this activity is created when the client does not support the
  */
-public class FallbackLoginActivity extends RiotAppCompatActivity {
+public class FallbackLoginActivity extends VectorAppCompatActivity {
     private static final String LOG_TAG = FallbackLoginActivity.class.getSimpleName();
 
     public static final String EXTRA_HOME_SERVER_ID = "FallbackLoginActivity.EXTRA_HOME_SERVER_ID";

@@ -33,7 +33,7 @@ import im.vector.webview.WebViewMode
  * It relies on the VectorWebViewClient
  * This class shouldn't be extended. To add new behaviors, you might create a new WebViewMode and a new WebViewEventListener
  */
-class VectorWebViewActivity : RiotAppCompatActivity() {
+class VectorWebViewActivity : VectorAppCompatActivity() {
 
     /* ==========================================================================================
      * UI
