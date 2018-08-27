@@ -164,7 +164,7 @@ class NotificationAreaView @JvmOverloads constructor(
         if (state.unreadCount > 0) {
             imageView.setImageResource(R.drawable.newmessages)
             messageView.setTextColor(ContextCompat.getColor(context, R.color.vector_fuchsia_color))
-            messageView.text = SpannableString(resources.getQuantityString(R.plurals.room_new_messages_notification, state.unreadCount))
+            messageView.text = SpannableString(resources.getQuantityString(R.plurals.room_new_messages_notification, state.unreadCount, state.unreadCount))
         } else {
             imageView.setImageResource(R.drawable.scrolldown)
             messageView.setTextColor(ThemeUtils.getColor(context, R.attr.room_notification_text_color))
