@@ -8,7 +8,7 @@ Features:
  -
 
 Improvements:
- -
+ - Improve intent to open document (#2544)
 
 Other changes:
  -

@@ -2203,7 +2203,7 @@ public class VectorRoomActivity extends MXCActionBarActivity implements
     private void launchFileSelectionIntent() {
         enableActionBarHeader(HIDE_ACTION_BAR_HEADER);
 
-        ExternalApplicationsUtilKt.openFileSelection(this, REQUEST_FILES_REQUEST_CODE);
+        ExternalApplicationsUtilKt.openFileSelection(this, null, true, REQUEST_FILES_REQUEST_CODE);
     }
 
     private void startStickerPickerActivity() {

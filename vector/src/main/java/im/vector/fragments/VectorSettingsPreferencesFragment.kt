@@ -2484,12 +2484,7 @@ class VectorSettingsPreferencesFragment : PreferenceFragment(), SharedPreference
      */
     @SuppressLint("NewApi")
     private fun importKeys() {
-        val fileIntent = Intent(Intent.ACTION_GET_CONTENT)
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR2) {
-            fileIntent.putExtra(Intent.EXTRA_ALLOW_MULTIPLE, false)
-        }
-        fileIntent.type = "*/*"
-        startActivityForResult(fileIntent, REQUEST_E2E_FILE_REQUEST_CODE)
+        openFileSelection(activity, this, false, REQUEST_E2E_FILE_REQUEST_CODE)
     }
 
     /**
