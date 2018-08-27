@@ -84,34 +84,34 @@
     <string name="auth_register">注册</string>
     <string name="auth_submit">提交</string>
     <string name="auth_skip">跳过</string>
-    <string name="auth_send_reset_email">发送密码重设邮件</string>
+    <string name="auth_send_reset_email">发送密码重设电子邮件</string>
     <string name="auth_return_to_login">返回登录页面</string>
     <string name="auth_user_id_placeholder">电子邮箱或用户名</string>
     <string name="auth_password_placeholder">密码</string>
     <string name="auth_new_password_placeholder">新密码</string>
     <string name="auth_user_name_placeholder">用户名</string>
-    <string name="auth_email_placeholder">邮箱地址</string>
-    <string name="auth_opt_email_placeholder">邮箱地址（可选）</string>
-    <string name="auth_phone_number_placeholder">手机号码</string>
-    <string name="auth_opt_phone_number_placeholder">手机号码（可选）</string>
+    <string name="auth_email_placeholder">电子邮箱地址</string>
+    <string name="auth_opt_email_placeholder">电子邮箱地址（可选）</string>
+    <string name="auth_phone_number_placeholder">电话号码</string>
+    <string name="auth_opt_phone_number_placeholder">电话号码（可选）</string>
     <string name="auth_repeat_new_password_placeholder">确认您的新密码</string>
     <string name="auth_invalid_login_param">不正确的用户名和/或密码</string>
     <string name="auth_invalid_user_name">用户名仅可由字母、数字、点、连字符与下划线组成</string>
     <string name="auth_invalid_password">密码太短（至少 6 位）</string>
     <string name="auth_missing_password">缺少密码</string>
-    <string name="auth_invalid_email">此邮件地址似乎无效</string>
-    <string name="auth_invalid_phone">此手机号码似乎无效</string>
-    <string name="auth_email_already_defined">此邮箱地址已被使用。</string>
-    <string name="auth_missing_email">缺少邮箱地址</string>
-    <string name="auth_missing_phone">缺少手机号码</string>
-    <string name="auth_missing_email_or_phone">缺少邮箱地址或手机号码</string>
+    <string name="auth_invalid_email">此电子邮箱地址似乎无效</string>
+    <string name="auth_invalid_phone">此电话号码似乎无效</string>
+    <string name="auth_email_already_defined">此电子邮箱地址已被使用。</string>
+    <string name="auth_missing_email">缺少电子邮箱地址</string>
+    <string name="auth_missing_phone">缺少电话号码</string>
+    <string name="auth_missing_email_or_phone">缺少电子邮箱地址或电话号码</string>
     <string name="auth_password_dont_match">密码不匹配</string>
     <string name="auth_forgot_password">忘记密码？</string>
     <string name="auth_home_server">主服务器：</string>
     <string name="auth_identity_server">身份服务器：</string>
-    <string name="auth_reset_password_next_step_button">我已验证我的邮箱地址</string>
+    <string name="auth_reset_password_next_step_button">我已验证我的电子邮箱地址</string>
     <string name="auth_reset_password_message">要重置您的密码，请输入与您的帐号关联的电子邮箱地址：</string>
-    <string name="auth_reset_password_missing_email">必须输入与您账号关联的邮箱地址。</string>
+    <string name="auth_reset_password_missing_email">必须输入与您账号关联的电子邮箱地址。</string>
     <string name="auth_reset_password_missing_password">必须输入新密码。</string>
     <string name="login_error_must_start_http">URL 必须以 http[s]:// 开头</string>
     <string name="login_error_network_error">无法登录：网络错误</string>
@@ -156,8 +156,8 @@
     <string name="room_sliding_menu_settings">设置</string>
     <string name="room_sliding_menu_version">版本</string>
     <string name="settings_email_address">电子邮箱</string>
-    <string name="settings_add_email_address">添加邮件地址</string>
-    <string name="settings_add_phone_number">添加手机号码</string>
+    <string name="settings_add_email_address">添加电子邮箱地址</string>
+    <string name="settings_add_phone_number">添加电话号码</string>
     <string name="settings_version">版本</string>
     <string name="settings_olm_version">olm 版本</string>
     <string name="settings_advanced">高级</string>
@@ -174,7 +174,7 @@
     <string name="settings_confirm_password">确认密码</string>
     <string name="settings_fail_to_update_password">更新密码失败</string>
     <string name="settings_password_updated">您的密码已更新</string>
-    <string name="settings_phone_number_label">手机号码</string>
+    <string name="settings_phone_number_label">电话号码</string>
     <string name="encryption_information_curve25519_identity_key">Curve25519 认证密钥</string>
     <string name="encryption_information_algorithm">算法</string>
     <string name="encryption_information_session_id">会话 ID</string>
@@ -211,10 +211,10 @@
 
     <string name="auth_add_email_message">为您的账户添加一个电子邮箱地址以便其他用户发现您，更可让您重设密码。</string>
     <string name="auth_add_phone_message">为您的账户添加一个电话号码以便其他用户发现您。</string>
-    <string name="auth_add_email_phone_message">添加邮箱地址和/或手机号码到您的账户以便其他用户发现您。
+    <string name="auth_add_email_phone_message">添加一个电子邮箱地址和/或电话号码到您的账户来让用户发现您。
 
-电子邮箱地址亦可用于重设您的密码。</string>
-    <string name="auth_add_email_and_phone_message">添加一个电子邮箱地址和一个手机号码到您的账户来让用户发现您。
+电子邮箱地址也可以让您重设您的密码。</string>
+    <string name="auth_add_email_and_phone_message">添加一个电子邮箱地址和电话号码到您的账户来让用户发现您。
 
 电子邮箱地址也可以让您重设您的密码。</string>
     <string name="auth_repeat_password_placeholder">重复密码</string>
@@ -222,7 +222,7 @@
     <string name="auth_email_validation_message">请检查您的电子邮箱以继续注册</string>
     <string name="auth_recaptcha_message">此主服务器想确认您不是机器人</string>
     <string name="auth_reset_password_email_validation_message">一封电子邮件已发送至 %s。点击了其中的链接后，请点击下面。</string>
-    <string name="auth_reset_password_error_unauthorized">邮箱地址验证失败：请确保您已点击邮件中的链接</string>
+    <string name="auth_reset_password_error_unauthorized">电子邮箱地址验证失败：请确保您已点击邮件中的链接</string>
     <string name="auth_reset_password_success_message">密码已重设。
 
 您已从所有设备注销并且不再接受推送通知。要重新启用通知，请重新在相应设备上登录。</string>
@@ -301,7 +301,7 @@
     <string name="room_sliding_menu_copyright">版权</string>
     <string name="room_sliding_menu_privacy_policy">隐私政策</string>
 
-    <string name="settings_phone_number">手机号码</string>
+    <string name="settings_phone_number">电话号码</string>
     <string name="settings_title_app_info_link">应用信息</string>
 
     <string name="settings_enable_all_notif">启用这个账户的通知</string>
@@ -340,7 +340,7 @@
     <string name="settings_phone_number_verification">电话验证</string>
     <string name="settings_phone_number_verification_instruction">我们已经发送了一条含有一个激活码的短信。请在下面输入这个激活码。</string>
     <string name="settings_phone_number_verification_error_empty_code">输入激活码</string>
-    <string name="settings_phone_number_verification_error">在验证您的手机号码的时候发生了错误</string>
+    <string name="settings_phone_number_verification_error">在验证您的电话号码的时候发生了错误</string>
     <string name="room_settings_room_name">聊天室名称</string>
     <string name="room_settings_topic">主题</string>
     <string name="room_settings_directory_visibility">把这个聊天室列在聊天室目录中</string>
@@ -410,7 +410,7 @@
     <string name="rename">重命名</string>
     <string name="report_content">举报消息</string>
     <string name="active_call">当前通话</string>
-    <string name="ongoing_conference_call">" 正在进行电话会议。请以语音或视频的形式加入。"</string>
+    <string name="ongoing_conference_call">正在进行电话会议。请以语音或视频的形式加入。</string>
     <string name="ongoing_conference_call_voice">语音</string>
     <string name="missing_permissions_to_start_conf_call">您需要权限才可在此聊天室中发起会议</string>
     <string name="send_anyway">依然发送</string>
@@ -421,9 +421,9 @@
     <string name="read_receipt">阅读</string>
 
     <string name="auth_invalid_token">无效令牌</string>
-    <string name="auth_threepid_warning_message">直到出现相应的 API，暂不支持同时使用邮箱地址与电话号码注册。只有手机号码会被添加到此帐户。
+    <string name="auth_threepid_warning_message">直到出现相应的 API，暂不支持同时使用电子邮箱地址与电话号码注册。只有电话号码会被添加到此帐户。
 
-您可在设置中将电子邮箱重新添加到你的账户。</string>
+您可在设置中将电子邮箱添加到你的账户。</string>
     <string name="auth_username_in_use">用户名已被使用</string>
     <string name="login_error_unable_register_mail_ownership">无法注册：电子邮箱所有权验证失败</string>
     <string name="login_error_unknown_token">无法识别指定的访问令牌</string>
@@ -457,7 +457,7 @@
 
     <string name="media_slider_saved_message">保存至下载？</string>
     <string name="remove">移除</string>
-    <string name="room_preview_unlinked_email_warning">此邀请已发送至 %s，但没和这个账户关联。
+    <string name="room_preview_unlinked_email_warning">此邀请已发送至未这个账户关联的 %s。
 您可能希望用一个不同的账户登录，或者把这个电子邮箱加入到这个账户。</string>
     <string name="room_preview_room_interactions_disabled">这是此聊天室的预览。与聊天室的交互已禁用。</string>
 
@@ -493,17 +493,17 @@
     <string name="settings_notifications_targets">通知目标</string>
     <string name="settings_logged_in">登录为</string>
     <string name="account_email_validation_message">请检查您的电子邮箱并点击里面包含的链接。完成时请点击继续。</string>
-    <string name="account_email_validation_error">无法验证电子邮箱地址。请检查您的电子邮件并点击里面包含的链接。完成时请点击继续</string>
+    <string name="account_email_validation_error">无法验证电子邮箱地址。请检查您的邮件并点击里面包含的链接。完成时请点击继续</string>
 
-    <string name="account_email_already_used_error">此电子邮件地址已被占用</string>
-    <string name="account_email_not_found_error">发送电子邮件失败：未找到此电子邮件地址</string>
-    <string name="account_phone_number_already_used_error">此手机号码已被使用</string>
+    <string name="account_email_already_used_error">此电子邮箱地址已被占用</string>
+    <string name="account_email_not_found_error">发送电子邮件失败：未找到此电子邮箱地址</string>
+    <string name="account_phone_number_already_used_error">此电话号码已被使用</string>
 
     <string name="settings_delete_notification_targets_confirmation">您确认您要移除这个通知目标吗？</string>
 
     <string name="settings_delete_threepid_confirmation">您确认要移除 %1$s %2$s 吗?</string>
 
-    <string name="settings_phone_number_error">无效的已选国家的手机号码</string>
+    <string name="settings_phone_number_error">无效的已选国家的电话号码</string>
     <string name="room_settings_room_photo">聊天室图片</string>
     <string name="room_settings_room_tag">聊天室标签</string>
     <string name="room_settings_tag_pref_dialog_title">标签为：</string>
@@ -557,10 +557,10 @@
 请谅解由此造成的不便。</string>
     <string name="read_receipts_list">已读标签清单</string>
     <string name="compression_options">"发送为 "</string>
-    <string name="permissions_rationale_msg_contacts">Riot 需要访问您的通讯录，才能根据电子邮件和手机号码查找其他 Matrix 用户。
+    <string name="permissions_rationale_msg_contacts">Riot 需要访问您的通讯录，才能根据电子邮箱地址和电话号码查找其他 Matrix 用户。
 
 请在接下来的弹出窗口中授权允许访问。</string>
-    <string name="permissions_msg_contacts_warning_other_androids">Riot 需要访问您的通讯录，才能根据电子邮件和手机号码查找其他 Matrix 用户。
+    <string name="permissions_msg_contacts_warning_other_androids">Riot 需要访问您的通讯录，才能根据电子邮箱地址和电话号码查找其他 Matrix 用户。
 
 允许 Riot 访问您的通讯录？</string>
 
@@ -572,7 +572,7 @@
     <string name="ssl_only_accept">请仅在服务器管理员已经发布了与上述相匹配的指纹的情况下接受该证书。</string>
     <string name="ssl_fingerprint_example">00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00</string>
     <string name="room_details_people">成员</string>
-    <string name="malformed_id">ID 的格式不正确。应该是一个电子邮件地址或 Matrix ID，如 “@localpart:domain”</string>
+    <string name="malformed_id">ID 的格式不正确。应该是一个电子邮箱地址或 Matrix ID，如 “@localpart:domain”</string>
     <string name="tab_title_search_people">联系人</string>
     <string name="room_sliding_menu_third_party_notices">第三方通知</string>
     <string name="settings_profile_picture">头像</string>
@@ -593,7 +593,7 @@
     <string name="room_settings_labs_end_to_end_is_active">端对端加密已激活</string>
     <string name="failed_to_load_timeline_position">%s 正在尝试在这个聊天室加载一个特定的时间点，但无法找到它。</string>
     <string name="encryption_information_name">名称</string>
-    <string name="encryption_information_verify_device_warning">" 为验证此设备是否可信，请通过其他方式（例如面对面交换或拨打电话）与其拥有者联系，并询问他们该设备的用户设置中的密钥是否与以下密钥匹配："</string>
+    <string name="encryption_information_verify_device_warning">为验证此设备是否可信，请通过其他方式（例如面对面交换或拨打电话）与其拥有者联系，并询问他们该设备的用户设置中的密钥是否与以下密钥匹配：</string>
     <string name="encryption_information_verify_device_warning2">如果匹配，请点击下面的验证按钮。 
 如果不匹配，那么这可能说明其他人正在盗用此设备，而您应当将其拉入黑名单。
 未来，这个验证过程将会变得更加精致、巧妙一些。</string>
@@ -635,8 +635,8 @@
     <string name="no_public_room_placeholder">没有公开聊天室</string>
 
     <string name="people_search_invite_by_id_dialog_title">用 ID 邀请用户</string>
-    <string name="people_search_invite_by_id_dialog_description">请输入一个或多个邮件地址或 Matrix ID</string>
-    <string name="people_search_invite_by_id_dialog_hint">邮件或 Matrix ID</string>
+    <string name="people_search_invite_by_id_dialog_description">请输入一个或多个电子邮箱地址或 Matrix ID</string>
+    <string name="people_search_invite_by_id_dialog_hint">电子邮箱地址或 Matrix ID</string>
     <string name="room_settings_forget">忘记</string>
 
     <!-- directory activity  -->
@@ -924,7 +924,7 @@ Matrix 中的消息可见性类似于电子邮件。我们忘记您的消息意�
 
     <string name="settings_notification_privacy_secure_message_content">• 通知中的消息内容<b>从 Matrix 主服务器直接安全的获取</b></string>
     <string name="settings_notification_privacy_nosecure_message_content">• 通知含有<b>消息与元数据</b></string>
-    <string name="room_settings_no_flair">" 这个聊天室没有显示任何社区的 flair"</string>
+    <string name="room_settings_no_flair">这个聊天室没有显示任何社区的 flair</string>
     <string name="widget_integration_missing_parameter">缺少所需的参数。</string>
     <string name="widget_integration_invalid_parameter">无效参数。</string>
     <string name="community_id_hint">样例 ID</string>
@@ -985,4 +985,39 @@ Matrix 中的消息可见性类似于电子邮件。我们忘记您的消息意�
 
 <string name="settings_without_flair">您目前不是任何社区的成员。</string>
 
+    <string name="missing_permissions_error">由于缺少权限，此操作无法完成。</string>
+    <plurals name="public_room_nb_users">
+	<item quantity="other">%d 个用户</item>
+</plurals>
+
+    <plurals name="format_time_s">
+	<item quantity="other">%d 秒</item>
+</plurals>
+    <plurals name="format_time_m">
+	<item quantity="other">%d 分钟</item>
+</plurals>
+    <plurals name="format_time_h">
+	<item quantity="other">%d 小时</item>
+</plurals>
+    <plurals name="format_time_d">
+	<item quantity="other">%d 天</item>
+</plurals>
+
+    <string name="room_participants_now">现在%1$s</string>
+    <string name="room_participants_ago">%2$s前%1$s</string>
+
+    <string name="room_participants_invite_join_names">"%1$s、 "</string>
+    <string name="room_participants_invite_join_names_and">%1$s 和 %2$s</string>
+    <string name="room_participants_invite_join_names_combined">%1$s%2$s</string>
+
+    <plurals name="room_details_selected">
+	<item quantity="other">已选择 %d 个</item>
+</plurals>
+    <plurals name="group_members">
+	<item quantity="other">%d 个成员</item>
+</plurals>
+
+    <plurals name="group_rooms">
+	<item quantity="other">%d 个聊天室</item>
+</plurals>
     </resources>

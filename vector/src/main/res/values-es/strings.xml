@@ -751,7 +751,7 @@ Lo puedes hacer ahora o luego desde las configuraciones de la aplicación.</stri
 
     <string name="login_mobile_device">Móvil</string>
 
-    <string name="call">LLamar</string>
+    <string name="call">Llamar</string>
     <string name="settings_notification_ringtone">Sonido de notificación</string>
     <string name="settings_containing_my_display_name">Mensajes que contengan mi nombre público</string>
     <string name="settings_containing_my_user_name">Mensajes que contengan mi nombre de usuario</string>
@@ -800,8 +800,8 @@ Lo puedes hacer ahora o luego desde las configuraciones de la aplicación.</stri
     <string name="unrecognized_command">Comando no reconocido: %s</string>
 
     <!-- notification statuses -->
-    <string name="notification_off">Off</string>
-    <string name="notification_on">On</string>
+    <string name="notification_off">Desactivado</string>
+    <string name="notification_on">Activado</string>
     <string name="notification_noisy">Ruidoso</string>
 
     <string name="encrypted_message">Mensaje cifrado</string>
@@ -821,11 +821,11 @@ Lo puedes hacer ahora o luego desde las configuraciones de la aplicación.</stri
 
     <string name="start_new_chat_prompt_msg">¿Está seguro que quiere empezar una nueva conversación con %s?</string>
     <string name="start_voice_call_prompt_msg">¿Está seguro que quiere empezar una llamada de voz?</string>
-    <string name="start_video_call_prompt_msg">¿Està seguro que quiere empezar una llamada de vídeo?</string>
+    <string name="start_video_call_prompt_msg">¿Está seguro que quiere empezar una llamada de vídeo?</string>
 
     <string name="groups_list">Lista de grupos</string>
 
-    <string name="room_participants_kick_prompt_msg">Está seguro que quiere echar este usuario de la conversación?</string>
+    <string name="room_participants_kick_prompt_msg">¿Está seguro que quiere echar este usuario de la conversación?</string>
     <string name="room_participants_ban_prompt_msg">¿Está seguro de que quiere vetar a este usuario de esta conversación?</string>
 
     <string name="room_settings_all_messages_noisy">Todos los mensajes (ruidoso)</string>

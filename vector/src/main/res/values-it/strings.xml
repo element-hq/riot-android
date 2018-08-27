@@ -33,11 +33,11 @@
     <string name="rename">Rinomina</string>
     <string name="report_content">Segnala contenuto</string>
     <string name="active_call">Chiamata attiva</string>
-    <string name="ongoing_conference_call">" Chiamata conferenza in corso. Unisciti con sola voce o video."</string>
+    <string name="ongoing_conference_call">Chiamata conferenza in corso. Unisciti con voce o video.</string>
     <string name="ongoing_conference_call_voice">voce</string>
     <string name="ongoing_conference_call_video">video</string>
     <string name="cannot_start_call">Impossibile avviare la chiamata, riprova più tardi</string>
-    <string name="missing_permissions_warning">A causa di permessi insufficienti, alcune funzioni potrebbero mancare...</string>
+    <string name="missing_permissions_warning">A causa di permessi insufficienti, potrebbero mancare alcune funzioni…</string>
     <string name="missing_permissions_to_start_conf_call">Necessiti del permesso per invitare ad iniziare una conferenza in questa stanza</string>
     <string name="missing_permissions_title_to_start_conf_call">Impossibile avviare la chiamata</string>
     <string name="device_information">Informazioni dispositivo</string>
@@ -683,16 +683,16 @@ I messaggi criptati non saranno visibili ai riceventi che non hanno ancora imple
     <string name="encryption_information_verification">Verifica</string>
     <string name="encryption_information_ed25519_fingerprint">Impronta digitale Ed25519</string>
 
-    <string name="encryption_export_e2e_room_keys">Esporta chiavi da-utente-a-utente della stanza</string>
-    <string name="encryption_export_room_keys">Esporta le chiavi della stanza</string>
+    <string name="encryption_export_e2e_room_keys">Esporta chiavi da-utente-a-utente delle stanze</string>
+    <string name="encryption_export_room_keys">Esporta le chiavi delle stanze</string>
     <string name="encryption_export_room_keys_summary">Esporta le chiavi in un file locale</string>
     <string name="encryption_export_export">Esporta</string>
     <string name="encryption_export_enter_passphrase">Inserisci frase d\'accesso (passphrase)</string>
     <string name="encryption_export_confirm_passphrase">Conferma frase d\'accesso (passphrase)</string>
     <string name="encryption_export_saved_as">Le chiavi da-utente-a-utente della stanza sono state salvate su \'%s\'</string>
 
-    <string name="encryption_import_e2e_room_keys">Importa chiavi da-utente-a-utente nella stanza</string>
-    <string name="encryption_import_room_keys">Importa chiavi nella stanza</string>
+    <string name="encryption_import_e2e_room_keys">Importa chiavi da-utente-a-utente delle stanze</string>
+    <string name="encryption_import_room_keys">Importa chiavi delle stanze</string>
     <string name="encryption_import_room_keys_summary">Importa le chiavi da un file locale</string>
     <string name="encryption_import_import">Importa</string>
     <string name="encryption_never_send_to_unverified_devices_title">Cripta solo per i dispositivi verificati</string>
@@ -932,7 +932,7 @@ In futuro il processo di verifica sarà più sofisticato.</string>
 
 <string name="settings_flair">Predisposizione</string>
 
-    <string name="room_settings_no_flair">" Questa stanza non mostra predisposizione per alcuna comunità"</string>
+    <string name="room_settings_no_flair">Questa stanza non mostra predisposizione per alcuna comunità</string>
     <string name="widget_integration_positive_power_level">Il livello di potere deve essere un intero positivo.</string>
     <string name="notice_avatar">Notificare avatar</string>
     <string name="receipt_avatar">Avatar ricevuto</string>
@@ -1044,4 +1044,42 @@ La visibilità dei messaggi in Matrix è simile alle email. \"Dimenticare i tuoi
 <string name="room_participants_action_unignore_prompt">Mostrare tutti i messaggi di questo utente?
 
 Tieni presente che questa azione riavvierà l\'app e potrebbe richiedere del tempo.</string>
+    <string name="missing_permissions_error">A causa di permessi insufficienti, questa azione non è possibile.</string>
+    <plurals name="format_time_s">
+	<item quantity="one">1s</item>
+	<item quantity="other">%ds</item>
+</plurals>
+    <plurals name="format_time_m">
+	<item quantity="one">1m</item>
+	<item quantity="other">%dm</item>
+</plurals>
+    <plurals name="format_time_h">
+	<item quantity="one">1o</item>
+	<item quantity="other">%do</item>
+</plurals>
+    <plurals name="format_time_d">
+	<item quantity="one">1g</item>
+	<item quantity="other">%dg</item>
+</plurals>
+
+    <string name="room_participants_now">%1$s ora</string>
+    <string name="room_participants_ago">%1$s %2$s fa</string>
+
+    <string name="room_participants_invite_join_names">"%1$s, "</string>
+    <string name="room_participants_invite_join_names_and">%1$s e %2$s</string>
+    <string name="room_participants_invite_join_names_combined">%1$s %2$s</string>
+
+    <plurals name="room_details_selected">
+	<item quantity="one">1 selezionato</item>
+	<item quantity="other">%d selezionati</item>
+</plurals>
+    <plurals name="group_members">
+	<item quantity="one">1 membro</item>
+	<item quantity="other">%d membri</item>
+</plurals>
+
+    <plurals name="group_rooms">
+	<item quantity="one">1 stanza</item>
+	<item quantity="other">%d stanze</item>
+</plurals>
     </resources>
