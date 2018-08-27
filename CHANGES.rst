@@ -1,5 +1,8 @@
-Changes in Riot 0.8.14 (2018-XX-XX)
+Changes in Riot 0.8.14 (2018-08-27)
 ===================================================
+
+MatrixSdk:
+ - Upgrade to version 0.9.8.
 
 Features:
  - Manage server quota notices (#2440)
@@ -19,12 +22,6 @@ Bugfix:
  - Fix media sharing (#2530)
  - Fix notification sound issue in settings (#2524)
  - Disable app icon badge for "listen for event" notification (#2104)
-
-Translations:
- -
-
-Build:
- -
 
 Changes in Riot 0.8.13 (2018-08-09)
 ===================================================
