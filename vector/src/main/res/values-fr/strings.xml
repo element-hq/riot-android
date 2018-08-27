@@ -1037,4 +1037,20 @@ Veuillez noter que cette action redémarrera l\'application et pourra prendre un
 	<item quantity="one">1 salon</item>
 	<item quantity="other">%d salons</item>
 </plurals>
-    </resources>
+    <string name="system_alerts_header">Alertes système</string>
+
+    <string name="resource_limit_exceeded_title">Limite de ressources dépassée</string>
+    <string name="resource_limit_contact_action">Contacter l\'administrateur</string>
+
+    <string name="resource_limit_contact_admin">contacter l\'administrateur de votre service</string>
+
+    <string name="resource_limit_soft_default">Ce serveur d\'accueil a dépassé une de ses limites de ressources donc <b>certains utilisateurs ne pourront pas se connecter</b>.</string>
+    <string name="resource_limit_hard_default">Ce serveur d\'accueil a dépassé une de ses limites de ressources.</string>
+
+    <string name="resource_limit_soft_mau"> Ce serveur d\'accueil a atteint sa limite mensuelle d\'utilisateurs actifs donc <b>certains utilisateurs ne pourront pas se connecter</b>.</string>
+    <string name="resource_limit_hard_mau">Ce serveur d\'accueil a atteint sa limite mensuelle d\'utilisateurs actifs.</string>
+
+    <string name="resource_limit_soft_contact">Veuillez %s pour augmenter cette limite.</string>
+    <string name="resource_limit_hard_contact">Veuillez %s pour continuer à utiliser ce service.</string>
+
+</resources>
