@@ -1082,4 +1082,20 @@ Tieni presente che questa azione riavvierà l\'app e potrebbe richiedere del tem
 	<item quantity="one">1 stanza</item>
 	<item quantity="other">%d stanze</item>
 </plurals>
-    </resources>
+    <string name="system_alerts_header">Avvisi di sistema</string>
+
+    <string name="resource_limit_exceeded_title">Limite di risorse superato</string>
+    <string name="resource_limit_contact_action">Contatta l\'amministratore</string>
+
+    <string name="resource_limit_contact_admin">contatta l\'amministratore del servizio</string>
+
+    <string name="resource_limit_soft_default">Il server home ha superato uno dei limiti delle risorse, pertanto <b>alcuni utenti non potranno accedere</b>.</string>
+    <string name="resource_limit_hard_default">Il server home ha superato uno dei limiti delle risorse.</string>
+
+    <string name="resource_limit_soft_mau"> Il server home ha raggiunto il limite mensile di utenti attivi, pertanto <b>alcuni utenti non potranno accedere</b>.</string>
+    <string name="resource_limit_hard_mau">Il server home ha raggiunto il limite mensile di utenti attivi.</string>
+
+    <string name="resource_limit_soft_contact">Per favore %s per aumentare questo limite.</string>
+    <string name="resource_limit_hard_contact">Per favore %s per continuare ad usare questo servizio.</string>
+
+</resources>
