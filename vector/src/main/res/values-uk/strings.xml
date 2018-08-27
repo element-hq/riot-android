@@ -54,7 +54,6 @@
     <string name="room_no_conference_call_in_encrypted_rooms">Конференц дзвінки не підтримуються в шифрованих чатах</string>
     <string name="send_anyway">Все одно надіслати</string>
     <string name="or">або</string>
-    <string name="and">і</string>
     <string name="invite">Запрошення</string>
     <string name="offline">Офлайн</string>
 
@@ -136,8 +135,6 @@
     <string name="logout">Вийти</string>
     <string name="hs_url">URL сервера</string>
     <string name="identity_url">URL сервера аутентифікації</string>
-    <string name="user">користувач</string>
-    <string name="users">користувачів</string>
     <string name="search">Пошук</string>
 
     <string name="start_new_chat">Почати новий чат</string>
@@ -307,12 +304,6 @@
     <string name="room_e2e_alert_title">Увага!</string>
     <string name="room_e2e_alert_message">Скрізне шифрування досі на стадії beta-тестування та може бути ненадійним.</string>
 
-    <!--  Time -->
-    <string name="format_time_s">с</string>
-    <string name="format_time_m">хв</string>
-    <string name="format_time_h">год</string>
-    <string name="format_time_d">д</string>
-
     <!--  Chat participants -->
     <string name="room_participants_leave_prompt_title">Залишити кімнату</string>
     <string name="room_participants_leave_prompt_msg">Ви впевнені, що хочете залишити кімнату?</string>
@@ -322,8 +313,6 @@
     <string name="room_participants_online">Online</string>
     <string name="room_participants_offline">Offline</string>
     <string name="room_participants_idle">Idle</string>
-    <string name="room_participants_now">зараз</string>
-    <string name="room_participants_ago">тому</string>
 
     <string name="room_participants_header_admin_tools">АДМІНІСТРУВАННЯ</string>
     <string name="room_participants_header_call">ВИКЛИК</string>
@@ -394,7 +383,6 @@
     <string name="room_details_people">Люди</string>
     <string name="room_details_files">Файли</string>
     <string name="room_details_settings">Налаштування</string>
-    <string name="room_details_selected">обрано</string>
     <string name="malformed_id">Викривлений ID. Використовуйте email адресу або Matrix ID вигляду \'@localpart:domain\'</string>
     <string name="room_details_people_invited_group_name">ЗАПРОШЕНІ</string>
     <string name="room_details_people_present_group_name">ПРИЄДНАЛИСЯ</string>
@@ -435,8 +423,6 @@
 
     <!-- Directory -->
     <string name="directory_search_results_title">Огляд каталогу</string>
-    <string name="directory_search_room">%1$d кімната</string>
-    <string name="directory_search_room_for">%1$d кімната знайдена для %2$s</string>
     <string name="directory_searching_title">Пошук у каталозі...</string>
 
     <!-- home room settings -->

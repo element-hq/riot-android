@@ -11,4 +11,40 @@
 
     <string name="title_activity_home">Mesaĝoj</string>
     <string name="title_activity_room">Ĉambro</string>
+    <string name="resources_country_code">EO</string>
+
+    <string name="title_activity_settings">Agordoj</string>
+    <string name="title_activity_bug_report">Informoj pri ĉi tiu ano</string>
+    <string name="title_activity_group_details">Informoj pri la komunumo</string>
+    <string name="title_activity_choose_sticker">Sendi glumarkon</string>
+
+    <string name="dialog_title_third_party_licences">Permesiloj de eksteraj liverantoj</string>
+
+    <string name="loading">Ŝarganta…</string>
+
+    <string name="ok">Bone</string>
+    <string name="cancel">Nuligi</string>
+    <string name="save">Konservi</string>
+    <string name="leave">Eliri</string>
+    <string name="send">Sendi</string>
+    <string name="copy">Kopii</string>
+    <string name="resend">Resendi</string>
+    <string name="redact">Forigi</string>
+    <string name="quote">Citi</string>
+    <string name="download">Elŝuti</string>
+    <string name="share">Diskonigi</string>
+    <string name="speak">Paroli</string>
+    <string name="clear">Forviŝi</string>
+    <string name="later">Pli malfrue</string>
+    <string name="forward">Plusendi</string>
+    <string name="permalink">Fiksligilo</string>
+    <string name="view_source">Vidi fonton</string>
+    <string name="view_decrypted_source">Vidi malĉifritan fonton</string>
+    <string name="delete">Forigi</string>
+    <string name="rename">Renomi</string>
+    <string name="title_activity_member_details">Membro-Detaloj</string>
+    <string name="title_activity_historical">Historia</string>
+    <string name="report_content">Reporti enhavon</string>
+    <string name="active_call">Aktiva alvoko</string>
+    <string name="ongoing_conference_call_voice">voĉo</string>
     </resources>

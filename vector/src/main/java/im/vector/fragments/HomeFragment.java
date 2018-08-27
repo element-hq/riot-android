@@ -21,9 +21,6 @@ import android.support.v4.content.ContextCompat;
 import android.support.v4.view.GestureDetectorCompat;
 import android.support.v4.widget.NestedScrollView;
 import android.support.v7.widget.LinearLayoutManager;
-
-import org.matrix.androidsdk.util.Log;
-
 import android.view.GestureDetector;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
@@ -31,22 +28,19 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import org.matrix.androidsdk.data.Room;
-import org.matrix.androidsdk.data.RoomAccountData;
 import org.matrix.androidsdk.data.RoomTag;
 import org.matrix.androidsdk.listeners.MXEventListener;
+import org.matrix.androidsdk.util.Log;
 
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collection;
 import java.util.Collections;
 import java.util.Comparator;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
 import butterknife.BindView;
 import im.vector.R;
-import im.vector.VectorApp;
 import im.vector.adapters.HomeRoomAdapter;
 import im.vector.util.HomeRoomsViewModel;
 import im.vector.util.PreferencesManager;
@@ -67,6 +61,9 @@ public class HomeFragment extends AbsHomeFragment implements HomeRoomAdapter.OnS
 
     @BindView(R.id.direct_chats_section)
     HomeSectionView mDirectChatsSection;
+
+    @BindView(R.id.server_notices_section)
+    HomeSectionView mServerNoticesSection;
 
     @BindView(R.id.rooms_section)
     HomeSectionView mRoomsSection;
@@ -196,7 +193,19 @@ public class HomeFragment extends AbsHomeFragment implements HomeRoomAdapter.OnS
         mLowPrioritySection.setupRoomRecyclerView(new LinearLayoutManager(getActivity(), LinearLayoutManager.HORIZONTAL, false),
                 R.layout.adapter_item_circular_room_view, true, this, null, null);
 
-        mHomeSectionViews = Arrays.asList(mInvitationsSection, mFavouritesSection, mDirectChatsSection, mRoomsSection, mLowPrioritySection);
+        // Server notice
+        mServerNoticesSection.setTitle(R.string.system_alerts_header);
+        mServerNoticesSection.setHideIfEmpty(true);
+        mServerNoticesSection.setPlaceholders(null, getString(R.string.no_result_placeholder));
+        mServerNoticesSection.setupRoomRecyclerView(new LinearLayoutManager(getActivity(), LinearLayoutManager.HORIZONTAL, false),
+                R.layout.adapter_item_circular_room_view, true, this, null, null);
+
+        mHomeSectionViews = Arrays.asList(mInvitationsSection,
+                mFavouritesSection,
+                mDirectChatsSection,
+                mRoomsSection,
+                mLowPrioritySection,
+                mServerNoticesSection);
 
         // Add listeners to hide the floating button when needed
         final GestureDetectorCompat gestureDetector = new GestureDetectorCompat(mActivity, new GestureDetector.SimpleOnGestureListener() {
@@ -253,11 +262,12 @@ public class HomeFragment extends AbsHomeFragment implements HomeRoomAdapter.OnS
     private void refreshData(final HomeRoomsViewModel.Result result) {
         final boolean pinMissedNotifications = PreferencesManager.pinMissedNotifications(getActivity());
         final boolean pinUnreadMessages = PreferencesManager.pinUnreadMessages(getActivity());
-        Comparator<Room> notificationComparator = RoomUtils.getNotifCountRoomsComparator(mSession, pinMissedNotifications, pinUnreadMessages);
+        final Comparator<Room> notificationComparator = RoomUtils.getNotifCountRoomsComparator(mSession, pinMissedNotifications, pinUnreadMessages);
         sortAndDisplay(result.getFavourites(), notificationComparator, mFavouritesSection);
         sortAndDisplay(result.getDirectChats(), notificationComparator, mDirectChatsSection);
         sortAndDisplay(result.getLowPriorities(), notificationComparator, mLowPrioritySection);
         sortAndDisplay(result.getOtherRooms(), notificationComparator, mRoomsSection);
+        sortAndDisplay(result.getServerNotices(), notificationComparator, mServerNoticesSection);
         mActivity.hideWaitingView();
         mInvitationsSection.setRooms(mActivity.getRoomInvitations());
     }

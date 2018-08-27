@@ -25,7 +25,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.SharedPreferences;
-import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.content.res.Configuration;
 import android.content.res.Resources;
@@ -38,7 +37,6 @@ import android.os.Looper;
 import android.preference.PreferenceManager;
 import android.support.multidex.MultiDex;
 import android.support.multidex.MultiDexApplication;
-import android.support.v4.content.ContextCompat;
 import android.text.TextUtils;
 import android.util.Pair;
 
@@ -46,18 +44,10 @@ import com.facebook.stetho.Stetho;
 
 import org.matrix.androidsdk.MXSession;
 import org.matrix.androidsdk.util.Log;
-import org.piwik.sdk.Piwik;
-import org.piwik.sdk.QueryParams;
-import org.piwik.sdk.TrackMe;
-import org.piwik.sdk.Tracker;
-import org.piwik.sdk.TrackerConfig;
-import org.piwik.sdk.extra.CustomVariables;
-import org.piwik.sdk.extra.TrackHelper;
 
 import java.io.File;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.Date;
@@ -85,6 +75,7 @@ import im.vector.gcm.GcmRegistrationManager;
 import im.vector.services.EventStreamService;
 import im.vector.settings.FontScale;
 import im.vector.util.CallsManager;
+import im.vector.util.PermissionsToolsKt;
 import im.vector.util.PhoneNumberUtils;
 import im.vector.util.PreferencesManager;
 import im.vector.util.RageShake;
@@ -297,7 +288,7 @@ public class VectorApp extends MultiDexApplication {
                     restartActivity(activity);
                 }
 
-                listPermissionStatuses();
+                PermissionsToolsKt.logPermissionStatuses(VectorApp.this);
             }
 
             @Override
@@ -484,28 +475,6 @@ public class VectorApp extends MultiDexApplication {
             }
         }
     }
-
-
-    /**
-     * List the used permissions statuses.
-     */
-    private void listPermissionStatuses() {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-            final List<String> permissions = Arrays.asList(
-                    android.Manifest.permission.CAMERA,
-                    android.Manifest.permission.RECORD_AUDIO,
-                    android.Manifest.permission.WRITE_EXTERNAL_STORAGE,
-                    android.Manifest.permission.READ_CONTACTS);
-
-            Log.d(LOG_TAG, "## listPermissionStatuses() : list the permissions used by the app");
-            for (String permission : permissions) {
-                Log.d(LOG_TAG, "Status of [" + permission + "] : " +
-                        ((PackageManager.PERMISSION_GRANTED == ContextCompat.checkSelfPermission(instance, permission)) ?
-                                "PERMISSION_GRANTED" : "PERMISSION_DENIED"));
-            }
-        }
-    }
-
 
     /**
      * Stop the background detection.

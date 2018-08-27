@@ -72,20 +72,20 @@
     <string name="no_room_placeholder">لا غرف</string>
     <string name="no_public_room_placeholder">لا غرف عمومية متوفرة</string>
     <plurals name="public_room_nb_users">
-	<item quantity="zero">لا مستخدمين</item>
-	<item quantity="one">مستخدم واحد</item>
-	<item quantity="two">مستخدمان</item>
-	<item quantity="few">%d مستخدمين</item>
-	<item quantity="many">%d مستخدما</item>
-	<item quantity="other">%d مستخدم</item>
-</plurals>
+        <item quantity="zero">لا مستخدمين</item>
+        <item quantity="one">مستخدم واحد</item>
+        <item quantity="two">مستخدمان</item>
+        <item quantity="few">%d مستخدمين</item>
+        <item quantity="many">%d مستخدما</item>
+        <item quantity="other">%d مستخدم</item>
+    </plurals>
 
     <string name="send_bug_report_include_logs">أرسِل السجلات</string>
     <string name="send_bug_report_include_crash_logs">أرسِل سجلات الانهيار</string>
     <string name="send_bug_report_include_screenshot">أرسِل لقطة شاشة</string>
     <string name="send_bug_report_description">رجاءً صِف المشكلة. ما الذي فعلته؟ ما الذي توقعت حدوثه؟ ما الذي حدث؟</string>
     <string name="send_bug_report_placeholder">صِف المشكلة هنا</string>
-    <string name="send_bug_report_logs_description">لنقدر على تحليل المشاكل، ستُرسل السجلات من هذا العميل مع بلاغ العلة هذا. إن أردت إرسال النص أعلاه فقط، رجاءً أزل تأشير:</string>
+    <string name="send_bug_report_logs_description">لنقدر على تحليل المشاكل، ستُرسل السجلات من هذا العميل مع بلاغ العلة هذا. سوف لن يُنشر بلاغ العلة (وذلك يشمل السجلات ولقطات الشاشة) لعموم الناس. إن أردت إرسال النص أعلاه فقط، رجاءً أزل تأشير:</string>
     <string name="send_bug_report_app_crashed">انهار التطبيق في آخر مرة. أتريد إرسال بلاغ انهيار؟</string>
 
     <string name="send_bug_report_sent">أُرسل بلاغ العلة بنجاح</string>
@@ -202,10 +202,6 @@
     <string name="room_creation_title">دردشة جديدة</string>
     <string name="room_creation_add_member">أضِف عضوا</string>
     <string name="room_e2e_alert_title">تحذير!</string>
-    <string name="format_time_s">ثا</string>
-    <string name="format_time_m">دق</string>
-    <string name="format_time_h">سا</string>
-    <string name="format_time_d">يوم</string>
 
     <string name="room_participants_leave_prompt_title">ترك الغرفة</string>
     <string name="room_participants_leave_prompt_msg">أمتأكّد من ترك الغرفة؟</string>
@@ -899,7 +895,6 @@
 
     <!-- group details -->
     <string name="title_activity_room">الغرفة</string>
-    <string name="and">و</string>
     <string name="groups_invite_header">دعوة</string>
     <string name="send_files_in">أرسل إلى</string>
     <string name="title_activity_choose_sticker">أرسِل ملصقا</string>
@@ -928,8 +923,6 @@
     <string name="room_participants_online">متّصل</string>
     <string name="room_participants_offline">غير متّصل</string>
     <string name="room_participants_idle">خامل</string>
-    <string name="room_participants_now">الآن</string>
-    <string name="room_participants_ago"/>
 
     <string name="settings_notification_privacy">خصوصيّة الإخطارات</string>
     <string name="settings_notification_privacy_warning">يعمل Riot.im في الخلفية ليُبقي محتوى رسائل الإخطارات خاصًّا. يمكنك تغيير هذا الخيار لتقليل استخدام البطارية.</string>
@@ -972,4 +965,5 @@
     <string name="deactivate_account_prompt_password">رجاءً اكتب كلمة السر للمتابعة:</string>
     <string name="error_empty_field_your_password">رجاءً اكتب كلمة السر.</string>
 
-</resources>
+<string name="send_bug_report_description_in_english">رجاءً اكتب الوصف بالإنجليزية إن أمكن.</string>
+    </resources>

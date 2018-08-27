@@ -88,6 +88,7 @@ import javax.microedition.khronos.egl.EGLSurface;
 
 import im.vector.R;
 import im.vector.VectorApp;
+import im.vector.util.PermissionsToolsKt;
 import im.vector.util.ViewUtilKt;
 import im.vector.view.RecentMediaLayout;
 import im.vector.view.VideoRecordView;
@@ -296,8 +297,9 @@ public class VectorMediasPickerActivity extends MXCActionBarActivity implements 
             @Override
             public boolean onLongClick(View v) {
                 if (mIsVideoRecordingSupported
-                        && CommonActivityUtils.checkPermissions(CommonActivityUtils.REQUEST_CODE_PERMISSION_VIDEO_RECORDING,
-                        VectorMediasPickerActivity.this)) {
+                        && PermissionsToolsKt.checkPermissions(PermissionsToolsKt.PERMISSIONS_FOR_VIDEO_RECORDING,
+                        VectorMediasPickerActivity.this,
+                        PermissionsToolsKt.PERMISSION_REQUEST_CODE)) {
                     mRecordAnimationView.startAnimation();
                     startVideoRecord();
                 }
@@ -364,8 +366,8 @@ public class VectorMediasPickerActivity extends MXCActionBarActivity implements 
     }
 
     @Override
-    public void onRequestPermissionsResult(int aRequestCode, @NonNull String[] aPermissions, @NonNull int[] aGrantResults) {
-        //if (aRequestCode == CommonActivityUtils.REQUEST_CODE_PERMISSION_VIDEO_RECORDING) {
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        //if (aRequestCode == CommonActivityUtils.PERMISSIONS_FOR_VIDEO_RECORDING) {
         // do nothing
         // the user has to long press again on the focus button
         //}

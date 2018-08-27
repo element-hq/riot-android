@@ -43,7 +43,6 @@
     <string name="room_no_conference_call_in_encrypted_rooms">Las llamadas de conferencia no pueden ser realizadas en salas cifradas</string>
     <string name="send_anyway">Enviar de todos modos</string>
     <string name="or">o</string>
-    <string name="and">y</string>
     <string name="invite">Invitar</string>
 
     <!-- actions -->
@@ -95,9 +94,9 @@ Seleccione exportar para crear un archivo de respaldo antes de cerrar la sesión
     <string name="no_room_placeholder">Sin salas</string>
     <string name="no_public_room_placeholder">No hay salas públicas disponibles</string>
     <plurals name="public_room_nb_users">
-	<item quantity="one">1 usuario</item>
-	<item quantity="other">%d usuarios</item>
-</plurals>
+        <item quantity="one">1 usuario</item>
+        <item quantity="other">%d usuarios</item>
+    </plurals>
 
     <string name="send_bug_report_include_logs">Enviar informes</string>
     <string name="send_bug_report_include_crash_logs">Mandar informes de fallas</string>
@@ -122,8 +121,6 @@ Seleccione exportar para crear un archivo de respaldo antes de cerrar la sesión
     <string name="logout">Salir</string>
     <string name="hs_url">Enlace de el Servidor</string>
     <string name="identity_url">Enlace del Servidor Entidad</string>
-    <string name="user">usuario</string>
-    <string name="users">usuarios</string>
     <string name="search">Buscar</string>
 
     <string name="start_new_chat">Comenzar chat nuevo</string>
@@ -299,12 +296,6 @@ Los dispositivos no podrán descifrar el historial de la sala desde antes de ent
 
 Mensajes cifrados no serán visibles en cuentas que no implementan el cifrado.</string>
 
-    <!--  Time -->
-    <string name="format_time_s">s</string>
-    <string name="format_time_m">m</string>
-    <string name="format_time_h">h</string>
-    <string name="format_time_d">d</string>
-
     <!--  Chat participants -->
     <string name="room_participants_leave_prompt_title">Salir de la sala</string>
     <string name="room_participants_leave_prompt_msg">¿Estás seguro que quieres salir de la sala?</string>
@@ -314,8 +305,6 @@ Mensajes cifrados no serán visibles en cuentas que no implementan el cifrado.</
     <string name="room_participants_online">Conectado</string>
     <string name="room_participants_offline">Desconectado</string>
     <string name="room_participants_idle">Ocioso</string>
-    <string name="room_participants_now">ahora</string>
-    <string name="room_participants_ago">en el pasado</string>
 
     <string name="room_participants_header_admin_tools">HERRAMIENTAS DE ADMINISTRADOR</string>
     <string name="room_participants_header_call">LLAMAR</string>
@@ -385,7 +374,6 @@ Mensajes cifrados no serán visibles en cuentas que no implementan el cifrado.</
     <string name="room_details_people">Personas</string>
     <string name="room_details_files">Archivos</string>
     <string name="room_details_settings">Configuraciones</string>
-    <string name="room_details_selected">seleccionado</string>
     <string name="malformed_id">Identificación malformada. Debe ser correo electrónico o identificación de Matrix como \'@localpart:domain\'</string>
     <string name="room_details_people_invited_group_name">INVITADO</string>
     <string name="room_details_people_present_group_name">ENTRO</string>
@@ -426,8 +414,6 @@ Mensajes cifrados no serán visibles en cuentas que no implementan el cifrado.</
 
     <!-- Directory -->
     <string name="directory_search_results_title">Buscar directorio</string>
-    <string name="directory_search_room">%1$d sala</string>
-    <string name="directory_search_room_for">%1$d sala encontrada por %2$s</string>
     <string name="directory_searching_title">Buscando directorio..</string>
 
     <!-- home room settings -->
@@ -700,4 +686,80 @@ Lo puedes hacer ahora o luego desde las configuraciones de la aplicación.</stri
 
     <!-- historical -->
     <string name="historical_placeholder">Search for historical</string>
-</resources>
+<string name="notification_sync_in_progress">Sincronizando</string>
+    <string name="loading">Cargando...</string>
+
+    <string name="download">Descargar</string>
+    <string name="speak">Hablar</string>
+    <string name="offline">Desconectado</string>
+
+    <string name="action_exit">Salir</string>
+    <string name="actions">Acciones</string>
+    <string name="bottom_action_groups">Comunidades</string>
+
+    <string name="groups_invite_header">Invitar</string>
+    <string name="groups_header">Comunidades</string>
+    <string name="no_group_placeholder">No hay grupos</string>
+
+    <string name="option_send_voice">Enviar audio</string>
+
+    <string name="option_send_sticker">Enviar sticker</string>
+    <string name="option_take_photo">Tomar foto</string>
+    <string name="option_take_video">Grabar video</string>
+
+    <string name="error_no_external_application_found">Lo sentimos, no se encontró una aplicación externa para completar esta acción.</string>
+
+    <string name="login_mobile_device">Móvil</string>
+
+    <string name="e2e_re_request_encryption_key_dialog_title">Solicitud enviada</string>
+    <string name="groups_list">Lista de grupos</string>
+
+    <string name="call">Llamar</string>
+    <string name="list_members">Lista de miembros</string>
+    <string name="room_sync_in_progress">Sincronizando...</string>
+    <plurals name="room_header_active_members_count">
+	<item quantity="one">1 miembro activo</item>
+	<item quantity="other">%d miembros activos</item>
+</plurals>
+    <plurals name="room_title_members">
+	<item quantity="one">1 miembro</item>
+	<item quantity="other">%d miembros</item>
+</plurals>
+    <plurals name="format_time_s">
+	<item quantity="one">1s</item>
+	<item quantity="other">%ds</item>
+</plurals>
+    <plurals name="format_time_m">
+	<item quantity="one">1m</item>
+	<item quantity="other">%dm</item>
+</plurals>
+    <plurals name="format_time_h">
+	<item quantity="one">1h</item>
+	<item quantity="other">%dh</item>
+</plurals>
+    <plurals name="format_time_d">
+	<item quantity="one">1d</item>
+	<item quantity="other">%dd</item>
+</plurals>
+
+    <plurals name="room_details_selected">
+	<item quantity="one">1 seleccionada</item>
+	<item quantity="other">%d seleccionadas</item>
+</plurals>
+    <plurals name="directory_search_rooms">
+	<item quantity="one">1 sala</item>
+	<item quantity="other">%d salas</item>
+</plurals>
+    <string name="room_settings_all_messages">Todos los mensajes</string>
+    <string name="settings_notification_privacy_normal">Normal</string>
+    <string name="deactivate_account_title">Desactivar Cuenta</string>
+    <string name="avatar">Foto de perfil</string>
+
+    <string name="group_details_home">Inicio</string>
+    <string name="community_name">Nombre de la comunidad</string>
+    <string name="encrypted_message">Mensaje cifrado</string>
+
+    <string name="notification_on">Activado</string>
+    <string name="notification_off">Desactivado</string>
+    <string name="command_description_markdown">Activar/desactivar Markdown</string>
+    </resources>

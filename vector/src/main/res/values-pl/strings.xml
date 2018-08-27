@@ -35,7 +35,6 @@
     <string name="room_no_conference_call_in_encrypted_rooms">Połączenia grupowe nie są obsługiwane w szyfrowanych pokojach</string>
     <string name="send_anyway">Wyślij mimo wszystko</string>
     <string name="or">i</string>
-    <string name="and">lub</string>
     <string name="invite">Zaproś</string>
     <string name="offline">Offline</string>
 
@@ -82,11 +81,11 @@ Utwórz kopię zapasową, zanim się wylogujesz.</string>
     <string name="no_room_placeholder">Brak pokojów</string>
     <string name="no_public_room_placeholder">Nie są dostępne publiczne pokoje</string>
     <plurals name="public_room_nb_users">
-	<item quantity="one">1 użytkownik</item>
-	<item quantity="few">%d użytkowników</item>
-	<item quantity="many">%d użytkowników</item>
-	<item quantity="other"/>
-</plurals>
+        <item quantity="one">1 użytkownik</item>
+        <item quantity="few">%d użytkowników</item>
+        <item quantity="many">%d użytkowników</item>
+        <item quantity="other"/>
+    </plurals>
 
     <string name="send_bug_report_include_logs">Wyślij dzienniki</string>
     <string name="send_bug_report_include_crash_logs">Wyślij dzienniki awarii</string>
@@ -111,8 +110,6 @@ Utwórz kopię zapasową, zanim się wylogujesz.</string>
     <string name="login">Zaloguj się</string>
     <string name="logout">Wyloguj</string>
     <string name="hs_url">Adres serwera</string>
-    <string name="user">użytkownik</string>
-    <string name="users">użytkownicy</string>
     <string name="search">Szukaj</string>
 
     <string name="start_new_chat">Rozpocznij nową rozmowę</string>
@@ -244,10 +241,6 @@ Przyznaj dostęp w następnym oknie.</string>
     <string name="room_creation_add_member">Dodaj członka</string>
     <string name="room_title_one_member">1 członek</string>
     <string name="room_e2e_alert_title">Ostrzeżenie!</string>
-    <string name="format_time_s">sek.</string>
-    <string name="format_time_m">min.</string>
-    <string name="format_time_h">godz.</string>
-    <string name="format_time_d">dni</string>
 
     <string name="room_participants_leave_prompt_title">Opuść pokój</string>
     <string name="room_participants_leave_prompt_msg">Czy na pewno chcesz opuścić pokój?</string>
@@ -257,8 +250,6 @@ Przyznaj dostęp w następnym oknie.</string>
     <string name="room_participants_online">Online</string>
     <string name="room_participants_offline">Offline</string>
     <string name="room_participants_idle">Zajęty</string>
-    <string name="room_participants_now">teraz</string>
-    <string name="room_participants_ago">temu</string>
 
     <string name="room_participants_header_admin_tools">NARZĘDZIA ADMINISTRACYJNE</string>
     <string name="room_participants_header_call">DZWOŃ</string>
@@ -316,7 +307,6 @@ Przyznaj dostęp w następnym oknie.</string>
     <string name="room_details_people">Ludzie</string>
     <string name="room_details_files">Pliki</string>
     <string name="room_details_settings">Ustawienia</string>
-    <string name="room_details_selected">zaznaczone</string>
     <string name="room_details_people_invited_group_name">ZAPROSZONO</string>
     <string name="room_details_people_present_group_name">DOŁĄCZONO</string>
 
@@ -351,8 +341,6 @@ Przyznaj dostęp w następnym oknie.</string>
     <string name="room_recents_join_room_prompt">Wprowadź ID lub nazwę pokoju</string>
 
     <string name="directory_search_results_title">Przeglądaj katalog</string>
-    <string name="directory_search_room">%1$d pokój</string>
-    <string name="directory_search_room_for">Znaleziono %1$d pokój dla wyniku %2$s</string>
     <string name="directory_searching_title">Wyszukiwanie katalogu..</string>
 
     <string name="room_settings_favourite">Dodaj do ulubionych</string>
@@ -551,8 +539,6 @@ Wprowadź hasło, aby kontynuować.</string>
 <string name="reason_colon">Powód: %1$s</string>
     <string name="has_been_banned">Zostałeś zbanowany z %1$s przez %2$s</string>
     <string name="has_been_kicked">Zostałeś wyrzucony z %1$s przez %2$s</string>
-    <string name="group_rooms">%d pokojów</string>
-    <string name="group_one_room">1 pokój</string>
     <string name="group_details_rooms">Pokoje</string>
     <string name="joined">Dołączył</string>
     <string name="group_details_people">Ludzie</string>
@@ -966,9 +952,6 @@ Czy chcesz dodać teraz kilka?</string>
     <string name="invited">Zaproszony</string>
     <string name="filter_group_members">Filtrowanie członków grupy</string>
     <string name="filter_group_rooms">Filtrowanie pokoi grupy</string>
-
-    <string name="group_one_member">1 członek</string>
-    <string name="group_members">%d członków</string>
 
     <string name="group_no_long_description">Administrator społeczności nie podał długiego opisu tej społeczności.</string>
 

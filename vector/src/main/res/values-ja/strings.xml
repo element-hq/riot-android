@@ -44,8 +44,8 @@
     <string name="direct_chats_header">会話</string>
     <string name="no_public_room_placeholder">公開された部屋がありません</string>
     <plurals name="public_room_nb_users">
-	<item quantity="other">%d 名</item>
-</plurals>
+        <item quantity="other">%d 名</item>
+    </plurals>
 
     <string name="send_bug_report">不具合報告</string>
     <string name="send_bug_report_description">不具合の内容と状況の説明をお願い致します。あなたは何をしましたか？何が起こると思いますか？実際何が起こったのですか？</string>
@@ -113,10 +113,6 @@
     <string name="room_jump_to_first_unread">最初の未読位置へ移動.</string>
 
     <string name="room_e2e_alert_title">警告！</string>
-    <string name="format_time_s">秒</string>
-    <string name="format_time_m">分</string>
-    <string name="format_time_h">時間</string>
-    <string name="format_time_d">日</string>
 
     <string name="room_participants_leave_prompt_title">部屋を退室</string>
     <string name="room_participants_leave_prompt_msg">本当にこの部屋を退室しますか？</string>
@@ -158,8 +154,6 @@
     <string name="room_creation_add_member">参加者を追加</string>
     <string name="room_title_one_member">1名</string>
     <string name="room_participants_remove_prompt_msg">本当に%sさんを退室させますか?</string>
-    <string name="room_participants_now">現在</string>
-    <string name="room_participants_ago">前</string>
 
     <string name="room_participants_header_devices">端末</string>
 
@@ -351,7 +345,6 @@
     <string name="missing_permissions_warning">権限が無いため、一部の機能が利用できない可能性があります。</string>
     <string name="missing_permissions_to_start_conf_call">この部屋で会議を開始するためには招待権限が必要です</string>
     <string name="send_anyway">とにかく送る</string>
-    <string name="and">と</string>
     <string name="action_sign_out">ログアウト</string>
     <string name="action_sign_out_confirmation">セキュリティを確保するため、ログアウトするとエンドツーエンド暗号鍵がすべて削除され、再度ログインすると暗号化された発言履歴が読み取れなくなります。
 ログアウトする前に暗号鍵を端末の記憶装置へ出力し、保管をしてください。</string>
@@ -482,7 +475,6 @@
     <string name="room_recents_join_room_title">部屋へ参加</string>
     <string name="room_recents_join">参加</string>
     <string name="directory_search_results_title">部屋一覧を見る</string>
-    <string name="directory_search_room">%1$d 部屋</string>
     <string name="room_settings_leave_conversation">退室</string>
     <string name="room_sliding_menu_messages">会話</string>
     <string name="room_sliding_menu_settings">設定</string>
@@ -532,8 +524,6 @@
     <string name="username">ユーザ名</string>
     <string name="hs_url">接続先サーバ URL</string>
     <string name="identity_url">認証サーバ URL</string>
-    <string name="user">ユーザ</string>
-    <string name="users">ユーザ</string>
     <string name="auth_login">ログイン</string>
     <string name="login_mobile_device">携帯端末</string>
 
@@ -658,7 +648,6 @@ Riotアプリがあなたの電話帳へアクセスすることを許可しま�
     <string name="ssl_unexpected_existing_expl">証明書はあなたの電話に信頼されていたものから変更されています。これはきわめて異常な事態です。この新しい証明書は承認しないことを強く推奨します。</string>
     <string name="ssl_expected_existing_expl">証明書は以前信頼されていたものから信頼されていないものへと変更されています。サーバがその証明書を更新した可能性があります。予測されるフィンガープリントを取得するために、サーバの管理者に連絡してください。</string>
     <string name="ssl_only_accept">サーバの管理者が上のフィンガープリントと一致するものを発行した場合に限り、証明書を承認してください。</string>
-    <string name="room_details_selected">選択済</string>
     <string name="malformed_id">不正な形式のIDです。メールアドレスまたは\'@localpart:domain\'のようなMatrix IDを入力してください</string>
     <string name="room_event_action_report_prompt_reason">このコンテンツを報告する理由</string>
     <string name="room_event_action_report_prompt_ignore_user">このユーザによるすべてのメッセージを非表示にしますか？</string>
@@ -676,7 +665,6 @@ Riotアプリがあなたの電話帳へアクセスすることを許可しま�
     <string name="room_recents_invites">招待</string>
     <string name="room_recents_join_room_prompt">部屋のIDまたは部屋のエイリアスを入力してください</string>
 
-    <string name="directory_search_room_for">%2$sに%1$d部屋見つかりました</string>
     <string name="directory_searching_title">ディレクトリを検索中..</string>
 
     <string name="room_sliding_menu_third_party_notices">サードパーティのライセンスに関する通知</string>
@@ -829,11 +817,6 @@ Riotアプリがあなたの電話帳へアクセスすることを許可しま�
     <string name="filter_group_members">グループの参加者をフィルタリングする</string>
     <string name="filter_group_rooms">グループの部屋をフィルタリングする</string>
 
-    <string name="group_one_member">1名</string>
-    <string name="group_members">%d名</string>
-
-    <string name="group_one_room">1部屋</string>
-    <string name="group_rooms">%d部屋</string>
     <string name="group_no_long_description">管理者はこのコミュニティの詳細を規定していません。</string>
 
     <string name="has_been_kicked">あなたは%2$sによって%1$sから除外されました</string>

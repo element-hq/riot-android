@@ -39,7 +39,7 @@ import im.vector.util.PhoneNumberUtils;
 import im.vector.util.ThemeUtils;
 import kotlin.Pair;
 
-public class CountryPickerActivity extends RiotAppCompatActivity implements CountryAdapter.OnSelectCountryListener, SearchView.OnQueryTextListener {
+public class CountryPickerActivity extends VectorAppCompatActivity implements CountryAdapter.OnSelectCountryListener, SearchView.OnQueryTextListener {
 
     private static final String EXTRA_IN_WITH_INDICATOR = "EXTRA_IN_WITH_INDICATOR";
     public static final String EXTRA_OUT_COUNTRY_NAME = "EXTRA_OUT_COUNTRY_NAME";

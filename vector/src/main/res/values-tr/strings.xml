@@ -2,26 +2,181 @@
 <resources><string name="resources_language">tr</string>
     <string name="resources_country_code">TR</string>
 
-    <string name="light_theme">Aydınlık Tema</string>
-    <string name="dark_theme">Karanlık Tema</string>
+    <string name="light_theme">Açık Tema</string>
+    <string name="dark_theme">Koyu Tema</string>
     <string name="black_them">Siyah Tema</string>
 
-    <string name="notification_sync_in_progress">Eşzamanlama</string>
-    <string name="notification_listen_for_events">Olayları dinliyor</string>
+    <string name="notification_sync_in_progress">Eşzamanlama (senkronizasyon)</string>
+    <string name="notification_listen_for_events">Olaylar dinleniyor</string>
     <string name="notification_noisy_notifications">Sesli bildirimler</string>
     <string name="notification_silent_notifications">Sessiz bildirimler</string>
 
     <string name="title_activity_home">Mesajlar</string>
     <string name="title_activity_room">Oda</string>
     <string name="title_activity_settings">Ayarlar</string>
-    <string name="title_activity_member_details">Üye Detayları</string>
+    <string name="title_activity_member_details">Üye Ayrıntıları</string>
     <string name="title_activity_historical">Tarihsel</string>
     <string name="title_activity_bug_report">Hata raporu</string>
-    <string name="title_activity_group_details">Topluluk detayları</string>
+    <string name="title_activity_group_details">Topluluk ayrıntıları</string>
 
     <string name="loading">Yükleniyor...</string>
 
     <string name="ok">Tamam</string>
     <string name="cancel">İptal</string>
-    <string name="save">Kayıt</string>
+    <string name="save">Kaydet</string>
+    <string name="room_jump_to_first_unread">Okunmamış ilk mesaja git.</string>
+
+    <string name="title_activity_choose_sticker">Çıkartma gönder</string>
+
+    <string name="dialog_title_third_party_licences">3. parti lisansları</string>
+
+    <string name="leave">Ayrıl</string>
+    <string name="send">Gönder</string>
+    <string name="copy">Kopyala</string>
+    <string name="resend">Tekrar gönder</string>
+    <string name="redact">Düzenle</string>
+    <string name="quote">Alıntı</string>
+    <string name="download">İndir</string>
+    <string name="share">Paylaş</string>
+    <string name="speak">Konuş</string>
+    <string name="clear">Temiz</string>
+    <string name="later">Sonra</string>
+    <string name="forward">İleri</string>
+    <string name="permalink">Kalıcı bağlantı</string>
+    <string name="view_source">Kaynağı İncele</string>
+    <string name="view_decrypted_source">Deşifre Edilmiş Kaynağı İncele</string>
+    <string name="delete">Sil</string>
+    <string name="rename">Yeniden Adlandır</string>
+    <string name="report_content">İçeriği bildir</string>
+    <string name="active_call">Şu anki görüşme</string>
+    <string name="ongoing_conference_call">" Devam eden konferans görüşmesi. Ses ile veya görüntülü olarak bağlan."</string>
+    <string name="ongoing_conference_call_voice">ses</string>
+    <string name="ongoing_conference_call_video">video</string>
+    <string name="cannot_start_call">Görüşme başlatılamıyor, lütfen sonra tekrar deneyin</string>
+    <string name="missing_permissions_warning">Eksik izinler nedeni ile bazı özellikler eksik olabilir...</string>
+    <string name="missing_permissions_to_start_conf_call">Bu odada bir kişiyi davet edip, konferansa başlamak için izniniz yok</string>
+    <string name="missing_permissions_title_to_start_conf_call">Arama gerçekleştirilemiyor</string>
+    <string name="device_information">Cihaz ayrıntıları</string>
+    <string name="room_no_conference_call_in_encrypted_rooms">Konferans görüşmeleri şifreli (encrypted) odalarda desteklenmiyor</string>
+    <string name="send_anyway">Ne olursa olsun gönder</string>
+    <string name="or">veya</string>
+    <string name="invite">Davet et</string>
+    <string name="offline">Çevrimdışı</string>
+
+    <string name="action_exit">Çık</string>
+    <string name="actions">Aksiyonlar</string>
+    <string name="action_sign_out">Hesaptan çık</string>
+    <string name="action_sign_out_confirmation">Güvenlik için, hesaptan çıkmak uçtan uca şifrelenmiş anahtarı siler. Bu da tekrar giriş yapıldığında önceki şifrelenmiş sohbet geçmişini okunamaz hale getirir.
+Yedekleme için çıkmadan önce, dışa aktarı seçin.</string>
+    <string name="action_voice_call">Görüntülü Görüşme</string>
+    <string name="action_video_call">Görüntülü Görüşme</string>
+    <string name="action_global_search">Global arama</string>
+    <string name="action_mark_all_as_read">Hepsini okunmuş olarak işaretle</string>
+    <string name="action_historical">Tarihsel</string>
+    <string name="action_quick_reply">Hızlı yanıt</string>
+    <string name="action_open">Aç</string>
+    <string name="action_close">Kapa</string>
+    <string name="copied_to_clipboard">Panoya kopyalandı</string>
+    <string name="disable">Etkisizleştir</string>
+
+    <string name="dialog_title_confirmation">Onay</string>
+    <string name="dialog_title_warning">Uyarı</string>
+
+    <string name="bottom_action_home">Ev</string>
+    <string name="bottom_action_favourites">Favoriler</string>
+    <string name="bottom_action_people">Kişiler</string>
+    <string name="bottom_action_rooms">Odalar</string>
+    <string name="bottom_action_groups">Topluluklar</string>
+
+    <string name="home_filter_placeholder_home">Odaları ara</string>
+    <string name="home_filter_placeholder_favorites">Favorileri ara</string>
+    <string name="home_filter_placeholder_people">Kişileri ara</string>
+    <string name="home_filter_placeholder_rooms">Odaları ara</string>
+    <string name="home_filter_placeholder_groups">Toplulukları ara</string>
+
+    <string name="invitations_header">Davetler</string>
+    <string name="low_priority_header">Düşük öncelik</string>
+
+    <string name="direct_chats_header">Konuşmalar</string>
+    <string name="local_address_book_header">Yerel adres defteri</string>
+    <string name="user_directory_header">Kullanıcı sözlüğü</string>
+    <string name="matrix_only_filter">Sadece Matrix kullanıcıları</string>
+    <string name="no_conversation_placeholder">Konuşma yok</string>
+    <string name="no_contact_access_placeholder">Riot\'un rehberine erşmesine izin vermedin</string>
+    <string name="no_result_placeholder">Sonuç yok</string>
+
+    <string name="rooms_header">Odalar</string>
+    <string name="rooms_directory_header">Odalar dizini</string>
+    <string name="no_room_placeholder">Oda yok</string>
+    <string name="no_public_room_placeholder">Hiç girilebilir oda yok</string>
+    <plurals name="public_room_nb_users">
+	<item quantity="one">kullanıcı</item>
+	<item quantity="other">kullanıcı</item>
+</plurals>
+
+    <string name="groups_invite_header">Davet</string>
+    <string name="groups_header">Topluluk</string>
+    <string name="no_group_placeholder">Grup yok</string>
+
+    <string name="send_bug_report_include_logs">Sistem günlüğünü (log) gönder</string>
+    <string name="send_bug_report_include_crash_logs">Çökme günlüğünü (crash log) gönder</string>
+    <string name="send_bug_report_include_screenshot">Ekran görüntüsünü gönder</string>
+    <string name="send_bug_report">Hata Raporu</string>
+    <string name="send_bug_report_description">Lütfen hatayı tanımlayın. Ne yaptınız? Ne olmasını beklediniz? Ne oldu?</string>
+    <string name="send_bug_report_description_in_english">Mümkünse, lütfen yapacağınız açıklamayı İngilizce yazar mısınız?</string>
+    <string name="send_bug_report_placeholder">Sorununu buraya yaz</string>
+    <string name="send_bug_report_logs_description">Sorunları teşhis etmek için bu istemciden gelen sistem günlüğü (log) hata raporu ile gönderilecek. Bu hata raporu -sistem günlüğü ve ekran görüntülere dahil- halka açık bir şekilde görünür olmayacaktır. Eğer sadece alttaki yazıları göndermek istiyorsanız, lütfen şunun işaretini kaldırın:</string>
+    <string name="send_bug_report_alert_message">Telefonu süsran ile sağa sola sallıyor gibi görünüyorsun. Hata raporu göndermek ister misiniz?</string>
+    <string name="send_bug_report_app_crashed">Geçen sefer uygulama çökmüştü, hata raporu göndermek ister misiniz?</string>
+    <string name="send_bug_report_rage_shake">Hatayı bildirmek için öfke ile salla.</string>
+
+    <string name="send_bug_report_sent">Hata raporu başarılı bir şekilde gönderildi</string>
+    <string name="send_bug_report_failed">Hata raporu gönderilemedi (%s)</string>
+    <string name="send_bug_report_progress">Süreç (%%%s)</string>
+
+    <string name="read_receipt">Oku</string>
+
+    <string name="join_room">Odaya Katıl</string>
+    <string name="username">Kullanıcı adı</string>
+    <string name="create_account">Kayıt</string>
+    <string name="login">Giriş yap</string>
+    <string name="logout">Çıkış yap</string>
+    <string name="hs_url">Ev Sunucusu URL\'si</string>
+    <string name="search">Ara</string>
+
+    <string name="start_new_chat">Yeni Sohbete Başla</string>
+    <string name="start_voice_call">Sesli Görüşme Başlat</string>
+    <string name="start_video_call">Görüntülü Görüşme Başlat</string>
+
+    <string name="option_send_voice">Sesli mesej gönder</string>
+
+    <string name="start_new_chat_prompt_msg">%s kullanıcısı ile yeni bir sohbet başlatmak istediğinize emin misiniz?</string>
+    <string name="start_voice_call_prompt_msg">Sesli görüşme başlatmak istediğinize emin misiniz?</string>
+    <string name="start_video_call_prompt_msg">Görüntülü görüşme başlatmak istediğinize emin misiniz?</string>
+
+    <string name="option_send_files">Dosya gönder</string>
+    <string name="option_send_sticker">Çıkartma gönder</string>
+    <string name="option_take_photo_video">Video kaydet veya fotoğraf çek</string>
+    <string name="option_take_photo">Fotoğraf çek</string>
+    <string name="option_take_video">Video kaydet</string>
+
+    <string name="no_sticker_application_dialog_content">Şu anda etkin bir çıkartma paketiniz bulunmamakta
+
+Birkaç tane eklensin mi?</string>
+
+    <string name="go_on_with">İle devam et…</string>
+    <string name="error_no_external_application_found">Üzgünüm, bu eylemi gerçekleştirebilecek hiçbir harici uygulama bulunamadı.</string>
+
+    <string name="auth_login">Giriş yap</string>
+    <string name="auth_register">Kayıt ol</string>
+    <string name="auth_submit">Tamam</string>
+    <string name="auth_skip">Geç</string>
+    <string name="auth_send_reset_email">Gönder Sıfırla e-posta</string>
+    <string name="auth_return_to_login">Giriş ekranına geri dön</string>
+    <string name="auth_user_id_placeholder">E-posta veya kullanıcı adı</string>
+    <string name="auth_password_placeholder">Şifre</string>
+    <string name="auth_new_password_placeholder">Yeni şifre</string>
+    <string name="auth_user_name_placeholder">Kullanıcı adı</string>
+    <string name="auth_add_email_message">Kullanıcıların seni rahatça bulabilmesi ve şifreni yeniden oluşturabilmen için bir e-posta hesabı ekle.</string>
+    <string name="auth_add_phone_message">Kullanıcıların seni rahatça bulabilmesi için bir telefon numarası ekle.</string>
     </resources>

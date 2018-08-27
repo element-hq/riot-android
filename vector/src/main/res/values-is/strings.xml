@@ -42,7 +42,6 @@
     <string name="device_information">Upplýsingar um tæki</string>
     <string name="send_anyway">Senda samt</string>
     <string name="or">eða</string>
-    <string name="and">og</string>
     <string name="invite">Bjóða</string>
     <string name="offline">Ónettengt</string>
 
@@ -77,9 +76,9 @@
     <string name="rooms_header">Spjallrásir</string>
     <string name="no_room_placeholder">Engar spjallrásir</string>
     <plurals name="public_room_nb_users">
-	<item quantity="one">1 notandi</item>
-	<item quantity="other">%d notendur</item>
-</plurals>
+        <item quantity="one">1 notandi</item>
+        <item quantity="other">%d notendur</item>
+    </plurals>
 
     <string name="groups_invite_header">Bjóða</string>
     <string name="no_group_placeholder">Engir hópar</string>
@@ -97,8 +96,6 @@
     <string name="create_account">Skrá þig</string>
     <string name="login">Innskráning</string>
     <string name="logout">Útskráning</string>
-    <string name="user">notandi</string>
-    <string name="users">notendur</string>
     <string name="search">Leita</string>
 
     <string name="start_new_chat">Hefja nýtt spjall</string>
@@ -194,10 +191,6 @@
 </plurals>
     <string name="room_title_one_member">1 meðlimur</string>
     <string name="room_e2e_alert_title">Aðvörun!</string>
-    <string name="format_time_s">sek</string>
-    <string name="format_time_m">mín</string>
-    <string name="format_time_h">klst</string>
-    <string name="format_time_d">d</string>
 
     <string name="room_participants_leave_prompt_title">Fara af spjallrás</string>
     <string name="room_participants_leave_prompt_msg">Ertu viss um að þú viljir fara út spjallrásinni?</string>
@@ -206,8 +199,6 @@
     <string name="room_participants_online">Nettengt</string>
     <string name="room_participants_offline">Ónettengt</string>
     <string name="room_participants_idle">Iðjulaust</string>
-    <string name="room_participants_now">núna</string>
-    <string name="room_participants_ago">síðan</string>
 
     <string name="room_participants_header_admin_tools">KERFISSTJÓRNUNARTÓL</string>
     <string name="room_participants_header_call">SAMTAL</string>
@@ -240,7 +231,6 @@
     <string name="room_details_people">Fólk</string>
     <string name="room_details_files">Skrár</string>
     <string name="room_details_settings">Stillingar</string>
-    <string name="room_details_selected">valið</string>
     <string name="room_event_action_cancel_download">Hætta við niðurhal</string>
 
     <string name="room_displayname_two_members">%1$s og %2$s</string>
@@ -272,7 +262,6 @@
     <string name="room_recents_join_room">Taka þátt í spjallrás</string>
     <string name="room_recents_join_room_title">Taka þátt í spjallrás</string>
     <string name="directory_search_results_title">Vafra í möppu</string>
-    <string name="directory_search_room">%1$d spjallrás</string>
     <plurals name="directory_search_rooms">
 	<item quantity="one">1 spjallrás</item>
 	<item quantity="other">%d spjallrásir</item>
@@ -464,11 +453,6 @@
     <string name="filter_group_members">Sía meðlimi hóps</string>
     <string name="filter_group_rooms">Sía spjallrásahópa</string>
 
-    <string name="group_one_member">1 meðlimur</string>
-    <string name="group_members">%d meðlimir</string>
-
-    <string name="group_one_room">1 spjallrás</string>
-    <string name="group_rooms">%d spjallrásir</string>
     <string name="reason_colon">Ástæða: %1$s</string>
     <string name="forget_room">Gleyma spjallrás</string>
 
@@ -718,7 +702,6 @@ Til að halda áfram skaltu setja inn lykilorðið þitt.</string>
     <string name="room_displayname_invite_from">Boð frá %s</string>
     <string name="room_recents_join_room_prompt">Settu inn auðkenni eða samheiti spjallrásar</string>
 
-    <string name="directory_search_room_for">%1$d spjallrás fannst fyrir %2$s</string>
     <plurals name="directory_search_rooms_for">
 	<item quantity="one">%1$s spjallrás fannst fyrir %2$s</item>
 	<item quantity="other">%1$s spjallrásir fundust fyrir %2$s</item>

@@ -32,11 +32,11 @@ import org.matrix.androidsdk.fragments.MatrixMessageListFragment;
 
 import im.vector.PublicRoomsManager;
 import im.vector.R;
-import im.vector.activity.CommonActivityUtils;
 import im.vector.fragments.VectorSearchMessagesListFragment;
 import im.vector.fragments.VectorSearchPeopleListFragment;
 import im.vector.fragments.VectorSearchRoomsFilesListFragment;
 import im.vector.fragments.VectorSearchRoomsListFragment;
+import im.vector.util.PermissionsToolsKt;
 
 /**
  * Unified search pager adapter
@@ -231,7 +231,7 @@ public class VectorUnifiedSearchFragmentPagerAdapter extends FragmentPagerAdapte
             int titleId = pair == null ? -1 : pair.first;
 
             if (titleId == R.string.tab_title_search_people) {
-                return CommonActivityUtils.REQUEST_CODE_PERMISSION_MEMBERS_SEARCH;
+                return PermissionsToolsKt.PERMISSIONS_FOR_MEMBERS_SEARCH;
             }
         }
 

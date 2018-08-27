@@ -871,16 +871,24 @@ public class VectorUtils {
         String formattedString;
 
         if (secondsInterval < 0) {
-            formattedString = "0" + context.getString(R.string.format_time_s);
+            formattedString = context.getResources().getQuantityString(R.plurals.format_time_s, 0, 0);
         } else {
             if (secondsInterval < 60) {
-                formattedString = secondsInterval + context.getString(R.string.format_time_s);
+                formattedString = context.getResources().getQuantityString(R.plurals.format_time_s,
+                                                                           (int) secondsInterval,
+                                                                           (int) secondsInterval);
             } else if (secondsInterval < 3600) {
-                formattedString = (secondsInterval / 60) + context.getString(R.string.format_time_m);
+                formattedString = context.getResources().getQuantityString(R.plurals.format_time_m,
+                                                                           (int) (secondsInterval / 60),
+                                                                           (int) (secondsInterval / 60));
             } else if (secondsInterval < 86400) {
-                formattedString = (secondsInterval / 3600) + context.getString(R.string.format_time_h);
+                formattedString = context.getResources().getQuantityString(R.plurals.format_time_h,
+                                                                           (int) (secondsInterval / 3600),
+                                                                           (int) (secondsInterval / 3600));
             } else {
-                formattedString = (secondsInterval / 86400) + context.getString(R.string.format_time_d);
+                formattedString = context.getResources().getQuantityString(R.plurals.format_time_d,
+                                                                           (int) (secondsInterval / 86400),
+                                                                           (int) (secondsInterval / 86400));
             }
         }
 
@@ -977,10 +985,11 @@ public class VectorUtils {
 
         if (presenceText != null) {
             if ((null != user.currently_active) && user.currently_active) {
-                presenceText += " " + context.getString(R.string.room_participants_now);
+                presenceText = context.getString(R.string.room_participants_now, presenceText);
             } else if ((null != user.lastActiveAgo) && (user.lastActiveAgo > 0)) {
-                presenceText += " " + formatSecondsIntervalFloored(context,
-                        user.getAbsoluteLastActiveAgo() / 1000L) + " " + context.getString(R.string.room_participants_ago);
+                presenceText = context.getString(R.string.room_participants_ago, presenceText,
+                                                 formatSecondsIntervalFloored(context,
+                                                    user.getAbsoluteLastActiveAgo() / 1000L));
             }
         }
 

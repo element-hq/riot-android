@@ -30,26 +30,25 @@
     <string name="view_decrypted_source">Mostrar fuente desencriptada</string>
     <string name="delete">Borrar</string>
     <string name="rename">Renombrar</string>
-    <string name="report_content">Reportar contenido</string>
+    <string name="report_content">Denunciar contenido</string>
     <string name="active_call">Llamada activa</string>
-    <string name="ongoing_conference_call">" Llamada de conferencia en proceso. Participar con voz o vídeo."</string>
+    <string name="ongoing_conference_call">" Llamada de conferencia en proceso. Participar con voz o vídeo"</string>
     <string name="ongoing_conference_call_voice">voz</string>
     <string name="ongoing_conference_call_video">vídeo</string>
     <string name="cannot_start_call">No se pudo iniciar la llamada, inténtalo de nuevo más tarde</string>
-    <string name="missing_permissions_warning">Debido a permisos faltantes, algunas características podrían estar ausentes..</string>
+    <string name="missing_permissions_warning">Debido a permisos faltantes, algunas características podrían estar ausentes</string>
     <string name="missing_permissions_to_start_conf_call">Necesitas permiso para realizar una llamada de conferencia en esta sala</string>
     <string name="missing_permissions_title_to_start_conf_call">No se puede iniciar la llamada</string>
     <string name="device_information">Información del dispositivo</string>
-    <string name="room_no_conference_call_in_encrypted_rooms">Las llamadas de conferencia no pueden ser realizadas en salas cifradas</string>
+    <string name="room_no_conference_call_in_encrypted_rooms">Las llamadas de conferencia no se pueden realizar en salas cifradas</string>
     <string name="send_anyway">Enviar de todos modos</string>
     <string name="or">o</string>
-    <string name="and">y</string>
     <string name="invite">Invitar</string>
 
     <!-- actions -->
     <string name="action_sign_out">Cerrar la sesión</string>
-    <string name="action_sign_out_confirmation">Para la seguridad, al cerrar la sesión, las claves de cifrado de extremo-a-extremo serán borradas haciendo que el historial sea ilegible.
-Seleccione exportar para crear un archivo de respaldo antes de cerrar la sesión.</string>
+    <string name="action_sign_out_confirmation">Para la seguridad, al cerrar la sesión, las claves de cifrado de extremo-a-extremo se borrarán haciendo que el historial sea ilegible.
+Selecciona exportar para crear un archivo de respaldo antes de cerrar la sesión.</string>
     <string name="action_voice_call">Llamada de Voz</string>
     <string name="action_video_call">Llamada de Vídeo</string>
     <string name="action_global_search">Búsqueda global</string>
@@ -66,7 +65,7 @@ Seleccione exportar para crear un archivo de respaldo antes de cerrar la sesión
     <string name="dialog_title_warning">Advertencia</string>
 
     <!-- Bottom navigation buttons -->
-    <string name="bottom_action_home">Home</string>
+    <string name="bottom_action_home">Inicio</string>
     <string name="bottom_action_favourites">Favoritos</string>
     <string name="bottom_action_people">Personas</string>
     <string name="bottom_action_rooms">Salas</string>
@@ -84,9 +83,9 @@ Seleccione exportar para crear un archivo de respaldo antes de cerrar la sesión
     <!-- People fragment -->
     <string name="direct_chats_header">Conversaciones</string>
     <string name="local_address_book_header">Agenda local de direcciones</string>
-    <string name="matrix_only_filter">Solo contactos de Matrix</string>
+    <string name="matrix_only_filter">Sólo contactos de Matrix</string>
     <string name="no_conversation_placeholder">No hay conversaciones</string>
-    <string name="no_contact_access_placeholder">No has cedido permiso a Riot a acceder a tus contactos locales</string>
+    <string name="no_contact_access_placeholder">No has permitido que Riot lea a tus contactos locales</string>
     <string name="no_result_placeholder">No hay resultados</string>
 
     <!-- Rooms fragment -->
@@ -95,22 +94,22 @@ Seleccione exportar para crear un archivo de respaldo antes de cerrar la sesión
     <string name="no_room_placeholder">No hay salas</string>
     <string name="no_public_room_placeholder">No hay salas públicas disponibles</string>
     <plurals name="public_room_nb_users">
-	<item quantity="one">1 usuario</item>
-	<item quantity="other">%d usuarios</item>
-</plurals>
+        <item quantity="one">1 usuario</item>
+        <item quantity="other">%d usuarios</item>
+    </plurals>
 
     <string name="send_bug_report_include_logs">Enviar informes</string>
-    <string name="send_bug_report_include_crash_logs">Mandar informes de fallas</string>
+    <string name="send_bug_report_include_crash_logs">Enviar informes de fallas</string>
     <string name="send_bug_report_include_screenshot">Enviar una captura de pantalla</string>
     <string name="send_bug_report">Informe de Error</string>
     <string name="send_bug_report_description">Por favor describe el error. ¿Qué hiciste? ¿Qué esperabas que sucediera? ¿Qué sucedió realmente?</string>
     <string name="send_bug_report_placeholder">Describe tu problema aquí</string>
-    <string name="send_bug_report_logs_description">Para diagnosticar los problemas, informes de este cliente se enviarán junto a este reporte de error. Si prefiere solamente enviar el texto de arriba, desmarque:</string>
+    <string name="send_bug_report_logs_description">Para diagnosticar los problemas, registros de este cliente se enviarán junto a este informe de errores. Este informe, incluidos los registros y la captura de pantalla, no serán visibles públicamente. Si prefieres solamente enviar el texto de arriba, desmarque:</string>
     <string name="send_bug_report_alert_message">Pareces estar temblando de frustración. ¿Te gustaría enviar un reporte de error?</string>
-    <string name="send_bug_report_sent">El reporte de error ha sido enviado</string>
+    <string name="send_bug_report_sent">El reporte de error se ha enviado</string>
     <string name="send_bug_report_failed">El reporte de error no se pudo enviar (%s)</string>
     <string name="send_bug_report_progress">Progreso (%s%%)</string>
-    <string name="send_bug_report_app_crashed">La aplicación se suspenió en la ultima sesión. ¿Te gustaría enviar un informe de fallas?</string>
+    <string name="send_bug_report_app_crashed">La aplicación se suspendió en la última sesión. ¿Te gustaría enviar un informe de fallas?</string>
 
     <string name="send_files_in">Enviar a</string>
     <string name="read_receipt">Leer</string>
@@ -122,8 +121,6 @@ Seleccione exportar para crear un archivo de respaldo antes de cerrar la sesión
     <string name="logout">Salir</string>
     <string name="hs_url">URL del Servidor</string>
     <string name="identity_url">URL del Servidor de Identidad</string>
-    <string name="user">usuario</string>
-    <string name="users">usuarios</string>
     <string name="search">Buscar</string>
 
     <string name="start_new_chat">Comenzar chat nuevo</string>
@@ -144,8 +141,8 @@ Seleccione exportar para crear un archivo de respaldo antes de cerrar la sesión
     <string name="auth_password_placeholder">Contraseña</string>
     <string name="auth_new_password_placeholder">Contraseña nueva</string>
     <string name="auth_user_name_placeholder">Nombre de usuario</string>
-    <string name="auth_add_email_message">Añadir un correo electrónico a tu cuenta para que otros te descubran, y para que puedas restablecer tu contraseña.</string>
-    <string name="auth_add_phone_message">Añadir número de teléfono a tu cuenta para que otros te descubran.</string>
+    <string name="auth_add_email_message">Añadir un correo electrónico a tu cuenta para que otros te descubran, y para que puedas restablecer tu contraseña</string>
+    <string name="auth_add_phone_message">Añadir número de teléfono a tu cuenta para que otros te descubran</string>
     <string name="auth_add_email_phone_message">Añadir un correo electrónico y/o número de teléfono a tu cuenta para que otros te descubran.
 
 El correo electrónico te permitirá restablecer tu contraseña.</string>
@@ -164,7 +161,7 @@ El correo electrónico te permitirá reiniciar tu contraseña.</string>
     <string name="auth_missing_password">Contraseña ausente</string>
     <string name="auth_invalid_email">"Esto no parece ser un correo electrónico válido"</string>
     <string name="auth_invalid_phone">Esto no parece ser un número de teléfono válido</string>
-    <string name="auth_email_already_defined">Este correo electrónico ya está ocupado.</string>
+    <string name="auth_email_already_defined">Este correo electrónico ya está ocupado</string>
     <string name="auth_missing_email">Correo electrónico ausente</string>
     <string name="auth_missing_phone">Número de teléfono ausente</string>
     <string name="auth_missing_email_or_phone">Correo electrónico o número de teléfono ausente</string>
@@ -241,7 +238,7 @@ Disculpe por la inconveniencia.</string>
 
     <!-- call string -->
     <string name="call_connected">Llamada conectada</string>
-    <string name="call_connecting">La llamada se esá conectando…</string>
+    <string name="call_connecting">La llamada se está conectando…</string>
     <string name="call_ended">Llamada finalizada</string>
     <string name="call_ring">Llamando…</string>
     <string name="incoming_call">Llamada Entrante</string>
@@ -252,11 +249,11 @@ Disculpe por la inconveniencia.</string>
     <string name="call_error_user_not_responding">El lado remoto no pudo contestar.</string>
     <string name="call_error_ice_failed">Conexión de media falló</string>
     <string name="call_error_camera_init_failed">La cámara no se pudo encender</string>
-    <string name="call_error_answered_elsewhere">llamada fue contestada en otra parte</string>
+    <string name="call_error_answered_elsewhere">La llamada fue contestada en otra parte</string>
 
     <!-- medias picker string -->
     <string name="media_picker_both_capture_title">Tomar una foto o grabar un video"</string>
-    <string name="media_picker_cannot_record_video">No pudo grabar video"</string>
+    <string name="media_picker_cannot_record_video">No se pudo grabar video"</string>
 
     <!-- permissions Android M -->
     <string name="permissions_rationale_popup_title">Información</string>
@@ -307,12 +304,6 @@ Los dispositivos no podrán descifrar el historial de la sala desde antes de ent
 
 Los mensajes cifrados no serán visibles en cuentas que no implementen el cifrado.</string>
 
-    <!--  Time -->
-    <string name="format_time_s">s</string>
-    <string name="format_time_m">m</string>
-    <string name="format_time_h">h</string>
-    <string name="format_time_d">d</string>
-
     <!--  Chat participants -->
     <string name="room_participants_leave_prompt_title">Salir de la sala</string>
     <string name="room_participants_leave_prompt_msg">¿Estás seguro que quieres salir de la sala?</string>
@@ -322,8 +313,6 @@ Los mensajes cifrados no serán visibles en cuentas que no implementen el cifrad
     <string name="room_participants_online">Conectado</string>
     <string name="room_participants_offline">Desconectado</string>
     <string name="room_participants_idle">Ocioso</string>
-    <string name="room_participants_now">ahora</string>
-    <string name="room_participants_ago">en el pasado</string>
 
     <string name="room_participants_header_admin_tools">HERRAMIENTAS DE ADMINISTRADOR</string>
     <string name="room_participants_header_call">LLAMAR</string>
@@ -362,7 +351,7 @@ Los mensajes cifrados no serán visibles en cuentas que no implementen el cifrad
     <string name="room_two_users_are_typing">%1$s &amp; %2$s están escribiendo…</string>
     <string name="room_many_users_are_typing">%1$s &amp; %2$s &amp; otros están escribiendo…</string>
     <string name="room_message_placeholder_encrypted">Enviar mensaje cifrado…</string>
-    <string name="room_message_placeholder_not_encrypted">Enviar mensaje (descifrado)…</string>
+    <string name="room_message_placeholder_not_encrypted">Enviar mensaje (sin cifrar)…</string>
     <string name="room_offline_notification">La conexión al servidor se perdió.</string>
     <string name="room_unsent_messages_notification">Mensajes no fueron enviados. ¿ %1$s o %2$s ahora?</string>
     <string name="room_unknown_devices_messages_notification">Mensajes no fueron enviados debido a la precencia de dispositivos no conocidos. ¿ %1$s o %2$s ahora?</string>
@@ -393,14 +382,15 @@ Los mensajes cifrados no serán visibles en cuentas que no implementen el cifrad
     <string name="room_details_people">Personas</string>
     <string name="room_details_files">Archivos</string>
     <string name="room_details_settings">Configuraciones</string>
-    <string name="room_details_selected">seleccionado</string>
     <string name="malformed_id">Identificación malformada. Debe ser correo electrónico o identificación de Matrix como \'@localpart:domain\'</string>
     <string name="room_details_people_invited_group_name">INVITADO</string>
     <string name="room_details_people_present_group_name">ENTRÓ</string>
 
     <!-- Room events -->
     <string name="room_event_action_report_prompt_reason">Razón por reportar este contenido</string>
-    <string name="room_event_action_report_prompt_ignore_user">¿Desea ocultar todos los mensajes de este usuario?</string>
+    <string name="room_event_action_report_prompt_ignore_user">¿Desea ocultar todos los mensajes de este usuario?
+
+Tenga en cuenta que esta acción reiniciará la app y puede tardar cierto tiempo.</string>
     <string name="room_event_action_cancel_upload">Cancelar Subida</string>
     <string name="room_event_action_cancel_download">Cancelar Descarga</string>
 
@@ -434,8 +424,6 @@ Los mensajes cifrados no serán visibles en cuentas que no implementen el cifrad
 
     <!-- Directory -->
     <string name="directory_search_results_title">Buscar directorio</string>
-    <string name="directory_search_room">%1$d sala</string>
-    <string name="directory_search_room_for">%1$d sala encontrada por %2$s</string>
     <string name="directory_searching_title">Buscando directorio..</string>
 
     <!-- home room settings -->
@@ -536,7 +524,9 @@ Los mensajes cifrados no serán visibles en cuentas que no implementen el cifrad
     <string name="settings_confirm_password">confirmar contraseña</string>
     <string name="settings_fail_to_update_password">La actualización de su contraseña falló</string>
     <string name="settings_password_updated">Su contraseña fue actualizada</string>
-    <string name="settings_unignore_user">¿Mostrar todo los mensajes de %s?</string>
+    <string name="settings_unignore_user">¿Mostrar todos los mensajes de %s?
+
+Tenga en cuenta que esta acción reiniciará la app y tardará cierto tiempo.</string>
 
     <string name="settings_delete_notification_targets_confirmation">¿Estás seguro que quieres quitar este objectivo de notificación?</string>
 
@@ -688,7 +678,9 @@ Los mensajes cifrados no serán visibles en cuentas que no implementan el cifrad
 
     <string name="encryption_information_verify_device">Verificar dispositivo</string>
     <string name="encryption_information_verify_device_warning">Para verificar que este dispositivo es confiable, por favor contacte el dueño de este dispositivo por otro medio (e.g. cara-a-cara o por llamada) y verifique que la clave de este dispositivo que ellos ven en su página de configuraciones coincide con el de abajo:</string>
-    <string name="encryption_information_verify_device_warning2">Si coinciden, seleccione Verificar. Si no, otro esta interceptando este dispositivo y vas a querer bloquearlo.\nEn el futuro, este procceso será mas sofisticado.</string>
+    <string name="encryption_information_verify_device_warning2">Si coinciden, seleccione el botón verificar inferior. 
+Si no es así, alguien está interceptando este dispositivo y debería agregarlo a la lista negra.
+En el futuro, este proceso de verificación será mas sofisticado.</string>
     <string name="encryption_information_verify_key_match">Verifico que las claves coinciden</string>
 
     <string name="e2e_enabling_on_app_update">Riot ahora cuenta con cifrado de extremo-a-extremo pero necesitas reentrar tu cuenta para prenderlo.
@@ -759,7 +751,7 @@ Lo puedes hacer ahora o luego desde las configuraciones de la aplicación.</stri
 
     <string name="login_mobile_device">Móvil</string>
 
-    <string name="call">LLamar</string>
+    <string name="call">Llamar</string>
     <string name="settings_notification_ringtone">Sonido de notificación</string>
     <string name="settings_containing_my_display_name">Mensajes que contengan mi nombre público</string>
     <string name="settings_containing_my_user_name">Mensajes que contengan mi nombre de usuario</string>
@@ -808,11 +800,11 @@ Lo puedes hacer ahora o luego desde las configuraciones de la aplicación.</stri
     <string name="unrecognized_command">Comando no reconocido: %s</string>
 
     <!-- notification statuses -->
-    <string name="notification_off">Off</string>
-    <string name="notification_on">On</string>
-    <string name="notification_noisy">Alto</string>
+    <string name="notification_off">Desactivado</string>
+    <string name="notification_on">Activado</string>
+    <string name="notification_noisy">Ruidoso</string>
 
-    <string name="encrypted_message">Mensaje encriptado</string>
+    <string name="encrypted_message">Mensaje cifrado</string>
 
 <string name="title_activity_group_details">Detalles de la comunidad</string>
 
@@ -829,12 +821,12 @@ Lo puedes hacer ahora o luego desde las configuraciones de la aplicación.</stri
 
     <string name="start_new_chat_prompt_msg">¿Está seguro que quiere empezar una nueva conversación con %s?</string>
     <string name="start_voice_call_prompt_msg">¿Está seguro que quiere empezar una llamada de voz?</string>
-    <string name="start_video_call_prompt_msg">¿Està seguro que quiere empezar una llamada de vídeo?</string>
+    <string name="start_video_call_prompt_msg">¿Está seguro que quiere empezar una llamada de vídeo?</string>
 
     <string name="groups_list">Lista de grupos</string>
 
-    <string name="room_participants_kick_prompt_msg">Está seguro que quiere echar este usuario de la conversación?</string>
-    <string name="room_participants_ban_prompt_msg">Está seguro que quiere vetar este usuario de esta conversación?</string>
+    <string name="room_participants_kick_prompt_msg">¿Está seguro que quiere echar este usuario de la conversación?</string>
+    <string name="room_participants_ban_prompt_msg">¿Está seguro de que quiere vetar a este usuario de esta conversación?</string>
 
     <string name="room_settings_all_messages_noisy">Todos los mensajes (ruidoso)</string>
     <string name="room_settings_all_messages">Todos los mensajes</string>
@@ -874,12 +866,6 @@ Lo puedes hacer ahora o luego desde las configuraciones de la aplicación.</stri
     <string name="invited">Ha sido invitado</string>
     <string name="filter_group_members">Filtro para miembros del grupo</string>
     <string name="filter_group_rooms">Filtro para salas de grupo</string>
-
-    <string name="group_one_member">1 miembro</string>
-    <string name="group_members">%d miembros</string>
-
-    <string name="group_one_room">1 sala</string>
-    <string name="group_rooms">%d salas</string>
 
     <string name="has_been_kicked">Ha sido echado de la sala %1$s por %2$s</string>
     <string name="has_been_banned">Ha sido vetado en %1$s por %2$s</string>
@@ -1019,4 +1005,34 @@ La visibilidad del mensaje en Matrix es similar al correo electrónico. Olvidar 
     <string name="settings_opt_in_of_analytics_prompt">Por favor, active las estadísticas para ayudarnos a mejorar Riot.</string>
     <string name="lock_screen_hint">Escriba aquí…</string>
 
+    <string name="send_bug_report_description_in_english">Si es posible, escribe la descripción en inglés.</string>
+    <string name="room_participants_action_unignore_prompt">¿Mostrar todos los mensajes de este usuario?
+
+Esta acción reiniciará la aplicación y puede llevar algún tiempo.</string>
+    <string name="room_message_placeholder_reply_to_encrypted">Enviar una respuesta cifrada…</string>
+    <string name="room_message_placeholder_reply_to_not_encrypted">Enviar una respuesta (sin cifrar)…</string>
+    <string name="settings_without_flair">Actualmente no eres miembro de ninguna comunidad.</string>
+
+    <string name="settings_labs_keyboard_options_to_send_message">Usa la tecla Enter para enviar el mensaje</string>
+    <string name="command_description_emote">Muestra la acción</string>
+    <string name="command_description_ban_user">Prohíbe la entrada al usuario con el ID dado</string>
+    <string name="command_description_unban_user">Permite de nuevo la entrada al usuario con el ID dado</string>
+    <string name="command_description_op_user">Define el nivel de poder de un usuario</string>
+    <string name="command_description_invite_user">Invita al usuario con el ID dado a la sala actual</string>
+    <string name="command_description_join_room">Entra en la sala con el alias dado</string>
+    <string name="command_description_part_room">Salir de la sala</string>
+    <string name="command_description_topic">Establecer el tema de la sala</string>
+    <string name="command_description_kick_user">Echar al usuario con el ID dado</string>
+    <string name="command_description_nick">Cambia tu nick mostrado</string>
+    <string name="command_description_markdown">Activar/desactivar Markdown</string>
+    <string name="command_description_clear_scalar_token">Para reparar la gestión de las aplicaciones Matrix</string>
+
+    <string name="settings_preview_media_before_sending">Ver media antes de enviar</string>
+
+    <string name="room_tombstone_versioned_description">Esta sala ha sido reemplazada o ya no está activa</string>
+    <string name="room_tombstone_continuation_link">La conversación continúa aquí</string>
+    <string name="room_tombstone_continuation_description">Esta sala es una continuación de otra conversación</string>
+    <string name="room_tombstone_predecessor_link">Pinchar aquí para ver mensajes más antiguos</string>
+
+<string name="command_description_deop_user">Degradar usuario con el id dado</string>
     </resources>

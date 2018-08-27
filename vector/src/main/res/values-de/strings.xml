@@ -32,18 +32,17 @@
     <string name="rename">Umbenennen</string>
     <string name="report_content">Inhalt melden</string>
     <string name="active_call">Aktives Gespräch</string>
-    <string name="ongoing_conference_call">" Konferenzgespräch läuft. Per Sprache oder Video beitreten."</string>
+    <string name="ongoing_conference_call">Konferenzgespräch läuft. Per Sprache oder Video beitreten.</string>
     <string name="ongoing_conference_call_voice">Sprache</string>
     <string name="ongoing_conference_call_video">Video</string>
     <string name="cannot_start_call">Das Gespräch kann nicht gestartet werden, bitte später erneut versuchen</string>
-    <string name="missing_permissions_warning">Aufgrund fehlender Berechtigungen stehen eventuell einige Funktionen nicht zur Verfügung..</string>
+    <string name="missing_permissions_warning">Aufgrund fehlender Berechtigungen stehen eventuell einige Funktionen vielleicht nicht zur Verfügung…</string>
     <string name="missing_permissions_to_start_conf_call">Dir fehlt das Recht ein Konferenzgespräch in diesem Raum zu starten</string>
     <string name="missing_permissions_title_to_start_conf_call">Kann Gespräch nicht starten</string>
     <string name="device_information">Geräteinformationen</string>
     <string name="room_no_conference_call_in_encrypted_rooms">Konferenzgespräche werden in verschlüsselten Räumen nicht unterstützt</string>
     <string name="send_anyway">Trotzdem senden</string>
     <string name="or">oder</string>
-    <string name="and">und</string>
     <string name="invite">Einladen</string>
 
     <!-- actions -->
@@ -94,9 +93,9 @@
     <string name="no_room_placeholder">Keine Räume</string>
     <string name="no_public_room_placeholder">Keine öffentl. Räume verfügbar</string>
     <plurals name="public_room_nb_users">
-	<item quantity="one">1 Benutzer</item>
-	<item quantity="other">%d Benutzer</item>
-</plurals>
+        <item quantity="one">1 Benutzer</item>
+        <item quantity="other">%d Benutzer</item>
+    </plurals>
 
     <string name="send_bug_report_include_logs">Logdateien übermitteln</string>
     <string name="send_bug_report_include_crash_logs">Absturzberichte übermitteln</string>
@@ -121,8 +120,6 @@
     <string name="logout">Abmelden</string>
     <string name="hs_url">Home-Server-URL</string>
     <string name="identity_url">Identitätsserver-URL</string>
-    <string name="user">Benutzer</string>
-    <string name="users">Benutzer</string>
     <string name="search">Suchen</string>
 
     <string name="start_new_chat">Neuen Chat starten</string>
@@ -306,12 +303,6 @@ Du möchtest dich evtl. mit einem anderen Account anmelden oder diese E-Mail-Adr
     <string name="room_e2e_alert_title">Achtung!</string>
     <string name="room_e2e_alert_message">Ende-zu-Ende-Verschlüsselung ist im Beta-Stadium und funktioniert möglicherweise nicht zuverlässig.\n\nDu solltest noch nicht darauf vertrauen, dass deine Daten richtig abgesichert werden.\n\nGeräte sind noch nicht in der Lage, den Chatverlauf vor dem Hinzufügen des Geräts zu entschlüsseln.\n\nVerschlüsselte Nachrichten werden auf Geräten, die Verschlüsselung noch nicht implementiert haben, nicht sichtbar sein.</string>
 
-    <!--  Time -->
-    <string name="format_time_s">s</string>
-    <string name="format_time_m">m</string>
-    <string name="format_time_h">h</string>
-    <string name="format_time_d">d</string>
-
     <!--  Chat participants -->
     <string name="room_participants_leave_prompt_title">Raum verlassen</string>
     <string name="room_participants_leave_prompt_msg">Bist du sicher, dass du den Raum verlassen möchtest?</string>
@@ -321,8 +312,6 @@ Du möchtest dich evtl. mit einem anderen Account anmelden oder diese E-Mail-Adr
     <string name="room_participants_online">Online</string>
     <string name="room_participants_offline">Offline</string>
     <string name="room_participants_idle">Untätig</string>
-    <string name="room_participants_now">jetzt</string>
-    <string name="room_participants_ago">zuvor</string>
 
     <string name="room_participants_header_admin_tools">ADMIN-WERKZEUGE</string>
     <string name="room_participants_header_call">ANRUFE</string>
@@ -353,7 +342,7 @@ Bist du sicher?</string>
     <string name="people_search_filter_text">Nur Matrix-Benutzer</string>
 
     <string name="people_search_invite_by_id_dialog_title">Benutzer per ID einladen</string>
-    <string name="people_search_invite_by_id_dialog_description">Bitte gebe eine oder mehrere E-Mail-Adressen oder eine Matrix-ID ein</string>
+    <string name="people_search_invite_by_id_dialog_description">Bitte gib eine oder mehrere E-Mail-Adressen oder eine Matrix-ID ein</string>
     <string name="people_search_invite_by_id_dialog_hint">E-Mail or Matrix-ID</string>
 
     <!--  Chat -->
@@ -393,7 +382,6 @@ Bist du sicher?</string>
     <string name="room_details_people">Personen</string>
     <string name="room_details_files">Dateien</string>
     <string name="room_details_settings">Einstellungen</string>
-    <string name="room_details_selected">ausgewählt</string>
     <string name="malformed_id">Ungültige ID. Eine E-Mail-Adresse oder eine Matrix-ID (\'@localpart:domain\') ist erforderlich</string>
     <string name="room_details_people_invited_group_name">EINGELADEN</string>
     <string name="room_details_people_present_group_name">TEILNEHMER</string>
@@ -436,8 +424,6 @@ Beachte: Diese Aktion wird die App neu starten und einige Zeit brauchen.</string
 
     <!-- Directory -->
     <string name="directory_search_results_title">Verzeichnis durchsuchen</string>
-    <string name="directory_search_room">%1$d Raum</string>
-    <string name="directory_search_room_for">%1$d Raum gefunden für %2$s</string>
     <string name="directory_searching_title">Verzeichnis wird durchsucht..</string>
 
     <!-- home room settings -->
@@ -515,7 +501,8 @@ Beachte: Diese Aktion wird die App neu starten und einige Zeit brauchen.</string
     <string name="devices_details_last_seen_title">Zuletzt gesehen</string>
     <string name="devices_details_last_seen_format">%1$s @ %2$s</string>
     <string name="devices_details_time_format">HH:mm:ss</string>
-    <string name="devices_delete_dialog_text">Diese Operation benötigt weitere Authentifizierung.\nUm fortzufahren, gebe dein Passwort ein.</string>
+    <string name="devices_delete_dialog_text">Diese Operation benötigt weitere Authentifizierung.
+Um fortzufahren, gib dein Passwort ein.</string>
     <string name="devices_delete_dialog_title">Authentifizierung</string>
     <string name="devices_delete_pswd">Passwort:</string>
     <string name="devices_delete_submit_button_label">Absenden</string>
@@ -691,7 +678,7 @@ Verschlüsselte Nachrichten werden auf Matrix-Clients, auf denen die Verschlüss
     <string name="encryption_information_unblock">Zulassen</string>
 
     <string name="encryption_information_verify_device">Gerät verifizieren</string>
-    <string name="encryption_information_verify_device_warning">" Um zu verifizieren, dass diesem Gerät vertraut werden kann, kontaktiere bitte den Besitzer des Gerätes über andere Kommunikationsmittel (z. B. persönlich oder telefonisch) und vergewissere dich, ob der Schüssel, den er in seinen Benutzereinstellungen für dieses Gerät sieht, mit folgendem übereinstimmt:"</string>
+    <string name="encryption_information_verify_device_warning">Um zu verifizieren, dass diesem Gerät vertraut werden kann, kontaktiere bitte den Besitzer des Gerätes über andere Kommunikationsmittel (z. B. persönlich oder telefonisch) und vergewissere dich, ob der Schüssel, den er in seinen Benutzereinstellungen für dieses Gerät sieht, mit folgendem übereinstimmt:</string>
     <string name="encryption_information_verify_device_warning2">Wenn er übereinstimmt, drücke unten den Bestätigen-Button.
 Stimmt er nicht überein, überwacht jemand anderes dieses Gerät und du solltest ggf. den Blockieren-Button drücken.
 In Zukunft wird dieser Bestätigungsprozess noch komfortabler gestaltet.</string>
@@ -712,7 +699,7 @@ Unbekannte Geräte:</string>
     <!-- directory activity  -->
     <string name="select_room_directory">Raum-Verzeichnis auswählen</string>
     <string name="directory_server_fail_to_retrieve_server">Der Server kann nicht verfügbar oder überlastet sein</string>
-    <string name="directory_server_type_homeserver">Gebe einen Heimserver ein um seine öffentlichen Räume aufzulisten</string>
+    <string name="directory_server_type_homeserver">Gib einen Heimserver ein, um seine öffentlichen Räume aufzulisten</string>
     <string name="directory_server_placeholder">Home-Server-URL</string>
     <string name="directory_server_all_rooms_on_server">Alle Räume auf dem %s-Server</string>
     <string name="directory_server_native_rooms">Alle nativen %s-Räume</string>
@@ -855,7 +842,7 @@ Unbekannte Geräte:</string>
     <string name="settings_vibrate_on_mention">Vibriere beim Erwähnen</string>
 
     <string name="room_settings_room_notifications_title">Benachrichtigungen</string>
-    <string name="room_settings_no_flair">" Dieser Raum zeigt keine Flairs für irgendeine Community"</string>
+    <string name="room_settings_no_flair">Dieser Raum zeigt keine Flairs für irgendeine Community an</string>
     <string name="room_settings_add_new_group">Neue Community-ID (z.B. +foo:matrix.org)</string>
     <string name="room_settings_invalid_group_format_dialog_title">Ungültige Community-ID</string>
     <string name="room_settings_invalid_group_format_dialog_body">\'%s\' ist keine valide Community-ID</string>
@@ -880,11 +867,6 @@ Unbekannte Geräte:</string>
     <string name="filter_group_members">Filter Gruppen-Mitglieder</string>
     <string name="filter_group_rooms">Filter Gruppen-Räume</string>
 
-    <string name="group_one_member">1 Mitglied</string>
-    <string name="group_members">%d Mitglieder</string>
-
-    <string name="group_one_room">1 Raum</string>
-    <string name="group_rooms">%d Räume</string>
     <string name="group_no_long_description">Der Community-Administrator hat keine lange Beschreibung für diese Community zur Verfügung gestellt.</string>
 
     <string name="has_been_kicked">Du wurdest von %2$s aus %1$s gekickt</string>
@@ -1028,7 +1010,7 @@ Die Sichtbarkeit deiner Nachrichten ist ähnlich zu E-Mails: Wenn wir deine Nach
 
     <string name="settings_labs_enable_send_voice">Sprachnachrichten (erfordert eine externe Anwendung um Sprachnachrichten aufzuzeichnen)</string>
 
-    <string name="error_empty_field_your_password">Bitte gebe dein Passwort ein.</string>
+    <string name="error_empty_field_your_password">Bitte gib dein Passwort ein.</string>
 
 <string name="send_bug_report_description_in_english">Wenn möglich, beschreibe bitte in Englisch.</string>
     <string name="room_message_placeholder_reply_to_encrypted">Sende verschlüsselte Antwort…</string>
@@ -1060,4 +1042,42 @@ Die Sichtbarkeit deiner Nachrichten ist ähnlich zu E-Mails: Wenn wir deine Nach
 <string name="room_participants_action_unignore_prompt">Zeige alle Nachrichten dieses Benutzers?
 
 Beachte: Diese Aktion wird die App neu starten und einige Zeit brauchen.</string>
+    <string name="missing_permissions_error">Nicht berechtigt diese Aktion durchzuführen.</string>
+    <plurals name="format_time_s">
+	<item quantity="one">1s</item>
+	<item quantity="other">%ds</item>
+</plurals>
+    <plurals name="format_time_m">
+	<item quantity="one">1m</item>
+	<item quantity="other">%dm</item>
+</plurals>
+    <plurals name="format_time_h">
+	<item quantity="one">1h</item>
+	<item quantity="other">%dh</item>
+</plurals>
+    <plurals name="format_time_d">
+	<item quantity="one">1d</item>
+	<item quantity="other">%dd</item>
+</plurals>
+
+    <string name="room_participants_now">Jetzt %1$s</string>
+    <string name="room_participants_ago">%1$s vor %2$s</string>
+
+    <string name="room_participants_invite_join_names">"%1$s, "</string>
+    <string name="room_participants_invite_join_names_and">%1$s und %2$s</string>
+    <string name="room_participants_invite_join_names_combined">%1$s %2$s</string>
+
+    <plurals name="room_details_selected">
+	<item quantity="one">1 ausgewählt</item>
+	<item quantity="other">%d ausgewählt</item>
+</plurals>
+    <plurals name="group_members">
+	<item quantity="one">1 Mitglied</item>
+	<item quantity="other">%d Mitglieder</item>
+</plurals>
+
+    <plurals name="group_rooms">
+	<item quantity="one">1 Raum</item>
+	<item quantity="other">%d Räume</item>
+</plurals>
     </resources>

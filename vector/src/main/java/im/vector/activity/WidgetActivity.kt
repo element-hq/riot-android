@@ -47,7 +47,7 @@ import org.matrix.androidsdk.util.Log
 /*
  * This class displays a widget
  */
-class WidgetActivity : RiotAppCompatActivity() {
+class WidgetActivity : VectorAppCompatActivity() {
 
     // the linked widget
     private var mWidget: Widget? = null

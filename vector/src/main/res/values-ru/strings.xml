@@ -20,7 +20,7 @@
     <string name="send">Отправить</string>
     <string name="copy">Копировать</string>
     <string name="resend">Повторить отправку</string>
-    <string name="redact">Скрыть</string>
+    <string name="redact">Удалить</string>
     <string name="quote">Цитата</string>
     <string name="share">Поделиться</string>
     <string name="later">Позже</string>
@@ -32,7 +32,7 @@
     <string name="rename">Переименовать</string>
     <string name="report_content">Содержание отчета</string>
     <string name="active_call">Активный вызов</string>
-    <string name="ongoing_conference_call">" Входящий конференц звонок. Присоединитесь голосом или видео."</string>
+    <string name="ongoing_conference_call">Установлен конференц-вызов. Присоединяйтесь с голосом или видео.</string>
     <string name="ongoing_conference_call_voice">голос</string>
     <string name="ongoing_conference_call_video">видео</string>
     <string name="cannot_start_call">Не удалось осуществить вызов, попробуйте позже</string>
@@ -43,7 +43,6 @@
     <string name="room_no_conference_call_in_encrypted_rooms">Конференц звонки не поддерживаются в зашифрованных комнатах</string>
     <string name="send_anyway">Отправить все равно</string>
     <string name="or">или</string>
-    <string name="and">и</string>
     <string name="invite">Приглашение</string>
 
     <!-- actions -->
@@ -95,19 +94,19 @@
     <string name="no_room_placeholder">Нет комнат</string>
     <string name="no_public_room_placeholder">Публичные комнаты недоступны</string>
     <plurals name="public_room_nb_users">
-	<item quantity="one">%d пользователь</item>
-	<item quantity="few">%d пользователя</item>
-	<item quantity="many">%d пользователей</item>
-	<item quantity="other"/>
-</plurals>
-    
+        <item quantity="one">%d пользователь</item>
+        <item quantity="few">%d пользователя</item>
+        <item quantity="many">%d пользователей</item>
+        <item quantity="other"/>
+    </plurals>
+
     <string name="send_bug_report_include_logs">Отправить логи</string>
     <string name="send_bug_report_include_crash_logs">Отправить журналы ошибок</string>
     <string name="send_bug_report_include_screenshot">Отправить скриншот</string>
     <string name="send_bug_report">Отчет об ошибке</string>
     <string name="send_bug_report_description">Пожалуйста опишите ошибку. Что вы делали? Что вы ожидали получить? Что произошло?</string>
     <string name="send_bug_report_placeholder">Опишите проблему здесь</string>
-    <string name="send_bug_report_logs_description">Для диагностики проблемы журналы работы приложения будут приложены к отчету об ошибке. Если вы предпочитаете не отправлять журналы, то снимите флаг:</string>
+    <string name="send_bug_report_logs_description">Для диагностики проблемы журналы работы приложения будут приложены к отчету об ошибке. Этот отчет, включая журналы и скриншот, не будет доступен публично. Если вы предпочитаете отправить только текст, то снимите отметку:</string>
     <string name="send_bug_report_alert_message">Хотите отправить отчет об ошибке?</string>
     <string name="send_bug_report_sent">Отчет об ошибке успешно отправлен</string>
     <string name="send_bug_report_failed">Сбой отправки отчета об ошибке (%s)</string>
@@ -124,8 +123,6 @@
     <string name="logout">Выйти</string>
     <string name="hs_url">URL сервера</string>
     <string name="identity_url">URL сервера авторизации</string>
-    <string name="user">пользователь</string>
-    <string name="users">пользователей</string>
     <string name="search">Поиск</string>
 
     <string name="start_new_chat">Начать новый чат</string>
@@ -310,13 +307,7 @@ Email также позволит вам при необходимости во�
 Устройства не смогут расшифровать историю переписки, которая велась до их входа в комнату.
 
 Зашифрованные сообщения не будут видны в клиентах, которые не применяют шифрование.</string>
-    
-    <!--  Time -->
-    <string name="format_time_s">с</string>
-    <string name="format_time_m">м</string>
-    <string name="format_time_h">ч</string>
-    <string name="format_time_d">д</string>
-    
+
     <!--  Chat participants -->
     <string name="room_participants_leave_prompt_title">Покинуть чат</string>
     <string name="room_participants_leave_prompt_msg">Вы уверены, что хотите покинуть чат?</string>
@@ -326,8 +317,6 @@ Email также позволит вам при необходимости во�
     <string name="room_participants_online">В сети</string>
     <string name="room_participants_offline">Недоступен</string>
     <string name="room_participants_idle">Покой</string>
-    <string name="room_participants_now">сейчас</string>
-    <string name="room_participants_ago">назад</string>
 
     <string name="room_participants_header_admin_tools">АДМИНИСТРИРОВАНИЕ</string>
     <string name="room_participants_header_call">ВЫЗОВ</string>
@@ -397,14 +386,15 @@ Email также позволит вам при необходимости во�
     <string name="room_details_people">Люди</string>
     <string name="room_details_files">Файлы</string>
     <string name="room_details_settings">Настройки</string>
-    <string name="room_details_selected">выбрано</string>
     <string name="malformed_id">Некорректный ID. Используйте email или Matrix ID вида \'@localpart:domain\'</string>
     <string name="room_details_people_invited_group_name">ПРИГЛАШЕНЫ</string>
     <string name="room_details_people_present_group_name">ПРИСОЕДИНИЛИСЬ</string>
     
     <!-- Room events -->
     <string name="room_event_action_report_prompt_reason">Причина отчета о контенте</string>
-    <string name="room_event_action_report_prompt_ignore_user">Вы хотите скрыть все сообщения этого пользователя?</string>
+    <string name="room_event_action_report_prompt_ignore_user">Вы хотите скрыть все сообщения этого пользователя?
+
+Учтите, что это действие перезапустит приложение и может занять некоторое время.</string>
     <string name="room_event_action_cancel_upload">Отменить загрузку</string>
     <string name="room_event_action_cancel_download">Отменить загрузку</string>
     
@@ -438,8 +428,6 @@ Email также позволит вам при необходимости во�
     
     <!-- Directory -->
     <string name="directory_search_results_title">Просмотр каталога</string>
-    <string name="directory_search_room">%1$d комната</string>
-    <string name="directory_search_room_for">%1$d комната найдена для %2$s</string>
     <string name="directory_searching_title">Поиск в каталоге..</string>
 
     <!-- home room settings -->
@@ -541,7 +529,9 @@ Email также позволит вам при необходимости во�
     <string name="settings_confirm_password">подтверждение пароля</string>
     <string name="settings_fail_to_update_password">Ошибка смены пароля</string>
     <string name="settings_password_updated">Пароль был обновлен</string>
-    <string name="settings_unignore_user">Отображать сообщения пользователя %s?</string>
+    <string name="settings_unignore_user">Отображать сообщения пользователя %s?
+
+Учтите, что это действие перезапустит приложение и может занять некоторое время.</string>
 
     <string name="settings_delete_notification_targets_confirmation">Вы уверены, что хотите удалить устройство для получения уведомлений?</string>
 
@@ -695,9 +685,9 @@ Email также позволит вам при необходимости во�
     <string name="encryption_information_unblock">Разрешить</string>
     
     <string name="encryption_information_verify_device">Проверить устройство</string>
-    <string name="encryption_information_verify_device_warning">" Для проверки устройства свяжитесь с его владельцем альтернативным способом (лично или по телефону) и запросите ключ, который он видит у себя в настройках пользователя. Проверьте что этот ключ совпадает с данными ниже:"</string>
-    <string name="encryption_information_verify_device_warning2">Если совпадает, то нажмите кнопку Подтвердить ниже. Если не совпадает, возможно вы захотите добавить устройство в черный список.
-В будущем данный процесс будет улучшен.</string>
+    <string name="encryption_information_verify_device_warning">Чтобы убедиться, что этому устройству можно доверять, обратитесь к его владельцу, используя другие способы (например, лично или по телефону), и спросите, соответствует ли ключ, который он видит в настройках для этого устройства:</string>
+    <string name="encryption_information_verify_device_warning2">"Если совпадает, то нажмите кнопку Подтвердить ниже. Если не совпадает, возможно кто-то пытается перехватить устройство и  вы захотите добавить его в черный список.
+В будущем данный процесс будет улучшен."</string>
     <string name="encryption_information_verify_key_match">Я проверил, что ключи совпадают</string>
     
     <string name="e2e_enabling_on_app_update">Riot теперь поддерживает сквозное шифрование, но вам нужно снова войти в систему, чтобы включить его.
@@ -883,11 +873,6 @@ Email также позволит вам при необходимости во�
     <string name="filter_group_members">Фильтр участников группы</string>
     <string name="filter_group_rooms">Фильтр комнат группы</string>
 
-    <string name="group_one_member">1 участник</string>
-    <string name="group_members">%d участников</string>
-
-    <string name="group_one_room">1 комната</string>
-    <string name="group_rooms">%d комнат</string>
     <string name="group_no_long_description">Администратор сообщества не предоставил подробного описания этого сообщества.</string>
 
     <string name="has_been_kicked">Вас выгнал %2$s из %1$s</string>
@@ -981,7 +966,7 @@ Email также позволит вам при необходимости во�
     <string name="notice_avatar">Заметка аватара</string>
     <string name="settings_flair">Настроение</string>
 
-    <string name="room_settings_no_flair">" Эта комната не показывает настроение для сообществ"</string>
+    <string name="room_settings_no_flair">Эта комната не показывает настроение для сообществ</string>
     <string name="settings_notification_privacy">Конфиденциальность уведомлений</string>
     <string name="settings_notification_privacy_warning">Riot.im работает в фоновом режиме для сохранения приватности ваших уведомлений. Вы можете изменить этот параметр, чтобы уменьшить потребление заряда батареи.</string>
     <string name="settings_notification_privacy_normal">Нормальный</string>
@@ -1054,4 +1039,86 @@ Email также позволит вам при необходимости во�
 
     <string name="error_empty_field_your_password">Пожалуйста, введите ваш пароль.</string>
 
-</resources>
+<string name="send_bug_report_description_in_english">Если возможно, добавьте описание на английском языке.</string>
+    <string name="room_message_placeholder_reply_to_encrypted">Отправить зашифрованный ответ…</string>
+    <string name="room_message_placeholder_reply_to_not_encrypted">Отправить ответ (незашифрованный)…</string>
+    <string name="settings_preview_media_before_sending">Предварительный просмотр медиа перед отправкой</string>
+
+    <string name="settings_without_flair">В настоящее время вы не являетесь участником каких-либо сообществ.</string>
+
+    <string name="settings_labs_keyboard_options_to_send_message">Используйте клавиатуру для ввода сообщения</string>
+    <string name="command_description_emote">Отображает действие</string>
+    <string name="command_description_ban_user">Банит пользователя с указанным ID</string>
+    <string name="command_description_unban_user">Разбанит пользователя с указанным ID</string>
+    <string name="command_description_op_user">Определение уровня доступа пользователя</string>
+    <string name="room_participants_action_unignore_prompt">Показать все сообщения от этого пользователя?
+
+Учтите, что это действие перезапустит приложение и может занять некоторое время.</string>
+    <string name="command_description_deop_user">Сбросить уровень доступа для пользователя с данным ID</string>
+    <string name="command_description_invite_user">Пригласить пользователя с данным ID в текущую комнату</string>
+    <string name="command_description_part_room">Покинуть комнату</string>
+    <string name="command_description_topic">Задать тему комнаты</string>
+    <string name="command_description_kick_user">Выкинуть пользователя с заданным ID</string>
+    <string name="command_description_nick">Изменить ваш псевдоним</string>
+    <string name="command_description_markdown">Вкл/выкл markdown</string>
+    <string name="room_tombstone_versioned_description">Эта комната была заменена и больше не активна</string>
+    <string name="room_tombstone_continuation_link">Этот разговор продолжается здесь</string>
+    <string name="room_tombstone_continuation_description">Эта комната является продолжением другого разговора</string>
+    <string name="room_tombstone_predecessor_link">Нажмите здесь для просмотра старых сообщений</string>
+
+<string name="command_description_join_room">Присоединиться к комнате с указанным псевдонимом</string>
+    <string name="command_description_clear_scalar_token">Для исправления управления приложениями Matrix</string>
+
+    <string name="missing_permissions_error">Из-за отсутствия разрешений это действие невозможно.</string>
+    <plurals name="format_time_s">
+	<item quantity="one">1s</item>
+	<item quantity="few">%ds</item>
+	<item quantity="many">%ds</item>
+	<item quantity="other"/>
+</plurals>
+    <plurals name="format_time_m">
+	<item quantity="one">1m</item>
+	<item quantity="few">%dm</item>
+	<item quantity="many">%dm</item>
+	<item quantity="other"/>
+</plurals>
+    <plurals name="format_time_h">
+	<item quantity="one">1h</item>
+	<item quantity="few">%dh</item>
+	<item quantity="many">%dh</item>
+	<item quantity="other"/>
+</plurals>
+    <plurals name="format_time_d">
+	<item quantity="one">1d</item>
+	<item quantity="few">%dd</item>
+	<item quantity="many">%dd</item>
+	<item quantity="other"/>
+</plurals>
+
+    <string name="room_participants_now">Сейчас %1$s</string>
+    <string name="room_participants_ago">%1$s %2$s назад</string>
+
+    <string name="room_participants_invite_join_names">"%1$s, "</string>
+    <string name="room_participants_invite_join_names_and">%1$s и %2$s</string>
+    <string name="room_participants_invite_join_names_combined">%1$s %2$s</string>
+
+    <plurals name="room_details_selected">
+	<item quantity="one">1 выбран</item>
+	<item quantity="few">%d выбрано</item>
+	<item quantity="many">%d выбраны</item>
+	<item quantity="other"/>
+</plurals>
+    <plurals name="group_members">
+	<item quantity="one">1 участник</item>
+	<item quantity="few">%d участника</item>
+	<item quantity="many">%d участников</item>
+	<item quantity="other"/>
+</plurals>
+
+    <plurals name="group_rooms">
+	<item quantity="one">1 комната</item>
+	<item quantity="few">%d комнаты</item>
+	<item quantity="many">%d комнат</item>
+	<item quantity="other"></item>
+</plurals>
+    </resources>

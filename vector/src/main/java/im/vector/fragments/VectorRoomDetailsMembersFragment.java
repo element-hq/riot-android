@@ -289,14 +289,14 @@ public class VectorRoomDetailsMembersFragment extends VectorBaseFragment {
 
         @Override
         public void onMatrixError(final MatrixError e) {
-            if (getRiotActivity() != null && MatrixError.M_CONSENT_NOT_GIVEN.equals(e.errcode)) {
-                getRiotActivity().runOnUiThread(
+            if (getVectorActivity() != null && MatrixError.M_CONSENT_NOT_GIVEN.equals(e.errcode)) {
+                getVectorActivity().runOnUiThread(
                         new Runnable() {
                             @Override
                             public void run() {
                                 mProgressView.setVisibility(View.GONE);
 
-                                getRiotActivity().getConsentNotGivenHelper().displayDialog(e);
+                                getVectorActivity().getConsentNotGivenHelper().displayDialog(e);
                             }
                         }
                 );
@@ -741,9 +741,9 @@ public class VectorRoomDetailsMembersFragment extends VectorBaseFragment {
 
                     @Override
                     public void onMatrixError(final MatrixError e) {
-                        if (getRiotActivity() != null) {
+                        if (getVectorActivity() != null) {
                             if (MatrixError.M_CONSENT_NOT_GIVEN.equals(e.errcode)) {
-                                getRiotActivity().getConsentNotGivenHelper().displayDialog(e);
+                                getVectorActivity().getConsentNotGivenHelper().displayDialog(e);
                             } else {
                                 Toast.makeText(getActivity(), e.getLocalizedMessage(), Toast.LENGTH_SHORT).show();
                                 kickNext();
@@ -866,7 +866,8 @@ public class VectorRoomDetailsMembersFragment extends VectorBaseFragment {
                 List<String> userIds = mAdapter.getSelectedUserIds();
 
                 if (0 != userIds.size()) {
-                    setActivityTitle(userIds.size() + " " + getString(R.string.room_details_selected));
+                    setActivityTitle(getResources().getQuantityString(R.plurals.room_details_selected,
+                                                                      userIds.size(), userIds.size()));
                 } else {
                     resetActivityTitle();
                 }
@@ -945,13 +946,13 @@ public class VectorRoomDetailsMembersFragment extends VectorBaseFragment {
 
                                     @Override
                                     public void onMatrixError(final MatrixError e) {
-                                        if (getRiotActivity() != null && MatrixError.M_CONSENT_NOT_GIVEN.equals(e.errcode)) {
-                                            getRiotActivity().runOnUiThread(new Runnable() {
+                                        if (getVectorActivity() != null && MatrixError.M_CONSENT_NOT_GIVEN.equals(e.errcode)) {
+                                            getVectorActivity().runOnUiThread(new Runnable() {
                                                 @Override
                                                 public void run() {
                                                     mProgressView.setVisibility(View.GONE);
 
-                                                    getRiotActivity().getConsentNotGivenHelper().displayDialog(e);
+                                                    getVectorActivity().getConsentNotGivenHelper().displayDialog(e);
                                                 }
                                             });
                                         } else {

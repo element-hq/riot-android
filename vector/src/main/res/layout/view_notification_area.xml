@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<merge xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_above="@id/bottom_separator"
+    android:minHeight="42dp"
+    android:paddingBottom="8dp"
+    android:paddingTop="8dp"
+    tools:background="@color/vector_fuchsia_color"
+    tools:parentTag="android.widget.RelativeLayout">
+
+    <ImageView
+        android:id="@+id/room_notification_icon"
+        android:layout_width="34dp"
+        android:layout_height="34dp"
+        android:layout_centerVertical="true"
+        android:layout_marginLeft="20dp"
+        android:padding="5dp"
+        tools:src="@drawable/vector_typing" />
+
+    <TextView
+        android:id="@+id/room_notification_message"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerVertical="true"
+        android:layout_marginLeft="68dp"
+        android:layout_marginRight="13dp"
+        android:accessibilityLiveRegion="polite"
+        android:textColor="?attr/room_notification_text_color"
+        tools:text="a text here" />
+
+</merge>

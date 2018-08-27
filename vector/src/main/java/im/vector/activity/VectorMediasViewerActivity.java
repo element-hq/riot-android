@@ -19,6 +19,7 @@ package im.vector.activity;
 
 import android.content.Intent;
 import android.net.Uri;
+import android.support.annotation.NonNull;
 import android.support.v4.view.ViewPager;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -43,6 +44,7 @@ import im.vector.R;
 import im.vector.VectorApp;
 import im.vector.adapters.VectorMediasViewerAdapter;
 import im.vector.db.VectorContentProvider;
+import im.vector.util.PermissionsToolsKt;
 import im.vector.util.SlidableMediaInfo;
 
 /**
@@ -70,6 +72,10 @@ public class VectorMediasViewerActivity extends MXCActionBarActivity {
 
     // the medias list
     private List<SlidableMediaInfo> mMediasList;
+
+    // Pending data during permission request
+    private int mPendingPosition;
+    private int mPendingAction;
 
     // the slide effect
     public class DepthPageTransformer implements ViewPager.PageTransformer {
@@ -219,12 +225,12 @@ public class VectorMediasViewerActivity extends MXCActionBarActivity {
      * Download the current video file
      */
     private void onAction(final int position, final int action) {
-        MXMediasCache mediasCache = Matrix.getInstance(this).getMediasCache();
+        final MXMediasCache mediasCache = Matrix.getInstance(this).getMediasCache();
         final SlidableMediaInfo mediaInfo = mMediasList.get(position);
 
         // check if the media has already been downloaded
         if (mediasCache.isMediaCached(mediaInfo.mMediaUrl, mediaInfo.mMimeType)) {
-            mediasCache.createTmpMediaFile(mediaInfo.mMediaUrl, mediaInfo.mMimeType, mediaInfo.mEncryptedFileInfo, new SimpleApiCallback<File>() {
+            mediasCache.createTmpDecryptedMediaFile(mediaInfo.mMediaUrl, mediaInfo.mMimeType, mediaInfo.mEncryptedFileInfo, new SimpleApiCallback<File>() {
                 @Override
                 public void onSuccess(File file) {
                     // sanity check
@@ -233,23 +239,25 @@ public class VectorMediasViewerActivity extends MXCActionBarActivity {
                     }
 
                     if (action == R.id.ic_action_download) {
-                        CommonActivityUtils.saveMediaIntoDownloads(VectorMediasViewerActivity.this,
-                                file, mediaInfo.mFileName, mediaInfo.mMimeType, new SimpleApiCallback<String>() {
-                                    @Override
-                                    public void onSuccess(String savedMediaPath) {
-                                        Toast.makeText(VectorApp.getInstance(), getText(R.string.media_slider_saved), Toast.LENGTH_LONG).show();
-                                    }
-                                });
+                        if (checkWritePermission(PermissionsToolsKt.PERMISSION_REQUEST_CODE)) {
+                            CommonActivityUtils.saveMediaIntoDownloads(VectorMediasViewerActivity.this,
+                                    file, mediaInfo.mFileName, mediaInfo.mMimeType, new SimpleApiCallback<String>() {
+                                        @Override
+                                        public void onSuccess(String savedMediaPath) {
+                                            Toast.makeText(VectorApp.getInstance(), getText(R.string.media_slider_saved), Toast.LENGTH_LONG).show();
+                                        }
+                                    });
+                        } else {
+                            mPendingPosition = position;
+                            mPendingAction = action;
+                        }
                     } else {
+                        // Move the file to the Share folder, to avoid it to be deleted because the Activity will be paused while the
+                        // user select an application to share the file
                         if (null != mediaInfo.mFileName) {
-                            File dstFile = new File(file.getParent(), mediaInfo.mFileName);
-
-                            if (dstFile.exists()) {
-                                dstFile.delete();
-                            }
-
-                            file.renameTo(dstFile);
-                            file = dstFile;
+                            file = mediasCache.moveToShareFolder(file, mediaInfo.mFileName);
+                        } else {
+                            file = mediasCache.moveToShareFolder(file, file.getName());
                         }
 
                         // shared / forward
@@ -313,5 +321,22 @@ public class VectorMediasViewerActivity extends MXCActionBarActivity {
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+    public boolean checkWritePermission(int requestCode) {
+        return PermissionsToolsKt.checkPermissions(PermissionsToolsKt.PERMISSIONS_FOR_WRITING_FILES, this, requestCode);
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        if (PermissionsToolsKt.allGranted(grantResults)) {
+            if (requestCode == PermissionsToolsKt.PERMISSION_REQUEST_CODE) {
+                // Request comes from here
+                onAction(mPendingPosition, mPendingAction);
+            } else if (requestCode == PermissionsToolsKt.PERMISSION_REQUEST_OTHER) {
+                // Request comes from adapter
+                mAdapter.downloadMediaAndExportToDownloads();
+            }
+        }
     }
 }

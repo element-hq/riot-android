@@ -34,7 +34,6 @@
     <string name="device_information">اطلاعات دستگاه</string>
     <string name="send_anyway">به هر حال ارسال کنید</string>
     <string name="or">یا</string>
-    <string name="and">و</string>
     <string name="invite">دعوت</string>
     <string name="offline">آفلاین</string>
 
@@ -60,9 +59,9 @@
     <string name="no_conversation_placeholder">هیچ مکالمه‌ای وجود ندارد</string>
     <string name="rooms_header">اتاق‌ها</string>
     <plurals name="public_room_nb_users">
-	<item quantity="one">1 کاربر</item>
-	<item quantity="other">%d کاربر</item>
-</plurals>
+        <item quantity="one">1 کاربر</item>
+        <item quantity="other">%d کاربر</item>
+    </plurals>
 
     <string name="groups_invite_header">دعوت</string>
     <string name="no_group_placeholder">هیچ گروهی وجود ندارد</string>
@@ -75,8 +74,6 @@
     <string name="create_account">ثبت نام</string>
     <string name="login">ورود</string>
     <string name="logout">خروج</string>
-    <string name="user">کاربر</string>
-    <string name="users">کاربران</string>
     <string name="search">جستجو</string>
 
     <string name="start_new_chat">شروع گپ جدید</string>

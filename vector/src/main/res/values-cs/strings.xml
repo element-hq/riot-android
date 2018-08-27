@@ -22,7 +22,6 @@
     <string name="ongoing_conference_call_voice">hlas</string>
     <string name="ongoing_conference_call_video">video</string>
     <string name="or">nebo</string>
-    <string name="and">a</string>
     <string name="invite">Pozvat</string>
     <string name="offline">Offline</string>
 
@@ -103,11 +102,11 @@ Zvolte export, chcete-li je zálohovat, než se odhlásíte.</string>
     <string name="no_room_placeholder">Žádne místností</string>
     <string name="no_public_room_placeholder">Žádné veřejné mistnosti nejsou k dispozici</string>
     <plurals name="public_room_nb_users">
-	<item quantity="one">1 uživatel</item>
-	<item quantity="few">%d uživatelé</item>
-	<item quantity="many">%d uživatelé</item>
-	<item quantity="other"/>
-</plurals>
+        <item quantity="one">1 uživatel</item>
+        <item quantity="few">%d uživatelé</item>
+        <item quantity="many">%d uživatelé</item>
+        <item quantity="other"/>
+    </plurals>
 
     <string name="groups_invite_header">Pozvat</string>
     <string name="groups_header">Komunity</string>
@@ -135,8 +134,6 @@ Zvolte export, chcete-li je zálohovat, než se odhlásíte.</string>
     <string name="logout">Odhlásit se</string>
     <string name="hs_url">Adresa domácího serveru URL</string>
     <string name="identity_url">Adresa serveru identit URL</string>
-    <string name="user">uživatel</string>
-    <string name="users">uživatelé</string>
     <string name="search">Hledat</string>
 
     <string name="start_new_chat">Začít novou konverzaci</string>

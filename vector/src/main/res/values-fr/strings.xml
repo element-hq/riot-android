@@ -26,17 +26,16 @@
     <string name="rename">Renommer</string>
     <string name="report_content">Signaler le contenu</string>
     <string name="active_call">Appel en cours</string>
-    <string name="ongoing_conference_call">" Téléconférence en cours. La rejoindre en vocal ou en vidéo."</string>
+    <string name="ongoing_conference_call">Téléconférence en cours. La rejoindre en vocal ou en vidéo.</string>
     <string name="ongoing_conference_call_voice">vocal</string>
     <string name="ongoing_conference_call_video">vidéo</string>
     <string name="cannot_start_call">Impossible d\'initier l\'appel, réessayez plus tard</string>
-    <string name="missing_permissions_warning">En raison de permissions manquantes, certaines fonctionnalités peuvent être absentes...</string>
+    <string name="missing_permissions_warning">En raison de permissions manquantes, certaines fonctionnalités peuvent être absentes…</string>
     <string name="missing_permissions_to_start_conf_call">Vous avez besoin de la permission d\'invitation pour initier une téléconférence dans ce salon</string>
     <string name="missing_permissions_title_to_start_conf_call">Impossible d\'initier l\'appel</string>
     <string name="device_information">Informations sur l\'appareil</string>
     <string name="room_no_conference_call_in_encrypted_rooms">Les téléconférences ne sont pas prises en charge dans les salons chiffrés</string>
     <string name="or">ou</string>
-    <string name="and">et</string>
     <string name="invite">Inviter</string>
 
     <string name="action_sign_out">Se déconnecter</string>
@@ -100,8 +99,6 @@ Cliquez sur exporter pour les sauvegarder avant de vous déconnecter.</string>
     <string name="logout">Se déconnecter</string>
     <string name="hs_url">URL du serveur d\'accueil</string>
     <string name="identity_url">URL du serveur d\'identité</string>
-    <string name="user">utilisateur</string>
-    <string name="users">participants</string>
     <string name="search">Rechercher</string>
 
     <string name="start_new_chat">Nouvelle discussion</string>
@@ -193,18 +190,12 @@ Cliquez sur exporter pour les sauvegarder avant de vous déconnecter.</string>
     <string name="room_creation_add_member">Ajouter un membre</string>
     <string name="room_title_one_member">1 membre</string>
     <string name="room_e2e_alert_title">Attention !</string>
-    <string name="format_time_s">s</string>
-    <string name="format_time_m">m</string>
-    <string name="format_time_h">h</string>
-    <string name="format_time_d">j</string>
 
     <string name="room_participants_leave_prompt_title">Quitter le salon</string>
     <string name="room_participants_create">Créer</string>
 
     <string name="room_participants_online">En ligne</string>
     <string name="room_participants_offline">Hors ligne</string>
-    <string name="room_participants_now">maintenant</string>
-    <string name="room_participants_ago">de là</string>
 
     <string name="room_participants_header_admin_tools">OUTILS DE L\'ADMINISTRATEUR</string>
     <string name="room_participants_header_call">APPEL</string>
@@ -245,7 +236,6 @@ Cliquez sur exporter pour les sauvegarder avant de vous déconnecter.</string>
     <string name="room_details_people">Participants</string>
     <string name="room_details_files">Fichiers</string>
     <string name="room_details_settings">Paramètres</string>
-    <string name="room_details_selected">choisi</string>
     <string name="room_details_people_invited_group_name">INVITÉS</string>
     <string name="room_details_people_present_group_name">MEMBRES</string>
 
@@ -586,8 +576,6 @@ Veuillez noter que cette action redémarrera l\'application et pourra prendre un
     <string name="room_displayname_two_members">%1$s et %2$s</string>
     <string name="room_recents_join_room_prompt">Saisissez un identifiant ou un alias de salon</string>
 
-    <string name="directory_search_room">%1$d salon</string>
-    <string name="directory_search_room_for">%1$d salon trouvé pour %2$s</string>
     <string name="settings_turn_screen_on">Allumer l\'écran pendant 3 secondes</string>
 
     <string name="settings_invited_to_room">Quand je suis invité sur un salon</string>
@@ -654,7 +642,7 @@ Les messages chiffrés ne seront pas visibles sur les clients qui n\'ont pas enc
     <string name="encryption_import_room_keys_summary">Importer les clés à partir d\'un fichier local</string>
     <string name="encryption_never_send_to_unverified_devices_summary">Ne jamais envoyer de messages chiffrés aux appareils non vérifiés depuis cet appareil</string>
 
-    <string name="encryption_information_verify_device_warning">" Pour vérifier que cet appareil est de confiance, contactez son propriétaire en utilisant un autre moyen (par exemple en personne ou par téléphone) et demandez-lui si la clé qu\'il voit dans ses paramètres utilisateur pour cet appareil correspond à la clé ci-dessous :"</string>
+    <string name="encryption_information_verify_device_warning">Pour vérifier que cet appareil est de confiance, contactez son propriétaire en utilisant un autre moyen (par exemple en personne ou par téléphone) et demandez-lui si la clé qu\'il voit dans ses paramètres utilisateur pour cet appareil correspond à la clé ci-dessous :</string>
     <string name="encryption_information_verify_device_warning2">Si elle correspond, appuyez sur le bouton Vérifier ci-dessous.
 Si ce n\'est pas le cas, quelqu\'un d\'autre intercepte cet appareil et vous devriez probablement le bloquer.
 À l\'avenir, ce processus de vérification sera plus évolué.</string>
@@ -813,7 +801,7 @@ Appareils inconnus :</string>
     <string name="settings_vibrate_on_mention">Vibrer lorsque l\'on mentionne quelqu\'un</string>
 
     <string name="room_settings_room_notifications_title">Notifications</string>
-    <string name="room_settings_no_flair">" Ce salon n\'a de vignettes pour aucune communauté"</string>
+    <string name="room_settings_no_flair">Ce salon n\'a de vignettes pour aucune communauté</string>
     <string name="room_settings_add_new_group">Nouvel identifiant de communauté (ex. +foo:matrix.org)</string>
     <string name="room_settings_invalid_group_format_dialog_title">Identifiant de communauté invalide</string>
     <string name="room_settings_invalid_group_format_dialog_body">\'%s\' n\'est pas un identifiant de communauté valide</string>
@@ -838,11 +826,6 @@ Appareils inconnus :</string>
     <string name="filter_group_members">Filtrer les membres du groupe</string>
     <string name="filter_group_rooms">Filtrer les salons du groupe</string>
 
-    <string name="group_one_member">Un membre</string>
-    <string name="group_members">%d membres</string>
-
-    <string name="group_one_room">Un salon</string>
-    <string name="group_rooms">%d salons</string>
     <string name="group_no_long_description">L\'administrateur de cette communauté n\'a pas encore fourni de description.</string>
 
     <string name="has_been_kicked">%2$s vous a exclu de %1$s</string>
@@ -1016,4 +999,42 @@ Veuillez noter que cette action redémarrera l\'application et pourra prendre un
     <string name="room_tombstone_continuation_description">Ce salon est la suite d\'une autre conversation</string>
     <string name="room_tombstone_predecessor_link">Cliquer ici pour voir les vieux messages</string>
 
-</resources>
+<string name="missing_permissions_error">En raison de permissions manquantes, cette action n\'est pas possible.</string>
+    <plurals name="format_time_s">
+	<item quantity="one">1 s</item>
+	<item quantity="other">%d s</item>
+</plurals>
+    <plurals name="format_time_m">
+	<item quantity="one">1 min</item>
+	<item quantity="other">%d min</item>
+</plurals>
+    <plurals name="format_time_h">
+	<item quantity="one">1 h</item>
+	<item quantity="other">%d h</item>
+</plurals>
+    <plurals name="format_time_d">
+	<item quantity="one">1 j</item>
+	<item quantity="other">%d j</item>
+</plurals>
+
+    <string name="room_participants_now">%1$s maintenant</string>
+    <string name="room_participants_ago">%1$s il y a %2$s</string>
+
+    <string name="room_participants_invite_join_names">"%1$s, "</string>
+    <string name="room_participants_invite_join_names_and">%1$s et %2$s</string>
+    <string name="room_participants_invite_join_names_combined">%1$s %2$s</string>
+
+    <plurals name="room_details_selected">
+	<item quantity="one">1 sélectionné</item>
+	<item quantity="other">%d sélectionnés</item>
+</plurals>
+    <plurals name="group_members">
+	<item quantity="one">1 participant</item>
+	<item quantity="other">%d participants</item>
+</plurals>
+
+    <plurals name="group_rooms">
+	<item quantity="one">1 salon</item>
+	<item quantity="other">%d salons</item>
+</plurals>
+    </resources>

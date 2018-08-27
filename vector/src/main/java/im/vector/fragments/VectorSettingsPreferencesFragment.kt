@@ -1183,7 +1183,7 @@ class VectorSettingsPreferencesFragment : PreferenceFragment(), SharedPreference
                         if (null != activity) {
                             activity.runOnUiThread {
                                 hideLoadingView()
-                                (activity as RiotAppCompatActivity).consentNotGivenHelper.displayDialog(e)
+                                (activity as VectorAppCompatActivity).consentNotGivenHelper.displayDialog(e)
                             }
                         }
                     } else {
@@ -1203,7 +1203,7 @@ class VectorSettingsPreferencesFragment : PreferenceFragment(), SharedPreference
      */
     private fun onUpdateAvatarClick() {
         activity.runOnUiThread {
-            if (CommonActivityUtils.checkPermissions(CommonActivityUtils.REQUEST_CODE_PERMISSION_TAKE_PHOTO, activity)) {
+            if (checkPermissions(PERMISSIONS_FOR_TAKING_PHOTO, activity, PERMISSION_REQUEST_CODE_LAUNCH_CAMERA)) {
                 val intent = Intent(activity, VectorMediasPickerActivity::class.java)
                 intent.putExtra(VectorMediasPickerActivity.EXTRA_AVATAR_MODE, true)
                 startActivityForResult(intent, VectorUtils.TAKE_IMAGE)
@@ -1240,7 +1240,8 @@ class VectorSettingsPreferencesFragment : PreferenceFragment(), SharedPreference
         if (resultCode == Activity.RESULT_OK) {
             when (requestCode) {
                 REQUEST_NOTIFICATION_RINGTONE -> {
-                    PreferencesManager.setNotificationRingTone(activity, data?.getParcelableExtra<Parcelable>(RingtoneManager.EXTRA_RINGTONE_PICKED_URI) as Uri)
+                    PreferencesManager.setNotificationRingTone(activity,
+                            data?.getParcelableExtra<Parcelable>(RingtoneManager.EXTRA_RINGTONE_PICKED_URI) as Uri?)
 
                     // test if the selected ring tone can be played
                     if (null == PreferencesManager.getNotificationRingToneName(activity)) {
@@ -1288,7 +1289,7 @@ class VectorSettingsPreferencesFragment : PreferenceFragment(), SharedPreference
                                                     if (null != activity) {
                                                         activity.runOnUiThread {
                                                             hideLoadingView()
-                                                            (activity as RiotAppCompatActivity).consentNotGivenHelper.displayDialog(e)
+                                                            (activity as VectorAppCompatActivity).consentNotGivenHelper.displayDialog(e)
                                                         }
                                                     }
                                                 } else {
@@ -2417,60 +2418,64 @@ class VectorSettingsPreferencesFragment : PreferenceFragment(), SharedPreference
     /**
      * Manage the e2e keys export.
      */
-    private fun exportKeys() {
-        val dialogLayout = activity.layoutInflater.inflate(R.layout.dialog_export_e2e_keys, null)
-        val builder = AlertDialog.Builder(activity)
-                .setTitle(R.string.encryption_export_room_keys)
-                .setView(dialogLayout)
+    fun exportKeys() {
+        // We need WRITE_EXTERNAL permission
+        if (checkPermissions(PERMISSIONS_FOR_WRITING_FILES, activity, PERMISSION_REQUEST_CODE_EXPORT_KEYS)) {
+            val dialogLayout = activity.layoutInflater.inflate(R.layout.dialog_export_e2e_keys, null)
+            val builder = AlertDialog.Builder(activity)
+                    .setTitle(R.string.encryption_export_room_keys)
+                    .setView(dialogLayout)
 
-        val passPhrase1EditText = dialogLayout.findViewById<TextInputEditText>(R.id.dialog_e2e_keys_passphrase_edit_text)
-        val passPhrase2EditText = dialogLayout.findViewById<TextInputEditText>(R.id.dialog_e2e_keys_confirm_passphrase_edit_text)
-        val exportButton = dialogLayout.findViewById<Button>(R.id.dialog_e2e_keys_export_button)
-        val textWatcher = object : TextWatcher {
-            override fun beforeTextChanged(s: CharSequence, start: Int, count: Int, after: Int) {
+            val passPhrase1EditText = dialogLayout.findViewById<TextInputEditText>(R.id.dialog_e2e_keys_passphrase_edit_text)
+            val passPhrase2EditText = dialogLayout.findViewById<TextInputEditText>(R.id.dialog_e2e_keys_confirm_passphrase_edit_text)
+            val exportButton = dialogLayout.findViewById<Button>(R.id.dialog_e2e_keys_export_button)
+            val textWatcher = object : TextWatcher {
+                override fun beforeTextChanged(s: CharSequence, start: Int, count: Int, after: Int) {
 
+                }
+
+                override fun onTextChanged(s: CharSequence, start: Int, before: Int, count: Int) {
+                    exportButton.isEnabled = !TextUtils.isEmpty(passPhrase1EditText.text)
+                            && TextUtils.equals(passPhrase1EditText.text, passPhrase2EditText.text)
+                }
+
+                override fun afterTextChanged(s: Editable) {
+
+                }
             }
 
-            override fun onTextChanged(s: CharSequence, start: Int, before: Int, count: Int) {
-                exportButton.isEnabled = !TextUtils.isEmpty(passPhrase1EditText.text) && TextUtils.equals(passPhrase1EditText.text, passPhrase2EditText.text)
+            passPhrase1EditText.addTextChangedListener(textWatcher)
+            passPhrase2EditText.addTextChangedListener(textWatcher)
+
+            exportButton.isEnabled = false
+
+            val exportDialog = builder.show()
+
+            exportButton.setOnClickListener {
+                displayLoadingView()
+
+                CommonActivityUtils.exportKeys(mSession, passPhrase1EditText.text.toString(), object : ApiCallback<String> {
+                    override fun onSuccess(filename: String) {
+                        VectorApp.getInstance().toast(filename)
+
+                        hideLoadingView()
+                    }
+
+                    override fun onNetworkError(e: Exception) {
+                        hideLoadingView()
+                    }
+
+                    override fun onMatrixError(e: MatrixError) {
+                        hideLoadingView()
+                    }
+
+                    override fun onUnexpectedError(e: Exception) {
+                        hideLoadingView()
+                    }
+                })
+
+                exportDialog.dismiss()
             }
-
-            override fun afterTextChanged(s: Editable) {
-
-            }
-        }
-
-        passPhrase1EditText.addTextChangedListener(textWatcher)
-        passPhrase2EditText.addTextChangedListener(textWatcher)
-
-        exportButton.isEnabled = false
-
-        val exportDialog = builder.show()
-
-        exportButton.setOnClickListener {
-            displayLoadingView()
-
-            CommonActivityUtils.exportKeys(mSession, passPhrase1EditText.text.toString(), object : ApiCallback<String> {
-                override fun onSuccess(filename: String) {
-                    VectorApp.getInstance().toast(filename)
-
-                    hideLoadingView()
-                }
-
-                override fun onNetworkError(e: Exception) {
-                    hideLoadingView()
-                }
-
-                override fun onMatrixError(e: MatrixError) {
-                    hideLoadingView()
-                }
-
-                override fun onUnexpectedError(e: Exception) {
-                    hideLoadingView()
-                }
-            })
-
-            exportDialog.dismiss()
         }
     }
 
@@ -2600,7 +2605,7 @@ class VectorSettingsPreferencesFragment : PreferenceFragment(), SharedPreference
                 // clear everything
                 mGroupsFlairCategory.removeAll()
 
-                if (publicisedGroups.isEmpty()){
+                if (publicisedGroups.isEmpty()) {
                     val vectorGroupPreference = VectorCustomActionEditTextPreference(activity)
                     vectorGroupPreference.title = resources.getString(R.string.settings_without_flair)
                     mGroupsFlairCategory.addPreference(vectorGroupPreference)
