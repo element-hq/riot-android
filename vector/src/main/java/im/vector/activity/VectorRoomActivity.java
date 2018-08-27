@@ -2446,6 +2446,10 @@ public class VectorRoomActivity extends MXCActionBarActivity implements
             } else {
                 // another user
                 if (TextUtils.isEmpty(mEditText.getText())) {
+                    // Ensure displayName will not be interpreted as a Slash command
+                    if (text.startsWith("/")) {
+                        mEditText.append("\\");
+                    }
                     mEditText.append(sanitizeDisplayname(text) + ": ");
                 } else {
                     mEditText.getText().insert(mEditText.getSelectionStart(), sanitizeDisplayname(text) + " ");
