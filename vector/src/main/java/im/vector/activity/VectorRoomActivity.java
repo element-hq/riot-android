@@ -711,6 +711,7 @@ public class VectorRoomActivity extends MXCActionBarActivity implements
 
                 if (EditorInfo.IME_ACTION_DONE == imeActionId) {
                     sendTextMessage();
+                    return true;
                 }
 
                 if ((null != keyEvent) && !keyEvent.isShiftPressed() && keyEvent.getKeyCode() == KeyEvent.KEYCODE_ENTER
