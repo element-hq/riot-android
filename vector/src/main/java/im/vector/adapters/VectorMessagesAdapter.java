@@ -19,7 +19,6 @@ package im.vector.adapters;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
-import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Point;
@@ -58,6 +57,7 @@ import android.widget.TextView;
 
 import com.binaryfork.spanny.Spanny;
 
+import org.matrix.androidsdk.MXPatterns;
 import org.matrix.androidsdk.MXSession;
 import org.matrix.androidsdk.adapters.AbstractMessagesAdapter;
 import org.matrix.androidsdk.adapters.MessageRow;
@@ -102,11 +102,11 @@ import java.util.regex.Pattern;
 
 import im.vector.R;
 import im.vector.VectorApp;
+import im.vector.extensions.MatrixSdkExtensionsKt;
 import im.vector.listeners.IMessagesAdapterActionsListener;
 import im.vector.ui.VectorQuoteSpan;
 import im.vector.util.EventGroup;
 import im.vector.util.MatrixLinkMovementMethod;
-import im.vector.util.MatrixSdkExtensionsKt;
 import im.vector.util.MatrixURLSpan;
 import im.vector.util.PreferencesManager;
 import im.vector.util.RiotEventDisplay;
@@ -219,6 +219,9 @@ public class VectorMessagesAdapter extends AbstractMessagesAdapter {
     // custom settings
     private final boolean mAlwaysShowTimeStamps;
     private final boolean mHideReadReceipts;
+
+    // Key is member id.
+    private final Map<String, RoomMember> mLiveRoomMembers = new HashMap<>();
 
     private static final Pattern mEmojisPattern = Pattern.compile("((?:[\uD83C\uDF00-\uD83D\uDDFF]" +
             "|[\uD83E\uDD00-\uD83E\uDDFF]" +
@@ -659,6 +662,7 @@ public class VectorMessagesAdapter extends AbstractMessagesAdapter {
 
         if (row != null) {
             remove(row);
+            mEventRowMap.remove(eventId);
         }
     }
 
@@ -834,7 +838,7 @@ public class VectorMessagesAdapter extends AbstractMessagesAdapter {
             MessageRow row = getItem(i);
             Event event = row.getEvent();
 
-            if ((null != event) && (event.isUndeliverable() || event.isUnkownDevice())) {
+            if ((null != event) && (event.isUndelivered() || event.isUnknownDevice())) {
                 undeliverableEvents.add(row);
                 remove(row);
                 i--;
@@ -876,6 +880,17 @@ public class VectorMessagesAdapter extends AbstractMessagesAdapter {
      * Public methods
      * *********************************************************************************************
      */
+
+    public void setLiveRoomMembers(List<RoomMember> roomMembers) {
+        mLiveRoomMembers.clear();
+
+        for (RoomMember roomMember : roomMembers) {
+            mLiveRoomMembers.put(roomMember.getUserId(), roomMember);
+        }
+
+        // Update the Ui (ex: read receipt avatar)
+        notifyDataSetChanged();
+    }
 
     /**
      * Notify the fragment that some bing rules could have been updated.
@@ -1097,13 +1112,13 @@ public class VectorMessagesAdapter extends AbstractMessagesAdapter {
         } else if (Event.EVENT_TYPE_STICKER.equals(eventType)) {
             viewType = ROW_TYPE_STICKER;
         } else if (
-                event.isCallEvent() ||
-                        Event.EVENT_TYPE_STATE_HISTORY_VISIBILITY.equals(eventType) ||
-                        Event.EVENT_TYPE_STATE_ROOM_TOPIC.equals(eventType) ||
-                        Event.EVENT_TYPE_STATE_ROOM_MEMBER.equals(eventType) ||
-                        Event.EVENT_TYPE_STATE_ROOM_NAME.equals(eventType) ||
-                        Event.EVENT_TYPE_STATE_ROOM_THIRD_PARTY_INVITE.equals(eventType) ||
-                        Event.EVENT_TYPE_MESSAGE_ENCRYPTION.equals(eventType)) {
+                event.isCallEvent()
+                        || Event.EVENT_TYPE_STATE_HISTORY_VISIBILITY.equals(eventType)
+                        || Event.EVENT_TYPE_STATE_ROOM_TOPIC.equals(eventType)
+                        || Event.EVENT_TYPE_STATE_ROOM_MEMBER.equals(eventType)
+                        || Event.EVENT_TYPE_STATE_ROOM_NAME.equals(eventType)
+                        || Event.EVENT_TYPE_STATE_ROOM_THIRD_PARTY_INVITE.equals(eventType)
+                        || Event.EVENT_TYPE_MESSAGE_ENCRYPTION.equals(eventType)) {
             viewType = ROW_TYPE_ROOM_MEMBER;
 
         } else if (WidgetsManager.WIDGET_EVENT_TYPE.equals(eventType)) {
@@ -1193,7 +1208,7 @@ public class VectorMessagesAdapter extends AbstractMessagesAdapter {
         TextView tsTextView = VectorMessagesAdapterHelper.setTimestampValue(convertView, getFormattedTimestamp(event));
 
         if (null != tsTextView) {
-            if (row.getEvent().isUndeliverable() || row.getEvent().isUnkownDevice()) {
+            if (row.getEvent().isUndelivered() || row.getEvent().isUnknownDevice()) {
                 tsTextView.setTextColor(mNotSentMessageTextColor);
             } else {
                 tsTextView.setTextColor(ThemeUtils.INSTANCE.getColor(mContext, R.attr.default_text_light_color));
@@ -1225,7 +1240,7 @@ public class VectorMessagesAdapter extends AbstractMessagesAdapter {
         if (mHideReadReceipts) {
             mHelper.hideReadReceipts(convertView);
         } else {
-            mHelper.displayReadReceipts(convertView, row, mIsPreviewMode);
+            mHelper.displayReadReceipts(convertView, row, mIsPreviewMode, mLiveRoomMembers);
         }
 
         // selection mode
@@ -1303,7 +1318,7 @@ public class VectorMessagesAdapter extends AbstractMessagesAdapter {
                 textColor = mEncryptingMessageTextColor;
             } else if (row.getEvent().isSending() || row.getEvent().isUnsent()) {
                 textColor = mSendingMessageTextColor;
-            } else if (row.getEvent().isUndeliverable() || row.getEvent().isUnkownDevice()) {
+            } else if (row.getEvent().isUndelivered() || row.getEvent().isUnknownDevice()) {
                 textColor = mNotSentMessageTextColor;
             } else {
                 textColor = shouldHighlighted ? mHighlightMessageTextColor : mDefaultMessageTextColor;
@@ -1340,10 +1355,7 @@ public class VectorMessagesAdapter extends AbstractMessagesAdapter {
             int end = spannable.getSpanEnd(quoteSpan);
             int flags = spannable.getSpanFlags(quoteSpan);
             spannable.removeSpan(quoteSpan);
-            spannable.setSpan(new VectorQuoteSpan(mContext),
-                    start,
-                    end,
-                    flags);
+            spannable.setSpan(new VectorQuoteSpan(mContext), start, end, flags);
         }
     }
 
@@ -1433,43 +1445,30 @@ public class VectorMessagesAdapter extends AbstractMessagesAdapter {
             Event event = row.getEvent();
             Message message = null;
 
-            int waterMarkResourceId = -1;
-
+            boolean videoContent = false;
             if (type == ROW_TYPE_IMAGE) {
-
                 ImageMessage imageMessage = JsonUtils.toImageMessage(event.getContent());
-
-                if ("image/gif".equals(imageMessage.getMimeType())) {
-                    waterMarkResourceId = R.drawable.filetype_gif;
+                if (imageMessage.getMimeType().equals("image/gif")) {
+                    videoContent = true;
                 }
                 message = imageMessage;
-
             } else if (type == ROW_TYPE_VIDEO) {
-
+                videoContent = true;
                 message = JsonUtils.toVideoMessage(event.getContent());
-                waterMarkResourceId = R.drawable.filetype_video;
-
             } else if (type == ROW_TYPE_STICKER) {
-
                 StickerMessage stickerMessage = JsonUtils.toStickerMessage(event.getContent());
                 message = stickerMessage;
             }
 
-            // display a type watermark
-            final ImageView imageTypeView = convertView.findViewById(R.id.messagesAdapter_image_type);
-
-            if (null == imageTypeView) {
+            // display a play icon for video content
+            final ImageView playCircleView = convertView.findViewById(R.id.messagesAdapter_play_circle);
+            if (null == playCircleView) {
                 Log.e(LOG_TAG, "getImageVideoView : invalid layout");
                 return convertView;
             }
-
-            imageTypeView.setBackgroundColor(Color.TRANSPARENT);
-
-            if (waterMarkResourceId > 0) {
-                imageTypeView.setImageBitmap(BitmapFactory.decodeResource(getContext().getResources(), waterMarkResourceId));
-                imageTypeView.setVisibility(View.VISIBLE);
-            } else {
-                imageTypeView.setVisibility(View.GONE);
+            playCircleView.setVisibility(View.GONE);
+            if (videoContent) {
+                playCircleView.setVisibility(View.VISIBLE);
             }
 
             if (null != message) {
@@ -1610,7 +1609,7 @@ public class VectorMessagesAdapter extends AbstractMessagesAdapter {
                 textColor = mEncryptingMessageTextColor;
             } else if (row.getEvent().isSending() || row.getEvent().isUnsent()) {
                 textColor = mSendingMessageTextColor;
-            } else if (row.getEvent().isUndeliverable() || row.getEvent().isUnkownDevice()) {
+            } else if (row.getEvent().isUndelivered() || row.getEvent().isUnknownDevice()) {
                 textColor = mNotSentMessageTextColor;
             } else {
                 textColor = mDefaultMessageTextColor;
@@ -1818,7 +1817,7 @@ public class VectorMessagesAdapter extends AbstractMessagesAdapter {
         final RoomCreateContent.Predecessor predecessor = roomState.getRoomCreateContent().predecessor;
 
         final String roomLink = PermalinkUtils.createPermalink(predecessor.roomId);
-        final ClickableSpan urlSpan = new MatrixURLSpan(roomLink, MXSession.PATTERN_CONTAIN_APP_LINK_PERMALINK_ROOM_ID, mVectorMessagesAdapterEventsListener);
+        final ClickableSpan urlSpan = new MatrixURLSpan(roomLink, MXPatterns.PATTERN_CONTAIN_APP_LINK_PERMALINK_ROOM_ID, mVectorMessagesAdapterEventsListener);
         final int textColorInt = ContextCompat.getColor(mContext, R.color.riot_primary_text_color_light);
         final CharSequence text = new Spanny(mContext.getString(R.string.room_tombstone_continuation_description),
                 new StyleSpan(Typeface.BOLD),
@@ -2196,7 +2195,7 @@ public class VectorMessagesAdapter extends AbstractMessagesAdapter {
 
                 int type = getItemViewType(position);
 
-                if ((type == ROW_TYPE_IMAGE) || (type == ROW_TYPE_VIDEO)) {
+                if ((type == ROW_TYPE_IMAGE) || (type == ROW_TYPE_VIDEO) || (type == ROW_TYPE_STICKER)) {
                     View bodyLayoutView = inflatedView.findViewById(R.id.messagesAdapter_body_layout);
                     ViewGroup.MarginLayoutParams bodyLayout = (ViewGroup.MarginLayoutParams) bodyLayoutView.getLayoutParams();
                     ViewGroup.MarginLayoutParams e2eIconViewLayout = (ViewGroup.MarginLayoutParams) e2eIconView.getLayoutParams();
@@ -2307,9 +2306,8 @@ public class VectorMessagesAdapter extends AbstractMessagesAdapter {
                 } else {
                     EncryptedEventContent encryptedEventContent = JsonUtils.toEncryptedEventContent(event.getWireContent().getAsJsonObject());
 
-                    if (TextUtils.equals(mSession.getCredentials().deviceId, encryptedEventContent.device_id) &&
-                            TextUtils.equals(mSession.getMyUserId(), event.getSender())
-                            ) {
+                    if (TextUtils.equals(mSession.getCredentials().deviceId, encryptedEventContent.device_id)
+                            && TextUtils.equals(mSession.getMyUserId(), event.getSender())) {
                         e2eIconByEventId.put(event.eventId, R.drawable.e2e_verified);
                         MXDeviceInfo deviceInfo = mSession.getCrypto()
                                 .deviceWithIdentityKey(encryptedEventContent.sender_key, event.getSender(), encryptedEventContent.algorithm);
@@ -2609,7 +2607,7 @@ public class VectorMessagesAdapter extends AbstractMessagesAdapter {
         if (event.canBeResent()) {
             menu.findItem(R.id.ic_action_vector_resend_message).setVisible(true);
 
-            if (event.isUndeliverable() || event.isUnkownDevice()) {
+            if (event.isUndelivered() || event.isUnknownDevice()) {
                 menu.findItem(R.id.ic_action_vector_redact_message).setVisible(true);
             }
         } else if (event.mSentState == Event.SentState.SENT) {

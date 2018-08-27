@@ -453,9 +453,8 @@
     <string name="room_displayname_room_invite">聊天室邀請</string>
     <string name="room_displayname_two_members">%1$s 和 %2$s</string>
 
-    <string name="room_displayname_many_members">%1$s 和 %2$s</string>
-    <plurals name="others">
-	<item quantity="other">和其他 %d 個人</item>
+    <plurals name="room_displayname_three_and_more_members">
+	<item quantity="other">%1$s 和 和其他 %d 個人</item>
 </plurals>
 
     <string name="room_displayname_no_title">空聊天室</string>

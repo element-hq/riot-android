@@ -31,9 +31,7 @@ import im.vector.R
  *
  * Inspired from https://medium.com/@459631839/style-blockquotes-in-android-textviews-de8656057c3d
  */
-class VectorQuoteSpan(context: Context) :
-        LeadingMarginSpan,
-        LineBackgroundSpan {
+class VectorQuoteSpan(context: Context) : LeadingMarginSpan, LineBackgroundSpan {
 
     private val backgroundColor = ContextCompat.getColor(context, R.color.quote_background_color)
     private val stripeColor = ContextCompat.getColor(context, R.color.quote_strip_color)

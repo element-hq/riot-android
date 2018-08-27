@@ -898,10 +898,9 @@ Unbekannte Geräte:</string>
 	<item quantity="other">%d neue Nachrichten</item>
 </plurals>
 
-    <string name="room_displayname_many_members">%1$s und %2$s</string>
-    <plurals name="others">
-	<item quantity="one">1 andere(r)</item>
-	<item quantity="other">%d andere</item>
+    <plurals name="room_displayname_three_and_more_members">
+	<item quantity="one">%1$s und 1 andere(r)</item>
+	<item quantity="other">%1$s und %d andere</item>
 </plurals>
 
     <plurals name="directory_search_rooms">

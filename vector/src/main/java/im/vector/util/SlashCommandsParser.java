@@ -240,7 +240,7 @@ public class SlashCommandsParser {
                         RoomState state = r.getState();
 
                         if (null != state) {
-                            if (TextUtils.equals(state.alias, roomAlias)) {
+                            if (TextUtils.equals(state.getCanonicalAlias(), roomAlias)) {
                                 theRoom = r;
                                 break;
                             } else if (state.getAliases().indexOf(roomAlias) >= 0) {

@@ -158,7 +158,6 @@ abstract class VectorAppCompatActivity : AppCompatActivity() {
             menuInflater.inflate(menuRes, menu)
             ThemeUtils.tintMenuIcons(menu, ThemeUtils.getColor(this, getMenuTint()))
             return true
-
         }
 
         return super.onCreateOptionsMenu(menu)

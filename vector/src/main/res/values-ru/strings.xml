@@ -888,7 +888,6 @@ Email также позволит вам при необходимости во�
     <string name="list_members">Список участников</string>
     <string name="open_chat_header">Открыть заголовок</string>
     <string name="room_sync_in_progress">Синхронизация...</string>
-    <string name="room_displayname_many_members">%1$s и %2$s</string>
     <plurals name="directory_search_rooms">
 	<item quantity="one">1 комната</item>
 	<item quantity="few">%d комнаты</item>
@@ -945,10 +944,10 @@ Email также позволит вам при необходимости во�
 	<item quantity="other"/>
 </plurals>
 
-    <plurals name="others">
-	<item quantity="one">1 другой</item>
-	<item quantity="few">%d другие</item>
-	<item quantity="many">%d других</item>
+    <plurals name="room_displayname_three_and_more_members">
+	<item quantity="one">%1$s и 1 другой</item>
+	<item quantity="few">%1$s и %d другие</item>
+	<item quantity="many">%1$s и %d других</item>
 	<item quantity="other"/>
 </plurals>
 

@@ -858,10 +858,9 @@ Ismeretlen eszközök:</string>
 	<item quantity="other">%d új üzenet</item>
 </plurals>
 
-    <string name="room_displayname_many_members">%1$s és %2$s</string>
-    <plurals name="others">
-	<item quantity="one">1 másik</item>
-	<item quantity="other">%d másik</item>
+    <plurals name="room_displayname_three_and_more_members">
+	<item quantity="one">%1$s és 1 másik</item>
+	<item quantity="other">%1$s és %d másik</item>
 </plurals>
 
     <plurals name="directory_search_rooms">

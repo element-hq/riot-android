@@ -858,10 +858,9 @@ Zifratutako mezuak ez dira zifratzea oraindik ezarrita ez duten beste gailuetan 
 	<item quantity="other">%d mezu berri</item>
 </plurals>
 
-    <string name="room_displayname_many_members">%1$s eta %2$s</string>
-    <plurals name="others">
-	<item quantity="one">Beste bat</item>
-	<item quantity="other">Beste %d</item>
+    <plurals name="room_displayname_three_and_more_members">
+	<item quantity="one">%1$s eta beste bat</item>
+	<item quantity="other">%1$s eta beste %d</item>
 </plurals>
 
     <plurals name="directory_search_rooms">

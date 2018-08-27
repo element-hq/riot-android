@@ -1,11 +1,39 @@
-Changes in Riot 0.8.15 (2018-XX-XX)
+Changes in Riot 0.8.16 (2018-XX-XX)
 ===================================================
 
 MatrixSdk:
  - Upgrade to version 0.X.Y.
 
 Features:
+ - Manage blue banner case of server quota notices (#2547)
+
+Improvements:
+ - Minor changes to toolbar style and other UI elements (#2529)
+ - Improvements to dialogs, video messages, and the previewer activity (#2583)
+ - Add a way to enable local file encryption on the SDK (disabled by default)
+
+Other changes:
+ - Sonar analysis has been configured (#2203)
+
+Bugfix:
+ - Fix crash when opening file with external application (#2573)
+ - Fix issue on settings: unable to rename current device if it has no name (#2174)
+ - Allow anyone to add local alias and to try to delete local alias (#1033)
+ - Fix issue on "Resend all" action (#2569)
+ - Fix messages vanishing when resending them (#2508)
+ - Remove delay for / completion (#2576)
+
+Translations:
  -
+
+Build:
+ -
+
+Changes in Riot 0.8.15 (2018-08-30)
+===================================================
+
+MatrixSdk:
+ - Upgrade to version 0.9.9.
 
 Improvements:
  - Improve intent to open document (#2544)
@@ -14,18 +42,13 @@ Improvements:
 
 Other changes:
  - Upgrade lib libphonenumber from v8.0.1 to 8.9.12
+ - Upgrade Google firebase libs
 
 Bugfix:
  - Handle `\/` at the beginning of a message to send a message starting with `/` (#658)
  - Escape nicknames starting with a forward slash `/` in mentions (#2146)
  - Improve management of Push feature
  - MatrixError mResourceLimitExceededError is now managed in MxDataHandler (vector-im/riot-android#2547 point 2)
-
-Translations:
- -
-
-Build:
- - Upgrade Google firebase libs
 
 Changes in Riot 0.8.14 (2018-08-27)
 ===================================================

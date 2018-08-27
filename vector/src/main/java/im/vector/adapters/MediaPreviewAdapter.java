@@ -61,11 +61,10 @@ public class MediaPreviewAdapter extends RecyclerView.Adapter<MediaPreviewAdapte
         final Uri uri = roomMediaMessage.getUri();
         if (mimeType != null) {
             if (mimeType.startsWith("image") || mimeType.startsWith("video")) {
-                final RequestOptions options = new RequestOptions().frame(0);
                 Glide.with(context)
                         .asBitmap()
                         .load(uri)
-                        .apply(options)
+                        .apply(new RequestOptions().frame(0))
                         .into(holder.mImagePreview);
             } else {
                 holder.mImagePreview.setImageResource(R.drawable.filetype_attachment);

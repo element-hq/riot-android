@@ -41,8 +41,8 @@
     <color name="tab_bar_unselected_background_color_dark">@color/primary_color_dark</color>
 
     <!-- Text Colors -->
-    <color name="primary_hint_text_color_light">#EAEAEA</color>
-    <color name="primary_hint_text_color_dark">#EAEAEA</color>
+    <color name="primary_hint_text_color_light">#FFFFFF</color>
+    <color name="primary_hint_text_color_dark">#FFFFFF</color>
 
     <color name="riot_primary_text_color_light">#FF3C3C3C</color>
     <color name="default_text_hint_color_light">#903C3C3C</color>
@@ -60,4 +60,9 @@
 
     <!-- Transparent status bar and toolbar colors -->
     <color name="transparent_dark">#80000000</color>
+
+    <!-- Notification view colors -->
+    <color name="soft_resource_limit_exceeded">#2f9edb</color>
+    <color name="hard_resource_limit_exceeded">@color/vector_fuchsia_color</color>
+
 </resources>

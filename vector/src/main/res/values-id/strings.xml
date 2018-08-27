@@ -503,9 +503,8 @@ Perhatikan bahwa tindakan ini akan memulai ulang aplikasi dan mungkin cukup mema
     <string name="room_displayname_room_invite">Undangan Ruang</string>
     <string name="room_displayname_two_members">%1$s dan %2$s</string>
 
-    <string name="room_displayname_many_members">%1$s dan %2$s</string>
-    <plurals name="others">
-	<item quantity="other">%d yang lain</item>
+    <plurals name="room_displayname_three_and_more_members">
+	<item quantity="other">%1$s dan %d yang lain</item>
 </plurals>
 
     <string name="room_displayname_no_title">Ruang kosong</string>

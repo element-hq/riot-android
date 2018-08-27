@@ -22,6 +22,7 @@ import android.content.Intent;
 import android.media.ExifInterface;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.support.v7.app.AlertDialog;
 import android.text.TextUtils;
 import android.view.KeyEvent;
@@ -34,6 +35,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import org.jetbrains.annotations.NotNull;
+import org.matrix.androidsdk.MXPatterns;
 import org.matrix.androidsdk.MXSession;
 import org.matrix.androidsdk.call.IMXCall;
 import org.matrix.androidsdk.crypto.MXCryptoError;
@@ -59,13 +61,14 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import butterknife.BindView;
 import im.vector.Matrix;
 import im.vector.R;
 import im.vector.adapters.VectorMemberDetailsAdapter;
 import im.vector.adapters.VectorMemberDetailsDevicesAdapter;
+import im.vector.extensions.MatrixSdkExtensionsKt;
 import im.vector.fragments.VectorUnknownDevicesFragment;
 import im.vector.util.CallsManager;
-import im.vector.util.MatrixSdkExtensionsKt;
 import im.vector.util.PermissionsToolsKt;
 import im.vector.util.VectorUtils;
 import kotlin.Pair;
@@ -112,6 +115,8 @@ public class VectorMemberDetailsActivity extends MXCActionBarActivity implements
 
     // internal info
     private Room mRoom;
+    @Nullable
+    private Room mCallableRoom;
     private String mMemberId;       // member whose details area displayed (provided in EXTRAS)
     private RoomMember mRoomMember; // room member corresponding to mMemberId
     private MXSession mSession;
@@ -121,19 +126,28 @@ public class VectorMemberDetailsActivity extends MXCActionBarActivity implements
     private VectorMemberDetailsDevicesAdapter mDevicesListViewAdapter;
 
     // UI widgets
-    private ImageView mMemberAvatarImageView;
-    private ImageView mMemberAvatarBadgeImageView;
-    private TextView mMemberNameTextView;
-    private TextView mPresenceTextView;
+    @BindView(R.id.avatar_img)
+    ImageView mMemberAvatarImageView;
+    @BindView(R.id.member_avatar_badge)
+    ImageView mMemberAvatarBadgeImageView;
+    @BindView(R.id.member_details_name)
+    TextView mMemberNameTextView;
+    @BindView(R.id.member_details_presence)
+    TextView mPresenceTextView;
 
     // full screen avatar
-    private View mFullMemberAvatarLayout;
-    private ImageView mFullMemberAvatarImageView;
+    @BindView(R.id.member_details_fullscreen_avatar_layout)
+    View mFullMemberAvatarLayout;
+    @BindView(R.id.member_details_fullscreen_avatar_image_view)
+    ImageView mFullMemberAvatarImageView;
 
     // listview
-    private ExpandableListView mExpandableListView;
-    private ListView mDevicesListView;
-    private View mDevicesListHeaderView;
+    @BindView(R.id.member_details_actions_list_view)
+    ExpandableListView mExpandableListView;
+    @BindView(R.id.member_details_devices_list_view)
+    ListView mDevicesListView;
+    @BindView(R.id.devices_header_view)
+    View mDevicesListHeaderView;
 
     // direct message
     /**
@@ -174,19 +188,19 @@ public class VectorMemberDetailsActivity extends MXCActionBarActivity implements
     private final MXEventListener mLiveEventsListener = new MXEventListener() {
         @Override
         public void onLiveEvent(final Event event, RoomState roomState) {
-            runOnUiThread(new Runnable() {
-                @Override
-                public void run() {
-                    String eventType = event.getType();
+            String eventType = event.getType();
 
-                    // check if the event is received for the current room
-                    // check if there is a member update
-                    if ((Event.EVENT_TYPE_STATE_ROOM_MEMBER.equals(eventType)) || (Event.EVENT_TYPE_STATE_ROOM_POWER_LEVELS.equals(eventType))) {
-                        // update only if it is the current user
+            // check if the event is received for the current room
+            // check if there is a member update
+            if ((Event.EVENT_TYPE_STATE_ROOM_MEMBER.equals(eventType)) || (Event.EVENT_TYPE_STATE_ROOM_POWER_LEVELS.equals(eventType))) {
+                // update only if it is the current user
+                checkRoomMemberStatus(new SimpleApiCallback<Boolean>() {
+                    @Override
+                    public void onSuccess(final Boolean info) {
                         runOnUiThread(new Runnable() {
                             @Override
                             public void run() {
-                                if (checkRoomMemberStatus()) {
+                                if (info) {
                                     updateUi();
                                 } else if (null != mRoom) {
                                     // exit from the activity
@@ -195,8 +209,8 @@ public class VectorMemberDetailsActivity extends MXCActionBarActivity implements
                             }
                         });
                     }
-                }
-            });
+                });
+            }
         }
 
         @Override
@@ -267,13 +281,13 @@ public class VectorMemberDetailsActivity extends MXCActionBarActivity implements
      * @param isVideo true if the call is a video call
      */
     private void startCall(final boolean isVideo) {
-        if (!mSession.isAlive()) {
-            Log.e(LOG_TAG, "startCall : the session is not anymore valid");
+        if (!mSession.isAlive() || mCallableRoom == null) {
+            Log.e(LOG_TAG, "startCall : the session is not anymore valid, or no callable room found");
             return;
         }
 
         // create the call object
-        mSession.mCallsManager.createCallInRoom(mRoom.getRoomId(), isVideo, new ApiCallback<IMXCall>() {
+        mSession.mCallsManager.createCallInRoom(mCallableRoom.getRoomId(), isVideo, new ApiCallback<IMXCall>() {
             @Override
             public void onSuccess(final IMXCall call) {
                 runOnUiThread(new Runnable() {
@@ -756,27 +770,46 @@ public class VectorMemberDetailsActivity extends MXCActionBarActivity implements
      *
      * @return a valid Room instance, null if no room found
      */
-    private Room searchCallableRoom() {
+    private void searchCallableRoom(final ApiCallback<Room> callback) {
         if (!mSession.isAlive()) {
             Log.e(LOG_TAG, "searchCallableRoom : the session is not anymore valid");
-            return null;
+            callback.onSuccess(null);
+        } else {
+            Collection<Room> rooms = mSession.getDataHandler().getStore().getRooms();
+
+            searchCallableRoomRecursive(new ArrayList<>(rooms), 0, callback);
         }
+    }
 
-        Collection<Room> rooms = mSession.getDataHandler().getStore().getRooms();
+    private void searchCallableRoomRecursive(final List<Room> rooms,
+                                             final int index,
+                                             final ApiCallback<Room> callback) {
+        if (index >= rooms.size()) {
+            // Not found
+            callback.onSuccess(null);
+        } else {
+            final Room room = rooms.get(index);
 
-        for (Room room : rooms) {
-            Collection<RoomMember> members = room.getMembers();
+            if (room.getNumberOfMembers() == 2 && room.canPerformCall()) {
+                room.getMembersAsync(new SimpleApiCallback<List<RoomMember>>() {
+                    @Override
+                    public void onSuccess(List<RoomMember> members) {
+                        for (RoomMember member : members) {
+                            if (member.getUserId().equals(mMemberId)) {
+                                callback.onSuccess(room);
+                                return;
+                            }
+                        }
 
-            if (members.size() == 2) {
-                for (RoomMember member : members) {
-                    if (member.getUserId().equals(mMemberId) && room.canPerformCall()) {
-                        return room;
+                        // Try next one
+                        searchCallableRoomRecursive(rooms, index + 1, callback);
                     }
-                }
+                });
+            } else {
+                // Try next one
+                searchCallableRoomRecursive(rooms, index + 1, callback);
             }
         }
-
-        return null;
     }
 
     // *********************************************************************************************
@@ -849,7 +882,7 @@ public class VectorMemberDetailsActivity extends MXCActionBarActivity implements
             }
         } else if (null != mRoomMember) {
             // 1:1 call
-            if ((null != searchCallableRoom()) && mSession.isVoipCallSupported() && (null == CallsManager.getSharedInstance().getActiveCall())) {
+            if ((null != mCallableRoom) && mSession.isVoipCallSupported() && (null == CallsManager.getSharedInstance().getActiveCall())) {
                 // Offer voip call options
                 supportedActions.add(ITEM_ACTION_START_VOICE_CALL);
                 supportedActions.add(ITEM_ACTION_START_VIDEO_CALL);
@@ -1053,7 +1086,7 @@ public class VectorMemberDetailsActivity extends MXCActionBarActivity implements
 
             // devices
             // don't show devices list if the member isn't a matrix user
-            if (mUser != null && MXSession.PATTERN_CONTAIN_MATRIX_USER_IDENTIFIER.matcher(mMemberId).matches()) {
+            if (mUser != null && MXPatterns.isUserId(mMemberId)) {
                 imageResource = R.drawable.ic_devices_info;
                 actionText = getString(R.string.room_participants_action_devices_list);
                 devicesActions.add(new VectorMemberDetailsAdapter.AdapterMemberActionItems(imageResource, actionText, ITEM_ACTION_DEVICES));
@@ -1122,9 +1155,6 @@ public class VectorMemberDetailsActivity extends MXCActionBarActivity implements
             Log.e(LOG_TAG, "## onCreate(): Parameters init failure");
             finish();
         } else {
-            // check if the user is a member of the room
-            checkRoomMemberStatus();
-
             // use a toolbar instead of the actionbar
             // to be able to display a large header
             android.support.v7.widget.Toolbar toolbar = findViewById(R.id.member_details_toolbar);
@@ -1134,23 +1164,13 @@ public class VectorMemberDetailsActivity extends MXCActionBarActivity implements
                 getSupportActionBar().setDisplayHomeAsUpEnabled(true);
             }
 
-            mMemberAvatarImageView = findViewById(R.id.avatar_img);
-            mMemberAvatarBadgeImageView = findViewById(R.id.member_avatar_badge);
-
-            mFullMemberAvatarImageView = findViewById(R.id.member_details_fullscreen_avatar_image_view);
-            mFullMemberAvatarLayout = findViewById(R.id.member_details_fullscreen_avatar_layout);
-
-            mMemberNameTextView = findViewById(R.id.member_details_name);
-            mPresenceTextView = findViewById(R.id.member_details_presence);
             setWaitingView(findViewById(R.id.member_details_list_view_progress_bar));
 
             // setup the devices list view
-            mDevicesListView = findViewById(R.id.member_details_devices_list_view);
             mDevicesListViewAdapter = new VectorMemberDetailsDevicesAdapter(this, R.layout.adapter_item_member_details_devices, mSession);
             mDevicesListViewAdapter.setDevicesAdapterListener(this);
             mDevicesListView.setAdapter(mDevicesListViewAdapter);
             // devices header row
-            mDevicesListHeaderView = findViewById(R.id.devices_header_view);
             TextView devicesHeaderTitleTxtView = mDevicesListHeaderView.findViewById(R.id.heading);
             if (null != devicesHeaderTitleTxtView) {
                 devicesHeaderTitleTxtView.setText(R.string.room_participants_header_devices);
@@ -1161,7 +1181,6 @@ public class VectorMemberDetailsActivity extends MXCActionBarActivity implements
                     mSession, R.layout.vector_adapter_member_details_items, R.layout.adapter_item_vector_recent_header);
             mListViewAdapter.setActionListener(this);
 
-            mExpandableListView = findViewById(R.id.member_details_actions_list_view);
             // the chevron is managed in the header view
             mExpandableListView.setGroupIndicator(null);
             mExpandableListView.setAdapter(mListViewAdapter);
@@ -1225,9 +1244,28 @@ public class VectorMemberDetailsActivity extends MXCActionBarActivity implements
             // update the UI
             updateUi();
 
-            if (!isFirstCreation() && getSavedInstanceState().getBoolean(AVATAR_FULLSCREEN_MODE, false)) {
-                displayFullScreenAvatar();
-            }
+            // check if the user is a member of the room
+            checkRoomMemberStatus(new SimpleApiCallback<Boolean>(this) {
+                @Override
+                public void onSuccess(Boolean info) {
+                    // update the UI
+                    updateUi();
+
+                    if (!isFirstCreation() && getSavedInstanceState().getBoolean(AVATAR_FULLSCREEN_MODE, false)) {
+                        displayFullScreenAvatar();
+                    }
+                }
+            });
+
+            searchCallableRoom(new SimpleApiCallback<Room>() {
+                @Override
+                public void onSuccess(Room info) {
+                    mCallableRoom = info;
+
+                    // update the UI
+                    updateUi();
+                }
+            });
         }
     }
 
@@ -1346,26 +1384,31 @@ public class VectorMemberDetailsActivity extends MXCActionBarActivity implements
     }
 
     /**
-     * Search if the member is present in the list of the members of
-     * the room
+     * Search if the member is present in the list of the members of the room
      *
-     * @return true if member was found in the room , false otherwise
+     * @param callback Callback to get the result: true if member was found in the room, false otherwise
      */
-    private boolean checkRoomMemberStatus() {
+    private void checkRoomMemberStatus(final ApiCallback<Boolean> callback) {
         mRoomMember = null;
 
         if (null != mRoom) {
             // find out the room member
-            Collection<RoomMember> members = mRoom.getMembers();
-            for (RoomMember member : members) {
-                if (member.getUserId().equals(mMemberId)) {
-                    mRoomMember = member;
-                    break;
-                }
-            }
-        }
+            mRoom.getMembersAsync(new SimpleApiCallback<List<RoomMember>>(callback) {
+                @Override
+                public void onSuccess(List<RoomMember> members) {
+                    for (RoomMember member : members) {
+                        if (member.getUserId().equals(mMemberId)) {
+                            mRoomMember = member;
+                            break;
+                        }
+                    }
 
-        return (null == mRoom) || (null != mRoomMember);
+                    callback.onSuccess(mRoomMember != null);
+                }
+            });
+        } else {
+            callback.onSuccess(false);
+        }
     }
 
     /**

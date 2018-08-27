@@ -21,8 +21,11 @@ enum class AutoCompletionMode {
     COMMAND_MODE;
 
     companion object {
+        /**
+         * It's important to start with " " to enter USER_MODE even if text starts with "/"
+         */
         fun getWithText(text:String) = when {
-            text.startsWith("@") || text.contains(" @")-> USER_MODE
+            text.startsWith("@") || text.contains(" ")-> USER_MODE
             text.startsWith("/") -> COMMAND_MODE
             else -> USER_MODE
         }

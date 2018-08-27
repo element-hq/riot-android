@@ -848,10 +848,9 @@ Je kan het nu, of later, doen vanuit de programma-instellingen.</string>
 	<item quantity="other">%d nieuwe berichten</item>
 </plurals>
 
-    <string name="room_displayname_many_members">%1$s en %2$s</string>
-    <plurals name="others">
-	<item quantity="one">1 andere</item>
-	<item quantity="other">%d anderen</item>
+    <plurals name="room_displayname_three_and_more_members">
+	<item quantity="one">%1$s en 1 andere</item>
+	<item quantity="other">%1$s en %d anderen</item>
 </plurals>
 
     <plurals name="directory_search_rooms">

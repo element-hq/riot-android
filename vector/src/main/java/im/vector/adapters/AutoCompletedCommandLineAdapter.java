@@ -17,7 +17,6 @@
 package im.vector.adapters;
 
 import android.content.Context;
-import android.support.annotation.StringRes;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -29,7 +28,6 @@ import org.matrix.androidsdk.MXSession;
 
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.Comparator;
 import java.util.List;
 
 import butterknife.BindView;
@@ -64,10 +62,10 @@ public class AutoCompletedCommandLineAdapter extends ArrayAdapter<String> {
     /**
      * Construct an adapter which will display a list of slash commands
      *
-     * @param context           Activity context
-     * @param layoutResourceId  The resource ID of the layout for each item.
-     * @param session           The session
-     * @param slashCommands      The command lines list
+     * @param context          Activity context
+     * @param layoutResourceId The resource ID of the layout for each item.
+     * @param session          The session
+     * @param slashCommands    The command lines list
      */
     public AutoCompletedCommandLineAdapter(Context context,
                                            int layoutResourceId,
@@ -84,10 +82,9 @@ public class AutoCompletedCommandLineAdapter extends ArrayAdapter<String> {
     /**
      * Get the updated view for a specified position.
      *
-     * @param position      the position
-     * @param convertView   the convert view
-     * @param parent        the parent view
-     *
+     * @param position    the position
+     * @param convertView the convert view
+     * @param parent      the parent view
      * @return the view
      */
     public View getView(int position, View convertView, ViewGroup parent) {
@@ -147,10 +144,10 @@ public class AutoCompletedCommandLineAdapter extends ArrayAdapter<String> {
 
                 if (prefixString.startsWith("/")) {
                     for (SlashCommandsParser.SlashCommand slashCommand : mCommandLines) {
-                        if ((null != slashCommand.getCommand()) &&
-                                slashCommand.getCommand()
-                                            .toLowerCase(VectorApp.getApplicationLocale())
-                                            .startsWith(prefixString)) {
+                        if ((null != slashCommand.getCommand())
+                                && slashCommand.getCommand()
+                                .toLowerCase(VectorApp.getApplicationLocale())
+                                .startsWith(prefixString)) {
                             newValues.add(slashCommand.getCommand());
                         }
                     }

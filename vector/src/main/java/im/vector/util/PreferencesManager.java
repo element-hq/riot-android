@@ -117,6 +117,7 @@ public class PreferencesManager {
     private static final String SETTINGS_PIN_UNREAD_MESSAGES_PREFERENCE_KEY = "SETTINGS_PIN_UNREAD_MESSAGES_PREFERENCE_KEY";
     private static final String SETTINGS_PIN_MISSED_NOTIFICATIONS_PREFERENCE_KEY = "SETTINGS_PIN_MISSED_NOTIFICATIONS_PREFERENCE_KEY";
 
+    public static final String SETTINGS_LAZY_LOADING_PREFERENCE_KEY = "SETTINGS_LAZY_LOADING_PREFERENCE_KEY";
     public static final String SETTINGS_DATA_SAVE_MODE_PREFERENCE_KEY = "SETTINGS_DATA_SAVE_MODE_PREFERENCE_KEY";
     public static final String SETTINGS_START_ON_BOOT_PREFERENCE_KEY = "SETTINGS_START_ON_BOOT_PREFERENCE_KEY";
     public static final String SETTINGS_INTERFACE_TEXT_SIZE_KEY = "SETTINGS_INTERFACE_TEXT_SIZE_KEY";
@@ -169,6 +170,7 @@ public class PreferencesManager {
 
             SETTINGS_PIN_UNREAD_MESSAGES_PREFERENCE_KEY,
             SETTINGS_PIN_MISSED_NOTIFICATIONS_PREFERENCE_KEY,
+            // Do not keep SETTINGS_LAZY_LOADING_PREFERENCE_KEY because the user may log in on a server which does not support lazy loading
             SETTINGS_DATA_SAVE_MODE_PREFERENCE_KEY,
             SETTINGS_START_ON_BOOT_PREFERENCE_KEY,
             SETTINGS_INTERFACE_TEXT_SIZE_KEY,
@@ -391,6 +393,29 @@ public class PreferencesManager {
         }
 
         return name;
+    }
+
+    /**
+     * Enable or disable the lazy loading
+     *
+     * @param context  the context
+     * @param newValue true to enable lazy loading, false to disable it
+     */
+    public static void setUseLazyLoading(Context context, boolean newValue) {
+        PreferenceManager.getDefaultSharedPreferences(context)
+                .edit()
+                .putBoolean(SETTINGS_LAZY_LOADING_PREFERENCE_KEY, newValue)
+                .apply();
+    }
+
+    /**
+     * Tells if the lazy loading is enabled
+     *
+     * @param context the context
+     * @return true if the lazy loading of room members is enabled
+     */
+    public static boolean useLazyLoading(Context context) {
+        return PreferenceManager.getDefaultSharedPreferences(context).getBoolean(SETTINGS_LAZY_LOADING_PREFERENCE_KEY, false);
     }
 
     /**

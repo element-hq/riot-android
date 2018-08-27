@@ -909,10 +909,9 @@ Dispositivos desconocidos:</string>
 	<item quantity="other">%d mensajes nuevos</item>
 </plurals>
 
-    <string name="room_displayname_many_members">%1$s y %2$s</string>
-    <plurals name="others">
-	<item quantity="one">1 otro</item>
-	<item quantity="other">otros %d</item>
+    <plurals name="room_displayname_three_and_more_members">
+	<item quantity="one">%1$s y 1 otro</item>
+	<item quantity="other">%1$s y %d otros</item>
 </plurals>
 
     <plurals name="directory_search_rooms">

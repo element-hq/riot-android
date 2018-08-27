@@ -6,11 +6,15 @@ buildscript {
     repositories {
         jcenter()
         google()
+        maven {
+            url "https://plugins.gradle.org/m2/"
+        }
     }
     dependencies {
         classpath 'com.android.tools.build:gradle:3.1.2'
         classpath 'com.google.gms:google-services:3.2.0'
         classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
+        classpath 'org.sonarsource.scanner.gradle:sonarqube-gradle-plugin:2.6.2'
 
         // NOTE: Do not place your application dependencies here; they belong
         // in the individual module build.gradle files
@@ -19,8 +23,8 @@ buildscript {
 
 // global properties used in sub modules
 ext {
-    versionCodeProp = 81500
-    versionNameProp = "0.8.15-dev"
+    versionCodeProp = 81600
+    versionNameProp = "0.8.16-dev"
     versionBuild = System.getenv("BUILD_NUMBER") as Integer ?: 0
     buildNumberProp = "${versionBuild}"
 }
@@ -33,5 +37,41 @@ allprojects {
             url "https://maven.google.com"
         }
         google()
+    }
+}
+
+apply plugin: 'org.sonarqube'
+
+sonarqube {
+    properties {
+        property "sonar.projectName", "Riot-Android"
+        property "sonar.projectKey", "vector.android.riot"
+        property "sonar.host.url", "https://sonarcloud.io"
+        property "sonar.projectVersion", project(":vector").android.defaultConfig.versionName
+        property "sonar.sourceEncoding", "UTF-8"
+        property "sonar.links.homepage", "https://github.com/vector-im/riot-android/"
+        property "sonar.links.ci", "https://matrix.org/jenkins/view/MatrixView/job/VectorAndroidDevelop/"
+        property "sonar.links.scm", "https://github.com/vector-im/riot-android/"
+        property "sonar.links.issue", "https://github.com/vector-im/riot-android/issues"
+        property "sonar.organization", "new_vector_ltd_organization"
+        property "sonar.login", project.hasProperty("SONAR_LOGIN") ? SONAR_LOGIN : "invalid"
+    }
+}
+
+project(":vector") {
+    sonarqube {
+        properties {
+            property "sonar.sources", project(":vector").android.sourceSets.main.java.srcDirs
+            // exclude source code from analyses separated by a colon (:)
+            // property "sonar.exclusions", "**/*.*"
+        }
+    }
+}
+
+if (findProject(':matrix-sdk') != null) {
+    project(":matrix-sdk") {
+        sonarqube {
+            skipProject = true
+        }
     }
 }

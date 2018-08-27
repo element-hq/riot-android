@@ -73,7 +73,7 @@ object ThemeUtils {
         when (aTheme) {
             THEME_DARK_VALUE -> VectorApp.getInstance().setTheme(R.style.AppTheme_Dark)
             THEME_BLACK_VALUE -> VectorApp.getInstance().setTheme(R.style.AppTheme_Black)
-            else -> VectorApp.getInstance().setTheme(R.style.AppTheme)
+            else -> VectorApp.getInstance().setTheme(R.style.AppTheme_Light)
         }
 
         mColorByAttr.clear()

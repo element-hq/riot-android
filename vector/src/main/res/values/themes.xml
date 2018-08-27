@@ -78,10 +78,13 @@
         <!-- room notification text color (typing, unsent...) -->
         <item name="room_notification_text_color">#a0a29f</item>
 
+        <!-- color for dividers in settings -->
+        <item name="preference_divider_color">#e1e1e1</item>
+
         <!-- icon colors -->
         <item name="default_icon_tint_color">@color/vector_green_color</item>
         <item name="settings_icon_tint_color">@android:color/black</item>
-        <item name="icon_tint_on_light_action_bar_color">@color/vector_green_color</item>
+        <item name="icon_tint_on_light_action_bar_color">@android:color/white</item>
         <item name="icon_tint_on_dark_action_bar_color">@android:color/white</item>
 
         <!-- theses colours are requested a background cannot be set by an ?att on android < 5 -->
@@ -90,6 +93,8 @@
         <item name="avatar_mask_room_header">@drawable/avatar_mask_room_header_light</item>
         <item name="avatar_mask_white_stroke">@drawable/avatar_mask_white_stroke_light</item>
         <item name="line_divider">@drawable/line_divider_light</item>
+        <item name="shadow_bottom">@drawable/shadow_bottom_light</item>
+        <item name="shadow_top">@drawable/shadow_top_light</item>
         <item name="vector_tabbar_selected_background">
             @drawable/vector_tabbar_selected_background_light
         </item>
@@ -183,11 +188,14 @@
         <!-- room notification text color (typing, unsent...) -->
         <item name="room_notification_text_color">#FF9D9D9D</item>
 
+        <!-- color for dividers in settings -->
+        <item name="preference_divider_color">#212121</item>
+
         <!-- icon colors -->
         <item name="default_icon_tint_color">@color/vector_green_color</item>
         <item name="settings_icon_tint_color">@android:color/white</item>
-        <item name="icon_tint_on_light_action_bar_color">?attr/primary_control_color</item>>
-        <item name="icon_tint_on_dark_action_bar_color">?attr/primary_control_color</item>
+        <item name="icon_tint_on_light_action_bar_color">@android:color/white</item>
+        <item name="icon_tint_on_dark_action_bar_color">@android:color/white</item>
 
         <!-- theses colours are requested a background cannot be set by an ?att on android < 5 -->
         <!-- dedicated drawables are created for each theme -->
@@ -195,6 +203,8 @@
         <item name="avatar_mask_room_header">@drawable/avatar_mask_room_header_dark</item>
         <item name="avatar_mask_white_stroke">@drawable/avatar_mask_white_stroke_dark</item>
         <item name="line_divider">@drawable/line_divider_dark</item>
+        <item name="shadow_bottom">@drawable/shadow_bottom_dark</item>
+        <item name="shadow_top">@drawable/shadow_top_dark</item>
         <item name="vector_tabbar_selected_background">
             @drawable/vector_tabbar_selected_background_dark
         </item>

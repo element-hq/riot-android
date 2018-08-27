@@ -142,7 +142,7 @@ public class VectorMediasViewerAdapter extends PagerAdapter {
                         final SlidableMediaInfo mediaInfo = mMediasMessagesList.get(position);
 
                         if (mediaInfo.mMessageType.equals(Message.MSGTYPE_VIDEO)) {
-                            final VideoView videoView = view.findViewById(R.id.media_slider_videoview);
+                            final VideoView videoView = view.findViewById(R.id.media_slider_video_view);
 
                             if (mMediasCache.isMediaCached(mediaInfo.mMediaUrl, mediaInfo.mMimeType)) {
                                 mMediasCache.createTmpDecryptedMediaFile(mediaInfo.mMediaUrl, mediaInfo.mMimeType, mediaInfo.mEncryptedFileInfo,
@@ -210,9 +210,10 @@ public class VectorMediasViewerAdapter extends PagerAdapter {
      * @param force    true to do not check the auto playmode
      */
     private void downloadVideo(final View view, final int position, boolean force) {
-        final VideoView videoView = view.findViewById(R.id.media_slider_videoview);
+        final VideoView videoView = view.findViewById(R.id.media_slider_video_view);
         final ImageView thumbView = view.findViewById(R.id.media_slider_video_thumbnail);
-        final PieFractionView pieFractionView = view.findViewById(R.id.media_slider_piechart);
+        final PieFractionView pieFractionView = view.findViewById(R.id.media_slider_pie_view);
+        final ImageView playCircleView = view.findViewById(R.id.media_slider_video_play);
         final View downloadFailedView = view.findViewById(R.id.media_download_failed);
 
         final SlidableMediaInfo mediaInfo = mMediasMessagesList.get(position);
@@ -249,6 +250,7 @@ public class VectorMediasViewerAdapter extends PagerAdapter {
 
         if (null != downloadId) {
             pieFractionView.setVisibility(View.VISIBLE);
+            playCircleView.setVisibility(View.GONE);
             pieFractionView.setFraction(mMediasCache.getProgressValueForDownloadId(downloadId));
             pieFractionView.setTag(downloadId);
 
@@ -256,13 +258,13 @@ public class VectorMediasViewerAdapter extends PagerAdapter {
 
                 @Override
                 public void onDownloadError(String downloadId, JsonElement jsonElement) {
-                    MatrixError error = JsonUtils.toMatrixError(jsonElement);
+                    pieFractionView.setVisibility(View.GONE);
+                    downloadFailedView.setVisibility(View.VISIBLE);
 
+                    MatrixError error = JsonUtils.toMatrixError(jsonElement);
                     if ((null != error) && error.isSupportedErrorCode()) {
                         Toast.makeText(mContext, error.getLocalizedMessage(), Toast.LENGTH_LONG).show();
                     }
-
-                    downloadFailedView.setVisibility(View.VISIBLE);
                 }
 
                 @Override
@@ -276,9 +278,9 @@ public class VectorMediasViewerAdapter extends PagerAdapter {
                 public void onDownloadComplete(String aDownloadId) {
                     if (aDownloadId.equals(pieFractionView.getTag())) {
                         pieFractionView.setVisibility(View.GONE);
-
                         // check if the media has been downloaded
                         if (mMediasCache.isMediaCached(loadingUri, mediaInfo.mMimeType)) {
+                            playCircleView.setVisibility(View.VISIBLE);
                             mMediasCache.createTmpDecryptedMediaFile(loadingUri, mediaInfo.mMimeType, mediaInfo.mEncryptedFileInfo,
                                     new SimpleApiCallback<File>() {
                                         @Override
@@ -321,7 +323,7 @@ public class VectorMediasViewerAdapter extends PagerAdapter {
      */
     private void downloadHighResImage(final View view, final int position) {
         final WebView webView = view.findViewById(R.id.media_slider_image_webview);
-        final PieFractionView pieFractionView = view.findViewById(R.id.media_slider_piechart);
+        final PieFractionView pieFractionView = view.findViewById(R.id.media_slider_pie_view);
         final View downloadFailedView = view.findViewById(R.id.media_download_failed);
 
         final SlidableMediaInfo imageInfo = mMediasMessagesList.get(position);
@@ -345,14 +347,12 @@ public class VectorMediasViewerAdapter extends PagerAdapter {
                 public void onDownloadError(String aDownloadId, JsonElement jsonElement) {
                     if (aDownloadId.equals(downloadId)) {
                         pieFractionView.setVisibility(View.GONE);
+                        downloadFailedView.setVisibility(View.VISIBLE);
 
                         MatrixError error = JsonUtils.toMatrixError(jsonElement);
-
                         if (null != error) {
                             Toast.makeText(mContext, error.getLocalizedMessage(), Toast.LENGTH_LONG).show();
                         }
-
-                        downloadFailedView.setVisibility(View.VISIBLE);
                     }
                 }
 
@@ -367,7 +367,6 @@ public class VectorMediasViewerAdapter extends PagerAdapter {
                 public void onDownloadComplete(String aDownloadId) {
                     if (aDownloadId.equals(downloadId)) {
                         pieFractionView.setVisibility(View.GONE);
-
                         if (mMediasCache.isMediaCached(loadingUri, imageInfo.mMimeType)) {
                             mMediasCache.createTmpDecryptedMediaFile(loadingUri, imageInfo.mMimeType, imageInfo.mEncryptedFileInfo,
                                     new SimpleApiCallback<File>() {
@@ -412,13 +411,13 @@ public class VectorMediasViewerAdapter extends PagerAdapter {
         final View view = mLayoutInflater.inflate(R.layout.adapter_vector_medias_viewer, null, false);
 
         // hide the pie chart
-        final PieFractionView pieFractionView = view.findViewById(R.id.media_slider_piechart);
+        final PieFractionView pieFractionView = view.findViewById(R.id.media_slider_pie_view);
         pieFractionView.setVisibility(View.GONE);
 
         view.findViewById(R.id.media_download_failed).setVisibility(View.GONE);
 
         final WebView imageWebView = view.findViewById(R.id.media_slider_image_webview);
-        final View videoLayout = view.findViewById(R.id.media_slider_videolayout);
+        final View videoLayout = view.findViewById(R.id.media_slider_video_layout);
         final ImageView thumbView = view.findViewById(R.id.media_slider_video_thumbnail);
 
         imageWebView.getSettings().setDisplayZoomControls(false);
@@ -468,7 +467,7 @@ public class VectorMediasViewerAdapter extends PagerAdapter {
             int width = -1;
             int height = -1;
 
-            // is the high picture already downloaded ?
+            // check if the high resolution picture is already downloaded
             if (mMediasCache.isMediaCached(mediaUrl, mimeType)) {
                 if (mHighResMediaIndex.indexOf(position) < 0) {
                     mHighResMediaIndex.add(position);
@@ -553,9 +552,9 @@ public class VectorMediasViewerAdapter extends PagerAdapter {
      * @param display true to display the video thumbnail, false to display the video player
      */
     private void displayVideoThumbnail(final View view, boolean display) {
-        final VideoView videoView = view.findViewById(R.id.media_slider_videoview);
+        final VideoView videoView = view.findViewById(R.id.media_slider_video_view);
         final ImageView thumbView = view.findViewById(R.id.media_slider_video_thumbnail);
-        final ImageView playView = view.findViewById(R.id.media_slider_video_playView);
+        final ImageView playView = view.findViewById(R.id.media_slider_video_play);
 
         videoView.setVisibility(display ? View.GONE : View.VISIBLE);
         thumbView.setVisibility(display ? View.VISIBLE : View.GONE);
@@ -740,9 +739,9 @@ public class VectorMediasViewerAdapter extends PagerAdapter {
                            final String videoUrl,
                            final String videoMimeType,
                            final EncryptedFileInfo encryptedFileInfo) {
-        final VideoView videoView = view.findViewById(R.id.media_slider_videoview);
+        final VideoView videoView = view.findViewById(R.id.media_slider_video_view);
         final ImageView thumbView = view.findViewById(R.id.media_slider_video_thumbnail);
-        final ImageView playView = view.findViewById(R.id.media_slider_video_playView);
+        final ImageView playView = view.findViewById(R.id.media_slider_video_play);
 
         displayVideoThumbnail(view, !videoView.isPlaying());
 

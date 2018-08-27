@@ -17,7 +17,7 @@
             android:layout_height="@dimen/chat_avatar_size"
             android:layout_centerVertical="true"
             android:layout_marginLeft="16dp"
-            tools:src="#22000000" />
+            tools:src="@tools:sample/avatars" />
 
         <ImageView
             android:id="@+id/room_avatar_direct_chat_icon"
@@ -100,7 +100,7 @@
         android:orientation="horizontal">
 
         <Button
-            android:id="@+id/recents_invite_reject_button"
+            android:id="@+id/room_invite_reject_button"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:background="@color/vector_green_color"
@@ -111,7 +111,7 @@
             android:textSize="14sp" />
 
         <Button
-            android:id="@+id/recents_invite_preview_button"
+            android:id="@+id/room_invite_preview_button"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:layout_marginLeft="16dp"

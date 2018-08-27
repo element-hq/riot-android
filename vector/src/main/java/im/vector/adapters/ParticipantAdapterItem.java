@@ -22,6 +22,7 @@ import android.graphics.Bitmap;
 import android.text.TextUtils;
 import android.widget.ImageView;
 
+import org.matrix.androidsdk.MXPatterns;
 import org.matrix.androidsdk.MXSession;
 import org.matrix.androidsdk.data.store.IMXStore;
 import org.matrix.androidsdk.rest.model.RoomMember;
@@ -467,7 +468,7 @@ public class ParticipantAdapterItem implements java.io.Serializable {
                 displayname += " (" + mUserId + ")";
             }
         } else {
-            if (MXSession.PATTERN_CONTAIN_MATRIX_USER_IDENTIFIER.matcher(mUserId).matches()) {
+            if (MXPatterns.isUserId(mUserId)) {
                 displayname += " (" + mUserId + ")";
             }
         }
