@@ -5,7 +5,7 @@
     <string name="black_them">Nigra haŭto</string>
 
     <string name="notification_sync_in_progress">Sinkroniganta</string>
-    <string name="notification_listen_for_events">Aŭskulti je eventoj</string>
+    <string name="notification_listen_for_events">Atenti pri eventoj</string>
     <string name="notification_noisy_notifications">Laŭtaj sciigoj</string>
     <string name="notification_silent_notifications">Silentaj sciigoj</string>
 
@@ -14,8 +14,8 @@
     <string name="resources_country_code">EO</string>
 
     <string name="title_activity_settings">Agordoj</string>
-    <string name="title_activity_bug_report">Informoj pri ĉi tiu ano</string>
-    <string name="title_activity_group_details">Informoj pri la komunumo</string>
+    <string name="title_activity_bug_report">Cimraporto</string>
+    <string name="title_activity_group_details">Komunumaj detaloj</string>
     <string name="title_activity_choose_sticker">Sendi glumarkon</string>
 
     <string name="dialog_title_third_party_licences">Permesiloj de eksteraj liverantoj</string>
@@ -35,7 +35,7 @@
     <string name="share">Diskonigi</string>
     <string name="speak">Paroli</string>
     <string name="clear">Forviŝi</string>
-    <string name="later">Pli malfrue</string>
+    <string name="later">Poste</string>
     <string name="forward">Plusendi</string>
     <string name="permalink">Fiksligilo</string>
     <string name="view_source">Vidi fonton</string>
@@ -44,7 +44,8 @@
     <string name="rename">Renomi</string>
     <string name="title_activity_member_details">Membro-Detaloj</string>
     <string name="title_activity_historical">Historia</string>
-    <string name="report_content">Reporti enhavon</string>
+    <string name="report_content">Raporti enhavon</string>
     <string name="active_call">Aktiva alvoko</string>
     <string name="ongoing_conference_call_voice">voĉo</string>
+    <string name="send_bug_report">Cimraporto</string>
     </resources>
