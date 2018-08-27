@@ -637,7 +637,9 @@ Les messages chiffrés ne seront pas visibles sur les clients qui n\'ont pas enc
 
 
     <string name="encryption_export_room_keys_summary">Exporter les clés vers un fichier local</string>
-    <string name="encryption_export_saved_as">Les clés E2E du salons sont sauvegardées dans \"%s\"</string>
+    <string name="encryption_export_saved_as">Les clés E2E du salons ont été sauvegardées dans \"%s\".
+
+Attention : ce fichier peut être supprimé si l\'application est désinstallée.</string>
 
     <string name="encryption_import_room_keys_summary">Importer les clés à partir d\'un fichier local</string>
     <string name="encryption_never_send_to_unverified_devices_summary">Ne jamais envoyer de messages chiffrés aux appareils non vérifiés depuis cet appareil</string>
