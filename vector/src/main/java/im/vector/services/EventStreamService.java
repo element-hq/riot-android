@@ -114,7 +114,7 @@ public class EventStreamService extends Service {
     /**
      * States of the foreground service notification.
      */
-    public enum ForegroundNotificationState {
+    private enum ForegroundNotificationState {
         // the foreground notification is not displayed
         NONE,
         // initial sync in progress or the app is resuming
