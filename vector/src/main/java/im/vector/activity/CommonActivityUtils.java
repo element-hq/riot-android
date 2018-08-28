@@ -1507,9 +1507,8 @@ public class CommonActivityUtils {
     /**
      * Export the e2e keys for a dedicated session.
      * {@link im.vector.util.PermissionsToolsKt#PERMISSIONS_FOR_WRITING_FILES} has to be granted
-     *
+     * <p>
      * TODO Export as a Share
-     *
      *
      * @param session  the session
      * @param password the password
@@ -1526,7 +1525,7 @@ public class CommonActivityUtils {
             return;
         }
 
-        session.getCrypto().exportRoomKeys(password, new ApiCallback<byte[]>() {
+        session.getCrypto().exportRoomKeys(password, new SimpleApiCallback<byte[]>(callback) {
             @Override
             public void onSuccess(byte[] bytesArray) {
                 try {
@@ -1535,60 +1534,18 @@ public class CommonActivityUtils {
                     stream.close();
 
                     saveMediaIntoDownloads(appContext,
-                            new File(Uri.parse(url).getPath()), "riot-keys.txt", "text/plain", new SimpleApiCallback<String>() {
+                            new File(Uri.parse(url).getPath()), "riot-keys.txt", "text/plain", new SimpleApiCallback<String>(callback) {
                                 @Override
                                 public void onSuccess(String path) {
                                     if (null != callback) {
                                         callback.onSuccess(path);
                                     }
                                 }
-
-                                @Override
-                                public void onNetworkError(Exception e) {
-                                    if (null != callback) {
-                                        callback.onNetworkError(e);
-                                    }
-                                }
-
-                                @Override
-                                public void onMatrixError(MatrixError e) {
-                                    if (null != callback) {
-                                        callback.onMatrixError(e);
-                                    }
-                                }
-
-                                @Override
-                                public void onUnexpectedError(Exception e) {
-                                    if (null != callback) {
-                                        callback.onUnexpectedError(e);
-                                    }
-                                }
                             });
                 } catch (Exception e) {
                     if (null != callback) {
-                        callback.onMatrixError(new MatrixError(null, e.getLocalizedMessage()));
+                        callback.onUnexpectedError(e);
                     }
-                }
-            }
-
-            @Override
-            public void onNetworkError(Exception e) {
-                if (null != callback) {
-                    callback.onNetworkError(e);
-                }
-            }
-
-            @Override
-            public void onMatrixError(MatrixError e) {
-                if (null != callback) {
-                    callback.onMatrixError(e);
-                }
-            }
-
-            @Override
-            public void onUnexpectedError(Exception e) {
-                if (null != callback) {
-                    callback.onUnexpectedError(e);
                 }
             }
         });
