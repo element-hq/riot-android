@@ -1012,13 +1012,7 @@ public class CommonActivityUtils {
 
         new AlertDialog.Builder(fromActivity)
                 .setTitle(R.string.send_files_in)
-                .setNegativeButton(R.string.cancel,
-                        new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialog, int which) {
-                                dialog.dismiss();
-                            }
-                        })
+                .setNegativeButton(R.string.cancel, null)
                 .setAdapter(adapter,
                         new DialogInterface.OnClickListener() {
 

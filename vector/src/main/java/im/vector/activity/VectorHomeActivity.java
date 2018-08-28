@@ -1217,11 +1217,7 @@ public class VectorHomeActivity extends VectorAppCompatActivity implements Searc
 
                 new AlertDialog.Builder(this)
                         .setMessage(R.string.e2e_need_log_in_again)
-                        .setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialog, int which) {
-                            }
-                        })
+                        .setNegativeButton(R.string.cancel, null)
                         .setPositiveButton(R.string.ok,
                                 new DialogInterface.OnClickListener() {
                                     public void onClick(DialogInterface dialog, int id) {
@@ -1497,12 +1493,7 @@ public class VectorHomeActivity extends VectorAppCompatActivity implements Searc
                                 });
                             }
                         })
-                .setNegativeButton(R.string.cancel,
-                        new DialogInterface.OnClickListener() {
-                            public void onClick(DialogInterface dialog, int id) {
-                                dialog.cancel();
-                            }
-                        })
+                .setNegativeButton(R.string.cancel, null)
                 .show();
 
         final Button joinButton = alertDialog.getButton(AlertDialog.BUTTON_POSITIVE);
@@ -1744,12 +1735,7 @@ public class VectorHomeActivity extends VectorAppCompatActivity implements Searc
                                                 CommonActivityUtils.logout(VectorHomeActivity.this);
                                             }
                                         })
-                                .setNegativeButton(R.string.cancel,
-                                        new DialogInterface.OnClickListener() {
-                                            public void onClick(DialogInterface dialog, int id) {
-                                                dialog.cancel();
-                                            }
-                                        })
+                                .setNegativeButton(R.string.cancel, null)
                                 .show();
                     }
 
@@ -1846,12 +1832,7 @@ public class VectorHomeActivity extends VectorAppCompatActivity implements Searc
                                         });
                                     }
                                 })
-                                .setNegativeButton(R.string.cancel,
-                                        new DialogInterface.OnClickListener() {
-                                            public void onClick(DialogInterface dialog, int id) {
-                                                dialog.cancel();
-                                            }
-                                        })
+                                .setNegativeButton(R.string.cancel, null)
                                 .show();
 
                         break;
@@ -2276,16 +2257,10 @@ public class VectorHomeActivity extends VectorAppCompatActivity implements Searc
                         .setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
-                                dialog.dismiss();
                                 CommonActivityUtils.logout(VectorHomeActivity.this);
                             }
                         })
-                        .setNegativeButton(R.string.later, new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialog, int which) {
-                                dialog.dismiss();
-                            }
-                        })
+                        .setNegativeButton(R.string.later, null)
                         .show();
             }
         }

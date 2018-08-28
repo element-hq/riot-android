@@ -841,7 +841,6 @@ public class VectorRoomActivity extends MXCActionBarActivity implements
                         .setPositiveButton(R.string.remove, new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
-                                dialog.dismiss();
                                 showWaitingView();
 
                                 WidgetsManager.getSharedInstance().closeWidget(mSession, mRoom, widget.getWidgetId(), new ApiCallback<Void>() {
@@ -1512,7 +1511,6 @@ public class VectorRoomActivity extends MXCActionBarActivity implements
                             .setPositiveButton(R.string.leave, new DialogInterface.OnClickListener() {
                                 @Override
                                 public void onClick(DialogInterface dialog, int which) {
-                                    dialog.dismiss();
                                     showWaitingView();
 
                                     mRoom.leave(new ApiCallback<Void>() {
