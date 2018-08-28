@@ -51,6 +51,7 @@ import im.vector.Matrix;
 import im.vector.R;
 import im.vector.activity.CommonActivityUtils;
 import im.vector.util.PreferencesManager;
+import im.vector.util.SystemUtilsKt;
 
 /**
  * Helper class to store the GCM registration ID in {@link SharedPreferences}
@@ -1157,7 +1158,7 @@ public final class GcmRegistrationManager {
         // If using GCM, first check if the application has the "run in background" permission.
         // No permission, no background sync
         if (hasRegistrationToken()
-                && !PreferencesManager.isIgnoringBatteryOptimizations(mContext)) {
+                && !SystemUtilsKt.isIgnoringBatteryOptimizations(mContext)) {
             return false;
         }
 

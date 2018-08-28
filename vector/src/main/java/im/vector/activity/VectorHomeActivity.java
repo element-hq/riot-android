@@ -129,6 +129,7 @@ import im.vector.util.CallsManager;
 import im.vector.util.HomeRoomsViewModel;
 import im.vector.util.PreferencesManager;
 import im.vector.util.RoomUtils;
+import im.vector.util.SystemUtilsKt;
 import im.vector.util.ThemeUtils;
 import im.vector.util.VectorUtils;
 import im.vector.view.UnreadCounterBadgeView;
@@ -638,7 +639,7 @@ public class VectorHomeActivity extends VectorAppCompatActivity implements Searc
         if (!PreferencesManager.didAskUserToIgnoreBatteryOptimizations(this)) {
             PreferencesManager.setDidAskUserToIgnoreBatteryOptimizations(this);
 
-            if (PreferencesManager.isIgnoringBatteryOptimizations(this)) {
+            if (SystemUtilsKt.isIgnoringBatteryOptimizations(this)) {
                 // No need to ask permission, we already have it
                 NotificationPrivacyActivity.setNotificationPrivacy(VectorHomeActivity.this,
                         GcmRegistrationManager.NotificationPrivacy.NORMAL);

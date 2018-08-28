@@ -243,26 +243,6 @@ public class PreferencesManager {
     }
 
     /**
-     * Tells if the application ignores battery optimizations.
-     * <p>
-     * Ignoring them allows the app to run in background to make background sync with the homeserver.
-     * This user option appears on Android M but Android O enforces its usage and kills apps not
-     * authorised by the user to run in background.
-     *
-     * @param context the context
-     * @return true if battery optimisations are ignored
-     */
-    @SuppressLint("NewApi")
-    public static boolean isIgnoringBatteryOptimizations(Context context) {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-            return ((PowerManager) context.getSystemService(context.POWER_SERVICE)).isIgnoringBatteryOptimizations(context.getPackageName());
-        }
-
-        // no issue before Android M, battery optimisations did not exist
-        return true;
-    }
-
-    /**
      * Tells if the timestamp must be displayed in 12h format
      *
      * @param context the context
