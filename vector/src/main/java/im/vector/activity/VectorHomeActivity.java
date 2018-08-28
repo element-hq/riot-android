@@ -126,6 +126,7 @@ import im.vector.receiver.VectorUniversalLinkReceiver;
 import im.vector.services.EventStreamService;
 import im.vector.util.BugReporter;
 import im.vector.util.CallsManager;
+import im.vector.util.ExternalApplicationsUtilKt;
 import im.vector.util.HomeRoomsViewModel;
 import im.vector.util.PreferencesManager;
 import im.vector.util.RoomUtils;
@@ -1725,42 +1726,23 @@ public class VectorHomeActivity extends VectorAppCompatActivity implements Searc
             public void onClick(View v) {
                 showWaitingView();
 
-                CommonActivityUtils.exportKeys(mSession, passPhrase1EditText.getText().toString(), new ApiCallback<String>() {
-                    private void onDone(String message) {
+                CommonActivityUtils.exportKeys(mSession, passPhrase1EditText.getText().toString(), new SimpleApiCallback<String>(VectorHomeActivity.this) {
+
+                    @Override
+                    public void onSuccess(final String filename) {
                         hideWaitingView();
 
                         new AlertDialog.Builder(VectorHomeActivity.this)
-                                .setMessage(message)
+                                .setMessage(getString(R.string.encryption_export_saved_as, filename))
                                 .setCancelable(false)
-                                .setPositiveButton(R.string.action_sign_out,
-                                        new DialogInterface.OnClickListener() {
-                                            public void onClick(DialogInterface dialog, int id) {
-                                                showWaitingView();
-                                                CommonActivityUtils.logout(VectorHomeActivity.this);
-                                            }
-                                        })
+                                .setPositiveButton(R.string.action_sign_out, new DialogInterface.OnClickListener() {
+                                    public void onClick(DialogInterface dialog, int id) {
+                                        showWaitingView();
+                                        CommonActivityUtils.logout(VectorHomeActivity.this);
+                                    }
+                                })
                                 .setNegativeButton(R.string.cancel, null)
                                 .show();
-                    }
-
-                    @Override
-                    public void onSuccess(String filename) {
-                        onDone(getString(R.string.encryption_export_saved_as, filename));
-                    }
-
-                    @Override
-                    public void onNetworkError(Exception e) {
-                        onDone(e.getLocalizedMessage());
-                    }
-
-                    @Override
-                    public void onMatrixError(MatrixError e) {
-                        onDone(e.getLocalizedMessage());
-                    }
-
-                    @Override
-                    public void onUnexpectedError(Exception e) {
-                        onDone(e.getLocalizedMessage());
                     }
                 });
 

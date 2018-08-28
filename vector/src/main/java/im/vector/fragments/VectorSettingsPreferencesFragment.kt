@@ -2444,9 +2444,12 @@ class VectorSettingsPreferencesFragment : PreferenceFragment(), SharedPreference
 
                 CommonActivityUtils.exportKeys(mSession, passPhrase1EditText.text.toString(), object : ApiCallback<String> {
                     override fun onSuccess(filename: String) {
-                        VectorApp.getInstance().toast(filename)
-
                         hideLoadingView()
+
+                        AlertDialog.Builder(activity)
+                                .setMessage(getString(R.string.encryption_export_saved_as, filename))
+                                .setPositiveButton(R.string.ok, null)
+                                .show()
                     }
 
                     override fun onNetworkError(e: Exception) {

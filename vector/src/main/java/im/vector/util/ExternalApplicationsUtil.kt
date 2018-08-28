@@ -29,6 +29,7 @@ import android.provider.MediaStore
 import androidx.core.widget.toast
 import im.vector.R
 import org.matrix.androidsdk.util.Log
+import java.io.File
 import java.text.SimpleDateFormat
 import java.util.*
 
@@ -219,3 +220,24 @@ fun openUri(activity: Activity, uri: String) {
         activity.toast(R.string.error_no_external_application_found)
     }
 }
+
+/**
+ * Send media to a third party application.
+ *
+ * @param activity       the activity
+ * @param savedMediaPath the media path
+ * @param mimeType       the media mime type.
+ */
+fun openMedia(activity: Activity, savedMediaPath: String, mimeType: String) {
+    val file = File(savedMediaPath)
+    val intent = Intent(Intent.ACTION_VIEW)
+
+    intent.setDataAndType(Uri.fromFile(file), mimeType)
+
+    try {
+        activity.startActivity(intent)
+    } catch (activityNotFoundException: ActivityNotFoundException) {
+        activity.toast(R.string.error_no_external_application_found)
+    }
+}
+
