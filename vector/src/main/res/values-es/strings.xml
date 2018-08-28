@@ -118,7 +118,7 @@ Selecciona exportar para crear un archivo de respaldo antes de cerrar la sesión
     <string name="username">Nombre de usuario</string>
     <string name="create_account">Registrar</string>
     <string name="login">Iniciar sesión</string>
-    <string name="logout">Salir</string>
+    <string name="logout">Cerrar sesión</string>
     <string name="hs_url">URL del Servidor</string>
     <string name="identity_url">URL del Servidor de Identidad</string>
     <string name="search">Buscar</string>
@@ -141,9 +141,9 @@ Selecciona exportar para crear un archivo de respaldo antes de cerrar la sesión
     <string name="auth_password_placeholder">Contraseña</string>
     <string name="auth_new_password_placeholder">Contraseña nueva</string>
     <string name="auth_user_name_placeholder">Nombre de usuario</string>
-    <string name="auth_add_email_message">Añadir un correo electrónico a tu cuenta para que otros te descubran, y para que puedas restablecer tu contraseña</string>
+    <string name="auth_add_email_message">Añade un correo electrónico a tu cuenta para que otros te descubran, y para que puedas restablecer tu contraseña.</string>
     <string name="auth_add_phone_message">Añadir número de teléfono a tu cuenta para que otros te descubran</string>
-    <string name="auth_add_email_phone_message">Añadir un correo electrónico y/o número de teléfono a tu cuenta para que otros te descubran.
+    <string name="auth_add_email_phone_message">Añade un correo electrónico y/o número de teléfono a tu cuenta para que otros te descubran.
 
 El correo electrónico te permitirá restablecer tu contraseña.</string>
     <string name="auth_add_email_and_phone_message">Añadir un correo electrónico y un número de teléfono a tu cuenta para que otros te descubran.
@@ -153,8 +153,8 @@ El correo electrónico te permitirá reiniciar tu contraseña.</string>
     <string name="auth_opt_email_placeholder">Correo electrónico (opcional)</string>
     <string name="auth_phone_number_placeholder">Número de teléfono</string>
     <string name="auth_opt_phone_number_placeholder">Número de teléfono (opcional)</string>
-    <string name="auth_repeat_password_placeholder">Confirmar contraseña</string>
-    <string name="auth_repeat_new_password_placeholder">Confirmar contraseña nueva</string>
+    <string name="auth_repeat_password_placeholder">Repite la contraseña</string>
+    <string name="auth_repeat_new_password_placeholder">Confirma tu nueva contraseña</string>
     <string name="auth_invalid_login_param">Nombre y/o contraseña incorrecta</string>
     <string name="auth_invalid_user_name">Nombres de usuarios sólo pueden contener letras, números, puntos, guiones y guiones bajos</string>
     <string name="auth_invalid_password">Contraseña demasiado corta (min 6)</string>
@@ -172,7 +172,7 @@ El correo electrónico te permitirá reiniciar tu contraseña.</string>
     <string name="auth_email_validation_message">Consulte su correo electrónico para poder continuar con la inscripción</string>
     <string name="auth_threepid_warning_message">La inscripción con correo electrónico y número de teléfono no está implementada hasta que exista la API. Solamente se tomará en cuenta el número de teléfono.
 
-Podrá añadir su correo electrónico a su cuenta en las configuraciones.</string>
+Podrá añadir su correo electrónico a su cuenta en configuraciones.</string>
     <string name="auth_recaptcha_message">Este servidor quiere verificar que no seas robot</string>
     <string name="auth_username_in_use">Este nombre ya está reservado para otra persona</string>
     <string name="auth_home_server">Servidor:</string>
@@ -366,7 +366,7 @@ Los mensajes cifrados no serán visibles en cuentas que no implementen el cifrad
     <!-- unrecognized SSL certificate -->
     <string name="ssl_trust">Confiar</string>
     <string name="ssl_do_not_trust">No confiar</string>
-    <string name="ssl_logout_account">Salir</string>
+    <string name="ssl_logout_account">Cerrar Sesión</string>
     <string name="ssl_remain_offline">Ignorar</string>
     <string name="ssl_fingerprint_hash">Huella (%s):</string>
     <string name="ssl_could_not_verify">La identidad de el servidor remoto no se pudo verificar.</string>
@@ -445,7 +445,7 @@ Tenga en cuenta que esta acción reiniciará la app y puede tardar cierto tiempo
     <!-- Vector Settings -->
 
     <string name="settings_profile_picture">Foto de Perfil</string>
-    <string name="settings_display_name">Nombre Visible</string>
+    <string name="settings_display_name">Nombre Público</string>
     <string name="settings_email_address">Correo Electrónico</string>
     <string name="settings_add_email_address">Añadir correo electrónico</string>
     <string name="settings_phone_number">Número Telefónico</string>
@@ -492,7 +492,7 @@ Tenga en cuenta que esta acción reiniciará la app y puede tardar cierto tiempo
     <string name="settings_contacts_phonebook_country">País de directorio telefónico</string>
     <string name="settings_home_display">Pantalla de inicio</string>
     <string name="settings_pin_missed_notifications">Fijar salas con notificaciones pendientes</string>
-    <string name="settings_pin_unread_messages">Pegar salas con mensajes no leídos</string>
+    <string name="settings_pin_unread_messages">Fijar salas con mensajes no leídos</string>
     <string name="settings_devices_list">Dispositivos</string>
     <string name="devices_details_dialog_title">Información del dispositivo</string>
     <string name="devices_details_id_title">Identificación</string>
@@ -735,9 +735,9 @@ Lo puedes hacer ahora o luego desde las configuraciones de la aplicación.</stri
     <string name="huge">Grandísimo</string>
 <string name="user_directory_header">Directorio del usuario</string>
     <string name="people_search_user_directory">DIRECTORIO DEL USUARIO (%s)</string>
-    <string name="light_theme">Tema blanco</string>
-    <string name="dark_theme">Tema oscuro</string>
-    <string name="black_them">Tema negro</string>
+    <string name="light_theme">Tema Claro</string>
+    <string name="dark_theme">Tema Oscuro</string>
+    <string name="black_them">Tema Negro</string>
 
     <string name="notification_sync_in_progress">Sincronizando</string>
     <string name="notification_listen_for_events">Escuchando eventos</string>
@@ -757,7 +757,7 @@ Lo puedes hacer ahora o luego desde las configuraciones de la aplicación.</stri
     <string name="settings_containing_my_user_name">Mensajes que contengan mi nombre de usuario</string>
     <string name="settings_12_24_timestamps">Mostrar la hora en formato de 12 horas (ej: 2:30pm)</string>
     <string name="settings_hide_join_leave_messages">Esconder mensajes de unirse/partir (invitaciones/kicks/baneos no son afectados)</string>
-    <string name="settings_hide_avatar_display_name_changes_messages">Esconder cambios de avatar y alias</string>
+    <string name="settings_hide_avatar_display_name_changes_messages">Esconder cambios de avatar y nombre público</string>
 
     <string name="settings_analytics">Análisis anónimo de uso</string>
     <string name="settings_opt_out_of_analytics">Darse de baja del análisis anónimo de uso</string>
@@ -837,10 +837,10 @@ Lo puedes hacer ahora o luego desde las configuraciones de la aplicación.</stri
     <string name="settings_inline_url_preview">Habilita las pre visualizaciones de las URL por defecto</string>
     <string name="settings_vibrate_on_mention">Vibrar cuando te citen</string>
 
-    <string name="settings_flair">Talento</string>
+    <string name="settings_flair">Insignia</string>
 
     <string name="room_settings_room_notifications_title">Notificaciones</string>
-    <string name="room_settings_no_flair">" Esta sala no pertenece a ninguna comunidad"</string>
+    <string name="room_settings_no_flair">Esta sala no está mostrando insignias para ninguna comunidad</string>
     <string name="room_settings_add_new_group">Nueva ID de la comunidad (Ej. +foo:matrix.org)</string>
     <string name="room_settings_invalid_group_format_dialog_title">El ID de la comunidad es inválido</string>
     <string name="forget_room">Salir de la sala</string>
@@ -1035,4 +1035,6 @@ Esta acción reiniciará la aplicación y puede llevar algún tiempo.</string>
     <string name="room_tombstone_predecessor_link">Pinchar aquí para ver mensajes más antiguos</string>
 
 <string name="command_description_deop_user">Degradar usuario con el id dado</string>
+    <string name="system_alerts_header">Alertas de Sistema</string>
+
     </resources>
