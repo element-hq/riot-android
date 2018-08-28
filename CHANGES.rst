@@ -9,6 +9,7 @@ Features:
 
 Improvements:
  - Improve intent to open document (#2544)
+ - Avoid useless dialog for permission (#2331)
 
 Other changes:
  -

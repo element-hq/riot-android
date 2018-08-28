@@ -621,7 +621,6 @@ public class VectorHomeActivity extends VectorAppCompatActivity implements Searc
      * Ask the user to choose a notification privacy policy.
      */
     private void checkNotificationPrivacySetting() {
-
         if (Build.VERSION.SDK_INT < Build.VERSION_CODES.M) {
             // The "Run in background" permission exists from android 6
             return;
@@ -637,37 +636,41 @@ public class VectorHomeActivity extends VectorAppCompatActivity implements Searc
 
         // ask user what notification privacy they want. Ask it once
         if (!PreferencesManager.didAskUserToIgnoreBatteryOptimizations(this)) {
-            PreferencesManager.setDidAskUserToIgnoreBatteryOptimizations(this, true);
+            PreferencesManager.setDidAskUserToIgnoreBatteryOptimizations(this);
 
-            // by default, use GCM and low detail notifications
-            gcmMgr.setNotificationPrivacy(GcmRegistrationManager.NotificationPrivacy.LOW_DETAIL);
+            if (PreferencesManager.isIgnoringBatteryOptimizations(this)) {
+                // No need to ask permission, we already have it
+                NotificationPrivacyActivity.setNotificationPrivacy(VectorHomeActivity.this,
+                        GcmRegistrationManager.NotificationPrivacy.NORMAL);
+            } else {
+                // by default, use GCM and low detail notifications
+                gcmMgr.setNotificationPrivacy(GcmRegistrationManager.NotificationPrivacy.LOW_DETAIL);
 
-            new AlertDialog.Builder(this)
-                    .setTitle(R.string.startup_notification_privacy_title)
-                    .setMessage(R.string.startup_notification_privacy_message)
-                    .setPositiveButton(R.string.startup_notification_privacy_button_grant, new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialog, int which) {
+                new AlertDialog.Builder(this)
+                        .setTitle(R.string.startup_notification_privacy_title)
+                        .setMessage(R.string.startup_notification_privacy_message)
+                        .setPositiveButton(R.string.startup_notification_privacy_button_grant, new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                Log.d(LOG_TAG, "checkNotificationPrivacySetting: user wants to grant the IgnoreBatteryOptimizations permission");
 
-                            Log.d(LOG_TAG, "checkNotificationPrivacySetting: user wants to grant the IgnoreBatteryOptimizations permission");
+                                // use NotificationPrivacyActivity in case we need to display the IgnoreBatteryOptimizations
+                                // grant permission dialog
+                                NotificationPrivacyActivity.setNotificationPrivacy(VectorHomeActivity.this,
+                                        GcmRegistrationManager.NotificationPrivacy.NORMAL);
+                            }
+                        })
+                        .setNegativeButton(R.string.startup_notification_privacy_button_other, new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                Log.d(LOG_TAG, "checkNotificationPrivacySetting: user opens notification policy setting screen");
 
-                            // use NotificationPrivacyActivity in case we need to display the IgnoreBatteryOptimizations
-                            // grant permission dialog
-                            NotificationPrivacyActivity.setNotificationPrivacy(VectorHomeActivity.this,
-                                    GcmRegistrationManager.NotificationPrivacy.NORMAL);
-                        }
-                    })
-                    .setNegativeButton(R.string.startup_notification_privacy_button_other, new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialog, int which) {
-
-                            Log.d(LOG_TAG, "checkNotificationPrivacySetting: user opens notification policy setting screen");
-
-                            // open the notification policy setting screen
-                            startActivity(NotificationPrivacyActivity.getIntent(VectorHomeActivity.this));
-                        }
-                    })
-                    .show();
+                                // open the notification policy setting screen
+                                startActivity(NotificationPrivacyActivity.getIntent(VectorHomeActivity.this));
+                            }
+                        })
+                        .show();
+            }
         }
     }
 

@@ -235,10 +235,10 @@ public class PreferencesManager {
      *
      * @param context the context
      */
-    public static void setDidAskUserToIgnoreBatteryOptimizations(Context context, boolean asked) {
+    public static void setDidAskUserToIgnoreBatteryOptimizations(Context context) {
         PreferenceManager.getDefaultSharedPreferences(context)
                 .edit()
-                .putBoolean(DID_ASK_TO_IGNORE_BATTERY_OPTIMIZATIONS_KEY, asked)
+                .putBoolean(DID_ASK_TO_IGNORE_BATTERY_OPTIMIZATIONS_KEY, true)
                 .apply();
     }
 
