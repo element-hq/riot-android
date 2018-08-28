@@ -210,7 +210,7 @@ public class PhoneNumberUtils {
      * Provide libphonenumber phonenumber from an unformatted one.
      *
      * @param text        the unformatted phone number
-     * @param countryCode the cuntry code
+     * @param countryCode the country code
      * @return the phone number
      */
     private static Phonenumber.PhoneNumber getPhoneNumber(final String text, final String countryCode) {

@@ -13,7 +13,7 @@ Improvements:
  - Improve wording when exporting keys (#2289)
 
 Other changes:
- -
+ - Upgrade lib libphonenumber from v8.0.1 to 8.9.12
 
 Bugfix:
  - Handle `\/` at the beginning of a message to send a message starting with `/` (#658)
