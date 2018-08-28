@@ -10,6 +10,7 @@ Features:
 Improvements:
  - Improve intent to open document (#2544)
  - Avoid useless dialog for permission (#2331)
+ - Improve wording when exporting keys (#2289)
 
 Other changes:
  -
