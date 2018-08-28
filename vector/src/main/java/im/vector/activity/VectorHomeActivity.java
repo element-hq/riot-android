@@ -196,9 +196,6 @@ public class VectorHomeActivity extends VectorAppCompatActivity implements Searc
 
     private String mGroupIdToOpen = null;
 
-    @BindView(R.id.listView_spinner_views)
-    View waitingView;
-
     @BindView(R.id.floating_action_menu)
     FloatingActionsMenu mFloatingActionsMenu;
 
@@ -314,6 +311,9 @@ public class VectorHomeActivity extends VectorAppCompatActivity implements Searc
             Log.d(LOG_TAG, "onCreate : Going to splash screen");
             return;
         }
+
+        // Waiting View
+        setWaitingView(findViewById(R.id.listView_spinner_views));
 
         sharedInstance = this;
 
@@ -1384,7 +1384,7 @@ public class VectorHomeActivity extends VectorAppCompatActivity implements Searc
         mSession.createRoom(new SimpleApiCallback<String>(VectorHomeActivity.this) {
             @Override
             public void onSuccess(final String roomId) {
-                waitingView.post(new Runnable() {
+                mToolbar.post(new Runnable() {
                     @Override
                     public void run() {
                         hideWaitingView();
@@ -1399,7 +1399,7 @@ public class VectorHomeActivity extends VectorAppCompatActivity implements Searc
             }
 
             private void onError(final String message) {
-                waitingView.post(new Runnable() {
+                mToolbar.post(new Runnable() {
                     @Override
                     public void run() {
                         if (null != message) {
@@ -1466,7 +1466,7 @@ public class VectorHomeActivity extends VectorAppCompatActivity implements Searc
                                     }
 
                                     private void onError(final String message) {
-                                        waitingView.post(new Runnable() {
+                                        mToolbar.post(new Runnable() {
                                             @Override
                                             public void run() {
                                                 if (null != message) {
