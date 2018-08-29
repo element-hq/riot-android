@@ -115,6 +115,7 @@ import im.vector.MyPresenceManager;
 import im.vector.PublicRoomsManager;
 import im.vector.R;
 import im.vector.VectorApp;
+import im.vector.activity.util.RequestCodesKt;
 import im.vector.fragments.AbsHomeFragment;
 import im.vector.fragments.FavouritesFragment;
 import im.vector.fragments.GroupsFragment;
@@ -126,7 +127,6 @@ import im.vector.receiver.VectorUniversalLinkReceiver;
 import im.vector.services.EventStreamService;
 import im.vector.util.BugReporter;
 import im.vector.util.CallsManager;
-import im.vector.util.ExternalApplicationsUtilKt;
 import im.vector.util.HomeRoomsViewModel;
 import im.vector.util.PreferencesManager;
 import im.vector.util.RoomUtils;
@@ -619,6 +619,18 @@ public class VectorHomeActivity extends VectorAppCompatActivity implements Searc
         checkNotificationPrivacySetting();
     }
 
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (resultCode == RESULT_OK) {
+            if (requestCode == RequestCodesKt.BATTERY_OPTIMIZATION_REQUEST_CODE) {
+                // Ok, we can set the NORMAL privacy setting
+                Matrix.getInstance(this)
+                        .getSharedGCMRegistrationManager()
+                        .setNotificationPrivacy(GcmRegistrationManager.NotificationPrivacy.NORMAL, null);
+            }
+        }
+    }
+
     /**
      * Ask the user to choose a notification privacy policy.
      */
@@ -642,13 +654,14 @@ public class VectorHomeActivity extends VectorAppCompatActivity implements Searc
 
             if (SystemUtilsKt.isIgnoringBatteryOptimizations(this)) {
                 // No need to ask permission, we already have it
-                NotificationPrivacyActivity.setNotificationPrivacy(VectorHomeActivity.this,
-                        GcmRegistrationManager.NotificationPrivacy.NORMAL);
+                // Set the NORMAL privacy setting
+                gcmMgr.setNotificationPrivacy(GcmRegistrationManager.NotificationPrivacy.NORMAL, null);
             } else {
                 // by default, use GCM and low detail notifications
-                gcmMgr.setNotificationPrivacy(GcmRegistrationManager.NotificationPrivacy.LOW_DETAIL);
+                gcmMgr.setNotificationPrivacy(GcmRegistrationManager.NotificationPrivacy.LOW_DETAIL, null);
 
                 new AlertDialog.Builder(this)
+                        .setCancelable(false)
                         .setTitle(R.string.startup_notification_privacy_title)
                         .setMessage(R.string.startup_notification_privacy_message)
                         .setPositiveButton(R.string.startup_notification_privacy_button_grant, new DialogInterface.OnClickListener() {
@@ -656,10 +669,9 @@ public class VectorHomeActivity extends VectorAppCompatActivity implements Searc
                             public void onClick(DialogInterface dialog, int which) {
                                 Log.d(LOG_TAG, "checkNotificationPrivacySetting: user wants to grant the IgnoreBatteryOptimizations permission");
 
-                                // use NotificationPrivacyActivity in case we need to display the IgnoreBatteryOptimizations
-                                // grant permission dialog
-                                NotificationPrivacyActivity.setNotificationPrivacy(VectorHomeActivity.this,
-                                        GcmRegistrationManager.NotificationPrivacy.NORMAL);
+                                // Request the battery optimization cancellation to the user
+                                SystemUtilsKt.requestDisablingBatteryOptimization(VectorHomeActivity.this,
+                                        RequestCodesKt.BATTERY_OPTIMIZATION_REQUEST_CODE);
                             }
                         })
                         .setNegativeButton(R.string.startup_notification_privacy_button_other, new DialogInterface.OnClickListener() {

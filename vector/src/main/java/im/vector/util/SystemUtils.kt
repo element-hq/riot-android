@@ -16,9 +16,14 @@
 
 package im.vector.util
 
+import android.annotation.TargetApi
+import android.app.Activity
 import android.content.Context
+import android.content.Intent
+import android.net.Uri
 import android.os.Build
 import android.os.PowerManager
+import android.provider.Settings
 
 /**
  * Tells if the application ignores battery optimizations.
@@ -34,4 +39,19 @@ fun isIgnoringBatteryOptimizations(context: Context): Boolean {
     // no issue before Android M, battery optimisations did not exist
     return Build.VERSION.SDK_INT < Build.VERSION_CODES.M
             || (context.getSystemService(Context.POWER_SERVICE) as PowerManager?)?.isIgnoringBatteryOptimizations(context.packageName) == true
+}
+
+/**
+ * display the system dialog for granting this permission. If previously granted, the
+ * system will not show it (so you should call this method).
+ *
+ * Note: If the user finally does not grant the permission, gcmRegistrationManager.isBackgroundSyncAllowed()
+ * will return false and the notification privacy will fallback to "LOW_DETAIL".
+ */
+@TargetApi(Build.VERSION_CODES.M)
+fun requestDisablingBatteryOptimization(activity: Activity, requestCode: Int) {
+    val intent = Intent()
+    intent.action = Settings.ACTION_REQUEST_IGNORE_BATTERY_OPTIMIZATIONS
+    intent.data = Uri.parse("package:" + activity.packageName)
+    activity.startActivityForResult(intent, requestCode)
 }

@@ -54,7 +54,6 @@ import im.vector.R
 import im.vector.VectorApp
 import im.vector.activity.*
 import im.vector.contacts.ContactsManager
-import im.vector.gcm.GcmRegistrationManager
 import im.vector.preference.*
 import im.vector.settings.FontScale
 import im.vector.util.*
@@ -450,12 +449,20 @@ class VectorSettingsPreferencesFragment : PreferenceFragment(), SharedPreference
                     displayLoadingView()
 
                     Matrix.getInstance(activity)!!.sharedGCMRegistrationManager
-                            .forceSessionsRegistration(object : GcmRegistrationManager.ThirdPartyRegistrationListener {
-                                override fun onSuccess() {
+                            .forceSessionsRegistration(object : ApiCallback<Void> {
+                                override fun onSuccess(info: Void?) {
                                     hideLoadingView()
                                 }
 
-                                override fun onError() {
+                                override fun onMatrixError(e: MatrixError?) {
+                                    hideLoadingView()
+                                }
+
+                                override fun onNetworkError(e: java.lang.Exception?) {
+                                    hideLoadingView()
+                                }
+
+                                override fun onUnexpectedError(e: java.lang.Exception?) {
                                     hideLoadingView()
                                 }
                             })
@@ -790,7 +797,7 @@ class VectorSettingsPreferencesFragment : PreferenceFragment(), SharedPreference
 
             Matrix.getInstance(context)!!
                     .sharedGCMRegistrationManager
-                    .refreshPushersList(Matrix.getInstance(context)!!.sessions, object : SimpleApiCallback<Void>() {
+                    .refreshPushersList(Matrix.getInstance(context)!!.sessions, object : SimpleApiCallback<Void>(activity) {
                         override fun onSuccess(info: Void?) {
                             refreshPushersList()
                         }
@@ -1081,7 +1088,7 @@ class VectorSettingsPreferencesFragment : PreferenceFragment(), SharedPreference
             // when using GCM
             // need to register on servers
             if (isConnected && gcmMgr.useGCM() && (gcmMgr.isServerRegistered || gcmMgr.isServerUnRegistered)) {
-                val listener = object : GcmRegistrationManager.ThirdPartyRegistrationListener {
+                val listener = object : ApiCallback<Void> {
 
                     private fun onDone() {
                         if (null != activity) {
@@ -1092,11 +1099,23 @@ class VectorSettingsPreferencesFragment : PreferenceFragment(), SharedPreference
                         }
                     }
 
-                    override fun onSuccess() {
+                    override fun onSuccess(info: Void?) {
                         onDone()
                     }
 
-                    override fun onError() {
+                    override fun onMatrixError(e: MatrixError?) {
+                        // Set again the previous state
+                        gcmMgr.setDeviceNotificationsAllowed(isAllowed)
+                        onDone()
+                    }
+
+                    override fun onNetworkError(e: java.lang.Exception?) {
+                        // Set again the previous state
+                        gcmMgr.setDeviceNotificationsAllowed(isAllowed)
+                        onDone()
+                    }
+
+                    override fun onUnexpectedError(e: java.lang.Exception?) {
                         // Set again the previous state
                         gcmMgr.setDeviceNotificationsAllowed(isAllowed)
                         onDone()
