@@ -18,6 +18,7 @@ Other changes:
 Bugfix:
  - Handle `\/` at the beginning of a message to send a message starting with `/` (#658)
  - Escape nicknames starting with a forward slash `/` in mentions (#2146)
+ - Improve management of Push feature
 
 Translations:
  -

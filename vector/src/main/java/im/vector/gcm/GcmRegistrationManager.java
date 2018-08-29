@@ -132,9 +132,6 @@ public final class GcmRegistrationManager {
     // 3 states : null not initialized (retrieved by flavor)
     private static Boolean mUseGCM;
 
-    // pusher rest client
-    private Map<String, PushersRestClient> mPushersRestClients = new HashMap<>();
-
     /**
      * Constructor
      *
@@ -173,37 +170,6 @@ public final class GcmRegistrationManager {
 
         mRegistrationState = getStoredRegistrationState();
         mRegistrationToken = getStoredRegistrationToken();
-    }
-
-    /**
-     * Retrieves the pushers rest client.
-     *
-     * @param session the session
-     * @return the pushers rest client.
-     */
-    private PushersRestClient getPushersRestClient(MXSession session) {
-        PushersRestClient pushersRestClient = mPushersRestClients.get(session.getMyUserId());
-
-        if (null == pushersRestClient) {
-            // pusher uses a custom server
-            if (!TextUtils.isEmpty(mContext.getString(R.string.push_server_url))) {
-                try {
-                    HomeServerConnectionConfig hsConfig = new HomeServerConnectionConfig(Uri.parse(mContext.getString(R.string.push_server_url)));
-                    hsConfig.setCredentials(session.getCredentials());
-                    pushersRestClient = new PushersRestClient(hsConfig);
-                } catch (Exception e) {
-                    Log.e(LOG_TAG, "## getPushersRestClient() failed " + e.getMessage(), e);
-                }
-            }
-
-            if (null == pushersRestClient) {
-                pushersRestClient = session.getPushersRestClient();
-            }
-
-            mPushersRestClients.put(session.getMyUserId(), pushersRestClient);
-        }
-
-        return pushersRestClient;
     }
 
     /**
@@ -520,7 +486,7 @@ public final class GcmRegistrationManager {
         // - or, if the app cannot run in background, the user does not want to send event content to GCM
         boolean eventIdOnlyPushes = isBackgroundSyncAllowed() || !isContentSendingAllowed();
 
-        getPushersRestClient(session).addHttpPusher(mRegistrationToken,
+        session.getPushersRestClient().addHttpPusher(mRegistrationToken,
                 DEFAULT_PUSHER_APP_ID,
                 computePushTag(session),
                 mPusherLang,
@@ -592,7 +558,7 @@ public final class GcmRegistrationManager {
     public void refreshPushersList(List<MXSession> sessions,
                                    @Nullable final ApiCallback<Void> callback) {
         if (null != sessions && !sessions.isEmpty()) {
-            getPushersRestClient(sessions.get(0)).getPushers(new SimpleApiCallback<PushersResponse>(callback) {
+            sessions.get(0).getPushersRestClient().getPushers(new SimpleApiCallback<PushersResponse>(callback) {
 
                 @Override
                 public void onSuccess(PushersResponse pushersResponse) {
@@ -880,7 +846,7 @@ public final class GcmRegistrationManager {
      * @param callback the asynchronous callback
      */
     public void unregister(final MXSession session, final Pusher pusher, final ApiCallback<Void> callback) {
-        getPushersRestClient(session).removeHttpPusher(pusher.pushkey,
+        session.getPushersRestClient().removeHttpPusher(pusher.pushkey,
                 pusher.appId,
                 pusher.profileTag,
                 pusher.lang,
@@ -890,14 +856,12 @@ public final class GcmRegistrationManager {
                 new SimpleApiCallback<Void>(callback) {
                     @Override
                     public void onSuccess(Void info) {
-                        mPushersRestClients.remove(session.getMyUserId());
                         refreshPushersList(new ArrayList<>(Matrix.getInstance(mContext).getSessions()), callback);
                     }
 
                     @Override
                     public void onMatrixError(MatrixError e) {
                         if (e.mStatus == 404) {
-                            mPushersRestClients.remove(session.getMyUserId());
                             // httpPusher is not available on server side anymore so assume the removal was successful
                             onSuccess(null);
                             return;
@@ -917,7 +881,7 @@ public final class GcmRegistrationManager {
     public void unregister(final MXSession session, @Nullable final ApiCallback<Void> callback) {
         Log.d(LOG_TAG, "unregister " + session.getMyUserId());
 
-        getPushersRestClient(session).removeHttpPusher(mRegistrationToken,
+        session.getPushersRestClient().removeHttpPusher(mRegistrationToken,
                 DEFAULT_PUSHER_APP_ID,
                 computePushTag(session),
                 mPusherLang,
