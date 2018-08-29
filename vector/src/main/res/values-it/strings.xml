@@ -689,7 +689,9 @@ I messaggi criptati non saranno visibili ai riceventi che non hanno ancora imple
     <string name="encryption_export_export">Esporta</string>
     <string name="encryption_export_enter_passphrase">Inserisci frase d\'accesso (passphrase)</string>
     <string name="encryption_export_confirm_passphrase">Conferma frase d\'accesso (passphrase)</string>
-    <string name="encryption_export_saved_as">Le chiavi da-utente-a-utente della stanza sono state salvate su \'%s\'</string>
+    <string name="encryption_export_saved_as">Le chiavi da-utente-a-utente della stanza sono state salvate su \'%s\'.
+
+Attenzione: questo file può essere eliminato se l\'applicazione viene disinstallata.</string>
 
     <string name="encryption_import_e2e_room_keys">Importa chiavi da-utente-a-utente delle stanze</string>
     <string name="encryption_import_room_keys">Importa chiavi delle stanze</string>
