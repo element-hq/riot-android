@@ -241,7 +241,8 @@ public class RoomDirectoryPickerActivity extends VectorAppCompatActivity impleme
                                 private void onError(String error) {
                                     Log.e(LOG_TAG, "## onSelectDirectoryServer() failed " + error);
                                     hideWaitingView();
-                                    Toast.makeText(RoomDirectoryPickerActivity.this, R.string.directory_server_fail_to_retrieve_server, Toast.LENGTH_LONG).show();
+                                    Toast.makeText(RoomDirectoryPickerActivity.this, R.string.directory_server_fail_to_retrieve_server, Toast.LENGTH_LONG)
+                                            .show();
                                 }
 
                                 @Override
