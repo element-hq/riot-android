@@ -638,8 +638,8 @@ public class Matrix {
         }*/
 
         final MXDataHandler dataHandler = new MXDataHandler(store, credentials);
-        final MXSession session = new MXSession.Builder(hsConfig, dataHandler, mAppContext)
-                .withPushServerUrl(mAppContext.getString(R.string.push_server_url))
+        final MXSession session = new MXSession.Builder(hsConfig, dataHandler, context)
+                .withPushServerUrl(context.getString(R.string.push_server_url))
                 .withMetricsListener(metricsListener)
                 .build();
 
