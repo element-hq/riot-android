@@ -1020,4 +1020,20 @@
 	<item quantity="one">1 стая</item>
 	<item quantity="other">%d стаи</item>
 </plurals>
-    </resources>
+    <string name="system_alerts_header">Системни уведомления</string>
+
+    <string name="resource_limit_exceeded_title">Надвишен ресурсен лимит</string>
+    <string name="resource_limit_contact_action">Свързване с администратор</string>
+
+    <string name="resource_limit_contact_admin">свържете се със администратора на услугата</string>
+
+    <string name="resource_limit_soft_default">Сървърът е надвишил някой от лимитите си, така че <b>някои потребители няма да успеят да влязат в профила си</b>.</string>
+    <string name="resource_limit_hard_default">Сървърът е надвишил някой от лимитите си.</string>
+
+    <string name="resource_limit_soft_mau"> Сървърът е достигнал своя лимит за потребители на месец, така че <b>някои потребители няма да успеят да влязат в профила си</b>.</string>
+    <string name="resource_limit_hard_mau">Сървърът е достигнал лимита си за потребители на месец.</string>
+
+    <string name="resource_limit_soft_contact">Моля, %s, за да се увеличи лимита.</string>
+    <string name="resource_limit_hard_contact">Моля, %s, за да продължите да използвате услугата.</string>
+
+</resources>
