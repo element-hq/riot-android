@@ -223,8 +223,8 @@ dependencies {
     /************* flavors management **************/
 
     // app flavor only
-    appImplementation 'com.google.firebase:firebase-core:11.8.0'
-    appImplementation 'com.google.firebase:firebase-messaging:11.8.0'
+    appImplementation 'com.google.firebase:firebase-core:16.0.3'
+    appImplementation 'com.google.firebase:firebase-messaging:17.3.0'
 
     // fdroid flavor only
 }

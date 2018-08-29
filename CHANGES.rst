@@ -24,7 +24,7 @@ Translations:
  -
 
 Build:
- -
+ - Upgrade Google firebase libs
 
 Changes in Riot 0.8.14 (2018-08-27)
 ===================================================
