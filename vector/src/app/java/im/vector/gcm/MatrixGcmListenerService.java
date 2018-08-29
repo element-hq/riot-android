@@ -185,7 +185,7 @@ public class MatrixGcmListenerService extends FirebaseMessagingService {
      */
     @Override
     public void onMessageReceived(RemoteMessage message) {
-        Log.d(LOG_TAG, "## onMessageReceived() from FCM");
+        Log.d(LOG_TAG, "## onMessageReceived() from FCM with priority " + message.getPriority());
 
         // Ensure event stream service is started
         if (EventStreamService.getInstance() == null) {
