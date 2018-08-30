@@ -774,7 +774,9 @@
     <string name="encryption_export_export">匯出</string>
     <string name="encryption_export_enter_passphrase">輸入通關密語</string>
     <string name="encryption_export_confirm_passphrase">確認通關密語</string>
-    <string name="encryption_export_saved_as">聊天室端到端加密金鑰已儲存爲“%s”</string>
+    <string name="encryption_export_saved_as">聊天室的端到端加密金鑰已儲存爲「%s」。
+
+警告：如果應用程式被解除安裝，這個檔案可能會被刪除。</string>
 
     <string name="encryption_import_e2e_room_keys">導入聊天室端到端加密密鑰</string>
     <string name="encryption_import_room_keys">匯入聊天室金鑰</string>
