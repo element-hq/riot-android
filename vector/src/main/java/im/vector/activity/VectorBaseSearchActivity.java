@@ -217,7 +217,7 @@ public abstract class VectorBaseSearchActivity extends MXCActionBarActivity {
 
     @Override
     public int getMenuTint() {
-        return R.attr.icon_tint_on_light_action_bar_color;
+        return R.attr.icon_tint_on_dark_action_bar_color;
     }
 
     @Override

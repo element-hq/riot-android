@@ -1,2 +1,25 @@
 <resources>
+    <style name="AppTheme.Light" parent="@style/AppTheme.Base.Light">
+        <item name="android:navigationBarColor">?attr/primary_dark_color</item>
+    </style>
+
+    <style name="AppTheme.NoActionBar.Light" parent="@style/AppTheme.NoActionBar.Base.Light">
+        <item name="android:navigationBarColor">?attr/primary_dark_color</item>
+    </style>
+
+    <style name="AppTheme.Dark" parent="@style/AppTheme.Base.Dark">
+        <item name="android:navigationBarColor">?attr/primary_dark_color</item>
+    </style>
+
+    <style name="AppTheme.NoActionBar.Dark" parent="@style/AppTheme.NoActionBar.Base.Dark">
+        <item name="android:navigationBarColor">?attr/primary_dark_color</item>
+    </style>
+
+    <style name="AppTheme.Black" parent="@style/AppTheme.Base.Black">
+        <item name="android:navigationBarColor">?attr/primary_dark_color</item>
+    </style>
+
+    <style name="AppTheme.NoActionBar.Black" parent="@style/AppTheme.NoActionBar.Base.Black">
+        <item name="android:navigationBarColor">?attr/primary_dark_color</item>
+    </style>
 </resources>

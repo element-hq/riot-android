@@ -1902,8 +1902,7 @@ public class VectorHomeActivity extends VectorAppCompatActivity implements Searc
         if (null != getSupportActionBar()) {
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
             getSupportActionBar().setHomeButtonEnabled(true);
-            getSupportActionBar().setHomeAsUpIndicator(ThemeUtils.INSTANCE.tintDrawable(this,
-                    ContextCompat.getDrawable(this, R.drawable.ic_material_menu_white), R.attr.primary_control_color));
+            getSupportActionBar().setHomeAsUpIndicator(ContextCompat.getDrawable(this, R.drawable.ic_material_menu_white));
         }
     }
 
