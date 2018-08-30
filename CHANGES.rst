@@ -1,11 +1,8 @@
-Changes in Riot 0.8.15 (2018-XX-XX)
+Changes in Riot 0.8.15 (2018-08-30)
 ===================================================
 
 MatrixSdk:
- - Upgrade to version 0.X.Y.
-
-Features:
- -
+ - Upgrade to version 0.9.9.
 
 Improvements:
  - Improve intent to open document (#2544)
@@ -14,18 +11,13 @@ Improvements:
 
 Other changes:
  - Upgrade lib libphonenumber from v8.0.1 to 8.9.12
+ - Upgrade Google firebase libs
 
 Bugfix:
  - Handle `\/` at the beginning of a message to send a message starting with `/` (#658)
  - Escape nicknames starting with a forward slash `/` in mentions (#2146)
  - Improve management of Push feature
  - MatrixError mResourceLimitExceededError is now managed in MxDataHandler (vector-im/riot-android#2547 point 2)
-
-Translations:
- -
-
-Build:
- - Upgrade Google firebase libs
 
 Changes in Riot 0.8.14 (2018-08-27)
 ===================================================
