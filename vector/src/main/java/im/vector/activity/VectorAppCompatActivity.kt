@@ -210,6 +210,12 @@ abstract class VectorAppCompatActivity : AppCompatActivity() {
     //==============================================================================================
 
     var waitingView: View? = null
+        set(value) {
+            field = value
+
+            // Ensure this view is clickable to catch UI events
+            value?.isClickable = true
+        }
 
     /**
      * Tells if the waiting view is currently displayed

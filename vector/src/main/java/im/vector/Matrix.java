@@ -62,7 +62,6 @@ import java.util.Set;
 import im.vector.activity.CommonActivityUtils;
 import im.vector.activity.SplashActivity;
 import im.vector.analytics.MetricsListenerProxy;
-import im.vector.analytics.PiwikAnalytics;
 import im.vector.gcm.GcmRegistrationManager;
 import im.vector.services.EventStreamService;
 import im.vector.store.LoginStorage;
@@ -639,8 +638,11 @@ public class Matrix {
         }*/
 
         final MXDataHandler dataHandler = new MXDataHandler(store, credentials);
-        final MXSession session = new MXSession(hsConfig, dataHandler, mAppContext);
-        session.setMetricsListener(metricsListener);
+        final MXSession session = new MXSession.Builder(hsConfig, dataHandler, context)
+                .withPushServerUrl(context.getString(R.string.push_server_url))
+                .withMetricsListener(metricsListener)
+                .build();
+
         dataHandler.setMetricsListener(metricsListener);
         dataHandler.setRequestNetworkErrorListener(new MXDataHandler.RequestNetworkErrorListener() {
 

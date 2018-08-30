@@ -16,23 +16,24 @@
 
 package im.vector.activity;
 
-import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
-import android.net.Uri;
 import android.os.Build;
-import android.provider.Settings;
 import android.view.View;
 import android.widget.RadioButton;
 import android.widget.TextView;
 
 import org.jetbrains.annotations.NotNull;
+import org.matrix.androidsdk.rest.callback.SimpleApiCallback;
+import org.matrix.androidsdk.rest.model.MatrixError;
 
 import butterknife.BindView;
 import butterknife.OnClick;
 import im.vector.Matrix;
 import im.vector.R;
+import im.vector.activity.util.RequestCodesKt;
 import im.vector.gcm.GcmRegistrationManager;
+import im.vector.util.SystemUtilsKt;
 import kotlin.Pair;
 
 /*
@@ -87,6 +88,8 @@ public class NotificationPrivacyActivity extends VectorAppCompatActivity {
     public void initUiAndData() {
         configureToolbar();
 
+        setWaitingView(findViewById(R.id.waiting_view));
+
         // The permission request is only necessary for devices os versions greater than API 23 (M)
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             tvNeedPermission.setVisibility(View.VISIBLE);
@@ -102,6 +105,16 @@ public class NotificationPrivacyActivity extends VectorAppCompatActivity {
         super.onResume();
 
         refreshNotificationPrivacy();
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (resultCode == RESULT_OK) {
+            if (requestCode == RequestCodesKt.BATTERY_OPTIMIZATION_REQUEST_CODE) {
+                // Ok, NotificationPrivacy.NORMAL can be set
+                doSetNotificationPrivacy(GcmRegistrationManager.NotificationPrivacy.NORMAL);
+            }
+        }
     }
 
     /* ==========================================================================================
@@ -128,8 +141,15 @@ public class NotificationPrivacyActivity extends VectorAppCompatActivity {
      * ========================================================================================== */
 
     private void updateNotificationPrivacy(GcmRegistrationManager.NotificationPrivacy newNotificationPrivacy) {
-        setNotificationPrivacy(this, newNotificationPrivacy);
-        refreshNotificationPrivacy();
+        // for the "NORMAL" privacy, the app needs to be able to run in background
+        // this requires the IgnoreBatteryOptimizations permission from android M
+        if (newNotificationPrivacy == GcmRegistrationManager.NotificationPrivacy.NORMAL
+                && !SystemUtilsKt.isIgnoringBatteryOptimizations(this)) {
+            // Request the battery optimization cancellation to the user
+            SystemUtilsKt.requestDisablingBatteryOptimization(this, RequestCodesKt.BATTERY_OPTIMIZATION_REQUEST_CODE);
+        } else {
+            doSetNotificationPrivacy(newNotificationPrivacy);
+        }
     }
 
     private void refreshNotificationPrivacy() {
@@ -140,6 +160,43 @@ public class NotificationPrivacyActivity extends VectorAppCompatActivity {
         rbPrivacyNormal.setChecked(notificationPrivacy == GcmRegistrationManager.NotificationPrivacy.NORMAL);
         rbPrivacyLowDetail.setChecked(notificationPrivacy == GcmRegistrationManager.NotificationPrivacy.LOW_DETAIL);
         rbPrivacyReduced.setChecked(notificationPrivacy == GcmRegistrationManager.NotificationPrivacy.REDUCED);
+    }
+
+    private void doSetNotificationPrivacy(GcmRegistrationManager.NotificationPrivacy notificationPrivacy) {
+        showWaitingView();
+
+        // Set the new notification privacy
+        Matrix.getInstance(this)
+                .getSharedGCMRegistrationManager()
+                .setNotificationPrivacy(notificationPrivacy, new SimpleApiCallback<Void>(this) {
+                    @Override
+                    public void onSuccess(Void info) {
+                        hideWaitingView();
+
+                        refreshNotificationPrivacy();
+                    }
+
+                    @Override
+                    public void onNetworkError(Exception e) {
+                        hideWaitingView();
+
+                        super.onNetworkError(e);
+                    }
+
+                    @Override
+                    public void onMatrixError(MatrixError e) {
+                        hideWaitingView();
+
+                        super.onMatrixError(e);
+                    }
+
+                    @Override
+                    public void onUnexpectedError(Exception e) {
+                        hideWaitingView();
+
+                        super.onUnexpectedError(e);
+                    }
+                });
     }
 
     /* ==========================================================================================
@@ -154,33 +211,6 @@ public class NotificationPrivacyActivity extends VectorAppCompatActivity {
      */
     public static Intent getIntent(final Context context) {
         return new Intent(context, NotificationPrivacyActivity.class);
-    }
-
-    /**
-     * Set the new notification privacy setting.
-     *
-     * @param activity            the activity from which to display the IgnoreBatteryOptimizations permission request dialog, if required
-     * @param notificationPrivacy the new setting
-     */
-    public static void setNotificationPrivacy(Activity activity, GcmRegistrationManager.NotificationPrivacy notificationPrivacy) {
-        // first, set the new privacy setting
-        Matrix.getInstance(activity)
-                .getSharedGCMRegistrationManager()
-                .setNotificationPrivacy(notificationPrivacy);
-
-        // for the "NORMAL" privacy, the app needs to be able to run in background
-        // this requires the IgnoreBatteryOptimizations permission from android M
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M
-                && notificationPrivacy == GcmRegistrationManager.NotificationPrivacy.NORMAL) {
-            // display the system dialog for granting this permission. If previously granted, the
-            // system will not show it.
-            // Note: If the user finally does not grant the permission, gcmRegistrationManager.isBackgroundSyncAllowed()
-            // will return false and the notification privacy will fallback to "LOW_DETAIL".
-            Intent intent = new Intent();
-            intent.setAction(Settings.ACTION_REQUEST_IGNORE_BATTERY_OPTIMIZATIONS);
-            intent.setData(Uri.parse("package:" + activity.getPackageName()));
-            activity.startActivity(intent);
-        }
     }
 
     /**

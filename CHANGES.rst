@@ -8,19 +8,23 @@ Features:
  -
 
 Improvements:
- -
+ - Improve intent to open document (#2544)
+ - Avoid useless dialog for permission (#2331)
+ - Improve wording when exporting keys (#2289)
 
 Other changes:
- -
+ - Upgrade lib libphonenumber from v8.0.1 to 8.9.12
 
 Bugfix:
- -
+ - Handle `\/` at the beginning of a message to send a message starting with `/` (#658)
+ - Escape nicknames starting with a forward slash `/` in mentions (#2146)
+ - Improve management of Push feature
 
 Translations:
  -
 
 Build:
- -
+ - Upgrade Google firebase libs
 
 Changes in Riot 0.8.14 (2018-08-27)
 ===================================================

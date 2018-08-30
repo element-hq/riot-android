@@ -22,16 +22,14 @@
             android:value="true" />
 
         <service
-            android:name="im.vector.gcm.MatrixGcmListenerService"
-            android:exported="false">
+            android:name="im.vector.gcm.MatrixGcmListenerService">
             <intent-filter>
                 <action android:name="com.google.firebase.MESSAGING_EVENT" />
             </intent-filter>
         </service>
 
         <service
-            android:name="im.vector.gcm.MatrixInstanceIDListenerService"
-            android:exported="false">
+            android:name="im.vector.gcm.MatrixInstanceIDListenerService">
             <intent-filter>
                 <action android:name="com.google.firebase.INSTANCE_ID_EVENT" />
             </intent-filter>

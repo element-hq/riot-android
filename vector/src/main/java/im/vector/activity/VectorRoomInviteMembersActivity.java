@@ -382,12 +382,7 @@ public class VectorRoomInviteMembersActivity extends VectorBaseSearchActivity {
                             finish();
                         }
                     })
-                    .setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialog, int which) {
-                            // nothing to do
-                        }
-                    })
+                    .setNegativeButton(R.string.cancel, null)
                     .show();
         } else {
             // returns the selected users
@@ -420,12 +415,7 @@ public class VectorRoomInviteMembersActivity extends VectorBaseSearchActivity {
                         // will be overridden to avoid dismissing the dialog while displaying the progress
                     }
                 })
-                .setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        dialog.dismiss();
-                    }
-                })
+                .setNegativeButton(R.string.cancel, null)
                 .show();
 
         final Button inviteButton = inviteDialog.getButton(AlertDialog.BUTTON_POSITIVE);

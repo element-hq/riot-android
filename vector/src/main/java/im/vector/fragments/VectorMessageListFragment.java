@@ -603,12 +603,7 @@ public class VectorMessageListFragment extends MatrixMessageListFragment impleme
                                             }
                                         }
                                     })
-                            .setNegativeButton(R.string.cancel,
-                                    new DialogInterface.OnClickListener() {
-                                        public void onClick(DialogInterface dialog, int id) {
-                                            dialog.cancel();
-                                        }
-                                    })
+                            .setNegativeButton(R.string.cancel, null)
                             .show();
                 }
             });
@@ -629,7 +624,6 @@ public class VectorMessageListFragment extends MatrixMessageListFragment impleme
                             .setPositiveButton(R.string.yes, new DialogInterface.OnClickListener() {
                                 @Override
                                 public void onClick(DialogInterface dialog, int which) {
-                                    dialog.dismiss();
                                     mRoom.cancelEventSending(event);
 
                                     getActivity().runOnUiThread(new Runnable() {
@@ -640,12 +634,7 @@ public class VectorMessageListFragment extends MatrixMessageListFragment impleme
                                     });
                                 }
                             })
-                            .setNegativeButton(R.string.no, new DialogInterface.OnClickListener() {
-                                @Override
-                                public void onClick(DialogInterface dialog, int which) {
-                                    dialog.dismiss();
-                                }
-                            })
+                            .setNegativeButton(R.string.no, null)
                             .show();
                 }
             });
@@ -805,8 +794,6 @@ public class VectorMessageListFragment extends MatrixMessageListFragment impleme
                                         .setPositiveButton(R.string.yes, new DialogInterface.OnClickListener() {
                                             @Override
                                             public void onClick(DialogInterface dialog, int which) {
-                                                dialog.dismiss();
-
                                                 List<String> userIdsList = new ArrayList<>();
                                                 userIdsList.add(event.sender);
 
@@ -817,23 +804,13 @@ public class VectorMessageListFragment extends MatrixMessageListFragment impleme
                                                 });
                                             }
                                         })
-                                        .setNegativeButton(R.string.no, new DialogInterface.OnClickListener() {
-                                            @Override
-                                            public void onClick(DialogInterface dialog, int which) {
-                                                dialog.dismiss();
-                                            }
-                                        })
+                                        .setNegativeButton(R.string.no, null)
                                         .show();
                             }
                         });
                     }
                 })
-                .setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        dialog.cancel();
-                    }
-                })
+                .setNegativeButton(R.string.cancel, null)
                 .show();
     }
 
@@ -874,7 +851,7 @@ public class VectorMessageListFragment extends MatrixMessageListFragment impleme
                                         if (menuAction == ACTION_VECTOR_SAVE) {
                                             Toast.makeText(getActivity(), getText(R.string.media_slider_saved), Toast.LENGTH_LONG).show();
                                         } else {
-                                            CommonActivityUtils.openMedia(getActivity(), savedMediaPath, mediaMimeType);
+                                            ExternalApplicationsUtilKt.openMedia(getActivity(), savedMediaPath, mediaMimeType);
                                         }
                                     }
                                 }
