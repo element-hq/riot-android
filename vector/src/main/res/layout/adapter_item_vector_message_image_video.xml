@@ -106,6 +106,7 @@
                                 android:layout_width="@dimen/chat_avatar_size"
                                 android:layout_height="@dimen/chat_avatar_size"
                                 android:layout_alignLeft="@+id/messagesAdapter_image"
+                                android:layout_margin="10dp"
                                 android:src="@drawable/filetype_image" />
 
                             <!-- the upload fails -->
