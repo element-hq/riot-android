@@ -182,7 +182,7 @@ Podrá añadir su correo electrónico a su cuenta en configuraciones.</string>
     <string name="auth_reset_password_missing_email">El correo electrónico de esta cuenta es requerido.</string>
     <string name="auth_reset_password_missing_password">Una contraseña nueva es requerida.</string>
     <string name="auth_reset_password_email_validation_message">Un correo fue enviado a %s. Una vez que sigas el enlace, seleccione abajo.</string>
-    <string name="auth_reset_password_error_unauthorized">Verificación de correo electrónico falló: asegúrese que siguió el enlace</string>
+    <string name="auth_reset_password_error_unauthorized">Falló la verificación del correo electrónico: asegúrate que seguiste el enlace en el mensaje</string>
     <string name="auth_reset_password_success_message">Su contraseña fue actualizada.
 
 Has sido desconectado de todos tus dispositivos y las notificaciones están apagadas. Para encender las notificaciones, entre su cuenta en cada dispositivo.</string>
@@ -193,7 +193,7 @@ Has sido desconectado de todos tus dispositivos y las notificaciones están apag
     <string name="login_error_unable_login">Sesión falló</string>
     <string name="login_error_registration_network_error">Inscripción falló: error con la red</string>
     <string name="login_error_unable_register">Inscripción falló</string>
-    <string name="login_error_unable_register_mail_ownership">Inscripción falló : el correo electrónico ya esta utilizado por otra cuenta</string>
+    <string name="login_error_unable_register_mail_ownership">Falló el registro : error de propiedad del correo electrónico</string>
     <string name="login_error_invalid_home_server">Escribe enlace válido</string>
 
     <string name="login_error_forbidden">Nombre/Contraseña inválido</string>
@@ -247,8 +247,8 @@ Disculpe por la inconveniencia.</string>
     <string name="call_in_progress">Llamada en Processo</string>
 
     <string name="call_error_user_not_responding">El lado remoto no pudo contestar.</string>
-    <string name="call_error_ice_failed">Conexión de media falló</string>
-    <string name="call_error_camera_init_failed">La cámara no se pudo encender</string>
+    <string name="call_error_ice_failed">Falló la Conexión de Media</string>
+    <string name="call_error_camera_init_failed">No se puede iniciar la cámara</string>
     <string name="call_error_answered_elsewhere">La llamada fue contestada en otra parte</string>
 
     <!-- medias picker string -->
@@ -429,7 +429,7 @@ Tenga en cuenta que esta acción reiniciará la app y puede tardar cierto tiempo
     <!-- home room settings -->
     <string name="room_settings_favourite">Destacar</string>
     <string name="room_settings_de_prioritize">Despriorizar</string>
-    <string name="room_settings_direct_chat">Chat Directo</string>
+    <string name="room_settings_direct_chat">Conversación Directa</string>
     <string name="room_settings_leave_conversation">Salir la Conversacion</string>
     <string name="room_settings_forget">Olvidar</string>
 
@@ -515,14 +515,14 @@ Tenga en cuenta que esta acción reiniciará la app y puede tardar cierto tiempo
     <string name="account_email_validation_error">Verificación de su correo electrónico falló. Por favor vea su correo electrónico y sigue el enlace que contiene. Una vez hecho, escoge Continuar</string>
 
     <string name="account_email_already_used_error">Esta dirección de correo electrónico ya está usada</string>
-    <string name="account_email_not_found_error">Error al enviar correo electrónico: No se pudo encontrar esta dirección de correo electrónico</string>
+    <string name="account_email_not_found_error">Falló el envío de correo electrónico: No se pudo encontrar esta dirección de correo electrónico</string>
     <string name="account_phone_number_already_used_error">Este número de teléfono ya esta usado</string>
 
     <string name="settings_change_password">Cambiar Contraseña</string>
     <string name="settings_old_password">Contraseña anterior</string>
     <string name="settings_new_password">Contraseña nueva</string>
     <string name="settings_confirm_password">confirmar contraseña</string>
-    <string name="settings_fail_to_update_password">La actualización de su contraseña falló</string>
+    <string name="settings_fail_to_update_password">La actualización de tu contraseña falló</string>
     <string name="settings_password_updated">Su contraseña fue actualizada</string>
     <string name="settings_unignore_user">¿Mostrar todos los mensajes de %s?
 
@@ -564,22 +564,22 @@ Tenga en cuenta que esta acción reiniciará la app y tardará cierto tiempo.</s
 
     <!-- room settings : access and visibility -->
     <string name="room_settings_category_access_visibility_title">Acceso y Visibilidad</string>
-    <string name="room_settings_directory_visibility">Inscribir esta sala en el directorio de salas</string>
+    <string name="room_settings_directory_visibility">Publicar esta sala en el directorio de salas</string>
     <string name="room_settings_room_access_rules_pref_title">Acceso a la Sala</string>
     <string name="room_settings_room_read_history_rules_pref_title">Historial y Legibilidad de la Sala</string>
-    <string name="room_settings_room_read_history_rules_pref_dialog_title">¿Quien puede leer el historial?</string>
+    <string name="room_settings_room_read_history_rules_pref_dialog_title">¿Quién puede leer el historial?</string>
     <string name="room_settings_room_access_rules_pref_dialog_title">¿Quien puede entrar a la sala?</string>
 
     <!-- Room settings, access and visibility : WHO CAN READ HISTORY? (read rule) -->
     <string name="room_settings_read_history_entry_anyone">Todos</string>
-    <string name="room_settings_read_history_entry_members_only_option_time_shared">Solamente miembros (desde seleccionar esta opción)</string>
-    <string name="room_settings_read_history_entry_members_only_invited">Solamente miembros (desde su invitación)</string>
-    <string name="room_settings_read_history_entry_members_only_joined">Solamente miembros (desde entrar a la sala)</string>
+    <string name="room_settings_read_history_entry_members_only_option_time_shared">Solamente miembros (desde el momento en que se selecciona esta opción)</string>
+    <string name="room_settings_read_history_entry_members_only_invited">Solamente miembros (desde que fueron invitados)</string>
+    <string name="room_settings_read_history_entry_members_only_joined">Solamente miembros (desde que se unieron a la sala)</string>
 
     <!-- Room settings: "Who can access this room?" (access rule) -->
-    <string name="room_settings_room_access_warning">Para hacer enlace a una sala debe tener una dirección.</string>
+    <string name="room_settings_room_access_warning">Para crear un enlace a una sala, debe tener una dirección.</string>
     <string name="room_settings_room_access_entry_only_invited">Solamente los invitados</string>
-    <string name="room_settings_room_access_entry_anyone_with_link_apart_guest">Los que saben el enlace de esta sala, excepto húespedes</string>
+    <string name="room_settings_room_access_entry_anyone_with_link_apart_guest">Cualquiera que conozca el enlace a esta sala, excepto huéspedes</string>
     <string name="room_settings_room_access_entry_anyone_with_link_including_guest">Los que saben el enlace de la sala, incluso húespedes</string>
 
     <!-- Room settings: banned users -->
@@ -601,10 +601,10 @@ Tenga en cuenta que esta acción reiniciará la app y tardará cierto tiempo.</s
     <string name="room_settings_addresses_no_local_addresses">Esta sala no tiene direcciones locales</string>
     <string name="room_settings_addresses_add_new_address">Dirección nueva (e.g #foo:matrix.org")</string>
 
-    <string name="room_settings_addresses_invalid_format_dialog_title">Formato de alias no válido</string>
-    <string name="room_settings_addresses_invalid_format_dialog_body">\'%s\' no es formato válido de alias</string>
+    <string name="room_settings_addresses_invalid_format_dialog_title">Formato de alias inválido</string>
+    <string name="room_settings_addresses_invalid_format_dialog_body">\'%s\' no es un formato de alias válido</string>
     <string name="room_settings_addresses_disable_main_address_prompt_msg">No habra dirección principal seleccionado. La dirección principal de esta sala por defecto será seleccionado al azar"</string>
-    <string name="room_settings_addresses_disable_main_address_prompt_title">Avisos de la dirección principal</string>
+    <string name="room_settings_addresses_disable_main_address_prompt_title">Advertencias de la dirección principal</string>
 
     <string name="room_settings_set_main_address">Escojer como Dirección Principal</string>
     <string name="room_settings_unset_main_address">Desescojer como Dirección Principal</string>
@@ -628,7 +628,7 @@ Los mensajes cifrados no serán visibles en cuentas que no implementan el cifrad
     <string name="directory_title">Directorio</string>
 
     <!-- matrix error -->
-    <string name="failed_to_load_timeline_position">%s estuvo intentando cargar un punto específico en el historial de esta sala pero no lo pudo encontrar.</string>
+    <string name="failed_to_load_timeline_position">%s estuvo intentando cargar un punto específico en el historial de esta sala pero no pudo encontrarlo.</string>
 
     <!-- encryption dialog -->
     <string name="encryption_information_title">Información del cifrado de extremo-a-extremo</string>
@@ -655,7 +655,9 @@ Los mensajes cifrados no serán visibles en cuentas que no implementan el cifrad
     <string name="encryption_export_export">Exportar</string>
     <string name="encryption_export_enter_passphrase">Escribir Contraseña</string>
     <string name="encryption_export_confirm_passphrase">Confirmar Contraseña</string>
-    <string name="encryption_export_saved_as">Las claves de cifrado de extremo-a-extremo se guardaron en \'%s\'</string>
+    <string name="encryption_export_saved_as">Las claves de cifrado de extremo a extremo para esta sala se guardaron en \'%s\'.
+
+Advertencia: este archivo puede ser eliminado si la aplicación se desinstala.</string>
 
     <string name="encryption_import_e2e_room_keys">Importar claves de cifrado de E2E de las salas</string>
     <string name="encryption_import_room_keys">Importar claves de salas</string>
@@ -677,7 +679,7 @@ Los mensajes cifrados no serán visibles en cuentas que no implementan el cifrad
     <string name="encryption_information_unblock">Desprohibir</string>
 
     <string name="encryption_information_verify_device">Verificar dispositivo</string>
-    <string name="encryption_information_verify_device_warning">Para verificar que este dispositivo es confiable, por favor contacte el dueño de este dispositivo por otro medio (e.g. cara-a-cara o por llamada) y verifique que la clave de este dispositivo que ellos ven en su página de configuraciones coincide con el de abajo:</string>
+    <string name="encryption_information_verify_device_warning">Para verificar que este dispositivo es confiable, por favor contacte a su dueño por otro medio (ej. cara a cara o por teléfono) y verifique que la clave para este dispositivo que ve en sus Configuraciones de Usuario coincide con la clave debajo:</string>
     <string name="encryption_information_verify_device_warning2">Si coinciden, seleccione el botón verificar inferior. 
 Si no es así, alguien está interceptando este dispositivo y debería agregarlo a la lista negra.
 En el futuro, este proceso de verificación será mas sofisticado.</string>
@@ -765,7 +767,7 @@ Lo puedes hacer ahora o luego desde las configuraciones de la aplicación.</stri
 
 
     <string name="widget_no_power_to_manage">Necesitas permisos para administrar los widgets de esta sala</string>
-    <string name="widget_creation_failure">La creación del widget ha fallado</string>
+    <string name="widget_creation_failure">La creación del componente ha fallado</string>
     <string name="event_formatter_widget_added">%1$s añadido por %2$s</string>
     <string name="event_formatter_widget_removed">%1$s eliminado por %2$s</string>
     <string name="settings_labs_create_conference_with_jitsi">Crear llamada de conferencia con jitsi</string>
@@ -773,7 +775,7 @@ Lo puedes hacer ahora o luego desde las configuraciones de la aplicación.</stri
 
     <!-- Widget Integration Manager -->
     <string name="widget_integration_unable_to_create">El widget no ha podido ser creado.</string>
-    <string name="widget_integration_failed_to_send_request">La consulta no ha podido ser enviada.</string>
+    <string name="widget_integration_failed_to_send_request">El envío de la consulta ha fallado.</string>
     <string name="widget_integration_positive_power_level">El nivel de potencia debe ser un número entero positivo.</string>
     <string name="widget_integration_must_be_in_room">No estás en esta sala.</string>
     <string name="widget_integration_no_permission_in_room">No tienes suficientes permisos para realizar esa acción en esta sala.</string>
@@ -1037,4 +1039,56 @@ Esta acción reiniciará la aplicación y puede llevar algún tiempo.</string>
 <string name="command_description_deop_user">Degradar usuario con el id dado</string>
     <string name="system_alerts_header">Alertas de Sistema</string>
 
-    </resources>
+    <string name="missing_permissions_error">Esta acción no es posible debido a que faltan permisos.</string>
+    <plurals name="format_time_s">
+	<item quantity="one">1s</item>
+	<item quantity="other">%ds</item>
+</plurals>
+    <plurals name="format_time_m">
+	<item quantity="one">1m</item>
+	<item quantity="other">%dm</item>
+</plurals>
+    <plurals name="format_time_h">
+	<item quantity="one">1h</item>
+	<item quantity="other">%dh</item>
+</plurals>
+    <plurals name="format_time_d">
+	<item quantity="one">1d</item>
+	<item quantity="other">%dd</item>
+</plurals>
+
+    <string name="room_participants_now">%1$s ahora</string>
+    <string name="room_participants_ago">hace %1$s %2$s</string>
+
+    <string name="room_participants_invite_join_names">"%1$s, "</string>
+    <string name="room_participants_invite_join_names_and">%1$s y %2$s</string>
+    <string name="room_participants_invite_join_names_combined">%1$s %2$s</string>
+
+    <plurals name="room_details_selected">
+	<item quantity="one">1 seleccionada</item>
+	<item quantity="other">%d seleccionadas</item>
+</plurals>
+    <plurals name="group_members">
+	<item quantity="one">1 miembro</item>
+	<item quantity="other">%d miembros</item>
+</plurals>
+
+    <plurals name="group_rooms">
+	<item quantity="one">1 sala</item>
+	<item quantity="other">%d salas</item>
+</plurals>
+    <string name="resource_limit_exceeded_title">Límite de Recursos Excedido</string>
+    <string name="resource_limit_contact_action">Contacta al Administrador</string>
+
+    <string name="resource_limit_contact_admin">contacta al administrador de tu servicio</string>
+
+    <string name="resource_limit_soft_default">Este servidor doméstico ha excedido uno de sus límites de recursos, por lo que <b>algunos usuarios no podrán iniciar sesión</b>.</string>
+    <string name="resource_limit_hard_default">Este servidor doméstico ha excedido uno de sus límites de recursos.</string>
+
+    <string name="resource_limit_soft_mau"> Este servidor doméstico ha alcanzado su límite Mensual de Usuario Activo, por lo que <b>algunos usuarios no podrán iniciar sesión</b>.</string>
+    <string name="resource_limit_hard_mau">Este servidor doméstico ha alcanzado su límite Mensual de Usuario Activo.</string>
+
+    <string name="resource_limit_soft_contact">Por favor %s para aumentar este límite.</string>
+    <string name="resource_limit_hard_contact">Por favor %s para continuar utilizando este servicio.</string>
+
+</resources>
