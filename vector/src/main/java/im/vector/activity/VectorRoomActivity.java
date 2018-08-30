@@ -297,9 +297,6 @@ public class VectorRoomActivity extends MXCActionBarActivity implements
     private MenuItem mSearchInRoomMenuItem;
     private MenuItem mUseMatrixAppsMenuItem;
 
-    @Nullable
-    private MatrixError mResourceLimitExceededError;
-
     // medias sending helper
     private VectorRoomMediasSender mVectorRoomMediasSender;
 
@@ -392,11 +389,10 @@ public class VectorRoomActivity extends MXCActionBarActivity implements
 
         @Override
         public void onSyncError(MatrixError matrixError) {
-            if (MatrixError.RESOURCE_LIMIT_EXCEEDED.equals(matrixError.errcode) && mResourceLimitExceededError == null) {
-                mResourceLimitExceededError = matrixError;
-                checkSendEventStatus();
-                refreshNotificationsArea();
-            }
+            mSyncInProgressView.setVisibility(View.GONE);
+
+            checkSendEventStatus();
+            refreshNotificationsArea();
         }
 
         @Override
@@ -431,11 +427,9 @@ public class VectorRoomActivity extends MXCActionBarActivity implements
         @Override
         public void onLiveEventsChunkProcessed(String fromToken, String toToken) {
             mSyncInProgressView.setVisibility(View.GONE);
-            if (mResourceLimitExceededError != null) {
-                mResourceLimitExceededError = null;
-                checkSendEventStatus();
-                refreshNotificationsArea();
-            }
+
+            checkSendEventStatus();
+            refreshNotificationsArea();
         }
     };
 
@@ -2572,12 +2566,15 @@ public class VectorRoomActivity extends MXCActionBarActivity implements
         if ((null == mSession.getDataHandler()) || (null == mRoom) || (null != sRoomPreviewData)) {
             return;
         }
+
+        MatrixError resourceLimitExceededError = mSession.getDataHandler().getResourceLimitExceededError();
+
         NotificationAreaView.State state = NotificationAreaView.State.Default.INSTANCE;
         boolean hasUnsentEvent = false;
         if (!mIsUnreadPreviewMode && !TextUtils.isEmpty(mEventId)) {
             state = NotificationAreaView.State.Hidden.INSTANCE;
-        } else if (mResourceLimitExceededError != null) {
-            state = new NotificationAreaView.State.ResourceLimitExceededError(mResourceLimitExceededError);
+        } else if (resourceLimitExceededError != null) {
+            state = new NotificationAreaView.State.ResourceLimitExceededError(resourceLimitExceededError);
         } else if (!Matrix.getInstance(this).isConnected()) {
             state = NotificationAreaView.State.ConnectionError.INSTANCE;
         } else if (mIsUnreadPreviewMode) {
@@ -2953,7 +2950,7 @@ public class VectorRoomActivity extends MXCActionBarActivity implements
             canSendMessage = (powerLevels != null && powerLevels.maySendMessage(mMyUserId));
         }
         if (canSendMessage) {
-            canSendMessage = mResourceLimitExceededError == null;
+            canSendMessage = mSession.getDataHandler().getResourceLimitExceededError() == null;
         }
         return canSendMessage;
     }
@@ -2970,7 +2967,7 @@ public class VectorRoomActivity extends MXCActionBarActivity implements
                 mBottomSeparator.setVisibility(View.VISIBLE);
                 mSendingMessagesLayout.setVisibility(View.VISIBLE);
                 mCanNotPostTextView.setVisibility(View.GONE);
-            } else if (state.isVersioned() || mResourceLimitExceededError != null) {
+            } else if (state.isVersioned() || mSession.getDataHandler().getResourceLimitExceededError() != null) {
                 mBottomSeparator.setVisibility(View.GONE);
                 mBottomLayout.getLayoutParams().height = 0;
             } else {
