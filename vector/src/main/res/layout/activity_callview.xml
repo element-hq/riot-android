@@ -63,7 +63,7 @@
                 android:layout_width="0dp"
                 android:layout_height="48dp"
                 android:layout_weight="16"
-                android:src="@drawable/ic_material_call_end_black" />
+                android:src="@drawable/ic_material_call_end_grey" />
 
             <!-- for further use: for now we cannot switch from audio to video -->
             <ImageView
