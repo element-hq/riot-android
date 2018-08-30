@@ -294,7 +294,7 @@ public class VectorRoomMediasSender {
             mVectorRoomActivity.runOnUiThread(new Runnable() {
                 @Override
                 public void run() {
-                    mVectorRoomActivity.sendMessage(fText, fHtmlText, Message.FORMAT_MATRIX_HTML);
+                    mVectorRoomActivity.sendMessage(fText, fHtmlText, Message.FORMAT_MATRIX_HTML, false);
                 }
             });
         }

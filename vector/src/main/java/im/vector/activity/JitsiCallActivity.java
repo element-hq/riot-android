@@ -95,9 +95,6 @@ public class JitsiCallActivity extends VectorAppCompatActivity {
     @BindView(R.id.jsti_connecting_text_view)
     View mConnectingTextView;
 
-    @BindView(R.id.jitsi_progress_layout)
-    View waitingView;
-
     /**
      * Widget events listener
      */
@@ -126,6 +123,9 @@ public class JitsiCallActivity extends VectorAppCompatActivity {
     @Override
     @SuppressLint("NewApi")
     public void initUiAndData() {
+        // Waiting View
+        setWaitingView(findViewById(R.id.jitsi_progress_layout));
+
         mWidget = (Widget) getIntent().getSerializableExtra(EXTRA_WIDGET_ID);
         mIsVideoCall = getIntent().getBooleanExtra(EXTRA_ENABLE_VIDEO, true);
 

@@ -909,39 +909,16 @@ public class CommonActivityUtils {
                                                   final String aRoomId,
                                                   String aParticipantUserId,
                                                   final Activity fromActivity,
-                                                  final ApiCallback<Void> callback) {
+                                                  @NonNull final ApiCallback<Void> callback) {
 
         if ((null == aSession) || (null == fromActivity) || TextUtils.isEmpty(aRoomId)) {
-            Log.d(LOG_TAG, "## setToggleDirectMessageRoom(): failure - invalid input parameters");
+            Log.e(LOG_TAG, "## setToggleDirectMessageRoom(): failure - invalid input parameters");
+            callback.onUnexpectedError(new Exception("## setToggleDirectMessageRoom(): failure - invalid input parameters"));
         } else {
-            aSession.toggleDirectChatRoom(aRoomId, aParticipantUserId, new ApiCallback<Void>() {
+            aSession.toggleDirectChatRoom(aRoomId, aParticipantUserId, new SimpleApiCallback<Void>(callback) {
                 @Override
                 public void onSuccess(Void info) {
                     callback.onSuccess(null);
-                }
-
-                @Override
-                public void onNetworkError(Exception e) {
-                    Log.d(LOG_TAG, "## setToggleDirectMessageRoom(): invite() onNetworkError Msg=" + e.getLocalizedMessage());
-                    if (null != callback) {
-                        callback.onNetworkError(e);
-                    }
-                }
-
-                @Override
-                public void onMatrixError(MatrixError e) {
-                    Log.d(LOG_TAG, "## setToggleDirectMessageRoom(): invite() onMatrixError Msg=" + e.getLocalizedMessage());
-                    if (null != callback) {
-                        callback.onMatrixError(e);
-                    }
-                }
-
-                @Override
-                public void onUnexpectedError(Exception e) {
-                    Log.d(LOG_TAG, "## setToggleDirectMessageRoom(): invite() onUnexpectedError Msg=" + e.getLocalizedMessage());
-                    if (null != callback) {
-                        callback.onUnexpectedError(e);
-                    }
                 }
             });
         }
@@ -1012,19 +989,14 @@ public class CommonActivityUtils {
 
         new AlertDialog.Builder(fromActivity)
                 .setTitle(R.string.send_files_in)
-                .setNegativeButton(R.string.cancel,
-                        new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialog, int which) {
-                                dialog.dismiss();
-                            }
-                        })
+                .setNegativeButton(R.string.cancel, null)
                 .setAdapter(adapter,
                         new DialogInterface.OnClickListener() {
 
                             @Override
                             public void onClick(DialogInterface dialog, final int which) {
                                 dialog.dismiss();
+
                                 fromActivity.runOnUiThread(new Runnable() {
                                     @Override
                                     public void run() {
@@ -1051,34 +1023,6 @@ public class CommonActivityUtils {
     //==============================================================================================================
     // Media utils
     //==============================================================================================================
-
-    /**
-     * Save a media in the downloads directory and offer to open it with a third party application.
-     *
-     * @param activity       the activity
-     * @param savedMediaPath the media path
-     * @param mimeType       the media mime type.
-     */
-    public static void openMedia(final Activity activity, final String savedMediaPath, final String mimeType) {
-        if ((null != activity) && (null != savedMediaPath)) {
-            activity.runOnUiThread(new Runnable() {
-                @Override
-                public void run() {
-                    try {
-                        File file = new File(savedMediaPath);
-                        Intent intent = new Intent();
-                        intent.setAction(android.content.Intent.ACTION_VIEW);
-                        intent.setDataAndType(Uri.fromFile(file), mimeType);
-                        activity.startActivity(intent);
-                    } catch (ActivityNotFoundException e) {
-                        Toast.makeText(activity, e.getLocalizedMessage(), Toast.LENGTH_LONG).show();
-                    } catch (Exception e) {
-                        Log.d(LOG_TAG, "## openMedia(): Exception Msg=" + e.getMessage(), e);
-                    }
-                }
-            });
-        }
-    }
 
     /**
      * Copy a file into a dstPath directory.
@@ -1189,11 +1133,11 @@ public class CommonActivityUtils {
             protected void onPostExecute(Pair<String, Exception> result) {
                 if (null != callback) {
                     if (null == result) {
-                        callback.onNetworkError(new Exception("Null parameters"));
+                        callback.onUnexpectedError(new Exception("Null parameters"));
                     } else if (null != result.first) {
                         callback.onSuccess(result.first);
                     } else {
-                        callback.onNetworkError(result.second);
+                        callback.onUnexpectedError(result.second);
                     }
                 }
             }
@@ -1513,9 +1457,7 @@ public class CommonActivityUtils {
     /**
      * Export the e2e keys for a dedicated session.
      * {@link im.vector.util.PermissionsToolsKt#PERMISSIONS_FOR_WRITING_FILES} has to be granted
-     *
-     * TODO Export as a Share
-     *
+     * <p>
      *
      * @param session  the session
      * @param password the password
@@ -1532,7 +1474,7 @@ public class CommonActivityUtils {
             return;
         }
 
-        session.getCrypto().exportRoomKeys(password, new ApiCallback<byte[]>() {
+        session.getCrypto().exportRoomKeys(password, new SimpleApiCallback<byte[]>(callback) {
             @Override
             public void onSuccess(byte[] bytesArray) {
                 try {
@@ -1541,60 +1483,18 @@ public class CommonActivityUtils {
                     stream.close();
 
                     saveMediaIntoDownloads(appContext,
-                            new File(Uri.parse(url).getPath()), "riot-keys.txt", "text/plain", new SimpleApiCallback<String>() {
+                            new File(Uri.parse(url).getPath()), "riot-keys.txt", "text/plain", new SimpleApiCallback<String>(callback) {
                                 @Override
                                 public void onSuccess(String path) {
                                     if (null != callback) {
                                         callback.onSuccess(path);
                                     }
                                 }
-
-                                @Override
-                                public void onNetworkError(Exception e) {
-                                    if (null != callback) {
-                                        callback.onNetworkError(e);
-                                    }
-                                }
-
-                                @Override
-                                public void onMatrixError(MatrixError e) {
-                                    if (null != callback) {
-                                        callback.onMatrixError(e);
-                                    }
-                                }
-
-                                @Override
-                                public void onUnexpectedError(Exception e) {
-                                    if (null != callback) {
-                                        callback.onUnexpectedError(e);
-                                    }
-                                }
                             });
                 } catch (Exception e) {
                     if (null != callback) {
-                        callback.onMatrixError(new MatrixError(null, e.getLocalizedMessage()));
+                        callback.onUnexpectedError(e);
                     }
-                }
-            }
-
-            @Override
-            public void onNetworkError(Exception e) {
-                if (null != callback) {
-                    callback.onNetworkError(e);
-                }
-            }
-
-            @Override
-            public void onMatrixError(MatrixError e) {
-                if (null != callback) {
-                    callback.onMatrixError(e);
-                }
-            }
-
-            @Override
-            public void onUnexpectedError(Exception e) {
-                if (null != callback) {
-                    callback.onUnexpectedError(e);
                 }
             }
         });

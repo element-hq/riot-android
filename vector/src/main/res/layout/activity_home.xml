@@ -64,26 +64,6 @@
             app:layout_constraintRight_toRightOf="parent"
             app:layout_constraintTop_toBottomOf="@id/listView_pending_callview" />
 
-        <FrameLayout
-            android:id="@+id/listView_spinner_views"
-            android:layout_width="0dp"
-            android:layout_height="0dp"
-            android:background="?attr/waiting_background_color"
-            android:visibility="gone"
-            app:layout_constraintBottom_toTopOf="@+id/bottom_navigation"
-            app:layout_constraintLeft_toLeftOf="parent"
-            app:layout_constraintRight_toRightOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/listView_pending_callview">
-
-            <ProgressBar
-                android:id="@+id/listView_spinner"
-                android:layout_width="40dp"
-                android:layout_height="40dp"
-                android:layout_gravity="center"
-                android:visibility="visible" />
-
-        </FrameLayout>
-
         <android.support.design.widget.BottomNavigationView
             android:id="@+id/bottom_navigation"
             android:layout_width="0dp"
@@ -157,6 +137,27 @@
                 tools:fab_colorPressed="@color/vector_fuchsia_color" />
 
         </com.getbase.floatingactionbutton.FloatingActionsMenu>
+
+        <FrameLayout
+            android:id="@+id/listView_spinner_views"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:background="?attr/waiting_background_color"
+            android:elevation="14dp"
+            android:visibility="gone"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/listView_pending_callview">
+
+            <ProgressBar
+                android:id="@+id/listView_spinner"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:layout_gravity="center"
+                android:visibility="visible" />
+
+        </FrameLayout>
 
     </android.support.constraint.ConstraintLayout>
 

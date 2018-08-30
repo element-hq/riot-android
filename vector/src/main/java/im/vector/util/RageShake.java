@@ -89,7 +89,6 @@ public class RageShake implements SensorEventListener {
                     .setPositiveButton(R.string.yes, new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
-                            dialog.dismiss();
                             BugReporter.sendBugReport();
                         }
                     })
@@ -97,15 +96,9 @@ public class RageShake implements SensorEventListener {
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
                             PreferencesManager.setUseRageshake(mContext, false);
-                            dialog.dismiss();
                         }
                     })
-                    .setNegativeButton(R.string.no, new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialog, int which) {
-                            dialog.dismiss();
-                        }
-                    })
+                    .setNegativeButton(R.string.no, null)
                     .show();
         } catch (Exception e) {
             Log.e(LOG_TAG, "promptForReport " + e.getMessage(), e);

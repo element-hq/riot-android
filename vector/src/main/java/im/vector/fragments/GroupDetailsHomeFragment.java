@@ -32,7 +32,6 @@ import org.matrix.androidsdk.rest.model.group.Group;
 
 import butterknife.BindView;
 import im.vector.R;
-import im.vector.activity.CommonActivityUtils;
 import im.vector.util.ThemeUtils;
 import im.vector.util.VectorImageGetter;
 import im.vector.util.VectorUtils;
@@ -130,6 +129,10 @@ public class GroupDetailsHomeFragment extends GroupDetailsBaseFragment {
 
     @Override
     public void refreshViews() {
+        if (!isAdded()) {
+            return;
+        }
+
         Group group = mActivity.getGroup();
 
         VectorUtils.loadGroupAvatar(mActivity, mSession, mGroupAvatar, group);

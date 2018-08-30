@@ -60,7 +60,7 @@ public class RoomDirectoryPickerActivity extends VectorAppCompatActivity impleme
     private MXSession mSession;
     private RoomDirectoryAdapter mRoomDirectoryAdapter;
 
-     /*
+    /*
      * *********************************************************************************************
      * Static methods
      * *********************************************************************************************
@@ -147,7 +147,7 @@ public class RoomDirectoryPickerActivity extends VectorAppCompatActivity impleme
      * Refresh the directory servers list.
      */
     private void refreshDirectoryServersList() {
-       showWaitingView();
+        showWaitingView();
 
         mSession.getEventsApiClient().getThirdPartyServerProtocols(new ApiCallback<Map<String, ThirdPartyProtocol>>() {
             private void onDone(List<RoomDirectoryData> list) {
@@ -222,52 +222,49 @@ public class RoomDirectoryPickerActivity extends VectorAppCompatActivity impleme
 
         final EditText editText = dialogView.findViewById(R.id.directory_picker_edit_text);
 
-        alert.setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
-            public void onClick(DialogInterface dialog, int whichButton) {
-                final String serverUrl = editText.getText().toString().trim();
+        alert
+                .setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int whichButton) {
+                        final String serverUrl = editText.getText().toString().trim();
 
-                if (!TextUtils.isEmpty(serverUrl)) {
-                    showWaitingView();
-                    mSession.getEventsApiClient().getPublicRoomsCount(serverUrl, new ApiCallback<Integer>() {
-                        @Override
-                        public void onSuccess(Integer count) {
-                            Intent intent = new Intent();
-                            intent.putExtra(EXTRA_OUT_ROOM_DIRECTORY_DATA, new RoomDirectoryData(serverUrl, serverUrl, null, null, false));
-                            setResult(RESULT_OK, intent);
-                            finish();
+                        if (!TextUtils.isEmpty(serverUrl)) {
+                            showWaitingView();
+                            mSession.getEventsApiClient().getPublicRoomsCount(serverUrl, new ApiCallback<Integer>() {
+                                @Override
+                                public void onSuccess(Integer count) {
+                                    Intent intent = new Intent();
+                                    intent.putExtra(EXTRA_OUT_ROOM_DIRECTORY_DATA, new RoomDirectoryData(serverUrl, serverUrl, null, null, false));
+                                    setResult(RESULT_OK, intent);
+                                    finish();
+                                }
+
+                                private void onError(String error) {
+                                    Log.e(LOG_TAG, "## onSelectDirectoryServer() failed " + error);
+                                    hideWaitingView();
+                                    Toast.makeText(RoomDirectoryPickerActivity.this, R.string.directory_server_fail_to_retrieve_server, Toast.LENGTH_LONG)
+                                            .show();
+                                }
+
+                                @Override
+                                public void onNetworkError(Exception e) {
+                                    onError(e.getMessage());
+                                }
+
+                                @Override
+                                public void onMatrixError(MatrixError e) {
+                                    onError(e.getMessage());
+                                }
+
+                                @Override
+                                public void onUnexpectedError(Exception e) {
+                                    onError(e.getMessage());
+                                }
+                            });
                         }
-
-                        private void onError(String error) {
-                            Log.e(LOG_TAG, "## onSelectDirectoryServer() failed " + error);
-                            hideWaitingView();
-                            Toast.makeText(RoomDirectoryPickerActivity.this, R.string.directory_server_fail_to_retrieve_server, Toast.LENGTH_LONG).show();
-                        }
-
-                        @Override
-                        public void onNetworkError(Exception e) {
-                            onError(e.getMessage());
-                        }
-
-                        @Override
-                        public void onMatrixError(MatrixError e) {
-                            onError(e.getMessage());
-                        }
-
-                        @Override
-                        public void onUnexpectedError(Exception e) {
-                            onError(e.getMessage());
-                        }
-                    });
-                }
-            }
-        });
-
-        alert.setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
-            public void onClick(DialogInterface dialog, int whichButton) {
-            }
-        });
-
-        alert.show();
+                    }
+                })
+                .setNegativeButton(R.string.cancel, null)
+                .show();
     }
 
     /*
