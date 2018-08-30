@@ -10,28 +10,30 @@
         android:background="#000"/>
 
     <RelativeLayout
-        android:id="@+id/media_slider_videolayout"
+        android:id="@+id/media_slider_video_layout"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:background="#000">
 
-        <VideoView android:id="@+id/media_slider_videoview"
+        <VideoView android:id="@+id/media_slider_video_view"
             android:layout_gravity="center"
             android:layout_centerInParent="true"
             android:layout_width="match_parent"
             android:layout_height="match_parent" />
 
         <ImageView android:id="@+id/media_slider_video_thumbnail"
+            android:layout_gravity="center"
+            android:layout_centerInParent="true"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:background="#000" />
 
-        <ImageView android:id="@+id/media_slider_video_playView"
+        <ImageView android:id="@+id/media_slider_video_play"
+            android:layout_gravity="center"
+            android:layout_centerInParent="true"
             android:layout_width="100dp"
             android:layout_height="100dp"
-            android:layout_centerHorizontal="true"
-            android:layout_centerVertical="true"
-            android:src="@drawable/ic_material_play_circle"
-            android:background="#77777777" />
+            android:src="@drawable/ic_material_play_circle" />
     </RelativeLayout>
 
 
@@ -39,7 +41,6 @@
         android:id="@+id/media_slider_piechart"
         android:layout_centerHorizontal="true"
         android:layout_centerVertical="true"
-        android:alpha="0.4"
         android:layout_width="160dp"
         android:layout_height="160dp"/>
 
