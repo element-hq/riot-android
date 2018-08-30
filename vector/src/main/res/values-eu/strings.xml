@@ -28,11 +28,11 @@
     <string name="rename">Aldatu izena</string>
     <string name="report_content">Salatu edukia</string>
     <string name="active_call">Dei aktiboa</string>
-    <string name="ongoing_conference_call">" Konferentzia deia abioan. Elkartu ahotsa edo bideoa erabiliz."</string>
+    <string name="ongoing_conference_call">Konferentzia deia abian. Elkartu ahotsa edo bideoa erabiliz.</string>
     <string name="ongoing_conference_call_voice">ahotsa</string>
     <string name="ongoing_conference_call_video">bideoa</string>
     <string name="cannot_start_call">Ezin da deia hasi, saiatu geroago</string>
-    <string name="missing_permissions_warning">Baimenak falta direnez, ezaugarri batzuk falta daitezke.</string>
+    <string name="missing_permissions_warning">Baimenak falta direnez, ezaugarri batzuk falta daitezke…</string>
     <string name="missing_permissions_to_start_conf_call">Gonbidatzeko baimena behar duzu gela honetan konferentzia bat hasteko</string>
     <string name="missing_permissions_title_to_start_conf_call">Ezin da deia hasi</string>
     <string name="device_information">Gailuaren informazioa</string>
@@ -643,7 +643,7 @@ Kontuan izan ekintza honek aplikazioa berrabiaraziko duela eta denbora bat behar
     <string name="encryption_information_unblock">Desblokeatu</string>
 
     <string name="encryption_information_verify_device">Egiaztatu gailua</string>
-    <string name="encryption_information_verify_device_warning">" Gailu hau fidagarria dela egiaztatzeko, kontaktatu bere jabea beste medio bat erabiliz (adib. aurrez aurre edo telefonoz deituz) eta galdetu beraien erabiltzaile-ezarpenetan bere gailurako ikusten duen gakoa hemen beheko bera den:"</string>
+    <string name="encryption_information_verify_device_warning">Gailu hau fidagarria dela egiaztatzeko, kontaktatu bere jabea beste medio bat erabiliz (adib. aurrez aurre edo telefonoz deituz) eta galdetu beraien erabiltzaile-ezarpenetan bere gailurako ikusten duen gakoa hemen beheko bera den:</string>
     <string name="encryption_information_verify_device_warning2">Bat badator bada, sakatu beheko egiaztatu botoia. 
 Ez badator bat, beste inor gailua antzematen dago eta zerrenda beltzean sartu beharko zenuke.
 Etorkizunean egiaztaketa metodoa hobetuko da.</string>
@@ -831,7 +831,7 @@ Zifratutako mezuak ez dira zifratzea oraindik ezarrita ez duten beste gailuetan 
     <string name="forget_room">Ahaztu gela</string>
 <string name="settings_flair">Ikurra</string>
 
-    <string name="room_settings_no_flair">" Gela honek ez ditu komunitateetako ikurrak erakusten"</string>
+    <string name="room_settings_no_flair">Gela honek ez ditu komunitateetako ikurrak erakusten</string>
     <string name="send_bug_report_rage_shake">Astindu amorruz akatsaren berri emateko</string>
 
     <string name="actions">Ekintzak</string>
@@ -996,4 +996,58 @@ Kontuan izan ekintza honek aplikazioa berrabiaraziko duela eta denbora bat behar
     <string name="room_tombstone_predecessor_link">Egin klik hemen mezu zaharragoak ikusteko</string>
 
 <string name="command_description_deop_user">Id zehatz bat duen erabiltzaileari maila jaisten dio</string>
-    </resources>
+    <string name="missing_permissions_error">Baimenak falta direnez, ekintza hau ezinezkoa da.</string>
+    <string name="system_alerts_header">Sistemaren alertak</string>
+
+    <plurals name="format_time_s">
+	<item quantity="one">1s</item>
+	<item quantity="other">%ds</item>
+</plurals>
+    <plurals name="format_time_m">
+	<item quantity="one">1m</item>
+	<item quantity="other">%dm</item>
+</plurals>
+    <plurals name="format_time_h">
+	<item quantity="one">1h</item>
+	<item quantity="other">%dh</item>
+</plurals>
+    <plurals name="format_time_d">
+	<item quantity="one">1e</item>
+	<item quantity="other">%de</item>
+</plurals>
+
+    <string name="room_participants_now">%1$s orain</string>
+    <string name="room_participants_ago">duela %1$s %2$s</string>
+
+    <string name="room_participants_invite_join_names">"%1$s, "</string>
+    <string name="room_participants_invite_join_names_and">%1$s eta %2$s</string>
+    <string name="room_participants_invite_join_names_combined">%1$s %2$s</string>
+
+    <plurals name="room_details_selected">
+	<item quantity="one">1 hautatuta</item>
+	<item quantity="other">%d hautatuta</item>
+</plurals>
+    <plurals name="group_members">
+	<item quantity="one">kide 1</item>
+	<item quantity="other">%d kide</item>
+</plurals>
+
+    <plurals name="group_rooms">
+	<item quantity="one">gela 1</item>
+	<item quantity="other">%d gela</item>
+</plurals>
+    <string name="resource_limit_exceeded_title">Bailabide-muga gaindituta</string>
+    <string name="resource_limit_contact_action">Kontaktatu administratzailea</string>
+
+    <string name="resource_limit_contact_admin">kontaktatu zure zerbitzu administratzailea</string>
+
+    <string name="resource_limit_soft_default">Hasiera zerbitzari honek zure baliabide muga gainditu du <b>erabiltzaile batzuk ezin izango dute saioa hasi</b>.</string>
+    <string name="resource_limit_hard_default">Hasiera zerbitzari honek bere baliabide mugetako bat gainditu du.</string>
+
+    <string name="resource_limit_soft_mau"> Hasiera zerbitzari honek hilabeteko erabiltzaile aktiboen muga jo du <b>erabiltzaile batzuk ezin izango dute saioa hasi</b>.</string>
+    <string name="resource_limit_hard_mau">Hasiera zerbitzari honek bere hilabeteko erabiltzaile aktiboen muga gainditu du.</string>
+
+    <string name="resource_limit_soft_contact">%s muga hau areagotzeko.</string>
+    <string name="resource_limit_hard_contact">%s zerbitzu hau erabiltzen jarraitzeko.</string>
+
+</resources>

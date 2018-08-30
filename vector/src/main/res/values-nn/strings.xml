@@ -55,7 +55,7 @@
     <string name="missing_permissions_title_to_start_conf_call">Klarer ikkje å setja i gang samtala</string>
     <string name="device_information">Einingsinfo</string>
     <string name="room_no_conference_call_in_encrypted_rooms">Gruppesamtaler er ikkje støtta i krypterte rom</string>
-    <string name="send_anyway">Send Same kva</string>
+    <string name="send_anyway">Send Likevel</string>
     <string name="or">eller</string>
     <string name="invite">Byd inn</string>
     <string name="offline">Fråkopla</string>

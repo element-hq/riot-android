@@ -993,4 +993,20 @@ Matrix 中的消息可見度類似于電子郵件。我們忘記您的郵件意�
     <plurals name="group_rooms">
 	<item quantity="other">%d 個聊天室</item>
 </plurals>
-    </resources>
+    <string name="system_alerts_header">系統警告</string>
+
+    <string name="resource_limit_exceeded_title">超過資源限制</string>
+    <string name="resource_limit_contact_action">聯絡管理員</string>
+
+    <string name="resource_limit_contact_admin">聯絡您的服務管理員</string>
+
+    <string name="resource_limit_soft_default">此家伺服器已經超過其中一項資源限制，所以<b>有一些使用者將會無法登入</b>。</string>
+    <string name="resource_limit_hard_default">此家伺服器已經超過其中一項資源限制。</string>
+
+    <string name="resource_limit_soft_mau"> 此家伺服器已經達到了每月活躍使用者限制，所以<b>有一些使用者將會無法登入</b>。</string>
+    <string name="resource_limit_hard_mau">此家伺服器已經達到其每月活躍使用者限制。</string>
+
+    <string name="resource_limit_soft_contact">請 %s 以讓此限制增加。</string>
+    <string name="resource_limit_hard_contact">請 %s 以繼續使用此服務。</string>
+
+</resources>
