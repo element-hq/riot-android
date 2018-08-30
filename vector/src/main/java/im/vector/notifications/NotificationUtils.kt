@@ -77,8 +77,10 @@ object NotificationUtils {
      * IDs for actions
      * ========================================================================================== */
 
-    private const val QUICK_LAUNCH_ACTION = "EventStreamService.QUICK_LAUNCH_ACTION"
-    const val TAP_TO_VIEW_ACTION = "EventStreamService.TAP_TO_VIEW_ACTION"
+    private const val JOIN_ACTION = "NotificationUtils.JOIN_ACTION"
+    private const val REJECT_ACTION = "NotificationUtils.REJECT_ACTION"
+    private const val QUICK_LAUNCH_ACTION = "NotificationUtils.QUICK_LAUNCH_ACTION"
+    const val TAP_TO_VIEW_ACTION = "NotificationUtils.TAP_TO_VIEW_ACTION"
 
     /* ==========================================================================================
      * IDs for channels
@@ -439,89 +441,88 @@ object NotificationUtils {
             builder.setStyle(inboxStyle)
         }
 
-        // do not offer to quick respond if the user did not dismiss the previous one
-        if (!LockScreenActivity.isDisplayingALockScreenActivity()) {
-            if (roomsNotifications.mIsInvitationEvent) {
-                run {
-                    // offer to type a quick reject button
-                    val rejectIntent = JoinRoomActivity.getRejectRoomIntent(context, roomsNotifications.mRoomId, roomsNotifications.mSessionId)
-
-                    // the action must be unique else the parameters are ignored
-                    rejectIntent.action = QUICK_LAUNCH_ACTION + System.currentTimeMillis().toInt()
-                    val pIntent = PendingIntent.getActivity(context, 0, rejectIntent, 0)
-                    builder.addAction(
-                            R.drawable.vector_notification_reject_invitation,
-                            context.getString(R.string.reject),
-                            pIntent)
-                }
-
-                run {
-                    // offer to type a quick accept button
-                    val joinIntent = JoinRoomActivity.getJoinRoomIntent(context, roomsNotifications.mRoomId, roomsNotifications.mSessionId)
-
-                    // the action must be unique else the parameters are ignored
-                    joinIntent.action = QUICK_LAUNCH_ACTION + System.currentTimeMillis().toInt()
-                    val pIntent = PendingIntent.getActivity(context, 0, joinIntent, 0)
-                    builder.addAction(
-                            R.drawable.vector_notification_accept_invitation,
-                            context.getString(R.string.join),
-                            pIntent)
-                }
-            } else {
-                // offer to type a quick answer (i.e. without launching the application)
-                val quickReplyIntent = Intent(context, LockScreenActivity::class.java)
-                quickReplyIntent.putExtra(LockScreenActivity.EXTRA_ROOM_ID, roomsNotifications.mRoomId)
-                quickReplyIntent.putExtra(LockScreenActivity.EXTRA_SENDER_NAME, roomsNotifications.mSenderName)
-                quickReplyIntent.putExtra(LockScreenActivity.EXTRA_MESSAGE_BODY, roomsNotifications.mQuickReplyBody)
+        if (roomsNotifications.mIsInvitationEvent) {
+            run {
+                // offer to type a quick reject button
+                val rejectIntent = JoinRoomActivity.getRejectRoomIntent(context, roomsNotifications.mRoomId, roomsNotifications.mSessionId)
 
                 // the action must be unique else the parameters are ignored
-                quickReplyIntent.action = QUICK_LAUNCH_ACTION + System.currentTimeMillis().toInt()
-                val pIntent = PendingIntent.getActivity(context, 0, quickReplyIntent, 0)
+                rejectIntent.action = REJECT_ACTION + System.currentTimeMillis().toInt()
+                val pIntent = PendingIntent.getActivity(context, 0, rejectIntent, 0)
                 builder.addAction(
-                        R.drawable.vector_notification_quick_reply,
-                        context.getString(R.string.action_quick_reply),
+                        R.drawable.vector_notification_reject_invitation,
+                        context.getString(R.string.reject),
                         pIntent)
             }
 
-            // Build the pending intent for when the notification is clicked
-            val roomIntentTap: Intent
+            run {
+                // offer to type a quick accept button
+                val joinIntent = JoinRoomActivity.getJoinRoomIntent(context, roomsNotifications.mRoomId, roomsNotifications.mSessionId)
 
-            if (roomsNotifications.mIsInvitationEvent) {
-                // for invitation the room preview must be displayed
-                roomIntentTap = CommonActivityUtils.buildIntentPreviewRoom(roomsNotifications.mSessionId,
-                        roomsNotifications.mRoomId, context, VectorFakeRoomPreviewActivity::class.java)
-            } else {
-                roomIntentTap = Intent(context, VectorRoomActivity::class.java)
-                roomIntentTap.putExtra(VectorRoomActivity.EXTRA_ROOM_ID, roomsNotifications.mRoomId)
+                // the action must be unique else the parameters are ignored
+                joinIntent.action = JOIN_ACTION + System.currentTimeMillis().toInt()
+                val pIntent = PendingIntent.getActivity(context, 0, joinIntent, 0)
+                builder.addAction(
+                        R.drawable.vector_notification_accept_invitation,
+                        context.getString(R.string.join),
+                        pIntent)
             }
+        } else if (!LockScreenActivity.isDisplayingALockScreenActivity()) {
+            // (do not offer to quick respond if the user did not dismiss the previous one)
+
+            // offer to type a quick answer (i.e. without launching the application)
+            val quickReplyIntent = Intent(context, LockScreenActivity::class.java)
+            quickReplyIntent.putExtra(LockScreenActivity.EXTRA_ROOM_ID, roomsNotifications.mRoomId)
+            quickReplyIntent.putExtra(LockScreenActivity.EXTRA_SENDER_NAME, roomsNotifications.mSenderName)
+            quickReplyIntent.putExtra(LockScreenActivity.EXTRA_MESSAGE_BODY, roomsNotifications.mQuickReplyBody)
+
             // the action must be unique else the parameters are ignored
-            roomIntentTap.action = TAP_TO_VIEW_ACTION + System.currentTimeMillis().toInt()
-
-            // Recreate the back stack
-            val stackBuilderTap = TaskStackBuilder.create(context)
-                    .addNextIntentWithParentStack(Intent(context, VectorHomeActivity::class.java))
-                    .addNextIntent(roomIntentTap)
-
-            builder.setContentIntent(stackBuilderTap.getPendingIntent(0, PendingIntent.FLAG_UPDATE_CURRENT))
-
+            quickReplyIntent.action = QUICK_LAUNCH_ACTION + System.currentTimeMillis().toInt()
+            val pIntent = PendingIntent.getActivity(context, 0, quickReplyIntent, 0)
             builder.addAction(
-                    R.drawable.vector_notification_open,
-                    context.getString(R.string.action_open),
-                    stackBuilderTap.getPendingIntent(0, PendingIntent.FLAG_UPDATE_CURRENT))
+                    R.drawable.vector_notification_quick_reply,
+                    context.getString(R.string.action_quick_reply),
+                    pIntent)
+        }
 
-            // wearable
-            if (!roomsNotifications.mIsInvitationEvent) {
-                try {
-                    val wearableExtender = NotificationCompat.WearableExtender()
-                    val action = NotificationCompat.Action.Builder(R.drawable.logo_transparent,
-                            roomsNotifications.mWearableMessage,
-                            stackBuilderTap.getPendingIntent(0, PendingIntent.FLAG_UPDATE_CURRENT))
-                            .build()
-                    wearableExtender.addAction(action)
-                    builder.extend(wearableExtender)
-                } catch (e: Exception) {
-                    Log.e(LOG_TAG, "## addTextStyleWithSeveralRooms() : WearableExtender failed " + e.message, e)
-                }
+        // Build the pending intent for when the notification is clicked
+        val roomIntentTap: Intent
+
+        if (roomsNotifications.mIsInvitationEvent) {
+            // for invitation the room preview must be displayed
+            roomIntentTap = CommonActivityUtils.buildIntentPreviewRoom(roomsNotifications.mSessionId,
+                    roomsNotifications.mRoomId, context, VectorFakeRoomPreviewActivity::class.java)
+        } else {
+            roomIntentTap = Intent(context, VectorRoomActivity::class.java)
+            roomIntentTap.putExtra(VectorRoomActivity.EXTRA_ROOM_ID, roomsNotifications.mRoomId)
+        }
+        // the action must be unique else the parameters are ignored
+        roomIntentTap.action = TAP_TO_VIEW_ACTION + System.currentTimeMillis().toInt()
+
+        // Recreate the back stack
+        val stackBuilderTap = TaskStackBuilder.create(context)
+                .addNextIntentWithParentStack(Intent(context, VectorHomeActivity::class.java))
+                .addNextIntent(roomIntentTap)
+
+        builder.setContentIntent(stackBuilderTap.getPendingIntent(0, PendingIntent.FLAG_UPDATE_CURRENT))
+
+        builder.addAction(
+                R.drawable.vector_notification_open,
+                context.getString(R.string.action_open),
+                stackBuilderTap.getPendingIntent(0, PendingIntent.FLAG_UPDATE_CURRENT))
+
+        // wearable
+        if (!roomsNotifications.mIsInvitationEvent) {
+            try {
+                val wearableExtender = NotificationCompat.WearableExtender()
+                val action = NotificationCompat.Action.Builder(R.drawable.logo_transparent,
+                        roomsNotifications.mWearableMessage,
+                        stackBuilderTap.getPendingIntent(0, PendingIntent.FLAG_UPDATE_CURRENT))
+                        .build()
+                wearableExtender.addAction(action)
+                builder.extend(wearableExtender)
+            } catch (e: Exception) {
+                Log.e(LOG_TAG, "## addTextStyleWithSeveralRooms() : WearableExtender failed " + e.message, e)
             }
         }
     }

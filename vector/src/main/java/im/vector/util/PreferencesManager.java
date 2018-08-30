@@ -235,31 +235,11 @@ public class PreferencesManager {
      *
      * @param context the context
      */
-    public static void setDidAskUserToIgnoreBatteryOptimizations(Context context, boolean asked) {
+    public static void setDidAskUserToIgnoreBatteryOptimizations(Context context) {
         PreferenceManager.getDefaultSharedPreferences(context)
                 .edit()
-                .putBoolean(DID_ASK_TO_IGNORE_BATTERY_OPTIMIZATIONS_KEY, asked)
+                .putBoolean(DID_ASK_TO_IGNORE_BATTERY_OPTIMIZATIONS_KEY, true)
                 .apply();
-    }
-
-    /**
-     * Tells if the application ignores battery optimizations.
-     * <p>
-     * Ignoring them allows the app to run in background to make background sync with the homeserver.
-     * This user option appears on Android M but Android O enforces its usage and kills apps not
-     * authorised by the user to run in background.
-     *
-     * @param context the context
-     * @return true if battery optimisations are ignored
-     */
-    @SuppressLint("NewApi")
-    public static boolean isIgnoringBatteryOptimizations(Context context) {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-            return ((PowerManager) context.getSystemService(context.POWER_SERVICE)).isIgnoringBatteryOptimizations(context.getPackageName());
-        }
-
-        // no issue before Android M, battery optimisations did not exist
-        return true;
     }
 
     /**

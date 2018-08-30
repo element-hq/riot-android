@@ -16,7 +16,7 @@
     <string name="title_activity_settings">Innstillingar</string>
     <string name="title_activity_member_details">Medlemdetaljar</string>
     <string name="title_activity_historical">Historiske</string>
-    <string name="title_activity_bug_report">Bøgg-fråmelding</string>
+    <string name="title_activity_bug_report">Feil-fråmelding</string>
     <string name="title_activity_group_details">Samfunnsdetaljar</string>
     <string name="title_activity_choose_sticker">Send eit klistremerke</string>
 
@@ -54,8 +54,8 @@
     <string name="missing_permissions_to_start_conf_call">Du trengjer tillating til å byda inn for å setja i gang ei gruppesamtale i dette rommet</string>
     <string name="missing_permissions_title_to_start_conf_call">Klarer ikkje å setja i gang samtala</string>
     <string name="device_information">Einingsinfo</string>
-    <string name="room_no_conference_call_in_encrypted_rooms">Gruppesamtaler er ikkje støtta i enkrypterte rom</string>
-    <string name="send_anyway">Send Same kva</string>
+    <string name="room_no_conference_call_in_encrypted_rooms">Gruppesamtaler er ikkje støtta i krypterte rom</string>
+    <string name="send_anyway">Send Likevel</string>
     <string name="or">eller</string>
     <string name="invite">Byd inn</string>
     <string name="offline">Fråkopla</string>
@@ -63,7 +63,7 @@
     <string name="action_exit">Gå ut</string>
     <string name="actions">Handlingar</string>
     <string name="action_sign_out">Logg av</string>
-    <string name="action_sign_out_confirmation">Av sikkerheitsmessige grunner, slettar det å logga av alle ende-til-ende-enkrypteringsnyklar slik at tidligare pratehistorie vert uleseleg viss du loggar inn att.
+    <string name="action_sign_out_confirmation">Av sikkerheitsmessige grunner, slettar det å logga av alle ende-til-ende-krypteringsnyklar slik at tidligare pratehistorie vert uleseleg viss du loggar inn att.
 Velg \"hent ut\" for å sikkerheitskopiera dei før du loggar av.</string>
     <string name="action_voice_call">Røystsamtale</string>
     <string name="action_video_call">Videosamtale</string>
@@ -118,17 +118,17 @@ Velg \"hent ut\" for å sikkerheitskopiera dei før du loggar av.</string>
     <string name="send_bug_report_include_logs">Send loggar</string>
     <string name="send_bug_report_include_crash_logs">Send kræsjloggar</string>
     <string name="send_bug_report_include_screenshot">Send skjermbilete</string>
-    <string name="send_bug_report">Bøgg-fråmelding</string>
-    <string name="send_bug_report_description">Ver venleg og skildr bøggen. Kva gjorde du? Kva forventa du at skulle skje? Kva skjedde eigentleg?</string>
+    <string name="send_bug_report">Feil-fråmelding</string>
+    <string name="send_bug_report_description">Ver venleg og skildr feilen. Kva gjorde du? Kva forventa du at skulle skje? Kva skjedde?</string>
     <string name="send_bug_report_description_in_english">Om mogeleg, ver venleg og skriv skildringa på Engelsk.</string>
     <string name="send_bug_report_placeholder">Skildr vansken din her</string>
-    <string name="send_bug_report_logs_description">For å diagnostisere vansker, sendast loggar frå denne klienten med bøggfråmeldinga. Bøggfråmeldinga, saman med loggane og skjermbiletet, vil ikkje vera offentleg synlege. Viss du føretrekkjer å berre sende teksta over, ver venleg og avmerk:</string>
-    <string name="send_bug_report_alert_message">Det verkar som om du ristar mobilen i sinne. Vil du senda ein bøggfråmelding inn?</string>
+    <string name="send_bug_report_logs_description">For å diagnostisere vansker, sendast loggar frå denne klienten med feilfråmeldinga. Feilfråmeldinga, saman med loggane og skjermbiletet, vil ikkje vera offentleg synlege. Viss du føretrekkjer å berre sende teksta over, ver venleg og avmerk:</string>
+    <string name="send_bug_report_alert_message">Det verkar som om du ristar mobilen i sinne. Vil du senda ein feilfråmelding inn?</string>
     <string name="send_bug_report_app_crashed">Æppen kræsja forrige gong. Vil du senda ein kræsjfråmelding inn?</string>
-    <string name="send_bug_report_rage_shake">Rist i sinne for å melda frå om bøgg</string>
+    <string name="send_bug_report_rage_shake">Rist i sinne for å melda frå om feil</string>
 
-    <string name="send_bug_report_sent">Bøggfråmeldinga vart send</string>
-    <string name="send_bug_report_failed">Fekk ikkje til å senda bøggfråmeldinga (%s)</string>
+    <string name="send_bug_report_sent">Feilfråmeldinga vart send</string>
+    <string name="send_bug_report_failed">Fekk ikkje til å senda feilfråmeldinga (%s)</string>
     <string name="send_bug_report_progress">Framgang (%s%%)</string>
 
     <string name="send_files_in">Send inn i</string>
@@ -170,22 +170,22 @@ Legg nokre til no?</string>
     <string name="auth_register">Meld deg inn</string>
     <string name="auth_submit">Send inn</string>
     <string name="auth_skip">Hopp over</string>
-    <string name="auth_send_reset_email">Send Attendestillingsemail</string>
+    <string name="auth_send_reset_email">Send Attendestillingsepost</string>
     <string name="auth_return_to_login">Gå attende til innloggingsskjermen</string>
-    <string name="auth_user_id_placeholder">Email eller brukarnamn</string>
+    <string name="auth_user_id_placeholder">Epost eller brukarnamn</string>
     <string name="auth_password_placeholder">Passord</string>
     <string name="auth_new_password_placeholder">Nytt passord</string>
     <string name="auth_user_name_placeholder">Brukarnamn</string>
-    <string name="auth_add_email_message">Legg ei emailadresse til til brukaren din slik at folk kan finna deg, og du kan attendestilla passordet.</string>
+    <string name="auth_add_email_message">Legg ei epostadresse til til brukaren din slik at folk kan finna deg, og du kan attendestilla passordet.</string>
     <string name="auth_add_phone_message">Legg eit telefonnummer til til brukaren din slik at andre brukarar kan finna deg.</string>
-    <string name="auth_add_email_phone_message">Legg ei emailaddresse og/eller eit telefonnummer til til brukaren din slik at andre brukarar kan finna deg.
+    <string name="auth_add_email_phone_message">Legg ei epostaddresse og/eller eit telefonnummer til til brukaren din slik at andre brukarar kan finna deg.
 
-Emailadressa lèt deg òg attendestilla passordet.</string>
-    <string name="auth_add_email_and_phone_message">Legg ei emailadresse og eit telefonnummer til til brukaren din slik at andre brukarar kan finna deg.
+Epostadressa lèt deg òg attendestilla passordet.</string>
+    <string name="auth_add_email_and_phone_message">Legg ei epostadresse og eit telefonnummer til til brukaren din slik at andre brukarar kan finna deg.
 
-Emailadressa lèt deg og attendestilla passordet.</string>
-    <string name="auth_email_placeholder">Emailadresse</string>
-    <string name="auth_opt_email_placeholder">Emailadresse (valfri)</string>
+Epostadressa lèt deg og attendestilla passordet.</string>
+    <string name="auth_email_placeholder">Epostadresse</string>
+    <string name="auth_opt_email_placeholder">Epostadresse (valfri)</string>
     <string name="auth_phone_number_placeholder">Telefonnummer</string>
     <string name="auth_opt_phone_number_placeholder">Telefonnummer (valfritt)</string>
     <string name="auth_repeat_password_placeholder">Gjentak passordet</string>
@@ -194,30 +194,30 @@ Emailadressa lèt deg og attendestilla passordet.</string>
     <string name="auth_invalid_user_name">Brukarnamn kan berre innehalde bokstavar, tal, prikkar, bindestrek og understrek</string>
     <string name="auth_invalid_password">Passordet er for kort (i det minste 6)</string>
     <string name="auth_missing_password">Vantande passord</string>
-    <string name="auth_invalid_email">Dette ser ikkje ut som ei gangbar emailadresse</string>
+    <string name="auth_invalid_email">Dette ser ikkje ut som ei gangbar epostadresse</string>
     <string name="auth_invalid_phone">Dette ser ikkje ut som eit gangbart telefonnummer</string>
-    <string name="auth_email_already_defined">Denne emailadressa er allereie sett.</string>
-    <string name="auth_missing_email">Vantande emailadresse</string>
+    <string name="auth_email_already_defined">Denne epostadressa er allereie sett.</string>
+    <string name="auth_missing_email">Vantande epostadresse</string>
     <string name="auth_missing_phone">Vantande telefonnummer</string>
-    <string name="auth_missing_email_or_phone">Vantande emailadresse eller telefonnummer</string>
+    <string name="auth_missing_email_or_phone">Vantande epostadresse eller telefonnummer</string>
     <string name="auth_invalid_token">Ugyldig teikn</string>
     <string name="auth_password_dont_match">Passorda er ikkje det same</string>
     <string name="auth_forgot_password">Gløymt passordet?</string>
     <string name="auth_use_server_options">Bruk eigentenarinnstillingar (omfattande)</string>
-    <string name="auth_email_validation_message">Ver venleg og sjekk emailen din for å gå fram med innmeldinga</string>
-    <string name="auth_threepid_warning_message">Innmelding med email og telefonnummer samtidig er førebels ikkje støtta før api-en finst. Berre telefonnummeret vert brukt.
+    <string name="auth_email_validation_message">Ver venleg og sjekk eposten din for å gå fram med innmeldinga</string>
+    <string name="auth_threepid_warning_message">Innmelding med epost og telefonnummer samtidig er førebels ikkje støtta før api-en finst. Berre telefonnummeret vert brukt.
 
-Du kan legga emailen din til til brukaren din i innstillingar.</string>
+Du kan legga eposten din til til brukaren din i innstillingar.</string>
     <string name="auth_recaptcha_message">Heimtenaren vil forsikra seg om at du ikkje er ein robot</string>
     <string name="auth_username_in_use">Brukarnamnet er allereie i bruk</string>
     <string name="auth_home_server">Heimtenar:</string>
     <string name="auth_identity_server">Identitetstenar:</string>
-    <string name="auth_reset_password_next_step_button">Eg har godkjend emailadressa mi</string>
-    <string name="auth_reset_password_message">For å attendestilla passordet, skriv emailadressa som er tilknytta brukaren din inn:</string>
-    <string name="auth_reset_password_missing_email">Emailadressa som er tilknytta brukaren din må skrivast inn.</string>
+    <string name="auth_reset_password_next_step_button">Eg har stadfesta epostdressa mi</string>
+    <string name="auth_reset_password_message">For å attendestilla passordet, skriv epostadressa som er tilknytta brukaren din inn:</string>
+    <string name="auth_reset_password_missing_email">Epostadressa som er tilknytta brukaren din må skrivast inn.</string>
     <string name="auth_reset_password_missing_password">Eit nytt passord må skrivast inn.</string>
-    <string name="auth_reset_password_email_validation_message">En email vart send til %s. Når du har følgja lenkja han inneheld, klikk under.</string>
-    <string name="auth_reset_password_error_unauthorized">Fekk ikkje til å godkjenna emailadressa: sjå til at du klikka på lenkja i emailen</string>
+    <string name="auth_reset_password_email_validation_message">Ein epost vart send til %s. Når du har fylgt lenkja han inneheld, klikk under.</string>
+    <string name="auth_reset_password_error_unauthorized">Fekk ikkje til å stadfesta epostadressa: sjå til at du klikka på lenkja i eposten</string>
     <string name="auth_reset_password_success_message">Passordet ditt vart attendestild.
 
 Du vart logga ut av alle einingar og får ikkje push-varsel lenger. For å skru varsel på igjen, logg inn at på kvar eining.</string>
@@ -227,7 +227,7 @@ Du vart logga ut av alle einingar og får ikkje push-varsel lenger. For å skru 
     <string name="login_error_unable_login">Fekk ikkje til å logga inn</string>
     <string name="login_error_registration_network_error">Fekk ikkje til å melda inn: Nettverksfeil</string>
     <string name="login_error_unable_register">Fekk ikkje til å melda inn</string>
-    <string name="login_error_unable_register_mail_ownership">Fekk ikkje til å melda inn: email-eigarskapsfeil</string>
+    <string name="login_error_unable_register_mail_ownership">Fekk ikkje til å melda inn: epost-eigarskapsfeil</string>
     <string name="login_error_invalid_home_server">Skriv ein gangbar URL inn</string>
     <string name="login_mobile_device">Mobil</string>
 
@@ -237,9 +237,9 @@ Du vart logga ut av alle einingar og får ikkje push-varsel lenger. For å skru 
     <string name="login_error_not_json">Inneheldt ikkje ein gangbar JSON</string>
     <string name="login_error_limit_exceeded">For mange førespurnader vart sende</string>
     <string name="login_error_user_in_use">Brukarnamnet er allereie i bruk</string>
-    <string name="login_error_login_email_not_yet">Emaillenkja som ikkje har verta klikka på enno</string>
+    <string name="login_error_login_email_not_yet">Epostlenkja som ikkje har verta klikka på enno</string>
 
-    <string name="e2e_re_request_encryption_key"><u>Spør på nytt om enkrypteringsnyklar</u> frå dei andre einingane dine.</string>
+    <string name="e2e_re_request_encryption_key"><u>Spør på nytt om krypteringsnyklar</u> frå dei andre einingane dine.</string>
 
     <string name="e2e_re_request_encryption_key_sent">Nykelførespurnad er send.</string>
 
@@ -305,10 +305,10 @@ Ver venleg og gjev tilgang på den neste popp-oppen for å kunna ringja.</string
     <string name="permissions_rationale_msg_camera_and_audio">Riot treng tilgang til kameraet og mikrofonen din for å videosamtala.
 
 Ver venleg og gjev tilgang på den neste popp-oppen for å kunna ringja.</string>
-    <string name="permissions_rationale_msg_contacts">Riot treng tilgang til adresseboka di for å finna andre Matrix-brukarar utifrå emailadressene og telefonnummera dei.
+    <string name="permissions_rationale_msg_contacts">Riot treng tilgang til adresseboka di for å finna andre Matrix-brukarar utifrå epostadressene og telefonnummera dei.
 
 Ver venleg og gjev tilgang på den neste popp-oppen for å finna addressebokbrukarar som kan nåast frå Riot.</string>
-    <string name="permissions_msg_contacts_warning_other_androids">Riot treng tilgang til å gå inn i adresseboka di for å finna andre Matrix-brukarar ut ifrå emailadressene og telefonnummera deira.
+    <string name="permissions_msg_contacts_warning_other_androids">Riot treng tilgang til å gå inn i adresseboka di for å finna andre Matrix-brukarar ut ifrå epostadressene og telefonnummera deira.
 
 Tillat Riot å gå inn i kontaktane dine?</string>
 
@@ -332,7 +332,7 @@ Tillat Riot å gå inn i kontaktane dine?</string>
 
     <string name="room_preview_invitation_format">Du vart boden inn til dette rommet av %s</string>
     <string name="room_preview_unlinked_email_warning">Innbydinga vart send til %s, som ikkje er tilknytta denne brukaren.
-Du bør kanskje logga inn med ein annan brukar, eller leggja emailen din til denne brukaren.</string>
+Du bør kanskje logga inn med ein annan brukar, eller leggja eposten din til denne brukaren.</string>
     <string name="room_preview_try_join_an_unknown_room">Du prøver å gå inn i %s. Vil du verta med med so du kan taka del i meiningsutvekslinga?</string>
     <string name="room_preview_try_join_an_unknown_room_default">eit rom</string>
     <string name="room_preview_room_interactions_disabled">Dette er ei førehandsvising av rommet. Romsamhandlingar har vorte skrudd av.</string>
@@ -349,13 +349,13 @@ Du bør kanskje logga inn med ein annan brukar, eller leggja emailen din til den
 </plurals>
     <string name="room_title_one_member">1 medlem</string>
     <string name="room_e2e_alert_title">Åtvaring!</string>
-    <string name="room_e2e_alert_message">Ende-til-ende-enkryptering vert betatesta og er kanskje ikkje heilt påliteleg. 
+    <string name="room_e2e_alert_message">Ende-til-ende-kryptering vert betatesta og er kanskje ikkje heilt påliteleg. 
 
 Du bør ikkje stola på at ho kan sikra data enno.
 
 Einingar kan ikkje enno dekryptera historia frå før dei kom inn i rommet.
 
-Enkrypterte meldingar vil ikkje verta synlege hjå klientar som førebels ikkje har implementert enkryptering.</string>
+Krypterte meldingar vil ikkje verta synlege hjå klientar som førebels ikkje har implementert kryptering.</string>
 
     <string name="room_participants_leave_prompt_title">Far frå rom</string>
     <string name="room_participants_leave_prompt_msg">Er du sikker på at du vil fara frå rommet?</string>
@@ -386,7 +386,7 @@ Enkrypterte meldingar vil ikkje verta synlege hjå klientar som førebels ikkje 
     <string name="room_participants_action_unignore_prompt">Vis alle meldingar frå denne brukaren?
 
 Merk deg at denne handlinga startar æppen på nytt og kan taka litt tid.</string>
-    <string name="room_participants_invite_search_another_user">Brukar-ID, Namn eller Email</string>
+    <string name="room_participants_invite_search_another_user">Brukar-ID, Namn eller Epost</string>
     <string name="room_participants_action_mention">Nemn</string>
     <string name="room_participants_action_devices_list">Vis Einingsliste</string>
     <string name="room_participants_power_level_prompt">Du vil ikkje kunna gjera om på denne forandringa fordi du hevjer ein brukar si høgd opp til di eiga. 
@@ -402,17 +402,17 @@ Er du sikker?</string>
     <string name="people_search_filter_text">Berre Matrix-brukarar</string>
 
     <string name="people_search_invite_by_id_dialog_title">Byd inn brukarar gjennom ID</string>
-    <string name="people_search_invite_by_id_dialog_description">Ver venleg og skriv ei eller fleire emailadresser eller Matrix-IDar inn</string>
-    <string name="people_search_invite_by_id_dialog_hint">Email eller Matrix-ID</string>
+    <string name="people_search_invite_by_id_dialog_description">Ver venleg og skriv ei eller fleire epostladresser eller Matrix-IDar inn</string>
+    <string name="people_search_invite_by_id_dialog_hint">Epost eller Matrix-ID</string>
 
     <string name="room_menu_search">Søk</string>
     <string name="room_one_user_is_typing">%s skriv…</string>
     <string name="room_two_users_are_typing">%1$s og %2$s skriv…</string>
     <string name="room_many_users_are_typing">%1$s og %2$s og fleire skriv…</string>
     <string name="room_message_placeholder_encrypted">Send ein ekryptert melding…</string>
-    <string name="room_message_placeholder_not_encrypted">Send ei melding (ikkje-enkryptert)…</string>
-    <string name="room_message_placeholder_reply_to_encrypted">Send ei enkryptert melding…</string>
-    <string name="room_message_placeholder_reply_to_not_encrypted">Send eit svar (ikkje-enkryptert)…</string>
+    <string name="room_message_placeholder_not_encrypted">Send ei melding (ikkje-kryptert)…</string>
+    <string name="room_message_placeholder_reply_to_encrypted">Send ei kryptert melding…</string>
+    <string name="room_message_placeholder_reply_to_not_encrypted">Send eit svar (ikkje-kryptert)…</string>
     <string name="room_offline_notification">Tilkolinga til tenaren gjekk tapt.</string>
     <string name="room_unsent_messages_notification">Meldingane vart ikkje sende. %1$s eller %2$s no?</string>
     <string name="room_unknown_devices_messages_notification">Meldingane vart ikkje sende fordi ukjende einingar er til stades. %1$s eller %2$s no?</string>
@@ -433,7 +433,7 @@ Er du sikker?</string>
     <string name="ssl_logout_account">Logg av</string>
     <string name="ssl_remain_offline">Oversjå</string>
     <string name="ssl_fingerprint_hash">Fingeravtrykk (%s):</string>
-    <string name="ssl_could_not_verify">Klarte ikkje å godkjenna identiteten på fjerntenaren.</string>
+    <string name="ssl_could_not_verify">Klarte ikkje å stadfesta identiteten på fjerntenaren.</string>
     <string name="ssl_cert_not_trust">Dette kan tyda at nokon tjuvlytter på trafikken din, eller at mobilen ikkje stoler på sertifikatet frå fjerntenaren.</string>
     <string name="ssl_cert_new_account_expl">Viss tenaradministratoren har sagt at dette er å venta, pass på at fingeravtrykket under samsvarar med fingeravtrykket frå dei.</string>
     <string name="ssl_unexpected_existing_expl">Sertifikatet har forandra seg frå ein som var stolt på av mobilen din. Dette er SÆRS UVANLEG. Det tilrådast å IKKJE GODKJENNA det nye sertifikatet.</string>
@@ -445,7 +445,7 @@ Er du sikker?</string>
     <string name="room_details_people">Folk</string>
     <string name="room_details_files">Filer</string>
     <string name="room_details_settings">Innstillingar</string>
-    <string name="malformed_id">Misforma ID. Det bør vera ei emailadresse eller ein Matrix-ID som \'@lokaldel:domene\'</string>
+    <string name="malformed_id">Misforma ID. Det bør vera ei epostadresse eller ein Matrix-ID som \'@lokaldel:domene\'</string>
     <string name="room_details_people_invited_group_name">BODNE INN</string>
     <string name="room_details_people_present_group_name">KOMEN INN</string>
 
@@ -520,8 +520,8 @@ Merk at denne handlinga vil starta æppen på nytt og kan taka litt tid.</string
 
     <string name="settings_profile_picture">Profilbilete</string>
     <string name="settings_display_name">Visingsnamn</string>
-    <string name="settings_email_address">Email</string>
-    <string name="settings_add_email_address">Legg ei emailadresse til</string>
+    <string name="settings_email_address">Epost</string>
+    <string name="settings_add_email_address">Legg ei epostadresse til</string>
     <string name="settings_phone_number">Telefon</string>
     <string name="settings_add_phone_number">Legg eit telefonnummer til</string>
     <string name="settings_summary_app_info_link">Æppsystem-infoskjerm</string>
@@ -622,9 +622,9 @@ Merk at denne handlinga vil starta æppen på nytt og kan taka litt tid.</string
     <string name="devices_details_last_seen_title">Sist sedd</string>
     <string name="devices_details_last_seen_format">%1$s @ %2$s</string>
     <string name="devices_details_time_format">TT:mm:ss</string>
-    <string name="devices_delete_dialog_text">Denne handlinga krev vidare godkjenning.
+    <string name="devices_delete_dialog_text">Denne handlinga krev vidare sjølvstadfesting.
 For å gå fram, ver venleg og skriv passordet ditt inn.</string>
-    <string name="devices_delete_dialog_title">Godkjenning</string>
+    <string name="devices_delete_dialog_title">Stadfesting</string>
     <string name="devices_delete_pswd">Passord:</string>
     <string name="devices_delete_submit_button_label">Send inn</string>
 
@@ -637,16 +637,16 @@ For å gå fram, ver venleg og skriv passordet ditt inn.</string>
     <string name="settings_select_language">Vel eit mål</string>
 
     <string name="account_email_validation_title">Ventar på Godkjenning</string>
-    <string name="account_email_validation_message">Ver venleg og sjekk emailen din og klikk på lenkja han inneheld. Når det er gjort, klikk gå fram.</string>
-    <string name="account_email_validation_error">Fekk ikkje til å godkjenna emailadressa. Ver venleg og sjekk emailen din og klikk på lenkja han inneheld. Når det er gjort, klikk gå fram</string>
-    <string name="account_email_already_used_error">Emailadressa er allereie i bruk</string>
-    <string name="account_email_not_found_error">Fekk ikkje til å senda email: Fann ikkje emailadressa</string>
+    <string name="account_email_validation_message">Ver venleg og sjekk eposten din og klikk på lenkja han inneheld. Når det er gjort, klikk gå fram.</string>
+    <string name="account_email_validation_error">Fekk ikkje til å stadfesta epostadressa. Ver venleg og sjekk eposten din og klikk på lenkja han inneheld. Når det er gjort, klikk gå fram</string>
+    <string name="account_email_already_used_error">Epostadressa er allereie i bruk</string>
+    <string name="account_email_not_found_error">Fekk ikkje til å senda eposten: Fann ikkje epostadressa</string>
     <string name="account_phone_number_already_used_error">Telefonnummeret er allereie i bruk</string>
 
     <string name="settings_change_password">Forandr passordet</string>
     <string name="settings_old_password">gamalt passord</string>
     <string name="settings_new_password">nytt passord</string>
-    <string name="settings_confirm_password">godkjenn passordet</string>
+    <string name="settings_confirm_password">stadfest passordet</string>
     <string name="settings_fail_to_update_password">Fekk ikkje til å oppdatera passordet</string>
     <string name="settings_password_updated">Passordet ditt vart oppdatert</string>
     <string name="settings_unignore_user">Vis alle meldingane frå %s?
@@ -663,10 +663,10 @@ Merk at denne handlinga gjer at æppen startar på nytt og kan taka litt tid.</s
     <string name="settings_phone_number_country_error">Ver venleg og vel eit land</string>
     <string name="settings_phone_number_label">Telefonnummer</string>
     <string name="settings_phone_number_error">Ugangbart telefonnummer for det valde landet</string>
-    <string name="settings_phone_number_verification">Mobilgodkjenning</string>
+    <string name="settings_phone_number_verification">Mobilstadfesting</string>
     <string name="settings_phone_number_verification_instruction">Vi har send deg ein SMS med ein kode. Ver venleg og skriv han inn under.</string>
-    <string name="settings_phone_number_verification_error_empty_code">Skriv ein godkjenningskode inn</string>
-    <string name="settings_phone_number_verification_error">Noko gjekk galt under godkjenninga av telefonummeret ditt</string>
+    <string name="settings_phone_number_verification_error_empty_code">Skriv ein stadfestingskode inn</string>
+    <string name="settings_phone_number_verification_error">Noko gjekk galt under stadfestinga av telefonummeret ditt</string>
     <string name="settings_phone_number_code">Kode</string>
 
 
@@ -717,10 +717,10 @@ Merk at denne handlinga gjer at æppen startar på nytt og kan taka litt tid.</s
     <string name="room_settings_addresses_pref_title">Adresser</string>
     <string name="room_settings_labs_pref_title">Labbar</string>
     <string name="room_settings_labs_warning_message">Desse funksjonane er under utprøving og uventa vanskar kan dukka opp. Bruk med omhug.</string>
-    <string name="room_settings_labs_end_to_end">Ende-til-Ende-Enkryptering</string>
+    <string name="room_settings_labs_end_to_end">Ende-til-Ende-Kryptering</string>
     <string name="room_settings_labs_end_to_end_is_active">Ende-til-Ende-Enrkyptering er skrudd på</string>
-    <string name="room_settings_labs_end_to_end_warnings">Du må vera logga ut for å kunna skru enkrypteringa på.</string>
-    <string name="room_settings_never_send_to_unverified_devices_title">Enkrypter berre til godkjende einingar</string>
+    <string name="room_settings_labs_end_to_end_warnings">Du må vera logga ut for å kunna skru krypteringa på.</string>
+    <string name="room_settings_never_send_to_unverified_devices_title">Krypter berre til godkjende einingar</string>
     <string name="room_settings_never_send_to_unverified_devices_summary">Aldri send enkryterte meldingar til ikkje-godkjende einingar i dette rommet frå denne eininga.</string>
 
     <string name="room_settings_addresses_no_local_addresses">Dette rommet har ingen lokale adresser</string>
@@ -742,27 +742,27 @@ Merk at denne handlinga gjer at æppen startar på nytt og kan taka litt tid.</s
     <string name="room_settings_copy_room_id">Kopier Rom-IDen</string>
     <string name="room_settings_copy_room_address">Kopier Romadressa</string>
 
-    <string name="room_settings_addresses_e2e_enabled">Enkryptering er skrudd på i dette rommet.</string>
-    <string name="room_settings_addresses_e2e_disabled">Enkryptering er skrudd av i dette rommet.</string>
-    <string name="room_settings_addresses_e2e_encryption_warning">Skru enkryptering på
+    <string name="room_settings_addresses_e2e_enabled">Kryptering er skrudd på i dette rommet.</string>
+    <string name="room_settings_addresses_e2e_disabled">Kryptering er skrudd av i dette rommet.</string>
+    <string name="room_settings_addresses_e2e_encryption_warning">Skru kryptering på
 (åtvaring: kan ikkje skruast av att!)</string>
     <string name="room_settings_addresses_e2e_prompt_title">Åtvaring!</string>
-    <string name="room_settings_addresses_e2e_prompt_message">Ende-til-ende-enkryptering vert betatesta og er kanskje ikkje heilt påliteleg. 
+    <string name="room_settings_addresses_e2e_prompt_message">Ende-til-ende-kryptering vert betatesta og er kanskje ikkje heilt påliteleg. 
 
 Du bør ikkje stola på at ho kan sikra data enno.
 
 Einingar kan ikkje enno dekryptera historia frå før dei kom inn i rommet.
 
-Når enkryptering er skrudd på kan det (førebels) ikkje skruast av att.
+Når kryptering er skrudd på kan det (førebels) ikkje skruast av att.
 
-Enkrypterte meldingar vil ikkje vera synlege hjå klientar som førebels ikkje har implementert enkryptering.</string>
+Krypterte meldingar vil ikkje vera synlege hjå klientar som førebels ikkje har implementert kryptering.</string>
 
     <string name="directory_title">Utval</string>
     <string name="settings_theme">Preg</string>
 
     <string name="failed_to_load_timeline_position">%s prøvde å lasta eit gjeve punkt i rommet si tidsline men klarte ikkje å finna det.</string>
 
-    <string name="encryption_information_title">Ende-til-ende-enkrypteringsinfo</string>
+    <string name="encryption_information_title">Ende-til-ende-krypteringsinfo</string>
 
     <string name="encryption_information_device_info">Hendingsinfo</string>
     <string name="encryption_information_user_id">Brukar-ID</string>
@@ -792,8 +792,8 @@ Enkrypterte meldingar vil ikkje vera synlege hjå klientar som førebels ikkje h
     <string name="encryption_import_room_keys">Hent romnyklar inn</string>
     <string name="encryption_import_room_keys_summary">Hent nyklane inn frå ei lokal fil</string>
     <string name="encryption_import_import">Hent inn</string>
-    <string name="encryption_never_send_to_unverified_devices_title">Enkrypter berre til godkjende einingar</string>
-    <string name="encryption_never_send_to_unverified_devices_summary">Aldri send enkrypterte meldingar til ikkje-godkjende einingar frå denne eininga</string>
+    <string name="encryption_never_send_to_unverified_devices_title">Krypter berre til godkjende einingar</string>
+    <string name="encryption_never_send_to_unverified_devices_summary">Aldri send krypterte meldingar til ikkje-godkjende einingar frå denne eininga</string>
 
     <string name="encryption_information_not_verified">IKKJE Godkjend</string>
     <string name="encryption_information_verified">Godkjend</string>
@@ -814,7 +814,7 @@ Viss han ikkje gjer det, tjuvlytter nokon andre på eininga og du bør sannsynle
 I framtida kjem denne godkjenningsprosessen til å vera betre utvikla.</string>
     <string name="encryption_information_verify_key_match">Eg stadfestar at nyklane er den same</string>
 
-    <string name="e2e_enabling_on_app_update">Riot støttar no ende-til-ende-enkryptering men du må logga inn att for å skru det på.
+    <string name="e2e_enabling_on_app_update">Riot støttar no ende-til-ende-kryptering men du må logga inn att for å skru det på.
 
 Du kan gjera det no eller seinare frå æpp-innstillingane.</string>
 
@@ -883,8 +883,8 @@ Ukjende einingar:</string>
     <string name="settings_labs_keyboard_options_to_send_message">Bruk entertasten på tastaturet for å senda meldingar</string>
     <string name="settings_labs_enable_send_voice">Send røystmelding (krever ein tredjepartisæpp for å spela inn meldinga)</string>
 
-    <string name="you_added_a_new_device">Du la til den nye eininga \'%s\', som bed om enkrypteringsnyklar.</string>
-    <string name="your_unverified_device_requesting">Den ikkje-godkjende eininga di \'%s\' bed om enkrypteringsnyklar.</string>
+    <string name="you_added_a_new_device">Du la til den nye eininga \'%s\', som bed om krypteringsnyklar.</string>
+    <string name="your_unverified_device_requesting">Den ikkje-godkjende eininga di \'%s\' bed om krypteringsnyklar.</string>
     <string name="start_verification">Byrj godkjenning</string>
     <string name="share_without_verifying">Del utan godkjenning</string>
     <string name="ignore_request">Oversjå førespurnaden</string>
@@ -912,7 +912,7 @@ Ukjende einingar:</string>
     <string name="notification_on">På</string>
     <string name="notification_noisy">Bråket</string>
 
-    <string name="encrypted_message">Enkryptert melding</string>
+    <string name="encrypted_message">Kryptert melding</string>
 
     <string name="create">Lag</string>
     <string name="create_community">Lag Samfunn</string>
@@ -940,7 +940,7 @@ Ukjende einingar:</string>
     <string name="rejoin">Vert med att</string>
     <string name="forget_room">Gløym rommet</string>
 
-    <string name="e2e_need_log_in_again">Du må logga på att for å laga ende-til-ende-enkrypteringsnyklar for denne eininga og senda den offentlege nykelen til heimetenaren.
+    <string name="e2e_need_log_in_again">Du må logga på att for å laga ende-til-ende-krypteringsnyklar for denne eininga og senda den offentlege nykelen til heimetenaren.
 Dette trengst berre ein gong.
 Orsak for ulempa.</string>
 
@@ -959,7 +959,7 @@ Orsak for ulempa.</string>
 
 Å avliva brukaren din <b>gjer i utgangspunktet ikkje at vi gløymer meldingane du har send.</b> Viss du vil at vi skal gløyma meldingane dine, ver venleg og kryss av i firkanten under.
 
-Meldingssynlegheit på Matrix liknar på email. At vi gløymer meldingane dine tyder at meldingar du har send ikkje vil verta delt med nye, ikkje-innmeldte brukarar, men brukare som er meldt på som allereie har tilgang til desse meldingane vil fortsatt kunne sjå kopien deira.</string>
+Meldingssynlegheit på Matrix liknar på epost. At vi gløymer meldingane dine tyder at meldingar du har send ikkje vil verta delt med nye, ikkje-innmeldte brukarar, men brukare som er meldt på som allereie har tilgang til desse meldingane vil fortsatt kunne sjå kopien deira.</string>
     <string name="deactivate_account_delete_checkbox">Ver venleg og gløym alle meldingane eg har send når brukaren min vert avliven (Åtvaring: dette gjer at framtidige brukarar ikkje fær eit fullstendig oversyn av samtalene)</string>
     <string name="deactivate_account_prompt_password">For å gå fram, ver venleg og skriv passordet ditt inn:</string>
     <string name="deactivate_account_submit">Avliv Brukar</string>

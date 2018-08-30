@@ -73,6 +73,7 @@ import im.vector.receiver.DismissNotificationReceiver;
 import im.vector.util.CallsManager;
 import im.vector.util.PreferencesManager;
 import im.vector.util.RiotEventDisplay;
+import im.vector.util.SystemUtilsKt;
 
 /**
  * A foreground service in charge of controlling whether the event stream is running or not.
@@ -113,7 +114,7 @@ public class EventStreamService extends Service {
     /**
      * States of the foreground service notification.
      */
-    public enum ForegroundNotificationState {
+    private enum ForegroundNotificationState {
         // the foreground notification is not displayed
         NONE,
         // initial sync in progress or the app is resuming
@@ -483,7 +484,7 @@ public class EventStreamService extends Service {
             // stop the foreground service on devices which respects battery optimizations
             // during the initial syncing
             // and if the GCM registration was done
-            if (!PreferencesManager.isIgnoringBatteryOptimizations(getApplicationContext())
+            if (!SystemUtilsKt.isIgnoringBatteryOptimizations(getApplicationContext())
                     && (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O)
                     && (mForegroundNotificationState == ForegroundNotificationState.INITIAL_SYNCING)
                     && Matrix.getInstance(getApplicationContext()).getSharedGCMRegistrationManager().hasRegistrationToken()) {

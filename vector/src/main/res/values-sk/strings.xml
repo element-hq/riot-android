@@ -652,7 +652,9 @@ Ak v miestnosti povolíte šifrovanie, šifrovanie nie je viac možné zakázať
     <string name="encryption_export_export">Exportovať</string>
     <string name="encryption_export_enter_passphrase">Zadajte heslo</string>
     <string name="encryption_export_confirm_passphrase">Potvrďte heslo</string>
-    <string name="encryption_export_saved_as">E2E šifrovacie kľúče miestností boli uložené do \'%s\'</string>
+    <string name="encryption_export_saved_as">Šifrovacie kľúče miestností boli uložené do %s
+
+Pozor: tento súbor môže byť automaticky zmazaný po odinštalovaní aplikácii Riot.</string>
 
     <string name="encryption_import_e2e_room_keys">Importovať E2E kľúče miestností</string>
     <string name="encryption_import_room_keys">Importovať kľúče miestností</string>
@@ -1010,7 +1012,7 @@ Viditeľnosť správ odoslaných cez matrix funguje podobne ako viditeľnosť sp
 	<item quantity="one">1d</item>
 	<item quantity="few">%dd</item>
 	<item quantity="many">%dd</item>
-	<item quantity="other"></item>
+	<item quantity="other"/>
 </plurals>
 
     <string name="room_participants_now">teraz %1$s</string>
@@ -1067,5 +1069,21 @@ Pozor! Vykonaním tejto akcie reštartujete aplikáciu a opätovné načítanie 
     <string name="room_tombstone_continuation_link">Konverzácia pokračuje tu</string>
     <string name="room_tombstone_continuation_description">Táto miestnosť je pokračovaním predchádzajúcej konverzácii</string>
     <string name="room_tombstone_predecessor_link">Staršie správy zobrazíte kliknutím sem</string>
+
+<string name="system_alerts_header">Systémové upozornenia</string>
+
+    <string name="resource_limit_exceeded_title">Prekročený limit prostriedkov</string>
+    <string name="resource_limit_contact_action">Kontaktovať správcu</string>
+
+    <string name="resource_limit_contact_admin">Kontaktujte správcu služieb</string>
+
+    <string name="resource_limit_soft_default">Bol prekročený limit využitia prostriedkov pre tento domovský server a <b>niektorí používatelia sa nebudú môcť prihlásiť</b>.</string>
+    <string name="resource_limit_hard_default">Bol prekročený limit využitia prostriedkov pre tento domovský server.</string>
+
+    <string name="resource_limit_soft_mau"> Bol dosiahnutý mesačný limit počtu aktívnych používateľov a <b>niektorí používatelia sa nebudú môcť prihlásiť</b>.</string>
+    <string name="resource_limit_hard_mau">Bol dosiahnutý mesačný limit počtu aktívnych používateľov.</string>
+
+    <string name="resource_limit_soft_contact">Prosím %s a pokúste sa tento limit navýšiť.</string>
+    <string name="resource_limit_hard_contact">Prosím %s aby ste službu mohli naďalej používať.</string>
 
 </resources>

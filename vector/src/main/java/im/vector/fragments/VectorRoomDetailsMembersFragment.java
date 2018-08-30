@@ -867,7 +867,7 @@ public class VectorRoomDetailsMembersFragment extends VectorBaseFragment {
 
                 if (0 != userIds.size()) {
                     setActivityTitle(getResources().getQuantityString(R.plurals.room_details_selected,
-                                                                      userIds.size(), userIds.size()));
+                            userIds.size(), userIds.size()));
                 } else {
                     resetActivityTitle();
                 }
@@ -882,22 +882,10 @@ public class VectorRoomDetailsMembersFragment extends VectorBaseFragment {
                         .setPositiveButton(R.string.remove, new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
-                                dialog.dismiss();
-
-                                getActivity().runOnUiThread(new Runnable() {
-                                    @Override
-                                    public void run() {
-                                        kickUsers(Collections.singletonList(participantItem.mUserId), 0);
-                                    }
-                                });
+                                kickUsers(Collections.singletonList(participantItem.mUserId), 0);
                             }
                         })
-                        .setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialog, int which) {
-                                dialog.dismiss();
-                            }
-                        })
+                        .setNegativeButton(R.string.cancel, null)
                         .show();
             }
 
@@ -910,8 +898,6 @@ public class VectorRoomDetailsMembersFragment extends VectorBaseFragment {
                         .setPositiveButton(R.string.leave, new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
-                                dialog.dismiss();
-
                                 mProgressView.setVisibility(View.VISIBLE);
 
                                 mRoom.leave(new ApiCallback<Void>() {
@@ -968,12 +954,7 @@ public class VectorRoomDetailsMembersFragment extends VectorBaseFragment {
 
                             }
                         })
-                        .setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialog, int which) {
-                                dialog.dismiss();
-                            }
-                        })
+                        .setNegativeButton(R.string.cancel, null)
                         .show();
             }
 

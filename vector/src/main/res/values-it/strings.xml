@@ -105,9 +105,9 @@ Selezionare esporta per fare un backup delle chat prima di disconnettersi.</stri
     <string name="send_bug_report_include_crash_logs">Invia registri di crash</string>
     <string name="send_bug_report_include_screenshot">Invia istantanea</string>
     <string name="send_bug_report">Rapporto errori</string>
-    <string name="send_bug_report_description">Per favore descrivi l\'errore. Cosa hai fatto? Cosa ti aspettavi sarebbe accaduto? Cosa è effettivamente successo?</string>
+    <string name="send_bug_report_description">Per favore descrivi l\'errore. Cosa hai fatto? Cosa ti aspettavi dovesse accadere? Cosa è effettivamente successo?</string>
     <string name="send_bug_report_placeholder">Descrivi qui il problema</string>
-    <string name="send_bug_report_logs_description">Al fine di diagnosticare i problemi, i registri Riot di questo dispositivo saranno inviati con il rapporto dell\'errore. Questo rapporto, che include i registri ed il fermoimmagine, non sarà pubblicamente visibile. Se preferisci inviare solo il testo soprastante, togli la spunta:</string>
+    <string name="send_bug_report_logs_description">Al fine di diagnosticare i problemi, i registri Riot di questo dispositivo saranno inviati con il rapporto dell\'errore. Questo rapporto, che include i registri e l\'istantanea grafica, non sarà pubblicamente visibile. Se preferisci inviare solo il testo soprastante, deseleziona:</string>
     <string name="send_bug_report_alert_message">Sembra tu stia scuotendo il dispositivo per frustrazione. Desideri segnalare un errore?</string>
     <string name="send_bug_report_app_crashed">L\'applicazione è crashata l\'ultima volta. Desideri inviare un rapporto del crash?</string>
 
@@ -930,9 +930,9 @@ In futuro il processo di verifica sarà più sofisticato.</string>
 
     <string name="avatar">Avatar</string>
 
-<string name="settings_flair">Predisposizione</string>
+<string name="settings_flair">Insegna</string>
 
-    <string name="room_settings_no_flair">Questa stanza non mostra predisposizione per alcuna comunità</string>
+    <string name="room_settings_no_flair">Questa stanza non mostra insegne per alcuna comunità</string>
     <string name="widget_integration_positive_power_level">Il livello di potere deve essere un intero positivo.</string>
     <string name="notice_avatar">Notificare avatar</string>
     <string name="receipt_avatar">Avatar ricevuto</string>
@@ -1082,4 +1082,20 @@ Tieni presente che questa azione riavvierà l\'app e potrebbe richiedere del tem
 	<item quantity="one">1 stanza</item>
 	<item quantity="other">%d stanze</item>
 </plurals>
-    </resources>
+    <string name="system_alerts_header">Avvisi di sistema</string>
+
+    <string name="resource_limit_exceeded_title">Limite di risorse superato</string>
+    <string name="resource_limit_contact_action">Contatta l\'amministratore</string>
+
+    <string name="resource_limit_contact_admin">contatta l\'amministratore del servizio</string>
+
+    <string name="resource_limit_soft_default">Il server home ha superato uno dei limiti delle risorse, pertanto <b>alcuni utenti non potranno accedere</b>.</string>
+    <string name="resource_limit_hard_default">Il server home ha superato uno dei limiti delle risorse.</string>
+
+    <string name="resource_limit_soft_mau"> Il server home ha raggiunto il limite mensile di utenti attivi, pertanto <b>alcuni utenti non potranno accedere</b>.</string>
+    <string name="resource_limit_hard_mau">Il server home ha raggiunto il limite mensile di utenti attivi.</string>
+
+    <string name="resource_limit_soft_contact">Per favore %s per aumentare questo limite.</string>
+    <string name="resource_limit_hard_contact">Per favore %s per continuare ad usare questo servizio.</string>
+
+</resources>

@@ -2313,18 +2313,8 @@ public class LoginActivity extends MXCActionBarActivity implements RegistrationM
         mCurrentDialog = new AlertDialog.Builder(LoginActivity.this)
                 .setView(dialogLayout)
                 .setMessage(R.string.settings_phone_number_verification_instruction)
-                .setPositiveButton(R.string.auth_submit, new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        // Do nothing here
-                    }
-                })
-                .setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        dialog.dismiss();
-                    }
-                })
+                .setPositiveButton(R.string.auth_submit, null)
+                .setNegativeButton(R.string.cancel, null)
                 .create();
 
         // Trick to prevent dialog being closed automatically when positive button is used

@@ -1119,6 +1119,11 @@ Email также позволит вам при необходимости во�
 	<item quantity="one">1 комната</item>
 	<item quantity="few">%d комнаты</item>
 	<item quantity="many">%d комнат</item>
-	<item quantity="other"></item>
+	<item quantity="other"/>
 </plurals>
+    <string name="system_alerts_header">Системные оповещения</string>
+
+    <string name="resource_limit_exceeded_title">Превышен лимит ресурсов</string>
+    <string name="resource_limit_contact_action">Связаться с администратором</string>
+
     </resources>

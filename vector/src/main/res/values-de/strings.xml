@@ -1080,4 +1080,20 @@ Beachte: Diese Aktion wird die App neu starten und einige Zeit brauchen.</string
 	<item quantity="one">1 Raum</item>
 	<item quantity="other">%d Räume</item>
 </plurals>
-    </resources>
+    <string name="system_alerts_header">Systembenachrichtigungen</string>
+
+    <string name="resource_limit_exceeded_title">Ressourcen-Limit</string>
+    <string name="resource_limit_contact_action">Kontaktiere Administrator</string>
+
+    <string name="resource_limit_contact_admin">kontaktiere deinen Service-Administrator</string>
+
+    <string name="resource_limit_soft_default">Dieser Heimserver hat einen seiner Ressourcen-Limits erreicht, sodass <b>einige Nutzer sich nicht anmelden können</b>.</string>
+    <string name="resource_limit_hard_default">Dieser Heimserver hat einen seiner Ressourcen-Limits überschritten.</string>
+
+    <string name="resource_limit_soft_mau"> Dieser Heimserver hat sein Limit an monatlich aktiven Nutzern erreicht, sodass <b>einige Nutzer sich nicht anmelden können</b>.</string>
+    <string name="resource_limit_hard_mau">Dieser Heimserver hat sein Limit an monatlich aktiven Nutzern erreicht.</string>
+
+    <string name="resource_limit_soft_contact">Bitte %s um dieses Limit anheben zu lassen.</string>
+    <string name="resource_limit_hard_contact">Bitte %s um diesen Dienst weiter zu nutzen.</string>
+
+</resources>

@@ -215,14 +215,12 @@ public class SplashActivity extends MXCActionBarActivity {
                 // should be called if the application was already initialized
                 @Override
                 public void onLiveEventsChunkProcessed(String fromToken, String toToken) {
-                    super.onLiveEventsChunkProcessed(fromToken, toToken);
                     onReady();
                 }
 
                 // first application launched
                 @Override
                 public void onInitialSyncComplete(String toToken) {
-                    super.onInitialSyncComplete(toToken);
                     onReady();
                 }
             };
