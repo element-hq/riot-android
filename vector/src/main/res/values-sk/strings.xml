@@ -652,7 +652,9 @@ Ak v miestnosti povolíte šifrovanie, šifrovanie nie je viac možné zakázať
     <string name="encryption_export_export">Exportovať</string>
     <string name="encryption_export_enter_passphrase">Zadajte heslo</string>
     <string name="encryption_export_confirm_passphrase">Potvrďte heslo</string>
-    <string name="encryption_export_saved_as">E2E šifrovacie kľúče miestností boli uložené do \'%s\'</string>
+    <string name="encryption_export_saved_as">Šifrovacie kľúče miestností boli uložené do %s
+
+Pozor: tento súbor môže byť automaticky zmazaný po odinštalovaní aplikácii Riot.</string>
 
     <string name="encryption_import_e2e_room_keys">Importovať E2E kľúče miestností</string>
     <string name="encryption_import_room_keys">Importovať kľúče miestností</string>

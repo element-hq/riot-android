@@ -400,8 +400,8 @@ Pesan terenkripsi tidak akan tersingkap untuk klien yang belum mengimplementasik
     <string name="room_participants_online">Online</string>
     <string name="room_participants_offline">Offline</string>
     <string name="room_participants_idle">Berdiam Diri</string>
-    <string name="room_participants_now">%1 sekarang</string>
-    <string name="room_participants_ago">%1 %2 yang lalu</string>
+    <string name="room_participants_now">%1$s sekarang</string>
+    <string name="room_participants_ago">%1$s %2$s yang lalu</string>
 
     <string name="room_participants_header_admin_tools">PERALATAN ADMIN</string>
     <string name="room_participants_header_call">PANGGIL</string>
