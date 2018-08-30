@@ -663,7 +663,9 @@ Email также позволит вам при необходимости во�
     <string name="encryption_export_export">Экспорт</string>
     <string name="encryption_export_enter_passphrase">Введите пароль</string>
     <string name="encryption_export_confirm_passphrase">Подтвердите пароль</string>
-    <string name="encryption_export_saved_as">E2E ключи комнаты сохранены в \'%s\'</string>
+    <string name="encryption_export_saved_as">E2E ключи комнаты сохранены в \'%s\'.
+
+Предупреждение: этот файл может быть удален после деинсталляции приложения.</string>
     
     <string name="encryption_import_e2e_room_keys">Импорт E2E ключей комнаты</string>
     <string name="encryption_import_room_keys">Импорт ключей комнаты</string>
