@@ -622,7 +622,9 @@ Kontuan izan ekintza honek aplikazioa berrabiaraziko duela eta denbora bat behar
     <string name="encryption_export_export">Esportatu</string>
     <string name="encryption_export_enter_passphrase">Idatzi pasaesaldia</string>
     <string name="encryption_export_confirm_passphrase">Berretsi pasaesaldia</string>
-    <string name="encryption_export_saved_as">Gelako E2E gakoak \'%s\' helbidean gorde dira</string>
+    <string name="encryption_export_saved_as">Gelako E2E gakoak \'%s\' helbidean gorde dira
+
+Abisua: Fitxategi hau ezabatu daiteke aplikazioa desinstalatzen bada.</string>
 
     <string name="encryption_import_e2e_room_keys">Inportatu gelako E2E gakoak</string>
     <string name="encryption_import_room_keys">Inportatu gelako gakoak</string>
