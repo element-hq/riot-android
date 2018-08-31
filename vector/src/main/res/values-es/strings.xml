@@ -168,7 +168,7 @@ Además, la dirección de correo electrónico te permitirá restablecer tu contr
     <string name="auth_invalid_token">Símbolo no válido</string>
     <string name="auth_password_dont_match">Las contraseñas no coinciden</string>
     <string name="auth_forgot_password">¿Olvidaste tu contraseña?</string>
-    <string name="auth_use_server_options">¿Usar opciones de servidor propietarias? (avanzado)</string>
+    <string name="auth_use_server_options">Usar opciones de servidor definidos por el usuario (avanzado)</string>
     <string name="auth_email_validation_message">Consulte su correo electrónico para poder continuar con la inscripción</string>
     <string name="auth_threepid_warning_message">Todavía no es posible registrarse con correo electrónico y número telefónico a la vez, hasta que exista la API. Solo se tendrá en cuenta el número telefónico.
 
