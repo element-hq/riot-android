@@ -737,7 +737,7 @@ Lo puedes hacer ahora o luego desde los ajustes de la aplicación.</string>
     <string name="tiny">Muy pequeño</string>
     <string name="larger">Más grande</string>
     <string name="huge">Grandísimo</string>
-<string name="user_directory_header">directorio de usuarios</string>
+<string name="user_directory_header">Directorio de usuarios</string>
     <string name="people_search_user_directory">DIRECTORIO DEL USUARIO (%s)</string>
     <string name="light_theme">Tema Claro</string>
     <string name="dark_theme">Tema Oscuro</string>
