@@ -183,9 +183,9 @@ Puedes añadir tu correo electrónico a tu perfil en ajustes.</string>
     <string name="auth_reset_password_missing_password">Una contraseña nueva es requerida.</string>
     <string name="auth_reset_password_email_validation_message">Se envió un correo electrónico a %s. Una vez que sigas el enlace que contiene, haz clic debajo.</string>
     <string name="auth_reset_password_error_unauthorized">Falló la verificación del correo electrónico: asegúrate que seguiste el enlace en el mensaje</string>
-    <string name="auth_reset_password_success_message">Su contraseña fue actualizada.
+    <string name="auth_reset_password_success_message">Tu contraseña fue restablecida.
 
-Has sido desconectado de todos tus dispositivos y ya no recibirás notificaciones. Para encender las notificaciones, entre su cuenta en cada dispositivo.</string>
+Has cerrado sesión en todos tus dispositivos y ya no recibirás notificaciones push. Para volver a habilitar las notificaciones, vuelve a iniciar sesión en cada dispositivo.</string>
 
     <!-- Login Screen -->
     <string name="login_error_must_start_http">La URL debe comenzar con http[s]://</string>
@@ -196,7 +196,7 @@ Has sido desconectado de todos tus dispositivos y ya no recibirás notificacione
     <string name="login_error_unable_register_mail_ownership">Falló el registro : error de propiedad del correo electrónico</string>
     <string name="login_error_invalid_home_server">Escribe enlace válido</string>
 
-    <string name="login_error_forbidden">Nombre/Contraseña inválido</string>
+    <string name="login_error_forbidden">Nombre de usuario/contraseña inválidos</string>
     <string name="login_error_unknown_token">El testimonio de acceso escogido no fue reconocido</string>
     <string name="login_error_bad_json">JSON malformado</string>
     <string name="login_error_not_json">No contenía JSON válido</string>
@@ -353,7 +353,7 @@ Los mensajes cifrados no serán visibles en clientes que aún no implementen el 
     <string name="room_two_users_are_typing">%1$s y %2$s están escribiendo…</string>
     <string name="room_many_users_are_typing">%1$s y %2$s y otros están escribiendo…</string>
     <string name="room_message_placeholder_encrypted">Enviar mensaje cifrado…</string>
-    <string name="room_message_placeholder_not_encrypted">Enviar mensaje (sin cifrar)…</string>
+    <string name="room_message_placeholder_not_encrypted">Enviar un mensaje (sin cifrar)…</string>
     <string name="room_offline_notification">La conexión al servidor se perdió.</string>
     <string name="room_unsent_messages_notification">Mensajes no fueron enviados. ¿ %1$s o %2$s ahora?</string>
     <string name="room_unknown_devices_messages_notification">Mensajes no fueron enviados debido a la precencia de dispositivos no conocidos. ¿ %1$s o %2$s ahora?</string>
@@ -455,8 +455,8 @@ Ten en cuenta que esta acción reiniciará la aplicación y puede tardar algo de
     <string name="settings_summary_app_info_link">Pantalla de información del sistema de la aplicación</string>
     <string name="settings_title_app_info_link">Información de la Aplicación</string>
 
-    <string name="settings_enable_all_notif">Encender notificaciones para esta cuenta</string>
-    <string name="settings_enable_this_device">Encender notificaciones para este dispostivo</string>
+    <string name="settings_enable_all_notif">Habilitar notificaciones para esta cuenta</string>
+    <string name="settings_enable_this_device">Habilitar notificaciones para este dispositivo</string>
     <string name="settings_turn_screen_on">Encender la pantalla por 3 segundos</string>
 
     <string name="settings_messages_in_one_to_one">Mensajes en chats de persona-a-persona</string>
@@ -466,7 +466,7 @@ Ten en cuenta que esta acción reiniciará la aplicación y puede tardar algo de
     <string name="settings_messages_sent_by_bot">Mensajes enviados por robot</string>
 
     <string name="settings_background_sync">Sincronización interna</string>
-    <string name="settings_enable_background_sync">Encender sincronización interna</string>
+    <string name="settings_enable_background_sync">Habilitar sincronización en segundo plano</string>
     <string name="settings_set_sync_timeout">Vencimiento de peticiones de sincronización</string>
     <string name="settings_set_sync_delay">El tardar entre dos peticiones de sincronización</string>
     <string name="settings_second">segundo</string>
@@ -710,8 +710,8 @@ Lo puedes hacer ahora o luego desde los ajustes de la aplicación.</string>
     <string name="settings_select_language">Elegir el idioma</string>
 
     <string name="settings_start_on_boot">Iniciar en el arranque</string>
-    <string name="settings_clear_medias_cache">Limpiar la cache de archivos</string>
-    <string name="settings_keep_media">Mantener los audiovisuales</string>
+    <string name="settings_clear_medias_cache">Borrar caché de medios</string>
+    <string name="settings_keep_media">Guardar los medios</string>
 
     <string name="settings_hide_read_receipts">Ocultar los marcadores de lectura</string>
     <string name="settings_dont_send_typings_notifs">No enviar notificaciones de estar escribiendo</string>
@@ -1032,7 +1032,7 @@ Ten en cuenta que esta acción reiniciará la aplicación y puede tardar algo de
     <string name="command_description_markdown">Activar/desactivar Markdown</string>
     <string name="command_description_clear_scalar_token">Para reparar la gestión de las Aplicaciones de Matrix</string>
 
-    <string name="settings_preview_media_before_sending">Ver media antes de enviar</string>
+    <string name="settings_preview_media_before_sending">Vista previa de medios antes de enviar</string>
 
     <string name="room_tombstone_versioned_description">Esta sala ha sido reemplazada o ya no está activa</string>
     <string name="room_tombstone_continuation_link">La conversación continúa aquí</string>
