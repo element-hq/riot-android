@@ -168,20 +168,20 @@ Además, la dirección de correo electrónico te permitirá restablecer tu contr
     <string name="auth_invalid_token">Símbolo no válido</string>
     <string name="auth_password_dont_match">Las contraseñas no coinciden</string>
     <string name="auth_forgot_password">¿Olvidaste tu contraseña?</string>
-    <string name="auth_use_server_options">Usar opciones de servidor definidos por el usuario (avanzado)</string>
+    <string name="auth_use_server_options">Utilizar las opciones personalizadas del servidor (avanzado)</string>
     <string name="auth_email_validation_message">Consulte su correo electrónico para poder continuar con la inscripción</string>
     <string name="auth_threepid_warning_message">Todavía no es posible registrarse con correo electrónico y número telefónico a la vez, hasta que exista la API. Solo se tendrá en cuenta el número telefónico.
 
 Puedes añadir tu correo electrónico a tu perfil en ajustes.</string>
     <string name="auth_recaptcha_message">Este servidor quiere verificar que no seas robot</string>
-    <string name="auth_username_in_use">Este nombre ya está reservado para otra persona</string>
+    <string name="auth_username_in_use">Este nombre de usuario ya está en uso</string>
     <string name="auth_home_server">Servidor:</string>
     <string name="auth_identity_server">Servidor de Identidad:</string>
     <string name="auth_reset_password_next_step_button">Verifiqué mi correo electrónico</string>
     <string name="auth_reset_password_message">Para restablecer su contraseña, introduzca el correo electrónico de esta cuenta:</string>
     <string name="auth_reset_password_missing_email">El correo electrónico de esta cuenta es requerido.</string>
     <string name="auth_reset_password_missing_password">Una contraseña nueva es requerida.</string>
-    <string name="auth_reset_password_email_validation_message">Un correo fue enviado a %s. Una vez que sigas el enlace, seleccione abajo.</string>
+    <string name="auth_reset_password_email_validation_message">Se envió un correo electrónico a %s. Una vez que sigas el enlace que contiene, haz clic debajo.</string>
     <string name="auth_reset_password_error_unauthorized">Falló la verificación del correo electrónico: asegúrate que seguiste el enlace en el mensaje</string>
     <string name="auth_reset_password_success_message">Su contraseña fue actualizada.
 
