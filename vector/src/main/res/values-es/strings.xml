@@ -32,7 +32,7 @@
     <string name="rename">Renombrar</string>
     <string name="report_content">Denunciar contenido</string>
     <string name="active_call">Llamada activa</string>
-    <string name="ongoing_conference_call">Llamada de conferencia en curso. Participa con voz o vídeo.</string>
+    <string name="ongoing_conference_call">Llamada de conferencia en curso. Unirse con voz o vídeo.</string>
     <string name="ongoing_conference_call_voice">voz</string>
     <string name="ongoing_conference_call_video">vídeo</string>
     <string name="cannot_start_call">No se pudo iniciar la llamada, inténtalo de nuevo más tarde</string>
@@ -83,7 +83,7 @@ Selecciona exportar para crear un archivo de respaldo antes de cerrar la sesión
     <!-- People fragment -->
     <string name="direct_chats_header">Conversaciones</string>
     <string name="local_address_book_header">Agenda de contactos local</string>
-    <string name="matrix_only_filter">Sólo contactos de Matrix</string>
+    <string name="matrix_only_filter">Solo contactos de Matrix</string>
     <string name="no_conversation_placeholder">No hay conversaciones</string>
     <string name="no_contact_access_placeholder">No has permitido que Riot lea a tus contactos locales</string>
     <string name="no_result_placeholder">No hay resultados</string>
@@ -136,35 +136,35 @@ Selecciona exportar para crear un archivo de respaldo antes de cerrar la sesión
     <string name="auth_submit">Entregar</string>
     <string name="auth_skip">Omitir</string>
     <string name="auth_send_reset_email">Enviar Correo Electrónico de Reinicio</string>
-    <string name="auth_return_to_login">Volver a la pantalla de inicio de sesión</string>
+    <string name="auth_return_to_login">Regresar a la pantalla de inicio de sesión</string>
     <string name="auth_user_id_placeholder">Correo electrónico o nombre de usuario</string>
     <string name="auth_password_placeholder">Contraseña</string>
     <string name="auth_new_password_placeholder">Contraseña nueva</string>
     <string name="auth_user_name_placeholder">Nombre de usuario</string>
     <string name="auth_add_email_message">Añade una dirección de correo electrónico a tu cuenta para poder ser descubierto por otros usuarios, y ser capaz de restablecer tu contraseña.</string>
     <string name="auth_add_phone_message">Añade un número telefónico a tu cuenta para que otros usuarios te descubran.</string>
-    <string name="auth_add_email_phone_message">Añade un correo electrónico y/o número de teléfono a tu cuenta para que otros te descubran.
+    <string name="auth_add_email_phone_message">Añade una dirección de correo electrónico y/o un número telefónico a tu cuenta para poder ser descubierto por otros usuarios.
 
-El correo electrónico te permitirá restablecer tu contraseña.</string>
+Además, la dirección de correo electrónico te permitirá restablecer tu contraseña.</string>
     <string name="auth_add_email_and_phone_message">Añade una dirección de correo electrónico y un número telefónico a tu cuenta para poder ser descubierto por otros usuarios.
 
 Además, la dirección de correo electrónico te permitirá restablecer tu contraseña.</string>
-    <string name="auth_email_placeholder">Correo electrónico</string>
-    <string name="auth_opt_email_placeholder">Correo electrónico (opcional)</string>
-    <string name="auth_phone_number_placeholder">Número de teléfono</string>
-    <string name="auth_opt_phone_number_placeholder">Número de teléfono (opcional)</string>
+    <string name="auth_email_placeholder">Dirección de correo electrónico</string>
+    <string name="auth_opt_email_placeholder">Dirección de correo electrónico (opcional)</string>
+    <string name="auth_phone_number_placeholder">Número telefónico</string>
+    <string name="auth_opt_phone_number_placeholder">Número telefónico (opcional)</string>
     <string name="auth_repeat_password_placeholder">Repite la contraseña</string>
     <string name="auth_repeat_new_password_placeholder">Confirma tu nueva contraseña</string>
     <string name="auth_invalid_login_param">Nombre de usuario y/o contraseña incorrectos</string>
-    <string name="auth_invalid_user_name">Nombres de usuarios sólo pueden contener letras, números, puntos, guiones y guiones bajos</string>
+    <string name="auth_invalid_user_name">Los nombres de usuario solo pueden contener letras, números, puntos, guiones y guiones bajos</string>
     <string name="auth_invalid_password">Contraseña demasiado corta (min 6)</string>
     <string name="auth_missing_password">Contraseña ausente</string>
-    <string name="auth_invalid_email">"Esto no parece ser un correo electrónico válido"</string>
-    <string name="auth_invalid_phone">Esto no parece ser un número de teléfono válido</string>
+    <string name="auth_invalid_email">Esto no parece ser una dirección de correo electrónico válida</string>
+    <string name="auth_invalid_phone">Esto no parece ser un número telefónico válido</string>
     <string name="auth_email_already_defined">Esta dirección de correo electrónico ya está definida.</string>
-    <string name="auth_missing_email">Correo electrónico ausente</string>
-    <string name="auth_missing_phone">Número de teléfono ausente</string>
-    <string name="auth_missing_email_or_phone">Correo electrónico o número de teléfono ausente</string>
+    <string name="auth_missing_email">Falta la dirección de correo electrónico</string>
+    <string name="auth_missing_phone">Número telefónico ausente</string>
+    <string name="auth_missing_email_or_phone">Falta la dirección de correo electrónico o el número telefónico</string>
     <string name="auth_invalid_token">Símbolo no válido</string>
     <string name="auth_password_dont_match">Las contraseñas no coinciden</string>
     <string name="auth_forgot_password">¿Olvidaste tu contraseña?</string>
@@ -177,12 +177,12 @@ Puedes añadir tu correo electrónico a tu perfil en ajustes.</string>
     <string name="auth_username_in_use">Este nombre de usuario ya está en uso</string>
     <string name="auth_home_server">Servidor:</string>
     <string name="auth_identity_server">Servidor de Identidad:</string>
-    <string name="auth_reset_password_next_step_button">Verifiqué mi correo electrónico</string>
-    <string name="auth_reset_password_message">Para restablecer su contraseña, introduzca el correo electrónico de esta cuenta:</string>
-    <string name="auth_reset_password_missing_email">El correo electrónico de esta cuenta es requerido.</string>
-    <string name="auth_reset_password_missing_password">Una contraseña nueva es requerida.</string>
+    <string name="auth_reset_password_next_step_button">He verificado mi dirección de correo electrónico</string>
+    <string name="auth_reset_password_message">Para restablecer tu contraseña, ingresa la dirección de correo electrónico vinculada a tu cuenta:</string>
+    <string name="auth_reset_password_missing_email">Debes ingresar la dirección de correo electrónico vinculada a tu cuenta.</string>
+    <string name="auth_reset_password_missing_password">Debes ingresar una nueva contraseña.</string>
     <string name="auth_reset_password_email_validation_message">Se envió un correo electrónico a %s. Una vez que sigas el enlace que contiene, haz clic debajo.</string>
-    <string name="auth_reset_password_error_unauthorized">Falló la verificación del correo electrónico: asegúrate que seguiste el enlace en el mensaje</string>
+    <string name="auth_reset_password_error_unauthorized">No se pudo verificar la dirección de correo electrónico: asegúrate de hacer clic en el enlace del correo electrónico</string>
     <string name="auth_reset_password_success_message">Tu contraseña fue restablecida.
 
 Has cerrado sesión en todos tus dispositivos y ya no recibirás notificaciones push. Para volver a habilitar las notificaciones, vuelve a iniciar sesión en cada dispositivo.</string>
@@ -194,7 +194,7 @@ Has cerrado sesión en todos tus dispositivos y ya no recibirás notificaciones 
     <string name="login_error_registration_network_error">Inscripción falló: error con la red</string>
     <string name="login_error_unable_register">Inscripción falló</string>
     <string name="login_error_unable_register_mail_ownership">Falló el registro : error de propiedad del correo electrónico</string>
-    <string name="login_error_invalid_home_server">Escribe enlace válido</string>
+    <string name="login_error_invalid_home_server">Ingresa una URL válida</string>
 
     <string name="login_error_forbidden">Nombre de usuario/contraseña inválidos</string>
     <string name="login_error_unknown_token">El testimonio de acceso escogido no fue reconocido</string>
@@ -202,7 +202,7 @@ Has cerrado sesión en todos tus dispositivos y ya no recibirás notificaciones 
     <string name="login_error_not_json">No contenía JSON válido</string>
     <string name="login_error_limit_exceeded">Demasiadas peticiones enviadas</string>
     <string name="login_error_user_in_use">Este nombre de usuario ya está reservado</string>
-    <string name="login_error_login_email_not_yet">El enlace que no siguió</string>
+    <string name="login_error_login_email_not_yet">El enlace del correo electrónico que aún no se ha hecho clic</string>
 
     <!-- crypto warnings -->
     <string name="e2e_need_log_in_again">Necesitas entrar de nuevo para generar claves de cifrado de extremo-a-extremo nuevas de este dispositivo y enviar la clave pública al servidor.
@@ -233,7 +233,7 @@ Disculpe por la inconveniencia.</string>
 
 
     <!-- room info dialog Screen -->
-    <string name="room_info_room_name">Nombre de la Sala</string>
+    <string name="room_info_room_name">Nombre de la sala</string>
     <string name="room_info_room_topic">Tema de la Sala</string>
 
     <!-- call string -->
@@ -252,21 +252,27 @@ Disculpe por la inconveniencia.</string>
     <string name="call_error_answered_elsewhere">La llamada fue contestada en otra parte</string>
 
     <!-- medias picker string -->
-    <string name="media_picker_both_capture_title">Tomar una foto o grabar un video"</string>
-    <string name="media_picker_cannot_record_video">No se pudo grabar video"</string>
+    <string name="media_picker_both_capture_title">Tomar una foto o un vídeo</string>
+    <string name="media_picker_cannot_record_video">No se pudo grabar vídeo</string>
 
     <!-- permissions Android M -->
     <string name="permissions_rationale_popup_title">Información</string>
     <string name="permissions_rationale_msg_storage">Riot necesita tu permiso para acceder a tu biblioteca de fotos y vídeos para enviar y guardar archivos adjuntos.
 
 Por favor permite el acceso en el siguiente mensaje para poder enviar archivos desde tu teléfono.</string>
-    <string name="permissions_rationale_msg_camera">Riot necesita tu permiso para usar tu cámara para tomar fotos y hacer llamadas de video.</string>
+    <string name="permissions_rationale_msg_camera">Riot necesita permiso para acceder a tu cámara para tomar fotos y realizar llamadas de vídeo.</string>
     <string name="permissions_rationale_msg_camera_explanation">\n\nPor favor permite el acceso en el siguiente mensaje para poder hacer la llamada.</string>
-    <string name="permissions_rationale_msg_record_audio">Riot necesita tu permiso para usar tu micrófono para hacer llamadas de voz.</string>
+    <string name="permissions_rationale_msg_record_audio">Riot necesita permiso para acceder a tu micrófono para realizar llamadas de voz.</string>
     <string name="permissions_rationale_msg_record_audio_explanation">\n\nPor favor permite el acceso en el siguiente mensaje para poder hacer la llamada.</string>
-    <string name="permissions_rationale_msg_camera_and_audio">Riot necesita tu permiso para usar su cámara y micrófono para hacer llamadas de video.\n\nPor favor permite el acceso en el siguiente mensaje para poder hacer la llamada.</string>
-    <string name="permissions_rationale_msg_contacts">Riot necesita tu permiso para leer tus contactos y directorio para encontrar a otros usuarios por sus correos electrónicos y números telefónicos.\n\nPor favor permite el acceso en el siguiente mensaje para encontrar usuarios de Riot en su directorio.</string>
-    <string name="permissions_msg_contacts_warning_other_androids">Riot necesita tu permiso para leer los contactos de tu directorio para encontrar otros usuarios de Matrix por sus correos electrónicos y números telefónicos.\n\n¿Permitir el acceso a Riot para leer tus contactos ?</string>
+    <string name="permissions_rationale_msg_camera_and_audio">Riot necesita permiso para acceder a tu cámara y micrófono para realizar llamadas de vídeo.
+
+Por favor permite el acceso en las próximas ventanas emergentes para poder realizar la llamada.</string>
+    <string name="permissions_rationale_msg_contacts">Riot necesita permiso para acceder a tu directorio de contactos para encontrar a otros usuarios de Matrix por sus correos electrónicos y números telefónicos.
+
+Por favor permite el acceso en el siguiente mensaje para encontrar usuarios de Riot en tu directorio.</string>
+    <string name="permissions_msg_contacts_warning_other_androids">Riot necesita permiso para acceder a tu directorio de contactos para encontrar otros usuarios de Matrix por sus correos electrónicos y números telefónicos.
+
+¿Permitir que Riot acceda a tus contactos ?</string>
 
     <string name="permissions_action_not_performed_missing_permissions">Perdon.. Operación no realizada, debido a permisos faltantes</string>
 
@@ -289,7 +295,7 @@ Por favor permite el acceso en el siguiente mensaje para poder enviar archivos d
     <!-- Room Preview -->
     <string name="room_preview_invitation_format">Has sido invitado por %s a unirte a esta sala</string>
     <string name="room_preview_unlinked_email_warning">Esta invitación fue enviado a %s, que no esta asociado con esta cuenta.\nTal vez desea entrar con otra cuenta, o añadir este correo electrónico a esta cuenta.</string>
-    <string name="room_preview_try_join_an_unknown_room">Estás intentando acceder a %s. ¿Quieres unirte para participar en la conversación?</string>
+    <string name="room_preview_try_join_an_unknown_room">Estás intentando acceder a %s. ¿Quieres unirte para participar en la discusión?</string>
     <string name="room_preview_try_join_an_unknown_room_default">una sala</string>
     <string name="room_preview_room_interactions_disabled">Esto es un preestreno de esta sala. Los interacciones están impedidos.</string>
 
@@ -341,10 +347,10 @@ Los mensajes cifrados no serán visibles en clientes que aún no implementen el 
     <!-- invitation -->
     <string name="people_search_invite_by_id"><u>Invitar por ID</u></string>
     <string name="people_search_local_contacts">CONTACTOS LOCALES (%d)</string>
-    <string name="people_search_filter_text">Solmente usuarios de Matrix</string>
+    <string name="people_search_filter_text">Solo usuarios de Matrix</string>
 
     <string name="people_search_invite_by_id_dialog_title">Invitar usuario por ID</string>
-    <string name="people_search_invite_by_id_dialog_description">Por favor, introduce una o más direcciones de correo electrónico o ID de Matrix</string>
+    <string name="people_search_invite_by_id_dialog_description">Por favor, ingresa una o más direcciones de correo electrónico o ID de Matrix</string>
     <string name="people_search_invite_by_id_dialog_hint">Correo electrónico o ID de Matrix</string>
 
     <!--  Chat -->
@@ -372,11 +378,11 @@ Los mensajes cifrados no serán visibles en clientes que aún no implementen el 
     <string name="ssl_remain_offline">Ignorar</string>
     <string name="ssl_fingerprint_hash">Huella (%s):</string>
     <string name="ssl_could_not_verify">La identidad de el servidor remoto no se pudo verificar.</string>
-    <string name="ssl_cert_not_trust">Esto podría significar que alquien esta maliciosamente interceptando tus mensajes, o que tu dispositivo no confía en el certificado proporcionado por el servidor remoto.</string>
+    <string name="ssl_cert_not_trust">Esto podría significar que alquien esta maliciosamente interceptando tus mensajes, o que tu teléfono no confía en el certificado proporcionado por el servidor remoto.</string>
     <string name="ssl_cert_new_account_expl">Si el administrador publicó que esto es normal, verifica que la huella abajo coincide con el que fue proporcionado por el administrador.</string>
-    <string name="ssl_unexpected_existing_expl">El certificado cambió de el que confiaba tu dispositivo. Esto es MUY RARO. Se recomienda que no aceptes el certificado nuevo.</string>
+    <string name="ssl_unexpected_existing_expl">El certificado cambió de el que confiaba tu teléfono. Esto es MUY RARO. Se recomienda que no aceptes el certificado nuevo.</string>
     <string name="ssl_expected_existing_expl">El certificado cambió de uno que confiaba tu dispositivo a un certificado desconfiado. El servidor posiblemente actualizo su certificado. Póngase en contacto con el administrador del servidor para la huella esperada.</string>
-    <string name="ssl_only_accept">SOLAMENTE acepta el certificado de arriba si coincide con el certificado que publicó el administrador de el servidor.</string>
+    <string name="ssl_only_accept">SOLO aceptar el certificado si el administrador del servidor ha publicado una huella digital que coincida con la anterior.</string>
     <string name="ssl_fingerprint_example">00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00</string>
 
     <!-- Room Details -->
@@ -386,7 +392,7 @@ Los mensajes cifrados no serán visibles en clientes que aún no implementen el 
     <string name="room_details_settings">Ajustes</string>
     <string name="malformed_id">ID mal formada. Debe ser una dirección de correo electrónico o una ID de Matrix como \'@partelocal:dominio\'</string>
     <string name="room_details_people_invited_group_name">INVITADO</string>
-    <string name="room_details_people_present_group_name">ENTRÓ</string>
+    <string name="room_details_people_present_group_name">SE UNIÓ</string>
 
     <!-- Room events -->
     <string name="room_event_action_report_prompt_reason">Razón por reportar este contenido</string>
@@ -412,7 +418,7 @@ Ten en cuenta que esta acción reiniciará la aplicación y puede tardar algo de
     <string name="tab_title_search_files">ARCHIVOS</string>
 
     <!-- Room recents -->
-    <string name="room_recents_join">ENTRAR</string>
+    <string name="room_recents_join">UNIRSE</string>
     <string name="room_recents_directory">DIRECTORIO</string>
     <string name="room_recents_favourites">FAVORITOS</string>
     <string name="room_recents_conversations">SALAS</string>
@@ -450,7 +456,7 @@ Ten en cuenta que esta acción reiniciará la aplicación y puede tardar algo de
     <string name="settings_display_name">Nombre Público</string>
     <string name="settings_email_address">Correo Electrónico</string>
     <string name="settings_add_email_address">Añadir dirección de correo electrónico</string>
-    <string name="settings_phone_number">Número Telefónico</string>
+    <string name="settings_phone_number">Teléfono</string>
     <string name="settings_add_phone_number">Añadir número telefónico</string>
     <string name="settings_summary_app_info_link">Pantalla de información del sistema de la aplicación</string>
     <string name="settings_title_app_info_link">Información de la Aplicación</string>
@@ -503,7 +509,8 @@ Ten en cuenta que esta acción reiniciará la aplicación y puede tardar algo de
     <string name="devices_details_last_seen_title">Ultima vez visto</string>
     <string name="devices_details_last_seen_format">%1$s @ %2$s</string>
     <string name="devices_details_time_format">HH:mm:ss</string>
-    <string name="devices_delete_dialog_text">Esta operación requiere autenticación adicional.\nPara continuar, escribe su contraseña.</string>
+    <string name="devices_delete_dialog_text">Esta operación requiere autenticación adicional.
+Para continuar, ingresa tu contraseña por favor.</string>
     <string name="devices_delete_dialog_title">Autenticación</string>
     <string name="devices_delete_pswd">Contraseña:</string>
     <string name="devices_delete_submit_button_label">Enviar</string>
@@ -513,12 +520,12 @@ Ten en cuenta que esta acción reiniciará la aplicación y puede tardar algo de
     <string name="settings_identity_server">Servidor Identidad</string>
 
     <string name="account_email_validation_title">Verificación Pendiente</string>
-    <string name="account_email_validation_message">Por favor vea su correo electrónico y sigue el enlace que contiene. Una vez hecho, escoje Continuar.</string>
-    <string name="account_email_validation_error">Verificación de su correo electrónico falló. Por favor vea su correo electrónico y sigue el enlace que contiene. Una vez hecho, escoge Continuar</string>
+    <string name="account_email_validation_message">Por favor revisa tu correo electrónico y haz clic en el enlace que contiene. Una vez hecho esto, haz clic en continuar.</string>
+    <string name="account_email_validation_error">No se pudo verificar la dirección de correo electrónico. Por favor revisa tu correo electrónico y haz clic el enlace que contiene. Una vez hecho esto, haz clic en continuar</string>
 
-    <string name="account_email_already_used_error">Esta dirección de correo electrónico ya está usada</string>
-    <string name="account_email_not_found_error">Falló el envío de correo electrónico: No se pudo encontrar esta dirección de correo electrónico</string>
-    <string name="account_phone_number_already_used_error">Este número de teléfono ya esta usado</string>
+    <string name="account_email_already_used_error">Esta dirección de correo electrónico ya está en uso</string>
+    <string name="account_email_not_found_error">No se pudo enviar el correo electrónico: No se encontró esta dirección de correo electrónico</string>
+    <string name="account_phone_number_already_used_error">Este número telefónico ya está en uso</string>
 
     <string name="settings_change_password">Cambiar contraseña</string>
     <string name="settings_old_password">Contraseña anterior</string>
@@ -537,12 +544,12 @@ Ten en cuenta que esta acción reiniciará la aplicación y puede tardar algo de
     <string name="settings_select_country">Escoje un país</string>
 
     <string name="settings_phone_number_country_label">País</string>
-    <string name="settings_phone_number_country_error">Por favor escoje un país</string>
-    <string name="settings_phone_number_label">Número de teléfono</string>
-    <string name="settings_phone_number_error">Número de teléfono inválido por el país escojido</string>
-    <string name="settings_phone_number_verification">Verficación de número telefónico</string>
-    <string name="settings_phone_number_verification_instruction">Hemos enviado un SMS con un código de activación. Por favor escribe ese código abajo.</string>
-    <string name="settings_phone_number_verification_error_empty_code">Escribe un código de activación</string>
+    <string name="settings_phone_number_country_error">Por favor seleccione un país</string>
+    <string name="settings_phone_number_label">Número telefónico</string>
+    <string name="settings_phone_number_error">Número telefónico inválido para el país seleccionado</string>
+    <string name="settings_phone_number_verification">Verificación de número telefónico</string>
+    <string name="settings_phone_number_verification_instruction">Hemos enviado un SMS con un código de activación. Por favor ingresa este código abajo.</string>
+    <string name="settings_phone_number_verification_error_empty_code">Ingresa un código de activación</string>
     <string name="settings_phone_number_verification_error">Error en la validación de tu número telefónico</string>
     <string name="settings_phone_number_code">Código</string>
 
@@ -574,13 +581,13 @@ Ten en cuenta que esta acción reiniciará la aplicación y puede tardar algo de
 
     <!-- Room settings, access and visibility : WHO CAN READ HISTORY? (read rule) -->
     <string name="room_settings_read_history_entry_anyone">Todos</string>
-    <string name="room_settings_read_history_entry_members_only_option_time_shared">Solamente miembros (desde el momento en que se selecciona esta opción)</string>
-    <string name="room_settings_read_history_entry_members_only_invited">Solamente miembros (desde que fueron invitados)</string>
-    <string name="room_settings_read_history_entry_members_only_joined">Solamente miembros (desde que se unieron a la sala)</string>
+    <string name="room_settings_read_history_entry_members_only_option_time_shared">Solo miembros (desde el momento en que se selecciona esta opción)</string>
+    <string name="room_settings_read_history_entry_members_only_invited">Solo miembros (desde que fueron invitados)</string>
+    <string name="room_settings_read_history_entry_members_only_joined">Solo miembros (desde que se unieron)</string>
 
     <!-- Room settings: "Who can access this room?" (access rule) -->
     <string name="room_settings_room_access_warning">Para crear un enlace a una sala, debe tener una dirección.</string>
-    <string name="room_settings_room_access_entry_only_invited">Solamente los invitados</string>
+    <string name="room_settings_room_access_entry_only_invited">Solo personas que hayan sido invitadas</string>
     <string name="room_settings_room_access_entry_anyone_with_link_apart_guest">Cualquiera que conozca el enlace a esta sala, excepto huéspedes</string>
     <string name="room_settings_room_access_entry_anyone_with_link_including_guest">Los que saben el enlace de la sala, incluso húespedes</string>
 
@@ -592,39 +599,41 @@ Ten en cuenta que esta acción reiniciará la aplicación y puede tardar algo de
     <string name="room_settings_room_internal_id">La ID interna de esta sala</string>
     <string name="room_settings_addresses_pref_title">Direcciones</string>
     <string name="room_settings_labs_pref_title">Laboratorios</string>
-    <string name="room_settings_labs_warning_message">Estas son características que se pueden descomponer en maneras no esperadas. Usar con precaución.</string>
+    <string name="room_settings_labs_warning_message">Estas son características experimentales que pueden romperse de maneras inesperadas. Utilizar con precaución.</string>
     <string name="room_settings_labs_end_to_end">Cifrado de extremo-a-extremo</string>
-    <string name="room_settings_labs_end_to_end_is_active">El cifrado de extremo-a-extremo está encendido</string>
-    <string name="room_settings_labs_end_to_end_warnings">Necesitas reingresar a tu cuenta para encender el cifrado.</string>
-    <string name="room_settings_never_send_to_unverified_devices_title">Cifrar solamente para dispositivos verificados</string>
+    <string name="room_settings_labs_end_to_end_is_active">El cifrado de extremo a extremo está activo</string>
+    <string name="room_settings_labs_end_to_end_warnings">Necesitas volver a iniciar sesión para habilitar el cifrado.</string>
+    <string name="room_settings_never_send_to_unverified_devices_title">Solo cifrar a dispositivos verificados</string>
     <string name="room_settings_never_send_to_unverified_devices_summary">Nunca enviar mensajes cifrados a dispositivos no verificados en esta sala de este dispositivo.</string>
 
     <!-- Room settings: advanced addresses -->
     <string name="room_settings_addresses_no_local_addresses">Esta sala no tiene direcciones locales</string>
-    <string name="room_settings_addresses_add_new_address">Dirección nueva (e.g #foo:matrix.org")</string>
+    <string name="room_settings_addresses_add_new_address">Nueva dirección (ej. #foo:matrix.org)</string>
 
     <string name="room_settings_addresses_invalid_format_dialog_title">Formato de alias inválido</string>
     <string name="room_settings_addresses_invalid_format_dialog_body">\'%s\' no es un formato de alias válido</string>
     <string name="room_settings_addresses_disable_main_address_prompt_msg">No tendrás una dirección principal especificada. La dirección principal por defecto para esta sala se elegirá al azar</string>
     <string name="room_settings_addresses_disable_main_address_prompt_title">Advertencias de la dirección principal</string>
 
-    <string name="room_settings_set_main_address">Escojer como Dirección Principal</string>
-    <string name="room_settings_unset_main_address">Desescojer como Dirección Principal</string>
+    <string name="room_settings_set_main_address">Establecer como Dirección Principal</string>
+    <string name="room_settings_unset_main_address">Dejar de Establecer como Dirección Principal</string>
     <string name="room_settings_copy_room_id">Copiar ID de Sala</string>
-    <string name="room_settings_copy_room_address">Copiar Dirección de la Sala</string>
+    <string name="room_settings_copy_room_address">Copiar Dirección de Sala</string>
 
-    <string name="room_settings_addresses_e2e_enabled">El cifrado está encendido en esta sala.</string>
-    <string name="room_settings_addresses_e2e_disabled">El cifrado está apagado en esta sala.</string>
-    <string name="room_settings_addresses_e2e_encryption_warning">Encender cifrado
-(¡Aviso: no se puede apagar!)</string>
-    <string name="room_settings_addresses_e2e_prompt_title">¡Aviso!</string>
-    <string name="room_settings_addresses_e2e_prompt_message">El cifrado de extremo-a-extremo está en beta y puede ser poco fiable.
+    <string name="room_settings_addresses_e2e_enabled">El cifrado está habilitado en esta sala.</string>
+    <string name="room_settings_addresses_e2e_disabled">El cifrado está desactivado en esta sala.</string>
+    <string name="room_settings_addresses_e2e_encryption_warning">Habilitar cifrado
+(advertencia: ¡no se puede desactivar de nuevo!)</string>
+    <string name="room_settings_addresses_e2e_prompt_title">¡Advertencia!</string>
+    <string name="room_settings_addresses_e2e_prompt_message">El cifrado de extremo a extremo está en beta y puede ser poco fiable.
 
-No debe usarla para proteger información.
+Aún no deberías confiar en él para proteger tus datos.
 
-Los dispositivos no podrán descifrar el historial de la sala desde antes de entrar.
+Los dispositivos todavía no podrán descifrar el historial desde antes de unirse a la sala.
 
-Los mensajes cifrados no serán visibles en cuentas que no implementan el cifrado.</string>
+Una vez que el cifrado está habilitado para una sala no se puede volver a desactivar (por ahora).
+
+Los mensajes cifrados no serán visibles en clientes que aún no implementen el cifrado.</string>
 
     <!-- Directory -->
     <string name="directory_title">Directorio</string>
@@ -655,7 +664,7 @@ Los mensajes cifrados no serán visibles en cuentas que no implementan el cifrad
     <string name="encryption_export_room_keys">Exportar claves de salas</string>
     <string name="encryption_export_room_keys_summary">Exportar las claves a un archivo local</string>
     <string name="encryption_export_export">Exportar</string>
-    <string name="encryption_export_enter_passphrase">Escribir Contraseña</string>
+    <string name="encryption_export_enter_passphrase">Ingresa la frase de contraseña</string>
     <string name="encryption_export_confirm_passphrase">Confirmar Contraseña</string>
     <string name="encryption_export_saved_as">Las claves de cifrado de extremo a extremo para esta sala se guardaron en \'%s\'.
 
@@ -665,7 +674,7 @@ Advertencia: este archivo puede ser eliminado si la aplicación se desinstala.</
     <string name="encryption_import_room_keys">Importar claves de salas</string>
     <string name="encryption_import_room_keys_summary">Importar las claves de un archivo local</string>
     <string name="encryption_import_import">Importar</string>
-    <string name="encryption_never_send_to_unverified_devices_title">Encriptar a dispositivos verificados solamente</string>
+    <string name="encryption_never_send_to_unverified_devices_title">Solo cifrar a dispositivos verificados</string>
     <string name="encryption_never_send_to_unverified_devices_summary">Nunca enviar mensajes cifrados a dispositivos no verificados de este dispositivo</string>
 
     <string name="encryption_information_not_verified">NO Verificado</string>
@@ -687,7 +696,7 @@ Si no es así, alguien está interceptando este dispositivo y debería agregarlo
 En el futuro, este proceso de verificación será mas sofisticado.</string>
     <string name="encryption_information_verify_key_match">Verifico que las claves coinciden</string>
 
-    <string name="e2e_enabling_on_app_update">Riot ahora cuenta con cifrado de extremo-a-extremo pero necesitas reentrar tu cuenta para prenderlo.
+    <string name="e2e_enabling_on_app_update">Riot ahora cuenta con cifrado de extremo a extremo pero necesitas volver a iniciar sesión para habilitarlo.
 
 Lo puedes hacer ahora o luego desde los ajustes de la aplicación.</string>
 
@@ -698,7 +707,7 @@ Lo puedes hacer ahora o luego desde los ajustes de la aplicación.</string>
     <!-- directory activity  -->
     <string name="select_room_directory">Elegir un directorio de salas</string>
     <string name="directory_server_fail_to_retrieve_server">El servidor podría estar no disponible o sobrecargado</string>
-    <string name="directory_server_type_homeserver">Escribir un homeserver para listar sus salas públicas</string>
+    <string name="directory_server_type_homeserver">Escribe un servidor doméstico para listar sus salas públicas</string>
     <string name="directory_server_placeholder">URL del homeserver</string>
     <string name="directory_server_all_rooms_on_server">Todas las salas en el servidor %s</string>
     <string name="directory_server_native_rooms">Todas las salas nativas de %s</string>
@@ -751,7 +760,7 @@ Lo puedes hacer ahora o luego desde los ajustes de la aplicación.</string>
     <string name="title_activity_bug_report">Informe de error</string>
 
     <string name="option_take_photo">Tomar foto</string>
-    <string name="option_take_video">Tomar video</string>
+    <string name="option_take_video">Tomar vídeo</string>
 
     <string name="login_mobile_device">Móvil</string>
 
@@ -760,7 +769,7 @@ Lo puedes hacer ahora o luego desde los ajustes de la aplicación.</string>
     <string name="settings_containing_my_display_name">Mensajes que contengan mi nombre público</string>
     <string name="settings_containing_my_user_name">Mensajes que contengan mi nombre de usuario</string>
     <string name="settings_12_24_timestamps">Mostrar la hora en formato de 12 horas (ej: 2:30pm)</string>
-    <string name="settings_hide_join_leave_messages">Esconder mensajes de unirse/partir (invitaciones/kicks/baneos no son afectados)</string>
+    <string name="settings_hide_join_leave_messages">Ocultar mensajes de unirse/salir (no afecta a invitaciones/kicks/vetos)</string>
     <string name="settings_hide_avatar_display_name_changes_messages">Esconder cambios de avatar y nombre público</string>
 
     <string name="settings_analytics">Análisis anónimo de uso</string>
@@ -786,7 +795,7 @@ Lo puedes hacer ahora o luego desde los ajustes de la aplicación.</string>
     <string name="widget_integration_room_not_visible">La sala %s no está visible.</string>
     <string name="settings_labs_matrix_apps">Matrix Apps</string>
     <string name="room_add_matrix_apps">Añadir Matrix apps</string>
-    <string name="settings_labs_native_camera">Usar cámara nativa</string>
+    <string name="settings_labs_native_camera">Utilizar cámara nativa</string>
 
     <!-- share keys -->
     <string name="you_added_a_new_device">Has añadido un nuevo dispositivo \'%s\', que esta solicitando claves de encriptación.</string>
@@ -827,7 +836,7 @@ Lo puedes hacer ahora o luego desde los ajustes de la aplicación.</string>
     <string name="start_voice_call_prompt_msg">¿Seguro que quieres iniciar una llamada de voz?</string>
     <string name="start_video_call_prompt_msg">¿Seguro que quieres iniciar una llamada de vídeo?</string>
 
-    <string name="groups_list">Lista de grupos</string>
+    <string name="groups_list">Lista de Grupos</string>
 
     <string name="room_participants_kick_prompt_msg">¿Está seguro que quiere echar este usuario de la conversación?</string>
     <string name="room_participants_ban_prompt_msg">¿Está seguro de que quiere vetar a este usuario de esta conversación?</string>
@@ -836,10 +845,10 @@ Lo puedes hacer ahora o luego desde los ajustes de la aplicación.</string>
     <string name="room_settings_all_messages">Todos los mensajes</string>
     <string name="room_settings_mention_only">Solo menciones</string>
     <string name="room_settings_mute">Silenciar</string>
-    <string name="room_settings_add_homescreen_shortcut">Añadir un atajo a la pantalla de inicio</string>
+    <string name="room_settings_add_homescreen_shortcut">Añadir un Atajo a la Pantalla de Inicio</string>
 
     <string name="settings_inline_url_preview">Habilitar vistas previas de URL en línea por defecto</string>
-    <string name="settings_vibrate_on_mention">Vibrar cuando te citen</string>
+    <string name="settings_vibrate_on_mention">Vibrar al mencionar</string>
 
     <string name="settings_flair">Insignia</string>
 
@@ -848,7 +857,7 @@ Lo puedes hacer ahora o luego desde los ajustes de la aplicación.</string>
     <string name="room_settings_add_new_group">Nueva ID de comunidad (ej. +foo:matrix.org)</string>
     <string name="room_settings_invalid_group_format_dialog_title">ID de comunidad inválida</string>
     <string name="forget_room">Olvidar sala</string>
-<string name="rejoin">Volver a entrar</string>
+<string name="rejoin">Volver a unirse</string>
     <string name="room_settings_invalid_group_format_dialog_body">\'%s\' no es una ID de comunidad válida</string>
 
 
@@ -866,7 +875,7 @@ Lo puedes hacer ahora o luego desde los ajustes de la aplicación.</string>
     <string name="no_users_placeholder">Sin usuarios</string>
 
     <string name="rooms">Salas</string>
-    <string name="joined">Se ha unido</string>
+    <string name="joined">Se unió</string>
     <string name="invited">Ha sido invitado</string>
     <string name="filter_group_members">Filtro para miembros del grupo</string>
     <string name="filter_group_rooms">Filtro para salas de grupo</string>
@@ -941,20 +950,20 @@ Lo puedes hacer ahora o luego desde los ajustes de la aplicación.</string>
 ¿Añadir algunos ahora?</string>
 
     <string name="deactivate_account_title">Desactivar Cuenta</string>
-    <string name="avatar">Foto de perfil</string>
+    <string name="avatar">Avatar</string>
 
-    <string name="receipt_avatar">Recibir avatar</string>
-    <string name="notice_avatar">Aviso de la imagen de perfil</string>
-    <string name="dialog_user_consent_content">Para seguir usando el homeserver de %1$s, debe revisar y aceptar los términos y condiciones.</string>
+    <string name="receipt_avatar">Avatar de recibo</string>
+    <string name="notice_avatar">Avatar de aviso</string>
+    <string name="dialog_user_consent_content">Para continuar utilizando el servidor doméstico %1$s, debes revisar y aceptar los términos y condiciones.</string>
     <string name="dialog_user_consent_submit">Revisar ahora</string>
 
-    <string name="deactivate_account_content">Esto hará que tu cuenta permanezca inutilizable. No podrá iniciar sesión y nadie podrá volver a registrar la misma ID de usuario. Esto hará que su cuenta salga de todas las salas en las que participa y eliminará los datos de su cuenta de su servidor de identidad. <b> Esta acción es irreversible </b>.
+    <string name="deactivate_account_content">"Esto hará que tu cuenta quede permanentemente inutilizable. No podrás iniciar sesión, y nadie podrá volver a registrar la misma ID de usuario.  Esto hará que tu cuenta salga de todas las salas de las cuales participa, y eliminará los datos de tu cuenta de tu servidor de identidad. "<b>Esta acción es irreversible</b>.
 
-Desactivar tu cuenta <b> no hace que olvidemos los mensajes que has enviado </b> por defecto. Si quieres que olvidemos tus mensajes, por favor marca la casilla a continuación.
+Desactivar tu cuenta <b>no hace que olvidemos los mensajes que has enviado</b> por defecto. Si quieres que olvidemos tus mensajes, por favor marca la casilla a continuación.
 
 La visibilidad de mensajes en Matrix es similar a la del correo electrónico. Que olvidemos tus mensajes significa que los mensajes que has enviado no se compartirán con ningún usuario nuevo o no registrado, pero los usuarios registrados que ya tengan acceso a estos mensajes seguirán teniendo acceso a sus copias.</string>
     <string name="deactivate_account_delete_checkbox">Borrar todos los mensajes que se ha enviado cuando mi cuenta sea desactivada (Advertencia: esto provocará que los futuros usuarios que vean una vista incompleta de las conversaciones)</string>
-    <string name="deactivate_account_prompt_password">Para continuar, ingrese su contraseña:</string>
+    <string name="deactivate_account_prompt_password">Para continuar, ingresa tu contraseña por favor:</string>
     <string name="deactivate_account_submit">Desactivar cuenta</string>
 
 <string name="settings_notification_privacy">Privacidad de las notificaciones</string>
@@ -982,7 +991,7 @@ La visibilidad de mensajes en Matrix es similar a la del correo electrónico. Qu
 
     <string name="option_send_sticker">Enviar pegatina</string>
     <string name="widget_integration_invalid_parameter">Un parámetro no es válido.</string>
-    <string name="error_empty_field_your_password">Por favor, introduzca su contraseña.</string>
+    <string name="error_empty_field_your_password">Por favor, ingresa tu contraseña.</string>
 
 <string name="settings_labs_enable_send_voice">Enviar mensaje de voz (requiere una aplicación externa para grabar los mensajes de voz)</string>
 
@@ -1007,8 +1016,8 @@ La visibilidad de mensajes en Matrix es similar a la del correo electrónico. Qu
     <string name="startup_notification_privacy_message">Riot se puede ejecutar en segundo plano para gestionar tus notificaciones de forma segura y privada (esto podría afectar el uso de la batería).</string>
     <string name="settings_opt_in_of_analytics">Enviar información de estadísticas</string>
     <string name="settings_opt_in_of_analytics_summary">Riot recopila estadísticas anónimas que nos permiten mejorar la aplicación.</string>
-    <string name="settings_opt_in_of_analytics_prompt">Por favor, active las estadísticas para ayudarnos a mejorar Riot.</string>
-    <string name="lock_screen_hint">Escriba aquí…</string>
+    <string name="settings_opt_in_of_analytics_prompt">Por favor, habilita las analíticas para ayudarnos a mejorar Riot.</string>
+    <string name="lock_screen_hint">Escribe aquí…</string>
 
     <string name="send_bug_report_description_in_english">Si es posible, escribe la descripción en inglés.</string>
     <string name="room_participants_action_unignore_prompt">¿Mostrar todos los mensajes de este usuario?
@@ -1018,17 +1027,17 @@ Ten en cuenta que esta acción reiniciará la aplicación y puede tardar algo de
     <string name="room_message_placeholder_reply_to_not_encrypted">Enviar una respuesta (sin cifrar)…</string>
     <string name="settings_without_flair">Actualmente no eres miembro de ninguna comunidad.</string>
 
-    <string name="settings_labs_keyboard_options_to_send_message">Usa la tecla Enter para enviar el mensaje</string>
+    <string name="settings_labs_keyboard_options_to_send_message">Utiliza la tecla Enter en el teclado para enviar el mensaje</string>
     <string name="command_description_emote">Muestra la acción</string>
     <string name="command_description_ban_user">Veta al usuario con la ID dada</string>
     <string name="command_description_unban_user">Quitar veto al usuario con la ID dada</string>
     <string name="command_description_op_user">Define el nivel de poder de un usuario</string>
     <string name="command_description_invite_user">Invita al usuario con la ID dada a la sala actual</string>
-    <string name="command_description_join_room">Se une a la sala con el alias dado</string>
+    <string name="command_description_join_room">Se une a la sala con un alias dado</string>
     <string name="command_description_part_room">Salir de la sala</string>
     <string name="command_description_topic">Establecer el tema de la sala</string>
     <string name="command_description_kick_user">Echa al usuario con la ID dada</string>
-    <string name="command_description_nick">Cambia tu nick mostrado</string>
+    <string name="command_description_nick">Cambia tu apodo público</string>
     <string name="command_description_markdown">Activar/desactivar Markdown</string>
     <string name="command_description_clear_scalar_token">Para reparar la gestión de las Aplicaciones de Matrix</string>
 
@@ -1037,7 +1046,7 @@ Ten en cuenta que esta acción reiniciará la aplicación y puede tardar algo de
     <string name="room_tombstone_versioned_description">Esta sala ha sido reemplazada o ya no está activa</string>
     <string name="room_tombstone_continuation_link">La conversación continúa aquí</string>
     <string name="room_tombstone_continuation_description">Esta sala es una continuación de otra conversación</string>
-    <string name="room_tombstone_predecessor_link">Pinchar aquí para ver mensajes más antiguos</string>
+    <string name="room_tombstone_predecessor_link">Haz clic aquí para ver mensajes más antiguos</string>
 
 <string name="command_description_deop_user">Degrada al usuario con la ID dada</string>
     <string name="system_alerts_header">Alertas de Sistema</string>
