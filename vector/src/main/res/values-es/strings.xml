@@ -520,7 +520,7 @@ Ten en cuenta que esta acción reiniciará la aplicación y puede tardar algo de
     <string name="account_email_not_found_error">Falló el envío de correo electrónico: No se pudo encontrar esta dirección de correo electrónico</string>
     <string name="account_phone_number_already_used_error">Este número de teléfono ya esta usado</string>
 
-    <string name="settings_change_password">Cambiar Contraseña</string>
+    <string name="settings_change_password">Cambiar contraseña</string>
     <string name="settings_old_password">Contraseña anterior</string>
     <string name="settings_new_password">Contraseña nueva</string>
     <string name="settings_confirm_password">confirmar contraseña</string>
