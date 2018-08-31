@@ -4,6 +4,12 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
+    <!-- TODO LazyLoading remove this, it's just added to be on the top of the screen -->
+    <im.vector.preference.VectorSwitchPreference
+        android:key="SETTINGS_LAZY_LOADING_PREFERENCE_KEY"
+        android:summary="@string/settings_lazy_loading_description"
+        android:title="@string/settings_lazy_loading_title" />
+
     <PreferenceCategory
         android:key="SETTINGS_USER_SETTINGS_PREFERENCE_KEY"
         android:title="@string/settings_user_settings">
@@ -103,8 +109,8 @@
             android:title="@string/settings_vibrate_on_mention" />
 
         <im.vector.preference.VectorSwitchPreference
-            android:title="@string/settings_preview_media_before_sending"
-            android:key="SETTINGS_PREVIEW_MEDIA_BEFORE_SENDING_KEY"/>
+            android:key="SETTINGS_PREVIEW_MEDIA_BEFORE_SENDING_KEY"
+            android:title="@string/settings_preview_media_before_sending" />
 
     </PreferenceCategory>
 
@@ -130,7 +136,7 @@
 
     <PreferenceCategory
         android:key="SETTINGS_GROUPS_FLAIR_KEY"
-        android:title="@string/settings_flair"/>
+        android:title="@string/settings_flair" />
 
     <im.vector.preference.VectorDividerCategory />
 
@@ -261,8 +267,8 @@
 
         <im.vector.preference.VectorSwitchPreference
             android:key="SETTINGS_LAZY_LOADING_PREFERENCE_KEY"
-            android:title="@string/settings_lazy_loading_title"
-            android:summary="@string/settings_lazy_loading_description"/>
+            android:summary="@string/settings_lazy_loading_description"
+            android:title="@string/settings_lazy_loading_title" />
 
         <im.vector.preference.VectorSwitchPreference
             android:key="SETTINGS_DATA_SAVE_MODE_PREFERENCE_KEY"

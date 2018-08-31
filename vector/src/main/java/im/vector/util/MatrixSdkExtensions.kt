@@ -53,7 +53,7 @@ fun Room?.getRoomMaxPowerLevel(): Int {
 
         // find out the room member
         // DO NOT COMMIT
-        todo
+        // TODO LazyLoading
         for (member in state.loadedMembers) {
             tempPowerLevel = it.getUserPowerLevel(member.userId)
             if (tempPowerLevel > maxPowerLevel) {

@@ -138,7 +138,7 @@ public class VectorUtils {
      * @param room    the room.
      * @return the calling room display name.
      */
-    @Nullable not used?
+    @Nullable
     public static void getCallingRoomDisplayName(Context context,
                                                  final MXSession session,
                                                  final Room room,
@@ -199,8 +199,7 @@ public class VectorUtils {
 
             String myUserId = session.getMyUserId();
 
-            todo
-            // TODO Use Heroes
+            // TODO LazyLoading Use Heroes
             Collection<RoomMember> members = new ArrayList<>(); // TODO roomState.getDisplayableMembers();
             List<RoomMember> othersActiveMembers = new ArrayList<>();
             List<RoomMember> activeMembers = new ArrayList<>();
