@@ -71,9 +71,9 @@ import im.vector.notifications.NotifiedEvent;
 import im.vector.notifications.RoomsNotifications;
 import im.vector.receiver.DismissNotificationReceiver;
 import im.vector.util.CallsManager;
-import im.vector.util.PreferencesManager;
 import im.vector.util.RiotEventDisplay;
 import im.vector.util.SystemUtilsKt;
+import im.vector.util.VectorUtils;
 
 /**
  * A foreground service in charge of controlling whether the event stream is running or not.
@@ -1634,7 +1634,7 @@ public class EventStreamService extends Service {
     public void displayCallInProgressNotification(MXSession session, Room room, String callId) {
         if (null != callId) {
             Notification notification = NotificationUtils.INSTANCE.buildPendingCallNotification(getApplicationContext(),
-                    room.getName(session.getCredentials().userId), room.getRoomId(), session.getCredentials().userId, callId);
+                    VectorUtils.getRoomDisplayName(this, session, room), room.getRoomId(), session.getCredentials().userId, callId);
             setForegroundNotificationState(ForegroundNotificationState.CALL_IN_PROGRESS, notification);
             mCallIdInProgress = callId;
         }

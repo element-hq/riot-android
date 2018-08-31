@@ -1,5 +1,6 @@
 /*
  * Copyright 2015 OpenMarket Ltd
+ * Copyright 2018 New Vector Ltd
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,9 +19,6 @@ package im.vector.adapters;
 
 import android.content.Context;
 import android.graphics.Typeface;
-
-import org.matrix.androidsdk.util.Log;
-
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -28,16 +26,17 @@ import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import im.vector.R;
-import im.vector.util.RiotEventDisplay;
-import im.vector.util.ThemeUtils;
-import im.vector.util.VectorUtils;
-
 import org.matrix.androidsdk.MXSession;
 import org.matrix.androidsdk.data.Room;
 import org.matrix.androidsdk.data.RoomSummary;
 import org.matrix.androidsdk.rest.model.Event;
 import org.matrix.androidsdk.util.EventDisplay;
+import org.matrix.androidsdk.util.Log;
+
+import im.vector.R;
+import im.vector.util.RiotEventDisplay;
+import im.vector.util.ThemeUtils;
+import im.vector.util.VectorUtils;
 
 /**
  * An adapter which display the rooms list
@@ -95,7 +94,7 @@ public class VectorRoomsSelectionAdapter extends ArrayAdapter<RoomSummary> {
         }
 
         RoomSummary roomSummary = getItem(position);
-        String roomName = roomSummary.getRoomName();
+        String roomName = VectorUtils.getRoomDisplayName(mContext, mSession, mSession.getDataHandler().getRoom(roomSummary.getRoomId()));
 
         // retrieve the UI items
         ImageView avatarImageView = convertView.findViewById(R.id.room_avatar);
