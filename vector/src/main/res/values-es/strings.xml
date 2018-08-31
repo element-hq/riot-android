@@ -119,7 +119,7 @@ Selecciona exportar para crear un archivo de respaldo antes de cerrar la sesión
     <string name="create_account">Registrar</string>
     <string name="login">Iniciar sesión</string>
     <string name="logout">Cerrar sesión</string>
-    <string name="hs_url">URL del Servidor</string>
+    <string name="hs_url">URL del Servidor Doméstico</string>
     <string name="identity_url">URL del Servidor de Identidad</string>
     <string name="search">Buscar</string>
 
@@ -136,26 +136,26 @@ Selecciona exportar para crear un archivo de respaldo antes de cerrar la sesión
     <string name="auth_submit">Entregar</string>
     <string name="auth_skip">Omitir</string>
     <string name="auth_send_reset_email">Enviar Correo Electrónico de Reinicio</string>
-    <string name="auth_return_to_login">Volver a la página de entrada</string>
+    <string name="auth_return_to_login">Volver a la pantalla de inicio de sesión</string>
     <string name="auth_user_id_placeholder">Correo electrónico o nombre de usuario</string>
     <string name="auth_password_placeholder">Contraseña</string>
     <string name="auth_new_password_placeholder">Contraseña nueva</string>
     <string name="auth_user_name_placeholder">Nombre de usuario</string>
-    <string name="auth_add_email_message">Añade un correo electrónico a tu cuenta para que otros te descubran, y para que puedas restablecer tu contraseña.</string>
+    <string name="auth_add_email_message">Añade una dirección de correo electrónico a tu cuenta para poder ser descubierto por otros usuarios, y ser capaz de restablecer tu contraseña.</string>
     <string name="auth_add_phone_message">Añade un número telefónico a tu cuenta para que otros usuarios te descubran.</string>
     <string name="auth_add_email_phone_message">Añade un correo electrónico y/o número de teléfono a tu cuenta para que otros te descubran.
 
 El correo electrónico te permitirá restablecer tu contraseña.</string>
-    <string name="auth_add_email_and_phone_message">Añadir un correo electrónico y un número de teléfono a tu cuenta para que otros te descubran.
+    <string name="auth_add_email_and_phone_message">Añade una dirección de correo electrónico y un número telefónico a tu cuenta para poder ser descubierto por otros usuarios.
 
-El correo electrónico te permitirá reiniciar tu contraseña.</string>
+Además, la dirección de correo electrónico te permitirá restablecer tu contraseña.</string>
     <string name="auth_email_placeholder">Correo electrónico</string>
     <string name="auth_opt_email_placeholder">Correo electrónico (opcional)</string>
     <string name="auth_phone_number_placeholder">Número de teléfono</string>
     <string name="auth_opt_phone_number_placeholder">Número de teléfono (opcional)</string>
     <string name="auth_repeat_password_placeholder">Repite la contraseña</string>
     <string name="auth_repeat_new_password_placeholder">Confirma tu nueva contraseña</string>
-    <string name="auth_invalid_login_param">Nombre y/o contraseña incorrecta</string>
+    <string name="auth_invalid_login_param">Nombre de usuario y/o contraseña incorrectos</string>
     <string name="auth_invalid_user_name">Nombres de usuarios sólo pueden contener letras, números, puntos, guiones y guiones bajos</string>
     <string name="auth_invalid_password">Contraseña demasiado corta (min 6)</string>
     <string name="auth_missing_password">Contraseña ausente</string>
