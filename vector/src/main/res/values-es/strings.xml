@@ -170,9 +170,9 @@ El correo electrónico te permitirá reiniciar tu contraseña.</string>
     <string name="auth_forgot_password">¿Olvidaste tu contraseña?</string>
     <string name="auth_use_server_options">¿Usar opciones de servidor propietarias? (avanzado)</string>
     <string name="auth_email_validation_message">Consulte su correo electrónico para poder continuar con la inscripción</string>
-    <string name="auth_threepid_warning_message">La inscripción con correo electrónico y número de teléfono no está implementada hasta que exista la API. Solamente se tomará en cuenta el número de teléfono.
+    <string name="auth_threepid_warning_message">Todavía no es posible registrarse con correo electrónico y número telefónico a la vez, hasta que exista la API. Solo se tendrá en cuenta el número telefónico.
 
-Podrá añadir su correo electrónico a su cuenta en configuraciones.</string>
+Puedes añadir tu correo electrónico a tu perfil en ajustes.</string>
     <string name="auth_recaptcha_message">Este servidor quiere verificar que no seas robot</string>
     <string name="auth_username_in_use">Este nombre ya está reservado para otra persona</string>
     <string name="auth_home_server">Servidor:</string>
@@ -383,7 +383,7 @@ Los mensajes cifrados no serán visibles en clientes que aún no implementen el 
     <string name="room_details_title">Detalles de la Sala</string>
     <string name="room_details_people">Personas</string>
     <string name="room_details_files">Archivos</string>
-    <string name="room_details_settings">Configuraciones</string>
+    <string name="room_details_settings">Ajustes</string>
     <string name="malformed_id">ID mal formada. Debe ser una dirección de correo electrónico o una ID de Matrix como \'@partelocal:dominio\'</string>
     <string name="room_details_people_invited_group_name">INVITADO</string>
     <string name="room_details_people_present_group_name">ENTRÓ</string>
@@ -430,14 +430,14 @@ Ten en cuenta que esta acción reiniciará la aplicación y puede tardar algo de
 
     <!-- home room settings -->
     <string name="room_settings_favourite">Destacar como Favorito</string>
-    <string name="room_settings_de_prioritize">Despriorizar</string>
+    <string name="room_settings_de_prioritize">Des-priorizar</string>
     <string name="room_settings_direct_chat">Conversación Directa</string>
-    <string name="room_settings_leave_conversation">Salir la Conversacion</string>
+    <string name="room_settings_leave_conversation">Salir de la Conversación</string>
     <string name="room_settings_forget">Olvidar</string>
 
     <!-- home sliding menu -->
     <string name="room_sliding_menu_messages">Mensajes</string>
-    <string name="room_sliding_menu_settings">Configuraciones</string>
+    <string name="room_sliding_menu_settings">Ajustes</string>
     <string name="room_sliding_menu_version">Versión</string>
     <string name="room_sliding_menu_term_and_conditions">Términos &amp; condiciones</string>
     <string name="room_sliding_menu_third_party_notices">Avisos de terceros</string>
@@ -446,13 +446,13 @@ Ten en cuenta que esta acción reiniciará la aplicación y puede tardar algo de
 
     <!-- Vector Settings -->
 
-    <string name="settings_profile_picture">Foto de Perfil</string>
+    <string name="settings_profile_picture">Imagen de Perfil</string>
     <string name="settings_display_name">Nombre Público</string>
     <string name="settings_email_address">Correo Electrónico</string>
-    <string name="settings_add_email_address">Añadir correo electrónico</string>
+    <string name="settings_add_email_address">Añadir dirección de correo electrónico</string>
     <string name="settings_phone_number">Número Telefónico</string>
     <string name="settings_add_phone_number">Añadir número telefónico</string>
-    <string name="settings_summary_app_info_link">Página de la información del sistema de la aplicación</string>
+    <string name="settings_summary_app_info_link">Pantalla de información del sistema de la aplicación</string>
     <string name="settings_title_app_info_link">Información de la Aplicación</string>
 
     <string name="settings_enable_all_notif">Encender notificaciones para esta cuenta</string>
@@ -482,7 +482,7 @@ Ten en cuenta que esta acción reiniciará la aplicación y puede tardar algo de
     <!--string name="settings_room_privacy_label">Privacy</string-->
 
 
-    <string name="settings_user_settings">Configuraciones de Usuario</string>
+    <string name="settings_user_settings">Ajustes de Usuario</string>
     <string name="settings_notifications">Notificaciones</string>
     <string name="settings_ignored_users">Usuarios ignorados</string>
     <string name="settings_other">Otro</string>
@@ -681,7 +681,7 @@ Advertencia: este archivo puede ser eliminado si la aplicación se desinstala.</
     <string name="encryption_information_unblock">Desprohibir</string>
 
     <string name="encryption_information_verify_device">Verificar dispositivo</string>
-    <string name="encryption_information_verify_device_warning">Para verificar que este dispositivo es confiable, por favor contacte a su dueño por otro medio (ej. cara a cara o por teléfono) y verifique que la clave para este dispositivo que ve en sus Configuraciones de Usuario coincide con la clave debajo:</string>
+    <string name="encryption_information_verify_device_warning">Para verificar que este dispositivo es confiable, por favor contacte a su dueño por otro medio (ej. cara a cara o por teléfono) y verifique que la clave para este dispositivo que ve en sus Ajustes de Usuario coincide con la clave debajo:</string>
     <string name="encryption_information_verify_device_warning2">Si coinciden, seleccione el botón verificar inferior. 
 Si no es así, alguien está interceptando este dispositivo y debería agregarlo a la lista negra.
 En el futuro, este proceso de verificación será mas sofisticado.</string>
@@ -689,7 +689,7 @@ En el futuro, este proceso de verificación será mas sofisticado.</string>
 
     <string name="e2e_enabling_on_app_update">Riot ahora cuenta con cifrado de extremo-a-extremo pero necesitas reentrar tu cuenta para prenderlo.
 
-Lo puedes hacer ahora o luego desde las configuraciones de la aplicación.</string>
+Lo puedes hacer ahora o luego desde los ajustes de la aplicación.</string>
 
     <!-- unknown devices management -->
     <string name="unknown_devices_alert_title">Esta sala contiene dispositivos desconocidos</string>
@@ -834,9 +834,9 @@ Lo puedes hacer ahora o luego desde las configuraciones de la aplicación.</stri
 
     <string name="room_settings_all_messages_noisy">Todos los mensajes (ruidoso)</string>
     <string name="room_settings_all_messages">Todos los mensajes</string>
-    <string name="room_settings_mention_only">Solo citaciones</string>
+    <string name="room_settings_mention_only">Solo menciones</string>
     <string name="room_settings_mute">Silenciar</string>
-    <string name="room_settings_add_homescreen_shortcut">Añadir un atajo en la pantalla de inicio</string>
+    <string name="room_settings_add_homescreen_shortcut">Añadir un atajo a la pantalla de inicio</string>
 
     <string name="settings_inline_url_preview">Habilitar vistas previas de URL en línea por defecto</string>
     <string name="settings_vibrate_on_mention">Vibrar cuando te citen</string>
@@ -958,9 +958,9 @@ La visibilidad de mensajes en Matrix es similar a la del correo electrónico. Qu
     <string name="deactivate_account_submit">Desactivar cuenta</string>
 
 <string name="settings_notification_privacy">Privacidad de las notificaciones</string>
-    <string name="settings_notification_privacy_warning">Riot.im se ejecuta en segundo plano para mantener privado el contenido del mensaje de la notificación. Puede cambiar esta opción para reducir el uso de la batería.</string>
+    <string name="settings_notification_privacy_warning">Riot.im se ejecuta en segundo plano para mantener privado el contenido del mensaje de la notificación. Puedes cambiar esta opción para reducir el uso de la batería.</string>
     <string name="settings_notification_privacy_normal">Normal</string>
-    <string name="settings_notification_privacy_power_saving">Opciones de ahorro de energía</string>
+    <string name="settings_notification_privacy_power_saving">Opciones de Ahorro de Energía</string>
     <string name="settings_notification_privacy_low_detail">Notificaciones simples</string>
     <string name="settings_notification_privacy_reduced">Privacidad reducida</string>
     <string name="settings_notification_privacy_need_permission">La aplicación necesita permiso para ejecutarse en segundo plano</string>
