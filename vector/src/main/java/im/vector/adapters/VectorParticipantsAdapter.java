@@ -277,7 +277,7 @@ public class VectorParticipantsAdapter extends BaseExpandableListAdapter {
             Room fromRoom = store.getRoom(mRoomId);
 
             if (null != fromRoom) {
-                fromRoom.getState().getDisplayableMembers(new SimpleApiCallback<List<RoomMember>>(callback) {
+                fromRoom.getState().getDisplayableMembersAsync(new SimpleApiCallback<List<RoomMember>>(callback) {
                     @Override
                     public void onSuccess(List<RoomMember> members) {
                         for (RoomMember member : members) {

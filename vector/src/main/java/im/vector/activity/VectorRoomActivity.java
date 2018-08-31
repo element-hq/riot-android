@@ -2985,7 +2985,7 @@ public class VectorRoomActivity extends MXCActionBarActivity implements
                         setMemberHeaderText(0, mRoom.getNumberOfJoinedMembers());
 
                         // Then request the list of members asynchronously
-                        roomState.getDisplayableMembers(new SimpleApiCallback<List<RoomMember>>(this) {
+                        roomState.getDisplayableMembersAsync(new SimpleApiCallback<List<RoomMember>>(this) {
                             @Override
                             public void onSuccess(List<RoomMember> members) {
                                 int joinedMembersCount = 0;
