@@ -185,7 +185,7 @@ Puedes añadir tu correo electrónico a tu perfil en ajustes.</string>
     <string name="auth_reset_password_error_unauthorized">Falló la verificación del correo electrónico: asegúrate que seguiste el enlace en el mensaje</string>
     <string name="auth_reset_password_success_message">Su contraseña fue actualizada.
 
-Has sido desconectado de todos tus dispositivos y las notificaciones están apagadas. Para encender las notificaciones, entre su cuenta en cada dispositivo.</string>
+Has sido desconectado de todos tus dispositivos y ya no recibirás notificaciones. Para encender las notificaciones, entre su cuenta en cada dispositivo.</string>
 
     <!-- Login Screen -->
     <string name="login_error_must_start_http">La URL debe comenzar con http[s]://</string>
