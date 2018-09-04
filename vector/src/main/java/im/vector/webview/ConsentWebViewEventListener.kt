@@ -52,7 +52,7 @@ class ConsentWebViewEventListener(activity: VectorAppCompatActivity, private val
         safeActivity?.let {
             val session = Matrix.getInstance(it).defaultSession
             val joinedRooms = session.dataHandler.store.rooms.filter {
-                it.hasMembership(RoomMember.MEMBERSHIP_JOIN)
+                it.isJoined
             }
             if (joinedRooms.isEmpty()) {
                 it.showWaitingView()

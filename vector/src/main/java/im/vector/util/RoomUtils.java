@@ -371,19 +371,20 @@ public class RoomUtils {
 
             // check if this is an invite
             if (roomSummary.isInvited() && (null != roomSummary.getInviterUserId())) {
+                // TODO Re-write this algorithm, it's so complicated to understand for nothing...
                 RoomState latestRoomState = roomSummary.getLatestRoomState();
                 String inviterUserId = roomSummary.getInviterUserId();
-                String myName = roomSummary.getMatrixId();
+                String myName = roomSummary.getUserId();
 
                 if (null != latestRoomState) {
                     inviterUserId = latestRoomState.getMemberName(inviterUserId);
                     myName = latestRoomState.getMemberName(myName);
                 } else {
-                    inviterUserId = getMemberDisplayNameFromUserId(context, roomSummary.getMatrixId(), inviterUserId);
-                    myName = getMemberDisplayNameFromUserId(context, roomSummary.getMatrixId(), myName);
+                    inviterUserId = getMemberDisplayNameFromUserId(context, roomSummary.getUserId(), inviterUserId);
+                    myName = getMemberDisplayNameFromUserId(context, roomSummary.getUserId(), myName);
                 }
 
-                if (TextUtils.equals(session.getMyUserId(), roomSummary.getMatrixId())) {
+                if (TextUtils.equals(session.getMyUserId(), roomSummary.getUserId())) {
                     messageToDisplay = context.getString(org.matrix.androidsdk.R.string.notice_room_invite_you, inviterUserId);
                 } else {
                     messageToDisplay = context.getString(org.matrix.androidsdk.R.string.notice_room_invite, inviterUserId, myName);
