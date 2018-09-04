@@ -20,7 +20,7 @@
     <string name="username">用户名</string>
     <string name="create_account">注册</string>
     <string name="login">登录</string>
-    <string name="logout">退出登录</string>
+    <string name="logout">登出</string>
     <string name="search">搜索</string>
 
     <string name="start_new_chat">发起新的聊天</string>
@@ -95,7 +95,7 @@
     <string name="auth_phone_number_placeholder">电话号码</string>
     <string name="auth_opt_phone_number_placeholder">电话号码（可选）</string>
     <string name="auth_repeat_new_password_placeholder">确认您的新密码</string>
-    <string name="auth_invalid_login_param">不正确的用户名和/或密码</string>
+    <string name="auth_invalid_login_param">用户名和/或密码错误</string>
     <string name="auth_invalid_user_name">用户名仅可由字母、数字、点、连字符与下划线组成</string>
     <string name="auth_invalid_password">密码太短（至少 6 位）</string>
     <string name="auth_missing_password">缺少密码</string>
@@ -192,11 +192,11 @@
     <string name="cancel">取消</string>
     <string name="delete">删除</string>
     <string name="cannot_start_call">无法开始通话，请稍后重试</string>
-    <string name="missing_permissions_warning">由于缺少部分权限，某些功能将无法使用…</string>
+    <string name="missing_permissions_warning">由于缺少权限，某些功能将无法使用…</string>
     <string name="missing_permissions_title_to_start_conf_call">无法发起通话</string>
     <string name="device_information">设备信息</string>
     <string name="room_no_conference_call_in_encrypted_rooms">电话会议在启用加密的聊天室中不受支持</string>
-    <string name="action_sign_out_confirmation">为保证安全，退出登录将会删除任何端对端加密密钥。重新登录后将无法阅读之前的已加密聊天历史。
+    <string name="action_sign_out_confirmation">为保证安全，退出登录将会删除任何端对端加密密钥。重新登录后将无法阅读之前的已加密的聊天历史。
 在登出之前，请导出并备份端对端加密密钥。</string>
     <string name="action_open">打开</string>
     <string name="action_close">关闭</string>
@@ -209,7 +209,7 @@
 
     <string name="option_take_photo_video">拍摄照片或视频</string>
 
-    <string name="auth_add_email_message">为您的账户添加一个电子邮箱地址以便其他用户发现您，更可让您重设密码。</string>
+    <string name="auth_add_email_message">为您的账户添加一个电子邮箱地址以便其他用户发现您，同时可让您重设密码。</string>
     <string name="auth_add_phone_message">为您的账户添加一个电话号码以便其他用户发现您。</string>
     <string name="auth_add_email_phone_message">添加一个电子邮箱地址和/或电话号码到您的账户来让用户发现您。
 
@@ -772,7 +772,7 @@
 
     <string name="action_exit">退出</string>
     <string name="groups_invite_header">邀请</string>
-    <string name="start_new_chat_prompt_msg">您确定要与 %s 发起新聊天吗？</string>
+    <string name="start_new_chat_prompt_msg">您确定要与 %s 发起新的聊天吗？</string>
     <string name="start_voice_call_prompt_msg">您确定要发起语音通话吗？</string>
     <string name="start_video_call_prompt_msg">您确定要发起视频通话吗？</string>
 
@@ -1037,5 +1037,5 @@ Matrix 中的消息可见性类似于电子邮件。我们忘记您的消息意�
 
     <string name="resource_limit_hard_contact">请 %s 以继续使用本服务。</string>
 
-<string name="resource_limit_soft_contact">请 %s 以增加此限制数目。</string>
+<string name="resource_limit_soft_contact">请 %s 以增加此限制的额度。</string>
     </resources>
