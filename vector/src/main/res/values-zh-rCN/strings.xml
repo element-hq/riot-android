@@ -954,7 +954,7 @@ Matrix 中的消息可见性类似于电子邮件。我们忘记您的消息意�
 
     <string name="error_empty_field_your_password">请输入您的密码。</string>
 
-<string name="speak">说话</string>
+<string name="speak">发言</string>
     <string name="send_bug_report_description_in_english">如果可能的话，请使用英文撰写问题描述。</string>
     <string name="room_participants_action_unignore_prompt">显示来自该用户的所有信息？
 
@@ -1020,4 +1020,19 @@ Matrix 中的消息可见性类似于电子邮件。我们忘记您的消息意�
     <plurals name="group_rooms">
 	<item quantity="other">%d 个聊天室</item>
 </plurals>
-    </resources>
+    <string name="system_alerts_header">系统警告</string>
+
+    <string name="resource_limit_exceeded_title">超出资源限制</string>
+    <string name="resource_limit_contact_action">联系管理员</string>
+
+    <string name="resource_limit_contact_admin">联系您的服务管理员</string>
+
+    <string name="resource_limit_soft_default">本服务器其中一项资源已超出限制，<b>部分用户将无法登录</b>。</string>
+    <string name="resource_limit_hard_default">本服务器其中一项资源已超出限制。</string>
+
+    <string name="resource_limit_soft_mau"> 本服务器已达到每月活跃用户限制，<b>部分用户将无法登录</b>。</string>
+    <string name="resource_limit_hard_mau">本服务器已达到每月活跃用户限制。</string>
+
+    <string name="resource_limit_hard_contact">请 %s 以继续使用本服务。</string>
+
+</resources>
