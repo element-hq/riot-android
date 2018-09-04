@@ -192,7 +192,7 @@
     <string name="cancel">取消</string>
     <string name="delete">删除</string>
     <string name="cannot_start_call">无法开始通话，请稍后重试</string>
-    <string name="missing_permissions_warning">由于缺少权限，可能会缺少一些功能…</string>
+    <string name="missing_permissions_warning">由于缺少部分权限，某些功能将无法使用…</string>
     <string name="missing_permissions_title_to_start_conf_call">无法发起通话</string>
     <string name="device_information">设备信息</string>
     <string name="room_no_conference_call_in_encrypted_rooms">电话会议在启用加密的聊天室中不受支持</string>
@@ -389,7 +389,9 @@
     <string name="encryption_export_export">导出</string>
     <string name="encryption_export_enter_passphrase">输入密码</string>
     <string name="encryption_export_confirm_passphrase">确认密码</string>
-    <string name="encryption_export_saved_as">聊天室端对端密钥已经被保存到“%s”</string>
+    <string name="encryption_export_saved_as">聊天室的端对端密钥已经被保存到“%s”。
+
+注意：如果本应用程式被卸载，此文件可能将会被移除。</string>
 
     <string name="encryption_import_e2e_room_keys">导入聊天室端对端加密密钥</string>
     <string name="encryption_import_room_keys">导入聊天室密钥</string>
@@ -896,7 +898,7 @@
     <string name="settings_notification_privacy_normal">标准</string>
     <string name="settings_notification_privacy_power_saving">省电模式</string>
     <string name="settings_notification_privacy_low_detail">简洁通知</string>
-    <string name="settings_notification_privacy_reduced">低隐私模式（Reduced privacy）</string>
+    <string name="settings_notification_privacy_reduced">低隐私模式</string>
     <string name="settings_deactivate_account_section">停用账户</string>
     <string name="settings_deactivate_my_account">停用我的账户</string>
 
@@ -1035,4 +1037,5 @@ Matrix 中的消息可见性类似于电子邮件。我们忘记您的消息意�
 
     <string name="resource_limit_hard_contact">请 %s 以继续使用本服务。</string>
 
-</resources>
+<string name="resource_limit_soft_contact">请 %s 以增加此限制数目。</string>
+    </resources>
