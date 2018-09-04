@@ -710,14 +710,14 @@ public class CommonActivityUtils {
         // Check whether the room exists to handled the cases where the user is invited or he has joined.
         // CAUTION: the room may exist whereas the user membership is neither invited nor joined.
         final Room room = session.getDataHandler().getRoom(roomId, false);
-        if (null != room && room.hasMembership(RoomMember.MEMBERSHIP_INVITE)) {
+        if (null != room && room.isInvited()) {
             Log.d(LOG_TAG, "previewRoom : the user is invited -> display the preview " + VectorApp.getCurrentActivity());
             previewRoom(fromActivity, roomPreviewData);
 
             if (null != callback) {
                 callback.onSuccess(null);
             }
-        } else if (null != room && room.hasMembership(RoomMember.MEMBERSHIP_JOIN)) {
+        } else if (null != room && room.isJoined()) {
             Log.d(LOG_TAG, "previewRoom : the user joined the room -> open the room");
             final Map<String, Object> params = new HashMap<>();
             params.put(VectorRoomActivity.EXTRA_MATRIX_ID, session.getMyUserId());

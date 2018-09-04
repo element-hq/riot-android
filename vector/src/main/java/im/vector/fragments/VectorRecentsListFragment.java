@@ -211,7 +211,7 @@ public class VectorRecentsListFragment extends VectorBaseFragment implements
 
                 } else {
                     RoomSummary roomSummary = mAdapter.getRoomSummaryAt(groupPosition, childPosition);
-                    MXSession session = Matrix.getInstance(getActivity()).getSession(roomSummary.getMatrixId());
+                    MXSession session = Matrix.getInstance(getActivity()).getSession(roomSummary.getUserId());
 
                     // sanity check : should never happen
                     // but it happened.
