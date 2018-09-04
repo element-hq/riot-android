@@ -55,7 +55,7 @@ class DecryptionFailureTracker(
         // Filter out "expected" UTDs
         // We cannot decrypt messages sent before the user joined the room
         val myUser = roomState.getMember(userId)
-        if (myUser.membership != RoomMember.MEMBERSHIP_JOIN) {
+        if (myUser == null || myUser.membership != RoomMember.MEMBERSHIP_JOIN) {
             return
         }
         val reason = when (event.cryptoError.errcode) {
