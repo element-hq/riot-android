@@ -577,7 +577,7 @@ class VectorSettingsPreferencesFragment : PreferenceFragment(), SharedPreference
                             AlertDialog.Builder(activity)
                                     .setTitle(R.string.dialog_title_error)
                                     .setMessage(R.string.error_lazy_loading_not_supported_by_home_server)
-                                    .setPositiveButton(R.string.ok) { _, _ -> }
+                                    .setPositiveButton(R.string.ok, null)
                                     .show()
                         }
                     }
