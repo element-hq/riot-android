@@ -88,8 +88,7 @@ android {
 
     productFlavors {
         app {
-            // TODO LazyLoading Remove the suffix before merging to develop
-            applicationId "im.vector.alpha.lazyloading"
+            applicationId "im.vector.alpha"
             // use the version name
             versionCode rootProject.ext.versionCodeProp
             versionName rootProject.ext.versionNameProp
@@ -100,8 +99,7 @@ android {
         }
 
         appfdroid {
-            // TODO LazyLoading Remove the suffix before merging to develop
-            applicationId "im.vector.alpha.lazyloading"
+            applicationId "im.vector.alpha"
             // use the version name
             versionCode rootProject.ext.versionCodeProp
             versionName rootProject.ext.versionNameProp
