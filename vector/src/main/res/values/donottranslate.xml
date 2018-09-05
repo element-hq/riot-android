@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <!-- TODO LazyLoading Remove the suffix before merging to develop -->
-    <string name="riot_app_name">Riot.im LL</string>
+    <string name="riot_app_name">Riot.im</string>
 
     <!-- server urls -->
     <string name="vector_im_server_url" translatable="false">https://vector.im</string>
