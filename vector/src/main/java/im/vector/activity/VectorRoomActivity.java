@@ -1126,7 +1126,7 @@ public class VectorRoomActivity extends MXCActionBarActivity implements
         if (null != mRoom) {
             // check if the room has been left from another client.
             if (mRoom.isReady()) {
-                if (null == mRoom.getMember(mMyUserId)) {
+                if (!mRoom.isMember()) {
                     Log.e(LOG_TAG, "## onResume() : the user is not anymore a member of the room.");
                     finish();
                     return;
