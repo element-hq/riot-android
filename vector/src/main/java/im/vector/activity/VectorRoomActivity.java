@@ -206,6 +206,7 @@ public class VectorRoomActivity extends MXCActionBarActivity implements
     private String mMyUserId;
     // the parameter is too big to be sent by the intent
     // so use a static variable to send it
+    // FIXME Remove this static variable. The VectorRoomActivity should load the RoomPreviewData itself
     public static RoomPreviewData sRoomPreviewData = null;
     private String mEventId;
     private String mDefaultRoomName;
@@ -3002,36 +3003,46 @@ public class VectorRoomActivity extends MXCActionBarActivity implements
                         mActionBarHeaderActiveMembersInviteButton.setVisibility(hideMembersButtons ? View.INVISIBLE : View.VISIBLE);
 
                         // Display what we have synchronously first. Use 0 as active members number
-                        setMemberHeaderText(0, mRoom.getNumberOfJoinedMembers());
+                        if (mRoom != null) {
+                            setMemberHeaderText(0, mRoom.getNumberOfJoinedMembers());
 
-                        // Then request the list of members asynchronously
-                        roomState.getDisplayableMembersAsync(new SimpleApiCallback<List<RoomMember>>(this) {
-                            @Override
-                            public void onSuccess(List<RoomMember> members) {
-                                int joinedMembersCount = 0;
-                                int activeMembersCount = 0;
+                            // Then request the list of members asynchronously
+                            roomState.getDisplayableMembersAsync(new SimpleApiCallback<List<RoomMember>>(this) {
+                                @Override
+                                public void onSuccess(List<RoomMember> members) {
+                                    int joinedMembersCount = 0;
+                                    int activeMembersCount = 0;
 
-                                for (RoomMember member : members) {
-                                    if (TextUtils.equals(member.membership, RoomMember.MEMBERSHIP_JOIN)) {
-                                        joinedMembersCount++;
+                                    for (RoomMember member : members) {
+                                        if (TextUtils.equals(member.membership, RoomMember.MEMBERSHIP_JOIN)) {
+                                            joinedMembersCount++;
 
-                                        User user = mSession.getDataHandler().getStore().getUser(member.getUserId());
+                                            User user = mSession.getDataHandler().getStore().getUser(member.getUserId());
 
-                                        if ((null != user) && user.isActive()) {
-                                            activeMembersCount++;
+                                            if ((null != user) && user.isActive()) {
+                                                activeMembersCount++;
+                                            }
                                         }
                                     }
-                                }
 
-                                // in preview mode, the room state might be a publicRoom
-                                // so try to use the public room info.
-                                if ((roomState instanceof PublicRoom) && (0 == joinedMembersCount)) {
-                                    activeMembersCount = joinedMembersCount = ((PublicRoom) roomState).numJoinedMembers;
-                                }
+                                    // in preview mode, the room state might be a publicRoom
+                                    // so try to use the public room info.
+                                    if ((roomState instanceof PublicRoom) && (0 == joinedMembersCount)) {
+                                        activeMembersCount = joinedMembersCount = ((PublicRoom) roomState).numJoinedMembers;
+                                    }
 
-                                setMemberHeaderText(activeMembersCount, joinedMembersCount);
+                                    setMemberHeaderText(activeMembersCount, joinedMembersCount);
+                                }
+                            });
+                        } else if (sRoomPreviewData != null) {
+                            // in preview mode, the room state might be a publicRoom
+                            if (roomState instanceof PublicRoom) {
+                                setMemberHeaderText(0, ((PublicRoom) roomState).numJoinedMembers);
+                            } else {
+                                // Should not happen
+                                setMemberHeaderText(0, 0);
                             }
-                        });
+                        }
                     } else {
                         mActionBarHeaderActiveMembersLayout.setVisibility(View.GONE);
                     }
