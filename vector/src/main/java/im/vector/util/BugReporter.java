@@ -32,6 +32,7 @@ import android.view.View;
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.matrix.androidsdk.MXSession;
+import org.matrix.androidsdk.RestClient;
 import org.matrix.androidsdk.util.Log;
 
 import java.io.BufferedReader;
@@ -204,7 +205,7 @@ public class BugReporter {
                     BugReporterMultipartBody.Builder builder = new BugReporterMultipartBody.Builder()
                             .addFormDataPart("text", bugDescription)
                             .addFormDataPart("app", "riot-android")
-                            .addFormDataPart("user_agent", "Android")
+                            .addFormDataPart("user_agent", RestClient.getUserAgent())
                             .addFormDataPart("user_id", userId)
                             .addFormDataPart("device_id", deviceId)
                             .addFormDataPart("version", Matrix.getInstance(context).getVersion(true, false))
@@ -212,7 +213,9 @@ public class BugReporter {
                             .addFormDataPart("matrix_sdk_version", matrixSdkVersion)
                             .addFormDataPart("olm_version", olmVersion)
                             .addFormDataPart("device", Build.MODEL.trim())
-                            .addFormDataPart("os", Build.VERSION.INCREMENTAL + " " + Build.VERSION.RELEASE + " " + Build.VERSION.CODENAME)
+                            .addFormDataPart("lazy_loading", StringUtilsKt.toOnOff(PreferencesManager.useLazyLoading(context)))
+                            .addFormDataPart("os", Build.VERSION.RELEASE + " (API " + Build.VERSION.SDK_INT + ") "
+                                    + Build.VERSION.INCREMENTAL + "-" + Build.VERSION.CODENAME)
                             .addFormDataPart("locale", Locale.getDefault().toString())
                             .addFormDataPart("app_language", VectorApp.getApplicationLocale().toString())
                             .addFormDataPart("default_app_language", VectorApp.getDeviceLocale().toString());
