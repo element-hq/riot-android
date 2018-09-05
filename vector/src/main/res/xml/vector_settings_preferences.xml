@@ -7,7 +7,7 @@
     <!-- TODO LazyLoading remove this, it's just added to be on the top of the screen -->
     <im.vector.preference.VectorSwitchPreference
         android:key="SETTINGS_LAZY_LOADING_PREFERENCE_KEY"
-        android:summary="@string/settings_lazy_loading_description"
+        android:summary="This setting is temporary also displayed on top of screen :)"
         android:title="@string/settings_lazy_loading_title" />
 
     <PreferenceCategory
