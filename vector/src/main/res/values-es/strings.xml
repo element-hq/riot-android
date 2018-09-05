@@ -3,52 +3,52 @@
     <!-- use to retrieve the supported languages list -->
     <!-- should the same value as the file name -->
     <string name="resources_language">es</string>
-    <string name="resources_country_code">ES</string>
+    <string name="resources_country_code">US</string>
 
     <!-- titles -->
     <string name="title_activity_home">Mensajes</string>
     <string name="title_activity_room">Sala</string>
     <string name="title_activity_settings">Ajustes</string>
-    <string name="title_activity_member_details">Detalles de los miembros</string>
-    <string name="title_activity_historical">Historial</string>
+    <string name="title_activity_member_details">Detalles de Miembro</string>
+    <string name="title_activity_historical">Histórico</string>
 
     <!-- button names -->
-    <string name="ok">OK</string>
+    <string name="ok">Correcto</string>
     <string name="cancel">Cancelar</string>
     <string name="save">Guardar</string>
     <string name="leave">Salir</string>
     <string name="send">Enviar</string>
     <string name="copy">Copiar</string>
     <string name="resend">Reenviar</string>
-    <string name="redact">Borrar</string>
+    <string name="redact">Redactar</string>
     <string name="quote">Citar</string>
     <string name="share">Compartir</string>
-    <string name="later">Luego</string>
-    <string name="forward">Enviar</string>
-    <string name="permalink">Enlace permanente</string>
-    <string name="view_source">Ver fuente</string>
-    <string name="view_decrypted_source">Mostrar fuente desencriptada</string>
-    <string name="delete">Borrar</string>
+    <string name="later">Más Tarde</string>
+    <string name="forward">Reenviar</string>
+    <string name="permalink">Enlace Permanente</string>
+    <string name="view_source">Ver Fuente</string>
+    <string name="view_decrypted_source">Ver Fuente Descifrada</string>
+    <string name="delete">Eliminar</string>
     <string name="rename">Renombrar</string>
-    <string name="report_content">Denunciar contenido</string>
+    <string name="report_content">Reportar contenido</string>
     <string name="active_call">Llamada activa</string>
     <string name="ongoing_conference_call">Llamada de conferencia en curso. Unirse con voz o vídeo.</string>
     <string name="ongoing_conference_call_voice">voz</string>
     <string name="ongoing_conference_call_video">vídeo</string>
-    <string name="cannot_start_call">No se pudo iniciar la llamada, inténtalo de nuevo más tarde</string>
-    <string name="missing_permissions_warning">Debido a que faltan permisos, algunas características pueden estar ausentes…</string>
-    <string name="missing_permissions_to_start_conf_call">Necesitas permiso para iniciar una llamada de conferencia en esta sala</string>
+    <string name="cannot_start_call">No se puede iniciar la llamada, por favor inténtalo de nuevo más tarde</string>
+    <string name="missing_permissions_warning">Debido a que faltan permisos, pueden faltar algunas características…</string>
+    <string name="missing_permissions_to_start_conf_call">Necesitas permiso para invitar a iniciar una conferencia en esta sala</string>
     <string name="missing_permissions_title_to_start_conf_call">No se puede iniciar la llamada</string>
-    <string name="device_information">Información del dispositivo</string>
-    <string name="room_no_conference_call_in_encrypted_rooms">Las llamadas de conferencia no se pueden realizar en salas cifradas</string>
-    <string name="send_anyway">Enviar de todos modos</string>
+    <string name="device_information">Información de dispositivo</string>
+    <string name="room_no_conference_call_in_encrypted_rooms">No se admiten llamadas de conferencia en salas cifradas</string>
+    <string name="send_anyway">Enviar de Todos Modos</string>
     <string name="or">o</string>
     <string name="invite">Invitar</string>
 
     <!-- actions -->
-    <string name="action_sign_out">Cerrar la sesión</string>
-    <string name="action_sign_out_confirmation">Para la seguridad, al cerrar la sesión, las claves de cifrado de extremo-a-extremo se borrarán haciendo que el historial sea ilegible.
-Selecciona exportar para crear un archivo de respaldo antes de cerrar la sesión.</string>
+    <string name="action_sign_out">Cerrar sesión</string>
+    <string name="action_sign_out_confirmation">Por seguridad, cerrar la sesión eliminará todas las claves de cifrado de extremo a extremo, haciendo ilegible todo el historial de conversación cifrado si vuelves a iniciar sesión.
+Selecciona exportar para crear una copia de seguridad antes de cerrar sesión.</string>
     <string name="action_voice_call">Llamada de Voz</string>
     <string name="action_video_call">Llamada de Vídeo</string>
     <string name="action_global_search">Búsqueda global</string>
@@ -58,7 +58,7 @@ Selecciona exportar para crear un archivo de respaldo antes de cerrar la sesión
     <string name="action_open">Abrir</string>
     <string name="action_close">Cerrar</string>
     <string name="copied_to_clipboard">Copiado al portapapeles</string>
-    <string name="disable">Desactivar</string>
+    <string name="disable">Deshabilitar</string>
 
     <!-- dialog titles -->
     <string name="dialog_title_confirmation">Confirmación</string>
@@ -85,7 +85,7 @@ Selecciona exportar para crear un archivo de respaldo antes de cerrar la sesión
     <string name="local_address_book_header">Agenda de contactos local</string>
     <string name="matrix_only_filter">Solo contactos de Matrix</string>
     <string name="no_conversation_placeholder">No hay conversaciones</string>
-    <string name="no_contact_access_placeholder">No has permitido que Riot lea a tus contactos locales</string>
+    <string name="no_contact_access_placeholder">No permitiste que Riot acceda a tus contactos locales</string>
     <string name="no_result_placeholder">No hay resultados</string>
 
     <!-- Rooms fragment -->
@@ -106,15 +106,15 @@ Selecciona exportar para crear un archivo de respaldo antes de cerrar la sesión
     <string name="send_bug_report_placeholder">Describe tu problema aquí</string>
     <string name="send_bug_report_logs_description">Para diagnosticar problemas, los registros de este cliente se enviarán junto con este informe de error. Este informe, incluidos los registros y la captura de pantalla, no será visible públicamente. Si prefieres enviar solo el texto anterior, por favor desmarca:</string>
     <string name="send_bug_report_alert_message">Parece que estás agitando el teléfono con frustración. ¿Te gustaría enviar un informe de error?</string>
-    <string name="send_bug_report_sent">El informe de error se ha enviado</string>
-    <string name="send_bug_report_failed">No se pudo enviar el reporte de error (%s)</string>
+    <string name="send_bug_report_sent">El informe de error ha sido enviado con éxito</string>
+    <string name="send_bug_report_failed">No se pudo enviar el informe de error (%s)</string>
     <string name="send_bug_report_progress">Progreso (%s%%)</string>
     <string name="send_bug_report_app_crashed">La aplicación falló en la última sesión. ¿Te gustaría enviar un informe de fallas?</string>
 
-    <string name="send_files_in">Enviar a</string>
-    <string name="read_receipt">Leer</string>
+    <string name="send_files_in">Enviar en</string>
+    <string name="read_receipt">Leído</string>
 
-    <string name="join_room">Unirse a la sala</string>
+    <string name="join_room">Unirse a la Sala</string>
     <string name="username">Nombre de usuario</string>
     <string name="create_account">Registrar</string>
     <string name="login">Iniciar sesión</string>
@@ -123,7 +123,7 @@ Selecciona exportar para crear un archivo de respaldo antes de cerrar la sesión
     <string name="identity_url">URL del Servidor de Identidad</string>
     <string name="search">Buscar</string>
 
-    <string name="start_new_chat">Iniciar nueva conversación</string>
+    <string name="start_new_chat">Iniciar Nueva Conversación</string>
     <string name="start_voice_call">Iniciar Llamada de Voz</string>
     <string name="start_video_call">Iniciar Llamada de Vídeo</string>
 
@@ -133,16 +133,16 @@ Selecciona exportar para crear un archivo de respaldo antes de cerrar la sesión
     <!-- Authentication -->
     <string name="auth_login">Iniciar sesión</string>
     <string name="auth_register">Registrar</string>
-    <string name="auth_submit">Entregar</string>
+    <string name="auth_submit">Enviar</string>
     <string name="auth_skip">Omitir</string>
-    <string name="auth_send_reset_email">Enviar Correo Electrónico de Reinicio</string>
+    <string name="auth_send_reset_email">Enviar Correo Electrónico de Restauración</string>
     <string name="auth_return_to_login">Regresar a la pantalla de inicio de sesión</string>
     <string name="auth_user_id_placeholder">Correo electrónico o nombre de usuario</string>
     <string name="auth_password_placeholder">Contraseña</string>
-    <string name="auth_new_password_placeholder">Contraseña nueva</string>
+    <string name="auth_new_password_placeholder">Nueva contraseña</string>
     <string name="auth_user_name_placeholder">Nombre de usuario</string>
     <string name="auth_add_email_message">Añade una dirección de correo electrónico a tu cuenta para poder ser descubierto por otros usuarios, y ser capaz de restablecer tu contraseña.</string>
-    <string name="auth_add_phone_message">Añade un número telefónico a tu cuenta para que otros usuarios te descubran.</string>
+    <string name="auth_add_phone_message">Añade un número telefónico a tu cuenta para poder ser descubierto por otros usuarios.</string>
     <string name="auth_add_email_phone_message">Añade una dirección de correo electrónico y/o un número telefónico a tu cuenta para poder ser descubierto por otros usuarios.
 
 Además, la dirección de correo electrónico te permitirá restablecer tu contraseña.</string>
@@ -154,38 +154,38 @@ Además, la dirección de correo electrónico te permitirá restablecer tu contr
     <string name="auth_phone_number_placeholder">Número telefónico</string>
     <string name="auth_opt_phone_number_placeholder">Número telefónico (opcional)</string>
     <string name="auth_repeat_password_placeholder">Repite la contraseña</string>
-    <string name="auth_repeat_new_password_placeholder">Confirma tu nueva contraseña</string>
+    <string name="auth_repeat_new_password_placeholder">Confirma tu contraseña nueva</string>
     <string name="auth_invalid_login_param">Nombre de usuario y/o contraseña incorrectos</string>
     <string name="auth_invalid_user_name">Los nombres de usuario solo pueden contener letras, números, puntos, guiones y guiones bajos</string>
-    <string name="auth_invalid_password">Contraseña demasiado corta (min 6)</string>
-    <string name="auth_missing_password">Contraseña ausente</string>
+    <string name="auth_invalid_password">Contraseña demasiado corta (mínimo 6)</string>
+    <string name="auth_missing_password">Falta la contraseña</string>
     <string name="auth_invalid_email">Esto no parece ser una dirección de correo electrónico válida</string>
     <string name="auth_invalid_phone">Esto no parece ser un número telefónico válido</string>
     <string name="auth_email_already_defined">Esta dirección de correo electrónico ya está definida.</string>
     <string name="auth_missing_email">Falta la dirección de correo electrónico</string>
-    <string name="auth_missing_phone">Número telefónico ausente</string>
+    <string name="auth_missing_phone">Falta el número telefónico</string>
     <string name="auth_missing_email_or_phone">Falta la dirección de correo electrónico o el número telefónico</string>
-    <string name="auth_invalid_token">Símbolo no válido</string>
+    <string name="auth_invalid_token">Código inválido</string>
     <string name="auth_password_dont_match">Las contraseñas no coinciden</string>
     <string name="auth_forgot_password">¿Olvidaste tu contraseña?</string>
-    <string name="auth_use_server_options">Utilizar las opciones personalizadas del servidor (avanzado)</string>
-    <string name="auth_email_validation_message">Consulte su correo electrónico para poder continuar con la inscripción</string>
+    <string name="auth_use_server_options">Utilizar opciones personalizadas del servidor (avanzado)</string>
+    <string name="auth_email_validation_message">Por favor consulta tu correo electrónico para continuar con el registro</string>
     <string name="auth_threepid_warning_message">Todavía no es posible registrarse con correo electrónico y número telefónico a la vez, hasta que exista la API. Solo se tendrá en cuenta el número telefónico.
 
 Puedes añadir tu correo electrónico a tu perfil en ajustes.</string>
-    <string name="auth_recaptcha_message">Este servidor quiere verificar que no seas robot</string>
-    <string name="auth_username_in_use">Este nombre de usuario ya está en uso</string>
-    <string name="auth_home_server">Servidor:</string>
+    <string name="auth_recaptcha_message">Este Servidor Doméstico quiere asegurarse de que no eres un robot</string>
+    <string name="auth_username_in_use">Nombre de usuario en uso</string>
+    <string name="auth_home_server">Servidor Doméstico:</string>
     <string name="auth_identity_server">Servidor de Identidad:</string>
     <string name="auth_reset_password_next_step_button">He verificado mi dirección de correo electrónico</string>
     <string name="auth_reset_password_message">Para restablecer tu contraseña, ingresa la dirección de correo electrónico vinculada a tu cuenta:</string>
     <string name="auth_reset_password_missing_email">Debes ingresar la dirección de correo electrónico vinculada a tu cuenta.</string>
     <string name="auth_reset_password_missing_password">Debes ingresar una nueva contraseña.</string>
-    <string name="auth_reset_password_email_validation_message">Se envió un correo electrónico a %s. Una vez que sigas el enlace que contiene, haz clic debajo.</string>
+    <string name="auth_reset_password_email_validation_message">Se envió un correo electrónico a %s. Una vez que hayas seguido el enlace que contiene, haz clic a continuación.</string>
     <string name="auth_reset_password_error_unauthorized">No se pudo verificar la dirección de correo electrónico: asegúrate de hacer clic en el enlace del correo electrónico</string>
     <string name="auth_reset_password_success_message">Tu contraseña fue restablecida.
 
-Has cerrado sesión en todos tus dispositivos y ya no recibirás notificaciones push. Para volver a habilitar las notificaciones, vuelve a iniciar sesión en cada dispositivo.</string>
+Se ha cerrado sesión en todos tus dispositivos y ya no recibirás notificaciones push. Para volver a habilitar las notificaciones, vuelve a iniciar sesión en cada dispositivo.</string>
 
     <!-- Login Screen -->
     <string name="login_error_must_start_http">La URL debe comenzar con http[s]://</string>
@@ -197,12 +197,12 @@ Has cerrado sesión en todos tus dispositivos y ya no recibirás notificaciones 
     <string name="login_error_invalid_home_server">Ingresa una URL válida</string>
 
     <string name="login_error_forbidden">Nombre de usuario/contraseña inválidos</string>
-    <string name="login_error_unknown_token">El testimonio de acceso escogido no fue reconocido</string>
+    <string name="login_error_unknown_token">No se reconoce el código de acceso especificado</string>
     <string name="login_error_bad_json">JSON malformado</string>
     <string name="login_error_not_json">No contenía JSON válido</string>
     <string name="login_error_limit_exceeded">Demasiadas peticiones enviadas</string>
     <string name="login_error_user_in_use">Este nombre de usuario ya está reservado</string>
-    <string name="login_error_login_email_not_yet">El enlace del correo electrónico que aún no se ha hecho clic</string>
+    <string name="login_error_login_email_not_yet">El enlace del correo electrónico que todavía no se ha hecho clic</string>
 
     <!-- crypto warnings -->
     <string name="e2e_need_log_in_again">Necesitas entrar de nuevo para generar claves de cifrado de extremo-a-extremo nuevas de este dispositivo y enviar la clave pública al servidor.
@@ -690,7 +690,7 @@ Advertencia: este archivo puede ser eliminado si la aplicación se desinstala.</
     <string name="encryption_information_unblock">Desprohibir</string>
 
     <string name="encryption_information_verify_device">Verificar dispositivo</string>
-    <string name="encryption_information_verify_device_warning">Para verificar que este dispositivo es confiable, por favor contacte a su dueño por otro medio (ej. cara a cara o por teléfono) y verifique que la clave para este dispositivo que ve en sus Ajustes de Usuario coincide con la clave debajo:</string>
+    <string name="encryption_information_verify_device_warning">Para verificar que este dispositivo es confiable, por favor contacta a su dueño por algún otro medio (ej. cara a cara o por teléfono) y pregúntale si la clave que ve en sus Ajustes de Usuario para este dispositivo coincide con la clave debajo:</string>
     <string name="encryption_information_verify_device_warning2">Si coinciden, seleccione el botón verificar inferior. 
 Si no es así, alguien está interceptando este dispositivo y debería agregarlo a la lista negra.
 En el futuro, este proceso de verificación será mas sofisticado.</string>
@@ -819,14 +819,14 @@ Lo puedes hacer ahora o luego desde los ajustes de la aplicación.</string>
 
     <string name="encrypted_message">Mensaje cifrado</string>
 
-<string name="title_activity_group_details">Detalles de la comunidad</string>
+<string name="title_activity_group_details">Detalles de comunidad</string>
 
     <string name="loading">Cargando...</string>
 
     <string name="action_exit">Salir</string>
     <string name="bottom_action_groups">Comunidades</string>
 
-    <string name="home_filter_placeholder_groups">Buscar en comunidades</string>
+    <string name="home_filter_placeholder_groups">Buscar comunidades</string>
 
     <string name="groups_invite_header">Invitar</string>
     <string name="groups_header">Comunidades</string>
@@ -885,7 +885,7 @@ Lo puedes hacer ahora o luego desde los ajustes de la aplicación.</string>
     <string name="reason_colon">Razón: %1$s</string>
     <string name="group_no_long_description">El administrador de la comunidad no ha redactado una descripción larga para esta comunidad.</string>
 
-    <string name="send_bug_report_rage_shake">Agitar con rabia para informar de un error</string>
+    <string name="send_bug_report_rage_shake">Agitar con rabia para reportar un error</string>
 
     <string name="actions">Acciones</string>
     <string name="list_members">Lista de miembros</string>
@@ -999,14 +999,14 @@ La visibilidad de mensajes en Matrix es similar a la del correo electrónico. Qu
 
     <string name="widget_integration_missing_parameter">Falta un parámetro requerido.</string>
     <string name="e2e_re_request_encryption_key_dialog_title">Solicitud enviada</string>
-    <string name="speak">Hablar</string>
+    <string name="speak">Conversar</string>
     <string name="e2e_re_request_encryption_key_dialog_content">"Por favor,  inicie Riot en otro dispositivo que pueda descifrar el mensaje para que pueda enviar las claves a este dispositivo."</string>
 
     <string name="dialog_title_third_party_licences">Licencias de terceros</string>
 
-    <string name="clear">Limpiar</string>
-    <string name="go_on_with">seguir con…</string>
-    <string name="error_no_external_application_found">Lo sentimos, no se encontró una aplicación externa para completar esta acción.</string>
+    <string name="clear">Borrar</string>
+    <string name="go_on_with">continuar con…</string>
+    <string name="error_no_external_application_found">Lo sentimos, no se encontró ninguna aplicación externa para completar esta acción.</string>
 
     <string name="e2e_re_request_encryption_key"><u>Volver a solicitar claves de cifrado</u> de sus otros dispositivos.</string>
 
@@ -1019,7 +1019,7 @@ La visibilidad de mensajes en Matrix es similar a la del correo electrónico. Qu
     <string name="settings_opt_in_of_analytics_prompt">Por favor, habilita las analíticas para ayudarnos a mejorar Riot.</string>
     <string name="lock_screen_hint">Escribe aquí…</string>
 
-    <string name="send_bug_report_description_in_english">Si es posible, escribe la descripción en inglés.</string>
+    <string name="send_bug_report_description_in_english">Si es posible, por favor escribe la descripción en inglés.</string>
     <string name="room_participants_action_unignore_prompt">¿Mostrar todos los mensajes de este usuario?
 
 Ten en cuenta que esta acción reiniciará la aplicación y puede tardar algo de tiempo.</string>
@@ -1051,7 +1051,7 @@ Ten en cuenta que esta acción reiniciará la aplicación y puede tardar algo de
 <string name="command_description_deop_user">Degrada al usuario con la ID dada</string>
     <string name="system_alerts_header">Alertas de Sistema</string>
 
-    <string name="missing_permissions_error">Esta acción no es posible debido a que faltan permisos.</string>
+    <string name="missing_permissions_error">Debido a que faltan permisos, esta acción no es posible.</string>
     <plurals name="format_time_s">
 	<item quantity="one">1s</item>
 	<item quantity="other">%ds</item>
