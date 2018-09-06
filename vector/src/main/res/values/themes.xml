@@ -186,7 +186,7 @@
         <!-- icon colors -->
         <item name="default_icon_tint_color">@color/vector_green_color</item>
         <item name="settings_icon_tint_color">@android:color/white</item>
-        <item name="icon_tint_on_light_action_bar_color">@android:color/white</item>>
+        <item name="icon_tint_on_light_action_bar_color">@android:color/white</item>
         <item name="icon_tint_on_dark_action_bar_color">@android:color/white</item>
 
         <!-- theses colours are requested a background cannot be set by an ?att on android < 5 -->
