@@ -20,6 +20,7 @@ package im.vector.adapters;
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.os.Handler;
+import android.support.annotation.Nullable;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
@@ -36,7 +37,8 @@ import org.matrix.androidsdk.MXDataHandler;
 import org.matrix.androidsdk.MXSession;
 import org.matrix.androidsdk.data.Room;
 import org.matrix.androidsdk.db.MXMediasCache;
-import org.matrix.androidsdk.rest.callback.SimpleApiCallback;
+import org.matrix.androidsdk.rest.callback.ApiCallback;
+import org.matrix.androidsdk.rest.model.MatrixError;
 import org.matrix.androidsdk.rest.model.PowerLevels;
 import org.matrix.androidsdk.rest.model.RoomMember;
 import org.matrix.androidsdk.rest.model.User;
@@ -105,8 +107,9 @@ public class VectorRoomDetailsMembersAdapter extends BaseExpandableListAdapter {
          *
          * @param aSearchCountResult the number of matched members
          * @param aIsSearchPerformed true if the search has been performed, false otherwise
+         * @param errorMessage       an error message or null if no error occurred
          */
-        void onSearchEnd(final int aSearchCountResult, final boolean aIsSearchPerformed);
+        void onSearchEnd(int aSearchCountResult, boolean aIsSearchPerformed, @Nullable String errorMessage);
     }
 
     private final String LOG_TAG = VectorRoomDetailsMembersAdapter.class.getSimpleName();
@@ -211,7 +214,6 @@ public class VectorRoomDetailsMembersAdapter extends BaseExpandableListAdapter {
      * @param searchListener   the search listener
      * @param aIsRefreshForced set to tru to force the refresh
      */
-    @SuppressLint("LongLogTag")
     public void setSearchedPattern(String aPattern, final OnRoomMembersSearchListener searchListener, boolean aIsRefreshForced) {
         if (TextUtils.isEmpty(aPattern)) {
             // refresh list members without any pattern filter (nominal display)
@@ -226,7 +228,7 @@ public class VectorRoomDetailsMembersAdapter extends BaseExpandableListAdapter {
                 // search pattern is identical, notify listener and exit
                 if (null != searchListener) {
                     int searchItemsCount = getItemsCount();
-                    searchListener.onSearchEnd(searchItemsCount, false/*search not updated*/);
+                    searchListener.onSearchEnd(searchItemsCount, false/*search not updated*/, null);
                 }
             }
         }
@@ -320,236 +322,274 @@ public class VectorRoomDetailsMembersAdapter extends BaseExpandableListAdapter {
                 final List<ParticipantAdapterItem> invitedMembers = new ArrayList<>();
 
                 final Collection<RoomMember> activeMembers = new ArrayList<>();
+                final String[] errorMessage = new String[1];
+                final CountDownLatch latch = new CountDownLatch(1);
 
-                CountDownLatch latch = new CountDownLatch(1);
-
-                mRoom.getActiveMembersAsync(new SimpleApiCallback<List<RoomMember>>() {
+                mRoom.getActiveMembersAsync(new ApiCallback<List<RoomMember>>() {
                     @Override
                     public void onSuccess(List<RoomMember> members) {
                         activeMembers.addAll(members);
+                        latch.countDown();
+                    }
+
+                    @Override
+                    public void onNetworkError(Exception e) {
+                        errorMessage[0] = e.getLocalizedMessage();
+                        latch.countDown();
+                    }
+
+                    @Override
+                    public void onMatrixError(MatrixError e) {
+                        errorMessage[0] = e.getLocalizedMessage();
+                        latch.countDown();
+                    }
+
+                    @Override
+                    public void onUnexpectedError(Exception e) {
+                        errorMessage[0] = e.getLocalizedMessage();
+                        latch.countDown();
                     }
                 });
 
                 try {
                     latch.await(30, TimeUnit.SECONDS);
                 } catch (InterruptedException e) {
+                    Log.e(LOG_TAG, "updateRoomMembersDataModel, latch interrupted", e);
+                    errorMessage[0] = mContext.getString(R.string.unknown_error);
                     e.printStackTrace();
                 }
 
-                String myUserId = mSession.getMyUserId();
-                final PowerLevels powerLevels = mRoom.getState().getPowerLevels();
+                // check that members are here
+                if (errorMessage[0] == null) {
+                    String myUserId = mSession.getMyUserId();
+                    final PowerLevels powerLevels = mRoom.getState().getPowerLevels();
 
-                // search loop to extract the following members: current user, invited, administrator and others
-                for (RoomMember member : activeMembers) {
-                    participantItem = new ParticipantAdapterItem(member);
+                    // search loop to extract the following members: current user, invited, administrator and others
+                    for (RoomMember member : activeMembers) {
+                        participantItem = new ParticipantAdapterItem(member);
 
-                    // if search is enabled, just skipp the member if pattern does not match
-                    if (isSearchEnabled && (!participantItem.contains(mSearchPattern))) {
-                        continue;
-                    }
+                        // if search is enabled, just skipp the member if pattern does not match
+                        if (isSearchEnabled && (!participantItem.contains(mSearchPattern))) {
+                            continue;
+                        }
 
-                    // oneself member ("You") is displayed on first raw
-                    if (member.getUserId().equals(myUserId)) {
-                        presentMembersList.add(participantItem);
-                    } else {
-                        if (RoomMember.MEMBERSHIP_INVITE.equals(member.membership)) {
-                            // invited members
-                            invitedMembers.add(participantItem);
+                        // oneself member ("You") is displayed on first raw
+                        if (member.getUserId().equals(myUserId)) {
+                            presentMembersList.add(participantItem);
                         } else {
-                            // the other members..
-                            actualParticipants.add(participantItem);
+                            if (RoomMember.MEMBERSHIP_INVITE.equals(member.membership)) {
+                                // invited members
+                                invitedMembers.add(participantItem);
+                            } else {
+                                // the other members..
+                                actualParticipants.add(participantItem);
+                            }
+                        }
+
+                        if (!TextUtils.isEmpty(participantItem.mDisplayName)) {
+                            displayNamesList.add(participantItem.mDisplayName);
                         }
                     }
 
-                    if (!TextUtils.isEmpty(participantItem.mDisplayName)) {
-                        displayNamesList.add(participantItem.mDisplayName);
-                    }
-                }
+                    // add 3rd party invite
+                    Collection<RoomThirdPartyInvite> thirdPartyInvites = mRoom.getState().thirdPartyInvites();
 
-                // add 3rd party invite
-                Collection<RoomThirdPartyInvite> thirdPartyInvites = mRoom.getState().thirdPartyInvites();
+                    for (RoomThirdPartyInvite invite : thirdPartyInvites) {
+                        // If the home server has converted the 3pid invite into a room member, do not show it
+                        if (null == mRoom.getState().memberWithThirdPartyInviteToken(invite.token)) {
+                            ParticipantAdapterItem participant = new ParticipantAdapterItem(invite.display_name, "", null, true);
 
-                for (RoomThirdPartyInvite invite : thirdPartyInvites) {
-                    // If the home server has converted the 3pid invite into a room member, do not show it
-                    if (null == mRoom.getState().memberWithThirdPartyInviteToken(invite.token)) {
-                        ParticipantAdapterItem participant = new ParticipantAdapterItem(invite.display_name, "", null, true);
-
-                        if ((!isSearchEnabled) || participant.contains(mSearchPattern)) {
-                            invitedMembers.add(participant);
+                            if ((!isSearchEnabled) || participant.contains(mSearchPattern)) {
+                                invitedMembers.add(participant);
+                            }
                         }
                     }
-                }
 
-                final MXDataHandler fDataHandler = mSession.getDataHandler();
+                    final MXDataHandler fDataHandler = mSession.getDataHandler();
 
-                // Comparator to order members alphabetically
-                final Comparator<ParticipantAdapterItem> comparator = new Comparator<ParticipantAdapterItem>() {
-                    private final Map<String, User> usersMap = new HashMap<>();
+                    // Comparator to order members alphabetically
+                    final Comparator<ParticipantAdapterItem> comparator = new Comparator<ParticipantAdapterItem>() {
+                        private final Map<String, User> usersMap = new HashMap<>();
 
-                    /**
-                     * Get an user snapshot from an user id.
-                     * @param userId the user id to find out
-                     * @return teh user if it exists
-                     */
-                    private User getUser(String userId) {
-                        User user = null;
+                        /**
+                         * Get an user snapshot from an user id.
+                         * @param userId the user id to find out
+                         * @return teh user if it exists
+                         */
+                        private User getUser(String userId) {
+                            User user = null;
 
-                        if (null != userId) {
-                            user = usersMap.get(userId);
+                            if (null != userId) {
+                                user = usersMap.get(userId);
 
-                            if (null == user) {
-                                user = fDataHandler.getUser(userId);
+                                if (null == user) {
+                                    user = fDataHandler.getUser(userId);
 
-                                if (null != user) {
-                                    // create a snapshot to avoid error while sorting the list
-                                    // some exceptions could be triggered because of updates.
-                                    user = user.deepCopy();
-                                    usersMap.put(userId, user);
+                                    if (null != user) {
+                                        // create a snapshot to avoid error while sorting the list
+                                        // some exceptions could be triggered because of updates.
+                                        user = user.deepCopy();
+                                        usersMap.put(userId, user);
+                                    }
                                 }
                             }
+
+                            return user;
                         }
 
-                        return user;
-                    }
+                        @Override
+                        public int compare(ParticipantAdapterItem part1, ParticipantAdapterItem part2) {
+                            User userA = getUser(part1.mUserId);
+                            User userB = getUser(part2.mUserId);
 
-                    @Override
-                    public int compare(ParticipantAdapterItem part1, ParticipantAdapterItem part2) {
-                        User userA = getUser(part1.mUserId);
-                        User userB = getUser(part2.mUserId);
+                            String userADisplayName = part1.getComparisonDisplayName();
+                            String userBDisplayName = part2.getComparisonDisplayName();
 
-                        String userADisplayName = part1.getComparisonDisplayName();
-                        String userBDisplayName = part2.getComparisonDisplayName();
+                            boolean isUserA_Active = false;
+                            boolean isUserB_Active = false;
 
-                        boolean isUserA_Active = false;
-                        boolean isUserB_Active = false;
-
-                        if ((null != userA) && (null != userA.currently_active)) {
-                            isUserA_Active = userA.currently_active;
-                        }
-
-                        if ((null != userB) && (null != userB.currently_active)) {
-                            isUserB_Active = userB.currently_active;
-                        }
-
-                        int powerLevelA = 0;
-                        int powerLevelB = 0;
-
-                        if (null != powerLevels) {
-                            if ((null != userA) && (null != userA.user_id)) {
-                                powerLevelA = powerLevels.getUserPowerLevel(userA.user_id);
+                            if ((null != userA) && (null != userA.currently_active)) {
+                                isUserA_Active = userA.currently_active;
                             }
 
-                            if ((null != userB) && (null != userB.user_id)) {
-                                powerLevelB = powerLevels.getUserPowerLevel(userB.user_id);
+                            if ((null != userB) && (null != userB.currently_active)) {
+                                isUserB_Active = userB.currently_active;
                             }
-                        }
 
-                        if ((null == userA) && (null == userB)) {
-                            return alphaComparator(userADisplayName, userBDisplayName);
-                        } else if ((null != userA) && (null == userB)) {
-                            return +1;
-                        } else if ((null == userA) && (null != userB)) {
-                            return -1;
-                        } else if (isUserA_Active && isUserB_Active) {
-                            if (powerLevelA == powerLevelB) {
+                            int powerLevelA = 0;
+                            int powerLevelB = 0;
+
+                            if (null != powerLevels) {
+                                if ((null != userA) && (null != userA.user_id)) {
+                                    powerLevelA = powerLevels.getUserPowerLevel(userA.user_id);
+                                }
+
+                                if ((null != userB) && (null != userB.user_id)) {
+                                    powerLevelB = powerLevels.getUserPowerLevel(userB.user_id);
+                                }
+                            }
+
+                            if ((null == userA) && (null == userB)) {
                                 return alphaComparator(userADisplayName, userBDisplayName);
-                            } else {
-                                return (powerLevelB - powerLevelA) > 0 ? +1 : -1;
+                            } else if ((null != userA) && (null == userB)) {
+                                return +1;
+                            } else if ((null == userA) && (null != userB)) {
+                                return -1;
+                            } else if (isUserA_Active && isUserB_Active) {
+                                if (powerLevelA == powerLevelB) {
+                                    return alphaComparator(userADisplayName, userBDisplayName);
+                                } else {
+                                    return (powerLevelB - powerLevelA) > 0 ? +1 : -1;
+                                }
                             }
+
+                            if (isUserA_Active && !isUserB_Active) {
+                                return -1;
+                            }
+                            if (!isUserA_Active && isUserB_Active) {
+                                return +1;
+                            }
+
+                            // Finally, compare the timestamps
+                            long lastActiveAgoA = (null != userA) ? userA.getAbsoluteLastActiveAgo() : 0;
+                            long lastActiveAgoB = (null != userB) ? userB.getAbsoluteLastActiveAgo() : 0;
+
+                            long diff = lastActiveAgoA - lastActiveAgoB;
+
+                            if (diff == 0) {
+                                return alphaComparator(userADisplayName, userBDisplayName);
+                            }
+
+                            // if only one member has a lastActiveAgo, prefer it
+                            if (0 == lastActiveAgoA) {
+                                return +1;
+                            } else if (0 == lastActiveAgoB) {
+                                return -1;
+                            }
+
+                            return (diff > 0) ? +1 : -1;
+                        }
+                    };
+
+                    // create "members present in the room" list
+                    try {
+                        Collections.sort(actualParticipants, comparator);
+                    } catch (Exception e) {
+                        Log.e(LOG_TAG, "## updateRoomMembersDataModel failed while sorting " + e.getMessage(), e);
+
+                        if (TextUtils.equals(fPattern, mSearchPattern)) {
+
+                            // most of the sort exception are triggered with
+                            //  java.lang.IllegalArgumentException: Comparison method violates its general contract!
+                            // it is triggered because the presences are updated while sorting.
+                            uiHandler.post(new Runnable() {
+                                @Override
+                                public void run() {
+                                    updateRoomMembersDataModel(aSearchListener);
+                                }
+                            });
                         }
 
-                        if (isUserA_Active && !isUserB_Active) {
-                            return -1;
-                        }
-                        if (!isUserA_Active && isUserB_Active) {
-                            return +1;
-                        }
-
-                        // Finally, compare the timestamps
-                        long lastActiveAgoA = (null != userA) ? userA.getAbsoluteLastActiveAgo() : 0;
-                        long lastActiveAgoB = (null != userB) ? userB.getAbsoluteLastActiveAgo() : 0;
-
-                        long diff = lastActiveAgoA - lastActiveAgoB;
-
-                        if (diff == 0) {
-                            return alphaComparator(userADisplayName, userBDisplayName);
-                        }
-
-                        // if only one member has a lastActiveAgo, prefer it
-                        if (0 == lastActiveAgoA) {
-                            return +1;
-                        } else if (0 == lastActiveAgoB) {
-                            return -1;
-                        }
-
-                        return (diff > 0) ? +1 : -1;
+                        return;
                     }
-                };
 
-                // create "members present in the room" list
-                try {
-                    Collections.sort(actualParticipants, comparator);
-                } catch (Exception e) {
-                    Log.e(LOG_TAG, "## updateRoomMembersDataModel failed while sorting " + e.getMessage(), e);
+                    presentMembersList.addAll(actualParticipants);
 
-                    if (TextUtils.equals(fPattern, mSearchPattern)) {
+                    uiHandler.post(new Runnable() {
+                        @Override
+                        public void run() {
+                            // test if the pattern has been updated while searching the items.
+                            if (TextUtils.equals(mSearchPattern, fPattern)) {
+                                mDisplayNamesList = displayNamesList;
+                                mRoomMembersListByGroupPosition = roomMembersListByGroupPosition;
+                                mGroupIndexPresentMembers = -1;
+                                mGroupIndexPresentMembers = -1;
 
-                        // most of the sort exception are triggered with
-                        //  java.lang.IllegalArgumentException: Comparison method violates its general contract!
-                        // it is triggered because the presences are updated while sorting.
-                        uiHandler.post(new Runnable() {
-                            @Override
-                            public void run() {
-                                updateRoomMembersDataModel(aSearchListener);
+                                int groupIndex = 0;
+
+                                // first group: members present in the room
+                                if (0 != presentMembersList.size()) {
+                                    roomMembersListByGroupPosition.add(presentMembersList);
+                                    mGroupIndexPresentMembers = groupIndex;
+                                    groupIndex++;
+                                }
+
+                                // second group: invited members only
+                                if (0 != invitedMembers.size()) {
+                                    Collections.sort(invitedMembers, comparator);
+                                    roomMembersListByGroupPosition.add(invitedMembers);
+                                    mGroupIndexInvitedMembers = groupIndex;
+                                }
+
+                                // notify end of search if listener is provided
+                                if (null != aSearchListener) {
+                                    try {
+                                        aSearchListener.onSearchEnd(getItemsCount(), isSearchEnabled, null);
+                                    } catch (Exception e) {
+                                        Log.e(LOG_TAG, "## updateRoomMembersDataModel() : onSearchEnd fails " + e.getMessage(), e);
+                                    }
+                                }
+
+                                // force UI rendering update
+                                notifyDataSetChanged();
                             }
-                        });
-                    }
-
-                    return;
-                }
-
-                presentMembersList.addAll(actualParticipants);
-
-                uiHandler.post(new Runnable() {
-                    @Override
-                    public void run() {
-                        // test if the pattern has been updated while searching the items.
-                        if (TextUtils.equals(mSearchPattern, fPattern)) {
-                            mDisplayNamesList = displayNamesList;
-                            mRoomMembersListByGroupPosition = roomMembersListByGroupPosition;
-                            mGroupIndexPresentMembers = -1;
-                            mGroupIndexPresentMembers = -1;
-
-                            int groupIndex = 0;
-
-                            // first group: members present in the room
-                            if (0 != presentMembersList.size()) {
-                                roomMembersListByGroupPosition.add(presentMembersList);
-                                mGroupIndexPresentMembers = groupIndex;
-                                groupIndex++;
-                            }
-
-                            // second group: invited members only
-                            if (0 != invitedMembers.size()) {
-                                Collections.sort(invitedMembers, comparator);
-                                roomMembersListByGroupPosition.add(invitedMembers);
-                                mGroupIndexInvitedMembers = groupIndex;
-                            }
-
-                            // notify end of search if listener is provided
+                        }
+                    });
+                } else {
+                    uiHandler.post(new Runnable() {
+                        @Override
+                        public void run() {
+                            // Show an error
                             if (null != aSearchListener) {
                                 try {
-                                    aSearchListener.onSearchEnd(getItemsCount(), isSearchEnabled);
+                                    aSearchListener.onSearchEnd(getItemsCount(), isSearchEnabled, errorMessage[0]);
                                 } catch (Exception e) {
                                     Log.e(LOG_TAG, "## updateRoomMembersDataModel() : onSearchEnd fails " + e.getMessage(), e);
                                 }
                             }
-
-                            // force UI rendering update
-                            notifyDataSetChanged();
                         }
-                    }
-                });
+                    });
+                }
             }
         });
 

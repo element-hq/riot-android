@@ -1069,4 +1069,7 @@
     <string name="settings_lazy_loading_description">Increase performance by only loading room members on first view</string>
     <string name="error_lazy_loading_not_supported_by_home_server">Your homeserver does not support lazy loading of room members yet. Try later.</string>
 
+    <!-- Other errors -->
+    <string name="unknown_error">Sorry, an error occurred</string>
+
 </resources>
