@@ -25,7 +25,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 
-import org.matrix.androidsdk.adapters.AbstractMessagesAdapter;
 import org.matrix.androidsdk.adapters.MessageRow;
 import org.matrix.androidsdk.rest.model.Event;
 import org.matrix.androidsdk.rest.model.message.FileMessage;
@@ -50,20 +49,12 @@ public class VectorSearchRoomsFilesListFragment extends VectorSearchMessagesList
      */
     public static VectorSearchRoomsFilesListFragment newInstance(String matrixId, String roomId, int layoutResId) {
         VectorSearchRoomsFilesListFragment frag = new VectorSearchRoomsFilesListFragment();
-        Bundle args = new Bundle();
-        args.putInt(ARG_LAYOUT_ID, layoutResId);
-        args.putString(ARG_MATRIX_ID, matrixId);
-
-        if (null != roomId) {
-            args.putString(ARG_ROOM_ID, roomId);
-        }
-
-        frag.setArguments(args);
+        frag.setArguments(getArguments(matrixId, roomId, layoutResId));
         return frag;
     }
 
     @Override
-    public AbstractMessagesAdapter createMessagesAdapter() {
+    public VectorMessagesAdapter createMessagesAdapter() {
         mIsMediaSearch = true;
         return new VectorSearchFilesListAdapter(mSession, getActivity(), (null == mRoomId), getMXMediasCache());
     }
@@ -78,11 +69,9 @@ public class VectorSearchRoomsFilesListFragment extends VectorSearchMessagesList
                 MessageRow row = mAdapter.getItem(position);
                 Event event = row.getEvent();
 
-                VectorMessagesAdapter vectorMessagesAdapter = (VectorMessagesAdapter) mAdapter;
-
-                if (vectorMessagesAdapter.isInSelectionMode()) {
+                if (mAdapter.isInSelectionMode()) {
                     // cancel the selection mode.
-                    vectorMessagesAdapter.onEventTap(null);
+                    mAdapter.onEventTap(null);
                     return;
                 }
 

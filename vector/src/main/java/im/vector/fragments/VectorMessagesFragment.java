@@ -1,5 +1,6 @@
 /*
  * Copyright 2015 OpenMarket Ltd
+ * Copyright 2018 New Vector Ltd
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,16 +17,12 @@
 
 package im.vector.fragments;
 
-import android.os.Bundle;
 import android.text.TextUtils;
-
-import org.matrix.androidsdk.util.Log;
-
 import android.widget.Toast;
 
-import org.matrix.androidsdk.MXSession;
 import org.matrix.androidsdk.fragments.MatrixMessagesFragment;
 import org.matrix.androidsdk.rest.model.MatrixError;
+import org.matrix.androidsdk.util.Log;
 
 import im.vector.Matrix;
 import im.vector.R;
@@ -33,27 +30,9 @@ import im.vector.R;
 public class VectorMessagesFragment extends MatrixMessagesFragment {
     private static final String LOG_TAG = VectorMessagesFragment.class.getSimpleName();
 
-    public static VectorMessagesFragment newInstance(MXSession session, String roomId, MatrixMessagesListener listener) {
+    public static VectorMessagesFragment newInstance(String roomId) {
         VectorMessagesFragment fragment = new VectorMessagesFragment();
-        Bundle args = new Bundle();
-
-
-        if (null == listener) {
-            throw new RuntimeException("Must define a listener.");
-        }
-
-        if (null == session) {
-            throw new RuntimeException("Must define a session.");
-        }
-
-        if (null != roomId) {
-            args.putString(ARG_ROOM_ID, roomId);
-        }
-
-        fragment.setArguments(args);
-        // Note: listener and session will be restored by the SDK if Fragment is recreated
-        fragment.setMatrixMessagesListener(listener);
-        fragment.setMXSession(session);
+        fragment.setArguments(getArgument(roomId));
         return fragment;
     }
 

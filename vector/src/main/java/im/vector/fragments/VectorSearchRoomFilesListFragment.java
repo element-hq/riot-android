@@ -56,15 +56,7 @@ public class VectorSearchRoomFilesListFragment extends VectorSearchRoomsFilesLis
      */
     public static VectorSearchRoomFilesListFragment newInstance(String matrixId, String roomId, int layoutResId) {
         VectorSearchRoomFilesListFragment frag = new VectorSearchRoomFilesListFragment();
-        Bundle args = new Bundle();
-        args.putInt(ARG_LAYOUT_ID, layoutResId);
-        args.putString(ARG_MATRIX_ID, matrixId);
-
-        if (null != roomId) {
-            args.putString(ARG_ROOM_ID, roomId);
-        }
-
-        frag.setArguments(args);
+        frag.setArguments(getArguments(matrixId, roomId, layoutResId));
         return frag;
     }
 
@@ -405,6 +397,4 @@ public class VectorSearchRoomFilesListFragment extends VectorSearchRoomsFilesLis
             }
         });
     }
-
-
 }
