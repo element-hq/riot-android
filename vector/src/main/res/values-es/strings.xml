@@ -361,10 +361,10 @@ Los mensajes cifrados no serán visibles en clientes que aún no implementen el 
     <string name="room_message_placeholder_encrypted">Enviar mensaje cifrado…</string>
     <string name="room_message_placeholder_not_encrypted">Enviar un mensaje (sin cifrar)…</string>
     <string name="room_offline_notification">La conexión al servidor se perdió.</string>
-    <string name="room_unsent_messages_notification">Mensajes no fueron enviados. ¿ %1$s o %2$s ahora?</string>
-    <string name="room_unknown_devices_messages_notification">Mensajes no fueron enviados debido a la precencia de dispositivos no conocidos. ¿ %1$s o %2$s ahora?</string>
-    <string name="room_prompt_resend">Reenviar a todos</string>
-    <string name="room_prompt_cancel">cancelar a todos</string>
+    <string name="room_unsent_messages_notification">Mensajes no se enviaron. ¿%1$s o %2$s ahora?</string>
+    <string name="room_unknown_devices_messages_notification">Mensajes no se enviaron por la presencia de dispositivos no desconocidos. ¿%1$s o %2$s ahora?</string>
+    <string name="room_prompt_resend">Reenviar todos</string>
+    <string name="room_prompt_cancel">cancelar todos</string>
     <string name="room_resend_unsent_messages">Reenviar mensajes no enviados</string>
     <string name="room_delete_unsent_messages">Borrar mensajes no enviados</string>
     <string name="room_message_file_not_found">No se pudo encontrar el archivo</string>
@@ -702,7 +702,11 @@ Lo puedes hacer ahora o luego desde los ajustes de la aplicación.</string>
 
     <!-- unknown devices management -->
     <string name="unknown_devices_alert_title">Esta sala contiene dispositivos desconocidos</string>
-    <string name="unknown_devices_alert_message">Esta sala contiene dispositivos desconocidos que no sa han verificado.\nEsto significa que no hay garantía que los dispositivos pertenecen a las personas que dicen ser.\nReccomendamos que los verifiques todos anted de continuar, Pero si puede reenviar el mensaje si verificación si lo necesitas.\n\nDispositivos desconocidos:</string>
+    <string name="unknown_devices_alert_message">Esta sala contiene dispositivos desconocidos que no se han verificado.
+Esto significa que no se garantiza que los dispositivos pertenezcan a las personas que dicen de que son.
+Recomendamos que los verifiques todos antes de continuar. Sin embargo, puedes reenviar el mensaje sin verificarlos si prefieres.
+
+Dispositivos desconocidos:</string>
 
     <!-- directory activity  -->
     <string name="select_room_directory">Elegir un directorio de salas</string>
