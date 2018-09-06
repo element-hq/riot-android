@@ -312,7 +312,7 @@ public class VectorRoomInviteMembersActivity extends VectorBaseSearchActivity {
         // if a room is defined
         if (null != mRoom) {
             // the room members must not be added again
-            mRoom.getState().getDisplayableMembersAsync(new SimpleApiCallback<List<RoomMember>>() {
+            mRoom.getDisplayableMembersAsync(new SimpleApiCallback<List<RoomMember>>() {
                 @Override
                 public void onSuccess(List<RoomMember> members) {
                     for (RoomMember member : members) {
