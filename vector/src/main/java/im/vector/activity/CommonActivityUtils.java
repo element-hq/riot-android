@@ -57,7 +57,6 @@ import org.matrix.androidsdk.db.MXMediasCache;
 import org.matrix.androidsdk.rest.callback.ApiCallback;
 import org.matrix.androidsdk.rest.callback.SimpleApiCallback;
 import org.matrix.androidsdk.rest.model.MatrixError;
-import org.matrix.androidsdk.rest.model.RoomMember;
 import org.matrix.androidsdk.util.Log;
 
 import java.io.ByteArrayInputStream;
@@ -766,18 +765,7 @@ public class CommonActivityUtils {
     // Room jump methods.
     //==============================================================================================================
 
-    /**
-     * Start a room activity with the dedicated parameters.
-     * Pop the activity to the homeActivity before pushing the new activity.
-     *
-     * @param fromActivity the caller activity.
-     * @param params       the room activity parameters
-     */
-    public static void goToRoomPage(final Activity fromActivity, final Map<String, Object> params) {
-        goToRoomPage(fromActivity, null, params);
-    }
-
-    /**
+   /**
      * Start a room activity with the dedicated parameters.
      * Pop the activity to the homeActivity before pushing the new activity.
      *
@@ -785,11 +773,13 @@ public class CommonActivityUtils {
      * @param session      the session.
      * @param params       the room activity parameters.
      */
-    public static void goToRoomPage(final Activity fromActivity, final MXSession session, final Map<String, Object> params) {
+    public static void goToRoomPage(@NonNull final Activity fromActivity,
+                                    final MXSession session,
+                                    @NonNull final Map<String, Object> params) {
         final MXSession finalSession = (session == null) ? Matrix.getMXSession(fromActivity, (String) params.get(VectorRoomActivity.EXTRA_MATRIX_ID)) : session;
 
         // sanity check
-        if ((null == finalSession) || !finalSession.isAlive()) {
+        if (finalSession == null || !finalSession.isAlive()) {
             return;
         }
 
