@@ -7,7 +7,7 @@
     <string name="black_them">Svart Preg</string>
 
     <string name="notification_sync_in_progress">Samstiller</string>
-    <string name="notification_listen_for_events">Høyr etter hendingar</string>
+    <string name="notification_listen_for_events">Høyrer etter hendingar</string>
     <string name="notification_noisy_notifications">Bråkete varsel</string>
     <string name="notification_silent_notifications">Stille varsel</string>
 
@@ -31,7 +31,7 @@
     <string name="send">Send</string>
     <string name="copy">Kopier</string>
     <string name="resend">Send på nytt</string>
-    <string name="redact">Gjer om</string>
+    <string name="redact">Trekk attende</string>
     <string name="quote">Siter</string>
     <string name="download">Last ned</string>
     <string name="share">Del</string>
@@ -613,7 +613,7 @@ Merk at denne handlinga vil starta æppen på nytt og kan taka litt tid.</string
     <string name="settings_opt_in_of_analytics_prompt">Ver venleg og skru statistikkinnsamling på for å hjelpa oss med å forbetra Riot.</string>
     <string name="settings_opt_in_of_analytics_ok">Ja, eg vil hjelpa til!</string>
 
-    <string name="settings_data_save_mode">Datalagringsmodus</string>
+    <string name="settings_data_save_mode">Datasparingsmodus</string>
 
     <string name="devices_details_dialog_title">Einingsdetaljar</string>
     <string name="devices_details_id_title">ID</string>
