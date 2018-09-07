@@ -529,13 +529,8 @@ public class VectorHomeActivity extends VectorAppCompatActivity implements Searc
         Intent intent = getIntent();
 
         if (null != mAutomaticallyOpenedRoomParams) {
-            runOnUiThread(new Runnable() {
-                @Override
-                public void run() {
-                    CommonActivityUtils.goToRoomPage(VectorHomeActivity.this, mAutomaticallyOpenedRoomParams);
-                    mAutomaticallyOpenedRoomParams = null;
-                }
-            });
+            CommonActivityUtils.goToRoomPage(VectorHomeActivity.this, mSession, mAutomaticallyOpenedRoomParams);
+            mAutomaticallyOpenedRoomParams = null;
         }
 
         // jump to an external link
