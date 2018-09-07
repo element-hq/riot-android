@@ -21,7 +21,6 @@ package im.vector.activity;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.annotation.Nullable;
 import android.text.TextUtils;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -45,6 +44,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import androidx.core.widget.ToastKt;
 import im.vector.R;
 import im.vector.adapters.ParticipantAdapterItem;
 import im.vector.adapters.VectorRoomCreationAdapter;
@@ -295,8 +295,8 @@ public class VectorRoomCreationActivity extends MXCActionBarActivity {
                     // the first entry is self so ignore
                     mParticipants.remove(0);
 
-                    // standalone case : should be accepted ?
                     if (mParticipants.isEmpty()) {
+                        // standalone case : should be accepted ?
                         createRoom(mParticipants);
                     } else if (mParticipants.size() > 1) {
                         createRoom(mParticipants);
@@ -312,7 +312,7 @@ public class VectorRoomCreationActivity extends MXCActionBarActivity {
     }
 
     private void openOrCreateDirectChatRoom(final String otherUserId) {
-        doesDirectChatRoomAlreadyExist(otherUserId, new SimpleApiCallback<String>() {
+        doesDirectChatRoomAlreadyExist(otherUserId, new ApiCallback<String>() {
             @Override
             public void onSuccess(String existingRoomId) {
                 if (null != existingRoomId) {
@@ -326,6 +326,21 @@ public class VectorRoomCreationActivity extends MXCActionBarActivity {
                     mSession.createDirectMessageRoom(otherUserId, mCreateDirectMessageCallBack);
                 }
             }
+
+            @Override
+            public void onNetworkError(Exception e) {
+                ToastKt.toast(VectorRoomCreationActivity.this, e.getLocalizedMessage(), Toast.LENGTH_SHORT);
+            }
+
+            @Override
+            public void onMatrixError(MatrixError e) {
+                ToastKt.toast(VectorRoomCreationActivity.this, e.getLocalizedMessage(), Toast.LENGTH_SHORT);
+            }
+
+            @Override
+            public void onUnexpectedError(Exception e) {
+                ToastKt.toast(VectorRoomCreationActivity.this, e.getLocalizedMessage(), Toast.LENGTH_SHORT);
+            }
         });
     }
 
@@ -337,7 +352,7 @@ public class VectorRoomCreationActivity extends MXCActionBarActivity {
     /**
      * Return the first direct chat room for a given user ID.
      *
-     * @param aUserId user ID to search for
+     * @param aUserId  user ID to search for
      * @param callback callback to return a room ID if search succeed, null otherwise.
      */
     private void doesDirectChatRoomAlreadyExist(final String aUserId, final ApiCallback<String> callback) {
@@ -376,7 +391,7 @@ public class VectorRoomCreationActivity extends MXCActionBarActivity {
 
             // check if the room is already initialized
             if (room != null && room.isReady() && !room.isInvited() && !room.isLeaving()) {
-                room.getActiveMembersAsync(new SimpleApiCallback<List<RoomMember>>() {
+                room.getActiveMembersAsync(new SimpleApiCallback<List<RoomMember>>(callback) {
                     @Override
                     public void onSuccess(List<RoomMember> members) {
                         // test if the member did not leave the room
