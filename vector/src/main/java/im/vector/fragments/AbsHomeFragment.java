@@ -34,6 +34,7 @@ import org.matrix.androidsdk.data.RoomTag;
 import org.matrix.androidsdk.rest.callback.ApiCallback;
 import org.matrix.androidsdk.rest.callback.SimpleApiCallback;
 import org.matrix.androidsdk.rest.model.MatrixError;
+import org.matrix.androidsdk.rest.model.RoomMember;
 import org.matrix.androidsdk.util.BingRulesManager;
 import org.matrix.androidsdk.util.Log;
 
@@ -333,21 +334,45 @@ public abstract class AbsHomeFragment extends VectorBaseFragment implements
         }
 
         if (roomId != null) {
-            final RoomSummary roomSummary = mSession.getDataHandler().getStore().getSummary(roomId);
+            mActivity.showWaitingView();
+            // All members have to be loaded before entering the room
+            room.getMembersAsync(new ApiCallback<List<RoomMember>>() {
+                @Override
+                public void onSuccess(List<RoomMember> info) {
+                    onRequestDone(null);
 
-            if (null != roomSummary) {
-                room.sendReadReceipt();
-            }
+                    final RoomSummary roomSummary = mSession.getDataHandler().getStore().getSummary(roomId);
 
-            // Update badge unread count in case device is offline
-            CommonActivityUtils.specificUpdateBadgeUnreadCount(mSession, getContext());
+                    if (null != roomSummary) {
+                        room.sendReadReceipt();
+                    }
 
-            // Launch corresponding room activity
-            Map<String, Object> params = new HashMap<>();
-            params.put(VectorRoomActivity.EXTRA_MATRIX_ID, mSession.getMyUserId());
-            params.put(VectorRoomActivity.EXTRA_ROOM_ID, roomId);
+                    // Update badge unread count in case device is offline
+                    CommonActivityUtils.specificUpdateBadgeUnreadCount(mSession, getContext());
 
-            CommonActivityUtils.goToRoomPage(getActivity(), mSession, params);
+                    // Launch corresponding room activity
+                    Map<String, Object> params = new HashMap<>();
+                    params.put(VectorRoomActivity.EXTRA_MATRIX_ID, mSession.getMyUserId());
+                    params.put(VectorRoomActivity.EXTRA_ROOM_ID, roomId);
+
+                    CommonActivityUtils.goToRoomPage(getActivity(), mSession, params);
+                }
+
+                @Override
+                public void onNetworkError(Exception e) {
+                    onRequestDone(e.getLocalizedMessage());
+                }
+
+                @Override
+                public void onMatrixError(MatrixError e) {
+                    onRequestDone(e.getLocalizedMessage());
+                }
+
+                @Override
+                public void onUnexpectedError(Exception e) {
+                    onRequestDone(e.getLocalizedMessage());
+                }
+            });
         }
     }
 
