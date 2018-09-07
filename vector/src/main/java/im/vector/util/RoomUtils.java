@@ -551,6 +551,7 @@ public class RoomUtils {
                 item.setIcon(null);
             }
 
+            // TODO LazyLoading, current user may be null
             RoomMember member = room.getMember(session.getMyUserId());
             final boolean isBannedKickedRoom = (null != member) && member.kickedOrBanned();
 

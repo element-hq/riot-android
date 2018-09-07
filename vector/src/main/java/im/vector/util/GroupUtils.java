@@ -146,6 +146,7 @@ public class GroupUtils {
     public static void openGroupRoom(final Activity fromActivity, final MXSession session, final GroupRoom groupRoom, final ApiCallback<Void> callback) {
         Room room = session.getDataHandler().getStore().getRoom(groupRoom.roomId);
 
+        // TODO LazyLoading, current user may be null
         if ((null == room) || (null == room.getMember(session.getMyUserId()))) {
             final RoomPreviewData roomPreviewData = new RoomPreviewData(session, groupRoom.roomId, null, groupRoom.getAlias(), null);
 

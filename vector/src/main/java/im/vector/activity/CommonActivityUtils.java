@@ -721,7 +721,7 @@ public class CommonActivityUtils {
             final Map<String, Object> params = new HashMap<>();
             params.put(VectorRoomActivity.EXTRA_MATRIX_ID, session.getMyUserId());
             params.put(VectorRoomActivity.EXTRA_ROOM_ID, roomId);
-            CommonActivityUtils.goToRoomPage(fromActivity, session, params);
+            goToRoomPage(fromActivity, session, params);
 
             if (null != callback) {
                 callback.onSuccess(null);
@@ -999,7 +999,7 @@ public class CommonActivityUtils {
                                         params.put(VectorRoomActivity.EXTRA_ROOM_ID, summary.getRoomId());
                                         params.put(VectorRoomActivity.EXTRA_ROOM_INTENT, intent);
 
-                                        CommonActivityUtils.goToRoomPage(fromActivity, session, params);
+                                        goToRoomPage(fromActivity, session, params);
                                     }
                                 });
                             }
