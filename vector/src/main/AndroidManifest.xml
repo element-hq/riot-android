@@ -116,7 +116,7 @@
         <activity
             android:name=".activity.LoginActivity"
             android:configChanges="orientation|screenSize"
-            android:theme="@style/LoginAppTheme"
+            android:theme="@style/LoginAppTheme.Light"
             android:windowSoftInputMode="stateHidden|adjustResize">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -148,14 +148,14 @@
             android:name=".activity.VectorHomeActivity"
             android:configChanges="orientation|screenSize"
             android:label="@string/title_activity_home"
-            android:theme="@style/HomeActivityTheme"
+            android:theme="@style/HomeActivityTheme.Light"
             android:windowSoftInputMode="adjustPan" />
         <activity
             android:name=".activity.HistoricalRoomsActivity"
             android:configChanges="orientation|screenSize"
             android:label="@string/title_activity_historical"
             android:parentActivityName=".activity.VectorHomeActivity"
-            android:theme="@style/HomeActivityTheme"
+            android:theme="@style/HomeActivityTheme.Light"
             android:windowSoftInputMode="adjustPan" />
         <activity
             android:name=".activity.VectorRoomActivity"
@@ -238,7 +238,7 @@
         <activity
             android:name=".activity.VectorCallViewActivity"
             android:configChanges="orientation|screenSize"
-            android:theme="@style/CallActivityTheme" />
+            android:theme="@style/CallActivityTheme.Light" />
         <activity
             android:name=".activity.JitsiCallActivity"
             android:configChanges="orientation|screenSize"
@@ -283,7 +283,7 @@
             android:label="Vector searches"
             android:launchMode="singleTop"
             android:parentActivityName=".activity.VectorHomeActivity"
-            android:theme="@style/SearchesAppTheme"
+            android:theme="@style/SearchesAppTheme.Light"
             android:windowSoftInputMode="adjustResize">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
@@ -295,7 +295,7 @@
             android:label="Vector searches"
             android:launchMode="singleTop"
             android:parentActivityName=".activity.VectorRoomDetailsActivity"
-            android:theme="@style/SearchesAppTheme"
+            android:theme="@style/SearchesAppTheme.Light"
             android:windowSoftInputMode="adjustResize">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
@@ -311,7 +311,7 @@
             android:configChanges="orientation|screenSize"
             android:label="@string/title_activity_group_details"
             android:launchMode="singleTop"
-            android:theme="@style/GroupAppTheme"
+            android:theme="@style/GroupAppTheme.Light"
             android:windowSoftInputMode="adjustResize" />
         <activity android:name=".activity.VectorUniversalLinkActivity">
             <intent-filter>
@@ -369,17 +369,17 @@
             android:name=".activity.CountryPickerActivity"
             android:configChanges="orientation|screenSize"
             android:label="@string/settings_select_country"
-            android:theme="@style/CountryPickerTheme" />
+            android:theme="@style/CountryPickerTheme.Light" />
         <activity
             android:name=".activity.LanguagePickerActivity"
             android:configChanges="orientation|screenSize"
             android:label="@string/settings_select_language"
-            android:theme="@style/CountryPickerTheme" />
+            android:theme="@style/CountryPickerTheme.Light" />
         <activity
             android:name=".activity.RoomDirectoryPickerActivity"
             android:configChanges="orientation|screenSize"
             android:label="@string/select_room_directory"
-            android:theme="@style/DirectoryPickerTheme" />
+            android:theme="@style/DirectoryPickerTheme.Light" />
         <activity
             android:name=".activity.PhoneNumberVerificationActivity"
             android:configChanges="orientation|screenSize"
@@ -389,7 +389,7 @@
             android:name=".activity.NotificationPrivacyActivity"
             android:configChanges="orientation|screenSize"
             android:label="@string/settings_notification_privacy"
-            android:theme="@style/CountryPickerTheme" />
+            android:theme="@style/CountryPickerTheme.Light" />
         <activity
             android:name=".activity.VectorWebViewActivity"
             android:theme="@style/AppTheme.NoActionBar.Light" />

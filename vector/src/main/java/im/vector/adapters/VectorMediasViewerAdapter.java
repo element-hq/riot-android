@@ -212,7 +212,7 @@ public class VectorMediasViewerAdapter extends PagerAdapter {
     private void downloadVideo(final View view, final int position, boolean force) {
         final VideoView videoView = view.findViewById(R.id.media_slider_video_view);
         final ImageView thumbView = view.findViewById(R.id.media_slider_video_thumbnail);
-        final PieFractionView pieFractionView = view.findViewById(R.id.media_slider_piechart);
+        final PieFractionView pieFractionView = view.findViewById(R.id.media_slider_pie_view);
         final View downloadFailedView = view.findViewById(R.id.media_download_failed);
 
         final SlidableMediaInfo mediaInfo = mMediasMessagesList.get(position);
@@ -321,7 +321,7 @@ public class VectorMediasViewerAdapter extends PagerAdapter {
      */
     private void downloadHighResImage(final View view, final int position) {
         final WebView webView = view.findViewById(R.id.media_slider_image_webview);
-        final PieFractionView pieFractionView = view.findViewById(R.id.media_slider_piechart);
+        final PieFractionView pieFractionView = view.findViewById(R.id.media_slider_pie_view);
         final View downloadFailedView = view.findViewById(R.id.media_download_failed);
 
         final SlidableMediaInfo imageInfo = mMediasMessagesList.get(position);
@@ -412,7 +412,7 @@ public class VectorMediasViewerAdapter extends PagerAdapter {
         final View view = mLayoutInflater.inflate(R.layout.adapter_vector_medias_viewer, null, false);
 
         // hide the pie chart
-        final PieFractionView pieFractionView = view.findViewById(R.id.media_slider_piechart);
+        final PieFractionView pieFractionView = view.findViewById(R.id.media_slider_pie_view);
         pieFractionView.setVisibility(View.GONE);
 
         view.findViewById(R.id.media_download_failed).setVisibility(View.GONE);
@@ -746,12 +746,6 @@ public class VectorMediasViewerAdapter extends PagerAdapter {
 
         displayVideoThumbnail(view, !videoView.isPlaying());
 
-        videoView.setOnPreparedListener(new MediaPlayer.OnPreparedListener() {
-            @Override
-            public void onPrepared(MediaPlayer mp) {
-                mp.setLooping(true);
-            }
-        });
         videoView.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
             @Override
             public void onCompletion(MediaPlayer mp) {

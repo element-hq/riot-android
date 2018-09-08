@@ -1,6 +1,6 @@
 <resources>
 
-    <!--  ************************  Common items  **************************** -->
+    <!-- ************************ Common items ************************ -->
 
     <!-- toolbar styles-->
     <style name="VectorToolbarStyle" parent="Widget.AppCompat.Toolbar">
@@ -190,7 +190,17 @@
         <item name="android:background">@drawable/vector_background_fab_label_light</item>
     </style>
 
-    <!--  ************************  Light theme  **************************** -->
+    <style name="Group.Styled.ActionBar" parent="@style/Vector.Styled.ActionBar">
+        <item name="android:background">@color/tab_groups</item>
+        <item name="background">@color/tab_groups</item>
+    </style>
+
+    <style name="Vector.TabView.Group" parent="@style/Widget.AppCompat.ActionBar.TabView">
+        <item name="android:background">@drawable/vector_tabbar_background_group_light</item>
+        <item name="background">@drawable/vector_tabbar_background_group_light</item>
+    </style>
+
+    <!-- ************************ Light theme ************************ -->
 
     <!-- Base application theme. -->
     <style name="AppTheme.Base.Light" parent="@style/Theme.Vector.Light">
@@ -274,14 +284,14 @@
     </style>
 
     <!-- home activity -->
-    <style name="HomeActivityTheme" parent="AppTheme.NoActionBar.Light">
+    <style name="HomeActivityTheme.Light" parent="AppTheme.NoActionBar.Light">
         <item name="editTextColor">@android:color/white</item>
         <item name="android:editTextColor">@android:color/white</item>
         <item name="android:textColorHint">?attr/activity_bottom_gradient_color</item>
     </style>
 
     <!-- call activity -->
-    <style name="CallActivityTheme" parent="AppTheme.Light">
+    <style name="CallActivityTheme.Light" parent="AppTheme.Light">
         <item name="android:windowNoTitle">true</item>
         <item name="windowNoTitle">true</item>
         <!-- status bar color -->
@@ -305,7 +315,7 @@
     </style>
 
     <!-- login & registration activities -->
-    <style name="LoginAppTheme" parent="AppTheme.NoActionBar.Light">
+    <style name="LoginAppTheme.Light" parent="AppTheme.NoActionBar.Light">
         <item name="android:editTextStyle">@style/LoginEditTextStyle</item>
         <item name="android:buttonStyle">@style/LoginButtonStyle</item>
         <item name="colorAccent">?attr/editTextColor</item>
@@ -313,16 +323,16 @@
 
     <style name="AppTheme.Dialog.Light" parent="Theme.AppCompat.Light.Dialog.Alert" />
 
-    <style name="CountryPickerTheme" parent="AppTheme.NoActionBar.Light">
+    <style name="CountryPickerTheme.Light" parent="AppTheme.NoActionBar.Light">
         <item name="editTextColor">@android:color/white</item>
         <item name="android:editTextColor">@android:color/white</item>
         <item name="android:textColorHint">?attr/activity_bottom_gradient_color</item>
     </style>
 
-    <style name="DirectoryPickerTheme" parent="AppTheme.NoActionBar.Light" />
+    <style name="DirectoryPickerTheme.Light" parent="AppTheme.NoActionBar.Light" />
 
     <!-- searches activity -->
-    <style name="SearchesAppTheme" parent="AppTheme.Light">
+    <style name="SearchesAppTheme.Light" parent="AppTheme.Light">
         <!-- custom action bar -->
         <item name="android:actionBarStyle">@style/VectorSearches.Styled.ActionBar</item>
         <item name="actionBarStyle">@style/VectorSearches.Styled.ActionBar</item>
@@ -337,7 +347,7 @@
         <item name="actionBarTheme">@style/VectorSearches.ActionBarTheme</item>
     </style>
 
-    <style name="CallAppTheme" parent="AppTheme.NoActionBar.Light">
+    <style name="CallAppTheme.Light" parent="AppTheme.NoActionBar.Light">
         <item name="android:colorBackground">?attr/colorBackgroundFloating</item>
         <item name="android:colorBackgroundCacheHint">@null</item>
 
@@ -362,17 +372,7 @@
         <item name="android:listDivider">@null</item>
     </style>
 
-    <style name="Group.Styled.ActionBar" parent="@style/Vector.Styled.ActionBar">
-        <item name="android:background">@color/tab_groups</item>
-        <item name="background">@color/tab_groups</item>
-    </style>
-
-    <style name="Vector.TabView.Group" parent="@style/Widget.AppCompat.ActionBar.TabView">
-        <item name="android:background">@drawable/vector_tabbar_background_group_light</item>
-        <item name="background">@drawable/vector_tabbar_background_group_light</item>
-    </style>
-
-    <style name="GroupAppTheme" parent="AppTheme.Light">
+    <style name="GroupAppTheme.Light" parent="AppTheme.Light">
         <item name="colorPrimaryDark">@color/tab_groups_secondary</item>
 
         <item name="android:actionBarTabStyle">@style/Vector.TabView.Group</item>
@@ -383,7 +383,7 @@
         <item name="actionBarStyle">@style/Group.Styled.ActionBar</item>
     </style>
 
-    <!--  ************************  Dark theme  **************************** -->
+    <!-- ************************ Dark theme ************************ -->
 
     <style name="AppTheme.Base.Dark" parent="@style/Theme.Vector.Dark">
 
@@ -545,7 +545,7 @@
         <item name="android:listDivider">@null</item>
     </style>
 
-    <!--  ************************  Black theme  **************************** -->
+    <!-- ************************ Black theme ************************ -->
 
     <style name="AppTheme.Base.Black" parent="@style/Theme.Vector.Black">
 

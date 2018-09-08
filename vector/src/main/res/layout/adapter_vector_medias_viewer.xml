@@ -2,12 +2,13 @@
 
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent" >
+    android:layout_height="match_parent">
 
-    <WebView android:id="@+id/media_slider_image_webview"
+    <WebView
+        android:id="@+id/media_slider_image_webview"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="#000"/>
+        android:background="#000" />
 
     <RelativeLayout
         android:id="@+id/media_slider_video_layout"
@@ -15,38 +16,41 @@
         android:layout_height="match_parent"
         android:background="#000">
 
-        <VideoView android:id="@+id/media_slider_video_view"
-            android:layout_gravity="center"
-            android:layout_centerInParent="true"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent" />
-
-        <ImageView android:id="@+id/media_slider_video_thumbnail"
-            android:layout_gravity="center"
-            android:layout_centerInParent="true"
+        <VideoView
+            android:id="@+id/media_slider_video_view"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
+            android:layout_centerInParent="true"
+            android:layout_gravity="center" />
+
+        <ImageView
+            android:id="@+id/media_slider_video_thumbnail"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_centerInParent="true"
+            android:layout_gravity="center"
             android:background="#000" />
 
-        <ImageView android:id="@+id/media_slider_video_play"
-            android:layout_gravity="center"
+        <ImageView
+            android:id="@+id/media_slider_video_play"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
             android:layout_centerInParent="true"
-            android:layout_width="100dp"
-            android:layout_height="100dp"
+            android:layout_gravity="center"
             android:src="@drawable/ic_material_play_circle" />
     </RelativeLayout>
 
-
     <im.vector.view.PieFractionView
-        android:id="@+id/media_slider_piechart"
+        android:id="@+id/media_slider_pie_view"
+        android:layout_width="160dp"
+        android:layout_height="160dp"
         android:layout_centerHorizontal="true"
         android:layout_centerVertical="true"
-        android:layout_width="160dp"
-        android:layout_height="160dp"/>
+        android:alpha="0.4" />
 
     <ImageView
         android:id="@+id/media_download_failed"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:src="@android:drawable/ic_menu_gallery"/>
+        android:src="@android:drawable/ic_menu_gallery" />
 </RelativeLayout>

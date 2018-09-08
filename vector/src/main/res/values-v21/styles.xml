@@ -1,10 +1,8 @@
 <resources>
     <style name="AppTheme.Light" parent="@style/AppTheme.Base.Light">
-        <item name="android:navigationBarColor">?attr/primary_dark_color</item>
     </style>
 
     <style name="AppTheme.NoActionBar.Light" parent="@style/AppTheme.NoActionBar.Base.Light">
-        <item name="android:navigationBarColor">?attr/primary_dark_color</item>
     </style>
 
     <style name="AppTheme.Dark" parent="@style/AppTheme.Base.Dark">
