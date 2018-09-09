@@ -50,7 +50,7 @@
     <string name="ongoing_conference_call_voice">røyst</string>
     <string name="ongoing_conference_call_video">video</string>
     <string name="cannot_start_call">Kan ikkje få i gang samtala, prøv att seinare</string>
-    <string name="missing_permissions_warning">På grunn av manglande tillatingar, kan nokre funksjonar mangla…</string>
+    <string name="missing_permissions_warning">På grunn av vantande tillatingar, kan nokre funksjonar mangla…</string>
     <string name="missing_permissions_to_start_conf_call">Du trengjer tillating til å byda inn for å setja i gang ei gruppesamtale i dette rommet</string>
     <string name="missing_permissions_title_to_start_conf_call">Klarer ikkje å setja i gang samtala</string>
     <string name="device_information">Einingsinfo</string>
@@ -786,7 +786,9 @@ Krypterte meldingar vil ikkje vera synlege hjå klientar som førebels ikkje har
     <string name="encryption_export_export">Hent ut</string>
     <string name="encryption_export_enter_passphrase">Skriv passetning inn</string>
     <string name="encryption_export_confirm_passphrase">Stadfest passetninga</string>
-    <string name="encryption_export_saved_as">E2E-romnyklane vart lagra til \'%s\'</string>
+    <string name="encryption_export_saved_as">E2E-romnyklane vart lagra til \'%s\'
+
+Åtvaring: fila kan verta sletta vis æppen avinstallerast.</string>
 
     <string name="encryption_import_e2e_room_keys">Hent E2E-romnyklar inn</string>
     <string name="encryption_import_room_keys">Hent romnyklar inn</string>
@@ -808,7 +810,7 @@ Krypterte meldingar vil ikkje vera synlege hjå klientar som førebels ikkje har
     <string name="encryption_information_unblock">Fjern frå svartelista</string>
 
     <string name="encryption_information_verify_device">Godkjenn eininga</string>
-    <string name="encryption_information_verify_device_warning">For å godkjenna at denne eininga er til å stola på, ver venleg og snakk med eiaren på ei anna måte (t.d. ansikt til ansikt eller på telefon), og spør dei om nykelen dei ser i Brukarinnstillingane for denne eininga samsvarar med nykelen under:</string>
+    <string name="encryption_information_verify_device_warning">For å godkjenna at denne eininga er til å stola på, ver venleg og snakk med eigaren på ei anna måte (t.d. ansikt til ansikt eller på telefon), og spør han om nykelen han ser i Brukarinnstillingane for denne eininga samsvarar med nykelen under:</string>
     <string name="encryption_information_verify_device_warning2">Viss han samsvarer, klikk godkjennknappen under.
 Viss han ikkje gjer det, tjuvlytter nokon andre på eininga og du bør sannsynlegvis setja ho på svartelista.
 I framtida kjem denne godkjenningsprosessen til å vera betre utvikla.</string>
@@ -995,19 +997,30 @@ Meldingssynlegheit på Matrix liknar på epost. At vi gløymer meldingane dine t
 
     <plurals name="room_details_selected">
 	<item quantity="one">1 valt</item>
-	<item quantity="other">%d valt</item>
+	<item quantity="other">%d valde</item>
 </plurals>
     <plurals name="group_members">
 	<item quantity="one">1 medlem</item>
-	<item quantity="other">%d medlem</item>
+	<item quantity="other">%d medlemer</item>
 </plurals>
 
     <plurals name="group_rooms">
 	<item quantity="one">1 rom</item>
 	<item quantity="other">%d rom</item>
 </plurals>
-    <string name="resource_limit_contact_action">Kontakt administrator</string>
+    <string name="resource_limit_contact_action">Kontakt Administratoren</string>
 
-    <string name="resource_limit_contact_admin">Kontakt din tenesteadministrator</string>
+    <string name="resource_limit_contact_admin">kontakt tenesteadministratoren din</string>
 
-    </resources>
+    <string name="missing_permissions_error">Grunna vantande tillatingar er denne handlinga umogeleg.</string>
+    <string name="resource_limit_exceeded_title">Ressursgrensa er Forbigått</string>
+    <string name="resource_limit_soft_default">Heimtenaren har truffe ei av ressursgrensene sine so <b>nokre brukarar vil ikkje kunna logga inn</b>.</string>
+    <string name="resource_limit_hard_default">Heimtenaren har forbigått ei av ressursgrensene sine.</string>
+
+    <string name="resource_limit_soft_mau"> Heimtenaren har truffe den Månadlege Grensa si for Aktive Brukarar, so <b>nokre brukarar vil ikkje kunna logga inn</b>.</string>
+    <string name="resource_limit_hard_mau">Heimtenaren har truffe den Månadlege Grensa si for Aktive Brukarar.</string>
+
+    <string name="resource_limit_soft_contact">Ver venleg og %s for å heva grensa.</string>
+    <string name="resource_limit_hard_contact">Ver venleg og %s for å halda fram med å bruka tenesten.</string>
+
+</resources>
