@@ -8,7 +8,7 @@ Features:
  -
 
 Improvements:
- -
+ - Minor changes to toolbar style and other UI elements (#2529)
 
 Other changes:
  -

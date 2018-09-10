@@ -28,7 +28,7 @@
             app:contentInsetEnd="0dp"
             app:contentInsetStart="0dp">
 
-            <include layout="@layout/vector_message_action_bar_custo_layout" />
+            <include layout="@layout/vector_message_action_bar_custom_layout" />
 
         </android.support.v7.widget.Toolbar>
 

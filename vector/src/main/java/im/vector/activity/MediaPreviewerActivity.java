@@ -124,7 +124,7 @@ public class MediaPreviewerActivity extends MXCActionBarActivity implements Medi
                 mPreviewerImageView.setVisibility(View.GONE);
                 mPreviewerVideoView.setVisibility(View.VISIBLE);
                 mPreviewerVideoView.setVideoURI(uri);
-                mPreviewerVideoView.seekTo(100);
+                mPreviewerVideoView.seekTo(0);
             } else {
                 mPreviewerImageView.setVisibility(View.VISIBLE);
                 mPreviewerVideoView.setVisibility(View.GONE);

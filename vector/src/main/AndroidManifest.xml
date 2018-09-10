@@ -104,7 +104,7 @@
         android:largeHeap="true"
         android:logo="@drawable/logo"
         android:resizeableActivity="false"
-        android:theme="@style/AppTheme"
+        android:theme="@style/AppTheme.Light"
         tools:replace="allowBackup,label">
 
         <!-- No limit for screen ratio: avoid black strips -->
@@ -116,7 +116,7 @@
         <activity
             android:name=".activity.LoginActivity"
             android:configChanges="orientation|screenSize"
-            android:theme="@style/LoginAppTheme"
+            android:theme="@style/LoginAppTheme.Light"
             android:windowSoftInputMode="stateHidden|adjustResize">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -139,33 +139,33 @@
         <activity
             android:name=".activity.SplashActivity"
             android:configChanges="orientation|screenSize"
-            android:theme="@style/AppTheme.NoActionBar" />
+            android:theme="@style/AppTheme.NoActionBar.Light" />
         <activity
             android:name=".activity.LoggingOutActivity"
             android:configChanges="orientation|screenSize"
-            android:theme="@style/AppTheme.NoActionBar" />
+            android:theme="@style/AppTheme.NoActionBar.Light" />
         <activity
             android:name=".activity.VectorHomeActivity"
             android:configChanges="orientation|screenSize"
             android:label="@string/title_activity_home"
-            android:theme="@style/HomeActivityTheme"
+            android:theme="@style/HomeActivityTheme.Light"
             android:windowSoftInputMode="adjustPan" />
         <activity
             android:name=".activity.HistoricalRoomsActivity"
             android:configChanges="orientation|screenSize"
             android:label="@string/title_activity_historical"
             android:parentActivityName=".activity.VectorHomeActivity"
-            android:theme="@style/HomeActivityTheme"
+            android:theme="@style/HomeActivityTheme.Light"
             android:windowSoftInputMode="adjustPan" />
         <activity
             android:name=".activity.VectorRoomActivity"
             android:configChanges="orientation|screenSize"
             android:label="@string/title_activity_room"
-            android:theme="@style/AppTheme.NoActionBar"
+            android:theme="@style/AppTheme.NoActionBar.Light"
             android:windowSoftInputMode="stateHidden|adjustResize" />
         <activity
             android:name=".activity.DeactivateAccountActivity"
-            android:theme="@style/AppTheme.NoActionBar" />
+            android:theme="@style/AppTheme.NoActionBar.Light" />
         <activity
             android:name=".activity.VectorRoomCreationActivity"
             android:configChanges="orientation|screenSize"
@@ -203,7 +203,7 @@
             android:configChanges="orientation|screenSize"
             android:label="@string/title_activity_member_details"
             android:parentActivityName=".activity.VectorRoomActivity"
-            android:theme="@style/AppTheme.NoActionBar">
+            android:theme="@style/AppTheme.NoActionBar.Light">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="im.vector.activity.VectorRoomActivity" />
@@ -238,7 +238,7 @@
         <activity
             android:name=".activity.VectorCallViewActivity"
             android:configChanges="orientation|screenSize"
-            android:theme="@style/CallActivityTheme" />
+            android:theme="@style/CallActivityTheme.Light" />
         <activity
             android:name=".activity.JitsiCallActivity"
             android:configChanges="orientation|screenSize"
@@ -250,11 +250,11 @@
         <activity
             android:name=".activity.IntegrationManagerActivity"
             android:configChanges="orientation|screenSize"
-            android:theme="@style/AppTheme.NoActionBar" />
+            android:theme="@style/AppTheme.NoActionBar.Light" />
         <activity
             android:name=".activity.StickerPickerActivity"
             android:configChanges="orientation|screenSize"
-            android:theme="@style/AppTheme.NoActionBar" />
+            android:theme="@style/AppTheme.NoActionBar.Light" />
         <activity
             android:name=".activity.VectorMediasPickerActivity"
             android:label="@string/media_picker_both_capture_title"
@@ -283,7 +283,7 @@
             android:label="Vector searches"
             android:launchMode="singleTop"
             android:parentActivityName=".activity.VectorHomeActivity"
-            android:theme="@style/SearchesAppTheme"
+            android:theme="@style/SearchesAppTheme.Light"
             android:windowSoftInputMode="adjustResize">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
@@ -295,7 +295,7 @@
             android:label="Vector searches"
             android:launchMode="singleTop"
             android:parentActivityName=".activity.VectorRoomDetailsActivity"
-            android:theme="@style/SearchesAppTheme"
+            android:theme="@style/SearchesAppTheme.Light"
             android:windowSoftInputMode="adjustResize">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
@@ -311,7 +311,7 @@
             android:configChanges="orientation|screenSize"
             android:label="@string/title_activity_group_details"
             android:launchMode="singleTop"
-            android:theme="@style/GroupAppTheme"
+            android:theme="@style/GroupAppTheme.Light"
             android:windowSoftInputMode="adjustResize" />
         <activity android:name=".activity.VectorUniversalLinkActivity">
             <intent-filter>
@@ -364,40 +364,40 @@
             android:name=".activity.PhoneNumberAdditionActivity"
             android:configChanges="orientation|screenSize"
             android:label="@string/settings_add_phone_number"
-            android:theme="@style/AppTheme.NoActionBar" />
+            android:theme="@style/AppTheme.NoActionBar.Light" />
         <activity
             android:name=".activity.CountryPickerActivity"
             android:configChanges="orientation|screenSize"
             android:label="@string/settings_select_country"
-            android:theme="@style/CountryPickerTheme" />
+            android:theme="@style/CountryPickerTheme.Light" />
         <activity
             android:name=".activity.LanguagePickerActivity"
             android:configChanges="orientation|screenSize"
             android:label="@string/settings_select_language"
-            android:theme="@style/CountryPickerTheme" />
+            android:theme="@style/CountryPickerTheme.Light" />
         <activity
             android:name=".activity.RoomDirectoryPickerActivity"
             android:configChanges="orientation|screenSize"
             android:label="@string/select_room_directory"
-            android:theme="@style/DirectoryPickerTheme" />
+            android:theme="@style/DirectoryPickerTheme.Light" />
         <activity
             android:name=".activity.PhoneNumberVerificationActivity"
             android:configChanges="orientation|screenSize"
             android:label="@string/settings_phone_number_verification"
-            android:theme="@style/AppTheme.NoActionBar" />
+            android:theme="@style/AppTheme.NoActionBar.Light" />
         <activity
             android:name=".activity.NotificationPrivacyActivity"
             android:configChanges="orientation|screenSize"
             android:label="@string/settings_notification_privacy"
-            android:theme="@style/CountryPickerTheme" />
+            android:theme="@style/CountryPickerTheme.Light" />
         <activity
             android:name=".activity.VectorWebViewActivity"
-            android:theme="@style/AppTheme.NoActionBar" />
+            android:theme="@style/AppTheme.NoActionBar.Light" />
 
         <activity
             android:name="im.vector.activity.MediaPreviewerActivity"
             android:configChanges="orientation|screenSize"
-            android:theme="@style/AppTheme.NoActionBar" />
+            android:theme="@style/AppTheme.NoActionBar.Light" />
 
         <!-- broadcast receiver -->
         <receiver

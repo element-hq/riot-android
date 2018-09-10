@@ -11,7 +11,7 @@
         android:label="@string/riot_app_name"
         android:largeHeap="true"
         android:logo="@drawable/logo"
-        android:theme="@style/AppTheme"
+        android:theme="@style/AppTheme.Light"
         tools:replace="allowBackup,label">
 
 

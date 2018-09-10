@@ -567,9 +567,9 @@ class VectorMessagesAdapterHelper {
         subViewLinearLayout.gravity = Gravity.LEFT | Gravity.CENTER_VERTICAL;
 
         if (isMergedView) {
-            bodyLayout.setMargins(avatarLayout.width, bodyLayout.topMargin, 4, bodyLayout.bottomMargin);
+            bodyLayout.setMargins(avatarLayout.width, bodyLayout.topMargin, bodyLayout.rightMargin, bodyLayout.bottomMargin);
         } else {
-            bodyLayout.setMargins(4, bodyLayout.topMargin, 4, bodyLayout.bottomMargin);
+            bodyLayout.setMargins(0, bodyLayout.topMargin, bodyLayout.rightMargin, bodyLayout.bottomMargin);
         }
         subView.setLayoutParams(bodyLayout);
 
