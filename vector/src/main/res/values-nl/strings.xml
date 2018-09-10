@@ -1070,8 +1070,8 @@ Let op: deze actie zal de app opnieuw opstarten, en kan enige tijd kosten.</stri
 </plurals>
 
     <plurals name="group_rooms">
-	<item quantity="one">1 kamer</item>
-	<item quantity="other">%d kamers</item>
+	<item quantity="one">1 ruimte</item>
+	<item quantity="other">%d ruimtes</item>
 </plurals>
     <string name="resource_limit_exceeded_title">Resource limiet overschreden</string>
     <string name="resource_limit_contact_action">Contact Beheerder</string>
