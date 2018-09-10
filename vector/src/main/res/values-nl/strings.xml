@@ -32,11 +32,11 @@
     <string name="rename">Herbenoemen</string>
     <string name="report_content">Inhoud melden</string>
     <string name="active_call">Actief gesprek</string>
-    <string name="ongoing_conference_call"> Lopend vergadergesprek. Neem deel met microfoon of camera.</string>
+    <string name="ongoing_conference_call">Lopend vergadergesprek. Neem deel met microfoon of video.</string>
     <string name="ongoing_conference_call_voice">microfoon</string>
     <string name="ongoing_conference_call_video">camera</string>
     <string name="cannot_start_call">Kan het gesprek niet starten, probeer later nog eens</string>
-    <string name="missing_permissions_warning">"Sommige functies werken misschien niet door missende permissies..</string>
+    <string name="missing_permissions_warning">Sommige functies zijn misschien afwezig door missende permissies…</string>
     <string name="missing_permissions_to_start_conf_call">Je moet de uitnodigingspermissie hebben om een vergadering in deze ruimte te starten</string>
     <string name="missing_permissions_title_to_start_conf_call">Kan het gesprek niet starten</string>
     <string name="device_information">Toestel informatie</string>
@@ -650,7 +650,9 @@ Versleutelde berichten zullen nog niet zichtbaar zijn op programma\'s die geen v
     <string name="encryption_export_export">Exporteer</string>
     <string name="encryption_export_enter_passphrase">Enter wachtzin</string>
     <string name="encryption_export_confirm_passphrase">Bevestig wachtzin</string>
-    <string name="encryption_export_saved_as">De E2E ruimte sletuels zijn in \'%s\' opgeslagen</string>
+    <string name="encryption_export_saved_as">De E2E ruimte sleutels zijn in \'%s\' opgeslagen.
+
+Waarschuwing: dit bestand kan worden verwijderd als de applicatie verwijderd is.</string>
 
     <string name="encryption_import_e2e_room_keys">Importeer E2E ruimte sleutels</string>
     <string name="encryption_import_room_keys">Importeer ruimte sleutels</string>
@@ -672,7 +674,7 @@ Versleutelde berichten zullen nog niet zichtbaar zijn op programma\'s die geen v
     <string name="encryption_information_unblock">Deblokkeringslijst</string>
 
     <string name="encryption_information_verify_device">Verifïeer apparaat</string>
-    <string name="encryption_information_verify_device_warning"> Om te verifïeren dat dit apparaat vertrouwd kan worden, contacteer de eigenaar via een andere methode (bijv. persoonlijk of via een telefoontje) en vraag diegene of de sleutel die ze zien in hun Gebruikersinstellingen van dit apparaat overeenkomt met de sleutel hieronder:</string>
+    <string name="encryption_information_verify_device_warning">Om te verifiëren dat dit apparaat vertrouwd kan worden, contacteer de eigenaar via een andere methode (bijv. persoonlijk of via een telefoontje) en vraag diegene of de sleutel die ze zien in hun Gebruikersinstellingen van dit apparaat overeenkomt met de sleutel hieronder:</string>
     <string name="encryption_information_verify_device_warning2">Als het overeenkomt, druk op de knop \'verifiëren\' hieronder. Als het niet overeenkomt, dan onderschept iemand anders het apparaat en hoor je deze te blokkeren.
 In de toekomst zal dit verificatieproces wat makkelijker gemaakt worden.</string>
     <string name="encryption_information_verify_key_match">Ik verifïeer dat de sleutels overeenkomen</string>
@@ -872,7 +874,7 @@ Je kan het nu, of later, doen vanuit de programma-instellingen.</string>
     <string name="settings_flair">Badge</string>
 
     <string name="room_settings_room_notifications_title">Notificaties</string>
-    <string name="room_settings_no_flair">" Deze ruimte geeft geen badges voor gemeenschappen weer"</string>
+    <string name="room_settings_no_flair">Deze ruimte geeft geen badges voor gemeenschappen weer</string>
     <string name="room_settings_add_new_group">Nieuw gemeenschaps-ID (bv. +foo:matrix.org)</string>
     <string name="room_settings_invalid_group_format_dialog_title">Ongeldig gemeenschaps-ID</string>
     <string name="room_settings_invalid_group_format_dialog_body">\'%s\' is niet een geldig gemeenschaps-ID</string>
@@ -1028,5 +1030,61 @@ Let op: deze actie zal de app opnieuw opstarten, en kan enige tijd kosten.</stri
     <string name="room_tombstone_continuation_link">Het gesprek wordt hier voortgezet</string>
     <string name="room_tombstone_continuation_description">Deze ruimte is een voortzetting van een ander gesprek</string>
     <string name="room_tombstone_predecessor_link">Klik hier om oudere berichten te zien</string>
+
+<string name="missing_permissions_error">Door missende permissies is deze actie niet mogelijk.</string>
+    <string name="system_alerts_header">Systeem Waarschuwingen</string>
+
+    <plurals name="format_time_s">
+	<item quantity="one">1s</item>
+	<item quantity="other">%ds</item>
+</plurals>
+    <plurals name="format_time_m">
+	<item quantity="one">1m</item>
+	<item quantity="other">%dm</item>
+</plurals>
+    <plurals name="format_time_h">
+	<item quantity="one">1h</item>
+	<item quantity="other">%dh</item>
+</plurals>
+    <plurals name="format_time_d">
+	<item quantity="one">1d</item>
+	<item quantity="other">%dd</item>
+</plurals>
+
+    <string name="room_participants_now">nu %1$s</string>
+    <string name="room_participants_ago">%1$s %2$s geleden</string>
+
+    <string name="room_participants_invite_join_names">"%1$s, "</string>
+    <string name="room_participants_invite_join_names_and">%1$s en %2$s</string>
+    <string name="room_participants_invite_join_names_combined">%1$s %2$s</string>
+
+    <plurals name="room_details_selected">
+	<item quantity="one">1 geselecteerd</item>
+	<item quantity="other">%d geselecteerd</item>
+</plurals>
+    <string name="command_description_clear_scalar_token">Om Matrix Apps management te repareren</string>
+
+    <plurals name="group_members">
+	<item quantity="one">1 deelnemer</item>
+	<item quantity="other">%d deelnemers</item>
+</plurals>
+
+    <plurals name="group_rooms">
+	<item quantity="one">1 kamer</item>
+	<item quantity="other">%d kamers</item>
+</plurals>
+    <string name="resource_limit_exceeded_title">Resource limiet overschreden</string>
+    <string name="resource_limit_contact_action">Contact Beheerder</string>
+
+    <string name="resource_limit_contact_admin">neem contact op met je service beheerder</string>
+
+    <string name="resource_limit_soft_default">Deze homeserver heeft een van zijn resource limieten bereikt dus <b>sommige gebruikers zullen niet kunnen inloggen</b>.</string>
+    <string name="resource_limit_hard_default">Deze homeserver heeft een van zijn resource limieten bereikt.</string>
+
+    <string name="resource_limit_soft_mau"> Deze homeserver heeft zijn Maandelijks Actieve Gebruikers limiet bereikt dus <b>sommige gebruikers zullen niet kunnen inloggen</b>.</string>
+    <string name="resource_limit_hard_mau">Deze homeserver heeft zijn Maandelijks Actieve Gebruikers limiet bereikt.</string>
+
+    <string name="resource_limit_soft_contact">Alstublieft %s om dit limiet te verhogen.</string>
+    <string name="resource_limit_hard_contact">Alstublieft %s om deze service te blijven gebruiken.</string>
 
 </resources>
