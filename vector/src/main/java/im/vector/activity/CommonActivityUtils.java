@@ -657,7 +657,7 @@ public class CommonActivityUtils {
 
                 // get the room alias (if any) for the preview data
                 if ((null != room) && (null != room.getState())) {
-                    roomAlias = room.getState().getAlias();
+                    roomAlias = room.getState().getCanonicalAlias();
                 }
 
                 intentRetCode = new Intent(aContext, aTargetActivity);

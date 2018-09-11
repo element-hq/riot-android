@@ -1576,7 +1576,7 @@ public class VectorRoomSettingsFragment extends PreferenceFragment implements Sh
         Menu menu = popup.getMenu();
         ThemeUtils.INSTANCE.tintMenuIcons(menu, ThemeUtils.INSTANCE.getColor(context, R.attr.icon_tint_on_light_action_bar_color));
 
-        String canonicalAlias = mRoom.getState().alias;
+        String canonicalAlias = mRoom.getState().getCanonicalAlias();
         final boolean canUpdateCanonicalAlias = canUpdateCanonicalAlias();
 
         /*

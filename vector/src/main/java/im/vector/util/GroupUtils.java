@@ -148,7 +148,7 @@ public class GroupUtils {
 
         // TODO LazyLoading, current user may be null
         if ((null == room) || (null == room.getMember(session.getMyUserId()))) {
-            final RoomPreviewData roomPreviewData = new RoomPreviewData(session, groupRoom.roomId, null, groupRoom.getAlias(), null);
+            final RoomPreviewData roomPreviewData = new RoomPreviewData(session, groupRoom.roomId, null, groupRoom.getCanonicalAlias(), null);
 
             roomPreviewData.fetchPreviewData(new ApiCallback<Void>() {
                 private void onDone() {
