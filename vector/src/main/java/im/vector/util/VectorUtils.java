@@ -189,8 +189,8 @@ public class VectorUtils {
                 return roomState.name;
             }
 
-            if (!TextUtils.isEmpty(roomState.alias)) {
-                return roomState.alias;
+            if (!TextUtils.isEmpty(roomState.getCanonicalAlias())) {
+                return roomState.getCanonicalAlias();
             }
 
             String myUserId = session.getMyUserId();
