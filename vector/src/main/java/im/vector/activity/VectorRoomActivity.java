@@ -534,18 +534,6 @@ public class VectorRoomActivity extends MXCActionBarActivity implements
         }
 
         @Override
-        public void onRoomInitialSyncComplete(String roomId) {
-            runOnUiThread(new Runnable() {
-                @Override
-                public void run() {
-                    // set general room information
-                    mVectorMessageListFragment.onInitialMessagesLoaded();
-                    updateActionBarTitleAndTopic();
-                }
-            });
-        }
-
-        @Override
         public void onBingRulesUpdate() {
             runOnUiThread(new Runnable() {
                 @Override
