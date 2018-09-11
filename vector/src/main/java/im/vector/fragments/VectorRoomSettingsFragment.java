@@ -610,22 +610,21 @@ public class VectorRoomSettingsFragment extends PreferenceFragment implements Sh
             mRoom.getDirectoryVisibility(mRoom.getRoomId(), new ApiCallback<String>() {
 
                 private void handleResponseOnUiThread(final String aVisibilityValue) {
-                    getActivity().runOnUiThread(new Runnable() {
-                        @Override
-                        public void run() {
-                            // only stop loading screen and do not update UI since the
-                            // update is done here below..
-                            hideLoadingView(DO_NOT_UPDATE_UI);
+                    if (!isAdded()) {
+                        return;
+                    }
 
-                            // set checked status
-                            // Note: the preference listener is disabled when the switch is updated, otherwise it will be seen
-                            // as a user action on the preference
-                            boolean isChecked = RoomState.DIRECTORY_VISIBILITY_PUBLIC.equals(aVisibilityValue);
-                            enableSharedPreferenceListener(false);
-                            mRoomDirectoryVisibilitySwitch.setChecked(isChecked);
-                            enableSharedPreferenceListener(true);
-                        }
-                    });
+                    // only stop loading screen and do not update UI since the
+                    // update is done here below..
+                    hideLoadingView(DO_NOT_UPDATE_UI);
+
+                    // set checked status
+                    // Note: the preference listener is disabled when the switch is updated, otherwise it will be seen
+                    // as a user action on the preference
+                    boolean isChecked = RoomState.DIRECTORY_VISIBILITY_PUBLIC.equals(aVisibilityValue);
+                    enableSharedPreferenceListener(false);
+                    mRoomDirectoryVisibilitySwitch.setChecked(isChecked);
+                    enableSharedPreferenceListener(true);
                 }
 
                 @Override
