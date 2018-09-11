@@ -1,5 +1,6 @@
 /*
  * Copyright 2017 Vector Creations Ltd
+ * Copyright 2018 New Vector Ltd
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,13 +19,14 @@ package im.vector.util;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.support.annotation.NonNull;
 import android.text.TextUtils;
 
 import org.matrix.androidsdk.MXSession;
 import org.matrix.androidsdk.data.Room;
 import org.matrix.androidsdk.data.RoomPreviewData;
 import org.matrix.androidsdk.rest.callback.ApiCallback;
-import org.matrix.androidsdk.rest.callback.SimpleApiCallback;
+import org.matrix.androidsdk.rest.callback.ApiSuccessCallback;
 import org.matrix.androidsdk.rest.model.MatrixError;
 import org.matrix.androidsdk.rest.model.group.Group;
 import org.matrix.androidsdk.rest.model.group.GroupRoom;
@@ -143,18 +145,18 @@ public class GroupUtils {
      * @param session      the session
      * @param groupRoom    the group room
      */
-    public static void openGroupRoom(final Activity fromActivity, final MXSession session, final GroupRoom groupRoom, final ApiCallback<Void> callback) {
+    public static void openGroupRoom(final Activity fromActivity,
+                                     final MXSession session,
+                                     final GroupRoom groupRoom,
+                                     @NonNull final ApiSuccessCallback<Void> callback) {
         Room room = session.getDataHandler().getStore().getRoom(groupRoom.roomId);
 
-        // TODO LazyLoading, current user may be null
-        if ((null == room) || (null == room.getMember(session.getMyUserId()))) {
+        if (room == null || !room.isJoined()) {
             final RoomPreviewData roomPreviewData = new RoomPreviewData(session, groupRoom.roomId, null, groupRoom.getCanonicalAlias(), null);
 
             roomPreviewData.fetchPreviewData(new ApiCallback<Void>() {
                 private void onDone() {
-                    if (null != callback) {
-                        callback.onSuccess(null);
-                    }
+                    callback.onSuccess(null);
 
                     CommonActivityUtils.previewRoom(fromActivity, roomPreviewData);
                 }
@@ -186,14 +188,12 @@ public class GroupUtils {
                 }
             });
         } else {
+            callback.onSuccess(null);
+
             Intent roomIntent = new Intent(fromActivity, VectorRoomActivity.class);
             roomIntent.putExtra(VectorRoomActivity.EXTRA_MATRIX_ID, session.getMyUserId());
             roomIntent.putExtra(VectorRoomActivity.EXTRA_ROOM_ID, groupRoom.roomId);
             fromActivity.startActivity(roomIntent);
-
-            if (null != callback) {
-                callback.onSuccess(null);
-            }
         }
     }
 }
