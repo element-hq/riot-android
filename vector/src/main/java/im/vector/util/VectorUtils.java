@@ -207,8 +207,6 @@ public class VectorUtils {
                         othersActiveMembers.add(roomMember);
                     }
                 }
-
-                nbOfOtherMembers = room.getNumberOfJoinedMembers() - 1;
             } else {
                 Collection<RoomMember> members = roomState.getDisplayableLoadedMembers();
 
@@ -229,9 +227,9 @@ public class VectorUtils {
                         return (diff == 0) ? 0 : ((diff < 0) ? -1 : +1);
                     }
                 });
-
-                nbOfOtherMembers = othersActiveMembers.size();
             }
+
+            nbOfOtherMembers = othersActiveMembers.size();
 
             String displayName;
 
