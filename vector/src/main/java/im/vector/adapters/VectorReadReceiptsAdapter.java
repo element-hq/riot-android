@@ -33,7 +33,6 @@ import android.widget.Toast;
 
 import org.matrix.androidsdk.MXSession;
 import org.matrix.androidsdk.data.Room;
-import org.matrix.androidsdk.db.MXMediasCache;
 import org.matrix.androidsdk.rest.model.ReceiptData;
 import org.matrix.androidsdk.rest.model.RoomMember;
 
@@ -42,7 +41,7 @@ import im.vector.activity.VectorMemberDetailsActivity;
 import im.vector.util.VectorUtils;
 
 /**
- * An adapter which can display receipts
+ * An adapter which can display read receipts
  */
 public class VectorReadReceiptsAdapter extends ArrayAdapter<ReceiptData> {
 
@@ -51,16 +50,14 @@ public class VectorReadReceiptsAdapter extends ArrayAdapter<ReceiptData> {
     private final int mLayoutResourceId;
     private final MXSession mSession;
     private final Room mRoom;
-    //private MXMediasCache mMediasCache;
 
-    public VectorReadReceiptsAdapter(Context context, int layoutResourceId, MXSession session, Room room, MXMediasCache mediasCache) {
+    public VectorReadReceiptsAdapter(Context context, int layoutResourceId, MXSession session, Room room) {
         super(context, layoutResourceId);
         mContext = context;
         mLayoutResourceId = layoutResourceId;
         mLayoutInflater = LayoutInflater.from(mContext);
         mSession = session;
         mRoom = room;
-        //mMediasCache = mediasCache;
     }
 
     @Override
