@@ -1,15 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
-
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    xmlns:tools="http://schemas.android.com/tools">
+    android:layout_height="wrap_content">
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginLeft="10dp"
-        android:layout_marginRight="10dp"
+        android:paddingLeft="?dialogPreferredPadding"
+        android:paddingStart="?dialogPreferredPadding"
+        android:paddingRight="?dialogPreferredPadding"
+        android:paddingEnd="?dialogPreferredPadding"
+        android:paddingTop="12dp"
         android:orientation="vertical">
 
         <TextView
@@ -32,7 +33,7 @@
             android:id="@+id/encrypted_info_user_id"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            tools:text="an user id"
+            android:text="an user id"
             android:textSize="12sp" />
 
         <TextView
@@ -47,7 +48,7 @@
             android:id="@+id/encrypted_info_curve25519_identity_key"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            tools:text="a Curve25519 identity key"
+            android:text="a Curve25519 identity key"
             android:textSize="12sp" />
 
         <TextView
@@ -62,7 +63,7 @@
             android:id="@+id/encrypted_info_claimed_ed25519_fingerprint_key"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            tools:text="a Claimed Ed25519 fingerprint key"
+            android:text="a Claimed Ed25519 fingerprint key"
             android:textSize="12sp" />
 
         <TextView
@@ -77,7 +78,7 @@
             android:id="@+id/encrypted_info_algorithm"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            tools:text="an algorithm"
+            android:text="an algorithm"
             android:textSize="12sp" />
 
         <TextView
@@ -93,7 +94,7 @@
             android:id="@+id/encrypted_info_decryption_error"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            tools:text="an error"
+            android:text="an error"
             android:textSize="12sp" />
 
         <TextView
@@ -108,7 +109,7 @@
             android:id="@+id/encrypted_info_session_id"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            tools:text="a session id"
+            android:text="a session id"
             android:textSize="12sp" />
 
         <TextView
@@ -153,7 +154,7 @@
                 android:id="@+id/encrypted_info_name"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                tools:text="a name"
+                android:text="a name"
                 android:textSize="12sp" />
 
             <TextView
@@ -168,7 +169,7 @@
                 android:id="@+id/encrypted_info_device_id"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                tools:text="a device id"
+                android:text="a device id"
                 android:textSize="12sp" />
 
             <TextView
@@ -183,7 +184,7 @@
                 android:id="@+id/encrypted_info_verification"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                tools:text="a Verification"
+                android:text="a Verification"
                 android:textSize="12sp" />
 
             <TextView
@@ -198,9 +199,8 @@
                 android:id="@+id/encrypted_ed25519_fingerprint"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                tools:text="a Ed25519 fingerprint"
+                android:text="a Ed25519 fingerprint"
                 android:textSize="12sp" />
         </LinearLayout>
     </LinearLayout>
-
 </ScrollView>

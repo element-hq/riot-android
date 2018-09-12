@@ -3,17 +3,14 @@
     android:id="@+id/layout_root"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
-    android:padding="10dp" >
-
-    <TextView
-        android:id="@+id/dialog_title"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textAppearance="?android:attr/textAppearanceLarge" />
+    android:paddingLeft="?dialogPreferredPadding"
+    android:paddingStart="?dialogPreferredPadding"
+    android:paddingRight="?dialogPreferredPadding"
+    android:paddingEnd="?dialogPreferredPadding"
+    android:orientation="vertical">
 
     <EditText
-        android:id="@+id/dialog_edit_text"
+        android:id="@+id/edit_text"
         android:layout_width="match_parent"
         android:layout_height="wrap_content" >
         <requestFocus />

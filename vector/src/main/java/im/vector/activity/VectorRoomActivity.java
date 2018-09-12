@@ -3615,16 +3615,14 @@ public class VectorRoomActivity extends MXCActionBarActivity implements
         }
 
         LayoutInflater inflater = LayoutInflater.from(this);
+        View dialogView = inflater.inflate(R.layout.dialog_base_edit_text, null);
 
         AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(this);
+        alertDialogBuilder
+                .setTitle(R.string.room_info_room_name)
+                .setView(dialogView);
 
-        View dialogView = inflater.inflate(R.layout.dialog_text_edittext, null);
-        alertDialogBuilder.setView(dialogView);
-
-        TextView titleText = dialogView.findViewById(R.id.dialog_title);
-        titleText.setText(R.string.room_info_room_name);
-
-        final EditText textInput = dialogView.findViewById(R.id.dialog_edit_text);
+        final EditText textInput = dialogView.findViewById(R.id.edit_text);
         textInput.setText(mRoom.getState().name);
 
         // set dialog message
@@ -3682,16 +3680,14 @@ public class VectorRoomActivity extends MXCActionBarActivity implements
         }
 
         LayoutInflater inflater = LayoutInflater.from(this);
+        View dialogView = inflater.inflate(R.layout.dialog_base_edit_text, null);
 
         AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(this);
+        alertDialogBuilder
+                .setTitle(R.string.room_info_room_topic)
+                .setView(dialogView);
 
-        View dialogView = inflater.inflate(R.layout.dialog_text_edittext, null);
-        alertDialogBuilder.setView(dialogView);
-
-        TextView titleText = dialogView.findViewById(R.id.dialog_title);
-        titleText.setText(R.string.room_info_room_topic);
-
-        final EditText textInput = dialogView.findViewById(R.id.dialog_edit_text);
+        final EditText textInput = dialogView.findViewById(R.id.edit_text);
         textInput.setText(mRoom.getState().topic);
 
         // set dialog message

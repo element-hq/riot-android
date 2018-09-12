@@ -977,15 +977,15 @@ class VectorSettingsPreferencesFragment : PreferenceFragment(), SharedPreference
      */
     private fun onPasswordUpdateClick() {
         activity.runOnUiThread {
-            val view = activity.layoutInflater.inflate(R.layout.fragment_dialog_change_password, null)
+            val view = activity.layoutInflater.inflate(R.layout.dialog_change_password, null)
 
             val oldPasswordText = view.findViewById<EditText>(R.id.change_password_old_pwd_text)
             val newPasswordText = view.findViewById<EditText>(R.id.change_password_new_pwd_text)
             val confirmNewPasswordText = view.findViewById<EditText>(R.id.change_password_confirm_new_pwd_text)
 
             val dialog = AlertDialog.Builder(activity)
-                    .setView(view)
                     .setTitle(R.string.settings_change_password)
+                    .setView(view)
                     .setPositiveButton(R.string.save) { dialog, which ->
                         if (null != activity) {
                             val imm = activity.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
@@ -1885,8 +1885,7 @@ class VectorSettingsPreferencesFragment : PreferenceFragment(), SharedPreference
 
     private fun displayTextSizeSelection(activity: Activity) {
         val inflater = activity.layoutInflater
-
-        val layout = inflater.inflate(R.layout.text_size_selection, null)
+        val layout = inflater.inflate(R.layout.dialog_select_text_size, null)
 
         val dialog = AlertDialog.Builder(activity)
                 .setTitle(R.string.font_size)
@@ -2232,7 +2231,7 @@ class VectorSettingsPreferencesFragment : PreferenceFragment(), SharedPreference
     private fun displayDeviceDetailsDialog(aDeviceInfo: DeviceInfo?) {
         val builder = AlertDialog.Builder(activity)
         val inflater = activity.layoutInflater
-        val layout = inflater.inflate(R.layout.devices_details_settings, null)
+        val layout = inflater.inflate(R.layout.dialog_device_details, null)
 
         if (null != aDeviceInfo) {
             //device ID
@@ -2296,12 +2295,15 @@ class VectorSettingsPreferencesFragment : PreferenceFragment(), SharedPreference
      * @param aDeviceInfoToRename device info
      */
     private fun displayDeviceRenameDialog(aDeviceInfoToRename: DeviceInfo) {
-        val input = EditText(activity)
+        val inflater = activity.layoutInflater
+        val layout = inflater.inflate(R.layout.dialog_base_edit_text, null)
+
+        val input = layout.findViewById<EditText>(R.id.edit_text)
         input.setText(aDeviceInfoToRename.display_name)
 
         AlertDialog.Builder(activity)
                 .setTitle(R.string.devices_details_device_name)
-                .setView(input)
+                .setView(layout)
                 .setPositiveButton(R.string.ok) { dialog, which ->
                     displayLoadingView()
 
@@ -2388,14 +2390,13 @@ class VectorSettingsPreferencesFragment : PreferenceFragment(), SharedPreference
                 deleteDevice(aDeviceInfoToDelete.device_id)
             } else {
                 val inflater = activity.layoutInflater
-                val layout = inflater.inflate(R.layout.devices_settings_delete, null)
+                val layout = inflater.inflate(R.layout.dialog_device_delete, null)
                 val passwordEditText = layout.findViewById<EditText>(R.id.delete_password)
 
                 AlertDialog.Builder(activity)
                         .setIcon(android.R.drawable.ic_dialog_alert)
                         .setTitle(R.string.devices_delete_dialog_title)
                         .setView(layout)
-
                         .setPositiveButton(R.string.devices_delete_submit_button_label, DialogInterface.OnClickListener { dialog, which ->
                             if (TextUtils.isEmpty(passwordEditText.toString())) {
                                 activity.applicationContext.toast(R.string.error_empty_field_your_password)

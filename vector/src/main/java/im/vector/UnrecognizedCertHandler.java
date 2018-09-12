@@ -97,7 +97,7 @@ public class UnrecognizedCertHandler {
 
         LayoutInflater inflater = activity.getLayoutInflater();
 
-        View layout = inflater.inflate(R.layout.ssl_fingerprint_prompt, null);
+        View layout = inflater.inflate(R.layout.dialog_ssl_fingerprint, null);
 
         TextView sslFingerprintTitle = layout.findViewById(R.id.ssl_fingerprint_title);
         sslFingerprintTitle.setText(

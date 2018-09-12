@@ -18,11 +18,9 @@
 package im.vector.util;
 
 import android.annotation.SuppressLint;
-import android.app.Activity;
 import android.content.ClipData;
 import android.content.ClipboardManager;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
@@ -38,7 +36,6 @@ import android.os.Looper;
 import android.support.v4.util.LruCache;
 import android.support.v7.app.AlertDialog;
 import android.text.TextUtils;
-import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewParent;
 import android.webkit.WebView;
@@ -55,7 +52,6 @@ import org.matrix.androidsdk.data.RoomPreviewData;
 import org.matrix.androidsdk.data.RoomState;
 import org.matrix.androidsdk.db.MXMediasCache;
 import org.matrix.androidsdk.rest.callback.ApiCallback;
-import org.matrix.androidsdk.rest.callback.SimpleApiCallback;
 import org.matrix.androidsdk.rest.model.MatrixError;
 import org.matrix.androidsdk.rest.model.RoomMember;
 import org.matrix.androidsdk.rest.model.User;
@@ -686,8 +682,6 @@ public class VectorUtils {
     // About / terms and conditions
     //==============================================================================================================
 
-    private static AlertDialog mMainAboutDialog = null;
-
     /**
      * Provide the application version
      *
@@ -699,60 +693,12 @@ public class VectorUtils {
     }
 
     /**
-     * Display the licenses text.
-     */
-    public static void displayThirdPartyLicenses() {
-        final Activity activity = VectorApp.getCurrentActivity();
-
-        if (null != activity) {
-            if (null != mMainAboutDialog) {
-                if (mMainAboutDialog.isShowing() && (null != mMainAboutDialog.getOwnerActivity())) {
-                    try {
-                        mMainAboutDialog.dismiss();
-                    } catch (Exception e) {
-                        Log.e(LOG_TAG, "## displayThirdPartyLicenses() : " + e.getMessage(), e);
-                    }
-                }
-                mMainAboutDialog = null;
-            }
-
-            activity.runOnUiThread(new Runnable() {
-                @Override
-                public void run() {
-                    WebView view = (WebView) LayoutInflater.from(activity).inflate(R.layout.dialog_licenses, null);
-                    view.loadUrl("file:///android_asset/open_source_licenses.html");
-
-                    View titleView = LayoutInflater.from(activity).inflate(R.layout.dialog_licenses_header, null);
-
-                    view.setScrollbarFadingEnabled(false);
-                    mMainAboutDialog = new AlertDialog.Builder(activity)
-                            .setCustomTitle(titleView)
-                            .setView(view)
-                            .setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
-                                @Override
-                                public void onClick(DialogInterface dialog, int which) {
-                                    mMainAboutDialog = null;
-                                }
-                            })
-                            .setOnCancelListener(new DialogInterface.OnCancelListener() {
-                                @Override
-                                public void onCancel(DialogInterface dialog) {
-                                    mMainAboutDialog = null;
-                                }
-                            })
-                            .show();
-                }
-            });
-        }
-    }
-
-    /**
      * Open a webview above the current activity.
      *
      * @param context the application context
      * @param url     the url to open
      */
-    private static void displayInWebview(final Context context, String url) {
+    private static void displayInWebView(final Context context, String url) {
         WebView wv = new WebView(context);
         wv.loadUrl(url);
         wv.setWebViewClient(new WebViewClient() {
@@ -771,12 +717,29 @@ public class VectorUtils {
     }
 
     /**
-     * Display the term and conditions.
+     * Open a webview above the current activity with a title.
+     *
+     * @param context the application context
+     * @param url     the url to open
+     * @param title   title of the dialog
      */
-    public static void displayAppTac() {
-        if (null != VectorApp.getCurrentActivity()) {
-            displayInWebview(VectorApp.getCurrentActivity(), "https://riot.im/tac");
-        }
+    private static void displayInTitleWebView(final Context context, String url, String title) {
+        WebView wv = new WebView(context);
+        wv.loadUrl(url);
+        wv.setWebViewClient(new WebViewClient() {
+            @Override
+            public boolean shouldOverrideUrlLoading(WebView view, String url) {
+                view.loadUrl(url);
+
+                return true;
+            }
+        });
+
+        new AlertDialog.Builder(context)
+                .setTitle(title)
+                .setView(wv)
+                .setPositiveButton(android.R.string.ok, null)
+                .show();
     }
 
     /**
@@ -784,7 +747,16 @@ public class VectorUtils {
      */
     public static void displayAppCopyright() {
         if (null != VectorApp.getCurrentActivity()) {
-            displayInWebview(VectorApp.getCurrentActivity(), "https://riot.im/copyright");
+            displayInWebView(VectorApp.getCurrentActivity(), "https://riot.im/copyright");
+        }
+    }
+
+    /**
+     * Display the term and conditions.
+     */
+    public static void displayAppTac() {
+        if (null != VectorApp.getCurrentActivity()) {
+            displayInWebView(VectorApp.getCurrentActivity(), "https://riot.im/tac");
         }
     }
 
@@ -793,7 +765,18 @@ public class VectorUtils {
      */
     public static void displayAppPrivacyPolicy() {
         if (null != VectorApp.getCurrentActivity()) {
-            displayInWebview(VectorApp.getCurrentActivity(), "https://riot.im/privacy");
+            displayInWebView(VectorApp.getCurrentActivity(), "https://riot.im/privacy");
+        }
+    }
+
+    /**
+     * Display the licenses text.
+     */
+    public static void displayThirdPartyLicenses() {
+        if (null != VectorApp.getCurrentActivity()) {
+            displayInTitleWebView(VectorApp.getCurrentActivity(),
+                    "file:///android_asset/open_source_licenses.html",
+                    VectorApp.getCurrentActivity().getResources().getString(R.string.dialog_title_third_party_licences));
         }
     }
 

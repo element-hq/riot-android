@@ -24,7 +24,6 @@ import android.app.ActivityManager;
 import android.app.AlarmManager;
 import android.app.DownloadManager;
 import android.app.PendingIntent;
-import android.content.ActivityNotFoundException;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -1421,7 +1420,7 @@ public class CommonActivityUtils {
         AlertDialog.Builder builder = new AlertDialog.Builder(activiy);
         LayoutInflater inflater = activiy.getLayoutInflater();
 
-        View layout = inflater.inflate(R.layout.encrypted_verify_device, null);
+        View layout = inflater.inflate(R.layout.dialog_device_verify, null);
 
         TextView textView;
 
@@ -1435,9 +1434,9 @@ public class CommonActivityUtils {
         textView.setText(MatrixSdkExtensionsKt.getFingerprintHumanReadable(deviceInfo));
 
         builder
-                .setView(layout)
                 .setTitle(R.string.encryption_information_verify_device)
-                .setPositiveButton(R.string.encryption_information_verify_key_match, new DialogInterface.OnClickListener() {
+                .setView(layout)
+                .setPositiveButton(R.string.encryption_information_verify, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         session.getCrypto().setDeviceVerification(MXDeviceInfo.DEVICE_VERIFICATION_VERIFIED, deviceInfo.deviceId, sender, callback);
