@@ -1023,7 +1023,7 @@
     <string name="rejoin">Rejoin</string>
     <string name="forget_room">Forget room</string>
 
-    <!-- Miscelaneous image descriptions for accessibility -->
+    <!-- Miscellaneous image descriptions for accessibility -->
     <string name="receipt_avatar">Receipt avatar</string>
     <string name="notice_avatar">Notice avatar</string>
     <string name="avatar">Avatar</string>

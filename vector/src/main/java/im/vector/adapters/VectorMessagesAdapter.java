@@ -1430,43 +1430,30 @@ public class VectorMessagesAdapter extends AbstractMessagesAdapter {
             Event event = row.getEvent();
             Message message = null;
 
-            int waterMarkResourceId = -1;
-
+            boolean videoContent = false;
             if (type == ROW_TYPE_IMAGE) {
-
                 ImageMessage imageMessage = JsonUtils.toImageMessage(event.getContent());
-
-                if ("image/gif".equals(imageMessage.getMimeType())) {
-                    waterMarkResourceId = R.drawable.filetype_gif;
+                if (imageMessage.getMimeType().equals("image/gif")) {
+                    videoContent = true;
                 }
                 message = imageMessage;
-
             } else if (type == ROW_TYPE_VIDEO) {
-
+                videoContent = true;
                 message = JsonUtils.toVideoMessage(event.getContent());
-                waterMarkResourceId = R.drawable.filetype_video;
-
             } else if (type == ROW_TYPE_STICKER) {
-
                 StickerMessage stickerMessage = JsonUtils.toStickerMessage(event.getContent());
                 message = stickerMessage;
             }
 
-            // display a type watermark
-            final ImageView imageTypeView = convertView.findViewById(R.id.messagesAdapter_image_type);
-
-            if (null == imageTypeView) {
+            // display a play icon for video content
+            final ImageView playCircleView = convertView.findViewById(R.id.messagesAdapter_play_circle);
+            playCircleView.setVisibility(View.GONE);
+            if (null == playCircleView) {
                 Log.e(LOG_TAG, "getImageVideoView : invalid layout");
                 return convertView;
             }
-
-            imageTypeView.setBackgroundColor(Color.TRANSPARENT);
-
-            if (waterMarkResourceId > 0) {
-                imageTypeView.setImageBitmap(BitmapFactory.decodeResource(getContext().getResources(), waterMarkResourceId));
-                imageTypeView.setVisibility(View.VISIBLE);
-            } else {
-                imageTypeView.setVisibility(View.GONE);
+            if (videoContent) {
+                playCircleView.setVisibility(View.VISIBLE);
             }
 
             if (null != message) {
