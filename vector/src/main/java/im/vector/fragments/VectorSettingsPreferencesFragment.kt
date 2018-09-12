@@ -1898,7 +1898,7 @@ class VectorSettingsPreferencesFragment : PreferenceFragment(), SharedPreference
 
         val childCount = linearLayout.childCount
 
-        val scaleText = FontScale.getFontScalePrefValue()
+        val scaleText = FontScale.getFontScaleDescription()
 
         for (i in 0 until childCount) {
             val v = linearLayout.getChildAt(i)
