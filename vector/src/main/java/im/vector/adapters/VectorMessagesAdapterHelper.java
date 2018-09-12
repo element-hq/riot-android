@@ -656,7 +656,10 @@ class VectorMessagesAdapterHelper {
      * @param row           the message row
      * @param isPreviewMode true if preview mode
      */
-    void displayReadReceipts(View convertView, MessageRow row, boolean isPreviewMode) {
+    void displayReadReceipts(View convertView,
+                             MessageRow row,
+                             boolean isPreviewMode,
+                             @Nullable List<RoomMember> liveRoomMembers) {
         View avatarsListView = convertView.findViewById(R.id.messagesAdapter_avatars_list);
 
         if (null == avatarsListView) {
@@ -712,6 +715,17 @@ class VectorMessagesAdapterHelper {
         for (; index < bound; index++) {
             final ReceiptData r = receipts.get(index);
             RoomMember member = roomState.getMember(r.userId);
+
+            if (member == null && liveRoomMembers != null) {
+                // Try to get the member form the live room members
+                for (RoomMember roomMember : liveRoomMembers) {
+                    if (r.userId.equals(roomMember.getUserId())) {
+                        member = roomMember;
+                        break;
+                    }
+                }
+            }
+
             ImageView imageView = (ImageView) imageViews.get(index);
 
             imageView.setVisibility(View.VISIBLE);
