@@ -63,6 +63,7 @@ import org.matrix.androidsdk.rest.callback.SimpleApiCallback;
 import org.matrix.androidsdk.rest.model.Event;
 import org.matrix.androidsdk.rest.model.MatrixError;
 import org.matrix.androidsdk.rest.model.PowerLevels;
+import org.matrix.androidsdk.rest.model.RoomDirectoryVisibility;
 import org.matrix.androidsdk.rest.model.RoomMember;
 import org.matrix.androidsdk.util.BingRulesManager;
 import org.matrix.androidsdk.util.Log;
@@ -621,7 +622,7 @@ public class VectorRoomSettingsFragment extends PreferenceFragment implements Sh
                     // set checked status
                     // Note: the preference listener is disabled when the switch is updated, otherwise it will be seen
                     // as a user action on the preference
-                    boolean isChecked = RoomState.DIRECTORY_VISIBILITY_PUBLIC.equals(aVisibilityValue);
+                    boolean isChecked = RoomDirectoryVisibility.DIRECTORY_VISIBILITY_PUBLIC.equals(aVisibilityValue);
                     enableSharedPreferenceListener(false);
                     mRoomDirectoryVisibilitySwitch.setChecked(isChecked);
                     enableSharedPreferenceListener(true);
@@ -1065,9 +1066,9 @@ public class VectorRoomSettingsFragment extends PreferenceFragment implements Sh
             Log.w(LOG_TAG, "## onRoomDirectoryVisibilityPreferenceChanged(): not processed due to invalid parameters");
             visibility = null;
         } else if (mRoomDirectoryVisibilitySwitch.isChecked()) {
-            visibility = RoomState.DIRECTORY_VISIBILITY_PUBLIC;
+            visibility = RoomDirectoryVisibility.DIRECTORY_VISIBILITY_PUBLIC;
         } else {
-            visibility = RoomState.DIRECTORY_VISIBILITY_PRIVATE;
+            visibility = RoomDirectoryVisibility.DIRECTORY_VISIBILITY_PRIVATE;
         }
 
         if (null != visibility) {
