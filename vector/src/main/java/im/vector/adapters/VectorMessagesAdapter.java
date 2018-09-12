@@ -220,6 +220,8 @@ public class VectorMessagesAdapter extends AbstractMessagesAdapter {
     private final boolean mAlwaysShowTimeStamps;
     private final boolean mHideReadReceipts;
 
+    private List<RoomMember> mLiveRoomMembers;
+
     private static final Pattern mEmojisPattern = Pattern.compile("((?:[\uD83C\uDF00-\uD83D\uDDFF]" +
             "|[\uD83E\uDD00-\uD83E\uDDFF]" +
             "|[\uD83D\uDE00-\uD83D\uDE4F]" +
@@ -877,6 +879,13 @@ public class VectorMessagesAdapter extends AbstractMessagesAdapter {
      * *********************************************************************************************
      */
 
+    public void setLiveRoomMembers(List<RoomMember> roomMembers) {
+        mLiveRoomMembers = roomMembers;
+
+        // Update the Ui (ex: read receipt avatar)
+        notifyDataSetChanged();
+    }
+
     /**
      * Notify the fragment that some bing rules could have been updated.
      */
@@ -1225,7 +1234,7 @@ public class VectorMessagesAdapter extends AbstractMessagesAdapter {
         if (mHideReadReceipts) {
             mHelper.hideReadReceipts(convertView);
         } else {
-            mHelper.displayReadReceipts(convertView, row, mIsPreviewMode);
+            mHelper.displayReadReceipts(convertView, row, mIsPreviewMode, mLiveRoomMembers);
         }
 
         // selection mode
