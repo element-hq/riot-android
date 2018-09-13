@@ -17,7 +17,7 @@
             android:layout_height="@dimen/chat_avatar_size"
             android:layout_centerVertical="true"
             android:layout_marginLeft="16dp"
-            tools:src="#22000000" />
+            tools:src="@tools:sample/avatars" />
 
         <ImageView
             android:id="@+id/room_avatar_direct_chat_icon"
