@@ -117,19 +117,10 @@ public class MediaPreviewerActivity extends MXCActionBarActivity implements Medi
         RequestOptions options = new RequestOptions();
         options.fitCenter();
         if (mimeType != null) {
-            if (mimeType.startsWith("image") && !mimeType.contains("gif")) {
+            if (mimeType.startsWith("image")) {
                 mPreviewerImageView.setVisibility(View.VISIBLE);
                 mPreviewerVideoView.setVisibility(View.GONE);
                 Glide.with(this)
-                        .asBitmap()
-                        .load(uri)
-                        .apply(options)
-                        .into(mPreviewerImageView);
-            } else if (mimeType.equals("image/gif")) {
-                mPreviewerImageView.setVisibility(View.VISIBLE);
-                mPreviewerVideoView.setVisibility(View.GONE);
-                Glide.with(this)
-                        .asGif()
                         .load(uri)
                         .apply(options)
                         .into(mPreviewerImageView);

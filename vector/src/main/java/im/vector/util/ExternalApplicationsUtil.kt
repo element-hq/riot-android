@@ -84,18 +84,12 @@ fun openFileSelection(activity: Activity,
                       fragment: Fragment?,
                       allowMultipleSelection: Boolean,
                       requestCode: Int) {
-    val fileIntent = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
-        Intent(Intent.ACTION_OPEN_DOCUMENT)
-    } else {
-        Intent(Intent.ACTION_GET_CONTENT)
-    }
-
+    val fileIntent = Intent(Intent.ACTION_GET_CONTENT)
     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR2) {
         fileIntent.putExtra(Intent.EXTRA_ALLOW_MULTIPLE, allowMultipleSelection)
     }
 
     fileIntent.addCategory(Intent.CATEGORY_OPENABLE);
-
     fileIntent.type = "*/*"
 
     try {
@@ -240,4 +234,3 @@ fun openMedia(activity: Activity, savedMediaPath: String, mimeType: String) {
         activity.toast(R.string.error_no_external_application_found)
     }
 }
-

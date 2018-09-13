@@ -2,7 +2,8 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical">
+    android:orientation="vertical"
+    xmlns:tools="http://schemas.android.com/tools">
 
     <android.support.design.widget.TextInputLayout
         android:id="@+id/phone_number_code"
@@ -19,7 +20,7 @@
             android:inputType="numberDecimal"
             android:maxLines="1"
             android:textColor="?attr/riot_primary_text_color"
-            android:text="123456" />
+            tools:text="123456" />
 
     </android.support.design.widget.TextInputLayout>
 </LinearLayout>
