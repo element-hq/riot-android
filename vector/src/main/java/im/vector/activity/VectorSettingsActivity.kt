@@ -15,13 +15,11 @@
  */
 package im.vector.activity
 
-import android.content.Intent
 import im.vector.Matrix
 import im.vector.R
 import im.vector.fragments.VectorSettingsPreferencesFragment
 import im.vector.util.PERMISSION_REQUEST_CODE_EXPORT_KEYS
 import im.vector.util.PERMISSION_REQUEST_CODE_LAUNCH_CAMERA
-import im.vector.util.VectorUtils
 import im.vector.util.allGranted
 
 /**
@@ -63,14 +61,12 @@ class VectorSettingsActivity : MXCActionBarActivity() {
     }
 
     /**
-     * Keep this code here, cause PreferenceFragment does not extend v4 Fragment
+     * Keep this code here, because PreferenceFragment does not extend v4 Fragment
      */
     override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<String>, grantResults: IntArray) {
         if (allGranted(grantResults)) {
             if (requestCode == PERMISSION_REQUEST_CODE_LAUNCH_CAMERA) {
-                val intent = Intent(this, VectorMediasPickerActivity::class.java)
-                intent.putExtra(VectorMediasPickerActivity.EXTRA_AVATAR_MODE, true)
-                startActivityForResult(intent, VectorUtils.TAKE_IMAGE)
+                vectorSettingsPreferencesFragment.changeAvatar();
             } else if (requestCode == PERMISSION_REQUEST_CODE_EXPORT_KEYS) {
                 vectorSettingsPreferencesFragment.exportKeys()
             }

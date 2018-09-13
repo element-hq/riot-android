@@ -1271,13 +1271,15 @@ class VectorSettingsPreferencesFragment : PreferenceFragment(), SharedPreference
      * Update the avatar.
      */
     private fun onUpdateAvatarClick() {
-        activity.runOnUiThread {
-            if (checkPermissions(PERMISSIONS_FOR_TAKING_PHOTO, activity, PERMISSION_REQUEST_CODE_LAUNCH_CAMERA)) {
-                val intent = Intent(activity, VectorMediasPickerActivity::class.java)
-                intent.putExtra(VectorMediasPickerActivity.EXTRA_AVATAR_MODE, true)
-                startActivityForResult(intent, VectorUtils.TAKE_IMAGE)
-            }
+        if (checkPermissions(PERMISSIONS_FOR_TAKING_PHOTO, activity, PERMISSION_REQUEST_CODE_LAUNCH_CAMERA)) {
+            changeAvatar()
         }
+    }
+
+    fun changeAvatar() {
+        val intent = Intent(activity, VectorMediasPickerActivity::class.java)
+        intent.putExtra(VectorMediasPickerActivity.EXTRA_AVATAR_MODE, true)
+        startActivityForResult(intent, VectorUtils.TAKE_IMAGE)
     }
 
     /**
