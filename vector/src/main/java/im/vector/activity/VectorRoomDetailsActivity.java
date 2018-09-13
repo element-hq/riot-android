@@ -227,7 +227,8 @@ public class VectorRoomDetailsActivity extends MXCActionBarActivity implements T
 
         if (mSession.isAlive()) {
             // check if the room has been left from another client
-            if ((null == mRoom.getMember(mSession.getMyUserId())) || !mSession.getDataHandler().doesRoomExist(mRoom.getRoomId())) {
+            if ((!mRoom.isJoined() && !mRoom.isInvited())
+                    || !mSession.getDataHandler().doesRoomExist(mRoom.getRoomId())) {
                 // pop to the home activity
                 Intent intent = new Intent(VectorRoomDetailsActivity.this, VectorHomeActivity.class);
                 intent.setFlags(android.content.Intent.FLAG_ACTIVITY_CLEAR_TOP | android.content.Intent.FLAG_ACTIVITY_SINGLE_TOP);
