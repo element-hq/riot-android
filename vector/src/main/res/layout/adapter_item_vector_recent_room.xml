@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    xmlns:tools="http://schemas.android.com/tools"
     android:background="?attr/riot_primary_background_color"
     android:orientation="vertical">
 
@@ -39,7 +39,8 @@
             android:layout_alignTop="@+id/room_avatar_layout"
             android:layout_marginLeft="30dp"
             android:src="@drawable/icon_person"
-            android:visibility="gone" />
+            android:visibility="gone"
+            tools:visibility="visible" />
 
 
         <ImageView
@@ -94,9 +95,9 @@
                     android:layout_toLeftOf="@+id/roomSummaryAdapter_unread_count"
                     android:fontFamily="sans-serif-regular"
                     android:singleLine="true"
-                    tools:text="Room Name"
                     android:textColor="?attr/riot_primary_text_color"
-                    android:textSize="16sp" />
+                    android:textSize="16sp"
+                    tools:text="Room Name" />
 
                 <!-- unread count badge -->
                 <TextView
@@ -112,10 +113,10 @@
                     android:minWidth="25dp"
                     android:paddingLeft="7dp"
                     android:paddingRight="7dp"
-                    tools:text="XXX"
                     android:textColor="@android:color/white"
                     android:textSize="14sp"
-                    android:visibility="gone" />
+                    android:visibility="gone"
+                    tools:text="XXX" />
 
                 <!-- Message timestamp -->
                 <TextView
@@ -126,9 +127,9 @@
                     android:layout_alignParentBottom="true"
                     android:layout_toLeftOf="@+id/roomSummaryAdapter_action_image"
                     android:fontFamily="sans-serif-light"
-                    tools:text="Jan 1 00:00"
                     android:textColor="?attr/default_text_light_color"
-                    android:textSize="12sp" />
+                    android:textSize="12sp"
+                    tools:text="Jan 1 00:00" />
 
                 <ImageView
                     android:id="@+id/roomSummaryAdapter_action_image"
@@ -195,11 +196,11 @@
                     android:layout_height="wrap_content"
                     android:layout_marginTop="3dp"
                     android:layout_toLeftOf="@+id/roomSummaryAdapter_word_readable"
-                    android:maxLines="1"
                     android:ellipsize="end"
-                    tools:text="last room message"
+                    android:maxLines="1"
                     android:textColor="?attr/default_text_light_color"
-                    android:textSize="14sp" />
+                    android:textSize="14sp"
+                    tools:text="last room message" />
 
             </RelativeLayout>
 
