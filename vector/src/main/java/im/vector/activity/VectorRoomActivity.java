@@ -780,25 +780,19 @@ public class VectorRoomActivity extends MXCActionBarActivity implements
 
         manageRoomPreview();
 
-        RoomMember member = (null != mRoom) ? mRoom.getMember(mMyUserId) : null;
-        boolean hasBeenKicked = (null != member) && member.kickedOrBanned();
+        if (mRoom != null) {
+            // Ensure menu and UI is up to date (ignore any error)
+            mRoom.getMembersAsync(new SimpleApiCallback<List<RoomMember>>() {
+                @Override
+                public void onSuccess(List<RoomMember> info) {
+                    supportInvalidateOptionsMenu();
 
-        // in timeline mode (i.e search in the forward and backward room history)
-        // or in room preview mode
-        // the edition items are not displayed
-        if ((!TextUtils.isEmpty(mEventId) || (null != sRoomPreviewData)) || hasBeenKicked) {
-            if (!mIsUnreadPreviewMode || hasBeenKicked) {
-                mNotificationsArea.setVisibility(View.GONE);
-                mBottomSeparator.setVisibility(View.GONE);
-                findViewById(R.id.room_notification_separator).setVisibility(View.GONE);
-            }
-
-            mBottomLayout.getLayoutParams().height = 0;
+                    checkIfUserHasBeenKicked();
+                }
+            });
         }
 
-        if ((null == sRoomPreviewData) && hasBeenKicked) {
-            manageBannedHeader(member);
-        }
+        checkIfUserHasBeenKicked();
 
         mLatestChatMessageCache = Matrix.getInstance(this).getDefaultLatestChatMessageCache();
 
@@ -1040,6 +1034,28 @@ public class VectorRoomActivity extends MXCActionBarActivity implements
             }
         });
         Log.d(LOG_TAG, "End of create");
+    }
+
+    private void checkIfUserHasBeenKicked() {
+        RoomMember member = (null != mRoom) ? mRoom.getMember(mMyUserId) : null;
+        boolean hasBeenKicked = (null != member) && member.kickedOrBanned();
+
+        // in timeline mode (i.e search in the forward and backward room history)
+        // or in room preview mode
+        // the edition items are not displayed
+        if ((!TextUtils.isEmpty(mEventId) || (null != sRoomPreviewData)) || hasBeenKicked) {
+            if (!mIsUnreadPreviewMode || hasBeenKicked) {
+                mNotificationsArea.setVisibility(View.GONE);
+                mBottomSeparator.setVisibility(View.GONE);
+                findViewById(R.id.room_notification_separator).setVisibility(View.GONE);
+            }
+
+            mBottomLayout.getLayoutParams().height = 0;
+        }
+
+        if ((null == sRoomPreviewData) && hasBeenKicked) {
+            manageBannedHeader(member);
+        }
     }
 
     @Override
@@ -1467,7 +1483,9 @@ public class VectorRoomActivity extends MXCActionBarActivity implements
             RoomMember member = mRoom.getMember(mSession.getMyUserId());
 
             // kicked / banned room
-            if ((null != member) && member.kickedOrBanned()) {
+            if (member != null && member.kickedOrBanned()) {
+                menu.findItem(R.id.ic_action_room_leave).setVisible(true);
+            } else {
                 menu.findItem(R.id.ic_action_room_leave).setVisible(false);
             }
 
@@ -2165,7 +2183,7 @@ public class VectorRoomActivity extends MXCActionBarActivity implements
      * @param selectedTab the selected tab index.
      */
     private void launchRoomDetails(int selectedTab) {
-        if ((null != mSession) && (null != mRoom) && (null != mRoom.getMember(mSession.getMyUserId()))) {
+        if (mSession != null && mRoom != null) {
             enableActionBarHeader(HIDE_ACTION_BAR_HEADER);
 
             // pop to the home activity
