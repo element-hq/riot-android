@@ -4,6 +4,7 @@ import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.net.Uri;
 import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.MotionEvent;
@@ -13,6 +14,12 @@ import android.widget.TextView;
 import android.widget.VideoView;
 
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.DataSource;
+import com.bumptech.glide.load.engine.GlideException;
+import com.bumptech.glide.load.resource.gif.GifDrawable;
+import com.bumptech.glide.request.RequestListener;
+import com.bumptech.glide.request.RequestOptions;
+import com.bumptech.glide.request.target.Target;
 
 import org.jetbrains.annotations.NotNull;
 import org.matrix.androidsdk.data.RoomMediaMessage;
@@ -93,8 +100,6 @@ public class MediaPreviewerActivity extends MXCActionBarActivity implements Medi
         finish();
     }
 
-    //region MediaPreviewAdapter.EventListener
-
     @Override
     public void onMediaMessagePreviewClicked(@NonNull final RoomMediaMessage roomMediaMessage) {
         if (roomMediaMessage != mCurrentRoomMediaMessage) {
@@ -103,22 +108,30 @@ public class MediaPreviewerActivity extends MXCActionBarActivity implements Medi
         }
     }
 
-    //endregion
-
-    //region Private methods
-
     private void updatePreview(final RoomMediaMessage roomMediaMessage) {
         mPreviewerVideoView.pause();
         mFileNameView.setText(roomMediaMessage.getFileName(this));
         final String mimeType = roomMediaMessage.getMimeType(this);
         final Uri uri = roomMediaMessage.getUri();
+
+        RequestOptions options = new RequestOptions();
+        options.fitCenter();
         if (mimeType != null) {
-            if (mimeType.startsWith("image")) {
+            if (mimeType.startsWith("image") && !mimeType.contains("gif")) {
                 mPreviewerImageView.setVisibility(View.VISIBLE);
                 mPreviewerVideoView.setVisibility(View.GONE);
                 Glide.with(this)
                         .asBitmap()
                         .load(uri)
+                        .apply(options)
+                        .into(mPreviewerImageView);
+            } else if (mimeType.equals("image/gif")) {
+                mPreviewerImageView.setVisibility(View.VISIBLE);
+                mPreviewerVideoView.setVisibility(View.GONE);
+                Glide.with(this)
+                        .asGif()
+                        .load(uri)
+                        .apply(options)
                         .into(mPreviewerImageView);
             } else if (mimeType.startsWith("video")) {
                 mPreviewerImageView.setVisibility(View.GONE);
@@ -159,6 +172,4 @@ public class MediaPreviewerActivity extends MXCActionBarActivity implements Medi
             mPreviewerVideoView.pause();
         }
     }
-
-    //endregion
 }
