@@ -504,7 +504,7 @@ public class VectorRoomActivity extends MXCActionBarActivity implements
                             checkSendEventStatus();
                             break;
                         case Event.EVENT_TYPE_TYPING:
-                            onRoomTypings();
+                            onRoomTyping();
                             break;
                         case Event.EVENT_TYPE_STATE_ROOM_AVATAR:
                             updateRoomHeaderAvatar();
@@ -516,6 +516,9 @@ public class VectorRoomActivity extends MXCActionBarActivity implements
                             break;
                         case Event.EVENT_TYPE_STATE_ROOM_TOMBSTONE:
                             checkSendEventStatus();
+                            break;
+                        default:
+                            Log.d(LOG_TAG, "Ignored event type: " + eventType);
                             break;
                     }
                     if (!VectorApp.isAppInBackground()) {
@@ -1991,7 +1994,7 @@ public class VectorRoomActivity extends MXCActionBarActivity implements
     private void handleTypingNotification(boolean isTyping) {
         // the typing notifications are disabled ?
         if (PreferencesManager.dontSendTypingNotifs(this)) {
-            Log.d(LOG_TAG, "##handleTypingNotification() : the typing notifs are disabled");
+            Log.d(LOG_TAG, "##handleTypingNotification() : the typing notifications are disabled");
             return;
         }
 
@@ -2649,7 +2652,7 @@ public class VectorRoomActivity extends MXCActionBarActivity implements
     /**
      * Display the typing status in the notification area.
      */
-    private void onRoomTypings() {
+    private void onRoomTyping() {
         mLatestTypingMessage = null;
 
         if (mRoom == null) {
@@ -2658,7 +2661,7 @@ public class VectorRoomActivity extends MXCActionBarActivity implements
 
         List<String> typingUsers = mRoom.getTypingUsers();
 
-        if ((null != typingUsers) && (typingUsers.size() > 0)) {
+        if (!typingUsers.isEmpty()) {
             String myUserId = mSession.getMyUserId();
 
             // get the room member names
@@ -2673,16 +2676,16 @@ public class VectorRoomActivity extends MXCActionBarActivity implements
                 }
             }
 
-            // nothing to display ?
-            if (0 == names.size()) {
+            if (names.isEmpty()) {
+                // nothing to display
                 mLatestTypingMessage = null;
-            } else if (1 == names.size()) {
+            } else if (names.size() == 1) {
                 mLatestTypingMessage = String.format(VectorApp.getApplicationLocale(),
                         getString(R.string.room_one_user_is_typing), names.get(0));
-            } else if (2 == names.size()) {
+            } else if (names.size() == 2) {
                 mLatestTypingMessage = String.format(VectorApp.getApplicationLocale(),
                         getString(R.string.room_two_users_are_typing), names.get(0), names.get(1));
-            } else if (names.size() > 2) {
+            } else {
                 mLatestTypingMessage = String.format(VectorApp.getApplicationLocale(),
                         getString(R.string.room_many_users_are_typing), names.get(0), names.get(1));
             }
