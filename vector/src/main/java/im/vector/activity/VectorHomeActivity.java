@@ -265,9 +265,6 @@ public class VectorHomeActivity extends VectorAppCompatActivity implements Searc
     // the current displayed fragment
     private String mCurrentFragmentTag;
 
-    private List<Room> mDirectChatInvitations;
-    private List<Room> mRoomInvitations;
-
     /*
      * *********************************************************************************************
      * Static methods
@@ -1540,17 +1537,10 @@ public class VectorHomeActivity extends VectorAppCompatActivity implements Searc
      * *********************************************************************************************
      */
 
+    @NonNull
     public List<Room> getRoomInvitations() {
-        if (mRoomInvitations == null) {
-            mRoomInvitations = new ArrayList<>();
-        } else {
-            mRoomInvitations.clear();
-        }
-        if (mDirectChatInvitations == null) {
-            mDirectChatInvitations = new ArrayList<>();
-        } else {
-            mDirectChatInvitations.clear();
-        }
+        List<Room> directChatInvitations =new ArrayList<>();
+        List<Room> roomInvitations =new ArrayList<>();
 
         if (null == mSession.getDataHandler().getStore()) {
             Log.e(LOG_TAG, "## getRoomInvitations() : null store");
@@ -1569,9 +1559,9 @@ public class VectorHomeActivity extends VectorAppCompatActivity implements Searc
                 // the user conference rooms are not displayed.
                 if (room != null && !room.isConferenceUserRoom() && room.isInvited()) {
                     if (room.isDirectChatInvitation()) {
-                        mDirectChatInvitations.add(room);
+                        directChatInvitations.add(room);
                     } else {
-                        mRoomInvitations.add(room);
+                        roomInvitations.add(room);
                     }
                 }
             }
@@ -1579,20 +1569,20 @@ public class VectorHomeActivity extends VectorAppCompatActivity implements Searc
 
         // the invitations are sorted from the oldest to the more recent one
         Comparator<Room> invitationComparator = RoomUtils.getRoomsDateComparator(mSession, true);
-        Collections.sort(mDirectChatInvitations, invitationComparator);
-        Collections.sort(mRoomInvitations, invitationComparator);
+        Collections.sort(directChatInvitations, invitationComparator);
+        Collections.sort(roomInvitations, invitationComparator);
 
         List<Room> roomInvites = new ArrayList<>();
         switch (mCurrentMenuId) {
             case R.id.bottom_action_people:
-                roomInvites.addAll(mDirectChatInvitations);
+                roomInvites.addAll(directChatInvitations);
                 break;
             case R.id.bottom_action_rooms:
-                roomInvites.addAll(mRoomInvitations);
+                roomInvites.addAll(roomInvitations);
                 break;
             default:
-                roomInvites.addAll(mDirectChatInvitations);
-                roomInvites.addAll(mRoomInvitations);
+                roomInvites.addAll(directChatInvitations);
+                roomInvites.addAll(roomInvitations);
                 Collections.sort(roomInvites, invitationComparator);
                 break;
         }

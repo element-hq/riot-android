@@ -18,7 +18,6 @@ package im.vector.util
 import org.matrix.androidsdk.MXSession
 import org.matrix.androidsdk.data.Room
 import org.matrix.androidsdk.data.RoomTag
-import org.matrix.androidsdk.rest.model.RoomMember
 import org.matrix.androidsdk.util.Log
 
 /**
