@@ -292,11 +292,6 @@ public class VectorRoomActivity extends MXCActionBarActivity implements
     @BindView(R.id.room_preview_info_layout)
     View mRoomPreviewLayout;
 
-    private MenuItem mResendUnsentMenuItem;
-    private MenuItem mResendDeleteMenuItem;
-    private MenuItem mSearchInRoomMenuItem;
-    private MenuItem mUseMatrixAppsMenuItem;
-
     // medias sending helper
     private VectorRoomMediasSender mVectorRoomMediasSender;
 
@@ -359,6 +354,9 @@ public class VectorRoomActivity extends MXCActionBarActivity implements
 
     // True if we are in preview mode to display unread message
     private boolean mIsUnreadPreviewMode;
+
+    // True when this room has unsent event(s)
+    private boolean mHasUnsentEvents;
 
     // progress bar to warn that the sync is not yet done
     @BindView(R.id.room_sync_in_progress)
@@ -785,7 +783,7 @@ public class VectorRoomActivity extends MXCActionBarActivity implements
             mRoom.getMembersAsync(new SimpleApiCallback<List<RoomMember>>() {
                 @Override
                 public void onSuccess(List<RoomMember> info) {
-                    supportInvalidateOptionsMenu();
+                    refreshNotificationsArea();
 
                     checkIfUserHasBeenKicked();
                 }
@@ -1466,31 +1464,48 @@ public class VectorRoomActivity extends MXCActionBarActivity implements
 
     @Override
     public boolean onPrepareOptionsMenu(Menu menu) {
+        MenuItem searchInRoomMenuItem = menu.findItem(R.id.ic_action_search_in_room);
+        MenuItem useMatrixAppsMenuItem = menu.findItem(R.id.ic_action_matrix_apps);
+        MenuItem resendUnsentMenuItem = menu.findItem(R.id.ic_action_room_resend_unsent);
+        MenuItem deleteUnsentMenuItem = menu.findItem(R.id.ic_action_room_delete_unsent);
+        MenuItem settingsMenuItem = menu.findItem(R.id.ic_action_room_settings);
+        MenuItem leaveRoomMenuItem = menu.findItem(R.id.ic_action_room_leave);
+
         // the application is in a weird state
         // GA : mSession is null, mRoom is null
         // This is the case in the room preview for public rooms
         if (CommonActivityUtils.shouldRestartApp(this) || null == mSession || null == mRoom) {
+            // Hide all items
+            searchInRoomMenuItem.setVisible(false);
+            useMatrixAppsMenuItem.setVisible(false);
+            resendUnsentMenuItem.setVisible(false);
+            deleteUnsentMenuItem.setVisible(false);
+            settingsMenuItem.setVisible(false);
+            leaveRoomMenuItem.setVisible(false);
+
             return true;
         }
 
         // the menu is only displayed when the current activity does not display a timeline search
         if (TextUtils.isEmpty(mEventId) && (null == sRoomPreviewData)) {
-            mResendUnsentMenuItem = menu.findItem(R.id.ic_action_room_resend_unsent);
-            mResendDeleteMenuItem = menu.findItem(R.id.ic_action_room_delete_unsent);
-            mSearchInRoomMenuItem = menu.findItem(R.id.ic_action_search_in_room);
-            mUseMatrixAppsMenuItem = menu.findItem(R.id.ic_action_matrix_apps);
-
             RoomMember member = mRoom.getMember(mSession.getMyUserId());
 
+            // the server search does not work on encrypted rooms.
+            searchInRoomMenuItem.setVisible(!mRoom.isEncrypted());
+            useMatrixAppsMenuItem.setVisible(TextUtils.isEmpty(mEventId) && null == sRoomPreviewData);
+            resendUnsentMenuItem.setVisible(mHasUnsentEvents);
+            deleteUnsentMenuItem.setVisible(mHasUnsentEvents);
+            settingsMenuItem.setVisible(true);
             // kicked / banned room
-            if (member != null && member.kickedOrBanned()) {
-                menu.findItem(R.id.ic_action_room_leave).setVisible(true);
-            } else {
-                menu.findItem(R.id.ic_action_room_leave).setVisible(false);
-            }
-
-            // hide / show the unsent / resend all entries.
-            refreshNotificationsArea();
+            leaveRoomMenuItem.setVisible(member != null && !member.kickedOrBanned());
+        } else {
+            // Hide all items
+            searchInRoomMenuItem.setVisible(false);
+            useMatrixAppsMenuItem.setVisible(false);
+            resendUnsentMenuItem.setVisible(false);
+            deleteUnsentMenuItem.setVisible(false);
+            settingsMenuItem.setVisible(false);
+            leaveRoomMenuItem.setVisible(false);
         }
 
         return true;
@@ -2561,8 +2576,7 @@ public class VectorRoomActivity extends MXCActionBarActivity implements
         final MatrixError softResourceLimitExceededError = limitResourceState.softErrorOrNull();
         
         NotificationAreaView.State state = NotificationAreaView.State.Default.INSTANCE;
-        boolean hasUnsentEvent = false;
-
+        mHasUnsentEvents = false;
         if (!mIsUnreadPreviewMode && !TextUtils.isEmpty(mEventId)) {
             state = NotificationAreaView.State.Hidden.INSTANCE;
         } else if (hardResourceLimitExceededError != null) {
@@ -2579,7 +2593,7 @@ public class VectorRoomActivity extends MXCActionBarActivity implements
             boolean hasUndeliverableEvents = (undeliveredEvents != null) && (undeliveredEvents.size() > 0);
             boolean hasUnknownDeviceEvents = (unknownDeviceEvents != null) && (unknownDeviceEvents.size() > 0);
             if (hasUndeliverableEvents || hasUnknownDeviceEvents) {
-                hasUnsentEvent = true;
+                mHasUnsentEvents = true;
                 state = new NotificationAreaView.State.UnsentEvents(hasUndeliverableEvents, hasUnknownDeviceEvents);
             } else if ((null != mIsScrolledToTheBottom) && (!mIsScrolledToTheBottom)) {
                 int unreadCount = 0;
@@ -2596,19 +2610,8 @@ public class VectorRoomActivity extends MXCActionBarActivity implements
             }
         }
         mNotificationsArea.render(state);
-        if (null != mResendUnsentMenuItem) {
-            mResendUnsentMenuItem.setVisible(hasUnsentEvent);
-        }
-        if (null != mResendDeleteMenuItem) {
-            mResendDeleteMenuItem.setVisible(hasUnsentEvent);
-        }
-        if (null != mSearchInRoomMenuItem) {
-            // the server search does not work on encrypted rooms.
-            mSearchInRoomMenuItem.setVisible(!mRoom.isEncrypted());
-        }
-        if (null != mUseMatrixAppsMenuItem) {
-            mUseMatrixAppsMenuItem.setVisible(TextUtils.isEmpty(mEventId) && null == sRoomPreviewData);
-        }
+
+        supportInvalidateOptionsMenu();
     }
 
     /**
