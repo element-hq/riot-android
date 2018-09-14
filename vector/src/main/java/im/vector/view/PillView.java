@@ -41,7 +41,7 @@ import im.vector.VectorApp;
 import im.vector.util.VectorUtils;
 
 /**
- *
+ * A PillView displays a user avatar and a user name in a message
  */
 public class PillView extends LinearLayout {
     private static final String LOG_TAG = PillView.class.getSimpleName();
