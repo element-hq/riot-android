@@ -807,7 +807,12 @@ class VectorMessagesAdapterHelper {
             int flags = strBuilder.getSpanFlags(span);
 
             if (PillView.isPillable(span.getURL())) {
-                final String key = span.getURL() + " " + isHighlighted;
+                // This URL link can be replaced by a Pill:
+                // Build the Drawable spannable thanks to a PillView
+                // And replace the URLSpan by a clickable ImageSpan
+
+                // the key is built with the link, the highlight status and the text of the link
+                final String key = span.getURL() + " " + isHighlighted + " " + strBuilder.subSequence(start, end).toString();
                 Drawable drawable = mPillsDrawableCache.get(key);
 
                 if (null == drawable) {
