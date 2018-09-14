@@ -220,7 +220,8 @@ public class VectorMessagesAdapter extends AbstractMessagesAdapter {
     private final boolean mAlwaysShowTimeStamps;
     private final boolean mHideReadReceipts;
 
-    private List<RoomMember> mLiveRoomMembers;
+    // Key is member id.
+    private final Map<String, RoomMember> mLiveRoomMembers = new HashMap<>();
 
     private static final Pattern mEmojisPattern = Pattern.compile("((?:[\uD83C\uDF00-\uD83D\uDDFF]" +
             "|[\uD83E\uDD00-\uD83E\uDDFF]" +
@@ -881,7 +882,11 @@ public class VectorMessagesAdapter extends AbstractMessagesAdapter {
      */
 
     public void setLiveRoomMembers(List<RoomMember> roomMembers) {
-        mLiveRoomMembers = roomMembers;
+        mLiveRoomMembers.clear();
+
+        for (RoomMember roomMember : roomMembers) {
+            mLiveRoomMembers.put(roomMember.getUserId(), roomMember);
+        }
 
         // Update the Ui (ex: read receipt avatar)
         notifyDataSetChanged();

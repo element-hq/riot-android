@@ -659,7 +659,7 @@ class VectorMessagesAdapterHelper {
     void displayReadReceipts(View convertView,
                              MessageRow row,
                              boolean isPreviewMode,
-                             @Nullable List<RoomMember> liveRoomMembers) {
+                             @Nullable Map<String, RoomMember> liveRoomMembers) {
         View avatarsListView = convertView.findViewById(R.id.messagesAdapter_avatars_list);
 
         if (null == avatarsListView) {
@@ -718,12 +718,7 @@ class VectorMessagesAdapterHelper {
 
             if (member == null && liveRoomMembers != null) {
                 // Try to get the member form the live room members
-                for (RoomMember roomMember : liveRoomMembers) {
-                    if (r.userId.equals(roomMember.getUserId())) {
-                        member = roomMember;
-                        break;
-                    }
-                }
+                member = liveRoomMembers.get(r.userId);
             }
 
             ImageView imageView = (ImageView) imageViews.get(index);
