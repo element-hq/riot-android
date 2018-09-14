@@ -26,6 +26,7 @@
             android:id="@+id/media_previewer_image_view"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
+            android:layout_gravity="center"
             android:scaleType="centerInside" />
 
         <VideoView
@@ -33,6 +34,19 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_gravity="center" />
+
+        <ImageView
+            android:id="@+id/media_previewer_video_thumbnail"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_gravity="center" />
+
+        <ImageView
+            android:id="@+id/media_previewer_video_play"
+            android:layout_width="100dp"
+            android:layout_height="100dp"
+            android:layout_gravity="center"
+            android:src="@drawable/ic_material_play_circle" />
     </FrameLayout>
 
     <android.support.v7.widget.RecyclerView

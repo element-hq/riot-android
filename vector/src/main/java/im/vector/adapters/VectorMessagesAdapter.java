@@ -2180,7 +2180,7 @@ public class VectorMessagesAdapter extends AbstractMessagesAdapter {
 
                 int type = getItemViewType(position);
 
-                if ((type == ROW_TYPE_IMAGE) || (type == ROW_TYPE_VIDEO)) {
+                if ((type == ROW_TYPE_IMAGE) || (type == ROW_TYPE_VIDEO) || (type == ROW_TYPE_STICKER)) {
                     View bodyLayoutView = inflatedView.findViewById(R.id.messagesAdapter_body_layout);
                     ViewGroup.MarginLayoutParams bodyLayout = (ViewGroup.MarginLayoutParams) bodyLayoutView.getLayoutParams();
                     ViewGroup.MarginLayoutParams e2eIconViewLayout = (ViewGroup.MarginLayoutParams) e2eIconView.getLayoutParams();

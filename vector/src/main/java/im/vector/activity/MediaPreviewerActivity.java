@@ -4,7 +4,6 @@ import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.net.Uri;
 import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.MotionEvent;
@@ -14,12 +13,7 @@ import android.widget.TextView;
 import android.widget.VideoView;
 
 import com.bumptech.glide.Glide;
-import com.bumptech.glide.load.DataSource;
-import com.bumptech.glide.load.engine.GlideException;
-import com.bumptech.glide.load.resource.gif.GifDrawable;
-import com.bumptech.glide.request.RequestListener;
 import com.bumptech.glide.request.RequestOptions;
-import com.bumptech.glide.request.target.Target;
 
 import org.jetbrains.annotations.NotNull;
 import org.matrix.androidsdk.data.RoomMediaMessage;
@@ -51,10 +45,14 @@ public class MediaPreviewerActivity extends MXCActionBarActivity implements Medi
     ImageView mPreviewerImageView;
     @BindView(R.id.media_previewer_video_view)
     VideoView mPreviewerVideoView;
+    @BindView(R.id.media_previewer_video_thumbnail)
+    ImageView mPreviewerVideoThumbnail;
     @BindView(R.id.media_previewer_list)
     RecyclerView mPreviewerRecyclerView;
     @BindView(R.id.media_previewer_file_name)
     TextView mFileNameView;
+    @BindView(R.id.media_previewer_video_play)
+    ImageView mPlayCircleView;
 
 
     @Override
@@ -81,6 +79,13 @@ public class MediaPreviewerActivity extends MXCActionBarActivity implements Medi
             return;
         }
         mPreviewerVideoView.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                onVideoPreviewClicked();
+                return false;
+            }
+        });
+        mPlayCircleView.setOnTouchListener(new View.OnTouchListener() {
             @Override
             public boolean onTouch(View v, MotionEvent event) {
                 onVideoPreviewClicked();
@@ -124,18 +129,27 @@ public class MediaPreviewerActivity extends MXCActionBarActivity implements Medi
             if (mimeType.startsWith("image")) {
                 mPreviewerImageView.setVisibility(View.VISIBLE);
                 mPreviewerVideoView.setVisibility(View.GONE);
+                mPreviewerVideoThumbnail.setVisibility(View.GONE);
+                mPlayCircleView.setVisibility(View.GONE);
                 Glide.with(this)
                         .load(uri)
                         .apply(new RequestOptions().fitCenter())
                         .into(mPreviewerImageView);
             } else if (mimeType.startsWith("video")) {
                 mPreviewerImageView.setVisibility(View.GONE);
-                mPreviewerVideoView.setVisibility(View.VISIBLE);
+                mPreviewerVideoView.setVisibility(View.GONE);
+                mPreviewerVideoThumbnail.setVisibility(View.VISIBLE);
+                mPlayCircleView.setVisibility(View.VISIBLE);
+                Glide.with(this)
+                        .load(uri)
+                        .apply(new RequestOptions().fitCenter().frame(0))
+                        .into(mPreviewerVideoThumbnail);
                 mPreviewerVideoView.setVideoURI(uri);
                 mPreviewerVideoView.seekTo(0);
             } else {
                 mPreviewerImageView.setVisibility(View.VISIBLE);
                 mPreviewerVideoView.setVisibility(View.GONE);
+                mPreviewerVideoThumbnail.setVisibility(View.GONE);
                 mPreviewerImageView.setImageResource(R.drawable.filetype_attachment);
             }
         }
@@ -162,8 +176,14 @@ public class MediaPreviewerActivity extends MXCActionBarActivity implements Medi
 
     private void onVideoPreviewClicked() {
         if (!mPreviewerVideoView.isPlaying()) {
+            mPreviewerVideoView.setVisibility(View.VISIBLE);
+            mPreviewerVideoThumbnail.setVisibility(View.GONE);
+            mPlayCircleView.setVisibility(View.GONE);
             mPreviewerVideoView.start();
         } else {
+            mPreviewerVideoThumbnail.setVisibility(View.VISIBLE);
+            mPlayCircleView.setVisibility(View.VISIBLE);
+            mPreviewerVideoView.setVisibility(View.GONE);
             mPreviewerVideoView.pause();
         }
     }

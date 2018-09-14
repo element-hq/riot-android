@@ -128,7 +128,7 @@
                     </FrameLayout>
                 </LinearLayout>
 
-                <!-- the descirption of the sticker -->
+                <!-- the description of the sticker -->
                 <LinearLayout
                     android:id="@+id/message_adapter_sticker_layout"
                     android:layout_width="wrap_content"

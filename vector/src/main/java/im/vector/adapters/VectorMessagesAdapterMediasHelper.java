@@ -235,7 +235,7 @@ class VectorMessagesAdapterMediasHelper {
                     orientation = imageInfo.orientation;
                 }
             }
-        } else if (message instanceof VideoMessage){ // video
+        } else if (message instanceof VideoMessage) {
             VideoMessage videoMessage = (VideoMessage) message;
             videoMessage.checkMediaUrls();
 
