@@ -182,7 +182,7 @@ public class VectorMessageListFragment extends MatrixMessageListFragment<VectorM
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         Log.d(LOG_TAG, "onCreateView");
 
         View v = super.onCreateView(inflater, container, savedInstanceState);
