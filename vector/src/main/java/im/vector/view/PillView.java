@@ -34,6 +34,7 @@ import org.matrix.androidsdk.rest.callback.ApiCallback;
 import org.matrix.androidsdk.rest.model.MatrixError;
 import org.matrix.androidsdk.rest.model.User;
 import org.matrix.androidsdk.util.Log;
+import org.matrix.androidsdk.util.PermalinkUtils;
 
 import im.vector.R;
 import im.vector.VectorApp;
@@ -86,29 +87,13 @@ public class PillView extends LinearLayout {
     }
 
     /**
-     * Extract the linked URL from the universal link
-     *
-     * @param url the universal link
-     * @return the url
-     */
-    private static String getLinkedUrl(String url) {
-        boolean isSupported = (null != url) && url.startsWith("https://matrix.to/#/");
-
-        if (isSupported) {
-            return url.substring("https://matrix.to/#/".length());
-        }
-
-        return null;
-    }
-
-    /**
      * Tells if a pill can be displayed for this url.
      *
      * @param url the url
      * @return true if a pill can be made.
      */
     public static boolean isPillable(String url) {
-        String linkedUrl = getLinkedUrl(url);
+        String linkedUrl = PermalinkUtils.getLinkedId(url);
 
         return (null != linkedUrl) && (MXSession.isRoomAlias(linkedUrl) || MXSession.isUserId(linkedUrl));
     }
@@ -137,7 +122,7 @@ public class PillView extends LinearLayout {
         a.recycle();
         mTextView.setTextColor(ContextCompat.getColor(getContext(), attributeResourceId));
 
-        final String linkedUrl = getLinkedUrl(url);
+        final String linkedUrl = PermalinkUtils.getLinkedId(url);
 
         if (MXSession.isUserId(linkedUrl)) {
             User user = session.getDataHandler().getUser(linkedUrl);
