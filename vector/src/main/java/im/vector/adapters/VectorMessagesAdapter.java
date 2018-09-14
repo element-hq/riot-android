@@ -1447,11 +1447,11 @@ public class VectorMessagesAdapter extends AbstractMessagesAdapter {
 
             // display a play icon for video content
             final ImageView playCircleView = convertView.findViewById(R.id.messagesAdapter_play_circle);
-            playCircleView.setVisibility(View.GONE);
             if (null == playCircleView) {
                 Log.e(LOG_TAG, "getImageVideoView : invalid layout");
                 return convertView;
             }
+            playCircleView.setVisibility(View.GONE);
             if (videoContent) {
                 playCircleView.setVisibility(View.VISIBLE);
             }

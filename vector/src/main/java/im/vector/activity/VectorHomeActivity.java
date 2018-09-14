@@ -1518,7 +1518,6 @@ public class VectorHomeActivity extends VectorAppCompatActivity implements Searc
                 .show();
 
         final Button joinButton = alertDialog.getButton(AlertDialog.BUTTON_POSITIVE);
-
         if (null != joinButton) {
             joinButton.setEnabled(false);
             textInput.addTextChangedListener(new TextWatcher() {

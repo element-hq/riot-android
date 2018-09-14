@@ -100,6 +100,8 @@ public class MediaPreviewerActivity extends MXCActionBarActivity implements Medi
         finish();
     }
 
+    //region MediaPreviewAdapter.EventListener
+
     @Override
     public void onMediaMessagePreviewClicked(@NonNull final RoomMediaMessage roomMediaMessage) {
         if (roomMediaMessage != mCurrentRoomMediaMessage) {
@@ -108,21 +110,23 @@ public class MediaPreviewerActivity extends MXCActionBarActivity implements Medi
         }
     }
 
+    //endregion
+
+    //region Private methods
+
     private void updatePreview(final RoomMediaMessage roomMediaMessage) {
         mPreviewerVideoView.pause();
         mFileNameView.setText(roomMediaMessage.getFileName(this));
         final String mimeType = roomMediaMessage.getMimeType(this);
         final Uri uri = roomMediaMessage.getUri();
 
-        RequestOptions options = new RequestOptions();
-        options.fitCenter();
         if (mimeType != null) {
             if (mimeType.startsWith("image")) {
                 mPreviewerImageView.setVisibility(View.VISIBLE);
                 mPreviewerVideoView.setVisibility(View.GONE);
                 Glide.with(this)
                         .load(uri)
-                        .apply(options)
+                        .apply(new RequestOptions().fitCenter())
                         .into(mPreviewerImageView);
             } else if (mimeType.startsWith("video")) {
                 mPreviewerImageView.setVisibility(View.GONE);
@@ -163,4 +167,6 @@ public class MediaPreviewerActivity extends MXCActionBarActivity implements Medi
             mPreviewerVideoView.pause();
         }
     }
+
+    //endregion
 }

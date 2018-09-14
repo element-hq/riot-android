@@ -693,7 +693,7 @@ public class VectorUtils {
     }
 
     /**
-     * Open a webview above the current activity.
+     * Open a web view above the current activity.
      *
      * @param context the application context
      * @param url     the url to open
@@ -701,42 +701,7 @@ public class VectorUtils {
     private static void displayInWebView(final Context context, String url) {
         WebView wv = new WebView(context);
         wv.loadUrl(url);
-        wv.setWebViewClient(new WebViewClient() {
-            @Override
-            public boolean shouldOverrideUrlLoading(WebView view, String url) {
-                view.loadUrl(url);
-
-                return true;
-            }
-        });
-
         new AlertDialog.Builder(context)
-                .setView(wv)
-                .setPositiveButton(android.R.string.ok, null)
-                .show();
-    }
-
-    /**
-     * Open a webview above the current activity with a title.
-     *
-     * @param context the application context
-     * @param url     the url to open
-     * @param title   title of the dialog
-     */
-    private static void displayInTitleWebView(final Context context, String url, String title) {
-        WebView wv = new WebView(context);
-        wv.loadUrl(url);
-        wv.setWebViewClient(new WebViewClient() {
-            @Override
-            public boolean shouldOverrideUrlLoading(WebView view, String url) {
-                view.loadUrl(url);
-
-                return true;
-            }
-        });
-
-        new AlertDialog.Builder(context)
-                .setTitle(title)
                 .setView(wv)
                 .setPositiveButton(android.R.string.ok, null)
                 .show();
@@ -774,9 +739,7 @@ public class VectorUtils {
      */
     public static void displayThirdPartyLicenses() {
         if (null != VectorApp.getCurrentActivity()) {
-            displayInTitleWebView(VectorApp.getCurrentActivity(),
-                    "file:///android_asset/open_source_licenses.html",
-                    VectorApp.getCurrentActivity().getResources().getString(R.string.dialog_title_third_party_licences));
+            displayInWebView(VectorApp.getCurrentActivity(), "file:///android_asset/open_source_licenses.html");
         }
     }
 

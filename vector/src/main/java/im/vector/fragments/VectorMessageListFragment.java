@@ -433,7 +433,7 @@ public class VectorMessageListFragment extends MatrixMessageListFragment impleme
         if (null != event.getCryptoError()) {
             decryptionErrorLabelTextView.setVisibility(View.VISIBLE);
             textView.setVisibility(View.VISIBLE);
-            textView.setText(event.getCryptoError().getLocalizedMessage());
+            textView.setText("**" + event.getCryptoError().getLocalizedMessage() + "**");
         } else {
             decryptionErrorLabelTextView.setVisibility(View.GONE);
             textView.setVisibility(View.GONE);
