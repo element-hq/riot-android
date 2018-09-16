@@ -139,9 +139,9 @@ E-mail helbideak zuri pasahitza berrezartzea ahalbidetzen dizu ere.</string>
 
 E-mail helbideak zuri pasahitza berrezartzea ahalbidetzen dizu ere.</string>
     <string name="auth_email_placeholder">E-mail helbidea</string>
-    <string name="auth_opt_email_placeholder">E-mail helbidea (aukerazkoa)</string>
+    <string name="auth_opt_email_placeholder">E-mail helbidea (aukerakoa)</string>
     <string name="auth_phone_number_placeholder">Telefono zenbakia</string>
-    <string name="auth_opt_phone_number_placeholder">Telefono zenbakia (aukerazkoa)</string>
+    <string name="auth_opt_phone_number_placeholder">Telefono zenbakia (aukerakoa)</string>
     <string name="auth_repeat_password_placeholder">Errepikatu pasahitza</string>
     <string name="auth_repeat_new_password_placeholder">Berretsi zure pasahitza</string>
     <string name="auth_invalid_login_param">Erabiltzaile-izen eta/edo pasahitz okerra</string>
@@ -667,7 +667,7 @@ Gailu ezezagunak:</string>
     <string name="directory_server_type_homeserver">Idatzi hasiera zerbitzari bat honen gela publikoak zerrendatzeko</string>
     <string name="directory_server_placeholder">Hasiera zerbitzariaren URLa</string>
     <string name="directory_server_all_rooms_on_server">%s zerbitzariko gela guztiak</string>
-    <string name="directory_server_native_rooms">%s zerbitzariko gela natibo guztiak</string>
+    <string name="directory_server_native_rooms">%s gela natibo guztiak</string>
 
     <string name="historical_placeholder">Bilatu historiala</string>
 
