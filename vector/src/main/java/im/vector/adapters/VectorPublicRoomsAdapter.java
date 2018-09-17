@@ -73,7 +73,7 @@ public class VectorPublicRoomsAdapter extends ArrayAdapter<PublicRoom> {
         View separatorView = convertView.findViewById(R.id.recents_separator);
 
         // display the room avatar
-        VectorUtils.loadUserAvatar(mContext, mSession, avatarImageView, publicRoom.getAvatarUrl(), publicRoom.roomId, roomName);
+        VectorUtils.loadUserAvatar(mContext, mSession, avatarImageView, publicRoom.avatarUrl, publicRoom.roomId, roomName);
 
         // set the topic
         roomMessageTxtView.setText(publicRoom.topic);

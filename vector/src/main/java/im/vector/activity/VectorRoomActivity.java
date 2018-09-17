@@ -85,9 +85,9 @@ import org.matrix.androidsdk.rest.model.MatrixError;
 import org.matrix.androidsdk.rest.model.PowerLevels;
 import org.matrix.androidsdk.rest.model.RoomMember;
 import org.matrix.androidsdk.rest.model.RoomTombstoneContent;
+import org.matrix.androidsdk.rest.model.StateEvent;
 import org.matrix.androidsdk.rest.model.User;
 import org.matrix.androidsdk.rest.model.message.Message;
-import org.matrix.androidsdk.rest.model.publicroom.PublicRoom;
 import org.matrix.androidsdk.util.JsonUtils;
 import org.matrix.androidsdk.util.Log;
 import org.matrix.androidsdk.util.PermalinkUtils;
@@ -497,8 +497,8 @@ public class VectorRoomActivity extends MXCActionBarActivity implements
                             updateRoomHeaderAvatar();
                             break;
                         case Event.EVENT_TYPE_STATE_ROOM_TOPIC:
-                            RoomState roomState = JsonUtils.toRoomState(event.getContent());
-                            setTopic(roomState.topic);
+                            StateEvent stateEvent = JsonUtils.toStateEvent(event.getContent());
+                            setTopic(stateEvent.topic);
                             break;
                         case Event.EVENT_TYPE_STATE_ROOM_POWER_LEVELS:
                             checkSendEventStatus();
@@ -2717,6 +2717,8 @@ public class VectorRoomActivity extends MXCActionBarActivity implements
             topic = mRoom.getTopic();
         } else if ((null != sRoomPreviewData) && (null != sRoomPreviewData.getRoomState())) {
             topic = sRoomPreviewData.getRoomState().topic;
+        } else if ((null != sRoomPreviewData) && (null != sRoomPreviewData.getPublicRoom())) {
+            topic = sRoomPreviewData.getPublicRoom().topic;
         }
 
         setTopic(topic);
@@ -2864,10 +2866,10 @@ public class VectorRoomActivity extends MXCActionBarActivity implements
         updateRoomHeaderAvatar();
 
         // update the room name
-        if (null != mRoom) {
-            mActionBarHeaderRoomName.setText(VectorUtils.getRoomDisplayName(this, mSession, mRoom));
-        } else if (null != sRoomPreviewData) {
+        if (null != sRoomPreviewData) {
             mActionBarHeaderRoomName.setText(sRoomPreviewData.getRoomName());
+        } else if (null != mRoom) {
+            mActionBarHeaderRoomName.setText(VectorUtils.getRoomDisplayName(this, mSession, mRoom));
         } else {
             mActionBarHeaderRoomName.setText("");
         }
@@ -2881,10 +2883,12 @@ public class VectorRoomActivity extends MXCActionBarActivity implements
         if (null != mActionBarCustomTopic) {
             String value = null;
 
-            if (null != mRoom) {
-                value = mRoom.isReady() ? mRoom.getTopic() : mDefaultTopic;
-            } else if ((null != sRoomPreviewData) && (null != sRoomPreviewData.getRoomState())) {
+            if ((null != sRoomPreviewData) && (null != sRoomPreviewData.getRoomState())) {
                 value = sRoomPreviewData.getRoomState().topic;
+            } else if ((null != sRoomPreviewData) && (null != sRoomPreviewData.getPublicRoom())) {
+                value = sRoomPreviewData.getPublicRoom().topic;
+            } else if (null != mRoom) {
+                value = mRoom.isReady() ? mRoom.getTopic() : mDefaultTopic;
             }
 
             // if topic value is empty, just hide the topic TextView
@@ -2982,7 +2986,7 @@ public class VectorRoomActivity extends MXCActionBarActivity implements
         if (null != mActionBarHeaderActiveMembersLayout) {
             // refresh only if the action bar is hidden
             if (mActionBarCustomTitle.getVisibility() == View.GONE) {
-                if ((null != mRoom) || (null != sRoomPreviewData)) {
+                if (mRoom != null || sRoomPreviewData != null) {
                     // update the members status: "active members"/"members"
 
                     final RoomState roomState = (null != sRoomPreviewData) ? sRoomPreviewData.getRoomState() : mRoom.getState();
@@ -2999,7 +3003,7 @@ public class VectorRoomActivity extends MXCActionBarActivity implements
                             setMemberHeaderText(0, mRoom.getNumberOfJoinedMembers());
 
                             // Then request the list of members asynchronously
-                            mRoom.getDisplayableMembersAsync(new SimpleApiCallback<List<RoomMember>>(this) {
+                            mRoom.getDisplayableMembersAsync(new ApiCallback<List<RoomMember>>() {
                                 @Override
                                 public void onSuccess(List<RoomMember> members) {
                                     int joinedMembersCount = 0;
@@ -3017,24 +3021,33 @@ public class VectorRoomActivity extends MXCActionBarActivity implements
                                         }
                                     }
 
-                                    // in preview mode, the room state might be a publicRoom
-                                    // so try to use the public room info.
-                                    if ((roomState instanceof PublicRoom) && (0 == joinedMembersCount)) {
-                                        activeMembersCount = joinedMembersCount = ((PublicRoom) roomState).numJoinedMembers;
-                                    }
-
                                     setMemberHeaderText(activeMembersCount, joinedMembersCount);
+
+                                    if (joinedMembersCount == 0) {
+                                        checkPublicRoom();
+                                    }
+                                }
+
+                                @Override
+                                public void onNetworkError(Exception e) {
+                                    checkPublicRoom();
+                                }
+
+                                @Override
+                                public void onMatrixError(MatrixError e) {
+                                    checkPublicRoom();
+                                }
+
+                                @Override
+                                public void onUnexpectedError(Exception e) {
+                                    checkPublicRoom();
                                 }
                             });
                         } else if (sRoomPreviewData != null) {
-                            // in preview mode, the room state might be a publicRoom
-                            if (roomState instanceof PublicRoom) {
-                                setMemberHeaderText(0, ((PublicRoom) roomState).numJoinedMembers);
-                            } else {
-                                // Should not happen
-                                setMemberHeaderText(0, 0);
-                            }
+                            checkPublicRoom();
                         }
+                    } else if (sRoomPreviewData != null && sRoomPreviewData.getPublicRoom() != null) {
+                        checkPublicRoom();
                     } else {
                         mActionBarHeaderActiveMembersLayout.setVisibility(View.GONE);
                     }
@@ -3044,6 +3057,15 @@ public class VectorRoomActivity extends MXCActionBarActivity implements
             } else {
                 mActionBarHeaderActiveMembersLayout.setVisibility(View.GONE);
             }
+        }
+    }
+
+    private void checkPublicRoom() {
+        if (sRoomPreviewData != null && sRoomPreviewData.getPublicRoom() != null) {
+            setMemberHeaderText(0, sRoomPreviewData.getPublicRoom().numJoinedMembers);
+        } else {
+            // Should not happen
+            setMemberHeaderText(0, 0);
         }
     }
 

@@ -114,13 +114,13 @@ public class VectorUtils {
         String displayName = publicRoom.name;
 
         if (TextUtils.isEmpty(displayName)) {
-            if (publicRoom.getAliases().size() > 0) {
-                displayName = publicRoom.getAliases().get(0);
+            if (publicRoom.aliases.size() > 0) {
+                displayName = publicRoom.aliases.get(0);
             } else {
                 displayName = publicRoom.roomId;
             }
-        } else if (!displayName.startsWith("#") && (0 < publicRoom.getAliases().size())) {
-            displayName = displayName + " (" + publicRoom.getAliases().get(0) + ")";
+        } else if (!displayName.startsWith("#") && (0 < publicRoom.aliases.size())) {
+            displayName = displayName + " (" + publicRoom.aliases.get(0) + ")";
         }
 
         return displayName;
