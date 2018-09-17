@@ -152,7 +152,7 @@ public class GroupUtils {
         Room room = session.getDataHandler().getStore().getRoom(groupRoom.roomId);
 
         if (room == null || !room.isJoined()) {
-            final RoomPreviewData roomPreviewData = new RoomPreviewData(session, groupRoom.roomId, null, groupRoom.getCanonicalAlias(), null);
+            final RoomPreviewData roomPreviewData = new RoomPreviewData(session, groupRoom.roomId, null, groupRoom.canonicalAlias, null);
 
             roomPreviewData.fetchPreviewData(new ApiCallback<Void>() {
                 private void onDone() {
@@ -167,7 +167,7 @@ public class GroupUtils {
                 }
 
                 private void onError() {
-                    roomPreviewData.setRoomState(groupRoom);
+                    roomPreviewData.setPublicRoom(groupRoom);
                     roomPreviewData.setRoomName(groupRoom.name);
                     onDone();
                 }

@@ -255,7 +255,7 @@ public class RoomsFragment extends AbsHomeFragment implements AbsHomeFragment.On
     private void onPublicRoomSelected(final PublicRoom publicRoom) {
         // sanity check
         if (null != publicRoom.roomId) {
-            final RoomPreviewData roomPreviewData = new RoomPreviewData(mSession, publicRoom.roomId, null, publicRoom.getCanonicalAlias(), null);
+            final RoomPreviewData roomPreviewData = new RoomPreviewData(mSession, publicRoom.roomId, null, publicRoom.canonicalAlias, null);
 
             // Check whether the room exists to handled the cases where the user is invited or he has joined.
             // CAUTION: the room may exist whereas the user membership is neither invited nor joined.
@@ -297,7 +297,7 @@ public class RoomsFragment extends AbsHomeFragment implements AbsHomeFragment.On
                     }
 
                     private void onError() {
-                        roomPreviewData.setRoomState(publicRoom);
+                        roomPreviewData.setPublicRoom(publicRoom);
                         roomPreviewData.setRoomName(publicRoom.name);
                         onDone();
                     }
