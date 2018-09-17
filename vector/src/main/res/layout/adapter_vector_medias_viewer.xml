@@ -13,8 +13,7 @@
     <RelativeLayout
         android:id="@+id/media_slider_video_layout"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:background="#000">
+        android:layout_height="match_parent">
 
         <VideoView
             android:id="@+id/media_slider_video_view"
@@ -28,13 +27,12 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_centerInParent="true"
-            android:layout_gravity="center"
-            android:background="#000" />
+            android:layout_gravity="center" />
 
         <ImageView
             android:id="@+id/media_slider_video_play"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="100dp"
+            android:layout_height="100dp"
             android:layout_centerInParent="true"
             android:layout_gravity="center"
             android:src="@drawable/ic_material_play_circle" />
@@ -42,8 +40,8 @@
 
     <im.vector.view.PieFractionView
         android:id="@+id/media_slider_pie_view"
-        android:layout_width="160dp"
-        android:layout_height="160dp"
+        android:layout_width="100dp"
+        android:layout_height="100dp"
         android:layout_centerHorizontal="true"
         android:layout_centerVertical="true"
         android:alpha="0.4" />

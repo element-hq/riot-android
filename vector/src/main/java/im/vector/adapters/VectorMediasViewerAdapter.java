@@ -213,6 +213,7 @@ public class VectorMediasViewerAdapter extends PagerAdapter {
         final VideoView videoView = view.findViewById(R.id.media_slider_video_view);
         final ImageView thumbView = view.findViewById(R.id.media_slider_video_thumbnail);
         final PieFractionView pieFractionView = view.findViewById(R.id.media_slider_pie_view);
+        final ImageView playCircleView = view.findViewById(R.id.media_slider_video_play);
         final View downloadFailedView = view.findViewById(R.id.media_download_failed);
 
         final SlidableMediaInfo mediaInfo = mMediasMessagesList.get(position);
@@ -249,6 +250,7 @@ public class VectorMediasViewerAdapter extends PagerAdapter {
 
         if (null != downloadId) {
             pieFractionView.setVisibility(View.VISIBLE);
+            playCircleView.setVisibility(View.GONE);
             pieFractionView.setFraction(mMediasCache.getProgressValueForDownloadId(downloadId));
             pieFractionView.setTag(downloadId);
 
@@ -256,13 +258,13 @@ public class VectorMediasViewerAdapter extends PagerAdapter {
 
                 @Override
                 public void onDownloadError(String downloadId, JsonElement jsonElement) {
-                    MatrixError error = JsonUtils.toMatrixError(jsonElement);
+                    pieFractionView.setVisibility(View.GONE);
+                    downloadFailedView.setVisibility(View.VISIBLE);
 
+                    MatrixError error = JsonUtils.toMatrixError(jsonElement);
                     if ((null != error) && error.isSupportedErrorCode()) {
                         Toast.makeText(mContext, error.getLocalizedMessage(), Toast.LENGTH_LONG).show();
                     }
-
-                    downloadFailedView.setVisibility(View.VISIBLE);
                 }
 
                 @Override
@@ -276,9 +278,9 @@ public class VectorMediasViewerAdapter extends PagerAdapter {
                 public void onDownloadComplete(String aDownloadId) {
                     if (aDownloadId.equals(pieFractionView.getTag())) {
                         pieFractionView.setVisibility(View.GONE);
-
                         // check if the media has been downloaded
                         if (mMediasCache.isMediaCached(loadingUri, mediaInfo.mMimeType)) {
+                            playCircleView.setVisibility(View.VISIBLE);
                             mMediasCache.createTmpDecryptedMediaFile(loadingUri, mediaInfo.mMimeType, mediaInfo.mEncryptedFileInfo,
                                     new SimpleApiCallback<File>() {
                                         @Override
@@ -345,14 +347,12 @@ public class VectorMediasViewerAdapter extends PagerAdapter {
                 public void onDownloadError(String aDownloadId, JsonElement jsonElement) {
                     if (aDownloadId.equals(downloadId)) {
                         pieFractionView.setVisibility(View.GONE);
+                        downloadFailedView.setVisibility(View.VISIBLE);
 
                         MatrixError error = JsonUtils.toMatrixError(jsonElement);
-
                         if (null != error) {
                             Toast.makeText(mContext, error.getLocalizedMessage(), Toast.LENGTH_LONG).show();
                         }
-
-                        downloadFailedView.setVisibility(View.VISIBLE);
                     }
                 }
 
@@ -367,7 +367,6 @@ public class VectorMediasViewerAdapter extends PagerAdapter {
                 public void onDownloadComplete(String aDownloadId) {
                     if (aDownloadId.equals(downloadId)) {
                         pieFractionView.setVisibility(View.GONE);
-
                         if (mMediasCache.isMediaCached(loadingUri, imageInfo.mMimeType)) {
                             mMediasCache.createTmpDecryptedMediaFile(loadingUri, imageInfo.mMimeType, imageInfo.mEncryptedFileInfo,
                                     new SimpleApiCallback<File>() {

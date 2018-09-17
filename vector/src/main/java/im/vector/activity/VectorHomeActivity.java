@@ -1448,13 +1448,17 @@ public class VectorHomeActivity extends VectorAppCompatActivity implements Searc
      */
     private void joinARoom() {
         LayoutInflater inflater = LayoutInflater.from(this);
-
-        AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(this);
         View dialogView = inflater.inflate(R.layout.dialog_join_room_by_id, null);
-        alertDialogBuilder.setView(dialogView);
 
         final EditText textInput = dialogView.findViewById(R.id.join_room_edit_text);
         textInput.setTextColor(ThemeUtils.INSTANCE.getColor(this, R.attr.riot_primary_text_color));
+
+        AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(this);
+
+        // set dialog layout
+        alertDialogBuilder
+                .setTitle(R.string.room_recents_join_room_title)
+                .setView(dialogView);
 
         // set dialog message
         AlertDialog alertDialog = alertDialogBuilder
@@ -1514,7 +1518,6 @@ public class VectorHomeActivity extends VectorAppCompatActivity implements Searc
                 .show();
 
         final Button joinButton = alertDialog.getButton(AlertDialog.BUTTON_POSITIVE);
-
         if (null != joinButton) {
             joinButton.setEnabled(false);
             textInput.addTextChangedListener(new TextWatcher() {

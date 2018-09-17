@@ -400,7 +400,7 @@ public class VectorMessageListFragment extends MatrixMessageListFragment impleme
 
         EncryptedEventContent encryptedEventContent = JsonUtils.toEncryptedEventContent(event.getWireContent().getAsJsonObject());
 
-        View layout = inflater.inflate(R.layout.encrypted_event_info, null);
+        View layout = inflater.inflate(R.layout.dialog_encryption_info, null);
 
         TextView textView;
 

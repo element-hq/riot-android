@@ -100,14 +100,14 @@
                                 android:adjustViewBounds="true"
                                 android:scaleType="center" />
 
-                            <!-- the media type -->
+                            <!-- the play icon -->
                             <ImageView
-                                android:id="@+id/messagesAdapter_image_type"
+                                android:id="@+id/messagesAdapter_play_circle"
                                 android:layout_width="@dimen/chat_avatar_size"
                                 android:layout_height="@dimen/chat_avatar_size"
-                                android:layout_alignLeft="@+id/messagesAdapter_image"
-                                android:layout_margin="10dp"
-                                android:src="@drawable/filetype_image" />
+                                android:layout_centerInParent="true"
+                                android:layout_gravity="center"
+                                android:src="@drawable/ic_material_play_circle" />
 
                             <!-- the upload fails -->
                             <ImageView
@@ -128,7 +128,7 @@
                     </FrameLayout>
                 </LinearLayout>
 
-                <!-- the descirption of the sticker -->
+                <!-- the description of the sticker -->
                 <LinearLayout
                     android:id="@+id/message_adapter_sticker_layout"
                     android:layout_width="wrap_content"

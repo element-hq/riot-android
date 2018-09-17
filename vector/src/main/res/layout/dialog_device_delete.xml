@@ -6,16 +6,18 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="10dp"
-        android:layout_marginLeft="10dp"
-        android:layout_marginRight="10dp"
+        android:paddingLeft="?dialogPreferredPadding"
+        android:paddingStart="?dialogPreferredPadding"
+        android:paddingRight="?dialogPreferredPadding"
+        android:paddingEnd="?dialogPreferredPadding"
+        android:paddingTop="12dp"
         android:orientation="vertical">
 
         <TextView
             android:id="@+id/delete_dialog_info_label"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="5dp"
+            android:layout_marginTop="6dp"
             android:text="@string/devices_delete_dialog_text"
             android:textSize="12sp" />
 
@@ -23,7 +25,7 @@
             android:id="@+id/password_label"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="5dp"
+            android:layout_marginTop="6dp"
             android:text="@string/devices_delete_pswd"
             android:textSize="12sp"
             android:textStyle="bold" />
@@ -35,6 +37,5 @@
             android:ems="10"
             android:inputType="textPassword"
             android:maxLines="1" />
-
     </LinearLayout>
 </ScrollView>

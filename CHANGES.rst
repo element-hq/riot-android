@@ -9,6 +9,7 @@ Features:
 
 Improvements:
  - Minor changes to toolbar style and other UI elements (#2529)
+ - Improvements to dialogs, video messages, and the previewer activity (#2583)
 
 Other changes:
  -

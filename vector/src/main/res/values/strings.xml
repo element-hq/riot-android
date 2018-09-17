@@ -487,7 +487,7 @@
     <string name="ssl_cert_new_account_expl">If the server administrator has said that this is expected, ensure that the fingerprint below matches the fingerprint provided by them.</string>
     <string name="ssl_unexpected_existing_expl">The certificate has changed from one that was trusted by your phone. This is HIGHLY UNUSUAL. It is recommended that you DO NOT ACCEPT this new certificate.</string>
     <string name="ssl_expected_existing_expl">The certificate has changed from a previously trusted one to one that is not trusted. The server may have renewed its certificate. Contact the server administrator for the expected fingerprint.</string>
-    <string name="ssl_only_accept">ONLY accept the certificate if the server administrator has published a fingerprint that matches the one above.</string>
+    <string name="ssl_only_accept">Only accept the certificate if the server administrator has published a fingerprint that matches the one above.</string>
     <string name="ssl_fingerprint_example">00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00</string>
 
     <!-- Room Details -->
@@ -706,9 +706,9 @@
     <string name="account_phone_number_already_used_error">This phone number is already in use</string>
 
     <string name="settings_change_password">Change password</string>
-    <string name="settings_old_password">old password</string>
-    <string name="settings_new_password">new password</string>
-    <string name="settings_confirm_password">confirm password</string>
+    <string name="settings_old_password">Old password</string>
+    <string name="settings_new_password">New password</string>
+    <string name="settings_confirm_password">Confirm password</string>
     <string name="settings_fail_to_update_password">Fail to update password</string>
     <string name="settings_password_updated">Your password has been updated</string>
     <string name="settings_unignore_user">Show all messages from %s?\n\nNote that this action will restart the app and it may take some time.</string>
@@ -874,7 +874,7 @@
 
     <string name="encryption_information_verify_device">Verify device</string>
     <string name="encryption_information_verify_device_warning">To verify that this device can be trusted, please contact its owner using some other means (e.g. in person or a phone call) and ask them whether the key they see in their User Settings for this device matches the key below:</string>
-    <string name="encryption_information_verify_device_warning2">If it matches, press the verify button below. \nIf it doesn\'t, then someone else is intercepting this device and you should probably blacklist it.\nIn future this verification process will be more sophisticated.</string>
+    <string name="encryption_information_verify_device_warning2">If it matches, press the verify button below. If it doesn\'t, then someone else is intercepting this device and you should probably blacklist it. In the future this verification process will be more sophisticated.</string>
     <string name="encryption_information_verify_key_match">I verify that the keys match</string>
 
     <string name="e2e_enabling_on_app_update">Riot now supports end-to-end encryption but you need to log in again to enable it.\n\nYou can do it now or later from the application settings.</string>
@@ -1023,7 +1023,7 @@
     <string name="rejoin">Rejoin</string>
     <string name="forget_room">Forget room</string>
 
-    <!-- Miscelaneous image descriptions for accessibility -->
+    <!-- Miscellaneous image descriptions for accessibility -->
     <string name="receipt_avatar">Receipt avatar</string>
     <string name="notice_avatar">Notice avatar</string>
     <string name="avatar">Avatar</string>
