@@ -760,8 +760,9 @@ public class EventStreamService extends Service {
             // 1- the state is in catchup : the event stream might have gone to sleep between two catchups
             // 2- the thread is suspended
             // 3- the application has been launched by a push so there is no displayed activity
-            canCatchup = (state == StreamAction.CATCHUP) || (state == StreamAction.PAUSE) ||
-                    ((StreamAction.START == state) && (null == VectorApp.getCurrentActivity()));
+            canCatchup = (state == StreamAction.CATCHUP)
+                    || (state == StreamAction.PAUSE)
+                    || ((StreamAction.START == state) && (null == VectorApp.getCurrentActivity()));
         }
 
         if (canCatchup) {
@@ -820,10 +821,10 @@ public class EventStreamService extends Service {
      */
     private boolean shouldDisplayListenForEventsNotification() {
         // fdroid
-        return (!mGcmRegistrationManager.useGCM() ||
+        return (!mGcmRegistrationManager.useGCM()
                 // the GCM registration was not done
-                TextUtils.isEmpty(mGcmRegistrationManager.getCurrentRegistrationToken())
-                        && !mGcmRegistrationManager.isServerRegistered())
+                || TextUtils.isEmpty(mGcmRegistrationManager.getCurrentRegistrationToken())
+                && !mGcmRegistrationManager.isServerRegistered())
                 && mGcmRegistrationManager.isBackgroundSyncAllowed()
                 && mGcmRegistrationManager.areDeviceNotificationsAllowed();
     }

@@ -278,8 +278,8 @@ public class CallsManager {
                             break;
 
                         case IMXCall.CALL_STATE_ENDED: {
-                            if (((TextUtils.equals(IMXCall.CALL_STATE_RINGING, mPrevCallState) && !mActiveCall.isIncoming()) ||
-                                    TextUtils.equals(IMXCall.CALL_STATE_INVITE_SENT, mPrevCallState))) {
+                            if (((TextUtils.equals(IMXCall.CALL_STATE_RINGING, mPrevCallState) && !mActiveCall.isIncoming())
+                                    || TextUtils.equals(IMXCall.CALL_STATE_INVITE_SENT, mPrevCallState))) {
                                 if (!mIsStoppedByUser) {
                                     // display message only if the caller originated the hang up
                                     showToast(mContext.getString(R.string.call_error_user_not_responding));

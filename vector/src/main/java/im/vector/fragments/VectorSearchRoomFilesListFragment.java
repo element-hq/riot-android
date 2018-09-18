@@ -325,10 +325,10 @@ public class VectorSearchRoomFilesListFragment extends VectorSearchRoomsFilesLis
             if (Event.EVENT_TYPE_MESSAGE.equals(event.getType())) {
                 Message message = JsonUtils.toMessage(event.getContent());
 
-                if (Message.MSGTYPE_FILE.equals(message.msgtype) ||
-                        Message.MSGTYPE_IMAGE.equals(message.msgtype) ||
-                        Message.MSGTYPE_VIDEO.equals(message.msgtype) ||
-                        Message.MSGTYPE_AUDIO.equals(message.msgtype)) {
+                if (Message.MSGTYPE_FILE.equals(message.msgtype)
+                        || Message.MSGTYPE_IMAGE.equals(message.msgtype)
+                        || Message.MSGTYPE_VIDEO.equals(message.msgtype)
+                        || Message.MSGTYPE_AUDIO.equals(message.msgtype)) {
                     filteredEvents.add(event);
                 }
             }

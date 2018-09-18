@@ -571,13 +571,13 @@ public class VectorRecentsListFragment extends VectorBaseFragment implements
                         String eventType = event.getType();
 
                         // refresh the UI at the end of the next events chunk
-                        refreshOnChunkEnd |= ((event.roomId != null) && RoomSummary.isSupportedEvent(event)) ||
-                                Event.EVENT_TYPE_STATE_ROOM_MEMBER.equals(eventType) ||
-                                Event.EVENT_TYPE_TAGS.equals(eventType) ||
-                                Event.EVENT_TYPE_REDACTION.equals(eventType) ||
-                                Event.EVENT_TYPE_RECEIPT.equals(eventType) ||
-                                Event.EVENT_TYPE_STATE_ROOM_AVATAR.equals(eventType) ||
-                                Event.EVENT_TYPE_STATE_ROOM_THIRD_PARTY_INVITE.equals(eventType);
+                        refreshOnChunkEnd |= ((event.roomId != null) && RoomSummary.isSupportedEvent(event))
+                                || Event.EVENT_TYPE_STATE_ROOM_MEMBER.equals(eventType)
+                                || Event.EVENT_TYPE_TAGS.equals(eventType)
+                                || Event.EVENT_TYPE_REDACTION.equals(eventType)
+                                || Event.EVENT_TYPE_RECEIPT.equals(eventType)
+                                || Event.EVENT_TYPE_STATE_ROOM_AVATAR.equals(eventType)
+                                || Event.EVENT_TYPE_STATE_ROOM_THIRD_PARTY_INVITE.equals(eventType);
                     }
                 });
             }
@@ -1060,9 +1060,9 @@ public class VectorRecentsListFragment extends VectorBaseFragment implements
      * @return true if the group is movable.
      */
     private boolean groupIsMovable(int groupPosition) {
-        return mAdapter.isNoTagRoomPosition(groupPosition) ||
-                mAdapter.isFavouriteRoomPosition(groupPosition) ||
-                mAdapter.isLowPriorityRoomPosition(groupPosition);
+        return mAdapter.isNoTagRoomPosition(groupPosition)
+                || mAdapter.isFavouriteRoomPosition(groupPosition)
+                || mAdapter.isLowPriorityRoomPosition(groupPosition);
     }
 
     /**
