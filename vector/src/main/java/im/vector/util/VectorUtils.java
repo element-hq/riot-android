@@ -204,10 +204,10 @@ public class VectorUtils {
                     && room.getRoomSummary() != null) {
                 List<String> heroes = room.getRoomSummary().getHeroes();
 
-                for(String id: heroes) {
+                for (String id : heroes) {
                     RoomMember roomMember = roomState.getMember(id);
 
-                    if(roomMember != null) {
+                    if (roomMember != null) {
                         othersActiveMembers.add(roomMember);
                     }
                 }
