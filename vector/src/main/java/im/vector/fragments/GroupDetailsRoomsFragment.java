@@ -29,7 +29,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Filter;
 
-import org.matrix.androidsdk.rest.callback.ApiSuccessCallback;
+import org.matrix.androidsdk.rest.callback.SuccessCallback;
 import org.matrix.androidsdk.rest.model.group.GroupRoom;
 
 import butterknife.BindView;
@@ -86,7 +86,7 @@ public class GroupDetailsRoomsFragment extends GroupDetailsBaseFragment {
             @Override
             public void onSelectItem(GroupRoom groupRoom, int position) {
                 mActivity.showWaitingView();
-                GroupUtils.openGroupRoom(mActivity, mSession, groupRoom, new ApiSuccessCallback<Void>() {
+                GroupUtils.openGroupRoom(mActivity, mSession, groupRoom, new SuccessCallback<Void>() {
                     @Override
                     public void onSuccess(Void info) {
                         mActivity.hideWaitingView();

@@ -26,7 +26,7 @@ import org.matrix.androidsdk.MXSession;
 import org.matrix.androidsdk.data.Room;
 import org.matrix.androidsdk.data.RoomPreviewData;
 import org.matrix.androidsdk.rest.callback.ApiCallback;
-import org.matrix.androidsdk.rest.callback.ApiSuccessCallback;
+import org.matrix.androidsdk.rest.callback.SuccessCallback;
 import org.matrix.androidsdk.rest.model.MatrixError;
 import org.matrix.androidsdk.rest.model.group.Group;
 import org.matrix.androidsdk.rest.model.group.GroupRoom;
@@ -148,7 +148,7 @@ public class GroupUtils {
     public static void openGroupRoom(final Activity fromActivity,
                                      final MXSession session,
                                      final GroupRoom groupRoom,
-                                     @NonNull final ApiSuccessCallback<Void> callback) {
+                                     @NonNull final SuccessCallback<Void> callback) {
         Room room = session.getDataHandler().getStore().getRoom(groupRoom.roomId);
 
         if (room == null || !room.isJoined()) {
