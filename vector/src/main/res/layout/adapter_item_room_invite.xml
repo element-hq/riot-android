@@ -100,7 +100,7 @@
         android:orientation="horizontal">
 
         <Button
-            android:id="@+id/recents_invite_reject_button"
+            android:id="@+id/room_invite_reject_button"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:background="@color/vector_green_color"
@@ -111,7 +111,7 @@
             android:textSize="14sp" />
 
         <Button
-            android:id="@+id/recents_invite_preview_button"
+            android:id="@+id/room_invite_preview_button"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:layout_marginLeft="16dp"
