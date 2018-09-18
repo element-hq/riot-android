@@ -289,8 +289,9 @@ public class VectorAutoCompleteTextView extends AppCompatMultiAutoCompleteTextVi
                 Editable editableAfter = getText();
 
                 // check if the inserted becomes was the new first item
-                if ((null != before) && !before.startsWith(text.toString()) &&
-                        editableAfter.toString().startsWith(text.toString())) {
+                if ((null != before)
+                        && !before.startsWith(text.toString())
+                        && editableAfter.toString().startsWith(text.toString())) {
 
                     if (text.toString().startsWith("@")) {
                         editableAfter.replace(0, text.length(), text + ":");

@@ -1111,13 +1111,13 @@ public class VectorMessagesAdapter extends AbstractMessagesAdapter {
         } else if (Event.EVENT_TYPE_STICKER.equals(eventType)) {
             viewType = ROW_TYPE_STICKER;
         } else if (
-                event.isCallEvent() ||
-                        Event.EVENT_TYPE_STATE_HISTORY_VISIBILITY.equals(eventType) ||
-                        Event.EVENT_TYPE_STATE_ROOM_TOPIC.equals(eventType) ||
-                        Event.EVENT_TYPE_STATE_ROOM_MEMBER.equals(eventType) ||
-                        Event.EVENT_TYPE_STATE_ROOM_NAME.equals(eventType) ||
-                        Event.EVENT_TYPE_STATE_ROOM_THIRD_PARTY_INVITE.equals(eventType) ||
-                        Event.EVENT_TYPE_MESSAGE_ENCRYPTION.equals(eventType)) {
+                event.isCallEvent()
+                        || Event.EVENT_TYPE_STATE_HISTORY_VISIBILITY.equals(eventType)
+                        || Event.EVENT_TYPE_STATE_ROOM_TOPIC.equals(eventType)
+                        || Event.EVENT_TYPE_STATE_ROOM_MEMBER.equals(eventType)
+                        || Event.EVENT_TYPE_STATE_ROOM_NAME.equals(eventType)
+                        || Event.EVENT_TYPE_STATE_ROOM_THIRD_PARTY_INVITE.equals(eventType)
+                        || Event.EVENT_TYPE_MESSAGE_ENCRYPTION.equals(eventType)) {
             viewType = ROW_TYPE_ROOM_MEMBER;
 
         } else if (WidgetsManager.WIDGET_EVENT_TYPE.equals(eventType)) {
@@ -2321,9 +2321,8 @@ public class VectorMessagesAdapter extends AbstractMessagesAdapter {
                 } else {
                     EncryptedEventContent encryptedEventContent = JsonUtils.toEncryptedEventContent(event.getWireContent().getAsJsonObject());
 
-                    if (TextUtils.equals(mSession.getCredentials().deviceId, encryptedEventContent.device_id) &&
-                            TextUtils.equals(mSession.getMyUserId(), event.getSender())
-                            ) {
+                    if (TextUtils.equals(mSession.getCredentials().deviceId, encryptedEventContent.device_id)
+                            && TextUtils.equals(mSession.getMyUserId(), event.getSender())) {
                         e2eIconByEventId.put(event.eventId, R.drawable.e2e_verified);
                         MXDeviceInfo deviceInfo = mSession.getCrypto()
                                 .deviceWithIdentityKey(encryptedEventContent.sender_key, event.getSender(), encryptedEventContent.algorithm);

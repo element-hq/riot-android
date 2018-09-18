@@ -1535,8 +1535,8 @@ public class VectorHomeActivity extends VectorAppCompatActivity implements Searc
 
     @NonNull
     public List<Room> getRoomInvitations() {
-        List<Room> directChatInvitations =new ArrayList<>();
-        List<Room> roomInvitations =new ArrayList<>();
+        List<Room> directChatInvitations = new ArrayList<>();
+        List<Room> roomInvitations = new ArrayList<>();
 
         if (null == mSession.getDataHandler().getStore()) {
             Log.e(LOG_TAG, "## getRoomInvitations() : null store");
@@ -1967,11 +1967,11 @@ public class VectorHomeActivity extends VectorAppCompatActivity implements Searc
             String eventType = event.getType();
 
             // refresh the UI at the end of the next events chunk
-            mRefreshBadgeOnChunkEnd |= ((event.roomId != null) && RoomSummary.isSupportedEvent(event)) ||
-                    Event.EVENT_TYPE_STATE_ROOM_MEMBER.equals(eventType) ||
-                    Event.EVENT_TYPE_REDACTION.equals(eventType) ||
-                    Event.EVENT_TYPE_TAGS.equals(eventType) ||
-                    Event.EVENT_TYPE_STATE_ROOM_THIRD_PARTY_INVITE.equals(eventType);
+            mRefreshBadgeOnChunkEnd |= ((event.roomId != null) && RoomSummary.isSupportedEvent(event))
+                    || Event.EVENT_TYPE_STATE_ROOM_MEMBER.equals(eventType)
+                    || Event.EVENT_TYPE_REDACTION.equals(eventType)
+                    || Event.EVENT_TYPE_TAGS.equals(eventType)
+                    || Event.EVENT_TYPE_STATE_ROOM_THIRD_PARTY_INVITE.equals(eventType);
 
         }
 
@@ -2337,13 +2337,13 @@ public class VectorHomeActivity extends VectorAppCompatActivity implements Searc
                 String eventType = event.getType();
 
                 // refresh the UI at the end of the next events chunk
-                mRefreshOnChunkEnd |= ((event.roomId != null) && RoomSummary.isSupportedEvent(event)) ||
-                        Event.EVENT_TYPE_STATE_ROOM_MEMBER.equals(eventType) ||
-                        Event.EVENT_TYPE_TAGS.equals(eventType) ||
-                        Event.EVENT_TYPE_REDACTION.equals(eventType) ||
-                        Event.EVENT_TYPE_RECEIPT.equals(eventType) ||
-                        Event.EVENT_TYPE_STATE_ROOM_AVATAR.equals(eventType) ||
-                        Event.EVENT_TYPE_STATE_ROOM_THIRD_PARTY_INVITE.equals(eventType);
+                mRefreshOnChunkEnd |= ((event.roomId != null) && RoomSummary.isSupportedEvent(event))
+                        || Event.EVENT_TYPE_STATE_ROOM_MEMBER.equals(eventType)
+                        || Event.EVENT_TYPE_TAGS.equals(eventType)
+                        || Event.EVENT_TYPE_REDACTION.equals(eventType)
+                        || Event.EVENT_TYPE_RECEIPT.equals(eventType)
+                        || Event.EVENT_TYPE_STATE_ROOM_AVATAR.equals(eventType)
+                        || Event.EVENT_TYPE_STATE_ROOM_THIRD_PARTY_INVITE.equals(eventType);
             }
 
             @Override
