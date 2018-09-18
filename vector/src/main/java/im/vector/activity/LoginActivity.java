@@ -82,7 +82,7 @@ import im.vector.R;
 import im.vector.RegistrationManager;
 import im.vector.UnrecognizedCertHandler;
 import im.vector.activity.util.RequestCodesKt;
-import im.vector.dialogs.ResourceLimitDialogHelper;
+import im.vector.features.hhs.ResourceLimitDialogHelper;
 import im.vector.receiver.VectorRegistrationReceiver;
 import im.vector.receiver.VectorUniversalLinkReceiver;
 import im.vector.repositories.ServerUrlsRepository;
