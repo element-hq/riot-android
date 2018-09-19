@@ -36,6 +36,11 @@ private const val MAX_PINNED_NOTICES_PER_ROOM = 2
 sealed class LimitResourceState {
     object Normal : LimitResourceState()
     data class Exceeded(val roomId: String, val eventId: String, val matrixError: MatrixError) : LimitResourceState()
+
+    fun softErrorOrNull(): MatrixError? = when (this) {
+        is Exceeded -> matrixError
+        is LimitResourceState.Normal -> null
+    }
 }
 
 /**
@@ -45,7 +50,7 @@ sealed class LimitResourceState {
  */
 class ResourceLimitEventListener(private val dataHandler: MXDataHandler, private val callback: Callback?) : MXEventListener() {
 
-    private var serverNoticesRooms: List<Room>
+    private var serverNoticesRooms: List<Room> = emptyList()
     var limitResourceState: LimitResourceState = LimitResourceState.Normal
         private set
 
@@ -53,14 +58,11 @@ class ResourceLimitEventListener(private val dataHandler: MXDataHandler, private
      * At init, we check the state of each server notice rooms
      */
     init {
-        serverNoticesRooms = loadServerNoticeRooms()
-        serverNoticesRooms.forEach {
-            processPinnedEvents(it)
-        }
+        loadAndProcessServerNoticeRooms()
     }
 
     override fun onRoomTagEvent(roomId: String) {
-        serverNoticesRooms = loadServerNoticeRooms()
+        loadAndProcessServerNoticeRooms()
     }
 
     override fun onLiveEvent(event: Event, roomState: RoomState) {
@@ -71,6 +73,13 @@ class ResourceLimitEventListener(private val dataHandler: MXDataHandler, private
     }
 
     // Private methods *****************************************************************************
+
+    private fun loadAndProcessServerNoticeRooms() {
+        serverNoticesRooms = loadServerNoticeRooms()
+        serverNoticesRooms.forEach {
+            processPinnedEvents(it)
+        }
+    }
 
     /**
      * Reload the server notice rooms.
@@ -111,7 +120,7 @@ class ResourceLimitEventListener(private val dataHandler: MXDataHandler, private
         dataRetriever.getEvent(dataHandler.store, roomId, eventId, object : SimpleApiCallback<Event>() {
             override fun onSuccess(event: Event) {
                 val content = JsonUtils.toClass(event.contentAsJsonObject, ServerNoticeUsageLimitContent::class.java)
-                if ((Event.EVENT_TYPE_SERVER_NOTICE_USAGE_LIMIT == content.type)) {
+                if (content.isServerNoticeUsageLimit) {
                     // map the content as a matrix error
                     val matrixError = MatrixError(MatrixError.RESOURCE_LIMIT_EXCEEDED, "").apply {
                         limitType = content.limit

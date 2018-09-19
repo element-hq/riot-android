@@ -85,7 +85,6 @@ import org.matrix.androidsdk.rest.model.MatrixError;
 import org.matrix.androidsdk.rest.model.PowerLevels;
 import org.matrix.androidsdk.rest.model.RoomMember;
 import org.matrix.androidsdk.rest.model.RoomTombstoneContent;
-import org.matrix.androidsdk.rest.model.ServerNoticeUsageLimitContent;
 import org.matrix.androidsdk.rest.model.User;
 import org.matrix.androidsdk.rest.model.message.Message;
 import org.matrix.androidsdk.rest.model.publicroom.PublicRoom;
@@ -2538,8 +2537,10 @@ public class VectorRoomActivity extends MXCActionBarActivity implements
         if ((null == mSession.getDataHandler()) || (null == mRoom) || (null != sRoomPreviewData)) {
             return;
         }
-        final MatrixError hardResourceLimitExceededError = mSession.getDataHandler().getResourceLimitExceededError();
         final LimitResourceState limitResourceState = mResourceLimitEventListener.getLimitResourceState();
+        final MatrixError hardResourceLimitExceededError = mSession.getDataHandler().getResourceLimitExceededError();
+        final MatrixError softResourceLimitExceededError = limitResourceState.softErrorOrNull();
+        
         NotificationAreaView.State state = NotificationAreaView.State.Default.INSTANCE;
         boolean hasUnsentEvent = false;
 
@@ -2547,8 +2548,7 @@ public class VectorRoomActivity extends MXCActionBarActivity implements
             state = NotificationAreaView.State.Hidden.INSTANCE;
         } else if (hardResourceLimitExceededError != null) {
             state = new NotificationAreaView.State.ResourceLimitExceededError(false, hardResourceLimitExceededError);
-        } else if (limitResourceState instanceof LimitResourceState.Exceeded) {
-            final MatrixError softResourceLimitExceededError = ((LimitResourceState.Exceeded) limitResourceState).getMatrixError();
+        } else if (softResourceLimitExceededError != null) {
             state = new NotificationAreaView.State.ResourceLimitExceededError(true, softResourceLimitExceededError);
         } else if (!Matrix.getInstance(this).isConnected()) {
             state = NotificationAreaView.State.ConnectionError.INSTANCE;
