@@ -54,6 +54,7 @@ import im.vector.R
 import im.vector.VectorApp
 import im.vector.activity.*
 import im.vector.contacts.ContactsManager
+import im.vector.extensions.getFingerprintHumanReadable
 import im.vector.preference.*
 import im.vector.settings.FontScale
 import im.vector.util.*

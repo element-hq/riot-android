@@ -53,6 +53,7 @@ import im.vector.Matrix;
 import im.vector.R;
 import im.vector.VectorApp;
 import im.vector.activity.BugReportActivity;
+import im.vector.extensions.BasicExtensionsKt;
 import okhttp3.Call;
 import okhttp3.MediaType;
 import okhttp3.OkHttpClient;
@@ -213,7 +214,7 @@ public class BugReporter {
                             .addFormDataPart("matrix_sdk_version", matrixSdkVersion)
                             .addFormDataPart("olm_version", olmVersion)
                             .addFormDataPart("device", Build.MODEL.trim())
-                            .addFormDataPart("lazy_loading", StringUtilsKt.toOnOff(PreferencesManager.useLazyLoading(context)))
+                            .addFormDataPart("lazy_loading", BasicExtensionsKt.toOnOff(PreferencesManager.useLazyLoading(context)))
                             .addFormDataPart("os", Build.VERSION.RELEASE + " (API " + Build.VERSION.SDK_INT + ") "
                                     + Build.VERSION.INCREMENTAL + "-" + Build.VERSION.CODENAME)
                             .addFormDataPart("locale", Locale.getDefault().toString())

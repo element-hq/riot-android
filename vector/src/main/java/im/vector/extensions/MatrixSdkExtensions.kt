@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package im.vector.util
+package im.vector.extensions
 
 import org.matrix.androidsdk.MXSession
 import org.matrix.androidsdk.crypto.data.MXDeviceInfo
