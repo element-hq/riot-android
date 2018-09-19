@@ -1409,16 +1409,16 @@ public class VectorRoomSettingsFragment extends PreferenceFragment implements Sh
      * @return true if the user is allowed.
      */
     private boolean canUpdateFlair() {
-        boolean canUpdateAliases = false;
+        boolean canUpdateFlair = false;
 
         PowerLevels powerLevels = mRoom.getState().getPowerLevels();
 
         if (null != powerLevels) {
             int powerLevel = powerLevels.getUserPowerLevel(mSession.getMyUserId());
-            canUpdateAliases = powerLevel >= powerLevels.minimumPowerLevelForSendingEventAsStateEvent(Event.EVENT_TYPE_STATE_RELATED_GROUPS);
+            canUpdateFlair = powerLevel >= powerLevels.minimumPowerLevelForSendingEventAsStateEvent(Event.EVENT_TYPE_STATE_RELATED_GROUPS);
         }
 
-        return canUpdateAliases;
+        return canUpdateFlair;
     }
 
     /**
