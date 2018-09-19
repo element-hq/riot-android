@@ -2024,7 +2024,7 @@ class VectorSettingsPreferencesFragment : PreferenceFragment(), SharedPreference
         val deviceId = mSession.credentials.deviceId
 
         // device name
-        if (null != aMyDeviceInfo && !TextUtils.isEmpty(aMyDeviceInfo.display_name)) {
+        if (null != aMyDeviceInfo) {
             cryptoInfoDeviceNamePreference.summary = aMyDeviceInfo.display_name
 
             cryptoInfoDeviceNamePreference.onPreferenceClickListener = Preference.OnPreferenceClickListener {
@@ -2307,8 +2307,12 @@ class VectorSettingsPreferencesFragment : PreferenceFragment(), SharedPreference
                 .setPositiveButton(R.string.ok) { dialog, which ->
                     displayLoadingView()
 
-                    mSession.setDeviceName(aDeviceInfoToRename.device_id, input.text.toString(), object : ApiCallback<Void> {
+                    val newName = input.text.toString()
+
+                    mSession.setDeviceName(aDeviceInfoToRename.device_id, newName, object : ApiCallback<Void> {
                         override fun onSuccess(info: Void?) {
+                            hideLoadingView()
+
                             // search which preference is updated
                             val count = mDevicesListSettingsCategory.preferenceCount
 
@@ -2316,17 +2320,17 @@ class VectorSettingsPreferencesFragment : PreferenceFragment(), SharedPreference
                                 val pref = mDevicesListSettingsCategory.getPreference(i) as VectorCustomActionEditTextPreference
 
                                 if (TextUtils.equals(aDeviceInfoToRename.device_id, pref.title)) {
-                                    pref.summary = input.text
+                                    pref.summary = newName
                                 }
                             }
 
                             // detect if the updated device is the current account one
-                            val pref = findPreference(PreferencesManager.SETTINGS_ENCRYPTION_INFORMATION_DEVICE_ID_PREFERENCE_KEY)
-                            if (TextUtils.equals(pref.summary, aDeviceInfoToRename.device_id)) {
-                                findPreference(PreferencesManager.SETTINGS_ENCRYPTION_INFORMATION_DEVICE_NAME_PREFERENCE_KEY).summary = input.text
+                            if (TextUtils.equals(cryptoInfoDeviceIdPreference.summary, aDeviceInfoToRename.device_id)) {
+                                cryptoInfoDeviceNamePreference.summary = newName
                             }
 
-                            hideLoadingView()
+                            // Also change the display name in aDeviceInfoToRename, in case of multiple renaming
+                            aDeviceInfoToRename.display_name = newName
                         }
 
                         override fun onNetworkError(e: Exception) {
