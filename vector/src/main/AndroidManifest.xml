@@ -399,6 +399,17 @@
             android:configChanges="orientation|screenSize"
             android:theme="@style/AppTheme.NoActionBar.Light" />
 
+        <!-- FileProvider -->
+        <provider
+            android:name="android.support.v4.content.FileProvider"
+            android:authorities="${applicationId}.fileProvider"
+            android:exported="false"
+            android:grantUriPermissions="true">
+            <meta-data
+                android:name="android.support.FILE_PROVIDER_PATHS"
+                android:resource="@xml/vector_provider_paths" />
+        </provider>
+
         <!-- broadcast receiver -->
         <receiver
             android:name=".receiver.VectorUniversalLinkReceiver"

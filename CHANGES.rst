@@ -15,7 +15,7 @@ Other changes:
  -
 
 Bugfix:
- -
+ - Fix crash when opening file with external application (#2573)
 
 Translations:
  -
