@@ -133,13 +133,15 @@ public class VectorAutoCompleteTextView extends AppCompatMultiAutoCompleteTextVi
     public void initAutoCompletions(@NonNull final MXSession session, @Nullable Room room) {
         initAutoCompletion();
 
-        // First build adapter with empty list
-        buildAdapter(session, new ArrayList<User>(), getSlashCommandList());
+        final List<SlashCommandsParser.SlashCommand> slashCommandList = getSlashCommandList();
+
+        // First build adapter with empty list of users
+        buildAdapter(session, new ArrayList<User>(), slashCommandList);
 
         getUsersList(session, room, new SimpleApiCallback<List<User>>() {
             @Override
             public void onSuccess(List<User> users) {
-                buildAdapter(session, users, getSlashCommandList());
+                buildAdapter(session, users, slashCommandList);
             }
         });
     }
