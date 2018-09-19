@@ -102,11 +102,11 @@ import java.util.regex.Pattern;
 
 import im.vector.R;
 import im.vector.VectorApp;
+import im.vector.extensions.MatrixSdkExtensionsKt;
 import im.vector.listeners.IMessagesAdapterActionsListener;
 import im.vector.ui.VectorQuoteSpan;
 import im.vector.util.EventGroup;
 import im.vector.util.MatrixLinkMovementMethod;
-import im.vector.util.MatrixSdkExtensionsKt;
 import im.vector.util.MatrixURLSpan;
 import im.vector.util.PreferencesManager;
 import im.vector.util.RiotEventDisplay;

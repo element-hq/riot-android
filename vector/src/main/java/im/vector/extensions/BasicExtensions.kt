@@ -14,6 +14,6 @@
  * limitations under the License.
  */
 
-package im.vector.util
+package im.vector.extensions
 
 fun Boolean.toOnOff() = if (this) "ON" else "OFF"
