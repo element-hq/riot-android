@@ -1573,17 +1573,17 @@ public class VectorRoomSettingsFragment extends PreferenceFragment implements Sh
         ThemeUtils.INSTANCE.tintMenuIcons(menu, ThemeUtils.INSTANCE.getColor(context, R.attr.icon_tint_on_light_action_bar_color));
 
         String canonicalAlias = mRoom.getState().alias;
-        final boolean canUpdateAliases = canUpdateAliases();
+        final boolean canUpdateCanonicalAlias = canUpdateCanonicalAlias();
 
-        /**
+        /*
          * For alias, it seems that you can only delete alias you have created, even if the Admin has set it as canonical.
          * So let the server answer if it's possible to delete an alias.
          *
          * For canonical alias, you need to have the right power level, so keep the test
          */
         menu.findItem(R.id.ic_action_vector_delete_alias).setVisible(true);
-        menu.findItem(R.id.ic_action_vector_set_as_main_address).setVisible(canUpdateAliases && !TextUtils.equals(roomAlias, canonicalAlias));
-        menu.findItem(R.id.ic_action_vector_unset_main_address).setVisible(canUpdateAliases && TextUtils.equals(roomAlias, canonicalAlias));
+        menu.findItem(R.id.ic_action_vector_set_as_main_address).setVisible(canUpdateCanonicalAlias && !TextUtils.equals(roomAlias, canonicalAlias));
+        menu.findItem(R.id.ic_action_vector_unset_main_address).setVisible(canUpdateCanonicalAlias && TextUtils.equals(roomAlias, canonicalAlias));
 
         // display the menu
         popup.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
@@ -1610,8 +1610,8 @@ public class VectorRoomSettingsFragment extends PreferenceFragment implements Sh
                     mRoom.removeAlias(roomAlias, new SimpleApiCallback<Void>(mAliasUpdatesCallback) {
                         @Override
                         public void onSuccess(Void info) {
-                            // when there is only one alias, it becomes the main alias.
-                            if (mRoom.getAliases().size() == 1 && canUpdateAliases) {
+                            // when there is only one alias, it becomes the canonical alias.
+                            if (mRoom.getAliases().size() == 1 && canUpdateCanonicalAlias) {
                                 mRoom.updateCanonicalAlias(mRoom.getAliases().get(0), mAliasUpdatesCallback);
                             } else {
                                 mAliasUpdatesCallback.onSuccess(info);
@@ -1632,21 +1632,21 @@ public class VectorRoomSettingsFragment extends PreferenceFragment implements Sh
     }
 
     /**
-     * Tells if the current user can updates the room aliases.
+     * Tells if the current user can updates the room canonical alias.
      *
-     * @return true if the user is allowed.
+     * @return true if the user is allowed to update the canonical alias.
      */
-    private boolean canUpdateAliases() {
-        boolean canUpdateAliases = false;
+    private boolean canUpdateCanonicalAlias() {
+        boolean canUpdateCanonicalAlias = false;
 
         PowerLevels powerLevels = mRoom.getState().getPowerLevels();
 
         if (null != powerLevels) {
             int powerLevel = powerLevels.getUserPowerLevel(mSession.getMyUserId());
-            canUpdateAliases = powerLevel >= powerLevels.minimumPowerLevelForSendingEventAsStateEvent(Event.EVENT_TYPE_STATE_ROOM_ALIASES);
+            canUpdateCanonicalAlias = powerLevel >= powerLevels.minimumPowerLevelForSendingEventAsStateEvent(Event.EVENT_TYPE_STATE_CANONICAL_ALIAS);
         }
 
-        return canUpdateAliases;
+        return canUpdateCanonicalAlias;
     }
 
     /**
@@ -1737,8 +1737,8 @@ public class VectorRoomSettingsFragment extends PreferenceFragment implements Sh
                                 mRoom.addAlias(newAddress, new SimpleApiCallback<Void>(mAliasUpdatesCallback) {
                                     @Override
                                     public void onSuccess(Void info) {
-                                        // when there is only one alias, it becomes the main alias.
-                                        if (mRoom.getAliases().size() == 1 && canUpdateAliases()) {
+                                        // when there is only one alias, it becomes the canonical alias.
+                                        if (mRoom.getAliases().size() == 1 && canUpdateCanonicalAlias()) {
                                             mRoom.updateCanonicalAlias(mRoom.getAliases().get(0), mAliasUpdatesCallback);
                                         } else {
                                             mAliasUpdatesCallback.onSuccess(info);
