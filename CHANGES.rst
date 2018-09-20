@@ -5,7 +5,7 @@ MatrixSdk:
  - Upgrade to version 0.X.Y.
 
 Features:
- -
+ - Manage blue banner case of server quota notices (#2547)
 
 Improvements:
  - Minor changes to toolbar style and other UI elements (#2529)

@@ -36,7 +36,7 @@ import butterknife.BindView
 import butterknife.ButterKnife
 import com.binaryfork.spanny.Spanny
 import im.vector.R
-import im.vector.error.ResourceLimitErrorFormatter
+import im.vector.features.hhs.ResourceLimitErrorFormatter
 import im.vector.listeners.IMessagesAdapterActionsListener
 import im.vector.util.MatrixURLSpan
 import im.vector.util.ThemeUtils
@@ -130,12 +130,21 @@ class NotificationAreaView @JvmOverloads constructor(
     private fun renderResourceLimitExceededError(state: State.ResourceLimitExceededError) {
         visibility = View.VISIBLE
         val resourceLimitErrorFormatter = ResourceLimitErrorFormatter(context)
-        val message = resourceLimitErrorFormatter.format(state.matrixError, ResourceLimitErrorFormatter.Mode.Hard, clickable = true)
+        val formatterMode: ResourceLimitErrorFormatter.Mode
+        val backgroundColor: Int
+        if (state.isSoft) {
+            backgroundColor = R.color.soft_resource_limit_exceeded
+            formatterMode = ResourceLimitErrorFormatter.Mode.Soft
+        } else {
+            backgroundColor = R.color.hard_resource_limit_exceeded
+            formatterMode = ResourceLimitErrorFormatter.Mode.Hard
+        }
+        val message = resourceLimitErrorFormatter.format(state.matrixError, formatterMode, clickable = true)
         messageView.setTextColor(Color.WHITE)
         messageView.text = message
         messageView.movementMethod = LinkMovementMethod.getInstance()
         messageView.setLinkTextColor(Color.WHITE)
-        setBackgroundColor(ContextCompat.getColor(context, R.color.vector_fuchsia_color))
+        setBackgroundColor(ContextCompat.getColor(context, backgroundColor))
     }
 
     private fun renderConnectionError() {
@@ -255,7 +264,7 @@ class NotificationAreaView @JvmOverloads constructor(
         object Hidden : State()
 
         // Resource limit exceeded error will be displayed (only hard for the moment)
-        data class ResourceLimitExceededError(val matrixError: MatrixError) : State()
+        data class ResourceLimitExceededError(val isSoft: Boolean, val matrixError: MatrixError) : State()
 
         // Server connection is lost
         object ConnectionError : State()
