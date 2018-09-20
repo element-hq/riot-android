@@ -38,8 +38,8 @@ sealed class LimitResourceState {
     data class Exceeded(val roomId: String, val eventId: String, val matrixError: MatrixError) : LimitResourceState()
 
     fun softErrorOrNull(): MatrixError? = when (this) {
+        is Normal -> null
         is Exceeded -> matrixError
-        is LimitResourceState.Normal -> null
     }
 }
 
