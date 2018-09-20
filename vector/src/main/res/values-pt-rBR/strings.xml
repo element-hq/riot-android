@@ -863,10 +863,9 @@ Você autoriza o Riot a acessar seus contatos?</string>
 	<item quantity="other">%d novas mensagens</item>
 </plurals>
 
-    <string name="room_displayname_many_members">%1$s e %2$s</string>
-    <plurals name="others">
-	<item quantity="one">1 outra/o</item>
-	<item quantity="other">%d outras/os</item>
+    <plurals name="room_displayname_three_and_more_members">
+	<item quantity="one">%1$s e 1 outra/o</item>
+	<item quantity="other">%1$s e %d outras/os</item>
 </plurals>
 
     <plurals name="directory_search_rooms">
