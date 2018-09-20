@@ -1,5 +1,6 @@
 /*
  * Copyright 2017 Vector Creations Ltd
+ * Copyright 2018 New Vector Ltd
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -96,8 +97,11 @@ public class RoomViewHolder extends RecyclerView.ViewHolder {
      * @param isInvitation           true when the room is an invitation one
      * @param moreRoomActionListener
      */
-    public void populateViews(final Context context, final MXSession session, final Room room,
-                              final boolean isDirectChat, final boolean isInvitation,
+    public void populateViews(final Context context,
+                              final MXSession session,
+                              final Room room,
+                              final boolean isDirectChat,
+                              final boolean isInvitation,
                               final AbsAdapter.MoreRoomActionListener moreRoomActionListener) {
         // sanity check
         if (null == room) {

@@ -45,6 +45,7 @@ import org.matrix.androidsdk.util.Log;
 import im.vector.Matrix;
 import im.vector.R;
 import im.vector.notifications.NotificationUtils;
+import im.vector.util.VectorUtils;
 import im.vector.util.ViewUtilKt;
 import kotlin.Pair;
 
@@ -127,11 +128,12 @@ public class LockScreenActivity extends VectorAppCompatActivity { // do NOT exte
         final Room room = session.getDataHandler().getRoom(roomId);
 
         // display the room name as title
-        setTitle(room.getName(session.getCredentials().userId));
+        String roomName = VectorUtils.getRoomDisplayName(this, session, room);
+        setTitle(roomName);
 
         ((TextView) findViewById(R.id.lock_screen_sender)).setText(intent.getStringExtra(EXTRA_SENDER_NAME) + " : ");
         ((TextView) findViewById(R.id.lock_screen_body)).setText(intent.getStringExtra(EXTRA_MESSAGE_BODY));
-        ((TextView) findViewById(R.id.lock_screen_room_name)).setText(room.getName(session.getCredentials().userId));
+        ((TextView) findViewById(R.id.lock_screen_room_name)).setText(roomName);
         final ImageButton sendButton = findViewById(R.id.lock_screen_sendbutton);
         final EditText editText = findViewById(R.id.lock_screen_edittext);
 

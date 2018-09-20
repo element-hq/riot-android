@@ -1,13 +1,13 @@
-/* 
+/*
  * Copyright 2016 OpenMarket Ltd
  * Copyright 2018 New Vector Ltd
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *     http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -36,6 +36,8 @@ import android.widget.MultiAutoCompleteTextView;
 
 import org.matrix.androidsdk.MXSession;
 import org.matrix.androidsdk.data.Room;
+import org.matrix.androidsdk.rest.callback.ApiCallback;
+import org.matrix.androidsdk.rest.callback.SimpleApiCallback;
 import org.matrix.androidsdk.rest.model.RoomMember;
 import org.matrix.androidsdk.rest.model.User;
 import org.matrix.androidsdk.util.Log;
@@ -96,7 +98,7 @@ public class VectorAutoCompleteTextView extends AppCompatMultiAutoCompleteTextVi
      */
     public void updateAutoCompletionMode() {
         final AutoCompletionMode newMode = AutoCompletionMode.Companion.getWithText(getText().toString());
-        if (newMode == mAutoCompletionMode){
+        if (newMode == mAutoCompletionMode) {
             return;
         }
         mAutoCompletionMode = newMode;
@@ -130,24 +132,43 @@ public class VectorAutoCompleteTextView extends AppCompatMultiAutoCompleteTextVi
      */
     public void initAutoCompletions(@NonNull final MXSession session, @Nullable Room room) {
         initAutoCompletion();
-        buildAdapter(session, getUsersList(session, room), getSlashCommandList());
+
+        final List<SlashCommandsParser.SlashCommand> slashCommandList = getSlashCommandList();
+
+        // First build adapter with empty list of users
+        buildAdapter(session, new ArrayList<User>(), slashCommandList);
+
+        getUsersList(session, room, new SimpleApiCallback<List<User>>() {
+            @Override
+            public void onSuccess(List<User> users) {
+                buildAdapter(session, users, slashCommandList);
+            }
+        });
     }
 
-    private List<User> getUsersList(@NonNull final MXSession session, @Nullable Room room) {
-        List<User> users = new ArrayList<>();
+    private void getUsersList(@NonNull final MXSession session,
+                              @Nullable Room room,
+                              ApiCallback<List<User>> callback) {
 
         if (null != room) {
-            Collection<RoomMember> members = room.getMembers();
+            room.getMembersAsync(new SimpleApiCallback<List<RoomMember>>(callback) {
+                @Override
+                public void onSuccess(List<RoomMember> members) {
+                    List<User> users = new ArrayList<>();
 
-            for (RoomMember member : members) {
-                User user = session.getDataHandler().getUser(member.getUserId());
+                    for (RoomMember member : members) {
+                        User user = session.getDataHandler().getUser(member.getUserId());
 
-                if (null != user) {
-                    users.add(user);
+                        if (null != user) {
+                            users.add(user);
+                        }
+                    }
                 }
-            }
+            });
+        } else {
+            // Empty list
+            callback.onSuccess(new ArrayList<User>());
         }
-        return users;
     }
 
     private List<SlashCommandsParser.SlashCommand> getSlashCommandList() {
@@ -184,9 +205,9 @@ public class VectorAutoCompleteTextView extends AppCompatMultiAutoCompleteTextVi
     /**
      * Internal method to build the auto completions list of users or slash commands.
      *
-     * @param session        the session
-     * @param users          the users list
-     * @param commandLines   the commands list
+     * @param session      the session
+     * @param users        the users list
+     * @param commandLines the commands list
      */
     private void buildAdapter(@NonNull MXSession session,
                               Collection<User> users,
@@ -270,8 +291,9 @@ public class VectorAutoCompleteTextView extends AppCompatMultiAutoCompleteTextVi
                 Editable editableAfter = getText();
 
                 // check if the inserted becomes was the new first item
-                if ((null != before) && !before.startsWith(text.toString()) &&
-                        editableAfter.toString().startsWith(text.toString())) {
+                if ((null != before)
+                        && !before.startsWith(text.toString())
+                        && editableAfter.toString().startsWith(text.toString())) {
 
                     if (text.toString().startsWith("@")) {
                         editableAfter.replace(0, text.length(), text + ":");

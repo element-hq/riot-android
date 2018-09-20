@@ -598,7 +598,7 @@ public class RoomsNotifications implements Parcelable {
         // avoid displaying the room Id
         // try to find the sender display name
         if (TextUtils.equals(roomName, room.getRoomId())) {
-            roomName = room.getName(session.getMyUserId());
+            roomName = VectorUtils.getRoomDisplayName(context, session, room);
 
             // avoid room Id as name
             if (TextUtils.equals(roomName, room.getRoomId()) && (null != event)) {

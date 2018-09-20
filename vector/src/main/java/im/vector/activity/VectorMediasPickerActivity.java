@@ -311,9 +311,8 @@ public class VectorMediasPickerActivity extends MXCActionBarActivity implements 
         mTakeImageView.setOnTouchListener(new View.OnTouchListener() {
             @Override
             public boolean onTouch(View v, MotionEvent event) {
-                if (mIsRecording &&
-                        ((event.getAction() == MotionEvent.ACTION_UP) ||
-                                (event.getAction() == MotionEvent.ACTION_CANCEL))) {
+                if (mIsRecording
+                        && ((event.getAction() == MotionEvent.ACTION_UP) || (event.getAction() == MotionEvent.ACTION_CANCEL))) {
                     stopVideoRecord();
                     startVideoPreviewVideo(null);
                     return true;

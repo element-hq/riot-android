@@ -186,13 +186,13 @@ class VectorMessagesAdapterHelper {
 
                 // theses events are managed like notice ones
                 // but they are dedicated behaviour i.e the sender must not be displayed
-                if (event.isCallEvent() ||
-                        Event.EVENT_TYPE_STATE_ROOM_TOPIC.equals(eventType) ||
-                        Event.EVENT_TYPE_STATE_ROOM_MEMBER.equals(eventType) ||
-                        Event.EVENT_TYPE_STATE_ROOM_NAME.equals(eventType) ||
-                        Event.EVENT_TYPE_STATE_ROOM_THIRD_PARTY_INVITE.equals(eventType) ||
-                        Event.EVENT_TYPE_STATE_HISTORY_VISIBILITY.equals(eventType) ||
-                        Event.EVENT_TYPE_MESSAGE_ENCRYPTION.equals(eventType)) {
+                if (event.isCallEvent()
+                        || Event.EVENT_TYPE_STATE_ROOM_TOPIC.equals(eventType)
+                        || Event.EVENT_TYPE_STATE_ROOM_MEMBER.equals(eventType)
+                        || Event.EVENT_TYPE_STATE_ROOM_NAME.equals(eventType)
+                        || Event.EVENT_TYPE_STATE_ROOM_THIRD_PARTY_INVITE.equals(eventType)
+                        || Event.EVENT_TYPE_STATE_HISTORY_VISIBILITY.equals(eventType)
+                        || Event.EVENT_TYPE_MESSAGE_ENCRYPTION.equals(eventType)) {
                     senderTextView.setVisibility(View.GONE);
                 } else {
                     senderTextView.setVisibility(View.VISIBLE);
@@ -656,7 +656,10 @@ class VectorMessagesAdapterHelper {
      * @param row           the message row
      * @param isPreviewMode true if preview mode
      */
-    void displayReadReceipts(View convertView, MessageRow row, boolean isPreviewMode) {
+    void displayReadReceipts(View convertView,
+                             MessageRow row,
+                             boolean isPreviewMode,
+                             @Nullable Map<String, RoomMember> liveRoomMembers) {
         View avatarsListView = convertView.findViewById(R.id.messagesAdapter_avatars_list);
 
         if (null == avatarsListView) {
@@ -712,6 +715,12 @@ class VectorMessagesAdapterHelper {
         for (; index < bound; index++) {
             final ReceiptData r = receipts.get(index);
             RoomMember member = roomState.getMember(r.userId);
+
+            if (member == null && liveRoomMembers != null) {
+                // Try to get the member form the live room members
+                member = liveRoomMembers.get(r.userId);
+            }
+
             ImageView imageView = (ImageView) imageViews.get(index);
 
             imageView.setVisibility(View.VISIBLE);
@@ -793,7 +802,12 @@ class VectorMessagesAdapterHelper {
             int flags = strBuilder.getSpanFlags(span);
 
             if (PillView.isPillable(span.getURL())) {
-                final String key = span.getURL() + " " + isHighlighted;
+                // This URL link can be replaced by a Pill:
+                // Build the Drawable spannable thanks to a PillView
+                // And replace the URLSpan by a clickable ImageSpan
+
+                // the key is built with the link, the highlight status and the text of the link
+                final String key = span.getURL() + " " + isHighlighted + " " + strBuilder.subSequence(start, end).toString();
                 Drawable drawable = mPillsDrawableCache.get(key);
 
                 if (null == drawable) {
@@ -848,9 +862,9 @@ class VectorMessagesAdapterHelper {
      * @return true if it contains code blocks
      */
     boolean containsFencedCodeBlocks(final Message message) {
-        return (null != message.formatted_body) &&
-                message.formatted_body.contains(START_FENCED_BLOCK) &&
-                message.formatted_body.contains(END_FENCED_BLOCK);
+        return (null != message.formatted_body)
+                && message.formatted_body.contains(START_FENCED_BLOCK)
+                && message.formatted_body.contains(END_FENCED_BLOCK);
     }
 
     private Map<String, String[]> mCodeBlocksMap = new HashMap<>();
@@ -1028,16 +1042,18 @@ class VectorMessagesAdapterHelper {
             EventDisplay display = new RiotEventDisplay(context, event, roomState);
             return display.getTextualDisplay() != null;
         } else if (event.isCallEvent()) {
-            return Event.EVENT_TYPE_CALL_INVITE.equals(eventType) ||
-                    Event.EVENT_TYPE_CALL_ANSWER.equals(eventType) ||
-                    Event.EVENT_TYPE_CALL_HANGUP.equals(eventType);
-        } else if (Event.EVENT_TYPE_STATE_ROOM_MEMBER.equals(eventType) || Event.EVENT_TYPE_STATE_ROOM_THIRD_PARTY_INVITE.equals(eventType)) {
+            return Event.EVENT_TYPE_CALL_INVITE.equals(eventType)
+                    || Event.EVENT_TYPE_CALL_ANSWER.equals(eventType)
+                    || Event.EVENT_TYPE_CALL_HANGUP.equals(eventType);
+        } else if (Event.EVENT_TYPE_STATE_ROOM_MEMBER.equals(eventType)
+                || Event.EVENT_TYPE_STATE_ROOM_THIRD_PARTY_INVITE.equals(eventType)) {
             // if we can display text for it, it's valid.
             EventDisplay display = new RiotEventDisplay(context, event, roomState);
             return display.getTextualDisplay() != null;
         } else if (Event.EVENT_TYPE_STATE_HISTORY_VISIBILITY.equals(eventType)) {
             return true;
-        } else if (Event.EVENT_TYPE_MESSAGE_ENCRYPTED.equals(eventType) || Event.EVENT_TYPE_MESSAGE_ENCRYPTION.equals(eventType)) {
+        } else if (Event.EVENT_TYPE_MESSAGE_ENCRYPTED.equals(eventType)
+                || Event.EVENT_TYPE_MESSAGE_ENCRYPTION.equals(eventType)) {
             // if we can display text for it, it's valid.
             EventDisplay display = new RiotEventDisplay(context, event, roomState);
             return event.hasContentFields() && (display.getTextualDisplay() != null);

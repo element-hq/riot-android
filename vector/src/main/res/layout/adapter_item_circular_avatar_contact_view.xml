@@ -12,7 +12,7 @@
         android:adjustViewBounds="true"
         android:scaleType="centerCrop"
         android:background="@color/riot_primary_background_color_light"
-        tools:src="@drawable/ic_material_camera" />
+        tools:src="@tools:sample/avatars" />
 
     <ImageView
         android:layout_width="match_parent"

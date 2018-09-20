@@ -153,7 +153,7 @@ public class VectorSearchRoomsListFragment extends VectorRecentsListFragment {
                 } else {
                     // open the dedicated room activity
                     RoomSummary roomSummary = mAdapter.getRoomSummaryAt(groupPosition, childPosition);
-                    MXSession session = Matrix.getInstance(getActivity()).getSession(roomSummary.getMatrixId());
+                    MXSession session = Matrix.getInstance(getActivity()).getSession(roomSummary.getUserId());
 
                     String roomId = roomSummary.getRoomId();
                     Room room = session.getDataHandler().getRoom(roomId);

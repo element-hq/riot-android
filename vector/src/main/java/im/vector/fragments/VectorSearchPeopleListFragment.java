@@ -1,5 +1,6 @@
 /*
  * Copyright 2016 OpenMarket Ltd
+ * Copyright 2018 New Vector Ltd
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,7 +19,6 @@ package im.vector.fragments;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.v4.app.Fragment;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -216,8 +216,8 @@ public class VectorSearchPeopleListFragment extends VectorBaseFragment {
         ParticipantAdapterItem firstEntry = null;
         if (!TextUtils.isEmpty(pattern)) {
             // test if the pattern is a valid email or matrix id
-            boolean isValid = android.util.Patterns.EMAIL_ADDRESS.matcher(pattern).matches() ||
-                    MXSession.isUserId(pattern);
+            boolean isValid = android.util.Patterns.EMAIL_ADDRESS.matcher(pattern).matches()
+                    || MXSession.isUserId(pattern);
             firstEntry = new ParticipantAdapterItem(pattern, null, pattern, isValid);
         }
 

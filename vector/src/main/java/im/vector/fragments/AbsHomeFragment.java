@@ -317,7 +317,7 @@ public abstract class AbsHomeFragment extends VectorBaseFragment implements
      *
      * @param room
      */
-    void openRoom(final Room room) {
+    protected void openRoom(final Room room) {
         // sanity checks
         // reported by GA
         if ((null == mSession.getDataHandler()) || (null == mSession.getDataHandler().getStore())) {

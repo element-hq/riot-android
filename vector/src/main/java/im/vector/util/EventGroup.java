@@ -74,10 +74,11 @@ public class EventGroup extends Event {
      * @return true it is supported
      */
     public static boolean isSupported(MessageRow row) {
-        return (null != row) && (null != row.getEvent()) &&
-                TextUtils.equals(row.getEvent().getType(), Event.EVENT_TYPE_STATE_ROOM_MEMBER) &&
+        return (null != row)
+                && (null != row.getEvent())
+                && TextUtils.equals(row.getEvent().getType(), Event.EVENT_TYPE_STATE_ROOM_MEMBER)
                 // do not merge the call invitation events
-                !TextUtils.equals(row.getEvent().stateKey, MXCallsManager.getConferenceUserId(row.getEvent().roomId));
+                && !TextUtils.equals(row.getEvent().stateKey, MXCallsManager.getConferenceUserId(row.getEvent().roomId));
     }
 
     /**
@@ -215,9 +216,9 @@ public class EventGroup extends Event {
      * @return true if the message row can be added
      */
     public boolean canAddRow(MessageRow row) {
-        return isEmpty() ||
-                (AdapterUtils.zeroTimeDate(new Date(row.getEvent().getOriginServerTs())).getTime() ==
-                        AdapterUtils.zeroTimeDate(new Date(getOriginServerTs())).getTime());
+        return isEmpty()
+                || (AdapterUtils.zeroTimeDate(new Date(row.getEvent().getOriginServerTs())).getTime()
+                == AdapterUtils.zeroTimeDate(new Date(getOriginServerTs())).getTime());
     }
 
     /**

@@ -35,6 +35,7 @@ import android.os.Build;
 import android.os.Handler;
 import android.os.HandlerThread;
 import android.os.Looper;
+import android.support.annotation.Nullable;
 import android.support.v4.util.LruCache;
 import android.support.v7.app.AlertDialog;
 import android.text.TextUtils;
@@ -117,13 +118,13 @@ public class VectorUtils {
         String displayName = publicRoom.name;
 
         if (TextUtils.isEmpty(displayName)) {
-            if (publicRoom.getAliases().size() > 0) {
-                displayName = publicRoom.getAliases().get(0);
+            if (publicRoom.aliases.size() > 0) {
+                displayName = publicRoom.aliases.get(0);
             } else {
                 displayName = publicRoom.roomId;
             }
-        } else if (!displayName.startsWith("#") && (0 < publicRoom.getAliases().size())) {
-            displayName = displayName + " (" + publicRoom.getAliases().get(0) + ")";
+        } else if (!displayName.startsWith("#") && (0 < publicRoom.aliases.size())) {
+            displayName = displayName + " (" + publicRoom.aliases.get(0) + ")";
         }
 
         return displayName;
@@ -137,23 +138,26 @@ public class VectorUtils {
      * @param room    the room.
      * @return the calling room display name.
      */
-    public static String getCallingRoomDisplayName(Context context, MXSession session, Room room) {
+    @Nullable
+    public static void getCallingRoomDisplayName(Context context,
+                                                 final MXSession session,
+                                                 final Room room,
+                                                 final ApiCallback<String> callback) {
         if ((null == context) || (null == session) || (null == room)) {
-            return null;
-        }
-
-        Collection<RoomMember> roomMembers = room.getJoinedMembers();
-
-        if (2 == roomMembers.size()) {
-            List<RoomMember> roomMembersList = new ArrayList<>(roomMembers);
-
-            if (TextUtils.equals(roomMembersList.get(0).getUserId(), session.getMyUserId())) {
-                return room.getState().getMemberName(roomMembersList.get(1).getUserId());
-            } else {
-                return room.getState().getMemberName(roomMembersList.get(0).getUserId());
-            }
+            callback.onSuccess(null);
+        } else if (room.getNumberOfJoinedMembers() == 2) {
+            room.getJoinedMembersAsync(new SimpleApiCallback<List<RoomMember>>(callback) {
+                @Override
+                public void onSuccess(List<RoomMember> members) {
+                    if (TextUtils.equals(members.get(0).getUserId(), session.getMyUserId())) {
+                        callback.onSuccess(room.getState().getMemberName(members.get(1).getUserId()));
+                    } else {
+                        callback.onSuccess(room.getState().getMemberName(members.get(0).getUserId()));
+                    }
+                }
+            });
         } else {
-            return getRoomDisplayName(context, session, room);
+            callback.onSuccess(getRoomDisplayName(context, session, room));
         }
     }
 
@@ -172,10 +176,12 @@ public class VectorUtils {
         }
 
         try {
-
             // this algorithm is the one defined in
             // https://github.com/matrix-org/matrix-js-sdk/blob/develop/lib/models/room.js#L617
             // calculateRoomName(room, userId)
+
+            // For Lazy Loaded room, see algorithm here:
+            // https://docs.google.com/document/d/11i14UI1cUz-OJ0knD5BFu7fmT6Fo327zvMYqfSAR7xs/edit#heading=h.qif6pkqyjgzn
 
             RoomState roomState = room.getState();
 
@@ -183,43 +189,55 @@ public class VectorUtils {
                 return roomState.name;
             }
 
-            String alias = roomState.alias;
-
-            if (TextUtils.isEmpty(alias) && (roomState.getAliases().size() > 0)) {
-                alias = roomState.getAliases().get(0);
-            }
-
-            if (!TextUtils.isEmpty(alias)) {
-                return alias;
+            if (!TextUtils.isEmpty(roomState.getCanonicalAlias())) {
+                return roomState.getCanonicalAlias();
             }
 
             String myUserId = session.getMyUserId();
 
-            Collection<RoomMember> members = roomState.getDisplayableMembers();
             List<RoomMember> othersActiveMembers = new ArrayList<>();
             List<RoomMember> activeMembers = new ArrayList<>();
 
-            for (RoomMember member : members) {
-                if (!TextUtils.equals(member.membership, RoomMember.MEMBERSHIP_LEAVE)) {
-                    if (!TextUtils.equals(member.getUserId(), myUserId)) {
-                        othersActiveMembers.add(member);
+            int nbOfOtherMembers;
+
+            if (room.getDataHandler().isLazyLoadingEnabled()
+                    && room.getRoomSummary() != null) {
+                List<String> heroes = room.getRoomSummary().getHeroes();
+
+                for (String id : heroes) {
+                    RoomMember roomMember = roomState.getMember(id);
+
+                    if (roomMember != null) {
+                        othersActiveMembers.add(roomMember);
                     }
-                    activeMembers.add(member);
                 }
+            } else {
+                Collection<RoomMember> members = roomState.getDisplayableLoadedMembers();
+
+                for (RoomMember member : members) {
+                    if (!TextUtils.equals(member.membership, RoomMember.MEMBERSHIP_LEAVE)) {
+                        if (!TextUtils.equals(member.getUserId(), myUserId)) {
+                            othersActiveMembers.add(member);
+                        }
+                        activeMembers.add(member);
+                    }
+                }
+
+                Collections.sort(othersActiveMembers, new Comparator<RoomMember>() {
+                    @Override
+                    public int compare(RoomMember m1, RoomMember m2) {
+                        long diff = m1.getOriginServerTs() - m2.getOriginServerTs();
+
+                        return (diff == 0) ? 0 : ((diff < 0) ? -1 : +1);
+                    }
+                });
             }
 
-            Collections.sort(othersActiveMembers, new Comparator<RoomMember>() {
-                @Override
-                public int compare(RoomMember m1, RoomMember m2) {
-                    long diff = m1.getOriginServerTs() - m2.getOriginServerTs();
-
-                    return (diff == 0) ? 0 : ((diff < 0) ? -1 : +1);
-                }
-            });
+            nbOfOtherMembers = othersActiveMembers.size();
 
             String displayName;
 
-            if (othersActiveMembers.size() == 0) {
+            if (nbOfOtherMembers == 0) {
                 if (activeMembers.size() == 1) {
                     RoomMember member = activeMembers.get(0);
 
@@ -237,10 +255,10 @@ public class VectorUtils {
                 } else {
                     displayName = context.getString(R.string.room_displayname_no_title);
                 }
-            } else if (othersActiveMembers.size() == 1) {
+            } else if (nbOfOtherMembers == 1) {
                 RoomMember member = othersActiveMembers.get(0);
                 displayName = roomState.getMemberName(member.getUserId());
-            } else if (othersActiveMembers.size() == 2) {
+            } else if (nbOfOtherMembers == 2) {
                 RoomMember member1 = othersActiveMembers.get(0);
                 RoomMember member2 = othersActiveMembers.get(1);
 
@@ -251,7 +269,7 @@ public class VectorUtils {
                 displayName = context.getString(R.string.room_displayname_many_members,
                         roomState.getMemberName(member.getUserId()),
                         context.getResources().getQuantityString(R.plurals.others,
-                                othersActiveMembers.size() - 1, othersActiveMembers.size() - 1));
+                                nbOfOtherMembers - 1, nbOfOtherMembers - 1));
             }
 
             return displayName;
@@ -875,20 +893,20 @@ public class VectorUtils {
         } else {
             if (secondsInterval < 60) {
                 formattedString = context.getResources().getQuantityString(R.plurals.format_time_s,
-                                                                           (int) secondsInterval,
-                                                                           (int) secondsInterval);
+                        (int) secondsInterval,
+                        (int) secondsInterval);
             } else if (secondsInterval < 3600) {
                 formattedString = context.getResources().getQuantityString(R.plurals.format_time_m,
-                                                                           (int) (secondsInterval / 60),
-                                                                           (int) (secondsInterval / 60));
+                        (int) (secondsInterval / 60),
+                        (int) (secondsInterval / 60));
             } else if (secondsInterval < 86400) {
                 formattedString = context.getResources().getQuantityString(R.plurals.format_time_h,
-                                                                           (int) (secondsInterval / 3600),
-                                                                           (int) (secondsInterval / 3600));
+                        (int) (secondsInterval / 3600),
+                        (int) (secondsInterval / 3600));
             } else {
                 formattedString = context.getResources().getQuantityString(R.plurals.format_time_d,
-                                                                           (int) (secondsInterval / 86400),
-                                                                           (int) (secondsInterval / 86400));
+                        (int) (secondsInterval / 86400),
+                        (int) (secondsInterval / 86400));
             }
         }
 
@@ -988,8 +1006,8 @@ public class VectorUtils {
                 presenceText = context.getString(R.string.room_participants_now, presenceText);
             } else if ((null != user.lastActiveAgo) && (user.lastActiveAgo > 0)) {
                 presenceText = context.getString(R.string.room_participants_ago, presenceText,
-                                                 formatSecondsIntervalFloored(context,
-                                                    user.getAbsoluteLastActiveAgo() / 1000L));
+                        formatSecondsIntervalFloored(context,
+                                user.getAbsoluteLastActiveAgo() / 1000L));
             }
         }
 

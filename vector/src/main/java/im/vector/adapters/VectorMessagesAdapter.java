@@ -102,11 +102,11 @@ import java.util.regex.Pattern;
 
 import im.vector.R;
 import im.vector.VectorApp;
+import im.vector.extensions.MatrixSdkExtensionsKt;
 import im.vector.listeners.IMessagesAdapterActionsListener;
 import im.vector.ui.VectorQuoteSpan;
 import im.vector.util.EventGroup;
 import im.vector.util.MatrixLinkMovementMethod;
-import im.vector.util.MatrixSdkExtensionsKt;
 import im.vector.util.MatrixURLSpan;
 import im.vector.util.PreferencesManager;
 import im.vector.util.RiotEventDisplay;
@@ -219,6 +219,9 @@ public class VectorMessagesAdapter extends AbstractMessagesAdapter {
     // custom settings
     private final boolean mAlwaysShowTimeStamps;
     private final boolean mHideReadReceipts;
+
+    // Key is member id.
+    private final Map<String, RoomMember> mLiveRoomMembers = new HashMap<>();
 
     private static final Pattern mEmojisPattern = Pattern.compile("((?:[\uD83C\uDF00-\uD83D\uDDFF]" +
             "|[\uD83E\uDD00-\uD83E\uDDFF]" +
@@ -877,6 +880,17 @@ public class VectorMessagesAdapter extends AbstractMessagesAdapter {
      * *********************************************************************************************
      */
 
+    public void setLiveRoomMembers(List<RoomMember> roomMembers) {
+        mLiveRoomMembers.clear();
+
+        for (RoomMember roomMember : roomMembers) {
+            mLiveRoomMembers.put(roomMember.getUserId(), roomMember);
+        }
+
+        // Update the Ui (ex: read receipt avatar)
+        notifyDataSetChanged();
+    }
+
     /**
      * Notify the fragment that some bing rules could have been updated.
      */
@@ -1097,13 +1111,13 @@ public class VectorMessagesAdapter extends AbstractMessagesAdapter {
         } else if (Event.EVENT_TYPE_STICKER.equals(eventType)) {
             viewType = ROW_TYPE_STICKER;
         } else if (
-                event.isCallEvent() ||
-                        Event.EVENT_TYPE_STATE_HISTORY_VISIBILITY.equals(eventType) ||
-                        Event.EVENT_TYPE_STATE_ROOM_TOPIC.equals(eventType) ||
-                        Event.EVENT_TYPE_STATE_ROOM_MEMBER.equals(eventType) ||
-                        Event.EVENT_TYPE_STATE_ROOM_NAME.equals(eventType) ||
-                        Event.EVENT_TYPE_STATE_ROOM_THIRD_PARTY_INVITE.equals(eventType) ||
-                        Event.EVENT_TYPE_MESSAGE_ENCRYPTION.equals(eventType)) {
+                event.isCallEvent()
+                        || Event.EVENT_TYPE_STATE_HISTORY_VISIBILITY.equals(eventType)
+                        || Event.EVENT_TYPE_STATE_ROOM_TOPIC.equals(eventType)
+                        || Event.EVENT_TYPE_STATE_ROOM_MEMBER.equals(eventType)
+                        || Event.EVENT_TYPE_STATE_ROOM_NAME.equals(eventType)
+                        || Event.EVENT_TYPE_STATE_ROOM_THIRD_PARTY_INVITE.equals(eventType)
+                        || Event.EVENT_TYPE_MESSAGE_ENCRYPTION.equals(eventType)) {
             viewType = ROW_TYPE_ROOM_MEMBER;
 
         } else if (WidgetsManager.WIDGET_EVENT_TYPE.equals(eventType)) {
@@ -1225,7 +1239,7 @@ public class VectorMessagesAdapter extends AbstractMessagesAdapter {
         if (mHideReadReceipts) {
             mHelper.hideReadReceipts(convertView);
         } else {
-            mHelper.displayReadReceipts(convertView, row, mIsPreviewMode);
+            mHelper.displayReadReceipts(convertView, row, mIsPreviewMode, mLiveRoomMembers);
         }
 
         // selection mode
@@ -2307,9 +2321,8 @@ public class VectorMessagesAdapter extends AbstractMessagesAdapter {
                 } else {
                     EncryptedEventContent encryptedEventContent = JsonUtils.toEncryptedEventContent(event.getWireContent().getAsJsonObject());
 
-                    if (TextUtils.equals(mSession.getCredentials().deviceId, encryptedEventContent.device_id) &&
-                            TextUtils.equals(mSession.getMyUserId(), event.getSender())
-                            ) {
+                    if (TextUtils.equals(mSession.getCredentials().deviceId, encryptedEventContent.device_id)
+                            && TextUtils.equals(mSession.getMyUserId(), event.getSender())) {
                         e2eIconByEventId.put(event.eventId, R.drawable.e2e_verified);
                         MXDeviceInfo deviceInfo = mSession.getCrypto()
                                 .deviceWithIdentityKey(encryptedEventContent.sender_key, event.getSender(), encryptedEventContent.algorithm);

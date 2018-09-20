@@ -54,6 +54,7 @@ import im.vector.R
 import im.vector.VectorApp
 import im.vector.activity.*
 import im.vector.contacts.ContactsManager
+import im.vector.extensions.getFingerprintHumanReadable
 import im.vector.preference.*
 import im.vector.settings.FontScale
 import im.vector.util.*
@@ -266,7 +267,7 @@ class VectorSettingsPreferencesFragment : PreferenceFragment(), SharedPreference
         // Avatar
         mUserAvatarPreference.let {
             it.setSession(mSession)
-            it.onPreferenceClickListener = Preference.OnPreferenceClickListener {
+            it.onPreferenceClickListener = Preference.OnPreferenceClickListener { _ ->
                 onUpdateAvatarClick()
                 false
             }
@@ -275,7 +276,7 @@ class VectorSettingsPreferencesFragment : PreferenceFragment(), SharedPreference
         // Display name
         mDisplayNamePreference.let {
             it.summary = mSession.myUser.displayname
-            it.onPreferenceChangeListener = Preference.OnPreferenceChangeListener { preference, newValue ->
+            it.onPreferenceChangeListener = Preference.OnPreferenceChangeListener { _, newValue ->
                 onDisplayNameClick(if (null == newValue) null else (newValue as String).trim())
                 false
             }
@@ -304,7 +305,7 @@ class VectorSettingsPreferencesFragment : PreferenceFragment(), SharedPreference
         (findPreference(PreferencesManager.SETTINGS_SHOW_URL_PREVIEW_KEY) as VectorSwitchPreference).let {
             it.isChecked = mSession.isURLPreviewEnabled
 
-            it.onPreferenceChangeListener = Preference.OnPreferenceChangeListener { preference, newValue ->
+            it.onPreferenceChangeListener = Preference.OnPreferenceChangeListener { _, newValue ->
                 if (null != newValue && newValue as Boolean != mSession.isURLPreviewEnabled) {
                     displayLoadingView()
                     mSession.setURLPreviewStatus(newValue, object : ApiCallback<Void> {
@@ -339,7 +340,7 @@ class VectorSettingsPreferencesFragment : PreferenceFragment(), SharedPreference
 
         // Themes
         findPreference(ThemeUtils.APPLICATION_THEME_KEY)
-                .onPreferenceChangeListener = Preference.OnPreferenceChangeListener { preference, newValue ->
+                .onPreferenceChangeListener = Preference.OnPreferenceChangeListener { _, newValue ->
             if (newValue is String) {
                 VectorApp.updateApplicationTheme(newValue)
                 activity.startActivity(activity.intent)
@@ -381,7 +382,7 @@ class VectorSettingsPreferencesFragment : PreferenceFragment(), SharedPreference
 
             if (null != preference) {
                 if (preference is CheckBoxPreference) {
-                    preference.onPreferenceChangeListener = Preference.OnPreferenceChangeListener { preference, newValueAsVoid ->
+                    preference.onPreferenceChangeListener = Preference.OnPreferenceChangeListener { _, newValueAsVoid ->
                         // on some old android APIs,
                         // the callback is called even if there is no user interaction
                         // so the value will be checked to ensure there is really no update.
@@ -439,7 +440,7 @@ class VectorSettingsPreferencesFragment : PreferenceFragment(), SharedPreference
             backgroundSyncPreference.let {
                 it.isChecked = gcmMgr.isBackgroundSyncAllowed
 
-                it.onPreferenceChangeListener = Preference.OnPreferenceChangeListener { preference, aNewValue ->
+                it.onPreferenceChangeListener = Preference.OnPreferenceChangeListener { _, aNewValue ->
                     val newValue = aNewValue as Boolean
 
                     if (newValue != gcmMgr.isBackgroundSyncAllowed) {
@@ -491,14 +492,14 @@ class VectorSettingsPreferencesFragment : PreferenceFragment(), SharedPreference
 
             useCryptoPref.isChecked = false
 
-            useCryptoPref.onPreferenceChangeListener = Preference.OnPreferenceChangeListener { preference, newValueAsVoid ->
+            useCryptoPref.onPreferenceChangeListener = Preference.OnPreferenceChangeListener { _, newValueAsVoid ->
                 if (TextUtils.isEmpty(mSession.credentials.deviceId)) {
                     AlertDialog.Builder(activity)
                             .setMessage(R.string.room_settings_labs_end_to_end_warnings)
-                            .setPositiveButton(R.string.logout) { dialog, which ->
+                            .setPositiveButton(R.string.logout) { _, _ ->
                                 CommonActivityUtils.logout(activity)
                             }
-                            .setNegativeButton(R.string.cancel) { dialog, which ->
+                            .setNegativeButton(R.string.cancel) { _, _ ->
                                 useCryptoPref.isChecked = false
                             }
                             .setOnCancelListener { dialog ->
@@ -550,9 +551,62 @@ class VectorSettingsPreferencesFragment : PreferenceFragment(), SharedPreference
             }
         }
 
+        // Lazy Loading Management
+        findPreference(PreferencesManager.SETTINGS_LAZY_LOADING_PREFERENCE_KEY)
+                .onPreferenceChangeListener = Preference.OnPreferenceChangeListener { _, newValue ->
+            val bNewValue = newValue as Boolean
+
+            if (!bNewValue) {
+                // Disable LazyLoading, just reload the sessions
+                Matrix.getInstance(appContext).reloadSessions(appContext)
+            } else {
+                // Try to enable LazyLoading
+                displayLoadingView()
+
+                mSession.canEnableLazyLoading(object : SimpleApiCallback<Boolean>() {
+                    override fun onSuccess(info: Boolean?) {
+                        if (info == true) {
+                            // Lazy loading can be enabled
+                            PreferencesManager.setUseLazyLoading(activity, true)
+
+                            // Reload the sessions
+                            Matrix.getInstance(appContext).reloadSessions(appContext)
+                        } else {
+                            // The server does not support lazy loading yet
+                            hideLoadingView()
+
+                            AlertDialog.Builder(activity)
+                                    .setTitle(R.string.dialog_title_error)
+                                    .setMessage(R.string.error_lazy_loading_not_supported_by_home_server)
+                                    .setPositiveButton(R.string.ok, null)
+                                    .show()
+                        }
+                    }
+
+                    override fun onNetworkError(e: Exception) {
+                        hideLoadingView()
+                        activity?.toast(R.string.network_error)
+                    }
+
+                    override fun onMatrixError(e: MatrixError) {
+                        hideLoadingView()
+                        activity?.toast(R.string.network_error)
+                    }
+
+                    override fun onUnexpectedError(e: Exception) {
+                        hideLoadingView()
+                        activity?.toast(R.string.network_error)
+                    }
+                })
+            }
+
+            // Do not update the value now when the user wants to enable the lazy loading
+            !bNewValue
+        }
+
         // SaveMode Management
         findPreference(PreferencesManager.SETTINGS_DATA_SAVE_MODE_PREFERENCE_KEY)
-                .onPreferenceChangeListener = Preference.OnPreferenceChangeListener { preference, newValue ->
+                .onPreferenceChangeListener = Preference.OnPreferenceChangeListener { _, newValue ->
             val sessions = Matrix.getMXSessions(activity)
             for (session in sessions) {
                 session.setUseDataSaveMode(newValue as Boolean)
@@ -586,7 +640,7 @@ class VectorSettingsPreferencesFragment : PreferenceFragment(), SharedPreference
             // On if the analytics tracking is activated
             it.isChecked = PreferencesManager.useAnalytics(appContext)
 
-            it.onPreferenceChangeListener = Preference.OnPreferenceChangeListener { preference, newValue ->
+            it.onPreferenceChangeListener = Preference.OnPreferenceChangeListener { _, newValue ->
                 PreferencesManager.setUseAnalytics(appContext, newValue as Boolean)
                 true
             }
@@ -596,7 +650,7 @@ class VectorSettingsPreferencesFragment : PreferenceFragment(), SharedPreference
         (findPreference(PreferencesManager.SETTINGS_USE_RAGE_SHAKE_KEY) as CheckBoxPreference).let {
             it.isChecked = PreferencesManager.useRageshake(appContext)
 
-            it.onPreferenceChangeListener = Preference.OnPreferenceChangeListener { preference, newValue ->
+            it.onPreferenceChangeListener = Preference.OnPreferenceChangeListener { _, newValue ->
                 PreferencesManager.setUseRageshake(appContext, newValue as Boolean)
                 true
             }
@@ -621,7 +675,7 @@ class VectorSettingsPreferencesFragment : PreferenceFragment(), SharedPreference
         (findPreference(PreferencesManager.SETTINGS_VERSION_PREFERENCE_KEY) as VectorCustomActionEditTextPreference).let {
             it.summary = VectorUtils.getApplicationVersion(appContext)
 
-            it.setOnPreferenceLongClickListener {
+            it.setOnPreferenceLongClickListener { _ ->
                 VectorUtils.copyToClipboard(appContext, VectorUtils.getApplicationVersion(appContext))
                 true
             }
@@ -664,7 +718,7 @@ class VectorSettingsPreferencesFragment : PreferenceFragment(), SharedPreference
         findPreference(PreferencesManager.SETTINGS_MEDIA_SAVING_PERIOD_KEY).let {
             it.summary = PreferencesManager.getSelectedMediasSavingPeriodString(activity)
 
-            it.onPreferenceClickListener = Preference.OnPreferenceClickListener {
+            it.onPreferenceClickListener = Preference.OnPreferenceClickListener { _ ->
                 AlertDialog.Builder(activity)
                         .setSingleChoiceItems(PreferencesManager.getMediasSavingItemsChoicesList(activity),
                                 PreferencesManager.getSelectedMediasSavingPeriod(activity)) { d, n ->
@@ -688,7 +742,7 @@ class VectorSettingsPreferencesFragment : PreferenceFragment(), SharedPreference
                 }
             })
 
-            it.onPreferenceClickListener = Preference.OnPreferenceClickListener {
+            it.onPreferenceClickListener = Preference.OnPreferenceClickListener { _ ->
                 displayLoadingView()
 
                 val task = object : AsyncTask<Void?, Void?, Void?>() {
@@ -731,18 +785,18 @@ class VectorSettingsPreferencesFragment : PreferenceFragment(), SharedPreference
                 }
             })
 
-            it.onPreferenceClickListener = Preference.OnPreferenceClickListener {
+            it.onPreferenceClickListener = Preference.OnPreferenceClickListener { _ ->
                 displayLoadingView()
                 Matrix.getInstance(appContext).reloadSessions(appContext)
                 false
             }
         }
 
-        // Deactivate accounbt section
+        // Deactivate account section
 
         // deactivate account
         findPreference(PreferencesManager.SETTINGS_DEACTIVATE_ACCOUNT_KEY)
-                .onPreferenceClickListener = Preference.OnPreferenceClickListener {
+                .onPreferenceClickListener = Preference.OnPreferenceClickListener { _ ->
             startActivity(DeactivateAccountActivity.getIntent(activity))
 
             false
@@ -986,7 +1040,7 @@ class VectorSettingsPreferencesFragment : PreferenceFragment(), SharedPreference
             val dialog = AlertDialog.Builder(activity)
                     .setView(view)
                     .setTitle(R.string.settings_change_password)
-                    .setPositiveButton(R.string.save) { dialog, which ->
+                    .setPositiveButton(R.string.save) { _, _ ->
                         if (null != activity) {
                             val imm = activity.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
                             imm.hideSoftInputFromWindow(view.applicationWindowToken, 0)
@@ -1026,7 +1080,7 @@ class VectorSettingsPreferencesFragment : PreferenceFragment(), SharedPreference
                             }
                         })
                     }
-                    .setNegativeButton(R.string.cancel) { dialog, which ->
+                    .setNegativeButton(R.string.cancel) { _, _ ->
                         if (null != activity) {
                             val imm = activity.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
                             imm.hideSoftInputFromWindow(view.applicationWindowToken, 0)
@@ -1218,13 +1272,15 @@ class VectorSettingsPreferencesFragment : PreferenceFragment(), SharedPreference
      * Update the avatar.
      */
     private fun onUpdateAvatarClick() {
-        activity.runOnUiThread {
-            if (checkPermissions(PERMISSIONS_FOR_TAKING_PHOTO, activity, PERMISSION_REQUEST_CODE_LAUNCH_CAMERA)) {
-                val intent = Intent(activity, VectorMediasPickerActivity::class.java)
-                intent.putExtra(VectorMediasPickerActivity.EXTRA_AVATAR_MODE, true)
-                startActivityForResult(intent, VectorUtils.TAKE_IMAGE)
-            }
+        if (checkPermissions(PERMISSIONS_FOR_TAKING_PHOTO, activity, PERMISSION_REQUEST_CODE_LAUNCH_CAMERA)) {
+            changeAvatar()
         }
+    }
+
+    fun changeAvatar() {
+        val intent = Intent(activity, VectorMediasPickerActivity::class.java)
+        intent.putExtra(VectorMediasPickerActivity.EXTRA_AVATAR_MODE, true)
+        startActivityForResult(intent, VectorUtils.TAKE_IMAGE)
     }
 
     /**
@@ -1383,7 +1439,7 @@ class VectorSettingsPreferencesFragment : PreferenceFragment(), SharedPreference
         AlertDialog.Builder(activity)
                 .setTitle(R.string.dialog_title_confirmation)
                 .setMessage(dialogMessage)
-                .setPositiveButton(R.string.remove) { dialog, which ->
+                .setPositiveButton(R.string.remove) { _, _ ->
                     displayLoadingView()
 
                     mSession.myUser.delete3Pid(pid, object : ApiCallback<Void> {
@@ -1445,7 +1501,7 @@ class VectorSettingsPreferencesFragment : PreferenceFragment(), SharedPreference
                 preference.onPreferenceClickListener = Preference.OnPreferenceClickListener {
                     AlertDialog.Builder(activity)
                             .setMessage(getString(R.string.settings_unignore_user, userId))
-                            .setPositiveButton(R.string.yes) { dialog, which ->
+                            .setPositiveButton(R.string.yes) { _, _ ->
                                 displayLoadingView()
 
                                 val idsList = ArrayList<String>()
@@ -1529,7 +1585,7 @@ class VectorSettingsPreferencesFragment : PreferenceFragment(), SharedPreference
                             AlertDialog.Builder(activity)
                                     .setTitle(R.string.dialog_title_confirmation)
                                     .setMessage(R.string.settings_delete_notification_targets_confirmation)
-                                    .setPositiveButton(R.string.remove) { dialog, which ->
+                                    .setPositiveButton(R.string.remove) { _, _ ->
                                         displayLoadingView()
                                         gcmRegistrationManager.unregister(mSession, pusher, object : ApiCallback<Void> {
                                             override fun onSuccess(info: Void?) {
@@ -1616,7 +1672,7 @@ class VectorSettingsPreferencesFragment : PreferenceFragment(), SharedPreference
                 preference.key = EMAIL_PREFERENCE_KEY_BASE + index
                 preference.order = order
 
-                preference.onPreferenceClickListener = Preference.OnPreferenceClickListener { preference ->
+                preference.onPreferenceClickListener = Preference.OnPreferenceClickListener { _ ->
                     displayDelete3PIDConfirmationDialog(email3PID, preference.summary)
                     true
                 }
@@ -1709,7 +1765,7 @@ class VectorSettingsPreferencesFragment : PreferenceFragment(), SharedPreference
         AlertDialog.Builder(activity)
                 .setTitle(R.string.account_email_validation_title)
                 .setMessage(R.string.account_email_validation_message)
-                .setPositiveButton(R.string._continue) { dialog, which ->
+                .setPositiveButton(R.string._continue) { _, _ ->
                     mSession.myUser.add3Pid(pid, true, object : ApiCallback<Void> {
                         override fun onSuccess(info: Void?) {
                             if (null != activity) {
@@ -1742,7 +1798,7 @@ class VectorSettingsPreferencesFragment : PreferenceFragment(), SharedPreference
                         }
                     })
                 }
-                .setNegativeButton(R.string.cancel) { dialog, which ->
+                .setNegativeButton(R.string.cancel) { _, _ ->
                     hideLoadingView()
                 }
                 .show()
@@ -1810,7 +1866,7 @@ class VectorSettingsPreferencesFragment : PreferenceFragment(), SharedPreference
                 preference.key = PHONE_NUMBER_PREFERENCE_KEY_BASE + index
                 preference.order = order
 
-                preference.onPreferenceClickListener = Preference.OnPreferenceClickListener { preference ->
+                preference.onPreferenceClickListener = Preference.OnPreferenceClickListener { _ ->
                     displayDelete3PIDConfirmationDialog(phoneNumber3PID, preference.summary)
                     true
                 }
@@ -1959,7 +2015,7 @@ class VectorSettingsPreferencesFragment : PreferenceFragment(), SharedPreference
             it.summary = secondsToText(timeout)
             it.text = timeout.toString() + ""
 
-            it.onPreferenceChangeListener = Preference.OnPreferenceChangeListener { preference, newValue ->
+            it.onPreferenceChangeListener = Preference.OnPreferenceChangeListener { _, newValue ->
                 var newTimeOut = timeout
 
                 try {
@@ -1983,7 +2039,7 @@ class VectorSettingsPreferencesFragment : PreferenceFragment(), SharedPreference
             it.summary = secondsToText(delay)
             it.text = delay.toString() + ""
 
-            it.onPreferenceChangeListener = Preference.OnPreferenceChangeListener { preference, newValue ->
+            it.onPreferenceChangeListener = Preference.OnPreferenceChangeListener { _, newValue ->
                 var newDelay = delay
 
                 try {
@@ -2269,11 +2325,11 @@ class VectorSettingsPreferencesFragment : PreferenceFragment(), SharedPreference
             builder.setTitle(R.string.devices_details_dialog_title)
                     .setIcon(android.R.drawable.ic_dialog_info)
                     .setView(layout)
-                    .setPositiveButton(R.string.rename) { dialog, which -> displayDeviceRenameDialog(aDeviceInfo) }
+                    .setPositiveButton(R.string.rename) { _, _ -> displayDeviceRenameDialog(aDeviceInfo) }
 
             // disable the deletion for our own device
             if (!TextUtils.equals(mSession.crypto.myDevice.deviceId, aDeviceInfo.device_id)) {
-                builder.setNegativeButton(R.string.delete) { dialog, which -> displayDeviceDeletionDialog(aDeviceInfo) }
+                builder.setNegativeButton(R.string.delete) { _, _ -> displayDeviceDeletionDialog(aDeviceInfo) }
             }
 
             builder.setNeutralButton(R.string.cancel, null)
@@ -2302,7 +2358,7 @@ class VectorSettingsPreferencesFragment : PreferenceFragment(), SharedPreference
         AlertDialog.Builder(activity)
                 .setTitle(R.string.devices_details_device_name)
                 .setView(input)
-                .setPositiveButton(R.string.ok) { dialog, which ->
+                .setPositiveButton(R.string.ok) { _, _ ->
                     displayLoadingView()
 
                     mSession.setDeviceName(aDeviceInfoToRename.device_id, input.text.toString(), object : ApiCallback<Void> {
@@ -2396,7 +2452,7 @@ class VectorSettingsPreferencesFragment : PreferenceFragment(), SharedPreference
                         .setTitle(R.string.devices_delete_dialog_title)
                         .setView(layout)
 
-                        .setPositiveButton(R.string.devices_delete_submit_button_label, DialogInterface.OnClickListener { dialog, which ->
+                        .setPositiveButton(R.string.devices_delete_submit_button_label, DialogInterface.OnClickListener { _, _ ->
                             if (TextUtils.isEmpty(passwordEditText.toString())) {
                                 activity.applicationContext.toast(R.string.error_empty_field_your_password)
                                 return@OnClickListener
@@ -2404,7 +2460,7 @@ class VectorSettingsPreferencesFragment : PreferenceFragment(), SharedPreference
                             mAccountPassword = passwordEditText.text.toString()
                             deleteDevice(aDeviceInfoToDelete.device_id)
                         })
-                        .setNegativeButton(R.string.cancel) { dialog, which ->
+                        .setNegativeButton(R.string.cancel) { _, _ ->
                             hideLoadingView()
                         }
                         .setOnKeyListener(DialogInterface.OnKeyListener { dialog, keyCode, event ->
@@ -2726,7 +2782,7 @@ class VectorSettingsPreferencesFragment : PreferenceFragment(), SharedPreference
         private const val IGNORED_USER_KEY_BASE = "IGNORED_USER_KEY_BASE"
         private const val ADD_EMAIL_PREFERENCE_KEY = "ADD_EMAIL_PREFERENCE_KEY"
         private const val ADD_PHONE_NUMBER_PREFERENCE_KEY = "ADD_PHONE_NUMBER_PREFERENCE_KEY"
-        private const val APP_INFO_LINK_PREFERENCE_KEY = "application_info_link"
+        private const val APP_INFO_LINK_PREFERENCE_KEY = "APP_INFO_LINK_PREFERENCE_KEY"
 
         private const val DUMMY_RULE = "DUMMY_RULE"
         private const val LABEL_UNAVAILABLE_DATA = "none"

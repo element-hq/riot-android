@@ -63,6 +63,7 @@ import org.matrix.androidsdk.rest.callback.SimpleApiCallback;
 import org.matrix.androidsdk.rest.model.Event;
 import org.matrix.androidsdk.rest.model.MatrixError;
 import org.matrix.androidsdk.rest.model.PowerLevels;
+import org.matrix.androidsdk.rest.model.RoomDirectoryVisibility;
 import org.matrix.androidsdk.rest.model.RoomMember;
 import org.matrix.androidsdk.util.BingRulesManager;
 import org.matrix.androidsdk.util.Log;
@@ -72,7 +73,6 @@ import org.matrix.androidsdk.util.ResourceUtils;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
@@ -611,22 +611,21 @@ public class VectorRoomSettingsFragment extends PreferenceFragment implements Sh
             mRoom.getDirectoryVisibility(mRoom.getRoomId(), new ApiCallback<String>() {
 
                 private void handleResponseOnUiThread(final String aVisibilityValue) {
-                    getActivity().runOnUiThread(new Runnable() {
-                        @Override
-                        public void run() {
-                            // only stop loading screen and do not update UI since the
-                            // update is done here below..
-                            hideLoadingView(DO_NOT_UPDATE_UI);
+                    if (!isAdded()) {
+                        return;
+                    }
 
-                            // set checked status
-                            // Note: the preference listener is disabled when the switch is updated, otherwise it will be seen
-                            // as a user action on the preference
-                            boolean isChecked = RoomState.DIRECTORY_VISIBILITY_PUBLIC.equals(aVisibilityValue);
-                            enableSharedPreferenceListener(false);
-                            mRoomDirectoryVisibilitySwitch.setChecked(isChecked);
-                            enableSharedPreferenceListener(true);
-                        }
-                    });
+                    // only stop loading screen and do not update UI since the
+                    // update is done here below..
+                    hideLoadingView(DO_NOT_UPDATE_UI);
+
+                    // set checked status
+                    // Note: the preference listener is disabled when the switch is updated, otherwise it will be seen
+                    // as a user action on the preference
+                    boolean isChecked = RoomDirectoryVisibility.DIRECTORY_VISIBILITY_PUBLIC.equals(aVisibilityValue);
+                    enableSharedPreferenceListener(false);
+                    mRoomDirectoryVisibilitySwitch.setChecked(isChecked);
+                    enableSharedPreferenceListener(true);
                 }
 
                 @Override
@@ -1067,9 +1066,9 @@ public class VectorRoomSettingsFragment extends PreferenceFragment implements Sh
             Log.w(LOG_TAG, "## onRoomDirectoryVisibilityPreferenceChanged(): not processed due to invalid parameters");
             visibility = null;
         } else if (mRoomDirectoryVisibilitySwitch.isChecked()) {
-            visibility = RoomState.DIRECTORY_VISIBILITY_PUBLIC;
+            visibility = RoomDirectoryVisibility.DIRECTORY_VISIBILITY_PUBLIC;
         } else {
-            visibility = RoomState.DIRECTORY_VISIBILITY_PRIVATE;
+            visibility = RoomDirectoryVisibility.DIRECTORY_VISIBILITY_PRIVATE;
         }
 
         if (null != visibility) {
@@ -1303,57 +1302,61 @@ public class VectorRoomSettingsFragment extends PreferenceFragment implements Sh
      * Refresh the banned users list.
      */
     private void refreshBannedMembersList() {
-        List<RoomMember> bannedMembers = new ArrayList<>();
-        Collection<RoomMember> members = mRoom.getMembers();
-
-        if (null != members) {
-            for (RoomMember member : members) {
-                if (TextUtils.equals(member.membership, RoomMember.MEMBERSHIP_BAN)) {
-                    bannedMembers.add(member);
-                }
-            }
-        }
-
-        Collections.sort(bannedMembers, new Comparator<RoomMember>() {
-            @Override
-            public int compare(RoomMember m1, RoomMember m2) {
-                return m1.getUserId().toLowerCase(VectorApp.getApplicationLocale()).compareTo(m2.getUserId().toLowerCase(VectorApp.getApplicationLocale()));
-            }
-        });
-
-        PreferenceScreen preferenceScreen = getPreferenceScreen();
+        final PreferenceScreen preferenceScreen = getPreferenceScreen();
 
         preferenceScreen.removePreference(mBannedMembersSettingsCategoryDivider);
         preferenceScreen.removePreference(mBannedMembersSettingsCategory);
         mBannedMembersSettingsCategory.removeAll();
 
-        if (bannedMembers.size() > 0) {
-            preferenceScreen.addPreference(mBannedMembersSettingsCategoryDivider);
-            preferenceScreen.addPreference(mBannedMembersSettingsCategory);
+        mRoom.getMembersAsync(new SimpleApiCallback<List<RoomMember>>(getActivity()) {
+            @Override
+            public void onSuccess(List<RoomMember> members) {
+                List<RoomMember> bannedMembers = new ArrayList<>();
 
-            for (RoomMember member : bannedMembers) {
-                VectorCustomActionEditTextPreference preference = new VectorCustomActionEditTextPreference(getActivity());
+                if (null != members) {
+                    for (RoomMember member : members) {
+                        if (TextUtils.equals(member.membership, RoomMember.MEMBERSHIP_BAN)) {
+                            bannedMembers.add(member);
+                        }
+                    }
+                }
 
-                final String userId = member.getUserId();
-
-                preference.setTitle(userId);
-                preference.setKey(BANNED_PREFERENCE_KEY_BASE + userId);
-
-                preference.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
+                Collections.sort(bannedMembers, new Comparator<RoomMember>() {
                     @Override
-                    public boolean onPreferenceClick(Preference preference) {
-                        Intent startRoomInfoIntent = new Intent(getActivity(), VectorMemberDetailsActivity.class);
-                        startRoomInfoIntent.putExtra(VectorMemberDetailsActivity.EXTRA_MEMBER_ID, userId);
-                        startRoomInfoIntent.putExtra(VectorMemberDetailsActivity.EXTRA_ROOM_ID, mRoom.getRoomId());
-                        startRoomInfoIntent.putExtra(VectorMemberDetailsActivity.EXTRA_MATRIX_ID, mSession.getCredentials().userId);
-                        getActivity().startActivity(startRoomInfoIntent);
-                        return false;
+                    public int compare(RoomMember m1, RoomMember m2) {
+                        return m1.getUserId().toLowerCase(VectorApp.getApplicationLocale()).compareTo(m2.getUserId().toLowerCase(VectorApp.getApplicationLocale()));
                     }
                 });
 
-                mBannedMembersSettingsCategory.addPreference(preference);
+                if (bannedMembers.size() > 0) {
+                    preferenceScreen.addPreference(mBannedMembersSettingsCategoryDivider);
+                    preferenceScreen.addPreference(mBannedMembersSettingsCategory);
+
+                    for (RoomMember member : bannedMembers) {
+                        VectorCustomActionEditTextPreference preference = new VectorCustomActionEditTextPreference(getActivity());
+
+                        final String userId = member.getUserId();
+
+                        preference.setTitle(userId);
+                        preference.setKey(BANNED_PREFERENCE_KEY_BASE + userId);
+
+                        preference.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
+                            @Override
+                            public boolean onPreferenceClick(Preference preference) {
+                                Intent startRoomInfoIntent = new Intent(getActivity(), VectorMemberDetailsActivity.class);
+                                startRoomInfoIntent.putExtra(VectorMemberDetailsActivity.EXTRA_MEMBER_ID, userId);
+                                startRoomInfoIntent.putExtra(VectorMemberDetailsActivity.EXTRA_ROOM_ID, mRoom.getRoomId());
+                                startRoomInfoIntent.putExtra(VectorMemberDetailsActivity.EXTRA_MATRIX_ID, mSession.getCredentials().userId);
+                                getActivity().startActivity(startRoomInfoIntent);
+                                return false;
+                            }
+                        });
+
+                        mBannedMembersSettingsCategory.addPreference(preference);
+                    }
+                }
             }
-        }
+        });
     }
 
     //================================================================================
@@ -1582,7 +1585,7 @@ public class VectorRoomSettingsFragment extends PreferenceFragment implements Sh
         Menu menu = popup.getMenu();
         ThemeUtils.INSTANCE.tintMenuIcons(menu, ThemeUtils.INSTANCE.getColor(context, R.attr.icon_tint_on_light_action_bar_color));
 
-        String canonicalAlias = mRoom.getState().alias;
+        String canonicalAlias = mRoom.getState().getCanonicalAlias();
         boolean canUpdateAliases = canUpdateAliases();
 
         menu.findItem(R.id.ic_action_vector_delete_alias).setVisible(canUpdateAliases);
@@ -1673,7 +1676,7 @@ public class VectorRoomSettingsFragment extends PreferenceFragment implements Sh
      */
     private void refreshAddresses() {
         final String localSuffix = ":" + mSession.getHomeServerConfig().getHomeserverUri().getHost();
-        final String canonicalAlias = mRoom.getState().alias;
+        final String canonicalAlias = mRoom.getState().getCanonicalAlias();
         final List<String> aliases = new ArrayList<>(mRoom.getAliases());
 
         // remove the displayed preferences

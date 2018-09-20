@@ -14,12 +14,13 @@
  * limitations under the License.
  */
 
-package im.vector.util
+package im.vector.extensions
 
 import org.matrix.androidsdk.MXSession
 import org.matrix.androidsdk.crypto.data.MXDeviceInfo
 import org.matrix.androidsdk.data.Room
 import org.matrix.androidsdk.rest.model.Event
+import kotlin.math.max
 
 /* ==========================================================================================
  * MXDeviceInfo
@@ -48,16 +49,8 @@ fun Room?.getRoomMaxPowerLevel(): Int {
 
     var maxPowerLevel = 0
 
-    state.powerLevels?.let {
-        var tempPowerLevel: Int
-
-        // find out the room member
-        for (member in members) {
-            tempPowerLevel = it.getUserPowerLevel(member.userId)
-            if (tempPowerLevel > maxPowerLevel) {
-                maxPowerLevel = tempPowerLevel
-            }
-        }
+    state?.powerLevels?.let {
+        maxPowerLevel = max(it.users_default, it.users?.values?.max() ?: 0)
     }
 
     return maxPowerLevel
