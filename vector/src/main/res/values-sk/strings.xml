@@ -864,11 +864,10 @@ Neznáme zariadenia:</string>
 	<item quantity="other"/>
 </plurals>
 
-    <string name="room_displayname_many_members">%1$s a %2$s</string>
-    <plurals name="others">
-	<item quantity="one">1 ďalší</item>
-	<item quantity="few">%d ďalší</item>
-	<item quantity="many">%d ďalších</item>
+    <plurals name="room_displayname_three_and_more_members">
+	<item quantity="one">%1$s a 1 ďalší</item>
+	<item quantity="few">%1$s a %d ďalší</item>
+	<item quantity="many">%1$s a %d ďalších</item>
 	<item quantity="other"/>
 </plurals>
 

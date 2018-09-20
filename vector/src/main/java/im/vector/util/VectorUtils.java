@@ -262,10 +262,8 @@ public class VectorUtils {
                         roomState.getMemberName(member1.getUserId()), roomState.getMemberName(member2.getUserId()));
             } else {
                 RoomMember member = othersActiveMembers.get(0);
-                displayName = context.getString(R.string.room_displayname_many_members,
-                        roomState.getMemberName(member.getUserId()),
-                        context.getResources().getQuantityString(R.plurals.others,
-                                nbOfOtherMembers - 1, nbOfOtherMembers - 1));
+                displayName = context.getResources().getQuantityString(R.plurals.room_displayname_three_and_more_members,
+                        nbOfOtherMembers - 1, roomState.getMemberName(member.getUserId()), nbOfOtherMembers - 1);
             }
 
             return displayName;

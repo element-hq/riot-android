@@ -513,12 +513,13 @@
     <!-- Room display name -->
     <string name="room_displayname_invite_from">Invite from %s</string>
     <string name="room_displayname_room_invite">Room Invite</string>
+
+    <!-- The 2 parameters will be members' name -->
     <string name="room_displayname_two_members">%1$s and %2$s</string>
 
-    <string name="room_displayname_many_members">%1$s and %2$s</string>
-    <plurals name="others">
-        <item quantity="one">1 other</item>
-        <item quantity="other">%d others</item>
+    <plurals name="room_displayname_three_and_more_members">
+        <item quantity="one">%1$s and 1 other</item>
+        <item quantity="other">%1$s and %2$d others</item>
     </plurals>
 
     <string name="room_displayname_no_title">Empty room</string>

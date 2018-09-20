@@ -852,10 +852,9 @@ Appareils inconnus :</string>
 	<item quantity="other">%d nouveaux messages</item>
 </plurals>
 
-    <string name="room_displayname_many_members">%1$s et %2$s</string>
-    <plurals name="others">
-	<item quantity="one">Un autre</item>
-	<item quantity="other">%d autres</item>
+    <plurals name="room_displayname_three_and_more_members">
+	<item quantity="one">%1$s et 1 autre</item>
+	<item quantity="other">%1$s et %d autres</item>
 </plurals>
 
     <string name="list_members">Liste les membres</string>

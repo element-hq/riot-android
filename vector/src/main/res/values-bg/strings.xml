@@ -375,11 +375,10 @@
     <string name="room_displayname_room_invite">Покана за стая</string>
     <string name="room_displayname_two_members">%1$s и %2$s</string>
 
-    <string name="room_displayname_many_members">%1$s и %2$s</string>
-    <plurals name="others">
-	<item quantity="one">1 друг</item>
-	<item quantity="other">%d други</item>
-</plurals>
+    <plurals name="room_displayname_three_and_more_members">
+ 	    <item quantity="one">%1$s и 1 друг</item>
+	    <item quantity="other">%1$s и %d други</item>
+    </plurals>
 
     <string name="room_displayname_no_title">Празна стая</string>
 
