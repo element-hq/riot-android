@@ -10,6 +10,7 @@ Features:
 Improvements:
  - Minor changes to toolbar style and other UI elements (#2529)
  - Improvements to dialogs, video messages, and the previewer activity (#2583)
+ - Add a way to enable local file encryption on the SDK (disabled by default)
 
 Other changes:
  -
