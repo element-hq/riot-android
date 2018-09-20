@@ -15,7 +15,9 @@ Other changes:
  -
 
 Bugfix:
- -
+ - Fix crash when opening file with external application (#2573)
+ - Fix issue on settings: unable to rename current device if it has no name (#2174)
+ - Allow anyone to add local alias and to try to delete local alias (#1033)
 
 Translations:
  -
