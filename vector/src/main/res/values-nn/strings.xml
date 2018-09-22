@@ -132,7 +132,7 @@ Velg \"hent ut\" for å sikkerheitskopiera dei før du loggar av.</string>
     <string name="send_bug_report_progress">Framgang (%s%%)</string>
 
     <string name="send_files_in">Send inn i</string>
-    <string name="read_receipt">Les</string>
+    <string name="read_receipt">Lesen</string>
 
     <string name="join_room">Gå inn i Rommet</string>
     <string name="username">Brukarnamn</string>
@@ -810,7 +810,7 @@ Krypterte meldingar vil ikkje vera synlege hjå klientar som førebels ikkje har
     <string name="encryption_information_unblock">Fjern frå svartelista</string>
 
     <string name="encryption_information_verify_device">Godkjenn eininga</string>
-    <string name="encryption_information_verify_device_warning">For å godkjenna at denne eininga er til å stola på, ver venleg og snakk med eigaren på ei anna måte (t.d. ansikt til ansikt eller på telefon), og spør han om nykelen han ser i Brukarinnstillingane for denne eininga samsvarar med nykelen under:</string>
+    <string name="encryption_information_verify_device_warning">For å godkjenna at denne eininga er til å stola på, ver venleg og snakk med eigaren på ei anna måte (t.d. ansikt til ansikt eller på telefon) og spør han om nykelen han ser i Brukarinnstillingane for denne eininga samsvarar med nykelen under:</string>
     <string name="encryption_information_verify_device_warning2">Viss han samsvarer, klikk godkjennknappen under.
 Viss han ikkje gjer det, tjuvlytter nokon andre på eininga og du bør sannsynlegvis setja ho på svartelista.
 I framtida kjem denne godkjenningsprosessen til å vera betre utvikla.</string>
