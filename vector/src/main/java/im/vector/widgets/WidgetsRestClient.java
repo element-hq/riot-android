@@ -33,7 +33,9 @@ class WidgetsRestClient extends RestClient<WidgetsApi> {
      * {@inheritDoc}
      */
     public WidgetsRestClient(Context context) {
-        super(new HomeServerConnectionConfig(Uri.parse(context.getString(R.string.integrations_rest_url))),
+        super(new HomeServerConnectionConfig.Builder()
+                        .withHomeServerUri(Uri.parse(context.getString(R.string.integrations_rest_url)))
+                        .build(),
                 WidgetsApi.class,
                 "api/",
                 false);

@@ -68,7 +68,6 @@ import org.matrix.androidsdk.ssl.UnrecognizedCertificateException;
 import org.matrix.androidsdk.util.JsonUtils;
 import org.matrix.androidsdk.util.Log;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -1287,7 +1286,11 @@ public class LoginActivity extends MXCActionBarActivity implements RegistrationM
                                   final String aHomeServer,
                                   final String aIdentityServer) {
         final HomeServerConnectionConfig homeServerConfig = mHomeserverConnectionConfig =
-                new HomeServerConnectionConfig(Uri.parse(aHomeServer), Uri.parse(aIdentityServer), null, new ArrayList<Fingerprint>(), false);
+                new HomeServerConnectionConfig.Builder()
+                        .withHomeServerUri(Uri.parse(aHomeServer))
+                        .withIdentityServerUri(Uri.parse(aIdentityServer))
+                        .build();
+
         RegistrationManager.getInstance().setHsConfig(homeServerConfig);
         Log.d(LOG_TAG, "## submitEmailToken(): IN");
 
@@ -1728,11 +1731,11 @@ public class LoginActivity extends MXCActionBarActivity implements RegistrationM
                     // try with the vector.im HS
                     if (TextUtils.equals(hsUrlString, getString(R.string.vector_im_server_url)) && TextUtils.equals(e.errcode, MatrixError.FORBIDDEN)) {
                         Log.e(LOG_TAG, "onLoginClick : test with matrix.org as HS");
-                        mHomeserverConnectionConfig = new HomeServerConnectionConfig(Uri.parse(getString(R.string.matrix_org_server_url)),
-                                Uri.parse(identityUrlString),
-                                null,
-                                new ArrayList<Fingerprint>(),
-                                false);
+                        mHomeserverConnectionConfig = new HomeServerConnectionConfig.Builder()
+                                .withHomeServerUri(Uri.parse(getString(R.string.matrix_org_server_url)))
+                                .withIdentityServerUri(Uri.parse(identityUrlString))
+                                .build();
+
                         login(mHomeserverConnectionConfig,
                                 getString(R.string.matrix_org_server_url),
                                 identityUrlString,
@@ -2089,11 +2092,10 @@ public class LoginActivity extends MXCActionBarActivity implements RegistrationM
 
             try {
                 mHomeserverConnectionConfig = null;
-                mHomeserverConnectionConfig = new HomeServerConnectionConfig(Uri.parse(hsUrlString),
-                        Uri.parse(identityServerUrlString),
-                        null,
-                        new ArrayList<Fingerprint>(),
-                        false);
+                mHomeserverConnectionConfig = new HomeServerConnectionConfig.Builder()
+                        .withHomeServerUri(Uri.parse(hsUrlString))
+                        .withIdentityServerUri(Uri.parse(identityServerUrlString))
+                        .build();
             } catch (Exception e) {
                 Log.e(LOG_TAG, "getHsConfig fails " + e.getLocalizedMessage(), e);
             }
