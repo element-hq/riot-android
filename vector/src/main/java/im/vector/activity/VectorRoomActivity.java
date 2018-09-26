@@ -1019,6 +1019,11 @@ public class VectorRoomActivity extends MXCActionBarActivity implements
             }
 
             @Override
+            public void resendUnsentEvents() {
+                mVectorMessageListFragment.resendUnsentMessages();
+            }
+
+            @Override
             public void deleteUnsentEvents() {
                 mVectorMessageListFragment.deleteUnsentEvents();
             }

@@ -239,7 +239,7 @@ class NotificationAreaView @JvmOverloads constructor(
      */
     private inner class ResendAllClickableSpan : ClickableSpan() {
         override fun onClick(widget: View) {
-            delegate?.deleteUnsentEvents()
+            delegate?.resendUnsentEvents()
             render(state)
         }
 
@@ -290,6 +290,7 @@ class NotificationAreaView @JvmOverloads constructor(
      */
     interface Delegate {
         fun providesMessagesActionListener(): IMessagesAdapterActionsListener
+        fun resendUnsentEvents()
         fun deleteUnsentEvents()
         fun closeScreen()
         fun jumpToBottom()
