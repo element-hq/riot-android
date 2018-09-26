@@ -124,7 +124,7 @@ class VectorMessagesAdapterMediasHelper {
         if (!mSession.getMyUserId().equals(event.getSender()) || !event.isSending()) {
             uploadProgressLayout.setVisibility(View.GONE);
             uploadSpinner.setVisibility(View.GONE);
-            showUploadFailure(convertView, type, event.isUndeliverable());
+            showUploadFailure(convertView, type, event.isUndelivered());
             return;
         }
 
@@ -436,12 +436,12 @@ class VectorMessagesAdapterMediasHelper {
         boolean hasContentInfo = (null != (isVideoMessage ? ((VideoMessage) message).info : ((ImageMessage) message).info));
 
         // not the sender ?
-        if (!mSession.getMyUserId().equals(event.getSender()) || event.isUndeliverable() || !hasContentInfo) {
+        if (!mSession.getMyUserId().equals(event.getSender()) || event.isUndelivered() || !hasContentInfo) {
             uploadProgressLayout.setVisibility(View.GONE);
             uploadSpinner.setVisibility(View.GONE);
             showUploadFailure(convertView,
                     isVideoMessage ? VectorMessagesAdapter.ROW_TYPE_VIDEO : VectorMessagesAdapter.ROW_TYPE_IMAGE,
-                    event.isUndeliverable());
+                    event.isUndelivered());
             return;
         }
 
