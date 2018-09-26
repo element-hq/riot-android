@@ -19,7 +19,6 @@ package im.vector.adapters;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
-import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Point;
@@ -659,6 +658,7 @@ public class VectorMessagesAdapter extends AbstractMessagesAdapter {
 
         if (row != null) {
             remove(row);
+            mEventRowMap.remove(eventId);
         }
     }
 
