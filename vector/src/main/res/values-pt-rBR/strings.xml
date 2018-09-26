@@ -36,7 +36,7 @@
     <string name="ongoing_conference_call_voice">voz</string>
     <string name="ongoing_conference_call_video">vídeo</string>
     <string name="cannot_start_call">Não consigo iniciar a chamada, favor tentar mais tarde</string>
-    <string name="missing_permissions_warning">Por falta de permissões, algumas funcionalidades podem estar faltando.</string>
+    <string name="missing_permissions_warning">Por falta de permissões, algumas funcionalidades podem estar faltando…</string>
     <string name="missing_permissions_to_start_conf_call">Você necessita permissão para convidar para poder iniciar uma conferência nesta sala</string>
     <string name="missing_permissions_title_to_start_conf_call">Não consigo iniciar a chamada</string>
     <string name="device_information">Informações do dispositivo</string>
@@ -245,7 +245,9 @@
 
     <!-- permissions Android M -->
     <string name="permissions_rationale_popup_title">Informação</string>
-    <string name="permissions_rationale_msg_storage">Riot necessita permissão para acessar sua biblitoeca de foto e vídeo para poder enviar e salvar anexos.\n\nPor favor, permita acesso na próxima tela para poder enviar arquivos do seu telefone.</string>
+    <string name="permissions_rationale_msg_storage">Riot necessita permissão para acessar sua galeria de fotos e vídeos para poder enviar e salvar anexos.
+
+Por favor, permita acesso na próxima tela para poder enviar arquivos do seu celular.</string>
     <string name="permissions_rationale_msg_camera">Riot necessita permissão para acessar sua câmera para poder tirar fotos e fazer chamadas de vídeo.</string>
     <string name="permissions_rationale_msg_camera_explanation">
 
@@ -766,7 +768,7 @@ No futuro, este processo de verificação será mais sofisticado.</string>
 
     <string name="settings_notification_ringtone">Som de notificação</string>
     <string name="settings_containing_my_display_name">Mensagens que contenham o meu nome público</string>
-    <string name="settings_containing_my_user_name">Mensagens que contenha o meu nome de usuário</string>
+    <string name="settings_containing_my_user_name">Mensagens que contenham o meu nome de usuária(o)</string>
     <string name="settings_inline_url_preview">Habilitar visualização resumida dos links por padrão</string>
     <string name="settings_12_24_timestamps">Utilizar o formato de 12 horas (p.ex: 2:30pm)</string>
     <string name="settings_hide_join_leave_messages">Ocultar mensagens de entrada e de saída de pessoas (convites, expulsões e banimentos não são afetados)</string>
@@ -915,7 +917,7 @@ No futuro, este processo de verificação será mais sofisticado.</string>
     <string name="notice_avatar">Imagem de notificação</string>
     <string name="avatar">Imagem de perfil</string>
 
-<string name="send_bug_report_rage_shake">Espumando de raiva para reportar bug</string>
+<string name="send_bug_report_rage_shake">Agite com raiva para reportar uma falha (bug)</string>
 
     <string name="settings_notification_privacy_normal">Normal</string>
     <string name="settings_notification_privacy_power_saving">Opções de economia de energia</string>
@@ -998,7 +1000,7 @@ Note que esta ação vai reiniciar o aplicativo e isso pode tomar um certo tempo
     <string name="settings_deactivate_my_account">Desativar a minha conta</string>
 
     <string name="startup_notification_privacy_title">Privacidade das notificações</string>
-    <string name="startup_notification_privacy_message">Riot por funcionar em segundo plano para gerir as suas notificações de forma segura e confidencial (isso poderá impactar no uso da bateria)</string>
+    <string name="startup_notification_privacy_message">Riot pode funcionar em segundo plano para gerir as suas notificações de forma segura e confidencial (isso poderá impactar no uso da bateria).</string>
     <string name="startup_notification_privacy_button_grant">Conceder a permissão</string>
     <string name="startup_notification_privacy_button_other">Escolha outra opção</string>
 
