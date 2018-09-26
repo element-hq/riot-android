@@ -21,6 +21,7 @@ Bugfix:
  - Allow anyone to add local alias and to try to delete local alias (#1033)
  - Fix issue on "Resend all" action (#2569)
  - Fix messages vanishing when resending them (#2508)
+ - Remove delay for / completion (#2576)
 
 Translations:
  -
