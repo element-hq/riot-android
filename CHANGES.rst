@@ -13,7 +13,7 @@ Improvements:
  - Add a way to enable local file encryption on the SDK (disabled by default)
 
 Other changes:
- -
+ - Sonar analysis has been configured (#2203)
 
 Bugfix:
  - Fix crash when opening file with external application (#2573)
