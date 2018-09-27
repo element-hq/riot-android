@@ -1265,9 +1265,9 @@ public class VectorMessageListFragment extends MatrixMessageListFragment impleme
     }
 
     @Override
-    public void onMessageIdClick(String messageId) {
+    public void onEventIdClick(String eventId) {
         try {
-            onURLClick(Uri.parse(PermalinkUtils.createPermalink(mRoom.getRoomId(), messageId)));
+            onURLClick(Uri.parse(PermalinkUtils.createPermalink(mRoom.getRoomId(), eventId)));
         } catch (Exception e) {
             Log.e(LOG_TAG, "onRoomIdClick failed " + e.getLocalizedMessage(), e);
         }

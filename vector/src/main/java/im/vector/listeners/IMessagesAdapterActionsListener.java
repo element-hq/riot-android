@@ -140,11 +140,11 @@ public interface IMessagesAdapterActionsListener {
     void onRoomIdClick(String roomId);
 
     /**
-     * A message id has been clicked in a message body.
+     * A event id has been clicked in a message body.
      *
-     * @param messageId the message id.
+     * @param eventId the event id.
      */
-    void onMessageIdClick(String messageId);
+    void onEventIdClick(String eventId);
 
     /**
      * A group id has been clicked in a message body.

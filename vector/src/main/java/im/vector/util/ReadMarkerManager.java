@@ -328,7 +328,7 @@ public class ReadMarkerManager implements VectorMessagesAdapter.ReadMarkerListen
             final String readReceiptEventId = mRoomSummary.getReadReceiptEventId();
 
             if (!mReadMarkerEventId.equals(readReceiptEventId)) {
-                if (!MXPatterns.isMessageId(mReadMarkerEventId)) {
+                if (!MXPatterns.isEventId(mReadMarkerEventId)) {
                     // Read marker is invalid, ignore it as it should not occur
                     Log.e(LOG_TAG, "updateJumpToBanner: Read marker event id is invalid, ignore it as it should not occur");
                 } else {
@@ -564,7 +564,7 @@ public class ReadMarkerManager implements VectorMessagesAdapter.ReadMarkerListen
                             + " TS:" + currentReadMarkerTs + " closestEvent:" + closestEvent.eventId + " TS:" + closestEvent.getOriginServerTs());
                     if (newReadMarkerTs > currentReadMarkerTs) {
                         Log.d(LOG_TAG, "setReadMarkerToLastVisibleRow update read marker to:" + newReadMarkerEvent.eventId
-                                + " isMessageId:" + MXPatterns.isMessageId(newReadMarkerEvent.eventId));
+                                + " isEventId:" + MXPatterns.isEventId(newReadMarkerEvent.eventId));
                         mRoom.setReadMakerEventId(newReadMarkerEvent.eventId);
                         onReadMarkerChanged(mRoom.getRoomId());
                     }

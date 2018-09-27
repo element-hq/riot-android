@@ -122,9 +122,9 @@ public class MatrixURLSpan extends ClickableSpan implements ParcelableSpan {
                 if (null != mActionsListener) {
                     mActionsListener.onRoomIdClick(mURL);
                 }
-            } else if (mPattern == MXPatterns.PATTERN_CONTAIN_MATRIX_MESSAGE_IDENTIFIER) {
+            } else if (mPattern == MXPatterns.PATTERN_CONTAIN_MATRIX_EVENT_IDENTIFIER) {
                 if (null != mActionsListener) {
-                    mActionsListener.onMessageIdClick(mURL);
+                    mActionsListener.onEventIdClick(mURL);
                 }
             } else if (mPattern == MXPatterns.PATTERN_CONTAIN_MATRIX_GROUP_IDENTIFIER) {
                 if (null != mActionsListener) {

@@ -473,7 +473,7 @@ public class VectorUniversalLinkReceiver extends BroadcastReceiver {
             if (temp.length > 2) {
                 String eventId = temp[2];
 
-                if (MXPatterns.isMessageId(eventId)) {
+                if (MXPatterns.isEventId(eventId)) {
                     map.put(ULINK_EVENT_ID_KEY, temp[2]);
                 } else {
                     uri = Uri.parse(uri.toString().replace("#/room/", "room/"));
