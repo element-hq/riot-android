@@ -27,7 +27,7 @@ import android.text.TextUtils;
 import android.view.MotionEvent;
 import android.view.View;
 
-import org.matrix.androidsdk.data.EventTimeline;
+import org.matrix.androidsdk.data.timeline.EventTimeline;
 import org.matrix.androidsdk.data.RoomState;
 import org.matrix.androidsdk.rest.model.Event;
 import org.matrix.androidsdk.util.Log;

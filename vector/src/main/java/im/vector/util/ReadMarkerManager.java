@@ -444,7 +444,7 @@ public class ReadMarkerManager implements VectorMessagesAdapter.ReadMarkerListen
             Log.d(LOG_TAG, "scrollUpToGivenEvent " + event.eventId);
             if (!scrollToAdapterEvent(event)) {
                 // use the cached events list
-                mRoom.getLiveTimeLine().backPaginate(UNREAD_BACK_PAGINATE_EVENT_COUNT, true, new ApiCallback<Integer>() {
+                mRoom.getTimeline().backPaginate(UNREAD_BACK_PAGINATE_EVENT_COUNT, true, new ApiCallback<Integer>() {
                     @Override
                     public void onSuccess(Integer info) {
                         if (!mActivity.isFinishing()) {

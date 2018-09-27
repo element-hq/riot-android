@@ -987,7 +987,7 @@ public class VectorRoomActivity extends MXCActionBarActivity implements
 
         // Init read marker manager
         if (mIsUnreadPreviewMode
-                || (mRoom != null && mRoom.getLiveTimeLine() != null && mRoom.getLiveTimeLine().isLiveTimeline() && TextUtils.isEmpty(mEventId))) {
+                || (mRoom != null && mRoom.getTimeline() != null && mRoom.getTimeline().isLiveTimeline() && TextUtils.isEmpty(mEventId))) {
             if (null == mRoom) {
                 Log.e(LOG_TAG, "## onCreate() : null room");
             } else if (null == mSession.getDataHandler().getStore().getSummary(mRoom.getRoomId())) {
