@@ -19,7 +19,6 @@ package im.vector.adapters;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
-import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Point;
@@ -659,6 +658,7 @@ public class VectorMessagesAdapter extends AbstractMessagesAdapter {
 
         if (row != null) {
             remove(row);
+            mEventRowMap.remove(eventId);
         }
     }
 
@@ -834,7 +834,7 @@ public class VectorMessagesAdapter extends AbstractMessagesAdapter {
             MessageRow row = getItem(i);
             Event event = row.getEvent();
 
-            if ((null != event) && (event.isUndeliverable() || event.isUnkownDevice())) {
+            if ((null != event) && (event.isUndelivered() || event.isUnknownDevice())) {
                 undeliverableEvents.add(row);
                 remove(row);
                 i--;
@@ -1193,7 +1193,7 @@ public class VectorMessagesAdapter extends AbstractMessagesAdapter {
         TextView tsTextView = VectorMessagesAdapterHelper.setTimestampValue(convertView, getFormattedTimestamp(event));
 
         if (null != tsTextView) {
-            if (row.getEvent().isUndeliverable() || row.getEvent().isUnkownDevice()) {
+            if (row.getEvent().isUndelivered() || row.getEvent().isUnknownDevice()) {
                 tsTextView.setTextColor(mNotSentMessageTextColor);
             } else {
                 tsTextView.setTextColor(ThemeUtils.INSTANCE.getColor(mContext, R.attr.default_text_light_color));
@@ -1303,7 +1303,7 @@ public class VectorMessagesAdapter extends AbstractMessagesAdapter {
                 textColor = mEncryptingMessageTextColor;
             } else if (row.getEvent().isSending() || row.getEvent().isUnsent()) {
                 textColor = mSendingMessageTextColor;
-            } else if (row.getEvent().isUndeliverable() || row.getEvent().isUnkownDevice()) {
+            } else if (row.getEvent().isUndelivered() || row.getEvent().isUnknownDevice()) {
                 textColor = mNotSentMessageTextColor;
             } else {
                 textColor = shouldHighlighted ? mHighlightMessageTextColor : mDefaultMessageTextColor;
@@ -1594,7 +1594,7 @@ public class VectorMessagesAdapter extends AbstractMessagesAdapter {
                 textColor = mEncryptingMessageTextColor;
             } else if (row.getEvent().isSending() || row.getEvent().isUnsent()) {
                 textColor = mSendingMessageTextColor;
-            } else if (row.getEvent().isUndeliverable() || row.getEvent().isUnkownDevice()) {
+            } else if (row.getEvent().isUndelivered() || row.getEvent().isUnknownDevice()) {
                 textColor = mNotSentMessageTextColor;
             } else {
                 textColor = mDefaultMessageTextColor;
@@ -2593,7 +2593,7 @@ public class VectorMessagesAdapter extends AbstractMessagesAdapter {
         if (event.canBeResent()) {
             menu.findItem(R.id.ic_action_vector_resend_message).setVisible(true);
 
-            if (event.isUndeliverable() || event.isUnkownDevice()) {
+            if (event.isUndelivered() || event.isUnknownDevice()) {
                 menu.findItem(R.id.ic_action_vector_redact_message).setVisible(true);
             }
         } else if (event.mSentState == Event.SentState.SENT) {

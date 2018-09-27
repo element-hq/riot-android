@@ -19,6 +19,9 @@ Bugfix:
  - Fix crash when opening file with external application (#2573)
  - Fix issue on settings: unable to rename current device if it has no name (#2174)
  - Allow anyone to add local alias and to try to delete local alias (#1033)
+ - Fix issue on "Resend all" action (#2569)
+ - Fix messages vanishing when resending them (#2508)
+ - Remove delay for / completion (#2576)
 
 Translations:
  -

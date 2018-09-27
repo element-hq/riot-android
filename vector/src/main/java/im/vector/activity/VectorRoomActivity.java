@@ -1019,6 +1019,11 @@ public class VectorRoomActivity extends MXCActionBarActivity implements
             }
 
             @Override
+            public void resendUnsentEvents() {
+                mVectorMessageListFragment.resendUnsentMessages();
+            }
+
+            @Override
             public void deleteUnsentEvents() {
                 mVectorMessageListFragment.deleteUnsentEvents();
             }
@@ -2555,7 +2560,7 @@ public class VectorRoomActivity extends MXCActionBarActivity implements
         } else if (mIsUnreadPreviewMode) {
             state = NotificationAreaView.State.UnreadPreview.INSTANCE;
         } else {
-            final List<Event> undeliveredEvents = mSession.getDataHandler().getStore().getUndeliverableEvents(mRoom.getRoomId());
+            final List<Event> undeliveredEvents = mSession.getDataHandler().getStore().getUndeliveredEvents(mRoom.getRoomId());
             final List<Event> unknownDeviceEvents = mSession.getDataHandler().getStore().getUnknownDeviceEvents(mRoom.getRoomId());
             boolean hasUndeliverableEvents = (undeliveredEvents != null) && (undeliveredEvents.size() > 0);
             boolean hasUnknownDeviceEvents = (unknownDeviceEvents != null) && (unknownDeviceEvents.size() > 0);
