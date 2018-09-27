@@ -57,6 +57,7 @@ import android.widget.TextView;
 
 import com.binaryfork.spanny.Spanny;
 
+import org.matrix.androidsdk.MXPatterns;
 import org.matrix.androidsdk.MXSession;
 import org.matrix.androidsdk.adapters.AbstractMessagesAdapter;
 import org.matrix.androidsdk.adapters.MessageRow;
@@ -1802,7 +1803,7 @@ public class VectorMessagesAdapter extends AbstractMessagesAdapter {
         final RoomCreateContent.Predecessor predecessor = roomState.getRoomCreateContent().predecessor;
 
         final String roomLink = PermalinkUtils.createPermalink(predecessor.roomId);
-        final ClickableSpan urlSpan = new MatrixURLSpan(roomLink, MXSession.PATTERN_CONTAIN_APP_LINK_PERMALINK_ROOM_ID, mVectorMessagesAdapterEventsListener);
+        final ClickableSpan urlSpan = new MatrixURLSpan(roomLink, MXPatterns.PATTERN_CONTAIN_APP_LINK_PERMALINK_ROOM_ID, mVectorMessagesAdapterEventsListener);
         final int textColorInt = ContextCompat.getColor(mContext, R.color.riot_primary_text_color_light);
         final CharSequence text = new Spanny(mContext.getString(R.string.room_tombstone_continuation_description),
                 new StyleSpan(Typeface.BOLD),

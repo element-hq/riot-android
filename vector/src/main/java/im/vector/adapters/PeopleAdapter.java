@@ -28,7 +28,7 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import org.matrix.androidsdk.MXSession;
+import org.matrix.androidsdk.MXPatterns;
 import org.matrix.androidsdk.data.Room;
 import org.matrix.androidsdk.rest.callback.SimpleApiCallback;
 import org.matrix.androidsdk.rest.model.User;
@@ -378,7 +378,7 @@ public class PeopleAdapter extends AbsAdapter {
              * For other contacts, it is the presence
              */
             if (participant.mContact != null) {
-                boolean isMatrixUserId = MXSession.PATTERN_CONTAIN_MATRIX_USER_IDENTIFIER.matcher(participant.mUserId).matches();
+                boolean isMatrixUserId = MXPatterns.isUserId(participant.mUserId);
                 vContactBadge.setVisibility(isMatrixUserId ? View.VISIBLE : View.GONE);
 
                 if (participant.mContact.getEmails().size() > 0) {

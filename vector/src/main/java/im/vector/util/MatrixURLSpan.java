@@ -1,6 +1,7 @@
 /*
  * Copyright 2016 OpenMarket Ltd
  * Copyright 2017 Vector Creations Ltd
+ * Copyright 2018 New Vector Ltd
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -25,11 +26,9 @@ import android.text.SpannableStringBuilder;
 import android.text.style.ClickableSpan;
 import android.view.View;
 
-import org.matrix.androidsdk.MXSession;
+import org.matrix.androidsdk.MXPatterns;
 import org.matrix.androidsdk.util.Log;
 
-import java.util.Arrays;
-import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -111,23 +110,23 @@ public class MatrixURLSpan extends ClickableSpan implements ParcelableSpan {
     @Override
     public void onClick(View widget) {
         try {
-            if (mPattern == MXSession.PATTERN_CONTAIN_MATRIX_USER_IDENTIFIER) {
+            if (mPattern == MXPatterns.PATTERN_CONTAIN_MATRIX_USER_IDENTIFIER) {
                 if (null != mActionsListener) {
                     mActionsListener.onMatrixUserIdClick(mURL);
                 }
-            } else if (mPattern == MXSession.PATTERN_CONTAIN_MATRIX_ALIAS) {
+            } else if (mPattern == MXPatterns.PATTERN_CONTAIN_MATRIX_ALIAS) {
                 if (null != mActionsListener) {
                     mActionsListener.onRoomAliasClick(mURL);
                 }
-            } else if (mPattern == MXSession.PATTERN_CONTAIN_MATRIX_ROOM_IDENTIFIER) {
+            } else if (mPattern == MXPatterns.PATTERN_CONTAIN_MATRIX_ROOM_IDENTIFIER) {
                 if (null != mActionsListener) {
                     mActionsListener.onRoomIdClick(mURL);
                 }
-            } else if (mPattern == MXSession.PATTERN_CONTAIN_MATRIX_MESSAGE_IDENTIFIER) {
+            } else if (mPattern == MXPatterns.PATTERN_CONTAIN_MATRIX_MESSAGE_IDENTIFIER) {
                 if (null != mActionsListener) {
                     mActionsListener.onMessageIdClick(mURL);
                 }
-            } else if (mPattern == MXSession.PATTERN_CONTAIN_MATRIX_GROUP_IDENTIFIER) {
+            } else if (mPattern == MXPatterns.PATTERN_CONTAIN_MATRIX_GROUP_IDENTIFIER) {
                 if (null != mActionsListener) {
                     mActionsListener.onGroupIdClick(mURL);
                 }
@@ -145,19 +144,6 @@ public class MatrixURLSpan extends ClickableSpan implements ParcelableSpan {
         }
     }
 
-    // list of patterns to find some matrix item.
-    private static final List<Pattern> mMatrixItemPatterns = Arrays.asList(
-            MXSession.PATTERN_CONTAIN_MATRIX_TO_PERMALINK_ROOM_ID,
-            MXSession.PATTERN_CONTAIN_MATRIX_TO_PERMALINK_ROOM_ALIAS,
-            MXSession.PATTERN_CONTAIN_APP_LINK_PERMALINK_ROOM_ID,
-            MXSession.PATTERN_CONTAIN_APP_LINK_PERMALINK_ROOM_ALIAS,
-            MXSession.PATTERN_CONTAIN_MATRIX_USER_IDENTIFIER,
-            MXSession.PATTERN_CONTAIN_MATRIX_ALIAS,
-            MXSession.PATTERN_CONTAIN_MATRIX_ROOM_IDENTIFIER,
-            MXSession.PATTERN_CONTAIN_MATRIX_MESSAGE_IDENTIFIER,
-            MXSession.PATTERN_CONTAIN_MATRIX_GROUP_IDENTIFIER
-    );
-
     /**
      * Find the matrix spans i.e matrix id , user id ... to display them as URL.
      *
@@ -171,8 +157,8 @@ public class MatrixURLSpan extends ClickableSpan implements ParcelableSpan {
 
         String text = stringBuilder.toString();
 
-        for (int index = 0; index < mMatrixItemPatterns.size(); index++) {
-            Pattern pattern = mMatrixItemPatterns.get(index);
+        for (int index = 0; index < MXPatterns.MATRIX_PATTERNS.size(); index++) {
+            Pattern pattern = MXPatterns.MATRIX_PATTERNS.get(index);
 
             // room id.
             Matcher matcher = pattern.matcher(stringBuilder);

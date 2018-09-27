@@ -34,6 +34,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import org.jetbrains.annotations.NotNull;
+import org.matrix.androidsdk.MXPatterns;
 import org.matrix.androidsdk.MXSession;
 import org.matrix.androidsdk.call.IMXCall;
 import org.matrix.androidsdk.crypto.MXCryptoError;
@@ -1053,7 +1054,7 @@ public class VectorMemberDetailsActivity extends MXCActionBarActivity implements
 
             // devices
             // don't show devices list if the member isn't a matrix user
-            if (mUser != null && MXSession.PATTERN_CONTAIN_MATRIX_USER_IDENTIFIER.matcher(mMemberId).matches()) {
+            if (mUser != null && MXPatterns.isUserId(mMemberId)) {
                 imageResource = R.drawable.ic_devices_info;
                 actionText = getString(R.string.room_participants_action_devices_list);
                 devicesActions.add(new VectorMemberDetailsAdapter.AdapterMemberActionItems(imageResource, actionText, ITEM_ACTION_DEVICES));

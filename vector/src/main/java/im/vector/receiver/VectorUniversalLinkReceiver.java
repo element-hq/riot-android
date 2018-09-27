@@ -27,6 +27,7 @@ import android.support.v4.content.LocalBroadcastManager;
 import android.text.TextUtils;
 import android.widget.Toast;
 
+import org.matrix.androidsdk.MXPatterns;
 import org.matrix.androidsdk.MXSession;
 import org.matrix.androidsdk.data.Room;
 import org.matrix.androidsdk.data.RoomPreviewData;
@@ -455,16 +456,16 @@ public class VectorUniversalLinkReceiver extends BroadcastReceiver {
 
             String firstParam = temp[1];
 
-            if (MXSession.isUserId(firstParam)) {
+            if (MXPatterns.isUserId(firstParam)) {
                 if (temp.length > 2) {
                     Log.e(LOG_TAG, "## parseUniversalLink : universal link to member id is too long");
                     return null;
                 }
 
                 map.put(ULINK_MATRIX_USER_ID_KEY, firstParam);
-            } else if (MXSession.isRoomAlias(firstParam) || MXSession.isRoomId(firstParam)) {
+            } else if (MXPatterns.isRoomAlias(firstParam) || MXPatterns.isRoomId(firstParam)) {
                 map.put(ULINK_ROOM_ID_OR_ALIAS_KEY, firstParam);
-            } else if (MXSession.isGroupId(firstParam)) {
+            } else if (MXPatterns.isGroupId(firstParam)) {
                 map.put(ULINK_GROUP_ID_KEY, firstParam);
             }
 
@@ -472,7 +473,7 @@ public class VectorUniversalLinkReceiver extends BroadcastReceiver {
             if (temp.length > 2) {
                 String eventId = temp[2];
 
-                if (MXSession.isMessageId(eventId)) {
+                if (MXPatterns.isMessageId(eventId)) {
                     map.put(ULINK_EVENT_ID_KEY, temp[2]);
                 } else {
                     uri = Uri.parse(uri.toString().replace("#/room/", "room/"));
