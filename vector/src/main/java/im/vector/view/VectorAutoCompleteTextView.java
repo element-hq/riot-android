@@ -95,10 +95,12 @@ public class VectorAutoCompleteTextView extends AppCompatMultiAutoCompleteTextVi
 
     /**
      * Update the auto completion mode according to the first character of the message.
+     *
+     * @param forceUpdate set to true to force to load the adapter
      */
-    public void updateAutoCompletionMode() {
+    public void updateAutoCompletionMode(boolean forceUpdate) {
         final AutoCompletionMode newMode = AutoCompletionMode.Companion.getWithText(getText().toString());
-        if (newMode == mAutoCompletionMode) {
+        if (newMode == mAutoCompletionMode && !forceUpdate) {
             return;
         }
         mAutoCompletionMode = newMode;
@@ -143,12 +145,14 @@ public class VectorAutoCompleteTextView extends AppCompatMultiAutoCompleteTextVi
             public void onSuccess(List<User> users) {
                 buildAdapter(session, users, slashCommandList);
             }
+
+            // ignore any errors
         });
     }
 
     private void getUsersList(@NonNull final MXSession session,
                               @Nullable Room room,
-                              ApiCallback<List<User>> callback) {
+                              final ApiCallback<List<User>> callback) {
 
         if (null != room) {
             room.getMembersAsync(new SimpleApiCallback<List<RoomMember>>(callback) {
@@ -163,6 +167,8 @@ public class VectorAutoCompleteTextView extends AppCompatMultiAutoCompleteTextVi
                             users.add(user);
                         }
                     }
+
+                    callback.onSuccess(users);
                 }
             });
         } else {
@@ -221,7 +227,7 @@ public class VectorAutoCompleteTextView extends AppCompatMultiAutoCompleteTextVi
             mAdapterUser = new AutoCompletedUserAdapter(getContext(), R.layout.item_user_auto_complete, session, users);
         }
 
-        updateAutoCompletionMode();
+        updateAutoCompletionMode(true);
     }
 
     /**
