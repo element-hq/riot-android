@@ -34,6 +34,7 @@ import android.widget.ExpandableListView;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import org.matrix.androidsdk.MXPatterns;
 import org.matrix.androidsdk.MXSession;
 import org.matrix.androidsdk.data.Room;
 import org.matrix.androidsdk.data.store.IMXStore;
@@ -983,7 +984,7 @@ public class VectorParticipantsAdapter extends BaseExpandableListAdapter {
 
         // the contact defines a matrix user but there is no way to get more information (presence, avatar)
         if (participant.mContact != null) {
-            boolean isMatrixUserId = MXSession.PATTERN_CONTAIN_MATRIX_USER_IDENTIFIER.matcher(participant.mUserId).matches();
+            boolean isMatrixUserId = MXPatterns.isUserId(participant.mUserId);
             matrixUserBadge.setVisibility(isMatrixUserId ? View.VISIBLE : View.GONE);
 
             if (participant.mContact.getEmails().size() > 0) {

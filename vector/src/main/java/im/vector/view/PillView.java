@@ -27,6 +27,7 @@ import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import org.matrix.androidsdk.MXPatterns;
 import org.matrix.androidsdk.MXSession;
 import org.matrix.androidsdk.data.Room;
 import org.matrix.androidsdk.data.RoomPreviewData;
@@ -110,7 +111,7 @@ public class PillView extends LinearLayout {
     public static boolean isPillable(String url) {
         String linkedUrl = getLinkedUrl(url);
 
-        return (null != linkedUrl) && (MXSession.isRoomAlias(linkedUrl) || MXSession.isUserId(linkedUrl));
+        return (null != linkedUrl) && (MXPatterns.isRoomAlias(linkedUrl) || MXPatterns.isUserId(linkedUrl));
     }
 
     /**
@@ -125,21 +126,21 @@ public class PillView extends LinearLayout {
         mTextView.setText(text.toString());
 
         TypedArray a = getContext().getTheme()
-                .obtainStyledAttributes(new int[]{MXSession.isRoomAlias(text.toString()) ? R.attr.pill_background_room_alias : R.attr.pill_background_user_id});
+                .obtainStyledAttributes(new int[]{MXPatterns.isRoomAlias(text.toString()) ? R.attr.pill_background_room_alias : R.attr.pill_background_user_id});
         int attributeResourceId = a.getResourceId(0, 0);
         a.recycle();
 
         mPillLayout.setBackground(ContextCompat.getDrawable(getContext(), attributeResourceId));
 
         a = getContext().getTheme()
-                .obtainStyledAttributes(new int[]{MXSession.isRoomAlias(text.toString()) ? R.attr.pill_text_color_room_alias : R.attr.pill_text_color_user_id});
+                .obtainStyledAttributes(new int[]{MXPatterns.isRoomAlias(text.toString()) ? R.attr.pill_text_color_room_alias : R.attr.pill_text_color_user_id});
         attributeResourceId = a.getResourceId(0, 0);
         a.recycle();
         mTextView.setTextColor(ContextCompat.getColor(getContext(), attributeResourceId));
 
         final String linkedUrl = getLinkedUrl(url);
 
-        if (MXSession.isUserId(linkedUrl)) {
+        if (MXPatterns.isUserId(linkedUrl)) {
             User user = session.getDataHandler().getUser(linkedUrl);
 
             if (null == user) {

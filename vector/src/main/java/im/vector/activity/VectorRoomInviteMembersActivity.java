@@ -30,7 +30,7 @@ import android.widget.Button;
 import android.widget.ExpandableListView;
 import android.widget.Toast;
 
-import org.matrix.androidsdk.MXSession;
+import org.matrix.androidsdk.MXPatterns;
 import org.matrix.androidsdk.listeners.MXEventListener;
 import org.matrix.androidsdk.rest.model.Event;
 import org.matrix.androidsdk.rest.model.RoomMember;
@@ -334,7 +334,7 @@ public class VectorRoomInviteMembersActivity extends VectorBaseSearchActivity {
             if (!hiddenUserIds.contains(item.mUserId)) {
                 userIds.add(item.mUserId);
                 // display name
-                if (MXSession.isUserId(item.mUserId)) {
+                if (MXPatterns.isUserId(item.mUserId)) {
                     User user = mSession.getDataHandler().getStore().getUser(item.mUserId);
                     if ((null != user) && !TextUtils.isEmpty(user.displayname)) {
                         displayNames.add(user.displayname);
@@ -428,7 +428,7 @@ public class VectorRoomInviteMembersActivity extends VectorBaseSearchActivity {
                 public void onClick(View v) {
                     String text = inviteTextView.getText().toString();
                     List<ParticipantAdapterItem> items = new ArrayList<>();
-                    List<Pattern> patterns = Arrays.asList(MXSession.PATTERN_CONTAIN_MATRIX_USER_IDENTIFIER, android.util.Patterns.EMAIL_ADDRESS);
+                    List<Pattern> patterns = Arrays.asList(MXPatterns.PATTERN_CONTAIN_MATRIX_USER_IDENTIFIER, android.util.Patterns.EMAIL_ADDRESS);
 
                     for (Pattern pattern : patterns) {
                         Matcher matcher = pattern.matcher(text);
@@ -460,7 +460,7 @@ public class VectorRoomInviteMembersActivity extends VectorBaseSearchActivity {
                 if (null != inviteButton) {
                     String text = inviteTextView.getText().toString();
 
-                    boolean containMXID = MXSession.PATTERN_CONTAIN_MATRIX_USER_IDENTIFIER.matcher(text).find();
+                    boolean containMXID = MXPatterns.PATTERN_CONTAIN_MATRIX_USER_IDENTIFIER.matcher(text).find();
                     boolean containEmailAddress = android.util.Patterns.EMAIL_ADDRESS.matcher(text).find();
 
                     inviteButton.setEnabled(containMXID || containEmailAddress);

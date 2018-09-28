@@ -27,6 +27,7 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import org.matrix.androidsdk.MXPatterns;
 import org.matrix.androidsdk.MXSession;
 import org.matrix.androidsdk.data.Room;
 import org.matrix.androidsdk.data.RoomSummary;
@@ -173,7 +174,7 @@ public class RoomViewHolder extends RecyclerView.ViewHolder {
         String roomName = VectorUtils.getRoomDisplayName(context, session, room);
         if (vRoomNameServer != null) {
             // This view holder is for the home page, we have up to two lines to display the name
-            if (MXSession.isRoomAlias(roomName)) {
+            if (MXPatterns.isRoomAlias(roomName)) {
                 // Room alias, split to display the server name on second line
                 final String[] roomAliasSplitted = roomName.split(":");
                 final String firstLine = roomAliasSplitted[0] + ":";

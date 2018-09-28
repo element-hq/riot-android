@@ -40,7 +40,7 @@ import im.vector.features.hhs.ResourceLimitErrorFormatter
 import im.vector.listeners.IMessagesAdapterActionsListener
 import im.vector.util.MatrixURLSpan
 import im.vector.util.ThemeUtils
-import org.matrix.androidsdk.MXSession
+import org.matrix.androidsdk.MXPatterns
 import org.matrix.androidsdk.rest.model.MatrixError
 import org.matrix.androidsdk.rest.model.RoomTombstoneContent
 import org.matrix.androidsdk.util.Log
@@ -116,7 +116,7 @@ class NotificationAreaView @JvmOverloads constructor(
         imageView.setImageResource(R.drawable.error)
         val roomTombstoneContent = state.tombstoneContent
         val roomLink = PermalinkUtils.createPermalink(roomTombstoneContent.replacementRoom)
-        val urlSpan = MatrixURLSpan(roomLink, MXSession.PATTERN_CONTAIN_APP_LINK_PERMALINK_ROOM_ID, delegate?.providesMessagesActionListener())
+        val urlSpan = MatrixURLSpan(roomLink, MXPatterns.PATTERN_CONTAIN_APP_LINK_PERMALINK_ROOM_ID, delegate?.providesMessagesActionListener())
         val textColorInt = ThemeUtils.getColor(context, R.attr.message_text_color)
         val message = Spanny(resources.getString(R.string.room_tombstone_versioned_description),
                 StyleSpan(Typeface.BOLD),
