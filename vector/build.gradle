@@ -229,6 +229,9 @@ dependencies {
     appImplementation 'com.google.firebase:firebase-messaging:17.3.0'
 
     // fdroid flavor only
+
+    // Test
+    testImplementation 'junit:junit:4.12'
 }
 
 
