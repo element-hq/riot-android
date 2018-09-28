@@ -741,7 +741,7 @@ public class VectorRoomActivity extends MXCActionBarActivity implements
             public void onTextChanged(CharSequence s, int start, int before, int count) {
                 // Auto completion mode management
                 // The auto completion mode depends on the first character of the message
-                mEditText.updateAutoCompletionMode();
+                mEditText.updateAutoCompletionMode(false);
             }
         });
 
