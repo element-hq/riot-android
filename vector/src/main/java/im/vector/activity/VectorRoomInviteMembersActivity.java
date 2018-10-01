@@ -316,7 +316,8 @@ public class VectorRoomInviteMembersActivity extends VectorBaseSearchActivity {
                 @Override
                 public void onSuccess(List<RoomMember> members) {
                     for (RoomMember member : members) {
-                        if (TextUtils.equals(member.membership, RoomMember.MEMBERSHIP_JOIN) || TextUtils.equals(member.membership, RoomMember.MEMBERSHIP_INVITE)) {
+                        if (TextUtils.equals(member.membership, RoomMember.MEMBERSHIP_JOIN)
+                                || TextUtils.equals(member.membership, RoomMember.MEMBERSHIP_INVITE)) {
                             hiddenUserIds.add(member.getUserId());
                         }
                     }

@@ -885,7 +885,7 @@ public class CommonActivityUtils {
 
         return listRetValue;
     }
-    */
+   */
 
     /**
      * Set a room as a direct chat room.<br>
