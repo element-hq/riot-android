@@ -1324,7 +1324,8 @@ public class VectorRoomSettingsFragment extends PreferenceFragment implements Sh
                 Collections.sort(bannedMembers, new Comparator<RoomMember>() {
                     @Override
                     public int compare(RoomMember m1, RoomMember m2) {
-                        return m1.getUserId().toLowerCase(VectorApp.getApplicationLocale()).compareTo(m2.getUserId().toLowerCase(VectorApp.getApplicationLocale()));
+                        return m1.getUserId().toLowerCase(VectorApp.getApplicationLocale())
+                                .compareTo(m2.getUserId().toLowerCase(VectorApp.getApplicationLocale()));
                     }
                 });
 
