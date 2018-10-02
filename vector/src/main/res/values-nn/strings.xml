@@ -7,7 +7,7 @@
     <string name="black_them">Svart Preg</string>
 
     <string name="notification_sync_in_progress">Samstiller</string>
-    <string name="notification_listen_for_events">Høyr etter hendingar</string>
+    <string name="notification_listen_for_events">Høyrer etter hendingar</string>
     <string name="notification_noisy_notifications">Bråkete varsel</string>
     <string name="notification_silent_notifications">Stille varsel</string>
 
@@ -31,7 +31,7 @@
     <string name="send">Send</string>
     <string name="copy">Kopier</string>
     <string name="resend">Send på nytt</string>
-    <string name="redact">Gjer om</string>
+    <string name="redact">Trekk attende</string>
     <string name="quote">Siter</string>
     <string name="download">Last ned</string>
     <string name="share">Del</string>
@@ -46,11 +46,11 @@
     <string name="rename">Gje nytt namn</string>
     <string name="report_content">Meld frå om innhald</string>
     <string name="active_call">Pågåande samtale</string>
-    <string name="ongoing_conference_call">" Pågåande gruppesamtale. Vert med med røyst eller video."</string>
+    <string name="ongoing_conference_call">Pågåande gruppesamtale. Vert med med røyst eller video.</string>
     <string name="ongoing_conference_call_voice">røyst</string>
     <string name="ongoing_conference_call_video">video</string>
     <string name="cannot_start_call">Kan ikkje få i gang samtala, prøv att seinare</string>
-    <string name="missing_permissions_warning">På grunn av vantande tillatingar, kan nokre funksjonar mangla..</string>
+    <string name="missing_permissions_warning">På grunn av vantande tillatingar, kan nokre funksjonar mangla…</string>
     <string name="missing_permissions_to_start_conf_call">Du trengjer tillating til å byda inn for å setja i gang ei gruppesamtale i dette rommet</string>
     <string name="missing_permissions_title_to_start_conf_call">Klarer ikkje å setja i gang samtala</string>
     <string name="device_information">Einingsinfo</string>
@@ -132,7 +132,7 @@ Velg \"hent ut\" for å sikkerheitskopiera dei før du loggar av.</string>
     <string name="send_bug_report_progress">Framgang (%s%%)</string>
 
     <string name="send_files_in">Send inn i</string>
-    <string name="read_receipt">Les</string>
+    <string name="read_receipt">Lesen</string>
 
     <string name="join_room">Gå inn i Rommet</string>
     <string name="username">Brukarnamn</string>
@@ -388,7 +388,7 @@ Krypterte meldingar vil ikkje verta synlege hjå klientar som førebels ikkje ha
 Merk deg at denne handlinga startar æppen på nytt og kan taka litt tid.</string>
     <string name="room_participants_invite_search_another_user">Brukar-ID, Namn eller Epost</string>
     <string name="room_participants_action_mention">Nemn</string>
-    <string name="room_participants_action_devices_list">Vis Einingsliste</string>
+    <string name="room_participants_action_devices_list">Vis einingsliste</string>
     <string name="room_participants_power_level_prompt">Du vil ikkje kunna gjera om på denne forandringa fordi du hevjer ein brukar si høgd opp til di eiga. 
 Er du sikker?</string>
 
@@ -612,7 +612,7 @@ Merk at denne handlinga vil starta æppen på nytt og kan taka litt tid.</string
     <string name="settings_opt_in_of_analytics_prompt">Ver venleg og skru statistikkinnsamling på for å hjelpa oss med å forbetra Riot.</string>
     <string name="settings_opt_in_of_analytics_ok">Ja, eg vil hjelpa til!</string>
 
-    <string name="settings_data_save_mode">Datalagringsmodus</string>
+    <string name="settings_data_save_mode">Datasparingsmodus</string>
 
     <string name="devices_details_dialog_title">Einingsdetaljar</string>
     <string name="devices_details_id_title">ID</string>
@@ -725,7 +725,7 @@ Merk at denne handlinga gjer at æppen startar på nytt og kan taka litt tid.</s
     <string name="room_settings_addresses_no_local_addresses">Dette rommet har ingen lokale adresser</string>
     <string name="room_settings_addresses_add_new_address">Ny adresse (t.d. #foo:matrix.org)</string>
 
-    <string name="room_settings_no_flair">" Dette rommet viser ikkje særpreg for nokre samfunn"</string>
+    <string name="room_settings_no_flair">Dette rommet viser ikkje særpreg for nokre samfunn</string>
     <string name="room_settings_add_new_group">Ny samfunns-ID (t.d. +foo:matrix.org)</string>
     <string name="room_settings_invalid_group_format_dialog_title">Ugangbar samfunns-ID</string>
     <string name="room_settings_invalid_group_format_dialog_body">\'%s\' er ikkje ein gangbar samfunns-ID</string>
@@ -785,7 +785,9 @@ Krypterte meldingar vil ikkje vera synlege hjå klientar som førebels ikkje har
     <string name="encryption_export_export">Hent ut</string>
     <string name="encryption_export_enter_passphrase">Skriv passetning inn</string>
     <string name="encryption_export_confirm_passphrase">Stadfest passetninga</string>
-    <string name="encryption_export_saved_as">E2E-romnyklane vart lagra til \'%s\'</string>
+    <string name="encryption_export_saved_as">E2E-romnyklane vart lagra til \'%s\'
+
+Åtvaring: fila kan verta sletta vis æppen avinstallerast.</string>
 
     <string name="encryption_import_e2e_room_keys">Hent E2E-romnyklar inn</string>
     <string name="encryption_import_room_keys">Hent romnyklar inn</string>
@@ -807,7 +809,7 @@ Krypterte meldingar vil ikkje vera synlege hjå klientar som førebels ikkje har
     <string name="encryption_information_unblock">Fjern frå svartelista</string>
 
     <string name="encryption_information_verify_device">Godkjenn eininga</string>
-    <string name="encryption_information_verify_device_warning">" For å godkjenna at denne eininga er til å stola på, ver venleg og snakk med eiaren på ei anna måte (t.d. ansikt til ansikt eller på telefon) og spør dei om nykelen dei ser i Brukarinnstillingane for denne eininga samsvarar med nykelen under:"</string>
+    <string name="encryption_information_verify_device_warning">For å godkjenna at denne eininga er til å stola på, ver venleg og snakk med eigaren på ei anna måte (t.d. ansikt til ansikt eller på telefon) og spør han om nykelen han ser i Brukarinnstillingane for denne eininga samsvarar med nykelen under:</string>
     <string name="encryption_information_verify_device_warning2">Viss han samsvarer, klikk godkjennknappen under.
 Viss han ikkje gjer det, tjuvlytter nokon andre på eininga og du bør sannsynlegvis setja ho på svartelista.
 I framtida kjem denne godkjenningsprosessen til å vera betre utvikla.</string>
@@ -968,5 +970,56 @@ Meldingssynlegheit på Matrix liknar på epost. At vi gløymer meldingane dine t
     <string name="room_tombstone_continuation_link">Samtala går vidare her</string>
     <string name="room_tombstone_continuation_description">Rommet er ein vidareføring av ei anna samtale</string>
     <string name="room_tombstone_predecessor_link">Klikk her for å sjå gamle meldingar</string>
+
+<string name="system_alerts_header">Systemvarsel</string>
+
+    <plurals name="format_time_s">
+	<item quantity="one">1s</item>
+	<item quantity="other">%ds</item>
+</plurals>
+    <plurals name="format_time_m">
+	<item quantity="one">1m</item>
+	<item quantity="other">%dm</item>
+</plurals>
+    <plurals name="format_time_h">
+	<item quantity="one">1t</item>
+	<item quantity="other">%dt</item>
+</plurals>
+    <plurals name="format_time_d">
+	<item quantity="one">1d</item>
+	<item quantity="other">%dd</item>
+</plurals>
+
+    <string name="room_participants_invite_join_names">"%1$s, "</string>
+    <string name="room_participants_invite_join_names_and">%1$s, og %2$s</string>
+    <string name="room_participants_invite_join_names_combined">%1$s %2$s</string>
+
+    <plurals name="room_details_selected">
+	<item quantity="one">1 valt</item>
+	<item quantity="other">%d valde</item>
+</plurals>
+    <plurals name="group_members">
+	<item quantity="one">1 medlem</item>
+	<item quantity="other">%d medlemer</item>
+</plurals>
+
+    <plurals name="group_rooms">
+	<item quantity="one">1 rom</item>
+	<item quantity="other">%d rom</item>
+</plurals>
+    <string name="resource_limit_contact_action">Kontakt Administratoren</string>
+
+    <string name="resource_limit_contact_admin">kontakt tenesteadministratoren din</string>
+
+    <string name="missing_permissions_error">Grunna vantande tillatingar er denne handlinga umogeleg.</string>
+    <string name="resource_limit_exceeded_title">Ressursgrensa er Forbigått</string>
+    <string name="resource_limit_soft_default">Heimtenaren har truffe ei av ressursgrensene sine so <b>nokre brukarar vil ikkje kunna logga inn</b>.</string>
+    <string name="resource_limit_hard_default">Heimtenaren har forbigått ei av ressursgrensene sine.</string>
+
+    <string name="resource_limit_soft_mau"> Heimtenaren har truffe den Månadlege Grensa si for Aktive Brukarar, so <b>nokre brukarar vil ikkje kunna logga inn</b>.</string>
+    <string name="resource_limit_hard_mau">Heimtenaren har truffe den Månadlege Grensa si for Aktive Brukarar.</string>
+
+    <string name="resource_limit_soft_contact">Ver venleg og %s for å heva grensa.</string>
+    <string name="resource_limit_hard_contact">Ver venleg og %s for å halda fram med å bruka tenesten.</string>
 
 </resources>

@@ -46,7 +46,7 @@
     <string name="invite">Приглашение</string>
 
     <!-- actions -->
-    <string name="action_sign_out">Выйти</string>
+    <string name="action_sign_out">Выйти из учётной записи</string>
     <string name="action_sign_out_confirmation">Для обеспечения безопасности, выход из системы удалит все ключи сквозного шифрования, сделав зашифрованную историю чата нечитаемой, если вы снова осуществите вход.
 Можно экспортировать ключи для последующей дешифровки истории.</string>
     <string name="action_voice_call">Голосовой вызов</string>
@@ -480,7 +480,7 @@ Email также позволит вам при необходимости во�
     <string name="settings_third_party_notices">Прочие уведомления</string>
     <string name="settings_copyright">Copyright</string>
     <string name="settings_privacy_policy">Политика конфиденциальности</string>
-    <string name="settings_clear_cache">Очистить кэш</string>
+    <string name="settings_clear_cache">Очистить весь кэш</string>
     <!--string name="settings_room_privacy_label">Privacy</string-->
     
     
@@ -663,7 +663,9 @@ Email также позволит вам при необходимости во�
     <string name="encryption_export_export">Экспорт</string>
     <string name="encryption_export_enter_passphrase">Введите пароль</string>
     <string name="encryption_export_confirm_passphrase">Подтвердите пароль</string>
-    <string name="encryption_export_saved_as">E2E ключи комнаты сохранены в \'%s\'</string>
+    <string name="encryption_export_saved_as">E2E ключи комнаты сохранены в \'%s\'.
+
+Предупреждение: этот файл может быть удален после деинсталляции приложения.</string>
     
     <string name="encryption_import_e2e_room_keys">Импорт E2E ключей комнаты</string>
     <string name="encryption_import_room_keys">Импорт ключей комнаты</string>
@@ -727,7 +729,7 @@ Email также позволит вам при необходимости во�
     <string name="media_saving_period_1_month">1 месяц</string>
     <string name="media_saving_period_forever">Постоянно</string>
 
-    <string name="settings_clear_medias_cache">Очистить кэш</string>
+    <string name="settings_clear_medias_cache">Очистить медиа кэш</string>
     <string name="offline">Недоступен</string>
 
     <string name="user_directory_header">Каталог пользователей</string>
@@ -821,7 +823,7 @@ Email также позволит вам при необходимости во�
 
     <string name="loading">Загрузка...</string>
 
-    <string name="action_exit">Выход</string>
+    <string name="action_exit">Закрыть</string>
     <string name="bottom_action_groups">Сообщества</string>
 
     <string name="home_filter_placeholder_groups">Поиск сообществ</string>

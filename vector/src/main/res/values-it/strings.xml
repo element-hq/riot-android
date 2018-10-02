@@ -339,7 +339,7 @@ I messaggi criptati non saranno visibili ai riceventi (client) che non hanno anc
     <string name="room_participants_action_leave">Lascia questa stanza</string>
     <string name="room_participants_action_remove">Rimuovi da questa stanza</string>
     <string name="room_participants_action_ban">Bandisci</string>
-    <string name="room_participants_action_unban">Rimuovi messa al bando</string>
+    <string name="room_participants_action_unban">Togli il bando</string>
     <string name="room_participants_action_set_default_power_level">Ripristina ad utente normale</string>
     <string name="room_participants_action_set_moderator">Rendi moderatore</string>
     <string name="room_participants_action_set_admin">Rendi amministratore</string>
@@ -689,7 +689,9 @@ I messaggi criptati non saranno visibili ai riceventi che non hanno ancora imple
     <string name="encryption_export_export">Esporta</string>
     <string name="encryption_export_enter_passphrase">Inserisci frase d\'accesso (passphrase)</string>
     <string name="encryption_export_confirm_passphrase">Conferma frase d\'accesso (passphrase)</string>
-    <string name="encryption_export_saved_as">Le chiavi da-utente-a-utente della stanza sono state salvate su \'%s\'</string>
+    <string name="encryption_export_saved_as">Le chiavi da-utente-a-utente della stanza sono state salvate su \'%s\'.
+
+Attenzione: questo file può essere eliminato se l\'applicazione viene disinstallata.</string>
 
     <string name="encryption_import_e2e_room_keys">Importa chiavi da-utente-a-utente delle stanze</string>
     <string name="encryption_import_room_keys">Importa chiavi delle stanze</string>
@@ -815,7 +817,7 @@ In futuro il processo di verifica sarà più sofisticato.</string>
 	<item quantity="one">1 membro</item>
 	<item quantity="other">%d membri</item>
 </plurals>
-    <string name="room_participants_kick_prompt_msg">Sei sicuro di voler cacciar fuori questo utente dalla chat?</string>
+    <string name="room_participants_kick_prompt_msg">Sei sicuro di voler buttare fuori questo utente dalla chat?</string>
     <string name="room_participants_ban_prompt_msg">Sei sicuro di voler bandire dalla chat questo utente?</string>
 
     <plurals name="room_new_messages_notification">
@@ -843,7 +845,7 @@ In futuro il processo di verifica sarà più sofisticato.</string>
     <string name="room_settings_add_homescreen_shortcut">Aggiungi scorciatoia su schermata iniziale</string>
 
     <string name="settings_inline_url_preview">Attiva l\'anteprima degli URL in via predefinita</string>
-    <string name="settings_hide_join_leave_messages">Nascondi messaggi entrato/uscito (non si applica ad inviti/ammonimenti/espulsioni)</string>
+    <string name="settings_hide_join_leave_messages">Nascondi messaggi entrato/uscito (non si applica a invita/butta-fuori/bandisci)</string>
     <string name="settings_vibrate_on_mention">Vibra quando ti citano</string>
 
     <string name="settings_analytics">Statistiche</string>
@@ -1023,14 +1025,14 @@ La visibilità dei messaggi in Matrix è simile alle email. \"Dimenticare i tuoi
     <string name="settings_labs_keyboard_options_to_send_message">Usa invio da tastiera per spedire un messaggio</string>
     <string name="command_description_emote">Mostra l\'azione</string>
     <string name="command_description_ban_user">Bandisci utente con un dato id</string>
-    <string name="command_description_unban_user">Rimuovi espulsione per un dato id</string>
+    <string name="command_description_unban_user">Togli il bando a un utente con un dato id</string>
     <string name="command_description_op_user">Definisci il livello di potere di un utente</string>
     <string name="command_description_deop_user">Dimentica utente con un dato id</string>
     <string name="command_description_invite_user">Invita utente con un dato id nella stanza corrente</string>
     <string name="command_description_join_room">Entra nella stanza con un determinato alias</string>
     <string name="command_description_part_room">Lascia la stanza</string>
     <string name="command_description_topic">Imposta argomento della stanza</string>
-    <string name="command_description_kick_user">Caccia fuori un utente con un dato id</string>
+    <string name="command_description_kick_user">Butta fuori un utente con un dato id</string>
     <string name="command_description_nick">Cambia il tuo nome visualizzato</string>
     <string name="command_description_markdown">Markdown attivo / spento</string>
     <string name="command_description_clear_scalar_token">Per correggere la gestione delle app Matrix</string>

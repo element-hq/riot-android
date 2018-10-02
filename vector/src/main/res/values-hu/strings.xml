@@ -609,7 +609,9 @@ A titkosított üzenetek nem fognak látszódni azokon a klienseken ahol a titko
     <string name="encryption_export_export">Exportálás</string>
     <string name="encryption_export_enter_passphrase">Írj be jelmondatot</string>
     <string name="encryption_export_confirm_passphrase">Ellenőrizd a jelmondatot</string>
-    <string name="encryption_export_saved_as">A E2E szoba kulcsok el lettek mentve ide \'%s\'</string>
+    <string name="encryption_export_saved_as">A E2E szoba kulcsok el lettek mentve ide \'%s\'
+
+Figyelmeztetés: ez a fájl törlésre kerülhet, ha az alkalmazást törli.</string>
 
     <string name="encryption_import_e2e_room_keys">E2E szoba kulcsok importálása</string>
     <string name="encryption_import_room_keys">Szoba kulcsok importálása</string>
