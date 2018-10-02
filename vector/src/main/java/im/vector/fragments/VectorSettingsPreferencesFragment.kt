@@ -502,7 +502,7 @@ class VectorSettingsPreferencesFragment : PreferenceFragment(), SharedPreference
                             .setNegativeButton(R.string.cancel) { _, _ ->
                                 useCryptoPref.isChecked = false
                             }
-                            .setOnCancelListener { dialog ->
+                            .setOnCancelListener { _ ->
                                 useCryptoPref.isChecked = false
                             }
                             .show()
