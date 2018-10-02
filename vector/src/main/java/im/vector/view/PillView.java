@@ -106,19 +106,21 @@ public class PillView extends LinearLayout {
      * @param url  the URL
      */
     public void initData(final CharSequence text, final String url, final MXSession session, OnUpdateListener listener) {
+        final String str = text.toString();
+
         mOnUpdateListener = listener;
         mAvatarView.setOnUpdateListener(listener);
-        mTextView.setText(text.toString());
+        mTextView.setText(str);
 
         TypedArray a = getContext().getTheme()
-                .obtainStyledAttributes(new int[]{MXPatterns.isRoomAlias(text.toString()) ? R.attr.pill_background_room_alias : R.attr.pill_background_user_id});
+                .obtainStyledAttributes(new int[]{MXPatterns.isRoomAlias(str) ? R.attr.pill_background_room_alias : R.attr.pill_background_user_id});
         int attributeResourceId = a.getResourceId(0, 0);
         a.recycle();
 
         mPillLayout.setBackground(ContextCompat.getDrawable(getContext(), attributeResourceId));
 
         a = getContext().getTheme()
-                .obtainStyledAttributes(new int[]{MXPatterns.isRoomAlias(text.toString()) ? R.attr.pill_text_color_room_alias : R.attr.pill_text_color_user_id});
+                .obtainStyledAttributes(new int[]{MXPatterns.isRoomAlias(str) ? R.attr.pill_text_color_room_alias : R.attr.pill_text_color_user_id});
         attributeResourceId = a.getResourceId(0, 0);
         a.recycle();
         mTextView.setTextColor(ContextCompat.getColor(getContext(), attributeResourceId));
