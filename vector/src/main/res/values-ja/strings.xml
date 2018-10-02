@@ -842,9 +842,8 @@ Riotアプリがあなたの電話帳へアクセスすることを許可しま�
 	<item quantity="other">%d件の新しいメッセージ</item>
 </plurals>
 
-    <string name="room_displayname_many_members">%1$sと%2$s</string>
-    <plurals name="others">
-	<item quantity="other">他%d名</item>
+    <plurals name="room_displayname_three_and_more_members">
+	<item quantity="other">%1$sと他%d名</item>
 </plurals>
 
     <plurals name="directory_search_rooms">

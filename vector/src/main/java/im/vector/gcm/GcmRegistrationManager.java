@@ -21,7 +21,6 @@ package im.vector.gcm;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.content.pm.PackageInfo;
-import android.net.Uri;
 import android.os.Build;
 import android.os.Handler;
 import android.os.Looper;
@@ -29,21 +28,17 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.text.TextUtils;
 
-import org.matrix.androidsdk.HomeServerConnectionConfig;
 import org.matrix.androidsdk.MXSession;
 import org.matrix.androidsdk.data.Pusher;
 import org.matrix.androidsdk.listeners.IMXNetworkEventListener;
 import org.matrix.androidsdk.rest.callback.ApiCallback;
 import org.matrix.androidsdk.rest.callback.SimpleApiCallback;
-import org.matrix.androidsdk.rest.client.PushersRestClient;
 import org.matrix.androidsdk.rest.model.MatrixError;
 import org.matrix.androidsdk.rest.model.PushersResponse;
 import org.matrix.androidsdk.util.Log;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.Timer;
 import java.util.TimerTask;
 
@@ -1332,8 +1327,8 @@ public final class GcmRegistrationManager {
         mRegistrationState = state;
 
         // do not store the .ing state
-        if (RegistrationState.SERVER_REGISTRATING != state &&
-                RegistrationState.SERVER_UNREGISTRATING != state) {
+        if (RegistrationState.SERVER_REGISTRATING != state
+                && RegistrationState.SERVER_UNREGISTRATING != state) {
 
             getGcmSharedPreferences()
                     .edit()

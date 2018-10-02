@@ -668,11 +668,10 @@ Lai turpinātu, ievadi savu paroli.</string>
 	<item quantity="other">%d jaunu ziņu</item>
 </plurals>
 
-    <string name="room_displayname_many_members">%1$s un %2$s</string>
-    <plurals name="others">
-	<item quantity="zero">1 cits</item>
-	<item quantity="one">%d citi</item>
-	<item quantity="other">%d citu</item>
+    <plurals name="room_displayname_three_and_more_members">
+	<item quantity="zero">%1$s un 1 cits</item>
+	<item quantity="one">%1$s un %d citi</item>
+	<item quantity="other">%1$s un %d citu</item>
 </plurals>
 
     <plurals name="directory_search_rooms">

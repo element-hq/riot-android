@@ -18,7 +18,6 @@ package im.vector.util
 import org.matrix.androidsdk.MXSession
 import org.matrix.androidsdk.data.Room
 import org.matrix.androidsdk.data.RoomTag
-import org.matrix.androidsdk.rest.model.RoomMember
 import org.matrix.androidsdk.util.Log
 
 /**
@@ -98,10 +97,10 @@ class HomeRoomsViewModel(private val session: MXSession) {
     private fun getJoinedRooms(): List<Room> {
         return session.dataHandler.store.rooms
                 .filter {
-                    val isJoined = it.hasMembership(RoomMember.MEMBERSHIP_JOIN)
+                    val isJoined = it.isJoined
                     val tombstoneContent = it.state.roomTombstoneContent
                     val redirectRoom = session.dataHandler.getRoom(tombstoneContent?.replacementRoom)
-                    val isVersioned = redirectRoom?.hasMembership(RoomMember.MEMBERSHIP_JOIN)
+                    val isVersioned = redirectRoom?.isJoined
                             ?: false
                     isJoined && !isVersioned && !it.isConferenceUserRoom
                 }

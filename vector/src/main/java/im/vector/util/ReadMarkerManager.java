@@ -204,8 +204,8 @@ public class ReadMarkerManager implements VectorMessagesAdapter.ReadMarkerListen
         } else if (mVectorMessageListFragment.getEventTimeLine().hasReachedHomeServerForwardsPaginationEnd()) {
             // Display "You've caught up" message if necessary
             final ListView messageListView = mVectorMessageListFragment.getMessageListView();
-            if (messageListView != null && firstVisibleItem + visibleItemCount == totalItemCount &&
-                    messageListView.getChildAt(messageListView.getChildCount() - 1).getBottom() == messageListView.getBottom()) {
+            if (messageListView != null && firstVisibleItem + visibleItemCount == totalItemCount
+                    && messageListView.getChildAt(messageListView.getChildCount() - 1).getBottom() == messageListView.getBottom()) {
                 mActivity.setResult(Activity.RESULT_OK);
                 mActivity.finish();
             }
@@ -444,7 +444,7 @@ public class ReadMarkerManager implements VectorMessagesAdapter.ReadMarkerListen
             Log.d(LOG_TAG, "scrollUpToGivenEvent " + event.eventId);
             if (!scrollToAdapterEvent(event)) {
                 // use the cached events list
-                mRoom.getLiveTimeLine().backPaginate(UNREAD_BACK_PAGINATE_EVENT_COUNT, true, new ApiCallback<Integer>() {
+                mRoom.getTimeline().backPaginate(UNREAD_BACK_PAGINATE_EVENT_COUNT, true, new ApiCallback<Integer>() {
                     @Override
                     public void onSuccess(Integer info) {
                         if (!mActivity.isFinishing()) {

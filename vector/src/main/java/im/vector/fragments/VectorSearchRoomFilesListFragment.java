@@ -18,7 +18,6 @@
 
 package im.vector.fragments;
 
-import android.os.Bundle;
 import android.text.TextUtils;
 import android.view.View;
 import android.widget.Toast;
@@ -28,7 +27,7 @@ import org.matrix.androidsdk.data.RoomState;
 import org.matrix.androidsdk.rest.callback.ApiCallback;
 import org.matrix.androidsdk.rest.model.Event;
 import org.matrix.androidsdk.rest.model.MatrixError;
-import org.matrix.androidsdk.rest.model.TokensChunkResponse;
+import org.matrix.androidsdk.rest.model.TokensChunkEvents;
 import org.matrix.androidsdk.rest.model.message.Message;
 import org.matrix.androidsdk.util.JsonUtils;
 import org.matrix.androidsdk.util.Log;
@@ -56,15 +55,7 @@ public class VectorSearchRoomFilesListFragment extends VectorSearchRoomsFilesLis
      */
     public static VectorSearchRoomFilesListFragment newInstance(String matrixId, String roomId, int layoutResId) {
         VectorSearchRoomFilesListFragment frag = new VectorSearchRoomFilesListFragment();
-        Bundle args = new Bundle();
-        args.putInt(ARG_LAYOUT_ID, layoutResId);
-        args.putString(ARG_MATRIX_ID, matrixId);
-
-        if (null != roomId) {
-            args.putString(ARG_ROOM_ID, roomId);
-        }
-
-        frag.setArguments(args);
+        frag.setArguments(getArguments(matrixId, roomId, layoutResId));
         return frag;
     }
 
@@ -334,10 +325,10 @@ public class VectorSearchRoomFilesListFragment extends VectorSearchRoomsFilesLis
             if (Event.EVENT_TYPE_MESSAGE.equals(event.getType())) {
                 Message message = JsonUtils.toMessage(event.getContent());
 
-                if (Message.MSGTYPE_FILE.equals(message.msgtype) ||
-                        Message.MSGTYPE_IMAGE.equals(message.msgtype) ||
-                        Message.MSGTYPE_VIDEO.equals(message.msgtype) ||
-                        Message.MSGTYPE_AUDIO.equals(message.msgtype)) {
+                if (Message.MSGTYPE_FILE.equals(message.msgtype)
+                        || Message.MSGTYPE_IMAGE.equals(message.msgtype)
+                        || Message.MSGTYPE_VIDEO.equals(message.msgtype)
+                        || Message.MSGTYPE_AUDIO.equals(message.msgtype)) {
                     filteredEvents.add(event);
                 }
             }
@@ -353,9 +344,9 @@ public class VectorSearchRoomFilesListFragment extends VectorSearchRoomsFilesLis
      * @param callback the result callback
      */
     private void remoteRoomHistoryRequest(final ArrayList<Event> events, final ApiCallback<ArrayList<Event>> callback) {
-        mRoom.requestServerRoomHistory(mNextBatch, MESSAGES_PAGINATION_LIMIT, new ApiCallback<TokensChunkResponse<Event>>() {
+        mRoom.requestServerRoomHistory(mNextBatch, MESSAGES_PAGINATION_LIMIT, new ApiCallback<TokensChunkEvents>() {
             @Override
-            public void onSuccess(TokensChunkResponse<Event> eventsChunk) {
+            public void onSuccess(TokensChunkEvents eventsChunk) {
                 if ((null == mNextBatch) || TextUtils.equals(eventsChunk.start, mNextBatch)) {
                     // no more message in the history
                     if (TextUtils.equals(eventsChunk.start, eventsChunk.end)) {
@@ -405,6 +396,4 @@ public class VectorSearchRoomFilesListFragment extends VectorSearchRoomsFilesLis
             }
         });
     }
-
-
 }

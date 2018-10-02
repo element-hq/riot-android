@@ -160,6 +160,7 @@ class IntegrationManagerActivity : AbstractWidgetActivity() {
 
         Log.d(LOG_TAG, description)
 
+        // FIXME LazyLoading. We cannot rely on getMember nullity anymore
         val member = mRoom!!.getMember(userId)
 
         if (null != member && TextUtils.equals(member.membership, RoomMember.MEMBERSHIP_JOIN)) {
@@ -290,9 +291,7 @@ class IntegrationManagerActivity : AbstractWidgetActivity() {
 
         Log.d(LOG_TAG, "Received request canSendEvent in room " + mRoom!!.roomId)
 
-        val member = mRoom!!.state.getMember(mSession!!.myUserId)
-
-        if (null == member || !TextUtils.equals(RoomMember.MEMBERSHIP_JOIN, member.membership)) {
+        if (!mRoom!!.isJoined) {
             sendError(getString(R.string.widget_integration_must_be_in_room), eventData)
             return
         }
@@ -507,7 +506,7 @@ class IntegrationManagerActivity : AbstractWidgetActivity() {
             return
         }
 
-        sendIntegerResponse(mRoom!!.joinedMembers.size, eventData)
+        sendIntegerResponse(mRoom!!.numberOfJoinedMembers, eventData)
     }
 
     /**

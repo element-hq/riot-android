@@ -28,6 +28,9 @@ import org.matrix.androidsdk.rest.model.ServerNoticeUsageLimitContent
 import org.matrix.androidsdk.util.JsonUtils
 import org.matrix.androidsdk.util.Log
 
+// We need to fetch each pinned message individually (if we don't already have it)
+// so each pinned message may trigger a request. Limit the number per room for sanity.
+// NB. this is just for server notices rather than pinned messages in general.
 private const val MAX_PINNED_NOTICES_PER_ROOM = 2
 
 /**

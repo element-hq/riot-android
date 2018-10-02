@@ -854,10 +854,9 @@
 	<item quantity="other">%d nous missarges</item>
 </plurals>
 
-    <string name="room_displayname_many_members">%1$s i %2$s</string>
-    <plurals name="others">
-	<item quantity="one">1 altre</item>
-	<item quantity="other">%d altres</item>
+    <plurals name="room_displayname_three_and_more_members">
+	<item quantity="one">%1$s i 1 altre</item>
+	<item quantity="other">%1$s i %d altres</item>
 </plurals>
 
     <plurals name="directory_search_rooms">

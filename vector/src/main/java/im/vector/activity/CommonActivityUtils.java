@@ -57,7 +57,6 @@ import org.matrix.androidsdk.db.MXMediasCache;
 import org.matrix.androidsdk.rest.callback.ApiCallback;
 import org.matrix.androidsdk.rest.callback.SimpleApiCallback;
 import org.matrix.androidsdk.rest.model.MatrixError;
-import org.matrix.androidsdk.rest.model.RoomMember;
 import org.matrix.androidsdk.util.Log;
 
 import java.io.ByteArrayInputStream;
@@ -81,10 +80,10 @@ import im.vector.VectorApp;
 import im.vector.adapters.VectorRoomsSelectionAdapter;
 import im.vector.contacts.ContactsManager;
 import im.vector.contacts.PIDsRetriever;
+import im.vector.extensions.MatrixSdkExtensionsKt;
 import im.vector.fragments.VectorUnknownDevicesFragment;
 import im.vector.gcm.GcmRegistrationManager;
 import im.vector.services.EventStreamService;
-import im.vector.util.MatrixSdkExtensionsKt;
 import im.vector.util.PreferencesManager;
 import im.vector.util.VectorUtils;
 import me.leolin.shortcutbadger.ShortcutBadger;
@@ -658,7 +657,7 @@ public class CommonActivityUtils {
 
                 // get the room alias (if any) for the preview data
                 if ((null != room) && (null != room.getState())) {
-                    roomAlias = room.getState().getAlias();
+                    roomAlias = room.getState().getCanonicalAlias();
                 }
 
                 intentRetCode = new Intent(aContext, aTargetActivity);
@@ -710,19 +709,19 @@ public class CommonActivityUtils {
         // Check whether the room exists to handled the cases where the user is invited or he has joined.
         // CAUTION: the room may exist whereas the user membership is neither invited nor joined.
         final Room room = session.getDataHandler().getRoom(roomId, false);
-        if (null != room && room.hasMembership(RoomMember.MEMBERSHIP_INVITE)) {
+        if (null != room && room.isInvited()) {
             Log.d(LOG_TAG, "previewRoom : the user is invited -> display the preview " + VectorApp.getCurrentActivity());
             previewRoom(fromActivity, roomPreviewData);
 
             if (null != callback) {
                 callback.onSuccess(null);
             }
-        } else if (null != room && room.hasMembership(RoomMember.MEMBERSHIP_JOIN)) {
+        } else if (null != room && room.isJoined()) {
             Log.d(LOG_TAG, "previewRoom : the user joined the room -> open the room");
             final Map<String, Object> params = new HashMap<>();
             params.put(VectorRoomActivity.EXTRA_MATRIX_ID, session.getMyUserId());
             params.put(VectorRoomActivity.EXTRA_ROOM_ID, roomId);
-            CommonActivityUtils.goToRoomPage(fromActivity, session, params);
+            goToRoomPage(fromActivity, session, params);
 
             if (null != callback) {
                 callback.onSuccess(null);
@@ -766,18 +765,7 @@ public class CommonActivityUtils {
     // Room jump methods.
     //==============================================================================================================
 
-    /**
-     * Start a room activity with the dedicated parameters.
-     * Pop the activity to the homeActivity before pushing the new activity.
-     *
-     * @param fromActivity the caller activity.
-     * @param params       the room activity parameters
-     */
-    public static void goToRoomPage(final Activity fromActivity, final Map<String, Object> params) {
-        goToRoomPage(fromActivity, null, params);
-    }
-
-    /**
+   /**
      * Start a room activity with the dedicated parameters.
      * Pop the activity to the homeActivity before pushing the new activity.
      *
@@ -785,11 +773,13 @@ public class CommonActivityUtils {
      * @param session      the session.
      * @param params       the room activity parameters.
      */
-    public static void goToRoomPage(final Activity fromActivity, final MXSession session, final Map<String, Object> params) {
+    public static void goToRoomPage(@NonNull final Activity fromActivity,
+                                    final MXSession session,
+                                    @NonNull final Map<String, Object> params) {
         final MXSession finalSession = (session == null) ? Matrix.getMXSession(fromActivity, (String) params.get(VectorRoomActivity.EXTRA_MATRIX_ID)) : session;
 
         // sanity check
-        if ((null == finalSession) || !finalSession.isAlive()) {
+        if (finalSession == null || !finalSession.isAlive()) {
             return;
         }
 
@@ -868,6 +858,8 @@ public class CommonActivityUtils {
      * @param aSearchedUserId the searched user ID
      * @return an array containing the found rooms
      */
+    // Commented out as unused
+    /*
     private static List<Room> findOneToOneRoomList(final MXSession aSession, final String aSearchedUserId) {
         List<Room> listRetValue = new ArrayList<>();
         List<RoomMember> roomMembersList;
@@ -893,6 +885,7 @@ public class CommonActivityUtils {
 
         return listRetValue;
     }
+   */
 
     /**
      * Set a room as a direct chat room.<br>
@@ -1006,7 +999,7 @@ public class CommonActivityUtils {
                                         params.put(VectorRoomActivity.EXTRA_ROOM_ID, summary.getRoomId());
                                         params.put(VectorRoomActivity.EXTRA_ROOM_INTENT, intent);
 
-                                        CommonActivityUtils.goToRoomPage(fromActivity, session, params);
+                                        goToRoomPage(fromActivity, session, params);
                                     }
                                 });
                             }

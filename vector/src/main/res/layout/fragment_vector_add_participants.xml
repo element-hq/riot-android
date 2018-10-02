@@ -2,9 +2,10 @@
 
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:background="?attr/riot_primary_background_color"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:background="?attr/riot_primary_background_color">
 
     <RelativeLayout
         android:id="@+id/search_layout"
@@ -41,7 +42,7 @@
             android:textColor="?attr/default_text_dark_color"
             android:textColorHint="?attr/default_text_hint_color"
             android:textCursorDrawable="@drawable/searches_cursor_background"
-            android:textSize="16sp"/>
+            android:textSize="16sp" />
     </RelativeLayout>
 
     <ExpandableListView
@@ -62,7 +63,8 @@
         android:text="@string/search_no_results"
         android:textSize="17sp"
         android:textStyle="bold"
-        android:visibility="gone" />
+        android:visibility="gone"
+        tools:visibility="visible" />
 
     <RelativeLayout
         android:id="@+id/add_participants_progress_view"

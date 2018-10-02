@@ -7,14 +7,16 @@
     android:layout_height="wrap_content"
     android:layout_marginLeft="3dp"
     android:layout_marginRight="3dp"
-    android:orientation="horizontal">
+    android:orientation="horizontal"
+    tools:background="@drawable/pill_background_user_id_dark">
 
     <im.vector.view.PillImageView
         android:id="@+id/pill_avatar_view"
         android:layout_width="14sp"
         android:layout_height="14sp"
         android:layout_gravity="center_vertical"
-        android:layout_marginLeft="5dp" />
+        android:layout_marginLeft="5dp"
+        tools:src="@tools:sample/avatars" />
 
     <TextView
         android:id="@+id/pill_text_view"
@@ -23,6 +25,8 @@
         android:layout_gravity="center_vertical"
         android:layout_marginLeft="5dp"
         android:layout_marginRight="5dp"
-        tools:text="A text"
-        android:textSize="14sp" />
+        android:textSize="14sp"
+        tools:text="Username"
+        tools:textColor="@android:color/white" />
+
 </LinearLayout>

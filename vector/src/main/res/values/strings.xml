@@ -89,6 +89,7 @@
     <!-- dialog titles -->
     <string name="dialog_title_confirmation">Confirmation</string>
     <string name="dialog_title_warning">Warning</string>
+    <string name="dialog_title_error">Error</string>
 
     <!-- Bottom navigation buttons -->
     <string name="bottom_action_home">Home</string>
@@ -512,12 +513,13 @@
     <!-- Room display name -->
     <string name="room_displayname_invite_from">Invite from %s</string>
     <string name="room_displayname_room_invite">Room Invite</string>
+
+    <!-- The 2 parameters will be members' name -->
     <string name="room_displayname_two_members">%1$s and %2$s</string>
 
-    <string name="room_displayname_many_members">%1$s and %2$s</string>
-    <plurals name="others">
-        <item quantity="one">1 other</item>
-        <item quantity="other">%d others</item>
+    <plurals name="room_displayname_three_and_more_members">
+        <item quantity="one">%1$s and 1 other</item>
+        <item quantity="other">%1$s and %2$d others</item>
     </plurals>
 
     <string name="room_displayname_no_title">Empty room</string>
@@ -1062,5 +1064,13 @@
     <string name="resource_limit_soft_contact">"Please %s to get this limit increased."</string>
     <!-- Parameter %s will be replaced by the value of string resource_limit_contact_admin -->
     <string name="resource_limit_hard_contact">"Please %s to continue using this service."</string>
+
+    <!-- Lazy loading -->
+    <string name="settings_lazy_loading_title">Lazy load rooms members</string>
+    <string name="settings_lazy_loading_description">Increase performance by only loading room members on first view</string>
+    <string name="error_lazy_loading_not_supported_by_home_server">Your homeserver does not support lazy loading of room members yet. Try later.</string>
+
+    <!-- Other errors -->
+    <string name="unknown_error">Sorry, an error occurred</string>
 
 </resources>

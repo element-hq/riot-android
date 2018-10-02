@@ -36,6 +36,8 @@ import android.widget.MultiAutoCompleteTextView;
 
 import org.matrix.androidsdk.MXSession;
 import org.matrix.androidsdk.data.Room;
+import org.matrix.androidsdk.rest.callback.ApiCallback;
+import org.matrix.androidsdk.rest.callback.SimpleApiCallback;
 import org.matrix.androidsdk.rest.model.RoomMember;
 import org.matrix.androidsdk.rest.model.User;
 import org.matrix.androidsdk.util.Log;
@@ -93,10 +95,12 @@ public class VectorAutoCompleteTextView extends AppCompatMultiAutoCompleteTextVi
 
     /**
      * Update the auto completion mode according to the first character of the message.
+     *
+     * @param forceUpdate set to true to force to load the adapter
      */
-    public void updateAutoCompletionMode() {
+    public void updateAutoCompletionMode(boolean forceUpdate) {
         final AutoCompletionMode newMode = AutoCompletionMode.Companion.getWithText(getText().toString());
-        if (newMode == mAutoCompletionMode) {
+        if (newMode == mAutoCompletionMode && !forceUpdate) {
             return;
         }
         mAutoCompletionMode = newMode;
@@ -130,24 +134,47 @@ public class VectorAutoCompleteTextView extends AppCompatMultiAutoCompleteTextVi
      */
     public void initAutoCompletions(@NonNull final MXSession session, @Nullable Room room) {
         initAutoCompletion();
-        buildAdapter(session, getUsersList(session, room), getSlashCommandList());
+
+        final List<SlashCommandsParser.SlashCommand> slashCommandList = getSlashCommandList();
+
+        // First build adapter with empty list of users
+        buildAdapter(session, new ArrayList<User>(), slashCommandList);
+
+        getUsersList(session, room, new SimpleApiCallback<List<User>>() {
+            @Override
+            public void onSuccess(List<User> users) {
+                buildAdapter(session, users, slashCommandList);
+            }
+
+            // ignore any errors
+        });
     }
 
-    private List<User> getUsersList(@NonNull final MXSession session, @Nullable Room room) {
-        List<User> users = new ArrayList<>();
+    private void getUsersList(@NonNull final MXSession session,
+                              @Nullable Room room,
+                              final ApiCallback<List<User>> callback) {
 
         if (null != room) {
-            Collection<RoomMember> members = room.getMembers();
+            room.getMembersAsync(new SimpleApiCallback<List<RoomMember>>(callback) {
+                @Override
+                public void onSuccess(List<RoomMember> members) {
+                    List<User> users = new ArrayList<>();
 
-            for (RoomMember member : members) {
-                User user = session.getDataHandler().getUser(member.getUserId());
+                    for (RoomMember member : members) {
+                        User user = session.getDataHandler().getUser(member.getUserId());
 
-                if (null != user) {
-                    users.add(user);
+                        if (null != user) {
+                            users.add(user);
+                        }
+                    }
+
+                    callback.onSuccess(users);
                 }
-            }
+            });
+        } else {
+            // Empty list
+            callback.onSuccess(new ArrayList<User>());
         }
-        return users;
     }
 
     private List<SlashCommandsParser.SlashCommand> getSlashCommandList() {
@@ -200,7 +227,7 @@ public class VectorAutoCompleteTextView extends AppCompatMultiAutoCompleteTextVi
             mAdapterUser = new AutoCompletedUserAdapter(getContext(), R.layout.item_user_auto_complete, session, users);
         }
 
-        updateAutoCompletionMode();
+        updateAutoCompletionMode(true);
     }
 
     /**
@@ -270,8 +297,9 @@ public class VectorAutoCompleteTextView extends AppCompatMultiAutoCompleteTextVi
                 Editable editableAfter = getText();
 
                 // check if the inserted becomes was the new first item
-                if ((null != before) && !before.startsWith(text.toString()) &&
-                        editableAfter.toString().startsWith(text.toString())) {
+                if ((null != before)
+                        && !before.startsWith(text.toString())
+                        && editableAfter.toString().startsWith(text.toString())) {
 
                     if (text.toString().startsWith("@")) {
                         editableAfter.replace(0, text.length(), text + ":");

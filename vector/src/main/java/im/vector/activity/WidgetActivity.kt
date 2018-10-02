@@ -163,7 +163,7 @@ class WidgetActivity : VectorAppCompatActivity() {
     internal fun onCloseClick() {
         AlertDialog.Builder(this)
                 .setMessage(R.string.widget_delete_message_confirmation)
-                .setPositiveButton(R.string.remove) { dialog, which ->
+                .setPositiveButton(R.string.remove) { _, _ ->
                     showWaitingView()
                     WidgetsManager.getSharedInstance().closeWidget(mSession, mRoom, mWidget!!.widgetId, object : ApiCallback<Void> {
                         override fun onSuccess(info: Void?) {

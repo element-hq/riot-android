@@ -1,12 +1,13 @@
-/* 
+/*
  * Copyright 2016 OpenMarket Ltd
- * 
+ * Copyright 2018 New Vector Ltd
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *     http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -29,6 +30,8 @@ import org.matrix.androidsdk.call.IMXCall;
 import org.matrix.androidsdk.call.IMXCallListener;
 import org.matrix.androidsdk.call.MXCallListener;
 import org.matrix.androidsdk.data.Room;
+import org.matrix.androidsdk.rest.callback.ApiCallback;
+import org.matrix.androidsdk.rest.model.MatrixError;
 
 import im.vector.R;
 import im.vector.util.CallUtilities;
@@ -207,24 +210,44 @@ public class VectorPendingCallView extends RelativeLayout {
         if (null != mCall) {
             mCallDescriptionTextView.setVisibility(View.VISIBLE);
 
+            updateDescription(mCall.getCallId());
+
             Room room = mCall.getRoom();
 
-            String description;
-
             if (null != room) {
-                description = VectorUtils.getCallingRoomDisplayName(getContext(), mCall.getSession(), room);
-            } else {
-                description = mCall.getCallId();
-            }
+                VectorUtils.getCallingRoomDisplayName(getContext(), mCall.getSession(), room, new ApiCallback<String>() {
+                    @Override
+                    public void onSuccess(String info) {
+                        updateDescription(info);
+                    }
 
-            if (TextUtils.equals(mCall.getCallState(), IMXCall.CALL_STATE_CONNECTED) && !mIsCallStatusHidden) {
-                description += " - " + getResources().getString(R.string.active_call);
-            }
+                    @Override
+                    public void onNetworkError(Exception e) {
+                        // Ignore error
+                    }
 
-            mCallDescriptionTextView.setText(description);
+                    @Override
+                    public void onMatrixError(MatrixError e) {
+                        // Ignore error
+                    }
+
+                    @Override
+                    public void onUnexpectedError(Exception e) {
+                        // Ignore error
+                    }
+                });
+            }
         } else {
             mCallDescriptionTextView.setVisibility(View.GONE);
         }
+    }
+
+    private void updateDescription(String description) {
+        if (TextUtils.equals(mCall.getCallState(), IMXCall.CALL_STATE_CONNECTED) && !mIsCallStatusHidden) {
+            description += " - " + getResources().getString(R.string.active_call);
+        }
+
+        mCallDescriptionTextView.setText(description);
     }
 
     /**

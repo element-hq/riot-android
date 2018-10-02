@@ -641,6 +641,8 @@ public class Matrix {
         }*/
 
         final MXDataHandler dataHandler = new MXDataHandler(store, credentials);
+        dataHandler.setLazyLoadingEnabled(PreferencesManager.useLazyLoading(context));
+
         final MXSession session = new MXSession.Builder(hsConfig, dataHandler, context)
                 .withPushServerUrl(context.getString(R.string.push_server_url))
                 .withMetricsListener(metricsListener)

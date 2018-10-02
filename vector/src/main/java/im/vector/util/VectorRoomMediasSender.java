@@ -227,10 +227,10 @@ public class VectorRoomMediasSender {
                         return;
                     }
 
-                    if (mimeType.startsWith("image/") &&
-                            (ResourceUtils.MIME_TYPE_JPEG.equals(mimeType) ||
-                                    ResourceUtils.MIME_TYPE_JPG.equals(mimeType) ||
-                                    ResourceUtils.MIME_TYPE_IMAGE_ALL.equals(mimeType))) {
+                    if (mimeType.startsWith("image/")
+                            && (ResourceUtils.MIME_TYPE_JPEG.equals(mimeType)
+                            || ResourceUtils.MIME_TYPE_JPG.equals(mimeType)
+                            || ResourceUtils.MIME_TYPE_IMAGE_ALL.equals(mimeType))) {
                         sendJpegImage(sharedDataItem, resource);
                     } else {
                         resource.close();

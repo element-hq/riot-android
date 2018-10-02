@@ -197,6 +197,9 @@ public class VectorApp extends MultiDexApplication {
             Stetho.initializeWithDefaults(this);
         }
 
+        // init the REST client
+        MXSession.initUserAgent(this);
+
         instance = this;
         mCallsManager = new CallsManager(this);
         mAppAnalytics = new AppAnalytics(this, new PiwikAnalytics(this));
@@ -229,9 +232,6 @@ public class VectorApp extends MultiDexApplication {
         Log.d(LOG_TAG, "----------------------------------------------------------------\n\n\n\n");
 
         mRageShake = new RageShake(this);
-
-        // init the REST client
-        MXSession.initUserAgent(getApplicationContext());
 
         registerActivityLifecycleCallbacks(new ActivityLifecycleCallbacks() {
             final Map<String, String> mLocalesByActivity = new HashMap<>();

@@ -460,10 +460,9 @@ Merk at denne handlinga vil starta æppen på nytt og kan taka litt tid.</string
     <string name="room_displayname_room_invite">Rominnbyding</string>
     <string name="room_displayname_two_members">%1$s og %2$s</string>
 
-    <string name="room_displayname_many_members">%1$s og %2$s</string>
-    <plurals name="others">
-	<item quantity="one">1 til</item>
-	<item quantity="other">%d til</item>
+    <plurals name="room_displayname_three_and_more_members">
+	<item quantity="one">%1$s og 1 til</item>
+	<item quantity="other">%1$s og %d til</item>
 </plurals>
 
     <string name="room_displayname_no_title">Tomt rom</string>

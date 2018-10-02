@@ -25,6 +25,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
+import android.support.annotation.Nullable;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
@@ -66,6 +67,7 @@ import java.util.Map;
 import java.util.Timer;
 import java.util.TimerTask;
 
+import androidx.core.widget.ToastKt;
 import im.vector.R;
 import im.vector.activity.CommonActivityUtils;
 import im.vector.activity.MXCActionBarActivity;
@@ -123,9 +125,9 @@ public class VectorRoomDetailsMembersFragment extends VectorBaseFragment {
                 public void run() {
                     String eventType = event.getType();
 
-                    if (Event.EVENT_TYPE_STATE_ROOM_MEMBER.equals(eventType) ||
-                            Event.EVENT_TYPE_STATE_ROOM_THIRD_PARTY_INVITE.equals(eventType) ||
-                            Event.EVENT_TYPE_STATE_ROOM_POWER_LEVELS.equals(eventType)) {
+                    if (Event.EVENT_TYPE_STATE_ROOM_MEMBER.equals(eventType)
+                            || Event.EVENT_TYPE_STATE_ROOM_THIRD_PARTY_INVITE.equals(eventType)
+                            || Event.EVENT_TYPE_STATE_ROOM_POWER_LEVELS.equals(eventType)) {
                         refreshRoomMembersList(mPatternValue, REFRESH_FORCED);
                     }
                 }
@@ -162,7 +164,7 @@ public class VectorRoomDetailsMembersFragment extends VectorBaseFragment {
     private final VectorRoomDetailsMembersAdapter.OnRoomMembersSearchListener mSearchListener
             = new VectorRoomDetailsMembersAdapter.OnRoomMembersSearchListener() {
         @Override
-        public void onSearchEnd(final int aSearchCountResult, final boolean aIsSearchPerformed) {
+        public void onSearchEnd(final int aSearchCountResult, boolean aIsSearchPerformed, @Nullable final String errorMessage) {
             mParticipantsListView.post(new Runnable() {
                 @Override
                 public void run() {
@@ -171,29 +173,33 @@ public class VectorRoomDetailsMembersFragment extends VectorBaseFragment {
                         mProgressView.setVisibility(View.GONE);
                     }
 
-                    if (0 == aSearchCountResult) {
-                        // no results found!
-                        mSearchNoResultTextView.setVisibility(View.VISIBLE);
-                    } else {
-                        mSearchNoResultTextView.setVisibility(View.GONE);
-                    }
-
-                    if (TextUtils.isEmpty(mPatternValue)) {
-                        // search result with no pattern filter
-                        updateListExpandingState();
-                    } else {
-                        // search result
-                        forceListInExpandingState();
-                        mClearSearchImageView.setVisibility(View.VISIBLE); // restore state from inter switch tab
-                    }
-
-                    mParticipantsListView.post(new Runnable() {
-                        @Override
-                        public void run() {
-                            // jump to the first item
-                            mParticipantsListView.setSelection(0);
+                    if (TextUtils.isEmpty(errorMessage)) {
+                        if (0 == aSearchCountResult) {
+                            // no results found!
+                            mSearchNoResultTextView.setVisibility(View.VISIBLE);
+                        } else {
+                            mSearchNoResultTextView.setVisibility(View.GONE);
                         }
-                    });
+
+                        if (TextUtils.isEmpty(mPatternValue)) {
+                            // search result with no pattern filter
+                            updateListExpandingState();
+                        } else {
+                            // search result
+                            forceListInExpandingState();
+                            mClearSearchImageView.setVisibility(View.VISIBLE); // restore state from inter switch tab
+                        }
+
+                        mParticipantsListView.post(new Runnable() {
+                            @Override
+                            public void run() {
+                                // jump to the first item
+                                mParticipantsListView.setSelection(0);
+                            }
+                        });
+                    } else {
+                        ToastKt.toast(getActivity(), errorMessage, Toast.LENGTH_SHORT);
+                    }
                 }
             });
         }
