@@ -16,6 +16,8 @@
  */
 package im.vector.gcm;
 
+import android.content.Context;
+
 public class GCMHelper {
 
     /**
