@@ -991,4 +991,45 @@ Riotアプリがあなたの電話帳へアクセスすることを許可しま�
 </plurals>
     <string name="receipt_avatar">アバターを受け取る</string>
     <string name="dialog_user_consent_content">%1$s ホームサーバを使用し続けるには、利用規約を読み、同意する必要があります。</string>
-    </resources>
+    <string name="dialog_title_error">エラー</string>
+
+    <string name="notice_avatar">アバターに通知を表示</string>
+    <string name="dialog_user_consent_submit">今すぐ見る</string>
+
+    <string name="deactivate_account_title">アカウントを停止</string>
+    <string name="deactivate_account_content">この操作によりあなたのアカウントは永久に使えなくなります。あなたはログインできなくなり、誰も同じユーザIDを登録できなくなります。アカウントが参加しているすべての部屋を去り、アイデンティティサーバからアカウントの詳細を削除することになります。 <b>この操作は取り消しできません</b>
+
+あなたのアカウントを停止することによって <b>デフォルトではあなたが送信したメッセージを削除しません</b>。メッセージを削除したいときは、下のボックスにチェックを入れてください。
+
+Matrixでのメッセージの可視性は電子メールと同様です。メッセージを削除すると、新規ユーザや登録していないユーザは読むことができませんが、すでにそれらのメッセージにアクセスできる登録済みのユーザはメッセージのコピーにアクセスできます。</string>
+    <string name="deactivate_account_delete_checkbox">アカウントを停止したとき自分の送信した全てのメッセージを削除 (警告: この操作により、将来的なユーザが会話を不完全な形で見ることになります）</string>
+    <string name="deactivate_account_prompt_password">続けるには、パスワードを入力してください:</string>
+    <string name="deactivate_account_submit">アカウントを停止</string>
+
+    <string name="error_empty_field_your_password">パスワードを入力してください。</string>
+    <string name="room_tombstone_versioned_description">この部屋は置き換えられており、アクティブではありません</string>
+    <string name="room_tombstone_continuation_link">ここで会話が続いています</string>
+    <string name="room_tombstone_continuation_description">この部屋は別の会話の続きです</string>
+    <string name="room_tombstone_predecessor_link">より古いメッセージを見るには、ここをクリックしてください</string>
+
+    <string name="resource_limit_exceeded_title">リソース制限の超過</string>
+    <string name="resource_limit_contact_action">管理者に連絡</string>
+
+    <string name="resource_limit_contact_admin">あなたのサービス管理者に連絡</string>
+
+    <string name="resource_limit_soft_default">このホームサーバはリソース制限の1つを超過しているため、 <b>ユーザがログインできなくなることがあります</b>。</string>
+    <string name="resource_limit_hard_default">このホームサーバはリソース制限の1つを超過しています。</string>
+
+    <string name="resource_limit_soft_mau"> このホームサーバは月間アクティブユーザ上限に達しているため、 <b>ユーザがログインできなくなることがあります</b>。</string>
+    <string name="resource_limit_hard_mau">このホームサーバは月間アクティブユーザ上限に達しています。</string>
+
+    <string name="resource_limit_soft_contact">この上限を上げるには、 %s してください。</string>
+    <string name="resource_limit_hard_contact">このサービスを使い続けるには、 %s してください。</string>
+
+    <string name="settings_lazy_loading_description">最初に部屋のメンバーのみを読み込むことによりパフォーマンスを向上</string>
+    <string name="error_lazy_loading_not_supported_by_home_server">あなたのホームサーバは部屋のメンバーの簡易読み込みをサポートしていません。後で試してください。</string>
+
+    <string name="settings_lazy_loading_title">部屋のメンバーの簡易読み込み</string>
+    <string name="unknown_error">申し訳ありません、エラーが発生しました</string>
+
+</resources>
