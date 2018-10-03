@@ -71,6 +71,7 @@ import im.vector.analytics.PiwikAnalytics;
 import im.vector.analytics.e2e.DecryptionFailureTracker;
 import im.vector.contacts.ContactsManager;
 import im.vector.contacts.PIDsRetriever;
+import im.vector.gcm.GCMHelper;
 import im.vector.gcm.GcmRegistrationManager;
 import im.vector.services.EventStreamService;
 import im.vector.settings.FontScale;
@@ -192,6 +193,8 @@ public class VectorApp extends MultiDexApplication {
     public void onCreate() {
         Log.d(LOG_TAG, "onCreate");
         super.onCreate();
+
+        GCMHelper.initFirebase(this);
 
         if (BuildConfig.DEBUG) {
             Stetho.initializeWithDefaults(this);
