@@ -1,6 +1,7 @@
 /*
  * Copyright 2014 OpenMarket Ltd
  * Copyright 2017 Vector Creations Ltd
+ * Copyright 2018 New Vector Ltd
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,20 +17,30 @@
  */
 package im.vector.gcm;
 
-import org.matrix.androidsdk.util.Log;
+import android.content.Context;
 
 import com.google.firebase.FirebaseApp;
 import com.google.firebase.iid.FirebaseInstanceId;
 
-import im.vector.VectorApp;
+import org.matrix.androidsdk.util.Log;
 
-class GCMHelper {
+public class GCMHelper {
     private static final String LOG_TAG = GCMHelper.class.getSimpleName();
+
+    /**
+     * Ensure Firebase is initialized.
+     *
+     * @param context application context
+     */
+    public static void initFirebase(Context context) {
+        // This call should not be necessary, but some users report that the application crashes if this call is not done.
+        FirebaseApp.initializeApp(context);
+    }
 
     /**
      * Retrieves the FCM registration token.
      */
-    public static String getRegistrationToken() {
+    static String getRegistrationToken() {
         final String registrationToken = FirebaseInstanceId.getInstance().getToken();
         Log.d(LOG_TAG, "## getRegistrationToken(): " + registrationToken);
         return registrationToken;
@@ -38,7 +49,7 @@ class GCMHelper {
     /**
      * Clear the registration token.
      */
-    public static void clearRegistrationToken() {
+    static void clearRegistrationToken() {
         try {
             FirebaseInstanceId.getInstance().deleteInstanceId();
         } catch (Exception e) {
