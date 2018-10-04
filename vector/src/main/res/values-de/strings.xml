@@ -374,7 +374,7 @@ Bist du sicher?</string>
     <string name="ssl_cert_new_account_expl">Wenn der Server-Administrator dir mitgeteilt hat, dass dies zu erwarten sei, stelle sicher, dass der Fingerabdruck unten mit dem von deinem Administrator bereitgestellten übereinstimmt.</string>
     <string name="ssl_unexpected_existing_expl">Das Zertifikat unterscheidet sich von dem Zertifikat, dem dein Gerät ursprünglich vertraut hat. Dies ist SEHR UNGEWÖHNLICH. Es wird empfohlen, dass du dieses neue Zertifikat NICHT AKZEPTIERST.</string>
     <string name="ssl_expected_existing_expl">Das Zertifikat hat sich von einem ursprünglich vertrauenswürdigem Zertifikat in ein nicht vertrauenswürdiges Zertifikat geändert. Eventuell wurde das Zertifikat des Servers erneuert. Bitte erkundige dich beim Server-Administrator, welcher Fingerprint als vertrauenswürdig gilt.</string>
-    <string name="ssl_only_accept">Akzeptiere das Zertifikat NUR dann, wenn der Server-Administrator einen Fingerprint veröffentlicht hat, der mit dem obigen übereinstimmt.</string>
+    <string name="ssl_only_accept">Akzeptiere das Zertifikat nur dann, wenn der Server-Administrator einen Fingerprint veröffentlicht hat, der mit dem obigen übereinstimmt.</string>
     <string name="ssl_fingerprint_example">00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00</string>
 
     <!-- Room Details -->
@@ -522,7 +522,7 @@ Um fortzufahren, gib dein Passwort ein.</string>
     <string name="settings_change_password">Passwort ändern</string>
     <string name="settings_old_password">Altes Passwort</string>
     <string name="settings_new_password">Neues Passwort</string>
-    <string name="settings_confirm_password">Neues Passwort wiederholen</string>
+    <string name="settings_confirm_password">Passwort bestätigen</string>
     <string name="settings_fail_to_update_password">Ändern des Passworts fehlgeschlagen</string>
     <string name="settings_password_updated">Dein Passwort wurde aktualisiert</string>
     <string name="settings_unignore_user">Alle Nachrichten von %s anzeigen?
@@ -603,7 +603,7 @@ Beachte: Diese Aktion wird die App neu starten und einige Zeit brauchen.</string
 
     <string name="room_settings_addresses_invalid_format_dialog_title">Ungültiges Adressformat</string>
     <string name="room_settings_addresses_invalid_format_dialog_body">\'%s\' entspricht nicht dem Format von Adressen</string>
-    <string name="room_settings_addresses_disable_main_address_prompt_msg">Du wirst keine Hauptadresse mehr angegeben haben. Die Hauptadresse für diesen Raum wird zufällig gewählt</string>
+    <string name="room_settings_addresses_disable_main_address_prompt_msg">Du wirst keine Hauptadresse mehr angegeben haben.</string>
     <string name="room_settings_addresses_disable_main_address_prompt_title">Hauptadressen-Warnung</string>
 
     <string name="room_settings_set_main_address">Als Hauptadresse setzen</string>
@@ -681,9 +681,7 @@ Achtung: Diese Datei wird vielleicht gelöscht, wenn die App deinstalliert wird.
 
     <string name="encryption_information_verify_device">Gerät verifizieren</string>
     <string name="encryption_information_verify_device_warning">Um zu verifizieren, dass diesem Gerät vertraut werden kann, kontaktiere bitte den Besitzer des Gerätes über andere Kommunikationsmittel (z. B. persönlich oder telefonisch) und vergewissere dich, ob der Schüssel, den er in seinen Benutzereinstellungen für dieses Gerät sieht, mit folgendem übereinstimmt:</string>
-    <string name="encryption_information_verify_device_warning2">Wenn er übereinstimmt, drücke unten den Bestätigen-Button.
-Stimmt er nicht überein, überwacht jemand anderes dieses Gerät und du solltest ggf. den Blockieren-Button drücken.
-In Zukunft wird dieser Bestätigungsprozess noch komfortabler gestaltet.</string>
+    <string name="encryption_information_verify_device_warning2">Wenn er übereinstimmt, drücke unten den Bestätigen-Button. Stimmt er nicht überein, überwacht jemand anderes dieses Gerät und du solltest ggf. den Blockieren-Button drücken. In Zukunft wird dieser Bestätigungsprozess noch komfortabler gestaltet.</string>
     <string name="encryption_information_verify_key_match">Ja, die Schlüssel stimmen überein</string>
 
     <string name="e2e_enabling_on_app_update">Riot unterstützt jetzt Ende-zu-Ende-Verschlüsselung, du musst dich jedoch erneut anmelden, um sie zu aktivieren.
@@ -1096,5 +1094,13 @@ Beachte: Diese Aktion wird die App neu starten und einige Zeit brauchen.</string
 
     <string name="resource_limit_soft_contact">Bitte %s um dieses Limit anheben zu lassen.</string>
     <string name="resource_limit_hard_contact">Bitte %s um diesen Dienst weiter zu nutzen.</string>
+
+<string name="dialog_title_error">Error</string>
+
+    <string name="settings_lazy_loading_title">Raummitglieder nachladen</string>
+    <string name="settings_lazy_loading_description">Verbessere Performanz, indem Raum-Mitglieder erst beim ersten Ansehen geladen werden</string>
+    <string name="error_lazy_loading_not_supported_by_home_server">Dein Heimserver unterstützt nachladen von Raummitgliedern noch nicht. Versuche es später.</string>
+
+    <string name="unknown_error">Entschuldige, ein Fehler trat auf</string>
 
 </resources>
