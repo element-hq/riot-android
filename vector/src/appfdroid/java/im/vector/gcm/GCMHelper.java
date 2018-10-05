@@ -16,18 +16,7 @@
  */
 package im.vector.gcm;
 
-import android.content.Context;
-
-public class GCMHelper {
-
-    /**
-     * Ensure Firebase is initialized.
-     *
-     * @param context application context
-     */
-    public static void initFirebase(Context context) {
-        // No op
-    }
+class GCMHelper {
 
     /**
      * Retrieves the GCM registration token.

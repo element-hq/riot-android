@@ -17,25 +17,12 @@
  */
 package im.vector.gcm;
 
-import android.content.Context;
-
-import com.google.firebase.FirebaseApp;
 import com.google.firebase.iid.FirebaseInstanceId;
 
 import org.matrix.androidsdk.util.Log;
 
-public class GCMHelper {
+class GCMHelper {
     private static final String LOG_TAG = GCMHelper.class.getSimpleName();
-
-    /**
-     * Ensure Firebase is initialized.
-     *
-     * @param context application context
-     */
-    public static void initFirebase(Context context) {
-        // This call should not be necessary, but some users report that the application crashes if this call is not done.
-        FirebaseApp.initializeApp(context);
-    }
 
     /**
      * Retrieves the FCM registration token.
