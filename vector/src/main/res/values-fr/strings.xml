@@ -340,9 +340,9 @@ Cliquez sur exporter pour les sauvegarder avant de vous déconnecter.</string>
 
     <string name="account_email_validation_title">Vérification en attente</string>
     <string name="settings_change_password">Changer le mot de passe</string>
-    <string name="settings_old_password">ancien mot de passe</string>
-    <string name="settings_new_password">nouveau mot de passe</string>
-    <string name="settings_confirm_password">confirmez le mot de passe</string>
+    <string name="settings_old_password">Ancien mot de passe</string>
+    <string name="settings_new_password">Nouveau mot de passe</string>
+    <string name="settings_confirm_password">Confirmer le mot de passe</string>
     <string name="settings_fail_to_update_password">Échec de mise à jour du mot de passe</string>
     <string name="settings_password_updated">Votre mot de passe a été mis à jour</string>
     <string name="settings_select_country">Choisissez un pays</string>
@@ -568,7 +568,7 @@ En êtes-vous sûr(e) ?</string>
     <string name="ssl_cert_new_account_expl">Si l\'administrateur du serveur a confirmé que cela était normal, assurez-vous que l\'empreinte ci-dessous correspond à l\'empreinte fournie par l\'administrateur.</string>
     <string name="ssl_unexpected_existing_expl">Le certificat n\'est plus celui qui a été approuvé par votre téléphone. Ce comportement est INATTENDU. Il est recommandé de ne PAS ACCEPTER ce nouveau certificat.</string>
     <string name="ssl_expected_existing_expl">Le certificat n\'est plus celui qui a été approuvé par votre téléphone. Le serveur a peut-être renouvelé son certificat. Contactez l\'administrateur du serveur pour lui demander l\'empreinte de son certificat.</string>
-    <string name="ssl_only_accept">Acceptez le certificat UNIQUEMENT si l\'administrateur du serveur a publié une empreinte correspondant à celle ci-dessus.</string>
+    <string name="ssl_only_accept">Acceptez le certificat uniquement si l\'administrateur du serveur a publié une empreinte correspondant à celle ci-dessus.</string>
     <string name="malformed_id">Identifiant au mauvais format. Une adresse e-mail ou un identifiant Matrix au format \"@utilisateur:domaine\" est attendu</string>
     <string name="room_event_action_report_prompt_ignore_user">Voulez-vous cacher tous les messages de cet utilisateur ?
 
@@ -618,7 +618,7 @@ Veuillez noter que cette action redémarrera l\'application et pourra prendre un
 
     <string name="room_settings_addresses_no_local_addresses">Ce salon n\'a pas d\'adresse locale</string>
     <string name="room_settings_addresses_invalid_format_dialog_body">"\"%s\"  n\'est pas un format valide pour un alias"</string>
-    <string name="room_settings_addresses_disable_main_address_prompt_msg">Vous n\'aurez aucune adresse principale spécifiée. L\'adresse principale par défaut de ce salon sera choisie au hasard</string>
+    <string name="room_settings_addresses_disable_main_address_prompt_msg">Vous n\'aurez aucune adresse principale spécifiée pour ce salon.</string>
     <string name="room_settings_addresses_e2e_enabled">Le chiffrement est activé sur ce salon.</string>
     <string name="room_settings_addresses_e2e_disabled">Le chiffrement est désactivé sur ce salon.</string>
     <string name="room_settings_addresses_e2e_encryption_warning">Activer le chiffrement
@@ -645,9 +645,7 @@ Attention : ce fichier peut être supprimé si l\'application est désinstallée
     <string name="encryption_never_send_to_unverified_devices_summary">Ne jamais envoyer de messages chiffrés aux appareils non vérifiés depuis cet appareil</string>
 
     <string name="encryption_information_verify_device_warning">Pour vérifier que cet appareil est de confiance, contactez son propriétaire en utilisant un autre moyen (par exemple en personne ou par téléphone) et demandez-lui si la clé qu\'il voit dans ses paramètres utilisateur pour cet appareil correspond à la clé ci-dessous :</string>
-    <string name="encryption_information_verify_device_warning2">Si elle correspond, appuyez sur le bouton Vérifier ci-dessous.
-Si ce n\'est pas le cas, quelqu\'un d\'autre intercepte cet appareil et vous devriez probablement le bloquer.
-À l\'avenir, ce processus de vérification sera plus évolué.</string>
+    <string name="encryption_information_verify_device_warning2">Si elle correspond, appuyez sur le bouton Vérifier ci-dessous. Si ce n\'est pas le cas, quelqu\'un d\'autre intercepte cet appareil et vous devriez probablement le bloquer. À l\'avenir, ce processus de vérification sera plus évolué.</string>
     <string name="encryption_information_verify_key_match">Je confirme que les clés correspondent</string>
 
     <string name="e2e_enabling_on_app_update">Riot prend désormais en charge le chiffrement de bout en bout, mais vous devez vous reconnecter pour l\'activer.
@@ -1053,5 +1051,13 @@ Veuillez noter que cette action redémarrera l\'application et pourra prendre un
 
     <string name="resource_limit_soft_contact">Veuillez %s pour augmenter cette limite.</string>
     <string name="resource_limit_hard_contact">Veuillez %s pour continuer à utiliser ce service.</string>
+
+<string name="dialog_title_error">Erreur</string>
+
+    <string name="settings_lazy_loading_title">Charger les membres des salons en différé</string>
+    <string name="settings_lazy_loading_description">Améliore les performances en ne chargeant les membres des salons qu\'au premier affichage</string>
+    <string name="error_lazy_loading_not_supported_by_home_server">Votre serveur d\'accueil ne prend pas encore en charge le chargement en différé des membres des salons. Réessayez ultérieurement.</string>
+
+    <string name="unknown_error">Désolé, une erreur est survenue</string>
 
 </resources>
