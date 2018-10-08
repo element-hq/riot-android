@@ -339,7 +339,7 @@ I messaggi criptati non saranno visibili ai riceventi (client) che non hanno anc
     <string name="room_participants_action_leave">Lascia questa stanza</string>
     <string name="room_participants_action_remove">Rimuovi da questa stanza</string>
     <string name="room_participants_action_ban">Bandisci</string>
-    <string name="room_participants_action_unban">Rimuovi messa al bando</string>
+    <string name="room_participants_action_unban">Togli il bando</string>
     <string name="room_participants_action_set_default_power_level">Ripristina ad utente normale</string>
     <string name="room_participants_action_set_moderator">Rendi moderatore</string>
     <string name="room_participants_action_set_admin">Rendi amministratore</string>
@@ -392,7 +392,7 @@ Sicuro di procedere?</string>
     <string name="ssl_cert_new_account_expl">Se l\'amministratore del server ha dichiarato che questa anomalia è prevista, assicurati che l\'impronta digitale corrisponda a quella fornita da loro.</string>
     <string name="ssl_unexpected_existing_expl">Il certificato è cambiato rispetto a quello ritenuto affidabile dal tuo telefono. Questo è ESTREMAMENTE INSOLITO. Si raccomanda di NON ACCETTARE questo nuovo certificato.</string>
     <string name="ssl_expected_existing_expl">Il certificato è cambiato da quello precedente ritenuto affidabile ad uno non affidabile. Il server potrebbe aver rinnovato il proprio certificato. Contatta l\'amministratore del server per chiedere l\'impronta digitale prevista.</string>
-    <string name="ssl_only_accept">Accetta il certificato SOLO se l\'amministratore ha pubblicato un\'impronta digitale che corrisponda a quella qua sopra.</string>
+    <string name="ssl_only_accept">Accetta il certificato solo se l\'amministratore ha pubblicato un\'impronta digitale che corrisponda a quella qua sopra.</string>
     <string name="ssl_fingerprint_example">00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00</string>
 
     <!-- Room Details -->
@@ -547,9 +547,9 @@ Tieni presente che questa azione riavvierà l\'app e potrebbe richiedere del tem
     <string name="account_phone_number_already_used_error">Questo numero di telefono è già in uso</string>
 
     <string name="settings_change_password">Cambia password</string>
-    <string name="settings_old_password">vecchia password</string>
-    <string name="settings_new_password">nuova password</string>
-    <string name="settings_confirm_password">conferma password</string>
+    <string name="settings_old_password">Vecchia password</string>
+    <string name="settings_new_password">Nuova password</string>
+    <string name="settings_confirm_password">Conferma password</string>
     <string name="settings_fail_to_update_password">Fallito l\'aggiornamento password</string>
     <string name="settings_password_updated">La tua password è stata aggiornata</string>
     <string name="settings_unignore_user">Mostrare tutti i messaggi di %s?
@@ -637,7 +637,7 @@ Tieni presente che questa azione riavvierà l\'app e potrebbe richiedere del tem
 
     <string name="room_settings_addresses_invalid_format_dialog_title">Formato soprannome non valido</string>
     <string name="room_settings_addresses_invalid_format_dialog_body">\'%s\' non è un formato valido per un soprannome</string>
-    <string name="room_settings_addresses_disable_main_address_prompt_msg">Non avrai un indirizzo principale specificato. L\'indirizzo principale predefinito per questa stanza sarà generato casualmente</string>
+    <string name="room_settings_addresses_disable_main_address_prompt_msg">Non avrai un indirizzo principale specificato per questa stanza.</string>
     <string name="room_settings_addresses_disable_main_address_prompt_title">Avvisi per l\'indirizzo principale</string>
 
     <string name="room_settings_set_main_address">Imposta come indirizzo principale</string>
@@ -689,7 +689,9 @@ I messaggi criptati non saranno visibili ai riceventi che non hanno ancora imple
     <string name="encryption_export_export">Esporta</string>
     <string name="encryption_export_enter_passphrase">Inserisci frase d\'accesso (passphrase)</string>
     <string name="encryption_export_confirm_passphrase">Conferma frase d\'accesso (passphrase)</string>
-    <string name="encryption_export_saved_as">Le chiavi da-utente-a-utente della stanza sono state salvate su \'%s\'</string>
+    <string name="encryption_export_saved_as">Le chiavi da-utente-a-utente della stanza sono state salvate su \'%s\'.
+
+Attenzione: questo file può essere eliminato se l\'applicazione viene disinstallata.</string>
 
     <string name="encryption_import_e2e_room_keys">Importa chiavi da-utente-a-utente delle stanze</string>
     <string name="encryption_import_room_keys">Importa chiavi delle stanze</string>
@@ -713,6 +715,7 @@ I messaggi criptati non saranno visibili ai riceventi che non hanno ancora imple
     <string name="encryption_information_verify_device">Verifica dispositivo</string>
     <string name="encryption_information_verify_device_warning">Per verificare che quel dispositivo è affidabile, contatta il suo proprietario utilizzando altri canali di comunicazione (ad esempio, per persona o per telefono) e chiedigli se nelle Impostazioni, sezione Crittografia, la voce Chiave dispositivo corrisponde al codice riportato qui sotto:</string>
     <string name="encryption_information_verify_device_warning2">Se esso corrisponde, premi il pulsante qui sotto per confermare la verifica.
+
 In caso contrario, qualcun altro sta intercettando questo dispositivo e probabilmente dovresti inserirlo nella lista nera.
 In futuro il processo di verifica sarà più sofisticato.</string>
     <string name="encryption_information_verify_key_match">Ho verificato che le chiavi corrispondano</string>
@@ -815,7 +818,7 @@ In futuro il processo di verifica sarà più sofisticato.</string>
 	<item quantity="one">1 membro</item>
 	<item quantity="other">%d membri</item>
 </plurals>
-    <string name="room_participants_kick_prompt_msg">Sei sicuro di voler cacciar fuori questo utente dalla chat?</string>
+    <string name="room_participants_kick_prompt_msg">Sei sicuro di voler buttare fuori questo utente dalla chat?</string>
     <string name="room_participants_ban_prompt_msg">Sei sicuro di voler bandire dalla chat questo utente?</string>
 
     <plurals name="room_new_messages_notification">
@@ -823,10 +826,9 @@ In futuro il processo di verifica sarà più sofisticato.</string>
 	<item quantity="other">%d nuovi messaggi</item>
 </plurals>
 
-    <string name="room_displayname_many_members">%1$s e %2$s</string>
-    <plurals name="others">
-	<item quantity="one">1 altro</item>
-	<item quantity="other">%d altri</item>
+    <plurals name="room_displayname_three_and_more_members">
+	<item quantity="one">%1$s e 1 altro</item>
+	<item quantity="other">%1$s e %d altri</item>
 </plurals>
 
     <plurals name="directory_search_rooms">
@@ -844,7 +846,7 @@ In futuro il processo di verifica sarà più sofisticato.</string>
     <string name="room_settings_add_homescreen_shortcut">Aggiungi scorciatoia su schermata iniziale</string>
 
     <string name="settings_inline_url_preview">Attiva l\'anteprima degli URL in via predefinita</string>
-    <string name="settings_hide_join_leave_messages">Nascondi messaggi entrato/uscito (non si applica ad inviti/ammonimenti/espulsioni)</string>
+    <string name="settings_hide_join_leave_messages">Nascondi messaggi entrato/uscito (non si applica a invita/butta-fuori/bandisci)</string>
     <string name="settings_vibrate_on_mention">Vibra quando ti citano</string>
 
     <string name="settings_analytics">Statistiche</string>
@@ -1024,14 +1026,14 @@ La visibilità dei messaggi in Matrix è simile alle email. \"Dimenticare i tuoi
     <string name="settings_labs_keyboard_options_to_send_message">Usa invio da tastiera per spedire un messaggio</string>
     <string name="command_description_emote">Mostra l\'azione</string>
     <string name="command_description_ban_user">Bandisci utente con un dato id</string>
-    <string name="command_description_unban_user">Rimuovi espulsione per un dato id</string>
+    <string name="command_description_unban_user">Togli il bando a un utente con un dato id</string>
     <string name="command_description_op_user">Definisci il livello di potere di un utente</string>
     <string name="command_description_deop_user">Dimentica utente con un dato id</string>
     <string name="command_description_invite_user">Invita utente con un dato id nella stanza corrente</string>
     <string name="command_description_join_room">Entra nella stanza con un determinato alias</string>
     <string name="command_description_part_room">Lascia la stanza</string>
     <string name="command_description_topic">Imposta argomento della stanza</string>
-    <string name="command_description_kick_user">Caccia fuori un utente con un dato id</string>
+    <string name="command_description_kick_user">Butta fuori un utente con un dato id</string>
     <string name="command_description_nick">Cambia il tuo nome visualizzato</string>
     <string name="command_description_markdown">Markdown attivo / spento</string>
     <string name="command_description_clear_scalar_token">Per correggere la gestione delle app Matrix</string>
@@ -1098,4 +1100,12 @@ Tieni presente che questa azione riavvierà l\'app e potrebbe richiedere del tem
     <string name="resource_limit_soft_contact">Per favore %s per aumentare questo limite.</string>
     <string name="resource_limit_hard_contact">Per favore %s per continuare ad usare questo servizio.</string>
 
-</resources>
+<string name="dialog_title_error">Errore</string>
+
+    <string name="settings_lazy_loading_description">Aumenta le prestazioni caricando i membri della stanza solo alla prima visualizzazione</string>
+    <string name="error_lazy_loading_not_supported_by_home_server">Il tuo server home non supporta ancora il caricamento posticipato dei membri delle stanze. Prova in seguito.</string>
+
+    <string name="unknown_error">Spiacente, si è verificato un errore</string>
+
+<string name="settings_lazy_loading_title">Caricamento posticipato dei membri della stanza</string>
+    </resources>

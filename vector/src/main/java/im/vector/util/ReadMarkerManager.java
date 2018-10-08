@@ -27,6 +27,7 @@ import android.widget.AbsListView;
 import android.widget.ListView;
 import android.widget.TextView;
 
+import org.matrix.androidsdk.MXPatterns;
 import org.matrix.androidsdk.MXSession;
 import org.matrix.androidsdk.adapters.MessageRow;
 import org.matrix.androidsdk.data.Room;
@@ -203,8 +204,8 @@ public class ReadMarkerManager implements VectorMessagesAdapter.ReadMarkerListen
         } else if (mVectorMessageListFragment.getEventTimeLine().hasReachedHomeServerForwardsPaginationEnd()) {
             // Display "You've caught up" message if necessary
             final ListView messageListView = mVectorMessageListFragment.getMessageListView();
-            if (messageListView != null && firstVisibleItem + visibleItemCount == totalItemCount &&
-                    messageListView.getChildAt(messageListView.getChildCount() - 1).getBottom() == messageListView.getBottom()) {
+            if (messageListView != null && firstVisibleItem + visibleItemCount == totalItemCount
+                    && messageListView.getChildAt(messageListView.getChildCount() - 1).getBottom() == messageListView.getBottom()) {
                 mActivity.setResult(Activity.RESULT_OK);
                 mActivity.finish();
             }
@@ -327,7 +328,7 @@ public class ReadMarkerManager implements VectorMessagesAdapter.ReadMarkerListen
             final String readReceiptEventId = mRoomSummary.getReadReceiptEventId();
 
             if (!mReadMarkerEventId.equals(readReceiptEventId)) {
-                if (!MXSession.isMessageId(mReadMarkerEventId)) {
+                if (!MXPatterns.isEventId(mReadMarkerEventId)) {
                     // Read marker is invalid, ignore it as it should not occur
                     Log.e(LOG_TAG, "updateJumpToBanner: Read marker event id is invalid, ignore it as it should not occur");
                 } else {
@@ -443,7 +444,7 @@ public class ReadMarkerManager implements VectorMessagesAdapter.ReadMarkerListen
             Log.d(LOG_TAG, "scrollUpToGivenEvent " + event.eventId);
             if (!scrollToAdapterEvent(event)) {
                 // use the cached events list
-                mRoom.getLiveTimeLine().backPaginate(UNREAD_BACK_PAGINATE_EVENT_COUNT, true, new ApiCallback<Integer>() {
+                mRoom.getTimeline().backPaginate(UNREAD_BACK_PAGINATE_EVENT_COUNT, true, new ApiCallback<Integer>() {
                     @Override
                     public void onSuccess(Integer info) {
                         if (!mActivity.isFinishing()) {
@@ -563,7 +564,7 @@ public class ReadMarkerManager implements VectorMessagesAdapter.ReadMarkerListen
                             + " TS:" + currentReadMarkerTs + " closestEvent:" + closestEvent.eventId + " TS:" + closestEvent.getOriginServerTs());
                     if (newReadMarkerTs > currentReadMarkerTs) {
                         Log.d(LOG_TAG, "setReadMarkerToLastVisibleRow update read marker to:" + newReadMarkerEvent.eventId
-                                + " isMessageId:" + MXSession.isMessageId(newReadMarkerEvent.eventId));
+                                + " isEventId:" + MXPatterns.isEventId(newReadMarkerEvent.eventId));
                         mRoom.setReadMakerEventId(newReadMarkerEvent.eventId);
                         onReadMarkerChanged(mRoom.getRoomId());
                     }

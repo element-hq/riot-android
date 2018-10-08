@@ -69,7 +69,8 @@
             android:layout_width="40dp"
             android:layout_height="40dp"
             android:layout_centerVertical="true"
-            android:layout_marginLeft="16dp" />
+            android:layout_marginLeft="16dp"
+            tools:src="@tools:sample/avatars"/>
 
         <ImageView
             android:id="@+id/filtered_list_matrix_user"

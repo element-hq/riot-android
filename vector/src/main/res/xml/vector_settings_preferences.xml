@@ -103,8 +103,8 @@
             android:title="@string/settings_vibrate_on_mention" />
 
         <im.vector.preference.VectorSwitchPreference
-            android:title="@string/settings_preview_media_before_sending"
-            android:key="SETTINGS_PREVIEW_MEDIA_BEFORE_SENDING_KEY"/>
+            android:key="SETTINGS_PREVIEW_MEDIA_BEFORE_SENDING_KEY"
+            android:title="@string/settings_preview_media_before_sending" />
 
     </PreferenceCategory>
 
@@ -130,7 +130,7 @@
 
     <PreferenceCategory
         android:key="SETTINGS_GROUPS_FLAIR_KEY"
-        android:title="@string/settings_flair"/>
+        android:title="@string/settings_flair" />
 
     <im.vector.preference.VectorDividerCategory />
 
@@ -260,6 +260,11 @@
             android:title="@string/room_settings_labs_end_to_end_is_active" />
 
         <im.vector.preference.VectorSwitchPreference
+            android:key="SETTINGS_LAZY_LOADING_PREFERENCE_KEY"
+            android:summary="@string/settings_lazy_loading_description"
+            android:title="@string/settings_lazy_loading_title" />
+
+        <im.vector.preference.VectorSwitchPreference
             android:key="SETTINGS_DATA_SAVE_MODE_PREFERENCE_KEY"
             android:title="@string/settings_data_save_mode" />
 
@@ -366,7 +371,7 @@
         android:title="@string/settings_other">
 
         <Preference
-            android:key="application_info_link"
+            android:key="APP_INFO_LINK_PREFERENCE_KEY"
             android:summary="@string/settings_summary_app_info_link"
             android:title="@string/settings_title_app_info_link" />
 

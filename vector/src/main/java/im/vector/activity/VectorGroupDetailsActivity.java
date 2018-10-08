@@ -28,6 +28,7 @@ import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.ProgressBar;
 
+import org.matrix.androidsdk.MXPatterns;
 import org.matrix.androidsdk.MXSession;
 import org.matrix.androidsdk.groups.GroupsManager;
 import org.matrix.androidsdk.listeners.MXEventListener;
@@ -169,7 +170,7 @@ public class VectorGroupDetailsActivity extends MXCActionBarActivity {
 
         String groupId = intent.getStringExtra(EXTRA_GROUP_ID);
 
-        if (!MXSession.isGroupId(groupId)) {
+        if (!MXPatterns.isGroupId(groupId)) {
             Log.e(LOG_TAG, "invalid group id " + groupId);
             finish();
             return;

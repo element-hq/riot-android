@@ -1,5 +1,6 @@
 /*
  * Copyright 2017 Vector Creations Ltd
+ * Copyright 2018 New Vector Ltd
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -55,7 +56,8 @@ public abstract class AbsFilterableAdapter<T extends RecyclerView.ViewHolder> ex
         mFilter = createFilter();
     }
 
-    AbsFilterableAdapter(final Context context, final AbsAdapter.RoomInvitationListener invitationListener,
+    AbsFilterableAdapter(final Context context,
+                         final AbsAdapter.RoomInvitationListener invitationListener,
                          final AbsAdapter.MoreRoomActionListener moreActionListener) {
         mContext = context;
 
@@ -66,7 +68,8 @@ public abstract class AbsFilterableAdapter<T extends RecyclerView.ViewHolder> ex
         mFilter = createFilter();
     }
 
-    AbsFilterableAdapter(final Context context, final AbsAdapter.GroupInvitationListener invitationListener,
+    AbsFilterableAdapter(final Context context,
+                         final AbsAdapter.GroupInvitationListener invitationListener,
                          final AbsAdapter.MoreGroupActionListener moreActionListener) {
         mContext = context;
 

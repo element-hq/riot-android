@@ -139,9 +139,9 @@ E-mail helbideak zuri pasahitza berrezartzea ahalbidetzen dizu ere.</string>
 
 E-mail helbideak zuri pasahitza berrezartzea ahalbidetzen dizu ere.</string>
     <string name="auth_email_placeholder">E-mail helbidea</string>
-    <string name="auth_opt_email_placeholder">E-mail helbidea (aukerazkoa)</string>
+    <string name="auth_opt_email_placeholder">E-mail helbidea (aukerakoa)</string>
     <string name="auth_phone_number_placeholder">Telefono zenbakia</string>
-    <string name="auth_opt_phone_number_placeholder">Telefono zenbakia (aukerazkoa)</string>
+    <string name="auth_opt_phone_number_placeholder">Telefono zenbakia (aukerakoa)</string>
     <string name="auth_repeat_password_placeholder">Errepikatu pasahitza</string>
     <string name="auth_repeat_new_password_placeholder">Berretsi zure pasahitza</string>
     <string name="auth_invalid_login_param">Erabiltzaile-izen eta/edo pasahitz okerra</string>
@@ -360,7 +360,7 @@ Ziur zaude?</string>
     <string name="ssl_cert_new_account_expl">Zerbitzariaren kudeatzaileak hau gerta daitekeela esaten badu, ziurtatu beheko hatz-marka beraiek emandako hatz-markarekin bat datorrela.</string>
     <string name="ssl_unexpected_existing_expl">Ziurtagiria aldatu da eta ez da zure telefonoak onartzen zuena. Hau OSO ARRAROA da. Ziurtagiri berri hau EZ ONARTZEA aholkatzen da.</string>
     <string name="ssl_expected_existing_expl">Ziurtagiria aldatu da, onartutako batetik onartu gabeko batera. Agian Zerbitzariak ziurtagiria berriztu du. Jarri kontaktuan zerbitzariaren kudeatzailearekin hatz-marka eskatzeko.</string>
-    <string name="ssl_only_accept">SOILIK onartu ziurtagiria zerbitzariaren kudeatzaileak goikoarekin bat datorren hatz-marka bat argitaratu badu.</string>
+    <string name="ssl_only_accept">Ziurtagiria onartu soilik baldin eta zerbitzariaren kudeatzaileak goikoarekin bat datorren hatz-marka bat argitaratu badu.</string>
     <string name="ssl_fingerprint_example">00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00</string>
 
     <string name="room_details_title">Gelaren xehetasunak</string>
@@ -499,9 +499,9 @@ Jarraitzeko, idatzi zure pasahitza.</string>
     <string name="account_phone_number_already_used_error">Telefono zenbaki hau erabilita dago</string>
 
     <string name="settings_change_password">Aldatu pasahitza</string>
-    <string name="settings_old_password">pasahitz zaharra</string>
-    <string name="settings_new_password">pasahitz berria</string>
-    <string name="settings_confirm_password">berretsi pasahitza</string>
+    <string name="settings_old_password">Pasahitz zaharra</string>
+    <string name="settings_new_password">Pasahitz berria</string>
+    <string name="settings_confirm_password">Berretsi pasahitza</string>
     <string name="settings_fail_to_update_password">Huts egin du pasahitza eguneratzean</string>
     <string name="settings_password_updated">Zure pasahitza eguneratu da</string>
     <string name="settings_unignore_user">%s erabiltzailearen mezu guztiak erakutsi?
@@ -582,7 +582,7 @@ Kontuan izan ekintza honek aplikazioa berrabiaraziko duela eta denbora bat behar
 
     <string name="room_settings_addresses_invalid_format_dialog_title">Ezizenaren formatu baliogabea</string>
     <string name="room_settings_addresses_invalid_format_dialog_body">\'%s\' ez da baliozko formatu bat ezizen baterako</string>
-    <string name="room_settings_addresses_disable_main_address_prompt_msg">Ez duzu helbide nagusirik zehaztu. Gela honen lehenetsitako helbide nagusia ausaz aukeratuko da</string>
+    <string name="room_settings_addresses_disable_main_address_prompt_msg">Ez duzu helbide nagusirik zehaztu gela honentzat.</string>
     <string name="room_settings_addresses_disable_main_address_prompt_title">Helbide nagusiaren abisuak</string>
 
     <string name="room_settings_set_main_address">Ezarri helbide nagusi gisa</string>
@@ -622,7 +622,9 @@ Kontuan izan ekintza honek aplikazioa berrabiaraziko duela eta denbora bat behar
     <string name="encryption_export_export">Esportatu</string>
     <string name="encryption_export_enter_passphrase">Idatzi pasaesaldia</string>
     <string name="encryption_export_confirm_passphrase">Berretsi pasaesaldia</string>
-    <string name="encryption_export_saved_as">Gelako E2E gakoak \'%s\' helbidean gorde dira</string>
+    <string name="encryption_export_saved_as">Gelako E2E gakoak \'%s\' helbidean gorde dira
+
+Abisua: Fitxategi hau ezabatu daiteke aplikazioa desinstalatzen bada.</string>
 
     <string name="encryption_import_e2e_room_keys">Inportatu gelako E2E gakoak</string>
     <string name="encryption_import_room_keys">Inportatu gelako gakoak</string>
@@ -644,9 +646,7 @@ Kontuan izan ekintza honek aplikazioa berrabiaraziko duela eta denbora bat behar
 
     <string name="encryption_information_verify_device">Egiaztatu gailua</string>
     <string name="encryption_information_verify_device_warning">Gailu hau fidagarria dela egiaztatzeko, kontaktatu bere jabea beste medio bat erabiliz (adib. aurrez aurre edo telefonoz deituz) eta galdetu beraien erabiltzaile-ezarpenetan bere gailurako ikusten duen gakoa hemen beheko bera den:</string>
-    <string name="encryption_information_verify_device_warning2">Bat badator bada, sakatu beheko egiaztatu botoia. 
-Ez badator bat, beste inor gailua antzematen dago eta zerrenda beltzean sartu beharko zenuke.
-Etorkizunean egiaztaketa metodoa hobetuko da.</string>
+    <string name="encryption_information_verify_device_warning2">Bat badator bada, sakatu beheko egiaztatu botoia. Ez badator bat, beste inor gailua antzematen dago eta zerrenda beltzean sartu beharko zenuke. Etorkizunean egiaztaketa metodoa hobetuko da.</string>
     <string name="encryption_information_verify_key_match">Gakoak bat datozela egiaztatu dut</string>
 
     <string name="e2e_enabling_on_app_update">Riotek orain muturretik muturrerako zifratzea onartzen du baina berriro hasi behar duzu saioa hau gaitzeko.
@@ -665,7 +665,7 @@ Gailu ezezagunak:</string>
     <string name="directory_server_type_homeserver">Idatzi hasiera zerbitzari bat honen gela publikoak zerrendatzeko</string>
     <string name="directory_server_placeholder">Hasiera zerbitzariaren URLa</string>
     <string name="directory_server_all_rooms_on_server">%s zerbitzariko gela guztiak</string>
-    <string name="directory_server_native_rooms">%s zerbitzariko gela natibo guztiak</string>
+    <string name="directory_server_native_rooms">%s gela natibo guztiak</string>
 
     <string name="historical_placeholder">Bilatu historiala</string>
 
@@ -856,10 +856,9 @@ Zifratutako mezuak ez dira zifratzea oraindik ezarrita ez duten beste gailuetan 
 	<item quantity="other">%d mezu berri</item>
 </plurals>
 
-    <string name="room_displayname_many_members">%1$s eta %2$s</string>
-    <plurals name="others">
-	<item quantity="one">Beste bat</item>
-	<item quantity="other">Beste %d</item>
+    <plurals name="room_displayname_three_and_more_members">
+	<item quantity="one">%1$s eta beste bat</item>
+	<item quantity="other">%1$s eta beste %d</item>
 </plurals>
 
     <plurals name="directory_search_rooms">
@@ -1049,5 +1048,13 @@ Kontuan izan ekintza honek aplikazioa berrabiaraziko duela eta denbora bat behar
 
     <string name="resource_limit_soft_contact">%s muga hau areagotzeko.</string>
     <string name="resource_limit_hard_contact">%s zerbitzu hau erabiltzen jarraitzeko.</string>
+
+<string name="dialog_title_error">Errorea</string>
+
+    <string name="settings_lazy_loading_title">Kargatu gelako kideak modu alperrean</string>
+    <string name="settings_lazy_loading_description">Hobetu errendimendua kideak lehen ikustaldian bakarrik kargatuz</string>
+    <string name="error_lazy_loading_not_supported_by_home_server">Zure hasiera-zerbitzariak ez du oraindik erabiltzaileen karga alperra onartzen. Saiatu geroago.</string>
+
+    <string name="unknown_error">Errore bat gertatu da</string>
 
 </resources>

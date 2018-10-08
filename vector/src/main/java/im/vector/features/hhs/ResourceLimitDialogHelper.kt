@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package im.vector.dialogs
+package im.vector.features.hhs
 
 import android.app.Activity
 import android.graphics.Typeface
@@ -24,7 +24,7 @@ import android.text.style.StyleSpan
 import com.binaryfork.spanny.Spanny
 import im.vector.R
 import im.vector.activity.interfaces.Restorable
-import im.vector.error.ResourceLimitErrorFormatter
+import im.vector.dialogs.DialogLocker
 import im.vector.util.openUri
 import org.matrix.androidsdk.rest.model.MatrixError
 
@@ -69,9 +69,5 @@ class ResourceLimitDialogHelper private constructor(private val activity: Activi
             builder
         }
     }
-
-    /* ==========================================================================================
-     * Private
-     * ========================================================================================== */
 
 }

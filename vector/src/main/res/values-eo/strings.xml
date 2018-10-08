@@ -10,7 +10,7 @@
     <string name="notification_silent_notifications">Silentaj sciigoj</string>
 
     <string name="title_activity_home">Mesaĝoj</string>
-    <string name="title_activity_room">Ĉambro</string>
+    <string name="title_activity_room">Babilejo</string>
     <string name="resources_country_code">EO</string>
 
     <string name="title_activity_settings">Agordoj</string>
@@ -48,4 +48,21 @@
     <string name="active_call">Aktiva alvoko</string>
     <string name="ongoing_conference_call_voice">voĉo</string>
     <string name="send_bug_report">Cimraporto</string>
+    <string name="ongoing_conference_call">Daŭranta telekonferenco. Aliĝi voĉe aŭ videe.</string>
+    <string name="ongoing_conference_call_video">video</string>
+    <string name="cannot_start_call">Ne eblas ekigi la alvokon, bonvolu provi poste</string>
+    <string name="missing_permissions_title_to_start_conf_call">Ne eblas ekigi alvokon</string>
+    <string name="missing_permissions_warning">Pro mankantaj permesoj, kelkaj ebloj eble mankos…</string>
+    <string name="missing_permissions_error">Pro mankantaj permesoj, tiu ago ne eblas.</string>
+    <string name="device_information">aparata informo</string>
+    <string name="send_anyway">Sendi iel</string>
+    <string name="or">aŭ</string>
+    <string name="invite">Inviti</string>
+    <string name="offline">Malinterrete</string>
+
+    <string name="action_exit">Eliri</string>
+    <string name="actions">Agoj</string>
+    <string name="action_voice_call">Telefono</string>
+    <string name="action_video_call">videotelefono</string>
+    <string name="action_global_search">Universala serĉo</string>
     </resources>

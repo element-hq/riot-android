@@ -32,11 +32,11 @@
     <string name="rename">Renomear</string>
     <string name="report_content">Denunciar conteúdo</string>
     <string name="active_call">Chamada ativa</string>
-    <string name="ongoing_conference_call"> Chamada de voz em andamento. Participar por voz ou vídeo.</string>
+    <string name="ongoing_conference_call">Chamada de voz em andamento. Participar por voz ou vídeo.</string>
     <string name="ongoing_conference_call_voice">voz</string>
     <string name="ongoing_conference_call_video">vídeo</string>
     <string name="cannot_start_call">Não consigo iniciar a chamada, favor tentar mais tarde</string>
-    <string name="missing_permissions_warning">"Por falta de permissões, algumas funcionalidades podem estar faltando..</string>
+    <string name="missing_permissions_warning">Por falta de permissões, algumas funcionalidades podem estar faltando…</string>
     <string name="missing_permissions_to_start_conf_call">Você necessita permissão para convidar para poder iniciar uma conferência nesta sala</string>
     <string name="missing_permissions_title_to_start_conf_call">Não consigo iniciar a chamada</string>
     <string name="device_information">Informações do dispositivo</string>
@@ -103,7 +103,7 @@
     <string name="send_bug_report">Reportar erro (bug)</string>
     <string name="send_bug_report_description">Por favor, descreva o erro (bug). O que você fez? O que você esperava ocorrer? O que aconteceu?</string>
     <string name="send_bug_report_placeholder">Descreva o seu problema aqui</string>
-    <string name="send_bug_report_logs_description">Para diagnosticar problemas, logs sobre este cliente serão enviados junto ao relatório de erro (bug). Se você prefere enviar apenas o texto acima, por favor desmarque:</string>
+    <string name="send_bug_report_logs_description">Para diagnosticar problemas, logs deste cliente serão enviados junto a este relatório de erros (bugs). Este relatório de erros, incluindo os logs e prints da tela, não serão visíveis publicamente. Se você prefere enviar apenas o texto acima, por favor desmarque:</string>
     <string name="send_bug_report_alert_message">Você parece estar frustrado balançando o telefone. Quer enviar um relatório de erro (bug)?</string>
     <string name="send_bug_report_sent">O relatório de erro (bug) foi enviado com sucesso</string>
     <string name="send_bug_report_failed">O envio do relatório de erro (bug) falhou (%s)</string>
@@ -245,7 +245,9 @@
 
     <!-- permissions Android M -->
     <string name="permissions_rationale_popup_title">Informação</string>
-    <string name="permissions_rationale_msg_storage">Riot necessita permissão para acessar sua biblitoeca de foto e vídeo para poder enviar e salvar anexos.\n\nPor favor, permita acesso na próxima tela para poder enviar arquivos do seu telefone.</string>
+    <string name="permissions_rationale_msg_storage">Riot necessita permissão para acessar sua galeria de fotos e vídeos para poder enviar e salvar anexos.
+
+Por favor, permita acesso na próxima tela para poder enviar arquivos do seu celular.</string>
     <string name="permissions_rationale_msg_camera">Riot necessita permissão para acessar sua câmera para poder tirar fotos e fazer chamadas de vídeo.</string>
     <string name="permissions_rationale_msg_camera_explanation">
 
@@ -268,7 +270,7 @@ Você autoriza o Riot a acessar seus contatos?</string>
 
     <!-- medias slider string -->
     <string name="media_slider_saved">Salvo</string>
-    <string name="media_slider_saved_message">Salvar nos downloads</string>
+    <string name="media_slider_saved_message">Salvar nos downloads?</string>
     <string name="yes">SIM</string>
     <string name="no">NÃO</string>
     <string name="_continue">Continuar</string>
@@ -380,7 +382,9 @@ Você autoriza o Riot a acessar seus contatos?</string>
 
     <!-- Room events -->
     <string name="room_event_action_report_prompt_reason">Motivos para denunciar este conteúdo</string>
-    <string name="room_event_action_report_prompt_ignore_user">Você deseja esconder todas as mensagens deste usuário?</string>
+    <string name="room_event_action_report_prompt_ignore_user">Você deseja ocultar todas as mensagens deste usuário?
+
+Note que esta ação irá reiniciar o aplicativo e poderá tomar um certo tempo.</string>
     <string name="room_event_action_cancel_upload">Cancelar envio</string>
     <string name="room_event_action_cancel_download">Cancelar download</string>
 
@@ -426,7 +430,7 @@ Você autoriza o Riot a acessar seus contatos?</string>
     <!-- home sliding menu -->
     <string name="room_sliding_menu_messages">Mensagens</string>
     <string name="room_sliding_menu_settings">Configurações</string>
-    <string name="room_sliding_menu_version">Versão </string>
+    <string name="room_sliding_menu_version">Versão</string>
     <string name="room_sliding_menu_term_and_conditions">Termos e condições</string>
     <string name="room_sliding_menu_third_party_notices">Notas de terceira parte</string>
     <string name="room_sliding_menu_copyright">Direito autoral</string>
@@ -514,7 +518,9 @@ Você autoriza o Riot a acessar seus contatos?</string>
     <string name="settings_confirm_password">confirme a senha</string>
     <string name="settings_fail_to_update_password">Não consegui atualizar a senha</string>
     <string name="settings_password_updated">Sua senha foi atualizada</string>
-    <string name="settings_unignore_user">Mostrar todas as mensagens de %s?</string>
+    <string name="settings_unignore_user">Mostrar todas as mensagens de %s?
+
+Note que esta ação irá reiniciar o aplicativo e poderá tomar um certo tempo.</string>
 
     <string name="settings_delete_notification_targets_confirmation">Você tem certeza que quer remover este destino de notificação?</string>
 
@@ -637,7 +643,9 @@ Você autoriza o Riot a acessar seus contatos?</string>
     <string name="encryption_export_export">Exportar</string>
     <string name="encryption_export_enter_passphrase">Entre com a \'passphrase\'</string>
     <string name="encryption_export_confirm_passphrase">Confirme a \'passphrase\'</string>
-    <string name="encryption_export_saved_as">As chaves de sala E2E foram salvas em \'%s\'</string>
+    <string name="encryption_export_saved_as">As chaves de sala E2E foram salvas em \'%s\'
+
+Atenção: este arquivo poderá ser apagado se o aplicativo for desinstalado.</string>
 
     <string name="encryption_import_e2e_room_keys">Importar chaves de sala E2E</string>
     <string name="encryption_import_room_keys">Importar chaves de sala</string>
@@ -659,8 +667,10 @@ Você autoriza o Riot a acessar seus contatos?</string>
     <string name="encryption_information_unblock">Retirar da lista negra</string>
 
     <string name="encryption_information_verify_device">Verificar dispositivo</string>
-    <string name="encryption_information_verify_device_warning"> Para confirmar que este dispositivo pode ser considerado confiável, por favor entre em contato com o seu dono usando outros meios (por exemplo pessoalmente ou através de uma chamada telefônica) e pergunte a ele se a chave que ele está vendo na sua configuração de usuário para este dispositivo é igual à chave abaixo:</string>
-    <string name="encryption_information_verify_device_warning2">Se é igual, clique no botão "verificar" abaixo. Se não é igual, então alguém está interceptando este dispositivo e você pode querer clicar no botão "bloquear".\nNo futuro vamos desenvolver um processo de verificação mais sofisticado.</string>
+    <string name="encryption_information_verify_device_warning">Para confirmar que este dispositivo é confiável, entre em contato com o seu proprietário usando outros meios (por exemplo pessoalmente ou através de uma chamada telefônica) e pergunte a ele se a chave que ele está vendo na sua configuração de usuário para este dispositivo é igual à chave abaixo:</string>
+    <string name="encryption_information_verify_device_warning2">Se é igual, clique no botão verificar abaixo.
+Se não é igual, então alguém está interceptando este dispositivo e você pode querer clicar no botão bloquear.
+No futuro, este processo de verificação será mais sofisticado.</string>
     <string name="encryption_information_verify_key_match">Eu confirmo que as chaves são iguais</string>
 
     <string name="e2e_enabling_on_app_update">Riot agora permite criptografia ponta-a-ponta mas você precisa fazer login de novo para ativá-la.\n\nVocê pode fazer isso mais tarde a partir das configurações do aplicativo.</string>
@@ -748,7 +758,7 @@ Você autoriza o Riot a acessar seus contatos?</string>
 
     <string name="call">Chamada</string>
     <string name="room_participants_kick_prompt_msg">Tem certeza que quer excluir esta pessoa da conversa?</string>
-    <string name="room_participants_ban_prompt_msg">Tem certeza que quer banir esta pessoa da conversa?</string>
+    <string name="room_participants_ban_prompt_msg">Tem certeza que quer banir esta pessoa desta conversa?</string>
 
     <string name="room_settings_all_messages_noisy">Notificação sonora para cada mensagem</string>
     <string name="room_settings_all_messages">Notificação para cada mensagem</string>
@@ -758,7 +768,7 @@ Você autoriza o Riot a acessar seus contatos?</string>
 
     <string name="settings_notification_ringtone">Som de notificação</string>
     <string name="settings_containing_my_display_name">Mensagens que contenham o meu nome público</string>
-    <string name="settings_containing_my_user_name">Mensagens que contenha o meu nome de usuário</string>
+    <string name="settings_containing_my_user_name">Mensagens que contenham o meu nome de usuária(o)</string>
     <string name="settings_inline_url_preview">Habilitar visualização resumida dos links por padrão</string>
     <string name="settings_12_24_timestamps">Utilizar o formato de 12 horas (p.ex: 2:30pm)</string>
     <string name="settings_hide_join_leave_messages">Ocultar mensagens de entrada e de saída de pessoas (convites, expulsões e banimentos não são afetados)</string>
@@ -772,7 +782,7 @@ Você autoriza o Riot a acessar seus contatos?</string>
     <string name="settings_flair">Faro</string>
 
     <string name="room_settings_room_notifications_title">Notificações</string>
-    <string name="room_settings_no_flair">" Esta sala não está mostrando Flairs para nenhuma comunidade"</string>
+    <string name="room_settings_no_flair">Esta sala não está mostrando Flairs para nenhuma comunidade</string>
     <string name="room_settings_add_new_group">Nova ID da comunidade (p.ex: +foo:matrix.org)</string>
     <string name="room_settings_invalid_group_format_dialog_title">ID de comunidade inválido</string>
     <string name="room_settings_invalid_group_format_dialog_body">\'%s\' não é um ID de comunidade válido</string>
@@ -863,10 +873,9 @@ Você autoriza o Riot a acessar seus contatos?</string>
 	<item quantity="other">%d novas mensagens</item>
 </plurals>
 
-    <string name="room_displayname_many_members">%1$s e %2$s</string>
-    <plurals name="others">
-	<item quantity="one">1 outra/o</item>
-	<item quantity="other">%d outras/os</item>
+    <plurals name="room_displayname_three_and_more_members">
+	<item quantity="one">%1$s e 1 outra/o</item>
+	<item quantity="other">%1$s e %d outras/os</item>
 </plurals>
 
     <plurals name="directory_search_rooms">
@@ -907,7 +916,7 @@ Você autoriza o Riot a acessar seus contatos?</string>
     <string name="notice_avatar">Imagem de notificação</string>
     <string name="avatar">Imagem de perfil</string>
 
-<string name="send_bug_report_rage_shake">Espumando de raiva para reportar bug</string>
+<string name="send_bug_report_rage_shake">Agite com raiva para reportar uma falha (bug)</string>
 
     <string name="settings_notification_privacy_normal">Normal</string>
     <string name="settings_notification_privacy_power_saving">Opções de economia de energia</string>
@@ -915,4 +924,153 @@ Você autoriza o Riot a acessar seus contatos?</string>
     <string name="settings_notification_privacy_reduced">Privacidade reduzida</string>
     <string name="settings_notification_privacy_need_permission">O app necessita de permissão para rodar em segundo plano</string>
     <string name="settings_notification_privacy_no_permission">Os aplicativos <b>não</b> precisam de permissão para rodar em segundo plano</string>
-    </resources>
+    <string name="title_activity_choose_sticker">Enviar um sticker</string>
+
+    <string name="dialog_title_third_party_licences">Licenças de terceiros</string>
+
+    <string name="download">Baixar</string>
+    <string name="speak">Falar</string>
+    <string name="clear">Apagar</string>
+    <string name="missing_permissions_error">Por falta de permissões, esta ação não é possível.</string>
+    <string name="system_alerts_header">Alertas do sistema</string>
+
+    <string name="send_bug_report_description_in_english">Se possível, favor escrever a descrição em inglês.</string>
+    <string name="option_send_voice">Enviar áudio</string>
+
+    <string name="option_send_sticker">Enviar um sticker</string>
+    <string name="no_sticker_application_dialog_content">Você não tem nenhum pacote de stickers habilitado no momento.
+
+Quer adicionar alguns agora?</string>
+
+    <string name="go_on_with">continuar com…</string>
+    <string name="error_no_external_application_found">Desculpe, mas não encontrei nenhum aplicativo externo para completar esta ação.</string>
+
+    <string name="e2e_re_request_encryption_key"><u>Pedir novamente as chaves de criptografia</u> de seus outros dispositivos.</string>
+
+    <string name="e2e_re_request_encryption_key_sent">Pedido de chave enviado.</string>
+
+    <string name="e2e_re_request_encryption_key_dialog_title">Pedido enviado</string>
+    <string name="e2e_re_request_encryption_key_dialog_content">Por favor, use o Riot em outro dispositivo que possa descriptografar a mensagem de modo que possa enviar as chaves a este dispositivo.</string>
+
+    <plurals name="format_time_s">
+	<item quantity="one">1s</item>
+	<item quantity="other">%ds</item>
+</plurals>
+    <plurals name="format_time_m">
+	<item quantity="one">1min</item>
+	<item quantity="other">%dmin</item>
+</plurals>
+    <plurals name="format_time_h">
+	<item quantity="one">1h</item>
+	<item quantity="other">%dh</item>
+</plurals>
+    <plurals name="format_time_d">
+	<item quantity="one">1 dia</item>
+	<item quantity="other">%d dias</item>
+</plurals>
+
+    <string name="room_participants_now">%1$s agora</string>
+    <string name="room_participants_ago">há %1$s %2$s</string>
+
+    <string name="room_participants_action_unignore_prompt">Exibir todas as mensagens desta(e) usuária(o)?
+
+Note que esta ação vai reiniciar o aplicativo e isso pode tomar um certo tempo.</string>
+    <string name="room_participants_invite_join_names">"%1$s, "</string>
+    <string name="room_participants_invite_join_names_and">%1$s e %2$s</string>
+    <string name="room_participants_invite_join_names_combined">%1$s %2$s</string>
+
+    <string name="room_message_placeholder_reply_to_encrypted">Enviar uma resposta criptografada…</string>
+    <string name="room_message_placeholder_reply_to_not_encrypted">Enviar uma resposta (não criptografada)…</string>
+    <plurals name="room_details_selected">
+	<item quantity="one">1 selecionado</item>
+	<item quantity="other">%d selecionados</item>
+</plurals>
+    <string name="settings_notification_privacy">Privacidade das notificações</string>
+    <string name="settings_notification_privacy_warning">Riot.im funciona em segundo plano para manter sua mensagem de notificação privada. Você pode alterar esta opção para reduzir o uso da bateria.</string>
+    <string name="settings_notification_privacy_gcm">• As notificações são enviadas pelo \"Google Cloud Messaging\"</string>
+    <string name="settings_notification_privacy_metadata">• As notificações contém apenas metadados</string>
+    <string name="settings_notification_privacy_secure_message_content">• O conteúdo das mensagens da notificação é <b>armazenado de forma segura diretamente no servidor Matrix</b></string>
+    <string name="settings_notification_privacy_nosecure_message_content">• As notificações contém <b>metadados e os dados da mensagem</b></string>
+    <string name="settings_notification_privacy_message_content_not_shown">• As notificações <b>não exibirão o conteúdo da mensagem</b></string>
+
+    <string name="settings_preview_media_before_sending">Pré-visualizar a mídia antes de enviá-la</string>
+
+    <string name="settings_deactivate_account_section">Desativar a conta</string>
+    <string name="settings_deactivate_my_account">Desativar a minha conta</string>
+
+    <string name="startup_notification_privacy_title">Privacidade das notificações</string>
+    <string name="startup_notification_privacy_message">Riot pode funcionar em segundo plano para gerir as suas notificações de forma segura e confidencial (isso poderá impactar no uso da bateria).</string>
+    <string name="startup_notification_privacy_button_grant">Conceder a permissão</string>
+    <string name="startup_notification_privacy_button_other">Escolha outra opção</string>
+
+    <string name="settings_opt_in_of_analytics">Enviar dados de uso</string>
+    <string name="settings_opt_in_of_analytics_summary">Riot coleta dados de uso anônimos para nos ajudar a melhorar o aplicativo.</string>
+    <string name="settings_opt_in_of_analytics_prompt">Por favor, habilite o envio de dados de uso para nos ajudar a melhorar o Riot.</string>
+    <string name="settings_opt_in_of_analytics_ok">Sim, eu quero ajudar!</string>
+
+    <string name="settings_without_flair">Você não faz parte de nenhuma comunidade atualmente.</string>
+
+    <string name="lock_screen_hint">Escreva aqui…</string>
+
+    <string name="widget_integration_missing_parameter">Um parâmetro obrigatório está faltando.</string>
+    <string name="widget_integration_invalid_parameter">Um parâmetro não é válido.</string>
+    <string name="settings_labs_keyboard_options_to_send_message">Use a tecla Enter do teclado para enviar a mensagem</string>
+    <string name="settings_labs_enable_send_voice">Enviar uma mensagem de voz (necessita um aplicativo de terceiros para registrar mensagens de voz)</string>
+
+    <string name="command_description_emote">Mostra a ação</string>
+    <string name="command_description_ban_user">Remove a(o) usuária(o) com a ID fornecida</string>
+    <string name="command_description_unban_user">Desfaz a remoção de um(a) usuário(a) com um dado ID</string>
+    <string name="command_description_op_user">Define o grau de poder de um(a) usuário(a)</string>
+    <string name="command_description_deop_user">Retira o nível de operador(a) do(a) usuário(a) com o ID fornecido</string>
+    <string name="command_description_invite_user">Convida a(o) usuária(o) com um dado ID para esta sala</string>
+    <string name="command_description_join_room">Entra na sala com o alias fornecido</string>
+    <string name="command_description_part_room">Deixa a sala</string>
+    <string name="command_description_topic">Define o tópico da sala</string>
+    <string name="command_description_kick_user">Expulsa a(o) usuária(o) com o ID fornecido</string>
+    <string name="command_description_nick">Altera o seu nome público de usuária(o)</string>
+    <string name="command_description_markdown">Ativar/Desativar o Markdown</string>
+    <string name="command_description_clear_scalar_token">Reparar a gestão de aplicativos Matrix</string>
+
+    <plurals name="group_members">
+	<item quantity="one">1 participante</item>
+	<item quantity="other">%d participantes</item>
+</plurals>
+
+    <plurals name="group_rooms">
+	<item quantity="one">1 sala</item>
+	<item quantity="other">%d salas</item>
+</plurals>
+    <string name="dialog_user_consent_content">Para continuar usando o Servidor de Base %1$s, você precisa revisar e aceitar os termos e condições de uso.</string>
+    <string name="dialog_user_consent_submit">Revisar agora</string>
+
+    <string name="deactivate_account_title">Desativar conta</string>
+    <string name="deactivate_account_content">Sua conta se tornará permanentemente inutilizável. Você não poderá iniciar uma sessão, e ninguém conseguirá registrar o mesmo ID de usuária(o). Isso fará que sua conta abandone todas as salas das quais participa, e eliminará os dados de sua conta do seu servidor de identidade. <b>Esta ação é irreversível</b>.
+
+Desativar a sua conta <b>não implica que as mensagens que você enviou sejam apagadas</b>. Se você quer que apaguemos suas mensagens, favor marcar a opção abaixo.
+
+A visibilidade de mensagens no Matrix é parecida com a dos e-mails. Se esquecermos as suas mensagens, isso significa que as mensagens que você enviou a nós não serão mais compartilhadas com novas(os) usuárias(os) ou por usuárias(os) não registradas(os), mas as(os) usuárias(os) registradas(os) que já tiveram acesso a estas mensagens conservarão a cópia das mesmas.</string>
+    <string name="deactivate_account_delete_checkbox">Por favor, esqueça todas as mensagens que enviei quando minha conta for desativada (Atenção: isso vai fazer com que futuras(os) usuárias(os) tenham uma visão incompleta das conversas)</string>
+    <string name="deactivate_account_prompt_password">Para continuar, entre com sua senha:</string>
+    <string name="deactivate_account_submit">Desativar conta</string>
+
+    <string name="error_empty_field_your_password">Por favor, digite sua senha.</string>
+    <string name="room_tombstone_versioned_description">Esta sala foi substituída e não está mais ativa</string>
+    <string name="room_tombstone_continuation_link">A conversa continua aqui</string>
+    <string name="room_tombstone_continuation_description">Esta sala é a continuação de outra conversa</string>
+    <string name="room_tombstone_predecessor_link">Clique aqui para ver as mensagens anteriores</string>
+
+    <string name="resource_limit_exceeded_title">Limite de recursos excedido</string>
+    <string name="resource_limit_contact_action">Entre em contato com o(a) administrador(a)</string>
+
+    <string name="resource_limit_contact_admin">entre em contato com o(a) administrador(a) do seu serviço</string>
+
+    <string name="resource_limit_soft_default">Este Servidor de Base excedeu um dos seus limites de recursos, portanto <b>alguns(mas) usuários(as) não conseguirão fazer login</b>.</string>
+    <string name="resource_limit_hard_default">Este Servidor de Base excedeu um de seus limites de recursos.</string>
+
+    <string name="resource_limit_soft_mau"> Este Servidor de Base atingiu o seu limite mensal de usuárias(os) ativas(os), portanto <b>alguns(mas) usuários(as) não conseguirão fazer login</b>.</string>
+    <string name="resource_limit_hard_mau">Este Servidor de Base atingiu o seu limite mensal de usuárias(os) ativas(os).</string>
+
+    <string name="resource_limit_soft_contact">Por favor, %s para que este limite seja aumentado.</string>
+    <string name="resource_limit_hard_contact">Por favor, %s para seguir usando este serviço.</string>
+
+</resources>

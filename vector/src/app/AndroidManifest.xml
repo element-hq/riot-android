@@ -1,22 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
-<manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
-    package="im.vector"
-    android:installLocation="auto">
+<manifest xmlns:android="http://schemas.android.com/apk/res/android">
 
-    <application
-        android:name="im.vector.VectorApp"
-        android:allowBackup="false"
-        android:icon="@drawable/logo"
-        android:label="@string/riot_app_name"
-        android:largeHeap="true"
-        android:logo="@drawable/logo"
-        android:theme="@style/AppTheme"
-        tools:replace="allowBackup,label">
-
+    <application>
 
         <!-- Firebase components -->
-
         <meta-data
             android:name="firebase_analytics_collection_deactivated"
             android:value="true" />
@@ -35,9 +22,5 @@
             </intent-filter>
         </service>
 
-        <provider
-            android:name="im.vector.db.VectorContentProvider"
-            android:authorities="im.vector.VectorApp.provider"
-            android:exported="true" />
     </application>
 </manifest>

@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package im.vector.error
+package im.vector.features.hhs
 
 import android.content.Context
 import android.support.annotation.StringRes
@@ -43,7 +43,6 @@ class ResourceLimitErrorFormatter(private val context: Context) {
         } else {
             context.getString(mode.defaultErrorRes)
         }
-
         val contact = if (clickable && matrixError.adminUri != null) {
             val contactSubString = uriAsLink(matrixError.adminUri!!)
             val contactFullString = context.getString(mode.contactRes, contactSubString)
@@ -52,7 +51,6 @@ class ResourceLimitErrorFormatter(private val context: Context) {
             val contactSubString = context.getString(R.string.resource_limit_contact_admin)
             context.getString(mode.contactRes, contactSubString)
         }
-
         return Spanny(error)
                 .append(separator)
                 .append(contact)

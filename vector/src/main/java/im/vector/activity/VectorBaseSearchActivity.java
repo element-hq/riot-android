@@ -145,10 +145,9 @@ public abstract class VectorBaseSearchActivity extends MXCActionBarActivity {
         mPatternToSearchEditText.setOnEditorActionListener(new TextView.OnEditorActionListener() {
             @Override
             public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
-                if ((actionId == EditorInfo.IME_ACTION_SEARCH) ||
+                if ((actionId == EditorInfo.IME_ACTION_SEARCH)
                         // hardware keyboard : detect the keydown event
-                        ((null != event) && (event.getKeyCode() == KeyEvent.KEYCODE_ENTER) && (event.getAction() == KeyEvent.ACTION_DOWN))
-                        ) {
+                        || ((null != event) && (event.getKeyCode() == KeyEvent.KEYCODE_ENTER) && (event.getAction() == KeyEvent.ACTION_DOWN))) {
                     onPatternUpdate(false);
                     return true;
                 }
@@ -217,7 +216,7 @@ public abstract class VectorBaseSearchActivity extends MXCActionBarActivity {
 
     @Override
     public int getMenuTint() {
-        return R.attr.icon_tint_on_light_action_bar_color;
+        return R.attr.icon_tint_on_dark_action_bar_color;
     }
 
     @Override

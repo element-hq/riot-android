@@ -37,10 +37,10 @@ import java.util.List;
 import im.vector.Matrix;
 import im.vector.R;
 import im.vector.contacts.ContactsManager;
+import im.vector.extensions.MatrixSdkExtensionsKt;
 import im.vector.fragments.VectorRoomDetailsMembersFragment;
 import im.vector.fragments.VectorRoomSettingsFragment;
 import im.vector.fragments.VectorSearchRoomFilesListFragment;
-import im.vector.util.MatrixSdkExtensionsKt;
 import im.vector.util.PermissionsToolsKt;
 
 /**
@@ -227,7 +227,8 @@ public class VectorRoomDetailsActivity extends MXCActionBarActivity implements T
 
         if (mSession.isAlive()) {
             // check if the room has been left from another client
-            if ((null == mRoom.getMember(mSession.getMyUserId())) || !mSession.getDataHandler().doesRoomExist(mRoom.getRoomId())) {
+            if ((!mRoom.isJoined() && !mRoom.isInvited())
+                    || !mSession.getDataHandler().doesRoomExist(mRoom.getRoomId())) {
                 // pop to the home activity
                 Intent intent = new Intent(VectorRoomDetailsActivity.this, VectorHomeActivity.class);
                 intent.setFlags(android.content.Intent.FLAG_ACTIVITY_CLEAR_TOP | android.content.Intent.FLAG_ACTIVITY_SINGLE_TOP);

@@ -599,7 +599,7 @@ Pozor! Vykonaním tejto akcie reštartujete aplikáciu a opätovné načítanie 
 
     <string name="room_settings_addresses_invalid_format_dialog_title">Nesprávny formát aliasu</string>
     <string name="room_settings_addresses_invalid_format_dialog_body">\'%s\' nie je platný formát aliasu</string>
-    <string name="room_settings_addresses_disable_main_address_prompt_msg">Nebude určená hlavná adresa pre túto miestnosť. Namiesto hlavnej adresy sa vždy použije náhodná adresa</string>
+    <string name="room_settings_addresses_disable_main_address_prompt_msg">Nebude určená hlavná adresa tejto miestnosti.</string>
     <string name="room_settings_addresses_disable_main_address_prompt_title">Upozornenie - Hlavná adresa</string>
 
     <string name="room_settings_set_main_address">Nastaviť ako hlavnú adresu</string>
@@ -864,11 +864,10 @@ Neznáme zariadenia:</string>
 	<item quantity="other"/>
 </plurals>
 
-    <string name="room_displayname_many_members">%1$s a %2$s</string>
-    <plurals name="others">
-	<item quantity="one">1 ďalší</item>
-	<item quantity="few">%d ďalší</item>
-	<item quantity="many">%d ďalších</item>
+    <plurals name="room_displayname_three_and_more_members">
+	<item quantity="one">%1$s a 1 ďalší</item>
+	<item quantity="few">%1$s a %d ďalší</item>
+	<item quantity="many">%1$s a %d ďalších</item>
 	<item quantity="other"/>
 </plurals>
 
@@ -1085,5 +1084,13 @@ Pozor! Vykonaním tejto akcie reštartujete aplikáciu a opätovné načítanie 
 
     <string name="resource_limit_soft_contact">Prosím %s a pokúste sa tento limit navýšiť.</string>
     <string name="resource_limit_hard_contact">Prosím %s aby ste službu mohli naďalej používať.</string>
+
+<string name="dialog_title_error">Chyba</string>
+
+    <string name="settings_lazy_loading_title">Oneskorene načítať členov miestnosti</string>
+    <string name="settings_lazy_loading_description">Zvýšiť výkon môžete načítaním členov v miestnosti až pri prvom zobrazení</string>
+    <string name="error_lazy_loading_not_supported_by_home_server">Váš domovský server zatiaľ nepodporuje oneskorené načítanie členov v miestnosti. Skúste prosím neskôr.</string>
+
+    <string name="unknown_error">Prepáčte, vyskytla sa chyba</string>
 
 </resources>

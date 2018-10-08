@@ -30,10 +30,8 @@ import org.matrix.androidsdk.MXSession;
 import org.matrix.androidsdk.rest.callback.ApiCallback;
 import org.matrix.androidsdk.rest.callback.SimpleApiCallback;
 import org.matrix.androidsdk.rest.model.MatrixError;
-import org.matrix.androidsdk.ssl.Fingerprint;
 import org.matrix.androidsdk.util.Log;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -131,8 +129,10 @@ public class VectorUniversalLinkActivity extends VectorAppCompatActivity {
 
         String ISUrl = uri.getScheme() + "://" + uri.getHost();
 
-        final HomeServerConnectionConfig homeServerConfig =
-                new HomeServerConnectionConfig(Uri.parse(ISUrl), Uri.parse(ISUrl), null, new ArrayList<Fingerprint>(), false);
+        final HomeServerConnectionConfig homeServerConfig = new HomeServerConnectionConfig.Builder()
+                .withHomeServerUri(Uri.parse(ISUrl))
+                .withIdentityServerUri(Uri.parse(ISUrl))
+                .build();
 
         String token = aMapParams.get(VectorRegistrationReceiver.KEY_MAIL_VALIDATION_TOKEN);
         String clientSecret = aMapParams.get(VectorRegistrationReceiver.KEY_MAIL_VALIDATION_CLIENT_SECRET);

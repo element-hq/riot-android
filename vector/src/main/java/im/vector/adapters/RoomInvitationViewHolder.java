@@ -1,5 +1,6 @@
 /*
  * Copyright 2017 Vector Creations Ltd
+ * Copyright 2018 New Vector Ltd
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -28,18 +29,21 @@ import im.vector.R;
 
 public class RoomInvitationViewHolder extends RoomViewHolder {
 
-    @BindView(R.id.recents_invite_reject_button)
+    @BindView(R.id.room_invite_reject_button)
     Button vRejectButton;
 
-    @BindView(R.id.recents_invite_preview_button)
+    @BindView(R.id.room_invite_preview_button)
     Button vPreViewButton;
 
     RoomInvitationViewHolder(View itemView) {
         super(itemView);
     }
 
-    void populateViews(final Context context, final MXSession session, final Room room,
-                       final AbsAdapter.RoomInvitationListener invitationListener, final AbsAdapter.MoreRoomActionListener moreRoomActionListener) {
+    void populateViews(final Context context,
+                       final MXSession session,
+                       final Room room,
+                       final AbsAdapter.RoomInvitationListener invitationListener,
+                       final AbsAdapter.MoreRoomActionListener moreRoomActionListener) {
         super.populateViews(context, session, room, room.isDirectChatInvitation(), true, moreRoomActionListener);
 
         vPreViewButton.setOnClickListener(new View.OnClickListener() {

@@ -1,3 +1,28 @@
+Changes in Riot 0.8.16 (2018-10-08)
+===================================================
+
+MatrixSdk:
+ - Upgrade to version 0.9.10.
+
+Features:
+ - Manage blue banner case of server quota notices (#2547)
+
+Improvements:
+ - Minor changes to toolbar style and other UI elements (#2529)
+ - Improvements to dialogs, video messages, and the previewer activity (#2583)
+ - Add a way to enable local file encryption on the SDK (disabled by default)
+
+Other changes:
+ - Sonar analysis has been configured (#2203)
+
+Bugfix:
+ - Fix crash when opening file with external application (#2573)
+ - Fix issue on settings: unable to rename current device if it has no name (#2174)
+ - Allow anyone to add local alias and to try to delete local alias (#1033)
+ - Fix issue on "Resend all" action (#2569)
+ - Fix messages vanishing when resending them (#2508)
+ - Remove delay for / completion (#2576)
+
 Changes in Riot 0.8.15 (2018-08-30)
 ===================================================
 

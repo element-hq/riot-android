@@ -138,15 +138,15 @@ public class VectorPublicRoomsListFragment extends VectorBaseFragment {
 
                 // launch corresponding room activity
                 if (null != publicRoom.roomId) {
-                    final RoomPreviewData roomPreviewData = new RoomPreviewData(mSession, publicRoom.roomId, null, publicRoom.getAlias(), null);
+                    final RoomPreviewData roomPreviewData = new RoomPreviewData(mSession, publicRoom.roomId, null, publicRoom.canonicalAlias, null);
 
                     // Check whether the room exists to handled the cases where the user is invited or he has joined.
                     // CAUTION: the room may exist whereas the user membership is neither invited nor joined.
                     final Room room = mSession.getDataHandler().getRoom(publicRoom.roomId, false);
-                    if (null != room && room.hasMembership(RoomMember.MEMBERSHIP_INVITE)) {
+                    if (null != room && room.isInvited()) {
                         Log.d(LOG_TAG, "manageRoom : the user is invited -> display the preview " + VectorApp.getCurrentActivity());
                         CommonActivityUtils.previewRoom(getActivity(), roomPreviewData);
-                    } else if (null != room && room.hasMembership(RoomMember.MEMBERSHIP_JOIN)) {
+                    } else if (null != room && room.isJoined()) {
                         Log.d(LOG_TAG, "manageRoom : the user joined the room -> open the room");
                         final Map<String, Object> params = new HashMap<>();
                         params.put(VectorRoomActivity.EXTRA_MATRIX_ID, mSession.getMyUserId());
@@ -178,7 +178,7 @@ public class VectorPublicRoomsListFragment extends VectorBaseFragment {
                             }
 
                             private void onError() {
-                                roomPreviewData.setRoomState(publicRoom);
+                                roomPreviewData.setPublicRoom(publicRoom);
                                 roomPreviewData.setRoomName(publicRoom.name);
                                 onDone();
                             }

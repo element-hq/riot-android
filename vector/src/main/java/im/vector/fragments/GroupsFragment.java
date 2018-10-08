@@ -42,6 +42,7 @@ import android.widget.PopupMenu;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import org.matrix.androidsdk.MXPatterns;
 import org.matrix.androidsdk.MXSession;
 import org.matrix.androidsdk.data.Room;
 import org.matrix.androidsdk.groups.GroupsManager;
@@ -441,7 +442,7 @@ public class GroupsFragment extends AbsHomeFragment {
 
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
-                createButton.setEnabled(MXSession.isGroupId("+" + idEditText.getText().toString().trim() + ":" + hostName));
+                createButton.setEnabled(MXPatterns.isGroupId("+" + idEditText.getText().toString().trim() + ":" + hostName));
             }
 
             @Override

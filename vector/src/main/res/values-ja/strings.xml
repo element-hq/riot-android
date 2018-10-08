@@ -681,7 +681,7 @@ Riotアプリがあなたの電話帳へアクセスすることを許可しま�
     <string name="settings_pin_unread_messages">未読のメッセージがある部屋を固定する</string>
     <string name="settings_analytics">分析</string>
     <string name="settings_opt_out_of_analytics">分析データを送信しない</string>
-    <string name="settings_opt_out_of_analytics_summary">Riotはアプリをよりよくするために匿名の分析データを収集します。</string>
+    <string name="settings_opt_out_of_analytics_summary">Riotはアプリを改善するため、匿名の解析データを収集します。</string>
 
 
     <string name="settings_data_save_mode">データ節約モード</string>
@@ -842,13 +842,12 @@ Riotアプリがあなたの電話帳へアクセスすることを許可しま�
 	<item quantity="other">%d件の新しいメッセージ</item>
 </plurals>
 
-    <string name="room_displayname_many_members">%1$sと%2$s</string>
-    <plurals name="others">
-	<item quantity="other">他%d名</item>
+    <plurals name="room_displayname_three_and_more_members">
+	<item quantity="other">%1$sと他%d名</item>
 </plurals>
 
     <plurals name="directory_search_rooms">
-	<item quantity="other">%d部屋</item>
+	<item quantity="other">%d 部屋</item>
 </plurals>
     <plurals name="directory_search_rooms_for">
 	<item quantity="other">%2$sに%1$s部屋見つかりました</item>
@@ -873,4 +872,164 @@ Riotアプリがあなたの電話帳へアクセスすることを許可しま�
 
     <string name="download">ダウンロード</string>
     <string name="speak">話す</string>
-    </resources>
+    <string name="clear">消去</string>
+    <string name="missing_permissions_error">許可がないため、この操作を実行できません。</string>
+    <string name="actions">実行</string>
+    <string name="system_alerts_header">システムアラート</string>
+
+    <string name="send_bug_report_description_in_english">可能であれば、英語で説明を書いてください。</string>
+    <string name="option_send_voice">音声を送信</string>
+
+    <string name="option_send_sticker">スタンプを送信</string>
+    <string name="no_sticker_application_dialog_content">現在使用可能なスタンプパックがありません。
+
+今いくつか追加しますか？</string>
+
+    <string name="go_on_with">...で続行</string>
+    <string name="error_no_external_application_found">申し訳ありません、この操作を完了するための外部アプリが見つかりません。</string>
+
+    <string name="e2e_re_request_encryption_key">他のデバイスから <u>暗号鍵を再度要求</u> します。</string>
+
+    <string name="e2e_re_request_encryption_key_sent">鍵のリクエストが送信されました。</string>
+
+    <string name="e2e_re_request_encryption_key_dialog_title">リクエスト送信済</string>
+    <string name="e2e_re_request_encryption_key_dialog_content">鍵をこのデバイスに送信できるように、メッセージを復号化できる他のデバイスでRiotを起動してください。</string>
+
+    <plurals name="format_time_s">
+	<item quantity="other">%d 秒</item>
+</plurals>
+    <plurals name="format_time_m">
+	<item quantity="other">%d 分</item>
+</plurals>
+    <plurals name="format_time_h">
+	<item quantity="other">%d 時間</item>
+</plurals>
+    <plurals name="format_time_d">
+	<item quantity="other">%d 日</item>
+</plurals>
+
+    <string name="room_participants_now">現在 %1$s</string>
+    <string name="room_participants_ago">%2$s 前 %1$s</string>
+
+    <string name="room_participants_action_unignore_prompt">このユーザからのすべてのメッセージを表示しますか？
+
+この操作によってアプリを再起動するため、しばらく時間がかかることにご注意ください。</string>
+    <string name="room_participants_invite_join_names">"%1$s、 "</string>
+    <string name="room_participants_invite_join_names_and">%1$s と %2$s</string>
+    <string name="room_participants_invite_join_names_combined">%1$s %2$s</string>
+
+    <string name="room_message_placeholder_reply_to_encrypted">暗号化された返信を送信…</string>
+    <string name="room_message_placeholder_reply_to_not_encrypted">返信を送信 (未暗号化)…</string>
+    <plurals name="room_details_selected">
+	<item quantity="other">%d 個選択済</item>
+</plurals>
+    <string name="settings_notification_privacy_reduced">低プライバシー</string>
+    <string name="settings_notification_privacy_secure_message_content">• 通知中のメッセージの内容は <b>Matrixのホームサーバから直接安全に配置されています</b></string>
+    <string name="settings_notification_privacy_nosecure_message_content">"•  "<b>メタデータとメッセージのデータ</b> を含む通知</string>
+    <string name="settings_notification_privacy_message_content_not_shown">• 通知は <b>メッセージの内容を表示しません</b></string>
+
+    <string name="settings_vibrate_on_mention">名前をあげられたときバイブレーションで通知</string>
+    <string name="settings_preview_media_before_sending">送信の前にメディアをプレビュー</string>
+
+    <string name="settings_deactivate_account_section">アカウントを停止</string>
+    <string name="settings_deactivate_my_account">自分のアカウントを停止</string>
+
+    <string name="startup_notification_privacy_title">通知のプライバシー</string>
+    <string name="startup_notification_privacy_message">Riotは通知を安全で内密に扱うため、バックグラウンドで動作できます（これによりバッテリー使用に影響が出ることがあります）。</string>
+    <string name="startup_notification_privacy_button_grant">許可を与える</string>
+    <string name="startup_notification_privacy_button_other">他のオプションを選択</string>
+
+    <string name="settings_opt_in_of_analytics">解析データを送信</string>
+    <string name="settings_opt_in_of_analytics_summary">Riotはアプリを改善するため、匿名の解析データを収集します。</string>
+    <string name="settings_opt_in_of_analytics_prompt">Riotを改善するのを助けるため、解析を許可してください。</string>
+    <string name="settings_opt_in_of_analytics_ok">はい、助けたいです！</string>
+
+    <string name="settings_without_flair">あなたは現在どのコミュニティーのメンバーでもありません。</string>
+
+    <string name="lock_screen_hint">ここに入力…</string>
+
+    <plurals name="notification_unread_notified_messages">
+	<item quantity="other">%d 個の未読の通知されたメッセージ</item>
+</plurals>
+    <plurals name="notification_unread_notified_messages_in_room_msgs">
+	<item quantity="other">%d 個の未読の通知されたメッセージ</item>
+</plurals>
+    <plurals name="notification_unread_notified_messages_in_room_rooms">
+	<item quantity="other">%d 部屋</item>
+</plurals>
+    <string name="notification_unread_notified_messages_in_room">%2$s件 中 %1$s件</string>
+
+    <plurals name="active_widgets">
+	<item quantity="other">%d 個のアクティブなウィジェット</item>
+</plurals>
+
+    <string name="widget_integration_missing_parameter">必要な変数が見つかりません。</string>
+    <string name="widget_integration_invalid_parameter">変数が無効です。</string>
+    <string name="settings_labs_keyboard_options_to_send_message">メッセージを送信するには、キーボードのエンターキーを使用してください</string>
+    <string name="settings_labs_enable_send_voice">ボイスメッセージを送信（ボイスメッセージを録音するには、サードパーティのアプリが必要です）</string>
+
+    <string name="command_description_emote">動作を表示</string>
+    <string name="command_description_ban_user">指定したIDのユーザをブロック</string>
+    <string name="command_description_unban_user">指定したIDのユーザのブロックを解除</string>
+    <string name="command_description_op_user">ユーザの権限レベルを決める</string>
+    <string name="command_description_deop_user">指定したIDのユーザの管理者権限を取り消す</string>
+    <string name="command_description_invite_user">指定したユーザを現在の部屋に招待</string>
+    <string name="command_description_join_room">指定したエイリアスの部屋に参加</string>
+    <string name="command_description_part_room">部屋を去る</string>
+    <string name="command_description_topic">部屋のテーマを設定</string>
+    <string name="command_description_kick_user">指定したIDのユーザとの接続を切断</string>
+    <string name="command_description_nick">表示するニックネームを変更</string>
+    <string name="command_description_markdown">Markdown書式の入/切</string>
+    <string name="command_description_clear_scalar_token">Matrixアプリの管理を修正するには</string>
+
+    <plurals name="group_members">
+	<item quantity="other">%d名</item>
+</plurals>
+
+    <plurals name="group_rooms">
+	<item quantity="other">%d 部屋</item>
+</plurals>
+    <string name="receipt_avatar">アバターを受け取る</string>
+    <string name="dialog_user_consent_content">%1$s ホームサーバを使用し続けるには、利用規約を読み、同意する必要があります。</string>
+    <string name="dialog_title_error">エラー</string>
+
+    <string name="notice_avatar">アバターに通知を表示</string>
+    <string name="dialog_user_consent_submit">今すぐ見る</string>
+
+    <string name="deactivate_account_title">アカウントを停止</string>
+    <string name="deactivate_account_content">この操作によりあなたのアカウントは永久に使えなくなります。あなたはログインできなくなり、誰も同じユーザIDを登録できなくなります。アカウントが参加しているすべての部屋を去り、アイデンティティサーバからアカウントの詳細を削除することになります。 <b>この操作は取り消しできません</b>
+
+あなたのアカウントを停止することによって <b>デフォルトではあなたが送信したメッセージを削除しません</b>。メッセージを削除したいときは、下のボックスにチェックを入れてください。
+
+Matrixでのメッセージの可視性は電子メールと同様です。メッセージを削除すると、新規ユーザや登録していないユーザは読むことができませんが、すでにそれらのメッセージにアクセスできる登録済みのユーザはメッセージのコピーにアクセスできます。</string>
+    <string name="deactivate_account_delete_checkbox">アカウントを停止したとき自分の送信した全てのメッセージを削除 (警告: この操作により、将来的なユーザが会話を不完全な形で見ることになります）</string>
+    <string name="deactivate_account_prompt_password">続けるには、パスワードを入力してください:</string>
+    <string name="deactivate_account_submit">アカウントを停止</string>
+
+    <string name="error_empty_field_your_password">パスワードを入力してください。</string>
+    <string name="room_tombstone_versioned_description">この部屋は置き換えられており、アクティブではありません</string>
+    <string name="room_tombstone_continuation_link">ここで会話が続いています</string>
+    <string name="room_tombstone_continuation_description">この部屋は別の会話の続きです</string>
+    <string name="room_tombstone_predecessor_link">より古いメッセージを見るには、ここをクリックしてください</string>
+
+    <string name="resource_limit_exceeded_title">リソース制限の超過</string>
+    <string name="resource_limit_contact_action">管理者に連絡</string>
+
+    <string name="resource_limit_contact_admin">あなたのサービス管理者に連絡</string>
+
+    <string name="resource_limit_soft_default">このホームサーバはリソース制限の1つを超過しているため、 <b>ユーザがログインできなくなることがあります</b>。</string>
+    <string name="resource_limit_hard_default">このホームサーバはリソース制限の1つを超過しています。</string>
+
+    <string name="resource_limit_soft_mau"> このホームサーバは月間アクティブユーザ上限に達しているため、 <b>ユーザがログインできなくなることがあります</b>。</string>
+    <string name="resource_limit_hard_mau">このホームサーバは月間アクティブユーザ上限に達しています。</string>
+
+    <string name="resource_limit_soft_contact">この上限を上げるには、 %s してください。</string>
+    <string name="resource_limit_hard_contact">このサービスを使い続けるには、 %s してください。</string>
+
+    <string name="settings_lazy_loading_description">最初に部屋のメンバーのみを読み込むことによりパフォーマンスを向上</string>
+    <string name="error_lazy_loading_not_supported_by_home_server">あなたのホームサーバは部屋のメンバーの簡易読み込みをサポートしていません。後で試してください。</string>
+
+    <string name="settings_lazy_loading_title">部屋のメンバーの簡易読み込み</string>
+    <string name="unknown_error">申し訳ありません、エラーが発生しました</string>
+
+</resources>

@@ -32,15 +32,15 @@
     <string name="rename">Renombrar</string>
     <string name="report_content">Reportar contenido</string>
     <string name="active_call">Llamada activa</string>
-    <string name="ongoing_conference_call">Llamada de conferencia en proceso. Unir con voz o video.</string>
+    <string name="ongoing_conference_call">Llamada de conferencia en proceso. Unir con voz o vídeo.</string>
     <string name="ongoing_conference_call_voice">voz</string>
     <string name="ongoing_conference_call_video">video</string>
     <string name="cannot_start_call">No se pudo iniciar la llamada, inténtalo más tarde</string>
-    <string name="missing_permissions_warning">"Debido a permisos faltantes, algunas caracteristicas podrían estar ausentes..</string>
+    <string name="missing_permissions_warning">Debido a permisos faltantes, algunas características podrían estar ausentes…</string>
     <string name="missing_permissions_to_start_conf_call">Necesitas permiso para realizar una llamada de conferencia en esta sala</string>
-    <string name="missing_permissions_title_to_start_conf_call">Llamada no se puede empezar</string>
+    <string name="missing_permissions_title_to_start_conf_call">No se puede iniciar la llamada</string>
     <string name="device_information">Información del dispositivo</string>
-    <string name="room_no_conference_call_in_encrypted_rooms">Las llamadas de conferencia no pueden ser realizadas en salas cifradas</string>
+    <string name="room_no_conference_call_in_encrypted_rooms">Las llamadas de conferencia no se pueden realizar en salas cifradas</string>
     <string name="send_anyway">Enviar de todos modos</string>
     <string name="or">o</string>
     <string name="invite">Invitar</string>
@@ -104,7 +104,7 @@ Seleccione exportar para crear un archivo de respaldo antes de cerrar la sesión
     <string name="send_bug_report">Informe de Error</string>
     <string name="send_bug_report_description">Por favor describe el error. ¿Qué hiciste? ¿Qué esperabas que sucediera, qué sucedió realmente?</string>
     <string name="send_bug_report_placeholder">Describe tu problema aquí</string>
-    <string name="send_bug_report_logs_description">Para la diagnostica de problemas, informes de este cliente se enviarán junto a este reporte de error. Si prefiere solamente enviar el texto de arriba, desmarque:</string>
+    <string name="send_bug_report_logs_description">Para diagnosticar problemas, informes de este cliente se enviarán junto a este reporte de error. Este informe, inclusive los registros y la captura de pantalla, no será visible públicamente. Si prefieres solamente enviar el texto de arriba, por favor desmarca:</string>
     <string name="send_bug_report_alert_message">Pareces estar temblando de frustración. ¿Te gustaría enviar un reporte de error?</string>
     <string name="send_bug_report_sent">El reporte de error ha sido enviado</string>
     <string name="send_bug_report_failed">El reporte de error no se pudo enviar (%s)</string>
@@ -230,7 +230,7 @@ Disculpe por la inconveniencia.</string>
 
     <!-- call string -->
     <string name="call_connected">Llamada conectada</string>
-    <string name="call_connecting">La llamada se esá conectando…</string>
+    <string name="call_connecting">La llamada se está conectando…</string>
     <string name="call_ended">Llamada finalizada</string>
     <string name="call_ring">Llamando…</string>
     <string name="incoming_call">Llamada Entrante</string>
@@ -256,7 +256,9 @@ Disculpe por la inconveniencia.</string>
     <string name="permissions_rationale_msg_record_audio_explanation">\n\nPor favor permite el acceso en el siguiente mensaje para poder hacer la llamada.</string>
     <string name="permissions_rationale_msg_camera_and_audio">Riot necesita tu permiso para usar su cámara y micrófono para hacer llamadas de video.\n\nPor favor permite el acceso en el siguiente mensaje para poder hacer la llamada.</string>
     <string name="permissions_rationale_msg_contacts">Riot necesita tu permiso para leer tus contactos y directorio para encontrar a otros usuarios por sus correos electrónicos y números telefónicos.\n\nPor favor permite el acceso en el siguiente mensaje para encontrar usuarios de Riot en su directorio.</string>
-    <string name="permissions_msg_contacts_warning_other_androids">Riot necesita tu permiso para leer los contactos de tu directorio para encontrar otros usuarios de Matrix por sus correos electrónicos y números telefónicos.\n\n¿Permitir el acceso a Riot para leer tus contactos ?</string>
+    <string name="permissions_msg_contacts_warning_other_androids">Riot necesita tu permiso para leer los contactos de tu directorio para encontrar otros usuarios de Matrix por sus correos electrónicos y números telefónicos.
+
+¿Permitir el acceso a Riot para leer tus contactos ?</string>
 
     <string name="permissions_action_not_performed_missing_permissions">Perdon.. Operación no realizada, debido a permisos faltantes</string>
 
@@ -345,9 +347,9 @@ Mensajes cifrados no serán visibles en cuentas que no implementan el cifrado.</
     <string name="room_message_placeholder_encrypted">Enviar mensaje cifrado…</string>
     <string name="room_message_placeholder_not_encrypted">Enviar mensaje (descifrado)…</string>
     <string name="room_offline_notification">La conexión al servidor se perdió.</string>
-    <string name="room_unsent_messages_notification">Mensajes no fueron enviados. ¿ %1$s o %2$s ahora?</string>
-    <string name="room_unknown_devices_messages_notification">Mensajes no fueron enviados debido a la precencia de dispositivos no conocidos. ¿ %1$s o %2$s ahora?</string>
-    <string name="room_prompt_resend">Reenviar a todos</string>
+    <string name="room_unsent_messages_notification">Mensajes no se enviaron. ¿%1$s o %2$s ahora?</string>
+    <string name="room_unknown_devices_messages_notification">Mensajes no se enviaron por la presencia de dispositivos no desconocidos. ¿ %1$s o %2$s ahora?</string>
+    <string name="room_prompt_resend">Reenviar todos</string>
     <string name="room_prompt_cancel">cancelar a todos</string>
     <string name="room_resend_unsent_messages">Reenviar mensajes no enviados</string>
     <string name="room_delete_unsent_messages">Borrar mensajes no enviados</string>
@@ -545,7 +547,7 @@ Mensajes cifrados no serán visibles en cuentas que no implementan el cifrado.</
     <string name="room_settings_tag_pref_entry_favourite">Destacar</string>
     <string name="room_settings_tag_pref_entry_low_priority">Baja prioridad</string>
     <string name="room_settings_tag_pref_entry_none">Ninguno</string>
-    <string name="room_settings_tag_pref_no_tag">no etiqutado</string>
+    <string name="room_settings_tag_pref_no_tag">no etiquetado</string>
     <string name="room_settings_tag_pref_entry_value_favourite">destacado</string>
     <string name="room_settings_tag_pref_entry_value_low_priority">bajo</string>
     <string name="room_settings_tag_pref_entry_value_none">ninguno</string>
@@ -674,7 +676,11 @@ Lo puedes hacer ahora o luego desde las configuraciones de la aplicación.</stri
 
     <!-- unknown devices management -->
     <string name="unknown_devices_alert_title">Esta sala contiene dispositivos desconocidos</string>
-    <string name="unknown_devices_alert_message">Esta sala contiene dispositivos desconocidos que no sa han verificado.\nEsto significa que no hay garantía que los dispositivos pertenecen a las personas que dicen ser.\nReccomendamos que los verifiques todos antes de continuar, Pero si puede reenviar el mensaje sin verificación si lo necesitas.\n\nDispositivos desconocidos:</string>
+    <string name="unknown_devices_alert_message">Esta sala contiene dispositivos desconocidos que no se han verificado.
+Esto significa que no se garantiza que los dispositivos pertenezcan a las personas que dicen de que son.
+Recomendamos que los verifiques todos antes de continuar. Sin embargo, puedes reenviar el mensaje sin verificarlos si prefieres.
+
+Dispositivos desconocidos:</string>
 
     <!-- directory activity  -->
     <string name="select_room_directory">Select a room directory</string>
@@ -762,4 +768,15 @@ Lo puedes hacer ahora o luego desde las configuraciones de la aplicación.</stri
     <string name="notification_on">Activado</string>
     <string name="notification_off">Desactivado</string>
     <string name="command_description_markdown">Activar/desactivar Markdown</string>
+    <string name="light_theme">Tema Claro</string>
+    <string name="dark_theme">Tema Oscuro</string>
+    <string name="black_them">Tema Negro</string>
+
+    <string name="notification_listen_for_events">Detectar eventos</string>
+    <string name="notification_noisy_notifications">Notificaciones ruidosas</string>
+    <string name="notification_silent_notifications">Notificaciones silenciosas</string>
+
+    <string name="clear">Borrar</string>
+    <string name="missing_permissions_error">Debido a que faltan permisos, esta acción no es posible.</string>
+    <string name="title_activity_bug_report">Informe de error</string>
     </resources>

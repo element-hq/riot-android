@@ -233,7 +233,7 @@ public class RoomAdapter extends AbsAdapter {
 
             // display the room avatar
             vPublicRoomAvatar.setBackgroundColor(ContextCompat.getColor(mContext, android.R.color.transparent));
-            VectorUtils.loadUserAvatar(mContext, mSession, vPublicRoomAvatar, publicRoom.getAvatarUrl(), publicRoom.roomId, roomName);
+            VectorUtils.loadUserAvatar(mContext, mSession, vPublicRoomAvatar, publicRoom.avatarUrl, publicRoom.roomId, roomName);
 
             // set the topic
             vRoomTopic.setText(publicRoom.topic);

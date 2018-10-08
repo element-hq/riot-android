@@ -36,11 +36,11 @@ import butterknife.BindView
 import butterknife.ButterKnife
 import com.binaryfork.spanny.Spanny
 import im.vector.R
-import im.vector.error.ResourceLimitErrorFormatter
+import im.vector.features.hhs.ResourceLimitErrorFormatter
 import im.vector.listeners.IMessagesAdapterActionsListener
 import im.vector.util.MatrixURLSpan
 import im.vector.util.ThemeUtils
-import org.matrix.androidsdk.MXSession
+import org.matrix.androidsdk.MXPatterns
 import org.matrix.androidsdk.rest.model.MatrixError
 import org.matrix.androidsdk.rest.model.RoomTombstoneContent
 import org.matrix.androidsdk.util.Log
@@ -116,7 +116,7 @@ class NotificationAreaView @JvmOverloads constructor(
         imageView.setImageResource(R.drawable.error)
         val roomTombstoneContent = state.tombstoneContent
         val roomLink = PermalinkUtils.createPermalink(roomTombstoneContent.replacementRoom)
-        val urlSpan = MatrixURLSpan(roomLink, MXSession.PATTERN_CONTAIN_APP_LINK_PERMALINK_ROOM_ID, delegate?.providesMessagesActionListener())
+        val urlSpan = MatrixURLSpan(roomLink, MXPatterns.PATTERN_CONTAIN_APP_LINK_PERMALINK_ROOM_ID, delegate?.providesMessagesActionListener())
         val textColorInt = ThemeUtils.getColor(context, R.attr.message_text_color)
         val message = Spanny(resources.getString(R.string.room_tombstone_versioned_description),
                 StyleSpan(Typeface.BOLD),
@@ -130,12 +130,21 @@ class NotificationAreaView @JvmOverloads constructor(
     private fun renderResourceLimitExceededError(state: State.ResourceLimitExceededError) {
         visibility = View.VISIBLE
         val resourceLimitErrorFormatter = ResourceLimitErrorFormatter(context)
-        val message = resourceLimitErrorFormatter.format(state.matrixError, ResourceLimitErrorFormatter.Mode.Hard, clickable = true)
+        val formatterMode: ResourceLimitErrorFormatter.Mode
+        val backgroundColor: Int
+        if (state.isSoft) {
+            backgroundColor = R.color.soft_resource_limit_exceeded
+            formatterMode = ResourceLimitErrorFormatter.Mode.Soft
+        } else {
+            backgroundColor = R.color.hard_resource_limit_exceeded
+            formatterMode = ResourceLimitErrorFormatter.Mode.Hard
+        }
+        val message = resourceLimitErrorFormatter.format(state.matrixError, formatterMode, clickable = true)
         messageView.setTextColor(Color.WHITE)
         messageView.text = message
         messageView.movementMethod = LinkMovementMethod.getInstance()
         messageView.setLinkTextColor(Color.WHITE)
-        setBackgroundColor(ContextCompat.getColor(context, R.color.vector_fuchsia_color))
+        setBackgroundColor(ContextCompat.getColor(context, backgroundColor))
     }
 
     private fun renderConnectionError() {
@@ -230,7 +239,7 @@ class NotificationAreaView @JvmOverloads constructor(
      */
     private inner class ResendAllClickableSpan : ClickableSpan() {
         override fun onClick(widget: View) {
-            delegate?.deleteUnsentEvents()
+            delegate?.resendUnsentEvents()
             render(state)
         }
 
@@ -255,7 +264,7 @@ class NotificationAreaView @JvmOverloads constructor(
         object Hidden : State()
 
         // Resource limit exceeded error will be displayed (only hard for the moment)
-        data class ResourceLimitExceededError(val matrixError: MatrixError) : State()
+        data class ResourceLimitExceededError(val isSoft: Boolean, val matrixError: MatrixError) : State()
 
         // Server connection is lost
         object ConnectionError : State()
@@ -281,6 +290,7 @@ class NotificationAreaView @JvmOverloads constructor(
      */
     interface Delegate {
         fun providesMessagesActionListener(): IMessagesAdapterActionsListener
+        fun resendUnsentEvents()
         fun deleteUnsentEvents()
         fun closeScreen()
         fun jumpToBottom()

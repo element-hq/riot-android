@@ -1,5 +1,6 @@
 /*
  * Copyright 2017 Vector Creations Ltd
+ * Copyright 2018 New Vector Ltd
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -46,8 +47,11 @@ public class HomeRoomAdapter extends AbsFilterableAdapter<RoomViewHolder> {
      * *********************************************************************************************
      */
 
-    public HomeRoomAdapter(final Context context, @LayoutRes final int layoutRes, final OnSelectRoomListener listener,
-                           final AbsAdapter.RoomInvitationListener invitationListener, final AbsAdapter.MoreRoomActionListener moreActionListener) {
+    public HomeRoomAdapter(final Context context,
+                           @LayoutRes final int layoutRes,
+                           final OnSelectRoomListener listener,
+                           final AbsAdapter.RoomInvitationListener invitationListener,
+                           final AbsAdapter.MoreRoomActionListener moreActionListener) {
         super(context, invitationListener, moreActionListener);
 
         mRooms = new ArrayList<>();

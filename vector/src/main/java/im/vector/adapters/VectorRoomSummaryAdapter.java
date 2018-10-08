@@ -487,14 +487,14 @@ public class VectorRoomSummaryAdapter extends BaseExpandableListAdapter {
     private Room roomFromRoomSummary(RoomSummary roomSummary) {
         Room roomRetValue;
         MXSession session;
-        String matrixId;
+        String userId;
 
         // sanity check
-        if ((null == roomSummary) || (null == (matrixId = roomSummary.getMatrixId()))) {
+        if ((null == roomSummary) || (null == (userId = roomSummary.getUserId()))) {
             roomRetValue = null;
         }
         // get session and check if the session is active
-        else if (null == (session = Matrix.getMXSession(mContext, matrixId)) || (!session.isAlive())) {
+        else if (null == (session = Matrix.getMXSession(mContext, userId)) || (!session.isAlive())) {
             roomRetValue = null;
         } else {
             roomRetValue = session.getDataHandler().getStore().getRoom(roomSummary.getRoomId());
@@ -921,19 +921,20 @@ public class VectorRoomSummaryAdapter extends BaseExpandableListAdapter {
 
             // check if this is an invite
             if (aChildRoomSummary.isInvited() && (null != aChildRoomSummary.getInviterUserId())) {
+                // TODO Re-write this algorithm, it's so complicated to understand for nothing...
                 RoomState latestRoomState = aChildRoomSummary.getLatestRoomState();
                 String inviterUserId = aChildRoomSummary.getInviterUserId();
-                String myName = aChildRoomSummary.getMatrixId();
+                String myName = aChildRoomSummary.getUserId();
 
                 if (null != latestRoomState) {
                     inviterUserId = latestRoomState.getMemberName(inviterUserId);
                     myName = latestRoomState.getMemberName(myName);
                 } else {
-                    inviterUserId = getMemberDisplayNameFromUserId(aChildRoomSummary.getMatrixId(), inviterUserId);
-                    myName = getMemberDisplayNameFromUserId(aChildRoomSummary.getMatrixId(), myName);
+                    inviterUserId = getMemberDisplayNameFromUserId(aChildRoomSummary.getUserId(), inviterUserId);
+                    myName = getMemberDisplayNameFromUserId(aChildRoomSummary.getUserId(), myName);
                 }
 
-                if (TextUtils.equals(mMxSession.getMyUserId(), aChildRoomSummary.getMatrixId())) {
+                if (TextUtils.equals(mMxSession.getMyUserId(), aChildRoomSummary.getUserId())) {
                     messageToDisplayRetValue = mContext.getString(org.matrix.androidsdk.R.string.notice_room_invite_you, inviterUserId);
                 } else {
                     messageToDisplayRetValue = mContext.getString(org.matrix.androidsdk.R.string.notice_room_invite, inviterUserId, myName);

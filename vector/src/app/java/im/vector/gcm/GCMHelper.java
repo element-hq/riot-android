@@ -1,6 +1,7 @@
 /*
  * Copyright 2014 OpenMarket Ltd
  * Copyright 2017 Vector Creations Ltd
+ * Copyright 2018 New Vector Ltd
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,10 +17,10 @@
  */
 package im.vector.gcm;
 
-import org.matrix.androidsdk.util.Log;
-
 import com.google.firebase.FirebaseApp;
 import com.google.firebase.iid.FirebaseInstanceId;
+
+import org.matrix.androidsdk.util.Log;
 
 import im.vector.VectorApp;
 
@@ -29,16 +30,38 @@ class GCMHelper {
     /**
      * Retrieves the FCM registration token.
      */
-    public static String getRegistrationToken() {
-        final String registrationToken = FirebaseInstanceId.getInstance().getToken();
-        Log.d(LOG_TAG, "## getRegistrationToken(): " + registrationToken);
+    static String getRegistrationToken() {
+        String registrationToken = null;
+
+        // Note: FirebaseApp initialization is not necessary, but some users report that application crashes if this is not done
+        // Because of this, we keep the code for the moment.
+        if (null == VectorApp.getInstance()) {
+            Log.e(LOG_TAG, "## getRegistrationToken() : No active application", new Exception("StackTrace"));
+        } else {
+            try {
+                if (null == FirebaseApp.initializeApp(VectorApp.getInstance())) {
+                    Log.e(LOG_TAG, "## getRegistrationToken() : cannot initialise FirebaseApp", new Exception("StackTrace"));
+                }
+            } catch (Exception e) {
+                Log.e(LOG_TAG, "## getRegistrationToken() : init failed " + e.getMessage(), e);
+            }
+        }
+
+        // And we protect the call to getToken()
+        try {
+            registrationToken = FirebaseInstanceId.getInstance().getToken();
+            Log.d(LOG_TAG, "## getRegistrationToken(): " + registrationToken);
+        } catch (Exception e) {
+            Log.e(LOG_TAG, "## getRegistrationToken() : failed " + e.getMessage(), e);
+        }
+
         return registrationToken;
     }
 
     /**
      * Clear the registration token.
      */
-    public static void clearRegistrationToken() {
+    static void clearRegistrationToken() {
         try {
             FirebaseInstanceId.getInstance().deleteInstanceId();
         } catch (Exception e) {

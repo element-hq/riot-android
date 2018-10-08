@@ -89,19 +89,18 @@ public class ImageSizeSelectionDialogFragment extends DialogFragment {
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         super.onCreateView(inflater, container, savedInstanceState);
-        View v = inflater.inflate(R.layout.fragment_dialog_accounts_list, container, false);
-        ListView listView = v.findViewById(R.id.listView_accounts);
+        View v = inflater.inflate(R.layout.dialog_base_list_view, container, false);
+        ListView listView = v.findViewById(R.id.list_view);
 
         ImageSizesAdapter adapter = new ImageSizesAdapter(getActivity(), R.layout.adapter_item_image_size);
 
         if (null != mEntries) {
             adapter.addAll(mEntries);
         }
-        listView.setAdapter(adapter);
 
+        listView.setAdapter(adapter);
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {

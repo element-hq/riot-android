@@ -680,10 +680,9 @@ Jesteś pewien?</string>
     <string name="ssl_expected_existing_expl">Certyfikat zmienił stan z zaufanego na niezaufany. jest to NIEZWYKLE RZADKIE. Rekomendowane jest NIE AKCEPTOWANIE nowego certyfikatu.</string>
     <string name="ssl_only_accept">akceptuj certyfikat TYLKO wtedy gdy administrator opublikował odcisk palca pasujący do tego powyżej.</string>
     <string name="malformed_id">Uszkodzony ID. Czy to powinien być adres e-mail lub Matrix ID podobny do \'@localpart:domain\'</string>
-    <string name="room_displayname_many_members">%1$s i %2$s</string>
-    <plurals name="others">
-	<item quantity="one">Jeden inny</item>
-	<item quantity="few">Kilku innych</item>
+    <plurals name="room_displayname_three_and_more_members">
+	<item quantity="one">%1$s i jeden inny</item>
+	<item quantity="few">%1$s i kilku innych</item>
 	<item quantity="many">%d innych</item>
 	<item quantity="other"/>
 </plurals>
