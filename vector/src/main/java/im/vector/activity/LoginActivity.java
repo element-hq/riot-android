@@ -89,7 +89,7 @@ import im.vector.services.EventStreamService;
 import im.vector.util.PhoneNumberUtils;
 import im.vector.util.ThemeUtils;
 import im.vector.util.ViewUtilKt;
-import kotlin.Pair;
+import kotlin.Triple;
 
 /**
  * Displays the login screen.
@@ -345,8 +345,8 @@ public class LoginActivity extends MXCActionBarActivity implements RegistrationM
 
     @NotNull
     @Override
-    public Pair getOtherThemes() {
-        return new Pair(R.style.LoginAppTheme_Dark, R.style.LoginAppTheme_Black);
+    public Triple getOtherThemes() {
+        return new Triple(R.style.LoginAppTheme_Dark, R.style.LoginAppTheme_Black, R.style.LoginAppTheme_Status );
     }
 
     @Override

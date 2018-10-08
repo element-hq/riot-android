@@ -25,7 +25,7 @@ import butterknife.BindView;
 import butterknife.OnClick;
 import im.vector.R;
 import im.vector.adapters.MediaPreviewAdapter;
-import kotlin.Pair;
+import kotlin.Triple;
 
 /**
  * Previews media selected to be send.
@@ -62,8 +62,8 @@ public class MediaPreviewerActivity extends MXCActionBarActivity implements Medi
 
     @NotNull
     @Override
-    public Pair<Integer, Integer> getOtherThemes() {
-        return new Pair<>(R.style.AppTheme_NoActionBar_Dark, R.style.AppTheme_NoActionBar_Black);
+    public Triple<Integer, Integer, Integer> getOtherThemes() {
+        return new Triple<>(R.style.AppTheme_NoActionBar_Dark, R.style.AppTheme_NoActionBar_Black, R.style.AppTheme_NoActionBar_Status);
     }
 
     @SuppressLint("ClickableViewAccessibility")

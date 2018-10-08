@@ -38,7 +38,7 @@ import im.vector.R;
 import im.vector.VectorApp;
 import im.vector.adapters.LanguagesAdapter;
 import im.vector.util.ThemeUtils;
-import kotlin.Pair;
+import kotlin.Triple;
 
 public class LanguagePickerActivity extends VectorAppCompatActivity implements LanguagesAdapter.OnSelectLocaleListener, SearchView.OnQueryTextListener {
 
@@ -64,8 +64,8 @@ public class LanguagePickerActivity extends VectorAppCompatActivity implements L
 
     @NotNull
     @Override
-    public Pair getOtherThemes() {
-        return new Pair(R.style.CountryPickerTheme_Dark, R.style.CountryPickerTheme_Black);
+    public Triple getOtherThemes() {
+        return new Triple(R.style.CountryPickerTheme_Dark, R.style.CountryPickerTheme_Black, R.style.CountryPickerTheme_Status);
     }
 
     @Override
