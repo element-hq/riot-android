@@ -172,6 +172,8 @@
         <item name="android:editTextColor">?attr/riot_primary_text_color</item>
     </style>
 
+    <style name="Vector_Lock_Status" parent="Vector_Lock_Light" />
+
     <style name="Vector_Lock_Dark" parent="Theme.Vector.EmptyDark">
         <item name="android:background">?attr/riot_primary_background_color</item>
         <item name="android:textColor">?attr/primary_text_color</item>
