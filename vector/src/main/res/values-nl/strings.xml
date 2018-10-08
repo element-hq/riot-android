@@ -1086,4 +1086,6 @@ Let op: deze actie zal de app opnieuw opstarten, en kan enige tijd kosten.</stri
     <string name="resource_limit_soft_contact">Alstublieft %s om dit limiet te verhogen.</string>
     <string name="resource_limit_hard_contact">Alstublieft %s om deze service te blijven gebruiken.</string>
 
-</resources>
+<string name="dialog_title_error">Foutmelding</string>
+
+    </resources>

@@ -355,7 +355,7 @@
     <string name="ssl_cert_new_account_expl">Ако администраторът на сървъра е обявил, че това е нормално, уверете се, че отпечатъкът по-долу съвпада с този, предоставен от него.</string>
     <string name="ssl_unexpected_existing_expl">Сертификатът е различен от този, на който телефонът Ви се доверява. Това е МНОГО НЕОБИЧАЙНО. Препоръчваме да НЕ ПРИЕМАТЕ този нов серфитикат.</string>
     <string name="ssl_expected_existing_expl">Сертификатът се промени от такъв, който е бил доверен, на такъв който вече не е. Сървърът може да е подновил своя сертификат. Свържете се с администратора за правилния отпечатък.</string>
-    <string name="ssl_only_accept">Приемайте сертификата САМО ако администратора на сървъра е публикувал отпечатък, който съвпада с този по-горе.</string>
+    <string name="ssl_only_accept">Приемайте сертификата само ако администратора на сървъра е публикувал отпечатък, който съвпада с този по-горе.</string>
     <string name="ssl_trust">Довери се</string>
     <string name="ssl_do_not_trust">Не се доверявай</string>
     <string name="room_details_title">Информация</string>
@@ -511,9 +511,9 @@
     <string name="account_phone_number_already_used_error">Този телефонен номер е вече зает</string>
 
     <string name="settings_change_password">Смяна на парола</string>
-    <string name="settings_old_password">стара парола</string>
-    <string name="settings_new_password">нова парола</string>
-    <string name="settings_confirm_password">потвърди парола</string>
+    <string name="settings_old_password">Стара парола</string>
+    <string name="settings_new_password">Нова парола</string>
+    <string name="settings_confirm_password">Потвърди парола</string>
     <string name="settings_fail_to_update_password">Неуспешно обновяване на парола</string>
     <string name="settings_password_updated">Вашата парола беше обновена</string>
     <string name="settings_unignore_user">Показване на всички съобщения от %s?
@@ -593,7 +593,7 @@
 
     <string name="room_settings_addresses_invalid_format_dialog_title">Невалиден формат на псевдонима</string>
     <string name="room_settings_addresses_invalid_format_dialog_body">\'%s\' не е валиден формат на псевдоним</string>
-    <string name="room_settings_addresses_disable_main_address_prompt_msg">Няма зададен основен адрес. Адресът по подразбиране за тази стая ще бъде избран на случаен принцип</string>
+    <string name="room_settings_addresses_disable_main_address_prompt_msg">Няма да има зададен основен адрес за тази стая.</string>
     <string name="room_settings_addresses_disable_main_address_prompt_title">Предупреждение за основен адрес</string>
 
     <string name="room_settings_set_main_address">Задай като основен адрес</string>
@@ -670,9 +670,7 @@
 
     <string name="encryption_information_verify_device">Потвърди устройството</string>
     <string name="encryption_information_verify_device_warning">За да потвърдите, че на това устройство може да се вярва, моля свържете се със собственика му по друг начин (напр. на живо или чрез телефонен разговор) и го попитайте дали ключът, който вижда в настройките на потребителя за това устройство, съвпада с ключа по-долу:</string>
-    <string name="encryption_information_verify_device_warning2">Ако съвпада, моля натиснете бутона за потвърждение по-долу.
-Ако не съвпада, то тогава някой друг имитира това устройство и вероятно бихте искали да го вкарате в черния списък.
-В бъдеще този процес на потвърждение ще бъде по-лесен.</string>
+    <string name="encryption_information_verify_device_warning2">Ако съвпада, моля натиснете бутона за потвърждение по-долу. Ако не съвпада, то тогава някой друг имитира това устройство и вероятно бихте искали да го вкарате в черния списък. В бъдеще този процес на потвърждение ще бъде по-лесен.</string>
     <string name="encryption_information_verify_key_match">Потвърждавам, че ключовете съвпадат</string>
 
     <string name="e2e_enabling_on_app_update">Riot поддържа шифроване от край до край, но за да го включите трябва да влезете в профила си отново.
@@ -1036,5 +1034,13 @@
 
     <string name="resource_limit_soft_contact">Моля, %s, за да се увеличи лимита.</string>
     <string name="resource_limit_hard_contact">Моля, %s, за да продължите да използвате услугата.</string>
+
+<string name="dialog_title_error">Грешка</string>
+
+    <string name="settings_lazy_loading_title">Постепенно зареждане на членове в стаи</string>
+    <string name="settings_lazy_loading_description">Подобрява производителността като зарежда членовете в стаите при първи преглед</string>
+    <string name="error_lazy_loading_not_supported_by_home_server">Сървърът Ви все още не поддържа постепенно зареждане на членовете в стаи. Опитайте по-късно.</string>
+
+    <string name="unknown_error">Съжаляваме, възникна грешка</string>
 
 </resources>

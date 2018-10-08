@@ -357,7 +357,7 @@ Biztos vagy benne?</string>
     <string name="ssl_cert_new_account_expl">Ha a szerver adminisztrátora szerint ez várható volt, akkor bizonyosodj meg róla, hogy az alábbi ujjlenyomat megegyezik a tőle kapottal.</string>
     <string name="ssl_unexpected_existing_expl">A tanúsítvány eltér attól, amit a telefonoddal megbízhatónak jelöltél. Ez RENDKÍVÜL SZOKATLAN. Javasoljuk, hogy NE FOGADD EL ezt az új tanúsítványt.</string>
     <string name="ssl_expected_existing_expl">Egy korábban megbízhatónak jelölt tanúsítvány megváltozott. Lehet, hogy a szerver frissítette a tanúsítványát. Lépj kapcsolatba a szerver adminisztrátorával és egyeztesd az ujjlenyomatot.</string>
-    <string name="ssl_only_accept">CSAK AKKOR fogadd el a tanúsítványt, ha a szerver adminisztrátortól kapott ujjlenyomat megegyezik a fentivel.</string>
+    <string name="ssl_only_accept">Csak akkor fogadd el a tanúsítványt, ha a szerver adminisztrátortól kapott ujjlenyomat megegyezik a fentivel.</string>
     <string name="ssl_fingerprint_example">00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00</string>
 
     <string name="room_details_title">Szoba adatai</string>
@@ -487,8 +487,8 @@ A folytatáshoz írd be a jelszavad.</string>
 
     <string name="settings_change_password">Jelszó megváltoztatása</string>
     <string name="settings_old_password">Régi jelszó</string>
-    <string name="settings_new_password">új jelszó</string>
-    <string name="settings_confirm_password">ellenőrizd a jelszavad</string>
+    <string name="settings_new_password">Új jelszó</string>
+    <string name="settings_confirm_password">Ellenőrizd a jelszavad</string>
     <string name="settings_fail_to_update_password">Jelszó frissítése sikertelen</string>
     <string name="settings_password_updated">A jelszavad sikeresen frissítésre került</string>
     <string name="settings_unignore_user">"Az összes üzenet mutatása %s -tól/-től?
@@ -560,7 +560,7 @@ Vedd figyelembe, hogy az alkalmazás újraindul  ami sok időt vehet igénybe."<
 
     <string name="room_settings_addresses_invalid_format_dialog_title">Helytelen fedőnév formátum</string>
     <string name="room_settings_addresses_invalid_format_dialog_body">\'%s\' nem egy helyes formátum egy fedőnévnek</string>
-    <string name="room_settings_addresses_disable_main_address_prompt_msg">Nem lesz fő címed megadva. Az alapértelmezett fő cím ennek a szobának véletlenszerűen lesz kiválasztva</string>
+    <string name="room_settings_addresses_disable_main_address_prompt_msg">Nem lesz elsődleges címe a szobának.</string>
     <string name="room_settings_addresses_disable_main_address_prompt_title">Fő cím figyelmeztetések</string>
 
     <string name="room_settings_set_main_address">Fő címnek állítás</string>
@@ -634,9 +634,7 @@ Figyelmeztetés: ez a fájl törlésre kerülhet, ha az alkalmazást törli.</st
 
     <string name="encryption_information_verify_device">Eszköz hitelesítése</string>
     <string name="encryption_information_verify_device_warning">Hogy ellenőrizni lehessen, hogy ez az eszköz megbízható, kérlek használj más kommunikáció módot a tulajdonossal (pl.: személyesen vagy telefonon keresztül) és kérdezd meg hogy a kulcs amit lát a Felhasználói Beállítások alatt megegyezik-e az alábbi kulccsal:</string>
-    <string name="encryption_information_verify_device_warning2">Ha egyezik, nyomja meg a hitelesítés gombot.
-Ha nem, akkor valaki más elfogta ezt az eszközt és érdemes lenne tiltólistára tenni.
-A jövőben ez a hitelesítési mód kényelmesebbé lesz téve.</string>
+    <string name="encryption_information_verify_device_warning2">Ha egyezik, nyomja meg a hitelesítés gombot. Ha nem, akkor valaki más elfogta ezt az eszközt és érdemes lenne tiltólistára tenni. A jövőben ez a hitelesítési mód kényelmesebbé lesz téve.</string>
     <string name="encryption_information_verify_key_match">Hitelesítem, hogy a kulcsok egyeznek</string>
 
     <string name="e2e_enabling_on_app_update">Mostantól a Riot támogatja a végtől végig titkosítást de előtte újra be kell jelentkezned, hogy bekapcsold.
@@ -1050,5 +1048,13 @@ Vedd figyelembe, hogy az alkalmazás újraindul ami sok időt vehet igénybe.</s
 
     <string name="resource_limit_soft_contact">Kérlek %s, hogy ez a korlát megemelésre kerüljön.</string>
     <string name="resource_limit_hard_contact">Kérlek %s, hogy tovább tudd használni ezt a szolgáltatást.</string>
+
+<string name="dialog_title_error">Hiba</string>
+
+    <string name="settings_lazy_loading_title">Szoba tagság késleltetett betöltése</string>
+    <string name="settings_lazy_loading_description">Teljesítmény növelése a szoba tagjainak késleltetett betöltésével</string>
+    <string name="error_lazy_loading_not_supported_by_home_server">A Matrix szervered jelenleg nem támogatja a szoba tagság késleltetett betöltését. Próbáld meg később.</string>
+
+    <string name="unknown_error">Ne haragudj, hiba történt</string>
 
 </resources>

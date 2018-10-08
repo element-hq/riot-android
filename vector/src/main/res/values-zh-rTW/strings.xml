@@ -721,7 +721,7 @@
 
     <string name="room_settings_addresses_invalid_format_dialog_title">別名格式錯誤</string>
     <string name="room_settings_addresses_invalid_format_dialog_body">\'%s\' 不是有效的別名格式</string>
-    <string name="room_settings_addresses_disable_main_address_prompt_msg">您沒有指定主地址。 該聊天室的主地址將會隨機選擇</string>
+    <string name="room_settings_addresses_disable_main_address_prompt_msg">您沒有為此聊天室指定主要地址。</string>
     <string name="room_settings_addresses_disable_main_address_prompt_title">主地址警告</string>
 
     <string name="room_settings_set_main_address">設定為主地址</string>
@@ -798,9 +798,7 @@
 
     <string name="encryption_information_verify_device">驗證裝置</string>
     <string name="encryption_information_verify_device_warning">要驗證此裝置是否可信，請使用其他方式（例如：面對面或是打電話）聯絡它的擁有者並詢問他們在使用者設定中看到此裝置的金鑰是否與下列的金鑰相符：</string>
-    <string name="encryption_information_verify_device_warning2">如果符合的話，按下下方的驗證按鈕。
-若果沒有得話，那麼其他地方的某個人可能正在攔截這個裝置，您應該將其列入黑名單。
-未來，這個驗證程序會變得更家複雜。</string>
+    <string name="encryption_information_verify_device_warning2">如果符合的話，按下下方的驗證按鈕。若果沒有得話，那麼其他地方的某個人可能正在攔截這個裝置，您應該將其列入黑名單。未來，這個驗證程序會變得更加複雜。</string>
     <string name="encryption_information_verify_key_match">我驗證金鑰相符</string>
 
     <string name="e2e_enabling_on_app_update">Riot 目前支援點對點加密，但您需要重新登入來啟用他。
@@ -1009,5 +1007,13 @@ Matrix 中的消息可見度類似于電子郵件。我們忘記您的郵件意�
 
     <string name="resource_limit_soft_contact">請 %s 以讓此限制增加。</string>
     <string name="resource_limit_hard_contact">請 %s 以繼續使用此服務。</string>
+
+<string name="dialog_title_error">錯誤</string>
+
+    <string name="settings_lazy_loading_title">延遲載入聊天室成員</string>
+    <string name="settings_lazy_loading_description">透過僅載入在第一次看到的地方的聊天室成員來增進效能</string>
+    <string name="error_lazy_loading_not_supported_by_home_server">您的家伺服器尚不支援延遲載入聊天室成員。請稍後再試。</string>
+
+    <string name="unknown_error">抱歉，遇到錯誤</string>
 
 </resources>

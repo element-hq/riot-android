@@ -40,7 +40,7 @@
     <string name="_continue">继续</string>
 
     <string name="join">加入</string>
-    <string name="preview">预览</string>
+    <string name="preview">查看</string>
     <string name="reject">拒绝</string>
 
     <string name="room_preview_invitation_format">%s 邀请您加入这个聊天室</string>
@@ -784,7 +784,7 @@
     <string name="room_settings_mute">静音</string>
     <string name="room_settings_add_homescreen_shortcut">添加主屏幕快捷方式</string>
 
-    <string name="settings_inline_url_preview">默认启用文内 URL 预览</string>
+    <string name="settings_inline_url_preview">默认启用链接预览</string>
     <string name="settings_vibrate_on_mention">提及他人时震动</string>
 
     <string name="room_settings_room_notifications_title">通知</string>
