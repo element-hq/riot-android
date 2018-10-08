@@ -47,7 +47,7 @@ class VectorWebViewActivity : VectorAppCompatActivity() {
      * Life cycle
      * ========================================================================================== */
 
-    override fun getOtherThemes() = Pair(R.style.AppTheme_NoActionBar_Dark, R.style.AppTheme_NoActionBar_Black)
+    override fun getOtherThemes() = Triple(R.style.AppTheme_NoActionBar_Dark, R.style.AppTheme_NoActionBar_Black, R.style.AppTheme_NoActionBar_Status)
 
     override fun getLayoutRes() = R.layout.activity_vector_web_view
 
