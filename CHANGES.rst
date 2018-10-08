@@ -2,7 +2,7 @@ Changes in Riot 0.8.16 (2018-XX-XX)
 ===================================================
 
 MatrixSdk:
- - Upgrade to version 0.X.Y.
+ - Upgrade to version 0.9.10.
 
 Features:
  - Manage blue banner case of server quota notices (#2547)
