@@ -1,4 +1,4 @@
-Changes in Riot 0.8.16 (2018-XX-XX)
+Changes in Riot 0.8.16 (2018-10-08)
 ===================================================
 
 MatrixSdk:
@@ -22,12 +22,6 @@ Bugfix:
  - Fix issue on "Resend all" action (#2569)
  - Fix messages vanishing when resending them (#2508)
  - Remove delay for / completion (#2576)
-
-Translations:
- -
-
-Build:
- -
 
 Changes in Riot 0.8.15 (2018-08-30)
 ===================================================
