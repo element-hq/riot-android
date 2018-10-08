@@ -1878,6 +1878,11 @@ public class VectorHomeActivity extends VectorAppCompatActivity implements Searc
     }
 
     private void refreshSlidingMenu() {
+        if (navigationView == null) {
+            // Activity is not resumed
+            return;
+        }
+
         Menu menuNav = navigationView.getMenu();
         MenuItem aboutMenuItem = menuNav.findItem(R.id.sliding_menu_version);
 
