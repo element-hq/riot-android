@@ -34,7 +34,7 @@ import im.vector.R;
 import im.vector.activity.util.RequestCodesKt;
 import im.vector.gcm.GcmRegistrationManager;
 import im.vector.util.SystemUtilsKt;
-import kotlin.Pair;
+import kotlin.Triple;
 
 /*
  * This activity allows the user to choose a notifications privacy policy.
@@ -70,8 +70,8 @@ public class NotificationPrivacyActivity extends VectorAppCompatActivity {
 
     @NotNull
     @Override
-    public Pair getOtherThemes() {
-        return new Pair(R.style.CountryPickerTheme_Dark, R.style.CountryPickerTheme_Black);
+    public Triple getOtherThemes() {
+        return new Triple(R.style.CountryPickerTheme_Dark, R.style.CountryPickerTheme_Black, R.style.CountryPickerTheme_Status);
     }
 
     @Override

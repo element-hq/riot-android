@@ -48,7 +48,7 @@ import im.vector.Matrix;
 import im.vector.R;
 import im.vector.adapters.RoomDirectoryAdapter;
 import im.vector.util.RoomDirectoryData;
-import kotlin.Pair;
+import kotlin.Triple;
 
 public class RoomDirectoryPickerActivity extends VectorAppCompatActivity implements RoomDirectoryAdapter.OnSelectRoomDirectoryListener {
     // LOG TAG
@@ -80,8 +80,8 @@ public class RoomDirectoryPickerActivity extends VectorAppCompatActivity impleme
 
     @NotNull
     @Override
-    public Pair getOtherThemes() {
-        return new Pair(R.style.DirectoryPickerTheme_Dark, R.style.DirectoryPickerTheme_Black);
+    public Triple getOtherThemes() {
+        return new Triple(R.style.DirectoryPickerTheme_Dark, R.style.DirectoryPickerTheme_Black, R.style.DirectoryPickerTheme_Status);
     }
 
     @Override

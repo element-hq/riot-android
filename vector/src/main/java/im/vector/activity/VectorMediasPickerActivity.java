@@ -92,7 +92,7 @@ import im.vector.util.PermissionsToolsKt;
 import im.vector.util.ViewUtilKt;
 import im.vector.view.RecentMediaLayout;
 import im.vector.view.VideoRecordView;
-import kotlin.Pair;
+import kotlin.Triple;
 
 /**
  * VectorMediasPickerActivity is used to take a photo or to send an old one.
@@ -223,8 +223,8 @@ public class VectorMediasPickerActivity extends MXCActionBarActivity implements 
 
     @NotNull
     @Override
-    public Pair getOtherThemes() {
-        return new Pair(R.style.AppTheme_NoActionBar_FullScreen_Dark, R.style.AppTheme_NoActionBar_FullScreen_Black);
+    public Triple getOtherThemes() {
+        return new Triple(R.style.AppTheme_NoActionBar_FullScreen_Dark, R.style.AppTheme_NoActionBar_FullScreen_Black, R.style.AppTheme_NoActionBar_FullScreen_Status);
     }
 
     @Override
