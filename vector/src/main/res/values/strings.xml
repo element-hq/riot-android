@@ -851,14 +851,17 @@
     <string name="encryption_export_room_keys">Export room keys</string>
     <string name="encryption_export_room_keys_summary">Export the keys to a local file</string>
     <string name="encryption_export_export">Export</string>
-    <string name="encryption_export_enter_passphrase">Enter passphrase</string>
+    <string name="encryption_export_notice">Please create a passphrase to encrypt the exported keys. You will need to enter the same passphrase to be able to import the keys.</string>
+    <string name="encryption_export_create_passphrase">Create passphrase</string>
     <string name="encryption_export_confirm_passphrase">Confirm passphrase</string>
+    <string name="encryption_export_passphrase_dont_match">Passphrases must match</string>
     <string name="encryption_export_saved_as">The E2E room keys have been saved to \'%s\'.\n\nWarning: this file may be deleted if the application is uninstalled.</string>
 
     <string name="encryption_import_e2e_room_keys">Import E2E room keys</string>
     <string name="encryption_import_room_keys">Import room keys</string>
     <string name="encryption_import_room_keys_summary">Import the keys from a local file</string>
     <string name="encryption_import_import">Import</string>
+    <string name="encryption_import_enter_passphrase">Enter passphrase</string>
     <string name="encryption_never_send_to_unverified_devices_title">Encrypt to verified devices only</string>
     <string name="encryption_never_send_to_unverified_devices_summary">Never send encrypted messages to unverified devices from this device</string>
 

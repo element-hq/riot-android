@@ -387,7 +387,7 @@
     <string name="encryption_export_room_keys">导出聊天室密钥</string>
     <string name="encryption_export_room_keys_summary">导出密钥到本地文件</string>
     <string name="encryption_export_export">导出</string>
-    <string name="encryption_export_enter_passphrase">输入密码</string>
+    <string name="encryption_import_enter_passphrase">输入密码</string>
     <string name="encryption_export_confirm_passphrase">确认密码</string>
     <string name="encryption_export_saved_as">聊天室的端对端密钥已经被保存到“%s”。
 

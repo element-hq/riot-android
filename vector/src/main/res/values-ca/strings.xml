@@ -699,7 +699,7 @@
     <string name="encryption_export_room_keys">Exporta les claus de la sala</string>
     <string name="encryption_export_room_keys_summary">Exporta les claus a un fitxer local</string>
     <string name="encryption_export_export">Exporta</string>
-    <string name="encryption_export_enter_passphrase">Introduïu una contrasenya</string>
+    <string name="encryption_import_enter_passphrase">Introduïu una contrasenya</string>
     <string name="encryption_export_confirm_passphrase">Confirmeu la contrasenya</string>
     <string name="encryption_export_saved_as">Les claus E2E de la sala s\'han desat a \'%s\'</string>
 

@@ -666,7 +666,7 @@ Mensagens cifradas não serão visíveis para clientes que não ainda não imple
     <string name="encryption_export_room_keys">Exportar chaves de sala</string>
     <string name="encryption_export_room_keys_summary">Exportar as chaves para um ficheiro local</string>
     <string name="encryption_export_export">Exportar</string>
-    <string name="encryption_export_enter_passphrase">Insira a frase secreta</string>
+    <string name="encryption_import_enter_passphrase">Insira a frase secreta</string>
     <string name="encryption_export_confirm_passphrase">Confirme a frase secreta</string>
     <string name="encryption_export_saved_as">As chaves E2E da sala foram guardadas em \'%s\'</string>
 

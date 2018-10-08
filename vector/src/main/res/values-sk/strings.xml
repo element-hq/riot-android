@@ -650,7 +650,7 @@ Ak v miestnosti povolíte šifrovanie, šifrovanie nie je viac možné zakázať
     <string name="encryption_export_room_keys">Exportovať kľúče miestností</string>
     <string name="encryption_export_room_keys_summary">Exportovať kľúče miestností do lokálneho súboru</string>
     <string name="encryption_export_export">Exportovať</string>
-    <string name="encryption_export_enter_passphrase">Zadajte heslo</string>
+    <string name="encryption_import_enter_passphrase">Zadajte heslo</string>
     <string name="encryption_export_confirm_passphrase">Potvrďte heslo</string>
     <string name="encryption_export_saved_as">Šifrovacie kľúče miestností boli uložené do %s
 

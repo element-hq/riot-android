@@ -687,7 +687,7 @@ I messaggi criptati non saranno visibili ai riceventi che non hanno ancora imple
     <string name="encryption_export_room_keys">Esporta le chiavi delle stanze</string>
     <string name="encryption_export_room_keys_summary">Esporta le chiavi in un file locale</string>
     <string name="encryption_export_export">Esporta</string>
-    <string name="encryption_export_enter_passphrase">Inserisci frase d\'accesso (passphrase)</string>
+    <string name="encryption_import_enter_passphrase">Inserisci frase d\'accesso (passphrase)</string>
     <string name="encryption_export_confirm_passphrase">Conferma frase d\'accesso (passphrase)</string>
     <string name="encryption_export_saved_as">Le chiavi da-utente-a-utente della stanza sono state salvate su \'%s\'.
 

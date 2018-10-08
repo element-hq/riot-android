@@ -879,7 +879,7 @@ Pesan terenkripsi tidak akan terlihat di klien yang belum mengimplementasikan en
     <string name="encryption_export_room_keys">Ekspor ruang kunci</string>
     <string name="encryption_export_room_keys_summary">Ekspor kunci ke berkas lokal</string>
     <string name="encryption_export_export">Ekspor</string>
-    <string name="encryption_export_enter_passphrase">Masukkan kata sandi</string>
+    <string name="encryption_import_enter_passphrase">Masukkan kata sandi</string>
     <string name="encryption_export_confirm_passphrase">Tegaskan kata sandi</string>
     <string name="encryption_export_saved_as">Kunci ruang terenkripsi telah disimpan di \'%s\'.
 

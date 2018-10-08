@@ -2503,12 +2503,24 @@ class VectorSettingsPreferencesFragment : PreferenceFragment(), SharedPreference
                 }
 
                 override fun onTextChanged(s: CharSequence, start: Int, before: Int, count: Int) {
-                    exportButton.isEnabled = !TextUtils.isEmpty(passPhrase1EditText.text)
-                            && TextUtils.equals(passPhrase1EditText.text, passPhrase2EditText.text)
+
                 }
 
                 override fun afterTextChanged(s: Editable) {
-
+                    when {
+                        TextUtils.isEmpty(passPhrase1EditText.text) -> {
+                            exportButton.isEnabled = false
+                            passPhrase2EditText.error = null
+                        }
+                        TextUtils.equals(passPhrase1EditText.text, passPhrase2EditText.text) -> {
+                            exportButton.isEnabled = true
+                            passPhrase2EditText.error = null
+                        }
+                        else -> {
+                            exportButton.isEnabled = false
+                            passPhrase2EditText.error = getString(R.string.encryption_export_passphrase_dont_match)
+                        }
+                    }
                 }
             }
 

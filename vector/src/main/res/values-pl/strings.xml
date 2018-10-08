@@ -498,7 +498,7 @@ Wprowadź hasło, aby kontynuować.</string>
     <string name="encryption_information_ed25519_fingerprint">Odcisk palca Ed25519</string>
 
     <string name="encryption_export_export">Eksportuj</string>
-    <string name="encryption_export_enter_passphrase">Wprowadź hasło</string>
+    <string name="encryption_import_enter_passphrase">Wprowadź hasło</string>
     <string name="encryption_export_confirm_passphrase">Potwierdź hasło</string>
     <string name="encryption_information_not_verified">Nie zweryfikowano</string>
     <string name="encryption_information_verified">Zweryfikowano</string>

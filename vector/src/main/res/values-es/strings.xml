@@ -670,7 +670,7 @@ Los mensajes cifrados no serán visibles en clientes que aún no implementen el 
     <string name="encryption_export_room_keys">Exportar claves de sala</string>
     <string name="encryption_export_room_keys_summary">Exportar las claves a un archivo local</string>
     <string name="encryption_export_export">Exportar</string>
-    <string name="encryption_export_enter_passphrase">Ingresar frase de contraseña</string>
+    <string name="encryption_import_enter_passphrase">Ingresar frase de contraseña</string>
     <string name="encryption_export_confirm_passphrase">Confirmar frase de contraseña</string>
     <string name="encryption_export_saved_as">Las claves de salas con Cifrado de Extremo a Extremo se guardaron en \'%s\'.
 

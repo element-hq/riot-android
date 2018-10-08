@@ -620,7 +620,7 @@ Kontuan izan ekintza honek aplikazioa berrabiaraziko duela eta denbora bat behar
     <string name="encryption_export_e2e_room_keys">Esportatu gelako E2E gakoak</string>
     <string name="encryption_export_room_keys">Esportatu gelako gakoak</string>
     <string name="encryption_export_export">Esportatu</string>
-    <string name="encryption_export_enter_passphrase">Idatzi pasaesaldia</string>
+    <string name="encryption_import_enter_passphrase">Idatzi pasaesaldia</string>
     <string name="encryption_export_confirm_passphrase">Berretsi pasaesaldia</string>
     <string name="encryption_export_saved_as">Gelako E2E gakoak \'%s\' helbidean gorde dira
 

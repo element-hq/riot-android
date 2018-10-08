@@ -643,7 +643,7 @@
     <string name="encryption_export_room_keys">Експортиране на ключове за стая</string>
     <string name="encryption_export_room_keys_summary">Експортирай ключовете в локален файл</string>
     <string name="encryption_export_export">Експортирай</string>
-    <string name="encryption_export_enter_passphrase">Въведи парола</string>
+    <string name="encryption_import_enter_passphrase">Въведи парола</string>
     <string name="encryption_export_confirm_passphrase">Потвърди парола</string>
     <string name="encryption_export_saved_as">E2E ключовете бяха запазени в \'%s\'
 

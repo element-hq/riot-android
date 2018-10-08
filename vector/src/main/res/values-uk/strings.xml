@@ -671,7 +671,7 @@
     <string name="encryption_export_room_keys">Експортувати ключі кімнати</string>
     <string name="encryption_export_room_keys_summary">Експортувати ключі до локального файлу</string>
     <string name="encryption_export_export">Експорт</string>
-    <string name="encryption_export_enter_passphrase">Введіть парольну фразу</string>
+    <string name="encryption_import_enter_passphrase">Введіть парольну фразу</string>
     <string name="encryption_export_confirm_passphrase">Підтвердіть парольну фразу</string>
     <string name="encryption_export_saved_as">E2E ключі кімнати збережено у \'%s\'</string>
 

@@ -14,7 +14,7 @@ Other changes:
  -
 
 Bugfix:
- -
+ - When exporting E2E keys, it isn't clear that you are creating a new password (#2626)
 
 Translations:
  -
