@@ -53,6 +53,7 @@
     <color name="default_text_hint_color_dark">#CCDDDDDD</color>
     <color name="default_text_light_color_dark">#A4A4A4</color>
     <color name="default_button_light_text_dark">#FF747474</color>
+    <color name="riot_primary_text_color_status">#70808D</color>
 
     <!-- Quote Colors -->
     <color name="quote_strip_color">#FFDDDDDD</color>
