@@ -18,6 +18,7 @@ Bugfix:
  - Can't change room directory server (#2611)
  - Reply get's lost when moving app in background and back (#2581)
  - Android 8: crash on device Boot (#2615)
+ - Avoid creation of Gson object (#2608)
 
 Translations:
  -
