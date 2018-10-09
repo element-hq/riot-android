@@ -9,6 +9,7 @@ Features:
 
 Improvements:
  - Use LocalBroadcastManager when applicable (#2595)
+ - Menu version copies version number to clipboard (#2570)
 
 Other changes:
  -

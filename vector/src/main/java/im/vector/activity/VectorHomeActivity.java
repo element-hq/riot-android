@@ -1773,6 +1773,11 @@ public class VectorHomeActivity extends VectorAppCompatActivity implements Searc
             @Override
             public void onDrawerClosed(View view) {
                 switch (mSlidingMenuIndex) {
+                    case R.id.sliding_menu_messages: {
+                        // no action
+                        break;
+                    }
+
                     case R.id.sliding_menu_settings: {
                         // launch the settings activity
                         final Intent settingsIntent = new Intent(VectorHomeActivity.this, VectorSettingsActivity.class);
@@ -1828,6 +1833,12 @@ public class VectorHomeActivity extends VectorAppCompatActivity implements Searc
                                 .setNegativeButton(R.string.cancel, null)
                                 .show();
 
+                        break;
+                    }
+
+                    case R.id.sliding_menu_version: {
+                        SystemUtilsKt.copyToClipboard(VectorHomeActivity.this,
+                                getString(R.string.room_sliding_menu_version_x, VectorUtils.getApplicationVersion(VectorHomeActivity.this)));
                         break;
                     }
 
@@ -1890,7 +1901,7 @@ public class VectorHomeActivity extends VectorAppCompatActivity implements Searc
         MenuItem aboutMenuItem = menuNav.findItem(R.id.sliding_menu_version);
 
         if (null != aboutMenuItem) {
-            String version = getString(R.string.room_sliding_menu_version) + " " + VectorUtils.getApplicationVersion(this);
+            String version = getString(R.string.room_sliding_menu_version_x, VectorUtils.getApplicationVersion(this));
             aboutMenuItem.setTitle(version);
         }
 

@@ -71,6 +71,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.regex.Pattern;
 
+import im.vector.Matrix;
 import im.vector.R;
 import im.vector.VectorApp;
 import im.vector.adapters.ParticipantAdapterItem;
@@ -687,7 +688,7 @@ public class VectorUtils {
      * @return the version. an empty string is not found.
      */
     public static String getApplicationVersion(final Context context) {
-        return im.vector.Matrix.getInstance(context).getVersion(false, true);
+        return Matrix.getInstance(context).getVersion(false, true);
     }
 
     /**
