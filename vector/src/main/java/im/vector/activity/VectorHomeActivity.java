@@ -44,6 +44,7 @@ import android.support.design.widget.TextInputEditText;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.content.ContextCompat;
+import android.support.v4.content.LocalBroadcastManager;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
@@ -1265,7 +1266,7 @@ public class VectorHomeActivity extends VectorAppCompatActivity implements Searc
                     myBroadcastIntent.setAction(VectorUniversalLinkReceiver.BROADCAST_ACTION_UNIVERSAL_LINK_RESUME);
                     myBroadcastIntent.putExtras(getIntent().getExtras());
                     myBroadcastIntent.putExtra(VectorUniversalLinkReceiver.EXTRA_UNIVERSAL_LINK_SENDER_ID, VectorUniversalLinkReceiver.HOME_SENDER_ID);
-                    sendBroadcast(myBroadcastIntent);
+                    LocalBroadcastManager.getInstance(this).sendBroadcast(myBroadcastIntent);
 
                     showWaitingView();
 
