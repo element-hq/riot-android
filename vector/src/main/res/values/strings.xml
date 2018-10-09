@@ -12,7 +12,6 @@
     <string name="black_them">Black Theme</string>
     <string name="status_theme">Status.im Theme</string>
 
-
     <!-- permanent notification subtitle -->
     <string name="notification_sync_in_progress">Synchronising</string>
     <string name="notification_listen_for_events">Listen for events</string>

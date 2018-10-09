@@ -32,6 +32,7 @@
         <item>light</item>
         <item>dark</item>
         <item>black</item>
+        <item>status</item>
     </string-array>
 
     <string-array name="theme_description">
