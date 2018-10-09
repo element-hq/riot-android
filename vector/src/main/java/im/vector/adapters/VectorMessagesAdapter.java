@@ -253,6 +253,8 @@ public class VectorMessagesAdapter extends AbstractMessagesAdapter {
     private VectorImageGetter mImageGetter;
 
     private HtmlToolbox mHtmlToolbox = new HtmlToolbox() {
+        HtmlTagHandler mHtmlTagHandler;
+
         @Override
         public String convert(String html) {
             String sanitised = mHelper.getSanitisedHtml(html);
@@ -277,10 +279,12 @@ public class VectorMessagesAdapter extends AbstractMessagesAdapter {
             boolean isCustomizable = !html.contains("<table>");
 
             if (isCustomizable) {
-                final HtmlTagHandler htmlTagHandler = new HtmlTagHandler();
-                htmlTagHandler.mContext = mContext;
-                htmlTagHandler.setCodeBlockBackgroundColor(ThemeUtils.INSTANCE.getColor(mContext, R.attr.markdown_block_background_color));
-                return htmlTagHandler;
+                if (mHtmlTagHandler == null) {
+                    mHtmlTagHandler = new HtmlTagHandler();
+                    mHtmlTagHandler.mContext = mContext;
+                    mHtmlTagHandler.setCodeBlockBackgroundColor(ThemeUtils.INSTANCE.getColor(mContext, R.attr.markdown_block_background_color));
+                }
+                return mHtmlTagHandler;
             }
 
             return null;
