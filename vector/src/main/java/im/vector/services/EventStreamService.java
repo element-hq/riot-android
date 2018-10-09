@@ -895,7 +895,7 @@ public class EventStreamService extends Service {
                 notification = NotificationUtils.INSTANCE.buildForegroundServiceNotification(this, R.string.notification_sync_in_progress);
                 break;
             case LISTENING_FOR_EVENTS:
-                notification = NotificationUtils.INSTANCE.buildForegroundServiceNotification(this, R.string.notification_listen_for_events);
+                notification = NotificationUtils.INSTANCE.buildForegroundServiceNotification(this, R.string.notification_listening_for_events);
                 break;
             case INCOMING_CALL:
             case CALL_IN_PROGRESS:

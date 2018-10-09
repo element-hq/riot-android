@@ -727,7 +727,7 @@
     <string name="settings_labs_matrix_apps">Matrix 应用</string>
     <string name="room_add_matrix_apps">添加 Matrix 应用</string>
     <string name="notification_sync_in_progress">正在同步</string>
-    <string name="notification_listen_for_events">监听事件更新</string>
+    <string name="notification_listening_for_events">监听事件更新</string>
 
     <string name="call">通话</string>
     <string name="settings_containing_my_display_name">包含我昵称的消息</string>

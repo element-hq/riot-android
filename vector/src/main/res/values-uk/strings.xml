@@ -13,7 +13,7 @@
 
     <!-- permanent notification subtitle -->
     <string name="notification_sync_in_progress">Синхронізую</string>
-    <string name="notification_listen_for_events">Слухати події</string>
+    <string name="notification_listening_for_events">Слухати події</string>
 
     <!-- titles -->
     <string name="title_activity_home">Повідомлення</string>

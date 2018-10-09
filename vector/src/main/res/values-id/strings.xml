@@ -885,7 +885,7 @@ Pesan terenkripsi tidak akan terlihat di klien yang belum mengimplementasikan en
 
 Peringatan: berkas ini mungkin ikut terhapus jika aplikasi dihapus.</string>
 
-    <string name="notification_listen_for_events">Mendengarkan peristiwa</string>
+    <string name="notification_listening_for_events">Mendengarkan peristiwa</string>
     <string name="settings_third_party_notices">Pemberitahuan pihak ketiga</string>
     <string name="settings_copyright">Hak Cipta</string>
     <string name="settings_privacy_policy">Kebijakan Pribadi</string>

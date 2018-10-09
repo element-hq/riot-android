@@ -7,7 +7,7 @@
     <string name="black_them">السمة السوداء</string>
 
     <string name="notification_sync_in_progress">يُزامن</string>
-    <string name="notification_listen_for_events">يستمع للأحداث</string>
+    <string name="notification_listening_for_events">يستمع للأحداث</string>
     <string name="title_activity_home">الرسائل</string>
     <string name="title_activity_settings">الإعدادات</string>
     <string name="title_activity_member_details">تفاصيل الأعضاء</string>

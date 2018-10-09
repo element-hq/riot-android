@@ -7,7 +7,7 @@
     <string name="black_them">Svart Preg</string>
 
     <string name="notification_sync_in_progress">Samstiller</string>
-    <string name="notification_listen_for_events">Høyrer etter hendingar</string>
+    <string name="notification_listening_for_events">Høyrer etter hendingar</string>
     <string name="notification_noisy_notifications">Bråkete varsel</string>
     <string name="notification_silent_notifications">Stille varsel</string>
 

@@ -700,7 +700,7 @@ Zifratutako mezuak ez dira zifratzea oraindik ezarrita ez duten beste gailuetan 
     <string name="black_them">Itxura beltza</string>
 
     <string name="notification_sync_in_progress">Sinkronizatzen</string>
-    <string name="notification_listen_for_events">Entzun gertaerak</string>
+    <string name="notification_listening_for_events">Entzun gertaerak</string>
 
     <string name="login_mobile_device">Mugikorra</string>
 

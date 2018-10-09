@@ -145,7 +145,7 @@ Kā arī epasta adrese ļaus Tev atiestatīt paroli.</string>
     <string name="black_them">Melna ādiņa</string>
 
     <string name="notification_sync_in_progress">Sinhronizācija</string>
-    <string name="notification_listen_for_events">Notikumu monitorings</string>
+    <string name="notification_listening_for_events">Notikumu monitorings</string>
     <string name="notification_noisy_notifications">Skaņi paziņojumi</string>
     <string name="notification_silent_notifications">Klusi paziņojumi</string>
 

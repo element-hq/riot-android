@@ -735,7 +735,7 @@ Je kan het nu, of later, doen vanuit de programma-instellingen.</string>
     <string name="black_them">Zwart Thema</string>
 
     <string name="notification_sync_in_progress">Aan het synchroniseren</string>
-    <string name="notification_listen_for_events">Luisteren voor evenementen</string>
+    <string name="notification_listening_for_events">Luisteren voor evenementen</string>
 
     <string name="login_mobile_device">Mobiel</string>
 

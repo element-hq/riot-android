@@ -13,7 +13,7 @@
 
     <!-- permanent notification subtitle -->
     <string name="notification_sync_in_progress">Synchronising</string>
-    <string name="notification_listen_for_events">Listen for events</string>
+    <string name="notification_listening_for_events">Listening for events</string>
     <string name="notification_noisy_notifications">Noisy notifications</string>
     <string name="notification_silent_notifications">Silent notifications</string>
 

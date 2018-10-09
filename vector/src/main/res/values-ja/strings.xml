@@ -324,7 +324,7 @@
     <string name="largest">とても大きい</string>
     <string name="huge">巨大</string>
 
-    <string name="notification_listen_for_events">発言更新を確認</string>
+    <string name="notification_listening_for_events">発言更新を確認</string>
 
     <string name="view_decrypted_source">暗号解除されたソースコードを表示</string>
     <string name="rename">名前変更</string>

@@ -39,7 +39,7 @@
     <string name="active_call">Chamada en curso</string>
     <string name="ongoing_conference_call_voice">voz</string>
     <string name="ongoing_conference_call_video">vídeo</string>
-    <string name="notification_listen_for_events">A escoita de eventos</string>
+    <string name="notification_listening_for_events">A escoita de eventos</string>
     <string name="forward">Adiante</string>
     <string name="report_content">Informar sobre contido</string>
     <string name="ongoing_conference_call">Conferencia en curso. Únase con vídeo ou voz.</string>

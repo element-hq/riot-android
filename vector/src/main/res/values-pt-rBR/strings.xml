@@ -727,7 +727,7 @@ No futuro, este processo de verificação será mais sofisticado.</string>
     <string name="black_them">Tema preto</string>
 
     <string name="notification_sync_in_progress">Sincronizando</string>
-    <string name="notification_listen_for_events">Escutando eventos</string>
+    <string name="notification_listening_for_events">Escutando eventos</string>
     <string name="notification_noisy_notifications">Notificações ruidosas</string>
     <string name="notification_silent_notifications">Notificações silenciosas</string>
 

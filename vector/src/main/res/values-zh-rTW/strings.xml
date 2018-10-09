@@ -7,7 +7,7 @@
     <string name="black_them">黑色主題</string>
 
     <string name="notification_sync_in_progress">同步中</string>
-    <string name="notification_listen_for_events">聆聽事件</string>
+    <string name="notification_listening_for_events">聆聽事件</string>
 
     <string name="title_activity_home">信息</string>
     <string name="title_activity_room">聊天室</string>

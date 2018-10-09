@@ -87,7 +87,7 @@ object NotificationUtils {
      * ========================================================================================== */
 
     // on devices >= android O, we need to define a channel for each notifications
-    private const val LISTEN_FOR_EVENTS_NOTIFICATION_CHANNEL_ID = "LISTEN_FOR_EVENTS_NOTIFICATION_CHANNEL_ID"
+    private const val LISTENING_FOR_EVENTS_NOTIFICATION_CHANNEL_ID = "LISTEN_FOR_EVENTS_NOTIFICATION_CHANNEL_ID"
 
     private const val NOISY_NOTIFICATION_CHANNEL_ID_BASE = "DEFAULT_NOISY_NOTIFICATION_CHANNEL_ID_BASE"
     private var noisyNotificationChannelId: String? = null
@@ -159,11 +159,11 @@ object NotificationUtils {
             notificationManager.createNotificationChannel(channel)
         }
 
-        if (null == notificationManager.getNotificationChannel(LISTEN_FOR_EVENTS_NOTIFICATION_CHANNEL_ID)) {
-            val channel = NotificationChannel(LISTEN_FOR_EVENTS_NOTIFICATION_CHANNEL_ID,
-                    context.getString(R.string.notification_listen_for_events),
+        if (null == notificationManager.getNotificationChannel(LISTENING_FOR_EVENTS_NOTIFICATION_CHANNEL_ID)) {
+            val channel = NotificationChannel(LISTENING_FOR_EVENTS_NOTIFICATION_CHANNEL_ID,
+                    context.getString(R.string.notification_listening_for_events),
                     NotificationManager.IMPORTANCE_MIN)
-            channel.description = context.getString(R.string.notification_listen_for_events)
+            channel.description = context.getString(R.string.notification_listening_for_events)
             channel.setSound(null, null)
             channel.setShowBadge(false)
             notificationManager.createNotificationChannel(channel)
@@ -195,7 +195,7 @@ object NotificationUtils {
 
         createNotificationChannels(context)
 
-        val builder = NotificationCompat.Builder(context, LISTEN_FOR_EVENTS_NOTIFICATION_CHANNEL_ID)
+        val builder = NotificationCompat.Builder(context, LISTENING_FOR_EVENTS_NOTIFICATION_CHANNEL_ID)
                 .setWhen(System.currentTimeMillis())
                 .setContentTitle(context.getString(R.string.riot_app_name))
                 .setContentText(context.getString(subTitleResId))

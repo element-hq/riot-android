@@ -6,7 +6,7 @@
     <string name="dark_theme">قالب تیره</string>
     <string name="black_them">قالب سیاه</string>
 
-    <string name="notification_listen_for_events">گوش دادن به رویدادها</string>
+    <string name="notification_listening_for_events">گوش دادن به رویدادها</string>
     <string name="title_activity_home">پیام‌ها</string>
     <string name="title_activity_room">اتاق</string>
     <string name="title_activity_settings">تنظیمات</string>

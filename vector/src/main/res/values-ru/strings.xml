@@ -778,7 +778,7 @@ Email также позволит вам при необходимости во�
     <string name="login_mobile_device">Мобильный</string>
 
     <string name="notification_sync_in_progress">Синхронизация</string>
-    <string name="notification_listen_for_events">Мониторинг событий</string>
+    <string name="notification_listening_for_events">Мониторинг событий</string>
 
     <string name="call">Вызов</string>
     <string name="settings_containing_my_user_name">Сообщения, содержащие мое имя пользователя</string>

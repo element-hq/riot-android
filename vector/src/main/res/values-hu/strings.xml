@@ -724,7 +724,7 @@ Ismeretlen eszközök:</string>
     <string name="widget_integration_room_not_visible">%s szoba nem látható.</string>
     <string name="settings_labs_matrix_apps">Matrix Alkalmazások</string>
     <string name="room_add_matrix_apps">Matrix alkalmazás hozzáadása</string>
-    <string name="notification_listen_for_events">Események figyelése</string>
+    <string name="notification_listening_for_events">Események figyelése</string>
 
     <string name="notification_sync_in_progress">Szinkronizálás</string>
     <string name="call">Hívás</string>
