@@ -1758,7 +1758,7 @@ public class VectorHomeActivity extends VectorAppCompatActivity implements Searc
         });
     }
 
-    void initSlidingMenu() {
+    private void initSlidingMenu() {
         ActionBarDrawerToggle drawerToggle = new ActionBarDrawerToggle(
                 /* host Activity */
                 this,
@@ -1780,9 +1780,7 @@ public class VectorHomeActivity extends VectorAppCompatActivity implements Searc
 
                     case R.id.sliding_menu_settings: {
                         // launch the settings activity
-                        final Intent settingsIntent = new Intent(VectorHomeActivity.this, VectorSettingsActivity.class);
-                        settingsIntent.putExtra(MXCActionBarActivity.EXTRA_MATRIX_ID, mSession.getMyUserId());
-                        startActivity(settingsIntent);
+                        startActivity(VectorSettingsActivity.getIntent(VectorHomeActivity.this, mSession.getMyUserId()));
                         break;
                     }
 
@@ -1910,6 +1908,15 @@ public class VectorHomeActivity extends VectorAppCompatActivity implements Searc
 
         if (null != displayNameTextView) {
             displayNameTextView.setText(mSession.getMyUser().displayname);
+
+            displayNameTextView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    // Open the settings
+                    mSlidingMenuIndex = R.id.sliding_menu_settings;
+                    mDrawerLayout.closeDrawers();
+                }
+            });
         }
 
         TextView userIdTextView = navigationView.findViewById(R.id.home_menu_main_matrix_id);
@@ -1921,6 +1928,15 @@ public class VectorHomeActivity extends VectorAppCompatActivity implements Searc
 
         if (null != mainAvatarView) {
             VectorUtils.loadUserAvatar(this, mSession, mainAvatarView, mSession.getMyUser());
+
+            mainAvatarView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    // Open the settings
+                    mSlidingMenuIndex = R.id.sliding_menu_settings;
+                    mDrawerLayout.closeDrawers();
+                }
+            });
         } else {
             // on Android M, the mNavigationView is not loaded at launch
             // so launch asap it is rendered.

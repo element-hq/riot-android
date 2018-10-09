@@ -10,6 +10,7 @@ Features:
 Improvements:
  - Use LocalBroadcastManager when applicable (#2595)
  - Menu version copies version number to clipboard (#2570)
+ - Tapping on profile picture in sidebar opens settings page (#2597)
 
 Other changes:
  -
