@@ -70,6 +70,7 @@ import im.vector.extensions.MatrixSdkExtensionsKt;
 import im.vector.fragments.VectorUnknownDevicesFragment;
 import im.vector.util.CallsManager;
 import im.vector.util.PermissionsToolsKt;
+import im.vector.util.SystemUtilsKt;
 import im.vector.util.VectorUtils;
 import kotlin.Pair;
 
@@ -1215,7 +1216,7 @@ public class VectorMemberDetailsActivity extends MXCActionBarActivity implements
             mMemberNameTextView.setOnLongClickListener(new View.OnLongClickListener() {
                 @Override
                 public boolean onLongClick(View v) {
-                    VectorUtils.copyToClipboard(VectorMemberDetailsActivity.this, mMemberNameTextView.getText());
+                    SystemUtilsKt.copyToClipboard(VectorMemberDetailsActivity.this, mMemberNameTextView.getText());
                     return true;
                 }
             });

@@ -89,6 +89,7 @@ import im.vector.preference.RoomAvatarPreference;
 import im.vector.preference.VectorCustomActionEditTextPreference;
 import im.vector.preference.VectorListPreference;
 import im.vector.preference.VectorSwitchPreference;
+import im.vector.util.SystemUtilsKt;
 import im.vector.util.ThemeUtils;
 import im.vector.util.VectorUtils;
 
@@ -361,7 +362,7 @@ public class VectorRoomSettingsFragment extends PreferenceFragment implements Sh
             roomInternalIdPreference.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
                 @Override
                 public boolean onPreferenceClick(Preference preference) {
-                    VectorUtils.copyToClipboard(getActivity(), mRoom.getRoomId());
+                    SystemUtilsKt.copyToClipboard(getActivity(), mRoom.getRoomId());
                     return false;
                 }
             });
@@ -1624,9 +1625,9 @@ public class VectorRoomSettingsFragment extends PreferenceFragment implements Sh
                         }
                     });
                 } else if (item.getItemId() == R.id.ic_action_vector_room_url) {
-                    VectorUtils.copyToClipboard(getActivity(), PermalinkUtils.createPermalink(roomAlias));
+                    SystemUtilsKt.copyToClipboard(getActivity(), PermalinkUtils.createPermalink(roomAlias));
                 } else {
-                    VectorUtils.copyToClipboard(getActivity(), roomAlias);
+                    SystemUtilsKt.copyToClipboard(getActivity(), roomAlias);
                 }
 
                 return true;
