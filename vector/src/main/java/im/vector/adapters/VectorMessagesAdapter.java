@@ -273,9 +273,8 @@ public class VectorMessagesAdapter extends AbstractMessagesAdapter {
         @Nullable
         @Override
         public Html.TagHandler getTagHandler(String html) {
-            // the links are not yet supported by ConsoleHtmlTagHandler
             // the markdown tables are not properly supported
-            boolean isCustomizable = !html.contains("<a href=") && !html.contains("<table>");
+            boolean isCustomizable = !html.contains("<table>");
 
             if (isCustomizable) {
                 final HtmlTagHandler htmlTagHandler = new HtmlTagHandler();
