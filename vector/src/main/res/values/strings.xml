@@ -1076,4 +1076,8 @@
     <!-- Other errors -->
     <string name="unknown_error">Sorry, an error occurred</string>
 
+    <!-- Expand/Collapse room member changes -->
+    <string name="merged_events_expand">expand</string>
+    <string name="merged_events_collapse">collapse</string>
+
 </resources>
