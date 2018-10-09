@@ -16,6 +16,7 @@ Other changes:
 Bugfix:
  - When exporting E2E keys, it isn't clear that you are creating a new password (#2626)
  - Can't change room directory server (#2611)
+ - Reply get's lost when moving app in background and back (#2581)
 
 Translations:
  -
