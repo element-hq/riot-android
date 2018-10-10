@@ -2,7 +2,7 @@ Changes in Riot 0.8.17 (2018-XX-XX)
 ===================================================
 
 MatrixSdk:
- - Upgrade to version 0.X.Y.
+ - Upgrade to version 0.9.11.
 
 Features:
  -
