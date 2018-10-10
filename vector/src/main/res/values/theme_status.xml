@@ -33,7 +33,7 @@
         <item name="pill_text_color_room_alias">@android:color/white</item>
     </style>
 
-    <style name="Vector_Lock_Status" parent="Vector_Lock_Light" />
+    <style name="Theme.Vector.Lock.Status" parent="Theme.Vector.Lock.Light" />
 
     <style name="AppTheme.Base.Status" parent="@style/Theme.Vector.Status">
 

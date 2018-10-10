@@ -119,7 +119,7 @@
         <item name="message_text_color">?attr/riot_primary_text_color</item>
     </style>
 
-    <style name="Vector_Lock_Light" parent="Theme.Vector.EmptyLight">
+    <style name="Theme.Vector.Lock.Light" parent="Theme.Vector.EmptyLight">
         <item name="android:background">?attr/riot_primary_background_color</item>
         <item name="android:textColor">?attr/primary_text_color</item>
         <item name="editTextColor">?attr/riot_primary_text_color</item>
@@ -179,8 +179,7 @@
         <item name="colorControlActivated">@color/vector_green_color</item>
     </style>
 
-    <style name="AppTheme.Light" parent="@style/AppTheme.Base.Light">
-    </style>
+    <style name="AppTheme.Light" parent="@style/AppTheme.Base.Light"/>
 
     <!-- no action bar window -->
     <style name="AppTheme.NoActionBar.Base.Light" parent="@style/Theme.Vector.Light">
@@ -207,7 +206,7 @@
     <style name="AppTheme.NoActionBar.Light" parent="@style/AppTheme.NoActionBar.Base.Light">
     </style>
 
-    <style name="AppTheme.NoActionBar.Swipe" parent="@style/AppTheme.NoActionBar.Light">
+    <style name="AppTheme.NoActionBar.Swipe.Light" parent="@style/AppTheme.NoActionBar.Light">
         <item name="android:windowIsTranslucent">true</item>
         <item name="android:windowBackground">@android:color/transparent</item>
     </style>
@@ -228,14 +227,14 @@
     </style>
 
     <!-- NoActionBar + FullScreen -->
-    <style name="AppTheme.NoActionBar.FullScreen" parent="@style/AppTheme.NoActionBar.Light">
+    <style name="AppTheme.NoActionBar.FullScreen.Light" parent="@style/AppTheme.NoActionBar.Light">
         <item name="android:windowFullscreen">true</item>
         <!-- activities background -->
         <item name="android:windowBackground">@android:color/transparent</item>
     </style>
 
     <!-- ActionBar + FullScreen -->
-    <style name="AppTheme.ActionBar.FullScreen" parent="@style/AppTheme.NoActionBar.FullScreen">
+    <style name="AppTheme.ActionBar.FullScreen.Light" parent="@style/AppTheme.NoActionBar.FullScreen.Light">
         <!-- show the action bar -->
         <item name="android:windowActionBar">true</item>
         <item name="windowActionBar">true</item>

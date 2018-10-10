@@ -12,12 +12,12 @@
         <item name="fenced_code_block_background_color">#FF00FF00</item>
     </style>
 
-    <style name="Theme.Vector.EmptyBlack" parent="@style/Theme.Vector.EmptyDark">
+    <style name="Theme.Vector.Empty.Black" parent="@style/Theme.Vector.Empty.Dark">
         <item name="riot_primary_background_color">@color/riot_primary_background_color_black</item>
         <item name="primary_color">@color/riot_primary_background_color_black</item>
     </style>
 
-    <style name="Vector_Lock_Black" parent="Vector_Lock_Dark" />
+    <style name="Vector.Lock.Black" parent="@style/Theme.Vector.Lock.Dark" />
 
     <style name="AppTheme.Base.Black" parent="@style/Theme.Vector.Black">
 

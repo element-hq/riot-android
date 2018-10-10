@@ -112,7 +112,7 @@
         <item name="pill_text_color_room_alias">@color/riot_primary_text_color_light</item>
     </style>
 
-    <style name="Theme.Vector.EmptyDark" parent="Theme.AppCompat.Dialog">
+    <style name="Theme.Vector.Empty.Dark" parent="Theme.AppCompat.Dialog">
         <item name="riot_primary_text_color">@color/riot_primary_text_color_dark</item>
         <item name="riot_primary_background_color">@color/riot_primary_background_color_dark</item>
         <item name="primary_hint_text_color">@color/primary_hint_text_color_dark</item>
@@ -120,7 +120,7 @@
         <item name="message_text_color">?attr/riot_primary_text_color</item>
     </style>
 
-    <style name="Vector_Lock_Dark" parent="Theme.Vector.EmptyDark">
+    <style name="Theme.Vector.Lock.Dark" parent="Theme.Vector.Empty.Dark">
         <item name="android:background">?attr/riot_primary_background_color</item>
         <item name="android:textColor">?attr/primary_text_color</item>
         <item name="editTextColor">?attr/riot_primary_text_color</item>
