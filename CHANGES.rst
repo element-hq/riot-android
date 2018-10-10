@@ -1,26 +1,11 @@
-Changes in Riot 0.8.17 (2018-XX-XX)
+Changes in Riot 0.8.17 (2018-10-10)
 ===================================================
 
 MatrixSdk:
- - Upgrade to version 0.X.Y.
-
-Features:
- -
-
-Improvements:
- -
-
-Other changes:
- -
+ - Upgrade to version 0.9.11.
 
 Bugfix:
- -
-
-Translations:
- -
-
-Build:
- -
+ - Fix issue on loading cache, and so avoid initial sync on each application startup.
 
 Changes in Riot 0.8.16 (2018-10-08)
 ===================================================
