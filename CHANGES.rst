@@ -5,7 +5,7 @@ MatrixSdk:
  - Upgrade to version 0.X.Y.
 
 Features:
- -
+ - Status.im theme
 
 Improvements:
  -

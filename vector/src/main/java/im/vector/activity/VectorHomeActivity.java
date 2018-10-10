@@ -136,7 +136,7 @@ import im.vector.util.ThemeUtils;
 import im.vector.util.VectorUtils;
 import im.vector.view.UnreadCounterBadgeView;
 import im.vector.view.VectorPendingCallView;
-import kotlin.Pair;
+import kotlin.Triple;
 
 /**
  * Displays the main screen of the app, with rooms the user has joined and the ability to create
@@ -286,8 +286,8 @@ public class VectorHomeActivity extends VectorAppCompatActivity implements Searc
 
     @NotNull
     @Override
-    public Pair getOtherThemes() {
-        return new Pair(R.style.HomeActivityTheme_Dark, R.style.HomeActivityTheme_Black);
+    public Triple getOtherThemes() {
+        return new Triple(R.style.HomeActivityTheme_Dark, R.style.HomeActivityTheme_Black, R.style.HomeActivityTheme_Status);
     }
 
     @Override

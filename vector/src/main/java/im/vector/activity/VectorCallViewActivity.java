@@ -69,7 +69,7 @@ import im.vector.util.PermissionsToolsKt;
 import im.vector.util.VectorUtils;
 import im.vector.util.ViewUtilKt;
 import im.vector.view.VectorPendingCallView;
-import kotlin.Pair;
+import kotlin.Triple;
 
 /**
  * VectorCallViewActivity is the call activity.
@@ -318,8 +318,8 @@ public class VectorCallViewActivity extends VectorAppCompatActivity implements S
 
     @NotNull
     @Override
-    public Pair getOtherThemes() {
-        return new Pair(R.style.CallActivityTheme_Dark, R.style.CallActivityTheme_Black);
+    public Triple getOtherThemes() {
+        return new Triple(R.style.CallActivityTheme_Dark, R.style.CallActivityTheme_Black, R.style.CallActivityTheme_Status);
     }
 
     @Override

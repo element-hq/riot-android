@@ -47,7 +47,7 @@ import im.vector.R;
 import im.vector.notifications.NotificationUtils;
 import im.vector.util.VectorUtils;
 import im.vector.util.ViewUtilKt;
-import kotlin.Pair;
+import kotlin.Triple;
 
 /**
  * LockScreenActivity is displayed within the notification to send a message without opening the application.
@@ -70,8 +70,8 @@ public class LockScreenActivity extends VectorAppCompatActivity { // do NOT exte
 
     @NotNull
     @Override
-    public Pair getOtherThemes() {
-        return new Pair(R.style.Vector_Lock_Dark, R.style.Vector_Lock_Light);
+    public Triple getOtherThemes() {
+        return new Triple(R.style.Vector_Lock_Dark, R.style.Vector_Lock_Light, R.style.Vector_Lock_Status);
     }
 
     @Override

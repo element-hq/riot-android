@@ -250,4 +250,36 @@
         <item name="riot_primary_background_color">@color/riot_primary_background_color_black</item>
         <item name="primary_color">@color/riot_primary_background_color_black</item>
     </style>
+
+    <!-- STATUS.IM THEME COLORS -->
+    <style name="Theme.Vector.Status" parent="@style/Theme.AppCompat.Light">
+        <!-- Only setting the items we need to override to get the background to be pure black, otherwise inheriting -->
+        <item name="riot_primary_background_color">@color/riot_primary_background_color_status</item>
+
+        <!-- room message colors -->
+        <item name="message_text_color">#70879d</item>
+        <item name="notice_text_color">#adadbe</item>
+        <item name="encrypting_message_text_color">#AECDF9</item>
+        <item name="sending_message_text_color">#b3e8d2</item>
+        <item name="unread_marker_line_color">#AECDF9</item>
+
+        <!--dedicated drawables -->
+        <item name="avatar_mask">@drawable/avatar_mask_status</item>
+        <item name="avatar_mask_room_header">@drawable/avatar_mask_room_header_status</item>
+        <item name="avatar_mask_white_stroke">@drawable/avatar_mask_white_stroke_status</item>
+        <item name="line_divider">@drawable/line_divider_light</item>
+        <item name="shadow_bottom">@drawable/shadow_bottom_light</item>
+        <item name="shadow_top">@drawable/shadow_top_light</item>
+        <item name="vector_tabbar_selected_background">
+            @drawable/vector_tabbar_selected_background_light
+        </item>
+        <item name="vector_tabbar_unselected_background">
+            @drawable/vector_tabbar_unselected_background_light
+        </item>
+        <item name="pill_background_user_id">@drawable/pill_background_user_id_status</item>
+        <item name="pill_background_room_alias">@drawable/pill_background_room_alias_status</item>
+        <item name="pill_text_color_user_id">@color/riot_primary_text_color_status</item>
+        <item name="pill_text_color_room_alias">@android:color/white</item>
+    </style>
+
 </resources>

@@ -46,7 +46,7 @@ import org.matrix.androidsdk.util.Log;
 import im.vector.Matrix;
 import im.vector.R;
 import im.vector.util.PhoneNumberUtils;
-import kotlin.Pair;
+import kotlin.Triple;
 
 public class PhoneNumberAdditionActivity extends VectorAppCompatActivity implements TextView.OnEditorActionListener, TextWatcher, View.OnClickListener {
 
@@ -94,8 +94,8 @@ public class PhoneNumberAdditionActivity extends VectorAppCompatActivity impleme
 
     @NotNull
     @Override
-    public Pair getOtherThemes() {
-        return new Pair(R.style.AppTheme_NoActionBar_Dark, R.style.AppTheme_NoActionBar_Black);
+    public Triple getOtherThemes() {
+        return new Triple(R.style.AppTheme_NoActionBar_Dark, R.style.AppTheme_NoActionBar_Black, R.style.AppTheme_NoActionBar_Status);
     }
 
     @Override
