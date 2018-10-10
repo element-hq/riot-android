@@ -1,0 +1,11 @@
+<resources>
+
+    <style name="AppTheme.Dark" parent="@style/AppTheme.Base.Dark">
+        <item name="android:navigationBarColor">?attr/primary_dark_color</item>
+    </style>
+
+    <style name="AppTheme.NoActionBar.Dark" parent="@style/AppTheme.NoActionBar.Base.Dark">
+        <item name="android:navigationBarColor">?attr/primary_dark_color</item>
+    </style>
+
+</resources>
