@@ -594,7 +594,6 @@
     <string name="room_delete_unsent_messages">Eyða ósendum skilaboðum</string>
     <string name="room_do_not_have_permission_to_post">Þú hefur ekki heimild til að senda skilaboð á þessa spjallrás</string>
     <string name="ssl_could_not_verify">Gat ekki sannreynt auðkenni fjartengds þjóns.</string>
-    <string name="ssl_fingerprint_example">00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00</string>
 
     <string name="room_details_people_invited_group_name">BOÐIÐ</string>
     <string name="room_details_people_present_group_name">SKRÁÐUR</string>

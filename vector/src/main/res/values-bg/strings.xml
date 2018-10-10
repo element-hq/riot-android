@@ -13,7 +13,6 @@
     <string name="title_activity_home">Съобщения</string>
     <string name="title_activity_room">Стая</string>
     <string name="title_activity_settings">Настройки</string>
-    <string name="ssl_fingerprint_example">00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00</string>
 
     <string name="compression_options">"Изпратете с размер "</string>
     <string name="compression_opt_list_original">Оригинален</string>

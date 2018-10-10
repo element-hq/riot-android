@@ -268,7 +268,6 @@
     <string name="ssl_remain_offline">పట్టించుకోకుండా</string>
     <string name="ssl_fingerprint_hash">వేలిముద్ర (%s):</string>
     <string name="ssl_could_not_verify">రిమోట్ సర్వర్ యొక్క గుర్తింపును ధృవీకరించలేకపోయింది.</string>
-    <string name="ssl_fingerprint_example">00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00</string>
 
     <string name="room_details_title">గది వివరాలు</string>
     <string name="room_details_people">ప్రజలు</string>
