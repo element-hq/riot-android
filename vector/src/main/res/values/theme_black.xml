@@ -3,7 +3,7 @@
 
     <!-- BLACK THEME COLORS -->
 
-    <style name="Theme.Vector.Black" parent="@style/Theme.Vector.Dark">
+    <style name="Theme.Vector.Black" parent="Theme.Vector.Dark">
         <!-- Only setting the items we need to override to get the background to be pure black, otherwise inheriting -->
         <item name="riot_primary_background_color">@color/riot_primary_background_color_black</item>
         <item name="avatar_mask">@drawable/avatar_mask_black</item>
@@ -12,14 +12,14 @@
         <item name="fenced_code_block_background_color">#FF00FF00</item>
     </style>
 
-    <style name="Theme.Vector.Empty.Black" parent="@style/Theme.Vector.Empty.Dark">
+    <style name="Theme.Vector.Empty.Black" parent="Theme.Vector.Empty.Dark">
         <item name="riot_primary_background_color">@color/riot_primary_background_color_black</item>
         <item name="primary_color">@color/riot_primary_background_color_black</item>
     </style>
 
-    <style name="Vector.Lock.Black" parent="@style/Theme.Vector.Lock.Dark" />
+    <style name="Vector.Lock.Black" parent="Theme.Vector.Lock.Dark" />
 
-    <style name="AppTheme.Base.Black" parent="@style/Theme.Vector.Black">
+    <style name="AppTheme.Base.Black" parent="Theme.Vector.Black">
 
         <!-- disable the overscroll because setOverscrollHeader/Footer don't always work -->
         <item name="android:overScrollMode">never</item>
@@ -66,10 +66,10 @@
         <item name="colorControlActivated">@color/vector_green_color</item>
     </style>
 
-    <style name="AppTheme.Black" parent="@style/AppTheme.Base.Black">
+    <style name="AppTheme.Black" parent="AppTheme.Base.Black">
     </style>
 
-    <style name="AppTheme.NoActionBar.Base.Black" parent="@style/Theme.Vector.Black">
+    <style name="AppTheme.NoActionBar.Base.Black" parent="Theme.Vector.Black">
         <!-- disable the overscroll because setOverscrollHeader/Footer don't always work -->
         <item name="android:overScrollMode">never</item>
 
@@ -89,10 +89,10 @@
         <item name="android:windowBackground">@color/riot_primary_background_color_black</item>
     </style>
 
-    <style name="AppTheme.NoActionBar.Black" parent="@style/AppTheme.NoActionBar.Base.Black">
+    <style name="AppTheme.NoActionBar.Black" parent="AppTheme.NoActionBar.Base.Black">
     </style>
 
-    <style name="AppTheme.NoActionBar.Swipe.Black" parent="@style/AppTheme.NoActionBar.Black">
+    <style name="AppTheme.NoActionBar.Swipe.Black" parent="AppTheme.NoActionBar.Black">
         <item name="android:windowIsTranslucent">true</item>
         <item name="android:windowBackground">@android:color/transparent</item>
     </style>
@@ -110,13 +110,13 @@
         <item name="colorPrimaryDark">@android:color/black</item>
     </style>
 
-    <style name="AppTheme.NoActionBar.FullScreen.Black" parent="@style/AppTheme.NoActionBar.Black">
+    <style name="AppTheme.NoActionBar.FullScreen.Black" parent="AppTheme.NoActionBar.Black">
         <item name="android:windowFullscreen">true</item>
         <!-- activities background -->
         <item name="android:windowBackground">@android:color/transparent</item>
     </style>
 
-    <style name="AppTheme.ActionBar.FullScreen.Black" parent="@style/AppTheme.NoActionBar.FullScreen.Black">
+    <style name="AppTheme.ActionBar.FullScreen.Black" parent="AppTheme.NoActionBar.FullScreen.Black">
         <!-- show the action bar -->
         <item name="android:windowActionBar">true</item>
         <item name="windowActionBar">true</item>

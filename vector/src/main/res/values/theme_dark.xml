@@ -3,7 +3,7 @@
 
     <!-- DARK THEME COLORS -->
 
-    <style name="Theme.Vector.Dark" parent="@style/Theme.AppCompat">
+    <style name="Theme.Vector.Dark" parent="Theme.AppCompat">
         <!-- default background color -->
         <item name="riot_primary_background_color">@color/riot_primary_background_color_dark</item>
 
@@ -128,12 +128,12 @@
     </style>
 
 
-    <style name="Vector.TabView.Dark" parent="@style/Widget.AppCompat.ActionBar.TabView">
+    <style name="Vector.TabView.Dark" parent="Widget.AppCompat.ActionBar.TabView">
         <item name="android:background">@drawable/vector_tabbar_background_dark</item>
         <item name="background">@drawable/vector_tabbar_background_dark</item>
     </style>
 
-    <style name="AppTheme.Base.Dark" parent="@style/Theme.Vector.Dark">
+    <style name="AppTheme.Base.Dark" parent="Theme.Vector.Dark">
 
         <!-- disable the overscroll because setOverscrollHeader/Footer don't always work -->
         <item name="android:overScrollMode">never</item>
@@ -180,10 +180,10 @@
         <item name="colorControlActivated">@color/vector_green_color</item>
     </style>
 
-    <style name="AppTheme.Dark" parent="@style/AppTheme.Base.Dark">
+    <style name="AppTheme.Dark" parent="AppTheme.Base.Dark">
     </style>
 
-    <style name="AppTheme.NoActionBar.Base.Dark" parent="@style/AppTheme.Dark">
+    <style name="AppTheme.NoActionBar.Base.Dark" parent="AppTheme.Dark">
         <!-- disable the overscroll because setOverscrollHeader/Footer don't always work -->
         <item name="android:overScrollMode">never</item>
 
@@ -203,10 +203,10 @@
         <item name="android:windowBackground">@color/riot_primary_background_color_dark</item>
     </style>
 
-    <style name="AppTheme.NoActionBar.Dark" parent="@style/AppTheme.NoActionBar.Base.Dark">
+    <style name="AppTheme.NoActionBar.Dark" parent="AppTheme.NoActionBar.Base.Dark">
     </style>
 
-    <style name="AppTheme.NoActionBar.Swipe.Dark" parent="@style/AppTheme.NoActionBar.Dark">
+    <style name="AppTheme.NoActionBar.Swipe.Dark" parent="AppTheme.NoActionBar.Dark">
         <item name="android:windowIsTranslucent">true</item>
         <item name="android:windowBackground">@android:color/transparent</item>
     </style>
@@ -224,13 +224,13 @@
         <item name="colorPrimaryDark">@android:color/black</item>
     </style>
 
-    <style name="AppTheme.NoActionBar.FullScreen.Dark" parent="@style/AppTheme.NoActionBar.Dark">
+    <style name="AppTheme.NoActionBar.FullScreen.Dark" parent="AppTheme.NoActionBar.Dark">
         <item name="android:windowFullscreen">true</item>
         <!-- activities background -->
         <item name="android:windowBackground">@android:color/transparent</item>
     </style>
 
-    <style name="AppTheme.ActionBar.FullScreen.Dark" parent="@style/AppTheme.NoActionBar.FullScreen.Dark">
+    <style name="AppTheme.ActionBar.FullScreen.Dark" parent="AppTheme.NoActionBar.FullScreen.Dark">
         <!-- show the action bar -->
         <item name="android:windowActionBar">true</item>
         <item name="windowActionBar">true</item>
