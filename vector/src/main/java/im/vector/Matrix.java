@@ -627,7 +627,7 @@ public class Matrix {
      * @return The session.
      */
     private MXSession createSession(final Context context, HomeServerConnectionConfig hsConfig) {
-        IMXStore store;
+        MXFileStore store;
 
         final MetricsListener metricsListener = new MetricsListenerProxy(VectorApp.getInstance().getAnalytics());
         final Credentials credentials = hsConfig.getCredentials();
@@ -641,6 +641,7 @@ public class Matrix {
         }*/
 
         final MXDataHandler dataHandler = new MXDataHandler(store, credentials);
+        store.setDataHandler(dataHandler);
         dataHandler.setLazyLoadingEnabled(PreferencesManager.useLazyLoading(context));
 
         final MXSession session = new MXSession.Builder(hsConfig, dataHandler, context)
