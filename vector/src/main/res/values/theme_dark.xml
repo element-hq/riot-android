@@ -25,6 +25,9 @@
         <!-- application bar text hint color -->
         <item name="primary_hint_text_color">@color/primary_hint_text_color_dark</item>
 
+        <item name="tab_home">@color/vector_green_color</item>
+        <item name="tab_home_secondary">#5EA584</item>
+
         <!-- default text colors -->
         <item name="riot_primary_text_color">@color/riot_primary_text_color_dark</item>
         <item name="default_text_hint_color">@color/default_text_hint_color_dark</item>
