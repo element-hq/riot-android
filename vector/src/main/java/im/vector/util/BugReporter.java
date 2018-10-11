@@ -220,7 +220,7 @@ public class BugReporter {
                                     + Build.VERSION.INCREMENTAL + "-" + Build.VERSION.CODENAME)
                             .addFormDataPart("locale", Locale.getDefault().toString())
                             .addFormDataPart("app_language", VectorLocale.INSTANCE.getApplicationLocale().toString())
-                            .addFormDataPart("default_app_language", VectorLocale.INSTANCE.getDeviceLocale().toString());
+                            .addFormDataPart("default_app_language", SystemUtilsKt.getDeviceLocale(context).toString());
 
                     String buildNumber = context.getString(R.string.build_number);
                     if (!TextUtils.isEmpty(buildNumber) && !buildNumber.equals("0")) {

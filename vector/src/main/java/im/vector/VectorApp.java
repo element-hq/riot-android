@@ -332,7 +332,7 @@ public class VectorApp extends MultiDexApplication {
         registerReceiver(mLanguageReceiver, new IntentFilter(Intent.ACTION_CONFIGURATION_CHANGED));
 
         PreferencesManager.fixMigrationIssues(this);
-        VectorLocale.INSTANCE.initApplicationLocale();
+        initApplicationLocale();
         visitSessionVariables();
     }
 
@@ -753,6 +753,26 @@ public class VectorApp extends MultiDexApplication {
     //==============================================================================================================
 
     /**
+     * Init the application locale from the saved one
+     */
+    private void initApplicationLocale() {
+        VectorLocale.INSTANCE.init(this);
+
+        Locale locale = VectorLocale.INSTANCE.getApplicationLocale();
+        float fontScale = FontScale.INSTANCE.getFontScale();
+        String theme = ThemeUtils.INSTANCE.getApplicationTheme(this);
+
+        Locale.setDefault(locale);
+        Configuration config = new Configuration(getResources().getConfiguration());
+        config.locale = locale;
+        config.fontScale = fontScale;
+        getResources().updateConfiguration(config, getResources().getDisplayMetrics());
+
+        // init the theme
+        ThemeUtils.INSTANCE.setApplicationTheme(this, theme);
+    }
+
+    /**
      * Update the application locale
      *
      * @param locale
@@ -784,7 +804,7 @@ public class VectorApp extends MultiDexApplication {
     private static void updateApplicationSettings(Locale locale, String textSize, String theme) {
         Context context = VectorApp.getInstance();
 
-        VectorLocale.INSTANCE.saveApplicationLocale(locale);
+        VectorLocale.INSTANCE.saveApplicationLocale(context, locale);
         FontScale.INSTANCE.saveFontScale(textSize);
         Locale.setDefault(locale);
 

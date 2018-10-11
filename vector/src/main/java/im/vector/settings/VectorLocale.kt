@@ -18,14 +18,13 @@ package im.vector.settings
 
 import android.content.Context
 import android.content.res.Configuration
-import android.os.AsyncTask
 import android.os.Build
 import android.preference.PreferenceManager
 import android.text.TextUtils
 import android.util.Pair
 import im.vector.R
-import im.vector.VectorApp
-import im.vector.util.ThemeUtils
+import kotlinx.coroutines.experimental.GlobalScope
+import kotlinx.coroutines.experimental.launch
 import org.matrix.androidsdk.util.Log
 import java.util.*
 
@@ -44,91 +43,49 @@ object VectorLocale {
 
     private val mApplicationDefaultLanguage = Locale("en", "US")
 
-    /**
-     * Init the application locale from the saved one
-     */
-    fun initApplicationLocale() {
-        val context = VectorApp.getInstance()
-        val locale = getApplicationLocale()
-        val fontScale = FontScale.getFontScale()
-        val theme = ThemeUtils.getApplicationTheme(context)
-
-        Locale.setDefault(locale)
-        val config = Configuration(context.resources.configuration)
-        config.locale = locale
-        config.fontScale = fontScale
-        context.resources.updateConfiguration(config, context.resources.displayMetrics)
-
-        // init the theme
-        ThemeUtils.setApplicationTheme(context, theme)
-
-        // init the known locales in background
-        val task = object : AsyncTask<Void, Void, Void>() {
-            override fun doInBackground(vararg params: Void): Void? {
-                getApplicationLocales(VectorApp.getInstance())
-                return null
-            }
-        }
-
-        // should never crash
-        task.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR)
-    }
+    private lateinit var applicationLocal: Locale
 
     /**
      * Provides the current application locale
      *
      * @return the application locale
      */
-    fun getApplicationLocale(): Locale {
-        val context = VectorApp.getInstance()
+    fun getApplicationLocale() = applicationLocal
+
+    /**
+     * Init this object
+     */
+    fun init(context: Context) {
         val preferences = PreferenceManager.getDefaultSharedPreferences(context)
-        var locale: Locale
 
         if (!preferences.contains(APPLICATION_LOCALE_LANGUAGE_KEY)) {
-            locale = Locale.getDefault()
+            applicationLocal = Locale.getDefault()
 
             // detect if the default language is used
             val defaultStringValue = getString(context, mApplicationDefaultLanguage, R.string.resources_country_code)
-            if (TextUtils.equals(defaultStringValue, getString(context, locale, R.string.resources_country_code))) {
-                locale = mApplicationDefaultLanguage
+            if (TextUtils.equals(defaultStringValue, getString(context, applicationLocal, R.string.resources_country_code))) {
+                applicationLocal = mApplicationDefaultLanguage
             }
 
-            saveApplicationLocale(locale)
+            saveApplicationLocale(context, applicationLocal)
         } else {
-            locale = Locale(preferences.getString(APPLICATION_LOCALE_LANGUAGE_KEY, ""),
+            applicationLocal = Locale(preferences.getString(APPLICATION_LOCALE_LANGUAGE_KEY, ""),
                     preferences.getString(APPLICATION_LOCALE_COUNTRY_KEY, ""),
                     preferences.getString(APPLICATION_LOCALE_VARIANT_KEY, "")
             )
         }
 
-        return locale
-    }
-
-    /**
-     * Provides the device locale
-     *
-     * @return the device locale
-     */
-    fun getDeviceLocale(): Locale {
-        val context = VectorApp.getInstance()
-        var locale = getApplicationLocale()
-
-        try {
-            val packageManager = context.packageManager
-            val resources = packageManager.getResourcesForApplication("android")
-            locale = resources.configuration.locale
-        } catch (e: Exception) {
-            Log.e(LOG_TAG, "## getDeviceLocale() failed " + e.message, e)
+        // init the known locales in background, using kotlin coroutines
+        GlobalScope.launch {
+            getApplicationLocales(context)
         }
-
-        return locale
     }
 
     /**
      * Save the new application locale.
      */
-    fun saveApplicationLocale(locale: Locale) {
-        val context = VectorApp.getInstance()
+    fun saveApplicationLocale(context: Context, locale: Locale) {
+        applicationLocal = locale
 
         val editor = PreferenceManager.getDefaultSharedPreferences(context).edit()
 
@@ -202,9 +159,9 @@ object VectorLocale {
      * @param context the context
      * @return the supported application locales list
      */
+    @Synchronized
     fun getApplicationLocales(context: Context): List<Locale> {
         if (mApplicationLocales.isEmpty()) {
-
             val knownLocalesSet = HashSet<Pair<String, String>>()
 
             try {
@@ -227,7 +184,7 @@ object VectorLocale {
         val sortedLocalesList = ArrayList(mApplicationLocales)
 
         // sort by human display names
-        Collections.sort(sortedLocalesList) { lhs, rhs -> localeToLocalisedString(lhs).compareTo(localeToLocalisedString(rhs)) }
+        sortedLocalesList.sortWith(Comparator { lhs, rhs -> localeToLocalisedString(lhs).compareTo(localeToLocalisedString(rhs)) })
 
         return sortedLocalesList
     }
