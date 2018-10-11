@@ -12,13 +12,7 @@
         <item name="fenced_code_block_background_color">#FF00FF00</item>
     </style>
 
-    <style name="Theme.Vector.Empty.Black" parent="Theme.Vector.Empty.Dark">
-        <item name="riot_primary_background_color">@color/riot_primary_background_color_black</item>
-        <item name="primary_color">@color/riot_primary_background_color_black</item>
-    </style>
-
-    <style name="Vector.Lock.Black" parent="Theme.Vector.Lock.Dark" />
-
+    <!-- Base application theme. -->
     <style name="AppTheme.Base.Black" parent="Theme.Vector.Black">
 
         <!-- disable the overscroll because setOverscrollHeader/Footer don't always work -->
@@ -51,6 +45,9 @@
 
         <item name="android:popupMenuStyle">@style/vector.PopupMenu</item>
 
+        <!-- no divider -->
+        <item name="android:actionBarDivider">@null</item>
+
         <!-- tabbar background -->
         <item name="android:actionBarTabStyle">@style/Vector.TabView.Dark</item>
         <item name="actionBarTabStyle">@style/Vector.TabView.Dark</item>
@@ -59,16 +56,13 @@
         <item name="android:actionBarTabTextStyle">@style/Vector.TabText</item>
         <item name="actionBarTabTextStyle">@style/Vector.TabText</item>
 
-        <!-- no divider -->
-        <item name="android:actionBarDivider">@null</item>
-
         <!-- switch color -->
         <item name="colorControlActivated">@color/vector_green_color</item>
     </style>
 
-    <style name="AppTheme.Black" parent="AppTheme.Base.Black">
-    </style>
+    <style name="AppTheme.Black" parent="AppTheme.Base.Black" />
 
+    <!-- no action bar window -->
     <style name="AppTheme.NoActionBar.Base.Black" parent="Theme.Vector.Black">
         <!-- disable the overscroll because setOverscrollHeader/Footer don't always work -->
         <item name="android:overScrollMode">never</item>
@@ -89,20 +83,28 @@
         <item name="android:windowBackground">@color/riot_primary_background_color_black</item>
     </style>
 
-    <style name="AppTheme.NoActionBar.Black" parent="AppTheme.NoActionBar.Base.Black">
+    <style name="AppTheme.NoActionBar.Black" parent="AppTheme.NoActionBar.Base.Black" />
+
+    <style name="Theme.Vector.Empty.Black" parent="Theme.Vector.Empty.Dark">
+        <item name="riot_primary_background_color">@color/riot_primary_background_color_black</item>
+        <item name="primary_color">@color/riot_primary_background_color_black</item>
     </style>
+
+    <style name="Theme.Vector.Lock.Black" parent="Theme.Vector.Lock.Dark" />
 
     <style name="AppTheme.NoActionBar.Swipe.Black" parent="AppTheme.NoActionBar.Black">
         <item name="android:windowIsTranslucent">true</item>
         <item name="android:windowBackground">@android:color/transparent</item>
     </style>
 
+    <!-- home activity -->
     <style name="HomeActivityTheme.Black" parent="AppTheme.NoActionBar.Black">
         <item name="editTextColor">?attr/riot_primary_text_color</item>
         <item name="android:editTextColor">?attr/riot_primary_text_color</item>
         <item name="android:textColorHint">?attr/default_text_hint_color</item>
     </style>
 
+    <!-- call activity -->
     <style name="CallActivityTheme.Black" parent="AppTheme.Black">
         <item name="android:windowNoTitle">true</item>
         <item name="windowNoTitle">true</item>
@@ -110,12 +112,14 @@
         <item name="colorPrimaryDark">@android:color/black</item>
     </style>
 
+    <!-- NoActionBar + FullScreen -->
     <style name="AppTheme.NoActionBar.FullScreen.Black" parent="AppTheme.NoActionBar.Black">
         <item name="android:windowFullscreen">true</item>
         <!-- activities background -->
         <item name="android:windowBackground">@android:color/transparent</item>
     </style>
 
+    <!-- ActionBar + FullScreen -->
     <style name="AppTheme.ActionBar.FullScreen.Black" parent="AppTheme.NoActionBar.FullScreen.Black">
         <!-- show the action bar -->
         <item name="android:windowActionBar">true</item>
@@ -124,6 +128,7 @@
         <item name="windowNoTitle">true</item>
     </style>
 
+    <!-- login & registration activities -->
     <style name="LoginAppTheme.Black" parent="AppTheme.NoActionBar.Black">
         <item name="android:editTextStyle">@style/LoginEditTextStyle</item>
         <item name="android:buttonStyle">@style/LoginButtonStyle</item>
@@ -138,6 +143,7 @@
 
     <style name="DirectoryPickerTheme.Black" parent="AppTheme.NoActionBar.Black" />
 
+    <!-- searches activity -->
     <style name="SearchesAppTheme.Black" parent="AppTheme.Black">
         <!-- custom action bar -->
         <item name="android:actionBarStyle">@style/VectorSearches.Styled.ActionBar</item>
@@ -151,7 +157,6 @@
 
         <!-- actionbar icons color -->
         <item name="actionBarTheme">@style/VectorSearches.ActionBarTheme</item>
-
     </style>
 
     <style name="CallAppTheme.Black" parent="AppTheme.NoActionBar.Black">
@@ -178,6 +183,5 @@
 
         <item name="android:listDivider">@null</item>
     </style>
-
 
 </resources>
