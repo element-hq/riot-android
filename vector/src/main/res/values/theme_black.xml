@@ -184,4 +184,15 @@
         <item name="android:listDivider">@null</item>
     </style>
 
+    <style name="GroupAppTheme.Black" parent="AppTheme.Black">
+        <item name="colorPrimaryDark">@color/tab_groups_secondary</item>
+
+        <item name="android:actionBarTabStyle">@style/Vector.TabView.Group</item>
+        <item name="actionBarTabStyle">@style/Vector.TabView.Group</item>
+
+        <!-- custom action bar -->
+        <item name="android:actionBarStyle">@style/Group.Styled.ActionBar</item>
+        <item name="actionBarStyle">@style/Group.Styled.ActionBar</item>
+    </style>
+
 </resources>
