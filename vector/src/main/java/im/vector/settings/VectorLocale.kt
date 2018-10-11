@@ -22,6 +22,7 @@ import android.os.Build
 import android.preference.PreferenceManager
 import android.text.TextUtils
 import android.util.Pair
+import androidx.core.content.edit
 import im.vector.R
 import kotlinx.coroutines.experimental.GlobalScope
 import kotlinx.coroutines.experimental.launch
@@ -58,7 +59,12 @@ object VectorLocale {
     fun init(context: Context) {
         val preferences = PreferenceManager.getDefaultSharedPreferences(context)
 
-        if (!preferences.contains(APPLICATION_LOCALE_LANGUAGE_KEY)) {
+        if (preferences.contains(APPLICATION_LOCALE_LANGUAGE_KEY)) {
+            applicationLocal = Locale(preferences.getString(APPLICATION_LOCALE_LANGUAGE_KEY, ""),
+                    preferences.getString(APPLICATION_LOCALE_COUNTRY_KEY, ""),
+                    preferences.getString(APPLICATION_LOCALE_VARIANT_KEY, "")
+            )
+        } else {
             applicationLocal = Locale.getDefault()
 
             // detect if the default language is used
@@ -68,11 +74,6 @@ object VectorLocale {
             }
 
             saveApplicationLocale(context, applicationLocal)
-        } else {
-            applicationLocal = Locale(preferences.getString(APPLICATION_LOCALE_LANGUAGE_KEY, ""),
-                    preferences.getString(APPLICATION_LOCALE_COUNTRY_KEY, ""),
-                    preferences.getString(APPLICATION_LOCALE_VARIANT_KEY, "")
-            )
         }
 
         // init the known locales in background, using kotlin coroutines
@@ -87,30 +88,28 @@ object VectorLocale {
     fun saveApplicationLocale(context: Context, locale: Locale) {
         applicationLocal = locale
 
-        val editor = PreferenceManager.getDefaultSharedPreferences(context).edit()
+        PreferenceManager.getDefaultSharedPreferences(context).edit {
+            val language = locale.language
+            if (TextUtils.isEmpty(language)) {
+                remove(APPLICATION_LOCALE_LANGUAGE_KEY)
+            } else {
+                putString(APPLICATION_LOCALE_LANGUAGE_KEY, language)
+            }
 
-        val language = locale.language
-        if (!TextUtils.isEmpty(language)) {
-            editor.putString(APPLICATION_LOCALE_LANGUAGE_KEY, language)
-        } else {
-            editor.remove(APPLICATION_LOCALE_LANGUAGE_KEY)
+            val country = locale.country
+            if (TextUtils.isEmpty(country)) {
+                remove(APPLICATION_LOCALE_COUNTRY_KEY)
+            } else {
+                putString(APPLICATION_LOCALE_COUNTRY_KEY, country)
+            }
+
+            val variant = locale.variant
+            if (TextUtils.isEmpty(variant)) {
+                remove(APPLICATION_LOCALE_VARIANT_KEY)
+            } else {
+                putString(APPLICATION_LOCALE_VARIANT_KEY, variant)
+            }
         }
-
-        val country = locale.country
-        if (!TextUtils.isEmpty(country)) {
-            editor.putString(APPLICATION_LOCALE_COUNTRY_KEY, country)
-        } else {
-            editor.remove(APPLICATION_LOCALE_COUNTRY_KEY)
-        }
-
-        val variant = locale.variant
-        if (!TextUtils.isEmpty(variant)) {
-            editor.putString(APPLICATION_LOCALE_VARIANT_KEY, variant)
-        } else {
-            editor.remove(APPLICATION_LOCALE_VARIANT_KEY)
-        }
-
-        editor.apply()
     }
 
     /**
