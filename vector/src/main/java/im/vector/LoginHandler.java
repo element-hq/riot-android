@@ -24,7 +24,6 @@ import android.text.TextUtils;
 import org.matrix.androidsdk.HomeServerConnectionConfig;
 import org.matrix.androidsdk.MXSession;
 import org.matrix.androidsdk.rest.callback.ApiCallback;
-import org.matrix.androidsdk.rest.callback.SimpleApiCallback;
 import org.matrix.androidsdk.rest.client.LoginRestClient;
 import org.matrix.androidsdk.rest.client.ThirdPidRestClient;
 import org.matrix.androidsdk.rest.model.MatrixError;
@@ -35,6 +34,8 @@ import org.matrix.androidsdk.rest.model.pid.ThreePid;
 
 import java.util.Collection;
 import java.util.List;
+
+import im.vector.settings.VectorLocale;
 
 public class LoginHandler {
     /**
@@ -129,7 +130,7 @@ public class LoginHandler {
         if (!TextUtils.isEmpty(username)) {
             if (android.util.Patterns.EMAIL_ADDRESS.matcher(username).matches()) {
                 // Login with 3pid
-                client.loginWith3Pid(ThreePid.MEDIUM_EMAIL, username.toLowerCase(VectorApp.getApplicationLocale()), password, deviceName, null, callback);
+                client.loginWith3Pid(ThreePid.MEDIUM_EMAIL, username.toLowerCase(VectorLocale.INSTANCE.getApplicationLocale()), password, deviceName, null, callback);
             } else {
                 // Login with user
                 client.loginWithUser(username, password, deviceName, null, callback);

@@ -35,6 +35,8 @@ import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
+import im.vector.settings.VectorLocale;
+
 /**
  * This class displays the unknown certificate dialog
  */
@@ -105,7 +107,7 @@ public class UnrecognizedCertHandler {
 
         TextView sslFingerprintTitle = layout.findViewById(R.id.ssl_fingerprint_title);
         sslFingerprintTitle.setText(
-                String.format(VectorApp.getApplicationLocale(), activity.getString(R.string.ssl_fingerprint_hash), unrecognizedFingerprint.getType().toString())
+                String.format(VectorLocale.INSTANCE.getApplicationLocale(), activity.getString(R.string.ssl_fingerprint_hash), unrecognizedFingerprint.getType().toString())
         );
 
         TextView sslFingerprint = layout.findViewById(R.id.ssl_fingerprint);

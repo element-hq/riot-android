@@ -100,6 +100,7 @@ import im.vector.R;
 import im.vector.VectorApp;
 import im.vector.extensions.MatrixSdkExtensionsKt;
 import im.vector.listeners.IMessagesAdapterActionsListener;
+import im.vector.settings.VectorLocale;
 import im.vector.ui.VectorQuoteSpan;
 import im.vector.util.EmojiKt;
 import im.vector.util.EventGroup;
@@ -371,7 +372,7 @@ public class VectorMessagesAdapter extends AbstractMessagesAdapter {
                 mSession, mMaxImageWidth, mMaxImageHeight, mNotSentMessageTextColor, mDefaultMessageTextColor);
         mHelper = new VectorMessagesAdapterHelper(context, mSession, this);
 
-        mLocale = VectorApp.getApplicationLocale();
+        mLocale = VectorLocale.INSTANCE.getApplicationLocale();
 
         mAlwaysShowTimeStamps = PreferencesManager.alwaysShowTimeStamps(VectorApp.getInstance());
         mHideReadReceipts = PreferencesManager.hideReadReceipts(VectorApp.getInstance());

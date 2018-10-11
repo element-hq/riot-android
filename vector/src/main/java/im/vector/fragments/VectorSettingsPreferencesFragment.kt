@@ -57,6 +57,7 @@ import im.vector.contacts.ContactsManager
 import im.vector.extensions.getFingerprintHumanReadable
 import im.vector.preference.*
 import im.vector.settings.FontScale
+import im.vector.settings.VectorLocale
 import im.vector.util.*
 import org.matrix.androidsdk.MXSession
 import org.matrix.androidsdk.crypto.data.MXDeviceInfo
@@ -1434,7 +1435,7 @@ class VectorSettingsPreferencesFragment : PreferenceFragment(), SharedPreference
      * @param preferenceSummary the displayed 3pid
      */
     private fun displayDelete3PIDConfirmationDialog(pid: ThirdPartyIdentifier, preferenceSummary: CharSequence) {
-        val mediumFriendlyName = ThreePid.getMediumFriendlyName(pid.medium, activity).toLowerCase(VectorApp.getApplicationLocale())
+        val mediumFriendlyName = ThreePid.getMediumFriendlyName(pid.medium, activity).toLowerCase(VectorLocale.getApplicationLocale())
         val dialogMessage = getString(R.string.settings_delete_threepid_confirmation, mediumFriendlyName, preferenceSummary)
 
         AlertDialog.Builder(activity)
@@ -1480,7 +1481,7 @@ class VectorSettingsPreferencesFragment : PreferenceFragment(), SharedPreference
         val ignoredUsersList = mSession.dataHandler.ignoredUserIds
 
         ignoredUsersList.sortWith(Comparator { u1, u2 ->
-            u1.toLowerCase(VectorApp.getApplicationLocale()).compareTo(u2.toLowerCase(VectorApp.getApplicationLocale()))
+            u1.toLowerCase(VectorLocale.getApplicationLocale()).compareTo(u2.toLowerCase(VectorLocale.getApplicationLocale()))
         })
 
         val preferenceScreen = preferenceScreen
@@ -1924,7 +1925,7 @@ class VectorSettingsPreferencesFragment : PreferenceFragment(), SharedPreference
 
     private fun setUserInterfacePreferences() {
         // Selected language
-        selectedLanguagePreference.summary = VectorApp.localeToLocalisedString(VectorApp.getApplicationLocale())
+        selectedLanguagePreference.summary = VectorLocale.localeToLocalisedString(VectorLocale.getApplicationLocale())
 
         selectedLanguagePreference.onPreferenceClickListener = Preference.OnPreferenceClickListener {
             startActivityForResult(LanguagePickerActivity.getIntent(activity), REQUEST_LOCALE)

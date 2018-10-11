@@ -72,6 +72,7 @@ import im.vector.Matrix;
 import im.vector.R;
 import im.vector.VectorApp;
 import im.vector.adapters.ParticipantAdapterItem;
+import im.vector.settings.VectorLocale;
 
 public class VectorUtils {
 
@@ -259,7 +260,7 @@ public class VectorUtils {
             firstChar = name.substring(idx, idx + chars);
         }
 
-        return firstChar.toUpperCase(VectorApp.getApplicationLocale());
+        return firstChar.toUpperCase(VectorLocale.INSTANCE.getApplicationLocale());
     }
 
     /**
