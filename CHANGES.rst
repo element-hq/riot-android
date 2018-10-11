@@ -8,13 +8,20 @@ Features:
  - Status.im theme
 
 Improvements:
- -
+ - Use LocalBroadcastManager when applicable (#2595)
+ - Menu version copies version number to clipboard (#2570)
+ - Tapping on profile picture in sidebar opens settings page (#2597)
 
 Other changes:
  -
 
 Bugfix:
- -
+ - When exporting E2E keys, it isn't clear that you are creating a new password (#2626)
+ - Can't change room directory server (#2611)
+ - Reply get's lost when moving app in background and back (#2581)
+ - Android 8: crash on device Boot (#2615)
+ - Avoid creation of Gson object (#2608)
+ - Inline code breaks in reply messages (#2531)
 
 Translations:
  -

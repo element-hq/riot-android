@@ -387,7 +387,7 @@
     <string name="encryption_export_room_keys">导出聊天室密钥</string>
     <string name="encryption_export_room_keys_summary">导出密钥到本地文件</string>
     <string name="encryption_export_export">导出</string>
-    <string name="encryption_export_enter_passphrase">输入密码</string>
+    <string name="encryption_import_enter_passphrase">输入密码</string>
     <string name="encryption_export_confirm_passphrase">确认密码</string>
     <string name="encryption_export_saved_as">聊天室的端对端密钥已经被保存到“%s”。
 
@@ -727,7 +727,7 @@
     <string name="settings_labs_matrix_apps">Matrix 应用</string>
     <string name="room_add_matrix_apps">添加 Matrix 应用</string>
     <string name="notification_sync_in_progress">正在同步</string>
-    <string name="notification_listen_for_events">监听事件更新</string>
+    <string name="notification_listening_for_events">监听事件更新</string>
 
     <string name="call">通话</string>
     <string name="settings_containing_my_display_name">包含我昵称的消息</string>

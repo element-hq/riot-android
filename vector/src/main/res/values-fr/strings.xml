@@ -414,7 +414,7 @@ Cliquez sur exporter pour les sauvegarder avant de vous déconnecter.</string>
     <string name="encryption_export_e2e_room_keys">Exporter les clés E2E des salons</string>
     <string name="encryption_export_room_keys">Exporter les clés des salons</string>
     <string name="encryption_export_export">Exporter</string>
-    <string name="encryption_export_enter_passphrase">Saisir la phrase de passe</string>
+    <string name="encryption_import_enter_passphrase">Saisir la phrase de passe</string>
     <string name="encryption_export_confirm_passphrase">Confirmer la phrase de passe</string>
     <string name="encryption_import_e2e_room_keys">Importer les clés E2E des salons</string>
     <string name="encryption_import_room_keys">Importer les clés des salons</string>
@@ -705,7 +705,7 @@ Appareils inconnus :</string>
     <string name="black_them">Thème noir</string>
 
     <string name="notification_sync_in_progress">Synchronisation</string>
-    <string name="notification_listen_for_events">Écoute d\'évènements</string>
+    <string name="notification_listening_for_events">Écoute d\'évènements</string>
 
     <string name="login_mobile_device">Portable</string>
 

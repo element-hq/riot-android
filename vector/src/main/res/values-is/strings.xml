@@ -7,7 +7,7 @@
     <string name="black_them">Svart þema</string>
 
     <string name="notification_sync_in_progress">Samstilli</string>
-    <string name="notification_listen_for_events">Hlusta eftir atburðum</string>
+    <string name="notification_listening_for_events">Hlusta eftir atburðum</string>
     <string name="notification_noisy_notifications">Háværar tilkynningar</string>
     <string name="notification_silent_notifications">Hljóðlegar tilkynningar</string>
 
@@ -386,7 +386,7 @@
     <string name="encryption_information_ed25519_fingerprint">Ed25519 fingrafar</string>
 
     <string name="encryption_export_export">Flytja út</string>
-    <string name="encryption_export_enter_passphrase">Settu inn lykilsetningu (passphrase)</string>
+    <string name="encryption_import_enter_passphrase">Settu inn lykilsetningu (passphrase)</string>
     <string name="encryption_export_confirm_passphrase">Staðfestu lykilsetningu</string>
     <string name="encryption_import_import">Flytja inn</string>
     <string name="encryption_information_unknown_device">óþekkt tæki</string>

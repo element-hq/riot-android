@@ -39,7 +39,7 @@
     <string name="active_call">Chamada en curso</string>
     <string name="ongoing_conference_call_voice">voz</string>
     <string name="ongoing_conference_call_video">vídeo</string>
-    <string name="notification_listen_for_events">A escoita de eventos</string>
+    <string name="notification_listening_for_events">A escoita de eventos</string>
     <string name="forward">Adiante</string>
     <string name="report_content">Informar sobre contido</string>
     <string name="ongoing_conference_call">Conferencia en curso. Únase con vídeo ou voz.</string>
@@ -420,7 +420,7 @@ Pode engadir a dirección de correo na sección de configuración de perfil.</st
     <string name="encryption_export_e2e_room_keys">Exportar chaves E2E da sala</string>
     <string name="encryption_export_room_keys">Exportar chaves da sala</string>
     <string name="encryption_export_export">Exportar</string>
-    <string name="encryption_export_enter_passphrase">Introduza a frase de paso</string>
+    <string name="encryption_import_enter_passphrase">Introduza a frase de paso</string>
     <string name="encryption_export_confirm_passphrase">Confirme a frase de paso</string>
     <string name="encryption_import_e2e_room_keys">Importar chaves E2E da sala</string>
     <string name="encryption_import_room_keys">Importar chaves de sala</string>

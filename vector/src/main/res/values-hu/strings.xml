@@ -607,7 +607,7 @@ A titkosított üzenetek nem fognak látszódni azokon a klienseken ahol a titko
     <string name="encryption_export_room_keys">Szoba kulcsok exportálása</string>
     <string name="encryption_export_room_keys_summary">Exportáld a kulcsokat helyi fájlba</string>
     <string name="encryption_export_export">Exportálás</string>
-    <string name="encryption_export_enter_passphrase">Írj be jelmondatot</string>
+    <string name="encryption_import_enter_passphrase">Írj be jelmondatot</string>
     <string name="encryption_export_confirm_passphrase">Ellenőrizd a jelmondatot</string>
     <string name="encryption_export_saved_as">A E2E szoba kulcsok el lettek mentve ide \'%s\'
 
@@ -724,7 +724,7 @@ Ismeretlen eszközök:</string>
     <string name="widget_integration_room_not_visible">%s szoba nem látható.</string>
     <string name="settings_labs_matrix_apps">Matrix Alkalmazások</string>
     <string name="room_add_matrix_apps">Matrix alkalmazás hozzáadása</string>
-    <string name="notification_listen_for_events">Események figyelése</string>
+    <string name="notification_listening_for_events">Események figyelése</string>
 
     <string name="notification_sync_in_progress">Szinkronizálás</string>
     <string name="call">Hívás</string>

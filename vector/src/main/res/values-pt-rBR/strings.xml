@@ -641,7 +641,7 @@ Note que esta ação irá reiniciar o aplicativo e poderá tomar um certo tempo.
     <string name="encryption_export_room_keys">Exportar chaves de sala</string>
     <string name="encryption_export_room_keys_summary">Exportar as chaves para um arquivo local</string>
     <string name="encryption_export_export">Exportar</string>
-    <string name="encryption_export_enter_passphrase">Entre com a \'passphrase\'</string>
+    <string name="encryption_import_enter_passphrase">Entre com a \'passphrase\'</string>
     <string name="encryption_export_confirm_passphrase">Confirme a \'passphrase\'</string>
     <string name="encryption_export_saved_as">As chaves de sala E2E foram salvas em \'%s\'
 
@@ -727,7 +727,7 @@ No futuro, este processo de verificação será mais sofisticado.</string>
     <string name="black_them">Tema preto</string>
 
     <string name="notification_sync_in_progress">Sincronizando</string>
-    <string name="notification_listen_for_events">Escutando eventos</string>
+    <string name="notification_listening_for_events">Escutando eventos</string>
     <string name="notification_noisy_notifications">Notificações ruidosas</string>
     <string name="notification_silent_notifications">Notificações silenciosas</string>
 

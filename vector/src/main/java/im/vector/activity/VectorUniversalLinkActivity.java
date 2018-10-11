@@ -22,6 +22,7 @@ import android.app.ActivityManager;
 import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
+import android.support.v4.content.LocalBroadcastManager;
 import android.text.TextUtils;
 import android.widget.Toast;
 
@@ -86,7 +87,7 @@ public class VectorUniversalLinkActivity extends VectorAppCompatActivity {
                                     @Override
                                     public void onSuccess(Void info) {
                                         Log.d(LOG_TAG, "## onCreate(): logout succeeded");
-                                        sendBroadcast(myBroadcastIntent);
+                                        LocalBroadcastManager.getInstance(VectorUniversalLinkActivity.this).sendBroadcast(myBroadcastIntent);
                                         finish();
                                     }
                                 });
@@ -113,7 +114,7 @@ public class VectorUniversalLinkActivity extends VectorAppCompatActivity {
 
             myBroadcastIntent.setAction(intentAction);
             myBroadcastIntent.setData(getIntent().getData());
-            sendBroadcast(myBroadcastIntent);
+            LocalBroadcastManager.getInstance(this).sendBroadcast(myBroadcastIntent);
             finish();
         }
     }

@@ -7,7 +7,7 @@
     <string name="black_them">Svart Preg</string>
 
     <string name="notification_sync_in_progress">Samstiller</string>
-    <string name="notification_listen_for_events">Høyrer etter hendingar</string>
+    <string name="notification_listening_for_events">Høyrer etter hendingar</string>
     <string name="notification_noisy_notifications">Bråkete varsel</string>
     <string name="notification_silent_notifications">Stille varsel</string>
 
@@ -783,7 +783,7 @@ Krypterte meldingar vil ikkje vera synlege hjå klientar som førebels ikkje har
     <string name="encryption_export_room_keys">Hent romnyklar ut</string>
     <string name="encryption_export_room_keys_summary">Hent nyklane ut til ei lokal fil</string>
     <string name="encryption_export_export">Hent ut</string>
-    <string name="encryption_export_enter_passphrase">Skriv passetning inn</string>
+    <string name="encryption_import_enter_passphrase">Skriv passetning inn</string>
     <string name="encryption_export_confirm_passphrase">Stadfest passetninga</string>
     <string name="encryption_export_saved_as">E2E-romnyklane vart lagra til \'%s\'
 

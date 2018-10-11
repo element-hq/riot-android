@@ -19,7 +19,6 @@ package im.vector.util;
 
 import android.annotation.SuppressLint;
 import android.content.ClipData;
-import android.content.ClipboardManager;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
@@ -43,7 +42,6 @@ import android.webkit.WebView;
 import android.widget.BaseExpandableListAdapter;
 import android.widget.ExpandableListView;
 import android.widget.ImageView;
-import android.widget.Toast;
 
 import org.matrix.androidsdk.MXSession;
 import org.matrix.androidsdk.call.MXCallsManager;
@@ -73,6 +71,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.regex.Pattern;
 
+import im.vector.Matrix;
 import im.vector.R;
 import im.vector.VectorApp;
 import im.vector.adapters.ParticipantAdapterItem;
@@ -83,22 +82,6 @@ public class VectorUtils {
 
     //public static final int REQUEST_FILES = 0;
     public static final int TAKE_IMAGE = 1;
-
-    //==============================================================================================================
-    // Clipboard helper
-    //==============================================================================================================
-
-    /**
-     * Copy a text to the clipboard.
-     *
-     * @param context the context
-     * @param text    the text to copy
-     */
-    public static void copyToClipboard(Context context, CharSequence text) {
-        ClipboardManager clipboard = (ClipboardManager) context.getSystemService(Context.CLIPBOARD_SERVICE);
-        clipboard.setPrimaryClip(ClipData.newPlainText("", text));
-        Toast.makeText(context, context.getString(R.string.copied_to_clipboard), Toast.LENGTH_SHORT).show();
-    }
 
     //==============================================================================================================
     // Rooms methods
@@ -705,7 +688,7 @@ public class VectorUtils {
      * @return the version. an empty string is not found.
      */
     public static String getApplicationVersion(final Context context) {
-        return im.vector.Matrix.getInstance(context).getVersion(false, true);
+        return Matrix.getInstance(context).getVersion(false, true);
     }
 
     /**

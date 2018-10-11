@@ -498,7 +498,7 @@ Wprowadź hasło, aby kontynuować.</string>
     <string name="encryption_information_ed25519_fingerprint">Odcisk palca Ed25519</string>
 
     <string name="encryption_export_export">Eksportuj</string>
-    <string name="encryption_export_enter_passphrase">Wprowadź hasło</string>
+    <string name="encryption_import_enter_passphrase">Wprowadź hasło</string>
     <string name="encryption_export_confirm_passphrase">Potwierdź hasło</string>
     <string name="encryption_information_not_verified">Nie zweryfikowano</string>
     <string name="encryption_information_verified">Zweryfikowano</string>
@@ -554,7 +554,7 @@ Wprowadź hasło, aby kontynuować.</string>
     <string name="notification_off">Off</string>
     <string name="conference_call_warning_title">Uwaga!</string>
     <string name="notification_sync_in_progress">W trakcie synchronizacji</string>
-    <string name="notification_listen_for_events">Nasłuchuj zdarzeń</string>
+    <string name="notification_listening_for_events">Nasłuchuj zdarzeń</string>
     <string name="notification_noisy_notifications">Głośne powiadomienia</string>
     <string name="notification_silent_notifications">Ciche powiadomienia</string>
 

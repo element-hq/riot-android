@@ -655,7 +655,7 @@ Salatut viestit eivät näy sovelluksissa, jotka eivät tue salausta.</string> <
     <string name="encryption_export_room_keys">Vie huoneen avaimet</string>
     <string name="encryption_export_room_keys_summary">Säästä avaimet paikalliseen tiedostoon</string>
     <string name="encryption_export_export">Vie</string>
-    <string name="encryption_export_enter_passphrase">Anna salasana</string>
+    <string name="encryption_import_enter_passphrase">Anna salasana</string>
     <string name="encryption_export_confirm_passphrase">Vahvista salasana</string>
     <string name="encryption_export_saved_as">Huoneen salausavaimet tallennettiin tiedostoon \'%s\'</string>
 
@@ -739,7 +739,7 @@ Voit tehdä sen nyt tai myöhemmin sovelluksen asetuksissa.</string>
     <string name="black_them">Musta teema</string>
 
     <string name="notification_sync_in_progress">Synkronoidaan</string>
-    <string name="notification_listen_for_events">Seuraa tapahtumia</string>
+    <string name="notification_listening_for_events">Seuraa tapahtumia</string>
     <string name="notification_noisy_notifications">Korostetut ilmoitukset</string>
     <string name="notification_silent_notifications">Hiljaiset ilmoitukset</string>
 

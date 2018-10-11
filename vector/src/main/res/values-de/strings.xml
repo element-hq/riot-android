@@ -654,7 +654,7 @@ Verschlüsselte Nachrichten werden auf Matrix-Clients, auf denen die Verschlüss
     <string name="encryption_export_room_keys">Raumschlüssel exportieren</string>
     <string name="encryption_export_room_keys_summary">Schlüssel in lokale Datei exportieren</string>
     <string name="encryption_export_export">Exportieren</string>
-    <string name="encryption_export_enter_passphrase">Passphrase eingeben</string>
+    <string name="encryption_import_enter_passphrase">Passphrase eingeben</string>
     <string name="encryption_export_confirm_passphrase">Passphrase bestätigen</string>
     <string name="encryption_export_saved_as">Die Ende-zu-Ende-Raumschlüssel wurden in \'%s\' gespeichert.
 
@@ -771,7 +771,7 @@ Unbekannte Geräte:</string>
     <string name="login_mobile_device">Mobilgerät</string>
 
     <string name="notification_sync_in_progress">Synchronisiere</string>
-    <string name="notification_listen_for_events">Auf Ereignisse lauschen</string>
+    <string name="notification_listening_for_events">Auf Ereignisse lauschen</string>
 
     <string name="settings_containing_my_display_name">Nachrichten, die meinen Anzeigenamen enthalten</string>
     <string name="settings_containing_my_user_name">Nachrichten, die meinen Benutzernamen enthalten</string>

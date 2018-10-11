@@ -428,7 +428,7 @@ public class VectorCallViewActivity extends VectorAppCompatActivity implements S
         mHangUpImageView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                mCallsManager.onHangUp(CallsManager.HANGUP_MSG_USER_CANCEL);
+                mCallsManager.onHangUp(null);
             }
         });
 

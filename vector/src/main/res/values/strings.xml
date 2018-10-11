@@ -14,7 +14,7 @@
 
     <!-- permanent notification subtitle -->
     <string name="notification_sync_in_progress">Synchronising</string>
-    <string name="notification_listen_for_events">Listen for events</string>
+    <string name="notification_listening_for_events">Listening for events</string>
     <string name="notification_noisy_notifications">Noisy notifications</string>
     <string name="notification_silent_notifications">Silent notifications</string>
 
@@ -575,6 +575,7 @@
     <string name="room_sliding_menu_messages">Messages</string>
     <string name="room_sliding_menu_settings">Settings</string>
     <string name="room_sliding_menu_version">Version</string>
+    <string name="room_sliding_menu_version_x">Version %s</string>
     <string name="room_sliding_menu_term_and_conditions">Terms &amp; conditions</string>
     <string name="room_sliding_menu_third_party_notices">Third party notices</string>
     <string name="room_sliding_menu_copyright">Copyright</string>
@@ -852,14 +853,17 @@
     <string name="encryption_export_room_keys">Export room keys</string>
     <string name="encryption_export_room_keys_summary">Export the keys to a local file</string>
     <string name="encryption_export_export">Export</string>
-    <string name="encryption_export_enter_passphrase">Enter passphrase</string>
+    <string name="encryption_export_notice">Please create a passphrase to encrypt the exported keys. You will need to enter the same passphrase to be able to import the keys.</string>
+    <string name="encryption_export_create_passphrase">Create passphrase</string>
     <string name="encryption_export_confirm_passphrase">Confirm passphrase</string>
+    <string name="encryption_export_passphrase_dont_match">Passphrases must match</string>
     <string name="encryption_export_saved_as">The E2E room keys have been saved to \'%s\'.\n\nWarning: this file may be deleted if the application is uninstalled.</string>
 
     <string name="encryption_import_e2e_room_keys">Import E2E room keys</string>
     <string name="encryption_import_room_keys">Import room keys</string>
     <string name="encryption_import_room_keys_summary">Import the keys from a local file</string>
     <string name="encryption_import_import">Import</string>
+    <string name="encryption_import_enter_passphrase">Enter passphrase</string>
     <string name="encryption_never_send_to_unverified_devices_title">Encrypt to verified devices only</string>
     <string name="encryption_never_send_to_unverified_devices_summary">Never send encrypted messages to unverified devices from this device</string>
 
@@ -1073,5 +1077,9 @@
 
     <!-- Other errors -->
     <string name="unknown_error">Sorry, an error occurred</string>
+
+    <!-- Expand/Collapse room member changes -->
+    <string name="merged_events_expand">expand</string>
+    <string name="merged_events_collapse">collapse</string>
 
 </resources>

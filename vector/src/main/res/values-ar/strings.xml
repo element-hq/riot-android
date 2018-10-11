@@ -7,7 +7,7 @@
     <string name="black_them">السمة السوداء</string>
 
     <string name="notification_sync_in_progress">يُزامن</string>
-    <string name="notification_listen_for_events">يستمع للأحداث</string>
+    <string name="notification_listening_for_events">يستمع للأحداث</string>
     <string name="title_activity_home">الرسائل</string>
     <string name="title_activity_settings">الإعدادات</string>
     <string name="title_activity_member_details">تفاصيل الأعضاء</string>
@@ -420,7 +420,7 @@
     <string name="encryption_information_device_key">مفتاح الجهاز</string>
     <string name="encryption_export_room_keys">صدّر مفاتيح الغرفة</string>
     <string name="encryption_export_room_keys_summary">صدّر المفاتيح إلى ملف محلي</string>
-    <string name="encryption_export_enter_passphrase">أدخِل عبارة المرور</string>
+    <string name="encryption_import_enter_passphrase">أدخِل عبارة المرور</string>
     <string name="encryption_export_confirm_passphrase">أكّد عبارة المرور</string>
     <string name="encryption_export_saved_as">حُفظت مفاتيح الطرفين للغرفة في ’⁨%s⁩‘</string>
 

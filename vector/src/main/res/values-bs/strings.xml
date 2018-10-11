@@ -7,7 +7,7 @@
     <string name="black_them">Crna Tema</string>
 
     <string name="notification_sync_in_progress">Sinkronizacija</string>
-    <string name="notification_listen_for_events">Budući Događaji</string>
+    <string name="notification_listening_for_events">Budući Događaji</string>
     <string name="notification_noisy_notifications">Glasne notifikacije</string>
     <string name="notification_silent_notifications">Nečujne notifikiacije</string>
 

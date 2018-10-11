@@ -642,7 +642,7 @@ Los mensajes cifrados no serán visibles en cuentas que no implementan el cifrad
     <string name="encryption_export_room_keys">Exportar claves de salas</string>
     <string name="encryption_export_room_keys_summary">Exportar las claves a un archivo local</string>
     <string name="encryption_export_export">Exportar</string>
-    <string name="encryption_export_enter_passphrase">Escribir Contraseña</string>
+    <string name="encryption_import_enter_passphrase">Escribir Contraseña</string>
     <string name="encryption_export_confirm_passphrase">Confirmar Contraseña</string>
     <string name="encryption_export_saved_as">Las claves de cifración de Persona-a-Persona se guardaron en \'%s\'</string>
 
@@ -772,7 +772,7 @@ Dispositivos desconocidos:</string>
     <string name="dark_theme">Tema Oscuro</string>
     <string name="black_them">Tema Negro</string>
 
-    <string name="notification_listen_for_events">Detectar eventos</string>
+    <string name="notification_listening_for_events">Detectar eventos</string>
     <string name="notification_noisy_notifications">Notificaciones ruidosas</string>
     <string name="notification_silent_notifications">Notificaciones silenciosas</string>
 

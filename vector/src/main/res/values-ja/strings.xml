@@ -324,7 +324,7 @@
     <string name="largest">とても大きい</string>
     <string name="huge">巨大</string>
 
-    <string name="notification_listen_for_events">発言更新を確認</string>
+    <string name="notification_listening_for_events">発言更新を確認</string>
 
     <string name="view_decrypted_source">暗号解除されたソースコードを表示</string>
     <string name="rename">名前変更</string>
@@ -602,7 +602,7 @@ Riotアプリがあなたの電話帳へアクセスすることを許可しま�
     <string name="encryption_import_e2e_room_keys">部屋のエンドツーエンド暗号鍵をインポート</string>
 
     <string name="encryption_export_confirm_passphrase">パスフレーズを確認</string>
-    <string name="encryption_export_enter_passphrase">パスフレーズを入力</string>
+    <string name="encryption_import_enter_passphrase">パスフレーズを入力</string>
     <string name="encryption_export_export">エクスポート</string>
     <string name="encryption_export_room_keys_summary">暗号鍵をローカルファイルにエクスポートする</string>
     <string name="encryption_export_room_keys">部屋の暗号鍵をエクスポート</string>

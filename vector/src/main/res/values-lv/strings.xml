@@ -145,7 +145,7 @@ Kā arī epasta adrese ļaus Tev atiestatīt paroli.</string>
     <string name="black_them">Melna ādiņa</string>
 
     <string name="notification_sync_in_progress">Sinhronizācija</string>
-    <string name="notification_listen_for_events">Notikumu monitorings</string>
+    <string name="notification_listening_for_events">Notikumu monitorings</string>
     <string name="notification_noisy_notifications">Skaņi paziņojumi</string>
     <string name="notification_silent_notifications">Klusi paziņojumi</string>
 
@@ -739,7 +739,7 @@ Ja reiz šifrēšana istabā tiek ieslēgta, tā vairs nevar tikt izslēgta (pag
     <string name="encryption_export_room_keys">Eksportēt istabas atslēgas</string>
     <string name="encryption_export_room_keys_summary">Eksportēt atslēgas vietējā failā</string>
     <string name="encryption_export_export">Eksports</string>
-    <string name="encryption_export_enter_passphrase">Ievadi paroli (paroles frāzi)</string>
+    <string name="encryption_import_enter_passphrase">Ievadi paroli (paroles frāzi)</string>
     <string name="encryption_export_confirm_passphrase">Apstiprināt paroli</string>
     <string name="encryption_export_saved_as">E2E istabas atslēgas ir saglabātas failā \'%s\'</string>
 

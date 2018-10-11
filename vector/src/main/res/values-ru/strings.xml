@@ -661,7 +661,7 @@ Email также позволит вам при необходимости во�
     <string name="encryption_export_room_keys">Экспорт ключей комнаты</string>
     <string name="encryption_export_room_keys_summary">Экспорт ключей в локальный файл</string>
     <string name="encryption_export_export">Экспорт</string>
-    <string name="encryption_export_enter_passphrase">Введите пароль</string>
+    <string name="encryption_import_enter_passphrase">Введите пароль</string>
     <string name="encryption_export_confirm_passphrase">Подтвердите пароль</string>
     <string name="encryption_export_saved_as">E2E ключи комнаты сохранены в \'%s\'.
 
@@ -778,7 +778,7 @@ Email также позволит вам при необходимости во�
     <string name="login_mobile_device">Мобильный</string>
 
     <string name="notification_sync_in_progress">Синхронизация</string>
-    <string name="notification_listen_for_events">Мониторинг событий</string>
+    <string name="notification_listening_for_events">Мониторинг событий</string>
 
     <string name="call">Вызов</string>
     <string name="settings_containing_my_user_name">Сообщения, содержащие мое имя пользователя</string>

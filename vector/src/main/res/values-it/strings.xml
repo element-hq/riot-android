@@ -687,7 +687,7 @@ I messaggi criptati non saranno visibili ai riceventi che non hanno ancora imple
     <string name="encryption_export_room_keys">Esporta le chiavi delle stanze</string>
     <string name="encryption_export_room_keys_summary">Esporta le chiavi in un file locale</string>
     <string name="encryption_export_export">Esporta</string>
-    <string name="encryption_export_enter_passphrase">Inserisci frase d\'accesso (passphrase)</string>
+    <string name="encryption_import_enter_passphrase">Inserisci frase d\'accesso (passphrase)</string>
     <string name="encryption_export_confirm_passphrase">Conferma frase d\'accesso (passphrase)</string>
     <string name="encryption_export_saved_as">Le chiavi da-utente-a-utente della stanza sono state salvate su \'%s\'.
 
@@ -777,7 +777,7 @@ In futuro il processo di verifica sarà più sofisticato.</string>
     <string name="notification_silent_notifications">Notifiche silenziose</string>
 
     <string name="notification_noisy_notifications">Notifiche audio</string>
-    <string name="notification_listen_for_events">In ascolto di eventi</string>
+    <string name="notification_listening_for_events">In ascolto di eventi</string>
     <string name="title_activity_bug_report">Rapporto errori</string>
 
     <string name="login_mobile_device">Cellulare</string>

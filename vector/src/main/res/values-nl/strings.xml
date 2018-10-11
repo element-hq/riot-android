@@ -648,7 +648,7 @@ Versleutelde berichten zullen nog niet zichtbaar zijn op programma\'s die geen v
     <string name="encryption_export_room_keys">Exporteer ruimte sleutels</string>
     <string name="encryption_export_room_keys_summary">Exporteer de sleutels naar een lokaal bestand</string>
     <string name="encryption_export_export">Exporteer</string>
-    <string name="encryption_export_enter_passphrase">Enter wachtzin</string>
+    <string name="encryption_import_enter_passphrase">Enter wachtzin</string>
     <string name="encryption_export_confirm_passphrase">Bevestig wachtzin</string>
     <string name="encryption_export_saved_as">De E2E ruimte sleutels zijn in \'%s\' opgeslagen.
 
@@ -735,7 +735,7 @@ Je kan het nu, of later, doen vanuit de programma-instellingen.</string>
     <string name="black_them">Zwart Thema</string>
 
     <string name="notification_sync_in_progress">Aan het synchroniseren</string>
-    <string name="notification_listen_for_events">Luisteren voor evenementen</string>
+    <string name="notification_listening_for_events">Luisteren voor evenementen</string>
 
     <string name="login_mobile_device">Mobiel</string>
 

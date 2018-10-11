@@ -149,3 +149,6 @@ android\.app\.AlertDialog
 &&$
 \|\|$
  ==$
+
+### Use JsonUtils.getBasicGson()
+new Gson\(\)
