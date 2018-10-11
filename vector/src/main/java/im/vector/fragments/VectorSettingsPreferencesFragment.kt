@@ -1435,7 +1435,7 @@ class VectorSettingsPreferencesFragment : PreferenceFragment(), SharedPreference
      * @param preferenceSummary the displayed 3pid
      */
     private fun displayDelete3PIDConfirmationDialog(pid: ThirdPartyIdentifier, preferenceSummary: CharSequence) {
-        val mediumFriendlyName = ThreePid.getMediumFriendlyName(pid.medium, activity).toLowerCase(VectorLocale.getApplicationLocale())
+        val mediumFriendlyName = ThreePid.getMediumFriendlyName(pid.medium, activity).toLowerCase(VectorLocale.applicationLocale)
         val dialogMessage = getString(R.string.settings_delete_threepid_confirmation, mediumFriendlyName, preferenceSummary)
 
         AlertDialog.Builder(activity)
@@ -1481,7 +1481,7 @@ class VectorSettingsPreferencesFragment : PreferenceFragment(), SharedPreference
         val ignoredUsersList = mSession.dataHandler.ignoredUserIds
 
         ignoredUsersList.sortWith(Comparator { u1, u2 ->
-            u1.toLowerCase(VectorLocale.getApplicationLocale()).compareTo(u2.toLowerCase(VectorLocale.getApplicationLocale()))
+            u1.toLowerCase(VectorLocale.applicationLocale).compareTo(u2.toLowerCase(VectorLocale.applicationLocale))
         })
 
         val preferenceScreen = preferenceScreen
@@ -1925,7 +1925,7 @@ class VectorSettingsPreferencesFragment : PreferenceFragment(), SharedPreference
 
     private fun setUserInterfacePreferences() {
         // Selected language
-        selectedLanguagePreference.summary = VectorLocale.localeToLocalisedString(VectorLocale.getApplicationLocale())
+        selectedLanguagePreference.summary = VectorLocale.localeToLocalisedString(VectorLocale.applicationLocale)
 
         selectedLanguagePreference.onPreferenceClickListener = Preference.OnPreferenceClickListener {
             startActivityForResult(LanguagePickerActivity.getIntent(activity), REQUEST_LOCALE)

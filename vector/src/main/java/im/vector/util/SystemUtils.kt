@@ -96,7 +96,7 @@ fun getDeviceLocale(context: Context): Locale {
     } catch (e: Exception) {
         Log.e(LOG_TAG, "## getDeviceLocale() failed " + e.message, e)
         // Fallback to application locale
-        VectorLocale.getApplicationLocale()
+        VectorLocale.applicationLocale
     }
 
     return locale

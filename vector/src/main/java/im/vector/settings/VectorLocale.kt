@@ -35,23 +35,23 @@ import java.util.*
 object VectorLocale {
     private val LOG_TAG = VectorLocale.javaClass.simpleName
 
-    // the supported application languages
-    private val mApplicationLocales = HashSet<Locale>()
-
     private const val APPLICATION_LOCALE_COUNTRY_KEY = "APPLICATION_LOCALE_COUNTRY_KEY"
     private const val APPLICATION_LOCALE_VARIANT_KEY = "APPLICATION_LOCALE_VARIANT_KEY"
     private const val APPLICATION_LOCALE_LANGUAGE_KEY = "APPLICATION_LOCALE_LANGUAGE_KEY"
 
-    private val mApplicationDefaultLanguage = Locale("en", "US")
+    private val defaultLocale = Locale("en", "US")
 
-    private lateinit var applicationLocal: Locale
+    /**
+     * The supported application languages
+     */
+    var supportedLocales = ArrayList<Locale>()
+        private set
 
     /**
      * Provides the current application locale
-     *
-     * @return the application locale
      */
-    fun getApplicationLocale() = applicationLocal
+    var applicationLocale = defaultLocale
+        private set
 
     /**
      * Init this object
@@ -60,25 +60,25 @@ object VectorLocale {
         val preferences = PreferenceManager.getDefaultSharedPreferences(context)
 
         if (preferences.contains(APPLICATION_LOCALE_LANGUAGE_KEY)) {
-            applicationLocal = Locale(preferences.getString(APPLICATION_LOCALE_LANGUAGE_KEY, ""),
+            applicationLocale = Locale(preferences.getString(APPLICATION_LOCALE_LANGUAGE_KEY, ""),
                     preferences.getString(APPLICATION_LOCALE_COUNTRY_KEY, ""),
                     preferences.getString(APPLICATION_LOCALE_VARIANT_KEY, "")
             )
         } else {
-            applicationLocal = Locale.getDefault()
+            applicationLocale = Locale.getDefault()
 
             // detect if the default language is used
-            val defaultStringValue = getString(context, mApplicationDefaultLanguage, R.string.resources_country_code)
-            if (TextUtils.equals(defaultStringValue, getString(context, applicationLocal, R.string.resources_country_code))) {
-                applicationLocal = mApplicationDefaultLanguage
+            val defaultStringValue = getString(context, defaultLocale, R.string.resources_country_code)
+            if (TextUtils.equals(defaultStringValue, getString(context, applicationLocale, R.string.resources_country_code))) {
+                applicationLocale = defaultLocale
             }
 
-            saveApplicationLocale(context, applicationLocal)
+            saveApplicationLocale(context, applicationLocale)
         }
 
         // init the known locales in background, using kotlin coroutines
         GlobalScope.launch {
-            getApplicationLocales(context)
+            initApplicationLocales(context)
         }
     }
 
@@ -86,7 +86,7 @@ object VectorLocale {
      * Save the new application locale.
      */
     fun saveApplicationLocale(context: Context, locale: Locale) {
-        applicationLocal = locale
+        applicationLocale = locale
 
         PreferenceManager.getDefaultSharedPreferences(context).edit {
             val language = locale.language
@@ -133,7 +133,6 @@ object VectorLocale {
                 // use the default one
                 result = context.getString(resourceId)
             }
-
         } else {
             val resources = context.resources
             val conf = resources.configuration
@@ -156,36 +155,30 @@ object VectorLocale {
      * Provides the supported application locales list
      *
      * @param context the context
-     * @return the supported application locales list
      */
-    @Synchronized
-    fun getApplicationLocales(context: Context): List<Locale> {
-        if (mApplicationLocales.isEmpty()) {
-            val knownLocalesSet = HashSet<Pair<String, String>>()
+    private fun initApplicationLocales(context: Context) {
+        val knownLocalesSet = HashSet<Pair<String, String>>()
 
-            try {
-                val availableLocales = Locale.getAvailableLocales()
+        try {
+            val availableLocales = Locale.getAvailableLocales()
 
-                for (locale in availableLocales) {
-                    knownLocalesSet.add(Pair(getString(context, locale, R.string.resources_language),
-                            getString(context, locale, R.string.resources_country_code)))
-                }
-            } catch (e: Exception) {
-                Log.e(LOG_TAG, "## getApplicationLocales() : failed " + e.message, e)
-                knownLocalesSet.add(Pair(context.getString(R.string.resources_language), context.getString(R.string.resources_country_code)))
+            for (locale in availableLocales) {
+                knownLocalesSet.add(Pair(getString(context, locale, R.string.resources_language),
+                        getString(context, locale, R.string.resources_country_code)))
             }
-
-            for (knownLocale in knownLocalesSet) {
-                mApplicationLocales.add(Locale(knownLocale.first, knownLocale.second))
-            }
+        } catch (e: Exception) {
+            Log.e(LOG_TAG, "## getApplicationLocales() : failed " + e.message, e)
+            knownLocalesSet.add(Pair(context.getString(R.string.resources_language), context.getString(R.string.resources_country_code)))
         }
 
-        val sortedLocalesList = ArrayList(mApplicationLocales)
+        supportedLocales.clear()
+
+        for (knownLocale in knownLocalesSet) {
+            supportedLocales.add(Locale(knownLocale.first, knownLocale.second))
+        }
 
         // sort by human display names
-        sortedLocalesList.sortWith(Comparator { lhs, rhs -> localeToLocalisedString(lhs).compareTo(localeToLocalisedString(rhs)) })
-
-        return sortedLocalesList
+        supportedLocales.sortWith(Comparator { lhs, rhs -> localeToLocalisedString(lhs).compareTo(localeToLocalisedString(rhs)) })
     }
 
     /**
