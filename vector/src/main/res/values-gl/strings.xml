@@ -253,7 +253,6 @@ Pode engadir a dirección de correo na sección de configuración de perfil.</st
     <string name="ssl_trust">Confiar</string>
     <string name="ssl_logout_account">Desconectar</string>
     <string name="ssl_remain_offline">Ignorar</string>
-    <string name="ssl_fingerprint_example">00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00</string>
 
     <string name="room_details_people">Xente</string>
     <string name="room_details_files">Ficheiros</string>

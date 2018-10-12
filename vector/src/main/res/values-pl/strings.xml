@@ -301,7 +301,6 @@ Przyznaj dostęp w następnym oknie.</string>
     <string name="ssl_remain_offline">Ignoruj</string>
     <string name="ssl_fingerprint_hash">Odcisk palca (%s):</string>
     <string name="ssl_could_not_verify">Nie można zweryfikować tożsamości serwera.</string>
-    <string name="ssl_fingerprint_example">00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00</string>
 
     <string name="room_details_title">Szczegóły pokoju</string>
     <string name="room_details_people">Ludzie</string>

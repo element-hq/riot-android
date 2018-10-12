@@ -365,7 +365,6 @@ Da li ste sigurani?</string>
     <string name="ssl_unexpected_existing_expl">Certifikat je promijenjen s onoga koji vaš telefon smatra pouzdanim. Ovo je VRLO NEUBIČAJENO. Preporučuje se da NE PRIHVAĆATE ovaj novi certifikat.</string>
     <string name="ssl_expected_existing_expl">Potvrda se promijenila s prethodno pouzdane u onu koja nije pouzdana. Postoji mogučnost da je server obnovio svoj certifikat. Obratite se administratoru servera za očekivani otisak prsta.</string>
     <string name="ssl_only_accept">SAMO prihvatiti certifikat ako je administrator servera objavio otisak prsta koji odgovara gore navedenom.</string>
-    <string name="ssl_fingerprint_example">00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00</string>
 
     <string name="room_details_title">Detalji Sobe</string>
     <string name="room_details_people">Ljudi</string>
