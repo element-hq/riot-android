@@ -1523,7 +1523,7 @@ public class VectorMessagesAdapter extends AbstractMessagesAdapter {
             Message message = JsonUtils.toMessage(event.getContent());
             String userDisplayName = (null == roomState) ? event.getSender() : roomState.getMemberName(event.getSender());
 
-            String body = "* " + userDisplayName + " " + message.body;
+            CharSequence body = "* " + userDisplayName + " " + message.body;
 
             if (TextUtils.equals(Message.FORMAT_MATRIX_HTML, message.format)) {
                 String htmlString = mHelper.getSanitisedHtml(message.formatted_body);
@@ -1531,7 +1531,7 @@ public class VectorMessagesAdapter extends AbstractMessagesAdapter {
                 if (null != htmlString) {
                     CharSequence sequence = mHelper.convertToHtml(htmlString);
 
-                    body = "* " + userDisplayName + " " + sequence;
+                    body = TextUtils.concat("* ", userDisplayName, " ", sequence);
                 }
             }
 
