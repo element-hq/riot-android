@@ -393,7 +393,6 @@ Sicuro di procedere?</string>
     <string name="ssl_unexpected_existing_expl">Il certificato è cambiato rispetto a quello ritenuto affidabile dal tuo telefono. Questo è ESTREMAMENTE INSOLITO. Si raccomanda di NON ACCETTARE questo nuovo certificato.</string>
     <string name="ssl_expected_existing_expl">Il certificato è cambiato da quello precedente ritenuto affidabile ad uno non affidabile. Il server potrebbe aver rinnovato il proprio certificato. Contatta l\'amministratore del server per chiedere l\'impronta digitale prevista.</string>
     <string name="ssl_only_accept">Accetta il certificato solo se l\'amministratore ha pubblicato un\'impronta digitale che corrisponda a quella qua sopra.</string>
-    <string name="ssl_fingerprint_example">00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00</string>
 
     <!-- Room Details -->
     <string name="room_details_title">Dettagli stanza</string>

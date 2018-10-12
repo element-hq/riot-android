@@ -572,7 +572,6 @@
     <string name="ssl_unexpected_existing_expl">您的手机曾信任的证书已被更改。这<b>非常反常</b>。建议您<b>不要接受</b>此新证书。</string>
     <string name="ssl_expected_existing_expl">证书已从以前受信任的更改为不受信任的证书。服务器可能已更新其证书。请联系管理员并核对服务器的指纹。</string>
     <string name="ssl_only_accept">请仅在服务器管理员已经发布了与上述相匹配的指纹的情况下接受该证书。</string>
-    <string name="ssl_fingerprint_example">00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00</string>
     <string name="room_details_people">成员</string>
     <string name="malformed_id">ID 的格式不正确。应该是一个电子邮箱地址或 Matrix ID，如 “@localpart:domain”</string>
     <string name="tab_title_search_people">联系人</string>

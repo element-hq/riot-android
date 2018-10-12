@@ -389,7 +389,6 @@ Los mensajes cifrados no serán visibles en los clientes que aún no implementen
     <string name="ssl_unexpected_existing_expl">El certificado cambió de uno que era confiable para tu teléfono. Esto es MUY INUSUAL. Se recomienda NO ACEPTAR este nuevo certificado.</string>
     <string name="ssl_expected_existing_expl">El certificado cambió de uno que era confiable a uno que no es confiable. El servidor puede haber renovado su certificado. Contacta al administrador del servidor para obtener la huella digital.</string>
     <string name="ssl_only_accept">SOLO acepta el certificado si el administrador del servidor ha publicado una huella digital que coincide con la anterior.</string>
-    <string name="ssl_fingerprint_example">00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00</string>
 
     <!-- Room Details -->
     <string name="room_details_title">Detalles de Sala</string>

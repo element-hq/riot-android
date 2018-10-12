@@ -490,7 +490,6 @@
     <string name="ssl_unexpected_existing_expl">The certificate has changed from one that was trusted by your phone. This is HIGHLY UNUSUAL. It is recommended that you DO NOT ACCEPT this new certificate.</string>
     <string name="ssl_expected_existing_expl">The certificate has changed from a previously trusted one to one that is not trusted. The server may have renewed its certificate. Contact the server administrator for the expected fingerprint.</string>
     <string name="ssl_only_accept">Only accept the certificate if the server administrator has published a fingerprint that matches the one above.</string>
-    <string name="ssl_fingerprint_example">00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00</string>
 
     <!-- Room Details -->
     <string name="room_details_title">Room Details</string>

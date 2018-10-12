@@ -397,7 +397,6 @@ Vai vēlies turpināt?</string>
     <string name="ssl_unexpected_existing_expl">Servera sertifikāts ir izmanījies un Tava ierīce tam tagad neuzticas. Tas ir ĻOTI NEPARASTI. Iesakām NEUZTICĒTIES šim jaunajam sertifikātam.</string>
     <string name="ssl_expected_existing_expl">Sertifikāts izmainījās no iepriekš uzticama uz neuzticamu. Iespējams, serveris ir aktualizējis savu sertifikātu. Sazinies ar servera administratoru, lai saņemtu sagaidāmo nospiedumu (fingerprint).</string>
     <string name="ssl_only_accept">Akceptē sertifikātu TIKAI tad, kad servera administrators publicējis sertifikāta nospiedumu, kurš atbilst augstāk redzamajam.</string>
-    <string name="ssl_fingerprint_example">00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00</string>
 
     <string name="room_details_title">Istabas informācija</string>
     <string name="room_details_people">Cilvēki</string>

@@ -375,7 +375,6 @@ Bist du sicher?</string>
     <string name="ssl_unexpected_existing_expl">Das Zertifikat unterscheidet sich von dem Zertifikat, dem dein Gerät ursprünglich vertraut hat. Dies ist SEHR UNGEWÖHNLICH. Es wird empfohlen, dass du dieses neue Zertifikat NICHT AKZEPTIERST.</string>
     <string name="ssl_expected_existing_expl">Das Zertifikat hat sich von einem ursprünglich vertrauenswürdigem Zertifikat in ein nicht vertrauenswürdiges Zertifikat geändert. Eventuell wurde das Zertifikat des Servers erneuert. Bitte erkundige dich beim Server-Administrator, welcher Fingerprint als vertrauenswürdig gilt.</string>
     <string name="ssl_only_accept">Akzeptiere das Zertifikat nur dann, wenn der Server-Administrator einen Fingerprint veröffentlicht hat, der mit dem obigen übereinstimmt.</string>
-    <string name="ssl_fingerprint_example">00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00</string>
 
     <!-- Room Details -->
     <string name="room_details_title">Raum-Details</string>

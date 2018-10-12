@@ -432,7 +432,6 @@
 
     <string name="ssl_expected_existing_expl">憑證已從以前受信任的更改為不受信任的憑證。伺服器可能已續訂其憑證。請與伺服器管理員聯繫以尋找所需的指紋。</string>
     <string name="ssl_only_accept">僅當伺服器管理員發佈的指紋與上面的指紋匹配時才接受此憑證。</string>
-    <string name="ssl_fingerprint_example">00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00</string>
 
     <string name="room_details_title">聊天室詳情</string>
     <string name="room_details_people">成員</string>

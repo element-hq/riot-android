@@ -368,7 +368,6 @@ Versleutelde berichten zullen nog niet zichtbaar zijn op programma\'s die geen v
     <string name="ssl_unexpected_existing_expl">Het certificaat is veranderd van één dat was vertrouwd bij je telefoon tot een ander Dit is HEEL ONGEBRUIKELIJK. Het is aangeraden om dit nieuwe certificaat NIET TE ACCEPTEREN.</string>
     <string name="ssl_expected_existing_expl">Het certificaat is veranderd van een vertrouwd certificaat naar een certificaat dat niet vertrouwd is. De server heeft misschien zijn certificaat vernieuwd. Contacteer de serverbeheerder voor het verwachte vingerafdruk.</string>
     <string name="ssl_only_accept">Accepteer ALLEEN het certificaat als de serverbeheerder een vingerafdruk heeft gepubliceerd dat overeenkomt met degene hierboven.</string>
-    <string name="ssl_fingerprint_example">00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00</string>
 
     <!-- Room Details -->
     <string name="room_details_title">Ruimte Details</string>

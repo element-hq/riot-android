@@ -439,7 +439,6 @@ Er du sikker?</string>
     <string name="ssl_unexpected_existing_expl">Sertifikatet har forandra seg frå ein som var stolt på av mobilen din. Dette er SÆRS UVANLEG. Det tilrådast å IKKJE GODKJENNA det nye sertifikatet.</string>
     <string name="ssl_expected_existing_expl">"Sertifikatet har forandra seg frå ein som tidlegare var stolt på til eit som ikkje er det. Tenaren kan ha fornya sertifikatet sitt. Tak kontakt med tenaradministratoren for å få det forventa  fingeravtrykket."</string>
     <string name="ssl_only_accept">Godkjenn BERRE sertifikatet viss tenaradministratoren har gjeve ut eit fingeravtrykk som samsvarar med det over.</string>
-    <string name="ssl_fingerprint_example">00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00</string>
 
     <string name="room_details_title">Romdetaljar</string>
     <string name="room_details_people">Folk</string>
