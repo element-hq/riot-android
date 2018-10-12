@@ -5,6 +5,8 @@
     android:layout_height="match_parent">
 
     <!-- scrollview containing the sufaceview and the gallery -->
+
+    <!-- preview container: imageview + redo and cancel buttons -->
     <ScrollView
         android:id="@+id/medias_picker_scrollView"
         android:layout_width="match_parent"
@@ -36,8 +38,8 @@
                 <ImageView
                     android:id="@+id/medias_picker_texture_mask_view"
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:background="@android:color/black" />
+                    android:layout_height="match_parent" />
+
 
                 <!-- button to record a video -->
                 <im.vector.view.VideoRecordView
@@ -64,10 +66,10 @@
                     android:id="@+id/medias_picker_switch_camera"
                     android:layout_width="46dp"
                     android:layout_height="46dp"
-                    android:layout_alignParentTop="true"
                     android:layout_alignRight="@+id/medias_picker_texture_view"
-                    android:layout_marginRight="12dp"
+                    android:layout_alignParentTop="true"
                     android:layout_marginTop="12dp"
+                    android:layout_marginRight="12dp"
                     android:background="@drawable/vector_medias_picker_button_background">
 
                     <ImageView
@@ -102,12 +104,11 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_alignParentBottom="true"
-                android:layout_gravity="center_horizontal"/>
+                android:layout_gravity="center_horizontal" />
 
         </RelativeLayout>
     </ScrollView>
 
-    <!-- preview container: imageview + redo and cancel buttons -->
     <RelativeLayout
         android:id="@+id/medias_picker_preview_layout"
         android:layout_width="match_parent"
@@ -165,10 +166,12 @@ preview of the taken image -->
 
             <ImageView
                 android:id="@+id/medias_picker_preview_image_view"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_centerInParent="true" />
-
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerInParent="true"
+                android:layout_centerHorizontal="true"
+                android:layout_centerVertical="true"
+                android:layout_gravity="center" />
             <ImageView
                 android:id="@+id/medias_picker_preview_avatar_mode_mask"
                 android:layout_width="match_parent"

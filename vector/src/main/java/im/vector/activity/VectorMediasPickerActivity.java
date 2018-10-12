@@ -88,6 +88,7 @@ import javax.microedition.khronos.egl.EGLSurface;
 
 import im.vector.R;
 import im.vector.VectorApp;
+import im.vector.listeners.ImageViewOnTouchListener;
 import im.vector.util.PermissionsToolsKt;
 import im.vector.util.ViewUtilKt;
 import im.vector.view.RecentMediaLayout;
@@ -268,6 +269,16 @@ public class VectorMediasPickerActivity extends MXCActionBarActivity implements 
         mImagePreviewLayout = findViewById(R.id.medias_picker_preview_image_layout);
         mImagePreviewImageView = findViewById(R.id.medias_picker_preview_image_view);
         mImagePreviewAvatarModeMaskView = findViewById(R.id.medias_picker_preview_avatar_mode_mask);
+        mImagePreviewImageView.setScaleType(ImageView.ScaleType.MATRIX);
+        mImagePreviewImageView.setOnTouchListener(new ImageViewOnTouchListener() {
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                if (mIsAvatarMode) {
+                    return (super.onTouch(v, event));
+                }
+                return true;
+            }
+        });
 
         // video preview
         mVideoPreviewLayout = findViewById(R.id.medias_picker_preview_video_layout);
@@ -1018,11 +1029,12 @@ public class VectorMediasPickerActivity extends MXCActionBarActivity implements 
                     // replace the high res picture with the preview one
                     // because the aspect ratio is not the same
                     // and the user would not understand that the mShotPicturePath image is not the previewed one
+                    /*
                     if (mIsAvatarMode && (null != mCameraTextureView.getBitmap())) {
                         ByteArrayOutputStream bos = new ByteArrayOutputStream();
                         mCameraTextureView.getBitmap().compress(Bitmap.CompressFormat.JPEG, AVATAR_COMPRESSION_LEVEL, bos);
                         data = bos.toByteArray();
-                    }
+                    }*/
 
                     ByteArrayInputStream inputStream = new ByteArrayInputStream(data);
                     File dstFile;
@@ -1290,7 +1302,12 @@ public class VectorMediasPickerActivity extends MXCActionBarActivity implements 
         try {
             // sanity check
             if (null != mShotPicturePath) {
-                Uri uri = Uri.fromFile(new File(mShotPicturePath));
+                Uri uri;
+                if (!mIsAvatarMode) {
+                    uri = Uri.fromFile(new File(mShotPicturePath));
+                } else {
+                    uri = getPreviewImageFileUri();
+                }
 
                 try {
                     Bitmap previewBitmap = VectorApp.getSavedPickerImagePreview();
@@ -1348,22 +1365,24 @@ public class VectorMediasPickerActivity extends MXCActionBarActivity implements 
      * @param height   the image height to hide
      */
     private void drawCircleMask(final ImageView maskView, final int width, final int height) {
+        Bitmap bitmap = Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888);
+        Canvas canvas = new Canvas(bitmap);
+        Paint paint = new Paint(Paint.ANTI_ALIAS_FLAG);
+        int radius = 24;
+
         // remove any background
         maskView.setBackgroundResource(0);
 
         // create a bitmap with a transparent hole
-        Bitmap bitmap = Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888);
-        Canvas canvas = new Canvas(bitmap);
+        paint.setStyle(Paint.Style.STROKE);
+        paint.setColor(getResources().getColor(R.color.direct_chat_ring_color));
+        paint.setStrokeWidth(radius);
+        paint.setStrokeCap(Paint.Cap.ROUND);
+        canvas.drawCircle(width / 2, height / 2, Math.min(width / 2, height / 2) - radius / 2, paint);
 
-        canvas.drawColor(getResources().getColor(android.R.color.black));
-
-        Paint eraser = new Paint(Paint.ANTI_ALIAS_FLAG);
-        eraser.setStyle(Paint.Style.FILL);
-        // require to make a transparent hole
-        eraser.setXfermode(new PorterDuffXfermode(PorterDuff.Mode.SRC_OUT));
-        eraser.setColor(Color.TRANSPARENT);
-
-        canvas.drawCircle(width / 2, height / 2, Math.min(width / 2, height / 2), eraser);
+        paint.setColor(Color.WHITE);
+        paint.setStrokeWidth(radius / 3);
+        canvas.drawCircle(width / 2, height / 2, Math.min(width / 2, height / 2) - radius / 2, paint);
         canvas.drawBitmap(bitmap, 0, 0, null);
 
         maskView.setImageBitmap(bitmap);
@@ -2205,7 +2224,11 @@ public class VectorMediasPickerActivity extends MXCActionBarActivity implements 
         Intent intent = new Intent();
 
         if (null != mSelectedGalleryImage) {
-            intent.setData(mSelectedGalleryImage.mFileUri);
+            if (!mIsAvatarMode) {
+                intent.setData(mSelectedGalleryImage.mFileUri);
+            } else {
+                intent.setData(getPreviewImageFileUri());
+            }
         } else {
             // attach after a screen rotation, the file uri must was saved in the tag
             Uri uriSavedFromLifeCycle = (Uri) mImagePreviewImageView.getTag();
@@ -2220,5 +2243,56 @@ public class VectorMediasPickerActivity extends MXCActionBarActivity implements 
         // clean footprint in App
         VectorApp.setSavedCameraImagePreview(null);
         finish();
+    }
+
+    /*
+     *  Returns
+     *
+     */
+    private Uri getPreviewImageFileUri() {
+        ByteArrayOutputStream bytes = new ByteArrayOutputStream();
+        Bitmap bitmap = Bitmap.createBitmap(mImagePreviewImageView.getWidth(), mImagePreviewImageView.getHeight(),
+                Bitmap.Config.ARGB_8888);
+        Canvas c = new Canvas(bitmap);
+        mImagePreviewImageView.draw(c);
+        mImagePreviewImageView.invalidate();
+        bitmap.compress(Bitmap.CompressFormat.JPEG, AVATAR_COMPRESSION_LEVEL, bytes);
+
+
+        String fileName = "preview_edit_" + new SimpleDateFormat("yyyy-MM-dd_hhmmss").format(new Date()) + ".jpg";
+        File file;
+
+        // remove any previously saved image
+        if (!TextUtils.isEmpty(fileName)) {
+            file = new File(getCacheDir().getAbsolutePath(), fileName);
+            if (file.exists()) {
+                file.delete();
+            }
+        }
+
+        // get new name
+        file = new File(getCacheDir().getAbsolutePath(), fileName);
+
+        FileOutputStream outputStream = null;
+        try {
+            file.createNewFile();
+
+            outputStream = new FileOutputStream(file);
+            outputStream.write(bytes.toByteArray());
+        } catch (IOException e) {
+            Toast.makeText(VectorMediasPickerActivity.this, "Exception getPreviewImageFileUri(): " + e.getLocalizedMessage(), Toast.LENGTH_SHORT).show();
+        } finally {
+            // Close resources
+            try {
+                if (outputStream != null) {
+                    outputStream.close();
+                }
+
+            } catch (Exception e) {
+                Log.e(LOG_TAG, "## getPreviewImageFileUri(): EXCEPTION Msg=" + e.getMessage(), e);
+            }
+        }
+
+        return Uri.fromFile(file);
     }
 }
