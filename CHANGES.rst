@@ -1,4 +1,4 @@
-Changes in Riot 0.8.18 (2018-XX-XX)
+Changes in Riot 0.8.19 (2018-XX-XX)
 ===================================================
 
 MatrixSdk:
@@ -28,6 +28,12 @@ Translations:
 
 Build:
  -
+
+Changes in Riot 0.8.18 (2018-10-13)
+===================================================
+
+Features:
+ - Ability to crop profile picture before setting (#2598)
 
 Changes in Riot 0.8.17 (2018-10-10)
 ===================================================
