@@ -28,7 +28,7 @@
     <string name="ongoing_conference_call_voice">głos</string>
     <string name="ongoing_conference_call_video">obraz</string>
     <string name="cannot_start_call">Nie można rozpocząć połączenia, spróbuj ponownie później</string>
-    <string name="missing_permissions_warning">Ze względu na brak pewnych uprawnień, niektóre funkcje mogą nie działać..</string>
+    <string name="missing_permissions_warning">Ze względu na brak pewnych uprawnień, niektóre funkcje mogą nie działać…</string>
     <string name="missing_permissions_to_start_conf_call">Musisz być uprawniony, aby rozpocząć połączenie grupowe</string>
     <string name="missing_permissions_title_to_start_conf_call">Nie można rozpocząć połączenia</string>
     <string name="device_information">Informacje o urządzeniu</string>
@@ -73,7 +73,7 @@ Utwórz kopię zapasową, zanim się wylogujesz.</string>
     <string name="user_directory_header">Katalog użytkowników</string>
     <string name="matrix_only_filter">Tylko kontakty Matrixa</string>
     <string name="no_conversation_placeholder">Brak rozmów</string>
-    <string name="no_contact_access_placeholder">Nie udzieliłeś uprawnienia na dostęp do listy kontaktów</string>
+    <string name="no_contact_access_placeholder">Nie udzieliłeś(-aś) uprawnienia na dostęp do listy kontaktów</string>
     <string name="no_result_placeholder">Brak wyników</string>
 
     <string name="rooms_header">Pokoje</string>
@@ -153,7 +153,7 @@ Utwórz kopię zapasową, zanim się wylogujesz.</string>
     <string name="auth_missing_email_or_phone">Brak adresu e-mail lub numeru telefonu</string>
     <string name="auth_invalid_token">Nieprawidłowy token</string>
     <string name="auth_password_dont_match">Hasła nie pasują do siebie</string>
-    <string name="auth_forgot_password">Zapomniałeś hasła?</string>
+    <string name="auth_forgot_password">Zapomniałeś(-aś) hasła?</string>
     <string name="auth_use_server_options">Użyj niestandardowych ustawień serwera (zaawansowane)</string>
     <string name="auth_email_validation_message">Sprawdź swój adres e-mail, aby kontynuować rejestrację</string>
     <string name="auth_recaptcha_message">Serwer chciałby upewnić się, czy nie jesteś robotem</string>
@@ -232,7 +232,7 @@ Przyznaj dostęp w następnym oknie.</string>
 
     <string name="room_jump_to_first_unread">Przejdź do pierwszej nieprzeczytanej wiadomości.</string>
 
-    <string name="room_preview_invitation_format">Zostałeś zaproszony do tego pokoju przez %s</string>
+    <string name="room_preview_invitation_format">Zostałeś(-aś) zaproszony(-a) do tego pokoju przez %s</string>
     <string name="room_preview_try_join_an_unknown_room">Próbujesz uzyskać dostęp do %s. Czy chcesz dołączyć do pokoju, aby wziąć udział w dyskusji?</string>
     <string name="room_preview_try_join_an_unknown_room_default">pokój</string>
     <string name="room_preview_room_interactions_disabled">To jest podgląd pokoju. Interakcje zostały zablokowane.</string>
@@ -311,7 +311,9 @@ Przyznaj dostęp w następnym oknie.</string>
     <string name="room_details_people_present_group_name">DOŁĄCZONO</string>
 
     <string name="room_event_action_report_prompt_reason">Powód zgłoszenia zawartości</string>
-    <string name="room_event_action_report_prompt_ignore_user">Czy chcesz ukrywać wszystkie wiadomości od tego użytkownika?</string>
+    <string name="room_event_action_report_prompt_ignore_user">Czy chcesz ukrywać wszystkie wiadomości od tego użytkownika?
+
+Zauważ, że ta czynność spowoduje ponowne uruchomienie aplikacji i może to trochę potrwać.</string>
     <string name="room_event_action_cancel_upload">Anuluj wysyłanie</string>
     <string name="room_event_action_cancel_download">Anuluj pobieranie</string>
 
@@ -426,12 +428,14 @@ Wprowadź hasło, aby kontynuować.</string>
     <string name="account_phone_number_already_used_error">Ten numer telefonu jest już używany</string>
 
     <string name="settings_change_password">Zmień hasło</string>
-    <string name="settings_old_password">stare haslo</string>
-    <string name="settings_new_password">nowe hasło</string>
-    <string name="settings_confirm_password">potwierdź hasło</string>
+    <string name="settings_old_password">Stare hasło</string>
+    <string name="settings_new_password">Nowe hasło</string>
+    <string name="settings_confirm_password">Potwierdź hasło</string>
     <string name="settings_fail_to_update_password">Nie udało się zmienić hasła</string>
     <string name="settings_password_updated">Twoje hasło zostało zmienione</string>
-    <string name="settings_unignore_user">Pokazywać wszysykie wiadomości od %s?</string>
+    <string name="settings_unignore_user">Pokazywać wszystkie wiadomości od %s?
+
+Zauważ, że ta czynność spowoduje ponowne uruchomienie aplikacji i może to trochę potrwać.</string>
 
     <string name="settings_select_country">Wybierz kraj</string>
 
@@ -678,7 +682,7 @@ Jesteś pewien?</string>
     <string name="ssl_cert_new_account_expl">Jeśli administrator serwera oświadczył, że jest to oczekiwane, upewnij się, że poniższy odcisk palca odpowiada odciskowi palca dostarczonemu przez niego.</string>
     <string name="ssl_unexpected_existing_expl">Certyfikat różni się od tego zaufanego w twoim telefonie. Serwer mógł odnowić certyfikat. Skontaktuj się z administratorem serwera w celu weryfikacji odcisku palca.</string>
     <string name="ssl_expected_existing_expl">Certyfikat zmienił stan z zaufanego na niezaufany. jest to NIEZWYKLE RZADKIE. Rekomendowane jest NIE AKCEPTOWANIE nowego certyfikatu.</string>
-    <string name="ssl_only_accept">akceptuj certyfikat TYLKO wtedy gdy administrator opublikował odcisk palca pasujący do tego powyżej.</string>
+    <string name="ssl_only_accept">Akceptuj certyfikat tylko wtedy gdy administrator opublikował odcisk palca pasujący do tego powyżej.</string>
     <string name="malformed_id">Uszkodzony ID. Czy to powinien być adres e-mail lub Matrix ID podobny do \'@localpart:domain\'</string>
     <plurals name="room_displayname_three_and_more_members">
 	<item quantity="one">%1$s i jeden inny</item>
@@ -688,8 +692,8 @@ Jesteś pewien?</string>
 </plurals>
 
     <plurals name="directory_search_rooms">
-	<item quantity="one">Jeden pokój</item>
-	<item quantity="few">Kilka pokoi</item>
+	<item quantity="one">1 pokój</item>
+	<item quantity="few">%d pokoje</item>
 	<item quantity="many">%d pokoi</item>
 	<item quantity="other"/>
 </plurals>
@@ -765,7 +769,7 @@ Jesteś pewien?</string>
 
     <string name="room_settings_addresses_invalid_format_dialog_title">Nieznany format aliasu</string>
     <string name="room_settings_addresses_invalid_format_dialog_body">\'%s\' jest nieznanym formatem dla aliasu</string>
-    <string name="room_settings_addresses_disable_main_address_prompt_msg">Nie będziesz mieć podanego głównego adresu. Domyślny adres główny tego pokoju zostanie wybrany losowo</string>
+    <string name="room_settings_addresses_disable_main_address_prompt_msg">Nie będziesz mieć podanego głównego adresu dla tego pokoju.</string>
     <string name="room_settings_addresses_disable_main_address_prompt_title">Ostrzeżenia głównego adresu</string>
 
     <string name="room_settings_unset_main_address">NIe ustawiaj jako główny adres</string>
@@ -835,7 +839,9 @@ Szyfrowane wiadomości nie będą widoczne dla klientów którzy nie wspierają 
     <string name="encryption_information_device_info">Informacje zdarzenia</string>
     <string name="encryption_information_sender_device_information">Informacja o urządzeniu nadawcy</string>
     <string name="encryption_export_e2e_room_keys">Eksportuj klucze E2E pokoju</string>
-    <string name="encryption_export_saved_as">Klucze pokoju zostały zapisane w \'%s\'</string>
+    <string name="encryption_export_saved_as">Klucze pokoju zostały zapisane w \'%s\'
+
+Uwaga: ten plik może zostać usunięty, jeśli aplikacja zostanie odinstalowana.</string>
 
     <string name="encryption_import_e2e_room_keys">Importuj klucze E2E pokoju</string>
     <string name="encryption_import_room_keys">Importuj klucze pokoju</string>
@@ -846,8 +852,7 @@ Szyfrowane wiadomości nie będą widoczne dla klientów którzy nie wspierają 
 
     <string name="encryption_information_unverify">Usuń weryfikację</string>
     <string name="encryption_information_verify_device_warning">" Aby sprawdzić czy to urządzenie jest zaufane, skontaktuj się z jego właścicielem używając innych środków (np. osobiście lub telefonicznie) i zapytaj ich czy klucz, który widzą w ustawieniach użytkownika dla tego urządzenia pasuje do klucza poniżej:"</string>
-    <string name="encryption_information_verify_device_warning2">Jeśli klucz pasuje, potwierdź to przyciskiem poniżej. Jeśli nie, to ktoś inny najprawdopodobniej przejmuje lub podszywa się pod to urządzenie i powinieneś dodać urządzenie do czarnej listy.
-W przyszłości proces weryfikacji będzie bardziej skomplikowany.</string>
+    <string name="encryption_information_verify_device_warning2">Jeśli klucz pasuje, potwierdź to przyciskiem poniżej. Jeśli nie, to ktoś inny najprawdopodobniej przejmuje lub podszywa się pod to urządzenie i powinieneś dodać urządzenie do czarnej listy. W przyszłości proces weryfikacji będzie bardziej skomplikowany.</string>
     <string name="e2e_enabling_on_app_update">Riot obsługuje już szyfrowanie końcówka-do-końcówki (E2E), ale musisz zalogować się ponownie, aby je włączyć.
 
 Możesz to zrobić teraz lub później z poziomu ustawień aplikacji.</string>
@@ -973,4 +978,33 @@ Dezaktywacja konta <b>domyślnie nie powoduje zapomnienia wysłanych przez Ciebi
 Widoczność wiadomości w Matrix jest podobna do wiadomości e-mail. Nasze zapomnienie wiadomości oznacza, że wysłane wiadomości nie będą udostępniane żadnym nowym lub niezarejestrowanym użytkownikom, ale zarejestrowani użytkownicy, którzy już mają dostęp do tych wiadomości, nadal będą mieli dostęp do ich kopii.</string>
     <string name="receipt_avatar">Uzyskaj awatar</string>
     <string name="notice_avatar">Zamień awatar</string>
-    </resources>
+    <string name="dialog_title_error">Błąd</string>
+
+    <string name="room_participants_now">%1$s teraz</string>
+    <string name="room_participants_ago">%1$s %2$s temu</string>
+
+    <string name="room_participants_invite_join_names">"%1$s, "</string>
+    <string name="room_participants_invite_join_names_and">%1$s i %2$s</string>
+    <string name="room_message_placeholder_reply_to_encrypted">Wyślij zaszyfrowaną odpowiedź…</string>
+    <string name="room_message_placeholder_reply_to_not_encrypted">Wyślij odpowiedź (niezaszyfrowaną)…</string>
+    <string name="settings_labs_keyboard_options_to_send_message">Użyj klawisza enter na klawiaturze, aby wysłać wiadomość</string>
+    <string name="command_description_part_room">Opuść pokój</string>
+    <string name="command_description_markdown">Włącz/Wyłącz markdown</string>
+    <plurals name="group_members">
+	<item quantity="one">1 członek</item>
+	<item quantity="few">%d członków</item>
+	<item quantity="many">%d członków</item>
+	<item quantity="other"/>
+</plurals>
+
+    <plurals name="group_rooms">
+	<item quantity="one">1 pokój</item>
+	<item quantity="few">%d pokoje</item>
+	<item quantity="many">%d pokoi</item>
+	<item quantity="other"/>
+</plurals>
+    <string name="room_tombstone_predecessor_link">Kliknij tutaj, aby zobaczyć starsze wiadomości</string>
+
+    <string name="unknown_error">Przepraszamy, wystąpił błąd</string>
+
+</resources>
