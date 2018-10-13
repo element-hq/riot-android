@@ -22,6 +22,9 @@ public abstract class ImageViewOnTouchListener implements View.OnTouchListener {
     private float newRot = 0f;
     private float[] lastEvent = null;
 
+    public void setStartMatrix(Matrix startMatrix) {
+        matrix.set(startMatrix);
+    }
 
     /**
      * Determine the space between the first two fingers
@@ -111,7 +114,6 @@ public abstract class ImageViewOnTouchListener implements View.OnTouchListener {
                 }
                 break;
         }
-
         view.setImageMatrix(matrix);
         return true;
     }

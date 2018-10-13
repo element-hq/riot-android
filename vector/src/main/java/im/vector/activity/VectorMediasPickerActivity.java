@@ -28,6 +28,7 @@ import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.ImageFormat;
+import android.graphics.Matrix;
 import android.graphics.Paint;
 import android.graphics.PorterDuff;
 import android.graphics.PorterDuffXfermode;
@@ -187,6 +188,15 @@ public class VectorMediasPickerActivity extends MXCActionBarActivity implements 
     private View mImagePreviewLayout;
     private ImageView mImagePreviewImageView;
     private ImageView mImagePreviewAvatarModeMaskView;
+    private ImageViewOnTouchListener imageViewOnTouchListener = new ImageViewOnTouchListener() {
+        @Override
+        public boolean onTouch(View v, MotionEvent event) {
+            if (mIsAvatarMode) {
+                return (super.onTouch(v, event));
+            }
+            return true;
+        }
+    };
 
     // video preview
     private View mVideoPreviewLayout;
@@ -270,15 +280,7 @@ public class VectorMediasPickerActivity extends MXCActionBarActivity implements 
         mImagePreviewImageView = findViewById(R.id.medias_picker_preview_image_view);
         mImagePreviewAvatarModeMaskView = findViewById(R.id.medias_picker_preview_avatar_mode_mask);
         mImagePreviewImageView.setScaleType(ImageView.ScaleType.MATRIX);
-        mImagePreviewImageView.setOnTouchListener(new ImageViewOnTouchListener() {
-            @Override
-            public boolean onTouch(View v, MotionEvent event) {
-                if (mIsAvatarMode) {
-                    return (super.onTouch(v, event));
-                }
-                return true;
-            }
-        });
+        mImagePreviewImageView.setOnTouchListener(imageViewOnTouchListener);
 
         // video preview
         mVideoPreviewLayout = findViewById(R.id.medias_picker_preview_video_layout);
@@ -332,18 +334,6 @@ public class VectorMediasPickerActivity extends MXCActionBarActivity implements 
                 }
 
                 return false;
-            }
-        });
-
-
-        findViewById(R.id.medias_picker_redo_text_view).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (null != mVideoUri) {
-                    stopVideoPreview();
-                } else {
-                    cancelTakeImage();
-                }
             }
         });
 
@@ -941,6 +931,18 @@ public class VectorMediasPickerActivity extends MXCActionBarActivity implements 
                     });
 
                     return;
+                } else {
+                    mImagePreviewImageView.post(new Runnable() {
+                        @Override
+                        public void run() {
+                            Matrix matrix = mImagePreviewImageView.getMatrix();
+                            matrix.postTranslate((mImagePreviewImageView.getWidth() - mImagePreviewImageView.getDrawable().getIntrinsicWidth()) / 2, (mImagePreviewImageView.getHeight() - mImagePreviewImageView.getDrawable().getIntrinsicHeight()) / 2);
+                            mImagePreviewImageView.setImageMatrix(matrix);
+                            imageViewOnTouchListener.setStartMatrix(matrix);
+
+                            return;
+                        }
+                    });
                 }
 
                 int newWidth;
