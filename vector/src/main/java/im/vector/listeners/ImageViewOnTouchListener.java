@@ -22,6 +22,9 @@ public abstract class ImageViewOnTouchListener implements View.OnTouchListener {
     private float newRot = 0f;
     private float[] lastEvent = null;
 
+    /**
+     * Set matrix that will be transformed next time instead of new matrix
+     */
     public void setStartMatrix(Matrix startMatrix) {
         matrix.set(startMatrix);
     }

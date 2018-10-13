@@ -1028,16 +1028,6 @@ public class VectorMediasPickerActivity extends MXCActionBarActivity implements 
                 public void onPictureTaken(byte[] data, Camera camera) {
                     Log.d(LOG_TAG, "## onPictureTaken(): success");
 
-                    // replace the high res picture with the preview one
-                    // because the aspect ratio is not the same
-                    // and the user would not understand that the mShotPicturePath image is not the previewed one
-                    /*
-                    if (mIsAvatarMode && (null != mCameraTextureView.getBitmap())) {
-                        ByteArrayOutputStream bos = new ByteArrayOutputStream();
-                        mCameraTextureView.getBitmap().compress(Bitmap.CompressFormat.JPEG, AVATAR_COMPRESSION_LEVEL, bos);
-                        data = bos.toByteArray();
-                    }*/
-
                     ByteArrayInputStream inputStream = new ByteArrayInputStream(data);
                     File dstFile;
                     String fileName = getSavedImageName(VectorMediasPickerActivity.this);
@@ -2259,8 +2249,7 @@ public class VectorMediasPickerActivity extends MXCActionBarActivity implements 
         mImagePreviewImageView.draw(c);
         mImagePreviewImageView.invalidate();
         bitmap.compress(Bitmap.CompressFormat.JPEG, AVATAR_COMPRESSION_LEVEL, bytes);
-
-
+        
         String fileName = "preview_edit_" + new SimpleDateFormat("yyyy-MM-dd_hhmmss").format(new Date()) + ".jpg";
         File file;
 
