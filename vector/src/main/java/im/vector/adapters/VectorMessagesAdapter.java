@@ -39,7 +39,6 @@ import android.text.method.LinkMovementMethod;
 import android.text.style.BackgroundColorSpan;
 import android.text.style.ClickableSpan;
 import android.text.style.ForegroundColorSpan;
-import android.text.style.QuoteSpan;
 import android.text.style.StyleSpan;
 import android.view.Gravity;
 import android.view.LayoutInflater;
@@ -64,7 +63,6 @@ import org.matrix.androidsdk.adapters.MessageRow;
 import org.matrix.androidsdk.crypto.MXCryptoError;
 import org.matrix.androidsdk.crypto.data.MXDeviceInfo;
 import org.matrix.androidsdk.data.Room;
-import org.matrix.androidsdk.data.RoomState;
 import org.matrix.androidsdk.db.MXMediasCache;
 import org.matrix.androidsdk.interfaces.HtmlToolbox;
 import org.matrix.androidsdk.rest.model.Event;
@@ -1226,15 +1224,9 @@ public class VectorMessagesAdapter extends AbstractMessagesAdapter {
                     return convertView;
                 }
 
-                RoomState roomState = row.getRoomState();
+                EventDisplay display = new RiotEventDisplay(mContext, mHtmlToolbox);
 
-                EventDisplay display = new RiotEventDisplay(mContext, event, roomState, mHtmlToolbox);
-                CharSequence textualDisplay = display.getTextualDisplay();
-
-                SpannableString body = new SpannableString((null == textualDisplay) ? "" : textualDisplay);
-
-                // Change to BlockQuote Spannable to customize it
-                replaceQuoteSpans(body);
+                Spannable body = row.getText(new VectorQuoteSpan(mContext), display);
 
                 CharSequence result = mHelper.highlightPattern(body,
                         mPattern,
@@ -1278,22 +1270,6 @@ public class VectorMessagesAdapter extends AbstractMessagesAdapter {
         }
 
         return convertView;
-    }
-
-    /**
-     * Replace all QuoteSpan instances by instances of VectorQuoteSpan
-     *
-     * @param spannable
-     */
-    private void replaceQuoteSpans(Spannable spannable) {
-        QuoteSpan[] quoteSpans = spannable.getSpans(0, spannable.length(), QuoteSpan.class);
-        for (QuoteSpan quoteSpan : quoteSpans) {
-            int start = spannable.getSpanStart(quoteSpan);
-            int end = spannable.getSpanEnd(quoteSpan);
-            int flags = spannable.getSpanFlags(quoteSpan);
-            spannable.removeSpan(quoteSpan);
-            spannable.setSpan(new VectorQuoteSpan(mContext), start, end, flags);
-        }
     }
 
     /**
@@ -1449,12 +1425,11 @@ public class VectorMessagesAdapter extends AbstractMessagesAdapter {
         try {
             MessageRow row = getItem(position);
             Event msg = row.getEvent();
-            RoomState roomState = row.getRoomState();
 
             CharSequence notice;
 
-            EventDisplay display = new RiotEventDisplay(mContext, msg, roomState);
-            notice = display.getTextualDisplay();
+            EventDisplay display = new RiotEventDisplay(mContext);
+            notice = row.getText(null, display);
 
             TextView noticeTextView = convertView.findViewById(R.id.messagesAdapter_body);
 
@@ -1511,7 +1486,6 @@ public class VectorMessagesAdapter extends AbstractMessagesAdapter {
         try {
             MessageRow row = getItem(position);
             Event event = row.getEvent();
-            RoomState roomState = row.getRoomState();
 
             TextView emoteTextView = convertView.findViewById(R.id.messagesAdapter_body);
 
@@ -1521,9 +1495,8 @@ public class VectorMessagesAdapter extends AbstractMessagesAdapter {
             }
 
             Message message = JsonUtils.toMessage(event.getContent());
-            String userDisplayName = (null == roomState) ? event.getSender() : roomState.getMemberName(event.getSender());
 
-            CharSequence body = "* " + userDisplayName + " " + message.body;
+            CharSequence body = "* " + row.getUserDisplayName() + " " + message.body;
 
             if (TextUtils.equals(Message.FORMAT_MATRIX_HTML, message.format)) {
                 String htmlString = mHelper.getSanitisedHtml(message.formatted_body);
@@ -1531,7 +1504,7 @@ public class VectorMessagesAdapter extends AbstractMessagesAdapter {
                 if (null != htmlString) {
                     CharSequence sequence = mHelper.convertToHtml(htmlString);
 
-                    body = TextUtils.concat("* ", userDisplayName, " ", sequence);
+                    body = TextUtils.concat("* ", row.getUserDisplayName(), " ", sequence);
                 }
             }
 
@@ -1750,8 +1723,7 @@ public class VectorMessagesAdapter extends AbstractMessagesAdapter {
             convertView = mLayoutInflater.inflate(mRowTypeToLayoutId.get(ROW_TYPE_VERSIONED_ROOM), parent, false);
         }
         final MessageRow row = getItem(position);
-        final RoomState roomState = row.getRoomState();
-        final RoomCreateContent.Predecessor predecessor = roomState.getRoomCreateContent().predecessor;
+        final RoomCreateContent.Predecessor predecessor = row.getRoomCreateContent().predecessor;
 
         final String roomLink = PermalinkUtils.createPermalink(predecessor.roomId);
         final ClickableSpan urlSpan = new MatrixURLSpan(roomLink, MXPatterns.PATTERN_CONTAIN_APP_LINK_PERMALINK_ROOM_ID, mVectorMessagesAdapterEventsListener);
@@ -1799,6 +1771,10 @@ public class VectorMessagesAdapter extends AbstractMessagesAdapter {
         }
 
         boolean isSupported = VectorMessagesAdapterHelper.isDisplayableEvent(mContext, row);
+
+        if (!isSupported) {
+            Log.w(LOG_TAG, "Unsupported row. Event type: " + event.getType());
+        }
 
         if (isSupported && TextUtils.equals(event.getType(), Event.EVENT_TYPE_STATE_ROOM_MEMBER)) {
             RoomMember roomMember = JsonUtils.toRoomMember(event.getContent());

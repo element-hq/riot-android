@@ -1201,9 +1201,9 @@ public class EventStreamService extends Service {
                 if (event.isEncrypted()) {
                     text = context.getString(R.string.encrypted_message);
                 } else {
-                    EventDisplay eventDisplay = new RiotEventDisplay(context, event, null);
+                    EventDisplay eventDisplay = new RiotEventDisplay(context);
                     eventDisplay.setPrependMessagesWithAuthor(false);
-                    text = eventDisplay.getTextualDisplay().toString();
+                    text = eventDisplay.getTextualDisplay(event, null).toString();
                 }
             }
 
@@ -1396,10 +1396,10 @@ public class EventStreamService extends Service {
 
                     if (null != event) {
                         // test if the message is displayable
-                        EventDisplay eventDisplay = new RiotEventDisplay(getApplicationContext(), event, room.getState());
+                        EventDisplay eventDisplay = new RiotEventDisplay(getApplicationContext());
                         eventDisplay.setPrependMessagesWithAuthor(false);
 
-                        CharSequence textualDisplay = eventDisplay.getTextualDisplay();
+                        CharSequence textualDisplay = eventDisplay.getTextualDisplay(event, room.getState());
 
                         // reported by GA
                         if (null != textualDisplay) {
