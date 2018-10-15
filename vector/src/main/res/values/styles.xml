@@ -25,7 +25,7 @@
     </style>
 
     <!-- tabbar text color -->
-    <style name="Vector.TabText" parent="@style/Widget.AppCompat.ActionBar.TabText">
+    <style name="Vector.TabText" parent="Widget.AppCompat.ActionBar.TabText">
         <item name="android:textColor">@android:color/white</item>
     </style>
 
@@ -38,12 +38,12 @@
     </style>
 
     <!-- actionbar icons color -->
-    <style name="Vector.ActionBarTheme" parent="@style/ThemeOverlay.AppCompat.ActionBar">
+    <style name="Vector.ActionBarTheme" parent="ThemeOverlay.AppCompat.ActionBar">
         <item name="colorControlNormal">@android:color/white</item>
     </style>
 
     <!-- custom action bar -->
-    <style name="Vector.Styled.ActionBar" parent="@style/Widget.AppCompat.Light.ActionBar">
+    <style name="Vector.Styled.ActionBar" parent="Widget.AppCompat.Light.ActionBar">
         <item name="android:background">?attr/primary_color</item>
         <item name="background">?attr/primary_color</item>
 
@@ -58,14 +58,14 @@
     </style>
 
     <!-- main text -->
-    <style name="ActionBarTitleText" parent="@style/TextAppearance.AppCompat.Widget.ActionBar.Title">
+    <style name="ActionBarTitleText" parent="TextAppearance.AppCompat.Widget.ActionBar.Title">
         <item name="android:textColor">?attr/primary_text_color</item>
         <item name="android:fontFamily">"sans-serif-medium"</item>
         <item name="android:textSize">20sp</item>
     </style>
 
     <!-- sub text -->
-    <style name="ActionBarSubTitleText" parent="@style/TextAppearance.AppCompat.Widget.ActionBar.Subtitle">
+    <style name="ActionBarSubTitleText" parent="TextAppearance.AppCompat.Widget.ActionBar.Subtitle">
         <item name="android:textColor">?attr/primary_text_color</item>
         <item name="android:fontFamily">"sans-serif-medium"</item>
         <item name="android:textSize">12sp</item>
@@ -86,23 +86,23 @@
         <item name="android:textAllCaps">true</item>
     </style>
 
-    <style name="VectorSearches.EditText" parent="@style/Widget.AppCompat.EditText">
+    <style name="VectorSearches.EditText" parent="Widget.AppCompat.EditText">
         <item name="android:textCursorDrawable">@drawable/searches_cursor_background</item>
         <item name="android:background">@android:color/transparent</item>
         <item name="background">@android:color/transparent</item>
     </style>
 
-    <style name="VectorSearches.Styled.ActionBar" parent="@style/Vector.Styled.ActionBar">
+    <style name="VectorSearches.Styled.ActionBar" parent="Vector.Styled.ActionBar">
         <item name="android:background">?attr/riot_primary_background_color</item>
         <item name="background">?attr/riot_primary_background_color</item>
     </style>
 
     <!-- tabbar text color -->
-    <style name="VectorSearches.TabText" parent="@style/Widget.AppCompat.ActionBar.TabText">
+    <style name="VectorSearches.TabText" parent="Widget.AppCompat.ActionBar.TabText">
         <item name="android:textColor">@color/vector_green_color</item>
     </style>
 
-    <style name="VectorSearches.ActionBarTheme" parent="@style/ThemeOverlay.AppCompat.ActionBar">
+    <style name="VectorSearches.ActionBarTheme" parent="ThemeOverlay.AppCompat.ActionBar">
         <item name="colorControlNormal">@color/vector_green_color</item>
     </style>
 
@@ -163,12 +163,12 @@
         <item name="android:background">@drawable/vector_background_fab_label_light</item>
     </style>
 
-    <style name="Group.Styled.ActionBar" parent="@style/Vector.Styled.ActionBar">
+    <style name="Group.Styled.ActionBar" parent="Vector.Styled.ActionBar">
         <item name="android:background">@color/tab_groups</item>
         <item name="background">@color/tab_groups</item>
     </style>
 
-    <style name="Vector.TabView.Group" parent="@style/Widget.AppCompat.ActionBar.TabView">
+    <style name="Vector.TabView.Group" parent="Widget.AppCompat.ActionBar.TabView">
         <item name="android:background">@drawable/vector_tabbar_background_group_light</item>
         <item name="background">@drawable/vector_tabbar_background_group_light</item>
     </style>
