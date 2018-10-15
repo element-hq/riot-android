@@ -1,3 +1,20 @@
+/*
+ * Copyright 2014 OpenMarket Ltd
+ * Copyright 2018 New Vector Ltd
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
 package im.vector.listeners;
 
 import android.graphics.Matrix;
@@ -5,6 +22,12 @@ import android.graphics.PointF;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.ImageView;
+
+/**
+ * ImageViewOnTouchListener contains methods, that allows the {@link android.widget.ImageView}
+ * (which {@link android.widget.ImageView.ScaleType} have to be set on {@link android.widget.ImageView.ScaleType#MATRIX}, in order to work)
+ * to transform its drawable by a touch event.
+ */
 
 public abstract class ImageViewOnTouchListener implements View.OnTouchListener {
     private static final int NONE = 0;
@@ -23,7 +46,7 @@ public abstract class ImageViewOnTouchListener implements View.OnTouchListener {
     private float[] lastEvent = null;
 
     /**
-     * Set matrix that will be transformed next time instead of new matrix
+     * Set matrix that will be transformed next time instead of new matrix or stored one
      */
     public void setStartMatrix(Matrix startMatrix) {
         matrix.set(startMatrix);
@@ -60,16 +83,22 @@ public abstract class ImageViewOnTouchListener implements View.OnTouchListener {
         return (float) Math.toDegrees(radians);
     }
 
+    /**
+     * {@inheritDoc}
+     */
+
     @Override
     public boolean onTouch(View v, MotionEvent event) {
         ImageView view = (ImageView) v;
         switch (event.getAction() & MotionEvent.ACTION_MASK) {
+            //when single touch occurs
             case MotionEvent.ACTION_DOWN:
                 savedMatrix.set(matrix);
                 start.set(event.getX(), event.getY());
                 mode = DRAG;
                 lastEvent = null;
                 break;
+            //when multi touch occurs
             case MotionEvent.ACTION_POINTER_DOWN:
                 oldDist = spacing(event);
                 if (oldDist > 10f) {
@@ -84,11 +113,13 @@ public abstract class ImageViewOnTouchListener implements View.OnTouchListener {
                 lastEvent[3] = event.getY(1);
                 d = rotation(event);
                 break;
+            //when touching ends
             case MotionEvent.ACTION_UP:
             case MotionEvent.ACTION_POINTER_UP:
                 mode = NONE;
                 lastEvent = null;
                 break;
+            //when sliding touch occurring
             case MotionEvent.ACTION_MOVE:
                 if (mode == DRAG) {
                     matrix.set(savedMatrix);

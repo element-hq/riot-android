@@ -166,11 +166,7 @@ preview of the taken image -->
             <ImageView
                 android:id="@+id/medias_picker_preview_image_view"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_centerInParent="true"
-                android:layout_centerHorizontal="true"
-                android:layout_centerVertical="true"
-                android:layout_gravity="center" />
+                android:layout_height="match_parent" />
             <ImageView
                 android:id="@+id/medias_picker_preview_avatar_mode_mask"
                 android:layout_width="match_parent"
