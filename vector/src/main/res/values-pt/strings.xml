@@ -404,12 +404,6 @@ Tem a certeza?</string>
     <string name="room_event_action_cancel_upload">Cancelar envio</string>
     <string name="room_event_action_cancel_download">Cancelar transferência</string>
 
-    <!-- Room display name -->
-    <string name="room_displayname_invite_from">Convite de %s</string>
-    <string name="room_displayname_room_invite">Convite para sala</string>
-    <string name="room_displayname_two_members">%1$s e %2$s</string>
-    <string name="room_displayname_no_title">Sala vazia</string>
-
     <!-- Search -->
     <string name="search_hint">Pesquisar</string>
     <string name="search_members_hint">Filtrar membros da sala</string>

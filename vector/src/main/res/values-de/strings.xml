@@ -393,12 +393,6 @@ Beachte: Diese Aktion wird die App neu starten und einige Zeit brauchen.</string
     <string name="room_event_action_cancel_upload">Upload abbrechen</string>
     <string name="room_event_action_cancel_download">Download abbrechen</string>
 
-    <!-- Room display name -->
-    <string name="room_displayname_invite_from">Einladung von %s</string>
-    <string name="room_displayname_room_invite">Raumeinladung</string>
-    <string name="room_displayname_two_members">%1$s und %2$s</string>
-    <string name="room_displayname_no_title">Leerer Raum</string>
-
     <!-- Search -->
     <string name="search_hint">Suchen</string>
     <string name="search_members_hint">Raum-Mitglieder filtern</string>
@@ -893,11 +887,6 @@ Unbekannte Geräte:</string>
     <plurals name="room_new_messages_notification">
 	<item quantity="one">1 neue Nachricht</item>
 	<item quantity="other">%d neue Nachrichten</item>
-</plurals>
-
-    <plurals name="room_displayname_three_and_more_members">
-	<item quantity="one">%1$s und 1 andere(r)</item>
-	<item quantity="other">%1$s und %d andere</item>
 </plurals>
 
     <plurals name="directory_search_rooms">

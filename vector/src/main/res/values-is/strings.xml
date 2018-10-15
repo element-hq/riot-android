@@ -233,14 +233,6 @@
     <string name="room_details_settings">Stillingar</string>
     <string name="room_event_action_cancel_download">Hætta við niðurhal</string>
 
-    <string name="room_displayname_two_members">%1$s og %2$s</string>
-
-    <plurals name="room_displayname_three_and_more_members">
-	<item quantity="one">%1$s og 1 annar</item>
-	<item quantity="other">%1$s og %d aðrir</item>
-</plurals>
-
-    <string name="room_displayname_no_title">Tóm spjallrás</string>
 
     <string name="search_hint">Leita</string>
     <string name="search_members_hint">Sía meðlimi spjallrásar</string>
@@ -697,7 +689,6 @@ Til að halda áfram skaltu setja inn lykilorðið þitt.</string>
     <string name="people_search_invite_by_id"><u>Bjóða miðað við auðkenni</u></string>
     <string name="people_search_local_contacts">TENGILIÐIR Á TÆKI (%d)</string>
     <string name="people_search_invite_by_id_dialog_title">Bjóða notendum miðað við auðkenni</string>
-    <string name="room_displayname_invite_from">Boð frá %s</string>
     <string name="room_recents_join_room_prompt">Settu inn auðkenni eða samheiti spjallrásar</string>
 
     <plurals name="directory_search_rooms_for">
@@ -741,7 +732,6 @@ Ertu alveg viss?</string>
     <string name="people_search_invite_by_id_dialog_description">Settu inn eitt eða fleir tölvupóstföng eða Matrix auðkenni</string>
     <string name="room_unsent_messages_notification">Skilaboð ekki send. %1$s eða %2$s núna?</string>
     <string name="room_unknown_devices_messages_notification">Skilaboð ekki send vegna þess að vart var við óþekkt tæki. %1$s eða %2$s núna?</string>
-    <string name="room_displayname_room_invite">Boð á spjallrás</string>
     <string name="settings_notification_privacy_warning">Riot.im keyrir í bakgrunni til að halda efni tilkynninga út af fyrir sig. YÞú getur breytt þessum valkosti til að minnka rafhlöðunotkun.</string>
     <string name="settings_notification_privacy_low_detail">Tilkynningar án smáatriða</string>
     <string name="settings_set_sync_delay">Hlé milli tveggja samstillingarbeiðna</string>

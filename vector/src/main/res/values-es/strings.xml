@@ -407,12 +407,6 @@ Ten en cuenta que esta acción reiniciará la aplicación y puede tardar algo de
     <string name="room_event_action_cancel_upload">Cancelar Subida</string>
     <string name="room_event_action_cancel_download">Cancelar Descarga</string>
 
-    <!-- Room display name -->
-    <string name="room_displayname_invite_from">Invitación de %s</string>
-    <string name="room_displayname_room_invite">Invitación a Sala</string>
-    <string name="room_displayname_two_members">%1$s y %2$s</string>
-    <string name="room_displayname_no_title">Sala vacía</string>
-
     <!-- Search -->
     <string name="search_hint">Buscar</string>
     <string name="search_members_hint">Filtrar miembros de la sala</string>
@@ -906,11 +900,6 @@ Dispositivos desconocidos:</string>
     <plurals name="room_new_messages_notification">
 	<item quantity="one">1 mensaje nuevo</item>
 	<item quantity="other">%d mensajes nuevos</item>
-</plurals>
-
-    <plurals name="room_displayname_three_and_more_members">
-	<item quantity="one">%1$s y 1 otro</item>
-	<item quantity="other">%1$s y %d otros</item>
 </plurals>
 
     <plurals name="directory_search_rooms">

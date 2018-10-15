@@ -429,16 +429,6 @@ Er du sikker?</string>
     <string name="room_event_action_cancel_upload">Annuller upload</string>
     <string name="room_event_action_cancel_download">Annuller download</string>
 
-    <string name="room_displayname_invite_from">Invitation fra %s</string>
-    <string name="room_displayname_room_invite">Invitation til rum</string>
-    <string name="room_displayname_two_members">%1$s og %2$s</string>
-
-    <plurals name="room_displayname_three_and_more_members">
-	<item quantity="one">%1$s og 1 anden</item>
-	<item quantity="other">%1$s og %d andre</item>
-</plurals>
-
-    <string name="room_displayname_no_title">Tomt rum</string>
 
     <string name="search_hint">Søg</string>
     <string name="search_members_hint">Filtrer medlemmer i rum</string>

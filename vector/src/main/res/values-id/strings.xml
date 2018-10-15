@@ -498,16 +498,6 @@ Perhatikan bahwa tindakan ini akan memulai ulang aplikasi dan mungkin cukup mema
     <string name="room_event_action_cancel_upload">Batalkan Unggahan</string>
     <string name="room_event_action_cancel_download">Batalkan Unduhan</string>
 
-    <string name="room_displayname_invite_from">Undang dari %s</string>
-    <string name="room_displayname_room_invite">Undangan Ruang</string>
-    <string name="room_displayname_two_members">%1$s dan %2$s</string>
-
-    <plurals name="room_displayname_three_and_more_members">
-	<item quantity="other">%1$s dan %d yang lain</item>
-</plurals>
-
-    <string name="room_displayname_no_title">Ruang kosong</string>
-
     <string name="search_hint">Cari</string>
     <string name="search_members_hint">Saring anggota ruang</string>
     <string name="search_no_results">Tiada hasil</string>

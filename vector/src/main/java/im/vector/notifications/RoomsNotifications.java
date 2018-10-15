@@ -48,7 +48,6 @@ import im.vector.R;
 import im.vector.VectorApp;
 import im.vector.activity.LockScreenActivity;
 import im.vector.util.RiotEventDisplay;
-import im.vector.util.VectorUtils;
 
 /**
  * RoomsNotifications
@@ -593,22 +592,17 @@ public class RoomsNotifications implements Parcelable {
      * @return the room name
      */
     public static String getRoomName(Context context, MXSession session, Room room, Event event) {
-        String roomName = VectorUtils.getRoomDisplayName(context, session, room);
+        String roomName = room.getRoomDisplayName(context);
 
         // avoid displaying the room Id
         // try to find the sender display name
-        if (TextUtils.equals(roomName, room.getRoomId())) {
-            roomName = VectorUtils.getRoomDisplayName(context, session, room);
+        if (TextUtils.equals(roomName, room.getRoomId()) && (null != event)) {
+            User user = session.getDataHandler().getStore().getUser(event.sender);
 
-            // avoid room Id as name
-            if (TextUtils.equals(roomName, room.getRoomId()) && (null != event)) {
-                User user = session.getDataHandler().getStore().getUser(event.sender);
-
-                if (null != user) {
-                    roomName = user.displayname;
-                } else {
-                    roomName = event.sender;
-                }
+            if (null != user) {
+                roomName = user.displayname;
+            } else {
+                roomName = event.sender;
             }
         }
 

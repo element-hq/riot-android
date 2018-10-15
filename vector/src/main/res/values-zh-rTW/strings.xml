@@ -448,15 +448,6 @@
     <string name="room_event_action_cancel_upload">取消上載</string>
     <string name="room_event_action_cancel_download">取消下載</string>
 
-    <string name="room_displayname_invite_from">來自%s 的邀請</string>
-    <string name="room_displayname_room_invite">聊天室邀請</string>
-    <string name="room_displayname_two_members">%1$s 和 %2$s</string>
-
-    <plurals name="room_displayname_three_and_more_members">
-	<item quantity="other">%1$s 和 和其他 %d 個人</item>
-</plurals>
-
-    <string name="room_displayname_no_title">空聊天室</string>
 
     <string name="search_hint">搜尋</string>
     <string name="search_members_hint">過濾聊天室成員</string>

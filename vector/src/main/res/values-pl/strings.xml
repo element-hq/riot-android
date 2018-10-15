@@ -314,11 +314,6 @@ Przyznaj dostęp w następnym oknie.</string>
     <string name="room_event_action_cancel_upload">Anuluj wysyłanie</string>
     <string name="room_event_action_cancel_download">Anuluj pobieranie</string>
 
-    <string name="room_displayname_invite_from">Zaproszenie od %s</string>
-    <string name="room_displayname_room_invite">Zaproszenie do pokoju</string>
-    <string name="room_displayname_two_members">%1$s i %2$s</string>
-    <string name="room_displayname_no_title">Pusty pokój</string>
-
     <string name="search_hint">Szukaj</string>
     <string name="search_members_hint">Filtruj członków pokoju</string>
     <string name="search_no_results">Brak wyników</string>
@@ -679,12 +674,6 @@ Jesteś pewien?</string>
     <string name="ssl_expected_existing_expl">Certyfikat zmienił stan z zaufanego na niezaufany. jest to NIEZWYKLE RZADKIE. Rekomendowane jest NIE AKCEPTOWANIE nowego certyfikatu.</string>
     <string name="ssl_only_accept">akceptuj certyfikat TYLKO wtedy gdy administrator opublikował odcisk palca pasujący do tego powyżej.</string>
     <string name="malformed_id">Uszkodzony ID. Czy to powinien być adres e-mail lub Matrix ID podobny do \'@localpart:domain\'</string>
-    <plurals name="room_displayname_three_and_more_members">
-	<item quantity="one">%1$s i jeden inny</item>
-	<item quantity="few">%1$s i kilku innych</item>
-	<item quantity="many">%d innych</item>
-	<item quantity="other"/>
-</plurals>
 
     <plurals name="directory_search_rooms">
 	<item quantity="one">Jeden pokój</item>

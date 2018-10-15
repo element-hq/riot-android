@@ -411,12 +411,6 @@ Tieni presente che questa azione riavvierà l\'app e potrebbe richiedere del tem
     <string name="room_event_action_cancel_upload">Annulla caricamento</string>
     <string name="room_event_action_cancel_download">Annulla scaricamento</string>
 
-    <!-- Room display name -->
-    <string name="room_displayname_invite_from">Invito da %s</string>
-    <string name="room_displayname_room_invite">Invito nella stanza</string>
-    <string name="room_displayname_two_members">%1$s e %2$s</string>
-    <string name="room_displayname_no_title">Stanza vuota</string>
-
     <!-- Search -->
     <string name="search_hint">Cerca</string>
     <string name="search_members_hint">Filtra membri della stanza</string>
@@ -823,11 +817,6 @@ In futuro il processo di verifica sarà più sofisticato.</string>
     <plurals name="room_new_messages_notification">
 	<item quantity="one">1 nuovo messaggio</item>
 	<item quantity="other">%d nuovi messaggi</item>
-</plurals>
-
-    <plurals name="room_displayname_three_and_more_members">
-	<item quantity="one">%1$s e 1 altro</item>
-	<item quantity="other">%1$s e %d altri</item>
 </plurals>
 
     <plurals name="directory_search_rooms">

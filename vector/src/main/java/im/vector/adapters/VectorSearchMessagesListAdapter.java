@@ -111,7 +111,7 @@ public class VectorSearchMessagesListAdapter extends VectorMessagesAdapter {
 
             RoomState roomState = row.getRoomState();
 
-            if (null == roomState) {
+            if (null == roomState && room != null) {
                 roomState = room.getState();
             }
 
@@ -157,7 +157,11 @@ public class VectorSearchMessagesListAdapter extends VectorMessagesAdapter {
 
             if (mDisplayRoomName) {
                 TextView roomTextView = convertView.findViewById(R.id.messagesAdapter_message_room_name_textview);
-                roomTextView.setText(VectorUtils.getRoomDisplayName(mContext, mSession, room));
+                if (room != null) {
+                    roomTextView.setText(room.getRoomDisplayName(mContext));
+                } else {
+                    roomTextView.setText(null);
+                }
             }
 
             // display the day

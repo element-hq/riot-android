@@ -137,7 +137,6 @@
     <string name="room_participants_create">创建</string>
 
     <string name="room_details_files">文件</string>
-    <string name="room_displayname_no_title">空聊天室</string>
 
     <string name="search_hint">搜索</string>
     <string name="search_members_hint">过滤聊天室成员</string>
@@ -290,9 +289,6 @@
     <string name="room_event_action_cancel_upload">取消上传</string>
     <string name="room_event_action_cancel_download">取消下载</string>
 
-    <string name="room_displayname_invite_from">来自 %s 的邀请</string>
-    <string name="room_displayname_room_invite">聊天室邀请</string>
-    <string name="room_displayname_two_members">%1$s 和 %2$s</string>
     <string name="room_recents_favourites">收藏夹</string>
     <string name="room_recents_low_priority">低优先级</string>
     <string name="room_settings_de_prioritize">降低优先级</string>
@@ -868,9 +864,6 @@
 
 <string name="receipt_avatar">已读提示头像</string>
     <string name="notice_avatar">通知头像</string>
-    <plurals name="room_displayname_three_and_more_members">
-	<item quantity="other">%1$s 和 与其他 %d 个人</item>
-</plurals>
 
     <plurals name="directory_search_rooms_for">
 	<item quantity="other">有 %1$s 个聊天室符合 “%2$s”</item>
