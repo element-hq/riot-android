@@ -8,8 +8,6 @@
     <color name="vector_dark_grey_color">#FF999999</color>
 
     <!-- home activity tab bar color -->
-    <color name="tab_home">@color/vector_green_color</color>
-    <color name="tab_home_secondary">#5EA584</color>
     <color name="tab_favourites">#BD79CC</color>
     <color name="tab_favourites_secondary">#744C7F</color>
     <color name="tab_people">#F8A15F</color>
@@ -31,6 +29,9 @@
 
     <color name="primary_color_light">#76CFA6</color>
     <color name="primary_color_dark">#353535</color>
+
+    <color name="primary_color_status">#FF586C7B</color>
+    <color name="accent_color_status">#FF465561</color>
 
     <color name="list_divider_color_light">#339D9D9D</color>
     <color name="list_divider_color_dark">#A5A5A5A5</color>

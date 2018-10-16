@@ -71,7 +71,7 @@ public class LockScreenActivity extends VectorAppCompatActivity { // do NOT exte
     @NotNull
     @Override
     public Triple getOtherThemes() {
-        return new Triple(R.style.Vector_Lock_Dark, R.style.Vector_Lock_Light, R.style.Vector_Lock_Status);
+        return new Triple(R.style.Theme_Vector_Lock_Dark, R.style.Theme_Vector_Lock_Light, R.style.Theme_Vector_Lock_Status);
     }
 
     @Override

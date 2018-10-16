@@ -83,6 +83,10 @@
         <attr name="icon_tint_on_dark_action_bar_color" format="color" />
         <attr name="settings_icon_tint_color" format="color" />
 
+        <!-- Tab home colors -->
+        <attr name="tab_home" format="color" />
+        <attr name="tab_home_secondary" format="color" />
+
         <!-- theses colours are requested a background cannot be set by an ?att on android < 5 -->
         <!-- dedicated drawables are created for each theme -->
 
