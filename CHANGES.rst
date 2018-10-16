@@ -23,6 +23,7 @@ Bugfix:
  - Avoid creation of Gson object (#2608)
  - Inline code breaks in reply messages (#2531)
  - Reduce size of clickable read-receipts area (#655)
+ - Fix issue of html rendering in emote message (#2652)
 
 Translations:
  -

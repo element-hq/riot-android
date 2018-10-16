@@ -972,9 +972,8 @@ class VectorMessagesAdapterHelper {
 
         // an html format has been released
         if (null != htmlFormattedText) {
-            boolean isCustomizable = !htmlFormattedText.contains("<a href=") && !htmlFormattedText.contains("<table>");
+            boolean isCustomizable = !htmlFormattedText.contains("<table>");
 
-            // the links are not yet supported by ConsoleHtmlTagHandler
             // the markdown tables are not properly supported
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
                 sequence = Html.fromHtml(htmlFormattedText,
