@@ -22,6 +22,7 @@ Bugfix:
  - Android 8: crash on device Boot (#2615)
  - Avoid creation of Gson object (#2608)
  - Inline code breaks in reply messages (#2531)
+ - Reduce size of clickable read-receipts area (#655)
 
 Translations:
  -

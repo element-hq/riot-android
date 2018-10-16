@@ -741,8 +741,15 @@ class VectorMessagesAdapterHelper {
             imageViews.get(index).setVisibility(View.INVISIBLE);
         }
 
+        // Read receipt clickable zone
+        View clickable = avatarsListView.findViewById(R.id.read_receipt_avatars_list);
+        if (clickable == null) {
+            // Fallback to the parent
+            clickable = avatarsListView;
+        }
+
         if (receipts.size() > 0) {
-            avatarsListView.setOnClickListener(new View.OnClickListener() {
+            clickable.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     if (null != mEventsListener) {
@@ -751,7 +758,7 @@ class VectorMessagesAdapterHelper {
                 }
             });
         } else {
-            avatarsListView.setOnClickListener(null);
+            clickable.setOnClickListener(null);
         }
     }
 
