@@ -108,9 +108,9 @@ import im.vector.R;
 import im.vector.VectorApp;
 import im.vector.ViewedRoomTracker;
 import im.vector.activity.util.RequestCodesKt;
+import im.vector.extensions.MatrixSdkExtensionsKt;
 import im.vector.features.hhs.LimitResourceState;
 import im.vector.features.hhs.ResourceLimitEventListener;
-import im.vector.extensions.MatrixSdkExtensionsKt;
 import im.vector.fragments.VectorMessageListFragment;
 import im.vector.fragments.VectorUnknownDevicesFragment;
 import im.vector.listeners.IMessagesAdapterActionsListener;
@@ -1476,12 +1476,24 @@ public class VectorRoomActivity extends MXCActionBarActivity implements
         // This is the case in the room preview for public rooms
         if (CommonActivityUtils.shouldRestartApp(this) || null == mSession || null == mRoom) {
             // Hide all items
-            searchInRoomMenuItem.setVisible(false);
-            useMatrixAppsMenuItem.setVisible(false);
-            resendUnsentMenuItem.setVisible(false);
-            deleteUnsentMenuItem.setVisible(false);
-            settingsMenuItem.setVisible(false);
-            leaveRoomMenuItem.setVisible(false);
+            if (searchInRoomMenuItem != null) {
+                searchInRoomMenuItem.setVisible(false);
+            }
+            if (useMatrixAppsMenuItem != null) {
+                useMatrixAppsMenuItem.setVisible(false);
+            }
+            if (resendUnsentMenuItem != null) {
+                resendUnsentMenuItem.setVisible(false);
+            }
+            if (deleteUnsentMenuItem != null) {
+                deleteUnsentMenuItem.setVisible(false);
+            }
+            if (settingsMenuItem != null) {
+                settingsMenuItem.setVisible(false);
+            }
+            if (leaveRoomMenuItem != null) {
+                leaveRoomMenuItem.setVisible(false);
+            }
 
             return true;
         }
@@ -1491,21 +1503,45 @@ public class VectorRoomActivity extends MXCActionBarActivity implements
             RoomMember member = mRoom.getMember(mSession.getMyUserId());
 
             // the server search does not work on encrypted rooms.
-            searchInRoomMenuItem.setVisible(!mRoom.isEncrypted());
-            useMatrixAppsMenuItem.setVisible(TextUtils.isEmpty(mEventId) && null == sRoomPreviewData);
-            resendUnsentMenuItem.setVisible(mHasUnsentEvents);
-            deleteUnsentMenuItem.setVisible(mHasUnsentEvents);
-            settingsMenuItem.setVisible(true);
+            if (searchInRoomMenuItem != null) {
+                searchInRoomMenuItem.setVisible(!mRoom.isEncrypted());
+            }
+            if (useMatrixAppsMenuItem != null) {
+                useMatrixAppsMenuItem.setVisible(TextUtils.isEmpty(mEventId) && null == sRoomPreviewData);
+            }
+            if (resendUnsentMenuItem != null) {
+                resendUnsentMenuItem.setVisible(mHasUnsentEvents);
+            }
+            if (deleteUnsentMenuItem != null) {
+                deleteUnsentMenuItem.setVisible(mHasUnsentEvents);
+            }
+            if (settingsMenuItem != null) {
+                settingsMenuItem.setVisible(true);
+            }
             // kicked / banned room
-            leaveRoomMenuItem.setVisible(member != null && !member.kickedOrBanned());
+            if (leaveRoomMenuItem != null) {
+                leaveRoomMenuItem.setVisible(member != null && !member.kickedOrBanned());
+            }
         } else {
             // Hide all items
-            searchInRoomMenuItem.setVisible(false);
-            useMatrixAppsMenuItem.setVisible(false);
-            resendUnsentMenuItem.setVisible(false);
-            deleteUnsentMenuItem.setVisible(false);
-            settingsMenuItem.setVisible(false);
-            leaveRoomMenuItem.setVisible(false);
+            if (searchInRoomMenuItem != null) {
+                searchInRoomMenuItem.setVisible(false);
+            }
+            if (useMatrixAppsMenuItem != null) {
+                useMatrixAppsMenuItem.setVisible(false);
+            }
+            if (resendUnsentMenuItem != null) {
+                resendUnsentMenuItem.setVisible(false);
+            }
+            if (deleteUnsentMenuItem != null) {
+                deleteUnsentMenuItem.setVisible(false);
+            }
+            if (settingsMenuItem != null) {
+                settingsMenuItem.setVisible(false);
+            }
+            if (leaveRoomMenuItem != null) {
+                leaveRoomMenuItem.setVisible(false);
+            }
         }
 
         return true;
@@ -2574,7 +2610,7 @@ public class VectorRoomActivity extends MXCActionBarActivity implements
         final LimitResourceState limitResourceState = mResourceLimitEventListener.getLimitResourceState();
         final MatrixError hardResourceLimitExceededError = mSession.getDataHandler().getResourceLimitExceededError();
         final MatrixError softResourceLimitExceededError = limitResourceState.softErrorOrNull();
-        
+
         NotificationAreaView.State state = NotificationAreaView.State.Default.INSTANCE;
         mHasUnsentEvents = false;
         if (!mIsUnreadPreviewMode && !TextUtils.isEmpty(mEventId)) {
