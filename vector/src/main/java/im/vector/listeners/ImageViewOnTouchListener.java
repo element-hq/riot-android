@@ -1,5 +1,4 @@
 /*
- * Copyright 2014 OpenMarket Ltd
  * Copyright 2018 New Vector Ltd
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -27,6 +26,7 @@ import android.widget.ImageView;
  * ImageViewOnTouchListener contains methods, that allows the {@link android.widget.ImageView}
  * (which {@link android.widget.ImageView.ScaleType} have to be set on {@link android.widget.ImageView.ScaleType#MATRIX}, in order to work)
  * to transform its drawable by a touch event.
+ * <div>Inspired by: <a href=https://github.com/judepereira/android-multitouch>https://github.com/judepereira/android-multitouch</a></div>
  */
 
 public abstract class ImageViewOnTouchListener implements View.OnTouchListener {
@@ -90,6 +90,7 @@ public abstract class ImageViewOnTouchListener implements View.OnTouchListener {
     @Override
     public boolean onTouch(View v, MotionEvent event) {
         ImageView view = (ImageView) v;
+
         switch (event.getAction() & MotionEvent.ACTION_MASK) {
             //when single touch occurs
             case MotionEvent.ACTION_DOWN:
