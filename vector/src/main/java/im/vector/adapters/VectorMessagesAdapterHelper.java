@@ -1051,7 +1051,7 @@ class VectorMessagesAdapterHelper {
             // Matrix apps are enabled
             return true;
         } else if (Event.EVENT_TYPE_STATE_ROOM_CREATE.equals(eventType)) {
-            return row.hasPredecessor();
+            return row.getRoomCreateContentPredecessor() != null;
         }
         return false;
     }

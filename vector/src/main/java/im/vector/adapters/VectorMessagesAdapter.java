@@ -1723,7 +1723,8 @@ public class VectorMessagesAdapter extends AbstractMessagesAdapter {
             convertView = mLayoutInflater.inflate(mRowTypeToLayoutId.get(ROW_TYPE_VERSIONED_ROOM), parent, false);
         }
         final MessageRow row = getItem(position);
-        final RoomCreateContent.Predecessor predecessor = row.getRoomCreateContent().predecessor;
+        // In this case, predecessor cannot be null
+        final RoomCreateContent.Predecessor predecessor = row.getRoomCreateContentPredecessor();
 
         final String roomLink = PermalinkUtils.createPermalink(predecessor.roomId);
         final ClickableSpan urlSpan = new MatrixURLSpan(roomLink, MXPatterns.PATTERN_CONTAIN_APP_LINK_PERMALINK_ROOM_ID, mVectorMessagesAdapterEventsListener);
