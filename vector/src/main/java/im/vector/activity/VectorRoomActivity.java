@@ -3828,7 +3828,7 @@ public class VectorRoomActivity extends MXCActionBarActivity implements
         if ((null != mRoom) && (null != mRoom.getState())) {
             if (MatrixSdkExtensionsKt.isPowerLevelEnoughForAvatarUpdate(mRoom, mSession)) {
                 // need to check if the camera permission has been granted
-                if (PermissionsToolsKt.checkPermissions(PermissionsToolsKt.PERMISSIONS_FOR_ROOM_DETAILS,
+                if (PermissionsToolsKt.checkPermissions(PermissionsToolsKt.PERMISSIONS_FOR_ROOM_AVATAR,
                         this, PermissionsToolsKt.PERMISSION_REQUEST_CODE)) {
                     Intent intent = new Intent(this, VectorMediasPickerActivity.class);
                     intent.putExtra(VectorMediasPickerActivity.EXTRA_AVATAR_MODE, true);
