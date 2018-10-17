@@ -1496,7 +1496,7 @@ public class VectorMessagesAdapter extends AbstractMessagesAdapter {
 
             Message message = JsonUtils.toMessage(event.getContent());
 
-            CharSequence body = "* " + row.getUserDisplayName() + " " + message.body;
+            CharSequence body = "* " + row.getSenderDisplayName() + " " + message.body;
 
             if (TextUtils.equals(Message.FORMAT_MATRIX_HTML, message.format)) {
                 String htmlString = mHelper.getSanitisedHtml(message.formatted_body);
@@ -1504,7 +1504,7 @@ public class VectorMessagesAdapter extends AbstractMessagesAdapter {
                 if (null != htmlString) {
                     CharSequence sequence = mHelper.convertToHtml(htmlString);
 
-                    body = TextUtils.concat("* ", row.getUserDisplayName(), " ", sequence);
+                    body = TextUtils.concat("* ", row.getSenderDisplayName(), " ", sequence);
                 }
             }
 

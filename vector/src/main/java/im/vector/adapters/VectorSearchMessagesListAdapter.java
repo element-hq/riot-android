@@ -30,7 +30,6 @@ import android.widget.TextView;
 import org.matrix.androidsdk.MXSession;
 import org.matrix.androidsdk.adapters.MessageRow;
 import org.matrix.androidsdk.data.Room;
-import org.matrix.androidsdk.data.RoomState;
 import org.matrix.androidsdk.db.MXMediasCache;
 import org.matrix.androidsdk.rest.model.Event;
 import org.matrix.androidsdk.util.EventDisplay;
@@ -116,7 +115,7 @@ public class VectorSearchMessagesListAdapter extends VectorMessagesAdapter {
             // display the sender
             TextView senderTextView = convertView.findViewById(R.id.messagesAdapter_sender);
             if (senderTextView != null) {
-                senderTextView.setText(row.getUserDisplayName());
+                senderTextView.setText(row.getSenderDisplayName());
             }
 
             // display the body
