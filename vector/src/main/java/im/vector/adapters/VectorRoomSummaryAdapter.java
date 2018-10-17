@@ -917,9 +917,11 @@ public class VectorRoomSummaryAdapter extends BaseExpandableListAdapter {
 
         if (null != aChildRoomSummary) {
             if (aChildRoomSummary.getLatestReceivedEvent() != null) {
-                eventDisplay = new RiotEventDisplay(mContext, aChildRoomSummary.getLatestReceivedEvent(), aChildRoomSummary.getLatestRoomState());
+                eventDisplay = new RiotEventDisplay(mContext);
                 eventDisplay.setPrependMessagesWithAuthor(true);
-                messageToDisplayRetValue = eventDisplay.getTextualDisplay(ThemeUtils.INSTANCE.getColor(mContext, R.attr.riot_primary_text_color));
+                messageToDisplayRetValue = eventDisplay.getTextualDisplay(ThemeUtils.INSTANCE.getColor(mContext, R.attr.riot_primary_text_color),
+                        aChildRoomSummary.getLatestReceivedEvent(),
+                        aChildRoomSummary.getLatestRoomState());
             }
 
             // check if this is an invite

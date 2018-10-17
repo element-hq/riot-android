@@ -364,9 +364,11 @@ public class RoomUtils {
 
         if (null != roomSummary) {
             if (roomSummary.getLatestReceivedEvent() != null) {
-                eventDisplay = new EventDisplay(context, roomSummary.getLatestReceivedEvent(), roomSummary.getLatestRoomState());
+                eventDisplay = new EventDisplay(context);
                 eventDisplay.setPrependMessagesWithAuthor(true);
-                messageToDisplay = eventDisplay.getTextualDisplay(ThemeUtils.INSTANCE.getColor(context, R.attr.room_notification_text_color));
+                messageToDisplay = eventDisplay.getTextualDisplay(ThemeUtils.INSTANCE.getColor(context, R.attr.room_notification_text_color),
+                        roomSummary.getLatestReceivedEvent(),
+                        roomSummary.getLatestRoomState());
             }
 
             // check if this is an invite

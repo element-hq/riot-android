@@ -30,7 +30,6 @@ import android.widget.TextView;
 import org.matrix.androidsdk.MXSession;
 import org.matrix.androidsdk.adapters.MessageRow;
 import org.matrix.androidsdk.data.Room;
-import org.matrix.androidsdk.data.RoomState;
 import org.matrix.androidsdk.db.MXMediasCache;
 import org.matrix.androidsdk.rest.model.Event;
 import org.matrix.androidsdk.util.EventDisplay;
@@ -109,12 +108,6 @@ public class VectorSearchMessagesListAdapter extends VectorMessagesAdapter {
 
             Room room = mSession.getDataHandler().getStore().getRoom(event.roomId);
 
-            RoomState roomState = row.getRoomState();
-
-            if (null == roomState && room != null) {
-                roomState = room.getState();
-            }
-
             // refresh the avatar
             ImageView avatarView = convertView.findViewById(R.id.messagesAdapter_roundAvatar).findViewById(R.id.avatar_img);
             mHelper.loadMemberAvatar(avatarView, row);
@@ -122,14 +115,14 @@ public class VectorSearchMessagesListAdapter extends VectorMessagesAdapter {
             // display the sender
             TextView senderTextView = convertView.findViewById(R.id.messagesAdapter_sender);
             if (senderTextView != null) {
-                senderTextView.setText(VectorMessagesAdapterHelper.getUserDisplayName(event.getSender(), roomState));
+                senderTextView.setText(row.getSenderDisplayName());
             }
 
             // display the body
             TextView bodyTextView = convertView.findViewById(R.id.messagesAdapter_body);
             // set the message text
-            EventDisplay display = new RiotEventDisplay(mContext, event, (null != room) ? room.getState() : null);
-            CharSequence text = display.getTextualDisplay();
+            EventDisplay display = new RiotEventDisplay(mContext);
+            CharSequence text = display.getTextualDisplay(event, (null != room) ? room.getState() : null);
 
             if (null == text) {
                 text = "";

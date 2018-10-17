@@ -45,7 +45,6 @@ import com.google.gson.JsonObject;
 import org.matrix.androidsdk.MXSession;
 import org.matrix.androidsdk.adapters.MessageRow;
 import org.matrix.androidsdk.data.Room;
-import org.matrix.androidsdk.data.RoomState;
 import org.matrix.androidsdk.data.store.IMXStore;
 import org.matrix.androidsdk.rest.callback.ApiCallback;
 import org.matrix.androidsdk.rest.model.Event;
@@ -146,21 +145,6 @@ class VectorMessagesAdapterHelper {
     }
 
     /**
-     * Returns an user display name for an user Id.
-     *
-     * @param userId    the user id.
-     * @param roomState the room state
-     * @return teh user display name.
-     */
-    public static String getUserDisplayName(String userId, RoomState roomState) {
-        if (null != roomState) {
-            return roomState.getMemberName(userId);
-        } else {
-            return userId;
-        }
-    }
-
-    /**
      * init the sender value
      *
      * @param convertView  the base view
@@ -196,7 +180,7 @@ class VectorMessagesAdapterHelper {
                     senderTextView.setVisibility(View.GONE);
                 } else {
                     senderTextView.setVisibility(View.VISIBLE);
-                    senderTextView.setText(getUserDisplayName(event.getSender(), row.getRoomState()));
+                    senderTextView.setText(row.getSenderDisplayName());
 
                     final String fSenderId = event.getSender();
                     final String fDisplayName = (null == senderTextView.getText()) ? "" : senderTextView.getText().toString();
@@ -439,14 +423,9 @@ class VectorMessagesAdapterHelper {
      * @param row        the message row
      */
     void loadMemberAvatar(ImageView avatarView, MessageRow row) {
-        RoomState roomState = row.getRoomState();
         Event event = row.getEvent();
 
-        RoomMember roomMember = null;
-
-        if (null != roomState) {
-            roomMember = roomState.getMember(event.getSender());
-        }
+        RoomMember roomMember = row.getSender();
 
         String url = null;
         String displayName = null;
@@ -671,15 +650,8 @@ class VectorMessagesAdapterHelper {
         }
 
         final String eventId = row.getEvent().eventId;
-        RoomState roomState = row.getRoomState();
 
         IMXStore store = mSession.getDataHandler().getStore();
-
-        // sanity check
-        if (null == roomState) {
-            avatarsListView.setVisibility(View.GONE);
-            return;
-        }
 
         // hide the read receipts until there is a way to retrieve them
         // without triggering a request per message
@@ -688,13 +660,25 @@ class VectorMessagesAdapterHelper {
             return;
         }
 
-        List<ReceiptData> receipts = store.getEventReceipts(roomState.roomId, eventId, true, true);
+        List<ReceiptData> receipts = store.getEventReceipts(row.getEvent().roomId, eventId, true, true);
 
         // if there is no receipt to display
         // hide the dedicated layout
         if ((null == receipts) || (0 == receipts.size())) {
             avatarsListView.setVisibility(View.GONE);
             return;
+        }
+
+        if (null == mRoom) {
+            // The read receipt handling required the room state. So we retrieve the current room (if any).
+            // Do not create it if it is not available. For example the room is not available during a room preview.
+            mRoom = mSession.getDataHandler().getRoom(row.getEvent().roomId, false);
+
+            if (null == mRoom) {
+                Log.d(LOG_TAG, "## displayReadReceipts () : the room is not available");
+                avatarsListView.setVisibility(View.GONE);
+                return;
+            }
         }
 
         avatarsListView.setVisibility(View.VISIBLE);
@@ -714,10 +698,11 @@ class VectorMessagesAdapterHelper {
 
         for (; index < bound; index++) {
             final ReceiptData r = receipts.get(index);
-            RoomMember member = roomState.getMember(r.userId);
+            // For read receipt, we use the last room member data, so get it from the room state
+            RoomMember member = mRoom.getState().getMember(r.userId);
 
             if (member == null && liveRoomMembers != null) {
-                // Try to get the member form the live room members
+                // Get the member form the live room members
                 member = liveRoomMembers.get(r.userId);
             }
 
@@ -1024,10 +1009,9 @@ class VectorMessagesAdapterHelper {
             return false;
         }
 
-        RoomState roomState = row.getRoomState();
         Event event = row.getEvent();
 
-        if ((null == roomState) || (null == event)) {
+        if ((null == event)) {
             return false;
         }
 
@@ -1045,8 +1029,8 @@ class VectorMessagesAdapterHelper {
             return !TextUtils.isEmpty(stickerMessage.body) && !event.isRedacted();
         } else if (Event.EVENT_TYPE_STATE_ROOM_TOPIC.equals(eventType)
                 || Event.EVENT_TYPE_STATE_ROOM_NAME.equals(eventType)) {
-            EventDisplay display = new RiotEventDisplay(context, event, roomState);
-            return display.getTextualDisplay() != null;
+            EventDisplay display = new RiotEventDisplay(context);
+            return row.getText(null, display) != null;
         } else if (event.isCallEvent()) {
             return Event.EVENT_TYPE_CALL_INVITE.equals(eventType)
                     || Event.EVENT_TYPE_CALL_ANSWER.equals(eventType)
@@ -1054,20 +1038,20 @@ class VectorMessagesAdapterHelper {
         } else if (Event.EVENT_TYPE_STATE_ROOM_MEMBER.equals(eventType)
                 || Event.EVENT_TYPE_STATE_ROOM_THIRD_PARTY_INVITE.equals(eventType)) {
             // if we can display text for it, it's valid.
-            EventDisplay display = new RiotEventDisplay(context, event, roomState);
-            return display.getTextualDisplay() != null;
+            EventDisplay display = new RiotEventDisplay(context);
+            return row.getText(null, display) != null;
         } else if (Event.EVENT_TYPE_STATE_HISTORY_VISIBILITY.equals(eventType)) {
             return true;
         } else if (Event.EVENT_TYPE_MESSAGE_ENCRYPTED.equals(eventType)
                 || Event.EVENT_TYPE_MESSAGE_ENCRYPTION.equals(eventType)) {
             // if we can display text for it, it's valid.
-            EventDisplay display = new RiotEventDisplay(context, event, roomState);
-            return event.hasContentFields() && (display.getTextualDisplay() != null);
+            EventDisplay display = new RiotEventDisplay(context);
+            return event.hasContentFields() && row.getText(null, display) != null;
         } else if (TextUtils.equals(WidgetsManager.WIDGET_EVENT_TYPE, event.getType())) {
             // Matrix apps are enabled
             return true;
         } else if (Event.EVENT_TYPE_STATE_ROOM_CREATE.equals(eventType)) {
-            return roomState.hasPredecessor();
+            return row.getRoomCreateContentPredecessor() != null;
         }
         return false;
     }
