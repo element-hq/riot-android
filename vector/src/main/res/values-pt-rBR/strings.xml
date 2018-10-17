@@ -387,12 +387,6 @@ Note que esta ação irá reiniciar o aplicativo e poderá tomar um certo tempo.
     <string name="room_event_action_cancel_upload">Cancelar envio</string>
     <string name="room_event_action_cancel_download">Cancelar download</string>
 
-    <!-- Room display name -->
-    <string name="room_displayname_invite_from">Convite de %s</string>
-    <string name="room_displayname_room_invite">Convite para sala</string>
-    <string name="room_displayname_two_members">%1$s e %2$s</string>
-    <string name="room_displayname_no_title">Sala vazia</string>
-
     <!-- Search -->
     <string name="search_hint">Pesquisar</string>
     <string name="search_members_hint">Filtrar integrantes da sala</string>
@@ -870,11 +864,6 @@ No futuro, este processo de verificação será mais sofisticado.</string>
     <plurals name="room_new_messages_notification">
 	<item quantity="one">1 nova mensagem</item>
 	<item quantity="other">%d novas mensagens</item>
-</plurals>
-
-    <plurals name="room_displayname_three_and_more_members">
-	<item quantity="one">%1$s e 1 outra/o</item>
-	<item quantity="other">%1$s e %d outras/os</item>
 </plurals>
 
     <plurals name="directory_search_rooms">

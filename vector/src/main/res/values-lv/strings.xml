@@ -411,11 +411,6 @@ Vai vēlies turpināt?</string>
     <string name="room_event_action_cancel_upload">Atcelt augšuplādi (nosūtīšanu)</string>
     <string name="room_event_action_cancel_download">Atcelt lejuplādi (saņemšanu)</string>
 
-    <string name="room_displayname_invite_from">Uzaicinājums no %s</string>
-    <string name="room_displayname_room_invite">Uzaicinājums uz istabu</string>
-    <string name="room_displayname_two_members">%1$s un %2$s</string>
-    <string name="room_displayname_no_title">Tukša istaba</string>
-
     <string name="search_hint">Meklēšana</string>
     <string name="search_members_hint">Istabas dalībnieku filtrs</string>
     <string name="search_no_results">Rezultātu nav</string>
@@ -665,12 +660,6 @@ Lai turpinātu, ievadi savu paroli.</string>
 	<item quantity="zero">1 jauna ziņa</item>
 	<item quantity="one">%d jaunas ziņas</item>
 	<item quantity="other">%d jaunu ziņu</item>
-</plurals>
-
-    <plurals name="room_displayname_three_and_more_members">
-	<item quantity="zero">%1$s un 1 cits</item>
-	<item quantity="one">%1$s un %d citi</item>
-	<item quantity="other">%1$s un %d citu</item>
 </plurals>
 
     <plurals name="directory_search_rooms">

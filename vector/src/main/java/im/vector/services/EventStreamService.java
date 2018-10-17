@@ -1635,7 +1635,7 @@ public class EventStreamService extends Service {
     public void displayCallInProgressNotification(MXSession session, Room room, String callId) {
         if (null != callId) {
             Notification notification = NotificationUtils.INSTANCE.buildPendingCallNotification(getApplicationContext(),
-                    VectorUtils.getRoomDisplayName(this, session, room), room.getRoomId(), session.getCredentials().userId, callId);
+                    room.getRoomDisplayName(this), room.getRoomId(), session.getCredentials().userId, callId);
             setForegroundNotificationState(ForegroundNotificationState.CALL_IN_PROGRESS, notification);
             mCallIdInProgress = callId;
         }

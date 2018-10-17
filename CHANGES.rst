@@ -13,7 +13,7 @@ Improvements:
  - Tapping on profile picture in sidebar opens settings page (#2597)
 
 Other changes:
- -
+ - Room display name is now computed by the Matrix SDK
 
 Bugfix:
  - When exporting E2E keys, it isn't clear that you are creating a new password (#2626)

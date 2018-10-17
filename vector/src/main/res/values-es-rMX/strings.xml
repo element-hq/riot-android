@@ -385,12 +385,6 @@ Mensajes cifrados no serán visibles en cuentas que no implementan el cifrado.</
     <string name="room_event_action_cancel_upload">Cancelar Subida</string>
     <string name="room_event_action_cancel_download">Cancelar Descarga</string>
 
-    <!-- Room display name -->
-    <string name="room_displayname_invite_from">Invitar de %s</string>
-    <string name="room_displayname_room_invite">Invitacion de Sala</string>
-    <string name="room_displayname_two_members">%1$s y %2$s</string>
-    <string name="room_displayname_no_title">Sala vacía</string>
-
     <!-- Search -->
     <string name="search_hint">Buscar</string>
     <string name="search_members_hint">Buscar miembros</string>

@@ -94,7 +94,6 @@ public class VectorRoomsSelectionAdapter extends ArrayAdapter<RoomSummary> {
         }
 
         RoomSummary roomSummary = getItem(position);
-        String roomName = VectorUtils.getRoomDisplayName(mContext, mSession, mSession.getDataHandler().getRoom(roomSummary.getRoomId()));
 
         // retrieve the UI items
         ImageView avatarImageView = convertView.findViewById(R.id.room_avatar);
@@ -125,8 +124,14 @@ public class VectorRoomsSelectionAdapter extends ArrayAdapter<RoomSummary> {
             timestampTxtView.setVisibility(View.GONE);
         }
 
-        // display the room name
-        roomNameTxtView.setText(roomName);
+        Room room = mSession.getDataHandler().getRoom(roomSummary.getRoomId());
+        if(room != null) {
+            // display the room name
+            String roomName = room.getRoomDisplayName(mContext);
+            roomNameTxtView.setText(roomName);
+        } else {
+            roomNameTxtView.setText(null);
+        }
 
         // separator
         separatorView.setVisibility(View.VISIBLE);

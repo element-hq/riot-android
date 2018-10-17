@@ -693,7 +693,7 @@ public class RoomUtils {
             return;
         }
 
-        String roomName = VectorUtils.getRoomDisplayName(context, session, room);
+        String roomName = room.getRoomDisplayName(context);
 
         Bitmap bitmap = null;
 
@@ -809,14 +809,15 @@ public class RoomUtils {
      * @param constraint
      * @return filtered rooms
      */
-    public static List<Room> getFilteredRooms(final Context context, final MXSession session,
-                                              final List<Room> roomsToFilter, final CharSequence constraint) {
+    public static List<Room> getFilteredRooms(final Context context,
+                                              final List<Room> roomsToFilter,
+                                              final CharSequence constraint) {
         final String filterPattern = constraint != null ? constraint.toString().trim() : null;
         if (!TextUtils.isEmpty(filterPattern)) {
             List<Room> filteredRoom = new ArrayList<>();
             Pattern pattern = Pattern.compile(Pattern.quote(filterPattern), Pattern.CASE_INSENSITIVE);
             for (final Room room : roomsToFilter) {
-                final String roomName = VectorUtils.getRoomDisplayName(context, session, room);
+                final String roomName = room.getRoomDisplayName(context);
                 if (pattern.matcher(roomName).find()) {
                     filteredRoom.add(room);
                 }

@@ -384,11 +384,6 @@ Pozor! Vykonaním tejto akcie reštartujete aplikáciu a opätovné načítanie 
     <string name="room_event_action_cancel_upload">Zrušiť nahrávanie</string>
     <string name="room_event_action_cancel_download">Zrušiť sťahovanie</string>
 
-    <string name="room_displayname_invite_from">Pozvanie od %s</string>
-    <string name="room_displayname_room_invite">Pozvanie do miestnosti</string>
-    <string name="room_displayname_two_members">%1$s a %2$s</string>
-    <string name="room_displayname_no_title">Prázdna miestnosť</string>
-
     <string name="search_hint">Hľadať</string>
     <string name="search_members_hint">Filtrovať členov v miestnosti</string>
     <string name="search_no_results">Žiadne výsledky</string>
@@ -860,13 +855,6 @@ Neznáme zariadenia:</string>
 	<item quantity="one">1 nová správa</item>
 	<item quantity="few">%d nové správy</item>
 	<item quantity="many">%d nových správ</item>
-	<item quantity="other"/>
-</plurals>
-
-    <plurals name="room_displayname_three_and_more_members">
-	<item quantity="one">%1$s a 1 ďalší</item>
-	<item quantity="few">%1$s a %d ďalší</item>
-	<item quantity="many">%1$s a %d ďalších</item>
 	<item quantity="other"/>
 </plurals>
 

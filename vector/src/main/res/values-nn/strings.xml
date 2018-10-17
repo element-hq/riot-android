@@ -455,16 +455,6 @@ Merk at denne handlinga vil starta æppen på nytt og kan taka litt tid.</string
     <string name="room_event_action_cancel_upload">Bryt Opplasting av</string>
     <string name="room_event_action_cancel_download">Bryt Nedlasting av</string>
 
-    <string name="room_displayname_invite_from">Byd inn frå %s</string>
-    <string name="room_displayname_room_invite">Rominnbyding</string>
-    <string name="room_displayname_two_members">%1$s og %2$s</string>
-
-    <plurals name="room_displayname_three_and_more_members">
-	<item quantity="one">%1$s og 1 til</item>
-	<item quantity="other">%1$s og %d til</item>
-</plurals>
-
-    <string name="room_displayname_no_title">Tomt rom</string>
 
     <string name="search_hint">Søk</string>
     <string name="search_members_hint">Filtrer rommedlemer</string>

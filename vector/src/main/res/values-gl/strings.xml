@@ -647,8 +647,6 @@ Seguramente queira conectarse cunha conta distinta, ou engadir este correo a sú
     <string name="room_event_action_cancel_upload">Cancelar a subida</string>
     <string name="room_event_action_cancel_download">Cancelar a descarga</string>
 
-    <string name="room_displayname_two_members">%1$s e %2$s</string>
-
     <string name="room_recents_join">UNIRSE</string>
     <string name="room_recents_directory">DIRECTORIO</string>
     <string name="room_recents_favourites">FAVORITOS</string>

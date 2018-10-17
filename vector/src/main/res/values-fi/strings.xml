@@ -397,12 +397,6 @@ Salatut viestit eivät näy sovelluksissa, jotka eivät tue salausta.</string> <
     <string name="room_event_action_cancel_upload">Peru lähetys</string>
     <string name="room_event_action_cancel_download">Peru lataus</string>
 
-    <!-- Room display name -->
-    <string name="room_displayname_invite_from">Kutsu käyttäjältä %s</string> <!-- Grammar problem -->
-    <string name="room_displayname_room_invite">Huonekutsu</string>
-    <string name="room_displayname_two_members">%1$s ja %2$s</string>
-    <string name="room_displayname_no_title">Tyhjä huone</string>
-
     <!-- Search -->
     <string name="search_hint">Etsi</string>
     <string name="search_members_hint">Etsi huoneen jäsenistä</string>

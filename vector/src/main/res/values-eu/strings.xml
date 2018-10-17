@@ -376,11 +376,6 @@ Kontuan izan ekintza honek aplikazioa berrabiaraziko duela eta denbora bat behar
     <string name="room_event_action_cancel_upload">Utzi igoera</string>
     <string name="room_event_action_cancel_download">Utzi deskarga</string>
 
-    <string name="room_displayname_invite_from">%s gelarako gonbidapena</string>
-    <string name="room_displayname_room_invite">Gela gonbidapena</string>
-    <string name="room_displayname_two_members">%1$s eta %2$s</string>
-    <string name="room_displayname_no_title">Gela hutsa</string>
-
     <string name="search_hint">Bilatu</string>
     <string name="search_members_hint">Iragazi gelako kideak</string>
     <string name="search_no_results">Emaitzarik ez</string>
@@ -853,11 +848,6 @@ Zifratutako mezuak ez dira zifratzea oraindik ezarrita ez duten beste gailuetan 
     <plurals name="room_new_messages_notification">
 	<item quantity="one">Mezu berri 1</item>
 	<item quantity="other">%d mezu berri</item>
-</plurals>
-
-    <plurals name="room_displayname_three_and_more_members">
-	<item quantity="one">%1$s eta beste bat</item>
-	<item quantity="other">%1$s eta beste %d</item>
 </plurals>
 
     <plurals name="directory_search_rooms">

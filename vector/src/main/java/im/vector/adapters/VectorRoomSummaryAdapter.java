@@ -21,6 +21,7 @@ import android.content.Context;
 import android.graphics.Color;
 import android.graphics.Typeface;
 import android.graphics.drawable.GradientDrawable;
+import android.support.annotation.NonNull;
 import android.support.v4.content.ContextCompat;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
@@ -216,11 +217,11 @@ public class VectorRoomSummaryAdapter extends BaseExpandableListAdapter {
      * @param room the room.
      * @return true of the pattern is found.
      */
-    private boolean isMatchedPattern(Room room) {
+    private boolean isMatchedPattern(@NonNull Room room) {
         boolean res = !mIsSearchMode;
 
         if (!TextUtils.isEmpty(mSearchedPattern)) {
-            String roomName = VectorUtils.getRoomDisplayName(mContext, mMxSession, room);
+            String roomName = room.getRoomDisplayName(mContext);
             res = (!TextUtils.isEmpty(roomName) && (roomName.toLowerCase(VectorApp.getApplicationLocale()).contains(mSearchedPattern)));
         }
 
@@ -751,6 +752,7 @@ public class VectorRoomSummaryAdapter extends BaseExpandableListAdapter {
         int highlightCount = 0;
         int notificationCount = 0;
 
+        String roomName = null;
         if (null != childRoom) {
             highlightCount = childRoom.getHighlightCount();
             notificationCount = childRoom.getNotificationCount();
@@ -758,13 +760,14 @@ public class VectorRoomSummaryAdapter extends BaseExpandableListAdapter {
             if (mMxSession.getDataHandler().getBingRulesManager().isRoomMentionOnly(childRoom.getRoomId())) {
                 notificationCount = highlightCount;
             }
+
+            roomName = childRoom.getRoomDisplayName(mContext);
         }
 
         // get last message to be displayed
         CharSequence lastMsgToDisplay = getChildMessageToDisplay(childRoomSummary);
 
         // display the room avatar
-        final String roomName = VectorUtils.getRoomDisplayName(mContext, mMxSession, childRoom);
         VectorUtils.loadRoomAvatar(mContext, mMxSession, avatarImageView, childRoom);
 
         // display the room name

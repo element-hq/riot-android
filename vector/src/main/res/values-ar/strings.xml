@@ -253,9 +253,6 @@
     <string name="room_event_action_cancel_upload">ألغِ الرفع</string>
     <string name="room_event_action_cancel_download">ألغِ التنزيل</string>
 
-    <string name="room_displayname_invite_from">دعوة من ⁨%s⁩</string>
-    <string name="room_displayname_no_title">غرفة فارغة</string>
-
     <string name="search_no_results">لا نتائج</string>
     <string name="tab_title_search_rooms">الغرف</string>
     <string name="tab_title_search_messages">الرسائل</string>
@@ -506,7 +503,6 @@
 	<item quantity="other">%d رسالة جديدة</item>
 </plurals>
 
-    <string name="room_displayname_two_members">‏⁨%1$s⁩ و ⁨%2$s⁩</string>
 
     <plurals name="directory_search_rooms">
 	<item quantity="zero">لا غرف</item>
@@ -820,7 +816,6 @@
     <string name="ssl_cert_not_trust">قد يعني هذا بأن أحدهم يعترض الاتصال بعدوانية، أو أن هاتفك لا يثق بالشهادة التي قدّمها الخادوم البعيد.</string>
     <string name="ssl_cert_new_account_expl">إن قال مدير الخادوم بأن هذا متوقع، فتأكد من أن البصمة أدناه تطابق البصمة التي وفّرها.</string>
     <string name="ssl_expected_existing_expl">تغيّرت الشهادة من شهادة كنت تثق بها إلى شهادة لا تثق بها. لربما جدّد الخادوم شهادته. راسل إدارة الخادوم واسألهم عن البصمة المتوقعة.</string>
-    <string name="room_displayname_room_invite">دعوة إلى غرفة</string>
 
     <string name="room_recents_join">انضم</string>
     <string name="room_recents_start_chat">ابدأ دردشة</string>
