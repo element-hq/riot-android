@@ -669,6 +669,18 @@ class VectorMessagesAdapterHelper {
             return;
         }
 
+        if (null == mRoom) {
+            // The read receipt handling required the room state. So we retrieve the current room (if any).
+            // Do not create it if it is not available. For example the room is not available during a room preview.
+            mRoom = mSession.getDataHandler().getRoom(row.getEvent().roomId, false);
+
+            if (null == mRoom) {
+                Log.d(LOG_TAG, "## displayReadReceipts () : the room is not available");
+                avatarsListView.setVisibility(View.GONE);
+                return;
+            }
+        }
+
         avatarsListView.setVisibility(View.VISIBLE);
 
         List<View> imageViews = new ArrayList<>();
