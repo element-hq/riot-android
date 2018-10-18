@@ -119,6 +119,7 @@ android {
         // Treat some warnings as errors
         error 'StringFormatCount'
         error 'HardcodedText'
+        error 'SpUsage'
     }
 
     repositories {
