@@ -1046,4 +1046,13 @@ Vedd figyelembe, hogy az alkalmazás újraindul ami sok időt vehet igénybe.</s
 
     <string name="unknown_error">Ne haragudj, hiba történt</string>
 
+<string name="status_theme">Status.im téma</string>
+
+    <string name="room_sliding_menu_version_x">Verzió: %s</string>
+    <string name="encryption_export_notice">Adj meg egy jelmondatot a kimentett kulcsok titkosításához. Ezt a jelmondatot kell majd megadnod a kulcsok betöltéséhez.</string>
+    <string name="encryption_export_create_passphrase">Jelmondat lekészítése</string>
+    <string name="encryption_export_passphrase_dont_match">A jelmondatoknak meg kell egyezniük</string>
+    <string name="merged_events_expand">kinyit</string>
+    <string name="merged_events_collapse">bezár</string>
+
 </resources>
