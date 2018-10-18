@@ -29,9 +29,6 @@ Bugfix:
 Translations:
  - Fix issue with indonesian translations. This language is now available.
 
-Build:
- -
-
 Changes in Riot 0.8.17 (2018-10-10)
 ===================================================
 
