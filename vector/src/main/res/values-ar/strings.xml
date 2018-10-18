@@ -418,7 +418,9 @@
     <string name="encryption_export_room_keys_summary">صدّر المفاتيح إلى ملف محلي</string>
     <string name="encryption_import_enter_passphrase">أدخِل عبارة المرور</string>
     <string name="encryption_export_confirm_passphrase">أكّد عبارة المرور</string>
-    <string name="encryption_export_saved_as">حُفظت مفاتيح الطرفين للغرفة في ’⁨%s⁩‘</string>
+    <string name="encryption_export_saved_as">حُفظت مفاتيح الطرفين للغرفة في ’⁨%s⁩‘
+
+تحذير: يمكن أن يُحذف الملف إن أزلت تثبيت التطبيق.</string>
 
     <string name="encryption_import_e2e_room_keys">استورد مفاتيح الطرفين لغرفة</string>
     <string name="encryption_import_room_keys">استورد مفاتيح الغرفة</string>
