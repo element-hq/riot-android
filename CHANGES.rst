@@ -27,7 +27,7 @@ Bugfix:
  - Fix issue of html rendering in emote message (#2652)
 
 Translations:
- -
+ - Fix issue with indonesian translations. This language is now available.
 
 Build:
  -
