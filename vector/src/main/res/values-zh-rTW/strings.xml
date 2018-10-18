@@ -141,8 +141,8 @@
     <string name="start_video_call">開始視訊通話</string>
 
     <string name="start_new_chat_prompt_msg">您確定想要與 %s 開始新的聊天？</string>
-    <string name="start_voice_call_prompt_msg">您確定想要與 %s 開始語音通話？</string>
-    <string name="start_video_call_prompt_msg">您確定想要與 %s 開始視訊通話？</string>
+    <string name="start_voice_call_prompt_msg">您確定想要與開始語音通話？</string>
+    <string name="start_video_call_prompt_msg">您確定想要與開始視訊通話？</string>
 
     <string name="option_send_files">傳送檔案</string>
     <string name="option_take_photo_video">拍照或錄影</string>

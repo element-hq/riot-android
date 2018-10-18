@@ -115,6 +115,11 @@ android {
         disable 'MissingTranslation'
         disable 'RestrictedApi'
         disable 'ImpliedQuantity'
+
+        // Treat some warnings as errors
+        error 'StringFormatCount'
+        error 'HardcodedText'
+        error 'SpUsage'
     }
 
     repositories {

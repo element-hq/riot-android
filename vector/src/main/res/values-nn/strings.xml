@@ -643,7 +643,7 @@ Merk at denne handlinga gjer at æppen startar på nytt og kan taka litt tid.</s
 
     <string name="settings_delete_notification_targets_confirmation">Er du sikker på at du vil fjerna varselmålet?</string>
 
-    <string name="settings_delete_threepid_confirmation">Er du sikker på at du vil fjerna %$s %2$s?</string>
+    <string name="settings_delete_threepid_confirmation">Er du sikker på at du vil fjerna %1$s %2$s?</string>
 
     <string name="settings_select_country">Vel eit land</string>
 
