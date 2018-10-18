@@ -1096,4 +1096,13 @@ Tieni presente che questa azione riavvierà l\'app e potrebbe richiedere del tem
     <string name="unknown_error">Spiacente, si è verificato un errore</string>
 
 <string name="settings_lazy_loading_title">Caricamento posticipato dei membri della stanza</string>
-    </resources>
+    <string name="status_theme">Tema Status.im</string>
+
+    <string name="room_sliding_menu_version_x">Versione %s</string>
+    <string name="encryption_export_notice">Crea una passphrase (frase d\'ordine) per crittografare le chiavi esportate. Dovrai inserire la stessa passphrase per poter importare le chiavi.</string>
+    <string name="encryption_export_create_passphrase">Crea passphrase</string>
+    <string name="encryption_export_passphrase_dont_match">Le passphrase devono corrispondere</string>
+    <string name="merged_events_expand">espandi</string>
+    <string name="merged_events_collapse">collassa</string>
+
+</resources>
