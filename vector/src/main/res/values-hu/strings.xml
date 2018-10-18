@@ -358,7 +358,6 @@ Biztos vagy benne?</string>
     <string name="ssl_unexpected_existing_expl">A tanúsítvány eltér attól, amit a telefonoddal megbízhatónak jelöltél. Ez RENDKÍVÜL SZOKATLAN. Javasoljuk, hogy NE FOGADD EL ezt az új tanúsítványt.</string>
     <string name="ssl_expected_existing_expl">Egy korábban megbízhatónak jelölt tanúsítvány megváltozott. Lehet, hogy a szerver frissítette a tanúsítványát. Lépj kapcsolatba a szerver adminisztrátorával és egyeztesd az ujjlenyomatot.</string>
     <string name="ssl_only_accept">Csak akkor fogadd el a tanúsítványt, ha a szerver adminisztrátortól kapott ujjlenyomat megegyezik a fentivel.</string>
-    <string name="ssl_fingerprint_example">00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00</string>
 
     <string name="room_details_title">Szoba adatai</string>
     <string name="room_details_people">Résztvevők</string>
@@ -374,11 +373,6 @@ Biztos vagy benne?</string>
 Vedd figyelembe, hogy az alkalmazás újraindul  ami sok időt vehet igénybe."</string>
     <string name="room_event_action_cancel_upload">Feltöltés megszakítása</string>
     <string name="room_event_action_cancel_download">Letöltés megszakítása</string>
-
-    <string name="room_displayname_invite_from">%s meghívott</string>
-    <string name="room_displayname_room_invite">Meghívó egy szobába</string>
-    <string name="room_displayname_two_members">%1$s és %2$s</string>
-    <string name="room_displayname_no_title">Üres szoba</string>
 
     <string name="search_hint">Keresés</string>
     <string name="search_members_hint">Szobatagok szűrése</string>
@@ -607,7 +601,7 @@ A titkosított üzenetek nem fognak látszódni azokon a klienseken ahol a titko
     <string name="encryption_export_room_keys">Szoba kulcsok exportálása</string>
     <string name="encryption_export_room_keys_summary">Exportáld a kulcsokat helyi fájlba</string>
     <string name="encryption_export_export">Exportálás</string>
-    <string name="encryption_export_enter_passphrase">Írj be jelmondatot</string>
+    <string name="encryption_import_enter_passphrase">Írj be jelmondatot</string>
     <string name="encryption_export_confirm_passphrase">Ellenőrizd a jelmondatot</string>
     <string name="encryption_export_saved_as">A E2E szoba kulcsok el lettek mentve ide \'%s\'
 
@@ -724,7 +718,7 @@ Ismeretlen eszközök:</string>
     <string name="widget_integration_room_not_visible">%s szoba nem látható.</string>
     <string name="settings_labs_matrix_apps">Matrix Alkalmazások</string>
     <string name="room_add_matrix_apps">Matrix alkalmazás hozzáadása</string>
-    <string name="notification_listen_for_events">Események figyelése</string>
+    <string name="notification_listening_for_events">Események figyelése</string>
 
     <string name="notification_sync_in_progress">Szinkronizálás</string>
     <string name="call">Hívás</string>
@@ -854,11 +848,6 @@ Ismeretlen eszközök:</string>
     <plurals name="room_new_messages_notification">
 	<item quantity="one">1 új üzenet</item>
 	<item quantity="other">%d új üzenet</item>
-</plurals>
-
-    <plurals name="room_displayname_three_and_more_members">
-	<item quantity="one">%1$s és 1 másik</item>
-	<item quantity="other">%1$s és %d másik</item>
 </plurals>
 
     <plurals name="directory_search_rooms">

@@ -13,7 +13,6 @@
     <string name="title_activity_home">Съобщения</string>
     <string name="title_activity_room">Стая</string>
     <string name="title_activity_settings">Настройки</string>
-    <string name="ssl_fingerprint_example">00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00</string>
 
     <string name="compression_options">"Изпратете с размер "</string>
     <string name="compression_opt_list_original">Оригинален</string>
@@ -105,7 +104,7 @@
     <string name="active_call">Активен разговор</string>
     <string name="ongoing_conference_call_voice">гласов</string>
     <string name="ongoing_conference_call_video">видео</string>
-    <string name="notification_listen_for_events">Следете за събития</string>
+    <string name="notification_listening_for_events">Следете за събития</string>
     <string name="notification_noisy_notifications">Известия със звук</string>
     <string name="notification_silent_notifications">Известия без звук</string>
 
@@ -371,16 +370,6 @@
     <string name="room_event_action_cancel_download">Откажи изтеглянето</string>
 
     <string name="room_event_action_cancel_upload">Откажи качването</string>
-    <string name="room_displayname_invite_from">Покана от %s</string>
-    <string name="room_displayname_room_invite">Покана за стая</string>
-    <string name="room_displayname_two_members">%1$s и %2$s</string>
-
-    <plurals name="room_displayname_three_and_more_members">
- 	    <item quantity="one">%1$s и 1 друг</item>
-	    <item quantity="other">%1$s и %d други</item>
-    </plurals>
-
-    <string name="room_displayname_no_title">Празна стая</string>
 
     <string name="search_hint">Търси</string>
     <string name="search_members_hint">Филтриране на членовете</string>
@@ -643,7 +632,7 @@
     <string name="encryption_export_room_keys">Експортиране на ключове за стая</string>
     <string name="encryption_export_room_keys_summary">Експортирай ключовете в локален файл</string>
     <string name="encryption_export_export">Експортирай</string>
-    <string name="encryption_export_enter_passphrase">Въведи парола</string>
+    <string name="encryption_import_enter_passphrase">Въведи парола</string>
     <string name="encryption_export_confirm_passphrase">Потвърди парола</string>
     <string name="encryption_export_saved_as">E2E ключовете бяха запазени в \'%s\'
 

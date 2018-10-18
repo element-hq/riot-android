@@ -388,7 +388,6 @@ Tem a certeza?</string>
     <string name="ssl_unexpected_existing_expl">O certificado mudou de um que era confiado pelo seu telefone. Isto é ALTAMENTE INVULGAR. Recomendamos que NÃO ACEITE este novo certificado.</string>
     <string name="ssl_expected_existing_expl">O certificado mudou de um que era anteriormente confiável para um que não é confiável. O servidor pode ter renovado o seu certificado. Contacte o administrador do servidor para obter a impressão digital expectável.</string>
     <string name="ssl_only_accept">APENAS aceite o certificado se o administrador do servidor publicou uma impressão digital que corresponde à impressão digital acima.</string>
-    <string name="ssl_fingerprint_example">00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00</string>
 
     <!-- Room Details -->
     <string name="room_details_title">Detalhes da sala</string>
@@ -404,12 +403,6 @@ Tem a certeza?</string>
     <string name="room_event_action_report_prompt_ignore_user">Deseja ocultar todas as mensagens deste utilizador?</string>
     <string name="room_event_action_cancel_upload">Cancelar envio</string>
     <string name="room_event_action_cancel_download">Cancelar transferência</string>
-
-    <!-- Room display name -->
-    <string name="room_displayname_invite_from">Convite de %s</string>
-    <string name="room_displayname_room_invite">Convite para sala</string>
-    <string name="room_displayname_two_members">%1$s e %2$s</string>
-    <string name="room_displayname_no_title">Sala vazia</string>
 
     <!-- Search -->
     <string name="search_hint">Pesquisar</string>
@@ -666,7 +659,7 @@ Mensagens cifradas não serão visíveis para clientes que não ainda não imple
     <string name="encryption_export_room_keys">Exportar chaves de sala</string>
     <string name="encryption_export_room_keys_summary">Exportar as chaves para um ficheiro local</string>
     <string name="encryption_export_export">Exportar</string>
-    <string name="encryption_export_enter_passphrase">Insira a frase secreta</string>
+    <string name="encryption_import_enter_passphrase">Insira a frase secreta</string>
     <string name="encryption_export_confirm_passphrase">Confirme a frase secreta</string>
     <string name="encryption_export_saved_as">As chaves E2E da sala foram guardadas em \'%s\'</string>
 
@@ -780,6 +773,6 @@ Dispositivos desconhecidos:</string>
     <string name="settings_labs_matrix_apps">Apps Matrix</string>
     <string name="room_add_matrix_apps">Adicionar apps Matrix</string>
     <string name="notification_sync_in_progress">A sincronizar</string>
-    <string name="notification_listen_for_events">À escuta de eventos</string>
+    <string name="notification_listening_for_events">À escuta de eventos</string>
 
     </resources>

@@ -43,7 +43,7 @@
                     android:layout_height="wrap_content"
                     android:layout_alignParentRight="true"
                     android:textColor="@color/vector_green_color"
-                    tools:text="Header" />
+                    tools:text="@string/merged_events_expand" />
 
                 <include
                     android:id="@+id/messagesAdapter_merge_avatar_list"
@@ -65,7 +65,7 @@
                 android:layout_height="wrap_content"
                 android:textIsSelectable="false"
                 android:textSize="14sp"
-                tools:text="A message here" />
+                tools:text="3 membership changes" />
 
         </LinearLayout>
 

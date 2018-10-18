@@ -19,7 +19,6 @@ package im.vector.util;
 
 import android.annotation.SuppressLint;
 import android.content.ClipData;
-import android.content.ClipboardManager;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
@@ -43,13 +42,11 @@ import android.webkit.WebView;
 import android.widget.BaseExpandableListAdapter;
 import android.widget.ExpandableListView;
 import android.widget.ImageView;
-import android.widget.Toast;
 
 import org.matrix.androidsdk.MXSession;
 import org.matrix.androidsdk.call.MXCallsManager;
 import org.matrix.androidsdk.data.Room;
 import org.matrix.androidsdk.data.RoomPreviewData;
-import org.matrix.androidsdk.data.RoomState;
 import org.matrix.androidsdk.db.MXMediasCache;
 import org.matrix.androidsdk.rest.callback.ApiCallback;
 import org.matrix.androidsdk.rest.callback.SimpleApiCallback;
@@ -66,13 +63,12 @@ import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
-import java.util.Collections;
-import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.regex.Pattern;
 
+import im.vector.Matrix;
 import im.vector.R;
 import im.vector.VectorApp;
 import im.vector.adapters.ParticipantAdapterItem;
@@ -83,22 +79,6 @@ public class VectorUtils {
 
     //public static final int REQUEST_FILES = 0;
     public static final int TAKE_IMAGE = 1;
-
-    //==============================================================================================================
-    // Clipboard helper
-    //==============================================================================================================
-
-    /**
-     * Copy a text to the clipboard.
-     *
-     * @param context the context
-     * @param text    the text to copy
-     */
-    public static void copyToClipboard(Context context, CharSequence text) {
-        ClipboardManager clipboard = (ClipboardManager) context.getSystemService(Context.CLIPBOARD_SERVICE);
-        clipboard.setPrimaryClip(ClipData.newPlainText("", text));
-        Toast.makeText(context, context.getString(R.string.copied_to_clipboard), Toast.LENGTH_SHORT).show();
-    }
 
     //==============================================================================================================
     // Rooms methods
@@ -114,12 +94,12 @@ public class VectorUtils {
         String displayName = publicRoom.name;
 
         if (TextUtils.isEmpty(displayName)) {
-            if (publicRoom.aliases.size() > 0) {
+            if (publicRoom.aliases != null && !publicRoom.aliases.isEmpty()) {
                 displayName = publicRoom.aliases.get(0);
             } else {
                 displayName = publicRoom.roomId;
             }
-        } else if (!displayName.startsWith("#") && (0 < publicRoom.aliases.size())) {
+        } else if (!displayName.startsWith("#") && publicRoom.aliases != null && !publicRoom.aliases.isEmpty()) {
             displayName = displayName + " (" + publicRoom.aliases.get(0) + ")";
         }
 
@@ -153,125 +133,8 @@ public class VectorUtils {
                 }
             });
         } else {
-            callback.onSuccess(getRoomDisplayName(context, session, room));
+            callback.onSuccess(room.getRoomDisplayName(context));
         }
-    }
-
-    /**
-     * Vector client formats the room display with a different manner than the SDK one.
-     *
-     * @param context the application context.
-     * @param session the room session.
-     * @param room    the room.
-     * @return the room display name.
-     */
-    public static String getRoomDisplayName(Context context, MXSession session, Room room) {
-        // sanity checks
-        if (null == room) {
-            return null;
-        }
-
-        try {
-            // this algorithm is the one defined in
-            // https://github.com/matrix-org/matrix-js-sdk/blob/develop/lib/models/room.js#L617
-            // calculateRoomName(room, userId)
-
-            // For Lazy Loaded room, see algorithm here:
-            // https://docs.google.com/document/d/11i14UI1cUz-OJ0knD5BFu7fmT6Fo327zvMYqfSAR7xs/edit#heading=h.qif6pkqyjgzn
-
-            RoomState roomState = room.getState();
-
-            if (!TextUtils.isEmpty(roomState.name)) {
-                return roomState.name;
-            }
-
-            if (!TextUtils.isEmpty(roomState.getCanonicalAlias())) {
-                return roomState.getCanonicalAlias();
-            }
-
-            String myUserId = session.getMyUserId();
-
-            List<RoomMember> othersActiveMembers = new ArrayList<>();
-            List<RoomMember> activeMembers = new ArrayList<>();
-
-            int nbOfOtherMembers;
-
-            if (room.getDataHandler().isLazyLoadingEnabled()
-                    && room.getRoomSummary() != null) {
-                List<String> heroes = room.getRoomSummary().getHeroes();
-
-                for (String id : heroes) {
-                    RoomMember roomMember = roomState.getMember(id);
-
-                    if (roomMember != null) {
-                        othersActiveMembers.add(roomMember);
-                    }
-                }
-            } else {
-                Collection<RoomMember> members = roomState.getDisplayableLoadedMembers();
-
-                for (RoomMember member : members) {
-                    if (!TextUtils.equals(member.membership, RoomMember.MEMBERSHIP_LEAVE)) {
-                        if (!TextUtils.equals(member.getUserId(), myUserId)) {
-                            othersActiveMembers.add(member);
-                        }
-                        activeMembers.add(member);
-                    }
-                }
-
-                Collections.sort(othersActiveMembers, new Comparator<RoomMember>() {
-                    @Override
-                    public int compare(RoomMember m1, RoomMember m2) {
-                        long diff = m1.getOriginServerTs() - m2.getOriginServerTs();
-
-                        return (diff == 0) ? 0 : ((diff < 0) ? -1 : +1);
-                    }
-                });
-            }
-
-            nbOfOtherMembers = othersActiveMembers.size();
-
-            String displayName;
-
-            if (nbOfOtherMembers == 0) {
-                if (activeMembers.size() == 1) {
-                    RoomMember member = activeMembers.get(0);
-
-                    if (TextUtils.equals(member.membership, RoomMember.MEMBERSHIP_INVITE)) {
-
-                        if (!TextUtils.isEmpty(member.mSender)) {
-                            // extract who invited us to the room
-                            displayName = context.getString(R.string.room_displayname_invite_from, roomState.getMemberName(member.mSender));
-                        } else {
-                            displayName = context.getString(R.string.room_displayname_room_invite);
-                        }
-                    } else {
-                        displayName = context.getString(R.string.room_displayname_no_title);
-                    }
-                } else {
-                    displayName = context.getString(R.string.room_displayname_no_title);
-                }
-            } else if (nbOfOtherMembers == 1) {
-                RoomMember member = othersActiveMembers.get(0);
-                displayName = roomState.getMemberName(member.getUserId());
-            } else if (nbOfOtherMembers == 2) {
-                RoomMember member1 = othersActiveMembers.get(0);
-                RoomMember member2 = othersActiveMembers.get(1);
-
-                displayName = context.getString(R.string.room_displayname_two_members,
-                        roomState.getMemberName(member1.getUserId()), roomState.getMemberName(member2.getUserId()));
-            } else {
-                RoomMember member = othersActiveMembers.get(0);
-                displayName = context.getResources().getQuantityString(R.plurals.room_displayname_three_and_more_members,
-                        nbOfOtherMembers - 1, roomState.getMemberName(member.getUserId()), nbOfOtherMembers - 1);
-            }
-
-            return displayName;
-        } catch (Exception e) {
-            Log.e(LOG_TAG, "## getRoomDisplayName() failed " + e.getMessage(), e);
-        }
-
-        return room.getRoomId();
     }
 
     //==============================================================================================================
@@ -464,7 +327,7 @@ public class VectorUtils {
     public static void loadRoomAvatar(Context context, MXSession session, ImageView imageView, Room room) {
         if (null != room) {
             VectorUtils.loadUserAvatar(context,
-                    session, imageView, room.getAvatarUrl(), room.getRoomId(), VectorUtils.getRoomDisplayName(context, session, room));
+                    session, imageView, room.getAvatarUrl(), room.getRoomId(), room.getRoomDisplayName(context));
         }
     }
 
@@ -514,7 +377,7 @@ public class VectorUtils {
 
             String callAvatarUrl = room.getCallAvatarUrl();
             String roomId = room.getRoomId();
-            String displayName = VectorUtils.getRoomDisplayName(context, session, room);
+            String displayName = room.getRoomDisplayName(context);
             int pixelsSide = imageView.getLayoutParams().width;
 
             // when size < 0, it means that the render graph must compute it
@@ -705,7 +568,7 @@ public class VectorUtils {
      * @return the version. an empty string is not found.
      */
     public static String getApplicationVersion(final Context context) {
-        return im.vector.Matrix.getInstance(context).getVersion(false, true);
+        return Matrix.getInstance(context).getVersion(false, true);
     }
 
     /**

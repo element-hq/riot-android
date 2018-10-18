@@ -131,7 +131,7 @@ public class MatrixGcmListenerService extends FirebaseMessagingService {
                     if ((null != session) && session.getDataHandler().getStore().isReady()) {
                         Room room = session.getDataHandler().getStore().getRoom(roomId);
                         if (null != room) {
-                            roomName = VectorUtils.getRoomDisplayName(this, session, room);
+                            roomName = room.getRoomDisplayName(this);
                         }
                     }
                 }

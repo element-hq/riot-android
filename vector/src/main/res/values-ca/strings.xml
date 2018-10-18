@@ -13,7 +13,7 @@
 
     <!-- permanent notification subtitle -->
     <string name="notification_sync_in_progress">Sincronitzant</string>
-    <string name="notification_listen_for_events">Escolta esdeveniments</string>
+    <string name="notification_listening_for_events">Escolta esdeveniments</string>
     <string name="notification_noisy_notifications">Notificacions sorolloses</string>
     <string name="notification_silent_notifications">Notificacions silencioses</string>
 
@@ -391,7 +391,6 @@
     <string name="ssl_unexpected_existing_expl">El certificat ha canviat respecte aquell en el qual el telefon confia. Això NO ÉS GENS HABITUAL. Es recomana que NO ACCEPTEU el certificat nou.</string>
     <string name="ssl_expected_existing_expl">El certificat en el que confiàveu ha canviat per un en el que no confieu. El servidor pot haver renovat el certificat. Contacteu amb l\'administrador del servidor per saber l\'empremta digital esperada.</string>
     <string name="ssl_only_accept">NOMÉS accepteu el certificat si l\'administrador del servidor ha publicat una empremta digital que coincideixi amb l\'anterior.</string>
-    <string name="ssl_fingerprint_example">00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00</string>
 
     <!-- Room Details -->
     <string name="room_details_title">Detalls de la sala</string>
@@ -407,12 +406,6 @@
     <string name="room_event_action_report_prompt_ignore_user">Voleu amagar tots els missatges d\'aquest usuari?</string>
     <string name="room_event_action_cancel_upload">Cancel·la la pujada</string>
     <string name="room_event_action_cancel_download">Cancel·la la baixada</string>
-
-    <!-- Room display name -->
-    <string name="room_displayname_invite_from">Convideu des de %s</string>
-    <string name="room_displayname_room_invite">Convideu a la sala</string>
-    <string name="room_displayname_two_members">%1$s i %2$s</string>
-    <string name="room_displayname_no_title">Sala buida</string>
 
     <!-- Search -->
     <string name="search_hint">Cerca</string>
@@ -699,7 +692,7 @@
     <string name="encryption_export_room_keys">Exporta les claus de la sala</string>
     <string name="encryption_export_room_keys_summary">Exporta les claus a un fitxer local</string>
     <string name="encryption_export_export">Exporta</string>
-    <string name="encryption_export_enter_passphrase">Introduïu una contrasenya</string>
+    <string name="encryption_import_enter_passphrase">Introduïu una contrasenya</string>
     <string name="encryption_export_confirm_passphrase">Confirmeu la contrasenya</string>
     <string name="encryption_export_saved_as">Les claus E2E de la sala s\'han desat a \'%s\'</string>
 
@@ -852,11 +845,6 @@
     <plurals name="room_new_messages_notification">
 	<item quantity="one">1 nou missatge</item>
 	<item quantity="other">%d nous missarges</item>
-</plurals>
-
-    <plurals name="room_displayname_three_and_more_members">
-	<item quantity="one">%1$s i 1 altre</item>
-	<item quantity="other">%1$s i %d altres</item>
 </plurals>
 
     <plurals name="directory_search_rooms">

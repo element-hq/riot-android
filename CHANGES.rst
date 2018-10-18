@@ -1,8 +1,51 @@
-Changes in Riot 0.8.16 (2018-XX-XX)
+Changes in Riot 0.8.18 (2018-XX-XX)
 ===================================================
 
 MatrixSdk:
  - Upgrade to version 0.X.Y.
+
+Features:
+ - Status.im theme
+
+Improvements:
+ - Use LocalBroadcastManager when applicable (#2595)
+ - Menu version copies version number to clipboard (#2570)
+ - Tapping on profile picture in sidebar opens settings page (#2597)
+ - Ask for Camera permission only when the user want to change the room avatar (#2575)
+
+Other changes:
+ - Room display name is now computed by the Matrix SDK
+
+Bugfix:
+ - When exporting E2E keys, it isn't clear that you are creating a new password (#2626)
+ - Can't change room directory server (#2611)
+ - Reply get's lost when moving app in background and back (#2581)
+ - Android 8: crash on device Boot (#2615)
+ - Avoid creation of Gson object (#2608)
+ - Inline code breaks in reply messages (#2531)
+ - Reduce size of clickable read-receipts area (#655)
+ - Fix issue of html rendering in emote message (#2652)
+
+Translations:
+ - Fix issue with indonesian translations. This language is now available.
+
+Build:
+ -
+
+Changes in Riot 0.8.17 (2018-10-10)
+===================================================
+
+MatrixSdk:
+ - Upgrade to version 0.9.11.
+
+Bugfix:
+ - Fix issue on loading cache, and so avoid initial sync on each application startup.
+
+Changes in Riot 0.8.16 (2018-10-08)
+===================================================
+
+MatrixSdk:
+ - Upgrade to version 0.9.10.
 
 Features:
  - Manage blue banner case of server quota notices (#2547)
@@ -22,12 +65,6 @@ Bugfix:
  - Fix issue on "Resend all" action (#2569)
  - Fix messages vanishing when resending them (#2508)
  - Remove delay for / completion (#2576)
-
-Translations:
- -
-
-Build:
- -
 
 Changes in Riot 0.8.15 (2018-08-30)
 ===================================================

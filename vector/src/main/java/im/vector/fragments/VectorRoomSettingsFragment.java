@@ -84,11 +84,14 @@ import im.vector.VectorApp;
 import im.vector.activity.CommonActivityUtils;
 import im.vector.activity.VectorMediasPickerActivity;
 import im.vector.activity.VectorMemberDetailsActivity;
+import im.vector.extensions.MatrixSdkExtensionsKt;
 import im.vector.preference.AddressPreference;
 import im.vector.preference.RoomAvatarPreference;
 import im.vector.preference.VectorCustomActionEditTextPreference;
 import im.vector.preference.VectorListPreference;
 import im.vector.preference.VectorSwitchPreference;
+import im.vector.util.PermissionsToolsKt;
+import im.vector.util.SystemUtilsKt;
 import im.vector.util.ThemeUtils;
 import im.vector.util.VectorUtils;
 
@@ -361,7 +364,7 @@ public class VectorRoomSettingsFragment extends PreferenceFragment implements Sh
             roomInternalIdPreference.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
                 @Override
                 public boolean onPreferenceClick(Preference preference) {
-                    VectorUtils.copyToClipboard(getActivity(), mRoom.getRoomId());
+                    SystemUtilsKt.copyToClipboard(getActivity(), mRoom.getRoomId());
                     return false;
                 }
             });
@@ -439,7 +442,7 @@ public class VectorRoomSettingsFragment extends PreferenceFragment implements Sh
             @Override
             public boolean onPreferenceClick(Preference preference) {
                 if ((null != mRoomPhotoAvatar) && mRoomPhotoAvatar.isEnabled()) {
-                    onRoomAvatarPreferenceChanged();
+                    onRoomAvatarPreferenceClicked();
                     return true; //True if the click was handled.
                 } else
                     return false;
@@ -914,7 +917,7 @@ public class VectorRoomSettingsFragment extends PreferenceFragment implements Sh
 
         if (aKey.equals(PREF_KEY_ROOM_PHOTO_AVATAR)) {
             // unused flow: onSharedPreferenceChanged not triggered for room avatar photo
-            onRoomAvatarPreferenceChanged();
+            onRoomAvatarPreferenceClicked();
         } else if (aKey.equals(PREF_KEY_ROOM_NAME)) {
             onRoomNamePreferenceChanged();
         } else if (aKey.equals(PREF_KEY_ROOM_TOPIC)) {
@@ -1166,15 +1169,18 @@ public class VectorRoomSettingsFragment extends PreferenceFragment implements Sh
      * Update the room avatar.
      * Start the camera activity to take the avatar picture.
      */
-    private void onRoomAvatarPreferenceChanged() {
-        getActivity().runOnUiThread(new Runnable() {
-            @Override
-            public void run() {
-                Intent intent = new Intent(getActivity(), VectorMediasPickerActivity.class);
-                intent.putExtra(VectorMediasPickerActivity.EXTRA_AVATAR_MODE, true);
-                startActivityForResult(intent, REQ_CODE_UPDATE_ROOM_AVATAR);
-            }
-        });
+    public void onRoomAvatarPreferenceClicked() {
+        int permissionToBeGranted = PermissionsToolsKt.PERMISSIONS_FOR_ROOM_AVATAR;
+        // remove camera permission request if the user has not enough power level
+        if (!MatrixSdkExtensionsKt.isPowerLevelEnoughForAvatarUpdate(mRoom, mSession)) {
+            permissionToBeGranted &= ~PermissionsToolsKt.PERMISSION_CAMERA;
+        }
+
+        if (PermissionsToolsKt.checkPermissions(permissionToBeGranted, getActivity(), PermissionsToolsKt.PERMISSION_REQUEST_CODE_CHANGE_AVATAR)) {
+            Intent intent = new Intent(getActivity(), VectorMediasPickerActivity.class);
+            intent.putExtra(VectorMediasPickerActivity.EXTRA_AVATAR_MODE, true);
+            startActivityForResult(intent, REQ_CODE_UPDATE_ROOM_AVATAR);
+        }
     }
 
     /**
@@ -1624,9 +1630,9 @@ public class VectorRoomSettingsFragment extends PreferenceFragment implements Sh
                         }
                     });
                 } else if (item.getItemId() == R.id.ic_action_vector_room_url) {
-                    VectorUtils.copyToClipboard(getActivity(), PermalinkUtils.createPermalink(roomAlias));
+                    SystemUtilsKt.copyToClipboard(getActivity(), PermalinkUtils.createPermalink(roomAlias));
                 } else {
-                    VectorUtils.copyToClipboard(getActivity(), roomAlias);
+                    SystemUtilsKt.copyToClipboard(getActivity(), roomAlias);
                 }
 
                 return true;

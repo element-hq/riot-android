@@ -32,12 +32,14 @@
         <item>light</item>
         <item>dark</item>
         <item>black</item>
+        <item>status</item>
     </string-array>
 
     <string-array name="theme_description">
         <item>@string/light_theme</item>
         <item>@string/dark_theme</item>
         <item>@string/black_them</item>
+        <item>@string/status_theme</item>
     </string-array>
 
     <string name="plus_sign" translatable="false">+</string>

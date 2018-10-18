@@ -48,3 +48,5 @@ script:
   - ./gradlew testAppReleaseUnitTest --stacktrace
   - ./tools/check/check_code_quality.sh
   - ./tools/travis/check_pr.sh
+  # Check that indonesians file are identical. Due to Android issue, the resource folder must be value-in/, and Weblate export data into value-id/.
+  - diff ./vector/src/main/res/values-id/strings.xml ./vector/src/main/res/values-in/strings.xml

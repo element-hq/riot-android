@@ -48,7 +48,6 @@ import im.vector.R;
 import im.vector.VectorApp;
 import im.vector.activity.LockScreenActivity;
 import im.vector.util.RiotEventDisplay;
-import im.vector.util.VectorUtils;
 
 /**
  * RoomsNotifications
@@ -150,9 +149,9 @@ public class RoomsNotifications implements Parcelable {
 
         mIsInvitationEvent = false;
 
-        EventDisplay eventDisplay = new RiotEventDisplay(mContext, mEvent, mRoom.getState());
+        EventDisplay eventDisplay = new RiotEventDisplay(mContext);
         eventDisplay.setPrependMessagesWithAuthor(true);
-        CharSequence textualDisplay = eventDisplay.getTextualDisplay();
+        CharSequence textualDisplay = eventDisplay.getTextualDisplay(mEvent, mRoom.getState());
         String body = !TextUtils.isEmpty(textualDisplay) ? textualDisplay.toString() : "";
 
         if (Event.EVENT_TYPE_STATE_ROOM_MEMBER.equals(mEvent.getType())) {
@@ -219,9 +218,9 @@ public class RoomsNotifications implements Parcelable {
 
         for (NotifiedEvent notifiedEvent : notifiedEvents) {
             Event event = store.getEvent(notifiedEvent.mEventId, notifiedEvent.mRoomId);
-            EventDisplay eventDisplay = new RiotEventDisplay(mContext, event, mRoom.getState());
+            EventDisplay eventDisplay = new RiotEventDisplay(mContext);
             eventDisplay.setPrependMessagesWithAuthor(true);
-            CharSequence textualDisplay = eventDisplay.getTextualDisplay();
+            CharSequence textualDisplay = eventDisplay.getTextualDisplay(event, mRoom.getState());
 
             if (!TextUtils.isEmpty(textualDisplay)) {
                 mReversedMessagesList.add(textualDisplay);
@@ -244,9 +243,9 @@ public class RoomsNotifications implements Parcelable {
                 RoomMember member = mRoom.getMember(event.getSender());
                 roomNotifications.mSenderName = (null == member) ? event.getSender() : member.getName();
 
-                EventDisplay eventDisplay = new RiotEventDisplay(mContext, event, mRoom.getState());
+                EventDisplay eventDisplay = new RiotEventDisplay(mContext);
                 eventDisplay.setPrependMessagesWithAuthor(false);
-                CharSequence textualDisplay = eventDisplay.getTextualDisplay();
+                CharSequence textualDisplay = eventDisplay.getTextualDisplay(event, mRoom.getState());
                 mQuickReplyBody = !TextUtils.isEmpty(textualDisplay) ? textualDisplay.toString() : "";
             }
         }
@@ -274,20 +273,17 @@ public class RoomsNotifications implements Parcelable {
             String text;
             String header;
 
-            EventDisplay eventDisplay = new RiotEventDisplay(mContext, latestEvent, room.getState());
+            EventDisplay eventDisplay = new RiotEventDisplay(mContext);
             eventDisplay.setPrependMessagesWithAuthor(false);
 
             if (room.isInvited()) {
                 header = roomName + ": ";
-                CharSequence textualDisplay = eventDisplay.getTextualDisplay();
+                CharSequence textualDisplay = eventDisplay.getTextualDisplay(latestEvent, room.getState());
                 text = !TextUtils.isEmpty(textualDisplay) ? textualDisplay.toString() : "";
             } else if (1 == notifiedEvents.size()) {
-                eventDisplay = new RiotEventDisplay(mContext, latestEvent, room.getState());
-                eventDisplay.setPrependMessagesWithAuthor(false);
-
                 header = roomName + ": " + room.getState().getMemberName(latestEvent.getSender()) + " ";
 
-                CharSequence textualDisplay = eventDisplay.getTextualDisplay();
+                CharSequence textualDisplay = eventDisplay.getTextualDisplay(latestEvent, room.getState());
 
                 // the event might have been redacted
                 if (!TextUtils.isEmpty(textualDisplay)) {
@@ -340,11 +336,11 @@ public class RoomsNotifications implements Parcelable {
                 MXSession session = Matrix.getInstance(context).getDefaultSession();
                 String roomName = getRoomName(context, session, room, null);
 
-                EventDisplay eventDisplay = new RiotEventDisplay(context, latestEvent, room.getState());
+                EventDisplay eventDisplay = new RiotEventDisplay(context);
                 eventDisplay.setPrependMessagesWithAuthor(false);
 
                 mWearableMessage = roomName + ": " + room.getState().getMemberName(latestEvent.getSender()) + " ";
-                CharSequence textualDisplay = eventDisplay.getTextualDisplay();
+                CharSequence textualDisplay = eventDisplay.getTextualDisplay(latestEvent, room.getState());
 
                 // the event might have been redacted
                 if (!TextUtils.isEmpty(textualDisplay)) {
@@ -593,22 +589,17 @@ public class RoomsNotifications implements Parcelable {
      * @return the room name
      */
     public static String getRoomName(Context context, MXSession session, Room room, Event event) {
-        String roomName = VectorUtils.getRoomDisplayName(context, session, room);
+        String roomName = room.getRoomDisplayName(context);
 
         // avoid displaying the room Id
         // try to find the sender display name
-        if (TextUtils.equals(roomName, room.getRoomId())) {
-            roomName = VectorUtils.getRoomDisplayName(context, session, room);
+        if (TextUtils.equals(roomName, room.getRoomId()) && (null != event)) {
+            User user = session.getDataHandler().getStore().getUser(event.sender);
 
-            // avoid room Id as name
-            if (TextUtils.equals(roomName, room.getRoomId()) && (null != event)) {
-                User user = session.getDataHandler().getStore().getUser(event.sender);
-
-                if (null != user) {
-                    roomName = user.displayname;
-                } else {
-                    roomName = event.sender;
-                }
+            if (null != user) {
+                roomName = user.displayname;
+            } else {
+                roomName = event.sender;
             }
         }
 

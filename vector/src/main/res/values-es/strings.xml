@@ -389,7 +389,6 @@ Los mensajes cifrados no serán visibles en los clientes que aún no implementen
     <string name="ssl_unexpected_existing_expl">El certificado cambió de uno que era confiable para tu teléfono. Esto es MUY INUSUAL. Se recomienda NO ACEPTAR este nuevo certificado.</string>
     <string name="ssl_expected_existing_expl">El certificado cambió de uno que era confiable a uno que no es confiable. El servidor puede haber renovado su certificado. Contacta al administrador del servidor para obtener la huella digital.</string>
     <string name="ssl_only_accept">SOLO acepta el certificado si el administrador del servidor ha publicado una huella digital que coincide con la anterior.</string>
-    <string name="ssl_fingerprint_example">00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00</string>
 
     <!-- Room Details -->
     <string name="room_details_title">Detalles de Sala</string>
@@ -407,12 +406,6 @@ Los mensajes cifrados no serán visibles en los clientes que aún no implementen
 Ten en cuenta que esta acción reiniciará la aplicación y puede tardar algo de tiempo.</string>
     <string name="room_event_action_cancel_upload">Cancelar Subida</string>
     <string name="room_event_action_cancel_download">Cancelar Descarga</string>
-
-    <!-- Room display name -->
-    <string name="room_displayname_invite_from">Invitación de %s</string>
-    <string name="room_displayname_room_invite">Invitación a Sala</string>
-    <string name="room_displayname_two_members">%1$s y %2$s</string>
-    <string name="room_displayname_no_title">Sala vacía</string>
 
     <!-- Search -->
     <string name="search_hint">Buscar</string>
@@ -670,7 +663,7 @@ Los mensajes cifrados no serán visibles en clientes que aún no implementen el 
     <string name="encryption_export_room_keys">Exportar claves de sala</string>
     <string name="encryption_export_room_keys_summary">Exportar las claves a un archivo local</string>
     <string name="encryption_export_export">Exportar</string>
-    <string name="encryption_export_enter_passphrase">Ingresar frase de contraseña</string>
+    <string name="encryption_import_enter_passphrase">Ingresar frase de contraseña</string>
     <string name="encryption_export_confirm_passphrase">Confirmar frase de contraseña</string>
     <string name="encryption_export_saved_as">Las claves de salas con Cifrado de Extremo a Extremo se guardaron en \'%s\'.
 
@@ -763,7 +756,7 @@ Dispositivos desconocidos:</string>
     <string name="black_them">Tema Negro</string>
 
     <string name="notification_sync_in_progress">Sincronizando</string>
-    <string name="notification_listen_for_events">Detectar eventos</string>
+    <string name="notification_listening_for_events">Detectar eventos</string>
     <string name="notification_noisy_notifications">Notificaciones ruidosas</string>
     <string name="notification_silent_notifications">Notificaciones silenciosas</string>
 
@@ -907,11 +900,6 @@ Dispositivos desconocidos:</string>
     <plurals name="room_new_messages_notification">
 	<item quantity="one">1 mensaje nuevo</item>
 	<item quantity="other">%d mensajes nuevos</item>
-</plurals>
-
-    <plurals name="room_displayname_three_and_more_members">
-	<item quantity="one">%1$s y 1 otro</item>
-	<item quantity="other">%1$s y %d otros</item>
 </plurals>
 
     <plurals name="directory_search_rooms">

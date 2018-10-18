@@ -85,13 +85,13 @@ class BugReportActivity : MXCActionBarActivity() {
     override fun getMenuRes() = R.menu.bug_report
 
     override fun onPrepareOptionsMenu(menu: Menu): Boolean {
-        val sendBugReportItem = menu.findItem(R.id.ic_action_send_bug_report)
+        menu.findItem(R.id.ic_action_send_bug_report)?.let {
+            val isValid = mBugReportText.text.toString().trim().length > 10
+                    && !mMaskView.isVisible
 
-        val isValid = mBugReportText.text.toString().trim().length > 10
-                && !mMaskView.isVisible
-
-        sendBugReportItem.isEnabled = isValid
-        sendBugReportItem.icon.alpha = if (isValid) 255 else 100
+            it.isEnabled = isValid
+            it.icon.alpha = if (isValid) 255 else 100
+        }
 
         return super.onPrepareOptionsMenu(menu)
     }

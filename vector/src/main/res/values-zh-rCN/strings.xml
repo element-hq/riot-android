@@ -137,7 +137,6 @@
     <string name="room_participants_create">创建</string>
 
     <string name="room_details_files">文件</string>
-    <string name="room_displayname_no_title">空聊天室</string>
 
     <string name="search_hint">搜索</string>
     <string name="search_members_hint">过滤聊天室成员</string>
@@ -290,9 +289,6 @@
     <string name="room_event_action_cancel_upload">取消上传</string>
     <string name="room_event_action_cancel_download">取消下载</string>
 
-    <string name="room_displayname_invite_from">来自 %s 的邀请</string>
-    <string name="room_displayname_room_invite">聊天室邀请</string>
-    <string name="room_displayname_two_members">%1$s 和 %2$s</string>
     <string name="room_recents_favourites">收藏夹</string>
     <string name="room_recents_low_priority">低优先级</string>
     <string name="room_settings_de_prioritize">降低优先级</string>
@@ -387,7 +383,7 @@
     <string name="encryption_export_room_keys">导出聊天室密钥</string>
     <string name="encryption_export_room_keys_summary">导出密钥到本地文件</string>
     <string name="encryption_export_export">导出</string>
-    <string name="encryption_export_enter_passphrase">输入密码</string>
+    <string name="encryption_import_enter_passphrase">输入密码</string>
     <string name="encryption_export_confirm_passphrase">确认密码</string>
     <string name="encryption_export_saved_as">聊天室的端对端密钥已经被保存到“%s”。
 
@@ -572,7 +568,6 @@
     <string name="ssl_unexpected_existing_expl">您的手机曾信任的证书已被更改。这<b>非常反常</b>。建议您<b>不要接受</b>此新证书。</string>
     <string name="ssl_expected_existing_expl">证书已从以前受信任的更改为不受信任的证书。服务器可能已更新其证书。请联系管理员并核对服务器的指纹。</string>
     <string name="ssl_only_accept">请仅在服务器管理员已经发布了与上述相匹配的指纹的情况下接受该证书。</string>
-    <string name="ssl_fingerprint_example">00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00</string>
     <string name="room_details_people">成员</string>
     <string name="malformed_id">ID 的格式不正确。应该是一个电子邮箱地址或 Matrix ID，如 “@localpart:domain”</string>
     <string name="tab_title_search_people">联系人</string>
@@ -727,7 +722,7 @@
     <string name="settings_labs_matrix_apps">Matrix 应用</string>
     <string name="room_add_matrix_apps">添加 Matrix 应用</string>
     <string name="notification_sync_in_progress">正在同步</string>
-    <string name="notification_listen_for_events">监听事件更新</string>
+    <string name="notification_listening_for_events">监听事件更新</string>
 
     <string name="call">通话</string>
     <string name="settings_containing_my_display_name">包含我昵称的消息</string>
@@ -869,9 +864,6 @@
 
 <string name="receipt_avatar">已读提示头像</string>
     <string name="notice_avatar">通知头像</string>
-    <plurals name="room_displayname_three_and_more_members">
-	<item quantity="other">%1$s 和 与其他 %d 个人</item>
-</plurals>
 
     <plurals name="directory_search_rooms_for">
 	<item quantity="other">有 %1$s 个聊天室符合 “%2$s”</item>

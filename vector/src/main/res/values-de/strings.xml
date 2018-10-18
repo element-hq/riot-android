@@ -375,7 +375,6 @@ Bist du sicher?</string>
     <string name="ssl_unexpected_existing_expl">Das Zertifikat unterscheidet sich von dem Zertifikat, dem dein Gerät ursprünglich vertraut hat. Dies ist SEHR UNGEWÖHNLICH. Es wird empfohlen, dass du dieses neue Zertifikat NICHT AKZEPTIERST.</string>
     <string name="ssl_expected_existing_expl">Das Zertifikat hat sich von einem ursprünglich vertrauenswürdigem Zertifikat in ein nicht vertrauenswürdiges Zertifikat geändert. Eventuell wurde das Zertifikat des Servers erneuert. Bitte erkundige dich beim Server-Administrator, welcher Fingerprint als vertrauenswürdig gilt.</string>
     <string name="ssl_only_accept">Akzeptiere das Zertifikat nur dann, wenn der Server-Administrator einen Fingerprint veröffentlicht hat, der mit dem obigen übereinstimmt.</string>
-    <string name="ssl_fingerprint_example">00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00</string>
 
     <!-- Room Details -->
     <string name="room_details_title">Raum-Details</string>
@@ -393,12 +392,6 @@ Bist du sicher?</string>
 Beachte: Diese Aktion wird die App neu starten und einige Zeit brauchen.</string>
     <string name="room_event_action_cancel_upload">Upload abbrechen</string>
     <string name="room_event_action_cancel_download">Download abbrechen</string>
-
-    <!-- Room display name -->
-    <string name="room_displayname_invite_from">Einladung von %s</string>
-    <string name="room_displayname_room_invite">Raumeinladung</string>
-    <string name="room_displayname_two_members">%1$s und %2$s</string>
-    <string name="room_displayname_no_title">Leerer Raum</string>
 
     <!-- Search -->
     <string name="search_hint">Suchen</string>
@@ -654,7 +647,7 @@ Verschlüsselte Nachrichten werden auf Matrix-Clients, auf denen die Verschlüss
     <string name="encryption_export_room_keys">Raumschlüssel exportieren</string>
     <string name="encryption_export_room_keys_summary">Schlüssel in lokale Datei exportieren</string>
     <string name="encryption_export_export">Exportieren</string>
-    <string name="encryption_export_enter_passphrase">Passphrase eingeben</string>
+    <string name="encryption_import_enter_passphrase">Passphrase eingeben</string>
     <string name="encryption_export_confirm_passphrase">Passphrase bestätigen</string>
     <string name="encryption_export_saved_as">Die Ende-zu-Ende-Raumschlüssel wurden in \'%s\' gespeichert.
 
@@ -771,7 +764,7 @@ Unbekannte Geräte:</string>
     <string name="login_mobile_device">Mobilgerät</string>
 
     <string name="notification_sync_in_progress">Synchronisiere</string>
-    <string name="notification_listen_for_events">Auf Ereignisse lauschen</string>
+    <string name="notification_listening_for_events">Auf Ereignisse lauschen</string>
 
     <string name="settings_containing_my_display_name">Nachrichten, die meinen Anzeigenamen enthalten</string>
     <string name="settings_containing_my_user_name">Nachrichten, die meinen Benutzernamen enthalten</string>
@@ -894,11 +887,6 @@ Unbekannte Geräte:</string>
     <plurals name="room_new_messages_notification">
 	<item quantity="one">1 neue Nachricht</item>
 	<item quantity="other">%d neue Nachrichten</item>
-</plurals>
-
-    <plurals name="room_displayname_three_and_more_members">
-	<item quantity="one">%1$s und 1 andere(r)</item>
-	<item quantity="other">%1$s und %d andere</item>
 </plurals>
 
     <plurals name="directory_search_rooms">

@@ -108,9 +108,9 @@ import im.vector.R;
 import im.vector.VectorApp;
 import im.vector.ViewedRoomTracker;
 import im.vector.activity.util.RequestCodesKt;
+import im.vector.extensions.MatrixSdkExtensionsKt;
 import im.vector.features.hhs.LimitResourceState;
 import im.vector.features.hhs.ResourceLimitEventListener;
-import im.vector.extensions.MatrixSdkExtensionsKt;
 import im.vector.fragments.VectorMessageListFragment;
 import im.vector.fragments.VectorUnknownDevicesFragment;
 import im.vector.listeners.IMessagesAdapterActionsListener;
@@ -135,7 +135,7 @@ import im.vector.view.VectorOngoingConferenceCallView;
 import im.vector.view.VectorPendingCallView;
 import im.vector.widgets.Widget;
 import im.vector.widgets.WidgetsManager;
-import kotlin.Pair;
+import kotlin.Triple;
 
 /**
  * Displays a single room with messages.
@@ -610,8 +610,8 @@ public class VectorRoomActivity extends MXCActionBarActivity implements
 
     @NotNull
     @Override
-    public Pair getOtherThemes() {
-        return new Pair(R.style.AppTheme_NoActionBar_Dark, R.style.AppTheme_NoActionBar_Black);
+    public Triple getOtherThemes() {
+        return new Triple(R.style.AppTheme_NoActionBar_Dark, R.style.AppTheme_NoActionBar_Black, R.style.AppTheme_NoActionBar_Status);
     }
 
     @Override
@@ -1158,7 +1158,7 @@ public class VectorRoomActivity extends MXCActionBarActivity implements
             // listen for room name or topic changes
             mRoom.addEventListener(mRoomEventListener);
 
-            setEditTextHint(null);
+            setEditTextHint(mVectorMessageListFragment.getCurrentSelectedEvent());
 
             mSyncInProgressView.setVisibility(VectorApp.isSessionSyncing(mSession) ? View.VISIBLE : View.GONE);
         } else {
@@ -1476,12 +1476,24 @@ public class VectorRoomActivity extends MXCActionBarActivity implements
         // This is the case in the room preview for public rooms
         if (CommonActivityUtils.shouldRestartApp(this) || null == mSession || null == mRoom) {
             // Hide all items
-            searchInRoomMenuItem.setVisible(false);
-            useMatrixAppsMenuItem.setVisible(false);
-            resendUnsentMenuItem.setVisible(false);
-            deleteUnsentMenuItem.setVisible(false);
-            settingsMenuItem.setVisible(false);
-            leaveRoomMenuItem.setVisible(false);
+            if (searchInRoomMenuItem != null) {
+                searchInRoomMenuItem.setVisible(false);
+            }
+            if (useMatrixAppsMenuItem != null) {
+                useMatrixAppsMenuItem.setVisible(false);
+            }
+            if (resendUnsentMenuItem != null) {
+                resendUnsentMenuItem.setVisible(false);
+            }
+            if (deleteUnsentMenuItem != null) {
+                deleteUnsentMenuItem.setVisible(false);
+            }
+            if (settingsMenuItem != null) {
+                settingsMenuItem.setVisible(false);
+            }
+            if (leaveRoomMenuItem != null) {
+                leaveRoomMenuItem.setVisible(false);
+            }
 
             return true;
         }
@@ -1491,21 +1503,45 @@ public class VectorRoomActivity extends MXCActionBarActivity implements
             RoomMember member = mRoom.getMember(mSession.getMyUserId());
 
             // the server search does not work on encrypted rooms.
-            searchInRoomMenuItem.setVisible(!mRoom.isEncrypted());
-            useMatrixAppsMenuItem.setVisible(TextUtils.isEmpty(mEventId) && null == sRoomPreviewData);
-            resendUnsentMenuItem.setVisible(mHasUnsentEvents);
-            deleteUnsentMenuItem.setVisible(mHasUnsentEvents);
-            settingsMenuItem.setVisible(true);
+            if (searchInRoomMenuItem != null) {
+                searchInRoomMenuItem.setVisible(!mRoom.isEncrypted());
+            }
+            if (useMatrixAppsMenuItem != null) {
+                useMatrixAppsMenuItem.setVisible(TextUtils.isEmpty(mEventId) && null == sRoomPreviewData);
+            }
+            if (resendUnsentMenuItem != null) {
+                resendUnsentMenuItem.setVisible(mHasUnsentEvents);
+            }
+            if (deleteUnsentMenuItem != null) {
+                deleteUnsentMenuItem.setVisible(mHasUnsentEvents);
+            }
+            if (settingsMenuItem != null) {
+                settingsMenuItem.setVisible(true);
+            }
             // kicked / banned room
-            leaveRoomMenuItem.setVisible(member != null && !member.kickedOrBanned());
+            if (leaveRoomMenuItem != null) {
+                leaveRoomMenuItem.setVisible(member != null && !member.kickedOrBanned());
+            }
         } else {
             // Hide all items
-            searchInRoomMenuItem.setVisible(false);
-            useMatrixAppsMenuItem.setVisible(false);
-            resendUnsentMenuItem.setVisible(false);
-            deleteUnsentMenuItem.setVisible(false);
-            settingsMenuItem.setVisible(false);
-            leaveRoomMenuItem.setVisible(false);
+            if (searchInRoomMenuItem != null) {
+                searchInRoomMenuItem.setVisible(false);
+            }
+            if (useMatrixAppsMenuItem != null) {
+                useMatrixAppsMenuItem.setVisible(false);
+            }
+            if (resendUnsentMenuItem != null) {
+                resendUnsentMenuItem.setVisible(false);
+            }
+            if (deleteUnsentMenuItem != null) {
+                deleteUnsentMenuItem.setVisible(false);
+            }
+            if (settingsMenuItem != null) {
+                settingsMenuItem.setVisible(false);
+            }
+            if (leaveRoomMenuItem != null) {
+                leaveRoomMenuItem.setVisible(false);
+            }
         }
 
         return true;
@@ -1992,7 +2028,9 @@ public class VectorRoomActivity extends MXCActionBarActivity implements
                 intent = new Intent(this, MediaPreviewerActivity.class);
             }
             intent.setExtrasClassLoader(RoomMediaMessage.class.getClassLoader());
-            intent.putExtra(MediaPreviewerActivity.EXTRA_ROOM_TITLE, VectorUtils.getRoomDisplayName(this, mSession, mRoom));
+            if (mRoom != null) {
+                intent.putExtra(MediaPreviewerActivity.EXTRA_ROOM_TITLE, mRoom.getRoomDisplayName(this));
+            }
             if (null != mLatestTakePictureCameraUri) {
                 intent.putExtra(MediaPreviewerActivity.EXTRA_CAMERA_PICTURE_URI, mLatestTakePictureCameraUri);
             }
@@ -2574,7 +2612,7 @@ public class VectorRoomActivity extends MXCActionBarActivity implements
         final LimitResourceState limitResourceState = mResourceLimitEventListener.getLimitResourceState();
         final MatrixError hardResourceLimitExceededError = mSession.getDataHandler().getResourceLimitExceededError();
         final MatrixError softResourceLimitExceededError = limitResourceState.softErrorOrNull();
-        
+
         NotificationAreaView.State state = NotificationAreaView.State.Default.INSTANCE;
         mHasUnsentEvents = false;
         if (!mIsUnreadPreviewMode && !TextUtils.isEmpty(mEventId)) {
@@ -2831,7 +2869,7 @@ public class VectorRoomActivity extends MXCActionBarActivity implements
     private void setTitle() {
         String titleToApply = mDefaultRoomName;
         if ((null != mSession) && (null != mRoom)) {
-            titleToApply = VectorUtils.getRoomDisplayName(this, mSession, mRoom);
+            titleToApply = mRoom.getRoomDisplayName(this);
 
             if (TextUtils.isEmpty(titleToApply)) {
                 titleToApply = mDefaultRoomName;
@@ -2869,7 +2907,7 @@ public class VectorRoomActivity extends MXCActionBarActivity implements
         if (null != sRoomPreviewData) {
             mActionBarHeaderRoomName.setText(sRoomPreviewData.getRoomName());
         } else if (null != mRoom) {
-            mActionBarHeaderRoomName.setText(VectorUtils.getRoomDisplayName(this, mSession, mRoom));
+            mActionBarHeaderRoomName.setText(mRoom.getRoomDisplayName(this));
         } else {
             mActionBarHeaderRoomName.setText("");
         }
@@ -3162,11 +3200,9 @@ public class VectorRoomActivity extends MXCActionBarActivity implements
         TextView invitationTextView = findViewById(R.id.room_preview_invitation_textview);
 
         if (TextUtils.equals(member.membership, RoomMember.MEMBERSHIP_BAN)) {
-            invitationTextView.setText(getString(R.string.has_been_banned,
-                    VectorUtils.getRoomDisplayName(this, mSession, mRoom), mRoom.getState().getMemberName(member.mSender)));
+            invitationTextView.setText(getString(R.string.has_been_banned, mRoom.getRoomDisplayName(this), mRoom.getState().getMemberName(member.mSender)));
         } else {
-            invitationTextView.setText(getString(R.string.has_been_kicked,
-                    VectorUtils.getRoomDisplayName(this, mSession, mRoom), mRoom.getState().getMemberName(member.mSender)));
+            invitationTextView.setText(getString(R.string.has_been_kicked, mRoom.getRoomDisplayName(this), mRoom.getState().getMemberName(member.mSender)));
         }
 
         // On mobile side, the modal to allow to add a reason to ban/kick someone isn't yet implemented
@@ -3792,7 +3828,7 @@ public class VectorRoomActivity extends MXCActionBarActivity implements
         if ((null != mRoom) && (null != mRoom.getState())) {
             if (MatrixSdkExtensionsKt.isPowerLevelEnoughForAvatarUpdate(mRoom, mSession)) {
                 // need to check if the camera permission has been granted
-                if (PermissionsToolsKt.checkPermissions(PermissionsToolsKt.PERMISSIONS_FOR_ROOM_DETAILS,
+                if (PermissionsToolsKt.checkPermissions(PermissionsToolsKt.PERMISSIONS_FOR_ROOM_AVATAR,
                         this, PermissionsToolsKt.PERMISSION_REQUEST_CODE)) {
                     Intent intent = new Intent(this, VectorMediasPickerActivity.class);
                     intent.putExtra(VectorMediasPickerActivity.EXTRA_AVATAR_MODE, true);

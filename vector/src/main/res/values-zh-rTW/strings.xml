@@ -7,7 +7,7 @@
     <string name="black_them">黑色主題</string>
 
     <string name="notification_sync_in_progress">同步中</string>
-    <string name="notification_listen_for_events">聆聽事件</string>
+    <string name="notification_listening_for_events">聆聽事件</string>
 
     <string name="title_activity_home">信息</string>
     <string name="title_activity_room">聊天室</string>
@@ -141,8 +141,8 @@
     <string name="start_video_call">開始視訊通話</string>
 
     <string name="start_new_chat_prompt_msg">您確定想要與 %s 開始新的聊天？</string>
-    <string name="start_voice_call_prompt_msg">您確定想要與 %s 開始語音通話？</string>
-    <string name="start_video_call_prompt_msg">您確定想要與 %s 開始視訊通話？</string>
+    <string name="start_voice_call_prompt_msg">您確定想要與開始語音通話？</string>
+    <string name="start_video_call_prompt_msg">您確定想要與開始視訊通話？</string>
 
     <string name="option_send_files">傳送檔案</string>
     <string name="option_take_photo_video">拍照或錄影</string>
@@ -432,7 +432,6 @@
 
     <string name="ssl_expected_existing_expl">憑證已從以前受信任的更改為不受信任的憑證。伺服器可能已續訂其憑證。請與伺服器管理員聯繫以尋找所需的指紋。</string>
     <string name="ssl_only_accept">僅當伺服器管理員發佈的指紋與上面的指紋匹配時才接受此憑證。</string>
-    <string name="ssl_fingerprint_example">00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00</string>
 
     <string name="room_details_title">聊天室詳情</string>
     <string name="room_details_people">成員</string>
@@ -449,15 +448,6 @@
     <string name="room_event_action_cancel_upload">取消上載</string>
     <string name="room_event_action_cancel_download">取消下載</string>
 
-    <string name="room_displayname_invite_from">來自%s 的邀請</string>
-    <string name="room_displayname_room_invite">聊天室邀請</string>
-    <string name="room_displayname_two_members">%1$s 和 %2$s</string>
-
-    <plurals name="room_displayname_three_and_more_members">
-	<item quantity="other">%1$s 和 和其他 %d 個人</item>
-</plurals>
-
-    <string name="room_displayname_no_title">空聊天室</string>
 
     <string name="search_hint">搜尋</string>
     <string name="search_members_hint">過濾聊天室成員</string>
@@ -771,7 +761,7 @@
     <string name="encryption_export_room_keys">導出聊天室的端到端加密金鑰</string>
     <string name="encryption_export_room_keys_summary">匯出金鑰到本地檔案</string>
     <string name="encryption_export_export">匯出</string>
-    <string name="encryption_export_enter_passphrase">輸入通關密語</string>
+    <string name="encryption_import_enter_passphrase">輸入通關密語</string>
     <string name="encryption_export_confirm_passphrase">確認通關密語</string>
     <string name="encryption_export_saved_as">聊天室的端到端加密金鑰已儲存爲「%s」。
 

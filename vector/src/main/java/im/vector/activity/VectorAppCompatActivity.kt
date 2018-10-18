@@ -199,9 +199,9 @@ abstract class VectorAppCompatActivity : AppCompatActivity() {
     open fun getMenuTint() = R.attr.icon_tint_on_dark_action_bar_color
 
     /**
-     * Return a Pair with Dark and Black theme
+     * Return a Triple with Dark, Black, and Status.im theme
      */
-    open fun getOtherThemes(): Pair<Int, Int> = Pair(R.style.AppTheme_Dark, R.style.AppTheme_Black)
+    open fun getOtherThemes(): Triple<Int, Int, Int> = Triple(R.style.AppTheme_Dark, R.style.AppTheme_Black, R.style.AppTheme_Status)
 
 
     //==============================================================================================

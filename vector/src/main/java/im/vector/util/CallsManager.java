@@ -57,8 +57,6 @@ import im.vector.services.EventStreamService;
 public class CallsManager {
     private static final String LOG_TAG = CallsManager.class.getSimpleName();
 
-    public static final String HANGUP_MSG_USER_CANCEL = "user hangup";
-
     // ring tones resource names
     private static final String RING_TONE_START_RINGING = "ring.ogg";
 
@@ -380,10 +378,10 @@ public class CallsManager {
 
                     if (currentCallState == TelephonyManager.CALL_STATE_OFFHOOK || currentCallState == TelephonyManager.CALL_STATE_RINGING) {
                         Log.d(LOG_TAG, "## onIncomingCall () : rejected because GSM Call is in progress");
-                        aCall.hangup("busy");
+                        aCall.hangup(null);
                     } else if (null != mActiveCall) {
                         Log.d(LOG_TAG, "## onIncomingCall () : rejected because " + mActiveCall + " is in progress");
-                        aCall.hangup("busy");
+                        aCall.hangup(null);
                     } else {
                         mPrevCallState = null;
                         mIsStoppedByUser = false;
@@ -496,7 +494,7 @@ public class CallsManager {
      */
     public void rejectCall() {
         if (null != mActiveCall) {
-            mActiveCall.hangup("Reject");
+            mActiveCall.hangup(null);
             releaseCall();
         }
     }

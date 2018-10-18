@@ -29,10 +29,10 @@ import android.webkit.ValueCallback;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
 
-import com.google.gson.Gson;
 import com.google.gson.internal.LinkedTreeMap;
 import com.google.gson.reflect.TypeToken;
 
+import org.matrix.androidsdk.util.JsonUtils;
 import org.matrix.androidsdk.util.Log;
 
 import java.net.URLDecoder;
@@ -187,7 +187,7 @@ public class FallbackLoginActivity extends VectorAppCompatActivity {
                     try {
                         // URL decode
                         json = URLDecoder.decode(json, "UTF-8");
-                        serverParams = new Gson().fromJson(json, new TypeToken<HashMap<String, Object>>() {
+                        serverParams = JsonUtils.getBasicGson().fromJson(json, new TypeToken<HashMap<String, Object>>() {
                         }.getType());
 
                     } catch (Exception e) {

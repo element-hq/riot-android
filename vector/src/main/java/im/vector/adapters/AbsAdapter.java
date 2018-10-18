@@ -376,7 +376,7 @@ public abstract class AbsAdapter extends AbsFilterableAdapter {
     int filterRoomSection(final AdapterSection<Room> section, final String filterPattern) {
         if (null != section) {
             if (!TextUtils.isEmpty(filterPattern)) {
-                List<Room> filteredRoom = RoomUtils.getFilteredRooms(mContext, mSession, section.getItems(), filterPattern);
+                List<Room> filteredRoom = RoomUtils.getFilteredRooms(mContext, section.getItems(), filterPattern);
                 section.setFilteredItems(filteredRoom, filterPattern);
             } else {
                 section.resetFilter();

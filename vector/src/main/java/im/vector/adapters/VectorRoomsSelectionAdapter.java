@@ -94,7 +94,6 @@ public class VectorRoomsSelectionAdapter extends ArrayAdapter<RoomSummary> {
         }
 
         RoomSummary roomSummary = getItem(position);
-        String roomName = VectorUtils.getRoomDisplayName(mContext, mSession, mSession.getDataHandler().getRoom(roomSummary.getRoomId()));
 
         // retrieve the UI items
         ImageView avatarImageView = convertView.findViewById(R.id.room_avatar);
@@ -112,9 +111,11 @@ public class VectorRoomsSelectionAdapter extends ArrayAdapter<RoomSummary> {
         }
 
         if (roomSummary.getLatestReceivedEvent() != null) {
-            EventDisplay eventDisplay = new RiotEventDisplay(mContext, roomSummary.getLatestReceivedEvent(), roomSummary.getLatestRoomState());
+            EventDisplay eventDisplay = new RiotEventDisplay(mContext);
             eventDisplay.setPrependMessagesWithAuthor(true);
-            roomMessageTxtView.setText(eventDisplay.getTextualDisplay(ThemeUtils.INSTANCE.getColor(mContext, R.attr.riot_primary_text_color)));
+            roomMessageTxtView.setText(eventDisplay.getTextualDisplay(ThemeUtils.INSTANCE.getColor(mContext, R.attr.riot_primary_text_color),
+                    roomSummary.getLatestReceivedEvent(),
+                    roomSummary.getLatestRoomState()));
 
             timestampTxtView.setText(getFormattedTimestamp(roomSummary.getLatestReceivedEvent()));
             timestampTxtView.setTextColor(ThemeUtils.INSTANCE.getColor(mContext, R.attr.default_text_light_color));
@@ -125,8 +126,14 @@ public class VectorRoomsSelectionAdapter extends ArrayAdapter<RoomSummary> {
             timestampTxtView.setVisibility(View.GONE);
         }
 
-        // display the room name
-        roomNameTxtView.setText(roomName);
+        Room room = mSession.getDataHandler().getRoom(roomSummary.getRoomId());
+        if (room != null) {
+            // display the room name
+            String roomName = room.getRoomDisplayName(mContext);
+            roomNameTxtView.setText(roomName);
+        } else {
+            roomNameTxtView.setText(null);
+        }
 
         // separator
         separatorView.setVisibility(View.VISIBLE);

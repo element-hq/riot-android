@@ -44,6 +44,7 @@ import android.support.design.widget.TextInputEditText;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.content.ContextCompat;
+import android.support.v4.content.LocalBroadcastManager;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
@@ -136,7 +137,7 @@ import im.vector.util.ThemeUtils;
 import im.vector.util.VectorUtils;
 import im.vector.view.UnreadCounterBadgeView;
 import im.vector.view.VectorPendingCallView;
-import kotlin.Pair;
+import kotlin.Triple;
 
 /**
  * Displays the main screen of the app, with rooms the user has joined and the ability to create
@@ -286,8 +287,8 @@ public class VectorHomeActivity extends VectorAppCompatActivity implements Searc
 
     @NotNull
     @Override
-    public Pair getOtherThemes() {
-        return new Pair(R.style.HomeActivityTheme_Dark, R.style.HomeActivityTheme_Black);
+    public Triple getOtherThemes() {
+        return new Triple(R.style.HomeActivityTheme_Dark, R.style.HomeActivityTheme_Black, R.style.HomeActivityTheme_Status);
     }
 
     @Override
@@ -614,6 +615,8 @@ public class VectorHomeActivity extends VectorAppCompatActivity implements Searc
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
         if (resultCode == RESULT_OK) {
             if (requestCode == RequestCodesKt.BATTERY_OPTIMIZATION_REQUEST_CODE) {
                 // Ok, we can set the NORMAL privacy setting
@@ -1263,7 +1266,7 @@ public class VectorHomeActivity extends VectorAppCompatActivity implements Searc
                     myBroadcastIntent.setAction(VectorUniversalLinkReceiver.BROADCAST_ACTION_UNIVERSAL_LINK_RESUME);
                     myBroadcastIntent.putExtras(getIntent().getExtras());
                     myBroadcastIntent.putExtra(VectorUniversalLinkReceiver.EXTRA_UNIVERSAL_LINK_SENDER_ID, VectorUniversalLinkReceiver.HOME_SENDER_ID);
-                    sendBroadcast(myBroadcastIntent);
+                    LocalBroadcastManager.getInstance(this).sendBroadcast(myBroadcastIntent);
 
                     showWaitingView();
 
@@ -1597,7 +1600,7 @@ public class VectorHomeActivity extends VectorAppCompatActivity implements Searc
         Room room = session.getDataHandler().getRoom(roomId);
         if ((null != room) && (null != room.getState())) {
             roomAlias = room.getState().getCanonicalAlias();
-            roomName = VectorUtils.getRoomDisplayName(this, mSession, room);
+            roomName = room.getRoomDisplayName(this);
         }
 
         final RoomPreviewData roomPreviewData = new RoomPreviewData(mSession, roomId, null, roomAlias, null);
@@ -1755,7 +1758,7 @@ public class VectorHomeActivity extends VectorAppCompatActivity implements Searc
         });
     }
 
-    void initSlidingMenu() {
+    private void initSlidingMenu() {
         ActionBarDrawerToggle drawerToggle = new ActionBarDrawerToggle(
                 /* host Activity */
                 this,
@@ -1770,11 +1773,14 @@ public class VectorHomeActivity extends VectorAppCompatActivity implements Searc
             @Override
             public void onDrawerClosed(View view) {
                 switch (mSlidingMenuIndex) {
+                    case R.id.sliding_menu_messages: {
+                        // no action
+                        break;
+                    }
+
                     case R.id.sliding_menu_settings: {
                         // launch the settings activity
-                        final Intent settingsIntent = new Intent(VectorHomeActivity.this, VectorSettingsActivity.class);
-                        settingsIntent.putExtra(MXCActionBarActivity.EXTRA_MATRIX_ID, mSession.getMyUserId());
-                        startActivity(settingsIntent);
+                        startActivity(VectorSettingsActivity.getIntent(VectorHomeActivity.this, mSession.getMyUserId()));
                         break;
                     }
 
@@ -1828,6 +1834,12 @@ public class VectorHomeActivity extends VectorAppCompatActivity implements Searc
                         break;
                     }
 
+                    case R.id.sliding_menu_version: {
+                        SystemUtilsKt.copyToClipboard(VectorHomeActivity.this,
+                                getString(R.string.room_sliding_menu_version_x, VectorUtils.getApplicationVersion(VectorHomeActivity.this)));
+                        break;
+                    }
+
                     case R.id.sliding_copyright_terms: {
                         VectorUtils.displayAppCopyright();
                         break;
@@ -1878,11 +1890,16 @@ public class VectorHomeActivity extends VectorAppCompatActivity implements Searc
     }
 
     private void refreshSlidingMenu() {
+        if (navigationView == null) {
+            // Activity is not resumed
+            return;
+        }
+
         Menu menuNav = navigationView.getMenu();
         MenuItem aboutMenuItem = menuNav.findItem(R.id.sliding_menu_version);
 
         if (null != aboutMenuItem) {
-            String version = getString(R.string.room_sliding_menu_version) + " " + VectorUtils.getApplicationVersion(this);
+            String version = getString(R.string.room_sliding_menu_version_x, VectorUtils.getApplicationVersion(this));
             aboutMenuItem.setTitle(version);
         }
 
@@ -1891,6 +1908,15 @@ public class VectorHomeActivity extends VectorAppCompatActivity implements Searc
 
         if (null != displayNameTextView) {
             displayNameTextView.setText(mSession.getMyUser().displayname);
+
+            displayNameTextView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    // Open the settings
+                    mSlidingMenuIndex = R.id.sliding_menu_settings;
+                    mDrawerLayout.closeDrawers();
+                }
+            });
         }
 
         TextView userIdTextView = navigationView.findViewById(R.id.home_menu_main_matrix_id);
@@ -1902,6 +1928,15 @@ public class VectorHomeActivity extends VectorAppCompatActivity implements Searc
 
         if (null != mainAvatarView) {
             VectorUtils.loadUserAvatar(this, mSession, mainAvatarView, mSession.getMyUser());
+
+            mainAvatarView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    // Open the settings
+                    mSlidingMenuIndex = R.id.sliding_menu_settings;
+                    mDrawerLayout.closeDrawers();
+                }
+            });
         } else {
             // on Android M, the mNavigationView is not loaded at launch
             // so launch asap it is rendered.

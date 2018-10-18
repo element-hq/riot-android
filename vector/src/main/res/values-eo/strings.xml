@@ -5,7 +5,7 @@
     <string name="black_them">Nigra haŭto</string>
 
     <string name="notification_sync_in_progress">Sinkroniganta</string>
-    <string name="notification_listen_for_events">Atenti pri eventoj</string>
+    <string name="notification_listening_for_events">Atenti pri eventoj</string>
     <string name="notification_noisy_notifications">Laŭtaj sciigoj</string>
     <string name="notification_silent_notifications">Silentaj sciigoj</string>
 

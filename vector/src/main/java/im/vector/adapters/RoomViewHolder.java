@@ -175,7 +175,7 @@ public class RoomViewHolder extends RecyclerView.ViewHolder {
             vRoomUnreadCount.setVisibility(View.GONE);
         }
 
-        String roomName = VectorUtils.getRoomDisplayName(context, session, room);
+        String roomName = room.getRoomDisplayName(context);
         if (vRoomNameServer != null) {
             // This view holder is for the home page, we have up to two lines to display the name
             if (MXPatterns.isRoomAlias(roomName)) {

@@ -35,6 +35,9 @@ import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
+/**
+ * This class displays the unknown certificate dialog
+ */
 public class UnrecognizedCertHandler {
     private static final String LOG_TAG = UnrecognizedCertHandler.class.getSimpleName();
 
@@ -43,7 +46,8 @@ public class UnrecognizedCertHandler {
 
     /**
      * Handle a network exception and display a dialog box if it's a certificate exception
-     * @param e the exception
+     *
+     * @param e        the exception
      * @param callback callback to fire when the user makes a decision
      * @return true if an exception was handled, false otherwise
      */
@@ -53,18 +57,18 @@ public class UnrecognizedCertHandler {
             final Fingerprint fingerprint = unrecCertEx.getFingerprint();
             UnrecognizedCertHandler.show(hsConfig, fingerprint, false, callback);
             return true;
-        }
-        else {
+        } else {
             return false;
         }
     }
 
     /**
      * Display a certificate dialog box, asking the user about an unknown certificate
-     * @param hsConfig the homeserver configuration
+     *
+     * @param hsConfig                the homeserver configuration
      * @param unrecognizedFingerprint the fingerprint for the unknown certificate
-     * @param existing the certificate is existing
-     * @param callback callback to fire when the user makes a decision
+     * @param existing                the certificate is existing
+     * @param callback                callback to fire when the user makes a decision
      */
     public static void show(final HomeServerConnectionConfig hsConfig, final Fingerprint unrecognizedFingerprint, boolean existing, final Callback callback) {
         final Activity activity = VectorApp.getCurrentActivity();
@@ -109,13 +113,9 @@ public class UnrecognizedCertHandler {
 
         TextView sslUserId = layout.findViewById(R.id.ssl_user_id);
         if (hsConfig.getCredentials() != null) {
-            sslUserId.setText(
-                    activity.getString(R.string.username) + ":  " + hsConfig.getCredentials().userId
-            );
+            sslUserId.setText(activity.getString(R.string.username) + ": " + hsConfig.getCredentials().userId);
         } else {
-            sslUserId.setText(
-                    activity.getString(R.string.hs_url) + ":  " + hsConfig.getHomeserverUri().toString()
-            );
+            sslUserId.setText(activity.getString(R.string.hs_url) + ": " + hsConfig.getHomeserverUri().toString());
         }
 
         TextView sslExpl = layout.findViewById(R.id.ssl_explanation);
@@ -199,7 +199,7 @@ public class UnrecognizedCertHandler {
 
     public interface Callback {
         /**
-         * The certificate was explicitely accepted
+         * The certificate was explicitly accepted
          */
         void onAccept();
 
@@ -209,7 +209,7 @@ public class UnrecognizedCertHandler {
         void onIgnore();
 
         /**
-         * The unknown certificate was explicitely rejected
+         * The unknown certificate was explicitly rejected
          */
         void onReject();
     }

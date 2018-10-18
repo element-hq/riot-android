@@ -39,7 +39,7 @@
     <string name="active_call">Chamada en curso</string>
     <string name="ongoing_conference_call_voice">voz</string>
     <string name="ongoing_conference_call_video">vídeo</string>
-    <string name="notification_listen_for_events">A escoita de eventos</string>
+    <string name="notification_listening_for_events">A escoita de eventos</string>
     <string name="forward">Adiante</string>
     <string name="report_content">Informar sobre contido</string>
     <string name="ongoing_conference_call">Conferencia en curso. Únase con vídeo ou voz.</string>
@@ -253,7 +253,6 @@ Pode engadir a dirección de correo na sección de configuración de perfil.</st
     <string name="ssl_trust">Confiar</string>
     <string name="ssl_logout_account">Desconectar</string>
     <string name="ssl_remain_offline">Ignorar</string>
-    <string name="ssl_fingerprint_example">00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00</string>
 
     <string name="room_details_people">Xente</string>
     <string name="room_details_files">Ficheiros</string>
@@ -420,7 +419,7 @@ Pode engadir a dirección de correo na sección de configuración de perfil.</st
     <string name="encryption_export_e2e_room_keys">Exportar chaves E2E da sala</string>
     <string name="encryption_export_room_keys">Exportar chaves da sala</string>
     <string name="encryption_export_export">Exportar</string>
-    <string name="encryption_export_enter_passphrase">Introduza a frase de paso</string>
+    <string name="encryption_import_enter_passphrase">Introduza a frase de paso</string>
     <string name="encryption_export_confirm_passphrase">Confirme a frase de paso</string>
     <string name="encryption_import_e2e_room_keys">Importar chaves E2E da sala</string>
     <string name="encryption_import_room_keys">Importar chaves de sala</string>
@@ -647,8 +646,6 @@ Seguramente queira conectarse cunha conta distinta, ou engadir este correo a sú
 
     <string name="room_event_action_cancel_upload">Cancelar a subida</string>
     <string name="room_event_action_cancel_download">Cancelar a descarga</string>
-
-    <string name="room_displayname_two_members">%1$s e %2$s</string>
 
     <string name="room_recents_join">UNIRSE</string>
     <string name="room_recents_directory">DIRECTORIO</string>

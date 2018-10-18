@@ -1,0 +1,7 @@
+<resources>
+
+    <style name="AppTheme.Status" parent="AppTheme.Base.Status" />
+
+    <style name="AppTheme.NoActionBar.Status" parent="AppTheme.NoActionBar.Base.Status" />
+
+</resources>

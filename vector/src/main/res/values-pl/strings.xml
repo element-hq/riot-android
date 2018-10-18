@@ -301,7 +301,6 @@ Przyznaj dostęp w następnym oknie.</string>
     <string name="ssl_remain_offline">Ignoruj</string>
     <string name="ssl_fingerprint_hash">Odcisk palca (%s):</string>
     <string name="ssl_could_not_verify">Nie można zweryfikować tożsamości serwera.</string>
-    <string name="ssl_fingerprint_example">00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00</string>
 
     <string name="room_details_title">Szczegóły pokoju</string>
     <string name="room_details_people">Ludzie</string>
@@ -316,11 +315,6 @@ Przyznaj dostęp w następnym oknie.</string>
 Zauważ, że ta czynność spowoduje ponowne uruchomienie aplikacji i może to trochę potrwać.</string>
     <string name="room_event_action_cancel_upload">Anuluj wysyłanie</string>
     <string name="room_event_action_cancel_download">Anuluj pobieranie</string>
-
-    <string name="room_displayname_invite_from">Zaproszenie od %s</string>
-    <string name="room_displayname_room_invite">Zaproszenie do pokoju</string>
-    <string name="room_displayname_two_members">%1$s i %2$s</string>
-    <string name="room_displayname_no_title">Pusty pokój</string>
 
     <string name="search_hint">Szukaj</string>
     <string name="search_members_hint">Filtruj członków pokoju</string>
@@ -502,7 +496,7 @@ Zauważ, że ta czynność spowoduje ponowne uruchomienie aplikacji i może to t
     <string name="encryption_information_ed25519_fingerprint">Odcisk palca Ed25519</string>
 
     <string name="encryption_export_export">Eksportuj</string>
-    <string name="encryption_export_enter_passphrase">Wprowadź hasło</string>
+    <string name="encryption_import_enter_passphrase">Wprowadź hasło</string>
     <string name="encryption_export_confirm_passphrase">Potwierdź hasło</string>
     <string name="encryption_information_not_verified">Nie zweryfikowano</string>
     <string name="encryption_information_verified">Zweryfikowano</string>
@@ -558,7 +552,7 @@ Zauważ, że ta czynność spowoduje ponowne uruchomienie aplikacji i może to t
     <string name="notification_off">Off</string>
     <string name="conference_call_warning_title">Uwaga!</string>
     <string name="notification_sync_in_progress">W trakcie synchronizacji</string>
-    <string name="notification_listen_for_events">Nasłuchuj zdarzeń</string>
+    <string name="notification_listening_for_events">Nasłuchuj zdarzeń</string>
     <string name="notification_noisy_notifications">Głośne powiadomienia</string>
     <string name="notification_silent_notifications">Ciche powiadomienia</string>
 
@@ -684,12 +678,6 @@ Jesteś pewien?</string>
     <string name="ssl_expected_existing_expl">Certyfikat zmienił stan z zaufanego na niezaufany. jest to NIEZWYKLE RZADKIE. Rekomendowane jest NIE AKCEPTOWANIE nowego certyfikatu.</string>
     <string name="ssl_only_accept">Akceptuj certyfikat tylko wtedy gdy administrator opublikował odcisk palca pasujący do tego powyżej.</string>
     <string name="malformed_id">Uszkodzony ID. Czy to powinien być adres e-mail lub Matrix ID podobny do \'@localpart:domain\'</string>
-    <plurals name="room_displayname_three_and_more_members">
-	<item quantity="one">%1$s i jeden inny</item>
-	<item quantity="few">%1$s i kilku innych</item>
-	<item quantity="many">%d innych</item>
-	<item quantity="other"/>
-</plurals>
 
     <plurals name="directory_search_rooms">
 	<item quantity="one">1 pokój</item>

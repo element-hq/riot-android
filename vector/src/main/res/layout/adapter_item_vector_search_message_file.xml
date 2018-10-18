@@ -3,6 +3,7 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    xmlns:tools="http://schemas.android.com/tools"
     android:orientation="vertical">
 
     <!-- header -->
@@ -24,7 +25,7 @@
             android:textSize="16sp"
             android:layout_centerVertical="true"
             android:textColor="?attr/search_mode_room_name_text_color"
-            android:text = "A room name here" />
+            tools:text="A room name here" />
 
     </RelativeLayout>
 

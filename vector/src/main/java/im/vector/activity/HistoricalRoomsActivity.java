@@ -58,7 +58,7 @@ import im.vector.util.RoomUtils;
 import im.vector.util.ThemeUtils;
 import im.vector.view.EmptyViewItemDecoration;
 import im.vector.view.SimpleDividerItemDecoration;
-import kotlin.Pair;
+import kotlin.Triple;
 
 /**
  * Displays the historical rooms list
@@ -99,8 +99,8 @@ public class HistoricalRoomsActivity extends VectorAppCompatActivity implements
 
     @NotNull
     @Override
-    public Pair getOtherThemes() {
-        return new Pair(R.style.HomeActivityTheme_Dark, R.style.HomeActivityTheme_Black);
+    public Triple getOtherThemes() {
+        return new Triple(R.style.HomeActivityTheme_Dark, R.style.HomeActivityTheme_Black, R.style.HomeActivityTheme_Status);
     }
 
     @Override

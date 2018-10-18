@@ -7,6 +7,7 @@
     android:layout_marginBottom="2dp">
 
     <LinearLayout
+        android:id="@+id/read_receipt_avatars_list"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentRight="true"

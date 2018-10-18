@@ -13,7 +13,7 @@
 
     <!-- permanent notification subtitle -->
     <string name="notification_sync_in_progress">Синхронізую</string>
-    <string name="notification_listen_for_events">Слухати події</string>
+    <string name="notification_listening_for_events">Слухати події</string>
 
     <!-- titles -->
     <string name="title_activity_home">Повідомлення</string>
@@ -376,7 +376,6 @@
     <string name="ssl_unexpected_existing_expl">Сертифікат почав відрізнятися від того, якому довіряв ваш телефон. Це ДУЖЕ НЕЗВИЧАЙНО. Наполегливо радимо НЕ ПРИЙМАТИ цей новий сертифікат.</string>
     <string name="ssl_expected_existing_expl">Сертифікат змінився з довіреного на недовірений. Сервер міг оновити свій сертифікат. Зв\'яжіться з адміністратором сервера, щоб отримати дійсний відбиток.</string>
     <string name="ssl_only_accept">Приймайте сертифікат ЛИШЕ у випадку збігу відбитку вище з відбитком, оприлюдненим адміністратором сервера.</string>
-    <string name="ssl_fingerprint_example">00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00</string>
 
     <!-- Room Details -->
     <string name="room_details_title">Деталі про кімнату</string>
@@ -392,12 +391,6 @@
     <string name="room_event_action_report_prompt_ignore_user">Бажаєте сховати всі повідомлення цього користувача?</string>
     <string name="room_event_action_cancel_upload">Скасувати відвантаження</string>
     <string name="room_event_action_cancel_download">Скасувати завантаження</string>
-
-    <!-- Room display name -->
-    <string name="room_displayname_invite_from">Запрошення від %s</string>
-    <string name="room_displayname_room_invite">Запрошення до кімнати</string>
-    <string name="room_displayname_two_members">%1$s і %2$s</string>
-    <string name="room_displayname_no_title">Порожня кімната</string>
 
     <!-- Search -->
     <string name="search_hint">Пошук</string>
@@ -671,7 +664,7 @@
     <string name="encryption_export_room_keys">Експортувати ключі кімнати</string>
     <string name="encryption_export_room_keys_summary">Експортувати ключі до локального файлу</string>
     <string name="encryption_export_export">Експорт</string>
-    <string name="encryption_export_enter_passphrase">Введіть парольну фразу</string>
+    <string name="encryption_import_enter_passphrase">Введіть парольну фразу</string>
     <string name="encryption_export_confirm_passphrase">Підтвердіть парольну фразу</string>
     <string name="encryption_export_saved_as">E2E ключі кімнати збережено у \'%s\'</string>
 
