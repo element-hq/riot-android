@@ -279,7 +279,6 @@ public class VectorMediasPickerActivity extends MXCActionBarActivity implements 
         mImagePreviewLayout = findViewById(R.id.medias_picker_preview_image_layout);
         mImagePreviewImageView = findViewById(R.id.medias_picker_preview_image_view);
         mImagePreviewAvatarModeMaskView = findViewById(R.id.medias_picker_preview_avatar_mode_mask);
-        mImagePreviewImageView.setScaleType(ImageView.ScaleType.MATRIX);
         mImagePreviewImageView.setOnTouchListener(imageViewOnTouchListener);
 
         // video preview
@@ -345,6 +344,13 @@ public class VectorMediasPickerActivity extends MXCActionBarActivity implements 
                 } else {
                     attachImageFrom(mTakenImageOrigin);
                 }
+            }
+        });
+
+        findViewById(R.id.medias_picker_redo_text_view).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                cancelTakeImage();
             }
         });
 
@@ -887,6 +893,7 @@ public class VectorMediasPickerActivity extends MXCActionBarActivity implements 
         mImagePreviewAvatarModeMaskView.setVisibility(View.GONE);
 
         if (!mIsAvatarMode) {
+            mImagePreviewImageView.setScaleType(ImageView.ScaleType.FIT_CENTER);
             // update the UI part
             if (null != newBitmap) {// from camera
                 mImagePreviewImageView.setImageBitmap(newBitmap);
@@ -896,6 +903,7 @@ public class VectorMediasPickerActivity extends MXCActionBarActivity implements 
                 }
             }
         } else {
+            mImagePreviewImageView.setScaleType(ImageView.ScaleType.MATRIX);
             // not bitmap but
             if ((null == newBitmap) && (null != defaultUri)) {
                 try {
@@ -937,8 +945,8 @@ public class VectorMediasPickerActivity extends MXCActionBarActivity implements 
                         public void run() {
                             Matrix matrix = mImagePreviewImageView.getMatrix();
                             matrix.postTranslate((mImagePreviewImageView.getWidth() - mImagePreviewImageView.getDrawable().getIntrinsicWidth()) / 2, (mImagePreviewImageView.getHeight() - mImagePreviewImageView.getDrawable().getIntrinsicHeight()) / 2);
-                            mImagePreviewImageView.setImageMatrix(matrix);
                             imageViewOnTouchListener.setStartMatrix(matrix);
+                            mImagePreviewImageView.setImageMatrix(matrix);
 
                             return;
                         }
@@ -955,7 +963,6 @@ public class VectorMediasPickerActivity extends MXCActionBarActivity implements 
                     newWidth = screenWidth;
                     newHeight = (int) (((float) newWidth) * imageH / imageW);
                 }
-
                 mImagePreviewAvatarModeMaskView.setVisibility(View.VISIBLE);
                 drawCircleMask(mImagePreviewAvatarModeMaskView, newWidth, newHeight);
             }
