@@ -2,7 +2,7 @@ Changes in Riot 0.8.18 (2018-XX-XX)
 ===================================================
 
 MatrixSdk:
- - Upgrade to version 0.X.Y.
+ - Upgrade to version 0.9.12.
 
 Features:
  - Status.im theme
@@ -28,9 +28,6 @@ Bugfix:
 
 Translations:
  - Fix issue with indonesian translations. This language is now available.
-
-Build:
- -
 
 Changes in Riot 0.8.17 (2018-10-10)
 ===================================================
