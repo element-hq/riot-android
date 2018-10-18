@@ -127,7 +127,7 @@ public class VectorRoomsSelectionAdapter extends ArrayAdapter<RoomSummary> {
         }
 
         Room room = mSession.getDataHandler().getRoom(roomSummary.getRoomId());
-        if(room != null) {
+        if (room != null) {
             // display the room name
             String roomName = room.getRoomDisplayName(mContext);
             roomNameTxtView.setText(roomName);
