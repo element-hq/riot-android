@@ -7,7 +7,7 @@
     <string name="black_them">Svart Preg</string>
 
     <string name="notification_sync_in_progress">Samstiller</string>
-    <string name="notification_listen_for_events">Høyrer etter hendingar</string>
+    <string name="notification_listening_for_events">Høyrer etter hendingar</string>
     <string name="notification_noisy_notifications">Bråkete varsel</string>
     <string name="notification_silent_notifications">Stille varsel</string>
 
@@ -409,9 +409,9 @@ Er du sikker?</string>
     <string name="room_one_user_is_typing">%s skriv…</string>
     <string name="room_two_users_are_typing">%1$s og %2$s skriv…</string>
     <string name="room_many_users_are_typing">%1$s og %2$s og fleire skriv…</string>
-    <string name="room_message_placeholder_encrypted">Send ein ekryptert melding…</string>
+    <string name="room_message_placeholder_encrypted">Send ei kryptert melding…</string>
     <string name="room_message_placeholder_not_encrypted">Send ei melding (ikkje-kryptert)…</string>
-    <string name="room_message_placeholder_reply_to_encrypted">Send ei kryptert melding…</string>
+    <string name="room_message_placeholder_reply_to_encrypted">Send eit kryptert svar…</string>
     <string name="room_message_placeholder_reply_to_not_encrypted">Send eit svar (ikkje-kryptert)…</string>
     <string name="room_offline_notification">Tilkolinga til tenaren gjekk tapt.</string>
     <string name="room_unsent_messages_notification">Meldingane vart ikkje sende. %1$s eller %2$s no?</string>
@@ -439,7 +439,6 @@ Er du sikker?</string>
     <string name="ssl_unexpected_existing_expl">Sertifikatet har forandra seg frå ein som var stolt på av mobilen din. Dette er SÆRS UVANLEG. Det tilrådast å IKKJE GODKJENNA det nye sertifikatet.</string>
     <string name="ssl_expected_existing_expl">"Sertifikatet har forandra seg frå ein som tidlegare var stolt på til eit som ikkje er det. Tenaren kan ha fornya sertifikatet sitt. Tak kontakt med tenaradministratoren for å få det forventa  fingeravtrykket."</string>
     <string name="ssl_only_accept">Godkjenn BERRE sertifikatet viss tenaradministratoren har gjeve ut eit fingeravtrykk som samsvarar med det over.</string>
-    <string name="ssl_fingerprint_example">00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00</string>
 
     <string name="room_details_title">Romdetaljar</string>
     <string name="room_details_people">Folk</string>
@@ -456,16 +455,6 @@ Merk at denne handlinga vil starta æppen på nytt og kan taka litt tid.</string
     <string name="room_event_action_cancel_upload">Bryt Opplasting av</string>
     <string name="room_event_action_cancel_download">Bryt Nedlasting av</string>
 
-    <string name="room_displayname_invite_from">Byd inn frå %s</string>
-    <string name="room_displayname_room_invite">Rominnbyding</string>
-    <string name="room_displayname_two_members">%1$s og %2$s</string>
-
-    <plurals name="room_displayname_three_and_more_members">
-	<item quantity="one">%1$s og 1 til</item>
-	<item quantity="other">%1$s og %d til</item>
-</plurals>
-
-    <string name="room_displayname_no_title">Tomt rom</string>
 
     <string name="search_hint">Søk</string>
     <string name="search_members_hint">Filtrer rommedlemer</string>
@@ -654,7 +643,7 @@ Merk at denne handlinga gjer at æppen startar på nytt og kan taka litt tid.</s
 
     <string name="settings_delete_notification_targets_confirmation">Er du sikker på at du vil fjerna varselmålet?</string>
 
-    <string name="settings_delete_threepid_confirmation">Er du sikker på at du vil fjerna %$s %2$s?</string>
+    <string name="settings_delete_threepid_confirmation">Er du sikker på at du vil fjerna %1$s %2$s?</string>
 
     <string name="settings_select_country">Vel eit land</string>
 
@@ -783,7 +772,7 @@ Krypterte meldingar vil ikkje vera synlege hjå klientar som førebels ikkje har
     <string name="encryption_export_room_keys">Hent romnyklar ut</string>
     <string name="encryption_export_room_keys_summary">Hent nyklane ut til ei lokal fil</string>
     <string name="encryption_export_export">Hent ut</string>
-    <string name="encryption_export_enter_passphrase">Skriv passetning inn</string>
+    <string name="encryption_import_enter_passphrase">Skriv passetning inn</string>
     <string name="encryption_export_confirm_passphrase">Stadfest passetninga</string>
     <string name="encryption_export_saved_as">E2E-romnyklane vart lagra til \'%s\'
 

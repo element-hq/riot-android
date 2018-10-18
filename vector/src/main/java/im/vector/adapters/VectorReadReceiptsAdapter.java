@@ -17,8 +17,6 @@
 
 package im.vector.adapters;
 
-import android.content.ClipData;
-import android.content.ClipboardManager;
 import android.content.Context;
 import android.content.Intent;
 import android.text.Spannable;
@@ -29,7 +27,6 @@ import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import org.matrix.androidsdk.MXSession;
 import org.matrix.androidsdk.data.Room;
@@ -38,6 +35,7 @@ import org.matrix.androidsdk.rest.model.RoomMember;
 
 import im.vector.R;
 import im.vector.activity.VectorMemberDetailsActivity;
+import im.vector.util.SystemUtilsKt;
 import im.vector.util.VectorUtils;
 
 /**
@@ -92,7 +90,7 @@ public class VectorReadReceiptsAdapter extends ArrayAdapter<ReceiptData> {
         userNameTextView.setOnLongClickListener(new View.OnLongClickListener() {
             @Override
             public boolean onLongClick(View v) {
-                VectorUtils.copyToClipboard(mContext, userNameTextView.getText());
+                SystemUtilsKt.copyToClipboard(mContext, userNameTextView.getText());
                 return true;
             }
         });
@@ -100,11 +98,7 @@ public class VectorReadReceiptsAdapter extends ArrayAdapter<ReceiptData> {
         tsTextView.setOnLongClickListener(new View.OnLongClickListener() {
             @Override
             public boolean onLongClick(View v) {
-                ClipboardManager clipboard = (ClipboardManager) mContext.getSystemService(Context.CLIPBOARD_SERVICE);
-                ClipData clip = ClipData.newPlainText("", ts);
-                clipboard.setPrimaryClip(clip);
-
-                Toast.makeText(mContext, mContext.getString(R.string.copied_to_clipboard), Toast.LENGTH_SHORT).show();
+                SystemUtilsKt.copyToClipboard(mContext, ts);
                 return true;
             }
         });

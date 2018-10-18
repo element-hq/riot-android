@@ -63,8 +63,8 @@ import im.vector.R;
 import im.vector.activity.VectorGroupDetailsActivity;
 import im.vector.adapters.AbsAdapter;
 import im.vector.adapters.GroupAdapter;
+import im.vector.util.SystemUtilsKt;
 import im.vector.util.ThemeUtils;
-import im.vector.util.VectorUtils;
 import im.vector.view.EmptyViewItemDecoration;
 import im.vector.view.SimpleDividerItemDecoration;
 
@@ -207,7 +207,7 @@ public class GroupsFragment extends AbsHomeFragment {
 
             @Override
             public boolean onLongPressItem(Group item, int position) {
-                VectorUtils.copyToClipboard(getActivity(), item.getGroupId());
+                SystemUtilsKt.copyToClipboard(getActivity(), item.getGroupId());
                 return true;
             }
         }, new AbsAdapter.GroupInvitationListener() {

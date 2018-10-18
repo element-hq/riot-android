@@ -393,7 +393,6 @@ Sicuro di procedere?</string>
     <string name="ssl_unexpected_existing_expl">Il certificato è cambiato rispetto a quello ritenuto affidabile dal tuo telefono. Questo è ESTREMAMENTE INSOLITO. Si raccomanda di NON ACCETTARE questo nuovo certificato.</string>
     <string name="ssl_expected_existing_expl">Il certificato è cambiato da quello precedente ritenuto affidabile ad uno non affidabile. Il server potrebbe aver rinnovato il proprio certificato. Contatta l\'amministratore del server per chiedere l\'impronta digitale prevista.</string>
     <string name="ssl_only_accept">Accetta il certificato solo se l\'amministratore ha pubblicato un\'impronta digitale che corrisponda a quella qua sopra.</string>
-    <string name="ssl_fingerprint_example">00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00</string>
 
     <!-- Room Details -->
     <string name="room_details_title">Dettagli stanza</string>
@@ -411,12 +410,6 @@ Sicuro di procedere?</string>
 Tieni presente che questa azione riavvierà l\'app e potrebbe richiedere del tempo.</string>
     <string name="room_event_action_cancel_upload">Annulla caricamento</string>
     <string name="room_event_action_cancel_download">Annulla scaricamento</string>
-
-    <!-- Room display name -->
-    <string name="room_displayname_invite_from">Invito da %s</string>
-    <string name="room_displayname_room_invite">Invito nella stanza</string>
-    <string name="room_displayname_two_members">%1$s e %2$s</string>
-    <string name="room_displayname_no_title">Stanza vuota</string>
 
     <!-- Search -->
     <string name="search_hint">Cerca</string>
@@ -687,7 +680,7 @@ I messaggi criptati non saranno visibili ai riceventi che non hanno ancora imple
     <string name="encryption_export_room_keys">Esporta le chiavi delle stanze</string>
     <string name="encryption_export_room_keys_summary">Esporta le chiavi in un file locale</string>
     <string name="encryption_export_export">Esporta</string>
-    <string name="encryption_export_enter_passphrase">Inserisci frase d\'accesso (passphrase)</string>
+    <string name="encryption_import_enter_passphrase">Inserisci frase d\'accesso (passphrase)</string>
     <string name="encryption_export_confirm_passphrase">Conferma frase d\'accesso (passphrase)</string>
     <string name="encryption_export_saved_as">Le chiavi da-utente-a-utente della stanza sono state salvate su \'%s\'.
 
@@ -777,7 +770,7 @@ In futuro il processo di verifica sarà più sofisticato.</string>
     <string name="notification_silent_notifications">Notifiche silenziose</string>
 
     <string name="notification_noisy_notifications">Notifiche audio</string>
-    <string name="notification_listen_for_events">In ascolto di eventi</string>
+    <string name="notification_listening_for_events">In ascolto di eventi</string>
     <string name="title_activity_bug_report">Rapporto errori</string>
 
     <string name="login_mobile_device">Cellulare</string>
@@ -824,11 +817,6 @@ In futuro il processo di verifica sarà più sofisticato.</string>
     <plurals name="room_new_messages_notification">
 	<item quantity="one">1 nuovo messaggio</item>
 	<item quantity="other">%d nuovi messaggi</item>
-</plurals>
-
-    <plurals name="room_displayname_three_and_more_members">
-	<item quantity="one">%1$s e 1 altro</item>
-	<item quantity="other">%1$s e %d altri</item>
 </plurals>
 
     <plurals name="directory_search_rooms">

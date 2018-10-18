@@ -369,7 +369,6 @@ Você autoriza o Riot a acessar seus contatos?</string>
     <string name="ssl_unexpected_existing_expl">O certificado mudou de um que era confiável no seu telefone. Isso é ALTAMENTE ESTRANHO. Recomendamos que você NÃO ACEITE este novo certificado.</string>
     <string name="ssl_expected_existing_expl">O certificado mudou de um que era confiável no seu telefone para um que não é considerado confiável pelo seu aparelho. Pode ser que o servidor renovou seu certificado. Entre em contato com o administrador do servidor e peça a impressão digital esperada.</string>
     <string name="ssl_only_accept">APENAS aceite o certificado se o administrador do servidor publicou uma impressão digital que é idêntica à que está acima.</string>
-    <string name="ssl_fingerprint_example">00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00</string>
 
     <!-- Room Details -->
     <string name="room_details_title">Detalhes da sala</string>
@@ -387,12 +386,6 @@ Você autoriza o Riot a acessar seus contatos?</string>
 Note que esta ação irá reiniciar o aplicativo e poderá tomar um certo tempo.</string>
     <string name="room_event_action_cancel_upload">Cancelar envio</string>
     <string name="room_event_action_cancel_download">Cancelar download</string>
-
-    <!-- Room display name -->
-    <string name="room_displayname_invite_from">Convite de %s</string>
-    <string name="room_displayname_room_invite">Convite para sala</string>
-    <string name="room_displayname_two_members">%1$s e %2$s</string>
-    <string name="room_displayname_no_title">Sala vazia</string>
 
     <!-- Search -->
     <string name="search_hint">Pesquisar</string>
@@ -641,7 +634,7 @@ Note que esta ação irá reiniciar o aplicativo e poderá tomar um certo tempo.
     <string name="encryption_export_room_keys">Exportar chaves de sala</string>
     <string name="encryption_export_room_keys_summary">Exportar as chaves para um arquivo local</string>
     <string name="encryption_export_export">Exportar</string>
-    <string name="encryption_export_enter_passphrase">Entre com a \'passphrase\'</string>
+    <string name="encryption_import_enter_passphrase">Entre com a \'passphrase\'</string>
     <string name="encryption_export_confirm_passphrase">Confirme a \'passphrase\'</string>
     <string name="encryption_export_saved_as">As chaves de sala E2E foram salvas em \'%s\'
 
@@ -727,7 +720,7 @@ No futuro, este processo de verificação será mais sofisticado.</string>
     <string name="black_them">Tema preto</string>
 
     <string name="notification_sync_in_progress">Sincronizando</string>
-    <string name="notification_listen_for_events">Escutando eventos</string>
+    <string name="notification_listening_for_events">Escutando eventos</string>
     <string name="notification_noisy_notifications">Notificações ruidosas</string>
     <string name="notification_silent_notifications">Notificações silenciosas</string>
 
@@ -871,11 +864,6 @@ No futuro, este processo de verificação será mais sofisticado.</string>
     <plurals name="room_new_messages_notification">
 	<item quantity="one">1 nova mensagem</item>
 	<item quantity="other">%d novas mensagens</item>
-</plurals>
-
-    <plurals name="room_displayname_three_and_more_members">
-	<item quantity="one">%1$s e 1 outra/o</item>
-	<item quantity="other">%1$s e %d outras/os</item>
 </plurals>
 
     <plurals name="directory_search_rooms">

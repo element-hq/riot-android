@@ -7,7 +7,7 @@
     <string name="black_them">Sort Tema</string>
 
     <string name="notification_sync_in_progress">Synkroniserer</string>
-    <string name="notification_listen_for_events">Lyt efter begivenheder</string>
+    <string name="notification_listening_for_events">Lyt efter begivenheder</string>
 
     <string name="title_activity_home">Beskeder</string>
     <string name="title_activity_room">Rum</string>
@@ -374,7 +374,6 @@ Er du sikker?</string>
 
     <string name="ssl_expected_existing_expl">Certifikatet er ændret fra et tidligere betroet, til et der ikke er betroet. Serveren kan have fornyet sit certifikat. Kontakt server administratoren for det forventede fingeraftryk.</string>
     <string name="ssl_only_accept">Accepter kun certifikatet hvis server administratoren har publiceret et fingeraftryk der matcher det ovenstående.</string>
-    <string name="ssl_fingerprint_example">00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00</string>
 
     <string name="room_details_title">Detaljer for rummet</string>
     <string name="room_details_people">Personer</string>
@@ -430,16 +429,6 @@ Er du sikker?</string>
     <string name="room_event_action_cancel_upload">Annuller upload</string>
     <string name="room_event_action_cancel_download">Annuller download</string>
 
-    <string name="room_displayname_invite_from">Invitation fra %s</string>
-    <string name="room_displayname_room_invite">Invitation til rum</string>
-    <string name="room_displayname_two_members">%1$s og %2$s</string>
-
-    <plurals name="room_displayname_three_and_more_members">
-	<item quantity="one">%1$s og 1 anden</item>
-	<item quantity="other">%1$s og %d andre</item>
-</plurals>
-
-    <string name="room_displayname_no_title">Tomt rum</string>
 
     <string name="search_hint">Søg</string>
     <string name="search_members_hint">Filtrer medlemmer i rum</string>

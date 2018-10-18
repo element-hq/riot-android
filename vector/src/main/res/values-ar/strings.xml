@@ -7,7 +7,7 @@
     <string name="black_them">السمة السوداء</string>
 
     <string name="notification_sync_in_progress">يُزامن</string>
-    <string name="notification_listen_for_events">يستمع للأحداث</string>
+    <string name="notification_listening_for_events">يستمع للأحداث</string>
     <string name="title_activity_home">الرسائل</string>
     <string name="title_activity_settings">الإعدادات</string>
     <string name="title_activity_member_details">تفاصيل الأعضاء</string>
@@ -240,7 +240,6 @@
     <string name="ssl_logout_account">اخرج</string>
     <string name="ssl_fingerprint_hash">البصمة (⁨%s⁩):</string>
     <string name="ssl_could_not_verify">تعذّر التحقق من معرّف الخادوم البعيد.</string>
-    <string name="ssl_fingerprint_example">00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00</string>
 
     <string name="room_details_title">تفاصيل الغرفة</string>
     <string name="room_details_files">الملفات</string>
@@ -253,9 +252,6 @@
 سيُعيد هذا الإجراء تشغيل التطبيق وقد يأخذ بعض الوقت.</string>
     <string name="room_event_action_cancel_upload">ألغِ الرفع</string>
     <string name="room_event_action_cancel_download">ألغِ التنزيل</string>
-
-    <string name="room_displayname_invite_from">دعوة من ⁨%s⁩</string>
-    <string name="room_displayname_no_title">غرفة فارغة</string>
 
     <string name="search_no_results">لا نتائج</string>
     <string name="tab_title_search_rooms">الغرف</string>
@@ -420,9 +416,11 @@
     <string name="encryption_information_device_key">مفتاح الجهاز</string>
     <string name="encryption_export_room_keys">صدّر مفاتيح الغرفة</string>
     <string name="encryption_export_room_keys_summary">صدّر المفاتيح إلى ملف محلي</string>
-    <string name="encryption_export_enter_passphrase">أدخِل عبارة المرور</string>
+    <string name="encryption_import_enter_passphrase">أدخِل عبارة المرور</string>
     <string name="encryption_export_confirm_passphrase">أكّد عبارة المرور</string>
-    <string name="encryption_export_saved_as">حُفظت مفاتيح الطرفين للغرفة في ’⁨%s⁩‘</string>
+    <string name="encryption_export_saved_as">حُفظت مفاتيح الطرفين للغرفة في ’⁨%s⁩‘
+
+تحذير: يمكن أن يُحذف الملف إن أزلت تثبيت التطبيق.</string>
 
     <string name="encryption_import_e2e_room_keys">استورد مفاتيح الطرفين لغرفة</string>
     <string name="encryption_import_room_keys">استورد مفاتيح الغرفة</string>
@@ -507,7 +505,6 @@
 	<item quantity="other">%d رسالة جديدة</item>
 </plurals>
 
-    <string name="room_displayname_two_members">‏⁨%1$s⁩ و ⁨%2$s⁩</string>
 
     <plurals name="directory_search_rooms">
 	<item quantity="zero">لا غرف</item>
@@ -821,7 +818,6 @@
     <string name="ssl_cert_not_trust">قد يعني هذا بأن أحدهم يعترض الاتصال بعدوانية، أو أن هاتفك لا يثق بالشهادة التي قدّمها الخادوم البعيد.</string>
     <string name="ssl_cert_new_account_expl">إن قال مدير الخادوم بأن هذا متوقع، فتأكد من أن البصمة أدناه تطابق البصمة التي وفّرها.</string>
     <string name="ssl_expected_existing_expl">تغيّرت الشهادة من شهادة كنت تثق بها إلى شهادة لا تثق بها. لربما جدّد الخادوم شهادته. راسل إدارة الخادوم واسألهم عن البصمة المتوقعة.</string>
-    <string name="room_displayname_room_invite">دعوة إلى غرفة</string>
 
     <string name="room_recents_join">انضم</string>
     <string name="room_recents_start_chat">ابدأ دردشة</string>

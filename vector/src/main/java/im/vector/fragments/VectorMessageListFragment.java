@@ -90,9 +90,9 @@ import im.vector.util.ExternalApplicationsUtilKt;
 import im.vector.util.PermissionsToolsKt;
 import im.vector.util.PreferencesManager;
 import im.vector.util.SlidableMediaInfo;
+import im.vector.util.SystemUtilsKt;
 import im.vector.util.ThemeUtils;
 import im.vector.util.VectorImageGetter;
-import im.vector.util.VectorUtils;
 import im.vector.widgets.WidgetsManager;
 
 public class VectorMessageListFragment extends MatrixMessageListFragment<VectorMessagesAdapter> implements IMessagesAdapterActionsListener {
@@ -597,7 +597,7 @@ public class VectorMessageListFragment extends MatrixMessageListFragment<VectorM
             getActivity().runOnUiThread(new Runnable() {
                 @Override
                 public void run() {
-                    VectorUtils.copyToClipboard(getActivity(), textMsg);
+                    SystemUtilsKt.copyToClipboard(getActivity(), textMsg);
                 }
             });
         } else if ((action == R.id.ic_action_vector_cancel_upload) || (action == R.id.ic_action_vector_cancel_download)) {
@@ -691,7 +691,7 @@ public class VectorMessageListFragment extends MatrixMessageListFragment<VectorM
                 }
             }
         } else if (action == R.id.ic_action_vector_permalink) {
-            VectorUtils.copyToClipboard(getActivity(), PermalinkUtils.createPermalink(event));
+            SystemUtilsKt.copyToClipboard(getActivity(), PermalinkUtils.createPermalink(event));
         } else if (action == R.id.ic_action_vector_report) {
             onMessageReport(event);
         } else if ((action == R.id.ic_action_view_source) || (action == R.id.ic_action_view_decrypted_source)) {

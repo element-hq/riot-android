@@ -50,13 +50,13 @@ public class RiotEventDisplay extends EventDisplay {
     private static final Map<String, Event> mClosingWidgetEventByStateKey = new HashMap<>();
 
     // constructor
-    public RiotEventDisplay(Context context, Event event, RoomState roomState, HtmlToolbox htmlToolbox) {
-        super(context, event, roomState, htmlToolbox);
+    public RiotEventDisplay(Context context, HtmlToolbox htmlToolbox) {
+        super(context, htmlToolbox);
     }
 
     // constructor
-    public RiotEventDisplay(Context context, Event event, RoomState roomState) {
-        super(context, event, roomState);
+    public RiotEventDisplay(Context context) {
+        super(context);
     }
 
     /**
@@ -66,32 +66,32 @@ public class RiotEventDisplay extends EventDisplay {
      * @return The text or null if it isn't possible.
      */
     @Override
-    public CharSequence getTextualDisplay(Integer displayNameColor) {
+    public CharSequence getTextualDisplay(Integer displayNameColor, Event event, RoomState roomState) {
         CharSequence text = null;
 
         try {
-            if (TextUtils.equals(mEvent.getType(), WidgetsManager.WIDGET_EVENT_TYPE)) {
-                JsonObject content = mEvent.getContentAsJsonObject();
+            if (TextUtils.equals(event.getType(), WidgetsManager.WIDGET_EVENT_TYPE)) {
+                JsonObject content = event.getContentAsJsonObject();
 
-                EventContent eventContent = JsonUtils.toEventContent(mEvent.getContentAsJsonObject());
-                EventContent prevEventContent = mEvent.getPrevContent();
-                String senderDisplayName = senderDisplayNameForEvent(mEvent, eventContent, prevEventContent, mRoomState);
+                EventContent eventContent = JsonUtils.toEventContent(event.getContentAsJsonObject());
+                EventContent prevEventContent = event.getPrevContent();
+                String senderDisplayName = senderDisplayNameForEvent(event, eventContent, prevEventContent, roomState);
 
                 if (0 == content.entrySet().size()) {
-                    Event closingWidgetEvent = mClosingWidgetEventByStateKey.get(mEvent.stateKey);
+                    Event closingWidgetEvent = mClosingWidgetEventByStateKey.get(event.stateKey);
 
                     if (null == closingWidgetEvent) {
-                        List<Event> widgetEvents = mRoomState.getStateEvents(new HashSet<>(Arrays.asList(WidgetsManager.WIDGET_EVENT_TYPE)));
+                        List<Event> widgetEvents = roomState.getStateEvents(new HashSet<>(Arrays.asList(WidgetsManager.WIDGET_EVENT_TYPE)));
 
                         for (Event widgetEvent : widgetEvents) {
-                            if (TextUtils.equals(widgetEvent.stateKey, mEvent.stateKey) && !widgetEvent.getContentAsJsonObject().entrySet().isEmpty()) {
+                            if (TextUtils.equals(widgetEvent.stateKey, event.stateKey) && !widgetEvent.getContentAsJsonObject().entrySet().isEmpty()) {
                                 closingWidgetEvent = widgetEvent;
                                 break;
                             }
                         }
 
                         if (null != closingWidgetEvent) {
-                            mClosingWidgetEventByStateKey.put(mEvent.stateKey, closingWidgetEvent);
+                            mClosingWidgetEventByStateKey.put(event.stateKey, closingWidgetEvent);
                         }
                     }
 
@@ -99,17 +99,17 @@ public class RiotEventDisplay extends EventDisplay {
                             WidgetContent.toWidgetContent(closingWidgetEvent.getContentAsJsonObject()).getHumanName() : "undefined";
                     text = mContext.getString(R.string.event_formatter_widget_removed, type, senderDisplayName);
                 } else {
-                    String type = WidgetContent.toWidgetContent(mEvent.getContentAsJsonObject()).getHumanName();
+                    String type = WidgetContent.toWidgetContent(event.getContentAsJsonObject()).getHumanName();
                     text = mContext.getString(R.string.event_formatter_widget_added, type, senderDisplayName);
                 }
             } else {
-                text = super.getTextualDisplay(displayNameColor);
+                text = super.getTextualDisplay(displayNameColor, event, roomState);
             }
-            if (mEvent.getCryptoError() != null) {
+            if (event.getCryptoError() != null) {
                 final MXSession session = Matrix.getInstance(mContext).getDefaultSession();
                 VectorApp.getInstance()
                         .getDecryptionFailureTracker()
-                        .reportUnableToDecryptError(mEvent, mRoomState, session.getMyUserId());
+                        .reportUnableToDecryptError(event, roomState, session.getMyUserId());
             }
 
         } catch (Exception e) {

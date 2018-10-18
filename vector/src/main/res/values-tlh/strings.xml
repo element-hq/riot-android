@@ -7,7 +7,7 @@
     <string name="black_them">tu\'qom qIj</string>
 
     <string name="notification_sync_in_progress">vIrapmoHltaH</string>
-    <string name="notification_listen_for_events">wanI\' vInejtaH</string>
+    <string name="notification_listening_for_events">wanI\' vInejtaH</string>
     <string name="notification_noisy_notifications">vep chuS</string>
     <string name="notification_silent_notifications">vep tam</string>
 
@@ -169,4 +169,6 @@
 
     <string name="bottom_action_favourites">parHa\'qu\'bogh</string>
     <string name="home_filter_placeholder_favorites">Doch parHa\'qu\'bogh nej</string>
-    </resources>
+    <string name="unknown_error">qaSpu\' Qagh</string>
+
+</resources>

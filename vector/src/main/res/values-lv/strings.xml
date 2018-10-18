@@ -145,7 +145,7 @@ Kā arī epasta adrese ļaus Tev atiestatīt paroli.</string>
     <string name="black_them">Melna ādiņa</string>
 
     <string name="notification_sync_in_progress">Sinhronizācija</string>
-    <string name="notification_listen_for_events">Notikumu monitorings</string>
+    <string name="notification_listening_for_events">Notikumu monitorings</string>
     <string name="notification_noisy_notifications">Skaņi paziņojumi</string>
     <string name="notification_silent_notifications">Klusi paziņojumi</string>
 
@@ -397,7 +397,6 @@ Vai vēlies turpināt?</string>
     <string name="ssl_unexpected_existing_expl">Servera sertifikāts ir izmanījies un Tava ierīce tam tagad neuzticas. Tas ir ĻOTI NEPARASTI. Iesakām NEUZTICĒTIES šim jaunajam sertifikātam.</string>
     <string name="ssl_expected_existing_expl">Sertifikāts izmainījās no iepriekš uzticama uz neuzticamu. Iespējams, serveris ir aktualizējis savu sertifikātu. Sazinies ar servera administratoru, lai saņemtu sagaidāmo nospiedumu (fingerprint).</string>
     <string name="ssl_only_accept">Akceptē sertifikātu TIKAI tad, kad servera administrators publicējis sertifikāta nospiedumu, kurš atbilst augstāk redzamajam.</string>
-    <string name="ssl_fingerprint_example">00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00</string>
 
     <string name="room_details_title">Istabas informācija</string>
     <string name="room_details_people">Cilvēki</string>
@@ -411,11 +410,6 @@ Vai vēlies turpināt?</string>
     <string name="room_event_action_report_prompt_ignore_user">Vai vēlies neredzēt nevienu ziņu no šī dalībnieka?</string>
     <string name="room_event_action_cancel_upload">Atcelt augšuplādi (nosūtīšanu)</string>
     <string name="room_event_action_cancel_download">Atcelt lejuplādi (saņemšanu)</string>
-
-    <string name="room_displayname_invite_from">Uzaicinājums no %s</string>
-    <string name="room_displayname_room_invite">Uzaicinājums uz istabu</string>
-    <string name="room_displayname_two_members">%1$s un %2$s</string>
-    <string name="room_displayname_no_title">Tukša istaba</string>
 
     <string name="search_hint">Meklēšana</string>
     <string name="search_members_hint">Istabas dalībnieku filtrs</string>
@@ -668,12 +662,6 @@ Lai turpinātu, ievadi savu paroli.</string>
 	<item quantity="other">%d jaunu ziņu</item>
 </plurals>
 
-    <plurals name="room_displayname_three_and_more_members">
-	<item quantity="zero">%1$s un 1 cits</item>
-	<item quantity="one">%1$s un %d citi</item>
-	<item quantity="other">%1$s un %d citu</item>
-</plurals>
-
     <plurals name="directory_search_rooms">
 	<item quantity="zero">1 istaba</item>
 	<item quantity="one">%d istabas</item>
@@ -739,7 +727,7 @@ Ja reiz šifrēšana istabā tiek ieslēgta, tā vairs nevar tikt izslēgta (pag
     <string name="encryption_export_room_keys">Eksportēt istabas atslēgas</string>
     <string name="encryption_export_room_keys_summary">Eksportēt atslēgas vietējā failā</string>
     <string name="encryption_export_export">Eksports</string>
-    <string name="encryption_export_enter_passphrase">Ievadi paroli (paroles frāzi)</string>
+    <string name="encryption_import_enter_passphrase">Ievadi paroli (paroles frāzi)</string>
     <string name="encryption_export_confirm_passphrase">Apstiprināt paroli</string>
     <string name="encryption_export_saved_as">E2E istabas atslēgas ir saglabātas failā \'%s\'</string>
 

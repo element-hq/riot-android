@@ -1,0 +1,316 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <!-- LIGHT THEME COLORS -->
+
+    <style name="Theme.Vector.Light" parent="Theme.AppCompat.Light">
+        <!-- default background color -->
+        <item name="riot_primary_background_color">@color/riot_primary_background_color_light</item>
+
+        <!-- waiting view background -->
+        <item name="waiting_background_color">#AAAAAAAA</item>
+
+        <!-- primary dark color (status bar) -->
+        <item name="primary_dark_color">#5EA584</item>
+
+        <!-- application bar background color -->
+        <item name="primary_color">@color/primary_color_light</item>
+
+        <!-- application bar text color -->
+        <item name="primary_text_color">@android:color/white</item>
+
+        <!-- application bar icons color -->
+        <item name="primary_control_color">@android:color/white</item>
+
+        <!-- application bar text hint color -->
+        <item name="primary_hint_text_color">@color/primary_hint_text_color_light</item>
+
+        <item name="tab_home">@color/vector_green_color</item>
+        <item name="tab_home_secondary">#5EA584</item>
+
+        <!-- default text colors -->
+        <item name="riot_primary_text_color">@color/riot_primary_text_color_light</item>
+        <item name="default_text_hint_color">@color/default_text_hint_color_light</item>
+        <item name="default_text_light_color">@color/default_text_light_color_light</item>
+        <item name="default_button_light_text_color">@color/default_button_light_text_light</item>
+        <item name="default_text_dark_color">@color/default_text_light_color_light</item>
+
+        <!-- room message colors -->
+        <item name="unsent_message_text_color">#FFFF4444</item>
+        <item name="message_text_color">?attr/riot_primary_text_color</item>
+        <item name="notice_text_color">#903C3C3C</item>
+        <item name="encrypting_message_text_color">@color/vector_green_color</item>
+        <item name="sending_message_text_color">#AAA</item>
+        <item name="highlighted_message_text_color">@color/vector_fuchsia_color</item>
+        <item name="highlighted_searched_message_text_color">@color/vector_green_color</item>
+        <item name="search_mode_room_name_text_color">#333C3C3C</item>
+        <item name="unread_marker_line_color">@color/vector_green_color</item>
+        <item name="markdown_block_background_color">#FFEEEEEE</item>
+        <item name="fenced_code_block_background_color">#FF00FF00</item>
+        <item name="room_activity_divider_color">#FFF2F2F2</item>
+
+        <!-- tab bar colors -->
+        <item name="tab_bar_background_color">?attr/primary_color</item>
+        <item name="tab_bar_inverted_background_color">#FFF2F2F2</item>
+        <item name="tab_bar_selected_background_color">
+            @color/tab_bar_selected_background_color_light
+        </item>
+        <item name="tab_bar_unselected_background_color">
+            @color/tab_bar_unselected_background_color_light
+        </item>
+
+        <!-- list colors -->
+        <item name="list_header_background_color">#f6f6f6</item>
+        <item name="list_divider_color">@color/list_divider_color_light</item>
+        <item name="list_header_subtext_color">#4D3C3C3C</item>
+
+        <!-- directory selection header -->
+        <item name="list_header_public_room_spinner_text_color">#7f3c3c3c</item>
+        <item name="list_header_public_room_spinner_color">#2e3c3c3c</item>
+
+        <!-- gradient on the home bottom -->
+        <item name="activity_bottom_gradient_color">#80ffffff</item>
+
+        <!-- outgoing call background color -->
+        <item name="pending_outgoing_view_background_color">#33000000</item>
+
+        <!-- multi selection member background color -->
+        <item name="multi_selection_background_color">#FFF2F2F2</item>
+
+        <!-- sliding menu icon colors -->
+        <item name="home_navigation_icon_color">#FF4D4D4D</item>
+
+        <!-- room notification text color (typing, unsent...) -->
+        <item name="room_notification_text_color">#a0a29f</item>
+
+        <!-- color for dividers in settings -->
+        <item name="preference_divider_color">#e1e1e1</item>
+
+        <!-- icon colors -->
+        <item name="default_icon_tint_color">@color/vector_green_color</item>
+        <item name="settings_icon_tint_color">@android:color/black</item>
+        <item name="icon_tint_on_light_action_bar_color">@android:color/white</item>
+        <item name="icon_tint_on_dark_action_bar_color">@android:color/white</item>
+
+        <!-- theses colours are requested a background cannot be set by an ?att on android < 5 -->
+        <!-- dedicated drawables are created for each theme -->
+        <item name="avatar_mask">@drawable/avatar_mask_light</item>
+        <item name="avatar_mask_room_header">@drawable/avatar_mask_room_header_light</item>
+        <item name="avatar_mask_white_stroke">@drawable/avatar_mask_white_stroke_light</item>
+        <item name="line_divider">@drawable/line_divider_light</item>
+        <item name="shadow_bottom">@drawable/shadow_bottom_light</item>
+        <item name="shadow_top">@drawable/shadow_top_light</item>
+        <item name="vector_tabbar_selected_background">
+            @drawable/vector_tabbar_selected_background_light
+        </item>
+        <item name="vector_tabbar_unselected_background">
+            @drawable/vector_tabbar_unselected_background_light
+        </item>
+        <item name="vector_tabbar_background">@drawable/vector_tabbar_background_light</item>
+
+        <item name="pill_background_user_id">@drawable/pill_background_user_id_light</item>
+        <item name="pill_background_room_alias">@drawable/pill_background_room_alias_light</item>
+
+        <item name="pill_text_color_user_id">@color/riot_primary_text_color_light</item>
+        <item name="pill_text_color_room_alias">@android:color/white</item>
+    </style>
+
+    <!-- Base application theme. -->
+    <style name="AppTheme.Base.Light" parent="Theme.Vector.Light">
+
+        <!-- disable the overscroll because setOverscrollHeader/Footer don't always work -->
+        <item name="android:overScrollMode">never</item>
+
+        <!-- with action bar -->
+        <item name="android:windowActionBar">true</item>
+
+        <!-- status bar color -->
+        <item name="colorPrimaryDark">?attr/primary_dark_color</item>
+
+        <!-- activities background -->
+        <item name="android:windowBackground">@color/riot_primary_background_color_light</item>
+
+        <!-- fonts -->
+        <item name="android:typeface">sans</item>
+
+        <!-- android ui button -->
+        <item name="colorAccent">@color/vector_green_color</item>
+
+        <!-- custom action bar -->
+        <item name="android:actionBarStyle">@style/Vector.Styled.ActionBar</item>
+        <item name="actionBarStyle">@style/Vector.Styled.ActionBar</item>
+
+        <!-- actionbar icons color -->
+        <item name="actionBarTheme">@style/Vector.ActionBarTheme</item>
+
+        <!-- remove the shadow under the actionbar -->
+        <item name="android:windowContentOverlay">@null</item>
+
+        <item name="android:popupMenuStyle">@style/vector.PopupMenu</item>
+
+        <!-- no divider -->
+        <item name="android:actionBarDivider">@null</item>
+
+        <!-- tabbar background -->
+        <item name="android:actionBarTabStyle">@style/Vector.TabView.Light</item>
+        <item name="actionBarTabStyle">@style/Vector.TabView.Light</item>
+
+        <!-- tabbar text color -->
+        <item name="android:actionBarTabTextStyle">@style/Vector.TabText</item>
+        <item name="actionBarTabTextStyle">@style/Vector.TabText</item>
+
+        <!-- switch color -->
+        <item name="colorControlActivated">@color/vector_green_color</item>
+    </style>
+
+    <style name="AppTheme.Light" parent="AppTheme.Base.Light" />
+
+    <!-- no action bar window -->
+    <style name="AppTheme.NoActionBar.Base.Light" parent="Theme.Vector.Light">
+        <!-- disable the overscroll because setOverscrollHeader/Footer don't always work -->
+        <item name="android:overScrollMode">never</item>
+
+        <!-- hide the action bar -->
+        <item name="android:windowActionBar">false</item>
+        <item name="windowActionBar">false</item>
+        <item name="android:windowNoTitle">true</item>
+        <item name="windowNoTitle">true</item>
+
+        <!-- status bar color -->
+        <item name="colorPrimaryDark">?attr/primary_dark_color</item>
+
+        <!-- fonts -->
+        <item name="android:typeface">sans</item>
+
+        <!-- activities background -->
+        <item name="android:windowBackground">@color/riot_primary_background_color_light</item>
+    </style>
+
+    <style name="AppTheme.NoActionBar.Light" parent="AppTheme.NoActionBar.Base.Light" />
+
+    <style name="Theme.Vector.Empty.Light" parent="Theme.AppCompat.Light.Dialog">
+        <item name="primary_color">@color/primary_color_light</item>
+        <item name="riot_primary_background_color">@color/riot_primary_background_color_light</item>
+        <item name="riot_primary_text_color">@color/riot_primary_text_color_light</item>
+        <item name="primary_hint_text_color">@color/primary_hint_text_color_light</item>
+        <item name="message_text_color">?attr/riot_primary_text_color</item>
+    </style>
+
+    <style name="Theme.Vector.Lock.Light" parent="Theme.Vector.Empty.Light">
+        <item name="android:background">?attr/riot_primary_background_color</item>
+        <item name="android:textColor">?attr/primary_text_color</item>
+        <item name="editTextColor">?attr/riot_primary_text_color</item>
+        <item name="android:editTextColor">?attr/riot_primary_text_color</item>
+    </style>
+
+    <style name="Vector.TabView.Light" parent="Widget.AppCompat.ActionBar.TabView">
+        <item name="android:background">@drawable/vector_tabbar_background_light</item>
+        <item name="background">@drawable/vector_tabbar_background_light</item>
+    </style>
+
+    <style name="AppTheme.NoActionBar.Swipe.Light" parent="AppTheme.NoActionBar.Light">
+        <item name="android:windowIsTranslucent">true</item>
+        <item name="android:windowBackground">@android:color/transparent</item>
+    </style>
+
+    <!-- home activity -->
+    <style name="HomeActivityTheme.Light" parent="AppTheme.NoActionBar.Light">
+        <item name="editTextColor">@android:color/white</item>
+        <item name="android:editTextColor">@android:color/white</item>
+        <item name="android:textColorHint">?attr/activity_bottom_gradient_color</item>
+    </style>
+
+    <!-- call activity -->
+    <style name="CallActivityTheme.Light" parent="AppTheme.Light">
+        <item name="android:windowNoTitle">true</item>
+        <item name="windowNoTitle">true</item>
+        <!-- status bar color -->
+        <item name="colorPrimaryDark">@android:color/black</item>
+    </style>
+
+    <!-- NoActionBar + FullScreen -->
+    <style name="AppTheme.NoActionBar.FullScreen.Light" parent="AppTheme.NoActionBar.Light">
+        <item name="android:windowFullscreen">true</item>
+        <!-- activities background -->
+        <item name="android:windowBackground">@android:color/transparent</item>
+    </style>
+
+    <!-- ActionBar + FullScreen -->
+    <style name="AppTheme.ActionBar.FullScreen.Light" parent="AppTheme.NoActionBar.FullScreen.Light">
+        <!-- show the action bar -->
+        <item name="android:windowActionBar">true</item>
+        <item name="windowActionBar">true</item>
+        <item name="android:windowNoTitle">true</item>
+        <item name="windowNoTitle">true</item>
+    </style>
+
+    <!-- login & registration activities -->
+    <style name="LoginAppTheme.Light" parent="AppTheme.NoActionBar.Light">
+        <item name="android:editTextStyle">@style/LoginEditTextStyle</item>
+        <item name="android:buttonStyle">@style/LoginButtonStyle</item>
+        <item name="colorAccent">?attr/editTextColor</item>
+    </style>
+
+    <style name="CountryPickerTheme.Light" parent="AppTheme.NoActionBar.Light">
+        <item name="editTextColor">@android:color/white</item>
+        <item name="android:editTextColor">@android:color/white</item>
+        <item name="android:textColorHint">?attr/activity_bottom_gradient_color</item>
+    </style>
+
+    <style name="DirectoryPickerTheme.Light" parent="AppTheme.NoActionBar.Light" />
+
+    <!-- searches activity -->
+    <style name="SearchesAppTheme.Light" parent="AppTheme.Light">
+        <!-- custom action bar -->
+        <item name="android:actionBarStyle">@style/VectorSearches.Styled.ActionBar</item>
+        <item name="actionBarStyle">@style/VectorSearches.Styled.ActionBar</item>
+
+        <!-- no divider -->
+        <item name="android:actionBarDivider">@null</item>
+
+        <!-- edit text -->
+        <item name="android:editTextStyle">@style/VectorSearches.EditText</item>
+
+        <!-- actionbar icons color -->
+        <item name="actionBarTheme">@style/VectorSearches.ActionBarTheme</item>
+    </style>
+
+    <style name="CallAppTheme.Light" parent="AppTheme.NoActionBar.Light">
+        <item name="android:colorBackground">?attr/colorBackgroundFloating</item>
+        <item name="android:colorBackgroundCacheHint">@null</item>
+
+        <item name="android:windowFrame">@null</item>
+        <item name="android:windowTitleStyle">@style/RtlOverlay.DialogWindowTitle.AppCompat</item>
+        <item name="android:windowTitleBackgroundStyle">
+            @style/Base.DialogWindowTitleBackground.AppCompat
+        </item>
+        <item name="android:windowBackground">@drawable/abc_dialog_material_background</item>
+        <item name="android:windowIsFloating">true</item>
+        <item name="android:backgroundDimEnabled">true</item>
+        <item name="android:windowContentOverlay">@null</item>
+        <item name="android:windowAnimationStyle">@style/Animation.AppCompat.Dialog</item>
+        <item name="android:windowSoftInputMode">stateUnspecified|adjustPan</item>
+
+        <item name="windowActionBar">false</item>
+        <item name="windowActionModeOverlay">true</item>
+
+        <item name="listPreferredItemPaddingLeft">24dip</item>
+        <item name="listPreferredItemPaddingRight">24dip</item>
+
+        <item name="android:listDivider">@null</item>
+    </style>
+
+    <style name="GroupAppTheme.Light" parent="AppTheme.Light">
+        <item name="colorPrimaryDark">@color/tab_groups_secondary</item>
+
+        <item name="android:actionBarTabStyle">@style/Vector.TabView.Group</item>
+        <item name="actionBarTabStyle">@style/Vector.TabView.Group</item>
+
+        <!-- custom action bar -->
+        <item name="android:actionBarStyle">@style/Group.Styled.ActionBar</item>
+        <item name="actionBarStyle">@style/Group.Styled.ActionBar</item>
+    </style>
+
+    <style name="AppTheme.Dialog.Light" parent="Theme.AppCompat.Light.Dialog.Alert" />
+
+</resources>

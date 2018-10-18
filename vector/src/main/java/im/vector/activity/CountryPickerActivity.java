@@ -37,7 +37,7 @@ import im.vector.adapters.CountryAdapter;
 import im.vector.util.CountryPhoneData;
 import im.vector.util.PhoneNumberUtils;
 import im.vector.util.ThemeUtils;
-import kotlin.Pair;
+import kotlin.Triple;
 
 public class CountryPickerActivity extends VectorAppCompatActivity implements CountryAdapter.OnSelectCountryListener, SearchView.OnQueryTextListener {
 
@@ -73,8 +73,8 @@ public class CountryPickerActivity extends VectorAppCompatActivity implements Co
 
     @NotNull
     @Override
-    public Pair getOtherThemes() {
-        return new Pair(R.style.CountryPickerTheme_Dark, R.style.CountryPickerTheme_Black);
+    public Triple getOtherThemes() {
+        return new Triple(R.style.CountryPickerTheme_Dark, R.style.CountryPickerTheme_Black, R.style.CountryPickerTheme_Status);
     }
 
     @Override

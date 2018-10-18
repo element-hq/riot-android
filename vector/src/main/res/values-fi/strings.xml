@@ -380,7 +380,6 @@ Salatut viestit eivät näy sovelluksissa, jotka eivät tue salausta.</string> <
     <string name="ssl_unexpected_existing_expl">Sertifikaatti johon laitteesi luotti aikaisemmin on vaihtunut. Tämä on HYVIN EPÄTAVALLISTA. Suositellaan että ET hyväksy tätä uutta sertifikaattia.</string>
     <string name="ssl_expected_existing_expl">Sertifikaatti on vaihtunut luotetusta sertifikaatista uuteen. Palvelin on voinut uudistaa sertifikaattinsa. Ota yhteyttä palvelimen ylläpitäjään ja selvitä oikean sertifikaatin sormenjälki.</string>
     <string name="ssl_only_accept">Hyväksy sertifikaatti VAIN jos palvelimen ylläpitäjä on julkaissut sormenjäljen joka täsmää yllä olevan kanssa.</string>
-    <string name="ssl_fingerprint_example">00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00</string>
 
     <!-- Room Details -->
     <string name="room_details_title">Huoneen tiedot</string>
@@ -397,12 +396,6 @@ Salatut viestit eivät näy sovelluksissa, jotka eivät tue salausta.</string> <
     <string name="room_event_action_report_prompt_ignore_user">Haluatko piilottaa kaikki tämän käyttäjän viestit?</string>
     <string name="room_event_action_cancel_upload">Peru lähetys</string>
     <string name="room_event_action_cancel_download">Peru lataus</string>
-
-    <!-- Room display name -->
-    <string name="room_displayname_invite_from">Kutsu käyttäjältä %s</string> <!-- Grammar problem -->
-    <string name="room_displayname_room_invite">Huonekutsu</string>
-    <string name="room_displayname_two_members">%1$s ja %2$s</string>
-    <string name="room_displayname_no_title">Tyhjä huone</string>
 
     <!-- Search -->
     <string name="search_hint">Etsi</string>
@@ -655,7 +648,7 @@ Salatut viestit eivät näy sovelluksissa, jotka eivät tue salausta.</string> <
     <string name="encryption_export_room_keys">Vie huoneen avaimet</string>
     <string name="encryption_export_room_keys_summary">Säästä avaimet paikalliseen tiedostoon</string>
     <string name="encryption_export_export">Vie</string>
-    <string name="encryption_export_enter_passphrase">Anna salasana</string>
+    <string name="encryption_import_enter_passphrase">Anna salasana</string>
     <string name="encryption_export_confirm_passphrase">Vahvista salasana</string>
     <string name="encryption_export_saved_as">Huoneen salausavaimet tallennettiin tiedostoon \'%s\'</string>
 
@@ -739,7 +732,7 @@ Voit tehdä sen nyt tai myöhemmin sovelluksen asetuksissa.</string>
     <string name="black_them">Musta teema</string>
 
     <string name="notification_sync_in_progress">Synkronoidaan</string>
-    <string name="notification_listen_for_events">Seuraa tapahtumia</string>
+    <string name="notification_listening_for_events">Seuraa tapahtumia</string>
     <string name="notification_noisy_notifications">Korostetut ilmoitukset</string>
     <string name="notification_silent_notifications">Hiljaiset ilmoitukset</string>
 

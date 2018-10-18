@@ -15,6 +15,8 @@
  */
 package im.vector.activity
 
+import android.content.Context
+import android.content.Intent
 import im.vector.Matrix
 import im.vector.R
 import im.vector.fragments.VectorSettingsPreferencesFragment
@@ -74,6 +76,12 @@ class VectorSettingsActivity : MXCActionBarActivity() {
     }
 
     companion object {
+        @JvmStatic
+        fun getIntent(context: Context, userId: String) = Intent(context, VectorSettingsActivity::class.java)
+                .apply {
+                    putExtra(MXCActionBarActivity.EXTRA_MATRIX_ID, userId)
+                }
+
         private const val FRAGMENT_TAG = "VectorSettingsPreferencesFragment"
     }
 }

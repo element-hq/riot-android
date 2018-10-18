@@ -7,7 +7,7 @@
     <string name="black_them">Čierny vzhľad</string>
 
     <string name="notification_sync_in_progress">Synchronizácia</string>
-    <string name="notification_listen_for_events">Spracovanie udalostí</string>
+    <string name="notification_listening_for_events">Spracovanie udalostí</string>
 
     <string name="title_activity_home">Správy</string>
     <string name="title_activity_room">Miestnosť</string>
@@ -368,7 +368,6 @@ Ste si istí?</string>
     <string name="ssl_unexpected_existing_expl">Certifikát sa zmenil na taký, ktorý nie je viac dôverovaný vašim zariadením. Takáto zmena je veľmi nezvičajná. Navrhujeme, aby ste NEDÔVEROVALI tomuto novému certifikátu.</string>
     <string name="ssl_expected_existing_expl">Vami overený certifikát sa zmenil na taký, ktorý nie je viac dôverovaný vašim zariadením. Je pravdepodobné, že správca servera obnovil certifikát. Na účel ručného overenia si prosím vyžiadajte nový odtlačok.</string>
     <string name="ssl_only_accept">Dôverujte certifikátu len v prípade, že správca servera zverejnil odtlačok zhodný s odtlačkom zobrazeným vyššie.</string>
-    <string name="ssl_fingerprint_example">00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00</string>
 
     <string name="room_details_title">Podrobnosti o miestnosti</string>
     <string name="room_details_people">Ľudia</string>
@@ -384,11 +383,6 @@ Ste si istí?</string>
 Pozor! Vykonaním tejto akcie reštartujete aplikáciu a opätovné načítanie môže chvíľu trvať.</string>
     <string name="room_event_action_cancel_upload">Zrušiť nahrávanie</string>
     <string name="room_event_action_cancel_download">Zrušiť sťahovanie</string>
-
-    <string name="room_displayname_invite_from">Pozvanie od %s</string>
-    <string name="room_displayname_room_invite">Pozvanie do miestnosti</string>
-    <string name="room_displayname_two_members">%1$s a %2$s</string>
-    <string name="room_displayname_no_title">Prázdna miestnosť</string>
 
     <string name="search_hint">Hľadať</string>
     <string name="search_members_hint">Filtrovať členov v miestnosti</string>
@@ -650,7 +644,7 @@ Ak v miestnosti povolíte šifrovanie, šifrovanie nie je viac možné zakázať
     <string name="encryption_export_room_keys">Exportovať kľúče miestností</string>
     <string name="encryption_export_room_keys_summary">Exportovať kľúče miestností do lokálneho súboru</string>
     <string name="encryption_export_export">Exportovať</string>
-    <string name="encryption_export_enter_passphrase">Zadajte heslo</string>
+    <string name="encryption_import_enter_passphrase">Zadajte heslo</string>
     <string name="encryption_export_confirm_passphrase">Potvrďte heslo</string>
     <string name="encryption_export_saved_as">Šifrovacie kľúče miestností boli uložené do %s
 
@@ -861,13 +855,6 @@ Neznáme zariadenia:</string>
 	<item quantity="one">1 nová správa</item>
 	<item quantity="few">%d nové správy</item>
 	<item quantity="many">%d nových správ</item>
-	<item quantity="other"/>
-</plurals>
-
-    <plurals name="room_displayname_three_and_more_members">
-	<item quantity="one">%1$s a 1 ďalší</item>
-	<item quantity="few">%1$s a %d ďalší</item>
-	<item quantity="many">%1$s a %d ďalších</item>
 	<item quantity="other"/>
 </plurals>
 

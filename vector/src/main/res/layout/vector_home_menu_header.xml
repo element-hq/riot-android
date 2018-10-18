@@ -1,48 +1,49 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="@dimen/navigation_view_height"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:background="@color/vector_green_color"
+    android:background="?attr/primary_color"
     android:orientation="vertical">
 
     <ImageView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:adjustViewBounds="true"
         android:layout_centerInParent="true"
+        android:adjustViewBounds="true"
         android:scaleType="centerCrop"
-        android:src="@drawable/bubbles_bg_portrait"/>
+        android:src="@drawable/bubbles_bg_portrait" />
 
     <im.vector.view.VectorCircularImageView
         android:id="@+id/home_menu_main_avatar"
         android:layout_width="60dp"
         android:layout_height="60dp"
         android:layout_marginLeft="16dp"
-        android:layout_marginTop="@dimen/navigation_avatar_top_margin">
-    </im.vector.view.VectorCircularImageView>
+        android:layout_marginTop="@dimen/navigation_avatar_top_margin"
+        tools:src="@tools:sample/avatars" />
 
     <TextView
         android:id="@+id/home_menu_main_displayname"
-        android:layout_width="match_parent"
-        android:layout_height="20dp"
-        android:layout_below="@+id/home_menu_main_avatar"
-        android:textSize="16sp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/home_menu_main_matrix_id"
+        android:layout_marginBottom="2dp"
+        android:paddingLeft="16dp"
+        android:paddingRight="16dp"
         android:textColor="@android:color/white"
-        android:layout_marginTop="39dp"
-        android:layout_marginLeft="16dp"
-        android:layout_marginRight="20dp"
+        android:textSize="16sp"
         tools:text="A displayname here" />
 
     <TextView
         android:id="@+id/home_menu_main_matrix_id"
-        android:layout_width="match_parent"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:textSize="12sp"
-        android:textColor="@android:color/white"
-        android:layout_below="@+id/home_menu_main_displayname"
+        android:layout_alignParentBottom="true"
         android:layout_marginLeft="16dp"
-        android:layout_marginRight="20dp"
-        android:layout_marginTop="3dp"
+        android:layout_marginRight="16dp"
+        android:layout_marginBottom="12dp"
+        android:textColor="@android:color/white"
+        android:textSize="12sp"
         tools:text="A matrix id here" />
+
 </RelativeLayout>

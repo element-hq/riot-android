@@ -361,7 +361,6 @@ Ziur zaude?</string>
     <string name="ssl_unexpected_existing_expl">Ziurtagiria aldatu da eta ez da zure telefonoak onartzen zuena. Hau OSO ARRAROA da. Ziurtagiri berri hau EZ ONARTZEA aholkatzen da.</string>
     <string name="ssl_expected_existing_expl">Ziurtagiria aldatu da, onartutako batetik onartu gabeko batera. Agian Zerbitzariak ziurtagiria berriztu du. Jarri kontaktuan zerbitzariaren kudeatzailearekin hatz-marka eskatzeko.</string>
     <string name="ssl_only_accept">Ziurtagiria onartu soilik baldin eta zerbitzariaren kudeatzaileak goikoarekin bat datorren hatz-marka bat argitaratu badu.</string>
-    <string name="ssl_fingerprint_example">00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00</string>
 
     <string name="room_details_title">Gelaren xehetasunak</string>
     <string name="room_details_people">Jendea</string>
@@ -376,11 +375,6 @@ Ziur zaude?</string>
 Kontuan izan ekintza honek aplikazioa berrabiaraziko duela eta denbora bat beharko lukeela."</string>
     <string name="room_event_action_cancel_upload">Utzi igoera</string>
     <string name="room_event_action_cancel_download">Utzi deskarga</string>
-
-    <string name="room_displayname_invite_from">%s gelarako gonbidapena</string>
-    <string name="room_displayname_room_invite">Gela gonbidapena</string>
-    <string name="room_displayname_two_members">%1$s eta %2$s</string>
-    <string name="room_displayname_no_title">Gela hutsa</string>
 
     <string name="search_hint">Bilatu</string>
     <string name="search_members_hint">Iragazi gelako kideak</string>
@@ -620,7 +614,7 @@ Kontuan izan ekintza honek aplikazioa berrabiaraziko duela eta denbora bat behar
     <string name="encryption_export_e2e_room_keys">Esportatu gelako E2E gakoak</string>
     <string name="encryption_export_room_keys">Esportatu gelako gakoak</string>
     <string name="encryption_export_export">Esportatu</string>
-    <string name="encryption_export_enter_passphrase">Idatzi pasaesaldia</string>
+    <string name="encryption_import_enter_passphrase">Idatzi pasaesaldia</string>
     <string name="encryption_export_confirm_passphrase">Berretsi pasaesaldia</string>
     <string name="encryption_export_saved_as">Gelako E2E gakoak \'%s\' helbidean gorde dira
 
@@ -700,7 +694,7 @@ Zifratutako mezuak ez dira zifratzea oraindik ezarrita ez duten beste gailuetan 
     <string name="black_them">Itxura beltza</string>
 
     <string name="notification_sync_in_progress">Sinkronizatzen</string>
-    <string name="notification_listen_for_events">Entzun gertaerak</string>
+    <string name="notification_listening_for_events">Entzun gertaerak</string>
 
     <string name="login_mobile_device">Mugikorra</string>
 
@@ -854,11 +848,6 @@ Zifratutako mezuak ez dira zifratzea oraindik ezarrita ez duten beste gailuetan 
     <plurals name="room_new_messages_notification">
 	<item quantity="one">Mezu berri 1</item>
 	<item quantity="other">%d mezu berri</item>
-</plurals>
-
-    <plurals name="room_displayname_three_and_more_members">
-	<item quantity="one">%1$s eta beste bat</item>
-	<item quantity="other">%1$s eta beste %d</item>
 </plurals>
 
     <plurals name="directory_search_rooms">

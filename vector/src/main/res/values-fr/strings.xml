@@ -230,7 +230,6 @@ Cliquez sur exporter pour les sauvegarder avant de vous déconnecter.</string>
     <string name="ssl_do_not_trust">Ne pas faire confiance</string>
     <string name="ssl_logout_account">Se déconnecter</string>
     <string name="ssl_remain_offline">Ignorer</string>
-    <string name="ssl_fingerprint_example">00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00</string>
 
     <string name="room_details_title">Information sur le salon</string>
     <string name="room_details_people">Participants</string>
@@ -242,10 +241,6 @@ Cliquez sur exporter pour les sauvegarder avant de vous déconnecter.</string>
     <string name="room_event_action_report_prompt_reason">Motif du signalement de ce contenu</string>
     <string name="room_event_action_cancel_upload">Annuler l\'envoi</string>
     <string name="room_event_action_cancel_download">Annuler le téléchargement</string>
-
-    <string name="room_displayname_invite_from">Invitation de %s</string>
-    <string name="room_displayname_room_invite">Invitation au salon</string>
-    <string name="room_displayname_no_title">Salon vide</string>
 
     <string name="search_hint">Rechercher</string>
     <string name="search_members_hint">Filtrer les membres du salon</string>
@@ -414,7 +409,7 @@ Cliquez sur exporter pour les sauvegarder avant de vous déconnecter.</string>
     <string name="encryption_export_e2e_room_keys">Exporter les clés E2E des salons</string>
     <string name="encryption_export_room_keys">Exporter les clés des salons</string>
     <string name="encryption_export_export">Exporter</string>
-    <string name="encryption_export_enter_passphrase">Saisir la phrase de passe</string>
+    <string name="encryption_import_enter_passphrase">Saisir la phrase de passe</string>
     <string name="encryption_export_confirm_passphrase">Confirmer la phrase de passe</string>
     <string name="encryption_import_e2e_room_keys">Importer les clés E2E des salons</string>
     <string name="encryption_import_room_keys">Importer les clés des salons</string>
@@ -573,7 +568,6 @@ En êtes-vous sûr(e) ?</string>
     <string name="room_event_action_report_prompt_ignore_user">Voulez-vous cacher tous les messages de cet utilisateur ?
 
 Veuillez noter que cette action redémarrera l\'application et pourra prendre un certain temps.</string>
-    <string name="room_displayname_two_members">%1$s et %2$s</string>
     <string name="room_recents_join_room_prompt">Saisissez un identifiant ou un alias de salon</string>
 
     <string name="settings_turn_screen_on">Allumer l\'écran pendant 3 secondes</string>
@@ -705,7 +699,7 @@ Appareils inconnus :</string>
     <string name="black_them">Thème noir</string>
 
     <string name="notification_sync_in_progress">Synchronisation</string>
-    <string name="notification_listen_for_events">Écoute d\'évènements</string>
+    <string name="notification_listening_for_events">Écoute d\'évènements</string>
 
     <string name="login_mobile_device">Portable</string>
 
@@ -850,11 +844,6 @@ Appareils inconnus :</string>
     <plurals name="room_new_messages_notification">
 	<item quantity="one">Un nouveau message</item>
 	<item quantity="other">%d nouveaux messages</item>
-</plurals>
-
-    <plurals name="room_displayname_three_and_more_members">
-	<item quantity="one">%1$s et 1 autre</item>
-	<item quantity="other">%1$s et %d autres</item>
 </plurals>
 
     <string name="list_members">Liste les membres</string>

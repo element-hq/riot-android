@@ -23,10 +23,10 @@
             android:layout_height="wrap_content"
             android:layout_centerVertical="true"
             android:layout_marginLeft="18dp"
-            tools:text="A message here"
             android:textAppearance="?android:attr/textAppearanceSmall"
             android:textColor="?attr/riot_primary_text_color"
-            android:textStyle="bold" />
+            android:textStyle="bold"
+            tools:text="Today" />
     </RelativeLayout>
 
     <View

@@ -45,6 +45,7 @@ import im.vector.adapters.HomeRoomAdapter;
 import im.vector.util.HomeRoomsViewModel;
 import im.vector.util.PreferencesManager;
 import im.vector.util.RoomUtils;
+import im.vector.util.ThemeUtils;
 import im.vector.view.HomeSectionView;
 
 public class HomeFragment extends AbsHomeFragment implements HomeRoomAdapter.OnSelectRoomListener {
@@ -101,8 +102,8 @@ public class HomeFragment extends AbsHomeFragment implements HomeRoomAdapter.OnS
     @Override
     public void onActivityCreated(final Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        mPrimaryColor = ContextCompat.getColor(getActivity(), R.color.tab_home);
-        mSecondaryColor = ContextCompat.getColor(getActivity(), R.color.tab_home_secondary);
+        mPrimaryColor = ThemeUtils.INSTANCE.getColor(getActivity(), R.attr.tab_home);
+        mSecondaryColor = ThemeUtils.INSTANCE.getColor(getActivity(), R.attr.tab_home_secondary);
         initViews();
         // Eventually restore the pattern of adapter after orientation change
         for (HomeSectionView homeSectionView : mHomeSectionViews) {

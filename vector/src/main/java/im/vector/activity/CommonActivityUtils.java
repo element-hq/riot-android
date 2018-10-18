@@ -38,6 +38,7 @@ import android.preference.PreferenceManager;
 import android.support.annotation.NonNull;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AlertDialog;
 import android.text.TextUtils;
 import android.util.Pair;
@@ -593,7 +594,7 @@ public class CommonActivityUtils {
                     Intent intent = new Intent(context, EventStreamService.class);
                     intent.putExtra(EventStreamService.EXTRA_MATRIX_IDS, matrixIds.toArray(new String[matrixIds.size()]));
                     intent.putExtra(EventStreamService.EXTRA_STREAM_ACTION, EventStreamService.StreamAction.START.ordinal());
-                    context.startService(intent);
+                    ContextCompat.startForegroundService(context, intent);
                 }
             }
 
@@ -830,7 +831,7 @@ public class CommonActivityUtils {
                                 Room room = finalSession.getDataHandler().getRoom((String) params.get(VectorRoomActivity.EXTRA_ROOM_ID));
 
                                 if ((null != room) && room.isInvited()) {
-                                    String displayName = VectorUtils.getRoomDisplayName(fromActivity, finalSession, room);
+                                    String displayName = room.getRoomDisplayName(fromActivity);
 
                                     if (null != displayName) {
                                         intent.putExtra(VectorRoomActivity.EXTRA_DEFAULT_NAME, displayName);

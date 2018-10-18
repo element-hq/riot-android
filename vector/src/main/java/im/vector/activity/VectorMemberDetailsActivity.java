@@ -70,8 +70,9 @@ import im.vector.extensions.MatrixSdkExtensionsKt;
 import im.vector.fragments.VectorUnknownDevicesFragment;
 import im.vector.util.CallsManager;
 import im.vector.util.PermissionsToolsKt;
+import im.vector.util.SystemUtilsKt;
 import im.vector.util.VectorUtils;
-import kotlin.Pair;
+import kotlin.Triple;
 
 /**
  * VectorMemberDetailsActivity displays the member information and allows to perform some dedicated actions.
@@ -1126,8 +1127,8 @@ public class VectorMemberDetailsActivity extends MXCActionBarActivity implements
 
     @NotNull
     @Override
-    public Pair getOtherThemes() {
-        return new Pair(R.style.AppTheme_NoActionBar_Dark, R.style.AppTheme_NoActionBar_Black);
+    public Triple getOtherThemes() {
+        return new Triple(R.style.AppTheme_NoActionBar_Dark, R.style.AppTheme_NoActionBar_Black, R.style.AppTheme_NoActionBar_Status);
     }
 
     @Override
@@ -1215,7 +1216,7 @@ public class VectorMemberDetailsActivity extends MXCActionBarActivity implements
             mMemberNameTextView.setOnLongClickListener(new View.OnLongClickListener() {
                 @Override
                 public boolean onLongClick(View v) {
-                    VectorUtils.copyToClipboard(VectorMemberDetailsActivity.this, mMemberNameTextView.getText());
+                    SystemUtilsKt.copyToClipboard(VectorMemberDetailsActivity.this, mMemberNameTextView.getText());
                     return true;
                 }
             });

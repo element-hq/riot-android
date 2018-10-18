@@ -215,7 +215,7 @@
             android:excludeFromRecents="true"
             android:launchMode="singleTop"
             android:taskAffinity=""
-            android:theme="@style/Vector_Lock_Light" />
+            android:theme="@style/Theme.Vector.Lock.Light" />
         <activity
             android:name=".activity.JoinRoomActivity"
             android:clearTaskOnLaunch="true"
@@ -242,11 +242,11 @@
         <activity
             android:name=".activity.JitsiCallActivity"
             android:configChanges="orientation|screenSize"
-            android:theme="@style/AppTheme.NoActionBar.FullScreen" />
+            android:theme="@style/AppTheme.NoActionBar.FullScreen.Light" />
         <activity
             android:name=".activity.WidgetActivity"
             android:configChanges="orientation|screenSize"
-            android:theme="@style/AppTheme.NoActionBar.FullScreen" />
+            android:theme="@style/AppTheme.NoActionBar.FullScreen.Light" />
         <activity
             android:name=".activity.IntegrationManagerActivity"
             android:configChanges="orientation|screenSize"
@@ -260,7 +260,7 @@
             android:label="@string/media_picker_both_capture_title"
             android:launchMode="singleTop"
             android:parentActivityName=".activity.VectorRoomActivity"
-            android:theme="@style/AppTheme.NoActionBar.FullScreen"
+            android:theme="@style/AppTheme.NoActionBar.FullScreen.Light"
             android:windowSoftInputMode="stateHidden">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
@@ -464,6 +464,7 @@
 
         <receiver android:name=".receiver.VectorBootReceiver">
             <intent-filter>
+                <action android:name="android.intent.action.ACTION_BOOT_COMPLETED" />
                 <action android:name="android.intent.action.BOOT_COMPLETED" />
             </intent-filter>
         </receiver>

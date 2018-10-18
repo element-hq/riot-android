@@ -19,13 +19,11 @@ package im.vector.activity
 import android.app.Activity
 import android.content.Context
 import android.content.Intent
-import android.view.Menu
 import android.view.MenuItem
-import com.google.gson.Gson
 import im.vector.R
 import im.vector.activity.util.INTEGRATION_MANAGER_ACTIVITY_REQUEST_CODE
 import im.vector.types.JsonDict
-import im.vector.util.ThemeUtils
+import org.matrix.androidsdk.util.JsonUtils
 import org.matrix.androidsdk.util.Log
 import java.net.URLEncoder
 
@@ -42,7 +40,7 @@ class StickerPickerActivity : AbstractWidgetActivity() {
      * IMPLEMENT METHODS
      * ========================================================================================== */
 
-    override fun getOtherThemes() = Pair(R.style.AppTheme_NoActionBar_Dark, R.style.AppTheme_NoActionBar_Black)
+    override fun getOtherThemes() = Triple(R.style.AppTheme_NoActionBar_Dark, R.style.AppTheme_NoActionBar_Black, R.style.AppTheme_NoActionBar_Status)
 
     override fun getLayoutRes() = R.layout.activity_choose_sticker
 
@@ -141,7 +139,7 @@ class StickerPickerActivity : AbstractWidgetActivity() {
             return
         }
 
-        val json = Gson().toJson(content)
+        val json = JsonUtils.getBasicGson().toJson(content)
 
         // Send the response to be polite (since the Activity will be finished)
         sendSuccess(eventData)

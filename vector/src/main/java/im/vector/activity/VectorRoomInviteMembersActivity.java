@@ -286,6 +286,11 @@ public class VectorRoomInviteMembersActivity extends VectorBaseSearchActivity {
         mAdapter.setSearchedPattern(pattern, null, new VectorParticipantsAdapter.OnParticipantsSearchListener() {
             @Override
             public void onSearchEnd(final int count) {
+                if (mListView == null) {
+                    // Activity is dead
+                    return;
+                }
+
                 mListView.post(new Runnable() {
                     @Override
                     public void run() {
@@ -370,10 +375,10 @@ public class VectorRoomInviteMembersActivity extends VectorBaseSearchActivity {
                 }
 
                 msgPartB = getString(R.string.room_participants_invite_join_names_and,
-                                     displayNames.get(displayNames.size() - 2),
-                                     displayNames.get(displayNames.size() - 1));
+                        displayNames.get(displayNames.size() - 2),
+                        displayNames.get(displayNames.size() - 1));
                 message = getString(R.string.room_participants_invite_join_names_combined,
-                                    msgPartA, msgPartB);
+                        msgPartA, msgPartB);
             }
 
             builder.setMessage(getString(R.string.room_participants_invite_prompt_msg, message))

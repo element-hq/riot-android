@@ -38,7 +38,7 @@
     <string name="title_activity_historical">Historický</string>
     <string name="title_activity_group_details">Detail komunity</string>
 
-    <string name="notification_listen_for_events">Naslouchat událostem</string>
+    <string name="notification_listening_for_events">Naslouchat událostem</string>
     <string name="resend">Poslat znovu</string>
     <string name="redact">Redigovat</string>
     <string name="quote">Citovat</string>

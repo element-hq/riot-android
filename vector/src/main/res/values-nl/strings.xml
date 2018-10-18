@@ -368,7 +368,6 @@ Versleutelde berichten zullen nog niet zichtbaar zijn op programma\'s die geen v
     <string name="ssl_unexpected_existing_expl">Het certificaat is veranderd van één dat was vertrouwd bij je telefoon tot een ander Dit is HEEL ONGEBRUIKELIJK. Het is aangeraden om dit nieuwe certificaat NIET TE ACCEPTEREN.</string>
     <string name="ssl_expected_existing_expl">Het certificaat is veranderd van een vertrouwd certificaat naar een certificaat dat niet vertrouwd is. De server heeft misschien zijn certificaat vernieuwd. Contacteer de serverbeheerder voor het verwachte vingerafdruk.</string>
     <string name="ssl_only_accept">Accepteer ALLEEN het certificaat als de serverbeheerder een vingerafdruk heeft gepubliceerd dat overeenkomt met degene hierboven.</string>
-    <string name="ssl_fingerprint_example">00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00</string>
 
     <!-- Room Details -->
     <string name="room_details_title">Ruimte Details</string>
@@ -386,12 +385,6 @@ Versleutelde berichten zullen nog niet zichtbaar zijn op programma\'s die geen v
 Let op: deze actie zal de app opnieuw opstarten, en kan enige tijd kosten.</string>
     <string name="room_event_action_cancel_upload">Upload annuleren</string>
     <string name="room_event_action_cancel_download">Download annuleren</string>
-
-    <!-- Room display name -->
-    <string name="room_displayname_invite_from">Uitnodiging van %s</string>
-    <string name="room_displayname_room_invite">Ruimte uitnodiging</string>
-    <string name="room_displayname_two_members">%1$s en %2$s</string>
-    <string name="room_displayname_no_title">Lege ruimte</string>
 
     <!-- Search -->
     <string name="search_hint">Zoeken</string>
@@ -648,7 +641,7 @@ Versleutelde berichten zullen nog niet zichtbaar zijn op programma\'s die geen v
     <string name="encryption_export_room_keys">Exporteer ruimte sleutels</string>
     <string name="encryption_export_room_keys_summary">Exporteer de sleutels naar een lokaal bestand</string>
     <string name="encryption_export_export">Exporteer</string>
-    <string name="encryption_export_enter_passphrase">Enter wachtzin</string>
+    <string name="encryption_import_enter_passphrase">Enter wachtzin</string>
     <string name="encryption_export_confirm_passphrase">Bevestig wachtzin</string>
     <string name="encryption_export_saved_as">De E2E ruimte sleutels zijn in \'%s\' opgeslagen.
 
@@ -735,7 +728,7 @@ Je kan het nu, of later, doen vanuit de programma-instellingen.</string>
     <string name="black_them">Zwart Thema</string>
 
     <string name="notification_sync_in_progress">Aan het synchroniseren</string>
-    <string name="notification_listen_for_events">Luisteren voor evenementen</string>
+    <string name="notification_listening_for_events">Luisteren voor evenementen</string>
 
     <string name="login_mobile_device">Mobiel</string>
 
@@ -846,11 +839,6 @@ Je kan het nu, of later, doen vanuit de programma-instellingen.</string>
     <plurals name="room_new_messages_notification">
 	<item quantity="one">1 nieuw bericht</item>
 	<item quantity="other">%d nieuwe berichten</item>
-</plurals>
-
-    <plurals name="room_displayname_three_and_more_members">
-	<item quantity="one">%1$s en 1 andere</item>
-	<item quantity="other">%1$s en %d anderen</item>
 </plurals>
 
     <plurals name="directory_search_rooms">

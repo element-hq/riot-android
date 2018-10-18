@@ -16,8 +16,6 @@
 
 package im.vector.adapters;
 
-import android.content.ClipData;
-import android.content.ClipboardManager;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Typeface;
@@ -28,7 +26,6 @@ import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import org.matrix.androidsdk.MXSession;
 import org.matrix.androidsdk.rest.callback.ApiCallback;
@@ -41,6 +38,7 @@ import java.util.Map;
 
 import im.vector.R;
 import im.vector.activity.VectorGroupDetailsActivity;
+import im.vector.util.SystemUtilsKt;
 import im.vector.util.VectorUtils;
 
 /**
@@ -150,11 +148,7 @@ public class VectorGroupsListAdapter extends ArrayAdapter<String> {
         convertView.setOnLongClickListener(new View.OnLongClickListener() {
             @Override
             public boolean onLongClick(View v) {
-                ClipboardManager clipboard = (ClipboardManager) mContext.getSystemService(Context.CLIPBOARD_SERVICE);
-                ClipData clip = ClipData.newPlainText("", groupId);
-                clipboard.setPrimaryClip(clip);
-
-                Toast.makeText(mContext, R.string.copied_to_clipboard, Toast.LENGTH_SHORT).show();
+                SystemUtilsKt.copyToClipboard(mContext, groupId);
                 return true;
             }
         });
