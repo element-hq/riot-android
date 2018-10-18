@@ -22,7 +22,7 @@ Translations:
 Build:
  -
 
-Changes in Riot 0.8.18 (2018-XX-XX)
+Changes in Riot 0.8.18 (2018-10-18)
 ===================================================
 
 MatrixSdk:
