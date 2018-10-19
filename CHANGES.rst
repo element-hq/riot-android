@@ -11,7 +11,7 @@ Improvements:
  -
 
 Other changes:
- -
+ - F-Droid version: restart event stream on application upgrade (#2105)
 
 Bugfix:
  -
