@@ -44,23 +44,29 @@ class VectorReadReceiptsAdapter(private val mContext: Context,
     private val mLayoutInflater: LayoutInflater = LayoutInflater.from(mContext)
 
     override fun getView(position: Int, convertView: View?, parent: ViewGroup): View {
-        val view = convertView ?: mLayoutInflater.inflate(mLayoutResourceId, parent, false)
+        val view: View
+        val holder: ViewHolder
+
+        if (convertView != null) {
+            view = convertView
+            holder = convertView.tag as ViewHolder
+        } else {
+            view = mLayoutInflater.inflate(mLayoutResourceId, parent, false)
+            holder = ViewHolder(view)
+            view.tag = holder
+        }
 
         val receipt = getItem(position)
-
-        val userNameTextView = view.findViewById<TextView>(R.id.accountAdapter_name)
-        val imageView = view.findViewById<ImageView>(R.id.avatar_img_vector)
-        val tsTextView = view.findViewById<TextView>(R.id.read_receipt_ts)
 
         val member = mRoom.getMember(receipt.userId)
 
         // if the room member is not known, display his user id.
         if (null == member) {
-            userNameTextView.text = receipt.userId
-            VectorUtils.loadUserAvatar(mContext, mSession, imageView, null, receipt.userId, receipt.userId)
+            holder.userNameTextView.text = receipt.userId
+            VectorUtils.loadUserAvatar(mContext, mSession, holder.imageView, null, receipt.userId, receipt.userId)
         } else {
-            userNameTextView.text = member.name
-            VectorUtils.loadRoomMemberAvatar(mContext, mSession, imageView, member)
+            holder.userNameTextView.text = member.name
+            VectorUtils.loadRoomMemberAvatar(mContext, mSession, holder.imageView, member)
         }
 
         val ts = AdapterUtils.tsToString(mContext, receipt.originServerTs, false)
@@ -68,14 +74,14 @@ class VectorReadReceiptsAdapter(private val mContext: Context,
         val body = SpannableStringBuilder(mContext.getString(im.vector.R.string.read_receipt) + " : " + ts)
         body.setSpan(android.text.style.StyleSpan(android.graphics.Typeface.BOLD),
                 0, mContext.getString(im.vector.R.string.read_receipt).length, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
-        tsTextView.text = body
+        holder.tsTextView.text = body
 
-        userNameTextView.setOnLongClickListener {
-            copyToClipboard(mContext, userNameTextView.text)
+        holder.userNameTextView.setOnLongClickListener {
+            copyToClipboard(mContext, holder.userNameTextView.text)
             true
         }
 
-        tsTextView.setOnLongClickListener {
+        holder.tsTextView.setOnLongClickListener {
             copyToClipboard(mContext, ts)
             true
         }
@@ -91,5 +97,11 @@ class VectorReadReceiptsAdapter(private val mContext: Context,
         }
 
         return view
+    }
+
+    private class ViewHolder(view: View) {
+        val userNameTextView: TextView = view.findViewById(R.id.accountAdapter_name)
+        val imageView: ImageView = view.findViewById(R.id.avatar_img_vector)
+        val tsTextView: TextView = view.findViewById(R.id.read_receipt_ts)
     }
 }
