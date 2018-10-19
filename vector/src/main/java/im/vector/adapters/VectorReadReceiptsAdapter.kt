@@ -17,14 +17,18 @@
 package im.vector.adapters
 
 import android.content.Context
+import android.graphics.Typeface
 import android.text.Spannable
 import android.text.SpannableStringBuilder
+import android.text.style.StyleSpan
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ArrayAdapter
 import android.widget.ImageView
 import android.widget.TextView
+import butterknife.BindView
+import butterknife.ButterKnife
 import im.vector.R
 import im.vector.util.VectorUtils
 import im.vector.util.copyToClipboard
@@ -76,7 +80,7 @@ class VectorReadReceiptsAdapter(private val mContext: Context,
         val ts = AdapterUtils.tsToString(mContext, receipt.originServerTs, false)
 
         val body = SpannableStringBuilder(mContext.getString(R.string.read_receipt) + " : " + ts)
-        body.setSpan(android.text.style.StyleSpan(android.graphics.Typeface.BOLD),
+        body.setSpan(StyleSpan(Typeface.BOLD),
                 0, mContext.getString(R.string.read_receipt).length, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
         holder.tsTextView.text = body
 
@@ -99,9 +103,18 @@ class VectorReadReceiptsAdapter(private val mContext: Context,
         return view
     }
 
-    private class ViewHolder(view: View) {
-        val userNameTextView: TextView = view.findViewById(R.id.accountAdapter_name)
-        val imageView: ImageView = view.findViewById(R.id.avatar_img_vector)
-        val tsTextView: TextView = view.findViewById(R.id.read_receipt_ts)
+    class ViewHolder(view: View) {
+        @BindView(R.id.accountAdapter_name)
+        lateinit var userNameTextView: TextView
+
+        @BindView(R.id.avatar_img_vector)
+        lateinit var imageView: ImageView
+
+        @BindView(R.id.read_receipt_ts)
+        lateinit var tsTextView: TextView
+
+        init {
+            ButterKnife.bind(view)
+        }
     }
 }
