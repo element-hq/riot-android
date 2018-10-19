@@ -3,9 +3,9 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/internal_container"
-    android:background="?attr/riot_primary_background_color"
     android:layout_width="match_parent"
-    android:layout_height="72dp">
+    android:layout_height="72dp"
+    android:background="?attr/riot_primary_background_color">
 
     <!-- Avatar -->
     <RelativeLayout
@@ -15,17 +15,17 @@
         android:layout_centerVertical="true"
         android:layout_marginLeft="8dp">
 
-        <include layout="@layout/round_avatar_vector"/>
+        <include layout="@layout/round_avatar_vector" />
     </RelativeLayout>
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_centerVertical="true"
-        android:layout_toRightOf="@+id/layout_avatar"
-        android:layout_marginLeft="16dp"
         android:layout_alignParentRight="true"
+        android:layout_centerVertical="true"
+        android:layout_marginLeft="16dp"
         android:layout_marginRight="8dp"
+        android:layout_toRightOf="@+id/layout_avatar"
         android:orientation="vertical">
 
         <!-- keep singleLine="true" because maxLines="1" truncation is not the expected one.-->
@@ -33,10 +33,10 @@
             android:id="@+id/accountAdapter_name"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:singleLine="true"
-            android:textSize="16sp"
             android:fontFamily="sans-serif-regular"
+            android:singleLine="true"
             android:textColor="?attr/riot_primary_text_color"
+            android:textSize="16sp"
             tools:text="Some Person's Name" />
 
         <!-- keep singleLine="true" because maxLines="1" truncation is not the expected one.-->
@@ -44,11 +44,11 @@
             android:id="@+id/read_receipt_ts"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:singleLine="true"
-            android:textSize="14sp"
             android:layout_marginTop="3dp"
             android:layout_marginRight="26dp"
+            android:singleLine="true"
             android:textColor="?attr/default_text_light_color"
+            android:textSize="14sp"
             tools:text="A date here" />
     </LinearLayout>
 
@@ -57,6 +57,6 @@
         android:layout_width="match_parent"
         android:layout_height="1dp"
         android:layout_alignParentBottom="true"
-        android:background="?attr/list_divider_color"/>
+        android:background="?attr/list_divider_color" />
 
 </RelativeLayout>
