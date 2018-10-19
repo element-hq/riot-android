@@ -24,6 +24,16 @@
         <item name="sending_message_text_color">#b3e8d2</item>
         <item name="unread_marker_line_color">#AECDF9</item>
 
+        <!-- tab bar colors -->
+        <item name="tab_bar_background_color">?attr/primary_color</item>
+        <item name="tab_bar_inverted_background_color">#FFF2F2F2</item>
+        <item name="tab_bar_selected_background_color">
+            @color/tab_bar_selected_background_color_status
+        </item>
+        <item name="tab_bar_unselected_background_color">
+            @color/tab_bar_unselected_background_color_status
+        </item>
+
         <!--dedicated drawables -->
         <item name="avatar_mask">@drawable/avatar_mask_status</item>
         <item name="avatar_mask_room_header">@drawable/avatar_mask_room_header_status</item>
@@ -32,10 +42,10 @@
         <item name="shadow_bottom">@drawable/shadow_bottom_light</item>
         <item name="shadow_top">@drawable/shadow_top_light</item>
         <item name="vector_tabbar_selected_background">
-            @drawable/vector_tabbar_selected_background_light
+            @drawable/vector_tabbar_selected_background_status
         </item>
         <item name="vector_tabbar_unselected_background">
-            @drawable/vector_tabbar_unselected_background_light
+            @drawable/vector_tabbar_unselected_background_status
         </item>
 
         <item name="pill_background_user_id">@drawable/pill_background_user_id_status</item>
@@ -82,8 +92,8 @@
         <item name="android:actionBarDivider">@null</item>
 
         <!-- tabbar background -->
-        <item name="android:actionBarTabStyle">@style/Vector.TabView.Light</item>
-        <item name="actionBarTabStyle">@style/Vector.TabView.Light</item>
+        <item name="android:actionBarTabStyle">@style/Vector.TabView.Status</item>
+        <item name="actionBarTabStyle">@style/Vector.TabView.Status</item>
 
         <!-- tabbar text color -->
         <item name="android:actionBarTabTextStyle">@style/Vector.TabText</item>
