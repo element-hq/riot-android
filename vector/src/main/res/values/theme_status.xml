@@ -130,6 +130,11 @@
 
     <style name="Theme.Vector.Lock.Status" parent="Theme.Vector.Lock.Light" />
 
+    <style name="Vector.TabView.Status" parent="Widget.AppCompat.ActionBar.TabView">
+        <item name="android:background">@drawable/vector_tabbar_background_status</item>
+        <item name="background">@drawable/vector_tabbar_background_status</item>
+    </style>
+
     <style name="AppTheme.NoActionBar.Swipe.Status" parent="AppTheme.NoActionBar.Status">
         <item name="android:windowIsTranslucent">true</item>
         <item name="android:windowBackground">@android:color/transparent</item>
