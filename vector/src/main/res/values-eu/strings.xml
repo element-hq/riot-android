@@ -1046,4 +1046,13 @@ Kontuan izan ekintza honek aplikazioa berrabiaraziko duela eta denbora bat behar
 
     <string name="unknown_error">Errore bat gertatu da</string>
 
+<string name="status_theme">Status.im itxura</string>
+
+    <string name="room_sliding_menu_version_x">%s bertsioa</string>
+    <string name="encryption_export_notice">Sortu esportatutako gakoak zifratzeko pasaesaldi bat. Pasaesaldi hori gakoak inportatzeko sartu beharko duzu.</string>
+    <string name="encryption_export_create_passphrase">Sortu pasaesaldia</string>
+    <string name="encryption_export_passphrase_dont_match">Pasaesaldiak berdinak izan behar dira</string>
+    <string name="merged_events_expand">hedatu</string>
+    <string name="merged_events_collapse">tolestu</string>
+
 </resources>
