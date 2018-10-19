@@ -18,11 +18,12 @@ package im.vector.fragments
 
 import android.app.Dialog
 import android.os.Bundle
+import android.support.v7.widget.LinearLayoutManager
+import android.support.v7.widget.RecyclerView
 import android.text.TextUtils
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.ListView
 import im.vector.Matrix
 import im.vector.R
 import im.vector.adapters.VectorReadReceiptsAdapter
@@ -59,8 +60,11 @@ class VectorReadReceiptsDialogFragment : VectorBaseDialogFragment<VectorReadRece
 
         val room = mxSession.dataHandler.getRoom(roomId)
 
-        mAdapter = VectorReadReceiptsAdapter(context!!, mxSession, room, this)
-        mAdapter.addAll(ArrayList<ReceiptData>(mxSession.dataHandler.store!!.getEventReceipts(roomId, eventId, true, true)))
+        mAdapter = VectorReadReceiptsAdapter(context!!,
+                mxSession,
+                room,
+                ArrayList(mxSession.dataHandler.store!!.getEventReceipts(roomId, eventId, true, true)),
+                this)
 
         // Ensure all the members are loaded (ignore error)
         room.getMembersAsync(object : SimpleApiCallback<List<RoomMember>>() {
@@ -80,8 +84,9 @@ class VectorReadReceiptsDialogFragment : VectorBaseDialogFragment<VectorReadRece
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        return (inflater.inflate(R.layout.fragment_dialog_member_list, container, false) as ListView)
+        return (inflater.inflate(R.layout.fragment_dialog_member_list, container, false) as RecyclerView)
                 .apply {
+                    layoutManager = LinearLayoutManager(context)
                     adapter = mAdapter
                 }
     }

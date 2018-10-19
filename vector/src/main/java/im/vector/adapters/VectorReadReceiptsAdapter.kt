@@ -18,13 +18,13 @@ package im.vector.adapters
 
 import android.content.Context
 import android.graphics.Typeface
+import android.support.v7.widget.RecyclerView
 import android.text.Spannable
 import android.text.SpannableStringBuilder
 import android.text.style.StyleSpan
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.ArrayAdapter
 import android.widget.ImageView
 import android.widget.TextView
 import butterknife.BindView
@@ -42,8 +42,9 @@ import org.matrix.androidsdk.rest.model.ReceiptData
 class VectorReadReceiptsAdapter(private val mContext: Context,
                                 private val mSession: MXSession,
                                 private val mRoom: Room,
+                                private val list: ArrayList<ReceiptData>,
                                 private val listener: VectorReadReceiptsAdapterListener) :
-        ArrayAdapter<ReceiptData>(mContext, 0) {
+        RecyclerView.Adapter<VectorReadReceiptsAdapter.ReadReceiptViewHolder>() {
 
     interface VectorReadReceiptsAdapterListener {
         fun onMemberClicked(userId: String)
@@ -51,20 +52,17 @@ class VectorReadReceiptsAdapter(private val mContext: Context,
 
     private val mLayoutInflater = LayoutInflater.from(mContext)
 
-    override fun getView(position: Int, convertView: View?, parent: ViewGroup): View {
-        val view: View
-        val holder: ViewHolder
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ReadReceiptViewHolder {
+        var view = mLayoutInflater.inflate(R.layout.adapter_item_read_receipt, parent, false)
+        return ReadReceiptViewHolder(view)
+    }
 
-        if (convertView != null) {
-            view = convertView
-            holder = convertView.tag as ViewHolder
-        } else {
-            view = mLayoutInflater.inflate(R.layout.adapter_item_read_receipt, parent, false)
-            holder = ViewHolder(view)
-            view.tag = holder
-        }
+    override fun getItemCount(): Int {
+        return list.size
+    }
 
-        val receipt = getItem(position)
+    override fun onBindViewHolder(holder: ReadReceiptViewHolder, position: Int) {
+        val receipt = list[position]
 
         val member = mRoom.getMember(receipt.userId)
 
@@ -94,16 +92,14 @@ class VectorReadReceiptsAdapter(private val mContext: Context,
             true
         }
 
-        view.setOnClickListener {
+        holder.view.setOnClickListener {
             if (null != member) {
                 listener.onMemberClicked(member.userId)
             }
         }
-
-        return view
     }
 
-    class ViewHolder(view: View) {
+    class ReadReceiptViewHolder(val view: View) : RecyclerView.ViewHolder(view) {
         @BindView(R.id.accountAdapter_name)
         lateinit var userNameTextView: TextView
 
@@ -114,7 +110,7 @@ class VectorReadReceiptsAdapter(private val mContext: Context,
         lateinit var tsTextView: TextView
 
         init {
-            ButterKnife.bind(view)
+            ButterKnife.bind(this, view)
         }
     }
 }
