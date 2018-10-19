@@ -17,9 +17,7 @@
 package im.vector.fragments
 
 import android.app.Dialog
-import android.content.Context
 import android.os.Bundle
-import android.support.v4.app.DialogFragment
 import android.text.TextUtils
 import android.view.LayoutInflater
 import android.view.View
@@ -28,6 +26,7 @@ import android.widget.ListView
 import im.vector.Matrix
 import im.vector.R
 import im.vector.adapters.VectorReadReceiptsAdapter
+import im.vector.fragments.base.VectorBaseDialogFragment
 import org.matrix.androidsdk.rest.callback.SimpleApiCallback
 import org.matrix.androidsdk.rest.model.ReceiptData
 import org.matrix.androidsdk.rest.model.RoomMember
@@ -37,26 +36,10 @@ import java.util.*
 /**
  * A dialog fragment showing the read receipts for an event
  */
-class VectorReadReceiptsDialogFragment : DialogFragment(), VectorReadReceiptsAdapter.VectorReadReceiptsAdapterListener {
+class VectorReadReceiptsDialogFragment : VectorBaseDialogFragment<VectorReadReceiptsDialogFragment.VectorReadReceiptsDialogFragmentListener>(), VectorReadReceiptsAdapter.VectorReadReceiptsAdapterListener {
     private lateinit var mAdapter: VectorReadReceiptsAdapter
 
-    private var listener: VectorReadReceiptsDialogFragmentListener? = null
-
     interface VectorReadReceiptsDialogFragmentListener : VectorReadReceiptsAdapter.VectorReadReceiptsAdapterListener
-
-    override fun onAttach(context: Context?) {
-        super.onAttach(context)
-
-        if (context is VectorReadReceiptsDialogFragmentListener) {
-            listener = context
-        }
-    }
-
-    override fun onDetach() {
-        super.onDetach()
-
-        listener = null
-    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
