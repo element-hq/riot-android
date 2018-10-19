@@ -17,7 +17,6 @@
 package im.vector.adapters
 
 import android.content.Context
-import android.content.Intent
 import android.text.Spannable
 import android.text.SpannableStringBuilder
 import android.view.LayoutInflater
@@ -27,7 +26,6 @@ import android.widget.ArrayAdapter
 import android.widget.ImageView
 import android.widget.TextView
 import im.vector.R
-import im.vector.activity.VectorMemberDetailsActivity
 import im.vector.util.VectorUtils
 import im.vector.util.copyToClipboard
 import org.matrix.androidsdk.MXSession
@@ -38,10 +36,16 @@ import org.matrix.androidsdk.rest.model.ReceiptData
  * An adapter which can display read receipts
  */
 class VectorReadReceiptsAdapter(private val mContext: Context,
-                                private val mLayoutResourceId: Int,
                                 private val mSession: MXSession,
-                                private val mRoom: Room) : ArrayAdapter<ReceiptData>(mContext, mLayoutResourceId) {
-    private val mLayoutInflater: LayoutInflater = LayoutInflater.from(mContext)
+                                private val mRoom: Room,
+                                private val listener: VectorReadReceiptsAdapterListener) :
+        ArrayAdapter<ReceiptData>(mContext, 0) {
+
+    interface VectorReadReceiptsAdapterListener {
+        fun onMemberClicked(userId: String)
+    }
+
+    private val mLayoutInflater = LayoutInflater.from(mContext)
 
     override fun getView(position: Int, convertView: View?, parent: ViewGroup): View {
         val view: View
@@ -51,7 +55,7 @@ class VectorReadReceiptsAdapter(private val mContext: Context,
             view = convertView
             holder = convertView.tag as ViewHolder
         } else {
-            view = mLayoutInflater.inflate(mLayoutResourceId, parent, false)
+            view = mLayoutInflater.inflate(R.layout.adapter_item_read_receipt, parent, false)
             holder = ViewHolder(view)
             view.tag = holder
         }
@@ -71,9 +75,9 @@ class VectorReadReceiptsAdapter(private val mContext: Context,
 
         val ts = AdapterUtils.tsToString(mContext, receipt.originServerTs, false)
 
-        val body = SpannableStringBuilder(mContext.getString(im.vector.R.string.read_receipt) + " : " + ts)
+        val body = SpannableStringBuilder(mContext.getString(R.string.read_receipt) + " : " + ts)
         body.setSpan(android.text.style.StyleSpan(android.graphics.Typeface.BOLD),
-                0, mContext.getString(im.vector.R.string.read_receipt).length, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
+                0, mContext.getString(R.string.read_receipt).length, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
         holder.tsTextView.text = body
 
         holder.userNameTextView.setOnLongClickListener {
@@ -88,11 +92,7 @@ class VectorReadReceiptsAdapter(private val mContext: Context,
 
         view.setOnClickListener {
             if (null != member) {
-                val startRoomInfoIntent = Intent(mContext, VectorMemberDetailsActivity::class.java)
-                startRoomInfoIntent.putExtra(VectorMemberDetailsActivity.EXTRA_MEMBER_ID, member.userId)
-                startRoomInfoIntent.putExtra(VectorMemberDetailsActivity.EXTRA_ROOM_ID, mRoom.roomId)
-                startRoomInfoIntent.putExtra(VectorMemberDetailsActivity.EXTRA_MATRIX_ID, mSession.credentials.userId)
-                mContext.startActivity(startRoomInfoIntent)
+                listener.onMemberClicked(member.userId)
             }
         }
 

@@ -17,6 +17,7 @@
 package im.vector.fragments
 
 import android.app.Dialog
+import android.content.Context
 import android.os.Bundle
 import android.support.v4.app.DialogFragment
 import android.text.TextUtils
@@ -36,9 +37,26 @@ import java.util.*
 /**
  * A dialog fragment showing the read receipts for an event
  */
-class VectorReadReceiptsDialogFragment : DialogFragment() {
-
+class VectorReadReceiptsDialogFragment : DialogFragment(), VectorReadReceiptsAdapter.VectorReadReceiptsAdapterListener {
     private lateinit var mAdapter: VectorReadReceiptsAdapter
+
+    private var listener: VectorReadReceiptsDialogFragmentListener? = null
+
+    interface VectorReadReceiptsDialogFragmentListener : VectorReadReceiptsAdapter.VectorReadReceiptsAdapterListener
+
+    override fun onAttach(context: Context?) {
+        super.onAttach(context)
+
+        if (context is VectorReadReceiptsDialogFragmentListener) {
+            listener = context
+        }
+    }
+
+    override fun onDetach() {
+        super.onDetach()
+
+        listener = null
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -57,7 +75,7 @@ class VectorReadReceiptsDialogFragment : DialogFragment() {
 
         val room = mxSession.dataHandler.getRoom(roomId)
 
-        mAdapter = VectorReadReceiptsAdapter(context!!, R.layout.adapter_item_read_receipt, mxSession, room)
+        mAdapter = VectorReadReceiptsAdapter(context!!, mxSession, room, this)
         mAdapter.addAll(ArrayList<ReceiptData>(mxSession.dataHandler.store!!.getEventReceipts(roomId, eventId, true, true)))
 
         // Ensure all the members are loaded (ignore error)
@@ -78,9 +96,14 @@ class VectorReadReceiptsDialogFragment : DialogFragment() {
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        return (inflater.inflate(R.layout.fragment_dialog_member_list, container, false) as ListView).apply {
-            adapter = mAdapter
-        }
+        return (inflater.inflate(R.layout.fragment_dialog_member_list, container, false) as ListView)
+                .apply {
+                    adapter = mAdapter
+                }
+    }
+
+    override fun onMemberClicked(userId: String) {
+        listener?.onMemberClicked(userId)
     }
 
     companion object {

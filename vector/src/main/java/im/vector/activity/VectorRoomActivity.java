@@ -112,6 +112,7 @@ import im.vector.extensions.MatrixSdkExtensionsKt;
 import im.vector.features.hhs.LimitResourceState;
 import im.vector.features.hhs.ResourceLimitEventListener;
 import im.vector.fragments.VectorMessageListFragment;
+import im.vector.fragments.VectorReadReceiptsDialogFragment;
 import im.vector.fragments.VectorUnknownDevicesFragment;
 import im.vector.listeners.IMessagesAdapterActionsListener;
 import im.vector.notifications.NotificationUtils;
@@ -144,7 +145,8 @@ public class VectorRoomActivity extends MXCActionBarActivity implements
         MatrixMessageListFragment.IRoomPreviewDataListener,
         MatrixMessageListFragment.IEventSendingListener,
         MatrixMessageListFragment.IOnScrollListener,
-        VectorMessageListFragment.VectorMessageListFragmentListener {
+        VectorMessageListFragment.VectorMessageListFragmentListener,
+        VectorReadReceiptsDialogFragment.VectorReadReceiptsDialogFragmentListener {
 
     // the session
     public static final String EXTRA_MATRIX_ID = MXCActionBarActivity.EXTRA_MATRIX_ID;
@@ -3916,6 +3918,22 @@ public class VectorRoomActivity extends MXCActionBarActivity implements
                         .setPositiveButton(R.string.ok, null)
                         .show();
             }
+        }
+    }
+
+
+    /* ==========================================================================================
+     * Interface VectorReadReceiptsDialogFragmentListener
+     * ========================================================================================== */
+
+    @Override
+    public void onMemberClicked(@NotNull String userId) {
+        if (mRoom != null) {
+            Intent vectorMemberDetailIntent = new Intent(this, VectorMemberDetailsActivity.class);
+            vectorMemberDetailIntent.putExtra(VectorMemberDetailsActivity.EXTRA_ROOM_ID, mRoom.getRoomId());
+            vectorMemberDetailIntent.putExtra(VectorMemberDetailsActivity.EXTRA_MEMBER_ID, userId);
+            vectorMemberDetailIntent.putExtra(VectorMemberDetailsActivity.EXTRA_MATRIX_ID, mSession.getCredentials().userId);
+            startActivityForResult(vectorMemberDetailIntent, VectorRoomActivity.GET_MENTION_REQUEST_CODE);
         }
     }
 
