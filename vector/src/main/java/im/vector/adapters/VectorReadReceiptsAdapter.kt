@@ -63,33 +63,57 @@ class VectorReadReceiptsAdapter(private val mContext: Context,
 
     override fun onBindViewHolder(holder: ReadReceiptViewHolder, position: Int) {
         val receipt = list[position]
-
         val member = mRoom.getMember(receipt.userId)
 
-        // if the room member is not known, display his user id.
-        if (null == member) {
-            holder.userNameTextView.text = receipt.userId
+        // Avatar
+        if (member == null) {
             VectorUtils.loadUserAvatar(mContext, mSession, holder.imageView, null, receipt.userId, receipt.userId)
         } else {
-            holder.userNameTextView.text = member.name
             VectorUtils.loadRoomMemberAvatar(mContext, mSession, holder.imageView, member)
         }
 
-        val ts = AdapterUtils.tsToString(mContext, receipt.originServerTs, false)
+        // User name
+        holder.userNameTextView.let {
+            // if the room member is not known, display his user id.
+            if (member == null) {
+                it.text = receipt.userId
+            } else {
+                it.text = member.name
+            }
 
-        val body = SpannableStringBuilder(mContext.getString(R.string.read_receipt) + " : " + ts)
-        body.setSpan(StyleSpan(Typeface.BOLD),
-                0, mContext.getString(R.string.read_receipt).length, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
-        holder.tsTextView.text = body
+            it.setOnLongClickListener { v ->
+                copyToClipboard(mContext, it.text)
+                true
+            }
 
-        holder.userNameTextView.setOnLongClickListener {
-            copyToClipboard(mContext, holder.userNameTextView.text)
-            true
+            // Also add on click listener, else it is not handled (it should...)
+            it.setOnClickListener { _ ->
+                if (null != member) {
+                    listener.onMemberClicked(member.userId)
+                }
+            }
         }
 
-        holder.tsTextView.setOnLongClickListener {
-            copyToClipboard(mContext, ts)
-            true
+        // Timestamp
+        holder.tsTextView.let {
+            val ts = AdapterUtils.tsToString(mContext, receipt.originServerTs, false)
+
+            val body = SpannableStringBuilder(mContext.getString(R.string.read_receipt) + " : " + ts)
+            body.setSpan(StyleSpan(Typeface.BOLD),
+                    0, mContext.getString(R.string.read_receipt).length, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
+            it.text = body
+
+            it.setOnLongClickListener { _ ->
+                copyToClipboard(mContext, ts)
+                true
+            }
+
+            // Also add on click listener, else it is not handled (it should...)
+            it.setOnClickListener { _ ->
+                if (null != member) {
+                    listener.onMemberClicked(member.userId)
+                }
+            }
         }
 
         holder.view.setOnClickListener {
