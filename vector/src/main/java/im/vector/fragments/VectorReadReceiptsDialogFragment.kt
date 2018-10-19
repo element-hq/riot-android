@@ -26,6 +26,7 @@ import android.widget.ListView
 import im.vector.Matrix
 import im.vector.R
 import im.vector.adapters.VectorReadReceiptsAdapter
+import im.vector.extensions.withArgs
 import im.vector.fragments.base.VectorBaseDialogFragment
 import org.matrix.androidsdk.rest.callback.SimpleApiCallback
 import org.matrix.androidsdk.rest.model.ReceiptData
@@ -97,12 +98,10 @@ class VectorReadReceiptsDialogFragment : VectorBaseDialogFragment<VectorReadRece
         private const val ARG_SESSION_ID = "VectorReadReceiptsDialogFragment.ARG_SESSION_ID"
 
         fun newInstance(userId: String, roomId: String, eventId: String): VectorReadReceiptsDialogFragment {
-            return VectorReadReceiptsDialogFragment().apply {
-                arguments = Bundle().apply {
-                    putString(ARG_SESSION_ID, userId)
-                    putString(ARG_ROOM_ID, roomId)
-                    putString(ARG_EVENT_ID, eventId)
-                }
+            return VectorReadReceiptsDialogFragment().withArgs {
+                putString(ARG_SESSION_ID, userId)
+                putString(ARG_ROOM_ID, roomId)
+                putString(ARG_EVENT_ID, eventId)
             }
         }
     }
