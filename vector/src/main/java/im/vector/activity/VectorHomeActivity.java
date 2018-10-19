@@ -1600,7 +1600,7 @@ public class VectorHomeActivity extends VectorAppCompatActivity implements Searc
         Room room = session.getDataHandler().getRoom(roomId);
         if ((null != room) && (null != room.getState())) {
             roomAlias = room.getState().getCanonicalAlias();
-            roomName = VectorUtils.getRoomDisplayName(this, mSession, room);
+            roomName = room.getRoomDisplayName(this);
         }
 
         final RoomPreviewData roomPreviewData = new RoomPreviewData(mSession, roomId, null, roomAlias, null);

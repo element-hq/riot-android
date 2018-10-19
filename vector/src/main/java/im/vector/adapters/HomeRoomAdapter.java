@@ -216,7 +216,7 @@ public class HomeRoomAdapter extends AbsFilterableAdapter<RoomViewHolder> {
      */
     private void filterRooms(CharSequence constraint) {
         mFilteredRooms.clear();
-        mFilteredRooms.addAll(RoomUtils.getFilteredRooms(mContext, mSession, mRooms, constraint));
+        mFilteredRooms.addAll(RoomUtils.getFilteredRooms(mContext, mRooms, constraint));
     }
 
     /*

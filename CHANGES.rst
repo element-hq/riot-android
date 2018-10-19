@@ -1,8 +1,32 @@
-Changes in Riot 0.8.18 (2018-XX-XX)
+Changes in Riot 0.8.19 (2018-XX-XX)
 ===================================================
 
 MatrixSdk:
  - Upgrade to version 0.X.Y.
+
+Features:
+ -
+
+Improvements:
+ -
+
+Other changes:
+ - F-Droid version: restart event stream on application upgrade (#2105)
+
+Bugfix:
+ -
+
+Translations:
+ -
+
+Build:
+ -
+
+Changes in Riot 0.8.18 (2018-10-18)
+===================================================
+
+MatrixSdk:
+ - Upgrade to version 0.9.12.
 
 Features:
  - Status.im theme
@@ -11,10 +35,11 @@ Improvements:
  - Use LocalBroadcastManager when applicable (#2595)
  - Menu version copies version number to clipboard (#2570)
  - Tapping on profile picture in sidebar opens settings page (#2597)
+ - Ask for Camera permission only when the user want to change the room avatar (#2575)
  - Ability to crop profile picture before setting (#2598)
 
 Other changes:
- -
+ - Room display name is now computed by the Matrix SDK
 
 Bugfix:
  - When exporting E2E keys, it isn't clear that you are creating a new password (#2626)
@@ -23,12 +48,11 @@ Bugfix:
  - Android 8: crash on device Boot (#2615)
  - Avoid creation of Gson object (#2608)
  - Inline code breaks in reply messages (#2531)
+ - Reduce size of clickable read-receipts area (#655)
+ - Fix issue of html rendering in emote message (#2652)
 
 Translations:
- -
-
-Build:
- -
+ - Fix issue with indonesian translations. This language is now available.
 
 Changes in Riot 0.8.17 (2018-10-10)
 ===================================================

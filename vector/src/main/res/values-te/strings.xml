@@ -281,11 +281,6 @@
     <string name="room_event_action_cancel_upload">ఎగుమతి రద్దు చేయండి</string>
     <string name="room_event_action_cancel_download">దింపుకోళ్ళు రద్దు చేయండి</string>
 
-    <string name="room_displayname_invite_from">%s నుండి ఆహ్వానించు</string>
-    <string name="room_displayname_two_members">%1$s మరియు %2$s</string>
-    <string name="room_displayname_room_invite">గదికి ఆహ్వానం</string>
-    <string name="room_displayname_no_title">ఖాళీ గది</string>
-
     <string name="search_hint">వెతుకు</string>
     <string name="search_members_hint">గది సభ్యుల వడపోత</string>
     <string name="search_no_results">ఫలితాలు లేవు</string>

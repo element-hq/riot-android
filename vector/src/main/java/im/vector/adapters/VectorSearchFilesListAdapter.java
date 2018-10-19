@@ -156,7 +156,7 @@ public class VectorSearchFilesListAdapter extends VectorMessagesAdapter {
             Room room = mSession.getDataHandler().getStore().getRoom(event.roomId);
 
             if (null != room) {
-                info += VectorUtils.getRoomDisplayName(mContext, mSession, room);
+                info += room.getRoomDisplayName(mContext);
                 info += " - ";
             }
         }

@@ -386,12 +386,6 @@ Let op: deze actie zal de app opnieuw opstarten, en kan enige tijd kosten.</stri
     <string name="room_event_action_cancel_upload">Upload annuleren</string>
     <string name="room_event_action_cancel_download">Download annuleren</string>
 
-    <!-- Room display name -->
-    <string name="room_displayname_invite_from">Uitnodiging van %s</string>
-    <string name="room_displayname_room_invite">Ruimte uitnodiging</string>
-    <string name="room_displayname_two_members">%1$s en %2$s</string>
-    <string name="room_displayname_no_title">Lege ruimte</string>
-
     <!-- Search -->
     <string name="search_hint">Zoeken</string>
     <string name="search_members_hint">Zoek bij naam of id</string>
@@ -845,11 +839,6 @@ Je kan het nu, of later, doen vanuit de programma-instellingen.</string>
     <plurals name="room_new_messages_notification">
 	<item quantity="one">1 nieuw bericht</item>
 	<item quantity="other">%d nieuwe berichten</item>
-</plurals>
-
-    <plurals name="room_displayname_three_and_more_members">
-	<item quantity="one">%1$s en 1 andere</item>
-	<item quantity="other">%1$s en %d anderen</item>
 </plurals>
 
     <plurals name="directory_search_rooms">

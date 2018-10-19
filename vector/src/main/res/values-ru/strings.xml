@@ -397,12 +397,6 @@ Email также позволит вам при необходимости во�
     <string name="room_event_action_cancel_upload">Отменить загрузку</string>
     <string name="room_event_action_cancel_download">Отменить загрузку</string>
     
-    <!-- Room display name -->
-    <string name="room_displayname_invite_from">Приглашение от %s</string>
-    <string name="room_displayname_room_invite">Приглашение в комнату</string>
-    <string name="room_displayname_two_members">%1$s и %2$s</string>
-    <string name="room_displayname_no_title">Пустая комната</string>
-    
     <!-- Search -->
     <string name="search_hint">Поиск</string>
     <string name="search_members_hint">Фильтр списка пользователей</string>
@@ -940,13 +934,6 @@ Email также позволит вам при необходимости во�
 	<item quantity="one">1 изменение членства</item>
 	<item quantity="few">%d изменения членства</item>
 	<item quantity="many">%d изменений членства</item>
-	<item quantity="other"/>
-</plurals>
-
-    <plurals name="room_displayname_three_and_more_members">
-	<item quantity="one">%1$s и 1 другой</item>
-	<item quantity="few">%1$s и %d другие</item>
-	<item quantity="many">%1$s и %d других</item>
 	<item quantity="other"/>
 </plurals>
 

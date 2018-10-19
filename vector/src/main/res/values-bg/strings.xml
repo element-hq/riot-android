@@ -370,16 +370,6 @@
     <string name="room_event_action_cancel_download">Откажи изтеглянето</string>
 
     <string name="room_event_action_cancel_upload">Откажи качването</string>
-    <string name="room_displayname_invite_from">Покана от %s</string>
-    <string name="room_displayname_room_invite">Покана за стая</string>
-    <string name="room_displayname_two_members">%1$s и %2$s</string>
-
-    <plurals name="room_displayname_three_and_more_members">
- 	    <item quantity="one">%1$s и 1 друг</item>
-	    <item quantity="other">%1$s и %d други</item>
-    </plurals>
-
-    <string name="room_displayname_no_title">Празна стая</string>
 
     <string name="search_hint">Търси</string>
     <string name="search_members_hint">Филтриране на членовете</string>

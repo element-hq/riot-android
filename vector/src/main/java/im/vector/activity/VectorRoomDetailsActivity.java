@@ -37,7 +37,6 @@ import java.util.List;
 import im.vector.Matrix;
 import im.vector.R;
 import im.vector.contacts.ContactsManager;
-import im.vector.extensions.MatrixSdkExtensionsKt;
 import im.vector.fragments.VectorRoomDetailsMembersFragment;
 import im.vector.fragments.VectorRoomSettingsFragment;
 import im.vector.fragments.VectorSearchRoomFilesListFragment;
@@ -195,6 +194,11 @@ public class VectorRoomDetailsActivity extends MXCActionBarActivity implements T
 
                 ContactsManager.getInstance().refreshLocalContactsSnapshot();
             }
+        } else if (requestCode == PermissionsToolsKt.PERMISSION_REQUEST_CODE_CHANGE_AVATAR) {
+            if (PermissionsToolsKt.allGranted(grantResults)) {
+                // If all results are granted, go on
+                mRoomSettingsFragment.onRoomAvatarPreferenceClicked();
+            }
         }
     }
 
@@ -309,7 +313,7 @@ public class VectorRoomDetailsActivity extends MXCActionBarActivity implements T
         mActionBar.addTab(tabToBeAdded);
 
         // set the default tab to be displayed
-        tabIndexToRestore = isFirstCreation()? -1 : getSavedInstanceState().getInt(KEY_STATE_CURRENT_TAB_INDEX, -1);
+        tabIndexToRestore = isFirstCreation() ? -1 : getSavedInstanceState().getInt(KEY_STATE_CURRENT_TAB_INDEX, -1);
 
         if (-1 == tabIndexToRestore) {
             tabIndexToRestore = defaultSelectedTab;
@@ -358,14 +362,8 @@ public class VectorRoomDetailsActivity extends MXCActionBarActivity implements T
                 PermissionsToolsKt.checkPermissions(PermissionsToolsKt.PERMISSIONS_FOR_MEMBER_DETAILS, this, PermissionsToolsKt.PERMISSION_REQUEST_CODE);
             }
         } else if (fragmentTag.equals(TAG_FRAGMENT_SETTINGS_ROOM_DETAIL)) {
-            int permissionToBeGranted = PermissionsToolsKt.PERMISSIONS_FOR_ROOM_DETAILS;
             onTabSelectSettingsFragment();
 
-            // remove camera permission request if the user has not enough power level
-            if (!MatrixSdkExtensionsKt.isPowerLevelEnoughForAvatarUpdate(mRoom, mSession)) {
-                permissionToBeGranted &= ~PermissionsToolsKt.PERMISSION_CAMERA;
-            }
-            PermissionsToolsKt.checkPermissions(permissionToBeGranted, this, PermissionsToolsKt.PERMISSION_REQUEST_CODE);
             mCurrentTabIndex = SETTINGS_TAB_INDEX;
         } else if (fragmentTag.equals(TAG_FRAGMENT_FILES_DETAILS)) {
             mSearchFilesFragment = (VectorSearchRoomFilesListFragment) getSupportFragmentManager().findFragmentByTag(TAG_FRAGMENT_FILES_DETAILS);

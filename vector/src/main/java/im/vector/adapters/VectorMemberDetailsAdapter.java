@@ -368,7 +368,7 @@ public class VectorMemberDetailsAdapter extends BaseExpandableListAdapter {
         if (null != currentItem.mRoom) {
             // room name
             viewHolder.mActionDescTextView.setTextColor(ThemeUtils.INSTANCE.getColor(mContext, R.attr.riot_primary_text_color));
-            viewHolder.mActionDescTextView.setText(VectorUtils.getRoomDisplayName(mContext, mSession, currentItem.mRoom));
+            viewHolder.mActionDescTextView.setText(currentItem.mRoom.getRoomDisplayName(mContext));
 
             // room avatar
             viewHolder.mActionImageView.setVisibility(View.GONE);
