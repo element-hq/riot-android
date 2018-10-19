@@ -5,7 +5,7 @@ MatrixSdk:
  - Upgrade to version 0.X.Y.
 
 Features:
- -
+ - Enable Lazy Loading by default, if the hs supports it
 
 Improvements:
  -

@@ -558,6 +558,7 @@ class VectorSettingsPreferencesFragment : PreferenceFragment(), SharedPreference
 
             if (!bNewValue) {
                 // Disable LazyLoading, just reload the sessions
+                PreferencesManager.setUserRefuseLazyLoading(appContext)
                 Matrix.getInstance(appContext).reloadSessions(appContext)
             } else {
                 // Try to enable LazyLoading
