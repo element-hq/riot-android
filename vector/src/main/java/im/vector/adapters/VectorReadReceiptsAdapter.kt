@@ -124,11 +124,11 @@ class VectorReadReceiptsAdapter(private val mContext: Context,
     }
 
     class ReadReceiptViewHolder(val view: View) : RecyclerView.ViewHolder(view) {
-        @BindView(R.id.accountAdapter_name)
-        lateinit var userNameTextView: TextView
-
         @BindView(R.id.avatar_img_vector)
         lateinit var imageView: ImageView
+
+        @BindView(R.id.read_receipt_user_name)
+        lateinit var userNameTextView: TextView
 
         @BindView(R.id.read_receipt_ts)
         lateinit var tsTextView: TextView
