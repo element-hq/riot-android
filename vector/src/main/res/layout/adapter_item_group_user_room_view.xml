@@ -18,10 +18,10 @@
         android:id="@+id/contact_badge"
         android:layout_width="20dp"
         android:layout_height="20dp"
-        android:layout_alignRight="@+id/contact_avatar_layout"
         android:layout_alignTop="@+id/contact_avatar_layout"
-        android:layout_marginRight="-7dp"
+        android:layout_alignRight="@+id/contact_avatar_layout"
         android:layout_marginTop="-7dp"
+        android:layout_marginRight="-7dp"
         android:src="@drawable/logo"
         android:visibility="gone" />
 

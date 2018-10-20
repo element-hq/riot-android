@@ -17,5 +17,5 @@
         android:textColor="@android:color/white"
         android:textSize="12sp"
         android:textStyle="bold"
-        tools:text="99"/>
+        tools:text="99" />
 </RelativeLayout>

@@ -57,9 +57,9 @@
             android:id="@+id/group_more_action_ic"
             android:layout_width="15dp"
             android:layout_height="15dp"
+            android:layout_alignTop="@+id/group_name"
             android:layout_alignBottom="@+id/group_name"
             android:layout_alignParentRight="true"
-            android:layout_alignTop="@+id/group_name"
             android:layout_marginLeft="10dp"
             android:src="@drawable/vector_actions_9b"
             android:visibility="visible" />

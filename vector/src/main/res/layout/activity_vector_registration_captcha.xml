@@ -8,15 +8,15 @@
         android:id="@+id/captcha_logo_layout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="27dp"
-        android:layout_marginTop="30dp">
+        android:layout_marginTop="30dp"
+        android:layout_marginBottom="27dp">
 
         <ImageView
             android:id="@+id/login_large_logo"
             android:layout_width="100dp"
             android:layout_height="100dp"
             android:layout_centerHorizontal="true"
-            android:src="@drawable/logo_login"/>
+            android:src="@drawable/logo_login" />
 
     </RelativeLayout>
 
@@ -25,9 +25,9 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@id/captcha_logo_layout"
-        android:layout_marginBottom="10dp"
         android:layout_marginLeft="16dp"
         android:layout_marginRight="16dp"
+        android:layout_marginBottom="10dp"
         android:text="@string/auth_recaptcha_message"
         android:textSize="16sp" />
 
@@ -35,18 +35,18 @@
         android:id="@+id/account_creation_webview"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_alignParentBottom="true"
+        android:layout_below="@id/account_creation_message"
         android:layout_alignParentEnd="true"
         android:layout_alignParentRight="true"
-        android:layout_below="@id/account_creation_message"
+        android:layout_alignParentBottom="true"
         android:background="#000" />
 
     <RelativeLayout
         android:id="@+id/account_creation_webview_loading"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_alignBottom="@id/account_creation_webview"
         android:layout_below="@id/account_creation_message"
+        android:layout_alignBottom="@id/account_creation_webview"
         android:background="@android:color/transparent">
 
         <ProgressBar

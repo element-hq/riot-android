@@ -1,5 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!-- TODO This layout is nearly the same than adapter_item_vector_message_text_emote_notice.xml. It should be removed -->
+<?xml version="1.0" encoding="utf-8"?><!-- TODO This layout is nearly the same than adapter_item_vector_message_text_emote_notice.xml. It should be removed -->
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"

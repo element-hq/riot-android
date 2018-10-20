@@ -7,8 +7,8 @@
         android:id="@+id/login_actions_bar"
         android:layout_width="wrap_content"
         android:layout_height="56dp"
-        android:layout_alignParentBottom="true"
-        android:layout_alignParentRight="true">
+        android:layout_alignParentRight="true"
+        android:layout_alignParentBottom="true">
 
         <View
             android:layout_width="match_parent"
@@ -124,8 +124,8 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="16dp"
-                android:layout_marginRight="16dp"
                 android:layout_marginTop="19dp"
+                android:layout_marginRight="16dp"
                 android:orientation="vertical">
 
                 <LinearLayout
@@ -388,8 +388,8 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_margin="5dp"
-                    android:paddingBottom="10dp"
                     android:paddingTop="5dp"
+                    android:paddingBottom="10dp"
                     android:text="@string/auth_forgot_password"
                     android:textColor="@color/vector_green_color"
                     android:textSize="14sp" />
@@ -400,9 +400,9 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:gravity="center_horizontal"
-                tools:text="A text here"
                 android:textSize="16sp"
-                android:visibility="gone" />
+                android:visibility="gone"
+                tools:text="A text here" />
 
         </LinearLayout>
     </ScrollView>

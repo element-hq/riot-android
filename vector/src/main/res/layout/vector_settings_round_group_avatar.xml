@@ -9,6 +9,6 @@
         android:layout_width="40dp"
         android:layout_height="40dp"
         android:layout_marginRight="10dp"
-        android:scaleType="centerCrop"
-        android:adjustViewBounds="true"/>
+        android:adjustViewBounds="true"
+        android:scaleType="centerCrop" />
 </FrameLayout>

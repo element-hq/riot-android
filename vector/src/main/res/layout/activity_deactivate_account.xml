@@ -63,13 +63,13 @@
                     android:id="@+id/deactivate_account_button_submit"
                     android:layout_width="wrap_content"
                     android:layout_height="36dp"
-                    android:layout_alignParentRight="true"
                     android:layout_below="@+id/deactivate_account_password"
-                    android:layout_marginBottom="16dp"
+                    android:layout_alignParentRight="true"
                     android:layout_marginTop="16dp"
+                    android:layout_marginBottom="16dp"
                     android:background="@color/vector_green_color"
-                    android:paddingEnd="16dp"
                     android:paddingStart="16dp"
+                    android:paddingEnd="16dp"
                     android:text="@string/deactivate_account_submit"
                     android:textColor="@android:color/white" />
 

@@ -12,8 +12,8 @@
         android:id="@+id/people_header_sub_layout"
         android:layout_width="match_parent"
         android:layout_height="20dp"
-        android:layout_marginBottom="11dp"
-        android:layout_marginTop="11dp">
+        android:layout_marginTop="11dp"
+        android:layout_marginBottom="11dp">
 
         <RelativeLayout
             android:layout_width="match_parent"
@@ -26,9 +26,9 @@
                 android:layout_centerVertical="true"
                 android:layout_marginLeft="16dp"
                 android:fontFamily="sans-serif-medium"
-                tools:text="Header"
                 android:textColor="?attr/riot_primary_text_color"
-                android:textSize="14sp" />
+                android:textSize="14sp"
+                tools:text="Header" />
 
             <ProgressBar
                 android:id="@+id/heading_loading_view"

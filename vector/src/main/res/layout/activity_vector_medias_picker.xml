@@ -64,10 +64,10 @@
                     android:id="@+id/medias_picker_switch_camera"
                     android:layout_width="46dp"
                     android:layout_height="46dp"
-                    android:layout_alignParentTop="true"
                     android:layout_alignRight="@+id/medias_picker_texture_view"
-                    android:layout_marginRight="12dp"
+                    android:layout_alignParentTop="true"
                     android:layout_marginTop="12dp"
+                    android:layout_marginRight="12dp"
                     android:background="@drawable/vector_medias_picker_button_background">
 
                     <ImageView
@@ -102,7 +102,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_alignParentBottom="true"
-                android:layout_gravity="center_horizontal"/>
+                android:layout_gravity="center_horizontal" />
 
         </RelativeLayout>
     </ScrollView>

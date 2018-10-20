@@ -4,8 +4,8 @@
     android:id="@+id/circular_room_view"
     android:layout_width="90dp"
     android:layout_height="wrap_content"
-    android:paddingBottom="10dp"
     android:paddingTop="10dp"
+    android:paddingBottom="10dp"
     tools:background="#22ff0000">
 
     <include
@@ -19,10 +19,10 @@
         android:id="@+id/direct_chat_indicator"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_alignBottom="@+id/room_avatar_layout"
         android:layout_alignLeft="@+id/room_avatar_layout"
-        android:layout_alignRight="@+id/room_avatar_layout"
         android:layout_alignTop="@+id/room_avatar_layout"
+        android:layout_alignRight="@+id/room_avatar_layout"
+        android:layout_alignBottom="@+id/room_avatar_layout"
         android:background="@drawable/direct_chat_background"
         android:visibility="gone" />
 
@@ -31,8 +31,8 @@
         android:id="@+id/room_unread_count"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignParentRight="true"
         android:layout_alignTop="@+id/room_avatar_layout"
+        android:layout_alignParentRight="true"
         android:layout_marginRight="10dp"
         android:gravity="center"
         android:minWidth="25dp"

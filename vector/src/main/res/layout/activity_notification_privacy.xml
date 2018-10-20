@@ -28,8 +28,8 @@
                     android:id="@+id/rly_warning_notification_privacy"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginBottom="15dp"
-                    android:layout_marginTop="4dp">
+                    android:layout_marginTop="4dp"
+                    android:layout_marginBottom="15dp">
 
                     <ImageView
                         android:id="@+id/iv_warning_notification_privacy"
@@ -43,8 +43,8 @@
                         android:id="@+id/tv_warning_notification_privacy"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_alignParentLeft="true"
                         android:layout_alignTop="@+id/iv_warning_notification_privacy"
+                        android:layout_alignParentLeft="true"
                         android:layout_marginLeft="40dp"
                         android:layout_marginTop="1dp"
                         android:text="@string/settings_notification_privacy_warning"
@@ -56,8 +56,8 @@
                     android:id="@+id/rly_normal_notification_privacy"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginBottom="20dp"
-                    android:layout_marginTop="10dp">
+                    android:layout_marginTop="10dp"
+                    android:layout_marginBottom="20dp">
 
                     <RadioButton
                         android:id="@+id/rb_normal_notification_privacy"
@@ -81,8 +81,8 @@
                         android:id="@+id/tv_apps_needs_permission"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_alignLeft="@+id/tv_normal_notification_privacy"
                         android:layout_below="@+id/tv_normal_notification_privacy"
+                        android:layout_alignLeft="@+id/tv_normal_notification_privacy"
                         android:text="@string/settings_notification_privacy_need_permission"
                         android:textColor="@color/default_text_light_color_dark"
                         android:textSize="13sp"
@@ -93,8 +93,8 @@
                         android:id="@+id/tv_notifications_gcm"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_alignLeft="@+id/tv_normal_notification_privacy"
                         android:layout_below="@+id/tv_apps_needs_permission"
+                        android:layout_alignLeft="@+id/tv_normal_notification_privacy"
                         android:layout_marginTop="10dp"
                         android:text="@string/settings_notification_privacy_gcm"
                         android:textColor="@color/default_text_light_color_dark"
@@ -104,8 +104,8 @@
                         android:id="@+id/tv_notifications_metadata"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_alignLeft="@+id/tv_normal_notification_privacy"
                         android:layout_below="@+id/tv_notifications_gcm"
+                        android:layout_alignLeft="@+id/tv_normal_notification_privacy"
                         android:text="@string/settings_notification_privacy_metadata"
                         android:textColor="@color/default_text_light_color_dark"
                         android:textSize="13sp" />
@@ -114,8 +114,8 @@
                         android:id="@+id/tv_secure_message"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_alignLeft="@+id/tv_normal_notification_privacy"
                         android:layout_below="@+id/tv_notifications_metadata"
+                        android:layout_alignLeft="@+id/tv_normal_notification_privacy"
                         android:text="@string/settings_notification_privacy_secure_message_content"
                         android:textColor="@color/default_text_light_color_dark"
                         android:textSize="13sp" />
@@ -125,8 +125,8 @@
                     android:id="@+id/rly_power_saving_options"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginBottom="20dp"
-                    android:layout_marginTop="20dp">
+                    android:layout_marginTop="20dp"
+                    android:layout_marginBottom="20dp">
 
                     <TextView
                         android:id="@+id/tv_power_saving_options"
@@ -141,8 +141,8 @@
                         android:id="@+id/tv_apps_no_permission"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_alignLeft="@+id/tv_power_saving_options"
                         android:layout_below="@+id/tv_power_saving_options"
+                        android:layout_alignLeft="@+id/tv_power_saving_options"
                         android:text="@string/settings_notification_privacy_no_permission"
                         android:textColor="@color/default_text_light_color_dark"
                         android:textSize="13sp"
@@ -177,8 +177,8 @@
                             android:id="@+id/tv_notifications_gcm_low"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:layout_alignLeft="@+id/tv_notification_low_detail"
                             android:layout_below="@+id/tv_notification_low_detail"
+                            android:layout_alignLeft="@+id/tv_notification_low_detail"
                             android:layout_marginTop="3dp"
                             android:text="@string/settings_notification_privacy_gcm"
                             android:textColor="@color/default_text_light_color_dark"
@@ -188,8 +188,8 @@
                             android:id="@+id/tv_notifications_metadata_low"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:layout_alignLeft="@+id/tv_notification_low_detail"
                             android:layout_below="@+id/tv_notifications_gcm_low"
+                            android:layout_alignLeft="@+id/tv_notification_low_detail"
                             android:text="@string/settings_notification_privacy_metadata"
                             android:textColor="@color/default_text_light_color_dark"
                             android:textSize="13sp" />
@@ -198,8 +198,8 @@
                             android:id="@+id/tv_message_not_shown"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:layout_alignLeft="@+id/tv_notification_low_detail"
                             android:layout_below="@+id/tv_notifications_metadata_low"
+                            android:layout_alignLeft="@+id/tv_notification_low_detail"
                             android:text="@string/settings_notification_privacy_message_content_not_shown"
                             android:textColor="@color/default_text_light_color_dark"
                             android:textSize="13sp" />
@@ -234,8 +234,8 @@
                             android:id="@+id/tv_notifications_gcm_reduced"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:layout_alignLeft="@+id/tv_notification_reduce_privacy"
                             android:layout_below="@+id/tv_notification_reduce_privacy"
+                            android:layout_alignLeft="@+id/tv_notification_reduce_privacy"
                             android:layout_marginTop="3dp"
                             android:text="@string/settings_notification_privacy_gcm"
                             android:textColor="@color/default_text_light_color_dark"
@@ -245,8 +245,8 @@
                             android:id="@+id/tv_notifications_metadata_reduced"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:layout_alignLeft="@+id/tv_notification_reduce_privacy"
                             android:layout_below="@+id/tv_notifications_gcm_reduced"
+                            android:layout_alignLeft="@+id/tv_notification_reduce_privacy"
                             android:text="@string/settings_notification_privacy_nosecure_message_content"
                             android:textColor="@color/default_text_light_color_dark"
                             android:textSize="13sp" />

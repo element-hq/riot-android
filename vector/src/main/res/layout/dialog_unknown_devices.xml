@@ -1,13 +1,11 @@
-<FrameLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    android:background="?attr/riot_primary_background_color"
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content">
+    android:layout_height="wrap_content"
+    android:background="?attr/riot_primary_background_color">
 
     <ExpandableListView
         android:id="@+id/unknown_devices_list_view"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
-    </ExpandableListView>
+        android:layout_height="wrap_content"></ExpandableListView>
 
 </FrameLayout>

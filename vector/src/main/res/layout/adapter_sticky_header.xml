@@ -17,12 +17,12 @@
         android:id="@+id/section_loading"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignBottom="@+id/section_title"
         android:layout_alignTop="@+id/section_title"
+        android:layout_alignBottom="@+id/section_title"
         android:layout_centerVertical="true"
-        android:layout_marginBottom="5dp"
         android:layout_marginLeft="-16dp"
         android:layout_marginTop="5dp"
+        android:layout_marginBottom="5dp"
         android:layout_toRightOf="@+id/section_title"
         android:indeterminate="true" />
 </RelativeLayout>

@@ -9,9 +9,9 @@
         android:id="@+id/matrix_only_filter_checkbox"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="6dp"
         android:layout_marginLeft="10dp"
         android:layout_marginRight="10dp"
+        android:layout_marginBottom="6dp"
         android:text="@string/matrix_only_filter"
         android:textColor="?attr/riot_primary_text_color"
         android:theme="@style/CheckBoxTheme" />

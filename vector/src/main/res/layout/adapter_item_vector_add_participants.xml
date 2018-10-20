@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="74dp"
-    xmlns:tools="http://schemas.android.com/tools"
     android:orientation="horizontal">
 
     <LinearLayout
@@ -70,16 +70,16 @@
             android:layout_height="40dp"
             android:layout_centerVertical="true"
             android:layout_marginLeft="16dp"
-            tools:src="@tools:sample/avatars"/>
+            tools:src="@tools:sample/avatars" />
 
         <ImageView
             android:id="@+id/filtered_list_matrix_user"
             android:layout_width="20dp"
             android:layout_height="20dp"
-            android:layout_alignRight="@+id/filtered_list_avatar"
             android:layout_alignTop="@+id/filtered_list_avatar"
-            android:layout_marginRight="-7dp"
+            android:layout_alignRight="@+id/filtered_list_avatar"
             android:layout_marginTop="-7dp"
+            android:layout_marginRight="-7dp"
             android:src="@drawable/logo"
             android:visibility="gone" />
 
@@ -87,10 +87,10 @@
             android:id="@+id/filtered_list_avatar_badge"
             android:layout_width="20dp"
             android:layout_height="20dp"
-            android:layout_alignRight="@id/filtered_list_avatar"
             android:layout_alignTop="@id/filtered_list_avatar"
-            android:layout_marginRight="-7dp"
+            android:layout_alignRight="@id/filtered_list_avatar"
             android:layout_marginTop="-7dp"
+            android:layout_marginRight="-7dp"
             android:src="@drawable/admin_icon"
             android:visibility="gone" />
 
@@ -105,30 +105,30 @@
             android:layout_toLeftOf="@id/filtered_list_actions_list"
             android:layout_toRightOf="@id/filtered_list_avatar"
             android:singleLine="true"
-            tools:text="A member name"
             android:textColor="?attr/default_text_dark_color"
             android:textSize="16sp"
-            android:textStyle="bold" />
+            android:textStyle="bold"
+            tools:text="A member name" />
 
         <TextView
             android:id="@+id/filtered_list_status"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_alignBottom="@id/filtered_list_avatar"
             android:layout_alignLeft="@id/filtered_list_name"
+            android:layout_alignBottom="@id/filtered_list_avatar"
             android:layout_marginRight="16dp"
             android:layout_toLeftOf="@id/filtered_list_actions_list"
-            android:maxLines="1"
             android:ellipsize="end"
-            tools:text="A member status"
+            android:maxLines="1"
             android:textColor="?attr/default_text_light_color"
-            android:textSize="14sp" />
+            android:textSize="14sp"
+            tools:text="A member status" />
 
         <View
             android:layout_width="match_parent"
             android:layout_height="1dp"
-            android:layout_alignParentBottom="true"
             android:layout_alignParentLeft="true"
+            android:layout_alignParentBottom="true"
             android:background="?attr/list_divider_color" />
 
     </RelativeLayout>

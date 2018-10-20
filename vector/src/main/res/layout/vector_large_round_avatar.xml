@@ -8,13 +8,13 @@
         android:id="@+id/avatar_img"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:scaleType="centerCrop"
-        android:adjustViewBounds="true"/>
+        android:adjustViewBounds="true"
+        android:scaleType="centerCrop" />
 
-        <ImageView
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:src="?avatar_mask_room_header"/>
+    <ImageView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:src="?avatar_mask_room_header" />
     <!--
             android:background="?attr/vector_dc_gray"
         <ImageView

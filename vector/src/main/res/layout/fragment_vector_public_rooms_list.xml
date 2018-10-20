@@ -7,29 +7,30 @@
         android:id="@+id/fragment_public_rooms_list"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:dividerHeight="0dp"
-        android:divider="#00000000"/>
+        android:divider="#00000000"
+        android:dividerHeight="0dp" />
 
     <RelativeLayout
         android:id="@+id/listView_global_spinner_views"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:visibility="gone"
-        android:background="#339D9D9D">
+        android:background="#339D9D9D"
+        android:visibility="gone">
+
         <ProgressBar
             android:id="@+id/listView_spinner"
             android:layout_width="40dp"
             android:layout_height="40dp"
             android:layout_centerHorizontal="true"
             android:layout_centerVertical="true"
-            android:visibility="visible"/>
+            android:visibility="visible" />
     </RelativeLayout>
 
     <ProgressBar
         android:id="@+id/listView_forward_spinner_view"
-        android:layout_height="40dp"
         android:layout_width="match_parent"
+        android:layout_height="40dp"
         android:layout_alignParentBottom="true"
-        android:visibility="gone"
-        android:indeterminate="true" />
+        android:indeterminate="true"
+        android:visibility="gone" />
 </RelativeLayout>

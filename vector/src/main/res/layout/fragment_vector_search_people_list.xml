@@ -8,7 +8,7 @@
         android:id="@+id/search_people_list"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:dividerHeight="0dp"
-        android:divider="#00000000" />
+        android:divider="#00000000"
+        android:dividerHeight="0dp" />
 
 </FrameLayout>

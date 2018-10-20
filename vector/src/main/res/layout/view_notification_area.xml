@@ -5,8 +5,8 @@
     android:layout_height="wrap_content"
     android:layout_above="@id/bottom_separator"
     android:minHeight="42dp"
-    android:paddingBottom="8dp"
     android:paddingTop="8dp"
+    android:paddingBottom="8dp"
     tools:background="@color/vector_fuchsia_color"
     tools:parentTag="android.widget.RelativeLayout">
 

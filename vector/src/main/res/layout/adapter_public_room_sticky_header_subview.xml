@@ -7,14 +7,14 @@
 
     <Spinner
         android:id="@+id/public_rooms_selector"
+        style="@style/Widget.AppCompat.Spinner.Underlined"
         android:layout_width="300dp"
         android:layout_height="44dp"
-        android:layout_marginBottom="6dp"
         android:layout_marginLeft="6dp"
         android:layout_marginRight="6dp"
+        android:layout_marginBottom="6dp"
         android:spinnerMode="dropdown"
         android:theme="@style/SpinnerTheme"
-        style="@style/Widget.AppCompat.Spinner.Underlined"
         tools:listitem="@layout/public_room_spinner_item" />
 
 </LinearLayout>
