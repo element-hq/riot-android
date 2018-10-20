@@ -1074,8 +1074,8 @@ Pamiętaj ta akcja może zresetować aplikacje i potrwać jakiś czas.</string>
     <string name="settings_lazy_loading_description">Zwiększ wydajność, ładując tylko członków pokoju w pierwszym widoku</string>
     <string name="error_lazy_loading_not_supported_by_home_server">Twój serwer nie obsługuje jeszcze powolnego ładowania członków pokoju. Spróbuj później.</string>
 
-    <string name="merged_events_expand">rozszerz</string>
-    <string name="merged_events_collapse">Rozwiń</string>
+    <string name="merged_events_expand">Rozwiń</string>
+    <string name="merged_events_collapse">Zwiń</string>
 
 <string name="settings_lazy_loading_title">Powolne ładowanie członków pokojów</string>
     <string name="room_participants_invite_join_names_combined">%1$s %2$s</string>
