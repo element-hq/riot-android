@@ -5,6 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:orientation="horizontal"
+    android:paddingStart="8dp"
     android:paddingLeft="8dp"
     android:paddingTop="14dp"
     android:paddingBottom="14dp">
@@ -35,8 +36,10 @@
                 android:id="@+id/room_avatar_direct_chat_icon"
                 android:layout_width="16dp"
                 android:layout_height="16dp"
+                android:layout_alignStart="@+id/room_avatar_image_view"
                 android:layout_alignLeft="@+id/room_avatar_image_view"
                 android:layout_alignTop="@+id/room_avatar_image_view"
+                android:layout_marginStart="24dp"
                 android:layout_marginLeft="24dp"
                 android:src="@drawable/icon_person" />
 
@@ -48,6 +51,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center_vertical"
+        android:paddingStart="32dp"
         android:paddingLeft="32dp"
         tools:text="actions.." />
 </LinearLayout>

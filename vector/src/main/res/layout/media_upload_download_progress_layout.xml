@@ -38,6 +38,7 @@
         <ImageView
             android:layout_width="20dp"
             android:layout_height="20dp"
+            android:layout_alignParentEnd="true"
             android:layout_alignParentRight="true"
             android:layout_alignParentBottom="true"
             android:src="@drawable/vector_cancel_upload_download" />

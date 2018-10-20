@@ -14,7 +14,9 @@
         android:id="@+id/messagesAdapter_body_view"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
         android:layout_marginLeft="16dp"
+        android:layout_marginEnd="16dp"
         android:layout_marginRight="16dp"
         android:orientation="horizontal">
 
@@ -26,7 +28,9 @@
             android:id="@+id/messagesAdapter_highlight_message_marker"
             android:layout_width="6dp"
             android:layout_height="match_parent"
+            android:layout_marginStart="5dp"
             android:layout_marginLeft="5dp"
+            android:layout_marginEnd="5dp"
             android:layout_marginRight="5dp"
             tools:background="@color/vector_green_color" />
 
@@ -45,6 +49,7 @@
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:layout_toStartOf="@+id/message_timestamp_layout"
                     android:layout_toLeftOf="@+id/message_timestamp_layout"
                     android:orientation="horizontal">
 
@@ -55,6 +60,7 @@
                     android:id="@+id/message_timestamp_layout"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:layout_alignParentEnd="true"
                     android:layout_alignParentRight="true"
                     android:orientation="horizontal">
 
@@ -83,19 +89,21 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
+                        android:paddingEnd="4dp"
                         android:paddingRight="4dp">
 
                         <RelativeLayout
                             android:id="@+id/messagesAdapter_image_layout"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:layout_gravity="right">
+                            android:layout_gravity="end">
 
                             <!-- the media -->
                             <ImageView
                                 android:id="@+id/messagesAdapter_image"
                                 android:layout_width="match_parent"
                                 android:layout_height="match_parent"
+                                android:layout_marginStart="4dp"
                                 android:layout_marginLeft="4dp"
                                 android:adjustViewBounds="true"
                                 android:scaleType="center" />
@@ -133,6 +141,7 @@
                     android:id="@+id/message_adapter_sticker_layout"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:layout_alignStart="@+id/messages_adapter_image_layout"
                     android:layout_alignLeft="@+id/messages_adapter_image_layout"
                     android:layout_marginTop="10dp"
                     android:orientation="vertical"
@@ -142,6 +151,7 @@
                         android:id="@+id/message_adapter_sticker_triangle"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:layout_marginStart="10dp"
                         android:layout_marginLeft="10dp"
                         android:background="@drawable/sticker_description_triangle" />
 

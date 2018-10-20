@@ -16,7 +16,9 @@
         android:id="@+id/pending_call_main_view"
         android:layout_width="match_parent"
         android:layout_height="72dp"
+        android:layout_marginStart="16dp"
         android:layout_marginLeft="16dp"
+        android:layout_marginEnd="16dp"
         android:layout_marginRight="16dp"
         android:orientation="horizontal">
 
@@ -43,7 +45,9 @@
             android:layout_gravity="center_vertical"
             android:layout_weight="1"
             android:orientation="vertical"
+            android:paddingStart="16dp"
             android:paddingLeft="16dp"
+            android:paddingEnd="4dp"
             android:paddingRight="4dp"
             android:paddingBottom="5dp">
 
@@ -64,6 +68,7 @@
             android:layout_width="40dp"
             android:layout_height="40dp"
             android:layout_gravity="center_vertical"
+            android:layout_marginStart="12dp"
             android:layout_marginLeft="12dp"
             android:visibility="gone">
 

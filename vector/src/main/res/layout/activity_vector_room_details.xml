@@ -34,6 +34,7 @@
             android:id="@+id/search_load_oldest_progress"
             android:layout_width="match_parent"
             android:layout_height="40dp"
+            android:layout_alignParentStart="true"
             android:layout_alignParentLeft="true"
             android:indeterminate="true"
             android:visibility="gone" />

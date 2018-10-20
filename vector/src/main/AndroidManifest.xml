@@ -104,6 +104,7 @@
         android:largeHeap="true"
         android:logo="@drawable/logo"
         android:resizeableActivity="false"
+        android:supportsRtl="true"
         android:theme="@style/AppTheme.Light"
         tools:replace="allowBackup,label">
 
