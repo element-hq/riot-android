@@ -24,7 +24,7 @@
     <string name="rename">Zmień nazwę</string>
     <string name="report_content">Zgłoś zawartość</string>
     <string name="active_call">Aktywne połączenie</string>
-    <string name="ongoing_conference_call">" Trwa połączenie grupowe. Dołącz z głosem lub obrazem."</string>
+    <string name="ongoing_conference_call">Przychodzące połączenie grupowe. Dołącz z mikrofonem lub z kamerą.</string>
     <string name="ongoing_conference_call_voice">głos</string>
     <string name="ongoing_conference_call_video">obraz</string>
     <string name="cannot_start_call">Nie można rozpocząć połączenia, spróbuj ponownie później</string>
@@ -995,4 +995,6 @@ Widoczność wiadomości w Matrix jest podobna do wiadomości e-mail. Nasze zapo
 
     <string name="unknown_error">Przepraszamy, wystąpił błąd</string>
 
-</resources>
+<string name="status_theme">Motyw Status.im</string>
+
+    </resources>
