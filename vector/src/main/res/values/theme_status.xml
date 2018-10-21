@@ -8,11 +8,17 @@
         <!-- default background color -->
         <item name="riot_primary_background_color">@color/riot_primary_background_color_status</item>
 
+        <!-- waiting view background -->
+        <item name="waiting_background_color">#AAAAAAAA</item>
+
         <!-- primary dark color (status bar) -->
         <item name="primary_dark_color">@color/accent_color_status</item>
 
         <!-- application bar background color -->
         <item name="primary_color">@color/primary_color_status</item>
+
+        <!-- application bar text color -->
+        <item name="primary_text_color">@android:color/white</item>
 
         <item name="tab_home">@color/primary_color_status</item>
         <item name="tab_home_secondary">@color/accent_color_status</item>
