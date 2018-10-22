@@ -4,7 +4,6 @@
     <!-- STATUS.IM THEME COLORS -->
 
     <style name="Theme.Vector.Status" parent="Theme.AppCompat.Light">
-        <!-- Only setting the items we need to override, otherwise inheriting -->
         <!-- default background color -->
         <item name="riot_primary_background_color">@color/riot_primary_background_color_status</item>
 
@@ -20,15 +19,35 @@
         <!-- application bar text color -->
         <item name="primary_text_color">@android:color/white</item>
 
+        <!-- application bar icons color -->
+        <item name="primary_control_color">@android:color/white</item>
+
+        <!-- application bar text hint color -->
+        <item name="primary_hint_text_color">@color/primary_hint_text_color_light</item>
+
         <item name="tab_home">@color/primary_color_status</item>
         <item name="tab_home_secondary">@color/accent_color_status</item>
 
+        <!-- default text colors -->
+        <item name="riot_primary_text_color">@color/riot_primary_text_color_light</item>
+        <item name="default_text_hint_color">@color/default_text_hint_color_light</item>
+        <item name="default_text_light_color">@color/default_text_light_color_light</item>
+        <item name="default_button_light_text_color">@color/default_button_light_text_light</item>
+        <item name="default_text_dark_color">@color/default_text_light_color_light</item>
+
         <!-- room message colors -->
+        <item name="unsent_message_text_color">#FFFF4444</item>
         <item name="message_text_color">#70879d</item>
         <item name="notice_text_color">#adadbe</item>
         <item name="encrypting_message_text_color">#AECDF9</item>
         <item name="sending_message_text_color">#b3e8d2</item>
+        <item name="highlighted_message_text_color">@color/vector_fuchsia_color</item>
+        <item name="highlighted_searched_message_text_color">@color/vector_green_color</item>
+        <item name="search_mode_room_name_text_color">#333C3C3C</item>
         <item name="unread_marker_line_color">#AECDF9</item>
+        <item name="markdown_block_background_color">#FFEEEEEE</item>
+        <item name="fenced_code_block_background_color">#FF00FF00</item>
+        <item name="room_activity_divider_color">#FFF2F2F2</item>
 
         <!-- tab bar colors -->
         <item name="tab_bar_background_color">?attr/primary_color</item>
@@ -40,7 +59,41 @@
             @color/tab_bar_unselected_background_color_status
         </item>
 
-        <!--dedicated drawables -->
+        <!-- list colors -->
+        <item name="list_header_background_color">#f6f6f6</item>
+        <item name="list_divider_color">@color/list_divider_color_light</item>
+        <item name="list_header_subtext_color">#4D3C3C3C</item>
+
+        <!-- directory selection header -->
+        <item name="list_header_public_room_spinner_text_color">#7f3c3c3c</item>
+        <item name="list_header_public_room_spinner_color">#2e3c3c3c</item>
+
+        <!-- gradient on the home bottom -->
+        <item name="activity_bottom_gradient_color">#80ffffff</item>
+
+        <!-- outgoing call background color -->
+        <item name="pending_outgoing_view_background_color">#33000000</item>
+
+        <!-- multi selection member background color -->
+        <item name="multi_selection_background_color">#FFF2F2F2</item>
+
+        <!-- sliding menu icon colors -->
+        <item name="home_navigation_icon_color">#FF4D4D4D</item>
+
+        <!-- room notification text color (typing, unsent...) -->
+        <item name="room_notification_text_color">#a0a29f</item>
+
+        <!-- color for dividers in settings -->
+        <item name="preference_divider_color">#e1e1e1</item>
+
+        <!-- icon colors -->
+        <item name="default_icon_tint_color">@color/vector_green_color</item>
+        <item name="settings_icon_tint_color">@android:color/black</item>
+        <item name="icon_tint_on_light_action_bar_color">@android:color/white</item>
+        <item name="icon_tint_on_dark_action_bar_color">@android:color/white</item>
+
+        <!-- theses colours are requested a background cannot be set by an ?att on android < 5 -->
+        <!-- dedicated drawables are created for each theme -->
         <item name="avatar_mask">@drawable/avatar_mask_status</item>
         <item name="avatar_mask_room_header">@drawable/avatar_mask_room_header_status</item>
         <item name="avatar_mask_white_stroke">@drawable/avatar_mask_white_stroke_status</item>
@@ -53,6 +106,7 @@
         <item name="vector_tabbar_unselected_background">
             @drawable/vector_tabbar_unselected_background_status
         </item>
+        <item name="vector_tabbar_background">@drawable/vector_tabbar_background_status</item>
 
         <item name="pill_background_user_id">@drawable/pill_background_user_id_status</item>
         <item name="pill_background_room_alias">@drawable/pill_background_room_alias_status</item>
@@ -134,7 +188,20 @@
 
     <style name="AppTheme.NoActionBar.Status" parent="AppTheme.NoActionBar.Base.Status" />
 
-    <style name="Theme.Vector.Lock.Status" parent="Theme.Vector.Lock.Light" />
+    <style name="Theme.Vector.Empty.Status" parent="Theme.AppCompat.Light.Dialog">
+        <item name="primary_color">@color/primary_color_status</item>
+        <item name="riot_primary_background_color">@color/riot_primary_background_color_status</item>
+        <item name="riot_primary_text_color">@color/riot_primary_text_color_status</item>
+        <item name="primary_hint_text_color">@color/primary_hint_text_color_light</item>
+        <item name="message_text_color">?attr/riot_primary_text_color</item>
+    </style>
+
+    <style name="Theme.Vector.Lock.Status" parent="Theme.Vector.Empty.Light">
+        <item name="android:background">?attr/riot_primary_background_color</item>
+        <item name="android:textColor">?attr/primary_text_color</item>
+        <item name="editTextColor">?attr/riot_primary_text_color</item>
+        <item name="android:editTextColor">?attr/riot_primary_text_color</item>
+    </style>
 
     <style name="Vector.TabView.Status" parent="Widget.AppCompat.ActionBar.TabView">
         <item name="android:background">@drawable/vector_tabbar_background_status</item>
@@ -243,5 +310,7 @@
         <item name="android:actionBarStyle">@style/Group.Styled.ActionBar</item>
         <item name="actionBarStyle">@style/Group.Styled.ActionBar</item>
     </style>
+
+    <style name="AppTheme.Dialog.Status" parent="Theme.AppCompat.Light.Dialog.Alert" />
 
 </resources>
