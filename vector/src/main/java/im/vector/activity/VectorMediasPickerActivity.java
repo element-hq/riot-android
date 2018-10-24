@@ -944,7 +944,10 @@ public class VectorMediasPickerActivity extends MXCActionBarActivity implements 
                         @Override
                         public void run() {
                             Matrix matrix = mImagePreviewImageView.getMatrix();
-                            matrix.postTranslate((mImagePreviewImageView.getWidth() - mImagePreviewImageView.getDrawable().getIntrinsicWidth()) / 2, (mImagePreviewImageView.getHeight() - mImagePreviewImageView.getDrawable().getIntrinsicHeight()) / 2);
+                            float widthMatrix = (mImagePreviewImageView.getWidth() - mImagePreviewImageView.getDrawable().getIntrinsicWidth()) / 2;
+                            float heightMatrix = (mImagePreviewImageView.getHeight() - mImagePreviewImageView.getDrawable().getIntrinsicHeight()) / 2;
+                                
+                            matrix.postTranslate(widthMatrix, heightMatrix);
                             imageViewOnTouchListener.setStartMatrix(matrix);
                             mImagePreviewImageView.setImageMatrix(matrix);
 
