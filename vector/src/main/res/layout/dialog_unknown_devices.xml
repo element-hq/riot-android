@@ -6,6 +6,6 @@
     <ExpandableListView
         android:id="@+id/unknown_devices_list_view"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"></ExpandableListView>
+        android:layout_height="wrap_content" />
 
 </FrameLayout>
