@@ -30,7 +30,6 @@ import im.vector.adapters.VectorReadReceiptsAdapter
 import im.vector.extensions.withArgs
 import im.vector.fragments.base.VectorBaseDialogFragment
 import org.matrix.androidsdk.rest.callback.SimpleApiCallback
-import org.matrix.androidsdk.rest.model.ReceiptData
 import org.matrix.androidsdk.rest.model.RoomMember
 import org.matrix.androidsdk.util.Log
 import java.util.*
@@ -38,7 +37,8 @@ import java.util.*
 /**
  * A dialog fragment showing the read receipts for an event
  */
-class VectorReadReceiptsDialogFragment : VectorBaseDialogFragment<VectorReadReceiptsDialogFragment.VectorReadReceiptsDialogFragmentListener>(), VectorReadReceiptsAdapter.VectorReadReceiptsAdapterListener {
+class VectorReadReceiptsDialogFragment : VectorBaseDialogFragment<VectorReadReceiptsDialogFragment.VectorReadReceiptsDialogFragmentListener>(),
+        VectorReadReceiptsAdapter.VectorReadReceiptsAdapterListener {
     private lateinit var mAdapter: VectorReadReceiptsAdapter
 
     interface VectorReadReceiptsDialogFragmentListener : VectorReadReceiptsAdapter.VectorReadReceiptsAdapterListener
