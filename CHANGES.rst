@@ -14,7 +14,7 @@ Other changes:
  - F-Droid version: restart event stream on application upgrade (#2105)
 
 Bugfix:
- -
+ - Status.im backgrounds, header, and missing items (#2672)
 
 Translations:
  -
