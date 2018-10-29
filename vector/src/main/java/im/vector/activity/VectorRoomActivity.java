@@ -1839,12 +1839,7 @@ public class VectorRoomActivity extends MXCActionBarActivity implements
                         intent.putExtra(VectorCallViewActivity.EXTRA_MATRIX_ID, mSession.getCredentials().userId);
                         intent.putExtra(VectorCallViewActivity.EXTRA_CALL_ID, call.getCallId());
 
-                        runOnUiThread(new Runnable() {
-                            @Override
-                            public void run() {
-                                startActivity(intent);
-                            }
-                        });
+                        startActivity(intent);
                     }
                 });
             }
@@ -3186,13 +3181,6 @@ public class VectorRoomActivity extends MXCActionBarActivity implements
     // Kick / ban mode management
     //================================================================================
 
-    /*
-        <string name="has_been_kicked">You have been kicked from %1$ by %2$</string>
-    <string name="reason_colon">Reason: %1$</string>
-    <string name="rejoin">Rejoin</string>
-    <string name="forget_room">Forget room</string>
-     */
-
     /**
      * Manage the room preview buttons area
      */
@@ -4036,13 +4024,7 @@ public class VectorRoomActivity extends MXCActionBarActivity implements
             final Intent intent = new Intent(VectorRoomActivity.this, VectorCallViewActivity.class);
             intent.putExtra(VectorCallViewActivity.EXTRA_MATRIX_ID, call.getSession().getCredentials().userId);
             intent.putExtra(VectorCallViewActivity.EXTRA_CALL_ID, call.getCallId());
-
-            runOnUiThread(new Runnable() {
-                @Override
-                public void run() {
-                    startActivity(intent);
-                }
-            });
+            startActivity(intent);
         } else {
             // if the call is no more active, just remove the view
             mVectorPendingCallView.onCallTerminated();
