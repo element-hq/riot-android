@@ -210,7 +210,7 @@ public class VectorMessageListFragment extends MatrixMessageListFragment<VectorM
             }
         });
 
-        v.setBackgroundColor(ThemeUtils.INSTANCE.getColor(getActivity(), R.attr.riot_primary_background_color));
+        v.setBackgroundColor(ThemeUtils.INSTANCE.getColor(getActivity(), R.attr.vctr_riot_primary_background_color));
 
         return v;
     }

@@ -122,7 +122,7 @@ public class CountryPickerActivity extends VectorAppCompatActivity implements Co
             mSearchView.setOnQueryTextListener(this);
 
             SearchView.SearchAutoComplete searchAutoComplete = mSearchView.findViewById(android.support.v7.appcompat.R.id.search_src_text);
-            searchAutoComplete.setHintTextColor(ThemeUtils.INSTANCE.getColor(this, R.attr.default_text_hint_color));
+            searchAutoComplete.setHintTextColor(ThemeUtils.INSTANCE.getColor(this, R.attr.vctr_default_text_hint_color));
         }
         return true;
     }

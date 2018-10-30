@@ -336,7 +336,7 @@ public class GroupsFragment extends AbsHomeFragment {
             popup = new PopupMenu(context, actionView);
         }
         popup.getMenuInflater().inflate(R.menu.vector_home_group_settings, popup.getMenu());
-        ThemeUtils.INSTANCE.tintMenuIcons(popup.getMenu(), ThemeUtils.INSTANCE.getColor(context, R.attr.settings_icon_tint_color));
+        ThemeUtils.INSTANCE.tintMenuIcons(popup.getMenu(), ThemeUtils.INSTANCE.getColor(context, R.attr.vctr_settings_icon_tint_color));
 
 
         popup.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {

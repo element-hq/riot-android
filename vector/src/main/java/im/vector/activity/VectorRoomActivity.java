@@ -1703,8 +1703,8 @@ public class VectorRoomActivity extends MXCActionBarActivity implements
         final Integer[] lTexts = new Integer[]{R.string.action_voice_call, R.string.action_video_call};
 
         IconAndTextDialogFragment fragment = IconAndTextDialogFragment.newInstance(lIcons, lTexts,
-                ThemeUtils.INSTANCE.getColor(this, R.attr.riot_primary_background_color),
-                ThemeUtils.INSTANCE.getColor(this, R.attr.riot_primary_text_color));
+                ThemeUtils.INSTANCE.getColor(this, R.attr.vctr_riot_primary_background_color),
+                ThemeUtils.INSTANCE.getColor(this, R.attr.vctr_riot_primary_text_color));
         fragment.setOnClickListener(new IconAndTextDialogFragment.OnItemClickListener() {
             @Override
             public void onItemClick(IconAndTextDialogFragment dialogFragment, int position) {
@@ -3169,7 +3169,7 @@ public class VectorRoomActivity extends MXCActionBarActivity implements
                 // hide the action bar header view and reset the arrow image (arrow reset to down)
                 mActionBarCustomArrowImageView.setImageResource(R.drawable.ic_arrow_drop_down_white);
                 mRoomHeaderView.setVisibility(View.GONE);
-                toolbar.setBackgroundColor(ThemeUtils.INSTANCE.getColor(this, R.attr.primary_color));
+                toolbar.setBackgroundColor(ThemeUtils.INSTANCE.getColor(this, R.attr.vctr_primary_color));
             }
         }
     }
@@ -3979,8 +3979,8 @@ public class VectorRoomActivity extends MXCActionBarActivity implements
             final Integer[] icons = iconsList.toArray(new Integer[0]);
 
             fragment = IconAndTextDialogFragment.newInstance(icons, messages,
-                    ThemeUtils.INSTANCE.getColor(VectorRoomActivity.this, R.attr.riot_primary_background_color),
-                    ThemeUtils.INSTANCE.getColor(VectorRoomActivity.this, R.attr.riot_primary_text_color));
+                    ThemeUtils.INSTANCE.getColor(VectorRoomActivity.this, R.attr.vctr_riot_primary_background_color),
+                    ThemeUtils.INSTANCE.getColor(VectorRoomActivity.this, R.attr.vctr_riot_primary_text_color));
             fragment.setOnClickListener(new IconAndTextDialogFragment.OnItemClickListener() {
                 @Override
                 public void onItemClick(IconAndTextDialogFragment dialogFragment, int position) {

@@ -397,7 +397,7 @@ public class LoginActivity extends MXCActionBarActivity implements RegistrationM
                 null,
                 ThemeUtils.INSTANCE.tintDrawable(this,
                         ContextCompat.getDrawable(this, R.drawable.ic_material_expand_more_black),
-                        R.attr.settings_icon_tint_color),
+                        R.attr.vctr_settings_icon_tint_color),
                 null);
         mLoginPasswordTextView = findViewById(R.id.login_password);
 
@@ -416,7 +416,7 @@ public class LoginActivity extends MXCActionBarActivity implements RegistrationM
                 null,
                 ThemeUtils.INSTANCE.tintDrawable(this,
                         ContextCompat.getDrawable(this, R.drawable.ic_material_expand_more_black),
-                        R.attr.settings_icon_tint_color),
+                        R.attr.vctr_settings_icon_tint_color),
                 null);
         mSubmitThreePidButton = findViewById(R.id.button_submit);
         mSkipThreePidButton = findViewById(R.id.button_skip);

@@ -208,7 +208,7 @@ public class HistoricalRoomsActivity extends VectorAppCompatActivity implements
         mSearchView.setQueryHint(getString(R.string.historical_placeholder));
 
         SearchView.SearchAutoComplete searchAutoComplete = mSearchView.findViewById(android.support.v7.appcompat.R.id.search_src_text);
-        searchAutoComplete.setHintTextColor(ThemeUtils.INSTANCE.getColor(this, R.attr.default_text_hint_color));
+        searchAutoComplete.setHintTextColor(ThemeUtils.INSTANCE.getColor(this, R.attr.vctr_default_text_hint_color));
     }
 
     /*
