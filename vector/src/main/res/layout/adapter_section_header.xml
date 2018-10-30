@@ -3,16 +3,16 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/wrapper_view"
     android:layout_width="match_parent"
-    android:tag="without-divider"
     android:layout_height="wrap_content"
-    android:orientation="vertical">
+    android:orientation="vertical"
+    android:tag="without-divider">
 
     <TextView
         android:id="@+id/section_title"
         style="@style/ListHeader"
-        android:background="#ff1f7c"
-        android:tag="sticky"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:background="#ff1f7c"
+        android:tag="sticky"
         tools:text="Default section header" />
 </LinearLayout>

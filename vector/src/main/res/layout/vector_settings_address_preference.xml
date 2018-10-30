@@ -8,6 +8,6 @@
         android:id="@+id/main_address_icon_view"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:src="@drawable/main_alias_icon"/>
+        android:src="@drawable/main_alias_icon" />
 
 </FrameLayout>

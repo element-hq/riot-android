@@ -10,6 +10,7 @@
         android:layout_width="40dp"
         android:layout_height="40dp"
         android:layout_centerVertical="true"
+        android:layout_marginStart="16dp"
         android:layout_marginLeft="16dp"
         android:src="@drawable/ic_material_add_circle" />
 
@@ -19,9 +20,13 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_centerVertical="true"
+        android:layout_marginStart="16dp"
         android:layout_marginLeft="16dp"
+        android:layout_marginEnd="16dp"
         android:layout_marginRight="16dp"
+        android:layout_toStartOf="@id/filtered_list_actions_list"
         android:layout_toLeftOf="@id/filtered_list_actions_list"
+        android:layout_toEndOf="@id/filtered_list_avatar"
         android:layout_toRightOf="@id/filtered_list_avatar"
         android:singleLine="true"
         android:text="@string/room_creation_add_member"
@@ -32,8 +37,9 @@
     <View
         android:layout_width="match_parent"
         android:layout_height="1dp"
-        android:layout_alignParentBottom="true"
+        android:layout_alignParentStart="true"
         android:layout_alignParentLeft="true"
+        android:layout_alignParentBottom="true"
         android:background="?attr/list_divider_color" />
 
 </RelativeLayout>

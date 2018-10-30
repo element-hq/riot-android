@@ -4,6 +4,7 @@
     android:id="@+id/public_room_view"
     android:layout_width="match_parent"
     android:layout_height="74dp"
+    android:paddingEnd="16dp"
     android:paddingRight="16dp">
 
 
@@ -12,6 +13,7 @@
         android:layout_width="@dimen/chat_avatar_size"
         android:layout_height="@dimen/chat_avatar_size"
         android:layout_centerVertical="true"
+        android:layout_marginStart="16dp"
         android:layout_marginLeft="16dp"
         tools:src="@tools:sample/avatars" />
 
@@ -19,14 +21,18 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_centerVertical="true"
+        android:layout_marginStart="16dp"
         android:layout_marginLeft="16dp"
+        android:layout_marginEnd="6dp"
         android:layout_marginRight="6dp"
+        android:layout_toEndOf="@+id/public_room_avatar"
         android:layout_toRightOf="@+id/public_room_avatar">
 
         <TextView
             android:id="@+id/public_room_name"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_toStartOf="@+id/public_room_members_count"
             android:layout_toLeftOf="@+id/public_room_members_count"
             android:ellipsize="end"
             android:fontFamily="sans-serif-regular"
@@ -39,8 +45,9 @@
             android:id="@+id/public_room_topic"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_alignRight="@+id/public_room_name"
             android:layout_below="@+id/public_room_name"
+            android:layout_alignEnd="@+id/public_room_name"
+            android:layout_alignRight="@+id/public_room_name"
             android:ellipsize="end"
             android:maxLines="1"
             android:textColor="?attr/default_text_light_color"
@@ -52,6 +59,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignBaseline="@+id/public_room_name"
+            android:layout_alignParentEnd="true"
             android:layout_alignParentRight="true"
             android:textColor="?attr/default_text_light_color"
             android:textSize="12sp"

@@ -24,7 +24,7 @@ android {
         versionName rootProject.ext.versionNameProp
 
         // custom values
-        resValue "string", "bug_report_url",  "https://riot.im/bugreports/submit"
+        resValue "string", "bug_report_url", "https://riot.im/bugreports/submit"
 
         ndk {
             abiFilters "armeabi-v7a", "x86"
@@ -120,6 +120,10 @@ android {
         error 'StringFormatCount'
         error 'HardcodedText'
         error 'SpUsage'
+
+        // RTL
+        error 'RtlEnabled'
+        error 'RtlHardcoded'
     }
 
     repositories {
@@ -220,7 +224,6 @@ dependencies {
     implementation(name: 'react-native-webrtc', ext: 'aar')
     implementation(name: 'react-native', ext: 'aar')
     implementation(name: 'react-native-locale-detector', ext: 'aar')
-
 
     // another tracking than GA
     implementation 'org.piwik.sdk:piwik-sdk:2.0.0'

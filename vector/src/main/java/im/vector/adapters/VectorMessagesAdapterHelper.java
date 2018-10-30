@@ -543,7 +543,7 @@ class VectorMessagesAdapterHelper {
         FrameLayout.LayoutParams subViewLinearLayout = (FrameLayout.LayoutParams) subView.getLayoutParams();
 
         ViewGroup.LayoutParams avatarLayout = avatarLayoutView.getLayoutParams();
-        subViewLinearLayout.gravity = Gravity.LEFT | Gravity.CENTER_VERTICAL;
+        subViewLinearLayout.gravity = Gravity.START | Gravity.CENTER_VERTICAL;
 
         if (isMergedView) {
             bodyLayout.setMargins(avatarLayout.width, bodyLayout.topMargin, bodyLayout.rightMargin, bodyLayout.bottomMargin);

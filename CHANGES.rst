@@ -6,6 +6,7 @@ MatrixSdk:
 
 Features:
  - Enable Lazy Loading by default, if the hs supports it
+ - Add RTL support (#2376, #2271)
 
 Improvements:
  -
