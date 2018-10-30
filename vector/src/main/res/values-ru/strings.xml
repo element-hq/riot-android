@@ -9,7 +9,7 @@
     <string name="title_activity_home">Сообщения</string>
     <string name="title_activity_room">Комната</string>
     <string name="title_activity_settings">Настройки</string>
-    <string name="title_activity_member_details">Информация об участнике</string>
+    <string name="title_activity_member_details">Информация о собеседнике</string>
     <string name="title_activity_historical">Исторические</string>
 
     <!-- button names -->
@@ -27,10 +27,10 @@
     <string name="forward">Переслать</string>
     <string name="permalink">Постоянная ссылка</string>
     <string name="view_source">Просмотр исходного кода</string>
-    <string name="view_decrypted_source">Просмотр расшифрованного источника</string>
+    <string name="view_decrypted_source">Просмотр расшифрованного исходного кода</string>
     <string name="delete">Удалить</string>
     <string name="rename">Переименовать</string>
-    <string name="report_content">Содержание отчета</string>
+    <string name="report_content">Пожаловаться на содержимое</string>
     <string name="active_call">Активный вызов</string>
     <string name="ongoing_conference_call">Установлен конференц-вызов. Присоединяйтесь с голосом или видео.</string>
     <string name="ongoing_conference_call_voice">голос</string>
@@ -797,7 +797,7 @@ Email также позволит вам при необходимости во�
     <string name="settings_labs_native_camera">Использовать встроенную камеру</string>
 
     <!-- share keys -->
-    <string name="title_activity_bug_report">Отчет об ошибке</string>
+    <string name="title_activity_bug_report">Сообщить об ошибке</string>
 
     <string name="conference_call_warning_title">Внимание!</string>
     <string name="conference_call_warning_message">Конференц-связь находится в разработке и может быть ненадежной.</string>
@@ -1134,10 +1134,10 @@ Email также позволит вам при необходимости во�
     <string name="resource_limit_hard_contact">Пожалуйста %s что бы продолжить пользоваться этим сервисом.</string>
 
     <string name="settings_lazy_loading_title">Ленивая подгрузка собеседников</string>
-    <string name="settings_lazy_loading_description">Увеличить производительность за счёт загрузки собеседников только при первом просмотре.</string>
+    <string name="settings_lazy_loading_description">Увеличить производительность за счёт загрузки собеседников только при первом просмотре</string>
     <string name="error_lazy_loading_not_supported_by_home_server">Ваш сервер не поддерживает ленивую подгрузку собеседников. Попробуйте позже.</string>
 
-    <string name="unknown_error">Извините, произошла ошибка.</string>
+    <string name="unknown_error">Извините, произошла ошибка</string>
 
     <string name="merged_events_expand">развернуть</string>
     <string name="merged_events_collapse">свернуть</string>
