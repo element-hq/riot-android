@@ -1194,10 +1194,10 @@ public class VectorMessageListFragment extends MatrixMessageListFragment<VectorM
 
                 if (null != universalParams) {
                     // open the member sheet from the current activity
-                    if (universalParams.containsKey(VectorUniversalLinkReceiver.ULINK_MATRIX_USER_ID_KEY)) {
+                    if (universalParams.containsKey(PermalinkUtils.ULINK_MATRIX_USER_ID_KEY)) {
                         Intent roomDetailsIntent = new Intent(getActivity(), VectorMemberDetailsActivity.class);
                         roomDetailsIntent.putExtra(VectorMemberDetailsActivity.EXTRA_MEMBER_ID,
-                                universalParams.get(VectorUniversalLinkReceiver.ULINK_MATRIX_USER_ID_KEY));
+                                universalParams.get(PermalinkUtils.ULINK_MATRIX_USER_ID_KEY));
                         roomDetailsIntent.putExtra(VectorMemberDetailsActivity.EXTRA_MATRIX_ID, mSession.getCredentials().userId);
                         getActivity().startActivityForResult(roomDetailsIntent, VectorRoomActivity.GET_MENTION_REQUEST_CODE);
                     } else {

@@ -95,6 +95,7 @@ import org.matrix.androidsdk.rest.model.Event;
 import org.matrix.androidsdk.rest.model.MatrixError;
 import org.matrix.androidsdk.util.BingRulesManager;
 import org.matrix.androidsdk.util.Log;
+import org.matrix.androidsdk.util.PermalinkUtils;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
@@ -401,10 +402,10 @@ public class VectorHomeActivity extends VectorAppCompatActivity implements Searc
                 // detect the room could be opened without waiting the next sync
                 Map<String, String> params = VectorUniversalLinkReceiver.parseUniversalLink(uri);
 
-                if ((null != params) && params.containsKey(VectorUniversalLinkReceiver.ULINK_ROOM_ID_OR_ALIAS_KEY)) {
+                if ((null != params) && params.containsKey(PermalinkUtils.ULINK_ROOM_ID_OR_ALIAS_KEY)) {
                     Log.d(LOG_TAG, "Has a valid universal link");
 
-                    final String roomIdOrAlias = params.get(VectorUniversalLinkReceiver.ULINK_ROOM_ID_OR_ALIAS_KEY);
+                    final String roomIdOrAlias = params.get(PermalinkUtils.ULINK_ROOM_ID_OR_ALIAS_KEY);
 
                     // it is a room ID ?
                     if (MXPatterns.isRoomId(roomIdOrAlias)) {
