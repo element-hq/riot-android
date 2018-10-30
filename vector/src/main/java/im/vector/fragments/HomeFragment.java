@@ -101,8 +101,8 @@ public class HomeFragment extends AbsHomeFragment implements HomeRoomAdapter.OnS
     @Override
     public void onActivityCreated(final Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        mPrimaryColor = ThemeUtils.INSTANCE.getColor(getActivity(), R.attr.tab_home);
-        mSecondaryColor = ThemeUtils.INSTANCE.getColor(getActivity(), R.attr.tab_home_secondary);
+        mPrimaryColor = ThemeUtils.INSTANCE.getColor(getActivity(), R.attr.vctr_tab_home);
+        mSecondaryColor = ThemeUtils.INSTANCE.getColor(getActivity(), R.attr.vctr_tab_home_secondary);
         initViews();
         // Eventually restore the pattern of adapter after orientation change
         for (HomeSectionView homeSectionView : mHomeSectionViews) {

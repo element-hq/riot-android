@@ -13,7 +13,7 @@
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:background="?attr/riot_primary_background_color">
+            android:background="?attr/vctr_riot_primary_background_color">
 
             <im.vector.view.VectorCircularImageView
                 android:id="@+id/call_other_member"

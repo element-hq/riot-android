@@ -42,7 +42,7 @@
             android:layout_alignRight="@+id/room_avatar_direct_chat_icon"
             android:layout_alignBottom="@+id/room_avatar"
             android:src="@drawable/e2e_verified"
-            android:tint="?attr/default_icon_tint_color"
+            android:tint="?attr/vctr_default_icon_tint_color"
             android:visibility="invisible"
             tools:visibility="visible" />
 
@@ -66,7 +66,7 @@
                 android:ellipsize="end"
                 android:fontFamily="sans-serif-regular"
                 android:maxLines="1"
-                android:textColor="?attr/riot_primary_text_color"
+                android:textColor="?attr/vctr_riot_primary_text_color"
                 android:textSize="16sp"
                 tools:text="Room name a bit long to be displayed completely" />
 
@@ -79,7 +79,7 @@
                 android:layout_alignRight="@+id/room_name"
                 android:ellipsize="end"
                 android:maxLines="1"
-                android:textColor="?attr/default_text_light_color"
+                android:textColor="?attr/vctr_default_text_light_color"
                 android:textSize="14sp"
                 tools:text="First message of the room is a bit too long to be displayed" />
 

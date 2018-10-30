@@ -49,7 +49,7 @@
         android:layout_height="wrap_content"
         android:layout_below="@+id/section_header"
         android:padding="16dp"
-        android:textColor="?attr/default_text_light_color"
+        android:textColor="?attr/vctr_default_text_light_color"
         android:textSize="14sp"
         tools:text="No items" />
 </merge>

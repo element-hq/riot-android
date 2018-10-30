@@ -28,7 +28,7 @@
         android:layout_marginEnd="6dp"
         android:layout_marginRight="6dp"
         android:maxLines="1"
-        android:textColor="?attr/default_text_dark_color"
+        android:textColor="?attr/vctr_default_text_dark_color"
         android:textSize="12sp"
         android:textStyle="bold" />
 </LinearLayout>

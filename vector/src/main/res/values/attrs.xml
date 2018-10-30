@@ -21,7 +21,7 @@
         <attr name="vctr_primary_control_color" format="color" />
 
         <!-- application bar text hint color -->
-        <attr name="primary_hint_text_color" format="color" />
+        <attr name="vctr_primary_hint_text_color" format="color" />
 
         <!-- default text colors -->
         <attr name="vctr_riot_primary_text_color" format="color" />

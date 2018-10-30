@@ -10,13 +10,13 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:adjustViewBounds="true"
-        android:background="?attr/primary_color"
+        android:background="?attr/vctr_primary_color"
         android:scaleType="centerCrop"
         tools:src="@tools:sample/avatars" />
 
     <ImageView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:src="?avatar_mask_room_header" />
+        android:src="?vctr_avatar_mask_room_header" />
 
 </FrameLayout>

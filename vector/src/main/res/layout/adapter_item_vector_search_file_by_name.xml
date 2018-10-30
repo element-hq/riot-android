@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="72dp"
-    android:background="?attr/riot_primary_background_color">
+    android:background="?attr/vctr_riot_primary_background_color">
 
     <ImageView
         android:id="@+id/file_search_thumbnail"
@@ -44,7 +44,7 @@
         android:ellipsize="end"
         android:fontFamily="sans-serif-regular"
         android:maxLines="1"
-        android:textColor="?attr/riot_primary_text_color"
+        android:textColor="?attr/vctr_riot_primary_text_color"
         android:textSize="16sp"
         tools:text="File name" />
 
@@ -61,7 +61,7 @@
         android:layout_marginBottom="18dp"
         android:ellipsize="end"
         android:maxLines="1"
-        android:textColor="?attr/default_text_light_color"
+        android:textColor="?attr/vctr_default_text_light_color"
         android:textSize="14sp"
         tools:text="Room name and date" />
 
@@ -69,5 +69,5 @@
         android:layout_width="match_parent"
         android:layout_height="1dp"
         android:layout_alignParentBottom="true"
-        android:background="?attr/list_divider_color" />
+        android:background="?attr/vctr_list_divider_color" />
 </RelativeLayout>
