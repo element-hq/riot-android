@@ -37,7 +37,6 @@ import java.util.Map;
 import java.util.Set;
 
 import im.vector.Matrix;
-import im.vector.settings.VectorLocale;
 
 /**
  * retrieve the contact matrix IDs
@@ -178,7 +177,7 @@ public class PIDsRetriever {
      * @return true if the matrix Ids have been retrieved
      */
     public void retrieveMatrixIds(final Context context, final List<Contact> contacts, final boolean localUpdateOnly) {
-        Log.d(LOG_TAG, String.format(VectorLocale.INSTANCE.getApplicationLocale(), "retrieveMatrixIds starts for %d contacts", contacts == null ? 0 : contacts.size()));
+        Log.d(LOG_TAG, "retrieveMatrixIds starts for " + (contacts == null ? 0 : contacts.size()) + " contacts");
         // sanity checks
         if ((null == contacts) || (0 == contacts.size())) {
             if (null != mListener) {

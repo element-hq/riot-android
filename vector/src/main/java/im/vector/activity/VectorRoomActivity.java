@@ -117,7 +117,6 @@ import im.vector.fragments.VectorUnknownDevicesFragment;
 import im.vector.listeners.IMessagesAdapterActionsListener;
 import im.vector.notifications.NotificationUtils;
 import im.vector.services.EventStreamService;
-import im.vector.settings.VectorLocale;
 import im.vector.util.CallsManager;
 import im.vector.util.ExternalApplicationsUtilKt;
 import im.vector.util.MatrixURLSpan;
@@ -2717,14 +2716,11 @@ public class VectorRoomActivity extends MXCActionBarActivity implements
                 // nothing to display
                 mLatestTypingMessage = null;
             } else if (names.size() == 1) {
-                mLatestTypingMessage = String.format(VectorLocale.INSTANCE.getApplicationLocale(),
-                        getString(R.string.room_one_user_is_typing), names.get(0));
+                mLatestTypingMessage = getString(R.string.room_one_user_is_typing, names.get(0));
             } else if (names.size() == 2) {
-                mLatestTypingMessage = String.format(VectorLocale.INSTANCE.getApplicationLocale(),
-                        getString(R.string.room_two_users_are_typing), names.get(0), names.get(1));
+                mLatestTypingMessage = getString(R.string.room_two_users_are_typing, names.get(0), names.get(1));
             } else {
-                mLatestTypingMessage = String.format(VectorLocale.INSTANCE.getApplicationLocale(),
-                        getString(R.string.room_many_users_are_typing), names.get(0), names.get(1));
+                mLatestTypingMessage = getString(R.string.room_many_users_are_typing, names.get(0), names.get(1));
             }
         }
 

@@ -130,7 +130,8 @@ public class LoginHandler {
         if (!TextUtils.isEmpty(username)) {
             if (android.util.Patterns.EMAIL_ADDRESS.matcher(username).matches()) {
                 // Login with 3pid
-                client.loginWith3Pid(ThreePid.MEDIUM_EMAIL, username.toLowerCase(VectorLocale.INSTANCE.getApplicationLocale()), password, deviceName, null, callback);
+                client.loginWith3Pid(ThreePid.MEDIUM_EMAIL,
+                        username.toLowerCase(VectorLocale.INSTANCE.getApplicationLocale()), password, deviceName, null, callback);
             } else {
                 // Login with user
                 client.loginWithUser(username, password, deviceName, null, callback);
