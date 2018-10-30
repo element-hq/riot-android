@@ -15,6 +15,7 @@ Other changes:
 
 Bugfix:
  - Status.im backgrounds, header, and missing items (#2672)
+ - Fix Permalinks and registration issue (#2689)
 
 Translations:
  -
