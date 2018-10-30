@@ -20,13 +20,13 @@
         <item name="vctr_primary_text_color">@android:color/white</item>
 
         <!-- application bar icons color -->
-        <item name="vctr_primary_control_color">#5EA584</item>
+        <item name="vctr_primary_control_color">@color/vector_green_color_dark</item>
 
         <!-- application bar text hint color -->
         <item name="vctr_primary_hint_text_color">@color/primary_hint_text_color_dark</item>
 
         <item name="vctr_tab_home">@color/vector_green_color</item>
-        <item name="vctr_tab_home_secondary">#5EA584</item>
+        <item name="vctr_tab_home_secondary">@color/vector_green_color_dark</item>
 
         <!-- default text colors -->
         <item name="vctr_riot_primary_text_color">@color/riot_primary_text_color_dark</item>
