@@ -126,6 +126,7 @@
 
         <!-- status bar color -->
         <item name="colorPrimaryDark">@color/vector_green_color_dark</item>
+        <item name="colorPrimary">@color/vector_green_color</item>
 
         <!-- activities background -->
         <item name="android:windowBackground">@color/riot_primary_background_color_light</item>

@@ -125,7 +125,8 @@
         <item name="android:windowActionBar">true</item>
 
         <!-- status bar color -->
-        <item name="colorPrimaryDark">?attr/vctr_primary_dark_color</item>
+        <item name="colorPrimaryDark">@color/accent_color_status</item>
+        <item name="colorPrimary">@color/primary_color_status</item>
 
         <!-- activities background -->
         <item name="android:windowBackground">@color/riot_primary_background_color_status</item>
@@ -134,7 +135,7 @@
         <item name="android:typeface">sans</item>
 
         <!-- android ui button -->
-        <item name="colorAccent">@color/vector_green_color</item>
+        <item name="colorAccent">@color/primary_color_status</item>
 
         <!-- custom action bar -->
         <item name="android:actionBarStyle">@style/Vector.Styled.ActionBar</item>
@@ -160,7 +161,7 @@
         <item name="actionBarTabTextStyle">@style/Vector.TabText</item>
 
         <!-- switch color -->
-        <item name="colorControlActivated">@color/vector_green_color</item>
+        <item name="colorControlActivated">@color/primary_color_status</item>
     </style>
 
     <style name="AppTheme.Status" parent="AppTheme.Base.Status" />
