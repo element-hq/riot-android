@@ -197,6 +197,7 @@ abstract class VectorAppCompatActivity : AppCompatActivity() {
     @MenuRes
     open fun getMenuRes() = -1
 
+    @AttrRes
     open fun getMenuTint() = R.attr.vctr_icon_tint_on_dark_action_bar_color
 
     /**

@@ -215,11 +215,6 @@ public abstract class VectorBaseSearchActivity extends MXCActionBarActivity {
     }
 
     @Override
-    public int getMenuTint() {
-        return R.attr.icon_tint_on_dark_action_bar_color;
-    }
-
-    @Override
     public boolean onPrepareOptionsMenu(Menu menu) {
         // the application is in a weird state
         if (CommonActivityUtils.shouldRestartApp(this)) {
