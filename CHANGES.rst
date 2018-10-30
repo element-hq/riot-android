@@ -15,6 +15,7 @@ Other changes:
 
 Bugfix:
  - Status.im backgrounds, header, and missing items (#2672)
+ - Mention from read receipts list doesn't work (#656)
 
 Translations:
  -
