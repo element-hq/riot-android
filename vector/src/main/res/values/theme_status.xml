@@ -125,7 +125,7 @@
         <item name="android:windowActionBar">true</item>
 
         <!-- status bar color -->
-        <item name="colorPrimaryDark">?attr/primary_dark_color</item>
+        <item name="colorPrimaryDark">?attr/vctr_primary_dark_color</item>
 
         <!-- activities background -->
         <item name="android:windowBackground">@color/riot_primary_background_color_status</item>
@@ -177,7 +177,7 @@
         <item name="windowNoTitle">true</item>
 
         <!-- status bar color -->
-        <item name="colorPrimaryDark">?attr/primary_dark_color</item>
+        <item name="colorPrimaryDark">?attr/vctr_primary_dark_color</item>
 
         <!-- fonts -->
         <item name="android:typeface">sans</item>
@@ -197,10 +197,10 @@
     </style>
 
     <style name="Theme.Vector.Lock.Status" parent="Theme.Vector.Empty.Light">
-        <item name="android:background">?attr/riot_primary_background_color</item>
-        <item name="android:textColor">?attr/primary_text_color</item>
-        <item name="editTextColor">?attr/riot_primary_text_color</item>
-        <item name="android:editTextColor">?attr/riot_primary_text_color</item>
+        <item name="android:background">?attr/vctr_riot_primary_background_color</item>
+        <item name="android:textColor">?attr/vctr_primary_text_color</item>
+        <item name="editTextColor">?attr/vctr_riot_primary_text_color</item>
+        <item name="android:editTextColor">?attr/vctr_riot_primary_text_color</item>
     </style>
 
     <style name="Vector.TabView.Status" parent="Widget.AppCompat.ActionBar.TabView">
@@ -215,9 +215,9 @@
 
     <!-- home activity -->
     <style name="HomeActivityTheme.Status" parent="AppTheme.NoActionBar.Status">
-        <item name="editTextColor">?attr/riot_primary_text_color</item>
-        <item name="android:editTextColor">?attr/riot_primary_text_color</item>
-        <item name="android:textColorHint">?attr/default_text_hint_color</item>
+        <item name="editTextColor">?attr/vctr_riot_primary_text_color</item>
+        <item name="android:editTextColor">?attr/vctr_riot_primary_text_color</item>
+        <item name="android:textColorHint">?attr/vctr_default_text_hint_color</item>
     </style>
 
     <!-- call activity -->
@@ -254,7 +254,7 @@
     <style name="CountryPickerTheme.Status" parent="AppTheme.NoActionBar.Status">
         <item name="editTextColor">@android:color/white</item>
         <item name="android:editTextColor">@android:color/white</item>
-        <item name="android:textColorHint">?attr/activity_bottom_gradient_color</item>
+        <item name="android:textColorHint">?attr/vctr_activity_bottom_gradient_color</item>
     </style>
 
     <style name="DirectoryPickerTheme.Status" parent="AppTheme.NoActionBar.Status" />
