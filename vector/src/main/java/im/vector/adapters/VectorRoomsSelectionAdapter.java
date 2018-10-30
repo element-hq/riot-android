@@ -34,8 +34,8 @@ import org.matrix.androidsdk.util.EventDisplay;
 import org.matrix.androidsdk.util.Log;
 
 import im.vector.R;
+import im.vector.ui.themes.ThemeUtils;
 import im.vector.util.RiotEventDisplay;
-import im.vector.util.ThemeUtils;
 import im.vector.util.VectorUtils;
 
 /**

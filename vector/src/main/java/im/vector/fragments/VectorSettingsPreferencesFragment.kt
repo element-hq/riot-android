@@ -58,6 +58,7 @@ import im.vector.extensions.getFingerprintHumanReadable
 import im.vector.preference.*
 import im.vector.settings.FontScale
 import im.vector.settings.VectorLocale
+import im.vector.ui.themes.ThemeUtils
 import im.vector.util.*
 import org.matrix.androidsdk.MXSession
 import org.matrix.androidsdk.crypto.data.MXDeviceInfo

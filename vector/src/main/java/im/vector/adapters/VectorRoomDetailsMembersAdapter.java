@@ -58,7 +58,7 @@ import java.util.concurrent.TimeUnit;
 import im.vector.R;
 import im.vector.activity.CommonActivityUtils;
 import im.vector.settings.VectorLocale;
-import im.vector.util.ThemeUtils;
+import im.vector.ui.themes.ThemeUtils;
 import im.vector.util.VectorUtils;
 
 /**

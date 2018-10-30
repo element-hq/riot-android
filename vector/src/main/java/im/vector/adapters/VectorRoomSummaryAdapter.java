@@ -53,9 +53,9 @@ import im.vector.Matrix;
 import im.vector.PublicRoomsManager;
 import im.vector.R;
 import im.vector.settings.VectorLocale;
+import im.vector.ui.themes.ThemeUtils;
 import im.vector.util.RiotEventDisplay;
 import im.vector.util.RoomUtils;
-import im.vector.util.ThemeUtils;
 import im.vector.util.VectorUtils;
 
 /**
@@ -814,7 +814,7 @@ public class VectorRoomSummaryAdapter extends BaseExpandableListAdapter {
         }
 
         if (null != childRoom) {
-            directChatIcon.setVisibility(RoomUtils.isDirectChat(mMxSession, childRoom.getRoomId()) ? View.VISIBLE: View.GONE);
+            directChatIcon.setVisibility(RoomUtils.isDirectChat(mMxSession, childRoom.getRoomId()) ? View.VISIBLE : View.GONE);
             encryptedIcon.setVisibility(childRoom.isEncrypted() ? View.VISIBLE : View.GONE);
         } else {
             directChatIcon.setVisibility(View.GONE);

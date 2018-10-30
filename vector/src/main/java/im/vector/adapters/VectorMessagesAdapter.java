@@ -102,13 +102,13 @@ import im.vector.extensions.MatrixSdkExtensionsKt;
 import im.vector.listeners.IMessagesAdapterActionsListener;
 import im.vector.settings.VectorLocale;
 import im.vector.ui.VectorQuoteSpan;
+import im.vector.ui.themes.ThemeUtils;
 import im.vector.util.EmojiKt;
 import im.vector.util.EventGroup;
 import im.vector.util.MatrixLinkMovementMethod;
 import im.vector.util.MatrixURLSpan;
 import im.vector.util.PreferencesManager;
 import im.vector.util.RiotEventDisplay;
-import im.vector.util.ThemeUtils;
 import im.vector.util.VectorImageGetter;
 import im.vector.widgets.WidgetsManager;
 

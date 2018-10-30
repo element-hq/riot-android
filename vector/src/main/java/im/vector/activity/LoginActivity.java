@@ -86,8 +86,8 @@ import im.vector.receiver.VectorRegistrationReceiver;
 import im.vector.receiver.VectorUniversalLinkReceiver;
 import im.vector.repositories.ServerUrlsRepository;
 import im.vector.services.EventStreamService;
+import im.vector.ui.themes.ThemeUtils;
 import im.vector.util.PhoneNumberUtils;
-import im.vector.util.ThemeUtils;
 import im.vector.util.ViewUtilKt;
 import kotlin.Triple;
 

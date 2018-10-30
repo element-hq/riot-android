@@ -63,8 +63,8 @@ import im.vector.R;
 import im.vector.activity.VectorGroupDetailsActivity;
 import im.vector.adapters.AbsAdapter;
 import im.vector.adapters.GroupAdapter;
+import im.vector.ui.themes.ThemeUtils;
 import im.vector.util.SystemUtilsKt;
-import im.vector.util.ThemeUtils;
 import im.vector.view.EmptyViewItemDecoration;
 import im.vector.view.SimpleDividerItemDecoration;
 

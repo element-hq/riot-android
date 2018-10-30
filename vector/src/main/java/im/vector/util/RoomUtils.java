@@ -63,6 +63,7 @@ import im.vector.Matrix;
 import im.vector.R;
 import im.vector.activity.VectorRoomActivity;
 import im.vector.adapters.AdapterUtils;
+import im.vector.ui.themes.ThemeUtils;
 
 public class RoomUtils {
 

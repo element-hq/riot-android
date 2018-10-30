@@ -38,7 +38,7 @@ import im.vector.R;
 import im.vector.VectorApp;
 import im.vector.adapters.LanguagesAdapter;
 import im.vector.settings.VectorLocale;
-import im.vector.util.ThemeUtils;
+import im.vector.ui.themes.ThemeUtils;
 import kotlin.Triple;
 
 public class LanguagePickerActivity extends VectorAppCompatActivity implements LanguagesAdapter.OnSelectLocaleListener, SearchView.OnQueryTextListener {

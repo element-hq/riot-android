@@ -31,7 +31,7 @@ import android.view.View;
 import im.vector.R;
 import im.vector.adapters.AbsAdapter;
 import im.vector.adapters.AdapterSection;
-import im.vector.util.ThemeUtils;
+import im.vector.ui.themes.ThemeUtils;
 
 public class EmptyViewItemDecoration extends DividerItemDecoration {
     private final int mOrientation;

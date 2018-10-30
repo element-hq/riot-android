@@ -38,8 +38,8 @@ import com.binaryfork.spanny.Spanny
 import im.vector.R
 import im.vector.features.hhs.ResourceLimitErrorFormatter
 import im.vector.listeners.IMessagesAdapterActionsListener
+import im.vector.ui.themes.ThemeUtils
 import im.vector.util.MatrixURLSpan
-import im.vector.util.ThemeUtils
 import org.matrix.androidsdk.MXPatterns
 import org.matrix.androidsdk.rest.model.MatrixError
 import org.matrix.androidsdk.rest.model.RoomTombstoneContent

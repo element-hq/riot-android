@@ -89,10 +89,10 @@ import im.vector.preference.RoomAvatarPreference;
 import im.vector.preference.VectorCustomActionEditTextPreference;
 import im.vector.preference.VectorListPreference;
 import im.vector.preference.VectorSwitchPreference;
+import im.vector.ui.themes.ThemeUtils;
 import im.vector.util.PermissionsToolsKt;
 import im.vector.settings.VectorLocale;
 import im.vector.util.SystemUtilsKt;
-import im.vector.util.ThemeUtils;
 import im.vector.util.VectorUtils;
 
 public class VectorRoomSettingsFragment extends PreferenceFragment implements SharedPreferences.OnSharedPreferenceChangeListener {

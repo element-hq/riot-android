@@ -41,7 +41,7 @@ import im.vector.R;
 import im.vector.adapters.AbsAdapter;
 import im.vector.adapters.HomeRoomAdapter;
 import im.vector.fragments.AbsHomeFragment;
-import im.vector.util.ThemeUtils;
+import im.vector.ui.themes.ThemeUtils;
 import im.vector.util.RoomUtils;
 
 public class HomeSectionView extends RelativeLayout {

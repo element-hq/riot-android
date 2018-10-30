@@ -43,7 +43,7 @@ import java.util.List;
 import im.vector.Matrix;
 import im.vector.R;
 import im.vector.adapters.GroupDetailsFragmentPagerAdapter;
-import im.vector.util.ThemeUtils;
+import im.vector.ui.themes.ThemeUtils;
 import im.vector.view.RiotViewPager;
 import kotlin.Triple;
 

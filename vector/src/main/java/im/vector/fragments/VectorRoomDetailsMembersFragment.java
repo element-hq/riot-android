@@ -75,7 +75,7 @@ import im.vector.activity.VectorMemberDetailsActivity;
 import im.vector.activity.VectorRoomInviteMembersActivity;
 import im.vector.adapters.ParticipantAdapterItem;
 import im.vector.adapters.VectorRoomDetailsMembersAdapter;
-import im.vector.util.ThemeUtils;
+import im.vector.ui.themes.ThemeUtils;
 import im.vector.util.VectorUtils;
 
 public class VectorRoomDetailsMembersFragment extends VectorBaseFragment {

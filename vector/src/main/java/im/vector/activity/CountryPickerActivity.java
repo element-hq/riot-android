@@ -34,9 +34,9 @@ import org.jetbrains.annotations.NotNull;
 
 import im.vector.R;
 import im.vector.adapters.CountryAdapter;
+import im.vector.ui.themes.ThemeUtils;
 import im.vector.util.CountryPhoneData;
 import im.vector.util.PhoneNumberUtils;
-import im.vector.util.ThemeUtils;
 import kotlin.Triple;
 
 public class CountryPickerActivity extends VectorAppCompatActivity implements CountryAdapter.OnSelectCountryListener, SearchView.OnQueryTextListener {

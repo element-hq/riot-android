@@ -37,7 +37,7 @@ import java.util.List;
 
 import im.vector.R;
 import im.vector.activity.VectorMemberDetailsActivity;
-import im.vector.util.ThemeUtils;
+import im.vector.ui.themes.ThemeUtils;
 import im.vector.util.VectorUtils;
 import im.vector.view.VectorCircularImageView;
 

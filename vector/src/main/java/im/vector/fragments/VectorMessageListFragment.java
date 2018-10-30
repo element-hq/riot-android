@@ -86,12 +86,12 @@ import im.vector.db.VectorContentProvider;
 import im.vector.extensions.MatrixSdkExtensionsKt;
 import im.vector.listeners.IMessagesAdapterActionsListener;
 import im.vector.receiver.VectorUniversalLinkReceiver;
+import im.vector.ui.themes.ThemeUtils;
 import im.vector.util.ExternalApplicationsUtilKt;
 import im.vector.util.PermissionsToolsKt;
 import im.vector.util.PreferencesManager;
 import im.vector.util.SlidableMediaInfo;
 import im.vector.util.SystemUtilsKt;
-import im.vector.util.ThemeUtils;
 import im.vector.util.VectorImageGetter;
 import im.vector.widgets.WidgetsManager;
 

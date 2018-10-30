@@ -35,8 +35,8 @@ import im.vector.VectorApp
 import im.vector.activity.interfaces.Restorable
 import im.vector.dialogs.ConsentNotGivenHelper
 import im.vector.receiver.DebugReceiver
+import im.vector.ui.themes.ThemeUtils
 import im.vector.util.AssetReader
-import im.vector.util.ThemeUtils
 import org.matrix.androidsdk.util.Log
 
 /**

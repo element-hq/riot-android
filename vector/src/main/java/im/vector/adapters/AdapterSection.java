@@ -29,7 +29,7 @@ import java.util.List;
 
 import im.vector.R;
 import im.vector.settings.VectorLocale;
-import im.vector.util.ThemeUtils;
+import im.vector.ui.themes.ThemeUtils;
 
 public class AdapterSection<T> {
 
@@ -57,7 +57,7 @@ public class AdapterSection<T> {
 
     private Context mContext;
 
-    public AdapterSection(Context context , String title, int headerSubViewResId, int contentResId, int headerViewType,
+    public AdapterSection(Context context, String title, int headerSubViewResId, int contentResId, int headerViewType,
                           int contentViewType, List<T> items, Comparator<T> comparator) {
         mContext = context;
         mTitle = title;
