@@ -112,6 +112,7 @@ import im.vector.extensions.MatrixSdkExtensionsKt;
 import im.vector.features.hhs.LimitResourceState;
 import im.vector.features.hhs.ResourceLimitEventListener;
 import im.vector.fragments.VectorMessageListFragment;
+import im.vector.fragments.VectorReadReceiptsDialogFragment;
 import im.vector.fragments.VectorUnknownDevicesFragment;
 import im.vector.listeners.IMessagesAdapterActionsListener;
 import im.vector.notifications.NotificationUtils;
@@ -144,7 +145,8 @@ public class VectorRoomActivity extends MXCActionBarActivity implements
         MatrixMessageListFragment.IRoomPreviewDataListener,
         MatrixMessageListFragment.IEventSendingListener,
         MatrixMessageListFragment.IOnScrollListener,
-        VectorMessageListFragment.VectorMessageListFragmentListener {
+        VectorMessageListFragment.VectorMessageListFragmentListener,
+        VectorReadReceiptsDialogFragment.VectorReadReceiptsDialogFragmentListener {
 
     // the session
     public static final String EXTRA_MATRIX_ID = MXCActionBarActivity.EXTRA_MATRIX_ID;
@@ -1837,12 +1839,7 @@ public class VectorRoomActivity extends MXCActionBarActivity implements
                         intent.putExtra(VectorCallViewActivity.EXTRA_MATRIX_ID, mSession.getCredentials().userId);
                         intent.putExtra(VectorCallViewActivity.EXTRA_CALL_ID, call.getCallId());
 
-                        runOnUiThread(new Runnable() {
-                            @Override
-                            public void run() {
-                                startActivity(intent);
-                            }
-                        });
+                        startActivity(intent);
                     }
                 });
             }
@@ -3184,13 +3181,6 @@ public class VectorRoomActivity extends MXCActionBarActivity implements
     // Kick / ban mode management
     //================================================================================
 
-    /*
-        <string name="has_been_kicked">You have been kicked from %1$ by %2$</string>
-    <string name="reason_colon">Reason: %1$</string>
-    <string name="rejoin">Rejoin</string>
-    <string name="forget_room">Forget room</string>
-     */
-
     /**
      * Manage the room preview buttons area
      */
@@ -3919,6 +3909,22 @@ public class VectorRoomActivity extends MXCActionBarActivity implements
         }
     }
 
+
+    /* ==========================================================================================
+     * Interface VectorReadReceiptsDialogFragmentListener
+     * ========================================================================================== */
+
+    @Override
+    public void onMemberClicked(@NotNull String userId) {
+        if (mRoom != null) {
+            Intent vectorMemberDetailIntent = new Intent(this, VectorMemberDetailsActivity.class);
+            vectorMemberDetailIntent.putExtra(VectorMemberDetailsActivity.EXTRA_ROOM_ID, mRoom.getRoomId());
+            vectorMemberDetailIntent.putExtra(VectorMemberDetailsActivity.EXTRA_MEMBER_ID, userId);
+            vectorMemberDetailIntent.putExtra(VectorMemberDetailsActivity.EXTRA_MATRIX_ID, mSession.getCredentials().userId);
+            startActivityForResult(vectorMemberDetailIntent, VectorRoomActivity.GET_MENTION_REQUEST_CODE);
+        }
+    }
+
     /* ==========================================================================================
      * UI Event
      * ========================================================================================== */
@@ -4018,13 +4024,7 @@ public class VectorRoomActivity extends MXCActionBarActivity implements
             final Intent intent = new Intent(VectorRoomActivity.this, VectorCallViewActivity.class);
             intent.putExtra(VectorCallViewActivity.EXTRA_MATRIX_ID, call.getSession().getCredentials().userId);
             intent.putExtra(VectorCallViewActivity.EXTRA_CALL_ID, call.getCallId());
-
-            runOnUiThread(new Runnable() {
-                @Override
-                public void run() {
-                    startActivity(intent);
-                }
-            });
+            startActivity(intent);
         } else {
             // if the call is no more active, just remove the view
             mVectorPendingCallView.onCallTerminated();

@@ -4,6 +4,7 @@
     android:id="@+id/invite_view"
     android:layout_width="match_parent"
     android:layout_height="130dp"
+    android:paddingEnd="16dp"
     android:paddingRight="16dp">
 
     <RelativeLayout
@@ -16,6 +17,7 @@
             android:layout_width="@dimen/chat_avatar_size"
             android:layout_height="@dimen/chat_avatar_size"
             android:layout_centerVertical="true"
+            android:layout_marginStart="16dp"
             android:layout_marginLeft="16dp"
             tools:src="@tools:sample/avatars" />
 
@@ -23,14 +25,18 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerVertical="true"
+            android:layout_marginStart="16dp"
             android:layout_marginLeft="16dp"
+            android:layout_marginEnd="6dp"
             android:layout_marginRight="6dp"
+            android:layout_toEndOf="@+id/room_avatar"
             android:layout_toRightOf="@+id/room_avatar">
 
             <TextView
                 android:id="@+id/group_name"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_toStartOf="@+id/group_members_count"
                 android:layout_toLeftOf="@+id/group_members_count"
                 android:ellipsize="end"
                 android:fontFamily="sans-serif-regular"
@@ -43,8 +49,9 @@
                 android:id="@+id/group_topic"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_alignRight="@+id/group_name"
                 android:layout_below="@+id/group_name"
+                android:layout_alignEnd="@+id/group_name"
+                android:layout_alignRight="@+id/group_name"
                 android:ellipsize="end"
                 android:maxLines="1"
                 android:textColor="?attr/default_text_light_color"
@@ -57,7 +64,9 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_alignBaseline="@+id/group_name"
+                android:layout_alignParentEnd="true"
                 android:layout_alignParentRight="true"
+                android:layout_marginStart="6dp"
                 android:layout_marginLeft="6dp"
                 android:gravity="center"
                 android:minWidth="25dp"
@@ -94,6 +103,7 @@
             android:id="@+id/group_invite_join_button"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
+            android:layout_marginStart="16dp"
             android:layout_marginLeft="16dp"
             android:background="@color/vector_green_color"
             android:fontFamily="sans-serif-medium"

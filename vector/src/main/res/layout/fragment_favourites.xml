@@ -13,6 +13,6 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:padding="16dp"
-        android:text="@string/search_no_results"/>
+        android:text="@string/search_no_results" />
 </RelativeLayout>
 
