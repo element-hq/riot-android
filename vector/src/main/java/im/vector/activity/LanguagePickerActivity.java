@@ -37,6 +37,7 @@ import java.util.Locale;
 import im.vector.R;
 import im.vector.VectorApp;
 import im.vector.adapters.LanguagesAdapter;
+import im.vector.settings.VectorLocale;
 import im.vector.util.ThemeUtils;
 import kotlin.Triple;
 
@@ -133,7 +134,7 @@ public class LanguagePickerActivity extends VectorAppCompatActivity implements L
         LinearLayoutManager layoutManager = new LinearLayoutManager(this);
         layoutManager.setOrientation(LinearLayoutManager.VERTICAL);
         languagesRecyclerView.setLayoutManager(layoutManager);
-        mAdapter = new LanguagesAdapter(VectorApp.getApplicationLocales(this), this);
+        mAdapter = new LanguagesAdapter(VectorLocale.INSTANCE.getSupportedLocales(), this);
         languagesRecyclerView.setAdapter(mAdapter);
     }
 

@@ -33,7 +33,7 @@ import java.util.List;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import im.vector.R;
-import im.vector.VectorApp;
+import im.vector.settings.VectorLocale;
 import im.vector.util.SlashCommandsParser;
 
 /**
@@ -140,13 +140,13 @@ public class AutoCompletedCommandLineAdapter extends ArrayAdapter<String> {
             List<String> newValues = new ArrayList<>();
 
             if (!TextUtils.isEmpty(prefix)) {
-                String prefixString = prefix.toString().toLowerCase(VectorApp.getApplicationLocale());
+                String prefixString = prefix.toString().toLowerCase(VectorLocale.INSTANCE.getApplicationLocale());
 
                 if (prefixString.startsWith("/")) {
                     for (SlashCommandsParser.SlashCommand slashCommand : mCommandLines) {
                         if ((null != slashCommand.getCommand())
                                 && slashCommand.getCommand()
-                                .toLowerCase(VectorApp.getApplicationLocale())
+                                .toLowerCase(VectorLocale.INSTANCE.getApplicationLocale())
                                 .startsWith(prefixString)) {
                             newValues.add(slashCommand.getCommand());
                         }

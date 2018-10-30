@@ -73,8 +73,8 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import im.vector.R;
-import im.vector.VectorApp;
 import im.vector.listeners.IMessagesAdapterActionsListener;
+import im.vector.settings.VectorLocale;
 import im.vector.util.MatrixLinkMovementMethod;
 import im.vector.util.MatrixURLSpan;
 import im.vector.util.RiotEventDisplay;
@@ -919,8 +919,8 @@ class VectorMessagesAdapterHelper {
     CharSequence highlightPattern(Spannable text, String pattern, CharacterStyle highLightTextStyle, boolean isHighlighted) {
         if (!TextUtils.isEmpty(pattern) && !TextUtils.isEmpty(text) && (text.length() >= pattern.length())) {
 
-            String lowerText = text.toString().toLowerCase(VectorApp.getApplicationLocale());
-            String lowerPattern = pattern.toLowerCase(VectorApp.getApplicationLocale());
+            String lowerText = text.toString().toLowerCase(VectorLocale.INSTANCE.getApplicationLocale());
+            String lowerPattern = pattern.toLowerCase(VectorLocale.INSTANCE.getApplicationLocale());
 
             int start = 0;
             int pos = lowerText.indexOf(lowerPattern, start);

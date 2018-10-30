@@ -56,8 +56,8 @@ import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.TimeUnit;
 
 import im.vector.R;
-import im.vector.VectorApp;
 import im.vector.activity.CommonActivityUtils;
+import im.vector.settings.VectorLocale;
 import im.vector.util.ThemeUtils;
 import im.vector.util.VectorUtils;
 
@@ -222,7 +222,7 @@ public class VectorRoomDetailsMembersAdapter extends BaseExpandableListAdapter {
         } else {
             // new pattern different from previous one?
             if (!aPattern.trim().equals(mSearchPattern) || aIsRefreshForced) {
-                mSearchPattern = aPattern.trim().toLowerCase(VectorApp.getApplicationLocale());
+                mSearchPattern = aPattern.trim().toLowerCase(VectorLocale.INSTANCE.getApplicationLocale());
                 updateRoomMembersDataModel(searchListener);
             } else {
                 // search pattern is identical, notify listener and exit

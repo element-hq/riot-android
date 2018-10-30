@@ -13,6 +13,7 @@ Improvements:
 
 Other changes:
  - F-Droid version: restart event stream on application upgrade (#2105)
+ - Locales management has been moved to a dedicated file
 
 Bugfix:
  - Status.im backgrounds, header, and missing items (#2672)

@@ -163,6 +163,9 @@ dependencies {
     // Kotlin KTX
     implementation 'androidx.core:core-ktx:0.3'
 
+    // Kotlin coroutines
+    implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-core:0.30.2'
+
     implementation 'com.android.support:multidex:1.0.0'
 
     implementation 'me.leolin:ShortcutBadger:1.1.2@aar'

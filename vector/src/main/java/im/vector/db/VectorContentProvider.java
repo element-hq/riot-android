@@ -32,6 +32,7 @@ import java.io.FileNotFoundException;
 
 import im.vector.BuildConfig;
 import im.vector.VectorApp;
+import im.vector.settings.VectorLocale;
 
 public class VectorContentProvider extends ContentProvider {
     private static final String LOG_TAG = VectorContentProvider.class.getSimpleName();
@@ -99,7 +100,7 @@ public class VectorContentProvider extends ContentProvider {
     @Nullable
     public String getType(@NonNull Uri uri) {
         String type = null;
-        String extension = MimeTypeMap.getFileExtensionFromUrl(uri.toString().toLowerCase(VectorApp.getApplicationLocale()));
+        String extension = MimeTypeMap.getFileExtensionFromUrl(uri.toString().toLowerCase(VectorLocale.INSTANCE.getApplicationLocale()));
         if (extension != null) {
             MimeTypeMap mime = MimeTypeMap.getSingleton();
             type = mime.getMimeTypeFromExtension(extension);

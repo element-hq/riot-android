@@ -37,7 +37,7 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 
-import im.vector.VectorApp;
+import im.vector.settings.VectorLocale;
 
 /**
  * This class contains the phone number toolbox
@@ -69,7 +69,7 @@ public class PhoneNumberUtils {
      */
     private static void buildCountryCodesList() {
         if (null == mCountryCodes) {
-            Locale applicationLocale = VectorApp.getApplicationLocale();
+            Locale applicationLocale = VectorLocale.INSTANCE.getApplicationLocale();
 
             // retrieve the ISO country code
             String[] isoCountryCodes = Locale.getISOCountries();
@@ -160,7 +160,7 @@ public class PhoneNumberUtils {
         if (!preferences.contains(COUNTRY_CODE_PREF_KEY) || TextUtils.isEmpty(preferences.getString(COUNTRY_CODE_PREF_KEY, ""))) {
             try {
                 TelephonyManager tm = (TelephonyManager) context.getSystemService(Context.TELEPHONY_SERVICE);
-                String countryCode = tm.getNetworkCountryIso().toUpperCase(VectorApp.getApplicationLocale());
+                String countryCode = tm.getNetworkCountryIso().toUpperCase(VectorLocale.INSTANCE.getApplicationLocale());
                 if (TextUtils.isEmpty(countryCode)
                         && !TextUtils.isEmpty(Locale.getDefault().getCountry())
                         && PhoneNumberUtil.getInstance().getCountryCodeForRegion(Locale.getDefault().getCountry()) != 0) {
