@@ -127,6 +127,7 @@ import im.vector.fragments.RoomsFragment;
 import im.vector.gcm.GcmRegistrationManager;
 import im.vector.receiver.VectorUniversalLinkReceiver;
 import im.vector.services.EventStreamService;
+import im.vector.ui.themes.ActivityOtherThemes;
 import im.vector.ui.themes.ThemeUtils;
 import im.vector.util.BugReporter;
 import im.vector.util.CallsManager;
@@ -137,7 +138,6 @@ import im.vector.util.SystemUtilsKt;
 import im.vector.util.VectorUtils;
 import im.vector.view.UnreadCounterBadgeView;
 import im.vector.view.VectorPendingCallView;
-import kotlin.Triple;
 
 /**
  * Displays the main screen of the app, with rooms the user has joined and the ability to create
@@ -287,8 +287,8 @@ public class VectorHomeActivity extends VectorAppCompatActivity implements Searc
 
     @NotNull
     @Override
-    public Triple getOtherThemes() {
-        return new Triple(R.style.HomeActivityTheme_Dark, R.style.HomeActivityTheme_Black, R.style.HomeActivityTheme_Status);
+    public ActivityOtherThemes getOtherThemes() {
+        return ActivityOtherThemes.Home.INSTANCE;
     }
 
     @Override

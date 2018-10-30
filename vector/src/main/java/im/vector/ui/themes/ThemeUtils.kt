@@ -86,11 +86,11 @@ object ThemeUtils {
      *
      * @param activity the activity
      */
-    fun setActivityTheme(activity: Activity, otherThemes: Triple<Int, Int, Int>) {
+    fun setActivityTheme(activity: Activity, otherThemes: ActivityOtherThemes) {
         when (getApplicationTheme(activity)) {
-            THEME_DARK_VALUE -> activity.setTheme(otherThemes.first)
-            THEME_BLACK_VALUE -> activity.setTheme(otherThemes.second)
-            THEME_STATUS_VALUE -> activity.setTheme(otherThemes.third)
+            THEME_DARK_VALUE -> activity.setTheme(otherThemes.dark)
+            THEME_BLACK_VALUE -> activity.setTheme(otherThemes.black)
+            THEME_STATUS_VALUE -> activity.setTheme(otherThemes.status)
         }
 
         mColorByAttr.clear()
@@ -166,7 +166,7 @@ object ThemeUtils {
      */
     fun getResourceId(c: Context, resourceId: Int): Int {
         if (TextUtils.equals(getApplicationTheme(c), THEME_LIGHT_VALUE) ||
-        TextUtils.equals(getApplicationTheme(c), THEME_STATUS_VALUE)) {
+                TextUtils.equals(getApplicationTheme(c), THEME_STATUS_VALUE)) {
             return when (resourceId) {
                 R.drawable.line_divider_dark -> R.drawable.line_divider_light
                 R.style.Floating_Actions_Menu -> R.style.Floating_Actions_Menu_Light

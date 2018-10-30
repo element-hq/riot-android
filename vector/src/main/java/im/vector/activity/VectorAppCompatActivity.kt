@@ -35,6 +35,7 @@ import im.vector.VectorApp
 import im.vector.activity.interfaces.Restorable
 import im.vector.dialogs.ConsentNotGivenHelper
 import im.vector.receiver.DebugReceiver
+import im.vector.ui.themes.ActivityOtherThemes
 import im.vector.ui.themes.ThemeUtils
 import im.vector.util.AssetReader
 import org.matrix.androidsdk.util.Log
@@ -199,10 +200,9 @@ abstract class VectorAppCompatActivity : AppCompatActivity() {
     open fun getMenuTint() = R.attr.icon_tint_on_dark_action_bar_color
 
     /**
-     * Return a Triple with Dark, Black, and Status.im theme
+     * Return a object containing other themes for this activity
      */
-    open fun getOtherThemes(): Triple<Int, Int, Int> = Triple(R.style.AppTheme_Dark, R.style.AppTheme_Black, R.style.AppTheme_Status)
-
+    open fun getOtherThemes(): ActivityOtherThemes = ActivityOtherThemes.Default
 
     //==============================================================================================
     // Handle loading view (also called waiting view or spinner view)

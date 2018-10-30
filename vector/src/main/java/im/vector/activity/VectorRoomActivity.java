@@ -117,6 +117,7 @@ import im.vector.fragments.VectorUnknownDevicesFragment;
 import im.vector.listeners.IMessagesAdapterActionsListener;
 import im.vector.notifications.NotificationUtils;
 import im.vector.services.EventStreamService;
+import im.vector.ui.themes.ActivityOtherThemes;
 import im.vector.ui.themes.ThemeUtils;
 import im.vector.util.CallsManager;
 import im.vector.util.ExternalApplicationsUtilKt;
@@ -136,7 +137,6 @@ import im.vector.view.VectorOngoingConferenceCallView;
 import im.vector.view.VectorPendingCallView;
 import im.vector.widgets.Widget;
 import im.vector.widgets.WidgetsManager;
-import kotlin.Triple;
 
 /**
  * Displays a single room with messages.
@@ -612,8 +612,8 @@ public class VectorRoomActivity extends MXCActionBarActivity implements
 
     @NotNull
     @Override
-    public Triple getOtherThemes() {
-        return new Triple(R.style.AppTheme_NoActionBar_Dark, R.style.AppTheme_NoActionBar_Black, R.style.AppTheme_NoActionBar_Status);
+    public ActivityOtherThemes getOtherThemes() {
+        return ActivityOtherThemes.NoActionBar.INSTANCE;
     }
 
     @Override
