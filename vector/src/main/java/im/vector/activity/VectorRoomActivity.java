@@ -2957,7 +2957,7 @@ public class VectorRoomActivity extends MXCActionBarActivity implements
      * @param span       the URL
      * @param value      roomAlias, roomId, groupId, eventId, etc.
      */
-    public void makeLinkClickable(SpannableStringBuilder strBuilder, final URLSpan span, final String value) {
+    private void makeLinkClickable(SpannableStringBuilder strBuilder, final URLSpan span, final String value) {
         int start = strBuilder.getSpanStart(span);
         int end = strBuilder.getSpanEnd(span);
 
