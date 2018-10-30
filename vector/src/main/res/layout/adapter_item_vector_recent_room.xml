@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:background="?attr/riot_primary_background_color"
+    android:background="?attr/vctr_riot_primary_background_color"
     android:orientation="vertical">
 
     <RelativeLayout
@@ -58,7 +58,7 @@
             android:layout_marginStart="35dp"
             android:layout_marginLeft="35dp"
             android:src="@drawable/e2e_verified"
-            android:tint="?attr/default_icon_tint_color"
+            android:tint="?attr/vctr_default_icon_tint_color"
             android:visibility="gone" />
 
         <RelativeLayout
@@ -110,7 +110,7 @@
                     android:layout_toLeftOf="@+id/roomSummaryAdapter_unread_count"
                     android:fontFamily="sans-serif-regular"
                     android:singleLine="true"
-                    android:textColor="?attr/riot_primary_text_color"
+                    android:textColor="?attr/vctr_riot_primary_text_color"
                     android:textSize="16sp"
                     tools:text="Room Name" />
 
@@ -147,7 +147,7 @@
                     android:layout_toStartOf="@+id/roomSummaryAdapter_action_image"
                     android:layout_toLeftOf="@+id/roomSummaryAdapter_action_image"
                     android:fontFamily="sans-serif-light"
-                    android:textColor="?attr/default_text_light_color"
+                    android:textColor="?attr/vctr_default_text_light_color"
                     android:textSize="12sp"
                     tools:text="Jan 1 00:00" />
 
@@ -228,7 +228,7 @@
                     android:layout_toLeftOf="@+id/roomSummaryAdapter_word_readable"
                     android:ellipsize="end"
                     android:maxLines="1"
-                    android:textColor="?attr/default_text_light_color"
+                    android:textColor="?attr/vctr_default_text_light_color"
                     android:textSize="14sp"
                     tools:text="last room message" />
 
@@ -307,12 +307,12 @@
         android:layout_height="1dp"
         android:layout_marginStart="73dp"
         android:layout_marginLeft="73dp"
-        android:background="?attr/list_divider_color" />
+        android:background="?attr/vctr_list_divider_color" />
 
     <View
         android:id="@+id/recents_groups_separator_line"
         android:layout_width="match_parent"
         android:layout_height="1dp"
-        android:background="?attr/list_divider_color" />
+        android:background="?attr/vctr_list_divider_color" />
 
 </LinearLayout>

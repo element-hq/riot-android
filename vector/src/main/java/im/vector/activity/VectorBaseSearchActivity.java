@@ -45,7 +45,7 @@ import java.util.Timer;
 import java.util.TimerTask;
 
 import im.vector.R;
-import kotlin.Triple;
+import im.vector.ui.themes.ActivityOtherThemes;
 
 /**
  * This class defines a base class to manage search in action bar
@@ -67,8 +67,8 @@ public abstract class VectorBaseSearchActivity extends MXCActionBarActivity {
 
     @NotNull
     @Override
-    public Triple getOtherThemes() {
-        return new Triple(R.style.SearchesAppTheme_Dark, R.style.SearchesAppTheme_Black, R.style.SearchesAppTheme_Status);
+    public ActivityOtherThemes getOtherThemes() {
+        return ActivityOtherThemes.Search.INSTANCE;
     }
 
     @Override
@@ -212,11 +212,6 @@ public abstract class VectorBaseSearchActivity extends MXCActionBarActivity {
     @Override
     public int getMenuRes() {
         return R.menu.vector_searches;
-    }
-
-    @Override
-    public int getMenuTint() {
-        return R.attr.icon_tint_on_dark_action_bar_color;
     }
 
     @Override

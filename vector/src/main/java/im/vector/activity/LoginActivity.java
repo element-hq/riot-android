@@ -86,10 +86,10 @@ import im.vector.receiver.VectorRegistrationReceiver;
 import im.vector.receiver.VectorUniversalLinkReceiver;
 import im.vector.repositories.ServerUrlsRepository;
 import im.vector.services.EventStreamService;
+import im.vector.ui.themes.ActivityOtherThemes;
+import im.vector.ui.themes.ThemeUtils;
 import im.vector.util.PhoneNumberUtils;
-import im.vector.util.ThemeUtils;
 import im.vector.util.ViewUtilKt;
-import kotlin.Triple;
 
 /**
  * Displays the login screen.
@@ -345,8 +345,8 @@ public class LoginActivity extends MXCActionBarActivity implements RegistrationM
 
     @NotNull
     @Override
-    public Triple getOtherThemes() {
-        return new Triple(R.style.LoginAppTheme_Dark, R.style.LoginAppTheme_Black, R.style.LoginAppTheme_Status );
+    public ActivityOtherThemes getOtherThemes() {
+        return ActivityOtherThemes.Login.INSTANCE;
     }
 
     @Override
@@ -397,7 +397,7 @@ public class LoginActivity extends MXCActionBarActivity implements RegistrationM
                 null,
                 ThemeUtils.INSTANCE.tintDrawable(this,
                         ContextCompat.getDrawable(this, R.drawable.ic_material_expand_more_black),
-                        R.attr.settings_icon_tint_color),
+                        R.attr.vctr_settings_icon_tint_color),
                 null);
         mLoginPasswordTextView = findViewById(R.id.login_password);
 
@@ -416,7 +416,7 @@ public class LoginActivity extends MXCActionBarActivity implements RegistrationM
                 null,
                 ThemeUtils.INSTANCE.tintDrawable(this,
                         ContextCompat.getDrawable(this, R.drawable.ic_material_expand_more_black),
-                        R.attr.settings_icon_tint_color),
+                        R.attr.vctr_settings_icon_tint_color),
                 null);
         mSubmitThreePidButton = findViewById(R.id.button_submit);
         mSkipThreePidButton = findViewById(R.id.button_skip);

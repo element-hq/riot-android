@@ -33,7 +33,7 @@
         android:id="@+id/filtered_list_cell"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="?attr/riot_primary_background_color">
+        android:background="?attr/vctr_riot_primary_background_color">
 
         <RelativeLayout
             android:id="@+id/filtered_list_actions_list"
@@ -117,7 +117,7 @@
             android:layout_toEndOf="@id/filtered_list_avatar"
             android:layout_toRightOf="@id/filtered_list_avatar"
             android:singleLine="true"
-            android:textColor="?attr/default_text_dark_color"
+            android:textColor="?attr/vctr_default_text_dark_color"
             android:textSize="16sp"
             android:textStyle="bold"
             tools:text="A member name" />
@@ -135,7 +135,7 @@
             android:layout_toLeftOf="@id/filtered_list_actions_list"
             android:ellipsize="end"
             android:maxLines="1"
-            android:textColor="?attr/default_text_light_color"
+            android:textColor="?attr/vctr_default_text_light_color"
             android:textSize="14sp"
             tools:text="A member status" />
 
@@ -145,7 +145,7 @@
             android:layout_alignParentStart="true"
             android:layout_alignParentLeft="true"
             android:layout_alignParentBottom="true"
-            android:background="?attr/list_divider_color" />
+            android:background="?attr/vctr_list_divider_color" />
 
     </RelativeLayout>
 </RelativeLayout>

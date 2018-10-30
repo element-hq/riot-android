@@ -15,7 +15,7 @@
         android:id="@+id/room_creation_spinner_views"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="?attr/waiting_background_color"
+        android:background="?attr/vctr_waiting_background_color"
         android:visibility="gone">
 
         <ProgressBar

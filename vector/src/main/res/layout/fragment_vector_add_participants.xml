@@ -5,7 +5,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="?attr/riot_primary_background_color">
+    android:background="?attr/vctr_riot_primary_background_color">
 
     <RelativeLayout
         android:id="@+id/search_layout"
@@ -45,8 +45,8 @@
             android:imeOptions="actionSearch"
             android:inputType="text"
             android:maxLines="1"
-            android:textColor="?attr/default_text_dark_color"
-            android:textColorHint="?attr/default_text_hint_color"
+            android:textColor="?attr/vctr_default_text_dark_color"
+            android:textColorHint="?attr/vctr_default_text_hint_color"
             android:textCursorDrawable="@drawable/searches_cursor_background"
             android:textSize="16sp" />
     </RelativeLayout>
@@ -56,8 +56,8 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_below="@id/search_layout"
-        android:background="?attr/riot_primary_background_color"
-        android:divider="?attr/list_divider_color"
+        android:background="?attr/vctr_riot_primary_background_color"
+        android:divider="?attr/vctr_list_divider_color"
         android:dividerHeight="1px" />
 
     <TextView
@@ -77,7 +77,7 @@
         android:id="@+id/add_participants_progress_view"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="?attr/waiting_background_color"
+        android:background="?attr/vctr_waiting_background_color"
         android:visibility="gone">
 
         <ProgressBar

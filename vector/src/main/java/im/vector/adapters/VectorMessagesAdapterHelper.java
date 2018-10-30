@@ -75,10 +75,10 @@ import java.util.regex.Pattern;
 import im.vector.R;
 import im.vector.listeners.IMessagesAdapterActionsListener;
 import im.vector.settings.VectorLocale;
+import im.vector.ui.themes.ThemeUtils;
 import im.vector.util.MatrixLinkMovementMethod;
 import im.vector.util.MatrixURLSpan;
 import im.vector.util.RiotEventDisplay;
-import im.vector.util.ThemeUtils;
 import im.vector.util.VectorImageGetter;
 import im.vector.util.VectorUtils;
 import im.vector.view.PillView;
@@ -893,7 +893,7 @@ class VectorMessagesAdapterHelper {
             return;
         }
 
-        textView.setBackgroundColor(ThemeUtils.INSTANCE.getColor(mContext, R.attr.markdown_block_background_color));
+        textView.setBackgroundColor(ThemeUtils.INSTANCE.getColor(mContext, R.attr.vctr_markdown_block_background_color));
     }
 
     /**
@@ -951,7 +951,7 @@ class VectorMessagesAdapterHelper {
     CharSequence convertToHtml(String htmlFormattedText) {
         final HtmlTagHandler htmlTagHandler = new HtmlTagHandler();
         htmlTagHandler.mContext = mContext;
-        htmlTagHandler.setCodeBlockBackgroundColor(ThemeUtils.INSTANCE.getColor(mContext, R.attr.markdown_block_background_color));
+        htmlTagHandler.setCodeBlockBackgroundColor(ThemeUtils.INSTANCE.getColor(mContext, R.attr.vctr_markdown_block_background_color));
 
         CharSequence sequence;
 

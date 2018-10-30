@@ -48,8 +48,8 @@ import im.vector.analytics.TrackingEvent;
 import im.vector.gcm.GcmRegistrationManager;
 import im.vector.receiver.VectorUniversalLinkReceiver;
 import im.vector.services.EventStreamService;
+import im.vector.ui.themes.ActivityOtherThemes;
 import im.vector.util.PreferencesManager;
-import kotlin.Triple;
 
 /**
  * SplashActivity displays a splash while loading and initializing the client.
@@ -137,8 +137,8 @@ public class SplashActivity extends MXCActionBarActivity {
 
     @NotNull
     @Override
-    public Triple getOtherThemes() {
-        return new Triple(R.style.AppTheme_NoActionBar_Dark, R.style.AppTheme_NoActionBar_Black, R.style.AppTheme_NoActionBar_Status);
+    public ActivityOtherThemes getOtherThemes() {
+        return ActivityOtherThemes.NoActionBar.INSTANCE;
     }
 
     @Override

@@ -19,7 +19,7 @@
             android:padding="8dp"
             android:rotation="@integer/rtl_mirror_flip"
             android:src="@drawable/ic_material_arrow_back_white"
-            android:tint="?attr/primary_control_color" />
+            android:tint="?attr/vctr_primary_control_color" />
 
         <TextView
             android:id="@+id/widget_title"

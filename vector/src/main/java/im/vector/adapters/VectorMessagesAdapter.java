@@ -102,13 +102,13 @@ import im.vector.extensions.MatrixSdkExtensionsKt;
 import im.vector.listeners.IMessagesAdapterActionsListener;
 import im.vector.settings.VectorLocale;
 import im.vector.ui.VectorQuoteSpan;
+import im.vector.ui.themes.ThemeUtils;
 import im.vector.util.EmojiKt;
 import im.vector.util.EventGroup;
 import im.vector.util.MatrixLinkMovementMethod;
 import im.vector.util.MatrixURLSpan;
 import im.vector.util.PreferencesManager;
 import im.vector.util.RiotEventDisplay;
-import im.vector.util.ThemeUtils;
 import im.vector.util.VectorImageGetter;
 import im.vector.widgets.WidgetsManager;
 
@@ -256,7 +256,7 @@ public class VectorMessagesAdapter extends AbstractMessagesAdapter {
                 if (mHtmlTagHandler == null) {
                     mHtmlTagHandler = new HtmlTagHandler();
                     mHtmlTagHandler.mContext = mContext;
-                    mHtmlTagHandler.setCodeBlockBackgroundColor(ThemeUtils.INSTANCE.getColor(mContext, R.attr.markdown_block_background_color));
+                    mHtmlTagHandler.setCodeBlockBackgroundColor(ThemeUtils.INSTANCE.getColor(mContext, R.attr.vctr_markdown_block_background_color));
                 }
                 return mHtmlTagHandler;
             }
@@ -378,7 +378,7 @@ public class VectorMessagesAdapter extends AbstractMessagesAdapter {
         mHideReadReceipts = PreferencesManager.hideReadReceipts(VectorApp.getInstance());
 
         mPadlockDrawable = ThemeUtils.INSTANCE.tintDrawable(mContext,
-                ContextCompat.getDrawable(mContext, R.drawable.e2e_unencrypted), R.attr.settings_icon_tint_color);
+                ContextCompat.getDrawable(mContext, R.drawable.e2e_unencrypted), R.attr.vctr_settings_icon_tint_color);
     }
 
     /*
@@ -415,31 +415,31 @@ public class VectorMessagesAdapter extends AbstractMessagesAdapter {
 
     // customization methods
     private int getDefaultMessageTextColor() {
-        return ThemeUtils.INSTANCE.getColor(mContext, R.attr.message_text_color);
+        return ThemeUtils.INSTANCE.getColor(mContext, R.attr.vctr_message_text_color);
     }
 
     private int getNoticeTextColor() {
-        return ThemeUtils.INSTANCE.getColor(mContext, R.attr.notice_text_color);
+        return ThemeUtils.INSTANCE.getColor(mContext, R.attr.vctr_notice_text_color);
     }
 
     private int getEncryptingMessageTextColor() {
-        return ThemeUtils.INSTANCE.getColor(mContext, R.attr.encrypting_message_text_color);
+        return ThemeUtils.INSTANCE.getColor(mContext, R.attr.vctr_encrypting_message_text_color);
     }
 
     private int getSendingMessageTextColor() {
-        return ThemeUtils.INSTANCE.getColor(mContext, R.attr.sending_message_text_color);
+        return ThemeUtils.INSTANCE.getColor(mContext, R.attr.vctr_sending_message_text_color);
     }
 
     private int getHighlightMessageTextColor() {
-        return ThemeUtils.INSTANCE.getColor(mContext, R.attr.highlighted_message_text_color);
+        return ThemeUtils.INSTANCE.getColor(mContext, R.attr.vctr_highlighted_message_text_color);
     }
 
     private int getSearchHighlightMessageTextColor() {
-        return ThemeUtils.INSTANCE.getColor(mContext, R.attr.highlighted_searched_message_text_color);
+        return ThemeUtils.INSTANCE.getColor(mContext, R.attr.vctr_highlighted_searched_message_text_color);
     }
 
     private int getNotSentMessageTextColor() {
-        return ThemeUtils.INSTANCE.getColor(mContext, R.attr.unsent_message_text_color);
+        return ThemeUtils.INSTANCE.getColor(mContext, R.attr.vctr_unsent_message_text_color);
     }
 
     /*
@@ -1147,7 +1147,7 @@ public class VectorMessagesAdapter extends AbstractMessagesAdapter {
             if (row.getEvent().isUndelivered() || row.getEvent().isUnknownDevice()) {
                 tsTextView.setTextColor(mNotSentMessageTextColor);
             } else {
-                tsTextView.setTextColor(ThemeUtils.INSTANCE.getColor(mContext, R.attr.default_text_light_color));
+                tsTextView.setTextColor(ThemeUtils.INSTANCE.getColor(mContext, R.attr.vctr_default_text_light_color));
             }
 
             tsTextView.setVisibility((((position + 1) == getCount()) || mIsSearchMode || mAlwaysShowTimeStamps) ? View.VISIBLE : View.GONE);
@@ -1314,7 +1314,7 @@ public class VectorMessagesAdapter extends AbstractMessagesAdapter {
                 container.addView(blockView);
                 textViews.add(tv);
 
-                ((View) tv.getParent()).setBackgroundColor(ThemeUtils.INSTANCE.getColor(mContext, R.attr.markdown_block_background_color));
+                ((View) tv.getParent()).setBackgroundColor(ThemeUtils.INSTANCE.getColor(mContext, R.attr.vctr_markdown_block_background_color));
             } else {
                 // Not a fenced block
                 final TextView tv = (TextView) mLayoutInflater.inflate(R.layout.adapter_item_vector_message_code_text, null);
@@ -2495,7 +2495,7 @@ public class VectorMessagesAdapter extends AbstractMessagesAdapter {
         }
 
         Menu menu = popup.getMenu();
-        ThemeUtils.INSTANCE.tintMenuIcons(menu, ThemeUtils.INSTANCE.getColor(mContext, R.attr.settings_icon_tint_color));
+        ThemeUtils.INSTANCE.tintMenuIcons(menu, ThemeUtils.INSTANCE.getColor(mContext, R.attr.vctr_settings_icon_tint_color));
 
         // hide entries
         for (int i = 0; i < menu.size(); i++) {

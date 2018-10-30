@@ -16,7 +16,7 @@ Other changes:
  - Locales management has been moved to a dedicated file
 
 Bugfix:
- - Status.im backgrounds, header, and missing items (#2672)
+ - Status.im backgrounds, header, buttons, and missing items (#2672)
  - Fix Permalinks and registration issue (#2689)
  - Mention from read receipts list doesn't work (#656)
 

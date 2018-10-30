@@ -58,7 +58,7 @@ import java.util.concurrent.TimeUnit;
 import im.vector.R;
 import im.vector.activity.CommonActivityUtils;
 import im.vector.settings.VectorLocale;
-import im.vector.util.ThemeUtils;
+import im.vector.ui.themes.ThemeUtils;
 import im.vector.util.VectorUtils;
 
 /**
@@ -967,7 +967,7 @@ public class VectorRoomDetailsMembersAdapter extends BaseExpandableListAdapter {
             });
         }
 
-        int backgroundColor = ThemeUtils.INSTANCE.getColor(mContext, R.attr.riot_primary_background_color);
+        int backgroundColor = ThemeUtils.INSTANCE.getColor(mContext, R.attr.vctr_riot_primary_background_color);
 
         // multi selections mode
         // do not display a checkbox for oneself
@@ -977,7 +977,7 @@ public class VectorRoomDetailsMembersAdapter extends BaseExpandableListAdapter {
             viewHolder.mMultipleSelectionCheckBox.setChecked(mSelectedUserIds.indexOf(participant.mUserId) >= 0);
 
             if (viewHolder.mMultipleSelectionCheckBox.isChecked()) {
-                backgroundColor = ThemeUtils.INSTANCE.getColor(mContext, R.attr.multi_selection_background_color);
+                backgroundColor = ThemeUtils.INSTANCE.getColor(mContext, R.attr.vctr_multi_selection_background_color);
             }
 
             viewHolder.mMultipleSelectionCheckBox.setOnClickListener(new View.OnClickListener() {
@@ -985,10 +985,10 @@ public class VectorRoomDetailsMembersAdapter extends BaseExpandableListAdapter {
                 public void onClick(View v) {
                     if (viewHolder.mMultipleSelectionCheckBox.isChecked()) {
                         mSelectedUserIds.add(participant.mUserId);
-                        viewHolder.mSwipeCellLayout.setBackgroundColor(ThemeUtils.INSTANCE.getColor(mContext, R.attr.multi_selection_background_color));
+                        viewHolder.mSwipeCellLayout.setBackgroundColor(ThemeUtils.INSTANCE.getColor(mContext, R.attr.vctr_multi_selection_background_color));
                     } else {
                         mSelectedUserIds.remove(participant.mUserId);
-                        viewHolder.mSwipeCellLayout.setBackgroundColor(ThemeUtils.INSTANCE.getColor(mContext, R.attr.riot_primary_background_color));
+                        viewHolder.mSwipeCellLayout.setBackgroundColor(ThemeUtils.INSTANCE.getColor(mContext, R.attr.vctr_riot_primary_background_color));
                     }
 
                     if (null != mOnParticipantsListener) {

@@ -20,17 +20,16 @@ import android.annotation.TargetApi;
 import android.content.Context;
 import android.os.Build;
 import android.util.AttributeSet;
-
-import org.matrix.androidsdk.util.Log;
-
 import android.view.View;
 import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import org.matrix.androidsdk.util.Log;
+
 import im.vector.R;
 import im.vector.adapters.AdapterSection;
-import im.vector.util.ThemeUtils;
+import im.vector.ui.themes.ThemeUtils;
 
 public class SectionView extends RelativeLayout {
 
@@ -77,7 +76,7 @@ public class SectionView extends RelativeLayout {
     private void setup(final AdapterSection section) {
         mSection = section;
 
-        setBackgroundColor(ThemeUtils.INSTANCE.getColor(getContext(), R.attr.list_header_background_color));
+        setBackgroundColor(ThemeUtils.INSTANCE.getColor(getContext(), R.attr.vctr_list_header_background_color));
         setLayoutParams(new LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT));
 
         // inflate the layout

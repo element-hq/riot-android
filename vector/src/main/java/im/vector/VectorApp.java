@@ -70,12 +70,12 @@ import im.vector.gcm.GcmRegistrationManager;
 import im.vector.services.EventStreamService;
 import im.vector.settings.FontScale;
 import im.vector.settings.VectorLocale;
+import im.vector.ui.themes.ThemeUtils;
 import im.vector.util.CallsManager;
 import im.vector.util.PermissionsToolsKt;
 import im.vector.util.PhoneNumberUtils;
 import im.vector.util.PreferencesManager;
 import im.vector.util.RageShake;
-import im.vector.util.ThemeUtils;
 import im.vector.util.VectorMarkdownParser;
 
 /**

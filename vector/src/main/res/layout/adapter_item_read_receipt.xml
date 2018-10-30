@@ -5,7 +5,7 @@
     android:id="@+id/internal_container"
     android:layout_width="match_parent"
     android:layout_height="72dp"
-    android:background="?attr/riot_primary_background_color">
+    android:background="?attr/vctr_riot_primary_background_color">
 
     <!-- Avatar -->
     <FrameLayout
@@ -35,7 +35,7 @@
         android:fontFamily="sans-serif-regular"
         android:gravity="start"
         android:singleLine="true"
-        android:textColor="?attr/riot_primary_text_color"
+        android:textColor="?attr/vctr_riot_primary_text_color"
         android:textSize="16sp"
         app:layout_constraintBottom_toTopOf="@id/read_receipt_ts"
         app:layout_constraintStart_toEndOf="@id/read_receipt_user_avatar"
@@ -52,7 +52,7 @@
         android:layout_marginEnd="26dp"
         android:layout_marginRight="26dp"
         android:singleLine="true"
-        android:textColor="?attr/default_text_light_color"
+        android:textColor="?attr/vctr_default_text_light_color"
         android:textSize="14sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="@id/read_receipt_user_name"
@@ -63,7 +63,7 @@
         android:id="@+id/receipts_separator"
         android:layout_width="match_parent"
         android:layout_height="1dp"
-        android:background="?attr/list_divider_color"
+        android:background="?attr/vctr_list_divider_color"
         app:layout_constraintBottom_toBottomOf="parent" />
 
 </android.support.constraint.ConstraintLayout>

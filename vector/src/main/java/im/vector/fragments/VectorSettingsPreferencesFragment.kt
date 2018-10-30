@@ -58,6 +58,7 @@ import im.vector.extensions.getFingerprintHumanReadable
 import im.vector.preference.*
 import im.vector.settings.FontScale
 import im.vector.settings.VectorLocale
+import im.vector.ui.themes.ThemeUtils
 import im.vector.util.*
 import org.matrix.androidsdk.MXSession
 import org.matrix.androidsdk.crypto.data.MXDeviceInfo
@@ -995,7 +996,7 @@ class VectorSettingsPreferencesFragment : PreferenceFragment(), SharedPreference
                     setDialogTitle(R.string.settings_add_email_address)
                     key = ADD_EMAIL_PREFERENCE_KEY
                     icon = ThemeUtils.tintDrawable(activity,
-                            ContextCompat.getDrawable(activity, R.drawable.ic_add_black)!!, R.attr.settings_icon_tint_color)
+                            ContextCompat.getDrawable(activity, R.drawable.ic_add_black)!!, R.attr.vctr_settings_icon_tint_color)
                     order = 100
                     editText.inputType = InputType.TYPE_CLASS_TEXT or InputType.TYPE_TEXT_VARIATION_EMAIL_ADDRESS
 
@@ -1012,7 +1013,7 @@ class VectorSettingsPreferencesFragment : PreferenceFragment(), SharedPreference
                     setTitle(R.string.settings_add_phone_number)
                     key = ADD_PHONE_NUMBER_PREFERENCE_KEY
                     icon = ThemeUtils.tintDrawable(activity,
-                            ContextCompat.getDrawable(activity, R.drawable.ic_add_black)!!, R.attr.settings_icon_tint_color)
+                            ContextCompat.getDrawable(activity, R.drawable.ic_add_black)!!, R.attr.vctr_settings_icon_tint_color)
                     order = 200
 
                     onPreferenceClickListener = Preference.OnPreferenceClickListener {

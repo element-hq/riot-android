@@ -26,7 +26,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.View;
 
 import im.vector.R;
-import im.vector.util.ThemeUtils;
+import im.vector.ui.themes.ThemeUtils;
 
 public class SimpleDividerItemDecoration extends DividerItemDecoration {
     private final Drawable mDivider;

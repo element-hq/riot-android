@@ -127,17 +127,17 @@ import im.vector.fragments.RoomsFragment;
 import im.vector.gcm.GcmRegistrationManager;
 import im.vector.receiver.VectorUniversalLinkReceiver;
 import im.vector.services.EventStreamService;
+import im.vector.ui.themes.ActivityOtherThemes;
+import im.vector.ui.themes.ThemeUtils;
 import im.vector.util.BugReporter;
 import im.vector.util.CallsManager;
 import im.vector.util.HomeRoomsViewModel;
 import im.vector.util.PreferencesManager;
 import im.vector.util.RoomUtils;
 import im.vector.util.SystemUtilsKt;
-import im.vector.util.ThemeUtils;
 import im.vector.util.VectorUtils;
 import im.vector.view.UnreadCounterBadgeView;
 import im.vector.view.VectorPendingCallView;
-import kotlin.Triple;
 
 /**
  * Displays the main screen of the app, with rooms the user has joined and the ability to create
@@ -287,8 +287,8 @@ public class VectorHomeActivity extends VectorAppCompatActivity implements Searc
 
     @NotNull
     @Override
-    public Triple getOtherThemes() {
-        return new Triple(R.style.HomeActivityTheme_Dark, R.style.HomeActivityTheme_Black, R.style.HomeActivityTheme_Status);
+    public ActivityOtherThemes getOtherThemes() {
+        return ActivityOtherThemes.Home.INSTANCE;
     }
 
     @Override
@@ -599,7 +599,7 @@ public class VectorHomeActivity extends VectorAppCompatActivity implements Searc
         // https://github.com/vector-im/vector-android/issues/323
         // the tool bar color is not restored on some devices.
         TypedValue vectorActionBarColor = new TypedValue();
-        getTheme().resolveAttribute(R.attr.riot_primary_background_color, vectorActionBarColor, true);
+        getTheme().resolveAttribute(R.attr.vctr_riot_primary_background_color, vectorActionBarColor, true);
         mToolbar.setBackgroundResource(vectorActionBarColor.resourceId);
 
         checkDeviceId();
@@ -1008,8 +1008,8 @@ public class VectorHomeActivity extends VectorAppCompatActivity implements Searc
 
         // Set color of toolbar search view
         EditText edit = mSearchView.findViewById(android.support.v7.appcompat.R.id.search_src_text);
-        edit.setTextColor(ThemeUtils.INSTANCE.getColor(this, R.attr.primary_text_color));
-        edit.setHintTextColor(ThemeUtils.INSTANCE.getColor(this, R.attr.primary_hint_text_color));
+        edit.setTextColor(ThemeUtils.INSTANCE.getColor(this, R.attr.vctr_primary_text_color));
+        edit.setHintTextColor(ThemeUtils.INSTANCE.getColor(this, R.attr.vctr_primary_hint_text_color));
     }
 
     /**
@@ -1447,7 +1447,7 @@ public class VectorHomeActivity extends VectorAppCompatActivity implements Searc
         View dialogView = inflater.inflate(R.layout.dialog_join_room_by_id, null);
 
         final EditText textInput = dialogView.findViewById(R.id.join_room_edit_text);
-        textInput.setTextColor(ThemeUtils.INSTANCE.getColor(this, R.attr.riot_primary_text_color));
+        textInput.setTextColor(ThemeUtils.INSTANCE.getColor(this, R.attr.vctr_riot_primary_text_color));
 
         AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(this);
 

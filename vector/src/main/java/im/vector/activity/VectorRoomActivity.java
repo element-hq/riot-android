@@ -117,6 +117,8 @@ import im.vector.fragments.VectorUnknownDevicesFragment;
 import im.vector.listeners.IMessagesAdapterActionsListener;
 import im.vector.notifications.NotificationUtils;
 import im.vector.services.EventStreamService;
+import im.vector.ui.themes.ActivityOtherThemes;
+import im.vector.ui.themes.ThemeUtils;
 import im.vector.util.CallsManager;
 import im.vector.util.ExternalApplicationsUtilKt;
 import im.vector.util.MatrixURLSpan;
@@ -125,7 +127,6 @@ import im.vector.util.PreferencesManager;
 import im.vector.util.ReadMarkerManager;
 import im.vector.util.RoomUtils;
 import im.vector.util.SlashCommandsParser;
-import im.vector.util.ThemeUtils;
 import im.vector.util.VectorMarkdownParser;
 import im.vector.util.VectorRoomMediasSender;
 import im.vector.util.VectorUtils;
@@ -136,7 +137,6 @@ import im.vector.view.VectorOngoingConferenceCallView;
 import im.vector.view.VectorPendingCallView;
 import im.vector.widgets.Widget;
 import im.vector.widgets.WidgetsManager;
-import kotlin.Triple;
 
 /**
  * Displays a single room with messages.
@@ -612,8 +612,8 @@ public class VectorRoomActivity extends MXCActionBarActivity implements
 
     @NotNull
     @Override
-    public Triple getOtherThemes() {
-        return new Triple(R.style.AppTheme_NoActionBar_Dark, R.style.AppTheme_NoActionBar_Black, R.style.AppTheme_NoActionBar_Status);
+    public ActivityOtherThemes getOtherThemes() {
+        return ActivityOtherThemes.NoActionBar.INSTANCE;
     }
 
     @Override
@@ -1703,8 +1703,8 @@ public class VectorRoomActivity extends MXCActionBarActivity implements
         final Integer[] lTexts = new Integer[]{R.string.action_voice_call, R.string.action_video_call};
 
         IconAndTextDialogFragment fragment = IconAndTextDialogFragment.newInstance(lIcons, lTexts,
-                ThemeUtils.INSTANCE.getColor(this, R.attr.riot_primary_background_color),
-                ThemeUtils.INSTANCE.getColor(this, R.attr.riot_primary_text_color));
+                ThemeUtils.INSTANCE.getColor(this, R.attr.vctr_riot_primary_background_color),
+                ThemeUtils.INSTANCE.getColor(this, R.attr.vctr_riot_primary_text_color));
         fragment.setOnClickListener(new IconAndTextDialogFragment.OnItemClickListener() {
             @Override
             public void onItemClick(IconAndTextDialogFragment dialogFragment, int position) {
@@ -3169,7 +3169,7 @@ public class VectorRoomActivity extends MXCActionBarActivity implements
                 // hide the action bar header view and reset the arrow image (arrow reset to down)
                 mActionBarCustomArrowImageView.setImageResource(R.drawable.ic_arrow_drop_down_white);
                 mRoomHeaderView.setVisibility(View.GONE);
-                toolbar.setBackgroundColor(ThemeUtils.INSTANCE.getColor(this, R.attr.primary_color));
+                toolbar.setBackgroundColor(ThemeUtils.INSTANCE.getColor(this, R.attr.vctr_primary_color));
             }
         }
     }
@@ -3979,8 +3979,8 @@ public class VectorRoomActivity extends MXCActionBarActivity implements
             final Integer[] icons = iconsList.toArray(new Integer[0]);
 
             fragment = IconAndTextDialogFragment.newInstance(icons, messages,
-                    ThemeUtils.INSTANCE.getColor(VectorRoomActivity.this, R.attr.riot_primary_background_color),
-                    ThemeUtils.INSTANCE.getColor(VectorRoomActivity.this, R.attr.riot_primary_text_color));
+                    ThemeUtils.INSTANCE.getColor(VectorRoomActivity.this, R.attr.vctr_riot_primary_background_color),
+                    ThemeUtils.INSTANCE.getColor(VectorRoomActivity.this, R.attr.vctr_riot_primary_text_color));
             fragment.setOnClickListener(new IconAndTextDialogFragment.OnItemClickListener() {
                 @Override
                 public void onItemClick(IconAndTextDialogFragment dialogFragment, int position) {

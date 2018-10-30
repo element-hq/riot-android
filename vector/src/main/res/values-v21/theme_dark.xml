@@ -1,11 +1,11 @@
 <resources>
 
     <style name="AppTheme.Dark" parent="AppTheme.Base.Dark">
-        <item name="android:navigationBarColor">?attr/primary_dark_color</item>
+        <item name="android:navigationBarColor">?attr/vctr_primary_dark_color</item>
     </style>
 
     <style name="AppTheme.NoActionBar.Dark" parent="AppTheme.NoActionBar.Base.Dark">
-        <item name="android:navigationBarColor">?attr/primary_dark_color</item>
+        <item name="android:navigationBarColor">?attr/vctr_primary_dark_color</item>
     </style>
 
 </resources>

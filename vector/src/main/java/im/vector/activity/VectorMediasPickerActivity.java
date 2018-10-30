@@ -88,11 +88,11 @@ import javax.microedition.khronos.egl.EGLSurface;
 
 import im.vector.R;
 import im.vector.VectorApp;
+import im.vector.ui.themes.ActivityOtherThemes;
 import im.vector.util.PermissionsToolsKt;
 import im.vector.util.ViewUtilKt;
 import im.vector.view.RecentMediaLayout;
 import im.vector.view.VideoRecordView;
-import kotlin.Triple;
 
 /**
  * VectorMediasPickerActivity is used to take a photo or to send an old one.
@@ -223,10 +223,8 @@ public class VectorMediasPickerActivity extends MXCActionBarActivity implements 
 
     @NotNull
     @Override
-    public Triple getOtherThemes() {
-        return new Triple(R.style.AppTheme_NoActionBar_FullScreen_Dark,
-                R.style.AppTheme_NoActionBar_FullScreen_Black,
-                R.style.AppTheme_NoActionBar_FullScreen_Status);
+    public ActivityOtherThemes getOtherThemes() {
+        return ActivityOtherThemes.NoActionBarFullscreen.INSTANCE;
     }
 
     @Override

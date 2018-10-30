@@ -46,7 +46,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:maxLines="1"
-            android:textColor="?attr/default_text_dark_color"
+            android:textColor="?attr/vctr_default_text_dark_color"
             android:textSize="16sp"
             android:textStyle="bold"
             tools:text="A member name" />
@@ -56,7 +56,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:maxLines="1"
-            android:textColor="?attr/default_text_light_color"
+            android:textColor="?attr/vctr_default_text_light_color"
             android:textSize="14sp"
             tools:text="A member status" />
 

@@ -37,6 +37,7 @@ import java.util.Set;
 
 import im.vector.R;
 import im.vector.repositories.ServerUrlsRepository;
+import im.vector.ui.themes.ThemeUtils;
 
 public class PreferencesManager {
 

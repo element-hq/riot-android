@@ -6,15 +6,15 @@
     <View
         android:layout_width="match_parent"
         android:layout_height="5dp"
-        android:background="?shadow_bottom" />
+        android:background="?vctr_shadow_bottom" />
 
     <View
         android:layout_width="match_parent"
         android:layout_height="2dp"
-        android:background="?preference_divider_color" />
+        android:background="?vctr_preference_divider_color" />
 
     <View
         android:layout_width="match_parent"
         android:layout_height="3dp"
-        android:background="?shadow_top" />
+        android:background="?vctr_shadow_top" />
 </LinearLayout>

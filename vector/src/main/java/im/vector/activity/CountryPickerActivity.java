@@ -34,10 +34,10 @@ import org.jetbrains.annotations.NotNull;
 
 import im.vector.R;
 import im.vector.adapters.CountryAdapter;
+import im.vector.ui.themes.ActivityOtherThemes;
+import im.vector.ui.themes.ThemeUtils;
 import im.vector.util.CountryPhoneData;
 import im.vector.util.PhoneNumberUtils;
-import im.vector.util.ThemeUtils;
-import kotlin.Triple;
 
 public class CountryPickerActivity extends VectorAppCompatActivity implements CountryAdapter.OnSelectCountryListener, SearchView.OnQueryTextListener {
 
@@ -73,8 +73,8 @@ public class CountryPickerActivity extends VectorAppCompatActivity implements Co
 
     @NotNull
     @Override
-    public Triple getOtherThemes() {
-        return new Triple(R.style.CountryPickerTheme_Dark, R.style.CountryPickerTheme_Black, R.style.CountryPickerTheme_Status);
+    public ActivityOtherThemes getOtherThemes() {
+        return ActivityOtherThemes.Picker.INSTANCE;
     }
 
     @Override
@@ -122,7 +122,7 @@ public class CountryPickerActivity extends VectorAppCompatActivity implements Co
             mSearchView.setOnQueryTextListener(this);
 
             SearchView.SearchAutoComplete searchAutoComplete = mSearchView.findViewById(android.support.v7.appcompat.R.id.search_src_text);
-            searchAutoComplete.setHintTextColor(ThemeUtils.INSTANCE.getColor(this, R.attr.default_text_hint_color));
+            searchAutoComplete.setHintTextColor(ThemeUtils.INSTANCE.getColor(this, R.attr.vctr_default_text_hint_color));
         }
         return true;
     }

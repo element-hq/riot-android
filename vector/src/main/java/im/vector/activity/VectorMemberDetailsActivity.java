@@ -68,11 +68,11 @@ import im.vector.adapters.VectorMemberDetailsAdapter;
 import im.vector.adapters.VectorMemberDetailsDevicesAdapter;
 import im.vector.extensions.MatrixSdkExtensionsKt;
 import im.vector.fragments.VectorUnknownDevicesFragment;
+import im.vector.ui.themes.ActivityOtherThemes;
 import im.vector.util.CallsManager;
 import im.vector.util.PermissionsToolsKt;
 import im.vector.util.SystemUtilsKt;
 import im.vector.util.VectorUtils;
-import kotlin.Triple;
 
 /**
  * VectorMemberDetailsActivity displays the member information and allows to perform some dedicated actions.
@@ -1127,8 +1127,8 @@ public class VectorMemberDetailsActivity extends MXCActionBarActivity implements
 
     @NotNull
     @Override
-    public Triple getOtherThemes() {
-        return new Triple(R.style.AppTheme_NoActionBar_Dark, R.style.AppTheme_NoActionBar_Black, R.style.AppTheme_NoActionBar_Status);
+    public ActivityOtherThemes getOtherThemes() {
+        return ActivityOtherThemes.NoActionBar.INSTANCE;
     }
 
     @Override

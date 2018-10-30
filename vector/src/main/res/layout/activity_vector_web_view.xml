@@ -11,7 +11,7 @@
         style="@style/VectorToolbarStyle"
         android:layout_width="match_parent"
         android:layout_height="?attr/actionBarSize"
-        android:background="?attr/primary_color"
+        android:background="?attr/vctr_primary_color"
         tools:title="Title of the web page" />
 
     <WebView

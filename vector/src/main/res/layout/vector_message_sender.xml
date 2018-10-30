@@ -21,7 +21,7 @@
         android:paddingEnd="4dp"
         android:paddingRight="4dp"
         android:singleLine="true"
-        android:textColor="?attr/default_text_light_color"
+        android:textColor="?attr/vctr_default_text_light_color"
         android:textSize="14sp"
         android:textStyle="bold"
         tools:text="One very long sender name for testing purpose" />

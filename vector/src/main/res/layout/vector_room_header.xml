@@ -3,7 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:background="?attr/primary_color"
+    android:background="?attr/vctr_primary_color"
     android:orientation="vertical">
 
     <include
@@ -71,7 +71,7 @@
             android:layout_gravity="center_vertical"
             android:ellipsize="end"
             android:padding="8dp"
-            android:textColor="?attr/default_text_light_color"
+            android:textColor="?attr/vctr_default_text_light_color"
             android:textSize="14sp"
             tools:text="a text" />
 
