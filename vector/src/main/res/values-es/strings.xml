@@ -388,7 +388,7 @@ Los mensajes cifrados no serán visibles en los clientes que aún no implementen
     <string name="ssl_cert_new_account_expl">Si el administrador del servidor dijo que esto es de esperarse, asegúrate que la huella digital que se muestra a continuación coincide con la huella digital proporcionada por el administrador.</string>
     <string name="ssl_unexpected_existing_expl">El certificado cambió de uno que era confiable para tu teléfono. Esto es MUY INUSUAL. Se recomienda NO ACEPTAR este nuevo certificado.</string>
     <string name="ssl_expected_existing_expl">El certificado cambió de uno que era confiable a uno que no es confiable. El servidor puede haber renovado su certificado. Contacta al administrador del servidor para obtener la huella digital.</string>
-    <string name="ssl_only_accept">SOLO acepta el certificado si el administrador del servidor ha publicado una huella digital que coincide con la anterior.</string>
+    <string name="ssl_only_accept">Solo acepta el certificado si el administrador del servidor ha publicado una huella digital que coincide con la anterior.</string>
 
     <!-- Room Details -->
     <string name="room_details_title">Detalles de Sala</string>
@@ -527,9 +527,9 @@ Para continuar, ingresa tu contraseña por favor.</string>
     <string name="account_phone_number_already_used_error">Este número telefónico ya está en uso</string>
 
     <string name="settings_change_password">Cambiar contraseña</string>
-    <string name="settings_old_password">contraseña anterior</string>
-    <string name="settings_new_password">contraseña nueva</string>
-    <string name="settings_confirm_password">confirmar contraseña</string>
+    <string name="settings_old_password">Contraseña anterior</string>
+    <string name="settings_new_password">Contraseña nueva</string>
+    <string name="settings_confirm_password">Confirmar contraseña</string>
     <string name="settings_fail_to_update_password">No se pudo actualizar la contraseña</string>
     <string name="settings_password_updated">Tu contraseña ha sido actualizada</string>
     <string name="settings_unignore_user">¿Mostrar todos los mensajes de %s?
@@ -611,7 +611,7 @@ Ten en cuenta que esta acción reiniciará la aplicación y puede tardar algo de
 
     <string name="room_settings_addresses_invalid_format_dialog_title">Formato de alias inválido</string>
     <string name="room_settings_addresses_invalid_format_dialog_body">\'%s\' no es un formato de alias válido</string>
-    <string name="room_settings_addresses_disable_main_address_prompt_msg">No tendrás una dirección principal especificada. La dirección principal por defecto para esta sala se elegirá al azar</string>
+    <string name="room_settings_addresses_disable_main_address_prompt_msg">No tendrás una dirección principal especificada para esta sala.</string>
     <string name="room_settings_addresses_disable_main_address_prompt_title">Advertencias de la dirección principal</string>
 
     <string name="room_settings_set_main_address">Establecer como Dirección Principal</string>
@@ -690,9 +690,7 @@ Advertencia: este archivo puede ser eliminado si la aplicación se desinstala.</
 
     <string name="encryption_information_verify_device">Verificar dispositivo</string>
     <string name="encryption_information_verify_device_warning">Para verificar que este dispositivo es confiable, por favor contacta a su dueño por algún otro medio (ej. cara a cara o por teléfono) y pregúntale si la clave que ve en sus Ajustes de Usuario para este dispositivo coincide con la clave a continuación:</string>
-    <string name="encryption_information_verify_device_warning2">Si coincide, oprime el botón de verificar a continuación. 
-Si no coincide, entonces alguien más está interceptando este dispositivo y probablemente deberías prohibirlo.
-En el futuro, este proceso de verificación será más sofisticado.</string>
+    <string name="encryption_information_verify_device_warning2">Si coincide, oprime el botón de verificar a continuación. Si no coincide, entonces alguien más está interceptando este dispositivo y probablemente deberías prohibirlo. En el futuro, este proceso de verificación será más sofisticado.</string>
     <string name="encryption_information_verify_key_match">Verifico que las claves coinciden</string>
 
     <string name="e2e_enabling_on_app_update">Riot ahora admite cifrado de extremo a extremo pero debes volver a iniciar sesión para habilitarlo.
@@ -1099,5 +1097,22 @@ Ten en cuenta que esta acción reiniciará la aplicación y puede tardar algo de
 
     <string name="resource_limit_soft_contact">Por favor, %s para aumentar este límite.</string>
     <string name="resource_limit_hard_contact">Por favor, %s para continuar utilizando este servicio.</string>
+
+<string name="status_theme">Tema de Status.im</string>
+
+    <string name="dialog_title_error">Error</string>
+
+    <string name="room_sliding_menu_version_x">Versión %s</string>
+    <string name="encryption_export_notice">Por favor, crea una frase de contraseña para cifrar las claves exportadas. Necesitarás ingresar la misma frase de contraseña para poder importar las claves.</string>
+    <string name="encryption_export_create_passphrase">Crear frase de contraseña</string>
+    <string name="encryption_export_passphrase_dont_match">Las frases de contraseña deben coincidir</string>
+    <string name="settings_lazy_loading_title">Utiliza carga diferida para los miembros de la sala</string>
+    <string name="settings_lazy_loading_description">Aumenta el rendimiento cargando los miembros de la sala solo en la primera vista</string>
+    <string name="error_lazy_loading_not_supported_by_home_server">Tu servidor doméstico aún no admite la carga diferida de los miembros de la sala. Prueba más tarde.</string>
+
+    <string name="unknown_error">Disculpas, ocurrió un error</string>
+
+    <string name="merged_events_expand">expandir</string>
+    <string name="merged_events_collapse">colapsar</string>
 
 </resources>
