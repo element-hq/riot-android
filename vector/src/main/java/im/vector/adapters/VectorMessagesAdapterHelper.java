@@ -515,12 +515,13 @@ class VectorMessagesAdapterHelper {
         }
 
         if (null != avatarLayoutView) {
-            ImageView avatarImageView = avatarLayoutView.findViewById(R.id.avatar_img);
-
             if (isMergedView) {
-                avatarLayoutView.setVisibility(View.GONE);
+                avatarLayoutView.setVisibility(View.INVISIBLE);
             } else {
                 avatarLayoutView.setVisibility(View.VISIBLE);
+
+                ImageView avatarImageView = avatarLayoutView.findViewById(R.id.avatar_img);
+
                 avatarImageView.setTag(null);
 
                 loadMemberAvatar(avatarImageView, row);
