@@ -463,7 +463,6 @@ Yakin?</string>
     <string name="room_delete_unsent_messages">Hapus pesan yang belum terkirim</string>
     <string name="room_message_file_not_found">Berkas tidak ditemukan</string>
     <string name="room_do_not_have_permission_to_post">Anda belum mendapat permisi untuk mengirim di ruang ini</string>
-    <string name="room_new_message_notification">1 pesan baru</string>
     <plurals name="room_new_messages_notification">
 	<item quantity="other">%d pesan baru</item>
 </plurals>
@@ -620,7 +619,6 @@ Perhatikan bahwa tindakan ini akan memulai ulang aplikasi dan mungkin cukup mema
     <string name="widget_integration_room_not_visible">Ruang %s tidak terlihat.</string>
     <string name="widget_integration_missing_parameter">Ada parameter penting yang hilang.</string>
     <string name="widget_integration_invalid_parameter">Ada parameter yang tidak valid.</string>
-    <string name="settings_labs_matrix_apps">Apps Matrix</string>
     <string name="room_add_matrix_apps">Tambahkan apps Matrix</string>
     <string name="settings_labs_native_camera">Gunakan kamera bawaan</string>
     <string name="settings_labs_keyboard_options_to_send_message">Gunakan tombol enter keyboard untuk mengirim pesan</string>
@@ -916,8 +914,6 @@ Peringatan: berkas ini mungkin ikut terhapus jika aplikasi dihapus.</string>
     <string name="startup_notification_privacy_button_other">Pilih opsi lain</string>
 
     <string name="settings_analytics">Analitik</string>
-    <string name="settings_opt_out_of_analytics">Hindari analitik</string>
-    <string name="settings_opt_out_of_analytics_summary">Riot mengumpulkan data analitik anonim dalam upaya kami meningkatkan aplikasi.</string>
     <string name="settings_opt_in_of_analytics">Kirim data analitik</string>
     <string name="settings_opt_in_of_analytics_summary">Riot mengumpulkan data analitik anonim dalam upaya kami meningkatkan aplikasi.</string>
     <string name="settings_opt_in_of_analytics_prompt">Mohon aktifkan analitik untuk membantu kami meningkatkan Riot.</string>

@@ -422,7 +422,6 @@ Er du sikker?</string>
     <string name="room_delete_unsent_messages">Slett usende meldingar</string>
     <string name="room_message_file_not_found">Fila vart ikkje funne</string>
     <string name="room_do_not_have_permission_to_post">Du har ikkje tilgang til å senda meldingar i dette rommet</string>
-    <string name="room_new_message_notification">1 ny melding</string>
     <plurals name="room_new_messages_notification">
 	<item quantity="one">1 ny melding</item>
 	<item quantity="other">%d nye meldingar</item>
@@ -594,8 +593,6 @@ Merk at denne handlinga vil starta æppen på nytt og kan taka litt tid.</string
     <string name="startup_notification_privacy_button_other">vel noko anna</string>
 
     <string name="settings_analytics">Statistikk</string>
-    <string name="settings_opt_out_of_analytics">Ikkje deltaka i statistikkinnsamling</string>
-    <string name="settings_opt_out_of_analytics_summary">Riot samlar inn anonym statistikk for å forbetre æppen.</string>
     <string name="settings_opt_in_of_analytics">Send statistikkdata</string>
     <string name="settings_opt_in_of_analytics_summary">Riot samlar anonym statistikk inn for å forbetra æppen.</string>
     <string name="settings_opt_in_of_analytics_prompt">Ver venleg og skru statistikkinnsamling på for å hjelpa oss med å forbetra Riot.</string>
@@ -868,7 +865,6 @@ Ukjende einingar:</string>
     <string name="widget_integration_room_not_visible">Rommet %s er ikkje synleg.</string>
     <string name="widget_integration_missing_parameter">Ein krevd parameter vantar.</string>
     <string name="widget_integration_invalid_parameter">Ein parameter er ikkje gangbar.</string>
-    <string name="settings_labs_matrix_apps">Matrix-Æppar</string>
     <string name="room_add_matrix_apps">Legg Matrix-æppar til</string>
     <string name="settings_labs_keyboard_options_to_send_message">Bruk entertasten på tastaturet for å senda meldingar</string>
     <string name="settings_labs_enable_send_voice">Send røystmelding (krever ein tredjepartisæpp for å spela inn meldinga)</string>

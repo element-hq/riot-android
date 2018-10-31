@@ -354,7 +354,6 @@ Versleutelde berichten zullen nog niet zichtbaar zijn op programma\'s die geen v
     <string name="room_delete_unsent_messages">Verwijder niet gestuurde berichten</string>
     <string name="room_message_file_not_found">Bestand niet gevonden</string>
     <string name="room_do_not_have_permission_to_post">Je hebt niet de permissie om dit naar deze ruimte te sturen</string>
-    <string name="room_new_message_notification">1 nieuw bericht</string>
 
     <!-- unrecognized SSL certificate -->
     <string name="ssl_trust">Vertrouwen</string>
@@ -753,7 +752,6 @@ Je kan het nu, of later, doen vanuit de programma-instellingen.</string>
     <string name="widget_integration_missing_room_id">room_id mist in het verzoek.</string>
     <string name="widget_integration_missing_user_id">user_id mist in het verzoek.</string>
     <string name="widget_integration_room_not_visible">Ruimte %s is niet zichtbaar.</string>
-    <string name="settings_labs_matrix_apps">Matrix Apps</string>
     <string name="room_add_matrix_apps">Matrix Apps toevoegen</string>
     <string name="notification_noisy_notifications">Geluidgevende notificaties</string>
     <string name="notification_silent_notifications">Stille notificaties</string>
@@ -767,9 +765,6 @@ Je kan het nu, of later, doen vanuit de programma-instellingen.</string>
     <string name="settings_containing_my_display_name">Berichten die mijn weergavenaam bevat</string>
     <string name="settings_containing_my_user_name">Berichten dat mijn gebruikersnaam bevat</string>
     <string name="settings_analytics">Analytics</string>
-    <string name="settings_opt_out_of_analytics">Analytics uitzetten</string>
-    <string name="settings_opt_out_of_analytics_summary">Riot verzamelt anonieme statistische gegevens om de applicatie te verbeteren.</string>
-
 
     <string name="settings_labs_native_camera">Gebruik de systeem camera</string>
 

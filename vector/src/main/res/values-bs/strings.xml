@@ -352,7 +352,6 @@ Da li ste sigurani?</string>
     <string name="room_delete_unsent_messages">Izbriši neposlane poruke</string>
     <string name="room_message_file_not_found">Datoteka nije pronađena</string>
     <string name="room_do_not_have_permission_to_post">Nemate dopuštenje da komunicirate u ovoj sobi</string>
-    <string name="room_new_message_notification">1 nova poruka</string>
 
     <string name="ssl_trust">Povjerenje</string>
     <string name="ssl_do_not_trust">Ne vjerujte</string>
@@ -478,12 +477,8 @@ Da li ste sigurani?</string>
     <string name="settings_hide_avatar_display_name_changes_messages">Sakrij avatar i promjene imena</string>
 
     <string name="settings_analytics">Analiza</string>
-    <string name="settings_opt_out_of_analytics">Isključite se iz analize</string>
     <string name="attachment_remaining_time_seconds">%d s</string>
     <string name="attachment_remaining_time_minutes">%1$a %2$i</string>
-
-    <string name="settings_opt_out_of_analytics_summary">Hepek prikuplja anonimnu analitiku kako bi nam omogućio poboljšanje aplikacije.</string>
-
 
     <string name="settings_disable_markdown">Onemogućite formatiranje oznaka</string>
     <string name="settings_data_save_mode">Način spremanja podataka</string>

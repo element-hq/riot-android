@@ -362,7 +362,6 @@
     <string name="room_delete_unsent_messages">Видалити ненадіслані повідомлення</string>
     <string name="room_message_file_not_found">Файл не знайдено</string>
     <string name="room_do_not_have_permission_to_post">Ви не маєте права писати повідомлення в цій кімнаті</string>
-    <string name="room_new_message_notification">1 нове повідомлення</string>
 
     <!-- unrecognized SSL certificate -->
     <string name="ssl_trust">Довіряти</string>
@@ -499,8 +498,6 @@
 
     <!-- analytics -->
     <string name="settings_analytics">Телеметрія</string>
-    <string name="settings_opt_out_of_analytics">Вимкнути телеметрію</string>
-    <string name="settings_opt_out_of_analytics_summary">Riot збирає анонімну статистику задля покращення застосунку.</string>
 
     <string name="settings_disable_markdown">Вимкнути розмітку Markdown</string>
     <string name="settings_data_save_mode">Режим економії трафіку</string>
@@ -736,7 +733,6 @@
     <string name="widget_integration_missing_room_id">У запиті відсутній room_id.</string>
     <string name="widget_integration_missing_user_id">У запиті відсутній user_id.</string>
     <string name="widget_integration_room_not_visible">Кімната %s невидима.</string>
-    <string name="settings_labs_matrix_apps">Застосунки Matrix</string>
 
     <string name="room_add_matrix_apps">Додати застосунки Matrix</string>
     <string name="notification_noisy_notifications">Гучне повідомлення</string>

@@ -495,7 +495,6 @@
 </plurals>
     <string name="room_two_users_are_typing">‏⁨%1$s⁩ و ⁨%2$s⁩ يكتبون…</string>
     <string name="room_many_users_are_typing">‏⁨%1$s⁩ و ⁨%2$s⁩ وغيرهم يكتبون…</string>
-    <string name="room_new_message_notification">رسالة واحدة جديدة</string>
     <plurals name="room_new_messages_notification">
 	<item quantity="zero">لا رسائل جديدة</item>
 	<item quantity="one">رسالة واحدة جديدة</item>
@@ -681,7 +680,6 @@
 </plurals>
 
     <!-- Widget Integration Manager -->
-    <string name="settings_labs_matrix_apps">تطبيقات ماترِكس</string>
     <string name="room_add_matrix_apps">أضِف تطبيقات ماترِكس</string>
     <string name="your_unverified_device_requesting">يطلب جهازك غير المؤكّد ”‏⁨%s⁩“ مفاتيح التعمية.</string>
     <string name="start_verification">ابدأ التأكيد</string>
@@ -745,8 +743,6 @@
     <string name="settings_vibrate_on_mention">هُزّ الجهاز عند الإشارة إليّ</string>
 
     <string name="settings_analytics">التحاليل</string>
-    <string name="settings_opt_out_of_analytics">انسحب من التحاليل</string>
-    <string name="settings_opt_out_of_analytics_summary">يجمع Riot تحاليل مجهّلة ليُتاح لنا تحسين جودة التطبيق.</string>
 
     <string name="devices_details_last_seen_format">‏⁨%1$s⁩ في ⁨%2$s⁩</string>
     <string name="devices_delete_dialog_text">تطلب هذه العملية تخويلا إضافيا.

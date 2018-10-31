@@ -340,7 +340,6 @@
     <string name="room_delete_unsent_messages">Изтрий неизпратените съобщения</string>
     <string name="room_message_file_not_found">Файлът не е намерен</string>
     <string name="room_do_not_have_permission_to_post">Нямате разрешение да публикувате в тази стая</string>
-    <string name="room_new_message_notification">1 ново съобщение</string>
     <plurals name="room_new_messages_notification">
 	<item quantity="one">1 ново съобщение</item>
 	<item quantity="other">%d нови съобщения</item>
@@ -468,8 +467,6 @@
     <string name="settings_hide_avatar_display_name_changes_messages">Скриване на информацията за промените на аватара и името</string>
     <string name="settings_disable_markdown">Изключи markdown при изпращане</string>
     <string name="settings_analytics">Статистика</string>
-    <string name="settings_opt_out_of_analytics">Отказване от събиране на статистически данни</string>
-    <string name="settings_opt_out_of_analytics_summary">Riot събира анонимни статистики, за да ни позволи да подобрим приложението.</string>
 
     <string name="devices_details_dialog_title">Информация за устройството</string>
     <string name="devices_details_id_title">ID</string>
@@ -705,7 +702,6 @@
     <string name="widget_integration_missing_room_id">Липсва room_id в заявката.</string>
     <string name="widget_integration_missing_user_id">Липсва user_id в заявката.</string>
     <string name="widget_integration_room_not_visible">Стая %s не е видима.</string>
-    <string name="settings_labs_matrix_apps">Matrix приложения</string>
     <string name="room_add_matrix_apps">Добави Matrix приложения</string>
     <string name="permissions_rationale_msg_storage">Riot иска разрешение за достъп до Вашата галерия със снимки и видеа, за да изпраща и запазва прикачени файлове.
 

@@ -375,7 +375,6 @@ Los mensajes cifrados no serán visibles en los clientes que aún no implementen
     <string name="room_delete_unsent_messages">Eliminar mensajes no enviados</string>
     <string name="room_message_file_not_found">Archivo no encontrado</string>
     <string name="room_do_not_have_permission_to_post">No tienes permiso para publicar en esta sala</string>
-    <string name="room_new_message_notification">1 mensaje nuevo</string>
 
     <!-- unrecognized SSL certificate -->
     <string name="ssl_trust">Confiar</string>
@@ -776,9 +775,6 @@ Dispositivos desconocidos:</string>
     <string name="settings_hide_avatar_display_name_changes_messages">Ocultar cambios de avatar y nombre público</string>
 
     <string name="settings_analytics">Análisis de Estadísticas</string>
-    <string name="settings_opt_out_of_analytics">Darse de baja del análisis de estadísticas</string>
-    <string name="settings_opt_out_of_analytics_summary">Riot recopila análisis de estadísticas anónimas para permitirnos mejorar la aplicación.</string>
-
 
     <string name="widget_no_power_to_manage">Necesitas permiso para gestionar los componentes en esta sala</string>
     <string name="widget_creation_failure">La creación del componente falló</string>
@@ -796,7 +792,6 @@ Dispositivos desconocidos:</string>
     <string name="widget_integration_missing_room_id">Falta el room_id en la solicitud.</string>
     <string name="widget_integration_missing_user_id">Falta el user_id en la solicitud.</string>
     <string name="widget_integration_room_not_visible">La sala %s no está visible.</string>
-    <string name="settings_labs_matrix_apps">Aplicaciones de Matrix</string>
     <string name="room_add_matrix_apps">Añadir aplicaciones de Matrix</string>
     <string name="settings_labs_native_camera">Utilizar cámara nativa</string>
 

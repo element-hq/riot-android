@@ -244,7 +244,6 @@ Pode engadir a dirección de correo na sección de configuración de perfil.</st
     <string name="room_prompt_cancel">cancelar todo</string>
     <string name="room_message_file_not_found">Non se atopou o ficheiro</string>
     <string name="room_do_not_have_permission_to_post">Non ten permiso para comentar nesta sala</string>
-    <string name="room_new_message_notification">1 mensaxe nova</string>
     <plurals name="room_new_messages_notification">
 	<item quantity="one">1 mensaxe nova</item>
 	<item quantity="other">%d mensaxe nova</item>
@@ -318,7 +317,6 @@ Pode engadir a dirección de correo na sección de configuración de perfil.</st
     <string name="settings_deactivate_my_account">Desactivar a miña conta</string>
 
     <string name="settings_analytics">Analytics</string>
-    <string name="settings_opt_out_of_analytics_summary">Riot crea informes con datos anónimos que lle permiten mellorar a aplicación.</string>
     <string name="settings_opt_in_of_analytics">Enviar datos de análises</string>
     <string name="settings_opt_in_of_analytics_summary">Riot recolle información analítica anónima para permitirnos mellorar o aplicativo.</string>
     <string name="settings_opt_in_of_analytics_ok">Si, quero axuda</string>
@@ -494,7 +492,6 @@ Pode engadir a dirección de correo na sección de configuración de perfil.</st
     <string name="widget_integration_room_not_visible">A sala %s non é visible.</string>
     <string name="widget_integration_missing_parameter">Falta un parámetro.</string>
     <string name="widget_integration_invalid_parameter">Hai un parámetro que non é válido.</string>
-    <string name="settings_labs_matrix_apps">Aplicacións de Matrix</string>
     <string name="room_add_matrix_apps">Engadir aplicacións de Matrix</string>
     <string name="settings_labs_native_camera">Usar a cámara nativa</string>
 

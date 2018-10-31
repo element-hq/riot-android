@@ -345,7 +345,6 @@ Biztos vagy benne?</string>
     <string name="room_delete_unsent_messages">El nem küldött üzenetek törlése</string>
     <string name="room_message_file_not_found">Fájl nem található</string>
     <string name="room_do_not_have_permission_to_post">Nincs engedélyed hogy üzenetet hagyj ebbe a szobában</string>
-    <string name="room_new_message_notification">1 új üzenet</string>
 
     <string name="ssl_trust">Megbízom benne</string>
     <string name="ssl_do_not_trust">Nem bízom meg benne</string>
@@ -716,7 +715,6 @@ Ismeretlen eszközök:</string>
     <string name="widget_integration_missing_room_id">Hiányzó szoba azonosító a kérésben.</string>
     <string name="widget_integration_missing_user_id">Hiányzó felhasználó azonosító a kérésben.</string>
     <string name="widget_integration_room_not_visible">%s szoba nem látható.</string>
-    <string name="settings_labs_matrix_apps">Matrix Alkalmazások</string>
     <string name="room_add_matrix_apps">Matrix alkalmazás hozzáadása</string>
     <string name="notification_listening_for_events">Események figyelése</string>
 
@@ -737,9 +735,6 @@ Ismeretlen eszközök:</string>
     <string name="option_take_video">Videófelvétel</string>
 
     <string name="settings_analytics">Elemzés</string>
-    <string name="settings_opt_out_of_analytics">Analitikai adatgyűjtés kikapcsolása</string>
-    <string name="settings_opt_out_of_analytics_summary">A Riot névtelen elemzést gyűjt az alkalmazás fejlesztésének érdekében.</string>
-
 
     <string name="settings_labs_native_camera">Beépített kamera használata</string>
 

@@ -225,7 +225,6 @@ Cliquez sur exporter pour les sauvegarder avant de vous déconnecter.</string>
     <string name="room_resend_unsent_messages">Renvoyer les messages non envoyés</string>
     <string name="room_delete_unsent_messages">Supprimer les messages non envoyés</string>
     <string name="room_message_file_not_found">Fichier non trouvé</string>
-    <string name="room_new_message_notification">1 nouveau message</string>
     <string name="ssl_trust">Faire confiance</string>
     <string name="ssl_do_not_trust">Ne pas faire confiance</string>
     <string name="ssl_logout_account">Se déconnecter</string>
@@ -724,7 +723,6 @@ Appareils inconnus :</string>
     <string name="widget_integration_missing_room_id">room_id manquant dans la requête.</string>
     <string name="widget_integration_missing_user_id">user_id manquant dans la requête.</string>
     <string name="widget_integration_room_not_visible">Le salon %s n\'est pas visible.</string>
-    <string name="settings_labs_matrix_apps">Applications Matrix</string>
     <string name="room_add_matrix_apps">Ajouter des applications Matrix</string>
     <string name="call">Appel</string>
     <string name="settings_containing_my_display_name">Messages contenant mon nom affiché</string>
@@ -742,8 +740,6 @@ Appareils inconnus :</string>
     <string name="option_take_video">Prendre une vidéo</string>
 
     <string name="settings_analytics">Statistiques d\'utilisation</string>
-    <string name="settings_opt_out_of_analytics">Ne pas envoyer de données</string>
-    <string name="settings_opt_out_of_analytics_summary">Riot collecte des données anonymes pour nous permettre d\'améliorer l\'application.</string>
     <string name="settings_labs_native_camera">Utiliser la caméra native</string>
 
     <!-- share keys -->

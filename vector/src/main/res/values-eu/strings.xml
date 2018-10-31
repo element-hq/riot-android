@@ -348,7 +348,6 @@ Ziur zaude?</string>
     <string name="room_delete_unsent_messages">Ezabatu bidali gabeko mezuak</string>
     <string name="room_message_file_not_found">Ez da fitxategia aurkitu</string>
     <string name="room_do_not_have_permission_to_post">Ez duzu gela honetara mezuak bidaltzeko baimenik</string>
-    <string name="room_new_message_notification">mezu berri 1</string>
 
     <string name="ssl_trust">Fidatu</string>
     <string name="ssl_do_not_trust">Ez fidatu</string>
@@ -719,7 +718,6 @@ Zifratutako mezuak ez dira zifratzea oraindik ezarrita ez duten beste gailuetan 
     <string name="widget_integration_missing_room_id">Eskarian room_id falta da.</string>
     <string name="widget_integration_missing_user_id">Eskarian user_id falta da.</string>
     <string name="widget_integration_room_not_visible">%s gela ez dago ikusgai.</string>
-    <string name="settings_labs_matrix_apps">Matrix aplikazioak</string>
     <string name="room_add_matrix_apps">Gehitu Matrix aplikazioak</string>
     <string name="notification_noisy_notifications">Jakinarazpen zaratatsuak</string>
     <string name="notification_silent_notifications">Jakinarazpen isilak</string>
@@ -727,8 +725,6 @@ Zifratutako mezuak ez dira zifratzea oraindik ezarrita ez duten beste gailuetan 
     <string name="settings_containing_my_display_name">Nire pantaila-izena duten mezuak</string>
     <string name="settings_containing_my_user_name">Nire erabiltzaile izena duten mezuak</string>
     <string name="settings_analytics">Analitikak</string>
-    <string name="settings_opt_out_of_analytics">Ez hartu parte analitiketan</string>
-    <string name="settings_opt_out_of_analytics_summary">Riotek analitika anonimoak biltzen ditu aplikazioa hobetzeko.</string>
 
     <string name="settings_labs_native_camera">Erabili kamera natiboa</string>
 

@@ -355,7 +355,6 @@ Mensajes cifrados no serán visibles en cuentas que no implementan el cifrado.</
     <string name="room_delete_unsent_messages">Borrar mensajes no enviados</string>
     <string name="room_message_file_not_found">No se pudo encontrar el archivo</string>
     <string name="room_do_not_have_permission_to_post">No tienes permiso para enviar en esta sala</string>
-    <string name="room_new_message_notification">1 mensaje nuevo</string>
 
     <!-- unrecognized SSL certificate -->
     <string name="ssl_trust">Confiar</string>
