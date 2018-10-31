@@ -117,12 +117,14 @@ android {
         disable 'ImpliedQuantity'
 
         // Treat some warnings as errors
+        // Layout
         error 'StringFormatCount'
         error 'HardcodedText'
         error 'SpUsage'
         error 'ObsoleteLayoutParam'
         error 'InefficientWeight'
         error 'DisableBaselineAlignment'
+        error 'ScrollViewSize'
 
         // RTL
         error 'RtlEnabled'
