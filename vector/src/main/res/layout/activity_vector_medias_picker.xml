@@ -198,7 +198,7 @@ preview of the taken image -->
                 android:layout_width="60dp"
                 android:layout_height="60dp"
                 android:layout_centerInParent="true"
-                android:rotation="@integer/rtl_mirror_flip"
+                android:rotationY="@integer/rtl_mirror_flip"
                 android:src="@drawable/camera_play" />
         </RelativeLayout>
 

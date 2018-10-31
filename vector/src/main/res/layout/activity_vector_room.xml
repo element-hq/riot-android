@@ -300,7 +300,7 @@
                         android:layout_gravity="bottom"
                         android:contentDescription="@string/send"
                         android:padding="8dp"
-                        android:rotation="@integer/rtl_mirror_flip"
+                        android:rotationY="@integer/rtl_mirror_flip"
                         android:scaleType="fitCenter"
                         android:src="@drawable/ic_material_file" />
 

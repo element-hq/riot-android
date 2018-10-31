@@ -99,7 +99,7 @@
                 android:layout_alignParentStart="true"
                 android:layout_alignParentLeft="true"
                 android:layout_centerInParent="true"
-                android:rotation="@integer/rtl_mirror_flip"
+                android:rotationY="@integer/rtl_mirror_flip"
                 android:src="@drawable/ic_material_arrow_back_white"
                 android:tint="?attr/vctr_primary_control_color"
                 android:visibility="gone"
