@@ -122,6 +122,7 @@ android {
         error 'SpUsage'
         error 'ObsoleteLayoutParam'
         error 'InefficientWeight'
+        error 'DisableBaselineAlignment'
 
         // RTL
         error 'RtlEnabled'

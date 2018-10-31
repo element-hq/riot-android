@@ -21,6 +21,7 @@
         android:layout_marginLeft="16dp"
         android:layout_marginEnd="16dp"
         android:layout_marginRight="16dp"
+        android:baselineAligned="false"
         android:orientation="horizontal">
 
         <!-- call icon -->

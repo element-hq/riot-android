@@ -42,63 +42,59 @@
             android:orientation="vertical"
             android:paddingBottom="5dp">
 
-            <LinearLayout
+            <FrameLayout
+                android:id="@+id/messagesAdapter_body_layout"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal">
+                android:layout_marginEnd="4dp"
+                android:layout_marginRight="4dp">
 
-                <FrameLayout
-                    android:id="@+id/messagesAdapter_body_layout"
-                    android:layout_width="0dp"
+                <!-- the body is here -->
+                <RelativeLayout
+                    android:id="@+id/messagesAdapter_text_layout"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginEnd="4dp"
-                    android:layout_marginRight="4dp"
-                    android:layout_weight="1">
+                    android:layout_gravity="start">
 
-                    <!-- the body is here -->
-                    <RelativeLayout
-                        android:id="@+id/messagesAdapter_text_layout"
+                    <ImageView
+                        android:id="@+id/message_adapter_e2e_icon"
+                        android:layout_width="14dp"
+                        android:layout_height="14dp"
+                        android:src="@drawable/e2e_verified" />
+
+                    <LinearLayout
+                        android:id="@+id/message_timestamp_layout"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentEnd="true"
+                        android:layout_alignParentRight="true"
+                        android:orientation="horizontal">
+
+                        <include layout="@layout/vector_message_timestamp" />
+
+                    </LinearLayout>
+
+                    <TextView
+                        android:id="@+id/messagesAdapter_body"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_gravity="start">
+                        android:layout_gravity="start"
+                        android:layout_marginStart="4dp"
+                        android:layout_marginLeft="4dp"
+                        android:layout_toStartOf="@+id/message_timestamp_layout"
+                        android:layout_toLeftOf="@+id/message_timestamp_layout"
+                        android:layout_toEndOf="@id/message_adapter_e2e_icon"
+                        android:layout_toRightOf="@id/message_adapter_e2e_icon"
+                        android:autoLink="all"
+                        android:textIsSelectable="false"
+                        android:textSize="14sp"
+                        tools:text="A body" />
+                </RelativeLayout>
 
-                        <ImageView
-                            android:id="@+id/message_adapter_e2e_icon"
-                            android:layout_width="14dp"
-                            android:layout_height="14dp"
-                            android:src="@drawable/e2e_verified" />
+            </FrameLayout>
 
-                        <LinearLayout
-                            android:id="@+id/message_timestamp_layout"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_alignParentEnd="true"
-                            android:layout_alignParentRight="true"
-                            android:orientation="horizontal">
-
-                            <include layout="@layout/vector_message_timestamp" />
-                        </LinearLayout>
-
-                        <TextView
-                            android:id="@+id/messagesAdapter_body"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:layout_gravity="start"
-                            android:layout_marginStart="4dp"
-                            android:layout_marginLeft="4dp"
-                            android:layout_toStartOf="@+id/message_timestamp_layout"
-                            android:layout_toLeftOf="@+id/message_timestamp_layout"
-                            android:layout_toEndOf="@id/message_adapter_e2e_icon"
-                            android:layout_toRightOf="@id/message_adapter_e2e_icon"
-                            android:autoLink="all"
-                            android:textIsSelectable="false"
-                            android:textSize="14sp"
-                            tools:text="A body" />
-                    </RelativeLayout>
-
-                </FrameLayout>
-            </LinearLayout>
         </LinearLayout>
+
     </LinearLayout>
 
     <include
