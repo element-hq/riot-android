@@ -93,6 +93,7 @@
         <!-- Elevate button above the touch guard (above lollipop). -->
         <com.getbase.floatingactionbutton.FloatingActionsMenu
             android:id="@+id/floating_action_menu"
+            style="@style/Floating_Action_Button"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:elevation="12dp"
