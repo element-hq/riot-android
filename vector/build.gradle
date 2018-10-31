@@ -120,6 +120,7 @@ android {
         error 'StringFormatCount'
         error 'HardcodedText'
         error 'SpUsage'
+        error 'ObsoleteLayoutParam'
 
         // RTL
         error 'RtlEnabled'
