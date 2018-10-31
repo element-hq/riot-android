@@ -64,7 +64,7 @@
 
         <EditText
             android:id="@+id/lock_screen_edittext"
-            android:layout_width="match_parent"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_gravity="start"
             android:layout_weight="1"

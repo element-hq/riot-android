@@ -121,6 +121,7 @@ android {
         error 'HardcodedText'
         error 'SpUsage'
         error 'ObsoleteLayoutParam'
+        error 'InefficientWeight'
 
         // RTL
         error 'RtlEnabled'
