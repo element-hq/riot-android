@@ -77,8 +77,8 @@
                     android:id="@+id/messagesAdapter_body_layout"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:paddingEnd="4dp"
-                    android:paddingRight="4dp">
+                    android:layout_marginEnd="4dp"
+                    android:layout_marginRight="4dp">
 
                     <RelativeLayout
                         android:id="@+id/messagesAdapter_file_layout"
@@ -102,8 +102,8 @@
                                 android:id="@+id/messagesAdapter_image_type"
                                 android:layout_width="@dimen/chat_avatar_size"
                                 android:layout_height="@dimen/chat_avatar_size"
-                                android:paddingStart="4dp"
-                                android:paddingLeft="4dp"
+                                android:layout_marginStart="4dp"
+                                android:layout_marginLeft="4dp"
                                 android:src="@drawable/filetype_image" />
 
                             <!-- the media -->
@@ -111,10 +111,10 @@
                                 android:id="@+id/messagesAdapter_filename"
                                 android:layout_width="0dp"
                                 android:layout_height="wrap_content"
+                                android:layout_marginStart="4dp"
+                                android:layout_marginLeft="4dp"
                                 android:layout_weight="1"
                                 android:autoLink="none"
-                                android:paddingStart="4dp"
-                                android:paddingLeft="4dp"
                                 tools:text="A filename here" />
 
                         </LinearLayout>

@@ -124,6 +124,7 @@ android {
         // RTL
         error 'RtlEnabled'
         error 'RtlHardcoded'
+        error 'RtlSymmetry'
     }
 
     repositories {

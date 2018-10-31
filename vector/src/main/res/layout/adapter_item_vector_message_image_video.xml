@@ -88,9 +88,9 @@
                         android:id="@+id/messagesAdapter_body_layout"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:paddingEnd="4dp"
-                        android:paddingRight="4dp">
+                        android:layout_marginEnd="4dp"
+                        android:layout_marginRight="4dp"
+                        android:layout_weight="1">
 
                         <RelativeLayout
                             android:id="@+id/messagesAdapter_image_layout"

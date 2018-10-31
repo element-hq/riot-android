@@ -185,11 +185,14 @@
             android:layout_alignBottom="@+id/jump_to_first_unread_label"
             android:layout_alignParentEnd="true"
             android:layout_alignParentRight="true"
-            android:layout_margin="2dp"
+            android:layout_marginStart="2dp"
+            android:layout_marginLeft="2dp"
+            android:layout_marginTop="2dp"
+            android:layout_marginEnd="4dp"
+            android:layout_marginRight="4dp"
+            android:layout_marginBottom="2dp"
             android:contentDescription="@string/loading"
-            android:indeterminate="true"
-            android:paddingEnd="2dp"
-            android:paddingRight="2dp" />
+            android:indeterminate="true" />
 
         <View
             android:layout_width="match_parent"
