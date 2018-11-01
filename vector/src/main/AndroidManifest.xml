@@ -296,7 +296,6 @@
             android:label="Vector searches"
             android:launchMode="singleTop"
             android:parentActivityName=".activity.VectorRoomDetailsActivity"
-            android:theme="@style/SearchesAppTheme.Light"
             android:windowSoftInputMode="adjustResize">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
@@ -390,7 +389,7 @@
             android:name=".activity.NotificationPrivacyActivity"
             android:configChanges="orientation|screenSize"
             android:label="@string/settings_notification_privacy"
-            android:theme="@style/CountryPickerTheme.Light" />
+            android:theme="@style/AppTheme.NoActionBar.Light" />
         <activity
             android:name=".activity.VectorWebViewActivity"
             android:theme="@style/AppTheme.NoActionBar.Light" />
