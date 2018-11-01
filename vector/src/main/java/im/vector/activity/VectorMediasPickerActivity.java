@@ -2246,8 +2246,11 @@ public class VectorMediasPickerActivity extends MXCActionBarActivity implements 
         finish();
     }
 
-    /*
-     *  Returns
+    /**
+     *  Create bitmap of mImagePreviewImageView.
+     *  Save it as JEPG format with name: "preview_edit_" + date of creation.
+     *  
+     *  @return {@link Uri}of saved image.
      *
      */
     private Uri getPreviewImageFileUri() {
