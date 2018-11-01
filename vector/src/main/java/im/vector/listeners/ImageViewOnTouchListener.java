@@ -47,6 +47,9 @@ public abstract class ImageViewOnTouchListener implements View.OnTouchListener {
 
     /**
      * Set matrix that will be transformed next time instead of new matrix or stored one
+     *
+     * @param startMatrix
+     *
      */
     public void setStartMatrix(Matrix startMatrix) {
         matrix.set(startMatrix);
@@ -54,6 +57,8 @@ public abstract class ImageViewOnTouchListener implements View.OnTouchListener {
 
     /**
      * Determine the space between the first two fingers
+     *
+     * @param event
      */
     private float spacing(MotionEvent event) {
         float x = event.getX(0) - event.getX(1);
@@ -63,6 +68,9 @@ public abstract class ImageViewOnTouchListener implements View.OnTouchListener {
 
     /**
      * Calculate the mid point of the first two fingers
+     *
+     * @param event
+     * @param point
      */
     private void midPoint(PointF point, MotionEvent event) {
         float x = event.getX(0) + event.getX(1);

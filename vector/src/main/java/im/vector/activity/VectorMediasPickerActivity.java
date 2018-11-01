@@ -923,10 +923,6 @@ public class VectorMediasPickerActivity extends MXCActionBarActivity implements 
             if (null != newBitmap) {// from camera
                 mImagePreviewImageView.setImageBitmap(newBitmap);
 
-                // compute the image size in the screen
-                int imageW = newBitmap.getWidth();
-                int imageH = newBitmap.getHeight();
-
                 int screenHeight = getWindow().getDecorView().getHeight();
                 int screenWidth = getWindow().getDecorView().getWidth();
 
@@ -955,19 +951,15 @@ public class VectorMediasPickerActivity extends MXCActionBarActivity implements 
                         }
                     });
                 }
-
-                int newWidth;
-                int newHeight;
-
-                newHeight = screenHeight;
-                newWidth = (int) (((float) newHeight) * imageW / imageH);
-
-                if (newWidth > screenWidth) {
-                    newWidth = screenWidth;
-                    newHeight = (int) (((float) newWidth) * imageH / imageW);
-                }
                 mImagePreviewAvatarModeMaskView.setVisibility(View.VISIBLE);
-                drawCircleMask(mImagePreviewAvatarModeMaskView, newWidth, newHeight);
+                mImagePreviewAvatarModeMaskView.post(new Runnable() {
+                    @Override
+                    public void run() {
+                        drawCircleMask(mImagePreviewAvatarModeMaskView,mImagePreviewAvatarModeMaskView.getWidth(),mImagePreviewAvatarModeMaskView.getHeight());
+
+                        return;
+                    }
+                });
             }
         }
 
@@ -1367,24 +1359,22 @@ public class VectorMediasPickerActivity extends MXCActionBarActivity implements 
      * @param height   the image height to hide
      */
     private void drawCircleMask(final ImageView maskView, final int width, final int height) {
-        Bitmap bitmap = Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888);
-        Canvas canvas = new Canvas(bitmap);
-        Paint paint = new Paint(Paint.ANTI_ALIAS_FLAG);
-        int radius = 24;
-
         // remove any background
         maskView.setBackgroundResource(0);
 
         // create a bitmap with a transparent hole
-        paint.setStyle(Paint.Style.STROKE);
-        paint.setColor(getResources().getColor(R.color.direct_chat_ring_color));
-        paint.setStrokeWidth(radius);
-        paint.setStrokeCap(Paint.Cap.ROUND);
-        canvas.drawCircle(width / 2, height / 2, Math.min(width / 2, height / 2) - radius / 2, paint);
+        Bitmap bitmap = Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888);
+        Canvas canvas = new Canvas(bitmap);
 
-        paint.setColor(Color.WHITE);
-        paint.setStrokeWidth(radius / 3);
-        canvas.drawCircle(width / 2, height / 2, Math.min(width / 2, height / 2) - radius / 2, paint);
+        canvas.drawColor(getResources().getColor(android.R.color.black));
+
+        Paint eraser = new Paint(Paint.ANTI_ALIAS_FLAG);
+        eraser.setStyle(Paint.Style.FILL);
+        // require to make a transparent hole
+        eraser.setXfermode(new PorterDuffXfermode(PorterDuff.Mode.SRC_OUT));
+        eraser.setColor(Color.TRANSPARENT);
+
+        canvas.drawCircle(width / 2, height / 2, Math.min(width / 2, height / 2), eraser);
         canvas.drawBitmap(bitmap, 0, 0, null);
 
         maskView.setImageBitmap(bitmap);
