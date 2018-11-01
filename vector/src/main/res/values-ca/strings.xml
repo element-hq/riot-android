@@ -44,7 +44,7 @@
     <string name="view_decrypted_source">Visualitza el codi font desencriptat</string>
     <string name="delete">Elimina</string>
     <string name="rename">Reanomena</string>
-    <string name="report_content">Mostra el contingut</string>
+    <string name="report_content">Informa del contingut</string>
     <string name="active_call">Trucada activa</string>
     <string name="ongoing_conference_call"> Conferència en curs. Uneix-te per veu o vídeo.</string>
     <string name="ongoing_conference_call_voice">veu</string>
