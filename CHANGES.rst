@@ -8,7 +8,7 @@ Features:
  -
 
 Improvements:
- -
+ - Ability to crop profile picture before setting (#2598)
 
 Other changes:
  - F-Droid version: restart event stream on application upgrade (#2105)
@@ -36,7 +36,6 @@ Improvements:
  - Menu version copies version number to clipboard (#2570)
  - Tapping on profile picture in sidebar opens settings page (#2597)
  - Ask for Camera permission only when the user want to change the room avatar (#2575)
- - Ability to crop profile picture before setting (#2598)
 
 Other changes:
  - Room display name is now computed by the Matrix SDK
