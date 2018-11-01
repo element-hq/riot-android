@@ -192,10 +192,7 @@ public class VectorMediasPickerActivity extends MXCActionBarActivity implements 
     private ImageViewOnTouchListener imageViewOnTouchListener = new ImageViewOnTouchListener() {
         @Override
         public boolean onTouch(View v, MotionEvent event) {
-            if (mIsAvatarMode) {
-                return (super.onTouch(v, event));
-            }
-            return true;
+            return (mIsAvatarMode)?  super.onTouch(v, event) : true;
         }
     };
 
