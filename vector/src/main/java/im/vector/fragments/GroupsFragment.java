@@ -381,7 +381,7 @@ public class GroupsFragment extends AbsHomeFragment {
         final EditText idEditText = dialogView.findViewById(R.id.community_id_edit_text);
         final String hostName = mSession.getHomeServerConfig().getHomeserverUri().getHost();
         TextView hsNameView = dialogView.findViewById(R.id.community_hs_name_text_view);
-        hsNameView.setText(":" + hostName);
+        hsNameView.setText(hostName);
 
         AlertDialog alertDialog = new AlertDialog.Builder(getActivity())
                 .setView(dialogView)

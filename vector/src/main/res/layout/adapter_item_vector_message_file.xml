@@ -110,11 +110,12 @@
                             <TextView
                                 android:id="@+id/messagesAdapter_filename"
                                 android:layout_width="0dp"
-                                android:layout_height="wrap_content"
+                                android:layout_height="@dimen/chat_avatar_size"
                                 android:layout_marginStart="4dp"
                                 android:layout_marginLeft="4dp"
                                 android:layout_weight="1"
                                 android:autoLink="none"
+                                android:gravity="center_vertical"
                                 tools:text="A filename here" />
 
                         </LinearLayout>

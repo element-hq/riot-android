@@ -18,6 +18,7 @@
 
 package im.vector.fragments;
 
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -380,6 +381,7 @@ public class VectorMessageListFragment extends MatrixMessageListFragment<VectorM
      * @param event      the event
      * @param deviceInfo the deviceinfo
      */
+    @SuppressLint("SetTextI18n")
     public void onE2eIconClick(final Event event, final MXDeviceInfo deviceInfo) {
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
         LayoutInflater inflater = getActivity().getLayoutInflater();

@@ -130,6 +130,9 @@ android {
         error 'RtlEnabled'
         error 'RtlHardcoded'
         error 'RtlSymmetry'
+
+        // Code
+        error 'SetTextI18n'
     }
 
     repositories {

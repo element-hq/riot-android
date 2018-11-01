@@ -111,9 +111,13 @@ public class UnrecognizedCertHandler {
 
         TextView sslUserId = layout.findViewById(R.id.ssl_user_id);
         if (hsConfig.getCredentials() != null) {
-            sslUserId.setText(activity.getString(R.string.username) + ": " + hsConfig.getCredentials().userId);
+            sslUserId.setText(activity.getString(R.string.generic_label_and_value,
+                    activity.getString(R.string.username),
+                    hsConfig.getCredentials().userId));
         } else {
-            sslUserId.setText(activity.getString(R.string.hs_url) + ": " + hsConfig.getHomeserverUri().toString());
+            sslUserId.setText(activity.getString(R.string.generic_label_and_value,
+                    activity.getString(R.string.hs_url),
+                    hsConfig.getHomeserverUri().toString()));
         }
 
         TextView sslExpl = layout.findViewById(R.id.ssl_explanation);

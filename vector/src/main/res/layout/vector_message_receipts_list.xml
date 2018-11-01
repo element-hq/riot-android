@@ -22,7 +22,7 @@
             android:layout_height="match_parent"
             android:gravity="center"
             android:textSize="9sp"
-            tools:text="+999" />
+            tools:text="999+" />
 
         <include
             android:id="@+id/message_avatar_receipt_5"

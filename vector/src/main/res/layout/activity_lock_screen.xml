@@ -39,7 +39,7 @@
         android:textAppearance="?android:attr/textAppearanceSmall"
         android:textColor="?attr/vctr_riot_primary_text_color"
         android:textStyle="bold"
-        tools:text="SENDER" />
+        tools:text="SENDER :" />
 
     <TextView
         android:id="@+id/lock_screen_body"

@@ -1068,4 +1068,9 @@
     <string name="show_info_area_messages_and_errors">For messages and errors</string>
     <string name="show_info_area_only_errors">Only for errors</string>
 
+    <string name="generic_label">%1$s:</string>
+    <string name="generic_label_and_value">%1$s: %2$s</string>
+    <string name="plus_x">+%d</string>
+    <string name="x_plus">%d+</string>
+
 </resources>

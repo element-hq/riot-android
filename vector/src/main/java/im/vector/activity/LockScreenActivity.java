@@ -130,7 +130,7 @@ public class LockScreenActivity extends VectorAppCompatActivity { // do NOT exte
         String roomName = room.getRoomDisplayName(this);
         setTitle(roomName);
 
-        ((TextView) findViewById(R.id.lock_screen_sender)).setText(intent.getStringExtra(EXTRA_SENDER_NAME) + " : ");
+        ((TextView) findViewById(R.id.lock_screen_sender)).setText(getString(R.string.generic_label, intent.getStringExtra(EXTRA_SENDER_NAME)));
         ((TextView) findViewById(R.id.lock_screen_body)).setText(intent.getStringExtra(EXTRA_MESSAGE_BODY));
         ((TextView) findViewById(R.id.lock_screen_room_name)).setText(roomName);
         final ImageButton sendButton = findViewById(R.id.lock_screen_sendbutton);
