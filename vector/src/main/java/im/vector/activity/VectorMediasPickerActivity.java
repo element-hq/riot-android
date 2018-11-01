@@ -90,6 +90,7 @@ import javax.microedition.khronos.egl.EGLSurface;
 import im.vector.R;
 import im.vector.VectorApp;
 import im.vector.listeners.ImageViewOnTouchListener;
+import im.vector.ui.themes.ActivityOtherThemes;
 import im.vector.util.PermissionsToolsKt;
 import im.vector.util.ViewUtilKt;
 import im.vector.view.RecentMediaLayout;
