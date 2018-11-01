@@ -1091,4 +1091,5 @@ Beachte: Diese Aktion wird die App neu starten und einige Zeit brauchen.</string
 
     <string name="unknown_error">Entschuldige, ein Fehler trat auf</string>
 
-</resources>
+<string name="room_sliding_menu_version_x">Version %s</string>
+    </resources>
