@@ -66,10 +66,9 @@ for example, with GCM, it would give
         // use the version name
         versionCode rootProject.ext.versionCodeProp
         versionName rootProject.ext.versionNameProp
-        resValue "string", "allow_gcm_use", "true"
-        resValue "string", "allow_ga_use", "true"
-        resValue "string", "short_flavor_description", "G"
-        resValue "string", "flavor_description", "GooglePlay"
+        buildConfigField "boolean", "ALLOW_GCM_USE", "true"
+        buildConfigField "String", "SHORT_FLAVOR_DESCRIPTION", "\"F\""
+        buildConfigField "String", "FLAVOR_DESCRIPTION", "\"FDroid\""
     }
 ```
 

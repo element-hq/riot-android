@@ -194,7 +194,7 @@ public class VectorApp extends MultiDexApplication {
         }
 
         // init the REST client
-        MXSession.initUserAgent(this);
+        MXSession.initUserAgent(this, BuildConfig.FLAVOR_DESCRIPTION);
 
         instance = this;
         mCallsManager = new CallsManager(this);
@@ -877,7 +877,7 @@ public class VectorApp extends MultiDexApplication {
      */
     private void onNewScreen(Activity activity) {
         final String screenPath = "/android/" + Matrix.getApplicationName()
-                + "/" + getString(R.string.flavor_description)
+                + "/" + BuildConfig.FLAVOR_DESCRIPTION
                 + "/" + BuildConfig.VERSION_NAME
                 + "/" + activity.getClass().getName().replace(".", "/");
         mAppAnalytics.trackScreen(screenPath, null);

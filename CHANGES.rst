@@ -27,7 +27,7 @@ Translations:
  -
 
 Build:
- -
+ - Better build.gradle file (#2302)
 
 Changes in Riot 0.8.18 (2018-10-18)
 ===================================================

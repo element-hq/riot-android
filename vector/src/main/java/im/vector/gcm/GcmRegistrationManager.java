@@ -42,8 +42,8 @@ import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
 
+import im.vector.BuildConfig;
 import im.vector.Matrix;
-import im.vector.R;
 import im.vector.activity.CommonActivityUtils;
 import im.vector.util.PreferencesManager;
 import im.vector.util.SystemUtilsKt;
@@ -123,9 +123,6 @@ public final class GcmRegistrationManager {
 
     // defines the GCM registration token
     private String mRegistrationToken;
-
-    // 3 states : null not initialized (retrieved by flavor)
-    private static Boolean mUseGCM;
 
     /**
      * Constructor
@@ -1042,16 +1039,7 @@ public final class GcmRegistrationManager {
      * @return true to use GCM before using the events polling thread, false otherwise
      */
     public boolean useGCM() {
-        if (null == mUseGCM) {
-            mUseGCM = true;
-
-            try {
-                mUseGCM = TextUtils.equals(mContext.getString(R.string.allow_gcm_use), "true");
-            } catch (Exception e) {
-                Log.e(LOG_TAG, "useGCM " + e.getMessage(), e);
-            }
-        }
-        return mUseGCM;
+        return BuildConfig.ALLOW_GCM_USE;
     }
 
     /**
@@ -1340,7 +1328,7 @@ public final class GcmRegistrationManager {
     /**
      * Clear the GCM data
      *
-     * @param callback               the asynchronous callback
+     * @param callback the asynchronous callback
      */
     public void clearGCMData(@NonNull ApiCallback<Void> callback) {
         try {

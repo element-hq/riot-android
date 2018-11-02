@@ -49,6 +49,7 @@ import java.util.List;
 import java.util.Locale;
 import java.util.zip.GZIPOutputStream;
 
+import im.vector.BuildConfig;
 import im.vector.Matrix;
 import im.vector.R;
 import im.vector.VectorApp;
@@ -268,7 +269,7 @@ public class BugReporter {
                         Log.e(LOG_TAG, "## sendBugReport() : cannot retrieve the appname " + e.getMessage(), e);
                     }
 
-                    builder.addFormDataPart("label", context.getString(R.string.flavor_description));
+                    builder.addFormDataPart("label", BuildConfig.FLAVOR_DESCRIPTION);
                     builder.addFormDataPart("label", context.getString(R.string.git_branch_name));
 
                     if (getCrashFile(context).exists()) {
