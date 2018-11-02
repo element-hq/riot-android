@@ -21,7 +21,7 @@ Bugfix:
  - Fix Permalinks and registration issue (#2689)
  - Mention from read receipts list doesn't work (#656)
  - Fix issue when scrolling file list in room details (#2702)
- - Align switch camera button to parent in landscape mode (#2703)
+ - Align switch camera button to parent in landscape mode (#2704)
 
 Translations:
  -
