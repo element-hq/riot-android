@@ -52,7 +52,7 @@
         <item>only_errors</item>
     </string-array>
 
-    <string-array name="show_info_area">
+    <string-array name="show_info_area_values">
         <item>@string/show_info_area_always</item>
         <item>@string/show_info_area_messages_and_errors</item>
         <item>@string/show_info_area_only_errors</item>
