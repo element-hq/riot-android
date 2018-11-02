@@ -40,6 +40,7 @@ import im.vector.features.hhs.ResourceLimitErrorFormatter
 import im.vector.listeners.IMessagesAdapterActionsListener
 import im.vector.ui.themes.ThemeUtils
 import im.vector.util.MatrixURLSpan
+import im.vector.util.RoomUtils
 import org.matrix.androidsdk.MXPatterns
 import org.matrix.androidsdk.rest.model.MatrixError
 import org.matrix.androidsdk.rest.model.RoomTombstoneContent
@@ -68,7 +69,7 @@ class NotificationAreaView @JvmOverloads constructor(
     lateinit var messageView: TextView
 
     var delegate: Delegate? = null
-    private var state: State = State.Default
+    private var state: State = State.Initial
 
     /**
      * This methods is responsible for rendering the view according to the newState
@@ -155,21 +156,21 @@ class NotificationAreaView @JvmOverloads constructor(
     }
 
     private fun renderTyping(state: State.Typing) {
-        visibility = View.VISIBLE
+        visibility = RoomUtils.showMessage(context)
         imageView.setImageResource(R.drawable.vector_typing)
         messageView.text = SpannableString(state.message)
         messageView.setTextColor(ThemeUtils.getColor(context, R.attr.vctr_room_notification_text_color))
     }
 
     private fun renderUnreadPreview() {
-        visibility = View.VISIBLE
+        visibility = RoomUtils.showMessage(context)
         imageView.setImageResource(R.drawable.scrolldown)
         messageView.setTextColor(ThemeUtils.getColor(context, R.attr.vctr_room_notification_text_color))
         imageView.setOnClickListener { delegate?.closeScreen() }
     }
 
     private fun renderScrollToBottom(state: State.ScrollToBottom) {
-        visibility = View.VISIBLE
+        visibility = RoomUtils.showMessage(context)
         if (state.unreadCount > 0) {
             imageView.setImageResource(R.drawable.newmessages)
             messageView.setTextColor(ContextCompat.getColor(context, R.color.vector_fuchsia_color))
@@ -210,7 +211,7 @@ class NotificationAreaView @JvmOverloads constructor(
     }
 
     private fun renderDefault() {
-        visibility = View.INVISIBLE
+        visibility = RoomUtils.showEmpty(context)
     }
 
     private fun renderHidden() {
@@ -257,6 +258,10 @@ class NotificationAreaView @JvmOverloads constructor(
      * Priority of state is managed in {@link VectorRoomActivity.refreshNotificationsArea() }
      */
     sealed class State {
+
+        // Not yet rendered
+        object Initial : State()
+
         // View will be Invisible
         object Default : State()
 

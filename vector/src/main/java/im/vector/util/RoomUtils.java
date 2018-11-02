@@ -27,6 +27,7 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.drawable.Icon;
 import android.os.Build;
+import android.preference.PreferenceManager;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AlertDialog;
 import android.text.TextUtils;
@@ -847,5 +848,61 @@ public class RoomUtils {
         } else {
             return null;
         }
+    }
+
+    /**
+     * Preference key.
+     */
+    public static final String SHOW_INFO_AREA_KEY = "SHOW_INFO_AREA_KEY";
+
+    /**
+     * Always show the info area.
+     */
+    public static final String ALWAYS = "always";
+
+    /**
+     * Show the info area when it has messages or errors.
+     */
+    public static final String MESSAGES_AND_ERRORS = "messages_and_errors";
+
+    /**
+     * Show the info area only when it has errors.
+     */
+    public static final String ONLY_ERRORS = "only_errors";
+
+    /**
+     * Provides visibility when the info area is empty.
+     * <br>
+     * Show only when preference is set to {@link RoomUtils#ALWAYS}.
+     *
+     * @param context application context
+     * @return {@link View#VISIBLE} to display the info area or {@link View#GONE} to hide.
+     */
+    public static int showEmpty(Context context) {
+        return ALWAYS.equals(getShowInfoAreaPreference(context)) ? View.VISIBLE : View.GONE;
+    }
+
+    /**
+     * Provides visibility when the info area has a non-error message or icon (for example scrolling icon).
+     * <br>
+     * Show only when preference is set to {@link RoomUtils#ALWAYS} or {@link RoomUtils#MESSAGES_AND_ERRORS}.
+     * Or when not equal {@link RoomUtils#ONLY_ERRORS}.
+     *
+     * @param context application context.
+     * @return {@link View#VISIBLE} to display the info area or {@link View#GONE} to hide.
+     */
+    public static int showMessage(Context context) {
+        return !ONLY_ERRORS.equals(getShowInfoAreaPreference(context)) ? View.VISIBLE : View.GONE;
+    }
+
+    /**
+     * Provides the setting's value.
+     *
+     * @param context application context.
+     * @return one of the {@link RoomUtils#ALWAYS}, {@link RoomUtils#MESSAGES_AND_ERRORS} or {@link RoomUtils#ONLY_ERRORS}.
+     * The default value is {@link RoomUtils#ALWAYS}.
+     */
+    public static String getShowInfoAreaPreference(Context context) {
+        return PreferenceManager.getDefaultSharedPreferences(context).getString(SHOW_INFO_AREA_KEY, ALWAYS);
     }
 }

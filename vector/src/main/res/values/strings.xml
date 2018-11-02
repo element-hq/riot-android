@@ -1067,4 +1067,9 @@
     <string name="merged_events_expand">expand</string>
     <string name="merged_events_collapse">collapse</string>
 
+    <string name="info_area_show">Show the info area</string>
+    <string name="show_info_area_always">Always</string>
+    <string name="show_info_area_messages_and_errors">Messages and errors</string>
+    <string name="show_info_area_only_errors">Only errors</string>
+
 </resources>
