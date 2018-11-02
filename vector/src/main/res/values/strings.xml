@@ -138,7 +138,7 @@
     <string name="send_bug_report_include_logs">Send logs</string>
     <string name="send_bug_report_include_crash_logs">Send crash logs</string>
     <string name="send_bug_report_include_screenshot">Send screenshot</string>
-    <string name="send_bug_report">Bug Report</string>
+    <string name="send_bug_report">Report bug</string>
     <string name="send_bug_report_description">Please describe the bug. What did you do? What did you expect to happen? What actually happened?</string>
     <string name="send_bug_report_description_in_english">If possible, please write the description in English.</string>
     <string name="send_bug_report_placeholder">Describe your problem here</string>
@@ -1066,5 +1066,10 @@
     <!-- Expand/Collapse room member changes -->
     <string name="merged_events_expand">expand</string>
     <string name="merged_events_collapse">collapse</string>
+
+    <string name="settings_info_area_show">Show the info area</string>
+    <string name="show_info_area_always">Always</string>
+    <string name="show_info_area_messages_and_errors">For messages and errors</string>
+    <string name="show_info_area_only_errors">Only for errors</string>
 
 </resources>

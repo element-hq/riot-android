@@ -7,8 +7,9 @@
         android:id="@+id/login_actions_bar"
         android:layout_width="wrap_content"
         android:layout_height="56dp"
-        android:layout_alignParentBottom="true"
-        android:layout_alignParentRight="true">
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentBottom="true">
 
         <View
             android:layout_width="match_parent"
@@ -25,8 +26,10 @@
             android:id="@+id/button_login"
             android:layout_width="94dp"
             android:layout_height="36dp"
+            android:layout_alignParentEnd="true"
             android:layout_alignParentRight="true"
             android:layout_centerVertical="true"
+            android:layout_marginEnd="16dp"
             android:layout_marginRight="16dp"
             android:background="@color/vector_green_color"
             android:text="@string/auth_login"
@@ -46,8 +49,10 @@
             android:id="@+id/button_reset_password"
             android:layout_width="150dp"
             android:layout_height="36dp"
+            android:layout_alignParentEnd="true"
             android:layout_alignParentRight="true"
             android:layout_centerVertical="true"
+            android:layout_marginEnd="16dp"
             android:layout_marginRight="16dp"
             android:background="@color/vector_green_color"
             android:text="@string/auth_send_reset_email"
@@ -58,9 +63,12 @@
             android:id="@+id/button_forgot_email_validate"
             android:layout_width="match_parent"
             android:layout_height="36dp"
+            android:layout_alignParentEnd="true"
             android:layout_alignParentRight="true"
             android:layout_centerVertical="true"
+            android:layout_marginStart="16dp"
             android:layout_marginLeft="16dp"
+            android:layout_marginEnd="16dp"
             android:layout_marginRight="16dp"
             android:background="@color/vector_green_color"
             android:text="@string/auth_send_reset_email"
@@ -71,8 +79,10 @@
             android:id="@+id/button_submit"
             android:layout_width="wrap_content"
             android:layout_height="36dp"
+            android:layout_alignParentEnd="true"
             android:layout_alignParentRight="true"
             android:layout_centerVertical="true"
+            android:layout_marginEnd="16dp"
             android:layout_marginRight="16dp"
             android:background="@color/vector_green_color"
             android:minWidth="94dp"
@@ -85,7 +95,9 @@
             android:layout_width="wrap_content"
             android:layout_height="36dp"
             android:layout_centerVertical="true"
+            android:layout_marginEnd="16dp"
             android:layout_marginRight="16dp"
+            android:layout_toStartOf="@id/button_submit"
             android:layout_toLeftOf="@id/button_submit"
             android:background="@color/vector_green_color"
             android:minWidth="94dp"
@@ -123,9 +135,11 @@
                 android:id="@+id/main_input_layout"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
                 android:layout_marginLeft="16dp"
-                android:layout_marginRight="16dp"
                 android:layout_marginTop="19dp"
+                android:layout_marginEnd="16dp"
+                android:layout_marginRight="16dp"
                 android:orientation="vertical">
 
                 <LinearLayout
@@ -147,6 +161,7 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:paddingStart="4dp"
                         android:paddingLeft="4dp"
                         android:text="@string/or"
                         android:textSize="16sp" />
@@ -161,8 +176,10 @@
                             android:id="@+id/login_phone_number_country"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
+                            android:layout_marginEnd="6dp"
                             android:layout_marginRight="6dp"
                             android:clickable="false"
+                            android:drawableEnd="@drawable/ic_material_expand_more_black"
                             android:drawableRight="@drawable/ic_material_expand_more_black"
                             android:focusable="false"
                             android:maxLines="1"
@@ -299,8 +316,10 @@
                             android:id="@+id/registration_phone_number_country"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
+                            android:layout_marginEnd="6dp"
                             android:layout_marginRight="6dp"
                             android:clickable="false"
+                            android:drawableEnd="@drawable/ic_material_expand_more_black"
                             android:drawableRight="@drawable/ic_material_expand_more_black"
                             android:focusable="false"
                             android:maxLines="1"
@@ -339,6 +358,7 @@
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="match_parent"
+                            android:layout_toEndOf="@+id/display_server_url_expand_checkbox"
                             android:layout_toRightOf="@+id/display_server_url_expand_checkbox"
                             android:gravity="center_vertical"
                             android:text="@string/auth_use_server_options" />
@@ -354,6 +374,7 @@
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
+                            android:layout_marginStart="5dp"
                             android:layout_marginLeft="5dp"
                             android:layout_marginTop="10dp"
                             android:text="@string/auth_home_server" />
@@ -369,6 +390,7 @@
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
+                            android:layout_marginStart="5dp"
                             android:layout_marginLeft="5dp"
                             android:layout_marginTop="10dp"
                             android:text="@string/auth_identity_server" />
@@ -388,8 +410,8 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_margin="5dp"
-                    android:paddingBottom="10dp"
                     android:paddingTop="5dp"
+                    android:paddingBottom="10dp"
                     android:text="@string/auth_forgot_password"
                     android:textColor="@color/vector_green_color"
                     android:textSize="14sp" />
@@ -400,9 +422,9 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:gravity="center_horizontal"
-                tools:text="A text here"
                 android:textSize="16sp"
-                android:visibility="gone" />
+                android:visibility="gone"
+                tools:text="A text here" />
 
         </LinearLayout>
     </ScrollView>

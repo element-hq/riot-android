@@ -35,6 +35,7 @@ import java.util.Map;
 import java.util.Set;
 
 import im.vector.VectorApp;
+import im.vector.settings.VectorLocale;
 import im.vector.util.PhoneNumberUtils;
 
 /**
@@ -304,20 +305,20 @@ public class Contact implements java.io.Serializable {
         boolean matched = false;
 
         if (!TextUtils.isEmpty(mDisplayName)) {
-            matched = (mDisplayName.toLowerCase(VectorApp.getApplicationLocale()).contains(pattern));
+            matched = (mDisplayName.toLowerCase(VectorLocale.INSTANCE.getApplicationLocale()).contains(pattern));
         }
 
         if (!matched) {
             for (String email : mEmails) {
-                matched |= email.toLowerCase(VectorApp.getApplicationLocale()).contains(pattern);
+                matched |= email.toLowerCase(VectorLocale.INSTANCE.getApplicationLocale()).contains(pattern);
             }
         }
 
         if (!matched) {
             for (PhoneNumber pn : mPhoneNumbers) {
-                matched |= pn.mMsisdnPhoneNumber.toLowerCase(VectorApp.getApplicationLocale()).contains(pattern)
-                        || pn.mRawPhoneNumber.toLowerCase(VectorApp.getApplicationLocale()).contains(pattern)
-                        || (pn.mE164PhoneNumber != null && pn.mE164PhoneNumber.toLowerCase(VectorApp.getApplicationLocale()).contains(pattern));
+                matched |= pn.mMsisdnPhoneNumber.toLowerCase(VectorLocale.INSTANCE.getApplicationLocale()).contains(pattern)
+                        || pn.mRawPhoneNumber.toLowerCase(VectorLocale.INSTANCE.getApplicationLocale()).contains(pattern)
+                        || (pn.mE164PhoneNumber != null && pn.mE164PhoneNumber.toLowerCase(VectorLocale.INSTANCE.getApplicationLocale()).contains(pattern));
             }
         }
 

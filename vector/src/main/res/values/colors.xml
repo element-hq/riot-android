@@ -2,7 +2,8 @@
 <resources>
 
     <!-- main app colors -->
-    <color name="vector_green_color">#FF76cfa6</color>
+    <color name="vector_green_color_dark">#FF5EA584</color>
+    <color name="vector_green_color">#FF76CFA6</color>
     <color name="vector_fuchsia_color">#ff0064</color>
     <color name="vector_silver_color">#FFC7C7C7</color>
     <color name="vector_dark_grey_color">#FF999999</color>
@@ -38,9 +39,11 @@
 
     <color name="tab_bar_selected_background_color_light">@color/primary_color_light</color>
     <color name="tab_bar_selected_background_color_dark">@color/primary_color_dark</color>
+    <color name="tab_bar_selected_background_color_status">@color/primary_color_status</color>
 
     <color name="tab_bar_unselected_background_color_light">@color/primary_color_light</color>
     <color name="tab_bar_unselected_background_color_dark">@color/primary_color_dark</color>
+    <color name="tab_bar_unselected_background_color_status">@color/primary_color_status</color>
 
     <!-- Text Colors -->
     <color name="primary_hint_text_color_light">#FFFFFF</color>

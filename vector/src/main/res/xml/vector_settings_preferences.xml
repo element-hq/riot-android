@@ -106,6 +106,14 @@
             android:key="SETTINGS_PREVIEW_MEDIA_BEFORE_SENDING_KEY"
             android:title="@string/settings_preview_media_before_sending" />
 
+        <ListPreference
+            android:entries="@array/show_info_area_values"
+            android:entryValues="@array/show_info_area_codes"
+            android:defaultValue="always"
+            android:key="SETTINGS_SHOW_INFO_AREA_KEY"
+            android:summary="%s"
+            android:title="@string/settings_info_area_show" />
+
     </PreferenceCategory>
 
     <im.vector.preference.VectorDividerCategory />

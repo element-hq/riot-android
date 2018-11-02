@@ -3,18 +3,20 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:background="?attr/list_header_background_color">
+    android:background="?attr/vctr_list_header_background_color">
 
     <Spinner
         android:id="@+id/public_rooms_selector"
+        style="@style/Widget.AppCompat.Spinner.Underlined"
         android:layout_width="300dp"
         android:layout_height="44dp"
-        android:layout_marginBottom="6dp"
+        android:layout_marginStart="6dp"
         android:layout_marginLeft="6dp"
+        android:layout_marginEnd="6dp"
         android:layout_marginRight="6dp"
+        android:layout_marginBottom="6dp"
         android:spinnerMode="dropdown"
         android:theme="@style/SpinnerTheme"
-        style="@style/Widget.AppCompat.Spinner.Underlined"
         tools:listitem="@layout/public_room_spinner_item" />
 
 </LinearLayout>

@@ -25,11 +25,9 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.SharedPreferences;
-import android.content.pm.PackageManager;
 import android.content.res.Configuration;
 import android.content.res.Resources;
 import android.graphics.Bitmap;
-import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
@@ -38,7 +36,6 @@ import android.preference.PreferenceManager;
 import android.support.multidex.MultiDex;
 import android.support.multidex.MultiDexApplication;
 import android.text.TextUtils;
-import android.util.Pair;
 
 import com.facebook.stetho.Stetho;
 
@@ -48,8 +45,6 @@ import org.matrix.androidsdk.util.Log;
 import java.io.File;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -74,12 +69,13 @@ import im.vector.contacts.PIDsRetriever;
 import im.vector.gcm.GcmRegistrationManager;
 import im.vector.services.EventStreamService;
 import im.vector.settings.FontScale;
+import im.vector.settings.VectorLocale;
+import im.vector.ui.themes.ThemeUtils;
 import im.vector.util.CallsManager;
 import im.vector.util.PermissionsToolsKt;
 import im.vector.util.PhoneNumberUtils;
 import im.vector.util.PreferencesManager;
 import im.vector.util.RageShake;
-import im.vector.util.ThemeUtils;
 import im.vector.util.VectorMarkdownParser;
 
 /**
@@ -168,10 +164,10 @@ public class VectorApp extends MultiDexApplication {
     private final BroadcastReceiver mLanguageReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
-            if (!TextUtils.equals(Locale.getDefault().toString(), getApplicationLocale().toString())) {
+            if (!TextUtils.equals(Locale.getDefault().toString(), VectorLocale.INSTANCE.getApplicationLocale().toString())) {
                 Log.d(LOG_TAG, "## onReceive() : the locale has been updated to " + Locale.getDefault().toString()
-                        + ", restore the expected value " + getApplicationLocale().toString());
-                updateApplicationSettings(getApplicationLocale(),
+                        + ", restore the expected value " + VectorLocale.INSTANCE.getApplicationLocale().toString());
+                updateApplicationSettings(VectorLocale.INSTANCE.getApplicationLocale(),
                         FontScale.INSTANCE.getFontScalePrefValue(),
                         ThemeUtils.INSTANCE.getApplicationTheme(context));
 
@@ -255,7 +251,7 @@ public class VectorApp extends MultiDexApplication {
              * @return the local status value
              */
             private String getActivityLocaleStatus(Activity activity) {
-                return getApplicationLocale().toString()
+                return VectorLocale.INSTANCE.getApplicationLocale().toString()
                         + "_" + FontScale.INSTANCE.getFontScalePrefValue()
                         + "_" + ThemeUtils.INSTANCE.getApplicationTheme(activity);
             }
@@ -279,10 +275,10 @@ public class VectorApp extends MultiDexApplication {
                 }
 
                 // it should never happen as there is a broadcast receiver (mLanguageReceiver)
-                if (!TextUtils.equals(Locale.getDefault().toString(), getApplicationLocale().toString())) {
+                if (!TextUtils.equals(Locale.getDefault().toString(), VectorLocale.INSTANCE.getApplicationLocale().toString())) {
                     Log.d(LOG_TAG, "## onActivityResumed() : the locale has been updated to " + Locale.getDefault().toString()
-                            + ", restore the expected value " + getApplicationLocale().toString());
-                    updateApplicationSettings(getApplicationLocale(),
+                            + ", restore the expected value " + VectorLocale.INSTANCE.getApplicationLocale().toString());
+                    updateApplicationSettings(VectorLocale.INSTANCE.getApplicationLocale(),
                             FontScale.INSTANCE.getFontScalePrefValue(),
                             ThemeUtils.INSTANCE.getApplicationTheme(activity));
                     restartActivity(activity);
@@ -343,10 +339,10 @@ public class VectorApp extends MultiDexApplication {
     @Override
     public void onConfigurationChanged(Configuration newConfig) {
         super.onConfigurationChanged(newConfig);
-        if (!TextUtils.equals(Locale.getDefault().toString(), getApplicationLocale().toString())) {
+        if (!TextUtils.equals(Locale.getDefault().toString(), VectorLocale.INSTANCE.getApplicationLocale().toString())) {
             Log.d(LOG_TAG, "## onConfigurationChanged() : the locale has been updated to " + Locale.getDefault().toString()
-                    + ", restore the expected value " + getApplicationLocale().toString());
-            updateApplicationSettings(getApplicationLocale(),
+                    + ", restore the expected value " + VectorLocale.INSTANCE.getApplicationLocale().toString());
+            updateApplicationSettings(VectorLocale.INSTANCE.getApplicationLocale(),
                     FontScale.INSTANCE.getFontScalePrefValue(),
                     ThemeUtils.INSTANCE.getApplicationTheme(this));
         }
@@ -756,126 +752,24 @@ public class VectorApp extends MultiDexApplication {
     // Locale management
     //==============================================================================================================
 
-    // the supported application languages
-    private static final Set<Locale> mApplicationLocales = new HashSet<>();
-
-    private static final String APPLICATION_LOCALE_COUNTRY_KEY = "APPLICATION_LOCALE_COUNTRY_KEY";
-    private static final String APPLICATION_LOCALE_VARIANT_KEY = "APPLICATION_LOCALE_VARIANT_KEY";
-    private static final String APPLICATION_LOCALE_LANGUAGE_KEY = "APPLICATION_LOCALE_LANGUAGE_KEY";
-
-    private static final Locale mApplicationDefaultLanguage = new Locale("en", "US");
-
     /**
      * Init the application locale from the saved one
      */
-    private static void initApplicationLocale() {
-        Context context = VectorApp.getInstance();
-        Locale locale = getApplicationLocale();
+    private void initApplicationLocale() {
+        VectorLocale.INSTANCE.init(this);
+
+        Locale locale = VectorLocale.INSTANCE.getApplicationLocale();
         float fontScale = FontScale.INSTANCE.getFontScale();
-        String theme = ThemeUtils.INSTANCE.getApplicationTheme(context);
+        String theme = ThemeUtils.INSTANCE.getApplicationTheme(this);
 
         Locale.setDefault(locale);
-        Configuration config = new Configuration(context.getResources().getConfiguration());
+        Configuration config = new Configuration(getResources().getConfiguration());
         config.locale = locale;
         config.fontScale = fontScale;
-        context.getResources().updateConfiguration(config, context.getResources().getDisplayMetrics());
+        getResources().updateConfiguration(config, getResources().getDisplayMetrics());
 
         // init the theme
-        ThemeUtils.INSTANCE.setApplicationTheme(context, theme);
-
-        // init the known locales in background
-        AsyncTask<Void, Void, Void> task = new AsyncTask<Void, Void, Void>() {
-            @Override
-            protected Void doInBackground(Void... params) {
-                getApplicationLocales(VectorApp.getInstance());
-                return null;
-            }
-        };
-
-        // should never crash
-        task.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
-    }
-
-    /**
-     * Provides the current application locale
-     *
-     * @return the application locale
-     */
-    public static Locale getApplicationLocale() {
-        Context context = VectorApp.getInstance();
-        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(context);
-        Locale locale;
-
-        if (!preferences.contains(APPLICATION_LOCALE_LANGUAGE_KEY)) {
-            locale = Locale.getDefault();
-
-            // detect if the default language is used
-            String defaultStringValue = getString(context, mApplicationDefaultLanguage, R.string.resources_country_code);
-            if (TextUtils.equals(defaultStringValue, getString(context, locale, R.string.resources_country_code))) {
-                locale = mApplicationDefaultLanguage;
-            }
-
-            saveApplicationLocale(locale);
-        } else {
-            locale = new Locale(preferences.getString(APPLICATION_LOCALE_LANGUAGE_KEY, ""),
-                    preferences.getString(APPLICATION_LOCALE_COUNTRY_KEY, ""),
-                    preferences.getString(APPLICATION_LOCALE_VARIANT_KEY, "")
-            );
-        }
-
-        return locale;
-    }
-
-    /**
-     * Provides the device locale
-     *
-     * @return the device locale
-     */
-    public static Locale getDeviceLocale() {
-        Context context = VectorApp.getInstance();
-        Locale locale = getApplicationLocale();
-
-        try {
-            PackageManager packageManager = context.getPackageManager();
-            Resources resources = packageManager.getResourcesForApplication("android");
-            locale = resources.getConfiguration().locale;
-        } catch (Exception e) {
-            Log.e(LOG_TAG, "## getDeviceLocale() failed " + e.getMessage(), e);
-        }
-
-        return locale;
-    }
-
-    /**
-     * Save the new application locale.
-     */
-    private static void saveApplicationLocale(Locale locale) {
-        Context context = VectorApp.getInstance();
-
-        SharedPreferences.Editor editor = PreferenceManager.getDefaultSharedPreferences(context).edit();
-
-        String language = locale.getLanguage();
-        if (!TextUtils.isEmpty(language)) {
-            editor.putString(APPLICATION_LOCALE_LANGUAGE_KEY, language);
-        } else {
-            editor.remove(APPLICATION_LOCALE_LANGUAGE_KEY);
-        }
-
-        String country = locale.getCountry();
-        if (!TextUtils.isEmpty(country)) {
-            editor.putString(APPLICATION_LOCALE_COUNTRY_KEY, country);
-        } else {
-            editor.remove(APPLICATION_LOCALE_COUNTRY_KEY);
-        }
-
-        String variant = locale.getVariant();
-        if (!TextUtils.isEmpty(variant)) {
-            editor.putString(APPLICATION_LOCALE_VARIANT_KEY, variant);
-        } else {
-            editor.remove(APPLICATION_LOCALE_VARIANT_KEY);
-        }
-
-        editor.apply();
+        ThemeUtils.INSTANCE.setApplicationTheme(this, theme);
     }
 
     /**
@@ -894,7 +788,7 @@ public class VectorApp extends MultiDexApplication {
      */
     public static void updateApplicationTheme(String theme) {
         ThemeUtils.INSTANCE.setApplicationTheme(VectorApp.getInstance(), theme);
-        updateApplicationSettings(getApplicationLocale(),
+        updateApplicationSettings(VectorLocale.INSTANCE.getApplicationLocale(),
                 FontScale.INSTANCE.getFontScalePrefValue(),
                 ThemeUtils.INSTANCE.getApplicationTheme(VectorApp.getInstance()));
     }
@@ -910,7 +804,7 @@ public class VectorApp extends MultiDexApplication {
     private static void updateApplicationSettings(Locale locale, String textSize, String theme) {
         Context context = VectorApp.getInstance();
 
-        saveApplicationLocale(locale);
+        VectorLocale.INSTANCE.saveApplicationLocale(context, locale);
         FontScale.INSTANCE.saveFontScale(textSize);
         Locale.setDefault(locale);
 
@@ -934,7 +828,7 @@ public class VectorApp extends MultiDexApplication {
     public static Context getLocalisedContext(Context context) {
         try {
             Resources resources = context.getResources();
-            Locale locale = getApplicationLocale();
+            Locale locale = VectorLocale.INSTANCE.getApplicationLocale();
             Configuration configuration = resources.getConfiguration();
             configuration.fontScale = FontScale.INSTANCE.getFontScale();
 
@@ -957,102 +851,6 @@ public class VectorApp extends MultiDexApplication {
         return context;
     }
 
-    /**
-     * Get String from a locale
-     *
-     * @param context    the context
-     * @param locale     the locale
-     * @param resourceId the string resource id
-     * @return the localized string
-     */
-    private static String getString(Context context, Locale locale, int resourceId) {
-        String result;
-
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1) {
-            Configuration config = new Configuration(context.getResources().getConfiguration());
-            config.setLocale(locale);
-            try {
-                result = context.createConfigurationContext(config).getText(resourceId).toString();
-            } catch (Exception e) {
-                Log.e(LOG_TAG, "## getString() failed : " + e.getMessage(), e);
-                // use the default one
-                result = context.getString(resourceId);
-            }
-        } else {
-            Resources resources = context.getResources();
-            Configuration conf = resources.getConfiguration();
-            Locale savedLocale = conf.locale;
-            conf.locale = locale;
-            resources.updateConfiguration(conf, null);
-
-            // retrieve resources from desired locale
-            result = resources.getString(resourceId);
-
-            // restore original locale
-            conf.locale = savedLocale;
-            resources.updateConfiguration(conf, null);
-        }
-
-        return result;
-    }
-
-    /**
-     * Provides the supported application locales list
-     *
-     * @param context the context
-     * @return the supported application locales list
-     */
-    public static List<Locale> getApplicationLocales(Context context) {
-        if (mApplicationLocales.isEmpty()) {
-
-            Set<Pair<String, String>> knownLocalesSet = new HashSet<>();
-
-            try {
-                final Locale[] availableLocales = Locale.getAvailableLocales();
-
-                for (Locale locale : availableLocales) {
-                    knownLocalesSet.add(new Pair<>(getString(context, locale, R.string.resources_language),
-                            getString(context, locale, R.string.resources_country_code)));
-                }
-            } catch (Exception e) {
-                Log.e(LOG_TAG, "## getApplicationLocales() : failed " + e.getMessage(), e);
-                knownLocalesSet.add(new Pair<>(context.getString(R.string.resources_language), context.getString(R.string.resources_country_code)));
-            }
-
-            for (Pair<String, String> knownLocale : knownLocalesSet) {
-                mApplicationLocales.add(new Locale(knownLocale.first, knownLocale.second));
-            }
-        }
-
-        List<Locale> sortedLocalesList = new ArrayList<>(mApplicationLocales);
-
-        // sort by human display names
-        Collections.sort(sortedLocalesList, new Comparator<Locale>() {
-            @Override
-            public int compare(Locale lhs, Locale rhs) {
-                return localeToLocalisedString(lhs).compareTo(localeToLocalisedString(rhs));
-            }
-        });
-
-        return sortedLocalesList;
-    }
-
-    /**
-     * Convert a locale to a string
-     *
-     * @param locale the locale to convert
-     * @return the string
-     */
-    public static String localeToLocalisedString(Locale locale) {
-        String res = locale.getDisplayLanguage(locale);
-
-        if (!TextUtils.isEmpty(locale.getDisplayCountry(locale))) {
-            res += " (" + locale.getDisplayCountry(locale) + ")";
-        }
-
-        return res;
-    }
-
     //==============================================================================================================
     // Analytics management
     //==============================================================================================================
@@ -1063,7 +861,7 @@ public class VectorApp extends MultiDexApplication {
     private void visitSessionVariables() {
         mAppAnalytics.visitVariable(1, "App Platform", "Android Platform");
         mAppAnalytics.visitVariable(2, "App Version", BuildConfig.VERSION_NAME);
-        mAppAnalytics.visitVariable(4, "Chosen Language", getApplicationLocale().toString());
+        mAppAnalytics.visitVariable(4, "Chosen Language", VectorLocale.INSTANCE.getApplicationLocale().toString());
 
         final MXSession session = Matrix.getInstance(this).getDefaultSession();
         if (session != null) {

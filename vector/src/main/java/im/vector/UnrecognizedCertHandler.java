@@ -104,9 +104,7 @@ public class UnrecognizedCertHandler {
         View layout = inflater.inflate(R.layout.dialog_ssl_fingerprint, null);
 
         TextView sslFingerprintTitle = layout.findViewById(R.id.ssl_fingerprint_title);
-        sslFingerprintTitle.setText(
-                String.format(VectorApp.getApplicationLocale(), activity.getString(R.string.ssl_fingerprint_hash), unrecognizedFingerprint.getType().toString())
-        );
+        sslFingerprintTitle.setText(activity.getString(R.string.ssl_fingerprint_hash, unrecognizedFingerprint.getType().toString()));
 
         TextView sslFingerprint = layout.findViewById(R.id.ssl_fingerprint);
         sslFingerprint.setText(unrecognizedFingerprint.getBytesAsHexString());

@@ -10,6 +10,7 @@
         android:id="@+id/left_margin"
         android:layout_width="8dp"
         android:layout_height="match_parent"
+        android:layout_marginEnd="8dp"
         android:layout_marginRight="8dp"
         android:background="@android:color/transparent" />
 
@@ -19,25 +20,30 @@
         android:layout_width="40dp"
         android:layout_height="40dp"
         android:layout_centerInParent="true"
+        android:layout_toEndOf="@+id/left_margin"
         android:layout_toRightOf="@+id/left_margin" />
 
     <RelativeLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_centerVertical="true"
+        android:layout_marginStart="16dp"
         android:layout_marginLeft="16dp"
+        android:layout_toEndOf="@+id/room_avatar_layout"
         android:layout_toRightOf="@+id/room_avatar_layout"
+        android:paddingEnd="16dp"
         android:paddingRight="16dp">
 
         <TextView
             android:id="@+id/group_name"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_toStartOf="@+id/group_members_count"
             android:layout_toLeftOf="@+id/group_members_count"
             android:ellipsize="end"
             android:fontFamily="sans-serif-regular"
             android:maxLines="1"
-            android:textColor="?attr/riot_primary_text_color"
+            android:textColor="?attr/vctr_riot_primary_text_color"
             android:textSize="16sp"
             tools:text="Room name a bit long to be displayed completely" />
 
@@ -49,7 +55,7 @@
             android:layout_marginTop="3dp"
             android:ellipsize="end"
             android:maxLines="1"
-            android:textColor="?attr/default_text_light_color"
+            android:textColor="?attr/vctr_default_text_light_color"
             android:textSize="14sp"
             tools:text="First message of the room is a bit too long to be displayed" />
 
@@ -57,9 +63,11 @@
             android:id="@+id/group_more_action_ic"
             android:layout_width="15dp"
             android:layout_height="15dp"
-            android:layout_alignBottom="@+id/group_name"
-            android:layout_alignParentRight="true"
             android:layout_alignTop="@+id/group_name"
+            android:layout_alignBottom="@+id/group_name"
+            android:layout_alignParentEnd="true"
+            android:layout_alignParentRight="true"
+            android:layout_marginStart="10dp"
             android:layout_marginLeft="10dp"
             android:src="@drawable/vector_actions_9b"
             android:visibility="visible" />
@@ -70,12 +78,17 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignBaseline="@+id/group_name"
+            android:layout_marginStart="6dp"
             android:layout_marginLeft="6dp"
+            android:layout_marginEnd="5dp"
             android:layout_marginRight="5dp"
+            android:layout_toStartOf="@+id/group_more_action_ic"
             android:layout_toLeftOf="@+id/group_more_action_ic"
             android:gravity="center"
             android:minWidth="25dp"
+            android:paddingStart="4dp"
             android:paddingLeft="4dp"
+            android:paddingEnd="4dp"
             android:paddingRight="4dp"
             android:textColor="@android:color/white"
             android:textSize="12sp"
@@ -87,13 +100,16 @@
         android:id="@+id/group_more_action_anchor"
         android:layout_width="1dp"
         android:layout_height="1dp"
+        android:layout_alignParentEnd="true"
         android:layout_alignParentRight="true"
+        android:layout_marginEnd="20dp"
         android:layout_marginRight="20dp" />
 
     <View
         android:id="@+id/group_more_action_click_area"
         android:layout_width="40dp"
         android:layout_height="match_parent"
+        android:layout_alignParentEnd="true"
         android:layout_alignParentRight="true" />
 
 </RelativeLayout>

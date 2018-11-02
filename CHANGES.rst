@@ -5,16 +5,21 @@ MatrixSdk:
  - Upgrade to version 0.X.Y.
 
 Features:
- -
+ - Enable Lazy Loading by default, if the hs supports it
+ - Add RTL support (#2376, #2271)
 
 Improvements:
  - Ability to crop profile picture before setting (#2598)
+ - Add a setting of the room's info area visibility.
 
 Other changes:
  - F-Droid version: restart event stream on application upgrade (#2105)
+ - Locales management has been moved to a dedicated file
 
 Bugfix:
- -
+ - Status.im backgrounds, header, buttons, and missing items (#2672)
+ - Fix Permalinks and registration issue (#2689)
+ - Mention from read receipts list doesn't work (#656)
 
 Translations:
  -
@@ -1068,5 +1073,5 @@ Changes in Vector 0.2.0 (2016-04-14)
 ===================================================
 
  * First official release.
-	
+
 

@@ -1,5 +1,6 @@
 /*
  * Copyright 2017 Vector Creations Ltd
+ * Copyright 2018 New Vector Ltd
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -27,8 +28,8 @@ import java.util.Comparator;
 import java.util.List;
 
 import im.vector.R;
-import im.vector.VectorApp;
-import im.vector.util.ThemeUtils;
+import im.vector.settings.VectorLocale;
+import im.vector.ui.themes.ThemeUtils;
 
 public class AdapterSection<T> {
 
@@ -56,7 +57,7 @@ public class AdapterSection<T> {
 
     private Context mContext;
 
-    public AdapterSection(Context context , String title, int headerSubViewResId, int contentResId, int headerViewType,
+    public AdapterSection(Context context, String title, int headerSubViewResId, int contentResId, int headerViewType,
                           int contentViewType, List<T> items, Comparator<T> comparator) {
         mContext = context;
         mTitle = title;
@@ -121,8 +122,8 @@ public class AdapterSection<T> {
      * @param titleToFormat
      */
     void formatTitle(final String titleToFormat) {
-        SpannableString spannableString = new SpannableString(titleToFormat.toUpperCase(VectorApp.getApplicationLocale()));
-        spannableString.setSpan(new ForegroundColorSpan(ThemeUtils.INSTANCE.getColor(mContext, R.attr.list_header_subtext_color)),
+        SpannableString spannableString = new SpannableString(titleToFormat.toUpperCase(VectorLocale.INSTANCE.getApplicationLocale()));
+        spannableString.setSpan(new ForegroundColorSpan(ThemeUtils.INSTANCE.getColor(mContext, R.attr.vctr_list_header_subtext_color)),
                 mTitle.length(), titleToFormat.length(), 0);
         mTitleFormatted = spannableString;
     }

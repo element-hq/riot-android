@@ -19,8 +19,10 @@
             style="@style/VectorToolbarStyle"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
+            app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent">
 
             <!-- The search view is added in the toolbar not in the menu
@@ -40,8 +42,10 @@
             android:background="@color/vector_green_color"
             android:indeterminate="true"
             android:visibility="gone"
+            app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/home_toolbar" />
 
         <im.vector.view.VectorPendingCallView
@@ -49,8 +53,10 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:visibility="gone"
+            app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/home_recents_sync_in_progress" />
 
         <!-- The main content view -->
@@ -58,23 +64,27 @@
             android:id="@+id/fragment_container"
             android:layout_width="0dp"
             android:layout_height="0dp"
-            android:background="?attr/riot_primary_background_color"
+            android:background="?attr/vctr_riot_primary_background_color"
             app:layout_constraintBottom_toTopOf="@+id/bottom_navigation"
+            app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/listView_pending_callview" />
 
         <android.support.design.widget.BottomNavigationView
             android:id="@+id/bottom_navigation"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:background="?attr/riot_primary_background_color"
-            app:itemBackground="?attr/riot_primary_background_color"
+            android:background="?attr/vctr_riot_primary_background_color"
+            app:itemBackground="?attr/vctr_riot_primary_background_color"
             app:itemIconTint="@color/home_bottom_nav_view_tint"
             app:itemTextColor="@color/home_bottom_nav_view_tint"
             app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
             app:menu="@menu/bottom_navigation_main" />
 
         <!-- Elevate above BottomNavigationView (above lollipop). -->
@@ -86,8 +96,10 @@
             android:background="@android:color/background_dark"
             android:elevation="10dp"
             app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
         <!-- Elevate button above the touch guard (above lollipop). -->
@@ -142,12 +154,14 @@
             android:id="@+id/listView_spinner_views"
             android:layout_width="0dp"
             android:layout_height="0dp"
-            android:background="?attr/waiting_background_color"
+            android:background="?attr/vctr_waiting_background_color"
             android:elevation="14dp"
             android:visibility="gone"
             app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/listView_pending_callview">
 
             <ProgressBar
@@ -166,10 +180,10 @@
         android:layout_width="wrap_content"
         android:layout_height="match_parent"
         android:layout_gravity="start"
-        android:background="?attr/riot_primary_background_color"
+        android:background="?attr/vctr_riot_primary_background_color"
         android:fitsSystemWindows="true"
         app:headerLayout="@layout/vector_home_menu_header"
-        app:itemIconTint="?attr/home_navigation_icon_color"
+        app:itemIconTint="?attr/vctr_home_navigation_icon_color"
         app:menu="@menu/vector_home_sliding_menu"
         app:theme="@style/NavigationViewStyle" />
 

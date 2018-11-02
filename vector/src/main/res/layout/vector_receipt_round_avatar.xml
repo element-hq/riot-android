@@ -4,6 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="12dp"
     android:layout_height="12dp"
+    android:layout_marginEnd="6dp"
     android:layout_marginRight="6dp"
     android:contentDescription="@string/receipt_avatar">
 
@@ -19,6 +20,6 @@
     <ImageView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:src="?avatar_mask" />
+        android:src="?vctr_avatar_mask" />
 
 </FrameLayout>

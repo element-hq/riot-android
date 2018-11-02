@@ -73,12 +73,12 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import im.vector.R;
-import im.vector.VectorApp;
 import im.vector.listeners.IMessagesAdapterActionsListener;
+import im.vector.settings.VectorLocale;
+import im.vector.ui.themes.ThemeUtils;
 import im.vector.util.MatrixLinkMovementMethod;
 import im.vector.util.MatrixURLSpan;
 import im.vector.util.RiotEventDisplay;
-import im.vector.util.ThemeUtils;
 import im.vector.util.VectorImageGetter;
 import im.vector.util.VectorUtils;
 import im.vector.view.PillView;
@@ -543,7 +543,7 @@ class VectorMessagesAdapterHelper {
         FrameLayout.LayoutParams subViewLinearLayout = (FrameLayout.LayoutParams) subView.getLayoutParams();
 
         ViewGroup.LayoutParams avatarLayout = avatarLayoutView.getLayoutParams();
-        subViewLinearLayout.gravity = Gravity.LEFT | Gravity.CENTER_VERTICAL;
+        subViewLinearLayout.gravity = Gravity.START | Gravity.CENTER_VERTICAL;
 
         if (isMergedView) {
             bodyLayout.setMargins(avatarLayout.width, bodyLayout.topMargin, bodyLayout.rightMargin, bodyLayout.bottomMargin);
@@ -893,7 +893,7 @@ class VectorMessagesAdapterHelper {
             return;
         }
 
-        textView.setBackgroundColor(ThemeUtils.INSTANCE.getColor(mContext, R.attr.markdown_block_background_color));
+        textView.setBackgroundColor(ThemeUtils.INSTANCE.getColor(mContext, R.attr.vctr_markdown_block_background_color));
     }
 
     /**
@@ -919,8 +919,8 @@ class VectorMessagesAdapterHelper {
     CharSequence highlightPattern(Spannable text, String pattern, CharacterStyle highLightTextStyle, boolean isHighlighted) {
         if (!TextUtils.isEmpty(pattern) && !TextUtils.isEmpty(text) && (text.length() >= pattern.length())) {
 
-            String lowerText = text.toString().toLowerCase(VectorApp.getApplicationLocale());
-            String lowerPattern = pattern.toLowerCase(VectorApp.getApplicationLocale());
+            String lowerText = text.toString().toLowerCase(VectorLocale.INSTANCE.getApplicationLocale());
+            String lowerPattern = pattern.toLowerCase(VectorLocale.INSTANCE.getApplicationLocale());
 
             int start = 0;
             int pos = lowerText.indexOf(lowerPattern, start);
@@ -951,7 +951,7 @@ class VectorMessagesAdapterHelper {
     CharSequence convertToHtml(String htmlFormattedText) {
         final HtmlTagHandler htmlTagHandler = new HtmlTagHandler();
         htmlTagHandler.mContext = mContext;
-        htmlTagHandler.setCodeBlockBackgroundColor(ThemeUtils.INSTANCE.getColor(mContext, R.attr.markdown_block_background_color));
+        htmlTagHandler.setCodeBlockBackgroundColor(ThemeUtils.INSTANCE.getColor(mContext, R.attr.vctr_markdown_block_background_color));
 
         CharSequence sequence;
 

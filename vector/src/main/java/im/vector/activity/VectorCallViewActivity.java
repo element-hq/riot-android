@@ -64,12 +64,13 @@ import java.util.TimerTask;
 import im.vector.Matrix;
 import im.vector.R;
 import im.vector.VectorApp;
+import im.vector.settings.VectorLocale;
+import im.vector.ui.themes.ActivityOtherThemes;
 import im.vector.util.CallsManager;
 import im.vector.util.PermissionsToolsKt;
 import im.vector.util.VectorUtils;
 import im.vector.util.ViewUtilKt;
 import im.vector.view.VectorPendingCallView;
-import kotlin.Triple;
 
 /**
  * VectorCallViewActivity is the call activity.
@@ -318,8 +319,8 @@ public class VectorCallViewActivity extends VectorAppCompatActivity implements S
 
     @NotNull
     @Override
-    public Triple getOtherThemes() {
-        return new Triple(R.style.CallActivityTheme_Dark, R.style.CallActivityTheme_Black, R.style.CallActivityTheme_Status);
+    public ActivityOtherThemes getOtherThemes() {
+        return ActivityOtherThemes.Call.INSTANCE;
     }
 
     @Override
@@ -1256,7 +1257,7 @@ public class VectorCallViewActivity extends VectorAppCompatActivity implements S
         if (null != event) {
             float distanceCentimeters = event.values[0];
 
-            Log.d(LOG_TAG, "## onSensorChanged(): " + String.format(VectorApp.getApplicationLocale(), "distance=%.3f", distanceCentimeters));
+            Log.d(LOG_TAG, "## onSensorChanged(): " + String.format(VectorLocale.INSTANCE.getApplicationLocale(), "distance=%.3f", distanceCentimeters));
 
             if (CallsManager.getSharedInstance().isSpeakerphoneOn()) {
                 Log.d(LOG_TAG, "## onSensorChanged(): Skipped due speaker ON");
