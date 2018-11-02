@@ -5,6 +5,8 @@
     android:layout_height="match_parent">
 
     <!-- scrollview containing the sufaceview and the gallery -->
+
+    <!-- preview container: imageview + redo and cancel buttons -->
     <ScrollView
         android:id="@+id/medias_picker_scrollView"
         android:layout_width="match_parent"
@@ -36,8 +38,8 @@
                 <ImageView
                     android:id="@+id/medias_picker_texture_mask_view"
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:background="@android:color/black" />
+                    android:layout_height="match_parent" />
+
 
                 <!-- button to record a video -->
                 <im.vector.view.VideoRecordView
@@ -110,7 +112,6 @@
         </RelativeLayout>
     </ScrollView>
 
-    <!-- preview container: imageview + redo and cancel buttons -->
     <RelativeLayout
         android:id="@+id/medias_picker_preview_layout"
         android:layout_width="match_parent"
@@ -165,13 +166,11 @@ preview of the taken image -->
             android:layout_height="match_parent"
             android:layout_above="@+id/cancel_attach_picture_layout"
             android:visibility="visible">
-
             <ImageView
                 android:id="@+id/medias_picker_preview_image_view"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_centerInParent="true" />
-
             <ImageView
                 android:id="@+id/medias_picker_preview_avatar_mode_mask"
                 android:layout_width="match_parent"

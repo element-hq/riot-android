@@ -28,6 +28,7 @@ import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.ImageFormat;
+import android.graphics.Matrix;
 import android.graphics.Paint;
 import android.graphics.PorterDuff;
 import android.graphics.PorterDuffXfermode;
@@ -88,6 +89,7 @@ import javax.microedition.khronos.egl.EGLSurface;
 
 import im.vector.R;
 import im.vector.VectorApp;
+import im.vector.listeners.ImageViewOnTouchListener;
 import im.vector.ui.themes.ActivityOtherThemes;
 import im.vector.util.PermissionsToolsKt;
 import im.vector.util.ViewUtilKt;
@@ -186,6 +188,12 @@ public class VectorMediasPickerActivity extends MXCActionBarActivity implements 
     private View mImagePreviewLayout;
     private ImageView mImagePreviewImageView;
     private ImageView mImagePreviewAvatarModeMaskView;
+    private ImageViewOnTouchListener imageViewOnTouchListener = new ImageViewOnTouchListener() {
+        @Override
+        public boolean onTouch(View v, MotionEvent event) {
+            return (mIsAvatarMode)?  super.onTouch(v, event) : true;
+        }
+    };
 
     // video preview
     private View mVideoPreviewLayout;
@@ -266,6 +274,7 @@ public class VectorMediasPickerActivity extends MXCActionBarActivity implements 
         mImagePreviewLayout = findViewById(R.id.medias_picker_preview_image_layout);
         mImagePreviewImageView = findViewById(R.id.medias_picker_preview_image_view);
         mImagePreviewAvatarModeMaskView = findViewById(R.id.medias_picker_preview_avatar_mode_mask);
+        mImagePreviewImageView.setOnTouchListener(imageViewOnTouchListener);
 
         // video preview
         mVideoPreviewLayout = findViewById(R.id.medias_picker_preview_video_layout);
@@ -322,18 +331,6 @@ public class VectorMediasPickerActivity extends MXCActionBarActivity implements 
             }
         });
 
-
-        findViewById(R.id.medias_picker_redo_text_view).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (null != mVideoUri) {
-                    stopVideoPreview();
-                } else {
-                    cancelTakeImage();
-                }
-            }
-        });
-
         findViewById(R.id.medias_picker_attach_text_view).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -342,6 +339,13 @@ public class VectorMediasPickerActivity extends MXCActionBarActivity implements 
                 } else {
                     attachImageFrom(mTakenImageOrigin);
                 }
+            }
+        });
+
+        findViewById(R.id.medias_picker_redo_text_view).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                cancelTakeImage();
             }
         });
 
@@ -884,6 +888,7 @@ public class VectorMediasPickerActivity extends MXCActionBarActivity implements 
         mImagePreviewAvatarModeMaskView.setVisibility(View.GONE);
 
         if (!mIsAvatarMode) {
+            mImagePreviewImageView.setScaleType(ImageView.ScaleType.FIT_CENTER);
             // update the UI part
             if (null != newBitmap) {// from camera
                 mImagePreviewImageView.setImageBitmap(newBitmap);
@@ -893,6 +898,7 @@ public class VectorMediasPickerActivity extends MXCActionBarActivity implements 
                 }
             }
         } else {
+            mImagePreviewImageView.setScaleType(ImageView.ScaleType.MATRIX);
             // not bitmap but
             if ((null == newBitmap) && (null != defaultUri)) {
                 try {
@@ -912,10 +918,6 @@ public class VectorMediasPickerActivity extends MXCActionBarActivity implements 
             if (null != newBitmap) {// from camera
                 mImagePreviewImageView.setImageBitmap(newBitmap);
 
-                // compute the image size in the screen
-                int imageW = newBitmap.getWidth();
-                int imageH = newBitmap.getHeight();
-
                 int screenHeight = getWindow().getDecorView().getHeight();
                 int screenWidth = getWindow().getDecorView().getWidth();
 
@@ -928,21 +930,31 @@ public class VectorMediasPickerActivity extends MXCActionBarActivity implements 
                     });
 
                     return;
+                } else {
+                    mImagePreviewImageView.post(new Runnable() {
+                        @Override
+                        public void run() {
+                            Matrix matrix = mImagePreviewImageView.getMatrix();
+                            float widthMatrix = (mImagePreviewImageView.getWidth() - mImagePreviewImageView.getDrawable().getIntrinsicWidth()) / 2;
+                            float heightMatrix = (mImagePreviewImageView.getHeight() - mImagePreviewImageView.getDrawable().getIntrinsicHeight()) / 2;
+                                
+                            matrix.postTranslate(widthMatrix, heightMatrix);
+                            imageViewOnTouchListener.setStartMatrix(matrix);
+                            mImagePreviewImageView.setImageMatrix(matrix);
+
+                            return;
+                        }
+                    });
                 }
-
-                int newWidth;
-                int newHeight;
-
-                newHeight = screenHeight;
-                newWidth = (int) (((float) newHeight) * imageW / imageH);
-
-                if (newWidth > screenWidth) {
-                    newWidth = screenWidth;
-                    newHeight = (int) (((float) newWidth) * imageH / imageW);
-                }
-
                 mImagePreviewAvatarModeMaskView.setVisibility(View.VISIBLE);
-                drawCircleMask(mImagePreviewAvatarModeMaskView, newWidth, newHeight);
+                mImagePreviewAvatarModeMaskView.post(new Runnable() {
+                    @Override
+                    public void run() {
+                        drawCircleMask(mImagePreviewAvatarModeMaskView,mImagePreviewAvatarModeMaskView.getWidth(),mImagePreviewAvatarModeMaskView.getHeight());
+
+                        return;
+                    }
+                });
             }
         }
 
@@ -1012,15 +1024,6 @@ public class VectorMediasPickerActivity extends MXCActionBarActivity implements 
                 @Override
                 public void onPictureTaken(byte[] data, Camera camera) {
                     Log.d(LOG_TAG, "## onPictureTaken(): success");
-
-                    // replace the high res picture with the preview one
-                    // because the aspect ratio is not the same
-                    // and the user would not understand that the mShotPicturePath image is not the previewed one
-                    if (mIsAvatarMode && (null != mCameraTextureView.getBitmap())) {
-                        ByteArrayOutputStream bos = new ByteArrayOutputStream();
-                        mCameraTextureView.getBitmap().compress(Bitmap.CompressFormat.JPEG, AVATAR_COMPRESSION_LEVEL, bos);
-                        data = bos.toByteArray();
-                    }
 
                     ByteArrayInputStream inputStream = new ByteArrayInputStream(data);
                     File dstFile;
@@ -1288,7 +1291,12 @@ public class VectorMediasPickerActivity extends MXCActionBarActivity implements 
         try {
             // sanity check
             if (null != mShotPicturePath) {
-                Uri uri = Uri.fromFile(new File(mShotPicturePath));
+                Uri uri;
+                if (!mIsAvatarMode) {
+                    uri = Uri.fromFile(new File(mShotPicturePath));
+                } else {
+                    uri = getPreviewImageFileUri();
+                }
 
                 try {
                     Bitmap previewBitmap = VectorApp.getSavedPickerImagePreview();
@@ -1819,7 +1827,11 @@ public class VectorMediasPickerActivity extends MXCActionBarActivity implements 
         List<MediaStoreMedia> mediasList = new ArrayList<>();
 
         // images
-        String[] imagesProjection = {MediaStore.Images.ImageColumns._ID, MediaStore.Images.ImageColumns.DATE_TAKEN, MediaStore.Images.ImageColumns.MIME_TYPE};
+        String[] imagesProjection = {
+            MediaStore.Images.ImageColumns._ID,
+            MediaStore.Images.ImageColumns.DATE_TAKEN,
+            MediaStore.Images.ImageColumns.MIME_TYPE
+        };
         Cursor imagesThumbnailsCursor = null;
 
         try {
@@ -1878,7 +1890,11 @@ public class VectorMediasPickerActivity extends MXCActionBarActivity implements 
         if (mIsVideoRecordingSupported) {
 
             // videos
-            String[] videosProjection = {MediaStore.Video.VideoColumns._ID, MediaStore.Video.VideoColumns.DATE_TAKEN, MediaStore.Video.VideoColumns.MIME_TYPE};
+            String[] videosProjection = {
+                MediaStore.Video.VideoColumns._ID,
+                MediaStore.Video.VideoColumns.DATE_TAKEN,
+                MediaStore.Video.VideoColumns.MIME_TYPE
+            };
             Cursor videoThumbnailsCursor = null;
 
             try {
@@ -2203,7 +2219,11 @@ public class VectorMediasPickerActivity extends MXCActionBarActivity implements 
         Intent intent = new Intent();
 
         if (null != mSelectedGalleryImage) {
-            intent.setData(mSelectedGalleryImage.mFileUri);
+            if (!mIsAvatarMode) {
+                intent.setData(mSelectedGalleryImage.mFileUri);
+            } else {
+                intent.setData(getPreviewImageFileUri());
+            }
         } else {
             // attach after a screen rotation, the file uri must was saved in the tag
             Uri uriSavedFromLifeCycle = (Uri) mImagePreviewImageView.getTag();
@@ -2218,5 +2238,58 @@ public class VectorMediasPickerActivity extends MXCActionBarActivity implements 
         // clean footprint in App
         VectorApp.setSavedCameraImagePreview(null);
         finish();
+    }
+
+    /**
+     *  Create bitmap of mImagePreviewImageView.
+     *  Save it as JEPG format with name: "preview_edit_" + date of creation.
+     *  
+     *  @return {@link Uri}of saved image.
+     *
+     */
+    private Uri getPreviewImageFileUri() {
+        ByteArrayOutputStream bytes = new ByteArrayOutputStream();
+        Bitmap bitmap = Bitmap.createBitmap(mImagePreviewImageView.getWidth(), mImagePreviewImageView.getHeight(),
+                Bitmap.Config.ARGB_8888);
+        Canvas c = new Canvas(bitmap);
+        mImagePreviewImageView.draw(c);
+        mImagePreviewImageView.invalidate();
+        bitmap.compress(Bitmap.CompressFormat.JPEG, AVATAR_COMPRESSION_LEVEL, bytes);
+        
+        String fileName = "preview_edit_" + new SimpleDateFormat("yyyy-MM-dd_hhmmss").format(new Date()) + ".jpg";
+        File file;
+
+        // remove any previously saved image
+        if (!TextUtils.isEmpty(fileName)) {
+            file = new File(getCacheDir().getAbsolutePath(), fileName);
+            if (file.exists()) {
+                file.delete();
+            }
+        }
+
+        // get new name
+        file = new File(getCacheDir().getAbsolutePath(), fileName);
+
+        FileOutputStream outputStream = null;
+        try {
+            file.createNewFile();
+
+            outputStream = new FileOutputStream(file);
+            outputStream.write(bytes.toByteArray());
+        } catch (IOException e) {
+            Toast.makeText(VectorMediasPickerActivity.this, "Exception getPreviewImageFileUri(): " + e.getLocalizedMessage(), Toast.LENGTH_SHORT).show();
+        } finally {
+            // Close resources
+            try {
+                if (outputStream != null) {
+                    outputStream.close();
+                }
+
+            } catch (Exception e) {
+                Log.e(LOG_TAG, "## getPreviewImageFileUri(): EXCEPTION Msg=" + e.getMessage(), e);
+            }
+        }
+
+        return Uri.fromFile(file);
     }
 }
