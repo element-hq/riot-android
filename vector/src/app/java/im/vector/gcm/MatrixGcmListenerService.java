@@ -36,7 +36,6 @@ import im.vector.Matrix;
 import im.vector.VectorApp;
 import im.vector.activity.CommonActivityUtils;
 import im.vector.services.EventStreamService;
-import im.vector.util.VectorUtils;
 
 /**
  * Class implementing GcmListenerService.
@@ -176,6 +175,19 @@ public class MatrixGcmListenerService extends FirebaseMessagingService {
         } catch (Exception e) {
             Log.d(LOG_TAG, "## onMessageReceivedInternal() failed : " + e.getMessage(), e);
         }
+    }
+
+    /**
+     * Called if InstanceID token is updated. This may occur if the security of
+     * the previous token had been compromised. Note that this is also called
+     * when the InstanceID token is initially generated, so this is where
+     * you retrieve the token.
+     */
+    @Override
+    public void onNewToken(String refreshedToken) {
+        Log.d(LOG_TAG, "onNewToken: " + refreshedToken);
+
+        Matrix.getInstance(this).getSharedGCMRegistrationManager().resetGCMRegistration(refreshedToken);
     }
 
     /**
