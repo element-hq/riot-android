@@ -17,12 +17,9 @@
  */
 package im.vector.gcm;
 
-import com.google.firebase.FirebaseApp;
 import com.google.firebase.iid.FirebaseInstanceId;
 
 import org.matrix.androidsdk.util.Log;
-
-import im.vector.VectorApp;
 
 class GCMHelper {
     private static final String LOG_TAG = GCMHelper.class.getSimpleName();
@@ -32,20 +29,6 @@ class GCMHelper {
      */
     static String getRegistrationToken() {
         String registrationToken = null;
-
-        // Note: FirebaseApp initialization is not necessary, but some users report that application crashes if this is not done
-        // Because of this, we keep the code for the moment.
-        if (null == VectorApp.getInstance()) {
-            Log.e(LOG_TAG, "## getRegistrationToken() : No active application", new Exception("StackTrace"));
-        } else {
-            try {
-                if (null == FirebaseApp.initializeApp(VectorApp.getInstance())) {
-                    Log.e(LOG_TAG, "## getRegistrationToken() : cannot initialise FirebaseApp", new Exception("StackTrace"));
-                }
-            } catch (Exception e) {
-                Log.e(LOG_TAG, "## getRegistrationToken() : init failed " + e.getMessage(), e);
-            }
-        }
 
         // And we protect the call to getToken()
         try {
