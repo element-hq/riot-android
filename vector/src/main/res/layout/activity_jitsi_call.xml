@@ -22,7 +22,7 @@
             android:layout_centerInParent="true"
             android:layout_marginStart="12dp"
             android:layout_marginLeft="12dp"
-            android:rotation="@integer/rtl_mirror_flip"
+            android:rotationY="@integer/rtl_mirror_flip"
             android:src="@drawable/ic_material_arrow_back_white"
             android:tint="@android:color/white" />
 

@@ -306,15 +306,14 @@ class VectorMessagesAdapterHelper {
             }
 
             moreText.setVisibility((groupIdsSet.size() <= imageViews.size()) ? View.GONE : View.VISIBLE);
-            moreText.setText("+" + (groupIdsSet.size() - imageViews.size()));
+            moreText.setText(mContext.getString(R.string.plus_x, groupIdsSet.size() - imageViews.size()));
 
             if (groupIdsSet.size() > 0) {
                 groupFlairView.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
                         if (null != mEventsListener) {
-                            mEventsListener.onGroupFlairClick(event.getSender()
-                                    , groupIds);
+                            mEventsListener.onGroupFlairClick(event.getSender(), groupIds);
                         }
                     }
                 });
@@ -515,12 +514,13 @@ class VectorMessagesAdapterHelper {
         }
 
         if (null != avatarLayoutView) {
-            ImageView avatarImageView = avatarLayoutView.findViewById(R.id.avatar_img);
-
             if (isMergedView) {
-                avatarLayoutView.setVisibility(View.GONE);
+                avatarLayoutView.setVisibility(View.INVISIBLE);
             } else {
                 avatarLayoutView.setVisibility(View.VISIBLE);
+
+                ImageView avatarImageView = avatarLayoutView.findViewById(R.id.avatar_img);
+
                 avatarImageView.setTag(null);
 
                 loadMemberAvatar(avatarImageView, row);
@@ -720,7 +720,7 @@ class VectorMessagesAdapterHelper {
         }
 
         moreText.setVisibility((receipts.size() <= imageViews.size()) ? View.GONE : View.VISIBLE);
-        moreText.setText((receipts.size() - imageViews.size()) + "+");
+        moreText.setText(mContext.getString(R.string.x_plus, receipts.size() - imageViews.size()));
 
         for (; index < imageViews.size(); index++) {
             imageViews.get(index).setVisibility(View.INVISIBLE);

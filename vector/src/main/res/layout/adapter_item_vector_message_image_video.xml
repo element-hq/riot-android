@@ -86,11 +86,12 @@
 
                     <FrameLayout
                         android:id="@+id/messagesAdapter_body_layout"
-                        android:layout_width="wrap_content"
+                        android:layout_width="0dp"
                         android:layout_height="wrap_content"
+                        android:layout_marginEnd="4dp"
+                        android:layout_marginRight="4dp"
                         android:layout_weight="1"
-                        android:paddingEnd="4dp"
-                        android:paddingRight="4dp">
+                        tools:layout_height="220dp">
 
                         <RelativeLayout
                             android:id="@+id/messagesAdapter_image_layout"
@@ -141,11 +142,10 @@
                     android:id="@+id/message_adapter_sticker_layout"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_alignStart="@+id/messages_adapter_image_layout"
-                    android:layout_alignLeft="@+id/messages_adapter_image_layout"
                     android:layout_marginTop="10dp"
                     android:orientation="vertical"
-                    android:visibility="gone">
+                    android:visibility="gone"
+                    tools:visibility="visible">
 
                     <ImageView
                         android:id="@+id/message_adapter_sticker_triangle"
@@ -159,7 +159,9 @@
                         android:id="@+id/message_adapter_sticker_description"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:background="@drawable/sticker_description_background" />
+                        android:background="@drawable/sticker_description_background"
+                        tools:text="Sticker description" />
+
                 </LinearLayout>
 
                 <include

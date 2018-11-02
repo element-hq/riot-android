@@ -270,7 +270,6 @@
     <string name="room_delete_unsent_messages">删除未发送的消息</string>
     <string name="room_message_file_not_found">文件未找到</string>
     <string name="room_do_not_have_permission_to_post">您没有发送到这个聊天室的权限</string>
-    <string name="room_new_message_notification">1 条新消息</string>
 
     <string name="ssl_trust">信任</string>
     <string name="ssl_do_not_trust">不信任</string>
@@ -579,7 +578,6 @@
     <string name="devices_details_name_title">名称</string>
     <string name="devices_details_last_seen_title">最近一次上线</string>
     <string name="devices_details_last_seen_format">%1$s @ %2$s</string>
-    <string name="devices_details_time_format">HH:mm:ss</string>
     <string name="settings_home_server">主服务器</string>
     <string name="settings_identity_server">身份服务器</string>
     <string name="account_email_validation_title">验证待定中</string>
@@ -719,7 +717,6 @@
     <string name="widget_integration_missing_room_id">请求中没有 room_id.</string>
     <string name="widget_integration_missing_user_id">请求中没有 user_id.</string>
     <string name="widget_integration_room_not_visible">聊天室 %s 不可见。</string>
-    <string name="settings_labs_matrix_apps">Matrix 应用</string>
     <string name="room_add_matrix_apps">添加 Matrix 应用</string>
     <string name="notification_sync_in_progress">正在同步</string>
     <string name="notification_listening_for_events">监听事件更新</string>
@@ -757,9 +754,6 @@
     <string name="notification_silent_notifications">静默通知</string>
 
     <string name="settings_analytics">数据收集</string>
-    <string name="settings_opt_out_of_analytics">退出统计分析计划</string>
-    <string name="settings_opt_out_of_analytics_summary">Riot 会收集匿名统计数据来帮助我们改进程序。</string>
-
 
     <string name="notification_noisy">通知并振铃</string>
 

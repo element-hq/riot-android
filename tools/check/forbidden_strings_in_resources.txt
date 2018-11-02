@@ -66,3 +66,7 @@ DO NOT COMMIT
 ### Bad comment format in XML resources. Use <!-- --> instead of //
 ^\s*\/\/
 
+### Bad RTL support, use attribute with Start and End
+layout_constraintRight_
+layout_constraintLeft_
+

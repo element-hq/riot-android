@@ -3,8 +3,7 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="74dp"
-    android:orientation="horizontal">
+    android:layout_height="74dp">
 
     <LinearLayout
         android:id="@+id/filtered_list_actions"

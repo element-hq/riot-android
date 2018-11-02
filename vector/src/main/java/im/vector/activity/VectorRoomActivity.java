@@ -2002,7 +2002,7 @@ public class VectorRoomActivity extends MXCActionBarActivity implements
             // sanity checks
             if (null != bundle) {
                 if (bundle.containsKey(Intent.EXTRA_TEXT)) {
-                    mEditText.setText(mEditText.getText() + bundle.getString(Intent.EXTRA_TEXT));
+                    mEditText.append(bundle.getString(Intent.EXTRA_TEXT));
 
                     mEditText.post(new Runnable() {
                         @Override

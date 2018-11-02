@@ -4,17 +4,16 @@
     android:id="@+id/public_room_view"
     android:layout_width="match_parent"
     android:layout_height="74dp"
+    android:paddingStart="16dp"
+    android:paddingLeft="16dp"
     android:paddingEnd="16dp"
     android:paddingRight="16dp">
-
 
     <im.vector.view.VectorCircularImageView
         android:id="@+id/public_room_avatar"
         android:layout_width="@dimen/chat_avatar_size"
         android:layout_height="@dimen/chat_avatar_size"
         android:layout_centerVertical="true"
-        android:layout_marginStart="16dp"
-        android:layout_marginLeft="16dp"
         tools:src="@tools:sample/avatars" />
 
     <RelativeLayout

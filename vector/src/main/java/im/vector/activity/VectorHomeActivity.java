@@ -2129,6 +2129,12 @@ public class VectorHomeActivity extends VectorAppCompatActivity implements Searc
                             iconViewLayoutParams.topMargin - badgeOffsetY,
                             iconViewLayoutParams.rightMargin,
                             iconViewLayoutParams.bottomMargin);
+
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1) {
+                        badgeLayoutParams.setMarginStart(iconViewLayoutParams.leftMargin + badgeOffsetX);
+                        badgeLayoutParams.setMarginEnd(iconViewLayoutParams.rightMargin);
+                    }
+
                     badgeLayoutParams.gravity = iconViewLayoutParams.gravity;
 
                     ((FrameLayout) iconView.getParent()).addView(badgeView, badgeLayoutParams);

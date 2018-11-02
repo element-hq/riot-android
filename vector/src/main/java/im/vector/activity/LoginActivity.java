@@ -89,6 +89,7 @@ import im.vector.services.EventStreamService;
 import im.vector.ui.themes.ActivityOtherThemes;
 import im.vector.ui.themes.ThemeUtils;
 import im.vector.util.PhoneNumberUtils;
+import im.vector.util.UrlUtilKt;
 import im.vector.util.ViewUtilKt;
 
 /**
@@ -2167,7 +2168,7 @@ public class LoginActivity extends MXCActionBarActivity implements RegistrationM
             } else if ((resultCode == RESULT_CANCELED) && (RequestCodesKt.FALLBACK_LOGIN_ACTIVITY_REQUEST_CODE == requestCode)) {
                 Log.d(LOG_TAG, "## onActivityResult(): RESULT_CANCELED && FALLBACK_LOGIN_ACTIVITY_REQUEST_CODE");
                 // reset the home server to let the user writes a valid one.
-                mHomeServerText.setText("https://");
+                mHomeServerText.setText(UrlUtilKt.HTTPS_SCHEME);
                 setActionButtonsEnabled(false);
             }
         }

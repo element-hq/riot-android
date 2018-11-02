@@ -379,7 +379,6 @@ Sicuro di procedere?</string>
     <string name="room_delete_unsent_messages">Elimina messaggi non spediti</string>
     <string name="room_message_file_not_found">File non trovato</string>
     <string name="room_do_not_have_permission_to_post">Non hai il permesso di pubblicare in questa stanza</string>
-    <string name="room_new_message_notification">1 nuovo messaggio</string>
 
     <!-- unrecognized SSL certificate -->
     <string name="ssl_trust">Fidati</string>
@@ -518,7 +517,6 @@ Tieni presente che questa azione riavvierà l\'app e potrebbe richiedere del tem
     <string name="devices_details_device_name">Nome dispositivo</string>
     <string name="devices_details_last_seen_title">Ultima visualizzazione</string>
     <string name="devices_details_last_seen_format">%1$s @ %2$s</string>
-    <string name="devices_details_time_format">HH:mm:ss</string>
     <string name="devices_delete_dialog_text">Questa operazione richiede un\'autenticazione aggiuntiva.\nPer proseguire, inserisci la tua password.</string>
     <string name="devices_delete_dialog_title">Autenticazione</string>
     <string name="devices_delete_pswd">Password:</string>
@@ -838,8 +836,6 @@ In futuro il processo di verifica sarà più sofisticato.</string>
     <string name="settings_vibrate_on_mention">Vibra quando ti citano</string>
 
     <string name="settings_analytics">Statistiche</string>
-    <string name="settings_opt_out_of_analytics">Non contribuire alle statistiche</string>
-    <string name="settings_opt_out_of_analytics_summary">Riot raccoglie statistiche d\'uso anonime per consentirci di migliorare l\'applicazione.</string>
 
     <string name="room_settings_room_notifications_title">Notifiche</string>
     <string name="room_settings_add_new_group">Nuovo ID della comunità (es. +foo:matrix.org)</string>
@@ -869,7 +865,6 @@ In futuro il processo di verifica sarà più sofisticato.</string>
 
     <!-- Widget Integration Manager -->
     <string name="widget_integration_room_not_visible">La stanza %s non è visibile.</string>
-    <string name="settings_labs_matrix_apps">Le App Matrix</string>
     <string name="settings_labs_native_camera">Usa fotocamera nativa</string>
 
     <!-- share keys -->

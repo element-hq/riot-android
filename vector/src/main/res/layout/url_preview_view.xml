@@ -10,8 +10,7 @@
     android:layout_marginLeft="76dp"
     android:layout_marginEnd="16dp"
     android:layout_marginRight="16dp"
-    android:layout_marginBottom="4dp"
-    android:orientation="horizontal">
+    android:layout_marginBottom="4dp">
 
     <View
         android:id="@+id/vertical_bar"
@@ -19,6 +18,7 @@
         android:layout_height="0dp"
         android:background="@color/vector_silver_color"
         app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
     <ImageView

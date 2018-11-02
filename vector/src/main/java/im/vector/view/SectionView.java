@@ -16,9 +16,7 @@
 
 package im.vector.view;
 
-import android.annotation.TargetApi;
 import android.content.Context;
-import android.os.Build;
 import android.util.AttributeSet;
 import android.view.View;
 import android.widget.ProgressBar;
@@ -47,25 +45,16 @@ public class SectionView extends RelativeLayout {
     private TextView mTitleView;
     private ProgressBar mLoadingView;
 
-    public SectionView(Context context, AdapterSection section) {
+    public SectionView(Context context) {
         super(context);
-        setup(section);
     }
 
-    public SectionView(Context context, AttributeSet attrs, AdapterSection section) {
+    public SectionView(Context context, AttributeSet attrs) {
         super(context, attrs);
-        setup(section);
     }
 
-    public SectionView(Context context, AttributeSet attrs, int defStyleAttr, AdapterSection section) {
+    public SectionView(Context context, AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
-        setup(section);
-    }
-
-    @TargetApi(Build.VERSION_CODES.LOLLIPOP)
-    public SectionView(Context context, AttributeSet attrs, int defStyleAttr, int defStyleRes, AdapterSection section) {
-        super(context, attrs, defStyleAttr, defStyleRes);
-        setup(section);
     }
 
     /**
@@ -73,7 +62,7 @@ public class SectionView extends RelativeLayout {
      *
      * @param section the section description
      */
-    private void setup(final AdapterSection section) {
+    public void setup(final AdapterSection section) {
         mSection = section;
 
         setBackgroundColor(ThemeUtils.INSTANCE.getColor(getContext(), R.attr.vctr_list_header_background_color));

@@ -216,7 +216,6 @@
     <string name="room_message_placeholder_encrypted">Senda dulrituð skilaboð…</string>
     <string name="room_prompt_cancel">hætta við allt</string>
     <string name="room_message_file_not_found">Skrá fannst ekki</string>
-    <string name="room_new_message_notification">1 ný skilaboð</string>
     <plurals name="room_new_messages_notification">
 	<item quantity="one">1 ný skilaboð</item>
 	<item quantity="other">%d ný skilaboð</item>
@@ -303,7 +302,6 @@
     <string name="devices_details_device_name">Heiti tækis</string>
     <string name="devices_details_last_seen_title">Sást síðast</string>
     <string name="devices_details_last_seen_format">%1$s @ %2$s</string>
-    <string name="devices_details_time_format">HH:mm:ss</string>
     <string name="devices_delete_dialog_title">Auðkenning</string>
     <string name="devices_delete_pswd">Lykilorð:</string>
     <string name="devices_delete_submit_button_label">Senda inn</string>
@@ -531,7 +529,6 @@
     <string name="encryption_information_blocked">Á bannlista</string>
 
     <string name="encryption_information_verify_device">Sannreyna tæki</string>
-    <string name="settings_labs_matrix_apps">Matrix-forrit</string>
     <string name="room_add_matrix_apps">Bæta við Matrix-forritum</string>
     <string name="start_verification">Hefja sannvottun</string>
     <string name="share_without_verifying">Deila án sannvottunar</string>
@@ -625,7 +622,6 @@
     <string name="startup_notification_privacy_button_grant">Gefa heimild</string>
     <string name="startup_notification_privacy_button_other">Veldu annan valkost</string>
 
-    <string name="settings_opt_out_of_analytics">Ekki senda greiningargögn</string>
     <string name="settings_data_save_mode">Gagnavistunarhamur</string>
 
     <string name="devices_details_dialog_title">Nánar um tæki</string>
@@ -740,7 +736,6 @@ Ertu alveg viss?</string>
     <string name="settings_hide_join_leave_messages">Fela taka-þátt/hætta skilaboð (hefur ekki áhrif á boð/spörk/bönn)</string>
     <string name="settings_hide_avatar_display_name_changes_messages">Fela breytingar á auðkennismynd og birtingarnafni</string>
     <string name="startup_notification_privacy_message">Riot getur keyrt í bakgrunni og stýrt tilkynningum á öruggan hátt (getur haft áhrif á rafhlöðunotkun).</string>
-    <string name="settings_opt_out_of_analytics_summary">Riot safnar nafnlausum greiningargögnum til að gera okkur kleift að bæta forritið.</string>
 
     <string name="account_email_validation_message">Skoðaðu tölvupóstinn þinn og smelltu á tengilinn sem hann inniheldur. Þegar því er lokið skaltu smella á að halda áfram.</string>
     <string name="account_email_validation_error">Tókst ekki að sannreyna tölvupóstfang. Skoðaðu tölvupóstinn þinn og smelltu á tengilinn sem hann inniheldur. Þegar því er lokið skaltu smella á að halda áfram</string>

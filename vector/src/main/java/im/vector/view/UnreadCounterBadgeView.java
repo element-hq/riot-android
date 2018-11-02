@@ -1,5 +1,6 @@
 /*
  * Copyright 2017 Vector Creations Ltd
+ * Copyright 2018 New Vector Ltd
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -22,7 +23,7 @@ import android.support.v4.content.ContextCompat;
 import android.text.TextUtils;
 import android.util.AttributeSet;
 import android.view.View;
-import android.widget.RelativeLayout;
+import android.widget.FrameLayout;
 import android.widget.TextView;
 
 import java.lang.annotation.Retention;
@@ -31,7 +32,10 @@ import java.lang.annotation.RetentionPolicy;
 import im.vector.R;
 import im.vector.util.RoomUtils;
 
-public class UnreadCounterBadgeView extends RelativeLayout {
+/**
+ * Badge for the bottom navigation bar of the Home Activity
+ */
+public class UnreadCounterBadgeView extends FrameLayout {
     // the background settings
     public static final int HIGHLIGHTED = 0;
     public static final int NOTIFIED = 1;
@@ -43,7 +47,6 @@ public class UnreadCounterBadgeView extends RelativeLayout {
     }
 
     private TextView mCounterTextView;
-    private View mParentView;
 
     public UnreadCounterBadgeView(Context context) {
         super(context);
@@ -63,7 +66,6 @@ public class UnreadCounterBadgeView extends RelativeLayout {
     private void init() {
         inflate(getContext(), R.layout.unread_counter_badge, this);
         mCounterTextView = findViewById(R.id.unread_counter_badge_text_view);
-        mParentView = findViewById(R.id.unread_counter_badge_layout);
     }
 
     /**
@@ -97,7 +99,7 @@ public class UnreadCounterBadgeView extends RelativeLayout {
             } else { //if (status == DEFAULT)
                 shape.setColor(ContextCompat.getColor(getContext(), R.color.vector_silver_color));
             }
-            mParentView.setBackground(shape);
+            mCounterTextView.setBackground(shape);
         } else {
             setVisibility(View.GONE);
         }

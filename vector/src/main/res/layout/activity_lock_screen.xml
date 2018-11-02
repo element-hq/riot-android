@@ -39,7 +39,7 @@
         android:textAppearance="?android:attr/textAppearanceSmall"
         android:textColor="?attr/vctr_riot_primary_text_color"
         android:textStyle="bold"
-        tools:text="SENDER" />
+        tools:text="SENDER :" />
 
     <TextView
         android:id="@+id/lock_screen_body"
@@ -64,7 +64,7 @@
 
         <EditText
             android:id="@+id/lock_screen_edittext"
-            android:layout_width="match_parent"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_gravity="start"
             android:layout_weight="1"
@@ -77,6 +77,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:background="@drawable/ic_material_send_green"
+            android:rotationY="@integer/rtl_mirror_flip"
             android:textColor="@android:color/black" />
     </LinearLayout>
 

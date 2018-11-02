@@ -2309,7 +2309,7 @@ class VectorSettingsPreferencesFragment : PreferenceFragment(), SharedPreference
                 var lastSeenTime = LABEL_UNAVAILABLE_DATA
 
                 if (null != activity) {
-                    val dateFormatTime = SimpleDateFormat(getString(R.string.devices_details_time_format))
+                    val dateFormatTime = SimpleDateFormat("HH:mm:ss")
                     val time = dateFormatTime.format(Date(aDeviceInfo.last_seen_ts))
 
                     val dateFormat = DateFormat.getDateInstance(DateFormat.SHORT, Locale.getDefault())

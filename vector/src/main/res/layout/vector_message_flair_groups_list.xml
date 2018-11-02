@@ -22,7 +22,6 @@
             android:id="@+id/message_avatar_group_2"
             layout="@layout/vector_receipt_round_avatar" />
 
-
         <include
             android:id="@+id/message_avatar_group_3"
             layout="@layout/vector_receipt_round_avatar" />

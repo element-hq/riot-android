@@ -13,12 +13,12 @@
 
         <TextView
             android:id="@+id/ImageSizesAdapter_format"
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_gravity="center_vertical"
+            android:layout_marginStart="5dp"
+            android:layout_marginLeft="5dp"
             android:layout_weight="1"
-            android:paddingStart="5dp"
-            android:paddingLeft="5dp"
             android:textAppearance="?android:attr/textAppearanceLarge"
             android:textStyle="bold"
             tools:text="A text here" />

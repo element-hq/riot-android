@@ -1066,7 +1066,7 @@ public class VectorMessagesAdapter extends AbstractMessagesAdapter {
         }
 
         if (null != eventId) {
-            mEventType.put(eventId, new Integer(viewType));
+            mEventType.put(eventId, viewType);
         }
 
         return viewType;
@@ -1567,7 +1567,7 @@ public class VectorMessagesAdapter extends AbstractMessagesAdapter {
             }
 
             fileTextView.setPaintFlags(fileTextView.getPaintFlags() | Paint.UNDERLINE_TEXT_FLAG);
-            fileTextView.setText("\n" + fileMessage.body + "\n");
+            fileTextView.setText(fileMessage.body);
 
             // display the right message type icon.
             // Audio and File messages are managed by the same method

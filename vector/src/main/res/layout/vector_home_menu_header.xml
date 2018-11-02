@@ -3,14 +3,14 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="@dimen/navigation_view_height"
-    android:background="?attr/vctr_primary_color"
-    android:orientation="vertical">
+    android:background="?attr/vctr_primary_color">
 
     <ImageView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_centerInParent="true"
         android:adjustViewBounds="true"
+        android:rotationY="@integer/rtl_mirror_flip"
         android:scaleType="centerCrop"
         android:src="@drawable/bubbles_bg_portrait" />
 

@@ -228,7 +228,6 @@
     <string name="devices_details_device_name">端末名</string>
     <string name="devices_details_last_seen_title">最終接続日</string>
     <string name="devices_details_last_seen_format">%1$s @ %2$s</string>
-    <string name="devices_details_time_format">HH:mm:ss</string>
     <string name="devices_delete_dialog_title">認証</string>
     <string name="devices_delete_dialog_text">この操作を行うには追加の認証が必要です.
 続けるにはあなたのパスワードを入力して下さい.</string>
@@ -451,7 +450,6 @@
     <string name="people_search_invite_by_id_dialog_hint">電子メールまたはMatrixユーザID</string>
 
     <string name="room_prompt_cancel">全て中止</string>
-    <string name="room_new_message_notification">1つの新しい発言があります</string>
 
     <string name="ssl_logout_account">ログアウト</string>
     <string name="ssl_remain_offline">無視</string>
@@ -526,7 +524,6 @@
     <string name="auth_login">ログイン</string>
     <string name="login_mobile_device">携帯端末</string>
 
-    <string name="settings_labs_matrix_apps">Matrixアプリ</string>
     <string name="room_add_matrix_apps">Matrixアプリを追加</string>
     <string name="widget_integration_positive_power_level">権限の数値は正の整数で入力してください。</string>
     <string name="active_call">通話開始</string>
@@ -674,9 +671,6 @@ Riotアプリがあなたの電話帳へアクセスすることを許可しま�
     <string name="settings_pin_missed_notifications">逃した通知がある部屋を固定する</string>
     <string name="settings_pin_unread_messages">未読のメッセージがある部屋を固定する</string>
     <string name="settings_analytics">分析</string>
-    <string name="settings_opt_out_of_analytics">分析データを送信しない</string>
-    <string name="settings_opt_out_of_analytics_summary">Riotはアプリを改善するため、匿名の解析データを収集します。</string>
-
 
     <string name="settings_data_save_mode">データ節約モード</string>
 

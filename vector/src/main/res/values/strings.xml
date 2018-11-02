@@ -472,7 +472,6 @@
     <string name="room_delete_unsent_messages">Delete unsent messages</string>
     <string name="room_message_file_not_found">File not found</string>
     <string name="room_do_not_have_permission_to_post">You do not have permission to post to this room</string>
-    <string name="room_new_message_notification">1 new message</string>
     <plurals name="room_new_messages_notification">
         <item quantity="one">1 new message</item>
         <item quantity="other">%d new messages</item>
@@ -658,8 +657,6 @@
 
     <!-- analytics -->
     <string name="settings_analytics">Analytics</string>
-    <string name="settings_opt_out_of_analytics">Opt out of analytics</string>
-    <string name="settings_opt_out_of_analytics_summary">Riot collects anonymous analytics to allow us to improve the application.</string>
     <string name="settings_opt_in_of_analytics">Send analytics data</string>
     <string name="settings_opt_in_of_analytics_summary">Riot collects anonymous analytics to allow us to improve the application.</string>
     <string name="settings_opt_in_of_analytics_prompt">Please enable analytics to help us improve Riot.</string>
@@ -673,7 +670,6 @@
     <string name="devices_details_device_name">Device Name</string>
     <string name="devices_details_last_seen_title">Last seen</string>
     <string name="devices_details_last_seen_format">%1$s @ %2$s</string>
-    <string name="devices_details_time_format">HH:mm:ss</string>
     <string name="devices_delete_dialog_text">This operation requires additional authentication.\nTo continue, please enter your password.</string>
     <string name="devices_delete_dialog_title">Authentication</string>
     <string name="devices_delete_pswd">Password:</string>
@@ -937,7 +933,6 @@
     <string name="widget_integration_room_not_visible">Room %s is not visible.</string>
     <string name="widget_integration_missing_parameter">A required parameter is missing.</string>
     <string name="widget_integration_invalid_parameter">A parameter is not valid.</string>
-    <string name="settings_labs_matrix_apps">Matrix Apps</string>
     <string name="room_add_matrix_apps">Add Matrix apps</string>
     <string name="settings_labs_native_camera">Use native camera</string>
     <string name="settings_labs_keyboard_options_to_send_message">Use keyboard enter key to send message</string>
@@ -1071,5 +1066,10 @@
     <string name="show_info_area_always">Always</string>
     <string name="show_info_area_messages_and_errors">For messages and errors</string>
     <string name="show_info_area_only_errors">Only for errors</string>
+
+    <string name="generic_label">%1$s:</string>
+    <string name="generic_label_and_value">%1$s: %2$s</string>
+    <string name="plus_x">+%d</string>
+    <string name="x_plus">%d+</string>
 
 </resources>

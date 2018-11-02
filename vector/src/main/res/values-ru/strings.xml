@@ -365,8 +365,7 @@ Email также позволит вам при необходимости во�
     <string name="room_delete_unsent_messages">Удалить неотправленные сообщения</string>
     <string name="room_message_file_not_found">Файл не найден</string>
     <string name="room_do_not_have_permission_to_post">У вас нет прав писать сообщения в этом чате</string>
-    <string name="room_new_message_notification">1 новое сообщение</string>
-    
+
     <!-- unrecognized SSL certificate -->
     <string name="ssl_trust">Доверять</string>
     <string name="ssl_do_not_trust">Не доверять</string>
@@ -497,7 +496,6 @@ Email также позволит вам при необходимости во�
     <string name="devices_details_device_name">Имя устройства</string>
     <string name="devices_details_last_seen_title">Последнее подключение</string>
     <string name="devices_details_last_seen_format">%1$s @ %2$s</string>
-    <string name="devices_details_time_format">HH:mm:ss</string>
     <string name="devices_delete_dialog_text">Для этой операции требуется дополнительная проверка подлинности.
 Чтобы продолжить, введите пароль.</string>
     <string name="devices_delete_dialog_title">Аутентификация</string>
@@ -766,7 +764,6 @@ Email также позволит вам при необходимости во�
     <string name="widget_integration_missing_room_id">В запросе отсутствует room_id.</string>
     <string name="widget_integration_missing_user_id">В запросе отсутствует user_id.</string>
     <string name="widget_integration_room_not_visible">Комната %s невидима.</string>
-    <string name="settings_labs_matrix_apps">Приложения Matrix</string>
     <string name="room_add_matrix_apps">Добавить приложения Matrix</string>
     <string name="login_mobile_device">Мобильный</string>
 
@@ -789,9 +786,6 @@ Email также позволит вам при необходимости во�
     <string name="option_take_video">Снять видео</string>
 
     <string name="settings_analytics">Аналитика</string>
-    <string name="settings_opt_out_of_analytics">Отказ от аналитики</string>
-    <string name="settings_opt_out_of_analytics_summary">Riot собирает анонимную аналитику, чтобы сделать приложение еще лучше.</string>
-
 
     <string name="settings_labs_native_camera">Использовать встроенную камеру</string>
 

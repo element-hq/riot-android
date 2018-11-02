@@ -355,7 +355,6 @@ Você autoriza o Riot a acessar seus contatos?</string>
     <string name="room_delete_unsent_messages">Apagar mensagens não enviadas</string>
     <string name="room_message_file_not_found">Arquivo não encontrado</string>
     <string name="room_do_not_have_permission_to_post">Você não tem permissão para enviar mensagens nesta sala</string>
-    <string name="room_new_message_notification">1 mensagem nova</string>
 
     <!-- unrecognized SSL certificate -->
     <string name="ssl_trust">Confiar</string>
@@ -487,7 +486,6 @@ Note que esta ação irá reiniciar o aplicativo e poderá tomar um certo tempo.
     <string name="devices_details_device_name">Nome do dispositivo</string>
     <string name="devices_details_last_seen_title">Último acesso</string>
     <string name="devices_details_last_seen_format">%1$s em %2$s</string>
-    <string name="devices_details_time_format">HH:mm:ss</string>
     <string name="devices_delete_dialog_text">Esta operação exige autenticação adicional.\nPara continuar, digite sua senha.</string>
     <string name="devices_delete_dialog_title">Autenticação</string>
     <string name="devices_delete_pswd">Senha:</string>
@@ -769,8 +767,6 @@ No futuro, este processo de verificação será mais sofisticado.</string>
     <string name="settings_vibrate_on_mention">Vibrar quando mencionado</string>
 
     <string name="settings_analytics">Estatísticas de uso</string>
-    <string name="settings_opt_out_of_analytics">Não enviar dados estatísticos de uso</string>
-    <string name="settings_opt_out_of_analytics_summary">Riot coleta dados anônimos para podermos melhorar o aplicativo.</string>
 
     <string name="settings_flair">Faro</string>
 
@@ -797,7 +793,6 @@ No futuro, este processo de verificação será mais sofisticado.</string>
     <string name="widget_integration_missing_room_id">O pedido veio sem o room_id.</string>
     <string name="widget_integration_missing_user_id">O pedido veio sem o user_id.</string>
     <string name="widget_integration_room_not_visible">A sala %s não está visível.</string>
-    <string name="settings_labs_matrix_apps">Aplicativos Matrix</string>
     <string name="room_add_matrix_apps">Adicionar aplicativos Matrix</string>
     <string name="settings_labs_native_camera">Usar a câmera nativa</string>
 

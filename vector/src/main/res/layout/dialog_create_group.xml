@@ -39,6 +39,29 @@
             android:text="@string/plus_sign"
             android:textSize="18sp" />
 
+        <EditText
+            android:id="@+id/community_id_edit_text"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_toStartOf="@+id/community_semicolon_text_view"
+            android:layout_toLeftOf="@+id/community_semicolon_text_view"
+            android:layout_toEndOf="@+id/community_plus_text_view"
+            android:layout_toRightOf="@+id/community_plus_text_view"
+            android:hint="@string/community_id_hint"
+            android:textColor="?attr/vctr_riot_primary_text_color"
+            android:textColorHint="?attr/vctr_default_text_hint_color" />
+
+        <TextView
+            android:id="@+id/community_semicolon_text_view"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_toStartOf="@+id/community_hs_name_text_view"
+            android:layout_toLeftOf="@+id/community_hs_name_text_view"
+            android:background="@color/vector_silver_color"
+            android:text="@string/semicolon_sign"
+            android:textSize="18sp" />
+
         <TextView
             android:id="@+id/community_hs_name_text_view"
             android:layout_width="wrap_content"
@@ -48,19 +71,8 @@
             android:layout_centerVertical="true"
             android:background="@color/vector_silver_color"
             android:textSize="18sp"
-            tools:text=":a_server_name.org" />
+            tools:text="a_server_name.org" />
 
-        <EditText
-            android:id="@+id/community_id_edit_text"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_toStartOf="@+id/community_hs_name_text_view"
-            android:layout_toLeftOf="@+id/community_hs_name_text_view"
-            android:layout_toEndOf="@+id/community_plus_text_view"
-            android:layout_toRightOf="@+id/community_plus_text_view"
-            android:hint="@string/community_id_hint"
-            android:textColor="?attr/vctr_riot_primary_text_color"
-            android:textColorHint="?attr/vctr_default_text_hint_color" />
     </RelativeLayout>
 
 </LinearLayout>
