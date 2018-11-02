@@ -54,7 +54,8 @@ public class StickySectionHelper extends RecyclerView.OnScrollListener implement
 
         //Initialize the sticky views
         for (final Pair<Integer, AdapterSection> section : sections) {
-            final SectionView sectionView = new SectionView(mRecyclerView.getContext(), section.second);
+            final SectionView sectionView = new SectionView(mRecyclerView.getContext());
+            sectionView.setup(section.second);
             sectionView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {

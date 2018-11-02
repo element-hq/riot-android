@@ -133,6 +133,7 @@ android {
 
         // Code
         error 'SetTextI18n'
+        error 'ViewConstructor'
     }
 
     repositories {
