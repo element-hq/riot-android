@@ -19,6 +19,7 @@ package im.vector.view
 import android.content.Context
 import android.graphics.Color
 import android.graphics.Typeface
+import android.preference.PreferenceManager
 import android.support.v4.content.ContextCompat
 import android.text.SpannableString
 import android.text.TextPaint
@@ -40,7 +41,6 @@ import im.vector.features.hhs.ResourceLimitErrorFormatter
 import im.vector.listeners.IMessagesAdapterActionsListener
 import im.vector.ui.themes.ThemeUtils
 import im.vector.util.MatrixURLSpan
-import im.vector.util.RoomUtils
 import org.matrix.androidsdk.MXPatterns
 import org.matrix.androidsdk.rest.model.MatrixError
 import org.matrix.androidsdk.rest.model.RoomTombstoneContent
@@ -59,10 +59,6 @@ class NotificationAreaView @JvmOverloads constructor(
         defStyleAttr: Int = 0
 ) : RelativeLayout(context, attrs, defStyleAttr) {
 
-    init {
-        setupView()
-    }
-
     @BindView(R.id.room_notification_icon)
     lateinit var imageView: ImageView
     @BindView(R.id.room_notification_message)
@@ -70,6 +66,37 @@ class NotificationAreaView @JvmOverloads constructor(
 
     var delegate: Delegate? = null
     private var state: State = State.Initial
+
+    /**
+     * Visibility when the info area is empty.
+     * [View.VISIBLE] only when preference is set to [SHOW_INFO_AREA_VALUE_ALWAYS].
+     */
+    private val visibilityForEmptyContent: Int
+
+    /**
+     * Visibility when the info area has a non-error message or icon (for example scrolling icon).
+     * [View.VISIBLE] only when preference is set to [SHOW_INFO_AREA_VALUE_ALWAYS] or [SHOW_INFO_AREA_VALUE_MESSAGES_AND_ERRORS].
+     */
+    private val visibilityForMessages: Int
+
+    init {
+        setupView()
+
+        when (PreferenceManager.getDefaultSharedPreferences(context).getString(SHOW_INFO_AREA_KEY, SHOW_INFO_AREA_VALUE_ALWAYS)) {
+            SHOW_INFO_AREA_VALUE_ALWAYS -> {
+                visibilityForEmptyContent = View.VISIBLE
+                visibilityForMessages = View.VISIBLE
+            }
+            SHOW_INFO_AREA_VALUE_MESSAGES_AND_ERRORS -> {
+                visibilityForEmptyContent = View.GONE
+                visibilityForMessages = View.VISIBLE
+            }
+            else /* SHOW_INFO_AREA_VALUE_ONLY_ERRORS */ -> {
+                visibilityForEmptyContent = View.GONE
+                visibilityForMessages = View.GONE
+            }
+        }
+    }
 
     /**
      * This methods is responsible for rendering the view according to the newState
@@ -156,21 +183,21 @@ class NotificationAreaView @JvmOverloads constructor(
     }
 
     private fun renderTyping(state: State.Typing) {
-        visibility = RoomUtils.showMessage(context)
+        visibility = visibilityForMessages
         imageView.setImageResource(R.drawable.vector_typing)
         messageView.text = SpannableString(state.message)
         messageView.setTextColor(ThemeUtils.getColor(context, R.attr.vctr_room_notification_text_color))
     }
 
     private fun renderUnreadPreview() {
-        visibility = RoomUtils.showMessage(context)
+        visibility = visibilityForMessages
         imageView.setImageResource(R.drawable.scrolldown)
         messageView.setTextColor(ThemeUtils.getColor(context, R.attr.vctr_room_notification_text_color))
         imageView.setOnClickListener { delegate?.closeScreen() }
     }
 
     private fun renderScrollToBottom(state: State.ScrollToBottom) {
-        visibility = RoomUtils.showMessage(context)
+        visibility = visibilityForMessages
         if (state.unreadCount > 0) {
             imageView.setImageResource(R.drawable.newmessages)
             messageView.setTextColor(ContextCompat.getColor(context, R.color.vector_fuchsia_color))
@@ -211,7 +238,7 @@ class NotificationAreaView @JvmOverloads constructor(
     }
 
     private fun renderDefault() {
-        visibility = RoomUtils.showEmpty(context)
+        visibility = visibilityForEmptyContent
     }
 
     private fun renderHidden() {
@@ -299,6 +326,28 @@ class NotificationAreaView @JvmOverloads constructor(
         fun deleteUnsentEvents()
         fun closeScreen()
         fun jumpToBottom()
+    }
+
+    companion object {
+        /**
+         * Preference key.
+         */
+        private const val SHOW_INFO_AREA_KEY = "SETTINGS_SHOW_INFO_AREA_KEY"
+
+        /**
+         * Always show the info area.
+         */
+        private const val SHOW_INFO_AREA_VALUE_ALWAYS = "always"
+
+        /**
+         * Show the info area when it has messages or errors.
+         */
+        private const val SHOW_INFO_AREA_VALUE_MESSAGES_AND_ERRORS = "messages_and_errors"
+
+        /**
+         * Show the info area only when it has errors.
+         */
+        private const val SHOW_INFO_AREA_VALUE_ONLY_ERRORS = "only_errors"
     }
 }
 
