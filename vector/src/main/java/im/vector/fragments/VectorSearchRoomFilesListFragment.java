@@ -197,8 +197,6 @@ public class VectorSearchRoomFilesListFragment extends VectorSearchRoomsFilesLis
         }
 
         mIsBackPaginating = true;
-
-        final int firstPos = mMessageListView.getFirstVisiblePosition();
         final int countBeforeUpdate = mAdapter.getCount();
 
         // if there is no item in the adapter
@@ -233,7 +231,7 @@ public class VectorSearchRoomFilesListFragment extends VectorSearchRoomsFilesLis
 
                                     // do not use count because some messages are not displayed
                                     // so we compute the new pos
-                                    mMessageListView.setSelection(firstPos + (mAdapter.getCount() - countBeforeUpdate));
+                                    mMessageListView.setSelection(mMessageListView.getFirstVisiblePosition() + (mAdapter.getCount() - countBeforeUpdate));
 
                                     mIsBackPaginating = false;
 
