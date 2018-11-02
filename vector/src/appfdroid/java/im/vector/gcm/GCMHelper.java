@@ -16,21 +16,40 @@
  */
 package im.vector.gcm;
 
-class GCMHelper {
+import android.app.Activity;
+import android.content.Context;
+import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
+
+public class GCMHelper {
 
     /**
-     * Retrieves the GCM registration token.
+     * Retrieves the FCM registration token.
      *
-     * @return the registration token.
+     * @return the FCM token or null if not received from FCM
      */
-    static String getRegistrationToken() {
+    @Nullable
+    public static String getFcmToken(Context context) {
         return null;
     }
 
     /**
-     * Clear the registration token.
+     * Store FCM token to the SharedPrefs
+     *
+     * @param context android context
+     * @param token   the token to store
      */
-    static void clearRegistrationToken() {
+    public static void storeFcmToken(@NonNull Context context,
+                                     @Nullable String token) {
+        // No op
+    }
+
+    /**
+     * onNewToken may not be called on application upgrade, so ensure my shared pref is set
+     *
+     * @param activity the first launch Activity
+     */
+    public static void ensureFcmTokenIsRetrieved(final Activity activity) {
         // No op
     }
 }

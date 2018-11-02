@@ -17,38 +17,57 @@
  */
 package im.vector.gcm;
 
+import android.app.Activity;
+import android.content.Context;
+import android.preference.PreferenceManager;
+import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
+import android.text.TextUtils;
+
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.iid.FirebaseInstanceId;
+import com.google.firebase.iid.InstanceIdResult;
 
-import org.matrix.androidsdk.util.Log;
-
-class GCMHelper {
-    private static final String LOG_TAG = GCMHelper.class.getSimpleName();
+public class GCMHelper {
+    private static final String PREFS_KEY_FCM_TOKEN = "FCM_TOKEN";
 
     /**
      * Retrieves the FCM registration token.
+     *
+     * @return the FCM token or null if not received from FCM
      */
-    static String getRegistrationToken() {
-        String registrationToken = null;
-
-        // And we protect the call to getToken()
-        try {
-            registrationToken = FirebaseInstanceId.getInstance().getToken();
-            Log.d(LOG_TAG, "## getRegistrationToken(): " + registrationToken);
-        } catch (Exception e) {
-            Log.e(LOG_TAG, "## getRegistrationToken() : failed " + e.getMessage(), e);
-        }
-
-        return registrationToken;
+    @Nullable
+    public static String getFcmToken(Context context) {
+        return PreferenceManager.getDefaultSharedPreferences(context).getString(PREFS_KEY_FCM_TOKEN, null);
     }
 
     /**
-     * Clear the registration token.
+     * Store FCM token to the SharedPrefs
+     *
+     * @param context android context
+     * @param token   the token to store
      */
-    static void clearRegistrationToken() {
-        try {
-            FirebaseInstanceId.getInstance().deleteInstanceId();
-        } catch (Exception e) {
-            Log.e(LOG_TAG, "##clearRegistrationToken() failed " + e.getMessage(), e);
+    public static void storeFcmToken(@NonNull Context context,
+                                     @Nullable String token) {
+        PreferenceManager.getDefaultSharedPreferences(context)
+                .edit()
+                .putString(PREFS_KEY_FCM_TOKEN, token)
+                .apply();
+    }
+
+    /**
+     * onNewToken may not be called on application upgrade, so ensure my shared pref is set
+     *
+     * @param activity the first launch Activity
+     */
+    public static void ensureFcmTokenIsRetrieved(final Activity activity) {
+        if (TextUtils.isEmpty(getFcmToken(activity))) {
+            FirebaseInstanceId.getInstance().getInstanceId().addOnSuccessListener(activity, new OnSuccessListener<InstanceIdResult>() {
+                @Override
+                public void onSuccess(InstanceIdResult instanceIdResult) {
+                    storeFcmToken(activity, instanceIdResult.getToken());
+                }
+            });
         }
     }
 }

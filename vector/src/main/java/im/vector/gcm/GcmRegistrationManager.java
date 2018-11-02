@@ -256,7 +256,7 @@ public final class GcmRegistrationManager {
 
         if (TextUtils.isEmpty(registrationToken)) {
             Log.d(LOG_TAG, "## getGcmRegistrationToken() : undefined token -> getting a new one");
-            registrationToken = GCMHelper.getRegistrationToken();
+            registrationToken = GCMHelper.getFcmToken(mContext);
         }
         return registrationToken;
     }
@@ -333,7 +333,7 @@ public final class GcmRegistrationManager {
             final boolean clearEverything = TextUtils.isEmpty(newToken);
 
             Log.d(LOG_TAG, "resetGCMRegistration : Clear the GCM data");
-            clearGCMData(clearEverything, new SimpleApiCallback<Void>() {
+            clearGCMData(new SimpleApiCallback<Void>() {
                 @Override
                 public void onSuccess(Void info) {
                     if (!clearEverything) {
@@ -1340,17 +1340,12 @@ public final class GcmRegistrationManager {
     /**
      * Clear the GCM data
      *
-     * @param clearRegistrationToken true to clear the provided GCM token
      * @param callback               the asynchronous callback
      */
-    public void clearGCMData(boolean clearRegistrationToken, @NonNull ApiCallback<Void> callback) {
+    public void clearGCMData(@NonNull ApiCallback<Void> callback) {
         try {
             setAndStoreRegistrationToken(null);
             setAndStoreRegistrationState(RegistrationState.UNREGISTRATED);
-
-            if (clearRegistrationToken) {
-                GCMHelper.clearRegistrationToken();
-            }
 
             callback.onSuccess(null);
         } catch (Exception e) {

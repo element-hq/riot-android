@@ -750,7 +750,7 @@ public class Matrix {
                 }
 
                 // clear GCM token before launching the splash screen
-                Matrix.getInstance(context).getSharedGCMRegistrationManager().clearGCMData(false, new SimpleApiCallback<Void>() {
+                Matrix.getInstance(context).getSharedGCMRegistrationManager().clearGCMData(new SimpleApiCallback<Void>() {
                     @Override
                     public void onSuccess(final Void anything) {
                         Intent intent = new Intent(context.getApplicationContext(), SplashActivity.class);

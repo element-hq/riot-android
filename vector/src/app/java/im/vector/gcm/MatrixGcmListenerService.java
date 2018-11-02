@@ -187,6 +187,8 @@ public class MatrixGcmListenerService extends FirebaseMessagingService {
     public void onNewToken(String refreshedToken) {
         Log.d(LOG_TAG, "onNewToken: " + refreshedToken);
 
+        GCMHelper.storeFcmToken(this, refreshedToken);
+
         Matrix.getInstance(this).getSharedGCMRegistrationManager().resetGCMRegistration(refreshedToken);
     }
 
