@@ -2302,7 +2302,7 @@ public class VectorRoomActivity extends MXCActionBarActivity implements
             AlertDialog.Builder builder = new AlertDialog.Builder(this);
 
             // Use the builder context
-            View v = LayoutInflater.from(builder.getContext()).inflate(R.layout.no_sticker_pack_dialog, null);
+            View v = LayoutInflater.from(builder.getContext()).inflate(R.layout.dialog_no_sticker_pack, null);
 
             builder
                     .setView(v)

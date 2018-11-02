@@ -117,7 +117,7 @@ public class VectorMediasViewerActivity extends MXCActionBarActivity {
 
     @Override
     public int getLayoutRes() {
-        return R.layout.activity_vector_medias_viewer;
+        return R.layout.activity_vector_media_viewer;
     }
 
     @Override
