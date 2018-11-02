@@ -1110,7 +1110,7 @@ public class VectorMessageListFragment extends MatrixMessageListFragment<VectorM
             // so provide an handle to retrieve it
             if (null != getRoomPreviewData()) {
                 roomDetailsIntent.putExtra(VectorMemberDetailsActivity.EXTRA_STORE_ID,
-                        new Integer(Matrix.getInstance(getActivity()).addTmpStore(mEventTimeLine.getStore())));
+                        Matrix.getInstance(getActivity()).addTmpStore(mEventTimeLine.getStore()));
             }
 
             roomDetailsIntent.putExtra(VectorMemberDetailsActivity.EXTRA_ROOM_ID, mRoom.getRoomId());

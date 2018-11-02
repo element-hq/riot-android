@@ -134,6 +134,7 @@ android {
         // Code
         error 'SetTextI18n'
         error 'ViewConstructor'
+        error 'UseValueOf'
     }
 
     repositories {

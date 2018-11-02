@@ -1066,7 +1066,7 @@ public class VectorMessagesAdapter extends AbstractMessagesAdapter {
         }
 
         if (null != eventId) {
-            mEventType.put(eventId, new Integer(viewType));
+            mEventType.put(eventId, viewType);
         }
 
         return viewType;
