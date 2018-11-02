@@ -22,9 +22,9 @@
     </string-array>
 
     <string-array name="room_access_rules_values">
-        <item>1</item>
-        <item>2</item>
-        <item>3</item>
+        <item>"1"</item>
+        <item>"2"</item>
+        <item>"3"</item>
     </string-array>
 
     <!-- read history rules: Who can read history? -->
@@ -35,11 +35,12 @@
         <item>@string/room_settings_read_history_entry_members_only_joined</item>
     </string-array>
 
+    <!-- Room settings, access and visibility : WHO CAN READ HISTORY? (read rule) -->
     <string-array name="room_read_history_rules_values">
-        <item>@string/room_settings_read_history_entry_value_anyone</item>
-        <item>@string/room_settings_read_history_entry_value_members_only_option_time_shared</item>
-        <item>@string/room_settings_read_history_entry_value_members_only_invited</item>
-        <item>@string/room_settings_read_history_entry_value_members_only_joined</item>
+        <item>"world_readable"</item>
+        <item>"shared"</item>
+        <item>"invited"</item>
+        <item>"joined"</item>
     </string-array>
 
     <string-array name="notification_values">

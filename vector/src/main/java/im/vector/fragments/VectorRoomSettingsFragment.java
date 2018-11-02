@@ -810,8 +810,8 @@ public class VectorRoomSettingsFragment extends PreferenceFragment implements Sh
                 mRoomAccessRulesListPreference.setValue(value);
                 mRoomAccessRulesListPreference.setSummary(summary);
             } else {
-                mRoomHistoryReadabilityRulesListPreference.setValue(UNKNOWN_VALUE);
-                mRoomHistoryReadabilityRulesListPreference.setSummary("");
+                mRoomAccessRulesListPreference.setValue(UNKNOWN_VALUE);
+                mRoomAccessRulesListPreference.setSummary("");
             }
         }
 
@@ -859,31 +859,9 @@ public class VectorRoomSettingsFragment extends PreferenceFragment implements Sh
         // room history readability
         if (null != mRoomHistoryReadabilityRulesListPreference) {
             value = mRoom.getState().getHistoryVisibility();
-            summary = null;
 
-            if ((null != value) && (null != resources)) {
-                // get summary value
-                if (value.equals(resources.getString(R.string.room_settings_read_history_entry_value_anyone))) {
-                    summary = resources.getString(R.string.room_settings_read_history_entry_anyone);
-                } else if (value.equals(resources.getString(R.string.room_settings_read_history_entry_value_members_only_option_time_shared))) {
-                    summary = resources.getString(R.string.room_settings_read_history_entry_members_only_option_time_shared);
-                } else if (value.equals(resources.getString(R.string.room_settings_read_history_entry_value_members_only_invited))) {
-                    summary = resources.getString(R.string.room_settings_read_history_entry_members_only_invited);
-                } else if (value.equals(resources.getString(R.string.room_settings_read_history_entry_value_members_only_joined))) {
-                    summary = resources.getString(R.string.room_settings_read_history_entry_members_only_joined);
-                } else {
-                    // unknown value
-                    Log.w(LOG_TAG, "## updatePreferenceUiValues(): unknown room read history value=" + value);
-                    summary = null;
-                }
-            }
-
-            if (null != summary) {
+            if (null != value) {
                 mRoomHistoryReadabilityRulesListPreference.setValue(value);
-                mRoomHistoryReadabilityRulesListPreference.setSummary(summary);
-            } else {
-                mRoomHistoryReadabilityRulesListPreference.setValue(UNKNOWN_VALUE);
-                mRoomHistoryReadabilityRulesListPreference.setSummary("");
             }
         }
     }
@@ -947,26 +925,8 @@ public class VectorRoomSettingsFragment extends PreferenceFragment implements Sh
         String newValue = mRoomHistoryReadabilityRulesListPreference.getValue();
 
         if (!TextUtils.equals(newValue, previousValue)) {
-            String historyVisibility;
-
-            if (newValue.equals(getString(R.string.room_settings_read_history_entry_value_anyone))) {
-                historyVisibility = RoomState.HISTORY_VISIBILITY_WORLD_READABLE;
-            } else if (newValue.equals(getString(R.string.room_settings_read_history_entry_value_members_only_option_time_shared))) {
-                historyVisibility = RoomState.HISTORY_VISIBILITY_SHARED;
-            } else if (newValue.equals(getString(R.string.room_settings_read_history_entry_value_members_only_invited))) {
-                historyVisibility = RoomState.HISTORY_VISIBILITY_INVITED;
-            } else if (newValue.equals(getString(R.string.room_settings_read_history_entry_value_members_only_joined))) {
-                historyVisibility = RoomState.HISTORY_VISIBILITY_JOINED;
-            } else {
-                // unknown value
-                Log.w(LOG_TAG, "## onRoomHistoryReadabilityPreferenceChanged(): unknown value:" + newValue);
-                historyVisibility = null;
-            }
-
-            if (null != historyVisibility) {
-                displayLoadingView();
-                mRoom.updateHistoryVisibility(historyVisibility, mUpdateCallback);
-            }
+            displayLoadingView();
+            mRoom.updateHistoryVisibility(newValue, mUpdateCallback);
         }
     }
 

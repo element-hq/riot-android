@@ -67,6 +67,7 @@
             android:entries="@array/room_read_history_rules_entries"
             android:entryValues="@array/room_read_history_rules_values"
             android:key="roomReadHistoryRulesList"
+            android:summary="%s"
             android:title="@string/room_settings_room_read_history_rules_pref_title" />
     </im.vector.preference.VectorPreferenceCategory>
 
