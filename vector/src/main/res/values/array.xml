@@ -9,9 +9,9 @@
     </string-array>
 
     <string-array name="tag_values">
-        <item>@string/room_settings_tag_pref_entry_value_favourite</item>
-        <item>@string/room_settings_tag_pref_entry_value_low_priority</item>
-        <item>@string/room_settings_tag_pref_entry_value_none</item>
+        <item>"m.favourite"</item>
+        <item>"m.lowpriority"</item>
+        <item>"m.recent"</item>
     </string-array>
 
     <!-- access rules: Who can access this room? -->
@@ -21,7 +21,7 @@
         <item>@string/room_settings_room_access_entry_anyone_with_link_including_guest</item>
     </string-array>
 
-    <string-array name="room_access_rules_values" translatable="false">
+    <string-array name="room_access_rules_values">
         <item>1</item>
         <item>2</item>
         <item>3</item>

@@ -38,7 +38,6 @@ import android.preference.PreferenceManager;
 import android.preference.PreferenceScreen;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AlertDialog;
-import android.text.Html;
 import android.text.TextUtils;
 import android.view.Gravity;
 import android.view.LayoutInflater;
@@ -89,9 +88,9 @@ import im.vector.preference.RoomAvatarPreference;
 import im.vector.preference.VectorCustomActionEditTextPreference;
 import im.vector.preference.VectorListPreference;
 import im.vector.preference.VectorSwitchPreference;
+import im.vector.settings.VectorLocale;
 import im.vector.ui.themes.ThemeUtils;
 import im.vector.util.PermissionsToolsKt;
-import im.vector.settings.VectorLocale;
 import im.vector.util.SystemUtilsKt;
 import im.vector.util.VectorUtils;
 
@@ -840,11 +839,9 @@ public class VectorRoomSettingsFragment extends PreferenceFragment implements Sh
                 //Set<String> customTagList = mRoom.getAccountData().getKeys();
 
                 if (null != mRoom.getAccountData().roomTag(RoomTag.ROOM_TAG_FAVOURITE)) {
-                    value = resources.getString(R.string.room_settings_tag_pref_entry_value_favourite);
-                    summary = resources.getString(R.string.room_settings_tag_pref_entry_favourite);
+                    value = RoomTag.ROOM_TAG_FAVOURITE;
                 } else if (null != mRoom.getAccountData().roomTag(RoomTag.ROOM_TAG_LOW_PRIORITY)) {
-                    value = resources.getString(R.string.room_settings_tag_pref_entry_value_low_priority);
-                    summary = resources.getString(R.string.room_settings_tag_pref_entry_low_priority);
+                    value = RoomTag.ROOM_TAG_LOW_PRIORITY;
                 /* For further use in case of multiple tags support
                 } else if (!mRoom.getAccountData().getKeys().isEmpty()) {
                     for (String tag : customTagList){
@@ -852,12 +849,10 @@ public class VectorRoomSettingsFragment extends PreferenceFragment implements Sh
                     }*/
                 } else {
                     // no tag associated to the room
-                    value = resources.getString(R.string.room_settings_tag_pref_entry_value_none);
-                    summary = Html.fromHtml("<i>" + getString(R.string.room_settings_tag_pref_no_tag) + "</i>").toString();
+                    value = RoomTag.ROOM_TAG_NO_TAG;
                 }
 
                 mRoomTagListPreference.setValue(value);
-                mRoomTagListPreference.setSummary(summary);
             }
         }
 
@@ -976,7 +971,7 @@ public class VectorRoomSettingsFragment extends PreferenceFragment implements Sh
     }
 
     private void onRoomTagPreferenceChanged() {
-        boolean isSupportedTag = true;
+        boolean isSupportedTag = false;
 
         // sanity check
         if ((null == mRoom) || (null == mRoomTagListPreference)) {
@@ -993,15 +988,14 @@ public class VectorRoomSettingsFragment extends PreferenceFragment implements Sh
             }
 
             if (!newTag.equals(currentTag)) {
-                if (newTag.equals(getString(R.string.room_settings_tag_pref_entry_value_favourite))) {
-                    newTag = RoomTag.ROOM_TAG_FAVOURITE;
-                } else if (newTag.equals(getString(R.string.room_settings_tag_pref_entry_value_low_priority))) {
-                    newTag = RoomTag.ROOM_TAG_LOW_PRIORITY;
-                } else if (newTag.equals(getString(R.string.room_settings_tag_pref_entry_value_none))) {
+                if (newTag.equals(RoomTag.ROOM_TAG_FAVOURITE)
+                        || newTag.equals(RoomTag.ROOM_TAG_LOW_PRIORITY)) {
+                    isSupportedTag = true;
+                } else if (newTag.equals(RoomTag.ROOM_TAG_NO_TAG)) {
+                    isSupportedTag = true;
                     newTag = null;
                 } else {
                     // unknown tag.. very unlikely
-                    isSupportedTag = false;
                     Log.w(LOG_TAG, "## onRoomTagPreferenceChanged() not supported tag = " + newTag);
                 }
             }

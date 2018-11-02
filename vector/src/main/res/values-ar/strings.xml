@@ -836,9 +836,6 @@
     <string name="settings_delete_threepid_confirmation">أمتأكّد من إزالة ⁨%1$s⁩ ⁨%2$s⁩؟</string>
 
     <string name="settings_phone_number_error">رقم الهاتف غير صالح حسب الدولة المنتقاة</string>
-    <string name="room_settings_tag_pref_entry_value_favourite">مفضلة</string>
-    <string name="room_settings_tag_pref_entry_value_low_priority">منخفضة</string>
-    <string name="room_settings_tag_pref_entry_value_none">بلا</string>
 
     <string name="room_settings_room_access_warning">يجب أن يكون للغرفة عنوان للربط بها.</string>
     <string name="room_settings_never_send_to_unverified_devices_summary">لا ترسل من هذا الجهاز الرسائل المعمّاة في هذه الغرفة إلى الأجهزة غير المؤكّدة.</string>

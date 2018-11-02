@@ -543,9 +543,6 @@ Note que esta ação irá reiniciar o aplicativo e poderá tomar um certo tempo.
     <string name="room_settings_tag_pref_entry_low_priority">Baixa prioridade</string>
     <string name="room_settings_tag_pref_entry_none">Nenhum</string>
     <string name="room_settings_tag_pref_no_tag">não etiquetada</string>
-    <string name="room_settings_tag_pref_entry_value_favourite">favorita</string>
-    <string name="room_settings_tag_pref_entry_value_low_priority">não prioritária</string>
-    <string name="room_settings_tag_pref_entry_value_none">nenhum</string>
 
     <!-- room settings : access and visibility -->
     <string name="room_settings_category_access_visibility_title">Acesso e visibilidade</string>

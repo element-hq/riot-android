@@ -344,9 +344,6 @@
     <string name="room_settings_tag_pref_entry_low_priority">Lítill forgangur</string>
     <string name="room_settings_tag_pref_entry_none">Ekkert</string>
     <string name="room_settings_tag_pref_no_tag">ekki merkt</string>
-    <string name="room_settings_tag_pref_entry_value_favourite">eftirlæti</string>
-    <string name="room_settings_tag_pref_entry_value_low_priority">lítill</string>
-    <string name="room_settings_tag_pref_entry_value_none">enginn</string>
 
     <string name="room_settings_category_access_visibility_title">Aðgengi og sýnileiki</string>
     <string name="room_settings_room_notifications_title">Tilkynningar</string>

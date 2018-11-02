@@ -661,9 +661,6 @@
     <string name="room_settings_tag_pref_entry_low_priority">低優先度</string>
     <string name="room_settings_tag_pref_entry_none">無</string>
     <string name="room_settings_tag_pref_no_tag">沒有標籤</string>
-    <string name="room_settings_tag_pref_entry_value_favourite">我的最愛</string>
-    <string name="room_settings_tag_pref_entry_value_low_priority">低</string>
-    <string name="room_settings_tag_pref_entry_value_none">無</string>
 
     <string name="room_settings_category_access_visibility_title">訪問和可見度</string>
     <string name="room_settings_directory_visibility">將此聊天室列入聊天室目錄</string>

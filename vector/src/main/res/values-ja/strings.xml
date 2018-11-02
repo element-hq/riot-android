@@ -266,9 +266,6 @@
     <string name="room_settings_tag_pref_entry_low_priority">低優先度</string>
     <string name="room_settings_tag_pref_entry_none">なし</string>
     <string name="room_settings_tag_pref_no_tag">属性指定なし</string>
-    <string name="room_settings_tag_pref_entry_value_favourite">お気に入り</string>
-    <string name="room_settings_tag_pref_entry_value_low_priority">低</string>
-    <string name="room_settings_tag_pref_entry_value_none">なし</string>
 
     <string name="room_settings_category_access_visibility_title">参加と可視範囲</string>
     <string name="room_settings_directory_visibility">部屋一覧へ公開する</string>

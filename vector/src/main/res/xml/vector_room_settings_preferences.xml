@@ -23,6 +23,7 @@
         android:entries="@array/tag_entries"
         android:entryValues="@array/tag_values"
         android:key="roomTagList"
+        android:summary="%s"
         android:title="@string/room_settings_room_tag" />
 
     <!-- the notification rule selection -->

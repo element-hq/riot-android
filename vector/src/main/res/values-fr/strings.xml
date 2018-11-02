@@ -356,9 +356,6 @@ Cliquez sur exporter pour les sauvegarder avant de vous déconnecter.</string>
     <string name="room_settings_tag_pref_entry_low_priority">Priorité basse</string>
     <string name="room_settings_tag_pref_entry_none">Aucune</string>
     <string name="room_settings_tag_pref_no_tag">sans étiquette</string>
-    <string name="room_settings_tag_pref_entry_value_favourite">favori</string>
-    <string name="room_settings_tag_pref_entry_value_low_priority">basse</string>
-    <string name="room_settings_tag_pref_entry_value_none">aucune</string>
 
     <string name="room_settings_room_access_rules_pref_title">Accès au salon</string>
     <string name="room_settings_room_read_history_rules_pref_title">Accès à l\'historique du salon</string>
