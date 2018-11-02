@@ -60,6 +60,7 @@
             android:entries="@array/room_access_rules_entries"
             android:entryValues="@array/room_access_rules_values"
             android:key="roomAccessRulesList"
+            android:summary="%s"
             android:title="@string/room_settings_room_access_rules_pref_title" />
 
         <!-- room read history (Who can read history?) -->

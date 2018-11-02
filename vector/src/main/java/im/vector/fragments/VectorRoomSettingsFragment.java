@@ -24,7 +24,6 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.content.res.Resources;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
@@ -732,8 +731,6 @@ public class VectorRoomSettingsFragment extends PreferenceFragment implements Sh
      */
     private void updatePreferenceUiValues() {
         String value;
-        String summary;
-        Resources resources;
 
         if ((null == mSession) || (null == mRoom)) {
             Log.w(LOG_TAG, "## updatePreferenceUiValues(): session or room may be missing");
@@ -765,53 +762,37 @@ public class VectorRoomSettingsFragment extends PreferenceFragment implements Sh
 //                mRoomDirectoryVisibilitySwitch.setChecked(isRoomPublic);
 //        }
 
-        // check if fragment is added to its Activity before calling getResources().
-        // getResources() may throw an exception ".. not attached to Activity"
+        // check if fragment is added to its Activity
         if (!isAdded()) {
             Log.e(LOG_TAG, "## updatePreferenceUiValues(): fragment not added to Activity - isAdded()=false");
             return;
-        } else {
-            // in some weird cases, even if isAdded() = true, sometimes getResources() may fail,
-            // so we need to catch the exception
-            try {
-                resources = getResources();
-            } catch (Exception ex) {
-                Log.e(LOG_TAG, "## updatePreferenceUiValues(): Exception in getResources() - Msg=" + ex.getLocalizedMessage(), ex);
-                return;
-            }
         }
 
         // room guest access rules
-        if ((null != mRoomAccessRulesListPreference) && (null != resources)) {
+        if ((null != mRoomAccessRulesListPreference)) {
             String joinRule = mRoom.getState().join_rule;
             String guestAccessRule = mRoom.getState().getGuestAccess();
 
             if (RoomState.JOIN_RULE_INVITE.equals(joinRule)/* && RoomState.GUEST_ACCESS_CAN_JOIN.equals(guestAccessRule)*/) {
                 // "Only people who have been invited" requires: {join_rule: "invite"} and {guest_access: "can_join"}
                 value = ACCESS_RULES_ONLY_PEOPLE_INVITED;
-                summary = resources.getString(R.string.room_settings_room_access_entry_only_invited);
             } else if (RoomState.JOIN_RULE_PUBLIC.equals(joinRule) && RoomState.GUEST_ACCESS_FORBIDDEN.equals(guestAccessRule)) {
                 // "Anyone who knows the room's link, apart from guests" requires: {join_rule: "public"} and {guest_access: "forbidden"}
                 value = ACCESS_RULES_ANYONE_WITH_LINK_APART_GUEST;
-                summary = resources.getString(R.string.room_settings_room_access_entry_anyone_with_link_apart_guest);
             } else if (RoomState.JOIN_RULE_PUBLIC.equals(joinRule) && RoomState.GUEST_ACCESS_CAN_JOIN.equals(guestAccessRule)) {
                 // "Anyone who knows the room's link, including guests" requires: {join_rule: "public"} and {guest_access: "can_join"}
                 value = ACCESS_RULES_ANYONE_WITH_LINK_INCLUDING_GUEST;
-                summary = resources.getString(R.string.room_settings_room_access_entry_anyone_with_link_including_guest);
             } else {
                 // unknown combination value
                 value = null;
-                summary = null;
                 Log.w(LOG_TAG, "## updatePreferenceUiValues(): unknown room access configuration joinRule=" + joinRule +
                         " and guestAccessRule=" + guestAccessRule);
             }
 
             if (null != value) {
                 mRoomAccessRulesListPreference.setValue(value);
-                mRoomAccessRulesListPreference.setSummary(summary);
             } else {
                 mRoomAccessRulesListPreference.setValue(UNKNOWN_VALUE);
-                mRoomAccessRulesListPreference.setSummary("");
             }
         }
 
@@ -834,7 +815,7 @@ public class VectorRoomSettingsFragment extends PreferenceFragment implements Sh
         // update the room tag preference
         if (null != mRoomTagListPreference) {
 
-            if (null != mRoom.getAccountData() && (null != resources)) {
+            if (null != mRoom.getAccountData()) {
                 //Set<String> customTagList = mRoom.getAccountData().getKeys();
 
                 if (null != mRoom.getAccountData().roomTag(RoomTag.ROOM_TAG_FAVOURITE)) {
