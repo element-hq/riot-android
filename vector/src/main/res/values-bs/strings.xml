@@ -489,7 +489,6 @@ Da li ste sigurani?</string>
     <string name="devices_details_device_name">Ime uređaja</string>
     <string name="devices_details_last_seen_title">Posljednji put viđeno</string>
     <string name="devices_details_last_seen_format">%1$s @ %2$s</string>
-    <string name="devices_details_time_format">SS:mm:ss</string>
     <string name="devices_delete_dialog_text">Ova operacija zahtijeva dodatnu provjeru autentičnosti.
 Da biste nastavili, unesite lozinku.</string>
     <string name="devices_delete_dialog_title">Ovjera</string>

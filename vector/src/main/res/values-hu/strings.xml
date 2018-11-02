@@ -463,7 +463,6 @@ Vedd figyelembe, hogy az alkalmazás újraindul  ami sok időt vehet igénybe."<
     <string name="devices_details_device_name">Készüléknév</string>
     <string name="devices_details_last_seen_title">Legutóbb láttuk</string>
     <string name="devices_details_last_seen_format">%1$s @ %2$s</string>
-    <string name="devices_details_time_format">HH:mm:ss</string>
     <string name="devices_delete_dialog_text">Ez a művelethez újra azonosításra van szükség.
 A folytatáshoz írd be a jelszavad.</string>
     <string name="devices_delete_dialog_title">Azonosítás</string>

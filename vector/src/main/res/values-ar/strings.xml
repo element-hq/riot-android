@@ -513,7 +513,6 @@
 	<item quantity="many">%d غرفة</item>
 	<item quantity="other">%d غرفة</item>
 </plurals>
-    <string name="devices_details_time_format">HH:mm:ss</string>
     <string name="action_historical">الأرشيف</string>
     <string name="bottom_action_groups">المجتمعات</string>
 

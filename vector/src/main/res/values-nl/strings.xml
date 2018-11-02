@@ -486,7 +486,6 @@ Let op: deze actie zal de app opnieuw opstarten, en kan enige tijd kosten.</stri
 
     <string name="devices_details_last_seen_title">Laatst gezien</string>
     <string name="devices_details_last_seen_format">%1$s @ %2$s</string>
-    <string name="devices_details_time_format">HH:mm:ss</string>
     <string name="devices_delete_dialog_text">Deze actie vereist additionele authenticatie.\nVoer je wachtwoord in om verder te gaan.</string>
     <string name="devices_delete_dialog_title">Authenticatie</string>
     <string name="devices_delete_pswd">Wachtwoord:</string>

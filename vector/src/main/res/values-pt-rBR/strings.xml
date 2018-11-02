@@ -486,7 +486,6 @@ Note que esta ação irá reiniciar o aplicativo e poderá tomar um certo tempo.
     <string name="devices_details_device_name">Nome do dispositivo</string>
     <string name="devices_details_last_seen_title">Último acesso</string>
     <string name="devices_details_last_seen_format">%1$s em %2$s</string>
-    <string name="devices_details_time_format">HH:mm:ss</string>
     <string name="devices_delete_dialog_text">Esta operação exige autenticação adicional.\nPara continuar, digite sua senha.</string>
     <string name="devices_delete_dialog_title">Autenticação</string>
     <string name="devices_delete_pswd">Senha:</string>

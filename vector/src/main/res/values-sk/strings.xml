@@ -490,7 +490,6 @@ Pozor! Vykonaním tejto akcie reštartujete aplikáciu a opätovné načítanie 
     <string name="devices_details_device_name">Názov zariadenia</string>
     <string name="devices_details_last_seen_title">Naposledy videné</string>
     <string name="devices_details_last_seen_format">%1$s @ %2$s</string>
-    <string name="devices_details_time_format">HH:mm:ss</string>
     <string name="devices_delete_dialog_text">Táto operácia si vyžaduje dodatočné overenie.
 Ak chcete pokračovať, prosím zadajte vaše heslo.</string>
     <string name="devices_delete_dialog_title">Overenie</string>

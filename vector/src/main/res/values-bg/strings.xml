@@ -474,7 +474,6 @@
     <string name="devices_details_device_name">Име на устройството</string>
     <string name="devices_details_last_seen_title">Последно видян</string>
     <string name="devices_details_last_seen_format">%1$s @ %2$s</string>
-    <string name="devices_details_time_format">HH:mm:ss</string>
     <string name="devices_delete_dialog_text">Тази операция изискра допълнителна автентикация.
 За да продължите, моля, въведете Вашата парола.</string>
     <string name="devices_delete_dialog_title">Автентикация</string>

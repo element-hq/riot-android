@@ -526,7 +526,6 @@
     <string name="devices_details_device_name">Nom del dispositiu</string>
     <string name="devices_details_last_seen_title">Últim cop vist</string>
     <string name="devices_details_last_seen_format">%1$s @ %2$s</string>
-    <string name="devices_details_time_format">HH:mm:ss</string>
     <string name="devices_delete_dialog_text">Aquesta operació necessita que us autentiqueu.\nPer tal de continuar, introduïu la vostra contrasenya.</string>
     <string name="devices_delete_dialog_title">Autenticació</string>
     <string name="devices_delete_pswd">Contrasenya:</string>

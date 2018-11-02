@@ -492,7 +492,6 @@ Beachte: Diese Aktion wird die App neu starten und einige Zeit brauchen.</string
     <string name="devices_details_device_name">Gerätename</string>
     <string name="devices_details_last_seen_title">Zuletzt gesehen</string>
     <string name="devices_details_last_seen_format">%1$s @ %2$s</string>
-    <string name="devices_details_time_format">HH:mm:ss</string>
     <string name="devices_delete_dialog_text">Diese Operation benötigt weitere Authentifizierung.
 Um fortzufahren, gib dein Passwort ein.</string>
     <string name="devices_delete_dialog_title">Authentifizierung</string>

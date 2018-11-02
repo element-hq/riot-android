@@ -606,7 +606,6 @@ Merk at denne handlinga vil starta æppen på nytt og kan taka litt tid.</string
     <string name="devices_details_device_name">Einingsnamn</string>
     <string name="devices_details_last_seen_title">Sist sedd</string>
     <string name="devices_details_last_seen_format">%1$s @ %2$s</string>
-    <string name="devices_details_time_format">TT:mm:ss</string>
     <string name="devices_delete_dialog_text">Denne handlinga krev vidare sjølvstadfesting.
 For å gå fram, ver venleg og skriv passordet ditt inn.</string>
     <string name="devices_delete_dialog_title">Stadfesting</string>

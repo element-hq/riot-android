@@ -578,7 +578,6 @@
     <string name="devices_details_name_title">名称</string>
     <string name="devices_details_last_seen_title">最近一次上线</string>
     <string name="devices_details_last_seen_format">%1$s @ %2$s</string>
-    <string name="devices_details_time_format">HH:mm:ss</string>
     <string name="settings_home_server">主服务器</string>
     <string name="settings_identity_server">身份服务器</string>
     <string name="account_email_validation_title">验证待定中</string>

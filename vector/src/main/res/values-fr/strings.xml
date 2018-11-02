@@ -574,7 +574,6 @@ Veuillez noter que cette action redémarrera l\'application et pourra prendre un
     <string name="settings_invited_to_room">Quand je suis invité sur un salon</string>
     <string name="settings_user_settings">Paramètres utilisateur</string>
     <string name="devices_details_last_seen_format">%1$s @ %2$s</string>
-    <string name="devices_details_time_format">HH:mm:ss</string>
     <string name="devices_delete_dialog_text">Cette opération nécessite de s\'authentifier à nouveau.
 Pour continuer, veuillez saisir votre mot de passe.</string>
     <string name="account_email_validation_message">Vérifiez votre e-mail et cliquez sur le lien qu\'il contient. Une fois cela fait, cliquez sur continuer.</string>

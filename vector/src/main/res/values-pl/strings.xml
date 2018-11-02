@@ -404,7 +404,6 @@ Zauważ, że ta czynność spowoduje ponowne uruchomienie aplikacji i może to t
     <string name="devices_details_device_name">Nazwa urządzenia</string>
     <string name="devices_details_last_seen_title">Ostatnio widziany</string>
     <string name="devices_details_last_seen_format">%1$s @ %2$s</string>
-    <string name="devices_details_time_format">HH:mm:ss</string>
     <string name="devices_delete_dialog_text">To działanie wymaga dodatkowego uwierzytelnienia.
 Wprowadź hasło, aby kontynuować.</string>
     <string name="devices_delete_dialog_title">Uwierzytelnianie</string>

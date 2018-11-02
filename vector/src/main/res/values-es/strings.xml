@@ -506,7 +506,6 @@ Ten en cuenta que esta acción reiniciará la aplicación y puede tardar algo de
     <string name="devices_details_device_name">Nombre de Dispositivo</string>
     <string name="devices_details_last_seen_title">Visto por última vez</string>
     <string name="devices_details_last_seen_format">%1$s @ %2$s</string>
-    <string name="devices_details_time_format">HH:mm:ss</string>
     <string name="devices_delete_dialog_text">Esta operación requiere autenticación adicional.
 Para continuar, ingresa tu contraseña por favor.</string>
     <string name="devices_delete_dialog_title">Autenticación</string>

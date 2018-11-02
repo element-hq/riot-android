@@ -228,7 +228,6 @@
     <string name="devices_details_device_name">端末名</string>
     <string name="devices_details_last_seen_title">最終接続日</string>
     <string name="devices_details_last_seen_format">%1$s @ %2$s</string>
-    <string name="devices_details_time_format">HH:mm:ss</string>
     <string name="devices_delete_dialog_title">認証</string>
     <string name="devices_delete_dialog_text">この操作を行うには追加の認証が必要です.
 続けるにはあなたのパスワードを入力して下さい.</string>

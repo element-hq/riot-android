@@ -508,7 +508,6 @@
     <string name="devices_details_device_name">Назва Пристрою</string>
     <string name="devices_details_last_seen_title">Востаннє онлайн</string>
     <string name="devices_details_last_seen_format">%1$s @ %2$s</string>
-    <string name="devices_details_time_format">HH:mm:ss</string>
     <string name="devices_delete_dialog_text">Операція потребує додаткової аутентифікації.\nДля продовження введіть ваш пароль.</string>
     <string name="devices_delete_dialog_title">Аутентифікація</string>
     <string name="devices_delete_pswd">Пароль:</string>

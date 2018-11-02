@@ -496,7 +496,6 @@ Email также позволит вам при необходимости во�
     <string name="devices_details_device_name">Имя устройства</string>
     <string name="devices_details_last_seen_title">Последнее подключение</string>
     <string name="devices_details_last_seen_format">%1$s @ %2$s</string>
-    <string name="devices_details_time_format">HH:mm:ss</string>
     <string name="devices_delete_dialog_text">Для этой операции требуется дополнительная проверка подлинности.
 Чтобы продолжить, введите пароль.</string>
     <string name="devices_delete_dialog_title">Аутентификация</string>

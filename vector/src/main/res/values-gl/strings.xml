@@ -326,7 +326,6 @@ Pode engadir a dirección de correo na sección de configuración de perfil.</st
     <string name="devices_details_device_name">Nome do dispositivo</string>
     <string name="devices_details_last_seen_title">Visto por última vez</string>
     <string name="devices_details_last_seen_format">%1$s @ %2$s</string>
-    <string name="devices_details_time_format">HH:mm:ss</string>
     <string name="devices_delete_dialog_title">Autenticación</string>
     <string name="devices_delete_pswd">Contrasinal:</string>
     <string name="devices_delete_submit_button_label">Enviar</string>

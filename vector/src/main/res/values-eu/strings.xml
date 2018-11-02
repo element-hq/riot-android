@@ -469,7 +469,6 @@ Kontuan izan ekintza honek aplikazioa berrabiaraziko duela eta denbora bat behar
     <string name="devices_details_device_name">Gailuaren izena</string>
     <string name="devices_details_last_seen_title">Azkenekoz ikusia</string>
     <string name="devices_details_last_seen_format">%1$s @ %2$s</string>
-    <string name="devices_details_time_format">HH:mm:ss</string>
     <string name="devices_delete_dialog_text">Eragiketa honek autentifikazio gehigarria behar du.
 Jarraitzeko, idatzi zure pasahitza.</string>
     <string name="devices_delete_dialog_title">Autentifikazioa</string>

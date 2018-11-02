@@ -517,7 +517,6 @@ Tieni presente che questa azione riavvierà l\'app e potrebbe richiedere del tem
     <string name="devices_details_device_name">Nome dispositivo</string>
     <string name="devices_details_last_seen_title">Ultima visualizzazione</string>
     <string name="devices_details_last_seen_format">%1$s @ %2$s</string>
-    <string name="devices_details_time_format">HH:mm:ss</string>
     <string name="devices_delete_dialog_text">Questa operazione richiede un\'autenticazione aggiuntiva.\nPer proseguire, inserisci la tua password.</string>
     <string name="devices_delete_dialog_title">Autenticazione</string>
     <string name="devices_delete_pswd">Password:</string>

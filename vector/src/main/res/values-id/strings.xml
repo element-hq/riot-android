@@ -927,7 +927,6 @@ Peringatan: berkas ini mungkin ikut terhapus jika aplikasi dihapus.</string>
     <string name="devices_details_device_name">Nama Perangkat</string>
     <string name="devices_details_last_seen_title">Terakhir terlihat</string>
     <string name="devices_details_last_seen_format">%1$s @ %2$s</string>
-    <string name="devices_details_time_format">JJ:mm:dd</string>
     <string name="devices_delete_dialog_text">Operasi ini membutuhkan otentikasi tambahan.
 Untuk melanjutkan, masukkan kata sandi Anda.</string>
     <string name="devices_delete_dialog_title">Otentikasi</string>
