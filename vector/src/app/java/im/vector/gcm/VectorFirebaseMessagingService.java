@@ -38,10 +38,10 @@ import im.vector.activity.CommonActivityUtils;
 import im.vector.services.EventStreamService;
 
 /**
- * Class implementing GcmListenerService.
+ * Class extending FirebaseMessagingService.
  */
-public class MatrixGcmListenerService extends FirebaseMessagingService {
-    private static final String LOG_TAG = MatrixGcmListenerService.class.getSimpleName();
+public class VectorFirebaseMessagingService extends FirebaseMessagingService {
+    private static final String LOG_TAG = VectorFirebaseMessagingService.class.getSimpleName();
 
     // Tells if the events service running state has been tested
     private Boolean mCheckLaunched = false;
@@ -50,9 +50,9 @@ public class MatrixGcmListenerService extends FirebaseMessagingService {
     private android.os.Handler mUIHandler = null;
 
     /**
-     * Try to create an event from the GCM data
+     * Try to create an event from the FCM data
      *
-     * @param data the GCM data
+     * @param data the FCM data
      * @return the event
      */
     @Nullable
