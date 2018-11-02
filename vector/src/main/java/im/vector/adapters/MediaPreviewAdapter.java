@@ -49,7 +49,7 @@ public class MediaPreviewAdapter extends RecyclerView.Adapter<MediaPreviewAdapte
     @NonNull
     @Override
     public MediaItemViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        final View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.media_preview, parent, false);
+        final View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.adapter_item_media_preview, parent, false);
         return new MediaItemViewHolder(view);
     }
 

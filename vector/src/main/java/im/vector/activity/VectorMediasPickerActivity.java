@@ -237,7 +237,7 @@ public class VectorMediasPickerActivity extends MXCActionBarActivity implements 
 
     @Override
     public int getLayoutRes() {
-        return R.layout.activity_vector_medias_picker;
+        return R.layout.activity_vector_media_picker;
     }
 
     @Override
