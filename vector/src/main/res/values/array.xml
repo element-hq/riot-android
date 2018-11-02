@@ -58,4 +58,32 @@
         <item>"4"</item>
     </string-array>
 
+    <!-- Theme -->
+    <string-array name="theme_entries">
+        <item>@string/light_theme</item>
+        <item>@string/dark_theme</item>
+        <item>@string/black_them</item>
+        <item>@string/status_theme</item>
+    </string-array>
+
+    <string-array name="theme_values">
+        <item>light</item>
+        <item>dark</item>
+        <item>black</item>
+        <item>status</item>
+    </string-array>
+
+    <!-- Info area -->
+    <string-array name="show_info_area_entries">
+        <item>@string/show_info_area_always</item>
+        <item>@string/show_info_area_messages_and_errors</item>
+        <item>@string/show_info_area_only_errors</item>
+    </string-array>
+
+    <string-array name="show_info_area_values">
+        <item>always</item>
+        <item>messages_and_errors</item>
+        <item>only_errors</item>
+    </string-array>
+
 </resources>

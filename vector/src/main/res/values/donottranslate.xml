@@ -20,35 +20,9 @@
         <item>matrix.org</item>
     </string-array>
 
-    <string-array name="theme_codes">
-        <item>light</item>
-        <item>dark</item>
-        <item>black</item>
-        <item>status</item>
-    </string-array>
-
-    <string-array name="theme_description">
-        <item>@string/light_theme</item>
-        <item>@string/dark_theme</item>
-        <item>@string/black_them</item>
-        <item>@string/status_theme</item>
-    </string-array>
-
     <string name="plus_sign" translatable="false">+</string>
     <string name="semicolon_sign" translatable="false">:</string>
 
     <string name="password_hint" translatable="false">********</string>
-
-    <string-array name="show_info_area_codes">
-        <item>always</item>
-        <item>messages_and_errors</item>
-        <item>only_errors</item>
-    </string-array>
-
-    <string-array name="show_info_area_values">
-        <item>@string/show_info_area_always</item>
-        <item>@string/show_info_area_messages_and_errors</item>
-        <item>@string/show_info_area_only_errors</item>
-    </string-array>
 
 </resources>

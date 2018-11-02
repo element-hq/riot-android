@@ -54,8 +54,8 @@
             android:title="@string/settings_interface_language" />
 
         <ListPreference
-            android:entries="@array/theme_description"
-            android:entryValues="@array/theme_codes"
+            android:entries="@array/theme_entries"
+            android:entryValues="@array/theme_values"
             android:key="APPLICATION_THEME_KEY"
             android:summary="%s"
             android:title="@string/settings_theme" />
@@ -107,8 +107,8 @@
             android:title="@string/settings_preview_media_before_sending" />
 
         <ListPreference
-            android:entries="@array/show_info_area_values"
-            android:entryValues="@array/show_info_area_codes"
+            android:entries="@array/show_info_area_entries"
+            android:entryValues="@array/show_info_area_values"
             android:defaultValue="always"
             android:key="SETTINGS_SHOW_INFO_AREA_KEY"
             android:summary="%s"
