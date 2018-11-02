@@ -43,11 +43,19 @@
         <item>"joined"</item>
     </string-array>
 
-    <string-array name="notification_values">
+    <!-- Room settings notification -->
+    <string-array name="notification_entries">
         <item>@string/room_settings_all_messages_noisy</item>
         <item>@string/room_settings_all_messages</item>
         <item>@string/room_settings_mention_only</item>
         <item>@string/room_settings_mute</item>
+    </string-array>
+
+    <string-array name="notification_values">
+        <item>"1"</item>
+        <item>"2"</item>
+        <item>"3"</item>
+        <item>"4"</item>
     </string-array>
 
 </resources>

@@ -28,9 +28,10 @@
 
     <!-- the notification rule selection -->
     <ListPreference
-        android:entries="@array/notification_values"
+        android:entries="@array/notification_entries"
         android:entryValues="@array/notification_values"
         android:key="roomNotificationPreference"
+        android:summary="%s"
         android:title="@string/room_settings_room_notifications_title" />
 
     <im.vector.preference.VectorCustomActionEditTextPreference

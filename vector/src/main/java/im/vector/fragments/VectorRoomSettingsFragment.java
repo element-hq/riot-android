@@ -819,17 +819,16 @@ public class VectorRoomSettingsFragment extends PreferenceFragment implements Sh
             BingRulesManager.RoomNotificationState state = mSession.getDataHandler().getBingRulesManager().getRoomNotificationState(mRoom.getRoomId());
 
             if (state == BingRulesManager.RoomNotificationState.ALL_MESSAGES_NOISY) {
-                value = getString(R.string.room_settings_all_messages_noisy);
+                value = "1";
             } else if (state == BingRulesManager.RoomNotificationState.ALL_MESSAGES) {
-                value = getString(R.string.room_settings_all_messages);
+                value = "2";
             } else if (state == BingRulesManager.RoomNotificationState.MENTIONS_ONLY) {
-                value = getString(R.string.room_settings_mention_only);
+                value = "3";
             } else {
-                value = getString(R.string.room_settings_mute);
+                value = "4";
             }
 
             mRoomNotificationsPreference.setValue(value);
-            mRoomNotificationsPreference.setSummary(value);
         }
 
         // update the room tag preference
@@ -1047,11 +1046,11 @@ public class VectorRoomSettingsFragment extends PreferenceFragment implements Sh
         String value = mRoomNotificationsPreference.getValue();
         BingRulesManager.RoomNotificationState updatedState;
 
-        if (TextUtils.equals(value, getString(R.string.room_settings_all_messages_noisy))) {
+        if (TextUtils.equals(value, "1")) {
             updatedState = BingRulesManager.RoomNotificationState.ALL_MESSAGES_NOISY;
-        } else if (TextUtils.equals(value, getString(R.string.room_settings_all_messages))) {
+        } else if (TextUtils.equals(value, "2")) {
             updatedState = BingRulesManager.RoomNotificationState.ALL_MESSAGES;
-        } else if (TextUtils.equals(value, getString(R.string.room_settings_mention_only))) {
+        } else if (TextUtils.equals(value, "3")) {
             updatedState = BingRulesManager.RoomNotificationState.MENTIONS_ONLY;
         } else {
             updatedState = BingRulesManager.RoomNotificationState.MUTE;
