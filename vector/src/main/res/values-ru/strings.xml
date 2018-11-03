@@ -1034,7 +1034,7 @@ Email также позволит вам при необходимости во�
 
     <string name="settings_without_flair">В настоящее время вы не являетесь участником каких-либо сообществ.</string>
 
-    <string name="settings_labs_keyboard_options_to_send_message">Используйте клавиатуру для ввода сообщения</string>
+    <string name="settings_labs_keyboard_options_to_send_message">Использовать клавишу Enter для отправки сообщения</string>
     <string name="command_description_emote">Отображает действие</string>
     <string name="command_description_ban_user">Банит пользователя с указанным ID</string>
     <string name="command_description_unban_user">Разбанит пользователя с указанным ID</string>
