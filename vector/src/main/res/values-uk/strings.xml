@@ -43,11 +43,11 @@
     <string name="rename">Перейменувати</string>
     <string name="report_content">Вміст звіту</string>
     <string name="active_call">Активний виклик</string>
-    <string name="ongoing_conference_call"> Вхідний конференц дзвінок. Приєднайтесь голосом чи відео.</string>
+    <string name="ongoing_conference_call">Вхідний конференц дзвінок. Приєднатись голосом чи відео.</string>
     <string name="ongoing_conference_call_voice">голос</string>
     <string name="ongoing_conference_call_video">відео</string>
     <string name="cannot_start_call">Не вдалося здійснити виклик, спробуйте пізніше</string>
-    <string name="missing_permissions_warning">"Деякі функції можуть бути недоступними через відсутність дозволів..</string>
+    <string name="missing_permissions_warning">Деякі функції можуть бути недоступними через відсутність дозволів…</string>
     <string name="missing_permissions_to_start_conf_call">Щоб почати конференцію у цій кімнаті, потрібен дозвіл на запрошення</string>
     <string name="missing_permissions_title_to_start_conf_call">Не вдалося здійснити виклик</string>
     <string name="device_information">Інформація про пристрій</string>
@@ -117,7 +117,7 @@
     <string name="send_bug_report">Звіт про помилку</string>
     <string name="send_bug_report_description">Буль ласка, опишіть помилку. Що ви робили? Якої поведінки чекали? Що сталося натомість?</string>
     <string name="send_bug_report_placeholder">Опишіть свою проблему</string>
-    <string name="send_bug_report_logs_description">Для діагностики проблеми, журнали з цього клієнту будуть приєднані до звіту про помилку. Якщо ви не хочете надсилати журнали, зніміть позначку:</string>
+    <string name="send_bug_report_logs_description">Для діагностики проблеми, журнали з цього клієнту будуть приєднані до звіту про помилку. Цей звіт, включаючи журнали та скріншот, не буде доступний публічно. Якщо ви не хочете надсилати журнали, зніміть позначку:</string>
     <string name="send_bug_report_alert_message">Здається, ви трясете телефон від фрустрації. Бажаєте надіслати звіт про помилку?</string>
     <string name="send_bug_report_app_crashed">При останньому запуску застосунок закрився з помилкою. Бажаєте надіслати звіт про помилку?</string>
 
@@ -276,7 +276,7 @@
 
     <!-- medias slider string -->
     <string name="media_slider_saved">Збережено</string>
-    <string name="media_slider_saved_message">Зберегти в завантажннях</string>
+    <string name="media_slider_saved_message">Зберегти в завантаженнях?</string>
     <string name="yes">ТАК</string>
     <string name="no">НІ</string>
     <string name="_continue">Продовжити</string>
@@ -375,7 +375,7 @@
     <string name="ssl_cert_new_account_expl">Якщо адміністратор сервера сказав цього чекати, переконайтесь, що відбиток нижче збігається з відбитком, наданим ним.</string>
     <string name="ssl_unexpected_existing_expl">Сертифікат почав відрізнятися від того, якому довіряв ваш телефон. Це ДУЖЕ НЕЗВИЧАЙНО. Наполегливо радимо НЕ ПРИЙМАТИ цей новий сертифікат.</string>
     <string name="ssl_expected_existing_expl">Сертифікат змінився з довіреного на недовірений. Сервер міг оновити свій сертифікат. Зв\'яжіться з адміністратором сервера, щоб отримати дійсний відбиток.</string>
-    <string name="ssl_only_accept">Приймайте сертифікат ЛИШЕ у випадку збігу відбитку вище з відбитком, оприлюдненим адміністратором сервера.</string>
+    <string name="ssl_only_accept">Приймайте сертифікат лише у випадку збігу відбитку вище з відбитком, оприлюдненим адміністратором сервера.</string>
 
     <!-- Room Details -->
     <string name="room_details_title">Деталі про кімнату</string>
@@ -388,7 +388,9 @@
 
     <!-- Room events -->
     <string name="room_event_action_report_prompt_reason">Причина скарги на цей вміст</string>
-    <string name="room_event_action_report_prompt_ignore_user">Бажаєте сховати всі повідомлення цього користувача?</string>
+    <string name="room_event_action_report_prompt_ignore_user">Бажаєте сховати всі повідомлення цього користувача?
+
+Зауважте, що це перезавантажить додаток та може зайняти деякий час.</string>
     <string name="room_event_action_cancel_upload">Скасувати відвантаження</string>
     <string name="room_event_action_cancel_download">Скасувати завантаження</string>
 
@@ -502,7 +504,7 @@
     <string name="settings_opt_out_of_analytics">Вимкнути телеметрію</string>
     <string name="settings_opt_out_of_analytics_summary">Riot збирає анонімну статистику задля покращення застосунку.</string>
 
-    <string name="settings_disable_markdown">Вимкнути розмітку Markdown</string>
+    <string name="settings_disable_markdown">Вимкнути розмітку Markdown при відправленні</string>
     <string name="settings_data_save_mode">Режим економії трафіку</string>
 
     <string name="devices_details_dialog_title">Про пристрій</string>
@@ -533,12 +535,14 @@
     <string name="account_phone_number_already_used_error">Цей номер вже використовується</string>
 
     <string name="settings_change_password">Змінити пароль</string>
-    <string name="settings_old_password">старий пароль</string>
-    <string name="settings_new_password">новий пароль</string>
-    <string name="settings_confirm_password">підтвердіть пароль</string>
+    <string name="settings_old_password">Старий пароль</string>
+    <string name="settings_new_password">Новий пароль</string>
+    <string name="settings_confirm_password">Підтвердіть пароль</string>
     <string name="settings_fail_to_update_password">Не вдалося оновити пароль</string>
     <string name="settings_password_updated">Пароль успішно оновлено</string>
-    <string name="settings_unignore_user">Показувати всі повідомлення %s?</string>
+    <string name="settings_unignore_user">Показувати всі повідомлення %s?
+
+Зауважте, що це перезавантажить додаток та може зайняти деякий час.</string>
 
     <string name="settings_delete_notification_targets_confirmation">Ви справді бажаєте видалити цю ціль сповіщень?</string>
 
@@ -621,7 +625,7 @@
 
     <string name="room_settings_addresses_invalid_format_dialog_title">Недійсний формат псевдоніму</string>
     <string name="room_settings_addresses_invalid_format_dialog_body">\'%s\' не є дійсним форматом псевдоніму</string>
-    <string name="room_settings_addresses_disable_main_address_prompt_msg">Основну адресу не вказано. Адреса за замовчуванням буде обрана випадково"</string>
+    <string name="room_settings_addresses_disable_main_address_prompt_msg">Основну адресу для цієї кімнати не вказано.</string>
     <string name="room_settings_addresses_disable_main_address_prompt_title">Попередження про адресу</string>
 
     <string name="room_settings_set_main_address">Встановити як Основну Адресу</string>
@@ -666,7 +670,9 @@
     <string name="encryption_export_export">Експорт</string>
     <string name="encryption_import_enter_passphrase">Введіть парольну фразу</string>
     <string name="encryption_export_confirm_passphrase">Підтвердіть парольну фразу</string>
-    <string name="encryption_export_saved_as">E2E ключі кімнати збережено у \'%s\'</string>
+    <string name="encryption_export_saved_as">E2E ключі кімнати збережено у \'%s\'
+
+Попередження: цей файл може бути видалений, якщо видалити додаток.</string>
 
     <string name="encryption_import_e2e_room_keys">Імпортувати E2E ключі кімнати</string>
     <string name="encryption_import_room_keys">Імпортувати ключі кімнати</string>
@@ -688,8 +694,10 @@
     <string name="encryption_information_unblock">Дозволити</string>
 
     <string name="encryption_information_verify_device">Перевірити пристрій</string>
-    <string name="encryption_information_verify_device_warning"> Для перевірки пристрою будь ласка, зв\'яжіться з його власником у інший спосіб (e.g. особисто чи телефоном) та запитайте, чи співпадає ключ, бачений ними у налаштуваннях користувача з наведеним нижче:</string>
-    <string name="encryption_information_verify_device_warning2">Якщо вони співпадуть, натисніть кнопку Підтвердити нижче. Якщо ж ні, хтось прослуховує цей пристрій, і ви імовірно захочете його блокувати.</string>
+    <string name="encryption_information_verify_device_warning">Для перевірки пристрою, будь ласка, зв’яжіться з його власником у інший спосіб (наприклад, особисто чи телефоном) та запитайте, чи збігається ключ, який він бачить у налаштуваннях користувача, з наведеним нижче:</string>
+    <string name="encryption_information_verify_device_warning2">Якщо вони збігаються, натисніть кнопку Підтвердити нижче.
+Якщо ні, хтось втрутився в цей пристрій, і Вам імовірно слід його заблокувати.
+У майбутньому цей процес верифікації стане більш складним.</string>
     <string name="encryption_information_verify_key_match">Я підтверджую, що ключі співпадають</string>
 
     <string name="e2e_enabling_on_app_update">Тепер Riot підтримує наскрізне шифрування, але вам треба залогуватися знову, щоб його увімкнути.\n\nМожете зробити це зараз або пізніше у налаштуваннях застосунку.</string>
@@ -751,11 +759,11 @@
 
     <!-- conference call -->
     <string name="conference_call_warning_title">Увага!</string>
-    <string name="notification_off">Викл</string>
-    <string name="notification_on">Вкл</string>
+    <string name="notification_off">Вимкнено</string>
+    <string name="notification_on">Увімкнено</string>
     <string name="notification_noisy">Гучно</string>
 
-    <string name="encrypted_message">Закодоване повідомлення</string>
+    <string name="encrypted_message">Зашифроване повідомлення</string>
 
     <string name="settings_labs_native_camera">Використовувати рідну камеру</string>
 
@@ -784,7 +792,7 @@
     <string name="groups_header">Спільноти</string>
     <string name="no_group_placeholder">Нема груп</string>
 
-    <string name="send_bug_report_rage_shake">"Струсити  пристрій, щоб повідомити про помилку"</string>
+    <string name="send_bug_report_rage_shake">"Струснути  пристрій, щоб повідомити про помилку"</string>
 
     <string name="start_new_chat_prompt_msg">Ви дійсно хочете почати новий чат з %s?</string>
     <string name="start_voice_call_prompt_msg">Ви впевнені, що бажаєте почати голосовий виклик?</string>
@@ -842,8 +850,8 @@
     <string name="settings_notification_privacy_power_saving">"Варіанти  енергозабезпечення"</string>
     <string name="settings_notification_privacy_low_detail">Повідомлення без подробиць</string>
     <string name="settings_notification_privacy_reduced">Обмежена конфіденційність</string>
-    <string name="settings_notification_privacy_need_permission">Программа потребує дозвіл на працю в фоновому режимі</string>
-    <string name="settings_notification_privacy_no_permission">"Программа  "<b>не</b> потребує дозвіл на працю в фоновому режимі</string>
+    <string name="settings_notification_privacy_need_permission">Програма потребує дозвіл на роботу у фоновому режимі</string>
+    <string name="settings_notification_privacy_no_permission">"Програма  "<b>не</b> потребує дозвіл на роботу у фоновому режимі</string>
     <string name="settings_notification_privacy_gcm">• Повідомлення відправляються через Google Cloud Messaging</string>
     <string name="settings_notification_privacy_metadata">• Повідомлення містять тільки метаданні</string>
     <string name="settings_notification_privacy_secure_message_content">• Зміст сповіщення був <b> надійно віднайдений просто на домашньому сервері Matrix </b></string>
@@ -877,5 +885,174 @@
     <string name="error_no_external_application_found">Вибачте, жодного стороннього застосунку не знайдено для завершення цієї дії.</string>
 
     <string name="option_send_voice">Відправити голосове повідомлення</string>
+
+    <string name="status_theme">Status.im Тема</string>
+
+    <string name="missing_permissions_error">Ця дія неможлива через відсутність дозволів.</string>
+    <string name="dialog_title_error">Помилка</string>
+
+    <string name="system_alerts_header">Системні сповіщення</string>
+
+    <string name="send_bug_report_description_in_english">Якщо можливо, будь ласка, напишіть опис англійською.</string>
+    <string name="go_on_with">продовжити з…</string>
+    <plurals name="format_time_s">
+	<item quantity="one">1 сек.</item>
+	<item quantity="few">%d сек.</item>
+	<item quantity="many">%d сек.</item>
+	<item quantity="other"/>
+</plurals>
+    <plurals name="format_time_m">
+	<item quantity="one">1 хв.</item>
+	<item quantity="few">%d хв.</item>
+	<item quantity="many">%d хв.</item>
+	<item quantity="other"/>
+</plurals>
+    <plurals name="format_time_h">
+	<item quantity="one">1 год.</item>
+	<item quantity="few">%d год.</item>
+	<item quantity="many">%d год.</item>
+	<item quantity="other"/>
+</plurals>
+    <plurals name="format_time_d">
+	<item quantity="one">1 день</item>
+	<item quantity="few">%d днів</item>
+	<item quantity="many">%d дні</item>
+	<item quantity="other"/>
+</plurals>
+
+    <string name="room_participants_now">Зараз %1$s</string>
+    <string name="room_participants_ago">%1$s %2$s тому</string>
+
+    <string name="room_participants_action_unignore_prompt">Показати усі повідомлення від цього користувача?
+
+Зауважте, що це перезавантажить додаток та може зайняти деякий час.</string>
+    <string name="room_participants_invite_join_names">"%1$s, "</string>
+    <string name="room_participants_invite_join_names_and">%1$s та %2$s</string>
+    <string name="room_participants_invite_join_names_combined">%1$s %2$s</string>
+
+    <string name="room_message_placeholder_reply_to_encrypted">Надіслати зашифровану відповідь…</string>
+    <string name="room_message_placeholder_reply_to_not_encrypted">Надіслати відповідь (незашифровано)…</string>
+    <plurals name="room_details_selected">
+	<item quantity="one">1 обрано</item>
+	<item quantity="few">"%d  обрано"</item>
+	<item quantity="many">"%d  обрано"</item>
+	<item quantity="other"/>
+</plurals>
+    <plurals name="directory_search_rooms">
+	<item quantity="one">1 кімната</item>
+	<item quantity="few">%d кімнати</item>
+	<item quantity="many">%d кімнат</item>
+	<item quantity="other"/>
+</plurals>
+    <plurals name="directory_search_rooms_for">
+	<item quantity="one">%1$s кімнату знайдено для %2$s</item>
+	<item quantity="few">%1$s кімнати знайдено для %2$s</item>
+	<item quantity="many">%1$s кімнат знайдено для %2$s</item>
+	<item quantity="other"/>
+</plurals>
+    <string name="room_sliding_menu_version_x">Версія %s</string>
+    <string name="settings_notification_privacy_warning">Riot.im запущено у фоновому режимі для забезпечення конфіденційності ваших сповіщень. Ви можете змінити цю опцію, щоб зменшити навантаження на батарею.</string>
+    <string name="settings_notification_privacy_nosecure_message_content">• Сповіщення містять <b>метадані та дані повідомлення</b></string>
+    <string name="settings_notification_privacy_message_content_not_shown">• Сповіщення <b>не будуть показувати вміст повідомлень</b></string>
+
+    <string name="settings_inline_url_preview">Увімкнути за замовчанням попередній перегляд посилань</string>
+    <string name="settings_preview_media_before_sending">Попередній перегляд медіа перед відправкою</string>
+
+    <string name="startup_notification_privacy_message">Riot.im може працювати у фоновому режимі для керування безпекою та конфіденційністю ваших сповіщень (це може вплинути на час роботи батареї).</string>
+    <string name="settings_opt_in_of_analytics_summary">Riot збирає анонімну аналітику, щоб ми могли вдосконалювати цей додаток.</string>
+    <string name="settings_opt_in_of_analytics_prompt">Будь ласка, увімкніть аналітику, щоб допомагати нам вдосконалювати Riot.</string>
+    <string name="settings_without_flair">Ви наразі не є учасником жодної спільноти.</string>
+
+    <string name="room_settings_no_flair">Ця кімната не показує настрій для спільнот</string>
+    <string name="room_settings_add_new_group">Новий ID спільноти (наприклад, +foo:matrix.org)</string>
+    <string name="room_settings_invalid_group_format_dialog_title">Недопустимий ID спільноти</string>
+    <string name="room_settings_invalid_group_format_dialog_body">\'%s\' недійсний ID спільноти</string>
+
+
+    <string name="encryption_export_notice">Будь ласка, створіть пароль для шифрування ключів що експортуються. Вам знадобиться ввести такий самий пароль для імпорту цих ключів.</string>
+    <string name="encryption_export_create_passphrase">Створіть пароль</string>
+    <string name="encryption_export_passphrase_dont_match">Паролі мають збігатися</string>
+    <string name="lock_screen_hint">Набирайте тут…</string>
+
+    <plurals name="notification_unread_notified_messages">
+	<item quantity="one">1 непрочитане сповіщення</item>
+	<item quantity="few">%d непрочитані сповіщення</item>
+	<item quantity="many">%d непрочитаних сповіщень</item>
+	<item quantity="other"/>
+</plurals>
+    <plurals name="notification_unread_notified_messages_in_room_msgs">
+	<item quantity="one">1 непрочитане сповіщення</item>
+	<item quantity="few">%d непрочитані сповіщення</item>
+	<item quantity="many">%d непрочитаних сповіщень</item>
+	<item quantity="other"/>
+</plurals>
+    <plurals name="notification_unread_notified_messages_in_room_rooms">
+	<item quantity="one">1 кімната</item>
+	<item quantity="few">%d кімнати</item>
+	<item quantity="many">%d кімнат</item>
+	<item quantity="other"/>
+</plurals>
+    <string name="notification_unread_notified_messages_in_room">%1$s у %2$s</string>
+
+    <plurals name="active_widgets">
+	<item quantity="one">1 активний віджет</item>
+	<item quantity="few">%d активні віджети</item>
+	<item quantity="many">%d активних віджетів</item>
+	<item quantity="other"/>
+</plurals>
+
+    <string name="widget_integration_missing_parameter">Пропущено обов’язковий параметр.</string>
+    <string name="widget_integration_invalid_parameter">Недійсний параметр.</string>
+    <string name="settings_labs_keyboard_options_to_send_message">Відправляти повідомлення клавішею Enter</string>
+    <string name="settings_labs_enable_send_voice">Надсилати голосові повідомлення (потребує сторонній додаток для запису голосових повідомлень)</string>
+
+    <string name="conference_call_warning_message">Конференц-зв’язок знаходиться у розробці та може виявитися ненадійним.</string>
+
+    <string name="command_description_emote">Відобразити дію</string>
+    <string name="command_description_ban_user">Блокувати користувача із вказаним ID</string>
+    <string name="command_description_unban_user">Розблокувати користувача із вказаним ID</string>
+    <string name="command_description_op_user">Визначити рівень доступу користувача</string>
+    <string name="command_description_deop_user">Скинути рівень доступу користувача із вказаним ID</string>
+    <string name="command_description_invite_user">Запросити користувача із вказаним ID до поточної кімнати</string>
+    <string name="command_description_join_room">Приєднатися до кімнати із вказаним псевдонімом</string>
+    <string name="command_description_part_room">Покинути кімнату</string>
+    <string name="command_description_topic">Встановити тему кімнати</string>
+    <string name="command_description_kick_user">Копнути користувача із вказаним ID</string>
+    <string name="command_description_nick">Змінити Ваш псевдонім</string>
+    <string name="command_description_markdown">Увімкнути/Вимкнути розмітку Markdown</string>
+    <string name="command_description_clear_scalar_token">Для виправлення керування додатками Matrix</string>
+
+    <string name="create">Створити</string>
+    <string name="create_community">Створити Спільноту</string>
+    <string name="community_name">Назва Спільноти</string>
+    <string name="community_name_hint">Приклад</string>
+    <string name="community_id">ID Спільноти</string>
+    <string name="community_id_hint">приклад</string>
+
+    <string name="group_details_home">Початок</string>
+    <string name="group_details_people">Люди</string>
+    <string name="group_details_rooms">Кімнати</string>
+    <string name="no_users_placeholder">Немає користувачів</string>
+
+    <string name="rooms">Кімнати</string>
+    <string name="joined">Приєднано</string>
+    <string name="invited">Запрошено</string>
+    <string name="filter_group_members">Фільтр учасників групи</string>
+    <string name="filter_group_rooms">Фільтр кімнат групи</string>
+
+    <plurals name="group_members">
+	<item quantity="one">1 учасник</item>
+	<item quantity="few">%d учасника</item>
+	<item quantity="many">%d учасників</item>
+	<item quantity="other"/>
+</plurals>
+
+    <plurals name="group_rooms">
+	<item quantity="one">1 кімната</item>
+	<item quantity="few">%d кімнати</item>
+	<item quantity="many">%d кімнат</item>
+	<item quantity="other"/>
+</plurals>
+    <string name="group_no_long_description">Адміністратор спільноти не вказав для неї детальної інформації.</string>
 
     </resources>
