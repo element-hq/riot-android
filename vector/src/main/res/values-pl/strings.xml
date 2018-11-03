@@ -710,7 +710,7 @@ Jesteś pewien?</string>
 
     <string name="settings_contacts_phonebook_country">Kraj książki adresowej</string>
     <string name="settings_home_display">Ekran domowy</string>
-    <string name="settings_inline_url_preview">"Zezwól na  domyślny podgląd zawartości URL"</string>
+    <string name="settings_inline_url_preview">Zezwól na domyślny podgląd zawartości URL</string>
     <string name="settings_12_24_timestamps">Pokaż czas w formacie 12 godzinnym (np. 2:30pm)</string>
     <string name="settings_hide_join_leave_messages">Ukryj wiadomości o dołączeniu/wyjściu (zaproszenia, wyproszenia, blokowanie nie zostaną ukryte)</string>
     <string name="settings_hide_avatar_display_name_changes_messages">Ukryj awatar i zmiany wyświetlanej nazwy</string>
