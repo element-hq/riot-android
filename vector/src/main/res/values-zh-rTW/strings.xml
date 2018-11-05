@@ -302,7 +302,7 @@
 
     <string name="list_members">列出成員</string>
     <string name="open_chat_header">打開標頭</string>
-    <string name="room_sync_in_progress">同步中...</string>
+    <string name="room_sync_in_progress">同步中…</string>
     <string name="room_jump_to_first_unread">跳到第一個未讀的訊息。</string>
 
     <string name="room_preview_invitation_format">你已經被 %s 邀請加入此聊天室</string>
