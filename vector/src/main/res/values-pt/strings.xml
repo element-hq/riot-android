@@ -236,7 +236,7 @@ Pedimos desculpa pela inconveniência.</string>
     <string name="room_info_room_topic">Tópico da sala</string>
 
     <!-- call string -->
-    <string name="call_connected">Chamada conectada</string>
+    <string name="call_connected">Chamada estabelecida</string>
     <string name="call_connecting">A estabelecer a chamada…</string>
     <string name="call_ended">Chamada terminada</string>
     <string name="call_ring">A chamar…</string>
@@ -246,7 +246,7 @@ Pedimos desculpa pela inconveniência.</string>
     <string name="call_in_progress">Chamada em curso</string>
 
     <string name="call_error_user_not_responding">O destinatário não atendeu.</string>
-    <string name="call_error_ice_failed">A conexão à mídia falhou</string>
+    <string name="call_error_ice_failed">A conexão de media falhou</string>
     <string name="call_error_camera_init_failed">Não foi possível iniciar a câmara</string>
     <string name="call_error_answered_elsewhere">chamada respondida noutro sítio</string>
 
