@@ -672,9 +672,6 @@ Merk at denne handlinga gjer at æppen startar på nytt og kan taka litt tid.</s
     <string name="room_settings_tag_pref_entry_low_priority">Lågrett</string>
     <string name="room_settings_tag_pref_entry_none">Ingen</string>
     <string name="room_settings_tag_pref_no_tag">ikkje merka</string>
-    <string name="room_settings_tag_pref_entry_value_favourite">yndling</string>
-    <string name="room_settings_tag_pref_entry_value_low_priority">låg</string>
-    <string name="room_settings_tag_pref_entry_value_none">ingen</string>
 
     <string name="room_settings_category_access_visibility_title">Tilgang og synlegheit</string>
     <string name="room_settings_directory_visibility">Vis rommet i romutvalet</string>

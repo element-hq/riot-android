@@ -572,9 +572,6 @@
     <string name="room_settings_tag_pref_entry_low_priority">Низький пріоритет</string>
     <string name="room_settings_tag_pref_entry_none">Жодного</string>
     <string name="room_settings_tag_pref_no_tag">Без мітки</string>
-    <string name="room_settings_tag_pref_entry_value_favourite">улюблені</string>
-    <string name="room_settings_tag_pref_entry_value_low_priority">низький</string>
-    <string name="room_settings_tag_pref_entry_value_none">жодного</string>
 
     <!-- room settings : access and visibility -->
     <string name="room_settings_category_access_visibility_title">Доступ та видимість</string>

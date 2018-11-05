@@ -9,9 +9,9 @@
     </string-array>
 
     <string-array name="tag_values">
-        <item>@string/room_settings_tag_pref_entry_value_favourite</item>
-        <item>@string/room_settings_tag_pref_entry_value_low_priority</item>
-        <item>@string/room_settings_tag_pref_entry_value_none</item>
+        <item>"m.favourite"</item>
+        <item>"m.lowpriority"</item>
+        <item>"m.recent"</item>
     </string-array>
 
     <!-- access rules: Who can access this room? -->
@@ -21,10 +21,10 @@
         <item>@string/room_settings_room_access_entry_anyone_with_link_including_guest</item>
     </string-array>
 
-    <string-array name="room_access_rules_values" translatable="false">
-        <item>1</item>
-        <item>2</item>
-        <item>3</item>
+    <string-array name="room_access_rules_values">
+        <item>"1"</item>
+        <item>"2"</item>
+        <item>"3"</item>
     </string-array>
 
     <!-- read history rules: Who can read history? -->
@@ -35,18 +35,55 @@
         <item>@string/room_settings_read_history_entry_members_only_joined</item>
     </string-array>
 
+    <!-- Room settings, access and visibility : WHO CAN READ HISTORY? (read rule) -->
     <string-array name="room_read_history_rules_values">
-        <item>@string/room_settings_read_history_entry_value_anyone</item>
-        <item>@string/room_settings_read_history_entry_value_members_only_option_time_shared</item>
-        <item>@string/room_settings_read_history_entry_value_members_only_invited</item>
-        <item>@string/room_settings_read_history_entry_value_members_only_joined</item>
+        <item>"world_readable"</item>
+        <item>"shared"</item>
+        <item>"invited"</item>
+        <item>"joined"</item>
     </string-array>
 
-    <string-array name="notification_values">
+    <!-- Room settings notification -->
+    <string-array name="notification_entries">
         <item>@string/room_settings_all_messages_noisy</item>
         <item>@string/room_settings_all_messages</item>
         <item>@string/room_settings_mention_only</item>
         <item>@string/room_settings_mute</item>
+    </string-array>
+
+    <string-array name="notification_values">
+        <item>"ALL_MESSAGES_NOISY"</item>
+        <item>"ALL_MESSAGES"</item>
+        <item>"MENTIONS_ONLY"</item>
+        <item>"MUTE"</item>
+    </string-array>
+
+    <!-- Theme -->
+    <string-array name="theme_entries">
+        <item>@string/light_theme</item>
+        <item>@string/dark_theme</item>
+        <item>@string/black_them</item>
+        <item>@string/status_theme</item>
+    </string-array>
+
+    <string-array name="theme_values">
+        <item>light</item>
+        <item>dark</item>
+        <item>black</item>
+        <item>status</item>
+    </string-array>
+
+    <!-- Info area -->
+    <string-array name="show_info_area_entries">
+        <item>@string/show_info_area_always</item>
+        <item>@string/show_info_area_messages_and_errors</item>
+        <item>@string/show_info_area_only_errors</item>
+    </string-array>
+
+    <string-array name="show_info_area_values">
+        <item>always</item>
+        <item>messages_and_errors</item>
+        <item>only_errors</item>
     </string-array>
 
 </resources>

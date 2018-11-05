@@ -398,8 +398,6 @@
 
     <string name="room_settings_tag_pref_entry_low_priority">తక్కువ ప్రాధాన్యత</string>
     <string name="room_settings_tag_pref_entry_none">ఎవరు కాదు</string>
-    <string name="room_settings_tag_pref_entry_value_low_priority">తక్కువ</string>
-    <string name="room_settings_tag_pref_entry_value_none">ఎవరు కాదు</string>
 
     <string name="room_settings_directory_visibility">గది డైరెక్టరీలో ఈ గదిని జాబితా చేయండి</string>
     <string name="room_settings_room_access_rules_pref_title">గది యాక్సెస్</string>

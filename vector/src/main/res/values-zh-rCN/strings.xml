@@ -509,9 +509,6 @@
     <string name="room_settings_tag_pref_entry_low_priority">低优先级</string>
     <string name="room_settings_tag_pref_entry_none">无</string>
     <string name="room_settings_tag_pref_no_tag">没有标签</string>
-    <string name="room_settings_tag_pref_entry_value_favourite">收藏夹</string>
-    <string name="room_settings_tag_pref_entry_value_low_priority">低</string>
-    <string name="room_settings_tag_pref_entry_value_none">无</string>
 
     <string name="room_settings_room_access_warning">要链接一个聊天室，必须有一个地址。</string>
     <string name="room_settings_never_send_to_unverified_devices_title">仅对已验证的设备加密</string>

@@ -729,9 +729,6 @@ Jesteś pewien?</string>
     <string name="room_settings_tag_pref_dialog_title">Otagowany jako:</string>
 
     <string name="room_settings_tag_pref_no_tag">nieotagowany</string>
-    <string name="room_settings_tag_pref_entry_value_favourite">Ulubione</string>
-    <string name="room_settings_tag_pref_entry_value_low_priority">niski</string>
-    <string name="room_settings_tag_pref_entry_value_none">żaden</string>
 
     <string name="room_settings_room_notifications_title">Powiadomienia</string>
     <string name="room_settings_read_history_entry_members_only_option_time_shared">Tylko członkowie (od momentu włączenia tej opcji)</string>

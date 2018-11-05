@@ -551,9 +551,6 @@ Salatut viestit eivät näy sovelluksissa, jotka eivät tue salausta.</string> <
     <string name="room_settings_tag_pref_entry_low_priority">Matala tärkeys</string>
     <string name="room_settings_tag_pref_entry_none">Ei mikään</string>
     <string name="room_settings_tag_pref_no_tag">ei luokiteltu</string>
-    <string name="room_settings_tag_pref_entry_value_favourite">suosikki</string>
-    <string name="room_settings_tag_pref_entry_value_low_priority">matala</string>
-    <string name="room_settings_tag_pref_entry_value_none">none</string>
 
     <!-- room settings : access and visibility -->
     <string name="room_settings_category_access_visibility_title">Näkyvyys ja pääsy</string>
