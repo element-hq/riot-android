@@ -246,7 +246,7 @@ Pedimos desculpa pela inconveniência.</string>
     <string name="call_in_progress">Chamada em curso</string>
 
     <string name="call_error_user_not_responding">O destinatário não atendeu.</string>
-    <string name="call_error_ice_failed">A conexão de media falhou</string>
+    <string name="call_error_ice_failed">A ligação multimédia falhou</string>
     <string name="call_error_camera_init_failed">Não foi possível iniciar a câmara</string>
     <string name="call_error_answered_elsewhere">chamada respondida noutro sítio</string>
 
@@ -335,7 +335,7 @@ Mensagens cifradas não serão visíveis em clientes que ainda não implementara
     <string name="room_participants_action_leave">Sair desta sala</string>
     <string name="room_participants_action_remove">Remover desta sala</string>
     <string name="room_participants_action_ban">Banir</string>
-    <string name="room_participants_action_unban">Desbanir</string>
+    <string name="room_participants_action_unban">Remover banimento</string>
     <string name="room_participants_action_set_default_power_level">Retornar a utilizador normal</string>
     <string name="room_participants_action_set_moderator">Tornar moderador</string>
     <string name="room_participants_action_set_admin">Tornar administrador</string>
