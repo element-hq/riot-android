@@ -904,7 +904,7 @@ Neznáme zariadenia:</string>
     <string name="settings_notification_privacy_normal">Normálne</string>
     <string name="settings_notification_privacy_need_permission">Aplikácia vyžaduje povolenie bežať na pozadí</string>
     <string name="settings_notification_privacy_no_permission">Aplikácia <b>ne</b>vyžaduje povolenie bežať na pozadí</string>
-    <string name="settings_notification_privacy_gcm">• Oznámenia sú zasielané prostredníctvom cloudových služieb Google</string>
+    <string name="settings_notification_privacy_fcm">• Oznámenia sú zasielané prostredníctvom cloudových služieb Google</string>
     <string name="settings_notification_privacy_metadata">• Oznámenia neobsahujú text správy, len meta údaje</string>
     <string name="settings_notification_privacy_secure_message_content">• Obsah správy oznámení je <b>bezpečne prevzatý priamo z domovského servera Matrix</b></string>
     <string name="settings_notification_privacy_nosecure_message_content">• Oznámenia obsahujú <b>meta údaje aj obsah správy</b></string>

@@ -45,7 +45,7 @@ import im.vector.Matrix;
 import im.vector.R;
 import im.vector.VectorApp;
 import im.vector.analytics.TrackingEvent;
-import im.vector.gcm.GcmRegistrationManager;
+import im.vector.push.PushManager;
 import im.vector.receiver.VectorUniversalLinkReceiver;
 import im.vector.services.EventStreamService;
 import im.vector.ui.themes.ActivityOtherThemes;
@@ -325,13 +325,13 @@ public class SplashActivity extends MXCActionBarActivity {
             EventStreamService.getInstance().startAccounts(matrixIds);
         }
 
-        // trigger the GCM registration if required
-        GcmRegistrationManager gcmRegistrationManager = Matrix.getInstance(getApplicationContext()).getSharedGCMRegistrationManager();
+        // trigger the push registration if required
+        PushManager pushManager = Matrix.getInstance(getApplicationContext()).getPushManager();
 
-        if (!gcmRegistrationManager.isGcmRegistered()) {
-            gcmRegistrationManager.checkRegistrations();
+        if (!pushManager.isFcmRegistered()) {
+            pushManager.checkRegistrations();
         } else {
-            gcmRegistrationManager.forceSessionsRegistration(null);
+            pushManager.forceSessionsRegistration(null);
         }
 
         boolean noUpdate;

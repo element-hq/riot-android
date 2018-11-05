@@ -1,5 +1,6 @@
 /*
  * Copyright 2014 OpenMarket Ltd
+ * Copyright 2017 Vector Creations Ltd
  * Copyright 2018 New Vector Ltd
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -14,14 +15,25 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package im.vector.gcm;
+package im.vector.push.fcm;
 
 import android.app.Activity;
 import android.content.Context;
+import android.preference.PreferenceManager;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.text.TextUtils;
 
-public class GCMHelper {
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.iid.FirebaseInstanceId;
+import com.google.firebase.iid.InstanceIdResult;
+
+/**
+ * This class store the FCM token in SharedPrefs and ensure this token is retrieved.
+ * It has an alter ego in the fdroid variant.
+ */
+public class FcmHelper {
+    private static final String PREFS_KEY_FCM_TOKEN = "FCM_TOKEN";
 
     /**
      * Retrieves the FCM registration token.
@@ -30,7 +42,7 @@ public class GCMHelper {
      */
     @Nullable
     public static String getFcmToken(Context context) {
-        return null;
+        return PreferenceManager.getDefaultSharedPreferences(context).getString(PREFS_KEY_FCM_TOKEN, null);
     }
 
     /**
@@ -41,7 +53,10 @@ public class GCMHelper {
      */
     public static void storeFcmToken(@NonNull Context context,
                                      @Nullable String token) {
-        // No op
+        PreferenceManager.getDefaultSharedPreferences(context)
+                .edit()
+                .putString(PREFS_KEY_FCM_TOKEN, token)
+                .apply();
     }
 
     /**
@@ -50,6 +65,13 @@ public class GCMHelper {
      * @param activity the first launch Activity
      */
     public static void ensureFcmTokenIsRetrieved(final Activity activity) {
-        // No op
+        if (TextUtils.isEmpty(getFcmToken(activity))) {
+            FirebaseInstanceId.getInstance().getInstanceId().addOnSuccessListener(activity, new OnSuccessListener<InstanceIdResult>() {
+                @Override
+                public void onSuccess(InstanceIdResult instanceIdResult) {
+                    storeFcmToken(activity, instanceIdResult.getToken());
+                }
+            });
+        }
     }
 }

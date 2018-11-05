@@ -584,7 +584,7 @@
     <string name="settings_notification_privacy_reduced">Reduced privacy</string>
     <string name="settings_notification_privacy_need_permission">The app needs permission to run in the background</string>
     <string name="settings_notification_privacy_no_permission">The apps does <b>not</b> need permission to run in the background</string>
-    <string name="settings_notification_privacy_gcm">• Notifications are sent via Google Cloud Messaging</string>
+    <string name="settings_notification_privacy_fcm">• Notifications are sent via Google Cloud Messaging</string>
     <string name="settings_notification_privacy_metadata">• Notifications only contain meta data</string>
     <string name="settings_notification_privacy_secure_message_content">• Message content of the notification is <b>located securely direct from the Matrix homeserver</b></string>
     <string name="settings_notification_privacy_nosecure_message_content">• Notifications contain <b>meta and message data</b></string>

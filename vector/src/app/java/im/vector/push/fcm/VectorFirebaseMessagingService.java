@@ -16,7 +16,7 @@
  * limitations under the License.
  */
 
-package im.vector.gcm;
+package im.vector.push.fcm;
 
 import android.support.annotation.Nullable;
 
@@ -35,6 +35,7 @@ import java.util.Map;
 import im.vector.Matrix;
 import im.vector.VectorApp;
 import im.vector.activity.CommonActivityUtils;
+import im.vector.push.PushManager;
 import im.vector.services.EventStreamService;
 
 /**
@@ -112,13 +113,13 @@ public class VectorFirebaseMessagingService extends FirebaseMessagingService {
             // update the badge counter
             CommonActivityUtils.updateBadgeCount(getApplicationContext(), unreadCount);
 
-            GcmRegistrationManager gcmManager = Matrix.getInstance(getApplicationContext()).getSharedGCMRegistrationManager();
+            PushManager pushManager = Matrix.getInstance(getApplicationContext()).getPushManager();
 
-            if (!gcmManager.areDeviceNotificationsAllowed()) {
+            if (!pushManager.areDeviceNotificationsAllowed()) {
                 Log.d(LOG_TAG, "## onMessageReceivedInternal() : the notifications are disabled");
                 return;
             }
-            if (!gcmManager.isBackgroundSyncAllowed() && VectorApp.isAppInBackground()) {
+            if (!pushManager.isBackgroundSyncAllowed() && VectorApp.isAppInBackground()) {
                 EventStreamService eventStreamService = EventStreamService.getInstance();
                 Event event = parseEvent(data);
 
@@ -142,7 +143,7 @@ public class VectorFirebaseMessagingService extends FirebaseMessagingService {
             }
 
             // check if the application has been launched once
-            // the first GCM event could have been triggered whereas the application is not yet launched.
+            // the first FCM event could have been triggered whereas the application is not yet launched.
             // so it is required to create the sessions and to start/resume event stream
             if (!mCheckLaunched && null != Matrix.getInstance(getApplicationContext()).getDefaultSession()) {
                 CommonActivityUtils.startEventStreamService(this);
@@ -187,9 +188,9 @@ public class VectorFirebaseMessagingService extends FirebaseMessagingService {
     public void onNewToken(String refreshedToken) {
         Log.d(LOG_TAG, "onNewToken: " + refreshedToken);
 
-        GCMHelper.storeFcmToken(this, refreshedToken);
+        FcmHelper.storeFcmToken(this, refreshedToken);
 
-        Matrix.getInstance(this).getSharedGCMRegistrationManager().resetGCMRegistration(refreshedToken);
+        Matrix.getInstance(this).getPushManager().resetFCMRegistration(refreshedToken);
     }
 
     /**

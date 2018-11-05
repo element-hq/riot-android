@@ -919,7 +919,7 @@
     <string name="settings_notification_privacy_reduced">خصوصية أقل</string>
     <string name="settings_notification_privacy_need_permission">يحتاج التطبيق تصريحًا ليعمل في الخلفية</string>
     <string name="settings_notification_privacy_no_permission"><b>لا</b> تحتاج التطبيقات تصريحًا لتعمل في الخلفية</string>
-    <string name="settings_notification_privacy_gcm">• تُرسل الإخطارات عبر «رسائل غوغل السحابية Google Cloud Messaging»</string>
+    <string name="settings_notification_privacy_fcm">• تُرسل الإخطارات عبر «رسائل غوغل السحابية Google Cloud Messaging»</string>
     <string name="settings_notification_privacy_metadata">• تحتوي الإخطارات بيانات وصفية فحسب</string>
     <string name="settings_notification_privacy_nosecure_message_content">• تحتوي الإخطارات <b>بيانات وصفية وبيانات الرسائل</b></string>
     <string name="settings_notification_privacy_message_content_not_shown">• سوف <b>لن تعرض الإخطارات محتوى الرسائل</b></string>

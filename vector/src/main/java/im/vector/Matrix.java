@@ -62,7 +62,7 @@ import java.util.Set;
 import im.vector.activity.CommonActivityUtils;
 import im.vector.activity.SplashActivity;
 import im.vector.analytics.MetricsListenerProxy;
-import im.vector.gcm.GcmRegistrationManager;
+import im.vector.push.PushManager;
 import im.vector.services.EventStreamService;
 import im.vector.store.LoginStorage;
 import im.vector.util.PreferencesManager;
@@ -90,8 +90,8 @@ public class Matrix {
     // list of session
     private List<MXSession> mMXSessions;
 
-    // GCM registration manager
-    private final GcmRegistrationManager mGCMRegistrationManager;
+    // Push manager
+    private final PushManager mPushManager;
 
     // list of store : some sessions or activities use tmp stores
     // provide an storage to exchange them
@@ -122,7 +122,7 @@ public class Matrix {
 
         @Override
         public void onLiveEventsChunkProcessed(String fromToken, String toToken) {
-            // when the client does not use GCM (ie. FDroid),
+            // when the client does not use FCM (ie. FDroid),
             // we need to compute the application badge values
 
             if ((null != instance) && (null != instance.mMXSessions)) {
@@ -130,10 +130,10 @@ public class Matrix {
                     mClearCacheRequired = false;
                     instance.reloadSessions(VectorApp.getInstance());
                 } else if (mRefreshUnreadCounter) {
-                    GcmRegistrationManager gcmMgr = instance.getSharedGCMRegistrationManager();
+                    PushManager pushManager = instance.getPushManager();
 
-                    // perform update: if the GCM is not yet available or if GCM registration failed
-                    if ((null != gcmMgr) && (!gcmMgr.useGCM() || !gcmMgr.hasRegistrationToken())) {
+                    // perform update: if the FCM is not yet available or if FCM registration failed
+                    if ((null != pushManager) && (!pushManager.useFcm() || !pushManager.hasRegistrationToken())) {
                         int roomCount = 0;
 
                         for (MXSession session : instance.mMXSessions) {
@@ -184,7 +184,7 @@ public class Matrix {
         mMXSessions = new ArrayList<>();
         mTmpStores = new ArrayList<>();
 
-        mGCMRegistrationManager = new GcmRegistrationManager(mAppContext);
+        mPushManager = new PushManager(mAppContext);
     }
 
     /**
@@ -749,8 +749,8 @@ public class Matrix {
                     }
                 }
 
-                // clear GCM token before launching the splash screen
-                Matrix.getInstance(context).getSharedGCMRegistrationManager().clearGCMData(new SimpleApiCallback<Void>() {
+                // clear FCM token before launching the splash screen
+                Matrix.getInstance(context).getPushManager().clearFcmData(new SimpleApiCallback<Void>() {
                     @Override
                     public void onSuccess(final Void anything) {
                         Intent intent = new Intent(context.getApplicationContext(), SplashActivity.class);
@@ -767,10 +767,10 @@ public class Matrix {
     }
 
     /**
-     * @return the GCM registration manager
+     * @return the push manager
      */
-    public GcmRegistrationManager getSharedGCMRegistrationManager() {
-        return mGCMRegistrationManager;
+    public PushManager getPushManager() {
+        return mPushManager;
     }
 
     //==============================================================================================================

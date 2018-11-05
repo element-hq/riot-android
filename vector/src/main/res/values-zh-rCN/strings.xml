@@ -873,7 +873,7 @@
     <string name="startup_notification_privacy_button_other">选择其他选项</string>
 
     <string name="settings_notification_privacy_no_permission">这个应用<b>不</b>需要在后台运行的权限</string>
-    <string name="settings_notification_privacy_gcm">• 通知通过 Google Cloud Messaging 发送</string>
+    <string name="settings_notification_privacy_fcm">• 通知通过 Google Cloud Messaging 发送</string>
     <string name="settings_notification_privacy_metadata">• 通知只含有元数据</string>
     <string name="settings_notification_privacy_message_content_not_shown">• 通知<b>不会显示消息内容</b></string>
 

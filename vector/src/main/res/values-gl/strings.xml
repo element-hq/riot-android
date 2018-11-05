@@ -661,7 +661,7 @@ Seguramente queira conectarse cunha conta distinta, ou engadir este correo a sú
     <string name="settings_notification_privacy_reduced">Reducir a privacidade</string>
     <string name="settings_notification_privacy_need_permission">Esta aplicación necesita de permisos para traballar en segundo plano</string>
     <string name="settings_notification_privacy_no_permission">Esta aplicación <b>non</b> ten permisos para traballar en segundo plano</string>
-    <string name="settings_notification_privacy_gcm">• Notificacións enviadas a través de Cloud Messaging de Google</string>
+    <string name="settings_notification_privacy_fcm">• Notificacións enviadas a través de Cloud Messaging de Google</string>
     <string name="settings_notification_privacy_metadata">• Notificacións que só conteñen metadatos</string>
     <string name="settings_notification_privacy_secure_message_content">• O contido da mensaxe das notificacións está <b>provén dun xeito seguro e directo do servidor local de Matrix</b></string>
     <string name="settings_notification_privacy_nosecure_message_content">• As notificacións conteñen <b>metadatos e os datos da mensaxe</b></string>

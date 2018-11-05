@@ -16,7 +16,7 @@
  * limitations under the License.
  */
 
-package im.vector.gcm;
+package im.vector.push;
 
 import android.content.Context;
 import android.content.SharedPreferences;
@@ -45,16 +45,17 @@ import java.util.TimerTask;
 import im.vector.BuildConfig;
 import im.vector.Matrix;
 import im.vector.activity.CommonActivityUtils;
+import im.vector.push.fcm.FcmHelper;
 import im.vector.util.PreferencesManager;
 import im.vector.util.SystemUtilsKt;
 
 /**
- * Helper class to store the GCM registration ID in {@link SharedPreferences}
+ * Helper class to store the FCM registration ID in {@link SharedPreferences}
  */
-public final class GcmRegistrationManager {
-    private static final String LOG_TAG = GcmRegistrationManager.class.getSimpleName();
+public final class PushManager {
+    private static final String LOG_TAG = PushManager.class.getSimpleName();
 
-    private static final String PREFS_GCM = "GcmRegistrationManager";
+    private static final String PREFS_PUSH = "GcmRegistrationManager";
 
     private static final String PREFS_ALLOW_NOTIFICATIONS = "GcmRegistrationManager.PREFS_ALLOW_NOTIFICATIONS";
     private static final String PREFS_TURN_SCREEN_ON = "GcmRegistrationManager.PREFS_TURN_SCREEN_ON";
@@ -87,23 +88,23 @@ public final class GcmRegistrationManager {
      */
     private enum RegistrationState {
         /**
-         * GCM is not registered
+         * FCM is not registered
          */
         UNREGISTRATED,
         /**
-         * GCM registration is started (not used anymore, but keep it to not break enum ordinal)
+         * FCM registration is started (not used anymore, but keep it to not break enum ordinal)
          */
-        GCM_REGISTRATING,
+        FCM_REGISTRATING,
         /**
-         * GCM is registered, but token has not been sent to the Push server
+         * FCM is registered, but token has not been sent to the Push server
          */
-        GCM_REGISTERED,
+        FCM_REGISTERED,
         /**
-         * GCM token is currently sent to the Push server
+         * FCM token is currently sent to the Push server
          */
         SERVER_REGISTRATING,
         /**
-         * GCM token has been sent to the Push server
+         * FCM token has been sent to the Push server
          */
         SERVER_REGISTERED,
         /**
@@ -121,7 +122,7 @@ public final class GcmRegistrationManager {
     // the registration state
     private RegistrationState mRegistrationState;
 
-    // defines the GCM registration token
+    // defines the FCM registration token
     private String mRegistrationToken;
 
     /**
@@ -129,7 +130,7 @@ public final class GcmRegistrationManager {
      *
      * @param appContext the application context.
      */
-    public GcmRegistrationManager(final Context appContext) {
+    public PushManager(final Context appContext) {
         mContext = appContext.getApplicationContext();
         // TODO customise it ?
         mBasePusherDeviceName = Build.MODEL.trim();
@@ -148,9 +149,9 @@ public final class GcmRegistrationManager {
             public void onNetworkConnectionUpdate(boolean isConnected) {
                 if (isConnected) {
                     // test if the server registration / unregistration should be done
-                    if (useGCM()) {
+                    if (useFcm()) {
                         // test if the user expect having notifications on his device but it was not yet done
-                        if (areDeviceNotificationsAllowed() && (mRegistrationState == RegistrationState.GCM_REGISTERED)) {
+                        if (areDeviceNotificationsAllowed() && (mRegistrationState == RegistrationState.FCM_REGISTERED)) {
                             register(null);
                         } else if (!areDeviceNotificationsAllowed() && (mRegistrationState == RegistrationState.SERVER_REGISTERED)) {
                             unregister(null);
@@ -165,14 +166,14 @@ public final class GcmRegistrationManager {
     }
 
     /**
-     * Check if the GCM registration has been broken with a new token ID.
-     * The GCM could have cleared it (onTokenRefresh).
+     * Check if the FCM registration has been broken with a new token ID.
+     * The FCM could have cleared it (onTokenRefresh).
      */
     public void checkRegistrations() {
         Log.d(LOG_TAG, "checkRegistrations with state " + mRegistrationState);
 
-        if (!useGCM()) {
-            Log.d(LOG_TAG, "checkRegistrations : GCM is disabled");
+        if (!useFcm()) {
+            Log.d(LOG_TAG, "checkRegistrations : FCM is disabled");
             return;
         }
 
@@ -185,7 +186,7 @@ public final class GcmRegistrationManager {
             unregister(new ApiCallback<Void>() {
                 @Override
                 public void onSuccess(Void aVoid) {
-                    Log.d(LOG_TAG, "resetGCMRegistration : remove the GCM registration token done");
+                    Log.d(LOG_TAG, "resetFCMRegistration : remove the GCM registration token done");
                     clearOldStoredRegistrationToken();
                     mRegistrationToken = null;
 
@@ -215,23 +216,23 @@ public final class GcmRegistrationManager {
                 }
             });
         } else if (mRegistrationState == RegistrationState.UNREGISTRATED) {
-            Log.d(LOG_TAG, "checkPusherRegistration : try to register to GCM server");
+            Log.d(LOG_TAG, "checkPusherRegistration : try to register to FCM server");
 
-            if (registerToGcm()) {
+            if (registerToFcm()) {
                 // register the sessions to the 3rd party server
                 // this setting should be updated from the listener
                 register(null);
 
                 Log.d(LOG_TAG, "checkRegistrations : reregistered");
-                CommonActivityUtils.onGcmUpdate(mContext);
+                CommonActivityUtils.onPushUpdate(mContext);
             } else {
                 Log.d(LOG_TAG, "checkRegistrations : onPusherRegistrationFailed");
             }
-        } else if (mRegistrationState == RegistrationState.GCM_REGISTERED) {
+        } else if (mRegistrationState == RegistrationState.FCM_REGISTERED) {
             // register the 3rd party server
             // the server registration might have failed
             // so ensure that it will be done when the application is de-backgrounded.
-            if (useGCM() && areDeviceNotificationsAllowed()) {
+            if (useFcm() && areDeviceNotificationsAllowed()) {
                 register(null);
             }
         } else if (mRegistrationState == RegistrationState.SERVER_REGISTERED) {
@@ -240,43 +241,43 @@ public final class GcmRegistrationManager {
     }
 
     //================================================================================
-    // GCM registration
+    // FCM registration
     //================================================================================
 
     /**
-     * Retrieve the GCM registration token.
+     * Retrieve the FCM registration token.
      *
-     * @return the GCM registration token
+     * @return the FCM registration token
      */
-    private String getGcmRegistrationToken() {
+    private String getFcmRegistrationToken() {
         String registrationToken = getStoredRegistrationToken();
 
         if (TextUtils.isEmpty(registrationToken)) {
-            Log.d(LOG_TAG, "## getGcmRegistrationToken() : undefined token -> getting a new one");
-            registrationToken = GCMHelper.getFcmToken(mContext);
+            Log.d(LOG_TAG, "## getFcmRegistrationToken() : undefined token -> getting a new one");
+            registrationToken = FcmHelper.getFcmToken(mContext);
         }
         return registrationToken;
     }
 
     /**
-     * Register to GCM.
+     * Register to FCM.
      *
      * @return true if registration succeed, else return false.
      */
-    private boolean registerToGcm() {
-        Log.d(LOG_TAG, "registerToGcm with state " + mRegistrationState);
+    private boolean registerToFcm() {
+        Log.d(LOG_TAG, "registerToFcm with state " + mRegistrationState);
 
-        if (!useGCM()) {
-            // do not use GCM
-            Log.d(LOG_TAG, "registerPusher : GCM is disabled");
+        if (!useFcm()) {
+            // do not use FCM
+            Log.d(LOG_TAG, "registerPusher : FCM is disabled");
 
             return false;
         }
 
         if (mRegistrationState == RegistrationState.UNREGISTRATED) {
-            String token = getGcmRegistrationToken();
+            String token = getFcmRegistrationToken();
 
-            setAndStoreRegistrationState(token != null ? RegistrationState.GCM_REGISTERED : RegistrationState.UNREGISTRATED);
+            setAndStoreRegistrationState(token != null ? RegistrationState.FCM_REGISTERED : RegistrationState.UNREGISTRATED);
 
             setAndStoreRegistrationToken(token);
 
@@ -287,57 +288,57 @@ public final class GcmRegistrationManager {
     }
 
     /**
-     * Reset the GCM registration.
+     * Reset the FCM registration.
      */
-    public void resetGCMRegistration() {
-        resetGCMRegistration(null);
+    public void resetFCMRegistration() {
+        resetFCMRegistration(null);
     }
 
     /**
-     * Reset the GCM registration.
+     * Reset the FCM registration.
      *
      * @param newToken the new registration token, to register again, or null
      */
-    public void resetGCMRegistration(final @Nullable String newToken) {
-        Log.d(LOG_TAG, "resetGCMRegistration");
+    public void resetFCMRegistration(final @Nullable String newToken) {
+        Log.d(LOG_TAG, "resetFCMRegistration");
 
         if (mRegistrationState == RegistrationState.SERVER_REGISTERED) {
-            Log.d(LOG_TAG, "resetGCMRegistration : unregister server before retrieving the new GCM key");
+            Log.d(LOG_TAG, "resetFCMRegistration : unregister server before retrieving the new FCM token");
 
             unregister(new ApiCallback<Void>() {
                 @Override
                 public void onSuccess(Void info) {
-                    Log.d(LOG_TAG, "resetGCMRegistration : un-registration is done --> start the registration process");
-                    resetGCMRegistration(newToken);
+                    Log.d(LOG_TAG, "resetFCMRegistration : un-registration is done --> start the registration process");
+                    resetFCMRegistration(newToken);
                 }
 
                 @Override
                 public void onNetworkError(Exception e) {
-                    Log.d(LOG_TAG, "resetGCMRegistration : un-registration failed.");
+                    Log.d(LOG_TAG, "resetFCMRegistration : un-registration failed.");
                 }
 
                 @Override
                 public void onMatrixError(MatrixError e) {
-                    Log.d(LOG_TAG, "resetGCMRegistration : un-registration failed.");
+                    Log.d(LOG_TAG, "resetFCMRegistration : un-registration failed.");
                 }
 
                 @Override
                 public void onUnexpectedError(Exception e) {
-                    Log.d(LOG_TAG, "resetGCMRegistration : un-registration failed.");
+                    Log.d(LOG_TAG, "resetFCMRegistration : un-registration failed.");
                 }
             });
         } else {
             final boolean clearEverything = TextUtils.isEmpty(newToken);
 
-            Log.d(LOG_TAG, "resetGCMRegistration : Clear the GCM data");
-            clearGCMData(new SimpleApiCallback<Void>() {
+            Log.d(LOG_TAG, "resetFCMRegistration : Clear the FCM data");
+            clearFcmData(new SimpleApiCallback<Void>() {
                 @Override
                 public void onSuccess(Void info) {
                     if (!clearEverything) {
-                        Log.d(LOG_TAG, "resetGCMRegistration : make a full registration process.");
+                        Log.d(LOG_TAG, "resetFCMRegistration : make a full registration process.");
                         register(null);
                     } else {
-                        Log.d(LOG_TAG, "resetGCMRegistration : Ready to register.");
+                        Log.d(LOG_TAG, "resetFCMRegistration : Ready to register.");
                     }
                 }
             });
@@ -417,7 +418,7 @@ public final class GcmRegistrationManager {
                     });
 
                 } else {
-                    Log.d(LOG_TAG, "500 error : no GCM key");
+                    Log.d(LOG_TAG, "500 error : no FCM token");
 
                     setAndStoreRegistrationToken(null);
                     setAndStoreRegistrationState(RegistrationState.UNREGISTRATED);
@@ -433,7 +434,7 @@ public final class GcmRegistrationManager {
      */
     public void onAppResume() {
         if (mRegistrationState == RegistrationState.SERVER_REGISTERED) {
-            Log.d(LOG_TAG, "## onAppResume() : force the GCM registration");
+            Log.d(LOG_TAG, "## onAppResume() : force the push registration");
 
             forceSessionsRegistration(null);
         }
@@ -449,24 +450,24 @@ public final class GcmRegistrationManager {
                                             final boolean append,
                                             @NonNull final ApiCallback<Void> callback) {
         // test if the push server registration is allowed
-        if (!areDeviceNotificationsAllowed() || !useGCM() || !session.isAlive()) {
+        if (!areDeviceNotificationsAllowed() || !useFcm() || !session.isAlive()) {
             if (!areDeviceNotificationsAllowed()) {
                 Log.d(LOG_TAG, "registerPusher : the user disabled it.");
             } else if (!session.isAlive()) {
                 Log.d(LOG_TAG, "registerPusher : the session is not anymore alive");
             } else {
-                Log.d(LOG_TAG, "registerPusher : GCM is disabled.");
+                Log.d(LOG_TAG, "registerPusher : FCM is disabled.");
             }
 
             try {
-                callback.onUnexpectedError(new Exception("GCM not allowed"));
+                callback.onUnexpectedError(new Exception("FCM not allowed"));
             } catch (Exception e) {
                 Log.e(LOG_TAG, "registerToThirdPartyServer failed " + e.getMessage(), e);
             }
 
-            // fallback to the GCM_REGISTERED state
+            // fallback to the FCM_REGISTERED state
             // thus, the client will try again to register with checkRegistrations.
-            setAndStoreRegistrationState(RegistrationState.GCM_REGISTERED);
+            setAndStoreRegistrationState(RegistrationState.FCM_REGISTERED);
 
             return;
         }
@@ -475,7 +476,7 @@ public final class GcmRegistrationManager {
 
         // send only the event id but not the event content if:
         // - the user let the app run in background to fetch the event content from the homeserver
-        // - or, if the app cannot run in background, the user does not want to send event content to GCM
+        // - or, if the app cannot run in background, the user does not want to send event content to FCM
         boolean eventIdOnlyPushes = isBackgroundSyncAllowed() || !isContentSendingAllowed();
 
         session.getPushersRestClient().addHttpPusher(mRegistrationToken,
@@ -517,9 +518,9 @@ public final class GcmRegistrationManager {
                     public void onMatrixError(MatrixError e) {
                         Log.e(LOG_TAG, "registerToThirdPartyServer onMatrixError " + e.errcode);
 
-                        // fallback to the GCM_REGISTERED state
+                        // fallback to the FCM_REGISTERED state
                         // thus, the client will try again to register with checkRegistrations.
-                        setAndStoreRegistrationState(RegistrationState.GCM_REGISTERED);
+                        setAndStoreRegistrationState(RegistrationState.FCM_REGISTERED);
 
                         if (MatrixError.UNKNOWN.equals(e.errcode)) {
                             manage500Error(callback);
@@ -532,9 +533,9 @@ public final class GcmRegistrationManager {
                     public void onUnexpectedError(Exception e) {
                         Log.e(LOG_TAG, "registerToThirdPartyServer onUnexpectedError " + e.getMessage(), e);
 
-                        // fallback to the GCM_REGISTERED state
+                        // fallback to the FCM_REGISTERED state
                         // thus, the client will try again to register with checkRegistrations.
-                        setAndStoreRegistrationState(RegistrationState.GCM_REGISTERED);
+                        setAndStoreRegistrationState(RegistrationState.FCM_REGISTERED);
 
                         callback.onUnexpectedError(e);
                     }
@@ -563,7 +564,7 @@ public final class GcmRegistrationManager {
                         Pusher selfPusher = null;
 
                         for (Pusher pusher : mPushersList) {
-                            if (TextUtils.equals(pusher.pushkey, getGcmRegistrationToken())) {
+                            if (TextUtils.equals(pusher.pushkey, getFcmRegistrationToken())) {
                                 selfPusher = pusher;
                                 break;
                             }
@@ -585,14 +586,14 @@ public final class GcmRegistrationManager {
 
     /**
      * Force to register the sessions to the third party servers.
-     * The GCM registration must have been done and there is no pending registration.
+     * The FCM registration must have been done and there is no pending registration.
      *
      * @param callback the callback
      */
     public void forceSessionsRegistration(@Nullable ApiCallback<Void> callback) {
         if (mRegistrationState == RegistrationState.SERVER_REGISTERED
-                || mRegistrationState == RegistrationState.GCM_REGISTERED) {
-            setAndStoreRegistrationState(RegistrationState.GCM_REGISTERED);
+                || mRegistrationState == RegistrationState.FCM_REGISTERED) {
+            setAndStoreRegistrationState(RegistrationState.FCM_REGISTERED);
 
             register(callback);
         } else {
@@ -607,7 +608,7 @@ public final class GcmRegistrationManager {
     }
 
     /**
-     * Register the current sessions to the 3rd party GCM server
+     * Register the current sessions to the 3rd party push server
      *
      * @param callback the callback.
      */
@@ -620,13 +621,13 @@ public final class GcmRegistrationManager {
 
                 // if the registration failed
                 // try to register again
-                if (registerToGcm()) {
-                    Log.d(LOG_TAG, "GCM registration success: register on server side");
+                if (registerToFcm()) {
+                    Log.d(LOG_TAG, "FCM registration success: register on server side");
                     register(callback);
                 } else {
-                    Log.d(LOG_TAG, "GCM registration failed");
+                    Log.d(LOG_TAG, "FCM registration failed");
                     if (callback != null) {
-                        callback.onUnexpectedError(new Exception("GCM registration failed"));
+                        callback.onUnexpectedError(new Exception("FCM registration failed"));
                     }
                 }
                 break;
@@ -637,9 +638,9 @@ public final class GcmRegistrationManager {
                     mRegistrationCallbacks.add(callback);
                 }
                 break;
-            case GCM_REGISTERED:
+            case FCM_REGISTERED:
                 // check if the notifications must be displayed
-                if (useGCM()
+                if (useFcm()
                         && areDeviceNotificationsAllowed()
                         && !TextUtils.isEmpty(mRegistrationToken)) {
                     setAndStoreRegistrationState(RegistrationState.SERVER_REGISTRATING);
@@ -653,7 +654,7 @@ public final class GcmRegistrationManager {
                     registerToThirdPartyServerRecursive(new ArrayList<>(Matrix.getInstance(mContext).getSessions()), 0);
                 } else {
                     if (callback != null) {
-                        callback.onUnexpectedError(new Exception("GCM is not allowed"));
+                        callback.onUnexpectedError(new Exception("FCM is not allowed"));
                     }
                 }
                 break;
@@ -696,11 +697,11 @@ public final class GcmRegistrationManager {
             refreshPushersList(sessions, null);
 
             // the notifications have been disabled while registering them
-            if (useGCM() && !areDeviceNotificationsAllowed()) {
+            if (useFcm() && !areDeviceNotificationsAllowed()) {
                 // remove them
                 unregister(null);
             } else {
-                CommonActivityUtils.onGcmUpdate(mContext);
+                CommonActivityUtils.onPushUpdate(mContext);
             }
 
             return;
@@ -719,24 +720,24 @@ public final class GcmRegistrationManager {
 
             @Override
             public void onNetworkError(Exception e) {
-                // fallback to the GCM_REGISTERED state
-                setAndStoreRegistrationState(RegistrationState.GCM_REGISTERED);
+                // fallback to the FCM_REGISTERED state
+                setAndStoreRegistrationState(RegistrationState.FCM_REGISTERED);
 
                 dispatchRegisterNetworkError(e);
             }
 
             @Override
             public void onMatrixError(MatrixError e) {
-                // fallback to the GCM_REGISTERED state
-                setAndStoreRegistrationState(RegistrationState.GCM_REGISTERED);
+                // fallback to the FCM_REGISTERED state
+                setAndStoreRegistrationState(RegistrationState.FCM_REGISTERED);
 
                 dispatchRegisterMatrixError(e);
             }
 
             @Override
             public void onUnexpectedError(Exception e) {
-                // fallback to the GCM_REGISTERED state
-                setAndStoreRegistrationState(RegistrationState.GCM_REGISTERED);
+                // fallback to the FCM_REGISTERED state
+                setAndStoreRegistrationState(RegistrationState.FCM_REGISTERED);
 
                 dispatchRegisterUnexpectedError(e);
             }
@@ -786,13 +787,13 @@ public final class GcmRegistrationManager {
                                      final int index) {
         // reach this end of the list ?
         if (index >= sessions.size()) {
-            setAndStoreRegistrationState(RegistrationState.GCM_REGISTERED);
+            setAndStoreRegistrationState(RegistrationState.FCM_REGISTERED);
 
             // trigger a registration if the user enabled them while the un-registration was processing
-            if (useGCM() && areDeviceNotificationsAllowed() && Matrix.hasValidSessions()) {
+            if (useFcm() && areDeviceNotificationsAllowed() && Matrix.hasValidSessions()) {
                 register(null);
             } else {
-                CommonActivityUtils.onGcmUpdate(mContext);
+                CommonActivityUtils.onPushUpdate(mContext);
             }
 
             dispatchUnregisterSuccess();
@@ -952,7 +953,7 @@ public final class GcmRegistrationManager {
     //================================================================================
 
     /**
-     * Tells if GCM has a push token.
+     * Tells if we have a FCM token.
      */
     public boolean hasRegistrationToken() {
         return null != mRegistrationToken;
@@ -966,30 +967,30 @@ public final class GcmRegistrationManager {
     }
 
     /**
-     * Tell if GCM is registered i.e. ready to use
+     * Tell if FCM is registered i.e. ready to use
      */
-    public boolean isGcmRegistered() {
-        return (mRegistrationState == RegistrationState.GCM_REGISTERED)
+    public boolean isFcmRegistered() {
+        return (mRegistrationState == RegistrationState.FCM_REGISTERED)
                 || (mRegistrationState == RegistrationState.SERVER_REGISTRATING)
                 || (mRegistrationState == RegistrationState.SERVER_REGISTERED);
     }
 
     /**
-     * Tells if the GCM is registered on server
+     * Tells if the push is registered on server
      */
     public boolean isServerRegistered() {
         return mRegistrationState == RegistrationState.SERVER_REGISTERED;
     }
 
     /**
-     * Tells if the GCM is unregistered on server
+     * Tells if the push is unregistered on server
      */
     public boolean isServerUnRegistered() {
-        return mRegistrationState == RegistrationState.GCM_REGISTERED;
+        return mRegistrationState == RegistrationState.FCM_REGISTERED;
     }
 
     //================================================================================
-    // GCM preferences
+    // Push preferences
     //================================================================================
 
     /**
@@ -1024,22 +1025,22 @@ public final class GcmRegistrationManager {
     }
 
     /**
-     * Clear the GCM preferences
+     * Clear the push preferences
      */
     public void clearPreferences() {
-        getGcmSharedPreferences()
+        getPushSharedPreferences()
                 .edit()
                 .clear()
                 .apply();
     }
 
     /**
-     * Tells if the client prefers GCM over events polling thread.
+     * Tells if the client prefers FCM over events polling thread.
      *
-     * @return true to use GCM before using the events polling thread, false otherwise
+     * @return true to use FCM before using the events polling thread, false otherwise
      */
-    public boolean useGCM() {
-        return BuildConfig.ALLOW_GCM_USE;
+    public boolean useFcm() {
+        return BuildConfig.ALLOW_FCM_USE;
     }
 
     /**
@@ -1092,7 +1093,7 @@ public final class GcmRegistrationManager {
      * @return true the notifications must be triggered on this device
      */
     public boolean areDeviceNotificationsAllowed() {
-        return getGcmSharedPreferences().getBoolean(PREFS_ALLOW_NOTIFICATIONS, true);
+        return getPushSharedPreferences().getBoolean(PREFS_ALLOW_NOTIFICATIONS, true);
     }
 
     /**
@@ -1101,14 +1102,14 @@ public final class GcmRegistrationManager {
      * @param areAllowed true to enable the device notifications.
      */
     public void setDeviceNotificationsAllowed(boolean areAllowed) {
-        getGcmSharedPreferences()
+        getPushSharedPreferences()
                 .edit()
                 .putBoolean(PREFS_ALLOW_NOTIFICATIONS, areAllowed)
                 .apply();
 
-        if (!useGCM()) {
-            // when GCM is disabled, enable / disable the "Listen for events" notifications
-            CommonActivityUtils.onGcmUpdate(mContext);
+        if (!useFcm()) {
+            // when FCM is disabled, enable / disable the "Listen for events" notifications
+            CommonActivityUtils.onPushUpdate(mContext);
         }
     }
 
@@ -1116,7 +1117,7 @@ public final class GcmRegistrationManager {
      * @return true if the notifications should turn the screen on for 3 seconds.
      */
     public boolean isScreenTurnedOn() {
-        return getGcmSharedPreferences().getBoolean(PREFS_TURN_SCREEN_ON, false);
+        return getPushSharedPreferences().getBoolean(PREFS_TURN_SCREEN_ON, false);
     }
 
     /**
@@ -1125,7 +1126,7 @@ public final class GcmRegistrationManager {
      * @param flag true to enable the device notifications.
      */
     public void setScreenTurnedOn(boolean flag) {
-        getGcmSharedPreferences()
+        getPushSharedPreferences()
                 .edit()
                 .putBoolean(PREFS_TURN_SCREEN_ON, flag)
                 .apply();
@@ -1138,7 +1139,7 @@ public final class GcmRegistrationManager {
      * @return true if the background sync is allowed
      */
     public boolean isBackgroundSyncAllowed() {
-        // If using GCM, first check if the application has the "run in background" permission.
+        // If using FCM, first check if the application has the "run in background" permission.
         // No permission, no background sync
         if (hasRegistrationToken()
                 && !SystemUtilsKt.isIgnoringBatteryOptimizations(mContext)) {
@@ -1146,7 +1147,7 @@ public final class GcmRegistrationManager {
         }
 
         // then, this depends on the user setting
-        return getGcmSharedPreferences().getBoolean(PREFS_ALLOW_BACKGROUND_SYNC, true);
+        return getPushSharedPreferences().getBoolean(PREFS_ALLOW_BACKGROUND_SYNC, true);
     }
 
     /**
@@ -1157,13 +1158,13 @@ public final class GcmRegistrationManager {
      * @param isAllowed true to allow the background sync.
      */
     public void setBackgroundSyncAllowed(boolean isAllowed) {
-        getGcmSharedPreferences()
+        getPushSharedPreferences()
                 .edit()
                 .putBoolean(PREFS_ALLOW_BACKGROUND_SYNC, isAllowed)
                 .apply();
 
-        // when GCM is disabled, enable / disable the "Listen for events" notifications
-        CommonActivityUtils.onGcmUpdate(mContext);
+        // when FCM is disabled, enable / disable the "Listen for events" notifications
+        CommonActivityUtils.onPushUpdate(mContext);
     }
 
     /**
@@ -1179,7 +1180,7 @@ public final class GcmRegistrationManager {
      * @return true if the non encrypted content may be sent through Google services servers
      */
     public boolean isContentSendingAllowed() {
-        return getGcmSharedPreferences().getBoolean(PREFS_ALLOW_SENDING_CONTENT_TO_GCM, true);
+        return getPushSharedPreferences().getBoolean(PREFS_ALLOW_SENDING_CONTENT_TO_GCM, true);
     }
 
     /**
@@ -1188,7 +1189,7 @@ public final class GcmRegistrationManager {
      * @param isAllowed true to allow the content sending.
      */
     public void setContentSendingAllowed(boolean isAllowed) {
-        getGcmSharedPreferences()
+        getPushSharedPreferences()
                 .edit()
                 .putBoolean(PREFS_ALLOW_SENDING_CONTENT_TO_GCM, isAllowed)
                 .apply();
@@ -1198,14 +1199,14 @@ public final class GcmRegistrationManager {
      * @return the sync timeout in ms.
      */
     public int getBackgroundSyncTimeOut() {
-        return getGcmSharedPreferences().getInt(PREFS_SYNC_TIMEOUT, 6000);
+        return getPushSharedPreferences().getInt(PREFS_SYNC_TIMEOUT, 6000);
     }
 
     /**
      * @param syncDelay the new sync delay in ms.
      */
     public void setBackgroundSyncTimeOut(int syncDelay) {
-        getGcmSharedPreferences()
+        getPushSharedPreferences()
                 .edit()
                 .putInt(PREFS_SYNC_TIMEOUT, syncDelay)
                 .apply();
@@ -1217,7 +1218,7 @@ public final class GcmRegistrationManager {
     public int getBackgroundSyncDelay() {
         // on fdroid version, the default sync delay is about 1 minutes
         // set a large value because many users don't know it can be defined from the settings page
-        if ((null == mRegistrationToken) && (null == getStoredRegistrationToken()) && !getGcmSharedPreferences().contains(PREFS_SYNC_DELAY)) {
+        if ((null == mRegistrationToken) && (null == getStoredRegistrationToken()) && !getPushSharedPreferences().contains(PREFS_SYNC_DELAY)) {
             return 60 * 1000;
         } else {
             int currentValue = 0;
@@ -1227,7 +1228,7 @@ public final class GcmRegistrationManager {
                 currentValue = session.getSyncDelay();
             }
 
-            return getGcmSharedPreferences().getInt(PREFS_SYNC_DELAY, currentValue);
+            return getPushSharedPreferences().getInt(PREFS_SYNC_DELAY, currentValue);
         }
     }
 
@@ -1240,35 +1241,35 @@ public final class GcmRegistrationManager {
             syncDelay = Math.max(syncDelay, 1000);
         }
 
-        getGcmSharedPreferences()
+        getPushSharedPreferences()
                 .edit()
                 .putInt(PREFS_SYNC_DELAY, syncDelay)
                 .apply();
     }
 
     //================================================================================
-    // GCM push key
+    // FCM push key
     //================================================================================
 
     /**
-     * @return the GCM preferences
+     * @return the push preferences
      */
-    private SharedPreferences getGcmSharedPreferences() {
-        return mContext.getSharedPreferences(PREFS_GCM, Context.MODE_PRIVATE);
+    private SharedPreferences getPushSharedPreferences() {
+        return mContext.getSharedPreferences(PREFS_PUSH, Context.MODE_PRIVATE);
     }
 
     /**
-     * @return the GCM registration stored for this version of the app or null if none is stored.
+     * @return the FCM registration stored for this version of the app or null if none is stored.
      */
     private String getStoredRegistrationToken() {
-        return getGcmSharedPreferences().getString(PREFS_PUSHER_REGISTRATION_TOKEN_KEY_FCM, null);
+        return getPushSharedPreferences().getString(PREFS_PUSHER_REGISTRATION_TOKEN_KEY_FCM, null);
     }
 
     /**
      * @return the old registration token (after updating GCM to FCM)
      */
     private String getOldStoredRegistrationToken() {
-        return getGcmSharedPreferences().getString(PREFS_PUSHER_REGISTRATION_TOKEN_KEY, null);
+        return getPushSharedPreferences().getString(PREFS_PUSHER_REGISTRATION_TOKEN_KEY, null);
     }
 
     /**
@@ -1277,14 +1278,14 @@ public final class GcmRegistrationManager {
     private void clearOldStoredRegistrationToken() {
         Log.d(LOG_TAG, "Remove old registration token");
 
-        getGcmSharedPreferences()
+        getPushSharedPreferences()
                 .edit()
                 .remove(PREFS_PUSHER_REGISTRATION_TOKEN_KEY)
                 .apply();
     }
 
     /**
-     * Set the GCM registration for the currently-running version of this app.
+     * Set the FCM registration for the currently-running version of this app.
      *
      * @param registrationToken the registration token
      */
@@ -1293,7 +1294,7 @@ public final class GcmRegistrationManager {
 
         mRegistrationToken = registrationToken;
 
-        getGcmSharedPreferences()
+        getPushSharedPreferences()
                 .edit()
                 .putString(PREFS_PUSHER_REGISTRATION_TOKEN_KEY_FCM, registrationToken)
                 .apply();
@@ -1303,7 +1304,7 @@ public final class GcmRegistrationManager {
      * @return the registration status
      */
     private RegistrationState getStoredRegistrationState() {
-        return RegistrationState.values()[getGcmSharedPreferences().getInt(PREFS_PUSHER_REGISTRATION_STATUS, RegistrationState.UNREGISTRATED.ordinal())];
+        return RegistrationState.values()[getPushSharedPreferences().getInt(PREFS_PUSHER_REGISTRATION_STATUS, RegistrationState.UNREGISTRATED.ordinal())];
     }
 
     /**
@@ -1318,7 +1319,7 @@ public final class GcmRegistrationManager {
         if (RegistrationState.SERVER_REGISTRATING != state
                 && RegistrationState.SERVER_UNREGISTRATING != state) {
 
-            getGcmSharedPreferences()
+            getPushSharedPreferences()
                     .edit()
                     .putInt(PREFS_PUSHER_REGISTRATION_STATUS, state.ordinal())
                     .apply();
@@ -1326,18 +1327,18 @@ public final class GcmRegistrationManager {
     }
 
     /**
-     * Clear the GCM data
+     * Clear the FCM data
      *
      * @param callback the asynchronous callback
      */
-    public void clearGCMData(@NonNull ApiCallback<Void> callback) {
+    public void clearFcmData(@NonNull ApiCallback<Void> callback) {
         try {
             setAndStoreRegistrationToken(null);
             setAndStoreRegistrationState(RegistrationState.UNREGISTRATED);
 
             callback.onSuccess(null);
         } catch (Exception e) {
-            Log.e(LOG_TAG, "## clearGCMData failed " + e.getMessage(), e);
+            Log.e(LOG_TAG, "## clearFcmData failed " + e.getMessage(), e);
 
             callback.onUnexpectedError(e);
         }
