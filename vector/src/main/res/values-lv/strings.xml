@@ -638,7 +638,7 @@ Lai turpinātu, ievadi savu paroli.</string>
 
     <string name="list_members">Biedru katalogs</string>
     <string name="open_chat_header">Atvērt galveni</string>
-    <string name="room_sync_in_progress">Notiek sinhronizācija...</string>
+    <string name="room_sync_in_progress">Notiek sinhronizācija…</string>
     <plurals name="room_header_active_members_count">
 	<item quantity="zero">1 aktīvs biedrs</item>
 	<item quantity="one">%d aktīvi biedri</item>
