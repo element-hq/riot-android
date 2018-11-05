@@ -58,8 +58,8 @@
     <string name="action_exit">離開</string>
     <string name="actions">動作</string>
     <string name="action_sign_out">登出</string>
-    <string name="action_sign_out_confirmation">為了安全，登出將會刪除任何的端對端加密金鑰。在你重新登入後，無法讀取先前已加密的歷史聊天。
-在登出前，選擇匯以備份加密金鑰。</string>
+    <string name="action_sign_out_confirmation">為了安全，登出將會刪除任何的端對端加密金鑰。在您重新登入後將無法讀取先前已加密的聊天歷史。
+在登出前請選取匯出以備份加密金鑰。</string>
     <string name="action_voice_call">語音通話</string>
     <string name="action_video_call">視訊通話</string>
     <string name="action_global_search">全域搜尋</string>
@@ -75,7 +75,7 @@
     <string name="dialog_title_warning">警告</string>
 
     <string name="bottom_action_home">首頁</string>
-    <string name="bottom_action_favourites">收藏夾</string>
+    <string name="bottom_action_favourites">最愛</string>
     <string name="bottom_action_people">聯絡人</string>
     <string name="bottom_action_rooms">聊天室</string>
     <string name="bottom_action_groups">社群</string>
@@ -118,7 +118,7 @@
     <string name="send_bug_report_logs_description">為了診斷問題，客戶端的紀錄將會同錯誤回報一起送出。這個包含了紀錄與螢幕截圖的錯誤回報將不會公開可見。如果您只想送出上方的文字，請取消勾選：</string>
     <string name="send_bug_report_alert_message">您似乎沮喪的搖晃著手機。想送出錯誤回報？</string>
     <string name="send_bug_report_app_crashed">此應用程式在上次當機。您想送出錯誤回報？</string>
-    <string name="send_bug_report_rage_shake">憤怒搖晃來回報錯誤</string>
+    <string name="send_bug_report_rage_shake">憤怒搖晃來回報臭蟲</string>
 
     <string name="send_bug_report_sent">此錯誤回報已成功送出</string>
     <string name="send_bug_report_failed">此錯誤回報無法送出（%s）</string>
@@ -458,7 +458,7 @@
 
     <string name="room_recents_join">加入</string>
     <string name="room_recents_directory">目錄</string>
-    <string name="room_recents_favourites">收藏夾</string>
+    <string name="room_recents_favourites">最愛</string>
     <string name="room_recents_conversations">聊天室</string>
     <string name="room_recents_low_priority">低優先度</string>
     <string name="room_recents_invites">邀請</string>
@@ -491,7 +491,7 @@
     <string name="room_sliding_menu_messages">訊息</string>
     <string name="room_sliding_menu_settings">設定</string>
     <string name="room_sliding_menu_version">版本</string>
-    <string name="room_sliding_menu_term_and_conditions">合約條款</string>
+    <string name="room_sliding_menu_term_and_conditions">條款與條件</string>
     <string name="room_sliding_menu_third_party_notices">第三方通知</string>
     <string name="room_sliding_menu_copyright">版權</string>
     <string name="room_sliding_menu_privacy_policy">隱私權政策</string>
@@ -502,7 +502,7 @@
     <string name="settings_add_email_address">新增電子郵件地址</string>
     <string name="settings_phone_number">電話號碼</string>
     <string name="settings_add_phone_number">添加電話號碼</string>
-    <string name="settings_summary_app_info_link">應用程式系統資訊窗口</string>
+    <string name="settings_summary_app_info_link">應用程式系統資訊畫面</string>
     <string name="settings_title_app_info_link">應用程式資訊</string>
 
     <string name="settings_notification_privacy">通知隱私</string>
@@ -520,9 +520,9 @@
     <string name="settings_notification_privacy_message_content_not_shown">• 通知<b>不會顯示訊息內容</b></string>
 
     <string name="settings_notification_ringtone">通知音效</string>
-    <string name="settings_enable_all_notif">啓用這個賬戶的通知</string>
+    <string name="settings_enable_all_notif">啟用這個帳號的通知</string>
     <string name="settings_enable_this_device">啓用這個裝置的通知</string>
-    <string name="settings_turn_screen_on">點亮熒幕 3 秒</string>
+    <string name="settings_turn_screen_on">將螢幕開啟 3 秒</string>
 
     <string name="settings_containing_my_display_name">包含我顯示名稱的訊息</string>
     <string name="settings_containing_my_user_name">包含我用戶名稱的訊息</string>
@@ -542,7 +542,7 @@
 
     <string name="settings_version">版本</string>
     <string name="settings_olm_version">olm 版本</string>
-    <string name="settings_app_term_conditions">合約條款</string>
+    <string name="settings_app_term_conditions">條款與條件</string>
     <string name="settings_third_party_notices">第三方通知</string>
     <string name="settings_copyright">版權</string>
     <string name="settings_privacy_policy">隱私權政策</string>
@@ -574,8 +574,8 @@
     <string name="settings_disable_markdown">發送訊息時不使用 Markdown 語法</string>
     <string name="settings_vibrate_on_mention">提及他人時震動</string>
 
-    <string name="settings_deactivate_account_section">註銷帳戶</string>
-    <string name="settings_deactivate_my_account">註銷我的帳號</string>
+    <string name="settings_deactivate_account_section">停用帳號</string>
+    <string name="settings_deactivate_my_account">停用我的帳號</string>
 
     <string name="startup_notification_privacy_title">通知隱私</string>
     <string name="startup_notification_privacy_message">Riot 可以在後臺安全隱密地管理通知 (這可能會影響電池的使用)。</string>
@@ -588,7 +588,7 @@
     <string name="settings_opt_in_of_analytics_prompt">請允許收集匿名分析以讓我們可以改進此應用程式。</string>
     <string name="settings_opt_in_of_analytics_ok">是的，我想要協助！</string>
 
-    <string name="settings_data_save_mode">省流量模式</string>
+    <string name="settings_data_save_mode">節省流量模式</string>
 
     <string name="devices_details_dialog_title">裝置資料</string>
     <string name="devices_details_id_title">ID</string>
@@ -607,7 +607,7 @@
     <string name="settings_identity_server">身份認證伺服器</string>
 
     <string name="settings_user_interface">使用者介面</string>
-    <string name="settings_interface_language">界面語言</string>
+    <string name="settings_interface_language">介面語言</string>
     <string name="settings_select_language">選擇語言</string>
 
     <string name="account_email_validation_title">等待驗證</string>
@@ -686,7 +686,7 @@
     <string name="room_settings_room_internal_id">此聊天室的內部 ID 為</string>
     <string name="room_settings_addresses_pref_title">地址</string>
     <string name="room_settings_labs_pref_title">實驗室</string>
-    <string name="room_settings_labs_warning_message">這些是可能出現意外故障的實驗性特徵。謹慎使用。</string>
+    <string name="room_settings_labs_warning_message">這些是可能以非預期的方式壞掉的實驗性功能。請小心服用。</string>
     <string name="room_settings_labs_end_to_end">端到端加密</string>
     <string name="room_settings_labs_end_to_end_is_active">端到端加密已啓用</string>
     <string name="room_settings_labs_end_to_end_warnings">您需要登出才能啟用加密。</string>
@@ -750,9 +750,9 @@
     <string name="encryption_information_verification">驗證</string>
     <string name="encryption_information_ed25519_fingerprint">Ed25519 指紋</string>
 
-    <string name="encryption_export_e2e_room_keys">導出聊天室的端到端加密金鑰</string>
-    <string name="encryption_export_room_keys">導出聊天室的端到端加密金鑰</string>
-    <string name="encryption_export_room_keys_summary">匯出金鑰到本地檔案</string>
+    <string name="encryption_export_e2e_room_keys">匯出聊天室的端到端加密金鑰</string>
+    <string name="encryption_export_room_keys">匯出聊天室的加密金鑰</string>
+    <string name="encryption_export_room_keys_summary">匯出金鑰到本機檔案</string>
     <string name="encryption_export_export">匯出</string>
     <string name="encryption_import_enter_passphrase">輸入通關密語</string>
     <string name="encryption_export_confirm_passphrase">確認通關密語</string>
@@ -760,9 +760,9 @@
 
 警告：如果應用程式被解除安裝，這個檔案可能會被刪除。</string>
 
-    <string name="encryption_import_e2e_room_keys">導入聊天室端到端加密密鑰</string>
+    <string name="encryption_import_e2e_room_keys">匯入聊天室端到端加密密鑰</string>
     <string name="encryption_import_room_keys">匯入聊天室金鑰</string>
-    <string name="encryption_import_room_keys_summary">從本地檔案匯入金鑰</string>
+    <string name="encryption_import_room_keys_summary">從本機檔案匯入金鑰</string>
     <string name="encryption_import_import">匯入</string>
     <string name="encryption_never_send_to_unverified_devices_title">只匯出到已驗證的裝置</string>
     <string name="encryption_never_send_to_unverified_devices_summary">從不自此裝置傳送加密的訊息到未驗證的裝置</string>
@@ -901,7 +901,7 @@
     <string name="dialog_user_consent_content">如要繼續使用此 %1$s 主伺服器，您必須同意該合約條款。</string>
     <string name="dialog_user_consent_submit">現在檢視</string>
 
-    <string name="deactivate_account_title">註銷帳戶</string>
+    <string name="deactivate_account_title">停用帳號</string>
     <string name="deactivate_account_content">這將使您的帳戶永久不可用。您將無法登錄, 並且沒有人能夠重新註冊相同的使用者 ID。這將導致您的帳戶離開它所參與的所有房間, 它將從您的身份伺服器上刪除您的帳戶詳細資訊。<b>此操作是不可逆轉</b>的。
 
 停用您的帳戶<b>不會預設導致我們刪除您發送的訊息</b>。如果您想讓我們忘記您的訊息, 請在下面的方框中打勾。
@@ -909,7 +909,7 @@
 Matrix 中的消息可見度類似于電子郵件。我們忘記您的郵件意味著您發送的訊息將不會與任何新的或未註冊的使用者共用, 但是已註冊的已訪問這些郵件的使用者仍然可以訪問他們的副本。</string>
     <string name="deactivate_account_delete_checkbox">請在我的帳號停用時忘記我傳送過的所有訊息（<b>警告：</b>這將會造成未來的使用者無法看見完整的對話紀錄）</string>
     <string name="deactivate_account_prompt_password">若要繼續進行，請輸入您的密碼：</string>
-    <string name="deactivate_account_submit">註銷帳戶</string>
+    <string name="deactivate_account_submit">停用帳號</string>
 
     <string name="error_empty_field_your_password">請輸入您的密碼。</string>
 
@@ -997,5 +997,14 @@ Matrix 中的消息可見度類似于電子郵件。我們忘記您的郵件意�
     <string name="error_lazy_loading_not_supported_by_home_server">您的家伺服器尚不支援延遲載入聊天室成員。請稍後再試。</string>
 
     <string name="unknown_error">抱歉，遇到錯誤</string>
+
+<string name="status_theme">Status.im 主題</string>
+
+    <string name="room_sliding_menu_version_x">版本 %s</string>
+    <string name="encryption_export_notice">請建立密語以加密您匯出的金鑰。您將需要輸入這些密語以匯入金鑰。</string>
+    <string name="encryption_export_create_passphrase">建立密語</string>
+    <string name="encryption_export_passphrase_dont_match">密語必須符合</string>
+    <string name="merged_events_expand">展開</string>
+    <string name="merged_events_collapse">摺疊</string>
 
 </resources>

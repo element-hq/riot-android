@@ -1024,4 +1024,13 @@
 
     <string name="unknown_error">Съжаляваме, възникна грешка</string>
 
+<string name="status_theme">Status.im тема</string>
+
+    <string name="room_sliding_menu_version_x">Версия %s</string>
+    <string name="encryption_export_notice">Моля, въведете парола за шифроване на екпортираните ключове. Ще е нужно да въведете същата парола за да можете да ги импортирате.</string>
+    <string name="encryption_export_create_passphrase">Създай парола</string>
+    <string name="encryption_export_passphrase_dont_match">Паролите трябва да съвпадат</string>
+    <string name="merged_events_expand">разшири</string>
+    <string name="merged_events_collapse">свий</string>
+
 </resources>

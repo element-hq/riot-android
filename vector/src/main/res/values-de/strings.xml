@@ -1081,4 +1081,13 @@ Beachte: Diese Aktion wird die App neu starten und einige Zeit brauchen.</string
 
     <string name="unknown_error">Entschuldige, ein Fehler trat auf</string>
 
+<string name="room_sliding_menu_version_x">Version %s</string>
+    <string name="status_theme">Status.im-Thema</string>
+
+    <string name="encryption_export_notice">Bitte eine Passphrase erstellen um exportierte Schlüssel zu verschlüsseln. Du musst dieselbe Passphrase eingeben um die Schlüssel importieren zu können.</string>
+    <string name="encryption_export_create_passphrase">Erzeuge Passphrase</string>
+    <string name="encryption_export_passphrase_dont_match">Passphrasen müssen übereinstimmen</string>
+    <string name="merged_events_expand">aufklappen</string>
+    <string name="merged_events_collapse">Zusammenklappen</string>
+
 </resources>

@@ -54,7 +54,7 @@
     <string name="room_participants_online">在线</string>
     <string name="room_participants_offline">离线</string>
     <string name="room_menu_search">搜索</string>
-    <string name="room_one_user_is_typing">%s 正在打字…</string>
+    <string name="room_one_user_is_typing">%s 正在输入…</string>
     <string name="title_activity_home">聊天</string>
     <string name="title_activity_room">聊天室</string>
     <string name="title_activity_settings">设置</string>
@@ -257,8 +257,8 @@
 
     <string name="people_search_local_contacts">本地联系人（%d 个）</string>
 
-    <string name="room_two_users_are_typing">%1$s 和 %2$s 正在打字…</string>
-    <string name="room_many_users_are_typing">%1$s 和 %2$s 及其他人正在打字…</string>
+    <string name="room_two_users_are_typing">%1$s 和 %2$s 正在输入…</string>
+    <string name="room_many_users_are_typing">%1$s 和 %2$s 及其他人正在输入…</string>
     <string name="room_message_placeholder_encrypted">发送一条加密消息…</string>
     <string name="room_message_placeholder_not_encrypted">发送一条消息（未加密）…</string>
     <string name="room_offline_notification">与服务器的连接已断开。</string>
@@ -652,8 +652,8 @@
     <string name="room_jump_to_first_unread">跳到第一条未读消息。</string>
 
     <string name="settings_home_display">主页显示</string>
-    <string name="settings_pin_missed_notifications">固定有错过通知的聊天室</string>
-    <string name="settings_pin_unread_messages">固定有未读通知的聊天室</string>
+    <string name="settings_pin_missed_notifications">置顶含有错过的通知的聊天室</string>
+    <string name="settings_pin_unread_messages">置顶含有未读消息的聊天室</string>
 <string name="settings_user_interface">用户界面</string>
     <string name="settings_interface_language">界面语言</string>
     <string name="settings_select_language">选择语言</string>
@@ -667,7 +667,7 @@
     <string name="settings_keep_media">保留媒体文件</string>
 
     <string name="settings_hide_read_receipts">隐藏已读标签</string>
-    <string name="settings_dont_send_typings_notifs">不发送打字通知</string>
+    <string name="settings_dont_send_typings_notifs">不要发送“正在输入”提示</string>
     <string name="settings_always_show_timestamps">总是显示消息时间戳</string>
     <string name="settings_disable_markdown">发送时禁用 markdown 格式化</string>
     <string name="settings_data_save_mode">省流量模式</string>
