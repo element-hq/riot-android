@@ -374,7 +374,6 @@ Tem a certeza?</string>
     <string name="room_delete_unsent_messages">Apagar mensagens não enviadas</string>
     <string name="room_message_file_not_found">Ficheiro não encontrado</string>
     <string name="room_do_not_have_permission_to_post">Não tem permissão para enviar mensagens nesta sala</string>
-    <string name="room_new_message_notification">1 mensagem nova</string>
 
     <!-- unrecognized SSL certificate -->
     <string name="ssl_trust">Confiar</string>
@@ -504,7 +503,6 @@ Tem a certeza?</string>
     <string name="devices_details_device_name">Nome do dispositivo</string>
     <string name="devices_details_last_seen_title">Visto pela última vez</string>
     <string name="devices_details_last_seen_format">%1$s em %2$s</string>
-    <string name="devices_details_time_format">HH:mm:ss</string>
     <string name="devices_delete_dialog_text">Esta operação exige autenticação adicional.
 Para continuar, insira a sua palavra-passe.</string>
     <string name="devices_delete_dialog_title">Autenticação</string>
@@ -561,9 +559,6 @@ Para continuar, insira a sua palavra-passe.</string>
     <string name="room_settings_tag_pref_entry_low_priority">Baixa prioridade</string>
     <string name="room_settings_tag_pref_entry_none">Nenhum</string>
     <string name="room_settings_tag_pref_no_tag">não etiquetada</string>
-    <string name="room_settings_tag_pref_entry_value_favourite">favorita</string>
-    <string name="room_settings_tag_pref_entry_value_low_priority">não prioritária</string>
-    <string name="room_settings_tag_pref_entry_value_none">nenhum</string>
 
     <!-- room settings : access and visibility -->
     <string name="room_settings_category_access_visibility_title">Acesso e visibilidade</string>
@@ -770,7 +765,6 @@ Dispositivos desconhecidos:</string>
     <string name="widget_integration_missing_room_id">O _id da sala está em falta no pedido.</string>
     <string name="widget_integration_missing_user_id">O user_id está em falta no pedido.</string>
     <string name="widget_integration_room_not_visible">Sala %s não se encontra visível.</string>
-    <string name="settings_labs_matrix_apps">Apps Matrix</string>
     <string name="room_add_matrix_apps">Adicionar apps Matrix</string>
     <string name="notification_sync_in_progress">A sincronizar</string>
     <string name="notification_listening_for_events">À escuta de eventos</string>

@@ -293,7 +293,6 @@ Przyznaj dostęp w następnym oknie.</string>
     <string name="room_delete_unsent_messages">Usuń niewysłane wiadomości</string>
     <string name="room_message_file_not_found">Nie znaleziono pliku</string>
     <string name="room_do_not_have_permission_to_post">Nie masz uprawnień, aby pisać w tym pokoju</string>
-    <string name="room_new_message_notification">1 nowa wiadomość</string>
 
     <string name="ssl_trust">Ufaj</string>
     <string name="ssl_do_not_trust">Nie ufaj</string>
@@ -405,7 +404,6 @@ Zauważ, że ta czynność spowoduje ponowne uruchomienie aplikacji i może to t
     <string name="devices_details_device_name">Nazwa urządzenia</string>
     <string name="devices_details_last_seen_title">Ostatnio widziany</string>
     <string name="devices_details_last_seen_format">%1$s @ %2$s</string>
-    <string name="devices_details_time_format">HH:mm:ss</string>
     <string name="devices_delete_dialog_text">To działanie wymaga dodatkowego uwierzytelnienia.
 Wprowadź hasło, aby kontynuować.</string>
     <string name="devices_delete_dialog_title">Uwierzytelnianie</string>
@@ -717,8 +715,6 @@ Jesteś pewien?</string>
     <string name="settings_vibrate_on_mention">Wibruj gdy ktoś wspomni o tobie</string>
 
     <string name="settings_analytics">Analityka</string>
-    <string name="settings_opt_out_of_analytics">Zrezygnuj z analityki</string>
-    <string name="settings_opt_out_of_analytics_summary">Riot zbiera anonimowe informacje które pozwolą ulepszyć aplikację.</string>
 
     <string name="settings_home_server">Serwer domowy</string>
     <string name="settings_identity_server">Serwer Tożsamości</string>
@@ -733,9 +729,6 @@ Jesteś pewien?</string>
     <string name="room_settings_tag_pref_dialog_title">Otagowany jako:</string>
 
     <string name="room_settings_tag_pref_no_tag">nieotagowany</string>
-    <string name="room_settings_tag_pref_entry_value_favourite">Ulubione</string>
-    <string name="room_settings_tag_pref_entry_value_low_priority">niski</string>
-    <string name="room_settings_tag_pref_entry_value_none">żaden</string>
 
     <string name="room_settings_room_notifications_title">Powiadomienia</string>
     <string name="room_settings_read_history_entry_members_only_option_time_shared">Tylko członkowie (od momentu włączenia tej opcji)</string>
@@ -787,7 +780,7 @@ Jesteś pewien?</string>
     <string name="settings_notification_privacy_reduced">Zmniejszona prywatność</string>
     <string name="settings_notification_privacy_need_permission">Aplikacja wymaga uprawnień do działania w tle</string>
     <string name="settings_notification_privacy_no_permission">Aplikacja <b>nie</b> wymaga uprawnień do działania w tle</string>
-    <string name="settings_notification_privacy_gcm">• Powiadomienia wysyłane za pomocą Google Cloud Messaging</string>
+    <string name="settings_notification_privacy_fcm">• Powiadomienia wysyłane za pomocą Google Cloud Messaging</string>
     <string name="settings_notification_privacy_metadata">• Powiadomienia zawierają tylko meta-dane</string>
     <string name="settings_notification_privacy_secure_message_content">• Treść powiadomienia jest <b>bezpiecznie pobierana z domowego serwera Matrix</b></string>
     <string name="settings_notification_privacy_nosecure_message_content">• Powiadomienia zawierają <b>meta-dane oraz treść wiadomości</b></string>
@@ -917,7 +910,6 @@ Czy chcesz dodać teraz kilka?</string>
     <string name="widget_integration_missing_user_id">Brakujący _id użytkownika w żądaniu.</string>
     <string name="widget_integration_missing_parameter">Brakuje wymaganego parametru.</string>
     <string name="widget_integration_invalid_parameter">Parametr jest niepoprawny.</string>
-    <string name="settings_labs_matrix_apps">Aplikacje Matrix</string>
     <string name="room_add_matrix_apps">Dodaj aplikacje Matrix</string>
     <string name="settings_labs_enable_send_voice">Wyślij wiadomość głosową (wymaga aplikacji innej firmy do nagrywania wiadomości głosowych)</string>
 

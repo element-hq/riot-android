@@ -29,6 +29,8 @@ import org.jetbrains.annotations.NotNull;
 import org.matrix.androidsdk.MXSession;
 import org.matrix.androidsdk.listeners.IMXEventListener;
 import org.matrix.androidsdk.listeners.MXEventListener;
+import org.matrix.androidsdk.rest.callback.ApiCallback;
+import org.matrix.androidsdk.rest.model.MatrixError;
 import org.matrix.androidsdk.util.Log;
 
 import java.util.ArrayList;
@@ -43,14 +45,14 @@ import im.vector.Matrix;
 import im.vector.R;
 import im.vector.VectorApp;
 import im.vector.analytics.TrackingEvent;
-import im.vector.gcm.GcmRegistrationManager;
+import im.vector.push.PushManager;
 import im.vector.receiver.VectorUniversalLinkReceiver;
 import im.vector.services.EventStreamService;
+import im.vector.ui.themes.ActivityOtherThemes;
 import im.vector.util.PreferencesManager;
-import kotlin.Triple;
 
 /**
- * SplashActivity displays a splash while loading and inittializing the client.
+ * SplashActivity displays a splash while loading and initializing the client.
  */
 public class SplashActivity extends MXCActionBarActivity {
     private static final String LOG_TAG = SplashActivity.class.getSimpleName();
@@ -99,7 +101,7 @@ public class SplashActivity extends MXCActionBarActivity {
 
         if (!hasCorruptedStore()) {
             // Go to the home page
-            Intent intent = new Intent(SplashActivity.this, VectorHomeActivity.class);
+            Intent intent = new Intent(this, VectorHomeActivity.class);
 
             Bundle receivedBundle = getIntent().getExtras();
 
@@ -135,8 +137,8 @@ public class SplashActivity extends MXCActionBarActivity {
 
     @NotNull
     @Override
-    public Triple getOtherThemes() {
-        return new Triple(R.style.AppTheme_NoActionBar_Dark, R.style.AppTheme_NoActionBar_Black, R.style.AppTheme_NoActionBar_Status);
+    public ActivityOtherThemes getOtherThemes() {
+        return ActivityOtherThemes.NoActionBar.INSTANCE;
     }
 
     @Override
@@ -146,7 +148,7 @@ public class SplashActivity extends MXCActionBarActivity {
 
     @Override
     public void initUiAndData() {
-        Collection<MXSession> sessions = Matrix.getInstance(getApplicationContext()).getSessions();
+        List<MXSession> sessions = Matrix.getInstance(getApplicationContext()).getSessions();
 
         if (sessions == null) {
             Log.e(LOG_TAG, "onCreate no Sessions");
@@ -176,6 +178,68 @@ public class SplashActivity extends MXCActionBarActivity {
                 .load(R.drawable.riot_splash)
                 .into(animatedLogo);
 
+        // Check the lazy loading status
+        checkLazyLoadingStatus(sessions);
+    }
+
+    private void checkLazyLoadingStatus(final List<MXSession> sessions) {
+        // Note: currently Riot uses a simple boolean to enable or disable LL, and does not support multi sessions
+        // If it was the case, every session may not support LL. So for the moment, only consider 1 session
+        if (sessions.size() != 1) {
+            // Go to next step
+            startEventStreamService(sessions);
+        }
+        // If LL is already ON, nothing to do
+        if (PreferencesManager.useLazyLoading(this)) {
+            // Go to next step
+            startEventStreamService(sessions);
+        } else {
+            // Check that user has not explicitly disabled the lazy loading
+            if (PreferencesManager.hasUserRefusedLazyLoading(this)) {
+                // Go to next step
+                startEventStreamService(sessions);
+            } else {
+                // Try to enable LL
+                final MXSession session = sessions.get(0);
+
+                session.canEnableLazyLoading(new ApiCallback<Boolean>() {
+                    @Override
+                    public void onNetworkError(Exception e) {
+                        // Ignore, maybe next time
+                        startEventStreamService(sessions);
+                    }
+
+                    @Override
+                    public void onMatrixError(MatrixError e) {
+                        // Ignore, maybe next time
+                        startEventStreamService(sessions);
+                    }
+
+                    @Override
+                    public void onUnexpectedError(Exception e) {
+                        // Ignore, maybe next time
+                        startEventStreamService(sessions);
+                    }
+
+                    @Override
+                    public void onSuccess(Boolean info) {
+                        if (info) {
+                            // We can enable lazy loading
+                            PreferencesManager.setUseLazyLoading(SplashActivity.this, true);
+
+                            // Reload the sessions
+                            Matrix.getInstance(SplashActivity.this).reloadSessions(SplashActivity.this);
+                        } else {
+                            // Maybe in the future this home server will support it
+                            startEventStreamService(sessions);
+                        }
+                    }
+                });
+            }
+        }
+    }
+
+    private void startEventStreamService(Collection<MXSession> sessions) {
         List<String> matrixIds = new ArrayList<>();
 
         for (final MXSession session : sessions) {
@@ -261,13 +325,13 @@ public class SplashActivity extends MXCActionBarActivity {
             EventStreamService.getInstance().startAccounts(matrixIds);
         }
 
-        // trigger the GCM registration if required
-        GcmRegistrationManager gcmRegistrationManager = Matrix.getInstance(getApplicationContext()).getSharedGCMRegistrationManager();
+        // trigger the push registration if required
+        PushManager pushManager = Matrix.getInstance(getApplicationContext()).getPushManager();
 
-        if (!gcmRegistrationManager.isGcmRegistered()) {
-            gcmRegistrationManager.checkRegistrations();
+        if (!pushManager.isFcmRegistered()) {
+            pushManager.checkRegistrations();
         } else {
-            gcmRegistrationManager.forceSessionsRegistration(null);
+            pushManager.forceSessionsRegistration(null);
         }
 
         boolean noUpdate;

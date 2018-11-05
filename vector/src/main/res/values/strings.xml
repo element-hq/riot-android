@@ -138,7 +138,7 @@
     <string name="send_bug_report_include_logs">Send logs</string>
     <string name="send_bug_report_include_crash_logs">Send crash logs</string>
     <string name="send_bug_report_include_screenshot">Send screenshot</string>
-    <string name="send_bug_report">Bug Report</string>
+    <string name="send_bug_report">Report bug</string>
     <string name="send_bug_report_description">Please describe the bug. What did you do? What did you expect to happen? What actually happened?</string>
     <string name="send_bug_report_description_in_english">If possible, please write the description in English.</string>
     <string name="send_bug_report_placeholder">Describe your problem here</string>
@@ -472,7 +472,6 @@
     <string name="room_delete_unsent_messages">Delete unsent messages</string>
     <string name="room_message_file_not_found">File not found</string>
     <string name="room_do_not_have_permission_to_post">You do not have permission to post to this room</string>
-    <string name="room_new_message_notification">1 new message</string>
     <plurals name="room_new_messages_notification">
         <item quantity="one">1 new message</item>
         <item quantity="other">%d new messages</item>
@@ -585,7 +584,7 @@
     <string name="settings_notification_privacy_reduced">Reduced privacy</string>
     <string name="settings_notification_privacy_need_permission">The app needs permission to run in the background</string>
     <string name="settings_notification_privacy_no_permission">The apps does <b>not</b> need permission to run in the background</string>
-    <string name="settings_notification_privacy_gcm">• Notifications are sent via Google Cloud Messaging</string>
+    <string name="settings_notification_privacy_fcm">• Notifications are sent via Google Cloud Messaging</string>
     <string name="settings_notification_privacy_metadata">• Notifications only contain meta data</string>
     <string name="settings_notification_privacy_secure_message_content">• Message content of the notification is <b>located securely direct from the Matrix homeserver</b></string>
     <string name="settings_notification_privacy_nosecure_message_content">• Notifications contain <b>meta and message data</b></string>
@@ -658,8 +657,6 @@
 
     <!-- analytics -->
     <string name="settings_analytics">Analytics</string>
-    <string name="settings_opt_out_of_analytics">Opt out of analytics</string>
-    <string name="settings_opt_out_of_analytics_summary">Riot collects anonymous analytics to allow us to improve the application.</string>
     <string name="settings_opt_in_of_analytics">Send analytics data</string>
     <string name="settings_opt_in_of_analytics_summary">Riot collects anonymous analytics to allow us to improve the application.</string>
     <string name="settings_opt_in_of_analytics_prompt">Please enable analytics to help us improve Riot.</string>
@@ -673,7 +670,6 @@
     <string name="devices_details_device_name">Device Name</string>
     <string name="devices_details_last_seen_title">Last seen</string>
     <string name="devices_details_last_seen_format">%1$s @ %2$s</string>
-    <string name="devices_details_time_format">HH:mm:ss</string>
     <string name="devices_delete_dialog_text">This operation requires additional authentication.\nTo continue, please enter your password.</string>
     <string name="devices_delete_dialog_title">Authentication</string>
     <string name="devices_delete_pswd">Password:</string>
@@ -742,9 +738,6 @@
     <string name="room_settings_tag_pref_entry_low_priority">Low priority</string>
     <string name="room_settings_tag_pref_entry_none">None</string>
     <string name="room_settings_tag_pref_no_tag">not tagged</string>
-    <string name="room_settings_tag_pref_entry_value_favourite">favourite</string>
-    <string name="room_settings_tag_pref_entry_value_low_priority">low</string>
-    <string name="room_settings_tag_pref_entry_value_none">none</string>
 
     <!-- room settings : access and visibility -->
     <string name="room_settings_category_access_visibility_title">Access and visibility</string>
@@ -937,7 +930,6 @@
     <string name="widget_integration_room_not_visible">Room %s is not visible.</string>
     <string name="widget_integration_missing_parameter">A required parameter is missing.</string>
     <string name="widget_integration_invalid_parameter">A parameter is not valid.</string>
-    <string name="settings_labs_matrix_apps">Matrix Apps</string>
     <string name="room_add_matrix_apps">Add Matrix apps</string>
     <string name="settings_labs_native_camera">Use native camera</string>
     <string name="settings_labs_keyboard_options_to_send_message">Use keyboard enter key to send message</string>
@@ -1066,5 +1058,15 @@
     <!-- Expand/Collapse room member changes -->
     <string name="merged_events_expand">expand</string>
     <string name="merged_events_collapse">collapse</string>
+
+    <string name="settings_info_area_show">Show the info area</string>
+    <string name="show_info_area_always">Always</string>
+    <string name="show_info_area_messages_and_errors">For messages and errors</string>
+    <string name="show_info_area_only_errors">Only for errors</string>
+
+    <string name="generic_label">%1$s:</string>
+    <string name="generic_label_and_value">%1$s: %2$s</string>
+    <string name="plus_x">+%d</string>
+    <string name="x_plus">%d+</string>
 
 </resources>

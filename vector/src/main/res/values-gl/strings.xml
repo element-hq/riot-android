@@ -244,7 +244,6 @@ Pode engadir a dirección de correo na sección de configuración de perfil.</st
     <string name="room_prompt_cancel">cancelar todo</string>
     <string name="room_message_file_not_found">Non se atopou o ficheiro</string>
     <string name="room_do_not_have_permission_to_post">Non ten permiso para comentar nesta sala</string>
-    <string name="room_new_message_notification">1 mensaxe nova</string>
     <plurals name="room_new_messages_notification">
 	<item quantity="one">1 mensaxe nova</item>
 	<item quantity="other">%d mensaxe nova</item>
@@ -318,7 +317,6 @@ Pode engadir a dirección de correo na sección de configuración de perfil.</st
     <string name="settings_deactivate_my_account">Desactivar a miña conta</string>
 
     <string name="settings_analytics">Analytics</string>
-    <string name="settings_opt_out_of_analytics_summary">Riot crea informes con datos anónimos que lle permiten mellorar a aplicación.</string>
     <string name="settings_opt_in_of_analytics">Enviar datos de análises</string>
     <string name="settings_opt_in_of_analytics_summary">Riot recolle información analítica anónima para permitirnos mellorar o aplicativo.</string>
     <string name="settings_opt_in_of_analytics_ok">Si, quero axuda</string>
@@ -328,7 +326,6 @@ Pode engadir a dirección de correo na sección de configuración de perfil.</st
     <string name="devices_details_device_name">Nome do dispositivo</string>
     <string name="devices_details_last_seen_title">Visto por última vez</string>
     <string name="devices_details_last_seen_format">%1$s @ %2$s</string>
-    <string name="devices_details_time_format">HH:mm:ss</string>
     <string name="devices_delete_dialog_title">Autenticación</string>
     <string name="devices_delete_pswd">Contrasinal:</string>
     <string name="devices_delete_submit_button_label">Enviar</string>
@@ -366,9 +363,6 @@ Pode engadir a dirección de correo na sección de configuración de perfil.</st
     <string name="room_settings_tag_pref_entry_low_priority">Prioridade baixa</string>
     <string name="room_settings_tag_pref_entry_none">Ningún</string>
     <string name="room_settings_tag_pref_no_tag">sen etiquetar</string>
-    <string name="room_settings_tag_pref_entry_value_favourite">favorito</string>
-    <string name="room_settings_tag_pref_entry_value_low_priority">baixo</string>
-    <string name="room_settings_tag_pref_entry_value_none">ningún</string>
 
     <string name="room_settings_room_notifications_title">Notificacións</string>
     <string name="room_settings_room_read_history_rules_pref_dialog_title">Quen pode ler o histórico?</string>
@@ -494,7 +488,6 @@ Pode engadir a dirección de correo na sección de configuración de perfil.</st
     <string name="widget_integration_room_not_visible">A sala %s non é visible.</string>
     <string name="widget_integration_missing_parameter">Falta un parámetro.</string>
     <string name="widget_integration_invalid_parameter">Hai un parámetro que non é válido.</string>
-    <string name="settings_labs_matrix_apps">Aplicacións de Matrix</string>
     <string name="room_add_matrix_apps">Engadir aplicacións de Matrix</string>
     <string name="settings_labs_native_camera">Usar a cámara nativa</string>
 
@@ -665,7 +658,7 @@ Seguramente queira conectarse cunha conta distinta, ou engadir este correo a sú
     <string name="settings_notification_privacy_reduced">Reducir a privacidade</string>
     <string name="settings_notification_privacy_need_permission">Esta aplicación necesita de permisos para traballar en segundo plano</string>
     <string name="settings_notification_privacy_no_permission">Esta aplicación <b>non</b> ten permisos para traballar en segundo plano</string>
-    <string name="settings_notification_privacy_gcm">• Notificacións enviadas a través de Cloud Messaging de Google</string>
+    <string name="settings_notification_privacy_fcm">• Notificacións enviadas a través de Cloud Messaging de Google</string>
     <string name="settings_notification_privacy_metadata">• Notificacións que só conteñen metadatos</string>
     <string name="settings_notification_privacy_secure_message_content">• O contido da mensaxe das notificacións está <b>provén dun xeito seguro e directo do servidor local de Matrix</b></string>
     <string name="settings_notification_privacy_nosecure_message_content">• As notificacións conteñen <b>metadatos e os datos da mensaxe</b></string>

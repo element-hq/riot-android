@@ -24,7 +24,7 @@ android {
         versionName rootProject.ext.versionNameProp
 
         // custom values
-        resValue "string", "bug_report_url",  "https://riot.im/bugreports/submit"
+        resValue "string", "bug_report_url", "https://riot.im/bugreports/submit"
 
         ndk {
             abiFilters "armeabi-v7a", "x86"
@@ -92,10 +92,9 @@ android {
             // use the version name
             versionCode rootProject.ext.versionCodeProp
             versionName rootProject.ext.versionNameProp
-            resValue "string", "allow_gcm_use", "true"
-            resValue "string", "allow_ga_use", "true"
-            resValue "string", "short_flavor_description", "G"
-            resValue "string", "flavor_description", "GooglePlay"
+            buildConfigField "boolean", "ALLOW_FCM_USE", "true"
+            buildConfigField "String", "SHORT_FLAVOR_DESCRIPTION", "\"G\""
+            buildConfigField "String", "FLAVOR_DESCRIPTION", "\"GooglePlay\""
         }
 
         appfdroid {
@@ -103,10 +102,9 @@ android {
             // use the version name
             versionCode rootProject.ext.versionCodeProp
             versionName rootProject.ext.versionNameProp
-            resValue "string", "allow_gcm_use", "false"
-            resValue "string", "allow_ga_use", "false"
-            resValue "string", "short_flavor_description", "F"
-            resValue "string", "flavor_description", "FDroid"
+            buildConfigField "boolean", "ALLOW_FCM_USE", "false"
+            buildConfigField "String", "SHORT_FLAVOR_DESCRIPTION", "\"F\""
+            buildConfigField "String", "FLAVOR_DESCRIPTION", "\"FDroid\""
         }
     }
 
@@ -117,9 +115,24 @@ android {
         disable 'ImpliedQuantity'
 
         // Treat some warnings as errors
+        // Layout
         error 'StringFormatCount'
         error 'HardcodedText'
         error 'SpUsage'
+        error 'ObsoleteLayoutParam'
+        error 'InefficientWeight'
+        error 'DisableBaselineAlignment'
+        error 'ScrollViewSize'
+
+        // RTL
+        error 'RtlEnabled'
+        error 'RtlHardcoded'
+        error 'RtlSymmetry'
+
+        // Code
+        error 'SetTextI18n'
+        error 'ViewConstructor'
+        error 'UseValueOf'
     }
 
     repositories {
@@ -158,6 +171,9 @@ dependencies {
 
     // Kotlin KTX
     implementation 'androidx.core:core-ktx:0.3'
+
+    // Kotlin coroutines
+    implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-core:0.30.2'
 
     implementation 'com.android.support:multidex:1.0.0'
 
@@ -221,15 +237,14 @@ dependencies {
     implementation(name: 'react-native', ext: 'aar')
     implementation(name: 'react-native-locale-detector', ext: 'aar')
 
-
     // another tracking than GA
     implementation 'org.piwik.sdk:piwik-sdk:2.0.0'
 
     /************* flavors management **************/
 
     // app flavor only
-    appImplementation 'com.google.firebase:firebase-core:16.0.3'
-    appImplementation 'com.google.firebase:firebase-messaging:17.3.0'
+    appImplementation 'com.google.firebase:firebase-core:16.0.4'
+    appImplementation 'com.google.firebase:firebase-messaging:17.3.4'
 
     // fdroid flavor only
 

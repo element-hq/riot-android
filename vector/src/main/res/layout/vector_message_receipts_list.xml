@@ -10,7 +10,9 @@
         android:id="@+id/read_receipt_avatars_list"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_alignParentEnd="true"
         android:layout_alignParentRight="true"
+        android:layout_marginEnd="12dp"
         android:layout_marginRight="12dp"
         android:orientation="horizontal">
 
@@ -20,7 +22,7 @@
             android:layout_height="match_parent"
             android:gravity="center"
             android:textSize="9sp"
-            tools:text="+999" />
+            tools:text="999+" />
 
         <include
             android:id="@+id/message_avatar_receipt_5"

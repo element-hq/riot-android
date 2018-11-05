@@ -5,15 +5,15 @@
     android:id="@+id/people_header_layout"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:background="?attr/list_header_background_color"
+    android:background="?attr/vctr_list_header_background_color"
     android:orientation="vertical">
 
     <RelativeLayout
         android:id="@+id/people_header_sub_layout"
         android:layout_width="match_parent"
         android:layout_height="20dp"
-        android:layout_marginBottom="11dp"
-        android:layout_marginTop="11dp">
+        android:layout_marginTop="11dp"
+        android:layout_marginBottom="11dp">
 
         <RelativeLayout
             android:layout_width="match_parent"
@@ -24,18 +24,21 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_centerVertical="true"
+                android:layout_marginStart="16dp"
                 android:layout_marginLeft="16dp"
                 android:fontFamily="sans-serif-medium"
-                tools:text="Header"
-                android:textColor="?attr/riot_primary_text_color"
-                android:textSize="14sp" />
+                android:textColor="?attr/vctr_riot_primary_text_color"
+                android:textSize="14sp"
+                tools:text="Header" />
 
             <ProgressBar
                 android:id="@+id/heading_loading_view"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
                 android:layout_centerVertical="true"
+                android:layout_marginStart="8dp"
                 android:layout_marginLeft="8dp"
+                android:layout_toEndOf="@+id/people_header_text_view"
                 android:layout_toRightOf="@+id/people_header_text_view"
                 android:indeterminate="true"
                 android:visibility="gone" />
@@ -45,8 +48,10 @@
             android:id="@+id/heading_image"
             android:layout_width="20dp"
             android:layout_height="20dp"
+            android:layout_alignParentEnd="true"
             android:layout_alignParentRight="true"
             android:layout_centerVertical="true"
+            android:layout_marginEnd="15dp"
             android:layout_marginRight="15dp" />
     </RelativeLayout>
 
@@ -63,13 +68,14 @@
             android:id="@+id/contacts_filter_checkbox"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
+            android:layout_marginStart="19dp"
             android:layout_marginLeft="19dp" />
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/people_search_filter_text"
-            android:textColor="?attr/riot_primary_text_color"
+            android:textColor="?attr/vctr_riot_primary_text_color"
             android:textSize="14sp" />
     </LinearLayout>
 </LinearLayout>

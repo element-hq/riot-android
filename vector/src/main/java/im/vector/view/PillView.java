@@ -113,14 +113,14 @@ public class PillView extends LinearLayout {
         mTextView.setText(str);
 
         TypedArray a = getContext().getTheme()
-                .obtainStyledAttributes(new int[]{MXPatterns.isRoomAlias(str) ? R.attr.pill_background_room_alias : R.attr.pill_background_user_id});
+                .obtainStyledAttributes(new int[]{MXPatterns.isRoomAlias(str) ? R.attr.vctr_pill_background_room_alias : R.attr.vctr_pill_background_user_id});
         int attributeResourceId = a.getResourceId(0, 0);
         a.recycle();
 
         mPillLayout.setBackground(ContextCompat.getDrawable(getContext(), attributeResourceId));
 
         a = getContext().getTheme()
-                .obtainStyledAttributes(new int[]{MXPatterns.isRoomAlias(str) ? R.attr.pill_text_color_room_alias : R.attr.pill_text_color_user_id});
+                .obtainStyledAttributes(new int[]{MXPatterns.isRoomAlias(str) ? R.attr.vctr_pill_text_color_room_alias : R.attr.vctr_pill_text_color_user_id});
         attributeResourceId = a.getResourceId(0, 0);
         a.recycle();
         mTextView.setTextColor(ContextCompat.getColor(getContext(), attributeResourceId));

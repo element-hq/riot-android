@@ -83,10 +83,9 @@ import im.vector.contacts.ContactsManager;
 import im.vector.contacts.PIDsRetriever;
 import im.vector.extensions.MatrixSdkExtensionsKt;
 import im.vector.fragments.VectorUnknownDevicesFragment;
-import im.vector.gcm.GcmRegistrationManager;
+import im.vector.push.PushManager;
 import im.vector.services.EventStreamService;
 import im.vector.util.PreferencesManager;
-import im.vector.util.VectorUtils;
 import me.leolin.shortcutbadger.ShortcutBadger;
 
 /**
@@ -163,8 +162,8 @@ public class CommonActivityUtils {
             // clear notification
             EventStreamService.removeNotification();
 
-            // unregister from the GCM.
-            Matrix.getInstance(context).getSharedGCMRegistrationManager().unregister(session, null);
+            // unregister from the push server.
+            Matrix.getInstance(context).getPushManager().unregister(session, null);
 
             // clear credentials
             Matrix.getInstance(context).clearSession(context, session, clearCredentials, new SimpleApiCallback<Void>() {
@@ -329,12 +328,12 @@ public class CommonActivityUtils {
         // clear the preferences
         PreferencesManager.clearPreferences(context);
 
-        // reset the GCM
-        Matrix.getInstance(context).getSharedGCMRegistrationManager().resetGCMRegistration();
+        // reset the FCM
+        Matrix.getInstance(context).getPushManager().resetFCMRegistration();
         // clear the preferences when the application goes to the login screen.
         if (goToLoginPage) {
             // display a dummy activity until the logout is done
-            Matrix.getInstance(context).getSharedGCMRegistrationManager().clearPreferences();
+            Matrix.getInstance(context).getPushManager().clearPreferences();
 
             if (null != activity) {
                 // go to login page
@@ -413,11 +412,11 @@ public class CommonActivityUtils {
                 // clear the preferences
                 PreferencesManager.clearPreferences(context);
 
-                // reset the GCM
-                Matrix.getInstance(context).getSharedGCMRegistrationManager().resetGCMRegistration();
+                // reset the FCM
+                Matrix.getInstance(context).getPushManager().resetFCMRegistration();
 
                 // clear the preferences
-                Matrix.getInstance(context).getSharedGCMRegistrationManager().clearPreferences();
+                Matrix.getInstance(context).getPushManager().clearPreferences();
 
                 // Clear the credentials
                 Matrix.getInstance(context).getLoginStorage().clear();
@@ -541,13 +540,13 @@ public class CommonActivityUtils {
     }
 
     /**
-     * Warn the events stream that there was a GCM status update.
+     * Warn the events stream that there was a push status update.
      *
      * @param context the context.
      */
-    public static void onGcmUpdate(Context context) {
-        Log.d(LOG_TAG, "onGcmUpdate");
-        sendEventStreamAction(context, EventStreamService.StreamAction.GCM_STATUS_UPDATE);
+    public static void onPushUpdate(Context context) {
+        Log.d(LOG_TAG, "onPushUpdate");
+        sendEventStreamAction(context, EventStreamService.StreamAction.PUSH_STATUS_UPDATE);
     }
 
     /**
@@ -564,7 +563,7 @@ public class CommonActivityUtils {
             Collection<MXSession> sessions = Matrix.getInstance(context.getApplicationContext()).getSessions();
 
             if ((null != sessions) && (sessions.size() > 0)) {
-                GcmRegistrationManager gcmRegistrationManager = Matrix.getInstance(context).getSharedGCMRegistrationManager();
+                PushManager pushManager = Matrix.getInstance(context).getPushManager();
                 Log.e(LOG_TAG, "## startEventStreamService() : restart EventStreamService");
 
                 for (MXSession session : sessions) {
@@ -581,8 +580,8 @@ public class CommonActivityUtils {
                             session.checkCrypto();
                         }
 
-                        session.setSyncDelay(gcmRegistrationManager.isBackgroundSyncAllowed() ? gcmRegistrationManager.getBackgroundSyncDelay() : 0);
-                        session.setSyncTimeout(gcmRegistrationManager.getBackgroundSyncTimeOut());
+                        session.setSyncDelay(pushManager.isBackgroundSyncAllowed() ? pushManager.getBackgroundSyncDelay() : 0);
+                        session.setSyncTimeout(pushManager.getBackgroundSyncTimeOut());
 
                         // session to activate
                         matrixIds.add(session.getCredentials().userId);
@@ -1237,8 +1236,8 @@ public class CommonActivityUtils {
     /**
      * Refresh the badge count for specific configurations.<br>
      * The refresh is only effective if the device is:
-     * <ul><li>offline</li><li>does not support GCM</li>
-     * <li>GCM registration failed</li>
+     * <ul><li>offline</li><li>does not support FCM</li>
+     * <li>FCM registration failed</li>
      * <br>Notifications rooms are parsed to track the notification count value.
      *
      * @param aSession session value
@@ -1255,11 +1254,11 @@ public class CommonActivityUtils {
         } else {
             if (aSession.isAlive()) {
                 boolean isRefreshRequired;
-                GcmRegistrationManager gcmMgr = Matrix.getInstance(aContext).getSharedGCMRegistrationManager();
+                PushManager pushManager = Matrix.getInstance(aContext).getPushManager();
 
-                // update the badge count if the device is offline, GCM is not supported or GCM registration failed
+                // update the badge count if the device is offline, FCM is not supported or FCM registration failed
                 isRefreshRequired = !Matrix.getInstance(aContext).isConnected();
-                isRefreshRequired |= (null != gcmMgr) && (!gcmMgr.useGCM() || !gcmMgr.hasRegistrationToken());
+                isRefreshRequired |= (null != pushManager) && (!pushManager.useFcm() || !pushManager.hasRegistrationToken());
 
                 if (isRefreshRequired) {
                     updateBadgeCount(aContext, dataHandler);

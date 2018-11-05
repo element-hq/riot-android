@@ -43,9 +43,9 @@ import java.util.List;
 import im.vector.Matrix;
 import im.vector.R;
 import im.vector.adapters.GroupDetailsFragmentPagerAdapter;
-import im.vector.util.ThemeUtils;
+import im.vector.ui.themes.ActivityOtherThemes;
+import im.vector.ui.themes.ThemeUtils;
 import im.vector.view.RiotViewPager;
-import kotlin.Triple;
 
 /**
  *
@@ -141,8 +141,8 @@ public class VectorGroupDetailsActivity extends MXCActionBarActivity {
 
     @NotNull
     @Override
-    public Triple<Integer, Integer, Integer> getOtherThemes() {
-        return new Triple<>(R.style.GroupAppTheme_Dark, R.style.GroupAppTheme_Black, R.style.GroupAppTheme_Status);
+    public ActivityOtherThemes getOtherThemes() {
+        return ActivityOtherThemes.Group.INSTANCE;
     }
 
     @Override

@@ -4,6 +4,9 @@
     android:id="@+id/invite_view"
     android:layout_width="match_parent"
     android:layout_height="130dp"
+    android:paddingStart="16dp"
+    android:paddingLeft="16dp"
+    android:paddingEnd="16dp"
     android:paddingRight="16dp">
 
     <RelativeLayout
@@ -16,15 +19,16 @@
             android:layout_width="@dimen/chat_avatar_size"
             android:layout_height="@dimen/chat_avatar_size"
             android:layout_centerVertical="true"
-            android:layout_marginLeft="16dp"
             tools:src="@tools:sample/avatars" />
 
         <ImageView
             android:id="@+id/room_avatar_direct_chat_icon"
             android:layout_width="20dp"
             android:layout_height="20dp"
+            android:layout_alignStart="@+id/room_avatar"
             android:layout_alignLeft="@+id/room_avatar"
             android:layout_alignTop="@+id/room_avatar"
+            android:layout_marginStart="30dp"
             android:layout_marginLeft="30dp"
             android:src="@drawable/icon_person"
             android:visibility="invisible"
@@ -34,10 +38,11 @@
             android:id="@+id/room_avatar_encrypted_icon"
             android:layout_width="15dp"
             android:layout_height="15dp"
-            android:layout_alignBottom="@+id/room_avatar"
+            android:layout_alignEnd="@+id/room_avatar_direct_chat_icon"
             android:layout_alignRight="@+id/room_avatar_direct_chat_icon"
+            android:layout_alignBottom="@+id/room_avatar"
             android:src="@drawable/e2e_verified"
-            android:tint="?attr/default_icon_tint_color"
+            android:tint="?attr/vctr_default_icon_tint_color"
             android:visibility="invisible"
             tools:visibility="visible" />
 
@@ -45,19 +50,23 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerVertical="true"
+            android:layout_marginStart="16dp"
             android:layout_marginLeft="16dp"
+            android:layout_marginEnd="6dp"
             android:layout_marginRight="6dp"
+            android:layout_toEndOf="@+id/room_avatar"
             android:layout_toRightOf="@+id/room_avatar">
 
             <TextView
                 android:id="@+id/room_name"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_toStartOf="@+id/room_unread_count"
                 android:layout_toLeftOf="@+id/room_unread_count"
                 android:ellipsize="end"
                 android:fontFamily="sans-serif-regular"
                 android:maxLines="1"
-                android:textColor="?attr/riot_primary_text_color"
+                android:textColor="?attr/vctr_riot_primary_text_color"
                 android:textSize="16sp"
                 tools:text="Room name a bit long to be displayed completely" />
 
@@ -65,11 +74,12 @@
                 android:id="@+id/room_message"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_alignRight="@+id/room_name"
                 android:layout_below="@+id/room_name"
+                android:layout_alignEnd="@+id/room_name"
+                android:layout_alignRight="@+id/room_name"
                 android:ellipsize="end"
                 android:maxLines="1"
-                android:textColor="?attr/default_text_light_color"
+                android:textColor="?attr/vctr_default_text_light_color"
                 android:textSize="14sp"
                 tools:text="First message of the room is a bit too long to be displayed" />
 
@@ -79,7 +89,9 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_alignBaseline="@+id/room_name"
+                android:layout_alignParentEnd="true"
                 android:layout_alignParentRight="true"
+                android:layout_marginStart="6dp"
                 android:layout_marginLeft="6dp"
                 android:gravity="center"
                 android:minWidth="25dp"
@@ -103,7 +115,7 @@
             android:id="@+id/room_invite_reject_button"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
-            android:background="@color/vector_green_color"
+            android:background="?attr/vctr_default_icon_tint_color"
             android:fontFamily="sans-serif-medium"
             android:minWidth="100dp"
             android:text="@string/reject"
@@ -114,8 +126,9 @@
             android:id="@+id/room_invite_preview_button"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
+            android:layout_marginStart="16dp"
             android:layout_marginLeft="16dp"
-            android:background="@color/vector_green_color"
+            android:background="?attr/vctr_default_icon_tint_color"
             android:fontFamily="sans-serif-medium"
             android:minWidth="100dp"
             android:text="@string/preview"

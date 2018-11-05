@@ -1,5 +1,6 @@
 /*
  * Copyright 2017 Vector Creations Ltd
+ * Copyright 2018 New Vector Ltd
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -25,13 +26,6 @@ import android.widget.ArrayAdapter;
 import android.widget.TextView;
 
 import org.matrix.androidsdk.MXSession;
-
-import im.vector.R;
-import im.vector.VectorApp;
-import im.vector.activity.VectorRoomActivity;
-import im.vector.util.VectorUtils;
-import im.vector.view.VectorCircularImageView;
-
 import org.matrix.androidsdk.rest.model.User;
 
 import java.util.ArrayList;
@@ -39,6 +33,12 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
+
+import im.vector.R;
+import im.vector.activity.VectorRoomActivity;
+import im.vector.settings.VectorLocale;
+import im.vector.util.VectorUtils;
+import im.vector.view.VectorCircularImageView;
 
 /**
  * This class describes a list of auto-completed users
@@ -180,18 +180,18 @@ public class AutoCompletedUserAdapter extends ArrayAdapter<User> {
                 mIsSearchingMatrixId = true;
             } else {
                 newValues = new ArrayList<>();
-                String prefixString = prefix.toString().toLowerCase(VectorApp.getApplicationLocale());
+                String prefixString = prefix.toString().toLowerCase(VectorLocale.INSTANCE.getApplicationLocale());
                 mIsSearchingMatrixId = prefixString.startsWith("@");
 
                 if (mIsSearchingMatrixId) {
                     for (User user : mUsersList) {
-                        if ((null != user.user_id) && user.user_id.toLowerCase(VectorApp.getApplicationLocale()).startsWith(prefixString)) {
+                        if ((null != user.user_id) && user.user_id.toLowerCase(VectorLocale.INSTANCE.getApplicationLocale()).startsWith(prefixString)) {
                             newValues.add(user);
                         }
                     }
                 } else {
                     for (User user : mUsersList) {
-                        if ((null != user.displayname) && user.displayname.toLowerCase(VectorApp.getApplicationLocale()).startsWith(prefixString)) {
+                        if ((null != user.displayname) && user.displayname.toLowerCase(VectorLocale.INSTANCE.getApplicationLocale()).startsWith(prefixString)) {
                             newValues.add(user);
                         }
                     }

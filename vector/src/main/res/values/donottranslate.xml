@@ -16,33 +16,12 @@
     <!-- set a valid URL like "https://matrix.org" to use a custom one -->
     <string name="push_server_url" translatable="false" />
 
-    <!--string name="settings_room_privacy_label">Privacy</string-->
-
-    <!-- Room settings, access and visibility : WHO CAN READ HISTORY? (read rule) -->
-    <string name="room_settings_read_history_entry_value_anyone" translatable="false">world_readable</string>
-    <string name="room_settings_read_history_entry_value_members_only_option_time_shared" translatable="false">shared</string>
-    <string name="room_settings_read_history_entry_value_members_only_invited" translatable="false">invited</string>
-    <string name="room_settings_read_history_entry_value_members_only_joined" translatable="false">joined</string>
-
     <string-array name="room_directory_servers" translatable="false">
         <item>matrix.org</item>
     </string-array>
 
-    <string-array name="theme_codes">
-        <item>light</item>
-        <item>dark</item>
-        <item>black</item>
-        <item>status</item>
-    </string-array>
-
-    <string-array name="theme_description">
-        <item>@string/light_theme</item>
-        <item>@string/dark_theme</item>
-        <item>@string/black_them</item>
-        <item>@string/status_theme</item>
-    </string-array>
-
     <string name="plus_sign" translatable="false">+</string>
+    <string name="semicolon_sign" translatable="false">:</string>
 
     <string name="password_hint" translatable="false">********</string>
 

@@ -12,7 +12,7 @@
 
             <stroke
                 android:width="50dp"
-                android:color="@color/primary_color_light" />
+                android:color="@color/primary_color_status" />
         </shape>
     </item>
 

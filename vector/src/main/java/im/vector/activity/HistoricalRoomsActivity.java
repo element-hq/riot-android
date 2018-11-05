@@ -54,11 +54,11 @@ import im.vector.Matrix;
 import im.vector.R;
 import im.vector.adapters.AbsAdapter;
 import im.vector.adapters.HomeRoomAdapter;
+import im.vector.ui.themes.ActivityOtherThemes;
+import im.vector.ui.themes.ThemeUtils;
 import im.vector.util.RoomUtils;
-import im.vector.util.ThemeUtils;
 import im.vector.view.EmptyViewItemDecoration;
 import im.vector.view.SimpleDividerItemDecoration;
-import kotlin.Triple;
 
 /**
  * Displays the historical rooms list
@@ -99,8 +99,8 @@ public class HistoricalRoomsActivity extends VectorAppCompatActivity implements
 
     @NotNull
     @Override
-    public Triple getOtherThemes() {
-        return new Triple(R.style.HomeActivityTheme_Dark, R.style.HomeActivityTheme_Black, R.style.HomeActivityTheme_Status);
+    public ActivityOtherThemes getOtherThemes() {
+        return ActivityOtherThemes.Home.INSTANCE;
     }
 
     @Override
@@ -208,7 +208,7 @@ public class HistoricalRoomsActivity extends VectorAppCompatActivity implements
         mSearchView.setQueryHint(getString(R.string.historical_placeholder));
 
         SearchView.SearchAutoComplete searchAutoComplete = mSearchView.findViewById(android.support.v7.appcompat.R.id.search_src_text);
-        searchAutoComplete.setHintTextColor(ThemeUtils.INSTANCE.getColor(this, R.attr.default_text_hint_color));
+        searchAutoComplete.setHintTextColor(ThemeUtils.INSTANCE.getColor(this, R.attr.vctr_default_text_hint_color));
     }
 
     /*

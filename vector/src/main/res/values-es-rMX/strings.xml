@@ -355,7 +355,6 @@ Mensajes cifrados no serán visibles en cuentas que no implementan el cifrado.</
     <string name="room_delete_unsent_messages">Borrar mensajes no enviados</string>
     <string name="room_message_file_not_found">No se pudo encontrar el archivo</string>
     <string name="room_do_not_have_permission_to_post">No tienes permiso para enviar en esta sala</string>
-    <string name="room_new_message_notification">1 mensaje nuevo</string>
 
     <!-- unrecognized SSL certificate -->
     <string name="ssl_trust">Confiar</string>
@@ -485,7 +484,6 @@ Mensajes cifrados no serán visibles en cuentas que no implementan el cifrado.</
     <string name="devices_details_device_name">Nombre del dispositivo</string>
     <string name="devices_details_last_seen_title">Ultima vez visto</string>
     <string name="devices_details_last_seen_format">%1$s @ %2$s</string>
-    <string name="devices_details_time_format">HH:mm:ss</string>
     <string name="devices_delete_dialog_text">Esta operación requiere autenticación adicional.\nPara continuar, escribe su contraseña.</string>
     <string name="devices_delete_dialog_title">Autenticación</string>
     <string name="devices_delete_pswd">Contraseña:</string>
@@ -541,9 +539,6 @@ Mensajes cifrados no serán visibles en cuentas que no implementan el cifrado.</
     <string name="room_settings_tag_pref_entry_low_priority">Baja prioridad</string>
     <string name="room_settings_tag_pref_entry_none">Ninguno</string>
     <string name="room_settings_tag_pref_no_tag">no etiquetado</string>
-    <string name="room_settings_tag_pref_entry_value_favourite">destacado</string>
-    <string name="room_settings_tag_pref_entry_value_low_priority">bajo</string>
-    <string name="room_settings_tag_pref_entry_value_none">ninguno</string>
 
     <!-- room settings : access and visibility -->
     <string name="room_settings_category_access_visibility_title">Acceso y Visibilidad</string>

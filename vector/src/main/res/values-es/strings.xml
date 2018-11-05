@@ -375,7 +375,6 @@ Los mensajes cifrados no serán visibles en los clientes que aún no implementen
     <string name="room_delete_unsent_messages">Eliminar mensajes no enviados</string>
     <string name="room_message_file_not_found">Archivo no encontrado</string>
     <string name="room_do_not_have_permission_to_post">No tienes permiso para publicar en esta sala</string>
-    <string name="room_new_message_notification">1 mensaje nuevo</string>
 
     <!-- unrecognized SSL certificate -->
     <string name="ssl_trust">Confiar</string>
@@ -507,7 +506,6 @@ Ten en cuenta que esta acción reiniciará la aplicación y puede tardar algo de
     <string name="devices_details_device_name">Nombre de Dispositivo</string>
     <string name="devices_details_last_seen_title">Visto por última vez</string>
     <string name="devices_details_last_seen_format">%1$s @ %2$s</string>
-    <string name="devices_details_time_format">HH:mm:ss</string>
     <string name="devices_delete_dialog_text">Esta operación requiere autenticación adicional.
 Para continuar, ingresa tu contraseña por favor.</string>
     <string name="devices_delete_dialog_title">Autenticación</string>
@@ -566,9 +564,6 @@ Ten en cuenta que esta acción reiniciará la aplicación y puede tardar algo de
     <string name="room_settings_tag_pref_entry_low_priority">Prioridad baja</string>
     <string name="room_settings_tag_pref_entry_none">Ninguno</string>
     <string name="room_settings_tag_pref_no_tag">sin etiquetar</string>
-    <string name="room_settings_tag_pref_entry_value_favourite">agregar a favoritos</string>
-    <string name="room_settings_tag_pref_entry_value_low_priority">bajo</string>
-    <string name="room_settings_tag_pref_entry_value_none">ninguno</string>
 
     <!-- room settings : access and visibility -->
     <string name="room_settings_category_access_visibility_title">Acceso y visibilidad</string>
@@ -774,9 +769,6 @@ Dispositivos desconocidos:</string>
     <string name="settings_hide_avatar_display_name_changes_messages">Ocultar cambios de avatar y nombre público</string>
 
     <string name="settings_analytics">Análisis de Estadísticas</string>
-    <string name="settings_opt_out_of_analytics">Darse de baja del análisis de estadísticas</string>
-    <string name="settings_opt_out_of_analytics_summary">Riot recopila análisis de estadísticas anónimas para permitirnos mejorar la aplicación.</string>
-
 
     <string name="widget_no_power_to_manage">Necesitas permiso para gestionar los componentes en esta sala</string>
     <string name="widget_creation_failure">La creación del componente falló</string>
@@ -794,7 +786,6 @@ Dispositivos desconocidos:</string>
     <string name="widget_integration_missing_room_id">Falta el room_id en la solicitud.</string>
     <string name="widget_integration_missing_user_id">Falta el user_id en la solicitud.</string>
     <string name="widget_integration_room_not_visible">La sala %s no está visible.</string>
-    <string name="settings_labs_matrix_apps">Aplicaciones de Matrix</string>
     <string name="room_add_matrix_apps">Añadir aplicaciones de Matrix</string>
     <string name="settings_labs_native_camera">Utilizar cámara nativa</string>
 
@@ -969,7 +960,7 @@ La visibilidad de mensajes en Matrix es similar a la del correo electrónico. Qu
     <string name="settings_notification_privacy_reduced">Privacidad reducida</string>
     <string name="settings_notification_privacy_need_permission">La aplicación necesita permiso para ejecutarse en segundo plano</string>
     <string name="settings_notification_privacy_no_permission">La aplicación <b> no </b> necesita permiso para ejecutarse en segundo plano</string>
-    <string name="settings_notification_privacy_gcm">• Las notificaciones se envían a través de Google Cloud Messaging</string>
+    <string name="settings_notification_privacy_fcm">• Las notificaciones se envían a través de Google Cloud Messaging</string>
     <string name="settings_notification_privacy_metadata">• Las notificaciones solo contienen metadatos</string>
     <string name="settings_notification_privacy_secure_message_content">• El contenido del mensaje de la notificación está <b>ubicado de forma segura directamente desde el servidor doméstico de Matrix</b></string>
     <string name="settings_notification_privacy_nosecure_message_content">• Las notificaciones contienen <b>datos de mensajes y metadatos</b></string>

@@ -355,7 +355,6 @@ Ste si istí?</string>
     <string name="room_delete_unsent_messages">Vymazať neodoslané správy</string>
     <string name="room_message_file_not_found">Súbor nenájdený</string>
     <string name="room_do_not_have_permission_to_post">Nemáte udelené právo posielať do tejto miestnosti</string>
-    <string name="room_new_message_notification">1 nová správa</string>
 
     <string name="ssl_trust">Dôverovať</string>
     <string name="ssl_do_not_trust">Nedôverovať</string>
@@ -491,7 +490,6 @@ Pozor! Vykonaním tejto akcie reštartujete aplikáciu a opätovné načítanie 
     <string name="devices_details_device_name">Názov zariadenia</string>
     <string name="devices_details_last_seen_title">Naposledy videné</string>
     <string name="devices_details_last_seen_format">%1$s @ %2$s</string>
-    <string name="devices_details_time_format">HH:mm:ss</string>
     <string name="devices_delete_dialog_text">Táto operácia si vyžaduje dodatočné overenie.
 Ak chcete pokračovať, prosím zadajte vaše heslo.</string>
     <string name="devices_delete_dialog_title">Overenie</string>
@@ -554,9 +552,6 @@ Pozor! Vykonaním tejto akcie reštartujete aplikáciu a opätovné načítanie 
     <string name="room_settings_tag_pref_entry_low_priority">Nízka priorita</string>
     <string name="room_settings_tag_pref_entry_none">Žiadne</string>
     <string name="room_settings_tag_pref_no_tag">Neoznačená</string>
-    <string name="room_settings_tag_pref_entry_value_favourite">favourite</string>
-    <string name="room_settings_tag_pref_entry_value_low_priority">low</string>
-    <string name="room_settings_tag_pref_entry_value_none">none</string>
 
     <string name="room_settings_category_access_visibility_title">Prístup a viditeľnosť</string>
     <string name="room_settings_directory_visibility">Uverejniť túto miestnosť v adresári miestností</string>
@@ -720,7 +715,6 @@ Neznáme zariadenia:</string>
     <string name="widget_integration_missing_room_id">V požiadavke chýba room_id.</string>
     <string name="widget_integration_missing_user_id">V požiadavke chýba user_id.</string>
     <string name="widget_integration_room_not_visible">Miestnosť %s nie je viditeľná.</string>
-    <string name="settings_labs_matrix_apps">Matrix Aplikácie</string>
     <string name="room_add_matrix_apps">Pridať Matrix aplikácie</string>
 
     <!-- share keys -->
@@ -739,9 +733,6 @@ Neznáme zariadenia:</string>
     <string name="option_take_video">Poslať video</string>
 
     <string name="settings_analytics">Štatistika</string>
-    <string name="settings_opt_out_of_analytics">Odhlásiť sa zo zasielania štatistiky</string>
-    <string name="settings_opt_out_of_analytics_summary">Riot zbiera anonymné štatistiky, ktoré nám umožňujú aplikáciu ďalej vylepšovať.</string>
-
 
     <string name="settings_labs_native_camera">Používať vstavaný fotoaparát a kameru</string>
 
@@ -910,7 +901,7 @@ Neznáme zariadenia:</string>
     <string name="settings_notification_privacy_normal">Normálne</string>
     <string name="settings_notification_privacy_need_permission">Aplikácia vyžaduje povolenie bežať na pozadí</string>
     <string name="settings_notification_privacy_no_permission">Aplikácia <b>ne</b>vyžaduje povolenie bežať na pozadí</string>
-    <string name="settings_notification_privacy_gcm">• Oznámenia sú zasielané prostredníctvom cloudových služieb Google</string>
+    <string name="settings_notification_privacy_fcm">• Oznámenia sú zasielané prostredníctvom cloudových služieb Google</string>
     <string name="settings_notification_privacy_metadata">• Oznámenia neobsahujú text správy, len meta údaje</string>
     <string name="settings_notification_privacy_secure_message_content">• Obsah správy oznámení je <b>bezpečne prevzatý priamo z domovského servera Matrix</b></string>
     <string name="settings_notification_privacy_nosecure_message_content">• Oznámenia obsahujú <b>meta údaje aj obsah správy</b></string>

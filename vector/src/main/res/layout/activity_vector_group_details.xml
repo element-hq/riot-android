@@ -11,9 +11,9 @@
             android:id="@+id/group_tabs"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_alignParentLeft="true"
-            android:layout_alignParentStart="true"
             android:layout_below="@+id/group_loading_layout"
+            android:layout_alignParentStart="true"
+            android:layout_alignParentLeft="true"
             android:layout_gravity="top" />
 
         <ProgressBar
@@ -38,7 +38,7 @@
             android:id="@+id/group_loading_layout"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:background="?attr/waiting_background_color"
+            android:background="?attr/vctr_waiting_background_color"
             android:visibility="gone">
 
             <ProgressBar

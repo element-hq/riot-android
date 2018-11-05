@@ -377,7 +377,6 @@
     <string name="room_delete_unsent_messages">Elimina els missatges no enviats</string>
     <string name="room_message_file_not_found">No s\'ha trobat el fitxer</string>
     <string name="room_do_not_have_permission_to_post">No teniu permís per escriure en aquesta sala</string>
-    <string name="room_new_message_notification">1 missatge nou</string>
 
     <!-- unrecognized SSL certificate -->
     <string name="ssl_trust">Confia</string>
@@ -520,8 +519,6 @@ Tingueu en compte que aquesta acció reiniciarà l\'aplicació i que pot trigar 
 
     <!-- analytics -->
     <string name="settings_analytics">Analítiques</string>
-    <string name="settings_opt_out_of_analytics">No acceptis analítiques</string>
-    <string name="settings_opt_out_of_analytics_summary">Riot recull analítiques anònimes per ajudar a millorar l\'aplicació.</string>
 
     <string name="settings_data_save_mode">Mode de desament de dades</string>
 
@@ -531,7 +528,6 @@ Tingueu en compte que aquesta acció reiniciarà l\'aplicació i que pot trigar 
     <string name="devices_details_device_name">Nom del dispositiu</string>
     <string name="devices_details_last_seen_title">Últim cop vist</string>
     <string name="devices_details_last_seen_format">%1$s @ %2$s</string>
-    <string name="devices_details_time_format">HH:mm:ss</string>
     <string name="devices_delete_dialog_text">Aquesta operació necessita que us autentiqueu.\nPer tal de continuar, introduïu la vostra contrasenya.</string>
     <string name="devices_delete_dialog_title">Autenticació</string>
     <string name="devices_delete_pswd">Contrasenya:</string>
@@ -601,9 +597,6 @@ Tingueu en compte que aquesta acció reiniciarà l\'aplicació i que pot trigar 
     <string name="room_settings_tag_pref_entry_low_priority">Prioritat baixa</string>
     <string name="room_settings_tag_pref_entry_none">Cap</string>
     <string name="room_settings_tag_pref_no_tag">sense etiquetar</string>
-    <string name="room_settings_tag_pref_entry_value_favourite">preferit</string>
-    <string name="room_settings_tag_pref_entry_value_low_priority">baixa</string>
-    <string name="room_settings_tag_pref_entry_value_none">cap</string>
 
     <!-- room settings : access and visibility -->
     <string name="room_settings_category_access_visibility_title">Accés i visibilitat</string>
@@ -772,7 +765,6 @@ En un futur aquest procés de verificació serà més sofisticat.</string>
     <string name="widget_integration_missing_room_id">Falta l\'ID de la sala en la sol·licitud.</string>
     <string name="widget_integration_missing_user_id">Falta l\'ID d\'usuari en la sol·licitud.</string>
     <string name="widget_integration_room_not_visible">La sala %s no és visible.</string>
-    <string name="settings_labs_matrix_apps">Aplicacions de Matrix</string>
     <string name="room_add_matrix_apps">Afegeix aplicacions de Matrix</string>
     <string name="settings_labs_native_camera">Utilitza la càmera nativa</string>
 

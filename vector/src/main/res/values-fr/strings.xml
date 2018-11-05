@@ -225,7 +225,6 @@ Cliquez sur exporter pour les sauvegarder avant de vous déconnecter.</string>
     <string name="room_resend_unsent_messages">Renvoyer les messages non envoyés</string>
     <string name="room_delete_unsent_messages">Supprimer les messages non envoyés</string>
     <string name="room_message_file_not_found">Fichier non trouvé</string>
-    <string name="room_new_message_notification">1 nouveau message</string>
     <string name="ssl_trust">Faire confiance</string>
     <string name="ssl_do_not_trust">Ne pas faire confiance</string>
     <string name="ssl_logout_account">Se déconnecter</string>
@@ -357,9 +356,6 @@ Cliquez sur exporter pour les sauvegarder avant de vous déconnecter.</string>
     <string name="room_settings_tag_pref_entry_low_priority">Priorité basse</string>
     <string name="room_settings_tag_pref_entry_none">Aucune</string>
     <string name="room_settings_tag_pref_no_tag">sans étiquette</string>
-    <string name="room_settings_tag_pref_entry_value_favourite">favori</string>
-    <string name="room_settings_tag_pref_entry_value_low_priority">basse</string>
-    <string name="room_settings_tag_pref_entry_value_none">aucune</string>
 
     <string name="room_settings_room_access_rules_pref_title">Accès au salon</string>
     <string name="room_settings_room_read_history_rules_pref_title">Accès à l\'historique du salon</string>
@@ -575,7 +571,6 @@ Veuillez noter que cette action redémarrera l\'application et pourra prendre un
     <string name="settings_invited_to_room">Quand je suis invité sur un salon</string>
     <string name="settings_user_settings">Paramètres utilisateur</string>
     <string name="devices_details_last_seen_format">%1$s @ %2$s</string>
-    <string name="devices_details_time_format">HH:mm:ss</string>
     <string name="devices_delete_dialog_text">Cette opération nécessite de s\'authentifier à nouveau.
 Pour continuer, veuillez saisir votre mot de passe.</string>
     <string name="account_email_validation_message">Vérifiez votre e-mail et cliquez sur le lien qu\'il contient. Une fois cela fait, cliquez sur continuer.</string>
@@ -724,7 +719,6 @@ Appareils inconnus :</string>
     <string name="widget_integration_missing_room_id">room_id manquant dans la requête.</string>
     <string name="widget_integration_missing_user_id">user_id manquant dans la requête.</string>
     <string name="widget_integration_room_not_visible">Le salon %s n\'est pas visible.</string>
-    <string name="settings_labs_matrix_apps">Applications Matrix</string>
     <string name="room_add_matrix_apps">Ajouter des applications Matrix</string>
     <string name="call">Appel</string>
     <string name="settings_containing_my_display_name">Messages contenant mon nom affiché</string>
@@ -742,8 +736,6 @@ Appareils inconnus :</string>
     <string name="option_take_video">Prendre une vidéo</string>
 
     <string name="settings_analytics">Statistiques d\'utilisation</string>
-    <string name="settings_opt_out_of_analytics">Ne pas envoyer de données</string>
-    <string name="settings_opt_out_of_analytics_summary">Riot collecte des données anonymes pour nous permettre d\'améliorer l\'application.</string>
     <string name="settings_labs_native_camera">Utiliser la caméra native</string>
 
     <!-- share keys -->
@@ -892,7 +884,7 @@ Appareils inconnus :</string>
     <string name="settings_notification_privacy_reduced">Confidentialité réduite</string>
     <string name="settings_notification_privacy_need_permission">L\'application a besoin de la permission de fonctionner en arrière-plan</string>
     <string name="settings_notification_privacy_no_permission">L\'application <b>n\'</b>a <b>pas</b> besoin de la permission pour fonctionner en arrière-plan</string>
-    <string name="settings_notification_privacy_gcm">• Les notifications sont envoyées via Google Cloud Messaging</string>
+    <string name="settings_notification_privacy_fcm">• Les notifications sont envoyées via Google Cloud Messaging</string>
     <string name="settings_notification_privacy_metadata">• Les notifications ne contiennent que des métadonnées</string>
     <string name="settings_notification_privacy_secure_message_content">• Le contenu du message de notification est <b>issu directement du serveur d\'accueil Matrix</b></string>
     <string name="settings_notification_privacy_nosecure_message_content">• Les notifications contiennent <b>des métadonnées et des messages</b></string>

@@ -14,9 +14,11 @@
             android:id="@+id/bug_report_progress_text_view"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginStart="10dp"
             android:layout_marginLeft="10dp"
-            android:layout_marginRight="10dp"
             android:layout_marginTop="10dp"
+            android:layout_marginEnd="10dp"
+            android:layout_marginRight="10dp"
             android:text="@string/send_bug_report_progress"
             android:visibility="gone"
             tools:visibility="visible" />
@@ -27,7 +29,9 @@
             android:layout_width="match_parent"
             android:layout_height="20dp"
             android:layout_gravity="center_vertical"
+            android:layout_marginStart="10dp"
             android:layout_marginLeft="10dp"
+            android:layout_marginEnd="10dp"
             android:layout_marginRight="10dp"
             android:max="100"
             android:progressTint="@color/vector_green_color"
@@ -50,17 +54,21 @@
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:layout_marginStart="10dp"
                     android:layout_marginLeft="10dp"
+                    android:layout_marginEnd="10dp"
                     android:layout_marginRight="10dp"
                     android:text="@string/send_bug_report_description" />
 
                 <android.support.design.widget.TextInputLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:layout_marginStart="10dp"
                     android:layout_marginLeft="10dp"
-                    android:layout_marginRight="10dp"
                     android:layout_marginTop="10dp"
-                    android:textColorHint="?attr/default_text_hint_color">
+                    android:layout_marginEnd="10dp"
+                    android:layout_marginRight="10dp"
+                    android:textColorHint="?attr/vctr_default_text_hint_color">
 
                     <android.support.design.widget.TextInputEditText
                         android:id="@+id/bug_report_edit_text"
@@ -68,13 +76,15 @@
                         android:layout_height="wrap_content"
                         android:hint="@string/send_bug_report_placeholder"
                         android:minHeight="40dp"
-                        android:textColor="?attr/riot_primary_text_color" />
+                        android:textColor="?attr/vctr_riot_primary_text_color" />
                 </android.support.design.widget.TextInputLayout>
 
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:layout_marginStart="10dp"
                     android:layout_marginLeft="10dp"
+                    android:layout_marginEnd="10dp"
                     android:layout_marginRight="10dp"
                     android:text="@string/send_bug_report_description_in_english"
                     android:textSize="12sp" />
@@ -82,9 +92,11 @@
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:layout_marginStart="10dp"
                     android:layout_marginLeft="10dp"
-                    android:layout_marginRight="10dp"
                     android:layout_marginTop="10dp"
+                    android:layout_marginEnd="10dp"
+                    android:layout_marginRight="10dp"
                     android:text="@string/send_bug_report_logs_description" />
 
                 <LinearLayout
@@ -102,6 +114,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center_vertical"
+                        android:layout_marginStart="10dp"
                         android:layout_marginLeft="10dp"
                         android:text="@string/send_bug_report_include_logs" />
                 </LinearLayout>
@@ -121,6 +134,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center_vertical"
+                        android:layout_marginStart="10dp"
                         android:layout_marginLeft="10dp"
                         android:text="@string/send_bug_report_include_crash_logs" />
                 </LinearLayout>
@@ -140,6 +154,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center_vertical"
+                        android:layout_marginStart="10dp"
                         android:layout_marginLeft="10dp"
                         android:text="@string/send_bug_report_include_screenshot" />
                 </LinearLayout>

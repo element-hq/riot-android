@@ -357,7 +357,6 @@ Er du sikker?</string>
     <string name="room_delete_unsent_messages">Slet usendte beskeder</string>
     <string name="room_message_file_not_found">Fil ikke fundet</string>
     <string name="room_do_not_have_permission_to_post">Du har ikke tilladelse til at skrive i dette rum</string>
-    <string name="room_new_message_notification">1 ny besked</string>
 
     <string name="ssl_trust">Stol på</string>
     <string name="ssl_do_not_trust">Stol ikke på</string>

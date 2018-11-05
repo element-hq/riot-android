@@ -362,7 +362,6 @@
     <string name="room_delete_unsent_messages">Видалити ненадіслані повідомлення</string>
     <string name="room_message_file_not_found">Файл не знайдено</string>
     <string name="room_do_not_have_permission_to_post">Ви не маєте права писати повідомлення в цій кімнаті</string>
-    <string name="room_new_message_notification">1 нове повідомлення</string>
 
     <!-- unrecognized SSL certificate -->
     <string name="ssl_trust">Довіряти</string>
@@ -501,8 +500,6 @@
 
     <!-- analytics -->
     <string name="settings_analytics">Телеметрія</string>
-    <string name="settings_opt_out_of_analytics">Вимкнути телеметрію</string>
-    <string name="settings_opt_out_of_analytics_summary">Riot збирає анонімну статистику задля покращення застосунку.</string>
 
     <string name="settings_disable_markdown">Вимкнути розмітку Markdown при відправленні</string>
     <string name="settings_data_save_mode">Режим економії трафіку</string>
@@ -513,7 +510,6 @@
     <string name="devices_details_device_name">Назва Пристрою</string>
     <string name="devices_details_last_seen_title">Востаннє онлайн</string>
     <string name="devices_details_last_seen_format">%1$s @ %2$s</string>
-    <string name="devices_details_time_format">HH:mm:ss</string>
     <string name="devices_delete_dialog_text">Операція потребує додаткової аутентифікації.\nДля продовження введіть ваш пароль.</string>
     <string name="devices_delete_dialog_title">Аутентифікація</string>
     <string name="devices_delete_pswd">Пароль:</string>
@@ -580,9 +576,6 @@
     <string name="room_settings_tag_pref_entry_low_priority">Низький пріоритет</string>
     <string name="room_settings_tag_pref_entry_none">Жодного</string>
     <string name="room_settings_tag_pref_no_tag">Без мітки</string>
-    <string name="room_settings_tag_pref_entry_value_favourite">улюблені</string>
-    <string name="room_settings_tag_pref_entry_value_low_priority">низький</string>
-    <string name="room_settings_tag_pref_entry_value_none">жодного</string>
 
     <!-- room settings : access and visibility -->
     <string name="room_settings_category_access_visibility_title">Доступ та видимість</string>
@@ -744,7 +737,6 @@
     <string name="widget_integration_missing_room_id">У запиті відсутній room_id.</string>
     <string name="widget_integration_missing_user_id">У запиті відсутній user_id.</string>
     <string name="widget_integration_room_not_visible">Кімната %s невидима.</string>
-    <string name="settings_labs_matrix_apps">Застосунки Matrix</string>
 
     <string name="room_add_matrix_apps">Додати застосунки Matrix</string>
     <string name="notification_noisy_notifications">Гучне повідомлення</string>
@@ -852,7 +844,7 @@
     <string name="settings_notification_privacy_reduced">Обмежена конфіденційність</string>
     <string name="settings_notification_privacy_need_permission">Програма потребує дозвіл на роботу у фоновому режимі</string>
     <string name="settings_notification_privacy_no_permission">"Програма  "<b>не</b> потребує дозвіл на роботу у фоновому режимі</string>
-    <string name="settings_notification_privacy_gcm">• Повідомлення відправляються через Google Cloud Messaging</string>
+    <string name="settings_notification_privacy_fcm">• Повідомлення відправляються через Google Cloud Messaging</string>
     <string name="settings_notification_privacy_metadata">• Повідомлення містять тільки метаданні</string>
     <string name="settings_notification_privacy_secure_message_content">• Зміст сповіщення був <b> надійно віднайдений просто на домашньому сервері Matrix </b></string>
     <string name="dialog_title_third_party_licences">Ліцензії сторонніх виробників</string>

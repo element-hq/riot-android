@@ -388,7 +388,6 @@
     <string name="room_delete_unsent_messages">刪除沒送出的訊息</string>
     <string name="room_message_file_not_found">沒找到檔案</string>
     <string name="room_do_not_have_permission_to_post">您沒有權限在此聊天室發言</string>
-    <string name="room_new_message_notification">1 則新訊息</string>
     <plurals name="room_new_messages_notification">
 	<item quantity="other">%d 則新訊息</item>
 </plurals>
@@ -514,7 +513,7 @@
     <string name="settings_notification_privacy_reduced">低隱私模式</string>
     <string name="settings_notification_privacy_need_permission">應用程式需要權限以在後臺運行</string>
     <string name="settings_notification_privacy_no_permission">此應用程式<b>不</b>需要權限在後臺運行</string>
-    <string name="settings_notification_privacy_gcm">•通知將通過 GCM(Google Cloud Messaging) 發送</string>
+    <string name="settings_notification_privacy_fcm">•通知將通過 GCM(Google Cloud Messaging) 發送</string>
     <string name="settings_notification_privacy_metadata">·通知僅包含中繼資料</string>
     <string name="settings_notification_privacy_secure_message_content">• 通知的消息內容<b>將從 Matrix 主服務器安全獲取</b></string>
     <string name="settings_notification_privacy_nosecure_message_content">• 通知含有<b>訊息與中繼資料</b></string>
@@ -584,8 +583,6 @@
     <string name="startup_notification_privacy_button_other">選擇其他選項</string>
 
     <string name="settings_analytics">傳送分析資料</string>
-    <string name="settings_opt_out_of_analytics">退出分析計劃</string>
-    <string name="settings_opt_out_of_analytics_summary">Riot 會收集匿名分析以讓我們可以改進此應用程式。</string>
     <string name="settings_opt_in_of_analytics">傳送分析資料</string>
     <string name="settings_opt_in_of_analytics_summary">Riot 會收集匿名分析以讓我們可以改進此應用程式。</string>
     <string name="settings_opt_in_of_analytics_prompt">請允許收集匿名分析以讓我們可以改進此應用程式。</string>
@@ -599,7 +596,6 @@
     <string name="devices_details_device_name">裝置名稱</string>
     <string name="devices_details_last_seen_title">上次上線</string>
     <string name="devices_details_last_seen_format">%1$s @ %2$s</string>
-    <string name="devices_details_time_format">HH:mm:ss</string>
     <string name="devices_delete_dialog_text">此操作需要額外的身份驗證。
 要繼續, 請輸入您的密碼。</string>
     <string name="devices_delete_dialog_title">授權</string>
@@ -665,9 +661,6 @@
     <string name="room_settings_tag_pref_entry_low_priority">低優先度</string>
     <string name="room_settings_tag_pref_entry_none">無</string>
     <string name="room_settings_tag_pref_no_tag">沒有標籤</string>
-    <string name="room_settings_tag_pref_entry_value_favourite">我的最愛</string>
-    <string name="room_settings_tag_pref_entry_value_low_priority">低</string>
-    <string name="room_settings_tag_pref_entry_value_none">無</string>
 
     <string name="room_settings_category_access_visibility_title">訪問和可見度</string>
     <string name="room_settings_directory_visibility">將此聊天室列入聊天室目錄</string>
@@ -853,8 +846,7 @@
     <string name="widget_integration_room_not_visible">聊天室 %s 不可見。</string>
     <string name="widget_integration_missing_parameter">缺少必需的參數。</string>
     <string name="widget_integration_invalid_parameter">無效參數。</string>
-    <string name="settings_labs_matrix_apps">Matrix 應用程式</string>
-    <string name="room_add_matrix_apps">新增 Matrix 應用程式</string>
+    <string name="room_add_matrix_apps">添加 Matrix 應用程式</string>
     <string name="settings_labs_native_camera">使用原生相機</string>
     <string name="settings_labs_enable_send_voice">發送語音訊息（需要可錄製語音的第三方應用程式）</string>
 

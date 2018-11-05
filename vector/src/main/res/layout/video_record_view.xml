@@ -7,7 +7,7 @@
     <im.vector.view.VideoRecordProgressView
         android:id="@+id/video_record_progress_view"
         android:layout_width="80dp"
-        android:layout_height="80dp"/>
+        android:layout_height="80dp" />
 
     <ImageView
         android:layout_width="80dp"

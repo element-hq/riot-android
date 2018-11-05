@@ -8,6 +8,7 @@
     <RelativeLayout
         android:layout_width="wrap_content"
         android:layout_height="match_parent"
+        android:layout_marginStart="6dp"
         android:layout_marginLeft="6dp">
 
         <im.vector.view.VectorCircularImageView
@@ -22,10 +23,12 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center_vertical"
+        android:layout_marginStart="12dp"
         android:layout_marginLeft="12dp"
+        android:layout_marginEnd="6dp"
         android:layout_marginRight="6dp"
         android:maxLines="1"
-        android:textColor="?attr/default_text_dark_color"
+        android:textColor="?attr/vctr_default_text_dark_color"
         android:textSize="12sp"
         android:textStyle="bold" />
 </LinearLayout>

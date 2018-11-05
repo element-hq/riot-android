@@ -340,7 +340,6 @@
     <string name="room_delete_unsent_messages">Изтрий неизпратените съобщения</string>
     <string name="room_message_file_not_found">Файлът не е намерен</string>
     <string name="room_do_not_have_permission_to_post">Нямате разрешение да публикувате в тази стая</string>
-    <string name="room_new_message_notification">1 ново съобщение</string>
     <plurals name="room_new_messages_notification">
 	<item quantity="one">1 ново съобщение</item>
 	<item quantity="other">%d нови съобщения</item>
@@ -468,8 +467,6 @@
     <string name="settings_hide_avatar_display_name_changes_messages">Скриване на информацията за промените на аватара и името</string>
     <string name="settings_disable_markdown">Изключи markdown при изпращане</string>
     <string name="settings_analytics">Статистика</string>
-    <string name="settings_opt_out_of_analytics">Отказване от събиране на статистически данни</string>
-    <string name="settings_opt_out_of_analytics_summary">Riot събира анонимни статистики, за да ни позволи да подобрим приложението.</string>
 
     <string name="devices_details_dialog_title">Информация за устройството</string>
     <string name="devices_details_id_title">ID</string>
@@ -477,7 +474,6 @@
     <string name="devices_details_device_name">Име на устройството</string>
     <string name="devices_details_last_seen_title">Последно видян</string>
     <string name="devices_details_last_seen_format">%1$s @ %2$s</string>
-    <string name="devices_details_time_format">HH:mm:ss</string>
     <string name="devices_delete_dialog_text">Тази операция изискра допълнителна автентикация.
 За да продължите, моля, въведете Вашата парола.</string>
     <string name="devices_delete_dialog_title">Автентикация</string>
@@ -539,9 +535,6 @@
     <string name="room_settings_tag_pref_entry_favourite">Любим</string>
     <string name="room_settings_tag_pref_entry_low_priority">Нисък приоритет</string>
     <string name="room_settings_tag_pref_entry_none">няма</string>
-    <string name="room_settings_tag_pref_entry_value_favourite">любим</string>
-    <string name="room_settings_tag_pref_entry_value_low_priority">нисък</string>
-    <string name="room_settings_tag_pref_entry_value_none">няма</string>
 
     <string name="room_settings_category_access_visibility_title">Достъп и видимост</string>
     <string name="room_settings_directory_visibility">Включване в директорията със стаи</string>
@@ -705,7 +698,6 @@
     <string name="widget_integration_missing_room_id">Липсва room_id в заявката.</string>
     <string name="widget_integration_missing_user_id">Липсва user_id в заявката.</string>
     <string name="widget_integration_room_not_visible">Стая %s не е видима.</string>
-    <string name="settings_labs_matrix_apps">Matrix приложения</string>
     <string name="room_add_matrix_apps">Добави Matrix приложения</string>
     <string name="permissions_rationale_msg_storage">Riot иска разрешение за достъп до Вашата галерия със снимки и видеа, за да изпраща и запазва прикачени файлове.
 
@@ -874,7 +866,7 @@
     <string name="settings_notification_privacy_reduced">Намалена конфиденциалност</string>
     <string name="settings_notification_privacy_need_permission">Приложението се нуждае от достъп за работа във фонов режим</string>
     <string name="settings_notification_privacy_no_permission">Приложението <b>не</b> се нуждае от достъп за работа във фонов режим</string>
-    <string name="settings_notification_privacy_gcm">• Уведомления се изпращат чрез Google Cloud Messaging</string>
+    <string name="settings_notification_privacy_fcm">• Уведомления се изпращат чрез Google Cloud Messaging</string>
     <string name="settings_notification_privacy_metadata">• Уведомленията съдържат само метаданни</string>
     <string name="settings_notification_privacy_secure_message_content">• Съдържанието на уведомленията се <b>извлича по защитен път директно от Matrix сървъра</b></string>
     <string name="settings_notification_privacy_nosecure_message_content">• Уведомленията съдържат <b>метаданни и съдържания на съобщения</b></string>

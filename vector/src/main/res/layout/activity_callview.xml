@@ -13,7 +13,7 @@
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:background="?attr/riot_primary_background_color">
+            android:background="?attr/vctr_riot_primary_background_color">
 
             <im.vector.view.VectorCircularImageView
                 android:id="@+id/call_other_member"
@@ -95,8 +95,8 @@
             android:id="@+id/incoming_call_menu_buttons_layout_container"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_alignParentBottom="true"
             android:layout_alignTop="@+id/call_menu_buttons_layout_container"
+            android:layout_alignParentBottom="true"
             android:background="@android:color/white"
             android:gravity="center">
 
@@ -105,14 +105,14 @@
                 android:layout_width="0dp"
                 android:layout_height="48dp"
                 android:layout_weight="50"
-                android:src="@drawable/voice_call_end_fushia"/>
+                android:src="@drawable/voice_call_end_fushia" />
 
             <ImageView
                 android:id="@+id/accept_incoming_call"
                 android:layout_width="0dp"
                 android:layout_height="48dp"
                 android:layout_weight="50"
-                android:src="@drawable/voice_call_start_green"/>
+                android:src="@drawable/voice_call_start_green" />
 
         </LinearLayout>
 

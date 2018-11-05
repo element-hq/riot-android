@@ -5,7 +5,9 @@
     android:id="@+id/pill_layout"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
+    android:layout_marginStart="3dp"
     android:layout_marginLeft="3dp"
+    android:layout_marginEnd="3dp"
     android:layout_marginRight="3dp"
     android:orientation="horizontal"
     tools:background="@drawable/pill_background_user_id_dark">
@@ -15,6 +17,7 @@
         android:layout_width="14sp"
         android:layout_height="14sp"
         android:layout_gravity="center_vertical"
+        android:layout_marginStart="5dp"
         android:layout_marginLeft="5dp"
         tools:src="@tools:sample/avatars" />
 
@@ -23,7 +26,9 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center_vertical"
+        android:layout_marginStart="5dp"
         android:layout_marginLeft="5dp"
+        android:layout_marginEnd="5dp"
         android:layout_marginRight="5dp"
         android:textSize="14sp"
         tools:text="Username"

@@ -17,18 +17,19 @@
             android:layout_width="40dp"
             android:layout_height="40dp"
             android:padding="8dp"
+            android:rotationY="@integer/rtl_mirror_flip"
             android:src="@drawable/ic_material_arrow_back_white"
-            android:tint="?attr/primary_control_color" />
+            android:tint="?attr/vctr_primary_control_color" />
 
         <TextView
             android:id="@+id/widget_title"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerInParent="true"
-            android:layout_toEndOf="@+id/widget_back_icon"
-            android:layout_toLeftOf="@+id/widget_close_icon"
-            android:layout_toRightOf="@+id/widget_back_icon"
             android:layout_toStartOf="@+id/widget_close_icon"
+            android:layout_toLeftOf="@+id/widget_close_icon"
+            android:layout_toEndOf="@+id/widget_back_icon"
+            android:layout_toRightOf="@+id/widget_back_icon"
             android:fontFamily="sans-serif-bold"
             android:gravity="center"
             android:textColor="@android:color/white"
@@ -53,8 +54,8 @@
         android:id="@+id/widget_web_view"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_alignParentBottom="true"
         android:layout_below="@+id/widget_tab_bar"
+        android:layout_alignParentBottom="true"
         android:background="@android:color/black" />
 
     <RelativeLayout

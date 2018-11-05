@@ -20,8 +20,7 @@ package im.vector.util
  * Schemes
  */
 private const val HTTP_SCHEME = "http://"
-private const val HTTPS_SCHEME = "https://"
-
+const val HTTPS_SCHEME = "https://"
 
 /**
  * Remove the http schemes from the URl passed in parameter

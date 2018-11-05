@@ -18,6 +18,7 @@
 
 package im.vector.fragments;
 
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -86,12 +87,12 @@ import im.vector.db.VectorContentProvider;
 import im.vector.extensions.MatrixSdkExtensionsKt;
 import im.vector.listeners.IMessagesAdapterActionsListener;
 import im.vector.receiver.VectorUniversalLinkReceiver;
+import im.vector.ui.themes.ThemeUtils;
 import im.vector.util.ExternalApplicationsUtilKt;
 import im.vector.util.PermissionsToolsKt;
 import im.vector.util.PreferencesManager;
 import im.vector.util.SlidableMediaInfo;
 import im.vector.util.SystemUtilsKt;
-import im.vector.util.ThemeUtils;
 import im.vector.util.VectorImageGetter;
 import im.vector.widgets.WidgetsManager;
 
@@ -210,7 +211,7 @@ public class VectorMessageListFragment extends MatrixMessageListFragment<VectorM
             }
         });
 
-        v.setBackgroundColor(ThemeUtils.INSTANCE.getColor(getActivity(), R.attr.riot_primary_background_color));
+        v.setBackgroundColor(ThemeUtils.INSTANCE.getColor(getActivity(), R.attr.vctr_riot_primary_background_color));
 
         return v;
     }
@@ -380,6 +381,7 @@ public class VectorMessageListFragment extends MatrixMessageListFragment<VectorM
      * @param event      the event
      * @param deviceInfo the deviceinfo
      */
+    @SuppressLint("SetTextI18n")
     public void onE2eIconClick(final Event event, final MXDeviceInfo deviceInfo) {
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
         LayoutInflater inflater = getActivity().getLayoutInflater();
@@ -1108,7 +1110,7 @@ public class VectorMessageListFragment extends MatrixMessageListFragment<VectorM
             // so provide an handle to retrieve it
             if (null != getRoomPreviewData()) {
                 roomDetailsIntent.putExtra(VectorMemberDetailsActivity.EXTRA_STORE_ID,
-                        new Integer(Matrix.getInstance(getActivity()).addTmpStore(mEventTimeLine.getStore())));
+                        Matrix.getInstance(getActivity()).addTmpStore(mEventTimeLine.getStore()));
             }
 
             roomDetailsIntent.putExtra(VectorMemberDetailsActivity.EXTRA_ROOM_ID, mRoom.getRoomId());
@@ -1163,7 +1165,7 @@ public class VectorMessageListFragment extends MatrixMessageListFragment<VectorM
             if (fragment != null) {
                 fragment.dismissAllowingStateLoss();
             }
-            fragment = VectorReadReceiptsDialogFragment.newInstance(mSession.getMyUserId(), mRoom.getRoomId(), eventId);
+            fragment = VectorReadReceiptsDialogFragment.Companion.newInstance(mSession.getMyUserId(), mRoom.getRoomId(), eventId);
             fragment.show(fm, TAG_FRAGMENT_RECEIPTS_DIALOG);
         } catch (Exception e) {
             Log.e(LOG_TAG, "## onMoreReadReceiptClick() failed " + e.getMessage(), e);
@@ -1194,10 +1196,10 @@ public class VectorMessageListFragment extends MatrixMessageListFragment<VectorM
 
                 if (null != universalParams) {
                     // open the member sheet from the current activity
-                    if (universalParams.containsKey(VectorUniversalLinkReceiver.ULINK_MATRIX_USER_ID_KEY)) {
+                    if (universalParams.containsKey(PermalinkUtils.ULINK_MATRIX_USER_ID_KEY)) {
                         Intent roomDetailsIntent = new Intent(getActivity(), VectorMemberDetailsActivity.class);
                         roomDetailsIntent.putExtra(VectorMemberDetailsActivity.EXTRA_MEMBER_ID,
-                                universalParams.get(VectorUniversalLinkReceiver.ULINK_MATRIX_USER_ID_KEY));
+                                universalParams.get(PermalinkUtils.ULINK_MATRIX_USER_ID_KEY));
                         roomDetailsIntent.putExtra(VectorMemberDetailsActivity.EXTRA_MATRIX_ID, mSession.getCredentials().userId);
                         getActivity().startActivityForResult(roomDetailsIntent, VectorRoomActivity.GET_MENTION_REQUEST_CODE);
                     } else {

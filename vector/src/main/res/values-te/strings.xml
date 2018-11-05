@@ -260,7 +260,6 @@
     <string name="room_delete_unsent_messages">పంపని సందేశాలను తొలగించండి</string>
     <string name="room_message_file_not_found">దస్త్రం కనుగొనబడలేదు</string>
     <string name="room_do_not_have_permission_to_post">మీకు ఈ గదికి పోస్ట్ చేయడానికి అనుమతి లేదు</string>
-    <string name="room_new_message_notification">1 కొత్త సందేశం</string>
 
     <string name="ssl_trust">నమ్మకం</string>
     <string name="ssl_do_not_trust">నమ్మకండి</string>
@@ -399,8 +398,6 @@
 
     <string name="room_settings_tag_pref_entry_low_priority">తక్కువ ప్రాధాన్యత</string>
     <string name="room_settings_tag_pref_entry_none">ఎవరు కాదు</string>
-    <string name="room_settings_tag_pref_entry_value_low_priority">తక్కువ</string>
-    <string name="room_settings_tag_pref_entry_value_none">ఎవరు కాదు</string>
 
     <string name="room_settings_directory_visibility">గది డైరెక్టరీలో ఈ గదిని జాబితా చేయండి</string>
     <string name="room_settings_room_access_rules_pref_title">గది యాక్సెస్</string>

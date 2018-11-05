@@ -44,7 +44,6 @@ import android.support.design.widget.TextInputEditText;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.content.ContextCompat;
-import android.support.v4.content.LocalBroadcastManager;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
@@ -96,6 +95,7 @@ import org.matrix.androidsdk.rest.model.Event;
 import org.matrix.androidsdk.rest.model.MatrixError;
 import org.matrix.androidsdk.util.BingRulesManager;
 import org.matrix.androidsdk.util.Log;
+import org.matrix.androidsdk.util.PermalinkUtils;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
@@ -124,20 +124,20 @@ import im.vector.fragments.GroupsFragment;
 import im.vector.fragments.HomeFragment;
 import im.vector.fragments.PeopleFragment;
 import im.vector.fragments.RoomsFragment;
-import im.vector.gcm.GcmRegistrationManager;
+import im.vector.push.PushManager;
 import im.vector.receiver.VectorUniversalLinkReceiver;
 import im.vector.services.EventStreamService;
+import im.vector.ui.themes.ActivityOtherThemes;
+import im.vector.ui.themes.ThemeUtils;
 import im.vector.util.BugReporter;
 import im.vector.util.CallsManager;
 import im.vector.util.HomeRoomsViewModel;
 import im.vector.util.PreferencesManager;
 import im.vector.util.RoomUtils;
 import im.vector.util.SystemUtilsKt;
-import im.vector.util.ThemeUtils;
 import im.vector.util.VectorUtils;
 import im.vector.view.UnreadCounterBadgeView;
 import im.vector.view.VectorPendingCallView;
-import kotlin.Triple;
 
 /**
  * Displays the main screen of the app, with rooms the user has joined and the ability to create
@@ -287,8 +287,8 @@ public class VectorHomeActivity extends VectorAppCompatActivity implements Searc
 
     @NotNull
     @Override
-    public Triple getOtherThemes() {
-        return new Triple(R.style.HomeActivityTheme_Dark, R.style.HomeActivityTheme_Black, R.style.HomeActivityTheme_Status);
+    public ActivityOtherThemes getOtherThemes() {
+        return ActivityOtherThemes.Home.INSTANCE;
     }
 
     @Override
@@ -402,10 +402,10 @@ public class VectorHomeActivity extends VectorAppCompatActivity implements Searc
                 // detect the room could be opened without waiting the next sync
                 Map<String, String> params = VectorUniversalLinkReceiver.parseUniversalLink(uri);
 
-                if ((null != params) && params.containsKey(VectorUniversalLinkReceiver.ULINK_ROOM_ID_OR_ALIAS_KEY)) {
+                if ((null != params) && params.containsKey(PermalinkUtils.ULINK_ROOM_ID_OR_ALIAS_KEY)) {
                     Log.d(LOG_TAG, "Has a valid universal link");
 
-                    final String roomIdOrAlias = params.get(VectorUniversalLinkReceiver.ULINK_ROOM_ID_OR_ALIAS_KEY);
+                    final String roomIdOrAlias = params.get(PermalinkUtils.ULINK_ROOM_ID_OR_ALIAS_KEY);
 
                     // it is a room ID ?
                     if (MXPatterns.isRoomId(roomIdOrAlias)) {
@@ -599,7 +599,7 @@ public class VectorHomeActivity extends VectorAppCompatActivity implements Searc
         // https://github.com/vector-im/vector-android/issues/323
         // the tool bar color is not restored on some devices.
         TypedValue vectorActionBarColor = new TypedValue();
-        getTheme().resolveAttribute(R.attr.riot_primary_background_color, vectorActionBarColor, true);
+        getTheme().resolveAttribute(R.attr.vctr_riot_primary_background_color, vectorActionBarColor, true);
         mToolbar.setBackgroundResource(vectorActionBarColor.resourceId);
 
         checkDeviceId();
@@ -621,8 +621,8 @@ public class VectorHomeActivity extends VectorAppCompatActivity implements Searc
             if (requestCode == RequestCodesKt.BATTERY_OPTIMIZATION_REQUEST_CODE) {
                 // Ok, we can set the NORMAL privacy setting
                 Matrix.getInstance(this)
-                        .getSharedGCMRegistrationManager()
-                        .setNotificationPrivacy(GcmRegistrationManager.NotificationPrivacy.NORMAL, null);
+                        .getPushManager()
+                        .setNotificationPrivacy(PushManager.NotificationPrivacy.NORMAL, null);
             }
         }
     }
@@ -636,9 +636,9 @@ public class VectorHomeActivity extends VectorAppCompatActivity implements Searc
             return;
         }
 
-        final GcmRegistrationManager gcmMgr = Matrix.getInstance(VectorHomeActivity.this).getSharedGCMRegistrationManager();
+        final PushManager pushManager = Matrix.getInstance(VectorHomeActivity.this).getPushManager();
 
-        if (!gcmMgr.useGCM()) {
+        if (!pushManager.useFcm()) {
             // f-droid does not need the permission.
             // It is still using the technique of sticky "Listen for events" notification
             return;
@@ -651,10 +651,10 @@ public class VectorHomeActivity extends VectorAppCompatActivity implements Searc
             if (SystemUtilsKt.isIgnoringBatteryOptimizations(this)) {
                 // No need to ask permission, we already have it
                 // Set the NORMAL privacy setting
-                gcmMgr.setNotificationPrivacy(GcmRegistrationManager.NotificationPrivacy.NORMAL, null);
+                pushManager.setNotificationPrivacy(PushManager.NotificationPrivacy.NORMAL, null);
             } else {
-                // by default, use GCM and low detail notifications
-                gcmMgr.setNotificationPrivacy(GcmRegistrationManager.NotificationPrivacy.LOW_DETAIL, null);
+                // by default, use FCM and low detail notifications
+                pushManager.setNotificationPrivacy(PushManager.NotificationPrivacy.LOW_DETAIL, null);
 
                 new AlertDialog.Builder(this)
                         .setCancelable(false)
@@ -1008,8 +1008,8 @@ public class VectorHomeActivity extends VectorAppCompatActivity implements Searc
 
         // Set color of toolbar search view
         EditText edit = mSearchView.findViewById(android.support.v7.appcompat.R.id.search_src_text);
-        edit.setTextColor(ThemeUtils.INSTANCE.getColor(this, R.attr.primary_text_color));
-        edit.setHintTextColor(ThemeUtils.INSTANCE.getColor(this, R.attr.primary_hint_text_color));
+        edit.setTextColor(ThemeUtils.INSTANCE.getColor(this, R.attr.vctr_primary_text_color));
+        edit.setHintTextColor(ThemeUtils.INSTANCE.getColor(this, R.attr.vctr_primary_hint_text_color));
     }
 
     /**
@@ -1266,7 +1266,7 @@ public class VectorHomeActivity extends VectorAppCompatActivity implements Searc
                     myBroadcastIntent.setAction(VectorUniversalLinkReceiver.BROADCAST_ACTION_UNIVERSAL_LINK_RESUME);
                     myBroadcastIntent.putExtras(getIntent().getExtras());
                     myBroadcastIntent.putExtra(VectorUniversalLinkReceiver.EXTRA_UNIVERSAL_LINK_SENDER_ID, VectorUniversalLinkReceiver.HOME_SENDER_ID);
-                    LocalBroadcastManager.getInstance(this).sendBroadcast(myBroadcastIntent);
+                    sendBroadcast(myBroadcastIntent);
 
                     showWaitingView();
 
@@ -1447,7 +1447,7 @@ public class VectorHomeActivity extends VectorAppCompatActivity implements Searc
         View dialogView = inflater.inflate(R.layout.dialog_join_room_by_id, null);
 
         final EditText textInput = dialogView.findViewById(R.id.join_room_edit_text);
-        textInput.setTextColor(ThemeUtils.INSTANCE.getColor(this, R.attr.riot_primary_text_color));
+        textInput.setTextColor(ThemeUtils.INSTANCE.getColor(this, R.attr.vctr_riot_primary_text_color));
 
         AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(this);
 
@@ -2129,6 +2129,12 @@ public class VectorHomeActivity extends VectorAppCompatActivity implements Searc
                             iconViewLayoutParams.topMargin - badgeOffsetY,
                             iconViewLayoutParams.rightMargin,
                             iconViewLayoutParams.bottomMargin);
+
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1) {
+                        badgeLayoutParams.setMarginStart(iconViewLayoutParams.leftMargin + badgeOffsetX);
+                        badgeLayoutParams.setMarginEnd(iconViewLayoutParams.rightMargin);
+                    }
+
                     badgeLayoutParams.gravity = iconViewLayoutParams.gravity;
 
                     ((FrameLayout) iconView.getParent()).addView(badgeView, badgeLayoutParams);

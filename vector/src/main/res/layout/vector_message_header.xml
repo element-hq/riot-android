@@ -15,16 +15,17 @@
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="42dp"
-        android:background="?attr/room_activity_divider_color">
+        android:background="?attr/vctr_room_activity_divider_color">
 
         <TextView
             android:id="@+id/messagesAdapter_message_header_text"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_centerVertical="true"
+            android:layout_marginStart="18dp"
             android:layout_marginLeft="18dp"
             android:textAppearance="?android:attr/textAppearanceSmall"
-            android:textColor="?attr/riot_primary_text_color"
+            android:textColor="?attr/vctr_riot_primary_text_color"
             android:textStyle="bold"
             tools:text="Today" />
     </RelativeLayout>

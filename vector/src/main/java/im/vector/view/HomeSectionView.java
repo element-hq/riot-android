@@ -41,7 +41,7 @@ import im.vector.R;
 import im.vector.adapters.AbsAdapter;
 import im.vector.adapters.HomeRoomAdapter;
 import im.vector.fragments.AbsHomeFragment;
-import im.vector.util.ThemeUtils;
+import im.vector.ui.themes.ThemeUtils;
 import im.vector.util.RoomUtils;
 
 public class HomeSectionView extends RelativeLayout {
@@ -109,7 +109,7 @@ public class HomeSectionView extends RelativeLayout {
         GradientDrawable shape = new GradientDrawable();
         shape.setShape(GradientDrawable.RECTANGLE);
         shape.setCornerRadius(100);
-        shape.setColor(ThemeUtils.INSTANCE.getColor(getContext(), R.attr.activity_bottom_gradient_color));
+        shape.setColor(ThemeUtils.INSTANCE.getColor(getContext(), R.attr.vctr_activity_bottom_gradient_color));
         mBadge.setBackground(shape);
 
         mHeader.setOnClickListener(new OnClickListener() {

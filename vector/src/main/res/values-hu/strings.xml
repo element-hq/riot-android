@@ -345,7 +345,6 @@ Biztos vagy benne?</string>
     <string name="room_delete_unsent_messages">El nem küldött üzenetek törlése</string>
     <string name="room_message_file_not_found">Fájl nem található</string>
     <string name="room_do_not_have_permission_to_post">Nincs engedélyed hogy üzenetet hagyj ebbe a szobában</string>
-    <string name="room_new_message_notification">1 új üzenet</string>
 
     <string name="ssl_trust">Megbízom benne</string>
     <string name="ssl_do_not_trust">Nem bízom meg benne</string>
@@ -464,7 +463,6 @@ Vedd figyelembe, hogy az alkalmazás újraindul  ami sok időt vehet igénybe."<
     <string name="devices_details_device_name">Készüléknév</string>
     <string name="devices_details_last_seen_title">Legutóbb láttuk</string>
     <string name="devices_details_last_seen_format">%1$s @ %2$s</string>
-    <string name="devices_details_time_format">HH:mm:ss</string>
     <string name="devices_delete_dialog_text">Ez a művelethez újra azonosításra van szükség.
 A folytatáshoz írd be a jelszavad.</string>
     <string name="devices_delete_dialog_title">Azonosítás</string>
@@ -515,9 +513,6 @@ Vedd figyelembe, hogy az alkalmazás újraindul  ami sok időt vehet igénybe."<
     <string name="room_settings_tag_pref_entry_low_priority">Alacsony prioritású</string>
     <string name="room_settings_tag_pref_entry_none">Semmi</string>
     <string name="room_settings_tag_pref_no_tag">nem címkézett</string>
-    <string name="room_settings_tag_pref_entry_value_favourite">kedvenc</string>
-    <string name="room_settings_tag_pref_entry_value_low_priority">alacsony</string>
-    <string name="room_settings_tag_pref_entry_value_none">semmi</string>
 
     <string name="room_settings_category_access_visibility_title">Hozzáférés és láthatóság</string>
     <string name="room_settings_directory_visibility">Listázza ezt a szobát a szobák könyvtárba</string>
@@ -716,7 +711,6 @@ Ismeretlen eszközök:</string>
     <string name="widget_integration_missing_room_id">Hiányzó szoba azonosító a kérésben.</string>
     <string name="widget_integration_missing_user_id">Hiányzó felhasználó azonosító a kérésben.</string>
     <string name="widget_integration_room_not_visible">%s szoba nem látható.</string>
-    <string name="settings_labs_matrix_apps">Matrix Alkalmazások</string>
     <string name="room_add_matrix_apps">Matrix alkalmazás hozzáadása</string>
     <string name="notification_listening_for_events">Események figyelése</string>
 
@@ -737,9 +731,6 @@ Ismeretlen eszközök:</string>
     <string name="option_take_video">Videófelvétel</string>
 
     <string name="settings_analytics">Elemzés</string>
-    <string name="settings_opt_out_of_analytics">Analitikai adatgyűjtés kikapcsolása</string>
-    <string name="settings_opt_out_of_analytics_summary">A Riot névtelen elemzést gyűjt az alkalmazás fejlesztésének érdekében.</string>
-
 
     <string name="settings_labs_native_camera">Beépített kamera használata</string>
 
@@ -887,7 +878,7 @@ Ismeretlen eszközök:</string>
     <string name="settings_notification_privacy_power_saving">Akkumulátor kímélő beállítások</string>
     <string name="settings_notification_privacy_low_detail">Értesítések kevés részlettel</string>
     <string name="settings_notification_privacy_no_permission">Az alkalmazásnak <b>nincs</b> szüksége engedélyre a háttérben való futáshoz</string>
-    <string name="settings_notification_privacy_gcm">• Az értesítések a Google Cloud Messaging rendszeren keresztül lesznek elküldve</string>
+    <string name="settings_notification_privacy_fcm">• Az értesítések a Google Cloud Messaging rendszeren keresztül lesznek elküldve</string>
     <string name="settings_notification_privacy_metadata">• Az értesítések csak metaadatokat tartalmaznak</string>
     <string name="settings_notification_privacy_secure_message_content">• Az értesítés tartalma <b>közvetlenül a Matrix szerverről kerül letöltésre</b></string>
     <string name="settings_notification_privacy_nosecure_message_content">Az értesítések <b>meta- és üzenet adatot is</b> tartalmaznak</string>

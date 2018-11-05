@@ -366,7 +366,6 @@ Salatut viestit eivät näy sovelluksissa, jotka eivät tue salausta.</string> <
     <string name="room_delete_unsent_messages">Poista lähettämättömät viestit</string>
     <string name="room_message_file_not_found">Tiedostoa ei löydy</string>
     <string name="room_do_not_have_permission_to_post">Et saa lähettää viestejä tähän huoneeseen</string>
-    <string name="room_new_message_notification">1 uusi viesti</string>
 
     <!-- unrecognized SSL certificate -->
     <string name="ssl_trust">Luota</string>
@@ -497,7 +496,6 @@ Salatut viestit eivät näy sovelluksissa, jotka eivät tue salausta.</string> <
     <string name="devices_details_device_name">Laitteen nimi</string>
     <string name="devices_details_last_seen_title">Viimeksi käytetty</string>
     <string name="devices_details_last_seen_format">%1$s @ %2$s</string>
-    <string name="devices_details_time_format">HH:mm:ss</string>
     <string name="devices_delete_dialog_text">Tämä toimenpide vaatii lisätunnistautumisen.\Anna salasanasi jatkaaksesi.</string>
     <string name="devices_delete_dialog_title">Tunnistautuminen</string>
     <string name="devices_delete_pswd">Salasana:</string>
@@ -553,9 +551,6 @@ Salatut viestit eivät näy sovelluksissa, jotka eivät tue salausta.</string> <
     <string name="room_settings_tag_pref_entry_low_priority">Matala tärkeys</string>
     <string name="room_settings_tag_pref_entry_none">Ei mikään</string>
     <string name="room_settings_tag_pref_no_tag">ei luokiteltu</string>
-    <string name="room_settings_tag_pref_entry_value_favourite">suosikki</string>
-    <string name="room_settings_tag_pref_entry_value_low_priority">matala</string>
-    <string name="room_settings_tag_pref_entry_value_none">none</string>
 
     <!-- room settings : access and visibility -->
     <string name="room_settings_category_access_visibility_title">Näkyvyys ja pääsy</string>
@@ -752,9 +747,6 @@ Voit tehdä sen nyt tai myöhemmin sovelluksen asetuksissa.</string>
     <string name="settings_hide_avatar_display_name_changes_messages">Piilota kuvan ja näyttönimen muutokset</string>
 
     <string name="settings_analytics">Analytiikka</string>
-    <string name="settings_opt_out_of_analytics">Älä jaa analytiikkatietoja</string>
-    <string name="settings_opt_out_of_analytics_summary">Riot kerää anonyymiä analytiikkaa sovelluksen parantamiseksi.</string>
-
 
     <string name="widget_no_power_to_manage">Tarvitse oikeudet pienoissovellusten hallintaan tässä huoneessa</string>
     <string name="widget_creation_failure">Pienoissovelluksen luonti epäonnistui</string>
@@ -772,7 +764,6 @@ Voit tehdä sen nyt tai myöhemmin sovelluksen asetuksissa.</string>
     <string name="widget_integration_missing_room_id">room_id puuttuu pyynnöstä.</string>
     <string name="widget_integration_missing_user_id">user_id puuttuu pyynnöstä.</string>
     <string name="widget_integration_room_not_visible">Huone %s ei ole näkyvillä.</string>
-    <string name="settings_labs_matrix_apps">Matrix Sovellukset</string>
     <string name="room_add_matrix_apps">Lisää Matrix sovellus</string>
     <string name="settings_labs_native_camera">Käytä alkuperäistä kamerasovellusta</string>
 

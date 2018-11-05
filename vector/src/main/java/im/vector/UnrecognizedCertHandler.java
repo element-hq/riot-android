@@ -104,18 +104,20 @@ public class UnrecognizedCertHandler {
         View layout = inflater.inflate(R.layout.dialog_ssl_fingerprint, null);
 
         TextView sslFingerprintTitle = layout.findViewById(R.id.ssl_fingerprint_title);
-        sslFingerprintTitle.setText(
-                String.format(VectorApp.getApplicationLocale(), activity.getString(R.string.ssl_fingerprint_hash), unrecognizedFingerprint.getType().toString())
-        );
+        sslFingerprintTitle.setText(activity.getString(R.string.ssl_fingerprint_hash, unrecognizedFingerprint.getType().toString()));
 
         TextView sslFingerprint = layout.findViewById(R.id.ssl_fingerprint);
         sslFingerprint.setText(unrecognizedFingerprint.getBytesAsHexString());
 
         TextView sslUserId = layout.findViewById(R.id.ssl_user_id);
         if (hsConfig.getCredentials() != null) {
-            sslUserId.setText(activity.getString(R.string.username) + ": " + hsConfig.getCredentials().userId);
+            sslUserId.setText(activity.getString(R.string.generic_label_and_value,
+                    activity.getString(R.string.username),
+                    hsConfig.getCredentials().userId));
         } else {
-            sslUserId.setText(activity.getString(R.string.hs_url) + ": " + hsConfig.getHomeserverUri().toString());
+            sslUserId.setText(activity.getString(R.string.generic_label_and_value,
+                    activity.getString(R.string.hs_url),
+                    hsConfig.getHomeserverUri().toString()));
         }
 
         TextView sslExpl = layout.findViewById(R.id.ssl_explanation);
