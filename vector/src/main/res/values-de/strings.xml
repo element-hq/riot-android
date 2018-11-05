@@ -865,7 +865,7 @@ Unbekannte Geräte:</string>
 
     <string name="actions">Aktionen</string>
     <string name="list_members">Mitglieder auflisten</string>
-    <string name="room_sync_in_progress">Synchronisiere...</string>
+    <string name="room_sync_in_progress">Synchronisiere…</string>
     <plurals name="room_header_active_members_count">
 	<item quantity="one">1 aktives Mitglied</item>
 	<item quantity="other">%d aktive Mitglieder</item>
