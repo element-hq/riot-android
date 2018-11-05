@@ -766,7 +766,7 @@
     <string name="room_menu_search">Търсене</string>
     <string name="room_details_people_present_group_name">УЧАСТНИЦИ</string>
 
-    <string name="room_sync_in_progress">Синхронизиране...</string>
+    <string name="room_sync_in_progress">Синхронизиране…</string>
     <string name="settings_summary_app_info_link">Екран с информация за системата на приложението</string>
     <string name="settings_title_app_info_link">Информация за приложението</string>
 
