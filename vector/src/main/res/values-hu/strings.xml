@@ -827,7 +827,7 @@ Ismeretlen eszközök:</string>
 
     <string name="list_members">Tagok listázása</string>
     <string name="open_chat_header">Fejléc megnyitása</string>
-    <string name="room_sync_in_progress">Szinkronizálás...</string>
+    <string name="room_sync_in_progress">Szinkronizálás…</string>
     <plurals name="room_header_active_members_count">
 	<item quantity="one">1 aktív tag</item>
 	<item quantity="other">%d aktív tag</item>
