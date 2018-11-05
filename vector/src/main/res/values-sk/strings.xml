@@ -829,7 +829,7 @@ Neznáme zariadenia:</string>
 
     <string name="list_members">Zobraziť členov</string>
     <string name="open_chat_header">Otvoriť záhlavie</string>
-    <string name="room_sync_in_progress">Synchronizácia...</string>
+    <string name="room_sync_in_progress">Synchronizácia…</string>
     <plurals name="room_header_active_members_count">
 	<item quantity="one">1 aktívny člen</item>
 	<item quantity="few">%d aktívni členovia</item>
