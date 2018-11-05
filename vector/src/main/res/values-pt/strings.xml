@@ -128,11 +128,11 @@ Selecione exportar para criar uma cópia de segurança antes de terminar sessão
     <string name="start_video_call">Iniciar chamada de vídeo</string>
 
     <string name="option_send_files">Enviar ficheiros</string>
-    <string name="option_take_photo_video">Tirar foto ou fazer vídeo</string>
+    <string name="option_take_photo_video">Capturar foto ou vídeo</string>
 
     <!-- Authentication -->
     <string name="auth_login">Iniciar sessão</string>
-    <string name="auth_register">Criar conta</string>
+    <string name="auth_register">Registar-se</string>
     <string name="auth_submit">Enviar</string>
     <string name="auth_skip">Saltar</string>
     <string name="auth_send_reset_email">Enviar email para redefinir senha</string>
