@@ -65,7 +65,7 @@ Selecione exportar para criar uma cópia de segurança antes de terminar sessão
     <string name="dialog_title_warning">Aviso</string>
 
     <!-- Bottom navigation buttons -->
-    <string name="bottom_action_home">Home</string>
+    <string name="bottom_action_home">Início</string>
     <string name="bottom_action_favourites">Favoritos</string>
     <string name="bottom_action_people">Pessoas</string>
     <string name="bottom_action_rooms">Salas</string>
