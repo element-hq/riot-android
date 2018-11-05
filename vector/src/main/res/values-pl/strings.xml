@@ -629,7 +629,7 @@ Zezwolić Riot na dostęp do kontaktów?</string>
 
     <string name="list_members">Lista uczestników</string>
     <string name="open_chat_header">Otwarty nagłówek</string>
-    <string name="room_sync_in_progress">Synchronizacja...</string>
+    <string name="room_sync_in_progress">Synchronizacja…</string>
     <string name="room_preview_unlinked_email_warning">Zaproszenie zostało wysłane do %s, który nie jest powiązany z zalogowanym kontem. 
 Możesz zalogować się z wykorzystaniem innego konta, albo dodać ten adres e-mail do swoich kontaktów.</string>
     <plurals name="room_header_active_members_count">
