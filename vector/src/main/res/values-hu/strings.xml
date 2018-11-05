@@ -1046,4 +1046,14 @@ Vedd figyelembe, hogy az alkalmazás újraindul ami sok időt vehet igénybe.</s
     <string name="merged_events_expand">kinyit</string>
     <string name="merged_events_collapse">bezár</string>
 
+<string name="settings_info_area_show">Mutasd az információs részt</string>
+    <string name="show_info_area_always">Mindig</string>
+    <string name="show_info_area_messages_and_errors">Üzenetekhez és hibákhoz</string>
+    <string name="show_info_area_only_errors">Csak hibákhoz</string>
+
+    <string name="generic_label">%1$s:</string>
+    <string name="generic_label_and_value">%1$s: %2$s</string>
+    <string name="plus_x">+%d</string>
+    <string name="x_plus">%d+</string>
+
 </resources>
