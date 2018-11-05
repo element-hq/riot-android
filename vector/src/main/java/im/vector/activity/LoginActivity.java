@@ -82,6 +82,7 @@ import im.vector.RegistrationManager;
 import im.vector.UnrecognizedCertHandler;
 import im.vector.activity.util.RequestCodesKt;
 import im.vector.features.hhs.ResourceLimitDialogHelper;
+import im.vector.push.fcm.FcmHelper;
 import im.vector.receiver.VectorRegistrationReceiver;
 import im.vector.receiver.VectorUniversalLinkReceiver;
 import im.vector.repositories.ServerUrlsRepository;
@@ -365,6 +366,8 @@ public class LoginActivity extends MXCActionBarActivity implements RegistrationM
 
         // warn that the application has started.
         CommonActivityUtils.onApplicationStarted(this);
+
+        FcmHelper.ensureFcmTokenIsRetrieved(this);
 
         Intent intent = getIntent();
 

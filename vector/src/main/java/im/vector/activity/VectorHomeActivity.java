@@ -124,7 +124,7 @@ import im.vector.fragments.GroupsFragment;
 import im.vector.fragments.HomeFragment;
 import im.vector.fragments.PeopleFragment;
 import im.vector.fragments.RoomsFragment;
-import im.vector.gcm.GcmRegistrationManager;
+import im.vector.push.PushManager;
 import im.vector.receiver.VectorUniversalLinkReceiver;
 import im.vector.services.EventStreamService;
 import im.vector.ui.themes.ActivityOtherThemes;
@@ -621,8 +621,8 @@ public class VectorHomeActivity extends VectorAppCompatActivity implements Searc
             if (requestCode == RequestCodesKt.BATTERY_OPTIMIZATION_REQUEST_CODE) {
                 // Ok, we can set the NORMAL privacy setting
                 Matrix.getInstance(this)
-                        .getSharedGCMRegistrationManager()
-                        .setNotificationPrivacy(GcmRegistrationManager.NotificationPrivacy.NORMAL, null);
+                        .getPushManager()
+                        .setNotificationPrivacy(PushManager.NotificationPrivacy.NORMAL, null);
             }
         }
     }
@@ -636,9 +636,9 @@ public class VectorHomeActivity extends VectorAppCompatActivity implements Searc
             return;
         }
 
-        final GcmRegistrationManager gcmMgr = Matrix.getInstance(VectorHomeActivity.this).getSharedGCMRegistrationManager();
+        final PushManager pushManager = Matrix.getInstance(VectorHomeActivity.this).getPushManager();
 
-        if (!gcmMgr.useGCM()) {
+        if (!pushManager.useFcm()) {
             // f-droid does not need the permission.
             // It is still using the technique of sticky "Listen for events" notification
             return;
@@ -651,10 +651,10 @@ public class VectorHomeActivity extends VectorAppCompatActivity implements Searc
             if (SystemUtilsKt.isIgnoringBatteryOptimizations(this)) {
                 // No need to ask permission, we already have it
                 // Set the NORMAL privacy setting
-                gcmMgr.setNotificationPrivacy(GcmRegistrationManager.NotificationPrivacy.NORMAL, null);
+                pushManager.setNotificationPrivacy(PushManager.NotificationPrivacy.NORMAL, null);
             } else {
-                // by default, use GCM and low detail notifications
-                gcmMgr.setNotificationPrivacy(GcmRegistrationManager.NotificationPrivacy.LOW_DETAIL, null);
+                // by default, use FCM and low detail notifications
+                pushManager.setNotificationPrivacy(PushManager.NotificationPrivacy.LOW_DETAIL, null);
 
                 new AlertDialog.Builder(this)
                         .setCancelable(false)

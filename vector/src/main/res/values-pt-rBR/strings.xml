@@ -967,7 +967,7 @@ Note que esta ação vai reiniciar o aplicativo e isso pode tomar um certo tempo
 </plurals>
     <string name="settings_notification_privacy">Privacidade das notificações</string>
     <string name="settings_notification_privacy_warning">Riot.im funciona em segundo plano para manter sua mensagem de notificação privada. Você pode alterar esta opção para reduzir o uso da bateria.</string>
-    <string name="settings_notification_privacy_gcm">• As notificações são enviadas pelo \"Google Cloud Messaging\"</string>
+    <string name="settings_notification_privacy_fcm">• As notificações são enviadas pelo \"Google Cloud Messaging\"</string>
     <string name="settings_notification_privacy_metadata">• As notificações contém apenas metadados</string>
     <string name="settings_notification_privacy_secure_message_content">• O conteúdo das mensagens da notificação é <b>armazenado de forma segura diretamente no servidor Matrix</b></string>
     <string name="settings_notification_privacy_nosecure_message_content">• As notificações contém <b>metadados e os dados da mensagem</b></string>

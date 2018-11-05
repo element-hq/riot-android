@@ -66,7 +66,7 @@ import im.vector.analytics.PiwikAnalytics;
 import im.vector.analytics.e2e.DecryptionFailureTracker;
 import im.vector.contacts.ContactsManager;
 import im.vector.contacts.PIDsRetriever;
-import im.vector.gcm.GcmRegistrationManager;
+import im.vector.push.PushManager;
 import im.vector.services.EventStreamService;
 import im.vector.settings.FontScale;
 import im.vector.settings.VectorLocale;
@@ -194,7 +194,7 @@ public class VectorApp extends MultiDexApplication {
         }
 
         // init the REST client
-        MXSession.initUserAgent(this);
+        MXSession.initUserAgent(this, BuildConfig.FLAVOR_DESCRIPTION);
 
         instance = this;
         mCallsManager = new CallsManager(this);
@@ -372,14 +372,14 @@ public class VectorApp extends MultiDexApplication {
      * Suspend background threads.
      */
     private void suspendApp() {
-        GcmRegistrationManager gcmRegistrationManager = Matrix.getInstance(VectorApp.this).getSharedGCMRegistrationManager();
+        PushManager pushManager = Matrix.getInstance(VectorApp.this).getPushManager();
 
-        // suspend the events thread if the client uses GCM
-        if (!gcmRegistrationManager.isBackgroundSyncAllowed() || (gcmRegistrationManager.useGCM() && gcmRegistrationManager.hasRegistrationToken())) {
+        // suspend the events thread if the client uses FCM
+        if (!pushManager.isBackgroundSyncAllowed() || (pushManager.useFcm() && pushManager.hasRegistrationToken())) {
             Log.d(LOG_TAG, "suspendApp ; pause the event stream");
             CommonActivityUtils.pauseEventStream(VectorApp.this);
         } else {
-            Log.d(LOG_TAG, "suspendApp ; the event stream is not paused because GCM is disabled.");
+            Log.d(LOG_TAG, "suspendApp ; the event stream is not paused because FCM is disabled.");
         }
 
         // the sessions are not anymore seen as "online"
@@ -388,8 +388,8 @@ public class VectorApp extends MultiDexApplication {
         for (MXSession session : sessions) {
             if (session.isAlive()) {
                 session.setIsOnline(false);
-                session.setSyncDelay(gcmRegistrationManager.isBackgroundSyncAllowed() ? gcmRegistrationManager.getBackgroundSyncDelay() : 0);
-                session.setSyncTimeout(gcmRegistrationManager.getBackgroundSyncTimeOut());
+                session.setSyncDelay(pushManager.isBackgroundSyncAllowed() ? pushManager.getBackgroundSyncDelay() : 0);
+                session.setSyncTimeout(pushManager.getBackgroundSyncTimeOut());
 
                 // remove older medias
                 if ((System.currentTimeMillis() - mLastMediasCheck) < (24 * 60 * 60 * 1000)) {
@@ -495,12 +495,12 @@ public class VectorApp extends MultiDexApplication {
             } else {
                 CommonActivityUtils.resumeEventStream(VectorApp.this);
 
-                // try to perform a GCM registration if it failed
-                // or if the GCM server generated a new push key
-                GcmRegistrationManager gcmRegistrationManager = Matrix.getInstance(this).getSharedGCMRegistrationManager();
+                // try to perform a FCM registration if it failed
+                // or if the FCM server generated a new push key
+                PushManager pushManager = Matrix.getInstance(this).getPushManager();
 
-                if (null != gcmRegistrationManager) {
-                    gcmRegistrationManager.checkRegistrations();
+                if (null != pushManager) {
+                    pushManager.checkRegistrations();
                 }
             }
 
@@ -518,7 +518,7 @@ public class VectorApp extends MultiDexApplication {
             }
 
             mCallsManager.checkDeadCalls();
-            Matrix.getInstance(this).getSharedGCMRegistrationManager().onAppResume();
+            Matrix.getInstance(this).getPushManager().onAppResume();
         }
 
         MyPresenceManager.advertiseAllOnline();
@@ -877,7 +877,7 @@ public class VectorApp extends MultiDexApplication {
      */
     private void onNewScreen(Activity activity) {
         final String screenPath = "/android/" + Matrix.getApplicationName()
-                + "/" + getString(R.string.flavor_description)
+                + "/" + BuildConfig.FLAVOR_DESCRIPTION
                 + "/" + BuildConfig.VERSION_NAME
                 + "/" + activity.getClass().getName().replace(".", "/");
         mAppAnalytics.trackScreen(screenPath, null);

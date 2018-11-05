@@ -931,7 +931,7 @@ In futuro il processo di verifica sarà più sofisticato.</string>
     <string name="settings_notification_privacy_reduced">Privacy ridotta</string>
     <string name="settings_notification_privacy_need_permission">L\'app richiede il permesso per funzionare in sottofondo</string>
     <string name="settings_notification_privacy_no_permission">Le app <b>non</b> richiedono il permesso per funzionare in sottofondo</string>
-    <string name="settings_notification_privacy_gcm">• Le notifiche vengono inviate via Google Cloud Messaging</string>
+    <string name="settings_notification_privacy_fcm">• Le notifiche vengono inviate via Google Cloud Messaging</string>
     <string name="settings_notification_privacy_metadata">• Le notifiche contengono solo metadati</string>
     <string name="settings_notification_privacy_secure_message_content">• Il contenuto del messaggio di una notifica <b>si trova al sicuro direttamente dal server home di Matrix</b></string>
     <string name="settings_notification_privacy_nosecure_message_content">• Le notifiche contengono <b>dati e metadati sul messaggio</b></string>

@@ -780,7 +780,7 @@ Jesteś pewien?</string>
     <string name="settings_notification_privacy_reduced">Zmniejszona prywatność</string>
     <string name="settings_notification_privacy_need_permission">Aplikacja wymaga uprawnień do działania w tle</string>
     <string name="settings_notification_privacy_no_permission">Aplikacja <b>nie</b> wymaga uprawnień do działania w tle</string>
-    <string name="settings_notification_privacy_gcm">• Powiadomienia wysyłane za pomocą Google Cloud Messaging</string>
+    <string name="settings_notification_privacy_fcm">• Powiadomienia wysyłane za pomocą Google Cloud Messaging</string>
     <string name="settings_notification_privacy_metadata">• Powiadomienia zawierają tylko meta-dane</string>
     <string name="settings_notification_privacy_secure_message_content">• Treść powiadomienia jest <b>bezpiecznie pobierana z domowego serwera Matrix</b></string>
     <string name="settings_notification_privacy_nosecure_message_content">• Powiadomienia zawierają <b>meta-dane oraz treść wiadomości</b></string>

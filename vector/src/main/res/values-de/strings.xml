@@ -925,7 +925,7 @@ Unbekannte Geräte:</string>
     <string name="settings_notification_privacy_reduced">Verringerter Datenschutz</string>
     <string name="settings_notification_privacy_need_permission">Dies App braucht die Berechtigung im Hintergrund zu laufen</string>
     <string name="settings_notification_privacy_no_permission">Die App braucht die Berechtigung im Hintergrund zu laufen <b>nicht</b></string>
-    <string name="settings_notification_privacy_gcm">• Benachrichtigungen werden über Google Cloud Messaging versendet</string>
+    <string name="settings_notification_privacy_fcm">• Benachrichtigungen werden über Google Cloud Messaging versendet</string>
     <string name="settings_notification_privacy_metadata">• Benachrichtigungen enthalten nur Metadaten</string>
     <string name="settings_notification_privacy_secure_message_content">• Der Nachrichteninhalt der Benachrichtigung wird <b>sicher vom Matrix-Heimserver abgerufen</b></string>
     <string name="settings_notification_privacy_nosecure_message_content">• Benachrichtigungen enthalten <b>Metadaten und Nachrichteninhalte</b></string>

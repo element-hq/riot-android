@@ -65,15 +65,14 @@ import im.vector.Matrix;
 import im.vector.R;
 import im.vector.VectorApp;
 import im.vector.ViewedRoomTracker;
-import im.vector.gcm.GcmRegistrationManager;
 import im.vector.notifications.NotificationUtils;
 import im.vector.notifications.NotifiedEvent;
 import im.vector.notifications.RoomsNotifications;
+import im.vector.push.PushManager;
 import im.vector.receiver.DismissNotificationReceiver;
 import im.vector.util.CallsManager;
 import im.vector.util.RiotEventDisplay;
 import im.vector.util.SystemUtilsKt;
-import im.vector.util.VectorUtils;
 
 /**
  * A foreground service in charge of controlling whether the event stream is running or not.
@@ -100,7 +99,7 @@ public class EventStreamService extends Service {
         PAUSE,
         RESUME,
         CATCHUP,
-        GCM_STATUS_UPDATE,
+        PUSH_STATUS_UPDATE,
         AUTO_RESTART
     }
 
@@ -120,7 +119,7 @@ public class EventStreamService extends Service {
         // initial sync in progress or the app is resuming
         // once started, we want the application completes its first sync even if it is background meanwhile
         INITIAL_SYNCING,
-        // fdroid mode or GCM registration failed
+        // fdroid mode or FCM registration failed
         // put this service in foreground to keep the app in life
         LISTENING_FOR_EVENTS,
         // there is a pending incoming call
@@ -181,9 +180,9 @@ public class EventStreamService extends Service {
     private String mIncomingCallId = null;
 
     /**
-     * GCM manager
+     * Push manager
      */
-    private GcmRegistrationManager mGcmRegistrationManager;
+    private PushManager mPushManager;
 
     /**
      * Tell if the service must be suspended after started.
@@ -359,8 +358,8 @@ public class EventStreamService extends Service {
                     return START_NOT_STICKY;
                 }
 
-                GcmRegistrationManager gcmManager = Matrix.getInstance(getApplicationContext()).getSharedGCMRegistrationManager();
-                if (!gcmManager.canStartAppInBackground()) {
+                PushManager pushManager = Matrix.getInstance(getApplicationContext()).getPushManager();
+                if (!pushManager.canStartAppInBackground()) {
                     Log.e(LOG_TAG, "onStartCommand : no auto restart because the user disabled the background sync");
                     return START_NOT_STICKY;
                 }
@@ -430,8 +429,8 @@ public class EventStreamService extends Service {
             case CATCHUP:
                 catchup(true);
                 break;
-            case GCM_STATUS_UPDATE:
-                gcmStatusUpdate();
+            case PUSH_STATUS_UPDATE:
+                pushStatusUpdate();
             default:
                 break;
         }
@@ -483,11 +482,11 @@ public class EventStreamService extends Service {
 
             // stop the foreground service on devices which respects battery optimizations
             // during the initial syncing
-            // and if the GCM registration was done
+            // and if the FCM registration was done
             if (!SystemUtilsKt.isIgnoringBatteryOptimizations(getApplicationContext())
                     && (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O)
                     && (mForegroundNotificationState == ForegroundNotificationState.INITIAL_SYNCING)
-                    && Matrix.getInstance(getApplicationContext()).getSharedGCMRegistrationManager().hasRegistrationToken()) {
+                    && Matrix.getInstance(getApplicationContext()).getPushManager().hasRegistrationToken()) {
                 setForegroundNotificationState(ForegroundNotificationState.NONE, null);
             }
 
@@ -585,9 +584,9 @@ public class EventStreamService extends Service {
         if (store.isReady()) {
             startEventStream(session, store);
             if (mSuspendWhenStarted) {
-                if (null != mGcmRegistrationManager) {
-                    session.setSyncDelay(mGcmRegistrationManager.getBackgroundSyncDelay());
-                    session.setSyncTimeout(mGcmRegistrationManager.getBackgroundSyncTimeOut());
+                if (null != mPushManager) {
+                    session.setSyncDelay(mPushManager.getBackgroundSyncDelay());
+                    session.setSyncTimeout(mPushManager.getBackgroundSyncTimeOut());
                 }
 
                 catchup(false);
@@ -601,9 +600,9 @@ public class EventStreamService extends Service {
                     startEventStream(session, store);
 
                     if (mSuspendWhenStarted) {
-                        if (null != mGcmRegistrationManager) {
-                            session.setSyncDelay(mGcmRegistrationManager.getBackgroundSyncDelay());
-                            session.setSyncTimeout(mGcmRegistrationManager.getBackgroundSyncTimeOut());
+                        if (null != mPushManager) {
+                            session.setSyncDelay(mPushManager.getBackgroundSyncDelay());
+                            session.setSyncTimeout(mPushManager.getBackgroundSyncTimeOut());
                         }
 
                         catchup(false);
@@ -642,7 +641,7 @@ public class EventStreamService extends Service {
      * internal start.
      */
     private void start() {
-        mGcmRegistrationManager = Matrix.getInstance(getApplicationContext()).getSharedGCMRegistrationManager();
+        mPushManager = Matrix.getInstance(getApplicationContext()).getPushManager();
         StreamAction state = getServiceState();
 
         if (state == StreamAction.START) {
@@ -800,13 +799,13 @@ public class EventStreamService extends Service {
     //================================================================================
 
     /**
-     * The GCM status has been updated (i.e disabled or enabled).
+     * The push status has been updated (i.e disabled or enabled).
      */
-    private void gcmStatusUpdate() {
-        Log.d(LOG_TAG, "## gcmStatusUpdate");
+    private void pushStatusUpdate() {
+        Log.d(LOG_TAG, "## pushStatusUpdate");
 
         if (ForegroundNotificationState.NONE != mForegroundNotificationState) {
-            Log.d(LOG_TAG, "## gcmStatusUpdate : gcm status succeeds. So, stop foreground service (" + mForegroundNotificationState + ")");
+            Log.d(LOG_TAG, "## pushStatusUpdate : push status succeeds. So, stop foreground service (" + mForegroundNotificationState + ")");
 
             if (ForegroundNotificationState.LISTENING_FOR_EVENTS == mForegroundNotificationState) {
                 setForegroundNotificationState(ForegroundNotificationState.NONE, null);
@@ -821,12 +820,12 @@ public class EventStreamService extends Service {
      */
     private boolean shouldDisplayListenForEventsNotification() {
         // fdroid
-        return (!mGcmRegistrationManager.useGCM()
-                // the GCM registration was not done
-                || TextUtils.isEmpty(mGcmRegistrationManager.getCurrentRegistrationToken())
-                && !mGcmRegistrationManager.isServerRegistered())
-                && mGcmRegistrationManager.isBackgroundSyncAllowed()
-                && mGcmRegistrationManager.areDeviceNotificationsAllowed();
+        return (!mPushManager.useFcm()
+                // the FCM registration was not done
+                || TextUtils.isEmpty(mPushManager.getCurrentRegistrationToken())
+                && !mPushManager.isServerRegistered())
+                && mPushManager.isBackgroundSyncAllowed()
+                && mPushManager.areDeviceNotificationsAllowed();
     }
 
     /**
@@ -851,7 +850,7 @@ public class EventStreamService extends Service {
         }
 
         // GA issue
-        if (null == mGcmRegistrationManager) {
+        if (null == mPushManager) {
             return;
         }
 
@@ -861,7 +860,7 @@ public class EventStreamService extends Service {
             Log.d(LOG_TAG, "## refreshForegroundNotification : put the service in foreground because of an initial sync " + mForegroundNotificationState);
             setForegroundNotificationState(ForegroundNotificationState.INITIAL_SYNCING, null);
         } else if (shouldDisplayListenForEventsNotification()) {
-            Log.d(LOG_TAG, "## refreshForegroundNotification : put the service in foreground because of GCM registration");
+            Log.d(LOG_TAG, "## refreshForegroundNotification : put the service in foreground because of FCM registration");
             setForegroundNotificationState(ForegroundNotificationState.LISTENING_FOR_EVENTS, null);
         } else {
             Log.d(LOG_TAG, "## refreshForegroundNotification : put the service in background from state " + mForegroundNotificationState);
@@ -973,7 +972,7 @@ public class EventStreamService extends Service {
             return;
         }
 
-        if (!mGcmRegistrationManager.areDeviceNotificationsAllowed()) {
+        if (!mPushManager.areDeviceNotificationsAllowed()) {
             Log.d(LOG_TAG, "prepareNotification : the push has been disable on this device");
             return;
         }
@@ -1229,7 +1228,7 @@ public class EventStreamService extends Service {
      * @param rule     the bing rule to use
      */
     private static void displayMessagesNotificationStatic(Context context, List<CharSequence> messages, BingRule rule) {
-        if (!Matrix.getInstance(context).getSharedGCMRegistrationManager().areDeviceNotificationsAllowed()
+        if (!Matrix.getInstance(context).getPushManager().areDeviceNotificationsAllowed()
                 || null == messages
                 || messages.isEmpty()) {
             NotificationUtils.INSTANCE.cancelNotificationMessage(context);
@@ -1255,7 +1254,7 @@ public class EventStreamService extends Service {
         new Handler(getMainLooper()).post(new Runnable() {
             @Override
             public void run() {
-                if (!mGcmRegistrationManager.areDeviceNotificationsAllowed()
+                if (!mPushManager.areDeviceNotificationsAllowed()
                         || null == messages
                         || messages.isEmpty()) {
                     NotificationUtils.INSTANCE.cancelNotificationMessage(EventStreamService.this);
@@ -1285,7 +1284,7 @@ public class EventStreamService extends Service {
         mBackgroundNotificationEventIds.clear();
 
         NotifiedEvent eventToNotify = getEventToNotify();
-        if (!mGcmRegistrationManager.areDeviceNotificationsAllowed()) {
+        if (!mPushManager.areDeviceNotificationsAllowed()) {
             mNotifiedEventsByRoomId = null;
             new Handler(getMainLooper()).post(new Runnable() {
                 @Override
@@ -1615,7 +1614,7 @@ public class EventStreamService extends Service {
             mIncomingCallId = callId;
 
             // turn the screen on for 3 seconds
-            if (Matrix.getInstance(VectorApp.getInstance()).getSharedGCMRegistrationManager().isScreenTurnedOn()) {
+            if (Matrix.getInstance(VectorApp.getInstance()).getPushManager().isScreenTurnedOn()) {
                 PowerManager pm = (PowerManager) getSystemService(Context.POWER_SERVICE);
                 PowerManager.WakeLock wl = pm.newWakeLock(PowerManager.SCREEN_BRIGHT_WAKE_LOCK | PowerManager.ACQUIRE_CAUSES_WAKEUP, "MXEventListener");
                 wl.acquire(3000);

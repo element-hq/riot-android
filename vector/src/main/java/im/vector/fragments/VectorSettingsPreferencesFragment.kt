@@ -432,26 +432,26 @@ class VectorSettingsPreferencesFragment : PreferenceFragment(), SharedPreference
         }
 
         // background sync tuning settings
-        // these settings are useless and hidden if the app is registered to the GCM push service
-        val gcmMgr = Matrix.getInstance(appContext)!!.sharedGCMRegistrationManager
-        if (gcmMgr.useGCM() && gcmMgr.hasRegistrationToken()) {
+        // these settings are useless and hidden if the app is registered to the FCM push service
+        val pushManager = Matrix.getInstance(appContext)!!.pushManager
+        if (pushManager.useFcm() && pushManager.hasRegistrationToken()) {
             // Hide the section
             preferenceScreen.removePreference(backgroundSyncDivider)
             preferenceScreen.removePreference(backgroundSyncCategory)
         } else {
             backgroundSyncPreference.let {
-                it.isChecked = gcmMgr.isBackgroundSyncAllowed
+                it.isChecked = pushManager.isBackgroundSyncAllowed
 
                 it.onPreferenceChangeListener = Preference.OnPreferenceChangeListener { _, aNewValue ->
                     val newValue = aNewValue as Boolean
 
-                    if (newValue != gcmMgr.isBackgroundSyncAllowed) {
-                        gcmMgr.isBackgroundSyncAllowed = newValue
+                    if (newValue != pushManager.isBackgroundSyncAllowed) {
+                        pushManager.isBackgroundSyncAllowed = newValue
                     }
 
                     displayLoadingView()
 
-                    Matrix.getInstance(activity)!!.sharedGCMRegistrationManager
+                    Matrix.getInstance(activity)!!.pushManager
                             .forceSessionsRegistration(object : ApiCallback<Void> {
                                 override fun onSuccess(info: Void?) {
                                     hideLoadingView()
@@ -853,7 +853,7 @@ class VectorSettingsPreferencesFragment : PreferenceFragment(), SharedPreference
             })
 
             Matrix.getInstance(context)!!
-                    .sharedGCMRegistrationManager
+                    .pushManager
                     .refreshPushersList(Matrix.getInstance(context)!!.sessions, object : SimpleApiCallback<Void>(activity) {
                         override fun onSuccess(info: Void?) {
                             refreshPushersList()
@@ -954,23 +954,23 @@ class VectorSettingsPreferencesFragment : PreferenceFragment(), SharedPreference
 
         val rules = mSession.dataHandler.pushRules()
 
-        val gcmMgr = Matrix.getInstance(appContext)!!.sharedGCMRegistrationManager
+        val pushManager = Matrix.getInstance(appContext)!!.pushManager
 
         for (resourceText in mPushesRuleByResourceId.keys) {
             val preference = preferenceManager.findPreference(resourceText)
 
             if (null != preference) {
                 if (preference is BingRulePreference) {
-                    preference.isEnabled = null != rules && isConnected && gcmMgr.areDeviceNotificationsAllowed()
+                    preference.isEnabled = null != rules && isConnected && pushManager.areDeviceNotificationsAllowed()
                     mSession.dataHandler.pushRules()?.let {
                         preference.setBingRule(it.findDefaultRule(mPushesRuleByResourceId[resourceText]))
                     }
                 } else if (preference is CheckBoxPreference) {
                     if (resourceText == PreferencesManager.SETTINGS_ENABLE_THIS_DEVICE_PREFERENCE_KEY) {
-                        preference.isChecked = gcmMgr.areDeviceNotificationsAllowed()
+                        preference.isChecked = pushManager.areDeviceNotificationsAllowed()
                     } else if (resourceText == PreferencesManager.SETTINGS_TURN_SCREEN_ON_PREFERENCE_KEY) {
-                        preference.isChecked = gcmMgr.isScreenTurnedOn
-                        preference.isEnabled = gcmMgr.areDeviceNotificationsAllowed()
+                        preference.isChecked = pushManager.isScreenTurnedOn
+                        preference.isEnabled = pushManager.areDeviceNotificationsAllowed()
                     } else {
                         preference.isEnabled = null != rules && isConnected
                         preference.isChecked = preferences.getBoolean(resourceText, false)
@@ -983,9 +983,9 @@ class VectorSettingsPreferencesFragment : PreferenceFragment(), SharedPreference
         // The others notifications settings have to be disable too
         val areNotificationAllowed = rules?.findDefaultRule(BingRule.RULE_ID_DISABLE_ALL)?.isEnabled == true
 
-        mRingtonePreference.isEnabled = !areNotificationAllowed && gcmMgr.areDeviceNotificationsAllowed()
+        mRingtonePreference.isEnabled = !areNotificationAllowed && pushManager.areDeviceNotificationsAllowed()
 
-        mNotificationPrivacyPreference.isEnabled = !areNotificationAllowed && gcmMgr.areDeviceNotificationsAllowed() && gcmMgr.useGCM()
+        mNotificationPrivacyPreference.isEnabled = !areNotificationAllowed && pushManager.areDeviceNotificationsAllowed() && pushManager.useFcm()
     }
 
     private fun addButtons() {
@@ -1120,31 +1120,31 @@ class VectorSettingsPreferencesFragment : PreferenceFragment(), SharedPreference
      * Update a push rule.
      */
     private fun onPushRuleClick(fResourceText: String, newValue: Boolean) {
-        val gcmMgr = Matrix.getInstance(activity)!!.sharedGCMRegistrationManager
+        val pushManager = Matrix.getInstance(activity)!!.pushManager
 
         Log.d(LOG_TAG, "onPushRuleClick $fResourceText : set to $newValue")
 
         if (fResourceText == PreferencesManager.SETTINGS_TURN_SCREEN_ON_PREFERENCE_KEY) {
-            if (gcmMgr.isScreenTurnedOn != newValue) {
-                gcmMgr.isScreenTurnedOn = newValue
+            if (pushManager.isScreenTurnedOn != newValue) {
+                pushManager.isScreenTurnedOn = newValue
             }
             return
         }
 
         if (fResourceText == PreferencesManager.SETTINGS_ENABLE_THIS_DEVICE_PREFERENCE_KEY) {
             val isConnected = Matrix.getInstance(activity)!!.isConnected
-            val isAllowed = gcmMgr.areDeviceNotificationsAllowed()
+            val isAllowed = pushManager.areDeviceNotificationsAllowed()
 
             // avoid useless update
             if (isAllowed == newValue) {
                 return
             }
 
-            gcmMgr.setDeviceNotificationsAllowed(!isAllowed)
+            pushManager.setDeviceNotificationsAllowed(!isAllowed)
 
-            // when using GCM
+            // when using FCM
             // need to register on servers
-            if (isConnected && gcmMgr.useGCM() && (gcmMgr.isServerRegistered || gcmMgr.isServerUnRegistered)) {
+            if (isConnected && pushManager.useFcm() && (pushManager.isServerRegistered || pushManager.isServerUnRegistered)) {
                 val listener = object : ApiCallback<Void> {
 
                     private fun onDone() {
@@ -1162,28 +1162,28 @@ class VectorSettingsPreferencesFragment : PreferenceFragment(), SharedPreference
 
                     override fun onMatrixError(e: MatrixError?) {
                         // Set again the previous state
-                        gcmMgr.setDeviceNotificationsAllowed(isAllowed)
+                        pushManager.setDeviceNotificationsAllowed(isAllowed)
                         onDone()
                     }
 
                     override fun onNetworkError(e: java.lang.Exception?) {
                         // Set again the previous state
-                        gcmMgr.setDeviceNotificationsAllowed(isAllowed)
+                        pushManager.setDeviceNotificationsAllowed(isAllowed)
                         onDone()
                     }
 
                     override fun onUnexpectedError(e: java.lang.Exception?) {
                         // Set again the previous state
-                        gcmMgr.setDeviceNotificationsAllowed(isAllowed)
+                        pushManager.setDeviceNotificationsAllowed(isAllowed)
                         onDone()
                     }
                 }
 
                 displayLoadingView()
-                if (gcmMgr.isServerRegistered) {
-                    gcmMgr.unregister(listener)
+                if (pushManager.isServerRegistered) {
+                    pushManager.unregister(listener)
                 } else {
-                    gcmMgr.register(listener)
+                    pushManager.register(listener)
                 }
             }
 
@@ -1297,12 +1297,12 @@ class VectorSettingsPreferencesFragment : PreferenceFragment(), SharedPreference
      * Refresh the notification privacy setting
      */
     private fun refreshNotificationPrivacy() {
-        val gcmRegistrationManager = Matrix.getInstance(activity)!!.sharedGCMRegistrationManager
+        val pushManager = Matrix.getInstance(activity)!!.pushManager
 
-        // this setting apply only with GCM for the moment
-        if (gcmRegistrationManager.useGCM()) {
+        // this setting apply only with FCM for the moment
+        if (pushManager.useFcm()) {
             val notificationPrivacyString = NotificationPrivacyActivity.getNotificationPrivacyString(activity.applicationContext,
-                    gcmRegistrationManager.notificationPrivacy)
+                    pushManager.notificationPrivacy)
             mNotificationPrivacyPreference.summary = notificationPrivacyString
         } else {
             notificationsSettingsCategory.removePreference(mNotificationPrivacyPreference)
@@ -1547,8 +1547,8 @@ class VectorSettingsPreferencesFragment : PreferenceFragment(), SharedPreference
      * Refresh the pushers list
      */
     private fun refreshPushersList() {
-        val gcmRegistrationManager = Matrix.getInstance(activity)!!.sharedGCMRegistrationManager
-        val pushersList = ArrayList(gcmRegistrationManager.mPushersList)
+        val pushManager = Matrix.getInstance(activity)!!.pushManager
+        val pushersList = ArrayList(pushManager.mPushersList)
 
         if (pushersList.isEmpty()) {
             preferenceScreen.removePreference(mPushersSettingsCategory)
@@ -1573,7 +1573,7 @@ class VectorSettingsPreferencesFragment : PreferenceFragment(), SharedPreference
 
             for (pusher in mDisplayedPushers) {
                 if (null != pusher.lang) {
-                    val isThisDeviceTarget = TextUtils.equals(gcmRegistrationManager.currentRegistrationToken, pusher.pushkey)
+                    val isThisDeviceTarget = TextUtils.equals(pushManager.currentRegistrationToken, pusher.pushkey)
 
                     val preference = VectorCustomActionEditTextPreference(activity, if (isThisDeviceTarget) Typeface.BOLD else Typeface.NORMAL)
                     preference.title = pusher.deviceDisplayName
@@ -1590,7 +1590,7 @@ class VectorSettingsPreferencesFragment : PreferenceFragment(), SharedPreference
                                     .setMessage(R.string.settings_delete_notification_targets_confirmation)
                                     .setPositiveButton(R.string.remove) { _, _ ->
                                         displayLoadingView()
-                                        gcmRegistrationManager.unregister(mSession, pusher, object : ApiCallback<Void> {
+                                        pushManager.unregister(mSession, pusher, object : ApiCallback<Void> {
                                             override fun onSuccess(info: Void?) {
                                                 refreshPushersList()
                                                 onCommonDone(null)
@@ -2002,10 +2002,10 @@ class VectorSettingsPreferencesFragment : PreferenceFragment(), SharedPreference
             return
         }
 
-        val gcmmgr = Matrix.getInstance(activity)!!.sharedGCMRegistrationManager
+        val pushManager = Matrix.getInstance(activity)!!.pushManager
 
-        val timeout = gcmmgr.backgroundSyncTimeOut / 1000
-        val delay = gcmmgr.backgroundSyncDelay / 1000
+        val timeout = pushManager.backgroundSyncTimeOut / 1000
+        val delay = pushManager.backgroundSyncDelay / 1000
 
         // update the settings
         PreferenceManager.getDefaultSharedPreferences(activity).edit {
@@ -2027,7 +2027,7 @@ class VectorSettingsPreferencesFragment : PreferenceFragment(), SharedPreference
                 }
 
                 if (newTimeOut != timeout) {
-                    gcmmgr.backgroundSyncTimeOut = newTimeOut * 1000
+                    pushManager.backgroundSyncTimeOut = newTimeOut * 1000
 
                     activity.runOnUiThread { refreshBackgroundSyncPrefs() }
                 }
@@ -2051,7 +2051,7 @@ class VectorSettingsPreferencesFragment : PreferenceFragment(), SharedPreference
                 }
 
                 if (newDelay != delay) {
-                    gcmmgr.backgroundSyncDelay = newDelay * 1000
+                    pushManager.backgroundSyncDelay = newDelay * 1000
 
                     activity.runOnUiThread { refreshBackgroundSyncPrefs() }
                 }

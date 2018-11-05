@@ -16,7 +16,7 @@
  * limitations under the License.
  */
 
-package im.vector.gcm;
+package im.vector.push.fcm;
 
 import android.support.annotation.Nullable;
 
@@ -35,14 +35,14 @@ import java.util.Map;
 import im.vector.Matrix;
 import im.vector.VectorApp;
 import im.vector.activity.CommonActivityUtils;
+import im.vector.push.PushManager;
 import im.vector.services.EventStreamService;
-import im.vector.util.VectorUtils;
 
 /**
- * Class implementing GcmListenerService.
+ * Class extending FirebaseMessagingService.
  */
-public class MatrixGcmListenerService extends FirebaseMessagingService {
-    private static final String LOG_TAG = MatrixGcmListenerService.class.getSimpleName();
+public class VectorFirebaseMessagingService extends FirebaseMessagingService {
+    private static final String LOG_TAG = VectorFirebaseMessagingService.class.getSimpleName();
 
     // Tells if the events service running state has been tested
     private Boolean mCheckLaunched = false;
@@ -51,9 +51,9 @@ public class MatrixGcmListenerService extends FirebaseMessagingService {
     private android.os.Handler mUIHandler = null;
 
     /**
-     * Try to create an event from the GCM data
+     * Try to create an event from the FCM data
      *
-     * @param data the GCM data
+     * @param data the FCM data
      * @return the event
      */
     @Nullable
@@ -113,13 +113,13 @@ public class MatrixGcmListenerService extends FirebaseMessagingService {
             // update the badge counter
             CommonActivityUtils.updateBadgeCount(getApplicationContext(), unreadCount);
 
-            GcmRegistrationManager gcmManager = Matrix.getInstance(getApplicationContext()).getSharedGCMRegistrationManager();
+            PushManager pushManager = Matrix.getInstance(getApplicationContext()).getPushManager();
 
-            if (!gcmManager.areDeviceNotificationsAllowed()) {
+            if (!pushManager.areDeviceNotificationsAllowed()) {
                 Log.d(LOG_TAG, "## onMessageReceivedInternal() : the notifications are disabled");
                 return;
             }
-            if (!gcmManager.isBackgroundSyncAllowed() && VectorApp.isAppInBackground()) {
+            if (!pushManager.isBackgroundSyncAllowed() && VectorApp.isAppInBackground()) {
                 EventStreamService eventStreamService = EventStreamService.getInstance();
                 Event event = parseEvent(data);
 
@@ -143,7 +143,7 @@ public class MatrixGcmListenerService extends FirebaseMessagingService {
             }
 
             // check if the application has been launched once
-            // the first GCM event could have been triggered whereas the application is not yet launched.
+            // the first FCM event could have been triggered whereas the application is not yet launched.
             // so it is required to create the sessions and to start/resume event stream
             if (!mCheckLaunched && null != Matrix.getInstance(getApplicationContext()).getDefaultSession()) {
                 CommonActivityUtils.startEventStreamService(this);
@@ -176,6 +176,21 @@ public class MatrixGcmListenerService extends FirebaseMessagingService {
         } catch (Exception e) {
             Log.d(LOG_TAG, "## onMessageReceivedInternal() failed : " + e.getMessage(), e);
         }
+    }
+
+    /**
+     * Called if InstanceID token is updated. This may occur if the security of
+     * the previous token had been compromised. Note that this is also called
+     * when the InstanceID token is initially generated, so this is where
+     * you retrieve the token.
+     */
+    @Override
+    public void onNewToken(String refreshedToken) {
+        Log.d(LOG_TAG, "onNewToken: " + refreshedToken);
+
+        FcmHelper.storeFcmToken(this, refreshedToken);
+
+        Matrix.getInstance(this).getPushManager().resetFCMRegistration(refreshedToken);
     }
 
     /**

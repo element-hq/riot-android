@@ -92,10 +92,9 @@ android {
             // use the version name
             versionCode rootProject.ext.versionCodeProp
             versionName rootProject.ext.versionNameProp
-            resValue "string", "allow_gcm_use", "true"
-            resValue "string", "allow_ga_use", "true"
-            resValue "string", "short_flavor_description", "G"
-            resValue "string", "flavor_description", "GooglePlay"
+            buildConfigField "boolean", "ALLOW_FCM_USE", "true"
+            buildConfigField "String", "SHORT_FLAVOR_DESCRIPTION", "\"G\""
+            buildConfigField "String", "FLAVOR_DESCRIPTION", "\"GooglePlay\""
         }
 
         appfdroid {
@@ -103,10 +102,9 @@ android {
             // use the version name
             versionCode rootProject.ext.versionCodeProp
             versionName rootProject.ext.versionNameProp
-            resValue "string", "allow_gcm_use", "false"
-            resValue "string", "allow_ga_use", "false"
-            resValue "string", "short_flavor_description", "F"
-            resValue "string", "flavor_description", "FDroid"
+            buildConfigField "boolean", "ALLOW_FCM_USE", "false"
+            buildConfigField "String", "SHORT_FLAVOR_DESCRIPTION", "\"F\""
+            buildConfigField "String", "FLAVOR_DESCRIPTION", "\"FDroid\""
         }
     }
 
@@ -245,8 +243,8 @@ dependencies {
     /************* flavors management **************/
 
     // app flavor only
-    appImplementation 'com.google.firebase:firebase-core:16.0.3'
-    appImplementation 'com.google.firebase:firebase-messaging:17.3.0'
+    appImplementation 'com.google.firebase:firebase-core:16.0.4'
+    appImplementation 'com.google.firebase:firebase-messaging:17.3.4'
 
     // fdroid flavor only
 

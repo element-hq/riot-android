@@ -836,7 +836,7 @@
     <string name="settings_notification_privacy_reduced">Обмежена конфіденційність</string>
     <string name="settings_notification_privacy_need_permission">Программа потребує дозвіл на працю в фоновому режимі</string>
     <string name="settings_notification_privacy_no_permission">"Программа  "<b>не</b> потребує дозвіл на працю в фоновому режимі</string>
-    <string name="settings_notification_privacy_gcm">• Повідомлення відправляються через Google Cloud Messaging</string>
+    <string name="settings_notification_privacy_fcm">• Повідомлення відправляються через Google Cloud Messaging</string>
     <string name="settings_notification_privacy_metadata">• Повідомлення містять тільки метаданні</string>
     <string name="settings_notification_privacy_secure_message_content">• Зміст сповіщення був <b> надійно віднайдений просто на домашньому сервері Matrix </b></string>
     <string name="dialog_title_third_party_licences">Ліцензії сторонніх виробників</string>

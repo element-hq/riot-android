@@ -951,7 +951,7 @@ Email также позволит вам при необходимости во�
     <string name="settings_notification_privacy_power_saving">Варианты энергосбережения</string>
     <string name="settings_notification_privacy_need_permission">Приложение нуждается в разрешении на работу в фоновом режиме</string>
     <string name="settings_notification_privacy_no_permission">Приложениям <b>не</b> требуется разрешение на работу в фоновом режиме</string>
-    <string name="settings_notification_privacy_gcm">• Уведомления отправляются через Google Cloud Messaging</string>
+    <string name="settings_notification_privacy_fcm">• Уведомления отправляются через Google Cloud Messaging</string>
     <string name="settings_notification_privacy_metadata">• Уведомления содержат только метаданные</string>
     <string name="settings_notification_privacy_nosecure_message_content">• Уведомления содержат <b>метаданные и данные сообщения</b></string>
     <string name="settings_notification_privacy_message_content_not_shown">• Уведомления <b>не будут показывать содержимое сообщения</b></string>

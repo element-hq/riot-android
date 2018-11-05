@@ -54,7 +54,7 @@ fun isIgnoringBatteryOptimizations(context: Context): Boolean {
  * display the system dialog for granting this permission. If previously granted, the
  * system will not show it (so you should call this method).
  *
- * Note: If the user finally does not grant the permission, gcmRegistrationManager.isBackgroundSyncAllowed()
+ * Note: If the user finally does not grant the permission, PushManager.isBackgroundSyncAllowed()
  * will return false and the notification privacy will fallback to "LOW_DETAIL".
  */
 @TargetApi(Build.VERSION_CODES.M)
