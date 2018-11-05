@@ -710,7 +710,7 @@ Dispositivos desconocidos:</string>
 
     <string name="call">Llamar</string>
     <string name="list_members">Lista de miembros</string>
-    <string name="room_sync_in_progress">Sincronizando...</string>
+    <string name="room_sync_in_progress">Sincronizando…</string>
     <plurals name="room_header_active_members_count">
 	<item quantity="one">1 miembro activo</item>
 	<item quantity="other">%d miembros activos</item>
