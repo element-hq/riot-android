@@ -429,7 +429,7 @@ Note que esta acção irá reiniciar a aplicação e poderá levar algum tempo.<
 
     <!-- Directory -->
     <string name="directory_search_results_title">Navegar diretório</string>
-    <string name="directory_searching_title">A pesquisar o diretório…</string>
+    <string name="directory_searching_title">A pesquisar o directório…</string>
 
     <!-- home room settings -->
     <string name="room_settings_favourite">Adicionar aos favoritos</string>
