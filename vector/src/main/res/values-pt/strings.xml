@@ -27,7 +27,7 @@
     <string name="forward">Encaminhar</string>
     <string name="permalink">Link permanente</string>
     <string name="view_source">Ver fonte</string>
-    <string name="view_decrypted_source">Ver Fonte Decifrada</string>
+    <string name="view_decrypted_source">Ver o original decifrado</string>
     <string name="delete">Apagar</string>
     <string name="rename">Renomear</string>
     <string name="report_content">Denunciar conteúdo</string>
@@ -37,7 +37,7 @@
     <string name="ongoing_conference_call_video">vídeo</string>
     <string name="cannot_start_call">Não foi possível iniciar a chamada, por favor tente mais tarde</string>
     <string name="missing_permissions_warning">Por falta de permissões, algumas funcionalidades poderão estar em falta…</string>
-    <string name="missing_permissions_to_start_conf_call">Você necessita permissão para convidar para poder iniciar uma conferência nesta sala</string>
+    <string name="missing_permissions_to_start_conf_call">Você precisa de permissão para convidar para iniciar uma conferência nesta sala</string>
     <string name="missing_permissions_title_to_start_conf_call">Não foi possível iniciar a chamada</string>
     <string name="device_information">Informações do dispositivo</string>
     <string name="room_no_conference_call_in_encrypted_rooms">Chamadas de conferência não são suportadas em salas cifradas</string>
@@ -47,8 +47,8 @@
 
     <!-- actions -->
     <string name="action_sign_out">Sair</string>
-    <string name="action_sign_out_confirmation">Por razões de segurança, ao sair, todas as chaves de criptografia ponta-a-ponta serão apagadas, fazendo com que o histórico de conversas cifradas não seja legível se iniciar sessão novamente.
-Selecione exportar para criar uma cópia de segurança antes de terminar sessão.</string>
+    <string name="action_sign_out_confirmation">Por razões de segurança, ao terminar a sessão, todas as chaves de criptografia ponta-a-ponta serão apagadas, fazendo com que o histórico de conversas cifradas não seja legível se iniciar a sessão novamente.
+Seleccione exportar para criar uma cópia de segurança antes de terminar a sessão.</string>
     <string name="action_voice_call">Chamada de voz</string>
     <string name="action_video_call">Chamada de vídeo</string>
     <string name="action_global_search">Pesquisa global</string>
@@ -82,9 +82,9 @@ Selecione exportar para criar uma cópia de segurança antes de terminar sessão
 
     <!-- People fragment -->
     <string name="direct_chats_header">Conversas</string>
-    <string name="local_address_book_header">Lista de contactos local</string>
+    <string name="local_address_book_header">Lista de endereços local</string>
     <string name="matrix_only_filter">Apenas contactos do Matrix</string>
-    <string name="no_conversation_placeholder">Sem conversas</string>
+    <string name="no_conversation_placeholder">Não há conversas</string>
     <string name="no_contact_access_placeholder">Não permitiu ao Riot aceder aos seus contactos locais</string>
     <string name="no_result_placeholder">Sem resultados</string>
 
@@ -105,7 +105,7 @@ Selecione exportar para criar uma cópia de segurança antes de terminar sessão
     <string name="send_bug_report_description">Por favor, descreva o erro (bug). O que fez? O que esperava que acontecesse? O que realmente aconteceu?</string>
     <string name="send_bug_report_placeholder">Descreva aqui o seu problema</string>
     <string name="send_bug_report_logs_description">A fim de diagnosticar problemas, registos sobre este cliente serão enviados juntamente com o relatório de erro. Este relatório de erro, incluindo os registos e a captura de ecrã, não serão visíveis publicamente. Se preferir enviar apenas o texto acima, por favor desmarque:</string>
-    <string name="send_bug_report_alert_message">Parece estar a abanar o telefone com frustração. Quer enviar um relatório de erro (bug)?</string>
+    <string name="send_bug_report_alert_message">Parece estar a abanar o telefone com frustração. Pretende enviar um relatório de erro (bug)?</string>
     <string name="send_bug_report_sent">O relatório de erro (bug) foi enviado com sucesso</string>
     <string name="send_bug_report_failed">O envio do relatório de erro (bug) falhou (%s)</string>
     <string name="send_bug_report_progress">Progresso (%s%%)</string>
@@ -136,7 +136,7 @@ Selecione exportar para criar uma cópia de segurança antes de terminar sessão
     <string name="auth_submit">Enviar</string>
     <string name="auth_skip">Saltar</string>
     <string name="auth_send_reset_email">Enviar email para redefinir senha</string>
-    <string name="auth_return_to_login">Voltar para o ecrã de início de sessão</string>
+    <string name="auth_return_to_login">Voltar ao ecrã de início de sessão</string>
     <string name="auth_user_id_placeholder">Email ou nome de utilizador</string>
     <string name="auth_password_placeholder">Palavra-passe</string>
     <string name="auth_new_password_placeholder">Nova palavra-passe</string>
@@ -155,37 +155,37 @@ O endereço de e-mail também lhe permitirá redefinir sua senha.</string>
     <string name="auth_opt_phone_number_placeholder">Número de telefone (opcional)</string>
     <string name="auth_repeat_password_placeholder">Repita a palavra-passe</string>
     <string name="auth_repeat_new_password_placeholder">Confirme a sua nova palavra-passe</string>
-    <string name="auth_invalid_login_param">Nome de utilizador e/ou palavra-passe incorreto</string>
+    <string name="auth_invalid_login_param">Nome de utilizador e/ou senha incorrectos</string>
     <string name="auth_invalid_user_name">Nomes de utilizador só podem conter letras, números, pontos, hífenes e underscores</string>
     <string name="auth_invalid_password">Palavra-passe muita curta (mín 6)</string>
-    <string name="auth_missing_password">Palavra-passe em falta</string>
+    <string name="auth_missing_password">Senha em falta</string>
     <string name="auth_invalid_email">Isto não parece ser um endereço de e-mail válido</string>
     <string name="auth_invalid_phone">Isto não parece ser um número de telefone válido</string>
-    <string name="auth_email_already_defined">Este endereço de e-mail já está em uso.</string>
+    <string name="auth_email_already_defined">Este endereço de email já está registado.</string>
     <string name="auth_missing_email">Endereço de e-mail em falta</string>
     <string name="auth_missing_phone">Número de telefone em falta</string>
     <string name="auth_missing_email_or_phone">Endereço de email ou número de telefone em falta</string>
     <string name="auth_invalid_token">Token inválido</string>
-    <string name="auth_password_dont_match">As palavras-passe não coincidem</string>
+    <string name="auth_password_dont_match">As senhas não coincidem</string>
     <string name="auth_forgot_password">Esqueceu-se da palavra-passe?</string>
     <string name="auth_use_server_options">Utilize opções de servidor personalizadas (avançado)</string>
-    <string name="auth_email_validation_message">Por favor, verifique o seu e-mail para continuar com o registo</string>
+    <string name="auth_email_validation_message">Por favor, verifique o seu email para continuar com o registo</string>
     <string name="auth_threepid_warning_message">O registo de nova conta com email e número de telefone de uma só vez ainda não é permitido enquanto a API não existir. Apenas o número de telefone será tido em consideração.
 
 Poderá adicionar o seu email ao seu perfil nas definições.</string>
     <string name="auth_recaptcha_message">Este servidor quer ter a certeza de que você não é um robô</string>
-    <string name="auth_username_in_use">Nome de utilizador já está em uso</string>
-    <string name="auth_home_server">Servidor:</string>
+    <string name="auth_username_in_use">Nome de utilizador já existe</string>
+    <string name="auth_home_server">Servidor local (home server):</string>
     <string name="auth_identity_server">Servidor de Identidade:</string>
-    <string name="auth_reset_password_next_step_button">Verifiquei o meu endereço de e-mail</string>
+    <string name="auth_reset_password_next_step_button">Verifiquei o meu endereço de email</string>
     <string name="auth_reset_password_message">Para redefinir a sua palavra-passe, introduza o endereço de e-mail associado à sua conta:</string>
     <string name="auth_reset_password_missing_email">O endereço de e-mail associado à sua conta tem que ser introduzido.</string>
-    <string name="auth_reset_password_missing_password">Tem que introduzir uma nova palavra-passe.</string>
-    <string name="auth_reset_password_email_validation_message">Um e-mail foi enviado para %s. Quando tiver clicado no link presente na mensagem, clique abaixo.</string>
+    <string name="auth_reset_password_missing_password">Tem de introduzir uma nova senha.</string>
+    <string name="auth_reset_password_email_validation_message">Foi enviado um email para %s. Quando tiver clicado no link presente na mensagem, clique abaixo.</string>
     <string name="auth_reset_password_error_unauthorized">Falha ao verificar o endereço de e-mail: verifique se clicou no link no e-mail</string>
-    <string name="auth_reset_password_success_message">A sua palavra-passe foi reposta.
+    <string name="auth_reset_password_success_message">A sua senha foi redefinida.
 
-Você foi desconectado de todos os dispositivos e não receberá mais notificações. Para reativar as notificações, inicie sessão novamente em cada um dos dispositivos.</string>
+A sessão foi terminada em todos os dispositivos e não receberá mais notificações. Para reactivar as notificações, inicie sessão novamente em cada um dos dispositivos.</string>
 
     <!-- Login Screen -->
     <string name="login_error_must_start_http">URL tem que começar com http[s]://</string>
@@ -193,7 +193,7 @@ Você foi desconectado de todos os dispositivos e não receberá mais notificaç
     <string name="login_error_unable_login">Não foi possível iniciar sessão</string>
     <string name="login_error_registration_network_error">Não foi possível criar conta: Erro de rede</string>
     <string name="login_error_unable_register">Não foi possível criar conta</string>
-    <string name="login_error_unable_register_mail_ownership">Não foi possível criar conta: falha na verificação de posse do e-mail</string>
+    <string name="login_error_unable_register_mail_ownership">Não foi possível criar a conta: falha na verificação de posse do email</string>
     <string name="login_error_invalid_home_server">Introduza um URL válido</string>
 
     <string name="login_error_forbidden">Nome de utilizador/palavra-passe inválido</string>
@@ -737,7 +737,7 @@ Dispositivos desconhecidos:</string>
     <string name="larger">Maior</string>
     <string name="largest">Ainda maior</string>
     <string name="huge">Enorme</string>
-<string name="offline">Offline</string>
+<string name="offline">Desconectado</string>
 
     <string name="user_directory_header">Lista de utilizadores</string>
     <string name="people_search_user_directory">LISTA DE UTILIZADORES (%s)</string>
