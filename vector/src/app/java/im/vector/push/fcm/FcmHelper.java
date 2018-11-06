@@ -28,11 +28,15 @@ import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.iid.FirebaseInstanceId;
 import com.google.firebase.iid.InstanceIdResult;
 
+import org.matrix.androidsdk.util.Log;
+
 /**
  * This class store the FCM token in SharedPrefs and ensure this token is retrieved.
  * It has an alter ego in the fdroid variant.
  */
 public class FcmHelper {
+    private static final String LOG_TAG = FcmHelper.class.getSimpleName();
+
     private static final String PREFS_KEY_FCM_TOKEN = "FCM_TOKEN";
 
     /**
@@ -66,12 +70,16 @@ public class FcmHelper {
      */
     public static void ensureFcmTokenIsRetrieved(final Activity activity) {
         if (TextUtils.isEmpty(getFcmToken(activity))) {
-            FirebaseInstanceId.getInstance().getInstanceId().addOnSuccessListener(activity, new OnSuccessListener<InstanceIdResult>() {
-                @Override
-                public void onSuccess(InstanceIdResult instanceIdResult) {
-                    storeFcmToken(activity, instanceIdResult.getToken());
-                }
-            });
+            try {
+                FirebaseInstanceId.getInstance().getInstanceId().addOnSuccessListener(activity, new OnSuccessListener<InstanceIdResult>() {
+                    @Override
+                    public void onSuccess(InstanceIdResult instanceIdResult) {
+                        storeFcmToken(activity, instanceIdResult.getToken());
+                    }
+                });
+            } catch (Exception e) {
+                Log.e(LOG_TAG, "## ensureFcmTokenIsRetrieved() : failed " + e.getMessage(), e);
+            }
         }
     }
 }
