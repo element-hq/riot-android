@@ -80,7 +80,7 @@ import java.util.List;
 import im.vector.Matrix;
 import im.vector.R;
 import im.vector.activity.CommonActivityUtils;
-import im.vector.activity.VectorMediasPickerActivity;
+import im.vector.activity.VectorMediaPickerActivity;
 import im.vector.activity.VectorMemberDetailsActivity;
 import im.vector.extensions.MatrixSdkExtensionsKt;
 import im.vector.preference.AddressPreference;
@@ -1107,8 +1107,8 @@ public class VectorRoomSettingsFragment extends PreferenceFragmentCompat impleme
         }
 
         if (PermissionsToolsKt.checkPermissions(permissionToBeGranted, this, PermissionsToolsKt.PERMISSION_REQUEST_CODE_CHANGE_AVATAR)) {
-            Intent intent = new Intent(getActivity(), VectorMediasPickerActivity.class);
-            intent.putExtra(VectorMediasPickerActivity.EXTRA_AVATAR_MODE, true);
+            Intent intent = new Intent(getActivity(), VectorMediaPickerActivity.class);
+            intent.putExtra(VectorMediaPickerActivity.EXTRA_AVATAR_MODE, true);
             startActivityForResult(intent, REQ_CODE_UPDATE_ROOM_AVATAR);
         }
     }
