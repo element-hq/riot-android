@@ -2,7 +2,7 @@ Changes in Riot 0.8.19 (2018-XX-XX)
 ===================================================
 
 MatrixSdk:
- - Upgrade to version 0.X.Y.
+ - Upgrade to version 0.9.13.
 
 Features:
  - Enable Lazy Loading by default, if the hs supports it
@@ -22,9 +22,6 @@ Bugfix:
  - Mention from read receipts list doesn't work (#656)
  - Fix issue when scrolling file list in room details (#2702)
  - Align switch camera button to parent in landscape mode (#2704)
-
-Translations:
- -
 
 Build:
  - Better build.gradle file (#2302)
