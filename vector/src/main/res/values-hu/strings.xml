@@ -254,7 +254,7 @@ Kérlek engedélyezd a hozzáférést a következő felugró ablakban, hogy tudj
 
 Engedélyezed Riot-nak a hozzáférést kapcsolataidhoz?</string>
 
-    <string name="permissions_action_not_performed_missing_permissions">Elnézést... A művelet nem lett végre hajtva hiányzó engedélyek miatt</string>
+    <string name="permissions_action_not_performed_missing_permissions">Elnézést… A művelet nem lett végre hajtva hiányzó engedélyek miatt</string>
 
     <string name="media_slider_saved">Mentve</string>
     <string name="media_slider_saved_message">Mentés a letöltések közé</string>
@@ -394,7 +394,7 @@ Vedd figyelembe, hogy az alkalmazás újraindul  ami sok időt vehet igénybe."<
     <string name="room_recents_join_room_prompt">Írd be a szoba azonosítóját vagy nevét</string>
 
     <string name="directory_search_results_title">Könyvtár böngészése</string>
-    <string name="directory_searching_title">Könyvtár keresése...</string>
+    <string name="directory_searching_title">Könyvtár keresése…</string>
 
     <string name="room_settings_favourite">Kedvenc</string>
     <string name="room_settings_de_prioritize">Prioritás csökkentése</string>
@@ -753,7 +753,7 @@ Ismeretlen eszközök:</string>
 
 <string name="title_activity_group_details">A közösség adatai</string>
 
-    <string name="loading">Betöltés...</string>
+    <string name="loading">Betöltés…</string>
 
     <string name="action_exit">Kilépés</string>
     <string name="bottom_action_groups">Közösségek</string>

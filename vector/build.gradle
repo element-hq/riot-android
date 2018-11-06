@@ -115,6 +115,9 @@ android {
         disable 'ImpliedQuantity'
 
         // Treat some warnings as errors
+        // Resources
+        error 'TypographyEllipsis'
+
         // Layout
         error 'StringFormatCount'
         error 'HardcodedText'

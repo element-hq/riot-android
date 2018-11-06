@@ -806,7 +806,7 @@ Email также позволит вам при необходимости во�
 
 <string name="title_activity_group_details">Сведения о сообществе</string>
 
-    <string name="loading">Загрузка...</string>
+    <string name="loading">Загрузка…</string>
 
     <string name="action_exit">Закрыть</string>
     <string name="bottom_action_groups">Сообщества</string>

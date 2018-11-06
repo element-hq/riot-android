@@ -557,7 +557,7 @@ Zauważ, że ta czynność spowoduje ponowne uruchomienie aplikacji i może to t
     <string name="title_activity_bug_report">Zgłoś błąd</string>
     <string name="title_activity_group_details">Informacje o społeczności</string>
 
-    <string name="loading">Wczytywanie...</string>
+    <string name="loading">Wczytywanie…</string>
 
     <string name="action_exit">Opuść</string>
     <string name="actions">Działania</string>

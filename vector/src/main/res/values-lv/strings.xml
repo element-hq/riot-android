@@ -152,7 +152,7 @@ Kā arī epasta adrese ļaus Tev atiestatīt paroli.</string>
     <string name="title_activity_bug_report">Kļūdas atskaite</string>
     <string name="title_activity_group_details">Kopienas informācija</string>
 
-    <string name="loading">Ielādējas...</string>
+    <string name="loading">Ielādējas…</string>
 
     <string name="action_exit">Izslēgt</string>
     <string name="bottom_action_groups">Kopienas</string>
@@ -292,7 +292,7 @@ Lūdzu dod piekļuves atļauju nākamajā uznirstošajā logā, lai būtu iespē
 
 Vai dot Riotam piekļuvi kontaktiem?</string>
 
-    <string name="permissions_action_not_performed_missing_permissions">Atvaino... Darbība nav veikta dēļ nepietiekamām piekļuves atļaujām</string>
+    <string name="permissions_action_not_performed_missing_permissions">Atvaino… Darbība nav veikta dēļ nepietiekamām piekļuves atļaujām</string>
 
     <string name="media_slider_saved">Saglabāts</string>
     <string name="media_slider_saved_message">Saglabāt lejupielādēs</string>
@@ -431,7 +431,7 @@ Vai vēlies turpināt?</string>
     <string name="room_recents_join_room_prompt">Ievadiet istabas ID vai aliasi</string>
 
     <string name="directory_search_results_title">Skatīt katalogu</string>
-    <string name="directory_searching_title">Meklēju katalogā...</string>
+    <string name="directory_searching_title">Meklēju katalogā…</string>
 
     <string name="room_settings_all_messages_noisy">Visas ziņas (ar skaņu)</string>
     <string name="room_settings_all_messages">Visas ziņas</string>

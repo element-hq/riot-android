@@ -791,7 +791,7 @@ Voit tehdä sen nyt tai myöhemmin sovelluksen asetuksissa.</string>
 
 <string name="title_activity_group_details">Yhteisön tiedot</string>
 
-    <string name="loading">Ladataan...</string>
+    <string name="loading">Ladataan…</string>
 
     <string name="action_exit">Poistu</string>
     <string name="bottom_action_groups">Yhteisöt</string>

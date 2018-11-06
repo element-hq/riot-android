@@ -754,7 +754,7 @@ Zifratutako mezuak ez dira zifratzea oraindik ezarrita ez duten beste gailuetan 
     <string name="call">Deia</string>
 <string name="title_activity_group_details">Komunitatearen xehetasunak</string>
 
-    <string name="loading">Kargatzen...</string>
+    <string name="loading">Kargatzen…</string>
 
     <string name="action_exit">Irten</string>
     <string name="bottom_action_groups">Komunitateak</string>

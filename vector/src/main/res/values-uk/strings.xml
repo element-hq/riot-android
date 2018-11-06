@@ -417,7 +417,7 @@
 
     <!-- Directory -->
     <string name="directory_search_results_title">Огляд каталогу</string>
-    <string name="directory_searching_title">Пошук у каталозі...</string>
+    <string name="directory_searching_title">Пошук у каталозі…</string>
 
     <!-- home room settings -->
     <string name="room_settings_favourite">Обране</string>
@@ -772,7 +772,7 @@
 
 <string name="title_activity_group_details">Відомості про спільноу</string>
 
-    <string name="loading">Завантаження...</string>
+    <string name="loading">Завантаження…</string>
 
     <string name="action_exit">Вихід</string>
     <string name="actions">Дії</string>

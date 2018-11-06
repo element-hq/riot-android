@@ -18,7 +18,7 @@
     <string name="title_activity_bug_report">Informar de erros</string>
     <string name="title_activity_group_details">Detalles da comunidade</string>
 
-    <string name="loading">Cargando...</string>
+    <string name="loading">Cargando…</string>
 
     <string name="ok">Aceptar</string>
     <string name="cancel">Cancelar</string>
@@ -44,7 +44,7 @@
     <string name="report_content">Informar sobre contido</string>
     <string name="ongoing_conference_call">Conferencia en curso. Únase con vídeo ou voz.</string>
     <string name="cannot_start_call">Non se pode iniciar a chamada, inténteo máis tarde</string>
-    <string name="missing_permissions_warning">Debido a falta de permisos, poderían faltar algunhas características...</string>
+    <string name="missing_permissions_warning">Debido a falta de permisos, poderían faltar algunhas características…</string>
     <string name="missing_permissions_to_start_conf_call">Precisa permiso para convidar a iniciar unha conferencia en esta sala</string>
     <string name="missing_permissions_title_to_start_conf_call">Non puido iniciar a chamada</string>
     <string name="device_information">Información do dispositivo</string>
@@ -269,7 +269,7 @@ Pode engadir a dirección de correo na sección de configuración de perfil.</st
     <string name="room_recents_create_room">Crear sala</string>
     <string name="room_recents_join_room">Unirse á sala</string>
     <string name="room_recents_join_room_title">Unirse á sala</string>
-    <string name="directory_searching_title">Buscando cartafol...</string>
+    <string name="directory_searching_title">Buscando cartafol…</string>
 
     <string name="room_settings_all_messages_noisy">Todas as mensaxes (alto)</string>
     <string name="room_settings_all_messages">Todas as mensaxes</string>

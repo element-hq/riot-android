@@ -277,7 +277,7 @@ Por favor, permita o acesso na próxima janela para poder encontrar utilizadores
 
 Permitir ao Riot aceder aos seus contactos?</string>
 
-    <string name="permissions_action_not_performed_missing_permissions">Desculpe... A ação não foi realizada por falta de permissões</string>
+    <string name="permissions_action_not_performed_missing_permissions">Desculpe… A ação não foi realizada por falta de permissões</string>
 
     <!-- medias slider string -->
     <string name="media_slider_saved">Guardado</string>
@@ -429,7 +429,7 @@ Note que esta acção irá reiniciar a aplicação e poderá levar algum tempo.<
 
     <!-- Directory -->
     <string name="directory_search_results_title">Navegar diretório</string>
-    <string name="directory_searching_title">A pesquisar o diretório...</string>
+    <string name="directory_searching_title">A pesquisar o diretório…</string>
 
     <!-- home room settings -->
     <string name="room_settings_favourite">Adicionar aos favoritos</string>

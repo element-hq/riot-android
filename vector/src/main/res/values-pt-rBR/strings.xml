@@ -266,7 +266,7 @@ Por favor, autorize o acesso na próxima tela para poder encontrar usuários na 
 
 Você autoriza o Riot a acessar seus contatos?</string>
 
-    <string name="permissions_action_not_performed_missing_permissions">Desculpe... A ação não foi realizada, por falta de permissão</string>
+    <string name="permissions_action_not_performed_missing_permissions">Desculpe… A ação não foi realizada, por falta de permissão</string>
 
     <!-- medias slider string -->
     <string name="media_slider_saved">Salvo</string>
@@ -410,7 +410,7 @@ Note que esta ação irá reiniciar o aplicativo e poderá tomar um certo tempo.
 
     <!-- Directory -->
     <string name="directory_search_results_title">Pesquisar na lista pública</string>
-    <string name="directory_searching_title">Buscando no diretório...</string>
+    <string name="directory_searching_title">Buscando no diretório…</string>
 
     <!-- home room settings -->
     <string name="room_settings_favourite">Favoritar</string>
@@ -722,7 +722,7 @@ No futuro, este processo de verificação será mais sofisticado.</string>
     <string name="title_activity_bug_report">Relatório de erros</string>
     <string name="title_activity_group_details">Detalhes da comunidade</string>
 
-    <string name="loading">Carregando...</string>
+    <string name="loading">Carregando…</string>
 
     <string name="action_exit">Sair</string>
     <string name="bottom_action_groups">Comunidades</string>

@@ -813,7 +813,7 @@ Dispositivos desconocidos:</string>
 
 <string name="title_activity_group_details">Detalles de comunidad</string>
 
-    <string name="loading">Cargando...</string>
+    <string name="loading">Cargando…</string>
 
     <string name="action_exit">Salir</string>
     <string name="bottom_action_groups">Comunidades</string>

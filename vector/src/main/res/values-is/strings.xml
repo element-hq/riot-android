@@ -19,7 +19,7 @@
     <string name="title_activity_bug_report">Villuskýrsla</string>
     <string name="title_activity_group_details">Nánar um samfélag</string>
 
-    <string name="loading">Hleð inn...</string>
+    <string name="loading">Hleð inn…</string>
 
     <string name="ok">Í lagi</string>
     <string name="cancel">Hætta við</string>
@@ -587,7 +587,7 @@
     <string name="room_event_action_report_prompt_reason">Ástæður fyrir tilkynningu um vankanta á þessu efni</string>
     <string name="room_event_action_report_prompt_ignore_user">Viltu fela öll skilaboð frá þessum notanda?</string>
     <string name="room_event_action_cancel_upload">Hætta við innsendingu</string>
-    <string name="directory_searching_title">Leita í yfirlitsskrá...</string>
+    <string name="directory_searching_title">Leita í yfirlitsskrá…</string>
 
     <string name="room_settings_all_messages_noisy">Öll skilaboð (hávært)</string>
     <string name="room_settings_de_prioritize">Minnka forgang</string>
@@ -705,7 +705,7 @@ Til að halda áfram skaltu setja inn lykilorðið þitt.</string>
     <string name="settings_contacts_phonebook_country">Land símaskrár</string>
     <string name="room_settings_addresses_invalid_format_dialog_title">Ógilt snið samnefnis</string>
     <string name="directory_server_fail_to_retrieve_server">Netþjónninn gæti verið undir miklu álagi eða ekki til taks</string>
-    <string name="missing_permissions_warning">Þar sem ýmsar heimildir vantar, eru sumir eiginleikar ekki tiltækir...</string>
+    <string name="missing_permissions_warning">Þar sem ýmsar heimildir vantar, eru sumir eiginleikar ekki tiltækir…</string>
     <string name="no_contact_access_placeholder">Þú heimilaðir Riot ekki aðgang að tengiliðum á tækinu</string>
     <string name="send_bug_report_rage_shake">Hristu ákveðið til að senda villutilkynningu</string>
 

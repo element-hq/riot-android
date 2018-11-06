@@ -797,7 +797,7 @@ Unbekannte Geräte:</string>
 
 <string name="title_activity_group_details">Community-Details</string>
 
-    <string name="loading">Lädt...</string>
+    <string name="loading">Lädt…</string>
 
     <string name="action_exit">Schließen</string>
     <string name="bottom_action_groups">Communities</string>

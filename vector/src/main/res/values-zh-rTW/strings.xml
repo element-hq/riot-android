@@ -18,7 +18,7 @@
     <string name="ok">確定</string>
     <string name="leave">離開</string>
     <string name="save">儲存</string>
-    <string name="loading">載入中...</string>
+    <string name="loading">載入中…</string>
 
     <string name="send">發送</string>
     <string name="resend">重新發送</string>

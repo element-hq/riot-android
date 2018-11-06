@@ -681,7 +681,7 @@ Dispositivos desconocidos:</string>
     <!-- historical -->
     <string name="historical_placeholder">Search for historical</string>
 <string name="notification_sync_in_progress">Sincronizando</string>
-    <string name="loading">Cargando...</string>
+    <string name="loading">Cargando…</string>
 
     <string name="download">Descargar</string>
     <string name="speak">Hablar</string>

@@ -745,7 +745,7 @@ Riotアプリがあなたの電話帳へアクセスすることを許可しま�
 <string name="action_exit">退出</string>
     <string name="title_activity_group_details">コミュニティの詳細</string>
 
-    <string name="loading">読み込み中...</string>
+    <string name="loading">読み込み中…</string>
 
     <string name="bottom_action_groups">コミュニティ</string>
 
@@ -866,7 +866,7 @@ Riotアプリがあなたの電話帳へアクセスすることを許可しま�
 
 今いくつか追加しますか？</string>
 
-    <string name="go_on_with">...で続行</string>
+    <string name="go_on_with">…で続行</string>
     <string name="error_no_external_application_found">申し訳ありません、この操作を完了するための外部アプリが見つかりません。</string>
 
     <string name="e2e_re_request_encryption_key">他のデバイスから <u>暗号鍵を再度要求</u> します。</string>

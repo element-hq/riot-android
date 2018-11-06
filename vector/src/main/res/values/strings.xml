@@ -31,7 +31,7 @@
     <string name="dialog_title_third_party_licences">Third party licences</string>
 
     <!-- splash screen accessibility -->
-    <string name="loading">Loading...</string>
+    <string name="loading">Loading…</string>
 
     <!-- button names -->
     <string name="ok">OK</string>
@@ -348,7 +348,7 @@
     <!-- Room -->
     <string name="list_members">List members</string>
     <string name="open_chat_header">Open header</string>
-    <string name="room_sync_in_progress">Syncing...</string>
+    <string name="room_sync_in_progress">Syncing…</string>
     <string name="room_jump_to_first_unread">Jump to first unread message.</string>
 
     <!-- Room Preview -->

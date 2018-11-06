@@ -287,7 +287,7 @@ Harap berikan akses pada halaman selanjutnya untuk melakukan panggilan.</string>
 
     <string name="dialog_title_third_party_licences">Lisensi Pihak Ketiga</string>
 
-    <string name="loading">Memuat...</string>
+    <string name="loading">Memuat…</string>
 
     <string name="download">Unduh</string>
     <string name="speak">Bicaralah</string>
@@ -352,7 +352,7 @@ Bolehkah Riot mengakses daftar kontak Anda?</string>
 
     <string name="list_members">Daftar Anggota</string>
     <string name="open_chat_header">Buka kop</string>
-    <string name="room_sync_in_progress">Menyinkronkan...</string>
+    <string name="room_sync_in_progress">Menyinkronkan…</string>
     <string name="room_jump_to_first_unread">Lompat ke pesan pertama yang belum terbaca.</string>
 
     <string name="room_preview_invitation_format">Anda telah diundang untuk bergabung ke ruang ini oleh %s</string>
