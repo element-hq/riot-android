@@ -2,7 +2,7 @@ Changes in Riot 0.8.19 (2018-XX-XX)
 ===================================================
 
 MatrixSdk:
- - Upgrade to version 0.X.Y.
+ - Upgrade to version 0.9.13.
 
 Features:
  - Enable Lazy Loading by default, if the hs supports it
