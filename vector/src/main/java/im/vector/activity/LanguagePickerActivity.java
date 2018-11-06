@@ -37,8 +37,9 @@ import java.util.Locale;
 import im.vector.R;
 import im.vector.VectorApp;
 import im.vector.adapters.LanguagesAdapter;
-import im.vector.util.ThemeUtils;
-import kotlin.Triple;
+import im.vector.settings.VectorLocale;
+import im.vector.ui.themes.ActivityOtherThemes;
+import im.vector.ui.themes.ThemeUtils;
 
 public class LanguagePickerActivity extends VectorAppCompatActivity implements LanguagesAdapter.OnSelectLocaleListener, SearchView.OnQueryTextListener {
 
@@ -64,8 +65,8 @@ public class LanguagePickerActivity extends VectorAppCompatActivity implements L
 
     @NotNull
     @Override
-    public Triple getOtherThemes() {
-        return new Triple(R.style.CountryPickerTheme_Dark, R.style.CountryPickerTheme_Black, R.style.CountryPickerTheme_Status);
+    public ActivityOtherThemes getOtherThemes() {
+        return ActivityOtherThemes.Picker.INSTANCE;
     }
 
     @Override
@@ -108,7 +109,7 @@ public class LanguagePickerActivity extends VectorAppCompatActivity implements L
             mSearchView.setSearchableInfo(searchManager.getSearchableInfo(getComponentName()));
             mSearchView.setOnQueryTextListener(this);
             SearchView.SearchAutoComplete searchAutoComplete = mSearchView.findViewById(android.support.v7.appcompat.R.id.search_src_text);
-            searchAutoComplete.setHintTextColor(ThemeUtils.INSTANCE.getColor(this, R.attr.default_text_hint_color));
+            searchAutoComplete.setHintTextColor(ThemeUtils.INSTANCE.getColor(this, R.attr.vctr_default_text_hint_color));
         }
         return true;
     }
@@ -133,7 +134,7 @@ public class LanguagePickerActivity extends VectorAppCompatActivity implements L
         LinearLayoutManager layoutManager = new LinearLayoutManager(this);
         layoutManager.setOrientation(LinearLayoutManager.VERTICAL);
         languagesRecyclerView.setLayoutManager(layoutManager);
-        mAdapter = new LanguagesAdapter(VectorApp.getApplicationLocales(this), this);
+        mAdapter = new LanguagesAdapter(VectorLocale.INSTANCE.getSupportedLocales(), this);
         languagesRecyclerView.setAdapter(mAdapter);
     }
 

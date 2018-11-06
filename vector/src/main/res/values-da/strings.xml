@@ -267,7 +267,7 @@ Giv venligst tilladelse ved næste pop-up for at finde kontakter der er på Riot
 
 Vil du give Riot adgang til dine kontakter?</string>
 
-    <string name="permissions_action_not_performed_missing_permissions">Beklager... Handlingen blev ikke udført fordi der mangler tilladelser</string>
+    <string name="permissions_action_not_performed_missing_permissions">Beklager… Handlingen blev ikke udført fordi der mangler tilladelser</string>
 
     <string name="media_slider_saved">Gemt</string>
     <string name="media_slider_saved_message">Gem til downloads</string>
@@ -357,7 +357,6 @@ Er du sikker?</string>
     <string name="room_delete_unsent_messages">Slet usendte beskeder</string>
     <string name="room_message_file_not_found">Fil ikke fundet</string>
     <string name="room_do_not_have_permission_to_post">Du har ikke tilladelse til at skrive i dette rum</string>
-    <string name="room_new_message_notification">1 ny besked</string>
 
     <string name="ssl_trust">Stol på</string>
     <string name="ssl_do_not_trust">Stol ikke på</string>
@@ -383,7 +382,7 @@ Er du sikker?</string>
     <string name="room_details_people_invited_group_name">INVITERET</string>
     <string name="title_activity_group_details">Detaljer om community</string>
 
-    <string name="loading">Loader...</string>
+    <string name="loading">Loader…</string>
 
     <string name="action_exit">Afslut</string>
     <string name="actions">Handlinger</string>
@@ -407,7 +406,7 @@ Er du sikker?</string>
 </plurals>
 
     <string name="list_members">Medlemsoversigt</string>
-    <string name="room_sync_in_progress">Synkroniserer...</string>
+    <string name="room_sync_in_progress">Synkroniserer…</string>
     <plurals name="room_header_active_members_count">
 	<item quantity="one">1 aktivt medlem</item>
 	<item quantity="other">%d aktive medlemmer</item>
@@ -456,7 +455,7 @@ Er du sikker?</string>
 	<item quantity="one">%1$s rum fundet for %2$s</item>
 	<item quantity="other">%1$s rum fundet for %2$s</item>
 </plurals>
-    <string name="directory_searching_title">Søger i liste...</string>
+    <string name="directory_searching_title">Søger i liste…</string>
 
     <string name="room_settings_all_messages_noisy">Alle meddelelser (højlydt)</string>
     <string name="room_settings_all_messages">Alle meddelelser</string>

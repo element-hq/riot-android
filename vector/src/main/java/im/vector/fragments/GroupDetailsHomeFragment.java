@@ -32,7 +32,7 @@ import org.matrix.androidsdk.rest.model.group.Group;
 
 import butterknife.BindView;
 import im.vector.R;
-import im.vector.util.ThemeUtils;
+import im.vector.ui.themes.ThemeUtils;
 import im.vector.util.VectorImageGetter;
 import im.vector.util.VectorUtils;
 

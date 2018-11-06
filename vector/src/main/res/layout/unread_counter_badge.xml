@@ -1,21 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<TextView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/unread_counter_badge_layout"
+    android:id="@+id/unread_counter_badge_text_view"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
-    android:layout_marginLeft="7dp"
-    android:layout_marginRight="7dp"
-    android:minWidth="25dp">
-
-    <TextView
-        android:id="@+id/unread_counter_badge_text_view"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_centerInParent="true"
-        android:fontFamily="sans-serif-light"
-        android:textColor="@android:color/white"
-        android:textSize="12sp"
-        android:textStyle="bold"
-        tools:text="99"/>
-</RelativeLayout>
+    android:fontFamily="sans-serif-light"
+    android:gravity="center"
+    android:minWidth="25dp"
+    android:paddingLeft="7dp"
+    android:paddingRight="7dp"
+    android:textColor="@android:color/white"
+    android:textSize="12sp"
+    android:textStyle="bold"
+    tools:background="@color/vector_fuchsia_color"
+    tools:text="99" />

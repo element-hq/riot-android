@@ -287,7 +287,7 @@ Harap berikan akses pada halaman selanjutnya untuk melakukan panggilan.</string>
 
     <string name="dialog_title_third_party_licences">Lisensi Pihak Ketiga</string>
 
-    <string name="loading">Memuat...</string>
+    <string name="loading">Memuat…</string>
 
     <string name="download">Unduh</string>
     <string name="speak">Bicaralah</string>
@@ -352,7 +352,7 @@ Bolehkah Riot mengakses daftar kontak Anda?</string>
 
     <string name="list_members">Daftar Anggota</string>
     <string name="open_chat_header">Buka kop</string>
-    <string name="room_sync_in_progress">Menyinkronkan...</string>
+    <string name="room_sync_in_progress">Menyinkronkan…</string>
     <string name="room_jump_to_first_unread">Lompat ke pesan pertama yang belum terbaca.</string>
 
     <string name="room_preview_invitation_format">Anda telah diundang untuk bergabung ke ruang ini oleh %s</string>
@@ -463,7 +463,6 @@ Yakin?</string>
     <string name="room_delete_unsent_messages">Hapus pesan yang belum terkirim</string>
     <string name="room_message_file_not_found">Berkas tidak ditemukan</string>
     <string name="room_do_not_have_permission_to_post">Anda belum mendapat permisi untuk mengirim di ruang ini</string>
-    <string name="room_new_message_notification">1 pesan baru</string>
     <plurals name="room_new_messages_notification">
 	<item quantity="other">%d pesan baru</item>
 </plurals>
@@ -563,7 +562,7 @@ Perhatikan bahwa tindakan ini akan memulai ulang aplikasi dan mungkin cukup mema
     <string name="settings_notification_privacy_reduced">Kerahasiaan diperlemah</string>
     <string name="settings_notification_privacy_need_permission">Aplikasi ini membutuhkan permisi untuk beroperasi di balik layar</string>
     <string name="settings_notification_privacy_no_permission">Aplikasi ini <b>tidak</b> membutuhkan permisi untuk beroperasi di balik layar</string>
-    <string name="settings_notification_privacy_gcm">• Pemberitahuan dikirim melalui Google Cloud Messaging</string>
+    <string name="settings_notification_privacy_fcm">• Pemberitahuan dikirim melalui Google Cloud Messaging</string>
     <string name="settings_notification_privacy_metadata">• Pemberitahuan hanya memuat meta data</string>
     <string name="settings_notification_privacy_secure_message_content">• Isi pesan pemberitahuan <b> tersimpan langsung dengan aman di homeserver Matrix</b></string>
     <string name="settings_notification_privacy_nosecure_message_content">• Pemberitahuan memuat <b>meta data dan data pesan</b></string>
@@ -620,7 +619,6 @@ Perhatikan bahwa tindakan ini akan memulai ulang aplikasi dan mungkin cukup mema
     <string name="widget_integration_room_not_visible">Ruang %s tidak terlihat.</string>
     <string name="widget_integration_missing_parameter">Ada parameter penting yang hilang.</string>
     <string name="widget_integration_invalid_parameter">Ada parameter yang tidak valid.</string>
-    <string name="settings_labs_matrix_apps">Apps Matrix</string>
     <string name="room_add_matrix_apps">Tambahkan apps Matrix</string>
     <string name="settings_labs_native_camera">Gunakan kamera bawaan</string>
     <string name="settings_labs_keyboard_options_to_send_message">Gunakan tombol enter keyboard untuk mengirim pesan</string>
@@ -772,9 +770,6 @@ Perangkat tak dikenal:</string>
     <string name="room_settings_tag_pref_entry_low_priority">Prioritas rendah</string>
     <string name="room_settings_tag_pref_entry_none">Tidak Ada</string>
     <string name="room_settings_tag_pref_no_tag">tidak ditandai</string>
-    <string name="room_settings_tag_pref_entry_value_favourite">favorit</string>
-    <string name="room_settings_tag_pref_entry_value_low_priority">rendah</string>
-    <string name="room_settings_tag_pref_entry_value_none">tidak ada</string>
 
     <string name="room_settings_category_access_visibility_title">Akses dan visibilitas</string>
     <string name="room_settings_directory_visibility">Daftarkan ruang ini di direktori ruang</string>
@@ -916,8 +911,6 @@ Peringatan: berkas ini mungkin ikut terhapus jika aplikasi dihapus.</string>
     <string name="startup_notification_privacy_button_other">Pilih opsi lain</string>
 
     <string name="settings_analytics">Analitik</string>
-    <string name="settings_opt_out_of_analytics">Hindari analitik</string>
-    <string name="settings_opt_out_of_analytics_summary">Riot mengumpulkan data analitik anonim dalam upaya kami meningkatkan aplikasi.</string>
     <string name="settings_opt_in_of_analytics">Kirim data analitik</string>
     <string name="settings_opt_in_of_analytics_summary">Riot mengumpulkan data analitik anonim dalam upaya kami meningkatkan aplikasi.</string>
     <string name="settings_opt_in_of_analytics_prompt">Mohon aktifkan analitik untuk membantu kami meningkatkan Riot.</string>
@@ -931,7 +924,6 @@ Peringatan: berkas ini mungkin ikut terhapus jika aplikasi dihapus.</string>
     <string name="devices_details_device_name">Nama Perangkat</string>
     <string name="devices_details_last_seen_title">Terakhir terlihat</string>
     <string name="devices_details_last_seen_format">%1$s @ %2$s</string>
-    <string name="devices_details_time_format">JJ:mm:dd</string>
     <string name="devices_delete_dialog_text">Operasi ini membutuhkan otentikasi tambahan.
 Untuk melanjutkan, masukkan kata sandi Anda.</string>
     <string name="devices_delete_dialog_title">Otentikasi</string>

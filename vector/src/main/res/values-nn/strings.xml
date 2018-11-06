@@ -22,7 +22,7 @@
 
     <string name="dialog_title_third_party_licences">Tredjepartilisensar</string>
 
-    <string name="loading">Lastar...</string>
+    <string name="loading">Lastar…</string>
 
     <string name="ok">Greitt</string>
     <string name="cancel">Bryt av</string>
@@ -312,7 +312,7 @@ Ver venleg og gjev tilgang på den neste popp-oppen for å finna addressebokbruk
 
 Tillat Riot å gå inn i kontaktane dine?</string>
 
-    <string name="permissions_action_not_performed_missing_permissions">Orsak... Handlinga vart ikkje gjennomført på grunn av vantande tilgang</string>
+    <string name="permissions_action_not_performed_missing_permissions">Orsak… Handlinga vart ikkje gjennomført på grunn av vantande tilgang</string>
 
     <string name="media_slider_saved">Lagra</string>
     <string name="media_slider_saved_message">Lagr til nedlastingar?</string>
@@ -327,7 +327,7 @@ Tillat Riot å gå inn i kontaktane dine?</string>
 
     <string name="list_members">Listemedlemer</string>
     <string name="open_chat_header">Opn tittel</string>
-    <string name="room_sync_in_progress">Samstiller...</string>
+    <string name="room_sync_in_progress">Samstiller…</string>
     <string name="room_jump_to_first_unread">Hopp til den fyrste ulesne meldigna.</string>
 
     <string name="room_preview_invitation_format">Du vart boden inn til dette rommet av %s</string>
@@ -422,7 +422,6 @@ Er du sikker?</string>
     <string name="room_delete_unsent_messages">Slett usende meldingar</string>
     <string name="room_message_file_not_found">Fila vart ikkje funne</string>
     <string name="room_do_not_have_permission_to_post">Du har ikkje tilgang til å senda meldingar i dette rommet</string>
-    <string name="room_new_message_notification">1 ny melding</string>
     <plurals name="room_new_messages_notification">
 	<item quantity="one">1 ny melding</item>
 	<item quantity="other">%d nye meldingar</item>
@@ -523,7 +522,7 @@ Merk at denne handlinga vil starta æppen på nytt og kan taka litt tid.</string
     <string name="settings_notification_privacy_reduced">Minska personvern</string>
     <string name="settings_notification_privacy_need_permission">Æppen treng tilgang til å køyra i bakgrunnen</string>
     <string name="settings_notification_privacy_no_permission">Æppen treng <b>ikkje</b> tillating til å køyra i bakgrunnen</string>
-    <string name="settings_notification_privacy_gcm">• Varsel vert sende gjennom Google Cloud-Meldingar</string>
+    <string name="settings_notification_privacy_fcm">• Varsel vert sende gjennom Google Cloud-Meldingar</string>
     <string name="settings_notification_privacy_metadata">• Varsel inneheld berre metadata</string>
     <string name="settings_notification_privacy_secure_message_content">• Meldingsinnhald i varselet <b>hentast trygt direkte frå Matrix-heimtenaren</b></string>
     <string name="settings_notification_privacy_nosecure_message_content">• Varsel inneheld <b>meta- og meldingsdata</b></string>
@@ -594,8 +593,6 @@ Merk at denne handlinga vil starta æppen på nytt og kan taka litt tid.</string
     <string name="startup_notification_privacy_button_other">vel noko anna</string>
 
     <string name="settings_analytics">Statistikk</string>
-    <string name="settings_opt_out_of_analytics">Ikkje deltaka i statistikkinnsamling</string>
-    <string name="settings_opt_out_of_analytics_summary">Riot samlar inn anonym statistikk for å forbetre æppen.</string>
     <string name="settings_opt_in_of_analytics">Send statistikkdata</string>
     <string name="settings_opt_in_of_analytics_summary">Riot samlar anonym statistikk inn for å forbetra æppen.</string>
     <string name="settings_opt_in_of_analytics_prompt">Ver venleg og skru statistikkinnsamling på for å hjelpa oss med å forbetra Riot.</string>
@@ -609,7 +606,6 @@ Merk at denne handlinga vil starta æppen på nytt og kan taka litt tid.</string
     <string name="devices_details_device_name">Einingsnamn</string>
     <string name="devices_details_last_seen_title">Sist sedd</string>
     <string name="devices_details_last_seen_format">%1$s @ %2$s</string>
-    <string name="devices_details_time_format">TT:mm:ss</string>
     <string name="devices_delete_dialog_text">Denne handlinga krev vidare sjølvstadfesting.
 For å gå fram, ver venleg og skriv passordet ditt inn.</string>
     <string name="devices_delete_dialog_title">Stadfesting</string>
@@ -676,9 +672,6 @@ Merk at denne handlinga gjer at æppen startar på nytt og kan taka litt tid.</s
     <string name="room_settings_tag_pref_entry_low_priority">Lågrett</string>
     <string name="room_settings_tag_pref_entry_none">Ingen</string>
     <string name="room_settings_tag_pref_no_tag">ikkje merka</string>
-    <string name="room_settings_tag_pref_entry_value_favourite">yndling</string>
-    <string name="room_settings_tag_pref_entry_value_low_priority">låg</string>
-    <string name="room_settings_tag_pref_entry_value_none">ingen</string>
 
     <string name="room_settings_category_access_visibility_title">Tilgang og synlegheit</string>
     <string name="room_settings_directory_visibility">Vis rommet i romutvalet</string>
@@ -868,7 +861,6 @@ Ukjende einingar:</string>
     <string name="widget_integration_room_not_visible">Rommet %s er ikkje synleg.</string>
     <string name="widget_integration_missing_parameter">Ein krevd parameter vantar.</string>
     <string name="widget_integration_invalid_parameter">Ein parameter er ikkje gangbar.</string>
-    <string name="settings_labs_matrix_apps">Matrix-Æppar</string>
     <string name="room_add_matrix_apps">Legg Matrix-æppar til</string>
     <string name="settings_labs_keyboard_options_to_send_message">Bruk entertasten på tastaturet for å senda meldingar</string>
     <string name="settings_labs_enable_send_voice">Send røystmelding (krever ein tredjepartisæpp for å spela inn meldinga)</string>

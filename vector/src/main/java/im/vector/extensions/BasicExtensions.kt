@@ -16,4 +16,12 @@
 
 package im.vector.extensions
 
+import android.os.Bundle
+import android.support.v4.app.Fragment
+
 fun Boolean.toOnOff() = if (this) "ON" else "OFF"
+
+/**
+ * Apply argument to a Fragment
+ */
+fun <T : Fragment> T.withArgs(block: Bundle.() -> Unit) = apply { arguments = Bundle().apply(block) }

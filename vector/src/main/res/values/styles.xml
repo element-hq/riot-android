@@ -4,8 +4,8 @@
 
     <!-- toolbar styles-->
     <style name="VectorToolbarStyle" parent="Widget.AppCompat.Toolbar">
-        <item name="android:background">?attr/primary_color</item>
-        <item name="background">?attr/primary_color</item>
+        <item name="android:background">?attr/vctr_primary_color</item>
+        <item name="background">?attr/vctr_primary_color</item>
 
         <!-- main text -->
         <item name="titleTextAppearance">@style/Vector.Toolbar.Title</item>
@@ -20,7 +20,7 @@
 
     <style name="Vector.Toolbar.Title" parent="TextAppearance.Widget.AppCompat.Toolbar.Title">
         <item name="android:textSize">20sp</item>
-        <item name="android:textColor">?attr/primary_text_color</item>
+        <item name="android:textColor">?attr/vctr_primary_text_color</item>
         <item name="android:fontFamily">"sans-serif-medium"</item>
     </style>
 
@@ -30,8 +30,8 @@
     </style>
 
     <style name="vector.PopupMenu" parent="@android:style/Widget.PopupMenu">
-        <item name="android:popupBackground">?attr/riot_primary_background_color</item>
-        <item name="android:textColor">?attr/riot_primary_text_color</item>
+        <item name="android:popupBackground">?attr/vctr_riot_primary_background_color</item>
+        <item name="android:textColor">?attr/vctr_riot_primary_text_color</item>
         <item name="android:textSize">16sp</item>
         <item name="android:dropDownHorizontalOffset">0dp</item>
         <item name="android:dropDownVerticalOffset">0dp</item>
@@ -44,8 +44,8 @@
 
     <!-- custom action bar -->
     <style name="Vector.Styled.ActionBar" parent="Widget.AppCompat.Light.ActionBar">
-        <item name="android:background">?attr/primary_color</item>
-        <item name="background">?attr/primary_color</item>
+        <item name="android:background">?attr/vctr_primary_color</item>
+        <item name="background">?attr/vctr_primary_color</item>
 
         <!-- remove shadow under the action bar -->
         <item name="elevation">0dp</item>
@@ -59,14 +59,14 @@
 
     <!-- main text -->
     <style name="ActionBarTitleText" parent="TextAppearance.AppCompat.Widget.ActionBar.Title">
-        <item name="android:textColor">?attr/primary_text_color</item>
+        <item name="android:textColor">?attr/vctr_primary_text_color</item>
         <item name="android:fontFamily">"sans-serif-medium"</item>
         <item name="android:textSize">20sp</item>
     </style>
 
     <!-- sub text -->
     <style name="ActionBarSubTitleText" parent="TextAppearance.AppCompat.Widget.ActionBar.Subtitle">
-        <item name="android:textColor">?attr/primary_text_color</item>
+        <item name="android:textColor">?attr/vctr_primary_text_color</item>
         <item name="android:fontFamily">"sans-serif-medium"</item>
         <item name="android:textSize">12sp</item>
     </style>
@@ -93,8 +93,8 @@
     </style>
 
     <style name="VectorSearches.Styled.ActionBar" parent="Vector.Styled.ActionBar">
-        <item name="android:background">?attr/riot_primary_background_color</item>
-        <item name="background">?attr/riot_primary_background_color</item>
+        <item name="android:background">?attr/vctr_riot_primary_background_color</item>
+        <item name="background">?attr/vctr_riot_primary_background_color</item>
     </style>
 
     <!-- tabbar text color -->
@@ -123,7 +123,7 @@
         <item name="tabMode">fixed</item>
         <item name="tabPaddingStart">0dp</item>
         <item name="tabPaddingEnd">0dp</item>
-        <item name="tabBackground">?attr/tab_bar_inverted_background_color</item>
+        <item name="tabBackground">?attr/vctr_tab_bar_inverted_background_color</item>
         <item name="tabTextColor">@color/vector_green_color</item>
         <item name="tabSelectedTextColor">@color/vector_green_color</item>
         <item name="tabIndicatorColor">@color/vector_green_color</item>
@@ -132,10 +132,10 @@
 
     <style name="ListHeader">
         <item name="android:textSize">14sp</item>
-        <item name="android:textColor">?attr/riot_primary_text_color</item>
+        <item name="android:textColor">?attr/vctr_riot_primary_text_color</item>
         <item name="android:textAllCaps">true</item>
         <item name="android:fontFamily">sans-serif-medium</item>
-        <item name="android:background">?attr/list_header_background_color</item>
+        <item name="android:background">?attr/vctr_list_header_background_color</item>
         <item name="android:paddingLeft">16dp</item>
         <item name="android:paddingRight">16dp</item>
         <item name="android:paddingTop">10dp</item>
@@ -147,16 +147,20 @@
     </style>
 
     <style name="SpinnerTheme">
-        <item name="colorControlNormal">?attr/list_header_public_room_spinner_color</item>
+        <item name="colorControlNormal">?attr/vctr_list_header_public_room_spinner_color</item>
     </style>
 
     <style name="PopMenuStyle" parent="Widget.AppCompat.PopupMenu">
         <item name="android:textSize">14sp</item>
     </style>
 
+    <style name="Floating_Action_Button">
+        <item name="fab_labelsPosition">left</item>
+    </style>
+
     <style name="Floating_Actions_Menu">
         <item name="android:background">@drawable/vector_background_fab_label</item>
-        <item name="android:textColor">?attr/riot_primary_text_color</item>
+        <item name="android:textColor">?attr/vctr_riot_primary_text_color</item>
     </style>
 
     <style name="Floating_Actions_Menu.Light">

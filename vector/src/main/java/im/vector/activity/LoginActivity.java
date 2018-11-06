@@ -82,14 +82,16 @@ import im.vector.RegistrationManager;
 import im.vector.UnrecognizedCertHandler;
 import im.vector.activity.util.RequestCodesKt;
 import im.vector.features.hhs.ResourceLimitDialogHelper;
+import im.vector.push.fcm.FcmHelper;
 import im.vector.receiver.VectorRegistrationReceiver;
 import im.vector.receiver.VectorUniversalLinkReceiver;
 import im.vector.repositories.ServerUrlsRepository;
 import im.vector.services.EventStreamService;
+import im.vector.ui.themes.ActivityOtherThemes;
+import im.vector.ui.themes.ThemeUtils;
 import im.vector.util.PhoneNumberUtils;
-import im.vector.util.ThemeUtils;
+import im.vector.util.UrlUtilKt;
 import im.vector.util.ViewUtilKt;
-import kotlin.Triple;
 
 /**
  * Displays the login screen.
@@ -345,8 +347,8 @@ public class LoginActivity extends MXCActionBarActivity implements RegistrationM
 
     @NotNull
     @Override
-    public Triple getOtherThemes() {
-        return new Triple(R.style.LoginAppTheme_Dark, R.style.LoginAppTheme_Black, R.style.LoginAppTheme_Status );
+    public ActivityOtherThemes getOtherThemes() {
+        return ActivityOtherThemes.Login.INSTANCE;
     }
 
     @Override
@@ -364,6 +366,8 @@ public class LoginActivity extends MXCActionBarActivity implements RegistrationM
 
         // warn that the application has started.
         CommonActivityUtils.onApplicationStarted(this);
+
+        FcmHelper.ensureFcmTokenIsRetrieved(this);
 
         Intent intent = getIntent();
 
@@ -397,7 +401,7 @@ public class LoginActivity extends MXCActionBarActivity implements RegistrationM
                 null,
                 ThemeUtils.INSTANCE.tintDrawable(this,
                         ContextCompat.getDrawable(this, R.drawable.ic_material_expand_more_black),
-                        R.attr.settings_icon_tint_color),
+                        R.attr.vctr_settings_icon_tint_color),
                 null);
         mLoginPasswordTextView = findViewById(R.id.login_password);
 
@@ -416,7 +420,7 @@ public class LoginActivity extends MXCActionBarActivity implements RegistrationM
                 null,
                 ThemeUtils.INSTANCE.tintDrawable(this,
                         ContextCompat.getDrawable(this, R.drawable.ic_material_expand_more_black),
-                        R.attr.settings_icon_tint_color),
+                        R.attr.vctr_settings_icon_tint_color),
                 null);
         mSubmitThreePidButton = findViewById(R.id.button_submit);
         mSkipThreePidButton = findViewById(R.id.button_skip);
@@ -891,7 +895,7 @@ public class LoginActivity extends MXCActionBarActivity implements RegistrationM
     }
 
     /**
-     * Some sessions have been registred, skip the login process.
+     * Some sessions have been registered, skip the login process.
      */
     private void goToSplash() {
         Log.d(LOG_TAG, "## gotoSplash(): Go to splash.");
@@ -2167,7 +2171,7 @@ public class LoginActivity extends MXCActionBarActivity implements RegistrationM
             } else if ((resultCode == RESULT_CANCELED) && (RequestCodesKt.FALLBACK_LOGIN_ACTIVITY_REQUEST_CODE == requestCode)) {
                 Log.d(LOG_TAG, "## onActivityResult(): RESULT_CANCELED && FALLBACK_LOGIN_ACTIVITY_REQUEST_CODE");
                 // reset the home server to let the user writes a valid one.
-                mHomeServerText.setText("https://");
+                mHomeServerText.setText(UrlUtilKt.HTTPS_SCHEME);
                 setActionButtonsEnabled(false);
             }
         }

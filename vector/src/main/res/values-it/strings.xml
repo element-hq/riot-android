@@ -379,7 +379,6 @@ Sicuro di procedere?</string>
     <string name="room_delete_unsent_messages">Elimina messaggi non spediti</string>
     <string name="room_message_file_not_found">File non trovato</string>
     <string name="room_do_not_have_permission_to_post">Non hai il permesso di pubblicare in questa stanza</string>
-    <string name="room_new_message_notification">1 nuovo messaggio</string>
 
     <!-- unrecognized SSL certificate -->
     <string name="ssl_trust">Fidati</string>
@@ -518,7 +517,6 @@ Tieni presente che questa azione riavvierà l\'app e potrebbe richiedere del tem
     <string name="devices_details_device_name">Nome dispositivo</string>
     <string name="devices_details_last_seen_title">Ultima visualizzazione</string>
     <string name="devices_details_last_seen_format">%1$s @ %2$s</string>
-    <string name="devices_details_time_format">HH:mm:ss</string>
     <string name="devices_delete_dialog_text">Questa operazione richiede un\'autenticazione aggiuntiva.\nPer proseguire, inserisci la tua password.</string>
     <string name="devices_delete_dialog_title">Autenticazione</string>
     <string name="devices_delete_pswd">Password:</string>
@@ -585,9 +583,6 @@ Tieni presente che questa azione riavvierà l\'app e potrebbe richiedere del tem
     <string name="room_settings_tag_pref_entry_low_priority">Bassa priorità</string>
     <string name="room_settings_tag_pref_entry_none">Niente</string>
     <string name="room_settings_tag_pref_no_tag">non etichettato</string>
-    <string name="room_settings_tag_pref_entry_value_favourite">preferito</string>
-    <string name="room_settings_tag_pref_entry_value_low_priority">bassa</string>
-    <string name="room_settings_tag_pref_entry_value_none">niente</string>
 
     <!-- room settings : access and visibility -->
     <string name="room_settings_category_access_visibility_title">Accesso e visibilità</string>
@@ -780,7 +775,7 @@ In futuro il processo di verifica sarà più sofisticato.</string>
 
 <string name="title_activity_group_details">Dettagli della comunità</string>
 
-    <string name="loading">Caricamento...</string>
+    <string name="loading">Caricamento…</string>
 
     <string name="action_exit">Esci</string>
     <string name="actions">Azioni</string>
@@ -802,7 +797,7 @@ In futuro il processo di verifica sarà più sofisticato.</string>
 
     <string name="list_members">Elenca i membri</string>
     <string name="open_chat_header">Apri intestazione</string>
-    <string name="room_sync_in_progress">Sincronizzazione...</string>
+    <string name="room_sync_in_progress">Sincronizzazione…</string>
     <plurals name="room_header_active_members_count">
 	<item quantity="one">1 membro attivo</item>
 	<item quantity="other">%d membri attivi</item>
@@ -838,8 +833,6 @@ In futuro il processo di verifica sarà più sofisticato.</string>
     <string name="settings_vibrate_on_mention">Vibra quando ti citano</string>
 
     <string name="settings_analytics">Statistiche</string>
-    <string name="settings_opt_out_of_analytics">Non contribuire alle statistiche</string>
-    <string name="settings_opt_out_of_analytics_summary">Riot raccoglie statistiche d\'uso anonime per consentirci di migliorare l\'applicazione.</string>
 
     <string name="room_settings_room_notifications_title">Notifiche</string>
     <string name="room_settings_add_new_group">Nuovo ID della comunità (es. +foo:matrix.org)</string>
@@ -869,7 +862,6 @@ In futuro il processo di verifica sarà più sofisticato.</string>
 
     <!-- Widget Integration Manager -->
     <string name="widget_integration_room_not_visible">La stanza %s non è visibile.</string>
-    <string name="settings_labs_matrix_apps">Le App Matrix</string>
     <string name="settings_labs_native_camera">Usa fotocamera nativa</string>
 
     <!-- share keys -->
@@ -939,7 +931,7 @@ In futuro il processo di verifica sarà più sofisticato.</string>
     <string name="settings_notification_privacy_reduced">Privacy ridotta</string>
     <string name="settings_notification_privacy_need_permission">L\'app richiede il permesso per funzionare in sottofondo</string>
     <string name="settings_notification_privacy_no_permission">Le app <b>non</b> richiedono il permesso per funzionare in sottofondo</string>
-    <string name="settings_notification_privacy_gcm">• Le notifiche vengono inviate via Google Cloud Messaging</string>
+    <string name="settings_notification_privacy_fcm">• Le notifiche vengono inviate via Google Cloud Messaging</string>
     <string name="settings_notification_privacy_metadata">• Le notifiche contengono solo metadati</string>
     <string name="settings_notification_privacy_secure_message_content">• Il contenuto del messaggio di una notifica <b>si trova al sicuro direttamente dal server home di Matrix</b></string>
     <string name="settings_notification_privacy_nosecure_message_content">• Le notifiche contengono <b>dati e metadati sul messaggio</b></string>
@@ -1096,4 +1088,13 @@ Tieni presente che questa azione riavvierà l\'app e potrebbe richiedere del tem
     <string name="unknown_error">Spiacente, si è verificato un errore</string>
 
 <string name="settings_lazy_loading_title">Caricamento posticipato dei membri della stanza</string>
-    </resources>
+    <string name="status_theme">Tema Status.im</string>
+
+    <string name="room_sliding_menu_version_x">Versione %s</string>
+    <string name="encryption_export_notice">Crea una passphrase (frase d\'ordine) per crittografare le chiavi esportate. Dovrai inserire la stessa passphrase per poter importare le chiavi.</string>
+    <string name="encryption_export_create_passphrase">Crea passphrase</string>
+    <string name="encryption_export_passphrase_dont_match">Le passphrase devono corrispondere</string>
+    <string name="merged_events_expand">espandi</string>
+    <string name="merged_events_collapse">collassa</string>
+
+</resources>

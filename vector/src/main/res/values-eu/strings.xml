@@ -348,7 +348,6 @@ Ziur zaude?</string>
     <string name="room_delete_unsent_messages">Ezabatu bidali gabeko mezuak</string>
     <string name="room_message_file_not_found">Ez da fitxategia aurkitu</string>
     <string name="room_do_not_have_permission_to_post">Ez duzu gela honetara mezuak bidaltzeko baimenik</string>
-    <string name="room_new_message_notification">mezu berri 1</string>
 
     <string name="ssl_trust">Fidatu</string>
     <string name="ssl_do_not_trust">Ez fidatu</string>
@@ -470,7 +469,6 @@ Kontuan izan ekintza honek aplikazioa berrabiaraziko duela eta denbora bat behar
     <string name="devices_details_device_name">Gailuaren izena</string>
     <string name="devices_details_last_seen_title">Azkenekoz ikusia</string>
     <string name="devices_details_last_seen_format">%1$s @ %2$s</string>
-    <string name="devices_details_time_format">HH:mm:ss</string>
     <string name="devices_delete_dialog_text">Eragiketa honek autentifikazio gehigarria behar du.
 Jarraitzeko, idatzi zure pasahitza.</string>
     <string name="devices_delete_dialog_title">Autentifikazioa</string>
@@ -538,9 +536,6 @@ Kontuan izan ekintza honek aplikazioa berrabiaraziko duela eta denbora bat behar
     <string name="room_settings_tag_pref_entry_low_priority">Lehentasun baxua</string>
     <string name="room_settings_tag_pref_entry_none">Bat ere ez</string>
     <string name="room_settings_tag_pref_no_tag">etiketatu gabe</string>
-    <string name="room_settings_tag_pref_entry_value_favourite">gogokoa</string>
-    <string name="room_settings_tag_pref_entry_value_low_priority">baxua</string>
-    <string name="room_settings_tag_pref_entry_value_none">bat ere ez</string>
 
     <string name="room_settings_category_access_visibility_title">Sarbidea eta ikusgaitasuna</string>
     <string name="room_settings_directory_visibility">Zerrendatu gela hau gelen direktorioan</string>
@@ -719,7 +714,6 @@ Zifratutako mezuak ez dira zifratzea oraindik ezarrita ez duten beste gailuetan 
     <string name="widget_integration_missing_room_id">Eskarian room_id falta da.</string>
     <string name="widget_integration_missing_user_id">Eskarian user_id falta da.</string>
     <string name="widget_integration_room_not_visible">%s gela ez dago ikusgai.</string>
-    <string name="settings_labs_matrix_apps">Matrix aplikazioak</string>
     <string name="room_add_matrix_apps">Gehitu Matrix aplikazioak</string>
     <string name="notification_noisy_notifications">Jakinarazpen zaratatsuak</string>
     <string name="notification_silent_notifications">Jakinarazpen isilak</string>
@@ -727,8 +721,6 @@ Zifratutako mezuak ez dira zifratzea oraindik ezarrita ez duten beste gailuetan 
     <string name="settings_containing_my_display_name">Nire pantaila-izena duten mezuak</string>
     <string name="settings_containing_my_user_name">Nire erabiltzaile izena duten mezuak</string>
     <string name="settings_analytics">Analitikak</string>
-    <string name="settings_opt_out_of_analytics">Ez hartu parte analitiketan</string>
-    <string name="settings_opt_out_of_analytics_summary">Riotek analitika anonimoak biltzen ditu aplikazioa hobetzeko.</string>
 
     <string name="settings_labs_native_camera">Erabili kamera natiboa</string>
 
@@ -762,7 +754,7 @@ Zifratutako mezuak ez dira zifratzea oraindik ezarrita ez duten beste gailuetan 
     <string name="call">Deia</string>
 <string name="title_activity_group_details">Komunitatearen xehetasunak</string>
 
-    <string name="loading">Kargatzen...</string>
+    <string name="loading">Kargatzen…</string>
 
     <string name="action_exit">Irten</string>
     <string name="bottom_action_groups">Komunitateak</string>
@@ -836,7 +828,7 @@ Zifratutako mezuak ez dira zifratzea oraindik ezarrita ez duten beste gailuetan 
 
     <string name="list_members">Zerrendatu kideak</string>
     <string name="open_chat_header">Ireki goiburua</string>
-    <string name="room_sync_in_progress">Sinkronizatzen...</string>
+    <string name="room_sync_in_progress">Sinkronizatzen…</string>
     <plurals name="room_header_active_members_count">
 	<item quantity="one">Kide aktibo 1</item>
 	<item quantity="other">%d kide aktibo</item>
@@ -890,7 +882,7 @@ Zifratutako mezuak ez dira zifratzea oraindik ezarrita ez duten beste gailuetan 
     <string name="settings_notification_privacy_reduced">Pribatutasun murriztua</string>
     <string name="settings_notification_privacy_need_permission">Aplikazioak bigarren planoan aritzeko baimenak behar ditu</string>
     <string name="settings_notification_privacy_no_permission">Aplikazioak <b>ez</b> du bigarren planoan aritzeko baimenik behar</string>
-    <string name="settings_notification_privacy_gcm">• Jakinarazpenak Google Cloud Messaging bidez bidaltzen dira</string>
+    <string name="settings_notification_privacy_fcm">• Jakinarazpenak Google Cloud Messaging bidez bidaltzen dira</string>
     <string name="settings_notification_privacy_metadata">• Jakinarazpenek meta-datuak besterik ez dituzte</string>
     <string name="settings_notification_privacy_secure_message_content">• Jakinarazpen mezuaren edukia <b>Matrix hasiera-zerbitzarian gorde da seguru</b></string>
     <string name="settings_notification_privacy_nosecure_message_content">• Jakinarazpenek <b>mezuen datuak eta metadatuak dituzte</b></string>
@@ -1045,5 +1037,14 @@ Kontuan izan ekintza honek aplikazioa berrabiaraziko duela eta denbora bat behar
     <string name="error_lazy_loading_not_supported_by_home_server">Zure hasiera-zerbitzariak ez du oraindik erabiltzaileen karga alperra onartzen. Saiatu geroago.</string>
 
     <string name="unknown_error">Errore bat gertatu da</string>
+
+<string name="status_theme">Status.im itxura</string>
+
+    <string name="room_sliding_menu_version_x">%s bertsioa</string>
+    <string name="encryption_export_notice">Sortu esportatutako gakoak zifratzeko pasaesaldi bat. Pasaesaldi hori gakoak inportatzeko sartu beharko duzu.</string>
+    <string name="encryption_export_create_passphrase">Sortu pasaesaldia</string>
+    <string name="encryption_export_passphrase_dont_match">Pasaesaldiak berdinak izan behar dira</string>
+    <string name="merged_events_expand">hedatu</string>
+    <string name="merged_events_collapse">tolestu</string>
 
 </resources>

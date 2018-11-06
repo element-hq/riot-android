@@ -14,7 +14,9 @@
         android:id="@+id/messagesAdapter_body_view"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginStart="56dp"
         android:layout_marginLeft="56dp"
+        android:layout_marginEnd="16dp"
         android:layout_marginRight="16dp"
         android:orientation="horizontal">
 
@@ -22,7 +24,9 @@
             android:id="@+id/messagesAdapter_highlight_message_marker"
             android:layout_width="6dp"
             android:layout_height="match_parent"
+            android:layout_marginStart="5dp"
             android:layout_marginLeft="5dp"
+            android:layout_marginEnd="5dp"
             android:layout_marginRight="5dp"
             tools:background="@color/vector_green_color" />
 
@@ -41,6 +45,7 @@
                     android:id="@+id/messagesAdapter_merge_header_text_view"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:layout_alignParentEnd="true"
                     android:layout_alignParentRight="true"
                     android:textColor="@color/vector_green_color"
                     tools:text="@string/merged_events_expand" />

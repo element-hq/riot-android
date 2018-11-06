@@ -1,5 +1,6 @@
 /*
  * Copyright 2017 Vector Creations Ltd
+ * Copyright 2018 New Vector Ltd
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -31,7 +32,7 @@ import java.util.Locale;
 import java.util.regex.Pattern;
 
 import im.vector.R;
-import im.vector.VectorApp;
+import im.vector.settings.VectorLocale;
 
 public class LanguagesAdapter extends RecyclerView.Adapter<LanguagesAdapter.LanguageViewHolder> implements Filterable {
 
@@ -92,7 +93,7 @@ public class LanguagesAdapter extends RecyclerView.Adapter<LanguagesAdapter.Lang
                     Pattern pattern = Pattern.compile(Pattern.quote(filterPattern), Pattern.CASE_INSENSITIVE);
 
                     for (Locale locale : mLocalesList) {
-                        if (pattern.matcher(VectorApp.localeToLocalisedString(locale)).find()) {
+                        if (pattern.matcher(VectorLocale.INSTANCE.localeToLocalisedString(locale)).find()) {
                             mFilteredLocalesList.add(locale);
                         }
                     }
@@ -126,7 +127,7 @@ public class LanguagesAdapter extends RecyclerView.Adapter<LanguagesAdapter.Lang
         }
 
         private void populateViews(final Locale locale) {
-            vLocaleNameTextView.setText(VectorApp.localeToLocalisedString(locale));
+            vLocaleNameTextView.setText(VectorLocale.INSTANCE.localeToLocalisedString(locale));
             itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {

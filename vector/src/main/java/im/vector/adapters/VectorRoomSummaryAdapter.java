@@ -52,10 +52,10 @@ import java.util.List;
 import im.vector.Matrix;
 import im.vector.PublicRoomsManager;
 import im.vector.R;
-import im.vector.VectorApp;
+import im.vector.settings.VectorLocale;
+import im.vector.ui.themes.ThemeUtils;
 import im.vector.util.RiotEventDisplay;
 import im.vector.util.RoomUtils;
-import im.vector.util.ThemeUtils;
 import im.vector.util.VectorUtils;
 
 /**
@@ -222,7 +222,7 @@ public class VectorRoomSummaryAdapter extends BaseExpandableListAdapter {
 
         if (!TextUtils.isEmpty(mSearchedPattern)) {
             String roomName = room.getRoomDisplayName(mContext);
-            res = (!TextUtils.isEmpty(roomName) && (roomName.toLowerCase(VectorApp.getApplicationLocale()).contains(mSearchedPattern)));
+            res = (!TextUtils.isEmpty(roomName) && (roomName.toLowerCase(VectorLocale.INSTANCE.getApplicationLocale()).contains(mSearchedPattern)));
         }
 
         return res;
@@ -668,9 +668,9 @@ public class VectorRoomSummaryAdapter extends BaseExpandableListAdapter {
             return convertView;
         }
 
-        int roomNameBlack = ThemeUtils.INSTANCE.getColor(mContext, R.attr.riot_primary_text_color);
+        int roomNameBlack = ThemeUtils.INSTANCE.getColor(mContext, R.attr.vctr_riot_primary_text_color);
         int fushiaColor = ContextCompat.getColor(mContext, R.color.vector_fuchsia_color);
-        int vectorDefaultTimeStampColor = ThemeUtils.INSTANCE.getColor(mContext, R.attr.default_text_light_color);
+        int vectorDefaultTimeStampColor = ThemeUtils.INSTANCE.getColor(mContext, R.attr.vctr_default_text_light_color);
         int vectorGreenColor = ContextCompat.getColor(mContext, R.color.vector_green_color);
         int vectorSilverColor = ContextCompat.getColor(mContext, R.color.vector_silver_color);
 
@@ -814,7 +814,7 @@ public class VectorRoomSummaryAdapter extends BaseExpandableListAdapter {
         }
 
         if (null != childRoom) {
-            directChatIcon.setVisibility(RoomUtils.isDirectChat(mMxSession, childRoom.getRoomId()) ? View.VISIBLE: View.GONE);
+            directChatIcon.setVisibility(RoomUtils.isDirectChat(mMxSession, childRoom.getRoomId()) ? View.VISIBLE : View.GONE);
             encryptedIcon.setVisibility(childRoom.isEncrypted() ? View.VISIBLE : View.GONE);
         } else {
             directChatIcon.setVisibility(View.GONE);
@@ -919,7 +919,7 @@ public class VectorRoomSummaryAdapter extends BaseExpandableListAdapter {
             if (aChildRoomSummary.getLatestReceivedEvent() != null) {
                 eventDisplay = new RiotEventDisplay(mContext);
                 eventDisplay.setPrependMessagesWithAuthor(true);
-                messageToDisplayRetValue = eventDisplay.getTextualDisplay(ThemeUtils.INSTANCE.getColor(mContext, R.attr.riot_primary_text_color),
+                messageToDisplayRetValue = eventDisplay.getTextualDisplay(ThemeUtils.INSTANCE.getColor(mContext, R.attr.vctr_riot_primary_text_color),
                         aChildRoomSummary.getLatestReceivedEvent(),
                         aChildRoomSummary.getLatestRoomState());
             }
@@ -959,7 +959,7 @@ public class VectorRoomSummaryAdapter extends BaseExpandableListAdapter {
         String trimmedPattern = pattern;
 
         if (null != pattern) {
-            trimmedPattern = pattern.trim().toLowerCase(VectorApp.getApplicationLocale());
+            trimmedPattern = pattern.trim().toLowerCase(VectorLocale.INSTANCE.getApplicationLocale());
             trimmedPattern = TextUtils.getTrimmedLength(trimmedPattern) == 0 ? null : trimmedPattern;
         }
 

@@ -43,9 +43,9 @@ import java.util.Map;
 import butterknife.BindView;
 import im.vector.Matrix;
 import im.vector.R;
+import im.vector.ui.themes.ActivityOtherThemes;
 import im.vector.widgets.Widget;
 import im.vector.widgets.WidgetsManager;
-import kotlin.Triple;
 
 public class JitsiCallActivity extends VectorAppCompatActivity {
     private static final String LOG_TAG = JitsiCallActivity.class.getSimpleName();
@@ -111,8 +111,8 @@ public class JitsiCallActivity extends VectorAppCompatActivity {
 
     @NotNull
     @Override
-    public Triple getOtherThemes() {
-        return new Triple(R.style.AppTheme_NoActionBar_Dark, R.style.AppTheme_NoActionBar_Black, R.style.AppTheme_NoActionBar_Status);
+    public ActivityOtherThemes getOtherThemes() {
+        return ActivityOtherThemes.NoActionBar.INSTANCE;
     }
 
     @Override

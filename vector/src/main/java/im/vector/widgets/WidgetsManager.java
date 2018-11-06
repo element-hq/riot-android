@@ -46,6 +46,7 @@ import java.util.UUID;
 import im.vector.Matrix;
 import im.vector.R;
 import im.vector.VectorApp;
+import im.vector.settings.VectorLocale;
 
 public class WidgetsManager {
     private static final String LOG_TAG = WidgetsManager.class.getSimpleName();
@@ -329,7 +330,7 @@ public class WidgetsManager {
             widgetSessionId = widgetSessionId.substring(0, 7);
         }
         String roomId = room.getRoomId();
-        String confId = roomId.substring(1, roomId.indexOf(":") - 1) + widgetSessionId.toLowerCase(VectorApp.getApplicationLocale());
+        String confId = roomId.substring(1, roomId.indexOf(":") - 1) + widgetSessionId.toLowerCase(VectorLocale.INSTANCE.getApplicationLocale());
 
         // TODO: This url may come from scalar API
         // Note: this url can be used as is inside a web container (like iframe for Riot-web)

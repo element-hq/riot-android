@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package im.vector.util
+package im.vector.ui.themes
 
 
 import android.app.Activity
@@ -86,11 +86,11 @@ object ThemeUtils {
      *
      * @param activity the activity
      */
-    fun setActivityTheme(activity: Activity, otherThemes: Triple<Int, Int, Int>) {
+    fun setActivityTheme(activity: Activity, otherThemes: ActivityOtherThemes) {
         when (getApplicationTheme(activity)) {
-            THEME_DARK_VALUE -> activity.setTheme(otherThemes.first)
-            THEME_BLACK_VALUE -> activity.setTheme(otherThemes.second)
-            THEME_STATUS_VALUE -> activity.setTheme(otherThemes.third)
+            THEME_DARK_VALUE -> activity.setTheme(otherThemes.dark)
+            THEME_BLACK_VALUE -> activity.setTheme(otherThemes.black)
+            THEME_STATUS_VALUE -> activity.setTheme(otherThemes.status)
         }
 
         mColorByAttr.clear()
@@ -116,11 +116,11 @@ object ThemeUtils {
             } else if (TextUtils.equals(getApplicationTheme(activity), THEME_STATUS_VALUE)) {
                 textColor = ContextCompat.getColor(activity, android.R.color.white)
                 underlineColor = textColor
-                backgroundColor = getColor(activity, R.attr.primary_color)
+                backgroundColor = getColor(activity, R.attr.vctr_primary_color)
             } else {
                 textColor = ContextCompat.getColor(activity, R.color.tab_groups)
                 underlineColor = textColor
-                backgroundColor = getColor(activity, R.attr.primary_color)
+                backgroundColor = getColor(activity, R.attr.vctr_primary_color)
             }
 
             layout.setTabTextColors(textColor, textColor)
@@ -165,8 +165,8 @@ object ThemeUtils {
      * @return the resource Id for the current theme
      */
     fun getResourceId(c: Context, resourceId: Int): Int {
-        if (TextUtils.equals(getApplicationTheme(c),THEME_LIGHT_VALUE) || 
-        TextUtils.equals(getApplicationTheme(c),THEME_STATUS_VALUE)) {
+        if (TextUtils.equals(getApplicationTheme(c), THEME_LIGHT_VALUE)
+                || TextUtils.equals(getApplicationTheme(c), THEME_STATUS_VALUE)) {
             return when (resourceId) {
                 R.drawable.line_divider_dark -> R.drawable.line_divider_light
                 R.style.Floating_Actions_Menu -> R.style.Floating_Actions_Menu_Light

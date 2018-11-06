@@ -1,36 +1,39 @@
 <?xml version="1.0" encoding="utf-8"?>
 
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    xmlns:tools="http://schemas.android.com/tools"
     android:paddingBottom="5dp">
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal" >
-    <TextView
-        android:paddingLeft="5dp"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center_vertical"
-        android:textAppearance="?android:attr/textAppearanceLarge"
-        tools:text="A text here"
-        android:layout_weight="1"
-        android:textStyle="bold"
-        android:id="@+id/ImageSizesAdapter_format"/>
+        android:orientation="horizontal">
 
-     <TextView
-            android:paddingLeft="5dp"
+        <TextView
+            android:id="@+id/ImageSizesAdapter_format"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:layout_marginStart="5dp"
+            android:layout_marginLeft="5dp"
+            android:layout_weight="1"
+            android:textAppearance="?android:attr/textAppearanceLarge"
+            android:textStyle="bold"
+            tools:text="A text here" />
+
+        <TextView
+            android:id="@+id/ImageSizesAdapter_info"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_gravity="right|center_vertical"
-            android:textAppearance="?android:attr/textAppearanceMedium"
-            tools:text="A text here"
-            android:id="@+id/ImageSizesAdapter_info"
+            android:layout_gravity="end|center_vertical"
+            android:paddingStart="5dp"
+            android:paddingLeft="5dp"
+            android:paddingEnd="5dp"
             android:paddingRight="5dp"
-            />
+            android:textAppearance="?android:attr/textAppearanceMedium"
+            tools:text="A text here" />
     </LinearLayout>
 
 </LinearLayout>

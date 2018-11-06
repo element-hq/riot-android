@@ -361,7 +361,6 @@ Bist du sicher?</string>
     <string name="room_delete_unsent_messages">Nicht gesendete Nachrichten löschen</string>
     <string name="room_message_file_not_found">Datei nicht gefunden</string>
     <string name="room_do_not_have_permission_to_post">Du bist nicht berechtigt, in diesen Raum zu schreiben</string>
-    <string name="room_new_message_notification">1 neue Nachricht</string>
 
     <!-- unrecognized SSL certificate -->
     <string name="ssl_trust">Vertrauen</string>
@@ -493,7 +492,6 @@ Beachte: Diese Aktion wird die App neu starten und einige Zeit brauchen.</string
     <string name="devices_details_device_name">Gerätename</string>
     <string name="devices_details_last_seen_title">Zuletzt gesehen</string>
     <string name="devices_details_last_seen_format">%1$s @ %2$s</string>
-    <string name="devices_details_time_format">HH:mm:ss</string>
     <string name="devices_delete_dialog_text">Diese Operation benötigt weitere Authentifizierung.
 Um fortzufahren, gib dein Passwort ein.</string>
     <string name="devices_delete_dialog_title">Authentifizierung</string>
@@ -551,9 +549,6 @@ Beachte: Diese Aktion wird die App neu starten und einige Zeit brauchen.</string
     <string name="room_settings_tag_pref_entry_low_priority">Niedrige Priorität</string>
     <string name="room_settings_tag_pref_entry_none">Keine</string>
     <string name="room_settings_tag_pref_no_tag">Nicht getaggt</string>
-    <string name="room_settings_tag_pref_entry_value_favourite">Favorit</string>
-    <string name="room_settings_tag_pref_entry_value_low_priority">niedrige Priorität</string>
-    <string name="room_settings_tag_pref_entry_value_none">keine</string>
 
     <!-- room settings : access and visibility -->
     <string name="room_settings_category_access_visibility_title">Zugriff und Sichtbarkeit</string>
@@ -752,7 +747,6 @@ Unbekannte Geräte:</string>
     <string name="widget_integration_no_permission_in_room">Du hast keine Berechtigung, diese Aktion in diesem Raum auszuführen.</string>
     <string name="widget_integration_missing_room_id">Anfrage beinhaltet keine room_id.</string>
     <string name="widget_integration_room_not_visible">Raum %s ist nicht sichtbar.</string>
-    <string name="settings_labs_matrix_apps">Matrix-Apps</string>
     <string name="room_add_matrix_apps">Matrix-Apps hinzufügen</string>
     <string name="settings_notification_ringtone">Benachrichtigungston</string>
     <string name="widget_integration_failed_to_send_request">Anfrage konnte nicht gesendet werden.</string>
@@ -778,9 +772,6 @@ Unbekannte Geräte:</string>
     <string name="option_take_photo">Foto aufnehmen</string>
     <string name="option_take_video">Video aufnehmen</string>
 
-    <string name="settings_opt_out_of_analytics_summary">Riot sammelt anonymisierte Analysedaten, um die Anwendung kontinuierlich verbessern zu können.</string>
-
-
     <string name="settings_labs_native_camera">Systemeigene Kamera verwenden</string>
 
     <!-- share keys -->
@@ -788,7 +779,6 @@ Unbekannte Geräte:</string>
     <string name="ignore_request">Anfrage ignorieren</string>
 
 <string name="settings_analytics">Anonymisierte Analysedaten</string>
-    <string name="settings_opt_out_of_analytics">Zustimmung zur Übermittlung von anonymisierten Analysedaten verweigern</string>
     <string name="title_activity_bug_report">Fehlerbericht</string>
 
     <string name="conference_call_warning_title">Warnung!</string>
@@ -807,7 +797,7 @@ Unbekannte Geräte:</string>
 
 <string name="title_activity_group_details">Community-Details</string>
 
-    <string name="loading">Lädt...</string>
+    <string name="loading">Lädt…</string>
 
     <string name="action_exit">Schließen</string>
     <string name="bottom_action_groups">Communities</string>
@@ -875,7 +865,7 @@ Unbekannte Geräte:</string>
 
     <string name="actions">Aktionen</string>
     <string name="list_members">Mitglieder auflisten</string>
-    <string name="room_sync_in_progress">Synchronisiere...</string>
+    <string name="room_sync_in_progress">Synchronisiere…</string>
     <plurals name="room_header_active_members_count">
 	<item quantity="one">1 aktives Mitglied</item>
 	<item quantity="other">%d aktive Mitglieder</item>
@@ -935,7 +925,7 @@ Unbekannte Geräte:</string>
     <string name="settings_notification_privacy_reduced">Verringerter Datenschutz</string>
     <string name="settings_notification_privacy_need_permission">Dies App braucht die Berechtigung im Hintergrund zu laufen</string>
     <string name="settings_notification_privacy_no_permission">Die App braucht die Berechtigung im Hintergrund zu laufen <b>nicht</b></string>
-    <string name="settings_notification_privacy_gcm">• Benachrichtigungen werden über Google Cloud Messaging versendet</string>
+    <string name="settings_notification_privacy_fcm">• Benachrichtigungen werden über Google Cloud Messaging versendet</string>
     <string name="settings_notification_privacy_metadata">• Benachrichtigungen enthalten nur Metadaten</string>
     <string name="settings_notification_privacy_secure_message_content">• Der Nachrichteninhalt der Benachrichtigung wird <b>sicher vom Matrix-Heimserver abgerufen</b></string>
     <string name="settings_notification_privacy_nosecure_message_content">• Benachrichtigungen enthalten <b>Metadaten und Nachrichteninhalte</b></string>
@@ -1090,5 +1080,14 @@ Beachte: Diese Aktion wird die App neu starten und einige Zeit brauchen.</string
     <string name="error_lazy_loading_not_supported_by_home_server">Dein Heimserver unterstützt nachladen von Raummitgliedern noch nicht. Versuche es später.</string>
 
     <string name="unknown_error">Entschuldige, ein Fehler trat auf</string>
+
+<string name="room_sliding_menu_version_x">Version %s</string>
+    <string name="status_theme">Status.im-Thema</string>
+
+    <string name="encryption_export_notice">Bitte eine Passphrase erstellen um exportierte Schlüssel zu verschlüsseln. Du musst dieselbe Passphrase eingeben um die Schlüssel importieren zu können.</string>
+    <string name="encryption_export_create_passphrase">Erzeuge Passphrase</string>
+    <string name="encryption_export_passphrase_dont_match">Passphrasen müssen übereinstimmen</string>
+    <string name="merged_events_expand">aufklappen</string>
+    <string name="merged_events_collapse">Zusammenklappen</string>
 
 </resources>

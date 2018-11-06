@@ -23,13 +23,15 @@
         android:entries="@array/tag_entries"
         android:entryValues="@array/tag_values"
         android:key="roomTagList"
+        android:summary="%s"
         android:title="@string/room_settings_room_tag" />
 
     <!-- the notification rule selection -->
     <ListPreference
-        android:entries="@array/notification_values"
+        android:entries="@array/notification_entries"
         android:entryValues="@array/notification_values"
         android:key="roomNotificationPreference"
+        android:summary="%s"
         android:title="@string/room_settings_room_notifications_title" />
 
     <im.vector.preference.VectorCustomActionEditTextPreference
@@ -58,6 +60,7 @@
             android:entries="@array/room_access_rules_entries"
             android:entryValues="@array/room_access_rules_values"
             android:key="roomAccessRulesList"
+            android:summary="%s"
             android:title="@string/room_settings_room_access_rules_pref_title" />
 
         <!-- room read history (Who can read history?) -->
@@ -66,6 +69,7 @@
             android:entries="@array/room_read_history_rules_entries"
             android:entryValues="@array/room_read_history_rules_values"
             android:key="roomReadHistoryRulesList"
+            android:summary="%s"
             android:title="@string/room_settings_room_read_history_rules_pref_title" />
     </im.vector.preference.VectorPreferenceCategory>
 

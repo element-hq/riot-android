@@ -225,7 +225,6 @@ Cliquez sur exporter pour les sauvegarder avant de vous déconnecter.</string>
     <string name="room_resend_unsent_messages">Renvoyer les messages non envoyés</string>
     <string name="room_delete_unsent_messages">Supprimer les messages non envoyés</string>
     <string name="room_message_file_not_found">Fichier non trouvé</string>
-    <string name="room_new_message_notification">1 nouveau message</string>
     <string name="ssl_trust">Faire confiance</string>
     <string name="ssl_do_not_trust">Ne pas faire confiance</string>
     <string name="ssl_logout_account">Se déconnecter</string>
@@ -357,9 +356,6 @@ Cliquez sur exporter pour les sauvegarder avant de vous déconnecter.</string>
     <string name="room_settings_tag_pref_entry_low_priority">Priorité basse</string>
     <string name="room_settings_tag_pref_entry_none">Aucune</string>
     <string name="room_settings_tag_pref_no_tag">sans étiquette</string>
-    <string name="room_settings_tag_pref_entry_value_favourite">favori</string>
-    <string name="room_settings_tag_pref_entry_value_low_priority">basse</string>
-    <string name="room_settings_tag_pref_entry_value_none">aucune</string>
 
     <string name="room_settings_room_access_rules_pref_title">Accès au salon</string>
     <string name="room_settings_room_read_history_rules_pref_title">Accès à l\'historique du salon</string>
@@ -517,7 +513,7 @@ Veuillez autoriser l\'accès dans la prochaine fenêtre contextuelle pour décou
 
 Autorisez-vous Riot à accéder à vos contacts ?</string>
 
-    <string name="permissions_action_not_performed_missing_permissions">Désolé... L\'action n\'a pas été réalisée, faute d\'autorisations</string>
+    <string name="permissions_action_not_performed_missing_permissions">Désolé… L\'action n\'a pas été réalisée, faute d\'autorisations</string>
 
     <string name="room_jump_to_first_unread">Aller au premier message non lu.</string>
 
@@ -575,7 +571,6 @@ Veuillez noter que cette action redémarrera l\'application et pourra prendre un
     <string name="settings_invited_to_room">Quand je suis invité sur un salon</string>
     <string name="settings_user_settings">Paramètres utilisateur</string>
     <string name="devices_details_last_seen_format">%1$s @ %2$s</string>
-    <string name="devices_details_time_format">HH:mm:ss</string>
     <string name="devices_delete_dialog_text">Cette opération nécessite de s\'authentifier à nouveau.
 Pour continuer, veuillez saisir votre mot de passe.</string>
     <string name="account_email_validation_message">Vérifiez votre e-mail et cliquez sur le lien qu\'il contient. Une fois cela fait, cliquez sur continuer.</string>
@@ -724,7 +719,6 @@ Appareils inconnus :</string>
     <string name="widget_integration_missing_room_id">room_id manquant dans la requête.</string>
     <string name="widget_integration_missing_user_id">user_id manquant dans la requête.</string>
     <string name="widget_integration_room_not_visible">Le salon %s n\'est pas visible.</string>
-    <string name="settings_labs_matrix_apps">Applications Matrix</string>
     <string name="room_add_matrix_apps">Ajouter des applications Matrix</string>
     <string name="call">Appel</string>
     <string name="settings_containing_my_display_name">Messages contenant mon nom affiché</string>
@@ -742,8 +736,6 @@ Appareils inconnus :</string>
     <string name="option_take_video">Prendre une vidéo</string>
 
     <string name="settings_analytics">Statistiques d\'utilisation</string>
-    <string name="settings_opt_out_of_analytics">Ne pas envoyer de données</string>
-    <string name="settings_opt_out_of_analytics_summary">Riot collecte des données anonymes pour nous permettre d\'améliorer l\'application.</string>
     <string name="settings_labs_native_camera">Utiliser la caméra native</string>
 
     <!-- share keys -->
@@ -834,21 +826,21 @@ Appareils inconnus :</string>
     <string name="actions">Actions</string>
     <string name="room_sync_in_progress">Synchronisation…</string>
     <plurals name="room_header_active_members_count">
-	<item quantity="one">Un membre actif</item>
+	<item quantity="one">%d membre actif</item>
 	<item quantity="other">%d membres actifs</item>
 </plurals>
     <plurals name="room_title_members">
-	<item quantity="one">Un membre</item>
+	<item quantity="one">%d membre</item>
 	<item quantity="other">%d membres</item>
 </plurals>
     <plurals name="room_new_messages_notification">
-	<item quantity="one">Un nouveau message</item>
+	<item quantity="one">%d nouveau message</item>
 	<item quantity="other">%d nouveaux messages</item>
 </plurals>
 
     <string name="list_members">Liste les membres</string>
     <plurals name="directory_search_rooms">
-	<item quantity="one">Un salon</item>
+	<item quantity="one">%d salon</item>
 	<item quantity="other">%d salons</item>
 </plurals>
     <plurals name="directory_search_rooms_for">
@@ -856,21 +848,21 @@ Appareils inconnus :</string>
 	<item quantity="other">%1$s salons trouvés pour %2$s</item>
 </plurals>
     <plurals name="notification_unread_notified_messages">
-	<item quantity="one">Un message notifié non lu</item>
+	<item quantity="one">%d message notifié non lu</item>
 	<item quantity="other">%d messages notifiés non lus</item>
 </plurals>
     <plurals name="notification_unread_notified_messages_in_room_msgs">
-	<item quantity="one">Un message notifié non lu</item>
+	<item quantity="one">%d message notifié non lu</item>
 	<item quantity="other">%d messages notifiés non lus</item>
 </plurals>
     <plurals name="notification_unread_notified_messages_in_room_rooms">
-	<item quantity="one">Un salon</item>
+	<item quantity="one">%d salon</item>
 	<item quantity="other">%d salons</item>
 </plurals>
     <string name="notification_unread_notified_messages_in_room">%1$s dans %2$s</string>
 
     <plurals name="active_widgets">
-	<item quantity="one">Un gadget actif</item>
+	<item quantity="one">%d gadget actif</item>
 	<item quantity="other">%d gadgets actifs</item>
 </plurals>
 
@@ -878,7 +870,7 @@ Appareils inconnus :</string>
     <string name="avatar">Avatar</string>
 
 <plurals name="membership_changes">
-	<item quantity="one">Un changement de statut</item>
+	<item quantity="one">%d changement de statut</item>
 	<item quantity="other">%d changements de statut</item>
 </plurals>
 
@@ -892,7 +884,7 @@ Appareils inconnus :</string>
     <string name="settings_notification_privacy_reduced">Confidentialité réduite</string>
     <string name="settings_notification_privacy_need_permission">L\'application a besoin de la permission de fonctionner en arrière-plan</string>
     <string name="settings_notification_privacy_no_permission">L\'application <b>n\'</b>a <b>pas</b> besoin de la permission pour fonctionner en arrière-plan</string>
-    <string name="settings_notification_privacy_gcm">• Les notifications sont envoyées via Google Cloud Messaging</string>
+    <string name="settings_notification_privacy_fcm">• Les notifications sont envoyées via Google Cloud Messaging</string>
     <string name="settings_notification_privacy_metadata">• Les notifications ne contiennent que des métadonnées</string>
     <string name="settings_notification_privacy_secure_message_content">• Le contenu du message de notification est <b>issu directement du serveur d\'accueil Matrix</b></string>
     <string name="settings_notification_privacy_nosecure_message_content">• Les notifications contiennent <b>des métadonnées et des messages</b></string>
@@ -989,19 +981,19 @@ Veuillez noter que cette action redémarrera l\'application et pourra prendre un
 
 <string name="missing_permissions_error">En raison de permissions manquantes, cette action n\'est pas possible.</string>
     <plurals name="format_time_s">
-	<item quantity="one">1 s</item>
+	<item quantity="one">%d s</item>
 	<item quantity="other">%d s</item>
 </plurals>
     <plurals name="format_time_m">
-	<item quantity="one">1 min</item>
+	<item quantity="one">%d min</item>
 	<item quantity="other">%d min</item>
 </plurals>
     <plurals name="format_time_h">
-	<item quantity="one">1 h</item>
+	<item quantity="one">%d h</item>
 	<item quantity="other">%d h</item>
 </plurals>
     <plurals name="format_time_d">
-	<item quantity="one">1 j</item>
+	<item quantity="one">%d j</item>
 	<item quantity="other">%d j</item>
 </plurals>
 
@@ -1013,16 +1005,16 @@ Veuillez noter que cette action redémarrera l\'application et pourra prendre un
     <string name="room_participants_invite_join_names_combined">%1$s %2$s</string>
 
     <plurals name="room_details_selected">
-	<item quantity="one">1 sélectionné</item>
+	<item quantity="one">%d sélectionné</item>
 	<item quantity="other">%d sélectionnés</item>
 </plurals>
     <plurals name="group_members">
-	<item quantity="one">1 participant</item>
+	<item quantity="one">%d participant</item>
 	<item quantity="other">%d participants</item>
 </plurals>
 
     <plurals name="group_rooms">
-	<item quantity="one">1 salon</item>
+	<item quantity="one">%d salon</item>
 	<item quantity="other">%d salons</item>
 </plurals>
     <string name="system_alerts_header">Alertes système</string>
@@ -1048,5 +1040,14 @@ Veuillez noter que cette action redémarrera l\'application et pourra prendre un
     <string name="error_lazy_loading_not_supported_by_home_server">Votre serveur d\'accueil ne prend pas encore en charge le chargement en différé des membres des salons. Réessayez ultérieurement.</string>
 
     <string name="unknown_error">Désolé, une erreur est survenue</string>
+
+<string name="status_theme">Thème Status.im</string>
+
+    <string name="room_sliding_menu_version_x">Version %s</string>
+    <string name="encryption_export_notice">Veuillez créer une phrase de passe pour chiffrer les clés exportées. Vous devrez saisir cette même phrase de passe afin de pouvoir importer les clés.</string>
+    <string name="encryption_export_create_passphrase">Créer la phrase de passe</string>
+    <string name="encryption_export_passphrase_dont_match">Les phrases de passe doivent concorder</string>
+    <string name="merged_events_expand">développer</string>
+    <string name="merged_events_collapse">réduire</string>
 
 </resources>

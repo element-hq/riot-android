@@ -44,13 +44,13 @@
     <string name="view_decrypted_source">Visualitza el codi font desencriptat</string>
     <string name="delete">Elimina</string>
     <string name="rename">Reanomena</string>
-    <string name="report_content">Mostra el contingut</string>
+    <string name="report_content">Informa del contingut</string>
     <string name="active_call">Trucada activa</string>
     <string name="ongoing_conference_call"> Conferència en curs. Uneix-te per veu o vídeo.</string>
     <string name="ongoing_conference_call_voice">veu</string>
     <string name="ongoing_conference_call_video">vídeo</string>
     <string name="cannot_start_call">La trucada no es pot iniciar, prova-ho més tard</string>
-    <string name="missing_permissions_warning">Pot ser que algunes funcions no apareguin per manca de permisos...</string>
+    <string name="missing_permissions_warning">Pot ser que algunes funcions no apareguin per manca de permisos…</string>
     <string name="missing_permissions_to_start_conf_call">Es necessiten permisos per convidar a iniciar una conferència en aquesta sala</string>
     <string name="missing_permissions_title_to_start_conf_call">No es pot iniciar la trucada</string>
     <string name="device_information">Informació del dispositiu</string>
@@ -125,7 +125,7 @@
     <string name="send_bug_report">Informa d\'un error</string>
     <string name="send_bug_report_description">Descriviu l\'error. Què heu fet? Què esperàveu que passés? Què ha passat realment?</string>
     <string name="send_bug_report_placeholder">Descriviu el problema aquí</string>
-    <string name="send_bug_report_logs_description">Els registres d\'aquest client s\'enviaran amb aquest informe d\'error per tal de diagnosticar problemes. Desmarqueu si preferiu enviar només el text:</string>
+    <string name="send_bug_report_logs_description">Els registres d\'aquest client s\'enviaran amb aquest informe d\'error per tal de diagnosticar problemes. Aquest informe d\'errors, així com també els registres i la captura de pantalla, no seran visibles de forma pública. Desmarqueu si preferiu enviar només el text:</string>
     <string name="send_bug_report_alert_message">Sembla que esteu prou frustrat com per estar sacsejant el telèfon. Voleu enviar un informe d\'error?</string>
     <string name="send_bug_report_app_crashed">En l\'última execució l\'aplicació va fallar. Voleu enviar un informe d\'error?</string>
 
@@ -377,7 +377,6 @@
     <string name="room_delete_unsent_messages">Elimina els missatges no enviats</string>
     <string name="room_message_file_not_found">No s\'ha trobat el fitxer</string>
     <string name="room_do_not_have_permission_to_post">No teniu permís per escriure en aquesta sala</string>
-    <string name="room_new_message_notification">1 missatge nou</string>
 
     <!-- unrecognized SSL certificate -->
     <string name="ssl_trust">Confia</string>
@@ -390,7 +389,7 @@
     <string name="ssl_cert_new_account_expl">Si l\'administrador del servidor diu que això és correcte, assegureu-vos que la següent empremta digital coincideix amb la que us ha donat.</string>
     <string name="ssl_unexpected_existing_expl">El certificat ha canviat respecte aquell en el qual el telefon confia. Això NO ÉS GENS HABITUAL. Es recomana que NO ACCEPTEU el certificat nou.</string>
     <string name="ssl_expected_existing_expl">El certificat en el que confiàveu ha canviat per un en el que no confieu. El servidor pot haver renovat el certificat. Contacteu amb l\'administrador del servidor per saber l\'empremta digital esperada.</string>
-    <string name="ssl_only_accept">NOMÉS accepteu el certificat si l\'administrador del servidor ha publicat una empremta digital que coincideixi amb l\'anterior.</string>
+    <string name="ssl_only_accept">Només accepteu el certificat si l\'administrador del servidor ha publicat una empremta digital que coincideixi amb l\'anterior.</string>
 
     <!-- Room Details -->
     <string name="room_details_title">Detalls de la sala</string>
@@ -403,7 +402,9 @@
 
     <!-- Room events -->
     <string name="room_event_action_report_prompt_reason">Motiu per informar d\'aquest contingut</string>
-    <string name="room_event_action_report_prompt_ignore_user">Voleu amagar tots els missatges d\'aquest usuari?</string>
+    <string name="room_event_action_report_prompt_ignore_user">Voleu amagar tots els missatges d\'aquest usuari?
+
+Tingueu en compte que aquesta acció reiniciarà l\'aplicació i que pot trigar una estona.</string>
     <string name="room_event_action_cancel_upload">Cancel·la la pujada</string>
     <string name="room_event_action_cancel_download">Cancel·la la baixada</string>
 
@@ -518,8 +519,6 @@
 
     <!-- analytics -->
     <string name="settings_analytics">Analítiques</string>
-    <string name="settings_opt_out_of_analytics">No acceptis analítiques</string>
-    <string name="settings_opt_out_of_analytics_summary">Riot recull analítiques anònimes per ajudar a millorar l\'aplicació.</string>
 
     <string name="settings_data_save_mode">Mode de desament de dades</string>
 
@@ -529,7 +528,6 @@
     <string name="devices_details_device_name">Nom del dispositiu</string>
     <string name="devices_details_last_seen_title">Últim cop vist</string>
     <string name="devices_details_last_seen_format">%1$s @ %2$s</string>
-    <string name="devices_details_time_format">HH:mm:ss</string>
     <string name="devices_delete_dialog_text">Aquesta operació necessita que us autentiqueu.\nPer tal de continuar, introduïu la vostra contrasenya.</string>
     <string name="devices_delete_dialog_title">Autenticació</string>
     <string name="devices_delete_pswd">Contrasenya:</string>
@@ -551,12 +549,14 @@
     <string name="account_phone_number_already_used_error">Aquest número de telèfon ja està en us</string>
 
     <string name="settings_change_password">Canvia la contrasenya</string>
-    <string name="settings_old_password">contrasenya antiga</string>
-    <string name="settings_new_password">contrasenya nova</string>
-    <string name="settings_confirm_password">confirma la contrasenya</string>
+    <string name="settings_old_password">Contrasenya antiga</string>
+    <string name="settings_new_password">Contrasenya nova</string>
+    <string name="settings_confirm_password">Confirmeu la contrasenya</string>
     <string name="settings_fail_to_update_password">No s\'ha pogut actualitzar la contrasenya</string>
     <string name="settings_password_updated">La contrasenya s\'ha actualitzat</string>
-    <string name="settings_unignore_user">Mostra tots els missatges des de %s?</string>
+    <string name="settings_unignore_user">Mostra tots els missatges des de %s?
+
+Tingueu en compte que aquesta acció reiniciarà l\'aplicació i que pot trigar una estona.</string>
 
     <string name="settings_delete_notification_targets_confirmation">Esteu segur que voleu esborrar aquesta notificació?</string>
 
@@ -597,9 +597,6 @@
     <string name="room_settings_tag_pref_entry_low_priority">Prioritat baixa</string>
     <string name="room_settings_tag_pref_entry_none">Cap</string>
     <string name="room_settings_tag_pref_no_tag">sense etiquetar</string>
-    <string name="room_settings_tag_pref_entry_value_favourite">preferit</string>
-    <string name="room_settings_tag_pref_entry_value_low_priority">baixa</string>
-    <string name="room_settings_tag_pref_entry_value_none">cap</string>
 
     <!-- room settings : access and visibility -->
     <string name="room_settings_category_access_visibility_title">Accés i visibilitat</string>
@@ -640,7 +637,7 @@
     <string name="room_settings_addresses_no_local_addresses">Aquesta sala no té adreces locals</string>
     <string name="room_settings_addresses_add_new_address">Adreça nova (per exemple #foo:matrix.org")</string>
 
-    <string name="room_settings_no_flair"> Aquesta sala no pertany a cap comunitat</string>
+    <string name="room_settings_no_flair">Aquesta sala no pertany a cap comunitat</string>
     <string name="room_settings_add_new_group">Nova ID de comunitat (per exemple +foo:matrix.org")</string>
     <string name="room_settings_invalid_group_format_dialog_title">l\'ID de comunitat és invalid</string>
     <string name="room_settings_invalid_group_format_dialog_body">\'%s\' no és una ID de comunitat vàlida</string>
@@ -648,7 +645,7 @@
 
     <string name="room_settings_addresses_invalid_format_dialog_title">Format d\'àlies invàlid</string>
     <string name="room_settings_addresses_invalid_format_dialog_body">\'%s\' no és un format d\'àlies vàlid</string>
-    <string name="room_settings_addresses_disable_main_address_prompt_msg">No tindreu especificada una adreça principal. El nom de la sala per defecte serà un nom a l\'atzar"</string>
+    <string name="room_settings_addresses_disable_main_address_prompt_msg">No tindreu especificada una adreça principal per aquesta sala.</string>
     <string name="room_settings_addresses_disable_main_address_prompt_title">Avisos de l\'adreça principal</string>
 
     <string name="room_settings_set_main_address">Estableix com a adreça principal</string>
@@ -694,7 +691,9 @@
     <string name="encryption_export_export">Exporta</string>
     <string name="encryption_import_enter_passphrase">Introduïu una contrasenya</string>
     <string name="encryption_export_confirm_passphrase">Confirmeu la contrasenya</string>
-    <string name="encryption_export_saved_as">Les claus E2E de la sala s\'han desat a \'%s\'</string>
+    <string name="encryption_export_saved_as">Les claus E2E de la sala s\'han desat a \'%s\'
+
+Atenció: es podria eliminar aquest fitxer si es desinstal·la l\'aplicació.</string>
 
     <string name="encryption_import_e2e_room_keys">Importa les claus E2E de la sala</string>
     <string name="encryption_import_room_keys">Importa les claus de la sala</string>
@@ -716,8 +715,10 @@
     <string name="encryption_information_unblock">Deixa de bloquejar</string>
 
     <string name="encryption_information_verify_device">Verifica el dispositiu</string>
-    <string name="encryption_information_verify_device_warning"> Per tal de verificar que es pot confiar amb aquest dispositiu, contacteu amb el seu propietari per algun altre mitjà (per exemple en persona o trucant-lo) i pregunteu-li si la clau que veu a les seves preferències d\'usuari coincideix amb la clau següent:</string>
-    <string name="encryption_information_verify_device_warning2">Si coincideix, prem el botó per verificar. Si no coincideix, algú està interceptant aquest dispositiu i probablement voleu prémer el botó per bloquejar-lo. En un futur aquest procés de verificació serà més sofisticat.</string>
+    <string name="encryption_information_verify_device_warning">Per tal de verificar que es pot confiar amb aquest dispositiu, contacteu amb el seu propietari per algun altre mitjà (per exemple en persona o trucant-lo) i pregunteu-li si la clau que veu a les seves preferències d\'usuari coincideix amb la clau següent:</string>
+    <string name="encryption_information_verify_device_warning2">Si coincideix, premeu el botó per verificar.
+Si no coincideix, algú està interceptant aquest dispositiu i probablement voldreu prémer el botó per bloquejar-lo.
+En un futur aquest procés de verificació serà més sofisticat.</string>
     <string name="encryption_information_verify_key_match">Verifica que les claus coincideixen</string>
 
     <string name="e2e_enabling_on_app_update">El Riot ara permet l\'ús d\'encriptació d\'extrem a extrem però us heu de tronar a connectar per tal d\'activar-la.\n\nHo podeu fer ara o més tard des de les preferències de l\'aplicació.</string>
@@ -764,7 +765,6 @@
     <string name="widget_integration_missing_room_id">Falta l\'ID de la sala en la sol·licitud.</string>
     <string name="widget_integration_missing_user_id">Falta l\'ID d\'usuari en la sol·licitud.</string>
     <string name="widget_integration_room_not_visible">La sala %s no és visible.</string>
-    <string name="settings_labs_matrix_apps">Aplicacions de Matrix</string>
     <string name="room_add_matrix_apps">Afegeix aplicacions de Matrix</string>
     <string name="settings_labs_native_camera">Utilitza la càmera nativa</string>
 
@@ -817,7 +817,7 @@
     <string name="reason_colon">Raó: %1$s</string>
     <string name="rejoin">Tornar-hi a entrar</string>
     <string name="forget_room">Oblida la sala</string>
-<string name="loading">Carregant...</string>
+<string name="loading">Carregant…</string>
 
     <string name="action_exit">Surt</string>
     <string name="bottom_action_groups">Comunitats</string>
@@ -833,7 +833,7 @@
 
     <string name="actions">Accions</string>
     <string name="list_members">Llista de membres</string>
-    <string name="room_sync_in_progress">Sincronitzant...</string>
+    <string name="room_sync_in_progress">Sincronitzant…</string>
     <plurals name="room_header_active_members_count">
 	<item quantity="one">1 membre actiu</item>
 	<item quantity="other">%d membres actius</item>
@@ -844,7 +844,7 @@
 </plurals>
     <plurals name="room_new_messages_notification">
 	<item quantity="one">1 nou missatge</item>
-	<item quantity="other">%d nous missarges</item>
+	<item quantity="other">%d nous missatges</item>
 </plurals>
 
     <plurals name="directory_search_rooms">
@@ -902,4 +902,157 @@
     <string name="e2e_re_request_encryption_key_dialog_content">Si us plau, engega Riot a un altre dispositiu que pugui desencriptar el missatge de manera que pugui enviar la clau a aquest dispositiu.</string>
 
     <string name="settings_notification_privacy_normal">Normal</string>
-    </resources>
+    <string name="status_theme">Motiu Status.im</string>
+
+    <string name="missing_permissions_error">Manquen permisos per a dur a terme aquesta acció.</string>
+    <string name="dialog_title_error">Error</string>
+
+    <string name="system_alerts_header">Alertes de sistema</string>
+
+    <string name="send_bug_report_description_in_english">Si és possible, escriviu si us plau la descripció en anglès.</string>
+    <string name="no_sticker_application_dialog_content">Actualment no teniu cap conjunt d\'enganxines activat.
+
+En voleu afegir algun?</string>
+
+    <plurals name="format_time_s">
+	<item quantity="one">1s</item>
+	<item quantity="other">%ds</item>
+</plurals>
+    <plurals name="format_time_m">
+	<item quantity="one">1m</item>
+	<item quantity="other">%dm</item>
+</plurals>
+    <plurals name="format_time_h">
+	<item quantity="one">1h</item>
+	<item quantity="other">%dh</item>
+</plurals>
+    <plurals name="format_time_d">
+	<item quantity="one">1d</item>
+	<item quantity="other">%dd</item>
+</plurals>
+
+    <string name="room_participants_now">Ara %1$s</string>
+    <string name="room_participants_ago">Fa %1$s %2$s</string>
+
+    <string name="room_participants_action_unignore_prompt">Mostrar tots els missatges d\'aquest usuari?
+
+Tingueu en compte que aquesta acció reiniciarà l\'aplicació i pot trigar una estona.</string>
+    <string name="room_participants_invite_join_names">"%1$s, "</string>
+    <string name="room_participants_invite_join_names_and">%1$s i %2$s</string>
+    <string name="room_participants_invite_join_names_combined">%1$s %2$s</string>
+
+    <string name="room_message_placeholder_reply_to_encrypted">Envieu una resposta encriptada…</string>
+    <string name="room_message_placeholder_reply_to_not_encrypted">Envieu una resposta (sense encriptar)…</string>
+    <plurals name="room_details_selected">
+	<item quantity="one">1 escollit</item>
+	<item quantity="other">%d escollits</item>
+</plurals>
+    <string name="room_sliding_menu_version_x">Versió %s</string>
+    <string name="settings_notification_privacy">Notificació de privacitat</string>
+    <string name="settings_notification_privacy_warning">Riot.im funciona en segon pla per mantenir el contingut de les notificacions dels missatges privats. Podeu canviar aquesta opció per tal de reduir l\'ús de bateria.</string>
+    <string name="settings_notification_privacy_power_saving">Opcions d\'estalvi d\'energia</string>
+    <string name="settings_notification_privacy_low_detail">Notificacions poc detallades</string>
+    <string name="settings_notification_privacy_reduced">Privacitat reduïda</string>
+    <string name="settings_notification_privacy_need_permission">L\'aplicació necessita permisos per funcionar en segon pla</string>
+    <string name="settings_notification_privacy_no_permission">L\'aplicació <b>no</b> necessita cap permís per funcionar en segon pla</string>
+    <string name="settings_notification_privacy_fcm">• Les notificacions s\'envien via Google Cloud Messaging</string>
+    <string name="settings_notification_privacy_metadata">• Les notificacions contenen només meta dades</string>
+    <string name="settings_notification_privacy_secure_message_content">• El contingut dels missatges de les notificacions s\'obté <b>de forma segura des del servidor de Matrix</b></string>
+    <string name="settings_notification_privacy_nosecure_message_content">• Les notificacions contenen <b>meta dades i dades de missatges</b></string>
+    <string name="settings_notification_privacy_message_content_not_shown">• Les notificacions <b>no mostraran el contingut dels missatges</b></string>
+
+    <string name="settings_preview_media_before_sending">Mostra el contingut multimèdia abans d\'enviar-lo</string>
+
+    <string name="settings_deactivate_account_section">Desactivar el compte</string>
+    <string name="settings_deactivate_my_account">Desactivar el meu compte</string>
+
+    <string name="startup_notification_privacy_title">Notificació de privacitat</string>
+    <string name="startup_notification_privacy_message">Riot pot funcionar en segon pla per gestionar les vostres notificacions de forma segura i privada (això podria afectar el consum de bateria).</string>
+    <string name="startup_notification_privacy_button_grant">Concedir permís</string>
+    <string name="startup_notification_privacy_button_other">Escolliu una altra opció</string>
+
+    <string name="settings_opt_in_of_analytics">Envia dades d\'anàlisi</string>
+    <string name="settings_opt_in_of_analytics_summary">Riot recopila dades d\'anàlisi anònimes per tal de permetre\'ns millorar l\'aplicació.</string>
+    <string name="settings_opt_in_of_analytics_prompt">Si us plau, activeu les dades d\'anàlisi per ajudar-nos a millorar Riot.</string>
+    <string name="settings_opt_in_of_analytics_ok">Sí, vull ajudar!</string>
+
+    <string name="settings_without_flair">No sou ara mateix membre de cap comunitat.</string>
+
+    <string name="encryption_export_notice">Si us plau creeu una frase de pas per encriptar les claus exportades. Haureu d\'introduir la mateixa frase de pas per poder importar les claus.</string>
+    <string name="encryption_export_create_passphrase">Crea frase de pas</string>
+    <string name="encryption_export_passphrase_dont_match">Les frases de pas han de coincidir</string>
+    <string name="lock_screen_hint">Escriviu aquí…</string>
+
+    <string name="widget_integration_missing_parameter">Falta un paràmetre necessari.</string>
+    <string name="widget_integration_invalid_parameter">Un paràmetre no és vàlid.</string>
+    <string name="settings_labs_keyboard_options_to_send_message">Premeu \"Enter\" per enviar el missatge</string>
+    <string name="settings_labs_enable_send_voice">Enviar un missatge de veu (cal que una aplicació de tercers enregistri missatges de veu)</string>
+
+    <string name="command_description_emote">Mostra l\'acció</string>
+    <string name="command_description_ban_user">Veta l\'usuari amb l\'ID proporcionat</string>
+    <string name="command_description_unban_user">Permeteu de nou l\'usuari amb l\'ID proporcionat</string>
+    <string name="command_description_op_user">Definiu el nivell de permisos d\'un usuari</string>
+    <string name="command_description_deop_user">Traieu els permisos d\'administració a l\'usuari amb l\'ID proporcionat</string>
+    <string name="command_description_invite_user">Convideu a l\'usuari amb l\'ID proporcionat a la sala actual</string>
+    <string name="command_description_join_room">Entreu a la sala amb l\'àlies donat</string>
+    <string name="command_description_part_room">Sortir de la sala</string>
+    <string name="command_description_topic">Definir el motiu de la sala</string>
+    <string name="command_description_kick_user">Fer fora l\'usuari amb l\'ID proporcionat</string>
+    <string name="command_description_nick">Canvia l\'àlies que es mostra</string>
+    <string name="command_description_markdown">Activa/Desactiva el markdown</string>
+    <string name="command_description_clear_scalar_token">Arreglar la gestió de les Apps de Matrix</string>
+
+    <plurals name="group_members">
+	<item quantity="one">1 membre</item>
+	<item quantity="other">%d membres</item>
+</plurals>
+
+    <plurals name="group_rooms">
+	<item quantity="one">1 sala</item>
+	<item quantity="other">%d sales</item>
+</plurals>
+    <string name="avatar">Imatge de perfil</string>
+
+    <string name="dialog_user_consent_content">Per poder continuar usant el servidor %1$s heu de revisar i acceptar les clàusules i condicions.</string>
+    <string name="dialog_user_consent_submit">Revisa ara</string>
+
+    <string name="deactivate_account_title">Desactiva el compte</string>
+    <string name="deactivate_account_content">Això farà que no pugueu usar més el vostre compte. No podreu iniciar la sessió i ningú podrà donar-se d\'alta amb el mateix identificador d\'usuari. Això provocarà que el vostre compte abandoni totes les sales a les que estigui participant i eliminarà les vostres dades del compte al qual teniu el servidor d\'identitats. <b>Aquesta acció és irreversible</b>.
+
+Desactivar el compte <b>no implica que s\'eliminin els missatges que heu eliminat</b>. Si voleu eliminar-los, marqueu la casella a continuació.
+
+La visibilitat dels missatges a Matrix és similar a la del correu electrònic. Que eliminem els vostres missatges significa que els missatges que hagueu enviat no seran accessibles per a nous usuaris o usuaris no registrats, però els usuaris registrats que ja hi tinguin accés, en conservaran una còpia.</string>
+    <string name="deactivate_account_delete_checkbox">Si us plau elimina tots els missatges que he enviat mentre es desactiva el meu compte (Avís: això provocarà que els usuaris futurs tinguin una vista incompleta de les converses)</string>
+    <string name="deactivate_account_prompt_password">Per a continuar, si us plau escriviu la vostra contrasenya:</string>
+    <string name="deactivate_account_submit">Desactivar el compte</string>
+
+    <string name="error_empty_field_your_password">Si us plau escriviu la vostra contrasenya.</string>
+    <string name="room_tombstone_versioned_description">Aquesta sala s\'ha substituït i ja no es troba activa</string>
+    <string name="room_tombstone_continuation_link">La conversa segueix aquí</string>
+    <string name="room_tombstone_continuation_description">Aquesta sala és la continuació d\'una altra conversa</string>
+    <string name="room_tombstone_predecessor_link">Feu clic aquí per veure els missatges antics</string>
+
+    <string name="resource_limit_exceeded_title">S\'ha sobrepassat el límit de recursos</string>
+    <string name="resource_limit_contact_action">Contacta amb l\'administrador</string>
+
+    <string name="resource_limit_contact_admin">Contacteu amb l\'administrador del servei</string>
+
+    <string name="resource_limit_soft_default">Aquest servidor ha sobrepassat on dels seus límits de recursos, així que <b>alguns usuaris no podran identificar-s\'hi</b>.</string>
+    <string name="resource_limit_hard_default">Aquest servidor ha sobrepassat on dels seus límits de recursos.</string>
+
+    <string name="resource_limit_soft_mau"> Aquest servidor ha assolit el seu límit màxim mensual d\'activitat d\'usuaris i <b>alguns usuaris no podran identificar-s\'hi</b>.</string>
+    <string name="resource_limit_hard_mau">Aquest servidor ha assolit el seu límit mensual d\'activitat d\'usuaris.</string>
+
+    <string name="resource_limit_soft_contact">Si us plau %s per tal d\'incrementar aquest límit.</string>
+    <string name="resource_limit_hard_contact">"Si us plau %s  per continuar usant aquest servei."</string>
+
+    <string name="settings_lazy_loading_title">Torna a carregar els membres de la sala</string>
+    <string name="settings_lazy_loading_description">Milloreu el rendiment carregant només els membres de la sala a primera vista</string>
+    <string name="error_lazy_loading_not_supported_by_home_server">El vostre servidor encara no suporta la recàrrega de membres d\'una sala. Proveu-ho més tard.</string>
+
+    <string name="unknown_error">Ho sentim, s\'ha produït un error</string>
+
+    <string name="merged_events_expand">desplega</string>
+    <string name="merged_events_collapse">plega</string>
+
+</resources>

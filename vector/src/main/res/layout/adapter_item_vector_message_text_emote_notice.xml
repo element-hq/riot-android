@@ -14,7 +14,9 @@
         android:id="@+id/messagesAdapter_body_view"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
         android:layout_marginLeft="16dp"
+        android:layout_marginEnd="16dp"
         android:layout_marginRight="16dp"
         android:orientation="horizontal">
 
@@ -26,7 +28,9 @@
             android:id="@+id/messagesAdapter_highlight_message_marker"
             android:layout_width="6dp"
             android:layout_height="match_parent"
+            android:layout_marginStart="5dp"
             android:layout_marginLeft="5dp"
+            android:layout_marginEnd="5dp"
             android:layout_marginRight="5dp"
             tools:background="@color/vector_green_color" />
 
@@ -45,6 +49,7 @@
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:layout_toStartOf="@+id/message_timestamp_layout"
                     android:layout_toLeftOf="@+id/message_timestamp_layout"
                     android:orientation="horizontal">
 
@@ -55,6 +60,7 @@
                     android:id="@+id/message_timestamp_layout"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:layout_alignParentEnd="true"
                     android:layout_alignParentRight="true"
                     android:orientation="horizontal">
 
@@ -62,60 +68,58 @@
                 </LinearLayout>
             </RelativeLayout>
 
-            <LinearLayout
+            <FrameLayout
+                android:id="@+id/messagesAdapter_body_layout"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal">
+                android:layout_marginEnd="4dp"
+                android:layout_marginRight="4dp">
 
-                <FrameLayout
-                    android:id="@+id/messagesAdapter_body_layout"
-                    android:layout_width="0dp"
+                <!-- the body is here -->
+                <RelativeLayout
+                    android:id="@+id/messagesAdapter_text_layout"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:paddingRight="4dp">
+                    android:layout_gravity="start">
 
-                    <!-- the body is here -->
-                    <RelativeLayout
-                        android:id="@+id/messagesAdapter_text_layout"
+                    <ImageView
+                        android:id="@+id/message_adapter_e2e_icon"
+                        android:layout_width="14dp"
+                        android:layout_height="14dp"
+                        android:src="@drawable/e2e_verified" />
+
+                    <TextView
+                        android:id="@+id/messagesAdapter_body"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_gravity="left">
+                        android:layout_gravity="start"
+                        android:layout_marginStart="4dp"
+                        android:layout_marginLeft="4dp"
+                        android:layout_toEndOf="@id/message_adapter_e2e_icon"
+                        android:layout_toRightOf="@id/message_adapter_e2e_icon"
+                        android:autoLink="all"
+                        android:textIsSelectable="false"
+                        android:textSize="14sp"
+                        tools:text="A body" />
 
-                        <ImageView
-                            android:id="@+id/message_adapter_e2e_icon"
-                            android:layout_width="14dp"
-                            android:layout_height="14dp"
-                            android:src="@drawable/e2e_verified" />
+                    <TextView
+                        android:id="@+id/messagesAdapter_re_request_e2e_key"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@+id/messagesAdapter_body"
+                        android:layout_alignStart="@+id/messagesAdapter_body"
+                        android:layout_alignLeft="@+id/messagesAdapter_body"
+                        android:layout_gravity="start"
+                        android:text="@string/e2e_re_request_encryption_key"
+                        android:textIsSelectable="false"
+                        android:textSize="14sp" />
 
-                        <TextView
-                            android:id="@+id/messagesAdapter_body"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:layout_gravity="left"
-                            android:layout_marginLeft="4dp"
-                            android:layout_toRightOf="@id/message_adapter_e2e_icon"
-                            android:autoLink="all"
-                            android:textIsSelectable="false"
-                            android:textSize="14sp"
-                            tools:text="A body" />
+                </RelativeLayout>
 
-                        <TextView
-                            android:id="@+id/messagesAdapter_re_request_e2e_key"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:layout_alignLeft="@+id/messagesAdapter_body"
-                            android:layout_alignStart="@+id/messagesAdapter_body"
-                            android:layout_below="@+id/messagesAdapter_body"
-                            android:layout_gravity="left"
-                            android:text="@string/e2e_re_request_encryption_key"
-                            android:textIsSelectable="false"
-                            android:textSize="14sp" />
+            </FrameLayout>
 
-                    </RelativeLayout>
-
-                </FrameLayout>
-            </LinearLayout>
         </LinearLayout>
+
     </LinearLayout>
 
     <LinearLayout

@@ -93,7 +93,7 @@
     <string name="no_room_placeholder">Não há salas</string>
     <string name="no_public_room_placeholder">Não há nenhuma sala pública disponível</string>
     <plurals name="public_room_nb_users">
-        <item quantity="one">1 usuária/o</item>
+        <item quantity="one">%d usuária/o</item>
         <item quantity="other">%d usuárias/os</item>
     </plurals>
 
@@ -266,7 +266,7 @@ Por favor, autorize o acesso na próxima tela para poder encontrar usuários na 
 
 Você autoriza o Riot a acessar seus contatos?</string>
 
-    <string name="permissions_action_not_performed_missing_permissions">Desculpe... A ação não foi realizada, por falta de permissão</string>
+    <string name="permissions_action_not_performed_missing_permissions">Desculpe… A ação não foi realizada, por falta de permissão</string>
 
     <!-- medias slider string -->
     <string name="media_slider_saved">Salvo</string>
@@ -355,7 +355,6 @@ Você autoriza o Riot a acessar seus contatos?</string>
     <string name="room_delete_unsent_messages">Apagar mensagens não enviadas</string>
     <string name="room_message_file_not_found">Arquivo não encontrado</string>
     <string name="room_do_not_have_permission_to_post">Você não tem permissão para enviar mensagens nesta sala</string>
-    <string name="room_new_message_notification">1 mensagem nova</string>
 
     <!-- unrecognized SSL certificate -->
     <string name="ssl_trust">Confiar</string>
@@ -411,7 +410,7 @@ Note que esta ação irá reiniciar o aplicativo e poderá tomar um certo tempo.
 
     <!-- Directory -->
     <string name="directory_search_results_title">Pesquisar na lista pública</string>
-    <string name="directory_searching_title">Buscando no diretório...</string>
+    <string name="directory_searching_title">Buscando no diretório…</string>
 
     <!-- home room settings -->
     <string name="room_settings_favourite">Favoritar</string>
@@ -487,7 +486,6 @@ Note que esta ação irá reiniciar o aplicativo e poderá tomar um certo tempo.
     <string name="devices_details_device_name">Nome do dispositivo</string>
     <string name="devices_details_last_seen_title">Último acesso</string>
     <string name="devices_details_last_seen_format">%1$s em %2$s</string>
-    <string name="devices_details_time_format">HH:mm:ss</string>
     <string name="devices_delete_dialog_text">Esta operação exige autenticação adicional.\nPara continuar, digite sua senha.</string>
     <string name="devices_delete_dialog_title">Autenticação</string>
     <string name="devices_delete_pswd">Senha:</string>
@@ -545,9 +543,6 @@ Note que esta ação irá reiniciar o aplicativo e poderá tomar um certo tempo.
     <string name="room_settings_tag_pref_entry_low_priority">Baixa prioridade</string>
     <string name="room_settings_tag_pref_entry_none">Nenhum</string>
     <string name="room_settings_tag_pref_no_tag">não etiquetada</string>
-    <string name="room_settings_tag_pref_entry_value_favourite">favorita</string>
-    <string name="room_settings_tag_pref_entry_value_low_priority">não prioritária</string>
-    <string name="room_settings_tag_pref_entry_value_none">nenhum</string>
 
     <!-- room settings : access and visibility -->
     <string name="room_settings_category_access_visibility_title">Acesso e visibilidade</string>
@@ -727,7 +722,7 @@ No futuro, este processo de verificação será mais sofisticado.</string>
     <string name="title_activity_bug_report">Relatório de erros</string>
     <string name="title_activity_group_details">Detalhes da comunidade</string>
 
-    <string name="loading">Carregando...</string>
+    <string name="loading">Carregando…</string>
 
     <string name="action_exit">Sair</string>
     <string name="bottom_action_groups">Comunidades</string>
@@ -769,13 +764,11 @@ No futuro, este processo de verificação será mais sofisticado.</string>
     <string name="settings_vibrate_on_mention">Vibrar quando mencionado</string>
 
     <string name="settings_analytics">Estatísticas de uso</string>
-    <string name="settings_opt_out_of_analytics">Não enviar dados estatísticos de uso</string>
-    <string name="settings_opt_out_of_analytics_summary">Riot coleta dados anônimos para podermos melhorar o aplicativo.</string>
 
-    <string name="settings_flair">Faro</string>
+    <string name="settings_flair">Insígnias</string>
 
     <string name="room_settings_room_notifications_title">Notificações</string>
-    <string name="room_settings_no_flair">Esta sala não está mostrando Flairs para nenhuma comunidade</string>
+    <string name="room_settings_no_flair">Esta sala não está mostrando insígnias para nenhuma comunidade</string>
     <string name="room_settings_add_new_group">Nova ID da comunidade (p.ex: +foo:matrix.org)</string>
     <string name="room_settings_invalid_group_format_dialog_title">ID de comunidade inválido</string>
     <string name="room_settings_invalid_group_format_dialog_body">\'%s\' não é um ID de comunidade válido</string>
@@ -797,7 +790,6 @@ No futuro, este processo de verificação será mais sofisticado.</string>
     <string name="widget_integration_missing_room_id">O pedido veio sem o room_id.</string>
     <string name="widget_integration_missing_user_id">O pedido veio sem o user_id.</string>
     <string name="widget_integration_room_not_visible">A sala %s não está visível.</string>
-    <string name="settings_labs_matrix_apps">Aplicativos Matrix</string>
     <string name="room_add_matrix_apps">Adicionar aplicativos Matrix</string>
     <string name="settings_labs_native_camera">Usar a câmera nativa</string>
 
@@ -852,22 +844,22 @@ No futuro, este processo de verificação será mais sofisticado.</string>
     <string name="forget_room">Esquecer a sala</string>
 <string name="actions">Ações</string>
     <string name="open_chat_header">Abrir cabeçalho</string>
-    <string name="room_sync_in_progress">Sincronizando...</string>
+    <string name="room_sync_in_progress">Sincronizando…</string>
     <plurals name="room_header_active_members_count">
-	<item quantity="one">1 membro ativo</item>
+	<item quantity="one">%d membro ativo</item>
 	<item quantity="other">%d membros ativos</item>
 </plurals>
     <plurals name="room_title_members">
-	<item quantity="one">1 membro</item>
+	<item quantity="one">%d membro</item>
 	<item quantity="other">%d membros</item>
 </plurals>
     <plurals name="room_new_messages_notification">
-	<item quantity="one">1 nova mensagem</item>
+	<item quantity="one">%d nova mensagem</item>
 	<item quantity="other">%d novas mensagens</item>
 </plurals>
 
     <plurals name="directory_search_rooms">
-	<item quantity="one">1 sala</item>
+	<item quantity="one">%d sala</item>
 	<item quantity="other">%d salas</item>
 </plurals>
     <plurals name="directory_search_rooms_for">
@@ -875,33 +867,33 @@ No futuro, este processo de verificação será mais sofisticado.</string>
 	<item quantity="other">%1$s salas encontradas para %2$s</item>
 </plurals>
     <plurals name="membership_changes">
-	<item quantity="one">1 alteração de status de participação</item>
+	<item quantity="one">%d alteração de status de participação</item>
 	<item quantity="other">%s alterações de status de participação</item>
 </plurals>
 
     <string name="list_members">Lista de integrantes</string>
     <plurals name="notification_unread_notified_messages">
-	<item quantity="one">1 mensagem notificada não lida</item>
+	<item quantity="one">%d mensagem notificada não lida</item>
 	<item quantity="other">%d mensagens notificadas não lidas</item>
 </plurals>
     <plurals name="notification_unread_notified_messages_in_room_msgs">
-	<item quantity="one">1 mensagem notificada não lida</item>
+	<item quantity="one">%d mensagem notificada não lida</item>
 	<item quantity="other">%d mensagens notificadas não lidas</item>
 </plurals>
     <plurals name="notification_unread_notified_messages_in_room_rooms">
-	<item quantity="one">1 sala</item>
+	<item quantity="one">%d sala</item>
 	<item quantity="other">%d salas</item>
 </plurals>
     <string name="notification_unread_notified_messages_in_room">%1$s em %2$s</string>
 
     <plurals name="active_widgets">
-	<item quantity="one">1 widget ativo</item>
+	<item quantity="one">%d widget ativo</item>
 	<item quantity="other">%d widgets ativos</item>
 </plurals>
 
     <!-- Widget Integration Manager -->
     <string name="receipt_avatar">Imagem de recebimento</string>
-    <string name="notice_avatar">Imagem de notificação</string>
+    <string name="notice_avatar">Imagem de aviso</string>
     <string name="avatar">Imagem de perfil</string>
 
 <string name="send_bug_report_rage_shake">Agite com raiva para reportar uma falha (bug)</string>
@@ -941,19 +933,19 @@ Quer adicionar alguns agora?</string>
     <string name="e2e_re_request_encryption_key_dialog_content">Por favor, use o Riot em outro dispositivo que possa descriptografar a mensagem de modo que possa enviar as chaves a este dispositivo.</string>
 
     <plurals name="format_time_s">
-	<item quantity="one">1s</item>
+	<item quantity="one">%ds</item>
 	<item quantity="other">%ds</item>
 </plurals>
     <plurals name="format_time_m">
-	<item quantity="one">1min</item>
+	<item quantity="one">%dmin</item>
 	<item quantity="other">%dmin</item>
 </plurals>
     <plurals name="format_time_h">
-	<item quantity="one">1h</item>
+	<item quantity="one">%dh</item>
 	<item quantity="other">%dh</item>
 </plurals>
     <plurals name="format_time_d">
-	<item quantity="one">1 dia</item>
+	<item quantity="one">%d dia</item>
 	<item quantity="other">%d dias</item>
 </plurals>
 
@@ -970,12 +962,12 @@ Note que esta ação vai reiniciar o aplicativo e isso pode tomar um certo tempo
     <string name="room_message_placeholder_reply_to_encrypted">Enviar uma resposta criptografada…</string>
     <string name="room_message_placeholder_reply_to_not_encrypted">Enviar uma resposta (não criptografada)…</string>
     <plurals name="room_details_selected">
-	<item quantity="one">1 selecionado</item>
+	<item quantity="one">%d selecionado</item>
 	<item quantity="other">%d selecionados</item>
 </plurals>
     <string name="settings_notification_privacy">Privacidade das notificações</string>
     <string name="settings_notification_privacy_warning">Riot.im funciona em segundo plano para manter sua mensagem de notificação privada. Você pode alterar esta opção para reduzir o uso da bateria.</string>
-    <string name="settings_notification_privacy_gcm">• As notificações são enviadas pelo \"Google Cloud Messaging\"</string>
+    <string name="settings_notification_privacy_fcm">• As notificações são enviadas pelo \"Google Cloud Messaging\"</string>
     <string name="settings_notification_privacy_metadata">• As notificações contém apenas metadados</string>
     <string name="settings_notification_privacy_secure_message_content">• O conteúdo das mensagens da notificação é <b>armazenado de forma segura diretamente no servidor Matrix</b></string>
     <string name="settings_notification_privacy_nosecure_message_content">• As notificações contém <b>metadados e os dados da mensagem</b></string>
@@ -1020,12 +1012,12 @@ Note que esta ação vai reiniciar o aplicativo e isso pode tomar um certo tempo
     <string name="command_description_clear_scalar_token">Reparar a gestão de aplicativos Matrix</string>
 
     <plurals name="group_members">
-	<item quantity="one">1 participante</item>
+	<item quantity="one">%d participante</item>
 	<item quantity="other">%d participantes</item>
 </plurals>
 
     <plurals name="group_rooms">
-	<item quantity="one">1 sala</item>
+	<item quantity="one">%d sala</item>
 	<item quantity="other">%d salas</item>
 </plurals>
     <string name="dialog_user_consent_content">Para continuar usando o Servidor de Base %1$s, você precisa revisar e aceitar os termos e condições de uso.</string>
@@ -1061,4 +1053,5 @@ A visibilidade de mensagens no Matrix é parecida com a dos e-mails. Se esquecer
     <string name="resource_limit_soft_contact">Por favor, %s para que este limite seja aumentado.</string>
     <string name="resource_limit_hard_contact">Por favor, %s para seguir usando este serviço.</string>
 
-</resources>
+<string name="encryption_export_notice">Por favor, crie uma senha para cifrar as chaves exportadas. Precisará de usar a mesma senha para conseguir importar as chaves.</string>
+    </resources>

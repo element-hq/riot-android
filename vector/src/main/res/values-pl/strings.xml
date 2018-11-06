@@ -12,7 +12,7 @@
     <string name="send">Wyślij</string>
     <string name="copy">Kopiuj</string>
     <string name="resend">Wyślij ponownie</string>
-    <string name="redact">Przeredaguj</string>
+    <string name="redact">Usuń</string>
     <string name="quote">Cytuj</string>
     <string name="share">Udostępnij</string>
     <string name="later">Później</string>
@@ -24,7 +24,7 @@
     <string name="rename">Zmień nazwę</string>
     <string name="report_content">Zgłoś zawartość</string>
     <string name="active_call">Aktywne połączenie</string>
-    <string name="ongoing_conference_call">" Trwa połączenie grupowe. Dołącz z głosem lub obrazem."</string>
+    <string name="ongoing_conference_call">Przychodzące połączenie grupowe. Dołącz z mikrofonem lub z kamerą.</string>
     <string name="ongoing_conference_call_voice">głos</string>
     <string name="ongoing_conference_call_video">obraz</string>
     <string name="cannot_start_call">Nie można rozpocząć połączenia, spróbuj ponownie później</string>
@@ -93,7 +93,7 @@ Utwórz kopię zapasową, zanim się wylogujesz.</string>
     <string name="send_bug_report">Zgłoszenie błędu</string>
     <string name="send_bug_report_description">Opisz błąd. Co zrobiłeś? Co powinno się wydarzyć? Co się stało?</string>
     <string name="send_bug_report_placeholder">Opisz swój problem tutaj</string>
-    <string name="send_bug_report_logs_description">By zdiagnozować problemy, raporty z tego klienta zostaną wysłane wraz z tym raportem o błędach. Jeśli wolisz wysłać tylko powyższy tekst, odznacz to pole:</string>
+    <string name="send_bug_report_logs_description">W celu zdiagnozowania problemów, logi z tego klienta zostaną wysłane wraz z tym raportem o błędzie. Ten raport o błędzie, w tym dzienniki i zrzut ekranu, nie będzie publicznie widoczny. Jeśli wolisz wysłać tylko powyższy tekst, odznacz:</string>
     <string name="send_bug_report_alert_message">Wygląda na to, że potrząsasz telefonem ze zdenerwowania. Czy chcesz zgłosić błąd?</string>
     <string name="send_bug_report_app_crashed">Aplikacja nie została poprawnie zamknięta za ostatnim razem. Czy chcesz zgłosić raport o nieoczekiwanym zamknięciu?</string>
 
@@ -293,7 +293,6 @@ Przyznaj dostęp w następnym oknie.</string>
     <string name="room_delete_unsent_messages">Usuń niewysłane wiadomości</string>
     <string name="room_message_file_not_found">Nie znaleziono pliku</string>
     <string name="room_do_not_have_permission_to_post">Nie masz uprawnień, aby pisać w tym pokoju</string>
-    <string name="room_new_message_notification">1 nowa wiadomość</string>
 
     <string name="ssl_trust">Ufaj</string>
     <string name="ssl_do_not_trust">Nie ufaj</string>
@@ -405,7 +404,6 @@ Zauważ, że ta czynność spowoduje ponowne uruchomienie aplikacji i może to t
     <string name="devices_details_device_name">Nazwa urządzenia</string>
     <string name="devices_details_last_seen_title">Ostatnio widziany</string>
     <string name="devices_details_last_seen_format">%1$s @ %2$s</string>
-    <string name="devices_details_time_format">HH:mm:ss</string>
     <string name="devices_delete_dialog_text">To działanie wymaga dodatkowego uwierzytelnienia.
 Wprowadź hasło, aby kontynuować.</string>
     <string name="devices_delete_dialog_title">Uwierzytelnianie</string>
@@ -559,7 +557,7 @@ Zauważ, że ta czynność spowoduje ponowne uruchomienie aplikacji i może to t
     <string name="title_activity_bug_report">Zgłoś błąd</string>
     <string name="title_activity_group_details">Informacje o społeczności</string>
 
-    <string name="loading">Wczytywanie...</string>
+    <string name="loading">Wczytywanie…</string>
 
     <string name="action_exit">Opuść</string>
     <string name="actions">Działania</string>
@@ -631,7 +629,7 @@ Zezwolić Riot na dostęp do kontaktów?</string>
 
     <string name="list_members">Lista uczestników</string>
     <string name="open_chat_header">Otwarty nagłówek</string>
-    <string name="room_sync_in_progress">Synchronizacja...</string>
+    <string name="room_sync_in_progress">Synchronizacja…</string>
     <string name="room_preview_unlinked_email_warning">Zaproszenie zostało wysłane do %s, który nie jest powiązany z zalogowanym kontem. 
 Możesz zalogować się z wykorzystaniem innego konta, albo dodać ten adres e-mail do swoich kontaktów.</string>
     <plurals name="room_header_active_members_count">
@@ -710,15 +708,13 @@ Jesteś pewien?</string>
 
     <string name="settings_contacts_phonebook_country">Kraj książki adresowej</string>
     <string name="settings_home_display">Ekran domowy</string>
-    <string name="settings_inline_url_preview">"Zezwól na  domyślny podgląd zawartości URL"</string>
+    <string name="settings_inline_url_preview">Zezwól na domyślny podgląd zawartości URL</string>
     <string name="settings_12_24_timestamps">Pokaż czas w formacie 12 godzinnym (np. 2:30pm)</string>
     <string name="settings_hide_join_leave_messages">Ukryj wiadomości o dołączeniu/wyjściu (zaproszenia, wyproszenia, blokowanie nie zostaną ukryte)</string>
     <string name="settings_hide_avatar_display_name_changes_messages">Ukryj awatar i zmiany wyświetlanej nazwy</string>
     <string name="settings_vibrate_on_mention">Wibruj gdy ktoś wspomni o tobie</string>
 
     <string name="settings_analytics">Analityka</string>
-    <string name="settings_opt_out_of_analytics">Zrezygnuj z analityki</string>
-    <string name="settings_opt_out_of_analytics_summary">Riot zbiera anonimowe informacje które pozwolą ulepszyć aplikację.</string>
 
     <string name="settings_home_server">Serwer domowy</string>
     <string name="settings_identity_server">Serwer Tożsamości</string>
@@ -733,9 +729,6 @@ Jesteś pewien?</string>
     <string name="room_settings_tag_pref_dialog_title">Otagowany jako:</string>
 
     <string name="room_settings_tag_pref_no_tag">nieotagowany</string>
-    <string name="room_settings_tag_pref_entry_value_favourite">Ulubione</string>
-    <string name="room_settings_tag_pref_entry_value_low_priority">niski</string>
-    <string name="room_settings_tag_pref_entry_value_none">żaden</string>
 
     <string name="room_settings_room_notifications_title">Powiadomienia</string>
     <string name="room_settings_read_history_entry_members_only_option_time_shared">Tylko członkowie (od momentu włączenia tej opcji)</string>
@@ -787,7 +780,7 @@ Jesteś pewien?</string>
     <string name="settings_notification_privacy_reduced">Zmniejszona prywatność</string>
     <string name="settings_notification_privacy_need_permission">Aplikacja wymaga uprawnień do działania w tle</string>
     <string name="settings_notification_privacy_no_permission">Aplikacja <b>nie</b> wymaga uprawnień do działania w tle</string>
-    <string name="settings_notification_privacy_gcm">• Powiadomienia wysyłane za pomocą Google Cloud Messaging</string>
+    <string name="settings_notification_privacy_fcm">• Powiadomienia wysyłane za pomocą Google Cloud Messaging</string>
     <string name="settings_notification_privacy_metadata">• Powiadomienia zawierają tylko meta-dane</string>
     <string name="settings_notification_privacy_secure_message_content">• Treść powiadomienia jest <b>bezpiecznie pobierana z domowego serwera Matrix</b></string>
     <string name="settings_notification_privacy_nosecure_message_content">• Powiadomienia zawierają <b>meta-dane oraz treść wiadomości</b></string>
@@ -810,7 +803,7 @@ Jesteś pewien?</string>
     <string name="settings_delete_notification_targets_confirmation">Czy na pewno chcesz usunąć ten cel powiadomień?</string>
 
     <string name="room_settings_room_access_warning">Aby móc stworzyć link do pokoju musi on mieć swój adres.</string>
-    <string name="room_settings_addresses_e2e_prompt_message">Szyfrowanie końcówka-do-końcówki jest w fazie beta i nie jest pewne.
+    <string name="room_settings_addresses_e2e_prompt_message">Szyfrowanie end-to-end jest w fazie beta i nie jest pewne.
 
 Nie powinieneś ufać mu w celu zabezpieczenia danych.
 
@@ -822,7 +815,7 @@ Szyfrowane wiadomości nie będą widoczne dla klientów którzy nie wspierają 
 
     <string name="failed_to_load_timeline_position">%s próbował załadować konkretny punkt na osi czasu tego pokoju, ale nie był w stanie go znaleźć.</string>
 
-    <string name="encryption_information_title">Informacje o szyfrowaniu końcówka-do-końcówki</string>
+    <string name="encryption_information_title">Informacje o szyfrowaniu end-to-end</string>
 
     <string name="encryption_information_device_info">Informacje zdarzenia</string>
     <string name="encryption_information_sender_device_information">Informacja o urządzeniu nadawcy</string>
@@ -839,9 +832,9 @@ Uwaga: ten plik może zostać usunięty, jeśli aplikacja zostanie odinstalowana
     <string name="encryption_never_send_to_unverified_devices_summary">Nigdy nie wysyłaj zaszyfrowanych wiadomości do niezweryfikowanych urządzeń w tym pokoju z tego urządzenia</string>
 
     <string name="encryption_information_unverify">Usuń weryfikację</string>
-    <string name="encryption_information_verify_device_warning">" Aby sprawdzić czy to urządzenie jest zaufane, skontaktuj się z jego właścicielem używając innych środków (np. osobiście lub telefonicznie) i zapytaj ich czy klucz, który widzą w ustawieniach użytkownika dla tego urządzenia pasuje do klucza poniżej:"</string>
+    <string name="encryption_information_verify_device_warning">Aby sprawdzić czy to urządzenie jest zaufane, skontaktuj się z jego właścicielem używając innych form (np. osobiście lub telefonicznie) i zapytaj ich czy klucz, który widzą w ustawieniach użytkownika dla tego urządzenia pasuje do klucza poniżej:</string>
     <string name="encryption_information_verify_device_warning2">Jeśli klucz pasuje, potwierdź to przyciskiem poniżej. Jeśli nie, to ktoś inny najprawdopodobniej przejmuje lub podszywa się pod to urządzenie i powinieneś dodać urządzenie do czarnej listy. W przyszłości proces weryfikacji będzie bardziej skomplikowany.</string>
-    <string name="e2e_enabling_on_app_update">Riot obsługuje już szyfrowanie końcówka-do-końcówki (E2E), ale musisz zalogować się ponownie, aby je włączyć.
+    <string name="e2e_enabling_on_app_update">Riot obsługuje już szyfrowanie end-to-end (E2E), ale musisz zalogować się ponownie, aby je włączyć.
 
 Możesz to zrobić teraz lub później z poziomu ustawień aplikacji.</string>
 
@@ -912,12 +905,11 @@ Czy chcesz dodać teraz kilka?</string>
     <string name="widget_integration_no_permission_in_room">Nie masz uprawnień, aby zrobić to w tym pokoju.</string>
     <string name="settings_flair">Nastrój</string>
 
-    <string name="room_settings_no_flair">" Ten pokój nie wyświetla nastroju do żadnej społeczności"</string>
+    <string name="room_settings_no_flair">Ten pokój nie wyświetla wyróżników dla żadnych społeczności</string>
     <string name="widget_integration_missing_room_id">Brakujący _id pokoju w żądaniu.</string>
     <string name="widget_integration_missing_user_id">Brakujący _id użytkownika w żądaniu.</string>
     <string name="widget_integration_missing_parameter">Brakuje wymaganego parametru.</string>
     <string name="widget_integration_invalid_parameter">Parametr jest niepoprawny.</string>
-    <string name="settings_labs_matrix_apps">Aplikacje Matrix</string>
     <string name="room_add_matrix_apps">Dodaj aplikacje Matrix</string>
     <string name="settings_labs_enable_send_voice">Wyślij wiadomość głosową (wymaga aplikacji innej firmy do nagrywania wiadomości głosowych)</string>
 
@@ -995,4 +987,89 @@ Widoczność wiadomości w Matrix jest podobna do wiadomości e-mail. Nasze zapo
 
     <string name="unknown_error">Przepraszamy, wystąpił błąd</string>
 
-</resources>
+<string name="status_theme">Motyw Status.im</string>
+
+    <string name="missing_permissions_error">Z powodu braku uprawnień to działanie nie jest możliwe.</string>
+    <string name="system_alerts_header">Alerty systemowe</string>
+
+    <string name="send_bug_report_description_in_english">Jeżeli to możliwe, proszę napisz opis w języku angielskim.</string>
+    <plurals name="format_time_s">
+	<item quantity="one">1 sekunda</item>
+	<item quantity="few">%d sek.</item>
+	<item quantity="many">%d sek.</item>
+	<item quantity="other"/>
+</plurals>
+    <plurals name="format_time_m">
+	<item quantity="one">1 minuta</item>
+	<item quantity="few">%d min.</item>
+	<item quantity="many">%d min.</item>
+	<item quantity="other"/>
+</plurals>
+    <plurals name="format_time_h">
+	<item quantity="one">1 godzina</item>
+	<item quantity="few">%s godz.</item>
+	<item quantity="many">%s godz.</item>
+	<item quantity="other"/>
+</plurals>
+    <plurals name="format_time_d">
+	<item quantity="one">1 dzień</item>
+	<item quantity="few">%d dni</item>
+	<item quantity="many">%d dni</item>
+	<item quantity="other"/>
+</plurals>
+
+    <string name="room_participants_action_unignore_prompt">Pokazać wszystkie wiadomości od tego użytkownika?
+Pamiętaj ta akcja może zresetować aplikacje i potrwać jakiś czas.</string>
+    <plurals name="room_details_selected">
+	<item quantity="one">1 zaznaczone</item>
+	<item quantity="few">%d zaznaczone</item>
+	<item quantity="many">%d zaznaczonych</item>
+	<item quantity="other"/>
+</plurals>
+    <string name="room_sliding_menu_version_x">Wersja %s</string>
+    <string name="settings_preview_media_before_sending">Podgląd mediów przed wysłaniem</string>
+
+    <string name="settings_without_flair">Nie jesteś obecnie członkiem żadnej społeczności.</string>
+
+    <string name="encryption_export_notice">Utwórz hasło, aby zaszyfrować wyeksportowane klucze. Będziesz musiał wpisać to samo hasło, aby móc zaimportować klucze.</string>
+    <string name="encryption_export_create_passphrase">Utwórz hasło</string>
+    <string name="encryption_export_passphrase_dont_match">Hasło musi się zgadzać</string>
+    <string name="command_description_emote">Wyświetla akcję</string>
+    <string name="command_description_ban_user">Banuje użytkownika z podanym ID</string>
+    <string name="command_description_unban_user">Odbanowywuje użytkownika z podanym ID</string>
+    <string name="command_description_op_user">Określ poziom mocy użytkownika</string>
+    <string name="command_description_deop_user">Usuwa opa użytkownikowi z podanym ID</string>
+    <string name="command_description_invite_user">Zaprasza użytkownika z podanym ID do aktualnego pokoju</string>
+    <string name="command_description_join_room">Dołącza do pokoju z podanym aliasem</string>
+    <string name="command_description_topic">Ustaw temat pokoju</string>
+    <string name="command_description_kick_user">Wyrzuca użytkownika z podanym ID</string>
+    <string name="command_description_nick">Zmienia twój wyświetlany nick</string>
+    <string name="command_description_clear_scalar_token">Aby naprawić zarządzanie aplikacjami Matrix</string>
+
+    <string name="room_tombstone_versioned_description">Ten pokój został zamieniony i nie jest już aktywny</string>
+    <string name="room_tombstone_continuation_link">Konwersacja jest kontynuowana tutaj</string>
+    <string name="room_tombstone_continuation_description">Ten pokój jest kontynuacją innej rozmowy</string>
+    <string name="resource_limit_exceeded_title">Limit pakietów został przekroczony</string>
+    <string name="resource_limit_contact_action">Skontaktuj się z administratorem</string>
+
+    <string name="resource_limit_contact_admin">Skontaktuj się z administratorem usług</string>
+
+    <string name="resource_limit_soft_default">Ten serwer przekroczył jeden z limitów, więc <b>niektórzy użytkownicy nie będą mogli się zalogować</b>.</string>
+    <string name="resource_limit_hard_default">Ten serwer przekroczył jeden z limitów zasobów.</string>
+
+    <string name="resource_limit_soft_mau"> Ten serwer osiągnął miesięczny limit aktywnego użytkownika, więc <b>niektórzy użytkownicy nie będą mogli się zalogować</b>.</string>
+    <string name="resource_limit_hard_mau">Ten serwer osiągnął miesięczny limit aktywnego użytkownika.</string>
+
+    <string name="resource_limit_soft_contact">Proszę %s, aby zwiększył ten limit.</string>
+    <string name="resource_limit_hard_contact">Proszę %s, aby kontynuować z tej usługi.</string>
+
+    <string name="settings_lazy_loading_description">Zwiększ wydajność, ładując tylko członków pokoju w pierwszym widoku</string>
+    <string name="error_lazy_loading_not_supported_by_home_server">Twój serwer nie obsługuje jeszcze powolnego ładowania członków pokoju. Spróbuj później.</string>
+
+    <string name="merged_events_expand">Rozwiń</string>
+    <string name="merged_events_collapse">Zwiń</string>
+
+<string name="settings_lazy_loading_title">Powolne ładowanie członków pokojów</string>
+    <string name="room_participants_invite_join_names_combined">%1$s %2$s</string>
+
+    </resources>

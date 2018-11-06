@@ -17,9 +17,12 @@
             android:id="@+id/jsti_back_to_app_icon"
             android:layout_width="24dp"
             android:layout_height="24dp"
+            android:layout_alignParentStart="true"
             android:layout_alignParentLeft="true"
             android:layout_centerInParent="true"
+            android:layout_marginStart="12dp"
             android:layout_marginLeft="12dp"
+            android:rotationY="@integer/rtl_mirror_flip"
             android:src="@drawable/ic_material_arrow_back_white"
             android:tint="@android:color/white" />
 
@@ -27,8 +30,10 @@
             android:id="@+id/jsti_close_widget_icon"
             android:layout_width="24dp"
             android:layout_height="24dp"
+            android:layout_alignParentEnd="true"
             android:layout_alignParentRight="true"
             android:layout_centerInParent="true"
+            android:layout_marginEnd="12dp"
             android:layout_marginRight="12dp"
             android:src="@drawable/vector_close_widget"
             android:tint="@android:color/white" />

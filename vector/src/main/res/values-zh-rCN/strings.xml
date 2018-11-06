@@ -54,7 +54,7 @@
     <string name="room_participants_online">在线</string>
     <string name="room_participants_offline">离线</string>
     <string name="room_menu_search">搜索</string>
-    <string name="room_one_user_is_typing">%s 正在打字…</string>
+    <string name="room_one_user_is_typing">%s 正在输入…</string>
     <string name="title_activity_home">聊天</string>
     <string name="title_activity_room">聊天室</string>
     <string name="title_activity_settings">设置</string>
@@ -257,8 +257,8 @@
 
     <string name="people_search_local_contacts">本地联系人（%d 个）</string>
 
-    <string name="room_two_users_are_typing">%1$s 和 %2$s 正在打字…</string>
-    <string name="room_many_users_are_typing">%1$s 和 %2$s 及其他人正在打字…</string>
+    <string name="room_two_users_are_typing">%1$s 和 %2$s 正在输入…</string>
+    <string name="room_many_users_are_typing">%1$s 和 %2$s 及其他人正在输入…</string>
     <string name="room_message_placeholder_encrypted">发送一条加密消息…</string>
     <string name="room_message_placeholder_not_encrypted">发送一条消息（未加密）…</string>
     <string name="room_offline_notification">与服务器的连接已断开。</string>
@@ -270,7 +270,6 @@
     <string name="room_delete_unsent_messages">删除未发送的消息</string>
     <string name="room_message_file_not_found">文件未找到</string>
     <string name="room_do_not_have_permission_to_post">您没有发送到这个聊天室的权限</string>
-    <string name="room_new_message_notification">1 条新消息</string>
 
     <string name="ssl_trust">信任</string>
     <string name="ssl_do_not_trust">不信任</string>
@@ -510,9 +509,6 @@
     <string name="room_settings_tag_pref_entry_low_priority">低优先级</string>
     <string name="room_settings_tag_pref_entry_none">无</string>
     <string name="room_settings_tag_pref_no_tag">没有标签</string>
-    <string name="room_settings_tag_pref_entry_value_favourite">收藏夹</string>
-    <string name="room_settings_tag_pref_entry_value_low_priority">低</string>
-    <string name="room_settings_tag_pref_entry_value_none">无</string>
 
     <string name="room_settings_room_access_warning">要链接一个聊天室，必须有一个地址。</string>
     <string name="room_settings_never_send_to_unverified_devices_title">仅对已验证的设备加密</string>
@@ -579,7 +575,6 @@
     <string name="devices_details_name_title">名称</string>
     <string name="devices_details_last_seen_title">最近一次上线</string>
     <string name="devices_details_last_seen_format">%1$s @ %2$s</string>
-    <string name="devices_details_time_format">HH:mm:ss</string>
     <string name="settings_home_server">主服务器</string>
     <string name="settings_identity_server">身份服务器</string>
     <string name="account_email_validation_title">验证待定中</string>
@@ -657,8 +652,8 @@
     <string name="room_jump_to_first_unread">跳到第一条未读消息。</string>
 
     <string name="settings_home_display">主页显示</string>
-    <string name="settings_pin_missed_notifications">固定有错过通知的聊天室</string>
-    <string name="settings_pin_unread_messages">固定有未读通知的聊天室</string>
+    <string name="settings_pin_missed_notifications">置顶含有错过的通知的聊天室</string>
+    <string name="settings_pin_unread_messages">置顶含有未读消息的聊天室</string>
 <string name="settings_user_interface">用户界面</string>
     <string name="settings_interface_language">界面语言</string>
     <string name="settings_select_language">选择语言</string>
@@ -672,7 +667,7 @@
     <string name="settings_keep_media">保留媒体文件</string>
 
     <string name="settings_hide_read_receipts">隐藏已读标签</string>
-    <string name="settings_dont_send_typings_notifs">不发送打字通知</string>
+    <string name="settings_dont_send_typings_notifs">不要发送“正在输入”提示</string>
     <string name="settings_always_show_timestamps">总是显示消息时间戳</string>
     <string name="settings_disable_markdown">发送时禁用 markdown 格式化</string>
     <string name="settings_data_save_mode">省流量模式</string>
@@ -719,7 +714,6 @@
     <string name="widget_integration_missing_room_id">请求中没有 room_id.</string>
     <string name="widget_integration_missing_user_id">请求中没有 user_id.</string>
     <string name="widget_integration_room_not_visible">聊天室 %s 不可见。</string>
-    <string name="settings_labs_matrix_apps">Matrix 应用</string>
     <string name="room_add_matrix_apps">添加 Matrix 应用</string>
     <string name="notification_sync_in_progress">正在同步</string>
     <string name="notification_listening_for_events">监听事件更新</string>
@@ -757,9 +751,6 @@
     <string name="notification_silent_notifications">静默通知</string>
 
     <string name="settings_analytics">数据收集</string>
-    <string name="settings_opt_out_of_analytics">退出统计分析计划</string>
-    <string name="settings_opt_out_of_analytics_summary">Riot 会收集匿名统计数据来帮助我们改进程序。</string>
-
 
     <string name="notification_noisy">通知并振铃</string>
 
@@ -879,7 +870,7 @@
     <string name="startup_notification_privacy_button_other">选择其他选项</string>
 
     <string name="settings_notification_privacy_no_permission">这个应用<b>不</b>需要在后台运行的权限</string>
-    <string name="settings_notification_privacy_gcm">• 通知通过 Google Cloud Messaging 发送</string>
+    <string name="settings_notification_privacy_fcm">• 通知通过 Google Cloud Messaging 发送</string>
     <string name="settings_notification_privacy_metadata">• 通知只含有元数据</string>
     <string name="settings_notification_privacy_message_content_not_shown">• 通知<b>不会显示消息内容</b></string>
 

@@ -53,7 +53,7 @@
     <string name="title_activity_bug_report">Αναφορά σφάλματος</string>
     <string name="title_activity_group_details">Πληροφορίες κοινότητας</string>
 
-    <string name="loading">Φόρτωση...</string>
+    <string name="loading">Φόρτωση…</string>
 
     <string name="save">Αποθήκευση</string>
     <string name="encrypted_message">Κρυπτογραφημένο μήνυμα</string>
