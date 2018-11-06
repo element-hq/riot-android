@@ -872,7 +872,7 @@ Email также позволит вам при необходимости во�
     <string name="actions">Действия</string>
     <string name="list_members">Список участников</string>
     <string name="open_chat_header">Открыть заголовок</string>
-    <string name="room_sync_in_progress">Синхронизация...</string>
+    <string name="room_sync_in_progress">Синхронизация…</string>
     <plurals name="directory_search_rooms">
 	<item quantity="one">1 комната</item>
 	<item quantity="few">%d комнаты</item>

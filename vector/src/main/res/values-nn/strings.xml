@@ -327,7 +327,7 @@ Tillat Riot å gå inn i kontaktane dine?</string>
 
     <string name="list_members">Listemedlemer</string>
     <string name="open_chat_header">Opn tittel</string>
-    <string name="room_sync_in_progress">Samstiller...</string>
+    <string name="room_sync_in_progress">Samstiller…</string>
     <string name="room_jump_to_first_unread">Hopp til den fyrste ulesne meldigna.</string>
 
     <string name="room_preview_invitation_format">Du vart boden inn til dette rommet av %s</string>

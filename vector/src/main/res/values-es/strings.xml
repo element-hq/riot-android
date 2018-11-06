@@ -881,7 +881,7 @@ Dispositivos desconocidos:</string>
 
     <string name="actions">Acciones</string>
     <string name="list_members">Listar miembros</string>
-    <string name="room_sync_in_progress">Sincronizando...</string>
+    <string name="room_sync_in_progress">Sincronizando…</string>
     <plurals name="room_title_members">
 	<item quantity="one">1 miembro</item>
 	<item quantity="other">%d miembros</item>

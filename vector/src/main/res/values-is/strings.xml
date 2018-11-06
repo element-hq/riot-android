@@ -178,7 +178,7 @@
 
     <string name="list_members">Listi yfir meðlimi</string>
     <string name="open_chat_header">Opna haus</string>
-    <string name="room_sync_in_progress">Samstilli...</string>
+    <string name="room_sync_in_progress">Samstilli…</string>
     <string name="room_preview_try_join_an_unknown_room_default">spjallrás</string>
     <string name="room_creation_add_member">Bæta við meðlimi</string>
     <plurals name="room_header_active_members_count">

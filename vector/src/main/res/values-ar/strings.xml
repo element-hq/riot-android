@@ -591,7 +591,7 @@
 رجاءً اسمح بالوصول في المنبثقة التالية لتستكشف مستخدميك في دفتر العناوين من Riot.</string>
     <string name="media_slider_saved">حُفظت</string>
     <string name="preview">عايِن</string>
-    <string name="room_sync_in_progress">يُزامن...</string>
+    <string name="room_sync_in_progress">يُزامن…</string>
     <string name="room_preview_unlinked_email_warning">أُرسلت الدعوة إلى ⁨%s⁩ غير المرتبط بهذا الحساب.
 لربما عليك الولوج بحساب آخر، أو إضافة هذا البريد إلى حسابك هذا.</string>
     <string name="room_preview_try_join_an_unknown_room">تحاول الوصول إلى ⁨%s⁩. أتريد الانضمام للمشاركة في النقاش؟</string>

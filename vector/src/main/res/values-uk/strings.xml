@@ -801,7 +801,7 @@
 
     <string name="list_members">Список учасників</string>
     <string name="open_chat_header">Відкрити заголовок</string>
-    <string name="room_sync_in_progress">Синхронізація...</string>
+    <string name="room_sync_in_progress">Синхронізація…</string>
     <string name="room_settings_all_messages_noisy">Всі повідомлення (гучно)</string>
     <string name="room_settings_all_messages">Всі повідомлення</string>
     <string name="room_settings_mention_only">Тільки упоминания</string>

@@ -828,7 +828,7 @@ Zifratutako mezuak ez dira zifratzea oraindik ezarrita ez duten beste gailuetan 
 
     <string name="list_members">Zerrendatu kideak</string>
     <string name="open_chat_header">Ireki goiburua</string>
-    <string name="room_sync_in_progress">Sinkronizatzen...</string>
+    <string name="room_sync_in_progress">Sinkronizatzen…</string>
     <plurals name="room_header_active_members_count">
 	<item quantity="one">Kide aktibo 1</item>
 	<item quantity="other">%d kide aktibo</item>

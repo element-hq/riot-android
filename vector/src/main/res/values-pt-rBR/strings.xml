@@ -765,10 +765,10 @@ No futuro, este processo de verificação será mais sofisticado.</string>
 
     <string name="settings_analytics">Estatísticas de uso</string>
 
-    <string name="settings_flair">Faro</string>
+    <string name="settings_flair">Insígnias</string>
 
     <string name="room_settings_room_notifications_title">Notificações</string>
-    <string name="room_settings_no_flair">Esta sala não está mostrando Flairs para nenhuma comunidade</string>
+    <string name="room_settings_no_flair">Esta sala não está mostrando insígnias para nenhuma comunidade</string>
     <string name="room_settings_add_new_group">Nova ID da comunidade (p.ex: +foo:matrix.org)</string>
     <string name="room_settings_invalid_group_format_dialog_title">ID de comunidade inválido</string>
     <string name="room_settings_invalid_group_format_dialog_body">\'%s\' não é um ID de comunidade válido</string>
@@ -844,7 +844,7 @@ No futuro, este processo de verificação será mais sofisticado.</string>
     <string name="forget_room">Esquecer a sala</string>
 <string name="actions">Ações</string>
     <string name="open_chat_header">Abrir cabeçalho</string>
-    <string name="room_sync_in_progress">Sincronizando...</string>
+    <string name="room_sync_in_progress">Sincronizando…</string>
     <plurals name="room_header_active_members_count">
 	<item quantity="one">1 membro ativo</item>
 	<item quantity="other">%d membros ativos</item>
@@ -893,7 +893,7 @@ No futuro, este processo de verificação será mais sofisticado.</string>
 
     <!-- Widget Integration Manager -->
     <string name="receipt_avatar">Imagem de recebimento</string>
-    <string name="notice_avatar">Imagem de notificação</string>
+    <string name="notice_avatar">Imagem de aviso</string>
     <string name="avatar">Imagem de perfil</string>
 
 <string name="send_bug_report_rage_shake">Agite com raiva para reportar uma falha (bug)</string>
@@ -1053,4 +1053,5 @@ A visibilidade de mensagens no Matrix é parecida com a dos e-mails. Se esquecer
     <string name="resource_limit_soft_contact">Por favor, %s para que este limite seja aumentado.</string>
     <string name="resource_limit_hard_contact">Por favor, %s para seguir usando este serviço.</string>
 
-</resources>
+<string name="encryption_export_notice">Por favor, crie uma senha para cifrar as chaves exportadas. Precisará de usar a mesma senha para conseguir importar as chaves.</string>
+    </resources>

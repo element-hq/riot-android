@@ -406,7 +406,7 @@ Er du sikker?</string>
 </plurals>
 
     <string name="list_members">Medlemsoversigt</string>
-    <string name="room_sync_in_progress">Synkroniserer...</string>
+    <string name="room_sync_in_progress">Synkroniserer…</string>
     <plurals name="room_header_active_members_count">
 	<item quantity="one">1 aktivt medlem</item>
 	<item quantity="other">%d aktive medlemmer</item>

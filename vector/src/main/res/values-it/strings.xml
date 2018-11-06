@@ -797,7 +797,7 @@ In futuro il processo di verifica sarà più sofisticato.</string>
 
     <string name="list_members">Elenca i membri</string>
     <string name="open_chat_header">Apri intestazione</string>
-    <string name="room_sync_in_progress">Sincronizzazione...</string>
+    <string name="room_sync_in_progress">Sincronizzazione…</string>
     <plurals name="room_header_active_members_count">
 	<item quantity="one">1 membro attivo</item>
 	<item quantity="other">%d membri attivi</item>

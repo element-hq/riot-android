@@ -815,7 +815,7 @@ Je kan het nu, of later, doen vanuit de programma-instellingen.</string>
 
     <string name="list_members">Ledenlijst</string>
     <string name="open_chat_header">Opschrift openen</string>
-    <string name="room_sync_in_progress">Synchroniseren...</string>
+    <string name="room_sync_in_progress">Synchroniseren…</string>
     <plurals name="room_header_active_members_count">
 	<item quantity="one">1 actief lid</item>
 	<item quantity="other">%d actieve leden</item>
