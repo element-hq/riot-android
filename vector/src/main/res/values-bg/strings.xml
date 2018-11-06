@@ -1033,4 +1033,14 @@
     <string name="merged_events_expand">разшири</string>
     <string name="merged_events_collapse">свий</string>
 
+<string name="settings_info_area_show">Покажи информационната област</string>
+    <string name="show_info_area_always">Винаги</string>
+    <string name="show_info_area_messages_and_errors">За съобщения и грешки</string>
+    <string name="show_info_area_only_errors">Само за грешки</string>
+
+    <string name="generic_label">%1$s:</string>
+    <string name="generic_label_and_value">%1$s: %2$s</string>
+    <string name="plus_x">+%d</string>
+    <string name="x_plus">%d+</string>
+
 </resources>
