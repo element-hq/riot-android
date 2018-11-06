@@ -109,9 +109,7 @@ android {
     }
 
     lintOptions {
-        disable 'InvalidPackage'
-        disable 'MissingTranslation'
-        disable 'RestrictedApi'
+        warning 'MissingTranslation'
 
         // Treat some warnings as errors
         // Resources
