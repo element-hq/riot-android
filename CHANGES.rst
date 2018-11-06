@@ -23,9 +23,6 @@ Bugfix:
  - Fix issue when scrolling file list in room details (#2702)
  - Align switch camera button to parent in landscape mode (#2704)
 
-Translations:
- -
-
 Build:
  - Better build.gradle file (#2302)
 
