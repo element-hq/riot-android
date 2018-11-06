@@ -104,7 +104,7 @@ Selezionare esporta per fare un backup delle chat prima di disconnettersi.</stri
     <string name="send_bug_report_include_logs">Invia registri</string>
     <string name="send_bug_report_include_crash_logs">Invia registri di crash</string>
     <string name="send_bug_report_include_screenshot">Invia istantanea</string>
-    <string name="send_bug_report">Rapporto errori</string>
+    <string name="send_bug_report">Segnala errore</string>
     <string name="send_bug_report_description">Per favore descrivi l\'errore. Cosa hai fatto? Cosa ti aspettavi dovesse accadere? Cosa è effettivamente successo?</string>
     <string name="send_bug_report_placeholder">Descrivi qui il problema</string>
     <string name="send_bug_report_logs_description">Al fine di diagnosticare i problemi, i registri Riot di questo dispositivo saranno inviati con il rapporto dell\'errore. Questo rapporto, che include i registri e l\'istantanea grafica, non sarà pubblicamente visibile. Se preferisci inviare solo il testo soprastante, deseleziona:</string>
@@ -1096,5 +1096,15 @@ Tieni presente che questa azione riavvierà l\'app e potrebbe richiedere del tem
     <string name="encryption_export_passphrase_dont_match">Le passphrase devono corrispondere</string>
     <string name="merged_events_expand">espandi</string>
     <string name="merged_events_collapse">collassa</string>
+
+<string name="settings_info_area_show">Mostra l\'area informazioni</string>
+    <string name="show_info_area_always">Sempre</string>
+    <string name="show_info_area_messages_and_errors">Per messaggi ed errori</string>
+    <string name="show_info_area_only_errors">Solo per gli errori</string>
+
+    <string name="generic_label">%1$s:</string>
+    <string name="generic_label_and_value">%1$s: %2$s</string>
+    <string name="plus_x">+%d</string>
+    <string name="x_plus">%d+</string>
 
 </resources>
