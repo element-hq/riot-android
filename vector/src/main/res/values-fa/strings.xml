@@ -59,7 +59,7 @@
     <string name="no_conversation_placeholder">هیچ مکالمه‌ای وجود ندارد</string>
     <string name="rooms_header">اتاق‌ها</string>
     <plurals name="public_room_nb_users">
-        <item quantity="one">1 کاربر</item>
+        <item quantity="one">%d کاربر</item>
         <item quantity="other">%d کاربر</item>
     </plurals>
 

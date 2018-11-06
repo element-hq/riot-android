@@ -835,7 +835,7 @@ Adicionar alguns agora?</string>
     <string name="groups_list">Lista de Grupos</string>
 
     <plurals name="membership_changes">
-	<item quantity="one">Uma mudança de adesão</item>
+	<item quantity="one">%d mudança de adesão</item>
 	<item quantity="other">%d mudanças de adesões</item>
 </plurals>
 
@@ -844,27 +844,27 @@ Adicionar alguns agora?</string>
     <string name="open_chat_header">Abrir cabeçalho</string>
     <string name="room_sync_in_progress">A sincronizar…</string>
     <plurals name="room_header_active_members_count">
-	<item quantity="one">1 participante activo</item>
+	<item quantity="one">%d participante activo</item>
 	<item quantity="other">%d participantes activos</item>
 </plurals>
     <plurals name="room_title_members">
-	<item quantity="one">1 participante</item>
+	<item quantity="one">%d participante</item>
 	<item quantity="other">%d participantes</item>
 </plurals>
     <plurals name="format_time_s">
-	<item quantity="one">1s</item>
+	<item quantity="one">%ds</item>
 	<item quantity="other">%ds</item>
 </plurals>
     <plurals name="format_time_m">
-	<item quantity="one">1m</item>
+	<item quantity="one">%dm</item>
 	<item quantity="other">%dm</item>
 </plurals>
     <plurals name="format_time_h">
-	<item quantity="one">1h</item>
+	<item quantity="one">%dh</item>
 	<item quantity="other">%dh</item>
 </plurals>
     <plurals name="format_time_d">
-	<item quantity="one">1d</item>
+	<item quantity="one">%dd</item>
 	<item quantity="other">%dd</item>
 </plurals>
 
@@ -884,16 +884,16 @@ Note que esta acção reiniciará a aplicação e poderá demorar algum tempo.</
     <string name="room_message_placeholder_reply_to_encrypted">Enviar uma resposta cifrada…</string>
     <string name="room_message_placeholder_reply_to_not_encrypted">Enviar uma resposta (não cifrada)…</string>
     <plurals name="room_new_messages_notification">
-	<item quantity="one">1 nova mensagem</item>
+	<item quantity="one">%d nova mensagem</item>
 	<item quantity="other">%d novas mensagens</item>
 </plurals>
 
     <plurals name="room_details_selected">
-	<item quantity="one">1 seleccionado</item>
+	<item quantity="one">%d seleccionado</item>
 	<item quantity="other">%d seleccionados</item>
 </plurals>
     <plurals name="directory_search_rooms">
-	<item quantity="one">1 sala</item>
+	<item quantity="one">%d sala</item>
 	<item quantity="other">%d salas</item>
 </plurals>
     <plurals name="directory_search_rooms_for">
@@ -957,21 +957,21 @@ Note que esta acção reiniciará a aplicação e poderá demorar algum tempo.</
     <string name="lock_screen_hint">Escreva aqui…</string>
 
     <plurals name="notification_unread_notified_messages">
-	<item quantity="one">1 mensagem notificada não lida</item>
+	<item quantity="one">%d mensagem notificada não lida</item>
 	<item quantity="other">%d mensagens notificadas não lidas</item>
 </plurals>
     <plurals name="notification_unread_notified_messages_in_room_msgs">
-	<item quantity="one">1 mensagem notificada não lida</item>
+	<item quantity="one">%d mensagem notificada não lida</item>
 	<item quantity="other">%d mensagens notificadas não lidas</item>
 </plurals>
     <plurals name="notification_unread_notified_messages_in_room_rooms">
-	<item quantity="one">1 sala</item>
+	<item quantity="one">%d sala</item>
 	<item quantity="other">%d salas</item>
 </plurals>
     <string name="notification_unread_notified_messages_in_room">%1$s em %2$s</string>
 
     <plurals name="active_widgets">
-	<item quantity="one">1 widget activo</item>
+	<item quantity="one">%d widget activo</item>
 	<item quantity="other">%d widgets activos</item>
 </plurals>
 
@@ -1031,12 +1031,12 @@ Note que esta acção reiniciará a aplicação e poderá demorar algum tempo.</
     <string name="filter_group_rooms">Filtrar salas do grupo</string>
 
     <plurals name="group_members">
-	<item quantity="one">1 participante</item>
+	<item quantity="one">%d participante</item>
 	<item quantity="other">%d participantes</item>
 </plurals>
 
     <plurals name="group_rooms">
-	<item quantity="one">1 sala</item>
+	<item quantity="one">%d sala</item>
 	<item quantity="other">%d salas</item>
 </plurals>
     <string name="group_no_long_description">O administrador desta comunidade não definiu uma descrição longa da mesma.</string>

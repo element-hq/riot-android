@@ -112,11 +112,11 @@ android {
         disable 'InvalidPackage'
         disable 'MissingTranslation'
         disable 'RestrictedApi'
-        disable 'ImpliedQuantity'
 
         // Treat some warnings as errors
         // Resources
         error 'TypographyEllipsis'
+        error 'ImpliedQuantity'
 
         // UX
         error 'ButtonOrder'

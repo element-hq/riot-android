@@ -826,21 +826,21 @@ Appareils inconnus :</string>
     <string name="actions">Actions</string>
     <string name="room_sync_in_progress">Synchronisation…</string>
     <plurals name="room_header_active_members_count">
-	<item quantity="one">Un membre actif</item>
+	<item quantity="one">%d membre actif</item>
 	<item quantity="other">%d membres actifs</item>
 </plurals>
     <plurals name="room_title_members">
-	<item quantity="one">Un membre</item>
+	<item quantity="one">%d membre</item>
 	<item quantity="other">%d membres</item>
 </plurals>
     <plurals name="room_new_messages_notification">
-	<item quantity="one">Un nouveau message</item>
+	<item quantity="one">%d nouveau message</item>
 	<item quantity="other">%d nouveaux messages</item>
 </plurals>
 
     <string name="list_members">Liste les membres</string>
     <plurals name="directory_search_rooms">
-	<item quantity="one">Un salon</item>
+	<item quantity="one">%d salon</item>
 	<item quantity="other">%d salons</item>
 </plurals>
     <plurals name="directory_search_rooms_for">
@@ -848,21 +848,21 @@ Appareils inconnus :</string>
 	<item quantity="other">%1$s salons trouvés pour %2$s</item>
 </plurals>
     <plurals name="notification_unread_notified_messages">
-	<item quantity="one">Un message notifié non lu</item>
+	<item quantity="one">%d message notifié non lu</item>
 	<item quantity="other">%d messages notifiés non lus</item>
 </plurals>
     <plurals name="notification_unread_notified_messages_in_room_msgs">
-	<item quantity="one">Un message notifié non lu</item>
+	<item quantity="one">%d message notifié non lu</item>
 	<item quantity="other">%d messages notifiés non lus</item>
 </plurals>
     <plurals name="notification_unread_notified_messages_in_room_rooms">
-	<item quantity="one">Un salon</item>
+	<item quantity="one">%d salon</item>
 	<item quantity="other">%d salons</item>
 </plurals>
     <string name="notification_unread_notified_messages_in_room">%1$s dans %2$s</string>
 
     <plurals name="active_widgets">
-	<item quantity="one">Un gadget actif</item>
+	<item quantity="one">%d gadget actif</item>
 	<item quantity="other">%d gadgets actifs</item>
 </plurals>
 
@@ -870,7 +870,7 @@ Appareils inconnus :</string>
     <string name="avatar">Avatar</string>
 
 <plurals name="membership_changes">
-	<item quantity="one">Un changement de statut</item>
+	<item quantity="one">%d changement de statut</item>
 	<item quantity="other">%d changements de statut</item>
 </plurals>
 
@@ -981,19 +981,19 @@ Veuillez noter que cette action redémarrera l\'application et pourra prendre un
 
 <string name="missing_permissions_error">En raison de permissions manquantes, cette action n\'est pas possible.</string>
     <plurals name="format_time_s">
-	<item quantity="one">1 s</item>
+	<item quantity="one">%d s</item>
 	<item quantity="other">%d s</item>
 </plurals>
     <plurals name="format_time_m">
-	<item quantity="one">1 min</item>
+	<item quantity="one">%d min</item>
 	<item quantity="other">%d min</item>
 </plurals>
     <plurals name="format_time_h">
-	<item quantity="one">1 h</item>
+	<item quantity="one">%d h</item>
 	<item quantity="other">%d h</item>
 </plurals>
     <plurals name="format_time_d">
-	<item quantity="one">1 j</item>
+	<item quantity="one">%d j</item>
 	<item quantity="other">%d j</item>
 </plurals>
 
@@ -1005,16 +1005,16 @@ Veuillez noter que cette action redémarrera l\'application et pourra prendre un
     <string name="room_participants_invite_join_names_combined">%1$s %2$s</string>
 
     <plurals name="room_details_selected">
-	<item quantity="one">1 sélectionné</item>
+	<item quantity="one">%d sélectionné</item>
 	<item quantity="other">%d sélectionnés</item>
 </plurals>
     <plurals name="group_members">
-	<item quantity="one">1 participant</item>
+	<item quantity="one">%d participant</item>
 	<item quantity="other">%d participants</item>
 </plurals>
 
     <plurals name="group_rooms">
-	<item quantity="one">1 salon</item>
+	<item quantity="one">%d salon</item>
 	<item quantity="other">%d salons</item>
 </plurals>
     <string name="system_alerts_header">Alertes système</string>

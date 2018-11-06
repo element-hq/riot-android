@@ -874,13 +874,13 @@ Email также позволит вам при необходимости во�
     <string name="open_chat_header">Открыть заголовок</string>
     <string name="room_sync_in_progress">Синхронизация…</string>
     <plurals name="directory_search_rooms">
-	<item quantity="one">1 комната</item>
+	<item quantity="one">%d комната</item>
 	<item quantity="few">%d комнаты</item>
 	<item quantity="many">%d комнат</item>
 	<item quantity="other"/>
 </plurals>
     <plurals name="notification_unread_notified_messages_in_room_rooms">
-	<item quantity="one">1 комната</item>
+	<item quantity="one">%d комната</item>
 	<item quantity="few">%d комнаты</item>
 	<item quantity="many">%d комнат</item>
 	<item quantity="other"/>
@@ -888,7 +888,7 @@ Email также позволит вам при необходимости во�
     <string name="notification_unread_notified_messages_in_room">%1$s в %2$s</string>
 
     <plurals name="active_widgets">
-	<item quantity="one">1 активный виджет</item>
+	<item quantity="one">%d активный виджет</item>
 	<item quantity="few">%d активных виджета</item>
 	<item quantity="many">%d активных виджетов</item>
 	<item quantity="other"/>
@@ -898,19 +898,19 @@ Email также позволит вам при необходимости во�
     <string name="avatar">Аватар</string>
 
 <plurals name="room_header_active_members_count">
-	<item quantity="one">1 активный участник</item>
+	<item quantity="one">%d активный участник</item>
 	<item quantity="few">%d активных участника</item>
 	<item quantity="many">%d активных участников</item>
 	<item quantity="other"/>
 </plurals>
     <plurals name="room_title_members">
-	<item quantity="one">1 участник</item>
+	<item quantity="one">%d участник</item>
 	<item quantity="few">%d участника</item>
 	<item quantity="many">%d участников</item>
 	<item quantity="other"/>
 </plurals>
     <plurals name="room_new_messages_notification">
-	<item quantity="one">1 новое сообщение</item>
+	<item quantity="one">%d новое сообщение</item>
 	<item quantity="few">%d новых сообщения</item>
 	<item quantity="many">%d новых сообщений</item>
 	<item quantity="other"/>
@@ -923,20 +923,20 @@ Email также позволит вам при необходимости во�
 	<item quantity="other"/>
 </plurals>
     <plurals name="membership_changes">
-	<item quantity="one">1 изменение членства</item>
+	<item quantity="one">%d изменение членства</item>
 	<item quantity="few">%d изменения членства</item>
 	<item quantity="many">%d изменений членства</item>
 	<item quantity="other"/>
 </plurals>
 
     <plurals name="notification_unread_notified_messages">
-	<item quantity="one">1 непрочитанное уведомление</item>
+	<item quantity="one">%d непрочитанное уведомление</item>
 	<item quantity="few">%d непрочитанных уведомления</item>
 	<item quantity="many">%d непрочитанных уведомлений</item>
 	<item quantity="other"/>
 </plurals>
     <plurals name="notification_unread_notified_messages_in_room_msgs">
-	<item quantity="one">1 непрочитанное уведомление</item>
+	<item quantity="one">%d непрочитанное уведомление</item>
 	<item quantity="few">%d непрочитанных уведомления</item>
 	<item quantity="many">%d непрочитанных уведомлений</item>
 	<item quantity="other"/>
@@ -1050,25 +1050,25 @@ Email также позволит вам при необходимости во�
 
     <string name="missing_permissions_error">Из-за отсутствия разрешений это действие невозможно.</string>
     <plurals name="format_time_s">
-	<item quantity="one">1s</item>
+	<item quantity="one">%ds</item>
 	<item quantity="few">%ds</item>
 	<item quantity="many">%ds</item>
 	<item quantity="other"/>
 </plurals>
     <plurals name="format_time_m">
-	<item quantity="one">1m</item>
+	<item quantity="one">%dm</item>
 	<item quantity="few">%dm</item>
 	<item quantity="many">%dm</item>
 	<item quantity="other"/>
 </plurals>
     <plurals name="format_time_h">
-	<item quantity="one">1h</item>
+	<item quantity="one">%dh</item>
 	<item quantity="few">%dh</item>
 	<item quantity="many">%dh</item>
 	<item quantity="other"/>
 </plurals>
     <plurals name="format_time_d">
-	<item quantity="one">1d</item>
+	<item quantity="one">%dd</item>
 	<item quantity="few">%dd</item>
 	<item quantity="many">%dd</item>
 	<item quantity="other"/>
@@ -1082,20 +1082,20 @@ Email также позволит вам при необходимости во�
     <string name="room_participants_invite_join_names_combined">%1$s %2$s</string>
 
     <plurals name="room_details_selected">
-	<item quantity="one">1 выбран</item>
+	<item quantity="one">%d выбран</item>
 	<item quantity="few">%d выбрано</item>
 	<item quantity="many">%d выбраны</item>
 	<item quantity="other"/>
 </plurals>
     <plurals name="group_members">
-	<item quantity="one">1 участник</item>
+	<item quantity="one">%d участник</item>
 	<item quantity="few">%d участника</item>
 	<item quantity="many">%d участников</item>
 	<item quantity="other"/>
 </plurals>
 
     <plurals name="group_rooms">
-	<item quantity="one">1 комната</item>
+	<item quantity="one">%d комната</item>
 	<item quantity="few">%d комнаты</item>
 	<item quantity="many">%d комнат</item>
 	<item quantity="other"/>

@@ -76,7 +76,7 @@
     <string name="rooms_header">Spjallrásir</string>
     <string name="no_room_placeholder">Engar spjallrásir</string>
     <plurals name="public_room_nb_users">
-        <item quantity="one">1 notandi</item>
+        <item quantity="one">%d notandi</item>
         <item quantity="other">%d notendur</item>
     </plurals>
 
@@ -136,7 +136,7 @@
 
     <string name="login_error_bad_json">Gallað JSON</string>
     <plurals name="membership_changes">
-	<item quantity="one">1 breyting á aðild</item>
+	<item quantity="one">%d breyting á aðild</item>
 	<item quantity="other">%d breytingar á aðild</item>
 </plurals>
 
@@ -182,11 +182,11 @@
     <string name="room_preview_try_join_an_unknown_room_default">spjallrás</string>
     <string name="room_creation_add_member">Bæta við meðlimi</string>
     <plurals name="room_header_active_members_count">
-	<item quantity="one">1 virkur meðlimur</item>
+	<item quantity="one">%d virkur meðlimur</item>
 	<item quantity="other">%d virkir meðlimir</item>
 </plurals>
     <plurals name="room_title_members">
-	<item quantity="one">1 meðlimur</item>
+	<item quantity="one">%d meðlimur</item>
 	<item quantity="other">%d meðlimir</item>
 </plurals>
     <string name="room_title_one_member">1 meðlimur</string>
@@ -217,7 +217,7 @@
     <string name="room_prompt_cancel">hætta við allt</string>
     <string name="room_message_file_not_found">Skrá fannst ekki</string>
     <plurals name="room_new_messages_notification">
-	<item quantity="one">1 ný skilaboð</item>
+	<item quantity="one">%d ný skilaboð</item>
 	<item quantity="other">%d ný skilaboð</item>
 </plurals>
 
@@ -253,7 +253,7 @@
     <string name="room_recents_join_room_title">Taka þátt í spjallrás</string>
     <string name="directory_search_results_title">Vafra í möppu</string>
     <plurals name="directory_search_rooms">
-	<item quantity="one">1 spjallrás</item>
+	<item quantity="one">%d spjallrás</item>
 	<item quantity="other">%d spjallrásir</item>
 </plurals>
     <string name="room_settings_all_messages">Öll skilaboð</string>
@@ -388,7 +388,7 @@
     <string name="directory_server_native_rooms">Allar innbyggðar %s-spjallrásir</string>
 
     <plurals name="notification_unread_notified_messages_in_room_rooms">
-	<item quantity="one">1 spjallrás</item>
+	<item quantity="one">%d spjallrás</item>
 	<item quantity="other">%d spjallrásir</item>
 </plurals>
     <string name="notification_unread_notified_messages_in_room">%1$s í %2$s</string>
@@ -405,7 +405,7 @@
     <string name="huge">Flennistórt</string>
 
     <plurals name="active_widgets">
-	<item quantity="one">1 virkur viðmótshluti</item>
+	<item quantity="one">%d virkur viðmótshluti</item>
 	<item quantity="other">%d virkir viðmótshlutar</item>
 </plurals>
 
@@ -653,11 +653,11 @@ Til að halda áfram skaltu setja inn lykilorðið þitt.</string>
     <string name="select_room_directory">Veldu skrá yfir spjallrásir</string>
     <string name="directory_server_placeholder">URL-slóð heimaþjóns</string>
     <plurals name="notification_unread_notified_messages">
-	<item quantity="one">1 ólesin tilkynnt skilaboð</item>
+	<item quantity="one">%d ólesin tilkynnt skilaboð</item>
 	<item quantity="other">%d ólesin tilkynnt skilaboð</item>
 </plurals>
     <plurals name="notification_unread_notified_messages_in_room_msgs">
-	<item quantity="one">1 ólesin tilkynnt skilaboð</item>
+	<item quantity="one">%d ólesin tilkynnt skilaboð</item>
 	<item quantity="other">%d ólesin tilkynnt skilaboð</item>
 </plurals>
     <string name="widget_no_power_to_manage">Þú þarft aðgangsheimildir til að sýsla með viðmótshluta á þessari spjallrás</string>
