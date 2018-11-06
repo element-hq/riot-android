@@ -76,22 +76,22 @@
             android:gravity="center_vertical">
 
             <Button
-                android:id="@+id/button_join_room"
+                android:id="@+id/button_decline"
                 android:layout_width="110dp"
                 android:layout_height="36dp"
                 android:layout_marginEnd="16dp"
                 android:layout_marginRight="16dp"
-                android:background="@color/vector_green_color"
-                android:text="@string/join_room"
-                android:textColor="@android:color/white" />
-
-            <Button
-                android:id="@+id/button_decline"
-                android:layout_width="110dp"
-                android:layout_height="36dp"
                 android:background="@android:color/white"
                 android:text="@string/cancel"
                 android:textColor="@color/vector_fuchsia_color" />
+
+            <Button
+                android:id="@+id/button_join_room"
+                android:layout_width="110dp"
+                android:layout_height="36dp"
+                android:background="@color/vector_green_color"
+                android:text="@string/join_room"
+                android:textColor="@android:color/white" />
 
         </LinearLayout>
 

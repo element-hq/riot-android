@@ -118,6 +118,9 @@ android {
         // Resources
         error 'TypographyEllipsis'
 
+        // UX
+        error 'ButtonOrder'
+
         // Layout
         error 'StringFormatCount'
         error 'HardcodedText'
