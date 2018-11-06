@@ -1,4 +1,28 @@
-Changes in Riot 0.8.19 (2018-XX-XX)
+Changes in Riot 0.8.20 (2018-XX-XX)
+===================================================
+
+MatrixSdk:
+ - Upgrade to version 0.X.Y.
+
+Features:
+ -
+
+Improvements:
+ -
+
+Other changes:
+ -
+
+Bugfix:
+ -
+
+Translations:
+ -
+
+Build:
+ -
+
+Changes in Riot 0.8.19 (2018-11-06)
 ===================================================
 
 MatrixSdk:
