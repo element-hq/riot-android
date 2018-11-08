@@ -193,7 +193,7 @@ public class SlashCommandsParser {
 
                 String newMessage = textMessage.substring(SlashCommand.EMOTE.getCommand().length()).trim();
 
-                if (textMessage.length() > 0) {
+                if (newMessage.length() > 0) {
                     if ((null != formattedBody) && formattedBody.length() > SlashCommand.EMOTE.getCommand().length()) {
                         activity.sendEmote(newMessage, formattedBody.substring(SlashCommand.EMOTE.getCommand().length()), format);
                     } else {
