@@ -61,6 +61,7 @@ import im.vector.settings.VectorLocale
 import im.vector.ui.themes.ThemeUtils
 import im.vector.util.*
 import org.matrix.androidsdk.MXSession
+import org.matrix.androidsdk.crypto.data.ImportRoomKeysResult
 import org.matrix.androidsdk.crypto.data.MXDeviceInfo
 import org.matrix.androidsdk.data.MyUser
 import org.matrix.androidsdk.data.Pusher
@@ -2677,9 +2678,22 @@ class VectorSettingsPreferencesFragment : PreferenceFragment(), SharedPreference
 
                 displayLoadingView()
 
-                mSession.crypto?.importRoomKeys(data, password, object : ApiCallback<Void> {
-                    override fun onSuccess(info: Void?) {
+                mSession.crypto?.importRoomKeys(data, password, object : ApiCallback<ImportRoomKeysResult> {
+                    override fun onSuccess(info: ImportRoomKeysResult?) {
+                        if (!isAdded) {
+                            return
+                        }
+
                         hideLoadingView()
+
+                        info?.let {
+                            AlertDialog.Builder(activity)
+                                    .setMessage(getString(R.string.encryption_import_room_keys_success,
+                                            it.successfullyNumberOfImportedKeys,
+                                            it.totalNumberOfKeys))
+                                    .setPositiveButton(R.string.ok, null)
+                                    .show()
+                        }
                     }
 
                     override fun onNetworkError(e: Exception) {

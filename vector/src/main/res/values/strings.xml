@@ -861,6 +861,7 @@
     <string name="encryption_import_enter_passphrase">Enter passphrase</string>
     <string name="encryption_never_send_to_unverified_devices_title">Encrypt to verified devices only</string>
     <string name="encryption_never_send_to_unverified_devices_summary">Never send encrypted messages to unverified devices from this device.</string>
+    <string name="encryption_import_room_keys_success">%1$d/%2$d key(s) imported with success.</string>
 
     <string name="encryption_information_not_verified">NOT Verified</string>
     <string name="encryption_information_verified">Verified</string>
