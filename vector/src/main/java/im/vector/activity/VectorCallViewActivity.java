@@ -542,6 +542,7 @@ public class VectorCallViewActivity extends VectorAppCompatActivity implements S
                 CommonActivityUtils.displayUnknownDevicesDialog(mSession,
                         VectorCallViewActivity.this,
                         (MXUsersDevicesMap<MXDeviceInfo>) intent.getSerializableExtra(VectorCallViewActivity.EXTRA_UNKNOWN_DEVICES),
+                        true,
                         null);
             }
         });

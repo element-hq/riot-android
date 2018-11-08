@@ -1345,6 +1345,7 @@ public class VectorRoomActivity extends MXCActionBarActivity implements
         CommonActivityUtils.displayUnknownDevicesDialog(mSession,
                 this,
                 (MXUsersDevicesMap<MXDeviceInfo>) error.mExceptionData,
+                false,
                 new VectorUnknownDevicesFragment.IUnknownDevicesSendAnywayListener() {
                     @Override
                     public void onSendAnyway() {
@@ -1872,6 +1873,7 @@ public class VectorRoomActivity extends MXCActionBarActivity implements
                         CommonActivityUtils.displayUnknownDevicesDialog(mSession,
                                 VectorRoomActivity.this,
                                 (MXUsersDevicesMap<MXDeviceInfo>) cryptoError.mExceptionData,
+                                true,
                                 new VectorUnknownDevicesFragment.IUnknownDevicesSendAnywayListener() {
                                     @Override
                                     public void onSendAnyway() {

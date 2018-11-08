@@ -765,7 +765,7 @@ public class CommonActivityUtils {
     // Room jump methods.
     //==============================================================================================================
 
-   /**
+    /**
      * Start a room activity with the dedicated parameters.
      * Pop the activity to the homeActivity before pushing the new activity.
      *
@@ -1500,11 +1500,13 @@ public class CommonActivityUtils {
      * @param session        the session
      * @param activity       the calling activity
      * @param unknownDevices the unknown devices list
+     * @param isForCalling   true when the user want to start a call
      * @param listener       optional listener to add an optional "Send anyway" button
      */
     public static void displayUnknownDevicesDialog(MXSession session,
                                                    FragmentActivity activity,
                                                    MXUsersDevicesMap<MXDeviceInfo> unknownDevices,
+                                                   boolean isForCalling,
                                                    VectorUnknownDevicesFragment.IUnknownDevicesSendAnywayListener listener) {
         // sanity checks
         if (activity.isFinishing() || (null == unknownDevices) || (0 == unknownDevices.getMap().size())) {
@@ -1518,7 +1520,7 @@ public class CommonActivityUtils {
             fragment.dismissAllowingStateLoss();
         }
 
-        fragment = VectorUnknownDevicesFragment.newInstance(session.getMyUserId(), unknownDevices, listener);
+        fragment = VectorUnknownDevicesFragment.newInstance(session.getMyUserId(), unknownDevices, isForCalling, listener);
         try {
             fragment.show(fm, TAG_FRAGMENT_UNKNOWN_DEVICES_DIALOG_DIALOG);
         } catch (Exception e) {

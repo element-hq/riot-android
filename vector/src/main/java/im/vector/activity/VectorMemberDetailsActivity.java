@@ -324,6 +324,7 @@ public class VectorMemberDetailsActivity extends MXCActionBarActivity implements
                         CommonActivityUtils.displayUnknownDevicesDialog(mSession,
                                 VectorMemberDetailsActivity.this,
                                 (MXUsersDevicesMap<MXDeviceInfo>) cryptoError.mExceptionData,
+                                true,
                                 new VectorUnknownDevicesFragment.IUnknownDevicesSendAnywayListener() {
                                     @Override
                                     public void onSendAnyway() {

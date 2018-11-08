@@ -14,7 +14,7 @@ Other changes:
  -
 
 Bugfix:
- -
+ - Use same "Call Anyway" string from iOS (#2695)
 
 Translations:
  -
