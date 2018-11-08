@@ -1090,4 +1090,14 @@ Beachte: Diese Aktion wird die App neu starten und einige Zeit brauchen.</string
     <string name="merged_events_expand">aufklappen</string>
     <string name="merged_events_collapse">Zusammenklappen</string>
 
+<string name="settings_info_area_show">Zeige Infobereich</string>
+    <string name="show_info_area_always">Immer</string>
+    <string name="show_info_area_messages_and_errors">Für Nachrichten und Fehler</string>
+    <string name="show_info_area_only_errors">Nur für Fehler</string>
+
+    <string name="generic_label">%1$s:</string>
+    <string name="generic_label_and_value">%1$s: %2$s</string>
+    <string name="plus_x">+%d</string>
+    <string name="x_plus">%d+</string>
+
 </resources>
