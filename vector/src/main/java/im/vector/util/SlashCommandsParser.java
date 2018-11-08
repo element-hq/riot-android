@@ -193,16 +193,14 @@ public class SlashCommandsParser {
                 }
             } else if (TextUtils.equals(firstPart, SlashCommand.EMOTE.getCommand())) {
                 isIRCCmd = true;
+                isIRCCmdValid = true;
 
                 String newMessage = textMessage.substring(SlashCommand.EMOTE.getCommand().length()).trim();
 
-                if (newMessage.length() > 0) {
-                    isIRCCmdValid = true;
-                    if ((null != formattedBody) && formattedBody.length() > SlashCommand.EMOTE.getCommand().length()) {
-                        activity.sendEmote(newMessage, formattedBody.substring(SlashCommand.EMOTE.getCommand().length()), format);
-                    } else {
-                        activity.sendEmote(newMessage, formattedBody, format);
-                    }
+                if ((null != formattedBody) && formattedBody.length() > SlashCommand.EMOTE.getCommand().length()) {
+                    activity.sendEmote(newMessage, formattedBody.substring(SlashCommand.EMOTE.getCommand().length()), format);
+                } else {
+                    activity.sendEmote(newMessage, formattedBody, format);
                 }
             } else if (TextUtils.equals(firstPart, SlashCommand.JOIN_ROOM.getCommand())) {
                 isIRCCmd = true;
