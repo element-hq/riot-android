@@ -15,6 +15,7 @@ Other changes:
 
 Bugfix:
  - Use same "Call Anyway" string from iOS (#2695)
+ - Improve `/markdown` command (#2673)
 
 Translations:
  -

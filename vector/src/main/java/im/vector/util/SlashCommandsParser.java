@@ -52,17 +52,17 @@ public class SlashCommandsParser {
         // the list will be displayed in this order
         EMOTE("/me", "<message>", R.string.command_description_emote),
         BAN_USER("/ban", "<user-id>", R.string.command_description_ban_user),
-        UNBAN_USER ("/unban", "<user-id>", R.string.command_description_unban_user),
-        SET_USER_POWER_LEVEL ("/op", "<user-id> [<power-level>]",R.string.command_description_op_user),
-        RESET_USER_POWER_LEVEL ("/deop", "<user-id>", R.string.command_description_deop_user),
-        INVITE ("/invite", "<user-id>", R.string.command_description_invite_user),
-        JOIN_ROOM ("/join", "<room-alias>", R.string.command_description_join_room),
-        PART ("/part", "<room-alias>", R.string.command_description_part_room),
-        TOPIC ("/topic", "<topic>", R.string.command_description_topic),
-        KICK_USER ("/kick", "<user-id>", R.string.command_description_kick_user),
-        CHANGE_DISPLAY_NAME ("/nick", "<display-name>", R.string.command_description_nick),
-        MARKDOWN ("/markdown", "", R.string.command_description_markdown),
-        CLEAR_SCALAR_TOKEN ("/clear_scalar_token", "", R.string.command_description_clear_scalar_token);
+        UNBAN_USER("/unban", "<user-id>", R.string.command_description_unban_user),
+        SET_USER_POWER_LEVEL("/op", "<user-id> [<power-level>]", R.string.command_description_op_user),
+        RESET_USER_POWER_LEVEL("/deop", "<user-id>", R.string.command_description_deop_user),
+        INVITE("/invite", "<user-id>", R.string.command_description_invite_user),
+        JOIN_ROOM("/join", "<room-alias>", R.string.command_description_join_room),
+        PART("/part", "<room-alias>", R.string.command_description_part_room),
+        TOPIC("/topic", "<topic>", R.string.command_description_topic),
+        KICK_USER("/kick", "<user-id>", R.string.command_description_kick_user),
+        CHANGE_DISPLAY_NAME("/nick", "<display-name>", R.string.command_description_nick),
+        MARKDOWN("/markdown", "<on|off>", R.string.command_description_markdown),
+        CLEAR_SCALAR_TOKEN("/clear_scalar_token", "", R.string.command_description_clear_scalar_token);
 
         private final String command;
         private String parameter;
@@ -70,7 +70,7 @@ public class SlashCommandsParser {
         @StringRes
         private int description;
 
-        private  static final Map<String, SlashCommand> lookup = new HashMap<String, SlashCommand>();
+        private static final Map<String, SlashCommand> lookup = new HashMap<>();
 
         static {
             for (SlashCommand slashCommand : SlashCommand.values()) {
@@ -312,8 +312,10 @@ public class SlashCommandsParser {
                 if (messageParts.length >= 2) {
                     if (TextUtils.equals(messageParts[1], "on")) {
                         PreferencesManager.setMarkdownEnabled(VectorApp.getInstance(), true);
+                        Toast.makeText(activity, R.string.markdown_has_been_enabled, Toast.LENGTH_SHORT).show();
                     } else if (TextUtils.equals(messageParts[1], "off")) {
                         PreferencesManager.setMarkdownEnabled(VectorApp.getInstance(), false);
+                        Toast.makeText(activity, R.string.markdown_has_been_disabled, Toast.LENGTH_SHORT).show();
                     }
                 }
             } else if (TextUtils.equals(firstPart, SlashCommand.CLEAR_SCALAR_TOKEN.getCommand())) {

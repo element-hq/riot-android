@@ -972,6 +972,9 @@
     <string name="command_description_markdown">On/Off markdown</string>
     <string name="command_description_clear_scalar_token">To fix Matrix Apps management</string>
 
+    <string name="markdown_has_been_enabled">Markdown has been enabled.</string>
+    <string name="markdown_has_been_disabled">Markdown has been disabled.</string>
+
     <!-- notification statuses -->
     <string name="notification_off">Off</string>
     <string name="notification_on">On</string>
