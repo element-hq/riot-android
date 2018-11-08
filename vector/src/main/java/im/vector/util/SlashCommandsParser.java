@@ -120,6 +120,7 @@ public class SlashCommandsParser {
                                               final String formattedBody,
                                               final String format) {
         boolean isIRCCmd = false;
+        boolean isIRCCmdValid = false;
 
         // sanity checks
         if ((null == activity) || (null == session) || (null == room)) {
@@ -176,6 +177,7 @@ public class SlashCommandsParser {
                 String newDisplayname = textMessage.substring(SlashCommand.CHANGE_DISPLAY_NAME.getCommand().length()).trim();
 
                 if (newDisplayname.length() > 0) {
+                    isIRCCmdValid = true;
                     MyUser myUser = session.getMyUser();
 
                     myUser.updateDisplayName(newDisplayname, callback);
@@ -186,6 +188,7 @@ public class SlashCommandsParser {
                 String newTopic = textMessage.substring(SlashCommand.TOPIC.getCommand().length()).trim();
 
                 if (newTopic.length() > 0) {
+                    isIRCCmdValid = true;
                     room.updateTopic(newTopic, callback);
                 }
             } else if (TextUtils.equals(firstPart, SlashCommand.EMOTE.getCommand())) {
@@ -194,6 +197,7 @@ public class SlashCommandsParser {
                 String newMessage = textMessage.substring(SlashCommand.EMOTE.getCommand().length()).trim();
 
                 if (newMessage.length() > 0) {
+                    isIRCCmdValid = true;
                     if ((null != formattedBody) && formattedBody.length() > SlashCommand.EMOTE.getCommand().length()) {
                         activity.sendEmote(newMessage, formattedBody.substring(SlashCommand.EMOTE.getCommand().length()), format);
                     } else {
@@ -205,6 +209,7 @@ public class SlashCommandsParser {
                 String roomAlias = textMessage.substring(SlashCommand.JOIN_ROOM.getCommand().length()).trim();
 
                 if (roomAlias.length() > 0) {
+                    isIRCCmdValid = true;
                     session.joinRoom(roomAlias, new SimpleApiCallback<String>(activity) {
 
                         @Override
@@ -233,6 +238,7 @@ public class SlashCommandsParser {
                 String roomAlias = textMessage.substring(SlashCommand.PART.getCommand().length()).trim();
 
                 if (roomAlias.length() > 0) {
+                    isIRCCmdValid = true;
                     Room theRoom = null;
                     Collection<Room> rooms = session.getDataHandler().getStore().getRooms();
 
@@ -258,12 +264,14 @@ public class SlashCommandsParser {
                 isIRCCmd = true;
 
                 if (messageParts.length >= 2) {
+                    isIRCCmdValid = true;
                     room.invite(messageParts[1], callback);
                 }
             } else if (TextUtils.equals(firstPart, SlashCommand.KICK_USER.getCommand())) {
                 isIRCCmd = true;
 
                 if (messageParts.length >= 2) {
+                    isIRCCmdValid = true;
                     room.kick(messageParts[1], callback);
                 }
             } else if (TextUtils.equals(firstPart, SlashCommand.BAN_USER.getCommand())) {
@@ -276,12 +284,14 @@ public class SlashCommandsParser {
                 String reason = params.substring(bannedUserID.length()).trim();
 
                 if (bannedUserID.length() > 0) {
+                    isIRCCmdValid = true;
                     room.ban(bannedUserID, reason, callback);
                 }
             } else if (TextUtils.equals(firstPart, SlashCommand.UNBAN_USER.getCommand())) {
                 isIRCCmd = true;
 
                 if (messageParts.length >= 2) {
+                    isIRCCmdValid = true;
                     room.unban(messageParts[1], callback);
                 }
 
@@ -289,6 +299,7 @@ public class SlashCommandsParser {
                 isIRCCmd = true;
 
                 if (messageParts.length >= 3) {
+                    isIRCCmdValid = true;
                     String userID = messageParts[1];
                     String powerLevelsAsString = messageParts[2];
 
@@ -304,6 +315,7 @@ public class SlashCommandsParser {
                 isIRCCmd = true;
 
                 if (messageParts.length >= 2) {
+                    isIRCCmdValid = true;
                     room.updateUserPowerLevels(messageParts[1], 0, callback);
                 }
             } else if (TextUtils.equals(firstPart, SlashCommand.MARKDOWN.getCommand())) {
@@ -311,15 +323,18 @@ public class SlashCommandsParser {
 
                 if (messageParts.length >= 2) {
                     if (TextUtils.equals(messageParts[1], "on")) {
+                        isIRCCmdValid = true;
                         PreferencesManager.setMarkdownEnabled(VectorApp.getInstance(), true);
                         Toast.makeText(activity, R.string.markdown_has_been_enabled, Toast.LENGTH_SHORT).show();
                     } else if (TextUtils.equals(messageParts[1], "off")) {
+                        isIRCCmdValid = true;
                         PreferencesManager.setMarkdownEnabled(VectorApp.getInstance(), false);
                         Toast.makeText(activity, R.string.markdown_has_been_disabled, Toast.LENGTH_SHORT).show();
                     }
                 }
             } else if (TextUtils.equals(firstPart, SlashCommand.CLEAR_SCALAR_TOKEN.getCommand())) {
                 isIRCCmd = true;
+                isIRCCmdValid = true;
 
                 WidgetsManager.clearScalarToken(activity, session);
 
@@ -332,6 +347,16 @@ public class SlashCommandsParser {
                         .setMessage(activity.getString(R.string.unrecognized_command, firstPart))
                         .setPositiveButton(R.string.ok, null)
                         .show();
+
+                // do not send the command as a message
+                isIRCCmd = true;
+            } else if (!isIRCCmdValid) {
+                new AlertDialog.Builder(activity)
+                        .setTitle(R.string.command_error)
+                        .setMessage(activity.getString(R.string.command_problem_with_parameters, firstPart))
+                        .setPositiveButton(R.string.ok, null)
+                        .show();
+
                 // do not send the command as a message
                 isIRCCmd = true;
             }
