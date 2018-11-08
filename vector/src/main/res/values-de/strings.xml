@@ -745,7 +745,7 @@ Unbekannte Geräte:</string>
     <string name="widget_integration_positive_power_level">Berechtigungslevel muss eine positive ganze Zahl sein.</string>
     <string name="widget_integration_must_be_in_room">Du bist nicht Mitglied in diesem Raum.</string>
     <string name="widget_integration_no_permission_in_room">Du hast keine Berechtigung, diese Aktion in diesem Raum auszuführen.</string>
-    <string name="widget_integration_missing_room_id">Anfrage beinhaltet keine room_id.</string>
+    <string name="widget_integration_missing_room_id">Anfrage beinhaltet keine Raum-ID.</string>
     <string name="widget_integration_room_not_visible">Raum %s ist nicht sichtbar.</string>
     <string name="room_add_matrix_apps">Matrix-Apps hinzufügen</string>
     <string name="settings_notification_ringtone">Benachrichtigungston</string>
@@ -980,7 +980,7 @@ Die Sichtbarkeit deiner Nachrichten ist ähnlich zu E-Mails: Wenn wir deine Nach
 
     <string name="lock_screen_hint">Hier tippen…</string>
 
-    <string name="option_send_voice">Sende Sprache</string>
+    <string name="option_send_voice">Sprachnachricht senden</string>
 
     <string name="go_on_with">fortfahren mit…</string>
     <string name="error_no_external_application_found">Es wurde keine externe Anwendung gefunden, um diese Aktion auszuführen.</string>
