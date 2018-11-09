@@ -766,7 +766,6 @@ Zifratutako mezuak ez dira zifratzea oraindik ezarrita ez duten beste gailuetan 
 
     <string name="groups_list">Taldeen zerrenda</string>
 
-    <string name="room_participants_kick_prompt_msg">Ziur erabiltzaile hau txat honetatik kanporatu nahi duzula?</string>
     <string name="room_participants_ban_prompt_msg">Ziur erabiltzaile hau txat honetan debekatu nahi duzula?</string>
 
     <string name="room_settings_all_messages_noisy">Mezu guztiak (zaratatsua)</string>

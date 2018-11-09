@@ -359,7 +359,6 @@
     <string name="room_participants_action_mention">提及</string>
     <string name="room_participants_action_devices_list">顯示裝置清單</string>
     <string name="room_participants_invite_prompt_msg">您確定想要邀請 %s 到聊天室？</string>
-    <string name="room_participants_kick_prompt_msg">您確定想要把這個使用者從聊天室踢除？</string>
     <string name="room_participants_ban_prompt_msg">您確定想要封鎖此聊天室的使用者？</string>
 
     <string name="people_search_invite_by_id"><u>透過 ID 邀請</u></string>

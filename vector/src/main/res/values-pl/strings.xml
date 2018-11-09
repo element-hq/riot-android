@@ -653,7 +653,6 @@ Szyfrowane wiadomości nie będą widoczne dla klientów którzy nie wspierają 
     <string name="room_participants_power_level_prompt">Nie będziesz w stanie cofnąć tej zmiany, ponieważ przyznajesz użytkownikowi uprawnienia równe swoim. 
 Jesteś pewien?</string>
 
-    <string name="room_participants_kick_prompt_msg">Czy chcesz wyrzucić tego użytkownika z rozmowy?</string>
     <string name="room_participants_ban_prompt_msg">Czy chcesz zablokować tego użytkownika w tej rozmowie?</string>
 
     <string name="login_error_unable_register_mail_ownership">Nie udało się zarejestrować: błąd własności e-maila</string>

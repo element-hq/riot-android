@@ -819,7 +819,6 @@ Je kan het nu, of later, doen vanuit de programma-instellingen.</string>
         <item quantity="one">1 lid</item>
         <item quantity="other">%d leden</item>
     </plurals>
-    <string name="room_participants_kick_prompt_msg">Weet je zeker dat je deze gebruiker uit het gesprek wilt verwijderen?</string>
     <string name="room_participants_ban_prompt_msg">Weet je zeker dat je deze gebruiker uit dit gesprek wilt verbannen?</string>
 
     <plurals name="room_new_messages_notification">

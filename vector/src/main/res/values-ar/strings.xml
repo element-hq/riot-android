@@ -609,7 +609,6 @@
     <string name="room_participants_power_level_prompt">لن تستطيع العودة عن هذا التغيير إذ أنك تمنح المستخدم نفس مستوى السلطة الذي لك.
 أمتأكد؟</string>
 
-    <string name="room_participants_kick_prompt_msg">أمتأكد من طرد هذا المستخدم من هذه الدردشة؟</string>
     <string name="room_participants_ban_prompt_msg">أمتأكد من منع هذا المستخدم من هذه الدردشة؟</string>
 
     <string name="people_search_invite_by_id"><u>ادعُ باستخدام المعرّف</u></string>

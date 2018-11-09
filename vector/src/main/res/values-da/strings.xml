@@ -416,7 +416,6 @@ Er du sikker?</string>
         <item quantity="one">1 medlem</item>
         <item quantity="other">%d medlemmer</item>
     </plurals>
-    <string name="room_participants_kick_prompt_msg">Er du sikker på, at du ønsker at fjerne denne bruger fra denne chat?</string>
     <string name="room_participants_ban_prompt_msg">Er du sikker på, at du ønsker at blokere denne bruger fra denne chat?</string>
 
     <plurals name="room_new_messages_notification">

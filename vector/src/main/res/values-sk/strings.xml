@@ -766,7 +766,6 @@ Neznáme zariadenia:</string>
 
     <string name="groups_list">Zoznam komunít</string>
 
-    <string name="room_participants_kick_prompt_msg">Ste si istí, že chcete tohoto používateľa vykázať z tejto miestnosti?</string>
     <string name="room_participants_ban_prompt_msg">Ste si istí, že chcete tomuto používateľovi zakázať vstúpiť do tejto miestnosti?</string>
 
     <string name="room_settings_all_messages_noisy">Všetky správy (hlučné)</string>

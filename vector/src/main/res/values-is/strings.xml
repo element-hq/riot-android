@@ -675,7 +675,6 @@ Til að halda áfram skaltu setja inn lykilorðið þitt.</string>
     <string name="room_preview_invitation_format">Þér hefur verið boðið af %s að taka þátt í þessari spjallrás</string>
     <string name="room_participants_remove_prompt_msg">Ertu viss um að þú viljir fjarlægja %s úr þessu spjalli?</string>
     <string name="room_participants_invite_prompt_msg">Ertu viss um að þú viljir bjóða %s á þetta spjall?</string>
-    <string name="room_participants_kick_prompt_msg">Ertu viss um að þú viljir sparka þessum notanda út af þessu spjalli?</string>
     <string name="room_participants_ban_prompt_msg">Ertu viss um að þú viljir banna þennan notanda á þessu spjalli?</string>
 
     <string name="people_search_invite_by_id"><u>Bjóða miðað við auðkenni</u></string>

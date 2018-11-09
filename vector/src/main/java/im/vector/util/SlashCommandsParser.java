@@ -51,7 +51,7 @@ public class SlashCommandsParser {
         // the user can write theses messages to perform some actions
         // the list will be displayed in this order
         EMOTE("/me", "<message>", R.string.command_description_emote),
-        BAN_USER("/ban", "<user-id>", R.string.command_description_ban_user),
+        BAN_USER("/ban", "<user-id> [reason]", R.string.command_description_ban_user),
         UNBAN_USER("/unban", "<user-id>", R.string.command_description_unban_user),
         SET_USER_POWER_LEVEL("/op", "<user-id> [<power-level>]", R.string.command_description_op_user),
         RESET_USER_POWER_LEVEL("/deop", "<user-id>", R.string.command_description_deop_user),
@@ -59,7 +59,7 @@ public class SlashCommandsParser {
         JOIN_ROOM("/join", "<room-alias>", R.string.command_description_join_room),
         PART("/part", "<room-alias>", R.string.command_description_part_room),
         TOPIC("/topic", "<topic>", R.string.command_description_topic),
-        KICK_USER("/kick", "<user-id>", R.string.command_description_kick_user),
+        KICK_USER("/kick", "<user-id> [reason]", R.string.command_description_kick_user),
         CHANGE_DISPLAY_NAME("/nick", "<display-name>", R.string.command_description_nick),
         MARKDOWN("/markdown", "<on|off>", R.string.command_description_markdown),
         CLEAR_SCALAR_TOKEN("/clear_scalar_token", "", R.string.command_description_clear_scalar_token);
@@ -270,7 +270,13 @@ public class SlashCommandsParser {
 
                 if (messageParts.length >= 2) {
                     isIRCCmdValid = true;
-                    room.kick(messageParts[1], callback);
+
+                    String user = messageParts[1];
+                    String reason = textMessage.substring(SlashCommand.BAN_USER.getCommand().length()
+                            + 1
+                            + user.length()).trim();
+
+                    room.kick(user, reason, callback);
                 }
             } else if (TextUtils.equals(firstPart, SlashCommand.BAN_USER.getCommand())) {
                 isIRCCmd = true;

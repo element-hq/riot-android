@@ -10,6 +10,7 @@ Features:
 Improvements:
  - Remove double negations from settings and update descriptions (#2723)
  - Handle missing or bad parameter in slash command
+ - Support specifying kick and ban message (#2164)
 
 Other changes:
  -

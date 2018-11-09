@@ -825,7 +825,6 @@ Dispositivos desconocidos:</string>
 
     <string name="groups_list">Lista de Grupos</string>
 
-    <string name="room_participants_kick_prompt_msg">¿Seguro que quieres expulsar a este usuario de esta conversación?</string>
     <string name="room_participants_ban_prompt_msg">¿Seguro que quieres vetar a este usuario de esta conversación?</string>
 
     <string name="room_settings_all_messages_noisy">Todos los mensajes (ruidoso)</string>

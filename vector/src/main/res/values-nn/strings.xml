@@ -394,7 +394,6 @@ Merk deg at denne handlinga startar æppen på nytt og kan taka litt tid.</strin
 Er du sikker?</string>
 
     <string name="room_participants_invite_prompt_msg">Er du sikker på at du vil byda %s inn til samtala?</string>
-    <string name="room_participants_kick_prompt_msg">Er du sikker på at du vil sparka brukaren ut av samtala?</string>
     <string name="room_participants_ban_prompt_msg">Er du sikker på at du vil stengja brukaren ute frå samtala?</string>
 
     <string name="people_search_invite_by_id"><u>Byd inn gjennom ID</u></string>

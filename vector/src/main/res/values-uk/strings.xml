@@ -824,7 +824,6 @@
         <item quantity="many">%d участників</item>
         <item quantity="other" />
     </plurals>
-    <string name="room_participants_kick_prompt_msg">Ви дійсно хотіли вигнати цього користувача із цього чата?</string>
     <string name="room_participants_ban_prompt_msg">Ви впевнені, що хочете забанити цього користувача в цьому чаті?</string>
 
     <plurals name="room_new_messages_notification">

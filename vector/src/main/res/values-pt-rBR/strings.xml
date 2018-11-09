@@ -742,7 +742,6 @@ No futuro, este processo de verificação será mais sofisticado.</string>
     <string name="groups_list">Lista dos grupos</string>
 
     <string name="call">Chamada</string>
-    <string name="room_participants_kick_prompt_msg">Tem certeza que quer excluir esta pessoa da conversa?</string>
     <string name="room_participants_ban_prompt_msg">Tem certeza que quer banir esta pessoa desta conversa?</string>
 
     <string name="room_settings_all_messages_noisy">Notificação sonora para cada mensagem</string>

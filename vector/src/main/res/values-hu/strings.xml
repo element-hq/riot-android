@@ -765,7 +765,6 @@ Ismeretlen eszközök:</string>
 
     <string name="groups_list">Csoportok listája</string>
 
-    <string name="room_participants_kick_prompt_msg">Biztos, hogy ki akarod rúgni ezt az illetőt ebből a beszélgetésből?</string>
     <string name="room_participants_ban_prompt_msg">Biztos, hogy ki akarod tiltani ezt az illetőt ebből a beszélgetésből?</string>
 
     <string name="room_settings_all_messages_noisy">Összes üzenet (hangos)</string>
