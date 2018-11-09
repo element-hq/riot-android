@@ -62,7 +62,7 @@
     <string name="join_room">部屋へ参加</string>
     <string name="missing_permissions_title_to_start_conf_call">通話が開始できません</string>
     <string name="action_voice_call">音声通話</string>
-    <string name="action_video_call">映像付き通話</string>
+    <string name="action_video_call">ビデオ通話</string>
     <string name="action_global_search">全体検索</string>
     <string name="local_address_book_header">端末の電話帳</string>
     <string name="no_room_placeholder">部屋がありません</string>
@@ -301,7 +301,7 @@
     <string name="room_settings_addresses_pref_title">住所表記</string>
     <string name="room_settings_addresses_invalid_format_dialog_title">住所表記が正しくありません</string>
     <string name="room_settings_addresses_invalid_format_dialog_body">\'%s\' は正しくない形式の住所表記です</string>
-    <string name="room_settings_addresses_disable_main_address_prompt_msg">本住所表記が設定されていません. この部屋の本住所表記は無作為に設定選択されます</string>
+    <string name="room_settings_addresses_disable_main_address_prompt_msg">この部屋の本住所表記が設定されていません.</string>
     <string name="room_settings_addresses_disable_main_address_prompt_title">本住所表記の警告</string>
 
     <string name="room_settings_set_main_address">本住所表記を設定</string>
@@ -333,12 +333,12 @@
     <string name="option_take_photo_video">写真または動画を撮影</string>
 
     <string name="auth_send_reset_email">初期化メール送信</string>
-    <string name="permissions_rationale_msg_camera">写真撮影や映像付き通話には, Riotアプリに端末のカメラの使用を許可する必要がります.</string>
-    <string name="ongoing_conference_call">" 会議通話実施中。音声か映像で参加してください。"</string>
+    <string name="permissions_rationale_msg_camera">写真撮影やビデオ通話には, Riotアプリに端末のカメラの使用を許可する必要があります.</string>
+    <string name="ongoing_conference_call">会議通話実施中。音声かビデオ通話で参加してください。</string>
     <string name="ongoing_conference_call_voice">音声</string>
     <string name="ongoing_conference_call_video">映像</string>
     <string name="cannot_start_call">通話を開始できませんでした。後ほど試してください。</string>
-    <string name="missing_permissions_warning">権限が無いため、一部の機能が利用できない可能性があります。</string>
+    <string name="missing_permissions_warning">権限が無いため、一部の機能を利用できない可能性があります…</string>
     <string name="missing_permissions_to_start_conf_call">この部屋で会議を開始するためには招待権限が必要です</string>
     <string name="send_anyway">とにかく送る</string>
     <string name="action_sign_out">ログアウト</string>
@@ -415,7 +415,7 @@
     <string name="call_connected">通話が接続されました</string>
     <string name="call_connecting">通話を接続中…</string>
     <string name="incoming_call">通話着信中</string>
-    <string name="incoming_video_call">映像つき通話の着信中</string>
+    <string name="incoming_video_call">ビデオ通話の着信中</string>
     <string name="incoming_voice_call">音声通話の着信中</string>
     <string name="call_in_progress">通話中</string>
 
@@ -472,7 +472,7 @@
     <string name="room_settings_leave_conversation">退室</string>
     <string name="room_sliding_menu_messages">会話</string>
     <string name="room_sliding_menu_settings">設定</string>
-    <string name="room_sliding_menu_version">"Version "</string>
+    <string name="room_sliding_menu_version">Version</string>
     <string name="room_sliding_menu_term_and_conditions">利用規約</string>
     <string name="room_sliding_menu_copyright">著作権</string>
     <string name="room_sliding_menu_privacy_policy">個人情報保護方針</string>
@@ -490,11 +490,13 @@
     <string name="account_phone_number_already_used_error">この電話番号は既に使用されています</string>
 
     <string name="settings_change_password">パスワード変更</string>
-    <string name="settings_old_password">今までのパスワード</string>
+    <string name="settings_old_password">古いパスワード</string>
     <string name="settings_new_password">新しいパスワード</string>
-    <string name="settings_confirm_password">パスワード確認</string>
+    <string name="settings_confirm_password">確認のパスワード</string>
     <string name="settings_fail_to_update_password">パスワードの更新に失敗しました</string>
-    <string name="settings_unignore_user">%s さんからの発言を表示してよろしいですか？</string>
+    <string name="settings_unignore_user">％sのすべてのメッセージを表示しますか？
+
+この操作はアプリを再起動し、時間がかかることに注意してください。</string>
 
     <string name="settings_phone_number_verification_error">電話番号の認証時にエラーが発生しました</string>
     <string name="room_settings_room_access_warning">この部屋へのリンクを作成するには、部屋の住所表記が必要です。</string>
@@ -537,7 +539,7 @@
     <string name="permissions_rationale_msg_record_audio_explanation">
 
 通話をするには、次のポップアップでアクセスできるようにしてください。</string>
-    <string name="permissions_rationale_msg_camera_and_audio">映像つき通話を行うには、カメラとマイクにアクセスするための権限がRiotアプリに必要です。
+    <string name="permissions_rationale_msg_camera_and_audio">ビデオ通話を行うには、カメラとマイクにアクセスするための権限がRiotアプリに必要です。
 
 通話をするには、次のポップアップでのアクセスを許可してください。</string>
     <string name="permissions_rationale_msg_contacts">Matrixユーザが電子メールアドレスや電話番号を元に他のユーザを検索するためには、Riotアプリがあなたの端末内電話帳へアクセスする許可が必要です。
@@ -582,8 +584,7 @@ Riotアプリがあなたの電話帳へアクセスすることを許可しま�
 
     <string name="encryption_information_verify_key_match">キーが一致していることを確認</string>
 
-    <string name="encryption_information_verify_device_warning2">一致する場合は、下の確認ボタンを押します。そうでない場合は、他の誰かがこのデバイスを盗聴しているので、代わりにブロックボタンを押すことをおすすめします。
-将来この検証プロセスはより洗練されたものになるでしょう。</string>
+    <string name="encryption_information_verify_device_warning2">一致する場合は、下の確認ボタンを押します。そうでない場合は、他の誰かがこのデバイスを盗聴しているので、代わりにブロックボタンを押すことをおすすめします。将来この検証プロセスはより洗練されたものになるでしょう。</string>
     <string name="encryption_information_verify_device">デバイスの検証</string>
     <string name="encryption_information_unknown_device">不明なデバイス</string>
     <string name="encryption_never_send_to_unverified_devices_summary">このデバイスから未認証のデバイスに暗号化されたメッセージを送信しない</string>
@@ -643,7 +644,9 @@ Riotアプリがあなたの電話帳へアクセスすることを許可しま�
     <string name="ssl_only_accept">サーバの管理者が上のフィンガープリントと一致するものを発行した場合に限り、証明書を承認してください。</string>
     <string name="malformed_id">不正な形式のIDです。メールアドレスまたは\'@localpart:domain\'のようなMatrix IDを入力してください</string>
     <string name="room_event_action_report_prompt_reason">このコンテンツを報告する理由</string>
-    <string name="room_event_action_report_prompt_ignore_user">このユーザによるすべてのメッセージを非表示にしますか？</string>
+    <string name="room_event_action_report_prompt_ignore_user">このユーザによるすべてのメッセージを非表示にしますか？
+
+この操作はアプリを再起動し、時間がかかることに注意してください。</string>
     <string name="room_event_action_cancel_upload">アップロードをキャンセルする</string>
     <string name="room_event_action_cancel_download">ダウンロードをキャンセルする</string>
 
@@ -757,12 +760,12 @@ Riotアプリがあなたの電話帳へアクセスすることを許可しま�
 
     <string name="start_new_chat_prompt_msg">%sと新しい対話を開始して本当によろしいですか？</string>
     <string name="start_voice_call_prompt_msg">音声通話を開始して本当によろしいですか？</string>
-    <string name="start_video_call_prompt_msg">ビデオ通話を開始して本当によろしいですか？</string>
+    <string name="start_video_call_prompt_msg">本当にビデオ通話を開始しますか？</string>
 
     <string name="groups_list">グループリスト</string>
 
     <string name="room_participants_kick_prompt_msg">このユーザをこの対話から除外して本当によろしいですか？</string>
-    <string name="room_participants_ban_prompt_msg">このユーザが対話に参加するのを禁止して本当によろしいですか？</string>
+    <string name="room_participants_ban_prompt_msg">このユーザが対話に参加するのを本当にブロックしますか？</string>
 
     <string name="room_settings_all_messages_noisy">すべてのメッセージ (大音量)</string>
     <string name="room_settings_all_messages">すべてのメッセージ</string>
@@ -771,7 +774,7 @@ Riotアプリがあなたの電話帳へアクセスすることを許可しま�
 
     <string name="settings_inline_url_preview">デフォルトでURLのプレビューを表示</string>
     <string name="room_settings_room_notifications_title">通知</string>
-    <string name="room_settings_no_flair">" この部屋はどのコミュニティにも属していません"</string>
+    <string name="room_settings_no_flair">この部屋はコミュニティの特色を表示していません</string>
     <string name="settings_flair">所属するコミュニティ</string>
 
     <string name="room_settings_add_new_group">新しいコミュニティID (記入例 +foo:matrix.org)</string>
@@ -779,7 +782,9 @@ Riotアプリがあなたの電話帳へアクセスすることを許可しま�
     <string name="room_settings_invalid_group_format_dialog_body">\'%s\' は有効なコミュニティIDではありません</string>
 
 
-    <string name="encryption_export_saved_as">部屋のエンドツーエンド暗号鍵は \'%s\' に保存されました</string>
+    <string name="encryption_export_saved_as">部屋のエンドツーエンド暗号鍵は \'%s\' に保存されました。
+
+警告：このファイルは、アプリケーションがアンインストールされた場合に削除されることがあります。</string>
 
     <string name="you_added_a_new_device">暗号鍵を要求している新しい端末 \'%s\' を追加しました。</string>
     <string name="your_unverified_device_requesting">未確認の端末 \'%s\' が暗号鍵を要求しています。</string>
@@ -1013,4 +1018,23 @@ Matrixでのメッセージの可視性は電子メールと同様です。メ�
     <string name="settings_lazy_loading_title">部屋のメンバーの簡易読み込み</string>
     <string name="unknown_error">申し訳ありません、エラーが発生しました</string>
 
-</resources>
+<string name="status_theme">Status.im テーマ</string>
+
+    <string name="room_sliding_menu_version_x">Version %s</string>
+    <string name="encryption_export_notice">エクスポートされた鍵を暗号化するパスフレーズを作成してください。 キーをインポートするには、同じパスフレーズを入力する必要があります。</string>
+    <string name="encryption_export_create_passphrase">パスフレーズの作成</string>
+    <string name="encryption_export_passphrase_dont_match">パスフレーズは一致する必要があります</string>
+    <string name="settings_info_area_show">情報領域を表示</string>
+    <string name="show_info_area_always">常に</string>
+    <string name="show_info_area_only_errors">エラーの場合のみ</string>
+
+    <string name="generic_label">%1$s:</string>
+    <string name="generic_label_and_value">%1$s: %2$s</string>
+    <string name="plus_x">+%d</string>
+    <string name="x_plus">%d+</string>
+
+<string name="merged_events_expand">展開</string>
+    <string name="merged_events_collapse">畳む</string>
+
+    <string name="show_info_area_messages_and_errors">メッセージとエラーの場合</string>
+    </resources>
