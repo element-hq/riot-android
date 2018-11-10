@@ -114,7 +114,7 @@
     <string name="send_bug_report_include_logs">Надіслати журнали</string>
     <string name="send_bug_report_include_crash_logs">Надіслати журнали помилок</string>
     <string name="send_bug_report_include_screenshot">Надіслати знімок екрана</string>
-    <string name="send_bug_report">Звіт про помилку</string>
+    <string name="send_bug_report">Повідомити про помилку</string>
     <string name="send_bug_report_description">Буль ласка, опишіть помилку. Що ви робили? Якої поведінки чекали? Що сталося натомість?</string>
     <string name="send_bug_report_placeholder">Опишіть свою проблему</string>
     <string name="send_bug_report_logs_description">Для діагностики проблеми, журнали з цього клієнту будуть приєднані до звіту про помилку. Цей звіт, включаючи журнали та скріншот, не буде доступний публічно. Якщо ви не хочете надсилати журнали, зніміть позначку:</string>
@@ -417,7 +417,7 @@
 
     <!-- Directory -->
     <string name="directory_search_results_title">Огляд каталогу</string>
-    <string name="directory_searching_title">Пошук у каталозі…</string>
+    <string name="directory_searching_title">Пошук у каталозі..</string>
 
     <!-- home room settings -->
     <string name="room_settings_favourite">Обране</string>
@@ -1047,4 +1047,66 @@
 </plurals>
     <string name="group_no_long_description">Адміністратор спільноти не вказав для неї детальної інформації.</string>
 
-    </resources>
+    <string name="has_been_kicked">%2$s Вас викинув з %1$s</string>
+    <string name="has_been_banned">%2$s Вас забанив у %1$s</string>
+    <string name="reason_colon">Причина: %1$s</string>
+    <string name="rejoin">Приєднатися знову</string>
+    <string name="forget_room">Забути кімнату</string>
+
+    <string name="receipt_avatar">Отримати аватар</string>
+    <string name="notice_avatar">Нотатка аватару</string>
+    <string name="avatar">Аватар</string>
+
+    <string name="dialog_user_consent_content">Щоб продовжити користуватися домашнім сервером %1$s Вам слід ознайомитись та прийняти Умови використання.</string>
+    <string name="dialog_user_consent_submit">Ознайомитись зараз</string>
+
+    <string name="deactivate_account_title">Деактивувати обліковий запис</string>
+    <string name="deactivate_account_content">Це зробить Ваш обліковий запис непридатним до подальшого використання. Ви не будете спроможні заходити у систему, та ніхто інший не зможе зареєструватися з таким самим ID. Це спричинить вихід Вашого облікового запису з усіх кімнат, в яких він зареєстрований, а також видалить усі данні облікового запису із Вашого серверу ідентифікації. <b>Ця дія незворотня</b>.
+
+Деактивація Вашого облікового запису <b>за замовчанням не спричинить видалення надісланих Вами повідомлень</b>. Якщо Ви бажаєте позбавитись Ваших повідомлень, будь ласка, поставте позначку під цим текстом.
+
+Відображення повідомлень у Matrix подібне до електронної пошти. Таке видалення означає, що Ваші надіслані повідомлення не будуть поширюватись серед нових або незареєстрованих користувачів, проте зареєстрованим користувачам, які мали доступ до цих повідомлень, все ще будуть доступні їх копії.</string>
+    <string name="deactivate_account_delete_checkbox">Будь ласка, після деактивації мого облікового запису видаліть усі надіслані мною повідомлення (Увага: це спричинить неповне відображення розмов для нових користувачів)</string>
+    <string name="deactivate_account_prompt_password">Для продовження, будь ласка, введіть Ваш пароль:</string>
+    <string name="deactivate_account_submit">Деактивувати обліковий запис</string>
+
+    <string name="error_empty_field_your_password">Будь ласка, введіть Ваш пароль.</string>
+    <string name="room_tombstone_versioned_description">Ця кімната була замінена та більше не активна</string>
+    <string name="room_tombstone_continuation_link">Продовження розмови тут</string>
+    <string name="room_tombstone_continuation_description">Ця кімната є продовженням іншої розмови</string>
+    <string name="room_tombstone_predecessor_link">Натисніть сюди, щоб побачити старіші повідомлення</string>
+
+    <string name="resource_limit_exceeded_title">Перевищено ресурсний ліміт</string>
+    <string name="resource_limit_contact_action">Зв’язатися з адміністратором</string>
+
+    <string name="resource_limit_contact_admin">зв’яжіться з Вашим адміністратором</string>
+
+    <string name="resource_limit_soft_default">Цей сервер перевищив один із ресурсних лімітів, тому <b>деякі користувачі не зможуть увійти в систему</b>.</string>
+    <string name="resource_limit_hard_default">Цей сервер перевищив один із ресурсних лімітів.</string>
+
+    <string name="resource_limit_soft_mau"> Цей сервер досяг свого місячного ліміту активних користувачів, тому <b>деякі з них не зможуть увійти в систему</b>.</string>
+    <string name="resource_limit_hard_mau">Цей сервер досяг свого місячного ліміту активних користувачів.</string>
+
+    <string name="resource_limit_soft_contact">Будь ласка, %s для збільшення цього ліміту.</string>
+    <string name="resource_limit_hard_contact">Будь ласка, %s для продовження використання цього сервісу.</string>
+
+    <string name="settings_lazy_loading_title">Поступове завантаження співрозмовників</string>
+    <string name="settings_lazy_loading_description">Підвищити продуктивність, завантажуючи співрозмовників лише при першому перегляді</string>
+    <string name="error_lazy_loading_not_supported_by_home_server">Ваш сервер ще не має підтримки поступового завантаження співрозмовників. Спробуйте пізніше.</string>
+
+    <string name="unknown_error">Вибачте, сталася помилка</string>
+
+    <string name="merged_events_expand">розгорнути</string>
+    <string name="merged_events_collapse">згорнути</string>
+
+    <string name="settings_info_area_show">Показувати інформаційне поле</string>
+    <string name="show_info_area_always">Завжди</string>
+    <string name="show_info_area_messages_and_errors">Для повідомлень та помилок</string>
+    <string name="show_info_area_only_errors">Лише для помилок</string>
+
+    <string name="generic_label">%1$s:</string>
+    <string name="generic_label_and_value">%1$s: %2$s</string>
+    <string name="plus_x">+%d</string>
+    <string name="x_plus">%d+</string>
+
+</resources>
