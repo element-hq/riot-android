@@ -455,8 +455,8 @@ Note que esta acção irá reiniciar a aplicação e poderá levar algum tempo.<
     <string name="settings_add_email_address">Adicionar endereço de e-mail</string>
     <string name="settings_phone_number">Telefone</string>
     <string name="settings_add_phone_number">Adicionar número de telefone</string>
-    <string name="settings_summary_app_info_link">Ecrã de informações de sistema da aplicação</string>
-    <string name="settings_title_app_info_link">Informações da aplicação</string>
+    <string name="settings_app_info_link_summary">Ecrã de informações de sistema da aplicação</string>
+    <string name="settings_app_info_link_title">Informações da aplicação</string>
 
     <string name="settings_enable_all_notif">Ativar notificações para esta conta</string>
     <string name="settings_enable_this_device">Ativar notificações para este dispositivo</string>
@@ -739,7 +739,7 @@ Dispositivos desconhecidos:</string>
     <string name="user_directory_header">Lista de utilizadores</string>
     <string name="people_search_user_directory">LISTA DE UTILIZADORES (%s)</string>
     <string name="settings_start_on_boot">Iniciar no arranque</string>
-    <string name="settings_clear_medias_cache">Limpar cache de multimédia</string>
+    <string name="settings_clear_media_cache">Limpar cache de multimédia</string>
     <string name="light_theme">Tema Claro</string>
     <string name="dark_theme">Tema Escuro</string>
     <string name="black_them">Tema Preto</string>

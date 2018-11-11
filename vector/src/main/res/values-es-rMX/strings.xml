@@ -434,8 +434,8 @@ Mensajes cifrados no serán visibles en cuentas que no implementan el cifrado.</
     <string name="settings_add_email_address">Añadir correo electrónico</string>
     <string name="settings_phone_number">Número Telefónico</string>
     <string name="settings_add_phone_number">Añadir número telefónico</string>
-    <string name="settings_summary_app_info_link">Página de la información del sistema de la aplicación</string>
-    <string name="settings_title_app_info_link">Información de la Aplicación</string>
+    <string name="settings_app_info_link_summary">Página de la información del sistema de la aplicación</string>
+    <string name="settings_app_info_link_title">Información de la Aplicación</string>
 
     <string name="settings_enable_all_notif">Encender notificaciones para esta cuenta</string>
     <string name="settings_enable_this_device">Encender notificaciones para este dispositivo</string>

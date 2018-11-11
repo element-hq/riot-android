@@ -200,7 +200,7 @@
     <string name="settings_set_sync_timeout">新着確認を失敗とするまでの時間</string>
     <string name="settings_set_sync_delay">再度新着確認を送るまでの時間</string>
     <string name="settings_clear_cache">一時保存を消去</string>
-    <string name="settings_clear_medias_cache">画像等の一時保存を消去</string>
+    <string name="settings_clear_media_cache">画像等の一時保存を消去</string>
     <string name="settings_keep_media">画像等を一時保存する期間</string>
 
     <string name="settings_user_settings">利用者設定</string>
@@ -651,8 +651,8 @@ Riotアプリがあなたの電話帳へアクセスすることを許可しま�
     <string name="directory_searching_title">ディレクトリを検索中..</string>
 
     <string name="room_sliding_menu_third_party_notices">サードパーティのライセンスに関する通知</string>
-    <string name="settings_summary_app_info_link">このアプリのシステムの情報を見る</string>
-    <string name="settings_title_app_info_link">アプリの情報</string>
+    <string name="settings_app_info_link_summary">このアプリのシステムの情報を見る</string>
+    <string name="settings_app_info_link_title">アプリの情報</string>
 
     <string name="settings_containing_my_display_name">自分の名前を含むメッセージ</string>
     <string name="settings_containing_my_user_name">自分のユーザネームを含むメッセージ</string>

@@ -460,8 +460,8 @@ Tieni presente che questa azione riavvierà l\'app e potrebbe richiedere del tem
     <string name="settings_add_email_address">Aggiungi indirizzo email</string>
     <string name="settings_phone_number">Telefono</string>
     <string name="settings_add_phone_number">Aggiungi numero di telefono</string>
-    <string name="settings_summary_app_info_link">Informazioni di sistema per l\'applicazione</string>
-    <string name="settings_title_app_info_link">Informazioni applicazione</string>
+    <string name="settings_app_info_link_summary">Informazioni di sistema per l\'applicazione</string>
+    <string name="settings_app_info_link_title">Informazioni applicazione</string>
 
     <string name="settings_enable_all_notif">Abilita notifiche per questo account</string>
     <string name="settings_enable_this_device">Abilita notifiche per questo dispositivo</string>
@@ -488,7 +488,7 @@ Tieni presente che questa azione riavvierà l\'app e potrebbe richiedere del tem
     <string name="settings_copyright">Copyright</string>
     <string name="settings_privacy_policy">Politica sulla privacy</string>
     <string name="settings_clear_cache">Elimina cache</string>
-    <string name="settings_clear_medias_cache">Elimina file multimediali temporanei</string>
+    <string name="settings_clear_media_cache">Elimina file multimediali temporanei</string>
     <string name="settings_keep_media">Conserva file multimediali</string>
 
     <string name="settings_user_settings">Impostazioni utente</string>

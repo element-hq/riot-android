@@ -551,8 +551,8 @@ Perhatikan bahwa tindakan ini akan memulai ulang aplikasi dan mungkin cukup mema
     <string name="settings_add_email_address">Tambahkan alamat email</string>
     <string name="settings_phone_number">Telepon</string>
     <string name="settings_add_phone_number">Tambahkan nomor telepon</string>
-    <string name="settings_summary_app_info_link">Layar info sistem aplikasi</string>
-    <string name="settings_title_app_info_link">Info aplikasi</string>
+    <string name="settings_app_info_link_summary">Layar info sistem aplikasi</string>
+    <string name="settings_app_info_link_title">Info aplikasi</string>
 
     <string name="settings_notification_privacy">Kerahasiaan pemberitahuan</string>
     <string name="settings_notification_privacy_warning">Riot.im beroperasi di balik layar untuk menjaga kerahasiaan isi pesan pemberitahuan. Anda dapat mengubah pengaturan untuk mengurangi penggunaan baterai.</string>
@@ -874,7 +874,7 @@ Peringatan: berkas ini mungkin ikut terhapus jika aplikasi dihapus.</string>
     <string name="settings_copyright">Hak Cipta</string>
     <string name="settings_privacy_policy">Kebijakan Pribadi</string>
     <string name="settings_clear_cache">Bersihkan cache</string>
-    <string name="settings_clear_medias_cache">Bersihkan cache media</string>
+    <string name="settings_clear_media_cache">Bersihkan cache media</string>
     <string name="settings_keep_media">Pertahankan media</string>
 
     <string name="settings_user_settings">Pengaturan pengguna</string>

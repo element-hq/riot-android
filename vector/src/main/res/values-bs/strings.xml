@@ -421,8 +421,8 @@ Da li ste sigurani?</string>
     <string name="settings_add_email_address">Dodaj email adresu</string>
     <string name="settings_phone_number">Telefon</string>
     <string name="settings_add_phone_number">Dodaj broj telefona</string>
-    <string name="settings_summary_app_info_link">Infomacije o aplikacijskom sustavu</string>
-    <string name="settings_title_app_info_link">Informacije o aplikaciji</string>
+    <string name="settings_app_info_link_summary">Infomacije o aplikacijskom sustavu</string>
+    <string name="settings_app_info_link_title">Informacije o aplikaciji</string>
 
     <string name="settings_notification_ringtone">Zvuk notifikacije</string>
     <string name="settings_enable_all_notif">Omogući obavijesti za ovaj račun</string>
@@ -452,7 +452,7 @@ Da li ste sigurani?</string>
     <string name="settings_copyright">Copyright</string>
     <string name="settings_privacy_policy">Privatnost</string>
     <string name="settings_clear_cache">Očisti keš</string>
-    <string name="settings_clear_medias_cache">Očisti medija keš</string>
+    <string name="settings_clear_media_cache">Očisti medija keš</string>
     <string name="settings_keep_media">Dodaj medij</string>
 
     <string name="settings_user_settings">Korisničke postavke</string>

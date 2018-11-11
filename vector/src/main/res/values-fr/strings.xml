@@ -282,8 +282,8 @@ Cliquez sur exporter pour les sauvegarder avant de vous déconnecter.</string>
     <string name="settings_add_email_address">Ajouter une adresse e-mail</string>
     <string name="settings_phone_number">Téléphone</string>
     <string name="settings_add_phone_number">Ajouter un numéro de téléphone</string>
-    <string name="settings_summary_app_info_link">Information sur l\'application</string>
-    <string name="settings_title_app_info_link">Informations sur l\'application</string>
+    <string name="settings_app_info_link_summary">Information sur l\'application</string>
+    <string name="settings_app_info_link_title">Informations sur l\'application</string>
 
     <string name="settings_enable_all_notif">Activer les notifications pour ce compte</string>
     <string name="settings_enable_this_device">Activer les notifications pour cet appareil</string>
@@ -665,7 +665,7 @@ Appareils inconnus :</string>
 
     <string name="people_search_user_directory">RÉPERTOIRE UTILISATEUR (%s)</string>
     <string name="settings_start_on_boot">Lancer au démarrage</string>
-    <string name="settings_clear_medias_cache">Vider le cache des médias</string>
+    <string name="settings_clear_media_cache">Vider le cache des médias</string>
     <string name="settings_keep_media">Conserver les médias</string>
 
     <string name="settings_always_show_timestamps">Toujours afficher l\'heure des messages</string>

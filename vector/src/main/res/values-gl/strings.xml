@@ -299,7 +299,7 @@ Pode engadir a dirección de correo na sección de configuración de perfil.</st
     <string name="settings_version">Versión</string>
     <string name="settings_olm_version">versións anteriores</string>
     <string name="settings_clear_cache">Limpar o caché</string>
-    <string name="settings_clear_medias_cache">Limpar o caché de imaxes</string>
+    <string name="settings_clear_media_cache">Limpar o caché de imaxes</string>
     <string name="settings_keep_media">Manter as imaxes</string>
 
     <string name="settings_user_settings">Configuracións dos usuarios</string>

@@ -275,8 +275,8 @@
     <string name="settings_add_email_address">Bæta við tölvupóstfangi</string>
     <string name="settings_phone_number">Símanúmer</string>
     <string name="settings_add_phone_number">Bæta við símanúmeri</string>
-    <string name="settings_summary_app_info_link">Kerfisupplýsingar forrits</string>
-    <string name="settings_title_app_info_link">Upplýsingar um forrit</string>
+    <string name="settings_app_info_link_summary">Kerfisupplýsingar forrits</string>
+    <string name="settings_app_info_link_title">Upplýsingar um forrit</string>
 
     <string name="settings_second">sekúnda</string>
     <string name="settings_seconds">sekúndur</string>
@@ -288,7 +288,7 @@
     <string name="settings_copyright">Höfundarréttur</string>
     <string name="settings_privacy_policy">Meðferð persónuupplýsinga</string>
     <string name="settings_clear_cache">Hreinsa skyndiminni</string>
-    <string name="settings_clear_medias_cache">Hreinsa skyndiminni margmiðlunarefnis</string>
+    <string name="settings_clear_media_cache">Hreinsa skyndiminni margmiðlunarefnis</string>
     <string name="settings_notifications">Tilkynningar</string>
     <string name="settings_ignored_users">Hunsaðir notendur</string>
     <string name="settings_other">Annað</string>

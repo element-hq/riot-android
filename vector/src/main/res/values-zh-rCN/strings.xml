@@ -297,7 +297,7 @@
     <string name="room_sliding_menu_privacy_policy">隐私政策</string>
 
     <string name="settings_phone_number">电话号码</string>
-    <string name="settings_title_app_info_link">应用信息</string>
+    <string name="settings_app_info_link_title">应用信息</string>
 
     <string name="settings_enable_all_notif">启用这个账户的通知</string>
     <string name="settings_enable_this_device">启用这个设备的通知</string>
@@ -481,7 +481,7 @@
     <string name="room_settings_favourite">收藏夹</string>
     <string name="room_sliding_menu_term_and_conditions">使用条款</string>
     <string name="settings_display_name">昵称</string>
-    <string name="settings_summary_app_info_link">应用程序系统信息窗口</string>
+    <string name="settings_app_info_link_summary">应用程序系统信息窗口</string>
     <string name="settings_turn_screen_on">点亮屏幕 3 秒</string>
 
     <string name="settings_call_invitations">通话请求</string>
@@ -663,7 +663,7 @@
     <string name="user_directory_header">用户目录</string>
     <string name="people_search_user_directory">用户目录（%s）</string>
     <string name="settings_start_on_boot">开机时自动启动</string>
-    <string name="settings_clear_medias_cache">清空缓存的媒体文件</string>
+    <string name="settings_clear_media_cache">清空缓存的媒体文件</string>
     <string name="settings_keep_media">保留媒体文件</string>
 
     <string name="settings_always_show_timestamps">总是显示消息时间戳</string>

@@ -459,8 +459,8 @@ Tingueu en compte que aquesta acció reiniciarà l\'aplicació i que pot trigar 
     <string name="settings_add_email_address">Afegeix una adreça de correu electrònic</string>
     <string name="settings_phone_number">Telèfon</string>
     <string name="settings_add_phone_number">Afegeix un número de telèfon</string>
-    <string name="settings_summary_app_info_link">Pantalla d\'informació del sistema de l\'aplicació</string>
-    <string name="settings_title_app_info_link">Informació de l\'aplicació</string>
+    <string name="settings_app_info_link_summary">Pantalla d\'informació del sistema de l\'aplicació</string>
+    <string name="settings_app_info_link_title">Informació de l\'aplicació</string>
 
     <string name="settings_notification_ringtone">So de les notificación</string>
     <string name="settings_enable_all_notif">Habilita les notificacions d\'aquest compte</string>
@@ -490,7 +490,7 @@ Tingueu en compte que aquesta acció reiniciarà l\'aplicació i que pot trigar 
     <string name="settings_copyright">Copyright</string>
     <string name="settings_privacy_policy">Política de privacitat</string>
     <string name="settings_clear_cache">Esborra la memòria cau</string>
-    <string name="settings_clear_medias_cache">Esborra la memòria cau multimèdia</string>
+    <string name="settings_clear_media_cache">Esborra la memòria cau multimèdia</string>
     <string name="settings_keep_media">Manté els elements multimèdia</string>
 
     <string name="settings_user_settings">Configuració de l\'usuari</string>

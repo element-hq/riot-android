@@ -435,8 +435,8 @@ Let op: deze actie zal de app opnieuw opstarten, en kan enige tijd kosten.</stri
     <string name="settings_add_email_address">E-mailadres toevoegen</string>
     <string name="settings_phone_number">Telefoonnummer</string>
     <string name="settings_add_phone_number">Add phone number</string>
-    <string name="settings_summary_app_info_link">Applicatiesysteem informatiescherm</string>
-    <string name="settings_title_app_info_link">Applicatie informatie</string>
+    <string name="settings_app_info_link_summary">Applicatiesysteem informatiescherm</string>
+    <string name="settings_app_info_link_title">Applicatie informatie</string>
 
     <string name="settings_enable_all_notif">Notificaties voor dit account aanzetten</string>
     <string name="settings_enable_this_device">Notificaties voor dit apparaat aanzetten</string>
@@ -690,7 +690,7 @@ Je kan het nu, of later, doen vanuit de programma-instellingen.</string>
     <string name="user_directory_header">Gebruikersadresboek</string>
     <string name="people_search_user_directory">GEBRUIKERSADRESBOEK (%s)</string>
     <string name="settings_start_on_boot">Start bij het inschakelen van je telefoon</string>
-    <string name="settings_clear_medias_cache">Media cache vrijmaken</string>
+    <string name="settings_clear_media_cache">Media cache vrijmaken</string>
     <string name="settings_keep_media">Media behouden</string>
 
     <string name="settings_always_show_timestamps">Altijd tijden van berichten weergeven</string>

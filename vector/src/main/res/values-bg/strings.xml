@@ -307,7 +307,7 @@
     <string name="call_connected">Свързано повикване</string>
     <string name="call_error_user_not_responding">Отсрещната страна не успя да отговори на повикването.</string>
     <string name="call_error_ice_failed">Неуспешна връзка с медийното устройство</string>
-    <string name="settings_clear_medias_cache">Изчисти кеша за медия</string>
+    <string name="settings_clear_media_cache">Изчисти кеша за медия</string>
     <string name="settings_keep_media">Запази медия</string>
 
     <string name="call_error_camera_init_failed">Неуспешно подготвяне на камерата</string>
@@ -762,8 +762,8 @@
     <string name="room_details_people_present_group_name">УЧАСТНИЦИ</string>
 
     <string name="room_sync_in_progress">Синхронизиране…</string>
-    <string name="settings_summary_app_info_link">Екран с информация за системата на приложението</string>
-    <string name="settings_title_app_info_link">Информация за приложението</string>
+    <string name="settings_app_info_link_summary">Екран с информация за системата на приложението</string>
+    <string name="settings_app_info_link_title">Информация за приложението</string>
 
     <string name="settings_notification_ringtone">Звук на известията</string>
     <string name="settings_turn_screen_on">Включи екрана за 3 секунди</string>

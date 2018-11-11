@@ -443,8 +443,8 @@
     <string name="settings_add_email_address">Додати email</string>
     <string name="settings_phone_number">Телефон</string>
     <string name="settings_add_phone_number">Додати номер телефону</string>
-    <string name="settings_summary_app_info_link">Екран системної інформації застосунку</string>
-    <string name="settings_title_app_info_link">Про застосунок</string>
+    <string name="settings_app_info_link_summary">Екран системної інформації застосунку</string>
+    <string name="settings_app_info_link_title">Про застосунок</string>
 
     <string name="settings_notification_ringtone">Тон сповіщення</string>
     <string name="settings_enable_all_notif">Увімкнути сповіщення для цього облікового запису</string>
@@ -474,7 +474,7 @@
     <string name="settings_copyright">Copyright</string>
     <string name="settings_privacy_policy">Політика конфіденційності</string>
     <string name="settings_clear_cache">Очистити кеш</string>
-    <string name="settings_clear_medias_cache">Очистити медіа кеш</string>
+    <string name="settings_clear_media_cache">Очистити медіа кеш</string>
     <string name="settings_keep_media">Зберігати медіа</string>
 
     <string name="settings_user_settings">Налаштування користувача</string>

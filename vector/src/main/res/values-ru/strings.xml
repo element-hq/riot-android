@@ -446,8 +446,8 @@ Email также позволит вам при необходимости во�
     <string name="settings_add_email_address">Добавить email</string>
     <string name="settings_phone_number">Телефон</string>
     <string name="settings_add_phone_number">Добавить телефон</string>
-    <string name="settings_summary_app_info_link">Экран системной информации приложения</string>
-    <string name="settings_title_app_info_link">Сведения о приложении</string>
+    <string name="settings_app_info_link_summary">Экран системной информации приложения</string>
+    <string name="settings_app_info_link_title">Сведения о приложении</string>
     
     <string name="settings_enable_all_notif">Включить уведомления для этой учетной записи</string>
     <string name="settings_enable_this_device">Включить уведомления для этого устройства</string>
@@ -715,7 +715,7 @@ Email также позволит вам при необходимости во�
     <string name="media_saving_period_1_month">1 месяц</string>
     <string name="media_saving_period_forever">Постоянно</string>
 
-    <string name="settings_clear_medias_cache">Очистить медиа кэш</string>
+    <string name="settings_clear_media_cache">Очистить медиа кэш</string>
     <string name="offline">Недоступен</string>
 
     <string name="user_directory_header">Каталог пользователей</string>

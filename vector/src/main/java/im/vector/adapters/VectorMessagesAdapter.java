@@ -216,7 +216,7 @@ public class VectorMessagesAdapter extends AbstractMessagesAdapter {
 
     // custom settings
     private final boolean mAlwaysShowTimeStamps;
-    private final boolean mHideReadReceipts;
+    private final boolean mShowReadReceipts;
 
     // Key is member id.
     private final Map<String, RoomMember> mLiveRoomMembers = new HashMap<>();
@@ -375,7 +375,7 @@ public class VectorMessagesAdapter extends AbstractMessagesAdapter {
         mLocale = VectorLocale.INSTANCE.getApplicationLocale();
 
         mAlwaysShowTimeStamps = PreferencesManager.alwaysShowTimeStamps(VectorApp.getInstance());
-        mHideReadReceipts = PreferencesManager.showReadReceipts(VectorApp.getInstance());
+        mShowReadReceipts = PreferencesManager.showReadReceipts(VectorApp.getInstance());
 
         mPadlockDrawable = ThemeUtils.INSTANCE.tintDrawable(mContext,
                 ContextCompat.getDrawable(mContext, R.drawable.e2e_unencrypted), R.attr.vctr_settings_icon_tint_color);
@@ -1173,7 +1173,7 @@ public class VectorMessagesAdapter extends AbstractMessagesAdapter {
         VectorMessagesAdapterHelper.setHeader(convertView, headerMessage(position), position);
 
         // read receipts
-        if (mHideReadReceipts) {
+        if (!mShowReadReceipts) {
             mHelper.hideReadReceipts(convertView);
         } else {
             mHelper.displayReadReceipts(convertView, row, mIsPreviewMode, mLiveRoomMembers);

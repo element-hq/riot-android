@@ -502,8 +502,8 @@
     <string name="settings_add_email_address">新增電子郵件地址</string>
     <string name="settings_phone_number">電話號碼</string>
     <string name="settings_add_phone_number">添加電話號碼</string>
-    <string name="settings_summary_app_info_link">應用程式系統資訊畫面</string>
-    <string name="settings_title_app_info_link">應用程式資訊</string>
+    <string name="settings_app_info_link_summary">應用程式系統資訊畫面</string>
+    <string name="settings_app_info_link_title">應用程式資訊</string>
 
     <string name="settings_notification_privacy">通知隱私</string>
     <string name="settings_notification_privacy_warning">Riot.im 將在後臺運行以保持通知訊息內容的私密。您可以更改此選項以減少電池使用量。</string>
@@ -547,7 +547,7 @@
     <string name="settings_copyright">版權</string>
     <string name="settings_privacy_policy">隱私權政策</string>
     <string name="settings_clear_cache">清空暫存檔</string>
-    <string name="settings_clear_medias_cache">清除媒體暫存檔</string>
+    <string name="settings_clear_media_cache">清除媒體暫存檔</string>
     <string name="settings_keep_media">保留媒體檔案</string>
 
     <string name="settings_user_settings">使用者設定</string>

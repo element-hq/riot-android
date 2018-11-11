@@ -416,8 +416,8 @@ Vedd figyelembe, hogy az alkalmazás újraindul  ami sok időt vehet igénybe."<
     <string name="settings_add_email_address">E-mail cím hozzáadása</string>
     <string name="settings_phone_number">Telefon</string>
     <string name="settings_add_phone_number">Telefonszám hozzáadása</string>
-    <string name="settings_summary_app_info_link">Alkalmazás infók a rendszerbeállításokban</string>
-    <string name="settings_title_app_info_link">Alkalmazás infó</string>
+    <string name="settings_app_info_link_summary">Alkalmazás infók a rendszerbeállításokban</string>
+    <string name="settings_app_info_link_title">Alkalmazás infó</string>
 
     <string name="settings_enable_all_notif">Értesítések bekapcsolása ehhez a felhasználóhoz</string>
     <string name="settings_enable_this_device">Értesítések bekapcsolása ehhez a készülékhez</string>
@@ -655,7 +655,7 @@ Ismeretlen eszközök:</string>
     <string name="account_phone_number_already_used_error">Ez a telefonszám már használatban van</string>
 
     <string name="settings_start_on_boot">Indítás rendszerinduláskor</string>
-    <string name="settings_clear_medias_cache">Média gyorsítótár törlése</string>
+    <string name="settings_clear_media_cache">Média gyorsítótár törlése</string>
     <string name="settings_keep_media">Média megtartása</string>
 
     <string name="settings_always_show_timestamps">Mindig jelenítse meg az üzenetek időbélyegét</string>

@@ -458,8 +458,8 @@ Vai vēlies turpināt?</string>
     <string name="settings_add_email_address">Pievienot epasta adresi</string>
     <string name="settings_phone_number">Tālrunis</string>
     <string name="settings_add_phone_number">Pievienot tālruņa #</string>
-    <string name="settings_summary_app_info_link">Doties uz Android Lietotņu informācijas sadaļu</string>
-    <string name="settings_title_app_info_link">Lietotnes informācija</string>
+    <string name="settings_app_info_link_summary">Doties uz Android Lietotņu informācijas sadaļu</string>
+    <string name="settings_app_info_link_title">Lietotnes informācija</string>
 
     <string name="settings_notification_ringtone">Paziņojumu skaņa</string>
     <string name="settings_enable_all_notif">Iespējot šim kontam paziņojumus</string>
@@ -489,7 +489,7 @@ Vai vēlies turpināt?</string>
     <string name="settings_copyright">Autortiesības</string>
     <string name="settings_privacy_policy">Privātuma politika</string>
     <string name="settings_clear_cache">Iztīrīt ķešu</string>
-    <string name="settings_clear_medias_cache">Iztīrīt mēdija ķešu</string>
+    <string name="settings_clear_media_cache">Iztīrīt mēdija ķešu</string>
     <string name="settings_keep_media">Turēt mēdiju (?)</string>
 
     <string name="settings_user_settings">Lietotāja iestatījumi</string>

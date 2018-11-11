@@ -436,8 +436,8 @@ Note que esta ação irá reiniciar o aplicativo e poderá tomar um certo tempo.
     <string name="settings_add_email_address">Adicionar endereço de email</string>
     <string name="settings_phone_number">Telefone</string>
     <string name="settings_add_phone_number">Adicionar número de telefone</string>
-    <string name="settings_summary_app_info_link">Tela de informações sobre o sistema do aplicativo</string>
-    <string name="settings_title_app_info_link">Informações sobre o aplicativo</string>
+    <string name="settings_app_info_link_summary">Tela de informações sobre o sistema do aplicativo</string>
+    <string name="settings_app_info_link_title">Informações sobre o aplicativo</string>
 
     <string name="settings_enable_all_notif">Habilitar notificações para esta conta</string>
     <string name="settings_enable_this_device">Habilitar notificações para este dispositivo</string>
@@ -682,7 +682,7 @@ No futuro, este processo de verificação será mais sofisticado.</string>
     <string name="user_directory_header">Lista de usuárias(os)</string>
     <string name="people_search_user_directory">LISTA DE USUÁRIAS(OS) (%s)</string>
     <string name="settings_start_on_boot">Iniciar na inicialização do celular</string>
-    <string name="settings_clear_medias_cache">Esvaziar o cache de mídia</string>
+    <string name="settings_clear_media_cache">Esvaziar o cache de mídia</string>
     <string name="settings_keep_media">Manter mídia</string>
 
     <string name="settings_always_show_timestamps">Sempre mostrar a hora das mensagens</string>

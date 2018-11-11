@@ -446,8 +446,8 @@ Salatut viestit eivät näy sovelluksissa, jotka eivät tue salausta.</string> <
     <string name="settings_add_email_address">Lisää sähköpostiosoite</string>
     <string name="settings_phone_number">Puhelin</string>
     <string name="settings_add_phone_number">Lisää puhelinnumero</string>
-    <string name="settings_summary_app_info_link">Sovelluksen infonäyttö</string>
-    <string name="settings_title_app_info_link">Sovelluksen tiedot</string>
+    <string name="settings_app_info_link_summary">Sovelluksen infonäyttö</string>
+    <string name="settings_app_info_link_title">Sovelluksen tiedot</string>
 
     <string name="settings_enable_all_notif">Ota ilmoitukset käyttöön tällä tilillä</string>
     <string name="settings_enable_this_device">Ota ilmoitukset käyttöön tällä laitteella</string>
@@ -692,7 +692,7 @@ Voit tehdä sen nyt tai myöhemmin sovelluksen asetuksissa.</string>
 <string name="user_directory_header">Käyttäjähakemisto</string>
     <string name="people_search_user_directory">KÄYTTÄJÄHAKEMISTO (%s)</string>
     <string name="settings_start_on_boot">Käynnistä automaattisesti</string>
-    <string name="settings_clear_medias_cache">Tyhjennä mediavälimuisti</string>
+    <string name="settings_clear_media_cache">Tyhjennä mediavälimuisti</string>
     <string name="settings_keep_media">Säilytä media</string>
 
     <string name="settings_always_show_timestamps">Näytä aina aikaleimat</string>

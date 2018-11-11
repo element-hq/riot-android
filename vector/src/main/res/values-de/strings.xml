@@ -442,8 +442,8 @@ Beachte: Diese Aktion wird die App neu starten und einige Zeit brauchen.</string
     <string name="settings_add_email_address">E-Mail-Adresse hinzufügen</string>
     <string name="settings_phone_number">Telefonnummer</string>
     <string name="settings_add_phone_number">Telefonnummer hinzufügen</string>
-    <string name="settings_summary_app_info_link">App-Info-Anzeige von Android</string>
-    <string name="settings_title_app_info_link">App-Info</string>
+    <string name="settings_app_info_link_summary">App-Info-Anzeige von Android</string>
+    <string name="settings_app_info_link_title">App-Info</string>
 
     <string name="settings_enable_all_notif">Benachrichtigungen für diesen Account aktivieren</string>
     <string name="settings_enable_this_device">Benachrichtigungen für dieses Gerät aktivieren</string>
@@ -700,7 +700,7 @@ Unbekannte Geräte:</string>
     <string name="settings_select_language">Wähle eine Sprache</string>
 
     <string name="settings_start_on_boot">Starte beim Systemstart</string>
-    <string name="settings_clear_medias_cache">Medien-Cache leeren</string>
+    <string name="settings_clear_media_cache">Medien-Cache leeren</string>
     <string name="settings_keep_media">Medien behalten</string>
 
     <string name="settings_always_show_timestamps">Nachrichten-Zeitstempel immer anzeigen</string>

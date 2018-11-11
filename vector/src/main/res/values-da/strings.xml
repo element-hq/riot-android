@@ -504,7 +504,7 @@ Er du sikker?</string>
     <string name="settings_copyright">Copyright</string>
     <string name="settings_privacy_policy">Privacy-politik</string>
     <string name="settings_clear_cache">Ryd cache</string>
-    <string name="settings_clear_medias_cache">Ryd mediecache</string>
+    <string name="settings_clear_media_cache">Ryd mediecache</string>
     <string name="settings_keep_media">Beholde mediefiler</string>
 
     <string name="settings_user_settings">Brugerindstillinger</string>

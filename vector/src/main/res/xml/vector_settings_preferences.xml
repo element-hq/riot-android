@@ -21,7 +21,7 @@
         <im.vector.preference.VectorCustomActionEditTextPreference
             android:key="SETTINGS_CHANGE_PASSWORD_PREFERENCE_KEY"
             android:summary="@string/password_hint"
-            android:title="@string/settings_change_password" />
+            android:title="@string/settings_password" />
 
     </PreferenceCategory>
 
@@ -68,17 +68,20 @@
         <im.vector.preference.VectorSwitchPreference
             android:defaultValue="true"
             android:key="SETTINGS_SHOW_URL_PREVIEW_KEY"
-            android:title="@string/settings_inline_url_preview" />
+            android:title="@string/settings_inline_url_preview"
+            android:summary="@string/settings_inline_url_preview_summary" />
 
         <im.vector.preference.VectorSwitchPreference
             android:defaultValue="true"
             android:key="SETTINGS_SEND_TYPING_NOTIF_KEY"
-            android:title="@string/settings_send_typing_notifs" />
+            android:title="@string/settings_send_typing_notifs"
+            android:summary="@string/settings_send_typing_notifs_summary" />
 
         <im.vector.preference.VectorSwitchPreference
             android:defaultValue="true"
             android:key="SETTINGS_SEND_MARKDOWN_KEY"
-            android:title="@string/settings_send_markdown" />
+            android:title="@string/settings_send_markdown"
+            android:summary="@string/settings_send_markdown_summary" />
 
         <im.vector.preference.VectorSwitchPreference
             android:key="SETTINGS_ALWAYS_SHOW_TIMESTAMPS_KEY"
@@ -91,17 +94,20 @@
         <im.vector.preference.VectorSwitchPreference
             android:defaultValue="true"
             android:key="SETTINGS_SHOW_READ_RECEIPTS_KEY"
-            android:title="@string/settings_show_read_receipts" />
+            android:title="@string/settings_show_read_receipts"
+            android:summary="@string/settings_show_read_receipts_summary" />
 
         <im.vector.preference.VectorSwitchPreference
             android:defaultValue="true"
             android:key="SETTINGS_SHOW_JOIN_LEAVE_MESSAGES_KEY"
-            android:title="@string/settings_show_join_leave_messages" />
+            android:title="@string/settings_show_join_leave_messages"
+            android:summary="@string/settings_show_join_leave_messages_summary" />
 
         <im.vector.preference.VectorSwitchPreference
             android:defaultValue="true"
             android:key="SETTINGS_SHOW_AVATAR_DISPLAY_NAME_CHANGES_MESSAGES_KEY"
-            android:title="@string/settings_show_avatar_display_name_changes_messages" />
+            android:title="@string/settings_show_avatar_display_name_changes_messages"
+            android:summary="@string/settings_show_avatar_display_name_changes_messages_summary" />
 
         <im.vector.preference.VectorSwitchPreference
             android:key="SETTINGS_VIBRATE_ON_MENTION_KEY"
@@ -160,6 +166,11 @@
             android:key="SETTINGS_ENABLE_THIS_DEVICE_PREFERENCE_KEY"
             android:title="@string/settings_enable_this_device" />
 
+        <im.vector.preference.VectorSwitchPreference
+            android:dependency="SETTINGS_ENABLE_ALL_NOTIF_PREFERENCE_KEY"
+            android:key="SETTINGS_TURN_SCREEN_ON_PREFERENCE_KEY"
+            android:title="@string/settings_turn_screen_on" />
+
         <im.vector.preference.VectorCustomActionEditTextPreference
             android:dialogTitle="@string/settings_notification_privacy"
             android:key="SETTINGS_NOTIFICATION_PRIVACY_PREFERENCE_KEY"
@@ -169,11 +180,6 @@
             android:dialogTitle="@string/settings_notification_ringtone"
             android:key="SETTINGS_NOTIFICATION_RINGTONE_SELECTION_PREFERENCE_KEY"
             android:title="@string/settings_notification_ringtone" />
-
-        <im.vector.preference.VectorSwitchPreference
-            android:dependency="SETTINGS_ENABLE_ALL_NOTIF_PREFERENCE_KEY"
-            android:key="SETTINGS_TURN_SCREEN_ON_PREFERENCE_KEY"
-            android:title="@string/settings_turn_screen_on" />
 
         <im.vector.preference.BingRulePreference
             android:dependency="SETTINGS_ENABLE_ALL_NOTIF_PREFERENCE_KEY"
@@ -288,11 +294,13 @@
 
         <im.vector.preference.VectorSwitchPreference
             android:key="SETTINGS_USE_NATIVE_CAMERA_PREFERENCE_KEY"
-            android:title="@string/settings_labs_native_camera" />
+            android:title="@string/settings_labs_native_camera"
+            android:summary="@string/settings_labs_native_camera_summary" />
 
         <im.vector.preference.VectorSwitchPreference
             android:key="SETTINGS_ENABLE_SEND_VOICE_FEATURE_PREFERENCE_KEY"
-            android:title="@string/settings_labs_enable_send_voice" />
+            android:title="@string/settings_labs_enable_send_voice"
+            android:summary="@string/settings_labs_enable_send_voice_summary" />
 
     </im.vector.preference.VectorPreferenceCategory>
 
@@ -385,8 +393,8 @@
 
         <Preference
             android:key="APP_INFO_LINK_PREFERENCE_KEY"
-            android:summary="@string/settings_summary_app_info_link"
-            android:title="@string/settings_title_app_info_link" />
+            android:summary="@string/settings_app_info_link_summary"
+            android:title="@string/settings_app_info_link_title" />
 
         <im.vector.preference.VectorCustomActionEditTextPreference
             android:key="SETTINGS_VERSION_PREFERENCE_KEY"
@@ -420,7 +428,7 @@
 
         <im.vector.preference.VectorCustomActionEditTextPreference
             android:key="SETTINGS_CLEAR_MEDIA_CACHE_PREFERENCE_KEY"
-            android:title="@string/settings_clear_medias_cache" />
+            android:title="@string/settings_clear_media_cache" />
 
         <im.vector.preference.VectorCustomActionEditTextPreference
             android:key="SETTINGS_CLEAR_CACHE_PREFERENCE_KEY"

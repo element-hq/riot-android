@@ -511,8 +511,8 @@ Merk at denne handlinga vil starta æppen på nytt og kan taka litt tid.</string
     <string name="settings_add_email_address">Legg ei epostadresse til</string>
     <string name="settings_phone_number">Telefon</string>
     <string name="settings_add_phone_number">Legg eit telefonnummer til</string>
-    <string name="settings_summary_app_info_link">Æppsystem-infoskjerm</string>
-    <string name="settings_title_app_info_link">Æppinfo</string>
+    <string name="settings_app_info_link_summary">Æppsystem-infoskjerm</string>
+    <string name="settings_app_info_link_title">Æppinfo</string>
 
     <string name="settings_notification_privacy">Varselpersonvern</string>
     <string name="settings_notification_privacy_warning">Riot.im køyrer i bakgrunnen for å halde varselinnhaldet ditt privat. Du kan forandra på denne innstillinga for å senka batteribruket.</string>
@@ -556,7 +556,7 @@ Merk at denne handlinga vil starta æppen på nytt og kan taka litt tid.</string
     <string name="settings_copyright">Opphavsrett</string>
     <string name="settings_privacy_policy">Personvernsretningsliner</string>
     <string name="settings_clear_cache">Tøm buffar</string>
-    <string name="settings_clear_medias_cache">Tøm mediabuffar</string>
+    <string name="settings_clear_media_cache">Tøm mediabuffar</string>
     <string name="settings_keep_media">Hald på mediet</string>
 
     <string name="settings_user_settings">Brukarinnstillingar</string>

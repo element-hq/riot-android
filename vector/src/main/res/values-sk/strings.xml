@@ -426,8 +426,8 @@ Pozor! Vykonaním tejto akcie reštartujete aplikáciu a opätovné načítanie 
     <string name="settings_add_email_address">Pridať emailovú adresu</string>
     <string name="settings_phone_number">Telefón</string>
     <string name="settings_add_phone_number">Pridať telefónne číslo</string>
-    <string name="settings_summary_app_info_link">Systémová obrazovka s informáciami o aplikácii</string>
-    <string name="settings_title_app_info_link">Info o aplikácii</string>
+    <string name="settings_app_info_link_summary">Systémová obrazovka s informáciami o aplikácii</string>
+    <string name="settings_app_info_link_title">Info o aplikácii</string>
 
     <string name="settings_notification_ringtone">Zvuk oznámení</string>
     <string name="settings_enable_all_notif">Povoliť oznámenia pre tento účet</string>
@@ -457,7 +457,7 @@ Pozor! Vykonaním tejto akcie reštartujete aplikáciu a opätovné načítanie 
     <string name="settings_copyright">Autorské práva</string>
     <string name="settings_privacy_policy">Pravidlá ochrany súkromia</string>
     <string name="settings_clear_cache">Vyprázdniť vyrovnávaciu pamäť</string>
-    <string name="settings_clear_medias_cache">Vyprázdniť vyrovnávaciu pamäť s médiami</string>
+    <string name="settings_clear_media_cache">Vyprázdniť vyrovnávaciu pamäť s médiami</string>
     <string name="settings_keep_media">Ponechať médiá</string>
 
     <string name="settings_user_settings">Používateľské nastavenia</string>
