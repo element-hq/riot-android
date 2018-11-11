@@ -459,13 +459,8 @@
     <string name="settings_pin_unread_messages">Закачане на стаи с непрочетени съобщения</string>
     <string name="settings_devices_list">Устройства</string>
     <string name="settings_inline_url_preview">Включване по подразбиране на URL прегледи</string>
-    <string name="settings_hide_read_receipts">Скриване на потвържденията за прочитане на съобщение</string>
-    <string name="settings_dont_send_typings_notifs">Не показвай на другите, че в момента пиша</string>
     <string name="settings_always_show_timestamps">Винаги показвай часа на съобщението</string>
     <string name="settings_12_24_timestamps">Показване на времето в 12-часов формат (напр. 2:30pm)</string>
-    <string name="settings_hide_join_leave_messages">Скриване на съобщения за присъединяване/напускане (не засяга покани/изгонвания/блокирания)</string>
-    <string name="settings_hide_avatar_display_name_changes_messages">Скриване на информацията за промените на аватара и името</string>
-    <string name="settings_disable_markdown">Изключи markdown при изпращане</string>
     <string name="settings_analytics">Статистика</string>
 
     <string name="devices_details_dialog_title">Информация за устройството</string>

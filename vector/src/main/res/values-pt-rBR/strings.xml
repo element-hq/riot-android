@@ -685,10 +685,7 @@ No futuro, este processo de verificação será mais sofisticado.</string>
     <string name="settings_clear_medias_cache">Esvaziar o cache de mídia</string>
     <string name="settings_keep_media">Manter mídia</string>
 
-    <string name="settings_hide_read_receipts">Ocultar recibos de leitura</string>
-    <string name="settings_dont_send_typings_notifs">Não enviar notificações de digitação</string>
     <string name="settings_always_show_timestamps">Sempre mostrar a hora das mensagens</string>
-    <string name="settings_disable_markdown">Desabilitar formatação Markdown quando estiver enviando</string>
     <string name="settings_data_save_mode">Modo de economia de dados</string>
 
     <string name="settings_user_interface">Interface de usuária(o)</string>
@@ -759,8 +756,6 @@ No futuro, este processo de verificação será mais sofisticado.</string>
     <string name="settings_containing_my_user_name">Mensagens que contenham o meu nome de usuária(o)</string>
     <string name="settings_inline_url_preview">Habilitar visualização resumida dos links por padrão</string>
     <string name="settings_12_24_timestamps">Utilizar o formato de 12 horas (p.ex: 2:30pm)</string>
-    <string name="settings_hide_join_leave_messages">Ocultar mensagens de entrada e de saída de pessoas (convites, expulsões e banimentos não são afetados)</string>
-    <string name="settings_hide_avatar_display_name_changes_messages">Ocultar mensagens de alteração de avatar e de nome público</string>
     <string name="settings_vibrate_on_mention">Vibrar quando mencionado</string>
 
     <string name="settings_analytics">Estatísticas de uso</string>

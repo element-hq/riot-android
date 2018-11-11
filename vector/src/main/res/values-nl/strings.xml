@@ -693,10 +693,7 @@ Je kan het nu, of later, doen vanuit de programma-instellingen.</string>
     <string name="settings_clear_medias_cache">Media cache vrijmaken</string>
     <string name="settings_keep_media">Media behouden</string>
 
-    <string name="settings_hide_read_receipts">Leesbewijzen verbergen</string>
-    <string name="settings_dont_send_typings_notifs">Geen typ notificaties versturen</string>
     <string name="settings_always_show_timestamps">Altijd tijden van berichten weergeven</string>
-    <string name="settings_disable_markdown">Tekst formattering uitzetten wanneer je berichten verstuurd</string>
     <string name="settings_data_save_mode">Data bespaarmodus</string>
 
     <string name="settings_user_interface">Gebruikersinterface</string>
@@ -729,8 +726,6 @@ Je kan het nu, of later, doen vanuit de programma-instellingen.</string>
 
     <string name="settings_notification_ringtone">Notificatie geluid</string>
     <string name="settings_12_24_timestamps">Tijdsaanduidingen in 12 uur formaat weergeven (bv. 2:30pm)</string>
-    <string name="settings_hide_join_leave_messages">Toetreden/verlaten berichten verbergen (uitnodigingen/uitzettingen/verbanningen blijven zichtbaar)</string>
-    <string name="settings_hide_avatar_display_name_changes_messages">Profielfoto en weergavenaam veranderingen verbergen</string>
 
     <string name="widget_no_power_to_manage">Je hebt permissie nodig om widgets in deze ruimte te beheren</string>
     <string name="widget_creation_failure">Het maken van de widget is niet goed gegaan</string>

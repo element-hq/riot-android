@@ -474,14 +474,9 @@ Pozor! Vykonaním tejto akcie reštartujete aplikáciu a opätovné načítanie 
     <string name="settings_pin_missed_notifications">Pripnúť miestnosti so zmeškanými oznámeniami</string>
     <string name="settings_pin_unread_messages">Pripnúť miestnosti s neprečítanými správami</string>
     <string name="settings_devices_list">Zariadenia</string>
-    <string name="settings_hide_read_receipts">Skryť upozornenia o prečítaní</string>
-    <string name="settings_dont_send_typings_notifs">Neposielať oznámenia keď píšete</string>
     <string name="settings_always_show_timestamps">Vždy zobrazovať časovú značku správ</string>
     <string name="settings_12_24_timestamps">Pri zobrazovaní časových značiek používať 12 hodinový formát (napr. 2:30pm)</string>
-    <string name="settings_hide_join_leave_messages">Skryť správy o vstupe a opustení miestnosti (netýka sa pozvaní/vykázaní/zákazov vstupu)</string>
-    <string name="settings_hide_avatar_display_name_changes_messages">Skryť zmeny zobrazovaného mena a obrázka v profile</string>
 
-    <string name="settings_disable_markdown">Pri odosielaní zakázať formátovanie textu Markdown</string>
     <string name="settings_data_save_mode">Režim šetrenia údajov</string>
 
     <string name="devices_details_dialog_title">Podrobnosti o zariadení</string>

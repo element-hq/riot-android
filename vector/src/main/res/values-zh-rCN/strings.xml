@@ -666,10 +666,7 @@
     <string name="settings_clear_medias_cache">清空缓存的媒体文件</string>
     <string name="settings_keep_media">保留媒体文件</string>
 
-    <string name="settings_hide_read_receipts">隐藏已读标签</string>
-    <string name="settings_dont_send_typings_notifs">不要发送“正在输入”提示</string>
     <string name="settings_always_show_timestamps">总是显示消息时间戳</string>
-    <string name="settings_disable_markdown">发送时禁用 markdown 格式化</string>
     <string name="settings_data_save_mode">省流量模式</string>
 
     <string name="media_saving_period_3_days">3天</string>
@@ -695,8 +692,6 @@
 
     <string name="settings_notification_ringtone">通知声音</string>
     <string name="settings_12_24_timestamps">用12小时制显示时间戳（如：下午 2:30）</string>
-    <string name="settings_hide_join_leave_messages">隐藏加入/退出消息（邀请/踢出/封禁不受影响）</string>
-    <string name="settings_hide_avatar_display_name_changes_messages">隐藏头像和显示名称的修改</string>
 
     <string name="widget_no_power_to_manage">您需要权限来管理这个聊天室的小部件</string>
     <string name="widget_creation_failure">创建小部件失败</string>

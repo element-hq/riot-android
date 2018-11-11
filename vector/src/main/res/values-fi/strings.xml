@@ -695,10 +695,7 @@ Voit tehdä sen nyt tai myöhemmin sovelluksen asetuksissa.</string>
     <string name="settings_clear_medias_cache">Tyhjennä mediavälimuisti</string>
     <string name="settings_keep_media">Säilytä media</string>
 
-    <string name="settings_hide_read_receipts">Piilota lukukuittaukset</string>
-    <string name="settings_dont_send_typings_notifs">Älä lähetä kirjoitusilmoituksia</string>
     <string name="settings_always_show_timestamps">Näytä aina aikaleimat</string>
-    <string name="settings_disable_markdown">Poista markdown -muotoilu käytöstä</string>
     <string name="settings_data_save_mode">Datansäästötila</string>
 
     <string name="settings_user_interface">Käyttöliittymä</string>
@@ -743,8 +740,6 @@ Voit tehdä sen nyt tai myöhemmin sovelluksen asetuksissa.</string>
     <string name="settings_containing_my_display_name">Viesti sisältää näyttönimeni</string>
     <string name="settings_containing_my_user_name">Viesti sisältää käyttäjänimeni</string>
     <string name="settings_12_24_timestamps">Näytä aikaleimat 12h muodossa (esim. 2:30pm)</string>
-    <string name="settings_hide_join_leave_messages">Piilota liittymis-/poistumisilmoitukset (ei vaikuta kutsuihin/poistoihin/estoihin)</string>
-    <string name="settings_hide_avatar_display_name_changes_messages">Piilota kuvan ja näyttönimen muutokset</string>
 
     <string name="settings_analytics">Analytiikka</string>
 

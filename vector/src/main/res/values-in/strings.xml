@@ -892,13 +892,8 @@ Peringatan: berkas ini mungkin ikut terhapus jika aplikasi dihapus.</string>
     <string name="settings_pin_unread_messages">Semat ruang yang pesannya belum terbaca</string>
     <string name="settings_devices_list">Perangkat</string>
     <string name="settings_inline_url_preview">Perbolehkan pratinjau URL dalam obrolan</string>
-    <string name="settings_hide_read_receipts">Sembunyi tanda \'telah terbaca\'</string>
-    <string name="settings_dont_send_typings_notifs">Jangan kirim pemberitahuan \'sedang mengetik\'</string>
     <string name="settings_always_show_timestamps">Selalu perlihatkan waktu pesan</string>
     <string name="settings_12_24_timestamps">Perlihatkan waktu pesan dengan format 12 jam (misalnya 2:30pm)</string>
-    <string name="settings_hide_join_leave_messages">Sembunyikan pesan \'bergabung\'/\'meninggalkan\' (undangan/pengeluaran/pelarangan tidak terpengaruh)</string>
-    <string name="settings_hide_avatar_display_name_changes_messages">Sembunyikan avatar dan perubahan nama layar</string>
-    <string name="settings_disable_markdown">Nonaktifkan format markdown ketika mengirim</string>
     <string name="settings_vibrate_on_mention">Bergetar ketika disebut</string>
     <string name="settings_preview_media_before_sending">Pratinjau media sebelum dikirim</string>
 

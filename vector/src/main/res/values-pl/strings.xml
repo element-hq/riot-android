@@ -392,10 +392,7 @@ Zauważ, że ta czynność spowoduje ponowne uruchomienie aplikacji i może to t
     <string name="settings_pin_missed_notifications">Przypnij pokoje z ominiętymi powiadomieniami</string>
     <string name="settings_pin_unread_messages">Przypnij pokoje z nieprzeczytanych wiadomościami</string>
     <string name="settings_devices_list">Urządzenia</string>
-    <string name="settings_hide_read_receipts">Nie pokazuj potwierdzeń o przeczytaniu</string>
-    <string name="settings_dont_send_typings_notifs">Nie informuj użytkowników, gdy piszesz</string>
     <string name="settings_always_show_timestamps">Zawsze pokazuj czas wysłania wiadomości</string>
-    <string name="settings_disable_markdown">Wyłącz formatowanie Markdown podczas wysyłania</string>
     <string name="settings_data_save_mode">Tryb oszczędzania danych</string>
 
     <string name="devices_details_dialog_title">Szczegóły o urządzeniu</string>
@@ -710,8 +707,6 @@ Jesteś pewien?</string>
     <string name="settings_home_display">Ekran domowy</string>
     <string name="settings_inline_url_preview">Zezwól na domyślny podgląd zawartości URL</string>
     <string name="settings_12_24_timestamps">Pokaż czas w formacie 12 godzinnym (np. 2:30pm)</string>
-    <string name="settings_hide_join_leave_messages">Ukryj wiadomości o dołączeniu/wyjściu (zaproszenia, wyproszenia, blokowanie nie zostaną ukryte)</string>
-    <string name="settings_hide_avatar_display_name_changes_messages">Ukryj awatar i zmiany wyświetlanej nazwy</string>
     <string name="settings_vibrate_on_mention">Wibruj gdy ktoś wspomni o tobie</string>
 
     <string name="settings_analytics">Analityka</string>

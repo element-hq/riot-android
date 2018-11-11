@@ -611,10 +611,8 @@
     <string name="settings_enable_background_sync">Virkja samstillingu í bakgrunnsvinnslu</string>
     <string name="settings_user_settings">Stillingar notanda</string>
     <string name="settings_contacts_app_permission">Heimildir fyrir tengiliði</string>
-    <string name="settings_hide_read_receipts">Fela leskvittanir</string>
     <string name="settings_always_show_timestamps">Alltaf birta tímamerki skilaboða</string>
     <string name="settings_12_24_timestamps">Birta tímamerki á 12 stunda sniði (t.d. 2:30 fh)</string>
-    <string name="settings_disable_markdown">Gera Markdown-stílgerð óvirka við sendingu</string>
     <string name="startup_notification_privacy_title">Friðhelgi tilkynninga</string>
     <string name="startup_notification_privacy_button_grant">Gefa heimild</string>
     <string name="startup_notification_privacy_button_other">Veldu annan valkost</string>
@@ -730,8 +728,6 @@ Ertu alveg viss?</string>
     <string name="settings_set_sync_delay">Hlé milli tveggja samstillingarbeiðna</string>
     <string name="settings_keep_media">Halda gögnum</string>
 
-    <string name="settings_hide_join_leave_messages">Fela taka-þátt/hætta skilaboð (hefur ekki áhrif á boð/spörk/bönn)</string>
-    <string name="settings_hide_avatar_display_name_changes_messages">Fela breytingar á auðkennismynd og birtingarnafni</string>
     <string name="startup_notification_privacy_message">Riot getur keyrt í bakgrunni og stýrt tilkynningum á öruggan hátt (getur haft áhrif á rafhlöðunotkun).</string>
 
     <string name="account_email_validation_message">Skoðaðu tölvupóstinn þinn og smelltu á tengilinn sem hann inniheldur. Þegar því er lokið skaltu smella á að halda áfram.</string>
@@ -841,5 +837,4 @@ Tölvupóstfang nýtist einnig til að endurstilla lykilorðið þitt.</string>
     <string name="widget_integration_missing_parameter">Nauðsynlegt gildi vantar.</string>
     <string name="widget_integration_invalid_parameter">Gildið er ekki gilt.</string>
 
-<string name="settings_dont_send_typings_notifs">Ekki senda skrunandi tilkynningar</string>
-    </resources>
+</resources>

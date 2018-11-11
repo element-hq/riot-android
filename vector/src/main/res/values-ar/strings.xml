@@ -307,14 +307,9 @@
     <string name="settings_contacts_app_permission">تصاريح المتراسلون</string>
     <string name="settings_contacts_phonebook_country">دولة دفتر العناوين</string>
     <string name="settings_devices_list">الأجهزة</string>
-    <string name="settings_hide_read_receipts">أخفِ إخطارات القراءة</string>
-    <string name="settings_dont_send_typings_notifs">لا تُرسل إخطارات الكتابة</string>
     <string name="settings_always_show_timestamps">اعرض أختام الرسائل الزمنية دائما</string>
     <string name="settings_12_24_timestamps">اعرض الأختام الزمنية بنسق ١٢ ساعة (مثلا ٢:٣٠م)</string>
-    <string name="settings_hide_join_leave_messages">أخفِ رسائل الانضمام/الخروج (الدعوات والطرد والمنع لا يتأثر)</string>
-    <string name="settings_hide_avatar_display_name_changes_messages">اعرض تغييرات الصور وأسماء العرض</string>
 
-    <string name="settings_disable_markdown">عطّل تنسيق ”ماركداون“ عند الإرسال</string>
     <string name="settings_data_save_mode">وضع حفظ البيانات</string>
 
     <string name="devices_details_dialog_title">تفاصيل الجهاز</string>

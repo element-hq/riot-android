@@ -507,13 +507,8 @@ Vai vēlies turpināt?</string>
     <string name="settings_pin_unread_messages">Piestiprināt istabas ar neizlasītām ziņām</string>
     <string name="settings_devices_list">Ierīces</string>
     <string name="settings_inline_url_preview">Iespējot URL priekšskatu pēc noklusējuma</string>
-    <string name="settings_hide_read_receipts">Nerādīt atzīmes, ka ziņu esmu izlasījis</string>
-    <string name="settings_dont_send_typings_notifs">Nerādīt paziņojumu par to, ka rakstu</string>
     <string name="settings_always_show_timestamps">Vienmēr rādīt ziņu laiku</string>
     <string name="settings_12_24_timestamps">Rādīt ziņu laiku 12 stundu formātā (piem. 12:12pm)</string>
-    <string name="settings_hide_join_leave_messages">Slēpt \"pievienojās/atstāja\" istabu paziņojumus (neietekmē uzaicinājumus/izsperšanu/nobanošanu)</string>
-    <string name="settings_hide_avatar_display_name_changes_messages">Nerādīt avatara un rādāmā vārdā izmaiņas</string>
-    <string name="settings_disable_markdown">Atspējot \"markdown\" formatēšanu nosūtāmajām ziņām</string>
     <string name="settings_vibrate_on_mention">Vibrācija, kad pieminējums</string>
 
     <string name="settings_analytics">Analītika</string>

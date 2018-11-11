@@ -708,10 +708,7 @@ Email также позволит вам при необходимости во�
     <string name="settings_select_language">Выберите язык</string>
 
     <string name="settings_start_on_boot">Запускать при загрузке</string>
-    <string name="settings_hide_read_receipts">Скрыть отметки о прочтении</string>
-    <string name="settings_dont_send_typings_notifs">Не оповещать, когда я печатаю</string>
     <string name="settings_always_show_timestamps">Всегда показывать временные метки сообщений</string>
-    <string name="settings_disable_markdown">Отключить Markdown-форматирование при отправке</string>
 
     <string name="media_saving_period_3_days">3 дня</string>
     <string name="media_saving_period_1_week">1 неделя</string>
@@ -745,8 +742,6 @@ Email также позволит вам при необходимости во�
     <string name="settings_12_24_timestamps">Показывать временные метки в 12-часовом формате (например 2:30pm)</string>
     <string name="event_formatter_widget_added">%1$s добавлен %2$s</string>
     <string name="event_formatter_widget_removed">%1$s удален %2$s</string>
-    <string name="settings_hide_join_leave_messages">Скрывать сообщения присоединился/покинул (не затрагивает приглашение/кик/бан)</string>
-    <string name="settings_hide_avatar_display_name_changes_messages">Скрывать изменения аватара и отображаемого имени</string>
 
     <string name="widget_no_power_to_manage">Вам нужно разрешение на управление виджетами в этой комнате</string>
     <string name="widget_creation_failure">Создание виджета не удалось</string>

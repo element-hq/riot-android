@@ -636,14 +636,14 @@
     <string name="settings_pin_unread_messages">Pin rooms with unread messages</string>
     <string name="settings_devices_list">Devices</string>
     <string name="settings_inline_url_preview">Enable inline URL previews by default</string>
-    <string name="settings_hide_read_receipts">Hide read receipts</string>
-    <string name="settings_dont_send_typings_notifs">Don\'t send typing notifications</string>
-    <string name="settings_always_show_timestamps">Always show message timestamps</string>
-    <string name="settings_12_24_timestamps">Show timestamps in 12 hour format (e.g. 2:30pm)</string>
-    <string name="settings_hide_join_leave_messages">Hide join/leave messages (invites/kicks/bans unaffected)</string>
-    <string name="settings_hide_avatar_display_name_changes_messages">Hide avatar and display name changes</string>
-    <string name="settings_disable_markdown">Disable markdown formatting when sending</string>
-    <string name="settings_vibrate_on_mention">Vibrate when mentioning</string>
+    <string name="settings_send_typing_notifs">Send typing notifications</string>
+    <string name="settings_send_markdown">Send messages with markdown formatting</string>
+    <string name="settings_always_show_timestamps">Show timestamps for all messages</string>
+    <string name="settings_12_24_timestamps">Show timestamps in twelve hour format</string>
+    <string name="settings_show_read_receipts">Show read receipts underneath messages</string>
+    <string name="settings_show_join_leave_messages">Show user join and leave messages</string>
+    <string name="settings_show_avatar_display_name_changes_messages">Show avatar and display name change messages</string>
+    <string name="settings_vibrate_on_mention">Vibrate when mentioning a user</string>
     <string name="settings_preview_media_before_sending">Preview media before sending</string>
 
     <string name="settings_deactivate_account_section">Deactivate account</string>

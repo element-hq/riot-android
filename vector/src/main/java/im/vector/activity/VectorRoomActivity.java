@@ -2075,7 +2075,7 @@ public class VectorRoomActivity extends MXCActionBarActivity implements
      */
     private void handleTypingNotification(boolean isTyping) {
         // the typing notifications are disabled ?
-        if (PreferencesManager.dontSendTypingNotifs(this)) {
+        if (!PreferencesManager.sendTypingNotifs(this)) {
             Log.d(LOG_TAG, "##handleTypingNotification() : the typing notifications are disabled");
             return;
         }

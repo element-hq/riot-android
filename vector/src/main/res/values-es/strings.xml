@@ -718,10 +718,7 @@ Dispositivos desconocidos:</string>
     <string name="settings_clear_medias_cache">Borrar caché de medios</string>
     <string name="settings_keep_media">Guardar medios</string>
 
-    <string name="settings_hide_read_receipts">Ocultar recibos de lectura</string>
-    <string name="settings_dont_send_typings_notifs">No enviar notificaciones de estar escribiendo</string>
     <string name="settings_always_show_timestamps">Siempre mostrar las marcas temporales de mensajes</string>
-    <string name="settings_disable_markdown">Deshabilitar el formato markdown cuando se envía</string>
 
     <string name="media_saving_period_3_days">3 días</string>
     <string name="media_saving_period_1_week">1 semana</string>
@@ -765,8 +762,6 @@ Dispositivos desconocidos:</string>
     <string name="settings_containing_my_display_name">Mensajes que contienen mi nombre público</string>
     <string name="settings_containing_my_user_name">Mensajes que contienen mi nombre de usuario</string>
     <string name="settings_12_24_timestamps">Mostrar marcas temporales en formato de 12 horas (ej. 2:30pm)</string>
-    <string name="settings_hide_join_leave_messages">Ocultar mensajes de unirse/salir (no afecta a invitaciones/expulsiones/vetos)</string>
-    <string name="settings_hide_avatar_display_name_changes_messages">Ocultar cambios de avatar y nombre público</string>
 
     <string name="settings_analytics">Análisis de Estadísticas</string>
 

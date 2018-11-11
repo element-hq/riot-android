@@ -668,10 +668,7 @@ Appareils inconnus :</string>
     <string name="settings_clear_medias_cache">Vider le cache des médias</string>
     <string name="settings_keep_media">Conserver les médias</string>
 
-    <string name="settings_hide_read_receipts">Masquer les accusés de lecture</string>
-    <string name="settings_dont_send_typings_notifs">Ne pas envoyer de notification d\'écriture</string>
     <string name="settings_always_show_timestamps">Toujours afficher l\'heure des messages</string>
-    <string name="settings_disable_markdown">Désactiver le formatage Markdown lors de l\'envoi des messages</string>
     <string name="settings_data_save_mode">Mode économie de données</string>
 
     <string name="media_saving_period_3_days">3 jours</string>
@@ -700,8 +697,6 @@ Appareils inconnus :</string>
 
     <string name="settings_notification_ringtone">Son de notification</string>
     <string name="settings_12_24_timestamps">Afficher l\'horodatage au format 12 heures (par ex. 2:30pm)</string>
-    <string name="settings_hide_join_leave_messages">Masquer les messages d\'arrivée/départ (les invitations/exclusions/bannissements ne sont pas concernés)</string>
-    <string name="settings_hide_avatar_display_name_changes_messages">Masquer les changements d\'avatar et de nom</string>
 
     <string name="widget_no_power_to_manage">Vous avez besoin d\'une permission pour gérer les widgets de ce salon</string>
     <string name="widget_creation_failure">La création du widget a échoué</string>

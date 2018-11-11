@@ -508,13 +508,8 @@ Tingueu en compte que aquesta acció reiniciarà l\'aplicació i que pot trigar 
     <string name="settings_pin_unread_messages">Destaca les sales amb missatges sense llegir</string>
     <string name="settings_devices_list">Dispositius</string>
     <string name="settings_inline_url_preview">Habilita les previsualitzacions de les URL per defecte</string>
-    <string name="settings_hide_read_receipts">Amaga les entrades llegides</string>
-    <string name="settings_dont_send_typings_notifs">No enviïs notificacions d\'esciptura</string>
     <string name="settings_always_show_timestamps">Mostra sempre l\'hora dels missatges</string>
     <string name="settings_12_24_timestamps">Mostra l\'hora en el format de 12 hores (per exemple 2:30pm)</string>
-    <string name="settings_hide_join_leave_messages">Amaga els missatges d\'entrada i sortida de participants</string>
-    <string name="settings_hide_avatar_display_name_changes_messages">Amaga les fotos de perfil i els canvis de nom visible</string>
-    <string name="settings_disable_markdown">Desactivar el Markdown quan s\'enviï</string>
     <string name="settings_vibrate_on_mention">Vibra quan et mencionin</string>
 
     <!-- analytics -->
