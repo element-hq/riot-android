@@ -1071,4 +1071,23 @@ Pozor! Vykonaním tejto akcie reštartujete aplikáciu a opätovné načítanie 
 
     <string name="unknown_error">Prepáčte, vyskytla sa chyba</string>
 
+<string name="status_theme">Téma Status.im</string>
+
+    <string name="room_sliding_menu_version_x">Verzia %s</string>
+    <string name="encryption_export_notice">Prosím vytvorte si heslo, ktorým zašifrujete exportované kľúče. Toto isté heslo budete musieť zadať aj pri importe kľúčov z uloženého súboru.</string>
+    <string name="encryption_export_create_passphrase">Vytvoriť heslo</string>
+    <string name="encryption_export_passphrase_dont_match">Heslá sa musia zhodovať</string>
+    <string name="merged_events_expand">Rozbaliť</string>
+    <string name="merged_events_collapse">Zbaliť</string>
+
+    <string name="settings_info_area_show">Zobrazovať oblasť s informáciami</string>
+    <string name="show_info_area_always">Vždy</string>
+    <string name="show_info_area_messages_and_errors">Pre správy a chybové hlásenia</string>
+    <string name="show_info_area_only_errors">Len pre chybové hlásenia</string>
+
+    <string name="generic_label">%1$s:</string>
+    <string name="generic_label_and_value">%1$s: %2$s</string>
+    <string name="plus_x">+%d</string>
+    <string name="x_plus">%d+</string>
+
 </resources>
