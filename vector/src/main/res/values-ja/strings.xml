@@ -47,13 +47,13 @@
         <item quantity="other">%d 名</item>
     </plurals>
 
-    <string name="send_bug_report">不具合報告</string>
+    <string name="send_bug_report">バグを報告</string>
     <string name="send_bug_report_description">不具合の内容と状況の説明をお願い致します。あなたは何をしましたか？何が起こると思いますか？実際何が起こったのですか？</string>
     <string name="send_bug_report_placeholder">ここに不具合内容を説明</string>
     <string name="send_bug_report_include_screenshot">画面のスクリーンショット画像を送信</string>
     <string name="send_bug_report_include_crash_logs">不具合発生時の動作記録を送信</string>
     <string name="send_bug_report_include_logs">動作記録を送信</string>
-    <string name="send_bug_report_logs_description">開発者が問題を診断するために、このRiotの動作記録が不具合報告と一緒に送信されます。上記文章のみを送信したい場合は以下のチェックを解除してください：</string>
+    <string name="send_bug_report_logs_description">開発者が問題を診断するために、このクライアントの動作記録がバグの報告と一緒に送信されます。このバグの報告は、ログとスクリーンショットを含め、公開されません。上記文章のみを送信したい場合は以下のチェックを解除してください：</string>
     <string name="send_bug_report_alert_message">あなたは不満で端末を振っているようです。不具合を報告しますか？</string>
     <string name="send_bug_report_app_crashed">前回アプリケーションは正常に停止しませんでした。クラッシュを報告しますか？</string>
 
@@ -609,7 +609,7 @@ Riotアプリがあなたの電話帳へアクセスすることを許可しま�
 
     <string name="read_receipts_list">レセプトリストを読み込む</string>
 
-    <string name="media_slider_saved_message">ダウンロードファイルに保存する</string>
+    <string name="media_slider_saved_message">ダウンロードファイルに保存しますか？</string>
     <string name="room_preview_unlinked_email_warning">この招待は%sさんに送られましたが、このアカウントには関連づけられていません。
 他のアカウントでログインするか、このメールアドレスをこのアカウントに追加できます。</string>
     <string name="room_preview_try_join_an_unknown_room">あなたは%sにアクセスしようとしています。話し合いに参加しますか？</string>
@@ -715,7 +715,7 @@ Riotアプリがあなたの電話帳へアクセスすることを許可しま�
     <string name="encryption_information_block">ブラックリスト</string>
     <string name="encryption_information_unblock">ブラックリストから除外する</string>
 
-    <string name="encryption_information_verify_device_warning">" このデバイスが信頼できることを確認するために、その所有者に何らかの他の方法(直接会って、または、電話で)連絡し、以下のキーが、そのデバイスの「設定」で確認できるキーと一致するかお尋ねください:"</string>
+    <string name="encryption_information_verify_device_warning">このデバイスが信頼できることを確認するために、その所有者に何らかの他の方法（直接会って、または、電話で）連絡し、以下のキーが、そのデバイスの「設定」で確認できるキーと一致するかお尋ねください:</string>
     <string name="select_room_directory">部屋のディレクトリを選択</string>
     <string name="directory_server_type_homeserver">公共の部屋を表示するホームサーバを入力してください</string>
     <string name="directory_server_placeholder">ホームサーバのURL</string>
@@ -852,7 +852,7 @@ Riotアプリがあなたの電話帳へアクセスすることを許可しま�
     <string name="settings_notification_privacy_fcm">•通知はGoogle Cloud Messaging経由で送られます</string>
     <string name="settings_notification_privacy_no_permission">このアプリにバックグラウンド動作の権限は<b>必要ありません</b></string>
     <string name="settings_notification_privacy_metadata">• 通知はメタデータのみを含みます</string>
-    <string name="title_activity_choose_sticker">ステッカーを送る</string>
+    <string name="title_activity_choose_sticker">スタンプを送る</string>
 
     <string name="dialog_title_third_party_licences">サードパーティーライセンス</string>
 
