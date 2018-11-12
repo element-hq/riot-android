@@ -658,15 +658,15 @@ Riotアプリがあなたの電話帳へアクセスすることを許可しま�
 
     <string name="directory_searching_title">ディレクトリを検索中..</string>
 
-    <string name="room_sliding_menu_third_party_notices">サードパーティのライセンスに関する通知</string>
+    <string name="room_sliding_menu_third_party_notices">サードパーティの通知</string>
     <string name="settings_summary_app_info_link">このアプリのシステムの情報を見る</string>
     <string name="settings_title_app_info_link">アプリの情報</string>
 
-    <string name="settings_containing_my_display_name">自分の名前を含むメッセージ</string>
+    <string name="settings_containing_my_display_name">自分の表示名を含むメッセージ</string>
     <string name="settings_containing_my_user_name">自分のユーザネームを含むメッセージ</string>
     <string name="settings_version">バージョン</string>
     <string name="settings_olm_version">olmのバージョン</string>
-    <string name="settings_third_party_notices">サードパーティのライセンスに関する通知</string>
+    <string name="settings_third_party_notices">サードパーティの通知</string>
     <string name="settings_home_display">ホーム画面</string>
     <string name="settings_pin_missed_notifications">逃した通知がある部屋を固定する</string>
     <string name="settings_pin_unread_messages">未読のメッセージがある部屋を固定する</string>
@@ -691,7 +691,7 @@ Riotアプリがあなたの電話帳へアクセスすることを許可しま�
 
 暗号化されたメッセージは、暗号化に対応していないクライアントでは読めない可能性があります。</string>
 
-    <string name="failed_to_load_timeline_position">%sさんはこの部屋のタイムラインのある箇所を読み込もうとしましたが、見つかりませんでした。</string>
+    <string name="failed_to_load_timeline_position">%sはこの部屋のタイムラインのある箇所を読み込もうとしましたが、見つかりませんでした。</string>
 
     <string name="encryption_information_device_info">イベント情報</string>
     <string name="encryption_information_user_id">ユーザID</string>
@@ -717,7 +717,7 @@ Riotアプリがあなたの電話帳へアクセスすることを許可しま�
 
     <string name="encryption_information_verify_device_warning">このデバイスが信頼できることを確認するために、その所有者に何らかの他の方法（直接会って、または、電話で）連絡し、以下のキーが、そのデバイスの「設定」で確認できるキーと一致するかお尋ねください:</string>
     <string name="select_room_directory">部屋のディレクトリを選択</string>
-    <string name="directory_server_type_homeserver">公共の部屋を表示するホームサーバを入力してください</string>
+    <string name="directory_server_type_homeserver">公開の部屋を表示するホームサーバを入力してください</string>
     <string name="directory_server_placeholder">ホームサーバのURL</string>
     <string name="directory_server_all_rooms_on_server">%sサーバ上のすべての部屋</string>
     <string name="directory_server_native_rooms">すべてのローカルの%s部屋</string>
@@ -787,7 +787,7 @@ Riotアプリがあなたの電話帳へアクセスすることを許可しま�
 警告：このファイルは、アプリケーションがアンインストールされた場合に削除されることがあります。</string>
 
     <string name="you_added_a_new_device">暗号鍵を要求している新しい端末 \'%s\' を追加しました。</string>
-    <string name="your_unverified_device_requesting">未確認の端末 \'%s\' が暗号鍵を要求しています。</string>
+    <string name="your_unverified_device_requesting">未認証の端末 \'%s\' が暗号鍵を要求しています。</string>
     <string name="create">作成</string>
     <string name="create_community">コミュニティを作成</string>
     <string name="community_name">コミュニティの名前</string>
@@ -804,13 +804,13 @@ Riotアプリがあなたの電話帳へアクセスすることを許可しま�
     <string name="rooms">部屋</string>
     <string name="joined">参加済</string>
     <string name="invited">招待済</string>
-    <string name="filter_group_members">グループの参加者をフィルタリングする</string>
+    <string name="filter_group_members">グループのメンバーをフィルタリングする</string>
     <string name="filter_group_rooms">グループの部屋をフィルタリングする</string>
 
     <string name="group_no_long_description">管理者はこのコミュニティの詳細を規定していません。</string>
 
     <string name="has_been_kicked">あなたは%2$sによって%1$sから除外されました</string>
-    <string name="has_been_banned">あなたは%2$sによって%1$sへの入室を禁止されました</string>
+    <string name="has_been_banned">あなたは%2$sによって%1$sへの参加を禁止されました</string>
     <string name="reason_colon">理由: %1$s</string>
     <string name="rejoin">再参加</string>
     <string name="send_bug_report_rage_shake">バグを報告するには端末を降ってください</string>
@@ -838,11 +838,11 @@ Riotアプリがあなたの電話帳へアクセスすることを許可しま�
     <plurals name="directory_search_rooms_for">
 	<item quantity="other">%2$sに%1$s部屋見つかりました</item>
 </plurals>
-    <string name="forget_room">部屋の記録を消す</string>
+    <string name="forget_room">部屋の履歴を消す</string>
 
     <string name="avatar">アバター</string>
 
-<string name="room_settings_mention_only">呼びかけがあったとき</string>
+<string name="room_settings_mention_only">名前があがったときのみ</string>
     <string name="settings_notification_privacy">通知のプライバシー</string>
     <string name="settings_notification_privacy_warning">Riot.imは通知のメッセージの内容の秘密を守るため、バックグラウンドで動作します。電池の使用を削減するために、このオプションを変えることができます。</string>
     <string name="settings_notification_privacy_normal">標準</string>
