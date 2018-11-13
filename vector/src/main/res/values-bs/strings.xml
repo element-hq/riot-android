@@ -421,8 +421,8 @@ Da li ste sigurani?</string>
     <string name="settings_add_email_address">Dodaj email adresu</string>
     <string name="settings_phone_number">Telefon</string>
     <string name="settings_add_phone_number">Dodaj broj telefona</string>
-    <string name="settings_summary_app_info_link">Infomacije o aplikacijskom sustavu</string>
-    <string name="settings_title_app_info_link">Informacije o aplikaciji</string>
+    <string name="settings_app_info_link_summary">Infomacije o aplikacijskom sustavu</string>
+    <string name="settings_app_info_link_title">Informacije o aplikaciji</string>
 
     <string name="settings_notification_ringtone">Zvuk notifikacije</string>
     <string name="settings_enable_all_notif">Omogući obavijesti za ovaj račun</string>
@@ -452,7 +452,7 @@ Da li ste sigurani?</string>
     <string name="settings_copyright">Copyright</string>
     <string name="settings_privacy_policy">Privatnost</string>
     <string name="settings_clear_cache">Očisti keš</string>
-    <string name="settings_clear_medias_cache">Očisti medija keš</string>
+    <string name="settings_clear_media_cache">Očisti medija keš</string>
     <string name="settings_keep_media">Dodaj medij</string>
 
     <string name="settings_user_settings">Korisničke postavke</string>
@@ -469,18 +469,13 @@ Da li ste sigurani?</string>
     <string name="settings_pin_missed_notifications">Prikačite sobe sa propuštenim obavijestima</string>
     <string name="settings_pin_unread_messages">Prikačite sobe sa nepročitanim porukama</string>
     <string name="settings_devices_list">Uređaj</string>
-    <string name="settings_hide_read_receipts">Sakrijte pročitane račune</string>
-    <string name="settings_dont_send_typings_notifs">Nemojte slati obavijesti o tipizaciji</string>
     <string name="settings_always_show_timestamps">Uvijek prikažite vremenske oznake poruka</string>
     <string name="settings_12_24_timestamps">Prikaži vremenske oznake u 12-satnom obliku (npr. 14:30)</string>
-    <string name="settings_hide_join_leave_messages">Sakrij poruke o pridruživanju / napuštanju (pozivnice / izbacivanja / neovlaštne zabrane)</string>
-    <string name="settings_hide_avatar_display_name_changes_messages">Sakrij avatar i promjene imena</string>
 
     <string name="settings_analytics">Analiza</string>
     <string name="attachment_remaining_time_seconds">%d s</string>
     <string name="attachment_remaining_time_minutes">%1$a %2$i</string>
 
-    <string name="settings_disable_markdown">Onemogućite formatiranje oznaka</string>
     <string name="settings_data_save_mode">Način spremanja podataka</string>
 
     <string name="devices_details_dialog_title">Pojedinosti uređaja</string>

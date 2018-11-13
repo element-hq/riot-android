@@ -460,8 +460,8 @@ Tieni presente che questa azione riavvierà l\'app e potrebbe richiedere del tem
     <string name="settings_add_email_address">Aggiungi indirizzo email</string>
     <string name="settings_phone_number">Telefono</string>
     <string name="settings_add_phone_number">Aggiungi numero di telefono</string>
-    <string name="settings_summary_app_info_link">Informazioni di sistema per l\'applicazione</string>
-    <string name="settings_title_app_info_link">Informazioni applicazione</string>
+    <string name="settings_app_info_link_summary">Informazioni di sistema per l\'applicazione</string>
+    <string name="settings_app_info_link_title">Informazioni applicazione</string>
 
     <string name="settings_enable_all_notif">Abilita notifiche per questo account</string>
     <string name="settings_enable_this_device">Abilita notifiche per questo dispositivo</string>
@@ -488,7 +488,7 @@ Tieni presente che questa azione riavvierà l\'app e potrebbe richiedere del tem
     <string name="settings_copyright">Copyright</string>
     <string name="settings_privacy_policy">Politica sulla privacy</string>
     <string name="settings_clear_cache">Elimina cache</string>
-    <string name="settings_clear_medias_cache">Elimina file multimediali temporanei</string>
+    <string name="settings_clear_media_cache">Elimina file multimediali temporanei</string>
     <string name="settings_keep_media">Conserva file multimediali</string>
 
     <string name="settings_user_settings">Impostazioni utente</string>
@@ -505,10 +505,7 @@ Tieni presente che questa azione riavvierà l\'app e potrebbe richiedere del tem
     <string name="settings_pin_missed_notifications">Segna le stanze con notifiche perse</string>
     <string name="settings_pin_unread_messages">Segna le stanze con messaggi non letti</string>
     <string name="settings_devices_list">Dispositivi</string>
-    <string name="settings_hide_read_receipts">Nascondi conferme di lettura</string>
-    <string name="settings_dont_send_typings_notifs">Non comunicare che stai scrivendo</string>
     <string name="settings_always_show_timestamps">Mostra sempre data e ora dei messaggi</string>
-    <string name="settings_disable_markdown">Disattiva la formattazione markdown quando si invia</string>
     <string name="settings_data_save_mode">Modalità risparmio banda</string>
 
     <string name="devices_details_dialog_title">Dettagli dispositivo</string>
@@ -760,7 +757,6 @@ In futuro il processo di verifica sarà più sofisticato.</string>
 
     <string name="settings_containing_my_display_name">Msg contenenti il nome mostrato</string>
     <string name="settings_containing_my_user_name">Msg contenenti il nome utente</string>
-    <string name="settings_hide_avatar_display_name_changes_messages">Nascondi cambiamenti del nome mostrato e dell\'avatar</string>
 
     <string name="notification_silent_notifications">Notifiche silenziose</string>
 
@@ -829,7 +825,6 @@ In futuro il processo di verifica sarà più sofisticato.</string>
     <string name="room_settings_add_homescreen_shortcut">Aggiungi scorciatoia su schermata iniziale</string>
 
     <string name="settings_inline_url_preview">Attiva l\'anteprima degli URL in via predefinita</string>
-    <string name="settings_hide_join_leave_messages">Nascondi messaggi entrato/uscito (non si applica a invita/butta-fuori/bandisci)</string>
     <string name="settings_vibrate_on_mention">Vibra quando ti citano</string>
 
     <string name="settings_analytics">Statistiche</string>

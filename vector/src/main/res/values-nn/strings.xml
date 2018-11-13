@@ -511,8 +511,8 @@ Merk at denne handlinga vil starta æppen på nytt og kan taka litt tid.</string
     <string name="settings_add_email_address">Legg ei epostadresse til</string>
     <string name="settings_phone_number">Telefon</string>
     <string name="settings_add_phone_number">Legg eit telefonnummer til</string>
-    <string name="settings_summary_app_info_link">Æppsystem-infoskjerm</string>
-    <string name="settings_title_app_info_link">Æppinfo</string>
+    <string name="settings_app_info_link_summary">Æppsystem-infoskjerm</string>
+    <string name="settings_app_info_link_title">Æppinfo</string>
 
     <string name="settings_notification_privacy">Varselpersonvern</string>
     <string name="settings_notification_privacy_warning">Riot.im køyrer i bakgrunnen for å halde varselinnhaldet ditt privat. Du kan forandra på denne innstillinga for å senka batteribruket.</string>
@@ -556,7 +556,7 @@ Merk at denne handlinga vil starta æppen på nytt og kan taka litt tid.</string
     <string name="settings_copyright">Opphavsrett</string>
     <string name="settings_privacy_policy">Personvernsretningsliner</string>
     <string name="settings_clear_cache">Tøm buffar</string>
-    <string name="settings_clear_medias_cache">Tøm mediabuffar</string>
+    <string name="settings_clear_media_cache">Tøm mediabuffar</string>
     <string name="settings_keep_media">Hald på mediet</string>
 
     <string name="settings_user_settings">Brukarinnstillingar</string>
@@ -574,13 +574,8 @@ Merk at denne handlinga vil starta æppen på nytt og kan taka litt tid.</string
     <string name="settings_pin_unread_messages">Fest rom med uleste meldingar</string>
     <string name="settings_devices_list">Einingar</string>
     <string name="settings_inline_url_preview">Skru URL-førehandsvisingar i tekstfeltet på</string>
-    <string name="settings_hide_read_receipts">Gøym lest-lappar</string>
-    <string name="settings_dont_send_typings_notifs">Ikkje send skrivevarsel</string>
     <string name="settings_always_show_timestamps">Vis alltid meldingstidspunkt</string>
     <string name="settings_12_24_timestamps">Vis tidspunkt i 12-timarsform (t.d. 4:20pm)</string>
-    <string name="settings_hide_join_leave_messages">Gøym kom inn/fór ut-meldingar (innbyding/utsparking/utestenging påverkast ikkje)</string>
-    <string name="settings_hide_avatar_display_name_changes_messages">Gøym avatar- og visingsnamnforandringar</string>
-    <string name="settings_disable_markdown">Skru markdown-teiknsetjing av ved avsending</string>
     <string name="settings_vibrate_on_mention">Rist ved nemning</string>
     <string name="settings_preview_media_before_sending">Førehandsvis medium før avsending</string>
 

@@ -435,8 +435,8 @@ Let op: deze actie zal de app opnieuw opstarten, en kan enige tijd kosten.</stri
     <string name="settings_add_email_address">E-mailadres toevoegen</string>
     <string name="settings_phone_number">Telefoonnummer</string>
     <string name="settings_add_phone_number">Add phone number</string>
-    <string name="settings_summary_app_info_link">Applicatiesysteem informatiescherm</string>
-    <string name="settings_title_app_info_link">Applicatie informatie</string>
+    <string name="settings_app_info_link_summary">Applicatiesysteem informatiescherm</string>
+    <string name="settings_app_info_link_title">Applicatie informatie</string>
 
     <string name="settings_enable_all_notif">Notificaties voor dit account aanzetten</string>
     <string name="settings_enable_this_device">Notificaties voor dit apparaat aanzetten</string>
@@ -690,13 +690,10 @@ Je kan het nu, of later, doen vanuit de programma-instellingen.</string>
     <string name="user_directory_header">Gebruikersadresboek</string>
     <string name="people_search_user_directory">GEBRUIKERSADRESBOEK (%s)</string>
     <string name="settings_start_on_boot">Start bij het inschakelen van je telefoon</string>
-    <string name="settings_clear_medias_cache">Media cache vrijmaken</string>
+    <string name="settings_clear_media_cache">Media cache vrijmaken</string>
     <string name="settings_keep_media">Media behouden</string>
 
-    <string name="settings_hide_read_receipts">Leesbewijzen verbergen</string>
-    <string name="settings_dont_send_typings_notifs">Geen typ notificaties versturen</string>
     <string name="settings_always_show_timestamps">Altijd tijden van berichten weergeven</string>
-    <string name="settings_disable_markdown">Tekst formattering uitzetten wanneer je berichten verstuurd</string>
     <string name="settings_data_save_mode">Data bespaarmodus</string>
 
     <string name="settings_user_interface">Gebruikersinterface</string>
@@ -729,8 +726,6 @@ Je kan het nu, of later, doen vanuit de programma-instellingen.</string>
 
     <string name="settings_notification_ringtone">Notificatie geluid</string>
     <string name="settings_12_24_timestamps">Tijdsaanduidingen in 12 uur formaat weergeven (bv. 2:30pm)</string>
-    <string name="settings_hide_join_leave_messages">Toetreden/verlaten berichten verbergen (uitnodigingen/uitzettingen/verbanningen blijven zichtbaar)</string>
-    <string name="settings_hide_avatar_display_name_changes_messages">Profielfoto en weergavenaam veranderingen verbergen</string>
 
     <string name="widget_no_power_to_manage">Je hebt permissie nodig om widgets in deze ruimte te beheren</string>
     <string name="widget_creation_failure">Het maken van de widget is niet goed gegaan</string>

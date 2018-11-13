@@ -443,8 +443,8 @@
     <string name="settings_add_email_address">Додати email</string>
     <string name="settings_phone_number">Телефон</string>
     <string name="settings_add_phone_number">Додати номер телефону</string>
-    <string name="settings_summary_app_info_link">Екран системної інформації застосунку</string>
-    <string name="settings_title_app_info_link">Про застосунок</string>
+    <string name="settings_app_info_link_summary">Екран системної інформації застосунку</string>
+    <string name="settings_app_info_link_title">Про застосунок</string>
 
     <string name="settings_notification_ringtone">Тон сповіщення</string>
     <string name="settings_enable_all_notif">Увімкнути сповіщення для цього облікового запису</string>
@@ -474,7 +474,7 @@
     <string name="settings_copyright">Copyright</string>
     <string name="settings_privacy_policy">Політика конфіденційності</string>
     <string name="settings_clear_cache">Очистити кеш</string>
-    <string name="settings_clear_medias_cache">Очистити медіа кеш</string>
+    <string name="settings_clear_media_cache">Очистити медіа кеш</string>
     <string name="settings_keep_media">Зберігати медіа</string>
 
     <string name="settings_user_settings">Налаштування користувача</string>
@@ -491,17 +491,12 @@
     <string name="settings_pin_missed_notifications">Закріплювати кімнати з пропущеними сповіщеннями</string>
     <string name="settings_pin_unread_messages">Закріплювати кімнати з новими повідомленнями</string>
     <string name="settings_devices_list">Пристрої</string>
-    <string name="settings_hide_read_receipts">Приховати звіти про читання</string>
-    <string name="settings_dont_send_typings_notifs">Не сповіщати про набір тексту</string>
     <string name="settings_always_show_timestamps">Завжди показувати час надсилання</string>
     <string name="settings_12_24_timestamps">Показувати час надсилання в 12 годинному форматі (e.g. 2:30pm)</string>
-    <string name="settings_hide_join_leave_messages">Приховати сповіщення про вступ/вихід з кімнат (не діє на запрошення/кіки/бани)</string>
-    <string name="settings_hide_avatar_display_name_changes_messages">Приховати аватари та показувати зміну імен</string>
 
     <!-- analytics -->
     <string name="settings_analytics">Телеметрія</string>
 
-    <string name="settings_disable_markdown">Вимкнути розмітку Markdown при відправленні</string>
     <string name="settings_data_save_mode">Режим економії трафіку</string>
 
     <string name="devices_details_dialog_title">Про пристрій</string>

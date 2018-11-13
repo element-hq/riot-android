@@ -320,7 +320,7 @@
     <string name="settings_add_email_address">ఇమెయిల్ చిరునామాను జోడించండి</string>
     <string name="settings_phone_number">ఫోన్</string>
     <string name="settings_add_phone_number">ఫోన్ నంబర్ను జోడించండి</string>
-    <string name="settings_title_app_info_link">అప్లికేషన్ సమాచారం</string>
+    <string name="settings_app_info_link_title">అప్లికేషన్ సమాచారం</string>
 
     <string name="settings_messages_in_group_chat">గుంపు చాట్లలోని సందేశాలు</string>
     <string name="settings_invited_to_room">నేను ఒక గదికి ఆహ్వానించబడినప్పుడు</string>

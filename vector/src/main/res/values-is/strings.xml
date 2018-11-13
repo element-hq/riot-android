@@ -275,8 +275,8 @@
     <string name="settings_add_email_address">Bæta við tölvupóstfangi</string>
     <string name="settings_phone_number">Símanúmer</string>
     <string name="settings_add_phone_number">Bæta við símanúmeri</string>
-    <string name="settings_summary_app_info_link">Kerfisupplýsingar forrits</string>
-    <string name="settings_title_app_info_link">Upplýsingar um forrit</string>
+    <string name="settings_app_info_link_summary">Kerfisupplýsingar forrits</string>
+    <string name="settings_app_info_link_title">Upplýsingar um forrit</string>
 
     <string name="settings_second">sekúnda</string>
     <string name="settings_seconds">sekúndur</string>
@@ -288,7 +288,7 @@
     <string name="settings_copyright">Höfundarréttur</string>
     <string name="settings_privacy_policy">Meðferð persónuupplýsinga</string>
     <string name="settings_clear_cache">Hreinsa skyndiminni</string>
-    <string name="settings_clear_medias_cache">Hreinsa skyndiminni margmiðlunarefnis</string>
+    <string name="settings_clear_media_cache">Hreinsa skyndiminni margmiðlunarefnis</string>
     <string name="settings_notifications">Tilkynningar</string>
     <string name="settings_ignored_users">Hunsaðir notendur</string>
     <string name="settings_other">Annað</string>
@@ -611,10 +611,8 @@
     <string name="settings_enable_background_sync">Virkja samstillingu í bakgrunnsvinnslu</string>
     <string name="settings_user_settings">Stillingar notanda</string>
     <string name="settings_contacts_app_permission">Heimildir fyrir tengiliði</string>
-    <string name="settings_hide_read_receipts">Fela leskvittanir</string>
     <string name="settings_always_show_timestamps">Alltaf birta tímamerki skilaboða</string>
     <string name="settings_12_24_timestamps">Birta tímamerki á 12 stunda sniði (t.d. 2:30 fh)</string>
-    <string name="settings_disable_markdown">Gera Markdown-stílgerð óvirka við sendingu</string>
     <string name="startup_notification_privacy_title">Friðhelgi tilkynninga</string>
     <string name="startup_notification_privacy_button_grant">Gefa heimild</string>
     <string name="startup_notification_privacy_button_other">Veldu annan valkost</string>
@@ -730,8 +728,6 @@ Ertu alveg viss?</string>
     <string name="settings_set_sync_delay">Hlé milli tveggja samstillingarbeiðna</string>
     <string name="settings_keep_media">Halda gögnum</string>
 
-    <string name="settings_hide_join_leave_messages">Fela taka-þátt/hætta skilaboð (hefur ekki áhrif á boð/spörk/bönn)</string>
-    <string name="settings_hide_avatar_display_name_changes_messages">Fela breytingar á auðkennismynd og birtingarnafni</string>
     <string name="startup_notification_privacy_message">Riot getur keyrt í bakgrunni og stýrt tilkynningum á öruggan hátt (getur haft áhrif á rafhlöðunotkun).</string>
 
     <string name="account_email_validation_message">Skoðaðu tölvupóstinn þinn og smelltu á tengilinn sem hann inniheldur. Þegar því er lokið skaltu smella á að halda áfram.</string>
@@ -841,5 +837,4 @@ Tölvupóstfang nýtist einnig til að endurstilla lykilorðið þitt.</string>
     <string name="widget_integration_missing_parameter">Nauðsynlegt gildi vantar.</string>
     <string name="widget_integration_invalid_parameter">Gildið er ekki gilt.</string>
 
-<string name="settings_dont_send_typings_notifs">Ekki senda skrunandi tilkynningar</string>
-    </resources>
+</resources>

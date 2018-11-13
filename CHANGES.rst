@@ -1,8 +1,32 @@
-Changes in Riot 0.8.19 (2018-XX-XX)
+Changes in Riot 0.8.20 (2018-XX-XX)
 ===================================================
 
 MatrixSdk:
  - Upgrade to version 0.X.Y.
+
+Features:
+ -
+
+Improvements:
+ - Remove double negations from settings and update descriptions (#2723)
+
+Other changes:
+ -
+
+Bugfix:
+ -
+
+Translations:
+ -
+
+Build:
+ -
+
+Changes in Riot 0.8.19 (2018-11-06)
+===================================================
+
+MatrixSdk:
+ - Upgrade to version 0.9.13.
 
 Features:
  - Enable Lazy Loading by default, if the hs supports it
@@ -22,9 +46,6 @@ Bugfix:
  - Mention from read receipts list doesn't work (#656)
  - Fix issue when scrolling file list in room details (#2702)
  - Align switch camera button to parent in landscape mode (#2704)
-
-Translations:
- -
 
 Build:
  - Better build.gradle file (#2302)

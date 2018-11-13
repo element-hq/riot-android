@@ -4,8 +4,8 @@ buildscript {
     ext.kotlin_version = '1.2.30'
 
     repositories {
-        jcenter()
         google()
+        jcenter()
         maven {
             url "https://plugins.gradle.org/m2/"
         }
@@ -23,20 +23,19 @@ buildscript {
 
 // global properties used in sub modules
 ext {
-    versionCodeProp = 81900
-    versionNameProp = "0.8.19-dev"
+    versionCodeProp = 82000
+    versionNameProp = "0.8.20-dev"
     versionBuild = System.getenv("BUILD_NUMBER") as Integer ?: 0
     buildNumberProp = "${versionBuild}"
 }
 
 allprojects {
     repositories {
+        google()
         jcenter()
-
         maven {
             url "https://maven.google.com"
         }
-        google()
     }
 }
 

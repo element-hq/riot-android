@@ -573,8 +573,8 @@
     <string name="settings_add_email_address">Add email address</string>
     <string name="settings_phone_number">Phone</string>
     <string name="settings_add_phone_number">Add phone number</string>
-    <string name="settings_summary_app_info_link">Application system info screen</string>
-    <string name="settings_title_app_info_link">Application info</string>
+    <string name="settings_app_info_link_title">Application info</string>
+    <string name="settings_app_info_link_summary">Show the application info in the system settings.</string>
 
     <string name="settings_notification_privacy">Notification privacy</string>
     <string name="settings_notification_privacy_warning">Riot.im runs in the background to keep your notification message content private. You can change this option to reduce battery usage.</string>
@@ -599,15 +599,15 @@
     <string name="settings_containing_my_user_name">Msgs containing my user name</string>
     <string name="settings_messages_in_one_to_one">Msgs in one-to-one chats</string>
     <string name="settings_messages_in_group_chat">Msgs in group chats</string>
-    <string name="settings_invited_to_room">When i\'m invited to a room</string>
+    <string name="settings_invited_to_room">When I\'m invited to a room</string>
     <string name="settings_call_invitations">Call invitations</string>
     <string name="settings_messages_sent_by_bot">Messages sent by bot</string>
 
-    <string name="settings_start_on_boot">Start on boot</string>
     <string name="settings_background_sync">Background synchronization</string>
+    <string name="settings_start_on_boot">Start on boot</string>
     <string name="settings_enable_background_sync">Enable background sync</string>
     <string name="settings_set_sync_timeout">Sync request timeout</string>
-    <string name="settings_set_sync_delay">Delay between two sync requests</string>
+    <string name="settings_set_sync_delay">Delay between each request</string>
     <string name="settings_second">second</string>
     <string name="settings_seconds">seconds</string>
 
@@ -617,9 +617,9 @@
     <string name="settings_third_party_notices">Third party notices</string>
     <string name="settings_copyright">Copyright</string>
     <string name="settings_privacy_policy">Privacy policy</string>
-    <string name="settings_clear_cache">Clear cache</string>
-    <string name="settings_clear_medias_cache">Clear media cache</string>
     <string name="settings_keep_media">Keep media</string>
+    <string name="settings_clear_cache">Clear cache</string>
+    <string name="settings_clear_media_cache">Clear media cache</string>
 
     <string name="settings_user_settings">User settings</string>
     <string name="settings_notifications">Notifications</string>
@@ -635,15 +635,21 @@
     <string name="settings_pin_missed_notifications">Pin rooms with missed notifications</string>
     <string name="settings_pin_unread_messages">Pin rooms with unread messages</string>
     <string name="settings_devices_list">Devices</string>
-    <string name="settings_inline_url_preview">Enable inline URL previews by default</string>
-    <string name="settings_hide_read_receipts">Hide read receipts</string>
-    <string name="settings_dont_send_typings_notifs">Don\'t send typing notifications</string>
-    <string name="settings_always_show_timestamps">Always show message timestamps</string>
-    <string name="settings_12_24_timestamps">Show timestamps in 12 hour format (e.g. 2:30pm)</string>
-    <string name="settings_hide_join_leave_messages">Hide join/leave messages (invites/kicks/bans unaffected)</string>
-    <string name="settings_hide_avatar_display_name_changes_messages">Hide avatar and display name changes</string>
-    <string name="settings_disable_markdown">Disable markdown formatting when sending</string>
-    <string name="settings_vibrate_on_mention">Vibrate when mentioning</string>
+    <string name="settings_inline_url_preview">Inline URL preview</string>
+    <string name="settings_inline_url_preview_summary">Preview links within the chat when your homeserver supports this feature.</string>
+    <string name="settings_send_typing_notifs">Send typing notifications</string>
+    <string name="settings_send_typing_notifs_summary">Let other users know that you are typing.</string>
+    <string name="settings_send_markdown">Markdown formatting</string>
+    <string name="settings_send_markdown_summary">Format messages using markdown syntax before they are sent. This allows for advanced formatting such as using asterisks to display italic text.</string>
+    <string name="settings_always_show_timestamps">Show timestamps for all messages</string>
+    <string name="settings_12_24_timestamps">Show timestamps in 12-hour format</string>
+    <string name="settings_show_read_receipts">Show read receipts</string>
+    <string name="settings_show_read_receipts_summary">Click on the read receipts for a detailed list.</string>
+    <string name="settings_show_join_leave_messages">Show join and leave events</string>
+    <string name="settings_show_join_leave_messages_summary">Invites, kicks, and bans are unaffected.</string>
+    <string name="settings_show_avatar_display_name_changes_messages">Show account events</string>
+    <string name="settings_show_avatar_display_name_changes_messages_summary">Includes avatar and display name changes.</string>
+    <string name="settings_vibrate_on_mention">Vibrate when mentioning a user</string>
     <string name="settings_preview_media_before_sending">Preview media before sending</string>
 
     <string name="settings_deactivate_account_section">Deactivate account</string>
@@ -651,7 +657,7 @@
 
     <!-- startup -->
     <string name="startup_notification_privacy_title">Notification Privacy</string>
-    <string name="startup_notification_privacy_message">Riot can run in the background to manage your notifications securely and privately (this might affect battery usage).</string>
+    <string name="startup_notification_privacy_message">Riot can run in the background to manage your notifications securely and privately. This might affect battery usage.</string>
     <string name="startup_notification_privacy_button_grant">Grant permission</string>
     <string name="startup_notification_privacy_button_other">Choose another option</string>
 
@@ -680,21 +686,22 @@
     <string name="settings_identity_server">Identity Server</string>
 
     <string name="settings_user_interface">User interface</string>
-    <string name="settings_interface_language">Interface Language</string>
-    <string name="settings_select_language">Choose a language</string>
+    <string name="settings_interface_language">Language</string>
+    <string name="settings_select_language">Choose language</string>
 
     <string name="account_email_validation_title">Verification Pending</string>
     <string name="account_email_validation_message">Please check your email and click on the link it contains. Once this is done, click continue.</string>
-    <string name="account_email_validation_error">Unable to verify email address. Please check your email and click on the link it contains. Once this is done, click continue</string>
-    <string name="account_email_already_used_error">This email address is already in use</string>
-    <string name="account_email_not_found_error">Failed to send email: This email address was not found</string>
-    <string name="account_phone_number_already_used_error">This phone number is already in use</string>
+    <string name="account_email_validation_error">Unable to verify email address. Please check your email and click on the link it contains. Once this is done, click continue.</string>
+    <string name="account_email_already_used_error">This email address is already in use.</string>
+    <string name="account_email_not_found_error">This email address was not found.</string>
+    <string name="account_phone_number_already_used_error">This phone number is already in use.</string>
 
+    <string name="settings_password">Password</string>
     <string name="settings_change_password">Change password</string>
     <string name="settings_old_password">Old password</string>
     <string name="settings_new_password">New password</string>
     <string name="settings_confirm_password">Confirm password</string>
-    <string name="settings_fail_to_update_password">Fail to update password</string>
+    <string name="settings_fail_to_update_password">Failed to update password</string>
     <string name="settings_password_updated">Your password has been updated</string>
     <string name="settings_unignore_user">Show all messages from %s?\n\nNote that this action will restart the app and it may take some time.</string>
 
@@ -713,7 +720,6 @@
     <string name="settings_phone_number_verification_error_empty_code">Enter an activation code</string>
     <string name="settings_phone_number_verification_error">Error while validating your phone number</string>
     <string name="settings_phone_number_code">Code</string>
-
 
     <string name="settings_flair">Flair</string>
     <string name="settings_without_flair">You are not currently a member of any communities.</string>
@@ -737,7 +743,7 @@
     <string name="room_settings_tag_pref_entry_favourite">Favourite</string>
     <string name="room_settings_tag_pref_entry_low_priority">Low priority</string>
     <string name="room_settings_tag_pref_entry_none">None</string>
-    <string name="room_settings_tag_pref_no_tag">not tagged</string>
+    <string name="room_settings_tag_pref_no_tag">Not tagged</string>
 
     <!-- room settings : access and visibility -->
     <string name="room_settings_category_access_visibility_title">Access and visibility</string>
@@ -843,7 +849,7 @@
     <string name="encryption_import_import">Import</string>
     <string name="encryption_import_enter_passphrase">Enter passphrase</string>
     <string name="encryption_never_send_to_unverified_devices_title">Encrypt to verified devices only</string>
-    <string name="encryption_never_send_to_unverified_devices_summary">Never send encrypted messages to unverified devices from this device</string>
+    <string name="encryption_never_send_to_unverified_devices_summary">Never send encrypted messages to unverified devices from this device.</string>
 
     <string name="encryption_information_not_verified">NOT Verified</string>
     <string name="encryption_information_verified">Verified</string>
@@ -932,8 +938,10 @@
     <string name="widget_integration_invalid_parameter">A parameter is not valid.</string>
     <string name="room_add_matrix_apps">Add Matrix apps</string>
     <string name="settings_labs_native_camera">Use native camera</string>
+    <string name="settings_labs_native_camera_summary">Start the system camera instead of the custom camera screen.</string>
     <string name="settings_labs_keyboard_options_to_send_message">Use keyboard enter key to send message</string>
-    <string name="settings_labs_enable_send_voice">Send voice message (requires a third party application to record voice messages)</string>
+    <string name="settings_labs_enable_send_voice">Send voice messages</string>
+    <string name="settings_labs_enable_send_voice_summary">This option requires a third party application to record the messages.</string>
 
     <!-- share keys -->
     <string name="you_added_a_new_device">You added a new device \'%s\', which is requesting encryption keys.</string>
@@ -1049,7 +1057,7 @@
 
     <!-- Lazy loading -->
     <string name="settings_lazy_loading_title">Lazy load rooms members</string>
-    <string name="settings_lazy_loading_description">Increase performance by only loading room members on first view</string>
+    <string name="settings_lazy_loading_description">Increase performance by only loading room members on first view.</string>
     <string name="error_lazy_loading_not_supported_by_home_server">Your homeserver does not support lazy loading of room members yet. Try later.</string>
 
     <!-- Other errors -->
