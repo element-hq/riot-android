@@ -66,6 +66,7 @@
     <string name="missing_permissions_title_to_start_conf_call">Cannot start call</string>
     <string name="device_information">Device information</string>
     <string name="room_no_conference_call_in_encrypted_rooms">Conference calls are not supported in encrypted rooms</string>
+    <string name="call_anyway">Call Anyway</string>
     <string name="send_anyway">Send Anyway</string>
     <string name="or">or</string>
     <string name="invite">Invite</string>
@@ -418,6 +419,7 @@
     <string name="room_participants_action_remove">Remove from this room</string>
     <string name="room_participants_action_ban">Ban</string>
     <string name="room_participants_action_unban">Unban</string>
+    <string name="room_participants_action_kick">Kick</string>
     <string name="room_participants_action_set_default_power_level">Reset to normal user</string>
     <string name="room_participants_action_set_moderator">Make moderator</string>
     <string name="room_participants_action_set_admin">Make admin</string>
@@ -429,8 +431,12 @@
     <string name="room_participants_action_devices_list">Show Device List</string>
     <string name="room_participants_power_level_prompt">You will not be able to undo this change as you are promoting the user to have the same power level as yourself.\nAre you sure?</string>
 
-    <string name="room_participants_kick_prompt_msg">Are you sure that you want to kick this user from this chat?</string>
+    <plurals name="room_participants_kick_prompt_msg">
+        <item quantity="one">Are you sure that you want to kick this user from this chat?</item>
+        <item quantity="other">Are you sure that you want to kick these users from this chat?</item>
+    </plurals>
     <string name="room_participants_ban_prompt_msg">Are you sure that you want to ban this user from this chat?</string>
+    <string name="reason_hint">Reason</string>
 
     <!--
     The variable can be a single name or a string of names
@@ -957,6 +963,7 @@
     <!-- slash commands -->
     <string name="command_error">Command error</string>
     <string name="unrecognized_command">Unrecognized command: %s</string>
+    <string name="command_problem_with_parameters">The command \"%s\" needs more parameters, or some parameters are incorrect.</string>
     <string name="command_description_emote">Displays action</string>
     <string name="command_description_ban_user">Bans user with given id</string>
     <string name="command_description_unban_user">Unbans user with given id</string>
@@ -970,6 +977,9 @@
     <string name="command_description_nick">Changes your display nickname</string>
     <string name="command_description_markdown">On/Off markdown</string>
     <string name="command_description_clear_scalar_token">To fix Matrix Apps management</string>
+
+    <string name="markdown_has_been_enabled">Markdown has been enabled.</string>
+    <string name="markdown_has_been_disabled">Markdown has been disabled.</string>
 
     <!-- notification statuses -->
     <string name="notification_off">Off</string>

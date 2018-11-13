@@ -43,6 +43,7 @@ import im.vector.adapters.VectorUnknownDevicesAdapter;
 
 public class VectorUnknownDevicesFragment extends DialogFragment {
     private static final String ARG_SESSION_ID = "VectorUnknownDevicesFragment.ARG_SESSION_ID";
+    private static final String ARG_IS_FOR_CALLING = "VectorUnknownDevicesFragment.ARG_IS_FOR_CALLING";
 
     /**
      * Define the SendAnyway button listener
@@ -56,14 +57,22 @@ public class VectorUnknownDevicesFragment extends DialogFragment {
 
     private static IUnknownDevicesSendAnywayListener mListener = null;
 
+    /**
+     * @param sessionId
+     * @param unknownDevicesMap
+     * @param isForCalling      true when the user wants to start a call
+     * @return
+     */
     public static VectorUnknownDevicesFragment newInstance(String sessionId,
                                                            MXUsersDevicesMap<MXDeviceInfo> unknownDevicesMap,
+                                                           boolean isForCalling,
                                                            IUnknownDevicesSendAnywayListener listener) {
         VectorUnknownDevicesFragment f = new VectorUnknownDevicesFragment();
 
         // Supply num input as an argument.
         Bundle args = new Bundle();
         args.putString(ARG_SESSION_ID, sessionId);
+        args.putBoolean(ARG_IS_FOR_CALLING, isForCalling);
         // cannot serialize unknownDevicesMap if it is too large
         mUnknownDevicesMap = unknownDevicesMap;
         // idem for the listener
@@ -76,10 +85,13 @@ public class VectorUnknownDevicesFragment extends DialogFragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         mSession = Matrix.getMXSession(getActivity(), getArguments().getString(ARG_SESSION_ID));
+        mIsForCalling = getArguments().getBoolean(ARG_IS_FOR_CALLING);
     }
 
     // current session
     private MXSession mSession;
+    // true when the user want to start a call
+    private boolean mIsForCalling;
     // list view
     private ExpandableListView mExpandableListView;
     // Devices list
@@ -206,7 +218,8 @@ public class VectorUnknownDevicesFragment extends DialogFragment {
 
         if (null != mListener) {
             // Add action buttons
-            builder.setPositiveButton(R.string.send_anyway, new DialogInterface.OnClickListener() {
+            int messageResId = mIsForCalling ? R.string.call_anyway : R.string.send_anyway;
+            builder.setPositiveButton(messageResId, new DialogInterface.OnClickListener() {
                 @Override
                 public void onClick(DialogInterface dialog, int id) {
                     mIsSendAnywayTapped = true;

@@ -768,7 +768,6 @@ Appareils inconnus :</string>
 
     <string name="groups_list">Liste des Groupes</string>
 
-    <string name="room_participants_kick_prompt_msg">Voulez-vous vraiment exclure cet utilisateur de la discussion ?</string>
     <string name="room_participants_ban_prompt_msg">Voulez-vous vraiment bannir cet utilisateur de la discussion ?</string>
 
     <string name="action_exit">Quitter</string>

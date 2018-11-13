@@ -357,7 +357,6 @@ Ierīces nevarēs atšifrēt čata saraksti, kura notikusi, pirms tās pievienot
 Vai vēlies turpināt?</string>
 
     <string name="room_participants_invite_prompt_msg">Vai tiešām vēlies uzaicināt %s uz šo čatu?</string>
-    <string name="room_participants_kick_prompt_msg">Vai tiešām vēlies izspert šo lietotāju no šī čata?</string>
     <string name="room_participants_ban_prompt_msg">Vai tiešām vēlies \"nobanot\" šo lietotāju šajā čatā?</string>
 
     <string name="people_search_invite_by_id"><u>Uzaicināt pēc ID</u></string>

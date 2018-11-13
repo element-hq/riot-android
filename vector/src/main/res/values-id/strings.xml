@@ -427,7 +427,6 @@ Tindakan ini akan memulai ulang aplikasi dan mungkin cukup memakan waktu.</strin
     <string name="room_participants_power_level_prompt">Anda tidak akan dapat membalik perubahan ini karena Anda mengangkat pengguna ini agar memiliki kuasa yang setara dengan Anda.
 Yakin?</string>
 
-    <string name="room_participants_kick_prompt_msg">Apa benar Anda ingin mengeluarkan pengguna ini dari percakapan ini?</string>
     <string name="room_participants_ban_prompt_msg">Apa benar Anda ingin melarang pengguna ini dari percakapan ini?</string>
 
     <string name="room_participants_invite_prompt_msg">Apa benar Anda ingin mengundang %s ke percakapan ini?</string>

@@ -802,7 +802,6 @@ In futuro il processo di verifica sarà più sofisticato.</string>
         <item quantity="one">1 membro</item>
         <item quantity="other">%d membri</item>
     </plurals>
-    <string name="room_participants_kick_prompt_msg">Sei sicuro di voler buttare fuori questo utente dalla chat?</string>
     <string name="room_participants_ban_prompt_msg">Sei sicuro di voler bandire dalla chat questo utente?</string>
 
     <plurals name="room_new_messages_notification">

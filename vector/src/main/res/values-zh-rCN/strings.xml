@@ -757,7 +757,6 @@
     <string name="start_voice_call_prompt_msg">您确定要发起语音通话吗？</string>
     <string name="start_video_call_prompt_msg">您确定要发起视频通话吗？</string>
 
-    <string name="room_participants_kick_prompt_msg">您确定要从这个聊天中移除这个用户吗？</string>
     <string name="room_participants_ban_prompt_msg">您确定要在这个聊天中封禁这个用户吗？</string>
 
     <string name="room_settings_all_messages">全部消息</string>

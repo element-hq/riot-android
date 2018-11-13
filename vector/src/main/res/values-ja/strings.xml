@@ -759,7 +759,6 @@ Riotアプリがあなたの電話帳へアクセスすることを許可しま�
 
     <string name="groups_list">グループリスト</string>
 
-    <string name="room_participants_kick_prompt_msg">このユーザをこの対話から除外して本当によろしいですか？</string>
     <string name="room_participants_ban_prompt_msg">このユーザが対話に参加するのを本当にブロックしますか？</string>
 
     <string name="room_settings_all_messages_noisy">すべてのメッセージ (大音量)</string>

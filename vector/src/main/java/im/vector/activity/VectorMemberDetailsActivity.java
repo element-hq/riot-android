@@ -324,6 +324,7 @@ public class VectorMemberDetailsActivity extends MXCActionBarActivity implements
                         CommonActivityUtils.displayUnknownDevicesDialog(mSession,
                                 VectorMemberDetailsActivity.this,
                                 (MXUsersDevicesMap<MXDeviceInfo>) cryptoError.mExceptionData,
+                                true,
                                 new VectorUnknownDevicesFragment.IUnknownDevicesSendAnywayListener() {
                                     @Override
                                     public void onSendAnyway() {
@@ -483,9 +484,26 @@ public class VectorMemberDetailsActivity extends MXCActionBarActivity implements
 
             case ITEM_ACTION_BAN:
                 if (null != mRoom) {
-                    enableProgressBarView(CommonActivityUtils.UTILS_DISPLAY_PROGRESS_BAR);
-                    mRoom.ban(mRoomMember.getUserId(), null, mRoomActionsListener);
-                    Log.d(LOG_TAG, "## performItemAction(): Block (Ban)");
+                    // Ask for a reason
+                    View layout = getLayoutInflater().inflate(R.layout.dialog_base_edit_text, null);
+
+                    final TextView input = layout.findViewById(R.id.edit_text);
+                    input.setHint(R.string.reason_hint);
+
+                    new AlertDialog.Builder(this)
+                            .setTitle(R.string.room_participants_ban_prompt_msg)
+                            .setView(layout)
+                            .setPositiveButton(R.string.room_participants_action_ban, new DialogInterface.OnClickListener() {
+                                        @Override
+                                        public void onClick(DialogInterface dialog, int which) {
+                                            enableProgressBarView(CommonActivityUtils.UTILS_DISPLAY_PROGRESS_BAR);
+                                            mRoom.ban(mRoomMember.getUserId(), input.getText().toString(), mRoomActionsListener);
+                                            Log.d(LOG_TAG, "## performItemAction(): Block (Ban)");
+                                        }
+                                    }
+                            )
+                            .setNegativeButton(R.string.cancel, null)
+                            .show();
                 }
                 break;
 
@@ -499,9 +517,27 @@ public class VectorMemberDetailsActivity extends MXCActionBarActivity implements
 
             case ITEM_ACTION_KICK:
                 if (null != mRoom) {
-                    enableProgressBarView(CommonActivityUtils.UTILS_DISPLAY_PROGRESS_BAR);
-                    mRoom.kick(mRoomMember.getUserId(), mRoomActionsListener);
-                    Log.d(LOG_TAG, "## performItemAction(): Kick");
+                    // Ask for a reason
+                    View layout = getLayoutInflater().inflate(R.layout.dialog_base_edit_text, null);
+
+                    final TextView input = layout.findViewById(R.id.edit_text);
+                    input.setHint(R.string.reason_hint);
+
+                    new AlertDialog.Builder(this)
+                            .setTitle(getResources().getQuantityString(R.plurals.room_participants_kick_prompt_msg, 1))
+                            .setView(layout)
+                            .setPositiveButton(R.string.room_participants_action_kick, new DialogInterface.OnClickListener() {
+                                        @Override
+                                        public void onClick(DialogInterface dialog, int which) {
+                                            enableProgressBarView(CommonActivityUtils.UTILS_DISPLAY_PROGRESS_BAR);
+                                            mRoom.kick(mRoomMember.getUserId(), input.getText().toString(), mRoomActionsListener);
+                                            Log.d(LOG_TAG, "## performItemAction(): Kick");
+                                        }
+                                    }
+                            )
+                            .setNegativeButton(R.string.cancel, null)
+                            .show();
+
                 }
                 break;
 

@@ -19,9 +19,7 @@
 package im.vector.adapters;
 
 import android.content.Context;
-import android.content.DialogInterface;
 import android.support.v4.content.ContextCompat;
-import android.support.v7.app.AlertDialog;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -412,29 +410,7 @@ public class VectorMemberDetailsAdapter extends BaseExpandableListAdapter {
                 @Override
                 public void onClick(View view) {
                     if (null != mActionListener) {
-                        if (VectorMemberDetailsActivity.ITEM_ACTION_KICK == currentItem.mActionType
-                                || VectorMemberDetailsActivity.ITEM_ACTION_BAN == currentItem.mActionType) {
-                            AlertDialog.Builder builder = new AlertDialog.Builder(view.getContext())
-                                    .setTitle(R.string.dialog_title_confirmation);
-
-                            if (VectorMemberDetailsActivity.ITEM_ACTION_KICK == currentItem.mActionType) {
-                                builder.setMessage(view.getContext().getString(R.string.room_participants_kick_prompt_msg));
-                            } else {
-                                builder.setMessage(view.getContext().getString(R.string.room_participants_ban_prompt_msg));
-                            }
-
-                            builder
-                                    .setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
-                                        @Override
-                                        public void onClick(DialogInterface dialog, int which) {
-                                            mActionListener.performItemAction(currentItem.mActionType);
-                                        }
-                                    })
-                                    .setNegativeButton(R.string.cancel, null)
-                                    .show();
-                        } else {
-                            mActionListener.performItemAction(currentItem.mActionType);
-                        }
+                        mActionListener.performItemAction(currentItem.mActionType);
                     }
                 }
             });

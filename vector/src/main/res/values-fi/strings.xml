@@ -803,7 +803,6 @@ Voit tehdä sen nyt tai myöhemmin sovelluksen asetuksissa.</string>
 
     <string name="groups_list">Ryhmälistaus</string>
 
-    <string name="room_participants_kick_prompt_msg">Haluatko varmasti poistaa tämän käyttäjän keskustelusta?</string>
     <string name="room_participants_ban_prompt_msg">Haluatko varmasti estää tämän käyttäjän keskustelussa?</string>
 
     <string name="room_settings_all_messages_noisy">Kaikki viestit (äänekäs)</string>

@@ -809,7 +809,6 @@ Unbekannte Geräte:</string>
 
     <string name="groups_list">Gruppenliste</string>
 
-    <string name="room_participants_kick_prompt_msg">Bist du sicher, dass du diesen Nutzer aus diesem Chat kicken möchtest?</string>
     <string name="room_participants_ban_prompt_msg">Bist du sicher, dass du diesen Nutzer aus diesem Chat verbannen möchtest?</string>
 
     <string name="room_settings_all_messages_noisy">Alle Nachrichten (laut)</string>

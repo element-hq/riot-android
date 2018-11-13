@@ -324,7 +324,6 @@
     <string name="room_participants_action_mention">Спомени</string>
     <string name="room_participants_action_devices_list">Покажи списъка с устройства</string>
     <string name="room_participants_invite_prompt_msg">Сигурни ли сте, че искате да поканите %s в този чат?</string>
-    <string name="room_participants_kick_prompt_msg">Сигурни ли сте, че искате да изгоните този потребител от чата?</string>
     <string name="room_participants_ban_prompt_msg">Сигурни ли сте, че искате да блокирате този потребител в този чат?</string>
 
     <string name="people_search_filter_text">Само потребители на Matrix</string>

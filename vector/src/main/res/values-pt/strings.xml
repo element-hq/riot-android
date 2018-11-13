@@ -869,7 +869,6 @@ Adicionar alguns agora?</string>
     <string name="room_participants_action_unignore_prompt">Mostrar todas as mensagens deste utilizador?
 
 Note que esta acção reiniciará a aplicação e poderá demorar algum tempo.</string>
-    <string name="room_participants_kick_prompt_msg">Tem a certeza que pretende expulsar este utilizador desta conversa?</string>
     <string name="room_participants_ban_prompt_msg">Tem a certeza que pretende banir este utilizador desta conversa?</string>
 
     <string name="room_participants_invite_join_names">"%1$s, "</string>
