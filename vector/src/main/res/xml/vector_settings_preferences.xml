@@ -68,20 +68,20 @@
         <im.vector.preference.VectorSwitchPreference
             android:defaultValue="true"
             android:key="SETTINGS_SHOW_URL_PREVIEW_KEY"
-            android:title="@string/settings_inline_url_preview"
-            android:summary="@string/settings_inline_url_preview_summary" />
+            android:summary="@string/settings_inline_url_preview_summary"
+            android:title="@string/settings_inline_url_preview" />
 
         <im.vector.preference.VectorSwitchPreference
             android:defaultValue="true"
             android:key="SETTINGS_SEND_TYPING_NOTIF_KEY"
-            android:title="@string/settings_send_typing_notifs"
-            android:summary="@string/settings_send_typing_notifs_summary" />
+            android:summary="@string/settings_send_typing_notifs_summary"
+            android:title="@string/settings_send_typing_notifs" />
 
         <im.vector.preference.VectorSwitchPreference
             android:defaultValue="true"
-            android:key="SETTINGS_SEND_MARKDOWN_KEY"
-            android:title="@string/settings_send_markdown"
-            android:summary="@string/settings_send_markdown_summary" />
+            android:key="SETTINGS_ENABLE_MARKDOWN_KEY"
+            android:summary="@string/settings_send_markdown_summary"
+            android:title="@string/settings_send_markdown" />
 
         <im.vector.preference.VectorSwitchPreference
             android:key="SETTINGS_ALWAYS_SHOW_TIMESTAMPS_KEY"
@@ -94,20 +94,20 @@
         <im.vector.preference.VectorSwitchPreference
             android:defaultValue="true"
             android:key="SETTINGS_SHOW_READ_RECEIPTS_KEY"
-            android:title="@string/settings_show_read_receipts"
-            android:summary="@string/settings_show_read_receipts_summary" />
+            android:summary="@string/settings_show_read_receipts_summary"
+            android:title="@string/settings_show_read_receipts" />
 
         <im.vector.preference.VectorSwitchPreference
             android:defaultValue="true"
             android:key="SETTINGS_SHOW_JOIN_LEAVE_MESSAGES_KEY"
-            android:title="@string/settings_show_join_leave_messages"
-            android:summary="@string/settings_show_join_leave_messages_summary" />
+            android:summary="@string/settings_show_join_leave_messages_summary"
+            android:title="@string/settings_show_join_leave_messages" />
 
         <im.vector.preference.VectorSwitchPreference
             android:defaultValue="true"
             android:key="SETTINGS_SHOW_AVATAR_DISPLAY_NAME_CHANGES_MESSAGES_KEY"
-            android:title="@string/settings_show_avatar_display_name_changes_messages"
-            android:summary="@string/settings_show_avatar_display_name_changes_messages_summary" />
+            android:summary="@string/settings_show_avatar_display_name_changes_messages_summary"
+            android:title="@string/settings_show_avatar_display_name_changes_messages" />
 
         <im.vector.preference.VectorSwitchPreference
             android:key="SETTINGS_VIBRATE_ON_MENTION_KEY"
@@ -118,9 +118,9 @@
             android:title="@string/settings_preview_media_before_sending" />
 
         <ListPreference
+            android:defaultValue="always"
             android:entries="@array/show_info_area_entries"
             android:entryValues="@array/show_info_area_values"
-            android:defaultValue="always"
             android:key="SETTINGS_SHOW_INFO_AREA_KEY"
             android:summary="%s"
             android:title="@string/settings_info_area_show" />
@@ -260,7 +260,7 @@
 
     <im.vector.preference.VectorDividerCategory />
 
-    <im.vector.preference.VectorPreferenceCategory
+    <PreferenceCategory
         android:key="SETTINGS_LABS_PREFERENCE_KEY"
         android:title="@string/room_settings_labs_pref_title">
 
@@ -294,15 +294,15 @@
 
         <im.vector.preference.VectorSwitchPreference
             android:key="SETTINGS_USE_NATIVE_CAMERA_PREFERENCE_KEY"
-            android:title="@string/settings_labs_native_camera"
-            android:summary="@string/settings_labs_native_camera_summary" />
+            android:summary="@string/settings_labs_native_camera_summary"
+            android:title="@string/settings_labs_native_camera" />
 
         <im.vector.preference.VectorSwitchPreference
             android:key="SETTINGS_ENABLE_SEND_VOICE_FEATURE_PREFERENCE_KEY"
-            android:title="@string/settings_labs_enable_send_voice"
-            android:summary="@string/settings_labs_enable_send_voice_summary" />
+            android:summary="@string/settings_labs_enable_send_voice_summary"
+            android:title="@string/settings_labs_enable_send_voice" />
 
-    </im.vector.preference.VectorPreferenceCategory>
+    </PreferenceCategory>
 
     <im.vector.preference.VectorDividerCategory />
 

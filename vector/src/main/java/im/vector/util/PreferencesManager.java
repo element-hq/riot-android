@@ -73,7 +73,8 @@ public class PreferencesManager {
     public static final String SETTINGS_DEVICES_LIST_PREFERENCE_KEY = "SETTINGS_DEVICES_LIST_PREFERENCE_KEY";
     public static final String SETTINGS_DEVICES_DIVIDER_PREFERENCE_KEY = "SETTINGS_DEVICES_DIVIDER_PREFERENCE_KEY";
     public static final String SETTINGS_ROOM_SETTINGS_LABS_END_TO_END_PREFERENCE_KEY = "SETTINGS_ROOM_SETTINGS_LABS_END_TO_END_PREFERENCE_KEY";
-    public static final String SETTINGS_ROOM_SETTINGS_LABS_END_TO_END_IS_ACTIVE_PREFERENCE_KEY = "SETTINGS_ROOM_SETTINGS_LABS_END_TO_END_IS_ACTIVE_PREFERENCE_KEY";
+    public static final String SETTINGS_ROOM_SETTINGS_LABS_END_TO_END_IS_ACTIVE_PREFERENCE_KEY
+            = "SETTINGS_ROOM_SETTINGS_LABS_END_TO_END_IS_ACTIVE_PREFERENCE_KEY";
     public static final String SETTINGS_ENCRYPTION_INFORMATION_DEVICE_NAME_PREFERENCE_KEY = "SETTINGS_ENCRYPTION_INFORMATION_DEVICE_NAME_PREFERENCE_KEY";
     public static final String SETTINGS_ENCRYPTION_INFORMATION_DEVICE_ID_PREFERENCE_KEY = "SETTINGS_ENCRYPTION_INFORMATION_DEVICE_ID_PREFERENCE_KEY";
     public static final String SETTINGS_ENCRYPTION_EXPORT_E2E_ROOM_KEYS_PREFERENCE_KEY = "SETTINGS_ENCRYPTION_EXPORT_E2E_ROOM_KEYS_PREFERENCE_KEY";
@@ -93,7 +94,7 @@ public class PreferencesManager {
     public static final String SETTINGS_INTERFACE_TEXT_SIZE_KEY = "SETTINGS_INTERFACE_TEXT_SIZE_KEY";
     public static final String SETTINGS_SHOW_URL_PREVIEW_KEY = "SETTINGS_SHOW_URL_PREVIEW_KEY";
     private static final String SETTINGS_SEND_TYPING_NOTIF_KEY = "SETTINGS_SEND_TYPING_NOTIF_KEY";
-    private static final String SETTINGS_SEND_MARKDOWN_KEY = "SETTINGS_SEND_MARKDOWN_KEY";
+    private static final String SETTINGS_ENABLE_MARKDOWN_KEY = "SETTINGS_ENABLE_MARKDOWN_KEY";
     private static final String SETTINGS_ALWAYS_SHOW_TIMESTAMPS_KEY = "SETTINGS_ALWAYS_SHOW_TIMESTAMPS_KEY";
     private static final String SETTINGS_12_24_TIMESTAMPS_KEY = "SETTINGS_12_24_TIMESTAMPS_KEY";
     private static final String SETTINGS_SHOW_READ_RECEIPTS_KEY = "SETTINGS_SHOW_READ_RECEIPTS_KEY";
@@ -157,7 +158,6 @@ public class PreferencesManager {
     // some preferences keys must be kept after a logout
     private static final List<String> mKeysToKeepAfterLogout = Arrays.asList(
             SETTINGS_SEND_TYPING_NOTIF_KEY,
-            SETTINGS_SEND_MARKDOWN_KEY,
             SETTINGS_ALWAYS_SHOW_TIMESTAMPS_KEY,
             SETTINGS_12_24_TIMESTAMPS_KEY,
             SETTINGS_SHOW_READ_RECEIPTS_KEY,
@@ -589,7 +589,7 @@ public class PreferencesManager {
 
         if (preferences.contains("MARKDOWN_PREFERENCE_KEY")) {
             preferences.edit()
-                    .putBoolean(SETTINGS_SEND_MARKDOWN_KEY, preferences.getBoolean("MARKDOWN_PREFERENCE_KEY", true))
+                    .putBoolean(SETTINGS_ENABLE_MARKDOWN_KEY, preferences.getBoolean("MARKDOWN_PREFERENCE_KEY", true))
                     .remove("MARKDOWN_PREFERENCE_KEY")
                     .apply();
         }
@@ -603,7 +603,7 @@ public class PreferencesManager {
 
         if (preferences.contains("SETTINGS_DISABLE_MARKDOWN_KEY")) {
             preferences.edit()
-                    .putBoolean(SETTINGS_SEND_MARKDOWN_KEY, !preferences.getBoolean("SETTINGS_DISABLE_MARKDOWN_KEY", true))
+                    .putBoolean(SETTINGS_ENABLE_MARKDOWN_KEY, !preferences.getBoolean("SETTINGS_DISABLE_MARKDOWN_KEY", true))
                     .remove("SETTINGS_DISABLE_MARKDOWN_KEY")
                     .apply();
         }
@@ -624,7 +624,8 @@ public class PreferencesManager {
 
         if (preferences.contains("SETTINGS_HIDE_AVATAR_DISPLAY_NAME_CHANGES")) {
             preferences.edit()
-                    .putBoolean(SETTINGS_SHOW_AVATAR_DISPLAY_NAME_CHANGES_MESSAGES_KEY, !preferences.getBoolean("SETTINGS_HIDE_AVATAR_DISPLAY_NAME_CHANGES", true))
+                    .putBoolean(SETTINGS_SHOW_AVATAR_DISPLAY_NAME_CHANGES_MESSAGES_KEY,
+                            !preferences.getBoolean("SETTINGS_HIDE_AVATAR_DISPLAY_NAME_CHANGES", true))
                     .remove("SETTINGS_HIDE_AVATAR_DISPLAY_NAME_CHANGES")
                     .apply();
         }
@@ -637,7 +638,7 @@ public class PreferencesManager {
      * @return true if the markdown is enabled
      */
     public static boolean isMarkdownEnabled(Context context) {
-        return PreferenceManager.getDefaultSharedPreferences(context).getBoolean(SETTINGS_SEND_MARKDOWN_KEY, true);
+        return PreferenceManager.getDefaultSharedPreferences(context).getBoolean(SETTINGS_ENABLE_MARKDOWN_KEY, true);
     }
 
     /**
@@ -649,7 +650,7 @@ public class PreferencesManager {
     public static void setMarkdownEnabled(Context context, boolean isEnabled) {
         PreferenceManager.getDefaultSharedPreferences(context)
                 .edit()
-                .putBoolean(SETTINGS_SEND_MARKDOWN_KEY, !isEnabled)
+                .putBoolean(SETTINGS_ENABLE_MARKDOWN_KEY, isEnabled)
                 .apply();
     }
 
