@@ -685,7 +685,7 @@ Je kan het nu, of later, doen vanuit de programma-instellingen.</string>
 
     <!-- historical -->
     <string name="historical_placeholder">Zoek voor historisch</string>
-<string name="offline">Offline</string>
+    <string name="offline">Offline</string>
 
     <string name="user_directory_header">Gebruikersadresboek</string>
     <string name="people_search_user_directory">GEBRUIKERSADRESBOEK (%s)</string>
@@ -715,7 +715,7 @@ Je kan het nu, of later, doen vanuit de programma-instellingen.</string>
     <string name="tiny">Klein</string>
     <string name="larger">Groter</string>
     <string name="huge">Gigantisch</string>
-<string name="light_theme">Licht Thema</string>
+    <string name="light_theme">Licht Thema</string>
     <string name="dark_theme">Donker Thema</string>
     <string name="black_them">Zwart Thema</string>
 
@@ -781,7 +781,7 @@ Je kan het nu, of later, doen vanuit de programma-instellingen.</string>
 
     <string name="encrypted_message">Versleuteld bericht</string>
 
-<string name="title_activity_group_details">Gemeenschap details</string>
+    <string name="title_activity_group_details">Gemeenschap details</string>
 
     <string name="loading">Laden…</string>
 
@@ -804,37 +804,37 @@ Je kan het nu, of later, doen vanuit de programma-instellingen.</string>
     <string name="groups_list">Groepenlijst</string>
 
     <plurals name="membership_changes">
-	<item quantity="one">1 verandering in lidmaatschap</item>
-	<item quantity="other">%d veranderingen in lidmaatschap</item>
-</plurals>
+        <item quantity="one">1 verandering in lidmaatschap</item>
+        <item quantity="other">%d veranderingen in lidmaatschap</item>
+    </plurals>
 
     <string name="list_members">Ledenlijst</string>
     <string name="open_chat_header">Opschrift openen</string>
     <string name="room_sync_in_progress">Synchroniseren…</string>
     <plurals name="room_header_active_members_count">
-	<item quantity="one">1 actief lid</item>
-	<item quantity="other">%d actieve leden</item>
-</plurals>
+        <item quantity="one">1 actief lid</item>
+        <item quantity="other">%d actieve leden</item>
+    </plurals>
     <plurals name="room_title_members">
-	<item quantity="one">1 lid</item>
-	<item quantity="other">%d leden</item>
-</plurals>
+        <item quantity="one">1 lid</item>
+        <item quantity="other">%d leden</item>
+    </plurals>
     <string name="room_participants_kick_prompt_msg">Weet je zeker dat je deze gebruiker uit het gesprek wilt verwijderen?</string>
     <string name="room_participants_ban_prompt_msg">Weet je zeker dat je deze gebruiker uit dit gesprek wilt verbannen?</string>
 
     <plurals name="room_new_messages_notification">
-	<item quantity="one">1 nieuw bericht</item>
-	<item quantity="other">%d nieuwe berichten</item>
-</plurals>
+        <item quantity="one">1 nieuw bericht</item>
+        <item quantity="other">%d nieuwe berichten</item>
+    </plurals>
 
     <plurals name="directory_search_rooms">
-	<item quantity="one">1 ruimte</item>
-	<item quantity="other">%d ruimtes</item>
-</plurals>
+        <item quantity="one">1 ruimte</item>
+        <item quantity="other">%d ruimtes</item>
+    </plurals>
     <plurals name="directory_search_rooms_for">
-	<item quantity="one">%1$s ruimte gevonden voor %2$s</item>
-	<item quantity="other">%1$s ruimtes gevonden voor %2$s</item>
-</plurals>
+        <item quantity="one">%1$s ruimte gevonden voor %2$s</item>
+        <item quantity="other">%1$s ruimtes gevonden voor %2$s</item>
+    </plurals>
     <string name="room_settings_all_messages_noisy">Alle berichten (luid)</string>
     <string name="room_settings_all_messages">Alle berichten</string>
     <string name="room_settings_mention_only">Alleen vermeldingen</string>
@@ -854,19 +854,19 @@ Je kan het nu, of later, doen vanuit de programma-instellingen.</string>
 
 
     <plurals name="notification_unread_notified_messages_in_room_msgs">
-	<item quantity="one">1 ongelezen bericht waarin je vermeld staat</item>
-	<item quantity="other">%d ongelezen berichten waarin je vermeld staat</item>
-</plurals>
+        <item quantity="one">1 ongelezen bericht waarin je vermeld staat</item>
+        <item quantity="other">%d ongelezen berichten waarin je vermeld staat</item>
+    </plurals>
     <plurals name="notification_unread_notified_messages_in_room_rooms">
-	<item quantity="one">1 ruimte</item>
-	<item quantity="other">%d ruimtes</item>
-</plurals>
+        <item quantity="one">1 ruimte</item>
+        <item quantity="other">%d ruimtes</item>
+    </plurals>
     <string name="notification_unread_notified_messages_in_room">%1$s in %2$s</string>
 
     <plurals name="active_widgets">
-	<item quantity="one">1 actieve widget</item>
-	<item quantity="other">%d actieve widgets</item>
-</plurals>
+        <item quantity="one">1 actieve widget</item>
+        <item quantity="other">%d actieve widgets</item>
+    </plurals>
 
     <!-- Widget Integration Manager -->
     <string name="create">Creëer</string>
@@ -899,10 +899,10 @@ Je kan het nu, of later, doen vanuit de programma-instellingen.</string>
     <string name="receipt_avatar">Ontvangst-avatar</string>
     <string name="avatar">Avatar</string>
 
-<plurals name="notification_unread_notified_messages">
-	<item quantity="one">1 ongelezen bericht waarin je vermeld staat</item>
-	<item quantity="other">%d ongelezen berichten waarin je vermeld staat</item>
-</plurals>
+    <plurals name="notification_unread_notified_messages">
+        <item quantity="one">1 ongelezen bericht waarin je vermeld staat</item>
+        <item quantity="other">%d ongelezen berichten waarin je vermeld staat</item>
+    </plurals>
     <string name="notice_avatar">Vermeldingsavatar</string>
     <string name="title_activity_choose_sticker">Verstuur een sticker</string>
 
@@ -953,7 +953,7 @@ De zichtbaarheid van berichten in Matrix is hetzelfde als in e-mail. Het vergete
     <string name="deactivate_account_prompt_password">Om verder te gaan, voer je wachtwoord in:</string>
     <string name="deactivate_account_submit">Account Deactiveren</string>
 
-<string name="dialog_title_third_party_licences">Licenties van derde partijen</string>
+    <string name="dialog_title_third_party_licences">Licenties van derde partijen</string>
 
     <string name="download">Download</string>
     <string name="speak">Spreek</string>
@@ -976,7 +976,7 @@ De zichtbaarheid van berichten in Matrix is hetzelfde als in e-mail. Het vergete
 
     <string name="error_empty_field_your_password">Vul alstublieft uw wachtwoord in.</string>
 
-<string name="send_bug_report_description_in_english">Indien mogelijk, schrijf alstublieft een omschrijving in het engels.</string>
+    <string name="send_bug_report_description_in_english">Indien mogelijk, schrijf alstublieft een omschrijving in het engels.</string>
     <string name="room_message_placeholder_reply_to_encrypted">Verstuur een versleutelde reactie…</string>
     <string name="room_message_placeholder_reply_to_not_encrypted">Verstuur een reactie (onversleuteld)…</string>
     <string name="settings_preview_media_before_sending">Bekijk media voor het versturen</string>
@@ -1004,25 +1004,25 @@ Let op: deze actie zal de app opnieuw opstarten, en kan enige tijd kosten.</stri
     <string name="room_tombstone_continuation_description">Deze ruimte is een voortzetting van een ander gesprek</string>
     <string name="room_tombstone_predecessor_link">Klik hier om oudere berichten te zien</string>
 
-<string name="missing_permissions_error">Door missende permissies is deze actie niet mogelijk.</string>
+    <string name="missing_permissions_error">Door missende permissies is deze actie niet mogelijk.</string>
     <string name="system_alerts_header">Systeem Waarschuwingen</string>
 
     <plurals name="format_time_s">
-	<item quantity="one">1s</item>
-	<item quantity="other">%ds</item>
-</plurals>
+        <item quantity="one">1s</item>
+        <item quantity="other">%ds</item>
+    </plurals>
     <plurals name="format_time_m">
-	<item quantity="one">1m</item>
-	<item quantity="other">%dm</item>
-</plurals>
+        <item quantity="one">1m</item>
+        <item quantity="other">%dm</item>
+    </plurals>
     <plurals name="format_time_h">
-	<item quantity="one">1h</item>
-	<item quantity="other">%dh</item>
-</plurals>
+        <item quantity="one">1h</item>
+        <item quantity="other">%dh</item>
+    </plurals>
     <plurals name="format_time_d">
-	<item quantity="one">1d</item>
-	<item quantity="other">%dd</item>
-</plurals>
+        <item quantity="one">1d</item>
+        <item quantity="other">%dd</item>
+    </plurals>
 
     <string name="room_participants_now">nu %1$s</string>
     <string name="room_participants_ago">%1$s %2$s geleden</string>
@@ -1032,20 +1032,20 @@ Let op: deze actie zal de app opnieuw opstarten, en kan enige tijd kosten.</stri
     <string name="room_participants_invite_join_names_combined">%1$s %2$s</string>
 
     <plurals name="room_details_selected">
-	<item quantity="one">1 geselecteerd</item>
-	<item quantity="other">%d geselecteerd</item>
-</plurals>
+        <item quantity="one">1 geselecteerd</item>
+        <item quantity="other">%d geselecteerd</item>
+    </plurals>
     <string name="command_description_clear_scalar_token">Om Matrix Apps management te repareren</string>
 
     <plurals name="group_members">
-	<item quantity="one">1 deelnemer</item>
-	<item quantity="other">%d deelnemers</item>
-</plurals>
+        <item quantity="one">1 deelnemer</item>
+        <item quantity="other">%d deelnemers</item>
+    </plurals>
 
     <plurals name="group_rooms">
-	<item quantity="one">1 ruimte</item>
-	<item quantity="other">%d ruimtes</item>
-</plurals>
+        <item quantity="one">1 ruimte</item>
+        <item quantity="other">%d ruimtes</item>
+    </plurals>
     <string name="resource_limit_exceeded_title">Resource limiet overschreden</string>
     <string name="resource_limit_contact_action">Contact Beheerder</string>
 
@@ -1060,6 +1060,6 @@ Let op: deze actie zal de app opnieuw opstarten, en kan enige tijd kosten.</stri
     <string name="resource_limit_soft_contact">Alstublieft %s om dit limiet te verhogen.</string>
     <string name="resource_limit_hard_contact">Alstublieft %s om deze service te blijven gebruiken.</string>
 
-<string name="dialog_title_error">Foutmelding</string>
+    <string name="dialog_title_error">Foutmelding</string>
 
-    </resources>
+</resources>

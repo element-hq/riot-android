@@ -678,7 +678,7 @@ Ismeretlen eszközök:</string>
     <string name="larger">Nagyobb</string>
     <string name="largest">Legnagyobb</string>
     <string name="huge">Óriási</string>
-<string name="offline">Offline</string>
+    <string name="offline">Offline</string>
 
     <string name="user_directory_header">Felhasználójegyzék</string>
     <string name="light_theme">Világos téma</string>
@@ -719,7 +719,7 @@ Ismeretlen eszközök:</string>
     <string name="share_without_verifying">Megosztás ellenőrzés nélkül</string>
     <string name="ignore_request">Kérelem figyelmen kívül hagyása</string>
 
-<string name="notification_noisy_notifications">Hangos értesítések</string>
+    <string name="notification_noisy_notifications">Hangos értesítések</string>
     <string name="notification_silent_notifications">Csendes értesítések</string>
 
     <string name="option_take_photo">Fényképezés</string>
@@ -746,7 +746,7 @@ Ismeretlen eszközök:</string>
 
     <string name="encrypted_message">Titkosított üzenet</string>
 
-<string name="title_activity_group_details">A közösség adatai</string>
+    <string name="title_activity_group_details">A közösség adatai</string>
 
     <string name="loading">Betöltés…</string>
 
@@ -807,7 +807,7 @@ Ismeretlen eszközök:</string>
     <string name="reason_colon">Ok: %1$s</string>
     <string name="rejoin">Újracsatlakozás</string>
     <string name="forget_room">Szoba elfelejtése</string>
-<string name="settings_inline_url_preview">"Üzenetekben URL előnézet engedélyezése alapbeállításként "</string>
+    <string name="settings_inline_url_preview">"Üzenetekben URL előnézet engedélyezése alapbeállításként "</string>
     <string name="settings_flair">Kitűző</string>
 
     <string name="room_settings_no_flair">"Ez a szoba nem mutatja  a közösségek kitűzőit"</string>
@@ -816,57 +816,57 @@ Ismeretlen eszközök:</string>
     <string name="send_bug_report_rage_shake">Rázd meg ha hibát szeretnél bejelenteni</string>
 
     <plurals name="membership_changes">
-	<item quantity="one">1 tagság változás</item>
-	<item quantity="other">%d tagság változás</item>
-</plurals>
+        <item quantity="one">1 tagság változás</item>
+        <item quantity="other">%d tagság változás</item>
+    </plurals>
 
     <string name="list_members">Tagok listázása</string>
     <string name="open_chat_header">Fejléc megnyitása</string>
     <string name="room_sync_in_progress">Szinkronizálás…</string>
     <plurals name="room_header_active_members_count">
-	<item quantity="one">1 aktív tag</item>
-	<item quantity="other">%d aktív tag</item>
-</plurals>
+        <item quantity="one">1 aktív tag</item>
+        <item quantity="other">%d aktív tag</item>
+    </plurals>
     <plurals name="room_title_members">
-	<item quantity="one">1 tag</item>
-	<item quantity="other">%d tag</item>
-</plurals>
+        <item quantity="one">1 tag</item>
+        <item quantity="other">%d tag</item>
+    </plurals>
     <plurals name="room_new_messages_notification">
-	<item quantity="one">1 új üzenet</item>
-	<item quantity="other">%d új üzenet</item>
-</plurals>
+        <item quantity="one">1 új üzenet</item>
+        <item quantity="other">%d új üzenet</item>
+    </plurals>
 
     <plurals name="directory_search_rooms">
-	<item quantity="one">1 szoba</item>
-	<item quantity="other">%d szoba</item>
-</plurals>
+        <item quantity="one">1 szoba</item>
+        <item quantity="other">%d szoba</item>
+    </plurals>
     <plurals name="directory_search_rooms_for">
-	<item quantity="one">%1$s szoba találat ehhez: %2$s</item>
-	<item quantity="other">%1$s szoba találat ehhez: %2$s</item>
-</plurals>
+        <item quantity="one">%1$s szoba találat ehhez: %2$s</item>
+        <item quantity="other">%1$s szoba találat ehhez: %2$s</item>
+    </plurals>
     <plurals name="notification_unread_notified_messages">
-	<item quantity="one">1 olvasatlan üzenet</item>
-	<item quantity="other">%d olvasatlan üzenet</item>
-</plurals>
+        <item quantity="one">1 olvasatlan üzenet</item>
+        <item quantity="other">%d olvasatlan üzenet</item>
+    </plurals>
     <plurals name="notification_unread_notified_messages_in_room_msgs">
-	<item quantity="one">1 olvasatlan üzenet értesítéssel</item>
-	<item quantity="other">%d olvasatlan üzenet értesítéssel</item>
-</plurals>
+        <item quantity="one">1 olvasatlan üzenet értesítéssel</item>
+        <item quantity="other">%d olvasatlan üzenet értesítéssel</item>
+    </plurals>
     <plurals name="notification_unread_notified_messages_in_room_rooms">
-	<item quantity="one">1 szoba</item>
-	<item quantity="other">%d szoba</item>
-</plurals>
+        <item quantity="one">1 szoba</item>
+        <item quantity="other">%d szoba</item>
+    </plurals>
     <string name="notification_unread_notified_messages_in_room">%1$s itt: %2$s</string>
 
     <plurals name="active_widgets">
-	<item quantity="one">1 aktív kisalkalmazás</item>
-	<item quantity="other">%d aktív kisalkalmazás</item>
-</plurals>
+        <item quantity="one">1 aktív kisalkalmazás</item>
+        <item quantity="other">%d aktív kisalkalmazás</item>
+    </plurals>
 
     <!-- Widget Integration Manager -->
     <string name="avatar">Avatar</string>
 
-<string name="receipt_avatar">Visszaigazolási avatar</string>
+    <string name="receipt_avatar">Visszaigazolási avatar</string>
     <string name="notice_avatar">Észlelés avatar</string>
     <string name="settings_notification_privacy_warning">Riot.im a háttérben fut azért, hogy az értesítések tartalma titokban maradhasson. Ezt a beállítást megváltoztathatod kisebb akkumulátor használathoz.</string>
     <string name="settings_notification_privacy_normal">Normál</string>
@@ -917,7 +917,7 @@ Matrixban az üzenetek láthatósága hasonlít az e-mailre. Az üzenet törlés
     <string name="deactivate_account_prompt_password">A folytatáshoz add meg a jelszavadat:</string>
     <string name="deactivate_account_submit">Fiók felfüggesztése</string>
 
-<string name="dialog_title_third_party_licences">Licencek harmadik féltől</string>
+    <string name="dialog_title_third_party_licences">Licencek harmadik féltől</string>
 
     <string name="download">Letöltés</string>
     <string name="speak">Mond</string>
@@ -940,7 +940,7 @@ Matrixban az üzenetek láthatósága hasonlít az e-mailre. Az üzenet törlés
 
     <string name="error_empty_field_your_password">Kérlek add meg a jelszavad.</string>
 
-<string name="send_bug_report_description_in_english">Kérlek, ha lehetséges a leírást angolul írd.</string>
+    <string name="send_bug_report_description_in_english">Kérlek, ha lehetséges a leírást angolul írd.</string>
     <string name="room_participants_action_unignore_prompt">Mutassuk ennek a felhasználónak minden üzenetét?
 
 Vedd figyelembe, hogy az alkalmazás újraindul ami sok időt vehet igénybe.</string>
@@ -970,23 +970,23 @@ Vedd figyelembe, hogy az alkalmazás újraindul ami sok időt vehet igénybe.</s
     <string name="room_tombstone_continuation_description">Ez a szoba a folytatása egy másik beszélgetésnek</string>
     <string name="room_tombstone_predecessor_link">Régebbi üzenetek megjelenítéséhez kattints ide</string>
 
-<string name="missing_permissions_error">A műveletet a hiányzó engedélyek miatt nem lehet végrehajtani.</string>
+    <string name="missing_permissions_error">A műveletet a hiányzó engedélyek miatt nem lehet végrehajtani.</string>
     <plurals name="format_time_s">
-	<item quantity="one">1mp</item>
-	<item quantity="other">%dmp</item>
-</plurals>
+        <item quantity="one">1mp</item>
+        <item quantity="other">%dmp</item>
+    </plurals>
     <plurals name="format_time_m">
-	<item quantity="one">1p</item>
-	<item quantity="other">%dp</item>
-</plurals>
+        <item quantity="one">1p</item>
+        <item quantity="other">%dp</item>
+    </plurals>
     <plurals name="format_time_h">
-	<item quantity="one">1ó</item>
-	<item quantity="other">%dó</item>
-</plurals>
+        <item quantity="one">1ó</item>
+        <item quantity="other">%dó</item>
+    </plurals>
     <plurals name="format_time_d">
-	<item quantity="one">1n</item>
-	<item quantity="other">%dn</item>
-</plurals>
+        <item quantity="one">1n</item>
+        <item quantity="other">%dn</item>
+    </plurals>
 
     <string name="room_participants_now">Most: %1$s</string>
     <string name="room_participants_ago">%1$s %2$s óta</string>
@@ -996,18 +996,18 @@ Vedd figyelembe, hogy az alkalmazás újraindul ami sok időt vehet igénybe.</s
     <string name="room_participants_invite_join_names_combined">%2$s %1$s</string>
 
     <plurals name="room_details_selected">
-	<item quantity="one">1 kiválasztva</item>
-	<item quantity="other">%d kiválasztva</item>
-</plurals>
+        <item quantity="one">1 kiválasztva</item>
+        <item quantity="other">%d kiválasztva</item>
+    </plurals>
     <plurals name="group_members">
-	<item quantity="one">1 tag</item>
-	<item quantity="other">%d tag</item>
-</plurals>
+        <item quantity="one">1 tag</item>
+        <item quantity="other">%d tag</item>
+    </plurals>
 
     <plurals name="group_rooms">
-	<item quantity="one">1 szoba</item>
-	<item quantity="other">%d szoba</item>
-</plurals>
+        <item quantity="one">1 szoba</item>
+        <item quantity="other">%d szoba</item>
+    </plurals>
     <string name="system_alerts_header">Rendszer Riasztások</string>
 
     <string name="resource_limit_exceeded_title">Erőforrás korlát túllépve</string>
@@ -1024,7 +1024,7 @@ Vedd figyelembe, hogy az alkalmazás újraindul ami sok időt vehet igénybe.</s
     <string name="resource_limit_soft_contact">Kérlek %s, hogy ez a korlát megemelésre kerüljön.</string>
     <string name="resource_limit_hard_contact">Kérlek %s, hogy tovább tudd használni ezt a szolgáltatást.</string>
 
-<string name="dialog_title_error">Hiba</string>
+    <string name="dialog_title_error">Hiba</string>
 
     <string name="settings_lazy_loading_title">Szoba tagság késleltetett betöltése</string>
     <string name="settings_lazy_loading_description">Teljesítmény növelése a szoba tagjainak késleltetett betöltésével</string>
@@ -1032,7 +1032,7 @@ Vedd figyelembe, hogy az alkalmazás újraindul ami sok időt vehet igénybe.</s
 
     <string name="unknown_error">Ne haragudj, hiba történt</string>
 
-<string name="status_theme">Status.im téma</string>
+    <string name="status_theme">Status.im téma</string>
 
     <string name="room_sliding_menu_version_x">Verzió: %s</string>
     <string name="encryption_export_notice">Adj meg egy jelmondatot a kimentett kulcsok titkosításához. Ezt a jelmondatot kell majd megadnod a kulcsok betöltéséhez.</string>
@@ -1041,7 +1041,7 @@ Vedd figyelembe, hogy az alkalmazás újraindul ami sok időt vehet igénybe.</s
     <string name="merged_events_expand">kinyit</string>
     <string name="merged_events_collapse">bezár</string>
 
-<string name="settings_info_area_show">Mutasd az információs részt</string>
+    <string name="settings_info_area_show">Mutasd az információs részt</string>
     <string name="show_info_area_always">Mindig</string>
     <string name="show_info_area_messages_and_errors">Üzenetekhez és hibákhoz</string>
     <string name="show_info_area_only_errors">Csak hibákhoz</string>

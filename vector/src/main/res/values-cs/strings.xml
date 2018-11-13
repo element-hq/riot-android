@@ -1,5 +1,6 @@
 <?xml version='1.0' encoding='UTF-8'?>
-<resources><string name="light_theme">Světlý motiv</string>
+<resources>
+    <string name="light_theme">Světlý motiv</string>
     <string name="black_them">Černý motiv</string>
 
     <string name="dark_theme">Tmavý motiv</string>
@@ -29,7 +30,7 @@
     <string name="resources_country_code">CZ</string>
 
     <string name="forget_room">Zapomenout místnost</string>
-<string name="notification_sync_in_progress">Synchronizace</string>
+    <string name="notification_sync_in_progress">Synchronizace</string>
     <string name="notification_noisy_notifications">Hlasitá oznámení</string>
     <string name="notification_silent_notifications">Tichá oznámení</string>
 
@@ -105,7 +106,7 @@ Zvolte export, chcete-li je zálohovat, než se odhlásíte.</string>
         <item quantity="one">1 uživatel</item>
         <item quantity="few">%d uživatelé</item>
         <item quantity="many">%d uživatelé</item>
-        <item quantity="other"/>
+        <item quantity="other" />
     </plurals>
 
     <string name="groups_invite_header">Pozvat</string>
@@ -205,4 +206,4 @@ Zvolte export, chcete-li je zálohovat, než se odhlásíte.</string>
     <string name="login_error_bad_json">Poškozený JSON</string>
     <string name="login_error_limit_exceeded">Příliš mnoho požadavků bylo odeslano</string>
     <string name="login_error_user_in_use">Toto uživatelské jméno je již použito</string>
-    </resources>
+</resources>

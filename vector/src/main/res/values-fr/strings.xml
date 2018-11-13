@@ -431,10 +431,10 @@ Cliquez sur exporter pour les sauvegarder avant de vous déconnecter.</string>
 
     <string name="historical_placeholder">Rechercher dans l\'historique</string>
 
-<plurals name="public_room_nb_users">
-	<item quantity="one">%d participant</item>
-	<item quantity="other">%d participants</item>
-</plurals>
+    <plurals name="public_room_nb_users">
+        <item quantity="one">%d participant</item>
+        <item quantity="other">%d participants</item>
+    </plurals>
 
     <string name="send_bug_report_description">Veuillez décrire l\'erreur. Qu\'avez-vous fait ? Quel était le comportement attendu ? Que s\'est-il réellement passé ?</string>
     <string name="send_bug_report_logs_description">Afin de diagnostiquer les problèmes, les journaux de ce client seront envoyés avec ce rapport d\'erreur. Ce rapport d\'erreur, y compris les journaux et la capture d\'écran, ne seront pas visibles publiquement. Si vous préférez envoyer le texte ci-dessus uniquement, veuillez décochez :</string>
@@ -686,7 +686,7 @@ Appareils inconnus :</string>
     <string name="larger">Très grande</string>
     <string name="largest">La plus grande</string>
     <string name="huge">Énorme</string>
-<string name="light_theme">Thème clair</string>
+    <string name="light_theme">Thème clair</string>
     <string name="dark_theme">Thème sombre</string>
     <string name="black_them">Thème noir</string>
 
@@ -724,7 +724,7 @@ Appareils inconnus :</string>
     <string name="share_without_verifying">Partager sans vérifier</string>
     <string name="ignore_request">Ignorer la demande</string>
 
-<string name="notification_noisy_notifications">Notifications sonores</string>
+    <string name="notification_noisy_notifications">Notifications sonores</string>
     <string name="notification_silent_notifications">Notifications muettes</string>
 
     <string name="option_take_photo">Prendre une photo</string>
@@ -750,7 +750,7 @@ Appareils inconnus :</string>
 
     <string name="encrypted_message">Message chiffré</string>
 
-<string name="loading">Chargement…</string>
+    <string name="loading">Chargement…</string>
 
     <string name="title_activity_group_details">Informations sur la communauté</string>
 
@@ -814,60 +814,60 @@ Appareils inconnus :</string>
     <string name="reason_colon">Motif : %1$s</string>
     <string name="rejoin">Rejoindre</string>
     <string name="forget_room">Abandonner le salon</string>
-<string name="settings_flair">Badge</string>
+    <string name="settings_flair">Badge</string>
 
     <string name="send_bug_report_rage_shake">Secouer avec frustration pour signaler un bug</string>
 
     <string name="actions">Actions</string>
     <string name="room_sync_in_progress">Synchronisation…</string>
     <plurals name="room_header_active_members_count">
-	<item quantity="one">%d membre actif</item>
-	<item quantity="other">%d membres actifs</item>
-</plurals>
+        <item quantity="one">%d membre actif</item>
+        <item quantity="other">%d membres actifs</item>
+    </plurals>
     <plurals name="room_title_members">
-	<item quantity="one">%d membre</item>
-	<item quantity="other">%d membres</item>
-</plurals>
+        <item quantity="one">%d membre</item>
+        <item quantity="other">%d membres</item>
+    </plurals>
     <plurals name="room_new_messages_notification">
-	<item quantity="one">%d nouveau message</item>
-	<item quantity="other">%d nouveaux messages</item>
-</plurals>
+        <item quantity="one">%d nouveau message</item>
+        <item quantity="other">%d nouveaux messages</item>
+    </plurals>
 
     <string name="list_members">Liste les membres</string>
     <plurals name="directory_search_rooms">
-	<item quantity="one">%d salon</item>
-	<item quantity="other">%d salons</item>
-</plurals>
+        <item quantity="one">%d salon</item>
+        <item quantity="other">%d salons</item>
+    </plurals>
     <plurals name="directory_search_rooms_for">
-	<item quantity="one">%1$s salon trouvé pour %2$s</item>
-	<item quantity="other">%1$s salons trouvés pour %2$s</item>
-</plurals>
+        <item quantity="one">%1$s salon trouvé pour %2$s</item>
+        <item quantity="other">%1$s salons trouvés pour %2$s</item>
+    </plurals>
     <plurals name="notification_unread_notified_messages">
-	<item quantity="one">%d message notifié non lu</item>
-	<item quantity="other">%d messages notifiés non lus</item>
-</plurals>
+        <item quantity="one">%d message notifié non lu</item>
+        <item quantity="other">%d messages notifiés non lus</item>
+    </plurals>
     <plurals name="notification_unread_notified_messages_in_room_msgs">
-	<item quantity="one">%d message notifié non lu</item>
-	<item quantity="other">%d messages notifiés non lus</item>
-</plurals>
+        <item quantity="one">%d message notifié non lu</item>
+        <item quantity="other">%d messages notifiés non lus</item>
+    </plurals>
     <plurals name="notification_unread_notified_messages_in_room_rooms">
-	<item quantity="one">%d salon</item>
-	<item quantity="other">%d salons</item>
-</plurals>
+        <item quantity="one">%d salon</item>
+        <item quantity="other">%d salons</item>
+    </plurals>
     <string name="notification_unread_notified_messages_in_room">%1$s dans %2$s</string>
 
     <plurals name="active_widgets">
-	<item quantity="one">%d gadget actif</item>
-	<item quantity="other">%d gadgets actifs</item>
-</plurals>
+        <item quantity="one">%d gadget actif</item>
+        <item quantity="other">%d gadgets actifs</item>
+    </plurals>
 
     <!-- Widget Integration Manager -->
     <string name="avatar">Avatar</string>
 
-<plurals name="membership_changes">
-	<item quantity="one">%d changement de statut</item>
-	<item quantity="other">%d changements de statut</item>
-</plurals>
+    <plurals name="membership_changes">
+        <item quantity="one">%d changement de statut</item>
+        <item quantity="other">%d changements de statut</item>
+    </plurals>
 
     <string name="open_chat_header">Développer l\'entête</string>
     <string name="receipt_avatar">Avatar de réception</string>
@@ -921,7 +921,7 @@ La visibilité des messages dans Matrix est identique à celle des e-mails. Si n
     <string name="deactivate_account_prompt_password">Pour continuer, veuillez renseigner votre mot de passe :</string>
     <string name="deactivate_account_submit">Désactiver le compte</string>
 
-<string name="dialog_title_third_party_licences">Licences tierces</string>
+    <string name="dialog_title_third_party_licences">Licences tierces</string>
 
     <string name="download">Télécharger</string>
     <string name="speak">Parler</string>
@@ -944,7 +944,7 @@ La visibilité des messages dans Matrix est identique à celle des e-mails. Si n
 
     <string name="error_empty_field_your_password">Veuillez renseigner votre mot de passe.</string>
 
-<string name="send_bug_report_description_in_english">Si possible, veuillez écrire la description en anglais.</string>
+    <string name="send_bug_report_description_in_english">Si possible, veuillez écrire la description en anglais.</string>
     <string name="room_participants_action_unignore_prompt">Afficher tous les messages de cet utilisateur ?
 
 Veuillez noter que cette action redémarrera l\'application et pourra prendre un certain temps.</string>
@@ -974,23 +974,23 @@ Veuillez noter que cette action redémarrera l\'application et pourra prendre un
     <string name="room_tombstone_continuation_description">Ce salon est la suite d\'une autre conversation</string>
     <string name="room_tombstone_predecessor_link">Cliquer ici pour voir les vieux messages</string>
 
-<string name="missing_permissions_error">En raison de permissions manquantes, cette action n\'est pas possible.</string>
+    <string name="missing_permissions_error">En raison de permissions manquantes, cette action n\'est pas possible.</string>
     <plurals name="format_time_s">
-	<item quantity="one">%d s</item>
-	<item quantity="other">%d s</item>
-</plurals>
+        <item quantity="one">%d s</item>
+        <item quantity="other">%d s</item>
+    </plurals>
     <plurals name="format_time_m">
-	<item quantity="one">%d min</item>
-	<item quantity="other">%d min</item>
-</plurals>
+        <item quantity="one">%d min</item>
+        <item quantity="other">%d min</item>
+    </plurals>
     <plurals name="format_time_h">
-	<item quantity="one">%d h</item>
-	<item quantity="other">%d h</item>
-</plurals>
+        <item quantity="one">%d h</item>
+        <item quantity="other">%d h</item>
+    </plurals>
     <plurals name="format_time_d">
-	<item quantity="one">%d j</item>
-	<item quantity="other">%d j</item>
-</plurals>
+        <item quantity="one">%d j</item>
+        <item quantity="other">%d j</item>
+    </plurals>
 
     <string name="room_participants_now">%1$s maintenant</string>
     <string name="room_participants_ago">%1$s il y a %2$s</string>
@@ -1000,18 +1000,18 @@ Veuillez noter que cette action redémarrera l\'application et pourra prendre un
     <string name="room_participants_invite_join_names_combined">%1$s %2$s</string>
 
     <plurals name="room_details_selected">
-	<item quantity="one">%d sélectionné</item>
-	<item quantity="other">%d sélectionnés</item>
-</plurals>
+        <item quantity="one">%d sélectionné</item>
+        <item quantity="other">%d sélectionnés</item>
+    </plurals>
     <plurals name="group_members">
-	<item quantity="one">%d participant</item>
-	<item quantity="other">%d participants</item>
-</plurals>
+        <item quantity="one">%d participant</item>
+        <item quantity="other">%d participants</item>
+    </plurals>
 
     <plurals name="group_rooms">
-	<item quantity="one">%d salon</item>
-	<item quantity="other">%d salons</item>
-</plurals>
+        <item quantity="one">%d salon</item>
+        <item quantity="other">%d salons</item>
+    </plurals>
     <string name="system_alerts_header">Alertes système</string>
 
     <string name="resource_limit_exceeded_title">Limite de ressources dépassée</string>
@@ -1028,7 +1028,7 @@ Veuillez noter que cette action redémarrera l\'application et pourra prendre un
     <string name="resource_limit_soft_contact">Veuillez %s pour augmenter cette limite.</string>
     <string name="resource_limit_hard_contact">Veuillez %s pour continuer à utiliser ce service.</string>
 
-<string name="dialog_title_error">Erreur</string>
+    <string name="dialog_title_error">Erreur</string>
 
     <string name="settings_lazy_loading_title">Charger les membres des salons en différé</string>
     <string name="settings_lazy_loading_description">Améliore les performances en ne chargeant les membres des salons qu\'au premier affichage</string>
@@ -1036,7 +1036,7 @@ Veuillez noter que cette action redémarrera l\'application et pourra prendre un
 
     <string name="unknown_error">Désolé, une erreur est survenue</string>
 
-<string name="status_theme">Thème Status.im</string>
+    <string name="status_theme">Thème Status.im</string>
 
     <string name="room_sliding_menu_version_x">Version %s</string>
     <string name="encryption_export_notice">Veuillez créer une phrase de passe pour chiffrer les clés exportées. Vous devrez saisir cette même phrase de passe afin de pouvoir importer les clés.</string>
@@ -1045,7 +1045,7 @@ Veuillez noter que cette action redémarrera l\'application et pourra prendre un
     <string name="merged_events_expand">développer</string>
     <string name="merged_events_collapse">réduire</string>
 
-<string name="settings_info_area_show">Afficher la zone d\'information</string>
+    <string name="settings_info_area_show">Afficher la zone d\'information</string>
     <string name="show_info_area_always">Toujours</string>
     <string name="show_info_area_messages_and_errors">Pour les messages et les erreurs</string>
     <string name="show_info_area_only_errors">Seulement pour les erreurs</string>

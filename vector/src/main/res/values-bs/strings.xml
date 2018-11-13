@@ -1,5 +1,6 @@
 <?xml version='1.0' encoding='UTF-8'?>
-<resources><string name="resources_language">bs</string>
+<resources>
+    <string name="resources_language">bs</string>
     <string name="resources_country_code">BA</string>
 
     <string name="light_theme">Svijetla Tema</string>
@@ -523,4 +524,4 @@ Da biste nastavili, unesite lozinku.</string>
     <string name="settings_phone_number_country_error">Izaberite zemlju</string>
     <string name="settings_phone_number_label">Broj telefona</string>
     <string name="settings_phone_number_error">Nevažeći broj telefona za izabranu zemlju</string>
-    </resources>
+</resources>

@@ -626,40 +626,40 @@ Lai turpinātu, ievadi savu paroli.</string>
     <string name="send_bug_report_rage_shake">Ņipri papurināt ierīci, lai paziņotu par kļūdu</string>
 
     <plurals name="membership_changes">
-	<item quantity="zero">%d biedru izmaiņa</item>
-	<item quantity="one">%d biedru izmaiņas</item>
-	<item quantity="other">%d biedru izmaiņas</item>
-</plurals>
+        <item quantity="zero">%d biedru izmaiņa</item>
+        <item quantity="one">%d biedru izmaiņas</item>
+        <item quantity="other">%d biedru izmaiņas</item>
+    </plurals>
 
     <string name="list_members">Biedru katalogs</string>
     <string name="open_chat_header">Atvērt galveni</string>
     <string name="room_sync_in_progress">Notiek sinhronizācija…</string>
     <plurals name="room_header_active_members_count">
-	<item quantity="zero">%d aktīvs biedrs</item>
-	<item quantity="one">%d aktīvi biedri</item>
-	<item quantity="other">%d aktīvu biedru</item>
-</plurals>
+        <item quantity="zero">%d aktīvs biedrs</item>
+        <item quantity="one">%d aktīvi biedri</item>
+        <item quantity="other">%d aktīvu biedru</item>
+    </plurals>
     <plurals name="room_title_members">
-	<item quantity="zero">%d biedrs</item>
-	<item quantity="one">%d biedri</item>
-	<item quantity="other">%d biedru</item>
-</plurals>
+        <item quantity="zero">%d biedrs</item>
+        <item quantity="one">%d biedri</item>
+        <item quantity="other">%d biedru</item>
+    </plurals>
     <plurals name="room_new_messages_notification">
-	<item quantity="zero">%d jauna ziņa</item>
-	<item quantity="one">%d jaunas ziņas</item>
-	<item quantity="other">%d jaunu ziņu</item>
-</plurals>
+        <item quantity="zero">%d jauna ziņa</item>
+        <item quantity="one">%d jaunas ziņas</item>
+        <item quantity="other">%d jaunu ziņu</item>
+    </plurals>
 
     <plurals name="directory_search_rooms">
-	<item quantity="zero">%d istaba</item>
-	<item quantity="one">%d istabas</item>
-	<item quantity="other">%d istabu</item>
-</plurals>
+        <item quantity="zero">%d istaba</item>
+        <item quantity="one">%d istabas</item>
+        <item quantity="other">%d istabu</item>
+    </plurals>
     <plurals name="directory_search_rooms_for">
-	<item quantity="zero">%1$s istaba atrasta priekš %2$s</item>
-	<item quantity="one">%1$s istabas atrastas priekš %2$s</item>
-	<item quantity="other">%1$s istabas atrastas priekš %2$s</item>
-</plurals>
+        <item quantity="zero">%1$s istaba atrasta priekš %2$s</item>
+        <item quantity="one">%1$s istabas atrastas priekš %2$s</item>
+        <item quantity="other">%1$s istabas atrastas priekš %2$s</item>
+    </plurals>
     <string name="room_settings_invalid_group_format_dialog_body">\'%s\' ir nederīgs kopienas Id</string>
 
 
@@ -763,20 +763,20 @@ Nepazīstamas ierīces:</string>
     <string name="directory_server_native_rooms">Visas vietējās %s istabas</string>
 
     <plurals name="notification_unread_notified_messages">
-	<item quantity="zero">%d nelasīta paziņota ziņa</item>
-	<item quantity="one">%d nelasītas paziņotas ziņas</item>
-	<item quantity="other">%d nelasītu paziņotu ziņu</item>
-</plurals>
+        <item quantity="zero">%d nelasīta paziņota ziņa</item>
+        <item quantity="one">%d nelasītas paziņotas ziņas</item>
+        <item quantity="other">%d nelasītu paziņotu ziņu</item>
+    </plurals>
     <plurals name="notification_unread_notified_messages_in_room_msgs">
-	<item quantity="zero">%d nelasīta paziņota ziņa</item>
-	<item quantity="one">%d nelasītas paziņotas ziņas</item>
-	<item quantity="other">%d nelasītu paziņotu ziņu</item>
-</plurals>
+        <item quantity="zero">%d nelasīta paziņota ziņa</item>
+        <item quantity="one">%d nelasītas paziņotas ziņas</item>
+        <item quantity="other">%d nelasītu paziņotu ziņu</item>
+    </plurals>
     <plurals name="notification_unread_notified_messages_in_room_rooms">
-	<item quantity="zero">%d istaba</item>
-	<item quantity="one">%d istabas</item>
-	<item quantity="other">%d istabu</item>
-</plurals>
+        <item quantity="zero">%d istaba</item>
+        <item quantity="one">%d istabas</item>
+        <item quantity="other">%d istabu</item>
+    </plurals>
     <string name="notification_unread_notified_messages_in_room">%1$s iekš %2$s</string>
 
     <string name="historical_placeholder">Meklēt vēsturē</string>
@@ -797,10 +797,10 @@ Nepazīstamas ierīces:</string>
     <string name="settings_labs_create_conference_with_jitsi">Konferences zvaniem izmantot Jitsi</string>
     <string name="widget_delete_message_confirmation">Vai tiešām vēlies dzēst vidžetu?</string>
     <plurals name="active_widgets">
-	<item quantity="zero">%d aktīvs vidžets</item>
-	<item quantity="one">%d aktīvi vidžeti</item>
-	<item quantity="other">%d aktīvu vidžetu</item>
-</plurals>
+        <item quantity="zero">%d aktīvs vidžets</item>
+        <item quantity="one">%d aktīvi vidžeti</item>
+        <item quantity="other">%d aktīvu vidžetu</item>
+    </plurals>
 
     <!-- Widget Integration Manager -->
     <string name="widget_integration_unable_to_create">Neizdevās uzstādīt vidžetu.</string>

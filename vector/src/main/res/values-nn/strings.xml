@@ -1,5 +1,6 @@
 <?xml version='1.0' encoding='UTF-8'?>
-<resources><string name="resources_language">nn</string>
+<resources>
+    <string name="resources_language">nn</string>
     <string name="resources_country_code">NO</string>
 
     <string name="light_theme">Ljost Preg</string>
@@ -107,9 +108,9 @@ Velg \"hent ut\" for å sikkerheitskopiera dei før du loggar av.</string>
     <string name="no_room_placeholder">Ingen rom</string>
     <string name="no_public_room_placeholder">Ingen offentlege rom er tilgjengelege</string>
     <plurals name="public_room_nb_users">
-	<item quantity="one">Ein brukar</item>
-	<item quantity="other">%d brukarar</item>
-</plurals>
+        <item quantity="one">Ein brukar</item>
+        <item quantity="other">%d brukarar</item>
+    </plurals>
 
     <string name="groups_invite_header">Byd inn</string>
     <string name="groups_header">Samfunn</string>
@@ -251,9 +252,9 @@ Du vart logga ut av alle einingar og får ikkje push-varsel lenger. For å skru 
     <string name="groups_list">Gruppeliste</string>
 
     <plurals name="membership_changes">
-	<item quantity="one">1 medlemskapsforandring</item>
-	<item quantity="other">%d medlemskapsforandringar</item>
-</plurals>
+        <item quantity="one">1 medlemskapsforandring</item>
+        <item quantity="other">%d medlemskapsforandringar</item>
+    </plurals>
 
     <string name="compression_options">"Send som "</string>
     <string name="compression_opt_list_original">Opprinneleg</string>
@@ -340,13 +341,13 @@ Du bør kanskje logga inn med ein annan brukar, eller leggja eposten din til den
     <string name="room_creation_title">Ny Samtale</string>
     <string name="room_creation_add_member">Legg ein medlem til</string>
     <plurals name="room_header_active_members_count">
-	<item quantity="one">1 aktiv medlem</item>
-	<item quantity="other">%d aktive medlemer</item>
-</plurals>
+        <item quantity="one">1 aktiv medlem</item>
+        <item quantity="other">%d aktive medlemer</item>
+    </plurals>
     <plurals name="room_title_members">
-	<item quantity="one">1 medlem</item>
-	<item quantity="other">%d medlemer</item>
-</plurals>
+        <item quantity="one">1 medlem</item>
+        <item quantity="other">%d medlemer</item>
+    </plurals>
     <string name="room_title_one_member">1 medlem</string>
     <string name="room_e2e_alert_title">Åtvaring!</string>
     <string name="room_e2e_alert_message">Ende-til-ende-kryptering vert betatesta og er kanskje ikkje heilt påliteleg. 
@@ -423,9 +424,9 @@ Er du sikker?</string>
     <string name="room_message_file_not_found">Fila vart ikkje funne</string>
     <string name="room_do_not_have_permission_to_post">Du har ikkje tilgang til å senda meldingar i dette rommet</string>
     <plurals name="room_new_messages_notification">
-	<item quantity="one">1 ny melding</item>
-	<item quantity="other">%d nye meldingar</item>
-</plurals>
+        <item quantity="one">1 ny melding</item>
+        <item quantity="other">%d nye meldingar</item>
+    </plurals>
 
     <string name="ssl_trust">Stol på</string>
     <string name="ssl_do_not_trust">Ikkje stol på</string>
@@ -477,13 +478,13 @@ Merk at denne handlinga vil starta æppen på nytt og kan taka litt tid.</string
 
     <string name="directory_search_results_title">Sjå gjennom Utvalet</string>
     <plurals name="directory_search_rooms">
-	<item quantity="one">1 rom</item>
-	<item quantity="other">%d rom</item>
-</plurals>
+        <item quantity="one">1 rom</item>
+        <item quantity="other">%d rom</item>
+    </plurals>
     <plurals name="directory_search_rooms_for">
-	<item quantity="one">Fant %1$s rom for %2$s</item>
-	<item quantity="other">Fant %1$s rom for %2$s</item>
-</plurals>
+        <item quantity="one">Fant %1$s rom for %2$s</item>
+        <item quantity="other">Fant %1$s rom for %2$s</item>
+    </plurals>
     <string name="directory_searching_title">Søkjer i utvalet..</string>
 
     <string name="room_settings_all_messages_noisy">Alle meldingar (bråket)</string>
@@ -811,17 +812,17 @@ Ukjende einingar:</string>
     <string name="lock_screen_hint">Skriv her…</string>
 
     <plurals name="notification_unread_notified_messages">
-	<item quantity="one">1 ulest varsla melding</item>
-	<item quantity="other">%d uleste varsla meldingar</item>
-</plurals>
+        <item quantity="one">1 ulest varsla melding</item>
+        <item quantity="other">%d uleste varsla meldingar</item>
+    </plurals>
     <plurals name="notification_unread_notified_messages_in_room_msgs">
-	<item quantity="one">1 ulest varsla melding</item>
-	<item quantity="other">%d uleste varsla meldingar</item>
-</plurals>
+        <item quantity="one">1 ulest varsla melding</item>
+        <item quantity="other">%d uleste varsla meldingar</item>
+    </plurals>
     <plurals name="notification_unread_notified_messages_in_room_rooms">
-	<item quantity="one">1 rom</item>
-	<item quantity="other">%d rom</item>
-</plurals>
+        <item quantity="one">1 rom</item>
+        <item quantity="other">%d rom</item>
+    </plurals>
     <string name="notification_unread_notified_messages_in_room">%1$s i %2$s</string>
 
     <string name="historical_placeholder">Søk etter historiske</string>
@@ -842,9 +843,9 @@ Ukjende einingar:</string>
     <string name="settings_labs_create_conference_with_jitsi">Lag gruppesamtaler med jitsi</string>
     <string name="widget_delete_message_confirmation">Er du sikker på at du vil sletta widgeten?</string>
     <plurals name="active_widgets">
-	<item quantity="one">1 verkande widget</item>
-	<item quantity="other">%d verkande widgetar</item>
-</plurals>
+        <item quantity="one">1 verkande widget</item>
+        <item quantity="other">%d verkande widgetar</item>
+    </plurals>
 
     <string name="widget_integration_unable_to_create">Klarte ikkje å laga widget.</string>
     <string name="widget_integration_failed_to_send_request">Fekk ikkje til å senda førespurnad.</string>
@@ -947,42 +948,42 @@ Meldingssynlegheit på Matrix liknar på epost. At vi gløymer meldingane dine t
     <string name="room_tombstone_continuation_description">Rommet er ein vidareføring av ei anna samtale</string>
     <string name="room_tombstone_predecessor_link">Klikk her for å sjå gamle meldingar</string>
 
-<string name="system_alerts_header">Systemvarsel</string>
+    <string name="system_alerts_header">Systemvarsel</string>
 
     <plurals name="format_time_s">
-	<item quantity="one">1s</item>
-	<item quantity="other">%ds</item>
-</plurals>
+        <item quantity="one">1s</item>
+        <item quantity="other">%ds</item>
+    </plurals>
     <plurals name="format_time_m">
-	<item quantity="one">1m</item>
-	<item quantity="other">%dm</item>
-</plurals>
+        <item quantity="one">1m</item>
+        <item quantity="other">%dm</item>
+    </plurals>
     <plurals name="format_time_h">
-	<item quantity="one">1t</item>
-	<item quantity="other">%dt</item>
-</plurals>
+        <item quantity="one">1t</item>
+        <item quantity="other">%dt</item>
+    </plurals>
     <plurals name="format_time_d">
-	<item quantity="one">1d</item>
-	<item quantity="other">%dd</item>
-</plurals>
+        <item quantity="one">1d</item>
+        <item quantity="other">%dd</item>
+    </plurals>
 
     <string name="room_participants_invite_join_names">"%1$s, "</string>
     <string name="room_participants_invite_join_names_and">%1$s, og %2$s</string>
     <string name="room_participants_invite_join_names_combined">%1$s %2$s</string>
 
     <plurals name="room_details_selected">
-	<item quantity="one">1 valt</item>
-	<item quantity="other">%d valde</item>
-</plurals>
+        <item quantity="one">1 valt</item>
+        <item quantity="other">%d valde</item>
+    </plurals>
     <plurals name="group_members">
-	<item quantity="one">1 medlem</item>
-	<item quantity="other">%d medlemer</item>
-</plurals>
+        <item quantity="one">1 medlem</item>
+        <item quantity="other">%d medlemer</item>
+    </plurals>
 
     <plurals name="group_rooms">
-	<item quantity="one">1 rom</item>
-	<item quantity="other">%d rom</item>
-</plurals>
+        <item quantity="one">1 rom</item>
+        <item quantity="other">%d rom</item>
+    </plurals>
     <string name="resource_limit_contact_action">Kontakt Administratoren</string>
 
     <string name="resource_limit_contact_admin">kontakt tenesteadministratoren din</string>

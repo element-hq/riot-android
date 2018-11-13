@@ -655,7 +655,7 @@ Gailu ezezagunak:</string>
 
     <string name="historical_placeholder">Bilatu historiala</string>
 
-<string name="room_settings_addresses_e2e_prompt_message">Muturretik muturrera zifratzea beta egoeran dago eta agian ez dabil behar bezala.
+    <string name="room_settings_addresses_e2e_prompt_message">Muturretik muturrera zifratzea beta egoeran dago eta agian ez dabil behar bezala.
 
 Ez zenuke datuak babesteko erabili behar oraindik.
 
@@ -681,7 +681,7 @@ Zifratutako mezuak ez dira zifratzea oraindik ezarrita ez duten beste gailuetan 
     <string name="larger">Oso handia</string>
     <string name="largest">Handiena</string>
     <string name="huge">Erraldoia</string>
-<string name="light_theme">Itxura argia</string>
+    <string name="light_theme">Itxura argia</string>
     <string name="dark_theme">Itxura iluna</string>
     <string name="black_them">Itxura beltza</string>
 
@@ -741,13 +741,13 @@ Zifratutako mezuak ez dira zifratzea oraindik ezarrita ez duten beste gailuetan 
 
     <string name="encrypted_message">Zifratutako mezua</string>
 
-<string name="title_activity_bug_report">Arazte-txostena</string>
+    <string name="title_activity_bug_report">Arazte-txostena</string>
 
     <string name="option_take_photo">Atera argazkia</string>
     <string name="option_take_video">Grabatu bideoa</string>
 
     <string name="call">Deia</string>
-<string name="title_activity_group_details">Komunitatearen xehetasunak</string>
+    <string name="title_activity_group_details">Komunitatearen xehetasunak</string>
 
     <string name="loading">Kargatzen…</string>
 
@@ -810,59 +810,59 @@ Zifratutako mezuak ez dira zifratzea oraindik ezarrita ez duten beste gailuetan 
     <string name="reason_colon">Arrazoia: %1$s</string>
     <string name="rejoin">Berriro elkartu</string>
     <string name="forget_room">Ahaztu gela</string>
-<string name="settings_flair">Ikurra</string>
+    <string name="settings_flair">Ikurra</string>
 
     <string name="room_settings_no_flair">Gela honek ez ditu komunitateetako ikurrak erakusten</string>
     <string name="send_bug_report_rage_shake">Astindu amorruz akatsaren berri emateko</string>
 
     <string name="actions">Ekintzak</string>
     <plurals name="membership_changes">
-	<item quantity="one">Kidetza aldaketa bat</item>
-	<item quantity="other">%d kidetza aldaketa</item>
-</plurals>
+        <item quantity="one">Kidetza aldaketa bat</item>
+        <item quantity="other">%d kidetza aldaketa</item>
+    </plurals>
 
     <string name="list_members">Zerrendatu kideak</string>
     <string name="open_chat_header">Ireki goiburua</string>
     <string name="room_sync_in_progress">Sinkronizatzen…</string>
     <plurals name="room_header_active_members_count">
-	<item quantity="one">Kide aktibo 1</item>
-	<item quantity="other">%d kide aktibo</item>
-</plurals>
+        <item quantity="one">Kide aktibo 1</item>
+        <item quantity="other">%d kide aktibo</item>
+    </plurals>
     <plurals name="room_title_members">
-	<item quantity="one">Kide 1</item>
-	<item quantity="other">%d kide</item>
-</plurals>
+        <item quantity="one">Kide 1</item>
+        <item quantity="other">%d kide</item>
+    </plurals>
     <plurals name="room_new_messages_notification">
-	<item quantity="one">Mezu berri 1</item>
-	<item quantity="other">%d mezu berri</item>
-</plurals>
+        <item quantity="one">Mezu berri 1</item>
+        <item quantity="other">%d mezu berri</item>
+    </plurals>
 
     <plurals name="directory_search_rooms">
-	<item quantity="one">Gela bat</item>
-	<item quantity="other">%d gela</item>
-</plurals>
+        <item quantity="one">Gela bat</item>
+        <item quantity="other">%d gela</item>
+    </plurals>
     <plurals name="directory_search_rooms_for">
-	<item quantity="one">Gela %1$s aurkitu da %2$s bilatuz</item>
-	<item quantity="other">%1$s gela aurkitu dira %2$s bilatuz</item>
-</plurals>
+        <item quantity="one">Gela %1$s aurkitu da %2$s bilatuz</item>
+        <item quantity="other">%1$s gela aurkitu dira %2$s bilatuz</item>
+    </plurals>
     <plurals name="notification_unread_notified_messages">
-	<item quantity="one">Irakurri gabeko jakinaraziko mezu bat</item>
-	<item quantity="other">%d irakurri gabeko jakinaraziko mezu</item>
-</plurals>
+        <item quantity="one">Irakurri gabeko jakinaraziko mezu bat</item>
+        <item quantity="other">%d irakurri gabeko jakinaraziko mezu</item>
+    </plurals>
     <plurals name="notification_unread_notified_messages_in_room_msgs">
-	<item quantity="one">Irakurri gabeko jakinaraziko mezu bat</item>
-	<item quantity="other">%d irakurri gabeko jakinaraziko mezu</item>
-</plurals>
+        <item quantity="one">Irakurri gabeko jakinaraziko mezu bat</item>
+        <item quantity="other">%d irakurri gabeko jakinaraziko mezu</item>
+    </plurals>
     <plurals name="notification_unread_notified_messages_in_room_rooms">
-	<item quantity="one">Gela 1</item>
-	<item quantity="other">%d gela</item>
-</plurals>
+        <item quantity="one">Gela 1</item>
+        <item quantity="other">%d gela</item>
+    </plurals>
     <string name="notification_unread_notified_messages_in_room">%1$s : %2$s</string>
 
     <plurals name="active_widgets">
-	<item quantity="one">Trepeta aktibo bat</item>
-	<item quantity="other">%d trepeta aktibo</item>
-</plurals>
+        <item quantity="one">Trepeta aktibo bat</item>
+        <item quantity="other">%d trepeta aktibo</item>
+    </plurals>
 
     <!-- Widget Integration Manager -->
     <string name="receipt_avatar">Hartzailearen abatarra</string>
@@ -907,7 +907,7 @@ Baten bat gehitu orain?</string>
     <string name="widget_integration_invalid_parameter">Parametro bat baliogabea da.</string>
     <string name="deactivate_account_submit">Desaktibatu kontua</string>
 
-<string name="dialog_user_consent_content">%1$s hasiera-zerbitzaria erabiltzen jarraitzeko erabilera baldintzak irakurri eta onartu behar dituzu.</string>
+    <string name="dialog_user_consent_content">%1$s hasiera-zerbitzaria erabiltzen jarraitzeko erabilera baldintzak irakurri eta onartu behar dituzu.</string>
     <string name="dialog_user_consent_submit">Irakurri orain</string>
 
     <string name="deactivate_account_title">Desaktibatu kontua</string>
@@ -941,7 +941,7 @@ Matrix-eko mezuen ikusgaitasuna e-mail sistemaren antekoa da. Guk zure mezuak ah
 
     <string name="error_empty_field_your_password">Sartu zure pasahitza.</string>
 
-<string name="send_bug_report_description_in_english">Ahal dela idatzi deskripzioa ingelesez.</string>
+    <string name="send_bug_report_description_in_english">Ahal dela idatzi deskripzioa ingelesez.</string>
     <string name="room_participants_action_unignore_prompt">Erakutsi erabiltzaile honen mezu guztiak?
 
 Kontuan izan ekintza honek aplikazioa berrabiaraziko duela eta denbora bat beharko lukeela.</string>
@@ -970,26 +970,26 @@ Kontuan izan ekintza honek aplikazioa berrabiaraziko duela eta denbora bat behar
     <string name="room_tombstone_continuation_description">Gela hau aurreko elkarrizketa baten jarraipena da</string>
     <string name="room_tombstone_predecessor_link">Egin klik hemen mezu zaharragoak ikusteko</string>
 
-<string name="command_description_deop_user">Id zehatz bat duen erabiltzaileari maila jaisten dio</string>
+    <string name="command_description_deop_user">Id zehatz bat duen erabiltzaileari maila jaisten dio</string>
     <string name="missing_permissions_error">Baimenak falta direnez, ekintza hau ezinezkoa da.</string>
     <string name="system_alerts_header">Sistemaren alertak</string>
 
     <plurals name="format_time_s">
-	<item quantity="one">1s</item>
-	<item quantity="other">%ds</item>
-</plurals>
+        <item quantity="one">1s</item>
+        <item quantity="other">%ds</item>
+    </plurals>
     <plurals name="format_time_m">
-	<item quantity="one">1m</item>
-	<item quantity="other">%dm</item>
-</plurals>
+        <item quantity="one">1m</item>
+        <item quantity="other">%dm</item>
+    </plurals>
     <plurals name="format_time_h">
-	<item quantity="one">1h</item>
-	<item quantity="other">%dh</item>
-</plurals>
+        <item quantity="one">1h</item>
+        <item quantity="other">%dh</item>
+    </plurals>
     <plurals name="format_time_d">
-	<item quantity="one">1e</item>
-	<item quantity="other">%de</item>
-</plurals>
+        <item quantity="one">1e</item>
+        <item quantity="other">%de</item>
+    </plurals>
 
     <string name="room_participants_now">%1$s orain</string>
     <string name="room_participants_ago">duela %1$s %2$s</string>
@@ -999,18 +999,18 @@ Kontuan izan ekintza honek aplikazioa berrabiaraziko duela eta denbora bat behar
     <string name="room_participants_invite_join_names_combined">%1$s %2$s</string>
 
     <plurals name="room_details_selected">
-	<item quantity="one">1 hautatuta</item>
-	<item quantity="other">%d hautatuta</item>
-</plurals>
+        <item quantity="one">1 hautatuta</item>
+        <item quantity="other">%d hautatuta</item>
+    </plurals>
     <plurals name="group_members">
-	<item quantity="one">kide 1</item>
-	<item quantity="other">%d kide</item>
-</plurals>
+        <item quantity="one">kide 1</item>
+        <item quantity="other">%d kide</item>
+    </plurals>
 
     <plurals name="group_rooms">
-	<item quantity="one">gela 1</item>
-	<item quantity="other">%d gela</item>
-</plurals>
+        <item quantity="one">gela 1</item>
+        <item quantity="other">%d gela</item>
+    </plurals>
     <string name="resource_limit_exceeded_title">Bailabide-muga gaindituta</string>
     <string name="resource_limit_contact_action">Kontaktatu administratzailea</string>
 
@@ -1025,7 +1025,7 @@ Kontuan izan ekintza honek aplikazioa berrabiaraziko duela eta denbora bat behar
     <string name="resource_limit_soft_contact">%s muga hau areagotzeko.</string>
     <string name="resource_limit_hard_contact">%s zerbitzu hau erabiltzen jarraitzeko.</string>
 
-<string name="dialog_title_error">Errorea</string>
+    <string name="dialog_title_error">Errorea</string>
 
     <string name="settings_lazy_loading_title">Kargatu gelako kideak modu alperrean</string>
     <string name="settings_lazy_loading_description">Hobetu errendimendua kideak lehen ikustaldian bakarrik kargatuz</string>
@@ -1033,7 +1033,7 @@ Kontuan izan ekintza honek aplikazioa berrabiaraziko duela eta denbora bat behar
 
     <string name="unknown_error">Errore bat gertatu da</string>
 
-<string name="status_theme">Status.im itxura</string>
+    <string name="status_theme">Status.im itxura</string>
 
     <string name="room_sliding_menu_version_x">%s bertsioa</string>
     <string name="encryption_export_notice">Sortu esportatutako gakoak zifratzeko pasaesaldi bat. Pasaesaldi hori gakoak inportatzeko sartu beharko duzu.</string>
@@ -1042,7 +1042,7 @@ Kontuan izan ekintza honek aplikazioa berrabiaraziko duela eta denbora bat behar
     <string name="merged_events_expand">hedatu</string>
     <string name="merged_events_collapse">tolestu</string>
 
-<string name="settings_info_area_show">Erakutsi informazio-area</string>
+    <string name="settings_info_area_show">Erakutsi informazio-area</string>
     <string name="show_info_area_always">Beti</string>
     <string name="show_info_area_messages_and_errors">Mezu eta erroreentzat</string>
     <string name="show_info_area_only_errors">Erroreentzat besterik ez</string>

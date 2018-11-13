@@ -680,7 +680,7 @@ Dispositivos desconocidos:</string>
 
     <!-- historical -->
     <string name="historical_placeholder">Search for historical</string>
-<string name="notification_sync_in_progress">Sincronizando</string>
+    <string name="notification_sync_in_progress">Sincronizando</string>
     <string name="loading">Cargando…</string>
 
     <string name="download">Descargar</string>
@@ -712,38 +712,38 @@ Dispositivos desconocidos:</string>
     <string name="list_members">Lista de miembros</string>
     <string name="room_sync_in_progress">Sincronizando…</string>
     <plurals name="room_header_active_members_count">
-	<item quantity="one">1 miembro activo</item>
-	<item quantity="other">%d miembros activos</item>
-</plurals>
+        <item quantity="one">1 miembro activo</item>
+        <item quantity="other">%d miembros activos</item>
+    </plurals>
     <plurals name="room_title_members">
-	<item quantity="one">1 miembro</item>
-	<item quantity="other">%d miembros</item>
-</plurals>
+        <item quantity="one">1 miembro</item>
+        <item quantity="other">%d miembros</item>
+    </plurals>
     <plurals name="format_time_s">
-	<item quantity="one">1s</item>
-	<item quantity="other">%ds</item>
-</plurals>
+        <item quantity="one">1s</item>
+        <item quantity="other">%ds</item>
+    </plurals>
     <plurals name="format_time_m">
-	<item quantity="one">1m</item>
-	<item quantity="other">%dm</item>
-</plurals>
+        <item quantity="one">1m</item>
+        <item quantity="other">%dm</item>
+    </plurals>
     <plurals name="format_time_h">
-	<item quantity="one">1h</item>
-	<item quantity="other">%dh</item>
-</plurals>
+        <item quantity="one">1h</item>
+        <item quantity="other">%dh</item>
+    </plurals>
     <plurals name="format_time_d">
-	<item quantity="one">1d</item>
-	<item quantity="other">%dd</item>
-</plurals>
+        <item quantity="one">1d</item>
+        <item quantity="other">%dd</item>
+    </plurals>
 
     <plurals name="room_details_selected">
-	<item quantity="one">1 seleccionada</item>
-	<item quantity="other">%d seleccionadas</item>
-</plurals>
+        <item quantity="one">1 seleccionada</item>
+        <item quantity="other">%d seleccionadas</item>
+    </plurals>
     <plurals name="directory_search_rooms">
-	<item quantity="one">1 sala</item>
-	<item quantity="other">%d salas</item>
-</plurals>
+        <item quantity="one">1 sala</item>
+        <item quantity="other">%d salas</item>
+    </plurals>
     <string name="room_settings_all_messages">Todos los mensajes</string>
     <string name="settings_notification_privacy_normal">Normal</string>
     <string name="deactivate_account_title">Desactivar Cuenta</string>
@@ -790,4 +790,4 @@ Dispositivos desconocidos:</string>
 
     <string name="settings_containing_my_display_name">Mensajes que contienen mi nombre público</string>
     <string name="settings_containing_my_user_name">Mensajes que contienen mi nombre de usuario</string>
-    </resources>
+</resources>

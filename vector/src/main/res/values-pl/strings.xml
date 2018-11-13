@@ -1,5 +1,6 @@
 <?xml version='1.0' encoding='UTF-8'?>
-<resources><string name="title_activity_home">Wiadomości</string>
+<resources>
+    <string name="title_activity_home">Wiadomości</string>
     <string name="title_activity_room">Pokój</string>
     <string name="title_activity_settings">Ustawienia</string>
     <string name="title_activity_member_details">Informacje o użytkowniku</string>
@@ -84,7 +85,7 @@ Utwórz kopię zapasową, zanim się wylogujesz.</string>
         <item quantity="one">1 użytkownik</item>
         <item quantity="few">%d użytkowników</item>
         <item quantity="many">%d użytkowników</item>
-        <item quantity="other"/>
+        <item quantity="other" />
     </plurals>
 
     <string name="send_bug_report_include_logs">Wyślij dzienniki</string>
@@ -522,14 +523,14 @@ Zauważ, że ta czynność spowoduje ponowne uruchomienie aplikacji i może to t
     <string name="larger">Wielki</string>
     <string name="largest">Ogromny</string>
     <string name="huge">P O T Ę Ż N Y</string>
-<string name="light_theme">Jasny motyw</string>
+    <string name="light_theme">Jasny motyw</string>
     <string name="dark_theme">Ciemny Motyw</string>
     <string name="black_them">Czarny Motyw</string>
 
     <string name="call">Zadzwoń</string>
     <string name="avatar">Awatar</string>
 
-<string name="reason_colon">Powód: %1$s</string>
+    <string name="reason_colon">Powód: %1$s</string>
     <string name="has_been_banned">Zostałeś zbanowany z %1$s przez %2$s</string>
     <string name="has_been_kicked">Zostałeś wyrzucony z %1$s przez %2$s</string>
     <string name="group_details_rooms">Pokoje</string>
@@ -601,11 +602,11 @@ Przepraszamy za trudności.</string>
     <string name="groups_list">Lista grup</string>
 
     <plurals name="membership_changes">
-	<item quantity="one">%d zmiana członkostwa</item>
-	<item quantity="few">%d zmiany członkostwa</item>
-	<item quantity="many">%d zmian członkostwa</item>
-	<item quantity="other"/>
-</plurals>
+        <item quantity="one">%d zmiana członkostwa</item>
+        <item quantity="few">%d zmiany członkostwa</item>
+        <item quantity="many">%d zmian członkostwa</item>
+        <item quantity="other" />
+    </plurals>
 
     <string name="call_error_user_not_responding">Rozmówca nie połączył się.</string>
     <string name="permissions_rationale_msg_camera_explanation">
@@ -630,17 +631,17 @@ Zezwolić Riot na dostęp do kontaktów?</string>
     <string name="room_preview_unlinked_email_warning">Zaproszenie zostało wysłane do %s, który nie jest powiązany z zalogowanym kontem. 
 Możesz zalogować się z wykorzystaniem innego konta, albo dodać ten adres e-mail do swoich kontaktów.</string>
     <plurals name="room_header_active_members_count">
-	<item quantity="one">Jeden aktywny członek</item>
-	<item quantity="few">Kilku aktywnych członków</item>
-	<item quantity="many">%d aktywnych członków</item>
-	<item quantity="other"/>
-</plurals>
+        <item quantity="one">Jeden aktywny członek</item>
+        <item quantity="few">Kilku aktywnych członków</item>
+        <item quantity="many">%d aktywnych członków</item>
+        <item quantity="other" />
+    </plurals>
     <plurals name="room_title_members">
-	<item quantity="one">1 członek</item>
-	<item quantity="few">kilku członków</item>
-	<item quantity="many">%d członków</item>
-	<item quantity="other"/>
-</plurals>
+        <item quantity="one">1 członek</item>
+        <item quantity="few">kilku członków</item>
+        <item quantity="many">%d członków</item>
+        <item quantity="other" />
+    </plurals>
     <string name="room_e2e_alert_message">Szyfrowanie End-to-End jest w fazie beta i nie jest pewne. 
 
 Nie powinieneś ufać mu w celu zabezpieczenia danych.
@@ -661,11 +662,11 @@ Jesteś pewien?</string>
     <string name="room_unsent_messages_notification">Wiadomość nie została wysłana. Czy %1$s lub %2$s teraz?</string>
     <string name="room_unknown_devices_messages_notification">Wiadomość niewysłana z powodu obecności nieznanych urządzeń. Czy %1$s lub %2$s teraz?</string>
     <plurals name="room_new_messages_notification">
-	<item quantity="one">Nowa wiadomość</item>
-	<item quantity="few">Kilka nowych wiadomości</item>
-	<item quantity="many">%d nowych wiadomości</item>
-	<item quantity="other"/>
-</plurals>
+        <item quantity="one">Nowa wiadomość</item>
+        <item quantity="few">Kilka nowych wiadomości</item>
+        <item quantity="many">%d nowych wiadomości</item>
+        <item quantity="other" />
+    </plurals>
 
     <string name="ssl_cert_not_trust">Może to oznaczać że ktoś zakłóca twoje połączenie, lub Twój telefon nie ufa certyfikatowi dostarczonemu przez zdalny serwer.</string>
     <string name="ssl_cert_new_account_expl">Jeśli administrator serwera oświadczył, że jest to oczekiwane, upewnij się, że poniższy odcisk palca odpowiada odciskowi palca dostarczonemu przez niego.</string>
@@ -675,17 +676,17 @@ Jesteś pewien?</string>
     <string name="malformed_id">Uszkodzony ID. Czy to powinien być adres e-mail lub Matrix ID podobny do \'@localpart:domain\'</string>
 
     <plurals name="directory_search_rooms">
-	<item quantity="one">1 pokój</item>
-	<item quantity="few">%d pokoje</item>
-	<item quantity="many">%d pokoi</item>
-	<item quantity="other"/>
-</plurals>
+        <item quantity="one">1 pokój</item>
+        <item quantity="few">%d pokoje</item>
+        <item quantity="many">%d pokoi</item>
+        <item quantity="other" />
+    </plurals>
     <plurals name="directory_search_rooms_for">
-	<item quantity="one">%1$s pokój znaleziony dla %2$s</item>
-	<item quantity="few">Kilka pokoi znalezionych dla %2$s</item>
-	<item quantity="many">%1$s pokoi znalezionych dla %2$s</item>
-	<item quantity="other"/>
-</plurals>
+        <item quantity="one">%1$s pokój znaleziony dla %2$s</item>
+        <item quantity="few">Kilka pokoi znalezionych dla %2$s</item>
+        <item quantity="many">%1$s pokoi znalezionych dla %2$s</item>
+        <item quantity="other" />
+    </plurals>
     <string name="room_settings_all_messages_noisy">Wszystkie wiadomości (hałaśliwy)</string>
     <string name="room_settings_all_messages">Wszystkie wiadomości</string>
     <string name="room_settings_mention_only">Tylko wspomnienia</string>
@@ -846,17 +847,17 @@ Nieznane urządzenia:</string>
     <string name="error_no_external_application_found">Niestety, nie znaleziono zewnętrznej aplikacji, która ukończy to działanie.</string>
 
     <plurals name="notification_unread_notified_messages_in_room_rooms">
-	<item quantity="one">1 pokój</item>
-	<item quantity="few">%d pokoje</item>
-	<item quantity="many">%d pokoi</item>
-	<item quantity="other"/>
-</plurals>
+        <item quantity="one">1 pokój</item>
+        <item quantity="few">%d pokoje</item>
+        <item quantity="many">%d pokoi</item>
+        <item quantity="other" />
+    </plurals>
     <plurals name="active_widgets">
-	<item quantity="one">1 aktywny widżet</item>
-	<item quantity="few">%d aktywne widżety</item>
-	<item quantity="many">%d aktywnych widżetów</item>
-	<item quantity="other"/>
-</plurals>
+        <item quantity="one">1 aktywny widżet</item>
+        <item quantity="few">%d aktywne widżety</item>
+        <item quantity="many">%d aktywnych widżetów</item>
+        <item quantity="other" />
+    </plurals>
 
     <string name="widget_integration_room_not_visible">Pokój %s nie jest widoczny.</string>
     <string name="settings_labs_native_camera">Użyj natywnej kamery</string>
@@ -874,17 +875,17 @@ Czy chcesz dodać teraz kilka?</string>
     <string name="lock_screen_hint">Napisz tutaj…</string>
 
     <plurals name="notification_unread_notified_messages">
-	<item quantity="one">1 nieprzeczytana wiadomość powiadomienia</item>
-	<item quantity="few">%d nieprzeczytane wiadomości powiadomienia</item>
-	<item quantity="many">%d nieprzeczytanych wiadomości powiadomienia</item>
-	<item quantity="other"/>
-</plurals>
+        <item quantity="one">1 nieprzeczytana wiadomość powiadomienia</item>
+        <item quantity="few">%d nieprzeczytane wiadomości powiadomienia</item>
+        <item quantity="many">%d nieprzeczytanych wiadomości powiadomienia</item>
+        <item quantity="other" />
+    </plurals>
     <plurals name="notification_unread_notified_messages_in_room_msgs">
-	<item quantity="one">1 nieprzeczytana wiadomość powiadomienia</item>
-	<item quantity="few">%d nieprzeczytane wiadomości powiadomienia</item>
-	<item quantity="many">%d nieprzeczytanych wiadomości powiadomienia</item>
-	<item quantity="other"/>
-</plurals>
+        <item quantity="one">1 nieprzeczytana wiadomość powiadomienia</item>
+        <item quantity="few">%d nieprzeczytane wiadomości powiadomienia</item>
+        <item quantity="many">%d nieprzeczytanych wiadomości powiadomienia</item>
+        <item quantity="other" />
+    </plurals>
     <string name="notification_unread_notified_messages_in_room">%1$s w %2$s</string>
 
     <string name="widget_no_power_to_manage">Potrzebujesz uprawnień do zarządzania widżetami w tym pokoju</string>
@@ -946,7 +947,7 @@ Czy chcesz dodać teraz kilka?</string>
 
     <string name="error_empty_field_your_password">Prosimy wpisać swoje hasło.</string>
 
-<string name="deactivate_account_content">To sprawi, że Twoje konto stanie się na stałe niezdatne do użytku. Nie będziesz mógł się zalogować i nikt nie będzie mógł ponownie zarejestrować tego samego identyfikatora użytkownika. Spowoduje to, że Twoje konto opuści wszystkie pokoje, w których uczestniczy, i usunie dane Twojego konta z serwera tożsamości. <b>Ta czynność jest nieodwracalna</b>.
+    <string name="deactivate_account_content">To sprawi, że Twoje konto stanie się na stałe niezdatne do użytku. Nie będziesz mógł się zalogować i nikt nie będzie mógł ponownie zarejestrować tego samego identyfikatora użytkownika. Spowoduje to, że Twoje konto opuści wszystkie pokoje, w których uczestniczy, i usunie dane Twojego konta z serwera tożsamości. <b>Ta czynność jest nieodwracalna</b>.
 
 Dezaktywacja konta <b>domyślnie nie powoduje zapomnienia wysłanych przez Ciebie wiadomości</b>. Jeśli chcesz, abyśmy zapomnieli o Twoich wiadomościach, zaznacz pole poniżej.
 
@@ -966,61 +967,61 @@ Widoczność wiadomości w Matrix jest podobna do wiadomości e-mail. Nasze zapo
     <string name="command_description_part_room">Opuść pokój</string>
     <string name="command_description_markdown">Włącz/Wyłącz markdown</string>
     <plurals name="group_members">
-	<item quantity="one">1 członek</item>
-	<item quantity="few">%d członków</item>
-	<item quantity="many">%d członków</item>
-	<item quantity="other"/>
-</plurals>
+        <item quantity="one">1 członek</item>
+        <item quantity="few">%d członków</item>
+        <item quantity="many">%d członków</item>
+        <item quantity="other" />
+    </plurals>
 
     <plurals name="group_rooms">
-	<item quantity="one">1 pokój</item>
-	<item quantity="few">%d pokoje</item>
-	<item quantity="many">%d pokoi</item>
-	<item quantity="other"/>
-</plurals>
+        <item quantity="one">1 pokój</item>
+        <item quantity="few">%d pokoje</item>
+        <item quantity="many">%d pokoi</item>
+        <item quantity="other" />
+    </plurals>
     <string name="room_tombstone_predecessor_link">Kliknij tutaj, aby zobaczyć starsze wiadomości</string>
 
     <string name="unknown_error">Przepraszamy, wystąpił błąd</string>
 
-<string name="status_theme">Motyw Status.im</string>
+    <string name="status_theme">Motyw Status.im</string>
 
     <string name="missing_permissions_error">Z powodu braku uprawnień to działanie nie jest możliwe.</string>
     <string name="system_alerts_header">Alerty systemowe</string>
 
     <string name="send_bug_report_description_in_english">Jeżeli to możliwe, proszę napisz opis w języku angielskim.</string>
     <plurals name="format_time_s">
-	<item quantity="one">1 sekunda</item>
-	<item quantity="few">%d sek.</item>
-	<item quantity="many">%d sek.</item>
-	<item quantity="other"/>
-</plurals>
+        <item quantity="one">1 sekunda</item>
+        <item quantity="few">%d sek.</item>
+        <item quantity="many">%d sek.</item>
+        <item quantity="other" />
+    </plurals>
     <plurals name="format_time_m">
-	<item quantity="one">1 minuta</item>
-	<item quantity="few">%d min.</item>
-	<item quantity="many">%d min.</item>
-	<item quantity="other"/>
-</plurals>
+        <item quantity="one">1 minuta</item>
+        <item quantity="few">%d min.</item>
+        <item quantity="many">%d min.</item>
+        <item quantity="other" />
+    </plurals>
     <plurals name="format_time_h">
-	<item quantity="one">1 godzina</item>
-	<item quantity="few">%s godz.</item>
-	<item quantity="many">%s godz.</item>
-	<item quantity="other"/>
-</plurals>
+        <item quantity="one">1 godzina</item>
+        <item quantity="few">%s godz.</item>
+        <item quantity="many">%s godz.</item>
+        <item quantity="other" />
+    </plurals>
     <plurals name="format_time_d">
-	<item quantity="one">1 dzień</item>
-	<item quantity="few">%d dni</item>
-	<item quantity="many">%d dni</item>
-	<item quantity="other"/>
-</plurals>
+        <item quantity="one">1 dzień</item>
+        <item quantity="few">%d dni</item>
+        <item quantity="many">%d dni</item>
+        <item quantity="other" />
+    </plurals>
 
     <string name="room_participants_action_unignore_prompt">Pokazać wszystkie wiadomości od tego użytkownika?
 Pamiętaj ta akcja może zresetować aplikacje i potrwać jakiś czas.</string>
     <plurals name="room_details_selected">
-	<item quantity="one">1 zaznaczone</item>
-	<item quantity="few">%d zaznaczone</item>
-	<item quantity="many">%d zaznaczonych</item>
-	<item quantity="other"/>
-</plurals>
+        <item quantity="one">1 zaznaczone</item>
+        <item quantity="few">%d zaznaczone</item>
+        <item quantity="many">%d zaznaczonych</item>
+        <item quantity="other" />
+    </plurals>
     <string name="room_sliding_menu_version_x">Wersja %s</string>
     <string name="settings_preview_media_before_sending">Podgląd mediów przed wysłaniem</string>
 
@@ -1064,7 +1065,7 @@ Pamiętaj ta akcja może zresetować aplikacje i potrwać jakiś czas.</string>
     <string name="merged_events_expand">Rozwiń</string>
     <string name="merged_events_collapse">Zwiń</string>
 
-<string name="settings_lazy_loading_title">Powolne ładowanie członków pokojów</string>
+    <string name="settings_lazy_loading_title">Powolne ładowanie członków pokojów</string>
     <string name="room_participants_invite_join_names_combined">%1$s %2$s</string>
 
-    </resources>
+</resources>

@@ -1,5 +1,6 @@
 <?xml version='1.0' encoding='UTF-8'?>
-<resources><string name="encrypted_message">Шифровано съобщение</string>
+<resources>
+    <string name="encrypted_message">Шифровано съобщение</string>
 
     <!-- groups creation -->
     <string name="resources_language">bg</string>
@@ -40,13 +41,13 @@
     <string name="call_ended">Разговорът приключи</string>
     <string name="call_ring">Позвъняване…</string>
     <plurals name="room_header_active_members_count">
-	<item quantity="one">1 активен член</item>
-	<item quantity="other">%d активни членове</item>
-</plurals>
+        <item quantity="one">1 активен член</item>
+        <item quantity="other">%d активни членове</item>
+    </plurals>
     <plurals name="room_title_members">
-	<item quantity="one">1 член</item>
-	<item quantity="other">%d членове</item>
-</plurals>
+        <item quantity="one">1 член</item>
+        <item quantity="other">%d членове</item>
+    </plurals>
     <string name="room_title_one_member">1 член</string>
     <string name="room_e2e_alert_title">Внимание!</string>
     <string name="room_e2e_alert_message">Шифроване от край до край е в бета версия и може да не е надеждно.
@@ -298,9 +299,9 @@
     <string name="groups_list">Списък с групи</string>
 
     <plurals name="membership_changes">
-	<item quantity="one">1 промяна в членството</item>
-	<item quantity="other">%d промени в членствата</item>
-</plurals>
+        <item quantity="one">1 промяна в членството</item>
+        <item quantity="other">%d промени в членствата</item>
+    </plurals>
 
     <string name="copied_to_clipboard">Копирано в клипборд</string>
     <string name="call">Повикване</string>
@@ -341,9 +342,9 @@
     <string name="room_message_file_not_found">Файлът не е намерен</string>
     <string name="room_do_not_have_permission_to_post">Нямате разрешение да публикувате в тази стая</string>
     <plurals name="room_new_messages_notification">
-	<item quantity="one">1 ново съобщение</item>
-	<item quantity="other">%d нови съобщения</item>
-</plurals>
+        <item quantity="one">1 ново съобщение</item>
+        <item quantity="other">%d нови съобщения</item>
+    </plurals>
 
     <string name="ssl_fingerprint_hash">Отпечатък (%s):</string>
     <string name="ssl_logout_account">Излез</string>
@@ -392,13 +393,13 @@
 
     <string name="directory_search_results_title">Прегледай директорията</string>
     <plurals name="directory_search_rooms">
-	<item quantity="one">1 стая</item>
-	<item quantity="other">%d стаи</item>
-</plurals>
+        <item quantity="one">1 стая</item>
+        <item quantity="other">%d стаи</item>
+    </plurals>
     <plurals name="directory_search_rooms_for">
-	<item quantity="one">%1$s стая намерена за %2$s</item>
-	<item quantity="other">%1$s стаи намерени за %2$s</item>
-</plurals>
+        <item quantity="one">%1$s стая намерена за %2$s</item>
+        <item quantity="other">%1$s стаи намерени за %2$s</item>
+    </plurals>
     <string name="directory_searching_title">Търсене в директорията..</string>
 
     <string name="room_settings_all_messages_noisy">Всички съобщения (шумно)</string>
@@ -668,9 +669,9 @@
     <string name="directory_server_native_rooms">Всички изцяло %s стаи</string>
 
     <plurals name="notification_unread_notified_messages_in_room_rooms">
-	<item quantity="one">1 стая</item>
-	<item quantity="other">%d стаи</item>
-</plurals>
+        <item quantity="one">1 стая</item>
+        <item quantity="other">%d стаи</item>
+    </plurals>
     <string name="notification_unread_notified_messages_in_room">%1$s в %2$s</string>
 
     <string name="widget_no_power_to_manage">Трябва Ви разрешение, за да управлявате приспособленията в тази стая</string>
@@ -680,9 +681,9 @@
     <string name="settings_labs_create_conference_with_jitsi">Създаване на групови разговори с jitsi</string>
     <string name="widget_delete_message_confirmation">Сигурни ли сте, че искате да изтриете приспособлението?</string>
     <plurals name="active_widgets">
-	<item quantity="one">1 активно приспособление</item>
-	<item quantity="other">%d активни приспособления</item>
-</plurals>
+        <item quantity="one">1 активно приспособление</item>
+        <item quantity="other">%d активни приспособления</item>
+    </plurals>
 
     <!-- Widget Integration Manager -->
     <string name="widget_integration_unable_to_create">Неуспешно създаване на приспособление.</string>
@@ -733,7 +734,7 @@
 
     <string name="avatar">Профилна снимка</string>
 
-<string name="list_members">Списък с членове</string>
+    <string name="list_members">Списък с членове</string>
     <string name="room_jump_to_first_unread">Отиди до първото непрочетено съобщение.</string>
 
     <string name="room_preview_invitation_format">Вие сте поканен да се присъедините към тази стая от %s</string>
@@ -788,13 +789,13 @@
     <string name="room_settings_labs_end_to_end_warnings">Трябва да излезете от профила си, за да можете да включите шифроването.</string>
     <string name="select_room_directory">Избиране на директория със стаи</string>
     <plurals name="notification_unread_notified_messages">
-	<item quantity="one">1 непрочетено съобщение</item>
-	<item quantity="other">%d непрочетени съобщения</item>
-</plurals>
+        <item quantity="one">1 непрочетено съобщение</item>
+        <item quantity="other">%d непрочетени съобщения</item>
+    </plurals>
     <plurals name="notification_unread_notified_messages_in_room_msgs">
-	<item quantity="one">1 непрочетено съобщение</item>
-	<item quantity="other">%d непрочетени съобщения</item>
-</plurals>
+        <item quantity="one">1 непрочетено съобщение</item>
+        <item quantity="other">%d непрочетени съобщения</item>
+    </plurals>
     <string name="historical_placeholder">Търсене в архив</string>
 
     <string name="font_size">Размер на шрифта</string>
@@ -904,7 +905,7 @@
     <string name="deactivate_account_prompt_password">За да продължите, моля въведете паролата си:</string>
     <string name="deactivate_account_submit">Деактивирай акаунта</string>
 
-<string name="dialog_title_third_party_licences">Лицензи от трети страни</string>
+    <string name="dialog_title_third_party_licences">Лицензи от трети страни</string>
 
     <string name="download">Изтегли</string>
     <string name="speak">Говори</string>
@@ -927,7 +928,7 @@
 
     <string name="error_empty_field_your_password">Моля, въведете паролата си.</string>
 
-<string name="send_bug_report_description_in_english">По възможност, моля въведете описанието на английски.</string>
+    <string name="send_bug_report_description_in_english">По възможност, моля въведете описанието на английски.</string>
     <string name="room_message_placeholder_reply_to_encrypted">Изпрати шифрован отговор…</string>
     <string name="room_message_placeholder_reply_to_not_encrypted">Изпрати отговор (нешифрован)…</string>
     <string name="settings_preview_media_before_sending">Преглед на медийни файлове преди изпращане</string>
@@ -954,26 +955,26 @@
     <string name="room_tombstone_continuation_description">Тази стая е продължение от предишна кореспонденция</string>
     <string name="room_tombstone_predecessor_link">Натиснете тук за да видите по-стари съобщения</string>
 
-<string name="room_participants_action_unignore_prompt">Показване на всички съобщения от този потребител?
+    <string name="room_participants_action_unignore_prompt">Показване на всички съобщения от този потребител?
 
 Имайте предвид, че това действие ще рестартира приложението, което може да отнеме известно време.</string>
     <string name="missing_permissions_error">Поради липсващи разрешения, това действие не е възможно.</string>
     <plurals name="format_time_s">
-	<item quantity="one">1 сек.</item>
-	<item quantity="other">%d сек.</item>
-</plurals>
+        <item quantity="one">1 сек.</item>
+        <item quantity="other">%d сек.</item>
+    </plurals>
     <plurals name="format_time_m">
-	<item quantity="one">1 мин.</item>
-	<item quantity="other">%d мин.</item>
-</plurals>
+        <item quantity="one">1 мин.</item>
+        <item quantity="other">%d мин.</item>
+    </plurals>
     <plurals name="format_time_h">
-	<item quantity="one">1 ч.</item>
-	<item quantity="other">%d ч.</item>
-</plurals>
+        <item quantity="one">1 ч.</item>
+        <item quantity="other">%d ч.</item>
+    </plurals>
     <plurals name="format_time_d">
-	<item quantity="one">1 ден</item>
-	<item quantity="other">%d дни</item>
-</plurals>
+        <item quantity="one">1 ден</item>
+        <item quantity="other">%d дни</item>
+    </plurals>
 
     <string name="room_participants_now">%1$s сега</string>
     <string name="room_participants_ago">%1$s преди %2$s</string>
@@ -983,18 +984,18 @@
     <string name="room_participants_invite_join_names_combined">%1$s %2$s</string>
 
     <plurals name="room_details_selected">
-	<item quantity="one">1 избран</item>
-	<item quantity="other">%d избрани</item>
-</plurals>
+        <item quantity="one">1 избран</item>
+        <item quantity="other">%d избрани</item>
+    </plurals>
     <plurals name="group_members">
-	<item quantity="one">1 член</item>
-	<item quantity="other">%d членове</item>
-</plurals>
+        <item quantity="one">1 член</item>
+        <item quantity="other">%d членове</item>
+    </plurals>
 
     <plurals name="group_rooms">
-	<item quantity="one">1 стая</item>
-	<item quantity="other">%d стаи</item>
-</plurals>
+        <item quantity="one">1 стая</item>
+        <item quantity="other">%d стаи</item>
+    </plurals>
     <string name="system_alerts_header">Системни уведомления</string>
 
     <string name="resource_limit_exceeded_title">Надвишен ресурсен лимит</string>
@@ -1011,7 +1012,7 @@
     <string name="resource_limit_soft_contact">Моля, %s, за да се увеличи лимита.</string>
     <string name="resource_limit_hard_contact">Моля, %s, за да продължите да използвате услугата.</string>
 
-<string name="dialog_title_error">Грешка</string>
+    <string name="dialog_title_error">Грешка</string>
 
     <string name="settings_lazy_loading_title">Постепенно зареждане на членове в стаи</string>
     <string name="settings_lazy_loading_description">Подобрява производителността като зарежда членовете в стаите при първи преглед</string>
@@ -1019,7 +1020,7 @@
 
     <string name="unknown_error">Съжаляваме, възникна грешка</string>
 
-<string name="status_theme">Status.im тема</string>
+    <string name="status_theme">Status.im тема</string>
 
     <string name="room_sliding_menu_version_x">Версия %s</string>
     <string name="encryption_export_notice">Моля, въведете парола за шифроване на екпортираните ключове. Ще е нужно да въведете същата парола за да можете да ги импортирате.</string>
@@ -1028,7 +1029,7 @@
     <string name="merged_events_expand">разшири</string>
     <string name="merged_events_collapse">свий</string>
 
-<string name="settings_info_area_show">Покажи информационната област</string>
+    <string name="settings_info_area_show">Покажи информационната област</string>
     <string name="show_info_area_always">Винаги</string>
     <string name="show_info_area_messages_and_errors">За съобщения и грешки</string>
     <string name="show_info_area_only_errors">Само за грешки</string>

@@ -155,7 +155,7 @@
     <string name="no_contact_access_placeholder">Anda tidak mengizinkan Riot untuk mengakses kontak lokal</string>
     <string name="send_bug_report_include_crash_logs">Kirim log gangguan</string>
     <string name="huge">Raksasa</string>
-<string name="small">Kecil</string>
+    <string name="small">Kecil</string>
     <string name="normal">Normal</string>
     <string name="large">Besar</string>
     <string name="larger">Lebih Besar</string>
@@ -337,8 +337,8 @@ Mau ditambah sekarang?</string>
     <string name="groups_list">Daftar Grup</string>
 
     <plurals name="membership_changes">
-	<item quantity="other">%d perubahan keanggotaan</item>
-</plurals>
+        <item quantity="other">%d perubahan keanggotaan</item>
+    </plurals>
 
     <string name="call">Panggilan</string>
     <string name="permissions_rationale_msg_contacts">Riot memerlukan permisi untuk mengakses daftar kontak agar dapat mencari pengguna Matrix lain berdasarkan email dan nomor telepon.
@@ -364,11 +364,11 @@ Anda mungkin ingin masuk dengan akun lain, atau tambahkan email ini ke akun Anda
     <string name="room_creation_title">Percakapan Baru</string>
     <string name="room_creation_add_member">Tambah anggota</string>
     <plurals name="room_header_active_members_count">
-	<item quantity="other">%d anggota aktif</item>
-</plurals>
+        <item quantity="other">%d anggota aktif</item>
+    </plurals>
     <plurals name="room_title_members">
-	<item quantity="other">%d anggota</item>
-</plurals>
+        <item quantity="other">%d anggota</item>
+    </plurals>
     <string name="room_title_one_member">1 anggota</string>
     <string name="room_e2e_alert_title">Peringatan!</string>
     <string name="room_e2e_alert_message">Enkripsi ujung-ke-ujung masih tahap beta dan mungkin belum dapat diandalkan.
@@ -380,17 +380,17 @@ Perangkat tidak akan dapat mendekripsi sejarah yang mendahului masa bergabung.
 Pesan terenkripsi tidak akan tersingkap untuk klien yang belum mengimplementasikan enkripsi.</string>
 
     <plurals name="format_time_s">
-	<item quantity="other">%dd</item>
-</plurals>
+        <item quantity="other">%dd</item>
+    </plurals>
     <plurals name="format_time_m">
-	<item quantity="other">%dm</item>
-</plurals>
+        <item quantity="other">%dm</item>
+    </plurals>
     <plurals name="format_time_h">
-	<item quantity="other">%dj</item>
-</plurals>
+        <item quantity="other">%dj</item>
+    </plurals>
     <plurals name="format_time_d">
-	<item quantity="other">$dh</item>
-</plurals>
+        <item quantity="other">$dh</item>
+    </plurals>
 
     <string name="room_participants_leave_prompt_title">Tinggalkan ruang</string>
     <string name="room_participants_leave_prompt_msg">Apa benar Anda ingin meninggalkan ruang ini?</string>
@@ -464,8 +464,8 @@ Yakin?</string>
     <string name="room_message_file_not_found">Berkas tidak ditemukan</string>
     <string name="room_do_not_have_permission_to_post">Anda belum mendapat permisi untuk mengirim di ruang ini</string>
     <plurals name="room_new_messages_notification">
-	<item quantity="other">%d pesan baru</item>
-</plurals>
+        <item quantity="other">%d pesan baru</item>
+    </plurals>
 
     <string name="ssl_trust">Percaya</string>
     <string name="ssl_do_not_trust">Tidak percaya</string>
@@ -484,8 +484,8 @@ Yakin?</string>
     <string name="room_details_files">Berkas</string>
     <string name="room_details_settings">Pengaturan</string>
     <plurals name="room_details_selected">
-	<item quantity="other">%d terpilih</item>
-</plurals>
+        <item quantity="other">%d terpilih</item>
+    </plurals>
     <string name="malformed_id">ID tidak sesuai. Seharusnya alamat email atau ID Matrix semisal \'@localport:domain\'</string>
     <string name="room_details_people_invited_group_name">DIUNDANG</string>
     <string name="room_details_people_present_group_name">BERGABUNG</string>
@@ -519,11 +519,11 @@ Perhatikan bahwa tindakan ini akan memulai ulang aplikasi dan mungkin cukup mema
 
     <string name="directory_search_results_title">Jelajahi direktori</string>
     <plurals name="directory_search_rooms">
-	<item quantity="other">%d ruang</item>
-</plurals>
+        <item quantity="other">%d ruang</item>
+    </plurals>
     <plurals name="directory_search_rooms_for">
-	<item quantity="other">%1$s ruang ditemukan untuk %2$s</item>
-</plurals>
+        <item quantity="other">%1$s ruang ditemukan untuk %2$s</item>
+    </plurals>
     <string name="directory_searching_title">Mencari direktori..</string>
 
     <string name="room_settings_all_messages_noisy">Semua pesan (berisik)</string>
@@ -593,8 +593,8 @@ Perhatikan bahwa tindakan ini akan memulai ulang aplikasi dan mungkin cukup mema
     <string name="settings_olm_version">versi olm</string>
     <string name="settings_app_term_conditions">Syarat &amp; ketentuan</string>
     <plurals name="notification_unread_notified_messages_in_room_rooms">
-	<item quantity="other">%d ruang</item>
-</plurals>
+        <item quantity="other">%d ruang</item>
+    </plurals>
     <string name="notification_unread_notified_messages_in_room">%1$s dalam %2$s</string>
 
     <string name="historical_placeholder">Cari sejarah</string>
@@ -606,8 +606,8 @@ Perhatikan bahwa tindakan ini akan memulai ulang aplikasi dan mungkin cukup mema
     <string name="settings_labs_create_conference_with_jitsi">Buat panggilan konferensi dengan jitsi</string>
     <string name="widget_delete_message_confirmation">Apa benar Anda ingin menghapus widget ini?</string>
     <plurals name="active_widgets">
-	<item quantity="other">%d widget aktif</item>
-</plurals>
+        <item quantity="other">%d widget aktif</item>
+    </plurals>
 
     <string name="widget_integration_unable_to_create">Tidak dapat membuat widget.</string>
     <string name="widget_integration_failed_to_send_request">Gagal mengirim permohonan.</string>
@@ -673,12 +673,12 @@ Perhatikan bahwa tindakan ini akan memulai ulang aplikasi dan mungkin cukup mema
     <string name="filter_group_rooms">Saring ruang grup</string>
 
     <plurals name="group_members">
-	<item quantity="other">%d anggota</item>
-</plurals>
+        <item quantity="other">%d anggota</item>
+    </plurals>
 
     <plurals name="group_rooms">
-	<item quantity="other">%d ruang</item>
-</plurals>
+        <item quantity="other">%d ruang</item>
+    </plurals>
     <string name="group_no_long_description">Admin komunitas belum menyediakan deskripsi panjang untuk komunitas ini.</string>
 
     <string name="has_been_kicked">Anda telah dikeluarkan dari %1$s oleh %2$s</string>
@@ -722,7 +722,7 @@ Pembacaan pesan di Matrix serupa dengan email. Dengan kami melupakan pesan-pesan
     <string name="resource_limit_soft_contact">Mohon %s untuk meningkatkan batasan ini.</string>
     <string name="resource_limit_hard_contact">Mohon %s untuk terus menggunakan layanan ini.</string>
 
-<string name="encryption_import_e2e_room_keys">Impor kunci ruang terenkripsi</string>
+    <string name="encryption_import_e2e_room_keys">Impor kunci ruang terenkripsi</string>
     <string name="encryption_import_room_keys">Impor kunci ruang</string>
     <string name="encryption_import_room_keys_summary">Impor kunci dari berkas lokal</string>
     <string name="encryption_import_import">Impor</string>
@@ -762,11 +762,11 @@ Perangkat tak dikenal:</string>
     <string name="lock_screen_hint">Ketik di sini…</string>
 
     <plurals name="notification_unread_notified_messages">
-	<item quantity="other">%d pesan pemberitahuan yang belum terbaca</item>
-</plurals>
+        <item quantity="other">%d pesan pemberitahuan yang belum terbaca</item>
+    </plurals>
     <plurals name="notification_unread_notified_messages_in_room_msgs">
-	<item quantity="other">%d pesan pemberitahuan yang belum terbaca</item>
-</plurals>
+        <item quantity="other">%d pesan pemberitahuan yang belum terbaca</item>
+    </plurals>
     <string name="room_settings_tag_pref_entry_low_priority">Prioritas rendah</string>
     <string name="room_settings_tag_pref_entry_none">Tidak Ada</string>
     <string name="room_settings_tag_pref_no_tag">tidak ditandai</string>
@@ -985,4 +985,4 @@ Tindakan ini akan memulai ulang aplikasi dan mungkin cukup memakan waktu.</strin
     <string name="notice_avatar">Avatar pemberitahu</string>
     <string name="receipt_avatar">Avatar penerima</string>
     <string name="command_description_deop_user">Demosi pengguna dengan id berikut</string>
-    </resources>
+</resources>

@@ -1,5 +1,6 @@
 <?xml version='1.0' encoding='UTF-8'?>
-<resources><string name="resources_language">zh</string>
+<resources>
+    <string name="resources_language">zh</string>
     <string name="resources_country_code">TW</string>
 
     <string name="light_theme">淺色主題</string>
@@ -315,11 +316,11 @@
     <string name="room_creation_title">新聊天</string>
     <string name="room_creation_add_member">加入成員</string>
     <plurals name="room_header_active_members_count">
-	<item quantity="other">%d 個活躍成員</item>
-</plurals>
+        <item quantity="other">%d 個活躍成員</item>
+    </plurals>
     <plurals name="room_title_members">
-	<item quantity="other">%d 個成員</item>
-</plurals>
+        <item quantity="other">%d 個成員</item>
+    </plurals>
     <string name="room_title_one_member">1 個成員</string>
     <string name="room_e2e_alert_title">警告！</string>
     <string name="room_e2e_alert_message">端對端加密處於測試狀態，它並不完全可靠。
@@ -389,8 +390,8 @@
     <string name="room_message_file_not_found">沒找到檔案</string>
     <string name="room_do_not_have_permission_to_post">您沒有權限在此聊天室發言</string>
     <plurals name="room_new_messages_notification">
-	<item quantity="other">%d 則新訊息</item>
-</plurals>
+        <item quantity="other">%d 則新訊息</item>
+    </plurals>
 
     <string name="ssl_trust">信任</string>
     <string name="ssl_do_not_trust">不信任</string>
@@ -399,8 +400,8 @@
     <string name="ssl_fingerprint_hash">指紋（%s）：</string>
     <string name="ssl_could_not_verify">無法驗證遠端伺服器的身份。</string>
     <plurals name="membership_changes">
-	<item quantity="other">%d 會員變動</item>
-</plurals>
+        <item quantity="other">%d 會員變動</item>
+    </plurals>
 
     <string name="ssl_cert_not_trust">這可能表示有人正惡意的攔截你的流量，或你的手機不信任由遠端伺服器提供的憑證。</string>
     <string name="ssl_cert_new_account_expl">如果伺服器管理員說這是正常的，請確保底下的指紋與他們所提供的指紋符合。</string>
@@ -470,11 +471,11 @@
 
     <string name="directory_search_results_title">瀏覽目錄</string>
     <plurals name="directory_search_rooms">
-	<item quantity="other">%1$d 個聊天室</item>
-</plurals>
+        <item quantity="other">%1$d 個聊天室</item>
+    </plurals>
     <plurals name="directory_search_rooms_for">
-	<item quantity="other">有 %1$d 個聊天室匹配 “%2$s”</item>
-</plurals>
+        <item quantity="other">有 %1$d 個聊天室匹配 “%2$s”</item>
+    </plurals>
     <string name="directory_searching_title">搜尋目錄..</string>
 
     <string name="room_settings_all_messages_noisy">所有訊息（通知並震動）</string>
@@ -800,14 +801,14 @@
     <string name="lock_screen_hint">在此輸入…</string>
 
     <plurals name="notification_unread_notified_messages">
-	<item quantity="other">%d 條未讀訊息</item>
-</plurals>
+        <item quantity="other">%d 條未讀訊息</item>
+    </plurals>
     <plurals name="notification_unread_notified_messages_in_room_msgs">
-	<item quantity="other">%d 條未讀訊息</item>
-</plurals>
+        <item quantity="other">%d 條未讀訊息</item>
+    </plurals>
     <plurals name="notification_unread_notified_messages_in_room_rooms">
-	<item quantity="other">%d 個聊天室</item>
-</plurals>
+        <item quantity="other">%d 個聊天室</item>
+    </plurals>
     <string name="notification_unread_notified_messages_in_room">%1$s 條在 %2$s 中</string>
 
     <string name="historical_placeholder">搜尋歷史</string>
@@ -828,8 +829,8 @@
     <string name="settings_labs_create_conference_with_jitsi">使用 jitsi 建立會議電話</string>
     <string name="widget_delete_message_confirmation">您確定要移除此小部件嗎？</string>
     <plurals name="active_widgets">
-	<item quantity="other">已啓用 %d 個小部件</item>
-</plurals>
+        <item quantity="other">已啓用 %d 個小部件</item>
+    </plurals>
 
     <string name="widget_integration_unable_to_create">無法建立小部件。</string>
     <string name="widget_integration_failed_to_send_request">發送請求失敗。</string>
@@ -908,7 +909,7 @@ Matrix 中的消息可見度類似于電子郵件。我們忘記您的郵件意�
 
     <string name="error_empty_field_your_password">請輸入您的密碼。</string>
 
-<string name="send_bug_report_description_in_english">如果可以，請使用英文撰寫描述。</string>
+    <string name="send_bug_report_description_in_english">如果可以，請使用英文撰寫描述。</string>
     <string name="room_participants_action_unignore_prompt">顯示所有從此使用者而來的訊息？
 
 注意此動作將會重新啟動應用程式，而其可能需要一點時間。</string>
@@ -938,19 +939,19 @@ Matrix 中的消息可見度類似于電子郵件。我們忘記您的郵件意�
     <string name="room_tombstone_continuation_description">這個聊天示是其他對話的延續</string>
     <string name="room_tombstone_predecessor_link">點選這裡以檢視更舊的訊息</string>
 
-<string name="missing_permissions_error">因為沒有權限，此動作無法執行。</string>
+    <string name="missing_permissions_error">因為沒有權限，此動作無法執行。</string>
     <plurals name="format_time_s">
-	<item quantity="other">%d 秒</item>
-</plurals>
+        <item quantity="other">%d 秒</item>
+    </plurals>
     <plurals name="format_time_m">
-	<item quantity="other">%d 分鐘</item>
-</plurals>
+        <item quantity="other">%d 分鐘</item>
+    </plurals>
     <plurals name="format_time_h">
-	<item quantity="other">%d 小時</item>
-</plurals>
+        <item quantity="other">%d 小時</item>
+    </plurals>
     <plurals name="format_time_d">
-	<item quantity="other">%d 天</item>
-</plurals>
+        <item quantity="other">%d 天</item>
+    </plurals>
 
     <string name="room_participants_now">目前 %1$s</string>
     <string name="room_participants_ago">%1$s %2$s 前</string>
@@ -960,15 +961,15 @@ Matrix 中的消息可見度類似于電子郵件。我們忘記您的郵件意�
     <string name="room_participants_invite_join_names_combined">%1$s %2$s</string>
 
     <plurals name="room_details_selected">
-	<item quantity="other">%d 已選取</item>
-</plurals>
+        <item quantity="other">%d 已選取</item>
+    </plurals>
     <plurals name="group_members">
-	<item quantity="other">%d 個成員</item>
-</plurals>
+        <item quantity="other">%d 個成員</item>
+    </plurals>
 
     <plurals name="group_rooms">
-	<item quantity="other">%d 個聊天室</item>
-</plurals>
+        <item quantity="other">%d 個聊天室</item>
+    </plurals>
     <string name="system_alerts_header">系統警告</string>
 
     <string name="resource_limit_exceeded_title">超過資源限制</string>
@@ -985,7 +986,7 @@ Matrix 中的消息可見度類似于電子郵件。我們忘記您的郵件意�
     <string name="resource_limit_soft_contact">請 %s 以讓此限制增加。</string>
     <string name="resource_limit_hard_contact">請 %s 以繼續使用此服務。</string>
 
-<string name="dialog_title_error">錯誤</string>
+    <string name="dialog_title_error">錯誤</string>
 
     <string name="settings_lazy_loading_title">延遲載入聊天室成員</string>
     <string name="settings_lazy_loading_description">透過僅載入在第一次看到的地方的聊天室成員來增進效能</string>
@@ -993,7 +994,7 @@ Matrix 中的消息可見度類似于電子郵件。我們忘記您的郵件意�
 
     <string name="unknown_error">抱歉，遇到錯誤</string>
 
-<string name="status_theme">Status.im 主題</string>
+    <string name="status_theme">Status.im 主題</string>
 
     <string name="room_sliding_menu_version_x">版本 %s</string>
     <string name="encryption_export_notice">請建立密語以加密您匯出的金鑰。您將需要輸入這些密語以匯入金鑰。</string>

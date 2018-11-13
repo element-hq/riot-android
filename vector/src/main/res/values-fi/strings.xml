@@ -689,7 +689,7 @@ Voit tehdä sen nyt tai myöhemmin sovelluksen asetuksissa.</string>
 
     <!-- historical -->
     <string name="historical_placeholder">Etsi historiasta</string>
-<string name="user_directory_header">Käyttäjähakemisto</string>
+    <string name="user_directory_header">Käyttäjähakemisto</string>
     <string name="people_search_user_directory">KÄYTTÄJÄHAKEMISTO (%s)</string>
     <string name="settings_start_on_boot">Käynnistä automaattisesti</string>
     <string name="settings_clear_media_cache">Tyhjennä mediavälimuisti</string>
@@ -717,7 +717,7 @@ Voit tehdä sen nyt tai myöhemmin sovelluksen asetuksissa.</string>
     <string name="larger">Isompi</string>
     <string name="largest">Isoin</string>
     <string name="huge">Valtava</string>
-<string name="offline">Offline</string>
+    <string name="offline">Offline</string>
 
     <string name="light_theme">Vaalea teema</string>
     <string name="dark_theme">Tumma teema</string>
@@ -784,7 +784,7 @@ Voit tehdä sen nyt tai myöhemmin sovelluksen asetuksissa.</string>
 
     <string name="encrypted_message">Salattu viesti</string>
 
-<string name="title_activity_group_details">Yhteisön tiedot</string>
+    <string name="title_activity_group_details">Yhteisön tiedot</string>
 
     <string name="loading">Ladataan…</string>
 
@@ -849,5 +849,5 @@ Voit tehdä sen nyt tai myöhemmin sovelluksen asetuksissa.</string>
     <string name="reason_colon">Syy: %1$s</string>
     <string name="rejoin">Liity uudelleen</string>
     <string name="forget_room">Unohda huone</string>
-<string name="room_settings_no_flair">" Tälle huoneelle ei näytetä tyyliä millekään yhteisölle"</string>
-    </resources>
+    <string name="room_settings_no_flair">" Tälle huoneelle ei näytetä tyyliä millekään yhteisölle"</string>
+</resources>
