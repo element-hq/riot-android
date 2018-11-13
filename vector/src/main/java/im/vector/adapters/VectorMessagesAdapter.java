@@ -216,7 +216,7 @@ public class VectorMessagesAdapter extends AbstractMessagesAdapter {
 
     // custom settings
     private final boolean mAlwaysShowTimeStamps;
-    private final boolean mHideReadReceipts;
+    private final boolean mShowReadReceipts;
 
     // Key is member id.
     private final Map<String, RoomMember> mLiveRoomMembers = new HashMap<>();
@@ -375,7 +375,7 @@ public class VectorMessagesAdapter extends AbstractMessagesAdapter {
         mLocale = VectorLocale.INSTANCE.getApplicationLocale();
 
         mAlwaysShowTimeStamps = PreferencesManager.alwaysShowTimeStamps(VectorApp.getInstance());
-        mHideReadReceipts = PreferencesManager.hideReadReceipts(VectorApp.getInstance());
+        mShowReadReceipts = PreferencesManager.showReadReceipts(VectorApp.getInstance());
 
         mPadlockDrawable = ThemeUtils.INSTANCE.tintDrawable(mContext,
                 ContextCompat.getDrawable(mContext, R.drawable.e2e_unencrypted), R.attr.vctr_settings_icon_tint_color);
@@ -1173,7 +1173,7 @@ public class VectorMessagesAdapter extends AbstractMessagesAdapter {
         VectorMessagesAdapterHelper.setHeader(convertView, headerMessage(position), position);
 
         // read receipts
-        if (mHideReadReceipts) {
+        if (!mShowReadReceipts) {
             mHelper.hideReadReceipts(convertView);
         } else {
             mHelper.displayReadReceipts(convertView, row, mIsPreviewMode, mLiveRoomMembers);
@@ -1782,11 +1782,11 @@ public class VectorMessagesAdapter extends AbstractMessagesAdapter {
             RoomMember roomMember = JsonUtils.toRoomMember(event.getContent());
             String membership = roomMember.membership;
 
-            if (PreferencesManager.hideJoinLeaveMessages(mContext)) {
+            if (!PreferencesManager.showJoinLeaveMessages(mContext)) {
                 isSupported = !TextUtils.equals(membership, RoomMember.MEMBERSHIP_LEAVE) && !TextUtils.equals(membership, RoomMember.MEMBERSHIP_JOIN);
             }
 
-            if (isSupported && PreferencesManager.hideAvatarDisplayNameChangeMessages(mContext) && TextUtils.equals(membership, RoomMember.MEMBERSHIP_JOIN)) {
+            if (isSupported && !PreferencesManager.showAvatarDisplayNameChangeMessages(mContext) && TextUtils.equals(membership, RoomMember.MEMBERSHIP_JOIN)) {
                 EventContent eventContent = JsonUtils.toEventContent(event.getContentAsJsonObject());
                 EventContent prevEventContent = event.getPrevContent();
 

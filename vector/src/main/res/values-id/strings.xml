@@ -551,8 +551,8 @@ Perhatikan bahwa tindakan ini akan memulai ulang aplikasi dan mungkin cukup mema
     <string name="settings_add_email_address">Tambahkan alamat email</string>
     <string name="settings_phone_number">Telepon</string>
     <string name="settings_add_phone_number">Tambahkan nomor telepon</string>
-    <string name="settings_summary_app_info_link">Layar info sistem aplikasi</string>
-    <string name="settings_title_app_info_link">Info aplikasi</string>
+    <string name="settings_app_info_link_summary">Layar info sistem aplikasi</string>
+    <string name="settings_app_info_link_title">Info aplikasi</string>
 
     <string name="settings_notification_privacy">Kerahasiaan pemberitahuan</string>
     <string name="settings_notification_privacy_warning">Riot.im beroperasi di balik layar untuk menjaga kerahasiaan isi pesan pemberitahuan. Anda dapat mengubah pengaturan untuk mengurangi penggunaan baterai.</string>
@@ -874,7 +874,7 @@ Peringatan: berkas ini mungkin ikut terhapus jika aplikasi dihapus.</string>
     <string name="settings_copyright">Hak Cipta</string>
     <string name="settings_privacy_policy">Kebijakan Pribadi</string>
     <string name="settings_clear_cache">Bersihkan cache</string>
-    <string name="settings_clear_medias_cache">Bersihkan cache media</string>
+    <string name="settings_clear_media_cache">Bersihkan cache media</string>
     <string name="settings_keep_media">Pertahankan media</string>
 
     <string name="settings_user_settings">Pengaturan pengguna</string>
@@ -892,13 +892,8 @@ Peringatan: berkas ini mungkin ikut terhapus jika aplikasi dihapus.</string>
     <string name="settings_pin_unread_messages">Semat ruang yang pesannya belum terbaca</string>
     <string name="settings_devices_list">Perangkat</string>
     <string name="settings_inline_url_preview">Perbolehkan pratinjau URL dalam obrolan</string>
-    <string name="settings_hide_read_receipts">Sembunyi tanda \'telah terbaca\'</string>
-    <string name="settings_dont_send_typings_notifs">Jangan kirim pemberitahuan \'sedang mengetik\'</string>
     <string name="settings_always_show_timestamps">Selalu perlihatkan waktu pesan</string>
     <string name="settings_12_24_timestamps">Perlihatkan waktu pesan dengan format 12 jam (misalnya 2:30pm)</string>
-    <string name="settings_hide_join_leave_messages">Sembunyikan pesan \'bergabung\'/\'meninggalkan\' (undangan/pengeluaran/pelarangan tidak terpengaruh)</string>
-    <string name="settings_hide_avatar_display_name_changes_messages">Sembunyikan avatar dan perubahan nama layar</string>
-    <string name="settings_disable_markdown">Nonaktifkan format markdown ketika mengirim</string>
     <string name="settings_vibrate_on_mention">Bergetar ketika disebut</string>
     <string name="settings_preview_media_before_sending">Pratinjau media sebelum dikirim</string>
 

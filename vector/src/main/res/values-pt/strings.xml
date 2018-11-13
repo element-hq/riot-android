@@ -455,8 +455,8 @@ Note que esta acção irá reiniciar a aplicação e poderá levar algum tempo.<
     <string name="settings_add_email_address">Adicionar endereço de e-mail</string>
     <string name="settings_phone_number">Telefone</string>
     <string name="settings_add_phone_number">Adicionar número de telefone</string>
-    <string name="settings_summary_app_info_link">Ecrã de informações de sistema da aplicação</string>
-    <string name="settings_title_app_info_link">Informações da aplicação</string>
+    <string name="settings_app_info_link_summary">Ecrã de informações de sistema da aplicação</string>
+    <string name="settings_app_info_link_title">Informações da aplicação</string>
 
     <string name="settings_enable_all_notif">Ativar notificações para esta conta</string>
     <string name="settings_enable_this_device">Ativar notificações para este dispositivo</string>
@@ -712,10 +712,7 @@ Dispositivos desconhecidos:</string>
     <string name="historical_placeholder">Procurar histórico</string>
 <string name="settings_keep_media">Manter ficheiros multimédia</string>
 
-    <string name="settings_hide_read_receipts">Ocultar recibos de leitura</string>
-    <string name="settings_dont_send_typings_notifs">Não enviar notificações de escrita</string>
     <string name="settings_always_show_timestamps">Mostrar sempre a hora das mensagens</string>
-    <string name="settings_disable_markdown">Desactivar a formatação Markdown quando estiver a enviar</string>
     <string name="settings_data_save_mode">Modo de poupança de dados</string>
 
     <string name="settings_user_interface">Interface de utilizador</string>
@@ -742,7 +739,7 @@ Dispositivos desconhecidos:</string>
     <string name="user_directory_header">Lista de utilizadores</string>
     <string name="people_search_user_directory">LISTA DE UTILIZADORES (%s)</string>
     <string name="settings_start_on_boot">Iniciar no arranque</string>
-    <string name="settings_clear_medias_cache">Limpar cache de multimédia</string>
+    <string name="settings_clear_media_cache">Limpar cache de multimédia</string>
     <string name="light_theme">Tema Claro</string>
     <string name="dark_theme">Tema Escuro</string>
     <string name="black_them">Tema Preto</string>
@@ -751,8 +748,6 @@ Dispositivos desconhecidos:</string>
 
     <string name="settings_notification_ringtone">Som de notificação</string>
     <string name="settings_12_24_timestamps">Utilizar formato de 12 horas (ex. 2:30pm)</string>
-    <string name="settings_hide_join_leave_messages">Ocultar mensagens de entrada/saída (convites/expulsões/banimentos não são afetados)</string>
-    <string name="settings_hide_avatar_display_name_changes_messages">Ocultar avatar e mostrar mudanças de nome</string>
 
     <string name="widget_no_power_to_manage">Precisa de permissão para gerir os widgets nesta sala</string>
     <string name="widget_creation_failure">Criação de widget falhou</string>

@@ -357,7 +357,7 @@ Zauważ, że ta czynność spowoduje ponowne uruchomienie aplikacji i może to t
     <string name="settings_add_email_address">Dodaj adres e-mail</string>
     <string name="settings_phone_number">Numer telefonu</string>
     <string name="settings_add_phone_number">Dodaj numer telefonu</string>
-    <string name="settings_title_app_info_link">Informacje o aplikacji</string>
+    <string name="settings_app_info_link_title">Informacje o aplikacji</string>
 
     <string name="settings_enable_all_notif">Włącz powiadomienia dla tego konta</string>
     <string name="settings_enable_this_device">Włącz powiadomienia dla tego użytkownika</string>
@@ -380,7 +380,7 @@ Zauważ, że ta czynność spowoduje ponowne uruchomienie aplikacji i może to t
     <string name="settings_copyright">Prawa autorskie</string>
     <string name="settings_privacy_policy">Polityka prywatności</string>
     <string name="settings_clear_cache">Wyczyść pamięć podręczną</string>
-    <string name="settings_clear_medias_cache">Wyczyść pamięć podręczną multimediów</string>
+    <string name="settings_clear_media_cache">Wyczyść pamięć podręczną multimediów</string>
     <string name="settings_user_settings">Ustawienia użytkownika</string>
     <string name="settings_notifications">Powiadomienia</string>
     <string name="settings_ignored_users">Ignorowani użytkownicy</string>
@@ -392,10 +392,7 @@ Zauważ, że ta czynność spowoduje ponowne uruchomienie aplikacji i może to t
     <string name="settings_pin_missed_notifications">Przypnij pokoje z ominiętymi powiadomieniami</string>
     <string name="settings_pin_unread_messages">Przypnij pokoje z nieprzeczytanych wiadomościami</string>
     <string name="settings_devices_list">Urządzenia</string>
-    <string name="settings_hide_read_receipts">Nie pokazuj potwierdzeń o przeczytaniu</string>
-    <string name="settings_dont_send_typings_notifs">Nie informuj użytkowników, gdy piszesz</string>
     <string name="settings_always_show_timestamps">Zawsze pokazuj czas wysłania wiadomości</string>
-    <string name="settings_disable_markdown">Wyłącz formatowanie Markdown podczas wysyłania</string>
     <string name="settings_data_save_mode">Tryb oszczędzania danych</string>
 
     <string name="devices_details_dialog_title">Szczegóły o urządzeniu</string>
@@ -696,7 +693,7 @@ Jesteś pewien?</string>
     <string name="room_settings_add_homescreen_shortcut">Dodaj skrót do ekranu domowego</string>
 
     <string name="room_sliding_menu_third_party_notices">Informacje o trzecich stronach</string>
-    <string name="settings_summary_app_info_link">Ekran informacji systemowych aplikacji</string>
+    <string name="settings_app_info_link_summary">Ekran informacji systemowych aplikacji</string>
     <string name="settings_notification_ringtone">Dźwięk powiadomień</string>
     <string name="settings_containing_my_display_name">Wiadomości zawierające moją wyświetlaną nazwę</string>
     <string name="settings_containing_my_user_name">Wiadomości zawierające moją nazwę użytkownika</string>
@@ -710,8 +707,6 @@ Jesteś pewien?</string>
     <string name="settings_home_display">Ekran domowy</string>
     <string name="settings_inline_url_preview">Zezwól na domyślny podgląd zawartości URL</string>
     <string name="settings_12_24_timestamps">Pokaż czas w formacie 12 godzinnym (np. 2:30pm)</string>
-    <string name="settings_hide_join_leave_messages">Ukryj wiadomości o dołączeniu/wyjściu (zaproszenia, wyproszenia, blokowanie nie zostaną ukryte)</string>
-    <string name="settings_hide_avatar_display_name_changes_messages">Ukryj awatar i zmiany wyświetlanej nazwy</string>
     <string name="settings_vibrate_on_mention">Wibruj gdy ktoś wspomni o tobie</string>
 
     <string name="settings_analytics">Analityka</string>

@@ -458,8 +458,8 @@ Vai vēlies turpināt?</string>
     <string name="settings_add_email_address">Pievienot epasta adresi</string>
     <string name="settings_phone_number">Tālrunis</string>
     <string name="settings_add_phone_number">Pievienot tālruņa #</string>
-    <string name="settings_summary_app_info_link">Doties uz Android Lietotņu informācijas sadaļu</string>
-    <string name="settings_title_app_info_link">Lietotnes informācija</string>
+    <string name="settings_app_info_link_summary">Doties uz Android Lietotņu informācijas sadaļu</string>
+    <string name="settings_app_info_link_title">Lietotnes informācija</string>
 
     <string name="settings_notification_ringtone">Paziņojumu skaņa</string>
     <string name="settings_enable_all_notif">Iespējot šim kontam paziņojumus</string>
@@ -489,7 +489,7 @@ Vai vēlies turpināt?</string>
     <string name="settings_copyright">Autortiesības</string>
     <string name="settings_privacy_policy">Privātuma politika</string>
     <string name="settings_clear_cache">Iztīrīt ķešu</string>
-    <string name="settings_clear_medias_cache">Iztīrīt mēdija ķešu</string>
+    <string name="settings_clear_media_cache">Iztīrīt mēdija ķešu</string>
     <string name="settings_keep_media">Turēt mēdiju (?)</string>
 
     <string name="settings_user_settings">Lietotāja iestatījumi</string>
@@ -507,13 +507,8 @@ Vai vēlies turpināt?</string>
     <string name="settings_pin_unread_messages">Piestiprināt istabas ar neizlasītām ziņām</string>
     <string name="settings_devices_list">Ierīces</string>
     <string name="settings_inline_url_preview">Iespējot URL priekšskatu pēc noklusējuma</string>
-    <string name="settings_hide_read_receipts">Nerādīt atzīmes, ka ziņu esmu izlasījis</string>
-    <string name="settings_dont_send_typings_notifs">Nerādīt paziņojumu par to, ka rakstu</string>
     <string name="settings_always_show_timestamps">Vienmēr rādīt ziņu laiku</string>
     <string name="settings_12_24_timestamps">Rādīt ziņu laiku 12 stundu formātā (piem. 12:12pm)</string>
-    <string name="settings_hide_join_leave_messages">Slēpt \"pievienojās/atstāja\" istabu paziņojumus (neietekmē uzaicinājumus/izsperšanu/nobanošanu)</string>
-    <string name="settings_hide_avatar_display_name_changes_messages">Nerādīt avatara un rādāmā vārdā izmaiņas</string>
-    <string name="settings_disable_markdown">Atspējot \"markdown\" formatēšanu nosūtāmajām ziņām</string>
     <string name="settings_vibrate_on_mention">Vibrācija, kad pieminējums</string>
 
     <string name="settings_analytics">Analītika</string>

@@ -416,8 +416,8 @@ Vedd figyelembe, hogy az alkalmazás újraindul  ami sok időt vehet igénybe."<
     <string name="settings_add_email_address">E-mail cím hozzáadása</string>
     <string name="settings_phone_number">Telefon</string>
     <string name="settings_add_phone_number">Telefonszám hozzáadása</string>
-    <string name="settings_summary_app_info_link">Alkalmazás infók a rendszerbeállításokban</string>
-    <string name="settings_title_app_info_link">Alkalmazás infó</string>
+    <string name="settings_app_info_link_summary">Alkalmazás infók a rendszerbeállításokban</string>
+    <string name="settings_app_info_link_title">Alkalmazás infó</string>
 
     <string name="settings_enable_all_notif">Értesítések bekapcsolása ehhez a felhasználóhoz</string>
     <string name="settings_enable_this_device">Értesítések bekapcsolása ehhez a készülékhez</string>
@@ -655,19 +655,16 @@ Ismeretlen eszközök:</string>
     <string name="account_phone_number_already_used_error">Ez a telefonszám már használatban van</string>
 
     <string name="settings_start_on_boot">Indítás rendszerinduláskor</string>
-    <string name="settings_clear_medias_cache">Média gyorsítótár törlése</string>
+    <string name="settings_clear_media_cache">Média gyorsítótár törlése</string>
     <string name="settings_keep_media">Média megtartása</string>
 
-    <string name="settings_dont_send_typings_notifs">Ne küldjön írásértesítést</string>
     <string name="settings_always_show_timestamps">Mindig jelenítse meg az üzenetek időbélyegét</string>
-    <string name="settings_disable_markdown">Markdown formázás kikapcsolása üzenet küldésekor</string>
 
     <string name="media_saving_period_3_days">3 nap</string>
     <string name="media_saving_period_1_week">1 hét</string>
     <string name="media_saving_period_1_month">1 hónap</string>
     <string name="media_saving_period_forever">Örökké</string>
 
-    <string name="settings_hide_read_receipts">Tértivevény elrejtése</string>
     <string name="people_search_user_directory">FELHASZNÁLÓ JEGYZÉK (%S)</string>
     <string name="settings_data_save_mode">Adattakarékos mód</string>
 
@@ -692,8 +689,6 @@ Ismeretlen eszközök:</string>
 
     <string name="settings_notification_ringtone">Értesítés hangja</string>
     <string name="settings_12_24_timestamps">Időbélyegek mutatása 12 órás formátumban (pl.: du. 2:30)</string>
-    <string name="settings_hide_join_leave_messages">Belépés/kilépés üzenetek elrejtése (meghívást/kirúgást/kitiltást nem érinti)</string>
-    <string name="settings_hide_avatar_display_name_changes_messages">Profilkép és -név változásainak elrejtése</string>
 
     <string name="widget_no_power_to_manage">Engedélyre van szükséged a kisalkalmazások ebben a szobában való kezeléséhez</string>
     <string name="widget_creation_failure">Kisalkalmazás létrehozása sikertelen</string>

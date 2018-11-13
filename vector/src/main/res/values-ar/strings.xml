@@ -284,7 +284,7 @@
     <string name="settings_add_email_address">أضِف بريدا إلكترونيا</string>
     <string name="settings_phone_number">الهاتف</string>
     <string name="settings_add_phone_number">أضِف رقم هاتف</string>
-    <string name="settings_title_app_info_link">معلومات التطبيق</string>
+    <string name="settings_app_info_link_title">معلومات التطبيق</string>
 
     <string name="settings_notification_ringtone">صوت الإخطارات</string>
     <string name="settings_turn_screen_on">شغّل الشاشة لمدة ٣ ثواني</string>
@@ -299,7 +299,7 @@
     <string name="settings_copyright">حقوق النسخ</string>
     <string name="settings_privacy_policy">سياسة الخصوصية</string>
     <string name="settings_clear_cache">امسح الخبيئة</string>
-    <string name="settings_clear_medias_cache">امسح خبيئة الوسائط</string>
+    <string name="settings_clear_media_cache">امسح خبيئة الوسائط</string>
     <string name="settings_user_settings">إعدادات المستخدم</string>
     <string name="settings_notifications">الإخطارات</string>
     <string name="settings_advanced">متقدم</string>
@@ -307,14 +307,9 @@
     <string name="settings_contacts_app_permission">تصاريح المتراسلون</string>
     <string name="settings_contacts_phonebook_country">دولة دفتر العناوين</string>
     <string name="settings_devices_list">الأجهزة</string>
-    <string name="settings_hide_read_receipts">أخفِ إخطارات القراءة</string>
-    <string name="settings_dont_send_typings_notifs">لا تُرسل إخطارات الكتابة</string>
     <string name="settings_always_show_timestamps">اعرض أختام الرسائل الزمنية دائما</string>
     <string name="settings_12_24_timestamps">اعرض الأختام الزمنية بنسق ١٢ ساعة (مثلا ٢:٣٠م)</string>
-    <string name="settings_hide_join_leave_messages">أخفِ رسائل الانضمام/الخروج (الدعوات والطرد والمنع لا يتأثر)</string>
-    <string name="settings_hide_avatar_display_name_changes_messages">اعرض تغييرات الصور وأسماء العرض</string>
 
-    <string name="settings_disable_markdown">عطّل تنسيق ”ماركداون“ عند الإرسال</string>
     <string name="settings_data_save_mode">وضع حفظ البيانات</string>
 
     <string name="devices_details_dialog_title">تفاصيل الجهاز</string>
@@ -830,7 +825,7 @@
 
     <string name="room_sliding_menu_term_and_conditions">الأحكام والشروط</string>
     <string name="room_sliding_menu_third_party_notices">إشعارات الأطراف الثالثة</string>
-    <string name="settings_summary_app_info_link">شاشة معلومات التطبيق في النظام</string>
+    <string name="settings_app_info_link_summary">شاشة معلومات التطبيق في النظام</string>
     <string name="settings_call_invitations">دعوات المكالمات</string>
     <string name="settings_start_on_boot">ابدأ عن الإقلاع</string>
     <string name="settings_delete_threepid_confirmation">أمتأكّد من إزالة ⁨%1$s⁩ ⁨%2$s⁩؟</string>

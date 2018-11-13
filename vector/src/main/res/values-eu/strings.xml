@@ -417,8 +417,8 @@ Kontuan izan ekintza honek aplikazioa berrabiaraziko duela eta denbora bat behar
     <string name="settings_add_email_address">Gehitu e-mail helbidea</string>
     <string name="settings_phone_number">Telefonoa</string>
     <string name="settings_add_phone_number">Gehitu telefono zenbakia</string>
-    <string name="settings_summary_app_info_link">Aplikazioaren sistema-informazio pantaila</string>
-    <string name="settings_title_app_info_link">Aplikazioaren informazioa</string>
+    <string name="settings_app_info_link_summary">Aplikazioaren sistema-informazio pantaila</string>
+    <string name="settings_app_info_link_title">Aplikazioaren informazioa</string>
 
     <string name="settings_enable_all_notif">Gaitu jakinarazpenak kontu honetarako</string>
     <string name="settings_enable_this_device">Gaitu jakinarazpenak gailu honetan</string>
@@ -444,7 +444,7 @@ Kontuan izan ekintza honek aplikazioa berrabiaraziko duela eta denbora bat behar
     <string name="settings_copyright">Copyright-a</string>
     <string name="settings_privacy_policy">Pribatutasun politika</string>
     <string name="settings_clear_cache">Garbitu cachea</string>
-    <string name="settings_clear_medias_cache">Garbitu media cachea</string>
+    <string name="settings_clear_media_cache">Garbitu media cachea</string>
     <string name="settings_keep_media">Mantendu media</string>
 
     <string name="settings_user_settings">Erabiltzaile-ezarpenak</string>
@@ -460,8 +460,6 @@ Kontuan izan ekintza honek aplikazioa berrabiaraziko duela eta denbora bat behar
     <string name="settings_pin_missed_notifications">Finkatu ikusi gabeko jakinarazpenak dituzten gelak</string>
     <string name="settings_pin_unread_messages">Finkatu irakurri gabeko mezuak dituzten gelak</string>
     <string name="settings_devices_list">Gailuak</string>
-    <string name="settings_hide_read_receipts">Ezkutatu irakurragiriak</string>
-    <string name="settings_dont_send_typings_notifs">Ez bidali idatzi bitarteko jakinarazpenak</string>
     <string name="settings_always_show_timestamps">Erakutsi beti mezuen denbora-zigilua</string>
     <string name="devices_details_dialog_title">Gailuaren xehetasunak</string>
     <string name="devices_details_id_title">ID</string>
@@ -511,7 +509,6 @@ Kontuan izan ekintza honek aplikazioa berrabiaraziko duela eta denbora bat behar
 
     <string name="room_sliding_menu_third_party_notices">Hirugarrengoen adierazpenak</string>
     <string name="settings_third_party_notices">Hirugarrengoen adierazpenak</string>
-    <string name="settings_disable_markdown">Desgaitu markdown formatua bidaltzean</string>
 
     <string name="settings_phone_number_label">Telefono zenbakia</string>
     <string name="settings_phone_number_error">Telefono zenbaki baliogabea hautatutako herrialdean</string>
@@ -695,8 +692,6 @@ Zifratutako mezuak ez dira zifratzea oraindik ezarrita ez duten beste gailuetan 
 
     <string name="settings_notification_ringtone">Jakinarazpen-soinua</string>
     <string name="settings_12_24_timestamps">Erakutsi denbora-zigiluak 12 ordutako formatuan (adib 2:30pm)</string>
-    <string name="settings_hide_join_leave_messages">Ezkutatu elkartu/utzi mezuak (gonbidatu/kanporatu/debekatu mezuei eraginik ez)</string>
-    <string name="settings_hide_avatar_display_name_changes_messages">Ezkutatu abatarraren eta pantaila-izenen aldaketak</string>
 
     <string name="widget_no_power_to_manage">Baimena behar duzu gela honetako trepetak kudeatzeko</string>
     <string name="widget_creation_failure">Trepetaren sorrerak huts egin du</string>

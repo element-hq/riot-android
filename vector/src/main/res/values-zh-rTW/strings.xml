@@ -502,8 +502,8 @@
     <string name="settings_add_email_address">新增電子郵件地址</string>
     <string name="settings_phone_number">電話號碼</string>
     <string name="settings_add_phone_number">添加電話號碼</string>
-    <string name="settings_summary_app_info_link">應用程式系統資訊畫面</string>
-    <string name="settings_title_app_info_link">應用程式資訊</string>
+    <string name="settings_app_info_link_summary">應用程式系統資訊畫面</string>
+    <string name="settings_app_info_link_title">應用程式資訊</string>
 
     <string name="settings_notification_privacy">通知隱私</string>
     <string name="settings_notification_privacy_warning">Riot.im 將在後臺運行以保持通知訊息內容的私密。您可以更改此選項以減少電池使用量。</string>
@@ -547,7 +547,7 @@
     <string name="settings_copyright">版權</string>
     <string name="settings_privacy_policy">隱私權政策</string>
     <string name="settings_clear_cache">清空暫存檔</string>
-    <string name="settings_clear_medias_cache">清除媒體暫存檔</string>
+    <string name="settings_clear_media_cache">清除媒體暫存檔</string>
     <string name="settings_keep_media">保留媒體檔案</string>
 
     <string name="settings_user_settings">使用者設定</string>
@@ -565,13 +565,8 @@
     <string name="settings_pin_unread_messages">釘選含有未讀訊息的聊天室</string>
     <string name="settings_devices_list">裝置列表</string>
     <string name="settings_inline_url_preview">預設啟用內嵌 URL 預覽</string>
-    <string name="settings_hide_read_receipts">隱藏已讀回執</string>
-    <string name="settings_dont_send_typings_notifs">不要發送我的打字狀態</string>
     <string name="settings_always_show_timestamps">總是顯示訊息時間戳</string>
     <string name="settings_12_24_timestamps">用12小時制顯示時間戳 （如：下午 2:30）</string>
-    <string name="settings_hide_join_leave_messages">隱藏加入／離開訊息（邀請／踢出／封鎖不受影響）</string>
-    <string name="settings_hide_avatar_display_name_changes_messages">隱藏修改個人資料圖片和顯示名稱的訊息</string>
-    <string name="settings_disable_markdown">發送訊息時不使用 Markdown 語法</string>
     <string name="settings_vibrate_on_mention">提及他人時震動</string>
 
     <string name="settings_deactivate_account_section">停用帳號</string>

@@ -8,7 +8,7 @@ Features:
  -
 
 Improvements:
- -
+ - Remove double negations from settings and update descriptions (#2723)
 
 Other changes:
  -
