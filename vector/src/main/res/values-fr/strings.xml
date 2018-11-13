@@ -85,7 +85,7 @@ Cliquez sur exporter pour les sauvegarder avant de vous déconnecter.</string>
     <string name="send_bug_report_include_logs">Envoyer les journaux</string>
     <string name="send_bug_report_include_crash_logs">Envoyer les journaux d\'erreur</string>
     <string name="send_bug_report_include_screenshot">Envoyer une capture d\'écran</string>
-    <string name="send_bug_report">Rapport d\'erreur</string>
+    <string name="send_bug_report">Rapporter une erreur</string>
     <string name="send_bug_report_placeholder">Décrivez votre problème ici</string>
     <string name="send_bug_report_progress">Avancement (%s %%)</string>
 
@@ -1044,5 +1044,15 @@ Veuillez noter que cette action redémarrera l\'application et pourra prendre un
     <string name="encryption_export_passphrase_dont_match">Les phrases de passe doivent concorder</string>
     <string name="merged_events_expand">développer</string>
     <string name="merged_events_collapse">réduire</string>
+
+<string name="settings_info_area_show">Afficher la zone d\'information</string>
+    <string name="show_info_area_always">Toujours</string>
+    <string name="show_info_area_messages_and_errors">Pour les messages et les erreurs</string>
+    <string name="show_info_area_only_errors">Seulement pour les erreurs</string>
+
+    <string name="generic_label">%1$s :</string>
+    <string name="generic_label_and_value">%1$s : %2$s</string>
+    <string name="plus_x">+%d</string>
+    <string name="x_plus">%d+</string>
 
 </resources>

@@ -90,7 +90,7 @@ Hautatu esportatu babes-kopia bat egiteko saioa amaitu aurretik.</string>
     <string name="send_bug_report_include_logs">Bidali egunkariak</string>
     <string name="send_bug_report_include_crash_logs">Bidali kraskatze egunkariak</string>
     <string name="send_bug_report_include_screenshot">Bidali pantaila-argazkia</string>
-    <string name="send_bug_report">Arazte-txostena</string>
+    <string name="send_bug_report">Eman akats baten berri</string>
     <string name="send_bug_report_description">Azaldu akatsa. Zer egin duzu? Zer espero zenuen? Zer gertatu da benetan?</string>
     <string name="send_bug_report_placeholder">Azaldu zure arazoa hemen</string>
     <string name="send_bug_report_logs_description">Akatsak aztertzeari begira, bezero honen egunkariak arazte-txosten honekin batera bidaliko dira. Arazte-txosten hau, egunkariak eta pantaila-argazkia barne, ez dira publikoki ikusgai egongo. Goiko testua besterik ez baduzu bidali nahi, desmarkatu:</string>
@@ -1041,5 +1041,15 @@ Kontuan izan ekintza honek aplikazioa berrabiaraziko duela eta denbora bat behar
     <string name="encryption_export_passphrase_dont_match">Pasaesaldiak berdinak izan behar dira</string>
     <string name="merged_events_expand">hedatu</string>
     <string name="merged_events_collapse">tolestu</string>
+
+<string name="settings_info_area_show">Erakutsi informazio-area</string>
+    <string name="show_info_area_always">Beti</string>
+    <string name="show_info_area_messages_and_errors">Mezu eta erroreentzat</string>
+    <string name="show_info_area_only_errors">Erroreentzat besterik ez</string>
+
+    <string name="generic_label">%1$s:</string>
+    <string name="generic_label_and_value">%1$s: %2$s</string>
+    <string name="plus_x">+%d</string>
+    <string name="x_plus">%d+</string>
 
 </resources>

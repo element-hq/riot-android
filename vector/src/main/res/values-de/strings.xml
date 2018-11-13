@@ -103,7 +103,7 @@
     <string name="send_bug_report">Problem melden</string>
     <string name="send_bug_report_description">Bitte beschreibe das Problem. Was hast du genau gemacht? Was sollte passieren? Was passierte tatsächlich?</string>
     <string name="send_bug_report_placeholder">Problembeschreibung</string>
-    <string name="send_bug_report_logs_description">Um Probleme diagnostizieren zu können, werden Protokolle dieses Matrix-Clients zusammen mit dem Fehlerbericht übermittelt. Dieser Fehlerbericht wird, wie die Protokolle und Screenshot, nicht öffentlich sichtbar sein. Wenn du nur den oben eingegebenen Text senden möchtest, bitte die nachfolgenden Haken entsprechend entfernen:</string>
+    <string name="send_bug_report_logs_description">Um Probleme diagnostizieren zu können, werden Protokolle dieses Clients zusammen mit dem Fehlerbericht übermittelt. Dieser Fehlerbericht wird, wie die Protokolle und Screenshot, nicht öffentlich sichtbar sein. Wenn du nur den oben eingegebenen Text senden möchtest, bitte die nachfolgenden Haken entsprechend entfernen:</string>
     <string name="send_bug_report_alert_message">Du scheinst dein Telefon frustriert zu schütteln. Möchtest du einen Fehlerbericht senden?</string>
     <string name="send_bug_report_sent">Der Fehlerbericht wurde erfolgreich übermittelt</string>
     <string name="send_bug_report_failed">Der Fehlerbericht konnte nicht übermittelt werden (%s)</string>
@@ -740,7 +740,7 @@ Unbekannte Geräte:</string>
     <string name="widget_integration_positive_power_level">Berechtigungslevel muss eine positive ganze Zahl sein.</string>
     <string name="widget_integration_must_be_in_room">Du bist nicht Mitglied in diesem Raum.</string>
     <string name="widget_integration_no_permission_in_room">Du hast keine Berechtigung, diese Aktion in diesem Raum auszuführen.</string>
-    <string name="widget_integration_missing_room_id">Anfrage beinhaltet keine room_id.</string>
+    <string name="widget_integration_missing_room_id">Anfrage beinhaltet keine Raum-ID.</string>
     <string name="widget_integration_room_not_visible">Raum %s ist nicht sichtbar.</string>
     <string name="room_add_matrix_apps">Matrix-Apps hinzufügen</string>
     <string name="settings_notification_ringtone">Benachrichtigungston</string>
@@ -965,7 +965,7 @@ Die Sichtbarkeit deiner Nachrichten ist ähnlich zu E-Mails: Wenn wir deine Nach
 
     <string name="download">Download</string>
     <string name="speak">Sprechen</string>
-    <string name="clear">Löschen</string>
+    <string name="clear">Leeren</string>
     <string name="e2e_re_request_encryption_key">Verschlüsselungsschlüssel von deinen anderen Geräten <u>erneut anfragen</u>.</string>
 
     <string name="e2e_re_request_encryption_key_sent">Schlüsselanfrage gesendet.</string>
@@ -975,7 +975,7 @@ Die Sichtbarkeit deiner Nachrichten ist ähnlich zu E-Mails: Wenn wir deine Nach
 
     <string name="lock_screen_hint">Hier tippen…</string>
 
-    <string name="option_send_voice">Sende Sprache</string>
+    <string name="option_send_voice">Sprachnachricht senden</string>
 
     <string name="go_on_with">fortfahren mit…</string>
     <string name="error_no_external_application_found">Es wurde keine externe Anwendung gefunden, um diese Aktion auszuführen.</string>
@@ -1084,5 +1084,15 @@ Beachte: Diese Aktion wird die App neu starten und einige Zeit brauchen.</string
     <string name="encryption_export_passphrase_dont_match">Passphrasen müssen übereinstimmen</string>
     <string name="merged_events_expand">aufklappen</string>
     <string name="merged_events_collapse">Zusammenklappen</string>
+
+<string name="settings_info_area_show">Zeige Infobereich</string>
+    <string name="show_info_area_always">Immer</string>
+    <string name="show_info_area_messages_and_errors">Für Nachrichten und Fehler</string>
+    <string name="show_info_area_only_errors">Nur für Fehler</string>
+
+    <string name="generic_label">%1$s:</string>
+    <string name="generic_label_and_value">%1$s: %2$s</string>
+    <string name="plus_x">+%d</string>
+    <string name="x_plus">%d+</string>
 
 </resources>
