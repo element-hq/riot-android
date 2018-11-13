@@ -489,7 +489,7 @@
     <string name="settings_new_password">新しいパスワード</string>
     <string name="settings_confirm_password">確認のパスワード</string>
     <string name="settings_fail_to_update_password">パスワードの更新に失敗しました</string>
-    <string name="settings_unignore_user">％sのすべてのメッセージを表示しますか？
+    <string name="settings_unignore_user">%sのすべてのメッセージを表示しますか？
 
 この操作はアプリを再起動し、時間がかかることに注意してください。</string>
 
