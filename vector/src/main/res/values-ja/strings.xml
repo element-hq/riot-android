@@ -554,7 +554,7 @@ Riotアプリがあなたの電話帳へアクセスすることを許可しま�
 
     <string name="ignore_request">要求を無視する</string>
 
-<string name="share_without_verifying">検証せずに共有する</string>
+    <string name="share_without_verifying">検証せずに共有する</string>
     <string name="start_verification">検証を開始する</string>
     <string name="widget_integration_missing_user_id">リクエストに user_id がありません。</string>
     <string name="widget_integration_missing_room_id">リクエストに room_id がありません。</string>
@@ -740,7 +740,7 @@ Riotアプリがあなたの電話帳へアクセスすることを許可しま�
 
     <string name="encrypted_message">暗号化されたメッセージ</string>
 
-<string name="action_exit">退出</string>
+    <string name="action_exit">退出</string>
     <string name="title_activity_group_details">コミュニティの詳細</string>
 
     <string name="loading">読み込み中…</string>
@@ -811,33 +811,33 @@ Riotアプリがあなたの電話帳へアクセスすることを許可しま�
     <string name="send_bug_report_rage_shake">バグを報告するには端末を降ってください</string>
 
     <plurals name="membership_changes">
-	<item quantity="other">%d権限の変更</item>
-</plurals>
+        <item quantity="other">%d権限の変更</item>
+    </plurals>
 
     <string name="list_members">参加者を表示</string>
     <string name="open_chat_header">見出しを開く</string>
     <string name="room_sync_in_progress">同期中…</string>
     <plurals name="room_header_active_members_count">
-	<item quantity="other">%d名のオンラインの参加者</item>
-</plurals>
+        <item quantity="other">%d名のオンラインの参加者</item>
+    </plurals>
     <plurals name="room_title_members">
-	<item quantity="other">%d名</item>
-</plurals>
+        <item quantity="other">%d名</item>
+    </plurals>
     <plurals name="room_new_messages_notification">
-	<item quantity="other">%d件の新しいメッセージ</item>
-</plurals>
+        <item quantity="other">%d件の新しいメッセージ</item>
+    </plurals>
 
     <plurals name="directory_search_rooms">
-	<item quantity="other">%d 部屋</item>
-</plurals>
+        <item quantity="other">%d 部屋</item>
+    </plurals>
     <plurals name="directory_search_rooms_for">
-	<item quantity="other">%2$sに%1$s部屋見つかりました</item>
-</plurals>
+        <item quantity="other">%2$sに%1$s部屋見つかりました</item>
+    </plurals>
     <string name="forget_room">部屋の履歴を消す</string>
 
     <string name="avatar">アバター</string>
 
-<string name="room_settings_mention_only">名前があがったときのみ</string>
+    <string name="room_settings_mention_only">名前があがったときのみ</string>
     <string name="settings_notification_privacy">通知のプライバシー</string>
     <string name="settings_notification_privacy_warning">Riot.imは通知のメッセージの内容の秘密を守るため、バックグラウンドで動作します。電池の使用を削減するために、このオプションを変えることができます。</string>
     <string name="settings_notification_privacy_normal">標準</string>
@@ -877,17 +877,17 @@ Riotアプリがあなたの電話帳へアクセスすることを許可しま�
     <string name="e2e_re_request_encryption_key_dialog_content">鍵をこのデバイスに送信できるように、メッセージを復号化できる他のデバイスでRiotを起動してください。</string>
 
     <plurals name="format_time_s">
-	<item quantity="other">%d 秒</item>
-</plurals>
+        <item quantity="other">%d 秒</item>
+    </plurals>
     <plurals name="format_time_m">
-	<item quantity="other">%d 分</item>
-</plurals>
+        <item quantity="other">%d 分</item>
+    </plurals>
     <plurals name="format_time_h">
-	<item quantity="other">%d 時間</item>
-</plurals>
+        <item quantity="other">%d 時間</item>
+    </plurals>
     <plurals name="format_time_d">
-	<item quantity="other">%d 日</item>
-</plurals>
+        <item quantity="other">%d 日</item>
+    </plurals>
 
     <string name="room_participants_now">現在 %1$s</string>
     <string name="room_participants_ago">%2$s 前 %1$s</string>
@@ -902,8 +902,8 @@ Riotアプリがあなたの電話帳へアクセスすることを許可しま�
     <string name="room_message_placeholder_reply_to_encrypted">暗号化された返信を送信…</string>
     <string name="room_message_placeholder_reply_to_not_encrypted">返信を送信 (未暗号化)…</string>
     <plurals name="room_details_selected">
-	<item quantity="other">%d 個選択済</item>
-</plurals>
+        <item quantity="other">%d 個選択済</item>
+    </plurals>
     <string name="settings_notification_privacy_reduced">低プライバシー</string>
     <string name="settings_notification_privacy_secure_message_content">• 通知中のメッセージの内容は <b>Matrixのホームサーバから直接安全に配置されています</b></string>
     <string name="settings_notification_privacy_nosecure_message_content">"•  "<b>メタデータとメッセージのデータ</b> を含む通知</string>
@@ -930,19 +930,19 @@ Riotアプリがあなたの電話帳へアクセスすることを許可しま�
     <string name="lock_screen_hint">ここに入力…</string>
 
     <plurals name="notification_unread_notified_messages">
-	<item quantity="other">%d 個の未読の通知されたメッセージ</item>
-</plurals>
+        <item quantity="other">%d 個の未読の通知されたメッセージ</item>
+    </plurals>
     <plurals name="notification_unread_notified_messages_in_room_msgs">
-	<item quantity="other">%d 個の未読の通知されたメッセージ</item>
-</plurals>
+        <item quantity="other">%d 個の未読の通知されたメッセージ</item>
+    </plurals>
     <plurals name="notification_unread_notified_messages_in_room_rooms">
-	<item quantity="other">%d 部屋</item>
-</plurals>
+        <item quantity="other">%d 部屋</item>
+    </plurals>
     <string name="notification_unread_notified_messages_in_room">%2$s件 中 %1$s件</string>
 
     <plurals name="active_widgets">
-	<item quantity="other">%d 個のアクティブなウィジェット</item>
-</plurals>
+        <item quantity="other">%d 個のアクティブなウィジェット</item>
+    </plurals>
 
     <string name="widget_integration_missing_parameter">必要な変数が見つかりません。</string>
     <string name="widget_integration_invalid_parameter">変数が無効です。</string>
@@ -964,12 +964,12 @@ Riotアプリがあなたの電話帳へアクセスすることを許可しま�
     <string name="command_description_clear_scalar_token">Matrixアプリの管理を修正するには</string>
 
     <plurals name="group_members">
-	<item quantity="other">%d名</item>
-</plurals>
+        <item quantity="other">%d名</item>
+    </plurals>
 
     <plurals name="group_rooms">
-	<item quantity="other">%d 部屋</item>
-</plurals>
+        <item quantity="other">%d 部屋</item>
+    </plurals>
     <string name="receipt_avatar">アバターを受け取る</string>
     <string name="dialog_user_consent_content">%1$s ホームサーバを使用し続けるには、利用規約を読み、同意する必要があります。</string>
     <string name="dialog_title_error">エラー</string>
@@ -1013,7 +1013,7 @@ Matrixでのメッセージの可視性は電子メールと同様です。メ�
     <string name="settings_lazy_loading_title">部屋のメンバーの簡易読み込み</string>
     <string name="unknown_error">申し訳ありません、エラーが発生しました</string>
 
-<string name="status_theme">Status.im テーマ</string>
+    <string name="status_theme">Status.im テーマ</string>
 
     <string name="room_sliding_menu_version_x">Version %s</string>
     <string name="encryption_export_notice">エクスポートされた鍵を暗号化するパスフレーズを作成してください。 キーをインポートするには、同じパスフレーズを入力する必要があります。</string>
@@ -1028,8 +1028,8 @@ Matrixでのメッセージの可視性は電子メールと同様です。メ�
     <string name="plus_x">+%d</string>
     <string name="x_plus">%d+</string>
 
-<string name="merged_events_expand">展開</string>
+    <string name="merged_events_expand">展開</string>
     <string name="merged_events_collapse">畳む</string>
 
     <string name="show_info_area_messages_and_errors">メッセージとエラーの場合</string>
-    </resources>
+</resources>

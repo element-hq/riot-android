@@ -695,7 +695,7 @@ Unbekannte Geräte:</string>
     <!-- historical -->
     <string name="historical_placeholder">Suche nach historischen</string>
 
-<string name="settings_user_interface">Benutzer-Oberfläche</string>
+    <string name="settings_user_interface">Benutzer-Oberfläche</string>
     <string name="settings_interface_language">Oberflächen-Sprache</string>
     <string name="settings_select_language">Wähle eine Sprache</string>
 
@@ -721,10 +721,10 @@ Unbekannte Geräte:</string>
     <string name="normal">Normal</string>
     <string name="large">Groß</string>
     <string name="largest">Extra groß</string>
-<string name="larger">Größer</string>
+    <string name="larger">Größer</string>
     <string name="tiny">Sehr klein</string>
     <string name="huge">Riesig</string>
-<string name="settings_theme">Thema</string>
+    <string name="settings_theme">Thema</string>
 
     <string name="settings_12_24_timestamps">Zeitstempel im 12-Stunden-Format anzeigen (z. B. 2:30 p. m.)</string>
 
@@ -773,7 +773,7 @@ Unbekannte Geräte:</string>
     <string name="share_without_verifying">Ohne Verifizierung teilen</string>
     <string name="ignore_request">Anfrage ignorieren</string>
 
-<string name="settings_analytics">Anonymisierte Analysedaten</string>
+    <string name="settings_analytics">Anonymisierte Analysedaten</string>
     <string name="title_activity_bug_report">Fehlerbericht</string>
 
     <string name="conference_call_warning_title">Warnung!</string>
@@ -790,7 +790,7 @@ Unbekannte Geräte:</string>
 
     <string name="encrypted_message">Verschlüsselte Nachricht</string>
 
-<string name="title_activity_group_details">Community-Details</string>
+    <string name="title_activity_group_details">Community-Details</string>
 
     <string name="loading">Lädt…</string>
 
@@ -852,7 +852,7 @@ Unbekannte Geräte:</string>
     <string name="reason_colon">Grund: %1$s</string>
     <string name="rejoin">Erneut beitreten</string>
     <string name="forget_room">Raum vergessen</string>
-<string name="room_settings_add_homescreen_shortcut">Startbildschirm-Verknüpfung hinzufügen</string>
+    <string name="room_settings_add_homescreen_shortcut">Startbildschirm-Verknüpfung hinzufügen</string>
 
     <string name="settings_flair">Flair</string>
 
@@ -862,50 +862,50 @@ Unbekannte Geräte:</string>
     <string name="list_members">Mitglieder auflisten</string>
     <string name="room_sync_in_progress">Synchronisiere…</string>
     <plurals name="room_header_active_members_count">
-	<item quantity="one">1 aktives Mitglied</item>
-	<item quantity="other">%d aktive Mitglieder</item>
-</plurals>
+        <item quantity="one">1 aktives Mitglied</item>
+        <item quantity="other">%d aktive Mitglieder</item>
+    </plurals>
     <plurals name="room_title_members">
-	<item quantity="one">1 Mitglied</item>
-	<item quantity="other">%d Mitglieder</item>
-</plurals>
+        <item quantity="one">1 Mitglied</item>
+        <item quantity="other">%d Mitglieder</item>
+    </plurals>
     <plurals name="room_new_messages_notification">
-	<item quantity="one">1 neue Nachricht</item>
-	<item quantity="other">%d neue Nachrichten</item>
-</plurals>
+        <item quantity="one">1 neue Nachricht</item>
+        <item quantity="other">%d neue Nachrichten</item>
+    </plurals>
 
     <plurals name="directory_search_rooms">
-	<item quantity="one">1 Raum</item>
-	<item quantity="other">%d Räume</item>
-</plurals>
+        <item quantity="one">1 Raum</item>
+        <item quantity="other">%d Räume</item>
+    </plurals>
     <plurals name="directory_search_rooms_for">
-	<item quantity="one">%1$s Raum gefunden für %2$s</item>
-	<item quantity="other">%1$s Räume gefunden für %2$s</item>
-</plurals>
+        <item quantity="one">%1$s Raum gefunden für %2$s</item>
+        <item quantity="other">%1$s Räume gefunden für %2$s</item>
+    </plurals>
     <plurals name="notification_unread_notified_messages">
-	<item quantity="one">1 ungelesene Nachricht</item>
-	<item quantity="other">%d ungelesene Nachrichten</item>
-</plurals>
+        <item quantity="one">1 ungelesene Nachricht</item>
+        <item quantity="other">%d ungelesene Nachrichten</item>
+    </plurals>
     <plurals name="notification_unread_notified_messages_in_room_msgs">
-	<item quantity="one">1 ungelesene benachrichtige Nachricht</item>
-	<item quantity="other">%d ungelesene benachrichte Nachrichten</item>
-</plurals>
+        <item quantity="one">1 ungelesene benachrichtige Nachricht</item>
+        <item quantity="other">%d ungelesene benachrichte Nachrichten</item>
+    </plurals>
     <plurals name="notification_unread_notified_messages_in_room_rooms">
-	<item quantity="one">1 Raum</item>
-	<item quantity="other">%d Räume</item>
-</plurals>
+        <item quantity="one">1 Raum</item>
+        <item quantity="other">%d Räume</item>
+    </plurals>
     <plurals name="active_widgets">
-	<item quantity="one">1 aktives Widget</item>
-	<item quantity="other">%d aktive Widgets</item>
-</plurals>
+        <item quantity="one">1 aktives Widget</item>
+        <item quantity="other">%d aktive Widgets</item>
+    </plurals>
 
     <!-- Widget Integration Manager -->
     <string name="avatar">Profilbild</string>
 
-<plurals name="membership_changes">
-	<item quantity="one">1 Mitgliederänderung</item>
-	<item quantity="other">%d Mitgliederänderungen</item>
-</plurals>
+    <plurals name="membership_changes">
+        <item quantity="one">1 Mitgliederänderung</item>
+        <item quantity="other">%d Mitgliederänderungen</item>
+    </plurals>
 
     <string name="notification_unread_notified_messages_in_room">%1$s in %2$s</string>
 
@@ -961,7 +961,7 @@ Die Sichtbarkeit deiner Nachrichten ist ähnlich zu E-Mails: Wenn wir deine Nach
     <string name="deactivate_account_prompt_password">Um fortzufahren, bitte Password eingeben:</string>
     <string name="deactivate_account_submit">Account deaktivieren</string>
 
-<string name="dialog_title_third_party_licences">Drittanbieter-Lizenzen</string>
+    <string name="dialog_title_third_party_licences">Drittanbieter-Lizenzen</string>
 
     <string name="download">Download</string>
     <string name="speak">Sprechen</string>
@@ -984,7 +984,7 @@ Die Sichtbarkeit deiner Nachrichten ist ähnlich zu E-Mails: Wenn wir deine Nach
 
     <string name="error_empty_field_your_password">Bitte gib dein Passwort ein.</string>
 
-<string name="send_bug_report_description_in_english">Wenn möglich, beschreibe bitte in Englisch.</string>
+    <string name="send_bug_report_description_in_english">Wenn möglich, beschreibe bitte in Englisch.</string>
     <string name="room_message_placeholder_reply_to_encrypted">Sende verschlüsselte Antwort…</string>
     <string name="room_message_placeholder_reply_to_not_encrypted">Sende unverschlüsselte Antwort…</string>
     <string name="settings_preview_media_before_sending">Zeige Medien vor dem Senden</string>
@@ -1011,26 +1011,26 @@ Die Sichtbarkeit deiner Nachrichten ist ähnlich zu E-Mails: Wenn wir deine Nach
     <string name="room_tombstone_continuation_description">Dieser Raum ist die Fortsetzung einer anderen Konversation</string>
     <string name="room_tombstone_predecessor_link">Klicke hier um die älteren Nachrichten zu sehen</string>
 
-<string name="room_participants_action_unignore_prompt">Zeige alle Nachrichten dieses Benutzers?
+    <string name="room_participants_action_unignore_prompt">Zeige alle Nachrichten dieses Benutzers?
 
 Beachte: Diese Aktion wird die App neu starten und einige Zeit brauchen.</string>
     <string name="missing_permissions_error">Nicht berechtigt diese Aktion durchzuführen.</string>
     <plurals name="format_time_s">
-	<item quantity="one">1s</item>
-	<item quantity="other">%ds</item>
-</plurals>
+        <item quantity="one">1s</item>
+        <item quantity="other">%ds</item>
+    </plurals>
     <plurals name="format_time_m">
-	<item quantity="one">1m</item>
-	<item quantity="other">%dm</item>
-</plurals>
+        <item quantity="one">1m</item>
+        <item quantity="other">%dm</item>
+    </plurals>
     <plurals name="format_time_h">
-	<item quantity="one">1h</item>
-	<item quantity="other">%dh</item>
-</plurals>
+        <item quantity="one">1h</item>
+        <item quantity="other">%dh</item>
+    </plurals>
     <plurals name="format_time_d">
-	<item quantity="one">1d</item>
-	<item quantity="other">%dd</item>
-</plurals>
+        <item quantity="one">1d</item>
+        <item quantity="other">%dd</item>
+    </plurals>
 
     <string name="room_participants_now">Jetzt %1$s</string>
     <string name="room_participants_ago">%1$s vor %2$s</string>
@@ -1040,18 +1040,18 @@ Beachte: Diese Aktion wird die App neu starten und einige Zeit brauchen.</string
     <string name="room_participants_invite_join_names_combined">%1$s %2$s</string>
 
     <plurals name="room_details_selected">
-	<item quantity="one">1 ausgewählt</item>
-	<item quantity="other">%d ausgewählt</item>
-</plurals>
+        <item quantity="one">1 ausgewählt</item>
+        <item quantity="other">%d ausgewählt</item>
+    </plurals>
     <plurals name="group_members">
-	<item quantity="one">1 Mitglied</item>
-	<item quantity="other">%d Mitglieder</item>
-</plurals>
+        <item quantity="one">1 Mitglied</item>
+        <item quantity="other">%d Mitglieder</item>
+    </plurals>
 
     <plurals name="group_rooms">
-	<item quantity="one">1 Raum</item>
-	<item quantity="other">%d Räume</item>
-</plurals>
+        <item quantity="one">1 Raum</item>
+        <item quantity="other">%d Räume</item>
+    </plurals>
     <string name="system_alerts_header">Systembenachrichtigungen</string>
 
     <string name="resource_limit_exceeded_title">Ressourcen-Limit</string>
@@ -1068,7 +1068,7 @@ Beachte: Diese Aktion wird die App neu starten und einige Zeit brauchen.</string
     <string name="resource_limit_soft_contact">Bitte %s um dieses Limit anheben zu lassen.</string>
     <string name="resource_limit_hard_contact">Bitte %s um diesen Dienst weiter zu nutzen.</string>
 
-<string name="dialog_title_error">Error</string>
+    <string name="dialog_title_error">Error</string>
 
     <string name="settings_lazy_loading_title">Raummitglieder nachladen</string>
     <string name="settings_lazy_loading_description">Verbessere Performanz, indem Raum-Mitglieder erst beim ersten Ansehen geladen werden</string>
@@ -1076,7 +1076,7 @@ Beachte: Diese Aktion wird die App neu starten und einige Zeit brauchen.</string
 
     <string name="unknown_error">Entschuldige, ein Fehler trat auf</string>
 
-<string name="room_sliding_menu_version_x">Version %s</string>
+    <string name="room_sliding_menu_version_x">Version %s</string>
     <string name="status_theme">Status.im-Thema</string>
 
     <string name="encryption_export_notice">Bitte eine Passphrase erstellen um exportierte Schlüssel zu verschlüsseln. Du musst dieselbe Passphrase eingeben um die Schlüssel importieren zu können.</string>
@@ -1085,7 +1085,7 @@ Beachte: Diese Aktion wird die App neu starten und einige Zeit brauchen.</string
     <string name="merged_events_expand">aufklappen</string>
     <string name="merged_events_collapse">Zusammenklappen</string>
 
-<string name="settings_info_area_show">Zeige Infobereich</string>
+    <string name="settings_info_area_show">Zeige Infobereich</string>
     <string name="show_info_area_always">Immer</string>
     <string name="show_info_area_messages_and_errors">Für Nachrichten und Fehler</string>
     <string name="show_info_area_only_errors">Nur für Fehler</string>

@@ -731,7 +731,7 @@ In futuro il processo di verifica sarà più sofisticato.</string>
     <string name="larger">Più grande</string>
     <string name="largest">Grandissimo</string>
     <string name="huge">Enorme</string>
-<string name="light_theme">Tema Chiaro</string>
+    <string name="light_theme">Tema Chiaro</string>
     <string name="dark_theme">Tema Scuro</string>
     <string name="black_them">Tema Nero</string>
 
@@ -769,7 +769,7 @@ In futuro il processo di verifica sarà più sofisticato.</string>
     <string name="call">Chiama</string>
     <string name="encrypted_message">Messaggio criptato</string>
 
-<string name="title_activity_group_details">Dettagli della comunità</string>
+    <string name="title_activity_group_details">Dettagli della comunità</string>
 
     <string name="loading">Caricamento…</string>
 
@@ -795,29 +795,29 @@ In futuro il processo di verifica sarà più sofisticato.</string>
     <string name="open_chat_header">Apri intestazione</string>
     <string name="room_sync_in_progress">Sincronizzazione…</string>
     <plurals name="room_header_active_members_count">
-	<item quantity="one">1 membro attivo</item>
-	<item quantity="other">%d membri attivi</item>
-</plurals>
+        <item quantity="one">1 membro attivo</item>
+        <item quantity="other">%d membri attivi</item>
+    </plurals>
     <plurals name="room_title_members">
-	<item quantity="one">1 membro</item>
-	<item quantity="other">%d membri</item>
-</plurals>
+        <item quantity="one">1 membro</item>
+        <item quantity="other">%d membri</item>
+    </plurals>
     <string name="room_participants_kick_prompt_msg">Sei sicuro di voler buttare fuori questo utente dalla chat?</string>
     <string name="room_participants_ban_prompt_msg">Sei sicuro di voler bandire dalla chat questo utente?</string>
 
     <plurals name="room_new_messages_notification">
-	<item quantity="one">1 nuovo messaggio</item>
-	<item quantity="other">%d nuovi messaggi</item>
-</plurals>
+        <item quantity="one">1 nuovo messaggio</item>
+        <item quantity="other">%d nuovi messaggi</item>
+    </plurals>
 
     <plurals name="directory_search_rooms">
-	<item quantity="one">1 stanza</item>
-	<item quantity="other">%d stanze</item>
-</plurals>
+        <item quantity="one">1 stanza</item>
+        <item quantity="other">%d stanze</item>
+    </plurals>
     <plurals name="directory_search_rooms_for">
-	<item quantity="one">%1$s stanza trovata per %2$s</item>
-	<item quantity="other">%1$s stanze trovate per %2$s</item>
-</plurals>
+        <item quantity="one">%1$s stanza trovata per %2$s</item>
+        <item quantity="other">%1$s stanze trovate per %2$s</item>
+    </plurals>
     <string name="room_settings_all_messages_noisy">Tutti i messaggi (rumoroso)</string>
     <string name="room_settings_all_messages">Tutti i messaggi</string>
     <string name="room_settings_mention_only">Solo le citazioni</string>
@@ -836,24 +836,24 @@ In futuro il processo di verifica sarà più sofisticato.</string>
 
 
     <plurals name="notification_unread_notified_messages">
-	<item quantity="one">1 messaggio notificato non letto</item>
-	<item quantity="other">%d messaggi notificati non letti</item>
-</plurals>
+        <item quantity="one">1 messaggio notificato non letto</item>
+        <item quantity="other">%d messaggi notificati non letti</item>
+    </plurals>
     <plurals name="notification_unread_notified_messages_in_room_msgs">
-	<item quantity="one">1 messaggio notificato non letto</item>
-	<item quantity="other">%d messaggi notificati non letti</item>
-</plurals>
+        <item quantity="one">1 messaggio notificato non letto</item>
+        <item quantity="other">%d messaggi notificati non letti</item>
+    </plurals>
     <plurals name="notification_unread_notified_messages_in_room_rooms">
-	<item quantity="one">1 stanza</item>
-	<item quantity="other">%d stanze</item>
-</plurals>
+        <item quantity="one">1 stanza</item>
+        <item quantity="other">%d stanze</item>
+    </plurals>
     <string name="notification_unread_notified_messages_in_room">%1$s in %2$s</string>
 
     <string name="widget_creation_failure">Creazione del widget fallita</string>
     <plurals name="active_widgets">
-	<item quantity="one">1 widget attivo</item>
-	<item quantity="other">%d widget attivi</item>
-</plurals>
+        <item quantity="one">1 widget attivo</item>
+        <item quantity="other">%d widget attivi</item>
+    </plurals>
 
     <!-- Widget Integration Manager -->
     <string name="widget_integration_room_not_visible">La stanza %s non è visibile.</string>
@@ -907,16 +907,16 @@ In futuro il processo di verifica sarà più sofisticato.</string>
 
     <string name="avatar">Avatar</string>
 
-<string name="settings_flair">Insegna</string>
+    <string name="settings_flair">Insegna</string>
 
     <string name="room_settings_no_flair">Questa stanza non mostra insegne per alcuna comunità</string>
     <string name="widget_integration_positive_power_level">Il livello di potere deve essere un intero positivo.</string>
     <string name="notice_avatar">Notificare avatar</string>
     <string name="receipt_avatar">Avatar ricevuto</string>
     <plurals name="membership_changes">
-	<item quantity="one">1 cambio d\'appartenenza</item>
-	<item quantity="other">%d cambi d\'appartenenza</item>
-</plurals>
+        <item quantity="one">1 cambio d\'appartenenza</item>
+        <item quantity="other">%d cambi d\'appartenenza</item>
+    </plurals>
 
     <string name="settings_notification_privacy_warning">Riot.im funziona in sottofondo per mantenere privato il contenuto delle notifiche. Puoi cambiare questa opzione per ridurre il consumo della batteria.</string>
     <string name="settings_notification_privacy">Privacy delle notifiche</string>
@@ -967,7 +967,7 @@ La visibilità dei messaggi in Matrix è simile alle email. \"Dimenticare i tuoi
     <string name="deactivate_account_prompt_password">Per continuare, inserisci la tua password:</string>
     <string name="deactivate_account_submit">Disattiva account</string>
 
-<string name="dialog_title_third_party_licences">Licenze di terze parti</string>
+    <string name="dialog_title_third_party_licences">Licenze di terze parti</string>
 
     <string name="download">Scarica</string>
     <string name="speak">Parla</string>
@@ -991,7 +991,7 @@ La visibilità dei messaggi in Matrix è simile alle email. \"Dimenticare i tuoi
     <string name="group_details_people">Persone</string>
     <string name="error_empty_field_your_password">Per favore, inserisci la tua password.</string>
 
-<string name="send_bug_report_description_in_english">Se possibile, scrivi la descrizione in inglese, grazie.</string>
+    <string name="send_bug_report_description_in_english">Se possibile, scrivi la descrizione in inglese, grazie.</string>
     <string name="room_message_placeholder_reply_to_encrypted">Invia risposta criptata…</string>
     <string name="room_message_placeholder_reply_to_not_encrypted">Risposta non criptata…</string>
     <string name="settings_preview_media_before_sending">Mostra file multimediale prima dell\'invio</string>
@@ -1018,26 +1018,26 @@ La visibilità dei messaggi in Matrix è simile alle email. \"Dimenticare i tuoi
     <string name="room_tombstone_continuation_description">Questa stanza è la continuazione di un\'altra conversazione</string>
     <string name="room_tombstone_predecessor_link">Clicca qui per vedere i messaggi più vecchi</string>
 
-<string name="room_participants_action_unignore_prompt">Mostrare tutti i messaggi di questo utente?
+    <string name="room_participants_action_unignore_prompt">Mostrare tutti i messaggi di questo utente?
 
 Tieni presente che questa azione riavvierà l\'app e potrebbe richiedere del tempo.</string>
     <string name="missing_permissions_error">A causa di permessi insufficienti, questa azione non è possibile.</string>
     <plurals name="format_time_s">
-	<item quantity="one">1s</item>
-	<item quantity="other">%ds</item>
-</plurals>
+        <item quantity="one">1s</item>
+        <item quantity="other">%ds</item>
+    </plurals>
     <plurals name="format_time_m">
-	<item quantity="one">1m</item>
-	<item quantity="other">%dm</item>
-</plurals>
+        <item quantity="one">1m</item>
+        <item quantity="other">%dm</item>
+    </plurals>
     <plurals name="format_time_h">
-	<item quantity="one">1o</item>
-	<item quantity="other">%do</item>
-</plurals>
+        <item quantity="one">1o</item>
+        <item quantity="other">%do</item>
+    </plurals>
     <plurals name="format_time_d">
-	<item quantity="one">1g</item>
-	<item quantity="other">%dg</item>
-</plurals>
+        <item quantity="one">1g</item>
+        <item quantity="other">%dg</item>
+    </plurals>
 
     <string name="room_participants_now">%1$s ora</string>
     <string name="room_participants_ago">%1$s %2$s fa</string>
@@ -1047,18 +1047,18 @@ Tieni presente che questa azione riavvierà l\'app e potrebbe richiedere del tem
     <string name="room_participants_invite_join_names_combined">%1$s %2$s</string>
 
     <plurals name="room_details_selected">
-	<item quantity="one">1 selezionato</item>
-	<item quantity="other">%d selezionati</item>
-</plurals>
+        <item quantity="one">1 selezionato</item>
+        <item quantity="other">%d selezionati</item>
+    </plurals>
     <plurals name="group_members">
-	<item quantity="one">1 membro</item>
-	<item quantity="other">%d membri</item>
-</plurals>
+        <item quantity="one">1 membro</item>
+        <item quantity="other">%d membri</item>
+    </plurals>
 
     <plurals name="group_rooms">
-	<item quantity="one">1 stanza</item>
-	<item quantity="other">%d stanze</item>
-</plurals>
+        <item quantity="one">1 stanza</item>
+        <item quantity="other">%d stanze</item>
+    </plurals>
     <string name="system_alerts_header">Avvisi di sistema</string>
 
     <string name="resource_limit_exceeded_title">Limite di risorse superato</string>
@@ -1075,14 +1075,14 @@ Tieni presente che questa azione riavvierà l\'app e potrebbe richiedere del tem
     <string name="resource_limit_soft_contact">Per favore %s per aumentare questo limite.</string>
     <string name="resource_limit_hard_contact">Per favore %s per continuare ad usare questo servizio.</string>
 
-<string name="dialog_title_error">Errore</string>
+    <string name="dialog_title_error">Errore</string>
 
     <string name="settings_lazy_loading_description">Aumenta le prestazioni caricando i membri della stanza solo alla prima visualizzazione</string>
     <string name="error_lazy_loading_not_supported_by_home_server">Il tuo server home non supporta ancora il caricamento posticipato dei membri delle stanze. Prova in seguito.</string>
 
     <string name="unknown_error">Spiacente, si è verificato un errore</string>
 
-<string name="settings_lazy_loading_title">Caricamento posticipato dei membri della stanza</string>
+    <string name="settings_lazy_loading_title">Caricamento posticipato dei membri della stanza</string>
     <string name="status_theme">Tema Status.im</string>
 
     <string name="room_sliding_menu_version_x">Versione %s</string>
@@ -1092,7 +1092,7 @@ Tieni presente che questa azione riavvierà l\'app e potrebbe richiedere del tem
     <string name="merged_events_expand">espandi</string>
     <string name="merged_events_collapse">collassa</string>
 
-<string name="settings_info_area_show">Mostra l\'area informazioni</string>
+    <string name="settings_info_area_show">Mostra l\'area informazioni</string>
     <string name="show_info_area_always">Sempre</string>
     <string name="show_info_area_messages_and_errors">Per messaggi ed errori</string>
     <string name="show_info_area_only_errors">Solo per gli errori</string>

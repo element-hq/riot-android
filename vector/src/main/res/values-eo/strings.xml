@@ -1,5 +1,6 @@
 <?xml version='1.0' encoding='UTF-8'?>
-<resources><string name="resources_language">eo</string>
+<resources>
+    <string name="resources_language">eo</string>
     <string name="light_theme">Hela haŭto</string>
     <string name="dark_theme">Malhela haŭto</string>
     <string name="black_them">Nigra haŭto</string>
@@ -65,4 +66,4 @@
     <string name="action_voice_call">Telefono</string>
     <string name="action_video_call">videotelefono</string>
     <string name="action_global_search">Universala serĉo</string>
-    </resources>
+</resources>

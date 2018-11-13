@@ -710,7 +710,7 @@ Dispositivos desconocidos:</string>
 
     <!-- historical -->
     <string name="historical_placeholder">Buscar históricos</string>
-<string name="settings_user_interface">Interfaz de usuario</string>
+    <string name="settings_user_interface">Interfaz de usuario</string>
     <string name="settings_interface_language">Idioma de la Interfaz</string>
     <string name="settings_select_language">Elige un idioma</string>
 
@@ -734,12 +734,12 @@ Dispositivos desconocidos:</string>
     <string name="normal">Normal</string>
     <string name="large">Grande</string>
     <string name="largest">Mayor</string>
-<string name="settings_theme">Tema</string>
+    <string name="settings_theme">Tema</string>
 
     <string name="tiny">Diminuto</string>
     <string name="larger">Más Grande</string>
     <string name="huge">Enorme</string>
-<string name="user_directory_header">Directorio de usuarios</string>
+    <string name="user_directory_header">Directorio de usuarios</string>
     <string name="people_search_user_directory">DIRECTORIO DE USUARIOS (%s)</string>
     <string name="light_theme">Tema Claro</string>
     <string name="dark_theme">Tema Oscuro</string>
@@ -806,7 +806,7 @@ Dispositivos desconocidos:</string>
 
     <string name="encrypted_message">Mensaje cifrado</string>
 
-<string name="title_activity_group_details">Detalles de comunidad</string>
+    <string name="title_activity_group_details">Detalles de comunidad</string>
 
     <string name="loading">Cargando…</string>
 
@@ -844,7 +844,7 @@ Dispositivos desconocidos:</string>
     <string name="room_settings_add_new_group">Nueva ID de comunidad (ej. +foo:matrix.org)</string>
     <string name="room_settings_invalid_group_format_dialog_title">ID de comunidad inválida</string>
     <string name="forget_room">Olvidar sala</string>
-<string name="rejoin">Volver a unirse</string>
+    <string name="rejoin">Volver a unirse</string>
     <string name="room_settings_invalid_group_format_dialog_body">\'%s\' no es una ID de comunidad válida</string>
 
 
@@ -878,50 +878,50 @@ Dispositivos desconocidos:</string>
     <string name="list_members">Listar miembros</string>
     <string name="room_sync_in_progress">Sincronizando…</string>
     <plurals name="room_title_members">
-	<item quantity="one">1 miembro</item>
-	<item quantity="other">%d miembros</item>
-</plurals>
+        <item quantity="one">1 miembro</item>
+        <item quantity="other">%d miembros</item>
+    </plurals>
     <plurals name="room_new_messages_notification">
-	<item quantity="one">1 mensaje nuevo</item>
-	<item quantity="other">%d mensajes nuevos</item>
-</plurals>
+        <item quantity="one">1 mensaje nuevo</item>
+        <item quantity="other">%d mensajes nuevos</item>
+    </plurals>
 
     <plurals name="directory_search_rooms">
-	<item quantity="one">1 sala</item>
-	<item quantity="other">%d salas</item>
-</plurals>
+        <item quantity="one">1 sala</item>
+        <item quantity="other">%d salas</item>
+    </plurals>
     <plurals name="directory_search_rooms_for">
-	<item quantity="one">%1$s sala encontrada para %2$s</item>
-	<item quantity="other">%1$s salas encontradas para %2$s</item>
-</plurals>
+        <item quantity="one">%1$s sala encontrada para %2$s</item>
+        <item quantity="other">%1$s salas encontradas para %2$s</item>
+    </plurals>
     <plurals name="notification_unread_notified_messages_in_room_rooms">
-	<item quantity="one">1 sala</item>
-	<item quantity="other">%d salas</item>
-</plurals>
+        <item quantity="one">1 sala</item>
+        <item quantity="other">%d salas</item>
+    </plurals>
     <plurals name="membership_changes">
-	<item quantity="one">1 cambio de membresía</item>
-	<item quantity="other">%d cambios de membresía</item>
-</plurals>
+        <item quantity="one">1 cambio de membresía</item>
+        <item quantity="other">%d cambios de membresía</item>
+    </plurals>
 
     <string name="open_chat_header">Abrir título</string>
     <plurals name="room_header_active_members_count">
-	<item quantity="one">1 miembro activo</item>
-	<item quantity="other">%d miembros activos</item>
-</plurals>
+        <item quantity="one">1 miembro activo</item>
+        <item quantity="other">%d miembros activos</item>
+    </plurals>
     <plurals name="notification_unread_notified_messages">
-	<item quantity="one">1 mensaje notificado sin leer</item>
-	<item quantity="other">%d mensajes notificados sin leer</item>
-</plurals>
+        <item quantity="one">1 mensaje notificado sin leer</item>
+        <item quantity="other">%d mensajes notificados sin leer</item>
+    </plurals>
     <plurals name="notification_unread_notified_messages_in_room_msgs">
-	<item quantity="one">1 mensaje notificado sin leer</item>
-	<item quantity="other">%d mensajes notificados sin leer</item>
-</plurals>
+        <item quantity="one">1 mensaje notificado sin leer</item>
+        <item quantity="other">%d mensajes notificados sin leer</item>
+    </plurals>
     <string name="notification_unread_notified_messages_in_room">%1$s en %2$s</string>
 
     <plurals name="active_widgets">
-	<item quantity="one">1 componente activo</item>
-	<item quantity="other">%d componentes activos</item>
-</plurals>
+        <item quantity="one">1 componente activo</item>
+        <item quantity="other">%d componentes activos</item>
+    </plurals>
 
     <!-- Widget Integration Manager -->
     <string name="title_activity_choose_sticker">Enviar una pegatina</string>
@@ -947,7 +947,7 @@ La visibilidad de mensajes en Matrix es similar a la del correo electrónico. Qu
     <string name="deactivate_account_prompt_password">Para continuar, ingresa tu contraseña por favor:</string>
     <string name="deactivate_account_submit">Desactivar Cuenta</string>
 
-<string name="settings_notification_privacy">Privacidad de notificaciones</string>
+    <string name="settings_notification_privacy">Privacidad de notificaciones</string>
     <string name="settings_notification_privacy_warning">Riot.im se ejecuta en segundo plano para mantener privado el contenido del mensaje de la notificación. Puedes cambiar esta opción para reducir el uso de la batería.</string>
     <string name="settings_notification_privacy_normal">Normal</string>
     <string name="settings_notification_privacy_power_saving">Opciones de Ahorro de Energía</string>
@@ -974,7 +974,7 @@ La visibilidad de mensajes en Matrix es similar a la del correo electrónico. Qu
     <string name="widget_integration_invalid_parameter">Un parámetro no es válido.</string>
     <string name="error_empty_field_your_password">Ingresa tu contraseña por favor.</string>
 
-<string name="settings_labs_enable_send_voice">Enviar mensaje de voz (requiere una aplicación de terceros para grabar mensajes de voz)</string>
+    <string name="settings_labs_enable_send_voice">Enviar mensaje de voz (requiere una aplicación de terceros para grabar mensajes de voz)</string>
 
     <string name="startup_notification_privacy_button_other">Elige otra opción</string>
 
@@ -1029,26 +1029,26 @@ Ten en cuenta que esta acción reiniciará la aplicación y puede tardar algo de
     <string name="room_tombstone_continuation_description">Esta sala es una continuación de otra conversación</string>
     <string name="room_tombstone_predecessor_link">Haz clic aquí para ver mensajes más antiguos</string>
 
-<string name="command_description_deop_user">Degrada al usuario con la ID dada</string>
+    <string name="command_description_deop_user">Degrada al usuario con la ID dada</string>
     <string name="system_alerts_header">Alertas de Sistema</string>
 
     <string name="missing_permissions_error">Debido a que faltan permisos, esta acción no es posible.</string>
     <plurals name="format_time_s">
-	<item quantity="one">1s</item>
-	<item quantity="other">%ds</item>
-</plurals>
+        <item quantity="one">1s</item>
+        <item quantity="other">%ds</item>
+    </plurals>
     <plurals name="format_time_m">
-	<item quantity="one">1m</item>
-	<item quantity="other">%dm</item>
-</plurals>
+        <item quantity="one">1m</item>
+        <item quantity="other">%dm</item>
+    </plurals>
     <plurals name="format_time_h">
-	<item quantity="one">1h</item>
-	<item quantity="other">%dh</item>
-</plurals>
+        <item quantity="one">1h</item>
+        <item quantity="other">%dh</item>
+    </plurals>
     <plurals name="format_time_d">
-	<item quantity="one">1d</item>
-	<item quantity="other">%dd</item>
-</plurals>
+        <item quantity="one">1d</item>
+        <item quantity="other">%dd</item>
+    </plurals>
 
     <string name="room_participants_now">%1$s ahora</string>
     <string name="room_participants_ago">hace %1$s %2$s</string>
@@ -1058,18 +1058,18 @@ Ten en cuenta que esta acción reiniciará la aplicación y puede tardar algo de
     <string name="room_participants_invite_join_names_combined">%1$s %2$s</string>
 
     <plurals name="room_details_selected">
-	<item quantity="one">1 seleccionado</item>
-	<item quantity="other">%d seleccionados</item>
-</plurals>
+        <item quantity="one">1 seleccionado</item>
+        <item quantity="other">%d seleccionados</item>
+    </plurals>
     <plurals name="group_members">
-	<item quantity="one">1 miembro</item>
-	<item quantity="other">%d miembros</item>
-</plurals>
+        <item quantity="one">1 miembro</item>
+        <item quantity="other">%d miembros</item>
+    </plurals>
 
     <plurals name="group_rooms">
-	<item quantity="one">1 sala</item>
-	<item quantity="other">%d salas</item>
-</plurals>
+        <item quantity="one">1 sala</item>
+        <item quantity="other">%d salas</item>
+    </plurals>
     <string name="resource_limit_exceeded_title">Límite de Recursos Excedido</string>
     <string name="resource_limit_contact_action">Contacta al Administrador</string>
 
@@ -1084,7 +1084,7 @@ Ten en cuenta que esta acción reiniciará la aplicación y puede tardar algo de
     <string name="resource_limit_soft_contact">Por favor, %s para aumentar este límite.</string>
     <string name="resource_limit_hard_contact">Por favor, %s para continuar utilizando este servicio.</string>
 
-<string name="status_theme">Tema de Status.im</string>
+    <string name="status_theme">Tema de Status.im</string>
 
     <string name="dialog_title_error">Error</string>
 

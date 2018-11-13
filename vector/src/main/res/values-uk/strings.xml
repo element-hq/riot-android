@@ -765,7 +765,7 @@
     <string name="command_error">Помилка виконання команди</string>
     <string name="unrecognized_command">Команду %s не розпізнано</string>
 
-<string name="title_activity_group_details">Відомості про спільноу</string>
+    <string name="title_activity_group_details">Відомості про спільноу</string>
 
     <string name="loading">Завантаження…</string>
 
@@ -788,11 +788,11 @@
     <string name="groups_list">Список груп</string>
 
     <plurals name="membership_changes">
-	<item quantity="one">%d зміна  членства</item>
-	<item quantity="few">%d зміни членства</item>
-	<item quantity="many">%d змін членства</item>
-	<item quantity="other"/>
-</plurals>
+        <item quantity="one">%d зміна  членства</item>
+        <item quantity="few">%d зміни членства</item>
+        <item quantity="many">%d змін членства</item>
+        <item quantity="other" />
+    </plurals>
 
     <string name="list_members">Список учасників</string>
     <string name="open_chat_header">Відкрити заголовок</string>
@@ -813,26 +813,26 @@
 Добавити зараз?</string>
 
     <plurals name="room_header_active_members_count">
-	<item quantity="one">%d активний участник</item>
-	<item quantity="few">%d активних участника</item>
-	<item quantity="many">%d активних участників</item>
-	<item quantity="other"/>
-</plurals>
+        <item quantity="one">%d активний участник</item>
+        <item quantity="few">%d активних участника</item>
+        <item quantity="many">%d активних участників</item>
+        <item quantity="other" />
+    </plurals>
     <plurals name="room_title_members">
-	<item quantity="one">%d участник</item>
-	<item quantity="few">%d участника</item>
-	<item quantity="many">%d участників</item>
-	<item quantity="other"/>
-</plurals>
+        <item quantity="one">%d участник</item>
+        <item quantity="few">%d участника</item>
+        <item quantity="many">%d участників</item>
+        <item quantity="other" />
+    </plurals>
     <string name="room_participants_kick_prompt_msg">Ви дійсно хотіли вигнати цього користувача із цього чата?</string>
     <string name="room_participants_ban_prompt_msg">Ви впевнені, що хочете забанити цього користувача в цьому чаті?</string>
 
     <plurals name="room_new_messages_notification">
-	<item quantity="one">%d нове повідомлення</item>
-	<item quantity="few">%d нових повідомленя</item>
-	<item quantity="many">%d нових повідомлень</item>
-	<item quantity="other"/>
-</plurals>
+        <item quantity="one">%d нове повідомлення</item>
+        <item quantity="few">%d нових повідомленя</item>
+        <item quantity="many">%d нових повідомлень</item>
+        <item quantity="other" />
+    </plurals>
 
     <string name="settings_notification_privacy_power_saving">"Варіанти  енергозабезпечення"</string>
     <string name="settings_notification_privacy_low_detail">Повідомлення без подробиць</string>
@@ -883,29 +883,29 @@
     <string name="send_bug_report_description_in_english">Якщо можливо, будь ласка, напишіть опис англійською.</string>
     <string name="go_on_with">продовжити з…</string>
     <plurals name="format_time_s">
-	<item quantity="one">%d сек.</item>
-	<item quantity="few">%d сек.</item>
-	<item quantity="many">%d сек.</item>
-	<item quantity="other"/>
-</plurals>
+        <item quantity="one">%d сек.</item>
+        <item quantity="few">%d сек.</item>
+        <item quantity="many">%d сек.</item>
+        <item quantity="other" />
+    </plurals>
     <plurals name="format_time_m">
-	<item quantity="one">%d хв.</item>
-	<item quantity="few">%d хв.</item>
-	<item quantity="many">%d хв.</item>
-	<item quantity="other"/>
-</plurals>
+        <item quantity="one">%d хв.</item>
+        <item quantity="few">%d хв.</item>
+        <item quantity="many">%d хв.</item>
+        <item quantity="other" />
+    </plurals>
     <plurals name="format_time_h">
-	<item quantity="one">%d год.</item>
-	<item quantity="few">%d год.</item>
-	<item quantity="many">%d год.</item>
-	<item quantity="other"/>
-</plurals>
+        <item quantity="one">%d год.</item>
+        <item quantity="few">%d год.</item>
+        <item quantity="many">%d год.</item>
+        <item quantity="other" />
+    </plurals>
     <plurals name="format_time_d">
-	<item quantity="one">%d день</item>
-	<item quantity="few">%d днів</item>
-	<item quantity="many">%d дні</item>
-	<item quantity="other"/>
-</plurals>
+        <item quantity="one">%d день</item>
+        <item quantity="few">%d днів</item>
+        <item quantity="many">%d дні</item>
+        <item quantity="other" />
+    </plurals>
 
     <string name="room_participants_now">Зараз %1$s</string>
     <string name="room_participants_ago">%1$s %2$s тому</string>
@@ -920,23 +920,23 @@
     <string name="room_message_placeholder_reply_to_encrypted">Надіслати зашифровану відповідь…</string>
     <string name="room_message_placeholder_reply_to_not_encrypted">Надіслати відповідь (незашифровано)…</string>
     <plurals name="room_details_selected">
-	<item quantity="one">%d обрано</item>
-	<item quantity="few">"%d  обрано"</item>
-	<item quantity="many">"%d  обрано"</item>
-	<item quantity="other"/>
-</plurals>
+        <item quantity="one">%d обрано</item>
+        <item quantity="few">"%d  обрано"</item>
+        <item quantity="many">"%d  обрано"</item>
+        <item quantity="other" />
+    </plurals>
     <plurals name="directory_search_rooms">
-	<item quantity="one">%d кімната</item>
-	<item quantity="few">%d кімнати</item>
-	<item quantity="many">%d кімнат</item>
-	<item quantity="other"/>
-</plurals>
+        <item quantity="one">%d кімната</item>
+        <item quantity="few">%d кімнати</item>
+        <item quantity="many">%d кімнат</item>
+        <item quantity="other" />
+    </plurals>
     <plurals name="directory_search_rooms_for">
-	<item quantity="one">%1$s кімнату знайдено для %2$s</item>
-	<item quantity="few">%1$s кімнати знайдено для %2$s</item>
-	<item quantity="many">%1$s кімнат знайдено для %2$s</item>
-	<item quantity="other"/>
-</plurals>
+        <item quantity="one">%1$s кімнату знайдено для %2$s</item>
+        <item quantity="few">%1$s кімнати знайдено для %2$s</item>
+        <item quantity="many">%1$s кімнат знайдено для %2$s</item>
+        <item quantity="other" />
+    </plurals>
     <string name="room_sliding_menu_version_x">Версія %s</string>
     <string name="settings_notification_privacy_warning">Riot.im запущено у фоновому режимі для забезпечення конфіденційності ваших сповіщень. Ви можете змінити цю опцію, щоб зменшити навантаження на батарею.</string>
     <string name="settings_notification_privacy_nosecure_message_content">• Сповіщення містять <b>метадані та дані повідомлення</b></string>
@@ -962,31 +962,31 @@
     <string name="lock_screen_hint">Набирайте тут…</string>
 
     <plurals name="notification_unread_notified_messages">
-	<item quantity="one">%d непрочитане сповіщення</item>
-	<item quantity="few">%d непрочитані сповіщення</item>
-	<item quantity="many">%d непрочитаних сповіщень</item>
-	<item quantity="other"/>
-</plurals>
+        <item quantity="one">%d непрочитане сповіщення</item>
+        <item quantity="few">%d непрочитані сповіщення</item>
+        <item quantity="many">%d непрочитаних сповіщень</item>
+        <item quantity="other" />
+    </plurals>
     <plurals name="notification_unread_notified_messages_in_room_msgs">
-	<item quantity="one">%d непрочитане сповіщення</item>
-	<item quantity="few">%d непрочитані сповіщення</item>
-	<item quantity="many">%d непрочитаних сповіщень</item>
-	<item quantity="other"/>
-</plurals>
+        <item quantity="one">%d непрочитане сповіщення</item>
+        <item quantity="few">%d непрочитані сповіщення</item>
+        <item quantity="many">%d непрочитаних сповіщень</item>
+        <item quantity="other" />
+    </plurals>
     <plurals name="notification_unread_notified_messages_in_room_rooms">
-	<item quantity="one">%d кімната</item>
-	<item quantity="few">%d кімнати</item>
-	<item quantity="many">%d кімнат</item>
-	<item quantity="other"/>
-</plurals>
+        <item quantity="one">%d кімната</item>
+        <item quantity="few">%d кімнати</item>
+        <item quantity="many">%d кімнат</item>
+        <item quantity="other" />
+    </plurals>
     <string name="notification_unread_notified_messages_in_room">%1$s у %2$s</string>
 
     <plurals name="active_widgets">
-	<item quantity="one">%d активний віджет</item>
-	<item quantity="few">%d активні віджети</item>
-	<item quantity="many">%d активних віджетів</item>
-	<item quantity="other"/>
-</plurals>
+        <item quantity="one">%d активний віджет</item>
+        <item quantity="few">%d активні віджети</item>
+        <item quantity="many">%d активних віджетів</item>
+        <item quantity="other" />
+    </plurals>
 
     <string name="widget_integration_missing_parameter">Пропущено обов’язковий параметр.</string>
     <string name="widget_integration_invalid_parameter">Недійсний параметр.</string>
@@ -1028,18 +1028,18 @@
     <string name="filter_group_rooms">Фільтр кімнат групи</string>
 
     <plurals name="group_members">
-	<item quantity="one">%d учасник</item>
-	<item quantity="few">%d учасника</item>
-	<item quantity="many">%d учасників</item>
-	<item quantity="other"/>
-</plurals>
+        <item quantity="one">%d учасник</item>
+        <item quantity="few">%d учасника</item>
+        <item quantity="many">%d учасників</item>
+        <item quantity="other" />
+    </plurals>
 
     <plurals name="group_rooms">
-	<item quantity="one">%d кімната</item>
-	<item quantity="few">%d кімнати</item>
-	<item quantity="many">%d кімнат</item>
-	<item quantity="other"/>
-</plurals>
+        <item quantity="one">%d кімната</item>
+        <item quantity="few">%d кімнати</item>
+        <item quantity="many">%d кімнат</item>
+        <item quantity="other" />
+    </plurals>
     <string name="group_no_long_description">Адміністратор спільноти не вказав для неї детальної інформації.</string>
 
     <string name="has_been_kicked">%2$s Вас викинув з %1$s</string>
