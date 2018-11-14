@@ -987,7 +987,7 @@ Na ndjeni për belanë.</string>
     <string name="ssl_cert_new_account_expl">Nëse përgjegjësi i shërbyesit ka thënë se kjo është e pritshme, sigurohuni që shenjat e gishtave më poshtë përputhen me shenjat e gishtave të furnizuara prej tyre.</string>
     <string name="ssl_unexpected_existing_expl">Dëshmia ka ndryshuar nga ajo që qe besuar nga telefoni juaj. Kjo është SHUMË E PAZAKONTË. Këshillohet që TË MOS E PRANONI këtë dëshmi të re.</string>
     <string name="ssl_expected_existing_expl">Dëshmia ka ndryshuar nga një e besueshme dikur në një që nuk besohet. Shërbyesi mund të ketë rinovuar dëshminë e tij. Lidhuni me përgjegjësin e shërbyesit për shenjat e pritshme të gishtave.</string>
-    <string name="ssl_only_accept">Pranojeni dëshminë vetëm nëse përgjegjësi i i shërbyesit ka publikuar shenja gishtave që përputhen me ato më sipër.</string>
+    <string name="ssl_only_accept">Pranojeni dëshminë vetëm nëse përgjegjësi i i shërbyesit ka publikuar shenja gishtash që përputhen me ato më sipër.</string>
 
     <string name="settings_app_info_link_summary">Shfaq te rregullimet e sistemit të dhëna të aplikacionit.</string>
 
