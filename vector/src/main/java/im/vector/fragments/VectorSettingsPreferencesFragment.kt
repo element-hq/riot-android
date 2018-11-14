@@ -208,6 +208,12 @@ class VectorSettingsPreferencesFragment : PreferenceFragment(), SharedPreference
     private val mRingtonePreference by lazy {
         findPreference(PreferencesManager.SETTINGS_NOTIFICATION_RINGTONE_SELECTION_PREFERENCE_KEY)
     }
+    private val mUseRiotCallRingtonePreference by lazy {
+        findPreference(PreferencesManager.SETTINGS_CALL_RINGTONE_USE_RIOT_PREFERENCE_KEY) as CheckBoxPreference
+    }
+    private val mCallRingtonePreference by lazy {
+        findPreference(PreferencesManager.SETTINGS_CALL_RINGTONE_URI_PREFERENCE_KEY)
+    }
     private val notificationsSettingsCategory by lazy {
         findPreference(PreferencesManager.SETTINGS_NOTIFICATIONS_KEY) as PreferenceCategory
     }
@@ -778,6 +784,20 @@ class VectorSettingsPreferencesFragment : PreferenceFragment(), SharedPreference
             }
         }
 
+        // Incoming call sounds
+        mUseRiotCallRingtonePreference.onPreferenceClickListener = Preference.OnPreferenceClickListener { _ ->
+            setUseRiotDefaultRingtone(activity, mUseRiotCallRingtonePreference.isChecked)
+            false
+        }
+
+        mCallRingtonePreference.let {
+            it.summary = getCallRingtoneName(activity)
+            it.onPreferenceClickListener = Preference.OnPreferenceClickListener { _ ->
+                displayRingtonePicker()
+                false
+            }
+        }
+
         // clear cache
         findPreference(PreferencesManager.SETTINGS_CLEAR_CACHE_PREFERENCE_KEY).let {
             MXSession.getApplicationSizeCaches(activity, object : SimpleApiCallback<Long>() {
@@ -1271,6 +1291,17 @@ class VectorSettingsPreferencesFragment : PreferenceFragment(), SharedPreference
         }
     }
 
+    private fun displayRingtonePicker() {
+        val intent = Intent(RingtoneManager.ACTION_RINGTONE_PICKER).apply {
+            putExtra(RingtoneManager.EXTRA_RINGTONE_TITLE, getString(R.string.settings_call_ringtone_dialog_title))
+            putExtra(RingtoneManager.EXTRA_RINGTONE_SHOW_SILENT, false)
+            putExtra(RingtoneManager.EXTRA_RINGTONE_SHOW_DEFAULT, true)
+            putExtra(RingtoneManager.EXTRA_RINGTONE_TYPE, RingtoneManager.TYPE_RINGTONE)
+            putExtra(RingtoneManager.EXTRA_RINGTONE_EXISTING_URI, getCallRingtoneUri(activity))
+        }
+        startActivityForResult(intent, REQUEST_CALL_RINGTONE)
+    }
+
     /**
      * Update the avatar.
      */
@@ -1324,6 +1355,13 @@ class VectorSettingsPreferencesFragment : PreferenceFragment(), SharedPreference
                     }
 
                     refreshNotificationRingTone()
+                }
+                REQUEST_CALL_RINGTONE -> {
+                    val callRingtoneUri: Uri? = data?.getParcelableExtra(RingtoneManager.EXTRA_RINGTONE_PICKED_URI)
+                    if (callRingtoneUri != null) {
+                        setCallRingtoneUri(activity, callRingtoneUri)
+                        mCallRingtonePreference.summary = getCallRingtoneName(activity)
+                    }
                 }
                 REQUEST_E2E_FILE_REQUEST_CODE -> importKeys(data)
                 REQUEST_NEW_PHONE_NUMBER -> refreshPhoneNumbersList()
@@ -2812,6 +2850,7 @@ class VectorSettingsPreferencesFragment : PreferenceFragment(), SharedPreference
         private const val REQUEST_PHONEBOOK_COUNTRY = 789
         private const val REQUEST_LOCALE = 777
         private const val REQUEST_NOTIFICATION_RINGTONE = 888
+        private const val REQUEST_CALL_RINGTONE = 999
 
         // rule Id <-> preference name
         private var mPushesRuleByResourceId = mapOf(
