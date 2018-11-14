@@ -460,7 +460,7 @@ Tieni presente che questa azione riavvierà l\'app e potrebbe richiedere del tem
     <string name="settings_add_email_address">Aggiungi indirizzo email</string>
     <string name="settings_phone_number">Telefono</string>
     <string name="settings_add_phone_number">Aggiungi numero di telefono</string>
-    <string name="settings_app_info_link_summary">Informazioni di sistema per l\'applicazione</string>
+    <string name="settings_app_info_link_summary">Mostra le informazioni dell\'app nelle impostazioni di sistema.</string>
     <string name="settings_app_info_link_title">Informazioni applicazione</string>
 
     <string name="settings_enable_all_notif">Abilita notifiche per questo account</string>
@@ -477,7 +477,7 @@ Tieni presente che questa azione riavvierà l\'app e potrebbe richiedere del tem
     <string name="settings_background_sync">Sincronizzazione in sottofondo</string>
     <string name="settings_enable_background_sync">Abilita sync in sottofondo</string>
     <string name="settings_set_sync_timeout">Attesa per una richiesta di sync</string>
-    <string name="settings_set_sync_delay">Pausa tra due richieste di sync</string>
+    <string name="settings_set_sync_delay">Attesa prima di una nuova richiesta</string>
     <string name="settings_second">secondo</string>
     <string name="settings_seconds">secondi</string>
 
@@ -505,7 +505,7 @@ Tieni presente che questa azione riavvierà l\'app e potrebbe richiedere del tem
     <string name="settings_pin_missed_notifications">Segna le stanze con notifiche perse</string>
     <string name="settings_pin_unread_messages">Segna le stanze con messaggi non letti</string>
     <string name="settings_devices_list">Dispositivi</string>
-    <string name="settings_always_show_timestamps">Mostra sempre data e ora dei messaggi</string>
+    <string name="settings_always_show_timestamps">Mostra data e ora di tutti i messaggi</string>
     <string name="settings_data_save_mode">Modalità risparmio banda</string>
 
     <string name="devices_details_dialog_title">Dettagli dispositivo</string>
@@ -524,15 +524,15 @@ Tieni presente che questa azione riavvierà l\'app e potrebbe richiedere del tem
     <string name="settings_identity_server">Server identità</string>
 
     <string name="settings_user_interface">Interfaccia utente</string>
-    <string name="settings_interface_language">Lingua interfaccia</string>
+    <string name="settings_interface_language">Lingua</string>
     <string name="settings_select_language">Scegli una lingua</string>
 
     <string name="account_email_validation_title">In attesa di verifica</string>
     <string name="account_email_validation_message">Controlla la tua email e clicca sul link lì contenuto. Fatto questo, clicca su Continua.</string>
-    <string name="account_email_validation_error">Impossibile verificare l\'indirizzo email. Controlla la tua email e clicca sul link lì contenuto. Fatto questo, clicca su Continua</string>
-    <string name="account_email_already_used_error">Questo indirizzo email è già in uso</string>
-    <string name="account_email_not_found_error">Invio email fallito: l\'indirizzo email non è stato trovato</string>
-    <string name="account_phone_number_already_used_error">Questo numero di telefono è già in uso</string>
+    <string name="account_email_validation_error">Impossibile verificare l\'indirizzo email. Controlla la tua email e clicca sul link lì contenuto. Fatto questo, clicca su continua.</string>
+    <string name="account_email_already_used_error">Questo indirizzo email è già in uso.</string>
+    <string name="account_email_not_found_error">Questo indirizzo email non è stato trovato.</string>
+    <string name="account_phone_number_already_used_error">Questo numero di telefono è già in uso.</string>
 
     <string name="settings_change_password">Cambia password</string>
     <string name="settings_old_password">Vecchia password</string>
@@ -579,7 +579,7 @@ Tieni presente che questa azione riavvierà l\'app e potrebbe richiedere del tem
     <string name="room_settings_tag_pref_entry_favourite">Preferito</string>
     <string name="room_settings_tag_pref_entry_low_priority">Bassa priorità</string>
     <string name="room_settings_tag_pref_entry_none">Niente</string>
-    <string name="room_settings_tag_pref_no_tag">non etichettato</string>
+    <string name="room_settings_tag_pref_no_tag">Non etichettato</string>
 
     <!-- room settings : access and visibility -->
     <string name="room_settings_category_access_visibility_title">Accesso e visibilità</string>
@@ -683,7 +683,7 @@ Attenzione: questo file può essere eliminato se l\'applicazione viene disinstal
     <string name="encryption_import_room_keys_summary">Importa le chiavi da un file locale</string>
     <string name="encryption_import_import">Importa</string>
     <string name="encryption_never_send_to_unverified_devices_title">Cripta solo per i dispositivi verificati</string>
-    <string name="encryption_never_send_to_unverified_devices_summary">Non inviare mai da questo dispositivo messaggi criptati a dispositivi non verificati</string>
+    <string name="encryption_never_send_to_unverified_devices_summary">Non inviare mai da questo dispositivo messaggi criptati a dispositivi non verificati.</string>
 
     <string name="encryption_information_not_verified">NON verificato</string>
     <string name="encryption_information_verified">Verificato</string>
@@ -737,7 +737,7 @@ In futuro il processo di verifica sarà più sofisticato.</string>
 
     <string name="notification_sync_in_progress">Sincronizzazione</string>
     <string name="settings_notification_ringtone">Suono notifiche</string>
-    <string name="settings_12_24_timestamps">Mostra gli orari in formato 12 ore (es. 2:30pm)</string>
+    <string name="settings_12_24_timestamps">Mostra gli orari in formato 12 ore</string>
     <string name="widget_no_power_to_manage">Hai bisogno dei permessi per gestire i widget in questa stanza</string>
     <string name="event_formatter_widget_added">%1$s aggiunto da %2$s</string>
     <string name="event_formatter_widget_removed">%1$s rimosso da %2$s</string>
@@ -823,8 +823,8 @@ In futuro il processo di verifica sarà più sofisticato.</string>
     <string name="room_settings_mute">Silenzioso</string>
     <string name="room_settings_add_homescreen_shortcut">Aggiungi scorciatoia su schermata iniziale</string>
 
-    <string name="settings_inline_url_preview">Attiva l\'anteprima degli URL in via predefinita</string>
-    <string name="settings_vibrate_on_mention">Vibra quando ti citano</string>
+    <string name="settings_inline_url_preview">Anteprima degli URL in linea</string>
+    <string name="settings_vibrate_on_mention">Vibra quando menzionano un utente</string>
 
     <string name="settings_analytics">Statistiche</string>
 
@@ -932,7 +932,7 @@ In futuro il processo di verifica sarà più sofisticato.</string>
     <string name="settings_notification_privacy_message_content_not_shown">• Le notifiche <b>non mostreranno il contenuto del messaggio</b></string>
 
     <string name="startup_notification_privacy_title">Privacy notifiche</string>
-    <string name="startup_notification_privacy_message">Riot può funzionare in sottofondo per gestire le tue notifiche in modo sicuro e privato (ciò può influenzare la durata della batteria).</string>
+    <string name="startup_notification_privacy_message">Riot può funzionare in sottofondo per gestire le tue notifiche in modo sicuro e privato. Ciò può influenzare la durata della batteria.</string>
     <string name="startup_notification_privacy_button_grant">Concedi l\'autorizzazione</string>
     <string name="startup_notification_privacy_button_other">Scegli un\'altra opzione</string>
 
@@ -985,7 +985,7 @@ La visibilità dei messaggi in Matrix è simile alle email. \"Dimenticare i tuoi
     <string name="go_on_with">prosegui con…</string>
     <string name="error_no_external_application_found">Spiacenti, ma non è stata trovata alcuna applicazione esterna per completare l\'azione.</string>
 
-    <string name="settings_labs_enable_send_voice">Invia messaggio vocale (applicazione di terze parti richiesta per registrare i messaggi vocali)</string>
+    <string name="settings_labs_enable_send_voice">Invia messaggi vocali</string>
 
     <string name="group_details_people">Persone</string>
     <string name="error_empty_field_your_password">Per favore, inserisci la tua password.</string>
@@ -1076,7 +1076,7 @@ Tieni presente che questa azione riavvierà l\'app e potrebbe richiedere del tem
 
     <string name="dialog_title_error">Errore</string>
 
-    <string name="settings_lazy_loading_description">Aumenta le prestazioni caricando i membri della stanza solo alla prima visualizzazione</string>
+    <string name="settings_lazy_loading_description">Aumenta le prestazioni caricando i membri della stanza solo alla prima visualizzazione.</string>
     <string name="error_lazy_loading_not_supported_by_home_server">Il tuo server home non supporta ancora il caricamento posticipato dei membri delle stanze. Prova in seguito.</string>
 
     <string name="unknown_error">Spiacente, si è verificato un errore</string>
@@ -1101,4 +1101,31 @@ Tieni presente che questa azione riavvierà l\'app e potrebbe richiedere del tem
     <string name="plus_x">+%d</string>
     <string name="x_plus">%d+</string>
 
-</resources>
+<string name="call_anyway">Chiama comunque</string>
+    <string name="room_participants_action_kick">Butta fuori</string>
+    <plurals name="room_participants_kick_prompt_msg">
+	<item quantity="one">Sei sicuro di voler buttare fuori questo utente dalla chat?</item>
+	<item quantity="other">Sei sicuro di voler buttare fuori questi utenti dalla chat?</item>
+</plurals>
+    <string name="reason_hint">Motivo</string>
+
+    <string name="settings_inline_url_preview_summary">Visualizza anteprima dei link all\'interno della chat quando il tuo server home supporta questa funzione.</string>
+    <string name="settings_send_typing_notifs">Invia notifiche di digitazione</string>
+    <string name="settings_send_typing_notifs_summary">Fai sapere agli altri utenti che stai scrivendo.</string>
+    <string name="settings_send_markdown">Formattazione markdown</string>
+    <string name="settings_send_markdown_summary">Formatta i messaggi utilizzando la sintassi markdown prima dell\'invio. Ciò consente una formattazione avanzata come l\'uso degli asterischi per visualizzare il testo in corsivo.</string>
+    <string name="settings_show_read_receipts">Mostra le conferme di lettura</string>
+    <string name="settings_show_read_receipts_summary">Clicca sulle conferme di lettura per un elenco dettagliato.</string>
+    <string name="settings_show_join_leave_messages">Mostra eventi di ingresso ed uscita partecipanti</string>
+    <string name="settings_show_join_leave_messages_summary">Non si applica ad inviti, butta fuori ed espulsioni.</string>
+    <string name="settings_show_avatar_display_name_changes_messages">Mostra eventi degli account</string>
+    <string name="settings_show_avatar_display_name_changes_messages_summary">Includi cambiamenti dell\'avatar e del nome visualizzato.</string>
+    <string name="settings_password">Password</string>
+    <string name="settings_labs_native_camera_summary">Avvia la fotocamera di sistema invece dello schermo della fotocamera personalizzata.</string>
+    <string name="settings_labs_enable_send_voice_summary">Questa opzione richiede un\'applicazione di terze parti per registrare i messaggi.</string>
+
+    <string name="command_problem_with_parameters">Il comando \"%s\" necessita di più parametri, o alcuni parametri non sono validi.</string>
+    <string name="markdown_has_been_enabled">Markdown è stato abilitato.</string>
+    <string name="markdown_has_been_disabled">Markdown è stato disabilitato.</string>
+
+    </resources>
