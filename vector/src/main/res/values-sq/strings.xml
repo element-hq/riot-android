@@ -730,4 +730,110 @@
     <string name="plus_x">+%d</string>
     <string name="x_plus">%d+</string>
 
-</resources>
+<string name="resources_language">sq</string>
+    <string name="resources_country_code">ShBA</string>
+
+    <string name="notification_listening_for_events">Po përgjohet për akte</string>
+    <string name="ongoing_conference_call">Thirrje konference që po zhvillohet. Merrni pjesë me zë ose video.</string>
+    <string name="missing_permissions_to_start_conf_call">Ju duhen leje për ftesa, që të nisni një konferencë në këtë dhomë</string>
+    <string name="bottom_action_favourites">Të parapëlqyer</string>
+    <string name="no_contact_access_placeholder">S’e lejuat Riot-i të hyjë në kontaktet tuaja vendore</string>
+    <string name="send_bug_report_description">Ju lutemi, përshkruajeni të metën. Ç’po bënit? Ç’prisnit të ndodhte? Ç’ndodhi në fakt?</string>
+    <string name="send_bug_report_alert_message">Duket se po përplasni telefonin nga inati. Do të donit të parashtroni një njoftim të mete?</string>
+    <string name="send_bug_report_app_crashed">Herën e fundit aplikacioni u vithis. Do të donit të parashtroni një raport vithisje?</string>
+    <string name="send_bug_report_failed">Dështoi dërgimi i njoftimit të të metës (%s)</string>
+    <string name="login">Hyni</string>
+    <string name="logout">Dilni</string>
+    <string name="option_send_voice">Dërgo mesazh zanor</string>
+
+    <string name="auth_add_email_message">Shtoni te llogaria juaj një adresë email, për t’u dhënë mundësinë përdoruesve t’ju zbulojnë dhe që t’ju lejojë të ricaktoni fjalëkalimin.</string>
+    <string name="auth_add_email_phone_message">Shtoni te llogaria juaj një adresë email dhe/ose një numër telefoni, për t’u dhënë mundësinë përdoruesve t’ju zbulojnë.
+
+Adresa email do t’ju lejojë edhe të ricaktoni fjalëkalimin tuaj.</string>
+    <string name="auth_add_email_and_phone_message">Shtoni te llogaria juaj një adresë email dhe një numër telefoni, për t’u dhënë mundësinë përdoruesve t’ju zbulojnë.
+
+Adresa email do t’ju lejojë edhe të ricaktoni fjalëkalimin tuaj.</string>
+    <string name="auth_threepid_warning_message">Regjistrimi me email dhe me numër telefoni njëherazi nuk mbulohet ende, deri sa të ketë API. Do të merret parasysh vetëm numri i telefonit.
+
+Email-in tuaj mund ta shtoni te profili juaj, te rregullimet.</string>
+    <string name="auth_reset_password_error_unauthorized">Verifikimi i adresës email dështoi: sigurohuni se keni klikuar lidhjen te email-i</string>
+    <string name="auth_reset_password_success_message">Fjalëkalimi juaj u ri caktua.
+
+Është bërë dalja juaj nga llogaria në krejt pajisjet dhe s’do të merrni më njoftime push. Për riaktivizim të njoftimeve, ribëni hyrjen në çdo pajisje.</string>
+
+    <string name="e2e_re_request_encryption_key_dialog_content">Ju lutemi, niseni Riot-in në një tjetër pajisje që mundet të shfshehtëzojë mesazhin, që kështu të mund të dërgojë kyçet te kjo pajisje.</string>
+
+    <string name="call_error_ice_failed">Lidhja e Medias Dështoi</string>
+    <string name="media_picker_cannot_record_video">S’regjistrohet dot video</string>
+
+    <string name="room_preview_unlinked_email_warning">Kjo ftesë i qe dërguar %s, që s’është i përshoqëruar me këtë llogari.
+Mund të doni të hyni me një llogari tjetër, ose ta shtoni këtë email te kjo llogari.</string>
+    <string name="room_preview_try_join_an_unknown_room">Po përpiqeni të hyni në %s. Do të donit të bëheni pjesë, që të mundni të merrni pjesë te diskutimi?</string>
+    <string name="room_preview_room_interactions_disabled">Kjo është një paraparje e kësaj dhome. Ndërveprimet në dhomë janë çaktivizuar.</string>
+
+    <string name="room_e2e_alert_message">Fshehtëzimi skaj-më-skaj është në fazën beta dhe mund të mos jetë i qëndrueshëm.
+
+S’duhet t’i zini ende besë për sigurim të dhënash.
+
+Pajisjet s’do të jenë ende në gjendje të shfshehtëzojnë historik nga periudha përpara se të merrnin pjesë te dhomë.
+
+Mesazhet e fshehtëzuar s’do të jenë të dukshëm në klientë që nuk sendërtojnë ende fshehtëzimin.</string>
+
+    <string name="room_many_users_are_typing">%1$s &amp; %2$s &amp; të tjerë po shtypin…</string>
+    <string name="room_unsent_messages_notification">Mesazhet nuk u dërguan. %1$s ose %2$s tani?</string>
+    <string name="malformed_id">ID e keqformuar. Duhet të jetë një adresë email ose ID Matrix, si \'@localpart:domain\'</string>
+    <string name="room_settings_de_prioritize">Hiqi përparësinë</string>
+    <string name="settings_notification_privacy">Privatësi njoftimesh</string>
+    <string name="settings_notification_privacy_low_detail">Njoftime me pak hollësi</string>
+    <string name="settings_olm_version">version olm</string>
+    <string name="settings_pin_missed_notifications">Fikso dhomat me njoftime të humbura</string>
+    <string name="room_settings_tag_pref_no_tag">E paetiketuar</string>
+
+    <string name="room_settings_category_access_visibility_title">Hyrje dhe dukshmëri</string>
+    <string name="room_settings_read_history_entry_members_only_option_time_shared">Vetëm anëtarët (që nga çasti i përzgjedhjes së kësaj mundësie)</string>
+    <string name="room_settings_room_access_warning">Që të lidhni një dhomë, ajo duhet të ketë një adresë.</string>
+    <string name="room_settings_room_access_entry_anyone_with_link_apart_guest">Cilido që di lidhjen e dhomës, hiq vizitorët</string>
+    <string name="room_settings_room_access_entry_anyone_with_link_including_guest">Cilido që di lidhjen e dhomës, përfshi vizitorë</string>
+
+    <string name="room_settings_add_new_group">ID bashkësie të re (p.sh., +foo:matrix.org)</string>
+    <string name="room_settings_addresses_e2e_encryption_warning">Aktivizo fshehtëzim 
+(kujdes: s’mund të çaktizohet më!)</string>
+    <string name="room_settings_addresses_e2e_prompt_message">Fshehtëzimi skaj-më-skaj është në fazën beta dhe mund të mos jetë i qëndrueshëm.
+
+S’duhet t’i zini ende besë për sigurim të dhënash.
+
+Pajisjet s’do të jenë ende në gjendje të shfshehtëzojnë historik nga periudha përpara se të merrnin pjesë te dhomë.
+
+Pasi të jetë aktivizuar fshehtëzimi për një dhomë, s’mund të çaktivizohet më (hëpërhë).
+
+Mesazhet e fshehtëzuar s’do të jenë të dukshëm në klientë që nuk sendërtojnë ende fshehtëzimin.</string>
+
+    <string name="e2e_enabling_on_app_update">Riot tani mbulon fshehtëzim skaj-më-skaj, por lypset të ribëni hyrjen që ta aktivizoni.
+
+Mund ta bëni tani ose më vonë, që prej rregullimeve të aplikacionit.</string>
+
+    <string name="unknown_devices_alert_message">Kjo dhomë përmban pajisje të panjohura që s’janë verifikuar.
+Kjo do të thotë se nuk ka garanci se pajisjet u përkasin përdoruesve që pretendojnë se u përkasin.
+Përpara se të vazhdoni, këshillojmë që të kaloni në proces verifikimi çdo pajisje, por mund të ridërgoni mesazhin pa verifikuar gjë, nëse parapëlqeni kështu.
+Pajisje të panjohura:</string>
+
+    <string name="directory_server_type_homeserver">Shtypni një shërbyes home që të paraqiten dhoma publike prej tij</string>
+    <string name="widget_no_power_to_manage">Ju duhen leje për të administruar widget-e në këtë dhomë</string>
+    <string name="settings_labs_native_camera">Përdor kamerë të brendshme</string>
+    <string name="you_added_a_new_device">Shtuat një pajisje të re \'%s\', e cila po kërkon kyçe fshehtëzimi.</string>
+    <string name="your_unverified_device_requesting">Pajisja juaj e paverifikuar \'%s\' po kërkon kyçe fshehtëzimi.</string>
+    <string name="command_description_deop_user">I heq cilësinë e operatorit përdoruesit me ID-në e dhënë</string>
+    <string name="dialog_user_consent_content">Që të vazhdohet të përdoret shërbyesi home %1$s, duhet të shqyrtoni dhe pajtoheni me termat dhe kushtet.</string>
+    <string name="room_tombstone_versioned_description">Kjo dhomë është zëvendësuar dhe s’është më aktive</string>
+    <string name="room_tombstone_continuation_description">Kjo dhomë është një vazhdim i një bisede tjetër</string>
+    <string name="resource_limit_hard_default">Ky shërbyes home ka tejkaluar një nga kufijtë mbi burimet.</string>
+
+    <string name="resource_limit_hard_mau">Ky shërbyes home ka tejkaluar kufirin Përdorues Aktivë Mujorë.</string>
+
+    <string name="resource_limit_soft_contact">Ju lutemi, %s për ta zmadhuar këtë kufi.</string>
+    <string name="resource_limit_hard_contact">Ju lutemi, %s që të vazhdoni përdorimin e këtij shërbimi.</string>
+
+    <string name="settings_lazy_loading_title"><em>Lazy-load</em> anëtarët e dhomave</string>
+    <string name="error_lazy_loading_not_supported_by_home_server">Shërbyesi juaj nuk e mbulon ende <em>lazy loading</em> e anëtarëve të dhomës. Provoni më vonë.</string>
+
+    </resources>
