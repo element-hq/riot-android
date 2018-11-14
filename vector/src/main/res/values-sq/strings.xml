@@ -26,7 +26,7 @@
     <string name="resend">Ridërgoje</string>
     <string name="quote">Citim</string>
     <string name="download">Shkarkoje</string>
-    <string name="share">Ndaje</string>
+    <string name="share">Ndaje me të tjerë</string>
     <string name="speak">Flisni</string>
     <string name="clear">Pastroje</string>
     <string name="later">Më vonë</string>
@@ -408,7 +408,7 @@
 
     <string name="settings_background_sync">Njëkohësim në prapaskenë</string>
     <string name="settings_enable_background_sync">Aktivizo njëkohësim në prapaskenë</string>
-    <string name="settings_set_sync_timeout">Mbarim Kohe për kërkesë njëkohësimi</string>
+    <string name="settings_set_sync_timeout">Mbarim kohe për kërkesë njëkohësimi</string>
     <string name="settings_set_sync_delay">Vonesë mes çdo kërkese</string>
     <string name="settings_second">sekondë</string>
     <string name="settings_seconds">sekonda</string>
@@ -440,7 +440,7 @@
     <string name="settings_always_show_timestamps">Shfaq vula kohore për krejt mesazhet</string>
     <string name="settings_12_24_timestamps">Vulat kohore shfaqi në formatin 12-orësh</string>
     <string name="settings_show_read_receipts">Shfaq dëftesash leximi</string>
-    <string name="settings_show_read_receipts_summary">Për një listë të hollësishme klikoni mbi dëftesa leximi.</string>
+    <string name="settings_show_read_receipts_summary">Për një listë të hollësishme, klikoni mbi dëftesa leximi.</string>
     <string name="settings_show_join_leave_messages">Shfaq akte hyrjesh dhe daljesh</string>
     <string name="settings_show_avatar_display_name_changes_messages">Shfaq akte llogarie</string>
     <string name="settings_show_avatar_display_name_changes_messages_summary">Përfshin ndryshime avatari dhe emri në ekran.</string>
@@ -497,7 +497,7 @@
     <string name="settings_select_country">Zgjidhni një vend</string>
 
     <string name="settings_phone_number_country_label">Vend</string>
-    <string name="settings_phone_number_country_error">Ju lutem, zgjidhni një vend</string>
+    <string name="settings_phone_number_country_error">Ju lutemi, zgjidhni një vend</string>
     <string name="settings_phone_number_label">Numër telefoni</string>
     <string name="settings_phone_number_error">Numër telefoni i pavlefshëm për vendin e përzgjedhur</string>
     <string name="settings_phone_number_verification">Verifikim telefoni</string>
@@ -643,7 +643,7 @@
     <string name="room_add_matrix_apps">Shtoni aplikacione Matrix</string>
     <string name="settings_labs_enable_send_voice">Dërgo mesazhe zanorë</string>
     <string name="start_verification">Fillo verifikimin</string>
-    <string name="share_without_verifying">Ndaje pa e verifikuar</string>
+    <string name="share_without_verifying">Ndajeni me të tjerë pa e verifikuar</string>
     <string name="ignore_request">Shpërfille kërkesën</string>
 
     <string name="conference_call_warning_title">Kujdes!</string>
@@ -978,4 +978,44 @@ Dukshmëria e mesazheve në Matrix është e ngjashme me atë në email. Harrimi
     <string name="deactivate_account_delete_checkbox">Të lutem, harro krejt mesazhet që kamë dërguar, kur të çaktivizohet llogaria ime (Kujdes: kjo do të bëjë që përdorues të ardhshëm të shohin një pamje jo të plotë të bisedave)</string>
     <string name="resource_limit_soft_default">Ky shërbyes home ka tejkaluar një nga kufijtë mbi burimet, ndaj <b>disa përdorues s’do të jenë në gjendje të bëjnë hyrjen</b>.</string>
     <string name="resource_limit_soft_mau"> Ky shërbyes home ka tejkaluar kufirin Përdorues Aktivë Mujorë, ndaj <b>disa përdorues s’do të jenë në gjendje të bëjnë hyrjen</b>.</string>
+    <string name="send_bug_report_logs_description">Që të mund të diagnostikohen probleme, regjistra prej këtij klienti do të dërgohen tok me këtë njoftim të metash. Ky njoftim të metash, përfshi regjistrat dhe foton e ekranit, nuk do të jenë të dukshëm publikisht. Nëse do të parapëlqenit të dërgohej vetëm teksti më sipër, ju lutemi, hiqjani shenjën kutizës:</string>
+    <string name="e2e_need_log_in_again">Që të prodhohen kyçe fshehtëzimi skaj-më-skaj për këtë pajisje, lypset të ribëni hyrjen dhe të parashtroni kyçin publik te shërbyesi juaj homë.
+Kjo duhet vetëm një herë.
+Na ndjeni për belanë.</string>
+
+    <string name="ssl_cert_not_trust">Kjo mund të ishte shenjë se dikush po përgjon me dashakeqësi trafikun tuaj, ose se telefoni juaj nuk i beson dëshmisë së furnizuar nga shërbyesi i largët.</string>
+    <string name="ssl_cert_new_account_expl">Nëse përgjegjësi i shërbyesit ka thënë se kjo është e pritshme, sigurohuni që shenjat e gishtave më poshtë përputhen me shenjat e gishtave të furnizuara prej tyre.</string>
+    <string name="ssl_unexpected_existing_expl">Dëshmia ka ndryshuar nga ajo që qe besuar nga telefoni juaj. Kjo është SHUMË E PAZAKONTË. Këshillohet që TË MOS E PRANONI këtë dëshmi të re.</string>
+    <string name="ssl_expected_existing_expl">Dëshmia ka ndryshuar nga një e besueshme dikur në një që nuk besohet. Shërbyesi mund të ketë rinovuar dëshminë e tij. Lidhuni me përgjegjësin e shërbyesit për shenjat e pritshme të gishtave.</string>
+    <string name="ssl_only_accept">Pranojeni dëshminë vetëm nëse përgjegjësi i i shërbyesit ka publikuar shenja gishtave që përputhen me ato më sipër.</string>
+
+    <string name="settings_app_info_link_summary">Shfaq te rregullimet e sistemit të dhëna të aplikacionit.</string>
+
+    <string name="settings_notification_privacy_warning">Riot.im xhiron në prapaskenë për ta mbajtur private lëndën e mesazheve të njoftimeve tuaja. Për të ulur harxhimin e baterisë, mund të ndryshoni këtë mundësi.</string>
+    <string name="settings_notification_privacy_need_permission">Aplikacioni lyp leje për xhirim në prapaskenë</string>
+    <string name="settings_notification_privacy_no_permission">Aplikacionet <b>nuk</b> lypin leje për të xhiruar në prapaskenë</string>
+    <string name="settings_notification_privacy_fcm">• Njoftimet dërgohen përmes Google Cloud Messaging</string>
+    <string name="settings_notification_privacy_metadata">• Njoftimet përmbajnë vetëm tejtëdhëna</string>
+    <string name="settings_notification_privacy_secure_message_content">• Lënda e mesazhit të njoftimit <b>gjendet e siguruar drejt e nga shërbyesi home Matrix</b></string>
+    <string name="settings_notification_privacy_nosecure_message_content">• Njoftimet përmbajnën <b>tejtëdhëna dhe të dhëna mesazhi</b></string>
+    <string name="settings_start_on_boot">Nise gjatë nisjes së sistemit</string>
+    <string name="settings_inline_url_preview_summary">Parashihini lidhjet brenda fjalosjes, kur shërbyesi juaj home e mbulon këtë veçori.</string>
+    <string name="settings_send_typing_notifs_summary">Lejojuni përdoruesve të tjerë të dinë se po shtypni.</string>
+    <string name="settings_send_markdown_summary">Formatojini mesazhet duke përdorur sintaksën Markdown përpara se të dërgohen. Kjo lejon formatim të thelluar, f.v., përdorimi i yllthit për ta shfaqur tekstin me të pjerrëta.</string>
+    <string name="settings_show_join_leave_messages_summary">Nuk prek ftesat, përzëniet dhe dëbimet.</string>
+    <string name="startup_notification_privacy_message">Riot-i mund të xhirojë në prapaskenë që të administrojë njoftimet tuaja në rrugë të sigurt dhe privatisht. Kjo mund të ndikojë në harxhimin e baterisë.</string>
+    <string name="settings_opt_in_of_analytics_summary">Riot-i grumbullon të dhëna analitike anonime që të na lejojë ta përmirësojmë aplikacionin.</string>
+    <string name="settings_opt_in_of_analytics_prompt">Ju lutemi, aktivizoni analizat që të na ndihmoni të përmirësojmë Riot-in.</string>
+    <string name="settings_unignore_user">Të shfaqen krejt mesazhet prej %s?
+
+Kini parasysh që ky veprim do të sjellë rinisjen e aplikacionit dhe mund të hajë ca kohë.</string>
+
+    <string name="settings_phone_number_verification_error">Gabim gjatë vleftësimit të numrit tuaj të telefonit</string>
+    <string name="settings_labs_native_camera_summary">Nis kamerën e sistemit, në vend se skenën e kamerës vetjake.</string>
+    <string name="settings_labs_keyboard_options_to_send_message">Përdor tastin Enter në tastierë për të dërguar mesazhin</string>
+    <string name="settings_labs_enable_send_voice_summary">Kjo mundëso lyp një aplikacion nga palë e tretë për të regjistruar mesazhet.</string>
+
+    <string name="command_description_emote">Shfaq veprimin</string>
+    <string name="command_description_markdown">On/Off sintakse Markdown</string>
+    <string name="settings_lazy_loading_description">Përmirësoni punimin duke ngarkuar anëtarë dhome vetëm kur sillen para syve.</string>
     </resources>
