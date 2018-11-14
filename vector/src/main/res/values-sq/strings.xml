@@ -857,7 +857,7 @@ Të shtohen ca tani?</string>
     <string name="error_no_external_application_found">Na ndjeni, s’u gjet aplikacion i jashtëm për të plotësuar këtë veprim.</string>
 
     <string name="login_error_unable_register_mail_ownership">S’arrihet të bëhet regjistrimi : dështim pronësie email-i</string>
-    <string name="login_error_limit_exceeded">"Janë dërguar shumë kërkesa "</string>
+    <string name="login_error_limit_exceeded">Janë dërguar shumë kërkesa</string>
     <string name="login_error_login_email_not_yet">Lidhja email që s’është klikuar ende</string>
 
     <string name="e2e_re_request_encryption_key"><u>Rikërkoni kyçe fshehtëzimi</u> prej pajisjesh tuaja të tjera.</string>
@@ -1018,4 +1018,14 @@ Kini parasysh që ky veprim do të sjellë rinisjen e aplikacionit dhe mund të 
     <string name="command_description_emote">Shfaq veprimin</string>
     <string name="command_description_markdown">On/Off sintakse Markdown</string>
     <string name="settings_lazy_loading_description">Përmirësoni punimin duke ngarkuar anëtarë dhome vetëm kur sillen para syve.</string>
+    <plurals name="notification_unread_notified_messages">
+	<item quantity="one">1 mesazh i njoftuar i palexuar</item>
+	<item quantity="other">%d mesazhe të njoftuar të palexuar</item>
+</plurals>
+    <plurals name="notification_unread_notified_messages_in_room_msgs">
+	<item quantity="one">1 mesazh i njoftuar i palexuar</item>
+	<item quantity="other">%d mesazhe të njoftuar të palexuar</item>
+</plurals>
+    <string name="receipt_avatar">Avatar dëftese</string>
+    <string name="notice_avatar">Avatar njoftimi</string>
     </resources>
