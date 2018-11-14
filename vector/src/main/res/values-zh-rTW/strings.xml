@@ -502,7 +502,7 @@
     <string name="settings_add_email_address">新增電子郵件地址</string>
     <string name="settings_phone_number">電話號碼</string>
     <string name="settings_add_phone_number">添加電話號碼</string>
-    <string name="settings_app_info_link_summary">應用程式系統資訊畫面</string>
+    <string name="settings_app_info_link_summary">顯示在系統設定中的應用程式資訊。</string>
     <string name="settings_app_info_link_title">應用程式資訊</string>
 
     <string name="settings_notification_privacy">通知隱私</string>
