@@ -282,7 +282,7 @@ Cliquez sur exporter pour les sauvegarder avant de vous déconnecter.</string>
     <string name="settings_add_email_address">Ajouter une adresse e-mail</string>
     <string name="settings_phone_number">Téléphone</string>
     <string name="settings_add_phone_number">Ajouter un numéro de téléphone</string>
-    <string name="settings_app_info_link_summary">Information sur l\'application</string>
+    <string name="settings_app_info_link_summary">Affiche les informations de l\'application dans les paramètres système.</string>
     <string name="settings_app_info_link_title">Informations sur l\'application</string>
 
     <string name="settings_enable_all_notif">Activer les notifications pour ce compte</string>
@@ -808,7 +808,7 @@ Appareils inconnus :</string>
 
     <string name="group_no_long_description">L\'administrateur de cette communauté n\'a pas encore fourni de description.</string>
 
-    <string name="has_been_kicked">%2$s vous a exclu de %1$s</string>
+    <string name="has_been_kicked">%2$s vous a expulsé de %1$s</string>
     <string name="has_been_banned">%2$s vous a banni de %1$s</string>
     <string name="reason_colon">Motif : %1$s</string>
     <string name="rejoin">Rejoindre</string>
@@ -963,7 +963,7 @@ Veuillez noter que cette action redémarrera l\'application et pourra prendre un
     <string name="command_description_join_room">Rejoint le salon avec l\'alias fourni</string>
     <string name="command_description_part_room">Quitte le salon</string>
     <string name="command_description_topic">Défini le sujet du salon</string>
-    <string name="command_description_kick_user">Exclu l\'utilisateur avec l\'identifiant fourni</string>
+    <string name="command_description_kick_user">Expulse l\'utilisateur avec l\'identifiant fourni</string>
     <string name="command_description_nick">Change le surnom affiché</string>
     <string name="command_description_markdown">Markdown activé/désactivé</string>
     <string name="command_description_clear_scalar_token">Pour réparer la gestion des applications Matrix</string>
@@ -1055,7 +1055,7 @@ Veuillez noter que cette action redémarrera l\'application et pourra prendre un
     <string name="x_plus">%d+</string>
 
 <string name="call_anyway">Appeler quand même</string>
-    <string name="room_participants_action_kick">Exclure</string>
+    <string name="room_participants_action_kick">Expulser</string>
     <plurals name="room_participants_kick_prompt_msg">
 	<item quantity="one">Voulez-vous vraiment expulser cet utilisateur de cette discussion ?</item>
 	<item quantity="other">Voulez-vous vraiment expulser ces utilisateurs de cette discussion ?</item>
