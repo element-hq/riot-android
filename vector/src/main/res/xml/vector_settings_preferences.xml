@@ -252,6 +252,23 @@
         android:key="SETTINGS_NOTIFICATIONS_TARGETS_PREFERENCE_KEY"
         android:title="@string/settings_notifications_targets" />
 
+    <im.vector.preference.VectorDividerCategory />
+
+    <PreferenceCategory android:title="@string/settings_call_category">
+
+        <im.vector.preference.VectorSwitchPreference
+            android:defaultValue="true"
+            android:disableDependentsState="true"
+            android:key="SETTINGS_CALL_RINGTONE_USE_RIOT_PREFERENCE_KEY"
+            android:title="@string/settings_call_ringtone_use_riot_ringtone" />
+
+        <im.vector.preference.VectorCustomActionEditTextPreference
+            android:dependency="SETTINGS_CALL_RINGTONE_USE_RIOT_PREFERENCE_KEY"
+            android:key="SETTINGS_CALL_RINGTONE_URI_PREFERENCE_KEY"
+            android:title="@string/settings_call_ringtone_title" />
+
+    </PreferenceCategory>
+
     <im.vector.preference.VectorDividerCategory android:key="SETTINGS_IGNORE_USERS_DIVIDER_PREFERENCE_KEY" />
 
     <PreferenceCategory

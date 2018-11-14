@@ -545,7 +545,14 @@ public class CallsManager {
         }
 
         requestAudioFocus();
-        mCallSoundsManager.startRinging(R.raw.ring, RING_TONE_START_RINGING);
+
+        if (RingtoneUtilsKt.useRiotDefaultRingtone(mContext)) {
+            // Riot default
+            mCallSoundsManager.startRinging(R.raw.ring, RING_TONE_START_RINGING);
+        } else {
+            // Use provided ringtone
+            mCallSoundsManager.startRinging(RingtoneUtilsKt.getCallRingtone(mContext));
+        }
     }
 
     /**
