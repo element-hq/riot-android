@@ -729,7 +729,7 @@ class VectorSettingsPreferencesFragment : PreferenceFragment(), SharedPreference
 
             it.onPreferenceClickListener = Preference.OnPreferenceClickListener { _ ->
                 AlertDialog.Builder(activity)
-                        .setSingleChoiceItems(PreferencesManager.getMediasSavingItemsChoicesList(activity),
+                        .setSingleChoiceItems(R.array.media_saving_choice,
                                 PreferencesManager.getSelectedMediasSavingPeriod(activity)) { d, n ->
                             PreferencesManager.setSelectedMediasSavingPeriod(activity, n)
                             d.cancel()

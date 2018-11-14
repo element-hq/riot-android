@@ -487,20 +487,6 @@ public class PreferencesManager {
     }
 
     /**
-     * Provides the medias saving choice list.
-     *
-     * @param context the context
-     * @return the list
-     */
-    public static CharSequence[] getMediasSavingItemsChoicesList(Context context) {
-        return new CharSequence[]{
-                context.getString(R.string.media_saving_period_3_days),
-                context.getString(R.string.media_saving_period_1_week),
-                context.getString(R.string.media_saving_period_1_month),
-                context.getString(R.string.media_saving_period_forever)};
-    }
-
-    /**
      * Provides the selected saving period.
      *
      * @param context the context
