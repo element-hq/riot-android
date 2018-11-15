@@ -979,7 +979,6 @@ public class VectorMessageListFragment extends MatrixMessageListFragment<VectorM
             Message message = JsonUtils.toMessage(row.getEvent().getContent());
 
             if (Message.MSGTYPE_IMAGE.equals(message.msgtype)) {
-
                 ImageMessage imageMessage = (ImageMessage) message;
                 SlidableMediaInfo info = new SlidableMediaInfo();
                 info.mMessageType = Message.MSGTYPE_IMAGE;
@@ -990,9 +989,7 @@ public class VectorMessageListFragment extends MatrixMessageListFragment<VectorM
                 info.mMimeType = imageMessage.getMimeType();
                 info.mEncryptedFileInfo = imageMessage.file;
                 res.add(info);
-
             } else if (Message.MSGTYPE_VIDEO.equals(message.msgtype)) {
-
                 VideoMessage videoMessage = (VideoMessage) message;
                 SlidableMediaInfo info = new SlidableMediaInfo();
                 info.mMessageType = Message.MSGTYPE_VIDEO;
