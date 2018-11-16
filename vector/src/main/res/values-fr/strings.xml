@@ -1,5 +1,5 @@
 <?xml version='1.0' encoding='UTF-8'?>
-<resources>
+<resources xmlns:tools="http://schemas.android.com/tools">
     <!-- use to retrieve the supported languages list -->
     <!-- should the same value as the file name -->
     <string name="resources_language">fr</string>
@@ -1057,7 +1057,7 @@ Veuillez noter que cette action redémarrera l\'application et pourra prendre un
 <string name="call_anyway">Appeler quand même</string>
     <string name="room_participants_action_kick">Expulser</string>
     <plurals name="room_participants_kick_prompt_msg">
-	<item quantity="one">Voulez-vous vraiment expulser cet utilisateur de cette discussion ?</item>
+	<item quantity="one" tools:ignore="ImpliedQuantity">Voulez-vous vraiment expulser cet utilisateur de cette discussion ?</item>
 	<item quantity="other">Voulez-vous vraiment expulser ces utilisateurs de cette discussion ?</item>
 </plurals>
     <string name="reason_hint">Motif</string>
