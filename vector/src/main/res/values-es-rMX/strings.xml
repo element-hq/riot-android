@@ -790,5 +790,5 @@ Dispositivos desconocidos:</string>
 
     <string name="settings_containing_my_display_name">Mensajes que contienen mi nombre público</string>
     <string name="settings_containing_my_user_name">Mensajes que contienen mi nombre de usuario</string>
-<string name="call_anyway">Llamar de todos modos</string>
-    </resources>
+    <string name="call_anyway">Llamar de todos modos</string>
+</resources>

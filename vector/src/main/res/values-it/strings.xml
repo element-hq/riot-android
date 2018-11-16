@@ -1101,12 +1101,12 @@ Tieni presente che questa azione riavvierà l\'app e potrebbe richiedere del tem
     <string name="plus_x">+%d</string>
     <string name="x_plus">%d+</string>
 
-<string name="call_anyway">Chiama comunque</string>
+    <string name="call_anyway">Chiama comunque</string>
     <string name="room_participants_action_kick">Butta fuori</string>
     <plurals name="room_participants_kick_prompt_msg">
-	<item quantity="one">Sei sicuro di voler buttare fuori questo utente dalla chat?</item>
-	<item quantity="other">Sei sicuro di voler buttare fuori questi utenti dalla chat?</item>
-</plurals>
+        <item quantity="one">Sei sicuro di voler buttare fuori questo utente dalla chat?</item>
+        <item quantity="other">Sei sicuro di voler buttare fuori questi utenti dalla chat?</item>
+    </plurals>
     <string name="reason_hint">Motivo</string>
 
     <string name="settings_inline_url_preview_summary">Visualizza anteprima dei link all\'interno della chat quando il tuo server home supporta questa funzione.</string>
@@ -1128,4 +1128,4 @@ Tieni presente che questa azione riavvierà l\'app e potrebbe richiedere del tem
     <string name="markdown_has_been_enabled">Markdown è stato abilitato.</string>
     <string name="markdown_has_been_disabled">Markdown è stato disabilitato.</string>
 
-    </resources>
+</resources>

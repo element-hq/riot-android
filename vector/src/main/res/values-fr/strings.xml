@@ -1054,12 +1054,12 @@ Veuillez noter que cette action redémarrera l\'application et pourra prendre un
     <string name="plus_x">+%d</string>
     <string name="x_plus">%d+</string>
 
-<string name="call_anyway">Appeler quand même</string>
+    <string name="call_anyway">Appeler quand même</string>
     <string name="room_participants_action_kick">Expulser</string>
     <plurals name="room_participants_kick_prompt_msg">
-	<item quantity="one" tools:ignore="ImpliedQuantity">Voulez-vous vraiment expulser cet utilisateur de cette discussion ?</item>
-	<item quantity="other">Voulez-vous vraiment expulser ces utilisateurs de cette discussion ?</item>
-</plurals>
+        <item quantity="one" tools:ignore="ImpliedQuantity">Voulez-vous vraiment expulser cet utilisateur de cette discussion ?</item>
+        <item quantity="other">Voulez-vous vraiment expulser ces utilisateurs de cette discussion ?</item>
+    </plurals>
     <string name="reason_hint">Motif</string>
 
     <string name="settings_inline_url_preview_summary">Afficher un aperçu des liens dans la discussion quand votre serveur d\'accueil le permet.</string>
@@ -1081,4 +1081,4 @@ Veuillez noter que cette action redémarrera l\'application et pourra prendre un
     <string name="markdown_has_been_enabled">Le Markdown a été activé.</string>
     <string name="markdown_has_been_disabled">Le Markdown a été désactivé.</string>
 
-    </resources>
+</resources>

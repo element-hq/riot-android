@@ -1,5 +1,6 @@
 <?xml version='1.0' encoding='UTF-8'?>
-<resources><string name="light_theme">Temë e Çelët</string>
+<resources>
+    <string name="light_theme">Temë e Çelët</string>
     <string name="dark_theme">Temë e Errët</string>
     <string name="black_them">Temë e Zezë</string>
     <string name="status_theme">Temë Status.im</string>
@@ -238,21 +239,21 @@
     <string name="room_title_one_member">1 anëtar</string>
     <string name="room_e2e_alert_title">Sinjalizim!</string>
     <plurals name="format_time_s">
-	<item quantity="one">1s</item>
-	<item quantity="other">%ds</item>
-</plurals>
+        <item quantity="one">1s</item>
+        <item quantity="other">%ds</item>
+    </plurals>
     <plurals name="format_time_m">
-	<item quantity="one">1m</item>
-	<item quantity="other">%dm</item>
-</plurals>
+        <item quantity="one">1m</item>
+        <item quantity="other">%dm</item>
+    </plurals>
     <plurals name="format_time_h">
-	<item quantity="one">1h</item>
-	<item quantity="other">%dh</item>
-</plurals>
+        <item quantity="one">1h</item>
+        <item quantity="other">%dh</item>
+    </plurals>
     <plurals name="format_time_d">
-	<item quantity="one">1d</item>
-	<item quantity="other">%dd</item>
-</plurals>
+        <item quantity="one">1d</item>
+        <item quantity="other">%dd</item>
+    </plurals>
 
     <string name="room_participants_leave_prompt_title">Dilni nga dhoma</string>
     <string name="room_participants_leave_prompt_msg">Jeni i sigurt se doni të dilni nga dhoma?</string>
@@ -285,9 +286,9 @@
     <string name="room_participants_action_mention">Përmendje</string>
     <string name="room_participants_action_devices_list">Shfaq Listë Pajisjesh</string>
     <plurals name="room_participants_kick_prompt_msg">
-	<item quantity="one">Jeni i sigurt se doni të përzihet ky përdorues nga kjo fjalosje?</item>
-	<item quantity="other">Jeni i sigurt se doni të përzihen këta përdorues nga kjo fjalosje?</item>
-</plurals>
+        <item quantity="one">Jeni i sigurt se doni të përzihet ky përdorues nga kjo fjalosje?</item>
+        <item quantity="other">Jeni i sigurt se doni të përzihen këta përdorues nga kjo fjalosje?</item>
+    </plurals>
     <string name="room_participants_ban_prompt_msg">Jeni i sigurt se doni të dëbohet ky përdorues nga kjo fjalosje?</string>
     <string name="reason_hint">Arsye</string>
 
@@ -329,9 +330,9 @@
     <string name="room_details_files">Kartela</string>
     <string name="room_details_settings">Rregullime</string>
     <plurals name="room_details_selected">
-	<item quantity="one">1 i përzgjedhur</item>
-	<item quantity="other">%d të përzgjedhur</item>
-</plurals>
+        <item quantity="one">1 i përzgjedhur</item>
+        <item quantity="other">%d të përzgjedhur</item>
+    </plurals>
     <string name="room_details_people_invited_group_name">TË FTUAR</string>
     <string name="room_details_people_present_group_name">PJESËMARRËS</string>
 
@@ -684,14 +685,14 @@
     <string name="filter_group_rooms">Filtroni dhoma grupi</string>
 
     <plurals name="group_members">
-	<item quantity="one">1 anëtar</item>
-	<item quantity="other">%d anëtarë</item>
-</plurals>
+        <item quantity="one">1 anëtar</item>
+        <item quantity="other">%d anëtarë</item>
+    </plurals>
 
     <plurals name="group_rooms">
-	<item quantity="one">1 dhomë</item>
-	<item quantity="other">%d dhoma</item>
-</plurals>
+        <item quantity="one">1 dhomë</item>
+        <item quantity="other">%d dhoma</item>
+    </plurals>
     <string name="has_been_kicked">Jeni përzënë prej %1$s nga %2$s</string>
     <string name="has_been_banned">Jeni dëbuar prej %1$s nga %2$s</string>
     <string name="reason_colon">Arsye: %1$s</string>
@@ -730,7 +731,7 @@
     <string name="plus_x">+%d</string>
     <string name="x_plus">%d+</string>
 
-<string name="resources_language">sq</string>
+    <string name="resources_language">sq</string>
     <string name="resources_country_code">ShBA</string>
 
     <string name="notification_listening_for_events">Po përgjohet për akte</string>
@@ -845,9 +846,9 @@ Pajisje të panjohura:</string>
     <string name="action_sign_out_confirmation">Për arsye sigurie, dalja nga llogaria do të sjellë fshirjen e çfarëdo kyçesh fshehtëzimi skaj-më-skaj, duke e bërë të palexueshëm historikun e dikurshëm të fjalosjes së fshehtëzuar, nëse rihyni.
 Përzgjidhni eksportimin që të bëni një kopjeruajtje të tyre përpara se të dilni.</string>
     <plurals name="public_room_nb_users">
-	<item quantity="one">1 përdorues</item>
-	<item quantity="other">%d përdorues</item>
-</plurals>
+        <item quantity="one">1 përdorues</item>
+        <item quantity="other">%d përdorues</item>
+    </plurals>
 
     <string name="send_bug_report_description_in_english">Në qoftë e mundur, ju lutemi, përshkrimin shkruajeni në anglisht.</string>
     <string name="no_sticker_application_dialog_content">Hëpërhë, s’keni të aktivizuar ndonjë pako ngjitësash.
@@ -863,9 +864,9 @@ Të shtohen ca tani?</string>
     <string name="e2e_re_request_encryption_key"><u>Rikërkoni kyçe fshehtëzimi</u> prej pajisjesh tuaja të tjera.</string>
 
     <plurals name="membership_changes">
-	<item quantity="one">1 ndryshim anëtarësie</item>
-	<item quantity="other">%d ndryshime anëtarësie</item>
-</plurals>
+        <item quantity="one">1 ndryshim anëtarësie</item>
+        <item quantity="other">%d ndryshime anëtarësie</item>
+    </plurals>
 
     <string name="call_connected">U bë lidhja e thirrjes</string>
     <string name="call_connecting">Po bëhet lidhja e thirrjes…</string>
@@ -898,13 +899,13 @@ Të lejohet Riot-i të hyjë në kontaktet tuaja?</string>
     <string name="no">JO</string>
     <string name="open_chat_header">Hap kryet</string>
     <plurals name="room_header_active_members_count">
-	<item quantity="one">1 anëtar aktiv</item>
-	<item quantity="other">%d anëtarë aktivë</item>
-</plurals>
+        <item quantity="one">1 anëtar aktiv</item>
+        <item quantity="other">%d anëtarë aktivë</item>
+    </plurals>
     <plurals name="room_title_members">
-	<item quantity="one">1 anëtar</item>
-	<item quantity="other">%d anëtarë</item>
-</plurals>
+        <item quantity="one">1 anëtar</item>
+        <item quantity="other">%d anëtarë</item>
+    </plurals>
     <string name="room_participants_action_unignore_prompt">Të shfaqen krejt mesazhet nga ky përdorues?
 
 Kini parasysh që ky veprim do të sjellë rinisjen e aplikacionit dhe mund të hajë ca kohë.</string>
@@ -914,21 +915,21 @@ Jeni i sigurt?</string>
     <string name="people_search_invite_by_id_dialog_description">Ju lutemi, jepni një ose më shumë adresa email ose ID Matrix</string>
     <string name="room_unknown_devices_messages_notification">Mesazhet s’u dërguan, për shkak të pranisë së pajisjeve të panjohura. %1$s ose %2$s tani?</string>
     <plurals name="room_new_messages_notification">
-	<item quantity="one">1 mesazh i ri</item>
-	<item quantity="other">%d mesazhe të rinj</item>
-</plurals>
+        <item quantity="one">1 mesazh i ri</item>
+        <item quantity="other">%d mesazhe të rinj</item>
+    </plurals>
 
     <string name="room_event_action_report_prompt_ignore_user">Doni të fshihen krejt mesazhet nga ky përdorues?
 
 Kini parasysh që ky veprim do të sjellë rinisjen e aplikacionit dhe mund të hajë ca kohë.</string>
     <plurals name="directory_search_rooms">
-	<item quantity="one">1 dhomë</item>
-	<item quantity="other">%d dhoma</item>
-</plurals>
+        <item quantity="one">1 dhomë</item>
+        <item quantity="other">%d dhoma</item>
+    </plurals>
     <plurals name="directory_search_rooms_for">
-	<item quantity="one">U gjet %1$s dhomë për %2$s</item>
-	<item quantity="other">U gjetën %1$s dhoma për %2$s</item>
-</plurals>
+        <item quantity="one">U gjet %1$s dhomë për %2$s</item>
+        <item quantity="other">U gjetën %1$s dhoma për %2$s</item>
+    </plurals>
     <string name="devices_delete_dialog_text">Ky veprim lyp mirëfilltësim shtesë.
 Që të vazhdohet, ju lutemi, jepni fjalëkalimin tuaj.</string>
     <string name="account_email_validation_message">Ju lutemi, kontrolloni email-in tuaj dhe klikoni mbi lidhjen që përmban. Pasi të jetë bërë kjo, klikoni që të vazhdohet.</string>
@@ -953,13 +954,13 @@ Kujdes: kjo kartelë mund të fshihet, nëse çinstalohet aplikacioni.</string>
     <string name="encryption_information_verify_device_warning2">Nëse përputhet, shtypni butonin e verifikimit më poshtë. Nëse jo, atëherë dikush tjetër po e përgjon këtë pajisje dhe duhet ta kaloni në listë të zezë. Në të ardhmen, ky proces verifikimi do të jetë më i sofistikuar.</string>
     <string name="directory_server_placeholder">URL Shërbyesi Home</string>
     <plurals name="notification_unread_notified_messages_in_room_rooms">
-	<item quantity="one">1 dhomë</item>
-	<item quantity="other">%d dhoma</item>
-</plurals>
+        <item quantity="one">1 dhomë</item>
+        <item quantity="other">%d dhoma</item>
+    </plurals>
     <plurals name="active_widgets">
-	<item quantity="one">1 widget aktiv</item>
-	<item quantity="other">%d widget-e aktivë</item>
-</plurals>
+        <item quantity="one">1 widget aktiv</item>
+        <item quantity="other">%d widget-e aktivë</item>
+    </plurals>
 
     <string name="conference_call_warning_message">Thirrjet konferencë janë në zhvillim e sipër dhe mund të mos jenë të qëndrueshme.</string>
 
@@ -1019,13 +1020,13 @@ Kini parasysh që ky veprim do të sjellë rinisjen e aplikacionit dhe mund të 
     <string name="command_description_markdown">On/Off sintakse Markdown</string>
     <string name="settings_lazy_loading_description">Përmirësoni punimin duke ngarkuar anëtarë dhome vetëm kur sillen para syve.</string>
     <plurals name="notification_unread_notified_messages">
-	<item quantity="one">1 mesazh i njoftuar i palexuar</item>
-	<item quantity="other">%d mesazhe të njoftuar të palexuar</item>
-</plurals>
+        <item quantity="one">1 mesazh i njoftuar i palexuar</item>
+        <item quantity="other">%d mesazhe të njoftuar të palexuar</item>
+    </plurals>
     <plurals name="notification_unread_notified_messages_in_room_msgs">
-	<item quantity="one">1 mesazh i njoftuar i palexuar</item>
-	<item quantity="other">%d mesazhe të njoftuar të palexuar</item>
-</plurals>
+        <item quantity="one">1 mesazh i njoftuar i palexuar</item>
+        <item quantity="other">%d mesazhe të njoftuar të palexuar</item>
+    </plurals>
     <string name="receipt_avatar">Avatar dëftese</string>
     <string name="notice_avatar">Avatar njoftimi</string>
-    </resources>
+</resources>
