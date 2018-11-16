@@ -360,7 +360,6 @@ Pode engadir a dirección de correo na sección de configuración de perfil.</st
     <string name="room_settings_tag_pref_entry_favourite">Favorita</string>
     <string name="room_settings_tag_pref_entry_low_priority">Prioridade baixa</string>
     <string name="room_settings_tag_pref_entry_none">Ningún</string>
-    <string name="room_settings_tag_pref_no_tag">sen etiquetar</string>
 
     <string name="room_settings_room_notifications_title">Notificacións</string>
     <string name="room_settings_room_read_history_rules_pref_dialog_title">Quen pode ler o histórico?</string>

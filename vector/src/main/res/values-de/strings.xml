@@ -548,7 +548,6 @@ Beachte: Diese Aktion wird die App neu starten und einige Zeit brauchen.</string
     <string name="room_settings_tag_pref_entry_favourite">Favorit</string>
     <string name="room_settings_tag_pref_entry_low_priority">Niedrige Priorität</string>
     <string name="room_settings_tag_pref_entry_none">Keine</string>
-    <string name="room_settings_tag_pref_no_tag">Nicht getaggt</string>
 
     <!-- room settings : access and visibility -->
     <string name="room_settings_category_access_visibility_title">Zugriff und Sichtbarkeit</string>
@@ -1094,12 +1093,12 @@ Beachte: Diese Aktion wird die App neu starten und einige Zeit brauchen.</string
     <string name="plus_x">+%d</string>
     <string name="x_plus">%d+</string>
 
-<string name="call_anyway">Trotzdem anrufen</string>
+    <string name="call_anyway">Trotzdem anrufen</string>
     <string name="room_participants_action_kick">Kicken</string>
     <plurals name="room_participants_kick_prompt_msg">
-	<item quantity="one">Bist du sicher, dass du diesen Benutzer aus diesem Chat kicken möchtest?</item>
-	<item quantity="other">Bist du sicher, dass du diese Benutzer aus diesem Chat kicken möchtest?</item>
-</plurals>
+        <item quantity="one">Bist du sicher, dass du diesen Benutzer aus diesem Chat kicken möchtest?</item>
+        <item quantity="other">Bist du sicher, dass du diese Benutzer aus diesem Chat kicken möchtest?</item>
+    </plurals>
     <string name="reason_hint">Grund</string>
 
     <string name="settings_inline_url_preview_summary">Im Chat Linkvorschau aktivieren, wenn dein Heimserver diese Funktion unterstützt.</string>
@@ -1121,4 +1120,4 @@ Beachte: Diese Aktion wird die App neu starten und einige Zeit brauchen.</string
     <string name="settings_show_join_leave_messages">Zeige Betretens- und Verlassens-Ereignisse</string>
     <string name="settings_show_avatar_display_name_changes_messages">Zeige Konto-Ereignisse</string>
     <string name="settings_show_avatar_display_name_changes_messages_summary">Enthält Änderungen des Profilbilds und Anzeigenamens.</string>
-    </resources>
+</resources>

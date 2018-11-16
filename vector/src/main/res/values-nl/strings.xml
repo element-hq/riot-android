@@ -542,7 +542,6 @@ Let op: deze actie zal de app opnieuw opstarten, en kan enige tijd kosten.</stri
     <string name="room_settings_tag_pref_entry_favourite">Favoriet</string>
     <string name="room_settings_tag_pref_entry_low_priority">Lage prioriteit</string>
     <string name="room_settings_tag_pref_entry_none">Geen</string>
-    <string name="room_settings_tag_pref_no_tag">niet gelabeld</string>
 
     <!-- room settings : access and visibility -->
     <string name="room_settings_category_access_visibility_title">Toegankelijk- en zichtbaarheid</string>

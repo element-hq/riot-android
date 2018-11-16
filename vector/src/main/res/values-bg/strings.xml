@@ -782,7 +782,6 @@
     <string name="settings_delete_notification_targets_confirmation">Сигурни ли сте, че искате да премахнете това устройство, получаващо известия?</string>
 
     <string name="settings_phone_number_verification">Потвърждение на номер</string>
-    <string name="room_settings_tag_pref_no_tag">без етикет</string>
     <string name="room_settings_room_read_history_rules_pref_title">Достъп до историята на стаята</string>
     <string name="room_settings_room_internal_id">Вътрешен ID на стаята</string>
     <string name="room_settings_labs_end_to_end_warnings">Трябва да излезете от профила си, за да можете да включите шифроването.</string>

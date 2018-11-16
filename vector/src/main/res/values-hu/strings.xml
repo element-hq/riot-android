@@ -512,7 +512,6 @@ Vedd figyelembe, hogy az alkalmazás újraindul  ami sok időt vehet igénybe."<
     <string name="room_settings_tag_pref_entry_favourite">Kedvencek</string>
     <string name="room_settings_tag_pref_entry_low_priority">Alacsony prioritású</string>
     <string name="room_settings_tag_pref_entry_none">Semmi</string>
-    <string name="room_settings_tag_pref_no_tag">Nem címkézett</string>
 
     <string name="room_settings_category_access_visibility_title">Hozzáférés és láthatóság</string>
     <string name="room_settings_directory_visibility">Listázza ezt a szobát a szobák könyvtárba</string>
@@ -1050,12 +1049,12 @@ Vedd figyelembe, hogy az alkalmazás újraindul ami sok időt vehet igénybe.</s
     <string name="plus_x">+%d</string>
     <string name="x_plus">%d+</string>
 
-<string name="call_anyway">Hívás mindenképpen</string>
+    <string name="call_anyway">Hívás mindenképpen</string>
     <string name="room_participants_action_kick">Kirúg</string>
     <plurals name="room_participants_kick_prompt_msg">
-	<item quantity="one">Ezeket az embereket biztosan kirúgod?</item>
-	<item quantity="other"/>
-</plurals>
+        <item quantity="one">Ezeket az embereket biztosan kirúgod?</item>
+        <item quantity="other" />
+    </plurals>
     <string name="reason_hint">Ok</string>
 
     <string name="settings_inline_url_preview_summary">URL előnézet a csevegő ablakban, ha a Matrix szervered támogatja ezt a lehetőséget.</string>
@@ -1077,4 +1076,4 @@ Vedd figyelembe, hogy az alkalmazás újraindul ami sok időt vehet igénybe.</s
     <string name="markdown_has_been_enabled">Markdown engedélyezve.</string>
     <string name="markdown_has_been_disabled">Markdown tiltva.</string>
 
-    </resources>
+</resources>

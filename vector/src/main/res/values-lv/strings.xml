@@ -582,7 +582,6 @@ Lai turpinātu, ievadi savu paroli.</string>
     <string name="room_settings_tag_pref_entry_favourite">Izlase</string>
     <string name="room_settings_tag_pref_entry_low_priority">Zema prioritāte</string>
     <string name="room_settings_tag_pref_entry_none">Nav</string>
-    <string name="room_settings_tag_pref_no_tag">bez birkām</string>
 
     <string name="room_settings_category_access_visibility_title">Pieejamība un redzamība</string>
     <string name="room_settings_directory_visibility">Iekļaut šo istabu katalogā</string>

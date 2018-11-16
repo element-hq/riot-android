@@ -2,7 +2,7 @@
 <resources>
     <!-- use to retrieve the supported languages list -->
     <!-- should the same value as the file name -->
-    <string name="resources_language">es_MX</string>
+    <string name="resources_language">es</string>
     <string name="resources_country_code">MX</string>
 
     <!-- titles -->
@@ -538,7 +538,6 @@ Mensajes cifrados no serán visibles en cuentas que no implementan el cifrado.</
     <string name="room_settings_tag_pref_entry_favourite">Destacar</string>
     <string name="room_settings_tag_pref_entry_low_priority">Baja prioridad</string>
     <string name="room_settings_tag_pref_entry_none">Ninguno</string>
-    <string name="room_settings_tag_pref_no_tag">no etiquetado</string>
 
     <!-- room settings : access and visibility -->
     <string name="room_settings_category_access_visibility_title">Acceso y Visibilidad</string>
@@ -790,5 +789,5 @@ Dispositivos desconocidos:</string>
 
     <string name="settings_containing_my_display_name">Mensajes que contienen mi nombre público</string>
     <string name="settings_containing_my_user_name">Mensajes que contienen mi nombre de usuario</string>
-<string name="call_anyway">Llamar de todos modos</string>
-    </resources>
+    <string name="call_anyway">Llamar de todos modos</string>
+</resources>

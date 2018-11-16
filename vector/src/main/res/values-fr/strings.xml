@@ -1,5 +1,5 @@
 <?xml version='1.0' encoding='UTF-8'?>
-<resources>
+<resources xmlns:tools="http://schemas.android.com/tools">
     <!-- use to retrieve the supported languages list -->
     <!-- should the same value as the file name -->
     <string name="resources_language">fr</string>
@@ -355,7 +355,6 @@ Cliquez sur exporter pour les sauvegarder avant de vous déconnecter.</string>
     <string name="room_settings_tag_pref_entry_favourite">Favori</string>
     <string name="room_settings_tag_pref_entry_low_priority">Priorité basse</string>
     <string name="room_settings_tag_pref_entry_none">Aucune</string>
-    <string name="room_settings_tag_pref_no_tag">Sans étiquette</string>
 
     <string name="room_settings_room_access_rules_pref_title">Accès au salon</string>
     <string name="room_settings_room_read_history_rules_pref_title">Accès à l\'historique du salon</string>
@@ -405,8 +404,8 @@ Cliquez sur exporter pour les sauvegarder avant de vous déconnecter.</string>
     <string name="encryption_export_e2e_room_keys">Exporter les clés E2E des salons</string>
     <string name="encryption_export_room_keys">Exporter les clés des salons</string>
     <string name="encryption_export_export">Exporter</string>
-    <string name="encryption_import_enter_passphrase">Saisir la phrase de passe</string>
-    <string name="encryption_export_confirm_passphrase">Confirmer la phrase de passe</string>
+    <string name="encryption_import_enter_passphrase">Saisir la phrase secrète</string>
+    <string name="encryption_export_confirm_passphrase">Confirmer la phrase secrète</string>
     <string name="encryption_import_e2e_room_keys">Importer les clés E2E des salons</string>
     <string name="encryption_import_room_keys">Importer les clés des salons</string>
     <string name="encryption_import_import">Importer</string>
@@ -1038,9 +1037,9 @@ Veuillez noter que cette action redémarrera l\'application et pourra prendre un
     <string name="status_theme">Thème Status.im</string>
 
     <string name="room_sliding_menu_version_x">Version %s</string>
-    <string name="encryption_export_notice">Veuillez créer une phrase de passe pour chiffrer les clés exportées. Vous devrez saisir cette même phrase de passe afin de pouvoir importer les clés.</string>
-    <string name="encryption_export_create_passphrase">Créer la phrase de passe</string>
-    <string name="encryption_export_passphrase_dont_match">Les phrases de passe doivent concorder</string>
+    <string name="encryption_export_notice">Veuillez créer une phrase secrète pour chiffrer les clés exportées. Vous devrez saisir cette même phrase secrète afin de pouvoir importer les clés.</string>
+    <string name="encryption_export_create_passphrase">Créer la phrase secrète</string>
+    <string name="encryption_export_passphrase_dont_match">Les phrases secrètes doivent concorder</string>
     <string name="merged_events_expand">développer</string>
     <string name="merged_events_collapse">réduire</string>
 
@@ -1054,12 +1053,12 @@ Veuillez noter que cette action redémarrera l\'application et pourra prendre un
     <string name="plus_x">+%d</string>
     <string name="x_plus">%d+</string>
 
-<string name="call_anyway">Appeler quand même</string>
+    <string name="call_anyway">Appeler quand même</string>
     <string name="room_participants_action_kick">Expulser</string>
     <plurals name="room_participants_kick_prompt_msg">
-	<item quantity="one">Voulez-vous vraiment expulser cet utilisateur de cette discussion ?</item>
-	<item quantity="other">Voulez-vous vraiment expulser ces utilisateurs de cette discussion ?</item>
-</plurals>
+        <item quantity="one" tools:ignore="ImpliedQuantity">Voulez-vous vraiment expulser cet utilisateur de cette discussion ?</item>
+        <item quantity="other">Voulez-vous vraiment expulser ces utilisateurs de cette discussion ?</item>
+    </plurals>
     <string name="reason_hint">Motif</string>
 
     <string name="settings_inline_url_preview_summary">Afficher un aperçu des liens dans la discussion quand votre serveur d\'accueil le permet.</string>
@@ -1081,4 +1080,4 @@ Veuillez noter que cette action redémarrera l\'application et pourra prendre un
     <string name="markdown_has_been_enabled">Le Markdown a été activé.</string>
     <string name="markdown_has_been_disabled">Le Markdown a été désactivé.</string>
 
-    </resources>
+</resources>

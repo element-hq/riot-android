@@ -723,8 +723,6 @@ Jesteś pewien?</string>
     <string name="settings_phone_number_verification_instruction">Wysłaliśmy SMS z kodem aktywacyjnym. Podaj ten kod poniżej.</string>
     <string name="room_settings_tag_pref_dialog_title">Otagowany jako:</string>
 
-    <string name="room_settings_tag_pref_no_tag">nieotagowany</string>
-
     <string name="room_settings_room_notifications_title">Powiadomienia</string>
     <string name="room_settings_read_history_entry_members_only_option_time_shared">Tylko członkowie (od momentu włączenia tej opcji)</string>
     <string name="room_settings_read_history_entry_members_only_invited">Tylko członkowie (od kiedy zostali zaproszeni)</string>
