@@ -113,7 +113,7 @@
     <string name="send_bug_report_include_logs">傳送記錄</string>
     <string name="send_bug_report_include_crash_logs">傳送當機紀錄</string>
     <string name="send_bug_report_include_screenshot">傳送螢幕截圖</string>
-    <string name="send_bug_report">錯誤回報</string>
+    <string name="send_bug_report">回報臭蟲</string>
     <string name="send_bug_report_description">請描述此錯誤。做了什麼？預期發生什麼？實際發生什麼？</string>
     <string name="send_bug_report_placeholder">在這裡描述你的問題</string>
     <string name="send_bug_report_logs_description">為了診斷問題，客戶端的紀錄將會同錯誤回報一起送出。這個包含了紀錄與螢幕截圖的錯誤回報將不會公開可見。如果您只想送出上方的文字，請取消勾選：</string>
@@ -303,7 +303,7 @@
 
     <string name="list_members">列出成員</string>
     <string name="open_chat_header">打開標頭</string>
-    <string name="room_sync_in_progress">同步中…</string>
+    <string name="room_sync_in_progress">正在同步……</string>
     <string name="room_jump_to_first_unread">跳到第一個未讀的訊息。</string>
 
     <string name="room_preview_invitation_format">你已經被 %s 邀請加入此聊天室</string>
@@ -502,7 +502,7 @@
     <string name="settings_add_email_address">新增電子郵件地址</string>
     <string name="settings_phone_number">電話號碼</string>
     <string name="settings_add_phone_number">添加電話號碼</string>
-    <string name="settings_app_info_link_summary">應用程式系統資訊畫面</string>
+    <string name="settings_app_info_link_summary">顯示在系統設定中的應用程式資訊。</string>
     <string name="settings_app_info_link_title">應用程式資訊</string>
 
     <string name="settings_notification_privacy">通知隱私</string>
@@ -528,7 +528,7 @@
     <string name="settings_containing_my_user_name">包含我用戶名稱的訊息</string>
     <string name="settings_messages_in_one_to_one">來自私訊的訊息</string>
     <string name="settings_messages_in_group_chat">來自群組的訊息</string>
-    <string name="settings_invited_to_room">聊天室邀請</string>
+    <string name="settings_invited_to_room">當我被邀請進聊天室時</string>
     <string name="settings_call_invitations">通話請求</string>
     <string name="settings_messages_sent_by_bot">來自機器人的訊息</string>
 
@@ -536,7 +536,7 @@
     <string name="settings_background_sync">後臺同步</string>
     <string name="settings_enable_background_sync">開啓後臺同步</string>
     <string name="settings_set_sync_timeout">同步請求超時</string>
-    <string name="settings_set_sync_delay">兩次同步請求的延遲</string>
+    <string name="settings_set_sync_delay">每次同步請求的延遲</string>
     <string name="settings_second">秒</string>
     <string name="settings_seconds">秒</string>
 
@@ -564,16 +564,16 @@
     <string name="settings_pin_missed_notifications">釘選含有錯過的通知的聊天室</string>
     <string name="settings_pin_unread_messages">釘選含有未讀訊息的聊天室</string>
     <string name="settings_devices_list">裝置列表</string>
-    <string name="settings_inline_url_preview">預設啟用內嵌 URL 預覽</string>
-    <string name="settings_always_show_timestamps">總是顯示訊息時間戳</string>
-    <string name="settings_12_24_timestamps">用12小時制顯示時間戳 （如：下午 2:30）</string>
-    <string name="settings_vibrate_on_mention">提及他人時震動</string>
+    <string name="settings_inline_url_preview">內嵌 URL 預覽</string>
+    <string name="settings_always_show_timestamps">對所有訊息顯示時間戳</string>
+    <string name="settings_12_24_timestamps">用12小時制顯示時間戳</string>
+    <string name="settings_vibrate_on_mention">提及使用者時震動</string>
 
     <string name="settings_deactivate_account_section">停用帳號</string>
     <string name="settings_deactivate_my_account">停用我的帳號</string>
 
     <string name="startup_notification_privacy_title">通知隱私</string>
-    <string name="startup_notification_privacy_message">Riot 可以在後臺安全隱密地管理通知 (這可能會影響電池的使用)。</string>
+    <string name="startup_notification_privacy_message">Riot 可以在後臺安全隱密地管理通知。這可能會影響電池的使用。</string>
     <string name="startup_notification_privacy_button_grant">獲取權限</string>
     <string name="startup_notification_privacy_button_other">選擇其他選項</string>
 
@@ -602,15 +602,15 @@
     <string name="settings_identity_server">身份認證伺服器</string>
 
     <string name="settings_user_interface">使用者介面</string>
-    <string name="settings_interface_language">介面語言</string>
+    <string name="settings_interface_language">語言</string>
     <string name="settings_select_language">選擇語言</string>
 
     <string name="account_email_validation_title">等待驗證</string>
     <string name="account_email_validation_message">請檢查您的電子郵件並點選其中包含的連結。只要這個完成了，就點選選繼續。</string>
-    <string name="account_email_validation_error">無法驗證電子郵件地址。請檢查您的電子郵件, 並點擊它所包含的連結。完成此操作後, 按一下 \"繼續\"</string>
-    <string name="account_email_already_used_error">此電子郵件地址已經被使用</string>
-    <string name="account_email_not_found_error">無法傳送電子郵件：找不到該電子郵件信箱</string>
-    <string name="account_phone_number_already_used_error">這個電話號碼已被使用</string>
+    <string name="account_email_validation_error">無法驗證電子郵件地址。請檢查您的電子郵件，並點選它所包含的連結。完成此動作後，按一下「繼續」。</string>
+    <string name="account_email_already_used_error">此電子郵件地址已經被使用。</string>
+    <string name="account_email_not_found_error">找不到該電子郵件信箱。</string>
+    <string name="account_phone_number_already_used_error">這個電話號碼已被使用。</string>
 
     <string name="settings_change_password">變更密碼</string>
     <string name="settings_old_password">舊密碼</string>
@@ -760,7 +760,7 @@
     <string name="encryption_import_room_keys_summary">從本機檔案匯入金鑰</string>
     <string name="encryption_import_import">匯入</string>
     <string name="encryption_never_send_to_unverified_devices_title">只匯出到已驗證的裝置</string>
-    <string name="encryption_never_send_to_unverified_devices_summary">從不自此裝置傳送加密的訊息到未驗證的裝置</string>
+    <string name="encryption_never_send_to_unverified_devices_summary">從不自此裝置傳送加密的訊息到未驗證的裝置。</string>
 
     <string name="encryption_information_not_verified">未驗證</string>
     <string name="encryption_information_verified">已驗證</string>
@@ -843,7 +843,7 @@
     <string name="widget_integration_invalid_parameter">無效參數。</string>
     <string name="room_add_matrix_apps">添加 Matrix 應用程式</string>
     <string name="settings_labs_native_camera">使用原生相機</string>
-    <string name="settings_labs_enable_send_voice">發送語音訊息（需要可錄製語音的第三方應用程式）</string>
+    <string name="settings_labs_enable_send_voice">傳送語音訊息</string>
 
     <string name="you_added_a_new_device">您新增的裝置“%s”正在請求加密金鑰。</string>
     <string name="your_unverified_device_requesting">您未驗證的裝置“%s”正在請求加密金鑰。</string>
@@ -988,7 +988,7 @@ Matrix 中的消息可見度類似于電子郵件。我們忘記您的郵件意�
     <string name="dialog_title_error">錯誤</string>
 
     <string name="settings_lazy_loading_title">延遲載入聊天室成員</string>
-    <string name="settings_lazy_loading_description">透過僅載入在第一次看到的地方的聊天室成員來增進效能</string>
+    <string name="settings_lazy_loading_description">透過僅載入在第一次看到的地方的聊天室成員來增進效能。</string>
     <string name="error_lazy_loading_not_supported_by_home_server">您的家伺服器尚不支援延遲載入聊天室成員。請稍後再試。</string>
 
     <string name="unknown_error">抱歉，遇到錯誤</string>
@@ -1001,5 +1001,41 @@ Matrix 中的消息可見度類似于電子郵件。我們忘記您的郵件意�
     <string name="encryption_export_passphrase_dont_match">密語必須符合</string>
     <string name="merged_events_expand">展開</string>
     <string name="merged_events_collapse">摺疊</string>
+
+<string name="call_anyway">無論如何都要通話</string>
+    <string name="room_participants_action_kick">踢出</string>
+    <plurals name="room_participants_kick_prompt_msg">
+	<item quantity="other">您確定您想要從這個聊天中踢出這些使用者嗎？</item>
+</plurals>
+    <string name="reason_hint">理由</string>
+
+    <string name="settings_inline_url_preview_summary">當您的家伺服器支援此功能時在聊天中預覽連結。</string>
+    <string name="settings_send_typing_notifs">傳送輸入通知</string>
+    <string name="settings_send_typing_notifs_summary">讓其他使用者知道您正在輸入。</string>
+    <string name="settings_send_markdown">Markdown 格式</string>
+    <string name="settings_send_markdown_summary">在您傳送之前使用 Markdown 格式化訊息。這讓您可以使用進階的格式化，如使用星號來顯示斜體文字。</string>
+    <string name="settings_show_read_receipts">顯示讀取回條</string>
+    <string name="settings_show_read_receipts_summary">點選讀取回條以顯示詳細資料。</string>
+    <string name="settings_show_join_leave_messages">顯示加入與離開的活動</string>
+    <string name="settings_show_join_leave_messages_summary">邀請、踢出與封鎖不受影響。</string>
+    <string name="settings_show_avatar_display_name_changes_messages">顯示帳號活動</string>
+    <string name="settings_show_avatar_display_name_changes_messages_summary">包含大頭貼與顯示名稱變動。</string>
+    <string name="settings_password">密碼</string>
+    <string name="settings_labs_native_camera_summary">啟動系統相機而非自訂的相機畫面。</string>
+    <string name="settings_labs_enable_send_voice_summary">這個選項需要第三方應用程式來錄製訊息。</string>
+
+    <string name="command_problem_with_parameters">指令「%s」需要更多參數，或是有一些參數不正確。</string>
+    <string name="markdown_has_been_enabled">Markdown 已啟用。</string>
+    <string name="markdown_has_been_disabled">Markdown 已停用。</string>
+
+    <string name="settings_info_area_show">顯示資訊區域</string>
+    <string name="show_info_area_always">總是</string>
+    <string name="show_info_area_messages_and_errors">訊息與錯誤</string>
+    <string name="show_info_area_only_errors">僅錯誤</string>
+
+    <string name="generic_label">%1$s：</string>
+    <string name="generic_label_and_value">%1$s：%2$s</string>
+    <string name="plus_x">+%d</string>
+    <string name="x_plus">%d+</string>
 
 </resources>

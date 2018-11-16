@@ -458,7 +458,7 @@ Beachte: Diese Aktion wird die App neu starten und einige Zeit brauchen.</string
     <string name="settings_background_sync">Hintergrundsynchronisierung</string>
     <string name="settings_enable_background_sync">Hintergrundsynchronisierung aktivieren</string>
     <string name="settings_set_sync_timeout">Timeout für Synchronisierungsanfragen</string>
-    <string name="settings_set_sync_delay">Verzögerung zwischen zwei Synchronisierungsanfragen</string>
+    <string name="settings_set_sync_delay">Verzögerung zwischen jeder Anfrage</string>
     <string name="settings_second">Sekunde</string>
     <string name="settings_seconds">Sekunden</string>
 
@@ -504,11 +504,11 @@ Um fortzufahren, gib dein Passwort ein.</string>
 
     <string name="account_email_validation_title">Verifizierung ausstehend</string>
     <string name="account_email_validation_message">Bitte prüfe deinen E-Mail-Posteingang und klicke auf den in der E-Mail enthaltenen Link. Klicke anschließend auf Fortsetzen.</string>
-    <string name="account_email_validation_error">Verifizieren der E-Mail-Adresse unmöglich. Bitte prüfe deine E-Mails und klicke auf den enthaltenen Link. Anschließend klicke auf "Fortsetzen"</string>
+    <string name="account_email_validation_error">Verifizieren der E-Mail-Adresse unmöglich. Bitte prüfe deine E-Mails und klicke auf den enthaltenen Link. Anschließend klicke auf Fortsetzen.</string>
 
-    <string name="account_email_already_used_error">Diese E-Mail-Adresse wird bereits verwendet</string>
-    <string name="account_email_not_found_error">Fehler beim Senden der E-Mail: Diese E-Mail-Adresse wurde nicht gefunden</string>
-    <string name="account_phone_number_already_used_error">Diese Telefonnummer wird bereits verwendet</string>
+    <string name="account_email_already_used_error">Diese E-Mail-Adresse wird bereits verwendet.</string>
+    <string name="account_email_not_found_error">Diese E-Mail-Adresse wurde nicht gefunden.</string>
+    <string name="account_phone_number_already_used_error">Diese Telefonnummer wird bereits verwendet.</string>
 
     <string name="settings_change_password">Passwort ändern</string>
     <string name="settings_old_password">Altes Passwort</string>
@@ -653,7 +653,7 @@ Achtung: Diese Datei wird vielleicht gelöscht, wenn die App deinstalliert wird.
     <string name="encryption_import_room_keys_summary">Schlüssel aus lokaler Datei importieren</string>
     <string name="encryption_import_import">Importieren</string>
     <string name="encryption_never_send_to_unverified_devices_title">Nur für verifizierte Geräte verschlüsseln</string>
-    <string name="encryption_never_send_to_unverified_devices_summary">Von diesem Gerät aus keine verschlüsselten Nachrichten an nicht verifizierte Geräte senden</string>
+    <string name="encryption_never_send_to_unverified_devices_summary">Von diesem Gerät aus keine verschlüsselten Nachrichten an nicht verifizierte Geräte senden.</string>
 
     <string name="encryption_information_not_verified">NICHT verifiziert</string>
     <string name="encryption_information_verified">Verifiziert</string>
@@ -696,14 +696,14 @@ Unbekannte Geräte:</string>
     <string name="historical_placeholder">Suche nach historischen</string>
 
     <string name="settings_user_interface">Benutzer-Oberfläche</string>
-    <string name="settings_interface_language">Oberflächen-Sprache</string>
-    <string name="settings_select_language">Wähle eine Sprache</string>
+    <string name="settings_interface_language">Sprache</string>
+    <string name="settings_select_language">Wähle Sprache</string>
 
     <string name="settings_start_on_boot">Starte beim Systemstart</string>
     <string name="settings_clear_media_cache">Medien-Cache leeren</string>
     <string name="settings_keep_media">Medien behalten</string>
 
-    <string name="settings_always_show_timestamps">Nachrichten-Zeitstempel immer anzeigen</string>
+    <string name="settings_always_show_timestamps">Für alle Nachrichten Zeitstempel anzeigen</string>
 
     <string name="media_saving_period_3_days">3 Tage</string>
     <string name="media_saving_period_1_week">1 Woche</string>
@@ -726,7 +726,7 @@ Unbekannte Geräte:</string>
     <string name="huge">Riesig</string>
     <string name="settings_theme">Thema</string>
 
-    <string name="settings_12_24_timestamps">Zeitstempel im 12-Stunden-Format anzeigen (z. B. 2:30 p. m.)</string>
+    <string name="settings_12_24_timestamps">Zeige Zeitstempel im 12-Stunden-Format</string>
 
     <string name="widget_no_power_to_manage">Für das Verwalten von Widgets in diesem Raum ist eine Berechtigung erforderlich</string>
     <string name="widget_creation_failure">Widget konnte nicht erstellt werden</string>
@@ -815,8 +815,8 @@ Unbekannte Geräte:</string>
     <string name="room_settings_all_messages">Alle Nachrichten</string>
     <string name="room_settings_mention_only">Nur Erwähnungen</string>
     <string name="room_settings_mute">Stumm</string>
-    <string name="settings_inline_url_preview">Aktiviere URL-Vorschau im Chat standardmäßig</string>
-    <string name="settings_vibrate_on_mention">Vibriere beim Erwähnen</string>
+    <string name="settings_inline_url_preview">URL-Vorschau im Chat</string>
+    <string name="settings_vibrate_on_mention">Vibriere beim Erwähnen eines Nutzers</string>
 
     <string name="room_settings_room_notifications_title">Benachrichtigungen</string>
     <string name="room_settings_no_flair">Dieser Raum zeigt keine Flairs für irgendeine Community an</string>
@@ -926,7 +926,7 @@ Unbekannte Geräte:</string>
     <string name="settings_notification_privacy_message_content_not_shown">• Benachrichtigungen werden <b>den Nachrichteninhalt nicht anzeigen</b></string>
 
     <string name="startup_notification_privacy_title">Benachrichtungs-Datenschutz</string>
-    <string name="startup_notification_privacy_message">Riot.im kann im Hintergrund laufen um deine Benachrichtigungen sicher und privat zu verwalten (dies kann den Energieverbrauch beeinflussen).</string>
+    <string name="startup_notification_privacy_message">Riot.im kann im Hintergrund laufen um deine Benachrichtigungen sicher und privat zu verwalten. Dies kann den Energieverbrauch beeinflussen.</string>
     <string name="startup_notification_privacy_button_grant">Berechtigung gewähren</string>
     <string name="startup_notification_privacy_button_other">Wähle eine andere Option</string>
 
@@ -979,7 +979,7 @@ Die Sichtbarkeit deiner Nachrichten ist ähnlich zu E-Mails: Wenn wir deine Nach
     <string name="go_on_with">fortfahren mit…</string>
     <string name="error_no_external_application_found">Es wurde keine externe Anwendung gefunden, um diese Aktion auszuführen.</string>
 
-    <string name="settings_labs_enable_send_voice">Sprachnachrichten (erfordert eine externe Anwendung um Sprachnachrichten aufzuzeichnen)</string>
+    <string name="settings_labs_enable_send_voice">Sende Sprachnachrichten</string>
 
     <string name="error_empty_field_your_password">Bitte gib dein Passwort ein.</string>
 
@@ -1070,7 +1070,7 @@ Beachte: Diese Aktion wird die App neu starten und einige Zeit brauchen.</string
     <string name="dialog_title_error">Error</string>
 
     <string name="settings_lazy_loading_title">Raummitglieder nachladen</string>
-    <string name="settings_lazy_loading_description">Verbessere Performanz, indem Raum-Mitglieder erst beim ersten Ansehen geladen werden</string>
+    <string name="settings_lazy_loading_description">Verbessere Performanz, indem Raum-Mitglieder erst beim ersten Ansehen geladen werden.</string>
     <string name="error_lazy_loading_not_supported_by_home_server">Dein Heimserver unterstützt nachladen von Raummitgliedern noch nicht. Versuche es später.</string>
 
     <string name="unknown_error">Entschuldige, ein Fehler trat auf</string>
@@ -1094,4 +1094,31 @@ Beachte: Diese Aktion wird die App neu starten und einige Zeit brauchen.</string
     <string name="plus_x">+%d</string>
     <string name="x_plus">%d+</string>
 
-</resources>
+<string name="call_anyway">Trotzdem anrufen</string>
+    <string name="room_participants_action_kick">Kicken</string>
+    <plurals name="room_participants_kick_prompt_msg">
+	<item quantity="one">Bist du sicher, dass du diesen Benutzer aus diesem Chat kicken möchtest?</item>
+	<item quantity="other">Bist du sicher, dass du diese Benutzer aus diesem Chat kicken möchtest?</item>
+</plurals>
+    <string name="reason_hint">Grund</string>
+
+    <string name="settings_inline_url_preview_summary">Im Chat Linkvorschau aktivieren, wenn dein Heimserver diese Funktion unterstützt.</string>
+    <string name="settings_send_typing_notifs">Sende Schreibbenachrichtigungen</string>
+    <string name="settings_send_typing_notifs_summary">Lasse andere Benutzer wissen, dass du tippst.</string>
+    <string name="settings_send_markdown">Markdown-Formatierung</string>
+    <string name="settings_send_markdown_summary">Formatiere Nachrichten mittels Markdown-Syntax bevor sie gesendet werden. Dies erlaubt erweiterte Formatierungen wie * um kursiven Text anzuzeigen.</string>
+    <string name="settings_show_read_receipts">Zeige Lesebestätigungen</string>
+    <string name="settings_show_read_receipts_summary">Klicke auf die Lesebestätigungen für eine detailliertere Liste.</string>
+    <string name="settings_show_join_leave_messages_summary">Einladungen, Kicks und Bans bleiben unberührt.</string>
+    <string name="settings_password">Passwort</string>
+    <string name="settings_labs_native_camera_summary">Starte die System-Kamera anstelle der angepassten Kamera.</string>
+    <string name="settings_labs_enable_send_voice_summary">Diese Option erfordert eine externe Anwendung um Sprachnachrichten aufzuzeichnen.</string>
+
+    <string name="command_problem_with_parameters">Das Kommando \"%s\" braucht mehr Parameter oder einige Parameter sind inkorrekt.</string>
+    <string name="markdown_has_been_enabled">Markdown wurde aktiviert.</string>
+    <string name="markdown_has_been_disabled">Markdown wurde deaktiviert.</string>
+
+    <string name="settings_show_join_leave_messages">Zeige Betretens- und Verlassens-Ereignisse</string>
+    <string name="settings_show_avatar_display_name_changes_messages">Zeige Konto-Ereignisse</string>
+    <string name="settings_show_avatar_display_name_changes_messages_summary">Enthält Änderungen des Profilbilds und Anzeigenamens.</string>
+    </resources>

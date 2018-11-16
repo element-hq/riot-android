@@ -432,7 +432,7 @@ Vedd figyelembe, hogy az alkalmazás újraindul  ami sok időt vehet igénybe."<
     <string name="settings_background_sync">Szinkronizálás a háttérben</string>
     <string name="settings_enable_background_sync">Háttérben történő szinkronizáció engedélyezése</string>
     <string name="settings_set_sync_timeout">Szinkronizáció kérelem időtúllépés</string>
-    <string name="settings_set_sync_delay">Késleltetés két szinkronizáció kérés között</string>
+    <string name="settings_set_sync_delay">Késleltetés kérések között</string>
     <string name="settings_second">másodperc</string>
     <string name="settings_seconds">másodperc</string>
 
@@ -475,7 +475,7 @@ A folytatáshoz írd be a jelszavad.</string>
 
     <string name="account_email_validation_title">Hitelesítés folyamatban</string>
     <string name="account_email_validation_message">Kérlek ellenőrizd az e-mail-ed és kattints a linkre amit tartalmaz. Amikor kész, kattints a folytatásra.</string>
-    <string name="account_email_validation_error">E-mail cím hitelesítése sikertelen. Kérlek kattints az e-mail-ben található linkre. Amikor kész, kattints a folytatásra</string>
+    <string name="account_email_validation_error">E-mail cím hitelesítése sikertelen. Kérlek kattints az e-mail-ben található linkre. Amikor kész, kattints a folytatásra.</string>
 
     <string name="settings_change_password">Jelszó megváltoztatása</string>
     <string name="settings_old_password">Régi jelszó</string>
@@ -512,7 +512,7 @@ Vedd figyelembe, hogy az alkalmazás újraindul  ami sok időt vehet igénybe."<
     <string name="room_settings_tag_pref_entry_favourite">Kedvencek</string>
     <string name="room_settings_tag_pref_entry_low_priority">Alacsony prioritású</string>
     <string name="room_settings_tag_pref_entry_none">Semmi</string>
-    <string name="room_settings_tag_pref_no_tag">nem címkézett</string>
+    <string name="room_settings_tag_pref_no_tag">Nem címkézett</string>
 
     <string name="room_settings_category_access_visibility_title">Hozzáférés és láthatóság</string>
     <string name="room_settings_directory_visibility">Listázza ezt a szobát a szobák könyvtárba</string>
@@ -607,7 +607,7 @@ Figyelmeztetés: ez a fájl törlésre kerülhet, ha az alkalmazást törli.</st
     <string name="encryption_import_room_keys_summary">Kulcsok importálás helyi fájlból</string>
     <string name="encryption_import_import">Importálás</string>
     <string name="encryption_never_send_to_unverified_devices_title">Csak hitelesített eszközökre titkosítás</string>
-    <string name="encryption_never_send_to_unverified_devices_summary">Sose küldj titkosított üzenetet nem hitelesített eszközökre erről az eszközről</string>
+    <string name="encryption_never_send_to_unverified_devices_summary">Sose küldj titkosított üzenetet nem hitelesített eszközökre erről az eszközről.</string>
 
     <string name="encryption_information_not_verified">NEM hitelesített</string>
     <string name="encryption_information_verified">Hitelesített</string>
@@ -647,18 +647,18 @@ Ismeretlen eszközök:</string>
     <string name="historical_placeholder">Előzmények keresése</string>
 
     <string name="settings_user_interface">Felhasználói felület</string>
-    <string name="settings_interface_language">Felület nyelve</string>
-    <string name="settings_select_language">Válassz egy nyelvet</string>
+    <string name="settings_interface_language">Nyelv</string>
+    <string name="settings_select_language">Válassz nyelvet</string>
 
-    <string name="account_email_already_used_error">Ezt az e-mail címet már használják</string>
-    <string name="account_email_not_found_error">E-mail küldése sikertelen: ez a cím nem található</string>
-    <string name="account_phone_number_already_used_error">Ez a telefonszám már használatban van</string>
+    <string name="account_email_already_used_error">Ezt az e-mail címet már használják.</string>
+    <string name="account_email_not_found_error">Az email cím nem található.</string>
+    <string name="account_phone_number_already_used_error">Ez a telefonszám már használatban van.</string>
 
     <string name="settings_start_on_boot">Indítás rendszerinduláskor</string>
     <string name="settings_clear_media_cache">Média gyorsítótár törlése</string>
     <string name="settings_keep_media">Média megtartása</string>
 
-    <string name="settings_always_show_timestamps">Mindig jelenítse meg az üzenetek időbélyegét</string>
+    <string name="settings_always_show_timestamps">Üzenetek megjelenítése időbélyeggel</string>
 
     <string name="media_saving_period_3_days">3 nap</string>
     <string name="media_saving_period_1_week">1 hét</string>
@@ -688,7 +688,7 @@ Ismeretlen eszközök:</string>
     <string name="login_mobile_device">Mobil</string>
 
     <string name="settings_notification_ringtone">Értesítés hangja</string>
-    <string name="settings_12_24_timestamps">Időbélyegek mutatása 12 órás formátumban (pl.: du. 2:30)</string>
+    <string name="settings_12_24_timestamps">Időbélyegek mutatása 12 órás formátumban</string>
 
     <string name="widget_no_power_to_manage">Engedélyre van szükséged a kisalkalmazások ebben a szobában való kezeléséhez</string>
     <string name="widget_creation_failure">Kisalkalmazás létrehozása sikertelen</string>
@@ -773,7 +773,7 @@ Ismeretlen eszközök:</string>
     <string name="room_settings_mute">Némítás</string>
     <string name="room_settings_add_homescreen_shortcut">Kezdőképernyő parancsikon hozzáadása</string>
 
-    <string name="settings_vibrate_on_mention">Rezegés megemlítéskor</string>
+    <string name="settings_vibrate_on_mention">Rezgés megemlítéskor</string>
 
     <string name="room_settings_room_notifications_title">Értesítések</string>
     <string name="room_settings_add_new_group">Új közösség azonosító (pl.: +foo:matrix.org)</string>
@@ -806,7 +806,7 @@ Ismeretlen eszközök:</string>
     <string name="reason_colon">Ok: %1$s</string>
     <string name="rejoin">Újracsatlakozás</string>
     <string name="forget_room">Szoba elfelejtése</string>
-    <string name="settings_inline_url_preview">"Üzenetekben URL előnézet engedélyezése alapbeállításként "</string>
+    <string name="settings_inline_url_preview">URL előnézet</string>
     <string name="settings_flair">Kitűző</string>
 
     <string name="room_settings_no_flair">"Ez a szoba nem mutatja  a közösségek kitűzőit"</string>
@@ -876,7 +876,7 @@ Ismeretlen eszközök:</string>
     <string name="settings_notification_privacy_metadata">• Az értesítések csak metaadatokat tartalmaznak</string>
     <string name="settings_notification_privacy_secure_message_content">• Az értesítés tartalma <b>közvetlenül a Matrix szerverről kerül letöltésre</b></string>
     <string name="settings_notification_privacy_nosecure_message_content">Az értesítések <b>meta- és üzenet adatot is</b> tartalmaznak</string>
-    <string name="startup_notification_privacy_message">Riot futtatható a háttérben az értesítések biztonságos és titkos kezeléséhez (ami hatással lehet az akkumulátor használatra ).</string>
+    <string name="startup_notification_privacy_message">Riot futtatható a háttérben az értesítések biztonságos és titkos kezeléséhez, ami hatással lehet az akkumulátor használatra.</string>
     <string name="startup_notification_privacy_button_grant">Engedély megadása</string>
     <string name="startup_notification_privacy_button_other">Más lehetőség választása</string>
 
@@ -935,7 +935,7 @@ Matrixban az üzenetek láthatósága hasonlít az e-mailre. Az üzenet törlés
     <string name="go_on_with">tovább ezzel…</string>
     <string name="error_no_external_application_found">Sajnálom, nem található külső alkalmazás a művelethez.</string>
 
-    <string name="settings_labs_enable_send_voice">Hang üzenet küldése (külső alkalmazásra van szükség a hang üzenet felvételéhez)</string>
+    <string name="settings_labs_enable_send_voice">Hang üzenet küldése</string>
 
     <string name="error_empty_field_your_password">Kérlek add meg a jelszavad.</string>
 
@@ -1026,7 +1026,7 @@ Vedd figyelembe, hogy az alkalmazás újraindul ami sok időt vehet igénybe.</s
     <string name="dialog_title_error">Hiba</string>
 
     <string name="settings_lazy_loading_title">Szoba tagság késleltetett betöltése</string>
-    <string name="settings_lazy_loading_description">Teljesítmény növelése a szoba tagjainak késleltetett betöltésével</string>
+    <string name="settings_lazy_loading_description">Teljesítmény növelése a szoba tagjainak késleltetett betöltésével.</string>
     <string name="error_lazy_loading_not_supported_by_home_server">A Matrix szervered jelenleg nem támogatja a szoba tagság késleltetett betöltését. Próbáld meg később.</string>
 
     <string name="unknown_error">Ne haragudj, hiba történt</string>
@@ -1050,4 +1050,31 @@ Vedd figyelembe, hogy az alkalmazás újraindul ami sok időt vehet igénybe.</s
     <string name="plus_x">+%d</string>
     <string name="x_plus">%d+</string>
 
-</resources>
+<string name="call_anyway">Hívás mindenképpen</string>
+    <string name="room_participants_action_kick">Kirúg</string>
+    <plurals name="room_participants_kick_prompt_msg">
+	<item quantity="one">Ezeket az embereket biztosan kirúgod?</item>
+	<item quantity="other"/>
+</plurals>
+    <string name="reason_hint">Ok</string>
+
+    <string name="settings_inline_url_preview_summary">URL előnézet a csevegő ablakban, ha a Matrix szervered támogatja ezt a lehetőséget.</string>
+    <string name="settings_send_typing_notifs">Gépelés visszajelzés küldése</string>
+    <string name="settings_send_typing_notifs_summary">Hogy a többi felhasználó lássa, ha gépelsz.</string>
+    <string name="settings_send_markdown">Markdown formázás</string>
+    <string name="settings_send_markdown_summary">Szöveg formázása markdown szabályok szerint küldés előtt. Ezzel például olyan haladó szövegformázást tudsz megvalósítani, mint két csillag közötti szöveg dőltként való megjelenítése.</string>
+    <string name="settings_show_read_receipts">Olvasás visszajelzés megjelenítése</string>
+    <string name="settings_show_read_receipts_summary">További információér kattints az olvasás visszaigazolásokra.</string>
+    <string name="settings_show_join_leave_messages">Be-, és kilépési események megjelenítése</string>
+    <string name="settings_show_join_leave_messages_summary">Meghívások, kirúgások és kitiltások nem változtak.</string>
+    <string name="settings_show_avatar_display_name_changes_messages">Fiók események megjelenítése</string>
+    <string name="settings_show_avatar_display_name_changes_messages_summary">Avatar és név változásokat tartalmaz.</string>
+    <string name="settings_password">Jelszó</string>
+    <string name="settings_labs_native_camera_summary">Rendszer kamera indítása a Riot egyedi kamera alkalmazása helyett.</string>
+    <string name="settings_labs_enable_send_voice_summary">Ehhez az opcióhoz egy harmadik féltől származó alkalmazásra van szükség, hogy felvedd az üzenetet.</string>
+
+    <string name="command_problem_with_parameters">\"%s\" parancsnak több paraméterre van szüksége vagy valamelyik paraméter hibás.</string>
+    <string name="markdown_has_been_enabled">Markdown engedélyezve.</string>
+    <string name="markdown_has_been_disabled">Markdown tiltva.</string>
+
+    </resources>
