@@ -130,6 +130,10 @@ public class PreferencesManager {
     public static final String SETTINGS_SET_SYNC_TIMEOUT_PREFERENCE_KEY = "SETTINGS_SET_SYNC_TIMEOUT_PREFERENCE_KEY";
     public static final String SETTINGS_SET_SYNC_DELAY_PREFERENCE_KEY = "SETTINGS_SET_SYNC_DELAY_PREFERENCE_KEY";
 
+    // Calls
+    public static final String SETTINGS_CALL_RINGTONE_USE_RIOT_PREFERENCE_KEY = "SETTINGS_CALL_RINGTONE_USE_RIOT_PREFERENCE_KEY";
+    public static final String SETTINGS_CALL_RINGTONE_URI_PREFERENCE_KEY = "SETTINGS_CALL_RINGTONE_URI_PREFERENCE_KEY";
+
     // labs
     public static final String SETTINGS_LAZY_LOADING_PREFERENCE_KEY = "SETTINGS_LAZY_LOADING_PREFERENCE_KEY";
     public static final String SETTINGS_USER_REFUSED_LAZY_LOADING_PREFERENCE_KEY = "SETTINGS_USER_REFUSED_LAZY_LOADING_PREFERENCE_KEY";
@@ -480,20 +484,6 @@ public class PreferencesManager {
                 .edit()
                 .putBoolean(SETTINGS_START_ON_BOOT_PREFERENCE_KEY, value)
                 .apply();
-    }
-
-    /**
-     * Provides the medias saving choice list.
-     *
-     * @param context the context
-     * @return the list
-     */
-    public static CharSequence[] getMediasSavingItemsChoicesList(Context context) {
-        return new CharSequence[]{
-                context.getString(R.string.media_saving_period_3_days),
-                context.getString(R.string.media_saving_period_1_week),
-                context.getString(R.string.media_saving_period_1_month),
-                context.getString(R.string.media_saving_period_forever)};
     }
 
     /**

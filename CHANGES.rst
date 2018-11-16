@@ -11,6 +11,7 @@ Improvements:
  - Remove double negations from settings and update descriptions (#2723)
  - Handle missing or bad parameter in slash command
  - Support specifying kick and ban message (#2164)
+ - Add image transparency and fix issues with gifs in the media viewer (#2731)
 
 Other changes:
  -
@@ -18,6 +19,7 @@ Other changes:
 Bugfix:
  - Use same "Call Anyway" string from iOS (#2695)
  - Improve `/markdown` command (#2673)
+ - Display thumbnail for encrypted files without a remote thumbnail (#2734)
 
 Translations:
  -
