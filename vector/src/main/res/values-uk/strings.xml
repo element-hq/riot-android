@@ -1106,7 +1106,7 @@
 <string name="call_anyway">Все одно подзвонити</string>
     <string name="room_participants_action_kick">Копнути</string>
     <plurals name="room_participants_kick_prompt_msg">
-	<item quantity="one">Ви певні, що хочете викинути цього користувача з чату?</item>
+	<item quantity="one">Ви певні, що хочете викинути цього (%d) користувача з чату?</item>
 	<item quantity="few">Ви певні, що хочете викинути цих користувачів з чату?</item>
 	<item quantity="many">Ви певні, що хочете викинути цих користувачів з чату?</item>
 	<item quantity="other"/>
