@@ -797,7 +797,7 @@ Mesazhet e fshehtëzuar s’do të jenë të dukshëm në klientë që nuk send�
 
     <string name="room_settings_add_new_group">ID bashkësie të re (p.sh., +foo:matrix.org)</string>
     <string name="room_settings_addresses_e2e_encryption_warning">Aktivizo fshehtëzim 
-(kujdes: s’mund të çaktizohet më!)</string>
+(kujdes: s’mund të çaktivizohet më!)</string>
     <string name="room_settings_addresses_e2e_prompt_message">Fshehtëzimi skaj-më-skaj është në fazën beta dhe mund të mos jetë i qëndrueshëm.
 
 S’duhet t’i zini ende besë për sigurim të dhënash.
