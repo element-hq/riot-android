@@ -1,5 +1,8 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <resources>
+    <string name="resources_language">sq</string>
+    <string name="resources_country_code">AL</string>
+
     <string name="light_theme">Temë e Çelët</string>
     <string name="dark_theme">Temë e Errët</string>
     <string name="black_them">Temë e Zezë</string>
@@ -730,9 +733,6 @@
     <string name="generic_label_and_value">%1$s: %2$s</string>
     <string name="plus_x">+%d</string>
     <string name="x_plus">%d+</string>
-
-    <string name="resources_language">sq</string>
-    <string name="resources_country_code">ShBA</string>
 
     <string name="notification_listening_for_events">Po përgjohet për akte</string>
     <string name="ongoing_conference_call">Thirrje konference që po zhvillohet. Merrni pjesë me zë ose video.</string>
