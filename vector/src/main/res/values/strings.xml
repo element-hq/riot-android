@@ -755,7 +755,6 @@
     <string name="room_settings_tag_pref_entry_favourite">Favourite</string>
     <string name="room_settings_tag_pref_entry_low_priority">Low priority</string>
     <string name="room_settings_tag_pref_entry_none">None</string>
-    <string name="room_settings_tag_pref_no_tag">Not tagged</string>
 
     <!-- room settings : access and visibility -->
     <string name="room_settings_category_access_visibility_title">Access and visibility</string>

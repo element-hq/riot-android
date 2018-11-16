@@ -590,7 +590,6 @@ Tingueu en compte que aquesta acció reiniciarà l\'aplicació i que pot trigar 
     <string name="room_settings_tag_pref_entry_favourite">Preferit</string>
     <string name="room_settings_tag_pref_entry_low_priority">Prioritat baixa</string>
     <string name="room_settings_tag_pref_entry_none">Cap</string>
-    <string name="room_settings_tag_pref_no_tag">sense etiquetar</string>
 
     <!-- room settings : access and visibility -->
     <string name="room_settings_category_access_visibility_title">Accés i visibilitat</string>

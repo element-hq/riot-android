@@ -579,7 +579,6 @@ Tieni presente che questa azione riavvierà l\'app e potrebbe richiedere del tem
     <string name="room_settings_tag_pref_entry_favourite">Preferito</string>
     <string name="room_settings_tag_pref_entry_low_priority">Bassa priorità</string>
     <string name="room_settings_tag_pref_entry_none">Niente</string>
-    <string name="room_settings_tag_pref_no_tag">Non etichettato</string>
 
     <!-- room settings : access and visibility -->
     <string name="room_settings_category_access_visibility_title">Accesso e visibilità</string>

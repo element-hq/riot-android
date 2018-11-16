@@ -553,7 +553,6 @@ Email также позволит вам при необходимости во�
     <string name="room_settings_tag_pref_entry_favourite">Избранное</string>
     <string name="room_settings_tag_pref_entry_low_priority">Низкий приоритет</string>
     <string name="room_settings_tag_pref_entry_none">Нет</string>
-    <string name="room_settings_tag_pref_no_tag">без меток</string>
 
     <!-- room settings : access and visibility -->
     <string name="room_settings_category_access_visibility_title">Доступность и видимость</string>

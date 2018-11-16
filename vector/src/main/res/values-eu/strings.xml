@@ -532,7 +532,6 @@ Kontuan izan ekintza honek aplikazioa berrabiaraziko duela eta denbora bat behar
     <string name="room_settings_tag_pref_entry_favourite">Gogokoa</string>
     <string name="room_settings_tag_pref_entry_low_priority">Lehentasun baxua</string>
     <string name="room_settings_tag_pref_entry_none">Bat ere ez</string>
-    <string name="room_settings_tag_pref_no_tag">etiketatu gabe</string>
 
     <string name="room_settings_category_access_visibility_title">Sarbidea eta ikusgaitasuna</string>
     <string name="room_settings_directory_visibility">Zerrendatu gela hau gelen direktorioan</string>

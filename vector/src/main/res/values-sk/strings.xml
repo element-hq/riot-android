@@ -547,7 +547,6 @@ Pozor! Vykonaním tejto akcie reštartujete aplikáciu a opätovné načítanie 
     <string name="room_settings_tag_pref_entry_favourite">Obľúbená</string>
     <string name="room_settings_tag_pref_entry_low_priority">Nízka priorita</string>
     <string name="room_settings_tag_pref_entry_none">Žiadne</string>
-    <string name="room_settings_tag_pref_no_tag">Neoznačená</string>
 
     <string name="room_settings_category_access_visibility_title">Prístup a viditeľnosť</string>
     <string name="room_settings_directory_visibility">Uverejniť túto miestnosť v adresári miestností</string>

@@ -788,7 +788,6 @@ Mesazhet e fshehtëzuar s’do të jenë të dukshëm në klientë që nuk send�
     <string name="settings_notification_privacy_low_detail">Njoftime me pak hollësi</string>
     <string name="settings_olm_version">version olm</string>
     <string name="settings_pin_missed_notifications">Fikso dhomat me njoftime të humbura</string>
-    <string name="room_settings_tag_pref_no_tag">E paetiketuar</string>
 
     <string name="room_settings_category_access_visibility_title">Hyrje dhe dukshmëri</string>
     <string name="room_settings_read_history_entry_members_only_option_time_shared">Vetëm anëtarët (që nga çasti i përzgjedhjes së kësaj mundësie)</string>

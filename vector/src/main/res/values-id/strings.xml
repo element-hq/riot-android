@@ -768,7 +768,6 @@ Perangkat tak dikenal:</string>
     </plurals>
     <string name="room_settings_tag_pref_entry_low_priority">Prioritas rendah</string>
     <string name="room_settings_tag_pref_entry_none">Tidak Ada</string>
-    <string name="room_settings_tag_pref_no_tag">tidak ditandai</string>
 
     <string name="room_settings_category_access_visibility_title">Akses dan visibilitas</string>
     <string name="room_settings_directory_visibility">Daftarkan ruang ini di direktori ruang</string>
