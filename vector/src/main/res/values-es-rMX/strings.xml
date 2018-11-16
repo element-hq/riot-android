@@ -2,7 +2,7 @@
 <resources>
     <!-- use to retrieve the supported languages list -->
     <!-- should the same value as the file name -->
-    <string name="resources_language">es_MX</string>
+    <string name="resources_language">es</string>
     <string name="resources_country_code">MX</string>
 
     <!-- titles -->
