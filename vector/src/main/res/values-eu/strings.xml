@@ -434,7 +434,7 @@ Kontuan izan ekintza honek aplikazioa berrabiaraziko duela eta denbora bat behar
     <string name="settings_background_sync">Bigarren planoko sinkronizazioa</string>
     <string name="settings_enable_background_sync">Gaitu bigarren planoko sinkronizazioa</string>
     <string name="settings_set_sync_timeout">Sinkronizazio eskaerak debora-muga gainditu du</string>
-    <string name="settings_set_sync_delay">Bi sinkronizazio eskaeren arteko itxaronaldia</string>
+    <string name="settings_set_sync_delay">Eskaeren arteko itxaronaldia</string>
     <string name="settings_second">segundo</string>
     <string name="settings_seconds">segundo</string>
 
@@ -460,7 +460,7 @@ Kontuan izan ekintza honek aplikazioa berrabiaraziko duela eta denbora bat behar
     <string name="settings_pin_missed_notifications">Finkatu ikusi gabeko jakinarazpenak dituzten gelak</string>
     <string name="settings_pin_unread_messages">Finkatu irakurri gabeko mezuak dituzten gelak</string>
     <string name="settings_devices_list">Gailuak</string>
-    <string name="settings_always_show_timestamps">Erakutsi beti mezuen denbora-zigilua</string>
+    <string name="settings_always_show_timestamps">Erakutsi mezu guztien denbora-zigilua</string>
     <string name="devices_details_dialog_title">Gailuaren xehetasunak</string>
     <string name="devices_details_id_title">ID</string>
     <string name="devices_details_name_title">Izena</string>
@@ -478,15 +478,15 @@ Jarraitzeko, idatzi zure pasahitza.</string>
     <string name="settings_identity_server">Identitate zerbitzaria</string>
 
     <string name="settings_user_interface">Erabiltzaile interfazea</string>
-    <string name="settings_interface_language">Interfazearen hizkuntza</string>
+    <string name="settings_interface_language">Hizkuntza</string>
     <string name="settings_select_language">Hautatu hizkuntza</string>
 
     <string name="account_email_validation_title">Egiaztaketa egiteke</string>
     <string name="account_email_validation_message">Irakurri zure e-maila eta egin klik dakarren estekan. Behin eginda, egin klik Jarraitu botoian.</string>
-    <string name="account_email_validation_error">Ezin izan da e-mail helbidea egiaztatu. Irakurrri zure e-maila eta egin klik dakarren estekan. Behin eginda, egin klik Jarraitu botoian</string>
-    <string name="account_email_already_used_error">E-mail helbide hau erabilita dago</string>
-    <string name="account_email_not_found_error">Huts egin du e-maila bidaltzean: Ez da e-mail helbide hau aurkitu</string>
-    <string name="account_phone_number_already_used_error">Telefono zenbaki hau erabilita dago</string>
+    <string name="account_email_validation_error">Ezin izan da e-mail helbidea egiaztatu. Irakurrri zure e-maila eta egin klik dakarren estekan. Behin eginda, egin klik Jarraitu botoian.</string>
+    <string name="account_email_already_used_error">E-mail helbide hau erabilita dago jada.</string>
+    <string name="account_email_not_found_error">Ez da e-mail helbide hau aurkitu.</string>
+    <string name="account_phone_number_already_used_error">Telefono zenbaki hau erabilita dago jada.</string>
 
     <string name="settings_change_password">Aldatu pasahitza</string>
     <string name="settings_old_password">Pasahitz zaharra</string>
@@ -615,7 +615,7 @@ Abisua: Fitxategi hau ezabatu daiteke aplikazioa desinstalatzen bada.</string>
     <string name="encryption_import_room_keys">Inportatu gelako gakoak</string>
     <string name="encryption_import_import">Inportatu</string>
     <string name="encryption_never_send_to_unverified_devices_title">Zifratu egiaztatutako gailuetarako besterik ez</string>
-    <string name="encryption_never_send_to_unverified_devices_summary">Ez bidali inoiz zifratutako mezuak egiaztatu gabeko gailuetara gailu honetatik</string>
+    <string name="encryption_never_send_to_unverified_devices_summary">Ez bidali inoiz zifratutako mezuak egiaztatu gabeko gailuetara gailu honetatik.</string>
 
     <string name="encryption_information_not_verified">EZ egiaztatuta</string>
     <string name="encryption_information_verified">Egiaztatuta</string>
@@ -690,7 +690,7 @@ Zifratutako mezuak ez dira zifratzea oraindik ezarrita ez duten beste gailuetan 
     <string name="login_mobile_device">Mugikorra</string>
 
     <string name="settings_notification_ringtone">Jakinarazpen-soinua</string>
-    <string name="settings_12_24_timestamps">Erakutsi denbora-zigiluak 12 ordutako formatuan (adib 2:30pm)</string>
+    <string name="settings_12_24_timestamps">Erakutsi denbora-zigiluak 12 ordutako formatuan</string>
 
     <string name="widget_no_power_to_manage">Baimena behar duzu gela honetako trepetak kudeatzeko</string>
     <string name="widget_creation_failure">Trepetaren sorrerak huts egin du</string>
@@ -773,8 +773,8 @@ Zifratutako mezuak ez dira zifratzea oraindik ezarrita ez duten beste gailuetan 
     <string name="room_settings_mute">Mututu</string>
     <string name="room_settings_add_homescreen_shortcut">Gehitu hasiera pantailako laster-bidea</string>
 
-    <string name="settings_inline_url_preview">Gaitu URL-en aurrebistak lehenetsita</string>
-    <string name="settings_vibrate_on_mention">Bibratu aipatzean</string>
+    <string name="settings_inline_url_preview">URL-en aurrebista</string>
+    <string name="settings_vibrate_on_mention">Bibratu erabiltzaile bat aipatzean</string>
 
     <string name="room_settings_room_notifications_title">Jakinarazpenak</string>
     <string name="room_settings_add_new_group">Komunitatearen ID berria (adib. +foo:matrix.org)</string>
@@ -882,7 +882,7 @@ Zifratutako mezuak ez dira zifratzea oraindik ezarrita ez duten beste gailuetan 
     <string name="settings_notification_privacy_message_content_not_shown">• Jakinarazpenek <b>ez dute mezuaren edukia erakutsiko</b></string>
 
     <string name="startup_notification_privacy_title">Jakinarazpenen pribatutasuna</string>
-    <string name="startup_notification_privacy_message">Riot bigarren planoan aritu daiteke zure jakinarazpenak modu seguru eta pribatuan kudeatzeko (baterian eragina izan lezake).</string>
+    <string name="startup_notification_privacy_message">Riot bigarren planoan aritu daiteke zure jakinarazpenak modu seguru eta pribatuan kudeatzeko. Honek baterian eragina izan lezake.</string>
     <string name="startup_notification_privacy_button_grant">Eman baimena</string>
     <string name="startup_notification_privacy_button_other">Aukeratu beste zerbait</string>
 
@@ -935,7 +935,7 @@ Matrix-eko mezuen ikusgaitasuna e-mail sistemaren antekoa da. Guk zure mezuak ah
     <string name="go_on_with">jarraitu honekin…</string>
     <string name="error_no_external_application_found">Ez da ekintza hau burutzeko kanpo aplikaziorik aurkitu.</string>
 
-    <string name="settings_labs_enable_send_voice">Bidali ahots mezua (Hirugarrengoen kanpo aplikazio bat behar da ahots-mezuak grabatzeko)</string>
+    <string name="settings_labs_enable_send_voice">Bidali ahots mezuak</string>
 
     <string name="error_empty_field_your_password">Sartu zure pasahitza.</string>
 
@@ -1026,7 +1026,7 @@ Kontuan izan ekintza honek aplikazioa berrabiaraziko duela eta denbora bat behar
     <string name="dialog_title_error">Errorea</string>
 
     <string name="settings_lazy_loading_title">Kargatu gelako kideak modu alperrean</string>
-    <string name="settings_lazy_loading_description">Hobetu errendimendua kideak lehen ikustaldian bakarrik kargatuz</string>
+    <string name="settings_lazy_loading_description">Hobetu errendimendua kideak lehen ikustaldian bakarrik kargatuz.</string>
     <string name="error_lazy_loading_not_supported_by_home_server">Zure hasiera-zerbitzariak ez du oraindik erabiltzaileen karga alperra onartzen. Saiatu geroago.</string>
 
     <string name="unknown_error">Errore bat gertatu da</string>
@@ -1050,4 +1050,36 @@ Kontuan izan ekintza honek aplikazioa berrabiaraziko duela eta denbora bat behar
     <string name="plus_x">+%d</string>
     <string name="x_plus">%d+</string>
 
-</resources>
+<string name="call_anyway">Deitu hala ere</string>
+    <string name="settings_call_category">Deiak</string>
+    <string name="settings_call_ringtone_use_riot_ringtone">Erabili Rioten lehenetsitako dei-doinua jasotako deientzat</string>
+    <string name="settings_call_ringtone_title">Jasotako deien doinua</string>
+    <string name="settings_call_ringtone_dialog_title">Hautatu deientzako doinua:</string>
+
+    <string name="room_participants_action_kick">Kanporatu</string>
+    <plurals name="room_participants_kick_prompt_msg">
+	<item quantity="one">Ziur erabiltzaile hau txat honetatik kanporatu nahi duzula?</item>
+	<item quantity="other">Ziur erabiltzaile hauek txat honetatik kanporatu nahi dituzula?</item>
+</plurals>
+    <string name="reason_hint">Arrazoia</string>
+
+    <string name="settings_inline_url_preview_summary">Erakutsi txateko esteken aurrebista hasiera-zerbitzariak onartzen badu.</string>
+    <string name="settings_send_typing_notifs">Bidali idazte jakinarazpenak</string>
+    <string name="settings_send_typing_notifs_summary">Eman beste erabiltzaileei ezagutzera idazten ari zarela.</string>
+    <string name="settings_send_markdown">Markdown formatua</string>
+    <string name="settings_send_markdown_summary">Eman formatua mezuei markdown sintaxia erabiliz hauek bidali aurretik. Honek formatu aurreratua ahalbidetzen du, adibidez letra etzana adierazteko asteriskoekin inguratzea.</string>
+    <string name="settings_show_read_receipts">Erakutsi irakurragiriak</string>
+    <string name="settings_show_read_receipts_summary">Egin klik irakurragirietan zerrenda xehetsu bat ikusteko.</string>
+    <string name="settings_show_join_leave_messages">Erakutsi batu eta ateratze gertaerak</string>
+    <string name="settings_show_join_leave_messages_summary">Gonbidapen, kanporatze eta debekuei ez die eragiten.</string>
+    <string name="settings_show_avatar_display_name_changes_messages">Erakutsi kontuen gertaerak</string>
+    <string name="settings_show_avatar_display_name_changes_messages_summary">Abatar eta izen aldaketak barne-hartzen ditu.</string>
+    <string name="settings_password">Pasahitza</string>
+    <string name="settings_labs_native_camera_summary">Abiatu sistemaren kamera, eta ez kamera pantaila pertsonalizatua.</string>
+    <string name="settings_labs_enable_send_voice_summary">Aukera honek hirugarrengoen aplikazio bat behar du mezuak grabatzeko.</string>
+
+    <string name="command_problem_with_parameters">\"%s\" komandoak parametro gehiago behar ditu, edo parametroren bat okerra da.</string>
+    <string name="markdown_has_been_enabled">Markdown aktibatu da.</string>
+    <string name="markdown_has_been_disabled">Markdown desaktibatu da.</string>
+
+    </resources>
