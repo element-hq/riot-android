@@ -2157,7 +2157,7 @@ class VectorSettingsPreferencesFragment : PreferenceFragment(), SharedPreference
 
         // crypto section: device key (fingerprint)
         if (!TextUtils.isEmpty(deviceId) && !TextUtils.isEmpty(userId)) {
-            mSession.crypto.getDeviceInfo(userId, deviceId, object : SimpleApiCallback<MXDeviceInfo>() {
+            mSession.crypto?.getDeviceInfo(userId, deviceId, object : SimpleApiCallback<MXDeviceInfo>() {
                 override fun onSuccess(deviceInfo: MXDeviceInfo?) {
                     if (null != deviceInfo && !TextUtils.isEmpty(deviceInfo.fingerprint()) && null != activity) {
                         cryptoInfoTextPreference.summary = deviceInfo.getFingerprintHumanReadable()
@@ -2173,18 +2173,18 @@ class VectorSettingsPreferencesFragment : PreferenceFragment(), SharedPreference
 
         sendToUnverifiedDevicesPref.isChecked = false
 
-        mSession.crypto.getGlobalBlacklistUnverifiedDevices(object : SimpleApiCallback<Boolean>() {
+        mSession.crypto?.getGlobalBlacklistUnverifiedDevices(object : SimpleApiCallback<Boolean>() {
             override fun onSuccess(status: Boolean) {
                 sendToUnverifiedDevicesPref.isChecked = status
             }
         })
 
         sendToUnverifiedDevicesPref.onPreferenceClickListener = Preference.OnPreferenceClickListener {
-            mSession.crypto.getGlobalBlacklistUnverifiedDevices(object : SimpleApiCallback<Boolean>() {
+            mSession.crypto?.getGlobalBlacklistUnverifiedDevices(object : SimpleApiCallback<Boolean>() {
                 override fun onSuccess(status: Boolean) {
                     if (sendToUnverifiedDevicesPref.isChecked != status) {
                         mSession.crypto
-                                .setGlobalBlacklistUnverifiedDevices(sendToUnverifiedDevicesPref.isChecked, object : SimpleApiCallback<Void>() {
+                                ?.setGlobalBlacklistUnverifiedDevices(sendToUnverifiedDevicesPref.isChecked, object : SimpleApiCallback<Void>() {
                                     override fun onSuccess(info: Void?) {
 
                                     }
@@ -2368,7 +2368,7 @@ class VectorSettingsPreferencesFragment : PreferenceFragment(), SharedPreference
                     .setPositiveButton(R.string.rename) { _, _ -> displayDeviceRenameDialog(aDeviceInfo) }
 
             // disable the deletion for our own device
-            if (!TextUtils.equals(mSession.crypto.myDevice.deviceId, aDeviceInfo.device_id)) {
+            if (!TextUtils.equals(mSession.crypto?.myDevice?.deviceId, aDeviceInfo.device_id)) {
                 builder.setNegativeButton(R.string.delete) { _, _ -> displayDeviceDeletionDialog(aDeviceInfo) }
             }
 
@@ -2677,7 +2677,7 @@ class VectorSettingsPreferencesFragment : PreferenceFragment(), SharedPreference
 
                 displayLoadingView()
 
-                mSession.crypto.importRoomKeys(data, password, object : ApiCallback<Void> {
+                mSession.crypto?.importRoomKeys(data, password, object : ApiCallback<Void> {
                     override fun onSuccess(info: Void?) {
                         hideLoadingView()
                     }
