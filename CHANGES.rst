@@ -12,6 +12,7 @@ Improvements:
  - Handle missing or bad parameter in slash command
  - Support specifying kick and ban message (#2164)
  - Add image transparency and fix issues with gifs in the media viewer (#2731)
+ - Upgrade olm-sdk.aar from version 2.3.0 to version 3.0.0
 
 Other changes:
  -
