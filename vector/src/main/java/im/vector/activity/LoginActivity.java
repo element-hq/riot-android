@@ -1463,7 +1463,6 @@ public class LoginActivity extends MXCActionBarActivity implements RegistrationM
                             if (mMode == MODE_ACCOUNT_CREATION) {
                                 showMainLayout();
                                 enableLoadingScreen(false);
-                                refreshDisplay();
                                 Toast.makeText(getApplicationContext(), errorMessage, Toast.LENGTH_LONG).show();
                             }
                         }
@@ -1616,7 +1615,6 @@ public class LoginActivity extends MXCActionBarActivity implements RegistrationM
     private void onClick() {
         onIdentityServerUrlUpdate(false);
         onHomeServerUrlUpdate(false);
-        checkFlows();
 
         InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
         imm.hideSoftInputFromWindow(mHomeServerText.getWindowToken(), 0);
@@ -1956,7 +1954,6 @@ public class LoginActivity extends MXCActionBarActivity implements RegistrationM
      * Refresh the visibility of mHomeServerText
      */
     private void refreshDisplay() {
-
         // check if the device supported the dedicated mode
         checkFlows();
 

@@ -28,6 +28,8 @@ import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.Toast;
 
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import org.matrix.androidsdk.MXSession;
 import org.matrix.androidsdk.data.Room;
 import org.matrix.androidsdk.data.RoomPreviewData;
@@ -41,6 +43,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import butterknife.BindView;
 import im.vector.Matrix;
 import im.vector.PublicRoomsManager;
 import im.vector.R;
@@ -70,12 +73,16 @@ public class VectorPublicRoomsListFragment extends VectorBaseFragment {
     }
 
     private MXSession mSession;
-    private ListView mRecentsListView;
+    @BindView(R.id.fragment_public_rooms_list)
+    ListView mRecentsListView;
     private VectorPublicRoomsAdapter mAdapter;
     private String mPattern;
 
-    private View mInitializationSpinnerView;
-    private View mForwardPaginationView;
+    @BindView(R.id.listView_global_spinner_views)
+    View mInitializationSpinnerView;
+
+    @BindView(R.id.listView_forward_spinner_view)
+    View mForwardPaginationView;
 
     /**
      * Customize the scrolls behaviour.
@@ -106,8 +113,15 @@ public class VectorPublicRoomsListFragment extends VectorBaseFragment {
     };
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        super.onCreateView(inflater, container, savedInstanceState);
+    public int getLayoutResId() {
+        Bundle args = getArguments();
+        return args.getInt(ARG_LAYOUT_ID);
+    }
+
+    @Override
+    public void onViewCreated(@NotNull View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+
         Bundle args = getArguments();
 
         String matrixId = args.getString(ARG_MATRIX_ID);
@@ -118,11 +132,6 @@ public class VectorPublicRoomsListFragment extends VectorBaseFragment {
         }
 
         mPattern = args.getString(ARG_SEARCHED_PATTERN, null);
-
-        View v = inflater.inflate(args.getInt(ARG_LAYOUT_ID), container, false);
-        mRecentsListView = v.findViewById(R.id.fragment_public_rooms_list);
-        mInitializationSpinnerView = v.findViewById(R.id.listView_global_spinner_views);
-        mForwardPaginationView = v.findViewById(R.id.listView_forward_spinner_view);
 
         // create the adapter
         mAdapter = new VectorPublicRoomsAdapter(getActivity(), R.layout.adapter_item_vector_recent_room, mSession);
@@ -202,8 +211,6 @@ public class VectorPublicRoomsListFragment extends VectorBaseFragment {
                 }
             }
         });
-
-        return v;
     }
 
     @Override

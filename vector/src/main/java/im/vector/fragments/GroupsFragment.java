@@ -117,8 +117,8 @@ public class GroupsFragment extends AbsHomeFragment {
      */
 
     @Override
-    public View onCreateView(final LayoutInflater inflater, final ViewGroup container, final Bundle savedInstanceState) {
-        return inflater.inflate(R.layout.fragment_groups, container, false);
+    public int getLayoutResId() {
+        return R.layout.fragment_groups;
     }
 
     @Override

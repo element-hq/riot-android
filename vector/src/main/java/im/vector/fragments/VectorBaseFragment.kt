@@ -19,8 +19,11 @@ package im.vector.fragments
 import android.content.Context
 import android.os.Bundle
 import android.support.annotation.CallSuper
+import android.support.annotation.LayoutRes
 import android.support.v4.app.Fragment
+import android.view.LayoutInflater
 import android.view.View
+import android.view.ViewGroup
 import butterknife.ButterKnife
 import butterknife.Unbinder
 import im.vector.activity.VectorAppCompatActivity
@@ -30,7 +33,7 @@ import org.matrix.androidsdk.util.Log
 /**
  * Parent class for all Fragment in Vector application
  */
-open class VectorBaseFragment : Fragment() {
+abstract class VectorBaseFragment : Fragment() {
 
     // Butterknife unbinder
     private var mUnBinder: Unbinder? = null
@@ -40,6 +43,13 @@ open class VectorBaseFragment : Fragment() {
     /* ==========================================================================================
      * Life cycle
      * ========================================================================================== */
+
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+        return inflater.inflate(getLayoutResId(), container, false)
+    }
+
+    @LayoutRes
+    abstract fun getLayoutResId(): Int
 
     @CallSuper
     override fun onResume() {

@@ -96,8 +96,8 @@ public class FavouritesFragment extends AbsHomeFragment implements HomeRoomAdapt
      */
 
     @Override
-    public View onCreateView(final LayoutInflater inflater, final ViewGroup container, final Bundle savedInstanceState) {
-        return inflater.inflate(R.layout.fragment_favourites, container, false);
+    public int getLayoutResId() {
+        return R.layout.fragment_favourites;
     }
 
     @Override
