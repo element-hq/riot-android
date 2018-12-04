@@ -43,7 +43,7 @@ import im.vector.R;
 
 /**
  * FallbackLoginActivity is the fallback login activity
- * i.e this activity is created when the client does not support the
+ * i.e this activity is created when the client does not support the login flow of the home server
  */
 public class FallbackLoginActivity extends VectorAppCompatActivity {
     private static final String LOG_TAG = FallbackLoginActivity.class.getSimpleName();

@@ -2172,6 +2172,7 @@ public class LoginActivity extends MXCActionBarActivity implements RegistrationM
                 Log.d(LOG_TAG, "## onActivityResult(): RESULT_CANCELED && FALLBACK_LOGIN_ACTIVITY_REQUEST_CODE");
                 // reset the home server to let the user writes a valid one.
                 mHomeServerText.setText(UrlUtilKt.HTTPS_SCHEME);
+                mHomeserverConnectionConfig = null;
                 setActionButtonsEnabled(false);
             }
         }
