@@ -529,7 +529,7 @@ public class VectorMessageListFragment extends MatrixMessageListFragment<VectorM
                                 EncryptedEventContent encryptedEventContent = JsonUtils.toEncryptedEventContent(event.getWireContent().getAsJsonObject());
 
                                 MXDeviceInfo deviceInfo = mSession.getCrypto()
-                                        .deviceWithIdentityKey(encryptedEventContent.sender_key, event.getSender(), encryptedEventContent.algorithm);
+                                        .deviceWithIdentityKey(encryptedEventContent.sender_key, encryptedEventContent.algorithm);
 
                                 if (null != deviceInfo) {
                                     dialog.cancel();
