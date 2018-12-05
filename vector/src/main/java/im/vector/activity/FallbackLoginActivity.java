@@ -48,7 +48,7 @@ import im.vector.R;
 public class FallbackLoginActivity extends VectorAppCompatActivity {
     private static final String LOG_TAG = FallbackLoginActivity.class.getSimpleName();
 
-    public static final String EXTRA_HOME_SERVER_ID = "FallbackLoginActivity.EXTRA_HOME_SERVER_ID";
+    public static final String EXTRA_HOME_SERVER_URL = "FallbackLoginActivity.EXTRA_HOME_SERVER_URL";
 
     private WebView mWebView = null;
     private String mHomeServerUrl = null;
@@ -69,10 +69,10 @@ public class FallbackLoginActivity extends VectorAppCompatActivity {
         mWebView.getSettings().setJavaScriptEnabled(true);
 
         Intent intent = getIntent();
-        mHomeServerUrl = "https://matrix.org/";
+        mHomeServerUrl = getString(R.string.default_hs_server_url);
 
-        if (intent.hasExtra(EXTRA_HOME_SERVER_ID)) {
-            mHomeServerUrl = intent.getStringExtra(EXTRA_HOME_SERVER_ID);
+        if (intent.hasExtra(EXTRA_HOME_SERVER_URL)) {
+            mHomeServerUrl = intent.getStringExtra(EXTRA_HOME_SERVER_URL);
         }
 
         // check the trailing slash
@@ -248,17 +248,5 @@ public class FallbackLoginActivity extends VectorAppCompatActivity {
             return true;
         }
         return super.onKeyDown(keyCode, event);
-    }
-
-    @Override
-    public void onLowMemory() {
-        super.onLowMemory();
-        CommonActivityUtils.onLowMemory(this);
-    }
-
-    @Override
-    public void onTrimMemory(int level) {
-        super.onTrimMemory(level);
-        CommonActivityUtils.onTrimMemory(this, level);
     }
 }

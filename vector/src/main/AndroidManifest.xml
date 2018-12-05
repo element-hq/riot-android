@@ -126,7 +126,7 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".activity.AccountCreationActivity"
+            android:name=".activity.FallbackAccountCreationActivity"
             android:configChanges="orientation|screenSize"
             android:label="@string/create_account" />
         <activity

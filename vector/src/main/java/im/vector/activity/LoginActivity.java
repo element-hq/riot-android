@@ -1395,11 +1395,9 @@ public class LoginActivity extends MXCActionBarActivity implements RegistrationM
                 return;
             }
 
-            fallbackToLoginMode();
-
-            Intent intent = new Intent(LoginActivity.this, AccountCreationActivity.class);
-            intent.putExtra(AccountCreationActivity.EXTRA_HOME_SERVER_ID, hs);
-            startActivityForResult(intent, RequestCodesKt.ACCOUNT_CREATION_ACTIVITY_REQUEST_CODE);
+            Intent intent = new Intent(LoginActivity.this, FallbackAccountCreationActivity.class);
+            intent.putExtra(FallbackAccountCreationActivity.EXTRA_HOME_SERVER_URL, hs);
+            startActivityForResult(intent, RequestCodesKt.FALLBACK_ACCOUNT_CREATION_ACTIVITY_REQUEST_CODE);
         }
     }
 
@@ -1798,7 +1796,7 @@ public class LoginActivity extends MXCActionBarActivity implements RegistrationM
                             // if not supported, switch to the fallback login
                             if (!isSupported) {
                                 Intent intent = new Intent(LoginActivity.this, FallbackLoginActivity.class);
-                                intent.putExtra(FallbackLoginActivity.EXTRA_HOME_SERVER_ID, hsConfig.getHomeserverUri().toString());
+                                intent.putExtra(FallbackLoginActivity.EXTRA_HOME_SERVER_URL, hsConfig.getHomeserverUri().toString());
                                 startActivityForResult(intent, RequestCodesKt.FALLBACK_LOGIN_ACTIVITY_REQUEST_CODE);
                             } else if (mIsPendingLogin) {
                                 onLoginClick();
@@ -2134,9 +2132,9 @@ public class LoginActivity extends MXCActionBarActivity implements RegistrationM
                 enableLoadingScreen(false);
                 refreshDisplay();
             }
-        } else if (RequestCodesKt.ACCOUNT_CREATION_ACTIVITY_REQUEST_CODE == requestCode || RequestCodesKt.FALLBACK_LOGIN_ACTIVITY_REQUEST_CODE == requestCode) {
+        } else if (RequestCodesKt.FALLBACK_ACCOUNT_CREATION_ACTIVITY_REQUEST_CODE == requestCode || RequestCodesKt.FALLBACK_LOGIN_ACTIVITY_REQUEST_CODE == requestCode) {
             if (resultCode == RESULT_OK) {
-                Log.d(LOG_TAG, "## onActivityResult(): ACCOUNT_CREATION_ACTIVITY_REQUEST_CODE => RESULT_OK");
+                Log.d(LOG_TAG, "## onActivityResult(): FALLBACK_ACTIVITY => RESULT_OK");
                 String homeServer = data.getStringExtra("homeServer");
                 String userId = data.getStringExtra("userId");
                 String accessToken = data.getStringExtra("accessToken");
@@ -2155,8 +2153,6 @@ public class LoginActivity extends MXCActionBarActivity implements RegistrationM
                     Log.d(LOG_TAG, "hsConfig setCredentials failed " + e.getLocalizedMessage());
                 }
 
-                Log.d(LOG_TAG, "Account creation succeeds");
-
                 // let's go...
                 MXSession session = Matrix.getInstance(getApplicationContext()).createSession(hsConfig);
                 Matrix.getInstance(getApplicationContext()).addSession(session);
@@ -2165,11 +2161,12 @@ public class LoginActivity extends MXCActionBarActivity implements RegistrationM
 
                 goToSplash();
                 finish();
-            } else if ((resultCode == RESULT_CANCELED) && (RequestCodesKt.FALLBACK_LOGIN_ACTIVITY_REQUEST_CODE == requestCode)) {
-                Log.d(LOG_TAG, "## onActivityResult(): RESULT_CANCELED && FALLBACK_LOGIN_ACTIVITY_REQUEST_CODE");
+            } else if ((resultCode == RESULT_CANCELED)) {
+                Log.d(LOG_TAG, "## onActivityResult(): fallback cancelled");
                 // reset the home server to let the user writes a valid one.
-                mHomeServerText.setText(UrlUtilKt.HTTPS_SCHEME);
                 mHomeserverConnectionConfig = null;
+                mRegistrationResponse = null;
+                mHomeServerText.setText(UrlUtilKt.HTTPS_SCHEME);
                 setActionButtonsEnabled(false);
             }
         }
