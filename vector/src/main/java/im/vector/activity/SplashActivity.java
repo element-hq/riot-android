@@ -45,6 +45,7 @@ import im.vector.R;
 import im.vector.VectorApp;
 import im.vector.analytics.TrackingEvent;
 import im.vector.push.PushManager;
+import im.vector.push.fcm.FcmHelper;
 import im.vector.receiver.VectorUniversalLinkReceiver;
 import im.vector.services.EventStreamService;
 import im.vector.util.PreferencesManager;
@@ -321,10 +322,27 @@ public class SplashActivity extends MXCActionBarActivity {
         // trigger the push registration if required
         PushManager pushManager = Matrix.getInstance(getApplicationContext()).getPushManager();
 
-        if (!pushManager.isFcmRegistered()) {
-            pushManager.checkRegistrations();
+        if (pushManager.isFcmRegistered()) {
+
+            //Issue #2266 It might be possible that the FCMHelper saved token is different
+            //than the push manager saved token, and that the pushManager is not aware.
+            //And as per current code the pushMgr saved token is sent at each startup (resume?)
+            //So anyway, might be a good thing to check that it is synced?
+            //Very defensive code but, ya know :/
+            String fcmToken = FcmHelper.getFcmToken(this);
+            String pushMgrSavedToken = pushManager.getCurrentRegistrationToken();
+
+            boolean savedTokenAreDifferent = pushMgrSavedToken == null ? fcmToken != null : !pushMgrSavedToken.equals(fcmToken);
+            if (savedTokenAreDifferent) {
+                Log.e(LOG_TAG, "SAVED NOTIFICATION TOKEN NOT IN SYNC");
+                pushManager.resetFCMRegistration(fcmToken);
+            } else {
+                pushManager.forceSessionsRegistration(null);
+            }
+
+
         } else {
-            pushManager.forceSessionsRegistration(null);
+            pushManager.checkRegistrations();
         }
 
         boolean noUpdate;

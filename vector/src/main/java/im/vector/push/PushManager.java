@@ -320,11 +320,17 @@ public final class PushManager {
                 @Override
                 public void onMatrixError(MatrixError e) {
                     Log.d(LOG_TAG, "resetFCMRegistration : un-registration failed.");
+                    //we can assume that it may have succeeded anyway
+                    setAndStoreRegistrationState(RegistrationState.FCM_REGISTERED);
+                    resetFCMRegistration(newToken);
                 }
 
                 @Override
                 public void onUnexpectedError(Exception e) {
                     Log.d(LOG_TAG, "resetFCMRegistration : un-registration failed.");
+                    //we can assume that it may have succeeded anyway
+                    setAndStoreRegistrationState(RegistrationState.FCM_REGISTERED);
+                    resetFCMRegistration(newToken);
                 }
             });
         } else {
