@@ -1991,7 +1991,7 @@ public class LoginActivity extends MXCActionBarActivity implements RegistrationM
         mForgotPasswordButton.setVisibility(mMode == MODE_FORGOT_PASSWORD ? View.VISIBLE : View.GONE);
         mForgotValidateEmailButton.setVisibility(mMode == MODE_FORGOT_PASSWORD_WAITING_VALIDATION ? View.VISIBLE : View.GONE);
         mSubmitThreePidButton.setVisibility(mMode == MODE_ACCOUNT_CREATION_THREE_PID ? View.VISIBLE : View.GONE);
-        mSkipThreePidButton.setVisibility(mMode == MODE_ACCOUNT_CREATION_THREE_PID && mRegistrationManager.canSkip() ? View.VISIBLE : View.GONE);
+        mSkipThreePidButton.setVisibility(mMode == MODE_ACCOUNT_CREATION_THREE_PID && mRegistrationManager.canSkipThreePid() ? View.VISIBLE : View.GONE);
         mHomeServerOptionLayout.setVisibility(mMode == MODE_ACCOUNT_CREATION_THREE_PID ? View.GONE : View.VISIBLE);
 
         // update the button text to the current status
@@ -2241,7 +2241,7 @@ public class LoginActivity extends MXCActionBarActivity implements RegistrationM
             mPhoneNumberLayout.setVisibility(View.GONE);
         }
 
-        if (mRegistrationManager.canSkip()) {
+        if (mRegistrationManager.canSkipThreePid()) {
             mSkipThreePidButton.setVisibility(View.VISIBLE);
             mSkipThreePidButton.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -2297,7 +2297,7 @@ public class LoginActivity extends MXCActionBarActivity implements RegistrationM
             return;
         }
 
-        if (!mRegistrationManager.canSkip() && mRegistrationPhoneNumberHandler.getPhoneNumber() == null && TextUtils.isEmpty(email)) {
+        if (!mRegistrationManager.canSkipThreePid() && mRegistrationPhoneNumberHandler.getPhoneNumber() == null && TextUtils.isEmpty(email)) {
             // Both are required and empty
             Toast.makeText(this, R.string.auth_missing_email_or_phone, Toast.LENGTH_SHORT).show();
             return;

@@ -1,5 +1,6 @@
 /*
  * Copyright 2017 Vector Creations Ltd
+ * Copyright 2018 New Vector Ltd
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -83,7 +84,6 @@ public class RegistrationManager {
     private RegistrationFlowResponse mRegistrationResponse;
     private final Set<String> mSupportedStages = new HashSet<>();
     private final List<String> mRequiredStages = new ArrayList<>();
-    private final List<String> mConditionalOptionalStages = new ArrayList<>();
     private final List<String> mOptionalStages = new ArrayList<>();
 
     // Current registration params
@@ -132,7 +132,6 @@ public class RegistrationManager {
         mSupportedStages.clear();
         mRequiredStages.clear();
         mOptionalStages.clear();
-        mConditionalOptionalStages.clear();
 
         mUsername = null;
         mPassword = null;
@@ -501,36 +500,39 @@ public class RegistrationManager {
      * @return true if email is mandatory for registration and not completed yet
      */
     public boolean isEmailRequired() {
-        return mRegistrationResponse != null
-                && isRequired(LoginRestClient.LOGIN_FLOW_TYPE_EMAIL_IDENTITY)
-                && !isCompleted(LoginRestClient.LOGIN_FLOW_TYPE_EMAIL_IDENTITY);
+        return isStageRequired(LoginRestClient.LOGIN_FLOW_TYPE_EMAIL_IDENTITY);
     }
 
     /**
      * @return true if phone number is mandatory for registration and not completed yet
      */
     public boolean isPhoneNumberRequired() {
-        return mRegistrationResponse != null
-                && isRequired(LoginRestClient.LOGIN_FLOW_TYPE_MSISDN)
-                && !isCompleted(LoginRestClient.LOGIN_FLOW_TYPE_MSISDN);
+        return isStageRequired(LoginRestClient.LOGIN_FLOW_TYPE_MSISDN);
     }
 
     /**
      * @return true if captcha is mandatory for registration and not completed yet
      */
     private boolean isCaptchaRequired() {
-        return mRegistrationResponse != null
-                && isRequired(LoginRestClient.LOGIN_FLOW_TYPE_RECAPTCHA)
-                && !isCompleted(LoginRestClient.LOGIN_FLOW_TYPE_RECAPTCHA);
+        return isStageRequired(LoginRestClient.LOGIN_FLOW_TYPE_RECAPTCHA);
     }
 
     /**
      * @return true if captcha is mandatory for registration and not completed yet
      */
     private boolean isTermsRequired() {
+        return isStageRequired(LoginRestClient.LOGIN_FLOW_TYPE_TERMS);
+    }
+
+    /**
+     * Return true if the stage is required and not completed
+     * @param stage
+     * @return
+     */
+    private boolean isStageRequired(final String stage) {
         return mRegistrationResponse != null
-                && isRequired(LoginRestClient.LOGIN_FLOW_TYPE_TERMS)
-                && !isCompleted(LoginRestClient.LOGIN_FLOW_TYPE_TERMS);
+                && isRequired(stage)
+                && !isCompleted(stage);
     }
 
     /**
@@ -539,17 +541,19 @@ public class RegistrationManager {
      *
      * @return
      */
-    public boolean canSkip() {
-        boolean canSkip;
+    public boolean canSkipThreePid() {
+        boolean canSkip = true;
+
         if (supportStage(LoginRestClient.LOGIN_FLOW_TYPE_EMAIL_IDENTITY)) {
             canSkip = isOptional(LoginRestClient.LOGIN_FLOW_TYPE_EMAIL_IDENTITY);
-        } else {
-            canSkip = true;
         }
 
-        if (canSkip && supportStage(LoginRestClient.LOGIN_FLOW_TYPE_MSISDN)) {
-            canSkip = isOptional(LoginRestClient.LOGIN_FLOW_TYPE_MSISDN);
+        if (canSkip) {
+            if (supportStage(LoginRestClient.LOGIN_FLOW_TYPE_MSISDN)) {
+                canSkip = isOptional(LoginRestClient.LOGIN_FLOW_TYPE_MSISDN);
+            }
         }
+
         return canSkip;
     }
 
@@ -735,12 +739,13 @@ public class RegistrationManager {
      */
     private void analyzeRegistrationStages(final RegistrationFlowResponse newFlowResponse) {
         mSupportedStages.clear();
+        mRequiredStages.clear();
+        mOptionalStages.clear();
 
         boolean canCaptchaBeMissing = false;
-        boolean canEmailBeMissing = false;
-        boolean canPhoneBeMissing = false;
-        boolean canThreePidBeMissing = false;
         boolean canTermsBeMissing = false;
+        boolean canPhoneBeMissing = false;
+        boolean canEmailBeMissing = false;
 
         // Add all supported stage and check if some stage can be missing
         for (LoginFlow loginFlow : newFlowResponse.flows) {
@@ -750,16 +755,12 @@ public class RegistrationManager {
                 canCaptchaBeMissing = true;
             }
 
-            // TODO Manu can we consider terms can be missing? I think no
             if (!loginFlow.stages.contains(LoginRestClient.LOGIN_FLOW_TYPE_TERMS)) {
                 canTermsBeMissing = true;
             }
 
             if (!loginFlow.stages.contains(LoginRestClient.LOGIN_FLOW_TYPE_MSISDN)) {
                 canPhoneBeMissing = true;
-                if (!loginFlow.stages.contains(LoginRestClient.LOGIN_FLOW_TYPE_EMAIL_IDENTITY)) {
-                    canThreePidBeMissing = true;
-                }
             }
 
             if (!loginFlow.stages.contains(LoginRestClient.LOGIN_FLOW_TYPE_EMAIL_IDENTITY)) {
@@ -767,11 +768,6 @@ public class RegistrationManager {
             }
         }
 
-        mRequiredStages.clear();
-        mConditionalOptionalStages.clear();
-        mOptionalStages.clear();
-
-        // Check if captcha is required/optional
         if (supportStage(LoginRestClient.LOGIN_FLOW_TYPE_RECAPTCHA)) {
             if (canCaptchaBeMissing) {
                 mOptionalStages.add(LoginRestClient.LOGIN_FLOW_TYPE_RECAPTCHA);
@@ -788,28 +784,19 @@ public class RegistrationManager {
             }
         }
 
-        if (supportStage(LoginRestClient.LOGIN_FLOW_TYPE_EMAIL_IDENTITY)
-                && supportStage(LoginRestClient.LOGIN_FLOW_TYPE_MSISDN)
-                && !canThreePidBeMissing
-                && canPhoneBeMissing
-                && canEmailBeMissing) {
-            // Both are supported and at least one is required
-            mConditionalOptionalStages.add(LoginRestClient.LOGIN_FLOW_TYPE_EMAIL_IDENTITY);
-            mConditionalOptionalStages.add(LoginRestClient.LOGIN_FLOW_TYPE_MSISDN);
-        } else {
-            if (supportStage(LoginRestClient.LOGIN_FLOW_TYPE_EMAIL_IDENTITY)) {
-                if (canEmailBeMissing) {
-                    mOptionalStages.add(LoginRestClient.LOGIN_FLOW_TYPE_EMAIL_IDENTITY);
-                } else {
-                    mRequiredStages.add(LoginRestClient.LOGIN_FLOW_TYPE_EMAIL_IDENTITY);
-                }
+        if (supportStage(LoginRestClient.LOGIN_FLOW_TYPE_EMAIL_IDENTITY)) {
+            if (canEmailBeMissing) {
+                mOptionalStages.add(LoginRestClient.LOGIN_FLOW_TYPE_EMAIL_IDENTITY);
+            } else {
+                mRequiredStages.add(LoginRestClient.LOGIN_FLOW_TYPE_EMAIL_IDENTITY);
             }
-            if (supportStage(LoginRestClient.LOGIN_FLOW_TYPE_MSISDN)) {
-                if (canPhoneBeMissing) {
-                    mOptionalStages.add(LoginRestClient.LOGIN_FLOW_TYPE_MSISDN);
-                } else {
-                    mRequiredStages.add(LoginRestClient.LOGIN_FLOW_TYPE_MSISDN);
-                }
+        }
+
+        if (supportStage(LoginRestClient.LOGIN_FLOW_TYPE_MSISDN)) {
+            if (canPhoneBeMissing) {
+                mOptionalStages.add(LoginRestClient.LOGIN_FLOW_TYPE_MSISDN);
+            } else {
+                mRequiredStages.add(LoginRestClient.LOGIN_FLOW_TYPE_MSISDN);
             }
         }
     }
