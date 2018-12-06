@@ -139,6 +139,7 @@ public class RegistrationManager {
         mEmail = null;
         mPhoneNumber = null;
         mCaptchaResponse = null;
+        mTermsApproved = false;
 
         mShowThreePidWarning = false;
     }
@@ -293,7 +294,7 @@ public class RegistrationManager {
             } else if (mTermsApproved && !isCompleted(LoginRestClient.LOGIN_FLOW_TYPE_TERMS)) {
                 registrationType = LoginRestClient.LOGIN_FLOW_TYPE_TERMS;
                 authParams = new AuthParams(LoginRestClient.LOGIN_FLOW_TYPE_TERMS);
-            } else if (mSupportedStages.contains(LoginRestClient.LOGIN_FLOW_TYPE_DUMMY)) {
+            } else if (supportStage(LoginRestClient.LOGIN_FLOW_TYPE_DUMMY)) {
                 registrationType = LoginRestClient.LOGIN_FLOW_TYPE_DUMMY;
                 authParams = new AuthParams(LoginRestClient.LOGIN_FLOW_TYPE_DUMMY);
             } else if (isPasswordBasedFlowSupported()) {
@@ -462,8 +463,8 @@ public class RegistrationManager {
      * @return true if can add a three pid
      */
     public boolean canAddThreePid() {
-        return (mSupportedStages.contains(LoginRestClient.LOGIN_FLOW_TYPE_EMAIL_IDENTITY) && !isCompleted(LoginRestClient.LOGIN_FLOW_TYPE_EMAIL_IDENTITY))
-                || (mSupportedStages.contains(LoginRestClient.LOGIN_FLOW_TYPE_MSISDN) && !isCompleted(LoginRestClient.LOGIN_FLOW_TYPE_MSISDN));
+        return (supportStage(LoginRestClient.LOGIN_FLOW_TYPE_EMAIL_IDENTITY) && !isCompleted(LoginRestClient.LOGIN_FLOW_TYPE_EMAIL_IDENTITY))
+                || (supportStage(LoginRestClient.LOGIN_FLOW_TYPE_MSISDN) && !isCompleted(LoginRestClient.LOGIN_FLOW_TYPE_MSISDN));
     }
 
     /**
@@ -540,14 +541,14 @@ public class RegistrationManager {
      */
     public boolean canSkip() {
         boolean canSkip;
-        if (mSupportedStages.contains(LoginRestClient.LOGIN_FLOW_TYPE_EMAIL_IDENTITY)) {
-            canSkip = mOptionalStages.contains(LoginRestClient.LOGIN_FLOW_TYPE_EMAIL_IDENTITY);
+        if (supportStage(LoginRestClient.LOGIN_FLOW_TYPE_EMAIL_IDENTITY)) {
+            canSkip = isOptional(LoginRestClient.LOGIN_FLOW_TYPE_EMAIL_IDENTITY);
         } else {
             canSkip = true;
         }
 
-        if (canSkip && mSupportedStages.contains(LoginRestClient.LOGIN_FLOW_TYPE_MSISDN)) {
-            canSkip = mOptionalStages.contains(LoginRestClient.LOGIN_FLOW_TYPE_MSISDN);
+        if (canSkip && supportStage(LoginRestClient.LOGIN_FLOW_TYPE_MSISDN)) {
+            canSkip = isOptional(LoginRestClient.LOGIN_FLOW_TYPE_MSISDN);
         }
         return canSkip;
     }
@@ -771,7 +772,7 @@ public class RegistrationManager {
         mOptionalStages.clear();
 
         // Check if captcha is required/optional
-        if (mSupportedStages.contains(LoginRestClient.LOGIN_FLOW_TYPE_RECAPTCHA)) {
+        if (supportStage(LoginRestClient.LOGIN_FLOW_TYPE_RECAPTCHA)) {
             if (canCaptchaBeMissing) {
                 mOptionalStages.add(LoginRestClient.LOGIN_FLOW_TYPE_RECAPTCHA);
             } else {
@@ -779,7 +780,7 @@ public class RegistrationManager {
             }
         }
 
-        if (mSupportedStages.contains(LoginRestClient.LOGIN_FLOW_TYPE_TERMS)) {
+        if (supportStage(LoginRestClient.LOGIN_FLOW_TYPE_TERMS)) {
             if (canTermsBeMissing) {
                 mOptionalStages.add(LoginRestClient.LOGIN_FLOW_TYPE_TERMS);
             } else {
@@ -787,20 +788,23 @@ public class RegistrationManager {
             }
         }
 
-        if (mSupportedStages.containsAll(Arrays.asList(LoginRestClient.LOGIN_FLOW_TYPE_EMAIL_IDENTITY, LoginRestClient.LOGIN_FLOW_TYPE_MSISDN))
-                && !canThreePidBeMissing && canPhoneBeMissing && canEmailBeMissing) {
+        if (supportStage(LoginRestClient.LOGIN_FLOW_TYPE_EMAIL_IDENTITY)
+                && supportStage(LoginRestClient.LOGIN_FLOW_TYPE_MSISDN)
+                && !canThreePidBeMissing
+                && canPhoneBeMissing
+                && canEmailBeMissing) {
             // Both are supported and at least one is required
             mConditionalOptionalStages.add(LoginRestClient.LOGIN_FLOW_TYPE_EMAIL_IDENTITY);
             mConditionalOptionalStages.add(LoginRestClient.LOGIN_FLOW_TYPE_MSISDN);
         } else {
-            if (mSupportedStages.contains(LoginRestClient.LOGIN_FLOW_TYPE_EMAIL_IDENTITY)) {
+            if (supportStage(LoginRestClient.LOGIN_FLOW_TYPE_EMAIL_IDENTITY)) {
                 if (canEmailBeMissing) {
                     mOptionalStages.add(LoginRestClient.LOGIN_FLOW_TYPE_EMAIL_IDENTITY);
                 } else {
                     mRequiredStages.add(LoginRestClient.LOGIN_FLOW_TYPE_EMAIL_IDENTITY);
                 }
             }
-            if (mSupportedStages.contains(LoginRestClient.LOGIN_FLOW_TYPE_MSISDN)) {
+            if (supportStage(LoginRestClient.LOGIN_FLOW_TYPE_MSISDN)) {
                 if (canPhoneBeMissing) {
                     mOptionalStages.add(LoginRestClient.LOGIN_FLOW_TYPE_MSISDN);
                 } else {
