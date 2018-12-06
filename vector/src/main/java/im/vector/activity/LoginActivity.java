@@ -82,6 +82,7 @@ import im.vector.PhoneNumberHandler;
 import im.vector.R;
 import im.vector.RegistrationManager;
 import im.vector.UnrecognizedCertHandler;
+import im.vector.activity.policies.AccountCreationTermsActivity;
 import im.vector.activity.util.RequestCodesKt;
 import im.vector.features.hhs.ResourceLimitDialogHelper;
 import im.vector.push.fcm.FcmHelper;

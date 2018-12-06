@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
@@ -17,11 +18,12 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
-        android:id="@+id/account_creation_message"
+        android:id="@+id/account_creation_policy_message"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
         android:layout_marginLeft="16dp"
+        android:layout_marginTop="27dp"
         android:layout_marginEnd="16dp"
         android:layout_marginRight="16dp"
         android:layout_marginBottom="10dp"
@@ -29,10 +31,25 @@
         android:textSize="16sp"
         app:layout_constraintTop_toBottomOf="@+id/login_large_logo" />
 
-    <android.support.v7.widget.RecyclerView
+    <com.airbnb.epoxy.EpoxyRecyclerView
         android:id="@+id/account_creation_policy_list"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        app:layout_constraintTop_toBottomOf="@+id/account_creation_message" />
+        android:layout_height="0dp"
+        android:layout_marginTop="10dp"
+        app:layout_constraintBottom_toTopOf="@+id/account_creation_policy_button_accept"
+        app:layout_constraintTop_toBottomOf="@+id/account_creation_policy_message"
+        tools:listitem="@layout/adapter_item_policy" />
+
+    <Button
+        android:id="@+id/account_creation_policy_button_accept"
+        android:layout_width="94dp"
+        android:layout_height="36dp"
+        android:layout_margin="16dp"
+        android:background="?attr/vctr_primary_color"
+        android:text="@string/accept"
+        android:textColor="@android:color/white"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/account_creation_policy_list" />
 
 </android.support.constraint.ConstraintLayout>

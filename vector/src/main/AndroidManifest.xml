@@ -134,7 +134,7 @@
             android:configChanges="orientation|screenSize"
             android:label="@string/create_account" />
         <activity
-            android:name=".activity.AccountCreationTermsActivity"
+            android:name=".activity.policies.AccountCreationTermsActivity"
             android:configChanges="orientation|screenSize"
             android:label="@string/create_account" />
         <activity

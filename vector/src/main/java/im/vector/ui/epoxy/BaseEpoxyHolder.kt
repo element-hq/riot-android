@@ -14,23 +14,24 @@
  * limitations under the License.
  */
 
-package im.vector.activity
+package im.vector.ui.epoxy
 
-import im.vector.R
+import android.support.annotation.CallSuper
+import android.view.View
+import butterknife.ButterKnife
+import com.airbnb.epoxy.EpoxyHolder
+
 
 /**
- * AccountCreationCaptchaActivity displays a webview to check captchas.
+ * This class ensure butterknife is used to bind Views
  */
-class AccountCreationTermsActivity : VectorAppCompatActivity() {
+abstract class BaseEpoxyHolder : EpoxyHolder() {
+    lateinit var main: View
 
-    override fun getLayoutRes() = R.layout.activity_vector_registration_terms
+    @CallSuper
+    override fun bindView(itemView: View) {
+        main = itemView
 
-    override fun getTitleRes() = R.string.create_account
-
-    override fun initUiAndData() {}
-
-    companion object {
-        private val LOG_TAG = AccountCreationTermsActivity::class.java.simpleName
+        ButterKnife.bind(this, itemView)
     }
-
 }

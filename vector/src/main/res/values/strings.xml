@@ -71,6 +71,7 @@
     <string name="or">or</string>
     <string name="invite">Invite</string>
     <string name="offline">Offline</string>
+    <string name="accept">Accept</string>
 
     <!-- actions -->
     <string name="action_exit">Exit</string>
