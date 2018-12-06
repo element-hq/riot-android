@@ -257,7 +257,7 @@ public class RegistrationManager {
             if (mPhoneNumber != null && !isCompleted(LoginRestClient.LOGIN_FLOW_TYPE_MSISDN) && !TextUtils.isEmpty(mPhoneNumber.sid)) {
                 registrationType = LoginRestClient.LOGIN_FLOW_TYPE_MSISDN;
                 authParams = getThreePidAuthParams(mPhoneNumber.clientSecret, mHsConfig.getIdentityServerUri().getHost(),
-                        mPhoneNumber.sid, LoginRestClient.LOGIN_FLOW_TYPE_MSISDN, mRegistrationResponse.session);
+                        mPhoneNumber.sid, LoginRestClient.LOGIN_FLOW_TYPE_MSISDN);
             } else if (mEmail != null && !isCompleted(LoginRestClient.LOGIN_FLOW_TYPE_EMAIL_IDENTITY)) {
                 if (TextUtils.isEmpty(mEmail.sid)) {
                     // Email token needs to be requested before doing validation
@@ -285,7 +285,7 @@ public class RegistrationManager {
                 } else {
                     registrationType = LoginRestClient.LOGIN_FLOW_TYPE_EMAIL_IDENTITY;
                     authParams = getThreePidAuthParams(mEmail.clientSecret, mHsConfig.getIdentityServerUri().getHost(),
-                            mEmail.sid, LoginRestClient.LOGIN_FLOW_TYPE_EMAIL_IDENTITY, mRegistrationResponse.session);
+                            mEmail.sid, LoginRestClient.LOGIN_FLOW_TYPE_EMAIL_IDENTITY);
                 }
             } else if (!TextUtils.isEmpty(mCaptchaResponse) && !isCompleted(LoginRestClient.LOGIN_FLOW_TYPE_RECAPTCHA)) {
                 registrationType = LoginRestClient.LOGIN_FLOW_TYPE_RECAPTCHA;
@@ -293,7 +293,6 @@ public class RegistrationManager {
             } else if (mTermsApproved && !isCompleted(LoginRestClient.LOGIN_FLOW_TYPE_TERMS)) {
                 registrationType = LoginRestClient.LOGIN_FLOW_TYPE_TERMS;
                 authParams = new AuthParams(LoginRestClient.LOGIN_FLOW_TYPE_TERMS);
-                authParams.session = mRegistrationResponse.session;
             } else if (mSupportedStages.contains(LoginRestClient.LOGIN_FLOW_TYPE_DUMMY)) {
                 registrationType = LoginRestClient.LOGIN_FLOW_TYPE_DUMMY;
                 authParams = new AuthParams(LoginRestClient.LOGIN_FLOW_TYPE_DUMMY);
@@ -301,7 +300,6 @@ public class RegistrationManager {
                 // never has been tested
                 registrationType = LoginRestClient.LOGIN_FLOW_TYPE_PASSWORD;
                 authParams = new AuthParamsLoginPassword();
-                authParams.session = mRegistrationResponse.session;
 
                 if (null != mUsername) {
                     ((AuthParamsLoginPassword) authParams).user = mUsername;
@@ -335,6 +333,9 @@ public class RegistrationManager {
             }
 
             if (authParams != null) {
+                // Always send the current session
+                authParams.session = mRegistrationResponse.session;
+
                 params.auth = authParams;
             }
 
@@ -386,8 +387,11 @@ public class RegistrationManager {
      * @param aSessionId      session ID
      * @param listener
      */
-    public void registerAfterEmailValidation(final Context context, final String aClientSecret, final String aSid,
-                                             final String aIdentityServer, final String aSessionId,
+    public void registerAfterEmailValidation(final Context context,
+                                             final String aClientSecret,
+                                             final String aSid,
+                                             final String aIdentityServer,
+                                             final String aSessionId,
                                              final RegistrationListener listener) {
         Log.d(LOG_TAG, "registerAfterEmailValidation");
         // set session
@@ -397,7 +401,9 @@ public class RegistrationManager {
 
         RegistrationParams registrationParams = new RegistrationParams();
         registrationParams.auth = getThreePidAuthParams(aClientSecret, UrlUtilKt.removeUrlScheme(aIdentityServer),
-                aSid, LoginRestClient.LOGIN_FLOW_TYPE_EMAIL_IDENTITY, aSessionId);
+                aSid, LoginRestClient.LOGIN_FLOW_TYPE_EMAIL_IDENTITY);
+
+        registrationParams.auth.session = aSessionId;
 
         // Note: username, password and bind_email must not be set in registrationParams
         mUsername = null;
@@ -811,21 +817,18 @@ public class RegistrationManager {
      * @param host
      * @param sid          received by requestToken request
      * @param medium       type of three pid
-     * @param sessionId    session id
      * @return map of params
      */
     private AuthParams getThreePidAuthParams(final String clientSecret,
                                              final String host,
                                              final String sid,
-                                             final String medium,
-                                             final String sessionId) {
+                                             final String medium) {
         AuthParamsThreePid authParams = new AuthParamsThreePid(medium);
 
         authParams.threePidCredentials.clientSecret = clientSecret;
         authParams.threePidCredentials.idServer = host;
         authParams.threePidCredentials.sid = sid;
 
-        authParams.session = sessionId;
         return authParams;
     }
 
@@ -838,7 +841,6 @@ public class RegistrationManager {
     private AuthParams getCaptchaAuthParams(final String captchaResponse) {
         AuthParamsCaptcha authParams = new AuthParamsCaptcha();
         authParams.response = captchaResponse;
-        authParams.session = mRegistrationResponse.session;
         return authParams;
     }
 
