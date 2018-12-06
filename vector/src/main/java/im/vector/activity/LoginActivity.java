@@ -2159,7 +2159,8 @@ public class LoginActivity extends MXCActionBarActivity implements RegistrationM
                 enableLoadingScreen(false);
                 refreshDisplay();
             }
-        } else if (RequestCodesKt.FALLBACK_ACCOUNT_CREATION_ACTIVITY_REQUEST_CODE == requestCode || RequestCodesKt.FALLBACK_LOGIN_ACTIVITY_REQUEST_CODE == requestCode) {
+        } else if (RequestCodesKt.FALLBACK_ACCOUNT_CREATION_ACTIVITY_REQUEST_CODE == requestCode
+                || RequestCodesKt.FALLBACK_LOGIN_ACTIVITY_REQUEST_CODE == requestCode) {
             if (resultCode == RESULT_OK) {
                 Log.d(LOG_TAG, "## onActivityResult(): FALLBACK_ACTIVITY => RESULT_OK");
                 String homeServer = data.getStringExtra("homeServer");
