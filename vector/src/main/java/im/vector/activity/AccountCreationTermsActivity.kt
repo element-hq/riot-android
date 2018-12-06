@@ -14,16 +14,23 @@
  * limitations under the License.
  */
 
-package im.vector.activity.util
+package im.vector.activity
 
-const val FALLBACK_ACCOUNT_CREATION_ACTIVITY_REQUEST_CODE = 314
-const val FALLBACK_LOGIN_ACTIVITY_REQUEST_CODE = 315
-const val CAPTCHA_CREATION_ACTIVITY_REQUEST_CODE = 316
-const val TERMS_CREATION_ACTIVITY_REQUEST_CODE = 317
+import im.vector.R
 
-const val STICKER_PICKER_ACTIVITY_REQUEST_CODE = 12000
+/**
+ * AccountCreationCaptchaActivity displays a webview to check captchas.
+ */
+class AccountCreationTermsActivity : VectorAppCompatActivity() {
 
-const val INTEGRATION_MANAGER_ACTIVITY_REQUEST_CODE = 13000
+    override fun getLayoutRes() = R.layout.activity_vector_registration_terms
 
-const val BATTERY_OPTIMIZATION_REQUEST_CODE = 14000
+    override fun getTitleRes() = R.string.create_account
 
+    override fun initUiAndData() {}
+
+    companion object {
+        private val LOG_TAG = AccountCreationTermsActivity::class.java.simpleName
+    }
+
+}

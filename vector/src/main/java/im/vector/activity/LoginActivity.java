@@ -59,8 +59,10 @@ import org.matrix.androidsdk.rest.client.LoginRestClient;
 import org.matrix.androidsdk.rest.client.ProfileRestClient;
 import org.matrix.androidsdk.rest.model.MatrixError;
 import org.matrix.androidsdk.rest.model.login.Credentials;
+import org.matrix.androidsdk.rest.model.login.LocalizedFlowDataLoginTerms;
 import org.matrix.androidsdk.rest.model.login.LoginFlow;
 import org.matrix.androidsdk.rest.model.login.RegistrationFlowResponse;
+import org.matrix.androidsdk.rest.model.login.ThreePidCredentials;
 import org.matrix.androidsdk.rest.model.pid.ThreePid;
 import org.matrix.androidsdk.ssl.CertUtil;
 import org.matrix.androidsdk.ssl.Fingerprint;
@@ -246,7 +248,7 @@ public class LoginActivity extends MXCActionBarActivity implements RegistrationM
     private boolean mIsMailValidationPending;
 
     // use to reset the password when the user click on the email validation
-    private Map<String, String> mForgotPid = null;
+    private ThreePidCredentials mForgotPid = null;
 
     // network state notification
     private final BroadcastReceiver mNetworkReceiver = new BroadcastReceiver() {
@@ -987,10 +989,10 @@ public class LoginActivity extends MXCActionBarActivity implements RegistrationM
                     mMode = MODE_FORGOT_PASSWORD_WAITING_VALIDATION;
                     refreshDisplay();
 
-                    mForgotPid = new HashMap<>();
-                    mForgotPid.put("client_secret", thirdPid.clientSecret);
-                    mForgotPid.put("id_server", hsConfig.getIdentityServerUri().getHost());
-                    mForgotPid.put("sid", thirdPid.sid);
+                    mForgotPid = new ThreePidCredentials();
+                    mForgotPid.clientSecret = thirdPid.clientSecret;
+                    mForgotPid.idServer = hsConfig.getIdentityServerUri().getHost();
+                    mForgotPid.sid = thirdPid.sid;
                 }
             }
 
@@ -1319,10 +1321,10 @@ public class LoginActivity extends MXCActionBarActivity implements RegistrationM
 
                             mMode = MODE_FORGOT_PASSWORD_WAITING_VALIDATION;
 
-                            mForgotPid = new HashMap<>();
-                            mForgotPid.put("client_secret", aClientSecret);
-                            mForgotPid.put("id_server", homeServerConfig.getIdentityServerUri().getHost());
-                            mForgotPid.put("sid", aSid);
+                            mForgotPid = new ThreePidCredentials();
+                            mForgotPid.clientSecret = aClientSecret;
+                            mForgotPid.idServer = homeServerConfig.getIdentityServerUri().getHost();
+                            mForgotPid.sid = aSid;
 
                             mIsPasswordResetted = false;
                             onForgotOnEmailValidated(homeServerConfig);
@@ -2132,6 +2134,19 @@ public class LoginActivity extends MXCActionBarActivity implements RegistrationM
                 enableLoadingScreen(false);
                 refreshDisplay();
             }
+        } else if (RequestCodesKt.TERMS_CREATION_ACTIVITY_REQUEST_CODE == requestCode) {
+            if (resultCode == RESULT_OK) {
+                Log.d(LOG_TAG, "## onActivityResult(): TERMS_CREATION_ACTIVITY_REQUEST_CODE => RESULT_OK");
+                RegistrationManager.getInstance().setTermsApproved();
+                createAccount();
+            } else {
+                Log.d(LOG_TAG, "## onActivityResult(): TERMS_CREATION_ACTIVITY_REQUEST_CODE => RESULT_KO");
+                // cancel the registration flow
+                mRegistrationResponse = null;
+                showMainLayout();
+                enableLoadingScreen(false);
+                refreshDisplay();
+            }
         } else if (RequestCodesKt.FALLBACK_ACCOUNT_CREATION_ACTIVITY_REQUEST_CODE == requestCode || RequestCodesKt.FALLBACK_LOGIN_ACTIVITY_REQUEST_CODE == requestCode) {
             if (resultCode == RESULT_OK) {
                 Log.d(LOG_TAG, "## onActivityResult(): FALLBACK_ACTIVITY => RESULT_OK");
@@ -2456,6 +2471,20 @@ public class LoginActivity extends MXCActionBarActivity implements RegistrationM
             startActivityForResult(intent, RequestCodesKt.CAPTCHA_CREATION_ACTIVITY_REQUEST_CODE);
         } else {
             Log.d(LOG_TAG, "## onWaitingCaptcha(): captcha flow cannot be done");
+            Toast.makeText(this, getString(R.string.login_error_unable_register), Toast.LENGTH_SHORT).show();
+        }
+    }
+
+    @Override
+    public void onWaitingTerms() {
+        cancelEmailPolling();
+        final List<LocalizedFlowDataLoginTerms> localizedFlowDataLoginTerms = RegistrationManager.getInstance().getLocalizedLoginTerms(this);
+        if (!localizedFlowDataLoginTerms.isEmpty()) {
+            Log.d(LOG_TAG, "## onWaitingTerms");
+            Intent intent = new Intent(LoginActivity.this, AccountCreationTermsActivity.class);
+            startActivityForResult(intent, RequestCodesKt.TERMS_CREATION_ACTIVITY_REQUEST_CODE);
+        } else {
+            Log.d(LOG_TAG, "## onWaitingTerms(): terms flow cannot be done");
             Toast.makeText(this, getString(R.string.login_error_unable_register), Toast.LENGTH_SHORT).show();
         }
     }
