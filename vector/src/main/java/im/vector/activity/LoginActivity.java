@@ -234,7 +234,7 @@ public class LoginActivity extends MXCActionBarActivity implements RegistrationM
     private View mHomeServerOptionLayout;
 
     // Registration Manager
-    private RegistrationManager mRegistrationManager;
+    private RegistrationManager mRegistrationManager = RegistrationManager.getInstance();
 
     // allowed registration response
     private RegistrationFlowResponse mRegistrationResponse;
@@ -395,9 +395,6 @@ public class LoginActivity extends MXCActionBarActivity implements RegistrationM
             finish();
             return;
         }
-
-        // Get RegistrationManager
-        mRegistrationManager = RegistrationManager.getInstance();
 
         // bind UI widgets
         mLoginMaskView = findViewById(R.id.flow_ui_mask_login);
