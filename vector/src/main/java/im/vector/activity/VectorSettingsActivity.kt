@@ -20,9 +20,6 @@ import android.content.Intent
 import im.vector.Matrix
 import im.vector.R
 import im.vector.fragments.VectorSettingsPreferencesFragment
-import im.vector.util.PERMISSION_REQUEST_CODE_EXPORT_KEYS
-import im.vector.util.PERMISSION_REQUEST_CODE_LAUNCH_CAMERA
-import im.vector.util.allGranted
 
 /**
  * Displays the client settings.
@@ -54,24 +51,11 @@ class VectorSettingsActivity : MXCActionBarActivity() {
         if (isFirstCreation()) {
             vectorSettingsPreferencesFragment = VectorSettingsPreferencesFragment.newInstance(session.myUserId)
             // display the fragment
-            fragmentManager.beginTransaction()
+            supportFragmentManager.beginTransaction()
                     .replace(R.id.vector_settings_page, vectorSettingsPreferencesFragment, FRAGMENT_TAG)
                     .commit()
         } else {
             vectorSettingsPreferencesFragment = fragmentManager.findFragmentByTag(FRAGMENT_TAG) as VectorSettingsPreferencesFragment
-        }
-    }
-
-    /**
-     * Keep this code here, because PreferenceFragment does not extend v4 Fragment
-     */
-    override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<String>, grantResults: IntArray) {
-        if (allGranted(grantResults)) {
-            if (requestCode == PERMISSION_REQUEST_CODE_LAUNCH_CAMERA) {
-                vectorSettingsPreferencesFragment.changeAvatar();
-            } else if (requestCode == PERMISSION_REQUEST_CODE_EXPORT_KEYS) {
-                vectorSettingsPreferencesFragment.exportKeys()
-            }
         }
     }
 

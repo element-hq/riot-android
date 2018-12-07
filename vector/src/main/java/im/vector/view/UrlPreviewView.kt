@@ -16,7 +16,7 @@
 package im.vector.view
 
 import android.content.Context
-import android.preference.PreferenceManager
+import android.support.v7.preference.PreferenceManager
 import android.text.Html
 import android.text.TextUtils
 import android.text.method.LinkMovementMethod
