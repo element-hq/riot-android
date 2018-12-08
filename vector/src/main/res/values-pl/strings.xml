@@ -85,7 +85,7 @@ Utwórz kopię zapasową, zanim się wylogujesz.</string>
         <item quantity="one">1 użytkownik</item>
         <item quantity="few">%d użytkowników</item>
         <item quantity="many">%d użytkowników</item>
-        <item quantity="other" />
+        <item quantity="other"/>
     </plurals>
 
     <string name="send_bug_report_include_logs">Wyślij dzienniki</string>
@@ -135,7 +135,7 @@ Utwórz kopię zapasową, zanim się wylogujesz.</string>
     <string name="auth_new_password_placeholder">Nowe hasło</string>
     <string name="auth_user_name_placeholder">Nazwa użytkownika</string>
     <string name="auth_add_email_message">Dodaj do konta adres e-mail, aby użytkownicy mogli Cię odnaleźć, oraz abyś mógł przywrócić swoje hasło.</string>
-    <string name="auth_add_phone_message">Dodaj numer telefonu, aby użytkownicy mogli Cię odnaleźć..</string>
+    <string name="auth_add_phone_message">Dodaj numer telefonu, aby użytkownicy mogli Cię odnaleźć.</string>
     <string name="auth_email_placeholder">Adres e-mail</string>
     <string name="auth_opt_email_placeholder">Adres e-mail (nieobowiązkowy)</string>
     <string name="auth_phone_number_placeholder">Numer telefonu</string>
@@ -250,7 +250,7 @@ Przyznaj dostęp w następnym oknie.</string>
 
     <string name="room_participants_online">Online</string>
     <string name="room_participants_offline">Offline</string>
-    <string name="room_participants_idle">Zajęty</string>
+    <string name="room_participants_idle">Bezczynny(-a)</string>
 
     <string name="room_participants_header_admin_tools">NARZĘDZIA ADMINISTRACYJNE</string>
     <string name="room_participants_header_call">DZWOŃ</string>
@@ -261,7 +261,7 @@ Przyznaj dostęp w następnym oknie.</string>
     <string name="room_participants_action_leave">Opuść pokój</string>
     <string name="room_participants_action_remove">Usuń z pokoju</string>
     <string name="room_participants_action_ban">Blokuj</string>
-    <string name="room_participants_action_unban">Odblokuj</string>
+    <string name="room_participants_action_unban">Odbanuj</string>
     <string name="room_participants_action_set_default_power_level">Przywróć do poziomu normalnego użytkownika</string>
     <string name="room_participants_action_set_moderator">Uczyń moderatorem</string>
     <string name="room_participants_action_set_admin">Uczyń administratorem</string>
@@ -286,7 +286,7 @@ Przyznaj dostęp w następnym oknie.</string>
     <string name="room_two_users_are_typing">%1$s i %2$s piszą…</string>
     <string name="room_many_users_are_typing">%1$s, %2$s i inni piszą…</string>
     <string name="room_message_placeholder_encrypted">Wyślij zaszyfrowaną wiadomość…</string>
-    <string name="room_message_placeholder_not_encrypted">Wyślij nieszyfrowaną wiadomość…</string>
+    <string name="room_message_placeholder_not_encrypted">Wyślij wiadomość (niezaszyfrowaną)…</string>
     <string name="room_offline_notification">Utracono połączenie z serwerem.</string>
     <string name="room_prompt_resend">Wyślij ponownie wszystko</string>
     <string name="room_prompt_cancel">anuluj wszystko</string>
@@ -366,7 +366,7 @@ Zauważ, że ta czynność spowoduje ponowne uruchomienie aplikacji i może to t
 
     <string name="settings_messages_in_one_to_one">Wiadomości bezpośrednie</string>
     <string name="settings_messages_in_group_chat">Wiadomości w rozmowach grupowych</string>
-    <string name="settings_invited_to_room">Zaproszenia do pokojów</string>
+    <string name="settings_invited_to_room">Kiedy zostanę zaproszony do pokoju</string>
     <string name="settings_call_invitations">Zaproszenia do rozmów</string>
     <string name="settings_messages_sent_by_bot">Wiadomości od botów</string>
 
@@ -393,7 +393,7 @@ Zauważ, że ta czynność spowoduje ponowne uruchomienie aplikacji i może to t
     <string name="settings_pin_missed_notifications">Przypnij pokoje z ominiętymi powiadomieniami</string>
     <string name="settings_pin_unread_messages">Przypnij pokoje z nieprzeczytanych wiadomościami</string>
     <string name="settings_devices_list">Urządzenia</string>
-    <string name="settings_always_show_timestamps">Zawsze pokazuj czas wysłania wiadomości</string>
+    <string name="settings_always_show_timestamps">Pokaż czas wysłania dla wszystkich wiadomości</string>
     <string name="settings_data_save_mode">Tryb oszczędzania danych</string>
 
     <string name="devices_details_dialog_title">Szczegóły o urządzeniu</string>
@@ -410,12 +410,12 @@ Wprowadź hasło, aby kontynuować.</string>
 
     <string name="settings_logged_in">Zalogowany jako</string>
     <string name="settings_user_interface">Interfejs użytkownika</string>
-    <string name="settings_interface_language">Język interfejsu</string>
+    <string name="settings_interface_language">Język</string>
     <string name="settings_select_language">Wybierz język</string>
 
     <string name="account_email_validation_title">Oczekiwanie na weryfikację</string>
-    <string name="account_email_already_used_error">Ten e-mail jest już używany</string>
-    <string name="account_phone_number_already_used_error">Ten numer telefonu jest już używany</string>
+    <string name="account_email_already_used_error">Ten e-mail jest już używany.</string>
+    <string name="account_phone_number_already_used_error">Ten numer telefonu jest już używany.</string>
 
     <string name="settings_change_password">Zmień hasło</string>
     <string name="settings_old_password">Stare hasło</string>
@@ -605,7 +605,7 @@ Przepraszamy za trudności.</string>
         <item quantity="one">%d zmiana członkostwa</item>
         <item quantity="few">%d zmiany członkostwa</item>
         <item quantity="many">%d zmian członkostwa</item>
-        <item quantity="other" />
+        <item quantity="other"/>
     </plurals>
 
     <string name="call_error_user_not_responding">Rozmówca nie połączył się.</string>
@@ -634,13 +634,13 @@ Możesz zalogować się z wykorzystaniem innego konta, albo dodać ten adres e-m
         <item quantity="one">Jeden aktywny członek</item>
         <item quantity="few">Kilku aktywnych członków</item>
         <item quantity="many">%d aktywnych członków</item>
-        <item quantity="other" />
+        <item quantity="other"/>
     </plurals>
     <plurals name="room_title_members">
         <item quantity="one">1 członek</item>
         <item quantity="few">kilku członków</item>
         <item quantity="many">%d członków</item>
-        <item quantity="other" />
+        <item quantity="other"/>
     </plurals>
     <string name="room_e2e_alert_message">Szyfrowanie End-to-End jest w fazie beta i nie jest pewne. 
 
@@ -664,7 +664,7 @@ Jesteś pewien?</string>
         <item quantity="one">Nowa wiadomość</item>
         <item quantity="few">Kilka nowych wiadomości</item>
         <item quantity="many">%d nowych wiadomości</item>
-        <item quantity="other" />
+        <item quantity="other"/>
     </plurals>
 
     <string name="ssl_cert_not_trust">Może to oznaczać że ktoś zakłóca twoje połączenie, lub Twój telefon nie ufa certyfikatowi dostarczonemu przez zdalny serwer.</string>
@@ -678,13 +678,13 @@ Jesteś pewien?</string>
         <item quantity="one">1 pokój</item>
         <item quantity="few">%d pokoje</item>
         <item quantity="many">%d pokoi</item>
-        <item quantity="other" />
+        <item quantity="other"/>
     </plurals>
     <plurals name="directory_search_rooms_for">
         <item quantity="one">%1$s pokój znaleziony dla %2$s</item>
         <item quantity="few">Kilka pokoi znalezionych dla %2$s</item>
         <item quantity="many">%1$s pokoi znalezionych dla %2$s</item>
-        <item quantity="other" />
+        <item quantity="other"/>
     </plurals>
     <string name="room_settings_all_messages_noisy">Wszystkie wiadomości (hałaśliwy)</string>
     <string name="room_settings_all_messages">Wszystkie wiadomości</string>
@@ -693,12 +693,12 @@ Jesteś pewien?</string>
     <string name="room_settings_add_homescreen_shortcut">Dodaj skrót do ekranu domowego</string>
 
     <string name="room_sliding_menu_third_party_notices">Informacje o trzecich stronach</string>
-    <string name="settings_app_info_link_summary">Ekran informacji systemowych aplikacji</string>
+    <string name="settings_app_info_link_summary">Pokaż informacje o aplikacji w ustawieniach systemu.</string>
     <string name="settings_notification_ringtone">Dźwięk powiadomień</string>
     <string name="settings_containing_my_display_name">Wiadomości zawierające moją wyświetlaną nazwę</string>
     <string name="settings_containing_my_user_name">Wiadomości zawierające moją nazwę użytkownika</string>
     <string name="settings_set_sync_timeout">Żądanie synchronizacji nieudane z powodu przekroczenia limitu czasu</string>
-    <string name="settings_set_sync_delay">Opóźnienie między dwoma żądaniami synchronizacji</string>
+    <string name="settings_set_sync_delay">Opóźnienie między każdym żądaniem</string>
     <string name="settings_olm_version">Wersja olm</string>
     <string name="settings_third_party_notices">Informacje o stronach trzecich</string>
     <string name="settings_keep_media">Zatrzymaj media</string>
@@ -706,7 +706,7 @@ Jesteś pewien?</string>
     <string name="settings_contacts_phonebook_country">Kraj książki adresowej</string>
     <string name="settings_home_display">Ekran domowy</string>
     <string name="settings_inline_url_preview">Zezwól na domyślny podgląd zawartości URL</string>
-    <string name="settings_12_24_timestamps">Pokaż czas w formacie 12 godzinnym (np. 2:30pm)</string>
+    <string name="settings_12_24_timestamps">Pokaż czas w formacie 12-godzinnym</string>
     <string name="settings_vibrate_on_mention">Wibruj gdy ktoś wspomni o tobie</string>
 
     <string name="settings_analytics">Analityka</string>
@@ -715,8 +715,8 @@ Jesteś pewien?</string>
     <string name="settings_identity_server">Serwer Tożsamości</string>
 
     <string name="account_email_validation_message">Sprawdź pocztę e-mail i kliknij odnośnik, który zawiera. Gdy to zrobisz, kliknij przycisk Kontynuuj.</string>
-    <string name="account_email_validation_error">Nie udało się zweryfikować adresu e-mail. Sprawdź swoją skrzynkę i kliknij w link. Gdy to zrobisz, kliknij kontynuuj</string>
-    <string name="account_email_not_found_error">Nie udało się wysłać wiadomości: Adres e-mail nie został znaleziony</string>
+    <string name="account_email_validation_error">Nie udało się zweryfikować adresu e-mail. Sprawdź swoją skrzynkę i kliknij w link. Gdy to zrobisz, kliknij kontynuuj.</string>
+    <string name="account_email_not_found_error">Adres e-mail nie został znaleziony.</string>
     <string name="settings_delete_threepid_confirmation">Czy na pewno chcesz usunąć %1$s %2$s?</string>
 
     <string name="settings_phone_number_error">Nieprawidłowy numer telefonu dla wybranego kraju</string>
@@ -784,7 +784,7 @@ Jesteś pewien?</string>
     <string name="settings_deactivate_my_account">Dezaktywuj moje konto</string>
 
     <string name="startup_notification_privacy_title">Prywatność powiadomień</string>
-    <string name="startup_notification_privacy_message">Riot może działać w tle aby bezpiecznie i prywatnie zarządzać Twoimi powiadomieniami (to może mieć wpływ na zużycie baterii).</string>
+    <string name="startup_notification_privacy_message">Riot może działać w tle aby bezpiecznie i prywatnie zarządzać Twoimi powiadomieniami. To może mieć wpływ na zużycie baterii.</string>
     <string name="startup_notification_privacy_button_grant">Nadaj uprawnienie</string>
     <string name="startup_notification_privacy_button_other">Wybierz inną opcję</string>
 
@@ -822,7 +822,7 @@ Uwaga: ten plik może zostać usunięty, jeśli aplikacja zostanie odinstalowana
     <string name="encryption_import_room_keys_summary">Importuj klucze z lokalnego pliku</string>
     <string name="encryption_import_import">Importuj</string>
     <string name="encryption_never_send_to_unverified_devices_title">Szyfruj wiadomości tylko do zaufanych urządzeń</string>
-    <string name="encryption_never_send_to_unverified_devices_summary">Nigdy nie wysyłaj zaszyfrowanych wiadomości do niezweryfikowanych urządzeń w tym pokoju z tego urządzenia</string>
+    <string name="encryption_never_send_to_unverified_devices_summary">Nigdy nie wysyłaj zaszyfrowanych wiadomości do niezweryfikowanych urządzeń w tym pokoju z tego urządzenia.</string>
 
     <string name="encryption_information_unverify">Usuń weryfikację</string>
     <string name="encryption_information_verify_device_warning">Aby sprawdzić czy to urządzenie jest zaufane, skontaktuj się z jego właścicielem używając innych form (np. osobiście lub telefonicznie) i zapytaj ich czy klucz, który widzą w ustawieniach użytkownika dla tego urządzenia pasuje do klucza poniżej:</string>
@@ -847,13 +847,13 @@ Nieznane urządzenia:</string>
         <item quantity="one">1 pokój</item>
         <item quantity="few">%d pokoje</item>
         <item quantity="many">%d pokoi</item>
-        <item quantity="other" />
+        <item quantity="other"/>
     </plurals>
     <plurals name="active_widgets">
         <item quantity="one">1 aktywny widżet</item>
         <item quantity="few">%d aktywne widżety</item>
         <item quantity="many">%d aktywnych widżetów</item>
-        <item quantity="other" />
+        <item quantity="other"/>
     </plurals>
 
     <string name="widget_integration_room_not_visible">Pokój %s nie jest widoczny.</string>
@@ -875,13 +875,13 @@ Czy chcesz dodać teraz kilka?</string>
         <item quantity="one">1 nieprzeczytana wiadomość powiadomienia</item>
         <item quantity="few">%d nieprzeczytane wiadomości powiadomienia</item>
         <item quantity="many">%d nieprzeczytanych wiadomości powiadomienia</item>
-        <item quantity="other" />
+        <item quantity="other"/>
     </plurals>
     <plurals name="notification_unread_notified_messages_in_room_msgs">
         <item quantity="one">1 nieprzeczytana wiadomość powiadomienia</item>
         <item quantity="few">%d nieprzeczytane wiadomości powiadomienia</item>
         <item quantity="many">%d nieprzeczytanych wiadomości powiadomienia</item>
-        <item quantity="other" />
+        <item quantity="other"/>
     </plurals>
     <string name="notification_unread_notified_messages_in_room">%1$s w %2$s</string>
 
@@ -899,18 +899,18 @@ Czy chcesz dodać teraz kilka?</string>
     <string name="settings_flair">Nastrój</string>
 
     <string name="room_settings_no_flair">Ten pokój nie wyświetla wyróżników dla żadnych społeczności</string>
-    <string name="widget_integration_missing_room_id">Brakujący _id pokoju w żądaniu.</string>
-    <string name="widget_integration_missing_user_id">Brakujący _id użytkownika w żądaniu.</string>
+    <string name="widget_integration_missing_room_id">Brakujące room_id w żądaniu.</string>
+    <string name="widget_integration_missing_user_id">Brakujące user_id w żądaniu.</string>
     <string name="widget_integration_missing_parameter">Brakuje wymaganego parametru.</string>
     <string name="widget_integration_invalid_parameter">Parametr jest niepoprawny.</string>
     <string name="room_add_matrix_apps">Dodaj aplikacje Matrix</string>
-    <string name="settings_labs_enable_send_voice">Wyślij wiadomość głosową (wymaga aplikacji innej firmy do nagrywania wiadomości głosowych)</string>
+    <string name="settings_labs_enable_send_voice">Wyślij wiadomości głosowe</string>
 
-    <string name="you_added_a_new_device">Dodałeś nowe urządzenie \'%s\', które żąda kluczy szyfrowania.</string>
+    <string name="you_added_a_new_device">Dodałeś(-aś) nowe urządzenie \'%s\', które żąda kluczy szyfrujących.</string>
     <string name="your_unverified_device_requesting">Twoje niezweryfikowane urządzenie \'%s\' żąda kluczy szyfrujących.</string>
     <string name="start_verification">Rozpocznij weryfikację</string>
     <string name="share_without_verifying">Współdziel bez weryfikacji</string>
-    <string name="ignore_request">Zignoruj prośbę</string>
+    <string name="ignore_request">Zignoruj żądanie</string>
 
     <string name="conference_call_warning_message">Połączenia konferencyjne są w stadium rozwoju i mogą nie być niezawodne.</string>
 
@@ -967,14 +967,14 @@ Widoczność wiadomości w Matrix jest podobna do wiadomości e-mail. Nasze zapo
         <item quantity="one">1 członek</item>
         <item quantity="few">%d członków</item>
         <item quantity="many">%d członków</item>
-        <item quantity="other" />
+        <item quantity="other"/>
     </plurals>
 
     <plurals name="group_rooms">
         <item quantity="one">1 pokój</item>
         <item quantity="few">%d pokoje</item>
         <item quantity="many">%d pokoi</item>
-        <item quantity="other" />
+        <item quantity="other"/>
     </plurals>
     <string name="room_tombstone_predecessor_link">Kliknij tutaj, aby zobaczyć starsze wiadomości</string>
 
@@ -990,25 +990,25 @@ Widoczność wiadomości w Matrix jest podobna do wiadomości e-mail. Nasze zapo
         <item quantity="one">1 sekunda</item>
         <item quantity="few">%d sek.</item>
         <item quantity="many">%d sek.</item>
-        <item quantity="other" />
+        <item quantity="other"/>
     </plurals>
     <plurals name="format_time_m">
         <item quantity="one">1 minuta</item>
         <item quantity="few">%d min.</item>
         <item quantity="many">%d min.</item>
-        <item quantity="other" />
+        <item quantity="other"/>
     </plurals>
     <plurals name="format_time_h">
         <item quantity="one">1 godzina</item>
         <item quantity="few">%s godz.</item>
         <item quantity="many">%s godz.</item>
-        <item quantity="other" />
+        <item quantity="other"/>
     </plurals>
     <plurals name="format_time_d">
         <item quantity="one">1 dzień</item>
         <item quantity="few">%d dni</item>
         <item quantity="many">%d dni</item>
-        <item quantity="other" />
+        <item quantity="other"/>
     </plurals>
 
     <string name="room_participants_action_unignore_prompt">Pokazać wszystkie wiadomości od tego użytkownika?
@@ -1017,7 +1017,7 @@ Pamiętaj ta akcja może zresetować aplikacje i potrwać jakiś czas.</string>
         <item quantity="one">1 zaznaczone</item>
         <item quantity="few">%d zaznaczone</item>
         <item quantity="many">%d zaznaczonych</item>
-        <item quantity="other" />
+        <item quantity="other"/>
     </plurals>
     <string name="room_sliding_menu_version_x">Wersja %s</string>
     <string name="settings_preview_media_before_sending">Podgląd mediów przed wysłaniem</string>
@@ -1056,7 +1056,7 @@ Pamiętaj ta akcja może zresetować aplikacje i potrwać jakiś czas.</string>
     <string name="resource_limit_soft_contact">Proszę %s, aby zwiększył ten limit.</string>
     <string name="resource_limit_hard_contact">Proszę %s, aby kontynuować z tej usługi.</string>
 
-    <string name="settings_lazy_loading_description">Zwiększ wydajność, ładując tylko członków pokoju w pierwszym widoku</string>
+    <string name="settings_lazy_loading_description">Zwiększ wydajność, ładując tylko członków pokoju w pierwszym widoku.</string>
     <string name="error_lazy_loading_not_supported_by_home_server">Twój serwer nie obsługuje jeszcze powolnego ładowania członków pokoju. Spróbuj później.</string>
 
     <string name="merged_events_expand">Rozwiń</string>
@@ -1065,4 +1065,42 @@ Pamiętaj ta akcja może zresetować aplikacje i potrwać jakiś czas.</string>
     <string name="settings_lazy_loading_title">Powolne ładowanie członków pokojów</string>
     <string name="room_participants_invite_join_names_combined">%1$s %2$s</string>
 
-</resources>
+<string name="settings_call_ringtone_title">Dzwonek przychodzących połączeń</string>
+    <string name="settings_call_ringtone_dialog_title">Wybierz dzwonek dla połączeń:</string>
+
+    <string name="reason_hint">Powód</string>
+
+    <string name="settings_send_typing_notifs">Wyślij powiadomienia o pisaniu</string>
+    <string name="settings_password">Hasło</string>
+    <string name="markdown_has_been_enabled">Markdown został włączony.</string>
+    <string name="markdown_has_been_disabled">Markdown został wyłączony.</string>
+
+    <string name="show_info_area_always">Zawsze</string>
+    <string name="generic_label">%1$s:</string>
+    <string name="generic_label_and_value">%1$s: %2$s</string>
+    <string name="plus_x">+%d</string>
+    <string name="x_plus">%d+</string>
+
+<string name="settings_call_ringtone_use_riot_ringtone">Użyj domyślnego dzwonka Riot dla przychodzących połączeń</string>
+    <string name="call_anyway">Zadzwoń mimo to</string>
+    <string name="settings_call_category">Połączenia</string>
+    <string name="room_participants_action_kick">Wyrzuć</string>
+    <plurals name="room_participants_kick_prompt_msg">
+	<item quantity="one">Czy chcesz wyrzucić tego użytkownika z rozmowy?</item>
+	<item quantity="few">Czy chcesz wyrzucić tych użytkowników z rozmowy?</item>
+	<item quantity="many">Czy chcesz wyrzucić tych użytkowników z rozmowy?</item>
+	<item quantity="other"/>
+</plurals>
+    <string name="settings_send_markdown">Formatowanie Markdown</string>
+    <string name="settings_show_join_leave_messages">Pokaż zdarzenia dołączenia i wyjścia</string>
+    <string name="show_info_area_messages_and_errors">Dla komunikatów i błędów</string>
+    <string name="show_info_area_only_errors">Tylko dla błędów</string>
+
+    <string name="settings_show_read_receipts">Wyświetl potwierdzenia odczytu</string>
+    <string name="settings_show_avatar_display_name_changes_messages_summary">Obejmuje zmiany awatara i nazwy wyświetlania.</string>
+    <string name="settings_show_avatar_display_name_changes_messages">Pokaż zdarzenia konta</string>
+    <string name="settings_send_typing_notifs_summary">Daj innym użytkownikom znać, że piszesz.</string>
+    <string name="settings_show_read_receipts_summary">Kliknij na potwierdzenie odbioru, aby wyświetlić szczegółową listę.</string>
+    <string name="command_problem_with_parameters">Komenda „%s” potrzebuje więcej parametrów lub niektóre parametry są niepoprawne.</string>
+    <string name="settings_info_area_show">Pokaż obszar informacyjny</string>
+    </resources>
