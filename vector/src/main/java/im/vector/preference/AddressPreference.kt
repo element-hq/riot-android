@@ -65,8 +65,6 @@ class AddressPreference : VectorPreference {
     fun setMainIconVisible(isVisible: Boolean) {
         mIsMainIconVisible = isVisible
 
-        if (null != mMainAddressIconView) {
-            mMainAddressIconView!!.visibility = if (mIsMainIconVisible) View.VISIBLE else View.GONE
-        }
+        mMainAddressIconView?.visibility = if (mIsMainIconVisible) View.VISIBLE else View.GONE
     }
 }

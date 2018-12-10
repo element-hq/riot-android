@@ -50,7 +50,7 @@
             android:title="@string/room_settings_directory_visibility" />
 
         <!-- for further use
-        <Preference
+        <im.vector.preference.VectorPreference
             android:key="roomPrivacyInfo"
             android:title="@string/settings_room_privacy_label" /> -->
 

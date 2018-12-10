@@ -16,7 +16,6 @@
 
 package im.vector.preference
 
-import android.annotation.SuppressLint
 import android.content.Context
 import android.support.v7.preference.ListPreference
 import android.support.v7.preference.Preference
@@ -51,7 +50,6 @@ class VectorListPreference : ListPreference {
 
     constructor(context: Context, attrs: AttributeSet) : super(context, attrs)
 
-    @SuppressLint("NewApi")
     constructor(context: Context, attrs: AttributeSet, defStyleAttr: Int) : super(context, attrs, defStyleAttr)
 
     init {

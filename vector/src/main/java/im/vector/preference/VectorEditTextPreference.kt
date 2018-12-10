@@ -21,6 +21,9 @@ import android.support.v7.preference.EditTextPreference
 import android.util.AttributeSet
 import im.vector.R
 
+/**
+ * Use this class to create an EditTextPreference form code and avoid a crash (see https://code.google.com/p/android/issues/detail?id=231576)
+ */
 class VectorEditTextPreference : EditTextPreference {
 
     constructor(context: Context) : super(context)

@@ -38,7 +38,7 @@
         <!-- Phone will be added here -->
 
         <!-- Note: iconTint does not work, it is also done in code -->
-        <Preference
+        <im.vector.preference.VectorPreference
             android:icon="@drawable/ic_add_black"
             android:key="ADD_PHONE_NUMBER_PREFERENCE_KEY"
             android:order="200"

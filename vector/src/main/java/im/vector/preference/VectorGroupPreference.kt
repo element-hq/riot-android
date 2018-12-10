@@ -16,9 +16,7 @@
 
 package im.vector.preference
 
-import android.annotation.TargetApi
 import android.content.Context
-import android.os.Build
 import android.support.v14.preference.SwitchPreference
 import android.support.v7.preference.PreferenceViewHolder
 import android.util.AttributeSet
@@ -46,13 +44,7 @@ class VectorGroupPreference : SwitchPreference {
 
     constructor(context: Context, attrs: AttributeSet, defStyle: Int) : super(context, attrs, defStyle)
 
-    @TargetApi(Build.VERSION_CODES.LOLLIPOP)
     constructor(context: Context, attrs: AttributeSet, defStyleAttr: Int, defStyleRes: Int) : super(context, attrs, defStyleAttr, defStyleRes)
-
-    init {
-        // Force the use of SwitchCompat component
-        //setWidgetLayoutResource(R.layout.preference_switch_layout);
-    }
 
     override fun onBindViewHolder(holder: PreferenceViewHolder) {
         super.onBindViewHolder(holder)
