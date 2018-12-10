@@ -17,7 +17,6 @@
 package im.vector.activity.policies
 
 import android.app.Activity
-import android.view.View
 import android.widget.Button
 import butterknife.BindView
 import butterknife.OnClick
@@ -26,14 +25,14 @@ import im.vector.R
 import im.vector.RegistrationManager
 import im.vector.activity.VectorAppCompatActivity
 import im.vector.activity.VectorWebViewActivity
-import im.vector.ui.epoxy.withModels
 import im.vector.webview.WebViewMode
 import org.matrix.androidsdk.rest.model.login.LocalizedFlowDataLoginTerms
 
 /**
  * AccountCreationTermsActivity displays the list of policies the user has to accept
  */
-class AccountCreationTermsActivity : VectorAppCompatActivity() {
+class AccountCreationTermsActivity : VectorAppCompatActivity(),
+        PolicyController.PolicyControllerListener {
 
     @BindView(R.id.account_creation_policy_list)
     lateinit var policyList: EpoxyRecyclerView
@@ -41,61 +40,60 @@ class AccountCreationTermsActivity : VectorAppCompatActivity() {
     @BindView(R.id.account_creation_policy_button_accept)
     lateinit var submitButton: Button
 
-    private var nbOfTerms = 0
-
     override fun getLayoutRes() = R.layout.activity_vector_registration_terms
 
     override fun getTitleRes() = R.string.create_account
 
-    private val mChecked: MutableSet<LocalizedFlowDataLoginTerms> = HashSet()
+    private var accountCreationTermsViewState: AccountCreationTermsViewState = AccountCreationTermsViewState(emptyList())
+
+    private val policyController = PolicyController(this)
 
     override fun initUiAndData() {
-        val localizedFlowDataLoginTerms = RegistrationManager.getInstance().getLocalizedLoginTerms(this)
+        policyList.setController(policyController)
 
-        nbOfTerms = localizedFlowDataLoginTerms.size
+        val list = ArrayList<LocalizedFlowDataLoginTermsChecked>()
 
-        policyList.withModels {
-            localizedFlowDataLoginTerms
-                    .forEach { localizedFlowDataLoginTerm ->
-                        policy {
-                            id(localizedFlowDataLoginTerm.policyName)
-                            title(localizedFlowDataLoginTerm.localizedName!!)
+        RegistrationManager.getInstance().getLocalizedLoginTerms(this)
+                .forEach {
+                    list.add(LocalizedFlowDataLoginTermsChecked(it))
+                }
 
-                            clickListener(View.OnClickListener { openPolicy(localizedFlowDataLoginTerm) })
-                            checkChangeListener { _, isChecked ->
-                                if (isChecked) {
-                                    mChecked.add(localizedFlowDataLoginTerm)
-                                } else {
-                                    mChecked.remove(localizedFlowDataLoginTerm)
-                                }
-                                updateButtonState()
-                            }
-                        }
-                    }
-        }
+        accountCreationTermsViewState = AccountCreationTermsViewState(list)
 
-        updateButtonState()
+        renderState()
     }
 
-    private fun openPolicy(localizedFlowDataLoginTerms: LocalizedFlowDataLoginTerms) {
-        val intent = VectorWebViewActivity.getIntent(this,
-                localizedFlowDataLoginTerms.localizedUrl!!,
-                localizedFlowDataLoginTerms.localizedName!!,
-                WebViewMode.DEFAULT)
+    private fun renderState() {
+        policyController.setData(accountCreationTermsViewState.localizedFlowDataLoginTermsChecked)
 
-        startActivity(intent)
-    }
-
-    private fun updateButtonState() {
         // Button is enabled only if all checkboxes are checked
         // TODO Update this when the redesign
-        if (mChecked.size == nbOfTerms) {
+        if (accountCreationTermsViewState.allChecked()) {
             submitButton.isEnabled = true
             submitButton.alpha = 1f
         } else {
             submitButton.isEnabled = false
             submitButton.alpha = 0.5f
         }
+    }
+
+    override fun setChecked(localizedFlowDataLoginTerms: LocalizedFlowDataLoginTerms, isChecked: Boolean) {
+        if (isChecked) {
+            accountCreationTermsViewState.check(localizedFlowDataLoginTerms)
+        } else {
+            accountCreationTermsViewState.uncheck(localizedFlowDataLoginTerms)
+        }
+
+        renderState()
+    }
+
+    override fun openPolicy(localizedFlowDataLoginTerms: LocalizedFlowDataLoginTerms) {
+        val intent = VectorWebViewActivity.getIntent(this,
+                localizedFlowDataLoginTerms.localizedUrl!!,
+                localizedFlowDataLoginTerms.localizedName!!,
+                WebViewMode.DEFAULT)
+
+        startActivity(intent)
     }
 
     @OnClick(R.id.account_creation_policy_button_accept)

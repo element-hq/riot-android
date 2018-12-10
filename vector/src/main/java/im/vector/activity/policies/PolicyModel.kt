@@ -26,6 +26,9 @@ import im.vector.R
 @EpoxyModelClass(layout = R.layout.adapter_item_policy)
 abstract class PolicyModel : EpoxyModelWithHolder<PolicyHolder>() {
     @EpoxyAttribute
+    var checked: Boolean = false
+
+    @EpoxyAttribute
     var title: String? = null
 
     @EpoxyAttribute(EpoxyAttribute.Option.DoNotHash)
@@ -36,12 +39,16 @@ abstract class PolicyModel : EpoxyModelWithHolder<PolicyHolder>() {
 
     override fun bind(holder: PolicyHolder) {
         holder.let {
+            it.checkbox.isChecked = checked
             it.checkbox.setOnCheckedChangeListener(checkChangeListener)
             it.title.text = title
             it.main.setOnClickListener(clickListener)
         }
     }
 
-    // To save state of Checkbox
-    override fun shouldSaveViewState() = true
+    // Ensure checkbox behaves as expected (remove the listener)
+    override fun unbind(holder: PolicyHolder) {
+        super.unbind(holder)
+        holder.checkbox.setOnCheckedChangeListener(null)
+    }
 }
