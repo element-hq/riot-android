@@ -55,7 +55,7 @@ class VectorSettingsActivity : MXCActionBarActivity() {
                     .replace(R.id.vector_settings_page, vectorSettingsPreferencesFragment, FRAGMENT_TAG)
                     .commit()
         } else {
-            vectorSettingsPreferencesFragment = fragmentManager.findFragmentByTag(FRAGMENT_TAG) as VectorSettingsPreferencesFragment
+            vectorSettingsPreferencesFragment = supportFragmentManager.findFragmentByTag(FRAGMENT_TAG) as VectorSettingsPreferencesFragment
         }
     }
 
