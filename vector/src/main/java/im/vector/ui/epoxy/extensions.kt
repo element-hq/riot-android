@@ -14,16 +14,19 @@
  * limitations under the License.
  */
 
-package im.vector.activity.util
+package im.vector.ui.epoxy
 
-const val FALLBACK_ACCOUNT_CREATION_ACTIVITY_REQUEST_CODE = 314
-const val FALLBACK_LOGIN_ACTIVITY_REQUEST_CODE = 315
-const val CAPTCHA_CREATION_ACTIVITY_REQUEST_CODE = 316
-const val TERMS_CREATION_ACTIVITY_REQUEST_CODE = 317
+import com.airbnb.epoxy.EpoxyController
+import com.airbnb.epoxy.EpoxyRecyclerView
 
-const val STICKER_PICKER_ACTIVITY_REQUEST_CODE = 12000
-
-const val INTEGRATION_MANAGER_ACTIVITY_REQUEST_CODE = 13000
-
-const val BATTERY_OPTIMIZATION_REQUEST_CODE = 14000
-
+/**
+ *  Easily add models to an EpoxyRecyclerView, the same way you would in a buildModels method of EpoxyController.
+ *  Copied from https://github.com/airbnb/epoxy/wiki/EpoxyRecyclerView
+ */
+fun EpoxyRecyclerView.withModels(buildModelsCallback: EpoxyController.() -> Unit) {
+    setControllerAndBuildModels(object : EpoxyController() {
+        override fun buildModels() {
+            buildModelsCallback()
+        }
+    })
+}

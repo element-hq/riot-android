@@ -14,16 +14,20 @@
  * limitations under the License.
  */
 
-package im.vector.activity.util
+package im.vector.activity.policies
 
-const val FALLBACK_ACCOUNT_CREATION_ACTIVITY_REQUEST_CODE = 314
-const val FALLBACK_LOGIN_ACTIVITY_REQUEST_CODE = 315
-const val CAPTCHA_CREATION_ACTIVITY_REQUEST_CODE = 316
-const val TERMS_CREATION_ACTIVITY_REQUEST_CODE = 317
+import android.widget.CheckBox
+import android.widget.TextView
+import butterknife.BindView
+import im.vector.R
+import im.vector.ui.epoxy.BaseEpoxyHolder
 
-const val STICKER_PICKER_ACTIVITY_REQUEST_CODE = 12000
+class PolicyHolder : BaseEpoxyHolder() {
 
-const val INTEGRATION_MANAGER_ACTIVITY_REQUEST_CODE = 13000
+    @BindView(R.id.adapter_item_policy_checkbox)
+    lateinit var checkbox: CheckBox
 
-const val BATTERY_OPTIMIZATION_REQUEST_CODE = 14000
+    @BindView(R.id.adapter_item_policy_title)
+    lateinit var title: TextView
 
+}

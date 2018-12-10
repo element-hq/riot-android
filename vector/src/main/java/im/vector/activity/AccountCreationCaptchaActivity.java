@@ -242,16 +242,4 @@ public class AccountCreationCaptchaActivity extends VectorAppCompatActivity {
         }
         return super.onKeyDown(keyCode, event);
     }
-
-    @Override
-    public void onLowMemory() {
-        super.onLowMemory();
-        CommonActivityUtils.onLowMemory(this);
-    }
-
-    @Override
-    public void onTrimMemory(int level) {
-        super.onTrimMemory(level);
-        CommonActivityUtils.onTrimMemory(this, level);
-    }
 }

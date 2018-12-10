@@ -14,16 +14,24 @@
  * limitations under the License.
  */
 
-package im.vector.activity.util
+package im.vector.ui.epoxy
 
-const val FALLBACK_ACCOUNT_CREATION_ACTIVITY_REQUEST_CODE = 314
-const val FALLBACK_LOGIN_ACTIVITY_REQUEST_CODE = 315
-const val CAPTCHA_CREATION_ACTIVITY_REQUEST_CODE = 316
-const val TERMS_CREATION_ACTIVITY_REQUEST_CODE = 317
+import android.support.annotation.CallSuper
+import android.view.View
+import butterknife.ButterKnife
+import com.airbnb.epoxy.EpoxyHolder
 
-const val STICKER_PICKER_ACTIVITY_REQUEST_CODE = 12000
 
-const val INTEGRATION_MANAGER_ACTIVITY_REQUEST_CODE = 13000
+/**
+ * This class ensure butterknife is used to bind Views
+ */
+abstract class BaseEpoxyHolder : EpoxyHolder() {
+    lateinit var main: View
 
-const val BATTERY_OPTIMIZATION_REQUEST_CODE = 14000
+    @CallSuper
+    override fun bindView(itemView: View) {
+        main = itemView
 
+        ButterKnife.bind(this, itemView)
+    }
+}
