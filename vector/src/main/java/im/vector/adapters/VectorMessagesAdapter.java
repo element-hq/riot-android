@@ -2225,7 +2225,7 @@ public class VectorMessagesAdapter extends AbstractMessagesAdapter {
                             && TextUtils.equals(mSession.getMyUserId(), event.getSender())) {
                         e2eIconByEventId.put(event.eventId, R.drawable.e2e_verified);
                         MXDeviceInfo deviceInfo = mSession.getCrypto()
-                                .deviceWithIdentityKey(encryptedEventContent.sender_key, event.getSender(), encryptedEventContent.algorithm);
+                                .deviceWithIdentityKey(encryptedEventContent.sender_key, encryptedEventContent.algorithm);
 
                         if (null != deviceInfo) {
                             e2eDeviceInfoByEventId.put(event.eventId, deviceInfo);
@@ -2233,7 +2233,7 @@ public class VectorMessagesAdapter extends AbstractMessagesAdapter {
 
                     } else {
                         MXDeviceInfo deviceInfo = mSession.getCrypto()
-                                .deviceWithIdentityKey(encryptedEventContent.sender_key, event.getSender(), encryptedEventContent.algorithm);
+                                .deviceWithIdentityKey(encryptedEventContent.sender_key, encryptedEventContent.algorithm);
 
                         if (null != deviceInfo) {
                             e2eDeviceInfoByEventId.put(event.eventId, deviceInfo);

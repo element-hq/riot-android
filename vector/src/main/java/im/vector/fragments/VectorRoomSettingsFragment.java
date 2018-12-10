@@ -49,6 +49,7 @@ import android.widget.Toast;
 
 import org.matrix.androidsdk.MXPatterns;
 import org.matrix.androidsdk.MXSession;
+import org.matrix.androidsdk.crypto.CryptoConstantsKt;
 import org.matrix.androidsdk.crypto.MXCryptoAlgorithms;
 import org.matrix.androidsdk.data.Room;
 import org.matrix.androidsdk.data.RoomAccountData;
@@ -1824,7 +1825,7 @@ public class VectorRoomSettingsFragment extends PreferenceFragmentCompat impleme
                                         public void onClick(DialogInterface dialog, int which) {
                                             displayLoadingView();
 
-                                            mRoom.enableEncryptionWithAlgorithm(MXCryptoAlgorithms.MXCRYPTO_ALGORITHM_MEGOLM, new ApiCallback<Void>() {
+                                            mRoom.enableEncryptionWithAlgorithm(CryptoConstantsKt.MXCRYPTO_ALGORITHM_MEGOLM, new ApiCallback<Void>() {
 
                                                 private void onDone() {
                                                     hideLoadingView(false);
