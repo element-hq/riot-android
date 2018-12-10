@@ -59,8 +59,10 @@ import org.matrix.androidsdk.rest.client.LoginRestClient;
 import org.matrix.androidsdk.rest.client.ProfileRestClient;
 import org.matrix.androidsdk.rest.model.MatrixError;
 import org.matrix.androidsdk.rest.model.login.Credentials;
+import org.matrix.androidsdk.rest.model.login.LocalizedFlowDataLoginTerms;
 import org.matrix.androidsdk.rest.model.login.LoginFlow;
 import org.matrix.androidsdk.rest.model.login.RegistrationFlowResponse;
+import org.matrix.androidsdk.rest.model.login.ThreePidCredentials;
 import org.matrix.androidsdk.rest.model.pid.ThreePid;
 import org.matrix.androidsdk.ssl.CertUtil;
 import org.matrix.androidsdk.ssl.Fingerprint;
@@ -80,6 +82,7 @@ import im.vector.PhoneNumberHandler;
 import im.vector.R;
 import im.vector.RegistrationManager;
 import im.vector.UnrecognizedCertHandler;
+import im.vector.activity.policies.AccountCreationTermsActivity;
 import im.vector.activity.util.RequestCodesKt;
 import im.vector.features.hhs.ResourceLimitDialogHelper;
 import im.vector.push.fcm.FcmHelper;
@@ -230,6 +233,9 @@ public class LoginActivity extends MXCActionBarActivity implements RegistrationM
     // Home server options
     private View mHomeServerOptionLayout;
 
+    // Registration Manager
+    private RegistrationManager mRegistrationManager = RegistrationManager.getInstance();
+
     // allowed registration response
     private RegistrationFlowResponse mRegistrationResponse;
 
@@ -246,7 +252,7 @@ public class LoginActivity extends MXCActionBarActivity implements RegistrationM
     private boolean mIsMailValidationPending;
 
     // use to reset the password when the user click on the email validation
-    private Map<String, String> mForgotPid = null;
+    private ThreePidCredentials mForgotPid = null;
 
     // network state notification
     private final BroadcastReceiver mNetworkReceiver = new BroadcastReceiver() {
@@ -303,7 +309,7 @@ public class LoginActivity extends MXCActionBarActivity implements RegistrationM
         }
 
         cancelEmailPolling();
-        RegistrationManager.getInstance().resetSingleton();
+        mRegistrationManager.resetSingleton();
         super.onDestroy();
         Log.i(LOG_TAG, "## onDestroy(): IN");
         // ignore any server response when the acitity is destroyed
@@ -655,10 +661,10 @@ public class LoginActivity extends MXCActionBarActivity implements RegistrationM
                 Log.d(LOG_TAG, "## onCreate() Resume email validation");
                 // Resume the email validation polling
                 enableLoadingScreen(true);
-                RegistrationManager.getInstance().setSupportedRegistrationFlows(mRegistrationResponse);
-                RegistrationManager.getInstance().setAccountData(name, password);
-                RegistrationManager.getInstance().addEmailThreePid(mPendingEmailValidation);
-                RegistrationManager.getInstance().attemptRegistration(this, this);
+                mRegistrationManager.setSupportedRegistrationFlows(mRegistrationResponse);
+                mRegistrationManager.setAccountData(name, password);
+                mRegistrationManager.addEmailThreePid(mPendingEmailValidation);
+                mRegistrationManager.attemptRegistration(this, this);
                 onWaitingEmailValidation();
             }
         }
@@ -750,6 +756,7 @@ public class LoginActivity extends MXCActionBarActivity implements RegistrationM
         if (!TextUtils.equals(mHomeServerUrl, getHomeServerUrl())) {
             mHomeServerUrl = getHomeServerUrl();
             mRegistrationResponse = null;
+            mRegistrationManager.resetSingleton();
 
             // invalidate the current homeserver config
             mHomeserverConnectionConfig = null;
@@ -776,6 +783,7 @@ public class LoginActivity extends MXCActionBarActivity implements RegistrationM
         if (!TextUtils.equals(mIdentityServerUrl, getIdentityServerUrl())) {
             mIdentityServerUrl = getIdentityServerUrl();
             mRegistrationResponse = null;
+            mRegistrationManager.resetSingleton();
 
             // invalidate the current homeserver config
             mHomeserverConnectionConfig = null;
@@ -818,6 +826,7 @@ public class LoginActivity extends MXCActionBarActivity implements RegistrationM
         cancelEmailPolling();
         mEmailValidationExtraParams = null;
         mRegistrationResponse = null;
+        mRegistrationManager.resetSingleton();
         showMainLayout();
         enableLoadingScreen(false);
 
@@ -855,7 +864,7 @@ public class LoginActivity extends MXCActionBarActivity implements RegistrationM
             } else if ((MODE_ACCOUNT_CREATION_THREE_PID == mMode)) {
                 Log.d(LOG_TAG, "## cancel the three pid mode");
                 cancelEmailPolling();
-                RegistrationManager.getInstance().clearThreePid();
+                mRegistrationManager.clearThreePid();
                 mEmailAddress.setText("");
                 mRegistrationPhoneNumberHandler.reset();
                 fallbackToRegistrationMode();
@@ -987,10 +996,10 @@ public class LoginActivity extends MXCActionBarActivity implements RegistrationM
                     mMode = MODE_FORGOT_PASSWORD_WAITING_VALIDATION;
                     refreshDisplay();
 
-                    mForgotPid = new HashMap<>();
-                    mForgotPid.put("client_secret", thirdPid.clientSecret);
-                    mForgotPid.put("id_server", hsConfig.getIdentityServerUri().getHost());
-                    mForgotPid.put("sid", thirdPid.sid);
+                    mForgotPid = new ThreePidCredentials();
+                    mForgotPid.clientSecret = thirdPid.clientSecret;
+                    mForgotPid.idServer = hsConfig.getIdentityServerUri().getHost();
+                    mForgotPid.sid = thirdPid.sid;
                 }
             }
 
@@ -1295,7 +1304,7 @@ public class LoginActivity extends MXCActionBarActivity implements RegistrationM
                         .withIdentityServerUri(Uri.parse(aIdentityServer))
                         .build();
 
-        RegistrationManager.getInstance().setHsConfig(homeServerConfig);
+        mRegistrationManager.setHsConfig(homeServerConfig);
         Log.d(LOG_TAG, "## submitEmailToken(): IN");
 
         if (mMode == MODE_ACCOUNT_CREATION) {
@@ -1319,10 +1328,10 @@ public class LoginActivity extends MXCActionBarActivity implements RegistrationM
 
                             mMode = MODE_FORGOT_PASSWORD_WAITING_VALIDATION;
 
-                            mForgotPid = new HashMap<>();
-                            mForgotPid.put("client_secret", aClientSecret);
-                            mForgotPid.put("id_server", homeServerConfig.getIdentityServerUri().getHost());
-                            mForgotPid.put("sid", aSid);
+                            mForgotPid = new ThreePidCredentials();
+                            mForgotPid.clientSecret = aClientSecret;
+                            mForgotPid.idServer = homeServerConfig.getIdentityServerUri().getHost();
+                            mForgotPid.sid = aSid;
 
                             mIsPasswordResetted = false;
                             onForgotOnEmailValidated(homeServerConfig);
@@ -1332,7 +1341,7 @@ public class LoginActivity extends MXCActionBarActivity implements RegistrationM
                             Log.d(LoginActivity.LOG_TAG, "## submitEmailToken(): onSuccess() - registerAfterEmailValidations() started");
                             mMode = MODE_ACCOUNT_CREATION;
                             enableLoadingScreen(true);
-                            RegistrationManager.getInstance().registerAfterEmailValidation(LoginActivity.this,
+                            mRegistrationManager.registerAfterEmailValidation(LoginActivity.this,
                                     aClientSecret,
                                     aSid,
                                     aIdentityServer,
@@ -1379,7 +1388,7 @@ public class LoginActivity extends MXCActionBarActivity implements RegistrationM
 
         // Check whether all listed flows in this authentication session are supported
         // We suggest using the fallback page (if any), when at least one flow is not supported.
-        if (RegistrationManager.getInstance().hasNonSupportedStage()) {
+        if (mRegistrationManager.hasNonSupportedStage()) {
             String hs = getHomeServerUrl();
             boolean validHomeServer = false;
 
@@ -1395,11 +1404,9 @@ public class LoginActivity extends MXCActionBarActivity implements RegistrationM
                 return;
             }
 
-            fallbackToLoginMode();
-
-            Intent intent = new Intent(LoginActivity.this, AccountCreationActivity.class);
-            intent.putExtra(AccountCreationActivity.EXTRA_HOME_SERVER_ID, hs);
-            startActivityForResult(intent, RequestCodesKt.ACCOUNT_CREATION_ACTIVITY_REQUEST_CODE);
+            Intent intent = new Intent(LoginActivity.this, FallbackAccountCreationActivity.class);
+            intent.putExtra(FallbackAccountCreationActivity.EXTRA_HOME_SERVER_URL, hs);
+            startActivityForResult(intent, RequestCodesKt.FALLBACK_ACCOUNT_CREATION_ACTIVITY_REQUEST_CODE);
         }
     }
 
@@ -1463,7 +1470,6 @@ public class LoginActivity extends MXCActionBarActivity implements RegistrationM
                             if (mMode == MODE_ACCOUNT_CREATION) {
                                 showMainLayout();
                                 enableLoadingScreen(false);
-                                refreshDisplay();
                                 Toast.makeText(getApplicationContext(), errorMessage, Toast.LENGTH_LONG).show();
                             }
                         }
@@ -1510,7 +1516,7 @@ public class LoginActivity extends MXCActionBarActivity implements RegistrationM
                                 }
 
                                 if (null != registrationFlowResponse) {
-                                    RegistrationManager.getInstance().setSupportedRegistrationFlows(registrationFlowResponse);
+                                    mRegistrationManager.setSupportedRegistrationFlows(registrationFlowResponse);
                                     onRegistrationFlow(registrationFlowResponse);
                                 } else {
                                     onFailureDuringAuthRequest(e);
@@ -1568,7 +1574,7 @@ public class LoginActivity extends MXCActionBarActivity implements RegistrationM
 
         // sanity check
         if (null == mRegistrationResponse) {
-            Log.d(LOG_TAG, "## onRegisterClick(): return - mRegistrationResponse=nuul");
+            Log.d(LOG_TAG, "## onRegisterClick(): return - mRegistrationResponse=null");
             return;
         }
 
@@ -1602,8 +1608,8 @@ public class LoginActivity extends MXCActionBarActivity implements RegistrationM
             }
         }
 
-        RegistrationManager.getInstance().setAccountData(name, password);
-        RegistrationManager.getInstance().checkUsernameAvailability(this, this);
+        mRegistrationManager.setAccountData(name, password);
+        mRegistrationManager.checkUsernameAvailability(this, this);
     }
 
     //==============================================================================================================
@@ -1616,7 +1622,6 @@ public class LoginActivity extends MXCActionBarActivity implements RegistrationM
     private void onClick() {
         onIdentityServerUrlUpdate(false);
         onHomeServerUrlUpdate(false);
-        checkFlows();
 
         InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
         imm.hideSoftInputFromWindow(mHomeServerText.getWindowToken(), 0);
@@ -1800,7 +1805,7 @@ public class LoginActivity extends MXCActionBarActivity implements RegistrationM
                             // if not supported, switch to the fallback login
                             if (!isSupported) {
                                 Intent intent = new Intent(LoginActivity.this, FallbackLoginActivity.class);
-                                intent.putExtra(FallbackLoginActivity.EXTRA_HOME_SERVER_ID, hsConfig.getHomeserverUri().toString());
+                                intent.putExtra(FallbackLoginActivity.EXTRA_HOME_SERVER_URL, hsConfig.getHomeserverUri().toString());
                                 startActivityForResult(intent, RequestCodesKt.FALLBACK_LOGIN_ACTIVITY_REQUEST_CODE);
                             } else if (mIsPendingLogin) {
                                 onLoginClick();
@@ -1939,7 +1944,7 @@ public class LoginActivity extends MXCActionBarActivity implements RegistrationM
         // check whether an email validation is in progress
         if (null != mRegisterPollingRunnable) {
             // Retrieve the current email three pid
-            ThreePid email3pid = RegistrationManager.getInstance().getEmailThreePid();
+            ThreePid email3pid = mRegistrationManager.getEmailThreePid();
             if (null != email3pid) {
                 savedInstanceState.putSerializable(SAVED_CREATION_EMAIL_THREEPID, email3pid);
             }
@@ -1956,7 +1961,6 @@ public class LoginActivity extends MXCActionBarActivity implements RegistrationM
      * Refresh the visibility of mHomeServerText
      */
     private void refreshDisplay() {
-
         // check if the device supported the dedicated mode
         checkFlows();
 
@@ -1984,7 +1988,7 @@ public class LoginActivity extends MXCActionBarActivity implements RegistrationM
         mForgotPasswordButton.setVisibility(mMode == MODE_FORGOT_PASSWORD ? View.VISIBLE : View.GONE);
         mForgotValidateEmailButton.setVisibility(mMode == MODE_FORGOT_PASSWORD_WAITING_VALIDATION ? View.VISIBLE : View.GONE);
         mSubmitThreePidButton.setVisibility(mMode == MODE_ACCOUNT_CREATION_THREE_PID ? View.VISIBLE : View.GONE);
-        mSkipThreePidButton.setVisibility(mMode == MODE_ACCOUNT_CREATION_THREE_PID && RegistrationManager.getInstance().canSkip() ? View.VISIBLE : View.GONE);
+        mSkipThreePidButton.setVisibility(mMode == MODE_ACCOUNT_CREATION_THREE_PID && mRegistrationManager.canSkipThreePid() ? View.VISIBLE : View.GONE);
         mHomeServerOptionLayout.setVisibility(mMode == MODE_ACCOUNT_CREATION_THREE_PID ? View.GONE : View.VISIBLE);
 
         // update the button text to the current status
@@ -2105,7 +2109,7 @@ public class LoginActivity extends MXCActionBarActivity implements RegistrationM
             }
         }
 
-        RegistrationManager.getInstance().setHsConfig(mHomeserverConnectionConfig);
+        mRegistrationManager.setHsConfig(mHomeserverConnectionConfig);
         return mHomeserverConnectionConfig;
     }
 
@@ -2127,19 +2131,35 @@ public class LoginActivity extends MXCActionBarActivity implements RegistrationM
             if (resultCode == RESULT_OK) {
                 Log.d(LOG_TAG, "## onActivityResult(): CAPTCHA_CREATION_ACTIVITY_REQUEST_CODE => RESULT_OK");
                 String captchaResponse = data.getStringExtra("response");
-                RegistrationManager.getInstance().setCaptchaResponse(captchaResponse);
+                mRegistrationManager.setCaptchaResponse(captchaResponse);
                 createAccount();
             } else {
                 Log.d(LOG_TAG, "## onActivityResult(): CAPTCHA_CREATION_ACTIVITY_REQUEST_CODE => RESULT_KO");
                 // cancel the registration flow
                 mRegistrationResponse = null;
+                mRegistrationManager.resetSingleton();
                 showMainLayout();
                 enableLoadingScreen(false);
                 refreshDisplay();
             }
-        } else if (RequestCodesKt.ACCOUNT_CREATION_ACTIVITY_REQUEST_CODE == requestCode || RequestCodesKt.FALLBACK_LOGIN_ACTIVITY_REQUEST_CODE == requestCode) {
+        } else if (RequestCodesKt.TERMS_CREATION_ACTIVITY_REQUEST_CODE == requestCode) {
             if (resultCode == RESULT_OK) {
-                Log.d(LOG_TAG, "## onActivityResult(): ACCOUNT_CREATION_ACTIVITY_REQUEST_CODE => RESULT_OK");
+                Log.d(LOG_TAG, "## onActivityResult(): TERMS_CREATION_ACTIVITY_REQUEST_CODE => RESULT_OK");
+                mRegistrationManager.setTermsApproved();
+                createAccount();
+            } else {
+                Log.d(LOG_TAG, "## onActivityResult(): TERMS_CREATION_ACTIVITY_REQUEST_CODE => RESULT_KO");
+                // cancel the registration flow
+                mRegistrationResponse = null;
+                mRegistrationManager.resetSingleton();
+                showMainLayout();
+                enableLoadingScreen(false);
+                refreshDisplay();
+            }
+        } else if (RequestCodesKt.FALLBACK_ACCOUNT_CREATION_ACTIVITY_REQUEST_CODE == requestCode
+                || RequestCodesKt.FALLBACK_LOGIN_ACTIVITY_REQUEST_CODE == requestCode) {
+            if (resultCode == RESULT_OK) {
+                Log.d(LOG_TAG, "## onActivityResult(): FALLBACK_ACTIVITY => RESULT_OK");
                 String homeServer = data.getStringExtra("homeServer");
                 String userId = data.getStringExtra("userId");
                 String accessToken = data.getStringExtra("accessToken");
@@ -2158,8 +2178,6 @@ public class LoginActivity extends MXCActionBarActivity implements RegistrationM
                     Log.d(LOG_TAG, "hsConfig setCredentials failed " + e.getLocalizedMessage());
                 }
 
-                Log.d(LOG_TAG, "Account creation succeeds");
-
                 // let's go...
                 MXSession session = Matrix.getInstance(getApplicationContext()).createSession(hsConfig);
                 Matrix.getInstance(getApplicationContext()).addSession(session);
@@ -2168,9 +2186,12 @@ public class LoginActivity extends MXCActionBarActivity implements RegistrationM
 
                 goToSplash();
                 finish();
-            } else if ((resultCode == RESULT_CANCELED) && (RequestCodesKt.FALLBACK_LOGIN_ACTIVITY_REQUEST_CODE == requestCode)) {
-                Log.d(LOG_TAG, "## onActivityResult(): RESULT_CANCELED && FALLBACK_LOGIN_ACTIVITY_REQUEST_CODE");
+            } else if ((resultCode == RESULT_CANCELED)) {
+                Log.d(LOG_TAG, "## onActivityResult(): fallback cancelled");
                 // reset the home server to let the user writes a valid one.
+                mHomeserverConnectionConfig = null;
+                mRegistrationResponse = null;
+                mRegistrationManager.resetSingleton();
                 mHomeServerText.setText(UrlUtilKt.HTTPS_SCHEME);
                 setActionButtonsEnabled(false);
             }
@@ -2188,16 +2209,16 @@ public class LoginActivity extends MXCActionBarActivity implements RegistrationM
      */
     private void initThreePidView() {
         // Make sure to start with a clear state
-        RegistrationManager.getInstance().clearThreePid();
+        mRegistrationManager.clearThreePid();
         mEmailAddress.setText("");
         mRegistrationPhoneNumberHandler.reset();
         mEmailAddress.requestFocus();
 
-        mThreePidInstructions.setText(RegistrationManager.getInstance().getThreePidInstructions(this));
+        mThreePidInstructions.setText(mRegistrationManager.getThreePidInstructions(this));
 
-        if (RegistrationManager.getInstance().supportStage(LoginRestClient.LOGIN_FLOW_TYPE_EMAIL_IDENTITY)) {
+        if (mRegistrationManager.supportStage(LoginRestClient.LOGIN_FLOW_TYPE_EMAIL_IDENTITY)) {
             mEmailAddress.setVisibility(View.VISIBLE);
-            if (RegistrationManager.getInstance().isOptional(LoginRestClient.LOGIN_FLOW_TYPE_EMAIL_IDENTITY)) {
+            if (mRegistrationManager.isOptional(LoginRestClient.LOGIN_FLOW_TYPE_EMAIL_IDENTITY)) {
                 mEmailAddress.setHint(R.string.auth_opt_email_placeholder);
             } else {
                 mEmailAddress.setHint(R.string.auth_email_placeholder);
@@ -2206,10 +2227,10 @@ public class LoginActivity extends MXCActionBarActivity implements RegistrationM
             mEmailAddress.setVisibility(View.GONE);
         }
 
-        if (RegistrationManager.getInstance().supportStage(LoginRestClient.LOGIN_FLOW_TYPE_MSISDN)) {
+        if (mRegistrationManager.supportStage(LoginRestClient.LOGIN_FLOW_TYPE_MSISDN)) {
             mRegistrationPhoneNumberHandler.setCountryCode(PhoneNumberUtils.getCountryCode(this));
             mPhoneNumberLayout.setVisibility(View.VISIBLE);
-            if (RegistrationManager.getInstance().isOptional(LoginRestClient.LOGIN_FLOW_TYPE_MSISDN)) {
+            if (mRegistrationManager.isOptional(LoginRestClient.LOGIN_FLOW_TYPE_MSISDN)) {
                 mPhoneNumber.setHint(R.string.auth_opt_phone_number_placeholder);
             } else {
                 mPhoneNumber.setHint(R.string.auth_phone_number_placeholder);
@@ -2218,13 +2239,13 @@ public class LoginActivity extends MXCActionBarActivity implements RegistrationM
             mPhoneNumberLayout.setVisibility(View.GONE);
         }
 
-        if (RegistrationManager.getInstance().canSkip()) {
+        if (mRegistrationManager.canSkipThreePid()) {
             mSkipThreePidButton.setVisibility(View.VISIBLE);
             mSkipThreePidButton.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     // Make sure no three pid is attached to the process
-                    RegistrationManager.getInstance().clearThreePid();
+                    mRegistrationManager.clearThreePid();
                     createAccount();
                     mRegistrationPhoneNumberHandler.reset();
                     mEmailAddress.setText("");
@@ -2249,7 +2270,7 @@ public class LoginActivity extends MXCActionBarActivity implements RegistrationM
         dismissKeyboard(this);
 
         // Make sure to start with a clear state in case user already submitted before but canceled
-        RegistrationManager.getInstance().clearThreePid();
+        mRegistrationManager.clearThreePid();
 
         // Check that email format is valid and not empty if field is required
         final String email = mEmailAddress.getText().toString();
@@ -2258,7 +2279,7 @@ public class LoginActivity extends MXCActionBarActivity implements RegistrationM
                 Toast.makeText(this, R.string.auth_invalid_email, Toast.LENGTH_SHORT).show();
                 return;
             }
-        } else if (RegistrationManager.getInstance().isEmailRequired()) {
+        } else if (mRegistrationManager.isEmailRequired()) {
             Toast.makeText(this, R.string.auth_missing_email, Toast.LENGTH_SHORT).show();
             return;
         }
@@ -2269,12 +2290,12 @@ public class LoginActivity extends MXCActionBarActivity implements RegistrationM
                 Toast.makeText(this, R.string.auth_invalid_phone, Toast.LENGTH_SHORT).show();
                 return;
             }
-        } else if (RegistrationManager.getInstance().isPhoneNumberRequired()) {
+        } else if (mRegistrationManager.isPhoneNumberRequired()) {
             Toast.makeText(this, R.string.auth_missing_phone, Toast.LENGTH_SHORT).show();
             return;
         }
 
-        if (!RegistrationManager.getInstance().canSkip() && mRegistrationPhoneNumberHandler.getPhoneNumber() == null && TextUtils.isEmpty(email)) {
+        if (!mRegistrationManager.canSkipThreePid() && mRegistrationPhoneNumberHandler.getPhoneNumber() == null && TextUtils.isEmpty(email)) {
             // Both are required and empty
             Toast.makeText(this, R.string.auth_missing_email_or_phone, Toast.LENGTH_SHORT).show();
             return;
@@ -2282,13 +2303,13 @@ public class LoginActivity extends MXCActionBarActivity implements RegistrationM
 
         if (!TextUtils.isEmpty(email)) {
             // Communicate email to singleton (will be validated later on)
-            RegistrationManager.getInstance().addEmailThreePid(new ThreePid(email, ThreePid.MEDIUM_EMAIL));
+            mRegistrationManager.addEmailThreePid(new ThreePid(email, ThreePid.MEDIUM_EMAIL));
         }
 
         if (mRegistrationPhoneNumberHandler.getPhoneNumber() != null) {
             // Communicate phone number to singleton + start validation process (always phone first)
             enableLoadingScreen(true);
-            RegistrationManager.getInstance()
+            mRegistrationManager
                     .addPhoneNumberThreePid(mRegistrationPhoneNumberHandler.getE164PhoneNumber(), mRegistrationPhoneNumberHandler.getCountryCode(),
                             new RegistrationManager.ThreePidRequestListener() {
                                 @Override
@@ -2351,7 +2372,7 @@ public class LoginActivity extends MXCActionBarActivity implements RegistrationM
         if (TextUtils.isEmpty(token)) {
             Toast.makeText(LoginActivity.this, R.string.auth_invalid_token, Toast.LENGTH_SHORT).show();
         } else {
-            RegistrationManager.getInstance().submitValidationToken(token, pid,
+            mRegistrationManager.submitValidationToken(token, pid,
                     new RegistrationManager.ThreePidValidationListener() {
                         @Override
                         public void onThreePidValidated(boolean isSuccess) {
@@ -2374,7 +2395,7 @@ public class LoginActivity extends MXCActionBarActivity implements RegistrationM
         }
         enableLoadingScreen(true);
         hideMainLayoutAndToast("");
-        RegistrationManager.getInstance().attemptRegistration(this, this);
+        mRegistrationManager.attemptRegistration(this, this);
     }
 
     /**
@@ -2442,7 +2463,7 @@ public class LoginActivity extends MXCActionBarActivity implements RegistrationM
             @Override
             public void run() {
                 Log.d(LOG_TAG, "## onWaitingEmailValidation attempt registration");
-                RegistrationManager.getInstance().attemptRegistration(LoginActivity.this, LoginActivity.this);
+                mRegistrationManager.attemptRegistration(LoginActivity.this, LoginActivity.this);
                 mHandler.postDelayed(mRegisterPollingRunnable, REGISTER_POLLING_PERIOD);
             }
         };
@@ -2452,7 +2473,7 @@ public class LoginActivity extends MXCActionBarActivity implements RegistrationM
     @Override
     public void onWaitingCaptcha() {
         cancelEmailPolling();
-        final String publicKey = RegistrationManager.getInstance().getCaptchaPublicKey();
+        final String publicKey = mRegistrationManager.getCaptchaPublicKey();
         if (!TextUtils.isEmpty(publicKey)) {
             Log.d(LOG_TAG, "## onWaitingCaptcha");
             Intent intent = new Intent(LoginActivity.this, AccountCreationCaptchaActivity.class);
@@ -2461,6 +2482,20 @@ public class LoginActivity extends MXCActionBarActivity implements RegistrationM
             startActivityForResult(intent, RequestCodesKt.CAPTCHA_CREATION_ACTIVITY_REQUEST_CODE);
         } else {
             Log.d(LOG_TAG, "## onWaitingCaptcha(): captcha flow cannot be done");
+            Toast.makeText(this, getString(R.string.login_error_unable_register), Toast.LENGTH_SHORT).show();
+        }
+    }
+
+    @Override
+    public void onWaitingTerms() {
+        cancelEmailPolling();
+        final List<LocalizedFlowDataLoginTerms> localizedFlowDataLoginTerms = mRegistrationManager.getLocalizedLoginTerms(this);
+        if (!localizedFlowDataLoginTerms.isEmpty()) {
+            Log.d(LOG_TAG, "## onWaitingTerms");
+            Intent intent = new Intent(LoginActivity.this, AccountCreationTermsActivity.class);
+            startActivityForResult(intent, RequestCodesKt.TERMS_CREATION_ACTIVITY_REQUEST_CODE);
+        } else {
+            Log.d(LOG_TAG, "## onWaitingTerms(): terms flow cannot be done");
             Toast.makeText(this, getString(R.string.login_error_unable_register), Toast.LENGTH_SHORT).show();
         }
     }
@@ -2481,7 +2516,7 @@ public class LoginActivity extends MXCActionBarActivity implements RegistrationM
             showMainLayout();
             Toast.makeText(this, R.string.auth_username_in_use, Toast.LENGTH_LONG).show();
         } else {
-            if (RegistrationManager.getInstance().canAddThreePid()) {
+            if (mRegistrationManager.canAddThreePid()) {
                 // Show next screen with email/phone number
                 showMainLayout();
                 mMode = MODE_ACCOUNT_CREATION_THREE_PID;

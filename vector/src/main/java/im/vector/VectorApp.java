@@ -32,9 +32,9 @@ import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
-import android.preference.PreferenceManager;
 import android.support.multidex.MultiDex;
 import android.support.multidex.MultiDexApplication;
+import android.support.v7.preference.PreferenceManager;
 import android.text.TextUtils;
 
 import com.facebook.stetho.Stetho;

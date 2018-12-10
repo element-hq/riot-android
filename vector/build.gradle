@@ -6,6 +6,10 @@ apply plugin: 'com.android.application'
 apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-kapt'
 
+kapt {
+    correctErrorTypes = true
+}
+
 android {
     compileSdkVersion 27
     buildToolsVersion '27.0.3'
@@ -187,6 +191,8 @@ dependencies {
     implementation 'com.android.support:design:27.1.1'
     implementation 'com.android.support:cardview-v7:27.1.1'
     implementation 'com.android.support:recyclerview-v7:27.1.1'
+    implementation 'com.android.support:preference-v7:27.1.1'
+    implementation 'com.android.support:preference-v14:27.1.1'
     implementation 'com.jakewharton:butterknife:8.5.1'
     kapt 'com.jakewharton:butterknife-compiler:8.5.1'
 
@@ -195,6 +201,10 @@ dependencies {
     implementation 'com.getbase:floatingactionbutton:1.10.1'
     implementation 'com.binaryfork:spanny:1.0.4'
     implementation 'com.github.chrisbanes:PhotoView:2.1.4'
+
+    // Epoxy (without androidx packages)
+    implementation 'com.airbnb.android:epoxy:2.19.0'
+    kapt 'com.airbnb.android:epoxy-processor:2.19.0'
 
     // Network
     implementation 'com.squareup.retrofit2:retrofit:2.4.0'

@@ -20,7 +20,7 @@ package im.vector.activity;
 import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
-import android.preference.PreferenceManager;
+import android.support.v7.preference.PreferenceManager;
 import android.widget.ImageView;
 
 import com.bumptech.glide.Glide;

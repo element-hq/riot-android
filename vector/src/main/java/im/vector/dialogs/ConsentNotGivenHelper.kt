@@ -63,7 +63,7 @@ class ConsentNotGivenHelper private constructor(private val activity: Activity,
      * ========================================================================================== */
 
     private fun openWebViewActivity(consentUri: String) {
-        val intent = VectorWebViewActivity.getIntent(activity, consentUri, R.string.settings_app_term_conditions, WebViewMode.CONSENT)
+        val intent = VectorWebViewActivity.getIntent(activity, consentUri, activity.getString(R.string.settings_app_term_conditions), WebViewMode.CONSENT)
         activity.startActivity(intent)
     }
 }
