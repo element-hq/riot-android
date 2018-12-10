@@ -2674,7 +2674,7 @@ class VectorSettingsPreferencesFragment : PreferenceFragmentCompat(), SharedPref
                         hideLoadingView()
 
                         info?.let {
-                            AlertDialog.Builder(activity)
+                            AlertDialog.Builder(activity!!)
                                     .setMessage(getString(R.string.encryption_import_room_keys_success,
                                             it.successfullyNumberOfImportedKeys,
                                             it.totalNumberOfKeys))
