@@ -482,13 +482,13 @@ public class VectorRoomDetailsActivity extends MXCActionBarActivity implements T
             public void run() {
                 if (null == mRoomSettingsFragment) {
                     mRoomSettingsFragment = VectorRoomSettingsFragment.newInstance(mMatrixId, mRoomId);
-                    getFragmentManager()
+                    getSupportFragmentManager()
                             .beginTransaction()
                             .replace(R.id.room_details_fragment_container, mRoomSettingsFragment, TAG_FRAGMENT_SETTINGS_ROOM_DETAIL)
                             .commit();
                     Log.d(LOG_TAG, "## onTabSelectSettingsFragment() settings frag replace");
                 } else {
-                    getFragmentManager()
+                    getSupportFragmentManager()
                             .beginTransaction()
                             .attach(mRoomSettingsFragment)
                             .commit();
@@ -507,7 +507,7 @@ public class VectorRoomDetailsActivity extends MXCActionBarActivity implements T
             @Override
             public void run() {
                 if (null != mRoomSettingsFragment)
-                    getFragmentManager().beginTransaction().detach(mRoomSettingsFragment).commit();
+                    getSupportFragmentManager().beginTransaction().detach(mRoomSettingsFragment).commit();
             }
         });
     }

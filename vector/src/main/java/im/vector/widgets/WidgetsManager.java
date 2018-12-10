@@ -20,7 +20,7 @@ package im.vector.widgets;
 import android.content.Context;
 import android.os.Handler;
 import android.os.Looper;
-import android.preference.PreferenceManager;
+import android.support.v7.preference.PreferenceManager;
 import android.text.TextUtils;
 
 import com.google.gson.JsonObject;

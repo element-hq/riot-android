@@ -17,7 +17,7 @@
 package im.vector.receiver
 
 import android.content.*
-import android.preference.PreferenceManager
+import android.support.v7.preference.PreferenceManager
 import android.util.Log
 import androidx.core.content.edit
 import im.vector.Matrix

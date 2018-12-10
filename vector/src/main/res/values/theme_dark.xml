@@ -161,6 +161,9 @@
 
         <!-- switch color -->
         <item name="colorControlActivated">@color/vector_green_color</item>
+
+        <!-- Preference -->
+        <item name="preferenceTheme">@style/PreferenceThemeOverlay.v14.Material</item>
     </style>
 
     <style name="AppTheme.Dark" parent="AppTheme.Base.Dark" />

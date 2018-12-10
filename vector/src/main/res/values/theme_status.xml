@@ -162,6 +162,9 @@
 
         <!-- switch color -->
         <item name="colorControlActivated">@color/primary_color_status</item>
+
+        <!-- Preference -->
+        <item name="preferenceTheme">@style/PreferenceThemeOverlay.v14.Material</item>
     </style>
 
     <style name="AppTheme.Status" parent="AppTheme.Base.Status" />
