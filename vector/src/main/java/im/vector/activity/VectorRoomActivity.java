@@ -1220,7 +1220,7 @@ public class VectorRoomActivity extends MXCActionBarActivity implements
             // can only manage one call instance.
             // either there is no active call or resume the active one
             if ((null == call) || call.getCallId().equals(mCallId)) {
-                final Intent intent = new Intent(VectorRoomActivity.this, VectorCallViewActivity.class);
+                final Intent intent = new Intent(this, VectorCallViewActivity.class);
                 intent.putExtra(VectorCallViewActivity.EXTRA_MATRIX_ID, mSession.getCredentials().userId);
                 intent.putExtra(VectorCallViewActivity.EXTRA_CALL_ID, mCallId);
 
@@ -1553,7 +1553,7 @@ public class VectorRoomActivity extends MXCActionBarActivity implements
                 try {
                     enableActionBarHeader(HIDE_ACTION_BAR_HEADER);
 
-                    final Intent searchIntent = new Intent(VectorRoomActivity.this, VectorUnifiedSearchActivity.class);
+                    final Intent searchIntent = new Intent(this, VectorUnifiedSearchActivity.class);
                     searchIntent.putExtra(VectorUnifiedSearchActivity.EXTRA_ROOM_ID, mRoom.getRoomId());
                     startActivity(searchIntent);
                 } catch (Exception e) {
@@ -1574,7 +1574,7 @@ public class VectorRoomActivity extends MXCActionBarActivity implements
             case R.id.ic_action_room_leave:
                 if (null != mRoom) {
                     Log.d(LOG_TAG, "Leave the room " + mRoom.getRoomId());
-                    new AlertDialog.Builder(VectorRoomActivity.this)
+                    new AlertDialog.Builder(this)
                             .setTitle(R.string.room_participants_leave_prompt_title)
                             .setMessage(R.string.room_participants_leave_prompt_msg)
                             .setPositiveButton(R.string.leave, new DialogInterface.OnClickListener() {
@@ -1676,7 +1676,7 @@ public class VectorRoomActivity extends MXCActionBarActivity implements
      */
     private void displayConfCallNotAllowed() {
         // display the dialog with the info text
-        new AlertDialog.Builder(VectorRoomActivity.this)
+        new AlertDialog.Builder(this)
                 .setTitle(R.string.missing_permissions_title_to_start_conf_call)
                 .setMessage(R.string.missing_permissions_to_start_conf_call)
                 .setIcon(android.R.drawable.ic_dialog_alert)
@@ -1751,7 +1751,7 @@ public class VectorRoomActivity extends MXCActionBarActivity implements
      * @param aIsVideoCall true if it is a video call
      */
     private void launchJitsiActivity(Widget widget, boolean aIsVideoCall) {
-        final Intent intent = new Intent(VectorRoomActivity.this, JitsiCallActivity.class);
+        final Intent intent = new Intent(this, JitsiCallActivity.class);
         intent.putExtra(JitsiCallActivity.EXTRA_WIDGET_ID, widget);
         intent.putExtra(JitsiCallActivity.EXTRA_ENABLE_VIDEO, aIsVideoCall);
         startActivity(intent);
@@ -2168,7 +2168,7 @@ public class VectorRoomActivity extends MXCActionBarActivity implements
 
         final boolean typingStatus = isTyping;
 
-        mRoom.sendTypingNotification(typingStatus, notificationTimeoutMS, new SimpleApiCallback<Void>(VectorRoomActivity.this) {
+        mRoom.sendTypingNotification(typingStatus, notificationTimeoutMS, new SimpleApiCallback<Void>(this) {
             @Override
             public void onSuccess(Void info) {
                 // Reset last typing date
@@ -2232,7 +2232,7 @@ public class VectorRoomActivity extends MXCActionBarActivity implements
             enableActionBarHeader(HIDE_ACTION_BAR_HEADER);
 
             // pop to the home activity
-            Intent intent = new Intent(VectorRoomActivity.this, VectorRoomDetailsActivity.class);
+            Intent intent = new Intent(this, VectorRoomDetailsActivity.class);
             intent.putExtra(VectorRoomDetailsActivity.EXTRA_ROOM_ID, mRoom.getRoomId());
             intent.putExtra(VectorRoomDetailsActivity.EXTRA_MATRIX_ID, mSession.getCredentials().userId);
             intent.putExtra(VectorRoomDetailsActivity.EXTRA_SELECTED_TAB_ID, selectedTab);
@@ -3508,7 +3508,7 @@ public class VectorRoomActivity extends MXCActionBarActivity implements
             }
 
             // clear the activity stack to home activity
-            Intent intent = new Intent(VectorRoomActivity.this, VectorHomeActivity.class);
+            Intent intent = new Intent(this, VectorHomeActivity.class);
             intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
 
             intent.putExtra(VectorHomeActivity.EXTRA_JUMP_TO_ROOM_PARAMS, (HashMap) params);
@@ -3950,7 +3950,7 @@ public class VectorRoomActivity extends MXCActionBarActivity implements
             iconsList.add(R.drawable.ic_material_file);
 
             // Send voice
-            if (PreferencesManager.isSendVoiceFeatureEnabled(VectorRoomActivity.this)) {
+            if (PreferencesManager.isSendVoiceFeatureEnabled(this)) {
                 messagesList.add(R.string.option_send_voice);
                 iconsList.add(R.drawable.vector_micro_green);
             }
@@ -3960,7 +3960,7 @@ public class VectorRoomActivity extends MXCActionBarActivity implements
             iconsList.add(R.drawable.ic_send_sticker);
 
             // Camera
-            if (PreferencesManager.useNativeCamera(VectorRoomActivity.this)) {
+            if (PreferencesManager.useNativeCamera(this)) {
                 messagesList.add(R.string.option_take_photo);
                 iconsList.add(R.drawable.ic_material_camera);
                 messagesList.add(R.string.option_take_video);
@@ -3974,8 +3974,8 @@ public class VectorRoomActivity extends MXCActionBarActivity implements
             final Integer[] icons = iconsList.toArray(new Integer[0]);
 
             fragment = IconAndTextDialogFragment.newInstance(icons, messages,
-                    ThemeUtils.INSTANCE.getColor(VectorRoomActivity.this, R.attr.vctr_riot_primary_background_color),
-                    ThemeUtils.INSTANCE.getColor(VectorRoomActivity.this, R.attr.vctr_riot_primary_text_color));
+                    ThemeUtils.INSTANCE.getColor(this, R.attr.vctr_riot_primary_background_color),
+                    ThemeUtils.INSTANCE.getColor(this, R.attr.vctr_riot_primary_text_color));
             fragment.setOnClickListener(new IconAndTextDialogFragment.OnItemClickListener() {
                 @Override
                 public void onItemClick(IconAndTextDialogFragment dialogFragment, int position) {
@@ -4013,7 +4013,7 @@ public class VectorRoomActivity extends MXCActionBarActivity implements
     void onPendingCallClick() {
         IMXCall call = CallsManager.getSharedInstance().getActiveCall();
         if (null != call) {
-            final Intent intent = new Intent(VectorRoomActivity.this, VectorCallViewActivity.class);
+            final Intent intent = new Intent(this, VectorCallViewActivity.class);
             intent.putExtra(VectorCallViewActivity.EXTRA_MATRIX_ID, call.getSession().getCredentials().userId);
             intent.putExtra(VectorCallViewActivity.EXTRA_CALL_ID, call.getCallId());
             startActivity(intent);
@@ -4038,14 +4038,14 @@ public class VectorRoomActivity extends MXCActionBarActivity implements
     void onStartCallClick() {
         if ((null != mRoom) && mRoom.isEncrypted() && (mRoom.getNumberOfMembers() > 2)) {
             // display the dialog with the info text
-            new AlertDialog.Builder(VectorRoomActivity.this)
+            new AlertDialog.Builder(this)
                     .setMessage(R.string.room_no_conference_call_in_encrypted_rooms)
                     .setIcon(android.R.drawable.ic_dialog_alert)
                     .setPositiveButton(R.string.ok, null)
                     .show();
         } else if (isUserAllowedToStartConfCall()) {
             if (mRoom.getNumberOfMembers() > 2) {
-                new AlertDialog.Builder(VectorRoomActivity.this)
+                new AlertDialog.Builder(this)
                         .setTitle(R.string.conference_call_warning_title)
                         .setMessage(R.string.conference_call_warning_message)
                         .setIcon(android.R.drawable.ic_dialog_alert)
