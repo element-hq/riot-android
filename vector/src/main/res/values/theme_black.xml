@@ -27,7 +27,7 @@
         <item name="android:typeface">sans</item>
 
         <!-- android ui button -->
-        <item name="colorAccent">@color/vector_green_color</item>
+        <item name="colorAccent">@color/primary_color_light</item>
 
         <!-- custom action bar -->
         <item name="android:actionBarStyle">@style/Vector.Styled.ActionBar</item>
@@ -53,7 +53,7 @@
         <item name="actionBarTabTextStyle">@style/Vector.TabText</item>
 
         <!-- switch color -->
-        <item name="colorControlActivated">@color/vector_green_color</item>
+        <item name="colorControlActivated">@color/primary_color_light</item>
 
         <item name="vctr_direct_chat_circle">@drawable/direct_chat_circle_black</item>
 

@@ -104,11 +104,11 @@
 
     <!-- tabbar text color -->
     <style name="VectorSearches.TabText" parent="Widget.AppCompat.ActionBar.TabText">
-        <item name="android:textColor">@color/vector_green_color</item>
+        <item name="android:textColor">?attr/colorAccent</item>
     </style>
 
     <style name="VectorSearches.ActionBarTheme" parent="ThemeOverlay.AppCompat.ActionBar">
-        <item name="colorControlNormal">@color/vector_green_color</item>
+        <item name="colorControlNormal">?attr/colorAccent</item>
     </style>
 
     <style name="VectorPeopleSearches.TabLayout" parent="Widget.Design.TabLayout">
@@ -116,7 +116,7 @@
         <item name="tabMode">fixed</item>
         <item name="tabPaddingStart">0dp</item>
         <item name="tabPaddingEnd">0dp</item>
-        <item name="tabBackground">@color/vector_green_color</item>
+        <item name="tabBackground">?attr/colorAccent</item>
         <item name="tabTextColor">@android:color/white</item>
         <item name="tabSelectedTextColor">@android:color/white</item>
         <item name="tabIndicatorColor">@android:color/white</item>
@@ -129,9 +129,9 @@
         <item name="tabPaddingStart">0dp</item>
         <item name="tabPaddingEnd">0dp</item>
         <item name="tabBackground">?attr/vctr_tab_bar_inverted_background_color</item>
-        <item name="tabTextColor">@color/vector_green_color</item>
-        <item name="tabSelectedTextColor">@color/vector_green_color</item>
-        <item name="tabIndicatorColor">@color/vector_green_color</item>
+        <item name="tabTextColor">?attr/colorAccent</item>
+        <item name="tabSelectedTextColor">?attr/colorAccent</item>
+        <item name="tabIndicatorColor">?attr/colorAccent</item>
         <item name="tabMaxWidth">0dp</item>
     </style>
 
@@ -148,7 +148,7 @@
     </style>
 
     <style name="CheckBoxTheme">
-        <item name="colorAccent">@color/vector_green_color</item>
+        <item name="colorAccent">?attr/colorAccent</item>
     </style>
 
     <style name="SpinnerTheme">

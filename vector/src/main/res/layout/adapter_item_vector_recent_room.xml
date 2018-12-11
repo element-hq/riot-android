@@ -34,6 +34,7 @@
             android:layout_toEndOf="@id/bing_indicator_unread_message"
             android:layout_toRightOf="@id/bing_indicator_unread_message" />
 
+        <!-- Note: cannot tint with colorAccent here... -->
         <ImageView
             android:id="@+id/room_avatar_direct_chat_icon"
             android:layout_width="20dp"
@@ -267,7 +268,7 @@
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_weight="0.26"
-                android:background="@color/vector_green_color"
+                android:background="?attr/colorAccent"
                 android:fontFamily="sans-serif-medium"
                 android:text="@string/reject"
                 android:textColor="@android:color/white"
@@ -285,7 +286,7 @@
                 android:layout_width="0dp"
                 android:layout_height="36dp"
                 android:layout_weight="0.26"
-                android:background="@color/vector_green_color"
+                android:background="?attr/colorAccent"
                 android:fontFamily="sans-serif-medium"
                 android:text="@string/preview"
                 android:textColor="@android:color/white"

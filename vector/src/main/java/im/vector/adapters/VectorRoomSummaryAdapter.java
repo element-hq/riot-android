@@ -671,7 +671,7 @@ public class VectorRoomSummaryAdapter extends BaseExpandableListAdapter {
         int roomNameBlack = ThemeUtils.INSTANCE.getColor(mContext, R.attr.vctr_riot_primary_text_color);
         int fushiaColor = ContextCompat.getColor(mContext, R.color.vector_fuchsia_color);
         int vectorDefaultTimeStampColor = ThemeUtils.INSTANCE.getColor(mContext, R.attr.vctr_default_text_light_color);
-        int vectorGreenColor = ContextCompat.getColor(mContext, R.color.vector_green_color);
+        int vectorAccentColor = ThemeUtils.INSTANCE.getColor(mContext, R.attr.colorAccent);
         int vectorSilverColor = ContextCompat.getColor(mContext, R.color.vector_silver_color);
 
         // retrieve the UI items
@@ -788,7 +788,7 @@ public class VectorRoomSummaryAdapter extends BaseExpandableListAdapter {
         if (0 != highlightCount) {
             bingUnreadColor = fushiaColor;
         } else if (0 != notificationCount) {
-            bingUnreadColor = vectorGreenColor;
+            bingUnreadColor = vectorAccentColor;
         } else if (0 != unreadMsgCount) {
             bingUnreadColor = vectorSilverColor;
         } else {

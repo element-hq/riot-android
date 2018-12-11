@@ -18,7 +18,6 @@
 package im.vector.adapters;
 
 import android.content.Context;
-import android.support.v4.content.ContextCompat;
 import android.text.SpannableString;
 import android.text.TextUtils;
 import android.text.style.BackgroundColorSpan;
@@ -36,6 +35,7 @@ import org.matrix.androidsdk.util.EventDisplay;
 import org.matrix.androidsdk.util.Log;
 
 import im.vector.R;
+import im.vector.ui.themes.ThemeUtils;
 import im.vector.util.RiotEventDisplay;
 
 /**
@@ -68,7 +68,7 @@ public class VectorSearchMessagesListAdapter extends VectorMessagesAdapter {
         setNotifyOnChange(true);
         mDisplayRoomName = displayRoomName;
 
-        mBackgroundColorSpan = new BackgroundColorSpan(ContextCompat.getColor(mContext, R.color.vector_green_color));
+        mBackgroundColorSpan = new BackgroundColorSpan(ThemeUtils.INSTANCE.getColor(mContext, R.attr.colorAccent));
     }
 
     /**

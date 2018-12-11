@@ -41,7 +41,6 @@
             android:layout_marginEnd="10dp"
             android:layout_marginRight="10dp"
             android:max="100"
-            android:progressTint="@color/vector_green_color"
             android:visibility="gone"
             tools:progress="70"
             tools:visibility="visible" />

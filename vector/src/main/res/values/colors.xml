@@ -2,8 +2,6 @@
 <resources>
 
     <!-- main app colors -->
-    <color name="vector_green_color_dark">#FF5EA584</color>
-    <color name="vector_green_color">#FF76CFA6</color>
     <color name="vector_fuchsia_color">#ff0064</color>
     <color name="vector_silver_color">#FFC7C7C7</color>
     <color name="vector_dark_grey_color">#FF999999</color>
@@ -13,7 +11,7 @@
     <color name="tab_favourites_secondary">#744C7F</color>
     <color name="tab_people">#F8A15F</color>
     <color name="tab_people_secondary">#D97051</color>
-    <color name="tab_rooms">@color/vector_green_color</color>
+    <color name="tab_rooms">#76CFA6</color>
     <color name="tab_rooms_secondary">#5EA584</color>
     <color name="tab_groups">#a6d0e5</color>
     <color name="tab_groups_secondary">#81bddb</color>
@@ -32,6 +30,8 @@
     <color name="riot_primary_background_color_status">#eef2f5</color>
 
     <color name="primary_color_light">#76CFA6</color>
+    <color name="primary_color_light_dark">#FF5EA584</color>
+
     <color name="primary_color_dark">#353535</color>
 
     <color name="primary_color_status">#FF586C7B</color>

@@ -88,7 +88,7 @@
                 android:id="@+id/button_join_room"
                 android:layout_width="110dp"
                 android:layout_height="36dp"
-                android:background="@color/vector_green_color"
+                android:background="?attr/colorAccent"
                 android:text="@string/join_room"
                 android:textColor="@android:color/white" />
 
