@@ -11,7 +11,7 @@
         <item name="vctr_waiting_background_color">#AAAAAAAA</item>
 
         <!-- primary dark color (status bar) -->
-        <item name="vctr_primary_dark_color">@color/accent_color_status</item>
+        <item name="vctr_primary_dark_color">@color/primary_color_status_dark</item>
 
         <!-- application bar background color -->
         <item name="vctr_primary_color">@color/primary_color_status</item>
@@ -26,7 +26,7 @@
         <item name="vctr_primary_hint_text_color">@color/primary_hint_text_color_light</item>
 
         <item name="vctr_tab_home">@color/primary_color_status</item>
-        <item name="vctr_tab_home_secondary">@color/accent_color_status</item>
+        <item name="vctr_tab_home_secondary">@color/primary_color_status_dark</item>
 
         <!-- default text colors -->
         <item name="vctr_riot_primary_text_color">@color/riot_primary_text_color_light</item>
@@ -122,7 +122,7 @@
         <item name="android:windowActionBar">true</item>
 
         <!-- status bar color -->
-        <item name="colorPrimaryDark">@color/accent_color_status</item>
+        <item name="colorPrimaryDark">@color/primary_color_status_dark</item>
         <item name="colorPrimary">@color/primary_color_status</item>
 
         <!-- activities background -->

@@ -32,7 +32,7 @@
     <color name="primary_color_dark">#353535</color>
 
     <color name="primary_color_status">#FF586C7B</color>
-    <color name="accent_color_status">#FF465561</color>
+    <color name="primary_color_status_dark">#FF465561</color>
 
     <color name="list_divider_color_light">#339D9D9D</color>
     <color name="list_divider_color_dark">#A5A5A5A5</color>
