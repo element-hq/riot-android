@@ -211,11 +211,6 @@
         <item name="background">@drawable/vector_tabbar_background_dark</item>
     </style>
 
-    <style name="AppTheme.NoActionBar.Swipe.Dark" parent="AppTheme.NoActionBar.Dark">
-        <item name="android:windowIsTranslucent">true</item>
-        <item name="android:windowBackground">@android:color/transparent</item>
-    </style>
-
     <!-- home activity -->
     <style name="HomeActivityTheme.Dark" parent="AppTheme.NoActionBar.Dark">
         <item name="editTextColor">?attr/vctr_riot_primary_text_color</item>
@@ -236,15 +231,6 @@
         <item name="android:windowFullscreen">true</item>
         <!-- activities background -->
         <item name="android:windowBackground">@android:color/transparent</item>
-    </style>
-
-    <!-- ActionBar + FullScreen -->
-    <style name="AppTheme.ActionBar.FullScreen.Dark" parent="AppTheme.NoActionBar.FullScreen.Dark">
-        <!-- show the action bar -->
-        <item name="android:windowActionBar">true</item>
-        <item name="windowActionBar">true</item>
-        <item name="android:windowNoTitle">true</item>
-        <item name="windowNoTitle">true</item>
     </style>
 
     <!-- login & registration activities -->
