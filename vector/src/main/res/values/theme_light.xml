@@ -3,7 +3,7 @@
 
     <!-- LIGHT THEME COLORS -->
 
-    <style name="Theme.Vector.Light" parent="Theme.AppCompat.Light">
+    <style name="Theme.Vector.Light" parent="Theme.AppCompat.Light.DarkActionBar">
         <!-- default background color -->
         <item name="vctr_riot_primary_background_color">@color/riot_primary_background_color_light</item>
 
