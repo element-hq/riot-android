@@ -110,6 +110,8 @@ public class VectorRoomDetailsActivity extends MXCActionBarActivity implements T
 
     @Override
     public void initUiAndData() {
+        configureToolbar();
+
         if (CommonActivityUtils.shouldRestartApp(this)) {
             Log.e(LOG_TAG, "Restart the application.");
             CommonActivityUtils.restartApp(this);

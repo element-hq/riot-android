@@ -65,6 +65,8 @@ public class FallbackLoginActivity extends VectorAppCompatActivity {
 
     @Override
     public void initUiAndData() {
+        configureToolbar();
+
         mWebView = findViewById(R.id.account_creation_webview);
         mWebView.getSettings().setJavaScriptEnabled(true);
 

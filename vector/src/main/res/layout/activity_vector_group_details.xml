@@ -1,53 +1,55 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <RelativeLayout
+    <android.support.v7.widget.Toolbar
+        android:id="@+id/toolbar"
+        style="@style/VectorToolbarStyle"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="wrap_content" />
 
-        <android.support.design.widget.TabLayout
-            android:id="@+id/group_tabs"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_below="@+id/group_loading_layout"
-            android:layout_alignParentStart="true"
-            android:layout_alignParentLeft="true"
-            android:layout_gravity="top" />
+    <!-- progress bar -->
+    <FrameLayout
+        android:id="@+id/group_loading_layout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@+id/toolbar"
+        android:background="?attr/vctr_waiting_background_color"
+        android:visibility="gone">
 
         <ProgressBar
-            android:id="@+id/group_sync_in_progress"
-            style="@style/Widget.AppCompat.ProgressBar.Horizontal"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_below="@+id/group_tabs"
-            android:background="@android:color/transparent"
-            android:indeterminate="true"
-            android:indeterminateTint="@color/tab_groups_secondary"
+            android:id="@+id/loading_settings_progress_bar"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:layout_gravity="center"
             android:visibility="visible" />
+    </FrameLayout>
 
-        <im.vector.view.RiotViewPager
-            android:id="@+id/groups_pager"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_below="@+id/group_sync_in_progress" />
+    <android.support.design.widget.TabLayout
+        android:id="@+id/group_tabs"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/group_loading_layout"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentLeft="true"
+        android:layout_gravity="top" />
 
-        <!-- progress bar -->
-        <FrameLayout
-            android:id="@+id/group_loading_layout"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:background="?attr/vctr_waiting_background_color"
-            android:visibility="gone">
+    <ProgressBar
+        android:id="@+id/group_sync_in_progress"
+        style="@style/Widget.AppCompat.ProgressBar.Horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/group_tabs"
+        android:background="@android:color/transparent"
+        android:indeterminate="true"
+        android:indeterminateTint="@color/tab_groups_secondary"
+        android:visibility="visible" />
 
-            <ProgressBar
-                android:id="@+id/loading_settings_progress_bar"
-                android:layout_width="40dp"
-                android:layout_height="40dp"
-                android:layout_gravity="center"
-                android:visibility="visible" />
-        </FrameLayout>
-    </RelativeLayout>
+    <im.vector.view.RiotViewPager
+        android:id="@+id/groups_pager"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@+id/group_sync_in_progress" />
 
-</FrameLayout>
+</RelativeLayout>

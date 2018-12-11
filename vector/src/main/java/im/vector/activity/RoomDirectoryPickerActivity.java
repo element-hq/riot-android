@@ -30,7 +30,6 @@ import android.view.View;
 import android.widget.EditText;
 import android.widget.Toast;
 
-import org.jetbrains.annotations.NotNull;
 import org.matrix.androidsdk.MXSession;
 import org.matrix.androidsdk.rest.callback.ApiCallback;
 import org.matrix.androidsdk.rest.model.MatrixError;
@@ -46,7 +45,6 @@ import java.util.Map;
 import im.vector.Matrix;
 import im.vector.R;
 import im.vector.adapters.RoomDirectoryAdapter;
-import im.vector.ui.themes.ActivityOtherThemes;
 import im.vector.util.RoomDirectoryData;
 
 public class RoomDirectoryPickerActivity extends VectorAppCompatActivity implements RoomDirectoryAdapter.OnSelectRoomDirectoryListener {
@@ -76,12 +74,6 @@ public class RoomDirectoryPickerActivity extends VectorAppCompatActivity impleme
      * Activity lifecycle
      * *********************************************************************************************
      */
-
-    @NotNull
-    @Override
-    public ActivityOtherThemes getOtherThemes() {
-        return ActivityOtherThemes.NoActionBar.INSTANCE;
-    }
 
     @Override
     public int getLayoutRes() {

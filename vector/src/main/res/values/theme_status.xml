@@ -3,7 +3,7 @@
 
     <!-- STATUS.IM THEME COLORS -->
 
-    <style name="Theme.Vector.Status" parent="Theme.AppCompat.Light.DarkActionBar">
+    <style name="AppTheme.Base.Status" parent="Theme.AppCompat.Light.NoActionBar">
         <!-- default background color -->
         <item name="vctr_riot_primary_background_color">@color/riot_primary_background_color_status</item>
 
@@ -113,11 +113,8 @@
 
         <item name="vctr_pill_text_color_user_id">@color/riot_primary_text_color_status</item>
         <item name="vctr_pill_text_color_room_alias">@android:color/white</item>
-    </style>
 
-    <!-- Base application theme. -->
-    <style name="AppTheme.Base.Status" parent="Theme.Vector.Status">
-
+        <!-- ANDROID SUPPORT ATTRIBUTES -->
         <!-- disable the overscroll because setOverscrollHeader/Footer don't always work -->
         <item name="android:overScrollMode">never</item>
 
@@ -169,29 +166,6 @@
 
     <style name="AppTheme.Status" parent="AppTheme.Base.Status" />
 
-    <!-- no action bar window -->
-    <style name="AppTheme.NoActionBar.Base.Status" parent="Theme.Vector.Status">
-        <!-- disable the overscroll because setOverscrollHeader/Footer don't always work -->
-        <item name="android:overScrollMode">never</item>
-
-        <!-- hide the action bar -->
-        <item name="android:windowActionBar">false</item>
-        <item name="windowActionBar">false</item>
-        <item name="android:windowNoTitle">true</item>
-        <item name="windowNoTitle">true</item>
-
-        <!-- status bar color -->
-        <item name="colorPrimaryDark">?attr/vctr_primary_dark_color</item>
-
-        <!-- fonts -->
-        <item name="android:typeface">sans</item>
-
-        <!-- activities background -->
-        <item name="android:windowBackground">@color/riot_primary_background_color_status</item>
-    </style>
-
-    <style name="AppTheme.NoActionBar.Status" parent="AppTheme.NoActionBar.Base.Status" />
-
     <style name="Theme.Vector.Empty.Status" parent="Theme.AppCompat.Light.Dialog">
         <item name="vctr_primary_color">@color/primary_color_status</item>
         <item name="vctr_riot_primary_background_color">@color/riot_primary_background_color_status</item>
@@ -213,7 +187,7 @@
     </style>
 
     <!-- home activity -->
-    <style name="HomeActivityTheme.Status" parent="AppTheme.NoActionBar.Status">
+    <style name="HomeActivityTheme.Status" parent="AppTheme.Status">
         <item name="editTextColor">?attr/vctr_riot_primary_text_color</item>
         <item name="android:editTextColor">?attr/vctr_riot_primary_text_color</item>
         <item name="android:textColorHint">?attr/vctr_default_text_hint_color</item>
@@ -228,21 +202,21 @@
     </style>
 
     <!-- NoActionBar + FullScreen -->
-    <style name="AppTheme.NoActionBar.FullScreen.Status" parent="AppTheme.NoActionBar.Status">
+    <style name="AppTheme.NoActionBar.FullScreen.Status" parent="AppTheme.Status">
         <item name="android:windowFullscreen">true</item>
         <!-- activities background -->
         <item name="android:windowBackground">@android:color/transparent</item>
     </style>
 
     <!-- login & registration activities -->
-    <style name="LoginAppTheme.Status" parent="AppTheme.NoActionBar.Status">
+    <style name="LoginAppTheme.Status" parent="AppTheme.Status">
         <item name="android:editTextStyle">@style/LoginEditTextStyle</item>
         <item name="android:buttonStyle">@style/LoginButtonStyle</item>
 
         <item name="colorAccent">@color/primary_color_status</item>
     </style>
 
-    <style name="CountryPickerTheme.Status" parent="AppTheme.NoActionBar.Status">
+    <style name="CountryPickerTheme.Status" parent="AppTheme.Status">
         <item name="editTextColor">@android:color/white</item>
         <item name="android:editTextColor">@android:color/white</item>
         <item name="android:textColorHint">?attr/vctr_activity_bottom_gradient_color</item>
@@ -264,7 +238,7 @@
         <item name="actionBarTheme">@style/VectorSearches.ActionBarTheme</item>
     </style>
 
-    <style name="CallAppTheme.Status" parent="AppTheme.NoActionBar.Status">
+    <style name="CallAppTheme.Status" parent="AppTheme.Status">
         <item name="android:colorBackground">?attr/colorBackgroundFloating</item>
         <item name="android:colorBackgroundCacheHint">@null</item>
 

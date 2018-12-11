@@ -33,12 +33,6 @@ sealed class ActivityOtherThemes(@StyleRes val dark: Int,
             R.style.AppTheme_Status
     )
 
-    object NoActionBar : ActivityOtherThemes(
-            R.style.AppTheme_NoActionBar_Dark,
-            R.style.AppTheme_NoActionBar_Black,
-            R.style.AppTheme_NoActionBar_Status
-    )
-
     object NoActionBarFullscreen : ActivityOtherThemes(
             R.style.AppTheme_NoActionBar_FullScreen_Dark,
             R.style.AppTheme_NoActionBar_FullScreen_Black,

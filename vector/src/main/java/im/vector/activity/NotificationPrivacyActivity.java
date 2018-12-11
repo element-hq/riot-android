@@ -23,7 +23,6 @@ import android.view.View;
 import android.widget.RadioButton;
 import android.widget.TextView;
 
-import org.jetbrains.annotations.NotNull;
 import org.matrix.androidsdk.rest.callback.SimpleApiCallback;
 import org.matrix.androidsdk.rest.model.MatrixError;
 
@@ -33,7 +32,6 @@ import im.vector.Matrix;
 import im.vector.R;
 import im.vector.activity.util.RequestCodesKt;
 import im.vector.push.PushManager;
-import im.vector.ui.themes.ActivityOtherThemes;
 import im.vector.util.SystemUtilsKt;
 
 /*
@@ -67,12 +65,6 @@ public class NotificationPrivacyActivity extends VectorAppCompatActivity {
     /* ==========================================================================================
      * LifeCycle
      * ========================================================================================== */
-
-    @NotNull
-    @Override
-    public ActivityOtherThemes getOtherThemes() {
-        return ActivityOtherThemes.NoActionBar.INSTANCE;
-    }
 
     @Override
     public int getLayoutRes() {

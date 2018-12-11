@@ -49,6 +49,8 @@ class AccountCreationTermsActivity : VectorAppCompatActivity(),
     private val policyController = PolicyController(this)
 
     override fun initUiAndData() {
+        configureToolbar()
+
         policyList.setController(policyController)
 
         val list = ArrayList<LocalizedFlowDataLoginTermsChecked>()

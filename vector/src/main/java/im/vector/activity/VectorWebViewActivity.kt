@@ -23,7 +23,6 @@ import android.webkit.WebChromeClient
 import android.webkit.WebView
 import butterknife.BindView
 import im.vector.R
-import im.vector.ui.themes.ActivityOtherThemes
 import im.vector.webview.VectorWebViewClient
 import im.vector.webview.WebViewMode
 
@@ -46,8 +45,6 @@ class VectorWebViewActivity : VectorAppCompatActivity() {
     /* =====================================================================@=====================
      * Life cycle
      * ========================================================================================== */
-
-    override fun getOtherThemes() = ActivityOtherThemes.NoActionBar
 
     override fun getLayoutRes() = R.layout.activity_vector_web_view
 

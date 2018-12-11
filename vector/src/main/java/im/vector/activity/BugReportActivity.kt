@@ -70,10 +70,7 @@ class BugReportActivity : MXCActionBarActivity() {
     override fun getLayoutRes() = R.layout.activity_bug_report
 
     override fun initUiAndData() {
-        supportActionBar?.let {
-            it.setDisplayShowHomeEnabled(true)
-            it.setDisplayHomeAsUpEnabled(true)
-        }
+        configureToolbar()
 
         if (BugReporter.getScreenshot() != null) {
             mScreenShotPreview.setImageBitmap(BugReporter.getScreenshot())

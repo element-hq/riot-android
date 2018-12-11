@@ -35,7 +35,6 @@ import com.google.i18n.phonenumbers.NumberParseException;
 import com.google.i18n.phonenumbers.PhoneNumberUtil;
 import com.google.i18n.phonenumbers.Phonenumber;
 
-import org.jetbrains.annotations.NotNull;
 import org.matrix.androidsdk.MXSession;
 import org.matrix.androidsdk.rest.callback.ApiCallback;
 import org.matrix.androidsdk.rest.model.MatrixError;
@@ -44,7 +43,6 @@ import org.matrix.androidsdk.util.Log;
 
 import im.vector.Matrix;
 import im.vector.R;
-import im.vector.ui.themes.ActivityOtherThemes;
 import im.vector.util.PhoneNumberUtils;
 
 public class PhoneNumberAdditionActivity extends VectorAppCompatActivity implements TextView.OnEditorActionListener, TextWatcher, View.OnClickListener {
@@ -90,12 +88,6 @@ public class PhoneNumberAdditionActivity extends VectorAppCompatActivity impleme
      * Activity lifecycle
      * *********************************************************************************************
      */
-
-    @NotNull
-    @Override
-    public ActivityOtherThemes getOtherThemes() {
-        return ActivityOtherThemes.NoActionBar.INSTANCE;
-    }
 
     @Override
     public int getLayoutRes() {

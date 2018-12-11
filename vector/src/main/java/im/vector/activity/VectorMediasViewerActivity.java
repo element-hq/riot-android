@@ -122,6 +122,8 @@ public class VectorMediasViewerActivity extends MXCActionBarActivity {
 
     @Override
     public void initUiAndData() {
+        configureToolbar();
+
         if (CommonActivityUtils.shouldRestartApp(this)) {
             Log.d(LOG_TAG, "onCreate : restart the application");
             CommonActivityUtils.restartApp(this);
