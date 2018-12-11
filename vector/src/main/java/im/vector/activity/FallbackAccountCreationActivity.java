@@ -50,7 +50,7 @@ public class FallbackAccountCreationActivity extends VectorAppCompatActivity {
 
     @Override
     public int getLayoutRes() {
-        return R.layout.activity_account_creation;
+        return R.layout.activity_login_fallback;
     }
 
     @Override
