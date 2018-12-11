@@ -21,7 +21,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.support.design.widget.TextInputEditText;
 import android.support.design.widget.TextInputLayout;
-import android.support.v7.widget.Toolbar;
 import android.text.Editable;
 import android.text.TextUtils;
 import android.text.TextWatcher;
@@ -110,12 +109,7 @@ public class PhoneNumberAdditionActivity extends VectorAppCompatActivity impleme
 
     @Override
     public void initUiAndData() {
-        Toolbar toolbar = findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
-        if (null != getSupportActionBar()) {
-            getSupportActionBar().setDisplayShowHomeEnabled(true);
-            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        }
+        configureToolbar();
 
         mCountry = findViewById(R.id.phone_number_country_value);
         mCountryLayout = findViewById(R.id.phone_number_country);

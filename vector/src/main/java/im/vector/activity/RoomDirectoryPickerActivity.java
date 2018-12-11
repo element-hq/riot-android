@@ -23,7 +23,6 @@ import android.content.Intent;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
@@ -98,14 +97,7 @@ public class RoomDirectoryPickerActivity extends VectorAppCompatActivity impleme
     public void initUiAndData() {
         setWaitingView(findViewById(R.id.room_directory_loading));
 
-        Toolbar toolbar = findViewById(R.id.toolbar);
-        if (toolbar != null) {
-            setSupportActionBar(toolbar);
-            if (getSupportActionBar() != null) {
-                getSupportActionBar().setDisplayShowHomeEnabled(true);
-                getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-            }
-        }
+        configureToolbar();
 
         final Intent intent = getIntent();
         String sessionId = intent.getStringExtra(EXTRA_SESSION_ID);
