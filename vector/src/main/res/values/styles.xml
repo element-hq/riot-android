@@ -13,6 +13,11 @@
         <item name="theme">@style/VectorToolbarTheme</item>
     </style>
 
+    <style name="VectorToolbarStyle.Group">
+        <item name="android:background">@color/tab_groups</item>
+        <item name="background">@color/tab_groups</item>
+    </style>
+
     <style name="VectorToolbarTheme">
         <!-- toolbar icons -->
         <item name="colorControlNormal">@android:color/white</item>
@@ -43,7 +48,7 @@
     </style>
 
     <!-- custom action bar -->
-    <style name="Vector.Styled.ActionBar" parent="Widget.AppCompat.Light.ActionBar">
+    <style name="Vector.Styled.ActionBar" parent="Widget.AppCompat.Toolbar">
         <item name="android:background">?attr/vctr_primary_color</item>
         <item name="background">?attr/vctr_primary_color</item>
 
@@ -165,11 +170,6 @@
 
     <style name="Floating_Actions_Menu.Light">
         <item name="android:background">@drawable/vector_background_fab_label_light</item>
-    </style>
-
-    <style name="Group.Styled.ActionBar" parent="Vector.Styled.ActionBar">
-        <item name="android:background">@color/tab_groups</item>
-        <item name="background">@color/tab_groups</item>
     </style>
 
     <style name="Vector.TabView.Group" parent="Widget.AppCompat.ActionBar.TabView">

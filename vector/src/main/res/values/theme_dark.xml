@@ -265,10 +265,6 @@
 
         <item name="android:actionBarTabStyle">@style/Vector.TabView.Group</item>
         <item name="actionBarTabStyle">@style/Vector.TabView.Group</item>
-
-        <!-- custom action bar -->
-        <item name="android:actionBarStyle">@style/Group.Styled.ActionBar</item>
-        <item name="actionBarStyle">@style/Group.Styled.ActionBar</item>
     </style>
 
 </resources>
