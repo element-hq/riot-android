@@ -19,7 +19,10 @@
     <color name="tab_groups_secondary">#81bddb</color>
 
     <!-- color of the direct chat avatar ring -->
-    <color name="direct_chat_ring_color">#8076cfa6</color>
+    <color name="direct_chat_ring_color_light">#8076cfa6</color>
+    <color name="direct_chat_ring_color_dark">#8076cfa6</color>
+    <color name="direct_chat_ring_color_black">#8076cfa6</color>
+    <color name="direct_chat_ring_color_status">#80586C7B</color>
 
     <!-- theses colours are requested a background cannot be set by an ?att on android < 5 -->
     <!-- dedicated drawables are created for each theme -->

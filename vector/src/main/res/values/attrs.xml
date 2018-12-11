@@ -99,6 +99,7 @@
         <attr name="vctr_tabbar_selected_background" format="reference" />
         <attr name="vctr_tabbar_unselected_background" format="reference" />
         <attr name="vctr_tabbar_background" format="reference" />
+        <attr name="vctr_direct_chat_circle" format="reference" />
 
         <attr name="vctr_pill_background_user_id" format="reference" />
         <attr name="vctr_pill_background_room_alias" format="reference" />

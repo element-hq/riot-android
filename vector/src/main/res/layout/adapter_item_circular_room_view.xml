@@ -25,8 +25,9 @@
         android:layout_alignEnd="@+id/room_avatar_layout"
         android:layout_alignRight="@+id/room_avatar_layout"
         android:layout_alignBottom="@+id/room_avatar_layout"
-        android:background="@drawable/direct_chat_background"
-        android:visibility="gone" />
+        android:background="?vctr_direct_chat_circle"
+        android:visibility="gone"
+        tools:visibility="visible" />
 
     <!-- unread count badge -->
     <TextView
