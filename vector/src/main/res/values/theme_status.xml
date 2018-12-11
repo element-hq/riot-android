@@ -238,7 +238,8 @@
     <style name="LoginAppTheme.Status" parent="AppTheme.NoActionBar.Status">
         <item name="android:editTextStyle">@style/LoginEditTextStyle</item>
         <item name="android:buttonStyle">@style/LoginButtonStyle</item>
-        <item name="colorAccent">?attr/editTextColor</item>
+
+        <item name="colorAccent">@color/primary_color_status</item>
     </style>
 
     <style name="CountryPickerTheme.Status" parent="AppTheme.NoActionBar.Status">

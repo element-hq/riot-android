@@ -118,7 +118,6 @@
     <style name="LoginAppTheme.Black" parent="AppTheme.NoActionBar.Black">
         <item name="android:editTextStyle">@style/LoginEditTextStyle</item>
         <item name="android:buttonStyle">@style/LoginButtonStyle</item>
-        <item name="colorAccent">?attr/editTextColor</item>
     </style>
 
     <style name="CountryPickerTheme.Black" parent="AppTheme.NoActionBar.Black">

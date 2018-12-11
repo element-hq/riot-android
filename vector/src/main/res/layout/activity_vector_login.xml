@@ -413,7 +413,7 @@
                     android:paddingTop="5dp"
                     android:paddingBottom="10dp"
                     android:text="@string/auth_forgot_password"
-                    android:textColor="@color/vector_green_color"
+                    android:textColor="?attr/colorAccent"
                     android:textSize="14sp" />
             </LinearLayout>
 

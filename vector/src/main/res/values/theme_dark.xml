@@ -237,7 +237,6 @@
     <style name="LoginAppTheme.Dark" parent="AppTheme.NoActionBar.Dark">
         <item name="android:editTextStyle">@style/LoginEditTextStyle</item>
         <item name="android:buttonStyle">@style/LoginButtonStyle</item>
-        <item name="colorAccent">?attr/editTextColor</item>
     </style>
 
     <style name="CountryPickerTheme.Dark" parent="AppTheme.NoActionBar.Dark">
