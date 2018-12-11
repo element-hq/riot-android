@@ -39,7 +39,7 @@
         <!-- remove the shadow under the actionbar -->
         <item name="android:windowContentOverlay">@null</item>
 
-        <item name="android:popupMenuStyle">@style/vector.PopupMenu</item>
+        <item name="android:popupMenuStyle">@style/Vector.PopupMenu</item>
 
         <!-- no divider -->
         <item name="android:actionBarDivider">@null</item>
