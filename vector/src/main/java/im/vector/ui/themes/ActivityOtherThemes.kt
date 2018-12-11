@@ -86,10 +86,4 @@ sealed class ActivityOtherThemes(@StyleRes val dark: Int,
             R.style.LoginAppTheme_Black,
             R.style.LoginAppTheme_Status
     )
-
-    object Directory : ActivityOtherThemes(
-            R.style.DirectoryPickerTheme_Dark,
-            R.style.DirectoryPickerTheme_Black,
-            R.style.DirectoryPickerTheme_Status
-    )
 }

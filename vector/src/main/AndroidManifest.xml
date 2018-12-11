@@ -383,7 +383,7 @@
             android:name=".activity.RoomDirectoryPickerActivity"
             android:configChanges="orientation|screenSize"
             android:label="@string/select_room_directory"
-            android:theme="@style/DirectoryPickerTheme.Light" />
+            android:theme="@style/AppTheme.NoActionBar.Light" />
         <activity
             android:name=".activity.PhoneNumberVerificationActivity"
             android:configChanges="orientation|screenSize"

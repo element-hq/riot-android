@@ -81,7 +81,7 @@ public class RoomDirectoryPickerActivity extends VectorAppCompatActivity impleme
     @NotNull
     @Override
     public ActivityOtherThemes getOtherThemes() {
-        return ActivityOtherThemes.Directory.INSTANCE;
+        return ActivityOtherThemes.NoActionBar.INSTANCE;
     }
 
     @Override

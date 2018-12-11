@@ -127,8 +127,6 @@
         <item name="android:textColorHint">?attr/vctr_activity_bottom_gradient_color</item>
     </style>
 
-    <style name="DirectoryPickerTheme.Black" parent="AppTheme.NoActionBar.Black" />
-
     <!-- searches activity -->
     <style name="SearchesAppTheme.Black" parent="AppTheme.Black">
         <!-- custom action bar -->
