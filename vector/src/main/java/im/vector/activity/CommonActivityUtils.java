@@ -54,7 +54,7 @@ import org.matrix.androidsdk.crypto.data.MXUsersDevicesMap;
 import org.matrix.androidsdk.data.Room;
 import org.matrix.androidsdk.data.RoomPreviewData;
 import org.matrix.androidsdk.data.RoomSummary;
-import org.matrix.androidsdk.db.MXMediasCache;
+import org.matrix.androidsdk.db.MXMediaCache;
 import org.matrix.androidsdk.rest.callback.ApiCallback;
 import org.matrix.androidsdk.rest.callback.SimpleApiCallback;
 import org.matrix.androidsdk.rest.model.MatrixError;
@@ -360,7 +360,7 @@ public class CommonActivityUtils {
                 PIDsRetriever.getInstance().reset();
                 ContactsManager.getInstance().reset();
 
-                MXMediasCache.clearThumbnailsCache(context);
+                MXMediaCache.clearThumbnailsCache(context);
 
                 if (goToLoginPage) {
                     Activity activeActivity = VectorApp.getCurrentActivity();
@@ -428,7 +428,7 @@ public class CommonActivityUtils {
                 PIDsRetriever.getInstance().reset();
                 ContactsManager.getInstance().reset();
 
-                MXMediasCache.clearThumbnailsCache(context);
+                MXMediaCache.clearThumbnailsCache(context);
 
                 callback.onSuccess(info);
             }
@@ -1471,7 +1471,7 @@ public class CommonActivityUtils {
             public void onSuccess(byte[] bytesArray) {
                 try {
                     ByteArrayInputStream stream = new ByteArrayInputStream(bytesArray);
-                    String url = session.getMediasCache().saveMedia(stream, "riot-" + System.currentTimeMillis() + ".txt", "text/plain");
+                    String url = session.getMediaCache().saveMedia(stream, "riot-" + System.currentTimeMillis() + ".txt", "text/plain");
                     stream.close();
 
                     saveMediaIntoDownloads(appContext,

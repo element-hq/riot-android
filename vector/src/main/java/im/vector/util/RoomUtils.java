@@ -705,7 +705,7 @@ public class RoomUtils {
             int size = context.getResources().getDimensionPixelSize(R.dimen.profile_avatar_size);
 
             // check if the thumbnail is already downloaded
-            File f = session.getMediasCache().thumbnailCacheFile(room.getAvatarUrl(), size);
+            File f = session.getMediaCache().thumbnailCacheFile(room.getAvatarUrl(), size);
 
             if (null != f) {
                 BitmapFactory.Options options = new BitmapFactory.Options();

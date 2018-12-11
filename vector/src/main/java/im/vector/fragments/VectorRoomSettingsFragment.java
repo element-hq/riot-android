@@ -50,7 +50,6 @@ import android.widget.Toast;
 import org.matrix.androidsdk.MXPatterns;
 import org.matrix.androidsdk.MXSession;
 import org.matrix.androidsdk.crypto.CryptoConstantsKt;
-import org.matrix.androidsdk.crypto.MXCryptoAlgorithms;
 import org.matrix.androidsdk.data.Room;
 import org.matrix.androidsdk.data.RoomAccountData;
 import org.matrix.androidsdk.data.RoomState;
@@ -1142,7 +1141,7 @@ public class VectorRoomSettingsFragment extends PreferenceFragmentCompat impleme
         }
 
         if (aResultCode == Activity.RESULT_OK) {
-            Uri thumbnailUri = VectorUtils.getThumbnailUriFromIntent(getActivity(), aData, mSession.getMediasCache());
+            Uri thumbnailUri = VectorUtils.getThumbnailUriFromIntent(getActivity(), aData, mSession.getMediaCache());
 
             if (null != thumbnailUri) {
                 displayLoadingView();
@@ -1150,7 +1149,7 @@ public class VectorRoomSettingsFragment extends PreferenceFragmentCompat impleme
                 // save the bitmap URL on the server
                 ResourceUtils.Resource resource = ResourceUtils.openResource(getActivity(), thumbnailUri, null);
                 if (null != resource) {
-                    mSession.getMediasCache().uploadContent(resource.mContentStream, null, resource.mMimeType, null, new MXMediaUploadListener() {
+                    mSession.getMediaCache().uploadContent(resource.mContentStream, null, resource.mMimeType, null, new MXMediaUploadListener() {
 
                         @Override
                         public void onUploadError(String uploadId, int serverResponseCode, String serverErrorMessage) {

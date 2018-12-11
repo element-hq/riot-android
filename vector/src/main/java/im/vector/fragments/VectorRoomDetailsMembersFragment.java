@@ -48,7 +48,7 @@ import org.jetbrains.annotations.NotNull;
 import org.matrix.androidsdk.MXSession;
 import org.matrix.androidsdk.data.Room;
 import org.matrix.androidsdk.data.RoomState;
-import org.matrix.androidsdk.db.MXMediasCache;
+import org.matrix.androidsdk.db.MXMediaCache;
 import org.matrix.androidsdk.listeners.MXEventListener;
 import org.matrix.androidsdk.rest.callback.ApiCallback;
 import org.matrix.androidsdk.rest.callback.SimpleApiCallback;
@@ -819,7 +819,7 @@ public class VectorRoomDetailsMembersFragment extends VectorBaseFragment {
      * Finalize the fragment initialization.
      */
     private void finalizeInit() {
-        MXMediasCache mxMediasCache = mSession.getMediasCache();
+        MXMediaCache mxMediasCache = mSession.getMediaCache();
 
         mAddMembersFloatingActionButton.setOnClickListener(new View.OnClickListener() {
             @Override

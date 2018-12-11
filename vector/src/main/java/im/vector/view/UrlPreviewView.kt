@@ -82,7 +82,7 @@ class UrlPreviewView @JvmOverloads constructor(
             visibility = View.GONE
         } else {
             visibility = View.VISIBLE
-            session.mediasCache.loadAvatarThumbnail(session.homeServerConfig,
+            session.mediaCache.loadAvatarThumbnail(session.homeServerConfig,
                     mImageView, preview.thumbnailURL, context.resources.getDimensionPixelSize(R.dimen.profile_avatar_size))
 
             mTitleTextView.let {

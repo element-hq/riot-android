@@ -63,7 +63,7 @@ import org.matrix.androidsdk.adapters.MessageRow;
 import org.matrix.androidsdk.crypto.MXCryptoError;
 import org.matrix.androidsdk.crypto.data.MXDeviceInfo;
 import org.matrix.androidsdk.data.Room;
-import org.matrix.androidsdk.db.MXMediasCache;
+import org.matrix.androidsdk.db.MXMediaCache;
 import org.matrix.androidsdk.interfaces.HtmlToolbox;
 import org.matrix.androidsdk.rest.model.Event;
 import org.matrix.androidsdk.rest.model.EventContent;
@@ -191,7 +191,7 @@ public class VectorMessagesAdapter extends AbstractMessagesAdapter {
     private final int mMaxImageHeight;
 
     // media cache
-    private final MXMediasCache mMediasCache;
+    private final MXMediaCache mMediasCache;
 
     // session
     final MXSession mSession;
@@ -268,7 +268,7 @@ public class VectorMessagesAdapter extends AbstractMessagesAdapter {
     /**
      * Creates a messages adapter with the default layouts.
      */
-    public VectorMessagesAdapter(MXSession session, Context context, MXMediasCache mediasCache) {
+    public VectorMessagesAdapter(MXSession session, Context context, MXMediaCache mediasCache) {
         this(session, context,
                 R.layout.adapter_item_vector_message_text_emote_notice,
                 R.layout.adapter_item_vector_message_image_video,
@@ -321,7 +321,7 @@ public class VectorMessagesAdapter extends AbstractMessagesAdapter {
                           int stickerResLayoutId,
                           int hiddenResLayoutId,
                           int roomVersionedResLayoutId,
-                          MXMediasCache mediasCache) {
+                          MXMediaCache mediasCache) {
         super(context, 0);
         mContext = context;
         mRowTypeToLayoutId.put(ROW_TYPE_TEXT, textResLayoutId);
@@ -2511,11 +2511,11 @@ public class VectorMessagesAdapter extends AbstractMessagesAdapter {
             menu.findItem(R.id.ic_action_vector_quote).setVisible(true);
         }
 
-        if (event.isUploadingMedias(mMediasCache)) {
+        if (event.isUploadingMedia(mMediasCache)) {
             menu.findItem(R.id.ic_action_vector_cancel_upload).setVisible(true);
         }
 
-        if (event.isDownloadingMedias(mMediasCache)) {
+        if (event.isDownloadingMedia(mMediasCache)) {
             menu.findItem(R.id.ic_action_vector_cancel_download).setVisible(true);
         }
 

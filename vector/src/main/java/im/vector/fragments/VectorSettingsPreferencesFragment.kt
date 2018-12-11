@@ -67,7 +67,7 @@ import org.matrix.androidsdk.crypto.data.MXDeviceInfo
 import org.matrix.androidsdk.data.MyUser
 import org.matrix.androidsdk.data.Pusher
 import org.matrix.androidsdk.data.RoomMediaMessage
-import org.matrix.androidsdk.db.MXMediasCache
+import org.matrix.androidsdk.db.MXMediaCache
 import org.matrix.androidsdk.listeners.IMXNetworkEventListener
 import org.matrix.androidsdk.listeners.MXEventListener
 import org.matrix.androidsdk.listeners.MXMediaUploadListener
@@ -764,7 +764,7 @@ class VectorSettingsPreferencesFragment : PreferenceFragmentCompat(), SharedPref
 
         // clear medias cache
         findPreference(PreferencesManager.SETTINGS_CLEAR_MEDIA_CACHE_PREFERENCE_KEY).let {
-            MXMediasCache.getCachesSize(activity, object : SimpleApiCallback<Long>() {
+            MXMediaCache.getCachesSize(activity, object : SimpleApiCallback<Long>() {
                 override fun onSuccess(size: Long) {
                     if (null != activity) {
                         it.summary = android.text.format.Formatter.formatFileSize(activity, size)
@@ -777,7 +777,7 @@ class VectorSettingsPreferencesFragment : PreferenceFragmentCompat(), SharedPref
 
                 val task = object : AsyncTask<Void?, Void?, Void?>() {
                     override fun doInBackground(vararg params: Void?): Void? {
-                        mSession.mediasCache.clear()
+                        mSession.mediaCache.clear()
                         Glide.get(activity!!).clearDiskCache()
                         return null
                     }
@@ -785,7 +785,7 @@ class VectorSettingsPreferencesFragment : PreferenceFragmentCompat(), SharedPref
                     override fun onPostExecute(result: Void?) {
                         hideLoadingView()
 
-                        MXMediasCache.getCachesSize(activity, object : SimpleApiCallback<Long>() {
+                        MXMediaCache.getCachesSize(activity, object : SimpleApiCallback<Long>() {
                             override fun onSuccess(size: Long) {
                                 it.summary = android.text.format.Formatter.formatFileSize(activity, size)
                             }
@@ -796,7 +796,7 @@ class VectorSettingsPreferencesFragment : PreferenceFragmentCompat(), SharedPref
                 try {
                     task.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR)
                 } catch (e: Exception) {
-                    Log.e(LOG_TAG, "## mSession.getMediasCache().clear() failed " + e.message, e)
+                    Log.e(LOG_TAG, "## mSession.getMediaCache().clear() failed " + e.message, e)
                     task.cancel(true)
                     hideLoadingView()
                 }
@@ -1358,7 +1358,7 @@ class VectorSettingsPreferencesFragment : PreferenceFragmentCompat(), SharedPref
                     activity!!.finish()
                 }
                 VectorUtils.TAKE_IMAGE -> {
-                    val thumbnailUri = VectorUtils.getThumbnailUriFromIntent(activity, data, mSession.mediasCache)
+                    val thumbnailUri = VectorUtils.getThumbnailUriFromIntent(activity, data, mSession.mediaCache)
 
                     if (null != thumbnailUri) {
                         displayLoadingView()
@@ -1366,7 +1366,7 @@ class VectorSettingsPreferencesFragment : PreferenceFragmentCompat(), SharedPref
                         val resource = ResourceUtils.openResource(activity, thumbnailUri, null)
 
                         if (null != resource) {
-                            mSession.mediasCache.uploadContent(resource.mContentStream, null, resource.mMimeType, null, object : MXMediaUploadListener() {
+                            mSession.mediaCache.uploadContent(resource.mContentStream, null, resource.mMimeType, null, object : MXMediaUploadListener() {
 
                                 override fun onUploadError(uploadId: String?, serverResponseCode: Int, serverErrorMessage: String?) {
                                     activity?.runOnUiThread { onCommonDone(serverResponseCode.toString() + " : " + serverErrorMessage) }

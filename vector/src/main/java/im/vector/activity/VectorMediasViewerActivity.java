@@ -29,7 +29,7 @@ import android.widget.Toast;
 import com.google.gson.JsonElement;
 
 import org.matrix.androidsdk.MXSession;
-import org.matrix.androidsdk.db.MXMediasCache;
+import org.matrix.androidsdk.db.MXMediaCache;
 import org.matrix.androidsdk.listeners.MXMediaDownloadListener;
 import org.matrix.androidsdk.rest.callback.SimpleApiCallback;
 import org.matrix.androidsdk.rest.model.MatrixError;
@@ -160,7 +160,7 @@ public class VectorMediasViewerActivity extends MXCActionBarActivity {
         int maxImageWidth = intent.getIntExtra(KEY_THUMBNAIL_WIDTH, 0);
         int maxImageHeight = intent.getIntExtra(VectorMediasViewerActivity.KEY_THUMBNAIL_HEIGHT, 0);
 
-        mAdapter = new VectorMediasViewerAdapter(this, mSession, mSession.getMediasCache(), mMediasList, maxImageWidth, maxImageHeight);
+        mAdapter = new VectorMediasViewerAdapter(this, mSession, mSession.getMediaCache(), mMediasList, maxImageWidth, maxImageHeight);
         mViewPager.setAdapter(mAdapter);
         mViewPager.setPageTransformer(true, new DepthPageTransformer());
         mAdapter.autoPlayItemAt(position);
@@ -225,7 +225,7 @@ public class VectorMediasViewerActivity extends MXCActionBarActivity {
      * Download the current video file
      */
     private void onAction(final int position, final int action) {
-        final MXMediasCache mediasCache = Matrix.getInstance(this).getMediasCache();
+        final MXMediaCache mediasCache = Matrix.getInstance(this).getMediaCache();
         final SlidableMediaInfo mediaInfo = mMediasList.get(position);
 
         // check if the media has already been downloaded

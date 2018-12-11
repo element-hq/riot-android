@@ -776,7 +776,7 @@ public class VectorRoomActivity extends MXCActionBarActivity implements
 
         mVectorMessageListFragment.setListener(this);
 
-        mVectorRoomMediasSender = new VectorRoomMediasSender(this, mVectorMessageListFragment, Matrix.getInstance(this).getMediasCache());
+        mVectorRoomMediasSender = new VectorRoomMediasSender(this, mVectorMessageListFragment, Matrix.getInstance(this).getMediaCache());
 
         manageRoomPreview();
 
@@ -3621,7 +3621,7 @@ public class VectorRoomActivity extends MXCActionBarActivity implements
             return;
         }
 
-        Uri thumbnailUri = VectorUtils.getThumbnailUriFromIntent(this, aData, mSession.getMediasCache());
+        Uri thumbnailUri = VectorUtils.getThumbnailUriFromIntent(this, aData, mSession.getMediaCache());
 
         if (null != thumbnailUri) {
             showWaitingView();
@@ -3629,7 +3629,7 @@ public class VectorRoomActivity extends MXCActionBarActivity implements
             // save the bitmap URL on the server
             ResourceUtils.Resource resource = ResourceUtils.openResource(this, thumbnailUri, null);
             if (null != resource) {
-                mSession.getMediasCache().uploadContent(resource.mContentStream, null, resource.mMimeType, null, new MXMediaUploadListener() {
+                mSession.getMediaCache().uploadContent(resource.mContentStream, null, resource.mMimeType, null, new MXMediaUploadListener() {
                     @Override
                     public void onUploadError(String uploadId, int serverResponseCode, String serverErrorMessage) {
                         Log.e(LOG_TAG, "Fail to upload the avatar");

@@ -49,7 +49,7 @@ import org.matrix.androidsdk.adapters.MessageRow;
 import org.matrix.androidsdk.crypto.data.MXDeviceInfo;
 import org.matrix.androidsdk.crypto.data.MXUsersDevicesMap;
 import org.matrix.androidsdk.data.RoomState;
-import org.matrix.androidsdk.db.MXMediasCache;
+import org.matrix.androidsdk.db.MXMediaCache;
 import org.matrix.androidsdk.fragments.MatrixMessageListFragment;
 import org.matrix.androidsdk.fragments.MatrixMessagesFragment;
 import org.matrix.androidsdk.listeners.MXMediaDownloadListener;
@@ -272,13 +272,13 @@ public class VectorMessageListFragment extends MatrixMessageListFragment<VectorM
     }
 
     @Override
-    public MXMediasCache getMXMediasCache() {
-        return Matrix.getInstance(getActivity()).getMediasCache();
+    public MXMediaCache getMXMediaCache() {
+        return Matrix.getInstance(getActivity()).getMediaCache();
     }
 
     @Override
     public VectorMessagesAdapter createMessagesAdapter() {
-        return new VectorMessagesAdapter(mSession, getActivity(), getMXMediasCache());
+        return new VectorMessagesAdapter(mSession, getActivity(), getMXMediaCache());
     }
 
     /**
@@ -818,7 +818,7 @@ public class VectorMessageListFragment extends MatrixMessageListFragment<VectorM
         // Sanitize file name in case `m.body` contains a path.
         final String trimmedFileName = new File(filename).getName();
 
-        final MXMediasCache mediasCache = Matrix.getInstance(getActivity()).getMediasCache();
+        final MXMediaCache mediasCache = Matrix.getInstance(getActivity()).getMediaCache();
         // check if the media has already been downloaded
         if (mediasCache.isMediaCached(mediaUrl, mediaMimeType)) {
             mediasCache.createTmpDecryptedMediaFile(mediaUrl, mediaMimeType, encryptedFileInfo, new SimpleApiCallback<File>() {

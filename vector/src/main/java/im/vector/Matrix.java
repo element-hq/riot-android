@@ -37,12 +37,11 @@ import org.matrix.androidsdk.data.metrics.MetricsListener;
 import org.matrix.androidsdk.data.store.IMXStore;
 import org.matrix.androidsdk.data.store.MXFileStore;
 import org.matrix.androidsdk.db.MXLatestChatMessageCache;
-import org.matrix.androidsdk.db.MXMediasCache;
+import org.matrix.androidsdk.db.MXMediaCache;
 import org.matrix.androidsdk.listeners.IMXNetworkEventListener;
 import org.matrix.androidsdk.listeners.MXEventListener;
 import org.matrix.androidsdk.rest.callback.ApiCallback;
 import org.matrix.androidsdk.rest.callback.SimpleApiCallback;
-import org.matrix.androidsdk.rest.client.LoginRestClient;
 import org.matrix.androidsdk.rest.model.Event;
 import org.matrix.androidsdk.rest.model.MatrixError;
 import org.matrix.androidsdk.rest.model.login.Credentials;
@@ -417,9 +416,9 @@ public class Matrix {
      *
      * @return the mediasCache.
      */
-    public MXMediasCache getMediasCache() {
+    public MXMediaCache getMediaCache() {
         if (getSessions().size() > 0) {
-            return getSessions().get(0).getMediasCache();
+            return getSessions().get(0).getMediaCache();
         }
         return null;
     }

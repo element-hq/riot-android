@@ -30,14 +30,13 @@ import android.widget.TextView;
 import org.matrix.androidsdk.MXSession;
 import org.matrix.androidsdk.adapters.MessageRow;
 import org.matrix.androidsdk.data.Room;
-import org.matrix.androidsdk.db.MXMediasCache;
+import org.matrix.androidsdk.db.MXMediaCache;
 import org.matrix.androidsdk.rest.model.Event;
 import org.matrix.androidsdk.util.EventDisplay;
 import org.matrix.androidsdk.util.Log;
 
 import im.vector.R;
 import im.vector.util.RiotEventDisplay;
-import im.vector.util.VectorUtils;
 
 /**
  * An adapter which display a list of messages found after a search
@@ -49,7 +48,7 @@ public class VectorSearchMessagesListAdapter extends VectorMessagesAdapter {
     private final boolean mDisplayRoomName;
     private String mPattern;
 
-    public VectorSearchMessagesListAdapter(MXSession session, Context context, boolean displayRoomName, MXMediasCache mediasCache) {
+    public VectorSearchMessagesListAdapter(MXSession session, Context context, boolean displayRoomName, MXMediaCache mediasCache) {
         super(session, context,
                 R.layout.adapter_item_vector_message_text_emote_notice,
                 R.layout.adapter_item_vector_message_image_video,
