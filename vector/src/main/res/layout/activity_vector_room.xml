@@ -24,7 +24,6 @@
             style="@style/VectorToolbarStyle"
             android:layout_width="match_parent"
             android:layout_height="?attr/actionBarSize"
-            android:background="?attr/vctr_primary_color"
             app:contentInsetEnd="0dp"
             app:contentInsetStart="0dp">
 
