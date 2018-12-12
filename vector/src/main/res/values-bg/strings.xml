@@ -762,7 +762,7 @@
     <string name="room_details_people_present_group_name">УЧАСТНИЦИ</string>
 
     <string name="room_sync_in_progress">Синхронизиране…</string>
-    <string name="settings_app_info_link_summary">Екран с информация за системата на приложението</string>
+    <string name="settings_app_info_link_summary">Покажи системния екран с информация за приложението.</string>
     <string name="settings_app_info_link_title">Информация за приложението</string>
 
     <string name="settings_notification_ringtone">Звук на известията</string>

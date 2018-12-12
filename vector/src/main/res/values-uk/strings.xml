@@ -21,7 +21,7 @@
     <string name="title_activity_settings">Налаштування</string>
     <string name="title_activity_member_details">Інформація про учасника</string>
     <string name="title_activity_historical">Історія</string>
-    <string name="title_activity_bug_report">Відгук про помилкуF</string>
+    <string name="title_activity_bug_report">Сповістити про помилку</string>
 
     <!-- button names -->
     <string name="ok">OK</string>
@@ -31,9 +31,9 @@
     <string name="send">Надіслати</string>
     <string name="copy">Копіювати</string>
     <string name="resend">Надіслати ще раз</string>
-    <string name="redact">Приховати</string>
+    <string name="redact">Прибрати</string>
     <string name="quote">Цитата</string>
-    <string name="share">Поділитись</string>
+    <string name="share">Поширити</string>
     <string name="later">Пізніше</string>
     <string name="forward">Переслати</string>
     <string name="permalink">Постійне посилання</string>
@@ -41,9 +41,9 @@
     <string name="view_decrypted_source">Переглянути розшифроване джерело</string>
     <string name="delete">Видалити</string>
     <string name="rename">Перейменувати</string>
-    <string name="report_content">Вміст звіту</string>
+    <string name="report_content">Поскаржитись на вміст</string>
     <string name="active_call">Активний виклик</string>
-    <string name="ongoing_conference_call">Вхідний конференц дзвінок. Приєднатись голосом чи відео.</string>
+    <string name="ongoing_conference_call">Відбувається конференц-дзвінок. Приєднатись голосом чи відео.</string>
     <string name="ongoing_conference_call_voice">голос</string>
     <string name="ongoing_conference_call_video">відео</string>
     <string name="cannot_start_call">Не вдалося здійснити виклик, спробуйте пізніше</string>
@@ -51,15 +51,16 @@
     <string name="missing_permissions_to_start_conf_call">Щоб почати конференцію у цій кімнаті, потрібен дозвіл на запрошення</string>
     <string name="missing_permissions_title_to_start_conf_call">Не вдалося здійснити виклик</string>
     <string name="device_information">Інформація про пристрій</string>
-    <string name="room_no_conference_call_in_encrypted_rooms">Конференц дзвінки не підтримуються в шифрованих чатах</string>
+    <string name="room_no_conference_call_in_encrypted_rooms">Конференц-дзвінки не підтримуються у зашифрованих кімнатах</string>
     <string name="send_anyway">Все одно надіслати</string>
     <string name="or">або</string>
     <string name="invite">Запрошення</string>
     <string name="offline">Офлайн</string>
 
     <!-- actions -->
-    <string name="action_sign_out">Вийти</string>
-    <string name="action_sign_out_confirmation">З міркувань безпеки, всі ключі шифрування видаляються при виході з системи, роблячи читання попередньої історії чату неможливим.\n Експортуйте її, перш ніж вийти.</string>
+    <string name="action_sign_out">Вийти з облікового запису</string>
+    <string name="action_sign_out_confirmation">З міркувань безпеки, всі ключі шифрування видаляються при виході з системи, що унеможливить перегляд попередньої історії чату коли Ви зайдете в систему знову.
+Експортуйте її, перш ніж вийти.</string>
     <string name="action_voice_call">Голосовий виклик</string>
     <string name="action_video_call">Відеовиклик</string>
     <string name="action_global_search">Глообальний пошук</string>
@@ -734,7 +735,7 @@
 
     <string name="room_add_matrix_apps">Додати застосунки Matrix</string>
     <string name="notification_noisy_notifications">Гучне повідомлення</string>
-    <string name="notification_silent_notifications">Тихе повідомлення</string>
+    <string name="notification_silent_notifications">Тихі повідомлення</string>
 
     <string name="option_take_photo">Зробити фото</string>
     <string name="option_take_video">Записати відео</string>
@@ -764,7 +765,7 @@
     <string name="command_error">Помилка виконання команди</string>
     <string name="unrecognized_command">Команду %s не розпізнано</string>
 
-    <string name="title_activity_group_details">Відомості про спільноу</string>
+    <string name="title_activity_group_details">Відомості про спільноту</string>
 
     <string name="loading">Завантаження…</string>
 
@@ -790,7 +791,7 @@
         <item quantity="one">%d зміна  членства</item>
         <item quantity="few">%d зміни членства</item>
         <item quantity="many">%d змін членства</item>
-        <item quantity="other" />
+        <item quantity="other"/>
     </plurals>
 
     <string name="list_members">Список учасників</string>
@@ -804,7 +805,7 @@
 
     <string name="settings_notification_privacy">Конфіденційність сповіщень</string>
     <string name="settings_notification_privacy_normal">Нормальний</string>
-    <string name="title_activity_choose_sticker">Відправити стікер</string>
+    <string name="title_activity_choose_sticker">Відправити наліпку</string>
 
     <string name="option_send_sticker">Відправити стікер</string>
     <string name="no_sticker_application_dialog_content">У вас зараз не має доступних стікерів.
@@ -815,13 +816,13 @@
         <item quantity="one">%d активний участник</item>
         <item quantity="few">%d активних участника</item>
         <item quantity="many">%d активних участників</item>
-        <item quantity="other" />
+        <item quantity="other"/>
     </plurals>
     <plurals name="room_title_members">
         <item quantity="one">%d участник</item>
         <item quantity="few">%d участника</item>
         <item quantity="many">%d участників</item>
-        <item quantity="other" />
+        <item quantity="other"/>
     </plurals>
     <string name="room_participants_ban_prompt_msg">Ви впевнені, що хочете забанити цього користувача в цьому чаті?</string>
 
@@ -829,7 +830,7 @@
         <item quantity="one">%d нове повідомлення</item>
         <item quantity="few">%d нових повідомленя</item>
         <item quantity="many">%d нових повідомлень</item>
-        <item quantity="other" />
+        <item quantity="other"/>
     </plurals>
 
     <string name="settings_notification_privacy_power_saving">"Варіанти  енергозабезпечення"</string>
@@ -843,7 +844,7 @@
     <string name="dialog_title_third_party_licences">Ліцензії сторонніх виробників</string>
 
     <string name="download">Завантажити</string>
-    <string name="speak">Розмовляти</string>
+    <string name="speak">Говорити</string>
     <string name="clear">Очистити</string>
     <string name="e2e_re_request_encryption_key"><u>Вдруге запитати ключі шифрування</u> з інших ваших пристроїв.</string>
 
@@ -884,25 +885,25 @@
         <item quantity="one">%d сек.</item>
         <item quantity="few">%d сек.</item>
         <item quantity="many">%d сек.</item>
-        <item quantity="other" />
+        <item quantity="other"/>
     </plurals>
     <plurals name="format_time_m">
         <item quantity="one">%d хв.</item>
         <item quantity="few">%d хв.</item>
         <item quantity="many">%d хв.</item>
-        <item quantity="other" />
+        <item quantity="other"/>
     </plurals>
     <plurals name="format_time_h">
         <item quantity="one">%d год.</item>
         <item quantity="few">%d год.</item>
         <item quantity="many">%d год.</item>
-        <item quantity="other" />
+        <item quantity="other"/>
     </plurals>
     <plurals name="format_time_d">
         <item quantity="one">%d день</item>
         <item quantity="few">%d днів</item>
         <item quantity="many">%d дні</item>
-        <item quantity="other" />
+        <item quantity="other"/>
     </plurals>
 
     <string name="room_participants_now">Зараз %1$s</string>
@@ -921,19 +922,19 @@
         <item quantity="one">%d обрано</item>
         <item quantity="few">"%d  обрано"</item>
         <item quantity="many">"%d  обрано"</item>
-        <item quantity="other" />
+        <item quantity="other"/>
     </plurals>
     <plurals name="directory_search_rooms">
         <item quantity="one">%d кімната</item>
         <item quantity="few">%d кімнати</item>
         <item quantity="many">%d кімнат</item>
-        <item quantity="other" />
+        <item quantity="other"/>
     </plurals>
     <plurals name="directory_search_rooms_for">
         <item quantity="one">%1$s кімнату знайдено для %2$s</item>
         <item quantity="few">%1$s кімнати знайдено для %2$s</item>
         <item quantity="many">%1$s кімнат знайдено для %2$s</item>
-        <item quantity="other" />
+        <item quantity="other"/>
     </plurals>
     <string name="room_sliding_menu_version_x">Версія %s</string>
     <string name="settings_notification_privacy_warning">Riot.im запущено у фоновому режимі для забезпечення конфіденційності ваших сповіщень. Ви можете змінити цю опцію, щоб зменшити навантаження на батарею.</string>
@@ -963,19 +964,19 @@
         <item quantity="one">%d непрочитане сповіщення</item>
         <item quantity="few">%d непрочитані сповіщення</item>
         <item quantity="many">%d непрочитаних сповіщень</item>
-        <item quantity="other" />
+        <item quantity="other"/>
     </plurals>
     <plurals name="notification_unread_notified_messages_in_room_msgs">
         <item quantity="one">%d непрочитане сповіщення</item>
         <item quantity="few">%d непрочитані сповіщення</item>
         <item quantity="many">%d непрочитаних сповіщень</item>
-        <item quantity="other" />
+        <item quantity="other"/>
     </plurals>
     <plurals name="notification_unread_notified_messages_in_room_rooms">
         <item quantity="one">%d кімната</item>
         <item quantity="few">%d кімнати</item>
         <item quantity="many">%d кімнат</item>
-        <item quantity="other" />
+        <item quantity="other"/>
     </plurals>
     <string name="notification_unread_notified_messages_in_room">%1$s у %2$s</string>
 
@@ -983,7 +984,7 @@
         <item quantity="one">%d активний віджет</item>
         <item quantity="few">%d активні віджети</item>
         <item quantity="many">%d активних віджетів</item>
-        <item quantity="other" />
+        <item quantity="other"/>
     </plurals>
 
     <string name="widget_integration_missing_parameter">Пропущено обов’язковий параметр.</string>
@@ -1029,14 +1030,14 @@
         <item quantity="one">%d учасник</item>
         <item quantity="few">%d учасника</item>
         <item quantity="many">%d учасників</item>
-        <item quantity="other" />
+        <item quantity="other"/>
     </plurals>
 
     <plurals name="group_rooms">
         <item quantity="one">%d кімната</item>
         <item quantity="few">%d кімнати</item>
         <item quantity="many">%d кімнат</item>
-        <item quantity="other" />
+        <item quantity="other"/>
     </plurals>
     <string name="group_no_long_description">Адміністратор спільноти не вказав для неї детальної інформації.</string>
 
@@ -1108,7 +1109,7 @@
         <item quantity="one">Ви певні, що хочете викинути цього (%d) користувача з чату?</item>
         <item quantity="few">Ви певні, що хочете викинути цих користувачів з чату?</item>
         <item quantity="many">Ви певні, що хочете викинути цих користувачів з чату?</item>
-        <item quantity="other" />
+        <item quantity="other"/>
     </plurals>
     <string name="reason_hint">Причина</string>
 
@@ -1131,4 +1132,9 @@
     <string name="markdown_has_been_enabled">Markdown задіяно.</string>
     <string name="markdown_has_been_disabled">Markdown вимкнено.</string>
 
-</resources>
+<string name="settings_call_category">Виклики</string>
+    <string name="settings_call_ringtone_use_riot_ringtone">Використовувати стандартний рингтон Riot для вхідних викликів</string>
+    <string name="settings_call_ringtone_title">Рингтон вхідного виклику</string>
+    <string name="settings_call_ringtone_dialog_title">Оберіть рингтон для викликів:</string>
+
+    </resources>

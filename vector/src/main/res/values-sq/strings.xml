@@ -1028,4 +1028,20 @@ Kini parasysh që ky veprim do të sjellë rinisjen e aplikacionit dhe mund të 
     </plurals>
     <string name="receipt_avatar">Avatar dëftese</string>
     <string name="notice_avatar">Avatar njoftimi</string>
-</resources>
+<string name="title_activity_historical">Të dikurshme</string>
+    <string name="title_activity_choose_sticker">Dërgoni një ngjitës</string>
+
+    <string name="action_historical">Të dikurshme</string>
+    <string name="option_send_sticker">Dërgoni një ngjitës</string>
+    <string name="go_on_with">vazhdoni me…</string>
+    <string name="settings_call_category">Thirrje</string>
+    <string name="settings_call_ringtone_use_riot_ringtone">Për thirrje ardhëse përdor zilen parazgjedhje të Riot-it</string>
+    <string name="settings_call_ringtone_title">Zile thirrjesh ardhëse</string>
+    <string name="settings_call_ringtone_dialog_title">Përzgjidhni zile për thirrjet:</string>
+
+    <string name="room_settings_no_flair">Kjo dhomë nuk shfaq simbole për ndonjë bashkësi</string>
+    <string name="encryption_information_claimed_ed25519_fingerprint_key">U pretendua për kyç Ed25519 shenjash gishtash</string>
+    <string name="historical_placeholder">Kërkoni për të dikurshme</string>
+
+    <string name="settings_flair">Simoble</string>
+    </resources>
