@@ -1053,7 +1053,7 @@ Vedd figyelembe, hogy az alkalmazás újraindul ami sok időt vehet igénybe.</s
     <string name="room_participants_action_kick">Kirúg</string>
     <plurals name="room_participants_kick_prompt_msg">
         <item quantity="one">Ezeket az embereket biztosan kirúgod?</item>
-        <item quantity="other" />
+        <item quantity="other"/>
     </plurals>
     <string name="reason_hint">Ok</string>
 
@@ -1081,4 +1081,10 @@ Vedd figyelembe, hogy az alkalmazás újraindul ami sok időt vehet igénybe.</s
     <string name="settings_call_ringtone_title">Bejövő hívás csengőhangja</string>
     <string name="settings_call_ringtone_dialog_title">Csengőhang kiválasztása hívásokhoz:</string>
 
-</resources>
+<string name="accept">Elfogad</string>
+
+    <string name="auth_accept_policies">Kérlek nézd át és fogadd el a Matrix szerver felhasználói feltételeit:</string>
+
+    <string name="encryption_import_room_keys_success">%1$d/%2$d kulcs sikeresen betöltve.</string>
+
+    </resources>
