@@ -7,7 +7,7 @@
     android:focusableInTouchMode="true">
 
     <android.support.v7.widget.Toolbar
-        android:id="@+id/historical_toolbar"
+        android:id="@+id/toolbar"
         style="@style/VectorToolbarStyle"
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
@@ -25,7 +25,7 @@
     <FrameLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_below="@+id/historical_toolbar">
+        android:layout_below="@+id/toolbar">
 
         <android.support.v7.widget.RecyclerView
             android:id="@+id/historical_recycler_view"
@@ -50,7 +50,7 @@
         android:id="@+id/historical_waiting_view"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_below="@id/historical_toolbar"
+        android:layout_below="@id/toolbar"
         android:background="?attr/vctr_waiting_background_color"
         android:visibility="gone"
         tools:visibility="visible">
