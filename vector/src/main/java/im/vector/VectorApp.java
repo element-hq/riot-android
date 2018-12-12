@@ -179,12 +179,6 @@ public class VectorApp extends MultiDexApplication {
     };
 
     @Override
-    protected void attachBaseContext(Context base) {
-        super.attachBaseContext(base);
-        MultiDex.install(this);
-    }
-
-    @Override
     public void onCreate() {
         Log.d(LOG_TAG, "onCreate");
         super.onCreate();
