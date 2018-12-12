@@ -1700,6 +1700,7 @@ public class VectorRoomActivity extends MXCActionBarActivity implements
                         onCallItemClicked(which);
                     }
                 })
+                .setNegativeButton(R.string.cancel, null)
                 .show();
     }
 
@@ -3962,6 +3963,7 @@ public class VectorRoomActivity extends MXCActionBarActivity implements
                             onSendChoiceClicked(items.get(which));
                         }
                     })
+                    .setNegativeButton(R.string.cancel, null)
                     .show();
         }
     }
