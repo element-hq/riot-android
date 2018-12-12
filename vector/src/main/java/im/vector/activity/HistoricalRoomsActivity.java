@@ -223,7 +223,7 @@ public class HistoricalRoomsActivity extends VectorAppCompatActivity implements
         if (!dataHandler.areLeftRoomsSynced()) {
             mHistoricalAdapter.setRooms(new ArrayList<Room>());
             showWaitingView();
-            dataHandler.retrieveLeftRooms(new ApiCallback<Void>() {
+            dataHandler.retrieveLeftRooms(new HistoricalRoomApiCallback() {
                 @Override
                 public void onSuccess(Void info) {
                     runOnUiThread(new Runnable() {
@@ -232,21 +232,6 @@ public class HistoricalRoomsActivity extends VectorAppCompatActivity implements
                             initHistoricalRoomsData();
                         }
                     });
-                }
-
-                @Override
-                public void onNetworkError(Exception e) {
-                    onRequestDone(e.getLocalizedMessage());
-                }
-
-                @Override
-                public void onMatrixError(MatrixError e) {
-                    onRequestDone(e.getLocalizedMessage());
-                }
-
-                @Override
-                public void onUnexpectedError(Exception e) {
-                    onRequestDone(e.getLocalizedMessage());
                 }
             });
         } else {
@@ -348,47 +333,49 @@ public class HistoricalRoomsActivity extends VectorAppCompatActivity implements
      * *********************************************************************************************
      */
 
-    /**
-     * Handle the end of any request : hide loading wheel and display error message if there is any
-     *
-     * @param errorMessage the localized error message
-     */
-    private void onRequestDone(final String errorMessage) {
-        if (!isFinishing()) {
-            runOnUiThread(new Runnable() {
-                @Override
-                public void run() {
-                    hideWaitingView();
-                    if (!TextUtils.isEmpty(errorMessage)) {
-                        Toast.makeText(HistoricalRoomsActivity.this, errorMessage, Toast.LENGTH_SHORT).show();
+    private abstract class HistoricalRoomApiCallback implements ApiCallback<Void> {
+        /**
+         * Handle the end of any request : hide loading wheel and display error message if there is any
+         *
+         * @param errorMessage the localized error message
+         */
+        protected void onRequestDone(final String errorMessage) {
+            if (!isFinishing()) {
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        hideWaitingView();
+                        if (!TextUtils.isEmpty(errorMessage)) {
+                            Toast.makeText(HistoricalRoomsActivity.this, errorMessage, Toast.LENGTH_SHORT).show();
+                        }
                     }
-                }
-            });
+                });
+            }
+        }
+
+        @Override
+        public final void onNetworkError(Exception e) {
+            onRequestDone(e.getLocalizedMessage());
+        }
+
+        @Override
+        public final void onMatrixError(MatrixError e) {
+            onRequestDone(e.getLocalizedMessage());
+        }
+
+        @Override
+        public final void onUnexpectedError(Exception e) {
+            onRequestDone(e.getLocalizedMessage());
         }
     }
 
     @Override
     public void onSelectRoom(Room room, int position) {
         showWaitingView();
-        CommonActivityUtils.previewRoom(this, mSession, room.getRoomId(), "", new ApiCallback<Void>() {
+        CommonActivityUtils.previewRoom(this, mSession, room.getRoomId(), "", new HistoricalRoomApiCallback() {
             @Override
             public void onSuccess(Void info) {
                 onRequestDone(null);
-            }
-
-            @Override
-            public void onNetworkError(Exception e) {
-                onRequestDone(e.getLocalizedMessage());
-            }
-
-            @Override
-            public void onMatrixError(MatrixError e) {
-                onRequestDone(e.getLocalizedMessage());
-            }
-
-            @Override
-            public void onUnexpectedError(Exception e) {
-                onRequestDone(e.getLocalizedMessage());
             }
         });
     }
@@ -407,25 +394,10 @@ public class HistoricalRoomsActivity extends VectorAppCompatActivity implements
     public void onForgotRoom(Room room) {
         showWaitingView();
 
-        room.forget(new ApiCallback<Void>() {
+        room.forget(new HistoricalRoomApiCallback() {
             @Override
             public void onSuccess(Void info) {
                 initHistoricalRoomsData();
-            }
-
-            @Override
-            public void onNetworkError(Exception e) {
-                onRequestDone(e.getLocalizedMessage());
-            }
-
-            @Override
-            public void onMatrixError(MatrixError e) {
-                onRequestDone(e.getLocalizedMessage());
-            }
-
-            @Override
-            public void onUnexpectedError(Exception e) {
-                onRequestDone(e.getLocalizedMessage());
             }
         });
     }
