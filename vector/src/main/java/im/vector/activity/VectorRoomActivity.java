@@ -73,7 +73,6 @@ import org.matrix.androidsdk.data.RoomPreviewData;
 import org.matrix.androidsdk.data.RoomState;
 import org.matrix.androidsdk.data.RoomSummary;
 import org.matrix.androidsdk.db.MXLatestChatMessageCache;
-import org.matrix.androidsdk.fragments.IconAndTextDialogFragment;
 import org.matrix.androidsdk.fragments.MatrixMessageListFragment;
 import org.matrix.androidsdk.listeners.IMXNetworkEventListener;
 import org.matrix.androidsdk.listeners.MXEventListener;
@@ -108,6 +107,9 @@ import im.vector.R;
 import im.vector.VectorApp;
 import im.vector.ViewedRoomTracker;
 import im.vector.activity.util.RequestCodesKt;
+import im.vector.dialogs.DialogCallAdapter;
+import im.vector.dialogs.DialogListItem;
+import im.vector.dialogs.DialogSendItemAdapter;
 import im.vector.extensions.MatrixSdkExtensionsKt;
 import im.vector.features.hhs.LimitResourceState;
 import im.vector.features.hhs.ResourceLimitEventListener;
@@ -176,8 +178,6 @@ public class VectorRoomActivity extends MXCActionBarActivity implements
     public static final String EXTRA_START_CALL_ID = "EXTRA_START_CALL_ID";
 
     private static final String TAG_FRAGMENT_MATRIX_MESSAGE_LIST = "TAG_FRAGMENT_MATRIX_MESSAGE_LIST";
-    private static final String TAG_FRAGMENT_ATTACHMENTS_DIALOG = "TAG_FRAGMENT_ATTACHMENTS_DIALOG";
-    private static final String TAG_FRAGMENT_CALL_OPTIONS = "TAG_FRAGMENT_CALL_OPTIONS";
 
     private static final String LOG_TAG = VectorRoomActivity.class.getSimpleName();
     private static final int TYPING_TIMEOUT_MS = 10000;
@@ -1693,55 +1693,54 @@ public class VectorRoomActivity extends MXCActionBarActivity implements
         // hide the header room
         enableActionBarHeader(HIDE_ACTION_BAR_HEADER);
 
-        final Integer[] lIcons = new Integer[]{R.drawable.voice_call_green, R.drawable.video_call_green};
-        final Integer[] lTexts = new Integer[]{R.string.action_voice_call, R.string.action_video_call};
+        new AlertDialog.Builder(this)
+                .setAdapter(new DialogCallAdapter(this), new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        onCallItemClicked(which);
+                    }
+                })
+                .show();
+    }
 
-        IconAndTextDialogFragment fragment = IconAndTextDialogFragment.newInstance(lIcons, lTexts,
-                ThemeUtils.INSTANCE.getColor(this, R.attr.vctr_riot_primary_background_color),
-                ThemeUtils.INSTANCE.getColor(this, R.attr.vctr_riot_primary_text_color));
-        fragment.setOnClickListener(new IconAndTextDialogFragment.OnItemClickListener() {
-            @Override
-            public void onItemClick(IconAndTextDialogFragment dialogFragment, int position) {
-                final boolean isVideoCall;
-                final int permissions;
-                final int requestCode;
+    /**
+     * @param which 0 for voice call, 1 for video call
+     */
+    private void onCallItemClicked(int which) {
+        final boolean isVideoCall;
+        final int permissions;
+        final int requestCode;
 
+        if (which == 0) {
+            isVideoCall = false;
+            permissions = PermissionsToolsKt.PERMISSIONS_FOR_AUDIO_IP_CALL;
+            requestCode = PermissionsToolsKt.PERMISSION_REQUEST_CODE_AUDIO_CALL;
+        } else {
+            isVideoCall = true;
+            permissions = PermissionsToolsKt.PERMISSIONS_FOR_VIDEO_IP_CALL;
+            requestCode = PermissionsToolsKt.PERMISSION_REQUEST_CODE_VIDEO_CALL;
+        }
 
-                if (position == 1) {
-                    isVideoCall = true;
-                    permissions = PermissionsToolsKt.PERMISSIONS_FOR_VIDEO_IP_CALL;
-                    requestCode = PermissionsToolsKt.PERMISSION_REQUEST_CODE_VIDEO_CALL;
-                } else {
-                    isVideoCall = false;
-                    permissions = PermissionsToolsKt.PERMISSIONS_FOR_AUDIO_IP_CALL;
-                    requestCode = PermissionsToolsKt.PERMISSION_REQUEST_CODE_AUDIO_CALL;
-                }
+        AlertDialog.Builder builder = new AlertDialog.Builder(VectorRoomActivity.this)
+                .setTitle(R.string.dialog_title_confirmation);
 
-                AlertDialog.Builder builder = new AlertDialog.Builder(VectorRoomActivity.this)
-                        .setTitle(R.string.dialog_title_confirmation);
+        if (isVideoCall) {
+            builder.setMessage(getString(R.string.start_video_call_prompt_msg));
+        } else {
+            builder.setMessage(getString(R.string.start_voice_call_prompt_msg));
+        }
 
-                if (isVideoCall) {
-                    builder.setMessage(getString(R.string.start_video_call_prompt_msg));
-                } else {
-                    builder.setMessage(getString(R.string.start_voice_call_prompt_msg));
-                }
-
-                builder
-                        .setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialog, int which) {
-                                if (PermissionsToolsKt.checkPermissions(permissions, VectorRoomActivity.this, requestCode)) {
-                                    startIpCall(PreferencesManager.useJitsiConfCall(VectorRoomActivity.this), isVideoCall);
-                                }
-                            }
-                        })
-                        .setNegativeButton(R.string.cancel, null)
-                        .show();
-            }
-        });
-
-        // display the fragment dialog
-        fragment.show(getSupportFragmentManager(), TAG_FRAGMENT_CALL_OPTIONS);
+        builder
+                .setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        if (PermissionsToolsKt.checkPermissions(permissions, VectorRoomActivity.this, requestCode)) {
+                            startIpCall(PreferencesManager.useJitsiConfCall(VectorRoomActivity.this), isVideoCall);
+                        }
+                    }
+                })
+                .setNegativeButton(R.string.cancel, null)
+                .show();
     }
 
     /**
@@ -3935,77 +3934,60 @@ public class VectorRoomActivity extends MXCActionBarActivity implements
             // hide the header room
             enableActionBarHeader(HIDE_ACTION_BAR_HEADER);
 
-            FragmentManager fm = getSupportFragmentManager();
-            IconAndTextDialogFragment fragment = (IconAndTextDialogFragment) fm.findFragmentByTag(TAG_FRAGMENT_ATTACHMENTS_DIALOG);
-
-            if (fragment != null) {
-                fragment.dismissAllowingStateLoss();
-            }
-
-            List<Integer> messagesList = new ArrayList<>();
-            List<Integer> iconsList = new ArrayList<>();
+            final List<DialogListItem> items = new ArrayList<>();
 
             // Send file
-            messagesList.add(R.string.option_send_files);
-            iconsList.add(R.drawable.ic_material_file);
+            items.add(DialogListItem.SendFile.INSTANCE);
 
             // Send voice
             if (PreferencesManager.isSendVoiceFeatureEnabled(this)) {
-                messagesList.add(R.string.option_send_voice);
-                iconsList.add(R.drawable.vector_micro_green);
+                items.add(DialogListItem.SendVoice.INSTANCE);
             }
 
             // Send sticker
-            messagesList.add(R.string.option_send_sticker);
-            iconsList.add(R.drawable.ic_send_sticker);
+            items.add(DialogListItem.SendSticker.INSTANCE);
 
             // Camera
             if (PreferencesManager.useNativeCamera(this)) {
-                messagesList.add(R.string.option_take_photo);
-                iconsList.add(R.drawable.ic_material_camera);
-                messagesList.add(R.string.option_take_video);
-                iconsList.add(R.drawable.ic_material_videocam);
+                items.add(DialogListItem.TakePhoto.INSTANCE);
+                items.add(DialogListItem.TakeVideo.INSTANCE);
             } else {
-                messagesList.add(R.string.option_take_photo_video);
-                iconsList.add(R.drawable.ic_material_camera);
+                items.add(DialogListItem.TakePhotoVideo.INSTANCE);
             }
 
-            final Integer[] messages = messagesList.toArray(new Integer[0]);
-            final Integer[] icons = iconsList.toArray(new Integer[0]);
+            new AlertDialog.Builder(this)
+                    .setAdapter(new DialogSendItemAdapter(this, items), new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            onSendChoiceClicked(items.get(which));
+                        }
+                    })
+                    .show();
+        }
+    }
 
-            fragment = IconAndTextDialogFragment.newInstance(icons, messages,
-                    ThemeUtils.INSTANCE.getColor(this, R.attr.vctr_riot_primary_background_color),
-                    ThemeUtils.INSTANCE.getColor(this, R.attr.vctr_riot_primary_text_color));
-            fragment.setOnClickListener(new IconAndTextDialogFragment.OnItemClickListener() {
-                @Override
-                public void onItemClick(IconAndTextDialogFragment dialogFragment, int position) {
-                    Integer selectedVal = messages[position];
-
-                    if (selectedVal == R.string.option_send_files) {
-                        launchFileSelectionIntent();
-                    } else if (selectedVal == R.string.option_send_voice) {
-                        launchAudioRecorderIntent();
-                    } else if (selectedVal == R.string.option_send_sticker) {
-                        startStickerPickerActivity();
-                    } else if (selectedVal == R.string.option_take_photo_video) {
-                        if (PermissionsToolsKt.checkPermissions(PermissionsToolsKt.PERMISSIONS_FOR_TAKING_PHOTO,
-                                VectorRoomActivity.this, PermissionsToolsKt.PERMISSION_REQUEST_CODE_LAUNCH_CAMERA)) {
-                            launchCamera();
-                        }
-                    } else if (selectedVal == R.string.option_take_photo) {
-                        if (PermissionsToolsKt.checkPermissions(PermissionsToolsKt.PERMISSIONS_FOR_TAKING_PHOTO,
-                                VectorRoomActivity.this, PermissionsToolsKt.PERMISSION_REQUEST_CODE_LAUNCH_NATIVE_CAMERA)) {
-                            launchNativeCamera();
-                        }
-                    } else if (selectedVal == R.string.option_take_video) {
-                        if (PermissionsToolsKt.checkPermissions(PermissionsToolsKt.PERMISSIONS_FOR_TAKING_PHOTO,
-                                VectorRoomActivity.this, PermissionsToolsKt.PERMISSION_REQUEST_CODE_LAUNCH_NATIVE_VIDEO_CAMERA)) {
-                            launchNativeVideoRecorder();
-                        }
-                    }
-                }
-            });
-            fragment.show(fm, TAG_FRAGMENT_ATTACHMENTS_DIALOG);
+    private void onSendChoiceClicked(DialogListItem dialogListItem) {
+        if (dialogListItem instanceof DialogListItem.SendFile) {
+            launchFileSelectionIntent();
+        } else if (dialogListItem instanceof DialogListItem.SendVoice) {
+            launchAudioRecorderIntent();
+        } else if (dialogListItem instanceof DialogListItem.SendSticker) {
+            startStickerPickerActivity();
+        } else if (dialogListItem instanceof DialogListItem.TakePhotoVideo) {
+            if (PermissionsToolsKt.checkPermissions(PermissionsToolsKt.PERMISSIONS_FOR_TAKING_PHOTO,
+                    VectorRoomActivity.this, PermissionsToolsKt.PERMISSION_REQUEST_CODE_LAUNCH_CAMERA)) {
+                launchCamera();
+            }
+        } else if (dialogListItem instanceof DialogListItem.TakePhoto) {
+            if (PermissionsToolsKt.checkPermissions(PermissionsToolsKt.PERMISSIONS_FOR_TAKING_PHOTO,
+                    VectorRoomActivity.this, PermissionsToolsKt.PERMISSION_REQUEST_CODE_LAUNCH_NATIVE_CAMERA)) {
+                launchNativeCamera();
+            }
+        } else if (dialogListItem instanceof DialogListItem.TakeVideo) {
+            if (PermissionsToolsKt.checkPermissions(PermissionsToolsKt.PERMISSIONS_FOR_TAKING_PHOTO,
+                    VectorRoomActivity.this, PermissionsToolsKt.PERMISSION_REQUEST_CODE_LAUNCH_NATIVE_VIDEO_CAMERA)) {
+                launchNativeVideoRecorder();
+            }
         }
     }
 
