@@ -417,7 +417,7 @@ Kontuan izan ekintza honek aplikazioa berrabiaraziko duela eta denbora bat behar
     <string name="settings_add_email_address">Gehitu e-mail helbidea</string>
     <string name="settings_phone_number">Telefonoa</string>
     <string name="settings_add_phone_number">Gehitu telefono zenbakia</string>
-    <string name="settings_app_info_link_summary">Aplikazioaren sistema-informazio pantaila</string>
+    <string name="settings_app_info_link_summary">Erakutsi aplikazioaren informazioa sistemaren ezarpenetan.</string>
     <string name="settings_app_info_link_title">Aplikazioaren informazioa</string>
 
     <string name="settings_enable_all_notif">Gaitu jakinarazpenak kontu honetarako</string>
