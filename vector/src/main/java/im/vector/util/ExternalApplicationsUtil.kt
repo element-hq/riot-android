@@ -17,7 +17,6 @@
 package im.vector.util
 
 import android.app.Activity
-import android.app.Fragment
 import android.content.ActivityNotFoundException
 import android.content.ContentValues
 import android.content.Context
@@ -26,6 +25,7 @@ import android.net.Uri
 import android.os.Build
 import android.provider.Browser
 import android.provider.MediaStore
+import android.support.v4.app.Fragment
 import android.support.v4.content.FileProvider
 import androidx.core.widget.toast
 import im.vector.BuildConfig

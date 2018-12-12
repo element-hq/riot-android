@@ -35,7 +35,7 @@ import com.bumptech.glide.request.RequestOptions;
 import com.google.gson.JsonElement;
 
 import org.matrix.androidsdk.MXSession;
-import org.matrix.androidsdk.db.MXMediasCache;
+import org.matrix.androidsdk.db.MXMediaCache;
 import org.matrix.androidsdk.listeners.IMXMediaDownloadListener;
 import org.matrix.androidsdk.listeners.IMXMediaUploadListener;
 import org.matrix.androidsdk.listeners.MXMediaDownloadListener;
@@ -69,7 +69,7 @@ class VectorMessagesAdapterMediasHelper {
     private final Context mContext;
     private final int mMaxImageWidth;
     private final int mMaxImageHeight;
-    private final MXMediasCache mMediasCache;
+    private final MXMediaCache mMediasCache;
     private IMessagesAdapterActionsListener mVectorMessagesAdapterEventsListener;
 
     private final int mNotSentMessageTextColor;
@@ -85,7 +85,7 @@ class VectorMessagesAdapterMediasHelper {
         mSession = session;
         mMaxImageWidth = maxImageWidth;
         mMaxImageHeight = maxImageHeight;
-        mMediasCache = mSession.getMediasCache();
+        mMediasCache = mSession.getMediaCache();
 
         mNotSentMessageTextColor = notSentMessageTextColor;
         mDefaultMessageTextColor = defaultMessageTextColor;
@@ -128,10 +128,10 @@ class VectorMessagesAdapterMediasHelper {
             return;
         }
 
-        IMXMediaUploadListener.UploadStats uploadStats = mSession.getMediasCache().getStatsForUploadId(mediaUrl);
+        IMXMediaUploadListener.UploadStats uploadStats = mSession.getMediaCache().getStatsForUploadId(mediaUrl);
 
         if (null != uploadStats) {
-            mSession.getMediasCache().addUploadListener(mediaUrl, new MXMediaUploadListener() {
+            mSession.getMediaCache().addUploadListener(mediaUrl, new MXMediaUploadListener() {
                 @Override
                 public void onUploadProgress(String uploadId, UploadStats uploadStats) {
                     if (TextUtils.equals((String) uploadProgressLayout.getTag(), uploadId)) {
@@ -460,7 +460,7 @@ class VectorMessagesAdapterMediasHelper {
         int progress;
 
         if (isUploadingThumbnail) {
-            progress = mSession.getMediasCache().getProgressValueForUploadId(uploadingUrl);
+            progress = mSession.getMediaCache().getProgressValueForUploadId(uploadingUrl);
         } else {
             if (message instanceof VideoMessage) {
                 uploadingUrl = ((VideoMessage) message).getUrl();
@@ -470,12 +470,12 @@ class VectorMessagesAdapterMediasHelper {
                 isUploadingContent = ((ImageMessage) message).isLocalContent();
             }
 
-            progress = mSession.getMediasCache().getProgressValueForUploadId(uploadingUrl);
+            progress = mSession.getMediaCache().getProgressValueForUploadId(uploadingUrl);
         }
 
         if (progress >= 0) {
             uploadProgressLayout.setTag(uploadingUrl);
-            mSession.getMediasCache().addUploadListener(uploadingUrl, new MXMediaUploadListener() {
+            mSession.getMediaCache().addUploadListener(uploadingUrl, new MXMediaUploadListener() {
                 @Override
                 public void onUploadProgress(String uploadId, UploadStats uploadStats) {
                     if (TextUtils.equals((String) uploadProgressLayout.getTag(), uploadId)) {
@@ -530,7 +530,7 @@ class VectorMessagesAdapterMediasHelper {
 
         showUploadFailure(convertView, isVideoMessage ? VectorMessagesAdapter.ROW_TYPE_VIDEO : VectorMessagesAdapter.ROW_TYPE_IMAGE, false);
         uploadSpinner.setVisibility(((progress < 0) && event.isSending()) ? View.VISIBLE : View.GONE);
-        refreshUploadViews(event, mSession.getMediasCache().getStatsForUploadId(uploadingUrl), uploadProgressLayout);
+        refreshUploadViews(event, mSession.getMediaCache().getStatsForUploadId(uploadingUrl), uploadProgressLayout);
 
         if (isUploadingContent) {
             progress = 10 + (progress * 90 / 100);
@@ -762,7 +762,7 @@ class VectorMessagesAdapterMediasHelper {
             }
 
             if (!TextUtils.isEmpty(url)) {
-                return null != mSession.getMediasCache().downloadIdFromUrl(url);
+                return null != mSession.getMediaCache().downloadIdFromUrl(url);
             }
         }
 

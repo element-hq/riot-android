@@ -123,6 +123,8 @@ public class VectorRoomCreationActivity extends MXCActionBarActivity {
 
     @Override
     public void initUiAndData() {
+        configureToolbar();
+
         if (CommonActivityUtils.shouldRestartApp(this)) {
             Log.e(LOG_TAG, "onCreate : Restart the application.");
             CommonActivityUtils.restartApp(this);

@@ -19,12 +19,10 @@ package im.vector.activity
 import android.content.Context
 import android.content.Intent
 import android.os.Build
-import android.support.annotation.StringRes
 import android.webkit.WebChromeClient
 import android.webkit.WebView
 import butterknife.BindView
 import im.vector.R
-import im.vector.ui.themes.ActivityOtherThemes
 import im.vector.webview.VectorWebViewClient
 import im.vector.webview.WebViewMode
 
@@ -47,8 +45,6 @@ class VectorWebViewActivity : VectorAppCompatActivity() {
     /* =====================================================================@=====================
      * Life cycle
      * ========================================================================================== */
-
-    override fun getOtherThemes() = ActivityOtherThemes.NoActionBar
 
     override fun getLayoutRes() = R.layout.activity_vector_web_view
 
@@ -82,9 +78,9 @@ class VectorWebViewActivity : VectorAppCompatActivity() {
         }
 
         val url = intent.extras.getString(EXTRA_URL)
-        val titleRes = intent.extras.getInt(EXTRA_TITLE_RES_ID, INVALID_RES_ID)
-        if (titleRes != INVALID_RES_ID) {
-            setTitle(titleRes)
+        val title = intent.extras.getString(EXTRA_TITLE, USE_TITLE_FROM_WEB_PAGE)
+        if (title != USE_TITLE_FROM_WEB_PAGE) {
+            setTitle(title)
         }
 
         val webViewMode = intent.extras.getSerializable(EXTRA_MODE) as WebViewMode
@@ -92,7 +88,7 @@ class VectorWebViewActivity : VectorAppCompatActivity() {
         webView.webViewClient = VectorWebViewClient(eventListener)
         webView.webChromeClient = object : WebChromeClient() {
             override fun onReceivedTitle(view: WebView, title: String) {
-                if (titleRes == INVALID_RES_ID) {
+                if (title == USE_TITLE_FROM_WEB_PAGE) {
                     setTitle(title)
                 }
             }
@@ -118,20 +114,19 @@ class VectorWebViewActivity : VectorAppCompatActivity() {
 
     companion object {
         private const val EXTRA_URL = "EXTRA_URL"
-        private const val EXTRA_TITLE_RES_ID = "EXTRA_TITLE_RES_ID"
+        private const val EXTRA_TITLE = "EXTRA_TITLE"
         private const val EXTRA_MODE = "EXTRA_MODE"
 
-        // TODO Move this somewhere else
-        private const val INVALID_RES_ID = -1
+        private const val USE_TITLE_FROM_WEB_PAGE = ""
 
         fun getIntent(context: Context,
                       url: String,
-                      @StringRes titleRes: Int = INVALID_RES_ID,
+                      title: String = USE_TITLE_FROM_WEB_PAGE,
                       mode: WebViewMode = WebViewMode.DEFAULT): Intent {
             return Intent(context, VectorWebViewActivity::class.java)
                     .apply {
                         putExtra(EXTRA_URL, url)
-                        putExtra(EXTRA_TITLE_RES_ID, titleRes)
+                        putExtra(EXTRA_TITLE, title)
                         putExtra(EXTRA_MODE, mode)
                     }
         }

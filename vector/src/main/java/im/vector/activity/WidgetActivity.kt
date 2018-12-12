@@ -36,7 +36,6 @@ import butterknife.BindView
 import butterknife.OnClick
 import im.vector.Matrix
 import im.vector.R
-import im.vector.ui.themes.ActivityOtherThemes
 import im.vector.widgets.Widget
 import im.vector.widgets.WidgetsManager
 import org.matrix.androidsdk.MXSession
@@ -82,8 +81,6 @@ class WidgetActivity : VectorAppCompatActivity() {
     /* ==========================================================================================
      * LIFE CYCLE
      * ========================================================================================== */
-
-    override fun getOtherThemes() = ActivityOtherThemes.NoActionBar
 
     override fun getLayoutRes() = R.layout.activity_widget
 

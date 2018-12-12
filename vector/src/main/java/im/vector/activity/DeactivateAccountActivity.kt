@@ -24,7 +24,6 @@ import butterknife.BindView
 import butterknife.OnClick
 import im.vector.Matrix
 import im.vector.R
-import im.vector.ui.themes.ActivityOtherThemes
 import org.matrix.androidsdk.MXSession
 import org.matrix.androidsdk.rest.callback.SimpleApiCallback
 import org.matrix.androidsdk.rest.model.MatrixError
@@ -53,8 +52,6 @@ class DeactivateAccountActivity : VectorAppCompatActivity() {
     /* ==========================================================================================
      * Life cycle
      * ========================================================================================== */
-
-    override fun getOtherThemes() = ActivityOtherThemes.NoActionBar
 
     override fun getLayoutRes() = R.layout.activity_deactivate_account
 

@@ -24,6 +24,7 @@ import android.util.AttributeSet;
 import android.view.View;
 
 import im.vector.R;
+import im.vector.ui.themes.ThemeUtils;
 
 /**
  * View that displays a disc representing a percentage.
@@ -42,7 +43,7 @@ public class PieFractionView extends View {
     private int restColor;
 
     public int getFillColor() {
-        return getResources().getColor(R.color.vector_green_color);
+        return ThemeUtils.INSTANCE.getColor(getContext(), R.attr.colorAccent);
     }
 
     public int getRestColor() {

@@ -63,7 +63,7 @@ import org.matrix.androidsdk.adapters.MessageRow;
 import org.matrix.androidsdk.crypto.MXCryptoError;
 import org.matrix.androidsdk.crypto.data.MXDeviceInfo;
 import org.matrix.androidsdk.data.Room;
-import org.matrix.androidsdk.db.MXMediasCache;
+import org.matrix.androidsdk.db.MXMediaCache;
 import org.matrix.androidsdk.interfaces.HtmlToolbox;
 import org.matrix.androidsdk.rest.model.Event;
 import org.matrix.androidsdk.rest.model.EventContent;
@@ -191,7 +191,7 @@ public class VectorMessagesAdapter extends AbstractMessagesAdapter {
     private final int mMaxImageHeight;
 
     // media cache
-    private final MXMediasCache mMediasCache;
+    private final MXMediaCache mMediasCache;
 
     // session
     final MXSession mSession;
@@ -268,7 +268,7 @@ public class VectorMessagesAdapter extends AbstractMessagesAdapter {
     /**
      * Creates a messages adapter with the default layouts.
      */
-    public VectorMessagesAdapter(MXSession session, Context context, MXMediasCache mediasCache) {
+    public VectorMessagesAdapter(MXSession session, Context context, MXMediaCache mediasCache) {
         this(session, context,
                 R.layout.adapter_item_vector_message_text_emote_notice,
                 R.layout.adapter_item_vector_message_image_video,
@@ -321,7 +321,7 @@ public class VectorMessagesAdapter extends AbstractMessagesAdapter {
                           int stickerResLayoutId,
                           int hiddenResLayoutId,
                           int roomVersionedResLayoutId,
-                          MXMediasCache mediasCache) {
+                          MXMediaCache mediasCache) {
         super(context, 0);
         mContext = context;
         mRowTypeToLayoutId.put(ROW_TYPE_TEXT, textResLayoutId);
@@ -1691,8 +1691,9 @@ public class VectorMessagesAdapter extends AbstractMessagesAdapter {
 
             // set the message marker
             convertView.findViewById(R.id.messagesAdapter_highlight_message_marker)
-                    .setBackgroundColor(ContextCompat.getColor(mContext,
-                            TextUtils.equals(mHighlightedEventId, event.eventId) ? R.color.vector_green_color : android.R.color.transparent));
+                    .setBackgroundColor(TextUtils.equals(mHighlightedEventId, event.eventId) ?
+                            ThemeUtils.INSTANCE.getColor(mContext, R.attr.colorAccent) :
+                            ContextCompat.getColor(mContext, android.R.color.transparent));
 
             // display the day separator
             VectorMessagesAdapterHelper.setHeader(convertView, headerMessage(position), position);
@@ -2225,7 +2226,7 @@ public class VectorMessagesAdapter extends AbstractMessagesAdapter {
                             && TextUtils.equals(mSession.getMyUserId(), event.getSender())) {
                         e2eIconByEventId.put(event.eventId, R.drawable.e2e_verified);
                         MXDeviceInfo deviceInfo = mSession.getCrypto()
-                                .deviceWithIdentityKey(encryptedEventContent.sender_key, event.getSender(), encryptedEventContent.algorithm);
+                                .deviceWithIdentityKey(encryptedEventContent.sender_key, encryptedEventContent.algorithm);
 
                         if (null != deviceInfo) {
                             e2eDeviceInfoByEventId.put(event.eventId, deviceInfo);
@@ -2233,7 +2234,7 @@ public class VectorMessagesAdapter extends AbstractMessagesAdapter {
 
                     } else {
                         MXDeviceInfo deviceInfo = mSession.getCrypto()
-                                .deviceWithIdentityKey(encryptedEventContent.sender_key, event.getSender(), encryptedEventContent.algorithm);
+                                .deviceWithIdentityKey(encryptedEventContent.sender_key, encryptedEventContent.algorithm);
 
                         if (null != deviceInfo) {
                             e2eDeviceInfoByEventId.put(event.eventId, deviceInfo);
@@ -2447,7 +2448,7 @@ public class VectorMessagesAdapter extends AbstractMessagesAdapter {
 
                     // move left the body
                     bodyLayout.setMargins(4, bodyLayout.topMargin, 4, bodyLayout.bottomMargin);
-                    highlightMakerView.setBackgroundColor(ContextCompat.getColor(mContext, R.color.vector_green_color));
+                    highlightMakerView.setBackgroundColor(ThemeUtils.INSTANCE.getColor(mContext, R.attr.colorAccent));
                 }
             } else {
                 highlightMakerView.setBackgroundColor(ContextCompat.getColor(mContext, android.R.color.transparent));
@@ -2511,11 +2512,11 @@ public class VectorMessagesAdapter extends AbstractMessagesAdapter {
             menu.findItem(R.id.ic_action_vector_quote).setVisible(true);
         }
 
-        if (event.isUploadingMedias(mMediasCache)) {
+        if (event.isUploadingMedia(mMediasCache)) {
             menu.findItem(R.id.ic_action_vector_cancel_upload).setVisible(true);
         }
 
-        if (event.isDownloadingMedias(mMediasCache)) {
+        if (event.isDownloadingMedia(mMediasCache)) {
             menu.findItem(R.id.ic_action_vector_cancel_download).setVisible(true);
         }
 

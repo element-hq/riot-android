@@ -31,12 +31,10 @@ import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
 import android.text.TextWatcher;
 import android.view.KeyEvent;
-import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.ViewGroup;
 import android.view.inputmethod.EditorInfo;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.AbsListView;
@@ -46,10 +44,11 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import org.jetbrains.annotations.NotNull;
 import org.matrix.androidsdk.MXSession;
 import org.matrix.androidsdk.data.Room;
 import org.matrix.androidsdk.data.RoomState;
-import org.matrix.androidsdk.db.MXMediasCache;
+import org.matrix.androidsdk.db.MXMediaCache;
 import org.matrix.androidsdk.listeners.MXEventListener;
 import org.matrix.androidsdk.rest.callback.ApiCallback;
 import org.matrix.androidsdk.rest.callback.SimpleApiCallback;
@@ -68,6 +67,7 @@ import java.util.Timer;
 import java.util.TimerTask;
 
 import androidx.core.widget.ToastKt;
+import butterknife.BindView;
 import im.vector.R;
 import im.vector.activity.CommonActivityUtils;
 import im.vector.activity.MXCActionBarActivity;
@@ -93,9 +93,11 @@ public class VectorRoomDetailsMembersFragment extends VectorBaseFragment {
     private Room mRoom;
 
     // fragment items
-    private View mProgressView;
+    @BindView(R.id.add_participants_progress_view)
+    View mProgressView;
     private VectorRoomDetailsMembersAdapter mAdapter;
-    private ExpandableListView mParticipantsListView;
+    @BindView(R.id.room_details_members_exp_list_view)
+    ExpandableListView mParticipantsListView;
     private Map<Integer, Boolean> mIsListViewGroupExpandedMap;
 
     private boolean mIsMultiSelectionMode;
@@ -317,14 +319,16 @@ public class VectorRoomDetailsMembersFragment extends VectorBaseFragment {
         }
     };
 
-
-    // top view
-    private View mViewHierarchy;
-    private EditText mPatternToSearchEditText;
-    private TextView mSearchNoResultTextView;
-    private ImageView mClearSearchImageView;
-    private String mPatternValue;
-    private View mAddMembersFloatingActionButton;
+    // search room members management
+    @BindView(R.id.search_value_edit_text)
+    EditText mPatternToSearchEditText;
+    @BindView(R.id.search_no_results_text_view)
+    TextView mSearchNoResultTextView;
+    @BindView(R.id.clear_search_icon_image_view)
+    ImageView mClearSearchImageView;
+    String mPatternValue;
+    @BindView(R.id.add_participants_create_view)
+    View mAddMembersFloatingActionButton;
 
     // create an instance of the fragment
     public static VectorRoomDetailsMembersFragment newInstance() {
@@ -448,10 +452,14 @@ public class VectorRoomDetailsMembersFragment extends VectorBaseFragment {
         }
     }
 
-    @SuppressLint("LongLogTag")
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        mViewHierarchy = inflater.inflate(R.layout.fragment_vector_add_participants, container, false);
+    public int getLayoutResId() {
+        return R.layout.fragment_vector_add_participants;
+    }
+
+    @Override
+    public void onViewCreated(@NotNull View view, @org.jetbrains.annotations.Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
 
         Activity activity = getActivity();
 
@@ -485,8 +493,6 @@ public class VectorRoomDetailsMembersFragment extends VectorBaseFragment {
         setHasOptionsMenu(true);
 
         mUIHandler = new Handler(Looper.getMainLooper());
-
-        return mViewHierarchy;
     }
 
     @Override
@@ -813,9 +819,7 @@ public class VectorRoomDetailsMembersFragment extends VectorBaseFragment {
      * Finalize the fragment initialization.
      */
     private void finalizeInit() {
-        MXMediasCache mxMediasCache = mSession.getMediasCache();
-
-        mAddMembersFloatingActionButton = mViewHierarchy.findViewById(R.id.add_participants_create_view);
+        MXMediaCache mxMediasCache = mSession.getMediaCache();
 
         mAddMembersFloatingActionButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -828,11 +832,6 @@ public class VectorRoomDetailsMembersFragment extends VectorBaseFragment {
                 getActivity().startActivityForResult(intent, INVITE_USER_REQUEST_CODE);
             }
         });
-
-        // search room members management
-        mPatternToSearchEditText = mViewHierarchy.findViewById(R.id.search_value_edit_text);
-        mClearSearchImageView = mViewHierarchy.findViewById(R.id.clear_search_icon_image_view);
-        mSearchNoResultTextView = mViewHierarchy.findViewById(R.id.search_no_results_text_view);
 
         // add IME search action handler
         mPatternToSearchEditText.setOnEditorActionListener(new TextView.OnEditorActionListener() {
@@ -865,8 +864,6 @@ public class VectorRoomDetailsMembersFragment extends VectorBaseFragment {
             }
         });
 
-        mProgressView = mViewHierarchy.findViewById(R.id.add_participants_progress_view);
-        mParticipantsListView = mViewHierarchy.findViewById(R.id.room_details_members_exp_list_view);
         mAdapter = new VectorRoomDetailsMembersAdapter(getActivity(),
                 R.layout.adapter_item_vector_add_participants, R.layout.adapter_item_vector_recent_header, mSession, mRoom.getRoomId(), mxMediasCache);
         mParticipantsListView.setAdapter(mAdapter);

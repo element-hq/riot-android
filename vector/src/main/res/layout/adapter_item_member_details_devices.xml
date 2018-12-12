@@ -58,7 +58,7 @@
             android:layout_width="0dp"
             android:layout_height="25dp"
             android:layout_weight="45"
-            android:background="@color/vector_green_color"
+            android:background="?attr/colorAccent"
             android:text="@string/encryption_information_verify"
             android:textColor="@android:color/white" />
 
@@ -73,7 +73,7 @@
             android:layout_width="0dp"
             android:layout_height="25dp"
             android:layout_weight="45"
-            android:background="@color/vector_green_color"
+            android:background="?attr/colorAccent"
             android:text="@string/encryption_information_block"
             android:textColor="@android:color/white" />
     </LinearLayout>

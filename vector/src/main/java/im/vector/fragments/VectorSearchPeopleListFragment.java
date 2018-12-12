@@ -20,11 +20,11 @@ package im.vector.fragments;
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.TextUtils;
-import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.ExpandableListView;
 
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import org.matrix.androidsdk.MXPatterns;
 import org.matrix.androidsdk.MXSession;
 import org.matrix.androidsdk.fragments.MatrixMessageListFragment;
@@ -35,6 +35,7 @@ import org.matrix.androidsdk.rest.model.User;
 import java.util.List;
 import java.util.Map;
 
+import butterknife.BindView;
 import im.vector.Matrix;
 import im.vector.R;
 import im.vector.activity.VectorBaseSearchActivity;
@@ -52,7 +53,8 @@ public class VectorSearchPeopleListFragment extends VectorBaseFragment {
 
     // the session
     private MXSession mSession;
-    private ExpandableListView mPeopleListView;
+    @BindView(R.id.search_people_list)
+    ExpandableListView mPeopleListView;
     private VectorParticipantsAdapter mAdapter;
 
     // contacts manager listener
@@ -138,10 +140,17 @@ public class VectorSearchPeopleListFragment extends VectorBaseFragment {
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        super.onCreateView(inflater, container, savedInstanceState);
+    public int getLayoutResId() {
         Bundle args = getArguments();
 
+        return args.getInt(ARG_LAYOUT_ID);
+    }
+
+    @Override
+    public void onViewCreated(@NotNull View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+
+        Bundle args = getArguments();
 
         String matrixId = args.getString(ARG_MATRIX_ID);
         mSession = Matrix.getInstance(getActivity()).getSession(matrixId);
@@ -150,8 +159,6 @@ public class VectorSearchPeopleListFragment extends VectorBaseFragment {
             throw new RuntimeException("Must have valid default MXSession.");
         }
 
-        View v = inflater.inflate(args.getInt(ARG_LAYOUT_ID), container, false);
-        mPeopleListView = (ExpandableListView) v.findViewById(R.id.search_people_list);
         // the chevron is managed in the header view
         mPeopleListView.setGroupIndicator(null);
         mAdapter = new VectorParticipantsAdapter(getActivity(),
@@ -186,8 +193,6 @@ public class VectorSearchPeopleListFragment extends VectorBaseFragment {
                 return true;
             }
         });
-
-        return v;
     }
 
     /**

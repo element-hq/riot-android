@@ -13,6 +13,11 @@
         <item name="theme">@style/VectorToolbarTheme</item>
     </style>
 
+    <style name="VectorToolbarStyle.Group">
+        <item name="android:background">@color/tab_groups</item>
+        <item name="background">@color/tab_groups</item>
+    </style>
+
     <style name="VectorToolbarTheme">
         <!-- toolbar icons -->
         <item name="colorControlNormal">@android:color/white</item>
@@ -29,7 +34,7 @@
         <item name="android:textColor">@android:color/white</item>
     </style>
 
-    <style name="vector.PopupMenu" parent="@android:style/Widget.PopupMenu">
+    <style name="Vector.PopupMenu" parent="@android:style/Widget.PopupMenu">
         <item name="android:popupBackground">?attr/vctr_riot_primary_background_color</item>
         <item name="android:textColor">?attr/vctr_riot_primary_text_color</item>
         <item name="android:textSize">16sp</item>
@@ -43,7 +48,7 @@
     </style>
 
     <!-- custom action bar -->
-    <style name="Vector.Styled.ActionBar" parent="Widget.AppCompat.Light.ActionBar">
+    <style name="Vector.Styled.ActionBar" parent="Widget.AppCompat.Toolbar">
         <item name="android:background">?attr/vctr_primary_color</item>
         <item name="background">?attr/vctr_primary_color</item>
 
@@ -99,11 +104,11 @@
 
     <!-- tabbar text color -->
     <style name="VectorSearches.TabText" parent="Widget.AppCompat.ActionBar.TabText">
-        <item name="android:textColor">@color/vector_green_color</item>
+        <item name="android:textColor">?attr/colorAccent</item>
     </style>
 
     <style name="VectorSearches.ActionBarTheme" parent="ThemeOverlay.AppCompat.ActionBar">
-        <item name="colorControlNormal">@color/vector_green_color</item>
+        <item name="colorControlNormal">?attr/colorAccent</item>
     </style>
 
     <style name="VectorPeopleSearches.TabLayout" parent="Widget.Design.TabLayout">
@@ -111,7 +116,7 @@
         <item name="tabMode">fixed</item>
         <item name="tabPaddingStart">0dp</item>
         <item name="tabPaddingEnd">0dp</item>
-        <item name="tabBackground">@color/vector_green_color</item>
+        <item name="tabBackground">?attr/colorAccent</item>
         <item name="tabTextColor">@android:color/white</item>
         <item name="tabSelectedTextColor">@android:color/white</item>
         <item name="tabIndicatorColor">@android:color/white</item>
@@ -124,9 +129,9 @@
         <item name="tabPaddingStart">0dp</item>
         <item name="tabPaddingEnd">0dp</item>
         <item name="tabBackground">?attr/vctr_tab_bar_inverted_background_color</item>
-        <item name="tabTextColor">@color/vector_green_color</item>
-        <item name="tabSelectedTextColor">@color/vector_green_color</item>
-        <item name="tabIndicatorColor">@color/vector_green_color</item>
+        <item name="tabTextColor">?attr/colorAccent</item>
+        <item name="tabSelectedTextColor">?attr/colorAccent</item>
+        <item name="tabIndicatorColor">?attr/colorAccent</item>
         <item name="tabMaxWidth">0dp</item>
     </style>
 
@@ -140,10 +145,6 @@
         <item name="android:paddingRight">16dp</item>
         <item name="android:paddingTop">10dp</item>
         <item name="android:paddingBottom">10dp</item>
-    </style>
-
-    <style name="CheckBoxTheme">
-        <item name="colorAccent">@color/vector_green_color</item>
     </style>
 
     <style name="SpinnerTheme">
@@ -165,11 +166,6 @@
 
     <style name="Floating_Actions_Menu.Light">
         <item name="android:background">@drawable/vector_background_fab_label_light</item>
-    </style>
-
-    <style name="Group.Styled.ActionBar" parent="Vector.Styled.ActionBar">
-        <item name="android:background">@color/tab_groups</item>
-        <item name="background">@color/tab_groups</item>
     </style>
 
     <style name="Vector.TabView.Group" parent="Widget.AppCompat.ActionBar.TabView">

@@ -16,7 +16,7 @@
 package im.vector.view
 
 import android.content.Context
-import android.preference.PreferenceManager
+import android.support.v7.preference.PreferenceManager
 import android.text.Html
 import android.text.TextUtils
 import android.text.method.LinkMovementMethod
@@ -82,7 +82,7 @@ class UrlPreviewView @JvmOverloads constructor(
             visibility = View.GONE
         } else {
             visibility = View.VISIBLE
-            session.mediasCache.loadAvatarThumbnail(session.homeServerConfig,
+            session.mediaCache.loadAvatarThumbnail(session.homeServerConfig,
                     mImageView, preview.thumbnailURL, context.resources.getDimensionPixelSize(R.dimen.profile_avatar_size))
 
             mTitleTextView.let {

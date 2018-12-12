@@ -3,7 +3,7 @@
 
     <!-- LIGHT THEME COLORS -->
 
-    <style name="Theme.Vector.Light" parent="Theme.AppCompat.Light">
+    <style name="AppTheme.Base.Light" parent="Theme.AppCompat.Light.NoActionBar">
         <!-- default background color -->
         <item name="vctr_riot_primary_background_color">@color/riot_primary_background_color_light</item>
 
@@ -11,7 +11,7 @@
         <item name="vctr_waiting_background_color">#AAAAAAAA</item>
 
         <!-- primary dark color (status bar) -->
-        <item name="vctr_primary_dark_color">@color/vector_green_color_dark</item>
+        <item name="vctr_primary_dark_color">@color/primary_color_light_dark</item>
 
         <!-- application bar background color -->
         <item name="vctr_primary_color">@color/primary_color_light</item>
@@ -25,8 +25,8 @@
         <!-- application bar text hint color -->
         <item name="vctr_primary_hint_text_color">@color/primary_hint_text_color_light</item>
 
-        <item name="vctr_tab_home">@color/vector_green_color</item>
-        <item name="vctr_tab_home_secondary">@color/vector_green_color_dark</item>
+        <item name="vctr_tab_home">@color/primary_color_light</item>
+        <item name="vctr_tab_home_secondary">@color/primary_color_light_dark</item>
 
         <!-- default text colors -->
         <item name="vctr_riot_primary_text_color">@color/riot_primary_text_color_light</item>
@@ -39,12 +39,12 @@
         <item name="vctr_unsent_message_text_color">#FFFF4444</item>
         <item name="vctr_message_text_color">?attr/vctr_riot_primary_text_color</item>
         <item name="vctr_notice_text_color">#903C3C3C</item>
-        <item name="vctr_encrypting_message_text_color">@color/vector_green_color</item>
+        <item name="vctr_encrypting_message_text_color">@color/primary_color_light</item>
         <item name="vctr_sending_message_text_color">#AAA</item>
         <item name="vctr_highlighted_message_text_color">@color/vector_fuchsia_color</item>
-        <item name="vctr_highlighted_searched_message_text_color">@color/vector_green_color</item>
+        <item name="vctr_highlighted_searched_message_text_color">@color/primary_color_light</item>
         <item name="vctr_search_mode_room_name_text_color">#333C3C3C</item>
-        <item name="vctr_unread_marker_line_color">@color/vector_green_color</item>
+        <item name="vctr_unread_marker_line_color">@color/primary_color_light</item>
         <item name="vctr_markdown_block_background_color">#FFEEEEEE</item>
         <item name="vctr_fenced_code_block_background_color">#FF00FF00</item>
         <item name="vctr_room_activity_divider_color">#FFF2F2F2</item>
@@ -87,7 +87,7 @@
         <item name="vctr_preference_divider_color">#e1e1e1</item>
 
         <!-- icon colors -->
-        <item name="vctr_default_icon_tint_color">@color/vector_green_color</item>
+        <item name="vctr_default_icon_tint_color">@color/primary_color_light</item>
         <item name="vctr_settings_icon_tint_color">@android:color/black</item>
         <item name="vctr_icon_tint_on_light_action_bar_color">@android:color/white</item>
         <item name="vctr_icon_tint_on_dark_action_bar_color">@android:color/white</item>
@@ -113,11 +113,10 @@
 
         <item name="vctr_pill_text_color_user_id">@color/riot_primary_text_color_light</item>
         <item name="vctr_pill_text_color_room_alias">@android:color/white</item>
-    </style>
 
-    <!-- Base application theme. -->
-    <style name="AppTheme.Base.Light" parent="Theme.Vector.Light">
+        <item name="vctr_direct_chat_circle">@drawable/direct_chat_circle_light</item>
 
+        <!-- ANDROID SUPPORT ATTRIBUTES -->
         <!-- disable the overscroll because setOverscrollHeader/Footer don't always work -->
         <item name="android:overScrollMode">never</item>
 
@@ -125,8 +124,8 @@
         <item name="android:windowActionBar">true</item>
 
         <!-- status bar color -->
-        <item name="colorPrimaryDark">@color/vector_green_color_dark</item>
-        <item name="colorPrimary">@color/vector_green_color</item>
+        <item name="colorPrimaryDark">@color/primary_color_light_dark</item>
+        <item name="colorPrimary">@color/primary_color_light</item>
 
         <!-- activities background -->
         <item name="android:windowBackground">@color/riot_primary_background_color_light</item>
@@ -135,7 +134,7 @@
         <item name="android:typeface">sans</item>
 
         <!-- android ui button -->
-        <item name="colorAccent">@color/vector_green_color</item>
+        <item name="colorAccent">@color/primary_color_light</item>
 
         <!-- custom action bar -->
         <item name="android:actionBarStyle">@style/Vector.Styled.ActionBar</item>
@@ -147,7 +146,7 @@
         <!-- remove the shadow under the actionbar -->
         <item name="android:windowContentOverlay">@null</item>
 
-        <item name="android:popupMenuStyle">@style/vector.PopupMenu</item>
+        <item name="android:popupMenuStyle">@style/Vector.PopupMenu</item>
 
         <!-- no divider -->
         <item name="android:actionBarDivider">@null</item>
@@ -161,43 +160,22 @@
         <item name="actionBarTabTextStyle">@style/Vector.TabText</item>
 
         <!-- switch color -->
-        <item name="colorControlActivated">@color/vector_green_color</item>
+        <item name="colorControlActivated">@color/primary_color_light</item>
+
+        <!-- Preference -->
+        <item name="preferenceTheme">@style/PreferenceThemeOverlay.v14.Material</item>
     </style>
 
     <style name="AppTheme.Light" parent="AppTheme.Base.Light" />
 
-    <!-- no action bar window -->
-    <style name="AppTheme.NoActionBar.Base.Light" parent="Theme.Vector.Light">
-        <!-- disable the overscroll because setOverscrollHeader/Footer don't always work -->
-        <item name="android:overScrollMode">never</item>
-
-        <!-- hide the action bar -->
-        <item name="android:windowActionBar">false</item>
-        <item name="windowActionBar">false</item>
-        <item name="android:windowNoTitle">true</item>
-        <item name="windowNoTitle">true</item>
-
-        <!-- status bar color -->
-        <item name="colorPrimaryDark">@color/vector_green_color_dark</item>
-
-        <!-- fonts -->
-        <item name="android:typeface">sans</item>
-
-        <!-- activities background -->
-        <item name="android:windowBackground">@color/riot_primary_background_color_light</item>
-    </style>
-
-    <style name="AppTheme.NoActionBar.Light" parent="AppTheme.NoActionBar.Base.Light" />
-
-    <style name="Theme.Vector.Empty.Light" parent="Theme.AppCompat.Light.Dialog">
+    <style name="Theme.Vector.Lock.Light" parent="Theme.AppCompat.Light.Dialog">
         <item name="vctr_primary_color">@color/primary_color_light</item>
         <item name="vctr_riot_primary_background_color">@color/riot_primary_background_color_light</item>
         <item name="vctr_riot_primary_text_color">@color/riot_primary_text_color_light</item>
         <item name="vctr_primary_hint_text_color">@color/primary_hint_text_color_light</item>
         <item name="vctr_message_text_color">?attr/vctr_riot_primary_text_color</item>
-    </style>
 
-    <style name="Theme.Vector.Lock.Light" parent="Theme.Vector.Empty.Light">
+        <item name="colorAccent">@color/primary_color_light</item>
         <item name="android:background">?attr/vctr_riot_primary_background_color</item>
         <item name="android:textColor">?attr/vctr_primary_text_color</item>
         <item name="editTextColor">?attr/vctr_riot_primary_text_color</item>
@@ -209,13 +187,8 @@
         <item name="background">@drawable/vector_tabbar_background_light</item>
     </style>
 
-    <style name="AppTheme.NoActionBar.Swipe.Light" parent="AppTheme.NoActionBar.Light">
-        <item name="android:windowIsTranslucent">true</item>
-        <item name="android:windowBackground">@android:color/transparent</item>
-    </style>
-
     <!-- home activity -->
-    <style name="HomeActivityTheme.Light" parent="AppTheme.NoActionBar.Light">
+    <style name="HomeActivityTheme.Light" parent="AppTheme.Light">
         <item name="editTextColor">@android:color/white</item>
         <item name="android:editTextColor">@android:color/white</item>
         <item name="android:textColorHint">?attr/vctr_activity_bottom_gradient_color</item>
@@ -230,35 +203,25 @@
     </style>
 
     <!-- NoActionBar + FullScreen -->
-    <style name="AppTheme.NoActionBar.FullScreen.Light" parent="AppTheme.NoActionBar.Light">
+    <style name="AppTheme.NoActionBar.FullScreen.Light" parent="AppTheme.Light">
         <item name="android:windowFullscreen">true</item>
         <!-- activities background -->
         <item name="android:windowBackground">@android:color/transparent</item>
     </style>
 
-    <!-- ActionBar + FullScreen -->
-    <style name="AppTheme.ActionBar.FullScreen.Light" parent="AppTheme.NoActionBar.FullScreen.Light">
-        <!-- show the action bar -->
-        <item name="android:windowActionBar">true</item>
-        <item name="windowActionBar">true</item>
-        <item name="android:windowNoTitle">true</item>
-        <item name="windowNoTitle">true</item>
-    </style>
-
     <!-- login & registration activities -->
-    <style name="LoginAppTheme.Light" parent="AppTheme.NoActionBar.Light">
+    <style name="LoginAppTheme.Light" parent="AppTheme.Light">
         <item name="android:editTextStyle">@style/LoginEditTextStyle</item>
         <item name="android:buttonStyle">@style/LoginButtonStyle</item>
-        <item name="colorAccent">?attr/editTextColor</item>
+
+        <item name="colorAccent">@color/primary_color_light</item>
     </style>
 
-    <style name="CountryPickerTheme.Light" parent="AppTheme.NoActionBar.Light">
+    <style name="CountryPickerTheme.Light" parent="AppTheme.Light">
         <item name="editTextColor">@android:color/white</item>
         <item name="android:editTextColor">@android:color/white</item>
         <item name="android:textColorHint">?attr/vctr_activity_bottom_gradient_color</item>
     </style>
-
-    <style name="DirectoryPickerTheme.Light" parent="AppTheme.NoActionBar.Light" />
 
     <!-- searches activity -->
     <style name="SearchesAppTheme.Light" parent="AppTheme.Light">
@@ -276,7 +239,7 @@
         <item name="actionBarTheme">@style/VectorSearches.ActionBarTheme</item>
     </style>
 
-    <style name="CallAppTheme.Light" parent="AppTheme.NoActionBar.Light">
+    <style name="CallAppTheme.Light" parent="AppTheme.Light">
         <item name="android:colorBackground">?attr/colorBackgroundFloating</item>
         <item name="android:colorBackgroundCacheHint">@null</item>
 
@@ -306,10 +269,6 @@
 
         <item name="android:actionBarTabStyle">@style/Vector.TabView.Group</item>
         <item name="actionBarTabStyle">@style/Vector.TabView.Group</item>
-
-        <!-- custom action bar -->
-        <item name="android:actionBarStyle">@style/Group.Styled.ActionBar</item>
-        <item name="actionBarStyle">@style/Group.Styled.ActionBar</item>
     </style>
 
     <style name="AppTheme.Dialog.Light" parent="Theme.AppCompat.Light.Dialog.Alert" />

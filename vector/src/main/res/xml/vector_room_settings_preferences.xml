@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
+<android.support.v7.preference.PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
@@ -34,11 +34,11 @@
         android:summary="%s"
         android:title="@string/room_settings_room_notifications_title" />
 
-    <im.vector.preference.VectorCustomActionEditTextPreference
+    <im.vector.preference.VectorPreference
         android:key="roomLeave"
         android:title="@string/leave" />
 
-    <im.vector.preference.VectorDividerCategory />
+    <im.vector.preference.VectorPreferenceDivider />
 
     <im.vector.preference.VectorPreferenceCategory
         android:key="prefCatAccessVisibility"
@@ -50,7 +50,7 @@
             android:title="@string/room_settings_directory_visibility" />
 
         <!-- for further use
-        <Preference
+        <im.vector.preference.VectorPreference
             android:key="roomPrivacyInfo"
             android:title="@string/settings_room_privacy_label" /> -->
 
@@ -73,7 +73,7 @@
             android:title="@string/room_settings_room_read_history_rules_pref_title" />
     </im.vector.preference.VectorPreferenceCategory>
 
-    <im.vector.preference.VectorDividerCategory />
+    <im.vector.preference.VectorPreferenceDivider />
 
     <im.vector.preference.VectorPreferenceCategory
         android:key="addresses"
@@ -81,25 +81,25 @@
 
     </im.vector.preference.VectorPreferenceCategory>
 
-    <im.vector.preference.VectorDividerCategory android:key="flair_divider" />
+    <im.vector.preference.VectorPreferenceDivider android:key="flair_divider" />
 
     <im.vector.preference.VectorPreferenceCategory
         android:key="flair"
         android:title="@string/settings_flair" />
 
-    <im.vector.preference.VectorDividerCategory android:key="banned_divider" />
+    <im.vector.preference.VectorPreferenceDivider android:key="banned_divider" />
 
     <im.vector.preference.VectorPreferenceCategory
         android:key="banned"
         android:title="@string/room_settings_banned_users_title" />
 
-    <im.vector.preference.VectorDividerCategory />
+    <im.vector.preference.VectorPreferenceDivider />
 
     <im.vector.preference.VectorPreferenceCategory
         android:key="advanced"
         android:title="@string/room_settings_category_advanced_title">
 
-        <im.vector.preference.VectorCustomActionEditTextPreference
+        <im.vector.preference.VectorPreference
             android:key="roomInternalId"
             android:title="@string/room_settings_room_internal_id" />
 
@@ -110,4 +110,4 @@
 
     </im.vector.preference.VectorPreferenceCategory>
 
-</PreferenceScreen>
+</android.support.v7.preference.PreferenceScreen>
