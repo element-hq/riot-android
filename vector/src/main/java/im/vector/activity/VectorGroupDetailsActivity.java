@@ -147,6 +147,8 @@ public class VectorGroupDetailsActivity extends MXCActionBarActivity {
 
     @Override
     public void initUiAndData() {
+        configureToolbar();
+
         if (CommonActivityUtils.shouldRestartApp(this)) {
             Log.e(LOG_TAG, "Restart the application.");
             CommonActivityUtils.restartApp(this);

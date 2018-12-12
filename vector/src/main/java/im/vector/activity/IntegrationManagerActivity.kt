@@ -23,7 +23,6 @@ import android.support.annotation.CallSuper
 import android.text.TextUtils
 import im.vector.R
 import im.vector.types.JsonDict
-import im.vector.ui.themes.ActivityOtherThemes
 import im.vector.util.toJsonMap
 import im.vector.widgets.WidgetsManager
 import org.matrix.androidsdk.rest.callback.ApiCallback
@@ -42,8 +41,6 @@ class IntegrationManagerActivity : AbstractWidgetActivity() {
 
     private var mWidgetId: String? = null
     private var mScreenId: String? = null
-
-    override fun getOtherThemes() = ActivityOtherThemes.NoActionBar
 
     override fun getLayoutRes() = R.layout.activity_integration_manager
 

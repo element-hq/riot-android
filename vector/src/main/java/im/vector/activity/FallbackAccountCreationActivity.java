@@ -50,7 +50,7 @@ public class FallbackAccountCreationActivity extends VectorAppCompatActivity {
 
     @Override
     public int getLayoutRes() {
-        return R.layout.activity_account_creation;
+        return R.layout.activity_login_fallback;
     }
 
     @Override
@@ -60,6 +60,8 @@ public class FallbackAccountCreationActivity extends VectorAppCompatActivity {
 
     @Override
     public void initUiAndData() {
+        configureToolbar();
+
         final WebView webView = findViewById(R.id.account_creation_webview);
         webView.getSettings().setJavaScriptEnabled(true);
 

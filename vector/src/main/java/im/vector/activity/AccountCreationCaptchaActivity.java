@@ -94,6 +94,8 @@ public class AccountCreationCaptchaActivity extends VectorAppCompatActivity {
 
     @Override
     public void initUiAndData() {
+        configureToolbar();
+
         final WebView webView = findViewById(R.id.account_creation_webview);
         webView.getSettings().setJavaScriptEnabled(true);
 

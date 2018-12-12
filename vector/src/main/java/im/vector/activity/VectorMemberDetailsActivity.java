@@ -34,7 +34,6 @@ import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import org.jetbrains.annotations.NotNull;
 import org.matrix.androidsdk.MXPatterns;
 import org.matrix.androidsdk.MXSession;
 import org.matrix.androidsdk.call.IMXCall;
@@ -68,7 +67,6 @@ import im.vector.adapters.VectorMemberDetailsAdapter;
 import im.vector.adapters.VectorMemberDetailsDevicesAdapter;
 import im.vector.extensions.MatrixSdkExtensionsKt;
 import im.vector.fragments.VectorUnknownDevicesFragment;
-import im.vector.ui.themes.ActivityOtherThemes;
 import im.vector.util.CallsManager;
 import im.vector.util.PermissionsToolsKt;
 import im.vector.util.SystemUtilsKt;
@@ -1159,12 +1157,6 @@ public class VectorMemberDetailsActivity extends MXCActionBarActivity implements
                 }
             });
         }
-    }
-
-    @NotNull
-    @Override
-    public ActivityOtherThemes getOtherThemes() {
-        return ActivityOtherThemes.NoActionBar.INSTANCE;
     }
 
     @Override

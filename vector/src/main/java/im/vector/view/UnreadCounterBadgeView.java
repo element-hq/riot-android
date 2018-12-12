@@ -30,6 +30,7 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 
 import im.vector.R;
+import im.vector.ui.themes.ThemeUtils;
 import im.vector.util.RoomUtils;
 
 /**
@@ -95,7 +96,7 @@ public class UnreadCounterBadgeView extends FrameLayout {
             if (status == HIGHLIGHTED) {
                 shape.setColor(ContextCompat.getColor(getContext(), R.color.vector_fuchsia_color));
             } else if (status == NOTIFIED) {
-                shape.setColor(ContextCompat.getColor(getContext(), R.color.vector_green_color));
+                shape.setColor(ThemeUtils.INSTANCE.getColor(getContext(), R.attr.colorAccent));
             } else { //if (status == DEFAULT)
                 shape.setColor(ContextCompat.getColor(getContext(), R.color.vector_silver_color));
             }

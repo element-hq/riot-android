@@ -31,7 +31,7 @@
             android:layout_centerVertical="true"
             android:layout_marginEnd="16dp"
             android:layout_marginRight="16dp"
-            android:background="@color/vector_green_color"
+            android:background="?attr/colorAccent"
             android:text="@string/auth_login"
             android:textColor="@android:color/white" />
 
@@ -43,7 +43,7 @@
             android:layout_centerVertical="true"
             android:background="@android:color/white"
             android:text="@string/auth_register"
-            android:textColor="@color/vector_green_color" />
+            android:textColor="?attr/colorAccent" />
 
         <Button
             android:id="@+id/button_reset_password"
@@ -54,7 +54,7 @@
             android:layout_centerVertical="true"
             android:layout_marginEnd="16dp"
             android:layout_marginRight="16dp"
-            android:background="@color/vector_green_color"
+            android:background="?attr/colorAccent"
             android:text="@string/auth_send_reset_email"
             android:textColor="@android:color/white"
             android:visibility="gone" />
@@ -70,7 +70,7 @@
             android:layout_marginLeft="16dp"
             android:layout_marginEnd="16dp"
             android:layout_marginRight="16dp"
-            android:background="@color/vector_green_color"
+            android:background="?attr/colorAccent"
             android:text="@string/auth_send_reset_email"
             android:textColor="@android:color/white"
             android:visibility="gone" />
@@ -84,7 +84,7 @@
             android:layout_centerVertical="true"
             android:layout_marginEnd="16dp"
             android:layout_marginRight="16dp"
-            android:background="@color/vector_green_color"
+            android:background="?attr/colorAccent"
             android:minWidth="94dp"
             android:text="@string/auth_submit"
             android:textColor="@android:color/white"
@@ -99,7 +99,7 @@
             android:layout_marginRight="16dp"
             android:layout_toStartOf="@id/button_submit"
             android:layout_toLeftOf="@id/button_submit"
-            android:background="@color/vector_green_color"
+            android:background="?attr/colorAccent"
             android:minWidth="94dp"
             android:text="@string/auth_skip"
             android:textColor="@android:color/white"
@@ -413,7 +413,7 @@
                     android:paddingTop="5dp"
                     android:paddingBottom="10dp"
                     android:text="@string/auth_forgot_password"
-                    android:textColor="@color/vector_green_color"
+                    android:textColor="?attr/colorAccent"
                     android:textSize="14sp" />
             </LinearLayout>
 

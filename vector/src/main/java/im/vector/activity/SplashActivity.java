@@ -25,7 +25,6 @@ import android.widget.ImageView;
 
 import com.bumptech.glide.Glide;
 
-import org.jetbrains.annotations.NotNull;
 import org.matrix.androidsdk.MXSession;
 import org.matrix.androidsdk.listeners.IMXEventListener;
 import org.matrix.androidsdk.listeners.MXEventListener;
@@ -48,7 +47,6 @@ import im.vector.analytics.TrackingEvent;
 import im.vector.push.PushManager;
 import im.vector.receiver.VectorUniversalLinkReceiver;
 import im.vector.services.EventStreamService;
-import im.vector.ui.themes.ActivityOtherThemes;
 import im.vector.util.PreferencesManager;
 
 /**
@@ -134,12 +132,6 @@ public class SplashActivity extends MXCActionBarActivity {
         } else {
             CommonActivityUtils.logout(this);
         }
-    }
-
-    @NotNull
-    @Override
-    public ActivityOtherThemes getOtherThemes() {
-        return ActivityOtherThemes.NoActionBar.INSTANCE;
     }
 
     @Override

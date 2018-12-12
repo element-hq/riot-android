@@ -74,6 +74,8 @@ public abstract class VectorBaseSearchActivity extends MXCActionBarActivity {
     @Override
     @CallSuper
     public void initUiAndData() {
+        configureToolbar();
+
         mActionBar = getSupportActionBar();
         View actionBarView = customizeActionBar();
 

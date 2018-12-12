@@ -37,6 +37,8 @@ class VectorSettingsActivity : MXCActionBarActivity() {
     }
 
     override fun initUiAndData() {
+        configureToolbar()
+
         var session = getSession(intent)
 
         if (null == session) {

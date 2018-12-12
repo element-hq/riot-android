@@ -15,6 +15,7 @@ Improvements:
  - Upgrade olm-sdk.aar from version 2.3.0 to version 3.0.0
  - Migration to the Preference v7 support
  - Make User Agreement part of the registration flow (#2442)
+ - Fix several color issue on Status theme and prepare rework some styles.
 
 Other changes:
  -

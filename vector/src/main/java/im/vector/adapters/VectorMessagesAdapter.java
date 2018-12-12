@@ -1691,8 +1691,9 @@ public class VectorMessagesAdapter extends AbstractMessagesAdapter {
 
             // set the message marker
             convertView.findViewById(R.id.messagesAdapter_highlight_message_marker)
-                    .setBackgroundColor(ContextCompat.getColor(mContext,
-                            TextUtils.equals(mHighlightedEventId, event.eventId) ? R.color.vector_green_color : android.R.color.transparent));
+                    .setBackgroundColor(TextUtils.equals(mHighlightedEventId, event.eventId) ?
+                            ThemeUtils.INSTANCE.getColor(mContext, R.attr.colorAccent) :
+                            ContextCompat.getColor(mContext, android.R.color.transparent));
 
             // display the day separator
             VectorMessagesAdapterHelper.setHeader(convertView, headerMessage(position), position);
@@ -2447,7 +2448,7 @@ public class VectorMessagesAdapter extends AbstractMessagesAdapter {
 
                     // move left the body
                     bodyLayout.setMargins(4, bodyLayout.topMargin, 4, bodyLayout.bottomMargin);
-                    highlightMakerView.setBackgroundColor(ContextCompat.getColor(mContext, R.color.vector_green_color));
+                    highlightMakerView.setBackgroundColor(ThemeUtils.INSTANCE.getColor(mContext, R.attr.colorAccent));
                 }
             } else {
                 highlightMakerView.setBackgroundColor(ContextCompat.getColor(mContext, android.R.color.transparent));

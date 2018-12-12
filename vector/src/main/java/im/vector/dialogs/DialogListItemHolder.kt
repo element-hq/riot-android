@@ -1,6 +1,4 @@
 /*
- * Copyright 2014 OpenMarket Ltd
- * Copyright 2017 Vector Creations Ltd
  * Copyright 2018 New Vector Ltd
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -16,21 +14,23 @@
  * limitations under the License.
  */
 
-package im.vector.activity;
+package im.vector.dialogs
 
-import im.vector.R;
+import android.view.View
+import android.widget.ImageView
+import android.widget.TextView
+import butterknife.BindView
+import butterknife.ButterKnife
+import im.vector.R
 
-/**
- * LoggingOutActivity displays an animation while a session log out is in progress.
- */
-public class LoggingOutActivity extends MXCActionBarActivity {
-    @Override
-    public int getLayoutRes() {
-        return R.layout.vector_activity_splash;
-    }
+class DialogListItemHolder(view: View) {
+    @BindView(R.id.adapter_item_dialog_icon)
+    lateinit var icon: ImageView
 
-    @Override
-    public void initUiAndData() {
-        // Nothing to do
+    @BindView(R.id.adapter_item_dialog_text)
+    lateinit var text: TextView
+
+    init {
+        ButterKnife.bind(this, view)
     }
 }

@@ -23,7 +23,6 @@ import android.content.Intent;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
@@ -31,7 +30,6 @@ import android.view.View;
 import android.widget.EditText;
 import android.widget.Toast;
 
-import org.jetbrains.annotations.NotNull;
 import org.matrix.androidsdk.MXSession;
 import org.matrix.androidsdk.rest.callback.ApiCallback;
 import org.matrix.androidsdk.rest.model.MatrixError;
@@ -47,7 +45,6 @@ import java.util.Map;
 import im.vector.Matrix;
 import im.vector.R;
 import im.vector.adapters.RoomDirectoryAdapter;
-import im.vector.ui.themes.ActivityOtherThemes;
 import im.vector.util.RoomDirectoryData;
 
 public class RoomDirectoryPickerActivity extends VectorAppCompatActivity implements RoomDirectoryAdapter.OnSelectRoomDirectoryListener {
@@ -78,12 +75,6 @@ public class RoomDirectoryPickerActivity extends VectorAppCompatActivity impleme
      * *********************************************************************************************
      */
 
-    @NotNull
-    @Override
-    public ActivityOtherThemes getOtherThemes() {
-        return ActivityOtherThemes.Directory.INSTANCE;
-    }
-
     @Override
     public int getLayoutRes() {
         return R.layout.activity_room_directory_picker;
@@ -98,14 +89,7 @@ public class RoomDirectoryPickerActivity extends VectorAppCompatActivity impleme
     public void initUiAndData() {
         setWaitingView(findViewById(R.id.room_directory_loading));
 
-        Toolbar toolbar = findViewById(R.id.toolbar);
-        if (toolbar != null) {
-            setSupportActionBar(toolbar);
-            if (getSupportActionBar() != null) {
-                getSupportActionBar().setDisplayShowHomeEnabled(true);
-                getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-            }
-        }
+        configureToolbar();
 
         final Intent intent = getIntent();
         String sessionId = intent.getStringExtra(EXTRA_SESSION_ID);

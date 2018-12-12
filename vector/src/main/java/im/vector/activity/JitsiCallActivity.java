@@ -29,7 +29,6 @@ import android.view.ViewGroup;
 import android.widget.RelativeLayout;
 import android.widget.Toast;
 
-import org.jetbrains.annotations.NotNull;
 import org.jitsi.meet.sdk.JitsiMeetView;
 import org.jitsi.meet.sdk.JitsiMeetViewListener;
 import org.matrix.androidsdk.MXSession;
@@ -43,7 +42,6 @@ import java.util.Map;
 import butterknife.BindView;
 import im.vector.Matrix;
 import im.vector.R;
-import im.vector.ui.themes.ActivityOtherThemes;
 import im.vector.widgets.Widget;
 import im.vector.widgets.WidgetsManager;
 
@@ -108,12 +106,6 @@ public class JitsiCallActivity extends VectorAppCompatActivity {
             }
         }
     };
-
-    @NotNull
-    @Override
-    public ActivityOtherThemes getOtherThemes() {
-        return ActivityOtherThemes.NoActionBar.INSTANCE;
-    }
 
     @Override
     public int getLayoutRes() {
