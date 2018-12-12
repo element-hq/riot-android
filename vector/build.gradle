@@ -198,6 +198,7 @@ dependencies {
 
     // Kotlin coroutines
     implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-core:0.30.2'
+    implementation "org.jetbrains.anko:anko-commons:0.10.8"
 
     implementation 'com.android.support:multidex:1.0.0'
 
