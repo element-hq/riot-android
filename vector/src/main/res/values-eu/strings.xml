@@ -1082,4 +1082,10 @@ Kontuan izan ekintza honek aplikazioa berrabiaraziko duela eta denbora bat behar
     <string name="markdown_has_been_enabled">Markdown aktibatu da.</string>
     <string name="markdown_has_been_disabled">Markdown desaktibatu da.</string>
 
-</resources>
+<string name="accept">Onartu</string>
+
+    <string name="auth_accept_policies">Berrikusi eta onartu hasiera-zerbitzari honen politikak:</string>
+
+    <string name="encryption_import_room_keys_success">%1$d/%2$d gako ongi inportatu dira.</string>
+
+    </resources>
