@@ -167,15 +167,14 @@
 
     <style name="AppTheme.Dark" parent="AppTheme.Base.Dark" />
 
-    <style name="Theme.Vector.Empty.Dark" parent="Theme.AppCompat.Dialog">
+    <style name="Theme.Vector.Lock.Dark" parent="Theme.AppCompat.Dialog">
         <item name="vctr_riot_primary_text_color">@color/riot_primary_text_color_dark</item>
         <item name="vctr_riot_primary_background_color">@color/riot_primary_background_color_dark</item>
         <item name="vctr_primary_hint_text_color">@color/primary_hint_text_color_dark</item>
         <item name="vctr_primary_color">@color/primary_color_dark</item>
         <item name="vctr_message_text_color">?attr/vctr_riot_primary_text_color</item>
-    </style>
 
-    <style name="Theme.Vector.Lock.Dark" parent="Theme.Vector.Empty.Dark">
+        <item name="colorAccent">@color/primary_color_light</item>
         <item name="android:background">?attr/vctr_riot_primary_background_color</item>
         <item name="android:textColor">?attr/vctr_primary_text_color</item>
         <item name="editTextColor">?attr/vctr_riot_primary_text_color</item>

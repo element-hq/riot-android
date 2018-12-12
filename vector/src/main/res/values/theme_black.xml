@@ -61,12 +61,10 @@
 
     <style name="AppTheme.Black" parent="AppTheme.Base.Black" />
 
-    <style name="Theme.Vector.Empty.Black" parent="Theme.Vector.Empty.Dark">
+    <style name="Theme.Vector.Lock.Black" parent="Theme.Vector.Lock.Dark">
         <item name="vctr_riot_primary_background_color">@color/riot_primary_background_color_black</item>
         <item name="vctr_primary_color">@color/riot_primary_background_color_black</item>
     </style>
-
-    <style name="Theme.Vector.Lock.Black" parent="Theme.Vector.Lock.Dark" />
 
     <!-- home activity -->
     <style name="HomeActivityTheme.Black" parent="AppTheme.Black">
