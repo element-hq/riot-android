@@ -1050,7 +1050,7 @@ Kontuan izan ekintza honek aplikazioa berrabiaraziko duela eta denbora bat behar
     <string name="plus_x">+%d</string>
     <string name="x_plus">%d+</string>
 
-<string name="call_anyway">Deitu hala ere</string>
+    <string name="call_anyway">Deitu hala ere</string>
     <string name="settings_call_category">Deiak</string>
     <string name="settings_call_ringtone_use_riot_ringtone">Erabili Rioten lehenetsitako dei-doinua jasotako deientzat</string>
     <string name="settings_call_ringtone_title">Jasotako deien doinua</string>
@@ -1058,9 +1058,9 @@ Kontuan izan ekintza honek aplikazioa berrabiaraziko duela eta denbora bat behar
 
     <string name="room_participants_action_kick">Kanporatu</string>
     <plurals name="room_participants_kick_prompt_msg">
-	<item quantity="one">Ziur erabiltzaile hau txat honetatik kanporatu nahi duzula?</item>
-	<item quantity="other">Ziur erabiltzaile hauek txat honetatik kanporatu nahi dituzula?</item>
-</plurals>
+        <item quantity="one">Ziur erabiltzaile hau txat honetatik kanporatu nahi duzula?</item>
+        <item quantity="other">Ziur erabiltzaile hauek txat honetatik kanporatu nahi dituzula?</item>
+    </plurals>
     <string name="reason_hint">Arrazoia</string>
 
     <string name="settings_inline_url_preview_summary">Erakutsi txateko esteken aurrebista hasiera-zerbitzariak onartzen badu.</string>
@@ -1082,4 +1082,4 @@ Kontuan izan ekintza honek aplikazioa berrabiaraziko duela eta denbora bat behar
     <string name="markdown_has_been_enabled">Markdown aktibatu da.</string>
     <string name="markdown_has_been_disabled">Markdown desaktibatu da.</string>
 
-    </resources>
+</resources>

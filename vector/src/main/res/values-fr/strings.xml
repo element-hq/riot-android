@@ -1080,9 +1080,9 @@ Veuillez noter que cette action redémarrera l\'application et pourra prendre un
     <string name="markdown_has_been_enabled">Le Markdown a été activé.</string>
     <string name="markdown_has_been_disabled">Le Markdown a été désactivé.</string>
 
-<string name="settings_call_category">Appels</string>
+    <string name="settings_call_category">Appels</string>
     <string name="settings_call_ringtone_use_riot_ringtone">Utiliser la sonnerie par défaut de Riot pour les appels entrants</string>
     <string name="settings_call_ringtone_title">Sonnerie d\'appel entrant</string>
     <string name="settings_call_ringtone_dialog_title">Sélectionner la sonnerie pour les appels :</string>
 
-    </resources>
+</resources>

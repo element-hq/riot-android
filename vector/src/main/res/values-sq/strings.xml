@@ -1028,7 +1028,7 @@ Kini parasysh që ky veprim do të sjellë rinisjen e aplikacionit dhe mund të 
     </plurals>
     <string name="receipt_avatar">Avatar dëftese</string>
     <string name="notice_avatar">Avatar njoftimi</string>
-<string name="title_activity_historical">Të dikurshme</string>
+    <string name="title_activity_historical">Të dikurshme</string>
     <string name="title_activity_choose_sticker">Dërgoni një ngjitës</string>
 
     <string name="action_historical">Të dikurshme</string>
@@ -1044,4 +1044,4 @@ Kini parasysh që ky veprim do të sjellë rinisjen e aplikacionit dhe mund të 
     <string name="historical_placeholder">Kërkoni për të dikurshme</string>
 
     <string name="settings_flair">Simoble</string>
-    </resources>
+</resources>
