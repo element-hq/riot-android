@@ -23,7 +23,6 @@ import butterknife.BindView
 import com.github.chrisbanes.photoview.PhotoView
 import im.vector.R
 
-// TODO Transition
 class VectorAvatarViewerActivity : MXCActionBarActivity() {
 
     @BindView(R.id.avatar_viewer_image)
@@ -53,5 +52,10 @@ class VectorAvatarViewerActivity : MXCActionBarActivity() {
                 putExtra(EXTRA_AVATAR_URL, avatarUrl)
             }
         }
+    }
+
+    // For transition
+    override fun onBackPressed() {
+        supportFinishAfterTransition()
     }
 }

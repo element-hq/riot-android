@@ -10,6 +10,7 @@
         android:layout_height="match_parent"
         android:adjustViewBounds="true"
         android:scaleType="centerCrop"
+        android:transitionName="vector_transition_avatar"
         tools:src="@tools:sample/avatars" />
 
     <ImageView
