@@ -114,9 +114,8 @@
             android:layout_alignParentTop="true"
             android:background="@android:color/transparent"
             app:contentInsetEnd="0dp"
-            app:contentInsetStart="0dp">
+            app:contentInsetStart="0dp" />
 
-        </android.support.v7.widget.Toolbar>
     </RelativeLayout>
 
     <!-- the member actions list: start new room, Make admin, block.. -->
@@ -138,6 +137,7 @@
         android:layout_height="wrap_content"
         android:layout_below="@+id/member_details_action_bar"
         android:visibility="gone"
+        tools:layout_marginStart="200dp"
         tools:visibility="visible" />
 
     <!-- devices list view: displayed when ExpandableListView is hidden -->
@@ -152,7 +152,7 @@
         android:listSelector="@android:color/transparent"
         android:visibility="gone"
         tools:alpha="0.3"
-        tools:layout_marginTop="200dp"
+        tools:layout_marginStart="200dp"
         tools:listitem="@layout/adapter_item_member_details_devices"
         tools:visibility="visible" />
 
