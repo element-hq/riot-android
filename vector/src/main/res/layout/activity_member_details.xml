@@ -53,27 +53,53 @@
             <!-- the member name -->
             <!-- keep singleLine="true" because maxLines="1" truncation is not the expected one.-->
             <TextView
-                android:id="@+id/member_details_name"
-                android:layout_width="match_parent"
+                android:id="@+id/member_details_display_name"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_below="@id/member_avatar_container"
-                android:layout_marginTop="10dp"
+                android:layout_centerHorizontal="true"
                 android:gravity="center_horizontal"
+                android:paddingLeft="10dp"
+                android:paddingTop="10dp"
+                android:paddingRight="10dp"
+                android:paddingBottom="2dp"
                 android:singleLine="true"
                 android:textColor="@android:color/white"
                 android:textSize="20sp"
                 tools:text="Display Name" />
 
+            <!-- the member name -->
+            <!-- keep singleLine="true" because maxLines="1" truncation is not the expected one.-->
+            <TextView
+                android:id="@+id/member_details_user_id"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/member_details_display_name"
+                android:layout_centerHorizontal="true"
+                android:gravity="center_horizontal"
+                android:paddingLeft="10dp"
+                android:paddingTop="2dp"
+                android:paddingRight="10dp"
+                android:paddingBottom="6dp"
+                android:singleLine="true"
+                android:textColor="@android:color/white"
+                android:textSize="16sp"
+                tools:text="\@userId:matrix.org" />
+
             <!-- the member presence -->
             <TextView
                 android:id="@+id/member_details_presence"
-                android:layout_width="match_parent"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_below="@id/member_details_name"
-                android:layout_marginBottom="16dp"
+                android:layout_below="@id/member_details_user_id"
+                android:layout_centerHorizontal="true"
                 android:ellipsize="end"
                 android:gravity="center_horizontal"
                 android:maxLines="1"
+                android:paddingLeft="10dp"
+                android:paddingTop="6dp"
+                android:paddingRight="10dp"
+                android:paddingBottom="16dp"
                 android:textColor="?attr/vctr_default_text_light_color"
                 android:textSize="14sp"
                 tools:text="User presence" />

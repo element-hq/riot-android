@@ -8,7 +8,7 @@ Features:
  -
 
 Improvements:
- -
+ - Show userId below display name in member detail screen (#2756)
 
 Other changes:
  -

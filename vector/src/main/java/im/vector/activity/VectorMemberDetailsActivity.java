@@ -59,6 +59,7 @@ import java.util.List;
 import java.util.Map;
 
 import butterknife.BindView;
+import butterknife.OnClick;
 import im.vector.Matrix;
 import im.vector.R;
 import im.vector.adapters.VectorMemberDetailsAdapter;
@@ -125,8 +126,10 @@ public class VectorMemberDetailsActivity extends MXCActionBarActivity implements
     ImageView mMemberAvatarImageView;
     @BindView(R.id.member_avatar_badge)
     ImageView mMemberAvatarBadgeImageView;
-    @BindView(R.id.member_details_name)
-    TextView mMemberNameTextView;
+    @BindView(R.id.member_details_display_name)
+    TextView mMemberDisplayNameTextView;
+    @BindView(R.id.member_details_user_id)
+    TextView mMemberUserIdTextView;
     @BindView(R.id.member_details_presence)
     TextView mPresenceTextView;
 
@@ -1212,33 +1215,6 @@ public class VectorMemberDetailsActivity extends MXCActionBarActivity implements
                 }
             });
 
-
-            // when clicking on the username
-            // switch member name <-> member id
-            mMemberNameTextView.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    User user = mSession.getDataHandler().getUser(mMemberId);
-
-                    if (TextUtils.equals(mMemberNameTextView.getText(), mMemberId)) {
-                        if ((null != user) && !TextUtils.isEmpty(user.displayname)) {
-                            mMemberNameTextView.setText(user.displayname);
-                        }
-                    } else {
-                        mMemberNameTextView.setText(mMemberId);
-                    }
-                }
-            });
-
-            // long tap : copy to the clipboard
-            mMemberNameTextView.setOnLongClickListener(new View.OnLongClickListener() {
-                @Override
-                public boolean onLongClick(View v) {
-                    SystemUtilsKt.copyToClipboard(VectorMemberDetailsActivity.this, mMemberNameTextView.getText());
-                    return true;
-                }
-            });
-
             mMemberAvatarImageView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -1419,17 +1395,17 @@ public class VectorMemberDetailsActivity extends MXCActionBarActivity implements
             return;
         }
 
-        if (null != mMemberNameTextView) {
-            if ((null != mRoomMember) && !TextUtils.isEmpty(mRoomMember.displayname)) {
-                mMemberNameTextView.setText(mRoomMember.displayname);
-            } else {
-                refreshUser();
-                mMemberNameTextView.setText(mUser.displayname);
-            }
-
-            // do not display the activity name in the action bar
-            setTitle("");
+        if ((null != mRoomMember) && !TextUtils.isEmpty(mRoomMember.displayname)) {
+            mMemberDisplayNameTextView.setText(mRoomMember.displayname);
+        } else {
+            refreshUser();
+            mMemberDisplayNameTextView.setText(mUser.displayname);
         }
+
+        mMemberUserIdTextView.setText(mMemberId);
+
+        // do not display the activity name in the action bar
+        setTitle("");
 
         // disable the progress bar
         enableProgressBarView(CommonActivityUtils.UTILS_HIDE_PROGRESS_BAR);
@@ -1548,6 +1524,16 @@ public class VectorMemberDetailsActivity extends MXCActionBarActivity implements
         if (null != mSession) {
             mSession.getDataHandler().removeListener(mPresenceEventsListener);
         }
+    }
+
+    /* ==========================================================================================
+     * UI Event
+     * ========================================================================================== */
+
+    @OnClick({R.id.member_details_user_id, R.id.member_details_display_name})
+    void onUserInfoClicked(TextView v) {
+        // Copy to the clipboard
+        SystemUtilsKt.copyToClipboard(this, v.getText());
     }
 
     // ********* IDevicesAdapterListener implementation *********
