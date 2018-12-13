@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/member_details_activity_main_view"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -46,7 +47,8 @@
                 android:layout_marginEnd="-7dp"
                 android:layout_marginRight="-7dp"
                 android:src="@drawable/admin_icon"
-                android:visibility="gone" />
+                android:visibility="gone"
+                tools:visibility="visible" />
 
             <!-- the member name -->
             <!-- keep singleLine="true" because maxLines="1" truncation is not the expected one.-->
@@ -59,7 +61,8 @@
                 android:gravity="center_horizontal"
                 android:singleLine="true"
                 android:textColor="@android:color/white"
-                android:textSize="20sp" />
+                android:textSize="20sp"
+                tools:text="Display Name" />
 
             <!-- the member presence -->
             <TextView
@@ -72,7 +75,9 @@
                 android:gravity="center_horizontal"
                 android:maxLines="1"
                 android:textColor="?attr/vctr_default_text_light_color"
-                android:textSize="14sp" />
+                android:textSize="14sp"
+                tools:text="User presence" />
+
         </RelativeLayout>
 
         <android.support.v7.widget.Toolbar
@@ -97,7 +102,8 @@
         android:cacheColorHint="@android:color/transparent"
         android:divider="#00000000"
         android:dividerHeight="0dp"
-        android:listSelector="@android:color/transparent" />
+        android:listSelector="@android:color/transparent"
+        tools:listitem="@layout/vector_adapter_member_details_items" />
 
     <include
         android:id="@+id/devices_header_view"
@@ -105,7 +111,8 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@+id/member_details_action_bar"
-        android:visibility="gone" />
+        android:visibility="gone"
+        tools:visibility="visible" />
 
     <!-- devices list view: displayed when ExpandableListView is hidden -->
     <ListView
@@ -117,7 +124,11 @@
         android:divider="#00000000"
         android:dividerHeight="0dp"
         android:listSelector="@android:color/transparent"
-        android:visibility="gone" />
+        android:visibility="gone"
+        tools:alpha="0.3"
+        tools:layout_marginTop="200dp"
+        tools:listitem="@layout/adapter_item_member_details_devices"
+        tools:visibility="visible" />
 
     <!-- progress bar view, displayed when an action in the list view is pressed -->
     <include
