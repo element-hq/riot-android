@@ -284,7 +284,7 @@
     <string name="settings_add_email_address">أضِف بريدا إلكترونيا</string>
     <string name="settings_phone_number">الهاتف</string>
     <string name="settings_add_phone_number">أضِف رقم هاتف</string>
-    <string name="settings_title_app_info_link">معلومات التطبيق</string>
+    <string name="settings_app_info_link_title">معلومات التطبيق</string>
 
     <string name="settings_notification_ringtone">صوت الإخطارات</string>
     <string name="settings_turn_screen_on">شغّل الشاشة لمدة ٣ ثواني</string>
@@ -299,7 +299,7 @@
     <string name="settings_copyright">حقوق النسخ</string>
     <string name="settings_privacy_policy">سياسة الخصوصية</string>
     <string name="settings_clear_cache">امسح الخبيئة</string>
-    <string name="settings_clear_medias_cache">امسح خبيئة الوسائط</string>
+    <string name="settings_clear_media_cache">امسح خبيئة الوسائط</string>
     <string name="settings_user_settings">إعدادات المستخدم</string>
     <string name="settings_notifications">الإخطارات</string>
     <string name="settings_advanced">متقدم</string>
@@ -307,14 +307,9 @@
     <string name="settings_contacts_app_permission">تصاريح المتراسلون</string>
     <string name="settings_contacts_phonebook_country">دولة دفتر العناوين</string>
     <string name="settings_devices_list">الأجهزة</string>
-    <string name="settings_hide_read_receipts">أخفِ إخطارات القراءة</string>
-    <string name="settings_dont_send_typings_notifs">لا تُرسل إخطارات الكتابة</string>
     <string name="settings_always_show_timestamps">اعرض أختام الرسائل الزمنية دائما</string>
     <string name="settings_12_24_timestamps">اعرض الأختام الزمنية بنسق ١٢ ساعة (مثلا ٢:٣٠م)</string>
-    <string name="settings_hide_join_leave_messages">أخفِ رسائل الانضمام/الخروج (الدعوات والطرد والمنع لا يتأثر)</string>
-    <string name="settings_hide_avatar_display_name_changes_messages">اعرض تغييرات الصور وأسماء العرض</string>
 
-    <string name="settings_disable_markdown">عطّل تنسيق ”ماركداون“ عند الإرسال</string>
     <string name="settings_data_save_mode">وضع حفظ البيانات</string>
 
     <string name="devices_details_dialog_title">تفاصيل الجهاز</string>
@@ -478,41 +473,41 @@
     <string name="loading">يحمّل…</string>
 
     <plurals name="room_header_active_members_count">
-	<item quantity="zero">لا أعضاء نشطين</item>
-	<item quantity="one">عضو واحد نشط</item>
-	<item quantity="two">عضوان نشطان</item>
-	<item quantity="few">%d أعضاء نشطين</item>
-	<item quantity="many">%d عضوا نشطا</item>
-	<item quantity="other">%d عضو نشط</item>
-</plurals>
+        <item quantity="zero">لا أعضاء نشطين</item>
+        <item quantity="one">عضو واحد نشط</item>
+        <item quantity="two">عضوان نشطان</item>
+        <item quantity="few">%d أعضاء نشطين</item>
+        <item quantity="many">%d عضوا نشطا</item>
+        <item quantity="other">%d عضو نشط</item>
+    </plurals>
     <plurals name="room_title_members">
-	<item quantity="zero">لا أعضاء</item>
-	<item quantity="one">عضو واحد</item>
-	<item quantity="two">عضوان</item>
-	<item quantity="few">%d أعضاء</item>
-	<item quantity="many">%d عضوا</item>
-	<item quantity="other">%d عضو</item>
-</plurals>
+        <item quantity="zero">لا أعضاء</item>
+        <item quantity="one">عضو واحد</item>
+        <item quantity="two">عضوان</item>
+        <item quantity="few">%d أعضاء</item>
+        <item quantity="many">%d عضوا</item>
+        <item quantity="other">%d عضو</item>
+    </plurals>
     <string name="room_two_users_are_typing">‏⁨%1$s⁩ و ⁨%2$s⁩ يكتبون…</string>
     <string name="room_many_users_are_typing">‏⁨%1$s⁩ و ⁨%2$s⁩ وغيرهم يكتبون…</string>
     <plurals name="room_new_messages_notification">
-	<item quantity="zero">لا رسائل جديدة</item>
-	<item quantity="one">رسالة واحدة جديدة</item>
-	<item quantity="two">رسالتان جديدتان</item>
-	<item quantity="few">%d رسائل جديدة</item>
-	<item quantity="many">%d رسالة جديدة</item>
-	<item quantity="other">%d رسالة جديدة</item>
-</plurals>
+        <item quantity="zero">لا رسائل جديدة</item>
+        <item quantity="one">رسالة واحدة جديدة</item>
+        <item quantity="two">رسالتان جديدتان</item>
+        <item quantity="few">%d رسائل جديدة</item>
+        <item quantity="many">%d رسالة جديدة</item>
+        <item quantity="other">%d رسالة جديدة</item>
+    </plurals>
 
 
     <plurals name="directory_search_rooms">
-	<item quantity="zero">لا غرف</item>
-	<item quantity="one">غرفة واحدة</item>
-	<item quantity="two">غرفتان</item>
-	<item quantity="few">%d غرف</item>
-	<item quantity="many">%d غرفة</item>
-	<item quantity="other">%d غرفة</item>
-</plurals>
+        <item quantity="zero">لا غرف</item>
+        <item quantity="one">غرفة واحدة</item>
+        <item quantity="two">غرفتان</item>
+        <item quantity="few">%d غرف</item>
+        <item quantity="many">%d غرفة</item>
+        <item quantity="other">%d غرفة</item>
+    </plurals>
     <string name="action_historical">الأرشيف</string>
     <string name="bottom_action_groups">المجتمعات</string>
 
@@ -563,13 +558,13 @@
     <string name="groups_list">قائمة المجموعات</string>
 
     <plurals name="membership_changes">
-	<item quantity="zero">لا تغييرات ملكية</item>
-	<item quantity="one">تغيير واحد على الملكية</item>
-	<item quantity="two">تغييران على الملكية</item>
-	<item quantity="few">%d تغييرات على الملكية</item>
-	<item quantity="many">%d تغييرا على الملكية</item>
-	<item quantity="other">%d تغيير على الملكية</item>
-</plurals>
+        <item quantity="zero">لا تغييرات ملكية</item>
+        <item quantity="one">تغيير واحد على الملكية</item>
+        <item quantity="two">تغييران على الملكية</item>
+        <item quantity="few">%d تغييرات على الملكية</item>
+        <item quantity="many">%d تغييرا على الملكية</item>
+        <item quantity="other">%d تغيير على الملكية</item>
+    </plurals>
 
     <string name="compression_options">"أرسِل كَ‍ "</string>
     <string name="call_error_ice_failed">فشل اتصال الوسائط</string>
@@ -614,7 +609,6 @@
     <string name="room_participants_power_level_prompt">لن تستطيع العودة عن هذا التغيير إذ أنك تمنح المستخدم نفس مستوى السلطة الذي لك.
 أمتأكد؟</string>
 
-    <string name="room_participants_kick_prompt_msg">أمتأكد من طرد هذا المستخدم من هذه الدردشة؟</string>
     <string name="room_participants_ban_prompt_msg">أمتأكد من منع هذا المستخدم من هذه الدردشة؟</string>
 
     <string name="people_search_invite_by_id"><u>ادعُ باستخدام المعرّف</u></string>
@@ -670,13 +664,13 @@
     <string name="select_room_directory">اختر دليل غرف</string>
     <string name="settings_labs_create_conference_with_jitsi">ابدأ مكالمات الاجتماعات مستخدما Jitsi</string>
     <plurals name="active_widgets">
-	<item quantity="zero">لا ودجات نشطة</item>
-	<item quantity="one">ودجة واحدة نشطة</item>
-	<item quantity="two">ودجتان نشطتان</item>
-	<item quantity="few">%d ودجات نشطة</item>
-	<item quantity="many">%d ودجة نشطة</item>
-	<item quantity="other">%d ودجة نشطة</item>
-</plurals>
+        <item quantity="zero">لا ودجات نشطة</item>
+        <item quantity="one">ودجة واحدة نشطة</item>
+        <item quantity="two">ودجتان نشطتان</item>
+        <item quantity="few">%d ودجات نشطة</item>
+        <item quantity="many">%d ودجة نشطة</item>
+        <item quantity="other">%d ودجة نشطة</item>
+    </plurals>
 
     <!-- Widget Integration Manager -->
     <string name="room_add_matrix_apps">أضِف تطبيقات ماترِكس</string>
@@ -766,7 +760,6 @@
     <string name="room_settings_tag_pref_entry_favourite">مفضلة</string>
     <string name="room_settings_tag_pref_entry_low_priority">أولوية منخفضة</string>
     <string name="room_settings_tag_pref_entry_none">بلا</string>
-    <string name="room_settings_tag_pref_no_tag">ليست موسومة</string>
     <string name="room_settings_category_access_visibility_title">الوصول والظهور</string>
     <string name="room_settings_directory_visibility">ضع هذه الغرفة في دليل الغرف</string>
     <string name="room_settings_room_notifications_title">الإخطارات</string>
@@ -818,19 +811,19 @@
     <string name="room_recents_start_chat">ابدأ دردشة</string>
     <string name="directory_search_results_title">تصفح الدليل</string>
     <plurals name="directory_search_rooms_for">
-	<item quantity="zero">لم يُعثر على غرف تطابق ‏⁨%2$s⁩</item>
-	<item quantity="one">عُثر على غرفة واحدة تطابق ‏⁨%2$s⁩</item>
-	<item quantity="two">عُثر على غرفتين تطابقان ‏⁨%2$s⁩</item>
-	<item quantity="few">عُثر على ‏⁨%1$s⁩ غرف تطابق ‏⁨%2$s⁩</item>
-	<item quantity="many">عُثر على ‏⁨%1$s⁩ غرفة تطابق ‏⁨%2$s⁩</item>
-	<item quantity="other">عُثر على ‏⁨%1$s⁩ غرفة تطابق ‏⁨%2$s⁩</item>
-</plurals>
+        <item quantity="zero">لم يُعثر على غرف تطابق ‏⁨%2$s⁩</item>
+        <item quantity="one">عُثر على غرفة واحدة تطابق ‏⁨%2$s⁩</item>
+        <item quantity="two">عُثر على غرفتين تطابقان ‏⁨%2$s⁩</item>
+        <item quantity="few">عُثر على ‏⁨%1$s⁩ غرف تطابق ‏⁨%2$s⁩</item>
+        <item quantity="many">عُثر على ‏⁨%1$s⁩ غرفة تطابق ‏⁨%2$s⁩</item>
+        <item quantity="other">عُثر على ‏⁨%1$s⁩ غرفة تطابق ‏⁨%2$s⁩</item>
+    </plurals>
     <string name="room_settings_direct_chat">دردشة مباشرة</string>
     <string name="room_settings_add_homescreen_shortcut">أضِف اختصارا إلى الشاشة الرئيسية</string>
 
     <string name="room_sliding_menu_term_and_conditions">الأحكام والشروط</string>
     <string name="room_sliding_menu_third_party_notices">إشعارات الأطراف الثالثة</string>
-    <string name="settings_summary_app_info_link">شاشة معلومات التطبيق في النظام</string>
+    <string name="settings_app_info_link_summary">شاشة معلومات التطبيق في النظام</string>
     <string name="settings_call_invitations">دعوات المكالمات</string>
     <string name="settings_start_on_boot">ابدأ عن الإقلاع</string>
     <string name="settings_delete_threepid_confirmation">أمتأكّد من إزالة ⁨%1$s⁩ ⁨%2$s⁩؟</string>
@@ -862,13 +855,13 @@
     <string name="encryption_information_none">بلا</string>
 
     <plurals name="notification_unread_notified_messages_in_room_rooms">
-	<item quantity="zero">صفر غرفة</item>
-	<item quantity="one">غرفة واحدة</item>
-	<item quantity="two">غرفتان</item>
-	<item quantity="few">%d غرف</item>
-	<item quantity="many">%d غرفة</item>
-	<item quantity="other">%d غرفة</item>
-</plurals>
+        <item quantity="zero">صفر غرفة</item>
+        <item quantity="one">غرفة واحدة</item>
+        <item quantity="two">غرفتان</item>
+        <item quantity="few">%d غرف</item>
+        <item quantity="many">%d غرفة</item>
+        <item quantity="other">%d غرفة</item>
+    </plurals>
     <string name="notification_unread_notified_messages_in_room">‏⁨%1$s⁩ في ‏⁨%2$s⁩</string>
 
     <string name="historical_placeholder">ابحث في الأرشيف</string>
@@ -949,42 +942,42 @@
     <string name="deactivate_account_prompt_password">رجاءً اكتب كلمة السر للمتابعة:</string>
     <string name="error_empty_field_your_password">رجاءً اكتب كلمة السر.</string>
 
-<string name="send_bug_report_description_in_english">رجاءً اكتب الوصف بالإنجليزية إن أمكن.</string>
+    <string name="send_bug_report_description_in_english">رجاءً اكتب الوصف بالإنجليزية إن أمكن.</string>
     <string name="missing_permissions_error">نظرًا لكون بعض التصاريح ناقصة، هذا الإجراء ليس ممكنًا.</string>
     <string name="system_alerts_header">تنبيهات النظام</string>
 
     <plurals name="format_time_s">
-	<item quantity="zero">%d ثانية</item>
-	<item quantity="one">ثانية واحدة</item>
-	<item quantity="two">ثانيتين</item>
-	<item quantity="few">%d ثوان</item>
-	<item quantity="many">%d ثانيةً</item>
-	<item quantity="other">%d ثانية</item>
-</plurals>
+        <item quantity="zero">%d ثانية</item>
+        <item quantity="one">ثانية واحدة</item>
+        <item quantity="two">ثانيتين</item>
+        <item quantity="few">%d ثوان</item>
+        <item quantity="many">%d ثانيةً</item>
+        <item quantity="other">%d ثانية</item>
+    </plurals>
     <plurals name="format_time_m">
-	<item quantity="zero">%d دقيقة</item>
-	<item quantity="one">دقيقة واحدة</item>
-	<item quantity="two">دقيقتين</item>
-	<item quantity="few">%d دقائق</item>
-	<item quantity="many">%d دقيقةً</item>
-	<item quantity="other">%d دقيقة</item>
-</plurals>
+        <item quantity="zero">%d دقيقة</item>
+        <item quantity="one">دقيقة واحدة</item>
+        <item quantity="two">دقيقتين</item>
+        <item quantity="few">%d دقائق</item>
+        <item quantity="many">%d دقيقةً</item>
+        <item quantity="other">%d دقيقة</item>
+    </plurals>
     <plurals name="format_time_h">
-	<item quantity="zero">%d ساعة</item>
-	<item quantity="one">ساعة واحدة</item>
-	<item quantity="two">ساعتين</item>
-	<item quantity="few">%d ساعات</item>
-	<item quantity="many">%d ساعةً</item>
-	<item quantity="other">%d ساعة</item>
-</plurals>
+        <item quantity="zero">%d ساعة</item>
+        <item quantity="one">ساعة واحدة</item>
+        <item quantity="two">ساعتين</item>
+        <item quantity="few">%d ساعات</item>
+        <item quantity="many">%d ساعةً</item>
+        <item quantity="other">%d ساعة</item>
+    </plurals>
     <plurals name="format_time_d">
-	<item quantity="zero">%d يوم</item>
-	<item quantity="one">يوم واحد</item>
-	<item quantity="two">يومين</item>
-	<item quantity="few">%d أيام</item>
-	<item quantity="many">%d يومًا</item>
-	<item quantity="other">%d يوم</item>
-</plurals>
+        <item quantity="zero">%d يوم</item>
+        <item quantity="one">يوم واحد</item>
+        <item quantity="two">يومين</item>
+        <item quantity="few">%d أيام</item>
+        <item quantity="many">%d يومًا</item>
+        <item quantity="other">%d يوم</item>
+    </plurals>
 
     <string name="room_participants_now">%1$s الآن</string>
     <string name="room_participants_ago">%1$s منذ %2$s</string>
@@ -999,13 +992,13 @@
     <string name="room_message_placeholder_reply_to_encrypted">أرسِل ردًا غير معمّى…</string>
     <string name="room_message_placeholder_reply_to_not_encrypted">أرسِل ردًا (بلا تعمية)…</string>
     <plurals name="room_details_selected">
-	<item quantity="zero">لا شيء محدّد</item>
-	<item quantity="one">واحدة محدّدة</item>
-	<item quantity="two">اثنتان محدّدتان</item>
-	<item quantity="few">%d محدّدة</item>
-	<item quantity="many">%d محدّدة</item>
-	<item quantity="other">%d محدّدة</item>
-</plurals>
+        <item quantity="zero">لا شيء محدّد</item>
+        <item quantity="one">واحدة محدّدة</item>
+        <item quantity="two">اثنتان محدّدتان</item>
+        <item quantity="few">%d محدّدة</item>
+        <item quantity="many">%d محدّدة</item>
+        <item quantity="other">%d محدّدة</item>
+    </plurals>
     <string name="settings_second">من الثواني</string>
     <string name="settings_seconds">من الثواني</string>
 
@@ -1015,21 +1008,21 @@
     <string name="settings_without_flair">لست عضوًا في أي مجتمع حاليًا.</string>
 
     <plurals name="notification_unread_notified_messages">
-	<item quantity="zero">لا رسائل إخطار غير مقروءة</item>
-	<item quantity="one">رسالة إخطار واحدة غير مقروءة</item>
-	<item quantity="two">رسالتا إخطار غير مقروءان</item>
-	<item quantity="few">%d رسائل إخطار غير مقروءة</item>
-	<item quantity="many">%d رسالة إخطار غير مقروءة</item>
-	<item quantity="other">%d رسالة إخطار غير مقروءة</item>
-</plurals>
+        <item quantity="zero">لا رسائل إخطار غير مقروءة</item>
+        <item quantity="one">رسالة إخطار واحدة غير مقروءة</item>
+        <item quantity="two">رسالتا إخطار غير مقروءان</item>
+        <item quantity="few">%d رسائل إخطار غير مقروءة</item>
+        <item quantity="many">%d رسالة إخطار غير مقروءة</item>
+        <item quantity="other">%d رسالة إخطار غير مقروءة</item>
+    </plurals>
     <plurals name="notification_unread_notified_messages_in_room_msgs">
-	<item quantity="zero">لا رسائل إخطار غير مقروءة</item>
-	<item quantity="one">رسالة إخطار واحدة غير مقروءة</item>
-	<item quantity="two">رسالتا إخطار غير مقروءان</item>
-	<item quantity="few">%d رسائل إخطار غير مقروءة</item>
-	<item quantity="many">%d رسالة إخطار غير مقروءة</item>
-	<item quantity="other">%d رسالة إخطار غير مقروءة</item>
-</plurals>
+        <item quantity="zero">لا رسائل إخطار غير مقروءة</item>
+        <item quantity="one">رسالة إخطار واحدة غير مقروءة</item>
+        <item quantity="two">رسالتا إخطار غير مقروءان</item>
+        <item quantity="few">%d رسائل إخطار غير مقروءة</item>
+        <item quantity="many">%d رسالة إخطار غير مقروءة</item>
+        <item quantity="other">%d رسالة إخطار غير مقروءة</item>
+    </plurals>
     <string name="event_formatter_widget_added">أضاف ⁨%2$s⁩ المستخدم ⁨%1$s⁩</string>
     <string name="event_formatter_widget_removed">أزال ⁨%2$s⁩ المستخدم ⁨%1$s⁩</string>
     <string name="settings_labs_keyboard_options_to_send_message">استخدم مفتاح الإدخال في لوحة المفاتيح لإرسال الرسالة</string>
@@ -1039,22 +1032,22 @@
     <string name="command_description_invite_user">يدعو المستخدم حسب المعرّف المعطى إلى الغرفة الحالية</string>
     <string name="command_description_markdown">شغّل/عطّل مارك‌داون</string>
     <plurals name="group_members">
-	<item quantity="zero">لا أعضاء</item>
-	<item quantity="one">عضو واحد</item>
-	<item quantity="two">عضوان</item>
-	<item quantity="few">%d أعضاء</item>
-	<item quantity="many">%d عضوًا</item>
-	<item quantity="other">%d عضو</item>
-</plurals>
+        <item quantity="zero">لا أعضاء</item>
+        <item quantity="one">عضو واحد</item>
+        <item quantity="two">عضوان</item>
+        <item quantity="few">%d أعضاء</item>
+        <item quantity="many">%d عضوًا</item>
+        <item quantity="other">%d عضو</item>
+    </plurals>
 
     <plurals name="group_rooms">
-	<item quantity="zero">لا غرف</item>
-	<item quantity="one">غرفة واحدة</item>
-	<item quantity="two">غرفتان</item>
-	<item quantity="few">%d غرف</item>
-	<item quantity="many">%d غرفةً</item>
-	<item quantity="other">%d غرفة</item>
-</plurals>
+        <item quantity="zero">لا غرف</item>
+        <item quantity="one">غرفة واحدة</item>
+        <item quantity="two">غرفتان</item>
+        <item quantity="few">%d غرف</item>
+        <item quantity="many">%d غرفةً</item>
+        <item quantity="other">%d غرفة</item>
+    </plurals>
     <string name="deactivate_account_submit">ألغِ تفعيل الحساب</string>
 
     <string name="room_tombstone_versioned_description">استُبدلت هذه الغرفة ولم تعد نشطة بعد الآن</string>
@@ -1069,7 +1062,7 @@
     <string name="resource_limit_soft_contact">رجاءً %s لزيادة هذا الحدّ.</string>
     <string name="resource_limit_hard_contact">رجاءً %s لمتابعة استخدام هذه الخدمة.</string>
 
-<string name="go_on_with">تابِع مستخدمًا…</string>
+    <string name="go_on_with">تابِع مستخدمًا…</string>
     <string name="command_description_emote">يعرض إجراءً</string>
     <string name="command_description_deop_user">يُلغي إدارية المستخدم حسب المعرّف المعطى</string>
     <string name="command_description_join_room">ينضمّ للغرفة حسب الاختصار المعطى</string>
@@ -1101,4 +1094,4 @@
 
 ظهور الرسائل في «ماترِكس» شبيه كثيرًا بالبريد الإلكتروني. نسياننا لرسائلك يعني أن الرسائل التي أرسلتها لن تُشارك مع أي مستخدم جديد أو غير مسجّل، إلا أن المستخدمين المسجّلين الذي يقدرون على الوصول إليها سيمتلكون نسخة عنها.</string>
     <string name="encryption_information_claimed_ed25519_fingerprint_key">طُلب مفتاح البصمة Ed25519</string>
-    </resources>
+</resources>

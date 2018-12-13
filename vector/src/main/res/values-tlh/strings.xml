@@ -1,5 +1,6 @@
 <?xml version='1.0' encoding='UTF-8'?>
-<resources><string name="resources_language">tlh</string>
+<resources>
+    <string name="resources_language">tlh</string>
     <string name="resources_country_code">QO</string>
 
     <string name="light_theme">tu\'qom wov</string>
@@ -52,7 +53,7 @@
     <string name="invite">ruSvep ngeH</string>
     <string name="actions">Qu\'</string>
     <string name="title_activity_bug_report">Qagh ja\'</string>
-    <string name="dialog_title_third_party_licences"/>
+    <string name="dialog_title_third_party_licences" />
 
     <string name="action_historical">qun</string>
     <string name="action_quick_reply">nom jang</string>
@@ -64,9 +65,9 @@
 
     <string name="bottom_action_home">juH</string>
     <string name="permalink">ratlhqu\'bogh rarwI\'</string>
-    <string name="room_no_conference_call_in_encrypted_rooms"/>
+    <string name="room_no_conference_call_in_encrypted_rooms" />
     <string name="send_anyway">SaHbe\' \'ej ngeH</string>
-    <string name="offline"/>
+    <string name="offline" />
 
     <string name="action_exit">mejchu\'</string>
     <string name="action_global_search">Dat nej</string>
@@ -94,9 +95,9 @@
     <string name="no_room_placeholder">pa\' tu\'lu\'be\'</string>
     <string name="no_public_room_placeholder">tlhopDaq pa\' tu\'lu\'be\'</string>
     <plurals name="public_room_nb_users">
-	<item quantity="one">%d lo\'wI\'</item>
-	<item quantity="other"/>
-</plurals>
+        <item quantity="one">%d lo\'wI\'</item>
+        <item quantity="other" />
+    </plurals>
 
     <string name="groups_invite_header">rIt</string>
     <string name="groups_header">tuqmey</string>
@@ -135,7 +136,7 @@
     <string name="auth_password_dont_match">rapbe\' chaw\' ngoqmey</string>
     <string name="auth_forgot_password">chaw\' ngoqlIj DalIj\'a\'?</string>
     <string name="auth_use_server_options">turwI\' motlhbe\'bogh DuHmey\' lo\' (\'Itlh)</string>
-    <string name="auth_email_validation_message"/>
+    <string name="auth_email_validation_message" />
     <string name="auth_recaptcha_message">qoq SoHbe\' \'e\' \'ol neH juH turwI\'vam</string>
     <string name="auth_username_in_use">lo\'wI\' pong lo\'lu\'taH vay\' latlh</string>
     <string name="auth_home_server">juH turwI\':</string>

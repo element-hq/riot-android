@@ -31,12 +31,10 @@ import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
 import android.text.TextWatcher;
 import android.view.KeyEvent;
-import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.ViewGroup;
 import android.view.inputmethod.EditorInfo;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.AbsListView;
@@ -46,10 +44,11 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import org.jetbrains.annotations.NotNull;
 import org.matrix.androidsdk.MXSession;
 import org.matrix.androidsdk.data.Room;
 import org.matrix.androidsdk.data.RoomState;
-import org.matrix.androidsdk.db.MXMediasCache;
+import org.matrix.androidsdk.db.MXMediaCache;
 import org.matrix.androidsdk.listeners.MXEventListener;
 import org.matrix.androidsdk.rest.callback.ApiCallback;
 import org.matrix.androidsdk.rest.callback.SimpleApiCallback;
@@ -68,6 +67,7 @@ import java.util.Timer;
 import java.util.TimerTask;
 
 import androidx.core.widget.ToastKt;
+import butterknife.BindView;
 import im.vector.R;
 import im.vector.activity.CommonActivityUtils;
 import im.vector.activity.MXCActionBarActivity;
@@ -93,9 +93,11 @@ public class VectorRoomDetailsMembersFragment extends VectorBaseFragment {
     private Room mRoom;
 
     // fragment items
-    private View mProgressView;
+    @BindView(R.id.add_participants_progress_view)
+    View mProgressView;
     private VectorRoomDetailsMembersAdapter mAdapter;
-    private ExpandableListView mParticipantsListView;
+    @BindView(R.id.room_details_members_exp_list_view)
+    ExpandableListView mParticipantsListView;
     private Map<Integer, Boolean> mIsListViewGroupExpandedMap;
 
     private boolean mIsMultiSelectionMode;
@@ -317,14 +319,16 @@ public class VectorRoomDetailsMembersFragment extends VectorBaseFragment {
         }
     };
 
-
-    // top view
-    private View mViewHierarchy;
-    private EditText mPatternToSearchEditText;
-    private TextView mSearchNoResultTextView;
-    private ImageView mClearSearchImageView;
-    private String mPatternValue;
-    private View mAddMembersFloatingActionButton;
+    // search room members management
+    @BindView(R.id.search_value_edit_text)
+    EditText mPatternToSearchEditText;
+    @BindView(R.id.search_no_results_text_view)
+    TextView mSearchNoResultTextView;
+    @BindView(R.id.clear_search_icon_image_view)
+    ImageView mClearSearchImageView;
+    String mPatternValue;
+    @BindView(R.id.add_participants_create_view)
+    View mAddMembersFloatingActionButton;
 
     // create an instance of the fragment
     public static VectorRoomDetailsMembersFragment newInstance() {
@@ -448,10 +452,14 @@ public class VectorRoomDetailsMembersFragment extends VectorBaseFragment {
         }
     }
 
-    @SuppressLint("LongLogTag")
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        mViewHierarchy = inflater.inflate(R.layout.fragment_vector_add_participants, container, false);
+    public int getLayoutResId() {
+        return R.layout.fragment_vector_add_participants;
+    }
+
+    @Override
+    public void onViewCreated(@NotNull View view, @org.jetbrains.annotations.Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
 
         Activity activity = getActivity();
 
@@ -485,8 +493,6 @@ public class VectorRoomDetailsMembersFragment extends VectorBaseFragment {
         setHasOptionsMenu(true);
 
         mUIHandler = new Handler(Looper.getMainLooper());
-
-        return mViewHierarchy;
     }
 
     @Override
@@ -696,12 +702,39 @@ public class VectorRoomDetailsMembersFragment extends VectorBaseFragment {
     }
 
     /**
+     * Kick an user Ids list. First step is to ask for a reason
+     *
+     * @param userIds the user ids list
+     */
+    private void kickUsers(final List<String> userIds) {
+        // Ask for a reason
+        View layout = getLayoutInflater().inflate(R.layout.dialog_base_edit_text, null);
+
+        final TextView input = layout.findViewById(R.id.edit_text);
+        input.setHint(R.string.reason_hint);
+
+        new AlertDialog.Builder(getActivity())
+                .setTitle(getResources().getQuantityString(R.plurals.room_participants_kick_prompt_msg, userIds.size()))
+                .setView(layout)
+                .setPositiveButton(R.string.room_participants_action_kick, new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                kickUsersRecursive(userIds, input.getText().toString(), 0);
+                            }
+                        }
+                )
+                .setNegativeButton(R.string.cancel, null)
+                .show();
+    }
+
+    /**
      * Kick an user Ids list
      *
      * @param userIds the user ids list
+     * @param reason  the reason
      * @param index   the start index
      */
-    private void kickUsers(final List<String> userIds, final int index) {
+    private void kickUsersRecursive(final List<String> userIds, @Nullable final String reason, final int index) {
         if (index >= userIds.size()) {
             // the kick requests are performed in a dedicated thread
             // so switch to the UI thread at the end.
@@ -730,9 +763,9 @@ public class VectorRoomDetailsMembersFragment extends VectorBaseFragment {
 
         mProgressView.setVisibility(View.VISIBLE);
 
-        mRoom.kick(userIds.get(index), new ApiCallback<Void>() {
+        mRoom.kick(userIds.get(index), reason, new ApiCallback<Void>() {
                     private void kickNext() {
-                        kickUsers(userIds, index + 1);
+                        kickUsersRecursive(userIds, reason, index + 1);
                     }
 
                     @Override
@@ -772,9 +805,11 @@ public class VectorRoomDetailsMembersFragment extends VectorBaseFragment {
         int id = item.getItemId();
 
         if (id == R.id.ic_action_room_details_delete) {
-            kickUsers(mAdapter.getSelectedUserIds(), 0);
+            kickUsers(mAdapter.getSelectedUserIds());
+            return true;
         } else if (id == R.id.ic_action_room_details_edition_mode) {
             toggleMultiSelectionMode();
+            return true;
         }
 
         return super.onOptionsItemSelected(item);
@@ -784,9 +819,7 @@ public class VectorRoomDetailsMembersFragment extends VectorBaseFragment {
      * Finalize the fragment initialization.
      */
     private void finalizeInit() {
-        MXMediasCache mxMediasCache = mSession.getMediasCache();
-
-        mAddMembersFloatingActionButton = mViewHierarchy.findViewById(R.id.add_participants_create_view);
+        MXMediaCache mxMediasCache = mSession.getMediaCache();
 
         mAddMembersFloatingActionButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -799,11 +832,6 @@ public class VectorRoomDetailsMembersFragment extends VectorBaseFragment {
                 getActivity().startActivityForResult(intent, INVITE_USER_REQUEST_CODE);
             }
         });
-
-        // search room members management
-        mPatternToSearchEditText = mViewHierarchy.findViewById(R.id.search_value_edit_text);
-        mClearSearchImageView = mViewHierarchy.findViewById(R.id.clear_search_icon_image_view);
-        mSearchNoResultTextView = mViewHierarchy.findViewById(R.id.search_no_results_text_view);
 
         // add IME search action handler
         mPatternToSearchEditText.setOnEditorActionListener(new TextView.OnEditorActionListener() {
@@ -836,8 +864,6 @@ public class VectorRoomDetailsMembersFragment extends VectorBaseFragment {
             }
         });
 
-        mProgressView = mViewHierarchy.findViewById(R.id.add_participants_progress_view);
-        mParticipantsListView = mViewHierarchy.findViewById(R.id.room_details_members_exp_list_view);
         mAdapter = new VectorRoomDetailsMembersAdapter(getActivity(),
                 R.layout.adapter_item_vector_add_participants, R.layout.adapter_item_vector_recent_header, mSession, mRoom.getRoomId(), mxMediasCache);
         mParticipantsListView.setAdapter(mAdapter);
@@ -881,14 +907,14 @@ public class VectorRoomDetailsMembersFragment extends VectorBaseFragment {
 
             @Override
             public void onRemoveClick(final ParticipantAdapterItem participantItem) {
-                // The user is trying to leave with unsaved changes. Warn about that
+                // Ask for confirmation
                 new AlertDialog.Builder(getActivity())
                         .setTitle(R.string.dialog_title_confirmation)
                         .setMessage(getString(R.string.room_participants_remove_prompt_msg, participantItem.mDisplayName))
                         .setPositiveButton(R.string.remove, new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
-                                kickUsers(Collections.singletonList(participantItem.mUserId), 0);
+                                kickUsers(Collections.singletonList(participantItem.mUserId));
                             }
                         })
                         .setNegativeButton(R.string.cancel, null)

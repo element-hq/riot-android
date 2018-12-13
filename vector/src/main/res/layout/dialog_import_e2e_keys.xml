@@ -31,6 +31,6 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="10dp"
-        android:background="@color/vector_green_color"
+        android:background="?attr/colorAccent"
         android:text="@string/encryption_import_import" />
 </LinearLayout>

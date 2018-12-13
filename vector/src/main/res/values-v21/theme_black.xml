@@ -4,8 +4,4 @@
         <item name="android:navigationBarColor">?attr/vctr_primary_dark_color</item>
     </style>
 
-    <style name="AppTheme.NoActionBar.Black" parent="AppTheme.NoActionBar.Base.Black">
-        <item name="android:navigationBarColor">?attr/vctr_primary_dark_color</item>
-    </style>
-
 </resources>

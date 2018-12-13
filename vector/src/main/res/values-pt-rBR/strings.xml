@@ -436,8 +436,8 @@ Note que esta ação irá reiniciar o aplicativo e poderá tomar um certo tempo.
     <string name="settings_add_email_address">Adicionar endereço de email</string>
     <string name="settings_phone_number">Telefone</string>
     <string name="settings_add_phone_number">Adicionar número de telefone</string>
-    <string name="settings_summary_app_info_link">Tela de informações sobre o sistema do aplicativo</string>
-    <string name="settings_title_app_info_link">Informações sobre o aplicativo</string>
+    <string name="settings_app_info_link_summary">Tela de informações sobre o sistema do aplicativo</string>
+    <string name="settings_app_info_link_title">Informações sobre o aplicativo</string>
 
     <string name="settings_enable_all_notif">Habilitar notificações para esta conta</string>
     <string name="settings_enable_this_device">Habilitar notificações para este dispositivo</string>
@@ -542,7 +542,6 @@ Note que esta ação irá reiniciar o aplicativo e poderá tomar um certo tempo.
     <string name="room_settings_tag_pref_entry_favourite">Favoritar</string>
     <string name="room_settings_tag_pref_entry_low_priority">Baixa prioridade</string>
     <string name="room_settings_tag_pref_entry_none">Nenhum</string>
-    <string name="room_settings_tag_pref_no_tag">não etiquetada</string>
 
     <!-- room settings : access and visibility -->
     <string name="room_settings_category_access_visibility_title">Acesso e visibilidade</string>
@@ -677,18 +676,15 @@ No futuro, este processo de verificação será mais sofisticado.</string>
 
     <!-- historical -->
     <string name="historical_placeholder">Pesquisar no histórico</string>
-<string name="offline">Desconectada(o)</string>
+    <string name="offline">Desconectada(o)</string>
 
     <string name="user_directory_header">Lista de usuárias(os)</string>
     <string name="people_search_user_directory">LISTA DE USUÁRIAS(OS) (%s)</string>
     <string name="settings_start_on_boot">Iniciar na inicialização do celular</string>
-    <string name="settings_clear_medias_cache">Esvaziar o cache de mídia</string>
+    <string name="settings_clear_media_cache">Esvaziar o cache de mídia</string>
     <string name="settings_keep_media">Manter mídia</string>
 
-    <string name="settings_hide_read_receipts">Ocultar recibos de leitura</string>
-    <string name="settings_dont_send_typings_notifs">Não enviar notificações de digitação</string>
     <string name="settings_always_show_timestamps">Sempre mostrar a hora das mensagens</string>
-    <string name="settings_disable_markdown">Desabilitar formatação Markdown quando estiver enviando</string>
     <string name="settings_data_save_mode">Modo de economia de dados</string>
 
     <string name="settings_user_interface">Interface de usuária(o)</string>
@@ -710,7 +706,7 @@ No futuro, este processo de verificação será mais sofisticado.</string>
     <string name="larger">Maior</string>
     <string name="largest">Ainda maior</string>
     <string name="huge">Gigantesco</string>
-<string name="light_theme">Tema claro</string>
+    <string name="light_theme">Tema claro</string>
     <string name="dark_theme">Tema escuro</string>
     <string name="black_them">Tema preto</string>
 
@@ -745,7 +741,6 @@ No futuro, este processo de verificação será mais sofisticado.</string>
     <string name="groups_list">Lista dos grupos</string>
 
     <string name="call">Chamada</string>
-    <string name="room_participants_kick_prompt_msg">Tem certeza que quer excluir esta pessoa da conversa?</string>
     <string name="room_participants_ban_prompt_msg">Tem certeza que quer banir esta pessoa desta conversa?</string>
 
     <string name="room_settings_all_messages_noisy">Notificação sonora para cada mensagem</string>
@@ -759,8 +754,6 @@ No futuro, este processo de verificação será mais sofisticado.</string>
     <string name="settings_containing_my_user_name">Mensagens que contenham o meu nome de usuária(o)</string>
     <string name="settings_inline_url_preview">Habilitar visualização resumida dos links por padrão</string>
     <string name="settings_12_24_timestamps">Utilizar o formato de 12 horas (p.ex: 2:30pm)</string>
-    <string name="settings_hide_join_leave_messages">Ocultar mensagens de entrada e de saída de pessoas (convites, expulsões e banimentos não são afetados)</string>
-    <string name="settings_hide_avatar_display_name_changes_messages">Ocultar mensagens de alteração de avatar e de nome público</string>
     <string name="settings_vibrate_on_mention">Vibrar quando mencionado</string>
 
     <string name="settings_analytics">Estatísticas de uso</string>
@@ -842,61 +835,61 @@ No futuro, este processo de verificação será mais sofisticado.</string>
     <string name="reason_colon">Motivo: %1$s</string>
     <string name="rejoin">Entrar novamente</string>
     <string name="forget_room">Esquecer a sala</string>
-<string name="actions">Ações</string>
+    <string name="actions">Ações</string>
     <string name="open_chat_header">Abrir cabeçalho</string>
     <string name="room_sync_in_progress">Sincronizando…</string>
     <plurals name="room_header_active_members_count">
-	<item quantity="one">%d membro ativo</item>
-	<item quantity="other">%d membros ativos</item>
-</plurals>
+        <item quantity="one">%d membro ativo</item>
+        <item quantity="other">%d membros ativos</item>
+    </plurals>
     <plurals name="room_title_members">
-	<item quantity="one">%d membro</item>
-	<item quantity="other">%d membros</item>
-</plurals>
+        <item quantity="one">%d membro</item>
+        <item quantity="other">%d membros</item>
+    </plurals>
     <plurals name="room_new_messages_notification">
-	<item quantity="one">%d nova mensagem</item>
-	<item quantity="other">%d novas mensagens</item>
-</plurals>
+        <item quantity="one">%d nova mensagem</item>
+        <item quantity="other">%d novas mensagens</item>
+    </plurals>
 
     <plurals name="directory_search_rooms">
-	<item quantity="one">%d sala</item>
-	<item quantity="other">%d salas</item>
-</plurals>
+        <item quantity="one">%d sala</item>
+        <item quantity="other">%d salas</item>
+    </plurals>
     <plurals name="directory_search_rooms_for">
-	<item quantity="one">%1$s sala encontrada para %2$s</item>
-	<item quantity="other">%1$s salas encontradas para %2$s</item>
-</plurals>
+        <item quantity="one">%1$s sala encontrada para %2$s</item>
+        <item quantity="other">%1$s salas encontradas para %2$s</item>
+    </plurals>
     <plurals name="membership_changes">
-	<item quantity="one">%d alteração de status de participação</item>
-	<item quantity="other">%s alterações de status de participação</item>
-</plurals>
+        <item quantity="one">%d alteração de status de participação</item>
+        <item quantity="other">%s alterações de status de participação</item>
+    </plurals>
 
     <string name="list_members">Lista de integrantes</string>
     <plurals name="notification_unread_notified_messages">
-	<item quantity="one">%d mensagem notificada não lida</item>
-	<item quantity="other">%d mensagens notificadas não lidas</item>
-</plurals>
+        <item quantity="one">%d mensagem notificada não lida</item>
+        <item quantity="other">%d mensagens notificadas não lidas</item>
+    </plurals>
     <plurals name="notification_unread_notified_messages_in_room_msgs">
-	<item quantity="one">%d mensagem notificada não lida</item>
-	<item quantity="other">%d mensagens notificadas não lidas</item>
-</plurals>
+        <item quantity="one">%d mensagem notificada não lida</item>
+        <item quantity="other">%d mensagens notificadas não lidas</item>
+    </plurals>
     <plurals name="notification_unread_notified_messages_in_room_rooms">
-	<item quantity="one">%d sala</item>
-	<item quantity="other">%d salas</item>
-</plurals>
+        <item quantity="one">%d sala</item>
+        <item quantity="other">%d salas</item>
+    </plurals>
     <string name="notification_unread_notified_messages_in_room">%1$s em %2$s</string>
 
     <plurals name="active_widgets">
-	<item quantity="one">%d widget ativo</item>
-	<item quantity="other">%d widgets ativos</item>
-</plurals>
+        <item quantity="one">%d widget ativo</item>
+        <item quantity="other">%d widgets ativos</item>
+    </plurals>
 
     <!-- Widget Integration Manager -->
     <string name="receipt_avatar">Imagem de recebimento</string>
     <string name="notice_avatar">Imagem de aviso</string>
     <string name="avatar">Imagem de perfil</string>
 
-<string name="send_bug_report_rage_shake">Agite com raiva para reportar uma falha (bug)</string>
+    <string name="send_bug_report_rage_shake">Agite com raiva para reportar uma falha (bug)</string>
 
     <string name="settings_notification_privacy_normal">Normal</string>
     <string name="settings_notification_privacy_power_saving">Opções de economia de energia</string>
@@ -933,21 +926,21 @@ Quer adicionar alguns agora?</string>
     <string name="e2e_re_request_encryption_key_dialog_content">Por favor, use o Riot em outro dispositivo que possa descriptografar a mensagem de modo que possa enviar as chaves a este dispositivo.</string>
 
     <plurals name="format_time_s">
-	<item quantity="one">%ds</item>
-	<item quantity="other">%ds</item>
-</plurals>
+        <item quantity="one">%ds</item>
+        <item quantity="other">%ds</item>
+    </plurals>
     <plurals name="format_time_m">
-	<item quantity="one">%dmin</item>
-	<item quantity="other">%dmin</item>
-</plurals>
+        <item quantity="one">%dmin</item>
+        <item quantity="other">%dmin</item>
+    </plurals>
     <plurals name="format_time_h">
-	<item quantity="one">%dh</item>
-	<item quantity="other">%dh</item>
-</plurals>
+        <item quantity="one">%dh</item>
+        <item quantity="other">%dh</item>
+    </plurals>
     <plurals name="format_time_d">
-	<item quantity="one">%d dia</item>
-	<item quantity="other">%d dias</item>
-</plurals>
+        <item quantity="one">%d dia</item>
+        <item quantity="other">%d dias</item>
+    </plurals>
 
     <string name="room_participants_now">%1$s agora</string>
     <string name="room_participants_ago">há %1$s %2$s</string>
@@ -962,9 +955,9 @@ Note que esta ação vai reiniciar o aplicativo e isso pode tomar um certo tempo
     <string name="room_message_placeholder_reply_to_encrypted">Enviar uma resposta criptografada…</string>
     <string name="room_message_placeholder_reply_to_not_encrypted">Enviar uma resposta (não criptografada)…</string>
     <plurals name="room_details_selected">
-	<item quantity="one">%d selecionado</item>
-	<item quantity="other">%d selecionados</item>
-</plurals>
+        <item quantity="one">%d selecionado</item>
+        <item quantity="other">%d selecionados</item>
+    </plurals>
     <string name="settings_notification_privacy">Privacidade das notificações</string>
     <string name="settings_notification_privacy_warning">Riot.im funciona em segundo plano para manter sua mensagem de notificação privada. Você pode alterar esta opção para reduzir o uso da bateria.</string>
     <string name="settings_notification_privacy_fcm">• As notificações são enviadas pelo \"Google Cloud Messaging\"</string>
@@ -1012,14 +1005,14 @@ Note que esta ação vai reiniciar o aplicativo e isso pode tomar um certo tempo
     <string name="command_description_clear_scalar_token">Reparar a gestão de aplicativos Matrix</string>
 
     <plurals name="group_members">
-	<item quantity="one">%d participante</item>
-	<item quantity="other">%d participantes</item>
-</plurals>
+        <item quantity="one">%d participante</item>
+        <item quantity="other">%d participantes</item>
+    </plurals>
 
     <plurals name="group_rooms">
-	<item quantity="one">%d sala</item>
-	<item quantity="other">%d salas</item>
-</plurals>
+        <item quantity="one">%d sala</item>
+        <item quantity="other">%d salas</item>
+    </plurals>
     <string name="dialog_user_consent_content">Para continuar usando o Servidor de Base %1$s, você precisa revisar e aceitar os termos e condições de uso.</string>
     <string name="dialog_user_consent_submit">Revisar agora</string>
 
@@ -1053,5 +1046,5 @@ A visibilidade de mensagens no Matrix é parecida com a dos e-mails. Se esquecer
     <string name="resource_limit_soft_contact">Por favor, %s para que este limite seja aumentado.</string>
     <string name="resource_limit_hard_contact">Por favor, %s para seguir usando este serviço.</string>
 
-<string name="encryption_export_notice">Por favor, crie uma senha para cifrar as chaves exportadas. Precisará de usar a mesma senha para conseguir importar as chaves.</string>
-    </resources>
+    <string name="encryption_export_notice">Por favor, crie uma senha para cifrar as chaves exportadas. Precisará de usar a mesma senha para conseguir importar as chaves.</string>
+</resources>

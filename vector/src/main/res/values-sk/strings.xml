@@ -1,5 +1,6 @@
 <?xml version='1.0' encoding='UTF-8'?>
-<resources><string name="resources_language">sk</string>
+<resources>
+    <string name="resources_language">sk</string>
     <string name="resources_country_code">SK</string>
 
     <string name="light_theme">Svetlý vzhľad</string>
@@ -93,7 +94,7 @@
         <item quantity="one">1 používateľ</item>
         <item quantity="few">%d používatelia</item>
         <item quantity="many">%d používateľov</item>
-        <item quantity="other"/>
+        <item quantity="other" />
     </plurals>
 
     <string name="send_bug_report_include_logs">Odoslať záznamy</string>
@@ -426,8 +427,8 @@ Pozor! Vykonaním tejto akcie reštartujete aplikáciu a opätovné načítanie 
     <string name="settings_add_email_address">Pridať emailovú adresu</string>
     <string name="settings_phone_number">Telefón</string>
     <string name="settings_add_phone_number">Pridať telefónne číslo</string>
-    <string name="settings_summary_app_info_link">Systémová obrazovka s informáciami o aplikácii</string>
-    <string name="settings_title_app_info_link">Info o aplikácii</string>
+    <string name="settings_app_info_link_summary">Systémová obrazovka s informáciami o aplikácii</string>
+    <string name="settings_app_info_link_title">Info o aplikácii</string>
 
     <string name="settings_notification_ringtone">Zvuk oznámení</string>
     <string name="settings_enable_all_notif">Povoliť oznámenia pre tento účet</string>
@@ -457,7 +458,7 @@ Pozor! Vykonaním tejto akcie reštartujete aplikáciu a opätovné načítanie 
     <string name="settings_copyright">Autorské práva</string>
     <string name="settings_privacy_policy">Pravidlá ochrany súkromia</string>
     <string name="settings_clear_cache">Vyprázdniť vyrovnávaciu pamäť</string>
-    <string name="settings_clear_medias_cache">Vyprázdniť vyrovnávaciu pamäť s médiami</string>
+    <string name="settings_clear_media_cache">Vyprázdniť vyrovnávaciu pamäť s médiami</string>
     <string name="settings_keep_media">Ponechať médiá</string>
 
     <string name="settings_user_settings">Používateľské nastavenia</string>
@@ -474,14 +475,9 @@ Pozor! Vykonaním tejto akcie reštartujete aplikáciu a opätovné načítanie 
     <string name="settings_pin_missed_notifications">Pripnúť miestnosti so zmeškanými oznámeniami</string>
     <string name="settings_pin_unread_messages">Pripnúť miestnosti s neprečítanými správami</string>
     <string name="settings_devices_list">Zariadenia</string>
-    <string name="settings_hide_read_receipts">Skryť upozornenia o prečítaní</string>
-    <string name="settings_dont_send_typings_notifs">Neposielať oznámenia keď píšete</string>
     <string name="settings_always_show_timestamps">Vždy zobrazovať časovú značku správ</string>
     <string name="settings_12_24_timestamps">Pri zobrazovaní časových značiek používať 12 hodinový formát (napr. 2:30pm)</string>
-    <string name="settings_hide_join_leave_messages">Skryť správy o vstupe a opustení miestnosti (netýka sa pozvaní/vykázaní/zákazov vstupu)</string>
-    <string name="settings_hide_avatar_display_name_changes_messages">Skryť zmeny zobrazovaného mena a obrázka v profile</string>
 
-    <string name="settings_disable_markdown">Pri odosielaní zakázať formátovanie textu Markdown</string>
     <string name="settings_data_save_mode">Režim šetrenia údajov</string>
 
     <string name="devices_details_dialog_title">Podrobnosti o zariadení</string>
@@ -551,7 +547,6 @@ Pozor! Vykonaním tejto akcie reštartujete aplikáciu a opätovné načítanie 
     <string name="room_settings_tag_pref_entry_favourite">Obľúbená</string>
     <string name="room_settings_tag_pref_entry_low_priority">Nízka priorita</string>
     <string name="room_settings_tag_pref_entry_none">Žiadne</string>
-    <string name="room_settings_tag_pref_no_tag">Neoznačená</string>
 
     <string name="room_settings_category_access_visibility_title">Prístup a viditeľnosť</string>
     <string name="room_settings_directory_visibility">Uverejniť túto miestnosť v adresári miestností</string>
@@ -724,7 +719,7 @@ Neznáme zariadenia:</string>
     <string name="share_without_verifying">Zdieľať bez overenia</string>
     <string name="ignore_request">Ignorovať žiadosť</string>
 
-<string name="notification_noisy_notifications">Hlučné oznámenia</string>
+    <string name="notification_noisy_notifications">Hlučné oznámenia</string>
     <string name="notification_silent_notifications">Tiché oznámenia</string>
 
     <string name="title_activity_bug_report">Hlásenie o chybe</string>
@@ -751,7 +746,7 @@ Neznáme zariadenia:</string>
 
     <string name="encrypted_message">Šifrovaná správa</string>
 
-<string name="title_activity_group_details">Podrobnosti o komunite</string>
+    <string name="title_activity_group_details">Podrobnosti o komunite</string>
 
     <string name="loading">Načítavanie…</string>
 
@@ -770,7 +765,6 @@ Neznáme zariadenia:</string>
 
     <string name="groups_list">Zoznam komunít</string>
 
-    <string name="room_participants_kick_prompt_msg">Ste si istí, že chcete tohoto používateľa vykázať z tejto miestnosti?</string>
     <string name="room_participants_ban_prompt_msg">Ste si istí, že chcete tomuto používateľovi zakázať vstúpiť do tejto miestnosti?</string>
 
     <string name="room_settings_all_messages_noisy">Všetky správy (hlučné)</string>
@@ -817,83 +811,83 @@ Neznáme zariadenia:</string>
     <string name="reason_colon">Dôvod: %1$s</string>
     <string name="rejoin">Vstúpiť znovu</string>
     <string name="forget_room">Zabudnúť miestnosť</string>
-<string name="actions">Akcie</string>
+    <string name="actions">Akcie</string>
     <string name="send_bug_report_rage_shake">Oznámiť chybu zatrasením zariadenia</string>
 
     <plurals name="membership_changes">
-	<item quantity="one">1 zmena stavu</item>
-	<item quantity="few">%d zmeny stavu</item>
-	<item quantity="many">%d zmien stavu</item>
-	<item quantity="other"/>
-</plurals>
+        <item quantity="one">1 zmena stavu</item>
+        <item quantity="few">%d zmeny stavu</item>
+        <item quantity="many">%d zmien stavu</item>
+        <item quantity="other" />
+    </plurals>
 
     <string name="list_members">Zobraziť členov</string>
     <string name="open_chat_header">Otvoriť záhlavie</string>
     <string name="room_sync_in_progress">Synchronizácia…</string>
     <plurals name="room_header_active_members_count">
-	<item quantity="one">1 aktívny člen</item>
-	<item quantity="few">%d aktívni členovia</item>
-	<item quantity="many">%d aktívnych členov</item>
-	<item quantity="other"/>
-</plurals>
+        <item quantity="one">1 aktívny člen</item>
+        <item quantity="few">%d aktívni členovia</item>
+        <item quantity="many">%d aktívnych členov</item>
+        <item quantity="other" />
+    </plurals>
     <plurals name="room_title_members">
-	<item quantity="one">1 člen</item>
-	<item quantity="few">%d členovia</item>
-	<item quantity="many">%d členov</item>
-	<item quantity="other"/>
-</plurals>
+        <item quantity="one">1 člen</item>
+        <item quantity="few">%d členovia</item>
+        <item quantity="many">%d členov</item>
+        <item quantity="other" />
+    </plurals>
     <plurals name="room_new_messages_notification">
-	<item quantity="one">1 nová správa</item>
-	<item quantity="few">%d nové správy</item>
-	<item quantity="many">%d nových správ</item>
-	<item quantity="other"/>
-</plurals>
+        <item quantity="one">1 nová správa</item>
+        <item quantity="few">%d nové správy</item>
+        <item quantity="many">%d nových správ</item>
+        <item quantity="other" />
+    </plurals>
 
     <plurals name="directory_search_rooms">
-	<item quantity="one">1 miestnosť</item>
-	<item quantity="few">%d miestnosti</item>
-	<item quantity="many">%d miestností</item>
-	<item quantity="other"/>
-</plurals>
+        <item quantity="one">1 miestnosť</item>
+        <item quantity="few">%d miestnosti</item>
+        <item quantity="many">%d miestností</item>
+        <item quantity="other" />
+    </plurals>
     <plurals name="directory_search_rooms_for">
-	<item quantity="one">Nájdená %1$s miestnosť pre %2$s</item>
-	<item quantity="few">Nájdené %1$s miestnosti pre %2$s</item>
-	<item quantity="many">Nájdených %1$s miestností pre %2$s</item>
-	<item quantity="other"/>
-</plurals>
+        <item quantity="one">Nájdená %1$s miestnosť pre %2$s</item>
+        <item quantity="few">Nájdené %1$s miestnosti pre %2$s</item>
+        <item quantity="many">Nájdených %1$s miestností pre %2$s</item>
+        <item quantity="other" />
+    </plurals>
     <plurals name="notification_unread_notified_messages">
-	<item quantity="one">1 neprečítaná správa</item>
-	<item quantity="few">%d neprečítané správy</item>
-	<item quantity="many">%d neprečítaných správ</item>
-	<item quantity="other"/>
-</plurals>
+        <item quantity="one">1 neprečítaná správa</item>
+        <item quantity="few">%d neprečítané správy</item>
+        <item quantity="many">%d neprečítaných správ</item>
+        <item quantity="other" />
+    </plurals>
     <plurals name="notification_unread_notified_messages_in_room_msgs">
-	<item quantity="one">1 neprečítaná správa</item>
-	<item quantity="few">%d neprečítané správy</item>
-	<item quantity="many">%d neprečítaných správ</item>
-	<item quantity="other"/>
-</plurals>
+        <item quantity="one">1 neprečítaná správa</item>
+        <item quantity="few">%d neprečítané správy</item>
+        <item quantity="many">%d neprečítaných správ</item>
+        <item quantity="other" />
+    </plurals>
     <plurals name="notification_unread_notified_messages_in_room_rooms">
-	<item quantity="one">1 miestnosti</item>
-	<item quantity="few">%d miestnostiach</item>
-	<item quantity="many">%d miestnostiach</item>
-	<item quantity="other"/>
-</plurals>
+        <item quantity="one">1 miestnosti</item>
+        <item quantity="few">%d miestnostiach</item>
+        <item quantity="many">%d miestnostiach</item>
+        <item quantity="other" />
+    </plurals>
     <string name="notification_unread_notified_messages_in_room">%1$s v %2$s</string>
 
     <plurals name="active_widgets">
-	<item quantity="one">1 aktívny widget</item>
-	<item quantity="few">%d aktívne widgety</item>
-	<item quantity="many">%d aktívnych widgetov</item>
-	<item quantity="other"/>
-</plurals>
+        <item quantity="one">1 aktívny widget</item>
+        <item quantity="few">%d aktívne widgety</item>
+        <item quantity="many">%d aktívnych widgetov</item>
+        <item quantity="other" />
+    </plurals>
 
     <!-- Widget Integration Manager -->
     <string name="receipt_avatar">Potvrdenie o prečítaní</string>
     <string name="notice_avatar">Obrázok oznámenia</string>
     <string name="avatar">Obrázok</string>
 
-<string name="settings_notification_privacy">Súkromie oznámení</string>
+    <string name="settings_notification_privacy">Súkromie oznámení</string>
     <string name="settings_notification_privacy_warning">Riot.im ostane spustený na pozadí, aby bol obsah správ oznámení zachovaný v súkromí. Zmenou tejto voľby môžete predlžiť výdrž pri napájaní z batérie.</string>
     <string name="settings_notification_privacy_power_saving">Nastavenia šetrenia energie</string>
     <string name="settings_notification_privacy_low_detail">Stručné oznámenia</string>
@@ -942,7 +936,7 @@ Viditeľnosť správ odoslaných cez matrix funguje podobne ako viditeľnosť sp
     <string name="deactivate_account_prompt_password">Aby ste mohli pokračovať, prosím zadajte svoje heslo:</string>
     <string name="deactivate_account_submit">Deaktivovať účet</string>
 
-<string name="dialog_title_third_party_licences">Licencie tretích strán</string>
+    <string name="dialog_title_third_party_licences">Licencie tretích strán</string>
 
     <string name="download">Stiahnuť</string>
     <string name="speak">Hovoriť</string>
@@ -965,32 +959,32 @@ Viditeľnosť správ odoslaných cez matrix funguje podobne ako viditeľnosť sp
 
     <string name="error_empty_field_your_password">Prosím, vložte svoje heslo.</string>
 
-<string name="missing_permissions_error">Túto akciu nie je možné vykonať, pretože neboli udelené všetky potrebné oprávnenia.</string>
+    <string name="missing_permissions_error">Túto akciu nie je možné vykonať, pretože neboli udelené všetky potrebné oprávnenia.</string>
     <string name="send_bug_report_description_in_english">Ak je to možné, prosím popis napíšte v angličtine.</string>
     <plurals name="format_time_s">
-	<item quantity="one">1s</item>
-	<item quantity="few">%ds</item>
-	<item quantity="many">%ds</item>
-	<item quantity="other"/>
-</plurals>
+        <item quantity="one">1s</item>
+        <item quantity="few">%ds</item>
+        <item quantity="many">%ds</item>
+        <item quantity="other" />
+    </plurals>
     <plurals name="format_time_m">
-	<item quantity="one">1m</item>
-	<item quantity="few">%dm</item>
-	<item quantity="many">%dm</item>
-	<item quantity="other"/>
-</plurals>
+        <item quantity="one">1m</item>
+        <item quantity="few">%dm</item>
+        <item quantity="many">%dm</item>
+        <item quantity="other" />
+    </plurals>
     <plurals name="format_time_h">
-	<item quantity="one">1h</item>
-	<item quantity="few">%dh</item>
-	<item quantity="many">%dh</item>
-	<item quantity="other"/>
-</plurals>
+        <item quantity="one">1h</item>
+        <item quantity="few">%dh</item>
+        <item quantity="many">%dh</item>
+        <item quantity="other" />
+    </plurals>
     <plurals name="format_time_d">
-	<item quantity="one">1d</item>
-	<item quantity="few">%dd</item>
-	<item quantity="many">%dd</item>
-	<item quantity="other"/>
-</plurals>
+        <item quantity="one">1d</item>
+        <item quantity="few">%dd</item>
+        <item quantity="many">%dd</item>
+        <item quantity="other" />
+    </plurals>
 
     <string name="room_participants_now">teraz %1$s</string>
     <string name="room_participants_ago">%1$s pred %2$s</string>
@@ -1005,11 +999,11 @@ Pozor! Vykonaním tejto akcie reštartujete aplikáciu a opätovné načítanie 
     <string name="room_message_placeholder_reply_to_encrypted">Odoslať šifrovanú odpoveď…</string>
     <string name="room_message_placeholder_reply_to_not_encrypted">Odoslať odpoveď (nešifrovanú)…</string>
     <plurals name="room_details_selected">
-	<item quantity="one">1 vybratý</item>
-	<item quantity="few">%d vybratí</item>
-	<item quantity="many">%d vybratých</item>
-	<item quantity="other"/>
-</plurals>
+        <item quantity="one">1 vybratý</item>
+        <item quantity="few">%d vybratí</item>
+        <item quantity="many">%d vybratých</item>
+        <item quantity="other" />
+    </plurals>
     <string name="settings_preview_media_before_sending">Zobraziť náhľad médií pred odoslaním</string>
 
     <string name="settings_without_flair">Momentálne nie ste členom žiadnych komunít.</string>
@@ -1030,24 +1024,24 @@ Pozor! Vykonaním tejto akcie reštartujete aplikáciu a opätovné načítanie 
     <string name="command_description_clear_scalar_token">Užitočné na opravu spravovania aplikácií matrix</string>
 
     <plurals name="group_members">
-	<item quantity="one">1 člen</item>
-	<item quantity="few">%d členovia</item>
-	<item quantity="many">%d členov</item>
-	<item quantity="other"/>
-</plurals>
+        <item quantity="one">1 člen</item>
+        <item quantity="few">%d členovia</item>
+        <item quantity="many">%d členov</item>
+        <item quantity="other" />
+    </plurals>
 
     <plurals name="group_rooms">
-	<item quantity="one">1 miestnosť</item>
-	<item quantity="few">%d miestnosti</item>
-	<item quantity="many">%d miestností</item>
-	<item quantity="other"/>
-</plurals>
+        <item quantity="one">1 miestnosť</item>
+        <item quantity="few">%d miestnosti</item>
+        <item quantity="many">%d miestností</item>
+        <item quantity="other" />
+    </plurals>
     <string name="room_tombstone_versioned_description">Táto miestnosť bola nahradená inou a nie je viac aktívna</string>
     <string name="room_tombstone_continuation_link">Konverzácia pokračuje tu</string>
     <string name="room_tombstone_continuation_description">Táto miestnosť je pokračovaním predchádzajúcej konverzácii</string>
     <string name="room_tombstone_predecessor_link">Staršie správy zobrazíte kliknutím sem</string>
 
-<string name="system_alerts_header">Systémové upozornenia</string>
+    <string name="system_alerts_header">Systémové upozornenia</string>
 
     <string name="resource_limit_exceeded_title">Prekročený limit prostriedkov</string>
     <string name="resource_limit_contact_action">Kontaktovať správcu</string>
@@ -1063,12 +1057,31 @@ Pozor! Vykonaním tejto akcie reštartujete aplikáciu a opätovné načítanie 
     <string name="resource_limit_soft_contact">Prosím %s a pokúste sa tento limit navýšiť.</string>
     <string name="resource_limit_hard_contact">Prosím %s aby ste službu mohli naďalej používať.</string>
 
-<string name="dialog_title_error">Chyba</string>
+    <string name="dialog_title_error">Chyba</string>
 
     <string name="settings_lazy_loading_title">Oneskorene načítať členov miestnosti</string>
     <string name="settings_lazy_loading_description">Zvýšiť výkon môžete načítaním členov v miestnosti až pri prvom zobrazení</string>
     <string name="error_lazy_loading_not_supported_by_home_server">Váš domovský server zatiaľ nepodporuje oneskorené načítanie členov v miestnosti. Skúste prosím neskôr.</string>
 
     <string name="unknown_error">Prepáčte, vyskytla sa chyba</string>
+
+    <string name="status_theme">Téma Status.im</string>
+
+    <string name="room_sliding_menu_version_x">Verzia %s</string>
+    <string name="encryption_export_notice">Prosím vytvorte si heslo, ktorým zašifrujete exportované kľúče. Toto isté heslo budete musieť zadať aj pri importe kľúčov z uloženého súboru.</string>
+    <string name="encryption_export_create_passphrase">Vytvoriť heslo</string>
+    <string name="encryption_export_passphrase_dont_match">Heslá sa musia zhodovať</string>
+    <string name="merged_events_expand">Rozbaliť</string>
+    <string name="merged_events_collapse">Zbaliť</string>
+
+    <string name="settings_info_area_show">Zobrazovať oblasť s informáciami</string>
+    <string name="show_info_area_always">Vždy</string>
+    <string name="show_info_area_messages_and_errors">Pre správy a chybové hlásenia</string>
+    <string name="show_info_area_only_errors">Len pre chybové hlásenia</string>
+
+    <string name="generic_label">%1$s:</string>
+    <string name="generic_label_and_value">%1$s: %2$s</string>
+    <string name="plus_x">+%d</string>
+    <string name="x_plus">%d+</string>
 
 </resources>

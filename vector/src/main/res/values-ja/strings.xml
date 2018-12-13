@@ -47,13 +47,13 @@
         <item quantity="other">%d 名</item>
     </plurals>
 
-    <string name="send_bug_report">不具合報告</string>
+    <string name="send_bug_report">バグを報告</string>
     <string name="send_bug_report_description">不具合の内容と状況の説明をお願い致します。あなたは何をしましたか？何が起こると思いますか？実際何が起こったのですか？</string>
     <string name="send_bug_report_placeholder">ここに不具合内容を説明</string>
     <string name="send_bug_report_include_screenshot">画面のスクリーンショット画像を送信</string>
     <string name="send_bug_report_include_crash_logs">不具合発生時の動作記録を送信</string>
     <string name="send_bug_report_include_logs">動作記録を送信</string>
-    <string name="send_bug_report_logs_description">開発者が問題を診断するために、このRiotの動作記録が不具合報告と一緒に送信されます。上記文章のみを送信したい場合は以下のチェックを解除してください：</string>
+    <string name="send_bug_report_logs_description">開発者が問題を診断するために、このクライアントの動作記録がバグの報告と一緒に送信されます。このバグの報告は、ログとスクリーンショットを含め、公開されません。上記文章のみを送信したい場合は以下のチェックを解除してください：</string>
     <string name="send_bug_report_alert_message">あなたは不満で端末を振っているようです。不具合を報告しますか？</string>
     <string name="send_bug_report_app_crashed">前回アプリケーションは正常に停止しませんでした。クラッシュを報告しますか？</string>
 
@@ -62,7 +62,7 @@
     <string name="join_room">部屋へ参加</string>
     <string name="missing_permissions_title_to_start_conf_call">通話が開始できません</string>
     <string name="action_voice_call">音声通話</string>
-    <string name="action_video_call">映像付き通話</string>
+    <string name="action_video_call">ビデオ通話</string>
     <string name="action_global_search">全体検索</string>
     <string name="local_address_book_header">端末の電話帳</string>
     <string name="no_room_placeholder">部屋がありません</string>
@@ -200,7 +200,7 @@
     <string name="settings_set_sync_timeout">新着確認を失敗とするまでの時間</string>
     <string name="settings_set_sync_delay">再度新着確認を送るまでの時間</string>
     <string name="settings_clear_cache">一時保存を消去</string>
-    <string name="settings_clear_medias_cache">画像等の一時保存を消去</string>
+    <string name="settings_clear_media_cache">画像等の一時保存を消去</string>
     <string name="settings_keep_media">画像等を一時保存する期間</string>
 
     <string name="settings_user_settings">利用者設定</string>
@@ -214,14 +214,9 @@
     <string name="settings_contacts_app_permission">端末の電話帳の使用を許可</string>
     <string name="settings_contacts_phonebook_country">電話帳の国番号</string>
     <string name="settings_devices_list">端末</string>
-    <string name="settings_hide_read_receipts">既読通知を表示しない</string>
-    <string name="settings_dont_send_typings_notifs">発言入力中であることを公表しない</string>
     <string name="settings_always_show_timestamps">発言時刻を常に表示</string>
     <string name="settings_12_24_timestamps">発言時刻を12時間形式で表示 (例 午後2:30)</string>
-    <string name="settings_hide_join_leave_messages">参加や退室の文を表示しない(招待,強制退室,再入室禁止は表示)</string>
-    <string name="settings_hide_avatar_display_name_changes_messages">アイコン画像や表示名の変更を表示しない</string>
 
-    <string name="settings_disable_markdown">markdown書式表示を不許可</string>
     <string name="devices_details_dialog_title">端末詳細</string>
     <string name="devices_details_id_title">ID(端末固有番号)</string>
     <string name="devices_details_name_title">端末名</string>
@@ -265,7 +260,6 @@
     <string name="room_settings_tag_pref_entry_favourite">お気に入り</string>
     <string name="room_settings_tag_pref_entry_low_priority">低優先度</string>
     <string name="room_settings_tag_pref_entry_none">なし</string>
-    <string name="room_settings_tag_pref_no_tag">属性指定なし</string>
 
     <string name="room_settings_category_access_visibility_title">参加と可視範囲</string>
     <string name="room_settings_directory_visibility">部屋一覧へ公開する</string>
@@ -301,7 +295,7 @@
     <string name="room_settings_addresses_pref_title">住所表記</string>
     <string name="room_settings_addresses_invalid_format_dialog_title">住所表記が正しくありません</string>
     <string name="room_settings_addresses_invalid_format_dialog_body">\'%s\' は正しくない形式の住所表記です</string>
-    <string name="room_settings_addresses_disable_main_address_prompt_msg">本住所表記が設定されていません. この部屋の本住所表記は無作為に設定選択されます</string>
+    <string name="room_settings_addresses_disable_main_address_prompt_msg">この部屋の本住所表記が設定されていません.</string>
     <string name="room_settings_addresses_disable_main_address_prompt_title">本住所表記の警告</string>
 
     <string name="room_settings_set_main_address">本住所表記を設定</string>
@@ -333,12 +327,12 @@
     <string name="option_take_photo_video">写真または動画を撮影</string>
 
     <string name="auth_send_reset_email">初期化メール送信</string>
-    <string name="permissions_rationale_msg_camera">写真撮影や映像付き通話には, Riotアプリに端末のカメラの使用を許可する必要がります.</string>
-    <string name="ongoing_conference_call">" 会議通話実施中。音声か映像で参加してください。"</string>
+    <string name="permissions_rationale_msg_camera">写真撮影やビデオ通話には, Riotアプリに端末のカメラの使用を許可する必要があります.</string>
+    <string name="ongoing_conference_call">会議通話実施中。音声かビデオ通話で参加してください。</string>
     <string name="ongoing_conference_call_voice">音声</string>
     <string name="ongoing_conference_call_video">映像</string>
     <string name="cannot_start_call">通話を開始できませんでした。後ほど試してください。</string>
-    <string name="missing_permissions_warning">権限が無いため、一部の機能が利用できない可能性があります。</string>
+    <string name="missing_permissions_warning">権限が無いため、一部の機能を利用できない可能性があります…</string>
     <string name="missing_permissions_to_start_conf_call">この部屋で会議を開始するためには招待権限が必要です</string>
     <string name="send_anyway">とにかく送る</string>
     <string name="action_sign_out">ログアウト</string>
@@ -415,7 +409,7 @@
     <string name="call_connected">通話が接続されました</string>
     <string name="call_connecting">通話を接続中…</string>
     <string name="incoming_call">通話着信中</string>
-    <string name="incoming_video_call">映像つき通話の着信中</string>
+    <string name="incoming_video_call">ビデオ通話の着信中</string>
     <string name="incoming_voice_call">音声通話の着信中</string>
     <string name="call_in_progress">通話中</string>
 
@@ -472,7 +466,7 @@
     <string name="room_settings_leave_conversation">退室</string>
     <string name="room_sliding_menu_messages">会話</string>
     <string name="room_sliding_menu_settings">設定</string>
-    <string name="room_sliding_menu_version">"Version "</string>
+    <string name="room_sliding_menu_version">Version</string>
     <string name="room_sliding_menu_term_and_conditions">利用規約</string>
     <string name="room_sliding_menu_copyright">著作権</string>
     <string name="room_sliding_menu_privacy_policy">個人情報保護方針</string>
@@ -490,11 +484,13 @@
     <string name="account_phone_number_already_used_error">この電話番号は既に使用されています</string>
 
     <string name="settings_change_password">パスワード変更</string>
-    <string name="settings_old_password">今までのパスワード</string>
+    <string name="settings_old_password">古いパスワード</string>
     <string name="settings_new_password">新しいパスワード</string>
-    <string name="settings_confirm_password">パスワード確認</string>
+    <string name="settings_confirm_password">確認のパスワード</string>
     <string name="settings_fail_to_update_password">パスワードの更新に失敗しました</string>
-    <string name="settings_unignore_user">%s さんからの発言を表示してよろしいですか？</string>
+    <string name="settings_unignore_user">%sのすべてのメッセージを表示しますか？
+
+この操作はアプリを再起動し、時間がかかることに注意してください。</string>
 
     <string name="settings_phone_number_verification_error">電話番号の認証時にエラーが発生しました</string>
     <string name="room_settings_room_access_warning">この部屋へのリンクを作成するには、部屋の住所表記が必要です。</string>
@@ -537,7 +533,7 @@
     <string name="permissions_rationale_msg_record_audio_explanation">
 
 通話をするには、次のポップアップでアクセスできるようにしてください。</string>
-    <string name="permissions_rationale_msg_camera_and_audio">映像つき通話を行うには、カメラとマイクにアクセスするための権限がRiotアプリに必要です。
+    <string name="permissions_rationale_msg_camera_and_audio">ビデオ通話を行うには、カメラとマイクにアクセスするための権限がRiotアプリに必要です。
 
 通話をするには、次のポップアップでのアクセスを許可してください。</string>
     <string name="permissions_rationale_msg_contacts">Matrixユーザが電子メールアドレスや電話番号を元に他のユーザを検索するためには、Riotアプリがあなたの端末内電話帳へアクセスする許可が必要です。
@@ -557,7 +553,7 @@ Riotアプリがあなたの電話帳へアクセスすることを許可しま�
 
     <string name="ignore_request">要求を無視する</string>
 
-<string name="share_without_verifying">検証せずに共有する</string>
+    <string name="share_without_verifying">検証せずに共有する</string>
     <string name="start_verification">検証を開始する</string>
     <string name="widget_integration_missing_user_id">リクエストに user_id がありません。</string>
     <string name="widget_integration_missing_room_id">リクエストに room_id がありません。</string>
@@ -582,8 +578,7 @@ Riotアプリがあなたの電話帳へアクセスすることを許可しま�
 
     <string name="encryption_information_verify_key_match">キーが一致していることを確認</string>
 
-    <string name="encryption_information_verify_device_warning2">一致する場合は、下の確認ボタンを押します。そうでない場合は、他の誰かがこのデバイスを盗聴しているので、代わりにブロックボタンを押すことをおすすめします。
-将来この検証プロセスはより洗練されたものになるでしょう。</string>
+    <string name="encryption_information_verify_device_warning2">一致する場合は、下の確認ボタンを押します。そうでない場合は、他の誰かがこのデバイスを盗聴しているので、代わりにブロックボタンを押すことをおすすめします。将来この検証プロセスはより洗練されたものになるでしょう。</string>
     <string name="encryption_information_verify_device">デバイスの検証</string>
     <string name="encryption_information_unknown_device">不明なデバイス</string>
     <string name="encryption_never_send_to_unverified_devices_summary">このデバイスから未認証のデバイスに暗号化されたメッセージを送信しない</string>
@@ -608,7 +603,7 @@ Riotアプリがあなたの電話帳へアクセスすることを許可しま�
 
     <string name="read_receipts_list">レセプトリストを読み込む</string>
 
-    <string name="media_slider_saved_message">ダウンロードファイルに保存する</string>
+    <string name="media_slider_saved_message">ダウンロードファイルに保存しますか？</string>
     <string name="room_preview_unlinked_email_warning">この招待は%sさんに送られましたが、このアカウントには関連づけられていません。
 他のアカウントでログインするか、このメールアドレスをこのアカウントに追加できます。</string>
     <string name="room_preview_try_join_an_unknown_room">あなたは%sにアクセスしようとしています。話し合いに参加しますか？</string>
@@ -643,7 +638,9 @@ Riotアプリがあなたの電話帳へアクセスすることを許可しま�
     <string name="ssl_only_accept">サーバの管理者が上のフィンガープリントと一致するものを発行した場合に限り、証明書を承認してください。</string>
     <string name="malformed_id">不正な形式のIDです。メールアドレスまたは\'@localpart:domain\'のようなMatrix IDを入力してください</string>
     <string name="room_event_action_report_prompt_reason">このコンテンツを報告する理由</string>
-    <string name="room_event_action_report_prompt_ignore_user">このユーザによるすべてのメッセージを非表示にしますか？</string>
+    <string name="room_event_action_report_prompt_ignore_user">このユーザによるすべてのメッセージを非表示にしますか？
+
+この操作はアプリを再起動し、時間がかかることに注意してください。</string>
     <string name="room_event_action_cancel_upload">アップロードをキャンセルする</string>
     <string name="room_event_action_cancel_download">ダウンロードをキャンセルする</string>
 
@@ -655,15 +652,15 @@ Riotアプリがあなたの電話帳へアクセスすることを許可しま�
 
     <string name="directory_searching_title">ディレクトリを検索中..</string>
 
-    <string name="room_sliding_menu_third_party_notices">サードパーティのライセンスに関する通知</string>
-    <string name="settings_summary_app_info_link">このアプリのシステムの情報を見る</string>
-    <string name="settings_title_app_info_link">アプリの情報</string>
+    <string name="room_sliding_menu_third_party_notices">サードパーティの通知</string>
+    <string name="settings_app_info_link_summary">このアプリのシステムの情報を見る</string>
+    <string name="settings_app_info_link_title">アプリの情報</string>
 
-    <string name="settings_containing_my_display_name">自分の名前を含むメッセージ</string>
+    <string name="settings_containing_my_display_name">自分の表示名を含むメッセージ</string>
     <string name="settings_containing_my_user_name">自分のユーザネームを含むメッセージ</string>
     <string name="settings_version">バージョン</string>
     <string name="settings_olm_version">olmのバージョン</string>
-    <string name="settings_third_party_notices">サードパーティのライセンスに関する通知</string>
+    <string name="settings_third_party_notices">サードパーティの通知</string>
     <string name="settings_home_display">ホーム画面</string>
     <string name="settings_pin_missed_notifications">逃した通知がある部屋を固定する</string>
     <string name="settings_pin_unread_messages">未読のメッセージがある部屋を固定する</string>
@@ -688,7 +685,7 @@ Riotアプリがあなたの電話帳へアクセスすることを許可しま�
 
 暗号化されたメッセージは、暗号化に対応していないクライアントでは読めない可能性があります。</string>
 
-    <string name="failed_to_load_timeline_position">%sさんはこの部屋のタイムラインのある箇所を読み込もうとしましたが、見つかりませんでした。</string>
+    <string name="failed_to_load_timeline_position">%sはこの部屋のタイムラインのある箇所を読み込もうとしましたが、見つかりませんでした。</string>
 
     <string name="encryption_information_device_info">イベント情報</string>
     <string name="encryption_information_user_id">ユーザID</string>
@@ -712,9 +709,9 @@ Riotアプリがあなたの電話帳へアクセスすることを許可しま�
     <string name="encryption_information_block">ブラックリスト</string>
     <string name="encryption_information_unblock">ブラックリストから除外する</string>
 
-    <string name="encryption_information_verify_device_warning">" このデバイスが信頼できることを確認するために、その所有者に何らかの他の方法(直接会って、または、電話で)連絡し、以下のキーが、そのデバイスの「設定」で確認できるキーと一致するかお尋ねください:"</string>
+    <string name="encryption_information_verify_device_warning">このデバイスが信頼できることを確認するために、その所有者に何らかの他の方法（直接会って、または、電話で）連絡し、以下のキーが、そのデバイスの「設定」で確認できるキーと一致するかお尋ねください:</string>
     <string name="select_room_directory">部屋のディレクトリを選択</string>
-    <string name="directory_server_type_homeserver">公共の部屋を表示するホームサーバを入力してください</string>
+    <string name="directory_server_type_homeserver">公開の部屋を表示するホームサーバを入力してください</string>
     <string name="directory_server_placeholder">ホームサーバのURL</string>
     <string name="directory_server_all_rooms_on_server">%sサーバ上のすべての部屋</string>
     <string name="directory_server_native_rooms">すべてのローカルの%s部屋</string>
@@ -742,7 +739,7 @@ Riotアプリがあなたの電話帳へアクセスすることを許可しま�
 
     <string name="encrypted_message">暗号化されたメッセージ</string>
 
-<string name="action_exit">退出</string>
+    <string name="action_exit">退出</string>
     <string name="title_activity_group_details">コミュニティの詳細</string>
 
     <string name="loading">読み込み中…</string>
@@ -757,12 +754,11 @@ Riotアプリがあなたの電話帳へアクセスすることを許可しま�
 
     <string name="start_new_chat_prompt_msg">%sと新しい対話を開始して本当によろしいですか？</string>
     <string name="start_voice_call_prompt_msg">音声通話を開始して本当によろしいですか？</string>
-    <string name="start_video_call_prompt_msg">ビデオ通話を開始して本当によろしいですか？</string>
+    <string name="start_video_call_prompt_msg">本当にビデオ通話を開始しますか？</string>
 
     <string name="groups_list">グループリスト</string>
 
-    <string name="room_participants_kick_prompt_msg">このユーザをこの対話から除外して本当によろしいですか？</string>
-    <string name="room_participants_ban_prompt_msg">このユーザが対話に参加するのを禁止して本当によろしいですか？</string>
+    <string name="room_participants_ban_prompt_msg">このユーザが対話に参加するのを本当にブロックしますか？</string>
 
     <string name="room_settings_all_messages_noisy">すべてのメッセージ (大音量)</string>
     <string name="room_settings_all_messages">すべてのメッセージ</string>
@@ -771,7 +767,7 @@ Riotアプリがあなたの電話帳へアクセスすることを許可しま�
 
     <string name="settings_inline_url_preview">デフォルトでURLのプレビューを表示</string>
     <string name="room_settings_room_notifications_title">通知</string>
-    <string name="room_settings_no_flair">" この部屋はどのコミュニティにも属していません"</string>
+    <string name="room_settings_no_flair">この部屋はコミュニティの特色を表示していません</string>
     <string name="settings_flair">所属するコミュニティ</string>
 
     <string name="room_settings_add_new_group">新しいコミュニティID (記入例 +foo:matrix.org)</string>
@@ -779,10 +775,12 @@ Riotアプリがあなたの電話帳へアクセスすることを許可しま�
     <string name="room_settings_invalid_group_format_dialog_body">\'%s\' は有効なコミュニティIDではありません</string>
 
 
-    <string name="encryption_export_saved_as">部屋のエンドツーエンド暗号鍵は \'%s\' に保存されました</string>
+    <string name="encryption_export_saved_as">部屋のエンドツーエンド暗号鍵は \'%s\' に保存されました。
+
+警告：このファイルは、アプリケーションがアンインストールされた場合に削除されることがあります。</string>
 
     <string name="you_added_a_new_device">暗号鍵を要求している新しい端末 \'%s\' を追加しました。</string>
-    <string name="your_unverified_device_requesting">未確認の端末 \'%s\' が暗号鍵を要求しています。</string>
+    <string name="your_unverified_device_requesting">未認証の端末 \'%s\' が暗号鍵を要求しています。</string>
     <string name="create">作成</string>
     <string name="create_community">コミュニティを作成</string>
     <string name="community_name">コミュニティの名前</string>
@@ -799,45 +797,45 @@ Riotアプリがあなたの電話帳へアクセスすることを許可しま�
     <string name="rooms">部屋</string>
     <string name="joined">参加済</string>
     <string name="invited">招待済</string>
-    <string name="filter_group_members">グループの参加者をフィルタリングする</string>
+    <string name="filter_group_members">グループのメンバーをフィルタリングする</string>
     <string name="filter_group_rooms">グループの部屋をフィルタリングする</string>
 
     <string name="group_no_long_description">管理者はこのコミュニティの詳細を規定していません。</string>
 
     <string name="has_been_kicked">あなたは%2$sによって%1$sから除外されました</string>
-    <string name="has_been_banned">あなたは%2$sによって%1$sへの入室を禁止されました</string>
+    <string name="has_been_banned">あなたは%2$sによって%1$sへの参加を禁止されました</string>
     <string name="reason_colon">理由: %1$s</string>
     <string name="rejoin">再参加</string>
     <string name="send_bug_report_rage_shake">バグを報告するには端末を降ってください</string>
 
     <plurals name="membership_changes">
-	<item quantity="other">%d権限の変更</item>
-</plurals>
+        <item quantity="other">%d権限の変更</item>
+    </plurals>
 
     <string name="list_members">参加者を表示</string>
     <string name="open_chat_header">見出しを開く</string>
     <string name="room_sync_in_progress">同期中…</string>
     <plurals name="room_header_active_members_count">
-	<item quantity="other">%d名のオンラインの参加者</item>
-</plurals>
+        <item quantity="other">%d名のオンラインの参加者</item>
+    </plurals>
     <plurals name="room_title_members">
-	<item quantity="other">%d名</item>
-</plurals>
+        <item quantity="other">%d名</item>
+    </plurals>
     <plurals name="room_new_messages_notification">
-	<item quantity="other">%d件の新しいメッセージ</item>
-</plurals>
+        <item quantity="other">%d件の新しいメッセージ</item>
+    </plurals>
 
     <plurals name="directory_search_rooms">
-	<item quantity="other">%d 部屋</item>
-</plurals>
+        <item quantity="other">%d 部屋</item>
+    </plurals>
     <plurals name="directory_search_rooms_for">
-	<item quantity="other">%2$sに%1$s部屋見つかりました</item>
-</plurals>
-    <string name="forget_room">部屋の記録を消す</string>
+        <item quantity="other">%2$sに%1$s部屋見つかりました</item>
+    </plurals>
+    <string name="forget_room">部屋の履歴を消す</string>
 
     <string name="avatar">アバター</string>
 
-<string name="room_settings_mention_only">呼びかけがあったとき</string>
+    <string name="room_settings_mention_only">名前があがったときのみ</string>
     <string name="settings_notification_privacy">通知のプライバシー</string>
     <string name="settings_notification_privacy_warning">Riot.imは通知のメッセージの内容の秘密を守るため、バックグラウンドで動作します。電池の使用を削減するために、このオプションを変えることができます。</string>
     <string name="settings_notification_privacy_normal">標準</string>
@@ -847,7 +845,7 @@ Riotアプリがあなたの電話帳へアクセスすることを許可しま�
     <string name="settings_notification_privacy_fcm">•通知はGoogle Cloud Messaging経由で送られます</string>
     <string name="settings_notification_privacy_no_permission">このアプリにバックグラウンド動作の権限は<b>必要ありません</b></string>
     <string name="settings_notification_privacy_metadata">• 通知はメタデータのみを含みます</string>
-    <string name="title_activity_choose_sticker">ステッカーを送る</string>
+    <string name="title_activity_choose_sticker">スタンプを送る</string>
 
     <string name="dialog_title_third_party_licences">サードパーティーライセンス</string>
 
@@ -877,17 +875,17 @@ Riotアプリがあなたの電話帳へアクセスすることを許可しま�
     <string name="e2e_re_request_encryption_key_dialog_content">鍵をこのデバイスに送信できるように、メッセージを復号化できる他のデバイスでRiotを起動してください。</string>
 
     <plurals name="format_time_s">
-	<item quantity="other">%d 秒</item>
-</plurals>
+        <item quantity="other">%d 秒</item>
+    </plurals>
     <plurals name="format_time_m">
-	<item quantity="other">%d 分</item>
-</plurals>
+        <item quantity="other">%d 分</item>
+    </plurals>
     <plurals name="format_time_h">
-	<item quantity="other">%d 時間</item>
-</plurals>
+        <item quantity="other">%d 時間</item>
+    </plurals>
     <plurals name="format_time_d">
-	<item quantity="other">%d 日</item>
-</plurals>
+        <item quantity="other">%d 日</item>
+    </plurals>
 
     <string name="room_participants_now">現在 %1$s</string>
     <string name="room_participants_ago">%2$s 前 %1$s</string>
@@ -902,8 +900,8 @@ Riotアプリがあなたの電話帳へアクセスすることを許可しま�
     <string name="room_message_placeholder_reply_to_encrypted">暗号化された返信を送信…</string>
     <string name="room_message_placeholder_reply_to_not_encrypted">返信を送信 (未暗号化)…</string>
     <plurals name="room_details_selected">
-	<item quantity="other">%d 個選択済</item>
-</plurals>
+        <item quantity="other">%d 個選択済</item>
+    </plurals>
     <string name="settings_notification_privacy_reduced">低プライバシー</string>
     <string name="settings_notification_privacy_secure_message_content">• 通知中のメッセージの内容は <b>Matrixのホームサーバから直接安全に配置されています</b></string>
     <string name="settings_notification_privacy_nosecure_message_content">"•  "<b>メタデータとメッセージのデータ</b> を含む通知</string>
@@ -930,19 +928,19 @@ Riotアプリがあなたの電話帳へアクセスすることを許可しま�
     <string name="lock_screen_hint">ここに入力…</string>
 
     <plurals name="notification_unread_notified_messages">
-	<item quantity="other">%d 個の未読の通知されたメッセージ</item>
-</plurals>
+        <item quantity="other">%d 個の未読の通知されたメッセージ</item>
+    </plurals>
     <plurals name="notification_unread_notified_messages_in_room_msgs">
-	<item quantity="other">%d 個の未読の通知されたメッセージ</item>
-</plurals>
+        <item quantity="other">%d 個の未読の通知されたメッセージ</item>
+    </plurals>
     <plurals name="notification_unread_notified_messages_in_room_rooms">
-	<item quantity="other">%d 部屋</item>
-</plurals>
+        <item quantity="other">%d 部屋</item>
+    </plurals>
     <string name="notification_unread_notified_messages_in_room">%2$s件 中 %1$s件</string>
 
     <plurals name="active_widgets">
-	<item quantity="other">%d 個のアクティブなウィジェット</item>
-</plurals>
+        <item quantity="other">%d 個のアクティブなウィジェット</item>
+    </plurals>
 
     <string name="widget_integration_missing_parameter">必要な変数が見つかりません。</string>
     <string name="widget_integration_invalid_parameter">変数が無効です。</string>
@@ -964,12 +962,12 @@ Riotアプリがあなたの電話帳へアクセスすることを許可しま�
     <string name="command_description_clear_scalar_token">Matrixアプリの管理を修正するには</string>
 
     <plurals name="group_members">
-	<item quantity="other">%d名</item>
-</plurals>
+        <item quantity="other">%d名</item>
+    </plurals>
 
     <plurals name="group_rooms">
-	<item quantity="other">%d 部屋</item>
-</plurals>
+        <item quantity="other">%d 部屋</item>
+    </plurals>
     <string name="receipt_avatar">アバターを受け取る</string>
     <string name="dialog_user_consent_content">%1$s ホームサーバを使用し続けるには、利用規約を読み、同意する必要があります。</string>
     <string name="dialog_title_error">エラー</string>
@@ -1013,4 +1011,23 @@ Matrixでのメッセージの可視性は電子メールと同様です。メ�
     <string name="settings_lazy_loading_title">部屋のメンバーの簡易読み込み</string>
     <string name="unknown_error">申し訳ありません、エラーが発生しました</string>
 
+    <string name="status_theme">Status.im テーマ</string>
+
+    <string name="room_sliding_menu_version_x">Version %s</string>
+    <string name="encryption_export_notice">エクスポートされた鍵を暗号化するパスフレーズを作成してください。 キーをインポートするには、同じパスフレーズを入力する必要があります。</string>
+    <string name="encryption_export_create_passphrase">パスフレーズの作成</string>
+    <string name="encryption_export_passphrase_dont_match">パスフレーズは一致する必要があります</string>
+    <string name="settings_info_area_show">情報領域を表示</string>
+    <string name="show_info_area_always">常に</string>
+    <string name="show_info_area_only_errors">エラーの場合のみ</string>
+
+    <string name="generic_label">%1$s:</string>
+    <string name="generic_label_and_value">%1$s: %2$s</string>
+    <string name="plus_x">+%d</string>
+    <string name="x_plus">%d+</string>
+
+    <string name="merged_events_expand">展開</string>
+    <string name="merged_events_collapse">畳む</string>
+
+    <string name="show_info_area_messages_and_errors">メッセージとエラーの場合</string>
 </resources>

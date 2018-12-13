@@ -101,7 +101,7 @@ Selecteer exporteren om de versleutelingssleutels op te slaan voordat je uitlogt
     <string name="send_bug_report_include_logs">Logboek versturen</string>
     <string name="send_bug_report_include_crash_logs">Crash logboek versturen</string>
     <string name="send_bug_report_include_screenshot">Schermafbeelding versturen</string>
-    <string name="send_bug_report">Foutmelding</string>
+    <string name="send_bug_report">Fout melden</string>
     <string name="send_bug_report_description">Beschrijf de fout. Wat deed je? Wat verwachtte je dat er zou gebeuren? Wat gebeurde er echt?</string>
     <string name="send_bug_report_placeholder">Beschrijf hier je probleem</string>
     <string name="send_bug_report_logs_description">Om het probleem te kunnen diagnosticeren, worden logboeken van deze applicatie met de foutmelding verstuurd. Deze foutmelding, inclusief de logboeken en schermafbeelding, zullen niet publiekelijk zichtbaar zijn. Als je liever alleen de bovenstaande tekst verstuurt, haal dan het vinkje weg:</string>
@@ -366,7 +366,7 @@ Versleutelde berichten zullen nog niet zichtbaar zijn op programma\'s die geen v
     <string name="ssl_cert_new_account_expl">Als de serverbeheerder heeft gezegd dat dit normaal is, wees er dan zeker van dat het vingerafdruk hieronder overeenkomt met de door de beheerder verschafde vingerafdruk.</string>
     <string name="ssl_unexpected_existing_expl">Het certificaat is veranderd van één dat was vertrouwd bij je telefoon tot een ander Dit is HEEL ONGEBRUIKELIJK. Het is aangeraden om dit nieuwe certificaat NIET TE ACCEPTEREN.</string>
     <string name="ssl_expected_existing_expl">Het certificaat is veranderd van een vertrouwd certificaat naar een certificaat dat niet vertrouwd is. De server heeft misschien zijn certificaat vernieuwd. Contacteer de serverbeheerder voor het verwachte vingerafdruk.</string>
-    <string name="ssl_only_accept">Accepteer ALLEEN het certificaat als de serverbeheerder een vingerafdruk heeft gepubliceerd dat overeenkomt met degene hierboven.</string>
+    <string name="ssl_only_accept">Accepteer het certificaat alleen als de serverbeheerder een vingerafdruk heeft gepubliceerd die overeenkomt met degene hierboven.</string>
 
     <!-- Room Details -->
     <string name="room_details_title">Ruimte Details</string>
@@ -435,8 +435,8 @@ Let op: deze actie zal de app opnieuw opstarten, en kan enige tijd kosten.</stri
     <string name="settings_add_email_address">E-mailadres toevoegen</string>
     <string name="settings_phone_number">Telefoonnummer</string>
     <string name="settings_add_phone_number">Add phone number</string>
-    <string name="settings_summary_app_info_link">Applicatiesysteem informatiescherm</string>
-    <string name="settings_title_app_info_link">Applicatie informatie</string>
+    <string name="settings_app_info_link_summary">Applicatiesysteem informatiescherm</string>
+    <string name="settings_app_info_link_title">Applicatie informatie</string>
 
     <string name="settings_enable_all_notif">Notificaties voor dit account aanzetten</string>
     <string name="settings_enable_this_device">Notificaties voor dit apparaat aanzetten</string>
@@ -451,7 +451,7 @@ Let op: deze actie zal de app opnieuw opstarten, en kan enige tijd kosten.</stri
     <string name="settings_background_sync">Synchronisatie in de achtergrond</string>
     <string name="settings_enable_background_sync">Achtergrond sync aanzetten</string>
     <string name="settings_set_sync_timeout">Sync verzoek is verlopen</string>
-    <string name="settings_set_sync_delay">Pauze tussen twee sync verzoeken</string>
+    <string name="settings_set_sync_delay">Pauze tussen elk verzoek</string>
     <string name="settings_second">seconde</string>
     <string name="settings_seconds">seconden</string>
 
@@ -542,7 +542,6 @@ Let op: deze actie zal de app opnieuw opstarten, en kan enige tijd kosten.</stri
     <string name="room_settings_tag_pref_entry_favourite">Favoriet</string>
     <string name="room_settings_tag_pref_entry_low_priority">Lage prioriteit</string>
     <string name="room_settings_tag_pref_entry_none">Geen</string>
-    <string name="room_settings_tag_pref_no_tag">niet gelabeld</string>
 
     <!-- room settings : access and visibility -->
     <string name="room_settings_category_access_visibility_title">Toegankelijk- en zichtbaarheid</string>
@@ -685,18 +684,15 @@ Je kan het nu, of later, doen vanuit de programma-instellingen.</string>
 
     <!-- historical -->
     <string name="historical_placeholder">Zoek voor historisch</string>
-<string name="offline">Offline</string>
+    <string name="offline">Offline</string>
 
     <string name="user_directory_header">Gebruikersadresboek</string>
     <string name="people_search_user_directory">GEBRUIKERSADRESBOEK (%s)</string>
     <string name="settings_start_on_boot">Start bij het inschakelen van je telefoon</string>
-    <string name="settings_clear_medias_cache">Media cache vrijmaken</string>
+    <string name="settings_clear_media_cache">Media cache vrijmaken</string>
     <string name="settings_keep_media">Media behouden</string>
 
-    <string name="settings_hide_read_receipts">Leesbewijzen verbergen</string>
-    <string name="settings_dont_send_typings_notifs">Geen typ notificaties versturen</string>
-    <string name="settings_always_show_timestamps">Altijd tijden van berichten weergeven</string>
-    <string name="settings_disable_markdown">Tekst formattering uitzetten wanneer je berichten verstuurd</string>
+    <string name="settings_always_show_timestamps">Tijd weergeven voor alle berichten</string>
     <string name="settings_data_save_mode">Data bespaarmodus</string>
 
     <string name="settings_user_interface">Gebruikersinterface</string>
@@ -718,7 +714,7 @@ Je kan het nu, of later, doen vanuit de programma-instellingen.</string>
     <string name="tiny">Klein</string>
     <string name="larger">Groter</string>
     <string name="huge">Gigantisch</string>
-<string name="light_theme">Licht Thema</string>
+    <string name="light_theme">Licht Thema</string>
     <string name="dark_theme">Donker Thema</string>
     <string name="black_them">Zwart Thema</string>
 
@@ -728,9 +724,7 @@ Je kan het nu, of later, doen vanuit de programma-instellingen.</string>
     <string name="login_mobile_device">Mobiel</string>
 
     <string name="settings_notification_ringtone">Notificatie geluid</string>
-    <string name="settings_12_24_timestamps">Tijdsaanduidingen in 12 uur formaat weergeven (bv. 2:30pm)</string>
-    <string name="settings_hide_join_leave_messages">Toetreden/verlaten berichten verbergen (uitnodigingen/uitzettingen/verbanningen blijven zichtbaar)</string>
-    <string name="settings_hide_avatar_display_name_changes_messages">Profielfoto en weergavenaam veranderingen verbergen</string>
+    <string name="settings_12_24_timestamps">Tijdsaanduidingen in 12-uursformaat weergeven</string>
 
     <string name="widget_no_power_to_manage">Je hebt permissie nodig om widgets in deze ruimte te beheren</string>
     <string name="widget_creation_failure">Het maken van de widget is niet goed gegaan</string>
@@ -786,7 +780,7 @@ Je kan het nu, of later, doen vanuit de programma-instellingen.</string>
 
     <string name="encrypted_message">Versleuteld bericht</string>
 
-<string name="title_activity_group_details">Gemeenschap details</string>
+    <string name="title_activity_group_details">Gemeenschap details</string>
 
     <string name="loading">Laden…</string>
 
@@ -809,44 +803,43 @@ Je kan het nu, of later, doen vanuit de programma-instellingen.</string>
     <string name="groups_list">Groepenlijst</string>
 
     <plurals name="membership_changes">
-	<item quantity="one">1 verandering in lidmaatschap</item>
-	<item quantity="other">%d veranderingen in lidmaatschap</item>
-</plurals>
+        <item quantity="one">1 verandering in lidmaatschap</item>
+        <item quantity="other">%d veranderingen in lidmaatschap</item>
+    </plurals>
 
     <string name="list_members">Ledenlijst</string>
     <string name="open_chat_header">Opschrift openen</string>
     <string name="room_sync_in_progress">Synchroniseren…</string>
     <plurals name="room_header_active_members_count">
-	<item quantity="one">1 actief lid</item>
-	<item quantity="other">%d actieve leden</item>
-</plurals>
+        <item quantity="one">1 actief lid</item>
+        <item quantity="other">%d actieve leden</item>
+    </plurals>
     <plurals name="room_title_members">
-	<item quantity="one">1 lid</item>
-	<item quantity="other">%d leden</item>
-</plurals>
-    <string name="room_participants_kick_prompt_msg">Weet je zeker dat je deze gebruiker uit het gesprek wilt verwijderen?</string>
+        <item quantity="one">1 lid</item>
+        <item quantity="other">%d leden</item>
+    </plurals>
     <string name="room_participants_ban_prompt_msg">Weet je zeker dat je deze gebruiker uit dit gesprek wilt verbannen?</string>
 
     <plurals name="room_new_messages_notification">
-	<item quantity="one">1 nieuw bericht</item>
-	<item quantity="other">%d nieuwe berichten</item>
-</plurals>
+        <item quantity="one">1 nieuw bericht</item>
+        <item quantity="other">%d nieuwe berichten</item>
+    </plurals>
 
     <plurals name="directory_search_rooms">
-	<item quantity="one">1 ruimte</item>
-	<item quantity="other">%d ruimtes</item>
-</plurals>
+        <item quantity="one">1 ruimte</item>
+        <item quantity="other">%d ruimtes</item>
+    </plurals>
     <plurals name="directory_search_rooms_for">
-	<item quantity="one">%1$s ruimte gevonden voor %2$s</item>
-	<item quantity="other">%1$s ruimtes gevonden voor %2$s</item>
-</plurals>
+        <item quantity="one">%1$s ruimte gevonden voor %2$s</item>
+        <item quantity="other">%1$s ruimtes gevonden voor %2$s</item>
+    </plurals>
     <string name="room_settings_all_messages_noisy">Alle berichten (luid)</string>
     <string name="room_settings_all_messages">Alle berichten</string>
     <string name="room_settings_mention_only">Alleen vermeldingen</string>
     <string name="room_settings_mute">Dempen</string>
     <string name="room_settings_add_homescreen_shortcut">Thuisscherm snelkoppeling toevoegen</string>
 
-    <string name="settings_inline_url_preview">Inline URL voorvertoning standaard aanzetten</string>
+    <string name="settings_inline_url_preview">Inline URL-voorvertoning</string>
     <string name="settings_vibrate_on_mention">Trillen bij vermeldingen</string>
 
     <string name="settings_flair">Badge</string>
@@ -859,19 +852,19 @@ Je kan het nu, of later, doen vanuit de programma-instellingen.</string>
 
 
     <plurals name="notification_unread_notified_messages_in_room_msgs">
-	<item quantity="one">1 ongelezen bericht waarin je vermeld staat</item>
-	<item quantity="other">%d ongelezen berichten waarin je vermeld staat</item>
-</plurals>
+        <item quantity="one">1 ongelezen bericht waarin je vermeld staat</item>
+        <item quantity="other">%d ongelezen berichten waarin je vermeld staat</item>
+    </plurals>
     <plurals name="notification_unread_notified_messages_in_room_rooms">
-	<item quantity="one">1 ruimte</item>
-	<item quantity="other">%d ruimtes</item>
-</plurals>
+        <item quantity="one">1 ruimte</item>
+        <item quantity="other">%d ruimtes</item>
+    </plurals>
     <string name="notification_unread_notified_messages_in_room">%1$s in %2$s</string>
 
     <plurals name="active_widgets">
-	<item quantity="one">1 actieve widget</item>
-	<item quantity="other">%d actieve widgets</item>
-</plurals>
+        <item quantity="one">1 actieve widget</item>
+        <item quantity="other">%d actieve widgets</item>
+    </plurals>
 
     <!-- Widget Integration Manager -->
     <string name="create">Creëer</string>
@@ -904,10 +897,10 @@ Je kan het nu, of later, doen vanuit de programma-instellingen.</string>
     <string name="receipt_avatar">Ontvangst-avatar</string>
     <string name="avatar">Avatar</string>
 
-<plurals name="notification_unread_notified_messages">
-	<item quantity="one">1 ongelezen bericht waarin je vermeld staat</item>
-	<item quantity="other">%d ongelezen berichten waarin je vermeld staat</item>
-</plurals>
+    <plurals name="notification_unread_notified_messages">
+        <item quantity="one">1 ongelezen bericht waarin je vermeld staat</item>
+        <item quantity="other">%d ongelezen berichten waarin je vermeld staat</item>
+    </plurals>
     <string name="notice_avatar">Vermeldingsavatar</string>
     <string name="title_activity_choose_sticker">Verstuur een sticker</string>
 
@@ -958,7 +951,7 @@ De zichtbaarheid van berichten in Matrix is hetzelfde als in e-mail. Het vergete
     <string name="deactivate_account_prompt_password">Om verder te gaan, voer je wachtwoord in:</string>
     <string name="deactivate_account_submit">Account Deactiveren</string>
 
-<string name="dialog_title_third_party_licences">Licenties van derde partijen</string>
+    <string name="dialog_title_third_party_licences">Licenties van derde partijen</string>
 
     <string name="download">Download</string>
     <string name="speak">Spreek</string>
@@ -981,7 +974,7 @@ De zichtbaarheid van berichten in Matrix is hetzelfde als in e-mail. Het vergete
 
     <string name="error_empty_field_your_password">Vul alstublieft uw wachtwoord in.</string>
 
-<string name="send_bug_report_description_in_english">Indien mogelijk, schrijf alstublieft een omschrijving in het engels.</string>
+    <string name="send_bug_report_description_in_english">Indien mogelijk, schrijf alstublieft een omschrijving in het engels.</string>
     <string name="room_message_placeholder_reply_to_encrypted">Verstuur een versleutelde reactie…</string>
     <string name="room_message_placeholder_reply_to_not_encrypted">Verstuur een reactie (onversleuteld)…</string>
     <string name="settings_preview_media_before_sending">Bekijk media voor het versturen</string>
@@ -1009,25 +1002,25 @@ Let op: deze actie zal de app opnieuw opstarten, en kan enige tijd kosten.</stri
     <string name="room_tombstone_continuation_description">Deze ruimte is een voortzetting van een ander gesprek</string>
     <string name="room_tombstone_predecessor_link">Klik hier om oudere berichten te zien</string>
 
-<string name="missing_permissions_error">Door missende permissies is deze actie niet mogelijk.</string>
+    <string name="missing_permissions_error">Door missende permissies is deze actie niet mogelijk.</string>
     <string name="system_alerts_header">Systeem Waarschuwingen</string>
 
     <plurals name="format_time_s">
-	<item quantity="one">1s</item>
-	<item quantity="other">%ds</item>
-</plurals>
+        <item quantity="one">1s</item>
+        <item quantity="other">%ds</item>
+    </plurals>
     <plurals name="format_time_m">
-	<item quantity="one">1m</item>
-	<item quantity="other">%dm</item>
-</plurals>
+        <item quantity="one">1m</item>
+        <item quantity="other">%dm</item>
+    </plurals>
     <plurals name="format_time_h">
-	<item quantity="one">1h</item>
-	<item quantity="other">%dh</item>
-</plurals>
+        <item quantity="one">1h</item>
+        <item quantity="other">%dh</item>
+    </plurals>
     <plurals name="format_time_d">
-	<item quantity="one">1d</item>
-	<item quantity="other">%dd</item>
-</plurals>
+        <item quantity="one">1d</item>
+        <item quantity="other">%dd</item>
+    </plurals>
 
     <string name="room_participants_now">nu %1$s</string>
     <string name="room_participants_ago">%1$s %2$s geleden</string>
@@ -1037,20 +1030,20 @@ Let op: deze actie zal de app opnieuw opstarten, en kan enige tijd kosten.</stri
     <string name="room_participants_invite_join_names_combined">%1$s %2$s</string>
 
     <plurals name="room_details_selected">
-	<item quantity="one">1 geselecteerd</item>
-	<item quantity="other">%d geselecteerd</item>
-</plurals>
+        <item quantity="one">1 geselecteerd</item>
+        <item quantity="other">%d geselecteerd</item>
+    </plurals>
     <string name="command_description_clear_scalar_token">Om Matrix Apps management te repareren</string>
 
     <plurals name="group_members">
-	<item quantity="one">1 deelnemer</item>
-	<item quantity="other">%d deelnemers</item>
-</plurals>
+        <item quantity="one">1 deelnemer</item>
+        <item quantity="other">%d deelnemers</item>
+    </plurals>
 
     <plurals name="group_rooms">
-	<item quantity="one">1 ruimte</item>
-	<item quantity="other">%d ruimtes</item>
-</plurals>
+        <item quantity="one">1 ruimte</item>
+        <item quantity="other">%d ruimtes</item>
+    </plurals>
     <string name="resource_limit_exceeded_title">Resource limiet overschreden</string>
     <string name="resource_limit_contact_action">Contact Beheerder</string>
 
@@ -1065,6 +1058,37 @@ Let op: deze actie zal de app opnieuw opstarten, en kan enige tijd kosten.</stri
     <string name="resource_limit_soft_contact">Alstublieft %s om dit limiet te verhogen.</string>
     <string name="resource_limit_hard_contact">Alstublieft %s om deze service te blijven gebruiken.</string>
 
-<string name="dialog_title_error">Foutmelding</string>
+    <string name="dialog_title_error">Foutmelding</string>
 
-    </resources>
+    <string name="status_theme">Status.im-thema</string>
+
+    <string name="call_anyway">Toch bellen</string>
+    <string name="accept">Accepteren</string>
+
+    <string name="auth_accept_policies">Lees en accepteer het beleid van deze thuisserver:</string>
+
+    <string name="settings_call_category">Oproepen</string>
+    <string name="settings_call_ringtone_use_riot_ringtone">Gebruik de standaardbeltoon van Riot voor binnenkomende oproepen</string>
+    <string name="settings_call_ringtone_title">Beltoon voor inkomende oproepen</string>
+    <string name="settings_call_ringtone_dialog_title">Selecteer beltoon voor oproepen:</string>
+
+    <string name="room_participants_action_kick">Eruit sturen</string>
+    <plurals name="room_participants_kick_prompt_msg">
+        <item quantity="one">Weet je zeker dat je deze gebruiker dit gesprek uit wil sturen?</item>
+        <item quantity="other">Weet je zeker dat je deze gebruikers dit gesprek uit wil sturen?</item>
+    </plurals>
+    <string name="reason_hint">Reden</string>
+
+    <string name="room_sliding_menu_version_x">Versie %s</string>
+    <string name="settings_inline_url_preview_summary">Links voorvertonen in het gesprek (als je thuisserver deze functie ondersteunt).</string>
+    <string name="settings_send_typing_notifs">Stuur typnotificaties</string>
+    <string name="settings_send_typing_notifs_summary">Laat andere gebruikers weten dat je aan het typen bent.</string>
+    <string name="settings_send_markdown">Markdown-opmaak</string>
+    <string name="settings_send_markdown_summary">Maak berichten op in Markdown-syntax voordat ze verstuurd worden. Hiermee kun je uitgebreide opmaak gebruiken, zoals sterretjes voor schuingedrukte tekst.</string>
+    <string name="settings_show_read_receipts">Laat leesbevestigingen zien</string>
+    <string name="settings_show_read_receipts_summary">Klik op de leesbevestigingen voor een uitgebreide lijst.</string>
+    <string name="settings_show_join_leave_messages">Laat toetredingen en verlatingen zien</string>
+    <string name="settings_show_join_leave_messages_summary">Meldingen over uitnodigen, eruit sturen en verbannen worden altijd weergegeven.</string>
+    <string name="settings_show_avatar_display_name_changes_messages">Laat accountgebeurtenissen zien</string>
+    <string name="settings_show_avatar_display_name_changes_messages_summary">Omvat veranderingen in avatar en weergavenaam.</string>
+</resources>

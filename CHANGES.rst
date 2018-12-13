@@ -1,4 +1,25 @@
-Changes in Riot 0.8.19 (2018-XX-XX)
+Changes in Riot 0.8.20 (2018-12-13)
+===================================================
+
+MatrixSdk:
+ - Upgrade to version 0.9.14.
+
+Improvements:
+ - Remove double negations from settings and update descriptions (#2723)
+ - Handle missing or bad parameter in slash command
+ - Support specifying kick and ban message (#2164)
+ - Add image transparency and fix issues with gifs in the media viewer (#2731)
+ - Upgrade olm-sdk.aar from version 2.3.0 to version 3.0.0
+ - Migration to the Preference v7 support
+ - Make User Agreement part of the registration flow (#2442)
+ - Fix several color issue on Status theme and prepare rework some styles.
+
+Bugfix:
+ - Use same "Call Anyway" string from iOS (#2695)
+ - Improve `/markdown` command (#2673)
+ - Display thumbnail for encrypted files without a remote thumbnail (#2734)
+
+Changes in Riot 0.8.19 (2018-11-06)
 ===================================================
 
 MatrixSdk:
@@ -1073,4 +1094,33 @@ Changes in Vector 0.2.0 (2016-04-14)
 
  * First official release.
 
+
+=======================================================
++        TEMPLATE WHEN PREPARING A NEW RELEASE        +
+=======================================================
+
+
+Changes in Riot 0.8.XX (2018-XX-XX)
+===================================================
+
+MatrixSdk:
+ - Upgrade to version 0.X.Y.
+
+Features:
+ -
+
+Improvements:
+ -
+
+Other changes:
+ -
+
+Bugfix:
+ -
+
+Translations:
+ -
+
+Build:
+ -
 

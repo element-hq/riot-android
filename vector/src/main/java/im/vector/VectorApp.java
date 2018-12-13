@@ -32,9 +32,9 @@ import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
-import android.preference.PreferenceManager;
 import android.support.multidex.MultiDex;
 import android.support.multidex.MultiDexApplication;
+import android.support.v7.preference.PreferenceManager;
 import android.text.TextUtils;
 
 import com.facebook.stetho.Stetho;
@@ -177,12 +177,6 @@ public class VectorApp extends MultiDexApplication {
             }
         }
     };
-
-    @Override
-    protected void attachBaseContext(Context base) {
-        super.attachBaseContext(base);
-        MultiDex.install(this);
-    }
 
     @Override
     public void onCreate() {
@@ -372,12 +366,12 @@ public class VectorApp extends MultiDexApplication {
      * Suspend background threads.
      */
     private void suspendApp() {
-        PushManager pushManager = Matrix.getInstance(VectorApp.this).getPushManager();
+        PushManager pushManager = Matrix.getInstance(this).getPushManager();
 
         // suspend the events thread if the client uses FCM
         if (!pushManager.isBackgroundSyncAllowed() || (pushManager.useFcm() && pushManager.hasRegistrationToken())) {
             Log.d(LOG_TAG, "suspendApp ; pause the event stream");
-            CommonActivityUtils.pauseEventStream(VectorApp.this);
+            CommonActivityUtils.pauseEventStream(this);
         } else {
             Log.d(LOG_TAG, "suspendApp ; the event stream is not paused because FCM is disabled.");
         }
@@ -394,7 +388,7 @@ public class VectorApp extends MultiDexApplication {
                 // remove older medias
                 if ((System.currentTimeMillis() - mLastMediasCheck) < (24 * 60 * 60 * 1000)) {
                     mLastMediasCheck = System.currentTimeMillis();
-                    session.removeMediasBefore(VectorApp.this, PreferencesManager.getMinMediasLastAccessTime(getApplicationContext()));
+                    session.removeMediaBefore(this, PreferencesManager.getMinMediasLastAccessTime(getApplicationContext()));
                 }
 
                 if (session.getDataHandler().areLeftRoomsSynced()) {

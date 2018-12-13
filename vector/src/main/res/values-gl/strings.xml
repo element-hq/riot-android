@@ -1,5 +1,6 @@
 <?xml version='1.0' encoding='UTF-8'?>
-<resources><string name="resources_language">gl</string>
+<resources>
+    <string name="resources_language">gl</string>
     <string name="resources_country_code">ES</string>
 
     <string name="light_theme">Tema claro</string>
@@ -245,9 +246,9 @@ Pode engadir a dirección de correo na sección de configuración de perfil.</st
     <string name="room_message_file_not_found">Non se atopou o ficheiro</string>
     <string name="room_do_not_have_permission_to_post">Non ten permiso para comentar nesta sala</string>
     <plurals name="room_new_messages_notification">
-	<item quantity="one">1 mensaxe nova</item>
-	<item quantity="other">%d mensaxe nova</item>
-</plurals>
+        <item quantity="one">1 mensaxe nova</item>
+        <item quantity="other">%d mensaxe nova</item>
+    </plurals>
 
     <string name="ssl_trust">Confiar</string>
     <string name="ssl_logout_account">Desconectar</string>
@@ -299,7 +300,7 @@ Pode engadir a dirección de correo na sección de configuración de perfil.</st
     <string name="settings_version">Versión</string>
     <string name="settings_olm_version">versións anteriores</string>
     <string name="settings_clear_cache">Limpar o caché</string>
-    <string name="settings_clear_medias_cache">Limpar o caché de imaxes</string>
+    <string name="settings_clear_media_cache">Limpar o caché de imaxes</string>
     <string name="settings_keep_media">Manter as imaxes</string>
 
     <string name="settings_user_settings">Configuracións dos usuarios</string>
@@ -309,11 +310,8 @@ Pode engadir a dirección de correo na sección de configuración de perfil.</st
     <string name="settings_cryptography">Criptografía</string>
     <string name="settings_devices_list">Dispositivos</string>
     <string name="settings_inline_url_preview">Activar por defecto as vistas previas en liña de URL</string>
-    <string name="settings_hide_read_receipts">Ocultar avisos de recepción</string>
-    <string name="settings_dont_send_typings_notifs">Non enviar notificacións de escritura</string>
     <string name="settings_always_show_timestamps">Mostrar sempre marcas de tempo</string>
     <string name="settings_12_24_timestamps">"Mostrar marcas  de tempo con formato 12 horas (ex. 2:30pm)"</string>
-    <string name="settings_hide_join_leave_messages">Ocultar mensaxes de unión/saída (convites/expulsións/bloqueos non afectados)</string>
     <string name="settings_deactivate_my_account">Desactivar a miña conta</string>
 
     <string name="settings_analytics">Analytics</string>
@@ -362,7 +360,6 @@ Pode engadir a dirección de correo na sección de configuración de perfil.</st
     <string name="room_settings_tag_pref_entry_favourite">Favorita</string>
     <string name="room_settings_tag_pref_entry_low_priority">Prioridade baixa</string>
     <string name="room_settings_tag_pref_entry_none">Ningún</string>
-    <string name="room_settings_tag_pref_no_tag">sen etiquetar</string>
 
     <string name="room_settings_room_notifications_title">Notificacións</string>
     <string name="room_settings_room_read_history_rules_pref_dialog_title">Quen pode ler o histórico?</string>
@@ -446,17 +443,17 @@ Pode engadir a dirección de correo na sección de configuración de perfil.</st
     <string name="lock_screen_hint">Escriba aquí…</string>
 
     <plurals name="notification_unread_notified_messages">
-	<item quantity="one">1 notificación sen ler</item>
-	<item quantity="other">%d notificacións sen ler</item>
-</plurals>
+        <item quantity="one">1 notificación sen ler</item>
+        <item quantity="other">%d notificacións sen ler</item>
+    </plurals>
     <plurals name="notification_unread_notified_messages_in_room_msgs">
-	<item quantity="one">1 notificación sen ler</item>
-	<item quantity="other">%d notificacións sen ler</item>
-</plurals>
+        <item quantity="one">1 notificación sen ler</item>
+        <item quantity="other">%d notificacións sen ler</item>
+    </plurals>
     <plurals name="notification_unread_notified_messages_in_room_rooms">
-	<item quantity="one">1 sala</item>
-	<item quantity="other">%d salas</item>
-</plurals>
+        <item quantity="one">1 sala</item>
+        <item quantity="other">%d salas</item>
+    </plurals>
     <string name="notification_unread_notified_messages_in_room">%1$s en %2$s</string>
 
     <string name="historical_placeholder">Buscar no histórico</string>
@@ -474,9 +471,9 @@ Pode engadir a dirección de correo na sección de configuración de perfil.</st
     <string name="event_formatter_widget_added">%1$s engadido por %2$s</string>
     <string name="event_formatter_widget_removed">%1$s eliminado por %2$s</string>
     <plurals name="active_widgets">
-	<item quantity="one">1 trebello activo</item>
-	<item quantity="other">%1 trebellos activos</item>
-</plurals>
+        <item quantity="one">1 trebello activo</item>
+        <item quantity="other">%1 trebellos activos</item>
+    </plurals>
 
     <string name="widget_integration_unable_to_create">Non se puido crear o trebello.</string>
     <string name="widget_integration_failed_to_send_request">Fallo ao enviar a petición.</string>
@@ -543,7 +540,7 @@ Pode engadir a dirección de correo na sección de configuración de perfil.</st
     <string name="deactivate_account_prompt_password">Para continuar introduza o seu contrasinal:</string>
     <string name="deactivate_account_submit">Desactivar conta</string>
 
-<string name="option_send_voice">Enviar voz</string>
+    <string name="option_send_voice">Enviar voz</string>
 
     <string name="go_on_with">continuar con…</string>
     <string name="error_no_external_application_found">Non se atopou unha aplicación que poida completar iso.</string>
@@ -571,9 +568,9 @@ Pode engadir a dirección de correo na sección de configuración de perfil.</st
     <string name="e2e_re_request_encryption_key_dialog_content">Inicie Riot noutro dispositivo que poida descifrar esta mensaxe e que despois desde alí lle poida enviar as chaves a este dispositivo.</string>
 
     <plurals name="membership_changes">
-	<item quantity="one">1 cambio de membros</item>
-	<item quantity="other">%d cambio de membros</item>
-</plurals>
+        <item quantity="one">1 cambio de membros</item>
+        <item quantity="other">%d cambio de membros</item>
+    </plurals>
 
     <string name="compression_opt_list_original">Autor Inicial</string>
     <string name="compression_opt_list_medium">Mediano</string>
@@ -617,13 +614,13 @@ Seguramente queira conectarse cunha conta distinta, ou engadir este correo a sú
     <string name="room_creation_title">Nova conversa</string>
     <string name="room_creation_add_member">Engadir membro</string>
     <plurals name="room_header_active_members_count">
-	<item quantity="one">1 participante activo</item>
-	<item quantity="other">%d participantes activos</item>
-</plurals>
+        <item quantity="one">1 participante activo</item>
+        <item quantity="other">%d participantes activos</item>
+    </plurals>
     <plurals name="room_title_members">
-	<item quantity="one">1 membro</item>
-	<item quantity="other">%d membros</item>
-</plurals>
+        <item quantity="one">1 membro</item>
+        <item quantity="other">%d membros</item>
+    </plurals>
     <string name="room_title_one_member">1 membro</string>
 
     <string name="room_participants_header_call">Chamar</string>
@@ -646,9 +643,9 @@ Seguramente queira conectarse cunha conta distinta, ou engadir este correo a sú
     <string name="room_recents_conversations">SALAS</string>
     <string name="room_recents_low_priority">BAIXA PRIORIDADE</string>
     <plurals name="directory_search_rooms">
-	<item quantity="one">1 sala</item>
-	<item quantity="other">%d salas</item>
-</plurals>
+        <item quantity="one">1 sala</item>
+        <item quantity="other">%d salas</item>
+    </plurals>
     <string name="room_sliding_menu_term_and_conditions">Termos e condicións</string>
     <string name="settings_notification_privacy">Segredo das notificacións</string>
     <string name="settings_notification_privacy_warning">Riot.im traballa agochado, en segundo plano, para garantir que o contido das súas mensaxes sexa segredo. Pode cambiar esta opción para que reducir o consumo das baterías.</string>

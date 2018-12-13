@@ -104,7 +104,7 @@ Selezionare esporta per fare un backup delle chat prima di disconnettersi.</stri
     <string name="send_bug_report_include_logs">Invia registri</string>
     <string name="send_bug_report_include_crash_logs">Invia registri di crash</string>
     <string name="send_bug_report_include_screenshot">Invia istantanea</string>
-    <string name="send_bug_report">Rapporto errori</string>
+    <string name="send_bug_report">Segnala errore</string>
     <string name="send_bug_report_description">Per favore descrivi l\'errore. Cosa hai fatto? Cosa ti aspettavi dovesse accadere? Cosa è effettivamente successo?</string>
     <string name="send_bug_report_placeholder">Descrivi qui il problema</string>
     <string name="send_bug_report_logs_description">Al fine di diagnosticare i problemi, i registri Riot di questo dispositivo saranno inviati con il rapporto dell\'errore. Questo rapporto, che include i registri e l\'istantanea grafica, non sarà pubblicamente visibile. Se preferisci inviare solo il testo soprastante, deseleziona:</string>
@@ -460,8 +460,8 @@ Tieni presente che questa azione riavvierà l\'app e potrebbe richiedere del tem
     <string name="settings_add_email_address">Aggiungi indirizzo email</string>
     <string name="settings_phone_number">Telefono</string>
     <string name="settings_add_phone_number">Aggiungi numero di telefono</string>
-    <string name="settings_summary_app_info_link">Informazioni di sistema per l\'applicazione</string>
-    <string name="settings_title_app_info_link">Informazioni applicazione</string>
+    <string name="settings_app_info_link_summary">Mostra le informazioni dell\'app nelle impostazioni di sistema.</string>
+    <string name="settings_app_info_link_title">Informazioni applicazione</string>
 
     <string name="settings_enable_all_notif">Abilita notifiche per questo account</string>
     <string name="settings_enable_this_device">Abilita notifiche per questo dispositivo</string>
@@ -477,7 +477,7 @@ Tieni presente che questa azione riavvierà l\'app e potrebbe richiedere del tem
     <string name="settings_background_sync">Sincronizzazione in sottofondo</string>
     <string name="settings_enable_background_sync">Abilita sync in sottofondo</string>
     <string name="settings_set_sync_timeout">Attesa per una richiesta di sync</string>
-    <string name="settings_set_sync_delay">Pausa tra due richieste di sync</string>
+    <string name="settings_set_sync_delay">Attesa prima di una nuova richiesta</string>
     <string name="settings_second">secondo</string>
     <string name="settings_seconds">secondi</string>
 
@@ -488,7 +488,7 @@ Tieni presente che questa azione riavvierà l\'app e potrebbe richiedere del tem
     <string name="settings_copyright">Copyright</string>
     <string name="settings_privacy_policy">Politica sulla privacy</string>
     <string name="settings_clear_cache">Elimina cache</string>
-    <string name="settings_clear_medias_cache">Elimina file multimediali temporanei</string>
+    <string name="settings_clear_media_cache">Elimina file multimediali temporanei</string>
     <string name="settings_keep_media">Conserva file multimediali</string>
 
     <string name="settings_user_settings">Impostazioni utente</string>
@@ -505,10 +505,7 @@ Tieni presente che questa azione riavvierà l\'app e potrebbe richiedere del tem
     <string name="settings_pin_missed_notifications">Segna le stanze con notifiche perse</string>
     <string name="settings_pin_unread_messages">Segna le stanze con messaggi non letti</string>
     <string name="settings_devices_list">Dispositivi</string>
-    <string name="settings_hide_read_receipts">Nascondi conferme di lettura</string>
-    <string name="settings_dont_send_typings_notifs">Non comunicare che stai scrivendo</string>
-    <string name="settings_always_show_timestamps">Mostra sempre data e ora dei messaggi</string>
-    <string name="settings_disable_markdown">Disattiva la formattazione markdown quando si invia</string>
+    <string name="settings_always_show_timestamps">Mostra data e ora di tutti i messaggi</string>
     <string name="settings_data_save_mode">Modalità risparmio banda</string>
 
     <string name="devices_details_dialog_title">Dettagli dispositivo</string>
@@ -527,15 +524,15 @@ Tieni presente che questa azione riavvierà l\'app e potrebbe richiedere del tem
     <string name="settings_identity_server">Server identità</string>
 
     <string name="settings_user_interface">Interfaccia utente</string>
-    <string name="settings_interface_language">Lingua interfaccia</string>
+    <string name="settings_interface_language">Lingua</string>
     <string name="settings_select_language">Scegli una lingua</string>
 
     <string name="account_email_validation_title">In attesa di verifica</string>
     <string name="account_email_validation_message">Controlla la tua email e clicca sul link lì contenuto. Fatto questo, clicca su Continua.</string>
-    <string name="account_email_validation_error">Impossibile verificare l\'indirizzo email. Controlla la tua email e clicca sul link lì contenuto. Fatto questo, clicca su Continua</string>
-    <string name="account_email_already_used_error">Questo indirizzo email è già in uso</string>
-    <string name="account_email_not_found_error">Invio email fallito: l\'indirizzo email non è stato trovato</string>
-    <string name="account_phone_number_already_used_error">Questo numero di telefono è già in uso</string>
+    <string name="account_email_validation_error">Impossibile verificare l\'indirizzo email. Controlla la tua email e clicca sul link lì contenuto. Fatto questo, clicca su continua.</string>
+    <string name="account_email_already_used_error">Questo indirizzo email è già in uso.</string>
+    <string name="account_email_not_found_error">Questo indirizzo email non è stato trovato.</string>
+    <string name="account_phone_number_already_used_error">Questo numero di telefono è già in uso.</string>
 
     <string name="settings_change_password">Cambia password</string>
     <string name="settings_old_password">Vecchia password</string>
@@ -582,7 +579,6 @@ Tieni presente che questa azione riavvierà l\'app e potrebbe richiedere del tem
     <string name="room_settings_tag_pref_entry_favourite">Preferito</string>
     <string name="room_settings_tag_pref_entry_low_priority">Bassa priorità</string>
     <string name="room_settings_tag_pref_entry_none">Niente</string>
-    <string name="room_settings_tag_pref_no_tag">non etichettato</string>
 
     <!-- room settings : access and visibility -->
     <string name="room_settings_category_access_visibility_title">Accesso e visibilità</string>
@@ -686,7 +682,7 @@ Attenzione: questo file può essere eliminato se l\'applicazione viene disinstal
     <string name="encryption_import_room_keys_summary">Importa le chiavi da un file locale</string>
     <string name="encryption_import_import">Importa</string>
     <string name="encryption_never_send_to_unverified_devices_title">Cripta solo per i dispositivi verificati</string>
-    <string name="encryption_never_send_to_unverified_devices_summary">Non inviare mai da questo dispositivo messaggi criptati a dispositivi non verificati</string>
+    <string name="encryption_never_send_to_unverified_devices_summary">Non inviare mai da questo dispositivo messaggi criptati a dispositivi non verificati.</string>
 
     <string name="encryption_information_not_verified">NON verificato</string>
     <string name="encryption_information_verified">Verificato</string>
@@ -734,13 +730,13 @@ In futuro il processo di verifica sarà più sofisticato.</string>
     <string name="larger">Più grande</string>
     <string name="largest">Grandissimo</string>
     <string name="huge">Enorme</string>
-<string name="light_theme">Tema Chiaro</string>
+    <string name="light_theme">Tema Chiaro</string>
     <string name="dark_theme">Tema Scuro</string>
     <string name="black_them">Tema Nero</string>
 
     <string name="notification_sync_in_progress">Sincronizzazione</string>
     <string name="settings_notification_ringtone">Suono notifiche</string>
-    <string name="settings_12_24_timestamps">Mostra gli orari in formato 12 ore (es. 2:30pm)</string>
+    <string name="settings_12_24_timestamps">Mostra gli orari in formato 12 ore</string>
     <string name="widget_no_power_to_manage">Hai bisogno dei permessi per gestire i widget in questa stanza</string>
     <string name="event_formatter_widget_added">%1$s aggiunto da %2$s</string>
     <string name="event_formatter_widget_removed">%1$s rimosso da %2$s</string>
@@ -760,7 +756,6 @@ In futuro il processo di verifica sarà più sofisticato.</string>
 
     <string name="settings_containing_my_display_name">Msg contenenti il nome mostrato</string>
     <string name="settings_containing_my_user_name">Msg contenenti il nome utente</string>
-    <string name="settings_hide_avatar_display_name_changes_messages">Nascondi cambiamenti del nome mostrato e dell\'avatar</string>
 
     <string name="notification_silent_notifications">Notifiche silenziose</string>
 
@@ -773,7 +768,7 @@ In futuro il processo di verifica sarà più sofisticato.</string>
     <string name="call">Chiama</string>
     <string name="encrypted_message">Messaggio criptato</string>
 
-<string name="title_activity_group_details">Dettagli della comunità</string>
+    <string name="title_activity_group_details">Dettagli della comunità</string>
 
     <string name="loading">Caricamento…</string>
 
@@ -799,38 +794,36 @@ In futuro il processo di verifica sarà più sofisticato.</string>
     <string name="open_chat_header">Apri intestazione</string>
     <string name="room_sync_in_progress">Sincronizzazione…</string>
     <plurals name="room_header_active_members_count">
-	<item quantity="one">1 membro attivo</item>
-	<item quantity="other">%d membri attivi</item>
-</plurals>
+        <item quantity="one">1 membro attivo</item>
+        <item quantity="other">%d membri attivi</item>
+    </plurals>
     <plurals name="room_title_members">
-	<item quantity="one">1 membro</item>
-	<item quantity="other">%d membri</item>
-</plurals>
-    <string name="room_participants_kick_prompt_msg">Sei sicuro di voler buttare fuori questo utente dalla chat?</string>
+        <item quantity="one">1 membro</item>
+        <item quantity="other">%d membri</item>
+    </plurals>
     <string name="room_participants_ban_prompt_msg">Sei sicuro di voler bandire dalla chat questo utente?</string>
 
     <plurals name="room_new_messages_notification">
-	<item quantity="one">1 nuovo messaggio</item>
-	<item quantity="other">%d nuovi messaggi</item>
-</plurals>
+        <item quantity="one">1 nuovo messaggio</item>
+        <item quantity="other">%d nuovi messaggi</item>
+    </plurals>
 
     <plurals name="directory_search_rooms">
-	<item quantity="one">1 stanza</item>
-	<item quantity="other">%d stanze</item>
-</plurals>
+        <item quantity="one">1 stanza</item>
+        <item quantity="other">%d stanze</item>
+    </plurals>
     <plurals name="directory_search_rooms_for">
-	<item quantity="one">%1$s stanza trovata per %2$s</item>
-	<item quantity="other">%1$s stanze trovate per %2$s</item>
-</plurals>
+        <item quantity="one">%1$s stanza trovata per %2$s</item>
+        <item quantity="other">%1$s stanze trovate per %2$s</item>
+    </plurals>
     <string name="room_settings_all_messages_noisy">Tutti i messaggi (rumoroso)</string>
     <string name="room_settings_all_messages">Tutti i messaggi</string>
     <string name="room_settings_mention_only">Solo le citazioni</string>
     <string name="room_settings_mute">Silenzioso</string>
     <string name="room_settings_add_homescreen_shortcut">Aggiungi scorciatoia su schermata iniziale</string>
 
-    <string name="settings_inline_url_preview">Attiva l\'anteprima degli URL in via predefinita</string>
-    <string name="settings_hide_join_leave_messages">Nascondi messaggi entrato/uscito (non si applica a invita/butta-fuori/bandisci)</string>
-    <string name="settings_vibrate_on_mention">Vibra quando ti citano</string>
+    <string name="settings_inline_url_preview">Anteprima degli URL in linea</string>
+    <string name="settings_vibrate_on_mention">Vibra quando menzionano un utente</string>
 
     <string name="settings_analytics">Statistiche</string>
 
@@ -841,24 +834,24 @@ In futuro il processo di verifica sarà più sofisticato.</string>
 
 
     <plurals name="notification_unread_notified_messages">
-	<item quantity="one">1 messaggio notificato non letto</item>
-	<item quantity="other">%d messaggi notificati non letti</item>
-</plurals>
+        <item quantity="one">1 messaggio notificato non letto</item>
+        <item quantity="other">%d messaggi notificati non letti</item>
+    </plurals>
     <plurals name="notification_unread_notified_messages_in_room_msgs">
-	<item quantity="one">1 messaggio notificato non letto</item>
-	<item quantity="other">%d messaggi notificati non letti</item>
-</plurals>
+        <item quantity="one">1 messaggio notificato non letto</item>
+        <item quantity="other">%d messaggi notificati non letti</item>
+    </plurals>
     <plurals name="notification_unread_notified_messages_in_room_rooms">
-	<item quantity="one">1 stanza</item>
-	<item quantity="other">%d stanze</item>
-</plurals>
+        <item quantity="one">1 stanza</item>
+        <item quantity="other">%d stanze</item>
+    </plurals>
     <string name="notification_unread_notified_messages_in_room">%1$s in %2$s</string>
 
     <string name="widget_creation_failure">Creazione del widget fallita</string>
     <plurals name="active_widgets">
-	<item quantity="one">1 widget attivo</item>
-	<item quantity="other">%d widget attivi</item>
-</plurals>
+        <item quantity="one">1 widget attivo</item>
+        <item quantity="other">%d widget attivi</item>
+    </plurals>
 
     <!-- Widget Integration Manager -->
     <string name="widget_integration_room_not_visible">La stanza %s non è visibile.</string>
@@ -912,16 +905,16 @@ In futuro il processo di verifica sarà più sofisticato.</string>
 
     <string name="avatar">Avatar</string>
 
-<string name="settings_flair">Insegna</string>
+    <string name="settings_flair">Insegna</string>
 
     <string name="room_settings_no_flair">Questa stanza non mostra insegne per alcuna comunità</string>
     <string name="widget_integration_positive_power_level">Il livello di potere deve essere un intero positivo.</string>
     <string name="notice_avatar">Notificare avatar</string>
     <string name="receipt_avatar">Avatar ricevuto</string>
     <plurals name="membership_changes">
-	<item quantity="one">1 cambio d\'appartenenza</item>
-	<item quantity="other">%d cambi d\'appartenenza</item>
-</plurals>
+        <item quantity="one">1 cambio d\'appartenenza</item>
+        <item quantity="other">%d cambi d\'appartenenza</item>
+    </plurals>
 
     <string name="settings_notification_privacy_warning">Riot.im funziona in sottofondo per mantenere privato il contenuto delle notifiche. Puoi cambiare questa opzione per ridurre il consumo della batteria.</string>
     <string name="settings_notification_privacy">Privacy delle notifiche</string>
@@ -938,7 +931,7 @@ In futuro il processo di verifica sarà più sofisticato.</string>
     <string name="settings_notification_privacy_message_content_not_shown">• Le notifiche <b>non mostreranno il contenuto del messaggio</b></string>
 
     <string name="startup_notification_privacy_title">Privacy notifiche</string>
-    <string name="startup_notification_privacy_message">Riot può funzionare in sottofondo per gestire le tue notifiche in modo sicuro e privato (ciò può influenzare la durata della batteria).</string>
+    <string name="startup_notification_privacy_message">Riot può funzionare in sottofondo per gestire le tue notifiche in modo sicuro e privato. Ciò può influenzare la durata della batteria.</string>
     <string name="startup_notification_privacy_button_grant">Concedi l\'autorizzazione</string>
     <string name="startup_notification_privacy_button_other">Scegli un\'altra opzione</string>
 
@@ -972,7 +965,7 @@ La visibilità dei messaggi in Matrix è simile alle email. \"Dimenticare i tuoi
     <string name="deactivate_account_prompt_password">Per continuare, inserisci la tua password:</string>
     <string name="deactivate_account_submit">Disattiva account</string>
 
-<string name="dialog_title_third_party_licences">Licenze di terze parti</string>
+    <string name="dialog_title_third_party_licences">Licenze di terze parti</string>
 
     <string name="download">Scarica</string>
     <string name="speak">Parla</string>
@@ -991,12 +984,12 @@ La visibilità dei messaggi in Matrix è simile alle email. \"Dimenticare i tuoi
     <string name="go_on_with">prosegui con…</string>
     <string name="error_no_external_application_found">Spiacenti, ma non è stata trovata alcuna applicazione esterna per completare l\'azione.</string>
 
-    <string name="settings_labs_enable_send_voice">Invia messaggio vocale (applicazione di terze parti richiesta per registrare i messaggi vocali)</string>
+    <string name="settings_labs_enable_send_voice">Invia messaggi vocali</string>
 
     <string name="group_details_people">Persone</string>
     <string name="error_empty_field_your_password">Per favore, inserisci la tua password.</string>
 
-<string name="send_bug_report_description_in_english">Se possibile, scrivi la descrizione in inglese, grazie.</string>
+    <string name="send_bug_report_description_in_english">Se possibile, scrivi la descrizione in inglese, grazie.</string>
     <string name="room_message_placeholder_reply_to_encrypted">Invia risposta criptata…</string>
     <string name="room_message_placeholder_reply_to_not_encrypted">Risposta non criptata…</string>
     <string name="settings_preview_media_before_sending">Mostra file multimediale prima dell\'invio</string>
@@ -1023,26 +1016,26 @@ La visibilità dei messaggi in Matrix è simile alle email. \"Dimenticare i tuoi
     <string name="room_tombstone_continuation_description">Questa stanza è la continuazione di un\'altra conversazione</string>
     <string name="room_tombstone_predecessor_link">Clicca qui per vedere i messaggi più vecchi</string>
 
-<string name="room_participants_action_unignore_prompt">Mostrare tutti i messaggi di questo utente?
+    <string name="room_participants_action_unignore_prompt">Mostrare tutti i messaggi di questo utente?
 
 Tieni presente che questa azione riavvierà l\'app e potrebbe richiedere del tempo.</string>
     <string name="missing_permissions_error">A causa di permessi insufficienti, questa azione non è possibile.</string>
     <plurals name="format_time_s">
-	<item quantity="one">1s</item>
-	<item quantity="other">%ds</item>
-</plurals>
+        <item quantity="one">1s</item>
+        <item quantity="other">%ds</item>
+    </plurals>
     <plurals name="format_time_m">
-	<item quantity="one">1m</item>
-	<item quantity="other">%dm</item>
-</plurals>
+        <item quantity="one">1m</item>
+        <item quantity="other">%dm</item>
+    </plurals>
     <plurals name="format_time_h">
-	<item quantity="one">1o</item>
-	<item quantity="other">%do</item>
-</plurals>
+        <item quantity="one">1o</item>
+        <item quantity="other">%do</item>
+    </plurals>
     <plurals name="format_time_d">
-	<item quantity="one">1g</item>
-	<item quantity="other">%dg</item>
-</plurals>
+        <item quantity="one">1g</item>
+        <item quantity="other">%dg</item>
+    </plurals>
 
     <string name="room_participants_now">%1$s ora</string>
     <string name="room_participants_ago">%1$s %2$s fa</string>
@@ -1052,18 +1045,18 @@ Tieni presente che questa azione riavvierà l\'app e potrebbe richiedere del tem
     <string name="room_participants_invite_join_names_combined">%1$s %2$s</string>
 
     <plurals name="room_details_selected">
-	<item quantity="one">1 selezionato</item>
-	<item quantity="other">%d selezionati</item>
-</plurals>
+        <item quantity="one">1 selezionato</item>
+        <item quantity="other">%d selezionati</item>
+    </plurals>
     <plurals name="group_members">
-	<item quantity="one">1 membro</item>
-	<item quantity="other">%d membri</item>
-</plurals>
+        <item quantity="one">1 membro</item>
+        <item quantity="other">%d membri</item>
+    </plurals>
 
     <plurals name="group_rooms">
-	<item quantity="one">1 stanza</item>
-	<item quantity="other">%d stanze</item>
-</plurals>
+        <item quantity="one">1 stanza</item>
+        <item quantity="other">%d stanze</item>
+    </plurals>
     <string name="system_alerts_header">Avvisi di sistema</string>
 
     <string name="resource_limit_exceeded_title">Limite di risorse superato</string>
@@ -1080,14 +1073,14 @@ Tieni presente che questa azione riavvierà l\'app e potrebbe richiedere del tem
     <string name="resource_limit_soft_contact">Per favore %s per aumentare questo limite.</string>
     <string name="resource_limit_hard_contact">Per favore %s per continuare ad usare questo servizio.</string>
 
-<string name="dialog_title_error">Errore</string>
+    <string name="dialog_title_error">Errore</string>
 
-    <string name="settings_lazy_loading_description">Aumenta le prestazioni caricando i membri della stanza solo alla prima visualizzazione</string>
+    <string name="settings_lazy_loading_description">Aumenta le prestazioni caricando i membri della stanza solo alla prima visualizzazione.</string>
     <string name="error_lazy_loading_not_supported_by_home_server">Il tuo server home non supporta ancora il caricamento posticipato dei membri delle stanze. Prova in seguito.</string>
 
     <string name="unknown_error">Spiacente, si è verificato un errore</string>
 
-<string name="settings_lazy_loading_title">Caricamento posticipato dei membri della stanza</string>
+    <string name="settings_lazy_loading_title">Caricamento posticipato dei membri della stanza</string>
     <string name="status_theme">Tema Status.im</string>
 
     <string name="room_sliding_menu_version_x">Versione %s</string>
@@ -1096,5 +1089,47 @@ Tieni presente che questa azione riavvierà l\'app e potrebbe richiedere del tem
     <string name="encryption_export_passphrase_dont_match">Le passphrase devono corrispondere</string>
     <string name="merged_events_expand">espandi</string>
     <string name="merged_events_collapse">collassa</string>
+
+    <string name="settings_info_area_show">Mostra l\'area informazioni</string>
+    <string name="show_info_area_always">Sempre</string>
+    <string name="show_info_area_messages_and_errors">Per messaggi ed errori</string>
+    <string name="show_info_area_only_errors">Solo per gli errori</string>
+
+    <string name="generic_label">%1$s:</string>
+    <string name="generic_label_and_value">%1$s: %2$s</string>
+    <string name="plus_x">+%d</string>
+    <string name="x_plus">%d+</string>
+
+    <string name="call_anyway">Chiama comunque</string>
+    <string name="room_participants_action_kick">Butta fuori</string>
+    <plurals name="room_participants_kick_prompt_msg">
+        <item quantity="one">Sei sicuro di voler buttare fuori questo utente dalla chat?</item>
+        <item quantity="other">Sei sicuro di voler buttare fuori questi utenti dalla chat?</item>
+    </plurals>
+    <string name="reason_hint">Motivo</string>
+
+    <string name="settings_inline_url_preview_summary">Visualizza anteprima dei link all\'interno della chat quando il tuo server home supporta questa funzione.</string>
+    <string name="settings_send_typing_notifs">Invia notifiche di digitazione</string>
+    <string name="settings_send_typing_notifs_summary">Fai sapere agli altri utenti che stai scrivendo.</string>
+    <string name="settings_send_markdown">Formattazione markdown</string>
+    <string name="settings_send_markdown_summary">Formatta i messaggi utilizzando la sintassi markdown prima dell\'invio. Ciò consente una formattazione avanzata come l\'uso degli asterischi per visualizzare il testo in corsivo.</string>
+    <string name="settings_show_read_receipts">Mostra le conferme di lettura</string>
+    <string name="settings_show_read_receipts_summary">Clicca sulle conferme di lettura per un elenco dettagliato.</string>
+    <string name="settings_show_join_leave_messages">Mostra eventi di ingresso ed uscita partecipanti</string>
+    <string name="settings_show_join_leave_messages_summary">Non si applica ad inviti, butta fuori ed espulsioni.</string>
+    <string name="settings_show_avatar_display_name_changes_messages">Mostra eventi degli account</string>
+    <string name="settings_show_avatar_display_name_changes_messages_summary">Includi cambiamenti dell\'avatar e del nome visualizzato.</string>
+    <string name="settings_password">Password</string>
+    <string name="settings_labs_native_camera_summary">Avvia la fotocamera di sistema invece dello schermo della fotocamera personalizzata.</string>
+    <string name="settings_labs_enable_send_voice_summary">Questa opzione richiede un\'applicazione di terze parti per registrare i messaggi.</string>
+
+    <string name="command_problem_with_parameters">Il comando \"%s\" necessita di più parametri, o alcuni parametri non sono validi.</string>
+    <string name="markdown_has_been_enabled">Markdown è stato abilitato.</string>
+    <string name="markdown_has_been_disabled">Markdown è stato disabilitato.</string>
+
+    <string name="settings_call_category">Chiamate</string>
+    <string name="settings_call_ringtone_use_riot_ringtone">Usa suoneria predefinita di Riot per le chiamate in arrivo</string>
+    <string name="settings_call_ringtone_title">Suoneria chiamate in arrivo</string>
+    <string name="settings_call_ringtone_dialog_title">Scegli suoneria per le chiamate:</string>
 
 </resources>

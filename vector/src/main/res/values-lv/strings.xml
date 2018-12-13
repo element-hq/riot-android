@@ -357,7 +357,6 @@ Ierīces nevarēs atšifrēt čata saraksti, kura notikusi, pirms tās pievienot
 Vai vēlies turpināt?</string>
 
     <string name="room_participants_invite_prompt_msg">Vai tiešām vēlies uzaicināt %s uz šo čatu?</string>
-    <string name="room_participants_kick_prompt_msg">Vai tiešām vēlies izspert šo lietotāju no šī čata?</string>
     <string name="room_participants_ban_prompt_msg">Vai tiešām vēlies \"nobanot\" šo lietotāju šajā čatā?</string>
 
     <string name="people_search_invite_by_id"><u>Uzaicināt pēc ID</u></string>
@@ -458,8 +457,8 @@ Vai vēlies turpināt?</string>
     <string name="settings_add_email_address">Pievienot epasta adresi</string>
     <string name="settings_phone_number">Tālrunis</string>
     <string name="settings_add_phone_number">Pievienot tālruņa #</string>
-    <string name="settings_summary_app_info_link">Doties uz Android Lietotņu informācijas sadaļu</string>
-    <string name="settings_title_app_info_link">Lietotnes informācija</string>
+    <string name="settings_app_info_link_summary">Doties uz Android Lietotņu informācijas sadaļu</string>
+    <string name="settings_app_info_link_title">Lietotnes informācija</string>
 
     <string name="settings_notification_ringtone">Paziņojumu skaņa</string>
     <string name="settings_enable_all_notif">Iespējot šim kontam paziņojumus</string>
@@ -489,7 +488,7 @@ Vai vēlies turpināt?</string>
     <string name="settings_copyright">Autortiesības</string>
     <string name="settings_privacy_policy">Privātuma politika</string>
     <string name="settings_clear_cache">Iztīrīt ķešu</string>
-    <string name="settings_clear_medias_cache">Iztīrīt mēdija ķešu</string>
+    <string name="settings_clear_media_cache">Iztīrīt mēdija ķešu</string>
     <string name="settings_keep_media">Turēt mēdiju (?)</string>
 
     <string name="settings_user_settings">Lietotāja iestatījumi</string>
@@ -507,13 +506,8 @@ Vai vēlies turpināt?</string>
     <string name="settings_pin_unread_messages">Piestiprināt istabas ar neizlasītām ziņām</string>
     <string name="settings_devices_list">Ierīces</string>
     <string name="settings_inline_url_preview">Iespējot URL priekšskatu pēc noklusējuma</string>
-    <string name="settings_hide_read_receipts">Nerādīt atzīmes, ka ziņu esmu izlasījis</string>
-    <string name="settings_dont_send_typings_notifs">Nerādīt paziņojumu par to, ka rakstu</string>
     <string name="settings_always_show_timestamps">Vienmēr rādīt ziņu laiku</string>
     <string name="settings_12_24_timestamps">Rādīt ziņu laiku 12 stundu formātā (piem. 12:12pm)</string>
-    <string name="settings_hide_join_leave_messages">Slēpt \"pievienojās/atstāja\" istabu paziņojumus (neietekmē uzaicinājumus/izsperšanu/nobanošanu)</string>
-    <string name="settings_hide_avatar_display_name_changes_messages">Nerādīt avatara un rādāmā vārdā izmaiņas</string>
-    <string name="settings_disable_markdown">Atspējot \"markdown\" formatēšanu nosūtāmajām ziņām</string>
     <string name="settings_vibrate_on_mention">Vibrācija, kad pieminējums</string>
 
     <string name="settings_analytics">Analītika</string>
@@ -588,7 +582,6 @@ Lai turpinātu, ievadi savu paroli.</string>
     <string name="room_settings_tag_pref_entry_favourite">Izlase</string>
     <string name="room_settings_tag_pref_entry_low_priority">Zema prioritāte</string>
     <string name="room_settings_tag_pref_entry_none">Nav</string>
-    <string name="room_settings_tag_pref_no_tag">bez birkām</string>
 
     <string name="room_settings_category_access_visibility_title">Pieejamība un redzamība</string>
     <string name="room_settings_directory_visibility">Iekļaut šo istabu katalogā</string>
@@ -631,40 +624,40 @@ Lai turpinātu, ievadi savu paroli.</string>
     <string name="send_bug_report_rage_shake">Ņipri papurināt ierīci, lai paziņotu par kļūdu</string>
 
     <plurals name="membership_changes">
-	<item quantity="zero">%d biedru izmaiņa</item>
-	<item quantity="one">%d biedru izmaiņas</item>
-	<item quantity="other">%d biedru izmaiņas</item>
-</plurals>
+        <item quantity="zero">%d biedru izmaiņa</item>
+        <item quantity="one">%d biedru izmaiņas</item>
+        <item quantity="other">%d biedru izmaiņas</item>
+    </plurals>
 
     <string name="list_members">Biedru katalogs</string>
     <string name="open_chat_header">Atvērt galveni</string>
     <string name="room_sync_in_progress">Notiek sinhronizācija…</string>
     <plurals name="room_header_active_members_count">
-	<item quantity="zero">%d aktīvs biedrs</item>
-	<item quantity="one">%d aktīvi biedri</item>
-	<item quantity="other">%d aktīvu biedru</item>
-</plurals>
+        <item quantity="zero">%d aktīvs biedrs</item>
+        <item quantity="one">%d aktīvi biedri</item>
+        <item quantity="other">%d aktīvu biedru</item>
+    </plurals>
     <plurals name="room_title_members">
-	<item quantity="zero">%d biedrs</item>
-	<item quantity="one">%d biedri</item>
-	<item quantity="other">%d biedru</item>
-</plurals>
+        <item quantity="zero">%d biedrs</item>
+        <item quantity="one">%d biedri</item>
+        <item quantity="other">%d biedru</item>
+    </plurals>
     <plurals name="room_new_messages_notification">
-	<item quantity="zero">%d jauna ziņa</item>
-	<item quantity="one">%d jaunas ziņas</item>
-	<item quantity="other">%d jaunu ziņu</item>
-</plurals>
+        <item quantity="zero">%d jauna ziņa</item>
+        <item quantity="one">%d jaunas ziņas</item>
+        <item quantity="other">%d jaunu ziņu</item>
+    </plurals>
 
     <plurals name="directory_search_rooms">
-	<item quantity="zero">%d istaba</item>
-	<item quantity="one">%d istabas</item>
-	<item quantity="other">%d istabu</item>
-</plurals>
+        <item quantity="zero">%d istaba</item>
+        <item quantity="one">%d istabas</item>
+        <item quantity="other">%d istabu</item>
+    </plurals>
     <plurals name="directory_search_rooms_for">
-	<item quantity="zero">%1$s istaba atrasta priekš %2$s</item>
-	<item quantity="one">%1$s istabas atrastas priekš %2$s</item>
-	<item quantity="other">%1$s istabas atrastas priekš %2$s</item>
-</plurals>
+        <item quantity="zero">%1$s istaba atrasta priekš %2$s</item>
+        <item quantity="one">%1$s istabas atrastas priekš %2$s</item>
+        <item quantity="other">%1$s istabas atrastas priekš %2$s</item>
+    </plurals>
     <string name="room_settings_invalid_group_format_dialog_body">\'%s\' ir nederīgs kopienas Id</string>
 
 
@@ -768,20 +761,20 @@ Nepazīstamas ierīces:</string>
     <string name="directory_server_native_rooms">Visas vietējās %s istabas</string>
 
     <plurals name="notification_unread_notified_messages">
-	<item quantity="zero">%d nelasīta paziņota ziņa</item>
-	<item quantity="one">%d nelasītas paziņotas ziņas</item>
-	<item quantity="other">%d nelasītu paziņotu ziņu</item>
-</plurals>
+        <item quantity="zero">%d nelasīta paziņota ziņa</item>
+        <item quantity="one">%d nelasītas paziņotas ziņas</item>
+        <item quantity="other">%d nelasītu paziņotu ziņu</item>
+    </plurals>
     <plurals name="notification_unread_notified_messages_in_room_msgs">
-	<item quantity="zero">%d nelasīta paziņota ziņa</item>
-	<item quantity="one">%d nelasītas paziņotas ziņas</item>
-	<item quantity="other">%d nelasītu paziņotu ziņu</item>
-</plurals>
+        <item quantity="zero">%d nelasīta paziņota ziņa</item>
+        <item quantity="one">%d nelasītas paziņotas ziņas</item>
+        <item quantity="other">%d nelasītu paziņotu ziņu</item>
+    </plurals>
     <plurals name="notification_unread_notified_messages_in_room_rooms">
-	<item quantity="zero">%d istaba</item>
-	<item quantity="one">%d istabas</item>
-	<item quantity="other">%d istabu</item>
-</plurals>
+        <item quantity="zero">%d istaba</item>
+        <item quantity="one">%d istabas</item>
+        <item quantity="other">%d istabu</item>
+    </plurals>
     <string name="notification_unread_notified_messages_in_room">%1$s iekš %2$s</string>
 
     <string name="historical_placeholder">Meklēt vēsturē</string>
@@ -802,10 +795,10 @@ Nepazīstamas ierīces:</string>
     <string name="settings_labs_create_conference_with_jitsi">Konferences zvaniem izmantot Jitsi</string>
     <string name="widget_delete_message_confirmation">Vai tiešām vēlies dzēst vidžetu?</string>
     <plurals name="active_widgets">
-	<item quantity="zero">%d aktīvs vidžets</item>
-	<item quantity="one">%d aktīvi vidžeti</item>
-	<item quantity="other">%d aktīvu vidžetu</item>
-</plurals>
+        <item quantity="zero">%d aktīvs vidžets</item>
+        <item quantity="one">%d aktīvi vidžeti</item>
+        <item quantity="other">%d aktīvu vidžetu</item>
+    </plurals>
 
     <!-- Widget Integration Manager -->
     <string name="widget_integration_unable_to_create">Neizdevās uzstādīt vidžetu.</string>

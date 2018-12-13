@@ -51,18 +51,18 @@ public class SlashCommandsParser {
         // the user can write theses messages to perform some actions
         // the list will be displayed in this order
         EMOTE("/me", "<message>", R.string.command_description_emote),
-        BAN_USER("/ban", "<user-id>", R.string.command_description_ban_user),
-        UNBAN_USER ("/unban", "<user-id>", R.string.command_description_unban_user),
-        SET_USER_POWER_LEVEL ("/op", "<user-id> [<power-level>]",R.string.command_description_op_user),
-        RESET_USER_POWER_LEVEL ("/deop", "<user-id>", R.string.command_description_deop_user),
-        INVITE ("/invite", "<user-id>", R.string.command_description_invite_user),
-        JOIN_ROOM ("/join", "<room-alias>", R.string.command_description_join_room),
-        PART ("/part", "<room-alias>", R.string.command_description_part_room),
-        TOPIC ("/topic", "<topic>", R.string.command_description_topic),
-        KICK_USER ("/kick", "<user-id>", R.string.command_description_kick_user),
-        CHANGE_DISPLAY_NAME ("/nick", "<display-name>", R.string.command_description_nick),
-        MARKDOWN ("/markdown", "", R.string.command_description_markdown),
-        CLEAR_SCALAR_TOKEN ("/clear_scalar_token", "", R.string.command_description_clear_scalar_token);
+        BAN_USER("/ban", "<user-id> [reason]", R.string.command_description_ban_user),
+        UNBAN_USER("/unban", "<user-id>", R.string.command_description_unban_user),
+        SET_USER_POWER_LEVEL("/op", "<user-id> [<power-level>]", R.string.command_description_op_user),
+        RESET_USER_POWER_LEVEL("/deop", "<user-id>", R.string.command_description_deop_user),
+        INVITE("/invite", "<user-id>", R.string.command_description_invite_user),
+        JOIN_ROOM("/join", "<room-alias>", R.string.command_description_join_room),
+        PART("/part", "<room-alias>", R.string.command_description_part_room),
+        TOPIC("/topic", "<topic>", R.string.command_description_topic),
+        KICK_USER("/kick", "<user-id> [reason]", R.string.command_description_kick_user),
+        CHANGE_DISPLAY_NAME("/nick", "<display-name>", R.string.command_description_nick),
+        MARKDOWN("/markdown", "<on|off>", R.string.command_description_markdown),
+        CLEAR_SCALAR_TOKEN("/clear_scalar_token", "", R.string.command_description_clear_scalar_token);
 
         private final String command;
         private String parameter;
@@ -70,7 +70,7 @@ public class SlashCommandsParser {
         @StringRes
         private int description;
 
-        private  static final Map<String, SlashCommand> lookup = new HashMap<String, SlashCommand>();
+        private static final Map<String, SlashCommand> lookup = new HashMap<>();
 
         static {
             for (SlashCommand slashCommand : SlashCommand.values()) {
@@ -120,6 +120,7 @@ public class SlashCommandsParser {
                                               final String formattedBody,
                                               final String format) {
         boolean isIRCCmd = false;
+        boolean isIRCCmdValid = false;
 
         // sanity checks
         if ((null == activity) || (null == session) || (null == room)) {
@@ -176,6 +177,7 @@ public class SlashCommandsParser {
                 String newDisplayname = textMessage.substring(SlashCommand.CHANGE_DISPLAY_NAME.getCommand().length()).trim();
 
                 if (newDisplayname.length() > 0) {
+                    isIRCCmdValid = true;
                     MyUser myUser = session.getMyUser();
 
                     myUser.updateDisplayName(newDisplayname, callback);
@@ -186,25 +188,26 @@ public class SlashCommandsParser {
                 String newTopic = textMessage.substring(SlashCommand.TOPIC.getCommand().length()).trim();
 
                 if (newTopic.length() > 0) {
+                    isIRCCmdValid = true;
                     room.updateTopic(newTopic, callback);
                 }
             } else if (TextUtils.equals(firstPart, SlashCommand.EMOTE.getCommand())) {
                 isIRCCmd = true;
+                isIRCCmdValid = true;
 
                 String newMessage = textMessage.substring(SlashCommand.EMOTE.getCommand().length()).trim();
 
-                if (textMessage.length() > 0) {
-                    if ((null != formattedBody) && formattedBody.length() > SlashCommand.EMOTE.getCommand().length()) {
-                        activity.sendEmote(newMessage, formattedBody.substring(SlashCommand.EMOTE.getCommand().length()), format);
-                    } else {
-                        activity.sendEmote(newMessage, formattedBody, format);
-                    }
+                if ((null != formattedBody) && formattedBody.length() > SlashCommand.EMOTE.getCommand().length()) {
+                    activity.sendEmote(newMessage, formattedBody.substring(SlashCommand.EMOTE.getCommand().length()), format);
+                } else {
+                    activity.sendEmote(newMessage, formattedBody, format);
                 }
             } else if (TextUtils.equals(firstPart, SlashCommand.JOIN_ROOM.getCommand())) {
                 isIRCCmd = true;
                 String roomAlias = textMessage.substring(SlashCommand.JOIN_ROOM.getCommand().length()).trim();
 
                 if (roomAlias.length() > 0) {
+                    isIRCCmdValid = true;
                     session.joinRoom(roomAlias, new SimpleApiCallback<String>(activity) {
 
                         @Override
@@ -233,6 +236,7 @@ public class SlashCommandsParser {
                 String roomAlias = textMessage.substring(SlashCommand.PART.getCommand().length()).trim();
 
                 if (roomAlias.length() > 0) {
+                    isIRCCmdValid = true;
                     Room theRoom = null;
                     Collection<Room> rooms = session.getDataHandler().getStore().getRooms();
 
@@ -258,13 +262,21 @@ public class SlashCommandsParser {
                 isIRCCmd = true;
 
                 if (messageParts.length >= 2) {
+                    isIRCCmdValid = true;
                     room.invite(messageParts[1], callback);
                 }
             } else if (TextUtils.equals(firstPart, SlashCommand.KICK_USER.getCommand())) {
                 isIRCCmd = true;
 
                 if (messageParts.length >= 2) {
-                    room.kick(messageParts[1], callback);
+                    isIRCCmdValid = true;
+
+                    String user = messageParts[1];
+                    String reason = textMessage.substring(SlashCommand.BAN_USER.getCommand().length()
+                            + 1
+                            + user.length()).trim();
+
+                    room.kick(user, reason, callback);
                 }
             } else if (TextUtils.equals(firstPart, SlashCommand.BAN_USER.getCommand())) {
                 isIRCCmd = true;
@@ -276,12 +288,14 @@ public class SlashCommandsParser {
                 String reason = params.substring(bannedUserID.length()).trim();
 
                 if (bannedUserID.length() > 0) {
+                    isIRCCmdValid = true;
                     room.ban(bannedUserID, reason, callback);
                 }
             } else if (TextUtils.equals(firstPart, SlashCommand.UNBAN_USER.getCommand())) {
                 isIRCCmd = true;
 
                 if (messageParts.length >= 2) {
+                    isIRCCmdValid = true;
                     room.unban(messageParts[1], callback);
                 }
 
@@ -289,6 +303,7 @@ public class SlashCommandsParser {
                 isIRCCmd = true;
 
                 if (messageParts.length >= 3) {
+                    isIRCCmdValid = true;
                     String userID = messageParts[1];
                     String powerLevelsAsString = messageParts[2];
 
@@ -304,6 +319,7 @@ public class SlashCommandsParser {
                 isIRCCmd = true;
 
                 if (messageParts.length >= 2) {
+                    isIRCCmdValid = true;
                     room.updateUserPowerLevels(messageParts[1], 0, callback);
                 }
             } else if (TextUtils.equals(firstPart, SlashCommand.MARKDOWN.getCommand())) {
@@ -311,13 +327,18 @@ public class SlashCommandsParser {
 
                 if (messageParts.length >= 2) {
                     if (TextUtils.equals(messageParts[1], "on")) {
+                        isIRCCmdValid = true;
                         PreferencesManager.setMarkdownEnabled(VectorApp.getInstance(), true);
+                        Toast.makeText(activity, R.string.markdown_has_been_enabled, Toast.LENGTH_SHORT).show();
                     } else if (TextUtils.equals(messageParts[1], "off")) {
+                        isIRCCmdValid = true;
                         PreferencesManager.setMarkdownEnabled(VectorApp.getInstance(), false);
+                        Toast.makeText(activity, R.string.markdown_has_been_disabled, Toast.LENGTH_SHORT).show();
                     }
                 }
             } else if (TextUtils.equals(firstPart, SlashCommand.CLEAR_SCALAR_TOKEN.getCommand())) {
                 isIRCCmd = true;
+                isIRCCmdValid = true;
 
                 WidgetsManager.clearScalarToken(activity, session);
 
@@ -330,6 +351,16 @@ public class SlashCommandsParser {
                         .setMessage(activity.getString(R.string.unrecognized_command, firstPart))
                         .setPositiveButton(R.string.ok, null)
                         .show();
+
+                // do not send the command as a message
+                isIRCCmd = true;
+            } else if (!isIRCCmdValid) {
+                new AlertDialog.Builder(activity)
+                        .setTitle(R.string.command_error)
+                        .setMessage(activity.getString(R.string.command_problem_with_parameters, firstPart))
+                        .setPositiveButton(R.string.ok, null)
+                        .show();
+
                 // do not send the command as a message
                 isIRCCmd = true;
             }

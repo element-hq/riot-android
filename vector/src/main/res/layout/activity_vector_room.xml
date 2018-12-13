@@ -24,7 +24,6 @@
             style="@style/VectorToolbarStyle"
             android:layout_width="match_parent"
             android:layout_height="?attr/actionBarSize"
-            android:background="?attr/vctr_primary_color"
             app:contentInsetEnd="0dp"
             app:contentInsetStart="0dp">
 
@@ -89,7 +88,7 @@
                 android:id="@+id/button_join_room"
                 android:layout_width="110dp"
                 android:layout_height="36dp"
-                android:background="@color/vector_green_color"
+                android:background="?attr/colorAccent"
                 android:text="@string/join_room"
                 android:textColor="@android:color/white" />
 
@@ -302,7 +301,8 @@
                         android:padding="8dp"
                         android:rotationY="@integer/rtl_mirror_flip"
                         android:scaleType="fitCenter"
-                        android:src="@drawable/ic_material_file" />
+                        android:src="@drawable/ic_material_file"
+                        android:tint="?attr/colorAccent" />
 
                     <ImageView
                         android:id="@+id/room_start_call_image_view"
@@ -313,6 +313,7 @@
                         android:padding="8dp"
                         android:scaleType="fitCenter"
                         android:src="@drawable/voice_call_start_green"
+                        android:tint="?attr/colorAccent"
                         android:visibility="gone"
                         tools:visibility="visible" />
 

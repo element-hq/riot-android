@@ -18,7 +18,6 @@
 package im.vector.adapters;
 
 import android.content.Context;
-import android.support.v4.content.ContextCompat;
 import android.text.SpannableString;
 import android.text.TextUtils;
 import android.text.style.BackgroundColorSpan;
@@ -30,14 +29,14 @@ import android.widget.TextView;
 import org.matrix.androidsdk.MXSession;
 import org.matrix.androidsdk.adapters.MessageRow;
 import org.matrix.androidsdk.data.Room;
-import org.matrix.androidsdk.db.MXMediasCache;
+import org.matrix.androidsdk.db.MXMediaCache;
 import org.matrix.androidsdk.rest.model.Event;
 import org.matrix.androidsdk.util.EventDisplay;
 import org.matrix.androidsdk.util.Log;
 
 import im.vector.R;
+import im.vector.ui.themes.ThemeUtils;
 import im.vector.util.RiotEventDisplay;
-import im.vector.util.VectorUtils;
 
 /**
  * An adapter which display a list of messages found after a search
@@ -49,7 +48,7 @@ public class VectorSearchMessagesListAdapter extends VectorMessagesAdapter {
     private final boolean mDisplayRoomName;
     private String mPattern;
 
-    public VectorSearchMessagesListAdapter(MXSession session, Context context, boolean displayRoomName, MXMediasCache mediasCache) {
+    public VectorSearchMessagesListAdapter(MXSession session, Context context, boolean displayRoomName, MXMediaCache mediasCache) {
         super(session, context,
                 R.layout.adapter_item_vector_message_text_emote_notice,
                 R.layout.adapter_item_vector_message_image_video,
@@ -69,7 +68,7 @@ public class VectorSearchMessagesListAdapter extends VectorMessagesAdapter {
         setNotifyOnChange(true);
         mDisplayRoomName = displayRoomName;
 
-        mBackgroundColorSpan = new BackgroundColorSpan(ContextCompat.getColor(mContext, R.color.vector_green_color));
+        mBackgroundColorSpan = new BackgroundColorSpan(ThemeUtils.INSTANCE.getColor(mContext, R.attr.colorAccent));
     }
 
     /**

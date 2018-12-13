@@ -297,7 +297,7 @@
     <string name="room_sliding_menu_privacy_policy">隐私政策</string>
 
     <string name="settings_phone_number">电话号码</string>
-    <string name="settings_title_app_info_link">应用信息</string>
+    <string name="settings_app_info_link_title">应用信息</string>
 
     <string name="settings_enable_all_notif">启用这个账户的通知</string>
     <string name="settings_enable_this_device">启用这个设备的通知</string>
@@ -402,7 +402,7 @@
     <string name="encryption_information_verify_key_match">我验证此密钥匹配</string>
 
     <string name="unknown_devices_alert_title">聊天室包含未知设备</string>
-<string name="later">稍后再说</string>
+    <string name="later">稍后再说</string>
     <string name="permalink">永久链接</string>
     <string name="rename">重命名</string>
     <string name="report_content">举报消息</string>
@@ -481,7 +481,7 @@
     <string name="room_settings_favourite">收藏夹</string>
     <string name="room_sliding_menu_term_and_conditions">使用条款</string>
     <string name="settings_display_name">昵称</string>
-    <string name="settings_summary_app_info_link">应用程序系统信息窗口</string>
+    <string name="settings_app_info_link_summary">应用程序系统信息窗口</string>
     <string name="settings_turn_screen_on">点亮屏幕 3 秒</string>
 
     <string name="settings_call_invitations">通话请求</string>
@@ -508,7 +508,6 @@
     <string name="room_settings_tag_pref_entry_favourite">收藏夹</string>
     <string name="room_settings_tag_pref_entry_low_priority">低优先级</string>
     <string name="room_settings_tag_pref_entry_none">无</string>
-    <string name="room_settings_tag_pref_no_tag">没有标签</string>
 
     <string name="room_settings_room_access_warning">要链接一个聊天室，必须有一个地址。</string>
     <string name="room_settings_never_send_to_unverified_devices_title">仅对已验证的设备加密</string>
@@ -654,7 +653,7 @@
     <string name="settings_home_display">主页显示</string>
     <string name="settings_pin_missed_notifications">置顶含有错过的通知的聊天室</string>
     <string name="settings_pin_unread_messages">置顶含有未读消息的聊天室</string>
-<string name="settings_user_interface">用户界面</string>
+    <string name="settings_user_interface">用户界面</string>
     <string name="settings_interface_language">界面语言</string>
     <string name="settings_select_language">选择语言</string>
 
@@ -663,13 +662,10 @@
     <string name="user_directory_header">用户目录</string>
     <string name="people_search_user_directory">用户目录（%s）</string>
     <string name="settings_start_on_boot">开机时自动启动</string>
-    <string name="settings_clear_medias_cache">清空缓存的媒体文件</string>
+    <string name="settings_clear_media_cache">清空缓存的媒体文件</string>
     <string name="settings_keep_media">保留媒体文件</string>
 
-    <string name="settings_hide_read_receipts">隐藏已读标签</string>
-    <string name="settings_dont_send_typings_notifs">不要发送“正在输入”提示</string>
     <string name="settings_always_show_timestamps">总是显示消息时间戳</string>
-    <string name="settings_disable_markdown">发送时禁用 markdown 格式化</string>
     <string name="settings_data_save_mode">省流量模式</string>
 
     <string name="media_saving_period_3_days">3天</string>
@@ -687,7 +683,7 @@
     <string name="larger">更大</string>
     <string name="largest">最大</string>
     <string name="huge">巨大</string>
-<string name="light_theme">浅色主题</string>
+    <string name="light_theme">浅色主题</string>
     <string name="dark_theme">深色主题</string>
     <string name="black_them">黑色主题</string>
 
@@ -695,8 +691,6 @@
 
     <string name="settings_notification_ringtone">通知声音</string>
     <string name="settings_12_24_timestamps">用12小时制显示时间戳（如：下午 2:30）</string>
-    <string name="settings_hide_join_leave_messages">隐藏加入/退出消息（邀请/踢出/封禁不受影响）</string>
-    <string name="settings_hide_avatar_display_name_changes_messages">隐藏头像和显示名称的修改</string>
 
     <string name="widget_no_power_to_manage">您需要权限来管理这个聊天室的小部件</string>
     <string name="widget_creation_failure">创建小部件失败</string>
@@ -727,7 +721,7 @@
     <string name="share_without_verifying">不验证而分享</string>
     <string name="ignore_request">忽略请求</string>
 
-<string name="title_activity_bug_report">反馈问题</string>
+    <string name="title_activity_bug_report">反馈问题</string>
 
     <string name="option_take_photo">拍摄照片</string>
     <string name="option_take_video">拍摄视频</string>
@@ -747,7 +741,7 @@
     <string name="notification_on">打开</string>
     <string name="encrypted_message">已加密消息</string>
 
-<string name="notification_noisy_notifications">铃声通知</string>
+    <string name="notification_noisy_notifications">铃声通知</string>
     <string name="notification_silent_notifications">静默通知</string>
 
     <string name="settings_analytics">数据收集</string>
@@ -762,7 +756,6 @@
     <string name="start_voice_call_prompt_msg">您确定要发起语音通话吗？</string>
     <string name="start_video_call_prompt_msg">您确定要发起视频通话吗？</string>
 
-    <string name="room_participants_kick_prompt_msg">您确定要从这个聊天中移除这个用户吗？</string>
     <string name="room_participants_ban_prompt_msg">您确定要在这个聊天中封禁这个用户吗？</string>
 
     <string name="room_settings_all_messages">全部消息</string>
@@ -778,12 +771,12 @@
     <string name="community_name_hint">样例名称</string>
 
     <plurals name="room_new_messages_notification">
-	<item quantity="other">%d 条新消息</item>
-</plurals>
+        <item quantity="other">%d 条新消息</item>
+    </plurals>
 
     <string name="rejoin">重新加入</string>
     <string name="forget_room">忘记聊天室</string>
-<string name="room_settings_all_messages_noisy">所有消息（通知并振铃）</string>
+    <string name="room_settings_all_messages_noisy">所有消息（通知并振铃）</string>
     <string name="title_activity_group_details">社区信息</string>
 
     <string name="actions">操作</string>
@@ -800,39 +793,39 @@
 
     <string name="room_sync_in_progress">正在同步…</string>
     <plurals name="room_header_active_members_count">
-	<item quantity="other">%d 人在线</item>
-</plurals>
+        <item quantity="other">%d 人在线</item>
+    </plurals>
     <plurals name="membership_changes">
-	<item quantity="other">%d 位成员的状态发生了变化</item>
-</plurals>
+        <item quantity="other">%d 位成员的状态发生了变化</item>
+    </plurals>
 
     <plurals name="room_title_members">
-	<item quantity="other">%d 位成员</item>
-</plurals>
+        <item quantity="other">%d 位成员</item>
+    </plurals>
     <string name="room_settings_invalid_group_format_dialog_title">无效的社区 ID</string>
     <string name="room_settings_invalid_group_format_dialog_body">“%s” 不是一个有效的社区 ID</string>
 
 
     <plurals name="notification_unread_notified_messages">
-	<item quantity="other">%d 条未读消息</item>
-</plurals>
+        <item quantity="other">%d 条未读消息</item>
+    </plurals>
     <string name="create_community">创建社区</string>
     <string name="list_members">显示成员</string>
     <string name="open_chat_header">显示顶栏</string>
     <plurals name="directory_search_rooms">
-	<item quantity="other">%d 个聊天室</item>
-</plurals>
+        <item quantity="other">%d 个聊天室</item>
+    </plurals>
     <string name="settings_notification_privacy">通知隐私</string>
     <string name="settings_notification_privacy_warning">Riot.im 将在后台运行以保证通知消息内容的私密性。 您可以更改此选项以减少电池使用量。</string>
     <string name="settings_notification_privacy_need_permission">本应用需要在后台运行的权限</string>
     <string name="settings_flair">Flair</string>
 
     <plurals name="notification_unread_notified_messages_in_room_rooms">
-	<item quantity="other">%d 个聊天室</item>
-</plurals>
+        <item quantity="other">%d 个聊天室</item>
+    </plurals>
     <plurals name="active_widgets">
-	<item quantity="other">已启用 %d 个小部件</item>
-</plurals>
+        <item quantity="other">已启用 %d 个小部件</item>
+    </plurals>
 
     <!-- Widget Integration Manager -->
     <string name="community_name">社区名称</string>
@@ -853,17 +846,17 @@
     <string name="reason_colon">理由：%1$s</string>
     <string name="avatar">头像</string>
 
-<string name="receipt_avatar">已读提示头像</string>
+    <string name="receipt_avatar">已读提示头像</string>
     <string name="notice_avatar">通知头像</string>
 
     <plurals name="directory_search_rooms_for">
-	<item quantity="other">有 %1$s 个聊天室符合 “%2$s”</item>
-</plurals>
+        <item quantity="other">有 %1$s 个聊天室符合 “%2$s”</item>
+    </plurals>
     <string name="notification_unread_notified_messages_in_room">%1$s 条在 %2$s 中</string>
 
     <plurals name="notification_unread_notified_messages_in_room_msgs">
-	<item quantity="other">%d 条未读消息</item>
-</plurals>
+        <item quantity="other">%d 条未读消息</item>
+    </plurals>
     <string name="startup_notification_privacy_title">通知隐私</string>
     <string name="startup_notification_privacy_message">Riot 可以在后台运行以安全隐密地管理您的通知（这可能会影响电池消耗）。</string>
     <string name="startup_notification_privacy_button_grant">获取权限</string>
@@ -899,7 +892,7 @@ Matrix 中的消息可见性类似于电子邮件。我们忘记您的消息意�
     <string name="deactivate_account_prompt_password">请输入您的密码以继续：</string>
     <string name="deactivate_account_submit">停用账户</string>
 
-<string name="title_activity_choose_sticker">发送贴纸</string>
+    <string name="title_activity_choose_sticker">发送贴纸</string>
 
     <string name="option_send_sticker">发送贴纸</string>
     <string name="no_sticker_application_dialog_content">您目前没有启用任何贴纸包。
@@ -938,7 +931,7 @@ Matrix 中的消息可见性类似于电子邮件。我们忘记您的消息意�
 
     <string name="error_empty_field_your_password">请输入您的密码。</string>
 
-<string name="speak">发言</string>
+    <string name="speak">发言</string>
     <string name="send_bug_report_description_in_english">如果可能的话，请使用英文撰写问题描述。</string>
     <string name="room_participants_action_unignore_prompt">显示来自该用户的所有信息？
 
@@ -967,25 +960,25 @@ Matrix 中的消息可见性类似于电子邮件。我们忘记您的消息意�
     <string name="room_tombstone_continuation_description">这个聊天室是另一个对话的继续</string>
     <string name="room_tombstone_predecessor_link">点击此处查看更早的消息</string>
 
-<string name="settings_without_flair">您目前不是任何社区的成员。</string>
+    <string name="settings_without_flair">您目前不是任何社区的成员。</string>
 
     <string name="missing_permissions_error">由于缺少权限，此操作无法完成。</string>
     <plurals name="public_room_nb_users">
-	<item quantity="other">%d 个用户</item>
-</plurals>
+        <item quantity="other">%d 个用户</item>
+    </plurals>
 
     <plurals name="format_time_s">
-	<item quantity="other">%d 秒</item>
-</plurals>
+        <item quantity="other">%d 秒</item>
+    </plurals>
     <plurals name="format_time_m">
-	<item quantity="other">%d 分钟</item>
-</plurals>
+        <item quantity="other">%d 分钟</item>
+    </plurals>
     <plurals name="format_time_h">
-	<item quantity="other">%d 小时</item>
-</plurals>
+        <item quantity="other">%d 小时</item>
+    </plurals>
     <plurals name="format_time_d">
-	<item quantity="other">%d 天</item>
-</plurals>
+        <item quantity="other">%d 天</item>
+    </plurals>
 
     <string name="room_participants_now">现在%1$s</string>
     <string name="room_participants_ago">%2$s前%1$s</string>
@@ -995,15 +988,15 @@ Matrix 中的消息可见性类似于电子邮件。我们忘记您的消息意�
     <string name="room_participants_invite_join_names_combined">%1$s%2$s</string>
 
     <plurals name="room_details_selected">
-	<item quantity="other">已选择 %d 个</item>
-</plurals>
+        <item quantity="other">已选择 %d 个</item>
+    </plurals>
     <plurals name="group_members">
-	<item quantity="other">%d 个成员</item>
-</plurals>
+        <item quantity="other">%d 个成员</item>
+    </plurals>
 
     <plurals name="group_rooms">
-	<item quantity="other">%d 个聊天室</item>
-</plurals>
+        <item quantity="other">%d 个聊天室</item>
+    </plurals>
     <string name="system_alerts_header">系统警告</string>
 
     <string name="resource_limit_exceeded_title">超出资源限制</string>
@@ -1019,5 +1012,5 @@ Matrix 中的消息可见性类似于电子邮件。我们忘记您的消息意�
 
     <string name="resource_limit_hard_contact">请 %s 以继续使用本服务。</string>
 
-<string name="resource_limit_soft_contact">请 %s 以增加此限制的额度。</string>
-    </resources>
+    <string name="resource_limit_soft_contact">请 %s 以增加此限制的额度。</string>
+</resources>

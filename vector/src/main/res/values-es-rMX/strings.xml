@@ -24,19 +24,19 @@
     <string name="quote">Citar</string>
     <string name="share">Compartir</string>
     <string name="later">Luego</string>
-    <string name="forward">Enviar</string>
-    <string name="permalink">Enlace permanente</string>
-    <string name="view_source">Ver fuente</string>
+    <string name="forward">Reenviar</string>
+    <string name="permalink">Enlace Permanente</string>
+    <string name="view_source">Ver Fuente</string>
     <string name="view_decrypted_source">Ver Fuente Descifrada</string>
     <string name="delete">Borrar</string>
     <string name="rename">Renombrar</string>
     <string name="report_content">Reportar contenido</string>
     <string name="active_call">Llamada activa</string>
-    <string name="ongoing_conference_call">Llamada de conferencia en proceso. Unir con voz o vídeo.</string>
+    <string name="ongoing_conference_call">Llamada de conferencia en proceso. Unirse con voz o video.</string>
     <string name="ongoing_conference_call_voice">voz</string>
     <string name="ongoing_conference_call_video">video</string>
-    <string name="cannot_start_call">No se pudo iniciar la llamada, inténtalo más tarde</string>
-    <string name="missing_permissions_warning">Debido a permisos faltantes, algunas características podrían estar ausentes…</string>
+    <string name="cannot_start_call">No se puede iniciar la llamada, inténtalo más tarde</string>
+    <string name="missing_permissions_warning">Debido a permisos que faltan, algunas características podrían estar ausentes…</string>
     <string name="missing_permissions_to_start_conf_call">Necesitas permiso para realizar una llamada de conferencia en esta sala</string>
     <string name="missing_permissions_title_to_start_conf_call">No se puede iniciar la llamada</string>
     <string name="device_information">Información del dispositivo</string>
@@ -434,8 +434,8 @@ Mensajes cifrados no serán visibles en cuentas que no implementan el cifrado.</
     <string name="settings_add_email_address">Añadir correo electrónico</string>
     <string name="settings_phone_number">Número Telefónico</string>
     <string name="settings_add_phone_number">Añadir número telefónico</string>
-    <string name="settings_summary_app_info_link">Página de la información del sistema de la aplicación</string>
-    <string name="settings_title_app_info_link">Información de la Aplicación</string>
+    <string name="settings_app_info_link_summary">Página de la información del sistema de la aplicación</string>
+    <string name="settings_app_info_link_title">Información de la Aplicación</string>
 
     <string name="settings_enable_all_notif">Encender notificaciones para esta cuenta</string>
     <string name="settings_enable_this_device">Encender notificaciones para este dispositivo</string>
@@ -538,7 +538,6 @@ Mensajes cifrados no serán visibles en cuentas que no implementan el cifrado.</
     <string name="room_settings_tag_pref_entry_favourite">Destacar</string>
     <string name="room_settings_tag_pref_entry_low_priority">Baja prioridad</string>
     <string name="room_settings_tag_pref_entry_none">Ninguno</string>
-    <string name="room_settings_tag_pref_no_tag">no etiquetado</string>
 
     <!-- room settings : access and visibility -->
     <string name="room_settings_category_access_visibility_title">Acceso y Visibilidad</string>
@@ -680,7 +679,7 @@ Dispositivos desconocidos:</string>
 
     <!-- historical -->
     <string name="historical_placeholder">Search for historical</string>
-<string name="notification_sync_in_progress">Sincronizando</string>
+    <string name="notification_sync_in_progress">Sincronizando</string>
     <string name="loading">Cargando…</string>
 
     <string name="download">Descargar</string>
@@ -712,38 +711,38 @@ Dispositivos desconocidos:</string>
     <string name="list_members">Lista de miembros</string>
     <string name="room_sync_in_progress">Sincronizando…</string>
     <plurals name="room_header_active_members_count">
-	<item quantity="one">1 miembro activo</item>
-	<item quantity="other">%d miembros activos</item>
-</plurals>
+        <item quantity="one">1 miembro activo</item>
+        <item quantity="other">%d miembros activos</item>
+    </plurals>
     <plurals name="room_title_members">
-	<item quantity="one">1 miembro</item>
-	<item quantity="other">%d miembros</item>
-</plurals>
+        <item quantity="one">1 miembro</item>
+        <item quantity="other">%d miembros</item>
+    </plurals>
     <plurals name="format_time_s">
-	<item quantity="one">1s</item>
-	<item quantity="other">%ds</item>
-</plurals>
+        <item quantity="one">1s</item>
+        <item quantity="other">%ds</item>
+    </plurals>
     <plurals name="format_time_m">
-	<item quantity="one">1m</item>
-	<item quantity="other">%dm</item>
-</plurals>
+        <item quantity="one">1m</item>
+        <item quantity="other">%dm</item>
+    </plurals>
     <plurals name="format_time_h">
-	<item quantity="one">1h</item>
-	<item quantity="other">%dh</item>
-</plurals>
+        <item quantity="one">1h</item>
+        <item quantity="other">%dh</item>
+    </plurals>
     <plurals name="format_time_d">
-	<item quantity="one">1d</item>
-	<item quantity="other">%dd</item>
-</plurals>
+        <item quantity="one">1d</item>
+        <item quantity="other">%dd</item>
+    </plurals>
 
     <plurals name="room_details_selected">
-	<item quantity="one">1 seleccionada</item>
-	<item quantity="other">%d seleccionadas</item>
-</plurals>
+        <item quantity="one">1 seleccionada</item>
+        <item quantity="other">%d seleccionadas</item>
+    </plurals>
     <plurals name="directory_search_rooms">
-	<item quantity="one">1 sala</item>
-	<item quantity="other">%d salas</item>
-</plurals>
+        <item quantity="one">1 sala</item>
+        <item quantity="other">%d salas</item>
+    </plurals>
     <string name="room_settings_all_messages">Todos los mensajes</string>
     <string name="settings_notification_privacy_normal">Normal</string>
     <string name="deactivate_account_title">Desactivar Cuenta</string>
@@ -770,7 +769,7 @@ Dispositivos desconocidos:</string>
     <string name="status_theme">Tema de Status.im</string>
 
     <string name="title_activity_group_details">Detalles sobre la comunidad</string>
-    <string name="title_activity_choose_sticker">Enviar una pegatina</string>
+    <string name="title_activity_choose_sticker">Enviar una calcomanía</string>
 
     <string name="dialog_title_third_party_licences">Licencias de terceros</string>
 
@@ -790,4 +789,5 @@ Dispositivos desconocidos:</string>
 
     <string name="settings_containing_my_display_name">Mensajes que contienen mi nombre público</string>
     <string name="settings_containing_my_user_name">Mensajes que contienen mi nombre de usuario</string>
-    </resources>
+    <string name="call_anyway">Llamar de todos modos</string>
+</resources>

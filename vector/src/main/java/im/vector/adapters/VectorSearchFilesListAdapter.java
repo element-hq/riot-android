@@ -29,7 +29,7 @@ import android.widget.TextView;
 import org.matrix.androidsdk.MXSession;
 import org.matrix.androidsdk.adapters.MessageRow;
 import org.matrix.androidsdk.data.Room;
-import org.matrix.androidsdk.db.MXMediasCache;
+import org.matrix.androidsdk.db.MXMediaCache;
 import org.matrix.androidsdk.rest.model.Event;
 import org.matrix.androidsdk.rest.model.crypto.EncryptedFileInfo;
 import org.matrix.androidsdk.rest.model.message.FileMessage;
@@ -39,7 +39,6 @@ import org.matrix.androidsdk.rest.model.message.VideoMessage;
 import org.matrix.androidsdk.util.JsonUtils;
 
 import im.vector.R;
-import im.vector.util.VectorUtils;
 
 /**
  * An adapter which display a files search result
@@ -49,7 +48,7 @@ public class VectorSearchFilesListAdapter extends VectorMessagesAdapter {
     // display the room name in the result view
     private final boolean mDisplayRoomName;
 
-    public VectorSearchFilesListAdapter(MXSession session, Context context, boolean displayRoomName, MXMediasCache mediasCache) {
+    public VectorSearchFilesListAdapter(MXSession session, Context context, boolean displayRoomName, MXMediaCache mediasCache) {
         super(session, context, mediasCache);
 
         mDisplayRoomName = displayRoomName;
@@ -88,6 +87,9 @@ public class VectorSearchFilesListAdapter extends VectorMessagesAdapter {
 
             if (null == thumbUrl) {
                 thumbUrl = imageMessage.getUrl();
+                encryptedFileInfo = imageMessage.file;
+            } else if (imageMessage.info != null) {
+                encryptedFileInfo = imageMessage.info.thumbnail_file;
             }
 
             if (null != imageMessage.info) {
@@ -98,10 +100,6 @@ public class VectorSearchFilesListAdapter extends VectorMessagesAdapter {
                 avatarId = R.drawable.filetype_gif;
             } else {
                 avatarId = R.drawable.filetype_image;
-            }
-
-            if (null != imageMessage.info) {
-                encryptedFileInfo = imageMessage.info.thumbnail_file;
             }
         } else if (Message.MSGTYPE_VIDEO.equals(message.msgtype)) {
             VideoMessage videoMessage = JsonUtils.toVideoMessage(event.getContent());
@@ -138,9 +136,9 @@ public class VectorSearchFilesListAdapter extends VectorMessagesAdapter {
             // detect if the media is encrypted
             if (null == encryptedFileInfo) {
                 int size = getContext().getResources().getDimensionPixelSize(R.dimen.member_list_avatar_size);
-                mSession.getMediasCache().loadAvatarThumbnail(mSession.getHomeServerConfig(), thumbnailView, thumbUrl, size);
+                mSession.getMediaCache().loadAvatarThumbnail(mSession.getHomeServerConfig(), thumbnailView, thumbUrl, size);
             } else {
-                mSession.getMediasCache().loadBitmap(mSession.getHomeServerConfig(),
+                mSession.getMediaCache().loadBitmap(mSession.getHomeServerConfig(),
                         thumbnailView, thumbUrl, 0, ExifInterface.ORIENTATION_UNDEFINED, null, encryptedFileInfo);
             }
         }

@@ -1,5 +1,6 @@
 <?xml version='1.0' encoding='UTF-8'?>
-<resources><string name="resources_language">fa</string>
+<resources>
+    <string name="resources_language">fa</string>
     <string name="resources_country_code">IR</string>
 
     <string name="light_theme">قالب روشن</string>
@@ -128,4 +129,4 @@
     <string name="today">امروز</string>
 
     <string name="room_info_room_name">نام اتاق</string>
-    </resources>
+</resources>

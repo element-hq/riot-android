@@ -1,43 +1,63 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:orientation="vertical">
 
-    <RelativeLayout
+    <android.support.v7.widget.Toolbar
+        android:id="@+id/toolbar"
+        style="@style/VectorToolbarStyle"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+
+    <!-- tabGravity and tabMaxWidth are set for full width in landscape -->
+    <android.support.design.widget.TabLayout
+        android:id="@+id/tabLayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/toolbar"
+        app:tabGravity="fill"
+        app:tabMaxWidth="0dp">
+
+        <android.support.design.widget.TabItem
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/room_details_people" />
+
+        <android.support.design.widget.TabItem
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/room_details_files" />
+
+        <android.support.design.widget.TabItem
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/room_details_settings" />
+
+    </android.support.design.widget.TabLayout>
+
+    <!-- tab fragments container -->
+    <FrameLayout
+        android:id="@+id/room_details_fragment_container"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@android:color/white">
+        android:layout_below="@+id/tabLayout" />
 
-        <!-- tab fragments container -->
-        <FrameLayout
-            android:id="@+id/room_details_fragment_container"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent" />
-
-        <!-- downloading progress bar -->
-        <FrameLayout
-            android:id="@+id/settings_loading_layout"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:background="?attr/vctr_waiting_background_color"
-            android:visibility="gone">
-
-            <ProgressBar
-                android:id="@+id/loading_settings_progress_bar"
-                android:layout_width="40dp"
-                android:layout_height="40dp"
-                android:layout_gravity="center"
-                android:visibility="visible" />
-        </FrameLayout>
+    <!-- downloading progress bar -->
+    <FrameLayout
+        android:id="@+id/settings_loading_layout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@+id/tabLayout"
+        android:background="?attr/vctr_waiting_background_color"
+        android:visibility="gone">
 
         <ProgressBar
-            android:id="@+id/search_load_oldest_progress"
-            android:layout_width="match_parent"
+            android:id="@+id/loading_settings_progress_bar"
+            android:layout_width="40dp"
             android:layout_height="40dp"
-            android:layout_alignParentStart="true"
-            android:layout_alignParentLeft="true"
-            android:indeterminate="true"
-            android:visibility="gone" />
-    </RelativeLayout>
+            android:layout_gravity="center" />
+    </FrameLayout>
 
-</FrameLayout>
+</RelativeLayout>

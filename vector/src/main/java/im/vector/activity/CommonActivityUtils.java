@@ -34,12 +34,12 @@ import android.os.Environment;
 import android.os.Handler;
 import android.os.Looper;
 import android.os.Parcelable;
-import android.preference.PreferenceManager;
 import android.support.annotation.NonNull;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AlertDialog;
+import android.support.v7.preference.PreferenceManager;
 import android.text.TextUtils;
 import android.util.Pair;
 import android.view.LayoutInflater;
@@ -54,7 +54,7 @@ import org.matrix.androidsdk.crypto.data.MXUsersDevicesMap;
 import org.matrix.androidsdk.data.Room;
 import org.matrix.androidsdk.data.RoomPreviewData;
 import org.matrix.androidsdk.data.RoomSummary;
-import org.matrix.androidsdk.db.MXMediasCache;
+import org.matrix.androidsdk.db.MXMediaCache;
 import org.matrix.androidsdk.rest.callback.ApiCallback;
 import org.matrix.androidsdk.rest.callback.SimpleApiCallback;
 import org.matrix.androidsdk.rest.model.MatrixError;
@@ -360,7 +360,7 @@ public class CommonActivityUtils {
                 PIDsRetriever.getInstance().reset();
                 ContactsManager.getInstance().reset();
 
-                MXMediasCache.clearThumbnailsCache(context);
+                MXMediaCache.clearThumbnailsCache(context);
 
                 if (goToLoginPage) {
                     Activity activeActivity = VectorApp.getCurrentActivity();
@@ -428,7 +428,7 @@ public class CommonActivityUtils {
                 PIDsRetriever.getInstance().reset();
                 ContactsManager.getInstance().reset();
 
-                MXMediasCache.clearThumbnailsCache(context);
+                MXMediaCache.clearThumbnailsCache(context);
 
                 callback.onSuccess(info);
             }
@@ -765,7 +765,7 @@ public class CommonActivityUtils {
     // Room jump methods.
     //==============================================================================================================
 
-   /**
+    /**
      * Start a room activity with the dedicated parameters.
      * Pop the activity to the homeActivity before pushing the new activity.
      *
@@ -1471,7 +1471,7 @@ public class CommonActivityUtils {
             public void onSuccess(byte[] bytesArray) {
                 try {
                     ByteArrayInputStream stream = new ByteArrayInputStream(bytesArray);
-                    String url = session.getMediasCache().saveMedia(stream, "riot-" + System.currentTimeMillis() + ".txt", "text/plain");
+                    String url = session.getMediaCache().saveMedia(stream, "riot-" + System.currentTimeMillis() + ".txt", "text/plain");
                     stream.close();
 
                     saveMediaIntoDownloads(appContext,
@@ -1500,11 +1500,13 @@ public class CommonActivityUtils {
      * @param session        the session
      * @param activity       the calling activity
      * @param unknownDevices the unknown devices list
+     * @param isForCalling   true when the user want to start a call
      * @param listener       optional listener to add an optional "Send anyway" button
      */
     public static void displayUnknownDevicesDialog(MXSession session,
                                                    FragmentActivity activity,
                                                    MXUsersDevicesMap<MXDeviceInfo> unknownDevices,
+                                                   boolean isForCalling,
                                                    VectorUnknownDevicesFragment.IUnknownDevicesSendAnywayListener listener) {
         // sanity checks
         if (activity.isFinishing() || (null == unknownDevices) || (0 == unknownDevices.getMap().size())) {
@@ -1518,7 +1520,7 @@ public class CommonActivityUtils {
             fragment.dismissAllowingStateLoss();
         }
 
-        fragment = VectorUnknownDevicesFragment.newInstance(session.getMyUserId(), unknownDevices, listener);
+        fragment = VectorUnknownDevicesFragment.newInstance(session.getMyUserId(), unknownDevices, isForCalling, listener);
         try {
             fragment.show(fm, TAG_FRAGMENT_UNKNOWN_DEVICES_DIALOG_DIALOG);
         } catch (Exception e) {

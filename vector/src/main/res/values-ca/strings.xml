@@ -348,7 +348,6 @@
     <string name="room_participants_power_level_prompt">No podreu desfer aquest canvi ja que esteu donant a aquest usuari els mateixos permisos que teniu.\nN\'esteu segur?</string>
 
     <string name="room_participants_invite_prompt_msg">"Esteu segur que voleu convidar a %s a aquest xat?"</string>
-    <string name="room_participants_kick_prompt_msg">Esteu segur que voleu fer fora aquest usuari de la conversa?</string>
     <string name="room_participants_ban_prompt_msg">Esteu segur que voleu vetar aquest usuari en aquesta conversa?</string>
 
     <!-- invitation -->
@@ -459,8 +458,8 @@ Tingueu en compte que aquesta acció reiniciarà l\'aplicació i que pot trigar 
     <string name="settings_add_email_address">Afegeix una adreça de correu electrònic</string>
     <string name="settings_phone_number">Telèfon</string>
     <string name="settings_add_phone_number">Afegeix un número de telèfon</string>
-    <string name="settings_summary_app_info_link">Pantalla d\'informació del sistema de l\'aplicació</string>
-    <string name="settings_title_app_info_link">Informació de l\'aplicació</string>
+    <string name="settings_app_info_link_summary">Pantalla d\'informació del sistema de l\'aplicació</string>
+    <string name="settings_app_info_link_title">Informació de l\'aplicació</string>
 
     <string name="settings_notification_ringtone">So de les notificación</string>
     <string name="settings_enable_all_notif">Habilita les notificacions d\'aquest compte</string>
@@ -490,7 +489,7 @@ Tingueu en compte que aquesta acció reiniciarà l\'aplicació i que pot trigar 
     <string name="settings_copyright">Copyright</string>
     <string name="settings_privacy_policy">Política de privacitat</string>
     <string name="settings_clear_cache">Esborra la memòria cau</string>
-    <string name="settings_clear_medias_cache">Esborra la memòria cau multimèdia</string>
+    <string name="settings_clear_media_cache">Esborra la memòria cau multimèdia</string>
     <string name="settings_keep_media">Manté els elements multimèdia</string>
 
     <string name="settings_user_settings">Configuració de l\'usuari</string>
@@ -508,13 +507,8 @@ Tingueu en compte que aquesta acció reiniciarà l\'aplicació i que pot trigar 
     <string name="settings_pin_unread_messages">Destaca les sales amb missatges sense llegir</string>
     <string name="settings_devices_list">Dispositius</string>
     <string name="settings_inline_url_preview">Habilita les previsualitzacions de les URL per defecte</string>
-    <string name="settings_hide_read_receipts">Amaga les entrades llegides</string>
-    <string name="settings_dont_send_typings_notifs">No enviïs notificacions d\'esciptura</string>
     <string name="settings_always_show_timestamps">Mostra sempre l\'hora dels missatges</string>
     <string name="settings_12_24_timestamps">Mostra l\'hora en el format de 12 hores (per exemple 2:30pm)</string>
-    <string name="settings_hide_join_leave_messages">Amaga els missatges d\'entrada i sortida de participants</string>
-    <string name="settings_hide_avatar_display_name_changes_messages">Amaga les fotos de perfil i els canvis de nom visible</string>
-    <string name="settings_disable_markdown">Desactivar el Markdown quan s\'enviï</string>
     <string name="settings_vibrate_on_mention">Vibra quan et mencionin</string>
 
     <!-- analytics -->
@@ -596,7 +590,6 @@ Tingueu en compte que aquesta acció reiniciarà l\'aplicació i que pot trigar 
     <string name="room_settings_tag_pref_entry_favourite">Preferit</string>
     <string name="room_settings_tag_pref_entry_low_priority">Prioritat baixa</string>
     <string name="room_settings_tag_pref_entry_none">Cap</string>
-    <string name="room_settings_tag_pref_no_tag">sense etiquetar</string>
 
     <!-- room settings : access and visibility -->
     <string name="room_settings_category_access_visibility_title">Accés i visibilitat</string>
@@ -817,7 +810,7 @@ En un futur aquest procés de verificació serà més sofisticat.</string>
     <string name="reason_colon">Raó: %1$s</string>
     <string name="rejoin">Tornar-hi a entrar</string>
     <string name="forget_room">Oblida la sala</string>
-<string name="loading">Carregant…</string>
+    <string name="loading">Carregant…</string>
 
     <string name="action_exit">Surt</string>
     <string name="bottom_action_groups">Comunitats</string>
@@ -835,50 +828,50 @@ En un futur aquest procés de verificació serà més sofisticat.</string>
     <string name="list_members">Llista de membres</string>
     <string name="room_sync_in_progress">Sincronitzant…</string>
     <plurals name="room_header_active_members_count">
-	<item quantity="one">1 membre actiu</item>
-	<item quantity="other">%d membres actius</item>
-</plurals>
+        <item quantity="one">1 membre actiu</item>
+        <item quantity="other">%d membres actius</item>
+    </plurals>
     <plurals name="room_title_members">
-	<item quantity="one">1 membre</item>
-	<item quantity="other">%d membres</item>
-</plurals>
+        <item quantity="one">1 membre</item>
+        <item quantity="other">%d membres</item>
+    </plurals>
     <plurals name="room_new_messages_notification">
-	<item quantity="one">1 nou missatge</item>
-	<item quantity="other">%d nous missatges</item>
-</plurals>
+        <item quantity="one">1 nou missatge</item>
+        <item quantity="other">%d nous missatges</item>
+    </plurals>
 
     <plurals name="directory_search_rooms">
-	<item quantity="one">1 sala</item>
-	<item quantity="other">%d sales</item>
-</plurals>
+        <item quantity="one">1 sala</item>
+        <item quantity="other">%d sales</item>
+    </plurals>
     <plurals name="directory_search_rooms_for">
-	<item quantity="one">%1$s sala trobada per %2$s</item>
-	<item quantity="other">%1$s sales trobades per %2$s</item>
-</plurals>
+        <item quantity="one">%1$s sala trobada per %2$s</item>
+        <item quantity="other">%1$s sales trobades per %2$s</item>
+    </plurals>
     <plurals name="notification_unread_notified_messages_in_room_rooms">
-	<item quantity="one">1 sala</item>
-	<item quantity="other">%d sales</item>
-</plurals>
+        <item quantity="one">1 sala</item>
+        <item quantity="other">%d sales</item>
+    </plurals>
     <string name="open_chat_header">Obrir la capçalera</string>
     <plurals name="notification_unread_notified_messages_in_room_msgs">
-	<item quantity="one">1 missatge de notificació sense llegir</item>
-	<item quantity="other">%d missatges de notificació sense llegir</item>
-</plurals>
+        <item quantity="one">1 missatge de notificació sense llegir</item>
+        <item quantity="other">%d missatges de notificació sense llegir</item>
+    </plurals>
     <plurals name="membership_changes">
-	<item quantity="one">1 canvi de membres</item>
-	<item quantity="other">%d canvis de membres</item>
-</plurals>
+        <item quantity="one">1 canvi de membres</item>
+        <item quantity="other">%d canvis de membres</item>
+    </plurals>
 
     <plurals name="notification_unread_notified_messages">
-	<item quantity="one">1 missatge de notificació sense llegir</item>
-	<item quantity="other">%d missatges de notificació sense llegir</item>
-</plurals>
+        <item quantity="one">1 missatge de notificació sense llegir</item>
+        <item quantity="other">%d missatges de notificació sense llegir</item>
+    </plurals>
     <string name="notification_unread_notified_messages_in_room">%1$s a %2$s</string>
 
     <plurals name="active_widgets">
-	<item quantity="one">1 complement actiu</item>
-	<item quantity="other">%d complements actius</item>
-</plurals>
+        <item quantity="one">1 complement actiu</item>
+        <item quantity="other">%d complements actius</item>
+    </plurals>
 
     <!-- Widget Integration Manager -->
     <string name="title_activity_choose_sticker">Envia un adhesiu</string>
@@ -915,21 +908,21 @@ En un futur aquest procés de verificació serà més sofisticat.</string>
 En voleu afegir algun?</string>
 
     <plurals name="format_time_s">
-	<item quantity="one">1s</item>
-	<item quantity="other">%ds</item>
-</plurals>
+        <item quantity="one">1s</item>
+        <item quantity="other">%ds</item>
+    </plurals>
     <plurals name="format_time_m">
-	<item quantity="one">1m</item>
-	<item quantity="other">%dm</item>
-</plurals>
+        <item quantity="one">1m</item>
+        <item quantity="other">%dm</item>
+    </plurals>
     <plurals name="format_time_h">
-	<item quantity="one">1h</item>
-	<item quantity="other">%dh</item>
-</plurals>
+        <item quantity="one">1h</item>
+        <item quantity="other">%dh</item>
+    </plurals>
     <plurals name="format_time_d">
-	<item quantity="one">1d</item>
-	<item quantity="other">%dd</item>
-</plurals>
+        <item quantity="one">1d</item>
+        <item quantity="other">%dd</item>
+    </plurals>
 
     <string name="room_participants_now">Ara %1$s</string>
     <string name="room_participants_ago">Fa %1$s %2$s</string>
@@ -944,9 +937,9 @@ Tingueu en compte que aquesta acció reiniciarà l\'aplicació i pot trigar una 
     <string name="room_message_placeholder_reply_to_encrypted">Envieu una resposta encriptada…</string>
     <string name="room_message_placeholder_reply_to_not_encrypted">Envieu una resposta (sense encriptar)…</string>
     <plurals name="room_details_selected">
-	<item quantity="one">1 escollit</item>
-	<item quantity="other">%d escollits</item>
-</plurals>
+        <item quantity="one">1 escollit</item>
+        <item quantity="other">%d escollits</item>
+    </plurals>
     <string name="room_sliding_menu_version_x">Versió %s</string>
     <string name="settings_notification_privacy">Notificació de privacitat</string>
     <string name="settings_notification_privacy_warning">Riot.im funciona en segon pla per mantenir el contingut de les notificacions dels missatges privats. Podeu canviar aquesta opció per tal de reduir l\'ús de bateria.</string>
@@ -1003,14 +996,14 @@ Tingueu en compte que aquesta acció reiniciarà l\'aplicació i pot trigar una 
     <string name="command_description_clear_scalar_token">Arreglar la gestió de les Apps de Matrix</string>
 
     <plurals name="group_members">
-	<item quantity="one">1 membre</item>
-	<item quantity="other">%d membres</item>
-</plurals>
+        <item quantity="one">1 membre</item>
+        <item quantity="other">%d membres</item>
+    </plurals>
 
     <plurals name="group_rooms">
-	<item quantity="one">1 sala</item>
-	<item quantity="other">%d sales</item>
-</plurals>
+        <item quantity="one">1 sala</item>
+        <item quantity="other">%d sales</item>
+    </plurals>
     <string name="avatar">Imatge de perfil</string>
 
     <string name="dialog_user_consent_content">Per poder continuar usant el servidor %1$s heu de revisar i acceptar les clàusules i condicions.</string>

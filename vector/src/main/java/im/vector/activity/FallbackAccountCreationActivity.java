@@ -38,31 +38,19 @@ import java.util.Map;
 import im.vector.R;
 
 /**
- * AccountCreationActivity is the fallback account creation activity
+ * FallbackAccountCreationActivity is the fallback account creation activity
  */
-public class AccountCreationActivity extends VectorAppCompatActivity {
-    private static final String LOG_TAG = AccountCreationActivity.class.getSimpleName();
+public class FallbackAccountCreationActivity extends VectorAppCompatActivity {
+    private static final String LOG_TAG = FallbackAccountCreationActivity.class.getSimpleName();
 
-    public static final String EXTRA_HOME_SERVER_ID = "AccountCreationActivity.EXTRA_HOME_SERVER_ID";
+    public static final String EXTRA_HOME_SERVER_URL = "FallbackAccountCreationActivity.EXTRA_HOME_SERVER_URL";
 
     // home server url
     private String mHomeServerUrl;
 
     @Override
-    public void onLowMemory() {
-        super.onLowMemory();
-        CommonActivityUtils.onLowMemory(this);
-    }
-
-    @Override
-    public void onTrimMemory(int level) {
-        super.onTrimMemory(level);
-        CommonActivityUtils.onTrimMemory(this, level);
-    }
-
-    @Override
     public int getLayoutRes() {
-        return R.layout.activity_account_creation;
+        return R.layout.activity_login_fallback;
     }
 
     @Override
@@ -72,15 +60,17 @@ public class AccountCreationActivity extends VectorAppCompatActivity {
 
     @Override
     public void initUiAndData() {
+        configureToolbar();
+
         final WebView webView = findViewById(R.id.account_creation_webview);
         webView.getSettings().setJavaScriptEnabled(true);
 
         Intent intent = getIntent();
 
-        mHomeServerUrl = "https://matrix.org/";
+        mHomeServerUrl = getString(R.string.default_hs_server_url);
 
-        if (intent.hasExtra(EXTRA_HOME_SERVER_ID)) {
-            mHomeServerUrl = intent.getStringExtra(EXTRA_HOME_SERVER_ID);
+        if (intent.hasExtra(EXTRA_HOME_SERVER_URL)) {
+            mHomeServerUrl = intent.getStringExtra(EXTRA_HOME_SERVER_URL);
         }
 
         // check the trailing slash
@@ -96,7 +86,7 @@ public class AccountCreationActivity extends VectorAppCompatActivity {
                                            SslError error) {
                 final SslErrorHandler fHander = handler;
 
-                new AlertDialog.Builder(AccountCreationActivity.this)
+                new AlertDialog.Builder(FallbackAccountCreationActivity.this)
                         .setMessage(R.string.ssl_could_not_verify)
                         .setPositiveButton(R.string.ssl_trust, new DialogInterface.OnClickListener() {
                             @Override

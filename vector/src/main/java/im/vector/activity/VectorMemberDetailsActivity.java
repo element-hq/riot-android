@@ -34,7 +34,6 @@ import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import org.jetbrains.annotations.NotNull;
 import org.matrix.androidsdk.MXPatterns;
 import org.matrix.androidsdk.MXSession;
 import org.matrix.androidsdk.call.IMXCall;
@@ -68,7 +67,6 @@ import im.vector.adapters.VectorMemberDetailsAdapter;
 import im.vector.adapters.VectorMemberDetailsDevicesAdapter;
 import im.vector.extensions.MatrixSdkExtensionsKt;
 import im.vector.fragments.VectorUnknownDevicesFragment;
-import im.vector.ui.themes.ActivityOtherThemes;
 import im.vector.util.CallsManager;
 import im.vector.util.PermissionsToolsKt;
 import im.vector.util.SystemUtilsKt;
@@ -324,6 +322,7 @@ public class VectorMemberDetailsActivity extends MXCActionBarActivity implements
                         CommonActivityUtils.displayUnknownDevicesDialog(mSession,
                                 VectorMemberDetailsActivity.this,
                                 (MXUsersDevicesMap<MXDeviceInfo>) cryptoError.mExceptionData,
+                                true,
                                 new VectorUnknownDevicesFragment.IUnknownDevicesSendAnywayListener() {
                                     @Override
                                     public void onSendAnyway() {
@@ -483,9 +482,26 @@ public class VectorMemberDetailsActivity extends MXCActionBarActivity implements
 
             case ITEM_ACTION_BAN:
                 if (null != mRoom) {
-                    enableProgressBarView(CommonActivityUtils.UTILS_DISPLAY_PROGRESS_BAR);
-                    mRoom.ban(mRoomMember.getUserId(), null, mRoomActionsListener);
-                    Log.d(LOG_TAG, "## performItemAction(): Block (Ban)");
+                    // Ask for a reason
+                    View layout = getLayoutInflater().inflate(R.layout.dialog_base_edit_text, null);
+
+                    final TextView input = layout.findViewById(R.id.edit_text);
+                    input.setHint(R.string.reason_hint);
+
+                    new AlertDialog.Builder(this)
+                            .setTitle(R.string.room_participants_ban_prompt_msg)
+                            .setView(layout)
+                            .setPositiveButton(R.string.room_participants_action_ban, new DialogInterface.OnClickListener() {
+                                        @Override
+                                        public void onClick(DialogInterface dialog, int which) {
+                                            enableProgressBarView(CommonActivityUtils.UTILS_DISPLAY_PROGRESS_BAR);
+                                            mRoom.ban(mRoomMember.getUserId(), input.getText().toString(), mRoomActionsListener);
+                                            Log.d(LOG_TAG, "## performItemAction(): Block (Ban)");
+                                        }
+                                    }
+                            )
+                            .setNegativeButton(R.string.cancel, null)
+                            .show();
                 }
                 break;
 
@@ -499,9 +515,27 @@ public class VectorMemberDetailsActivity extends MXCActionBarActivity implements
 
             case ITEM_ACTION_KICK:
                 if (null != mRoom) {
-                    enableProgressBarView(CommonActivityUtils.UTILS_DISPLAY_PROGRESS_BAR);
-                    mRoom.kick(mRoomMember.getUserId(), mRoomActionsListener);
-                    Log.d(LOG_TAG, "## performItemAction(): Kick");
+                    // Ask for a reason
+                    View layout = getLayoutInflater().inflate(R.layout.dialog_base_edit_text, null);
+
+                    final TextView input = layout.findViewById(R.id.edit_text);
+                    input.setHint(R.string.reason_hint);
+
+                    new AlertDialog.Builder(this)
+                            .setTitle(getResources().getQuantityString(R.plurals.room_participants_kick_prompt_msg, 1))
+                            .setView(layout)
+                            .setPositiveButton(R.string.room_participants_action_kick, new DialogInterface.OnClickListener() {
+                                        @Override
+                                        public void onClick(DialogInterface dialog, int which) {
+                                            enableProgressBarView(CommonActivityUtils.UTILS_DISPLAY_PROGRESS_BAR);
+                                            mRoom.kick(mRoomMember.getUserId(), input.getText().toString(), mRoomActionsListener);
+                                            Log.d(LOG_TAG, "## performItemAction(): Kick");
+                                        }
+                                    }
+                            )
+                            .setNegativeButton(R.string.cancel, null)
+                            .show();
+
                 }
                 break;
 
@@ -1125,12 +1159,6 @@ public class VectorMemberDetailsActivity extends MXCActionBarActivity implements
         }
     }
 
-    @NotNull
-    @Override
-    public ActivityOtherThemes getOtherThemes() {
-        return ActivityOtherThemes.NoActionBar.INSTANCE;
-    }
-
     @Override
     public int getLayoutRes() {
         return R.layout.activity_member_details;
@@ -1332,7 +1360,7 @@ public class VectorMemberDetailsActivity extends MXCActionBarActivity implements
 
         if (!TextUtils.isEmpty(avatarUrl)) {
             mFullMemberAvatarLayout.setVisibility(View.VISIBLE);
-            mSession.getMediasCache().loadBitmap(mSession.getHomeServerConfig(),
+            mSession.getMediaCache().loadBitmap(mSession.getHomeServerConfig(),
                     mFullMemberAvatarImageView, avatarUrl, 0, ExifInterface.ORIENTATION_UNDEFINED, null, null);
         }
     }

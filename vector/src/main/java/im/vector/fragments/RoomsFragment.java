@@ -106,8 +106,8 @@ public class RoomsFragment extends AbsHomeFragment implements AbsHomeFragment.On
      */
 
     @Override
-    public View onCreateView(final LayoutInflater inflater, final ViewGroup container, final Bundle savedInstanceState) {
-        return inflater.inflate(R.layout.fragment_rooms, container, false);
+    public int getLayoutResId() {
+        return R.layout.fragment_rooms;
     }
 
     @Override

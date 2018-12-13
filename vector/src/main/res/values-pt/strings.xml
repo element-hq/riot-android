@@ -27,7 +27,7 @@
     <string name="forward">Encaminhar</string>
     <string name="permalink">Link permanente</string>
     <string name="view_source">Ver fonte</string>
-    <string name="view_decrypted_source">Ver Fonte Decifrada</string>
+    <string name="view_decrypted_source">Ver o original decifrado</string>
     <string name="delete">Apagar</string>
     <string name="rename">Renomear</string>
     <string name="report_content">Denunciar conteúdo</string>
@@ -37,7 +37,7 @@
     <string name="ongoing_conference_call_video">vídeo</string>
     <string name="cannot_start_call">Não foi possível iniciar a chamada, por favor tente mais tarde</string>
     <string name="missing_permissions_warning">Por falta de permissões, algumas funcionalidades poderão estar em falta…</string>
-    <string name="missing_permissions_to_start_conf_call">Você necessita permissão para convidar para poder iniciar uma conferência nesta sala</string>
+    <string name="missing_permissions_to_start_conf_call">Você precisa de permissão para convidar para iniciar uma conferência nesta sala</string>
     <string name="missing_permissions_title_to_start_conf_call">Não foi possível iniciar a chamada</string>
     <string name="device_information">Informações do dispositivo</string>
     <string name="room_no_conference_call_in_encrypted_rooms">Chamadas de conferência não são suportadas em salas cifradas</string>
@@ -47,8 +47,8 @@
 
     <!-- actions -->
     <string name="action_sign_out">Sair</string>
-    <string name="action_sign_out_confirmation">Por razões de segurança, ao sair, todas as chaves de criptografia ponta-a-ponta serão apagadas, fazendo com que o histórico de conversas cifradas não seja legível se iniciar sessão novamente.
-Selecione exportar para criar uma cópia de segurança antes de terminar sessão.</string>
+    <string name="action_sign_out_confirmation">Por razões de segurança, ao terminar a sessão, todas as chaves de criptografia ponta-a-ponta serão apagadas, fazendo com que o histórico de conversas cifradas não seja legível se iniciar a sessão novamente.
+Seleccione exportar para criar uma cópia de segurança antes de terminar a sessão.</string>
     <string name="action_voice_call">Chamada de voz</string>
     <string name="action_video_call">Chamada de vídeo</string>
     <string name="action_global_search">Pesquisa global</string>
@@ -82,9 +82,9 @@ Selecione exportar para criar uma cópia de segurança antes de terminar sessão
 
     <!-- People fragment -->
     <string name="direct_chats_header">Conversas</string>
-    <string name="local_address_book_header">Lista de contactos local</string>
+    <string name="local_address_book_header">Lista de endereços local</string>
     <string name="matrix_only_filter">Apenas contactos do Matrix</string>
-    <string name="no_conversation_placeholder">Sem conversas</string>
+    <string name="no_conversation_placeholder">Não há conversas</string>
     <string name="no_contact_access_placeholder">Não permitiu ao Riot aceder aos seus contactos locais</string>
     <string name="no_result_placeholder">Sem resultados</string>
 
@@ -105,7 +105,7 @@ Selecione exportar para criar uma cópia de segurança antes de terminar sessão
     <string name="send_bug_report_description">Por favor, descreva o erro (bug). O que fez? O que esperava que acontecesse? O que realmente aconteceu?</string>
     <string name="send_bug_report_placeholder">Descreva aqui o seu problema</string>
     <string name="send_bug_report_logs_description">A fim de diagnosticar problemas, registos sobre este cliente serão enviados juntamente com o relatório de erro. Este relatório de erro, incluindo os registos e a captura de ecrã, não serão visíveis publicamente. Se preferir enviar apenas o texto acima, por favor desmarque:</string>
-    <string name="send_bug_report_alert_message">Parece estar a abanar o telefone com frustração. Quer enviar um relatório de erro (bug)?</string>
+    <string name="send_bug_report_alert_message">Parece estar a abanar o telefone com frustração. Pretende enviar um relatório de erro (bug)?</string>
     <string name="send_bug_report_sent">O relatório de erro (bug) foi enviado com sucesso</string>
     <string name="send_bug_report_failed">O envio do relatório de erro (bug) falhou (%s)</string>
     <string name="send_bug_report_progress">Progresso (%s%%)</string>
@@ -136,7 +136,7 @@ Selecione exportar para criar uma cópia de segurança antes de terminar sessão
     <string name="auth_submit">Enviar</string>
     <string name="auth_skip">Saltar</string>
     <string name="auth_send_reset_email">Enviar email para redefinir senha</string>
-    <string name="auth_return_to_login">Voltar para o ecrã de início de sessão</string>
+    <string name="auth_return_to_login">Voltar ao ecrã de início de sessão</string>
     <string name="auth_user_id_placeholder">Email ou nome de utilizador</string>
     <string name="auth_password_placeholder">Palavra-passe</string>
     <string name="auth_new_password_placeholder">Nova palavra-passe</string>
@@ -155,37 +155,37 @@ O endereço de e-mail também lhe permitirá redefinir sua senha.</string>
     <string name="auth_opt_phone_number_placeholder">Número de telefone (opcional)</string>
     <string name="auth_repeat_password_placeholder">Repita a palavra-passe</string>
     <string name="auth_repeat_new_password_placeholder">Confirme a sua nova palavra-passe</string>
-    <string name="auth_invalid_login_param">Nome de utilizador e/ou palavra-passe incorreto</string>
+    <string name="auth_invalid_login_param">Nome de utilizador e/ou senha incorrectos</string>
     <string name="auth_invalid_user_name">Nomes de utilizador só podem conter letras, números, pontos, hífenes e underscores</string>
     <string name="auth_invalid_password">Palavra-passe muita curta (mín 6)</string>
-    <string name="auth_missing_password">Palavra-passe em falta</string>
+    <string name="auth_missing_password">Senha em falta</string>
     <string name="auth_invalid_email">Isto não parece ser um endereço de e-mail válido</string>
     <string name="auth_invalid_phone">Isto não parece ser um número de telefone válido</string>
-    <string name="auth_email_already_defined">Este endereço de e-mail já está em uso.</string>
+    <string name="auth_email_already_defined">Este endereço de email já está registado.</string>
     <string name="auth_missing_email">Endereço de e-mail em falta</string>
     <string name="auth_missing_phone">Número de telefone em falta</string>
     <string name="auth_missing_email_or_phone">Endereço de email ou número de telefone em falta</string>
     <string name="auth_invalid_token">Token inválido</string>
-    <string name="auth_password_dont_match">As palavras-passe não coincidem</string>
+    <string name="auth_password_dont_match">As senhas não coincidem</string>
     <string name="auth_forgot_password">Esqueceu-se da palavra-passe?</string>
     <string name="auth_use_server_options">Utilize opções de servidor personalizadas (avançado)</string>
-    <string name="auth_email_validation_message">Por favor, verifique o seu e-mail para continuar com o registo</string>
+    <string name="auth_email_validation_message">Por favor, verifique o seu email para continuar com o registo</string>
     <string name="auth_threepid_warning_message">O registo de nova conta com email e número de telefone de uma só vez ainda não é permitido enquanto a API não existir. Apenas o número de telefone será tido em consideração.
 
 Poderá adicionar o seu email ao seu perfil nas definições.</string>
     <string name="auth_recaptcha_message">Este servidor quer ter a certeza de que você não é um robô</string>
-    <string name="auth_username_in_use">Nome de utilizador já está em uso</string>
-    <string name="auth_home_server">Servidor:</string>
+    <string name="auth_username_in_use">Nome de utilizador já existe</string>
+    <string name="auth_home_server">Servidor local (home server):</string>
     <string name="auth_identity_server">Servidor de Identidade:</string>
-    <string name="auth_reset_password_next_step_button">Verifiquei o meu endereço de e-mail</string>
+    <string name="auth_reset_password_next_step_button">Verifiquei o meu endereço de email</string>
     <string name="auth_reset_password_message">Para redefinir a sua palavra-passe, introduza o endereço de e-mail associado à sua conta:</string>
     <string name="auth_reset_password_missing_email">O endereço de e-mail associado à sua conta tem que ser introduzido.</string>
-    <string name="auth_reset_password_missing_password">Tem que introduzir uma nova palavra-passe.</string>
-    <string name="auth_reset_password_email_validation_message">Um e-mail foi enviado para %s. Quando tiver clicado no link presente na mensagem, clique abaixo.</string>
+    <string name="auth_reset_password_missing_password">Tem de introduzir uma nova senha.</string>
+    <string name="auth_reset_password_email_validation_message">Foi enviado um email para %s. Quando tiver clicado no link presente na mensagem, clique abaixo.</string>
     <string name="auth_reset_password_error_unauthorized">Falha ao verificar o endereço de e-mail: verifique se clicou no link no e-mail</string>
-    <string name="auth_reset_password_success_message">A sua palavra-passe foi reposta.
+    <string name="auth_reset_password_success_message">A sua senha foi redefinida.
 
-Você foi desconectado de todos os dispositivos e não receberá mais notificações. Para reativar as notificações, inicie sessão novamente em cada um dos dispositivos.</string>
+A sessão foi terminada em todos os dispositivos e não receberá mais notificações. Para reactivar as notificações, inicie sessão novamente em cada um dos dispositivos.</string>
 
     <!-- Login Screen -->
     <string name="login_error_must_start_http">URL tem que começar com http[s]://</string>
@@ -193,7 +193,7 @@ Você foi desconectado de todos os dispositivos e não receberá mais notificaç
     <string name="login_error_unable_login">Não foi possível iniciar sessão</string>
     <string name="login_error_registration_network_error">Não foi possível criar conta: Erro de rede</string>
     <string name="login_error_unable_register">Não foi possível criar conta</string>
-    <string name="login_error_unable_register_mail_ownership">Não foi possível criar conta: falha na verificação de posse do e-mail</string>
+    <string name="login_error_unable_register_mail_ownership">Não foi possível criar a conta: falha na verificação de posse do email</string>
     <string name="login_error_invalid_home_server">Introduza um URL válido</string>
 
     <string name="login_error_forbidden">Nome de utilizador/palavra-passe inválido</string>
@@ -429,7 +429,7 @@ Note que esta acção irá reiniciar a aplicação e poderá levar algum tempo.<
 
     <!-- Directory -->
     <string name="directory_search_results_title">Navegar diretório</string>
-    <string name="directory_searching_title">A pesquisar o diretório…</string>
+    <string name="directory_searching_title">A pesquisar o directório…</string>
 
     <!-- home room settings -->
     <string name="room_settings_favourite">Adicionar aos favoritos</string>
@@ -455,8 +455,8 @@ Note que esta acção irá reiniciar a aplicação e poderá levar algum tempo.<
     <string name="settings_add_email_address">Adicionar endereço de e-mail</string>
     <string name="settings_phone_number">Telefone</string>
     <string name="settings_add_phone_number">Adicionar número de telefone</string>
-    <string name="settings_summary_app_info_link">Ecrã de informações de sistema da aplicação</string>
-    <string name="settings_title_app_info_link">Informações da aplicação</string>
+    <string name="settings_app_info_link_summary">Ecrã de informações de sistema da aplicação</string>
+    <string name="settings_app_info_link_title">Informações da aplicação</string>
 
     <string name="settings_enable_all_notif">Ativar notificações para esta conta</string>
     <string name="settings_enable_this_device">Ativar notificações para este dispositivo</string>
@@ -562,7 +562,6 @@ Note que esta acção irá reiniciar a aplicação e poderá levar algum tempo.<
     <string name="room_settings_tag_pref_entry_favourite">Adicionar aos favoritos</string>
     <string name="room_settings_tag_pref_entry_low_priority">Baixa prioridade</string>
     <string name="room_settings_tag_pref_entry_none">Nenhum</string>
-    <string name="room_settings_tag_pref_no_tag">não etiquetada</string>
 
     <!-- room settings : access and visibility -->
     <string name="room_settings_category_access_visibility_title">Acesso e visibilidade</string>
@@ -710,12 +709,9 @@ Dispositivos desconhecidos:</string>
 
     <!-- historical -->
     <string name="historical_placeholder">Procurar histórico</string>
-<string name="settings_keep_media">Manter ficheiros multimédia</string>
+    <string name="settings_keep_media">Manter ficheiros multimédia</string>
 
-    <string name="settings_hide_read_receipts">Ocultar recibos de leitura</string>
-    <string name="settings_dont_send_typings_notifs">Não enviar notificações de escrita</string>
     <string name="settings_always_show_timestamps">Mostrar sempre a hora das mensagens</string>
-    <string name="settings_disable_markdown">Desactivar a formatação Markdown quando estiver a enviar</string>
     <string name="settings_data_save_mode">Modo de poupança de dados</string>
 
     <string name="settings_user_interface">Interface de utilizador</string>
@@ -737,12 +733,12 @@ Dispositivos desconhecidos:</string>
     <string name="larger">Maior</string>
     <string name="largest">Ainda maior</string>
     <string name="huge">Enorme</string>
-<string name="offline">Offline</string>
+    <string name="offline">Desconectado</string>
 
     <string name="user_directory_header">Lista de utilizadores</string>
     <string name="people_search_user_directory">LISTA DE UTILIZADORES (%s)</string>
     <string name="settings_start_on_boot">Iniciar no arranque</string>
-    <string name="settings_clear_medias_cache">Limpar cache de multimédia</string>
+    <string name="settings_clear_media_cache">Limpar cache de multimédia</string>
     <string name="light_theme">Tema Claro</string>
     <string name="dark_theme">Tema Escuro</string>
     <string name="black_them">Tema Preto</string>
@@ -751,8 +747,6 @@ Dispositivos desconhecidos:</string>
 
     <string name="settings_notification_ringtone">Som de notificação</string>
     <string name="settings_12_24_timestamps">Utilizar formato de 12 horas (ex. 2:30pm)</string>
-    <string name="settings_hide_join_leave_messages">Ocultar mensagens de entrada/saída (convites/expulsões/banimentos não são afetados)</string>
-    <string name="settings_hide_avatar_display_name_changes_messages">Ocultar avatar e mostrar mudanças de nome</string>
 
     <string name="widget_no_power_to_manage">Precisa de permissão para gerir os widgets nesta sala</string>
     <string name="widget_creation_failure">Criação de widget falhou</string>
@@ -835,38 +829,38 @@ Adicionar alguns agora?</string>
     <string name="groups_list">Lista de Grupos</string>
 
     <plurals name="membership_changes">
-	<item quantity="one">%d mudança de adesão</item>
-	<item quantity="other">%d mudanças de adesões</item>
-</plurals>
+        <item quantity="one">%d mudança de adesão</item>
+        <item quantity="other">%d mudanças de adesões</item>
+    </plurals>
 
     <string name="call">Chamar</string>
     <string name="list_members">Listar participantes</string>
     <string name="open_chat_header">Abrir cabeçalho</string>
     <string name="room_sync_in_progress">A sincronizar…</string>
     <plurals name="room_header_active_members_count">
-	<item quantity="one">%d participante activo</item>
-	<item quantity="other">%d participantes activos</item>
-</plurals>
+        <item quantity="one">%d participante activo</item>
+        <item quantity="other">%d participantes activos</item>
+    </plurals>
     <plurals name="room_title_members">
-	<item quantity="one">%d participante</item>
-	<item quantity="other">%d participantes</item>
-</plurals>
+        <item quantity="one">%d participante</item>
+        <item quantity="other">%d participantes</item>
+    </plurals>
     <plurals name="format_time_s">
-	<item quantity="one">%ds</item>
-	<item quantity="other">%ds</item>
-</plurals>
+        <item quantity="one">%ds</item>
+        <item quantity="other">%ds</item>
+    </plurals>
     <plurals name="format_time_m">
-	<item quantity="one">%dm</item>
-	<item quantity="other">%dm</item>
-</plurals>
+        <item quantity="one">%dm</item>
+        <item quantity="other">%dm</item>
+    </plurals>
     <plurals name="format_time_h">
-	<item quantity="one">%dh</item>
-	<item quantity="other">%dh</item>
-</plurals>
+        <item quantity="one">%dh</item>
+        <item quantity="other">%dh</item>
+    </plurals>
     <plurals name="format_time_d">
-	<item quantity="one">%dd</item>
-	<item quantity="other">%dd</item>
-</plurals>
+        <item quantity="one">%dd</item>
+        <item quantity="other">%dd</item>
+    </plurals>
 
     <string name="room_participants_now">%1$s agora</string>
     <string name="room_participants_ago">há %1$s %2$s</string>
@@ -874,7 +868,6 @@ Adicionar alguns agora?</string>
     <string name="room_participants_action_unignore_prompt">Mostrar todas as mensagens deste utilizador?
 
 Note que esta acção reiniciará a aplicação e poderá demorar algum tempo.</string>
-    <string name="room_participants_kick_prompt_msg">Tem a certeza que pretende expulsar este utilizador desta conversa?</string>
     <string name="room_participants_ban_prompt_msg">Tem a certeza que pretende banir este utilizador desta conversa?</string>
 
     <string name="room_participants_invite_join_names">"%1$s, "</string>
@@ -884,22 +877,22 @@ Note que esta acção reiniciará a aplicação e poderá demorar algum tempo.</
     <string name="room_message_placeholder_reply_to_encrypted">Enviar uma resposta cifrada…</string>
     <string name="room_message_placeholder_reply_to_not_encrypted">Enviar uma resposta (não cifrada)…</string>
     <plurals name="room_new_messages_notification">
-	<item quantity="one">%d nova mensagem</item>
-	<item quantity="other">%d novas mensagens</item>
-</plurals>
+        <item quantity="one">%d nova mensagem</item>
+        <item quantity="other">%d novas mensagens</item>
+    </plurals>
 
     <plurals name="room_details_selected">
-	<item quantity="one">%d seleccionado</item>
-	<item quantity="other">%d seleccionados</item>
-</plurals>
+        <item quantity="one">%d seleccionado</item>
+        <item quantity="other">%d seleccionados</item>
+    </plurals>
     <plurals name="directory_search_rooms">
-	<item quantity="one">%d sala</item>
-	<item quantity="other">%d salas</item>
-</plurals>
+        <item quantity="one">%d sala</item>
+        <item quantity="other">%d salas</item>
+    </plurals>
     <plurals name="directory_search_rooms_for">
-	<item quantity="one">%1$s sala encontrada para %2$s</item>
-	<item quantity="other">%1$s salas encontradas para %2$s</item>
-</plurals>
+        <item quantity="one">%1$s sala encontrada para %2$s</item>
+        <item quantity="other">%1$s salas encontradas para %2$s</item>
+    </plurals>
     <string name="room_settings_all_messages_noisy">Todas as mensagens (alto)</string>
     <string name="room_settings_all_messages">Todas as mensagens</string>
     <string name="room_settings_mention_only">Apenas menções</string>
@@ -957,23 +950,23 @@ Note que esta acção reiniciará a aplicação e poderá demorar algum tempo.</
     <string name="lock_screen_hint">Escreva aqui…</string>
 
     <plurals name="notification_unread_notified_messages">
-	<item quantity="one">%d mensagem notificada não lida</item>
-	<item quantity="other">%d mensagens notificadas não lidas</item>
-</plurals>
+        <item quantity="one">%d mensagem notificada não lida</item>
+        <item quantity="other">%d mensagens notificadas não lidas</item>
+    </plurals>
     <plurals name="notification_unread_notified_messages_in_room_msgs">
-	<item quantity="one">%d mensagem notificada não lida</item>
-	<item quantity="other">%d mensagens notificadas não lidas</item>
-</plurals>
+        <item quantity="one">%d mensagem notificada não lida</item>
+        <item quantity="other">%d mensagens notificadas não lidas</item>
+    </plurals>
     <plurals name="notification_unread_notified_messages_in_room_rooms">
-	<item quantity="one">%d sala</item>
-	<item quantity="other">%d salas</item>
-</plurals>
+        <item quantity="one">%d sala</item>
+        <item quantity="other">%d salas</item>
+    </plurals>
     <string name="notification_unread_notified_messages_in_room">%1$s em %2$s</string>
 
     <plurals name="active_widgets">
-	<item quantity="one">%d widget activo</item>
-	<item quantity="other">%d widgets activos</item>
-</plurals>
+        <item quantity="one">%d widget activo</item>
+        <item quantity="other">%d widgets activos</item>
+    </plurals>
 
     <string name="widget_integration_missing_parameter">Falta um parâmetro obrigatório.</string>
     <string name="widget_integration_invalid_parameter">Há um parâmetro que não é válido.</string>
@@ -1031,14 +1024,14 @@ Note que esta acção reiniciará a aplicação e poderá demorar algum tempo.</
     <string name="filter_group_rooms">Filtrar salas do grupo</string>
 
     <plurals name="group_members">
-	<item quantity="one">%d participante</item>
-	<item quantity="other">%d participantes</item>
-</plurals>
+        <item quantity="one">%d participante</item>
+        <item quantity="other">%d participantes</item>
+    </plurals>
 
     <plurals name="group_rooms">
-	<item quantity="one">%d sala</item>
-	<item quantity="other">%d salas</item>
-</plurals>
+        <item quantity="one">%d sala</item>
+        <item quantity="other">%d salas</item>
+    </plurals>
     <string name="group_no_long_description">O administrador desta comunidade não definiu uma descrição longa da mesma.</string>
 
     <string name="has_been_kicked">Você foi expulso da sala %1$s por %2$s</string>

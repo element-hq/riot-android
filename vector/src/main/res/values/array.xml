@@ -86,4 +86,19 @@
         <item>only_errors</item>
     </string-array>
 
+    <!-- media saving choice list -->
+    <string-array name="media_saving_choice">
+        <item>@string/media_saving_period_3_days</item>
+        <item>@string/media_saving_period_1_week</item>
+        <item>@string/media_saving_period_1_month</item>
+        <item>@string/media_saving_period_forever</item>
+    </string-array>
+
+    <!-- Notification status for bing rules -->
+    <string-array name="notification_status">
+        <item>@string/notification_off</item>
+        <item>@string/notification_on</item>
+        <item>@string/notification_noisy</item>
+    </string-array>
+
 </resources>

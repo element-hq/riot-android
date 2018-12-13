@@ -20,12 +20,11 @@ package im.vector.activity;
 import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
-import android.preference.PreferenceManager;
+import android.support.v7.preference.PreferenceManager;
 import android.widget.ImageView;
 
 import com.bumptech.glide.Glide;
 
-import org.jetbrains.annotations.NotNull;
 import org.matrix.androidsdk.MXSession;
 import org.matrix.androidsdk.listeners.IMXEventListener;
 import org.matrix.androidsdk.listeners.MXEventListener;
@@ -48,7 +47,6 @@ import im.vector.analytics.TrackingEvent;
 import im.vector.push.PushManager;
 import im.vector.receiver.VectorUniversalLinkReceiver;
 import im.vector.services.EventStreamService;
-import im.vector.ui.themes.ActivityOtherThemes;
 import im.vector.util.PreferencesManager;
 
 /**
@@ -116,7 +114,8 @@ public class SplashActivity extends MXCActionBarActivity {
 
             // launch from a shared files menu
             if (getIntent().hasExtra(VectorHomeActivity.EXTRA_SHARED_INTENT_PARAMS)) {
-                intent.putExtra(VectorHomeActivity.EXTRA_SHARED_INTENT_PARAMS, getIntent().getParcelableExtra(VectorHomeActivity.EXTRA_SHARED_INTENT_PARAMS));
+                intent.putExtra(VectorHomeActivity.EXTRA_SHARED_INTENT_PARAMS,
+                        (Intent) getIntent().getParcelableExtra(VectorHomeActivity.EXTRA_SHARED_INTENT_PARAMS));
                 getIntent().removeExtra(VectorHomeActivity.EXTRA_SHARED_INTENT_PARAMS);
             }
 
@@ -133,12 +132,6 @@ public class SplashActivity extends MXCActionBarActivity {
         } else {
             CommonActivityUtils.logout(this);
         }
-    }
-
-    @NotNull
-    @Override
-    public ActivityOtherThemes getOtherThemes() {
-        return ActivityOtherThemes.NoActionBar.INSTANCE;
     }
 
     @Override

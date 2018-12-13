@@ -33,7 +33,7 @@ import android.text.TextUtils;
 import android.widget.Toast;
 
 import org.matrix.androidsdk.data.RoomMediaMessage;
-import org.matrix.androidsdk.db.MXMediasCache;
+import org.matrix.androidsdk.db.MXMediaCache;
 import org.matrix.androidsdk.rest.model.message.Message;
 import org.matrix.androidsdk.util.ImageUtils;
 import org.matrix.androidsdk.util.Log;
@@ -76,7 +76,7 @@ public class VectorRoomMediasSender {
     private final VectorMessageListFragment mVectorMessageListFragment;
 
     // the medias cache
-    private final MXMediasCache mMediasCache;
+    private final MXMediaCache mMediasCache;
 
     // the background thread
     private static HandlerThread mHandlerThread = null;
@@ -91,7 +91,7 @@ public class VectorRoomMediasSender {
      *
      * @param roomActivity the room activity.
      */
-    public VectorRoomMediasSender(VectorRoomActivity roomActivity, VectorMessageListFragment vectorMessageListFragment, MXMediasCache mediasCache) {
+    public VectorRoomMediasSender(VectorRoomActivity roomActivity, VectorMessageListFragment vectorMessageListFragment, MXMediaCache mediasCache) {
         mVectorRoomActivity = roomActivity;
         mVectorMessageListFragment = vectorMessageListFragment;
         mMediasCache = mediasCache;

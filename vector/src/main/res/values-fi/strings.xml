@@ -446,8 +446,8 @@ Salatut viestit eivät näy sovelluksissa, jotka eivät tue salausta.</string> <
     <string name="settings_add_email_address">Lisää sähköpostiosoite</string>
     <string name="settings_phone_number">Puhelin</string>
     <string name="settings_add_phone_number">Lisää puhelinnumero</string>
-    <string name="settings_summary_app_info_link">Sovelluksen infonäyttö</string>
-    <string name="settings_title_app_info_link">Sovelluksen tiedot</string>
+    <string name="settings_app_info_link_summary">Sovelluksen infonäyttö</string>
+    <string name="settings_app_info_link_title">Sovelluksen tiedot</string>
 
     <string name="settings_enable_all_notif">Ota ilmoitukset käyttöön tällä tilillä</string>
     <string name="settings_enable_this_device">Ota ilmoitukset käyttöön tällä laitteella</string>
@@ -550,7 +550,6 @@ Salatut viestit eivät näy sovelluksissa, jotka eivät tue salausta.</string> <
     <string name="room_settings_tag_pref_entry_favourite">Suosikki</string>
     <string name="room_settings_tag_pref_entry_low_priority">Matala tärkeys</string>
     <string name="room_settings_tag_pref_entry_none">Ei mikään</string>
-    <string name="room_settings_tag_pref_no_tag">ei luokiteltu</string>
 
     <!-- room settings : access and visibility -->
     <string name="room_settings_category_access_visibility_title">Näkyvyys ja pääsy</string>
@@ -689,16 +688,13 @@ Voit tehdä sen nyt tai myöhemmin sovelluksen asetuksissa.</string>
 
     <!-- historical -->
     <string name="historical_placeholder">Etsi historiasta</string>
-<string name="user_directory_header">Käyttäjähakemisto</string>
+    <string name="user_directory_header">Käyttäjähakemisto</string>
     <string name="people_search_user_directory">KÄYTTÄJÄHAKEMISTO (%s)</string>
     <string name="settings_start_on_boot">Käynnistä automaattisesti</string>
-    <string name="settings_clear_medias_cache">Tyhjennä mediavälimuisti</string>
+    <string name="settings_clear_media_cache">Tyhjennä mediavälimuisti</string>
     <string name="settings_keep_media">Säilytä media</string>
 
-    <string name="settings_hide_read_receipts">Piilota lukukuittaukset</string>
-    <string name="settings_dont_send_typings_notifs">Älä lähetä kirjoitusilmoituksia</string>
     <string name="settings_always_show_timestamps">Näytä aina aikaleimat</string>
-    <string name="settings_disable_markdown">Poista markdown -muotoilu käytöstä</string>
     <string name="settings_data_save_mode">Datansäästötila</string>
 
     <string name="settings_user_interface">Käyttöliittymä</string>
@@ -720,7 +716,7 @@ Voit tehdä sen nyt tai myöhemmin sovelluksen asetuksissa.</string>
     <string name="larger">Isompi</string>
     <string name="largest">Isoin</string>
     <string name="huge">Valtava</string>
-<string name="offline">Offline</string>
+    <string name="offline">Offline</string>
 
     <string name="light_theme">Vaalea teema</string>
     <string name="dark_theme">Tumma teema</string>
@@ -743,8 +739,6 @@ Voit tehdä sen nyt tai myöhemmin sovelluksen asetuksissa.</string>
     <string name="settings_containing_my_display_name">Viesti sisältää näyttönimeni</string>
     <string name="settings_containing_my_user_name">Viesti sisältää käyttäjänimeni</string>
     <string name="settings_12_24_timestamps">Näytä aikaleimat 12h muodossa (esim. 2:30pm)</string>
-    <string name="settings_hide_join_leave_messages">Piilota liittymis-/poistumisilmoitukset (ei vaikuta kutsuihin/poistoihin/estoihin)</string>
-    <string name="settings_hide_avatar_display_name_changes_messages">Piilota kuvan ja näyttönimen muutokset</string>
 
     <string name="settings_analytics">Analytiikka</string>
 
@@ -789,7 +783,7 @@ Voit tehdä sen nyt tai myöhemmin sovelluksen asetuksissa.</string>
 
     <string name="encrypted_message">Salattu viesti</string>
 
-<string name="title_activity_group_details">Yhteisön tiedot</string>
+    <string name="title_activity_group_details">Yhteisön tiedot</string>
 
     <string name="loading">Ladataan…</string>
 
@@ -808,7 +802,6 @@ Voit tehdä sen nyt tai myöhemmin sovelluksen asetuksissa.</string>
 
     <string name="groups_list">Ryhmälistaus</string>
 
-    <string name="room_participants_kick_prompt_msg">Haluatko varmasti poistaa tämän käyttäjän keskustelusta?</string>
     <string name="room_participants_ban_prompt_msg">Haluatko varmasti estää tämän käyttäjän keskustelussa?</string>
 
     <string name="room_settings_all_messages_noisy">Kaikki viestit (äänekäs)</string>
@@ -854,5 +847,5 @@ Voit tehdä sen nyt tai myöhemmin sovelluksen asetuksissa.</string>
     <string name="reason_colon">Syy: %1$s</string>
     <string name="rejoin">Liity uudelleen</string>
     <string name="forget_room">Unohda huone</string>
-<string name="room_settings_no_flair">" Tälle huoneelle ei näytetä tyyliä millekään yhteisölle"</string>
-    </resources>
+    <string name="room_settings_no_flair">" Tälle huoneelle ei näytetä tyyliä millekään yhteisölle"</string>
+</resources>

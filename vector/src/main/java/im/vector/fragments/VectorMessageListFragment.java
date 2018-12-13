@@ -49,7 +49,7 @@ import org.matrix.androidsdk.adapters.MessageRow;
 import org.matrix.androidsdk.crypto.data.MXDeviceInfo;
 import org.matrix.androidsdk.crypto.data.MXUsersDevicesMap;
 import org.matrix.androidsdk.data.RoomState;
-import org.matrix.androidsdk.db.MXMediasCache;
+import org.matrix.androidsdk.db.MXMediaCache;
 import org.matrix.androidsdk.fragments.MatrixMessageListFragment;
 import org.matrix.androidsdk.fragments.MatrixMessagesFragment;
 import org.matrix.androidsdk.listeners.MXMediaDownloadListener;
@@ -272,13 +272,13 @@ public class VectorMessageListFragment extends MatrixMessageListFragment<VectorM
     }
 
     @Override
-    public MXMediasCache getMXMediasCache() {
-        return Matrix.getInstance(getActivity()).getMediasCache();
+    public MXMediaCache getMXMediaCache() {
+        return Matrix.getInstance(getActivity()).getMediaCache();
     }
 
     @Override
     public VectorMessagesAdapter createMessagesAdapter() {
-        return new VectorMessagesAdapter(mSession, getActivity(), getMXMediasCache());
+        return new VectorMessagesAdapter(mSession, getActivity(), getMXMediaCache());
     }
 
     /**
@@ -529,7 +529,7 @@ public class VectorMessageListFragment extends MatrixMessageListFragment<VectorM
                                 EncryptedEventContent encryptedEventContent = JsonUtils.toEncryptedEventContent(event.getWireContent().getAsJsonObject());
 
                                 MXDeviceInfo deviceInfo = mSession.getCrypto()
-                                        .deviceWithIdentityKey(encryptedEventContent.sender_key, event.getSender(), encryptedEventContent.algorithm);
+                                        .deviceWithIdentityKey(encryptedEventContent.sender_key, encryptedEventContent.algorithm);
 
                                 if (null != deviceInfo) {
                                     dialog.cancel();
@@ -818,7 +818,7 @@ public class VectorMessageListFragment extends MatrixMessageListFragment<VectorM
         // Sanitize file name in case `m.body` contains a path.
         final String trimmedFileName = new File(filename).getName();
 
-        final MXMediasCache mediasCache = Matrix.getInstance(getActivity()).getMediasCache();
+        final MXMediaCache mediasCache = Matrix.getInstance(getActivity()).getMediaCache();
         // check if the media has already been downloaded
         if (mediasCache.isMediaCached(mediaUrl, mediaMimeType)) {
             mediasCache.createTmpDecryptedMediaFile(mediaUrl, mediaMimeType, encryptedFileInfo, new SimpleApiCallback<File>() {
@@ -979,7 +979,6 @@ public class VectorMessageListFragment extends MatrixMessageListFragment<VectorM
             Message message = JsonUtils.toMessage(row.getEvent().getContent());
 
             if (Message.MSGTYPE_IMAGE.equals(message.msgtype)) {
-
                 ImageMessage imageMessage = (ImageMessage) message;
                 SlidableMediaInfo info = new SlidableMediaInfo();
                 info.mMessageType = Message.MSGTYPE_IMAGE;
@@ -990,9 +989,7 @@ public class VectorMessageListFragment extends MatrixMessageListFragment<VectorM
                 info.mMimeType = imageMessage.getMimeType();
                 info.mEncryptedFileInfo = imageMessage.file;
                 res.add(info);
-
             } else if (Message.MSGTYPE_VIDEO.equals(message.msgtype)) {
-
                 VideoMessage videoMessage = (VideoMessage) message;
                 SlidableMediaInfo info = new SlidableMediaInfo();
                 info.mMessageType = Message.MSGTYPE_VIDEO;

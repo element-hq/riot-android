@@ -94,6 +94,8 @@ public class AccountCreationCaptchaActivity extends VectorAppCompatActivity {
 
     @Override
     public void initUiAndData() {
+        configureToolbar();
+
         final WebView webView = findViewById(R.id.account_creation_webview);
         webView.getSettings().setJavaScriptEnabled(true);
 
@@ -164,7 +166,7 @@ public class AccountCreationCaptchaActivity extends VectorAppCompatActivity {
 
             // common error message
             private void onError(String errorMessage) {
-                Log.e(LOG_TAG, "## onError() : errorMessage");
+                Log.e(LOG_TAG, "## onError() : " + errorMessage);
                 Toast.makeText(AccountCreationCaptchaActivity.this, errorMessage, Toast.LENGTH_LONG).show();
 
                 // on error case, close this activity
@@ -241,17 +243,5 @@ public class AccountCreationCaptchaActivity extends VectorAppCompatActivity {
             return true;
         }
         return super.onKeyDown(keyCode, event);
-    }
-
-    @Override
-    public void onLowMemory() {
-        super.onLowMemory();
-        CommonActivityUtils.onLowMemory(this);
-    }
-
-    @Override
-    public void onTrimMemory(int level) {
-        super.onTrimMemory(level);
-        CommonActivityUtils.onTrimMemory(this, level);
     }
 }

@@ -27,16 +27,16 @@ import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
-import android.preference.CheckBoxPreference;
-import android.preference.EditTextPreference;
-import android.preference.ListPreference;
-import android.preference.Preference;
-import android.preference.PreferenceCategory;
-import android.preference.PreferenceFragment;
-import android.preference.PreferenceManager;
-import android.preference.PreferenceScreen;
+import android.support.v14.preference.SwitchPreference;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AlertDialog;
+import android.support.v7.preference.EditTextPreference;
+import android.support.v7.preference.ListPreference;
+import android.support.v7.preference.Preference;
+import android.support.v7.preference.PreferenceCategory;
+import android.support.v7.preference.PreferenceFragmentCompat;
+import android.support.v7.preference.PreferenceManager;
+import android.support.v7.preference.PreferenceScreen;
 import android.text.TextUtils;
 import android.view.Gravity;
 import android.view.LayoutInflater;
@@ -49,7 +49,7 @@ import android.widget.Toast;
 
 import org.matrix.androidsdk.MXPatterns;
 import org.matrix.androidsdk.MXSession;
-import org.matrix.androidsdk.crypto.MXCryptoAlgorithms;
+import org.matrix.androidsdk.crypto.CryptoConstantsKt;
 import org.matrix.androidsdk.data.Room;
 import org.matrix.androidsdk.data.RoomAccountData;
 import org.matrix.androidsdk.data.RoomState;
@@ -84,8 +84,9 @@ import im.vector.activity.VectorMemberDetailsActivity;
 import im.vector.extensions.MatrixSdkExtensionsKt;
 import im.vector.preference.AddressPreference;
 import im.vector.preference.RoomAvatarPreference;
-import im.vector.preference.VectorCustomActionEditTextPreference;
+import im.vector.preference.VectorEditTextPreference;
 import im.vector.preference.VectorListPreference;
+import im.vector.preference.VectorPreference;
 import im.vector.preference.VectorSwitchPreference;
 import im.vector.settings.VectorLocale;
 import im.vector.ui.themes.ThemeUtils;
@@ -93,7 +94,7 @@ import im.vector.util.PermissionsToolsKt;
 import im.vector.util.SystemUtilsKt;
 import im.vector.util.VectorUtils;
 
-public class VectorRoomSettingsFragment extends PreferenceFragment implements SharedPreferences.OnSharedPreferenceChangeListener {
+public class VectorRoomSettingsFragment extends PreferenceFragmentCompat implements SharedPreferences.OnSharedPreferenceChangeListener {
     // internal constants values
     private static final String LOG_TAG = VectorRoomSettingsFragment.class.getSimpleName();
     private static final boolean UPDATE_UI = true;
@@ -150,11 +151,11 @@ public class VectorRoomSettingsFragment extends PreferenceFragment implements Sh
     private PreferenceCategory mAddressesSettingsCategory;
 
     // other
-    private PreferenceCategory mAdvandceSettingsCategory;
+    private PreferenceCategory mAdvancedSettingsCategory;
 
     // banned members
     private PreferenceCategory mBannedMembersSettingsCategory;
-    private PreferenceCategory mBannedMembersSettingsCategoryDivider;
+    private Preference mBannedMembersSettingsCategoryDivider;
 
     // flair
     private PreferenceCategory mFlairSettingsCategory;
@@ -163,7 +164,7 @@ public class VectorRoomSettingsFragment extends PreferenceFragment implements Sh
     private RoomAvatarPreference mRoomPhotoAvatar;
     private EditTextPreference mRoomNameEditTxt;
     private EditTextPreference mRoomTopicEditTxt;
-    private CheckBoxPreference mRoomDirectoryVisibilitySwitch;
+    private SwitchPreference mRoomDirectoryVisibilitySwitch;
     private ListPreference mRoomTagListPreference;
     private VectorListPreference mRoomAccessRulesListPreference;
     private ListPreference mRoomHistoryReadabilityRulesListPreference;
@@ -305,16 +306,15 @@ public class VectorRoomSettingsFragment extends PreferenceFragment implements Sh
     }
 
     @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        Log.d(LOG_TAG, "## onCreate() IN");
+    public void onCreatePreferences(Bundle savedInstanceState, String rootKey) {
+        Log.d(LOG_TAG, "## onCreatePreferences() IN");
 
         // retrieve fragment extras
         String matrixId = getArguments().getString(EXTRA_MATRIX_ID);
         String roomId = getArguments().getString(EXTRA_ROOM_ID);
 
         if (TextUtils.isEmpty(matrixId) || TextUtils.isEmpty(roomId)) {
-            Log.e(LOG_TAG, "## onCreate(): fragment extras (MatrixId or RoomId) are missing");
+            Log.e(LOG_TAG, "## onCreatePreferences(): fragment extras (MatrixId or RoomId) are missing");
             getActivity().finish();
         } else {
             mSession = Matrix.getInstance(getActivity()).getSession(matrixId);
@@ -324,7 +324,7 @@ public class VectorRoomSettingsFragment extends PreferenceFragment implements Sh
             }
 
             if (null == mRoom) {
-                Log.e(LOG_TAG, "## onCreate(): unable to retrieve Room object");
+                Log.e(LOG_TAG, "## onCreatePreferences(): unable to retrieve Room object");
                 getActivity().finish();
             }
         }
@@ -336,14 +336,14 @@ public class VectorRoomSettingsFragment extends PreferenceFragment implements Sh
         mRoomPhotoAvatar = (RoomAvatarPreference) findPreference(PREF_KEY_ROOM_PHOTO_AVATAR);
         mRoomNameEditTxt = (EditTextPreference) findPreference(PREF_KEY_ROOM_NAME);
         mRoomTopicEditTxt = (EditTextPreference) findPreference(PREF_KEY_ROOM_TOPIC);
-        mRoomDirectoryVisibilitySwitch = (CheckBoxPreference) findPreference(PREF_KEY_ROOM_DIRECTORY_VISIBILITY_SWITCH);
+        mRoomDirectoryVisibilitySwitch = (SwitchPreference) findPreference(PREF_KEY_ROOM_DIRECTORY_VISIBILITY_SWITCH);
         mRoomTagListPreference = (ListPreference) findPreference(PREF_KEY_ROOM_TAG_LIST);
         mRoomAccessRulesListPreference = (VectorListPreference) findPreference(PREF_KEY_ROOM_ACCESS_RULES_LIST);
         mRoomHistoryReadabilityRulesListPreference = (ListPreference) findPreference(PREF_KEY_ROOM_HISTORY_READABILITY_LIST);
         mAddressesSettingsCategory = (PreferenceCategory) getPreferenceManager().findPreference(PREF_KEY_ADDRESSES);
-        mAdvandceSettingsCategory = (PreferenceCategory) getPreferenceManager().findPreference(PREF_KEY_ADVANCED);
+        mAdvancedSettingsCategory = (PreferenceCategory) getPreferenceManager().findPreference(PREF_KEY_ADVANCED);
         mBannedMembersSettingsCategory = (PreferenceCategory) getPreferenceManager().findPreference(PREF_KEY_BANNED);
-        mBannedMembersSettingsCategoryDivider = (PreferenceCategory) getPreferenceManager().findPreference(PREF_KEY_BANNED_DIVIDER);
+        mBannedMembersSettingsCategoryDivider = getPreferenceManager().findPreference(PREF_KEY_BANNED_DIVIDER);
         mFlairSettingsCategory = (PreferenceCategory) getPreferenceManager().findPreference(PREF_KEY_FLAIR);
         mRoomNotificationsPreference = (ListPreference) getPreferenceManager().findPreference(PREF_KEY_ROOM_NOTIFICATIONS_LIST);
 
@@ -1141,7 +1141,7 @@ public class VectorRoomSettingsFragment extends PreferenceFragment implements Sh
         }
 
         if (aResultCode == Activity.RESULT_OK) {
-            Uri thumbnailUri = VectorUtils.getThumbnailUriFromIntent(getActivity(), aData, mSession.getMediasCache());
+            Uri thumbnailUri = VectorUtils.getThumbnailUriFromIntent(getActivity(), aData, mSession.getMediaCache());
 
             if (null != thumbnailUri) {
                 displayLoadingView();
@@ -1149,7 +1149,7 @@ public class VectorRoomSettingsFragment extends PreferenceFragment implements Sh
                 // save the bitmap URL on the server
                 ResourceUtils.Resource resource = ResourceUtils.openResource(getActivity(), thumbnailUri, null);
                 if (null != resource) {
-                    mSession.getMediasCache().uploadContent(resource.mContentStream, null, resource.mMimeType, null, new MXMediaUploadListener() {
+                    mSession.getMediaCache().uploadContent(resource.mContentStream, null, resource.mMimeType, null, new MXMediaUploadListener() {
 
                         @Override
                         public void onUploadError(String uploadId, int serverResponseCode, String serverErrorMessage) {
@@ -1270,7 +1270,7 @@ public class VectorRoomSettingsFragment extends PreferenceFragment implements Sh
                     preferenceScreen.addPreference(mBannedMembersSettingsCategory);
 
                     for (RoomMember member : bannedMembers) {
-                        VectorCustomActionEditTextPreference preference = new VectorCustomActionEditTextPreference(getActivity());
+                        Preference preference = new VectorPreference(getActivity());
 
                         final String userId = member.getUserId();
 
@@ -1372,11 +1372,11 @@ public class VectorRoomSettingsFragment extends PreferenceFragment implements Sh
 
         if (!groups.isEmpty()) {
             for (final String groupId : groups) {
-                VectorCustomActionEditTextPreference preference = new VectorCustomActionEditTextPreference(getActivity());
+                VectorPreference preference = new VectorPreference(getActivity());
                 preference.setTitle(groupId);
                 preference.setKey(FLAIR_PREFERENCE_KEY_BASE + groupId);
 
-                preference.setOnPreferenceLongClickListener(new VectorCustomActionEditTextPreference.OnPreferenceLongClickListener() {
+                preference.setOnPreferenceLongClickListener(new VectorPreference.OnPreferenceLongClickListener() {
                     @Override
                     public boolean onPreferenceLongClick(Preference preference) {
                         getActivity().runOnUiThread(new Runnable() {
@@ -1393,7 +1393,7 @@ public class VectorRoomSettingsFragment extends PreferenceFragment implements Sh
                 mFlairSettingsCategory.addPreference(preference);
             }
         } else {
-            VectorCustomActionEditTextPreference preference = new VectorCustomActionEditTextPreference(getActivity());
+            VectorPreference preference = new VectorPreference(getActivity());
             preference.setTitle(getString(R.string.room_settings_no_flair));
             preference.setKey(FLAIR_PREFERENCE_KEY_BASE + "no_flair");
 
@@ -1402,7 +1402,7 @@ public class VectorRoomSettingsFragment extends PreferenceFragment implements Sh
 
         if (canUpdateFlair()) {
             // display the "add addresses" entry
-            EditTextPreference addAddressPreference = new EditTextPreference(getActivity());
+            EditTextPreference addAddressPreference = new VectorEditTextPreference(getActivity());
             addAddressPreference.setTitle(R.string.room_settings_add_new_group);
             addAddressPreference.setDialogTitle(R.string.room_settings_add_new_group);
             addAddressPreference.setKey(FLAIR_PREFERENCE_KEY_BASE + "__add");
@@ -1633,7 +1633,7 @@ public class VectorRoomSettingsFragment extends PreferenceFragment implements Sh
                 final String fAlias = alias;
                 final AddressPreference fAddressPreference = preference;
 
-                preference.setOnPreferenceLongClickListener(new VectorCustomActionEditTextPreference.OnPreferenceLongClickListener() {
+                preference.setOnPreferenceLongClickListener(new VectorPreference.OnPreferenceLongClickListener() {
                     @Override
                     public boolean onPreferenceLongClick(Preference preference) {
                         onAddressLongClick(fAlias, fAddressPreference.getMainIconView());
@@ -1647,7 +1647,7 @@ public class VectorRoomSettingsFragment extends PreferenceFragment implements Sh
         }
 
         // Everyone can add an alias: display the "add address" entry
-        EditTextPreference addAddressPreference = new EditTextPreference(getActivity());
+        EditTextPreference addAddressPreference = new VectorEditTextPreference(getActivity());
         addAddressPreference.setTitle(R.string.room_settings_addresses_add_new_address);
         addAddressPreference.setDialogTitle(R.string.room_settings_addresses_add_new_address);
         addAddressPreference.setKey(ADD_ADDRESSES_PREFERENCE_KEY);
@@ -1700,8 +1700,8 @@ public class VectorRoomSettingsFragment extends PreferenceFragment implements Sh
      */
     private void refreshEndToEnd() {
         // encrypt to unverified devices
-        final CheckBoxPreference sendToUnverifiedDevicesPref =
-                (CheckBoxPreference) findPreference(getString(R.string.room_settings_never_send_to_unverified_devices_title));
+        final SwitchPreference sendToUnverifiedDevicesPref =
+                (SwitchPreference) findPreference(getString(R.string.room_settings_never_send_to_unverified_devices_title));
 
         // reported by GA
         if (null == sendToUnverifiedDevicesPref) {
@@ -1711,7 +1711,7 @@ public class VectorRoomSettingsFragment extends PreferenceFragment implements Sh
 
         // test if the crypto is
         if (null == mSession.getCrypto()) {
-            mAdvandceSettingsCategory.removePreference(sendToUnverifiedDevicesPref);
+            mAdvancedSettingsCategory.removePreference(sendToUnverifiedDevicesPref);
         } else if (null != sendToUnverifiedDevicesPref) {
             if (mRoom.isEncrypted()) {
                 sendToUnverifiedDevicesPref.setChecked(false);
@@ -1732,7 +1732,7 @@ public class VectorRoomSettingsFragment extends PreferenceFragment implements Sh
                 );
 
             } else if (null != sendToUnverifiedDevicesPref) {
-                mAdvandceSettingsCategory.removePreference(sendToUnverifiedDevicesPref);
+                mAdvancedSettingsCategory.removePreference(sendToUnverifiedDevicesPref);
             }
 
             sendToUnverifiedDevicesPref.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
@@ -1765,24 +1765,24 @@ public class VectorRoomSettingsFragment extends PreferenceFragment implements Sh
         final String key = PREF_KEY_ENCRYPTION + mRoom.getRoomId();
 
         // remove the displayed preferences
-        Preference e2ePref = mAdvandceSettingsCategory.findPreference(key);
+        Preference e2ePref = mAdvancedSettingsCategory.findPreference(key);
 
         if (null != e2ePref) {
-            mAdvandceSettingsCategory.removePreference(e2ePref);
+            mAdvancedSettingsCategory.removePreference(e2ePref);
         }
 
-        // remove the preference because it might switch from a SwitchPreference to  VectorCustomActionEditTextPreference
+        // remove the preference because it might switch from a SwitchPreference to  VectorPreference
         PreferenceManager.getDefaultSharedPreferences(getActivity())
                 .edit()
                 .remove(key)
                 .apply();
 
         if (mRoom.isEncrypted()) {
-            VectorCustomActionEditTextPreference isEncryptedPreference = new VectorCustomActionEditTextPreference(getActivity());
+            Preference isEncryptedPreference = new VectorPreference(getActivity());
             isEncryptedPreference.setTitle(R.string.room_settings_addresses_e2e_enabled);
             isEncryptedPreference.setKey(key);
             isEncryptedPreference.setIcon(getResources().getDrawable(R.drawable.e2e_verified));
-            mAdvandceSettingsCategory.addPreference(isEncryptedPreference);
+            mAdvancedSettingsCategory.addPreference(isEncryptedPreference);
         } else {
             PowerLevels powerLevels = mRoom.getState().getPowerLevels();
             int myPowerLevel = -1;
@@ -1795,20 +1795,20 @@ public class VectorRoomSettingsFragment extends PreferenceFragment implements Sh
 
             // Test if the user has enough power levels to enable the crypto is in this room
             if (myPowerLevel < minimumPowerLevel) {
-                VectorCustomActionEditTextPreference isEncryptedPreference = new VectorCustomActionEditTextPreference(getActivity());
+                Preference isEncryptedPreference = new VectorPreference(getActivity());
                 isEncryptedPreference.setTitle(R.string.room_settings_addresses_e2e_disabled);
                 isEncryptedPreference.setKey(key);
                 isEncryptedPreference.setIcon(ThemeUtils.INSTANCE.tintDrawable(getActivity(),
                         getResources().getDrawable(R.drawable.e2e_unencrypted), R.attr.vctr_settings_icon_tint_color));
-                mAdvandceSettingsCategory.addPreference(isEncryptedPreference);
+                mAdvancedSettingsCategory.addPreference(isEncryptedPreference);
             } else if (mSession.isCryptoEnabled()) {
-                final VectorSwitchPreference encryptSwitchPreference = new VectorSwitchPreference(getActivity());
+                final SwitchPreference encryptSwitchPreference = new VectorSwitchPreference(getActivity());
                 encryptSwitchPreference.setTitle(R.string.room_settings_addresses_e2e_encryption_warning);
                 encryptSwitchPreference.setKey(key);
                 encryptSwitchPreference.setIcon(ThemeUtils.INSTANCE.tintDrawable(getActivity(),
                         getResources().getDrawable(R.drawable.e2e_unencrypted), R.attr.vctr_settings_icon_tint_color));
                 encryptSwitchPreference.setChecked(false);
-                mAdvandceSettingsCategory.addPreference(encryptSwitchPreference);
+                mAdvancedSettingsCategory.addPreference(encryptSwitchPreference);
 
                 encryptSwitchPreference.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
                     @Override
@@ -1824,7 +1824,7 @@ public class VectorRoomSettingsFragment extends PreferenceFragment implements Sh
                                         public void onClick(DialogInterface dialog, int which) {
                                             displayLoadingView();
 
-                                            mRoom.enableEncryptionWithAlgorithm(MXCryptoAlgorithms.MXCRYPTO_ALGORITHM_MEGOLM, new ApiCallback<Void>() {
+                                            mRoom.enableEncryptionWithAlgorithm(CryptoConstantsKt.MXCRYPTO_ALGORITHM_MEGOLM, new ApiCallback<Void>() {
 
                                                 private void onDone() {
                                                     hideLoadingView(false);

@@ -37,12 +37,13 @@
             style="@style/Widget.AppCompat.ProgressBar.Horizontal"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:background="@color/vector_green_color"
+            android:background="?attr/vctr_primary_color"
             android:indeterminate="true"
             android:visibility="gone"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/home_toolbar" />
+            app:layout_constraintTop_toBottomOf="@+id/home_toolbar"
+            tools:visibility="visible" />
 
         <im.vector.view.VectorPendingCallView
             android:id="@+id/listView_pending_callview"

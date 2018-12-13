@@ -27,7 +27,6 @@ import android.view.ViewGroup;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.EditText;
-import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -133,7 +132,7 @@ public class LockScreenActivity extends VectorAppCompatActivity { // do NOT exte
         ((TextView) findViewById(R.id.lock_screen_sender)).setText(getString(R.string.generic_label, intent.getStringExtra(EXTRA_SENDER_NAME)));
         ((TextView) findViewById(R.id.lock_screen_body)).setText(intent.getStringExtra(EXTRA_MESSAGE_BODY));
         ((TextView) findViewById(R.id.lock_screen_room_name)).setText(roomName);
-        final ImageButton sendButton = findViewById(R.id.lock_screen_sendbutton);
+        final View sendButton = findViewById(R.id.lock_screen_sendbutton);
         final EditText editText = findViewById(R.id.lock_screen_edittext);
 
         // disable send button

@@ -47,6 +47,8 @@ public class VectorPublicRoomsActivity extends MXCActionBarActivity {
 
     @Override
     public void initUiAndData() {
+        configureToolbar();
+
         if (CommonActivityUtils.shouldRestartApp(this)) {
             CommonActivityUtils.restartApp(this);
             Log.d(LOG_TAG, "onCreate : restart the application");

@@ -27,8 +27,8 @@ import android.text.TextUtils;
 import android.view.MotionEvent;
 import android.view.View;
 
-import org.matrix.androidsdk.data.timeline.EventTimeline;
 import org.matrix.androidsdk.data.RoomState;
+import org.matrix.androidsdk.data.timeline.EventTimeline;
 import org.matrix.androidsdk.rest.model.Event;
 import org.matrix.androidsdk.util.Log;
 
@@ -63,7 +63,7 @@ public class VectorSearchMessagesListFragment extends VectorMessageListFragment 
 
     @Override
     public VectorMessagesAdapter createMessagesAdapter() {
-        return new VectorSearchMessagesListAdapter(mSession, getActivity(), (null == mRoomId), getMXMediasCache());
+        return new VectorSearchMessagesListAdapter(mSession, getActivity(), (null == mRoomId), getMXMediaCache());
     }
 
     @Override
@@ -74,7 +74,7 @@ public class VectorSearchMessagesListFragment extends VectorMessageListFragment 
             cancelSearch();
 
             if (mIsMediaSearch) {
-                mSession.cancelSearchMediasByText();
+                mSession.cancelSearchMediaByText();
             } else {
                 mSession.cancelSearchMessagesByText();
             }

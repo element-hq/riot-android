@@ -103,7 +103,7 @@
     <string name="send_bug_report">Problem melden</string>
     <string name="send_bug_report_description">Bitte beschreibe das Problem. Was hast du genau gemacht? Was sollte passieren? Was passierte tatsächlich?</string>
     <string name="send_bug_report_placeholder">Problembeschreibung</string>
-    <string name="send_bug_report_logs_description">Um Probleme diagnostizieren zu können, werden Protokolle dieses Matrix-Clients zusammen mit dem Fehlerbericht übermittelt. Dieser Fehlerbericht wird, wie die Protokolle und Screenshot, nicht öffentlich sichtbar sein. Wenn du nur den oben eingegebenen Text senden möchtest, bitte die nachfolgenden Haken entsprechend entfernen:</string>
+    <string name="send_bug_report_logs_description">Um Probleme diagnostizieren zu können, werden Protokolle dieses Clients zusammen mit dem Fehlerbericht übermittelt. Dieser Fehlerbericht wird, wie die Protokolle und Screenshot, nicht öffentlich sichtbar sein. Wenn du nur den oben eingegebenen Text senden möchtest, bitte die nachfolgenden Haken entsprechend entfernen:</string>
     <string name="send_bug_report_alert_message">Du scheinst dein Telefon frustriert zu schütteln. Möchtest du einen Fehlerbericht senden?</string>
     <string name="send_bug_report_sent">Der Fehlerbericht wurde erfolgreich übermittelt</string>
     <string name="send_bug_report_failed">Der Fehlerbericht konnte nicht übermittelt werden (%s)</string>
@@ -442,8 +442,8 @@ Beachte: Diese Aktion wird die App neu starten und einige Zeit brauchen.</string
     <string name="settings_add_email_address">E-Mail-Adresse hinzufügen</string>
     <string name="settings_phone_number">Telefonnummer</string>
     <string name="settings_add_phone_number">Telefonnummer hinzufügen</string>
-    <string name="settings_summary_app_info_link">App-Info-Anzeige von Android</string>
-    <string name="settings_title_app_info_link">App-Info</string>
+    <string name="settings_app_info_link_summary">App-Info-Anzeige von Android</string>
+    <string name="settings_app_info_link_title">App-Info</string>
 
     <string name="settings_enable_all_notif">Benachrichtigungen für diesen Account aktivieren</string>
     <string name="settings_enable_this_device">Benachrichtigungen für dieses Gerät aktivieren</string>
@@ -458,7 +458,7 @@ Beachte: Diese Aktion wird die App neu starten und einige Zeit brauchen.</string
     <string name="settings_background_sync">Hintergrundsynchronisierung</string>
     <string name="settings_enable_background_sync">Hintergrundsynchronisierung aktivieren</string>
     <string name="settings_set_sync_timeout">Timeout für Synchronisierungsanfragen</string>
-    <string name="settings_set_sync_delay">Verzögerung zwischen zwei Synchronisierungsanfragen</string>
+    <string name="settings_set_sync_delay">Verzögerung zwischen jeder Anfrage</string>
     <string name="settings_second">Sekunde</string>
     <string name="settings_seconds">Sekunden</string>
 
@@ -504,11 +504,11 @@ Um fortzufahren, gib dein Passwort ein.</string>
 
     <string name="account_email_validation_title">Verifizierung ausstehend</string>
     <string name="account_email_validation_message">Bitte prüfe deinen E-Mail-Posteingang und klicke auf den in der E-Mail enthaltenen Link. Klicke anschließend auf Fortsetzen.</string>
-    <string name="account_email_validation_error">Verifizieren der E-Mail-Adresse unmöglich. Bitte prüfe deine E-Mails und klicke auf den enthaltenen Link. Anschließend klicke auf "Fortsetzen"</string>
+    <string name="account_email_validation_error">Verifizieren der E-Mail-Adresse unmöglich. Bitte prüfe deine E-Mails und klicke auf den enthaltenen Link. Anschließend klicke auf Fortsetzen.</string>
 
-    <string name="account_email_already_used_error">Diese E-Mail-Adresse wird bereits verwendet</string>
-    <string name="account_email_not_found_error">Fehler beim Senden der E-Mail: Diese E-Mail-Adresse wurde nicht gefunden</string>
-    <string name="account_phone_number_already_used_error">Diese Telefonnummer wird bereits verwendet</string>
+    <string name="account_email_already_used_error">Diese E-Mail-Adresse wird bereits verwendet.</string>
+    <string name="account_email_not_found_error">Diese E-Mail-Adresse wurde nicht gefunden.</string>
+    <string name="account_phone_number_already_used_error">Diese Telefonnummer wird bereits verwendet.</string>
 
     <string name="settings_change_password">Passwort ändern</string>
     <string name="settings_old_password">Altes Passwort</string>
@@ -548,7 +548,6 @@ Beachte: Diese Aktion wird die App neu starten und einige Zeit brauchen.</string
     <string name="room_settings_tag_pref_entry_favourite">Favorit</string>
     <string name="room_settings_tag_pref_entry_low_priority">Niedrige Priorität</string>
     <string name="room_settings_tag_pref_entry_none">Keine</string>
-    <string name="room_settings_tag_pref_no_tag">Nicht getaggt</string>
 
     <!-- room settings : access and visibility -->
     <string name="room_settings_category_access_visibility_title">Zugriff und Sichtbarkeit</string>
@@ -653,7 +652,7 @@ Achtung: Diese Datei wird vielleicht gelöscht, wenn die App deinstalliert wird.
     <string name="encryption_import_room_keys_summary">Schlüssel aus lokaler Datei importieren</string>
     <string name="encryption_import_import">Importieren</string>
     <string name="encryption_never_send_to_unverified_devices_title">Nur für verifizierte Geräte verschlüsseln</string>
-    <string name="encryption_never_send_to_unverified_devices_summary">Von diesem Gerät aus keine verschlüsselten Nachrichten an nicht verifizierte Geräte senden</string>
+    <string name="encryption_never_send_to_unverified_devices_summary">Von diesem Gerät aus keine verschlüsselten Nachrichten an nicht verifizierte Geräte senden.</string>
 
     <string name="encryption_information_not_verified">NICHT verifiziert</string>
     <string name="encryption_information_verified">Verifiziert</string>
@@ -695,18 +694,15 @@ Unbekannte Geräte:</string>
     <!-- historical -->
     <string name="historical_placeholder">Suche nach historischen</string>
 
-<string name="settings_user_interface">Benutzer-Oberfläche</string>
-    <string name="settings_interface_language">Oberflächen-Sprache</string>
-    <string name="settings_select_language">Wähle eine Sprache</string>
+    <string name="settings_user_interface">Benutzer-Oberfläche</string>
+    <string name="settings_interface_language">Sprache</string>
+    <string name="settings_select_language">Wähle Sprache</string>
 
     <string name="settings_start_on_boot">Starte beim Systemstart</string>
-    <string name="settings_clear_medias_cache">Medien-Cache leeren</string>
+    <string name="settings_clear_media_cache">Medien-Cache leeren</string>
     <string name="settings_keep_media">Medien behalten</string>
 
-    <string name="settings_hide_read_receipts">Lesebestätigungen verbergen</string>
-    <string name="settings_dont_send_typings_notifs">Sende nicht, dass ich tippe</string>
-    <string name="settings_always_show_timestamps">Nachrichten-Zeitstempel immer anzeigen</string>
-    <string name="settings_disable_markdown">Markdown-Formatierung beim Senden deaktivieren</string>
+    <string name="settings_always_show_timestamps">Für alle Nachrichten Zeitstempel anzeigen</string>
 
     <string name="media_saving_period_3_days">3 Tage</string>
     <string name="media_saving_period_1_week">1 Woche</string>
@@ -724,14 +720,12 @@ Unbekannte Geräte:</string>
     <string name="normal">Normal</string>
     <string name="large">Groß</string>
     <string name="largest">Extra groß</string>
-<string name="larger">Größer</string>
+    <string name="larger">Größer</string>
     <string name="tiny">Sehr klein</string>
     <string name="huge">Riesig</string>
-<string name="settings_theme">Thema</string>
+    <string name="settings_theme">Thema</string>
 
-    <string name="settings_12_24_timestamps">Zeitstempel im 12-Stunden-Format anzeigen (z. B. 2:30 p. m.)</string>
-    <string name="settings_hide_join_leave_messages">Betreten-/Verlassen-Meldungen verbergen (gilt nicht für Einladungen/Kicks/Bans)</string>
-    <string name="settings_hide_avatar_display_name_changes_messages">Profilbild- und Anzeigenamen-Änderungen verbergen</string>
+    <string name="settings_12_24_timestamps">Zeige Zeitstempel im 12-Stunden-Format</string>
 
     <string name="widget_no_power_to_manage">Für das Verwalten von Widgets in diesem Raum ist eine Berechtigung erforderlich</string>
     <string name="widget_creation_failure">Widget konnte nicht erstellt werden</string>
@@ -745,7 +739,7 @@ Unbekannte Geräte:</string>
     <string name="widget_integration_positive_power_level">Berechtigungslevel muss eine positive ganze Zahl sein.</string>
     <string name="widget_integration_must_be_in_room">Du bist nicht Mitglied in diesem Raum.</string>
     <string name="widget_integration_no_permission_in_room">Du hast keine Berechtigung, diese Aktion in diesem Raum auszuführen.</string>
-    <string name="widget_integration_missing_room_id">Anfrage beinhaltet keine room_id.</string>
+    <string name="widget_integration_missing_room_id">Anfrage beinhaltet keine Raum-ID.</string>
     <string name="widget_integration_room_not_visible">Raum %s ist nicht sichtbar.</string>
     <string name="room_add_matrix_apps">Matrix-Apps hinzufügen</string>
     <string name="settings_notification_ringtone">Benachrichtigungston</string>
@@ -778,7 +772,7 @@ Unbekannte Geräte:</string>
     <string name="share_without_verifying">Ohne Verifizierung teilen</string>
     <string name="ignore_request">Anfrage ignorieren</string>
 
-<string name="settings_analytics">Anonymisierte Analysedaten</string>
+    <string name="settings_analytics">Anonymisierte Analysedaten</string>
     <string name="title_activity_bug_report">Fehlerbericht</string>
 
     <string name="conference_call_warning_title">Warnung!</string>
@@ -795,7 +789,7 @@ Unbekannte Geräte:</string>
 
     <string name="encrypted_message">Verschlüsselte Nachricht</string>
 
-<string name="title_activity_group_details">Community-Details</string>
+    <string name="title_activity_group_details">Community-Details</string>
 
     <string name="loading">Lädt…</string>
 
@@ -814,15 +808,14 @@ Unbekannte Geräte:</string>
 
     <string name="groups_list">Gruppenliste</string>
 
-    <string name="room_participants_kick_prompt_msg">Bist du sicher, dass du diesen Nutzer aus diesem Chat kicken möchtest?</string>
     <string name="room_participants_ban_prompt_msg">Bist du sicher, dass du diesen Nutzer aus diesem Chat verbannen möchtest?</string>
 
     <string name="room_settings_all_messages_noisy">Alle Nachrichten (laut)</string>
     <string name="room_settings_all_messages">Alle Nachrichten</string>
     <string name="room_settings_mention_only">Nur Erwähnungen</string>
     <string name="room_settings_mute">Stumm</string>
-    <string name="settings_inline_url_preview">Aktiviere URL-Vorschau im Chat standardmäßig</string>
-    <string name="settings_vibrate_on_mention">Vibriere beim Erwähnen</string>
+    <string name="settings_inline_url_preview">URL-Vorschau im Chat</string>
+    <string name="settings_vibrate_on_mention">Vibriere beim Erwähnen eines Nutzers</string>
 
     <string name="room_settings_room_notifications_title">Benachrichtigungen</string>
     <string name="room_settings_no_flair">Dieser Raum zeigt keine Flairs für irgendeine Community an</string>
@@ -857,7 +850,7 @@ Unbekannte Geräte:</string>
     <string name="reason_colon">Grund: %1$s</string>
     <string name="rejoin">Erneut beitreten</string>
     <string name="forget_room">Raum vergessen</string>
-<string name="room_settings_add_homescreen_shortcut">Startbildschirm-Verknüpfung hinzufügen</string>
+    <string name="room_settings_add_homescreen_shortcut">Startbildschirm-Verknüpfung hinzufügen</string>
 
     <string name="settings_flair">Flair</string>
 
@@ -867,50 +860,50 @@ Unbekannte Geräte:</string>
     <string name="list_members">Mitglieder auflisten</string>
     <string name="room_sync_in_progress">Synchronisiere…</string>
     <plurals name="room_header_active_members_count">
-	<item quantity="one">1 aktives Mitglied</item>
-	<item quantity="other">%d aktive Mitglieder</item>
-</plurals>
+        <item quantity="one">1 aktives Mitglied</item>
+        <item quantity="other">%d aktive Mitglieder</item>
+    </plurals>
     <plurals name="room_title_members">
-	<item quantity="one">1 Mitglied</item>
-	<item quantity="other">%d Mitglieder</item>
-</plurals>
+        <item quantity="one">1 Mitglied</item>
+        <item quantity="other">%d Mitglieder</item>
+    </plurals>
     <plurals name="room_new_messages_notification">
-	<item quantity="one">1 neue Nachricht</item>
-	<item quantity="other">%d neue Nachrichten</item>
-</plurals>
+        <item quantity="one">1 neue Nachricht</item>
+        <item quantity="other">%d neue Nachrichten</item>
+    </plurals>
 
     <plurals name="directory_search_rooms">
-	<item quantity="one">1 Raum</item>
-	<item quantity="other">%d Räume</item>
-</plurals>
+        <item quantity="one">1 Raum</item>
+        <item quantity="other">%d Räume</item>
+    </plurals>
     <plurals name="directory_search_rooms_for">
-	<item quantity="one">%1$s Raum gefunden für %2$s</item>
-	<item quantity="other">%1$s Räume gefunden für %2$s</item>
-</plurals>
+        <item quantity="one">%1$s Raum gefunden für %2$s</item>
+        <item quantity="other">%1$s Räume gefunden für %2$s</item>
+    </plurals>
     <plurals name="notification_unread_notified_messages">
-	<item quantity="one">1 ungelesene Nachricht</item>
-	<item quantity="other">%d ungelesene Nachrichten</item>
-</plurals>
+        <item quantity="one">1 ungelesene Nachricht</item>
+        <item quantity="other">%d ungelesene Nachrichten</item>
+    </plurals>
     <plurals name="notification_unread_notified_messages_in_room_msgs">
-	<item quantity="one">1 ungelesene benachrichtige Nachricht</item>
-	<item quantity="other">%d ungelesene benachrichte Nachrichten</item>
-</plurals>
+        <item quantity="one">1 ungelesene benachrichtige Nachricht</item>
+        <item quantity="other">%d ungelesene benachrichte Nachrichten</item>
+    </plurals>
     <plurals name="notification_unread_notified_messages_in_room_rooms">
-	<item quantity="one">1 Raum</item>
-	<item quantity="other">%d Räume</item>
-</plurals>
+        <item quantity="one">1 Raum</item>
+        <item quantity="other">%d Räume</item>
+    </plurals>
     <plurals name="active_widgets">
-	<item quantity="one">1 aktives Widget</item>
-	<item quantity="other">%d aktive Widgets</item>
-</plurals>
+        <item quantity="one">1 aktives Widget</item>
+        <item quantity="other">%d aktive Widgets</item>
+    </plurals>
 
     <!-- Widget Integration Manager -->
     <string name="avatar">Profilbild</string>
 
-<plurals name="membership_changes">
-	<item quantity="one">1 Mitgliederänderung</item>
-	<item quantity="other">%d Mitgliederänderungen</item>
-</plurals>
+    <plurals name="membership_changes">
+        <item quantity="one">1 Mitgliederänderung</item>
+        <item quantity="other">%d Mitgliederänderungen</item>
+    </plurals>
 
     <string name="notification_unread_notified_messages_in_room">%1$s in %2$s</string>
 
@@ -932,7 +925,7 @@ Unbekannte Geräte:</string>
     <string name="settings_notification_privacy_message_content_not_shown">• Benachrichtigungen werden <b>den Nachrichteninhalt nicht anzeigen</b></string>
 
     <string name="startup_notification_privacy_title">Benachrichtungs-Datenschutz</string>
-    <string name="startup_notification_privacy_message">Riot.im kann im Hintergrund laufen um deine Benachrichtigungen sicher und privat zu verwalten (dies kann den Energieverbrauch beeinflussen).</string>
+    <string name="startup_notification_privacy_message">Riot.im kann im Hintergrund laufen um deine Benachrichtigungen sicher und privat zu verwalten. Dies kann den Energieverbrauch beeinflussen.</string>
     <string name="startup_notification_privacy_button_grant">Berechtigung gewähren</string>
     <string name="startup_notification_privacy_button_other">Wähle eine andere Option</string>
 
@@ -966,11 +959,11 @@ Die Sichtbarkeit deiner Nachrichten ist ähnlich zu E-Mails: Wenn wir deine Nach
     <string name="deactivate_account_prompt_password">Um fortzufahren, bitte Password eingeben:</string>
     <string name="deactivate_account_submit">Account deaktivieren</string>
 
-<string name="dialog_title_third_party_licences">Drittanbieter-Lizenzen</string>
+    <string name="dialog_title_third_party_licences">Drittanbieter-Lizenzen</string>
 
     <string name="download">Download</string>
     <string name="speak">Sprechen</string>
-    <string name="clear">Löschen</string>
+    <string name="clear">Leeren</string>
     <string name="e2e_re_request_encryption_key">Verschlüsselungsschlüssel von deinen anderen Geräten <u>erneut anfragen</u>.</string>
 
     <string name="e2e_re_request_encryption_key_sent">Schlüsselanfrage gesendet.</string>
@@ -980,16 +973,16 @@ Die Sichtbarkeit deiner Nachrichten ist ähnlich zu E-Mails: Wenn wir deine Nach
 
     <string name="lock_screen_hint">Hier tippen…</string>
 
-    <string name="option_send_voice">Sende Sprache</string>
+    <string name="option_send_voice">Sprachnachricht senden</string>
 
     <string name="go_on_with">fortfahren mit…</string>
     <string name="error_no_external_application_found">Es wurde keine externe Anwendung gefunden, um diese Aktion auszuführen.</string>
 
-    <string name="settings_labs_enable_send_voice">Sprachnachrichten (erfordert eine externe Anwendung um Sprachnachrichten aufzuzeichnen)</string>
+    <string name="settings_labs_enable_send_voice">Sende Sprachnachrichten</string>
 
     <string name="error_empty_field_your_password">Bitte gib dein Passwort ein.</string>
 
-<string name="send_bug_report_description_in_english">Wenn möglich, beschreibe bitte in Englisch.</string>
+    <string name="send_bug_report_description_in_english">Wenn möglich, beschreibe bitte in Englisch.</string>
     <string name="room_message_placeholder_reply_to_encrypted">Sende verschlüsselte Antwort…</string>
     <string name="room_message_placeholder_reply_to_not_encrypted">Sende unverschlüsselte Antwort…</string>
     <string name="settings_preview_media_before_sending">Zeige Medien vor dem Senden</string>
@@ -1016,26 +1009,26 @@ Die Sichtbarkeit deiner Nachrichten ist ähnlich zu E-Mails: Wenn wir deine Nach
     <string name="room_tombstone_continuation_description">Dieser Raum ist die Fortsetzung einer anderen Konversation</string>
     <string name="room_tombstone_predecessor_link">Klicke hier um die älteren Nachrichten zu sehen</string>
 
-<string name="room_participants_action_unignore_prompt">Zeige alle Nachrichten dieses Benutzers?
+    <string name="room_participants_action_unignore_prompt">Zeige alle Nachrichten dieses Benutzers?
 
 Beachte: Diese Aktion wird die App neu starten und einige Zeit brauchen.</string>
     <string name="missing_permissions_error">Nicht berechtigt diese Aktion durchzuführen.</string>
     <plurals name="format_time_s">
-	<item quantity="one">1s</item>
-	<item quantity="other">%ds</item>
-</plurals>
+        <item quantity="one">1s</item>
+        <item quantity="other">%ds</item>
+    </plurals>
     <plurals name="format_time_m">
-	<item quantity="one">1m</item>
-	<item quantity="other">%dm</item>
-</plurals>
+        <item quantity="one">1m</item>
+        <item quantity="other">%dm</item>
+    </plurals>
     <plurals name="format_time_h">
-	<item quantity="one">1h</item>
-	<item quantity="other">%dh</item>
-</plurals>
+        <item quantity="one">1h</item>
+        <item quantity="other">%dh</item>
+    </plurals>
     <plurals name="format_time_d">
-	<item quantity="one">1d</item>
-	<item quantity="other">%dd</item>
-</plurals>
+        <item quantity="one">1d</item>
+        <item quantity="other">%dd</item>
+    </plurals>
 
     <string name="room_participants_now">Jetzt %1$s</string>
     <string name="room_participants_ago">%1$s vor %2$s</string>
@@ -1045,18 +1038,18 @@ Beachte: Diese Aktion wird die App neu starten und einige Zeit brauchen.</string
     <string name="room_participants_invite_join_names_combined">%1$s %2$s</string>
 
     <plurals name="room_details_selected">
-	<item quantity="one">1 ausgewählt</item>
-	<item quantity="other">%d ausgewählt</item>
-</plurals>
+        <item quantity="one">1 ausgewählt</item>
+        <item quantity="other">%d ausgewählt</item>
+    </plurals>
     <plurals name="group_members">
-	<item quantity="one">1 Mitglied</item>
-	<item quantity="other">%d Mitglieder</item>
-</plurals>
+        <item quantity="one">1 Mitglied</item>
+        <item quantity="other">%d Mitglieder</item>
+    </plurals>
 
     <plurals name="group_rooms">
-	<item quantity="one">1 Raum</item>
-	<item quantity="other">%d Räume</item>
-</plurals>
+        <item quantity="one">1 Raum</item>
+        <item quantity="other">%d Räume</item>
+    </plurals>
     <string name="system_alerts_header">Systembenachrichtigungen</string>
 
     <string name="resource_limit_exceeded_title">Ressourcen-Limit</string>
@@ -1073,15 +1066,15 @@ Beachte: Diese Aktion wird die App neu starten und einige Zeit brauchen.</string
     <string name="resource_limit_soft_contact">Bitte %s um dieses Limit anheben zu lassen.</string>
     <string name="resource_limit_hard_contact">Bitte %s um diesen Dienst weiter zu nutzen.</string>
 
-<string name="dialog_title_error">Error</string>
+    <string name="dialog_title_error">Error</string>
 
     <string name="settings_lazy_loading_title">Raummitglieder nachladen</string>
-    <string name="settings_lazy_loading_description">Verbessere Performanz, indem Raum-Mitglieder erst beim ersten Ansehen geladen werden</string>
+    <string name="settings_lazy_loading_description">Verbessere Performanz, indem Raum-Mitglieder erst beim ersten Ansehen geladen werden.</string>
     <string name="error_lazy_loading_not_supported_by_home_server">Dein Heimserver unterstützt nachladen von Raummitgliedern noch nicht. Versuche es später.</string>
 
     <string name="unknown_error">Entschuldige, ein Fehler trat auf</string>
 
-<string name="room_sliding_menu_version_x">Version %s</string>
+    <string name="room_sliding_menu_version_x">Version %s</string>
     <string name="status_theme">Status.im-Thema</string>
 
     <string name="encryption_export_notice">Bitte eine Passphrase erstellen um exportierte Schlüssel zu verschlüsseln. Du musst dieselbe Passphrase eingeben um die Schlüssel importieren zu können.</string>
@@ -1089,5 +1082,47 @@ Beachte: Diese Aktion wird die App neu starten und einige Zeit brauchen.</string
     <string name="encryption_export_passphrase_dont_match">Passphrasen müssen übereinstimmen</string>
     <string name="merged_events_expand">aufklappen</string>
     <string name="merged_events_collapse">Zusammenklappen</string>
+
+    <string name="settings_info_area_show">Zeige Infobereich</string>
+    <string name="show_info_area_always">Immer</string>
+    <string name="show_info_area_messages_and_errors">Für Nachrichten und Fehler</string>
+    <string name="show_info_area_only_errors">Nur für Fehler</string>
+
+    <string name="generic_label">%1$s:</string>
+    <string name="generic_label_and_value">%1$s: %2$s</string>
+    <string name="plus_x">+%d</string>
+    <string name="x_plus">%d+</string>
+
+    <string name="call_anyway">Trotzdem anrufen</string>
+    <string name="room_participants_action_kick">Kicken</string>
+    <plurals name="room_participants_kick_prompt_msg">
+        <item quantity="one">Bist du sicher, dass du diesen Benutzer aus diesem Chat kicken möchtest?</item>
+        <item quantity="other">Bist du sicher, dass du diese Benutzer aus diesem Chat kicken möchtest?</item>
+    </plurals>
+    <string name="reason_hint">Grund</string>
+
+    <string name="settings_inline_url_preview_summary">Im Chat Linkvorschau aktivieren, wenn dein Heimserver diese Funktion unterstützt.</string>
+    <string name="settings_send_typing_notifs">Sende Schreibbenachrichtigungen</string>
+    <string name="settings_send_typing_notifs_summary">Lasse andere Benutzer wissen, dass du tippst.</string>
+    <string name="settings_send_markdown">Markdown-Formatierung</string>
+    <string name="settings_send_markdown_summary">Formatiere Nachrichten mittels Markdown-Syntax bevor sie gesendet werden. Dies erlaubt erweiterte Formatierungen wie * um kursiven Text anzuzeigen.</string>
+    <string name="settings_show_read_receipts">Zeige Lesebestätigungen</string>
+    <string name="settings_show_read_receipts_summary">Klicke auf die Lesebestätigungen für eine detailliertere Liste.</string>
+    <string name="settings_show_join_leave_messages_summary">Einladungen, Kicks und Bans bleiben unberührt.</string>
+    <string name="settings_password">Passwort</string>
+    <string name="settings_labs_native_camera_summary">Starte die System-Kamera anstelle der angepassten Kamera.</string>
+    <string name="settings_labs_enable_send_voice_summary">Diese Option erfordert eine externe Anwendung um Sprachnachrichten aufzuzeichnen.</string>
+
+    <string name="command_problem_with_parameters">Das Kommando \"%s\" braucht mehr Parameter oder einige Parameter sind inkorrekt.</string>
+    <string name="markdown_has_been_enabled">Markdown wurde aktiviert.</string>
+    <string name="markdown_has_been_disabled">Markdown wurde deaktiviert.</string>
+
+    <string name="settings_show_join_leave_messages">Zeige Betretens- und Verlassens-Ereignisse</string>
+    <string name="settings_show_avatar_display_name_changes_messages">Zeige Konto-Ereignisse</string>
+    <string name="settings_show_avatar_display_name_changes_messages_summary">Enthält Änderungen des Profilbilds und Anzeigenamens.</string>
+    <string name="settings_call_category">Anrufe</string>
+    <string name="settings_call_ringtone_use_riot_ringtone">Nutze den Standard-Klingelton von Riot für eingehende Anrufe</string>
+    <string name="settings_call_ringtone_title">Klingelton für eingehende Anrufe</string>
+    <string name="settings_call_ringtone_dialog_title">Wähle Klingelton für Anrufe:</string>
 
 </resources>
