@@ -34,10 +34,12 @@ class VectorAvatarViewerActivity : MXCActionBarActivity() {
     override fun initUiAndData() {
         super.initUiAndData()
 
-        getSession(intent)?.let {
-            it.mediaCache.loadBitmap(it.homeServerConfig,
+        val session = getSession(intent)
+
+        if (session != null) {
+            session.mediaCache.loadBitmap(session.homeServerConfig,
                     photoView, intent.getStringExtra(EXTRA_AVATAR_URL), 0, ExifInterface.ORIENTATION_UNDEFINED, null, null)
-        } ?: run {
+        } else {
             finish()
         }
     }
