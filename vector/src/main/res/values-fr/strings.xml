@@ -1085,4 +1085,10 @@ Veuillez noter que cette action redémarrera l\'application et pourra prendre un
     <string name="settings_call_ringtone_title">Sonnerie d\'appel entrant</string>
     <string name="settings_call_ringtone_dialog_title">Sélectionner la sonnerie pour les appels :</string>
 
-</resources>
+<string name="accept">Accepter</string>
+
+    <string name="auth_accept_policies">Veuillez lire et accepter les politiques de ce serveur d\'accueil :</string>
+
+    <string name="encryption_import_room_keys_success">%1$d/%2$d clé(s) importée(s) avec succès.</string>
+
+    </resources>

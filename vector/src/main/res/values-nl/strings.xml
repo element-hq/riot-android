@@ -101,7 +101,7 @@ Selecteer exporteren om de versleutelingssleutels op te slaan voordat je uitlogt
     <string name="send_bug_report_include_logs">Logboek versturen</string>
     <string name="send_bug_report_include_crash_logs">Crash logboek versturen</string>
     <string name="send_bug_report_include_screenshot">Schermafbeelding versturen</string>
-    <string name="send_bug_report">Foutmelding</string>
+    <string name="send_bug_report">Fout melden</string>
     <string name="send_bug_report_description">Beschrijf de fout. Wat deed je? Wat verwachtte je dat er zou gebeuren? Wat gebeurde er echt?</string>
     <string name="send_bug_report_placeholder">Beschrijf hier je probleem</string>
     <string name="send_bug_report_logs_description">Om het probleem te kunnen diagnosticeren, worden logboeken van deze applicatie met de foutmelding verstuurd. Deze foutmelding, inclusief de logboeken en schermafbeelding, zullen niet publiekelijk zichtbaar zijn. Als je liever alleen de bovenstaande tekst verstuurt, haal dan het vinkje weg:</string>
@@ -366,7 +366,7 @@ Versleutelde berichten zullen nog niet zichtbaar zijn op programma\'s die geen v
     <string name="ssl_cert_new_account_expl">Als de serverbeheerder heeft gezegd dat dit normaal is, wees er dan zeker van dat het vingerafdruk hieronder overeenkomt met de door de beheerder verschafde vingerafdruk.</string>
     <string name="ssl_unexpected_existing_expl">Het certificaat is veranderd van één dat was vertrouwd bij je telefoon tot een ander Dit is HEEL ONGEBRUIKELIJK. Het is aangeraden om dit nieuwe certificaat NIET TE ACCEPTEREN.</string>
     <string name="ssl_expected_existing_expl">Het certificaat is veranderd van een vertrouwd certificaat naar een certificaat dat niet vertrouwd is. De server heeft misschien zijn certificaat vernieuwd. Contacteer de serverbeheerder voor het verwachte vingerafdruk.</string>
-    <string name="ssl_only_accept">Accepteer ALLEEN het certificaat als de serverbeheerder een vingerafdruk heeft gepubliceerd dat overeenkomt met degene hierboven.</string>
+    <string name="ssl_only_accept">Accepteer het certificaat alleen als de serverbeheerder een vingerafdruk heeft gepubliceerd die overeenkomt met degene hierboven.</string>
 
     <!-- Room Details -->
     <string name="room_details_title">Ruimte Details</string>
@@ -451,7 +451,7 @@ Let op: deze actie zal de app opnieuw opstarten, en kan enige tijd kosten.</stri
     <string name="settings_background_sync">Synchronisatie in de achtergrond</string>
     <string name="settings_enable_background_sync">Achtergrond sync aanzetten</string>
     <string name="settings_set_sync_timeout">Sync verzoek is verlopen</string>
-    <string name="settings_set_sync_delay">Pauze tussen twee sync verzoeken</string>
+    <string name="settings_set_sync_delay">Pauze tussen elk verzoek</string>
     <string name="settings_second">seconde</string>
     <string name="settings_seconds">seconden</string>
 
@@ -692,7 +692,7 @@ Je kan het nu, of later, doen vanuit de programma-instellingen.</string>
     <string name="settings_clear_media_cache">Media cache vrijmaken</string>
     <string name="settings_keep_media">Media behouden</string>
 
-    <string name="settings_always_show_timestamps">Altijd tijden van berichten weergeven</string>
+    <string name="settings_always_show_timestamps">Tijd weergeven voor alle berichten</string>
     <string name="settings_data_save_mode">Data bespaarmodus</string>
 
     <string name="settings_user_interface">Gebruikersinterface</string>
@@ -724,7 +724,7 @@ Je kan het nu, of later, doen vanuit de programma-instellingen.</string>
     <string name="login_mobile_device">Mobiel</string>
 
     <string name="settings_notification_ringtone">Notificatie geluid</string>
-    <string name="settings_12_24_timestamps">Tijdsaanduidingen in 12 uur formaat weergeven (bv. 2:30pm)</string>
+    <string name="settings_12_24_timestamps">Tijdsaanduidingen in 12-uursformaat weergeven</string>
 
     <string name="widget_no_power_to_manage">Je hebt permissie nodig om widgets in deze ruimte te beheren</string>
     <string name="widget_creation_failure">Het maken van de widget is niet goed gegaan</string>
@@ -839,7 +839,7 @@ Je kan het nu, of later, doen vanuit de programma-instellingen.</string>
     <string name="room_settings_mute">Dempen</string>
     <string name="room_settings_add_homescreen_shortcut">Thuisscherm snelkoppeling toevoegen</string>
 
-    <string name="settings_inline_url_preview">Inline URL voorvertoning standaard aanzetten</string>
+    <string name="settings_inline_url_preview">Inline URL-voorvertoning</string>
     <string name="settings_vibrate_on_mention">Trillen bij vermeldingen</string>
 
     <string name="settings_flair">Badge</string>
@@ -1060,4 +1060,35 @@ Let op: deze actie zal de app opnieuw opstarten, en kan enige tijd kosten.</stri
 
     <string name="dialog_title_error">Foutmelding</string>
 
-</resources>
+<string name="status_theme">Status.im-thema</string>
+
+    <string name="call_anyway">Toch bellen</string>
+    <string name="accept">Accepteren</string>
+
+    <string name="auth_accept_policies">Lees en accepteer het beleid van deze thuisserver:</string>
+
+    <string name="settings_call_category">Oproepen</string>
+    <string name="settings_call_ringtone_use_riot_ringtone">Gebruik de standaardbeltoon van Riot voor binnenkomende oproepen</string>
+    <string name="settings_call_ringtone_title">Beltoon voor inkomende oproepen</string>
+    <string name="settings_call_ringtone_dialog_title">Selecteer beltoon voor oproepen:</string>
+
+    <string name="room_participants_action_kick">Eruit sturen</string>
+    <plurals name="room_participants_kick_prompt_msg">
+	<item quantity="one">Weet je zeker dat je deze gebruiker dit gesprek uit wil sturen?</item>
+	<item quantity="other">Weet je zeker dat je deze gebruikers dit gesprek uit wil sturen?</item>
+</plurals>
+    <string name="reason_hint">Reden</string>
+
+    <string name="room_sliding_menu_version_x">Versie %s</string>
+    <string name="settings_inline_url_preview_summary">Links voorvertonen in het gesprek (als je thuisserver deze functie ondersteunt).</string>
+    <string name="settings_send_typing_notifs">Stuur typnotificaties</string>
+    <string name="settings_send_typing_notifs_summary">Laat andere gebruikers weten dat je aan het typen bent.</string>
+    <string name="settings_send_markdown">Markdown-opmaak</string>
+    <string name="settings_send_markdown_summary">Maak berichten op in Markdown-syntax voordat ze verstuurd worden. Hiermee kun je uitgebreide opmaak gebruiken, zoals sterretjes voor schuingedrukte tekst.</string>
+    <string name="settings_show_read_receipts">Laat leesbevestigingen zien</string>
+    <string name="settings_show_read_receipts_summary">Klik op de leesbevestigingen voor een uitgebreide lijst.</string>
+    <string name="settings_show_join_leave_messages">Laat toetredingen en verlatingen zien</string>
+    <string name="settings_show_join_leave_messages_summary">Meldingen over uitnodigen, eruit sturen en verbannen worden altijd weergegeven.</string>
+    <string name="settings_show_avatar_display_name_changes_messages">Laat accountgebeurtenissen zien</string>
+    <string name="settings_show_avatar_display_name_changes_messages_summary">Omvat veranderingen in avatar en weergavenaam.</string>
+    </resources>
