@@ -207,6 +207,7 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="im.vector.activity.VectorRoomActivity" />
         </activity>
+        <activity android:name=".activity.VectorAvatarViewerActivity" />
         <activity
             android:name=".activity.LockScreenActivity"
             android:clearTaskOnLaunch="true"

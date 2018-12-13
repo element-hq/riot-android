@@ -19,8 +19,6 @@ package im.vector.activity;
 
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.media.ExifInterface;
-import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AlertDialog;
@@ -89,8 +87,6 @@ public class VectorMemberDetailsActivity extends MXCActionBarActivity implements
 
     public static final String RESULT_MENTION_ID = "RESULT_MENTION_ID";
 
-    private static final String AVATAR_FULLSCREEN_MODE = "AVATAR_FULLSCREEN_MODE";
-
     // list view items associated actions
     private static final int ITEM_ACTION_INVITE = 0;
     private static final int ITEM_ACTION_LEAVE = 1;
@@ -133,12 +129,6 @@ public class VectorMemberDetailsActivity extends MXCActionBarActivity implements
     TextView mMemberNameTextView;
     @BindView(R.id.member_details_presence)
     TextView mPresenceTextView;
-
-    // full screen avatar
-    @BindView(R.id.member_details_fullscreen_avatar_layout)
-    View mFullMemberAvatarLayout;
-    @BindView(R.id.member_details_fullscreen_avatar_image_view)
-    ImageView mFullMemberAvatarImageView;
 
     // listview
     @BindView(R.id.member_details_actions_list_view)
@@ -1256,20 +1246,6 @@ public class VectorMemberDetailsActivity extends MXCActionBarActivity implements
                 }
             });
 
-            mFullMemberAvatarImageView.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    hideFullScreenAvatar();
-                }
-            });
-
-            mFullMemberAvatarLayout.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    hideFullScreenAvatar();
-                }
-            });
-
             // update the UI
             updateUi();
 
@@ -1279,10 +1255,6 @@ public class VectorMemberDetailsActivity extends MXCActionBarActivity implements
                 public void onSuccess(Boolean info) {
                     // update the UI
                     updateUi();
-
-                    if (!isFirstCreation() && getSavedInstanceState().getBoolean(AVATAR_FULLSCREEN_MODE, false)) {
-                        displayFullScreenAvatar();
-                    }
                 }
             });
 
@@ -1301,10 +1273,7 @@ public class VectorMemberDetailsActivity extends MXCActionBarActivity implements
     @Override
     public boolean onKeyDown(int keyCode, KeyEvent event) {
         if ((KeyEvent.KEYCODE_BACK == keyCode)) {
-            if (View.VISIBLE == mFullMemberAvatarLayout.getVisibility()) {
-                hideFullScreenAvatar();
-                return true;
-            } else if ((View.VISIBLE == mDevicesListView.getVisibility())) {
+            if ((View.VISIBLE == mDevicesListView.getVisibility())) {
                 setScreenDevicesListVisibility(View.GONE);
                 return true;
             }
@@ -1313,29 +1282,6 @@ public class VectorMemberDetailsActivity extends MXCActionBarActivity implements
         return super.onKeyDown(keyCode, event);
     }
 
-
-    @Override
-    public void onSaveInstanceState(Bundle savedInstanceState) {
-        // Always call the superclass so it can save the view hierarchy state
-        super.onSaveInstanceState(savedInstanceState);
-        savedInstanceState.putBoolean(AVATAR_FULLSCREEN_MODE, View.VISIBLE == mFullMemberAvatarLayout.getVisibility());
-    }
-
-    @Override
-    protected void onRestoreInstanceState(Bundle savedInstanceState) {
-        super.onRestoreInstanceState(savedInstanceState);
-
-        if (savedInstanceState.getBoolean(AVATAR_FULLSCREEN_MODE, false)) {
-            displayFullScreenAvatar();
-        }
-    }
-
-    /**
-     * Hide the fullscreen avatar.
-     */
-    private void hideFullScreenAvatar() {
-        mFullMemberAvatarLayout.setVisibility(View.GONE);
-    }
 
     /**
      * Display the user/member avatar in fullscreen.
@@ -1359,9 +1305,7 @@ public class VectorMemberDetailsActivity extends MXCActionBarActivity implements
         }
 
         if (!TextUtils.isEmpty(avatarUrl)) {
-            mFullMemberAvatarLayout.setVisibility(View.VISIBLE);
-            mSession.getMediaCache().loadBitmap(mSession.getHomeServerConfig(),
-                    mFullMemberAvatarImageView, avatarUrl, 0, ExifInterface.ORIENTATION_UNDEFINED, null, null);
+            startActivity(VectorAvatarViewerActivity.Companion.getIntent(this, mSession.getMyUserId(), avatarUrl));
         }
     }
 
