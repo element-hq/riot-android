@@ -1044,10 +1044,10 @@ Kini parasysh që ky veprim do të sjellë rinisjen e aplikacionit dhe mund të 
     <string name="historical_placeholder">Kërkoni për të dikurshme</string>
 
     <string name="settings_flair">Simoble</string>
-<string name="accept">Pranoje</string>
+    <string name="accept">Pranoje</string>
 
     <string name="auth_accept_policies">Ju lutemi, merrni në shqyrtim dhe pranoni rregullat e këtij shërbyesi Home:</string>
 
     <string name="encryption_import_room_keys_success">%1$d/%2$d kyç(e) u importuan me sukses.</string>
 
-    </resources>
+</resources>

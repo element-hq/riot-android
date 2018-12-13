@@ -1060,7 +1060,7 @@ Let op: deze actie zal de app opnieuw opstarten, en kan enige tijd kosten.</stri
 
     <string name="dialog_title_error">Foutmelding</string>
 
-<string name="status_theme">Status.im-thema</string>
+    <string name="status_theme">Status.im-thema</string>
 
     <string name="call_anyway">Toch bellen</string>
     <string name="accept">Accepteren</string>
@@ -1074,9 +1074,9 @@ Let op: deze actie zal de app opnieuw opstarten, en kan enige tijd kosten.</stri
 
     <string name="room_participants_action_kick">Eruit sturen</string>
     <plurals name="room_participants_kick_prompt_msg">
-	<item quantity="one">Weet je zeker dat je deze gebruiker dit gesprek uit wil sturen?</item>
-	<item quantity="other">Weet je zeker dat je deze gebruikers dit gesprek uit wil sturen?</item>
-</plurals>
+        <item quantity="one">Weet je zeker dat je deze gebruiker dit gesprek uit wil sturen?</item>
+        <item quantity="other">Weet je zeker dat je deze gebruikers dit gesprek uit wil sturen?</item>
+    </plurals>
     <string name="reason_hint">Reden</string>
 
     <string name="room_sliding_menu_version_x">Versie %s</string>
@@ -1091,4 +1091,4 @@ Let op: deze actie zal de app opnieuw opstarten, en kan enige tijd kosten.</stri
     <string name="settings_show_join_leave_messages_summary">Meldingen over uitnodigen, eruit sturen en verbannen worden altijd weergegeven.</string>
     <string name="settings_show_avatar_display_name_changes_messages">Laat accountgebeurtenissen zien</string>
     <string name="settings_show_avatar_display_name_changes_messages_summary">Omvat veranderingen in avatar en weergavenaam.</string>
-    </resources>
+</resources>
