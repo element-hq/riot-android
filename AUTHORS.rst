@@ -45,3 +45,7 @@ Isa Cichon <isa4 at posteo.net>
 
 Nathan van Beelen <nathan at vanbeelen.org>
  * PR #1742: Add a media previewer
+
+Ville Ranki <ville.ranki at iki.fi>
+ * Display contact id with contact info
+

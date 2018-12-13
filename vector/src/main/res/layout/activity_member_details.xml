@@ -63,12 +63,39 @@
                 android:textColor="@android:color/white"
                 android:textSize="20sp" />
 
+            <!-- member id -->
+            <TextView
+                android:id="@+id/member_details_id"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/member_details_name"
+                android:layout_marginBottom="16dp"
+                android:gravity="center_horizontal"
+                android:ellipsize="end"
+                android:maxLines="1"
+                android:textColor="?attr/vctr_default_text_light_color"
+                android:textSize="18sp" />
+            <!-- member id copy button -->
+            <TextView
+                android:id="@+id/member_details_id_copy"
+                android:text="@string/copy_icon"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/member_details_name"
+                android:layout_alignParentRight="true"
+                android:layout_alignParentEnd="true"
+                android:paddingRight="10dp"
+                android:paddingEnd="10dp"
+                android:maxLines="1"
+                android:textColor="@android:color/white"
+                android:textSize="20sp" />
+
             <!-- the member presence -->
             <TextView
                 android:id="@+id/member_details_presence"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_below="@id/member_details_name"
+                android:layout_below="@id/member_details_id"
                 android:layout_marginBottom="16dp"
                 android:ellipsize="end"
                 android:gravity="center_horizontal"

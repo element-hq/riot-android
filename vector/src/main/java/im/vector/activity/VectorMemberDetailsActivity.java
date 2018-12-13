@@ -108,7 +108,6 @@ public class VectorMemberDetailsActivity extends MXCActionBarActivity implements
     private static final int ITEM_ACTION_START_VIDEO_CALL = 13;
     private static final int ITEM_ACTION_MENTION = 14;
     private static final int ITEM_ACTION_DEVICES = 15;
-
     private static final int VECTOR_ROOM_MODERATOR_LEVEL = 50;
     private static final int VECTOR_ROOM_ADMIN_LEVEL = 100;
 
@@ -131,6 +130,8 @@ public class VectorMemberDetailsActivity extends MXCActionBarActivity implements
     ImageView mMemberAvatarBadgeImageView;
     @BindView(R.id.member_details_name)
     TextView mMemberNameTextView;
+    @BindView(R.id.member_details_id)
+    TextView mMemberIdTextView;
     @BindView(R.id.member_details_presence)
     TextView mPresenceTextView;
 
@@ -1223,29 +1224,20 @@ public class VectorMemberDetailsActivity extends MXCActionBarActivity implements
             });
 
 
-            // when clicking on the username
-            // switch member name <-> member id
-            mMemberNameTextView.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    User user = mSession.getDataHandler().getUser(mMemberId);
-
-                    if (TextUtils.equals(mMemberNameTextView.getText(), mMemberId)) {
-                        if ((null != user) && !TextUtils.isEmpty(user.displayname)) {
-                            mMemberNameTextView.setText(user.displayname);
-                        }
-                    } else {
-                        mMemberNameTextView.setText(mMemberId);
-                    }
-                }
-            });
-
             // long tap : copy to the clipboard
             mMemberNameTextView.setOnLongClickListener(new View.OnLongClickListener() {
                 @Override
                 public boolean onLongClick(View v) {
                     SystemUtilsKt.copyToClipboard(VectorMemberDetailsActivity.this, mMemberNameTextView.getText());
                     return true;
+                }
+            });
+
+            // copy id to the clipboard on click
+            mMemberIdTextView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    SystemUtilsKt.copyToClipboard(VectorMemberDetailsActivity.this, mMemberIdTextView.getText());
                 }
             });
 
@@ -1478,9 +1470,11 @@ public class VectorMemberDetailsActivity extends MXCActionBarActivity implements
         if (null != mMemberNameTextView) {
             if ((null != mRoomMember) && !TextUtils.isEmpty(mRoomMember.displayname)) {
                 mMemberNameTextView.setText(mRoomMember.displayname);
+                mMemberIdTextView.setText(mRoomMember.getUserId());
             } else {
                 refreshUser();
                 mMemberNameTextView.setText(mUser.displayname);
+                mMemberIdTextView.setText(mUser.user_id);
             }
 
             // do not display the activity name in the action bar

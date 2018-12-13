@@ -40,6 +40,7 @@
     <string name="leave">Leave</string>
     <string name="send">Send</string>
     <string name="copy">Copy</string>
+    <string name="copy_icon">⎘</string>
     <string name="resend">Resend</string>
     <string name="redact">Redact</string>
     <string name="quote">Quote</string>

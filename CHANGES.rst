@@ -8,7 +8,7 @@ Features:
  -
 
 Improvements:
- -
+ - Display contact id with other contact info
 
 Other changes:
  -
