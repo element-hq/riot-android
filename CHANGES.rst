@@ -1,11 +1,8 @@
-Changes in Riot 0.8.20 (2018-XX-XX)
+Changes in Riot 0.8.20 (2018-12-13)
 ===================================================
 
 MatrixSdk:
- - Upgrade to version 0.X.Y.
-
-Features:
- -
+ - Upgrade to version 0.9.14.
 
 Improvements:
  - Remove double negations from settings and update descriptions (#2723)
@@ -17,19 +14,10 @@ Improvements:
  - Make User Agreement part of the registration flow (#2442)
  - Fix several color issue on Status theme and prepare rework some styles.
 
-Other changes:
- -
-
 Bugfix:
  - Use same "Call Anyway" string from iOS (#2695)
  - Improve `/markdown` command (#2673)
  - Display thumbnail for encrypted files without a remote thumbnail (#2734)
-
-Translations:
- -
-
-Build:
- -
 
 Changes in Riot 0.8.19 (2018-11-06)
 ===================================================
@@ -1106,4 +1094,33 @@ Changes in Vector 0.2.0 (2016-04-14)
 
  * First official release.
 
+
+=======================================================
++        TEMPLATE WHEN PREPARING A NEW RELEASE        +
+=======================================================
+
+
+Changes in Riot 0.8.XX (2018-XX-XX)
+===================================================
+
+MatrixSdk:
+ - Upgrade to version 0.X.Y.
+
+Features:
+ -
+
+Improvements:
+ -
+
+Other changes:
+ -
+
+Bugfix:
+ -
+
+Translations:
+ -
+
+Build:
+ -
 
