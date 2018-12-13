@@ -124,7 +124,7 @@ public class VectorMemberDetailsActivity extends MXCActionBarActivity implements
     private VectorMemberDetailsDevicesAdapter mDevicesListViewAdapter;
 
     // UI widgets
-    @BindView(R.id.avatar_img)
+    @BindView(R.id.member_detail_avatar)
     ImageView mMemberAvatarImageView;
     @BindView(R.id.member_avatar_badge)
     ImageView mMemberAvatarBadgeImageView;

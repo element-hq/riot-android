@@ -658,7 +658,7 @@ public class VectorRoomActivity extends MXCActionBarActivity implements
         }
 
         //setDragEdge(SwipeBackLayout.DragEdge.LEFT);
-        mActionBarHeaderRoomAvatar = mRoomHeaderView.findViewById(R.id.avatar_img);
+        mActionBarHeaderRoomAvatar = mRoomHeaderView.findViewById(R.id.room_header_avatar);
 
         // hide the header room as soon as the bottom layout (text edit zone) is touched
         mBottomLayout.setOnTouchListener(new View.OnTouchListener() {
@@ -963,11 +963,7 @@ public class VectorRoomActivity extends MXCActionBarActivity implements
             }
         });
 
-        View avatarLayout = findViewById(R.id.room_self_avatar);
-
-        if (null != avatarLayout) {
-            mAvatarImageView = avatarLayout.findViewById(R.id.avatar_img);
-        }
+        mAvatarImageView = findViewById(R.id.room_self_avatar);
 
         refreshSelfAvatar();
 
@@ -3803,7 +3799,7 @@ public class VectorRoomActivity extends MXCActionBarActivity implements
                 .show();
     }
 
-    @OnClick(R.id.room_avatar)
+    @OnClick(R.id.room_header_avatar)
     void onRoomAvatarClick() {
         // tap on the expanded room avatar
         // sanity checks : reported by GA

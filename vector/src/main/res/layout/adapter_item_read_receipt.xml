@@ -7,21 +7,20 @@
     android:layout_height="72dp"
     android:background="?attr/vctr_riot_primary_background_color">
 
-    <!-- Avatar -->
-    <FrameLayout
+    <!-- avatar image -->
+    <im.vector.view.VectorCircularImageView
         android:id="@+id/read_receipt_user_avatar"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="@dimen/chat_avatar_size"
+        android:layout_height="@dimen/chat_avatar_size"
         android:layout_centerVertical="true"
         android:layout_marginStart="8dp"
         android:layout_marginLeft="8dp"
+        android:adjustViewBounds="true"
+        android:scaleType="centerCrop"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
-
-        <include layout="@layout/round_avatar_vector" />
-
-    </FrameLayout>
+        app:layout_constraintTop_toTopOf="parent"
+        tools:src="@tools:sample/avatars" />
 
     <!-- keep singleLine="true" because maxLines="1" truncation is not the expected one.-->
     <TextView

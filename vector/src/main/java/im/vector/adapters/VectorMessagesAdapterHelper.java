@@ -231,9 +231,9 @@ class VectorMessagesAdapterHelper {
 
             List<ImageView> imageViews = new ArrayList<>();
 
-            imageViews.add((ImageView) (groupFlairView.findViewById(R.id.message_avatar_group_1).findViewById(R.id.avatar_img)));
-            imageViews.add((ImageView) (groupFlairView.findViewById(R.id.message_avatar_group_2).findViewById(R.id.avatar_img)));
-            imageViews.add((ImageView) (groupFlairView.findViewById(R.id.message_avatar_group_3).findViewById(R.id.avatar_img)));
+            imageViews.add(groupFlairView.findViewById(R.id.message_avatar_group_1));
+            imageViews.add(groupFlairView.findViewById(R.id.message_avatar_group_2));
+            imageViews.add(groupFlairView.findViewById(R.id.message_avatar_group_3));
 
             TextView moreText = groupFlairView.findViewById(R.id.message_more_than_expected);
 
@@ -489,13 +489,12 @@ class VectorMessagesAdapterHelper {
      */
     View setSenderAvatar(View convertView, MessageRow row, boolean isMergedView) {
         Event event = row.getEvent();
-        View avatarLayoutView = convertView.findViewById(R.id.messagesAdapter_roundAvatar);
+        ImageView avatarView = convertView.findViewById(R.id.messagesAdapter_avatar);
 
-        if (null != avatarLayoutView) {
+        if (null != avatarView) {
             final String userId = event.getSender();
 
-            avatarLayoutView.setClickable(true);
-            avatarLayoutView.setOnLongClickListener(new View.OnLongClickListener() {
+            avatarView.setOnLongClickListener(new View.OnLongClickListener() {
                 @Override
                 public boolean onLongClick(View v) {
                     return (null != mEventsListener) && mEventsListener.onAvatarLongClick(userId);
@@ -503,7 +502,7 @@ class VectorMessagesAdapterHelper {
             });
 
             // click on the avatar opens the details page
-            avatarLayoutView.setOnClickListener(new View.OnClickListener() {
+            avatarView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     if (null != mEventsListener) {
@@ -513,21 +512,19 @@ class VectorMessagesAdapterHelper {
             });
         }
 
-        if (null != avatarLayoutView) {
+        if (null != avatarView) {
             if (isMergedView) {
-                avatarLayoutView.setVisibility(View.INVISIBLE);
+                avatarView.setVisibility(View.INVISIBLE);
             } else {
-                avatarLayoutView.setVisibility(View.VISIBLE);
+                avatarView.setVisibility(View.VISIBLE);
 
-                ImageView avatarImageView = avatarLayoutView.findViewById(R.id.avatar_img);
+                avatarView.setTag(null);
 
-                avatarImageView.setTag(null);
-
-                loadMemberAvatar(avatarImageView, row);
+                loadMemberAvatar(avatarView, row);
             }
         }
 
-        return avatarLayoutView;
+        return avatarView;
     }
 
     /**
@@ -685,11 +682,11 @@ class VectorMessagesAdapterHelper {
 
         List<View> imageViews = new ArrayList<>();
 
-        imageViews.add(avatarsListView.findViewById(R.id.message_avatar_receipt_1).findViewById(R.id.avatar_img));
-        imageViews.add(avatarsListView.findViewById(R.id.message_avatar_receipt_2).findViewById(R.id.avatar_img));
-        imageViews.add(avatarsListView.findViewById(R.id.message_avatar_receipt_3).findViewById(R.id.avatar_img));
-        imageViews.add(avatarsListView.findViewById(R.id.message_avatar_receipt_4).findViewById(R.id.avatar_img));
-        imageViews.add(avatarsListView.findViewById(R.id.message_avatar_receipt_5).findViewById(R.id.avatar_img));
+        imageViews.add(avatarsListView.findViewById(R.id.message_avatar_receipt_1));
+        imageViews.add(avatarsListView.findViewById(R.id.message_avatar_receipt_2));
+        imageViews.add(avatarsListView.findViewById(R.id.message_avatar_receipt_3));
+        imageViews.add(avatarsListView.findViewById(R.id.message_avatar_receipt_4));
+        imageViews.add(avatarsListView.findViewById(R.id.message_avatar_receipt_5));
 
         TextView moreText = avatarsListView.findViewById(R.id.message_more_than_expected);
 

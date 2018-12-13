@@ -23,26 +23,23 @@
             android:visibility="visible">
 
             <!-- the member avatar-->
-            <RelativeLayout
-                android:id="@+id/member_avatar_container"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_centerHorizontal="true">
-
-                <include
-                    android:id="@+id/memberDetails_roundAvatar"
-                    layout="@layout/vector_large_round_avatar"
-                    android:layout_width="84dp"
-                    android:layout_height="84dp" />
-            </RelativeLayout>
+            <im.vector.view.VectorCircularImageView
+                android:id="@+id/member_detail_avatar"
+                android:layout_width="84dp"
+                android:layout_height="84dp"
+                android:layout_centerHorizontal="true"
+                android:adjustViewBounds="true"
+                android:scaleType="centerCrop"
+                android:transitionName="vector_transition_avatar"
+                tools:src="@tools:sample/avatars" />
 
             <ImageView
                 android:id="@+id/member_avatar_badge"
                 android:layout_width="24dp"
                 android:layout_height="24dp"
-                android:layout_alignTop="@id/member_avatar_container"
-                android:layout_alignEnd="@id/member_avatar_container"
-                android:layout_alignRight="@id/member_avatar_container"
+                android:layout_alignTop="@id/member_detail_avatar"
+                android:layout_alignEnd="@id/member_detail_avatar"
+                android:layout_alignRight="@id/member_detail_avatar"
                 android:layout_marginTop="-0dp"
                 android:layout_marginEnd="-7dp"
                 android:layout_marginRight="-7dp"
@@ -56,7 +53,7 @@
                 android:id="@+id/member_details_display_name"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_below="@id/member_avatar_container"
+                android:layout_below="@id/member_detail_avatar"
                 android:layout_centerHorizontal="true"
                 android:gravity="center_horizontal"
                 android:paddingLeft="10dp"

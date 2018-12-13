@@ -244,14 +244,16 @@
                 android:layout_marginStart="16dp"
                 android:layout_marginLeft="16dp">
 
-                <include
+                <im.vector.view.VectorCircularImageView
                     android:id="@+id/room_self_avatar"
-                    layout="@layout/vector_room_round_avatar"
                     android:layout_width="40dp"
                     android:layout_height="40dp"
                     android:layout_centerVertical="true"
                     android:layout_marginTop="8dp"
-                    android:layout_marginBottom="8dp" />
+                    android:layout_marginBottom="8dp"
+                    android:adjustViewBounds="true"
+                    android:scaleType="centerCrop"
+                    tools:src="@tools:sample/avatars" />
 
                 <LinearLayout
                     android:id="@+id/room_sending_message_layout"
