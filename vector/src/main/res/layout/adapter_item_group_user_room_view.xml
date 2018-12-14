@@ -15,7 +15,6 @@
         android:layout_height="@dimen/chat_avatar_size"
         android:layout_centerVertical="true"
         android:adjustViewBounds="true"
-        android:background="@color/riot_primary_background_color_light"
         android:scaleType="centerCrop"
         tools:src="@tools:sample/avatars" />
 
