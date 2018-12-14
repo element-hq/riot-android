@@ -9,6 +9,7 @@ Features:
 
 Improvements:
  - Show userId below display name in member detail screen (#2756)
+ - Clicking on a user and a room avatar opens a new screen with animation to view the avatar in full screen, with zoom capabilities (#2455)
 
 Other changes:
  -

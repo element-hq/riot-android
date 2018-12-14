@@ -14,6 +14,7 @@
         android:layout_marginTop="16dp"
         android:adjustViewBounds="true"
         android:scaleType="centerCrop"
+        android:transitionName="vector_transition_avatar"
         tools:src="@tools:sample/avatars" />
 
     <!-- keep singleLine="true" because maxLines="1" truncation is not the expected one.-->
