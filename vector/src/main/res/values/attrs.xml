@@ -89,10 +89,6 @@
 
         <!-- theses colours are requested a background cannot be set by an ?att on android < 5 -->
         <!-- dedicated drawables are created for each theme -->
-
-        <attr name="vctr_avatar_mask" format="reference" />
-        <attr name="vctr_avatar_mask_room_header" format="reference" />
-        <attr name="vctr_avatar_mask_white_stroke" format="reference" />
         <attr name="vctr_line_divider" format="reference" />
         <attr name="vctr_shadow_bottom" format="reference" />
         <attr name="vctr_shadow_top" format="reference" />

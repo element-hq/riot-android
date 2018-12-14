@@ -1,8 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
-
-
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/member_details_activity_main_view"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -24,57 +23,84 @@
             android:visibility="visible">
 
             <!-- the member avatar-->
-            <RelativeLayout
-                android:id="@+id/member_avatar_container"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_centerHorizontal="true">
-
-                <include
-                    android:id="@+id/memberDetails_roundAvatar"
-                    layout="@layout/vector_large_round_avatar"
-                    android:layout_width="84dp"
-                    android:layout_height="84dp" />
-            </RelativeLayout>
+            <im.vector.view.VectorCircularImageView
+                android:id="@+id/member_detail_avatar"
+                android:layout_width="84dp"
+                android:layout_height="84dp"
+                android:layout_centerHorizontal="true"
+                android:adjustViewBounds="true"
+                android:scaleType="centerCrop"
+                android:transitionName="vector_transition_avatar"
+                tools:src="@tools:sample/avatars" />
 
             <ImageView
                 android:id="@+id/member_avatar_badge"
                 android:layout_width="24dp"
                 android:layout_height="24dp"
-                android:layout_alignTop="@id/member_avatar_container"
-                android:layout_alignEnd="@id/member_avatar_container"
-                android:layout_alignRight="@id/member_avatar_container"
+                android:layout_alignTop="@id/member_detail_avatar"
+                android:layout_alignEnd="@id/member_detail_avatar"
+                android:layout_alignRight="@id/member_detail_avatar"
                 android:layout_marginTop="-0dp"
                 android:layout_marginEnd="-7dp"
                 android:layout_marginRight="-7dp"
                 android:src="@drawable/admin_icon"
-                android:visibility="gone" />
+                android:visibility="gone"
+                tools:visibility="visible" />
 
             <!-- the member name -->
             <!-- keep singleLine="true" because maxLines="1" truncation is not the expected one.-->
             <TextView
-                android:id="@+id/member_details_name"
-                android:layout_width="match_parent"
+                android:id="@+id/member_details_display_name"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_below="@id/member_avatar_container"
-                android:layout_marginTop="10dp"
+                android:layout_below="@id/member_detail_avatar"
+                android:layout_centerHorizontal="true"
                 android:gravity="center_horizontal"
+                android:paddingLeft="10dp"
+                android:paddingTop="10dp"
+                android:paddingRight="10dp"
+                android:paddingBottom="2dp"
                 android:singleLine="true"
                 android:textColor="@android:color/white"
-                android:textSize="20sp" />
+                android:textSize="20sp"
+                tools:text="Display Name" />
+
+            <!-- the member name -->
+            <!-- keep singleLine="true" because maxLines="1" truncation is not the expected one.-->
+            <TextView
+                android:id="@+id/member_details_user_id"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/member_details_display_name"
+                android:layout_centerHorizontal="true"
+                android:gravity="center_horizontal"
+                android:paddingLeft="10dp"
+                android:paddingTop="2dp"
+                android:paddingRight="10dp"
+                android:paddingBottom="6dp"
+                android:singleLine="true"
+                android:textColor="@android:color/white"
+                android:textSize="16sp"
+                tools:text="\@userId:matrix.org" />
 
             <!-- the member presence -->
             <TextView
                 android:id="@+id/member_details_presence"
-                android:layout_width="match_parent"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_below="@id/member_details_name"
-                android:layout_marginBottom="16dp"
+                android:layout_below="@id/member_details_user_id"
+                android:layout_centerHorizontal="true"
                 android:ellipsize="end"
                 android:gravity="center_horizontal"
                 android:maxLines="1"
+                android:paddingLeft="10dp"
+                android:paddingTop="6dp"
+                android:paddingRight="10dp"
+                android:paddingBottom="16dp"
                 android:textColor="?attr/vctr_default_text_light_color"
-                android:textSize="14sp" />
+                android:textSize="14sp"
+                tools:text="User presence" />
+
         </RelativeLayout>
 
         <android.support.v7.widget.Toolbar
@@ -85,9 +111,8 @@
             android:layout_alignParentTop="true"
             android:background="@android:color/transparent"
             app:contentInsetEnd="0dp"
-            app:contentInsetStart="0dp">
+            app:contentInsetStart="0dp" />
 
-        </android.support.v7.widget.Toolbar>
     </RelativeLayout>
 
     <!-- the member actions list: start new room, Make admin, block.. -->
@@ -99,7 +124,8 @@
         android:cacheColorHint="@android:color/transparent"
         android:divider="#00000000"
         android:dividerHeight="0dp"
-        android:listSelector="@android:color/transparent" />
+        android:listSelector="@android:color/transparent"
+        tools:listitem="@layout/vector_adapter_member_details_items" />
 
     <include
         android:id="@+id/devices_header_view"
@@ -107,7 +133,9 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@+id/member_details_action_bar"
-        android:visibility="gone" />
+        android:visibility="gone"
+        tools:layout_marginStart="200dp"
+        tools:visibility="visible" />
 
     <!-- devices list view: displayed when ExpandableListView is hidden -->
     <ListView
@@ -119,7 +147,11 @@
         android:divider="#00000000"
         android:dividerHeight="0dp"
         android:listSelector="@android:color/transparent"
-        android:visibility="gone" />
+        android:visibility="gone"
+        tools:alpha="0.3"
+        tools:layout_marginStart="200dp"
+        tools:listitem="@layout/adapter_item_member_details_devices"
+        tools:visibility="visible" />
 
     <!-- progress bar view, displayed when an action in the list view is pressed -->
     <include
@@ -128,27 +160,5 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:visibility="gone" />
-
-    <!-- display the avatar in fullscreen -->
-    <RelativeLayout
-        android:id="@+id/member_details_fullscreen_avatar_layout"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:background="@android:color/black"
-        android:visibility="gone">
-
-        <ProgressBar
-            android:id="@+id/progress_bar_view"
-            android:layout_width="40dp"
-            android:layout_height="40dp"
-            android:layout_centerInParent="true" />
-
-        <ImageView
-            android:id="@+id/member_details_fullscreen_avatar_image_view"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:adjustViewBounds="true"
-            android:scaleType="fitCenter" />
-    </RelativeLayout>
 
 </RelativeLayout>

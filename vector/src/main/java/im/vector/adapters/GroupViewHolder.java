@@ -39,7 +39,7 @@ import im.vector.util.VectorUtils;
 public class GroupViewHolder extends RecyclerView.ViewHolder {
     private static final String LOG_TAG = GroupViewHolder.class.getSimpleName();
 
-    @BindView(R.id.room_avatar)
+    @BindView(R.id.group_avatar)
     ImageView vGroupAvatar;
 
     @BindView(R.id.group_name)

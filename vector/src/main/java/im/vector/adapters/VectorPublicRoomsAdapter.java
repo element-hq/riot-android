@@ -25,11 +25,11 @@ import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import im.vector.R;
-import im.vector.util.VectorUtils;
-
 import org.matrix.androidsdk.MXSession;
 import org.matrix.androidsdk.rest.model.publicroom.PublicRoom;
+
+import im.vector.R;
+import im.vector.util.VectorUtils;
 
 /**
  * An adapter which can display m.room.member content.
@@ -65,7 +65,7 @@ public class VectorPublicRoomsAdapter extends ArrayAdapter<PublicRoom> {
         String roomName = !TextUtils.isEmpty(publicRoom.name) ? publicRoom.name : VectorUtils.getPublicRoomDisplayName(publicRoom);
 
         // retrieve the UI items
-        ImageView avatarImageView = convertView.findViewById(R.id.room_avatar);
+        ImageView avatarImageView = convertView.findViewById(R.id.adapter_item_recent_room_avatar);
         TextView roomNameTxtView = convertView.findViewById(R.id.roomSummaryAdapter_roomName);
         TextView roomMessageTxtView = convertView.findViewById(R.id.roomSummaryAdapter_roomMessage);
 

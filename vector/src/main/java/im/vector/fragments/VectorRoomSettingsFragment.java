@@ -27,6 +27,7 @@ import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.v14.preference.SwitchPreference;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AlertDialog;
@@ -1098,14 +1099,14 @@ public class VectorRoomSettingsFragment extends PreferenceFragmentCompat impleme
      * Update the room avatar.
      * Start the camera activity to take the avatar picture.
      */
-    public void onRoomAvatarPreferenceClicked() {
+    private void onRoomAvatarPreferenceClicked() {
         int permissionToBeGranted = PermissionsToolsKt.PERMISSIONS_FOR_ROOM_AVATAR;
         // remove camera permission request if the user has not enough power level
         if (!MatrixSdkExtensionsKt.isPowerLevelEnoughForAvatarUpdate(mRoom, mSession)) {
             permissionToBeGranted &= ~PermissionsToolsKt.PERMISSION_CAMERA;
         }
 
-        if (PermissionsToolsKt.checkPermissions(permissionToBeGranted, getActivity(), PermissionsToolsKt.PERMISSION_REQUEST_CODE_CHANGE_AVATAR)) {
+        if (PermissionsToolsKt.checkPermissions(permissionToBeGranted, this, PermissionsToolsKt.PERMISSION_REQUEST_CODE_CHANGE_AVATAR)) {
             Intent intent = new Intent(getActivity(), VectorMediasPickerActivity.class);
             intent.putExtra(VectorMediasPickerActivity.EXTRA_AVATAR_MODE, true);
             startActivityForResult(intent, REQ_CODE_UPDATE_ROOM_AVATAR);
@@ -1125,6 +1126,16 @@ public class VectorRoomSettingsFragment extends PreferenceFragmentCompat impleme
 
         if (REQ_CODE_UPDATE_ROOM_AVATAR == aRequestCode) {
             onActivityResultRoomAvatarUpdate(aResultCode, aData);
+        }
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        if (requestCode == PermissionsToolsKt.PERMISSION_REQUEST_CODE_CHANGE_AVATAR) {
+            if (PermissionsToolsKt.allGranted(grantResults)) {
+                // If all results are granted, go on
+                onRoomAvatarPreferenceClicked();
+            }
         }
     }
 

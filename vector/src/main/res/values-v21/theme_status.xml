@@ -1,5 +1,8 @@
 <resources>
 
-    <style name="AppTheme.Status" parent="AppTheme.Base.Status" />
+    <style name="AppTheme.Status" parent="AppTheme.Base.Status">
+        <!-- enable window content transitions -->
+        <item name="android:windowContentTransitions">true</item>
+    </style>
 
 </resources>

@@ -20,7 +20,7 @@
             android:id="@+id/group_avatar"
             android:layout_width="@dimen/chat_avatar_size"
             android:layout_height="@dimen/chat_avatar_size"
-            tools:background="#f00" />
+            tools:src="@tools:sample/avatars" />
 
         <RelativeLayout
             android:id="@+id/group_details_group_view"
