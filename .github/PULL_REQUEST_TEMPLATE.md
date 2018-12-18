@@ -1,6 +1,6 @@
 ### Pull Request Checklist
 
-<!-- Please read CONTRIBUTING.rst before submitting your pull request -->
+<!-- Please read [CONTRIBUTING.md](https://github.com/vector-im/riot-android/CONTRIBUTING.md) before submitting your pull request -->
 
 * [ ] Pull request is based on the develop branch
 * [ ] Pull request updates [CHANGES.rst](https://github.com/vector-im/riot-android/blob/develop/CHANGES.rst)
