@@ -1141,7 +1141,7 @@ Other changes:
  -
 
 Bugfix:
- -
+ - Correct issue during signup when a 3PID error would let the signup flow spin forever
 
 Translations:
  -

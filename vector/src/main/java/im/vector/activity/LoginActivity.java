@@ -2321,8 +2321,9 @@ public class LoginActivity extends MXCActionBarActivity implements RegistrationM
                                 }
 
                                 @Override
-                                public void onThreePidRequestFailed(@StringRes int errorMessageRes) {
-                                    LoginActivity.this.onThreePidRequestFailed(getString(errorMessageRes));
+                                public void onThreePidRequestFailed(@StringRes int errorMessageRes, String additionalInfo) {
+                                    String message = RegistrationManager.Build3PidErrorMessage(LoginActivity.this, errorMessageRes, additionalInfo);
+                                    LoginActivity.this.onThreePidRequestFailed(message);
                                 }
                             });
         } else {

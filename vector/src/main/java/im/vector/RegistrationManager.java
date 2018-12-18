@@ -277,8 +277,8 @@ public class RegistrationManager {
                         }
 
                         @Override
-                        public void onThreePidRequestFailed(@StringRes int errorMessageRes) {
-                            listener.onThreePidRequestFailed(context.getString(errorMessageRes));
+                        public void onThreePidRequestFailed(@StringRes int errorMessageRes, String additionalInfo) {
+                            listener.onThreePidRequestFailed(Build3PidErrorMessage(context, errorMessageRes, additionalInfo));
                         }
                     });
                     return;
@@ -862,15 +862,15 @@ public class RegistrationManager {
 
                         @Override
                         public void onUnexpectedError(Exception e) {
-                            listener.onThreePidRequested(pid);
+                            listener.onThreePidRequestFailed(R.string.account_email_error, e.toString());
                         }
 
                         @Override
                         public void onMatrixError(MatrixError e) {
                             if (TextUtils.equals(MatrixError.THREEPID_IN_USE, e.errcode)) {
-                                listener.onThreePidRequestFailed(R.string.account_email_already_used_error);
+                                listener.onThreePidRequestFailed(R.string.account_email_already_used_error, null);
                             } else {
-                                listener.onThreePidRequested(pid);
+                                listener.onThreePidRequestFailed(R.string.account_email_error, e.error);
                             }
                         }
                     });
@@ -890,21 +890,41 @@ public class RegistrationManager {
 
                         @Override
                         public void onUnexpectedError(Exception e) {
-                            listener.onThreePidRequested(pid);
+                            listener.onThreePidRequestFailed(R.string.account_email_error, e.toString());
                         }
 
                         @Override
                         public void onMatrixError(MatrixError e) {
                             if (TextUtils.equals(MatrixError.THREEPID_IN_USE, e.errcode)) {
-                                listener.onThreePidRequestFailed(R.string.account_phone_number_already_used_error);
+                                listener.onThreePidRequestFailed(R.string.account_phone_number_already_used_error, null);
                             } else {
-                                listener.onThreePidRequested(pid);
+                                listener.onThreePidRequestFailed(R.string.account_phone_number_error, e.mReason);
                             }
                         }
                     });
                     break;
             }
         }
+    }
+
+    /**
+     * Creates a 3PID error message from a string resource id and adds the additional infos, if non-null
+     * @param context
+     * @param errorMessageRes
+     * @param additionalInfo
+     * @return The error message
+     */
+    public static String Build3PidErrorMessage(Context context, @StringRes int errorMessageRes, String additionalInfo)
+    {
+        StringBuilder builder = new StringBuilder();
+        builder.append(context.getString(errorMessageRes));
+
+        if (additionalInfo != null) {
+            builder.append(context.getString(R.string.account_additional_info));
+            builder.append(additionalInfo);
+        }
+
+        return builder.toString();
     }
 
     /**
@@ -1039,7 +1059,7 @@ public class RegistrationManager {
     public interface ThreePidRequestListener {
         void onThreePidRequested(ThreePid pid);
 
-        void onThreePidRequestFailed(@StringRes int errorMessageRes);
+        void onThreePidRequestFailed(@StringRes int errorMessageRes, String additionalInfo);
     }
 
     public interface ThreePidValidationListener {
