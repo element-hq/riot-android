@@ -114,10 +114,6 @@ public class FcmHelper {
         GoogleApiAvailability apiAvailability = GoogleApiAvailability.getInstance();
         int resultCode = apiAvailability.isGooglePlayServicesAvailable(activity);
         if (resultCode != ConnectionResult.SUCCESS) {
-            if (apiAvailability.isUserResolvableError(resultCode)) {
-                apiAvailability.getErrorDialog(activity, resultCode, 9000 /*hey does the magic number*/)
-                        .show();
-            }
             return false;
         }
         return true;
