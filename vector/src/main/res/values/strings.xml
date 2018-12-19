@@ -736,7 +736,7 @@
     <string name="settings_phone_number_verification_error">Error while validating your phone number</string>
     <string name="settings_phone_number_code">Code</string>
     <string name="account_phone_number_error">An error occurred while verifying your phone number.</string>
-    <string name="account_additional_info"> Additional info : </string>
+    <string name="account_additional_info">Additional info: %s</string>
 
     <string name="settings_flair">Flair</string>
     <string name="settings_without_flair">You are not currently a member of any communities.</string>
