@@ -18,8 +18,11 @@ package im.vector.preference
 
 import android.content.Context
 import android.support.v7.preference.EditTextPreference
+import android.support.v7.preference.PreferenceViewHolder
 import android.util.AttributeSet
+import android.widget.TextView
 import im.vector.R
+import org.matrix.androidsdk.util.Log
 
 /**
  * Use this class to create an EditTextPreference form code and avoid a crash (see https://code.google.com/p/android/issues/detail?id=231576)
@@ -34,5 +37,21 @@ class VectorEditTextPreference : EditTextPreference {
 
     init {
         dialogLayoutResource = R.layout.dialog_preference_edit_text
+    }
+
+    // No single line for title
+    override fun onBindViewHolder(holder: PreferenceViewHolder) {
+        // display the title in multi-line to avoid ellipsis.
+        try {
+            holder.itemView.findViewById<TextView>(android.R.id.title)?.setSingleLine(false)
+        } catch (e: Exception) {
+            Log.e(LOG_TAG, "onBindView " + e.message, e)
+        }
+
+        super.onBindViewHolder(holder)
+    }
+
+    companion object {
+        private val LOG_TAG = VectorEditTextPreference::class.java.simpleName
     }
 }
