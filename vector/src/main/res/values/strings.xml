@@ -592,12 +592,12 @@
 
     <string name="settings_notification_privacy">Notification privacy</string>
     <string name="settings_notification_troubleshoot">Troubleshoot Notifications</string>
-    <string name="settings_troubleshoot_diagnostic">Troubleshoot Diagnostic</string>
+    <string name="settings_troubleshoot_diagnostic">Troubleshooting diagnostics</string>
     <string name="settings_troubleshoot_diagnostic_run_button_title">Run Tests</string>
     <string name="settings_troubleshoot_diagnostic_running_status">Running… (%1$d of %2$d)</string>
     <string name="settings_troubleshoot_diagnostic_success_status">Basic diagnostic is ok. If you still do not receive notifications, please submit a bug report to help us investigate.</string>
-    <string name="settings_troubleshoot_diagnostic_failure_status_with_quickfix">One ore more test has failed, try suggested fix(es).</string>
-    <string name="settings_troubleshoot_diagnostic_failure_status_no_quickfix">One ore more test has failed, please submit a bug report to help us investigate.</string>
+    <string name="settings_troubleshoot_diagnostic_failure_status_with_quickfix">One or more tests have failed, try suggested fix(es).</string>
+    <string name="settings_troubleshoot_diagnostic_failure_status_no_quickfix">One or more tests have failed, please submit a bug report to help us investigate.</string>
 
     <string name="settings_troubleshoot_test_system_settings_title">System Settings.</string>
     <string name="settings_troubleshoot_test_system_settings_success">Notifications are enabled in the system settings.</string>
@@ -628,7 +628,7 @@
     <string name="settings_troubleshoot_test_token_registration_failed">Failed to register FCM token to HomeServer:\n%1$s</string>
 
     <string name="settings_troubleshoot_test_foreground_service_started_title">Notifications Service</string>
-    <string name="settings_troubleshoot_test_foreground_service_startedt_success">Notifications Service is running..</string>
+    <string name="settings_troubleshoot_test_foreground_service_startedt_success">Notifications Service is running.</string>
     <string name="settings_troubleshoot_test_foreground_service_started_failed">Notifications Service is not running.\nTry to restart the application.</string>
     <string name="settings_troubleshoot_test_foreground_service_started_quickfix">Start Service</string>
 
@@ -638,7 +638,7 @@
 
     <string name="settings_troubleshoot_test_service_boot_title">Start on boot</string>
     <string name="settings_troubleshoot_test_service_boot_success">Service will start when the device is restarted.</string>
-    <string name="settings_troubleshoot_test_service_boot_failed">The service will not start when the device is restarted, you will not receive notification until Riot has been opened once.</string>
+    <string name="settings_troubleshoot_test_service_boot_failed">The service will not start when the device is restarted, you will not receive notifications until Riot has been opened once.</string>
     <string name="settings_troubleshoot_test_service_boot_quickfix">Enable Start on boot</string>
 
     <string name="settings_troubleshoot_test_bg_restricted_title">Check background restrictions</string>
@@ -734,6 +734,10 @@
     <string name="startup_notification_privacy_message">Riot can run in the background to manage your notifications securely and privately. This might affect battery usage.</string>
     <string name="startup_notification_privacy_button_grant">Grant permission</string>
     <string name="startup_notification_privacy_button_other">Choose another option</string>
+
+    <string name="startup_notification_fdroid_battery_optim_title">Background Connection</string>
+    <string name="startup_notification_fdroid_battery_optim_message">Riot needs to keep a low impact background connection in order to have reliable notifications.\nPlease allow Riot to always run in background.</string>
+    <string name="startup_notification_fdroid_battery_optim_button_grant">Grant permission</string>
 
     <!-- analytics -->
     <string name="settings_analytics">Analytics</string>
@@ -1157,6 +1161,6 @@
     <string name="generic_label_and_value">%1$s: %2$s</string>
     <string name="plus_x">+%d</string>
     <string name="x_plus">%d+</string>
-    <string name="no_valid_google_play_services_apk">No valid Google Play Services APK found. Notifications may not work properly</string>
+    <string name="no_valid_google_play_services_apk">No valid Google Play Services APK found. Notifications may not work properly.</string>
 
 </resources>
