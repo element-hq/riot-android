@@ -17,6 +17,7 @@ Other changes:
 
 Bugfix:
  - Defensive code for notifications issues + check play services as per FCM recommendation (#2266)
+ - Added ShortcutBadger missing permissions for some devices
 
 Translations:
  -
