@@ -8,21 +8,21 @@
 
     <TextView
         android:id="@+id/device_name"
-        android:layout_width="match_parent"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
         android:layout_marginLeft="16dp"
-        tools:text="device name.." />
+        tools:text="device name" />
 
     <TextView
         android:id="@+id/device_id"
-        android:layout_width="match_parent"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@+id/device_name"
         android:layout_marginStart="16dp"
         android:layout_marginLeft="16dp"
         android:layout_marginTop="0dp"
-        tools:text="device id.." />
+        tools:text="device id" />
 
     <ImageView
         android:id="@+id/device_e2e_icon"
