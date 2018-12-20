@@ -24,26 +24,22 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.SearchView;
 import android.text.TextUtils;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
 import android.widget.Filter;
 
 import org.matrix.androidsdk.rest.model.group.GroupUser;
 
 import butterknife.BindView;
 import im.vector.R;
-
 import im.vector.adapters.GroupDetailsPeopleAdapter;
 import im.vector.util.GroupUtils;
 import im.vector.view.EmptyViewItemDecoration;
 import im.vector.view.SimpleDividerItemDecoration;
 
 public class GroupDetailsPeopleFragment extends GroupDetailsBaseFragment {
-    @BindView(R.id.recyclerview)
+    @BindView(R.id.people_recyclerview)
     RecyclerView mRecycler;
 
-    @BindView(R.id.search_view)
+    @BindView(R.id.people_search_view)
     SearchView mSearchView;
 
     private GroupDetailsPeopleAdapter mAdapter;

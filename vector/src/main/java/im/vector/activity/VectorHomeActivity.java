@@ -242,7 +242,7 @@ public class VectorHomeActivity extends VectorAppCompatActivity implements Searc
     @BindView(R.id.home_recents_sync_in_progress)
     ProgressBar mSyncInProgressView;
 
-    @BindView(R.id.search_view)
+    @BindView(R.id.home_search_view)
     SearchView mSearchView;
 
     @BindView(R.id.floating_action_menu_touch_guard)

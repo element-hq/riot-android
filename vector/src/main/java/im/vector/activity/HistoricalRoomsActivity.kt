@@ -60,7 +60,7 @@ class HistoricalRoomsActivity : VectorAppCompatActivity(),
         AbsAdapter.MoreRoomActionListener,
         RoomUtils.HistoricalRoomActionListener {
 
-    @BindView(R.id.search_view)
+    @BindView(R.id.historical_search_view)
     internal lateinit var mSearchView: SearchView
 
     @BindView(R.id.historical_recycler_view)
