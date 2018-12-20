@@ -49,6 +49,7 @@
             android:textColorHint="?attr/vctr_default_text_hint_color"
             android:textCursorDrawable="@drawable/searches_cursor_background"
             android:textSize="16sp" />
+
     </RelativeLayout>
 
     <ExpandableListView
