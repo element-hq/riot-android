@@ -26,9 +26,6 @@ import android.support.v7.widget.RecyclerView
 import android.support.v7.widget.SearchView
 import android.text.TextUtils
 import android.view.View
-import android.view.ViewGroup
-import android.widget.ImageView
-import android.widget.LinearLayout
 import android.widget.TextView
 import android.widget.Toast
 import androidx.core.view.isVisible
@@ -37,6 +34,7 @@ import im.vector.Matrix
 import im.vector.R
 import im.vector.adapters.AbsAdapter
 import im.vector.adapters.HomeRoomAdapter
+import im.vector.extensions.withoutLeftMargin
 import im.vector.ui.themes.ActivityOtherThemes
 import im.vector.util.RoomUtils
 import im.vector.view.EmptyViewItemDecoration
@@ -146,19 +144,9 @@ class HistoricalRoomsActivity : VectorAppCompatActivity(),
         }
 
         val searchManager = getSystemService(Context.SEARCH_SERVICE) as SearchManager
+
         // Remove unwanted left margin
-        val searchEditFrame = mSearchView.findViewById<LinearLayout>(R.id.search_edit_frame)
-        if (searchEditFrame != null) {
-            val searchEditFrameParams = searchEditFrame.layoutParams as ViewGroup.MarginLayoutParams
-            searchEditFrameParams.leftMargin = 0
-            searchEditFrame.layoutParams = searchEditFrameParams
-        }
-        val searchIcon = mSearchView.findViewById<ImageView>(R.id.search_mag_icon)
-        if (searchIcon != null) {
-            val searchIconParams = searchIcon.layoutParams as ViewGroup.MarginLayoutParams
-            searchIconParams.leftMargin = 0
-            searchIcon.layoutParams = searchIconParams
-        }
+        mSearchView.withoutLeftMargin()
 
         toolbar.contentInsetStartWithNavigation = 0
 
