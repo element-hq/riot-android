@@ -47,7 +47,8 @@
         android:ellipsize="end"
         android:gravity="center_horizontal"
         android:maxLines="3"
-        android:textColor="#FFFFFF"
+        android:textColor="@android:color/white"
+        android:textColorLink="@color/vector_dark_grey_color"
         android:textSize="14sp"
         tools:text="a topic here" />
 
