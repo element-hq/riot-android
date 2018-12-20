@@ -638,48 +638,66 @@ public class VectorHomeActivity extends VectorAppCompatActivity implements Searc
 
         final PushManager pushManager = Matrix.getInstance(VectorHomeActivity.this).getPushManager();
 
-        if (!pushManager.useFcm()) {
-            // f-droid does not need the permission.
-            // It is still using the technique of sticky "Listen for events" notification
-            return;
-        }
+        if (pushManager.useFcm()) {
+            // ask user what notification privacy they want. Ask it once
+            if (!PreferencesManager.didAskUserToIgnoreBatteryOptimizations(this)) {
+                PreferencesManager.setDidAskUserToIgnoreBatteryOptimizations(this);
 
-        // ask user what notification privacy they want. Ask it once
-        if (!PreferencesManager.didAskUserToIgnoreBatteryOptimizations(this)) {
-            PreferencesManager.setDidAskUserToIgnoreBatteryOptimizations(this);
+                if (SystemUtilsKt.isIgnoringBatteryOptimizations(this)) {
+                    // No need to ask permission, we already have it
+                    // Set the NORMAL privacy setting
+                    pushManager.setNotificationPrivacy(PushManager.NotificationPrivacy.NORMAL, null);
+                } else {
+                    // by default, use FCM and low detail notifications
+                    pushManager.setNotificationPrivacy(PushManager.NotificationPrivacy.LOW_DETAIL, null);
 
-            if (SystemUtilsKt.isIgnoringBatteryOptimizations(this)) {
-                // No need to ask permission, we already have it
-                // Set the NORMAL privacy setting
-                pushManager.setNotificationPrivacy(PushManager.NotificationPrivacy.NORMAL, null);
-            } else {
-                // by default, use FCM and low detail notifications
-                pushManager.setNotificationPrivacy(PushManager.NotificationPrivacy.LOW_DETAIL, null);
+                    new AlertDialog.Builder(this)
+                            .setCancelable(false)
+                            .setTitle(R.string.startup_notification_privacy_title)
+                            .setMessage(R.string.startup_notification_privacy_message)
+                            .setPositiveButton(R.string.startup_notification_privacy_button_grant, new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialog, int which) {
+                                    Log.d(LOG_TAG, "checkNotificationPrivacySetting: user wants to grant the IgnoreBatteryOptimizations permission");
 
-                new AlertDialog.Builder(this)
-                        .setCancelable(false)
-                        .setTitle(R.string.startup_notification_privacy_title)
-                        .setMessage(R.string.startup_notification_privacy_message)
-                        .setPositiveButton(R.string.startup_notification_privacy_button_grant, new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialog, int which) {
-                                Log.d(LOG_TAG, "checkNotificationPrivacySetting: user wants to grant the IgnoreBatteryOptimizations permission");
+                                    // Request the battery optimization cancellation to the user
+                                    SystemUtilsKt.requestDisablingBatteryOptimization(VectorHomeActivity.this,
+                                            RequestCodesKt.BATTERY_OPTIMIZATION_REQUEST_CODE);
+                                }
+                            })
+                            .setNegativeButton(R.string.startup_notification_privacy_button_other, new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialog, int which) {
+                                    Log.d(LOG_TAG, "checkNotificationPrivacySetting: user opens notification policy setting screen");
 
-                                // Request the battery optimization cancellation to the user
-                                SystemUtilsKt.requestDisablingBatteryOptimization(VectorHomeActivity.this,
-                                        RequestCodesKt.BATTERY_OPTIMIZATION_REQUEST_CODE);
-                            }
-                        })
-                        .setNegativeButton(R.string.startup_notification_privacy_button_other, new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialog, int which) {
-                                Log.d(LOG_TAG, "checkNotificationPrivacySetting: user opens notification policy setting screen");
+                                    // open the notification policy setting screen
+                                    startActivity(NotificationPrivacyActivity.getIntent(VectorHomeActivity.this));
+                                }
+                            })
+                            .show();
+                }
+            }
+        } else {
+            if (!PreferencesManager.didAskUserToIgnoreBatteryOptimizations(this)) {
+                PreferencesManager.setDidAskUserToIgnoreBatteryOptimizations(this);
 
-                                // open the notification policy setting screen
-                                startActivity(NotificationPrivacyActivity.getIntent(VectorHomeActivity.this));
-                            }
-                        })
-                        .show();
+                if (!SystemUtilsKt.isIgnoringBatteryOptimizations(this)) {
+                    new AlertDialog.Builder(this)
+                            .setCancelable(false)
+                            .setTitle(R.string.startup_notification_fdroid_battery_optim_title)
+                            .setMessage(R.string.startup_notification_fdroid_battery_optim_message)
+                            .setPositiveButton(R.string.startup_notification_fdroid_battery_optim_button_grant, new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialog, int which) {
+                                    Log.d(LOG_TAG, "checkNotificationPrivacySetting: user wants to grant the IgnoreBatteryOptimizations permission");
+
+                                    // Request the battery optimization cancellation to the user
+                                    SystemUtilsKt.requestDisablingBatteryOptimization(VectorHomeActivity.this,
+                                            RequestCodesKt.BATTERY_OPTIMIZATION_REQUEST_CODE);
+                                }
+                            })
+                            .show();
+                }
             }
         }
     }

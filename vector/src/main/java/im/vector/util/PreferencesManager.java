@@ -471,7 +471,7 @@ public class PreferencesManager {
      * @return true if the application must be started on boot
      */
     public static boolean autoStartOnBoot(Context context) {
-        return PreferenceManager.getDefaultSharedPreferences(context).getBoolean(SETTINGS_START_ON_BOOT_PREFERENCE_KEY, false);
+        return PreferenceManager.getDefaultSharedPreferences(context).getBoolean(SETTINGS_START_ON_BOOT_PREFERENCE_KEY, true);
     }
 
     /**
