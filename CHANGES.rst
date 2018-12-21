@@ -20,6 +20,7 @@ Bugfix:
  - Fix many little UI/UX issues (#2769)
  - Fix crash opening the setting screen (#2793)
  - Allow popup on IntegrationManagerActivity's WebView because it's require to add Slack integration (#2768)
+ - Fix crash on Android ViewPager (#2786)
 
 Translations:
  -
