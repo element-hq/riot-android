@@ -618,7 +618,7 @@ public class VectorHomeActivity extends VectorAppCompatActivity implements Searc
         super.onActivityResult(requestCode, resultCode, data);
 
         if (resultCode == RESULT_OK) {
-            if (requestCode == RequestCodesKt.BATTERY_OPTIMIZATION_REQUEST_CODE) {
+            if (requestCode == RequestCodesKt.BATTERY_OPTIMIZATION_FCM_REQUEST_CODE) {
                 // Ok, we can set the NORMAL privacy setting
                 Matrix.getInstance(this)
                         .getPushManager()
@@ -662,7 +662,7 @@ public class VectorHomeActivity extends VectorAppCompatActivity implements Searc
 
                                     // Request the battery optimization cancellation to the user
                                     SystemUtilsKt.requestDisablingBatteryOptimization(VectorHomeActivity.this,
-                                            RequestCodesKt.BATTERY_OPTIMIZATION_REQUEST_CODE);
+                                            RequestCodesKt.BATTERY_OPTIMIZATION_FCM_REQUEST_CODE);
                                 }
                             })
                             .setNegativeButton(R.string.startup_notification_privacy_button_other, new DialogInterface.OnClickListener() {
@@ -693,7 +693,7 @@ public class VectorHomeActivity extends VectorAppCompatActivity implements Searc
 
                                     // Request the battery optimization cancellation to the user
                                     SystemUtilsKt.requestDisablingBatteryOptimization(VectorHomeActivity.this,
-                                            RequestCodesKt.BATTERY_OPTIMIZATION_REQUEST_CODE);
+                                            RequestCodesKt.BATTERY_OPTIMIZATION_FDROID_REQUEST_CODE);
                                 }
                             })
                             .show();
