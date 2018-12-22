@@ -18,6 +18,7 @@ Other changes:
 Bugfix:
  - Defensive code for notifications issues + check play services as per FCM recommendation (#2266)
  - Fix many little UI/UX issues (#2769)
+ - Fix avatar icon characters being a little bit offset to right.
 
 Translations:
  -
