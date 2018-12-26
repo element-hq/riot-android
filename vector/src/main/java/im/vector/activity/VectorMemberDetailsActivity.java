@@ -1550,22 +1550,26 @@ public class VectorMemberDetailsActivity extends MXCActionBarActivity implements
     private final ApiCallback<Void> mDevicesVerificationCallback = new ApiCallback<Void>() {
         @Override
         public void onSuccess(Void info) {
-            mDevicesListViewAdapter.notifyDataSetChanged();
+            // Refresh the adapter data
+            List<MXDeviceInfo> deviceList = mSession.getCrypto().getUserDevices(mMemberId);
+
+            mDevicesListViewAdapter.clear();
+            mDevicesListViewAdapter.addAll(deviceList);
         }
 
         @Override
         public void onNetworkError(Exception e) {
-            mDevicesListViewAdapter.notifyDataSetChanged();
+            onSuccess(null);
         }
 
         @Override
         public void onMatrixError(MatrixError e) {
-            mDevicesListViewAdapter.notifyDataSetChanged();
+            onSuccess(null);
         }
 
         @Override
         public void onUnexpectedError(Exception e) {
-            mDevicesListViewAdapter.notifyDataSetChanged();
+            onSuccess(null);
         }
     };
 
@@ -1593,8 +1597,6 @@ public class VectorMemberDetailsActivity extends MXCActionBarActivity implements
             mSession.getCrypto()
                     .setDeviceVerification(MXDeviceInfo.DEVICE_VERIFICATION_BLOCKED, aDeviceInfo.deviceId, aDeviceInfo.userId, mDevicesVerificationCallback);
         }
-
-        mDevicesListViewAdapter.notifyDataSetChanged();
     }
     // ***********************************************************
 }

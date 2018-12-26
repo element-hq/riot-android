@@ -18,6 +18,7 @@ Other changes:
 Bugfix:
  - Defensive code for notifications issues + check play services as per FCM recommendation (#2266)
  - No notification on f-droid when device enters sleep mode (#2789)
+ - Fix many little UI/UX issues (#2769)
 
 Translations:
  -
