@@ -736,7 +736,7 @@
     <string name="startup_notification_privacy_button_other">Choose another option</string>
 
     <string name="startup_notification_fdroid_battery_optim_title">Background Connection</string>
-    <string name="startup_notification_fdroid_battery_optim_message">Riot needs to keep a low impact background connection in order to have reliable notifications.\nPlease allow Riot to always run in background.</string>
+    <string name="startup_notification_fdroid_battery_optim_message">Riot needs to keep a low impact background connection in order to have reliable notifications.\nOn the next screen you will be prompted to allow Riot to always run in background, please accept.</string>
     <string name="startup_notification_fdroid_battery_optim_button_grant">Grant permission</string>
 
     <!-- analytics -->
