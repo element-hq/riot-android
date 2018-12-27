@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -15,9 +16,11 @@
         <!-- The search view is added in the toolbar not in the menu
              to ensure that the overflow icon menu is not hidden.-->
         <android.support.v7.widget.SearchView
-            android:id="@+id/search_view"
+            android:id="@+id/historical_search_view"
             android:layout_width="match_parent"
-            android:layout_height="match_parent" />
+            android:layout_height="match_parent"
+            app:iconifiedByDefault="false"
+            app:queryHint="@string/historical_placeholder" />
 
     </android.support.v7.widget.Toolbar>
 

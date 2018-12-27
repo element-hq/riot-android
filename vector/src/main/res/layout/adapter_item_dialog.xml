@@ -13,7 +13,7 @@
         android:id="@+id/adapter_item_dialog_icon"
         android:layout_width="32dp"
         android:layout_height="32dp"
-        android:rotation="@integer/rtl_mirror_flip"
+        android:rotationY="@integer/rtl_mirror_flip"
         android:tint="?attr/colorAccent"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"

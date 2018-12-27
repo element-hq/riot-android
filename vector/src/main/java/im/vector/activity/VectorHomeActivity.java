@@ -58,14 +58,12 @@ import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.ViewGroup;
 import android.view.ViewPropertyAnimator;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -118,6 +116,7 @@ import im.vector.PublicRoomsManager;
 import im.vector.R;
 import im.vector.VectorApp;
 import im.vector.activity.util.RequestCodesKt;
+import im.vector.extensions.ViewExtensionsKt;
 import im.vector.fragments.AbsHomeFragment;
 import im.vector.fragments.FavouritesFragment;
 import im.vector.fragments.GroupsFragment;
@@ -242,7 +241,7 @@ public class VectorHomeActivity extends VectorAppCompatActivity implements Searc
     @BindView(R.id.home_recents_sync_in_progress)
     ProgressBar mSyncInProgressView;
 
-    @BindView(R.id.search_view)
+    @BindView(R.id.home_search_view)
     SearchView mSearchView;
 
     @BindView(R.id.floating_action_menu_touch_guard)
@@ -1040,18 +1039,8 @@ public class VectorHomeActivity extends VectorAppCompatActivity implements Searc
         // init the search view
         SearchManager searchManager = (SearchManager) getSystemService(Context.SEARCH_SERVICE);
         // Remove unwanted left margin
-        LinearLayout searchEditFrame = mSearchView.findViewById(R.id.search_edit_frame);
-        if (searchEditFrame != null) {
-            ViewGroup.MarginLayoutParams searchEditFrameParams = (ViewGroup.MarginLayoutParams) searchEditFrame.getLayoutParams();
-            searchEditFrameParams.leftMargin = 0;
-            searchEditFrame.setLayoutParams(searchEditFrameParams);
-        }
-        ImageView searchIcon = mSearchView.findViewById(R.id.search_mag_icon);
-        if (searchIcon != null) {
-            ViewGroup.MarginLayoutParams searchIconParams = (ViewGroup.MarginLayoutParams) searchIcon.getLayoutParams();
-            searchIconParams.leftMargin = 0;
-            searchIcon.setLayoutParams(searchIconParams);
-        }
+        ViewExtensionsKt.withoutLeftMargin(mSearchView);
+
         mToolbar.setContentInsetStartWithNavigation(0);
 
         mSearchView.setMaxWidth(Integer.MAX_VALUE);
