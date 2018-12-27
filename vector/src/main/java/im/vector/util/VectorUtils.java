@@ -215,7 +215,7 @@ public class VectorUtils {
         // draw the text in center
         canvas.drawText(text,
                 canvas.getWidth() / 2,
-                (canvas.getHeight() + textBounds.height() - textBounds.bottom) / 2,
+                (canvas.getHeight() - textBounds.top) / 2,
                 textPaint);
 
         // Return the avatar
