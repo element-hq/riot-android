@@ -45,7 +45,7 @@ import im.vector.R;
 import im.vector.adapters.GroupDetailsFragmentPagerAdapter;
 import im.vector.ui.themes.ActivityOtherThemes;
 import im.vector.ui.themes.ThemeUtils;
-import im.vector.view.RiotViewPager;
+import im.vector.view.VectorViewPager;
 
 /**
  *
@@ -65,7 +65,7 @@ public class VectorGroupDetailsActivity extends MXCActionBarActivity {
     // UI views
     private ProgressBar mGroupSyncInProgress;
 
-    private RiotViewPager mPager;
+    private VectorViewPager mPager;
     private GroupDetailsFragmentPagerAdapter mPagerAdapter;
 
     private MXEventListener mGroupEventsListener = new MXEventListener() {
