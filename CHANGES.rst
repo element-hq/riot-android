@@ -17,6 +17,7 @@ Other changes:
 
 Bugfix:
  - Defensive code for notifications issues + check play services as per FCM recommendation (#2266)
+ - Added ShortcutBadger missing permissions for some devices
  - Fix many little UI/UX issues (#2769)
  - Fix crash opening the setting screen (#2793)
  - Allow popup on IntegrationManagerActivity's WebView because it's require to add Slack integration (#2768)
