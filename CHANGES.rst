@@ -13,7 +13,7 @@ Improvements:
  - Added Troubleshoot Notification settings page
 
 Other changes:
- -
+ - Update README.md and CONTRIBUTING.md (#2795)
 
 Bugfix:
  - Defensive code for notifications issues + check play services as per FCM recommendation (#2266)
