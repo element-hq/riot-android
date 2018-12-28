@@ -58,6 +58,9 @@ class IntegrationManagerActivity : AbstractWidgetActivity() {
         showWaitingView()
 
         super.initUiAndData()
+
+        // Some widgets need popup to be enabled
+        mWebView.settings.javaScriptCanOpenWindowsAutomatically = true
     }
 
     /* ==========================================================================================

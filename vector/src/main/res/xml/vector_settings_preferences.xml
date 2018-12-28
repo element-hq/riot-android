@@ -253,6 +253,7 @@
 
         <im.vector.preference.VectorSwitchPreference
             android:key="SETTINGS_START_ON_BOOT_PREFERENCE_KEY"
+            android:defaultValue="true"
             android:title="@string/settings_start_on_boot" />
 
         <im.vector.preference.VectorSwitchPreference
