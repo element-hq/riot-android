@@ -24,6 +24,8 @@ Bugfix:
  - Allow popup on IntegrationManagerActivity's WebView because it's require to add Slack integration (#2768)
  - Fix crash on Android ViewPager (#2786)
  - Fix avatar icon characters being a little bit offset to right.
+ - Fix Stopping Loading View after Upload of User Avatar (#2801)
+
 
 Translations:
  -

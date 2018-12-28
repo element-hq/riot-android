@@ -870,8 +870,9 @@ class VectorSettingsPreferencesFragment : PreferenceFragmentCompat(), SharedPref
     override fun onResume() {
         super.onResume()
 
-        // search the loading view from the upper view
-        mLoadingView = view!!.findViewById(R.id.vector_settings_spinner_views)
+        // find the view from parent activity
+        mLoadingView = activity!!.findViewById(R.id.vector_settings_spinner_views)
+
 
         if (mSession.isAlive) {
             val context = activity!!.applicationContext
