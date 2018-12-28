@@ -27,6 +27,7 @@ Bugfix:
  - Fix avatar icon characters being a little bit offset to right.
  - Fix Stopping Loading View after Upload of User Avatar (#2801)
  - Fix no display of image without `info` (#2666)
+ - Fix permission request failure. It was actually not necessary to request overlay permission (#2680)
 
 
 Translations:
