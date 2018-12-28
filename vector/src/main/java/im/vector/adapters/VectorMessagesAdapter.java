@@ -1362,7 +1362,7 @@ public class VectorMessagesAdapter extends AbstractMessagesAdapter {
             boolean videoContent = false;
             if (type == ROW_TYPE_IMAGE) {
                 ImageMessage imageMessage = JsonUtils.toImageMessage(event.getContent());
-                if (imageMessage.getMimeType().equals("image/gif")) {
+                if ("image/gif".equals(imageMessage.getMimeType())) {
                     videoContent = true;
                 }
                 message = imageMessage;
