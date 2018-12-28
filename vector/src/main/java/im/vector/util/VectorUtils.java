@@ -192,7 +192,7 @@ public class VectorUtils {
      * @return the generated bitmap
      */
     private static Bitmap createAvatar(int backgroundColor, String text, int pixelsSide) {
-        android.graphics.Bitmap.Config bitmapConfig = android.graphics.Bitmap.Config.ARGB_8888;
+        Bitmap.Config bitmapConfig = Bitmap.Config.ARGB_8888;
 
         Bitmap bitmap = Bitmap.createBitmap(pixelsSide, pixelsSide, bitmapConfig);
         Canvas canvas = new Canvas(bitmap);
@@ -203,6 +203,7 @@ public class VectorUtils {
         Paint textPaint = new Paint();
         textPaint.setTypeface(Typeface.create(Typeface.DEFAULT, Typeface.BOLD));
         textPaint.setColor(Color.WHITE);
+        textPaint.setTextAlign(Paint.Align.CENTER);
         // the text size is proportional to the avatar size.
         // by default, the avatar size is 42dp, the text size is 28 dp (not sp because it has to be fixed).
         textPaint.setTextSize(pixelsSide * 2 / 3);
@@ -213,8 +214,8 @@ public class VectorUtils {
 
         // draw the text in center
         canvas.drawText(text,
-                (canvas.getWidth() - textBounds.width() - textBounds.left) / 2,
-                (canvas.getHeight() + textBounds.height() - textBounds.bottom) / 2,
+                canvas.getWidth() / 2,
+                (canvas.getHeight() - textBounds.top) / 2,
                 textPaint);
 
         // Return the avatar

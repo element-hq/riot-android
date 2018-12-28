@@ -102,7 +102,7 @@ public class NotificationPrivacyActivity extends VectorAppCompatActivity {
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (resultCode == RESULT_OK) {
-            if (requestCode == RequestCodesKt.BATTERY_OPTIMIZATION_REQUEST_CODE) {
+            if (requestCode == RequestCodesKt.BATTERY_OPTIMIZATION_FCM_REQUEST_CODE) {
                 // Ok, NotificationPrivacy.NORMAL can be set
                 doSetNotificationPrivacy(PushManager.NotificationPrivacy.NORMAL);
             }
@@ -138,7 +138,7 @@ public class NotificationPrivacyActivity extends VectorAppCompatActivity {
         if (newNotificationPrivacy == PushManager.NotificationPrivacy.NORMAL
                 && !SystemUtilsKt.isIgnoringBatteryOptimizations(this)) {
             // Request the battery optimization cancellation to the user
-            SystemUtilsKt.requestDisablingBatteryOptimization(this, RequestCodesKt.BATTERY_OPTIMIZATION_REQUEST_CODE);
+            SystemUtilsKt.requestDisablingBatteryOptimization(this, RequestCodesKt.BATTERY_OPTIMIZATION_FCM_REQUEST_CODE);
         } else {
             doSetNotificationPrivacy(newNotificationPrivacy);
         }
