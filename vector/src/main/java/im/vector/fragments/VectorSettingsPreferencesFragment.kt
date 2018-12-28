@@ -870,7 +870,6 @@ class VectorSettingsPreferencesFragment : PreferenceFragmentCompat(), SharedPref
     override fun onResume() {
         super.onResume()
 
-        // search the loading view from the upper
         // find the view from parent activity
         mLoadingView = activity!!.findViewById(R.id.vector_settings_spinner_views)
 
@@ -1379,7 +1378,7 @@ class VectorSettingsPreferencesFragment : PreferenceFragmentCompat(), SharedPref
                                         mSession.myUser.updateAvatarUrl(contentUri, object : ApiCallback<Void> {
                                             override fun onSuccess(info: Void?) {
                                                 onCommonDone(null)
-                                                hideLoadingView(true)
+                                                refreshDisplay()
                                             }
 
                                             override fun onNetworkError(e: Exception) {
