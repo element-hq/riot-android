@@ -1163,4 +1163,38 @@
     <string name="x_plus">%d+</string>
     <string name="no_valid_google_play_services_apk">No valid Google Play Services APK found. Notifications may not work properly.</string>
 
+    <!-- String for Play Store -->
+    <string name="store_title">Riot.im - open team collaboration</string>
+    <string name="store_short_description">Welcome to Riot.im: a new world of open communication!</string>
+    <string name="store_full_description">"Riot.im is a simple and elegant collaboration environment that gathers all of your different conversations and app integrations into one single app.
+
+Built around group chatrooms, Riot.im lets you share messages, images, videos and files - interact with your tools and access all your different communities under one roof. One single identity and place for all your teams: no need to switch accounts, work and chat with people from different organisations in public or private rooms: from professional projects to school trips, Riot.im will become the center of all your discussions!
+
+Now with end-to-end encryption!
+
+Features include:
+
+• Instantly share messages, images, videos and files of any kind within groups of any size
+• Voice and video 1-1 and conference calling via WebRTC
+• End-to-end encryption using Olm (https://matrix.org/git/olm)
+• See who's reading your messages with read receipts
+• Communicate with users anywhere in the Matrix.org ecosystem - not just Riot.im users!
+• Discover and invite users by email address
+• Participate in guest-accessible public rooms
+• Highly scalable - supports hundreds of rooms and thousands of users
+• Fully synchronised message history across multiple devices and browsers
+• Finely configurable notification settings, synchronised over all devices
+• Infinite searchable chat history
+• Permalinks to messages
+• Full message search
+• Support for RTL languages such as Arabic
+
+For developers:
+• Riot.im is a Matrix client - built on the Matrix.org open standard and ecosystem, providing interoperability with all other Matrix compatible apps, servers and integrations
+• Entirely open sourced under the permissive Apache License - get the code from https://github.com/vector-im/vector-android. Pull requests welcome!
+• Trivially extensible via the open Matrix Client-Server API (https://matrix.org/docs/spec)
+• Run your own server! You can use the default matrix.org server or run your own Matrix home server (e.g. https://matrix.org/docs/projects/server/synapse.html)
+
+Discover truly efficient and open collaboration with Riot.im!"</string>
+
 </resources>
