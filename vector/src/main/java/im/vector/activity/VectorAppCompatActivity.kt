@@ -60,7 +60,6 @@ abstract class VectorAppCompatActivity : AppCompatActivity() {
      * UI
      * ========================================================================================== */
 
-    // TODO Maintenance: Toolbar is bound here now. Use this member in children Activities
     @Nullable
     @BindView(R.id.toolbar)
     protected lateinit var toolbar: Toolbar

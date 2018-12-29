@@ -45,7 +45,7 @@ open class UserAvatarPreference : Preference {
     override fun onBindViewHolder(holder: PreferenceViewHolder) {
         super.onBindViewHolder(holder)
 
-        mAvatarView = holder.itemView.findViewById(R.id.avatar_img)
+        mAvatarView = holder.itemView.findViewById(R.id.settings_avatar)
         mLoadingProgressBar = holder.itemView.findViewById(R.id.avatar_update_progress_bar)
         refreshAvatar()
     }

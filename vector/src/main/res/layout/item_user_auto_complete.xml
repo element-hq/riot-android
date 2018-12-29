@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="wrap_content"
     android:layout_height="40dp"
     android:orientation="horizontal">
@@ -15,7 +16,8 @@
             android:id="@+id/item_user_auto_complete_avatar"
             android:layout_width="28dp"
             android:layout_height="28dp"
-            android:layout_centerVertical="true" />
+            android:layout_centerVertical="true"
+            tools:src="@tools:sample/avatars" />
     </RelativeLayout>
 
     <TextView
@@ -30,5 +32,6 @@
         android:maxLines="1"
         android:textColor="?attr/vctr_default_text_dark_color"
         android:textSize="12sp"
-        android:textStyle="bold" />
+        android:textStyle="bold"
+        tools:text="name" />
 </LinearLayout>

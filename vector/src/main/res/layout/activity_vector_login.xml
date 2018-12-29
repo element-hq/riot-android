@@ -343,12 +343,11 @@
                     android:layout_height="wrap_content"
                     android:orientation="vertical">
 
-                    <RelativeLayout
+                    <LinearLayout
                         android:id="@+id/display_server_url_layout"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginTop="10dp"
-                        android:orientation="horizontal">
+                        android:layout_marginTop="10dp">
 
                         <CheckBox
                             android:id="@+id/display_server_url_expand_checkbox"
@@ -357,13 +356,11 @@
 
                         <TextView
                             android:layout_width="wrap_content"
-                            android:layout_height="match_parent"
-                            android:layout_toEndOf="@+id/display_server_url_expand_checkbox"
-                            android:layout_toRightOf="@+id/display_server_url_expand_checkbox"
-                            android:gravity="center_vertical"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center_vertical"
                             android:text="@string/auth_use_server_options" />
 
-                    </RelativeLayout>
+                    </LinearLayout>
 
                     <LinearLayout
                         android:id="@+id/login_matrix_server_options_layout"

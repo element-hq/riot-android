@@ -1,4 +1,4 @@
-Changes in Riot 0.8.20 (2018-XX-XX)
+Changes in Riot 0.8.21 (2018-XX-XX)
 ===================================================
 
 MatrixSdk:
@@ -6,6 +6,39 @@ MatrixSdk:
 
 Features:
  -
+
+Improvements:
+ - Show userId below display name in member detail screen (#2756)
+ - Clicking on a user and a room avatar opens a new screen with animation to view the avatar in full screen, with zoom capabilities (#2455)
+ - Added Troubleshoot Notification settings page
+
+Other changes:
+ -
+
+Bugfix:
+ - Defensive code for notifications issues + check play services as per FCM recommendation (#2266)
+ - No notification on f-droid when device enters sleep mode (#2789)
+ - Added ShortcutBadger missing permissions for some devices
+ - Fix many little UI/UX issues (#2769)
+ - Fix crash opening the setting screen (#2793)
+ - Allow popup on IntegrationManagerActivity's WebView because it's require to add Slack integration (#2768)
+ - Fix crash on Android ViewPager (#2786)
+ - Fix avatar icon characters being a little bit offset to right.
+ - Fix Stopping Loading View after Upload of User Avatar (#2801)
+ - Fix no display of image without `info` (#2666)
+
+
+Translations:
+ -
+
+Build:
+ -
+
+Changes in Riot 0.8.20 (2018-12-13)
+===================================================
+
+MatrixSdk:
+ - Upgrade to version 0.9.14.
 
 Improvements:
  - Remove double negations from settings and update descriptions (#2723)
@@ -17,19 +50,10 @@ Improvements:
  - Make User Agreement part of the registration flow (#2442)
  - Fix several color issue on Status theme and prepare rework some styles.
 
-Other changes:
- -
-
 Bugfix:
  - Use same "Call Anyway" string from iOS (#2695)
  - Improve `/markdown` command (#2673)
  - Display thumbnail for encrypted files without a remote thumbnail (#2734)
-
-Translations:
- -
-
-Build:
- -
 
 Changes in Riot 0.8.19 (2018-11-06)
 ===================================================
@@ -1106,4 +1130,33 @@ Changes in Vector 0.2.0 (2016-04-14)
 
  * First official release.
 
+
+=======================================================
++        TEMPLATE WHEN PREPARING A NEW RELEASE        +
+=======================================================
+
+
+Changes in Riot 0.8.XX (2018-XX-XX)
+===================================================
+
+MatrixSdk:
+ - Upgrade to version 0.X.Y.
+
+Features:
+ -
+
+Improvements:
+ -
+
+Other changes:
+ -
+
+Bugfix:
+ - Correct issue during signup when a 3PID error would let the signup flow spin forever
+
+Translations:
+ -
+
+Build:
+ -
 

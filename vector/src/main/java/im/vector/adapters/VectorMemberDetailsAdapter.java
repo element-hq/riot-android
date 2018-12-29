@@ -37,7 +37,6 @@ import im.vector.R;
 import im.vector.activity.VectorMemberDetailsActivity;
 import im.vector.ui.themes.ThemeUtils;
 import im.vector.util.VectorUtils;
-import im.vector.view.VectorCircularImageView;
 
 /**
  * An adapter which can display the available actions list
@@ -96,7 +95,7 @@ public class VectorMemberDetailsAdapter extends BaseExpandableListAdapter {
      * Recycle view holder class.
      */
     private static class MemberDetailsViewHolder {
-        final VectorCircularImageView mVectorCircularImageView;
+        final ImageView mVectorCircularImageView;
         final ImageView mActionImageView;
         final TextView mActionDescTextView;
         final View mRoomAvatarLayout;

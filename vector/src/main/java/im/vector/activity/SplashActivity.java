@@ -320,12 +320,7 @@ public class SplashActivity extends MXCActionBarActivity {
 
         // trigger the push registration if required
         PushManager pushManager = Matrix.getInstance(getApplicationContext()).getPushManager();
-
-        if (!pushManager.isFcmRegistered()) {
-            pushManager.checkRegistrations();
-        } else {
-            pushManager.forceSessionsRegistration(null);
-        }
+        pushManager.deepCheckRegistration(this);
 
         boolean noUpdate;
 

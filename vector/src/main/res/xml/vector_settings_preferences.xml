@@ -194,6 +194,11 @@
             android:title="@string/settings_turn_screen_on" />
 
         <im.vector.preference.VectorPreference
+            android:key="SETTINGS_NOTIFICATION_TROUBLESHOOT_PREFERENCE_KEY"
+            android:title="@string/settings_notification_troubleshoot"
+            app:fragment="im.vector.fragments.VectorSettingsNotificationsTroubleshootFragment" />
+
+        <im.vector.preference.VectorPreference
             android:dialogTitle="@string/settings_notification_privacy"
             android:key="SETTINGS_NOTIFICATION_PRIVACY_PREFERENCE_KEY"
             android:title="@string/settings_notification_privacy" />
@@ -248,6 +253,7 @@
 
         <im.vector.preference.VectorSwitchPreference
             android:key="SETTINGS_START_ON_BOOT_PREFERENCE_KEY"
+            android:defaultValue="true"
             android:title="@string/settings_start_on_boot" />
 
         <im.vector.preference.VectorSwitchPreference

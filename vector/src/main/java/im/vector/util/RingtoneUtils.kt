@@ -1,3 +1,19 @@
+/*
+ * Copyright 2018 New Vector Ltd
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
 package im.vector.util
 
 import android.content.Context
@@ -22,7 +38,7 @@ import androidx.core.content.edit
  * @return the [Uri] of the currently set [Ringtone]
  * @see Ringtone
  */
-fun getCallRingtoneUri(context: Context): Uri {
+fun getCallRingtoneUri(context: Context): Uri? {
     val callRingtone: String? = PreferenceManager.getDefaultSharedPreferences(context)
             .getString(PreferencesManager.SETTINGS_CALL_RINGTONE_URI_PREFERENCE_KEY, null)
 
@@ -30,7 +46,7 @@ fun getCallRingtoneUri(context: Context): Uri {
         return Uri.parse(it)
     }
 
-    // Use current system notification sound for incoming calls per default
+    // Use current system notification sound for incoming calls per default (note that it can return null)
     return RingtoneManager.getActualDefaultRingtoneUri(context, RingtoneManager.TYPE_RINGTONE)
 }
 
@@ -43,8 +59,13 @@ fun getCallRingtoneUri(context: Context): Uri {
  * @return the currently set [Ringtone]
  * @see Ringtone
  */
-fun getCallRingtone(context: Context): Ringtone {
-    return RingtoneManager.getRingtone(context, getCallRingtoneUri(context))
+fun getCallRingtone(context: Context): Ringtone? {
+    getCallRingtoneUri(context)?.let {
+        // Note that it can also return null
+        return RingtoneManager.getRingtone(context, it)
+    }
+
+    return null
 }
 
 /**
@@ -57,7 +78,7 @@ fun getCallRingtone(context: Context): Ringtone {
  * @see Ringtone
  */
 fun getCallRingtoneName(context: Context): String? {
-    return getCallRingtone(context).getTitle(context)
+    return getCallRingtone(context)?.getTitle(context)
 }
 
 /**

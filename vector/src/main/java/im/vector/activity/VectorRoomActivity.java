@@ -21,6 +21,7 @@ package im.vector.activity;
 import android.Manifest;
 import android.annotation.SuppressLint;
 import android.app.Activity;
+import android.app.ActivityOptions;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -29,6 +30,7 @@ import android.content.pm.PackageManager;
 import android.content.res.Configuration;
 import android.graphics.Color;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Vibrator;
 import android.support.annotation.NonNull;
@@ -76,7 +78,6 @@ import org.matrix.androidsdk.db.MXLatestChatMessageCache;
 import org.matrix.androidsdk.fragments.MatrixMessageListFragment;
 import org.matrix.androidsdk.listeners.IMXNetworkEventListener;
 import org.matrix.androidsdk.listeners.MXEventListener;
-import org.matrix.androidsdk.listeners.MXMediaUploadListener;
 import org.matrix.androidsdk.rest.callback.ApiCallback;
 import org.matrix.androidsdk.rest.callback.SimpleApiCallback;
 import org.matrix.androidsdk.rest.model.Event;
@@ -90,7 +91,6 @@ import org.matrix.androidsdk.rest.model.message.Message;
 import org.matrix.androidsdk.util.JsonUtils;
 import org.matrix.androidsdk.util.Log;
 import org.matrix.androidsdk.util.PermalinkUtils;
-import org.matrix.androidsdk.util.ResourceUtils;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -110,7 +110,6 @@ import im.vector.activity.util.RequestCodesKt;
 import im.vector.dialogs.DialogCallAdapter;
 import im.vector.dialogs.DialogListItem;
 import im.vector.dialogs.DialogSendItemAdapter;
-import im.vector.extensions.MatrixSdkExtensionsKt;
 import im.vector.features.hhs.LimitResourceState;
 import im.vector.features.hhs.ResourceLimitEventListener;
 import im.vector.fragments.VectorMessageListFragment;
@@ -188,7 +187,6 @@ public class VectorRoomActivity extends MXCActionBarActivity implements
     private static final int REQUEST_FILES_REQUEST_CODE = 0;
     private static final int TAKE_IMAGE_REQUEST_CODE = 1;
     public static final int GET_MENTION_REQUEST_CODE = 2;
-    private static final int REQUEST_ROOM_AVATAR_CODE = 3;
     private static final int INVITE_USER_REQUEST_CODE = 4;
     public static final int UNREAD_PREVIEW_REQUEST_CODE = 5;
     private static final int RECORD_AUDIO_REQUEST_CODE = 6;
@@ -224,7 +222,8 @@ public class VectorRoomActivity extends MXCActionBarActivity implements
     @BindView(R.id.editText_messageBox)
     VectorAutoCompleteTextView mEditText;
 
-    private ImageView mAvatarImageView;
+    @BindView(R.id.room_self_avatar)
+    ImageView mAvatarImageView;
 
     @BindView(R.id.bottom_separator)
     View mBottomSeparator;
@@ -277,7 +276,8 @@ public class VectorRoomActivity extends MXCActionBarActivity implements
     @BindView(R.id.action_bar_header_room_topic)
     TextView mActionBarHeaderRoomTopic;
 
-    private ImageView mActionBarHeaderRoomAvatar;
+    @BindView(R.id.room_header_avatar)
+    ImageView mActionBarHeaderRoomAvatar;
 
     // notifications area
     @BindView(R.id.room_notifications_area)
@@ -658,7 +658,6 @@ public class VectorRoomActivity extends MXCActionBarActivity implements
         }
 
         //setDragEdge(SwipeBackLayout.DragEdge.LEFT);
-        mActionBarHeaderRoomAvatar = mRoomHeaderView.findViewById(R.id.avatar_img);
 
         // hide the header room as soon as the bottom layout (text edit zone) is touched
         mBottomLayout.setOnTouchListener(new View.OnTouchListener() {
@@ -962,12 +961,6 @@ public class VectorRoomActivity extends MXCActionBarActivity implements
                 refreshCallButtons(false);
             }
         });
-
-        View avatarLayout = findViewById(R.id.room_self_avatar);
-
-        if (null != avatarLayout) {
-            mAvatarImageView = avatarLayout.findViewById(R.id.avatar_img);
-        }
 
         refreshSelfAvatar();
 
@@ -1292,9 +1285,6 @@ public class VectorRoomActivity extends MXCActionBarActivity implements
                     break;
                 case GET_MENTION_REQUEST_CODE:
                     insertUserDisplayNameInTextEditor(data.getStringExtra(VectorMemberDetailsActivity.RESULT_MENTION_ID));
-                    break;
-                case REQUEST_ROOM_AVATAR_CODE:
-                    onActivityResultRoomAvatarUpdate(data);
                     break;
                 case INVITE_USER_REQUEST_CODE:
                     onActivityResultRoomInvite(data);
@@ -2354,30 +2344,6 @@ public class VectorRoomActivity extends MXCActionBarActivity implements
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         if (0 == permissions.length) {
             Log.d(LOG_TAG, "## onRequestPermissionsResult(): cancelled " + requestCode);
-        } else if (requestCode == PermissionsToolsKt.PERMISSION_REQUEST_CODE) {
-            boolean isCameraPermissionGranted = false;
-
-            for (int i = 0; i < permissions.length; i++) {
-                Log.d(LOG_TAG, "## onRequestPermissionsResult(): " + permissions[i] + "=" + grantResults[i]);
-
-                if (Manifest.permission.CAMERA.equals(permissions[i])) {
-                    if (PackageManager.PERMISSION_GRANTED == grantResults[i]) {
-                        Log.d(LOG_TAG, "## onRequestPermissionsResult(): CAMERA permission granted");
-                        isCameraPermissionGranted = true;
-                    } else {
-                        Log.d(LOG_TAG, "## onRequestPermissionsResult(): CAMERA permission not granted");
-                    }
-                }
-            }
-
-            // the user allows to use to the camera.
-            if (isCameraPermissionGranted) {
-                Intent intent = new Intent(this, VectorMediasPickerActivity.class);
-                intent.putExtra(VectorMediasPickerActivity.EXTRA_AVATAR_MODE, true);
-                startActivityForResult(intent, REQUEST_ROOM_AVATAR_CODE);
-            } else {
-                launchRoomDetails(VectorRoomDetailsActivity.SETTINGS_TAB_INDEX);
-            }
         } else if (requestCode == PermissionsToolsKt.PERMISSION_REQUEST_CODE_LAUNCH_CAMERA
                 || requestCode == PermissionsToolsKt.PERMISSION_REQUEST_CODE_LAUNCH_NATIVE_CAMERA
                 || requestCode == PermissionsToolsKt.PERMISSION_REQUEST_CODE_LAUNCH_NATIVE_VIDEO_CAMERA) {
@@ -3604,76 +3570,6 @@ public class VectorRoomActivity extends MXCActionBarActivity implements
     }
 
     /**
-     * Update the avatar from the data provided the medias picker.
-     *
-     * @param aData the provided data.
-     */
-    private void onActivityResultRoomAvatarUpdate(final Intent aData) {
-        // sanity check
-        if (null == mSession || null == mRoom) {
-            return;
-        }
-
-        Uri thumbnailUri = VectorUtils.getThumbnailUriFromIntent(this, aData, mSession.getMediaCache());
-
-        if (null != thumbnailUri) {
-            showWaitingView();
-
-            // save the bitmap URL on the server
-            ResourceUtils.Resource resource = ResourceUtils.openResource(this, thumbnailUri, null);
-            if (null != resource) {
-                mSession.getMediaCache().uploadContent(resource.mContentStream, null, resource.mMimeType, null, new MXMediaUploadListener() {
-                    @Override
-                    public void onUploadError(String uploadId, int serverResponseCode, String serverErrorMessage) {
-                        Log.e(LOG_TAG, "Fail to upload the avatar");
-                    }
-
-                    @Override
-                    public void onUploadComplete(final String uploadId, final String contentUri) {
-                        runOnUiThread(new Runnable() {
-                            @Override
-                            public void run() {
-                                Log.d(LOG_TAG, "The avatar has been uploaded, update the room avatar");
-                                mRoom.updateAvatarUrl(contentUri, new ApiCallback<Void>() {
-
-                                    private void onDone(String message) {
-                                        if (!TextUtils.isEmpty(message)) {
-                                            Toast.makeText(VectorRoomActivity.this, message, Toast.LENGTH_SHORT).show();
-                                        }
-
-                                        hideWaitingView();
-                                        updateRoomHeaderAvatar();
-                                    }
-
-                                    @Override
-                                    public void onSuccess(Void info) {
-                                        onDone(null);
-                                    }
-
-                                    @Override
-                                    public void onNetworkError(Exception e) {
-                                        onDone(e.getLocalizedMessage());
-                                    }
-
-                                    @Override
-                                    public void onMatrixError(MatrixError e) {
-                                        onDone(e.getLocalizedMessage());
-                                    }
-
-                                    @Override
-                                    public void onUnexpectedError(Exception e) {
-                                        onDone(e.getLocalizedMessage());
-                                    }
-                                });
-                            }
-                        });
-                    }
-                });
-            }
-        }
-    }
-
-    /**
      * The user clicks on the room title.
      * Assume he wants to update it.
      */
@@ -3803,23 +3699,18 @@ public class VectorRoomActivity extends MXCActionBarActivity implements
                 .show();
     }
 
-    @OnClick(R.id.room_avatar)
+    @OnClick(R.id.room_header_avatar)
     void onRoomAvatarClick() {
-        // tap on the expanded room avatar
-        // sanity checks : reported by GA
-        if ((null != mRoom) && (null != mRoom.getState())) {
-            if (MatrixSdkExtensionsKt.isPowerLevelEnoughForAvatarUpdate(mRoom, mSession)) {
-                // need to check if the camera permission has been granted
-                if (PermissionsToolsKt.checkPermissions(PermissionsToolsKt.PERMISSIONS_FOR_ROOM_AVATAR,
-                        this, PermissionsToolsKt.PERMISSION_REQUEST_CODE)) {
-                    Intent intent = new Intent(this, VectorMediasPickerActivity.class);
-                    intent.putExtra(VectorMediasPickerActivity.EXTRA_AVATAR_MODE, true);
-                    startActivityForResult(intent, REQUEST_ROOM_AVATAR_CODE);
-                }
+        if (mRoom != null && !TextUtils.isEmpty(mRoom.getAvatarUrl()))
+            // Display the avatar in fullscreen with animation
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                ActivityOptions options =
+                        ActivityOptions.makeSceneTransitionAnimation(this, mActionBarHeaderRoomAvatar, "vector_transition_avatar");
+                startActivity(VectorAvatarViewerActivity.Companion.getIntent(this, mSession.getMyUserId(), mRoom.getAvatarUrl()), options.toBundle());
             } else {
-                launchRoomDetails(VectorRoomDetailsActivity.SETTINGS_TAB_INDEX);
+                // No transition
+                startActivity(VectorAvatarViewerActivity.Companion.getIntent(this, mSession.getMyUserId(), mRoom.getAvatarUrl()));
             }
-        }
     }
 
     @OnClick(R.id.action_bar_header_room_title)

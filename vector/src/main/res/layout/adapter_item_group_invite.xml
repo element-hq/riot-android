@@ -15,7 +15,7 @@
         android:layout_height="74dp">
 
         <im.vector.view.VectorCircularImageView
-            android:id="@+id/room_avatar"
+            android:id="@+id/group_avatar"
             android:layout_width="@dimen/chat_avatar_size"
             android:layout_height="@dimen/chat_avatar_size"
             android:layout_centerVertical="true"
@@ -29,8 +29,8 @@
             android:layout_marginLeft="16dp"
             android:layout_marginEnd="6dp"
             android:layout_marginRight="6dp"
-            android:layout_toEndOf="@+id/room_avatar"
-            android:layout_toRightOf="@+id/room_avatar">
+            android:layout_toEndOf="@+id/group_avatar"
+            android:layout_toRightOf="@+id/group_avatar">
 
             <TextView
                 android:id="@+id/group_name"
