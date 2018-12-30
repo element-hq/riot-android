@@ -17,8 +17,11 @@
 package im.vector.preference
 
 import android.content.Context
+import android.support.v7.preference.PreferenceViewHolder
 import android.text.TextUtils
 import android.util.AttributeSet
+import android.widget.RadioButton
+import android.widget.RadioGroup
 import im.vector.R
 import org.matrix.androidsdk.rest.model.bingrules.BingRule
 
@@ -35,6 +38,10 @@ class BingRulePreference : VectorPreference {
     constructor(context: Context, attrs: AttributeSet) : super(context, attrs)
 
     constructor(context: Context, attrs: AttributeSet, defStyle: Int) : super(context, attrs, defStyle)
+
+    init {
+        layoutResource = R.layout.vector_preference_bing_rule
+    }
 
     /**
      * @return the bing rule status index
@@ -84,7 +91,7 @@ class BingRulePreference : VectorPreference {
     private fun refreshSummary() {
         summary = context.getString(when (ruleStatusIndex) {
             NOTIFICATION_OFF_INDEX -> R.string.notification_off
-            NOTIFICATION_ON_INDEX -> R.string.notification_on
+            NOTIFICATION_ON_INDEX -> R.string.notification_silent
             else -> R.string.notification_noisy
         })
     }
@@ -148,6 +155,36 @@ class BingRulePreference : VectorPreference {
 
         return rule
     }
+
+    override fun onBindViewHolder(holder: PreferenceViewHolder) {
+        super.onBindViewHolder(holder)
+        val radioGroup = holder.findViewById(R.id.bingPreferenceRadioGroup) as? RadioGroup
+
+        when (ruleStatusIndex) {
+            NOTIFICATION_OFF_INDEX -> radioGroup?.check(R.id.bingPreferenceRadioBingRuleOff)
+            NOTIFICATION_ON_INDEX -> radioGroup?.check(R.id.bingPreferenceRadioBingRuleOn)
+            else -> radioGroup?.check(R.id.bingPreferenceRadioBingRuleNoisy)
+        }
+
+        radioGroup?.setOnCheckedChangeListener { group, checkedId ->
+
+            // This will get the radiobutton that has changed in its check state
+            val checkedRadioButton = group.findViewById<RadioGroup>(checkedId) as RadioButton
+            when (checkedId) {
+                R.id.bingPreferenceRadioBingRuleOff -> {
+                    onPreferenceChangeListener?.onPreferenceChange(this, NOTIFICATION_OFF_INDEX)
+                }
+                R.id.bingPreferenceRadioBingRuleOn -> {
+                    onPreferenceChangeListener?.onPreferenceChange(this, NOTIFICATION_ON_INDEX)
+                }
+                R.id.bingPreferenceRadioBingRuleNoisy-> {
+                    onPreferenceChangeListener?.onPreferenceChange(this, NOTIFICATION_NOISY_INDEX)
+                }
+            }
+        }
+
+    }
+
 
     companion object {
 

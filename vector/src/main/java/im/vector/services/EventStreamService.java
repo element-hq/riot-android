@@ -46,7 +46,9 @@ import org.matrix.androidsdk.data.RoomState;
 import org.matrix.androidsdk.data.store.IMXStore;
 import org.matrix.androidsdk.data.store.MXStoreListener;
 import org.matrix.androidsdk.listeners.MXEventListener;
+import org.matrix.androidsdk.rest.callback.ApiCallback;
 import org.matrix.androidsdk.rest.model.Event;
+import org.matrix.androidsdk.rest.model.MatrixError;
 import org.matrix.androidsdk.rest.model.bingrules.BingRule;
 import org.matrix.androidsdk.util.BingRulesManager;
 import org.matrix.androidsdk.util.EventDisplay;
@@ -1447,16 +1449,20 @@ public class EventStreamService extends Service {
 
         // not yet loaded
         if (!session.getDataHandler().getBingRulesManager().isReady()) {
+            Log.e(LOG_TAG,"## refreshNotifiedMessagesList: bing rules manager not ready");
+            workAroundBingRulesNotReadyRetryOnce(session);
             return false;
         }
 
         IMXStore store = session.getDataHandler().getStore();
 
         if (null == store) {
+            Log.e(LOG_TAG,"## refreshNotifiedMessagesList: Failed MXStore is null");
             return false;
         }
 
         if (!store.areReceiptsReady()) {
+            Log.e(LOG_TAG,"## refreshNotifiedMessagesList: Failed receipts not ready");
             return false;
         }
 
@@ -1589,6 +1595,45 @@ public class EventStreamService extends Service {
 
             return isUpdated;
         }
+    }
+
+    /**
+     * Bug fix, no notification.
+     * Step to reproduce:
+     * 1) set the wifi to connect to a non existent proxy (this way connection is ok but no internet)
+     * 2) Send a push, Play services still receive a notification (it is not affected by bad proxy)
+     * 3) Put back wifi on , and send a new push
+     * -> Notifications are never displayed because bing rules is not loaded...
+     *
+     * @param session
+     */
+    private void workAroundBingRulesNotReadyRetryOnce(MXSession session) {
+        session.getDataHandler().getBingRulesManager().loadRules(new ApiCallback<Void>() {
+            @Override
+            public void onNetworkError(Exception e) {
+                Log.e(LOG_TAG,"Failed to load bing rules",e);
+            }
+
+            @Override
+            public void onMatrixError(MatrixError e) {
+                Log.e(LOG_TAG,"Failed to load bing rules: " + e.getLocalizedMessage() );
+            }
+
+            @Override
+            public void onUnexpectedError(Exception e) {
+                Log.e(LOG_TAG,"Failed to load bing rules",e);
+            }
+
+            @Override
+            public void onSuccess(Void info) {
+                new Handler(getMainLooper()).post(new Runnable() {
+                    @Override
+                    public void run() {
+                        refreshNotifiedMessagesList();
+                    }
+                });
+            }
+        });
     }
 
     //================================================================================

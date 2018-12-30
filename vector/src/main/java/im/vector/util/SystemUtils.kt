@@ -122,6 +122,18 @@ fun startNotificationSettingsIntent(fragment: Fragment, requestCode: Int) {
         val uri = Uri.fromParts("package", fragment.activity?.packageName, null)
         intent.data = uri
     }
-
     fragment.startActivityForResult(intent, requestCode)
 }
+
+/**
+ * Shows notification system settings for the given channel id.
+ */
+fun startNotificationChannelSettingsIntent(fragment: Fragment, channelID: String) {
+    if (Build.VERSION.SDK_INT < Build.VERSION_CODES.O) return
+    val intent = Intent(Settings.ACTION_CHANNEL_NOTIFICATION_SETTINGS).apply {
+        putExtra(Settings.EXTRA_APP_PACKAGE, fragment.context?.packageName)
+        putExtra(Settings.EXTRA_CHANNEL_ID, channelID)
+    }
+    fragment.startActivity(intent)
+}
+

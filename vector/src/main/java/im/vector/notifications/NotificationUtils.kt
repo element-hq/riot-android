@@ -30,6 +30,7 @@ import android.os.Build
 import android.os.PowerManager
 import android.support.annotation.ColorInt
 import android.support.annotation.StringRes
+import android.support.v4.app.Fragment
 import android.support.v4.app.NotificationCompat
 import android.support.v4.app.NotificationManagerCompat
 import android.support.v4.app.TaskStackBuilder
@@ -45,6 +46,7 @@ import im.vector.activity.*
 import im.vector.receiver.DismissNotificationReceiver
 import im.vector.util.PreferencesManager
 import im.vector.util.createSquareBitmap
+import im.vector.util.startNotificationChannelSettingsIntent
 import org.matrix.androidsdk.rest.model.bingrules.BingRule
 import org.matrix.androidsdk.util.Log
 import java.util.*
@@ -104,7 +106,7 @@ object NotificationUtils {
      *
      * @param context the context
      */
-    private fun createNotificationChannels(context: Context) {
+    fun createNotificationChannels(context: Context) {
         if (Build.VERSION.SDK_INT < Build.VERSION_CODES.O) {
             return
         }
@@ -138,6 +140,10 @@ object NotificationUtils {
             }
         }
 
+        /**
+         * Default notification importance: shows everywhere, makes noise, but does not visually
+         * intrude.
+         */
         if (null == noisyNotificationChannelId) {
             noisyNotificationChannelId = NOISY_NOTIFICATION_CHANNEL_ID_BASE + "_" + System.currentTimeMillis()
 
@@ -147,36 +153,37 @@ object NotificationUtils {
             channel.description = context.getString(R.string.notification_noisy_notifications)
             channel.setSound(PreferencesManager.getNotificationRingTone(context), null)
             channel.enableVibration(true)
+            channel.enableLights(true)
             notificationManager.createNotificationChannel(channel)
         }
 
-        if (null == notificationManager.getNotificationChannel(SILENT_NOTIFICATION_CHANNEL_ID)) {
-            val channel = NotificationChannel(SILENT_NOTIFICATION_CHANNEL_ID,
-                    context.getString(R.string.notification_silent_notifications),
-                    NotificationManager.IMPORTANCE_DEFAULT)
-            channel.description = context.getString(R.string.notification_silent_notifications)
-            channel.setSound(null, null)
-            notificationManager.createNotificationChannel(channel)
-        }
+        /**
+         * Low notification importance: shows everywhere, but is not intrusive.
+         */
+        val silentChannel = NotificationChannel(SILENT_NOTIFICATION_CHANNEL_ID,
+                context.getString(R.string.notification_silent_notifications),
+                NotificationManager.IMPORTANCE_LOW)
+        silentChannel.description = context.getString(R.string.notification_silent_notifications)
+        silentChannel.setSound(null, null)
+        silentChannel.enableLights(true)
+        notificationManager.createNotificationChannel(silentChannel)
 
-        if (null == notificationManager.getNotificationChannel(LISTENING_FOR_EVENTS_NOTIFICATION_CHANNEL_ID)) {
-            val channel = NotificationChannel(LISTENING_FOR_EVENTS_NOTIFICATION_CHANNEL_ID,
-                    context.getString(R.string.notification_listening_for_events),
-                    NotificationManager.IMPORTANCE_MIN)
-            channel.description = context.getString(R.string.notification_listening_for_events)
-            channel.setSound(null, null)
-            channel.setShowBadge(false)
-            notificationManager.createNotificationChannel(channel)
-        }
+        val listeningForEventChannel = NotificationChannel(LISTENING_FOR_EVENTS_NOTIFICATION_CHANNEL_ID,
+                context.getString(R.string.notification_listening_for_events),
+                NotificationManager.IMPORTANCE_MIN)
+        listeningForEventChannel.description = context.getString(R.string.notification_listening_for_events)
+        listeningForEventChannel.setSound(null, null)
+        listeningForEventChannel.setShowBadge(false)
+        notificationManager.createNotificationChannel(listeningForEventChannel)
 
-        if (null == notificationManager.getNotificationChannel(CALL_NOTIFICATION_CHANNEL_ID)) {
-            val channel = NotificationChannel(CALL_NOTIFICATION_CHANNEL_ID,
-                    context.getString(R.string.call),
-                    NotificationManager.IMPORTANCE_DEFAULT)
-            channel.description = context.getString(R.string.call)
-            channel.setSound(null, null)
-            notificationManager.createNotificationChannel(channel)
-        }
+        val callChannel = NotificationChannel(CALL_NOTIFICATION_CHANNEL_ID,
+                context.getString(R.string.call),
+                NotificationManager.IMPORTANCE_HIGH)
+        callChannel.description = context.getString(R.string.call)
+        callChannel.setSound(null, null)
+        callChannel.enableLights(true)
+        callChannel.lightColor = Color.GREEN
+        notificationManager.createNotificationChannel(callChannel)
     }
 
     /**
@@ -192,8 +199,6 @@ object NotificationUtils {
         val i = Intent(context, VectorHomeActivity::class.java)
         i.flags = Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_SINGLE_TOP
         val pi = PendingIntent.getActivity(context, 0, i, 0)
-
-        createNotificationChannels(context)
 
         val builder = NotificationCompat.Builder(context, LISTENING_FOR_EVENTS_NOTIFICATION_CHANNEL_ID)
                 .setWhen(System.currentTimeMillis())
@@ -243,7 +248,6 @@ object NotificationUtils {
      */
     @SuppressLint("NewApi")
     fun buildIncomingCallNotification(context: Context, isVideo: Boolean, roomName: String, matrixId: String, callId: String): Notification {
-        createNotificationChannels(context)
 
         val builder = NotificationCompat.Builder(context, CALL_NOTIFICATION_CHANNEL_ID)
                 .setWhen(System.currentTimeMillis())
@@ -299,7 +303,6 @@ object NotificationUtils {
      */
     @SuppressLint("NewApi")
     fun buildPendingCallNotification(context: Context, isVideo: Boolean, roomName: String, roomId: String, matrixId: String, callId: String): Notification {
-        createNotificationChannels(context)
 
         val builder = NotificationCompat.Builder(context, CALL_NOTIFICATION_CHANNEL_ID)
                 .setWhen(System.currentTimeMillis())
@@ -546,38 +549,33 @@ object NotificationUtils {
      *
      * @param context      the context
      * @param builder      the notification builder
-     * @param isBackground true if the notification is a background one
+     * @param isBackground true if the notification is a background one (e.g. read receipt)
      * @param isBing       true if the notification should play sound
      */
     @SuppressLint("NewApi")
     private fun manageNotificationSound(context: Context, builder: NotificationCompat.Builder, isBackground: Boolean, isBing: Boolean) {
         @ColorInt val highlightColor = ContextCompat.getColor(context, R.color.vector_fuchsia_color)
-        val defaultColor = Color.TRANSPARENT
 
-        if (isBackground) {
-            builder.priority = NotificationCompat.PRIORITY_DEFAULT
-            builder.color = defaultColor
-        } else if (isBing) {
-            builder.priority = NotificationCompat.PRIORITY_HIGH
-            builder.color = highlightColor
+        //set default, will be overridden if needed
+        builder.color = Color.TRANSPARENT
+
+        if (isBackground) { // no event notification (like read receipt)
+            builder.priority = NotificationCompat.PRIORITY_LOW
+            builder.setChannelId(SILENT_NOTIFICATION_CHANNEL_ID)
         } else {
-            builder.priority = NotificationCompat.PRIORITY_DEFAULT
-            builder.color = defaultColor
-        }
-
-        if (!isBackground) {
             builder.setDefaults(Notification.DEFAULT_LIGHTS)
 
-            if (isBing && null != PreferencesManager.getNotificationRingTone(context)) {
-                builder.setSound(PreferencesManager.getNotificationRingTone(context))
-
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-                    builder.setChannelId(noisyNotificationChannelId!!)
+            if (isBing) {
+                builder.setChannelId(noisyNotificationChannelId!!)
+                builder.color = highlightColor
+                //android <O compatibility, set priority and set the ringtone
+                builder.priority = NotificationCompat.PRIORITY_DEFAULT
+                if (null != PreferencesManager.getNotificationRingTone(context)) {
+                    builder.setSound(PreferencesManager.getNotificationRingTone(context))
                 }
             } else {
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-                    builder.setChannelId(SILENT_NOTIFICATION_CHANNEL_ID)
-                }
+                builder.priority = NotificationCompat.PRIORITY_LOW
+                builder.setChannelId(SILENT_NOTIFICATION_CHANNEL_ID)
             }
 
             // turn the screen on for 3 seconds
@@ -586,10 +584,6 @@ object NotificationUtils {
                 val wl = pm.newWakeLock(PowerManager.SCREEN_BRIGHT_WAKE_LOCK or PowerManager.ACQUIRE_CAUSES_WAKEUP, "manageNotificationSound")
                 wl.acquire(3000)
                 wl.release()
-            }
-        } else {
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-                builder.setChannelId(SILENT_NOTIFICATION_CHANNEL_ID)
             }
         }
     }
@@ -624,7 +618,7 @@ object NotificationUtils {
      * @param context                the context
      * @param notifiedEventsByRoomId the notified events
      * @param eventToNotify          the latest event to notify
-     * @param isBackground           true if it is background notification
+     * @param isBackground           true if it is background notification (like read receipt)
      * @return the notification
      */
     fun buildMessageNotification(context: Context,
@@ -652,7 +646,7 @@ object NotificationUtils {
      * @param context            the context
      * @param roomsNotifications the rooms notifications
      * @param bingRule           the bing rule
-     * @param isBackground       true if it is background notification
+     * @param isBackground       true if it is background notification (e.g. read receipt)
      * @return the notification
      */
     private fun buildMessageNotification(context: Context,
@@ -679,8 +673,6 @@ object NotificationUtils {
             }
 
             Log.d(LOG_TAG, "prepareNotification : with sound " + BingRule.isDefaultNotificationSound(bingRule.notificationSound))
-
-            createNotificationChannels(context)
 
             val builder = NotificationCompat.Builder(context, SILENT_NOTIFICATION_CHANNEL_ID)
                     .setWhen(roomsNotifications.mContentTs)
@@ -726,7 +718,6 @@ object NotificationUtils {
      */
     fun buildMessagesListNotification(context: Context, messagesStrings: List<CharSequence>, bingRule: BingRule): Notification? {
         try {
-            createNotificationChannels(context)
 
             val builder = NotificationCompat.Builder(context, SILENT_NOTIFICATION_CHANNEL_ID)
                     .setWhen(System.currentTimeMillis())
@@ -826,5 +817,20 @@ object NotificationUtils {
         }
 
         return title!!
+    }
+
+    fun supportNotificationChannels(): Boolean = (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O)
+
+    fun openSystemSettingsForSilentCategory(fragment: Fragment) {
+        startNotificationChannelSettingsIntent(fragment, SILENT_NOTIFICATION_CHANNEL_ID)
+    }
+
+    fun openSystemSettingsForNoisyCategory(fragment: Fragment) {
+        startNotificationChannelSettingsIntent(fragment, noisyNotificationChannelId ?: "")
+    }
+
+
+    fun openSystemSettingsForCallCategory(fragment: Fragment) {
+        startNotificationChannelSettingsIntent(fragment, CALL_NOTIFICATION_CHANNEL_ID)
     }
 }

@@ -23,6 +23,7 @@ import android.support.v7.preference.Preference
 import android.support.v7.preference.PreferenceFragmentCompat
 import im.vector.Matrix
 import im.vector.R
+import im.vector.fragments.VectorSettingsAdvancedNotificationPreferenceFragment
 import im.vector.fragments.VectorSettingsNotificationsTroubleshootFragment
 import im.vector.fragments.VectorSettingsPreferencesFragment
 import im.vector.util.PreferencesManager
@@ -97,6 +98,8 @@ class VectorSettingsActivity : MXCActionBarActivity(),
 
         if (PreferencesManager.SETTINGS_NOTIFICATION_TROUBLESHOOT_PREFERENCE_KEY == pref?.key) {
             oFragment = VectorSettingsNotificationsTroubleshootFragment.newInstance(session.myUserId)
+        } else if (PreferencesManager.SETTINGS_NOTIFICATION_ADVANCED_PREFERENCE_KEY == pref?.key) {
+            oFragment = VectorSettingsAdvancedNotificationPreferenceFragment.newInstance(session.myUserId)
         }
 
         if (oFragment != null) {

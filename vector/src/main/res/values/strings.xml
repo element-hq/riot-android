@@ -591,6 +591,11 @@
     <string name="settings_app_info_link_title">Application info</string>
     <string name="settings_app_info_link_summary">Show the application info in the system settings.</string>
 
+
+    <string name="settings_notification_advanced">Advanced Notification Settings</string>
+    <string name="settings_notification_advanced_summary">Set notification importance by event, Configure sound, led, vibration</string>
+    <string name="settings_notification_by_event">Notification importance by event</string>
+
     <string name="settings_notification_privacy">Notification privacy</string>
     <string name="settings_notification_troubleshoot">Troubleshoot Notifications</string>
     <string name="settings_troubleshoot_diagnostic">Troubleshooting diagnostics</string>
@@ -669,6 +674,11 @@
     <string name="settings_enable_all_notif">Enable notifications for this account</string>
     <string name="settings_enable_this_device">Enable notifications for this device</string>
     <string name="settings_turn_screen_on">Turn the screen on for 3 seconds</string>
+    <string name="settings_noisy_notifications_preferences">Configure Noisy Notifications</string>
+    <string name="settings_call_notifications_preferences">Configure Call Notifications</string>
+    <string name="settings_silent_notifications_preferences">Configure Silent Notifications</string>
+    <string name="settings_system_preferences_summary">Choose LED color, vibration, sound…</string>
+
 
     <string name="settings_containing_my_display_name">Msgs containing my display name</string>
     <string name="settings_containing_my_user_name">Msgs containing my user name</string>
@@ -1059,7 +1069,7 @@
 
     <!-- notification statuses -->
     <string name="notification_off">Off</string>
-    <string name="notification_on">On</string>
+    <string name="notification_silent">Silent</string>
     <string name="notification_noisy">Noisy</string>
 
     <string name="encrypted_message">Encrypted message</string>

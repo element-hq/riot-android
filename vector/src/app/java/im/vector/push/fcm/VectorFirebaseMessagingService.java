@@ -142,6 +142,15 @@ public class VectorFirebaseMessagingService extends FirebaseMessagingService {
                 return;
             }
 
+            //Work Around for notification reliability:
+            //Sort of timeout fallback for when the event stream has not been able to download the message to ensure that a notification is displayed.
+            //If the event is not known after the timeout delay, we display a static notification.
+            final Event event = parseEvent(data);
+            if (event != null) {
+                safeGuardFallbackOnStaticNotif(data.get("sender_display_name"), event, data.get("room_name"), roomId, eventId, unreadCount);
+            }
+
+
             // check if the application has been launched once
             // the first FCM event could have been triggered whereas the application is not yet launched.
             // so it is required to create the sessions and to start/resume event stream
@@ -176,6 +185,30 @@ public class VectorFirebaseMessagingService extends FirebaseMessagingService {
         } catch (Exception e) {
             Log.d(LOG_TAG, "## onMessageReceivedInternal() failed : " + e.getMessage(), e);
         }
+    }
+
+    private void safeGuardFallbackOnStaticNotif(@Nullable String senderName, Event event, @Nullable String roomName, String roomId, String eventId, int unreadCount) {
+        mUIHandler.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                if (null != eventId && null != roomId) {
+                    try {
+                        Collection<MXSession> sessions = Matrix.getInstance(getApplicationContext()).getSessions();
+                        if (null != sessions && !sessions.isEmpty()) {
+                            for (MXSession session : sessions) {
+                                if (session.getDataHandler().getStore().isReady()) {
+                                    if (null == session.getDataHandler().getStore().getEvent(eventId, roomId)) {
+                                        EventStreamService.onStaticNotifiedEvent(getApplicationContext(), event, roomName, senderName, unreadCount);
+                                    }
+                                }
+                            }
+                        }
+                    } catch (Exception e) {
+                        Log.e(LOG_TAG, "## onMessageReceivedInternal() : failed to check if the event was already defined " + e.getMessage(), e);
+                    }
+                }
+            }
+        }, 10*1000);
     }
 
     /**

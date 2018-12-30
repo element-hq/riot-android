@@ -63,6 +63,7 @@ import im.vector.analytics.PiwikAnalytics;
 import im.vector.analytics.e2e.DecryptionFailureTracker;
 import im.vector.contacts.ContactsManager;
 import im.vector.contacts.PIDsRetriever;
+import im.vector.notifications.NotificationUtils;
 import im.vector.push.PushManager;
 import im.vector.services.EventStreamService;
 import im.vector.settings.FontScale;
@@ -181,6 +182,8 @@ public class VectorApp extends MultiDexApplication {
         if (BuildConfig.DEBUG) {
             Stetho.initializeWithDefaults(this);
         }
+
+        NotificationUtils.INSTANCE.createNotificationChannels(this);
 
         // init the REST client
         MXSession.initUserAgent(this, BuildConfig.FLAVOR_DESCRIPTION);
