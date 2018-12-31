@@ -566,7 +566,8 @@ object NotificationUtils {
             builder.setDefaults(Notification.DEFAULT_LIGHTS)
 
             if (isBing) {
-                builder.setChannelId(noisyNotificationChannelId!!)
+                //can be null on android <O
+                if (noisyNotificationChannelId != null) builder.setChannelId(noisyNotificationChannelId!!)
                 builder.color = highlightColor
                 //android <O compatibility, set priority and set the ringtone
                 builder.priority = NotificationCompat.PRIORITY_DEFAULT
