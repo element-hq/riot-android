@@ -161,15 +161,18 @@ class BingRulePreference : VectorPreference {
         val radioGroup = holder.findViewById(R.id.bingPreferenceRadioGroup) as? RadioGroup
 
         when (ruleStatusIndex) {
-            NOTIFICATION_OFF_INDEX -> radioGroup?.check(R.id.bingPreferenceRadioBingRuleOff)
-            NOTIFICATION_ON_INDEX -> radioGroup?.check(R.id.bingPreferenceRadioBingRuleOn)
-            else -> radioGroup?.check(R.id.bingPreferenceRadioBingRuleNoisy)
+            NOTIFICATION_OFF_INDEX -> {
+                radioGroup?.check(R.id.bingPreferenceRadioBingRuleOff)
+            }
+            NOTIFICATION_ON_INDEX -> {
+                radioGroup?.check(R.id.bingPreferenceRadioBingRuleOn)
+            }
+            else -> {
+                radioGroup?.check(R.id.bingPreferenceRadioBingRuleNoisy)
+            }
         }
 
         radioGroup?.setOnCheckedChangeListener { group, checkedId ->
-
-            // This will get the radiobutton that has changed in its check state
-            val checkedRadioButton = group.findViewById<RadioGroup>(checkedId) as RadioButton
             when (checkedId) {
                 R.id.bingPreferenceRadioBingRuleOff -> {
                     onPreferenceChangeListener?.onPreferenceChange(this, NOTIFICATION_OFF_INDEX)
@@ -177,7 +180,7 @@ class BingRulePreference : VectorPreference {
                 R.id.bingPreferenceRadioBingRuleOn -> {
                     onPreferenceChangeListener?.onPreferenceChange(this, NOTIFICATION_ON_INDEX)
                 }
-                R.id.bingPreferenceRadioBingRuleNoisy-> {
+                R.id.bingPreferenceRadioBingRuleNoisy -> {
                     onPreferenceChangeListener?.onPreferenceChange(this, NOTIFICATION_NOISY_INDEX)
                 }
             }

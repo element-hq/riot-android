@@ -187,7 +187,8 @@ public class VectorFirebaseMessagingService extends FirebaseMessagingService {
         }
     }
 
-    private void safeGuardFallbackOnStaticNotif(@Nullable String senderName, Event event, @Nullable String roomName, String roomId, String eventId, int unreadCount) {
+    private void safeGuardFallbackOnStaticNotif(
+            @Nullable String senderName, Event event, @Nullable String roomName, String roomId, String eventId, int unreadCount) {
         mUIHandler.postDelayed(new Runnable() {
             @Override
             public void run() {
