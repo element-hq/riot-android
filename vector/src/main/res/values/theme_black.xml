@@ -9,49 +9,10 @@
         <item name="vctr_markdown_block_background_color">#FF4D4D4D</item>
         <item name="vctr_fenced_code_block_background_color">#FF00FF00</item>
 
-        <!-- disable the overscroll because setOverscrollHeader/Footer don't always work -->
-        <item name="android:overScrollMode">never</item>
-
-        <!-- with action bar -->
-        <item name="android:windowActionBar">true</item>
-
         <!-- activities background -->
         <item name="android:windowBackground">@color/riot_primary_background_color_black</item>
 
-        <!-- fonts -->
-        <item name="android:typeface">sans</item>
-
-        <!-- android ui button -->
-        <item name="colorAccent">@color/primary_color_light</item>
-
-        <!-- custom action bar -->
-        <item name="android:actionBarStyle">@style/Vector.Styled.ActionBar</item>
-        <item name="actionBarStyle">@style/Vector.Styled.ActionBar</item>
-
-        <!-- actionbar icons color -->
-        <item name="actionBarTheme">@style/Vector.ActionBarTheme</item>
-
-        <!-- remove the shadow under the actionbar -->
-        <item name="android:windowContentOverlay">@null</item>
-
-        <item name="android:popupMenuStyle">@style/Vector.PopupMenu</item>
-
-        <!-- no divider -->
-        <item name="android:actionBarDivider">@null</item>
-
-        <!-- tabbar background -->
-        <item name="android:actionBarTabStyle">@style/Vector.TabView.Dark</item>
-        <item name="actionBarTabStyle">@style/Vector.TabView.Dark</item>
-
-        <!-- tabbar text color -->
-        <item name="android:actionBarTabTextStyle">@style/Vector.TabText</item>
-        <item name="actionBarTabTextStyle">@style/Vector.TabText</item>
-
-        <!-- switch color -->
-        <item name="colorControlActivated">@color/primary_color_light</item>
-
         <item name="vctr_direct_chat_circle">@drawable/direct_chat_circle_black</item>
-
     </style>
 
     <style name="AppTheme.Black" parent="AppTheme.Base.Black" />
