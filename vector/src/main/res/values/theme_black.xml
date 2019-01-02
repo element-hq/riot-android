@@ -15,9 +15,6 @@
         <!-- with action bar -->
         <item name="android:windowActionBar">true</item>
 
-        <!-- status bar color -->
-        <item name="colorPrimaryDark">?attr/vctr_primary_dark_color</item>
-
         <!-- activities background -->
         <item name="android:windowBackground">@color/riot_primary_background_color_black</item>
 

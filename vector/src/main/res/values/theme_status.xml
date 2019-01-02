@@ -14,9 +14,6 @@
         <!-- waiting view background -->
         <item name="vctr_waiting_background_color">#AAAAAAAA</item>
 
-        <!-- primary dark color (status bar) -->
-        <item name="vctr_primary_dark_color">@color/primary_color_status_dark</item>
-
         <!-- application bar text color -->
         <item name="vctr_primary_text_color">@android:color/white</item>
 

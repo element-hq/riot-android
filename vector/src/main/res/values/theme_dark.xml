@@ -4,7 +4,7 @@
     <!-- DARK THEME COLORS -->
 
     <style name="AppTheme.Base.Dark" parent="Theme.AppCompat.NoActionBar">
-        <item name="colorPrimaryDark">?attr/vctr_primary_dark_color</item>
+        <item name="colorPrimaryDark">@color/primary_color_dark_dark</item>
         <item name="colorPrimary">@color/primary_color_dark</item>
         <item name="colorAccent">@color/primary_color_light</item>
 
@@ -13,9 +13,6 @@
 
         <!-- waiting view background -->
         <item name="vctr_waiting_background_color">#55555555</item>
-
-        <!-- primary dark color (status bar) -->
-        <item name="vctr_primary_dark_color">#191919</item>
 
         <!-- application bar text color -->
         <item name="vctr_primary_text_color">@android:color/white</item>

@@ -8,9 +8,6 @@
         <!-- waiting view background -->
         <attr name="vctr_waiting_background_color" format="color" />
 
-        <!-- primary dark color (status bar) -->
-        <attr name="vctr_primary_dark_color" format="color" />
-
         <!-- application bar text color -->
         <attr name="vctr_primary_text_color" format="color" />
 
