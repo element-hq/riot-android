@@ -512,7 +512,7 @@ Veuillez autoriser l\'accès dans la prochaine fenêtre contextuelle pour décou
 
 Autorisez-vous Riot à accéder à vos contacts ?</string>
 
-    <string name="permissions_action_not_performed_missing_permissions">Désolé… L\'action n\'a pas été réalisée, faute d\'autorisations</string>
+    <string name="permissions_action_not_performed_missing_permissions">Désolé. L\'action n\'a pas été réalisée, faute d\'autorisations</string>
 
     <string name="room_jump_to_first_unread">Aller au premier message non lu.</string>
 
