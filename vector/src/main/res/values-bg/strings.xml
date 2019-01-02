@@ -1037,7 +1037,7 @@
     <string name="plus_x">+%d</string>
     <string name="x_plus">%d+</string>
 
-<string name="call_anyway">Звънни въпреки това</string>
+    <string name="call_anyway">Звънни въпреки това</string>
     <string name="accept">Разреши</string>
 
     <string name="auth_accept_policies">Моля прегледайте и приемете политиките на сървъра:</string>
@@ -1049,9 +1049,9 @@
 
     <string name="room_participants_action_kick">Изгони</string>
     <plurals name="room_participants_kick_prompt_msg">
-	<item quantity="one">Сигурни ли сте, че искате да изгоните този потребител от този чат?</item>
-	<item quantity="other">Сигурни ли сте, че искате да изгоните тези потребители от този чат?</item>
-</plurals>
+        <item quantity="one">Сигурни ли сте, че искате да изгоните този потребител от този чат?</item>
+        <item quantity="other">Сигурни ли сте, че искате да изгоните тези потребители от този чат?</item>
+    </plurals>
     <string name="reason_hint">Причина</string>
 
     <string name="settings_inline_url_preview_summary">Прегледи на връзки директно в самия чат, когато функцията се поддържа от сървъра.</string>

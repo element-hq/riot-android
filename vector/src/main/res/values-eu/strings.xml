@@ -1088,7 +1088,7 @@ Kontuan izan ekintza honek aplikazioa berrabiaraziko duela eta denbora bat behar
 
     <string name="encryption_import_room_keys_success">%1$d/%2$d gako ongi inportatu dira.</string>
 
-<string name="settings_notification_troubleshoot">Egiaztatu arazoak jakinarazpenekin</string>
+    <string name="settings_notification_troubleshoot">Egiaztatu arazoak jakinarazpenekin</string>
     <string name="settings_troubleshoot_diagnostic">Arazoak egiaztatzen</string>
     <string name="settings_troubleshoot_diagnostic_run_button_title">Abiatu probak</string>
     <string name="settings_troubleshoot_diagnostic_running_status">Exekutatzen… (%1$d / %2$d)</string>

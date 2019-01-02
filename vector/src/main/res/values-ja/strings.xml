@@ -1030,7 +1030,7 @@ Matrixでのメッセージの可視性は電子メールと同様です。メ�
     <string name="merged_events_collapse">畳む</string>
 
     <string name="show_info_area_messages_and_errors">メッセージとエラーの場合</string>
-<string name="call_anyway">とにかく通話する</string>
+    <string name="call_anyway">とにかく通話する</string>
     <string name="accept">受け取る</string>
 
     <string name="auth_accept_policies">このホームサーバーの方針を閲覧し承認してください:</string>
@@ -1042,8 +1042,8 @@ Matrixでのメッセージの可視性は電子メールと同様です。メ�
 
     <string name="room_participants_action_kick">追い出す</string>
     <plurals name="room_participants_kick_prompt_msg">
-	<item quantity="other">このチャットから本当にこのユーザーを追い出しますか？</item>
-</plurals>
+        <item quantity="other">このチャットから本当にこのユーザーを追い出しますか？</item>
+    </plurals>
     <string name="reason_hint">理由</string>
 
-    </resources>
+</resources>

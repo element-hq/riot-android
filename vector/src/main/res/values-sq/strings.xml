@@ -1050,7 +1050,7 @@ Kini parasysh që ky veprim do të sjellë rinisjen e aplikacionit dhe mund të 
 
     <string name="encryption_import_room_keys_success">%1$d/%2$d kyç(e) u importuan me sukses.</string>
 
-<string name="settings_notification_troubleshoot">Diagnostikoni Njoftime</string>
+    <string name="settings_notification_troubleshoot">Diagnostikoni Njoftime</string>
     <string name="settings_troubleshoot_diagnostic">Diagnostikime</string>
     <string name="settings_troubleshoot_diagnostic_run_button_title">Xhironi Teste</string>
     <string name="settings_troubleshoot_diagnostic_running_status">Po xhirohet… (%1$d of %2$d)</string>
@@ -1068,4 +1068,4 @@ Ju lutemi, kontrolloni rregullimet e sistemit.</string>
     <string name="settings_troubleshoot_test_account_settings_success">Njoftimet janë të aktivizuara për llogarinë tuaj.</string>
     <string name="settings_troubleshoot_test_account_settings_failed">Njoftimet janë të çaktivizuara për llogarinë tuaj.
 Ju lutemi, kontrolloni rregullime llogarie.</string>
-    </resources>
+</resources>

@@ -1091,7 +1091,7 @@ Veuillez noter que cette action redémarrera l\'application et pourra prendre un
 
     <string name="encryption_import_room_keys_success">%1$d/%2$d clé(s) importée(s) avec succès.</string>
 
-<string name="settings_notification_troubleshoot">Résoudre les problèmes de notification</string>
+    <string name="settings_notification_troubleshoot">Résoudre les problèmes de notification</string>
     <string name="settings_troubleshoot_diagnostic">Diagnostics de résolution de problème</string>
     <string name="settings_troubleshoot_diagnostic_run_button_title">Lancer les tests</string>
     <string name="settings_troubleshoot_diagnostic_running_status">"Exécution…  (%1$d sur %2$d)"</string>

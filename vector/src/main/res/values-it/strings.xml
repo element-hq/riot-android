@@ -1132,7 +1132,7 @@ Tieni presente che questa azione riavvierà l\'app e potrebbe richiedere del tem
     <string name="settings_call_ringtone_title">Suoneria chiamate in arrivo</string>
     <string name="settings_call_ringtone_dialog_title">Scegli suoneria per le chiamate:</string>
 
-<string name="accept">Accetto</string>
+    <string name="accept">Accetto</string>
 
     <string name="auth_accept_policies">Per favore, rivedere e accettare le politiche di questo server home:</string>
 
