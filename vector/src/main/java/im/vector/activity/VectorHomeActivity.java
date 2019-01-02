@@ -1992,7 +1992,7 @@ public class VectorHomeActivity extends VectorAppCompatActivity implements Searc
     // Unread counter badges
     //==============================================================================================================
 
-    // Badge view <-> menu entry id
+    // menu entry id -> Badge view
     private final Map<Integer, UnreadCounterBadgeView> mBadgeViewByIndex = new HashMap<>();
 
     // events listener to track required refresh
@@ -2194,6 +2194,9 @@ public class VectorHomeActivity extends VectorAppCompatActivity implements Searc
         menuIndexes.remove(R.id.bottom_action_home);
 
         for (Integer id : menuIndexes) {
+            int highlightCount = 0;
+            int roomCount = 0;
+
             // use a map because contains is faster
             Set<String> filteredRoomIdsSet = new HashSet<>();
 
@@ -2230,12 +2233,12 @@ public class VectorHomeActivity extends VectorAppCompatActivity implements Searc
                         filteredRoomIdsSet.add(room.getRoomId());
                     }
                 }
+            } else if (id == R.id.bottom_action_groups) {
+                // Display number of groups invitation in the badge of groups
+                roomCount = mSession.getGroupsManager().getInvitedGroups().size();
             }
 
             // compute the badge value and its displays
-            int highlightCount = 0;
-            int roomCount = 0;
-
             for (String roomId : filteredRoomIdsSet) {
                 Room room = store.getRoom(roomId);
 
@@ -2452,6 +2455,24 @@ public class VectorHomeActivity extends VectorAppCompatActivity implements Searc
                         onRoomDataUpdated();
                     }
                 }
+            }
+
+            @Override
+            public void onNewGroupInvitation(String groupId) {
+                // Refresh badge
+                refreshUnreadBadges();
+            }
+
+            @Override
+            public void onJoinGroup(String groupId) {
+                // Refresh badge (invitation accepted)
+                refreshUnreadBadges();
+            }
+
+            @Override
+            public void onLeaveGroup(String groupId) {
+                // Refresh badge (invitation rejected)
+                refreshUnreadBadges();
             }
         };
 

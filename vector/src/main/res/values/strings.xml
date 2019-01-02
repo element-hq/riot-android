@@ -339,7 +339,7 @@
     <string name="permissions_rationale_msg_contacts">Riot needs permission to access your address book contacts to find other Matrix users based on their email and phone numbers.\n\nPlease allow access on the next pop-up to discover address book users reachable from Riot.</string>
     <string name="permissions_msg_contacts_warning_other_androids">Riot needs permission to access your address book contact to find other Matrix users based on their email and phone numbers.\n\nAllow Riot to access your contacts ?</string>
 
-    <string name="permissions_action_not_performed_missing_permissions">Sorry.. Action not performed, due to missing permissions</string>
+    <string name="permissions_action_not_performed_missing_permissions">Sorry. Action not performed, due to missing permissions</string>
 
     <!-- medias slider string -->
     <string name="media_slider_saved">Saved</string>
@@ -555,7 +555,7 @@
         <item quantity="one">%1$s room found for %2$s</item>
         <item quantity="other">%1$s rooms found for %2$s</item>
     </plurals>
-    <string name="directory_searching_title">Searching directory..</string>
+    <string name="directory_searching_title">Searching directory…</string>
 
     <!-- home room settings -->
     <string name="room_settings_all_messages_noisy">All messages (noisy)</string>
