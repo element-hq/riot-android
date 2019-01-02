@@ -4,6 +4,10 @@
     <!-- LIGHT THEME COLORS -->
 
     <style name="AppTheme.Base.Light" parent="Theme.AppCompat.Light.NoActionBar">
+        <item name="colorPrimaryDark">@color/primary_color_light_dark</item>
+        <item name="colorPrimary">@color/primary_color_light</item>
+        <item name="colorAccent">@color/primary_color_light</item>
+
         <!-- default background color -->
         <item name="vctr_riot_primary_background_color">@color/riot_primary_background_color_light</item>
 
@@ -12,9 +16,6 @@
 
         <!-- primary dark color (status bar) -->
         <item name="vctr_primary_dark_color">@color/primary_color_light_dark</item>
-
-        <!-- application bar background color -->
-        <item name="vctr_primary_color">@color/primary_color_light</item>
 
         <!-- application bar text color -->
         <item name="vctr_primary_text_color">@android:color/white</item>
@@ -50,7 +51,7 @@
         <item name="vctr_room_activity_divider_color">#FFF2F2F2</item>
 
         <!-- tab bar colors -->
-        <item name="vctr_tab_bar_background_color">?attr/vctr_primary_color</item>
+        <item name="vctr_tab_bar_background_color">?colorPrimary</item>
         <item name="vctr_tab_bar_inverted_background_color">#FFF2F2F2</item>
         <item name="vctr_tab_bar_selected_background_color">
             @color/tab_bar_selected_background_color_light
@@ -120,18 +121,11 @@
         <!-- with action bar -->
         <item name="android:windowActionBar">true</item>
 
-        <!-- status bar color -->
-        <item name="colorPrimaryDark">@color/primary_color_light_dark</item>
-        <item name="colorPrimary">@color/primary_color_light</item>
-
         <!-- activities background -->
         <item name="android:windowBackground">@color/riot_primary_background_color_light</item>
 
         <!-- fonts -->
         <item name="android:typeface">sans</item>
-
-        <!-- android ui button -->
-        <item name="colorAccent">@color/primary_color_light</item>
 
         <!-- custom action bar -->
         <item name="android:actionBarStyle">@style/Vector.Styled.ActionBar</item>
@@ -166,13 +160,14 @@
     <style name="AppTheme.Light" parent="AppTheme.Base.Light" />
 
     <style name="Theme.Vector.Lock.Light" parent="Theme.AppCompat.Light.Dialog">
-        <item name="vctr_primary_color">@color/primary_color_light</item>
+        <item name="colorPrimary">@color/primary_color_light</item>
+        <item name="colorAccent">@color/primary_color_light</item>
+
         <item name="vctr_riot_primary_background_color">@color/riot_primary_background_color_light</item>
         <item name="vctr_riot_primary_text_color">@color/riot_primary_text_color_light</item>
         <item name="vctr_primary_hint_text_color">@color/primary_hint_text_color_light</item>
         <item name="vctr_message_text_color">?attr/vctr_riot_primary_text_color</item>
 
-        <item name="colorAccent">@color/primary_color_light</item>
         <item name="android:background">?attr/vctr_riot_primary_background_color</item>
         <item name="android:textColor">?attr/vctr_primary_text_color</item>
         <item name="editTextColor">?attr/vctr_riot_primary_text_color</item>

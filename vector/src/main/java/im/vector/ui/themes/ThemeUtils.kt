@@ -116,11 +116,11 @@ object ThemeUtils {
             } else if (TextUtils.equals(getApplicationTheme(activity), THEME_STATUS_VALUE)) {
                 textColor = ContextCompat.getColor(activity, android.R.color.white)
                 underlineColor = textColor
-                backgroundColor = getColor(activity, R.attr.vctr_primary_color)
+                backgroundColor = getColor(activity, R.attr.colorPrimary)
             } else {
                 textColor = ContextCompat.getColor(activity, R.color.tab_groups)
                 underlineColor = textColor
-                backgroundColor = getColor(activity, R.attr.vctr_primary_color)
+                backgroundColor = getColor(activity, R.attr.colorPrimary)
             }
 
             layout.setTabTextColors(textColor, textColor)

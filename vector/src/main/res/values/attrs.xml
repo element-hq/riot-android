@@ -11,9 +11,6 @@
         <!-- primary dark color (status bar) -->
         <attr name="vctr_primary_dark_color" format="color" />
 
-        <!-- application bar background color -->
-        <attr name="vctr_primary_color" format="color" />
-
         <!-- application bar text color -->
         <attr name="vctr_primary_text_color" format="color" />
 

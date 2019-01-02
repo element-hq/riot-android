@@ -4,8 +4,8 @@
 
     <!-- toolbar styles-->
     <style name="VectorToolbarStyle" parent="Widget.AppCompat.Toolbar">
-        <item name="android:background">?attr/vctr_primary_color</item>
-        <item name="background">?attr/vctr_primary_color</item>
+        <item name="android:background">?colorPrimary</item>
+        <item name="background">?colorPrimary</item>
 
         <!-- main text -->
         <item name="titleTextAppearance">@style/Vector.Toolbar.Title</item>
@@ -49,8 +49,8 @@
 
     <!-- custom action bar -->
     <style name="Vector.Styled.ActionBar" parent="Widget.AppCompat.Toolbar">
-        <item name="android:background">?attr/vctr_primary_color</item>
-        <item name="background">?attr/vctr_primary_color</item>
+        <item name="android:background">?colorPrimary</item>
+        <item name="background">?colorPrimary</item>
 
         <!-- remove shadow under the action bar -->
         <item name="elevation">0dp</item>

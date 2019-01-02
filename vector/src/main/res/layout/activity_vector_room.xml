@@ -39,7 +39,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@+id/room_action_bar"
-        android:background="?attr/vctr_primary_color"
+        android:background="?colorPrimary"
         android:contentDescription="@string/room_sync_in_progress"
         android:indeterminate="true" />
 
