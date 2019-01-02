@@ -1111,4 +1111,29 @@ Pamiętaj ta akcja może zresetować aplikacje i potrwać jakiś czas.</string>
 
     <string name="settings_labs_enable_send_voice_summary">Ta opcja wymaga aplikacji osoby trzeciej do nagrywania wiadomości.</string>
 
+    <string name="settings_troubleshoot_diagnostic_run_button_title">Uruchom Testy</string>
+    <string name="settings_troubleshoot_test_system_settings_title">Ustawienia Systemowe.</string>
+    <string name="settings_troubleshoot_test_system_settings_success">Powiadomienia są włączone w ustawieniach systemowych.</string>
+    <string name="settings_troubleshoot_test_system_settings_quickfix">Otwórz Ustawienia</string>
+
+    <string name="settings_troubleshoot_test_account_settings_title">Ustawienia Konta.</string>
+    <string name="settings_troubleshoot_test_account_settings_success">Powiadomienia są właczone dla twojego konta.</string>
+    <string name="settings_troubleshoot_test_account_settings_quickfix">Włącz</string>
+
+    <string name="settings_troubleshoot_test_device_settings_title">Ustawienia Urządzenia.</string>
+    <string name="settings_troubleshoot_test_device_settings_success">Powiadomienia są włączone dla tego urządzenia.</string>
+    <string name="settings_troubleshoot_test_device_settings_quickfix">Włącz</string>
+
+    <string name="settings_troubleshoot_test_fcm_title">Token Firebase</string>
+    <string name="settings_troubleshoot_test_token_registration_title">Rejestracja Tokena</string>
+    <string name="settings_troubleshoot_test_service_boot_title">Rozpocznij przy uruchomieniu systemu</string>
+    <string name="startup_notification_fdroid_battery_optim_button_grant">Nadaj uprawnienie</string>
+
+    <string name="settings_troubleshoot_diagnostic_failure_status_with_quickfix">Jeden lub więcej testów nie powiodło się, spróbuj sugerowaną poprawkę(-ki).</string>
+    <string name="settings_troubleshoot_test_system_settings_failed">Powiadomienia są wyłączone w ustawieniach systemowych.
+Sprawdź ustawienia systemowe.</string>
+    <string name="settings_troubleshoot_test_account_settings_failed">Powiadomienia są wyłączone dla twojego konta.
+Sprawdź ustawienia konta.</string>
+    <string name="settings_troubleshoot_test_device_settings_failed">Powiadomienia nie są dozwolone dla tego urządzenia.
+Proszę sprawdź ustawienia Riot.</string>
     </resources>
