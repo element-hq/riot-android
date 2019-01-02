@@ -1090,7 +1090,7 @@ Vedd figyelembe, hogy az alkalmazás újraindul ami sok időt vehet igénybe.</s
 <string name="settings_notification_troubleshoot">Értesítéshibák felderítése</string>
     <string name="settings_troubleshoot_diagnostic">Hibakereső diagnosztika</string>
     <string name="settings_troubleshoot_diagnostic_run_button_title">Tesztek futtatása</string>
-    <string name="settings_troubleshoot_diagnostic_running_status">Fut... (%1$d / %2$d)</string>
+    <string name="settings_troubleshoot_diagnostic_running_status">Fut… (%1$d / %2$d)</string>
     <string name="settings_troubleshoot_diagnostic_success_status">Alapszintű diagnosztika nem talált hibát. Ha még mindig nem kapsz értesítéseket, kérlek küldj egy hiba jegyet amivel segítheted a hibakeresésünket.</string>
     <string name="settings_troubleshoot_diagnostic_failure_status_with_quickfix">Egy vagy több teszt is sikertelen volt, próbáld ki a javasolt javítást, javításokat.</string>
     <string name="settings_troubleshoot_diagnostic_failure_status_no_quickfix">Egy vagy több teszt sikertelenül végződött, kérlek küldj egy hibabejelentést ami segít nekünk a problémát kivizsgálni.</string>

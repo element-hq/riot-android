@@ -1141,7 +1141,7 @@ Tieni presente che questa azione riavvierà l\'app e potrebbe richiedere del tem
     <string name="settings_notification_troubleshoot">Notifiche per la risoluzione dei problemi</string>
     <string name="settings_troubleshoot_diagnostic">Diagnostica per la risoluzione dei problemi</string>
     <string name="settings_troubleshoot_diagnostic_run_button_title">Esegui i test</string>
-    <string name="settings_troubleshoot_diagnostic_running_status">In esecuzione... (%1$d di %2$d)</string>
+    <string name="settings_troubleshoot_diagnostic_running_status">In esecuzione… (%1$d di %2$d)</string>
     <string name="settings_troubleshoot_diagnostic_success_status">La diagnostica di base risponde correttamente. Se continui a non ricevere notifiche, invia una segnalazione errore per aiutarci a indagare.</string>
     <string name="settings_troubleshoot_diagnostic_failure_status_with_quickfix">Uno o più test hanno fallito, prova le soluzioni suggerite.</string>
     <string name="settings_troubleshoot_diagnostic_failure_status_no_quickfix">Uno o più test hanno fallito, per favore invia un rapporto errore per aiutarci a indagare.</string>
