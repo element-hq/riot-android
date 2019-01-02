@@ -20,6 +20,7 @@ import android.content.Context
 import android.graphics.Color
 import android.graphics.Typeface
 import android.preference.PreferenceManager
+import android.support.transition.TransitionManager
 import android.support.v4.content.ContextCompat
 import android.text.SpannableString
 import android.text.TextPaint
@@ -30,6 +31,7 @@ import android.text.style.ForegroundColorSpan
 import android.text.style.StyleSpan
 import android.util.AttributeSet
 import android.view.View
+import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.RelativeLayout
 import android.widget.TextView
@@ -39,6 +41,7 @@ import com.binaryfork.spanny.Spanny
 import im.vector.R
 import im.vector.features.hhs.ResourceLimitErrorFormatter
 import im.vector.listeners.IMessagesAdapterActionsListener
+import im.vector.ui.animation.VectorAnimation
 import im.vector.ui.themes.ThemeUtils
 import im.vector.util.MatrixURLSpan
 import org.matrix.androidsdk.MXPatterns
@@ -122,6 +125,19 @@ class NotificationAreaView @JvmOverloads constructor(
             is State.ScrollToBottom -> renderScrollToBottom(newState)
             is State.UnsentEvents -> renderUnsent(newState)
         }
+    }
+
+    override fun setVisibility(visibility: Int) {
+        if (visibility != getVisibility()) {
+            // Schedule animation
+            val parent = parent as ViewGroup
+            TransitionManager.beginDelayedTransition(parent, VectorAnimation().apply {
+                appearFromBottom(this@NotificationAreaView)
+                appearWithAlpha(this@NotificationAreaView)
+            })
+        }
+
+        super.setVisibility(visibility)
     }
 
     // PRIVATE METHODS *****************************************************************************************************************************************
