@@ -2,7 +2,7 @@
 
 Please read https://github.com/matrix-org/synapse/blob/master/CONTRIBUTING.rst
 
-Android support can be found in this [Matrix room](https://riot.im/app/#/room/#riot-android:matrix.org).
+Android support can be found in this [![Android Matrix room](https://img.shields.io/matrix/riot-android:matrix.org.svg)](https://riot.im/app/#/room/#riot-android:matrix.org)
 
 # Specific rules for Matrix Android projects
 
@@ -25,6 +25,11 @@ If you want to fix an issue in other languages, or add a missing translation, or
 
 Please check if a corresponding issue exists. If yes, please let us know in a comment that you're working on it.
 If an issue does not exist yet, it may be relevant to open a new issue and let us know that you're implementing it.
+
+### Kotlin
+
+Please write every new classes in Kotlin. You can also convert existing Java classes (limited to classes impacted by the PR) to Kotlin (Android Studio has a tool to do this), but if you do so, please do atomic commit of the conversion, to ensure there is no other change, it will facilitate code review.
+Also please check that everything works fine after Kotlin conversion, especially regarding nullity check.
 
 ### CHANGES.rst
 
