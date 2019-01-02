@@ -33,7 +33,7 @@ Also please check that everything works fine after Kotlin conversion, especially
 
 ### CHANGES.rst
 
-Please add a line in the file `CHANGES.rst` describing your change.
+Please add a line to the top of the file `CHANGES.rst` describing your change.
 
 ### Code quality
 
