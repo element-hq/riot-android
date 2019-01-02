@@ -20,9 +20,7 @@ package im.vector.activity;
 import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.net.Uri;
-import android.os.Build;
 import android.os.Bundle;
-import android.provider.Settings;
 import android.text.TextUtils;
 import android.view.View;
 import android.view.ViewGroup;
@@ -62,9 +60,6 @@ public class JitsiCallActivity extends VectorAppCompatActivity {
      * Base server URL
      */
     private static final String JITSI_SERVER_URL = "https://jitsi.riot.im/";
-
-    // permission request code
-    private final static int CAN_DRAW_OVERLAY_REQUEST_CODE = 1234;
 
     // the jitsi view
     private JitsiMeetView mJitsiView = null;
@@ -150,16 +145,7 @@ public class JitsiCallActivity extends VectorAppCompatActivity {
 
         refreshStatusBar();
 
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-            if (!Settings.canDrawOverlays(this)) {
-                Intent intent = new Intent(Settings.ACTION_MANAGE_OVERLAY_PERMISSION, Uri.parse("package:" + getPackageName()));
-                startActivityForResult(intent, CAN_DRAW_OVERLAY_REQUEST_CODE);
-            } else {
-                loadURL();
-            }
-        } else {
-            loadURL();
-        }
+        loadURL();
     }
 
     /**
@@ -282,19 +268,6 @@ public class JitsiCallActivity extends VectorAppCompatActivity {
                 Log.d(LOG_TAG, "## onLoadConfigError() : " + data);
             }
         });
-    }
-
-    @Override
-    @SuppressLint("NewApi")
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if (requestCode == CAN_DRAW_OVERLAY_REQUEST_CODE) {
-            if (Settings.canDrawOverlays(this)) {
-                loadURL();
-            } else {
-                Log.e(LOG_TAG, "## onActivityResult() : cannot draw overlay");
-                finish();
-            }
-        }
     }
 
     @Override

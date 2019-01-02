@@ -1,5 +1,5 @@
-Riot-Android [![Jenkins](https://img.shields.io/jenkins/s/https/matrix.org/jenkins/view/MatrixView/job/VectorAndroidDevelop.svg)](https://matrix.org/jenkins/view/MatrixView/job/VectorAndroidDevelop/) [![Weblate](https://translate.riot.im/widgets/riot-android/-/svg-badge.svg)](https://translate.riot.im/engage/riot-android/?utm_source=widget) [![Quality Gate](https://sonarcloud.io/api/project_badges/measure?project=vector.android.riot&metric=alert_status)](https://sonarcloud.io/dashboard?id=vector.android.riot) [![Vulnerabilities](https://sonarcloud.io/api/project_badges/measure?project=vector.android.riot&metric=vulnerabilities)](https://sonarcloud.io/dashboard?id=vector.android.riot) [![Bugs](https://sonarcloud.io/api/project_badges/measure?project=vector.android.riot&metric=bugs)](https://sonarcloud.io/dashboard?id=vector.android.riot) 
-=======
+Riot-Android [![Jenkins](https://img.shields.io/jenkins/s/https/matrix.org/jenkins/view/MatrixView/job/VectorAndroidDevelop.svg)](https://matrix.org/jenkins/view/MatrixView/job/VectorAndroidDevelop/) [![Weblate](https://translate.riot.im/widgets/riot-android/-/svg-badge.svg)](https://translate.riot.im/engage/riot-android/?utm_source=widget) [![Android Matrix room](https://img.shields.io/matrix/riot-android:matrix.org.svg)](https://riot.im/app/#/room/#riot-android:matrix.org) [![Quality Gate](https://sonarcloud.io/api/project_badges/measure?project=vector.android.riot&metric=alert_status)](https://sonarcloud.io/dashboard?id=vector.android.riot) [![Vulnerabilities](https://sonarcloud.io/api/project_badges/measure?project=vector.android.riot&metric=vulnerabilities)](https://sonarcloud.io/dashboard?id=vector.android.riot) [![Bugs](https://sonarcloud.io/api/project_badges/measure?project=vector.android.riot&metric=bugs)](https://sonarcloud.io/dashboard?id=vector.android.riot) 
+============
 
  Riot is an Android Matrix client.
   		  
@@ -7,6 +7,11 @@ Riot-Android [![Jenkins](https://img.shields.io/jenkins/s/https/matrix.org/jenki
    
  [<img src="https://f-droid.org/badge/get-it-on.png" alt="Get it on F-Droid" height="60">](https://f-droid.org/app/im.vector.alpha)
  
+
+Contributing
+============
+
+Please refer to [CONTRIBUTING.md](https://github.com/vector-im/riot-android/blob/develop/CONTRIBUTING.md) if you want to contribute the Matrix on Android projects!
 
 Build instructions
 ==================
@@ -72,7 +77,7 @@ for example, with FCM, it would give
     }
 ```
 
-- if you use FCM, duplicate appCompile at the end of this file and replace appCompile by appmyriotCompile.
+- if you use FCM, duplicate appImplementation at the end of this file and replace appImplementation by appmyriotImplementation.
 - if you don't, update the "if (!getGradle().getStartParameter().getTaskRequests().toString().contains("fdroid"))" to include your flavor.
 
 Create your flavour directory
@@ -86,8 +91,7 @@ Customise your flavour
 ----------------------
 
 - Open riot-android/vector/src/appmyriot/AndroidManifest.xml
-- Comment the provider section.
-- Change the application name to myRiot with "android:label="myRiot""
+- Change the application name to myRiot with "android:label="myRiot"" and "tools:replace="label"" in the application tag.
 - Any other field can be customised by adding the resources in this directory classpath.
 - Open Android studio, select your flavour.
 - Build and run the app : you made your first Riot app.
