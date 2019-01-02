@@ -94,7 +94,7 @@ Hautatu esportatu babes-kopia bat egiteko saioa amaitu aurretik.</string>
     <string name="send_bug_report_description">Azaldu akatsa. Zer egin duzu? Zer espero zenuen? Zer gertatu da benetan?</string>
     <string name="send_bug_report_placeholder">Azaldu zure arazoa hemen</string>
     <string name="send_bug_report_logs_description">Akatsak aztertzeari begira, bezero honen egunkariak arazte-txosten honekin batera bidaliko dira. Arazte-txosten hau, egunkariak eta pantaila-argazkia barne, ez dira publikoki ikusgai egongo. Goiko testua besterik ez baduzu bidali nahi, desmarkatu:</string>
-    <string name="send_bug_report_alert_message">Telefonoa amorruz astintzen zabiltzala dirudi. Akats baten berri eman nahi duzu?</string>
+    <string name="send_bug_report_alert_message">Telefonoa amorruz astintzen zabiltzala dirudi. Akats-tostenen pantaila ireki nahi duzu?</string>
     <string name="send_bug_report_app_crashed">Azken aldian aplikazioa kraskatu da. Kraskatze txostena bidali nahi duzu?</string>
 
     <string name="send_bug_report_sent">Arazte-txostena ongi bidali da</string>
@@ -1087,5 +1087,121 @@ Kontuan izan ekintza honek aplikazioa berrabiaraziko duela eta denbora bat behar
     <string name="auth_accept_policies">Berrikusi eta onartu hasiera-zerbitzari honen politikak:</string>
 
     <string name="encryption_import_room_keys_success">%1$d/%2$d gako ongi inportatu dira.</string>
+
+    <string name="settings_notification_troubleshoot">Egiaztatu arazoak jakinarazpenekin</string>
+    <string name="settings_troubleshoot_diagnostic">Arazoak egiaztatzen</string>
+    <string name="settings_troubleshoot_diagnostic_run_button_title">Abiatu probak</string>
+    <string name="settings_troubleshoot_diagnostic_running_status">Exekutatzen… (%1$d / %2$d)</string>
+    <string name="settings_troubleshoot_diagnostic_success_status">Oinarrizko diagnostikoa ongi dago. Oraindik ez badituzu jakinarazpenak jasotzen, bidali akats-txosten bat ikertu dezagun.</string>
+    <string name="settings_troubleshoot_diagnostic_failure_status_with_quickfix">Gutxienez proba batek kale egin du, saiatu proposatutako konponketa(k).</string>
+    <string name="settings_troubleshoot_diagnostic_failure_status_no_quickfix">Gutxienez proba batek kale egin du, bidali mesedez akats-txosten bat ikertu dezagun.</string>
+
+    <string name="settings_troubleshoot_test_system_settings_title">Sistemaren ezarpenak.</string>
+    <string name="settings_troubleshoot_test_system_settings_success">Jakinarazpenak aktibatuta daude sistemaren ezarpenetan.</string>
+    <string name="settings_troubleshoot_test_system_settings_failed">Jakinarazpenak desaktibatuta daude sistemaren ezarpenetan.
+Egiaztatu sistemaren ezarpenak.</string>
+    <string name="settings_troubleshoot_test_system_settings_quickfix">Ireki ezarpenak</string>
+
+    <string name="settings_troubleshoot_test_account_settings_title">Kontuaren ezarpenak.</string>
+    <string name="settings_troubleshoot_test_account_settings_success">Jakinarazpenak aktibatuta daude zure kontuarentzat.</string>
+    <string name="settings_troubleshoot_test_account_settings_failed">Jakinarazpenak desaktibatuta daude zure kontuarentzat.
+Egiaztatu zure kontuaren ezarpenak.</string>
+    <string name="settings_troubleshoot_test_account_settings_quickfix">Aktibatu</string>
+
+    <string name="settings_troubleshoot_test_device_settings_title">Gailuaren ezarpenak.</string>
+    <string name="settings_troubleshoot_test_device_settings_success">Jakinarazpenak aktibatuta daude gailu honentzat.</string>
+    <string name="settings_troubleshoot_test_device_settings_failed">Jakinarazpenak ez daude aktibatuta gailu honentzat.
+Egiaztatu Riot ezarpenak.</string>
+    <string name="settings_troubleshoot_test_device_settings_quickfix">Aktibatu</string>
+
+    <string name="settings_troubleshoot_test_play_services_title">Play Services egiaztaketa</string>
+    <string name="settings_troubleshoot_test_play_services_success">Google Play Services APK eskuragarri eta egunean dago.</string>
+    <string name="settings_troubleshoot_test_play_services_failed">Riot-ek Google Play Services erabiltzen du baina antza ez dago ondo konfiguratuta:
+%1$s</string>
+    <string name="settings_troubleshoot_test_play_services_quickfix">Konpondu Play Services</string>
+
+    <string name="settings_troubleshoot_test_fcm_title">Firebase token-a</string>
+    <string name="settings_troubleshoot_test_fcm_success">FCM token-a ongi jaso da:
+%1$s</string>
+    <string name="settings_troubleshoot_test_fcm_failed">Huts egin du FCM token-a jasotzean:
+%1$s</string>
+
+    <string name="settings_troubleshoot_test_token_registration_title">Token erregistroa</string>
+    <string name="settings_troubleshoot_test_token_registration_success">FCM token-a ongi erregistratu da hasiera-zerbitzarian.</string>
+    <string name="settings_troubleshoot_test_token_registration_failed">Huts egin du FCM token-a hasiera zerbitzarian erregistratzean:
+%1$s</string>
+
+    <string name="settings_troubleshoot_test_foreground_service_started_title">Jakinarazpen zerbitzua</string>
+    <string name="settings_troubleshoot_test_foreground_service_startedt_success">Jakinarazpen zerbitzua abian dago.</string>
+    <string name="settings_troubleshoot_test_foreground_service_started_failed">Jakinarazpen zerbitzua ez dago abian.
+Berrabiarazi aplikazioa.</string>
+    <string name="settings_troubleshoot_test_foreground_service_started_quickfix">Hasi zerbitzua</string>
+
+    <string name="settings_troubleshoot_test_service_restart_title">Jakinarazpen zerbitzua automatikoki berrabiarazi</string>
+    <string name="settings_troubleshoot_test_service_restart_success">Zerbitzua hil da eta automatikoki berrabiarazi da.</string>
+    <string name="settings_troubleshoot_test_service_restart_failed">Zerbitzuak huts egin du berrabiaraztean</string>
+
+    <string name="settings_troubleshoot_test_service_boot_title">Hasi abioan</string>
+    <string name="settings_troubleshoot_test_service_boot_success">Zerbitzua gailua berrabiaraztean hasiko da.</string>
+    <string name="settings_troubleshoot_test_service_boot_failed">Zerbitzua ez da hasiko gailua berrabiaraztean, ez duzu jakinarazpenik jasoko Riot behin ireki arte.</string>
+    <string name="settings_troubleshoot_test_service_boot_quickfix">Gaitu abioan hastea</string>
+
+    <string name="settings_troubleshoot_test_bg_restricted_title">Egiaztatu bigarren planoko murrizketak</string>
+    <string name="settings_troubleshoot_test_bg_restricted_success">Bigarren planoko murrizketak desaktibatuta daude Riot-entzat. Proba hau datu mugikorrekin egin behar da (Ez WiFi).
+%1$s</string>
+    <string name="settings_troubleshoot_test_bg_restricted_failed">Bigarren planoko murrizketak aktibatuta daude Riot-entzat.
+Aplikazioa egiten saiatzen ari dena agresiboki murriztuko zaio bigarren planoan dagoenean, eta honek jakinarazpenetan eragina izan dezake.
+%1$s</string>
+    <string name="settings_troubleshoot_test_bg_restricted_quickfix">Desaktibatu murrizketak</string>
+
+    <string name="settings_troubleshoot_test_battery_title">Bateria optimizazioa</string>
+    <string name="settings_troubleshoot_test_battery_success">Bateria optimizazioak ez du eraginik Riot-engan.</string>
+    <string name="settings_troubleshoot_test_battery_quickfix">Ezikusi optimizazioa</string>
+
+    <string name="startup_notification_fdroid_battery_optim_title">Bigaren planoko konexioa</string>
+    <string name="startup_notification_fdroid_battery_optim_button_grant">Eman baimena</string>
+
+    <string name="account_email_error">Errore bat gertatu da zure e-mail kontua egiaztatzean.</string>
+
+    <string name="account_phone_number_error">Errore bat gertatu da zure telefono zenbakia egiaztatzean.</string>
+    <string name="account_additional_info">Informazio gehigarria: %s</string>
+
+    <string name="no_valid_google_play_services_apk">Ez da baliozko Google Play Services APK-rik aurkitu. Jakinarazpenak agian ez dira ongi ibiliko.</string>
+
+    <string name="store_title">Riot.im - talde kolaborazio irekia</string>
+    <string name="store_short_description">Ongi etorri Riot.im-ra: Komunikaziorako mundu ireki berri bat!</string>
+    <string name="settings_troubleshoot_test_battery_failed">"Erabiltzaile batek gailu bat deskonektatuta eta erabili gabe uzten badu denbora batez, pantaila itzalita duela, gailua kuluxka moduan sartzen da. Honek aplikazioak sarera konektatzea eragozten du eta beraien lanak atzeratzen ditu, baita ohiko alarmak. "</string>
+    <string name="startup_notification_fdroid_battery_optim_message">Riot-ek bigarren planoko konexio arin bat behar du jakinarazpen fidagarriak izateko.
+Hurrengo pantailan Riot-i bigarren planoan aritzeko baimena eskatuko zaizu, onartu ezazu mesedez.</string>
+    <string name="store_full_description">Riot.im is kolaboraziorako ingurune sinple eta elegante bat da, zure elkarrizketa eta aplikazio integratuak aplikazio bakarrean biltzen dituena.
+
+Txat gelen inguruan eraikia, Riot.im-k mezuak, irudiak, bideoak eta fitxategiak partekatzea ahalbidetzen dizu, duzun tresnekin batera ari da eta zure komunitate guztiak zentralki atzitzea ahalbidetzen dizu. Identitate eta toki bakarra zure talde guztientzat: Kontuak aldatzeko beharrik gabe, egin lan eta txateatu elkarte ezberdinetako jendearekin, gela publiko edo pribatuetan: Proiektu profesionalak, zein ikas-bidaiak… Riot.im zure elkarrizketen bilgune bihurtuko da!
+
+Orain muturretik muturrerako zifratzearekin!
+
+Ezaugarri batzuk:
+
+• Partekatu berehala mezuak, irudiak, bideoak eta fitxategiak edozein tamainako taldeekin
+• Ahos eta bideo deiak eta konferentziak WebRTC bidez
+• Muturretik muturrerako zifratzea Olm erabiliz (https://matrix.org/git/olm)
+• Jakin nork irakurri dituen mezuak irakurragiriekin
+• Komunikatu Matrix.org ekosistemako erabiltzaile guztiekin, ez soilik Riot.im erabiltzaileekin!
+• Aurkitu eta gonbidatu jendea e-mail helbidea erabiliz
+• Hartu-parte gonbidatuetara irekiak diren geletan
+• Oso eskalagarria - ehunka gela eta milaka erabiltzaile onartzen ditu
+• Erabat sinkronizatutako mezuen historiala hainbat gailu eta nabigatzaileetan
+• Jakinarazpenak nahi eran konfiguratzeko gaitasuna, eta gailuetan zehar sinkronizatuta
+• Txat historial bilagarri mugagabea
+• Mezuetara esteka iraunkorrak
+• Mezu osoen bilaketa
+• Eskuinetik ezkerrera idatzitako hizkuntzentzako euskarria, esaterako arabiera
+
+Garatzaileentzat:
+• Riot.im Matrix bezero bat da - Matrix.org estandar eta ekosistema irekian eraikia, eta Matrix-ekin bateragarriak diren beste aplikazio, zerbitzari eta integrazioekin elkar aritzea ahalbidetzen dizu
+• Erabat librea Apache lizentziapean - eskuraku iturburu kodea hemen: https://github.com/vector-im/vector-android. Ekarpenak ongi etorriak dira!!
+• Erraz hedatu daiteke Matrix Client-Server API irekiari esker (https://matrix.org/docs/spec)
+• Ezarri zure zerbitzari propioa! Lehenetsitako matrix.org zerbitzaria erabili dezakezu eta zure Matrix zerbitzari propioa erabili dezakezu (adib. https://matrix.org/docs/projects/server/synapse.html)
+
+Ezagutu benetako kolaborazio ireki eta eraginkorra Riot.im erabiliz!</string>
 
 </resources>

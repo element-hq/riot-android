@@ -437,7 +437,7 @@ Cliquez sur exporter pour les sauvegarder avant de vous déconnecter.</string>
 
     <string name="send_bug_report_description">Veuillez décrire l\'erreur. Qu\'avez-vous fait ? Quel était le comportement attendu ? Que s\'est-il réellement passé ?</string>
     <string name="send_bug_report_logs_description">Afin de diagnostiquer les problèmes, les journaux de ce client seront envoyés avec ce rapport d\'erreur. Ce rapport d\'erreur, y compris les journaux et la capture d\'écran, ne seront pas visibles publiquement. Si vous préférez envoyer le texte ci-dessus uniquement, veuillez décochez :</string>
-    <string name="send_bug_report_alert_message">Vous semblez secouer le téléphone avec frustration. Souhaitez-vous soumettre un rapport d\'erreur ?</string>
+    <string name="send_bug_report_alert_message">Vous semblez secouer le téléphone avec frustration. Souhaitez-vous ouvrir l\'écran pour soumettre un rapport d\'erreur ?</string>
     <string name="send_bug_report_app_crashed">L\'application s\'est arrêtée anormalement la dernière fois. Souhaitez-vous soumettre un rapport d’erreur ?</string>
 
     <string name="send_bug_report_sent">Le rapport d\'erreur a bien été envoyé</string>
@@ -1090,5 +1090,121 @@ Veuillez noter que cette action redémarrera l\'application et pourra prendre un
     <string name="auth_accept_policies">Veuillez lire et accepter les politiques de ce serveur d\'accueil :</string>
 
     <string name="encryption_import_room_keys_success">%1$d/%2$d clé(s) importée(s) avec succès.</string>
+
+    <string name="settings_notification_troubleshoot">Résoudre les problèmes de notification</string>
+    <string name="settings_troubleshoot_diagnostic">Diagnostics de résolution de problème</string>
+    <string name="settings_troubleshoot_diagnostic_run_button_title">Lancer les tests</string>
+    <string name="settings_troubleshoot_diagnostic_running_status">"Exécution…  (%1$d sur %2$d)"</string>
+    <string name="settings_troubleshoot_diagnostic_success_status">Le diagnostic de base est passé. Si vous ne recevez toujours pas de notifications, veuillez envoyer un rapport d\'anomalie pour nous aider à résoudre le problème.</string>
+    <string name="settings_troubleshoot_diagnostic_failure_status_with_quickfix">Au moins un test a échoué, essayez les solutions suggérées.</string>
+    <string name="settings_troubleshoot_diagnostic_failure_status_no_quickfix">Au moins un test a échoué, veuillez envoyer un rapport d\'anomalie pour nous aider à résoudre le problème.</string>
+
+    <string name="settings_troubleshoot_test_system_settings_title">Paramètres système.</string>
+    <string name="settings_troubleshoot_test_system_settings_success">Les notifications sont activées dans les paramètres système.</string>
+    <string name="settings_troubleshoot_test_system_settings_failed">Les notifications sont désactivées dans les paramètres systèmes.
+Veuillez vérifier les paramètres système.</string>
+    <string name="settings_troubleshoot_test_system_settings_quickfix">Ouvrir les paramètres</string>
+
+    <string name="settings_troubleshoot_test_account_settings_title">Paramètres du compte.</string>
+    <string name="settings_troubleshoot_test_account_settings_success">Les notifications sont activées pour votre compte.</string>
+    <string name="settings_troubleshoot_test_account_settings_failed">Les notifications sont désactivées pour votre compte.
+Veuillez vérifier les paramètres du compte.</string>
+    <string name="settings_troubleshoot_test_account_settings_quickfix">Activer</string>
+
+    <string name="settings_troubleshoot_test_device_settings_title">Paramètres de l\'appareil.</string>
+    <string name="settings_troubleshoot_test_device_settings_success">Les notifications sont activées pour cet appareil.</string>
+    <string name="settings_troubleshoot_test_device_settings_failed">Les notifications ne sont pas activées pour cet appareil.
+Veuillez vérifier les paramètres de Riot.</string>
+    <string name="settings_troubleshoot_test_device_settings_quickfix">Activer</string>
+
+    <string name="settings_troubleshoot_test_play_services_title">Vérification des services Google Play</string>
+    <string name="settings_troubleshoot_test_play_services_success">L\'APK des services Google Play est disponible et à jour.</string>
+    <string name="settings_troubleshoot_test_play_services_failed">Riot utilise les services Google Play pour envoyer les notifications mais ils n\'ont pas l\'air d\'être configurés correctement :
+%1$s</string>
+    <string name="settings_troubleshoot_test_play_services_quickfix">Réparer les services Google Play</string>
+
+    <string name="settings_troubleshoot_test_fcm_title">Jeton Firebase</string>
+    <string name="settings_troubleshoot_test_fcm_success">Le jeton FCM a été récupéré avec succès :
+%1$s</string>
+    <string name="settings_troubleshoot_test_fcm_failed">Le jeton FCM n\'a pas pu être récupéré :
+%1$s</string>
+
+    <string name="settings_troubleshoot_test_token_registration_title">Enregistrement du jeton</string>
+    <string name="settings_troubleshoot_test_token_registration_success">Le jeton FCM a été correctement enregistré sur le serveur d\'accueil.</string>
+    <string name="settings_troubleshoot_test_token_registration_failed">Le jeton FCM n\'a pas pu être enregistré sur le serveur d\'accueil :
+%1$s</string>
+
+    <string name="settings_troubleshoot_test_foreground_service_started_title">Service de notifications</string>
+    <string name="settings_troubleshoot_test_foreground_service_startedt_success">Le service de notifications est lancé.</string>
+    <string name="settings_troubleshoot_test_foreground_service_started_failed">Le service de notifications n\'est pas lancé.
+Essayez de redémarrer l\'application.</string>
+    <string name="settings_troubleshoot_test_foreground_service_started_quickfix">Démarrer le service</string>
+
+    <string name="settings_troubleshoot_test_service_restart_title">Redémarrage automatique du service de notifications</string>
+    <string name="settings_troubleshoot_test_service_restart_success">Le service a été tué et redémarré automatiquement.</string>
+    <string name="settings_troubleshoot_test_service_restart_failed">Le redémarrage du service a échoué</string>
+
+    <string name="settings_troubleshoot_test_service_boot_title">Lancer au démarrage</string>
+    <string name="settings_troubleshoot_test_service_boot_success">Le service démarrera quand l\'appareil sera redémarré.</string>
+    <string name="settings_troubleshoot_test_service_boot_failed">Le service ne démarrera pas quand l\'appareil sera redémarré, vous ne recevrez pas de notifications tant que Riot n\'aura pas été lancé au moins une fois.</string>
+    <string name="settings_troubleshoot_test_service_boot_quickfix">Activer le démarrage au démarrage de l\'appareil</string>
+
+    <string name="settings_troubleshoot_test_bg_restricted_title">Vérifier les restrictions en arrière-plan</string>
+    <string name="settings_troubleshoot_test_bg_restricted_success">Les restrictions en arrière-plan sont désactivées pour Riot. Ce test devrait être lancé en utilisant les données mobiles (pas le wi-fi).
+%1$s</string>
+    <string name="settings_troubleshoot_test_bg_restricted_failed">Les restrictions en arrière-plan sont activées pour Riot.
+Le travail qu\'essayera de faire l\'application sera restreint agressivement tant qu\'elle sera en arrière-plan et cela pourra affecter les notifications.
+%1$s</string>
+    <string name="settings_troubleshoot_test_bg_restricted_quickfix">Désactiver les restrictions</string>
+
+    <string name="settings_troubleshoot_test_battery_title">Optimisation de la batterie</string>
+    <string name="settings_troubleshoot_test_battery_success">Riot n\'est pas affecté par l\'optimisation de la batterie.</string>
+    <string name="settings_troubleshoot_test_battery_failed">"Si un utilisateur laisse un appareil débranché et immobile pour une longue durée, avec l\'écran éteint, l\'appareil entre dans le mode Doze. Cela empêche les applications d\'accéder au réseau et reporte leurs travaux, synchronisations et alarmes standard. "</string>
+    <string name="settings_troubleshoot_test_battery_quickfix">Ignorer l\'optimisation</string>
+
+    <string name="startup_notification_fdroid_battery_optim_title">Connexion en arrière-plan</string>
+    <string name="startup_notification_fdroid_battery_optim_message">Riot doit garder une connexion à faible impact en arrière-plan afin d\'avoir des notifications fiables.
+Sur l\'écran suivant on vous demandera d\'autoriser Riot à toujours fonctionner en arrière-plan, veuillez accepter.</string>
+    <string name="startup_notification_fdroid_battery_optim_button_grant">Donner la permission</string>
+
+    <string name="account_email_error">Une erreur est survenue lors de la vérification de votre adresse e-mail.</string>
+
+    <string name="account_phone_number_error">Une erreur est survenue lors de la vérification de votre numéro de téléphone.</string>
+    <string name="account_additional_info">Informations additionnelles : %s</string>
+
+    <string name="no_valid_google_play_services_apk">Aucun APK des services Google Play valide n\'a été trouvé. Les notifications peuvent ne pas fonctionner correctement.</string>
+
+    <string name="store_title">Riot.im - collaboration en équipe libre</string>
+    <string name="store_short_description">Bienvenue sur Riot.im : un nouveau monde de communication libre !</string>
+    <string name="store_full_description">Riot.im est un environnement de collaboration simple et élégant qui réuni toutes vos conversations et intégrations d’application dans une seule application.
+
+Construit autour de salons de discussion en groupe, Riot.im vous permet de partager des messages, des images, des vidéos et des fichiers — interagissez avec vos outils et accédez à toutes vos communautés sous un même toit. Une seule identité et un seul lieu pour toutes vos équipes : pas besoin de changer de compte, travaillez et discutez avec des personnes de différentes organisations dans des salons privés ou publics : des projets professionnels aux voyages scolaires, Riot.im deviendra le centre de toutes vos discussions !
+
+Maintenant avec le chiffrement bout-à-bout !
+
+Les fonctionnalités comprennent :
+
+• Partage instantané de messages, d’images, de vidéos et de fichiers de tous types avec des groupes de toutes les tailles
+• Appels voix et vidéo personnels et en conférence via WebRTC
+• Chiffrement bout-à-bout utilisant Olm (https://matrix.org/git/olm)
+• Voyez qui a lu vos messages avec les accusés de lecture
+• Communiquez avec des utilisateurs de tout l’écosystème Matrix.org — pas seulement les utilisateurs de Riot.im !
+• Découvrez et invitez les utilisateurs par adresse e-mail
+• Participez à des salons publics accessibles aux invités
+• Hautement évolutif — supporte des centaines de salons et des milliers d\'utilisateurs
+• Synchronisation complète de l’historique des messages entre plusieurs appareils et navigateurs
+• Paramètres de notification configurables précisément et synchronisés entre les appareils
+• Recherche infinie dans l’historique de discussion
+• Permaliens vers les messages
+• Recherche complète de message
+• Support des langues avec une écriture de droite à gauche comme l’arabe
+
+Pour les développeurs :
+• Riot.im est un client Matrix — construit sur le standard et l’écosystème libre Matrix, qui lui fournit une interopérabilité avec les applications, les serveurs et les intégrations compatibles avec Matrix
+• Complètement open source sous Licence Apache — obtenez le code sur https://github.com/vector-im/vector-android. Vos améliorations sont les bienvenues !
+• Simplement extensible via l’API ouverte de Client-Serveur Matrix (https://matrix.org/docs/spec)
+• Exploitez votre propre serveur ! Vous pouvez utiliser le serveur matrix.org par défaut ou bien utiliser votre propre serveur d’accueil Matrix (par ex. https://matrix.org/docs/projects/server/synapse.html)
+
+Découvrez une collaboration libre et vraiment efficace avec Riot.im !</string>
 
 </resources>

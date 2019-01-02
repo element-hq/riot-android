@@ -23,6 +23,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import org.matrix.androidsdk.MXSession;
@@ -38,7 +39,6 @@ import im.vector.R;
 import im.vector.activity.VectorRoomActivity;
 import im.vector.settings.VectorLocale;
 import im.vector.util.VectorUtils;
-import im.vector.view.VectorCircularImageView;
 
 /**
  * This class describes a list of auto-completed users
@@ -140,7 +140,7 @@ public class AutoCompletedUserAdapter extends ArrayAdapter<User> {
         User user = getItem(position);
 
         if (loadAvatar) {
-            VectorCircularImageView avatarView = convertView.findViewById(R.id.item_user_auto_complete_avatar);
+            ImageView avatarView = convertView.findViewById(R.id.item_user_auto_complete_avatar);
             VectorUtils.loadUserAvatar(mContext, mSession, avatarView, user.getAvatarUrl(), user.user_id, user.displayname);
         }
 

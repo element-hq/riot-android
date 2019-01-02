@@ -1050,7 +1050,7 @@ Vedd figyelembe, hogy az alkalmazás újraindul ami sok időt vehet igénybe.</s
     <string name="x_plus">%d+</string>
 
     <string name="call_anyway">Hívás mindenképpen</string>
-    <string name="room_participants_action_kick">Kirúg</string>
+    <string name="room_participants_action_kick">Elküld</string>
     <plurals name="room_participants_kick_prompt_msg">
         <item quantity="one">Ezeket az embereket biztosan kirúgod?</item>
         <item quantity="other" />
@@ -1086,5 +1086,121 @@ Vedd figyelembe, hogy az alkalmazás újraindul ami sok időt vehet igénybe.</s
     <string name="auth_accept_policies">Kérlek nézd át és fogadd el a Matrix szerver felhasználói feltételeit:</string>
 
     <string name="encryption_import_room_keys_success">%1$d/%2$d kulcs sikeresen betöltve.</string>
+
+    <string name="settings_notification_troubleshoot">Értesítéshibák felderítése</string>
+    <string name="settings_troubleshoot_diagnostic">Hibakereső diagnosztika</string>
+    <string name="settings_troubleshoot_diagnostic_run_button_title">Tesztek futtatása</string>
+    <string name="settings_troubleshoot_diagnostic_running_status">Fut… (%1$d / %2$d)</string>
+    <string name="settings_troubleshoot_diagnostic_success_status">Alapszintű diagnosztika nem talált hibát. Ha még mindig nem kapsz értesítéseket, kérlek küldj egy hiba jegyet amivel segítheted a hibakeresésünket.</string>
+    <string name="settings_troubleshoot_diagnostic_failure_status_with_quickfix">Egy vagy több teszt is sikertelen volt, próbáld ki a javasolt javítást, javításokat.</string>
+    <string name="settings_troubleshoot_diagnostic_failure_status_no_quickfix">Egy vagy több teszt sikertelenül végződött, kérlek küldj egy hibabejelentést ami segít nekünk a problémát kivizsgálni.</string>
+
+    <string name="settings_troubleshoot_test_system_settings_title">Rendszer beállítások.</string>
+    <string name="settings_troubleshoot_test_system_settings_success">Az értesítések engedélyezve vannak a rendszerbeállításokban.</string>
+    <string name="settings_troubleshoot_test_system_settings_failed">Az értesítések tiltva vannak a rendszerbeállításokban.
+Kérlek ellenőrizd a rendszerbeállításokat.</string>
+    <string name="settings_troubleshoot_test_system_settings_quickfix">Beállítások megnyitása</string>
+
+    <string name="settings_troubleshoot_test_account_settings_title">Fiók beállítások.</string>
+    <string name="settings_troubleshoot_test_account_settings_success">Az értesítések engedélyezve vannak a felhasználói fiókhoz.</string>
+    <string name="settings_troubleshoot_test_account_settings_failed">Az értesítések tiltva vannak a felhasználói fiókhoz.
+Kérlek ellenőrizd a fiókbeállításokat.</string>
+    <string name="settings_troubleshoot_test_account_settings_quickfix">Engedélyez</string>
+
+    <string name="settings_troubleshoot_test_device_settings_title">Eszköz beállítások.</string>
+    <string name="settings_troubleshoot_test_device_settings_success">Az értesítések engedélyezve vannak ezen az eszközön.</string>
+    <string name="settings_troubleshoot_test_device_settings_failed">Az értesítések tiltva vannak ezen az eszközön.
+Kérlek ellenőrizd a Riot beállításokat.</string>
+    <string name="settings_troubleshoot_test_device_settings_quickfix">Engedélyez</string>
+
+    <string name="settings_troubleshoot_test_play_services_title">Play Szolgáltatások ellenőrzése</string>
+    <string name="settings_troubleshoot_test_play_services_success">Google Play Services APK elérhető és a legújabb verziójú.</string>
+    <string name="settings_troubleshoot_test_play_services_failed">"Riot a Google Play Services-t használja  a „push” értesítések fogadásához, de úgy tűnik az nincs megfelelően beállítva:
+%1$s"</string>
+    <string name="settings_troubleshoot_test_play_services_quickfix">Play Services javítása</string>
+
+    <string name="settings_troubleshoot_test_fcm_title">Firebase Token</string>
+    <string name="settings_troubleshoot_test_fcm_success">FCM token fogadása sikeres:
+%1$s</string>
+    <string name="settings_troubleshoot_test_fcm_failed">FCM token fogadása sikertelen:
+%1$s</string>
+
+    <string name="settings_troubleshoot_test_token_registration_title">Token Regisztráció</string>
+    <string name="settings_troubleshoot_test_token_registration_success">FCM token sikeresen regisztrálva a Matrix szerveren.</string>
+    <string name="settings_troubleshoot_test_token_registration_failed">FCM token regisztrációja sikertelen a Matrix szerveren:
+%1$s</string>
+
+    <string name="settings_troubleshoot_test_foreground_service_started_title">Értesítés Szolgáltatás</string>
+    <string name="settings_troubleshoot_test_foreground_service_startedt_success">Értesítés Szolgáltatás fut.</string>
+    <string name="settings_troubleshoot_test_foreground_service_started_failed">Értesítés Szolgáltatás nem fut.
+Próbáld újraindítani a szolgáltatást.</string>
+    <string name="settings_troubleshoot_test_foreground_service_started_quickfix">Szolgáltatás indítása</string>
+
+    <string name="settings_troubleshoot_test_service_restart_title">Értesítések szolgáltatás Automatikus-Újraindítása</string>
+    <string name="settings_troubleshoot_test_service_restart_success">A szolgáltatás meg lett szakítva és automatikusan újraindult.</string>
+    <string name="settings_troubleshoot_test_service_restart_failed">A szolgáltatást nem sikerült újraindítani</string>
+
+    <string name="settings_troubleshoot_test_service_boot_title">Indítás az eszköz indulásakor</string>
+    <string name="settings_troubleshoot_test_service_boot_success">A szolgáltatás az eszköz újraindulásakor elindul.</string>
+    <string name="settings_troubleshoot_test_service_boot_failed">A szolgáltatás az eszköz újraindulásakor nem fog elindulni, addig nem kapsz értesítést amíg egyszer el nem indítod a Riot-ot.</string>
+    <string name="settings_troubleshoot_test_service_boot_quickfix">Indulás engedélyezése amikor az eszköz elindul</string>
+
+    <string name="settings_troubleshoot_test_bg_restricted_title">Háttér korlátozások ellenőrzése</string>
+    <string name="settings_troubleshoot_test_bg_restricted_success">A háttér korlátozások nincsenek érvényben a Riot-hoz. Ezt a tesztet mobil hálózaton kell elvégezni (WiFi nélkül).
+%1$s</string>
+    <string name="settings_troubleshoot_test_bg_restricted_failed">Háttér korlátozások vannak érvényben a Riot-hoz.
+Bármi amit a Riot el akar végezni amíg a háttérben fut, agresszívan korlátozva van. Ez érintheti az értesítéseket is.
+%1$s</string>
+    <string name="settings_troubleshoot_test_bg_restricted_quickfix">Korlátozások tiltása</string>
+
+    <string name="settings_troubleshoot_test_battery_title">Akkumulátor optimalizáció</string>
+    <string name="settings_troubleshoot_test_battery_success">Riotot nem érinti az akkumulátor optimalizáció.</string>
+    <string name="settings_troubleshoot_test_battery_failed">"Ha a felhasználó töltés nélkül kikapcsolt képernyővel egy ideig magára hagyja az eszközt, az eszköz „Doze” módba kerül. Ez megakadályozza az alkalmazás számára, hogy hozzáférjen a hálózathoz, nem engedi elvégezni a feladatait, szinkronizációt és az alapértelmezett riasztásait. "</string>
+    <string name="settings_troubleshoot_test_battery_quickfix">Optimalizáció figyelmen kívül hagyása</string>
+
+    <string name="startup_notification_fdroid_battery_optim_title">Háttér kapcsolat</string>
+    <string name="startup_notification_fdroid_battery_optim_message">Riotnak szüksége van egy minimális háttér kapcsolat fenntartására ahhoz, hogy az értesítések biztonságban megérkezhessenek.
+A következő képernyőn el kell fogadnod, hogy a Riot folyamatosan fusson a háttérben.</string>
+    <string name="startup_notification_fdroid_battery_optim_button_grant">Jogosultság megadása</string>
+
+    <string name="account_email_error">Az e-mail címed ellenőrzésekor hiba történt.</string>
+
+    <string name="account_phone_number_error">A telefonszámod ellenőrzésekor hiba történt.</string>
+    <string name="account_additional_info">További információ: %s</string>
+
+    <string name="no_valid_google_play_services_apk">Érvényes Google Play Services APK nem található. Az értesítések megbízhatatlanul működhetnek.</string>
+
+    <string name="store_title">Riot.im - open team collaboration</string>
+    <string name="store_short_description">Üdvözöllek a Riot.im-nél: a szabad kommunikáció új világa!</string>
+    <string name="store_full_description">"Riot.im egyszerű és elegáns környezetet biztosít együttműködéshez ami egy alkalmazásba gyűjti valamennyi beszélgetését.
+
+A szolgáltatás csoportos csevegőszobák köré épül. Riot.im-mel üzeneteket, képeket, videókat és fájlokat oszthatsz meg - összekapcsolódhatsz az eszközeiddel és a csatlakozhatsz különböző közösségekhez egy tető alatt. Egy fiók és hely minden csoportod számára: nem kell felhasználót váltanod, dolgozz és csevegj bárkivel - legyen az akár más szervezetnél - nyilvános vagy privát szobákban: professzionális projektekről vagy iskolai kirándulásokról. Riot.im lesz a közepe  a beszélgetéseidnek!
+
+Most végponttól végpontig titkosítással!
+
+Lehetőségek:
+
+• Azonnal megoszthatsz üzenetet, képet, videót vagy bármilyen fájlt a csoporton belül akármilyen méretben
+• Hang és videóhívás privát szobákban vagy konferenciahívás WebRTC-vel
+• Végponttól végpontig való titkosítás Olm (https://matrix.org/git/olm) felhasználásával
+• Láthatod, hogy ki olvasta az üzenetedet olvasás visszaigazolással
+• A Matrix rendszerében bárkivel tarthatod a kapcsolatot - nem csak a Riot.im-et használó felhasználókkal!
+• Keress és hívj meg bárkit e-mail cím megadásával
+• Részt vehetsz vendég felhasználóval látogatható nyílt szobákban
+• Nagyon jól skálázható - több száz szobát és több ezer felhasználót támogat
+• Teljesen egységes üzenet napló minden eszközön és böngészőben
+• Finoman állítható egységes értesítési beállítások minden eszközön
+• Korlátlanul kereshető csevegés naplók
+• Közvetlen hivatkozások üzenetekhez
+• Teljes szöveges keresés az üzenetekben
+• Jobbról balra irányban írt nyelvek, mint az Arab, támogatása
+
+Fejlesztőknek:
+• Riot.im egy Matrix kliens - a Matrix.org nyílt szabványára és környezet köré épült, együttműködést biztosít minden Matrix kompatibilis alkalmazással, szerverrel és más összekötésekkel
+• Teljesen nyílt forráskódú a megengedő Apache licence alatt - a kódot letöltheted innen: https://github.com/vector-im/vector-android . A „Pull request”-eket szívesen vesszük!
+• Egyszerűen bővíthető a nyílt Matrix Client-Server API (https://matrix.org/docs/spec) alapján.
+• Futtass saját szervert! Használhatod az alapértelmezett matrix.org szervert vagy üzemeltethetsz saját Matrix szervert (pl. https://matrix.org/docs/projects/server/synapse.html)
+
+Fedezd fel az igazán hatásos és nyílt együttműködés lehetőségét a Riot.im-mel!"</string>
 
 </resources>

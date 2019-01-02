@@ -1154,13 +1154,13 @@ public class VectorMessagesAdapter extends AbstractMessagesAdapter {
         }
 
         // Sender avatar
-        View avatarLayoutView = mHelper.setSenderAvatar(convertView, row, isMergedView);
+        View avatarView = mHelper.setSenderAvatar(convertView, row, isMergedView);
 
         // if the messages are merged
         // the thumbnail is hidden
         // and the subview must be moved to be aligned with the previous body
         View bodyLayoutView = convertView.findViewById(R.id.messagesAdapter_body_layout);
-        VectorMessagesAdapterHelper.alignSubviewToAvatarView(subView, bodyLayoutView, avatarLayoutView, isMergedView);
+        VectorMessagesAdapterHelper.alignSubviewToAvatarView(subView, bodyLayoutView, avatarView, isMergedView);
 
         // messages separator
         View messageSeparatorView = convertView.findViewById(R.id.messagesAdapter_message_separator);
@@ -1183,7 +1183,7 @@ public class VectorMessagesAdapter extends AbstractMessagesAdapter {
         manageSelectionMode(convertView, event, msgType);
 
         // read marker
-        setReadMarker(convertView, row, isMergedView, avatarLayoutView, bodyLayoutView);
+        setReadMarker(convertView, row, isMergedView, avatarView, bodyLayoutView);
 
         // download / upload progress layout
         if ((ROW_TYPE_IMAGE == msgType) || (ROW_TYPE_FILE == msgType) || (ROW_TYPE_VIDEO == msgType) || (ROW_TYPE_STICKER == msgType)) {
@@ -1362,7 +1362,7 @@ public class VectorMessagesAdapter extends AbstractMessagesAdapter {
             boolean videoContent = false;
             if (type == ROW_TYPE_IMAGE) {
                 ImageMessage imageMessage = JsonUtils.toImageMessage(event.getContent());
-                if (imageMessage.getMimeType().equals("image/gif")) {
+                if ("image/gif".equals(imageMessage.getMimeType())) {
                     videoContent = true;
                 }
                 message = imageMessage;

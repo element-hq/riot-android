@@ -341,7 +341,7 @@ public class PeopleAdapter extends AbsAdapter {
 
     class ContactViewHolder extends RecyclerView.ViewHolder {
 
-        @BindView(R.id.contact_avatar)
+        @BindView(R.id.adapter_item_contact_avatar)
         ImageView vContactAvatar;
 
         @BindView(R.id.contact_badge)

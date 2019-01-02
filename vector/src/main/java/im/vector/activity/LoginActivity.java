@@ -2310,7 +2310,7 @@ public class LoginActivity extends MXCActionBarActivity implements RegistrationM
             // Communicate phone number to singleton + start validation process (always phone first)
             enableLoadingScreen(true);
             mRegistrationManager
-                    .addPhoneNumberThreePid(mRegistrationPhoneNumberHandler.getE164PhoneNumber(), mRegistrationPhoneNumberHandler.getCountryCode(),
+                    .addPhoneNumberThreePid(this, mRegistrationPhoneNumberHandler.getE164PhoneNumber(), mRegistrationPhoneNumberHandler.getCountryCode(),
                             new RegistrationManager.ThreePidRequestListener() {
                                 @Override
                                 public void onThreePidRequested(ThreePid pid) {
@@ -2321,8 +2321,8 @@ public class LoginActivity extends MXCActionBarActivity implements RegistrationM
                                 }
 
                                 @Override
-                                public void onThreePidRequestFailed(@StringRes int errorMessageRes) {
-                                    LoginActivity.this.onThreePidRequestFailed(getString(errorMessageRes));
+                                public void onThreePidRequestFailed(String errorMessage) {
+                                    LoginActivity.this.onThreePidRequestFailed(errorMessage);
                                 }
                             });
         } else {

@@ -262,7 +262,7 @@ public class RegistrationManager {
                 if (TextUtils.isEmpty(mEmail.sid)) {
                     // Email token needs to be requested before doing validation
                     Log.d(LOG_TAG, "attemptRegistration: request email validation");
-                    requestValidationToken(mEmail, new ThreePidRequestListener() {
+                    requestValidationToken(context, mEmail, new ThreePidRequestListener() {
                         @Override
                         public void onThreePidRequested(ThreePid pid) {
                             if (!TextUtils.isEmpty(pid.sid)) {
@@ -277,8 +277,8 @@ public class RegistrationManager {
                         }
 
                         @Override
-                        public void onThreePidRequestFailed(@StringRes int errorMessageRes) {
-                            listener.onThreePidRequestFailed(context.getString(errorMessageRes));
+                        public void onThreePidRequestFailed(String errorMessage) {
+                            listener.onThreePidRequestFailed(errorMessage);
                         }
                     });
                     return;
@@ -633,13 +633,14 @@ public class RegistrationManager {
     /**
      * Add phone number to the registration process by requesting token first
      *
+     * @param context
      * @param phoneNumber
      * @param countryCode
      * @param listener
      */
-    public void addPhoneNumberThreePid(final String phoneNumber, final String countryCode, final ThreePidRequestListener listener) {
+    public void addPhoneNumberThreePid(final Context context, final String phoneNumber, final String countryCode, final ThreePidRequestListener listener) {
         final ThreePid pid = new ThreePid(phoneNumber, countryCode, ThreePid.MEDIUM_MSISDN);
-        requestValidationToken(pid, listener);
+        requestValidationToken(context, pid, listener);
     }
 
     /**
@@ -838,10 +839,11 @@ public class RegistrationManager {
     /**
      * Request a validation token for the given three pid
      *
+     * @param context
      * @param pid
      * @param listener
      */
-    private void requestValidationToken(final ThreePid pid, final ThreePidRequestListener listener) {
+    private void requestValidationToken(final Context context, final ThreePid pid, final ThreePidRequestListener listener) {
         if (getThirdPidRestClient() != null) {
             switch (pid.medium) {
                 case ThreePid.MEDIUM_EMAIL:
@@ -857,21 +859,25 @@ public class RegistrationManager {
 
                         @Override
                         public void onNetworkError(final Exception e) {
-                            warnAfterCertificateError(e, pid, listener);
+                            warnAfterCertificateError(context, e, pid, listener);
                         }
 
                         @Override
                         public void onUnexpectedError(Exception e) {
-                            listener.onThreePidRequested(pid);
+                            String errorMessage = build3PidErrorMessage(context, R.string.account_email_error, e.getLocalizedMessage());
+                            listener.onThreePidRequestFailed(errorMessage);
                         }
 
                         @Override
                         public void onMatrixError(MatrixError e) {
+                            String errorMessage = null;
                             if (TextUtils.equals(MatrixError.THREEPID_IN_USE, e.errcode)) {
-                                listener.onThreePidRequestFailed(R.string.account_email_already_used_error);
+                                errorMessage = build3PidErrorMessage(context, R.string.account_email_already_used_error, null);
                             } else {
-                                listener.onThreePidRequested(pid);
+                                errorMessage = build3PidErrorMessage(context, R.string.account_email_error, e.getLocalizedMessage());
                             }
+
+                            listener.onThreePidRequestFailed(errorMessage);
                         }
                     });
                     break;
@@ -885,21 +891,25 @@ public class RegistrationManager {
 
                         @Override
                         public void onNetworkError(final Exception e) {
-                            warnAfterCertificateError(e, pid, listener);
+                            warnAfterCertificateError(context, e, pid, listener);
                         }
 
                         @Override
                         public void onUnexpectedError(Exception e) {
-                            listener.onThreePidRequested(pid);
+                            String errorMessage = build3PidErrorMessage(context, R.string.account_phone_number_error, e.getLocalizedMessage());
+                            listener.onThreePidRequestFailed(errorMessage);
                         }
 
                         @Override
                         public void onMatrixError(MatrixError e) {
+                            String errorMessage = null;
                             if (TextUtils.equals(MatrixError.THREEPID_IN_USE, e.errcode)) {
-                                listener.onThreePidRequestFailed(R.string.account_phone_number_already_used_error);
+                                errorMessage = build3PidErrorMessage(context, R.string.account_phone_number_already_used_error, null);
                             } else {
-                                listener.onThreePidRequested(pid);
+                                errorMessage = build3PidErrorMessage(context, R.string.account_phone_number_error, e.mReason);
                             }
+
+                            listener.onThreePidRequestFailed(errorMessage);
                         }
                     });
                     break;
@@ -908,13 +918,34 @@ public class RegistrationManager {
     }
 
     /**
+     * Creates a 3PID error message from a string resource id and adds the additional infos, if non-null
+     * @param context
+     * @param errorMessageRes
+     * @param additionalInfo
+     * @return The error message
+     */
+    private static String build3PidErrorMessage(Context context, @StringRes int errorMessageRes, @Nullable String additionalInfo)
+    {
+        StringBuilder builder = new StringBuilder();
+        builder.append(context.getString(errorMessageRes));
+
+        if (additionalInfo != null) {
+            builder.append(' ');
+            builder.append(context.getString(R.string.account_additional_info, additionalInfo));
+        }
+
+        return builder.toString();
+    }
+
+    /**
      * Display warning dialog in case of certificate error
      *
+     * @param context
      * @param e        the exception
      * @param pid
      * @param listener
      */
-    private void warnAfterCertificateError(final Exception e, final ThreePid pid, final ThreePidRequestListener listener) {
+    private void warnAfterCertificateError(final Context context, final Exception e, final ThreePid pid, final ThreePidRequestListener listener) {
         UnrecognizedCertificateException unrecCertEx = CertUtil.getCertificateException(e);
         if (unrecCertEx != null) {
             final Fingerprint fingerprint = unrecCertEx.getFingerprint();
@@ -922,7 +953,7 @@ public class RegistrationManager {
             UnrecognizedCertHandler.show(mHsConfig, fingerprint, false, new UnrecognizedCertHandler.Callback() {
                 @Override
                 public void onAccept() {
-                    requestValidationToken(pid, listener);
+                    requestValidationToken(context, pid, listener);
                 }
 
                 @Override
@@ -1039,7 +1070,7 @@ public class RegistrationManager {
     public interface ThreePidRequestListener {
         void onThreePidRequested(ThreePid pid);
 
-        void onThreePidRequestFailed(@StringRes int errorMessageRes);
+        void onThreePidRequestFailed(String errorMessage);
     }
 
     public interface ThreePidValidationListener {

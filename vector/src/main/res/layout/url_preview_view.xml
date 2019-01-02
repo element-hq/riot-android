@@ -61,6 +61,7 @@
         android:layout_width="30dp"
         android:layout_height="30dp"
         android:src="@drawable/vector_clear_edittext_green"
+        android:tint="?attr/colorAccent"
         app:layout_constraintEnd_toEndOf="parent" />
 
 </android.support.constraint.ConstraintLayout>

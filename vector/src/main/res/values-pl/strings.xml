@@ -146,7 +146,7 @@ Utwórz kopię zapasową, zanim się wylogujesz.</string>
     <string name="auth_invalid_user_name">Nazwa użytkownika można zawierać wyłącznie litery, cyfry, kropki, myślniki i podkreślniki</string>
     <string name="auth_invalid_password">Zbyt krótkie hasło (co najmniej 6 znaków)</string>
     <string name="auth_missing_password">Brak hasła</string>
-    <string name="auth_invalid_email">To nie jest prawidłowy adres e-mail</string>
+    <string name="auth_invalid_email">To nie wygląda na poprawny adres e-mail</string>
     <string name="auth_invalid_phone">To nie jest prawidłowy numer telefonu</string>
     <string name="auth_email_already_defined">Ten adres e-mail został już użyty.</string>
     <string name="auth_missing_email">Brak adresu e-mail</string>
@@ -306,8 +306,8 @@ Przyznaj dostęp w następnym oknie.</string>
     <string name="room_details_people">Ludzie</string>
     <string name="room_details_files">Pliki</string>
     <string name="room_details_settings">Ustawienia</string>
-    <string name="room_details_people_invited_group_name">ZAPROSZONO</string>
-    <string name="room_details_people_present_group_name">DOŁĄCZONO</string>
+    <string name="room_details_people_invited_group_name">ZAPROSZENI</string>
+    <string name="room_details_people_present_group_name">DOŁĄCZENI</string>
 
     <string name="room_event_action_report_prompt_reason">Powód zgłoszenia zawartości</string>
     <string name="room_event_action_report_prompt_ignore_user">Czy chcesz ukrywać wszystkie wiadomości od tego użytkownika?
@@ -585,8 +585,8 @@ Adres email pozwoli ci również zresetować hasło.</string>
     <string name="auth_threepid_warning_message">Rejestracja jednocześnie za pomocą numeru telefonu i adresu e-mail nie jest obsługiwana dopóki nie pojawi się odpowiednie API. Tylko numer telefonu będzie brany pod uwagę.
 
 Możesz dodać adres e-mail do swojego profilu w ustawieniach.</string>
-    <string name="auth_home_server">Serwer Główny:</string>
-    <string name="auth_identity_server">Serwer Uwierzytelnienia:</string>
+    <string name="auth_home_server">Serwer Domowy:</string>
+    <string name="auth_identity_server">Serwer Tożsamości:</string>
     <string name="auth_reset_password_success_message">Twoje hasło zostało zresetowane.
 
 Zostałeś wylogowany ze wszystkich urządzeń i nie będziesz więcej otrzymywać powiadomień push. Aby ponownie włączyć powiadomienia, zaloguj się ponownie na każdym urządzeniu.</string>
@@ -618,10 +618,10 @@ Zezwól na dostęp w następnym oknie aby móc wykonać połączenie.</string>
     <string name="permissions_rationale_msg_camera_and_audio">Riot wymaga dostępu do kamery i mikrofonu, aby przeprowadzać rozmowy wideo.
 
 Przyznaj dostęp w następnym oknie.</string>
-    <string name="permissions_rationale_msg_contacts">Riot wymaga dostępu do kontaktów, aby znajdywać innych użytkowników Matriksa bazując na adresie e-mail i numerze telefonu.
+    <string name="permissions_rationale_msg_contacts">Riot wymaga dostępu do kontaktów, aby znajdywać innych użytkowników Matrixa bazując na adresie e-mail i numerze telefonu.
 
-Przyznaj dostęp w następnym oknie.</string>
-    <string name="permissions_msg_contacts_warning_other_androids">Riot wymaga dostępu do kontaktów, aby znajdywać innych użytkowników Matriksa bazując na adresie e-mail i numerze telefonu.
+Proszę przyznaj dostęp w następnym oknie, aby odkryć użytkowników książki adresowej osiągalnych z Riot.</string>
+    <string name="permissions_msg_contacts_warning_other_androids">Riot wymaga dostępu do kontaktów, aby znajdywać innych użytkowników Matrixa bazując na adresie e-mail i numerze telefonu.
 
 Zezwolić Riot na dostęp do kontaktów?</string>
 
@@ -672,7 +672,7 @@ Jesteś pewien?</string>
     <string name="ssl_unexpected_existing_expl">Certyfikat różni się od tego zaufanego w twoim telefonie. Serwer mógł odnowić certyfikat. Skontaktuj się z administratorem serwera w celu weryfikacji odcisku palca.</string>
     <string name="ssl_expected_existing_expl">Certyfikat zmienił stan z zaufanego na niezaufany. jest to NIEZWYKLE RZADKIE. Rekomendowane jest NIE AKCEPTOWANIE nowego certyfikatu.</string>
     <string name="ssl_only_accept">Akceptuj certyfikat tylko wtedy gdy administrator opublikował odcisk palca pasujący do tego powyżej.</string>
-    <string name="malformed_id">Uszkodzony ID. Czy to powinien być adres e-mail lub Matrix ID podobny do \'@localpart:domain\'</string>
+    <string name="malformed_id">Uszkodzony ID. Powinien być adres e-mail lub Matrix ID podobny do \'@localpart:domain\'</string>
 
     <plurals name="directory_search_rooms">
         <item quantity="one">1 pokój</item>
@@ -1103,4 +1103,37 @@ Pamiętaj ta akcja może zresetować aplikacje i potrwać jakiś czas.</string>
     <string name="settings_show_read_receipts_summary">Kliknij na potwierdzenie odbioru, aby wyświetlić szczegółową listę.</string>
     <string name="command_problem_with_parameters">Komenda „%s” potrzebuje więcej parametrów lub niektóre parametry są niepoprawne.</string>
     <string name="settings_info_area_show">Pokaż obszar informacyjny</string>
+    <string name="accept">Akceptuj</string>
+
+    <string name="auth_accept_policies">Przeczytaj i zaakceptuj zasady tego serwera domowego:</string>
+
+    <string name="encryption_import_room_keys_success">%1$d/%2$d klucz(y) zaimportowano z sukcesem.</string>
+
+    <string name="settings_labs_enable_send_voice_summary">Ta opcja wymaga aplikacji osoby trzeciej do nagrywania wiadomości.</string>
+
+    <string name="settings_troubleshoot_diagnostic_run_button_title">Uruchom Testy</string>
+    <string name="settings_troubleshoot_test_system_settings_title">Ustawienia Systemowe.</string>
+    <string name="settings_troubleshoot_test_system_settings_success">Powiadomienia są włączone w ustawieniach systemowych.</string>
+    <string name="settings_troubleshoot_test_system_settings_quickfix">Otwórz Ustawienia</string>
+
+    <string name="settings_troubleshoot_test_account_settings_title">Ustawienia Konta.</string>
+    <string name="settings_troubleshoot_test_account_settings_success">Powiadomienia są właczone dla twojego konta.</string>
+    <string name="settings_troubleshoot_test_account_settings_quickfix">Włącz</string>
+
+    <string name="settings_troubleshoot_test_device_settings_title">Ustawienia Urządzenia.</string>
+    <string name="settings_troubleshoot_test_device_settings_success">Powiadomienia są włączone dla tego urządzenia.</string>
+    <string name="settings_troubleshoot_test_device_settings_quickfix">Włącz</string>
+
+    <string name="settings_troubleshoot_test_fcm_title">Token Firebase</string>
+    <string name="settings_troubleshoot_test_token_registration_title">Rejestracja Tokena</string>
+    <string name="settings_troubleshoot_test_service_boot_title">Rozpocznij przy uruchomieniu systemu</string>
+    <string name="startup_notification_fdroid_battery_optim_button_grant">Nadaj uprawnienie</string>
+
+    <string name="settings_troubleshoot_diagnostic_failure_status_with_quickfix">Jeden lub więcej testów nie powiodło się, spróbuj sugerowaną poprawkę(-ki).</string>
+    <string name="settings_troubleshoot_test_system_settings_failed">Powiadomienia są wyłączone w ustawieniach systemowych.
+Sprawdź ustawienia systemowe.</string>
+    <string name="settings_troubleshoot_test_account_settings_failed">Powiadomienia są wyłączone dla twojego konta.
+Sprawdź ustawienia konta.</string>
+    <string name="settings_troubleshoot_test_device_settings_failed">Powiadomienia nie są dozwolone dla tego urządzenia.
+Proszę sprawdź ustawienia Riot.</string>
 </resources>

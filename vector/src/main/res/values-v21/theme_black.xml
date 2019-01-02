@@ -2,6 +2,9 @@
 
     <style name="AppTheme.Black" parent="AppTheme.Base.Black">
         <item name="android:navigationBarColor">?attr/vctr_primary_dark_color</item>
+
+        <!-- enable window content transitions -->
+        <item name="android:windowContentTransitions">true</item>
     </style>
 
 </resources>

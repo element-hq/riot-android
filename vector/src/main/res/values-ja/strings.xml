@@ -1030,4 +1030,20 @@ Matrixでのメッセージの可視性は電子メールと同様です。メ�
     <string name="merged_events_collapse">畳む</string>
 
     <string name="show_info_area_messages_and_errors">メッセージとエラーの場合</string>
+    <string name="call_anyway">とにかく通話する</string>
+    <string name="accept">受け取る</string>
+
+    <string name="auth_accept_policies">このホームサーバーの方針を閲覧し承認してください:</string>
+
+    <string name="settings_call_category">通話設定画面</string>
+    <string name="settings_call_ringtone_use_riot_ringtone">着信にRiotの既定の着信音を使う</string>
+    <string name="settings_call_ringtone_title">着信音</string>
+    <string name="settings_call_ringtone_dialog_title">着信音を選んでください:</string>
+
+    <string name="room_participants_action_kick">追い出す</string>
+    <plurals name="room_participants_kick_prompt_msg">
+        <item quantity="other">このチャットから本当にこのユーザーを追い出しますか？</item>
+    </plurals>
+    <string name="reason_hint">理由</string>
+
 </resources>

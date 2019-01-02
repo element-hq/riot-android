@@ -740,7 +740,7 @@
     <string name="bottom_action_favourites">Të parapëlqyer</string>
     <string name="no_contact_access_placeholder">S’e lejuat Riot-i të hyjë në kontaktet tuaja vendore</string>
     <string name="send_bug_report_description">Ju lutemi, përshkruajeni të metën. Ç’po bënit? Ç’prisnit të ndodhte? Ç’ndodhi në fakt?</string>
-    <string name="send_bug_report_alert_message">Duket se po përplasni telefonin nga inati. Do të donit të parashtroni një njoftim të mete?</string>
+    <string name="send_bug_report_alert_message">Duket se po përplasni telefonin nga inati. Do të donit të hapej skena për njoftim të metash?</string>
     <string name="send_bug_report_app_crashed">Herën e fundit aplikacioni u vithis. Do të donit të parashtroni një raport vithisje?</string>
     <string name="send_bug_report_failed">Dështoi dërgimi i njoftimit të të metës (%s)</string>
     <string name="login">Hyni</string>
@@ -1043,11 +1043,29 @@ Kini parasysh që ky veprim do të sjellë rinisjen e aplikacionit dhe mund të 
     <string name="encryption_information_claimed_ed25519_fingerprint_key">U pretendua për kyç Ed25519 shenjash gishtash</string>
     <string name="historical_placeholder">Kërkoni për të dikurshme</string>
 
-    <string name="settings_flair">Simoble</string>
+    <string name="settings_flair">Simbole</string>
     <string name="accept">Pranoje</string>
 
     <string name="auth_accept_policies">Ju lutemi, merrni në shqyrtim dhe pranoni rregullat e këtij shërbyesi Home:</string>
 
     <string name="encryption_import_room_keys_success">%1$d/%2$d kyç(e) u importuan me sukses.</string>
 
+    <string name="settings_notification_troubleshoot">Diagnostikoni Njoftime</string>
+    <string name="settings_troubleshoot_diagnostic">Diagnostikime</string>
+    <string name="settings_troubleshoot_diagnostic_run_button_title">Xhironi Teste</string>
+    <string name="settings_troubleshoot_diagnostic_running_status">Po xhirohet… (%1$d of %2$d)</string>
+    <string name="settings_troubleshoot_diagnostic_success_status">Diagnostikimi bazë del në rregull. Nëse ende nuk merrni njoftime, ju lutemi, parashtroni një njoftim të mete, që të na ndihmoni të hetojmë.</string>
+    <string name="settings_troubleshoot_diagnostic_failure_status_with_quickfix">Një ose më tepër teste dështuan, provoni ndreqjen(t) e sugjeruara.</string>
+    <string name="settings_troubleshoot_diagnostic_failure_status_no_quickfix">Një ose më tepër teste dështuan, ju lutemi, parashtroni një njoftim të mete që të na ndihmoni ta hetojmë.</string>
+
+    <string name="settings_troubleshoot_test_system_settings_title">Rregullime Sistemi.</string>
+    <string name="settings_troubleshoot_test_system_settings_success">Njoftimet janë të aktivizuara te rregullimet e sistemit.</string>
+    <string name="settings_troubleshoot_test_system_settings_failed">Njoftimet janë të çaktivizuara te rregullimet e sistemit.
+Ju lutemi, kontrolloni rregullimet e sistemit.</string>
+    <string name="settings_troubleshoot_test_system_settings_quickfix">Hap Rregullimet</string>
+
+    <string name="settings_troubleshoot_test_account_settings_title">Rregullime Llogarie.</string>
+    <string name="settings_troubleshoot_test_account_settings_success">Njoftimet janë të aktivizuara për llogarinë tuaj.</string>
+    <string name="settings_troubleshoot_test_account_settings_failed">Njoftimet janë të çaktivizuara për llogarinë tuaj.
+Ju lutemi, kontrolloni rregullime llogarie.</string>
 </resources>

@@ -18,17 +18,24 @@
 package im.vector.push.fcm;
 
 import android.app.Activity;
+import android.app.Dialog;
 import android.content.Context;
 import android.preference.PreferenceManager;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.text.TextUtils;
+import android.widget.Toast;
 
+import com.google.android.gms.common.ConnectionResult;
+import com.google.android.gms.common.GoogleApiAvailability;
+import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.iid.FirebaseInstanceId;
 import com.google.firebase.iid.InstanceIdResult;
 
 import org.matrix.androidsdk.util.Log;
+
+import im.vector.R;
 
 /**
  * This class store the FCM token in SharedPrefs and ensure this token is retrieved.
@@ -70,16 +77,45 @@ public class FcmHelper {
      */
     public static void ensureFcmTokenIsRetrieved(final Activity activity) {
         if (TextUtils.isEmpty(getFcmToken(activity))) {
-            try {
-                FirebaseInstanceId.getInstance().getInstanceId().addOnSuccessListener(activity, new OnSuccessListener<InstanceIdResult>() {
-                    @Override
-                    public void onSuccess(InstanceIdResult instanceIdResult) {
-                        storeFcmToken(activity, instanceIdResult.getToken());
-                    }
-                });
-            } catch (Exception e) {
-                Log.e(LOG_TAG, "## ensureFcmTokenIsRetrieved() : failed " + e.getMessage(), e);
+
+
+            //vfe: according to firebase doc
+            //'app should always check the device for a compatible Google Play services APK before accessing Google Play services features'
+            if (checkPlayServices(activity)) {
+                try {
+                    FirebaseInstanceId.getInstance().getInstanceId().addOnSuccessListener(activity, new OnSuccessListener<InstanceIdResult>() {
+                        @Override
+                        public void onSuccess(InstanceIdResult instanceIdResult) {
+                            storeFcmToken(activity, instanceIdResult.getToken());
+                        }
+                    })
+                    .addOnFailureListener(activity, new OnFailureListener() {
+                        @Override
+                        public void onFailure(@NonNull Exception e) {
+                            Log.e(LOG_TAG, "## ensureFcmTokenIsRetrieved() : failed " + e.getMessage(), e);
+                        }
+                    });
+                } catch (Throwable e) {
+                    Log.e(LOG_TAG, "## ensureFcmTokenIsRetrieved() : failed " + e.getMessage(), e);
+                }
+            } else {
+                Toast.makeText(activity, R.string.no_valid_google_play_services_apk, Toast.LENGTH_SHORT).show();
+                Log.e(LOG_TAG, "No valid Google Play Services found. Cannot use FCM.");
             }
         }
+    }
+
+    /**
+     * Check the device to make sure it has the Google Play Services APK. If
+     * it doesn't, display a dialog that allows users to download the APK from
+     * the Google Play Store or enable it in the device's system settings.
+     */
+    private static boolean checkPlayServices(Activity activity) {
+        GoogleApiAvailability apiAvailability = GoogleApiAvailability.getInstance();
+        int resultCode = apiAvailability.isGooglePlayServicesAvailable(activity);
+        if (resultCode != ConnectionResult.SUCCESS) {
+            return false;
+        }
+        return true;
     }
 }

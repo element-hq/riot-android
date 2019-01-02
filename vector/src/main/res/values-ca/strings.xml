@@ -508,7 +508,7 @@ Tingueu en compte que aquesta acció reiniciarà l\'aplicació i que pot trigar 
     <string name="settings_devices_list">Dispositius</string>
     <string name="settings_inline_url_preview">Habilita les previsualitzacions de les URL per defecte</string>
     <string name="settings_always_show_timestamps">Mostra sempre l\'hora dels missatges</string>
-    <string name="settings_12_24_timestamps">Mostra l\'hora en el format de 12 hores (per exemple 2:30pm)</string>
+    <string name="settings_12_24_timestamps">Mostra l\'hora en el format de 12 hores</string>
     <string name="settings_vibrate_on_mention">Vibra quan et mencionin</string>
 
     <!-- analytics -->
@@ -1048,4 +1048,25 @@ La visibilitat dels missatges a Matrix és similar a la del correu electrònic. 
     <string name="merged_events_expand">desplega</string>
     <string name="merged_events_collapse">plega</string>
 
+    <string name="accept">Acceptar</string>
+
+    <string name="settings_call_category">Trucada</string>
+    <string name="settings_call_ringtone_use_riot_ringtone">Useu el to de Riot per defecte per les trucades entrants</string>
+    <string name="settings_call_ringtone_title">To de trucada entrant</string>
+    <string name="settings_call_ringtone_dialog_title">Escolliu el to per les trucades:</string>
+
+    <string name="room_participants_action_kick">Expulsar</string>
+    <plurals name="room_participants_kick_prompt_msg">
+        <item quantity="one">Esteu segur que voleu expulsar aquest usuari d\'aquest xat?</item>
+        <item quantity="other">Esteu segur que voleu expulsar aquests usuaris d\'aquest xat?</item>
+    </plurals>
+    <string name="reason_hint">Motiu</string>
+
+    <string name="settings_inline_url_preview_summary">Mostra al vista prèvia dels enllaços dins del xat en cas que el vostre homeserver suporti aquesta funcionalitat.</string>
+    <string name="settings_send_typing_notifs">Envia notificacions d\'escriptura</string>
+    <string name="settings_send_typing_notifs_summary">Feu saber a altres usuaris que esteu escrivint.</string>
+    <string name="settings_send_markdown">Format en Markdown</string>
+    <string name="settings_send_markdown_summary">Doneu format a missatges usant la sintaxi Markdown abans d\'enviar-los. Això us permetrà l\'ús de format avançat com ara usar asteriscs per mostrar text en cursiva.</string>
+    <string name="settings_show_join_leave_messages_summary">No afecta invitacions, expulsions i bloquejos.</string>
+    <string name="settings_show_avatar_display_name_changes_messages">Mostra els esdeveniments del compte</string>
 </resources>

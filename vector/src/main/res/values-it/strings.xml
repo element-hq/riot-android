@@ -108,7 +108,7 @@ Selezionare esporta per fare un backup delle chat prima di disconnettersi.</stri
     <string name="send_bug_report_description">Per favore descrivi l\'errore. Cosa hai fatto? Cosa ti aspettavi dovesse accadere? Cosa è effettivamente successo?</string>
     <string name="send_bug_report_placeholder">Descrivi qui il problema</string>
     <string name="send_bug_report_logs_description">Al fine di diagnosticare i problemi, i registri Riot di questo dispositivo saranno inviati con il rapporto dell\'errore. Questo rapporto, che include i registri e l\'istantanea grafica, non sarà pubblicamente visibile. Se preferisci inviare solo il testo soprastante, deseleziona:</string>
-    <string name="send_bug_report_alert_message">Sembra tu stia scuotendo il dispositivo per frustrazione. Desideri segnalare un errore?</string>
+    <string name="send_bug_report_alert_message">Sembra che tu stia scuotendo il dispositivo con frustrazione. Desideri aprire la schermata di segnalazione errore?</string>
     <string name="send_bug_report_app_crashed">L\'applicazione è crashata l\'ultima volta. Desideri inviare un rapporto del crash?</string>
 
     <string name="send_bug_report_sent">La segnalazione dell\'errore è stata spedita con successo</string>
@@ -1131,5 +1131,128 @@ Tieni presente che questa azione riavvierà l\'app e potrebbe richiedere del tem
     <string name="settings_call_ringtone_use_riot_ringtone">Usa suoneria predefinita di Riot per le chiamate in arrivo</string>
     <string name="settings_call_ringtone_title">Suoneria chiamate in arrivo</string>
     <string name="settings_call_ringtone_dialog_title">Scegli suoneria per le chiamate:</string>
+
+    <string name="accept">Accetto</string>
+
+    <string name="auth_accept_policies">Per favore, rivedere e accettare le politiche di questo server home:</string>
+
+    <string name="encryption_import_room_keys_success">%1$d/%2$d chiave/i importate con successo.</string>
+
+    <string name="settings_notification_troubleshoot">Notifiche per la risoluzione dei problemi</string>
+    <string name="settings_troubleshoot_diagnostic">Diagnostica per la risoluzione dei problemi</string>
+    <string name="settings_troubleshoot_diagnostic_run_button_title">Esegui i test</string>
+    <string name="settings_troubleshoot_diagnostic_running_status">In esecuzione… (%1$d di %2$d)</string>
+    <string name="settings_troubleshoot_diagnostic_success_status">La diagnostica di base risponde correttamente. Se continui a non ricevere notifiche, invia una segnalazione errore per aiutarci a indagare.</string>
+    <string name="settings_troubleshoot_diagnostic_failure_status_with_quickfix">Uno o più test hanno fallito, prova le soluzioni suggerite.</string>
+    <string name="settings_troubleshoot_diagnostic_failure_status_no_quickfix">Uno o più test hanno fallito, per favore invia un rapporto errore per aiutarci a indagare.</string>
+
+    <string name="settings_troubleshoot_test_system_settings_title">Impostazioni di sistema.</string>
+    <string name="settings_troubleshoot_test_system_settings_success">Le notifiche sono abilitate nelle impostazioni di sistema.</string>
+    <string name="settings_troubleshoot_test_system_settings_failed">Le notifiche sono disabilitate nelle impostazioni di sistema.
+Controlla le impostazioni di sistema.</string>
+    <string name="settings_troubleshoot_test_system_settings_quickfix">Apri le impostazioni</string>
+
+    <string name="settings_troubleshoot_test_account_settings_title">Impostazioni account.</string>
+    <string name="settings_troubleshoot_test_account_settings_success">Le notifiche sono abilitate per il tuo account.</string>
+    <string name="settings_troubleshoot_test_account_settings_failed">Le notifiche sono disabilitate per il tuo account.
+Controlla le impostazioni dell\'account.</string>
+    <string name="settings_troubleshoot_test_account_settings_quickfix">Abilita</string>
+
+    <string name="settings_troubleshoot_test_device_settings_title">Impostazioni dispositivo.</string>
+    <string name="settings_troubleshoot_test_device_settings_success">Le notifiche sono abilitate per questo dispositivo.</string>
+    <string name="settings_troubleshoot_test_device_settings_failed">Le notifiche non sono abilitate per questo dispositivo.
+Controlla le impostazioni Riot.</string>
+    <string name="settings_troubleshoot_test_device_settings_quickfix">Abilita</string>
+
+    <string name="settings_troubleshoot_test_play_services_title">Esegui controllo servizi</string>
+    <string name="settings_troubleshoot_test_play_services_success">L\'APK Google Play Services è disponibile e aggiornato.</string>
+    <string name="settings_troubleshoot_test_play_services_failed">Riot usa Google Play Services per consegnare i messaggi a comparsa, ma non sembra sia configurato correttamente:
+%1$s</string>
+    <string name="settings_troubleshoot_test_play_services_quickfix">Correggi i servizi play</string>
+
+    <string name="settings_troubleshoot_test_fcm_title">Token di Firebase</string>
+    <string name="settings_troubleshoot_test_fcm_success">Token FCM recuperato con successo:
+%1$s</string>
+    <string name="settings_troubleshoot_test_fcm_failed">Recupero fallito del Token FCM:
+%1$s</string>
+
+    <string name="settings_troubleshoot_test_token_registration_title">Registrazione token</string>
+    <string name="settings_troubleshoot_test_token_registration_success">Token FCM registrato con successo sul server home.</string>
+    <string name="settings_troubleshoot_test_token_registration_failed">Registrazione fallita del token FCM sul server home:
+%1$s</string>
+
+    <string name="settings_troubleshoot_test_foreground_service_started_title">Servizio di notifiche</string>
+    <string name="settings_troubleshoot_test_foreground_service_startedt_success">Servizio di notifiche in esecuzione.</string>
+    <string name="settings_troubleshoot_test_foreground_service_started_failed">Servizio di notifiche non in esecuzione.
+Prova a riavviare l\'applicazione.</string>
+    <string name="settings_troubleshoot_test_foreground_service_started_quickfix">Avvia il servizio</string>
+
+    <string name="settings_troubleshoot_test_service_restart_title">Auto riavvio del servizio di notifiche</string>
+    <string name="settings_troubleshoot_test_service_restart_success">Il servizio è stato terminato e riavviato automaticamente.</string>
+    <string name="settings_troubleshoot_test_service_restart_failed">Fallito l\'avvio del servizio</string>
+
+    <string name="settings_troubleshoot_test_service_boot_title">Esegui all\'avvio</string>
+    <string name="settings_troubleshoot_test_service_boot_success">Il servizio sarà eseguito quando il dispositivo sarà riavviato.</string>
+    <string name="settings_troubleshoot_test_service_boot_failed">Il servizio non sarà avviato al riavvio del dispositivo, non riceverai notifiche finché Riot non verrà aperto almeno una volta.</string>
+    <string name="settings_troubleshoot_test_service_boot_quickfix">Abilita l\'esecuzione all\'avvio</string>
+
+    <string name="settings_troubleshoot_test_bg_restricted_title">Controlla le restrizioni in sottofondo</string>
+    <string name="settings_troubleshoot_test_bg_restricted_success">Le restrizioni in sottofondo sono disabilitate per Riot. Questo test andrebbe eseguito usando dati mobili (non WIFI).
+%1$s</string>
+    <string name="settings_troubleshoot_test_bg_restricted_failed">Le restrizioni in sottofondo sono abilitate per Riot.
+Il lavoro che l\'app tenta di eseguire verrà limitato in modo aggressivo mentre è in sottofondo e ciò potrebbe influenzare le notifiche.
+%1$s</string>
+    <string name="settings_troubleshoot_test_bg_restricted_quickfix">Disabilita le restrizioni</string>
+
+    <string name="settings_troubleshoot_test_battery_title">Ottimizzazione della batteria</string>
+    <string name="settings_troubleshoot_test_battery_success">Riot non è influenzato dall\'ottimizzazione della batteria.</string>
+    <string name="settings_troubleshoot_test_battery_failed">"Se un utente lascia un dispositivo scollegato e fermo per un periodo di tempo, a schermo spento, il dispositivo entra in modalità sonno. Ciò impedisce alle app di accedere alla rete e rinvia le attività, le sincronizzazioni e gli allarmi normali. "</string>
+    <string name="settings_troubleshoot_test_battery_quickfix">Ignora l\'ottimizzazione</string>
+
+    <string name="startup_notification_fdroid_battery_optim_title">Connessione in sottofondo</string>
+    <string name="startup_notification_fdroid_battery_optim_message">Riot deve mantenere una connessione in sottofondo a basso impatto per poter ricevere notifiche affidabili.
+Nella schermata successiva ti verrà chiesto di consentire a Riot di funzionare sempre in sottofondo, accetta per favore.</string>
+    <string name="startup_notification_fdroid_battery_optim_button_grant">Concedi il permesso</string>
+
+    <string name="account_email_error">Si è verificato un errore durante la verifica dell\'indirizzo email.</string>
+
+    <string name="account_phone_number_error">Si è verificato un errore durante la verifica del numero di telefono.</string>
+    <string name="account_additional_info">Ulteriori informazioni: %s</string>
+
+    <string name="no_valid_google_play_services_apk">Nessun valido APK Google Play Services è stato trovato. Le notifiche non funzioneranno correttamente.</string>
+
+    <string name="store_title">Riot.im - collaborazione in team aperto</string>
+    <string name="store_short_description">Benvenuto su Riot.im: un nuovo mondo di comunicazioni aperte!</string>
+    <string name="store_full_description">Riot.im è un ambiente di collaborazione semplice ed elegante che raccoglie tutte le conversazioni e le integrazioni con le app in un\'unica app.
+
+Costruito intorno alle chat room di gruppo, Riot.im ti consente di condividere messaggi, immagini, video e file - interagire con i tuoi strumenti e accedere a tutte le tue comunità sotto lo stesso tetto. Una sola identità e un solo luogo per i tuoi team: non serve cambiare account, puoi lavorare e chattare con persone di diverse organizzazioni in stanze pubbliche o private: dai progetti professionali alle gite scolastiche, Riot.im diventerà il centro di tutte le tue discussioni!
+
+
+Ora con la crittografia da utente a utente!
+
+Le funzionalità includono:
+
+• Condividere istantaneamente messaggi, immagini, video e file di qualsiasi tipo all\'interno di gruppi di qualsiasi dimensione
+• Voce e video uno-a-uno e chiamate in conferenza via WebRTC
+• Crittografia da utente a utente con Olm (https://matrix.org/git/olm)
+• Poter vedere chi legge i tuoi messaggi con le conferme di lettura
+• Comunicare con gli utenti ovunque nell\'ecosistema Matrix.org - non solo con utenti Riot.im!
+• Scoprire e invitare utenti attraverso l\'indirizzo email
+• Partecipare a stanze pubbliche accessibili agli ospiti
+• Altamente scalabile - supporta centinaia di stanze e centinaia di utenti
+• Sincronizzazione completa della cronologia dei messaggi tra diversi dispositivi e browser
+• Raffinata configurazione delle notifiche sincronizzate su tutti i dispositivi
+• Cronologia delle chat infinita e ricercabile
+• Link permanenti ai messaggi
+• Ricerca sull\'intero testo dei messaggi
+• Supporto per le lingue RTL come l\'arabo
+
+Per gli sviluppatori:
+• Riot.im è un client Matrix, basato sullo standard aperto e sull\'ecosistema Matrix.org, che fornisce interoperabilità con tutte le altre app, server e integrazioni compatibili con Matrix
+• Interamente aperto in base alla permissiva Licenza Apache - prendi il codice da https://github.com/vector-im/vector-android. Le proposte di sviluppo sono benvenute!
+• Facilmente estendibile tramite l\'API Client-Server aperta di Matrix (https://matrix.org/docs/spec)
+• Usa il tuo server! È possibile utilizzare il server predefinito matrix.org o eseguire il proprio Matrix server home (es. https://matrix.org/docs/projects/server/synapse.html)
+
+Scopri una collaborazione davvero efficiente e aperta con Riot.im!</string>
 
 </resources>

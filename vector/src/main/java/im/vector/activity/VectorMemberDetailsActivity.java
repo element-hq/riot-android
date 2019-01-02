@@ -17,10 +17,10 @@
  */
 package im.vector.activity;
 
+import android.app.ActivityOptions;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.media.ExifInterface;
-import android.os.Bundle;
+import android.os.Build;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AlertDialog;
@@ -61,6 +61,7 @@ import java.util.List;
 import java.util.Map;
 
 import butterknife.BindView;
+import butterknife.OnClick;
 import im.vector.Matrix;
 import im.vector.R;
 import im.vector.adapters.VectorMemberDetailsAdapter;
@@ -88,8 +89,6 @@ public class VectorMemberDetailsActivity extends MXCActionBarActivity implements
     public static final String EXTRA_STORE_ID = "EXTRA_STORE_ID";
 
     public static final String RESULT_MENTION_ID = "RESULT_MENTION_ID";
-
-    private static final String AVATAR_FULLSCREEN_MODE = "AVATAR_FULLSCREEN_MODE";
 
     // list view items associated actions
     private static final int ITEM_ACTION_INVITE = 0;
@@ -125,20 +124,16 @@ public class VectorMemberDetailsActivity extends MXCActionBarActivity implements
     private VectorMemberDetailsDevicesAdapter mDevicesListViewAdapter;
 
     // UI widgets
-    @BindView(R.id.avatar_img)
+    @BindView(R.id.member_detail_avatar)
     ImageView mMemberAvatarImageView;
     @BindView(R.id.member_avatar_badge)
     ImageView mMemberAvatarBadgeImageView;
-    @BindView(R.id.member_details_name)
-    TextView mMemberNameTextView;
+    @BindView(R.id.member_details_display_name)
+    TextView mMemberDisplayNameTextView;
+    @BindView(R.id.member_details_user_id)
+    TextView mMemberUserIdTextView;
     @BindView(R.id.member_details_presence)
     TextView mPresenceTextView;
-
-    // full screen avatar
-    @BindView(R.id.member_details_fullscreen_avatar_layout)
-    View mFullMemberAvatarLayout;
-    @BindView(R.id.member_details_fullscreen_avatar_image_view)
-    ImageView mFullMemberAvatarImageView;
 
     // listview
     @BindView(R.id.member_details_actions_list_view)
@@ -1222,51 +1217,10 @@ public class VectorMemberDetailsActivity extends MXCActionBarActivity implements
                 }
             });
 
-
-            // when clicking on the username
-            // switch member name <-> member id
-            mMemberNameTextView.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    User user = mSession.getDataHandler().getUser(mMemberId);
-
-                    if (TextUtils.equals(mMemberNameTextView.getText(), mMemberId)) {
-                        if ((null != user) && !TextUtils.isEmpty(user.displayname)) {
-                            mMemberNameTextView.setText(user.displayname);
-                        }
-                    } else {
-                        mMemberNameTextView.setText(mMemberId);
-                    }
-                }
-            });
-
-            // long tap : copy to the clipboard
-            mMemberNameTextView.setOnLongClickListener(new View.OnLongClickListener() {
-                @Override
-                public boolean onLongClick(View v) {
-                    SystemUtilsKt.copyToClipboard(VectorMemberDetailsActivity.this, mMemberNameTextView.getText());
-                    return true;
-                }
-            });
-
             mMemberAvatarImageView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     displayFullScreenAvatar();
-                }
-            });
-
-            mFullMemberAvatarImageView.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    hideFullScreenAvatar();
-                }
-            });
-
-            mFullMemberAvatarLayout.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    hideFullScreenAvatar();
                 }
             });
 
@@ -1279,10 +1233,6 @@ public class VectorMemberDetailsActivity extends MXCActionBarActivity implements
                 public void onSuccess(Boolean info) {
                     // update the UI
                     updateUi();
-
-                    if (!isFirstCreation() && getSavedInstanceState().getBoolean(AVATAR_FULLSCREEN_MODE, false)) {
-                        displayFullScreenAvatar();
-                    }
                 }
             });
 
@@ -1301,10 +1251,7 @@ public class VectorMemberDetailsActivity extends MXCActionBarActivity implements
     @Override
     public boolean onKeyDown(int keyCode, KeyEvent event) {
         if ((KeyEvent.KEYCODE_BACK == keyCode)) {
-            if (View.VISIBLE == mFullMemberAvatarLayout.getVisibility()) {
-                hideFullScreenAvatar();
-                return true;
-            } else if ((View.VISIBLE == mDevicesListView.getVisibility())) {
+            if ((View.VISIBLE == mDevicesListView.getVisibility())) {
                 setScreenDevicesListVisibility(View.GONE);
                 return true;
             }
@@ -1313,29 +1260,6 @@ public class VectorMemberDetailsActivity extends MXCActionBarActivity implements
         return super.onKeyDown(keyCode, event);
     }
 
-
-    @Override
-    public void onSaveInstanceState(Bundle savedInstanceState) {
-        // Always call the superclass so it can save the view hierarchy state
-        super.onSaveInstanceState(savedInstanceState);
-        savedInstanceState.putBoolean(AVATAR_FULLSCREEN_MODE, View.VISIBLE == mFullMemberAvatarLayout.getVisibility());
-    }
-
-    @Override
-    protected void onRestoreInstanceState(Bundle savedInstanceState) {
-        super.onRestoreInstanceState(savedInstanceState);
-
-        if (savedInstanceState.getBoolean(AVATAR_FULLSCREEN_MODE, false)) {
-            displayFullScreenAvatar();
-        }
-    }
-
-    /**
-     * Hide the fullscreen avatar.
-     */
-    private void hideFullScreenAvatar() {
-        mFullMemberAvatarLayout.setVisibility(View.GONE);
-    }
 
     /**
      * Display the user/member avatar in fullscreen.
@@ -1359,9 +1283,14 @@ public class VectorMemberDetailsActivity extends MXCActionBarActivity implements
         }
 
         if (!TextUtils.isEmpty(avatarUrl)) {
-            mFullMemberAvatarLayout.setVisibility(View.VISIBLE);
-            mSession.getMediaCache().loadBitmap(mSession.getHomeServerConfig(),
-                    mFullMemberAvatarImageView, avatarUrl, 0, ExifInterface.ORIENTATION_UNDEFINED, null, null);
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                ActivityOptions options =
+                        ActivityOptions.makeSceneTransitionAnimation(this, mMemberAvatarImageView, "vector_transition_avatar");
+                startActivity(VectorAvatarViewerActivity.Companion.getIntent(this, mSession.getMyUserId(), avatarUrl), options.toBundle());
+            } else {
+                // No transition
+                startActivity(VectorAvatarViewerActivity.Companion.getIntent(this, mSession.getMyUserId(), avatarUrl));
+            }
         }
     }
 
@@ -1475,17 +1404,17 @@ public class VectorMemberDetailsActivity extends MXCActionBarActivity implements
             return;
         }
 
-        if (null != mMemberNameTextView) {
-            if ((null != mRoomMember) && !TextUtils.isEmpty(mRoomMember.displayname)) {
-                mMemberNameTextView.setText(mRoomMember.displayname);
-            } else {
-                refreshUser();
-                mMemberNameTextView.setText(mUser.displayname);
-            }
-
-            // do not display the activity name in the action bar
-            setTitle("");
+        if ((null != mRoomMember) && !TextUtils.isEmpty(mRoomMember.displayname)) {
+            mMemberDisplayNameTextView.setText(mRoomMember.displayname);
+        } else {
+            refreshUser();
+            mMemberDisplayNameTextView.setText(mUser.displayname);
         }
+
+        mMemberUserIdTextView.setText(mMemberId);
+
+        // do not display the activity name in the action bar
+        setTitle("");
 
         // disable the progress bar
         enableProgressBarView(CommonActivityUtils.UTILS_HIDE_PROGRESS_BAR);
@@ -1606,27 +1535,41 @@ public class VectorMemberDetailsActivity extends MXCActionBarActivity implements
         }
     }
 
+    /* ==========================================================================================
+     * UI Event
+     * ========================================================================================== */
+
+    @OnClick({R.id.member_details_user_id, R.id.member_details_display_name})
+    void onUserInfoClicked(TextView v) {
+        // Copy to the clipboard
+        SystemUtilsKt.copyToClipboard(this, v.getText());
+    }
+
     // ********* IDevicesAdapterListener implementation *********
 
     private final ApiCallback<Void> mDevicesVerificationCallback = new ApiCallback<Void>() {
         @Override
         public void onSuccess(Void info) {
-            mDevicesListViewAdapter.notifyDataSetChanged();
+            // Refresh the adapter data
+            List<MXDeviceInfo> deviceList = mSession.getCrypto().getUserDevices(mMemberId);
+
+            mDevicesListViewAdapter.clear();
+            mDevicesListViewAdapter.addAll(deviceList);
         }
 
         @Override
         public void onNetworkError(Exception e) {
-            mDevicesListViewAdapter.notifyDataSetChanged();
+            onSuccess(null);
         }
 
         @Override
         public void onMatrixError(MatrixError e) {
-            mDevicesListViewAdapter.notifyDataSetChanged();
+            onSuccess(null);
         }
 
         @Override
         public void onUnexpectedError(Exception e) {
-            mDevicesListViewAdapter.notifyDataSetChanged();
+            onSuccess(null);
         }
     };
 
@@ -1654,8 +1597,6 @@ public class VectorMemberDetailsActivity extends MXCActionBarActivity implements
             mSession.getCrypto()
                     .setDeviceVerification(MXDeviceInfo.DEVICE_VERIFICATION_BLOCKED, aDeviceInfo.deviceId, aDeviceInfo.userId, mDevicesVerificationCallback);
         }
-
-        mDevicesListViewAdapter.notifyDataSetChanged();
     }
     // ***********************************************************
 }

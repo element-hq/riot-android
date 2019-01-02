@@ -1,5 +1,8 @@
 <resources>
 
-    <style name="AppTheme.Light" parent="AppTheme.Base.Light" />
+    <style name="AppTheme.Light" parent="AppTheme.Base.Light">
+        <!-- enable window content transitions -->
+        <item name="android:windowContentTransitions">true</item>
+    </style>
 
 </resources>

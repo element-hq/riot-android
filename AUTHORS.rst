@@ -45,3 +45,10 @@ Isa Cichon <isa4 at posteo.net>
 
 Nathan van Beelen <nathan at vanbeelen.org>
  * PR #1742: Add a media previewer
+
+Blue <blue at bluecode.fr>
+ * Propagate error messages from 3PID and display them during signup
+
+Ville Ranki <ville.ranki at iki.fi>
+ * Fix avatar icon characters being offset
+

@@ -91,7 +91,7 @@ public class VectorGroupsListAdapter extends ArrayAdapter<String> {
         groupName.setText(group.getDisplayName());
         groupName.setTypeface(null, Typeface.NORMAL);
 
-        final ImageView groupAvatar = convertView.findViewById(R.id.room_avatar);
+        final ImageView groupAvatar = convertView.findViewById(R.id.group_avatar);
         VectorUtils.loadGroupAvatar(mContext, mSession, groupAvatar, group);
 
         final TextView groupTopic = convertView.findViewById(R.id.group_topic);

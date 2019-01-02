@@ -6,13 +6,16 @@
     android:background="?attr/vctr_primary_color"
     android:orientation="vertical">
 
-    <include
-        android:id="@+id/room_avatar"
-        layout="@layout/vector_room_header_round_avatar"
+    <im.vector.view.VectorCircularImageView
+        android:id="@+id/room_header_avatar"
         android:layout_width="84dp"
         android:layout_height="84dp"
         android:layout_gravity="center_horizontal"
-        android:layout_marginTop="16dp" />
+        android:layout_marginTop="16dp"
+        android:adjustViewBounds="true"
+        android:scaleType="centerCrop"
+        android:transitionName="vector_transition_avatar"
+        tools:src="@tools:sample/avatars" />
 
     <!-- keep singleLine="true" because maxLines="1" truncation is not the expected one.-->
     <TextView
@@ -44,7 +47,8 @@
         android:ellipsize="end"
         android:gravity="center_horizontal"
         android:maxLines="3"
-        android:textColor="#FFFFFF"
+        android:textColor="@android:color/white"
+        android:textColorLink="@color/vector_dark_grey_color"
         android:textSize="14sp"
         tools:text="a topic here" />
 

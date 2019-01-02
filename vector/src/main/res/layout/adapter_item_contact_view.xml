@@ -9,20 +9,22 @@
     android:paddingEnd="16dp"
     android:paddingRight="16dp">
 
-    <include
-        android:id="@+id/contact_avatar_layout"
-        layout="@layout/adapter_item_circular_avatar_contact_view"
+    <im.vector.view.VectorCircularImageView
+        android:id="@+id/adapter_item_contact_avatar"
         android:layout_width="@dimen/chat_avatar_size"
         android:layout_height="@dimen/chat_avatar_size"
-        android:layout_centerVertical="true" />
+        android:layout_centerVertical="true"
+        android:adjustViewBounds="true"
+        android:scaleType="centerCrop"
+        tools:src="@tools:sample/avatars" />
 
     <ImageView
         android:id="@+id/contact_badge"
         android:layout_width="20dp"
         android:layout_height="20dp"
-        android:layout_alignTop="@+id/contact_avatar_layout"
-        android:layout_alignEnd="@+id/contact_avatar_layout"
-        android:layout_alignRight="@+id/contact_avatar_layout"
+        android:layout_alignTop="@+id/adapter_item_contact_avatar"
+        android:layout_alignEnd="@+id/adapter_item_contact_avatar"
+        android:layout_alignRight="@+id/adapter_item_contact_avatar"
         android:layout_marginTop="-7dp"
         android:layout_marginEnd="-7dp"
         android:layout_marginRight="-7dp"
@@ -37,8 +39,8 @@
         android:layout_marginLeft="16dp"
         android:layout_marginEnd="16dp"
         android:layout_marginRight="16dp"
-        android:layout_toEndOf="@+id/contact_avatar_layout"
-        android:layout_toRightOf="@+id/contact_avatar_layout"
+        android:layout_toEndOf="@+id/adapter_item_contact_avatar"
+        android:layout_toRightOf="@+id/adapter_item_contact_avatar"
         android:orientation="vertical">
 
         <TextView

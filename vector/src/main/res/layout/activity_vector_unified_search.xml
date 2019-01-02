@@ -44,7 +44,7 @@
                 android:layout_height="0px"
                 android:layout_weight="1">
 
-                <im.vector.view.RiotViewPager
+                <im.vector.view.VectorViewPager
                     android:id="@+id/search_view_pager"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"

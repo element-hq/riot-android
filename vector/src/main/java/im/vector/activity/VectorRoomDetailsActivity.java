@@ -178,6 +178,9 @@ public class VectorRoomDetailsActivity extends MXCActionBarActivity implements T
 
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        // Transmit to Fragment
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+
         if (0 == permissions.length) {
             Log.d(LOG_TAG, "## onRequestPermissionsResult(): cancelled " + requestCode);
         } else if (requestCode == PermissionsToolsKt.PERMISSION_REQUEST_CODE) {
@@ -190,11 +193,6 @@ public class VectorRoomDetailsActivity extends MXCActionBarActivity implements T
                 }
 
                 ContactsManager.getInstance().refreshLocalContactsSnapshot();
-            }
-        } else if (requestCode == PermissionsToolsKt.PERMISSION_REQUEST_CODE_CHANGE_AVATAR) {
-            if (PermissionsToolsKt.allGranted(grantResults)) {
-                // If all results are granted, go on
-                mRoomSettingsFragment.onRoomAvatarPreferenceClicked();
             }
         }
     }

@@ -117,7 +117,7 @@
     <string name="send_bug_report_description">請描述此錯誤。做了什麼？預期發生什麼？實際發生什麼？</string>
     <string name="send_bug_report_placeholder">在這裡描述你的問題</string>
     <string name="send_bug_report_logs_description">為了診斷問題，客戶端的紀錄將會同錯誤回報一起送出。這個包含了紀錄與螢幕截圖的錯誤回報將不會公開可見。如果您只想送出上方的文字，請取消勾選：</string>
-    <string name="send_bug_report_alert_message">您似乎沮喪的搖晃著手機。想送出錯誤回報？</string>
+    <string name="send_bug_report_alert_message">您似乎沮喪的搖晃著手機。您要開啟錯誤回報畫面嗎？</string>
     <string name="send_bug_report_app_crashed">此應用程式在上次當機。您想送出錯誤回報？</string>
     <string name="send_bug_report_rage_shake">憤怒搖晃來回報臭蟲</string>
 
@@ -1041,5 +1041,127 @@ Matrix 中的消息可見度類似于電子郵件。我們忘記您的郵件意�
     <string name="settings_call_ringtone_use_riot_ringtone">為來電使用預設的 Riot 鈴聲</string>
     <string name="settings_call_ringtone_title">來電鈴聲</string>
     <string name="settings_call_ringtone_dialog_title">選取通話鈴聲：</string>
+
+    <string name="accept">接受</string>
+
+    <string name="auth_accept_policies">請審閱並接受此家伺服器的政策：</string>
+
+    <string name="encryption_import_room_keys_success">%1$d/%2$d 個金鑰匯入成功。</string>
+
+    <string name="settings_notification_troubleshoot">疑難排解通知</string>
+    <string name="settings_troubleshoot_diagnostic">疑難排解診斷</string>
+    <string name="settings_troubleshoot_diagnostic_run_button_title">執行測試</string>
+    <string name="settings_troubleshoot_diagnostic_running_status">正在執行……（%2$d 中的 %1$d）</string>
+    <string name="settings_troubleshoot_diagnostic_success_status">基本診斷正常。如果您仍然沒有燒到通知，請遞交錯誤回報以協助我們調查原因。</string>
+    <string name="settings_troubleshoot_diagnostic_failure_status_with_quickfix">一個或更多的測試失敗，嘗試建議的修復。</string>
+    <string name="settings_troubleshoot_diagnostic_failure_status_no_quickfix">一個或更多的測試失敗，請遞交錯誤回報以協助我們調查原因。</string>
+
+    <string name="settings_troubleshoot_test_system_settings_title">系統設定。</string>
+    <string name="settings_troubleshoot_test_system_settings_success">通知已在系統設定中啟用。</string>
+    <string name="settings_troubleshoot_test_system_settings_failed">通知已在系統設定中停用。
+請檢查系統設定。</string>
+    <string name="settings_troubleshoot_test_system_settings_quickfix">開啟設定</string>
+
+    <string name="settings_troubleshoot_test_account_settings_title">帳號設定。</string>
+    <string name="settings_troubleshoot_test_account_settings_success">通知已為您的帳號啟用。</string>
+    <string name="settings_troubleshoot_test_account_settings_failed">通知已為您的帳號停用。
+請檢查帳號設定。</string>
+    <string name="settings_troubleshoot_test_account_settings_quickfix">啟用</string>
+
+    <string name="settings_troubleshoot_test_device_settings_title">裝置設定。</string>
+    <string name="settings_troubleshoot_test_device_settings_success">通知已為此裝置啟用。</string>
+    <string name="settings_troubleshoot_test_device_settings_failed">此裝置不允許通知。
+請檢查 Riot 設定。</string>
+    <string name="settings_troubleshoot_test_device_settings_quickfix">啟用</string>
+
+    <string name="settings_troubleshoot_test_play_services_title">Play 服務檢查</string>
+    <string name="settings_troubleshoot_test_play_services_success">Google Play 服務 APK 可用且已為最新。</string>
+    <string name="settings_troubleshoot_test_play_services_failed">Riot 使用 Google Play 服務來傳遞推送訊息，但它似乎並未正確設定：
+%1$s</string>
+    <string name="settings_troubleshoot_test_play_services_quickfix">修復 Play 服務</string>
+
+    <string name="settings_troubleshoot_test_fcm_title">Firebase Token</string>
+    <string name="settings_troubleshoot_test_fcm_success">成功擷取 FCM token：
+%1$s</string>
+    <string name="settings_troubleshoot_test_fcm_failed">擷取 FCM token 失敗：
+%1$s</string>
+
+    <string name="settings_troubleshoot_test_token_registration_title">註冊 token</string>
+    <string name="settings_troubleshoot_test_token_registration_success">FCM token 成功註冊至家伺服器。</string>
+    <string name="settings_troubleshoot_test_token_registration_failed">FCM token 註冊至家伺服器失敗：
+%1$s</string>
+
+    <string name="settings_troubleshoot_test_foreground_service_started_title">通知服務</string>
+    <string name="settings_troubleshoot_test_foreground_service_startedt_success">通知服務正在執行。</string>
+    <string name="settings_troubleshoot_test_foreground_service_started_failed">通知服務並未執行。
+嘗試重新啟動應用程式。</string>
+    <string name="settings_troubleshoot_test_foreground_service_started_quickfix">啟動服務</string>
+
+    <string name="settings_troubleshoot_test_service_restart_title">通知服務自動重新啟動</string>
+    <string name="settings_troubleshoot_test_service_restart_success">服務被自動砍除並重新啟動。</string>
+    <string name="settings_troubleshoot_test_service_restart_failed">服務重新啟動失敗</string>
+
+    <string name="settings_troubleshoot_test_service_boot_title">開機時啟動</string>
+    <string name="settings_troubleshoot_test_service_boot_success">服務將會在裝置重新啟動時自行啟動。</string>
+    <string name="settings_troubleshoot_test_service_boot_failed">服務不會在裝置重心啟動時自行啟動，您將不能在 Riot 開啟前收到通知。</string>
+    <string name="settings_troubleshoot_test_service_boot_quickfix">啟用開機時啟動</string>
+
+    <string name="settings_troubleshoot_test_bg_restricted_title">檢查背景限制</string>
+    <string name="settings_troubleshoot_test_bg_restricted_success">背景限制已為 Riot 停用。本測試應該使用行動數據執行（不是 WiFi）。
+%1$s</string>
+    <string name="settings_troubleshoot_test_bg_restricted_failed">背景限制已為 Riot 啟用。
+應用程式要在背景執行的工作將被顏格限制，這可能會影響通知。
+%1$s</string>
+    <string name="settings_troubleshoot_test_bg_restricted_quickfix">停用限制</string>
+
+    <string name="settings_troubleshoot_test_battery_title">電池最佳化</string>
+    <string name="settings_troubleshoot_test_battery_success">Riot 不會被電池最佳化影響。</string>
+    <string name="settings_troubleshoot_test_battery_failed">"如果使用者不為裝置充電，並讓其靜置一段時間，且將螢幕關閉，裝置將會進入 Doze 模式。這可能會導致應用程式無法存取網路，並延遲它們的工作、同步與標準警報。 "</string>
+    <string name="settings_troubleshoot_test_battery_quickfix">忽略最佳化</string>
+
+    <string name="startup_notification_fdroid_battery_optim_title">背景連線</string>
+    <string name="startup_notification_fdroid_battery_optim_message">Riot 需要保持最低影響的背景連線以接收可靠的通知。
+在下一個畫面，您必須允許 Riot 總是在背景執行，請接受。</string>
+    <string name="startup_notification_fdroid_battery_optim_button_grant">授予權限</string>
+
+    <string name="account_email_error">當驗證您的電子郵件地址時遇到錯誤。</string>
+
+    <string name="account_phone_number_error">當驗證您的手機號碼時遇到錯誤。</string>
+    <string name="account_additional_info">額外資訊：%s</string>
+
+    <string name="no_valid_google_play_services_apk">找不到有效的 Google Play 服務 APK。通知可能無法正常運作。</string>
+
+    <string name="store_title">Riot.im - 開放式團隊協作</string>
+    <string name="store_short_description">歡迎來到 Riot.im：開放溝通的新世界！</string>
+    <string name="store_full_description">Riot.im 是簡潔優雅的協作環境，其收集了您所有不同的對話，並將應用程式整合至單一的應用程式。
+
+圍繞群組聊天室建構，Riot.im 讓您分享訊息、圖片、影片與檔案，與您的工具互動並在同一個地方存取您所有不同的社群。為您所有的團隊使用同一個身份與地方：不需要切換帳號，與從不同組織而來的夥伴們在公開或私密聊天室中工作並聊天：從專業的專案到學校旅行，Riot.im 將會變成您所有討論的中心！
+
+現在有端到端加密了！
+
+包含以下功能：
+
+• 立刻與任何規模的群組分享訊息、圖片、影片與檔案
+• 透過 WebRTC 進行音訊與視訊的一對一或會議通話
+• 使用 Olm (https://matrix.org/git/olm) 的端到端加密
+• 看讀取回條來看誰讀了您的訊息
+• 與整個 Matrix.org 生態系統的使用者溝通 - 不只 Riot.im 使用者！
+• 透過電子郵件探索並邀請使用者
+• 參與訪客可以進入的公開聊天室
+• 高度可擴展性 - 支援數百個聊天室與數千個使用者
+• 橫跨多裝置與瀏覽器完全同步訊息歷史
+• 可精確設定的通知設定，在所有裝置䅮同步
+• 可無限搜尋的聊天歷史
+• 訊息的永久連結
+• 完整訊息搜尋
+• 支援如阿拉伯文的右向左語言
+
+對開發者來說：
+• Riot.im 是 Matrix 客戶端 - 建構於 Matrix.org 開放標準與生態系統，提供與其他所有相容 Matrix 的應用程式、伺服器與整合的互操作性
+• 以寬鬆的 Apache 授權條款完全開放原始碼 - 從 https://github.com/vector-im/vector-android 取得。歡迎拉取請求！
+• 可透過開放的 Matrix 客戶端對伺服器 API 擴充 (https://matrix.org/docs/spec)
+• 執行您自己的伺服器！您可以使用預設的 matrix.org 伺服器，或是執行您自己的 Matrix 家伺服器（例如 https://matrix.org/docs/projects/server/synapse.html）
+
+與 Riot.im 探索真正有效與開放的協作！</string>
 
 </resources>

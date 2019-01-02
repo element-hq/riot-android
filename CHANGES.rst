@@ -1,3 +1,31 @@
+Changes in Riot 0.8.21 (2018-01-02)
+===================================================
+
+MatrixSdk:
+ - Upgrade MatrixSdk to version 0.9.15.
+
+Improvements:
+ - Show userId below display name in member detail screen (#2756)
+ - Clicking on a user and a room avatar opens a new screen with animation to view the avatar in full screen, with zoom capabilities (#2455)
+ - Added Troubleshoot Notification settings page
+ - Add badge to indicate number of group invitations on the Home Screen (#1923)
+
+Other changes:
+ - Update README.md and CONTRIBUTING.md (#2795)
+
+Bugfix:
+ - Defensive code for notifications issues + check play services as per FCM recommendation (#2266)
+ - No notification on f-droid when device enters sleep mode (#2789)
+ - Added ShortcutBadger missing permissions for some devices
+ - Fix many little UI/UX issues (#2769)
+ - Fix crash opening the setting screen (#2793)
+ - Allow popup on IntegrationManagerActivity's WebView because it's require to add Slack integration (#2768)
+ - Fix crash on Android ViewPager (#2786)
+ - Fix avatar icon characters being a little bit offset to right.
+ - Fix Stopping Loading View after Upload of User Avatar (#2801)
+ - Fix no display of image without `info` (#2666)
+ - Fix permission request failure. It was actually not necessary to request overlay permission (#2680)
+
 Changes in Riot 0.8.20 (2018-12-13)
 ===================================================
 
@@ -1104,7 +1132,7 @@ Changes in Riot 0.8.XX (2018-XX-XX)
 ===================================================
 
 MatrixSdk:
- - Upgrade to version 0.X.Y.
+ - Upgrade MatrixSdk to version 0.X.Y.
 
 Features:
  -
@@ -1116,7 +1144,7 @@ Other changes:
  -
 
 Bugfix:
- -
+ - Correct issue during signup when a 3PID error would let the signup flow spin forever
 
 Translations:
  -

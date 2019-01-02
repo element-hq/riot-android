@@ -25,23 +25,26 @@
             android:background="@android:color/darker_gray" />
 
         <!-- Avatar -->
-        <include
-            android:id="@+id/room_avatar_layout"
-            layout="@layout/adapter_item_circular_avatar_room_view"
+        <im.vector.view.VectorCircularImageView
+            android:id="@+id/adapter_item_recent_room_avatar"
             android:layout_width="@dimen/chat_avatar_size"
             android:layout_height="@dimen/chat_avatar_size"
+            android:layout_centerInParent="true"
             android:layout_centerVertical="true"
             android:layout_toEndOf="@id/bing_indicator_unread_message"
-            android:layout_toRightOf="@id/bing_indicator_unread_message" />
+            android:layout_toRightOf="@id/bing_indicator_unread_message"
+            android:adjustViewBounds="true"
+            android:scaleType="centerCrop"
+            tools:src="@tools:sample/avatars" />
 
         <!-- Note: cannot tint with colorAccent here... -->
         <ImageView
             android:id="@+id/room_avatar_direct_chat_icon"
             android:layout_width="20dp"
             android:layout_height="20dp"
-            android:layout_alignStart="@+id/room_avatar_layout"
-            android:layout_alignLeft="@+id/room_avatar_layout"
-            android:layout_alignTop="@+id/room_avatar_layout"
+            android:layout_alignStart="@+id/adapter_item_recent_room_avatar"
+            android:layout_alignLeft="@+id/adapter_item_recent_room_avatar"
+            android:layout_alignTop="@+id/adapter_item_recent_room_avatar"
             android:layout_marginStart="30dp"
             android:layout_marginLeft="30dp"
             android:src="@drawable/icon_person"
@@ -53,9 +56,9 @@
             android:id="@+id/room_avatar_encrypted_icon"
             android:layout_width="15dp"
             android:layout_height="15dp"
-            android:layout_alignStart="@+id/room_avatar_layout"
-            android:layout_alignLeft="@+id/room_avatar_layout"
-            android:layout_alignBottom="@+id/room_avatar_layout"
+            android:layout_alignStart="@+id/adapter_item_recent_room_avatar"
+            android:layout_alignLeft="@+id/adapter_item_recent_room_avatar"
+            android:layout_alignBottom="@+id/adapter_item_recent_room_avatar"
             android:layout_marginStart="35dp"
             android:layout_marginLeft="35dp"
             android:src="@drawable/e2e_verified"
@@ -70,12 +73,14 @@
             android:layout_alignParentRight="true"
             android:layout_marginEnd="20dp"
             android:layout_marginRight="20dp"
-            android:visibility="gone">
+            android:visibility="gone"
+            tools:visibility="visible">
 
             <ImageView
                 android:layout_width="24dp"
                 android:layout_height="24dp"
                 android:layout_centerVertical="true"
+                android:rotationY="@integer/rtl_mirror_flip"
                 android:src="@drawable/ic_material_chevron_right_black" />
         </RelativeLayout>
 
@@ -89,8 +94,8 @@
             android:layout_marginRight="15dp"
             android:layout_toStartOf="@id/roomSummaryAdapter_show_more_layout"
             android:layout_toLeftOf="@id/roomSummaryAdapter_show_more_layout"
-            android:layout_toEndOf="@id/room_avatar_layout"
-            android:layout_toRightOf="@id/room_avatar_layout"
+            android:layout_toEndOf="@id/adapter_item_recent_room_avatar"
+            android:layout_toRightOf="@id/adapter_item_recent_room_avatar"
             android:orientation="vertical">
 
             <RelativeLayout

@@ -26,6 +26,7 @@ import android.net.Uri
 import android.os.Build
 import android.os.PowerManager
 import android.provider.Settings
+import android.support.v4.app.Fragment
 import androidx.core.widget.toast
 import im.vector.R
 import im.vector.settings.VectorLocale
@@ -100,4 +101,27 @@ fun getDeviceLocale(context: Context): Locale {
     }
 
     return locale
+}
+
+/**
+ * Shows notification settings for the current app.
+ * In android O will directly opens the notification settings, in lower version it will show the App settings
+ */
+fun startNotificationSettingsIntent(fragment: Fragment, requestCode: Int) {
+    val intent = Intent()
+    if (Build.VERSION.SDK_INT > Build.VERSION_CODES.N_MR1) {
+        intent.action = Settings.ACTION_APP_NOTIFICATION_SETTINGS
+        intent.putExtra(Settings.EXTRA_APP_PACKAGE, fragment.context?.packageName)
+    } else if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+        intent.action = Settings.ACTION_APP_NOTIFICATION_SETTINGS
+        intent.putExtra("app_package", fragment.context?.packageName)
+        intent.putExtra("app_uid", fragment.context?.applicationInfo?.uid)
+    } else {
+        intent.action = Settings.ACTION_APPLICATION_DETAILS_SETTINGS
+        intent.addCategory(Intent.CATEGORY_DEFAULT);
+        val uri = Uri.fromParts("package", fragment.activity?.packageName, null)
+        intent.data = uri
+    }
+
+    fragment.startActivityForResult(intent, requestCode)
 }

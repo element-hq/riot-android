@@ -1,18 +1,20 @@
-/* 
+/*
  * Copyright 2014 OpenMarket Ltd
- * 
+ * Copyright 2018 New Vector Ltd
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *     http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
 package im.vector.view;
 
 import android.content.Context;
@@ -24,15 +26,16 @@ import org.matrix.androidsdk.util.Log;
 
 /**
  * Patch the issue "https://code.google.com/p/android/issues/detail?id=66620"
+ * and https://issuetracker.google.com/issues/36931456
  */
-public class RiotViewPager extends android.support.v4.view.ViewPager {
-    private static final String LOG_TAG = RiotViewPager.class.getSimpleName();
+public class VectorViewPager extends android.support.v4.view.ViewPager {
+    private static final String LOG_TAG = VectorViewPager.class.getSimpleName();
 
-    public RiotViewPager(Context context) {
+    public VectorViewPager(Context context) {
         super(context);
     }
 
-    public RiotViewPager(Context context, AttributeSet attrs) {
+    public VectorViewPager(Context context, AttributeSet attrs) {
         super(context, attrs);
     }
 
@@ -41,7 +44,13 @@ public class RiotViewPager extends android.support.v4.view.ViewPager {
         if (getAdapter() == null || getAdapter().getCount() == 0) {
             return false;
         }
-        return super.onInterceptTouchEvent(event);
+
+        try {
+            return super.onInterceptTouchEvent(event);
+        } catch (IllegalArgumentException exception) {
+            Log.e(LOG_TAG, "Exception: " + exception.getLocalizedMessage());
+        }
+        return false;
     }
 
     @Override
@@ -49,7 +58,13 @@ public class RiotViewPager extends android.support.v4.view.ViewPager {
         if (getAdapter() == null || getAdapter().getCount() == 0) {
             return false;
         }
-        return super.onTouchEvent(ev);
+
+        try {
+            return super.onTouchEvent(ev);
+        } catch (IllegalArgumentException exception) {
+            Log.e(LOG_TAG, "Exception: " + exception.getLocalizedMessage());
+        }
+        return false;
     }
 
     @Override

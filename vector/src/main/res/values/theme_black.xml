@@ -6,8 +6,6 @@
     <style name="AppTheme.Base.Black" parent="AppTheme.Base.Dark">
         <!-- Only setting the items we need to override to get the background to be pure black, otherwise inheriting -->
         <item name="vctr_riot_primary_background_color">@color/riot_primary_background_color_black</item>
-        <item name="vctr_avatar_mask">@drawable/avatar_mask_black</item>
-        <item name="vctr_avatar_mask_white_stroke">@drawable/avatar_mask_white_stroke_black</item>
         <item name="vctr_markdown_block_background_color">#FF4D4D4D</item>
         <item name="vctr_fenced_code_block_background_color">#FF00FF00</item>
 

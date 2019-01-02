@@ -145,7 +145,7 @@
     <string name="send_bug_report_description_in_english">If possible, please write the description in English.</string>
     <string name="send_bug_report_placeholder">Describe your problem here</string>
     <string name="send_bug_report_logs_description">In order to diagnose problems, logs from this client will be sent with this bug report. This bug report, including the logs and the screenshot, will not be publicly visible. If you would prefer to only send the text above, please untick:</string>
-    <string name="send_bug_report_alert_message">You seem to be shaking the phone in frustration. Would you like to submit a bug report?</string>
+    <string name="send_bug_report_alert_message">You seem to be shaking the phone in frustration. Would you like to open the bug report screen?</string>
     <string name="send_bug_report_app_crashed">The application has crashed last time. Would you like to submit a crash report?</string>
     <string name="send_bug_report_rage_shake">Rage shake to report bug</string>
 
@@ -339,7 +339,7 @@
     <string name="permissions_rationale_msg_contacts">Riot needs permission to access your address book contacts to find other Matrix users based on their email and phone numbers.\n\nPlease allow access on the next pop-up to discover address book users reachable from Riot.</string>
     <string name="permissions_msg_contacts_warning_other_androids">Riot needs permission to access your address book contact to find other Matrix users based on their email and phone numbers.\n\nAllow Riot to access your contacts ?</string>
 
-    <string name="permissions_action_not_performed_missing_permissions">Sorry.. Action not performed, due to missing permissions</string>
+    <string name="permissions_action_not_performed_missing_permissions">Sorry. Action not performed, due to missing permissions</string>
 
     <!-- medias slider string -->
     <string name="media_slider_saved">Saved</string>
@@ -555,7 +555,7 @@
         <item quantity="one">%1$s room found for %2$s</item>
         <item quantity="other">%1$s rooms found for %2$s</item>
     </plurals>
-    <string name="directory_searching_title">Searching directory..</string>
+    <string name="directory_searching_title">Searching directory…</string>
 
     <!-- home room settings -->
     <string name="room_settings_all_messages_noisy">All messages (noisy)</string>
@@ -591,6 +591,66 @@
     <string name="settings_app_info_link_summary">Show the application info in the system settings.</string>
 
     <string name="settings_notification_privacy">Notification privacy</string>
+    <string name="settings_notification_troubleshoot">Troubleshoot Notifications</string>
+    <string name="settings_troubleshoot_diagnostic">Troubleshooting diagnostics</string>
+    <string name="settings_troubleshoot_diagnostic_run_button_title">Run Tests</string>
+    <string name="settings_troubleshoot_diagnostic_running_status">Running… (%1$d of %2$d)</string>
+    <string name="settings_troubleshoot_diagnostic_success_status">Basic diagnostic is ok. If you still do not receive notifications, please submit a bug report to help us investigate.</string>
+    <string name="settings_troubleshoot_diagnostic_failure_status_with_quickfix">One or more tests have failed, try suggested fix(es).</string>
+    <string name="settings_troubleshoot_diagnostic_failure_status_no_quickfix">One or more tests have failed, please submit a bug report to help us investigate.</string>
+
+    <string name="settings_troubleshoot_test_system_settings_title">System Settings.</string>
+    <string name="settings_troubleshoot_test_system_settings_success">Notifications are enabled in the system settings.</string>
+    <string name="settings_troubleshoot_test_system_settings_failed">Notifications are disabled in the system settings.\nPlease check system settings.</string>
+    <string name="settings_troubleshoot_test_system_settings_quickfix">Open Settings</string>
+
+    <string name="settings_troubleshoot_test_account_settings_title">Account Settings.</string>
+    <string name="settings_troubleshoot_test_account_settings_success">Notifications are enabled for your account.</string>
+    <string name="settings_troubleshoot_test_account_settings_failed">Notifications are disabled for your account.\nPlease check account settings.</string>
+    <string name="settings_troubleshoot_test_account_settings_quickfix">Enable</string>
+
+    <string name="settings_troubleshoot_test_device_settings_title">Device Settings.</string>
+    <string name="settings_troubleshoot_test_device_settings_success">Notifications are enabled for this device.</string>
+    <string name="settings_troubleshoot_test_device_settings_failed">Notifications are not allowed for this device.\nPlease check the Riot settings.</string>
+    <string name="settings_troubleshoot_test_device_settings_quickfix">Enable</string>
+
+    <string name="settings_troubleshoot_test_play_services_title">Play Services Check</string>
+    <string name="settings_troubleshoot_test_play_services_success">Google Play Services APK is available and up-to-date.</string>
+    <string name="settings_troubleshoot_test_play_services_failed">Riot uses Google Play Services to deliver push messages but it doesn\'t seem to be configured correctly:\n%1$s</string>
+    <string name="settings_troubleshoot_test_play_services_quickfix">Fix Play Services</string>
+
+    <string name="settings_troubleshoot_test_fcm_title">Firebase Token</string>
+    <string name="settings_troubleshoot_test_fcm_success">FCM token successfully retrieved:\n%1$s</string>
+    <string name="settings_troubleshoot_test_fcm_failed">Failed to retrieved FCM token:\n%1$s</string>
+
+    <string name="settings_troubleshoot_test_token_registration_title">Token Registration</string>
+    <string name="settings_troubleshoot_test_token_registration_success">FCM token successfully registered to HomeServer.</string>
+    <string name="settings_troubleshoot_test_token_registration_failed">Failed to register FCM token to HomeServer:\n%1$s</string>
+
+    <string name="settings_troubleshoot_test_foreground_service_started_title">Notifications Service</string>
+    <string name="settings_troubleshoot_test_foreground_service_startedt_success">Notifications Service is running.</string>
+    <string name="settings_troubleshoot_test_foreground_service_started_failed">Notifications Service is not running.\nTry to restart the application.</string>
+    <string name="settings_troubleshoot_test_foreground_service_started_quickfix">Start Service</string>
+
+    <string name="settings_troubleshoot_test_service_restart_title">Notifications Service Auto-Restart</string>
+    <string name="settings_troubleshoot_test_service_restart_success">Service was killed and restarted automatically.</string>
+    <string name="settings_troubleshoot_test_service_restart_failed">Service failed to restart</string>
+
+    <string name="settings_troubleshoot_test_service_boot_title">Start on boot</string>
+    <string name="settings_troubleshoot_test_service_boot_success">Service will start when the device is restarted.</string>
+    <string name="settings_troubleshoot_test_service_boot_failed">The service will not start when the device is restarted, you will not receive notifications until Riot has been opened once.</string>
+    <string name="settings_troubleshoot_test_service_boot_quickfix">Enable Start on boot</string>
+
+    <string name="settings_troubleshoot_test_bg_restricted_title">Check background restrictions</string>
+    <string name="settings_troubleshoot_test_bg_restricted_success">Background restrictions are disabled for Riot. This test should be run using mobile data (no WIFI).\n%1$s</string>
+    <string name="settings_troubleshoot_test_bg_restricted_failed">Background restrictions are enabled for Riot.\nWork that the app tries to do will be aggressively restricted while it is in the background, and this could affect notifications.\n%1$s</string>
+    <string name="settings_troubleshoot_test_bg_restricted_quickfix">Disable restrictions</string>
+
+    <string name="settings_troubleshoot_test_battery_title">Battery Optimization</string>
+    <string name="settings_troubleshoot_test_battery_success">Riot is not affected by Battery Optimization.</string>
+    <string name="settings_troubleshoot_test_battery_failed">If a user leaves a device unplugged and stationary for a period of time, with the screen off, the device enters Doze mode. This prevents apps from accessing the network and defers their jobs, syncs, and standard alarms. </string>
+    <string name="settings_troubleshoot_test_battery_quickfix">Ignore Optimization</string>
+
     <string name="settings_notification_privacy_warning">Riot.im runs in the background to keep your notification message content private. You can change this option to reduce battery usage.</string>
     <string name="settings_notification_privacy_normal">Normal</string>
     <string name="settings_notification_privacy_power_saving">Power-saving Options</string>
@@ -675,6 +735,10 @@
     <string name="startup_notification_privacy_button_grant">Grant permission</string>
     <string name="startup_notification_privacy_button_other">Choose another option</string>
 
+    <string name="startup_notification_fdroid_battery_optim_title">Background Connection</string>
+    <string name="startup_notification_fdroid_battery_optim_message">Riot needs to keep a low impact background connection in order to have reliable notifications.\nOn the next screen you will be prompted to allow Riot to always run in background, please accept.</string>
+    <string name="startup_notification_fdroid_battery_optim_button_grant">Grant permission</string>
+
     <!-- analytics -->
     <string name="settings_analytics">Analytics</string>
     <string name="settings_opt_in_of_analytics">Send analytics data</string>
@@ -709,6 +773,7 @@
     <string name="account_email_already_used_error">This email address is already in use.</string>
     <string name="account_email_not_found_error">This email address was not found.</string>
     <string name="account_phone_number_already_used_error">This phone number is already in use.</string>
+    <string name="account_email_error">An error occurred while verifying your email address.</string>
 
     <string name="settings_password">Password</string>
     <string name="settings_change_password">Change password</string>
@@ -734,6 +799,8 @@
     <string name="settings_phone_number_verification_error_empty_code">Enter an activation code</string>
     <string name="settings_phone_number_verification_error">Error while validating your phone number</string>
     <string name="settings_phone_number_code">Code</string>
+    <string name="account_phone_number_error">An error occurred while verifying your phone number.</string>
+    <string name="account_additional_info">Additional info: %s</string>
 
     <string name="settings_flair">Flair</string>
     <string name="settings_without_flair">You are not currently a member of any communities.</string>
@@ -1094,5 +1161,40 @@
     <string name="generic_label_and_value">%1$s: %2$s</string>
     <string name="plus_x">+%d</string>
     <string name="x_plus">%d+</string>
+    <string name="no_valid_google_play_services_apk">No valid Google Play Services APK found. Notifications may not work properly.</string>
+
+    <!-- String for Play Store -->
+    <string name="store_title">Riot.im - open team collaboration</string>
+    <string name="store_short_description">Welcome to Riot.im: a new world of open communication!</string>
+    <string name="store_full_description">"Riot.im is a simple and elegant collaboration environment that gathers all of your different conversations and app integrations into one single app.
+
+Built around group chatrooms, Riot.im lets you share messages, images, videos and files - interact with your tools and access all your different communities under one roof. One single identity and place for all your teams: no need to switch accounts, work and chat with people from different organisations in public or private rooms: from professional projects to school trips, Riot.im will become the center of all your discussions!
+
+Now with end-to-end encryption!
+
+Features include:
+
+• Instantly share messages, images, videos and files of any kind within groups of any size
+• Voice and video 1-1 and conference calling via WebRTC
+• End-to-end encryption using Olm (https://matrix.org/git/olm)
+• See who's reading your messages with read receipts
+• Communicate with users anywhere in the Matrix.org ecosystem - not just Riot.im users!
+• Discover and invite users by email address
+• Participate in guest-accessible public rooms
+• Highly scalable - supports hundreds of rooms and thousands of users
+• Fully synchronised message history across multiple devices and browsers
+• Finely configurable notification settings, synchronised over all devices
+• Infinite searchable chat history
+• Permalinks to messages
+• Full message search
+• Support for RTL languages such as Arabic
+
+For developers:
+• Riot.im is a Matrix client - built on the Matrix.org open standard and ecosystem, providing interoperability with all other Matrix compatible apps, servers and integrations
+• Entirely open sourced under the permissive Apache License - get the code from https://github.com/vector-im/vector-android. Pull requests welcome!
+• Trivially extensible via the open Matrix Client-Server API (https://matrix.org/docs/spec)
+• Run your own server! You can use the default matrix.org server or run your own Matrix home server (e.g. https://matrix.org/docs/projects/server/synapse.html)
+
+Discover truly efficient and open collaboration with Riot.im!"</string>
 
 </resources>
