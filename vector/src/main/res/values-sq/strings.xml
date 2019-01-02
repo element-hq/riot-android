@@ -893,7 +893,7 @@ Ju lutemi, lejoni përdorimin, që nga flluska pasuese, që të zbulohen te libr
 
 Të lejohet Riot-i të hyjë në kontaktet tuaja?</string>
 
-    <string name="permissions_action_not_performed_missing_permissions">Na ndjeni… Veprimi nuk u krye, për shkak lejesh që mungojnë</string>
+    <string name="permissions_action_not_performed_missing_permissions">Na ndjeni. Veprimi nuk u krye, për shkak lejesh që mungojnë</string>
 
     <string name="no">JO</string>
     <string name="open_chat_header">Hap kryet</string>
