@@ -17,6 +17,7 @@
 package im.vector.activity.policies
 
 import android.app.Activity
+import android.os.Build
 import android.widget.Button
 import butterknife.BindView
 import butterknife.OnClick
@@ -25,6 +26,7 @@ import im.vector.R
 import im.vector.RegistrationManager
 import im.vector.activity.VectorAppCompatActivity
 import im.vector.activity.VectorWebViewActivity
+import im.vector.ui.themes.ThemeUtils
 import im.vector.webview.WebViewMode
 import org.matrix.androidsdk.rest.model.login.LocalizedFlowDataLoginTerms
 
@@ -61,6 +63,11 @@ class AccountCreationTermsActivity : VectorAppCompatActivity(),
                 }
 
         accountCreationTermsViewState = AccountCreationTermsViewState(list)
+
+        if (Build.VERSION.SDK_INT <= Build.VERSION_CODES.JELLY_BEAN) {
+            toolbar.setBackgroundColor(ThemeUtils.getColor(this, R.attr.colorAccent))
+            submitButton.setBackgroundColor(ThemeUtils.getColor(this, R.attr.colorAccent))
+        }
 
         renderState()
     }
