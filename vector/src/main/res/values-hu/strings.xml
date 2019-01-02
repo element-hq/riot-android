@@ -254,7 +254,7 @@ Kérlek engedélyezd a hozzáférést a következő felugró ablakban, hogy tudj
 
 Engedélyezed Riot-nak a hozzáférést kapcsolataidhoz?</string>
 
-    <string name="permissions_action_not_performed_missing_permissions">Elnézést… A művelet nem lett végre hajtva hiányzó engedélyek miatt</string>
+    <string name="permissions_action_not_performed_missing_permissions">"Elnézést.  A művelet nem lett végre hajtva hiányzó engedélyek miatt"</string>
 
     <string name="media_slider_saved">Mentve</string>
     <string name="media_slider_saved_message">Mentés a letöltések közé</string>
@@ -1053,7 +1053,7 @@ Vedd figyelembe, hogy az alkalmazás újraindul ami sok időt vehet igénybe.</s
     <string name="room_participants_action_kick">Elküld</string>
     <plurals name="room_participants_kick_prompt_msg">
         <item quantity="one">Ezeket az embereket biztosan kirúgod?</item>
-        <item quantity="other" />
+        <item quantity="other"/>
     </plurals>
     <string name="reason_hint">Ok</string>
 
