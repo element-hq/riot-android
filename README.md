@@ -77,7 +77,7 @@ for example, with FCM, it would give
     }
 ```
 
-- if you use FCM, duplicate appCompile at the end of this file and replace appCompile by appmyriotCompile.
+- if you use FCM, duplicate appImplementation at the end of this file and replace appImplementation by appmyriotImplementation.
 - if you don't, update the "if (!getGradle().getStartParameter().getTaskRequests().toString().contains("fdroid"))" to include your flavor.
 
 Create your flavour directory
@@ -91,8 +91,7 @@ Customise your flavour
 ----------------------
 
 - Open riot-android/vector/src/appmyriot/AndroidManifest.xml
-- Comment the provider section.
-- Change the application name to myRiot with "android:label="myRiot""
+- Change the application name to myRiot with "android:label="myRiot"" and "tools:replace="label"" in the application tag.
 - Any other field can be customised by adding the resources in this directory classpath.
 - Open Android studio, select your flavour.
 - Build and run the app : you made your first Riot app.
