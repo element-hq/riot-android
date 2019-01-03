@@ -752,7 +752,6 @@ Dispositivos desconocidos:</string>
     <string name="community_name">Nombre de la comunidad</string>
     <string name="encrypted_message">Mensaje cifrado</string>
 
-    <string name="notification_on">Activado</string>
     <string name="notification_off">Desactivado</string>
     <string name="command_description_markdown">Activar/desactivar Markdown</string>
     <string name="light_theme">Tema Claro</string>

@@ -744,7 +744,6 @@ Appareils inconnus :</string>
 
     <!-- notification statuses -->
     <string name="notification_off">Désactivé</string>
-    <string name="notification_on">Activé</string>
     <string name="notification_noisy">Notification sonore</string>
 
     <string name="encrypted_message">Message chiffré</string>

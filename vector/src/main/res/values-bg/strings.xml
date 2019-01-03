@@ -824,7 +824,6 @@
 
     <!-- notification statuses -->
     <string name="notification_off">Изключено</string>
-    <string name="notification_on">Включено</string>
     <string name="notification_noisy">Шумно</string>
 
     <string name="create">Създай</string>

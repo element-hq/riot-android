@@ -1000,7 +1000,6 @@ Note que esta acção reiniciará a aplicação e poderá demorar algum tempo.</
     <string name="command_description_clear_scalar_token">Repara a gestão de aplicações Matrix</string>
 
     <string name="notification_off">Desactivado</string>
-    <string name="notification_on">Activado</string>
     <string name="notification_noisy">Alto</string>
 
     <string name="encrypted_message">Mensagem cifrada</string>

@@ -793,7 +793,6 @@ Email также позволит вам при необходимости во�
 
     <!-- notification statuses -->
     <string name="notification_off">Выкл</string>
-    <string name="notification_on">Вкл</string>
     <string name="notification_noisy">Громко</string>
 
     <string name="encrypted_message">Зашифрованное сообщение</string>

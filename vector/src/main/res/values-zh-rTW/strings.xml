@@ -857,7 +857,6 @@
     <string name="unrecognized_command">無法辨識的指令：%s</string>
 
     <string name="notification_off">關閉</string>
-    <string name="notification_on">打開</string>
     <string name="notification_noisy">通知並震動</string>
 
     <string name="encrypted_message">已加密的訊息</string>

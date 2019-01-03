@@ -801,7 +801,6 @@ Atenção: este arquivo poderá ser apagado se o aplicativo for desinstalado.</s
 
     <!-- notification statuses -->
     <string name="notification_off">Desativado</string>
-    <string name="notification_on">Ativado</string>
     <string name="notification_noisy">Alto</string>
 
     <string name="encrypted_message">Mensagem criptografada</string>

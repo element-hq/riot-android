@@ -741,7 +741,6 @@ Neznáme zariadenia:</string>
 
     <!-- notification statuses -->
     <string name="notification_off">Vypnuté</string>
-    <string name="notification_on">Zapnuté</string>
     <string name="notification_noisy">Hlučné</string>
 
     <string name="encrypted_message">Šifrovaná správa</string>
