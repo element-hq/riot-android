@@ -91,8 +91,7 @@ object NotificationUtils {
     // on devices >= android O, we need to define a channel for each notifications
     private const val LISTENING_FOR_EVENTS_NOTIFICATION_CHANNEL_ID = "LISTEN_FOR_EVENTS_NOTIFICATION_CHANNEL_ID"
 
-    private const val NOISY_NOTIFICATION_CHANNEL_ID_BASE = "DEFAULT_NOISY_NOTIFICATION_CHANNEL_ID_BASE"
-    private var noisyNotificationChannelId: String? = null
+    private const val NOISY_NOTIFICATION_CHANNEL_ID = "DEFAULT_NOISY_NOTIFICATION_CHANNEL_ID"
 
     private const val SILENT_NOTIFICATION_CHANNEL_ID = "DEFAULT_SILENT_NOTIFICATION_CHANNEL_ID"
     private const val CALL_NOTIFICATION_CHANNEL_ID = "CALL_NOTIFICATION_CHANNEL_ID"
@@ -113,30 +112,14 @@ object NotificationUtils {
 
         val notificationManager = context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
 
-        // A notification channel cannot be updated :
-        // it must be deleted and created with another channel id
-        if (null == noisyNotificationChannelId) {
-            for (channel in notificationManager.notificationChannels) {
-                if (channel.id.startsWith(NOISY_NOTIFICATION_CHANNEL_ID_BASE)) {
-                    noisyNotificationChannelId = channel.id
-                    break
-                }
-            }
-        }
-
-        if (null != noisyNotificationChannelId) {
-            // Check that the notification sound is still the same
-            val channel = notificationManager.getNotificationChannel(noisyNotificationChannelId)
-            val notificationSound = channel.sound
-            val expectedSound = PreferencesManager.getNotificationRingTone(context)
-
-            // the notification sound has been updated
-            // need to delete it, to create a new one
-            // else the sound won't be updated
-            if ((null == notificationSound)
-                    xor (null == expectedSound) || null != notificationSound && !TextUtils.equals(notificationSound.toString(), expectedSound!!.toString())) {
-                notificationManager.deleteNotificationChannel(noisyNotificationChannelId)
-                noisyNotificationChannelId = null
+        //Legacy - the noisy channel was deleted and recreated when sound preference was changed (id was DEFAULT_NOISY_NOTIFICATION_CHANNEL_ID_BASE + currentTimeMillis).
+        //Now the sound can only be change directly in system settings, so for app upgrading we are deleting this former channel
+        //Starting from this version the channel will not be dynamic
+        for (channel in notificationManager.notificationChannels) {
+            val channelId = channel.id
+            val legacyBaseName = "DEFAULT_NOISY_NOTIFICATION_CHANNEL_ID_BASE"
+            if (channelId.startsWith(legacyBaseName)) {
+                notificationManager.deleteNotificationChannel(channelId)
             }
         }
 
@@ -144,17 +127,14 @@ object NotificationUtils {
          * Default notification importance: shows everywhere, makes noise, but does not visually
          * intrude.
          */
-        if (null == noisyNotificationChannelId) {
-            noisyNotificationChannelId = NOISY_NOTIFICATION_CHANNEL_ID_BASE + "_" + System.currentTimeMillis()
 
-            val channel = NotificationChannel(noisyNotificationChannelId,
-                    context.getString(R.string.notification_noisy_notifications),
-                    NotificationManager.IMPORTANCE_DEFAULT)
-            channel.description = context.getString(R.string.notification_noisy_notifications)
-            channel.enableVibration(true)
-            channel.enableLights(true)
-            notificationManager.createNotificationChannel(channel)
-        }
+        val noisyChannel = NotificationChannel(NOISY_NOTIFICATION_CHANNEL_ID,
+                context.getString(R.string.notification_noisy_notifications),
+                NotificationManager.IMPORTANCE_DEFAULT)
+        noisyChannel.description = context.getString(R.string.notification_noisy_notifications)
+        noisyChannel.enableVibration(true)
+        noisyChannel.enableLights(true)
+        notificationManager.createNotificationChannel(noisyChannel)
 
         /**
          * Low notification importance: shows everywhere, but is not intrusive.
@@ -565,8 +545,7 @@ object NotificationUtils {
             builder.setDefaults(Notification.DEFAULT_LIGHTS)
 
             if (isBing) {
-                //can be null on android <O
-                if (noisyNotificationChannelId != null) builder.setChannelId(noisyNotificationChannelId!!)
+                builder.setChannelId(NOISY_NOTIFICATION_CHANNEL_ID)
                 builder.color = highlightColor
                 //android <O compatibility, set priority and set the ringtone
                 builder.priority = NotificationCompat.PRIORITY_DEFAULT
@@ -826,7 +805,7 @@ object NotificationUtils {
     }
 
     fun openSystemSettingsForNoisyCategory(fragment: Fragment) {
-        startNotificationChannelSettingsIntent(fragment, noisyNotificationChannelId ?: "")
+        startNotificationChannelSettingsIntent(fragment, NOISY_NOTIFICATION_CHANNEL_ID)
     }
 
 
