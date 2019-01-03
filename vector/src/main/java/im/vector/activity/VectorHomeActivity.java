@@ -126,6 +126,7 @@ import im.vector.fragments.RoomsFragment;
 import im.vector.push.PushManager;
 import im.vector.receiver.VectorUniversalLinkReceiver;
 import im.vector.services.EventStreamService;
+import im.vector.tools.VectorUncaughtExceptionHandler;
 import im.vector.ui.themes.ActivityOtherThemes;
 import im.vector.ui.themes.ThemeUtils;
 import im.vector.util.BugReporter;
@@ -554,11 +555,12 @@ public class VectorHomeActivity extends VectorAppCompatActivity implements Searc
 
         mVectorPendingCallView.checkPendingCall();
 
-        if ((null != VectorApp.getInstance()) && VectorApp.getInstance().didAppCrash()) {
+        if (VectorUncaughtExceptionHandler.INSTANCE.didAppCrash(this)) {
             // crash reported by a rage shake
             try {
                 new AlertDialog.Builder(this)
                         .setMessage(R.string.send_bug_report_app_crashed)
+                        .setCancelable(false)
                         .setPositiveButton(R.string.yes, new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
@@ -573,7 +575,7 @@ public class VectorHomeActivity extends VectorAppCompatActivity implements Searc
                         })
                         .show();
 
-                VectorApp.getInstance().clearAppCrashStatus();
+                VectorUncaughtExceptionHandler.INSTANCE.clearAppCrashStatus(this);
             } catch (Exception e) {
                 Log.e(LOG_TAG, "## onResume() : appCrashedAlert failed " + e.getMessage(), e);
             }
