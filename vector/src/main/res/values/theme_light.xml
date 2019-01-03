@@ -111,6 +111,8 @@
 
         <item name="vctr_direct_chat_circle">@drawable/direct_chat_circle_light</item>
 
+        <item name="vctr_widget_banner_background">#FFD3EFE1</item>
+
         <!-- ANDROID SUPPORT ATTRIBUTES -->
         <!-- disable the overscroll because setOverscrollHeader/Footer don't always work -->
         <item name="android:overScrollMode">never</item>

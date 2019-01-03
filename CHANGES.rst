@@ -14,7 +14,7 @@ Other changes:
  -
 
 Bugfix:
- -
+ - Improve widget banner (#2129)
 
 Translations:
  -
