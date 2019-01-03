@@ -112,7 +112,8 @@ object NotificationUtils {
 
         val notificationManager = context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
 
-        //Legacy - the noisy channel was deleted and recreated when sound preference was changed (id was DEFAULT_NOISY_NOTIFICATION_CHANNEL_ID_BASE + currentTimeMillis).
+        //Legacy - the noisy channel was deleted and recreated when sound preference was changed (id was DEFAULT_NOISY_NOTIFICATION_CHANNEL_ID_BASE
+        // + currentTimeMillis).
         //Now the sound can only be change directly in system settings, so for app upgrading we are deleting this former channel
         //Starting from this version the channel will not be dynamic
         for (channel in notificationManager.notificationChannels) {
