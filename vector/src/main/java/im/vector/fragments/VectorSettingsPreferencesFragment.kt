@@ -28,7 +28,6 @@ import android.net.Uri
 import android.os.AsyncTask
 import android.os.Build
 import android.os.Bundle
-import android.os.Parcelable
 import android.provider.Settings
 import android.support.design.widget.TextInputEditText
 import android.support.v14.preference.SwitchPreference
@@ -56,7 +55,6 @@ import im.vector.activity.*
 import im.vector.contacts.ContactsManager
 import im.vector.extensions.getFingerprintHumanReadable
 import im.vector.extensions.withArgs
-import im.vector.notifications.NotificationUtils
 import im.vector.preference.*
 import im.vector.settings.FontScale
 import im.vector.settings.VectorLocale
@@ -397,7 +395,7 @@ class VectorSettingsPreferencesFragment : PreferenceFragmentCompat(), SharedPref
         }
         refreshNotificationPrivacy()
 
-        for (resourceText in mPushesRuleByResourceId.keys) {
+        for (resourceText in mPrefKeyToBongRuleId.keys) {
             val preference = findPreference(resourceText)
 
             if (null != preference) {
@@ -960,7 +958,7 @@ class VectorSettingsPreferencesFragment : PreferenceFragmentCompat(), SharedPref
 
         val pushManager = Matrix.getInstance(appContext)!!.pushManager
 
-        for (resourceText in mPushesRuleByResourceId.keys) {
+        for (resourceText in mPrefKeyToBongRuleId.keys) {
             val preference = preferenceManager.findPreference(resourceText)
 
             if (null != preference) {
@@ -1146,7 +1144,7 @@ class VectorSettingsPreferencesFragment : PreferenceFragmentCompat(), SharedPref
             return
         }
 
-        val ruleId = mPushesRuleByResourceId[fResourceText]
+        val ruleId = mPrefKeyToBongRuleId[fResourceText]
         val rule = mSession.dataHandler.pushRules()?.findDefaultRule(ruleId)
 
         // check if there is an update
@@ -1347,11 +1345,11 @@ class VectorSettingsPreferencesFragment : PreferenceFragmentCompat(), SharedPref
             putString(PreferencesManager.SETTINGS_VERSION_PREFERENCE_KEY, VectorUtils.getApplicationVersion(activity))
 
             mSession.dataHandler.pushRules()?.let {
-                for (resourceText in mPushesRuleByResourceId.keys) {
+                for (resourceText in mPrefKeyToBongRuleId.keys) {
                     val preference = findPreference(resourceText)
 
                     if (null != preference && preference is SwitchPreference) {
-                        val ruleId = mPushesRuleByResourceId[resourceText]
+                        val ruleId = mPrefKeyToBongRuleId[resourceText]
 
                         val rule = it.findDefaultRule(ruleId)
                         var isEnabled = null != rule && rule.isEnabled
@@ -2781,8 +2779,8 @@ class VectorSettingsPreferencesFragment : PreferenceFragmentCompat(), SharedPref
         private const val REQUEST_LOCALE = 777
         private const val REQUEST_CALL_RINGTONE = 999
 
-        // rule Id <-> preference name
-        private var mPushesRuleByResourceId = mapOf(
+        // preference name <-> rule Id
+        private var mPrefKeyToBongRuleId = mapOf(
                 PreferencesManager.SETTINGS_ENABLE_ALL_NOTIF_PREFERENCE_KEY to BingRule.RULE_ID_DISABLE_ALL,
                 PreferencesManager.SETTINGS_ENABLE_THIS_DEVICE_PREFERENCE_KEY to DUMMY_RULE,
                 PreferencesManager.SETTINGS_TURN_SCREEN_ON_PREFERENCE_KEY to DUMMY_RULE

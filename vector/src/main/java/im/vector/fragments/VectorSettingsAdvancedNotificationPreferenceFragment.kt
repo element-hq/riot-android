@@ -37,7 +37,6 @@ import im.vector.notifications.NotificationUtils
 import im.vector.preference.BingRulePreference
 import im.vector.util.PreferencesManager
 import org.matrix.androidsdk.MXSession
-import org.matrix.androidsdk.data.MyUser
 import org.matrix.androidsdk.listeners.MXEventListener
 import org.matrix.androidsdk.rest.model.bingrules.BingRule
 import org.matrix.androidsdk.util.BingRulesManager
@@ -54,9 +53,6 @@ class VectorSettingsAdvancedNotificationPreferenceFragment : PreferenceFragmentC
         override fun onBingRulesUpdate() {
             refreshPreferences()
             refreshDisplay()
-        }
-
-        override fun onAccountInfoUpdate(myUser: MyUser) {
         }
     }
 
@@ -128,13 +124,13 @@ class VectorSettingsAdvancedNotificationPreferenceFragment : PreferenceFragmentC
             }
         }
 
-        for (resourceText in mPushesRuleByResourceId.keys) {
+        for (resourceText in mPrefKeyToBongRuleId.keys) {
             val preference = findPreference(resourceText)
             if (null != preference) {
                 if (preference is BingRulePreference) {
                     //preference.isEnabled = null != rules && isConnected && pushManager.areDeviceNotificationsAllowed()
                     mSession.dataHandler.pushRules()?.let {
-                        preference.setBingRule(it.findDefaultRule(mPushesRuleByResourceId[resourceText]))
+                        preference.setBingRule(it.findDefaultRule(mPrefKeyToBongRuleId[resourceText]))
                     }
                     preference.onPreferenceChangeListener = Preference.OnPreferenceChangeListener { _, newValue ->
                         val rule = preference.createRule(newValue as Int)
@@ -218,11 +214,11 @@ class VectorSettingsAdvancedNotificationPreferenceFragment : PreferenceFragmentC
     private fun refreshPreferences() {
         PreferenceManager.getDefaultSharedPreferences(activity).edit {
             mSession.dataHandler.pushRules()?.let {
-                for (resourceText in mPushesRuleByResourceId.keys) {
-                    val preference = findPreference(resourceText)
+                for (prefKey in mPrefKeyToBongRuleId.keys) {
+                    val preference = findPreference(prefKey)
 
                     if (null != preference && preference is SwitchPreference) {
-                        val ruleId = mPushesRuleByResourceId[resourceText]
+                        val ruleId = mPrefKeyToBongRuleId[prefKey]
 
                         val rule = it.findDefaultRule(ruleId)
                         var isEnabled = null != rule && rule.isEnabled
@@ -245,7 +241,7 @@ class VectorSettingsAdvancedNotificationPreferenceFragment : PreferenceFragmentC
                             }
                         }// check if the rule is only defined by don't notify
 
-                        putBoolean(resourceText, isEnabled)
+                        putBoolean(prefKey, isEnabled)
                     }
                 }
             }
@@ -261,16 +257,6 @@ class VectorSettingsAdvancedNotificationPreferenceFragment : PreferenceFragmentC
      * Display the loading view.
      */
     private fun displayLoadingView() {
-        // search the loading view from the upper view
-        if (null == mLoadingView) {
-            var parent = view
-
-            while (parent != null && mLoadingView == null) {
-                mLoadingView = parent.findViewById(R.id.vector_settings_spinner_views)
-                parent = parent.parent as View
-            }
-        }
-
         if (null != mLoadingView) {
             mLoadingView!!.visibility = View.VISIBLE
         }
@@ -295,8 +281,8 @@ class VectorSettingsAdvancedNotificationPreferenceFragment : PreferenceFragmentC
 
         private const val REQUEST_NOTIFICATION_RINGTONE = 888
 
-        // rule Id <-> preference name
-        private var mPushesRuleByResourceId = mapOf(
+        //  preference name <-> rule Id
+        private var mPrefKeyToBongRuleId = mapOf(
                 PreferencesManager.SETTINGS_CONTAINING_MY_DISPLAY_NAME_PREFERENCE_KEY to BingRule.RULE_ID_CONTAIN_DISPLAY_NAME,
                 PreferencesManager.SETTINGS_CONTAINING_MY_USER_NAME_PREFERENCE_KEY to BingRule.RULE_ID_CONTAIN_USER_NAME,
                 PreferencesManager.SETTINGS_MESSAGES_IN_ONE_TO_ONE_PREFERENCE_KEY to BingRule.RULE_ID_ONE_TO_ONE_ROOM,

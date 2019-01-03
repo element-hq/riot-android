@@ -151,7 +151,6 @@ object NotificationUtils {
                     context.getString(R.string.notification_noisy_notifications),
                     NotificationManager.IMPORTANCE_DEFAULT)
             channel.description = context.getString(R.string.notification_noisy_notifications)
-            channel.setSound(PreferencesManager.getNotificationRingTone(context), null)
             channel.enableVibration(true)
             channel.enableLights(true)
             notificationManager.createNotificationChannel(channel)
@@ -820,7 +819,7 @@ object NotificationUtils {
         return title!!
     }
 
-    fun supportNotificationChannels(): Boolean = (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O)
+    fun supportNotificationChannels() = (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O)
 
     fun openSystemSettingsForSilentCategory(fragment: Fragment) {
         startNotificationChannelSettingsIntent(fragment, SILENT_NOTIFICATION_CHANNEL_ID)

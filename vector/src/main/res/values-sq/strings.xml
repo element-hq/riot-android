@@ -967,7 +967,6 @@ Kujdes: kjo kartelë mund të fshihet, nëse çinstalohet aplikacioni.</string>
     <string name="command_description_invite_user">Fton te dhoma e tanishme përdoruesin me ID-në e dhënë</string>
     <string name="command_description_clear_scalar_token">Për ndreqje administrimi Aplikacionesh Matrix</string>
 
-    <string name="notification_on">On</string>
     <string name="group_no_long_description">Përgjegjësi i bashkësisë nuk ka dhënë një përshkrim të gjatë për këtë bashkësi.</string>
 
     <string name="deactivate_account_content">Kjo do ta bëjë llogarinë tuaj përgjithmonë të papërdorshme. S’do të jeni në gjendje të hyni në llogarinë tuaj, dhe askush s’do të jetë në gjendje të riregjistrojë të njëjtën ID përdoruesi. Kjo do të shkaktojë daljen e llogarisë tuaj nga krejt dhomat ku merr pjesë, dhe do të heqë hollësitë e llogarisë tuaj nga shërbyesi juaj i identiteteve. <b>Ky veprim është i paprapakthyeshëm</b>.
