@@ -32,7 +32,6 @@ import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
-import android.support.multidex.MultiDex;
 import android.support.multidex.MultiDexApplication;
 import android.support.v7.preference.PreferenceManager;
 import android.text.TextUtils;
@@ -43,6 +42,8 @@ import org.matrix.androidsdk.MXSession;
 import org.matrix.androidsdk.util.Log;
 
 import java.io.File;
+import java.io.PrintWriter;
+import java.io.StringWriter;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -71,6 +72,7 @@ import im.vector.services.EventStreamService;
 import im.vector.settings.FontScale;
 import im.vector.settings.VectorLocale;
 import im.vector.ui.themes.ThemeUtils;
+import im.vector.util.BugReporter;
 import im.vector.util.CallsManager;
 import im.vector.util.PermissionsToolsKt;
 import im.vector.util.PhoneNumberUtils;
@@ -81,7 +83,7 @@ import im.vector.util.VectorMarkdownParser;
 /**
  * The main application injection point
  */
-public class VectorApp extends MultiDexApplication {
+public class VectorApp extends MultiDexApplication implements Thread.UncaughtExceptionHandler {
     private static final String LOG_TAG = VectorApp.class.getSimpleName();
 
     // key to save the crash status
@@ -189,6 +191,8 @@ public class VectorApp extends MultiDexApplication {
 
         // init the REST client
         MXSession.initUserAgent(this, BuildConfig.FLAVOR_DESCRIPTION);
+
+        Thread.setDefaultUncaughtExceptionHandler(this);
 
         instance = this;
         mCallsManager = new CallsManager(this);
@@ -719,6 +723,82 @@ public class VectorApp extends MultiDexApplication {
         }
 
         return isSyncing;
+    }
+
+    //==============================================================================================================
+    // Crash management
+    //==============================================================================================================
+
+    /**
+     * An uncaught exception has been triggered
+     *
+     * @param thread    the thread
+     * @param throwable the throwable
+     * @return the exception description
+     */
+    @Override
+    public void uncaughtException(Thread thread, Throwable throwable) {
+        StringBuilder b = new StringBuilder();
+        String appName = Matrix.getApplicationName();
+
+        b.append(appName + " Build : " + BuildConfig.VERSION_CODE + "\n");
+        b.append(appName + " Version : " + VectorApp.VECTOR_VERSION_STRING + "\n");
+        b.append("SDK Version : " + VectorApp.SDK_VERSION_STRING + "\n");
+        b.append("Phone : " + Build.MODEL.trim() + " (" + Build.VERSION.INCREMENTAL + " " + Build.VERSION.RELEASE + " " + Build.VERSION.CODENAME + ")\n");
+
+        b.append("Memory statuses \n");
+
+        long freeSize = 0L;
+        long totalSize = 0L;
+        long usedSize = -1L;
+        try {
+            Runtime info = Runtime.getRuntime();
+            freeSize = info.freeMemory();
+            totalSize = info.totalMemory();
+            usedSize = totalSize - freeSize;
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        b.append("usedSize   " + (usedSize / 1048576L) + " MB\n");
+        b.append("freeSize   " + (freeSize / 1048576L) + " MB\n");
+        b.append("totalSize   " + (totalSize / 1048576L) + " MB\n");
+
+        b.append("Thread: ");
+        b.append(thread.getName());
+
+        Activity a = VectorApp.getCurrentActivity();
+        if (a != null) {
+            b.append(", Activity:");
+            b.append(a.getLocalClassName());
+        }
+
+        b.append(", Exception: ");
+
+        StringWriter sw = new StringWriter();
+        PrintWriter pw = new PrintWriter(sw, true);
+        throwable.printStackTrace(pw);
+        b.append(sw.getBuffer().toString());
+        Log.e("FATAL EXCEPTION", b.toString());
+
+        String bugDescription = b.toString();
+
+        if (null != VectorApp.getInstance()) {
+            VectorApp.getInstance().setAppCrashed(bugDescription);
+        }
+    }
+
+    /**
+     * Warn that the application crashed
+     *
+     * @param description the crash description
+     */
+    private void setAppCrashed(String description) {
+        final SharedPreferences preferences = android.preference.PreferenceManager.getDefaultSharedPreferences(VectorApp.getInstance());
+        SharedPreferences.Editor editor = preferences.edit();
+        editor.putBoolean(PREFS_CRASH_KEY, true);
+        editor.apply();
+
+        BugReporter.saveCrashReport(this, description);
     }
 
     /**
