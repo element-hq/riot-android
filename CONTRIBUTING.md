@@ -48,6 +48,11 @@ Make sure the following commands execute without any error:
 
 > ./gradlew testAppReleaseUnitTest
 
+### Tests
+
+Riot is currently supported on Android Jelly Bean (API 16+): please test your change on an Android device (or Android emulator) running with API 16. Many issues can happen (including crashes) on older devices.
+Also, if possible, please test your change on a real device. Testing on Android emulator may not be sufficient.
+
 ### Internationalisation
 
 When adding new string resources, please only add new entries in file `value/strings.xml`. Translations will be added later by the community of translators with a specific tool named [Weblate](https://translate.riot.im/projects/riot-android/).
