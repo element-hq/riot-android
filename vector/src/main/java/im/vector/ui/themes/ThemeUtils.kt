@@ -32,12 +32,15 @@ import android.view.Menu
 import im.vector.R
 import im.vector.VectorApp
 import im.vector.activity.VectorGroupDetailsActivity
+import org.matrix.androidsdk.util.Log
 import java.util.*
 
 /**
  * Util class for managing themes.
  */
 object ThemeUtils {
+    const val LOG_TAG = "ThemeUtils"
+
     // preference key
     const val APPLICATION_THEME_KEY = "APPLICATION_THEME_KEY"
 
@@ -149,6 +152,7 @@ object ThemeUtils {
             c.theme.resolveAttribute(colorAttribute, color, true)
             matchedColor = color.data
         } catch (e: Exception) {
+            Log.e(LOG_TAG, "Unable to get color", e)
             matchedColor = ContextCompat.getColor(c, android.R.color.holo_red_dark)
         }
 
