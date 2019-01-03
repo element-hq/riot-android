@@ -38,7 +38,7 @@
 
     </PreferenceCategory>
 
-    <im.vector.preference.VectorPreferenceDivider android:key="SETTINGS_NOTIFICATIONS_TARGET_DIVIDER_PREFERENCE_KEY" />
+    <im.vector.preference.VectorPreferenceDivider />
 
     <im.vector.preference.VectorPreference
         android:dialogTitle="@string/settings_notification_ringtone"
