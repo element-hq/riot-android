@@ -11,7 +11,7 @@ Improvements:
  -
 
 Other changes:
- -
+ - Restore the crash report dialog after a crash
 
 Bugfix:
  -
