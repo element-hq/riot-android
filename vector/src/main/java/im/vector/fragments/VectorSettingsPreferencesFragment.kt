@@ -55,7 +55,10 @@ import im.vector.activity.*
 import im.vector.contacts.ContactsManager
 import im.vector.extensions.getFingerprintHumanReadable
 import im.vector.extensions.withArgs
-import im.vector.preference.*
+import im.vector.preference.ProgressBarPreference
+import im.vector.preference.UserAvatarPreference
+import im.vector.preference.VectorGroupPreference
+import im.vector.preference.VectorPreference
 import im.vector.settings.FontScale
 import im.vector.settings.VectorLocale
 import im.vector.ui.themes.ThemeUtils
@@ -204,9 +207,6 @@ class VectorSettingsPreferencesFragment : PreferenceFragmentCompat(), SharedPref
     }
     private val backgroundSyncPreference by lazy {
         findPreference(PreferencesManager.SETTINGS_ENABLE_BACKGROUND_SYNC_PREFERENCE_KEY) as SwitchPreference
-    }
-    private val mRingtonePreference by lazy {
-        findPreference(PreferencesManager.SETTINGS_NOTIFICATION_RINGTONE_SELECTION_PREFERENCE_KEY)
     }
     private val mUseRiotCallRingtonePreference by lazy {
         findPreference(PreferencesManager.SETTINGS_CALL_RINGTONE_USE_RIOT_PREFERENCE_KEY) as SwitchPreference
