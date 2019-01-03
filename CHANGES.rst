@@ -14,7 +14,7 @@ Other changes:
  -
 
 Bugfix:
- -
+ - Fix crash when taking picture for user avatar on old device (#2818)
 
 Translations:
  -
