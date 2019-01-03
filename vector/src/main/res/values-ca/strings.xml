@@ -160,7 +160,7 @@
 
     <!-- Authentication -->
     <string name="auth_login">Entra</string>
-    <string name="auth_register">Registra\'mr</string>
+    <string name="auth_register">Registra\'m</string>
     <string name="auth_submit">Tramet</string>
     <string name="auth_skip">Omet</string>
     <string name="auth_send_reset_email">Envia el correu de reinici</string>
