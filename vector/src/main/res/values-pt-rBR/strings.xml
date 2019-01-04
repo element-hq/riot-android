@@ -1033,13 +1033,13 @@ A visibilidade de mensagens no Matrix é parecida com a dos e-mails. Se esquecer
     <string name="resource_limit_exceeded_title">Limite de recursos excedido</string>
     <string name="resource_limit_contact_action">Entre em contato com o(a) administrador(a)</string>
 
-    <string name="resource_limit_contact_admin">entre em contato com o(a) administrador(a) do seu serviço</string>
+    <string name="resource_limit_contact_admin">entre em contato com o administrador do seu serviço</string>
 
-    <string name="resource_limit_soft_default">Este Servidor de Base excedeu um dos seus limites de recursos, portanto <b>alguns(mas) usuários(as) não conseguirão fazer login</b>.</string>
-    <string name="resource_limit_hard_default">Este Servidor de Base excedeu um de seus limites de recursos.</string>
+    <string name="resource_limit_soft_default">Este homeserver excedeu um dos seus limites de recursos, portanto <b>alguns usuários não conseguirão fazer login</b>.</string>
+    <string name="resource_limit_hard_default">Este homeserver excedeu um de seus limites de recursos.</string>
 
-    <string name="resource_limit_soft_mau"> Este Servidor de Base atingiu o seu limite mensal de usuárias(os) ativas(os), portanto <b>alguns(mas) usuários(as) não conseguirão fazer login</b>.</string>
-    <string name="resource_limit_hard_mau">Este Servidor de Base atingiu o seu limite mensal de usuárias(os) ativas(os).</string>
+    <string name="resource_limit_soft_mau"> Este homeserver atingiu o seu limite mensal de usuários ativos, portanto <b>alguns usuários não conseguirão fazer login</b>.</string>
+    <string name="resource_limit_hard_mau">Este homeserver atingiu o seu limite mensal de usuários ativos.</string>
 
     <string name="resource_limit_soft_contact">Por favor, %s para que este limite seja aumentado.</string>
     <string name="resource_limit_hard_contact">Por favor, %s para seguir usando este serviço.</string>
@@ -1066,7 +1066,7 @@ A visibilidade de mensagens no Matrix é parecida com a dos e-mails. Se esquecer
     <string name="settings_troubleshoot_diagnostic_run_button_title">Executar Testes</string>
     <string name="settings_troubleshoot_diagnostic_running_status">Executando… (%1$d of %2$d)</string>
     <string name="settings_troubleshoot_diagnostic_success_status">Diagnóstico básico está ok. Se você ainda não recebe notificações, por favor relate um erro para nos ajudar a investigar.</string>
-    <string name="settings_troubleshoot_diagnostic_failure_status_with_quickfix">Um ou mais testes falharam, tente a(as) correção(ões) sugerida(as).</string>
+    <string name="settings_troubleshoot_diagnostic_failure_status_with_quickfix">Um ou mais testes falharam, tente as correções sugeridas.</string>
     <string name="settings_troubleshoot_diagnostic_failure_status_no_quickfix">Um ou mais testes falharam, por favor relate um erro para nos ajudar a investigar.</string>
 
     <string name="settings_troubleshoot_test_system_settings_title">Configurações do sistema.</string>
@@ -1169,7 +1169,7 @@ Trabalhos que o aplicativo tentar fazer serão restringidos agressivamente enqua
     <string name="markdown_has_been_disabled">Markdown foi desabilitado.</string>
 
     <string name="settings_lazy_loading_description">Aumente o desempenho apenas carregando os membros da sala na primeira exibição.</string>
-    <string name="error_lazy_loading_not_supported_by_home_server">Seu homeserver não suporta o carregamento lazy de membros da sala ainda. Tente depois.</string>
+    <string name="error_lazy_loading_not_supported_by_home_server">Seu homeserver não suporta o carregamento Lazy de membros da sala ainda. Tente depois.</string>
 
     <string name="unknown_error">Desculpe, ocorreu um erro</string>
 
@@ -1187,7 +1187,7 @@ Trabalhos que o aplicativo tentar fazer serão restringidos agressivamente enqua
     <string name="x_plus">%d+</string>
     <string name="no_valid_google_play_services_apk">Nenhum APK do Google Play Services válido foi encontrado. Notificações podem não funcionar corretamente.</string>
 
-    <string name="store_title">Riot.im - equipe aberta e colaborativa</string>
+    <string name="store_title">Riot.im - colaboração aberta em equipe</string>
     <string name="store_short_description">Bem-vindo ao Riot.im: um novo mundo de comunicação aberta!</string>
     <string name="settings_troubleshoot_test_battery_failed">"Se um usuário deixar um dispositivo desconectado e parado por um período de tempo, com a tela desligada, o dispositivo entrará no modo Cochilo. Isso impede que os aplicativos acessem a rede e adiem seus trabalhos, sincronizações e alarmes padrão. "</string>
     <string name="encryption_export_create_passphrase">Criar passphrase</string>
@@ -1206,7 +1206,7 @@ Características incluem:
 • Criptografia de ponta a ponta usando Olm (https://matrix.org/git/olm)
 • Veja quem está lendo suas mensagens com recibos de leitura
 • Comunique-se com os usuários em qualquer lugar do ecossistema Matrix.org - não apenas usuários do Riot.im!
-• Descobrir e convidar usuários por endereço de email
+• Descobrir e convidar usuários por endereço de e-mail
 • Participar em salas públicas acessíveis aos hóspedes
 • Altamente escalável - suporta centenas de salas e milhares de usuários
 • Histórico de mensagens totalmente sincronizado em vários dispositivos e navegadores
