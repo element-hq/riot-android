@@ -33,7 +33,14 @@ class TestFirebaseToken(val fragment: Fragment) : TroubleshootTest(R.string.sett
                     .addOnCompleteListener(fragmentActivity) { task ->
                         if (!task.isSuccessful) {
                             val errorMsg = if (task.exception == null) "Unknown" else task.exception!!.localizedMessage
-                            description = fragment.getString(R.string.settings_troubleshoot_test_fcm_failed, errorMsg)
+                            //Can't find where this constant is (not documented -or deprecated in docs- and all obfuscated)
+                            if ("SERVICE_NOT_AVAILABLE".equals(errorMsg)) {
+                                description = fragment.getString(R.string.settings_troubleshoot_test_fcm_failed_service_not_available, errorMsg)
+                            } else if ("TOO_MANY_REGISTRATIONS".equals(errorMsg)) {
+                                description = fragment.getString(R.string.settings_troubleshoot_test_fcm_failed_too_many_registration, errorMsg)
+                            } else {
+                                description = fragment.getString(R.string.settings_troubleshoot_test_fcm_failed, errorMsg)
+                            }
                             status = TestStatus.FAILED
 
                         } else {

@@ -628,6 +628,8 @@
     <string name="settings_troubleshoot_test_fcm_title">Firebase Token</string>
     <string name="settings_troubleshoot_test_fcm_success">FCM token successfully retrieved:\n%1$s</string>
     <string name="settings_troubleshoot_test_fcm_failed">Failed to retrieved FCM token:\n%1$s</string>
+    <string name="settings_troubleshoot_test_fcm_failed_too_many_registration">[%1$s]\nThis error is out of control of Riot and according to Google, this error indicates that the device has too many apps registered with GCM. The error only occurs in cases where there are extreme numbers of apps, so it should not affect the average user.</string>
+    <string name="settings_troubleshoot_test_fcm_failed_service_not_available">[%1$s]\nThis error is out of control of Riot. It can occur for several reasons. Maybe it will work if you retry later, you can also check that Google Play Service is not restricted in data usage in the system settings, or that your device clock is correct, or it can happen on custom ROM.</string>
 
     <string name="settings_troubleshoot_test_token_registration_title">Token Registration</string>
     <string name="settings_troubleshoot_test_token_registration_success">FCM token successfully registered to HomeServer.</string>
