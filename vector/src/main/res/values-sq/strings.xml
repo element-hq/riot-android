@@ -1068,7 +1068,7 @@ Ju lutemi, kontrolloni rregullimet e sistemit.</string>
     <string name="settings_troubleshoot_test_account_settings_success">Njoftimet janë të aktivizuara për llogarinë tuaj.</string>
     <string name="settings_troubleshoot_test_account_settings_failed">Njoftimet janë të çaktivizuara për llogarinë tuaj.
 Ju lutemi, kontrolloni rregullime llogarie.</string>
-<string name="settings_troubleshoot_test_account_settings_quickfix">Aktivizoje</string>
+    <string name="settings_troubleshoot_test_account_settings_quickfix">Aktivizoje</string>
 
     <string name="settings_troubleshoot_test_device_settings_title">Rregullime Pajisjeje.</string>
     <string name="settings_troubleshoot_test_device_settings_success">Njoftimet janë të aktivizuara për këtë pajisje.</string>

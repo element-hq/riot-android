@@ -1045,7 +1045,7 @@ A visibilidade de mensagens no Matrix é parecida com a dos e-mails. Se esquecer
     <string name="resource_limit_hard_contact">Por favor, %s para seguir usando este serviço.</string>
 
     <string name="encryption_export_notice">Por favor, crie uma senha para cifrar as chaves exportadas. Precisará de usar a mesma senha para conseguir importar as chaves.</string>
-<string name="status_theme">Tema Status.im</string>
+    <string name="status_theme">Tema Status.im</string>
 
     <string name="accept">Aceitar</string>
 
@@ -1085,9 +1085,9 @@ Por favor revise as configurações da conta.</string>
     <string name="settings_troubleshoot_test_device_settings_success">Notificações estão habilitadas para este dispositivo.</string>
     <string name="room_participants_action_kick">Desconectar</string>
     <plurals name="room_participants_kick_prompt_msg">
-	<item quantity="one">Você tem certeza que deseja desconectar este usuário deste chat?</item>
-	<item quantity="other">Você tem certeza que deseja desconectar estes usuários deste chat?</item>
-</plurals>
+        <item quantity="one">Você tem certeza que deseja desconectar este usuário deste chat?</item>
+        <item quantity="other">Você tem certeza que deseja desconectar estes usuários deste chat?</item>
+    </plurals>
     <string name="settings_troubleshoot_test_device_settings_failed">Notificações não são permitidas para este dispositivo.
 Por favor revise as configurações do Riot.</string>
     <string name="settings_troubleshoot_test_device_settings_quickfix">Habilitar</string>

@@ -1131,7 +1131,7 @@ Beachte: Diese Aktion wird die App neu starten und einige Zeit brauchen.</string
 
     <string name="encryption_import_room_keys_success">%1$d/%2$d Schlüssel erfolgreich importiert.</string>
 
-<string name="settings_troubleshoot_diagnostic_run_button_title">Tests ausführen</string>
+    <string name="settings_troubleshoot_diagnostic_run_button_title">Tests ausführen</string>
     <string name="settings_troubleshoot_diagnostic_running_status">Läuft… (%1$d von %2$d)</string>
     <string name="settings_troubleshoot_diagnostic_failure_status_with_quickfix">Einer oder mehr Tests sind fehlgeschlagen. Versuche vorgeschlagene Lösung(en).</string>
     <string name="settings_troubleshoot_diagnostic_failure_status_no_quickfix">Einer oder mehr Tests sind fehlgeschlagen. Bitte sende einen Fehlerbericht um uns zu helfen diese(n) zu untersuchen.</string>
