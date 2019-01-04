@@ -509,7 +509,7 @@
     <string name="settings_phone_number_verification_error_empty_code">Jepni kod aktivizimi</string>
     <string name="settings_phone_number_code">Kod</string>
 
-    <string name="settings_without_flair">S’jeni anëtar i ndonjë grupi.</string>
+    <string name="settings_without_flair">S’jeni anëtar i ndonjë bashkësie.</string>
 
     <string name="media_saving_period_3_days">3 ditë</string>
     <string name="media_saving_period_1_week">1 javë</string>
@@ -893,7 +893,7 @@ Ju lutemi, lejoni përdorimin, që nga flluska pasuese, që të zbulohen te libr
 
 Të lejohet Riot-i të hyjë në kontaktet tuaja?</string>
 
-    <string name="permissions_action_not_performed_missing_permissions">Na ndjeni… Veprimi nuk u krye, për shkak lejesh që mungojnë</string>
+    <string name="permissions_action_not_performed_missing_permissions">Na ndjeni. Veprimi nuk u krye, për shkak lejesh që mungojnë</string>
 
     <string name="no">JO</string>
     <string name="open_chat_header">Hap kryet</string>
@@ -1068,4 +1068,102 @@ Ju lutemi, kontrolloni rregullimet e sistemit.</string>
     <string name="settings_troubleshoot_test_account_settings_success">Njoftimet janë të aktivizuara për llogarinë tuaj.</string>
     <string name="settings_troubleshoot_test_account_settings_failed">Njoftimet janë të çaktivizuara për llogarinë tuaj.
 Ju lutemi, kontrolloni rregullime llogarie.</string>
+<string name="settings_troubleshoot_test_account_settings_quickfix">Aktivizoje</string>
+
+    <string name="settings_troubleshoot_test_device_settings_title">Rregullime Pajisjeje.</string>
+    <string name="settings_troubleshoot_test_device_settings_success">Njoftimet janë të aktivizuara për këtë pajisje.</string>
+    <string name="settings_troubleshoot_test_device_settings_failed">Nuk lejohen njoftime për këtë pajisje.
+Ju lutemi, kontrolloni rregullimet e Riot-it.</string>
+    <string name="settings_troubleshoot_test_device_settings_quickfix">Aktivizoje</string>
+
+    <string name="settings_troubleshoot_test_play_services_title">Kontroll pë Play Services</string>
+    <string name="settings_troubleshoot_test_play_services_success">APK-ja për Google Play Services është e pranishme dhe e përditësuar.</string>
+    <string name="settings_troubleshoot_test_play_services_failed">Riot-i përdor Google Play Services për të dorëzuar mesazhe push, por s’duket të jetë formësuar saktë:
+%1$s</string>
+    <string name="settings_troubleshoot_test_play_services_quickfix">Ndreqni Play Services</string>
+
+    <string name="settings_troubleshoot_test_fcm_title">Token Firebase</string>
+    <string name="settings_troubleshoot_test_fcm_success">U mor me sukses token FCM:
+%1$s</string>
+    <string name="settings_troubleshoot_test_fcm_failed">S’u arrit të merreh token FCM:
+%1$s</string>
+
+    <string name="settings_troubleshoot_test_token_registration_title">Regjistrim Token-i</string>
+    <string name="settings_troubleshoot_test_token_registration_success">Token-i FCM u regjistrua me sukses te Shërbyes Home.</string>
+    <string name="settings_troubleshoot_test_token_registration_failed">S’u arrit të regjistrohej token FCM te Shërbyes Home:
+%1$s</string>
+
+    <string name="settings_troubleshoot_test_foreground_service_started_title">Shërbim Njoftimesh</string>
+    <string name="settings_troubleshoot_test_foreground_service_startedt_success">Shërbimi i Njoftimeve po xhiron.</string>
+    <string name="settings_troubleshoot_test_foreground_service_started_failed">Shërbimi i Njoftimeve s’po xhiron.
+Provoni të rinisni aplikacionin.</string>
+    <string name="settings_troubleshoot_test_foreground_service_started_quickfix">Nise Shërbimin</string>
+
+    <string name="settings_troubleshoot_test_service_restart_title">Vetërinisje Shërbimi Njoftimesh</string>
+    <string name="settings_troubleshoot_test_service_restart_success">Shërbimi u asgjësua dhe u rinis automatikisht.</string>
+    <string name="settings_troubleshoot_test_service_restart_failed">S’u arrit të rinisej shërbimi</string>
+
+    <string name="settings_troubleshoot_test_service_boot_title">Nise gjatë nisjes së sistemit</string>
+    <string name="settings_troubleshoot_test_service_boot_success">Shërbimi do të niset kur të riniset pajisja.</string>
+    <string name="settings_troubleshoot_test_service_boot_failed">Shërbimi s’do të niset kur të riniset pajisja,s’do të merrni njoftime derisa Riot-i të jetë hapur një herë.</string>
+    <string name="settings_troubleshoot_test_service_boot_quickfix">Aktivizo Nisje gjatë nisjes së sistemit</string>
+
+    <string name="settings_troubleshoot_test_bg_restricted_title">Kontrollo kufizime prapaskene</string>
+    <string name="settings_troubleshoot_test_bg_restricted_success">Kufizimet për në prapaskenë janë të çaktivizuar për Riot-in. Ky test duhet të xhirojë duke përdorur të dhëna rrjeti celular (jo WIFI).
+%1$s</string>
+    <string name="settings_troubleshoot_test_bg_restricted_failed">Kufizimet për në prapaskenë janë të aktivizuara për Riot-in.
+Puna që aplikacioni rreket të bëjë do të kufizohet në mënyrë agresive, teksa gjendet në prapaskenë, dhe kjo mund të prekë njoftimet.
+%1$s</string>
+    <string name="settings_troubleshoot_test_bg_restricted_quickfix">Çaktivizoji kufizimet</string>
+
+    <string name="settings_troubleshoot_test_battery_title">Optimizim Baterie</string>
+    <string name="settings_troubleshoot_test_battery_success">Riot-i nuk preket nga Optimizime Baterie.</string>
+    <string name="settings_troubleshoot_test_battery_failed">"Nëse një përdorues e lë një pajisje jo në prizë dhe të palëvizshme për një periudhë kohe, me ekranin të fikur, pajisja kalon nën mënyrën Dremitje. Kjo u parandalon aplikimeve të hyjnë në rrjet dhe shtyn për më vonë punët e tyre, njëkohësimet dhe alarmet standarde. "</string>
+    <string name="settings_troubleshoot_test_battery_quickfix">Shpërfille Optimizimin</string>
+
+    <string name="startup_notification_fdroid_battery_optim_title">Lidhje Në Prapaskenë</string>
+    <string name="startup_notification_fdroid_battery_optim_message">Për t’ju dhënë njoftime të qëndrueshme, Riot-i lyp të mbajë në prapaskenë një lidhje me pak ndikim.
+Në skenën pasuese do t’ju kërkohet të lejoni Riot-in të xhirojë në prapaskenë, ju lutemi, pranojeni.</string>
+    <string name="startup_notification_fdroid_battery_optim_button_grant">Akordojini leje</string>
+
+    <string name="account_email_error">Ndodhi një gabim teksa verifikohej adresa juaj email.</string>
+
+    <string name="account_phone_number_error">Ndodhi një gabim teksa verifikohej numri juaj i telefonit.</string>
+    <string name="account_additional_info">Të dhëna shtesë: %s</string>
+
+    <string name="no_valid_google_play_services_apk">S’u gjet APK për Google Play Services. Njoftimet mund të mos punojnë saktë.</string>
+
+    <string name="store_title">Riot.im - bashkëpunim ekipi të hapur</string>
+    <string name="store_short_description">Mirë se vini te Riot.im: një botë e re komunikimesh të hapura!</string>
+    <string name="store_full_description">Riot.im është një mjedis i thjeshtë dhe elegant bashkëpunimi që mbledh tok në një aplikacion të vetëm krejt bisedat dhe integrime aplikacionesh tuaja të ndryshme.
+
+I ndërtuar rreth modelit të dhomave të bisedave, Riot.im ju lejon të shkëmbeni mesazhe, figura, video dhe kartela - të ndërveproni me mjetet tuaja dhe të merrni pjesë në krejt bashkësitë e ndryshme tuajat, që nga një vend i vetëm. Një identitet dhe një vend i vetëm për krejt ekipet ku merrni pjesë: s’ka nevojë të ndërrohen llogari, punoni dhe bisedoni me persona nga ente të ndryshme, publikisht ose në dhoma private: nga projekte profesionale e deri te ekskursionet shkollore, Riot.im do të shndërrohet në qendrën e krejt diskutimeve tuaja!
+
+Tanimë me fshehtëzim skaj-më-skaj!
+
+Në veçoritë përfshihen:
+
+• Ndani me të tjerët aty për aty mesazhe, figura, video dhe kartela të çfarëdo lloji, brenda grupesh të çfarëdo madhësie
+• Zë dhe video tek për tek dhe thirrje në stil konference, përmes WebRTC-së
+• Fshehtëzim skaj-më-skaj duke përdorur Olm-in (https://matrix.org/git/olm)
+• Shihni kush po lexon mesazhet tuaj me dëftesa leximi
+• Komunikoni me përdorues kudo në ekosistemin Matrix.org - jo thjesht me përdorues të Riot.im-it!
+• Zbuloni dhe ftoni përdorues përmes adresash email
+• Merrni pjesë në dhoma publike të hapura ndaj vizitorësh
+• Tejet i përshkallëzueshëm - mbulon qindra dhoma dhe mijëra përdorues
+• Historik mesazhesh plotësisht i njëkohësuar në pajisje dhe shfletues të shumtë
+• Rregullime shumë të imta të formësueshme mbi njoftimet, të njëkohësuara përmes krejt pajisjeve
+• Historik bisede i kërkueshëm pambarimisht
+• Permalidhje për te mesazhe
+• Kërkim i plotë mesazhesh
+• Mbulim për gjuhë DNM, bie fjala, Arabishtja
+
+Për zhvilluesit:
+• Riot.im është një klient Matrix - i ngritur mbi standardin dhe ekosistemin e hapur të Matrix.org, që furnizon ndërveprueshmëri me krejt aplikacionet, shërbimet dhe integrimet e tjera Matrix
+• Tërësisht me burim të hapur nën licencën tolerante Apache License - merreni kodin prej https://github.com/vector-im/vector-android. Mirëpriten <em>pull request</em>-e!
+• I zgjerueshëm shumë thjesht, përmes API-t me burim të hapur Matrix Client-Server (https://matrix.org/docs/spec)
+• Xhironi shërbyesin tuaj! Mund të përdorni shërbyesin parazgjedhje matrix.org ose të xhironi shërbyesin tuaj Matrix (p.sh. https://matrix.org/docs/projects/server/synapse.html)
+
+Zbuloni bashkëpunimin vërtet efikas dhe të hapur, me Riot.im!</string>
+
 </resources>
