@@ -93,8 +93,8 @@ object NotificationUtils {
 
     private const val NOISY_NOTIFICATION_CHANNEL_ID = "DEFAULT_NOISY_NOTIFICATION_CHANNEL_ID"
 
-    private const val SILENT_NOTIFICATION_CHANNEL_ID = "DEFAULT_SILENT_NOTIFICATION_CHANNEL_ID"
-    private const val CALL_NOTIFICATION_CHANNEL_ID = "CALL_NOTIFICATION_CHANNEL_ID"
+    private const val SILENT_NOTIFICATION_CHANNEL_ID = "DEFAULT_SILENT_NOTIFICATION_CHANNEL_ID_V2"
+    private const val CALL_NOTIFICATION_CHANNEL_ID = "CALL_NOTIFICATION_CHANNEL_ID_V2"
 
     /* ==========================================================================================
      * Channel names
@@ -112,7 +112,7 @@ object NotificationUtils {
 
         val notificationManager = context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
 
-        //Legacy - the noisy channel was deleted and recreated when sound preference was changed (id was DEFAULT_NOISY_NOTIFICATION_CHANNEL_ID_BASE
+        //Migration - the noisy channel was deleted and recreated when sound preference was changed (id was DEFAULT_NOISY_NOTIFICATION_CHANNEL_ID_BASE
         // + currentTimeMillis).
         //Now the sound can only be change directly in system settings, so for app upgrading we are deleting this former channel
         //Starting from this version the channel will not be dynamic
@@ -120,6 +120,12 @@ object NotificationUtils {
             val channelId = channel.id
             val legacyBaseName = "DEFAULT_NOISY_NOTIFICATION_CHANNEL_ID_BASE"
             if (channelId.startsWith(legacyBaseName)) {
+                notificationManager.deleteNotificationChannel(channelId)
+            }
+        }
+        //Migration - Remove deprecated channels
+        for (channelId in listOf("DEFAULT_SILENT_NOTIFICATION_CHANNEL_ID","CALL_NOTIFICATION_CHANNEL_ID")) {
+            notificationManager.getNotificationChannel(channelId)?.let {
                 notificationManager.deleteNotificationChannel(channelId)
             }
         }
