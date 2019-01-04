@@ -1165,6 +1165,9 @@
 
     <!-- String for Play Store -->
     <string name="store_title">Riot.im - open team collaboration</string>
+    <string name="store_whats_new">"We’re always making changes and improvements to Riot.im.
+The complete changelog can be found here: %1$s.
+To make sure you don’t miss a thing, just keep your updates turned on."</string>
     <string name="store_short_description">Welcome to Riot.im: a new world of open communication!</string>
     <string name="store_full_description">"Riot.im is a simple and elegant collaboration environment that gathers all of your different conversations and app integrations into one single app.
 
