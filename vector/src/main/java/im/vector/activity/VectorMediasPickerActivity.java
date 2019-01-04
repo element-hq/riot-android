@@ -937,12 +937,11 @@ public class VectorMediasPickerActivity extends MXCActionBarActivity implements 
                             Matrix matrix = mImagePreviewImageView.getMatrix();
                             float widthMatrix = (mImagePreviewImageView.getWidth() - mImagePreviewImageView.getDrawable().getIntrinsicWidth()) / 2;
                             float heightMatrix = (mImagePreviewImageView.getHeight() - mImagePreviewImageView.getDrawable().getIntrinsicHeight()) / 2;
-                                
-                            matrix.postTranslate(widthMatrix, heightMatrix);
-                            imageViewOnTouchListener.setStartMatrix(matrix);
-                            mImagePreviewImageView.setImageMatrix(matrix);
 
-                            return;
+                            Matrix modifiableMatrix = new Matrix(matrix);
+                            modifiableMatrix.postTranslate(widthMatrix, heightMatrix);
+                            imageViewOnTouchListener.setStartMatrix(modifiableMatrix);
+                            mImagePreviewImageView.setImageMatrix(modifiableMatrix);
                         }
                     });
                 }
@@ -951,8 +950,6 @@ public class VectorMediasPickerActivity extends MXCActionBarActivity implements 
                     @Override
                     public void run() {
                         drawCircleMask(mImagePreviewAvatarModeMaskView,mImagePreviewAvatarModeMaskView.getWidth(),mImagePreviewAvatarModeMaskView.getHeight());
-
-                        return;
                     }
                 });
             }

@@ -33,7 +33,7 @@ Also please check that everything works fine after Kotlin conversion, especially
 
 ### CHANGES.rst
 
-Please add a line in the file `CHANGES.rst` describing your change.
+Please add a line to the top of the file `CHANGES.rst` describing your change.
 
 ### Code quality
 
@@ -47,6 +47,11 @@ Make sure the following commands execute without any error:
 Make sure the following commands execute without any error:
 
 > ./gradlew testAppReleaseUnitTest
+
+### Tests
+
+Riot is currently supported on Android Jelly Bean (API 16+): please test your change on an Android device (or Android emulator) running with API 16. Many issues can happen (including crashes) on older devices.
+Also, if possible, please test your change on a real device. Testing on Android emulator may not be sufficient.
 
 ### Internationalisation
 

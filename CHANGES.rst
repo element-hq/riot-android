@@ -1,11 +1,32 @@
-Changes in Riot 0.8.21 (2018-XX-XX)
+Changes in Riot 0.8.22 (2019-XX-XX)
 ===================================================
 
 MatrixSdk:
- - Upgrade to version 0.X.Y.
+ - Upgrade MatrixSdk to version 0.X.Y.
 
 Features:
  -
+
+Improvements:
+ -
+
+Other changes:
+ -
+
+Bugfix:
+ - Fix crash when taking picture for user avatar on old device (#2818)
+
+Translations:
+ -
+
+Build:
+ -
+
+Changes in Riot 0.8.21 (2018-01-02)
+===================================================
+
+MatrixSdk:
+ - Upgrade MatrixSdk to version 0.9.15.
 
 Improvements:
  - Show userId below display name in member detail screen (#2756)
@@ -17,6 +38,7 @@ Other changes:
  - Update README.md and CONTRIBUTING.md (#2795)
 
 Bugfix:
+ - Correct issue during signup when a 3PID error would let the signup flow spin forever
  - Defensive code for notifications issues + check play services as per FCM recommendation (#2266)
  - No notification on f-droid when device enters sleep mode (#2789)
  - Added ShortcutBadger missing permissions for some devices
@@ -28,13 +50,6 @@ Bugfix:
  - Fix Stopping Loading View after Upload of User Avatar (#2801)
  - Fix no display of image without `info` (#2666)
  - Fix permission request failure. It was actually not necessary to request overlay permission (#2680)
-
-
-Translations:
- -
-
-Build:
- -
 
 Changes in Riot 0.8.20 (2018-12-13)
 ===================================================
@@ -1138,11 +1153,11 @@ Changes in Vector 0.2.0 (2016-04-14)
 =======================================================
 
 
-Changes in Riot 0.8.XX (2018-XX-XX)
+Changes in Riot 0.8.XX (2019-XX-XX)
 ===================================================
 
 MatrixSdk:
- - Upgrade to version 0.X.Y.
+ - Upgrade MatrixSdk to version 0.X.Y.
 
 Features:
  -
@@ -1154,7 +1169,7 @@ Other changes:
  -
 
 Bugfix:
- - Correct issue during signup when a 3PID error would let the signup flow spin forever
+ -
 
 Translations:
  -
