@@ -1164,7 +1164,7 @@ Trabalhos que o aplicativo tentar fazer serão restringidos agressivamente enqua
     <string name="settings_labs_native_camera_summary">Inicie a câmera do sistema em vez da tela de câmera personalizada.</string>
     <string name="settings_labs_enable_send_voice_summary">Esta opção requer um aplicativo de terceiros para gravar as mensagens.</string>
 
-    <string name="command_problem_with_parameters">O comando \"% s\" precisa de mais parâmetros ou alguns parâmetros estão incorretos.</string>
+    <string name="command_problem_with_parameters">O comando \"%s\" precisa de mais parâmetros ou alguns parâmetros estão incorretos.</string>
     <string name="markdown_has_been_enabled">Markdown foi habilitado.</string>
     <string name="markdown_has_been_disabled">Markdown foi desabilitado.</string>
 
