@@ -8,7 +8,7 @@ Features:
  -
 
 Improvements:
- -
+ - Better wording in notification for video call (#1421)
 
 Other changes:
  -

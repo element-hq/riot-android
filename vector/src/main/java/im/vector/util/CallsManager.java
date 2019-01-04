@@ -232,7 +232,11 @@ public class CallsManager {
                             if (mActiveCall.isIncoming()) {
                                 if (EventStreamService.getInstance() != null) {
                                     EventStreamService.getInstance().displayIncomingCallNotification(mActiveCall.getSession(),
-                                            mActiveCall.getRoom(), null, mActiveCall.getCallId(), null);
+                                            mActiveCall.isVideo(),
+                                            mActiveCall.getRoom(),
+                                            null,
+                                            mActiveCall.getCallId(),
+                                            null);
                                 }
                                 startRinging();
                             }
@@ -250,7 +254,9 @@ public class CallsManager {
                         case IMXCall.CALL_STATE_CONNECTED:
                             if (EventStreamService.getInstance() != null) {
                                 EventStreamService.getInstance().displayCallInProgressNotification(mActiveCall.getSession(),
-                                        mActiveCall.getRoom(), mActiveCall.getCallId());
+                                        mActiveCall.isVideo(),
+                                        mActiveCall.getRoom(),
+                                        mActiveCall.getCallId());
                             }
                             mCallSoundsManager.stopSounds();
                             requestAudioFocus();
