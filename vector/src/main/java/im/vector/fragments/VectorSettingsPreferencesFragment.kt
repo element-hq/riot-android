@@ -34,6 +34,8 @@ import android.support.v14.preference.SwitchPreference
 import android.support.v4.content.ContextCompat
 import android.support.v7.app.AlertDialog
 import android.support.v7.preference.*
+import android.support.v7.widget.LinearLayoutManager
+import android.support.v7.widget.RecyclerView
 import android.text.Editable
 import android.text.TextUtils
 import android.text.TextWatcher
@@ -121,6 +123,8 @@ class VectorSettingsPreferencesFragment : PreferenceFragmentCompat(), SharedPref
     private var mMyDeviceInfo: DeviceInfo? = null
 
     private var mDisplayedPushers = ArrayList<Pusher>()
+
+    private var interactionListener : VectorSettingsFragmentInteractionListener? = null
 
     // devices: device IDs and device names
     private var mDevicesNameList: List<DeviceInfo> = ArrayList()
@@ -818,6 +822,14 @@ class VectorSettingsPreferencesFragment : PreferenceFragmentCompat(), SharedPref
         }
     }
 
+    override fun onAttach(context: Context?) {
+        super.onAttach(context)
+        if (context is VectorSettingsFragmentInteractionListener) {
+            interactionListener = context
+        }
+    }
+
+
     override fun onResume() {
         super.onResume()
 
@@ -858,6 +870,13 @@ class VectorSettingsPreferencesFragment : PreferenceFragmentCompat(), SharedPref
             refreshNotificationPrivacy()
             refreshDisplay()
             refreshBackgroundSyncPrefs()
+        }
+
+        interactionListener?.requestedKeyToHighlight()?.let {key ->
+            interactionListener?.requestHighlightPreferenceKeyOnResume(null)
+            //scrollToPreference(key)
+            val preference = findPreference(key)
+            (preference as? VectorPreference)?.isHighlighted = true
         }
     }
 
