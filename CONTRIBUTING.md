@@ -2,7 +2,7 @@
 
 Please read https://github.com/matrix-org/synapse/blob/master/CONTRIBUTING.rst
 
-Android support can be found in this [![Android Matrix room](https://img.shields.io/matrix/riot-android:matrix.org.svg)](https://riot.im/app/#/room/#riot-android:matrix.org)
+Android support can be found in this [![Android Matrix room #riot-android:matrix.org](https://img.shields.io/matrix/riot-android:matrix.org.svg?label=%23riot-android:matrix.org)](https://matrix.to/#/#riot-android:matrix.org) room.
 
 # Specific rules for Matrix Android projects
 
@@ -13,7 +13,7 @@ At each release, this library is updated.
 Between two releases, the Riot code may not compile due to evolution of the library API.
 To compile against the source of the Matrix Android library, please clone the project [AndroidMatrixSdk](https://github.com/matrix-org/matrix-android-sdk)
  and run the following command:
- 
+
 > ./compile_with_sdk_project.sh
 
 ## I want to help translating Riot
