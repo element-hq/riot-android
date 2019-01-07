@@ -1,12 +1,12 @@
-Riot-Android [![Jenkins](https://img.shields.io/jenkins/s/https/matrix.org/jenkins/view/MatrixView/job/VectorAndroidDevelop.svg)](https://matrix.org/jenkins/view/MatrixView/job/VectorAndroidDevelop/) [![Weblate](https://translate.riot.im/widgets/riot-android/-/svg-badge.svg)](https://translate.riot.im/engage/riot-android/?utm_source=widget) [![Android Matrix room](https://img.shields.io/matrix/riot-android:matrix.org.svg)](https://riot.im/app/#/room/#riot-android:matrix.org) [![Quality Gate](https://sonarcloud.io/api/project_badges/measure?project=vector.android.riot&metric=alert_status)](https://sonarcloud.io/dashboard?id=vector.android.riot) [![Vulnerabilities](https://sonarcloud.io/api/project_badges/measure?project=vector.android.riot&metric=vulnerabilities)](https://sonarcloud.io/dashboard?id=vector.android.riot) [![Bugs](https://sonarcloud.io/api/project_badges/measure?project=vector.android.riot&metric=bugs)](https://sonarcloud.io/dashboard?id=vector.android.riot) 
+Riot-Android [![Jenkins](https://img.shields.io/jenkins/s/https/matrix.org/jenkins/view/MatrixView/job/VectorAndroidDevelop.svg)](https://matrix.org/jenkins/view/MatrixView/job/VectorAndroidDevelop/) [![Weblate](https://translate.riot.im/widgets/riot-android/-/svg-badge.svg)](https://translate.riot.im/engage/riot-android/?utm_source=widget) [![Android Matrix room #riot-android:matrix.org](https://img.shields.io/matrix/riot-android:matrix.org.svg?label=%23riot-android:matrix.org)](https://matrix.to/#/#riot-android:matrix.org) [![Quality Gate](https://sonarcloud.io/api/project_badges/measure?project=vector.android.riot&metric=alert_status)](https://sonarcloud.io/dashboard?id=vector.android.riot) [![Vulnerabilities](https://sonarcloud.io/api/project_badges/measure?project=vector.android.riot&metric=vulnerabilities)](https://sonarcloud.io/dashboard?id=vector.android.riot) [![Bugs](https://sonarcloud.io/api/project_badges/measure?project=vector.android.riot&metric=bugs)](https://sonarcloud.io/dashboard?id=vector.android.riot)
 ============
 
  Riot is an Android Matrix client.
-  		  
- [<img src="https://play.google.com/intl/en_us/badges/images/generic/en_badge_web_generic.png" alt="Get it on Google Play" height="60">](https://play.google.com/store/apps/details?id=im.vector.alpha&hl=en&utm_source=global_co&utm_medium=prtnr&utm_content=Mar2515&utm_campaign=PartBadge&pcampaignid=MKT-Other-global-all-co-prtnr-py-PartBadge-Mar2515-1)	
-   
+
+ [<img src="https://play.google.com/intl/en_us/badges/images/generic/en_badge_web_generic.png" alt="Get it on Google Play" height="60">](https://play.google.com/store/apps/details?id=im.vector.alpha&hl=en&utm_source=global_co&utm_medium=prtnr&utm_content=Mar2515&utm_campaign=PartBadge&pcampaignid=MKT-Other-global-all-co-prtnr-py-PartBadge-Mar2515-1)
+
  [<img src="https://f-droid.org/badge/get-it-on.png" alt="Get it on F-Droid" height="60">](https://f-droid.org/app/im.vector.alpha)
- 
+
 
 Contributing
 ============
@@ -30,24 +30,24 @@ Release mode:
 
 And it should build the project (you need to have the right android SDKs)
 
-Recompile the provided aar files until we have gradle 
+Recompile the provided aar files until we have gradle
 ======================================================
 
 generate olm-sdk.aar
 --------------------
 
 sh build_olm_lib.sh
-	
+
 generate matrix-sdk.aar
 ----------------------
 
 sh build_matrix_sdk_lib.sh
-   
+
 generate the other aar files
 ----------------------
 
 sh build_jitsi_libs.sh
-   
+
 compile the matrix SDK with the Riot-android project
 ----------------------
 
