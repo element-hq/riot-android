@@ -620,6 +620,11 @@
     <string name="settings_troubleshoot_test_device_settings_failed">Notifications are not allowed for this device.\nPlease check the Riot settings.</string>
     <string name="settings_troubleshoot_test_device_settings_quickfix">Enable</string>
 
+    <string name="settings_troubleshoot_test_bing_settings_title">Custom Settings.</string>
+    <string name="settings_troubleshoot_test_bing_settings_success_with_warn">Notice that some messages type are set to be silent (will produce a notification with no sound).</string>
+    <string name="settings_troubleshoot_test_bing_settings_failed">Some notifications are disabled in your custom settings.</string>
+    <string name="settings_troubleshoot_test_bing_settings_quickfix">Check Settings</string>
+
     <string name="settings_troubleshoot_test_play_services_title">Play Services Check</string>
     <string name="settings_troubleshoot_test_play_services_success">Google Play Services APK is available and up-to-date.</string>
     <string name="settings_troubleshoot_test_play_services_failed">Riot uses Google Play Services to deliver push messages but it doesn\'t seem to be configured correctly:\n%1$s</string>
