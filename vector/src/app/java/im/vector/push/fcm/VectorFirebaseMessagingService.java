@@ -108,7 +108,8 @@ public class VectorFirebaseMessagingService extends FirebaseMessagingService {
                 }
             }
 
-            Log.d(LOG_TAG, "## onMessageReceivedInternal() : roomId " + roomId + " eventId " + eventId + " unread " + unreadCount);
+            Log.i(LOG_TAG, "## onMessageReceivedInternal() : roomId " + roomId + " eventId " + eventId + " unread " + unreadCount);
+            Log.i(LOG_TAG, "## onMessageReceivedInternal() : " + data);
 
             // update the badge counter
             CommonActivityUtils.updateBadgeCount(getApplicationContext(), unreadCount);
@@ -116,7 +117,7 @@ public class VectorFirebaseMessagingService extends FirebaseMessagingService {
             PushManager pushManager = Matrix.getInstance(getApplicationContext()).getPushManager();
 
             if (!pushManager.areDeviceNotificationsAllowed()) {
-                Log.d(LOG_TAG, "## onMessageReceivedInternal() : the notifications are disabled");
+                Log.i(LOG_TAG, "## onMessageReceivedInternal() : the notifications are disabled");
                 return;
             }
             if (!pushManager.isBackgroundSyncAllowed() && VectorApp.isAppInBackground()) {
@@ -136,19 +137,19 @@ public class VectorFirebaseMessagingService extends FirebaseMessagingService {
                     }
                 }
 
-                Log.d(LOG_TAG, "## onMessageReceivedInternal() : the background sync is disabled with eventStreamService " + eventStreamService);
+                Log.i(LOG_TAG, "## onMessageReceivedInternal() : the background sync is disabled with eventStreamService " + eventStreamService);
 
                 EventStreamService.onStaticNotifiedEvent(getApplicationContext(), event, roomName, data.get("sender_display_name"), unreadCount);
                 return;
             }
 
-            //Work Around for notification reliability:
-            //Sort of timeout fallback for when the event stream has not been able to download the message to ensure that a notification is displayed.
-            //If the event is not known after the timeout delay, we display a static notification.
-            final Event event = parseEvent(data);
-            if (event != null) {
-                safeGuardFallbackOnStaticNotif(data.get("sender_display_name"), event, data.get("room_name"), roomId, eventId, unreadCount);
-            }
+//            //Work Around for notification reliability:
+//            //Sort of timeout fallback for when the event stream has not been able to download the message to ensure that a notification is displayed.
+//            //If the event is not known after the timeout delay, we display a static notification.
+//            final Event event = parseEvent(data);
+//            if (event != null) {
+//                safeGuardFallbackOnStaticNotif(data.get("sender_display_name"), event, data.get("room_name"), roomId, eventId, unreadCount);
+//            }
 
 
             // check if the application has been launched once
@@ -183,34 +184,34 @@ public class VectorFirebaseMessagingService extends FirebaseMessagingService {
 
             CommonActivityUtils.catchupEventStream(this);
         } catch (Exception e) {
-            Log.d(LOG_TAG, "## onMessageReceivedInternal() failed : " + e.getMessage(), e);
+            Log.e(LOG_TAG, "## onMessageReceivedInternal() failed : " + e.getMessage(), e);
         }
     }
 
-    private void safeGuardFallbackOnStaticNotif(
-            @Nullable String senderName, Event event, @Nullable String roomName, String roomId, String eventId, int unreadCount) {
-        mUIHandler.postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                if (null != eventId && null != roomId) {
-                    try {
-                        Collection<MXSession> sessions = Matrix.getInstance(getApplicationContext()).getSessions();
-                        if (null != sessions && !sessions.isEmpty()) {
-                            for (MXSession session : sessions) {
-                                if (session.getDataHandler().getStore().isReady()) {
-                                    if (null == session.getDataHandler().getStore().getEvent(eventId, roomId)) {
-                                        EventStreamService.onStaticNotifiedEvent(getApplicationContext(), event, roomName, senderName, unreadCount);
-                                    }
-                                }
-                            }
-                        }
-                    } catch (Exception e) {
-                        Log.e(LOG_TAG, "## onMessageReceivedInternal() : failed to check if the event was already defined " + e.getMessage(), e);
-                    }
-                }
-            }
-        }, 10*1000);
-    }
+//    private void safeGuardFallbackOnStaticNotif(
+//            @Nullable String senderName, Event event, @Nullable String roomName, String roomId, String eventId, int unreadCount) {
+//        mUIHandler.postDelayed(new Runnable() {
+//            @Override
+//            public void run() {
+//                if (null != eventId && null != roomId) {
+//                    try {
+//                        Collection<MXSession> sessions = Matrix.getInstance(getApplicationContext()).getSessions();
+//                        if (null != sessions && !sessions.isEmpty()) {
+//                            for (MXSession session : sessions) {
+//                                if (session.getDataHandler().getStore().isReady()) {
+//                                    if (null == session.getDataHandler().getStore().getEvent(eventId, roomId)) {
+//                                        EventStreamService.onStaticNotifiedEvent(getApplicationContext(), event, roomName, senderName, unreadCount);
+//                                    }
+//                                }
+//                            }
+//                        }
+//                    } catch (Exception e) {
+//                        Log.e(LOG_TAG, "## onMessageReceivedInternal() : failed to check if the event was already defined " + e.getMessage(), e);
+//                    }
+//                }
+//            }
+//        }, 10*1000);
+//    }
 
     /**
      * Called if InstanceID token is updated. This may occur if the security of
@@ -220,7 +221,7 @@ public class VectorFirebaseMessagingService extends FirebaseMessagingService {
      */
     @Override
     public void onNewToken(String refreshedToken) {
-        Log.d(LOG_TAG, "onNewToken: " + refreshedToken);
+        Log.i(LOG_TAG, "onNewToken: FCM Token has been updated");
 
         FcmHelper.storeFcmToken(this, refreshedToken);
 
@@ -234,8 +235,7 @@ public class VectorFirebaseMessagingService extends FirebaseMessagingService {
      */
     @Override
     public void onMessageReceived(RemoteMessage message) {
-        Log.d(LOG_TAG, "## onMessageReceived() from FCM with priority " + message.getPriority()
-                + " from " + message.getFrom());
+        Log.i(LOG_TAG, "## onMessageReceived() from FCM with priority " + message.getPriority());
 
         // Ensure event stream service is started
         if (EventStreamService.getInstance() == null) {
