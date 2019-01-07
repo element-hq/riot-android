@@ -124,7 +124,7 @@ object NotificationUtils {
             }
         }
         //Migration - Remove deprecated channels
-        for (channelId in listOf("DEFAULT_SILENT_NOTIFICATION_CHANNEL_ID","CALL_NOTIFICATION_CHANNEL_ID")) {
+        for (channelId in listOf("DEFAULT_SILENT_NOTIFICATION_CHANNEL_ID", "CALL_NOTIFICATION_CHANNEL_ID")) {
             notificationManager.getNotificationChannel(channelId)?.let {
                 notificationManager.deleteNotificationChannel(channelId)
             }
@@ -246,12 +246,11 @@ object NotificationUtils {
                     }
                 }
                 .setSmallIcon(R.drawable.incoming_call_notification_transparent)
+                .setCategory(NotificationCompat.CATEGORY_CALL)
                 .setLights(Color.GREEN, 500, 500)
 
-        // Display the incoming call notification on the lock screen
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
-            builder.priority = NotificationCompat.PRIORITY_MAX
-        }
+        //Compat: Display the incoming call notification on the lock screen
+        builder.priority = NotificationCompat.PRIORITY_MAX
 
         // clear the activity stack to home activity
         val intent = Intent(context, VectorHomeActivity::class.java)
