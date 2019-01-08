@@ -24,7 +24,6 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
-import android.content.SharedPreferences;
 import android.content.res.Configuration;
 import android.content.res.Resources;
 import android.graphics.Bitmap;
@@ -32,9 +31,7 @@ import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
-import android.support.multidex.MultiDex;
 import android.support.multidex.MultiDexApplication;
-import android.support.v7.preference.PreferenceManager;
 import android.text.TextUtils;
 
 import com.facebook.stetho.Stetho;
@@ -70,6 +67,7 @@ import im.vector.push.PushManager;
 import im.vector.services.EventStreamService;
 import im.vector.settings.FontScale;
 import im.vector.settings.VectorLocale;
+import im.vector.tools.VectorUncaughtExceptionHandler;
 import im.vector.ui.themes.ThemeUtils;
 import im.vector.util.CallsManager;
 import im.vector.util.PermissionsToolsKt;
@@ -83,9 +81,6 @@ import im.vector.util.VectorMarkdownParser;
  */
 public class VectorApp extends MultiDexApplication {
     private static final String LOG_TAG = VectorApp.class.getSimpleName();
-
-    // key to save the crash status
-    private static final String PREFS_CRASH_KEY = "PREFS_CRASH_KEY";
 
     /**
      * The current instance.
@@ -190,6 +185,8 @@ public class VectorApp extends MultiDexApplication {
         // init the REST client
         MXSession.initUserAgent(this, BuildConfig.FLAVOR_DESCRIPTION);
 
+        VectorUncaughtExceptionHandler.INSTANCE.activate();
+
         instance = this;
         mCallsManager = new CallsManager(this);
         mAppAnalytics = new AppAnalytics(this, new PiwikAnalytics(this));
@@ -205,6 +202,9 @@ public class VectorApp extends MultiDexApplication {
         } else {
             SDK_VERSION_STRING = "";
         }
+
+        VectorUncaughtExceptionHandler.INSTANCE.setVersions(VECTOR_VERSION_STRING, SDK_VERSION_STRING);
+
         mLogsDirectoryFile = new File(getCacheDir().getAbsolutePath() + "/logs");
 
         org.matrix.androidsdk.util.Log.setLogDirectory(mLogsDirectoryFile);
@@ -719,27 +719,6 @@ public class VectorApp extends MultiDexApplication {
         }
 
         return isSyncing;
-    }
-
-    /**
-     * Tells if the application crashed
-     *
-     * @return true if the application crashed
-     */
-    public boolean didAppCrash() {
-        final SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(VectorApp.getInstance());
-        return preferences.getBoolean(PREFS_CRASH_KEY, false);
-    }
-
-
-    /**
-     * Clear the crash status
-     */
-    public void clearAppCrashStatus() {
-        PreferenceManager.getDefaultSharedPreferences(VectorApp.getInstance())
-                .edit()
-                .remove(PREFS_CRASH_KEY)
-                .apply();
     }
 
     //==============================================================================================================

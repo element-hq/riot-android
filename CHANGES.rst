@@ -11,7 +11,7 @@ Improvements:
  - Support Split-screen mode (#1832)
 
 Other changes:
- -
+ - Restore the crash report dialog after a crash
 
 Bugfix:
  - Fix crash when taking picture for user avatar on old device (#2818)
