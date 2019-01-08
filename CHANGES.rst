@@ -9,6 +9,7 @@ Features:
 
 Improvements:
  - Support Split-screen mode (#1832)
+ - Enable auto focus when taking picture with the camera (#2831)
 
 Other changes:
  -
