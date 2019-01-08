@@ -244,7 +244,7 @@
             android:taskAffinity=""
             android:theme="@style/Theme.AppCompat.Light.Dialog" />
         <activity
-            android:name=".activity.VectorMediasViewerActivity"
+            android:name=".activity.VectorMediaViewerActivity"
             android:configChanges="orientation|screenSize"
             android:label="a filename"
             android:launchMode="singleTop"
@@ -273,7 +273,7 @@
             android:name=".activity.StickerPickerActivity"
             android:configChanges="orientation|screenSize" />
         <activity
-            android:name=".activity.VectorMediasPickerActivity"
+            android:name=".activity.VectorMediaPickerActivity"
             android:label="@string/media_picker_both_capture_title"
             android:launchMode="singleTop"
             android:parentActivityName=".activity.VectorRoomActivity"

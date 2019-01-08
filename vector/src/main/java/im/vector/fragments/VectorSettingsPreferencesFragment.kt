@@ -1300,8 +1300,8 @@ class VectorSettingsPreferencesFragment : PreferenceFragmentCompat(), SharedPref
     }
 
     private fun changeAvatar() {
-        val intent = Intent(activity, VectorMediasPickerActivity::class.java)
-        intent.putExtra(VectorMediasPickerActivity.EXTRA_AVATAR_MODE, true)
+        val intent = Intent(activity, VectorMediaPickerActivity::class.java)
+        intent.putExtra(VectorMediaPickerActivity.EXTRA_AVATAR_MODE, true)
         startActivityForResult(intent, VectorUtils.TAKE_IMAGE)
     }
 

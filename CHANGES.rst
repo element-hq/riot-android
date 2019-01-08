@@ -84,6 +84,7 @@ Features:
  - Add RTL support (#2376, #2271)
 
 Improvements:
+ - improve UI for VectorMediaPickerActivity and InviteMembersActivity (#2610)
  - Ability to crop profile picture before setting (#2598)
  - Add a setting of the room's info area visibility.
 
