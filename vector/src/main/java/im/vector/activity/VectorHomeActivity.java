@@ -556,6 +556,8 @@ public class VectorHomeActivity extends VectorAppCompatActivity implements Searc
         mVectorPendingCallView.checkPendingCall();
 
         if (VectorUncaughtExceptionHandler.INSTANCE.didAppCrash(this)) {
+            VectorUncaughtExceptionHandler.INSTANCE.clearAppCrashStatus(this);
+
             // crash reported by a rage shake
             try {
                 new AlertDialog.Builder(this)
@@ -574,8 +576,6 @@ public class VectorHomeActivity extends VectorAppCompatActivity implements Searc
                             }
                         })
                         .show();
-
-                VectorUncaughtExceptionHandler.INSTANCE.clearAppCrashStatus(this);
             } catch (Exception e) {
                 Log.e(LOG_TAG, "## onResume() : appCrashedAlert failed " + e.getMessage(), e);
             }
