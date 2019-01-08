@@ -28,31 +28,37 @@ class TestFirebaseToken(val fragment: Fragment) : TroubleshootTest(R.string.sett
 
     override fun perform() {
         status = TestStatus.RUNNING
-        fragment.activity?.let { fragmentActivity ->
-            FirebaseInstanceId.getInstance().instanceId
-                    .addOnCompleteListener(fragmentActivity) { task ->
-                        if (!task.isSuccessful) {
-                            val errorMsg = if (task.exception == null) "Unknown" else task.exception!!.localizedMessage
-                            //Can't find where this constant is (not documented -or deprecated in docs- and all obfuscated)
-                            if ("SERVICE_NOT_AVAILABLE".equals(errorMsg)) {
-                                description = fragment.getString(R.string.settings_troubleshoot_test_fcm_failed_service_not_available, errorMsg)
-                            } else if ("TOO_MANY_REGISTRATIONS".equals(errorMsg)) {
-                                description = fragment.getString(R.string.settings_troubleshoot_test_fcm_failed_too_many_registration, errorMsg)
-                            } else {
-                                description = fragment.getString(R.string.settings_troubleshoot_test_fcm_failed, errorMsg)
-                            }
-                            status = TestStatus.FAILED
+        val activity = fragment.activity
+        if (activity != null) {
+            try {
+                FirebaseInstanceId.getInstance().instanceId
+                        .addOnCompleteListener(activity) { task ->
+                            if (!task.isSuccessful) {
+                                val errorMsg = if (task.exception == null) "Unknown" else task.exception!!.localizedMessage
+                                //Can't find where this constant is (not documented -or deprecated in docs- and all obfuscated)
+                                if ("SERVICE_NOT_AVAILABLE".equals(errorMsg)) {
+                                    description = fragment.getString(R.string.settings_troubleshoot_test_fcm_failed_service_not_available, errorMsg)
+                                } else if ("TOO_MANY_REGISTRATIONS".equals(errorMsg)) {
+                                    description = fragment.getString(R.string.settings_troubleshoot_test_fcm_failed_too_many_registration, errorMsg)
+                                } else {
+                                    description = fragment.getString(R.string.settings_troubleshoot_test_fcm_failed, errorMsg)
+                                }
+                                status = TestStatus.FAILED
 
-                        } else {
-                            task.result?.token?.let {
-                                val tok = it.substring(0, Math.min(8, it.length)) + "********************"
-                                description = fragment.getString(R.string.settings_troubleshoot_test_fcm_success, tok)
-                                Log.e(this::class.java.simpleName, "Retrieved FCM token success [$it].")
+                            } else {
+                                task.result?.token?.let {
+                                    val tok = it.substring(0, Math.min(8, it.length)) + "********************"
+                                    description = fragment.getString(R.string.settings_troubleshoot_test_fcm_success, tok)
+                                    Log.e(this::class.java.simpleName, "Retrieved FCM token success [$it].")
+                                }
+                                status = TestStatus.SUCCESS
                             }
-                            status = TestStatus.SUCCESS
                         }
-                    }
-        } ?: run {
+            } catch (e: Throwable) {
+                description = fragment.getString(R.string.settings_troubleshoot_test_fcm_failed, e.localizedMessage)
+                status = TestStatus.FAILED
+            }
+        } else {
             status = TestStatus.FAILED
         }
     }
