@@ -18,6 +18,7 @@
 package im.vector.activity
 
 import android.content.Context
+import android.content.res.Configuration
 import android.os.Bundle
 import android.support.annotation.*
 import android.support.v7.app.AppCompatActivity
@@ -38,12 +39,15 @@ import im.vector.receiver.DebugReceiver
 import im.vector.ui.themes.ActivityOtherThemes
 import im.vector.ui.themes.ThemeUtils
 import im.vector.util.AssetReader
+import im.vector.util.BugReporter
 import org.matrix.androidsdk.util.Log
 
 /**
  * Parent class for all Activities in Vector application
  */
 abstract class VectorAppCompatActivity : AppCompatActivity() {
+
+    private var LOG_TAG = VectorAppCompatActivity::class.java.simpleName
 
     /* ==========================================================================================
      * DATA
@@ -145,6 +149,13 @@ abstract class VectorAppCompatActivity : AppCompatActivity() {
         if (hasFocus && displayInFullscreen()) {
             setFullScreen()
         }
+    }
+
+    override fun onMultiWindowModeChanged(isInMultiWindowMode: Boolean, newConfig: Configuration?) {
+        super.onMultiWindowModeChanged(isInMultiWindowMode, newConfig)
+
+        Log.w(LOG_TAG, "onMultiWindowModeChanged. isInMultiWindowMode: $isInMultiWindowMode")
+        BugReporter.setMultiWindowMode(isInMultiWindowMode)
     }
 
     /* ==========================================================================================

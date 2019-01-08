@@ -69,6 +69,12 @@ import okhttp3.Response;
 public class BugReporter {
     private static final String LOG_TAG = BugReporter.class.getSimpleName();
 
+    private static boolean sInMultiWindowMode;
+
+    public static void setMultiWindowMode(boolean inMultiWindowMode) {
+        sInMultiWindowMode = inMultiWindowMode;
+    }
+
     /**
      * Bug report upload listener
      */
@@ -217,6 +223,7 @@ public class BugReporter {
                             .addFormDataPart("olm_version", olmVersion)
                             .addFormDataPart("device", Build.MODEL.trim())
                             .addFormDataPart("lazy_loading", BasicExtensionsKt.toOnOff(PreferencesManager.useLazyLoading(context)))
+                            .addFormDataPart("multi_window", BasicExtensionsKt.toOnOff(sInMultiWindowMode))
                             .addFormDataPart("os", Build.VERSION.RELEASE + " (API " + Build.VERSION.SDK_INT + ") "
                                     + Build.VERSION.INCREMENTAL + "-" + Build.VERSION.CODENAME)
                             .addFormDataPart("locale", Locale.getDefault().toString())

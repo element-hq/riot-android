@@ -8,7 +8,7 @@ Features:
  -
 
 Improvements:
- -
+ - Support Split-screen mode (#1832)
 
 Other changes:
  -
