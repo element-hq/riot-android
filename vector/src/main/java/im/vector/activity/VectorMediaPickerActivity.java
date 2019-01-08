@@ -698,6 +698,9 @@ public class VectorMediaPickerActivity extends MXCActionBarActivity implements T
         }
     }
 
+    /**
+     * Start auto-focus of the camera, using the best available mode
+     */
     private void startAutoFocus() {
         Log.d(LOG_TAG, "## startAutoFocus");
 
@@ -944,7 +947,9 @@ public class VectorMediaPickerActivity extends MXCActionBarActivity implements T
                 mImagePreviewAvatarModeMaskView.post(new Runnable() {
                     @Override
                     public void run() {
-                        drawCircleMask(mImagePreviewAvatarModeMaskView, mImagePreviewAvatarModeMaskView.getWidth(), mImagePreviewAvatarModeMaskView.getHeight());
+                        drawCircleMask(mImagePreviewAvatarModeMaskView,
+                                mImagePreviewAvatarModeMaskView.getWidth(),
+                                mImagePreviewAvatarModeMaskView.getHeight());
                     }
                 });
             }
