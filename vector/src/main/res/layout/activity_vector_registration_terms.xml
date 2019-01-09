@@ -51,7 +51,7 @@
         android:layout_width="94dp"
         android:layout_height="36dp"
         android:layout_margin="16dp"
-        android:background="?attr/vctr_primary_color"
+        android:background="?colorAccent"
         android:text="@string/accept"
         android:textColor="@android:color/white"
         app:layout_constraintBottom_toBottomOf="parent"
