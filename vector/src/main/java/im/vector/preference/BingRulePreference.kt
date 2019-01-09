@@ -159,6 +159,8 @@ class BingRulePreference : VectorPreference {
         super.onBindViewHolder(holder)
         val radioGroup = holder.findViewById(R.id.bingPreferenceRadioGroup) as? RadioGroup
 
+        radioGroup?.setOnCheckedChangeListener(null)
+
         when (ruleStatusIndex) {
             NOTIFICATION_OFF_INDEX -> {
                 radioGroup?.check(R.id.bingPreferenceRadioBingRuleOff)

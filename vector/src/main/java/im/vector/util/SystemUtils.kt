@@ -125,11 +125,13 @@ fun startNotificationSettingsIntent(fragment: Fragment, requestCode: Int) {
     fragment.startActivityForResult(intent, requestCode)
 }
 
+fun supportNotificationChannels() = (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O)
+
 /**
  * Shows notification system settings for the given channel id.
  */
 fun startNotificationChannelSettingsIntent(fragment: Fragment, channelID: String) {
-    if (Build.VERSION.SDK_INT < Build.VERSION_CODES.O) return
+    if (!supportNotificationChannels()) return
     val intent = Intent(Settings.ACTION_CHANNEL_NOTIFICATION_SETTINGS).apply {
         putExtra(Settings.EXTRA_APP_PACKAGE, fragment.context?.packageName)
         putExtra(Settings.EXTRA_CHANNEL_ID, channelID)
