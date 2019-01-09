@@ -50,8 +50,8 @@ import im.vector.util.SlidableMediaInfo;
 /**
  * Display a medias list.
  */
-public class VectorMediasViewerActivity extends MXCActionBarActivity {
-    private static final String LOG_TAG = VectorMediasViewerActivity.class.getSimpleName();
+public class VectorMediaViewerActivity extends MXCActionBarActivity {
+    private static final String LOG_TAG = VectorMediaViewerActivity.class.getSimpleName();
 
     public static final String KEY_INFO_LIST = "ImageSliderActivity.KEY_INFO_LIST";
     public static final String KEY_INFO_LIST_INDEX = "ImageSliderActivity.KEY_INFO_LIST_INDEX";
@@ -160,7 +160,7 @@ public class VectorMediasViewerActivity extends MXCActionBarActivity {
 
         int position = Math.min(intent.getIntExtra(KEY_INFO_LIST_INDEX, 0), mMediasList.size() - 1);
         int maxImageWidth = intent.getIntExtra(KEY_THUMBNAIL_WIDTH, 0);
-        int maxImageHeight = intent.getIntExtra(VectorMediasViewerActivity.KEY_THUMBNAIL_HEIGHT, 0);
+        int maxImageHeight = intent.getIntExtra(VectorMediaViewerActivity.KEY_THUMBNAIL_HEIGHT, 0);
 
         mAdapter = new VectorMediasViewerAdapter(this, mSession, mSession.getMediaCache(), mMediasList, maxImageWidth, maxImageHeight);
         mViewPager.setAdapter(mAdapter);
@@ -242,7 +242,7 @@ public class VectorMediasViewerActivity extends MXCActionBarActivity {
 
                     if (action == R.id.ic_action_download) {
                         if (checkWritePermission(PermissionsToolsKt.PERMISSION_REQUEST_CODE)) {
-                            CommonActivityUtils.saveMediaIntoDownloads(VectorMediasViewerActivity.this,
+                            CommonActivityUtils.saveMediaIntoDownloads(VectorMediaViewerActivity.this,
                                     file, mediaInfo.mFileName, mediaInfo.mMimeType, new SimpleApiCallback<String>() {
                                         @Override
                                         public void onSuccess(String savedMediaPath) {
@@ -265,7 +265,7 @@ public class VectorMediasViewerActivity extends MXCActionBarActivity {
                         // shared / forward
                         Uri mediaUri = null;
                         try {
-                            mediaUri = VectorContentProvider.absolutePathToUri(VectorMediasViewerActivity.this, file.getAbsolutePath());
+                            mediaUri = VectorContentProvider.absolutePathToUri(VectorMediaViewerActivity.this, file.getAbsolutePath());
                         } catch (Exception e) {
                             Log.e(LOG_TAG, "onMediaAction onAction.absolutePathToUri: " + e.getMessage(), e);
                         }
@@ -279,7 +279,7 @@ public class VectorMediasViewerActivity extends MXCActionBarActivity {
                                 startActivity(sendIntent);
                             } catch (Exception e) {
                                 Log.e(LOG_TAG, "## onAction : cannot display the media " + mediaUri + " mimeType " + mediaInfo.mMimeType, e);
-                                Toast.makeText(VectorMediasViewerActivity.this, e.getLocalizedMessage(), Toast.LENGTH_SHORT).show();
+                                Toast.makeText(VectorMediaViewerActivity.this, e.getLocalizedMessage(), Toast.LENGTH_SHORT).show();
                             }
                         }
                     }
@@ -300,7 +300,7 @@ public class VectorMediasViewerActivity extends MXCActionBarActivity {
                         MatrixError error = JsonUtils.toMatrixError(jsonElement);
 
                         if ((null != error) && error.isSupportedErrorCode()) {
-                            Toast.makeText(VectorMediasViewerActivity.this, error.getLocalizedMessage(), Toast.LENGTH_LONG).show();
+                            Toast.makeText(VectorMediaViewerActivity.this, error.getLocalizedMessage(), Toast.LENGTH_LONG).show();
                         }
                     }
 
