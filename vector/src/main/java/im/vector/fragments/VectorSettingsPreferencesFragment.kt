@@ -34,8 +34,6 @@ import android.support.v14.preference.SwitchPreference
 import android.support.v4.content.ContextCompat
 import android.support.v7.app.AlertDialog
 import android.support.v7.preference.*
-import android.support.v7.widget.LinearLayoutManager
-import android.support.v7.widget.RecyclerView
 import android.text.Editable
 import android.text.TextUtils
 import android.text.TextWatcher
@@ -124,7 +122,7 @@ class VectorSettingsPreferencesFragment : PreferenceFragmentCompat(), SharedPref
 
     private var mDisplayedPushers = ArrayList<Pusher>()
 
-    private var interactionListener : VectorSettingsFragmentInteractionListener? = null
+    private var interactionListener: VectorSettingsFragmentInteractionListener? = null
 
     // devices: device IDs and device names
     private var mDevicesNameList: List<DeviceInfo> = ArrayList()
@@ -399,7 +397,7 @@ class VectorSettingsPreferencesFragment : PreferenceFragmentCompat(), SharedPref
         }
         refreshNotificationPrivacy()
 
-        for (resourceText in mPrefKeyToBongRuleId.keys) {
+        for (resourceText in mPrefKeyToBingRuleId.keys) {
             val preference = findPreference(resourceText)
 
             if (null != preference) {
@@ -872,7 +870,7 @@ class VectorSettingsPreferencesFragment : PreferenceFragmentCompat(), SharedPref
             refreshBackgroundSyncPrefs()
         }
 
-        interactionListener?.requestedKeyToHighlight()?.let {key ->
+        interactionListener?.requestedKeyToHighlight()?.let { key ->
             interactionListener?.requestHighlightPreferenceKeyOnResume(null)
             //scrollToPreference(key)
             val preference = findPreference(key)
@@ -977,7 +975,7 @@ class VectorSettingsPreferencesFragment : PreferenceFragmentCompat(), SharedPref
 
         val pushManager = Matrix.getInstance(appContext)!!.pushManager
 
-        for (resourceText in mPrefKeyToBongRuleId.keys) {
+        for (resourceText in mPrefKeyToBingRuleId.keys) {
             val preference = preferenceManager.findPreference(resourceText)
 
             if (null != preference) {
@@ -1163,7 +1161,7 @@ class VectorSettingsPreferencesFragment : PreferenceFragmentCompat(), SharedPref
             return
         }
 
-        val ruleId = mPrefKeyToBongRuleId[fResourceText]
+        val ruleId = mPrefKeyToBingRuleId[fResourceText]
         val rule = mSession.dataHandler.pushRules()?.findDefaultRule(ruleId)
 
         // check if there is an update
@@ -1364,11 +1362,11 @@ class VectorSettingsPreferencesFragment : PreferenceFragmentCompat(), SharedPref
             putString(PreferencesManager.SETTINGS_VERSION_PREFERENCE_KEY, VectorUtils.getApplicationVersion(activity))
 
             mSession.dataHandler.pushRules()?.let {
-                for (resourceText in mPrefKeyToBongRuleId.keys) {
+                for (resourceText in mPrefKeyToBingRuleId.keys) {
                     val preference = findPreference(resourceText)
 
                     if (null != preference && preference is SwitchPreference) {
-                        val ruleId = mPrefKeyToBongRuleId[resourceText]
+                        val ruleId = mPrefKeyToBingRuleId[resourceText]
 
                         val rule = it.findDefaultRule(ruleId)
                         var isEnabled = null != rule && rule.isEnabled
@@ -2799,7 +2797,7 @@ class VectorSettingsPreferencesFragment : PreferenceFragmentCompat(), SharedPref
         private const val REQUEST_CALL_RINGTONE = 999
 
         // preference name <-> rule Id
-        private var mPrefKeyToBongRuleId = mapOf(
+        private var mPrefKeyToBingRuleId = mapOf(
                 PreferencesManager.SETTINGS_ENABLE_ALL_NOTIF_PREFERENCE_KEY to BingRule.RULE_ID_DISABLE_ALL,
                 PreferencesManager.SETTINGS_ENABLE_THIS_DEVICE_PREFERENCE_KEY to DUMMY_RULE,
                 PreferencesManager.SETTINGS_TURN_SCREEN_ON_PREFERENCE_KEY to DUMMY_RULE

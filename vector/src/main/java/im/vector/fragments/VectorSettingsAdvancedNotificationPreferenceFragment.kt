@@ -124,13 +124,13 @@ class VectorSettingsAdvancedNotificationPreferenceFragment : PreferenceFragmentC
             }
         }
 
-        for (resourceText in mPrefKeyToBongRuleId.keys) {
+        for (resourceText in mPrefKeyToBingRuleId.keys) {
             val preference = findPreference(resourceText)
             if (null != preference) {
                 if (preference is BingRulePreference) {
                     //preference.isEnabled = null != rules && isConnected && pushManager.areDeviceNotificationsAllowed()
                     mSession.dataHandler.pushRules()?.let {
-                        preference.setBingRule(it.findDefaultRule(mPrefKeyToBongRuleId[resourceText]))
+                        preference.setBingRule(it.findDefaultRule(mPrefKeyToBingRuleId[resourceText]))
                     }
                     preference.onPreferenceChangeListener = Preference.OnPreferenceChangeListener { _, newValue ->
                         val rule = preference.createRule(newValue as Int)
@@ -214,11 +214,11 @@ class VectorSettingsAdvancedNotificationPreferenceFragment : PreferenceFragmentC
     private fun refreshPreferences() {
         PreferenceManager.getDefaultSharedPreferences(activity).edit {
             mSession.dataHandler.pushRules()?.let {
-                for (prefKey in mPrefKeyToBongRuleId.keys) {
+                for (prefKey in mPrefKeyToBingRuleId.keys) {
                     val preference = findPreference(prefKey)
 
                     if (null != preference && preference is SwitchPreference) {
-                        val ruleId = mPrefKeyToBongRuleId[prefKey]
+                        val ruleId = mPrefKeyToBingRuleId[prefKey]
 
                         val rule = it.findDefaultRule(ruleId)
                         var isEnabled = null != rule && rule.isEnabled
@@ -282,7 +282,7 @@ class VectorSettingsAdvancedNotificationPreferenceFragment : PreferenceFragmentC
         private const val REQUEST_NOTIFICATION_RINGTONE = 888
 
         //  preference name <-> rule Id
-        private var mPrefKeyToBongRuleId = mapOf(
+        private var mPrefKeyToBingRuleId = mapOf(
                 PreferencesManager.SETTINGS_CONTAINING_MY_DISPLAY_NAME_PREFERENCE_KEY to BingRule.RULE_ID_CONTAIN_DISPLAY_NAME,
                 PreferencesManager.SETTINGS_CONTAINING_MY_USER_NAME_PREFERENCE_KEY to BingRule.RULE_ID_CONTAIN_USER_NAME,
                 PreferencesManager.SETTINGS_MESSAGES_IN_ONE_TO_ONE_PREFERENCE_KEY to BingRule.RULE_ID_ONE_TO_ONE_ROOM,
