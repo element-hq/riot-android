@@ -174,7 +174,7 @@
                     android:adjustViewBounds="true"
                     android:maxWidth="260dp"
                     android:scaleType="fitCenter"
-                    tools:src="@drawable/logo" />
+                    tools:src="@tools:sample/backgrounds/scenic" />
 
             </LinearLayout>
         </ScrollView>

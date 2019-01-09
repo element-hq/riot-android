@@ -12,6 +12,7 @@ Improvements:
  - Enable auto focus when taking picture with the camera (#2831)
  - Better wording in notification for video call (#1421)
  - Improve widget banner (#2129)
+ - Icon for Oreo (#2169)
 
 Other changes:
  - Restore the crash report dialog after a crash
