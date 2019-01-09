@@ -41,7 +41,6 @@ class TestBingRulesSettings(val fragment: Fragment, val session: MXSession) : Tr
         } else {
             var oneOrMoreRuleIsOff = false
             var oneOrMoreRuleAreSilent = false
-            var details = ""
             for ((index, ruleId) in testedRules.withIndex()) {
                 pushRules.findDefaultRule(ruleId)?.let { rule ->
                     if (!rule.isEnabled || rule.shouldNotNotify()) {
@@ -56,13 +55,13 @@ class TestBingRulesSettings(val fragment: Fragment, val session: MXSession) : Tr
                 }
             }
 
-            description = details
             if (oneOrMoreRuleIsOff) {
                 description = fragment.getString(R.string.settings_troubleshoot_test_bing_settings_failed)
                 quickFix = object : TroubleshootQuickFix(R.string.settings_troubleshoot_test_bing_settings_quickfix) {
                     override fun doFix() {
                         if (fragment.activity is VectorSettingsFragmentInteractionListener) {
-                            (fragment.activity as VectorSettingsFragmentInteractionListener).requestHighlightPreferenceKeyOnResume(PreferencesManager.SETTINGS_NOTIFICATION_ADVANCED_PREFERENCE_KEY)
+                            (fragment.activity as VectorSettingsFragmentInteractionListener)
+                                    .requestHighlightPreferenceKeyOnResume(PreferencesManager.SETTINGS_NOTIFICATION_ADVANCED_PREFERENCE_KEY)
                         }
                         fragment.activity?.supportFragmentManager?.popBackStack()
                     }
