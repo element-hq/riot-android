@@ -134,7 +134,7 @@ android {
         // Treat some warnings as errors
         // Resources
         error 'TypographyEllipsis'
-        error 'ImpliedQuantity'
+        warning 'ImpliedQuantity'
 
         // UX
         error 'ButtonOrder'

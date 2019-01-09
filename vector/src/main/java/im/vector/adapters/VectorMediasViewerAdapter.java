@@ -54,7 +54,7 @@ import java.util.List;
 
 import im.vector.R;
 import im.vector.activity.CommonActivityUtils;
-import im.vector.activity.VectorMediasViewerActivity;
+import im.vector.activity.VectorMediaViewerActivity;
 import im.vector.util.PermissionsToolsKt;
 import im.vector.util.SlidableMediaInfo;
 import im.vector.view.PieFractionView;
@@ -608,7 +608,7 @@ public class VectorMediasViewerAdapter extends PagerAdapter {
      * Download the current media file, and export it to the Download folder of the device
      */
     public void downloadMediaAndExportToDownloads() {
-        if (((VectorMediasViewerActivity) mContext).checkWritePermission(PermissionsToolsKt.PERMISSION_REQUEST_OTHER)) {
+        if (((VectorMediaViewerActivity) mContext).checkWritePermission(PermissionsToolsKt.PERMISSION_REQUEST_OTHER)) {
             final SlidableMediaInfo mediaInfo = mMediasMessagesList.get(mLatestPrimaryItemPosition);
 
             if (mMediasCache.isMediaCached(mediaInfo.mMediaUrl, mediaInfo.mMimeType)) {

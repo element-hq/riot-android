@@ -73,6 +73,7 @@ import im.vector.notifications.NotifiedEvent;
 import im.vector.notifications.RoomsNotifications;
 import im.vector.push.PushManager;
 import im.vector.receiver.DismissNotificationReceiver;
+import im.vector.tools.VectorUncaughtExceptionHandler;
 import im.vector.util.CallsManager;
 import im.vector.util.RiotEventDisplay;
 import im.vector.util.SystemUtilsKt;
@@ -356,7 +357,7 @@ public class EventStreamService extends Service {
                     return START_NOT_STICKY;
                 }
 
-                if ((null != VectorApp.getInstance()) && VectorApp.getInstance().didAppCrash()) {
+                if (VectorUncaughtExceptionHandler.INSTANCE.didAppCrash(this)) {
                     Log.e(LOG_TAG, "onStartCommand : no auto restart because the application crashed");
                     return START_NOT_STICKY;
                 }

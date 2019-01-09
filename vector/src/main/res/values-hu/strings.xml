@@ -254,7 +254,7 @@ Kérlek engedélyezd a hozzáférést a következő felugró ablakban, hogy tudj
 
 Engedélyezed Riot-nak a hozzáférést kapcsolataidhoz?</string>
 
-    <string name="permissions_action_not_performed_missing_permissions">Elnézést… A művelet nem lett végre hajtva hiányzó engedélyek miatt</string>
+    <string name="permissions_action_not_performed_missing_permissions">"Elnézést.  A művelet nem lett végre hajtva hiányzó engedélyek miatt"</string>
 
     <string name="media_slider_saved">Mentve</string>
     <string name="media_slider_saved_message">Mentés a letöltések közé</string>

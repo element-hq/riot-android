@@ -20,6 +20,8 @@ import android.graphics.Bitmap
 import android.graphics.Canvas
 import org.matrix.androidsdk.util.Log
 
+private const val LOG_TAG = "BitmapUtil"
+
 /**
  * Create a centered square bitmap from another one.
  *
@@ -53,14 +55,14 @@ import org.matrix.androidsdk.util.Log
  * @param bitmap the bitmap to "square"
  * @return the squared bitmap
  */
-fun Bitmap.createSquareBitmap(): Bitmap? = when {
+fun Bitmap.createSquareBitmap(): Bitmap = when {
     width == height -> this
     width > height ->
         try {
             // larger than high
             Bitmap.createBitmap(this, (width - height) / 2, 0, height, height)
         } catch (e: Exception) {
-            Log.e("BitmapUtil", "## createSquareBitmap " + e.message, e)
+            Log.e(LOG_TAG, "## createSquareBitmap " + e.message, e)
             this
         }
     else ->
@@ -68,7 +70,7 @@ fun Bitmap.createSquareBitmap(): Bitmap? = when {
             // higher than large
             Bitmap.createBitmap(this, 0, (height - width) / 2, width, width)
         } catch (e: Exception) {
-            Log.e("BitmapUtil", "## createSquareBitmap " + e.message, e)
+            Log.e(LOG_TAG, "## createSquareBitmap " + e.message, e)
             this
         }
 }
@@ -78,7 +80,14 @@ fun Bitmap.createSquareBitmap(): Bitmap? = when {
  */
 fun Bitmap.addBackgroundColor(backgroundColor: Int): Bitmap {
     // Create new bitmap based on the size and config of the old
-    val newBitmap = Bitmap.createBitmap(width, height, config)
+    val newBitmap = Bitmap.createBitmap(width, height, config ?: Bitmap.Config.ARGB_8888)
+
+    // Reported by the Play Store
+    if (newBitmap == null) {
+        Log.e(LOG_TAG, "## unable to add background color")
+
+        return this
+    }
 
     Canvas(newBitmap).let {
         // Paint background

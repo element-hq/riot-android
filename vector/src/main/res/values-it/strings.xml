@@ -281,7 +281,7 @@ Per favore consenti l\'accesso nella prossima finestra in modo da scoprire i con
 
 Consentire a Riot di accedere ai tuoi contatti?</string>
 
-    <string name="permissions_action_not_performed_missing_permissions">Spiacenti… azione non eseguita a causa di mancate autorizzazioni</string>
+    <string name="permissions_action_not_performed_missing_permissions">Spiacente. Azione non eseguita a causa di mancate autorizzazioni</string>
 
     <!-- medias slider string -->
     <string name="media_slider_saved">Salvato</string>
@@ -434,7 +434,7 @@ Tieni presente che questa azione riavvierà l\'app e potrebbe richiedere del tem
 
     <!-- Directory -->
     <string name="directory_search_results_title">Esplora elenco</string>
-    <string name="directory_searching_title">Ricerca in corso…</string>
+    <string name="directory_searching_title">Ricerca negli elenchi…</string>
 
     <!-- home room settings -->
     <string name="room_settings_favourite">Preferito</string>
