@@ -33,7 +33,7 @@ import butterknife.ButterKnife
 import butterknife.OnClick
 import im.vector.R
 import im.vector.VectorApp
-import im.vector.ui.animation.VectorAnimation
+import im.vector.ui.animation.VectorTransitionSet
 import im.vector.util.openUrlInExternalBrowser
 import org.matrix.androidsdk.MXSession
 import org.matrix.androidsdk.rest.model.URLPreview
@@ -131,7 +131,7 @@ class UrlPreviewView @JvmOverloads constructor(
     internal fun closeUrlPreview() {
         // Parent is a LinearLayout
         val parent = parent as ViewGroup
-        TransitionManager.beginDelayedTransition(parent, VectorAnimation().apply {
+        TransitionManager.beginDelayedTransition(parent, VectorTransitionSet().apply {
             appearWithAlpha(this@UrlPreviewView)
         })
 

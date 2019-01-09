@@ -41,7 +41,7 @@ import com.binaryfork.spanny.Spanny
 import im.vector.R
 import im.vector.features.hhs.ResourceLimitErrorFormatter
 import im.vector.listeners.IMessagesAdapterActionsListener
-import im.vector.ui.animation.VectorAnimation
+import im.vector.ui.animation.VectorTransitionSet
 import im.vector.ui.themes.ThemeUtils
 import im.vector.util.MatrixURLSpan
 import org.matrix.androidsdk.MXPatterns
@@ -131,7 +131,7 @@ class NotificationAreaView @JvmOverloads constructor(
         if (visibility != getVisibility()) {
             // Schedule animation
             val parent = parent as ViewGroup
-            TransitionManager.beginDelayedTransition(parent, VectorAnimation().apply {
+            TransitionManager.beginDelayedTransition(parent, VectorTransitionSet().apply {
                 appearFromBottom(this@NotificationAreaView)
                 appearWithAlpha(this@NotificationAreaView)
             })

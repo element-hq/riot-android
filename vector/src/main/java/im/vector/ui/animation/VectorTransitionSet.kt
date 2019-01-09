@@ -22,7 +22,7 @@ import android.support.transition.TransitionSet
 import android.view.Gravity
 import android.view.View
 
-class VectorAnimation : TransitionSet() {
+class VectorTransitionSet : TransitionSet() {
 
     init {
         // Change bounds for every Views
