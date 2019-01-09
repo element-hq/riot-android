@@ -1419,6 +1419,10 @@ public class VectorRoomActivity extends MXCActionBarActivity implements
         if (mReadMarkerManager != null) {
             mReadMarkerManager.onScrollStateChanged(scrollState);
         }
+
+        if (mNotificationsArea != null) {
+            mNotificationsArea.setScrollState(scrollState);
+        }
     }
 
     @Override

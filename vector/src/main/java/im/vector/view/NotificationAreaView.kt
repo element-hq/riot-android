@@ -32,6 +32,7 @@ import android.text.style.StyleSpan
 import android.util.AttributeSet
 import android.view.View
 import android.view.ViewGroup
+import android.widget.AbsListView
 import android.widget.ImageView
 import android.widget.RelativeLayout
 import android.widget.TextView
@@ -69,6 +70,20 @@ class NotificationAreaView @JvmOverloads constructor(
 
     var delegate: Delegate? = null
     private var state: State = State.Initial
+
+    var scrollState = AbsListView.OnScrollListener.SCROLL_STATE_IDLE
+        set(value) {
+            field = value
+
+            val pendingV = pendingVisibility
+
+            if (pendingV != null) {
+                pendingVisibility = null
+                visibility = pendingV
+            }
+        }
+
+    private var pendingVisibility: Int? = null
 
     /**
      * Visibility when the info area is empty.
@@ -128,6 +143,12 @@ class NotificationAreaView @JvmOverloads constructor(
     }
 
     override fun setVisibility(visibility: Int) {
+        if (scrollState != AbsListView.OnScrollListener.SCROLL_STATE_IDLE) {
+            // Wait for scroll state to be idle
+            pendingVisibility = visibility
+            return
+        }
+
         if (visibility != getVisibility()) {
             // Schedule animation
             val parent = parent as ViewGroup
