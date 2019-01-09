@@ -62,7 +62,8 @@ class TestBingRulesSettings(val fragment: Fragment, val session: MXSession) : Tr
                 quickFix = object : TroubleshootQuickFix(R.string.settings_troubleshoot_test_bing_settings_quickfix) {
                     override fun doFix() {
                         if (fragment.activity is VectorSettingsFragmentInteractionListener) {
-                            (fragment.activity as VectorSettingsFragmentInteractionListener).requestHighlightPreferenceKeyOnResume(PreferencesManager.SETTINGS_NOTIFICATION_ADVANCED_PREFERENCE_KEY)
+                            (fragment.activity as VectorSettingsFragmentInteractionListener)
+                                    .requestHighlightPreferenceKeyOnResume(PreferencesManager.SETTINGS_NOTIFICATION_ADVANCED_PREFERENCE_KEY)
                         }
                         fragment.activity?.supportFragmentManager?.popBackStack()
                     }
