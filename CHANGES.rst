@@ -21,6 +21,7 @@ Bugfix:
  - Fix crash when taking picture for user avatar on old device (#2818)
  - Fix crash when adding background to image (#2828)
  - LED notifications are not working (#2512)
+ - FCM Troubleshoot screen crash in some cases (#2846)
 
 Translations:
  -
