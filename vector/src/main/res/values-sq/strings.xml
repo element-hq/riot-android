@@ -214,7 +214,7 @@
     <string name="incoming_call">Thirrje Ardhëse</string>
     <string name="incoming_video_call">Thirrje Video Ardhëse</string>
     <string name="incoming_voice_call">Thirrje Audio Ardhëse</string>
-    <string name="call_in_progress">Thirrje Në Kryerje e Sipër</string>
+    <string name="call_in_progress">Thirrje Në Kryerje e Sipër…</string>
 
     <string name="call_error_camera_init_failed">S’gatitet dot kamera</string>
     <string name="call_error_answered_elsewhere">thirrje e përgjigjur gjetkë</string>
@@ -633,7 +633,7 @@
     <string name="event_formatter_widget_added">%1$s u shtua nga %2$s</string>
     <string name="event_formatter_widget_removed">%1$s u hoq nga %2$s</string>
     <string name="settings_labs_create_conference_with_jitsi">Krijoni thirrje konferencë me Jitsi-n</string>
-    <string name="widget_delete_message_confirmation">Jeni i sigurt se doni të fshihet widget-i?</string>
+    <string name="widget_delete_message_confirmation">Jeni i sigurt se doni të fshihet widget-i nga kjo dhomë?</string>
     <string name="widget_integration_unable_to_create">S’arrihet të krijohet widget-i.</string>
     <string name="widget_integration_failed_to_send_request">S’u arrit të dërgohej kërkesë.</string>
     <string name="widget_integration_positive_power_level">Shkalla e pushtetit duhet të jetë një numër i plotë pozitiv.</string>
@@ -741,7 +741,7 @@
     <string name="no_contact_access_placeholder">S’e lejuat Riot-i të hyjë në kontaktet tuaja vendore</string>
     <string name="send_bug_report_description">Ju lutemi, përshkruajeni të metën. Ç’po bënit? Ç’prisnit të ndodhte? Ç’ndodhi në fakt?</string>
     <string name="send_bug_report_alert_message">Duket se po përplasni telefonin nga inati. Do të donit të hapej skena për njoftim të metash?</string>
-    <string name="send_bug_report_app_crashed">Herën e fundit aplikacioni u vithis. Do të donit të parashtroni një raport vithisje?</string>
+    <string name="send_bug_report_app_crashed">Herën e fundit aplikacioni u vithis. Do të donit të hapej skena e raportimit të vithisjeve?</string>
     <string name="send_bug_report_failed">Dështoi dërgimi i njoftimit të të metës (%s)</string>
     <string name="login">Hyni</string>
     <string name="logout">Dilni</string>
@@ -1166,4 +1166,9 @@ Për zhvilluesit:
 
 Zbuloni bashkëpunimin vërtet efikas dhe të hapur, me Riot.im!</string>
 
-</resources>
+<string name="video_call_in_progress">Thirrje Video Në Kryerje e Sipër…</string>
+
+    <string name="store_whats_new">Bëjmë përherë ndryshime dhe përmirësime te Riot.im.
+Regjistri i plotë i ndryshimeve mund të gjendet këtu: %1$s.
+Që të garantoni se s’ju shpëton gjë, thjesht mbajeni të aktivizuar mekanizmin e përditësimeve.</string>
+    </resources>
