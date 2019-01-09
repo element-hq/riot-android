@@ -15,9 +15,12 @@
  */
 package im.vector.push.fcm.troubleshoot
 
+import android.content.Intent
+import android.provider.Settings
 import android.support.v4.app.Fragment
 import com.google.firebase.iid.FirebaseInstanceId
 import im.vector.R
+import im.vector.fragments.troubleshoot.NotificationTroubleshootTestManager
 import im.vector.fragments.troubleshoot.TroubleshootTest
 import org.matrix.androidsdk.util.Log
 
@@ -40,11 +43,19 @@ class TestFirebaseToken(val fragment: Fragment) : TroubleshootTest(R.string.sett
                                     description = fragment.getString(R.string.settings_troubleshoot_test_fcm_failed_service_not_available, errorMsg)
                                 } else if ("TOO_MANY_REGISTRATIONS".equals(errorMsg)) {
                                     description = fragment.getString(R.string.settings_troubleshoot_test_fcm_failed_too_many_registration, errorMsg)
+                                } else if ("ACCOUNT_MISSING".equals(errorMsg)) {
+                                    description = fragment.getString(R.string.settings_troubleshoot_test_fcm_failed_account_missing, errorMsg)
+                                    quickFix = object : TroubleshootQuickFix(R.string.settings_troubleshoot_test_fcm_failed_account_missing_quick_fix) {
+                                        override fun doFix() {
+                                            val intent = Intent(Settings.ACTION_ADD_ACCOUNT)
+                                            intent.putExtra(Settings.EXTRA_ACCOUNT_TYPES, arrayOf("com.google"));
+                                            fragment.startActivityForResult(intent, NotificationTroubleshootTestManager.REQ_CODE_FIX)
+                                        }
+                                    }
                                 } else {
                                     description = fragment.getString(R.string.settings_troubleshoot_test_fcm_failed, errorMsg)
                                 }
                                 status = TestStatus.FAILED
-
                             } else {
                                 task.result?.token?.let {
                                     val tok = it.substring(0, Math.min(8, it.length)) + "********************"
