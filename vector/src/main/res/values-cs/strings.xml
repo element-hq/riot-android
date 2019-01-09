@@ -106,7 +106,7 @@ Zvolte export, chcete-li je zálohovat, než se odhlásíte.</string>
         <item quantity="one">1 uživatel</item>
         <item quantity="few">%d uživatelé</item>
         <item quantity="many">%d uživatelé</item>
-        <item quantity="other"/>
+        <item quantity="other" />
     </plurals>
 
     <string name="groups_invite_header">Pozvat</string>
@@ -206,7 +206,7 @@ Zvolte export, chcete-li je zálohovat, než se odhlásíte.</string>
     <string name="login_error_bad_json">Poškozený JSON</string>
     <string name="login_error_limit_exceeded">Příliš mnoho požadavků bylo odeslano</string>
     <string name="login_error_user_in_use">Toto uživatelské jméno je již použito</string>
-<string name="status_theme">Motiv Status.im</string>
+    <string name="status_theme">Motiv Status.im</string>
 
     <string name="title_activity_choose_sticker">Odeslat nálepku</string>
 
@@ -266,11 +266,11 @@ Omlouváme se za způsobené nepříjemnosti.</string>
     <string name="e2e_re_request_encryption_key_sent">Žádost o klíče odeslána.</string>
 
     <plurals name="membership_changes">
-	<item quantity="one">1 změna členství</item>
-	<item quantity="few">%d změny členství</item>
-	<item quantity="many">%d změn členství</item>
-	<item quantity="other"/>
-</plurals>
+        <item quantity="one">1 změna členství</item>
+        <item quantity="few">%d změny členství</item>
+        <item quantity="many">%d změn členství</item>
+        <item quantity="other" />
+    </plurals>
 
     <string name="compression_options">"Odeslat jako "</string>
     <string name="compression_opt_list_original">Původní</string>
@@ -354,43 +354,43 @@ Prosím, povolte přístup na následující hlášce pro možnost uskutečňova
     <string name="room_creation_title">Nová konverzace</string>
     <string name="room_creation_add_member">Přidat člena</string>
     <plurals name="room_header_active_members_count">
-	<item quantity="one">1 aktivní člen</item>
-	<item quantity="few">%d aktivní členové</item>
-	<item quantity="many">%d aktivních členů</item>
-	<item quantity="other"/>
-</plurals>
+        <item quantity="one">1 aktivní člen</item>
+        <item quantity="few">%d aktivní členové</item>
+        <item quantity="many">%d aktivních členů</item>
+        <item quantity="other" />
+    </plurals>
     <plurals name="room_title_members">
-	<item quantity="one">1 člen</item>
-	<item quantity="few">%d členové</item>
-	<item quantity="many">%d členů</item>
-	<item quantity="other"/>
-</plurals>
+        <item quantity="one">1 člen</item>
+        <item quantity="few">%d členové</item>
+        <item quantity="many">%d členů</item>
+        <item quantity="other" />
+    </plurals>
     <string name="room_title_one_member">1 člen</string>
     <string name="room_e2e_alert_title">Varování!</string>
     <plurals name="format_time_s">
-	<item quantity="one">1s</item>
-	<item quantity="few">%ds</item>
-	<item quantity="many">%ds</item>
-	<item quantity="other"/>
-</plurals>
+        <item quantity="one">1s</item>
+        <item quantity="few">%ds</item>
+        <item quantity="many">%ds</item>
+        <item quantity="other" />
+    </plurals>
     <plurals name="format_time_m">
-	<item quantity="one">1min</item>
-	<item quantity="few">%dmin</item>
-	<item quantity="many">%dmin</item>
-	<item quantity="other"/>
-</plurals>
+        <item quantity="one">1min</item>
+        <item quantity="few">%dmin</item>
+        <item quantity="many">%dmin</item>
+        <item quantity="other" />
+    </plurals>
     <plurals name="format_time_h">
-	<item quantity="one">1h</item>
-	<item quantity="few">%dh</item>
-	<item quantity="many">%dh</item>
-	<item quantity="other"/>
-</plurals>
+        <item quantity="one">1h</item>
+        <item quantity="few">%dh</item>
+        <item quantity="many">%dh</item>
+        <item quantity="other" />
+    </plurals>
     <plurals name="format_time_d">
-	<item quantity="one">1d</item>
-	<item quantity="few">%dd</item>
-	<item quantity="many">%dd</item>
-	<item quantity="other"/>
-</plurals>
+        <item quantity="one">1d</item>
+        <item quantity="few">%dd</item>
+        <item quantity="many">%dd</item>
+        <item quantity="other" />
+    </plurals>
 
     <string name="room_participants_leave_prompt_title">Opustit místnost</string>
     <string name="room_participants_leave_prompt_msg">Jste si jisti, že chcete opustit tuto místnost?</string>
@@ -433,11 +433,11 @@ Zařízení nebudou zatím schopna dešifrovat historii z doby předtím, nežli
 Šifrované zprávy nebudou viditelné v klientech, které nemají implementováno šifrování.</string>
 
     <plurals name="room_participants_kick_prompt_msg">
-	<item quantity="one">Jste si jisti, že chcete vyhodit tohoto uživatele z této konverzace?</item>
-	<item quantity="few">Jste si jisti, že chcete vyhodit tyto uživatele z této konverzace?</item>
-	<item quantity="many">Jste si jisti, že chcete vyhodit tyto uživatele z této konverzace?</item>
-	<item quantity="other"/>
-</plurals>
+        <item quantity="one">Jste si jisti, že chcete vyhodit tohoto uživatele z této konverzace?</item>
+        <item quantity="few">Jste si jisti, že chcete vyhodit tyto uživatele z této konverzace?</item>
+        <item quantity="many">Jste si jisti, že chcete vyhodit tyto uživatele z této konverzace?</item>
+        <item quantity="other" />
+    </plurals>
     <string name="room_participants_ban_prompt_msg">Jste si jisti, že chcete zakázat vstup tohoto uživatele do této konverzace?</string>
     <string name="reason_hint">Důvod</string>
 
@@ -471,11 +471,11 @@ Zařízení nebudou zatím schopna dešifrovat historii z doby předtím, nežli
     <string name="room_message_file_not_found">Soubor nenalezen</string>
     <string name="room_do_not_have_permission_to_post">Nemáte právo odesílat v této místnosti</string>
     <plurals name="room_new_messages_notification">
-	<item quantity="one">1 nová zpráva</item>
-	<item quantity="few">%d nové zprávy</item>
-	<item quantity="many">%d nových zpráv</item>
-	<item quantity="other"/>
-</plurals>
+        <item quantity="one">1 nová zpráva</item>
+        <item quantity="few">%d nové zprávy</item>
+        <item quantity="many">%d nových zpráv</item>
+        <item quantity="other" />
+    </plurals>
 
     <string name="ssl_trust">Důvěřovat</string>
     <string name="ssl_do_not_trust">Nedůvěřovat</string>
@@ -488,9 +488,9 @@ Zařízení nebudou zatím schopna dešifrovat historii z doby předtím, nežli
     <string name="room_details_files">Soubory</string>
     <string name="room_details_settings">Nastavení</string>
     <plurals name="room_details_selected">
-	<item quantity="one">1 vybrán</item>
-	<item quantity="few">%d vybrány</item>
-	<item quantity="many">%d vybráno</item>
-	<item quantity="other"></item>
-</plurals>
-    </resources>
+        <item quantity="one">1 vybrán</item>
+        <item quantity="few">%d vybrány</item>
+        <item quantity="many">%d vybráno</item>
+        <item quantity="other"></item>
+    </plurals>
+</resources>
