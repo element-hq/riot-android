@@ -17,7 +17,6 @@ package im.vector.view;
 
 import android.content.Context;
 import android.graphics.Bitmap;
-import android.graphics.Color;
 import android.net.Uri;
 import android.util.AttributeSet;
 import android.view.View;
@@ -53,7 +52,6 @@ public class RecentMediaLayout extends RelativeLayout {
         mThumbnailView = findViewById(R.id.media_thumbnail_view);
         mTypeView = findViewById(R.id.media_type_view);
         mSelectedItemView = findViewById(R.id.media_selected_mask_view);
-        mSelectedItemView.setVisibility(View.GONE);
     }
 
     /**
@@ -87,7 +85,6 @@ public class RecentMediaLayout extends RelativeLayout {
      */
     public void setVideoType(boolean isVideo) {
         mTypeView.setImageResource(isVideo ? R.drawable.ic_material_movie : R.drawable.ic_material_photo);
-        mTypeView.setColorFilter(Color.WHITE);
     }
 
     /**
@@ -97,6 +94,5 @@ public class RecentMediaLayout extends RelativeLayout {
      */
     public void setGifType(boolean isGif) {
         mTypeView.setImageResource(isGif ? R.drawable.filetype_gif : R.drawable.ic_material_photo);
-        mTypeView.setColorFilter(Color.WHITE);
     }
 }
