@@ -146,7 +146,7 @@
     <string name="send_bug_report_placeholder">Describe your problem here</string>
     <string name="send_bug_report_logs_description">In order to diagnose problems, logs from this client will be sent with this bug report. This bug report, including the logs and the screenshot, will not be publicly visible. If you would prefer to only send the text above, please untick:</string>
     <string name="send_bug_report_alert_message">You seem to be shaking the phone in frustration. Would you like to open the bug report screen?</string>
-    <string name="send_bug_report_app_crashed">The application has crashed last time. Would you like to submit a crash report?</string>
+    <string name="send_bug_report_app_crashed">The application has crashed last time. Would you like to open the crash report screen?</string>
     <string name="send_bug_report_rage_shake">Rage shake to report bug</string>
 
     <string name="send_bug_report_sent">The bug report has been successfully sent</string>
@@ -317,7 +317,8 @@
     <string name="incoming_call">Incoming Call</string>
     <string name="incoming_video_call">Incoming Video Call</string>
     <string name="incoming_voice_call">Incoming Voice Call</string>
-    <string name="call_in_progress">Call In Progress</string>
+    <string name="call_in_progress">Call In Progress…</string>
+    <string name="video_call_in_progress">Video Call In Progress…</string>
 
     <string name="call_error_user_not_responding">The remote side failed to pick up.</string>
     <string name="call_error_ice_failed">Media Connection Failed</string>

@@ -10,9 +10,10 @@ Features:
 Improvements:
  - Support Split-screen mode (#1832)
  - Enable auto focus when taking picture with the camera (#2831)
+ - Better wording in notification for video call (#1421)
 
 Other changes:
- -
+ - Restore the crash report dialog after a crash
 
 Bugfix:
  - Fix crash when taking picture for user avatar on old device (#2818)
