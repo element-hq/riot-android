@@ -163,7 +163,7 @@ class VectorSettingsAdvancedNotificationPreferenceFragment : PreferenceFragmentC
     }
 
     private fun refreshDisplay() {
-        listView.adapter?.notifyDataSetChanged()
+        listView?.adapter?.notifyDataSetChanged()
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {

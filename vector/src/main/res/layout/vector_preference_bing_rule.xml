@@ -29,19 +29,20 @@
             android:textSize="16sp"
             tools:text="Title" />
 
-        <!--<TextView-->
-        <!--android:id="@android:id/summary"-->
-        <!--android:layout_width="wrap_content"-->
-        <!--android:layout_height="wrap_content"-->
-        <!--android:layout_below="@android:id/title"-->
-        <!--android:layout_alignStart="@android:id/title"-->
-        <!--android:layout_alignLeft="@android:id/title"-->
-        <!--android:maxLines="2"-->
-        <!--android:paddingTop="6dp"-->
-        <!--android:textAppearance="?android:attr/textAppearanceSmall"-->
-        <!--android:textColor="?android:attr/textColorSecondary"-->
-        <!--android:textSize="14sp"-->
-        <!--tools:text="Summary" />-->
+        <TextView
+            android:id="@android:id/summary"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@android:id/title"
+            android:layout_alignStart="@android:id/title"
+            android:layout_alignLeft="@android:id/title"
+            android:maxLines="2"
+            android:paddingTop="6dp"
+            android:textAppearance="?android:attr/textAppearanceSmall"
+            android:textColor="?android:attr/textColorSecondary"
+            android:textSize="14sp"
+            tools:visibility="gone"
+            tools:text="Summary" />
 
     </RelativeLayout>
 

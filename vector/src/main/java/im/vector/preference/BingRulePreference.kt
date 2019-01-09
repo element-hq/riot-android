@@ -20,7 +20,9 @@ import android.content.Context
 import android.support.v7.preference.PreferenceViewHolder
 import android.text.TextUtils
 import android.util.AttributeSet
+import android.view.View
 import android.widget.RadioGroup
+import android.widget.TextView
 import im.vector.R
 import org.matrix.androidsdk.rest.model.bingrules.BingRule
 
@@ -157,8 +159,12 @@ class BingRulePreference : VectorPreference {
 
     override fun onBindViewHolder(holder: PreferenceViewHolder) {
         super.onBindViewHolder(holder)
-        val radioGroup = holder.findViewById(R.id.bingPreferenceRadioGroup) as? RadioGroup
 
+        holder.itemView?.findViewById<TextView>(android.R.id.summary)?.visibility = View.GONE
+        holder.itemView?.setOnClickListener(null)
+        holder.itemView?.setOnLongClickListener(null)
+
+        val radioGroup = holder.findViewById(R.id.bingPreferenceRadioGroup) as? RadioGroup
         radioGroup?.setOnCheckedChangeListener(null)
 
         when (ruleStatusIndex) {

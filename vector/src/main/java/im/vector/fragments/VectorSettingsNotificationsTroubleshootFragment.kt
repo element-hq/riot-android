@@ -158,6 +158,7 @@ class VectorSettingsNotificationsTroubleshootFragment : VectorBaseFragment() {
 
     override fun onDetach() {
         testManager?.cancel()
+        interactionListener = null
         super.onDetach()
     }
 

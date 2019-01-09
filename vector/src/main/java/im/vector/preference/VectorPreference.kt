@@ -104,27 +104,26 @@ open class VectorPreference : Preference {
             if (isHighlighted) {
                 val colorFrom = 0
                 val colorTo = ThemeUtils.getColor(itemView.context, R.attr.colorAccent)
-                val colorAnimation = ValueAnimator.ofObject(ArgbEvaluator(), colorFrom, colorTo)
-                colorAnimation.duration = 250 // milliseconds
-
-                colorAnimation.addUpdateListener { animator ->
-                    itemView.setBackgroundColor(animator.animatedValue as Int)
-                    val colorAnimationBack = ValueAnimator.ofObject(ArgbEvaluator(), colorTo, colorFrom)
-                    colorAnimationBack.duration = 250 // milliseconds
-
-                    colorAnimationBack.addUpdateListener { animator ->
+                currentHighlightAnimator = ValueAnimator.ofObject(ArgbEvaluator(), colorFrom, colorTo).apply {
+                    duration = 250 // milliseconds
+                    addUpdateListener { animator ->
                         itemView?.setBackgroundColor(animator.animatedValue as Int)
                     }
-                    colorAnimationBack.doOnEnd {
-                        isHighlighted = false
-                        colorAnimationBack?.cancel()
+                    doOnEnd {
+                        currentHighlightAnimator = ValueAnimator.ofObject(ArgbEvaluator(), colorTo, colorFrom).apply {
+                            duration = 250 // milliseconds
+                            addUpdateListener { animator ->
+                                itemView?.setBackgroundColor(animator.animatedValue as Int)
+                            }
+                            doOnEnd {
+                                isHighlighted = false
+                            }
+                            start()
+                        }
                     }
-                    currentHighlightAnimator = colorAnimationBack
-                    colorAnimationBack.start()
+                    startDelay = 200
+                    start()
                 }
-                colorAnimation.startDelay = 200
-                currentHighlightAnimator = colorAnimation
-                colorAnimation.start()
             } else {
                 itemView.setBackgroundColor(0)
             }

@@ -36,29 +36,28 @@ class TestBingRulesSettings(val fragment: Fragment, val session: MXSession) : Tr
     override fun perform() {
         val pushRules = session.dataHandler.pushRules()
         if (pushRules == null) {
-            //mmm
+            description = fragment.getString(R.string.settings_troubleshoot_test_bing_settings_failed_to_load_rules)
+            status = TestStatus.FAILED
         } else {
-            var oneOrMoreRuleisOff = false
+            var oneOrMoreRuleIsOff = false
             var oneOrMoreRuleAreSilent = false
-            var allRulesAreOff = true
             var details = ""
             for ((index, ruleId) in testedRules.withIndex()) {
                 pushRules.findDefaultRule(ruleId)?.let { rule ->
                     if (!rule.isEnabled || rule.shouldNotNotify()) {
                         //off
-                        oneOrMoreRuleisOff = oneOrMoreRuleisOff || true
-                        allRulesAreOff = allRulesAreOff && true
+                        oneOrMoreRuleIsOff = true
                     } else if (rule.notificationSound == null) {
                         //silent
-                        oneOrMoreRuleAreSilent = oneOrMoreRuleAreSilent || true
+                        oneOrMoreRuleAreSilent = true
                     } else {
-
+                        //noisy
                     }
                 }
             }
 
             description = details
-            if (oneOrMoreRuleisOff) {
+            if (oneOrMoreRuleIsOff) {
                 description = fragment.getString(R.string.settings_troubleshoot_test_bing_settings_failed)
                 quickFix = object : TroubleshootQuickFix(R.string.settings_troubleshoot_test_bing_settings_quickfix) {
                     override fun doFix() {

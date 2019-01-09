@@ -827,6 +827,10 @@ class VectorSettingsPreferencesFragment : PreferenceFragmentCompat(), SharedPref
         }
     }
 
+    override fun onDetach() {
+        interactionListener = null
+        super.onDetach()
+    }
 
     override fun onResume() {
         super.onResume()
@@ -872,7 +876,6 @@ class VectorSettingsPreferencesFragment : PreferenceFragmentCompat(), SharedPref
 
         interactionListener?.requestedKeyToHighlight()?.let { key ->
             interactionListener?.requestHighlightPreferenceKeyOnResume(null)
-            //scrollToPreference(key)
             val preference = findPreference(key)
             (preference as? VectorPreference)?.isHighlighted = true
         }
