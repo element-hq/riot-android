@@ -189,7 +189,7 @@ public class VectorMediaPickerActivity extends MXCActionBarActivity implements T
     private ImageViewOnTouchListener imageViewOnTouchListener = new ImageViewOnTouchListener() {
         @Override
         public boolean onTouch(View v, MotionEvent event) {
-            return (mIsAvatarMode)?  super.onTouch(v, event) : true;
+            return (mIsAvatarMode) ? super.onTouch(v, event) : true;
         }
     };
 
@@ -554,7 +554,7 @@ public class VectorMediaPickerActivity extends MXCActionBarActivity implements T
                     Log.e(LOG_TAG, "## onSwitchCamera(): setPreviewTexture EXCEPTION Msg=" + e.getMessage(), e);
                 }
 
-                mCamera.startPreview();
+                startCameraPreview();
             } catch (Exception e) {
                 Log.e(LOG_TAG, "## onSwitchCamera(): cannot init the other camera " + e.getMessage(), e);
                 // assume that only one camera can be used.
@@ -682,14 +682,6 @@ public class VectorMediaPickerActivity extends MXCActionBarActivity implements T
             }
 
             if (!mIsVideoMode) {
-                // set auto focus
-                try {
-                    params.setFocusMode(Camera.Parameters.FOCUS_MODE_AUTO);
-                    mCamera.setParameters(params);
-                } catch (Exception e) {
-                    Log.e(LOG_TAG, "## initCameraSettings(): set auto focus fails EXCEPTION Msg=" + e.getMessage(), e);
-                }
-
                 // set jpeg quality
                 try {
                     params.setPictureFormat(ImageFormat.JPEG);
@@ -706,6 +698,42 @@ public class VectorMediaPickerActivity extends MXCActionBarActivity implements T
         }
     }
 
+    /**
+     * Start auto-focus of the camera, using the best available mode
+     */
+    private void startAutoFocus() {
+        Log.d(LOG_TAG, "## startAutoFocus");
+
+        String focusMode = null;
+
+        Camera.Parameters params = mCamera.getParameters();
+
+        if (mIsVideoMode) {
+            // set auto focus for video
+            if (params.getSupportedFocusModes().contains(Camera.Parameters.FOCUS_MODE_CONTINUOUS_VIDEO)) {
+                focusMode = Camera.Parameters.FOCUS_MODE_CONTINUOUS_VIDEO;
+            }
+        } else {
+            // set auto focus for picture
+            if (params.getSupportedFocusModes().contains(Camera.Parameters.FOCUS_MODE_CONTINUOUS_PICTURE)) {
+                focusMode = Camera.Parameters.FOCUS_MODE_CONTINUOUS_PICTURE;
+            }
+        }
+
+        if (focusMode == null
+                && params.getSupportedFocusModes().contains(Camera.Parameters.FOCUS_MODE_AUTO)) {
+            focusMode = Camera.Parameters.FOCUS_MODE_AUTO;
+        }
+
+        if (focusMode != null && !focusMode.equals(params.getFocusMode())) {
+            try {
+                params.setFocusMode(focusMode);
+                mCamera.setParameters(params);
+            } catch (Exception e) {
+                Log.e(LOG_TAG, "## startAutoFocus(): set auto focus fails EXCEPTION Msg=" + e.getMessage(), e);
+            }
+        }
+    }
 
     /**
      * Resize the camera preview texture from the camera preview size.
@@ -919,7 +947,9 @@ public class VectorMediaPickerActivity extends MXCActionBarActivity implements T
                 mImagePreviewAvatarModeMaskView.post(new Runnable() {
                     @Override
                     public void run() {
-                        drawCircleMask(mImagePreviewAvatarModeMaskView,mImagePreviewAvatarModeMaskView.getWidth(),mImagePreviewAvatarModeMaskView.getHeight());
+                        drawCircleMask(mImagePreviewAvatarModeMaskView,
+                                mImagePreviewAvatarModeMaskView.getWidth(),
+                                mImagePreviewAvatarModeMaskView.getHeight());
                     }
                 });
             }
@@ -967,12 +997,14 @@ public class VectorMediaPickerActivity extends MXCActionBarActivity implements T
      * Start the camera preview
      */
     private void startCameraPreview() {
-        try {
-            if (null != mCamera) {
+        if (mCamera != null) {
+            try {
                 mCamera.startPreview();
+            } catch (Exception ex) {
+                Log.w(LOG_TAG, "## startCameraPreview(): Exception Msg=" + ex.getMessage());
             }
-        } catch (Exception ex) {
-            Log.w(LOG_TAG, "## startCameraPreview(): Exception Msg=" + ex.getMessage());
+
+            startAutoFocus();
         }
     }
 
@@ -1381,8 +1413,7 @@ public class VectorMediaPickerActivity extends MXCActionBarActivity implements T
 
             initCameraSettings();
 
-            mCamera.startPreview();
-
+            startCameraPreview();
         } catch (Exception e) {
             if (null != mCamera) {
                 try {
@@ -1795,9 +1826,9 @@ public class VectorMediaPickerActivity extends MXCActionBarActivity implements T
 
         // images
         String[] imagesProjection = {
-            MediaStore.Images.ImageColumns._ID,
-            MediaStore.Images.ImageColumns.DATE_TAKEN,
-            MediaStore.Images.ImageColumns.MIME_TYPE
+                MediaStore.Images.ImageColumns._ID,
+                MediaStore.Images.ImageColumns.DATE_TAKEN,
+                MediaStore.Images.ImageColumns.MIME_TYPE
         };
         Cursor imagesThumbnailsCursor = null;
 
@@ -1858,9 +1889,9 @@ public class VectorMediaPickerActivity extends MXCActionBarActivity implements T
 
             // videos
             String[] videosProjection = {
-                MediaStore.Video.VideoColumns._ID,
-                MediaStore.Video.VideoColumns.DATE_TAKEN,
-                MediaStore.Video.VideoColumns.MIME_TYPE
+                    MediaStore.Video.VideoColumns._ID,
+                    MediaStore.Video.VideoColumns.DATE_TAKEN,
+                    MediaStore.Video.VideoColumns.MIME_TYPE
             };
             Cursor videoThumbnailsCursor = null;
 
@@ -2183,11 +2214,10 @@ public class VectorMediaPickerActivity extends MXCActionBarActivity implements T
     }
 
     /**
-     *  Create bitmap of mImagePreviewImageView.
-     *  Save it as JEPG format with name: "preview_edit_" + date of creation.
-     *  
-     *  @return {@link Uri}of saved image.
+     * Create bitmap of mImagePreviewImageView.
+     * Save it as JEPG format with name: "preview_edit_" + date of creation.
      *
+     * @return {@link Uri}of saved image.
      */
     private Uri getPreviewImageFileUri() {
         ByteArrayOutputStream bytes = new ByteArrayOutputStream();
@@ -2197,7 +2227,7 @@ public class VectorMediaPickerActivity extends MXCActionBarActivity implements T
         mImagePreviewImageView.draw(c);
         mImagePreviewImageView.invalidate();
         bitmap.compress(Bitmap.CompressFormat.JPEG, AVATAR_COMPRESSION_LEVEL, bytes);
-        
+
         String fileName = "preview_edit_" + new SimpleDateFormat("yyyy-MM-dd_hhmmss").format(new Date()) + ".jpg";
         File file;
 
