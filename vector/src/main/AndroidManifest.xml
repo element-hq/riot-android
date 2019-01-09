@@ -118,11 +118,11 @@
     <application
         android:name=".VectorApp"
         android:allowBackup="false"
-        android:icon="@drawable/logo"
+        android:icon="@mipmap/ic_launcher"
         android:label="@string/riot_app_name"
         android:largeHeap="true"
-        android:logo="@drawable/logo"
         android:resizeableActivity="true"
+        android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme.Light"
         tools:replace="allowBackup,label">
