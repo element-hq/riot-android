@@ -37,6 +37,9 @@ import android.text.TextUtils;
 import android.text.style.StyleSpan;
 import android.widget.Toast;
 
+import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
+
 import org.matrix.androidsdk.MXSession;
 import org.matrix.androidsdk.data.Room;
 import org.matrix.androidsdk.data.RoomState;
@@ -949,15 +952,23 @@ public class EventStreamService extends Service {
         }
 
         String callId = null;
+        boolean isVideo = false;
 
         try {
             callId = event.getContentAsJsonObject().get("call_id").getAsString();
+
+            // Check if it is a video call
+            JsonObject offer = event.getContentAsJsonObject().get("offer").getAsJsonObject();
+            JsonElement sdp = offer.get("sdp");
+            String sdpValue = sdp.getAsString();
+
+            isVideo = sdpValue.contains("m=video");
         } catch (Exception e) {
             Log.e(LOG_TAG, "prepareNotification : getContentAsJsonObject " + e.getMessage(), e);
         }
 
         if (!TextUtils.isEmpty(callId)) {
-            displayIncomingCallNotification(session, room, event, callId, bingRule);
+            displayIncomingCallNotification(session, isVideo, room, event, callId, bingRule);
         }
     }
 
@@ -1588,12 +1599,13 @@ public class EventStreamService extends Service {
      * Display a permanent notification when there is an incoming call.
      *
      * @param session  the session
+     * @param isVideo  true if this is a video call, false for voice call
      * @param room     the room
      * @param event    the event
      * @param callId   the callId
      * @param bingRule the bing rule.
      */
-    public void displayIncomingCallNotification(MXSession session, Room room, Event event, String callId, BingRule bingRule) {
+    public void displayIncomingCallNotification(MXSession session, boolean isVideo, Room room, Event event, String callId, BingRule bingRule) {
         Log.d(LOG_TAG, "displayIncomingCallNotification : " + callId + " in " + room.getRoomId());
 
         // the incoming call in progress is already displayed
@@ -1607,6 +1619,7 @@ public class EventStreamService extends Service {
             Log.d(LOG_TAG, "displayIncomingCallNotification : display the dedicated notification");
             Notification notification = NotificationUtils.INSTANCE.buildIncomingCallNotification(
                     EventStreamService.this,
+                    isVideo,
                     RoomsNotifications.getRoomName(getApplicationContext(), session, room, event),
                     session.getMyUserId(),
                     callId);
@@ -1630,12 +1643,18 @@ public class EventStreamService extends Service {
      * Display a call in progress notification.
      *
      * @param session the session
+     * @param isVideo true if this is a video call, false for voice call
+     * @param room    the room
      * @param callId  the callId
      */
-    public void displayCallInProgressNotification(MXSession session, Room room, String callId) {
+    public void displayCallInProgressNotification(MXSession session, boolean isVideo, Room room, String callId) {
         if (null != callId) {
             Notification notification = NotificationUtils.INSTANCE.buildPendingCallNotification(getApplicationContext(),
-                    room.getRoomDisplayName(this), room.getRoomId(), session.getCredentials().userId, callId);
+                    isVideo,
+                    room.getRoomDisplayName(this),
+                    room.getRoomId(),
+                    session.getCredentials().userId,
+                    callId);
             setForegroundNotificationState(ForegroundNotificationState.CALL_IN_PROGRESS, notification);
             mCallIdInProgress = callId;
         }

@@ -235,19 +235,26 @@ object NotificationUtils {
      * This notification starts the VectorHomeActivity which is in charge of centralizing the incoming call flow.
      *
      * @param context  the context.
+     * @param isVideo  true if this is a video call, false for voice call
      * @param roomName the room name in which the call is pending.
      * @param matrixId the matrix id
      * @param callId   the call id.
      * @return the call notification.
      */
     @SuppressLint("NewApi")
-    fun buildIncomingCallNotification(context: Context, roomName: String, matrixId: String, callId: String): Notification {
+    fun buildIncomingCallNotification(context: Context, isVideo: Boolean, roomName: String, matrixId: String, callId: String): Notification {
         createNotificationChannels(context)
 
         val builder = NotificationCompat.Builder(context, CALL_NOTIFICATION_CHANNEL_ID)
                 .setWhen(System.currentTimeMillis())
                 .setContentTitle(ensureTitleNotEmpty(context, roomName))
-                .setContentText(context.getString(R.string.incoming_call))
+                .apply {
+                    if (isVideo) {
+                        setContentText(context.getString(R.string.incoming_video_call))
+                    } else {
+                        setContentText(context.getString(R.string.incoming_voice_call))
+                    }
+                }
                 .setSmallIcon(R.drawable.incoming_call_notification_transparent)
                 .setLights(Color.GREEN, 500, 500)
 
@@ -283,6 +290,7 @@ object NotificationUtils {
      * Build a pending call notification
      *
      * @param context  the context.
+     * @param isVideo  true if this is a video call, false for voice call
      * @param roomName the room name in which the call is pending.
      * @param roomId   the room Id
      * @param matrixId the matrix id
@@ -290,13 +298,19 @@ object NotificationUtils {
      * @return the call notification.
      */
     @SuppressLint("NewApi")
-    fun buildPendingCallNotification(context: Context, roomName: String, roomId: String, matrixId: String, callId: String): Notification {
+    fun buildPendingCallNotification(context: Context, isVideo: Boolean, roomName: String, roomId: String, matrixId: String, callId: String): Notification {
         createNotificationChannels(context)
 
         val builder = NotificationCompat.Builder(context, CALL_NOTIFICATION_CHANNEL_ID)
                 .setWhen(System.currentTimeMillis())
                 .setContentTitle(ensureTitleNotEmpty(context, roomName))
-                .setContentText(context.getString(R.string.call_in_progress))
+                .apply {
+                    if (isVideo) {
+                        setContentText(context.getString(R.string.call_in_progress))
+                    } else {
+                        setContentText(context.getString(R.string.video_call_in_progress))
+                    }
+                }
                 .setSmallIcon(R.drawable.incoming_call_notification_transparent)
 
         // Display the pending call notification on the lock screen

@@ -9,6 +9,7 @@ Features:
 
 Improvements:
  - Support Split-screen mode (#1832)
+ - Better wording in notification for video call (#1421)
 
 Other changes:
  - Restore the crash report dialog after a crash
