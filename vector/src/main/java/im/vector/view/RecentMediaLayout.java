@@ -30,7 +30,6 @@ public class RecentMediaLayout extends RelativeLayout {
     private ImageView mThumbnailView;
     private ImageView mTypeView;
     private View mSelectedItemView;
-    private ImageView mGifLogoImageView;
 
     public RecentMediaLayout(Context context) {
         super(context);
@@ -47,15 +46,12 @@ public class RecentMediaLayout extends RelativeLayout {
         init();
     }
 
-
     private void init() {
-        inflate(getContext(), R.layout.recent_media, this);
+        inflate(getContext(), R.layout.layout_media_thumbnail, this);
 
         mThumbnailView = findViewById(R.id.media_thumbnail_view);
         mTypeView = findViewById(R.id.media_type_view);
-        mGifLogoImageView = findViewById(R.id.media_gif_type_view);
         mSelectedItemView = findViewById(R.id.media_selected_mask_view);
-        mSelectedItemView.setVisibility(View.GONE);
     }
 
     /**
@@ -82,29 +78,21 @@ public class RecentMediaLayout extends RelativeLayout {
         mThumbnailView.setImageResource(aThumbnailResource);
     }
 
-    public void setThumbnailScaleType(ImageView.ScaleType aScaleType) {
-        mThumbnailView.setScaleType(aScaleType);
-    }
-
     /**
-     * Update the media type view
+     * Enable the display of the video thumbnail
      *
-     * @param isVideo true to display the view type thumbnail
+     * @param isVideo true to display video thumbnail
      */
-    public void setIsVideo(boolean isVideo) {
+    public void setVideoType(boolean isVideo) {
         mTypeView.setImageResource(isVideo ? R.drawable.ic_material_movie : R.drawable.ic_material_photo);
     }
 
-    public void enableMediaTypeLogoImage(Boolean aIsTypeDisplayed) {
-        mTypeView.setVisibility(aIsTypeDisplayed ? View.VISIBLE : View.GONE);
-    }
-
     /**
-     * Enable the display of the gif logo
+     * Enable the display of the gif thumbnail
      *
-     * @param aIsGifImage true to display the logo, false otherwise
+     * @param isGif true to display gif thumbnail
      */
-    public void enableGifLogoImage(boolean aIsGifImage) {
-        mGifLogoImageView.setVisibility(aIsGifImage ? View.VISIBLE : View.GONE);
+    public void setGifType(boolean isGif) {
+        mTypeView.setImageResource(isGif ? R.drawable.filetype_gif : R.drawable.ic_material_photo);
     }
 }

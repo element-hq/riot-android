@@ -8,13 +8,17 @@ Features:
  -
 
 Improvements:
- -
+ - Support Split-screen mode (#1832)
+ - Enable auto focus when taking picture with the camera (#2831)
+ - Better wording in notification for video call (#1421)
+ - Improve widget banner (#2129)
 
 Other changes:
- -
+ - Restore the crash report dialog after a crash
 
 Bugfix:
- - Improve widget banner (#2129)
+ - Fix crash when taking picture for user avatar on old device (#2818)
+ - Fix crash when adding background to image (#2828)
 
 Translations:
  -
@@ -83,6 +87,7 @@ Features:
  - Add RTL support (#2376, #2271)
 
 Improvements:
+ - improve UI for VectorMediaPickerActivity and InviteMembersActivity (#2610)
  - Ability to crop profile picture before setting (#2598)
  - Add a setting of the room's info area visibility.
 

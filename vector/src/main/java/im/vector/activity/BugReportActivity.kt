@@ -192,6 +192,13 @@ class BugReportActivity : MXCActionBarActivity() {
         mScreenShotPreview.isVisible = mIncludeScreenShotButton.isChecked && BugReporter.getScreenshot() != null
     }
 
+    override fun onBackPressed() {
+        // Ensure there is no crash status remaining, which will be sent later on by mistake
+        BugReporter.deleteCrashFile(this)
+
+        super.onBackPressed()
+    }
+
     /* ==========================================================================================
      * Companion
      * ========================================================================================== */

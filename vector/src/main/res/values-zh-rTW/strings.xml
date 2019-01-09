@@ -288,7 +288,7 @@
 
 是否允許 Riot 存取聯絡人？</string>
 
-    <string name="permissions_action_not_performed_missing_permissions">抱歉.. 由於缺少權限，動作沒被執行</string>
+    <string name="permissions_action_not_performed_missing_permissions">抱歉。由於缺少權限，所以無法執行動作</string>
 
     <string name="media_slider_saved">已儲存</string>
     <string name="media_slider_saved_message">儲存到下載?</string>
@@ -475,7 +475,7 @@
     <plurals name="directory_search_rooms_for">
         <item quantity="other">有 %1$d 個聊天室匹配 “%2$s”</item>
     </plurals>
-    <string name="directory_searching_title">搜尋目錄..</string>
+    <string name="directory_searching_title">正在搜尋目錄……</string>
 
     <string name="room_settings_all_messages_noisy">所有訊息（通知並震動）</string>
     <string name="room_settings_all_messages">所有訊息</string>

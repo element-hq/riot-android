@@ -35,7 +35,7 @@ import org.matrix.androidsdk.util.JsonUtils;
 import java.util.ArrayList;
 import java.util.List;
 
-import im.vector.activity.VectorMediasViewerActivity;
+import im.vector.activity.VectorMediaViewerActivity;
 import im.vector.adapters.VectorMessagesAdapter;
 import im.vector.adapters.VectorSearchFilesListAdapter;
 import im.vector.util.SlidableMediaInfo;
@@ -84,13 +84,13 @@ public class VectorSearchRoomsFilesListFragment extends VectorSearchMessagesList
                     int listPosition = getMediaMessagePosition(mediaMessagesList, message);
 
                     if (listPosition >= 0) {
-                        Intent viewImageIntent = new Intent(getActivity(), VectorMediasViewerActivity.class);
+                        Intent viewImageIntent = new Intent(getActivity(), VectorMediaViewerActivity.class);
 
-                        viewImageIntent.putExtra(VectorMediasViewerActivity.EXTRA_MATRIX_ID, mSession.getCredentials().userId);
-                        viewImageIntent.putExtra(VectorMediasViewerActivity.KEY_THUMBNAIL_WIDTH, mAdapter.getMaxThumbnailWidth());
-                        viewImageIntent.putExtra(VectorMediasViewerActivity.KEY_THUMBNAIL_HEIGHT, mAdapter.getMaxThumbnailHeight());
-                        viewImageIntent.putExtra(VectorMediasViewerActivity.KEY_INFO_LIST, (ArrayList) mediaMessagesList);
-                        viewImageIntent.putExtra(VectorMediasViewerActivity.KEY_INFO_LIST_INDEX, listPosition);
+                        viewImageIntent.putExtra(VectorMediaViewerActivity.EXTRA_MATRIX_ID, mSession.getCredentials().userId);
+                        viewImageIntent.putExtra(VectorMediaViewerActivity.KEY_THUMBNAIL_WIDTH, mAdapter.getMaxThumbnailWidth());
+                        viewImageIntent.putExtra(VectorMediaViewerActivity.KEY_THUMBNAIL_HEIGHT, mAdapter.getMaxThumbnailHeight());
+                        viewImageIntent.putExtra(VectorMediaViewerActivity.KEY_INFO_LIST, (ArrayList) mediaMessagesList);
+                        viewImageIntent.putExtra(VectorMediaViewerActivity.KEY_INFO_LIST_INDEX, listPosition);
 
                         getActivity().startActivity(viewImageIntent);
                     }

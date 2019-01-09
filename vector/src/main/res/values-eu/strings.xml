@@ -396,7 +396,7 @@ Kontuan izan ekintza honek aplikazioa berrabiaraziko duela eta denbora bat behar
     <string name="room_recents_join_room_prompt">Idatzi gelaren IDa edo ezizena</string>
 
     <string name="directory_search_results_title">Arakatu direktorioa</string>
-    <string name="directory_searching_title">Direktorioa bilatzen..</string>
+    <string name="directory_searching_title">Direktorioa bilatzen…</string>
 
     <string name="room_settings_favourite">Gogokoa</string>
     <string name="room_settings_de_prioritize">Jaitsi lehentasuna</string>
