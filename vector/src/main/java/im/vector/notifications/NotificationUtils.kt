@@ -48,10 +48,12 @@ import im.vector.receiver.DismissNotificationReceiver
 import im.vector.util.PreferencesManager
 import im.vector.util.createSquareBitmap
 import im.vector.util.startNotificationChannelSettingsIntent
-import im.vector.util.supportNotificationChannels
 import org.matrix.androidsdk.rest.model.bingrules.BingRule
 import org.matrix.androidsdk.util.Log
 import java.util.*
+
+
+fun supportNotificationChannels() = (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O)
 
 /**
  * Util class for creating notifications.

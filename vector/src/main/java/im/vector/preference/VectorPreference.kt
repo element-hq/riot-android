@@ -20,6 +20,7 @@ import android.animation.Animator
 import android.animation.ArgbEvaluator
 import android.animation.ValueAnimator
 import android.content.Context
+import android.graphics.Color
 import android.graphics.Typeface
 import android.support.v7.preference.Preference
 import android.support.v7.preference.PreferenceViewHolder
@@ -102,7 +103,7 @@ open class VectorPreference : Preference {
             //cancel existing animation (find a way to resume if happens during anim?)
             currentHighlightAnimator?.cancel()
             if (isHighlighted) {
-                val colorFrom = 0
+                val colorFrom = Color.TRANSPARENT
                 val colorTo = ThemeUtils.getColor(itemView.context, R.attr.colorAccent)
                 currentHighlightAnimator = ValueAnimator.ofObject(ArgbEvaluator(), colorFrom, colorTo).apply {
                     duration = 250 // milliseconds
@@ -125,7 +126,7 @@ open class VectorPreference : Preference {
                     start()
                 }
             } else {
-                itemView.setBackgroundColor(0)
+                itemView.setBackgroundColor(Color.TRANSPARENT)
             }
 
         } catch (e: Exception) {

@@ -49,7 +49,11 @@ class TestFirebaseToken(val fragment: Fragment) : TroubleshootTest(R.string.sett
                                         override fun doFix() {
                                             val intent = Intent(Settings.ACTION_ADD_ACCOUNT)
                                             intent.putExtra(Settings.EXTRA_ACCOUNT_TYPES, arrayOf("com.google"));
-                                            fragment.startActivityForResult(intent, NotificationTroubleshootTestManager.REQ_CODE_FIX)
+                                            try {
+                                                fragment.startActivityForResult(intent, NotificationTroubleshootTestManager.REQ_CODE_FIX)
+                                            } catch (e: Throwable) {
+                                                Log.e(TestFirebaseToken::class.java.name, "Failed to start add account activity", e)
+                                            }
                                         }
                                     }
                                 } else {

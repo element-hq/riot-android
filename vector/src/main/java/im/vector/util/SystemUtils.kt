@@ -29,6 +29,7 @@ import android.provider.Settings
 import android.support.v4.app.Fragment
 import androidx.core.widget.toast
 import im.vector.R
+import im.vector.notifications.supportNotificationChannels
 import im.vector.settings.VectorLocale
 import org.matrix.androidsdk.util.Log
 import java.util.*
@@ -124,8 +125,6 @@ fun startNotificationSettingsIntent(fragment: Fragment, requestCode: Int) {
     }
     fragment.startActivityForResult(intent, requestCode)
 }
-
-fun supportNotificationChannels() = (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O)
 
 /**
  * Shows notification system settings for the given channel id.
