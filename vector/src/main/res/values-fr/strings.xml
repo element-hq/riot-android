@@ -166,7 +166,7 @@ Cliquez sur exporter pour les sauvegarder avant de vous déconnecter.</string>
     <string name="incoming_call">Appel entrant</string>
     <string name="incoming_video_call">Appel vidéo entrant</string>
     <string name="incoming_voice_call">Appel vocal entrant</string>
-    <string name="call_in_progress">Appel en cours</string>
+    <string name="call_in_progress">Appel en cours…</string>
 
     <string name="call_error_ice_failed">Échec de la connexion</string>
     <string name="call_error_camera_init_failed">Impossible d\'initialiser l\'appareil photo</string>
@@ -438,7 +438,7 @@ Cliquez sur exporter pour les sauvegarder avant de vous déconnecter.</string>
     <string name="send_bug_report_description">Veuillez décrire l\'erreur. Qu\'avez-vous fait ? Quel était le comportement attendu ? Que s\'est-il réellement passé ?</string>
     <string name="send_bug_report_logs_description">Afin de diagnostiquer les problèmes, les journaux de ce client seront envoyés avec ce rapport d\'erreur. Ce rapport d\'erreur, y compris les journaux et la capture d\'écran, ne seront pas visibles publiquement. Si vous préférez envoyer le texte ci-dessus uniquement, veuillez décochez :</string>
     <string name="send_bug_report_alert_message">Vous semblez secouer le téléphone avec frustration. Souhaitez-vous ouvrir l\'écran pour soumettre un rapport d\'erreur ?</string>
-    <string name="send_bug_report_app_crashed">L\'application s\'est arrêtée anormalement la dernière fois. Souhaitez-vous soumettre un rapport d’erreur ?</string>
+    <string name="send_bug_report_app_crashed">L\'application s\'est arrêtée anormalement la dernière fois. Souhaitez-vous ouvrir l\'écran de rapport d’anomalie ?</string>
 
     <string name="send_bug_report_sent">Le rapport d\'erreur a bien été envoyé</string>
     <string name="send_bug_report_failed">L\'envoi du rapport d\'erreur a échoué (%s)</string>
@@ -702,7 +702,7 @@ Appareils inconnus :</string>
     <string name="event_formatter_widget_added">%1$s ajouté par %2$s</string>
     <string name="event_formatter_widget_removed">%1$s supprimé par %2$s</string>
     <string name="settings_labs_create_conference_with_jitsi">Créer des appels en téléconférence avec jitsi</string>
-    <string name="widget_delete_message_confirmation">Voulez-vous vraiment supprimer ce widget ?</string>
+    <string name="widget_delete_message_confirmation">Voulez-vous vraiment supprimer le widget de ce salon ?</string>
 
     <!-- Widget Integration Manager -->
     <string name="widget_integration_unable_to_create">Impossible de créer le widget.</string>
@@ -1207,4 +1207,9 @@ Pour les développeurs :
 
 Découvrez une collaboration libre et vraiment efficace avec Riot.im !</string>
 
-</resources>
+<string name="video_call_in_progress">Appel vidéo en cours…</string>
+
+    <string name="store_whats_new">Nous sommes constamment en train de modifier et d\'améliorer Riot.im.
+Le journal des modifications peut être consulté ici : %1$s.
+Afin d\'être sûr de ne rien manquer, continuez à installer les mises à jour.</string>
+    </resources>
