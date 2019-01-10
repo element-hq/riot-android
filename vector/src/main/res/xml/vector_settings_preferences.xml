@@ -197,17 +197,17 @@
             android:title="@string/settings_notification_privacy" />
 
         <im.vector.preference.VectorPreference
-            android:key="SETTINGS_NOTIFICATION_TROUBLESHOOT_PREFERENCE_KEY"
-            android:title="@string/settings_notification_troubleshoot"
-            app:fragment="im.vector.fragments.VectorSettingsNotificationsTroubleshootFragment" />
-
-        <im.vector.preference.VectorPreference
             android:dependency="SETTINGS_ENABLE_THIS_DEVICE_PREFERENCE_KEY"
             android:key="SETTINGS_NOTIFICATION_ADVANCED_PREFERENCE_KEY"
             android:persistent="false"
             android:summary="@string/settings_notification_advanced_summary"
             android:title="@string/settings_notification_advanced"
             app:fragment="im.vector.fragments.VectorSettingsNotificationsAdvancedFragment" />
+
+        <im.vector.preference.VectorPreference
+            android:key="SETTINGS_NOTIFICATION_TROUBLESHOOT_PREFERENCE_KEY"
+            android:title="@string/settings_notification_troubleshoot"
+            app:fragment="im.vector.fragments.VectorSettingsNotificationsTroubleshootFragment" />
 
     </PreferenceCategory>
 
