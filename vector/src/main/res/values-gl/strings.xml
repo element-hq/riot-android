@@ -499,7 +499,6 @@ Pode engadir a dirección de correo na sección de configuración de perfil.</st
     <string name="unrecognized_command">Comandos que non se recoñecen: %s</string>
 
     <string name="notification_off">Off</string>
-    <string name="notification_on">On</string>
     <string name="notification_noisy">Ruidoso</string>
 
     <string name="encrypted_message">Mensaxe cifrada</string>

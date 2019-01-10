@@ -419,7 +419,6 @@
 
     <!-- notification statuses -->
     <string name="notification_off">Slökkt</string>
-    <string name="notification_on">Kveikt</string>
     <string name="notification_noisy">Hávært</string>
 
     <string name="encrypted_message">Dulrituð skilaboð</string>

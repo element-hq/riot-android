@@ -740,7 +740,6 @@ Ismeretlen eszközök:</string>
 
     <!-- notification statuses -->
     <string name="notification_off">Ki</string>
-    <string name="notification_on">Be</string>
     <string name="notification_noisy">Hangos</string>
 
     <string name="encrypted_message">Titkosított üzenet</string>

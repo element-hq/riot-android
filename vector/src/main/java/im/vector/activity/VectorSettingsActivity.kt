@@ -23,6 +23,8 @@ import android.support.v7.preference.Preference
 import android.support.v7.preference.PreferenceFragmentCompat
 import im.vector.Matrix
 import im.vector.R
+import im.vector.fragments.VectorSettingsAdvancedNotificationPreferenceFragment
+import im.vector.fragments.VectorSettingsFragmentInteractionListener
 import im.vector.fragments.VectorSettingsNotificationsTroubleshootFragment
 import im.vector.fragments.VectorSettingsPreferencesFragment
 import im.vector.util.PreferencesManager
@@ -32,14 +34,16 @@ import im.vector.util.PreferencesManager
  */
 class VectorSettingsActivity : MXCActionBarActivity(),
         PreferenceFragmentCompat.OnPreferenceStartFragmentCallback,
-        FragmentManager.OnBackStackChangedListener {
-
+        FragmentManager.OnBackStackChangedListener,
+        VectorSettingsFragmentInteractionListener {
 
     private lateinit var vectorSettingsPreferencesFragment: VectorSettingsPreferencesFragment
 
     override fun getLayoutRes() = R.layout.activity_vector_settings
 
     override fun getTitleRes() = R.string.title_activity_settings
+
+    var keyToHighlight : String? = null
 
     override fun initUiAndData() {
         configureToolbar()
@@ -97,6 +101,8 @@ class VectorSettingsActivity : MXCActionBarActivity(),
 
         if (PreferencesManager.SETTINGS_NOTIFICATION_TROUBLESHOOT_PREFERENCE_KEY == pref?.key) {
             oFragment = VectorSettingsNotificationsTroubleshootFragment.newInstance(session.myUserId)
+        } else if (PreferencesManager.SETTINGS_NOTIFICATION_ADVANCED_PREFERENCE_KEY == pref?.key) {
+            oFragment = VectorSettingsAdvancedNotificationPreferenceFragment.newInstance(session.myUserId)
         }
 
         if (oFragment != null) {
@@ -111,6 +117,15 @@ class VectorSettingsActivity : MXCActionBarActivity(),
             return true
         }
         return false
+    }
+
+
+    override fun requestHighlightPreferenceKeyOnResume(key: String?) {
+        keyToHighlight = key
+    }
+
+    override fun requestedKeyToHighlight(): String? {
+        return keyToHighlight
     }
 
     companion object {

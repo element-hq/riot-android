@@ -16,15 +16,22 @@
 
 package im.vector.preference
 
+import android.animation.Animator
+import android.animation.ArgbEvaluator
+import android.animation.ValueAnimator
 import android.content.Context
+import android.graphics.Color
 import android.graphics.Typeface
 import android.support.v7.preference.Preference
 import android.support.v7.preference.PreferenceViewHolder
 import android.util.AttributeSet
 import android.view.View
 import android.widget.TextView
-
+import androidx.core.animation.doOnEnd
+import im.vector.R
+import im.vector.ui.themes.ThemeUtils
 import org.matrix.androidsdk.util.Log
+
 
 /**
  * create a Preference with a dedicated click/long click methods.
@@ -67,13 +74,23 @@ open class VectorPreference : Preference {
 
     constructor(context: Context, attrs: AttributeSet, defStyle: Int) : super(context, attrs, defStyle)
 
+
+    var isHighlighted = false
+        set(value) {
+            field = value
+            notifyChanged()
+        }
+
+    var currentHighlightAnimator: Animator? = null
+
     override fun onBindViewHolder(holder: PreferenceViewHolder) {
-        addClickListeners(holder.itemView)
+        val itemView = holder.itemView
+        addClickListeners(itemView)
 
         // display the title in multi-line to avoid ellipsis.
         try {
-            val title = holder.itemView.findViewById<TextView>(android.R.id.title)
-            val summary = holder.itemView.findViewById<TextView>(android.R.id.summary)
+            val title = itemView.findViewById<TextView>(android.R.id.title)
+            val summary = itemView.findViewById<TextView>(android.R.id.summary)
             if (title != null) {
                 title.setSingleLine(false)
                 title.setTypeface(null, mTypeface)
@@ -81,6 +98,35 @@ open class VectorPreference : Preference {
 
             if (title !== summary) {
                 summary.setTypeface(null, mTypeface)
+            }
+
+            //cancel existing animation (find a way to resume if happens during anim?)
+            currentHighlightAnimator?.cancel()
+            if (isHighlighted) {
+                val colorFrom = Color.TRANSPARENT
+                val colorTo = ThemeUtils.getColor(itemView.context, R.attr.colorAccent)
+                currentHighlightAnimator = ValueAnimator.ofObject(ArgbEvaluator(), colorFrom, colorTo).apply {
+                    duration = 250 // milliseconds
+                    addUpdateListener { animator ->
+                        itemView?.setBackgroundColor(animator.animatedValue as Int)
+                    }
+                    doOnEnd {
+                        currentHighlightAnimator = ValueAnimator.ofObject(ArgbEvaluator(), colorTo, colorFrom).apply {
+                            duration = 250 // milliseconds
+                            addUpdateListener { animator ->
+                                itemView?.setBackgroundColor(animator.animatedValue as Int)
+                            }
+                            doOnEnd {
+                                isHighlighted = false
+                            }
+                            start()
+                        }
+                    }
+                    startDelay = 200
+                    start()
+                }
+            } else {
+                itemView.setBackgroundColor(Color.TRANSPARENT)
             }
 
         } catch (e: Exception) {

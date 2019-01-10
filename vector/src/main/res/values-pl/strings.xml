@@ -544,7 +544,6 @@ Zauważ, że ta czynność spowoduje ponowne uruchomienie aplikacji i może to t
 
     <!-- groups creation -->
     <string name="create">Utwórz</string>
-    <string name="notification_on">On</string>
     <string name="notification_off">Off</string>
     <string name="conference_call_warning_title">Uwaga!</string>
     <string name="notification_sync_in_progress">W trakcie synchronizacji</string>

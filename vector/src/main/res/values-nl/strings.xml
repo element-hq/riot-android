@@ -775,7 +775,6 @@ Je kan het nu, of later, doen vanuit de programma-instellingen.</string>
 
     <!-- notification statuses -->
     <string name="notification_off">Uit</string>
-    <string name="notification_on">Aan</string>
     <string name="notification_noisy">Luidruchtig</string>
 
     <string name="encrypted_message">Versleuteld bericht</string>

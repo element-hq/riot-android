@@ -778,7 +778,6 @@ En un futur aquest procés de verificació serà més sofisticat.</string>
 
     <!-- notification statuses -->
     <string name="notification_off">Apagat</string>
-    <string name="notification_on">Encès</string>
     <string name="notification_noisy">Sorrollós</string>
 
     <string name="encrypted_message">Missatge encriptat</string>

@@ -97,7 +97,7 @@
     <!-- Notification status for bing rules -->
     <string-array name="notification_status">
         <item>@string/notification_off</item>
-        <item>@string/notification_on</item>
+        <item>@string/notification_silent</item>
         <item>@string/notification_noisy</item>
     </string-array>
 

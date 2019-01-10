@@ -648,7 +648,6 @@ Perhatikan bahwa tindakan ini akan memulai ulang aplikasi dan mungkin cukup mema
     <string name="command_description_clear_scalar_token">Untuk memperbaiki kepengurusan Apps Matrix</string>
 
     <string name="notification_off">Mati</string>
-    <string name="notification_on">Nyala</string>
     <string name="notification_noisy">Berisik</string>
 
     <string name="encrypted_message">Pesan terenkripsi</string>

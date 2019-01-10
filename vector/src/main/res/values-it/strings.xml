@@ -874,7 +874,6 @@ In futuro il processo di verifica sarà più sofisticato.</string>
 
     <!-- notification statuses -->
     <string name="notification_off">Spento</string>
-    <string name="notification_on">Acceso</string>
     <string name="notification_noisy">Rumoroso</string>
 
     <string name="create">Crea</string>
