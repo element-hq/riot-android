@@ -118,6 +118,7 @@
     <application
         android:name=".VectorApp"
         android:allowBackup="false"
+        android:description="@string/store_short_description"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/riot_app_name"
         android:largeHeap="true"
