@@ -136,11 +136,11 @@ fun startNotificationChannelSettingsIntent(fragment: Fragment, channelID: String
     fragment.startActivity(intent)
 }
 
-fun startAddGoogleAccountIntent(fragment: Fragment) {
+fun startAddGoogleAccountIntent(fragment: Fragment, requestCode: Int) {
     try {
         val intent = Intent(Settings.ACTION_ADD_ACCOUNT)
         intent.putExtra(Settings.EXTRA_ACCOUNT_TYPES, arrayOf("com.google"))
-        fragment.startActivityForResult(intent, NotificationTroubleshootTestManager.REQ_CODE_FIX)
+        fragment.startActivityForResult(intent, requestCode)
     } catch (activityNotFoundException: ActivityNotFoundException) {
         fragment.activity?.toast(R.string.error_no_external_application_found)
     }

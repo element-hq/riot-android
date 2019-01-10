@@ -18,6 +18,7 @@ package im.vector.push.fcm.troubleshoot
 import android.support.v4.app.Fragment
 import com.google.firebase.iid.FirebaseInstanceId
 import im.vector.R
+import im.vector.fragments.troubleshoot.NotificationTroubleshootTestManager
 import im.vector.fragments.troubleshoot.TroubleshootTest
 import im.vector.util.startAddGoogleAccountIntent
 import org.matrix.androidsdk.util.Log
@@ -45,7 +46,7 @@ class TestFirebaseToken(val fragment: Fragment) : TroubleshootTest(R.string.sett
                                     description = fragment.getString(R.string.settings_troubleshoot_test_fcm_failed_account_missing, errorMsg)
                                     quickFix = object : TroubleshootQuickFix(R.string.settings_troubleshoot_test_fcm_failed_account_missing_quick_fix) {
                                         override fun doFix() {
-                                            startAddGoogleAccountIntent(fragment)
+                                            startAddGoogleAccountIntent(fragment, NotificationTroubleshootTestManager.REQ_CODE_FIX)
                                         }
                                     }
                                 } else {
