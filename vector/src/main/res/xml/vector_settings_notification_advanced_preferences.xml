@@ -38,11 +38,13 @@
 
     <im.vector.preference.VectorPreferenceDivider />
 
+    <!-- For API < 26 -->
     <im.vector.preference.VectorPreference
         android:dialogTitle="@string/settings_notification_ringtone"
         android:key="SETTINGS_NOTIFICATION_RINGTONE_SELECTION_PREFERENCE_KEY"
         android:title="@string/settings_notification_ringtone" />
 
+    <!-- For API >= 26 -->
     <im.vector.preference.VectorPreference
         android:key="SETTINGS_SYSTEM_NOISY_NOTIFICATION_PREFERENCE_KEY"
         android:persistent="false"
