@@ -125,13 +125,13 @@ class VectorSettingsAdvancedNotificationPreferenceFragment : PreferenceFragmentC
             }
         }
 
-        for (resourceText in mPrefKeyToBingRuleId.keys) {
-            val preference = findPreference(resourceText)
+        for (preferenceKey in mPrefKeyToBingRuleId.keys) {
+            val preference = findPreference(preferenceKey)
             if (null != preference) {
                 if (preference is BingRulePreference) {
                     //preference.isEnabled = null != rules && isConnected && pushManager.areDeviceNotificationsAllowed()
                     mSession.dataHandler.pushRules()?.let {
-                        preference.setBingRule(it.findDefaultRule(mPrefKeyToBingRuleId[resourceText]))
+                        preference.setBingRule(it.findDefaultRule(mPrefKeyToBingRuleId[preferenceKey]))
                     }
                     preference.onPreferenceChangeListener = Preference.OnPreferenceChangeListener { _, newValue ->
                         val rule = preference.createRule(newValue as Int)

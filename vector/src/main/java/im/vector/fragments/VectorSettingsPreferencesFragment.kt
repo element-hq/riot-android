@@ -397,8 +397,8 @@ class VectorSettingsPreferencesFragment : PreferenceFragmentCompat(), SharedPref
         }
         refreshNotificationPrivacy()
 
-        for (resourceText in mPrefKeyToBingRuleId.keys) {
-            val preference = findPreference(resourceText)
+        for (preferenceKey in mPrefKeyToBingRuleId.keys) {
+            val preference = findPreference(preferenceKey)
 
             if (null != preference) {
                 if (preference is SwitchPreference) {
@@ -978,19 +978,19 @@ class VectorSettingsPreferencesFragment : PreferenceFragmentCompat(), SharedPref
 
         val pushManager = Matrix.getInstance(appContext)!!.pushManager
 
-        for (resourceText in mPrefKeyToBingRuleId.keys) {
-            val preference = preferenceManager.findPreference(resourceText)
+        for (preferenceKey in mPrefKeyToBingRuleId.keys) {
+            val preference = preferenceManager.findPreference(preferenceKey)
 
             if (null != preference) {
                 if (preference is SwitchPreference) {
-                    if (resourceText == PreferencesManager.SETTINGS_ENABLE_THIS_DEVICE_PREFERENCE_KEY) {
+                    if (preferenceKey == PreferencesManager.SETTINGS_ENABLE_THIS_DEVICE_PREFERENCE_KEY) {
                         preference.isChecked = pushManager.areDeviceNotificationsAllowed()
-                    } else if (resourceText == PreferencesManager.SETTINGS_TURN_SCREEN_ON_PREFERENCE_KEY) {
+                    } else if (preferenceKey == PreferencesManager.SETTINGS_TURN_SCREEN_ON_PREFERENCE_KEY) {
                         preference.isChecked = pushManager.isScreenTurnedOn
                         preference.isEnabled = pushManager.areDeviceNotificationsAllowed()
                     } else {
                         preference.isEnabled = null != rules && isConnected
-                        preference.isChecked = preferences.getBoolean(resourceText, false)
+                        preference.isChecked = preferences.getBoolean(preferenceKey, false)
                     }
                 }
             }
@@ -1095,19 +1095,19 @@ class VectorSettingsPreferencesFragment : PreferenceFragmentCompat(), SharedPref
     /**
      * Update a push rule.
      */
-    private fun onPushRuleClick(fResourceText: String, newValue: Boolean) {
+    private fun onPushRuleClick(preferenceKey: String, newValue: Boolean) {
         val pushManager = Matrix.getInstance(activity)!!.pushManager
 
-        Log.d(LOG_TAG, "onPushRuleClick $fResourceText : set to $newValue")
+        Log.d(LOG_TAG, "onPushRuleClick $preferenceKey : set to $newValue")
 
-        if (fResourceText == PreferencesManager.SETTINGS_TURN_SCREEN_ON_PREFERENCE_KEY) {
+        if (preferenceKey == PreferencesManager.SETTINGS_TURN_SCREEN_ON_PREFERENCE_KEY) {
             if (pushManager.isScreenTurnedOn != newValue) {
                 pushManager.isScreenTurnedOn = newValue
             }
             return
         }
 
-        if (fResourceText == PreferencesManager.SETTINGS_ENABLE_THIS_DEVICE_PREFERENCE_KEY) {
+        if (preferenceKey == PreferencesManager.SETTINGS_ENABLE_THIS_DEVICE_PREFERENCE_KEY) {
             val isConnected = Matrix.getInstance(activity)!!.isConnected
             val isAllowed = pushManager.areDeviceNotificationsAllowed()
 
@@ -1164,7 +1164,7 @@ class VectorSettingsPreferencesFragment : PreferenceFragmentCompat(), SharedPref
             return
         }
 
-        val ruleId = mPrefKeyToBingRuleId[fResourceText]
+        val ruleId = mPrefKeyToBingRuleId[preferenceKey]
         val rule = mSession.dataHandler.pushRules()?.findDefaultRule(ruleId)
 
         // check if there is an update
@@ -1365,11 +1365,11 @@ class VectorSettingsPreferencesFragment : PreferenceFragmentCompat(), SharedPref
             putString(PreferencesManager.SETTINGS_VERSION_PREFERENCE_KEY, VectorUtils.getApplicationVersion(activity))
 
             mSession.dataHandler.pushRules()?.let {
-                for (resourceText in mPrefKeyToBingRuleId.keys) {
-                    val preference = findPreference(resourceText)
+                for (preferenceKey in mPrefKeyToBingRuleId.keys) {
+                    val preference = findPreference(preferenceKey)
 
                     if (null != preference && preference is SwitchPreference) {
-                        val ruleId = mPrefKeyToBingRuleId[resourceText]
+                        val ruleId = mPrefKeyToBingRuleId[preferenceKey]
 
                         val rule = it.findDefaultRule(ruleId)
                         var isEnabled = null != rule && rule.isEnabled
@@ -1392,7 +1392,7 @@ class VectorSettingsPreferencesFragment : PreferenceFragmentCompat(), SharedPref
                             }
                         }// check if the rule is only defined by don't notify
 
-                        putBoolean(resourceText, isEnabled)
+                        putBoolean(preferenceKey, isEnabled)
                     }
                 }
             }
