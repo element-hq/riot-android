@@ -256,14 +256,14 @@ class VectorSettingsPreferencesFragment : PreferenceFragmentCompat(), SharedPref
      * ========================================================================================== */
 
     override fun onCreatePreferences(savedInstanceState: Bundle?, rootKey: String?) {
-        val appContext = activity!!.applicationContext
+        val appContext = activity?.applicationContext
 
         // retrieve the arguments
-        val sessionArg = Matrix.getInstance(appContext).getSession(arguments!!.getString(ARG_MATRIX_ID))
+        val sessionArg = Matrix.getInstance(appContext).getSession(arguments?.getString(ARG_MATRIX_ID))
 
         // sanity checks
         if (null == sessionArg || !sessionArg.isAlive) {
-            activity!!.finish()
+            activity?.finish()
             return
         }
 
@@ -285,7 +285,7 @@ class VectorSettingsPreferencesFragment : PreferenceFragmentCompat(), SharedPref
         mDisplayNamePreference.let {
             it.summary = mSession.myUser.displayname
             it.onPreferenceChangeListener = Preference.OnPreferenceChangeListener { _, newValue ->
-                onDisplayNameClick(if (null == newValue) null else (newValue as String).trim())
+                onDisplayNameClick(newValue?.let { (it as String).trim() })
                 false
             }
         }
@@ -299,10 +299,12 @@ class VectorSettingsPreferencesFragment : PreferenceFragmentCompat(), SharedPref
         // Add Email
         (findPreference(ADD_EMAIL_PREFERENCE_KEY) as EditTextPreference).let {
             // It does not work on XML, do it here
-            it.icon = ThemeUtils.tintDrawable(activity!!,
-                    ContextCompat.getDrawable(activity!!, R.drawable.ic_add_black)!!, R.attr.vctr_settings_icon_tint_color)
+            it.icon = activity?.let {
+                ThemeUtils.tintDrawable(it,
+                        ContextCompat.getDrawable(it, R.drawable.ic_add_black)!!, R.attr.vctr_settings_icon_tint_color)
+            }
 
-            // Unfortunatly, this is not supported in lib v7
+            // Unfortunately, this is not supported in lib v7
             // it.editText.inputType = InputType.TYPE_CLASS_TEXT or InputType.TYPE_TEXT_VARIATION_EMAIL_ADDRESS
 
             it.onPreferenceChangeListener = Preference.OnPreferenceChangeListener { _, newValue ->
@@ -534,7 +536,7 @@ class VectorSettingsPreferencesFragment : PreferenceFragmentCompat(), SharedPref
                             .setNegativeButton(R.string.cancel) { _, _ ->
                                 useCryptoPref.isChecked = false
                             }
-                            .setOnCancelListener { _ ->
+                            .setOnCancelListener {
                                 useCryptoPref.isChecked = false
                             }
                             .show()
@@ -690,13 +692,17 @@ class VectorSettingsPreferencesFragment : PreferenceFragmentCompat(), SharedPref
         // preference to start the App info screen, to facilitate App permissions access
         findPreference(APP_INFO_LINK_PREFERENCE_KEY)
                 .onPreferenceClickListener = Preference.OnPreferenceClickListener {
-            if (null != activity) {
-                val intent = Intent()
-                intent.action = Settings.ACTION_APPLICATION_DETAILS_SETTINGS
-                intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
-                val uri = Uri.fromParts("package", appContext.packageName, null)
-                intent.data = uri
-                activity!!.applicationContext.startActivity(intent)
+
+            activity?.let {
+                val intent = Intent().apply {
+                    action = Settings.ACTION_APPLICATION_DETAILS_SETTINGS
+                    addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+
+                    val uri = appContext?.let { Uri.fromParts("package", it.packageName, null) }
+
+                    data = uri
+                }
+                it.applicationContext.startActivity(intent)
             }
 
             true
@@ -707,7 +713,9 @@ class VectorSettingsPreferencesFragment : PreferenceFragmentCompat(), SharedPref
             it.summary = VectorUtils.getApplicationVersion(appContext)
 
             it.setOnPreferenceClickListener {
-                copyToClipboard(appContext, VectorUtils.getApplicationVersion(appContext))
+                appContext?.let {
+                    copyToClipboard(it, VectorUtils.getApplicationVersion(it))
+                }
                 true
             }
         }
@@ -794,7 +802,7 @@ class VectorSettingsPreferencesFragment : PreferenceFragmentCompat(), SharedPref
 //                    }
 //                }
 //
-                val task = ClearCacheAsyncTask(
+                val task = ClearMediaCacheAsyncTask(
                         {
                             mSession.mediaCache.clear()
                             activity?.let { it -> Glide.get(it).clearDiskCache() }
@@ -867,9 +875,8 @@ class VectorSettingsPreferencesFragment : PreferenceFragmentCompat(), SharedPref
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         val view = super.onCreateView(inflater, container, savedInstanceState)
 
-        if (null != view) {
-            val listView = view.findViewById<View>(android.R.id.list)
-
+        view?.apply {
+            val listView = findViewById<View>(android.R.id.list)
             listView?.setPadding(0, 0, 0, 0)
         }
 
@@ -967,10 +974,8 @@ class VectorSettingsPreferencesFragment : PreferenceFragmentCompat(), SharedPref
                 mLoadingView = parent.findViewById(R.id.vector_settings_spinner_views)
                 parent = parent.parent as View
             }
-        }
-
-        if (null != mLoadingView) {
-            mLoadingView!!.visibility = View.VISIBLE
+        } else {
+            mLoadingView?.visibility = View.VISIBLE
         }
     }
 
@@ -978,8 +983,8 @@ class VectorSettingsPreferencesFragment : PreferenceFragmentCompat(), SharedPref
      * Hide the loading view.
      */
     private fun hideLoadingView() {
-        if (null != mLoadingView) {
-            mLoadingView!!.visibility = View.GONE
+        mLoadingView?.let {
+            it.visibility = View.GONE
         }
     }
 
@@ -989,7 +994,9 @@ class VectorSettingsPreferencesFragment : PreferenceFragmentCompat(), SharedPref
      * @param refresh true to refresh the display
      */
     private fun hideLoadingView(refresh: Boolean) {
-        mLoadingView!!.visibility = View.GONE
+        mLoadingView?.let {
+            it.visibility = View.GONE
+        }
 
         if (refresh) {
             refreshDisplay()
@@ -1034,14 +1041,17 @@ class VectorSettingsPreferencesFragment : PreferenceFragmentCompat(), SharedPref
                         preference.setBingRule(it.findDefaultRule(mPushesRuleByResourceId[resourceText]))
                     }
                 } else if (preference is SwitchPreference) {
-                    if (resourceText == PreferencesManager.SETTINGS_ENABLE_THIS_DEVICE_PREFERENCE_KEY) {
-                        preference.isChecked = pushManager.areDeviceNotificationsAllowed()
-                    } else if (resourceText == PreferencesManager.SETTINGS_TURN_SCREEN_ON_PREFERENCE_KEY) {
-                        preference.isChecked = pushManager.isScreenTurnedOn
-                        preference.isEnabled = pushManager.areDeviceNotificationsAllowed()
-                    } else {
-                        preference.isEnabled = null != rules && isConnected
-                        preference.isChecked = preferences.getBoolean(resourceText, false)
+                    when (resourceText) {
+                        PreferencesManager.SETTINGS_ENABLE_THIS_DEVICE_PREFERENCE_KEY -> preference.isChecked = pushManager.areDeviceNotificationsAllowed()
+
+                        PreferencesManager.SETTINGS_TURN_SCREEN_ON_PREFERENCE_KEY -> {
+                            preference.isChecked = pushManager.isScreenTurnedOn
+                            preference.isEnabled = pushManager.areDeviceNotificationsAllowed()
+                        }
+                        else -> {
+                            preference.isEnabled = null != rules && isConnected
+                            preference.isChecked = preferences.getBoolean(resourceText, false)
+                        }
                     }
                 }
             }
@@ -1074,8 +1084,8 @@ class VectorSettingsPreferencesFragment : PreferenceFragmentCompat(), SharedPref
                 .setTitle(R.string.settings_change_password)
                 .setView(view)
                 .setPositiveButton(R.string.save) { _, _ ->
-                    if (null != activity) {
-                        val imm = activity!!.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+                    activity?.let {
+                        val imm = it.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
                         imm.hideSoftInputFromWindow(view.applicationWindowToken, 0)
                     }
 
@@ -1114,14 +1124,14 @@ class VectorSettingsPreferencesFragment : PreferenceFragmentCompat(), SharedPref
                     })
                 }
                 .setNegativeButton(R.string.cancel) { _, _ ->
-                    if (null != activity) {
-                        val imm = activity!!.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+                    activity?.let {
+                        val imm = it.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
                         imm.hideSoftInputFromWindow(view.applicationWindowToken, 0)
                     }
                 }
                 .setOnCancelListener {
-                    if (null != activity) {
-                        val imm = activity!!.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+                    activity?.let {
+                        val imm = it.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
                         imm.hideSoftInputFromWindow(view.applicationWindowToken, 0)
                     }
                 }
@@ -1138,7 +1148,7 @@ class VectorSettingsPreferencesFragment : PreferenceFragmentCompat(), SharedPref
                 val newPwd = newPasswordText.text.toString().trim()
                 val newConfirmPwd = confirmNewPasswordText.text.toString().trim()
 
-                saveButton.isEnabled = oldPwd.length > 0 && newPwd.length > 0 && TextUtils.equals(newPwd, newConfirmPwd)
+                saveButton.isEnabled = oldPwd.isNotEmpty() && newPwd.isNotEmpty() && TextUtils.equals(newPwd, newConfirmPwd)
             }
 
             override fun afterTextChanged(s: Editable) {}
@@ -1705,13 +1715,12 @@ class VectorSettingsPreferencesFragment : PreferenceFragmentCompat(), SharedPref
             // add new emails list
             mDisplayedEmails = newEmailsList
 
-            var index = 0
             val addEmailBtn = mUserSettingsCategory.findPreference(ADD_EMAIL_PREFERENCE_KEY)
                     ?: return
 
             var order = addEmailBtn.order
 
-            for (email3PID in currentEmail3PID) {
+            for ((index, email3PID) in currentEmail3PID.withIndex()) {
                 val preference = VectorPreference(activity!!)
 
                 preference.title = getString(R.string.settings_email_address)
@@ -1733,7 +1742,6 @@ class VectorSettingsPreferencesFragment : PreferenceFragmentCompat(), SharedPref
 
                 mUserSettingsCategory.addPreference(preference)
 
-                index++
                 order++
             }
 
@@ -2843,7 +2851,7 @@ class VectorSettingsPreferencesFragment : PreferenceFragmentCompat(), SharedPref
     }
 
 
-    private class ClearCacheAsyncTask internal constructor(
+    private class ClearMediaCacheAsyncTask internal constructor(
             backgroundTask: () -> Unit,
             onCompleteTask: () -> Unit
     ) : AsyncTask<Unit, Unit, Unit>() {
