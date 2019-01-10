@@ -83,6 +83,7 @@ import org.matrix.androidsdk.rest.model.sync.DevicesListResponse
 import org.matrix.androidsdk.util.BingRulesManager
 import org.matrix.androidsdk.util.Log
 import org.matrix.androidsdk.util.ResourceUtils
+import java.lang.ref.WeakReference
 import java.text.DateFormat
 import java.text.SimpleDateFormat
 import java.util.*
@@ -772,26 +773,42 @@ class VectorSettingsPreferencesFragment : PreferenceFragmentCompat(), SharedPref
                 }
             })
 
-            it.onPreferenceClickListener = Preference.OnPreferenceClickListener { _ ->
+            it.onPreferenceClickListener = Preference.OnPreferenceClickListener { it ->
                 displayLoadingView()
 
-                val task = object : AsyncTask<Void?, Void?, Void?>() {
-                    override fun doInBackground(vararg params: Void?): Void? {
-                        mSession.mediaCache.clear()
-                        Glide.get(activity!!).clearDiskCache()
-                        return null
-                    }
+//                val task = object : AsyncTask<Void?, Void?, Void?>() {
+//                    override fun doInBackground(vararg params: Void?): Void? {
+//                        mSession.mediaCache.clear()
+//                        Glide.get(activity!!).clearDiskCache()
+//                        return null
+//                    }
+//
+//                    override fun onPostExecute(result: Void?) {
+//                        hideLoadingView()
+//
+//                        MXMediaCache.getCachesSize(activity, object : SimpleApiCallback<Long>() {
+//                            override fun onSuccess(size: Long) {
+//                                it.summary = android.text.format.Formatter.formatFileSize(activity, size)
+//                            }
+//                        })
+//                    }
+//                }
+//
+                val task = ClearCacheAsyncTask(
+                        {
+                            mSession.mediaCache.clear()
+                            activity?.let { it -> Glide.get(it).clearDiskCache() }
+                        },
+                        {
+                            hideLoadingView()
 
-                    override fun onPostExecute(result: Void?) {
-                        hideLoadingView()
-
-                        MXMediaCache.getCachesSize(activity, object : SimpleApiCallback<Long>() {
-                            override fun onSuccess(size: Long) {
-                                it.summary = android.text.format.Formatter.formatFileSize(activity, size)
-                            }
-                        })
-                    }
-                }
+                            MXMediaCache.getCachesSize(activity, object : SimpleApiCallback<Long>() {
+                                override fun onSuccess(size: Long) {
+                                    it.summary = android.text.format.Formatter.formatFileSize(activity, size)
+                                }
+                            })
+                        }
+                )
 
                 try {
                     task.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR)
@@ -2822,6 +2839,24 @@ class VectorSettingsPreferencesFragment : PreferenceFragmentCompat(), SharedPref
             }
 
             refreshCryptographyPreference(mMyDeviceInfo)
+        }
+    }
+
+
+    private class ClearCacheAsyncTask internal constructor(
+            backgroundTask: () -> Unit,
+            onCompleteTask: () -> Unit
+    ) : AsyncTask<Unit, Unit, Unit>() {
+
+        private val backgroundTaskReference = WeakReference(backgroundTask)
+        private val onCompleteTaskReference = WeakReference(onCompleteTask)
+        override fun doInBackground(vararg params: Unit?) {
+            backgroundTaskReference.get()?.invoke()
+        }
+
+        override fun onPostExecute(result: Unit?) {
+            super.onPostExecute(result)
+            onCompleteTaskReference.get()?.invoke()
         }
     }
 
