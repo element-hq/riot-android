@@ -59,11 +59,11 @@ class TestBingRulesSettings(val fragment: Fragment, val session: MXSession) : Tr
                 description = fragment.getString(R.string.settings_troubleshoot_test_bing_settings_failed)
                 quickFix = object : TroubleshootQuickFix(R.string.settings_troubleshoot_test_bing_settings_quickfix) {
                     override fun doFix() {
-                        if (fragment.activity is VectorSettingsFragmentInteractionListener) {
-                            (fragment.activity as VectorSettingsFragmentInteractionListener)
-                                    .requestHighlightPreferenceKeyOnResume(PreferencesManager.SETTINGS_NOTIFICATION_ADVANCED_PREFERENCE_KEY)
+                        val activity = fragment.activity
+                        if (activity is VectorSettingsFragmentInteractionListener) {
+                            activity.requestHighlightPreferenceKeyOnResume(PreferencesManager.SETTINGS_NOTIFICATION_ADVANCED_PREFERENCE_KEY)
                         }
-                        fragment.activity?.supportFragmentManager?.popBackStack()
+                        activity?.supportFragmentManager?.popBackStack()
                     }
                 }
                 status = TestStatus.FAILED

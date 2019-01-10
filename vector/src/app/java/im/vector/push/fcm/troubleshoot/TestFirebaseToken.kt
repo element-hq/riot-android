@@ -15,15 +15,11 @@
  */
 package im.vector.push.fcm.troubleshoot
 
-import android.content.ActivityNotFoundException
-import android.content.Intent
-import android.provider.Settings
 import android.support.v4.app.Fragment
-import androidx.core.widget.toast
 import com.google.firebase.iid.FirebaseInstanceId
 import im.vector.R
-import im.vector.fragments.troubleshoot.NotificationTroubleshootTestManager
 import im.vector.fragments.troubleshoot.TroubleshootTest
+import im.vector.util.startAddGoogleAccountIntent
 import org.matrix.androidsdk.util.Log
 
 /*
@@ -49,13 +45,7 @@ class TestFirebaseToken(val fragment: Fragment) : TroubleshootTest(R.string.sett
                                     description = fragment.getString(R.string.settings_troubleshoot_test_fcm_failed_account_missing, errorMsg)
                                     quickFix = object : TroubleshootQuickFix(R.string.settings_troubleshoot_test_fcm_failed_account_missing_quick_fix) {
                                         override fun doFix() {
-                                            val intent = Intent(Settings.ACTION_ADD_ACCOUNT)
-                                            intent.putExtra(Settings.EXTRA_ACCOUNT_TYPES, arrayOf("com.google"));
-                                            try {
-                                                fragment.startActivityForResult(intent, NotificationTroubleshootTestManager.REQ_CODE_FIX)
-                                            } catch (activityNotFoundException: ActivityNotFoundException) {
-                                                activity.toast(R.string.error_no_external_application_found)
-                                            }
+                                            startAddGoogleAccountIntent(fragment)
                                         }
                                     }
                                 } else {

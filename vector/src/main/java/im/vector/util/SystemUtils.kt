@@ -18,10 +18,7 @@ package im.vector.util
 
 import android.annotation.TargetApi
 import android.app.Activity
-import android.content.ClipData
-import android.content.ClipboardManager
-import android.content.Context
-import android.content.Intent
+import android.content.*
 import android.net.Uri
 import android.os.Build
 import android.os.PowerManager
@@ -29,6 +26,7 @@ import android.provider.Settings
 import android.support.v4.app.Fragment
 import androidx.core.widget.toast
 import im.vector.R
+import im.vector.fragments.troubleshoot.NotificationTroubleshootTestManager
 import im.vector.notifications.supportNotificationChannels
 import im.vector.settings.VectorLocale
 import org.matrix.androidsdk.util.Log
@@ -136,5 +134,15 @@ fun startNotificationChannelSettingsIntent(fragment: Fragment, channelID: String
         putExtra(Settings.EXTRA_CHANNEL_ID, channelID)
     }
     fragment.startActivity(intent)
+}
+
+fun startAddGoogleAccountIntent(fragment: Fragment) {
+    try {
+        val intent = Intent(Settings.ACTION_ADD_ACCOUNT)
+        intent.putExtra(Settings.EXTRA_ACCOUNT_TYPES, arrayOf("com.google"))
+        fragment.startActivityForResult(intent, NotificationTroubleshootTestManager.REQ_CODE_FIX)
+    } catch (activityNotFoundException: ActivityNotFoundException) {
+        fragment.activity?.toast(R.string.error_no_external_application_found)
+    }
 }
 

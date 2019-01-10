@@ -34,9 +34,9 @@ import im.vector.R
 import im.vector.activity.MXCActionBarActivity
 import im.vector.extensions.withArgs
 import im.vector.notifications.NotificationUtils
+import im.vector.notifications.supportNotificationChannels
 import im.vector.preference.BingRulePreference
 import im.vector.util.PreferencesManager
-import im.vector.util.supportNotificationChannels
 import org.matrix.androidsdk.MXSession
 import org.matrix.androidsdk.listeners.MXEventListener
 import org.matrix.androidsdk.rest.model.bingrules.BingRule
