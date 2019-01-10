@@ -44,6 +44,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import im.vector.R;
+import im.vector.ui.themes.ThemeUtils;
 
 /**
  * AccountCreationCaptchaActivity displays a webview to check captchas.
@@ -232,6 +233,10 @@ public class AccountCreationCaptchaActivity extends VectorAppCompatActivity {
                 return true;
             }
         });
+
+        if (Build.VERSION.SDK_INT <= Build.VERSION_CODES.JELLY_BEAN) {
+            toolbar.setBackgroundColor(ThemeUtils.INSTANCE.getColor(this, R.attr.colorAccent));
+        }
     }
 
     @Override

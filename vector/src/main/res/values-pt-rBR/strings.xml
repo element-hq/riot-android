@@ -16,7 +16,7 @@
     <string name="ok">OK</string>
     <string name="cancel">Cancelar</string>
     <string name="save">Salvar</string>
-    <string name="leave">Sair</string>
+    <string name="leave">Sair da sala</string>
     <string name="send">Enviar</string>
     <string name="copy">Copiar</string>
     <string name="resend">Reenviar</string>
@@ -46,8 +46,9 @@
     <string name="invite">Convidar</string>
 
     <!-- actions -->
-    <string name="action_sign_out">Sair</string>
-    <string name="action_sign_out_confirmation">Por razões de segurança, ao sair, todas as chaves de criptografia ponta-a-ponta serão apagadas, fazendo com que o histórico de conversas criptografadas não mais sejam acessíveis quando você entrar novamente.\nExporte estas conversas para o backup antes de sair se quiser armazená-las.</string>
+    <string name="action_sign_out">Sair da Conta</string>
+    <string name="action_sign_out_confirmation">Por razões de segurança, ao sair da Conta, todas as chaves de criptografia ponta-a-ponta serão apagadas, fazendo com que o histórico de conversas criptografadas não mais sejam acessíveis quando você entrar novamente.
+Exporte estas conversas para o backup antes de sair da Conta se quiser armazená-las.</string>
     <string name="action_voice_call">Chamada de voz</string>
     <string name="action_video_call">Chamada de vídeo</string>
     <string name="action_global_search">Busca global</string>
@@ -117,7 +118,7 @@
     <string name="username">Nome de usuário</string>
     <string name="create_account">Criar conta</string>
     <string name="login">Entrar</string>
-    <string name="logout">Sair</string>
+    <string name="logout">Sair da Conta</string>
     <string name="hs_url">URL do "Home Server"</string>
     <string name="identity_url">URL do "Identity Server"</string>
     <string name="search">Pesquisar</string>
@@ -156,7 +157,7 @@
     <string name="auth_missing_password">Falta a senha</string>
     <string name="auth_invalid_email">"Endereço de email inválido"</string>
     <string name="auth_invalid_phone">"Isso não me parece ser um número de telefone válido"</string>
-    <string name="auth_email_already_defined">Este email já está cadastrado.</string>
+    <string name="auth_email_already_defined">Este e-mail já está cadastrado.</string>
     <string name="auth_missing_email">Falta endereço de email</string>
     <string name="auth_missing_phone">Falta número de telefone</string>
     <string name="auth_missing_email_or_phone">Falta endereço de email ou número de telefone</string>
@@ -359,7 +360,7 @@ Você autoriza o Riot a acessar seus contatos?</string>
     <!-- unrecognized SSL certificate -->
     <string name="ssl_trust">Confiar</string>
     <string name="ssl_do_not_trust">Não confiar</string>
-    <string name="ssl_logout_account">Sair</string>
+    <string name="ssl_logout_account">Sair da Conta</string>
     <string name="ssl_remain_offline">Ignorar</string>
     <string name="ssl_fingerprint_hash">Impressão digital (%s):</string>
     <string name="ssl_could_not_verify">Não consegui verificar a identidade do servidor remoto.</string>
@@ -718,7 +719,7 @@ Atenção: este arquivo poderá ser apagado se o aplicativo for desinstalado.</s
 
     <string name="loading">Carregando…</string>
 
-    <string name="action_exit">Sair</string>
+    <string name="action_exit">Sair do App</string>
     <string name="bottom_action_groups">Comunidades</string>
 
     <string name="home_filter_placeholder_groups">Pesquisar comunidades</string>
@@ -1137,7 +1138,7 @@ Tente reiniciar a aplicação.</string>
     <string name="settings_send_typing_notifs_summary">Deixar outros usuários saberem quando você estiver digitando.</string>
     <string name="settings_show_read_receipts">Mostrar confirmações de leitura</string>
     <string name="settings_show_read_receipts_summary">Clique nas notificações de leitura para uma lista detalhada.</string>
-    <string name="settings_show_join_leave_messages">Mostrar eventos de participar e sair</string>
+    <string name="settings_show_join_leave_messages">Mostrar eventos de entrada e saída de sala</string>
     <string name="settings_show_join_leave_messages_summary">Convites, chutes e proibições não são afetados.</string>
     <string name="settings_show_avatar_display_name_changes_messages">Mostrar eventos da conta</string>
     <string name="settings_show_avatar_display_name_changes_messages_summary">Inclui avatar e alterações no nome de exibição.</string>

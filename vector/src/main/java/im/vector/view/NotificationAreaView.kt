@@ -20,6 +20,7 @@ import android.content.Context
 import android.graphics.Color
 import android.graphics.Typeface
 import android.preference.PreferenceManager
+import android.support.transition.TransitionManager
 import android.support.v4.content.ContextCompat
 import android.text.SpannableString
 import android.text.TextPaint
@@ -30,6 +31,8 @@ import android.text.style.ForegroundColorSpan
 import android.text.style.StyleSpan
 import android.util.AttributeSet
 import android.view.View
+import android.view.ViewGroup
+import android.widget.AbsListView
 import android.widget.ImageView
 import android.widget.RelativeLayout
 import android.widget.TextView
@@ -39,6 +42,7 @@ import com.binaryfork.spanny.Spanny
 import im.vector.R
 import im.vector.features.hhs.ResourceLimitErrorFormatter
 import im.vector.listeners.IMessagesAdapterActionsListener
+import im.vector.ui.animation.VectorTransitionSet
 import im.vector.ui.themes.ThemeUtils
 import im.vector.util.MatrixURLSpan
 import org.matrix.androidsdk.MXPatterns
@@ -66,6 +70,20 @@ class NotificationAreaView @JvmOverloads constructor(
 
     var delegate: Delegate? = null
     private var state: State = State.Initial
+
+    var scrollState = AbsListView.OnScrollListener.SCROLL_STATE_IDLE
+        set(value) {
+            field = value
+
+            val pendingV = pendingVisibility
+
+            if (pendingV != null) {
+                pendingVisibility = null
+                visibility = pendingV
+            }
+        }
+
+    private var pendingVisibility: Int? = null
 
     /**
      * Visibility when the info area is empty.
@@ -122,6 +140,25 @@ class NotificationAreaView @JvmOverloads constructor(
             is State.ScrollToBottom -> renderScrollToBottom(newState)
             is State.UnsentEvents -> renderUnsent(newState)
         }
+    }
+
+    override fun setVisibility(visibility: Int) {
+        if (scrollState != AbsListView.OnScrollListener.SCROLL_STATE_IDLE) {
+            // Wait for scroll state to be idle
+            pendingVisibility = visibility
+            return
+        }
+
+        if (visibility != getVisibility()) {
+            // Schedule animation
+            val parent = parent as ViewGroup
+            TransitionManager.beginDelayedTransition(parent, VectorTransitionSet().apply {
+                appearFromBottom(this@NotificationAreaView)
+                appearWithAlpha(this@NotificationAreaView)
+            })
+        }
+
+        super.setVisibility(visibility)
     }
 
     // PRIVATE METHODS *****************************************************************************************************************************************

@@ -1419,6 +1419,10 @@ public class VectorRoomActivity extends MXCActionBarActivity implements
         if (mReadMarkerManager != null) {
             mReadMarkerManager.onScrollStateChanged(scrollState);
         }
+
+        if (mNotificationsArea != null) {
+            mNotificationsArea.setScrollState(scrollState);
+        }
     }
 
     @Override
@@ -2335,8 +2339,8 @@ public class VectorRoomActivity extends MXCActionBarActivity implements
     private void launchCamera() {
         enableActionBarHeader(HIDE_ACTION_BAR_HEADER);
 
-        Intent intent = new Intent(this, VectorMediasPickerActivity.class);
-        intent.putExtra(VectorMediasPickerActivity.EXTRA_VIDEO_RECORDING_MODE, true);
+        Intent intent = new Intent(this, VectorMediaPickerActivity.class);
+        intent.putExtra(VectorMediaPickerActivity.EXTRA_VIDEO_RECORDING_MODE, true);
         startActivityForResult(intent, TAKE_IMAGE_REQUEST_CODE);
     }
 
@@ -3130,7 +3134,7 @@ public class VectorRoomActivity extends MXCActionBarActivity implements
                 // hide the action bar header view and reset the arrow image (arrow reset to down)
                 mActionBarCustomArrowImageView.setImageResource(R.drawable.ic_arrow_drop_down_white);
                 mRoomHeaderView.setVisibility(View.GONE);
-                toolbar.setBackgroundColor(ThemeUtils.INSTANCE.getColor(this, R.attr.vctr_primary_color));
+                toolbar.setBackgroundColor(ThemeUtils.INSTANCE.getColor(this, R.attr.colorPrimary));
             }
         }
     }

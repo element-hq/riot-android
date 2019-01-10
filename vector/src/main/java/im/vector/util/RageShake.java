@@ -74,7 +74,7 @@ public class RageShake implements SensorEventListener {
     }
 
     /**
-     * Display a dialog to let the user chooses if he would like to send a bnug report.
+     * Display a dialog to let the user chooses if he would like to send a bug report.
      */
     private void promptForReport() {
         // Cannot prompt for bug, no active activity.

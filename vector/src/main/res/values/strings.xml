@@ -146,7 +146,7 @@
     <string name="send_bug_report_placeholder">Describe your problem here</string>
     <string name="send_bug_report_logs_description">In order to diagnose problems, logs from this client will be sent with this bug report. This bug report, including the logs and the screenshot, will not be publicly visible. If you would prefer to only send the text above, please untick:</string>
     <string name="send_bug_report_alert_message">You seem to be shaking the phone in frustration. Would you like to open the bug report screen?</string>
-    <string name="send_bug_report_app_crashed">The application has crashed last time. Would you like to submit a crash report?</string>
+    <string name="send_bug_report_app_crashed">The application has crashed last time. Would you like to open the crash report screen?</string>
     <string name="send_bug_report_rage_shake">Rage shake to report bug</string>
 
     <string name="send_bug_report_sent">The bug report has been successfully sent</string>
@@ -317,7 +317,8 @@
     <string name="incoming_call">Incoming Call</string>
     <string name="incoming_video_call">Incoming Video Call</string>
     <string name="incoming_voice_call">Incoming Voice Call</string>
-    <string name="call_in_progress">Call In Progress</string>
+    <string name="call_in_progress">Call In Progress…</string>
+    <string name="video_call_in_progress">Video Call In Progress…</string>
 
     <string name="call_error_user_not_responding">The remote side failed to pick up.</string>
     <string name="call_error_ice_failed">Media Connection Failed</string>
@@ -1000,7 +1001,7 @@
     <string name="event_formatter_widget_added">%1$s added by %2$s</string>
     <string name="event_formatter_widget_removed">%1$s removed by %2$s</string>
     <string name="settings_labs_create_conference_with_jitsi">Create conference calls with jitsi</string>
-    <string name="widget_delete_message_confirmation">Are you sure you want to delete the widget?</string>
+    <string name="widget_delete_message_confirmation">Are you sure you want to delete the widget from this room?</string>
     <plurals name="active_widgets">
         <item quantity="one">1 active widget</item>
         <item quantity="other">%d active widgets</item>
@@ -1165,6 +1166,9 @@
 
     <!-- String for Play Store -->
     <string name="store_title">Riot.im - open team collaboration</string>
+    <string name="store_whats_new">"We’re always making changes and improvements to Riot.im.
+The complete changelog can be found here: %1$s.
+To make sure you don’t miss a thing, just keep your updates turned on."</string>
     <string name="store_short_description">Welcome to Riot.im: a new world of open communication!</string>
     <string name="store_full_description">"Riot.im is a simple and elegant collaboration environment that gathers all of your different conversations and app integrations into one single app.
 
