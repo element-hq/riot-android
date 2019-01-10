@@ -118,7 +118,7 @@
     <string name="send_bug_report_placeholder">在這裡描述你的問題</string>
     <string name="send_bug_report_logs_description">為了診斷問題，客戶端的紀錄將會同錯誤回報一起送出。這個包含了紀錄與螢幕截圖的錯誤回報將不會公開可見。如果您只想送出上方的文字，請取消勾選：</string>
     <string name="send_bug_report_alert_message">您似乎沮喪的搖晃著手機。您要開啟錯誤回報畫面嗎？</string>
-    <string name="send_bug_report_app_crashed">此應用程式在上次當機。您想送出錯誤回報？</string>
+    <string name="send_bug_report_app_crashed">這個應用程式上次當掉了。您想要開啟錯誤回報畫面嗎？</string>
     <string name="send_bug_report_rage_shake">憤怒搖晃來回報臭蟲</string>
 
     <string name="send_bug_report_sent">此錯誤回報已成功送出</string>
@@ -256,7 +256,7 @@
     <string name="incoming_call">來電</string>
     <string name="incoming_video_call">視訊來電</string>
     <string name="incoming_voice_call">語音來電</string>
-    <string name="call_in_progress">通話進行中</string>
+    <string name="call_in_progress">通話進行中……</string>
 
     <string name="call_error_user_not_responding">遠端未能接聽。</string>
     <string name="call_error_ice_failed">媒體連線失敗</string>
@@ -825,7 +825,7 @@
     <string name="event_formatter_widget_added">%1$s 已由 %2$s 新增</string>
     <string name="event_formatter_widget_removed">%1$s 被 %2$s 移除</string>
     <string name="settings_labs_create_conference_with_jitsi">使用 jitsi 建立會議電話</string>
-    <string name="widget_delete_message_confirmation">您確定要移除此小部件嗎？</string>
+    <string name="widget_delete_message_confirmation">您確定要從聊天室刪除小工具嗎？</string>
     <plurals name="active_widgets">
         <item quantity="other">已啓用 %d 個小部件</item>
     </plurals>
@@ -1164,4 +1164,9 @@ Matrix 中的消息可見度類似于電子郵件。我們忘記您的郵件意�
 
 與 Riot.im 探索真正有效與開放的協作！</string>
 
-</resources>
+<string name="video_call_in_progress">視訊通話進行中……</string>
+
+    <string name="store_whats_new">我們會不斷為 Riot.im 做出變更與改善。
+完整的變更紀錄可以在此找到：%1$s。
+為了確保您不會錯過任何事情，只要把更新打開就行了。</string>
+    </resources>
