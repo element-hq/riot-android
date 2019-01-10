@@ -15,9 +15,11 @@
  */
 package im.vector.push.fcm.troubleshoot
 
+import android.content.ActivityNotFoundException
 import android.content.Intent
 import android.provider.Settings
 import android.support.v4.app.Fragment
+import androidx.core.widget.toast
 import com.google.firebase.iid.FirebaseInstanceId
 import im.vector.R
 import im.vector.fragments.troubleshoot.NotificationTroubleshootTestManager
@@ -51,8 +53,8 @@ class TestFirebaseToken(val fragment: Fragment) : TroubleshootTest(R.string.sett
                                             intent.putExtra(Settings.EXTRA_ACCOUNT_TYPES, arrayOf("com.google"));
                                             try {
                                                 fragment.startActivityForResult(intent, NotificationTroubleshootTestManager.REQ_CODE_FIX)
-                                            } catch (e: Throwable) {
-                                                Log.e(TestFirebaseToken::class.java.name, "Failed to start add account activity", e)
+                                            } catch (activityNotFoundException: ActivityNotFoundException) {
+                                                activity.toast(R.string.error_no_external_application_found)
                                             }
                                         }
                                     }
