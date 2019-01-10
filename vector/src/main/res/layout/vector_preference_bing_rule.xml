@@ -41,8 +41,8 @@
             android:textAppearance="?android:attr/textAppearanceSmall"
             android:textColor="?android:attr/textColorSecondary"
             android:textSize="14sp"
-            tools:visibility="gone"
-            tools:text="Summary" />
+            tools:text="Summary"
+            tools:visibility="gone" />
 
     </RelativeLayout>
 

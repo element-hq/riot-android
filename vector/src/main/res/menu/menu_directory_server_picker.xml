@@ -4,8 +4,8 @@
 
     <item
         android:id="@+id/action_add_custom_hs"
-        android:title="@string/action_open"
         android:icon="@drawable/ic_add_white"
+        android:title="@string/action_open"
         app:showAsAction="always" />
 
 </menu>
