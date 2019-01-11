@@ -116,30 +116,15 @@ public class LoginActivity extends MXCActionBarActivity implements RegistrationM
 
     // saved parameters index
 
-    // login
-    private static final String SAVED_LOGIN_EMAIL_ADDRESS = "SAVED_LOGIN_EMAIL_ADDRESS";
-    private static final String SAVED_LOGIN_PASSWORD_ADDRESS = "SAVED_LOGIN_PASSWORD_ADDRESS";
-
     // creation
     private static final String SAVED_CREATION_USER_NAME = "SAVED_CREATION_USER_NAME";
     private static final String SAVED_CREATION_PASSWORD1 = "SAVED_CREATION_PASSWORD1";
-    private static final String SAVED_CREATION_PASSWORD2 = "SAVED_CREATION_PASSWORD2";
     private static final String SAVED_CREATION_REGISTRATION_RESPONSE = "SAVED_CREATION_REGISTRATION_RESPONSE";
     private static final String SAVED_CREATION_EMAIL_THREEPID = "SAVED_CREATION_EMAIL_THREEPID";
     private ThreePid mPendingEmailValidation;
 
-    // forgot password
-    private static final String SAVED_FORGOT_EMAIL_ADDRESS = "SAVED_FORGOT_EMAIL_ADDRESS";
-    private static final String SAVED_FORGOT_PASSWORD1 = "SAVED_FORGOT_PASSWORD1";
-    private static final String SAVED_FORGOT_PASSWORD2 = "SAVED_FORGOT_PASSWORD2";
-
     // mode
     private static final String SAVED_MODE = "SAVED_MODE";
-
-    // servers part
-    private static final String SAVED_IS_SERVER_URL_EXPANDED = "SAVED_IS_SERVER_URL_EXPANDED";
-    private static final String SAVED_HOME_SERVER_URL = "SAVED_HOME_SERVER_URL";
-    private static final String SAVED_IDENTITY_SERVER_URL = "SAVED_IDENTITY_SERVER_URL";
 
     // activity mode
     private int mMode = MODE_LOGIN;
@@ -1849,20 +1834,6 @@ public class LoginActivity extends MXCActionBarActivity implements RegistrationM
     private void restoreSavedData(@NonNull Bundle savedInstanceState) {
         Log.d(LOG_TAG, "## restoreSavedData(): IN");
 
-        mLoginEmailTextView.setText(savedInstanceState.getString(SAVED_LOGIN_EMAIL_ADDRESS));
-        mLoginPasswordTextView.setText(savedInstanceState.getString(SAVED_LOGIN_PASSWORD_ADDRESS));
-        mUseCustomHomeServersCheckbox.setChecked(savedInstanceState.getBoolean(SAVED_IS_SERVER_URL_EXPANDED));
-        mHomeServerText.setText(savedInstanceState.getString(SAVED_HOME_SERVER_URL));
-        mIdentityServerText.setText(savedInstanceState.getString(SAVED_IDENTITY_SERVER_URL));
-
-        mCreationUsernameTextView.setText(savedInstanceState.getString(SAVED_CREATION_USER_NAME));
-        mCreationPassword1TextView.setText(savedInstanceState.getString(SAVED_CREATION_PASSWORD1));
-        mCreationPassword2TextView.setText(savedInstanceState.getString(SAVED_CREATION_PASSWORD2));
-
-        mForgotEmailTextView.setText(savedInstanceState.getString(SAVED_FORGOT_EMAIL_ADDRESS));
-        mForgotPassword1TextView.setText(savedInstanceState.getString(SAVED_FORGOT_PASSWORD1));
-        mForgotPassword2TextView.setText(savedInstanceState.getString(SAVED_FORGOT_PASSWORD2));
-
         mRegistrationResponse = (RegistrationFlowResponse) savedInstanceState.getSerializable(SAVED_CREATION_REGISTRATION_RESPONSE);
 
         mMode = savedInstanceState.getInt(SAVED_MODE, MODE_LOGIN);
@@ -1881,46 +1852,12 @@ public class LoginActivity extends MXCActionBarActivity implements RegistrationM
         super.onSaveInstanceState(savedInstanceState);
         Log.d(LOG_TAG, "## onSaveInstanceState(): IN");
 
-        if (!TextUtils.isEmpty(mLoginEmailTextView.getText().toString().trim())) {
-            savedInstanceState.putString(SAVED_LOGIN_EMAIL_ADDRESS, mLoginEmailTextView.getText().toString().trim());
-        }
-
-        if (!TextUtils.isEmpty(mLoginPasswordTextView.getText().toString().trim())) {
-            savedInstanceState.putString(SAVED_LOGIN_PASSWORD_ADDRESS, mLoginPasswordTextView.getText().toString().trim());
-        }
-
-        savedInstanceState.putBoolean(SAVED_IS_SERVER_URL_EXPANDED, mUseCustomHomeServersCheckbox.isChecked());
-
-        if (!TextUtils.isEmpty(mHomeServerText.getText().toString().trim())) {
-            savedInstanceState.putString(SAVED_HOME_SERVER_URL, mHomeServerText.getText().toString().trim());
-        }
-
-        if (!TextUtils.isEmpty(mIdentityServerText.getText().toString().trim())) {
-            savedInstanceState.putString(SAVED_IDENTITY_SERVER_URL, mIdentityServerText.getText().toString().trim());
-        }
-
         if (!TextUtils.isEmpty(mCreationUsernameTextView.getText().toString().trim())) {
             savedInstanceState.putString(SAVED_CREATION_USER_NAME, mCreationUsernameTextView.getText().toString().trim());
         }
 
         if (!TextUtils.isEmpty(mCreationPassword1TextView.getText().toString().trim())) {
             savedInstanceState.putString(SAVED_CREATION_PASSWORD1, mCreationPassword1TextView.getText().toString().trim());
-        }
-
-        if (!TextUtils.isEmpty(mCreationPassword2TextView.getText().toString().trim())) {
-            savedInstanceState.putString(SAVED_CREATION_PASSWORD2, mCreationPassword2TextView.getText().toString().trim());
-        }
-
-        if (!TextUtils.isEmpty(mForgotEmailTextView.getText().toString().trim())) {
-            savedInstanceState.putString(SAVED_FORGOT_EMAIL_ADDRESS, mForgotEmailTextView.getText().toString().trim());
-        }
-
-        if (!TextUtils.isEmpty(mForgotPassword1TextView.getText().toString().trim())) {
-            savedInstanceState.putString(SAVED_FORGOT_PASSWORD1, mForgotPassword1TextView.getText().toString().trim());
-        }
-
-        if (!TextUtils.isEmpty(mForgotPassword2TextView.getText().toString().trim())) {
-            savedInstanceState.putString(SAVED_FORGOT_PASSWORD2, mForgotPassword2TextView.getText().toString().trim());
         }
 
         if (null != mRegistrationResponse) {
