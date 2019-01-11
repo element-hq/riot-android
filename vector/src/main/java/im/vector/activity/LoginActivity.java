@@ -2369,9 +2369,8 @@ public class LoginActivity extends MXCActionBarActivity implements RegistrationM
     }
 
     @Override
-    public void onWaitingCaptcha() {
+    public void onWaitingCaptcha(String publicKey) {
         cancelEmailPolling();
-        final String publicKey = mRegistrationManager.getCaptchaPublicKey();
         if (!TextUtils.isEmpty(publicKey)) {
             Log.d(LOG_TAG, "## onWaitingCaptcha");
             Intent intent = new Intent(LoginActivity.this, AccountCreationCaptchaActivity.class);

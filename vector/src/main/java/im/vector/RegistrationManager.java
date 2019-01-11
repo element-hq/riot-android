@@ -363,7 +363,7 @@ public class RegistrationManager {
                             listener.onWaitingTerms(getLocalizedLoginTerms(context));
                         } else {
                             // At this point, only captcha can be the missing stage
-                            listener.onWaitingCaptcha();
+                            listener.onWaitingCaptcha(getCaptchaPublicKey());
                         }
                     } else {
                         listener.onRegistrationFailed(message);
@@ -426,7 +426,7 @@ public class RegistrationManager {
                         listener.onWaitingTerms(getLocalizedLoginTerms(context));
                     } else {
                         // At this point, only captcha can be the missing stage
-                        listener.onWaitingCaptcha();
+                        listener.onWaitingCaptcha(getCaptchaPublicKey());
                     }
                 } else {
                     listener.onRegistrationFailed(message);
@@ -595,16 +595,6 @@ public class RegistrationManager {
     }
 
     /**
-     * Get the public key for captcha registration
-     *
-     * @return public key
-     */
-    @Nullable
-    public String getCaptchaPublicKey() {
-        return RegistrationToolsKt.getCaptchaPublicKey(mRegistrationResponse);
-    }
-
-    /**
      * Add email three pid to singleton values
      * It will be processed later on
      *
@@ -688,6 +678,16 @@ public class RegistrationManager {
         return RegistrationToolsKt.getLocalizedLoginTerms(mRegistrationResponse,
                 context.getString(R.string.resources_language),
                 "en");
+    }
+
+    /**
+     * Get the public key for captcha registration
+     *
+     * @return public key
+     */
+    @Nullable
+    private String getCaptchaPublicKey() {
+        return RegistrationToolsKt.getCaptchaPublicKey(mRegistrationResponse);
     }
 
     /**
@@ -1110,7 +1110,10 @@ public class RegistrationManager {
 
         void onWaitingEmailValidation();
 
-        void onWaitingCaptcha();
+        /**
+         * @param publicKey the Captcha public key
+         */
+        void onWaitingCaptcha(String publicKey);
 
         /**
          * @param localizedFlowDataLoginTerms list of LocalizedFlowDataLoginTerms the user has to accept
