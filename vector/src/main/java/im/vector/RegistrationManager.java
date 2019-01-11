@@ -360,7 +360,7 @@ public class RegistrationManager {
                         if (mEmail != null && !isCompleted(LoginRestClient.LOGIN_FLOW_TYPE_EMAIL_IDENTITY)) {
                             attemptRegistration(context, listener);
                         } else if (isTermsRequired()) {
-                            listener.onWaitingTerms();
+                            listener.onWaitingTerms(getLocalizedLoginTerms(context));
                         } else {
                             // At this point, only captcha can be the missing stage
                             listener.onWaitingCaptcha();
@@ -423,7 +423,7 @@ public class RegistrationManager {
             public void onRegistrationFailed(String message) {
                 if (TextUtils.equals(ERROR_MISSING_STAGE, message)) {
                     if (isTermsRequired()) {
-                        listener.onWaitingTerms();
+                        listener.onWaitingTerms(getLocalizedLoginTerms(context));
                     } else {
                         // At this point, only captcha can be the missing stage
                         listener.onWaitingCaptcha();
@@ -605,17 +605,6 @@ public class RegistrationManager {
     }
 
     /**
-     * Get the list of LocalizedFlowDataLoginTerms the user has to accept
-     *
-     * @return list of LocalizedFlowDataLoginTerms the user has to accept
-     */
-    public List<LocalizedFlowDataLoginTerms> getLocalizedLoginTerms(Context context) {
-        return RegistrationToolsKt.getLocalizedLoginTerms(mRegistrationResponse,
-                context.getString(R.string.resources_language),
-                "en");
-    }
-
-    /**
      * Add email three pid to singleton values
      * It will be processed later on
      *
@@ -689,6 +678,17 @@ public class RegistrationManager {
      * Private methods
      * *********************************************************************************************
      */
+
+    /**
+     * Get the list of LocalizedFlowDataLoginTerms the user has to accept
+     *
+     * @return list of LocalizedFlowDataLoginTerms the user has to accept
+     */
+    private List<LocalizedFlowDataLoginTerms> getLocalizedLoginTerms(Context context) {
+        return RegistrationToolsKt.getLocalizedLoginTerms(mRegistrationResponse,
+                context.getString(R.string.resources_language),
+                "en");
+    }
 
     /**
      * Get a login rest client
@@ -1112,7 +1112,10 @@ public class RegistrationManager {
 
         void onWaitingCaptcha();
 
-        void onWaitingTerms();
+        /**
+         * @param localizedFlowDataLoginTerms list of LocalizedFlowDataLoginTerms the user has to accept
+         */
+        void onWaitingTerms(List<LocalizedFlowDataLoginTerms> localizedFlowDataLoginTerms);
 
         void onThreePidRequestFailed(String message);
 

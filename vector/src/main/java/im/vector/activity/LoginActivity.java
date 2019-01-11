@@ -2384,11 +2384,9 @@ public class LoginActivity extends MXCActionBarActivity implements RegistrationM
         }
     }
 
-    // TODO Pass data in cb
     @Override
-    public void onWaitingTerms() {
+    public void onWaitingTerms(List<LocalizedFlowDataLoginTerms> localizedFlowDataLoginTerms) {
         cancelEmailPolling();
-        final List<LocalizedFlowDataLoginTerms> localizedFlowDataLoginTerms = mRegistrationManager.getLocalizedLoginTerms(this);
         if (!localizedFlowDataLoginTerms.isEmpty()) {
             Log.d(LOG_TAG, "## onWaitingTerms");
             Intent intent = AccountCreationTermsActivity.Companion.getIntent(this, localizedFlowDataLoginTerms);
