@@ -209,6 +209,8 @@ public class RegistrationManager {
             RegistrationParams params = new RegistrationParams();
             params.username = mUsername;
 
+            // Note: We do not pass sessionId here, this is not necessary.
+
             register(context, params, new InternalRegistrationListener() {
                 @Override
                 public void onRegistrationSuccess() {
