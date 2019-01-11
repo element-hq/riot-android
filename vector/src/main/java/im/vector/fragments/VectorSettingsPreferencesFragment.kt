@@ -483,24 +483,23 @@ class VectorSettingsPreferencesFragment : PreferenceFragmentCompat(), SharedPref
 
                     displayLoadingView()
 
-                    Matrix.getInstance(activity)!!.pushManager
-                            .forceSessionsRegistration(object : ApiCallback<Void> {
-                                override fun onSuccess(info: Void?) {
-                                    hideLoadingView()
-                                }
+                    Matrix.getInstance(activity)?.pushManager?.forceSessionsRegistration(object : ApiCallback<Void> {
+                        override fun onSuccess(info: Void?) {
+                            hideLoadingView()
+                        }
 
-                                override fun onMatrixError(e: MatrixError?) {
-                                    hideLoadingView()
-                                }
+                        override fun onMatrixError(e: MatrixError?) {
+                            hideLoadingView()
+                        }
 
-                                override fun onNetworkError(e: java.lang.Exception?) {
-                                    hideLoadingView()
-                                }
+                        override fun onNetworkError(e: java.lang.Exception?) {
+                            hideLoadingView()
+                        }
 
-                                override fun onUnexpectedError(e: java.lang.Exception?) {
-                                    hideLoadingView()
-                                }
-                            })
+                        override fun onUnexpectedError(e: java.lang.Exception?) {
+                            hideLoadingView()
+                        }
+                    })
 
                     true
                 }
@@ -608,11 +607,13 @@ class VectorSettingsPreferencesFragment : PreferenceFragmentCompat(), SharedPref
                             // The server does not support lazy loading yet
                             hideLoadingView()
 
-                            AlertDialog.Builder(activity!!)
-                                    .setTitle(R.string.dialog_title_error)
-                                    .setMessage(R.string.error_lazy_loading_not_supported_by_home_server)
-                                    .setPositiveButton(R.string.ok, null)
-                                    .show()
+                            context?.let {
+                                AlertDialog.Builder(it)
+                                        .setTitle(R.string.dialog_title_error)
+                                        .setMessage(R.string.error_lazy_loading_not_supported_by_home_server)
+                                        .setPositiveButton(R.string.ok) { dialog, _ -> dialog.dismiss() }
+                                        .show()
+                            }
                         }
                     }
 
@@ -757,16 +758,19 @@ class VectorSettingsPreferencesFragment : PreferenceFragmentCompat(), SharedPref
         findPreference(PreferencesManager.SETTINGS_MEDIA_SAVING_PERIOD_KEY).let {
             it.summary = PreferencesManager.getSelectedMediasSavingPeriodString(activity)
 
-            it.onPreferenceClickListener = Preference.OnPreferenceClickListener { _ ->
-                AlertDialog.Builder(activity!!)
-                        .setSingleChoiceItems(R.array.media_saving_choice,
-                                PreferencesManager.getSelectedMediasSavingPeriod(activity)) { d, n ->
-                            PreferencesManager.setSelectedMediasSavingPeriod(activity, n)
-                            d.cancel()
+            it.onPreferenceClickListener = Preference.OnPreferenceClickListener {
+                context?.let { context: Context ->
+                    AlertDialog.Builder(context)
+                            .setSingleChoiceItems(R.array.media_saving_choice,
+                                    PreferencesManager.getSelectedMediasSavingPeriod(activity)) { d, n ->
+                                PreferencesManager.setSelectedMediasSavingPeriod(activity, n)
+                                d.cancel()
 
-                            it.summary = PreferencesManager.getSelectedMediasSavingPeriodString(activity)
-                        }
-                        .show()
+                                it.summary = PreferencesManager.getSelectedMediasSavingPeriodString(activity)
+                            }
+                            .show()
+                }
+
                 false
             }
         }
@@ -784,24 +788,6 @@ class VectorSettingsPreferencesFragment : PreferenceFragmentCompat(), SharedPref
             it.onPreferenceClickListener = Preference.OnPreferenceClickListener { it ->
                 displayLoadingView()
 
-//                val task = object : AsyncTask<Void?, Void?, Void?>() {
-//                    override fun doInBackground(vararg params: Void?): Void? {
-//                        mSession.mediaCache.clear()
-//                        Glide.get(activity!!).clearDiskCache()
-//                        return null
-//                    }
-//
-//                    override fun onPostExecute(result: Void?) {
-//                        hideLoadingView()
-//
-//                        MXMediaCache.getCachesSize(activity, object : SimpleApiCallback<Long>() {
-//                            override fun onSuccess(size: Long) {
-//                                it.summary = android.text.format.Formatter.formatFileSize(activity, size)
-//                            }
-//                        })
-//                    }
-//                }
-//
                 val task = ClearMediaCacheAsyncTask(
                         {
                             mSession.mediaCache.clear()
@@ -854,7 +840,7 @@ class VectorSettingsPreferencesFragment : PreferenceFragmentCompat(), SharedPref
                 }
             })
 
-            it.onPreferenceClickListener = Preference.OnPreferenceClickListener { _ ->
+            it.onPreferenceClickListener = Preference.OnPreferenceClickListener {
                 displayLoadingView()
                 Matrix.getInstance(appContext).reloadSessions(appContext)
                 false
@@ -865,7 +851,7 @@ class VectorSettingsPreferencesFragment : PreferenceFragmentCompat(), SharedPref
 
         // deactivate account
         findPreference(PreferencesManager.SETTINGS_DEACTIVATE_ACCOUNT_KEY)
-                .onPreferenceClickListener = Preference.OnPreferenceClickListener { _ ->
+                .onPreferenceClickListener = Preference.OnPreferenceClickListener {
             startActivity(DeactivateAccountActivity.getIntent(activity!!))
 
             false
@@ -895,15 +881,15 @@ class VectorSettingsPreferencesFragment : PreferenceFragmentCompat(), SharedPref
         super.onResume()
 
         // find the view from parent activity
-        mLoadingView = activity!!.findViewById(R.id.vector_settings_spinner_views)
+        mLoadingView = activity?.findViewById(R.id.vector_settings_spinner_views)
 
 
         if (mSession.isAlive) {
-            val context = activity!!.applicationContext
+            val context = activity?.applicationContext
 
             mSession.dataHandler.addListener(mEventsListener)
 
-            Matrix.getInstance(context)!!.addNetworkEventListener(mNetworkListener)
+            Matrix.getInstance(context)?.addNetworkEventListener(mNetworkListener)
 
             mSession.myUser.refreshThirdPartyIdentifiers(object : SimpleApiCallback<Void>() {
                 override fun onSuccess(info: Void?) {
@@ -916,13 +902,11 @@ class VectorSettingsPreferencesFragment : PreferenceFragmentCompat(), SharedPref
                 }
             })
 
-            Matrix.getInstance(context)!!
-                    .pushManager
-                    .refreshPushersList(Matrix.getInstance(context)!!.sessions, object : SimpleApiCallback<Void>(activity) {
-                        override fun onSuccess(info: Void?) {
-                            refreshPushersList()
-                        }
-                    })
+            Matrix.getInstance(context)?.pushManager?.refreshPushersList(Matrix.getInstance(context)?.sessions, object : SimpleApiCallback<Void>(activity) {
+                override fun onSuccess(info: Void?) {
+                    refreshPushersList()
+                }
+            })
 
             PreferenceManager.getDefaultSharedPreferences(context).registerOnSharedPreferenceChangeListener(this)
 
@@ -937,11 +921,11 @@ class VectorSettingsPreferencesFragment : PreferenceFragmentCompat(), SharedPref
     override fun onPause() {
         super.onPause()
 
-        val context = activity!!.applicationContext
+        val context = activity?.applicationContext
 
         if (mSession.isAlive) {
             mSession.dataHandler.removeListener(mEventsListener)
-            Matrix.getInstance(context)!!.removeNetworkEventListener(mNetworkListener)
+            Matrix.getInstance(context)?.removeNetworkEventListener(mNetworkListener)
         }
 
         PreferenceManager.getDefaultSharedPreferences(context).unregisterOnSharedPreferenceChangeListener(this)
@@ -983,9 +967,7 @@ class VectorSettingsPreferencesFragment : PreferenceFragmentCompat(), SharedPref
      * Hide the loading view.
      */
     private fun hideLoadingView() {
-        mLoadingView?.let {
-            it.visibility = View.GONE
-        }
+        mLoadingView?.visibility = View.GONE
     }
 
     /**
@@ -994,9 +976,7 @@ class VectorSettingsPreferencesFragment : PreferenceFragmentCompat(), SharedPref
      * @param refresh true to refresh the display
      */
     private fun hideLoadingView(refresh: Boolean) {
-        mLoadingView?.let {
-            it.visibility = View.GONE
-        }
+        mLoadingView?.visibility = View.GONE
 
         if (refresh) {
             refreshDisplay()
@@ -1007,8 +987,9 @@ class VectorSettingsPreferencesFragment : PreferenceFragmentCompat(), SharedPref
      * Refresh the preferences.
      */
     private fun refreshDisplay() {
-        val isConnected = Matrix.getInstance(activity)!!.isConnected
-        val appContext = activity!!.applicationContext
+        // If Matrix instance is null, then connection can't be there
+        val isConnected = Matrix.getInstance(activity)?.isConnected ?: false
+        val appContext = activity?.applicationContext
 
         val preferenceManager = preferenceManager
 
@@ -1029,24 +1010,25 @@ class VectorSettingsPreferencesFragment : PreferenceFragmentCompat(), SharedPref
 
         val rules = mSession.dataHandler.pushRules()
 
-        val pushManager = Matrix.getInstance(appContext)!!.pushManager
+        val pushManager = Matrix.getInstance(appContext)?.pushManager
 
         for (resourceText in mPushesRuleByResourceId.keys) {
             val preference = preferenceManager.findPreference(resourceText)
 
             if (null != preference) {
                 if (preference is BingRulePreference) {
-                    preference.isEnabled = null != rules && isConnected && pushManager.areDeviceNotificationsAllowed()
+                    preference.isEnabled = null != rules && isConnected && (pushManager?.areDeviceNotificationsAllowed()
+                            ?: true)
                     mSession.dataHandler.pushRules()?.let {
                         preference.setBingRule(it.findDefaultRule(mPushesRuleByResourceId[resourceText]))
                     }
                 } else if (preference is SwitchPreference) {
                     when (resourceText) {
-                        PreferencesManager.SETTINGS_ENABLE_THIS_DEVICE_PREFERENCE_KEY -> preference.isChecked = pushManager.areDeviceNotificationsAllowed()
+                        PreferencesManager.SETTINGS_ENABLE_THIS_DEVICE_PREFERENCE_KEY -> preference.isChecked = pushManager?.areDeviceNotificationsAllowed() ?: true
 
                         PreferencesManager.SETTINGS_TURN_SCREEN_ON_PREFERENCE_KEY -> {
-                            preference.isChecked = pushManager.isScreenTurnedOn
-                            preference.isEnabled = pushManager.areDeviceNotificationsAllowed()
+                            preference.isChecked = pushManager?.isScreenTurnedOn ?: false
+                            preference.isEnabled = pushManager?.areDeviceNotificationsAllowed() ?: true
                         }
                         else -> {
                             preference.isEnabled = null != rules && isConnected
@@ -1061,9 +1043,10 @@ class VectorSettingsPreferencesFragment : PreferenceFragmentCompat(), SharedPref
         // The others notifications settings have to be disable too
         val areNotificationAllowed = rules?.findDefaultRule(BingRule.RULE_ID_DISABLE_ALL)?.isEnabled == true
 
-        mRingtonePreference.isEnabled = !areNotificationAllowed && pushManager.areDeviceNotificationsAllowed()
+        mRingtonePreference.isEnabled = !areNotificationAllowed && pushManager?.areDeviceNotificationsAllowed() ?: true
 
-        mNotificationPrivacyPreference.isEnabled = !areNotificationAllowed && pushManager.areDeviceNotificationsAllowed() && pushManager.useFcm()
+        mNotificationPrivacyPreference.isEnabled = !areNotificationAllowed && (pushManager?.areDeviceNotificationsAllowed()
+                ?: true) && pushManager?.useFcm() ?: true
     }
 
     //==============================================================================================================
@@ -1074,194 +1057,197 @@ class VectorSettingsPreferencesFragment : PreferenceFragmentCompat(), SharedPref
      * Update the password.
      */
     private fun onPasswordUpdateClick() {
-        val view = activity!!.layoutInflater.inflate(R.layout.dialog_change_password, null)
 
-        val oldPasswordText = view.findViewById<EditText>(R.id.change_password_old_pwd_text)
-        val newPasswordText = view.findViewById<EditText>(R.id.change_password_new_pwd_text)
-        val confirmNewPasswordText = view.findViewById<EditText>(R.id.change_password_confirm_new_pwd_text)
+        val thisActivity = activity
+        thisActivity?.let { activity ->
+            val view = activity.layoutInflater.inflate(R.layout.dialog_change_password, null)
+            val oldPasswordText = view.findViewById<EditText>(R.id.change_password_old_pwd_text)
+            val newPasswordText = view.findViewById<EditText>(R.id.change_password_new_pwd_text)
+            val confirmNewPasswordText = view.findViewById<EditText>(R.id.change_password_confirm_new_pwd_text)
 
-        val dialog = AlertDialog.Builder(activity!!)
-                .setTitle(R.string.settings_change_password)
-                .setView(view)
-                .setPositiveButton(R.string.save) { _, _ ->
-                    activity?.let {
-                        val imm = it.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+            val dialog = AlertDialog.Builder(activity)
+                    .setTitle(R.string.settings_change_password)
+                    .setView(view)
+                    .setPositiveButton(R.string.save) { _, _ ->
+
+                        val imm = activity.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
                         imm.hideSoftInputFromWindow(view.applicationWindowToken, 0)
-                    }
 
-                    val oldPwd = oldPasswordText.text.toString().trim()
-                    val newPwd = newPasswordText.text.toString().trim()
+                        val oldPwd = oldPasswordText.text.toString().trim()
+                        val newPwd = newPasswordText.text.toString().trim()
 
-                    displayLoadingView()
+                        displayLoadingView()
 
-                    mSession.updatePassword(oldPwd, newPwd, object : ApiCallback<Void> {
-                        private fun onDone(textId: Int) {
-                            // check the activity still exists
-                            if (null != activity) {
-                                // and the code is called in the right thread
-                                activity!!.runOnUiThread {
+                        mSession.updatePassword(oldPwd, newPwd, object : ApiCallback<Void> {
+                            private fun onDone(textId: Int) {
+                                activity.runOnUiThread {
                                     hideLoadingView()
-                                    activity?.toast(textId, Toast.LENGTH_LONG)
+                                    activity.toast(textId, Toast.LENGTH_LONG)
                                 }
                             }
-                        }
 
-                        override fun onSuccess(info: Void?) {
-                            onDone(R.string.settings_password_updated)
-                        }
+                            override fun onSuccess(info: Void?) {
+                                onDone(R.string.settings_password_updated)
+                            }
 
-                        override fun onNetworkError(e: Exception) {
-                            onDone(R.string.settings_fail_to_update_password)
-                        }
+                            override fun onNetworkError(e: Exception) {
+                                onDone(R.string.settings_fail_to_update_password)
+                            }
 
-                        override fun onMatrixError(e: MatrixError) {
-                            onDone(R.string.settings_fail_to_update_password)
-                        }
+                            override fun onMatrixError(e: MatrixError) {
+                                onDone(R.string.settings_fail_to_update_password)
+                            }
 
-                        override fun onUnexpectedError(e: Exception) {
-                            onDone(R.string.settings_fail_to_update_password)
-                        }
-                    })
-                }
-                .setNegativeButton(R.string.cancel) { _, _ ->
-                    activity?.let {
-                        val imm = it.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+                            override fun onUnexpectedError(e: Exception) {
+                                onDone(R.string.settings_fail_to_update_password)
+                            }
+                        })
+                    }
+                    .setNegativeButton(R.string.cancel) { _, _ ->
+                        val imm = activity.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
                         imm.hideSoftInputFromWindow(view.applicationWindowToken, 0)
                     }
-                }
-                .setOnCancelListener {
-                    activity?.let {
-                        val imm = it.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+                    .setOnCancelListener {
+                        val imm = activity.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
                         imm.hideSoftInputFromWindow(view.applicationWindowToken, 0)
                     }
+                    .show()
+
+            val saveButton = dialog.getButton(AlertDialog.BUTTON_POSITIVE)
+            saveButton.isEnabled = false
+
+            confirmNewPasswordText.addTextChangedListener(object : TextWatcher {
+                override fun beforeTextChanged(s: CharSequence, start: Int, count: Int, after: Int) {}
+
+                override fun onTextChanged(s: CharSequence, start: Int, before: Int, count: Int) {
+                    val oldPwd = oldPasswordText.text.toString().trim()
+                    val newPwd = newPasswordText.text.toString().trim()
+                    val newConfirmPwd = confirmNewPasswordText.text.toString().trim()
+
+                    saveButton.isEnabled = oldPwd.isNotEmpty() && newPwd.isNotEmpty() && TextUtils.equals(newPwd, newConfirmPwd)
                 }
-                .show()
 
-        val saveButton = dialog.getButton(AlertDialog.BUTTON_POSITIVE)
-        saveButton.isEnabled = false
-
-        confirmNewPasswordText.addTextChangedListener(object : TextWatcher {
-            override fun beforeTextChanged(s: CharSequence, start: Int, count: Int, after: Int) {}
-
-            override fun onTextChanged(s: CharSequence, start: Int, before: Int, count: Int) {
-                val oldPwd = oldPasswordText.text.toString().trim()
-                val newPwd = newPasswordText.text.toString().trim()
-                val newConfirmPwd = confirmNewPasswordText.text.toString().trim()
-
-                saveButton.isEnabled = oldPwd.isNotEmpty() && newPwd.isNotEmpty() && TextUtils.equals(newPwd, newConfirmPwd)
-            }
-
-            override fun afterTextChanged(s: Editable) {}
-        })
+                override fun afterTextChanged(s: Editable) {}
+            })
+        }
     }
 
     /**
      * Update a push rule.
      */
     private fun onPushRuleClick(fResourceText: String, newValue: Boolean) {
-        val pushManager = Matrix.getInstance(activity)!!.pushManager
+
+        val matrixInstance = Matrix.getInstance(context)
+        val pushManager = matrixInstance.pushManager
 
         Log.d(LOG_TAG, "onPushRuleClick $fResourceText : set to $newValue")
 
-        if (fResourceText == PreferencesManager.SETTINGS_TURN_SCREEN_ON_PREFERENCE_KEY) {
-            if (pushManager.isScreenTurnedOn != newValue) {
-                pushManager.isScreenTurnedOn = newValue
-            }
-            return
-        }
+        when (fResourceText) {
 
-        if (fResourceText == PreferencesManager.SETTINGS_ENABLE_THIS_DEVICE_PREFERENCE_KEY) {
-            val isConnected = Matrix.getInstance(activity)!!.isConnected
-            val isAllowed = pushManager.areDeviceNotificationsAllowed()
-
-            // avoid useless update
-            if (isAllowed == newValue) {
-                return
+            PreferencesManager.SETTINGS_TURN_SCREEN_ON_PREFERENCE_KEY -> {
+                if (pushManager.isScreenTurnedOn != newValue) {
+                    pushManager.isScreenTurnedOn = newValue
+                }
             }
 
-            pushManager.setDeviceNotificationsAllowed(!isAllowed)
+            PreferencesManager.SETTINGS_ENABLE_THIS_DEVICE_PREFERENCE_KEY -> {
+                val isConnected = matrixInstance.isConnected
+                val isAllowed = pushManager.areDeviceNotificationsAllowed()
 
-            // when using FCM
-            // need to register on servers
-            if (isConnected && pushManager.useFcm() && (pushManager.isServerRegistered || pushManager.isServerUnRegistered)) {
-                val listener = object : ApiCallback<Void> {
+                // avoid useless update
+                if (isAllowed == newValue) {
+                    return
+                }
 
-                    private fun onDone() {
-                        activity?.runOnUiThread {
-                            hideLoadingView(true)
-                            refreshPushersList()
+                pushManager.setDeviceNotificationsAllowed(!isAllowed)
+
+                // when using FCM
+                // need to register on servers
+                if (isConnected && pushManager.useFcm() && (pushManager.isServerRegistered || pushManager.isServerUnRegistered)) {
+                    val listener = object : ApiCallback<Void> {
+
+                        private fun onDone() {
+                            activity?.runOnUiThread {
+                                hideLoadingView(true)
+                                refreshPushersList()
+                            }
+                        }
+
+                        override fun onSuccess(info: Void?) {
+                            onDone()
+                        }
+
+                        override fun onMatrixError(e: MatrixError?) {
+                            // Set again the previous state
+                            pushManager.setDeviceNotificationsAllowed(isAllowed)
+                            onDone()
+                        }
+
+                        override fun onNetworkError(e: java.lang.Exception?) {
+                            // Set again the previous state
+                            pushManager.setDeviceNotificationsAllowed(isAllowed)
+                            onDone()
+                        }
+
+                        override fun onUnexpectedError(e: java.lang.Exception?) {
+                            // Set again the previous state
+                            pushManager.setDeviceNotificationsAllowed(isAllowed)
+                            onDone()
                         }
                     }
 
-                    override fun onSuccess(info: Void?) {
-                        onDone()
+                    displayLoadingView()
+                    if (pushManager.isServerRegistered) {
+                        pushManager.unregister(listener)
+                    } else {
+                        pushManager.register(listener)
                     }
-
-                    override fun onMatrixError(e: MatrixError?) {
-                        // Set again the previous state
-                        pushManager.setDeviceNotificationsAllowed(isAllowed)
-                        onDone()
-                    }
-
-                    override fun onNetworkError(e: java.lang.Exception?) {
-                        // Set again the previous state
-                        pushManager.setDeviceNotificationsAllowed(isAllowed)
-                        onDone()
-                    }
-
-                    override fun onUnexpectedError(e: java.lang.Exception?) {
-                        // Set again the previous state
-                        pushManager.setDeviceNotificationsAllowed(isAllowed)
-                        onDone()
-                    }
-                }
-
-                displayLoadingView()
-                if (pushManager.isServerRegistered) {
-                    pushManager.unregister(listener)
-                } else {
-                    pushManager.register(listener)
                 }
             }
 
-            return
-        }
+            // check if there is an update
 
-        val ruleId = mPushesRuleByResourceId[fResourceText]
-        val rule = mSession.dataHandler.pushRules()?.findDefaultRule(ruleId)
+            // on some old android APIs,
+            // the callback is called even if there is no user interaction
+            // so the value will be checked to ensure there is really no update.
+            else -> {
 
-        // check if there is an update
-        var curValue = null != rule && rule.isEnabled
+                val ruleId = mPushesRuleByResourceId[fResourceText]
+                val rule = mSession.dataHandler.pushRules()?.findDefaultRule(ruleId)
 
-        if (TextUtils.equals(ruleId, BingRule.RULE_ID_DISABLE_ALL) || TextUtils.equals(ruleId, BingRule.RULE_ID_SUPPRESS_BOTS_NOTIFICATIONS)) {
-            curValue = !curValue
-        }
+                // check if there is an update
+                var curValue = null != rule && rule.isEnabled
 
-        // on some old android APIs,
-        // the callback is called even if there is no user interaction
-        // so the value will be checked to ensure there is really no update.
-        if (newValue == curValue) {
-            return
-        }
-
-        if (null != rule) {
-            displayLoadingView()
-            mSession.dataHandler.bingRulesManager.updateEnableRuleStatus(rule, !rule.isEnabled, object : BingRulesManager.onBingRuleUpdateListener {
-                private fun onDone() {
-                    refreshDisplay()
-                    hideLoadingView()
+                if (TextUtils.equals(ruleId, BingRule.RULE_ID_DISABLE_ALL) || TextUtils.equals(ruleId, BingRule.RULE_ID_SUPPRESS_BOTS_NOTIFICATIONS)) {
+                    curValue = !curValue
                 }
 
-                override fun onBingRuleUpdateSuccess() {
-                    onDone()
+                // on some old android APIs,
+                // the callback is called even if there is no user interaction
+                // so the value will be checked to ensure there is really no update.
+                if (newValue == curValue) {
+                    return
                 }
 
-                override fun onBingRuleUpdateFailure(errorMessage: String) {
-                    activity?.toast(errorMessage)
+                if (null != rule) {
+                    displayLoadingView()
+                    mSession.dataHandler.bingRulesManager.updateEnableRuleStatus(rule, !rule.isEnabled, object : BingRulesManager.onBingRuleUpdateListener {
+                        private fun onDone() {
+                            refreshDisplay()
+                            hideLoadingView()
+                        }
 
-                    onDone()
+                        override fun onBingRuleUpdateSuccess() {
+                            onDone()
+                        }
+
+                        override fun onBingRuleUpdateFailure(errorMessage: String) {
+                            activity?.toast(errorMessage)
+                            onDone()
+                        }
+                    })
                 }
-            })
+            }
         }
     }
 
@@ -1893,12 +1879,11 @@ class VectorSettingsPreferencesFragment : PreferenceFragmentCompat(), SharedPref
             // add new phone number list
             mDisplayedPhoneNumber = phoneNumberList
 
-            var index = 0
             val addPhoneBtn = mUserSettingsCategory.findPreference(ADD_PHONE_NUMBER_PREFERENCE_KEY)
                     ?: return
             var order = addPhoneBtn.order
 
-            for (phoneNumber3PID in currentPhoneNumber3PID) {
+            for ((index, phoneNumber3PID) in currentPhoneNumber3PID.withIndex()) {
                 val preference = VectorPreference(activity!!)
 
                 preference.title = getString(R.string.settings_phone_number)
@@ -1927,7 +1912,6 @@ class VectorSettingsPreferencesFragment : PreferenceFragmentCompat(), SharedPref
                     }
                 }
 
-                index++
                 order++
                 mUserSettingsCategory.addPreference(preference)
             }
@@ -2790,13 +2774,11 @@ class VectorSettingsPreferencesFragment : PreferenceFragmentCompat(), SharedPref
             val joinedGroups = ArrayList(mSession.groupsManager.joinedGroups)
             Collections.sort(joinedGroups, Group.mGroupsComparator)
 
-            var prefIndex = 0
             mPublicisedGroups = publicisedGroups.toMutableSet()
 
-            for (group in joinedGroups) {
+            for ((prefIndex, group) in joinedGroups.withIndex()) {
                 val vectorGroupPreference = VectorGroupPreference(activity!!)
                 vectorGroupPreference.key = DEVICES_PREFERENCE_KEY_BASE + prefIndex
-                prefIndex++
 
                 vectorGroupPreference.setGroup(group, mSession)
                 vectorGroupPreference.title = group.displayName
