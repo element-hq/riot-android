@@ -1584,83 +1584,83 @@ class VectorSettingsPreferencesFragment : PreferenceFragmentCompat(), SharedPref
      * Refresh the pushers list
      */
     private fun refreshPushersList() {
-       activity?.let { activity->
-           val pushManager = Matrix.getInstance(activity).pushManager
-           val pushersList = ArrayList(pushManager.mPushersList)
+        activity?.let { activity ->
+            val pushManager = Matrix.getInstance(activity).pushManager
+            val pushersList = ArrayList(pushManager.mPushersList)
 
-           if (pushersList.isEmpty()) {
-               preferenceScreen.removePreference(mPushersSettingsCategory)
-               preferenceScreen.removePreference(mPushersSettingsDivider)
-               return
-           }
+            if (pushersList.isEmpty()) {
+                preferenceScreen.removePreference(mPushersSettingsCategory)
+                preferenceScreen.removePreference(mPushersSettingsDivider)
+                return
+            }
 
-           // check first if there is an update
-           var isNewList = true
-           if (pushersList.size == mDisplayedPushers.size) {
-               isNewList = !mDisplayedPushers.containsAll(pushersList)
-           }
+            // check first if there is an update
+            var isNewList = true
+            if (pushersList.size == mDisplayedPushers.size) {
+                isNewList = !mDisplayedPushers.containsAll(pushersList)
+            }
 
-           if (isNewList) {
-               // remove the displayed one
-               mPushersSettingsCategory.removeAll()
+            if (isNewList) {
+                // remove the displayed one
+                mPushersSettingsCategory.removeAll()
 
-               // add new emails list
-               mDisplayedPushers = pushersList
+                // add new emails list
+                mDisplayedPushers = pushersList
 
-               var index = 0
+                var index = 0
 
-               for (pusher in mDisplayedPushers) {
-                   if (null != pusher.lang) {
-                       val isThisDeviceTarget = TextUtils.equals(pushManager.currentRegistrationToken, pusher.pushkey)
+                for (pusher in mDisplayedPushers) {
+                    if (null != pusher.lang) {
+                        val isThisDeviceTarget = TextUtils.equals(pushManager.currentRegistrationToken, pusher.pushkey)
 
-                       val preference = VectorPreference(activity).apply {
-                           mTypeface = if (isThisDeviceTarget) Typeface.BOLD else Typeface.NORMAL
-                       }
-                       preference.title = pusher.deviceDisplayName
-                       preference.summary = pusher.appDisplayName
-                       preference.key = PUSHER_PREFERENCE_KEY_BASE + index
-                       index++
-                       mPushersSettingsCategory.addPreference(preference)
+                        val preference = VectorPreference(activity).apply {
+                            mTypeface = if (isThisDeviceTarget) Typeface.BOLD else Typeface.NORMAL
+                        }
+                        preference.title = pusher.deviceDisplayName
+                        preference.summary = pusher.appDisplayName
+                        preference.key = PUSHER_PREFERENCE_KEY_BASE + index
+                        index++
+                        mPushersSettingsCategory.addPreference(preference)
 
-                       // the user cannot remove the self device target
-                       if (!isThisDeviceTarget) {
-                           preference.onPreferenceLongClickListener = object : VectorPreference.OnPreferenceLongClickListener {
-                               override fun onPreferenceLongClick(preference: Preference): Boolean {
-                                   AlertDialog.Builder(activity)
-                                           .setTitle(R.string.dialog_title_confirmation)
-                                           .setMessage(R.string.settings_delete_notification_targets_confirmation)
-                                           .setPositiveButton(R.string.remove)
-                                           { _, _ ->
-                                               displayLoadingView()
-                                               pushManager.unregister(mSession, pusher, object : ApiCallback<Void> {
-                                                   override fun onSuccess(info: Void?) {
-                                                       refreshPushersList()
-                                                       onCommonDone(null)
-                                                   }
+                        // the user cannot remove the self device target
+                        if (!isThisDeviceTarget) {
+                            preference.onPreferenceLongClickListener = object : VectorPreference.OnPreferenceLongClickListener {
+                                override fun onPreferenceLongClick(preference: Preference): Boolean {
+                                    AlertDialog.Builder(activity)
+                                            .setTitle(R.string.dialog_title_confirmation)
+                                            .setMessage(R.string.settings_delete_notification_targets_confirmation)
+                                            .setPositiveButton(R.string.remove)
+                                            { _, _ ->
+                                                displayLoadingView()
+                                                pushManager.unregister(mSession, pusher, object : ApiCallback<Void> {
+                                                    override fun onSuccess(info: Void?) {
+                                                        refreshPushersList()
+                                                        onCommonDone(null)
+                                                    }
 
-                                                   override fun onNetworkError(e: Exception) {
-                                                       onCommonDone(e.localizedMessage)
-                                                   }
+                                                    override fun onNetworkError(e: Exception) {
+                                                        onCommonDone(e.localizedMessage)
+                                                    }
 
-                                                   override fun onMatrixError(e: MatrixError) {
-                                                       onCommonDone(e.localizedMessage)
-                                                   }
+                                                    override fun onMatrixError(e: MatrixError) {
+                                                        onCommonDone(e.localizedMessage)
+                                                    }
 
-                                                   override fun onUnexpectedError(e: Exception) {
-                                                       onCommonDone(e.localizedMessage)
-                                                   }
-                                               })
-                                           }
-                                           .setNegativeButton(R.string.cancel, null)
-                                           .show()
-                                   return true
-                               }
-                           }
-                       }
-                   }
-               }
-           }
-       }
+                                                    override fun onUnexpectedError(e: Exception) {
+                                                        onCommonDone(e.localizedMessage)
+                                                    }
+                                                })
+                                            }
+                                            .setNegativeButton(R.string.cancel, null)
+                                            .show()
+                                    return true
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
     }
 
     //==============================================================================================================
@@ -2033,7 +2033,7 @@ class VectorSettingsPreferencesFragment : PreferenceFragmentCompat(), SharedPref
      * Refresh the background sync preference
      */
     private fun refreshBackgroundSyncPrefs() {
-        activity?.let {  activity->
+        activity?.let { activity ->
             val pushManager = Matrix.getInstance(activity).pushManager
 
             val timeout = pushManager.backgroundSyncTimeOut / 1000
@@ -2324,14 +2324,16 @@ class VectorSettingsPreferencesFragment : PreferenceFragmentCompat(), SharedPref
      *
      * @param aDeviceInfo the device information
      */
-    private fun displayDeviceDetailsDialog(aDeviceInfo: DeviceInfo?) {
-        val builder = AlertDialog.Builder(activity!!)
-        val inflater = activity!!.layoutInflater
-        val layout = inflater.inflate(R.layout.dialog_device_details, null)
+    private fun displayDeviceDetailsDialog(aDeviceInfo: DeviceInfo) {
 
-        if (null != aDeviceInfo) {
-            //device ID
+        activity?.let {
+
+            val builder = AlertDialog.Builder(it)
+            val inflater = it.layoutInflater
+            val layout = inflater.inflate(R.layout.dialog_device_details, null)
             var textView = layout.findViewById<TextView>(R.id.device_id)
+
+
             textView.text = aDeviceInfo.device_id
 
             // device name
@@ -2343,15 +2345,10 @@ class VectorSettingsPreferencesFragment : PreferenceFragmentCompat(), SharedPref
             textView = layout.findViewById(R.id.device_last_seen)
             if (!TextUtils.isEmpty(aDeviceInfo.last_seen_ip)) {
                 val lastSeenIp = aDeviceInfo.last_seen_ip
-                var lastSeenTime = LABEL_UNAVAILABLE_DATA
-
-                if (null != activity) {
-                    val dateFormatTime = SimpleDateFormat("HH:mm:ss")
-                    val time = dateFormatTime.format(Date(aDeviceInfo.last_seen_ts))
-
-                    val dateFormat = DateFormat.getDateInstance(DateFormat.SHORT, Locale.getDefault())
-                    lastSeenTime = dateFormat.format(Date(aDeviceInfo.last_seen_ts)) + ", " + time
-                }
+                val dateFormatTime = SimpleDateFormat("HH:mm:ss")
+                val time = dateFormatTime.format(Date(aDeviceInfo.last_seen_ts))
+                val dateFormat = DateFormat.getDateInstance(DateFormat.SHORT, Locale.getDefault())
+                val lastSeenTime = dateFormat.format(Date(aDeviceInfo.last_seen_ts)) + ", " + time
                 val lastSeenInfo = getString(R.string.devices_details_last_seen_format, lastSeenIp, lastSeenTime)
                 textView.text = lastSeenInfo
             } else {
@@ -2380,8 +2377,6 @@ class VectorSettingsPreferencesFragment : PreferenceFragmentCompat(), SharedPref
                         false
                     })
                     .show()
-        } else {
-            Log.e(LOG_TAG, "## displayDeviceDetailsDialog(): sanity check failure")
         }
     }
 
@@ -2391,59 +2386,61 @@ class VectorSettingsPreferencesFragment : PreferenceFragmentCompat(), SharedPref
      * @param aDeviceInfoToRename device info
      */
     private fun displayDeviceRenameDialog(aDeviceInfoToRename: DeviceInfo) {
-        val inflater = activity!!.layoutInflater
-        val layout = inflater.inflate(R.layout.dialog_base_edit_text, null)
+        activity?.let {
+            val inflater = it.layoutInflater
+            val layout = inflater.inflate(R.layout.dialog_base_edit_text, null)
 
-        val input = layout.findViewById<EditText>(R.id.edit_text)
-        input.setText(aDeviceInfoToRename.display_name)
+            val input = layout.findViewById<EditText>(R.id.edit_text)
+            input.setText(aDeviceInfoToRename.display_name)
 
-        AlertDialog.Builder(activity!!)
-                .setTitle(R.string.devices_details_device_name)
-                .setView(layout)
-                .setPositiveButton(R.string.ok) { _, _ ->
-                    displayLoadingView()
+            AlertDialog.Builder(it)
+                    .setTitle(R.string.devices_details_device_name)
+                    .setView(layout)
+                    .setPositiveButton(R.string.ok) { _, _ ->
+                        displayLoadingView()
 
-                    val newName = input.text.toString()
+                        val newName = input.text.toString()
 
-                    mSession.setDeviceName(aDeviceInfoToRename.device_id, newName, object : ApiCallback<Void> {
-                        override fun onSuccess(info: Void?) {
-                            hideLoadingView()
+                        mSession.setDeviceName(aDeviceInfoToRename.device_id, newName, object : ApiCallback<Void> {
+                            override fun onSuccess(info: Void?) {
+                                hideLoadingView()
 
-                            // search which preference is updated
-                            val count = mDevicesListSettingsCategory.preferenceCount
+                                // search which preference is updated
+                                val count = mDevicesListSettingsCategory.preferenceCount
 
-                            for (i in 0 until count) {
-                                val pref = mDevicesListSettingsCategory.getPreference(i) as Preference
+                                for (i in 0 until count) {
+                                    val pref = mDevicesListSettingsCategory.getPreference(i) as Preference
 
-                                if (TextUtils.equals(aDeviceInfoToRename.device_id, pref.title)) {
-                                    pref.summary = newName
+                                    if (TextUtils.equals(aDeviceInfoToRename.device_id, pref.title)) {
+                                        pref.summary = newName
+                                    }
                                 }
+
+                                // detect if the updated device is the current account one
+                                if (TextUtils.equals(cryptoInfoDeviceIdPreference.summary, aDeviceInfoToRename.device_id)) {
+                                    cryptoInfoDeviceNamePreference.summary = newName
+                                }
+
+                                // Also change the display name in aDeviceInfoToRename, in case of multiple renaming
+                                aDeviceInfoToRename.display_name = newName
                             }
 
-                            // detect if the updated device is the current account one
-                            if (TextUtils.equals(cryptoInfoDeviceIdPreference.summary, aDeviceInfoToRename.device_id)) {
-                                cryptoInfoDeviceNamePreference.summary = newName
+                            override fun onNetworkError(e: Exception) {
+                                onCommonDone(e.localizedMessage)
                             }
 
-                            // Also change the display name in aDeviceInfoToRename, in case of multiple renaming
-                            aDeviceInfoToRename.display_name = newName
-                        }
+                            override fun onMatrixError(e: MatrixError) {
+                                onCommonDone(e.localizedMessage)
+                            }
 
-                        override fun onNetworkError(e: Exception) {
-                            onCommonDone(e.localizedMessage)
-                        }
-
-                        override fun onMatrixError(e: MatrixError) {
-                            onCommonDone(e.localizedMessage)
-                        }
-
-                        override fun onUnexpectedError(e: Exception) {
-                            onCommonDone(e.localizedMessage)
-                        }
-                    })
-                }
-                .setNegativeButton(R.string.cancel, null)
-                .show()
+                            override fun onUnexpectedError(e: Exception) {
+                                onCommonDone(e.localizedMessage)
+                            }
+                        })
+                    }
+                    .setNegativeButton(R.string.cancel, null)
+                    .show()
+        }
     }
 
     /**
@@ -2484,39 +2481,41 @@ class VectorSettingsPreferencesFragment : PreferenceFragmentCompat(), SharedPref
      *
      * @param aDeviceInfoToDelete device info
      */
-    private fun displayDeviceDeletionDialog(aDeviceInfoToDelete: DeviceInfo?) {
-        if (aDeviceInfoToDelete?.device_id != null) {
+    private fun displayDeviceDeletionDialog(aDeviceInfoToDelete: DeviceInfo) {
+        if (aDeviceInfoToDelete.device_id != null) {
             if (!TextUtils.isEmpty(mAccountPassword)) {
                 deleteDevice(aDeviceInfoToDelete.device_id)
             } else {
-                val inflater = activity!!.layoutInflater
-                val layout = inflater.inflate(R.layout.dialog_device_delete, null)
-                val passwordEditText = layout.findViewById<EditText>(R.id.delete_password)
+                activity?.let {
+                    val inflater = it.layoutInflater
+                    val layout = inflater.inflate(R.layout.dialog_device_delete, null)
+                    val passwordEditText = layout.findViewById<EditText>(R.id.delete_password)
 
-                AlertDialog.Builder(activity!!)
-                        .setIcon(android.R.drawable.ic_dialog_alert)
-                        .setTitle(R.string.devices_delete_dialog_title)
-                        .setView(layout)
-                        .setPositiveButton(R.string.devices_delete_submit_button_label, DialogInterface.OnClickListener { _, _ ->
-                            if (TextUtils.isEmpty(passwordEditText.toString())) {
-                                activity!!.applicationContext.toast(R.string.error_empty_field_your_password)
-                                return@OnClickListener
-                            }
-                            mAccountPassword = passwordEditText.text.toString()
-                            deleteDevice(aDeviceInfoToDelete.device_id)
-                        })
-                        .setNegativeButton(R.string.cancel) { _, _ ->
-                            hideLoadingView()
-                        }
-                        .setOnKeyListener(DialogInterface.OnKeyListener { dialog, keyCode, event ->
-                            if (event.action == KeyEvent.ACTION_UP && keyCode == KeyEvent.KEYCODE_BACK) {
-                                dialog.cancel()
+                    AlertDialog.Builder(it)
+                            .setIcon(android.R.drawable.ic_dialog_alert)
+                            .setTitle(R.string.devices_delete_dialog_title)
+                            .setView(layout)
+                            .setPositiveButton(R.string.devices_delete_submit_button_label, DialogInterface.OnClickListener { _, _ ->
+                                if (TextUtils.isEmpty(passwordEditText.toString())) {
+                                    it.toast(R.string.error_empty_field_your_password)
+                                    return@OnClickListener
+                                }
+                                mAccountPassword = passwordEditText.text.toString()
+                                deleteDevice(aDeviceInfoToDelete.device_id)
+                            })
+                            .setNegativeButton(R.string.cancel) { _, _ ->
                                 hideLoadingView()
-                                return@OnKeyListener true
                             }
-                            false
-                        })
-                        .show()
+                            .setOnKeyListener(DialogInterface.OnKeyListener { dialog, keyCode, event ->
+                                if (event.action == KeyEvent.ACTION_UP && keyCode == KeyEvent.KEYCODE_BACK) {
+                                    dialog.cancel()
+                                    hideLoadingView()
+                                    return@OnKeyListener true
+                                }
+                                false
+                            })
+                            .show()
+                }
             }
         } else {
             Log.e(LOG_TAG, "## displayDeviceDeletionDialog(): sanity check failure")
@@ -2529,75 +2528,78 @@ class VectorSettingsPreferencesFragment : PreferenceFragmentCompat(), SharedPref
     private fun exportKeys() {
         // We need WRITE_EXTERNAL permission
         if (checkPermissions(PERMISSIONS_FOR_WRITING_FILES, this, PERMISSION_REQUEST_CODE_EXPORT_KEYS)) {
-            val dialogLayout = activity!!.layoutInflater.inflate(R.layout.dialog_export_e2e_keys, null)
-            val builder = AlertDialog.Builder(activity!!)
-                    .setTitle(R.string.encryption_export_room_keys)
-                    .setView(dialogLayout)
+            activity?.let { activity ->
 
-            val passPhrase1EditText = dialogLayout.findViewById<TextInputEditText>(R.id.dialog_e2e_keys_passphrase_edit_text)
-            val passPhrase2EditText = dialogLayout.findViewById<TextInputEditText>(R.id.dialog_e2e_keys_confirm_passphrase_edit_text)
-            val exportButton = dialogLayout.findViewById<Button>(R.id.dialog_e2e_keys_export_button)
-            val textWatcher = object : TextWatcher {
-                override fun beforeTextChanged(s: CharSequence, start: Int, count: Int, after: Int) {
+                val dialogLayout = activity.layoutInflater.inflate(R.layout.dialog_export_e2e_keys, null)
+                val builder = AlertDialog.Builder(activity)
+                        .setTitle(R.string.encryption_export_room_keys)
+                        .setView(dialogLayout)
 
+                val passPhrase1EditText = dialogLayout.findViewById<TextInputEditText>(R.id.dialog_e2e_keys_passphrase_edit_text)
+                val passPhrase2EditText = dialogLayout.findViewById<TextInputEditText>(R.id.dialog_e2e_keys_confirm_passphrase_edit_text)
+                val exportButton = dialogLayout.findViewById<Button>(R.id.dialog_e2e_keys_export_button)
+                val textWatcher = object : TextWatcher {
+                    override fun beforeTextChanged(s: CharSequence, start: Int, count: Int, after: Int) {
+
+                    }
+
+                    override fun onTextChanged(s: CharSequence, start: Int, before: Int, count: Int) {
+
+                    }
+
+                    override fun afterTextChanged(s: Editable) {
+                        when {
+                            TextUtils.isEmpty(passPhrase1EditText.text) -> {
+                                exportButton.isEnabled = false
+                                passPhrase2EditText.error = null
+                            }
+                            TextUtils.equals(passPhrase1EditText.text, passPhrase2EditText.text) -> {
+                                exportButton.isEnabled = true
+                                passPhrase2EditText.error = null
+                            }
+                            else -> {
+                                exportButton.isEnabled = false
+                                passPhrase2EditText.error = getString(R.string.encryption_export_passphrase_dont_match)
+                            }
+                        }
+                    }
                 }
 
-                override fun onTextChanged(s: CharSequence, start: Int, before: Int, count: Int) {
+                passPhrase1EditText.addTextChangedListener(textWatcher)
+                passPhrase2EditText.addTextChangedListener(textWatcher)
 
+                exportButton.isEnabled = false
+
+                val exportDialog = builder.show()
+
+                exportButton.setOnClickListener {
+                    displayLoadingView()
+
+                    CommonActivityUtils.exportKeys(mSession, passPhrase1EditText.text.toString(), object : ApiCallback<String> {
+                        override fun onSuccess(filename: String) {
+                            hideLoadingView()
+
+                            AlertDialog.Builder(activity)
+                                    .setMessage(getString(R.string.encryption_export_saved_as, filename))
+                                    .setPositiveButton(R.string.ok, null)
+                                    .show()
+                        }
+
+                        override fun onNetworkError(e: Exception) {
+                            hideLoadingView()
+                        }
+
+                        override fun onMatrixError(e: MatrixError) {
+                            hideLoadingView()
+                        }
+
+                        override fun onUnexpectedError(e: Exception) {
+                            hideLoadingView()
+                        }
+                    })
+
+                    exportDialog.dismiss()
                 }
-
-                override fun afterTextChanged(s: Editable) {
-                    when {
-                        TextUtils.isEmpty(passPhrase1EditText.text) -> {
-                            exportButton.isEnabled = false
-                            passPhrase2EditText.error = null
-                        }
-                        TextUtils.equals(passPhrase1EditText.text, passPhrase2EditText.text) -> {
-                            exportButton.isEnabled = true
-                            passPhrase2EditText.error = null
-                        }
-                        else -> {
-                            exportButton.isEnabled = false
-                            passPhrase2EditText.error = getString(R.string.encryption_export_passphrase_dont_match)
-                        }
-                    }
-                }
-            }
-
-            passPhrase1EditText.addTextChangedListener(textWatcher)
-            passPhrase2EditText.addTextChangedListener(textWatcher)
-
-            exportButton.isEnabled = false
-
-            val exportDialog = builder.show()
-
-            exportButton.setOnClickListener {
-                displayLoadingView()
-
-                CommonActivityUtils.exportKeys(mSession, passPhrase1EditText.text.toString(), object : ApiCallback<String> {
-                    override fun onSuccess(filename: String) {
-                        hideLoadingView()
-
-                        AlertDialog.Builder(activity!!)
-                                .setMessage(getString(R.string.encryption_export_saved_as, filename))
-                                .setPositiveButton(R.string.ok, null)
-                                .show()
-                    }
-
-                    override fun onNetworkError(e: Exception) {
-                        hideLoadingView()
-                    }
-
-                    override fun onMatrixError(e: MatrixError) {
-                        hideLoadingView()
-                    }
-
-                    override fun onUnexpectedError(e: Exception) {
-                        hideLoadingView()
-                    }
-                })
-
-                exportDialog.dismiss()
             }
         }
     }
@@ -2622,11 +2624,12 @@ class VectorSettingsPreferencesFragment : PreferenceFragmentCompat(), SharedPref
         }
 
         val sharedDataItems = ArrayList(RoomMediaMessage.listRoomMediaMessages(intent))
+        val thisActivity = activity
 
-        if (sharedDataItems.size > 0) {
+        if (sharedDataItems.isNotEmpty() && thisActivity != null) {
             val sharedDataItem = sharedDataItems[0]
-            val dialogLayout = activity!!.layoutInflater.inflate(R.layout.dialog_import_e2e_keys, null)
-            val builder = AlertDialog.Builder(activity!!)
+            val dialogLayout = thisActivity.layoutInflater.inflate(R.layout.dialog_import_e2e_keys, null)
+            val builder = AlertDialog.Builder(thisActivity)
                     .setTitle(R.string.encryption_import_room_keys)
                     .setView(dialogLayout)
 
@@ -2650,7 +2653,7 @@ class VectorSettingsPreferencesFragment : PreferenceFragmentCompat(), SharedPref
             importButton.isEnabled = false
 
             val importDialog = builder.show()
-            val appContext = activity!!.applicationContext
+            val appContext = thisActivity.applicationContext
 
             importButton.setOnClickListener(View.OnClickListener {
                 val password = passPhraseEditText.text.toString()
@@ -2685,11 +2688,11 @@ class VectorSettingsPreferencesFragment : PreferenceFragmentCompat(), SharedPref
                         hideLoadingView()
 
                         info?.let {
-                            AlertDialog.Builder(activity!!)
+                            AlertDialog.Builder(thisActivity)
                                     .setMessage(getString(R.string.encryption_import_room_keys_success,
                                             it.successfullyNumberOfImportedKeys,
                                             it.totalNumberOfKeys))
-                                    .setPositiveButton(R.string.ok, null)
+                                    .setPositiveButton(R.string.ok) { dialog, _ -> dialog.dismiss() }
                                     .show()
                         }
                     }
@@ -2727,8 +2730,10 @@ class VectorSettingsPreferencesFragment : PreferenceFragmentCompat(), SharedPref
     private fun refreshGroupFlairsList() {
         // display a spinner while refreshing
         if (0 == mGroupsFlairCategory.preferenceCount) {
-            val preference = ProgressBarPreference(activity!!)
-            mGroupsFlairCategory.addPreference(preference)
+            activity?.let {
+                val preference = ProgressBarPreference(it)
+                mGroupsFlairCategory.addPreference(preference)
+            }
         }
 
         mSession.groupsManager.getUserPublicisedGroups(mSession.myUserId, true, object : ApiCallback<Set<String>> {
@@ -2767,9 +2772,12 @@ class VectorSettingsPreferencesFragment : PreferenceFragmentCompat(), SharedPref
     private fun buildGroupsList(publicisedGroups: Set<String>) {
         var isNewList = true
 
-        if (null != mPublicisedGroups && mPublicisedGroups!!.size == publicisedGroups.size) {
-            isNewList = !mPublicisedGroups!!.containsAll(publicisedGroups)
+        mPublicisedGroups?.let {
+            if (it.size == publicisedGroups.size) {
+                isNewList = !it.containsAll(publicisedGroups)
+            }
         }
+
 
         if (isNewList) {
             val joinedGroups = ArrayList(mSession.groupsManager.joinedGroups)
@@ -2790,7 +2798,12 @@ class VectorSettingsPreferencesFragment : PreferenceFragmentCompat(), SharedPref
 
                 vectorGroupPreference.onPreferenceChangeListener = Preference.OnPreferenceChangeListener { _, newValue ->
                     if (newValue is Boolean) {
-                        val isFlaired = mPublicisedGroups!!.contains(group.groupId)
+                        /*
+                         *  if mPublicisedGroup is null somehow, then
+                         *  we cant check it contains groupId or not
+                         *  so set isFlaired to false
+                        */
+                        val isFlaired = mPublicisedGroups?.contains(group.groupId) ?: false
 
                         if (newValue != isFlaired) {
                             displayLoadingView()
@@ -2798,9 +2811,9 @@ class VectorSettingsPreferencesFragment : PreferenceFragmentCompat(), SharedPref
                                 override fun onSuccess(info: Void?) {
                                     hideLoadingView()
                                     if (newValue) {
-                                        mPublicisedGroups!!.add(group.groupId)
+                                        mPublicisedGroups?.add(group.groupId)
                                     } else {
-                                        mPublicisedGroups!!.remove(group.groupId)
+                                        mPublicisedGroups?.remove(group.groupId)
                                     }
                                 }
 
