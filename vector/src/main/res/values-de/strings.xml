@@ -784,7 +784,6 @@ Unbekannte Geräte:</string>
 
     <!-- notification statuses -->
     <string name="notification_off">Aus</string>
-    <string name="notification_on">An</string>
     <string name="notification_noisy">Laut</string>
 
     <string name="encrypted_message">Verschlüsselte Nachricht</string>

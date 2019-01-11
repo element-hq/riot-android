@@ -800,7 +800,6 @@ Dispositivos desconocidos:</string>
 
     <!-- notification statuses -->
     <string name="notification_off">Desactivado</string>
-    <string name="notification_on">Activado</string>
     <string name="notification_noisy">Ruidoso</string>
 
     <string name="encrypted_message">Mensaje cifrado</string>

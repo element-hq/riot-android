@@ -734,7 +734,6 @@ Riotアプリがあなたの電話帳へアクセスすることを許可しま�
 
     <!-- notification statuses -->
     <string name="notification_off">切</string>
-    <string name="notification_on">入</string>
     <string name="notification_noisy">音量大</string>
 
     <string name="encrypted_message">暗号化されたメッセージ</string>

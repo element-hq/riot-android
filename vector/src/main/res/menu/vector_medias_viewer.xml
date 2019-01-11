@@ -3,13 +3,15 @@
     xmlns:tools="http://schemas.android.com/tools"
     tools:context="org.matrix.vector.activity.RoomActivity">
 
-    <item android:id="@+id/ic_action_share"
-        android:title="@string/share"
+    <item
+        android:id="@+id/ic_action_share"
         android:icon="@drawable/ic_share_white"
+        android:title="@string/share"
         app:showAsAction="always" />
 
-    <item android:id="@+id/ic_action_download"
-        android:title="@string/download"
+    <item
+        android:id="@+id/ic_action_download"
         android:icon="@drawable/ic_file_download_white"
+        android:title="@string/download"
         app:showAsAction="always" />
 </menu>

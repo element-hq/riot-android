@@ -28,7 +28,6 @@ import android.net.Uri
 import android.os.AsyncTask
 import android.os.Build
 import android.os.Bundle
-import android.os.Parcelable
 import android.provider.Settings
 import android.support.design.widget.TextInputEditText
 import android.support.v14.preference.SwitchPreference
@@ -56,7 +55,10 @@ import im.vector.activity.*
 import im.vector.contacts.ContactsManager
 import im.vector.extensions.getFingerprintHumanReadable
 import im.vector.extensions.withArgs
-import im.vector.preference.*
+import im.vector.preference.ProgressBarPreference
+import im.vector.preference.UserAvatarPreference
+import im.vector.preference.VectorGroupPreference
+import im.vector.preference.VectorPreference
 import im.vector.settings.FontScale
 import im.vector.settings.VectorLocale
 import im.vector.ui.themes.ThemeUtils
@@ -120,6 +122,8 @@ class VectorSettingsPreferencesFragment : PreferenceFragmentCompat(), SharedPref
     private var mMyDeviceInfo: DeviceInfo? = null
 
     private var mDisplayedPushers = ArrayList<Pusher>()
+
+    private var interactionListener: VectorSettingsFragmentInteractionListener? = null
 
     // devices: device IDs and device names
     private var mDevicesNameList: List<DeviceInfo> = ArrayList()
@@ -207,9 +211,6 @@ class VectorSettingsPreferencesFragment : PreferenceFragmentCompat(), SharedPref
     }
     private val backgroundSyncPreference by lazy {
         findPreference(PreferencesManager.SETTINGS_ENABLE_BACKGROUND_SYNC_PREFERENCE_KEY) as SwitchPreference
-    }
-    private val mRingtonePreference by lazy {
-        findPreference(PreferencesManager.SETTINGS_NOTIFICATION_RINGTONE_SELECTION_PREFERENCE_KEY)
     }
     private val mUseRiotCallRingtonePreference by lazy {
         findPreference(PreferencesManager.SETTINGS_CALL_RINGTONE_USE_RIOT_PREFERENCE_KEY) as SwitchPreference
@@ -402,22 +403,8 @@ class VectorSettingsPreferencesFragment : PreferenceFragmentCompat(), SharedPref
         }
         refreshNotificationPrivacy()
 
-        // Ringtone
-        mRingtonePreference.onPreferenceClickListener = Preference.OnPreferenceClickListener {
-            val intent = Intent(RingtoneManager.ACTION_RINGTONE_PICKER)
-            intent.putExtra(RingtoneManager.EXTRA_RINGTONE_TYPE, RingtoneManager.TYPE_NOTIFICATION)
-
-            if (null != PreferencesManager.getNotificationRingTone(activity)) {
-                intent.putExtra(RingtoneManager.EXTRA_RINGTONE_EXISTING_URI, PreferencesManager.getNotificationRingTone(activity))
-            }
-
-            startActivityForResult(intent, REQUEST_NOTIFICATION_RINGTONE)
-            false
-        }
-        refreshNotificationRingTone()
-
-        for (resourceText in mPushesRuleByResourceId.keys) {
-            val preference = findPreference(resourceText)
+        for (preferenceKey in mPrefKeyToBingRuleId.keys) {
+            val preference = findPreference(preferenceKey)
 
             if (null != preference) {
                 if (preference is SwitchPreference) {
@@ -428,6 +415,7 @@ class VectorSettingsPreferencesFragment : PreferenceFragmentCompat(), SharedPref
                         onPushRuleClick(preference.key, newValueAsVoid as Boolean)
                         true
                     }
+
                 } else if (preference is BingRulePreference) {
                     preference.onPreferenceClickListener = Preference.OnPreferenceClickListener {
                         activity?.let { activity ->
@@ -885,6 +873,18 @@ class VectorSettingsPreferencesFragment : PreferenceFragmentCompat(), SharedPref
         }
     }
 
+    override fun onAttach(context: Context?) {
+        super.onAttach(context)
+        if (context is VectorSettingsFragmentInteractionListener) {
+            interactionListener = context
+        }
+    }
+
+    override fun onDetach() {
+        interactionListener = null
+        super.onDetach()
+    }
+
     override fun onResume() {
         super.onResume()
 
@@ -923,6 +923,12 @@ class VectorSettingsPreferencesFragment : PreferenceFragmentCompat(), SharedPref
             refreshNotificationPrivacy()
             refreshDisplay()
             refreshBackgroundSyncPrefs()
+        }
+
+        interactionListener?.requestedKeyToHighlight()?.let { key ->
+            interactionListener?.requestHighlightPreferenceKeyOnResume(null)
+            val preference = findPreference(key)
+            (preference as? VectorPreference)?.isHighlighted = true
         }
     }
 
@@ -1020,10 +1026,11 @@ class VectorSettingsPreferencesFragment : PreferenceFragmentCompat(), SharedPref
 
         val pushManager = Matrix.getInstance(appContext)?.pushManager
 
-        for (resourceText in mPushesRuleByResourceId.keys) {
-            val preference = preferenceManager.findPreference(resourceText)
+        for (preferenceKey in mPrefKeyToBingRuleId.keys) {
+            val preference = preferenceManager.findPreference(preferenceKey)
 
             if (null != preference) {
+
                 if (preference is BingRulePreference) {
                     preference.isEnabled = null != rules && isConnected && (pushManager?.areDeviceNotificationsAllowed()
                             ?: true)
@@ -1143,12 +1150,14 @@ class VectorSettingsPreferencesFragment : PreferenceFragmentCompat(), SharedPref
     /**
      * Update a push rule.
      */
+
     private fun onPushRuleClick(fResourceText: String, newValue: Boolean) {
 
         val matrixInstance = Matrix.getInstance(context)
         val pushManager = matrixInstance.pushManager
 
-        Log.d(LOG_TAG, "onPushRuleClick $fResourceText : set to $newValue")
+        Log.d(LOG_TAG, "onPushRuleClick $preferenceKey : set to $newValue")
+
 
         when (fResourceText) {
 
@@ -1327,13 +1336,6 @@ class VectorSettingsPreferencesFragment : PreferenceFragmentCompat(), SharedPref
     }
 
     /**
-     * Refresh the notification ring tone
-     */
-    private fun refreshNotificationRingTone() {
-        mRingtonePreference.summary = PreferencesManager.getNotificationRingToneName(activity)
-    }
-
-    /**
      * Refresh the notification privacy setting
      */
     private fun refreshNotificationPrivacy() {
@@ -1354,17 +1356,6 @@ class VectorSettingsPreferencesFragment : PreferenceFragmentCompat(), SharedPref
 
         if (resultCode == Activity.RESULT_OK) {
             when (requestCode) {
-                REQUEST_NOTIFICATION_RINGTONE -> {
-                    PreferencesManager.setNotificationRingTone(activity,
-                            data?.getParcelableExtra<Parcelable>(RingtoneManager.EXTRA_RINGTONE_PICKED_URI) as Uri?)
-
-                    // test if the selected ring tone can be played
-                    if (null == PreferencesManager.getNotificationRingToneName(activity)) {
-                        PreferencesManager.setNotificationRingTone(activity, PreferencesManager.getNotificationRingTone(activity))
-                    }
-
-                    refreshNotificationRingTone()
-                }
                 REQUEST_CALL_RINGTONE -> {
                     val callRingtoneUri: Uri? = data?.getParcelableExtra(RingtoneManager.EXTRA_RINGTONE_PICKED_URI)
                     val thisActivity = activity
@@ -1443,11 +1434,11 @@ class VectorSettingsPreferencesFragment : PreferenceFragmentCompat(), SharedPref
             putString(PreferencesManager.SETTINGS_VERSION_PREFERENCE_KEY, VectorUtils.getApplicationVersion(activity))
 
             mSession.dataHandler.pushRules()?.let {
-                for (resourceText in mPushesRuleByResourceId.keys) {
-                    val preference = findPreference(resourceText)
+                for (preferenceKey in mPrefKeyToBingRuleId.keys) {
+                    val preference = findPreference(preferenceKey)
 
                     if (null != preference && preference is SwitchPreference) {
-                        val ruleId = mPushesRuleByResourceId[resourceText]
+                        val ruleId = mPrefKeyToBingRuleId[preferenceKey]
 
                         val rule = it.findDefaultRule(ruleId)
                         var isEnabled = null != rule && rule.isEnabled
@@ -1470,7 +1461,7 @@ class VectorSettingsPreferencesFragment : PreferenceFragmentCompat(), SharedPref
                             }
                         }// check if the rule is only defined by don't notify
 
-                        putBoolean(resourceText, isEnabled)
+                        putBoolean(preferenceKey, isEnabled)
                     }
                 }
             }
@@ -2913,21 +2904,13 @@ class VectorSettingsPreferencesFragment : PreferenceFragmentCompat(), SharedPref
         private const val REQUEST_NEW_PHONE_NUMBER = 456
         private const val REQUEST_PHONEBOOK_COUNTRY = 789
         private const val REQUEST_LOCALE = 777
-        private const val REQUEST_NOTIFICATION_RINGTONE = 888
         private const val REQUEST_CALL_RINGTONE = 999
 
-        // rule Id <-> preference name
-        private var mPushesRuleByResourceId = mapOf(
+        // preference name <-> rule Id
+        private var mPrefKeyToBingRuleId = mapOf(
                 PreferencesManager.SETTINGS_ENABLE_ALL_NOTIF_PREFERENCE_KEY to BingRule.RULE_ID_DISABLE_ALL,
                 PreferencesManager.SETTINGS_ENABLE_THIS_DEVICE_PREFERENCE_KEY to DUMMY_RULE,
-                PreferencesManager.SETTINGS_TURN_SCREEN_ON_PREFERENCE_KEY to DUMMY_RULE,
-                PreferencesManager.SETTINGS_CONTAINING_MY_DISPLAY_NAME_PREFERENCE_KEY to BingRule.RULE_ID_CONTAIN_DISPLAY_NAME,
-                PreferencesManager.SETTINGS_CONTAINING_MY_USER_NAME_PREFERENCE_KEY to BingRule.RULE_ID_CONTAIN_USER_NAME,
-                PreferencesManager.SETTINGS_MESSAGES_IN_ONE_TO_ONE_PREFERENCE_KEY to BingRule.RULE_ID_ONE_TO_ONE_ROOM,
-                PreferencesManager.SETTINGS_MESSAGES_IN_GROUP_CHAT_PREFERENCE_KEY to BingRule.RULE_ID_ALL_OTHER_MESSAGES_ROOMS,
-                PreferencesManager.SETTINGS_INVITED_TO_ROOM_PREFERENCE_KEY to BingRule.RULE_ID_INVITE_ME,
-                PreferencesManager.SETTINGS_CALL_INVITATIONS_PREFERENCE_KEY to BingRule.RULE_ID_CALL,
-                PreferencesManager.SETTINGS_MESSAGES_SENT_BY_BOT_PREFERENCE_KEY to BingRule.RULE_ID_SUPPRESS_BOTS_NOTIFICATIONS
+                PreferencesManager.SETTINGS_TURN_SCREEN_ON_PREFERENCE_KEY to DUMMY_RULE
         )
 
         // static constructor

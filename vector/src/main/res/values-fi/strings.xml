@@ -778,7 +778,6 @@ Voit tehdä sen nyt tai myöhemmin sovelluksen asetuksissa.</string>
 
     <!-- notification statuses -->
     <string name="notification_off">Off</string>
-    <string name="notification_on">On</string>
     <string name="notification_noisy">Äänekäs</string>
 
     <string name="encrypted_message">Salattu viesti</string>

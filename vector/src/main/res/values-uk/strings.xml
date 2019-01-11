@@ -747,7 +747,6 @@
     <!-- conference call -->
     <string name="conference_call_warning_title">Увага!</string>
     <string name="notification_off">Вимкнено</string>
-    <string name="notification_on">Увімкнено</string>
     <string name="notification_noisy">Гучно</string>
 
     <string name="encrypted_message">Зашифроване повідомлення</string>

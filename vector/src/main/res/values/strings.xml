@@ -591,6 +591,11 @@
     <string name="settings_app_info_link_title">Application info</string>
     <string name="settings_app_info_link_summary">Show the application info in the system settings.</string>
 
+
+    <string name="settings_notification_advanced">Advanced Notification Settings</string>
+    <string name="settings_notification_advanced_summary">Set notification importance by event, Configure sound, led, vibration</string>
+    <string name="settings_notification_by_event">Notification importance by event</string>
+
     <string name="settings_notification_privacy">Notification privacy</string>
     <string name="settings_notification_troubleshoot">Troubleshoot Notifications</string>
     <string name="settings_troubleshoot_diagnostic">Troubleshooting diagnostics</string>
@@ -615,6 +620,12 @@
     <string name="settings_troubleshoot_test_device_settings_failed">Notifications are not allowed for this device.\nPlease check the Riot settings.</string>
     <string name="settings_troubleshoot_test_device_settings_quickfix">Enable</string>
 
+    <string name="settings_troubleshoot_test_bing_settings_title">Custom Settings.</string>
+    <string name="settings_troubleshoot_test_bing_settings_success_with_warn">Notice that some messages type are set to be silent (will produce a notification with no sound).</string>
+    <string name="settings_troubleshoot_test_bing_settings_failed">Some notifications are disabled in your custom settings.</string>
+    <string name="settings_troubleshoot_test_bing_settings_failed_to_load_rules">Failed to load custom rules, please retry.</string>
+    <string name="settings_troubleshoot_test_bing_settings_quickfix">Check Settings</string>
+
     <string name="settings_troubleshoot_test_play_services_title">Play Services Check</string>
     <string name="settings_troubleshoot_test_play_services_success">Google Play Services APK is available and up-to-date.</string>
     <string name="settings_troubleshoot_test_play_services_failed">Riot uses Google Play Services to deliver push messages but it doesn\'t seem to be configured correctly:\n%1$s</string>
@@ -623,6 +634,10 @@
     <string name="settings_troubleshoot_test_fcm_title">Firebase Token</string>
     <string name="settings_troubleshoot_test_fcm_success">FCM token successfully retrieved:\n%1$s</string>
     <string name="settings_troubleshoot_test_fcm_failed">Failed to retrieved FCM token:\n%1$s</string>
+    <string name="settings_troubleshoot_test_fcm_failed_too_many_registration">[%1$s]\nThis error is out of control of Riot and according to Google, this error indicates that the device has too many apps registered with FCM. The error only occurs in cases where there are extreme numbers of apps, so it should not affect the average user.</string>
+    <string name="settings_troubleshoot_test_fcm_failed_service_not_available">[%1$s]\nThis error is out of control of Riot. It can occur for several reasons. Maybe it will work if you retry later, you can also check that Google Play Service is not restricted in data usage in the system settings, or that your device clock is correct, or it can happen on custom ROM.</string>
+    <string name="settings_troubleshoot_test_fcm_failed_account_missing">[%1$s]\nThis error is out of control of Riot. There is no Google account on the phone. Please open the account manager and add a Google account.</string>
+    <string name="settings_troubleshoot_test_fcm_failed_account_missing_quick_fix">Add Account</string>
 
     <string name="settings_troubleshoot_test_token_registration_title">Token Registration</string>
     <string name="settings_troubleshoot_test_token_registration_success">FCM token successfully registered to HomeServer.</string>
@@ -669,6 +684,11 @@
     <string name="settings_enable_all_notif">Enable notifications for this account</string>
     <string name="settings_enable_this_device">Enable notifications for this device</string>
     <string name="settings_turn_screen_on">Turn the screen on for 3 seconds</string>
+    <string name="settings_noisy_notifications_preferences">Configure Noisy Notifications</string>
+    <string name="settings_call_notifications_preferences">Configure Call Notifications</string>
+    <string name="settings_silent_notifications_preferences">Configure Silent Notifications</string>
+    <string name="settings_system_preferences_summary">Choose LED color, vibration, sound…</string>
+
 
     <string name="settings_containing_my_display_name">Msgs containing my display name</string>
     <string name="settings_containing_my_user_name">Msgs containing my user name</string>
@@ -1059,7 +1079,7 @@
 
     <!-- notification statuses -->
     <string name="notification_off">Off</string>
-    <string name="notification_on">On</string>
+    <string name="notification_silent">Silent</string>
     <string name="notification_noisy">Noisy</string>
 
     <string name="encrypted_message">Encrypted message</string>

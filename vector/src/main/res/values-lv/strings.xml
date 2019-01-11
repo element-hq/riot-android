@@ -829,7 +829,6 @@ Nepazīstamas ierīces:</string>
 
     <!-- notification statuses -->
     <string name="notification_off">Izslēgts</string>
-    <string name="notification_on">Ieslēgts</string>
     <string name="notification_noisy">Ar skaņu</string>
 
     <string name="encrypted_message">Šifrēta ziņa</string>

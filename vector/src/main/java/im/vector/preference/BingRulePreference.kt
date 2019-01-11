@@ -17,8 +17,12 @@
 package im.vector.preference
 
 import android.content.Context
+import android.support.v7.preference.PreferenceViewHolder
 import android.text.TextUtils
 import android.util.AttributeSet
+import android.view.View
+import android.widget.RadioGroup
+import android.widget.TextView
 import im.vector.R
 import org.matrix.androidsdk.rest.model.bingrules.BingRule
 
@@ -36,6 +40,10 @@ class BingRulePreference : VectorPreference {
 
     constructor(context: Context, attrs: AttributeSet, defStyle: Int) : super(context, attrs, defStyle)
 
+    init {
+        layoutResource = R.layout.vector_preference_bing_rule
+    }
+
     /**
      * @return the bing rule status index
      */
@@ -47,7 +55,7 @@ class BingRulePreference : VectorPreference {
                         return if (rule!!.isEnabled) {
                             NOTIFICATION_OFF_INDEX
                         } else {
-                            NOTIFICATION_ON_INDEX
+                            NOTIFICATION_SILENT_INDEX
                         }
                     } else if (rule!!.shouldNotify()) {
                         return NOTIFICATION_NOISY_INDEX
@@ -60,7 +68,7 @@ class BingRulePreference : VectorPreference {
                     } else if (null != rule!!.notificationSound) {
                         NOTIFICATION_NOISY_INDEX
                     } else {
-                        NOTIFICATION_ON_INDEX
+                        NOTIFICATION_SILENT_INDEX
                     }
                 }
             }
@@ -84,7 +92,7 @@ class BingRulePreference : VectorPreference {
     private fun refreshSummary() {
         summary = context.getString(when (ruleStatusIndex) {
             NOTIFICATION_OFF_INDEX -> R.string.notification_off
-            NOTIFICATION_ON_INDEX -> R.string.notification_on
+            NOTIFICATION_SILENT_INDEX -> R.string.notification_silent
             else -> R.string.notification_noisy
         })
     }
@@ -107,7 +115,7 @@ class BingRulePreference : VectorPreference {
                         rule.isEnabled = true
                         rule.setNotify(false)
                     }
-                    NOTIFICATION_ON_INDEX -> {
+                    NOTIFICATION_SILENT_INDEX -> {
                         rule.isEnabled = false
                         rule.setNotify(false)
                     }
@@ -149,11 +157,50 @@ class BingRulePreference : VectorPreference {
         return rule
     }
 
+    override fun onBindViewHolder(holder: PreferenceViewHolder) {
+        super.onBindViewHolder(holder)
+
+        holder.itemView?.findViewById<TextView>(android.R.id.summary)?.visibility = View.GONE
+        holder.itemView?.setOnClickListener(null)
+        holder.itemView?.setOnLongClickListener(null)
+
+        val radioGroup = holder.findViewById(R.id.bingPreferenceRadioGroup) as? RadioGroup
+        radioGroup?.setOnCheckedChangeListener(null)
+
+        when (ruleStatusIndex) {
+            NOTIFICATION_OFF_INDEX -> {
+                radioGroup?.check(R.id.bingPreferenceRadioBingRuleOff)
+            }
+            NOTIFICATION_SILENT_INDEX -> {
+                radioGroup?.check(R.id.bingPreferenceRadioBingRuleSilent)
+            }
+            else -> {
+                radioGroup?.check(R.id.bingPreferenceRadioBingRuleNoisy)
+            }
+        }
+
+        radioGroup?.setOnCheckedChangeListener { group, checkedId ->
+            when (checkedId) {
+                R.id.bingPreferenceRadioBingRuleOff -> {
+                    onPreferenceChangeListener?.onPreferenceChange(this, NOTIFICATION_OFF_INDEX)
+                }
+                R.id.bingPreferenceRadioBingRuleSilent -> {
+                    onPreferenceChangeListener?.onPreferenceChange(this, NOTIFICATION_SILENT_INDEX)
+                }
+                R.id.bingPreferenceRadioBingRuleNoisy -> {
+                    onPreferenceChangeListener?.onPreferenceChange(this, NOTIFICATION_NOISY_INDEX)
+                }
+            }
+        }
+
+    }
+
+
     companion object {
 
         // index in mRuleStatuses
         private const val NOTIFICATION_OFF_INDEX = 0
-        private const val NOTIFICATION_ON_INDEX = 1
+        private const val NOTIFICATION_SILENT_INDEX = 1
         private const val NOTIFICATION_NOISY_INDEX = 2
     }
 }

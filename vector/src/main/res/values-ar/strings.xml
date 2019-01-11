@@ -772,7 +772,6 @@
 
     <string name="create_community">إنشاء مجتمع</string>
     <string name="notification_off">معطّل</string>
-    <string name="notification_on">مفعّل</string>
     <string name="notification_noisy">مزعج</string>
 
     <string name="conference_call_warning_message">ما زالت مكالمات الاجتماعات قيد التطوير وقد لا يُعتمد عليها.</string>

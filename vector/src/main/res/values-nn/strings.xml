@@ -885,7 +885,6 @@ Ukjende einingar:</string>
     <string name="command_description_clear_scalar_token">For å retta opp i Matrix-Æppadministrering</string>
 
     <string name="notification_off">Av</string>
-    <string name="notification_on">På</string>
     <string name="notification_noisy">Bråket</string>
 
     <string name="encrypted_message">Kryptert melding</string>

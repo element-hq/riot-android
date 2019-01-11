@@ -735,7 +735,6 @@ Zifratutako mezuak ez dira zifratzea oraindik ezarrita ez duten beste gailuetan 
 
     <!-- notification statuses -->
     <string name="notification_off">Ez</string>
-    <string name="notification_on">Bai</string>
     <string name="notification_noisy">Zaratatsua</string>
 
     <string name="encrypted_message">Zifratutako mezua</string>

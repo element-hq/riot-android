@@ -13,8 +13,10 @@ Improvements:
  - Better wording in notification for video call (#1421)
  - Improve widget banner (#2129)
  - Icon for Oreo (#2169)
+ - Notification settings re-organization, added bing rule troubleshoot
  - Kotlin Code Improvement in VectorSettingsPreferencesFragment.kt
  - Remove redundant !! , Replace it with null safe operators in VectorSettingsPreferencesFragment.kt
+
 
 Other changes:
  - Restore the crash report dialog after a crash
@@ -22,6 +24,8 @@ Other changes:
 Bugfix:
  - Fix crash when taking picture for user avatar on old device (#2818)
  - Fix crash when adding background to image (#2828)
+ - LED notifications are not working (#2512)
+ - FCM Troubleshoot screen crash in some cases (#2846)
 
 Translations:
  -

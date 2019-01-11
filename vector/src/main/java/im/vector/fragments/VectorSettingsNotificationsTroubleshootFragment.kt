@@ -16,6 +16,7 @@
 package im.vector.fragments
 
 import android.app.Activity
+import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.support.transition.TransitionManager
@@ -56,6 +57,7 @@ class VectorSettingsNotificationsTroubleshootFragment : VectorBaseFragment() {
 
     override fun getLayoutResId() = R.layout.fragment_settings_notifications_troubleshoot
 
+    private var interactionListener: VectorSettingsFragmentInteractionListener? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -156,12 +158,20 @@ class VectorSettingsNotificationsTroubleshootFragment : VectorBaseFragment() {
 
     override fun onDetach() {
         testManager?.cancel()
+        interactionListener = null
         super.onDetach()
     }
 
     override fun onResume() {
         super.onResume()
         (activity as? MXCActionBarActivity)?.supportActionBar?.setTitle(R.string.settings_notification_troubleshoot)
+    }
+
+    override fun onAttach(context: Context?) {
+        super.onAttach(context)
+        if (context is VectorSettingsFragmentInteractionListener) {
+            interactionListener = context
+        }
     }
 
     companion object {

@@ -738,7 +738,6 @@
 
     <!-- notification statuses -->
     <string name="notification_off">关闭</string>
-    <string name="notification_on">打开</string>
     <string name="encrypted_message">已加密消息</string>
 
     <string name="notification_noisy_notifications">铃声通知</string>

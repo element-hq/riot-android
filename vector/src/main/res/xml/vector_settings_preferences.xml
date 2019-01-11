@@ -1,9 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <android.support.v7.preference.PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    xmlns:tools="http://schemas.android.com/tools">
 
     <PreferenceCategory
         android:key="SETTINGS_USER_SETTINGS_PREFERENCE_KEY"
@@ -194,54 +192,22 @@
             android:title="@string/settings_turn_screen_on" />
 
         <im.vector.preference.VectorPreference
-            android:key="SETTINGS_NOTIFICATION_TROUBLESHOOT_PREFERENCE_KEY"
-            android:title="@string/settings_notification_troubleshoot"
-            app:fragment="im.vector.fragments.VectorSettingsNotificationsTroubleshootFragment" />
-
-        <im.vector.preference.VectorPreference
             android:dialogTitle="@string/settings_notification_privacy"
             android:key="SETTINGS_NOTIFICATION_PRIVACY_PREFERENCE_KEY"
             android:title="@string/settings_notification_privacy" />
 
         <im.vector.preference.VectorPreference
-            android:dialogTitle="@string/settings_notification_ringtone"
-            android:key="SETTINGS_NOTIFICATION_RINGTONE_SELECTION_PREFERENCE_KEY"
-            android:title="@string/settings_notification_ringtone" />
+            android:dependency="SETTINGS_ENABLE_THIS_DEVICE_PREFERENCE_KEY"
+            android:key="SETTINGS_NOTIFICATION_ADVANCED_PREFERENCE_KEY"
+            android:persistent="false"
+            android:summary="@string/settings_notification_advanced_summary"
+            android:title="@string/settings_notification_advanced"
+            app:fragment="im.vector.fragments.VectorSettingsNotificationsAdvancedFragment" />
 
-        <im.vector.preference.BingRulePreference
-            android:dependency="SETTINGS_ENABLE_ALL_NOTIF_PREFERENCE_KEY"
-            android:key="SETTINGS_CONTAINING_MY_DISPLAY_NAME_PREFERENCE_KEY_2"
-            android:title="@string/settings_containing_my_display_name" />
-
-        <im.vector.preference.BingRulePreference
-            android:dependency="SETTINGS_ENABLE_ALL_NOTIF_PREFERENCE_KEY"
-            android:key="SETTINGS_CONTAINING_MY_USER_NAME_PREFERENCE_KEY_2"
-            android:title="@string/settings_containing_my_user_name" />
-
-        <im.vector.preference.BingRulePreference
-            android:dependency="SETTINGS_ENABLE_ALL_NOTIF_PREFERENCE_KEY"
-            android:key="SETTINGS_MESSAGES_IN_ONE_TO_ONE_PREFERENCE_KEY_2"
-            android:title="@string/settings_messages_in_one_to_one" />
-
-        <im.vector.preference.BingRulePreference
-            android:dependency="SETTINGS_ENABLE_ALL_NOTIF_PREFERENCE_KEY"
-            android:key="SETTINGS_MESSAGES_IN_GROUP_CHAT_PREFERENCE_KEY_2"
-            android:title="@string/settings_messages_in_group_chat" />
-
-        <im.vector.preference.BingRulePreference
-            android:dependency="SETTINGS_ENABLE_ALL_NOTIF_PREFERENCE_KEY"
-            android:key="SETTINGS_INVITED_TO_ROOM_PREFERENCE_KEY_2"
-            android:title="@string/settings_invited_to_room" />
-
-        <im.vector.preference.BingRulePreference
-            android:dependency="SETTINGS_ENABLE_ALL_NOTIF_PREFERENCE_KEY"
-            android:key="SETTINGS_CALL_INVITATIONS_PREFERENCE_KEY_2"
-            android:title="@string/settings_call_invitations" />
-
-        <im.vector.preference.BingRulePreference
-            android:dependency="SETTINGS_ENABLE_ALL_NOTIF_PREFERENCE_KEY"
-            android:key="SETTINGS_MESSAGES_SENT_BY_BOT_PREFERENCE_KEY_2"
-            android:title="@string/settings_messages_sent_by_bot" />
+        <im.vector.preference.VectorPreference
+            android:key="SETTINGS_NOTIFICATION_TROUBLESHOOT_PREFERENCE_KEY"
+            android:title="@string/settings_notification_troubleshoot"
+            app:fragment="im.vector.fragments.VectorSettingsNotificationsTroubleshootFragment" />
 
     </PreferenceCategory>
 
@@ -252,8 +218,8 @@
         android:title="@string/settings_background_sync">
 
         <im.vector.preference.VectorSwitchPreference
-            android:key="SETTINGS_START_ON_BOOT_PREFERENCE_KEY"
             android:defaultValue="true"
+            android:key="SETTINGS_START_ON_BOOT_PREFERENCE_KEY"
             android:title="@string/settings_start_on_boot" />
 
         <im.vector.preference.VectorSwitchPreference
