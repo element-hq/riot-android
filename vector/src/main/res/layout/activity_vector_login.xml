@@ -24,6 +24,7 @@
 
         <Button
             android:id="@+id/button_login"
+            style="@style/LoginButtonStyle"
             android:layout_width="94dp"
             android:layout_height="36dp"
             android:layout_alignParentEnd="true"
@@ -37,6 +38,7 @@
 
         <Button
             android:id="@+id/button_register"
+            style="@style/LoginButtonStyle"
             android:layout_width="94dp"
             android:layout_height="36dp"
             android:layout_centerHorizontal="true"
@@ -47,6 +49,7 @@
 
         <Button
             android:id="@+id/button_reset_password"
+            style="@style/LoginButtonStyle"
             android:layout_width="150dp"
             android:layout_height="36dp"
             android:layout_alignParentEnd="true"
@@ -61,6 +64,7 @@
 
         <Button
             android:id="@+id/button_forgot_email_validate"
+            style="@style/LoginButtonStyle"
             android:layout_width="match_parent"
             android:layout_height="36dp"
             android:layout_alignParentEnd="true"
@@ -77,6 +81,7 @@
 
         <Button
             android:id="@+id/button_submit"
+            style="@style/LoginButtonStyle"
             android:layout_width="wrap_content"
             android:layout_height="36dp"
             android:layout_alignParentEnd="true"
@@ -92,6 +97,7 @@
 
         <Button
             android:id="@+id/button_skip"
+            style="@style/LoginButtonStyle"
             android:layout_width="wrap_content"
             android:layout_height="36dp"
             android:layout_centerVertical="true"
@@ -103,7 +109,8 @@
             android:minWidth="94dp"
             android:text="@string/auth_skip"
             android:textColor="@android:color/white"
-            android:visibility="gone" />
+            android:visibility="gone"
+            tools:visibility="visible" />
 
     </RelativeLayout>
 
@@ -147,10 +154,12 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="vertical"
-                    android:visibility="gone">
+                    android:visibility="gone"
+                    tools:visibility="visible">
 
                     <EditText
                         android:id="@+id/login_user_name"
+                        style="@style/LoginEditTextStyle"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:hint="@string/auth_user_id_placeholder"
@@ -174,6 +183,7 @@
 
                         <EditText
                             android:id="@+id/login_phone_number_country"
+                            style="@style/LoginEditTextStyle"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_marginEnd="6dp"
@@ -184,10 +194,12 @@
                             android:focusable="false"
                             android:maxLines="1"
                             android:visibility="gone"
-                            tools:text="FR" />
+                            tools:text="FR"
+                            tools:visibility="visible" />
 
                         <EditText
                             android:id="@+id/login_phone_number_value"
+                            style="@style/LoginEditTextStyle"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:hint="@string/auth_phone_number_placeholder"
@@ -198,6 +210,7 @@
 
                     <EditText
                         android:id="@+id/login_password"
+                        style="@style/LoginEditTextStyle"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="10dp"
@@ -220,6 +233,7 @@
 
                     <EditText
                         android:id="@+id/forget_email_address"
+                        style="@style/LoginEditTextStyle"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:hint="@string/auth_email_placeholder"
@@ -228,6 +242,7 @@
 
                     <EditText
                         android:id="@+id/forget_new_password"
+                        style="@style/LoginEditTextStyle"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="10dp"
@@ -238,6 +253,7 @@
 
                     <EditText
                         android:id="@+id/forget_confirm_new_password"
+                        style="@style/LoginEditTextStyle"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="10dp"
@@ -257,6 +273,7 @@
 
                     <EditText
                         android:id="@+id/creation_your_name"
+                        style="@style/LoginEditTextStyle"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:hint="@string/auth_user_name_placeholder"
@@ -265,6 +282,7 @@
 
                     <EditText
                         android:id="@+id/creation_password1"
+                        style="@style/LoginEditTextStyle"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:ems="10"
@@ -274,6 +292,7 @@
 
                     <EditText
                         android:id="@+id/creation_password2"
+                        style="@style/LoginEditTextStyle"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:ems="10"
@@ -299,6 +318,7 @@
 
                     <EditText
                         android:id="@+id/registration_email"
+                        style="@style/LoginEditTextStyle"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="12dp"
@@ -314,6 +334,7 @@
 
                         <EditText
                             android:id="@+id/registration_phone_number_country"
+                            style="@style/LoginEditTextStyle"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_marginEnd="6dp"
@@ -324,10 +345,12 @@
                             android:focusable="false"
                             android:maxLines="1"
                             android:visibility="gone"
-                            tools:text="FR" />
+                            tools:text="FR"
+                            tools:visibility="visible" />
 
                         <EditText
                             android:id="@+id/registration_phone_number_value"
+                            style="@style/LoginEditTextStyle"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:hint="@string/auth_phone_number_placeholder"
@@ -378,6 +401,7 @@
 
                         <EditText
                             android:id="@+id/login_matrix_server_url"
+                            style="@style/LoginEditTextStyle"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:hint="@string/hs_url"
@@ -394,6 +418,7 @@
 
                         <EditText
                             android:id="@+id/login_identity_url"
+                            style="@style/LoginEditTextStyle"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:hint="@string/identity_url"
@@ -421,7 +446,8 @@
                 android:gravity="center_horizontal"
                 android:textSize="16sp"
                 android:visibility="gone"
-                tools:text="A text here" />
+                tools:text="A text here"
+                tools:visibility="visible" />
 
         </LinearLayout>
     </ScrollView>
