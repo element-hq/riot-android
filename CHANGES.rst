@@ -23,6 +23,7 @@ Bugfix:
  - Fix crash when adding background to image (#2828)
  - LED notifications are not working (#2512)
  - FCM Troubleshoot screen crash in some cases (#2846)
+ - Fix login button issue (#1568)
 
 Translations:
  -
