@@ -13,6 +13,8 @@ Improvements:
  - Better wording in notification for video call (#1421)
  - Improve widget banner (#2129)
  - Icon for Oreo (#2169)
+ - Kotlin Code Improvement in VectorSettingsPreferencesFragment.kt
+ - Remove redundant !! , Replace it with null safe operators in VectorSettingsPreferencesFragment.kt
 
 Other changes:
  - Restore the crash report dialog after a crash

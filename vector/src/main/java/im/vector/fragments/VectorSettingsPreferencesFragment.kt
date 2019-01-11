@@ -150,6 +150,7 @@ class VectorSettingsPreferencesFragment : PreferenceFragmentCompat(), SharedPref
     private val mContactSettingsCategory by lazy {
         findPreference(PreferencesManager.SETTINGS_CONTACT_PREFERENCE_KEYS) as PreferenceCategory
     }
+
     private val mContactPhonebookCountryPreference by lazy {
         findPreference(PreferencesManager.SETTINGS_CONTACTS_PHONEBOOK_COUNTRY_PREFERENCE_KEY) as Preference
     }
