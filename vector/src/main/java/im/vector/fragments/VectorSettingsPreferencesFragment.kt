@@ -412,44 +412,6 @@ class VectorSettingsPreferencesFragment : PreferenceFragmentCompat(), SharedPref
                         onPushRuleClick(preference.key, newValueAsVoid as Boolean)
                         true
                     }
-
-                } else if (preference is BingRulePreference) {
-                    preference.onPreferenceClickListener = Preference.OnPreferenceClickListener {
-                        activity?.let { activity ->
-                            AlertDialog.Builder(activity)
-                                    .setSingleChoiceItems(R.array.notification_status, preference.ruleStatusIndex) { d, index ->
-                                        val rule = preference.createRule(index)
-                                        d.cancel()
-
-                                        if (null != rule) {
-                                            displayLoadingView()
-                                            mSession.dataHandler
-                                                    .bingRulesManager
-                                                    .updateRule(preference.rule,
-                                                            rule,
-                                                            object : BingRulesManager.onBingRuleUpdateListener {
-                                                                private fun onDone() {
-                                                                    refreshDisplay()
-                                                                    hideLoadingView()
-                                                                }
-
-                                                                override fun onBingRuleUpdateSuccess() {
-                                                                    onDone()
-                                                                }
-
-                                                                override fun onBingRuleUpdateFailure(errorMessage: String) {
-                                                                    activity.toast(errorMessage)
-
-                                                                    onDone()
-                                                                }
-                                                            })
-                                        }
-                                    }
-                                    .show()
-
-                        }
-                        true
-                    }
                 }
             }
         }
@@ -782,11 +744,11 @@ class VectorSettingsPreferencesFragment : PreferenceFragmentCompat(), SharedPref
                 displayLoadingView()
 
                 val task = ClearMediaCacheAsyncTask(
-                        {
+                        backgroundTask = {
                             mSession.mediaCache.clear()
                             activity?.let { it -> Glide.get(it).clearDiskCache() }
                         },
-                        {
+                        onCompleteTask = {
                             hideLoadingView()
 
                             MXMediaCache.getCachesSize(activity, object : SimpleApiCallback<Long>() {
