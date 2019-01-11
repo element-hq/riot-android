@@ -55,10 +55,7 @@ import im.vector.activity.*
 import im.vector.contacts.ContactsManager
 import im.vector.extensions.getFingerprintHumanReadable
 import im.vector.extensions.withArgs
-import im.vector.preference.ProgressBarPreference
-import im.vector.preference.UserAvatarPreference
-import im.vector.preference.VectorGroupPreference
-import im.vector.preference.VectorPreference
+import im.vector.preference.*
 import im.vector.settings.FontScale
 import im.vector.settings.VectorLocale
 import im.vector.ui.themes.ThemeUtils
@@ -1031,14 +1028,8 @@ class VectorSettingsPreferencesFragment : PreferenceFragmentCompat(), SharedPref
 
             if (null != preference) {
 
-                if (preference is BingRulePreference) {
-                    preference.isEnabled = null != rules && isConnected && (pushManager?.areDeviceNotificationsAllowed()
-                            ?: true)
-                    mSession.dataHandler.pushRules()?.let {
-                        preference.setBingRule(it.findDefaultRule(mPushesRuleByResourceId[resourceText]))
-                    }
-                } else if (preference is SwitchPreference) {
-                    when (resourceText) {
+                if ( preference is SwitchPreference) {
+                    when (preferenceKey) {
                         PreferencesManager.SETTINGS_ENABLE_THIS_DEVICE_PREFERENCE_KEY -> preference.isChecked = pushManager?.areDeviceNotificationsAllowed() ?: true
 
                         PreferencesManager.SETTINGS_TURN_SCREEN_ON_PREFERENCE_KEY -> {
@@ -1047,7 +1038,7 @@ class VectorSettingsPreferencesFragment : PreferenceFragmentCompat(), SharedPref
                         }
                         else -> {
                             preference.isEnabled = null != rules && isConnected
-                            preference.isChecked = preferences.getBoolean(resourceText, false)
+                            preference.isChecked = preferences.getBoolean(preferenceKey, false)
                         }
                     }
                 }
@@ -1057,8 +1048,6 @@ class VectorSettingsPreferencesFragment : PreferenceFragmentCompat(), SharedPref
         // If notifications are disabled for the current user account or for the current user device
         // The others notifications settings have to be disable too
         val areNotificationAllowed = rules?.findDefaultRule(BingRule.RULE_ID_DISABLE_ALL)?.isEnabled == true
-
-        mRingtonePreference.isEnabled = !areNotificationAllowed && pushManager?.areDeviceNotificationsAllowed() ?: true
 
         mNotificationPrivacyPreference.isEnabled = !areNotificationAllowed && (pushManager?.areDeviceNotificationsAllowed()
                 ?: true) && pushManager?.useFcm() ?: true
@@ -1151,7 +1140,7 @@ class VectorSettingsPreferencesFragment : PreferenceFragmentCompat(), SharedPref
      * Update a push rule.
      */
 
-    private fun onPushRuleClick(fResourceText: String, newValue: Boolean) {
+    private fun onPushRuleClick(preferenceKey: String, newValue: Boolean) {
 
         val matrixInstance = Matrix.getInstance(context)
         val pushManager = matrixInstance.pushManager
@@ -1159,7 +1148,7 @@ class VectorSettingsPreferencesFragment : PreferenceFragmentCompat(), SharedPref
         Log.d(LOG_TAG, "onPushRuleClick $preferenceKey : set to $newValue")
 
 
-        when (fResourceText) {
+        when (preferenceKey) {
 
             PreferencesManager.SETTINGS_TURN_SCREEN_ON_PREFERENCE_KEY -> {
                 if (pushManager.isScreenTurnedOn != newValue) {
@@ -1229,7 +1218,7 @@ class VectorSettingsPreferencesFragment : PreferenceFragmentCompat(), SharedPref
             // so the value will be checked to ensure there is really no update.
             else -> {
 
-                val ruleId = mPushesRuleByResourceId[fResourceText]
+                val ruleId = mPrefKeyToBingRuleId[preferenceKey]
                 val rule = mSession.dataHandler.pushRules()?.findDefaultRule(ruleId)
 
                 // check if there is an update
