@@ -24,6 +24,7 @@ Bugfix:
  - LED notifications are not working (#2512)
  - FCM Troubleshoot screen crash in some cases (#2846)
  - Fix login button issue (#1568)
+ - Fix issue with registration when an email is provided (#2852)
 
 Translations:
  -

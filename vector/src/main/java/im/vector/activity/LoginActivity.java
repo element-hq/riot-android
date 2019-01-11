@@ -2359,7 +2359,6 @@ public class LoginActivity extends MXCActionBarActivity implements RegistrationM
         mRegisterPollingRunnable = new Runnable() {
             @Override
             public void run() {
-                // TODO Cancel the handler when activity is paused (and not destroy)
                 Log.d(LOG_TAG, "## onWaitingEmailValidation attempt registration");
                 mRegistrationManager.attemptRegistration(LoginActivity.this, LoginActivity.this);
                 mHandler.postDelayed(mRegisterPollingRunnable, REGISTER_POLLING_PERIOD);

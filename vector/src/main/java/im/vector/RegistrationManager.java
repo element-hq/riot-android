@@ -326,7 +326,8 @@ public class RegistrationManager {
             }
 
             final RegistrationParams params = new RegistrationParams();
-            if (!registrationType.equals(LoginRestClient.LOGIN_FLOW_TYPE_RECAPTCHA)) {
+            if (!registrationType.equals(LoginRestClient.LOGIN_FLOW_TYPE_RECAPTCHA)
+                    && !registrationType.equals(LoginRestClient.LOGIN_FLOW_TYPE_TERMS)) {
                 if (mUsername != null) {
                     params.username = mUsername;
                 }
