@@ -257,10 +257,10 @@ public class LoginActivity extends MXCActionBarActivity implements RegistrationM
     private boolean mIsWaitingNetworkConnection = false;
 
     /**
-     * Tell whether the password has been reseted with success.
+     * Tell whether the password has been reset with success.
      * Used to return on login screen on submit button pressed.
      */
-    private boolean mIsPasswordResetted;
+    private boolean mIsPasswordReset;
 
     // there is a polling thread to monitor when the email has been validated.
     private Runnable mRegisterPollingRunnable;
@@ -288,7 +288,7 @@ public class LoginActivity extends MXCActionBarActivity implements RegistrationM
         mRegistrationManager.reset();
         super.onDestroy();
         Log.i(LOG_TAG, "## onDestroy(): IN");
-        // ignore any server response when the acitity is destroyed
+        // ignore any server response when the activity is destroyed
         mMode = MODE_UNKNOWN;
         mEmailValidationExtraParams = null;
     }
@@ -1029,10 +1029,10 @@ public class LoginActivity extends MXCActionBarActivity implements RegistrationM
      * The user warns the client that the reset password email has been received
      */
     private void onForgotOnEmailValidated(final HomeServerConnectionConfig hsConfig) {
-        if (mIsPasswordResetted) {
+        if (mIsPasswordReset) {
             Log.d(LOG_TAG, "onForgotOnEmailValidated : go back to login screen");
 
-            mIsPasswordResetted = false;
+            mIsPasswordReset = false;
             mMode = MODE_LOGIN;
             showMainLayout();
             refreshDisplay();
@@ -1052,7 +1052,7 @@ public class LoginActivity extends MXCActionBarActivity implements RegistrationM
 
                         // refresh the messages
                         hideMainLayoutAndToast(getString(R.string.auth_reset_password_success_message));
-                        mIsPasswordResetted = true;
+                        mIsPasswordReset = true;
                         refreshDisplay();
                     }
                 }
@@ -1297,7 +1297,7 @@ public class LoginActivity extends MXCActionBarActivity implements RegistrationM
                             mForgotPid.idServer = homeServerConfig.getIdentityServerUri().getHost();
                             mForgotPid.sid = aSid;
 
-                            mIsPasswordResetted = false;
+                            mIsPasswordReset = false;
                             onForgotOnEmailValidated(homeServerConfig);
                         } else {
                             // the validation of mail ownership succeed, just resume the registration flow
@@ -1894,7 +1894,7 @@ public class LoginActivity extends MXCActionBarActivity implements RegistrationM
         // update the button text to the current status
         // 1 - the user does not warn that he clicks on the email validation
         // 2 - the password has been resetted and the user is invited to switch to the login screen
-        mForgotValidateEmailButton.setText(mIsPasswordResetted ? R.string.auth_return_to_login : R.string.auth_reset_password_next_step_button);
+        mForgotValidateEmailButton.setText(mIsPasswordReset ? R.string.auth_return_to_login : R.string.auth_reset_password_next_step_button);
 
         @ColorInt final int accent = ThemeUtils.INSTANCE.getColor(this, R.attr.colorAccent);
         @ColorInt final int white = ContextCompat.getColor(this, android.R.color.white);
@@ -2359,6 +2359,7 @@ public class LoginActivity extends MXCActionBarActivity implements RegistrationM
         mRegisterPollingRunnable = new Runnable() {
             @Override
             public void run() {
+                // TODO Cancel the handler when activity is paused (and not destroy)
                 Log.d(LOG_TAG, "## onWaitingEmailValidation attempt registration");
                 mRegistrationManager.attemptRegistration(LoginActivity.this, LoginActivity.this);
                 mHandler.postDelayed(mRegisterPollingRunnable, REGISTER_POLLING_PERIOD);
