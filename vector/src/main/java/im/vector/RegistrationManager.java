@@ -18,6 +18,7 @@
 package im.vector;
 
 import android.content.Context;
+import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.annotation.StringRes;
 import android.text.TextUtils;
@@ -58,12 +59,15 @@ import im.vector.util.UrlUtilKt;
 public class RegistrationManager {
     private static final String LOG_TAG = RegistrationManager.class.getSimpleName();
 
-    private static volatile RegistrationManager sInstance;
-
     private static final String ERROR_MISSING_STAGE = "ERROR_MISSING_STAGE";
     private static final String ERROR_EMPTY_USER_ID = "ERROR_EMPTY_USER_ID";
 
     private static final String NEXTLINK_BASE_URL = "https://riot.im/app";
+
+    // saved parameters index
+    private static final String SAVED_CREATION_USER_NAME = "SAVED_CREATION_USER_NAME";
+    private static final String SAVED_CREATION_PASSWORD = "SAVED_CREATION_PASSWORD";
+    private static final String SAVED_CREATION_REGISTRATION_RESPONSE = "SAVED_CREATION_REGISTRATION_RESPONSE";
 
     // List of stages supported by the app
     private static final List<String> VECTOR_SUPPORTED_STAGES = Arrays.asList(
@@ -99,18 +103,17 @@ public class RegistrationManager {
 
     /*
      * *********************************************************************************************
-     * Singleton
+     * Constructor
      * *********************************************************************************************
      */
 
-    public static RegistrationManager getInstance() {
-        if (sInstance == null) {
-            sInstance = new RegistrationManager();
-        }
-        return sInstance;
-    }
+    public RegistrationManager(@Nullable Bundle savedInstanceState) {
+        if (savedInstanceState != null) {
+            mUsername = savedInstanceState.getString(SAVED_CREATION_USER_NAME);
+            mPassword = savedInstanceState.getString(SAVED_CREATION_PASSWORD);
 
-    private RegistrationManager() {
+            mRegistrationResponse = (RegistrationFlowResponse) savedInstanceState.getSerializable(SAVED_CREATION_REGISTRATION_RESPONSE);
+        }
     }
 
     /*
@@ -122,7 +125,7 @@ public class RegistrationManager {
     /**
      * Reset singleton values to allow a new registration
      */
-    public void resetSingleton() {
+    public void reset() {
         mHsConfig = null;
         mLoginRestClient = null;
         mThirdPidRestClient = null;
@@ -526,6 +529,7 @@ public class RegistrationManager {
 
     /**
      * Return true if the stage is required and not completed
+     *
      * @param stage
      * @return
      */
@@ -919,13 +923,13 @@ public class RegistrationManager {
 
     /**
      * Creates a 3PID error message from a string resource id and adds the additional infos, if non-null
+     *
      * @param context
      * @param errorMessageRes
      * @param additionalInfo
      * @return The error message
      */
-    private static String build3PidErrorMessage(Context context, @StringRes int errorMessageRes, @Nullable String additionalInfo)
-    {
+    private static String build3PidErrorMessage(Context context, @StringRes int errorMessageRes, @Nullable String additionalInfo) {
         StringBuilder builder = new StringBuilder();
         builder.append(context.getString(errorMessageRes));
 
@@ -1044,6 +1048,24 @@ public class RegistrationManager {
                     }
                 }
             });
+        }
+    }
+
+    public boolean hasRegistrationResponse() {
+        return mRegistrationResponse != null;
+    }
+
+    public void saveInstanceState(Bundle savedInstanceState) {
+        if (!TextUtils.isEmpty(mUsername)) {
+            savedInstanceState.putString(SAVED_CREATION_USER_NAME, mUsername);
+        }
+
+        if (!TextUtils.isEmpty(mPassword)) {
+            savedInstanceState.putString(SAVED_CREATION_PASSWORD, mPassword);
+        }
+
+        if (null != mRegistrationResponse) {
+            savedInstanceState.putSerializable(SAVED_CREATION_REGISTRATION_RESPONSE, mRegistrationResponse);
         }
     }
 

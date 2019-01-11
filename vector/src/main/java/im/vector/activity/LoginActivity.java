@@ -115,12 +115,9 @@ public class LoginActivity extends MXCActionBarActivity implements RegistrationM
     private static final int MODE_ACCOUNT_CREATION_THREE_PID = 5;
 
     // saved parameters index
-
     // creation
-    private static final String SAVED_CREATION_USER_NAME = "SAVED_CREATION_USER_NAME";
-    private static final String SAVED_CREATION_PASSWORD1 = "SAVED_CREATION_PASSWORD1";
-    private static final String SAVED_CREATION_REGISTRATION_RESPONSE = "SAVED_CREATION_REGISTRATION_RESPONSE";
     private static final String SAVED_CREATION_EMAIL_THREEPID = "SAVED_CREATION_EMAIL_THREEPID";
+
     private ThreePid mPendingEmailValidation;
 
     // mode
@@ -216,10 +213,7 @@ public class LoginActivity extends MXCActionBarActivity implements RegistrationM
     private View mHomeServerOptionLayout;
 
     // Registration Manager
-    private RegistrationManager mRegistrationManager = RegistrationManager.getInstance();
-
-    // allowed registration response
-    private RegistrationFlowResponse mRegistrationResponse;
+    private RegistrationManager mRegistrationManager;
 
     // login handler
     private final LoginHandler mLoginHandler = new LoginHandler();
@@ -291,7 +285,7 @@ public class LoginActivity extends MXCActionBarActivity implements RegistrationM
         }
 
         cancelEmailPolling();
-        mRegistrationManager.resetSingleton();
+        mRegistrationManager.reset();
         super.onDestroy();
         Log.i(LOG_TAG, "## onDestroy(): IN");
         // ignore any server response when the acitity is destroyed
@@ -431,11 +425,13 @@ public class LoginActivity extends MXCActionBarActivity implements RegistrationM
         mButtonsView = findViewById(R.id.login_actions_bar);
 
         if (isFirstCreation()) {
+            mRegistrationManager = new RegistrationManager(null);
             mResourceLimitDialogHelper = new ResourceLimitDialogHelper(this, null);
             mHomeServerText.setText(ServerUrlsRepository.INSTANCE.getLastHomeServerUrl(this));
             mIdentityServerText.setText(ServerUrlsRepository.INSTANCE.getLastIdentityServerUrl(this));
         } else {
             final Bundle savedInstanceState = getSavedInstanceState();
+            mRegistrationManager = new RegistrationManager(savedInstanceState);
             mResourceLimitDialogHelper = new ResourceLimitDialogHelper(this, savedInstanceState);
             restoreSavedData(savedInstanceState);
         }
@@ -629,16 +625,11 @@ public class LoginActivity extends MXCActionBarActivity implements RegistrationM
 
             // Sanity check
             HomeServerConnectionConfig hsConfig = getHsConfig();
-            if (null != mRegistrationResponse && null != hsConfig && !isFirstCreation()) {
+            if (null != hsConfig && !isFirstCreation()) {
                 // retrieve the name and pwd from store data (we consider here that these inputs have been already checked)
-                String name = getSavedInstanceState().getString(SAVED_CREATION_USER_NAME);
-                String password = getSavedInstanceState().getString(SAVED_CREATION_PASSWORD1);
-
                 Log.d(LOG_TAG, "## onCreate() Resume email validation");
                 // Resume the email validation polling
                 enableLoadingScreen(true);
-                mRegistrationManager.setSupportedRegistrationFlows(mRegistrationResponse);
-                mRegistrationManager.setAccountData(name, password);
                 mRegistrationManager.addEmailThreePid(mPendingEmailValidation);
                 mRegistrationManager.attemptRegistration(this, this);
                 onWaitingEmailValidation();
@@ -731,8 +722,7 @@ public class LoginActivity extends MXCActionBarActivity implements RegistrationM
     private boolean onHomeServerUrlUpdate(boolean checkFlowOnUpdate) {
         if (!TextUtils.equals(mHomeServerUrl, getHomeServerUrl())) {
             mHomeServerUrl = getHomeServerUrl();
-            mRegistrationResponse = null;
-            mRegistrationManager.resetSingleton();
+            mRegistrationManager.reset();
 
             // invalidate the current homeserver config
             mHomeserverConnectionConfig = null;
@@ -758,8 +748,7 @@ public class LoginActivity extends MXCActionBarActivity implements RegistrationM
     private boolean onIdentityServerUrlUpdate(boolean checkFlowOnUpdate) {
         if (!TextUtils.equals(mIdentityServerUrl, getIdentityServerUrl())) {
             mIdentityServerUrl = getIdentityServerUrl();
-            mRegistrationResponse = null;
-            mRegistrationManager.resetSingleton();
+            mRegistrationManager.reset();
 
             // invalidate the current homeserver config
             mHomeserverConnectionConfig = null;
@@ -801,8 +790,7 @@ public class LoginActivity extends MXCActionBarActivity implements RegistrationM
         // cancel the registration flow
         cancelEmailPolling();
         mEmailValidationExtraParams = null;
-        mRegistrationResponse = null;
-        mRegistrationManager.resetSingleton();
+        mRegistrationManager.reset();
         showMainLayout();
         enableLoadingScreen(false);
 
@@ -829,7 +817,7 @@ public class LoginActivity extends MXCActionBarActivity implements RegistrationM
     public boolean onKeyDown(int keyCode, KeyEvent event) {
         if (keyCode == KeyEvent.KEYCODE_BACK) {
             Log.d(LOG_TAG, "KEYCODE_BACK pressed");
-            if ((MODE_ACCOUNT_CREATION == mMode) && (null != mRegistrationResponse)) {
+            if ((MODE_ACCOUNT_CREATION == mMode) && (!mRegistrationManager.hasRegistrationResponse())) {
                 Log.d(LOG_TAG, "## cancel the registration mode");
                 fallbackToLoginMode();
                 return true;
@@ -1353,14 +1341,10 @@ public class LoginActivity extends MXCActionBarActivity implements RegistrationM
 
     /**
      * Check if the client supports the registration kind.
-     *
-     * @param registrationFlowResponse the response
      */
-    private void onRegistrationFlow(RegistrationFlowResponse registrationFlowResponse) {
+    private void onRegistrationFlow() {
         enableLoadingScreen(false);
         setActionButtonsEnabled(true);
-
-        mRegistrationResponse = registrationFlowResponse;
 
         // Check whether all listed flows in this authentication session are supported
         // We suggest using the fallback page (if any), when at least one flow is not supported.
@@ -1392,7 +1376,7 @@ public class LoginActivity extends MXCActionBarActivity implements RegistrationM
     private void checkIfMailValidationPending() {
         Log.d(LOG_TAG, "## checkIfMailValidationPending(): mIsMailValidationPending=" + mIsMailValidationPending);
 
-        if (null == mRegistrationResponse) {
+        if (!mRegistrationManager.hasRegistrationResponse()) {
             Log.d(LOG_TAG, "## checkIfMailValidationPending(): pending mail validation delayed (mRegistrationResponse=null)");
         } else if (mIsMailValidationPending) {
             mIsMailValidationPending = false;
@@ -1418,6 +1402,7 @@ public class LoginActivity extends MXCActionBarActivity implements RegistrationM
      * i.e checks if this registration page is enough to perform a registration.
      * else switch to a fallback page
      */
+    // TODO Move this code to RegistrationManager?
     private void checkRegistrationFlows() {
         Log.d(LOG_TAG, "## checkRegistrationFlows(): IN");
         // should only check registration flows
@@ -1425,7 +1410,7 @@ public class LoginActivity extends MXCActionBarActivity implements RegistrationM
             return;
         }
 
-        if (null == mRegistrationResponse) {
+        if (!mRegistrationManager.hasRegistrationResponse()) {
             try {
                 final HomeServerConnectionConfig hsConfig = getHsConfig();
 
@@ -1435,7 +1420,7 @@ public class LoginActivity extends MXCActionBarActivity implements RegistrationM
                 } else {
                     enableLoadingScreen(true);
 
-                    mLoginHandler.getSupportedRegistrationFlows(LoginActivity.this, hsConfig, new SimpleApiCallback<HomeServerConnectionConfig>() {
+                    mLoginHandler.getSupportedRegistrationFlows(this, hsConfig, new SimpleApiCallback<HomeServerConnectionConfig>() {
                         @Override
                         public void onSuccess(HomeServerConnectionConfig homeserverConnectionConfig) {
                             // should never be called
@@ -1493,7 +1478,7 @@ public class LoginActivity extends MXCActionBarActivity implements RegistrationM
 
                                 if (null != registrationFlowResponse) {
                                     mRegistrationManager.setSupportedRegistrationFlows(registrationFlowResponse);
-                                    onRegistrationFlow(registrationFlowResponse);
+                                    onRegistrationFlow();
                                 } else {
                                     onFailureDuringAuthRequest(e);
                                 }
@@ -1549,7 +1534,7 @@ public class LoginActivity extends MXCActionBarActivity implements RegistrationM
         }
 
         // sanity check
-        if (null == mRegistrationResponse) {
+        if (!mRegistrationManager.hasRegistrationResponse()) {
             Log.d(LOG_TAG, "## onRegisterClick(): return - mRegistrationResponse=null");
             return;
         }
@@ -1834,8 +1819,6 @@ public class LoginActivity extends MXCActionBarActivity implements RegistrationM
     private void restoreSavedData(@NonNull Bundle savedInstanceState) {
         Log.d(LOG_TAG, "## restoreSavedData(): IN");
 
-        mRegistrationResponse = (RegistrationFlowResponse) savedInstanceState.getSerializable(SAVED_CREATION_REGISTRATION_RESPONSE);
-
         mMode = savedInstanceState.getInt(SAVED_MODE, MODE_LOGIN);
 
         // check if the application has been opened by click on an url
@@ -1852,17 +1835,7 @@ public class LoginActivity extends MXCActionBarActivity implements RegistrationM
         super.onSaveInstanceState(savedInstanceState);
         Log.d(LOG_TAG, "## onSaveInstanceState(): IN");
 
-        if (!TextUtils.isEmpty(mCreationUsernameTextView.getText().toString().trim())) {
-            savedInstanceState.putString(SAVED_CREATION_USER_NAME, mCreationUsernameTextView.getText().toString().trim());
-        }
-
-        if (!TextUtils.isEmpty(mCreationPassword1TextView.getText().toString().trim())) {
-            savedInstanceState.putString(SAVED_CREATION_PASSWORD1, mCreationPassword1TextView.getText().toString().trim());
-        }
-
-        if (null != mRegistrationResponse) {
-            savedInstanceState.putSerializable(SAVED_CREATION_REGISTRATION_RESPONSE, mRegistrationResponse);
-        }
+        mRegistrationManager.saveInstanceState(savedInstanceState);
 
         // check if the application has been opened by click on an url
         if (null != mUniversalLinkUri) {
@@ -2064,8 +2037,7 @@ public class LoginActivity extends MXCActionBarActivity implements RegistrationM
             } else {
                 Log.d(LOG_TAG, "## onActivityResult(): CAPTCHA_CREATION_ACTIVITY_REQUEST_CODE => RESULT_KO");
                 // cancel the registration flow
-                mRegistrationResponse = null;
-                mRegistrationManager.resetSingleton();
+                mRegistrationManager.reset();
                 showMainLayout();
                 enableLoadingScreen(false);
                 refreshDisplay();
@@ -2078,8 +2050,7 @@ public class LoginActivity extends MXCActionBarActivity implements RegistrationM
             } else {
                 Log.d(LOG_TAG, "## onActivityResult(): TERMS_CREATION_ACTIVITY_REQUEST_CODE => RESULT_KO");
                 // cancel the registration flow
-                mRegistrationResponse = null;
-                mRegistrationManager.resetSingleton();
+                mRegistrationManager.reset();
                 showMainLayout();
                 enableLoadingScreen(false);
                 refreshDisplay();
@@ -2118,8 +2089,7 @@ public class LoginActivity extends MXCActionBarActivity implements RegistrationM
                 Log.d(LOG_TAG, "## onActivityResult(): fallback cancelled");
                 // reset the home server to let the user writes a valid one.
                 mHomeserverConnectionConfig = null;
-                mRegistrationResponse = null;
-                mRegistrationManager.resetSingleton();
+                mRegistrationManager.reset();
                 mHomeServerText.setText(UrlUtilKt.HTTPS_SCHEME);
                 setActionButtonsEnabled(false);
             }
@@ -2414,13 +2384,14 @@ public class LoginActivity extends MXCActionBarActivity implements RegistrationM
         }
     }
 
+    // TODO Pass data in cb
     @Override
     public void onWaitingTerms() {
         cancelEmailPolling();
         final List<LocalizedFlowDataLoginTerms> localizedFlowDataLoginTerms = mRegistrationManager.getLocalizedLoginTerms(this);
         if (!localizedFlowDataLoginTerms.isEmpty()) {
             Log.d(LOG_TAG, "## onWaitingTerms");
-            Intent intent = new Intent(LoginActivity.this, AccountCreationTermsActivity.class);
+            Intent intent = AccountCreationTermsActivity.Companion.getIntent(this, localizedFlowDataLoginTerms);
             startActivityForResult(intent, RequestCodesKt.TERMS_CREATION_ACTIVITY_REQUEST_CODE);
         } else {
             Log.d(LOG_TAG, "## onWaitingTerms(): terms flow cannot be done");
