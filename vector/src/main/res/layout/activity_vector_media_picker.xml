@@ -58,12 +58,12 @@
                 android:id="@+id/media_picker_switch_camera"
                 android:layout_width="46dp"
                 android:layout_height="46dp"
-                android:layout_alignParentTop="true"
-                android:layout_alignRight="@+id/media_picker_texture_view"
                 android:layout_alignEnd="@+id/media_picker_texture_view"
-                android:layout_marginRight="12dp"
-                android:layout_marginEnd="12dp"
+                android:layout_alignRight="@+id/media_picker_texture_view"
+                android:layout_alignParentTop="true"
                 android:layout_marginTop="12dp"
+                android:layout_marginEnd="12dp"
+                android:layout_marginRight="12dp"
                 android:background="@drawable/vector_medias_picker_button_background">
 
                 <ImageView
@@ -78,8 +78,8 @@
                 android:id="@+id/media_picker_exit"
                 android:layout_width="46dp"
                 android:layout_height="46dp"
-                android:layout_marginLeft="12dp"
                 android:layout_marginStart="12dp"
+                android:layout_marginLeft="12dp"
                 android:layout_marginTop="12dp"
                 android:background="@drawable/vector_medias_picker_button_background"
                 android:onClick="onExitButton">

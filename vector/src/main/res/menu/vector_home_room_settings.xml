@@ -15,7 +15,7 @@
         <item
             android:id="@+id/ic_action_notifications_mention_only"
             android:icon="@drawable/ic_material_done"
-            android:title="@string/room_settings_mention_only"/>
+            android:title="@string/room_settings_mention_only" />
 
         <item
             android:id="@+id/ic_action_notifications_mute"
