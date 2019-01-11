@@ -2473,7 +2473,7 @@ public class LoginActivity extends MXCActionBarActivity implements RegistrationM
             startActivityForResult(intent, RequestCodesKt.CAPTCHA_CREATION_ACTIVITY_REQUEST_CODE);
         } else {
             Log.d(LOG_TAG, "## onWaitingCaptcha(): captcha flow cannot be done");
-            Toast.makeText(this, getString(R.string.login_error_unable_register), Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, R.string.login_error_unable_register, Toast.LENGTH_SHORT).show();
         }
     }
 
@@ -2487,7 +2487,7 @@ public class LoginActivity extends MXCActionBarActivity implements RegistrationM
             startActivityForResult(intent, RequestCodesKt.TERMS_CREATION_ACTIVITY_REQUEST_CODE);
         } else {
             Log.d(LOG_TAG, "## onWaitingTerms(): terms flow cannot be done");
-            Toast.makeText(this, getString(R.string.login_error_unable_register), Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, R.string.login_error_unable_register, Toast.LENGTH_SHORT).show();
         }
     }
 
