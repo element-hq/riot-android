@@ -1402,7 +1402,6 @@ public class LoginActivity extends MXCActionBarActivity implements RegistrationM
      * i.e checks if this registration page is enough to perform a registration.
      * else switch to a fallback page
      */
-    // TODO Move this code to RegistrationManager?
     private void checkRegistrationFlows() {
         Log.d(LOG_TAG, "## checkRegistrationFlows(): IN");
         // should only check registration flows

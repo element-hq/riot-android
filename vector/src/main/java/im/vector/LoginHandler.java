@@ -175,21 +175,10 @@ public class LoginHandler {
     public void getSupportedRegistrationFlows(Context ctx,
                                               final HomeServerConnectionConfig hsConfig,
                                               final ApiCallback<HomeServerConnectionConfig> callback) {
-        register(ctx, hsConfig, new RegistrationParams(), callback);
-    }
+        final RegistrationParams params = new RegistrationParams();
 
-    /**
-     * Retrieve the supported registration flows of a home server.
-     *
-     * @param ctx      the application context.
-     * @param hsConfig the home server config.
-     * @param callback the supported flows list callback.
-     */
-    private void register(Context ctx,
-                          final HomeServerConnectionConfig hsConfig,
-                          final RegistrationParams params,
-                          final ApiCallback<HomeServerConnectionConfig> callback) {
         final Context appCtx = ctx.getApplicationContext();
+
         LoginRestClient client = new LoginRestClient(hsConfig);
 
         // avoid dispatching the device name
@@ -198,6 +187,7 @@ public class LoginHandler {
         client.register(params, new UnrecognizedCertApiCallback<Credentials>(hsConfig, callback) {
             @Override
             public void onSuccess(Credentials credentials) {
+                // Should never happen, onMatrixError() will be called
                 onRegistrationDone(appCtx, hsConfig, credentials, callback);
             }
 
