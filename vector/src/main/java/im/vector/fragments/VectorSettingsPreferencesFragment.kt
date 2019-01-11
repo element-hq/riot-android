@@ -1329,11 +1329,11 @@ class VectorSettingsPreferencesFragment : PreferenceFragmentCompat(), SharedPref
      * Refresh the notification privacy setting
      */
     private fun refreshNotificationPrivacy() {
-        val pushManager = Matrix.getInstance(activity)!!.pushManager
+        val pushManager = Matrix.getInstance(activity).pushManager
 
         // this setting apply only with FCM for the moment
         if (pushManager.useFcm()) {
-            val notificationPrivacyString = NotificationPrivacyActivity.getNotificationPrivacyString(activity!!,
+            val notificationPrivacyString = NotificationPrivacyActivity.getNotificationPrivacyString(activity,
                     pushManager.notificationPrivacy)
             mNotificationPrivacyPreference.summary = notificationPrivacyString
         } else {
@@ -1584,81 +1584,83 @@ class VectorSettingsPreferencesFragment : PreferenceFragmentCompat(), SharedPref
      * Refresh the pushers list
      */
     private fun refreshPushersList() {
-        val pushManager = Matrix.getInstance(activity)!!.pushManager
-        val pushersList = ArrayList(pushManager.mPushersList)
+       activity?.let { activity->
+           val pushManager = Matrix.getInstance(activity).pushManager
+           val pushersList = ArrayList(pushManager.mPushersList)
 
-        if (pushersList.isEmpty()) {
-            preferenceScreen.removePreference(mPushersSettingsCategory)
-            preferenceScreen.removePreference(mPushersSettingsDivider)
-            return
-        }
+           if (pushersList.isEmpty()) {
+               preferenceScreen.removePreference(mPushersSettingsCategory)
+               preferenceScreen.removePreference(mPushersSettingsDivider)
+               return
+           }
 
-        // check first if there is an update
-        var isNewList = true
-        if (pushersList.size == mDisplayedPushers.size) {
-            isNewList = !mDisplayedPushers.containsAll(pushersList)
-        }
+           // check first if there is an update
+           var isNewList = true
+           if (pushersList.size == mDisplayedPushers.size) {
+               isNewList = !mDisplayedPushers.containsAll(pushersList)
+           }
 
-        if (isNewList) {
-            // remove the displayed one
-            mPushersSettingsCategory.removeAll()
+           if (isNewList) {
+               // remove the displayed one
+               mPushersSettingsCategory.removeAll()
 
-            // add new emails list
-            mDisplayedPushers = pushersList
+               // add new emails list
+               mDisplayedPushers = pushersList
 
-            var index = 0
+               var index = 0
 
-            for (pusher in mDisplayedPushers) {
-                if (null != pusher.lang) {
-                    val isThisDeviceTarget = TextUtils.equals(pushManager.currentRegistrationToken, pusher.pushkey)
+               for (pusher in mDisplayedPushers) {
+                   if (null != pusher.lang) {
+                       val isThisDeviceTarget = TextUtils.equals(pushManager.currentRegistrationToken, pusher.pushkey)
 
-                    val preference = VectorPreference(activity!!).apply {
-                        mTypeface = if (isThisDeviceTarget) Typeface.BOLD else Typeface.NORMAL
-                    }
-                    preference.title = pusher.deviceDisplayName
-                    preference.summary = pusher.appDisplayName
-                    preference.key = PUSHER_PREFERENCE_KEY_BASE + index
-                    index++
-                    mPushersSettingsCategory.addPreference(preference)
+                       val preference = VectorPreference(activity).apply {
+                           mTypeface = if (isThisDeviceTarget) Typeface.BOLD else Typeface.NORMAL
+                       }
+                       preference.title = pusher.deviceDisplayName
+                       preference.summary = pusher.appDisplayName
+                       preference.key = PUSHER_PREFERENCE_KEY_BASE + index
+                       index++
+                       mPushersSettingsCategory.addPreference(preference)
 
-                    // the user cannot remove the self device target
-                    if (!isThisDeviceTarget) {
-                        preference.onPreferenceLongClickListener = object : VectorPreference.OnPreferenceLongClickListener {
-                            override fun onPreferenceLongClick(preference: Preference): Boolean {
-                                AlertDialog.Builder(activity!!)
-                                        .setTitle(R.string.dialog_title_confirmation)
-                                        .setMessage(R.string.settings_delete_notification_targets_confirmation)
-                                        .setPositiveButton(R.string.remove)
-                                        { _, _ ->
-                                            displayLoadingView()
-                                            pushManager.unregister(mSession, pusher, object : ApiCallback<Void> {
-                                                override fun onSuccess(info: Void?) {
-                                                    refreshPushersList()
-                                                    onCommonDone(null)
-                                                }
+                       // the user cannot remove the self device target
+                       if (!isThisDeviceTarget) {
+                           preference.onPreferenceLongClickListener = object : VectorPreference.OnPreferenceLongClickListener {
+                               override fun onPreferenceLongClick(preference: Preference): Boolean {
+                                   AlertDialog.Builder(activity)
+                                           .setTitle(R.string.dialog_title_confirmation)
+                                           .setMessage(R.string.settings_delete_notification_targets_confirmation)
+                                           .setPositiveButton(R.string.remove)
+                                           { _, _ ->
+                                               displayLoadingView()
+                                               pushManager.unregister(mSession, pusher, object : ApiCallback<Void> {
+                                                   override fun onSuccess(info: Void?) {
+                                                       refreshPushersList()
+                                                       onCommonDone(null)
+                                                   }
 
-                                                override fun onNetworkError(e: Exception) {
-                                                    onCommonDone(e.localizedMessage)
-                                                }
+                                                   override fun onNetworkError(e: Exception) {
+                                                       onCommonDone(e.localizedMessage)
+                                                   }
 
-                                                override fun onMatrixError(e: MatrixError) {
-                                                    onCommonDone(e.localizedMessage)
-                                                }
+                                                   override fun onMatrixError(e: MatrixError) {
+                                                       onCommonDone(e.localizedMessage)
+                                                   }
 
-                                                override fun onUnexpectedError(e: Exception) {
-                                                    onCommonDone(e.localizedMessage)
-                                                }
-                                            })
-                                        }
-                                        .setNegativeButton(R.string.cancel, null)
-                                        .show()
-                                return true
-                            }
-                        }
-                    }
-                }
-            }
-        }
+                                                   override fun onUnexpectedError(e: Exception) {
+                                                       onCommonDone(e.localizedMessage)
+                                                   }
+                                               })
+                                           }
+                                           .setNegativeButton(R.string.cancel, null)
+                                           .show()
+                                   return true
+                               }
+                           }
+                       }
+                   }
+               }
+           }
+       }
     }
 
     //==============================================================================================================
@@ -1801,42 +1803,44 @@ class VectorSettingsPreferencesFragment : PreferenceFragmentCompat(), SharedPref
      * @param pid the used pid.
      */
     private fun showEmailValidationDialog(pid: ThreePid) {
-        AlertDialog.Builder(activity!!)
-                .setTitle(R.string.account_email_validation_title)
-                .setMessage(R.string.account_email_validation_message)
-                .setPositiveButton(R.string._continue) { _, _ ->
-                    mSession.myUser.add3Pid(pid, true, object : ApiCallback<Void> {
-                        override fun onSuccess(info: Void?) {
-                            activity?.runOnUiThread {
-                                hideLoadingView()
-                                refreshEmailsList()
-                            }
-                        }
-
-                        override fun onNetworkError(e: Exception) {
-                            onCommonDone(e.localizedMessage)
-                        }
-
-                        override fun onMatrixError(e: MatrixError) {
-                            if (TextUtils.equals(e.errcode, MatrixError.THREEPID_AUTH_FAILED)) {
-                                activity?.runOnUiThread {
+        activity?.let {
+            AlertDialog.Builder(it)
+                    .setTitle(R.string.account_email_validation_title)
+                    .setMessage(R.string.account_email_validation_message)
+                    .setPositiveButton(R.string._continue) { _, _ ->
+                        mSession.myUser.add3Pid(pid, true, object : ApiCallback<Void> {
+                            override fun onSuccess(info: Void?) {
+                                it.runOnUiThread {
                                     hideLoadingView()
-                                    activity?.toast(R.string.account_email_validation_error)
+                                    refreshEmailsList()
                                 }
-                            } else {
+                            }
+
+                            override fun onNetworkError(e: Exception) {
                                 onCommonDone(e.localizedMessage)
                             }
-                        }
 
-                        override fun onUnexpectedError(e: Exception) {
-                            onCommonDone(e.localizedMessage)
-                        }
-                    })
-                }
-                .setNegativeButton(R.string.cancel) { _, _ ->
-                    hideLoadingView()
-                }
-                .show()
+                            override fun onMatrixError(e: MatrixError) {
+                                if (TextUtils.equals(e.errcode, MatrixError.THREEPID_AUTH_FAILED)) {
+                                    it.runOnUiThread {
+                                        hideLoadingView()
+                                        it.toast(R.string.account_email_validation_error)
+                                    }
+                                } else {
+                                    onCommonDone(e.localizedMessage)
+                                }
+                            }
+
+                            override fun onUnexpectedError(e: Exception) {
+                                onCommonDone(e.localizedMessage)
+                            }
+                        })
+                    }
+                    .setNegativeButton(R.string.cancel) { _, _ ->
+                        hideLoadingView()
+                    }
+                    .show()
+        }
     }
 
     //==============================================================================================================
@@ -2029,66 +2033,63 @@ class VectorSettingsPreferencesFragment : PreferenceFragmentCompat(), SharedPref
      * Refresh the background sync preference
      */
     private fun refreshBackgroundSyncPrefs() {
-        // sanity check
-        if (null == activity) {
-            return
-        }
+        activity?.let {  activity->
+            val pushManager = Matrix.getInstance(activity).pushManager
 
-        val pushManager = Matrix.getInstance(activity)!!.pushManager
+            val timeout = pushManager.backgroundSyncTimeOut / 1000
+            val delay = pushManager.backgroundSyncDelay / 1000
 
-        val timeout = pushManager.backgroundSyncTimeOut / 1000
-        val delay = pushManager.backgroundSyncDelay / 1000
-
-        // update the settings
-        PreferenceManager.getDefaultSharedPreferences(activity).edit {
-            putString(PreferencesManager.SETTINGS_SET_SYNC_TIMEOUT_PREFERENCE_KEY, timeout.toString() + "")
-            putString(PreferencesManager.SETTINGS_SET_SYNC_DELAY_PREFERENCE_KEY, delay.toString() + "")
-        }
-
-        mSyncRequestTimeoutPreference?.let {
-            it.summary = secondsToText(timeout)
-            it.text = timeout.toString() + ""
-
-            it.onPreferenceChangeListener = Preference.OnPreferenceChangeListener { _, newValue ->
-                var newTimeOut = timeout
-
-                try {
-                    newTimeOut = Integer.parseInt(newValue as String)
-                } catch (e: Exception) {
-                    Log.e(LOG_TAG, "## refreshBackgroundSyncPrefs : parseInt failed " + e.message, e)
-                }
-
-                if (newTimeOut != timeout) {
-                    pushManager.backgroundSyncTimeOut = newTimeOut * 1000
-
-                    activity?.runOnUiThread { refreshBackgroundSyncPrefs() }
-                }
-
-                false
+            // update the settings
+            PreferenceManager.getDefaultSharedPreferences(activity).edit {
+                putString(PreferencesManager.SETTINGS_SET_SYNC_TIMEOUT_PREFERENCE_KEY, timeout.toString() + "")
+                putString(PreferencesManager.SETTINGS_SET_SYNC_DELAY_PREFERENCE_KEY, delay.toString() + "")
             }
-        }
 
+            mSyncRequestTimeoutPreference?.let {
+                it.summary = secondsToText(timeout)
+                it.text = timeout.toString() + ""
 
-        mSyncRequestDelayPreference?.let {
-            it.summary = secondsToText(delay)
-            it.text = delay.toString() + ""
+                it.onPreferenceChangeListener = Preference.OnPreferenceChangeListener { _, newValue ->
+                    var newTimeOut = timeout
 
-            it.onPreferenceChangeListener = Preference.OnPreferenceChangeListener { _, newValue ->
-                var newDelay = delay
+                    try {
+                        newTimeOut = Integer.parseInt(newValue as String)
+                    } catch (e: Exception) {
+                        Log.e(LOG_TAG, "## refreshBackgroundSyncPrefs : parseInt failed " + e.message, e)
+                    }
 
-                try {
-                    newDelay = Integer.parseInt(newValue as String)
-                } catch (e: Exception) {
-                    Log.e(LOG_TAG, "## refreshBackgroundSyncPrefs : parseInt failed " + e.message, e)
+                    if (newTimeOut != timeout) {
+                        pushManager.backgroundSyncTimeOut = newTimeOut * 1000
+
+                        activity.runOnUiThread { refreshBackgroundSyncPrefs() }
+                    }
+
+                    false
                 }
+            }
 
-                if (newDelay != delay) {
-                    pushManager.backgroundSyncDelay = newDelay * 1000
 
-                    activity?.runOnUiThread { refreshBackgroundSyncPrefs() }
+            mSyncRequestDelayPreference?.let {
+                it.summary = secondsToText(delay)
+                it.text = delay.toString() + ""
+
+                it.onPreferenceChangeListener = Preference.OnPreferenceChangeListener { _, newValue ->
+                    var newDelay = delay
+
+                    try {
+                        newDelay = Integer.parseInt(newValue as String)
+                    } catch (e: Exception) {
+                        Log.e(LOG_TAG, "## refreshBackgroundSyncPrefs : parseInt failed " + e.message, e)
+                    }
+
+                    if (newDelay != delay) {
+                        pushManager.backgroundSyncDelay = newDelay * 1000
+
+                        activity.runOnUiThread { refreshBackgroundSyncPrefs() }
+                    }
+
+                    false
                 }
-
-                false
             }
         }
     }
