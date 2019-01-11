@@ -1028,9 +1028,10 @@ class VectorSettingsPreferencesFragment : PreferenceFragmentCompat(), SharedPref
 
             if (null != preference) {
 
-                if ( preference is SwitchPreference) {
+                if (preference is SwitchPreference) {
                     when (preferenceKey) {
-                        PreferencesManager.SETTINGS_ENABLE_THIS_DEVICE_PREFERENCE_KEY -> preference.isChecked = pushManager?.areDeviceNotificationsAllowed() ?: true
+                        PreferencesManager.SETTINGS_ENABLE_THIS_DEVICE_PREFERENCE_KEY ->
+                            preference.isChecked = pushManager?.areDeviceNotificationsAllowed() ?: true
 
                         PreferencesManager.SETTINGS_TURN_SCREEN_ON_PREFERENCE_KEY -> {
                             preference.isChecked = pushManager?.isScreenTurnedOn ?: false
