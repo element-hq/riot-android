@@ -123,7 +123,7 @@ public class RegistrationManager {
      */
 
     /**
-     * Reset singleton values to allow a new registration
+     * Reset values to allow a new registration
      */
     public void reset() {
         mHsConfig = null;

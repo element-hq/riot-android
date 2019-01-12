@@ -285,7 +285,6 @@ public class LoginActivity extends MXCActionBarActivity implements RegistrationM
         }
 
         cancelEmailPolling();
-        mRegistrationManager.reset();
         super.onDestroy();
         Log.i(LOG_TAG, "## onDestroy(): IN");
         // ignore any server response when the activity is destroyed
