@@ -15,12 +15,12 @@
  */
 package im.vector.notifications
 
-import android.os.Parcel
 import android.os.Parcelable
 import android.support.v4.app.NotificationCompat
+import kotlinx.android.parcel.Parcelize
 import org.matrix.androidsdk.rest.model.Event
 
-interface NotifiableEvent : Parcelable{
+interface NotifiableEvent : Parcelable {
     val eventId: String
     val noisy: Boolean
     val title: String
@@ -34,6 +34,7 @@ interface NotifiableEvent : Parcelable{
     var hasBeenDisplayed: Boolean
 }
 
+@Parcelize
 data class SimpleNotifiableEvent(
         override val eventId: String,
         override val noisy: Boolean,
@@ -47,45 +48,9 @@ data class SimpleNotifiableEvent(
 
     override var lockScreenVisibility = NotificationCompat.VISIBILITY_PUBLIC
 
-    constructor(parcel: Parcel) : this(
-            parcel.readString(),
-            parcel.readByte() != 0.toByte(),
-            parcel.readString(),
-            parcel.readString(),
-            parcel.readString(),
-            parcel.readLong(),
-            parcel.readString()) {
-        hasBeenDisplayed = parcel.readByte() != 0.toByte()
-        lockScreenVisibility = parcel.readInt()
-    }
-
-    override fun writeToParcel(parcel: Parcel, flags: Int) {
-        parcel.writeString(eventId)
-        parcel.writeByte(if (noisy) 1 else 0)
-        parcel.writeString(title)
-        parcel.writeString(description)
-        parcel.writeString(type)
-        parcel.writeLong(timestamp)
-        parcel.writeString(soundName)
-        parcel.writeByte(if (hasBeenDisplayed) 1 else 0)
-        parcel.writeInt(lockScreenVisibility)
-    }
-
-    override fun describeContents(): Int {
-        return 0
-    }
-
-    companion object CREATOR : Parcelable.Creator<SimpleNotifiableEvent> {
-        override fun createFromParcel(parcel: Parcel): SimpleNotifiableEvent {
-            return SimpleNotifiableEvent(parcel)
-        }
-
-        override fun newArray(size: Int): Array<SimpleNotifiableEvent?> {
-            return arrayOfNulls(size)
-        }
-    }
 }
 
+@Parcelize
 data class NotifiableMessageEvent(
         override val eventId: String,
         override val noisy: Boolean,
@@ -111,49 +76,5 @@ data class NotifiableMessageEvent(
 
     override val title: String
         get() = senderName ?: ""
-
-    constructor(parcel: Parcel) : this(
-            parcel.readString(),
-            parcel.readByte() != 0.toByte(),
-            parcel.readLong(),
-            parcel.readString(),
-            parcel.readString(),
-            parcel.readString(),
-            parcel.readString()) {
-        soundName = parcel.readString()
-        lockScreenVisibility = parcel.readInt()
-        hasBeenDisplayed = parcel.readByte() != 0.toByte()
-        roomAvatarPath = parcel.readString()
-        senderAvatarPath = parcel.readString()
-    }
-
-    override fun writeToParcel(parcel: Parcel, flags: Int) {
-        parcel.writeString(eventId)
-        parcel.writeByte(if (noisy) 1 else 0)
-        parcel.writeLong(timestamp)
-        parcel.writeString(senderName)
-        parcel.writeString(body)
-        parcel.writeString(roomId)
-        parcel.writeString(roomName)
-        parcel.writeString(soundName)
-        parcel.writeInt(lockScreenVisibility)
-        parcel.writeByte(if (hasBeenDisplayed) 1 else 0)
-        parcel.writeString(roomAvatarPath)
-        parcel.writeString(senderAvatarPath)
-    }
-
-    override fun describeContents(): Int {
-        return 0
-    }
-
-    companion object CREATOR : Parcelable.Creator<NotifiableMessageEvent> {
-        override fun createFromParcel(parcel: Parcel): NotifiableMessageEvent {
-            return NotifiableMessageEvent(parcel)
-        }
-
-        override fun newArray(size: Int): Array<NotifiableMessageEvent?> {
-            return arrayOfNulls(size)
-        }
-    }
 
 }

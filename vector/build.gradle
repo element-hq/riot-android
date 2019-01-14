@@ -185,6 +185,12 @@ android {
     }
 }
 
+apply plugin: 'org.jetbrains.kotlin.android.extensions'
+
+androidExtensions {
+    experimental = true
+}
+
 static def gitRevision() {
     def cmd = "git rev-parse --short HEAD"
     return cmd.execute().text.trim()
