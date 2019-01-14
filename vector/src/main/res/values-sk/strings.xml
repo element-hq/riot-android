@@ -427,7 +427,7 @@ Pozor! Vykonaním tejto akcie reštartujete aplikáciu a opätovné načítanie 
     <string name="settings_add_email_address">Pridať emailovú adresu</string>
     <string name="settings_phone_number">Telefón</string>
     <string name="settings_add_phone_number">Pridať telefónne číslo</string>
-    <string name="settings_app_info_link_summary">Systémová obrazovka s informáciami o aplikácii</string>
+    <string name="settings_app_info_link_summary">Zobraziť informácie o aplikácii v systémových nastaveniach.</string>
     <string name="settings_app_info_link_title">Info o aplikácii</string>
 
     <string name="settings_notification_ringtone">Zvuk oznámení</string>
@@ -607,7 +607,7 @@ Ak v miestnosti povolíte šifrovanie, šifrovanie nie je viac možné zakázať
 Šifrované správy nebudú vôbec zobrazené v klientoch, ktorí zatiaľ nepodporujú šifrovanie.</string>
 
     <string name="directory_title">Adresár</string>
-    <string name="settings_theme">Téma</string>
+    <string name="settings_theme">Vzhľad</string>
 
     <string name="failed_to_load_timeline_position">%s sa pokúšal zobraziť konkrétny bod v histórii tejto miestnosti, no zodpovedajúcu udalosť sa nepodarilo nájsť.</string>
 
@@ -774,7 +774,7 @@ Neznáme zariadenia:</string>
     <string name="room_settings_add_homescreen_shortcut">Pridať odkaz na domovskú obrazovku</string>
 
     <string name="settings_inline_url_preview">Náhľady URL adries</string>
-    <string name="settings_vibrate_on_mention">Vybrovať keď spomeniete iného používateľa</string>
+    <string name="settings_vibrate_on_mention">Vibrovať keď spomeniete iného používateľa</string>
 
     <string name="settings_flair">Príslušnosť ku komunitám</string>
 
