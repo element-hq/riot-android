@@ -75,6 +75,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import butterknife.BindView;
+import butterknife.OnClick;
 import im.vector.LoginHandler;
 import im.vector.Matrix;
 import im.vector.PhoneNumberHandler;
@@ -250,10 +251,10 @@ public class LoginActivity extends MXCActionBarActivity implements RegistrationM
     @BindView(R.id.registration_phone_number_value)
     EditText mPhoneNumber;
 
-    @BindView(R.id.button_submit)
+    @BindView(R.id.button_submit_three_pid)
     Button mSubmitThreePidButton;
 
-    @BindView(R.id.button_skip)
+    @BindView(R.id.button_skip_three_pid)
     Button mSkipThreePidButton;
 
     // Home server options
@@ -445,29 +446,6 @@ public class LoginActivity extends MXCActionBarActivity implements RegistrationM
             restoreSavedData(savedInstanceState);
         }
         addToRestorables(mResourceLimitDialogHelper);
-
-        mLoginButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                onLoginClick();
-            }
-        });
-
-        // account creation handler
-        mRegisterButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                onRegisterClick(true);
-            }
-        });
-
-        // forgot password button
-        mForgotPasswordButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                onForgotPasswordClick();
-            }
-        });
 
         mForgotValidateEmailButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -914,7 +892,8 @@ public class LoginActivity extends MXCActionBarActivity implements RegistrationM
     /**
      * the user forgot his password
      */
-    private void onForgotPasswordClick() {
+    @OnClick(R.id.button_reset_password)
+    void onForgotPasswordClick() {
         final HomeServerConnectionConfig hsConfig = getHsConfig();
 
         // it might be null if the identity / homeserver urls are invalids
@@ -1527,8 +1506,9 @@ public class LoginActivity extends MXCActionBarActivity implements RegistrationM
     /**
      * The user clicks on the register button.
      */
-    private void onRegisterClick(boolean checkRegistrationValues) {
-        Log.d(LOG_TAG, "## onRegisterClick(): IN - checkRegistrationValues=" + checkRegistrationValues);
+    @OnClick(R.id.button_register)
+    void onRegisterClick() {
+        Log.d(LOG_TAG, "## onRegisterClick(): IN");
         onClick();
 
         // the user switches to another mode
@@ -1549,28 +1529,26 @@ public class LoginActivity extends MXCActionBarActivity implements RegistrationM
         final String password = mCreationPassword1TextView.getText().toString().trim();
         final String passwordCheck = mCreationPassword2TextView.getText().toString().trim();
 
-        if (checkRegistrationValues) {
-            if (TextUtils.isEmpty(name)) {
+        if (TextUtils.isEmpty(name)) {
+            Toast.makeText(getApplicationContext(), getString(R.string.auth_invalid_user_name), Toast.LENGTH_SHORT).show();
+            return;
+        } else if (TextUtils.isEmpty(password)) {
+            Toast.makeText(getApplicationContext(), getString(R.string.auth_missing_password), Toast.LENGTH_SHORT).show();
+            return;
+        } else if (password.length() < 6) {
+            Toast.makeText(getApplicationContext(), getString(R.string.auth_invalid_password), Toast.LENGTH_SHORT).show();
+            return;
+        } else if (!TextUtils.equals(password, passwordCheck)) {
+            Toast.makeText(getApplicationContext(), getString(R.string.auth_password_dont_match), Toast.LENGTH_SHORT).show();
+            return;
+        } else {
+            String expression = "^[a-z0-9.\\-_]+$";
+
+            Pattern pattern = Pattern.compile(expression, Pattern.CASE_INSENSITIVE);
+            Matcher matcher = pattern.matcher(name);
+            if (!matcher.matches()) {
                 Toast.makeText(getApplicationContext(), getString(R.string.auth_invalid_user_name), Toast.LENGTH_SHORT).show();
                 return;
-            } else if (TextUtils.isEmpty(password)) {
-                Toast.makeText(getApplicationContext(), getString(R.string.auth_missing_password), Toast.LENGTH_SHORT).show();
-                return;
-            } else if (password.length() < 6) {
-                Toast.makeText(getApplicationContext(), getString(R.string.auth_invalid_password), Toast.LENGTH_SHORT).show();
-                return;
-            } else if (!TextUtils.equals(password, passwordCheck)) {
-                Toast.makeText(getApplicationContext(), getString(R.string.auth_password_dont_match), Toast.LENGTH_SHORT).show();
-                return;
-            } else {
-                String expression = "^[a-z0-9.\\-_]+$";
-
-                Pattern pattern = Pattern.compile(expression, Pattern.CASE_INSENSITIVE);
-                Matcher matcher = pattern.matcher(name);
-                if (!matcher.matches()) {
-                    Toast.makeText(getApplicationContext(), getString(R.string.auth_invalid_user_name), Toast.LENGTH_SHORT).show();
-                    return;
-                }
             }
         }
 
@@ -1596,7 +1574,8 @@ public class LoginActivity extends MXCActionBarActivity implements RegistrationM
     /**
      * The user clicks on the login button
      */
-    private void onLoginClick() {
+    @OnClick(R.id.button_login)
+    void onLoginClick() {
         if (onHomeServerUrlUpdate(true) || onIdentityServerUrlUpdate(true)) {
             mIsPendingLogin = true;
             Log.d(LOG_TAG, "## onLoginClick() : The user taps on login but the IS/HS did not loos the focus");
@@ -2154,19 +2133,13 @@ public class LoginActivity extends MXCActionBarActivity implements RegistrationM
         } else {
             mSkipThreePidButton.setVisibility(View.GONE);
         }
-
-        mSubmitThreePidButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                submitThreePids();
-            }
-        });
     }
 
     /**
      * Submit the three pids
      */
-    private void submitThreePids() {
+    @OnClick(R.id.button_submit_three_pid)
+    void submitThreePids() {
         dismissKeyboard(this);
 
         // Make sure to start with a clear state in case user already submitted before but canceled
