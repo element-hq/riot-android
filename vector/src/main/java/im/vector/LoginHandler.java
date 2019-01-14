@@ -49,7 +49,7 @@ public class LoginHandler {
     private void onRegistrationDone(Context appCtx,
                                     HomeServerConnectionConfig hsConfig,
                                     Credentials credentials,
-                                    ApiCallback<HomeServerConnectionConfig> callback) {
+                                    ApiCallback<Void> callback) {
         // sanity check - GA issue
         if (TextUtils.isEmpty(credentials.userId)) {
             callback.onMatrixError(new MatrixError(MatrixError.FORBIDDEN, "No user id"));
@@ -70,7 +70,7 @@ public class LoginHandler {
             Matrix.getInstance(appCtx).addSession(session);
         }
 
-        callback.onSuccess(hsConfig);
+        callback.onSuccess(null);
     }
 
     /**
@@ -91,7 +91,7 @@ public class LoginHandler {
                       final String phoneNumber,
                       final String phoneNumberCountry,
                       final String password,
-                      final ApiCallback<HomeServerConnectionConfig> callback) {
+                      final ApiCallback<Void> callback) {
         final Context appCtx = ctx.getApplicationContext();
 
         callLogin(ctx, hsConfig, username, phoneNumber, phoneNumberCountry, password, new UnrecognizedCertApiCallback<Credentials>(hsConfig, callback) {
@@ -174,7 +174,7 @@ public class LoginHandler {
      */
     public void getSupportedRegistrationFlows(Context ctx,
                                               final HomeServerConnectionConfig hsConfig,
-                                              final ApiCallback<HomeServerConnectionConfig> callback) {
+                                              final ApiCallback<Void> callback) {
         final RegistrationParams params = new RegistrationParams();
 
         final Context appCtx = ctx.getApplicationContext();

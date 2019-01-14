@@ -1415,9 +1415,9 @@ public class LoginActivity extends MXCActionBarActivity implements RegistrationM
                 } else {
                     enableLoadingScreen(true);
 
-                    mLoginHandler.getSupportedRegistrationFlows(this, hsConfig, new SimpleApiCallback<HomeServerConnectionConfig>() {
+                    mLoginHandler.getSupportedRegistrationFlows(this, hsConfig, new SimpleApiCallback<Void>() {
                         @Override
-                        public void onSuccess(HomeServerConnectionConfig homeserverConnectionConfig) {
+                        public void onSuccess(Void avoid) {
                             // should never be called
                         }
 
@@ -1660,13 +1660,17 @@ public class LoginActivity extends MXCActionBarActivity implements RegistrationM
      * @param phoneNumberCountry the phone number country code
      * @param password           the user password
      */
-    private void login(final HomeServerConnectionConfig hsConfig, final String hsUrlString,
-                       final String identityUrlString, final String username, final String phoneNumber,
-                       final String phoneNumberCountry, final String password) {
+    private void login(final HomeServerConnectionConfig hsConfig,
+                       final String hsUrlString,
+                       final String identityUrlString,
+                       final String username,
+                       final String phoneNumber,
+                       final String phoneNumberCountry,
+                       final String password) {
         try {
-            mLoginHandler.login(this, hsConfig, username, phoneNumber, phoneNumberCountry, password, new SimpleApiCallback<HomeServerConnectionConfig>(this) {
+            mLoginHandler.login(this, hsConfig, username, phoneNumber, phoneNumberCountry, password, new SimpleApiCallback<Void>(this) {
                 @Override
-                public void onSuccess(HomeServerConnectionConfig c) {
+                public void onSuccess(Void avoid) {
                     enableLoadingScreen(false);
 
                     saveServerUrlsIfCustomValuesHasBeenEntered();
@@ -1875,8 +1879,6 @@ public class LoginActivity extends MXCActionBarActivity implements RegistrationM
         threePidLayout.setVisibility((mMode == MODE_ACCOUNT_CREATION_THREE_PID) ? View.VISIBLE : View.GONE);
 
         boolean isLoginMode = mMode == MODE_LOGIN;
-
-        mButtonsView.setVisibility(View.VISIBLE);
 
         mPasswordForgottenTxtView.setVisibility(isLoginMode ? View.VISIBLE : View.GONE);
         mLoginButton.setVisibility(mMode == MODE_LOGIN || mMode == MODE_ACCOUNT_CREATION ? View.VISIBLE : View.GONE);
