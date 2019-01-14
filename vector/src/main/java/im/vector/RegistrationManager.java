@@ -18,6 +18,7 @@
 package im.vector;
 
 import android.content.Context;
+import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.annotation.StringRes;
 import android.text.TextUtils;
@@ -58,12 +59,15 @@ import im.vector.util.UrlUtilKt;
 public class RegistrationManager {
     private static final String LOG_TAG = RegistrationManager.class.getSimpleName();
 
-    private static volatile RegistrationManager sInstance;
-
     private static final String ERROR_MISSING_STAGE = "ERROR_MISSING_STAGE";
     private static final String ERROR_EMPTY_USER_ID = "ERROR_EMPTY_USER_ID";
 
     private static final String NEXTLINK_BASE_URL = "https://riot.im/app";
+
+    // saved parameters index
+    private static final String SAVED_CREATION_USER_NAME = "SAVED_CREATION_USER_NAME";
+    private static final String SAVED_CREATION_PASSWORD = "SAVED_CREATION_PASSWORD";
+    private static final String SAVED_CREATION_REGISTRATION_RESPONSE = "SAVED_CREATION_REGISTRATION_RESPONSE";
 
     // List of stages supported by the app
     private static final List<String> VECTOR_SUPPORTED_STAGES = Arrays.asList(
@@ -99,18 +103,17 @@ public class RegistrationManager {
 
     /*
      * *********************************************************************************************
-     * Singleton
+     * Constructor
      * *********************************************************************************************
      */
 
-    public static RegistrationManager getInstance() {
-        if (sInstance == null) {
-            sInstance = new RegistrationManager();
-        }
-        return sInstance;
-    }
+    public RegistrationManager(@Nullable Bundle savedInstanceState) {
+        if (savedInstanceState != null) {
+            mUsername = savedInstanceState.getString(SAVED_CREATION_USER_NAME);
+            mPassword = savedInstanceState.getString(SAVED_CREATION_PASSWORD);
 
-    private RegistrationManager() {
+            mRegistrationResponse = (RegistrationFlowResponse) savedInstanceState.getSerializable(SAVED_CREATION_REGISTRATION_RESPONSE);
+        }
     }
 
     /*
@@ -120,9 +123,9 @@ public class RegistrationManager {
      */
 
     /**
-     * Reset singleton values to allow a new registration
+     * Reset values to allow a new registration
      */
-    public void resetSingleton() {
+    public void reset() {
         mHsConfig = null;
         mLoginRestClient = null;
         mThirdPidRestClient = null;
@@ -205,6 +208,8 @@ public class RegistrationManager {
             // Trigger a fake registration (without password) to know whether the user name is available or not.
             RegistrationParams params = new RegistrationParams();
             params.username = mUsername;
+
+            // Note: We do not pass sessionId here, this is not necessary.
 
             register(context, params, new InternalRegistrationListener() {
                 @Override
@@ -321,7 +326,8 @@ public class RegistrationManager {
             }
 
             final RegistrationParams params = new RegistrationParams();
-            if (!registrationType.equals(LoginRestClient.LOGIN_FLOW_TYPE_RECAPTCHA)) {
+            if (!registrationType.equals(LoginRestClient.LOGIN_FLOW_TYPE_RECAPTCHA)
+                    && !registrationType.equals(LoginRestClient.LOGIN_FLOW_TYPE_TERMS)) {
                 if (mUsername != null) {
                     params.username = mUsername;
                 }
@@ -357,10 +363,10 @@ public class RegistrationManager {
                         if (mEmail != null && !isCompleted(LoginRestClient.LOGIN_FLOW_TYPE_EMAIL_IDENTITY)) {
                             attemptRegistration(context, listener);
                         } else if (isTermsRequired()) {
-                            listener.onWaitingTerms();
+                            listener.onWaitingTerms(getLocalizedLoginTerms(context));
                         } else {
                             // At this point, only captcha can be the missing stage
-                            listener.onWaitingCaptcha();
+                            listener.onWaitingCaptcha(getCaptchaPublicKey());
                         }
                     } else {
                         listener.onRegistrationFailed(message);
@@ -420,10 +426,10 @@ public class RegistrationManager {
             public void onRegistrationFailed(String message) {
                 if (TextUtils.equals(ERROR_MISSING_STAGE, message)) {
                     if (isTermsRequired()) {
-                        listener.onWaitingTerms();
+                        listener.onWaitingTerms(getLocalizedLoginTerms(context));
                     } else {
                         // At this point, only captcha can be the missing stage
-                        listener.onWaitingCaptcha();
+                        listener.onWaitingCaptcha(getCaptchaPublicKey());
                     }
                 } else {
                     listener.onRegistrationFailed(message);
@@ -526,6 +532,7 @@ public class RegistrationManager {
 
     /**
      * Return true if the stage is required and not completed
+     *
      * @param stage
      * @return
      */
@@ -588,27 +595,6 @@ public class RegistrationManager {
                 }
             });
         }
-    }
-
-    /**
-     * Get the public key for captcha registration
-     *
-     * @return public key
-     */
-    @Nullable
-    public String getCaptchaPublicKey() {
-        return RegistrationToolsKt.getCaptchaPublicKey(mRegistrationResponse);
-    }
-
-    /**
-     * Get the list of LocalizedFlowDataLoginTerms the user has to accept
-     *
-     * @return list of LocalizedFlowDataLoginTerms the user has to accept
-     */
-    public List<LocalizedFlowDataLoginTerms> getLocalizedLoginTerms(Context context) {
-        return RegistrationToolsKt.getLocalizedLoginTerms(mRegistrationResponse,
-                context.getString(R.string.resources_language),
-                "en");
     }
 
     /**
@@ -685,6 +671,27 @@ public class RegistrationManager {
      * Private methods
      * *********************************************************************************************
      */
+
+    /**
+     * Get the list of LocalizedFlowDataLoginTerms the user has to accept
+     *
+     * @return list of LocalizedFlowDataLoginTerms the user has to accept
+     */
+    private List<LocalizedFlowDataLoginTerms> getLocalizedLoginTerms(Context context) {
+        return RegistrationToolsKt.getLocalizedLoginTerms(mRegistrationResponse,
+                context.getString(R.string.resources_language),
+                "en");
+    }
+
+    /**
+     * Get the public key for captcha registration
+     *
+     * @return public key
+     */
+    @Nullable
+    private String getCaptchaPublicKey() {
+        return RegistrationToolsKt.getCaptchaPublicKey(mRegistrationResponse);
+    }
 
     /**
      * Get a login rest client
@@ -919,13 +926,13 @@ public class RegistrationManager {
 
     /**
      * Creates a 3PID error message from a string resource id and adds the additional infos, if non-null
+     *
      * @param context
      * @param errorMessageRes
      * @param additionalInfo
      * @return The error message
      */
-    private static String build3PidErrorMessage(Context context, @StringRes int errorMessageRes, @Nullable String additionalInfo)
-    {
+    private static String build3PidErrorMessage(Context context, @StringRes int errorMessageRes, @Nullable String additionalInfo) {
         StringBuilder builder = new StringBuilder();
         builder.append(context.getString(errorMessageRes));
 
@@ -1047,6 +1054,24 @@ public class RegistrationManager {
         }
     }
 
+    public boolean hasRegistrationResponse() {
+        return mRegistrationResponse != null;
+    }
+
+    public void saveInstanceState(Bundle savedInstanceState) {
+        if (!TextUtils.isEmpty(mUsername)) {
+            savedInstanceState.putString(SAVED_CREATION_USER_NAME, mUsername);
+        }
+
+        if (!TextUtils.isEmpty(mPassword)) {
+            savedInstanceState.putString(SAVED_CREATION_PASSWORD, mPassword);
+        }
+
+        if (null != mRegistrationResponse) {
+            savedInstanceState.putSerializable(SAVED_CREATION_REGISTRATION_RESPONSE, mRegistrationResponse);
+        }
+    }
+
     /*
      * *********************************************************************************************
      * Private listeners
@@ -1088,9 +1113,15 @@ public class RegistrationManager {
 
         void onWaitingEmailValidation();
 
-        void onWaitingCaptcha();
+        /**
+         * @param publicKey the Captcha public key
+         */
+        void onWaitingCaptcha(String publicKey);
 
-        void onWaitingTerms();
+        /**
+         * @param localizedFlowDataLoginTerms list of LocalizedFlowDataLoginTerms the user has to accept
+         */
+        void onWaitingTerms(List<LocalizedFlowDataLoginTerms> localizedFlowDataLoginTerms);
 
         void onThreePidRequestFailed(String message);
 

@@ -195,14 +195,7 @@
         <item name="android:windowBackground">@android:color/transparent</item>
     </style>
 
-    <!-- login & registration activities -->
-    <style name="LoginAppTheme.Status" parent="AppTheme.Status">
-        <item name="android:editTextStyle">@style/LoginEditTextStyle</item>
-        <item name="android:buttonStyle">@style/LoginButtonStyle</item>
-
-        <item name="colorAccent">@color/primary_color_status</item>
-    </style>
-
+    <!-- Picker activities -->
     <style name="CountryPickerTheme.Status" parent="AppTheme.Status">
         <item name="editTextColor">@android:color/white</item>
         <item name="android:editTextColor">@android:color/white</item>

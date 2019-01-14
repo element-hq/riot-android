@@ -42,12 +42,7 @@
         <item name="android:windowBackground">@android:color/transparent</item>
     </style>
 
-    <!-- login & registration activities -->
-    <style name="LoginAppTheme.Black" parent="AppTheme.Black">
-        <item name="android:editTextStyle">@style/LoginEditTextStyle</item>
-        <item name="android:buttonStyle">@style/LoginButtonStyle</item>
-    </style>
-
+    <!-- Picker activities -->
     <style name="CountryPickerTheme.Black" parent="AppTheme.Black">
         <item name="editTextColor">@android:color/white</item>
         <item name="android:editTextColor">@android:color/white</item>

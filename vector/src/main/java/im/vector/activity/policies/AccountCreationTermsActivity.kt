@@ -17,13 +17,15 @@
 package im.vector.activity.policies
 
 import android.app.Activity
+import android.content.Context
+import android.content.Intent
 import android.os.Build
+import android.os.Parcelable
 import android.widget.Button
 import butterknife.BindView
 import butterknife.OnClick
 import com.airbnb.epoxy.EpoxyRecyclerView
 import im.vector.R
-import im.vector.RegistrationManager
 import im.vector.activity.VectorAppCompatActivity
 import im.vector.activity.VectorWebViewActivity
 import im.vector.ui.themes.ThemeUtils
@@ -57,7 +59,7 @@ class AccountCreationTermsActivity : VectorAppCompatActivity(),
 
         val list = ArrayList<LocalizedFlowDataLoginTermsChecked>()
 
-        RegistrationManager.getInstance().getLocalizedLoginTerms(this)
+        intent.getParcelableArrayListExtra<LocalizedFlowDataLoginTerms>(DATA)
                 .forEach {
                     list.add(LocalizedFlowDataLoginTermsChecked(it))
                 }
@@ -109,5 +111,13 @@ class AccountCreationTermsActivity : VectorAppCompatActivity(),
     internal fun submit() {
         setResult(Activity.RESULT_OK)
         finish()
+    }
+
+    companion object {
+        private const val DATA = "DATA"
+
+        fun getIntent(context: Context, list: List<LocalizedFlowDataLoginTerms>) = Intent(context, AccountCreationTermsActivity::class.java).apply {
+            putParcelableArrayListExtra(DATA, list as java.util.ArrayList<out Parcelable>)
+        }
     }
 }

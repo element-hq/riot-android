@@ -81,11 +81,19 @@
         <item name="android:textSize">14sp</item>
     </style>
 
+    <!-- Styles for login screen -->
     <style name="LoginEditTextStyle" parent="@android:style/Widget.EditText">
         <item name="android:textSize">16sp</item>
     </style>
 
     <style name="LoginButtonStyle" parent="@android:style/Widget.Button">
+        <item name="android:layout_marginEnd">16dp</item>
+        <item name="android:layout_marginRight">16dp</item>
+        <item name="android:paddingLeft">8dp</item>
+        <item name="android:paddingRight">8dp</item>
+        <item name="android:minWidth">94dp</item>
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">36dp</item>
         <item name="android:fontFamily">sans-serif-medium</item>
         <item name="android:textSize">14sp</item>
         <item name="android:textAllCaps">true</item>
