@@ -74,6 +74,7 @@ import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import butterknife.BindView;
 import im.vector.LoginHandler;
 import im.vector.Matrix;
 import im.vector.PhoneNumberHandler;
@@ -127,25 +128,45 @@ public class LoginActivity extends MXCActionBarActivity implements RegistrationM
     private int mMode = MODE_LOGIN;
 
     // graphical items
+    // Layouts
+    @BindView(R.id.login_inputs_layout)
+    View mLoginLayout;
+
+    @BindView(R.id.creation_inputs_layout)
+    View mCreationLayout;
+
+    @BindView(R.id.forget_password_inputs_layout)
+    View mForgetPasswordLayout;
+
+    @BindView(R.id.three_pid_layout)
+    View mThreePidLayout;
+
     // login button
-    private Button mLoginButton;
+    @BindView(R.id.button_login)
+    Button mLoginButton;
 
     // create account button
-    private Button mRegisterButton;
+    @BindView(R.id.button_register)
+    Button mRegisterButton;
 
     // forgot password button
-    private Button mForgotPasswordButton;
+    @BindView(R.id.button_reset_password)
+    Button mForgotPasswordButton;
 
     // The email has been validated
-    private Button mForgotValidateEmailButton;
+    @BindView(R.id.button_forgot_email_validate)
+    Button mForgotValidateEmailButton;
 
     // the login account name
-    private EditText mLoginEmailTextView;
+    @BindView(R.id.login_user_name)
+    EditText mLoginEmailTextView;
 
     // the login password
-    private EditText mLoginPasswordTextView;
+    @BindView(R.id.login_password)
+    EditText mLoginPasswordTextView;
 
-    private View mButtonsView;
+    @BindView(R.id.login_actions_bar)
+    View mButtonsView;
 
     // if the taps on login button
     // after updating the IS / HS urls
@@ -155,44 +176,59 @@ public class LoginActivity extends MXCActionBarActivity implements RegistrationM
     private boolean mIsPendingLogin;
 
     // the creation user name
-    private EditText mCreationUsernameTextView;
+    @BindView(R.id.creation_your_name)
+    EditText mCreationUsernameTextView;
 
     // the password 1 name
-    private EditText mCreationPassword1TextView;
+    @BindView(R.id.creation_password1)
+    EditText mCreationPassword1TextView;
 
     // the password 2 name
-    private EditText mCreationPassword2TextView;
+    @BindView(R.id.creation_password2)
+    EditText mCreationPassword2TextView;
 
     // forgot my password
-    private TextView mPasswordForgottenTxtView;
+    @BindView(R.id.login_forgot_password)
+    TextView mPasswordForgottenTxtView;
 
     // the forgot password email text view
-    private TextView mForgotEmailTextView;
+    @BindView(R.id.forget_email_address)
+    TextView mForgotEmailTextView;
 
     // the password 1 name
-    private EditText mForgotPassword1TextView;
+    @BindView(R.id.forget_new_password)
+    EditText mForgotPassword1TextView;
 
     // the password 2 name
-    private EditText mForgotPassword2TextView;
+    @BindView(R.id.forget_confirm_new_password)
+    EditText mForgotPassword2TextView;
 
     // the home server text
-    private EditText mHomeServerText;
+    @BindView(R.id.login_matrix_server_url)
+    EditText mHomeServerText;
 
     // the identity server text
-    private EditText mIdentityServerText;
+    @BindView(R.id.login_identity_url)
+    EditText mIdentityServerText;
 
     // used to display a UI mask on the screen
-    private RelativeLayout mLoginMaskView;
+    @BindView(R.id.flow_ui_mask_login)
+    RelativeLayout mLoginMaskView;
 
     // a text displayed while there is progress
-    private TextView mProgressTextView;
+    @BindView(R.id.flow_progress_message_textview)
+    TextView mProgressTextView;
 
     // the layout (there is a layout for each mode)
-    private View mMainLayout;
+    @BindView(R.id.main_input_layout)
+    View mMainLayout;
 
     // HS / identity URL layouts
-    private View mHomeServerUrlsLayout;
-    private CheckBox mUseCustomHomeServersCheckbox;
+    @BindView(R.id.login_matrix_server_options_layout)
+    View mHomeServerUrlsLayout;
+
+    @BindView(R.id.display_server_url_expand_checkbox)
+    CheckBox mUseCustomHomeServersCheckbox;
 
     // the pending universal link uri (if any)
     private Parcelable mUniversalLinkUri;
@@ -202,15 +238,27 @@ public class LoginActivity extends MXCActionBarActivity implements RegistrationM
     private String mIdentityServerUrl = null;
 
     // Account creation - Three pid
-    private TextView mThreePidInstructions;
-    private EditText mEmailAddress;
-    private View mPhoneNumberLayout;
-    private EditText mPhoneNumber;
-    private Button mSubmitThreePidButton;
-    private Button mSkipThreePidButton;
+    @BindView(R.id.instructions)
+    TextView mThreePidInstructions;
+
+    @BindView(R.id.registration_email)
+    EditText mEmailAddress;
+
+    @BindView(R.id.registration_phone_number)
+    View mPhoneNumberLayout;
+
+    @BindView(R.id.registration_phone_number_value)
+    EditText mPhoneNumber;
+
+    @BindView(R.id.button_submit)
+    Button mSubmitThreePidButton;
+
+    @BindView(R.id.button_skip)
+    Button mSkipThreePidButton;
 
     // Home server options
-    private View mHomeServerOptionLayout;
+    @BindView(R.id.homeserver_layout)
+    View mHomeServerOptionLayout;
 
     // Registration Manager
     private RegistrationManager mRegistrationManager;
@@ -366,10 +414,7 @@ public class LoginActivity extends MXCActionBarActivity implements RegistrationM
         }
 
         // bind UI widgets
-        mLoginMaskView = findViewById(R.id.flow_ui_mask_login);
-
         // login
-        mLoginEmailTextView = findViewById(R.id.login_user_name);
         EditText loginPhoneNumber = findViewById(R.id.login_phone_number_value);
         EditText loginPhoneNumberCountryCode = findViewById(R.id.login_phone_number_country);
         loginPhoneNumberCountryCode.setCompoundDrawablesWithIntrinsicBounds(null,
@@ -378,18 +423,8 @@ public class LoginActivity extends MXCActionBarActivity implements RegistrationM
                         ContextCompat.getDrawable(this, R.drawable.ic_material_expand_more_black),
                         R.attr.vctr_settings_icon_tint_color),
                 null);
-        mLoginPasswordTextView = findViewById(R.id.login_password);
-
-        // account creation
-        mCreationUsernameTextView = findViewById(R.id.creation_your_name);
-        mCreationPassword1TextView = findViewById(R.id.creation_password1);
-        mCreationPassword2TextView = findViewById(R.id.creation_password2);
 
         // account creation - three pid
-        mThreePidInstructions = findViewById(R.id.instructions);
-        mEmailAddress = findViewById(R.id.registration_email);
-        mPhoneNumberLayout = findViewById(R.id.registration_phone_number);
-        mPhoneNumber = findViewById(R.id.registration_phone_number_value);
         EditText phoneNumberCountryCode = findViewById(R.id.registration_phone_number_country);
         phoneNumberCountryCode.setCompoundDrawablesWithIntrinsicBounds(null,
                 null,
@@ -397,31 +432,6 @@ public class LoginActivity extends MXCActionBarActivity implements RegistrationM
                         ContextCompat.getDrawable(this, R.drawable.ic_material_expand_more_black),
                         R.attr.vctr_settings_icon_tint_color),
                 null);
-        mSubmitThreePidButton = findViewById(R.id.button_submit);
-        mSkipThreePidButton = findViewById(R.id.button_skip);
-
-        // forgot password
-        mPasswordForgottenTxtView = findViewById(R.id.login_forgot_password);
-        mForgotEmailTextView = findViewById(R.id.forget_email_address);
-        mForgotPassword1TextView = findViewById(R.id.forget_new_password);
-        mForgotPassword2TextView = findViewById(R.id.forget_confirm_new_password);
-
-        mHomeServerOptionLayout = findViewById(R.id.homeserver_layout);
-        mHomeServerText = findViewById(R.id.login_matrix_server_url);
-        mIdentityServerText = findViewById(R.id.login_identity_url);
-
-        mLoginButton = findViewById(R.id.button_login);
-        mRegisterButton = findViewById(R.id.button_register);
-        mForgotPasswordButton = findViewById(R.id.button_reset_password);
-        mForgotValidateEmailButton = findViewById(R.id.button_forgot_email_validate);
-
-        mHomeServerUrlsLayout = findViewById(R.id.login_matrix_server_options_layout);
-        mUseCustomHomeServersCheckbox = findViewById(R.id.display_server_url_expand_checkbox);
-
-        mProgressTextView = findViewById(R.id.flow_progress_message_textview);
-
-        mMainLayout = findViewById(R.id.main_input_layout);
-        mButtonsView = findViewById(R.id.login_actions_bar);
 
         if (isFirstCreation()) {
             mRegistrationManager = new RegistrationManager(null);
@@ -1868,15 +1878,10 @@ public class LoginActivity extends MXCActionBarActivity implements RegistrationM
         mHomeServerUrlsLayout.setVisibility(mUseCustomHomeServersCheckbox.isChecked() ? View.VISIBLE : View.GONE);
 
         // views
-        View loginLayout = findViewById(R.id.login_inputs_layout);
-        View creationLayout = findViewById(R.id.creation_inputs_layout);
-        View forgetPasswordLayout = findViewById(R.id.forget_password_inputs_layout);
-        View threePidLayout = findViewById(R.id.three_pid_layout);
-
-        loginLayout.setVisibility((mMode == MODE_LOGIN) ? View.VISIBLE : View.GONE);
-        creationLayout.setVisibility((mMode == MODE_ACCOUNT_CREATION) ? View.VISIBLE : View.GONE);
-        forgetPasswordLayout.setVisibility((mMode == MODE_FORGOT_PASSWORD) ? View.VISIBLE : View.GONE);
-        threePidLayout.setVisibility((mMode == MODE_ACCOUNT_CREATION_THREE_PID) ? View.VISIBLE : View.GONE);
+        mLoginLayout.setVisibility((mMode == MODE_LOGIN) ? View.VISIBLE : View.GONE);
+        mCreationLayout.setVisibility((mMode == MODE_ACCOUNT_CREATION) ? View.VISIBLE : View.GONE);
+        mForgetPasswordLayout.setVisibility((mMode == MODE_FORGOT_PASSWORD) ? View.VISIBLE : View.GONE);
+        mThreePidLayout.setVisibility((mMode == MODE_ACCOUNT_CREATION_THREE_PID) ? View.VISIBLE : View.GONE);
 
         boolean isLoginMode = mMode == MODE_LOGIN;
 
