@@ -48,9 +48,9 @@
 
     <Button
         android:id="@+id/account_creation_policy_button_accept"
-        android:layout_width="94dp"
-        android:layout_height="36dp"
-        android:layout_margin="16dp"
+        style="@style/LoginButtonStyle"
+        android:layout_marginTop="16dp"
+        android:layout_marginBottom="16dp"
         android:background="?colorAccent"
         android:text="@string/accept"
         android:textColor="@android:color/white"
