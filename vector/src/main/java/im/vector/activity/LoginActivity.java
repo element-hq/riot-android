@@ -1552,6 +1552,8 @@ public class LoginActivity extends MXCActionBarActivity implements RegistrationM
             }
         }
 
+        enableLoadingScreen(true);
+
         mRegistrationManager.setAccountData(name, password);
         mRegistrationManager.checkUsernameAvailability(this, this);
     }
