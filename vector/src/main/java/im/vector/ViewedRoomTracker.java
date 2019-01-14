@@ -18,6 +18,7 @@ package im.vector;
 /**
  * Singleton class for tracking the currently viewed room.
  */
+@Deprecated
 public class ViewedRoomTracker {
 
     private static ViewedRoomTracker instance = null;

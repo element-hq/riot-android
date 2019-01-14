@@ -52,6 +52,7 @@ import im.vector.util.RiotEventDisplay;
 /**
  * RoomsNotifications
  */
+@Deprecated
 public class RoomsNotifications implements Parcelable {
     private static final String LOG_TAG = RoomsNotifications.class.getSimpleName();
 

@@ -32,6 +32,7 @@ import org.matrix.androidsdk.util.Log;
 import java.util.Collection;
 import java.util.Map;
 
+import im.vector.BuildConfig;
 import im.vector.Matrix;
 import im.vector.VectorApp;
 import im.vector.activity.CommonActivityUtils;
@@ -200,7 +201,10 @@ public class VectorFirebaseMessagingService extends FirebaseMessagingService {
      */
     @Override
     public void onMessageReceived(RemoteMessage message) {
-        Log.i(LOG_TAG, "## onMessageReceived() from FCM with priority " + message.getPriority());
+        if (BuildConfig.DEBUG) {
+            Log.i(LOG_TAG, "%%%%%%%% :" + message.getData().toString());
+            Log.i(LOG_TAG, "%%%%%%%%  ## onMessageReceived() from FCM with priority " + message.getPriority());
+        }
 
         // Ensure event stream service is started
         if (EventStreamService.getInstance() == null) {

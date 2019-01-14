@@ -31,10 +31,7 @@ import android.os.Build
 import android.os.PowerManager
 import android.support.annotation.ColorInt
 import android.support.annotation.StringRes
-import android.support.v4.app.Fragment
-import android.support.v4.app.NotificationCompat
-import android.support.v4.app.NotificationManagerCompat
-import android.support.v4.app.TaskStackBuilder
+import android.support.v4.app.*
 import android.support.v4.content.ContextCompat
 import android.text.Spannable
 import android.text.SpannableString
@@ -70,6 +67,9 @@ object NotificationUtils {
      * Those messages are merged into a single notification.
      */
     private const val NOTIFICATION_ID_MESSAGES = 60
+
+
+    private const val NOTIFICATION_ID_ROOM_MESSAGES = 62
 
     /**
      * Identifier of the foreground notification used to keep the application alive
@@ -224,6 +224,47 @@ object NotificationUtils {
         }
 
         return notification
+    }
+
+    fun buildTestSummNotif(context: Context): Notification {
+        val summaryNotification = NotificationCompat.Builder(context, SILENT_NOTIFICATION_CHANNEL_ID)
+                .setContentTitle("Summary")
+                //set content text to support devices running API level < 24
+                .setContentText("new messages")
+                .setSmallIcon(R.drawable.logo_transparent)
+                //build summary info into InboxStyle template
+                .setStyle(NotificationCompat.InboxStyle()
+//                        .addLine("Line 1")
+//                        .addLine("Line 2")
+//                        .setBigContentTitle("$nId new messages")
+                        .setSummaryText("summary text"))
+                //specify which group this notification belongs to
+                .setGroup(context.getString(R.string.riot_app_name))
+                //set this notification as the summary for the group
+                .setGroupSummary(true)
+                .build()
+        return summaryNotification
+    }
+
+    fun buildNotificationForNonCallEvent(context: Context, roomName: String, body: String, noisy: Boolean): Notification {
+
+        @ColorInt val highlightColor = ContextCompat.getColor(context, R.color.vector_fuchsia_color)
+        val builder = NotificationCompat.Builder(context, if (noisy) NOISY_NOTIFICATION_CHANNEL_ID else SILENT_NOTIFICATION_CHANNEL_ID)
+                .setWhen(System.currentTimeMillis())
+                .setContentTitle(ensureTitleNotEmpty(context, roomName))
+                .setContentText(body)
+                .setSmallIcon(R.drawable.logo_transparent)
+                .setGroup(context.getString(R.string.riot_app_name))
+                //Compat
+                .setLights(Color.GREEN, 500, 500)
+                //setSound
+                .apply {
+                    if (noisy) {
+                        color = highlightColor
+                    }
+                }
+        return builder.build()
+
     }
 
     /**
@@ -571,7 +612,7 @@ object NotificationUtils {
             // turn the screen on for 3 seconds
             if (Matrix.getInstance(VectorApp.getInstance())!!.pushManager.isScreenTurnedOn) {
                 val pm = VectorApp.getInstance().getSystemService(Context.POWER_SERVICE) as PowerManager
-                val wl = pm.newWakeLock(PowerManager.SCREEN_BRIGHT_WAKE_LOCK or PowerManager.ACQUIRE_CAUSES_WAKEUP, "manageNotificationSound")
+                val wl = pm.newWakeLock(PowerManager.SCREEN_BRIGHT_WAKE_LOCK or PowerManager.ACQUIRE_CAUSES_WAKEUP, "riot:manageNotificationSound")
                 wl.acquire(3000)
                 wl.release()
             }
@@ -748,14 +789,100 @@ object NotificationUtils {
         return null
     }
 
+    fun buildMessagesListNotification(context: Context, messageSytle: NotificationCompat.MessagingStyle, roomInfo: RoomEventGroupInfo, largeIcon : Bitmap?): Notification? {
+        @ColorInt val highlightColor = ContextCompat.getColor(context, R.color.vector_fuchsia_color)
+
+
+        // Key for the string that's delivered in the action's intent.
+        val KEY_TEXT_REPLY = "key_text_reply"
+        var replyLabel: String = context.getString(R.string.action_quick_reply)
+        var remoteInput: RemoteInput = RemoteInput.Builder(KEY_TEXT_REPLY).run {
+            setLabel(replyLabel)
+            build()
+        }
+
+        var replyIntent = Intent()
+
+        var replyPendingIntent: PendingIntent =
+                PendingIntent.getBroadcast(VectorApp.getInstance().baseContext,
+                        0,
+                        replyIntent,
+                        PendingIntent.FLAG_UPDATE_CURRENT)
+
+        var action: NotificationCompat.Action =
+                NotificationCompat.Action.Builder(R.drawable.vector_notification_quick_reply,
+                        context.getString(R.string.action_quick_reply), replyPendingIntent)
+                        .addRemoteInput(remoteInput)
+                        .build()
+
+
+        return NotificationCompat.Builder(context, if (roomInfo.shouldBing) NOISY_NOTIFICATION_CHANNEL_ID else SILENT_NOTIFICATION_CHANNEL_ID)
+                .setStyle(messageSytle)
+                .setContentTitle(context.getString(R.string.riot_app_name))
+                .setSubText(roomInfo.roomDisplayName)
+                .setNumber(messageSytle.messages.size)
+                .setSmallIcon(R.drawable.logo_transparent)
+                .setGroup(context.getString(R.string.riot_app_name))
+                .addAction(action)
+                .apply {
+
+                    if (largeIcon != null) {
+                        setLargeIcon(largeIcon)
+                    }
+
+                    if (roomInfo.shouldBing) {
+                        color = highlightColor
+                        //Compat
+                        priority = NotificationCompat.PRIORITY_DEFAULT
+                        PreferencesManager.getNotificationRingTone(context)?.let {
+                            setSound(it)
+                        }
+                    } else {
+                        priority = NotificationCompat.PRIORITY_LOW
+                    }
+                }
+                .build()
+
+    }
+
+    fun buildSummaryListNotification(context: Context, inboxSytle : NotificationCompat.InboxStyle, compatSummary: String, noisy: Boolean): Notification? {
+        @ColorInt val highlightColor = ContextCompat.getColor(context, R.color.vector_fuchsia_color)
+        return NotificationCompat.Builder(context, if (noisy) NOISY_NOTIFICATION_CHANNEL_ID else SILENT_NOTIFICATION_CHANNEL_ID)
+                .setStyle(inboxSytle)
+                .setContentTitle(context.getString(R.string.riot_app_name))
+                .setSmallIcon(R.drawable.logo_transparent)
+                //set content text to support devices running API level < 24
+                .setContentText(compatSummary)
+                .setGroup(context.getString(R.string.riot_app_name))
+                //set this notification as the summary for the group
+                .setGroupSummary(true)
+                .apply {
+                    if (noisy) { color = highlightColor}
+                }.build()
+
+    }
 
     /**
      * Show a notification containing messages
      */
     fun showNotificationMessage(context: Context, notification: Notification) {
-        NotificationManagerCompat.from(context)
-                .notify(NOTIFICATION_ID_MESSAGES, notification)
+        with(NotificationManagerCompat.from(context)) {
+            notify(NOTIFICATION_ID_MESSAGES,notification)
+        }
     }
+
+    fun showNotificationMessage(context: Context, tag: String?, id: Int, notification: Notification) {
+        with(NotificationManagerCompat.from(context)) {
+            notify(tag, id,notification)
+        }
+    }
+
+
+//    fun showSummaryNotificationMessage(context: Context, tag: String, notification: Notification) {
+//        with(NotificationManagerCompat.from(context)) {
+//            notify(tag,NOTIFICATION_ID_ROOM_MESSAGES,notification)
+//        }
+//    }
 
     /**
      * Cancel the notification containing messages
@@ -763,6 +890,11 @@ object NotificationUtils {
     fun cancelNotificationMessage(context: Context) {
         NotificationManagerCompat.from(context)
                 .cancel(NOTIFICATION_ID_MESSAGES)
+    }
+
+    fun cancelNotificationMessage(context: Context, tag: String?, id: Int) {
+        NotificationManagerCompat.from(context)
+                .cancel(tag,id)
     }
 
     /**

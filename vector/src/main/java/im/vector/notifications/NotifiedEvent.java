@@ -22,6 +22,7 @@ import org.matrix.androidsdk.rest.model.bingrules.BingRule;
  * Define a notified event
  * i.e the matched bing rules
  */
+@Deprecated
 public class NotifiedEvent {
     public final BingRule mBingRule;
     public final String mRoomId;

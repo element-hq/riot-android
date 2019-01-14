@@ -25,6 +25,7 @@ import java.util.Comparator;
 /**
  * RoomNotifications
  */
+@Deprecated
 public class RoomNotifications implements Parcelable {
     private static final String LOG_TAG = RoomNotifications.class.getSimpleName();
 

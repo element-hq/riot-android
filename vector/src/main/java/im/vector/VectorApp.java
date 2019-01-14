@@ -63,6 +63,7 @@ import im.vector.analytics.PiwikAnalytics;
 import im.vector.analytics.e2e.DecryptionFailureTracker;
 import im.vector.contacts.ContactsManager;
 import im.vector.contacts.PIDsRetriever;
+import im.vector.notifications.NotificationDrawerManager;
 import im.vector.notifications.NotificationUtils;
 import im.vector.push.PushManager;
 import im.vector.services.EventStreamService;
@@ -133,6 +134,11 @@ public class VectorApp extends MultiDexApplication {
      */
     private VectorMarkdownParser mMarkdownParser;
 
+    private NotificationDrawerManager mNotificationDrawerManager;
+    public NotificationDrawerManager getNotificationDrawerManager() {
+        return mNotificationDrawerManager;
+    }
+
     /**
      * Calls manager
      */
@@ -185,7 +191,7 @@ public class VectorApp extends MultiDexApplication {
         }
 
         VectorUtils.initAvatarColors(this);
-
+        mNotificationDrawerManager = new NotificationDrawerManager(this);
         NotificationUtils.INSTANCE.createNotificationChannels(this);
 
         // init the REST client
