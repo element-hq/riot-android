@@ -436,12 +436,6 @@ public class LoginActivity extends MXCActionBarActivity implements RegistrationM
         }
         addToRestorables(mResourceLimitDialogHelper);
 
-        // If home server url or identity server url are not the default ones, check the mUseCustomHomeServersCheckbox
-        if (!ServerUrlsRepository.INSTANCE.isDefaultHomeServerUrl(this, mHomeServerText.getText().toString())
-                || !ServerUrlsRepository.INSTANCE.isDefaultIdentityServerUrl(this, mIdentityServerText.getText().toString())) {
-            mUseCustomHomeServersCheckbox.setChecked(true);
-        }
-
         mLoginButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -547,8 +541,6 @@ public class LoginActivity extends MXCActionBarActivity implements RegistrationM
         mLoginPhoneNumberHandler.setCountryCode(PhoneNumberUtils.getCountryCode(this));
         mRegistrationPhoneNumberHandler = new PhoneNumberHandler(this, mPhoneNumber, phoneNumberCountryCode,
                 PhoneNumberHandler.DISPLAY_COUNTRY_ISO_CODE, REQUEST_REGISTRATION_COUNTRY);
-
-        refreshDisplay();
 
         // reset the badge counter
         CommonActivityUtils.updateBadgeCount(this, 0);
@@ -774,8 +766,13 @@ public class LoginActivity extends MXCActionBarActivity implements RegistrationM
         mHomeServerUrl = getHomeServerUrl();
         mIdentityServerUrl = getIdentityServerUrl();
 
-        // check if the login supports the server flows
-        checkFlows();
+        // If home server url or identity server url are not the default ones, check the mUseCustomHomeServersCheckbox
+        if (!ServerUrlsRepository.INSTANCE.isDefaultHomeServerUrl(this, mHomeServerText.getText().toString())
+                || !ServerUrlsRepository.INSTANCE.isDefaultIdentityServerUrl(this, mIdentityServerText.getText().toString())) {
+            mUseCustomHomeServersCheckbox.setChecked(true);
+        }
+
+        refreshDisplay();
     }
 
     /**
