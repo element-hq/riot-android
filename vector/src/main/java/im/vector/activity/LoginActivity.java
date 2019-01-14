@@ -45,7 +45,6 @@ import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -214,7 +213,7 @@ public class LoginActivity extends MXCActionBarActivity implements RegistrationM
 
     // used to display a UI mask on the screen
     @BindView(R.id.flow_ui_mask_login)
-    RelativeLayout mLoginMaskView;
+    View mWaitingView;
 
     // a text displayed while there is progress
     @BindView(R.id.flow_progress_message_textview)
@@ -413,6 +412,8 @@ public class LoginActivity extends MXCActionBarActivity implements RegistrationM
             finish();
             return;
         }
+
+        setWaitingView(mWaitingView);
 
         // bind UI widgets
         // login
@@ -1898,8 +1899,10 @@ public class LoginActivity extends MXCActionBarActivity implements RegistrationM
         // disable register/login buttons when loading screen is displayed
         setActionButtonsEnabled(!isLoadingScreenVisible);
 
-        if (null != mLoginMaskView) {
-            mLoginMaskView.setVisibility(isLoadingScreenVisible ? View.VISIBLE : View.GONE);
+        if (isLoadingScreenVisible) {
+            showWaitingView();
+        } else {
+            hideWaitingView();
         }
     }
 
@@ -1908,7 +1911,6 @@ public class LoginActivity extends MXCActionBarActivity implements RegistrationM
      */
     private void setActionButtonsEnabled(boolean enabled) {
         boolean isForgotPasswordMode = (mMode == MODE_FORGOT_PASSWORD) || (mMode == MODE_FORGOT_PASSWORD_WAITING_VALIDATION);
-
 
         // forgot password mode
         // the register and the login buttons are hidden
