@@ -22,6 +22,7 @@ import android.graphics.BitmapFactory
 import android.support.v4.app.NotificationCompat
 import android.text.TextUtils
 import org.matrix.androidsdk.util.Log
+import java.io.*
 
 
 data class RoomEventGroupInfo(
@@ -36,12 +37,16 @@ data class RoomEventGroupInfo(
 
 class NotificationDrawerManager(val context: Context) {
 
+    init {
+        loadEventInfo()
+    }
+
     private var eventList: MutableList<NotifiableEvent> = ArrayList()
     private var myUserDisplayName: String = ""
 
     //Keeps a mapping between a notification ID
     //and the list of eventIDs represented by the notification
-    private val notificationToEventsMap: MutableMap<String, List<String>> = HashMap()
+    //private val notificationToEventsMap: MutableMap<String, List<String>> = HashMap()
     //private val notificationToRoomIdMap: MutableMap<Int, String> = HashMap()
 
     private var currentRoomId: String? = null
@@ -57,6 +62,8 @@ class NotificationDrawerManager(val context: Context) {
     fun onNotifiableEventReceived(notifiableEvent: NotifiableEvent, userId: String, userDisplayName: String?) {
         //If we support multi session, event list should be per userId
         //Currently only manage single session
+
+        Log.e(LOG_TAG, "%%%%%%%% onNotifiableEventReceived ${notifiableEvent}")
         synchronized(this) {
             myUserDisplayName = userDisplayName ?: userId
             eventList.add(notifiableEvent)
@@ -74,11 +81,12 @@ class NotificationDrawerManager(val context: Context) {
             currentRoomId = roomId
         }
         if (hasChanged) {
-            if (roomId != null ) {
-                notificationToEventsMap[roomId]?.let {
-                    eventList.removeAll { e ->
-                        it.contains(e.eventId)
+            if (roomId != null) {
+                eventList.removeAll { e ->
+                    if (e is NotifiableMessageEvent) {
+                        return@removeAll e.roomId == roomId
                     }
+                    return@removeAll false
                 }
                 NotificationUtils.cancelNotificationMessage(context,roomId, ROOM_MESSAGES_NOTIFICATION_ID)
             }
@@ -89,6 +97,8 @@ class NotificationDrawerManager(val context: Context) {
 
     fun refreshNotificationDrawer() {
         synchronized(this) {
+
+            Log.e(LOG_TAG, "%%%%%%%% REFRESH NOTIFICATION DRAWER ")
             //TMP code
             var hasNewEvent = false
             var summaryIsNoisy = false
@@ -111,6 +121,9 @@ class NotificationDrawerManager(val context: Context) {
                     }
                 }
             }
+
+
+            Log.e(LOG_TAG, "%%%%%%%% REFRESH NOTIFICATION DRAWER ${roomIdToEventMap.size} room groups")
 
             //events have been grouped
             for ((roomId, events) in roomIdToEventMap) {
@@ -142,15 +155,17 @@ class NotificationDrawerManager(val context: Context) {
 
 
                 if (roomGroup.hasNewEvent) { //SHould update displayed notification
-                    NotificationUtils.buildMessagesListNotification(context, style, roomGroup, largeBitmap)?.let {
+
+                    Log.e(LOG_TAG, "%%%%%%%% REFRESH NOTIFICATION DRAWER ${roomId} need refresh")
+                    NotificationUtils.buildMessagesListNotification(context, style, roomGroup, largeBitmap, myUserDisplayName)?.let {
                         //is there an id for this room?
                         notifications.add(it)
                         NotificationUtils.showNotificationMessage(context, roomId, ROOM_MESSAGES_NOTIFICATION_ID, it)
-                        notificationToEventsMap[roomId] = events.map { ev -> ev.eventId }
-
                     }
                     hasNewEvent = true
                     summaryIsNoisy = summaryIsNoisy || roomGroup.shouldBing
+                } else {
+                    Log.e(LOG_TAG, "%%%%%%%% REFRESH NOTIFICATION DRAWER ${roomId} is up to date")
                 }
             }
 
@@ -168,7 +183,7 @@ class NotificationDrawerManager(val context: Context) {
             // To ensure the best experience on all devices and versions, always include a group summary when you create a group
             // https://developer.android.com/training/notify-user/group
 
-            if (notifications.isEmpty()) {
+            if (roomIdToEventMap.isEmpty()) {
                 NotificationUtils.cancelNotificationMessage(context, null, SUMMARY_NOTIFICATION_ID)
             } else {
                 val style = NotificationCompat.InboxStyle()
@@ -183,6 +198,7 @@ class NotificationDrawerManager(val context: Context) {
                 }
             }
 
+            saveEventInfo()
         }
     }
 
@@ -209,9 +225,52 @@ class NotificationDrawerManager(val context: Context) {
         return roomId != null && roomId == currentRoomId
     }
 
+
+    private fun saveEventInfo() {
+        if (eventList == null || eventList.isEmpty()) {
+            deleteCachedRoomNotifications(context)
+            return
+        }
+        try {
+            val file = File(context.applicationContext.cacheDir, ROOMS_NOTIFICATIONS_FILE_NAME)
+            val fileOut = FileOutputStream(file)
+            val out = ObjectOutputStream(fileOut)
+            out.writeObject(eventList)
+            out.close()
+            fileOut.close()
+        } catch (e: Throwable) {
+            Log.e(LOG_TAG, "## Failed to save cached notification info", e)
+        }
+    }
+
+    private fun loadEventInfo() {
+        try {
+            val file = File(context.applicationContext.cacheDir, ROOMS_NOTIFICATIONS_FILE_NAME)
+            if (file.exists()) {
+                val fileIn = FileInputStream(file)
+                val ois = ObjectInputStream(fileIn)
+                val readObject = ois.readObject()
+                (readObject as? ArrayList<NotifiableEvent>)?.let {
+                    this.eventList = it
+                }
+            }
+        } catch (e: Throwable) {
+            Log.e(LOG_TAG, "## Failed to load cached notification info", e)
+        }
+    }
+
+    private fun deleteCachedRoomNotifications(context: Context) {
+        val file = File(context.applicationContext.cacheDir, ROOMS_NOTIFICATIONS_FILE_NAME)
+        if (file.exists()) {
+            file.delete()
+        }
+    }
+
     companion object {
         private const val SUMMARY_NOTIFICATION_ID = 0
         private const val ROOM_MESSAGES_NOTIFICATION_ID = 1
+
+        private const val ROOMS_NOTIFICATIONS_FILE_NAME = "im.vector.notifications.cache"
         private val LOG_TAG = NotificationDrawerManager::class.java.simpleName
     }
 }

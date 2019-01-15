@@ -15,12 +15,11 @@
  */
 package im.vector.notifications
 
-import android.os.Parcelable
 import android.support.v4.app.NotificationCompat
-import kotlinx.android.parcel.Parcelize
 import org.matrix.androidsdk.rest.model.Event
+import java.io.Serializable
 
-interface NotifiableEvent : Parcelable {
+interface NotifiableEvent : Serializable {
     val eventId: String
     val noisy: Boolean
     val title: String
@@ -34,7 +33,6 @@ interface NotifiableEvent : Parcelable {
     var hasBeenDisplayed: Boolean
 }
 
-@Parcelize
 data class SimpleNotifiableEvent(
         override val eventId: String,
         override val noisy: Boolean,
@@ -50,7 +48,6 @@ data class SimpleNotifiableEvent(
 
 }
 
-@Parcelize
 data class NotifiableMessageEvent(
         override val eventId: String,
         override val noisy: Boolean,
@@ -76,5 +73,9 @@ data class NotifiableMessageEvent(
 
     override val title: String
         get() = senderName ?: ""
+
+    //This is used for >N notification, as the result of a smart reply
+    var outGoingMessage = false
+    var outGoingMessageFailed = false
 
 }
