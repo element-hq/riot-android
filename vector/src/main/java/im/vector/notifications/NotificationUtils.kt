@@ -37,11 +37,13 @@ import android.text.Spannable
 import android.text.SpannableString
 import android.text.TextUtils
 import android.text.style.StyleSpan
+import im.vector.BuildConfig
 import im.vector.Matrix
 import im.vector.R
 import im.vector.VectorApp
 import im.vector.activity.*
 import im.vector.receiver.DismissNotificationReceiver
+import im.vector.receiver.ReplyNotificationBroadcastReceiver
 import im.vector.util.PreferencesManager
 import im.vector.util.createSquareBitmap
 import im.vector.util.startNotificationChannelSettingsIntent
@@ -86,6 +88,7 @@ object NotificationUtils {
     private const val JOIN_ACTION = "NotificationUtils.JOIN_ACTION"
     private const val REJECT_ACTION = "NotificationUtils.REJECT_ACTION"
     private const val QUICK_LAUNCH_ACTION = "NotificationUtils.QUICK_LAUNCH_ACTION"
+    const val SMART_REPLY_ACTION = "NotificationUtils.SMART_REPLY_ACTION"
     const val TAP_TO_VIEW_ACTION = "NotificationUtils.TAP_TO_VIEW_ACTION"
 
     /* ==========================================================================================
@@ -789,42 +792,43 @@ object NotificationUtils {
         return null
     }
 
-    fun buildMessagesListNotification(context: Context, messageSytle: NotificationCompat.MessagingStyle, roomInfo: RoomEventGroupInfo, largeIcon : Bitmap?): Notification? {
+    fun buildMessagesListNotification(context: Context, messageSytle: NotificationCompat.MessagingStyle, roomInfo: RoomEventGroupInfo, largeIcon: Bitmap?, senderDisplayNameForReplyCompat: String?): Notification? {
         @ColorInt val highlightColor = ContextCompat.getColor(context, R.color.vector_fuchsia_color)
 
 
-        // Key for the string that's delivered in the action's intent.
-        val KEY_TEXT_REPLY = "key_text_reply"
-        var replyLabel: String = context.getString(R.string.action_quick_reply)
-        var remoteInput: RemoteInput = RemoteInput.Builder(KEY_TEXT_REPLY).run {
-            setLabel(replyLabel)
-            build()
-        }
-
-        var replyIntent = Intent()
-
-        var replyPendingIntent: PendingIntent =
-                PendingIntent.getBroadcast(VectorApp.getInstance().baseContext,
-                        0,
-                        replyIntent,
-                        PendingIntent.FLAG_UPDATE_CURRENT)
-
-        var action: NotificationCompat.Action =
-                NotificationCompat.Action.Builder(R.drawable.vector_notification_quick_reply,
-                        context.getString(R.string.action_quick_reply), replyPendingIntent)
-                        .addRemoteInput(remoteInput)
-                        .build()
-
+        // Build the pending intent for when the notification is clicked
+        val openRoomIntent = buildOpenRoomIntent(context, roomInfo.roomId)
 
         return NotificationCompat.Builder(context, if (roomInfo.shouldBing) NOISY_NOTIFICATION_CHANNEL_ID else SILENT_NOTIFICATION_CHANNEL_ID)
-                .setStyle(messageSytle)
-                .setContentTitle(context.getString(R.string.riot_app_name))
-                .setSubText(roomInfo.roomDisplayName)
-                .setNumber(messageSytle.messages.size)
-                .setSmallIcon(R.drawable.logo_transparent)
-                .setGroup(context.getString(R.string.riot_app_name))
-                .addAction(action)
                 .apply {
+
+                    setStyle(messageSytle)
+                    setContentTitle(context.getString(R.string.riot_app_name))
+                    setSubText(roomInfo.roomDisplayName)
+                    setNumber(messageSytle.messages.size)
+                    setSmallIcon(R.drawable.logo_transparent)
+                    setGroup(context.getString(R.string.riot_app_name))
+                    setGroupAlertBehavior(NotificationCompat.GROUP_ALERT_SUMMARY)
+
+                    buildQuickReplyIntent(context, roomInfo.roomId, senderDisplayNameForReplyCompat)?.let { replyPendingIntent ->
+
+                        var replyLabel: String = context.getString(R.string.action_quick_reply)
+                        var remoteInput: RemoteInput = RemoteInput.Builder(ReplyNotificationBroadcastReceiver.KEY_TEXT_REPLY).run {
+                            setLabel(replyLabel)
+                            build()
+                        }
+
+                        NotificationCompat.Action.Builder(R.drawable.vector_notification_quick_reply,
+                                context.getString(R.string.action_quick_reply), replyPendingIntent)
+                                .addRemoteInput(remoteInput)
+                                .build()?.let {
+                                    addAction(it)
+                                }
+                    }
+
+                    if (openRoomIntent != null) {
+                        setContentIntent(openRoomIntent)
+                    }
 
                     if (largeIcon != null) {
                         setLargeIcon(largeIcon)
@@ -845,7 +849,51 @@ object NotificationUtils {
 
     }
 
-    fun buildSummaryListNotification(context: Context, inboxSytle : NotificationCompat.InboxStyle, compatSummary: String, noisy: Boolean): Notification? {
+    private fun buildOpenRoomIntent(context: Context, roomId: String): PendingIntent? {
+        val roomIntentTap = Intent(context, VectorRoomActivity::class.java)
+        roomIntentTap.putExtra(VectorRoomActivity.EXTRA_ROOM_ID, roomId)
+        // the action must be unique else the parameters are ignored
+        roomIntentTap.action = "${BuildConfig.APPLICATION_ID}.${TAP_TO_VIEW_ACTION}_${roomId}_${System.currentTimeMillis().toInt()}"
+
+        // Recreate the back stack
+        val stackBuilderTap = TaskStackBuilder.create(context)
+                .addNextIntentWithParentStack(Intent(context, VectorHomeActivity::class.java))
+                .addNextIntent(roomIntentTap)
+        return stackBuilderTap.getPendingIntent(0, PendingIntent.FLAG_UPDATE_CURRENT)
+    }
+
+
+    /*
+        Direct reply is new in Android N, and Android already handles the UI, so the right pending intent
+        here will ideally be a Service/IntentService (for a long running background task) or a BroadcastReceiver,
+         which runs on the UI thread. It also works without unlocking, making the process really fluid for the user.
+        However, for Android devices running Marshmallow and below (API level 23 and below),
+        it will be more appropriate to use an activity. Since you have to provide your own UI.
+     */
+    private fun buildQuickReplyIntent(context: Context, roomId: String, senderName: String?): PendingIntent? {
+        val intent: Intent
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+            intent = Intent(context, ReplyNotificationBroadcastReceiver::class.java)
+            intent.action = SMART_REPLY_ACTION
+            intent.putExtra(ReplyNotificationBroadcastReceiver.KEY_ROOM_ID, roomId)
+            return PendingIntent.getBroadcast(context, 100, intent,
+                    PendingIntent.FLAG_UPDATE_CURRENT)
+        } else {
+            if (!LockScreenActivity.isDisplayingALockScreenActivity()) {
+                // start your activity for Android M and below
+                val quickReplyIntent = Intent(context, LockScreenActivity::class.java)
+                quickReplyIntent.putExtra(LockScreenActivity.EXTRA_ROOM_ID, roomId)
+                quickReplyIntent.putExtra(LockScreenActivity.EXTRA_SENDER_NAME, senderName ?: "")
+
+                // the action must be unique else the parameters are ignored
+                quickReplyIntent.action = QUICK_LAUNCH_ACTION + System.currentTimeMillis().toInt()
+                return PendingIntent.getActivity(context, 0, quickReplyIntent, 0)
+            }
+        }
+        return null
+    }
+
+    fun buildSummaryListNotification(context: Context, inboxSytle: NotificationCompat.InboxStyle, compatSummary: String, noisy: Boolean): Notification? {
         @ColorInt val highlightColor = ContextCompat.getColor(context, R.color.vector_fuchsia_color)
         return NotificationCompat.Builder(context, if (noisy) NOISY_NOTIFICATION_CHANNEL_ID else SILENT_NOTIFICATION_CHANNEL_ID)
                 .setStyle(inboxSytle)
@@ -857,7 +905,9 @@ object NotificationUtils {
                 //set this notification as the summary for the group
                 .setGroupSummary(true)
                 .apply {
-                    if (noisy) { color = highlightColor}
+                    if (noisy) {
+                        color = highlightColor
+                    }
                 }.build()
 
     }
@@ -867,13 +917,13 @@ object NotificationUtils {
      */
     fun showNotificationMessage(context: Context, notification: Notification) {
         with(NotificationManagerCompat.from(context)) {
-            notify(NOTIFICATION_ID_MESSAGES,notification)
+            notify(NOTIFICATION_ID_MESSAGES, notification)
         }
     }
 
     fun showNotificationMessage(context: Context, tag: String?, id: Int, notification: Notification) {
         with(NotificationManagerCompat.from(context)) {
-            notify(tag, id,notification)
+            notify(tag, id, notification)
         }
     }
 
@@ -894,7 +944,7 @@ object NotificationUtils {
 
     fun cancelNotificationMessage(context: Context, tag: String?, id: Int) {
         NotificationManagerCompat.from(context)
-                .cancel(tag,id)
+                .cancel(tag, id)
     }
 
     /**
