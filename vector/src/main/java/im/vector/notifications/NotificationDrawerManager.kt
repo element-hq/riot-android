@@ -63,7 +63,7 @@ class NotificationDrawerManager(val context: Context) {
         //If we support multi session, event list should be per userId
         //Currently only manage single session
 
-        Log.e(LOG_TAG, "%%%%%%%% onNotifiableEventReceived ${notifiableEvent}")
+        //Log.d(LOG_TAG, "%%%%%%%% onNotifiableEventReceived ${notifiableEvent}")
         synchronized(this) {
             myUserDisplayName = userDisplayName ?: userId
             eventList.add(notifiableEvent)
@@ -98,7 +98,7 @@ class NotificationDrawerManager(val context: Context) {
     fun refreshNotificationDrawer() {
         synchronized(this) {
 
-            Log.e(LOG_TAG, "%%%%%%%% REFRESH NOTIFICATION DRAWER ")
+            //Log.d(LOG_TAG, "%%%%%%%% REFRESH NOTIFICATION DRAWER ")
             //TMP code
             var hasNewEvent = false
             var summaryIsNoisy = false
@@ -123,7 +123,7 @@ class NotificationDrawerManager(val context: Context) {
             }
 
 
-            Log.e(LOG_TAG, "%%%%%%%% REFRESH NOTIFICATION DRAWER ${roomIdToEventMap.size} room groups")
+            //Log.d(LOG_TAG, "%%%%%%%% REFRESH NOTIFICATION DRAWER ${roomIdToEventMap.size} room groups")
 
             //events have been grouped
             for ((roomId, events) in roomIdToEventMap) {
@@ -156,7 +156,7 @@ class NotificationDrawerManager(val context: Context) {
 
                 if (roomGroup.hasNewEvent) { //SHould update displayed notification
 
-                    Log.e(LOG_TAG, "%%%%%%%% REFRESH NOTIFICATION DRAWER ${roomId} need refresh")
+                    //Log.d(LOG_TAG, "%%%%%%%% REFRESH NOTIFICATION DRAWER ${roomId} need refresh")
                     NotificationUtils.buildMessagesListNotification(context, style, roomGroup, largeBitmap, myUserDisplayName)?.let {
                         //is there an id for this room?
                         notifications.add(it)
@@ -165,7 +165,7 @@ class NotificationDrawerManager(val context: Context) {
                     hasNewEvent = true
                     summaryIsNoisy = summaryIsNoisy || roomGroup.shouldBing
                 } else {
-                    Log.e(LOG_TAG, "%%%%%%%% REFRESH NOTIFICATION DRAWER ${roomId} is up to date")
+                    //Log.d(LOG_TAG, "%%%%%%%% REFRESH NOTIFICATION DRAWER ${roomId} is up to date")
                 }
             }
 
