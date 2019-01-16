@@ -29,7 +29,7 @@ Bugfix:
  - FCM Troubleshoot screen crash in some cases (#2846)
  - Fix login button issue (#1568)
  - Fix issue with registration when an email is provided (#2852)
-
+ - Fix issues with Tombstone events (#2866 && #2867)
 Translations:
  -
 
