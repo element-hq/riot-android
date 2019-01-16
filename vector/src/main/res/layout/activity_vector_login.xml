@@ -134,7 +134,6 @@
                         style="@style/LoginEditTextStyle"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginTop="10dp"
                         android:ems="10"
                         android:hint="@string/auth_new_password_placeholder"
                         android:inputType="textPassword"
@@ -145,7 +144,6 @@
                         style="@style/LoginEditTextStyle"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginTop="10dp"
                         android:ems="10"
                         android:hint="@string/auth_repeat_new_password_placeholder"
                         android:inputType="textPassword"
@@ -401,7 +399,7 @@
                 tools:visibility="visible" />
 
             <Button
-                android:id="@+id/button_submit"
+                android:id="@+id/button_submit_three_pid"
                 style="@style/LoginButtonStyle"
                 android:layout_alignParentEnd="true"
                 android:layout_alignParentRight="true"
@@ -414,10 +412,10 @@
                 tools:visibility="visible" />
 
             <Button
-                android:id="@+id/button_skip"
+                android:id="@+id/button_skip_three_pid"
                 style="@style/LoginButtonStyle"
-                android:layout_toStartOf="@id/button_submit"
-                android:layout_toLeftOf="@id/button_submit"
+                android:layout_toStartOf="@id/button_submit_three_pid"
+                android:layout_toLeftOf="@id/button_submit_three_pid"
                 android:background="?attr/colorAccent"
                 android:minWidth="94dp"
                 android:text="@string/auth_skip"
