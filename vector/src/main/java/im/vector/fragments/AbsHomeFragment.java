@@ -81,6 +81,8 @@ public abstract class AbsHomeFragment extends VectorBaseFragment implements
 
     int mPrimaryColor = -1;
     int mSecondaryColor = -1;
+    int mFabColor = -1;
+    int mFabPressedColor = -1;
 
 
     /*
@@ -115,7 +117,10 @@ public abstract class AbsHomeFragment extends VectorBaseFragment implements
         super.onResume();
         if (mActivity != null) {
             if (mPrimaryColor != -1) {
-                mActivity.updateTabStyle(mPrimaryColor, mSecondaryColor != -1 ? mSecondaryColor : mPrimaryColor);
+                mActivity.updateTabStyle(mPrimaryColor,
+                        mSecondaryColor != -1 ? mSecondaryColor : mPrimaryColor,
+                        mFabColor != -1 ? mFabColor : mPrimaryColor,
+                        mFabPressedColor != -1 ? mFabPressedColor : mSecondaryColor);
             }
             final HomeRoomsViewModel.Result result = mActivity.getRoomsViewModel().getResult();
             onRoomResultUpdated(result);

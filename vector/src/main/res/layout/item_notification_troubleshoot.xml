@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:background="?attr/vctr_riot_primary_background_color"
+    android:background="?android:attr/colorBackground"
     android:minHeight="50dp">
 
 
@@ -28,7 +28,6 @@
         android:layout_marginRight="16dp"
         android:paddingTop="4dp"
         android:paddingBottom="4dp"
-        android:textColor="?attr/vctr_riot_primary_text_color"
         android:textSize="14sp"
         android:textStyle="bold"
         app:layout_constraintBottom_toTopOf="@+id/troubleshootTestDescription"
@@ -50,7 +49,7 @@
         android:layout_marginRight="16dp"
         android:paddingTop="4dp"
         android:paddingBottom="4dp"
-        android:textColor="?attr/vctr_default_text_hint_color"
+        android:textColor="?android:attr/textColorSecondary"
         android:visibility="gone"
         app:layout_constraintBottom_toTopOf="@id/troubleshootTestButton"
         app:layout_constraintEnd_toStartOf="@+id/troubleshootStatusIcon"

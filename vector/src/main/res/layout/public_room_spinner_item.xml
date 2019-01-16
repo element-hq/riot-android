@@ -9,5 +9,5 @@
     android:fontFamily="sans-serif-medium"
     android:singleLine="true"
     android:textAlignment="inherit"
-    android:textColor="?attr/vctr_list_header_public_room_spinner_text_color"
+    android:textColor="?attr/vctr_list_header_secondary_text_color"
     tools:text="One long text for testing purpose" />

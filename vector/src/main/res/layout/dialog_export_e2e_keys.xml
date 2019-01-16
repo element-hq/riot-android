@@ -29,7 +29,7 @@
             android:layout_height="wrap_content"
             android:hint="@string/encryption_export_create_passphrase"
             android:inputType="textPassword"
-            android:textColor="?attr/vctr_riot_primary_text_color" />
+            android:textColor="?android:textColorPrimary" />
 
     </android.support.design.widget.TextInputLayout>
 
@@ -46,7 +46,7 @@
             android:layout_height="wrap_content"
             android:hint="@string/encryption_export_confirm_passphrase"
             android:inputType="textPassword"
-            android:textColor="?attr/vctr_riot_primary_text_color" />
+            android:textColor="?android:textColorPrimary" />
 
     </android.support.design.widget.TextInputLayout>
 

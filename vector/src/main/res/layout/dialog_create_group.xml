@@ -16,7 +16,7 @@
         android:layout_height="wrap_content"
         android:layout_margin="10dp"
         android:hint="@string/community_name_hint"
-        android:textColor="?attr/vctr_riot_primary_text_color"
+        android:textColor="?android:textColorPrimary"
         android:textColorHint="?attr/vctr_default_text_hint_color" />
 
     <TextView
@@ -48,7 +48,7 @@
             android:layout_toEndOf="@+id/community_plus_text_view"
             android:layout_toRightOf="@+id/community_plus_text_view"
             android:hint="@string/community_id_hint"
-            android:textColor="?attr/vctr_riot_primary_text_color"
+            android:textColor="?android:textColorPrimary"
             android:textColorHint="?attr/vctr_default_text_hint_color" />
 
         <TextView

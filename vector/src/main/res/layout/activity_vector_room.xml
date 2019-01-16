@@ -48,7 +48,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@+id/room_sync_in_progress"
-        android:background="?attr/vctr_riot_primary_background_color"
+        android:background="?android:attr/colorBackground"
         android:orientation="vertical"
         android:paddingTop="16dp">
 
@@ -60,7 +60,6 @@
             android:layout_marginLeft="20dp"
             android:layout_marginEnd="20dp"
             android:layout_marginRight="20dp"
-            android:textColor="?attr/vctr_riot_primary_text_color"
             android:textSize="14sp"
             tools:text="Preview invitation" />
 
@@ -139,7 +138,7 @@
         android:layout_below="@+id/room_pending_widgets_view"
         android:layout_alignParentStart="true"
         android:layout_alignParentLeft="true"
-        android:background="?attr/vctr_riot_primary_background_color"
+        android:background="?android:attr/colorBackground"
         android:visibility="gone"
         tools:visibility="visible">
 
@@ -205,7 +204,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_below="@+id/jump_to_first_unread"
-        android:background="?attr/vctr_riot_primary_background_color">
+        android:background="?android:attr/colorBackground">
 
         <ImageView
             android:id="@+id/search_background_imageview"
@@ -266,7 +265,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_alignParentBottom="true"
-            android:background="?attr/vctr_riot_primary_background_color">
+            android:background="?android:attr/colorBackground">
 
             <im.vector.view.VectorCircularImageView
                 android:id="@+id/room_self_avatar"
@@ -299,7 +298,7 @@
                     android:layout_gravity="center_vertical"
                     android:scaleType="fitCenter"
                     android:src="@drawable/e2e_verified"
-                    android:tint="?attr/vctr_default_icon_tint_color" />
+                    android:tint="?attr/colorAccent" />
 
                 <im.vector.view.VectorAutoCompleteTextView
                     android:id="@+id/editText_messageBox"
@@ -314,7 +313,7 @@
                     android:hint="@string/room_message_placeholder_not_encrypted"
                     android:inputType="textCapSentences|textMultiLine"
                     android:maxHeight="160dp"
-                    android:textColor="?attr/vctr_riot_primary_text_color"
+                    android:textColor="?android:textColorPrimary"
                     android:textColorHint="?attr/vctr_default_text_hint_color"
                     android:textCursorDrawable="@drawable/searches_cursor_background"
                     android:textSize="14sp"
@@ -376,7 +375,6 @@
                 android:layout_toEndOf="@id/room_self_avatar"
                 android:layout_toRightOf="@id/room_self_avatar"
                 android:text="@string/room_do_not_have_permission_to_post"
-                android:textColor="?attr/vctr_riot_primary_text_color"
                 android:textSize="14sp"
                 android:visibility="gone"
                 tools:visibility="visible" />

@@ -19,7 +19,7 @@
             android:layout_marginStart="18dp"
             android:layout_marginLeft="18dp"
             android:fontFamily="sans-serif-medium"
-            android:textColor="?attr/vctr_riot_primary_text_color"
+            android:textColor="?attr/vctr_list_header_primary_text_color"
             android:textSize="14sp"
             tools:text="Header" />
 
@@ -31,6 +31,9 @@
             android:layout_alignParentRight="true"
             android:layout_centerVertical="true"
             android:layout_marginEnd="15dp"
-            android:layout_marginRight="15dp" />
+            android:layout_marginRight="15dp"
+            tools:src="@tools:sample/backgrounds/scenic" />
+
     </RelativeLayout>
+
 </RelativeLayout>

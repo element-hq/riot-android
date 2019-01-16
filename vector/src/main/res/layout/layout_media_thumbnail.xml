@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:layout_margin="4dp"
-    card-view:cardBackgroundColor="?vctr_riot_primary_background_color"
+    card-view:cardBackgroundColor="?android:attr/colorBackground"
     tools:layout_height="164dp"
     tools:layout_width="164dp">
 

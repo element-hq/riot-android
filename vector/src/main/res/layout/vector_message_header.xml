@@ -12,23 +12,20 @@
         android:layout_width="match_parent"
         android:layout_height="16dp" />
 
-    <RelativeLayout
+    <TextView
+        android:id="@+id/messagesAdapter_message_header_text"
         android:layout_width="match_parent"
         android:layout_height="42dp"
-        android:background="?attr/vctr_room_activity_divider_color">
-
-        <TextView
-            android:id="@+id/messagesAdapter_message_header_text"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_centerVertical="true"
-            android:layout_marginStart="18dp"
-            android:layout_marginLeft="18dp"
-            android:textAppearance="?android:attr/textAppearanceSmall"
-            android:textColor="?attr/vctr_riot_primary_text_color"
-            android:textStyle="bold"
-            tools:text="Today" />
-    </RelativeLayout>
+        android:background="?attr/vctr_list_header_background_color"
+        android:gravity="center_vertical"
+        android:paddingStart="18dp"
+        android:paddingLeft="18dp"
+        android:paddingEnd="18dp"
+        android:paddingRight="18dp"
+        android:textAppearance="?android:attr/textAppearanceSmall"
+        android:textColor="?attr/vctr_list_header_primary_text_color"
+        android:textStyle="bold"
+        tools:text="Today" />
 
     <View
         android:id="@+id/messagesAdapter_message_header_bottom_margin"

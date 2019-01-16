@@ -24,7 +24,7 @@
             android:imeOptions="actionDone"
             android:inputType="numberDecimal"
             android:maxLines="1"
-            android:textColor="?attr/vctr_riot_primary_text_color"
+            android:textColor="?android:textColorPrimary"
             tools:text="123456" />
 
     </android.support.design.widget.TextInputLayout>
