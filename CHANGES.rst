@@ -16,6 +16,7 @@ Improvements:
  - Notification settings re-organization, added bing rule troubleshoot
  - Kotlin Code Improvement in VectorSettingsPreferencesFragment.kt
  - Remove redundant !! , Replace it with null safe operators in VectorSettingsPreferencesFragment.kt
+ - `Redact` has been renamed to `Remove` to match riot/web (#2871)
 
 
 Other changes:
