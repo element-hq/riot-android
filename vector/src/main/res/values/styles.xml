@@ -86,8 +86,7 @@
         <item name="android:textSize">16sp</item>
     </style>
 
-    <style name="LoginButtonStyle" parent="Widget.AppCompat.Button.Borderless">
-        <item name="android:layout_marginEnd">16dp</item>
+    <style name="LoginButtonStyleBase" parent="Widget.AppCompat.Button.Borderless">
         <item name="android:layout_marginRight">16dp</item>
         <item name="android:paddingLeft">8dp</item>
         <item name="android:paddingRight">8dp</item>
@@ -98,6 +97,8 @@
         <item name="android:textSize">14sp</item>
         <item name="android:textAllCaps">true</item>
     </style>
+
+    <style name="LoginButtonStyle" parent="LoginButtonStyleBase" />
 
     <style name="VectorSearches.EditText" parent="Widget.AppCompat.EditText">
         <item name="android:textCursorDrawable">@drawable/searches_cursor_background</item>
