@@ -14,6 +14,9 @@ Improvements:
  - Improve widget banner (#2129)
  - Icon for Oreo (#2169)
  - Notification settings re-organization, added bing rule troubleshoot
+ - Kotlin Code Improvement in VectorSettingsPreferencesFragment.kt
+ - Remove redundant !! , Replace it with null safe operators in VectorSettingsPreferencesFragment.kt
+
 
 Other changes:
  - Restore the crash report dialog after a crash
