@@ -21,10 +21,8 @@ import android.support.v4.view.GestureDetectorCompat;
 import android.support.v4.widget.NestedScrollView;
 import android.support.v7.widget.LinearLayoutManager;
 import android.view.GestureDetector;
-import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
-import android.view.ViewGroup;
 
 import org.matrix.androidsdk.data.Room;
 import org.matrix.androidsdk.data.RoomTag;
@@ -103,6 +101,9 @@ public class HomeFragment extends AbsHomeFragment implements HomeRoomAdapter.OnS
         super.onActivityCreated(savedInstanceState);
         mPrimaryColor = ThemeUtils.INSTANCE.getColor(getActivity(), R.attr.vctr_tab_home);
         mSecondaryColor = ThemeUtils.INSTANCE.getColor(getActivity(), R.attr.vctr_tab_home_secondary);
+        mFabColor = ThemeUtils.INSTANCE.getColor(getActivity(), R.attr.colorAccent);
+        // TODO Pressed color
+        mFabPressedColor = ThemeUtils.INSTANCE.getColor(getActivity(), R.attr.colorAccent);
         initViews();
         // Eventually restore the pattern of adapter after orientation change
         for (HomeSectionView homeSectionView : mHomeSectionViews) {

@@ -4,7 +4,7 @@
     android:id="@+id/drawer_layout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#FFFFFFFF"
+    android:background="?android:attr/colorBackground"
     android:fitsSystemWindows="true">
 
     <android.support.constraint.ConstraintLayout
@@ -59,7 +59,7 @@
             android:id="@+id/fragment_container"
             android:layout_width="0dp"
             android:layout_height="0dp"
-            android:background="?attr/vctr_riot_primary_background_color"
+            android:background="?android:attr/colorBackground"
             app:layout_constraintBottom_toTopOf="@+id/bottom_navigation"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -69,8 +69,8 @@
             android:id="@+id/bottom_navigation"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:background="?attr/vctr_riot_primary_background_color"
-            app:itemBackground="?attr/vctr_riot_primary_background_color"
+            android:background="?android:attr/colorBackground"
+            app:itemBackground="?android:attr/colorBackground"
             app:itemIconTint="@color/home_bottom_nav_view_tint"
             app:itemTextColor="@color/home_bottom_nav_view_tint"
             app:layout_constraintBottom_toBottomOf="parent"
@@ -103,8 +103,8 @@
             app:fab_expandDirection="up"
             app:layout_constraintBottom_toTopOf="@id/bottom_navigation"
             app:layout_constraintEnd_toEndOf="parent"
-            tools:backgroundTint="@color/vector_fuchsia_color"
-            tools:fab_addButtonColorNormal="@color/vector_fuchsia_color">
+            tools:backgroundTint="?attr/colorAccent"
+            tools:fab_addButtonColorNormal="?attr/colorAccent">
 
             <com.getbase.floatingactionbutton.FloatingActionButton
                 android:id="@+id/button_start_chat"
@@ -114,8 +114,8 @@
                 app:fab_icon="@drawable/ic_person_black_24dp"
                 app:fab_size="mini"
                 app:fab_title="@string/room_recents_start_chat"
-                tools:fab_colorNormal="@color/vector_fuchsia_color"
-                tools:fab_colorPressed="@color/vector_fuchsia_color" />
+                tools:fab_colorNormal="?attr/colorAccent"
+                tools:fab_colorPressed="?attr/colorAccent" />
 
             <com.getbase.floatingactionbutton.FloatingActionButton
                 android:id="@+id/button_create_room"
@@ -124,8 +124,8 @@
                 app:fab_icon="@drawable/ic_add_white"
                 app:fab_size="mini"
                 app:fab_title="@string/room_recents_create_room"
-                tools:fab_colorNormal="@color/vector_fuchsia_color"
-                tools:fab_colorPressed="@color/vector_fuchsia_color" />
+                tools:fab_colorNormal="?attr/colorAccent"
+                tools:fab_colorPressed="?attr/colorAccent" />
 
             <com.getbase.floatingactionbutton.FloatingActionButton
                 android:id="@+id/button_join_room"
@@ -134,8 +134,8 @@
                 app:fab_icon="@drawable/riot_tab_rooms"
                 app:fab_size="mini"
                 app:fab_title="@string/room_recents_join_room"
-                tools:fab_colorNormal="@color/vector_fuchsia_color"
-                tools:fab_colorPressed="@color/vector_fuchsia_color" />
+                tools:fab_colorNormal="?attr/colorAccent"
+                tools:fab_colorPressed="?attr/colorAccent" />
 
         </com.getbase.floatingactionbutton.FloatingActionsMenu>
 
@@ -167,7 +167,7 @@
         android:layout_width="wrap_content"
         android:layout_height="match_parent"
         android:layout_gravity="start"
-        android:background="?attr/vctr_riot_primary_background_color"
+        android:background="?android:attr/colorBackground"
         android:fitsSystemWindows="true"
         app:headerLayout="@layout/vector_home_menu_header"
         app:itemIconTint="?attr/vctr_home_navigation_icon_color"

@@ -15,6 +15,6 @@
         android:layout_marginRight="10dp"
         android:layout_marginBottom="6dp"
         android:text="@string/matrix_only_filter"
-        android:textColor="?attr/vctr_riot_primary_text_color" />
+        android:textColor="?attr/vctr_list_header_primary_text_color" />
 
 </LinearLayout>

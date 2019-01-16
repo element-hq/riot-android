@@ -17,7 +17,7 @@
             android:id="@+id/vector_settings_page"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:background="?attr/vctr_riot_primary_background_color" />
+            android:background="?android:attr/colorBackground" />
 
     </LinearLayout>
 

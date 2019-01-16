@@ -34,9 +34,8 @@
         <item name="android:textColor">@android:color/white</item>
     </style>
 
-    <style name="Vector.PopupMenu" parent="@android:style/Widget.PopupMenu">
-        <item name="android:popupBackground">?attr/vctr_riot_primary_background_color</item>
-        <item name="android:textColor">?attr/vctr_riot_primary_text_color</item>
+    <style name="Vector.PopupMenu" parent="Widget.AppCompat.PopupMenu">
+        <item name="android:textColor">?android:attr/textColorPrimary</item>
         <item name="android:textSize">16sp</item>
         <item name="android:dropDownHorizontalOffset">0dp</item>
         <item name="android:dropDownVerticalOffset">0dp</item>
@@ -107,8 +106,8 @@
     </style>
 
     <style name="VectorSearches.Styled.ActionBar" parent="Vector.Styled.ActionBar">
-        <item name="android:background">?attr/vctr_riot_primary_background_color</item>
-        <item name="background">?attr/vctr_riot_primary_background_color</item>
+        <item name="android:background">?android:attr/colorBackground</item>
+        <item name="background">?android:attr/colorBackground</item>
     </style>
 
     <!-- tabbar text color -->
@@ -146,10 +145,10 @@
 
     <style name="ListHeader">
         <item name="android:textSize">14sp</item>
-        <item name="android:textColor">?attr/vctr_riot_primary_text_color</item>
+        <item name="android:textColor">?vctr_list_header_primary_text_color</item>
         <item name="android:textAllCaps">true</item>
         <item name="android:fontFamily">sans-serif-medium</item>
-        <item name="android:background">?attr/vctr_list_header_background_color</item>
+        <item name="android:background">?vctr_list_header_background_color</item>
         <item name="android:paddingLeft">16dp</item>
         <item name="android:paddingRight">16dp</item>
         <item name="android:paddingTop">10dp</item>
@@ -157,7 +156,7 @@
     </style>
 
     <style name="SpinnerTheme">
-        <item name="colorControlNormal">?attr/vctr_list_header_public_room_spinner_color</item>
+        <item name="colorControlNormal">?attr/vctr_list_header_primary_text_color</item>
     </style>
 
     <style name="PopMenuStyle" parent="Widget.AppCompat.PopupMenu">
@@ -170,7 +169,7 @@
 
     <style name="Floating_Actions_Menu">
         <item name="android:background">@drawable/vector_background_fab_label</item>
-        <item name="android:textColor">?attr/vctr_riot_primary_text_color</item>
+        <item name="android:textColor">?android:attr/textColorPrimary</item>
     </style>
 
     <style name="Floating_Actions_Menu.Light">

@@ -19,6 +19,7 @@ Improvements:
 
 
 Other changes:
+ - Update of Light and Dark themes (#2710)
  - Restore the crash report dialog after a crash
 
 Bugfix:

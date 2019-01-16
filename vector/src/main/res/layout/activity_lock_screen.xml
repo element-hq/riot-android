@@ -18,7 +18,7 @@
         android:paddingRight="5dp"
         android:paddingBottom="5dp"
         android:textAppearance="?android:attr/textAppearanceMedium"
-        android:textColor="?attr/vctr_riot_primary_text_color"
+        android:textColor="?android:textColorPrimary"
         android:textStyle="bold"
         tools:text="Room name" />
 
@@ -38,7 +38,6 @@
         android:paddingEnd="5dp"
         android:paddingRight="5dp"
         android:textAppearance="?android:attr/textAppearanceSmall"
-        android:textColor="?attr/vctr_riot_primary_text_color"
         android:textStyle="bold"
         tools:text="SENDER :" />
 

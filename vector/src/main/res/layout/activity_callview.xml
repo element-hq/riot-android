@@ -3,29 +3,22 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:background="@android:color/black">
+    android:background="?android:attr/colorBackground"
+    android:layout_height="match_parent">
 
     <RelativeLayout
         android:id="@+id/call_layout"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-        <RelativeLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:background="?attr/vctr_riot_primary_background_color">
-
-            <im.vector.view.VectorCircularImageView
-                android:id="@+id/call_other_member"
-                android:layout_width="100dp"
-                android:layout_height="100dp"
-                android:layout_centerInParent="true"
-                android:adjustViewBounds="true"
-                android:scaleType="centerCrop"
-                tools:src="@tools:sample/avatars" />
-
-        </RelativeLayout>
+        <im.vector.view.VectorCircularImageView
+            android:id="@+id/call_other_member"
+            android:layout_width="100dp"
+            android:layout_height="100dp"
+            android:layout_centerInParent="true"
+            android:adjustViewBounds="true"
+            android:scaleType="centerCrop"
+            tools:src="@tools:sample/avatars" />
 
         <!-- container layout for the action buttons -->
         <LinearLayout

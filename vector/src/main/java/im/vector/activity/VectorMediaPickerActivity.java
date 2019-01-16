@@ -1360,7 +1360,7 @@ public class VectorMediaPickerActivity extends MXCActionBarActivity implements T
         Bitmap bitmap = Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888);
         Canvas canvas = new Canvas(bitmap);
 
-        canvas.drawColor(ThemeUtils.INSTANCE.getColor(this, R.attr.vctr_riot_primary_background_color));
+        canvas.drawColor(ThemeUtils.INSTANCE.getColor(this, android.R.attr.colorBackground));
 
         Paint eraser = new Paint(Paint.ANTI_ALIAS_FLAG);
         eraser.setStyle(Paint.Style.FILL);
@@ -2051,7 +2051,7 @@ public class VectorMediaPickerActivity extends MXCActionBarActivity implements T
 
         if (null != mGalleryTableLayout) {
             mGalleryTableLayout.removeAllViews();
-            mGalleryTableLayout.setBackgroundColor(ThemeUtils.INSTANCE.getColor(this, R.attr.vctr_riot_primary_background_color));
+            mGalleryTableLayout.setBackgroundColor(ThemeUtils.INSTANCE.getColor(this, android.R.attr.colorBackground));
 
             DisplayMetrics metrics = new DisplayMetrics();
             getWindowManager().getDefaultDisplay().getMetrics(metrics);
@@ -2113,7 +2113,7 @@ public class VectorMediaPickerActivity extends MXCActionBarActivity implements T
                         recentMediaView.setThumbnailByUri(recentMedia.mFileUri);
                     }
 
-                    recentMediaView.setBackgroundColor(ThemeUtils.INSTANCE.getColor(this, R.attr.vctr_riot_primary_background_color));
+                    recentMediaView.setBackgroundColor(ThemeUtils.INSTANCE.getColor(this, android.R.attr.colorBackground));
                     final MediaStoreMedia finalRecentMedia = recentMedia;
 
                     recentMediaView.setOnClickListener(new View.OnClickListener() {

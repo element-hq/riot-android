@@ -12,7 +12,6 @@
         android:layout_height="wrap_content"
         android:layout_gravity="center_vertical"
         android:maxLines="1"
-        android:textColor="?attr/vctr_default_text_dark_color"
         android:textSize="12sp"
         android:textStyle="bold"
         tools:text="/invite" />
@@ -27,7 +26,6 @@
         android:layout_toEndOf="@+id/item_command_auto_complete_name"
         android:layout_toRightOf="@+id/item_command_auto_complete_name"
         android:maxLines="1"
-        android:textColor="?attr/vctr_default_text_dark_color"
         android:textSize="12sp"
         android:textStyle="italic"
         tools:text="&lt;user-id&gt;" />
@@ -41,7 +39,7 @@
         android:layout_alignParentLeft="true"
         android:layout_gravity="center_vertical"
         android:maxLines="1"
-        android:textColor="@color/vector_dark_grey_color"
+        android:textColor="?android:attr/textColorSecondary"
         android:textSize="12sp"
         tools:text="@string/command_description_invite_user" />
 

@@ -33,6 +33,7 @@ import android.os.Handler;
 import android.os.HandlerThread;
 import android.os.Looper;
 import android.support.annotation.Nullable;
+import android.support.v4.content.ContextCompat;
 import android.support.v4.util.LruCache;
 import android.support.v7.app.AlertDialog;
 import android.text.TextUtils;
@@ -61,7 +62,6 @@ import org.matrix.androidsdk.util.ResourceUtils;
 
 import java.io.InputStream;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
@@ -145,7 +145,14 @@ public class VectorUtils {
     // avatars cache
     static final private LruCache<String, Bitmap> mAvatarImageByKeyDict = new LruCache<>(20 * 1024 * 1024);
     // the avatars background color
-    static final private List<Integer> mColorList = new ArrayList<>(Arrays.asList(0xff76cfa6, 0xff50e2c2, 0xfff4c371));
+    static final private List<Integer> mColorList = new ArrayList<>();
+
+    public static void initAvatarColors(Context context) {
+        mColorList.clear();
+        mColorList.add(ContextCompat.getColor(context, R.color.avatar_color_1));
+        mColorList.add(ContextCompat.getColor(context, R.color.avatar_color_2));
+        mColorList.add(ContextCompat.getColor(context, R.color.avatar_color_3));
+    }
 
     /**
      * Provides the avatar background color from a text.

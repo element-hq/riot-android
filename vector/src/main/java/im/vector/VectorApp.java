@@ -76,6 +76,7 @@ import im.vector.util.PhoneNumberUtils;
 import im.vector.util.PreferencesManager;
 import im.vector.util.RageShake;
 import im.vector.util.VectorMarkdownParser;
+import im.vector.util.VectorUtils;
 
 /**
  * The main application injection point
@@ -182,6 +183,8 @@ public class VectorApp extends MultiDexApplication {
         if (BuildConfig.DEBUG) {
             Stetho.initializeWithDefaults(this);
         }
+
+        VectorUtils.initAvatarColors(this);
 
         NotificationUtils.INSTANCE.createNotificationChannels(this);
 
