@@ -55,7 +55,10 @@ import im.vector.activity.*
 import im.vector.contacts.ContactsManager
 import im.vector.extensions.getFingerprintHumanReadable
 import im.vector.extensions.withArgs
-import im.vector.preference.*
+import im.vector.preference.ProgressBarPreference
+import im.vector.preference.UserAvatarPreference
+import im.vector.preference.VectorGroupPreference
+import im.vector.preference.VectorPreference
 import im.vector.settings.FontScale
 import im.vector.settings.VectorLocale
 import im.vector.ui.themes.ThemeUtils
@@ -621,7 +624,6 @@ class VectorSettingsPreferencesFragment : PreferenceFragmentCompat(), SharedPref
         findPreference(PreferencesManager.SETTINGS_IDENTITY_SERVER_PREFERENCE_KEY)
                 .summary = mSession.homeServerConfig.identityServerUri.toString()
 
-
         // Analytics
 
         // Analytics tracking management
@@ -679,7 +681,6 @@ class VectorSettingsPreferencesFragment : PreferenceFragmentCompat(), SharedPref
         // olm version
         findPreference(PreferencesManager.SETTINGS_OLM_VERSION_PREFERENCE_KEY)
                 .summary = mSession.getCryptoVersion(appContext, false)
-
 
         // copyright
         findPreference(PreferencesManager.SETTINGS_COPYRIGHT_PREFERENCE_KEY)
@@ -849,7 +850,6 @@ class VectorSettingsPreferencesFragment : PreferenceFragmentCompat(), SharedPref
 
         // find the view from parent activity
         mLoadingView = activity?.findViewById(R.id.vector_settings_spinner_views)
-
 
         if (mSession.isAlive) {
             val context = activity?.applicationContext
@@ -1109,7 +1109,6 @@ class VectorSettingsPreferencesFragment : PreferenceFragmentCompat(), SharedPref
         val pushManager = matrixInstance.pushManager
 
         Log.d(LOG_TAG, "onPushRuleClick $preferenceKey : set to $newValue")
-
 
         when (preferenceKey) {
 
@@ -1664,7 +1663,6 @@ class VectorSettingsPreferencesFragment : PreferenceFragmentCompat(), SharedPref
             val addEmailBtn = mUserSettingsCategory.findPreference(ADD_EMAIL_PREFERENCE_KEY)
                     ?: return
 
-
             var order = addEmailBtn.order
 
             for ((index, email3PID) in currentEmail3PID.withIndex()) {
@@ -1693,8 +1691,6 @@ class VectorSettingsPreferencesFragment : PreferenceFragmentCompat(), SharedPref
             }
 
             addEmailBtn.order = order
-
-
         }
     }
 
@@ -1718,11 +1714,10 @@ class VectorSettingsPreferencesFragment : PreferenceFragmentCompat(), SharedPref
      *
      * @param email the email to add.
      */
-    private fun addEmail(email: String?) {
+    private fun addEmail(email: String) {
         // check first if the email syntax is valid
         // if email is null , then also its invalid email
-        if (TextUtils.isEmpty(email) || !android.util.Patterns.EMAIL_ADDRESS.matcher(email
-                        ?: "").matches()) {
+        if (TextUtils.isEmpty(email) || !android.util.Patterns.EMAIL_ADDRESS.matcher(email).matches()) {
             activity?.toast(R.string.auth_invalid_email)
             return
         }
@@ -2032,7 +2027,6 @@ class VectorSettingsPreferencesFragment : PreferenceFragmentCompat(), SharedPref
                 }
             }
 
-
             mSyncRequestDelayPreference?.let {
                 it.summary = secondsToText(delay)
                 it.text = delay.toString() + ""
@@ -2057,7 +2051,6 @@ class VectorSettingsPreferencesFragment : PreferenceFragmentCompat(), SharedPref
             }
         }
     }
-
 
     //==============================================================================================================
     // Cryptography
@@ -2298,7 +2291,6 @@ class VectorSettingsPreferencesFragment : PreferenceFragmentCompat(), SharedPref
             val inflater = it.layoutInflater
             val layout = inflater.inflate(R.layout.dialog_device_details, null)
             var textView = layout.findViewById<TextView>(R.id.device_id)
-
 
             textView.text = aDeviceInfo.device_id
 
@@ -2744,7 +2736,6 @@ class VectorSettingsPreferencesFragment : PreferenceFragmentCompat(), SharedPref
             }
         }
 
-
         if (isNewList) {
             val joinedGroups = ArrayList(mSession.groupsManager.joinedGroups)
             Collections.sort(joinedGroups, Group.mGroupsComparator)
@@ -2805,13 +2796,11 @@ class VectorSettingsPreferencesFragment : PreferenceFragmentCompat(), SharedPref
                     }
                     true
                 }
-
             }
 
             refreshCryptographyPreference(mMyDeviceInfo)
         }
     }
-
 
     private class ClearMediaCacheAsyncTask internal constructor(
             backgroundTask: () -> Unit,
