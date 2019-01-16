@@ -25,7 +25,6 @@ import android.app.PendingIntent
 import android.content.Context
 import android.content.Intent
 import android.graphics.Bitmap
-import android.graphics.BitmapFactory
 import android.graphics.Color
 import android.os.Build
 import android.os.PowerManager
@@ -42,10 +41,9 @@ import im.vector.Matrix
 import im.vector.R
 import im.vector.VectorApp
 import im.vector.activity.*
-import im.vector.receiver.DismissNotificationReceiver
 import im.vector.receiver.ReplyNotificationBroadcastReceiver
+import im.vector.ui.themes.ThemeUtils
 import im.vector.util.PreferencesManager
-import im.vector.util.createSquareBitmap
 import im.vector.util.startNotificationChannelSettingsIntent
 import org.matrix.androidsdk.rest.model.bingrules.BingRule
 import org.matrix.androidsdk.util.Log
@@ -70,9 +68,6 @@ object NotificationUtils {
      */
     private const val NOTIFICATION_ID_MESSAGES = 60
 
-
-    private const val NOTIFICATION_ID_ROOM_MESSAGES = 62
-
     /**
      * Identifier of the foreground notification used to keep the application alive
      * when it runs in background.
@@ -88,8 +83,11 @@ object NotificationUtils {
     private const val JOIN_ACTION = "NotificationUtils.JOIN_ACTION"
     private const val REJECT_ACTION = "NotificationUtils.REJECT_ACTION"
     private const val QUICK_LAUNCH_ACTION = "NotificationUtils.QUICK_LAUNCH_ACTION"
-    const val SMART_REPLY_ACTION = "NotificationUtils.SMART_REPLY_ACTION"
-    const val TAP_TO_VIEW_ACTION = "NotificationUtils.TAP_TO_VIEW_ACTION"
+    const val SMART_REPLY_ACTION = "${BuildConfig.APPLICATION_ID}.NotificationUtils.SMART_REPLY_ACTION"
+    const val DISMISS_NOTIF_AND_OPEN_HOME_ACTION = "${BuildConfig.APPLICATION_ID}.NotificationUtils.DISMISS_NOTIF_AND_OPEN_HOME_ACTION"
+    const val DISMISS_SUMMARY_ACTION = "${BuildConfig.APPLICATION_ID}.NotificationUtils.DISMISS_SUMMARY_ACTION"
+    const val DISMISS_ROOM_NOTIF_ACTION = "${BuildConfig.APPLICATION_ID}.NotificationUtils.DISMISS_ROOM_NOTIF_ACTION"
+    const val TAP_TO_VIEW_ACTION = "${BuildConfig.APPLICATION_ID}.NotificationUtils.TAP_TO_VIEW_ACTION"
 
     /* ==========================================================================================
      * IDs for channels
@@ -225,50 +223,49 @@ object NotificationUtils {
             }
 
         }
-
         return notification
     }
 
-    fun buildTestSummNotif(context: Context): Notification {
-        val summaryNotification = NotificationCompat.Builder(context, SILENT_NOTIFICATION_CHANNEL_ID)
-                .setContentTitle("Summary")
-                //set content text to support devices running API level < 24
-                .setContentText("new messages")
-                .setSmallIcon(R.drawable.logo_transparent)
-                //build summary info into InboxStyle template
-                .setStyle(NotificationCompat.InboxStyle()
-//                        .addLine("Line 1")
-//                        .addLine("Line 2")
-//                        .setBigContentTitle("$nId new messages")
-                        .setSummaryText("summary text"))
-                //specify which group this notification belongs to
-                .setGroup(context.getString(R.string.riot_app_name))
-                //set this notification as the summary for the group
-                .setGroupSummary(true)
-                .build()
-        return summaryNotification
-    }
+//    fun buildTestSummNotif(context: Context): Notification {
+//        val summaryNotification = NotificationCompat.Builder(context, SILENT_NOTIFICATION_CHANNEL_ID)
+//                .setContentTitle("Summary")
+//                //set content text to support devices running API level < 24
+//                .setContentText("new messages")
+//                .setSmallIcon(R.drawable.logo_transparent)
+//                //build summary info into InboxStyle template
+//                .setStyle(NotificationCompat.InboxStyle()
+////                        .addLine("Line 1")
+////                        .addLine("Line 2")
+////                        .setBigContentTitle("$nId new messages")
+//                        .setSummaryText("summary text"))
+//                //specify which group this notification belongs to
+//                .setGroup(context.getString(R.string.riot_app_name))
+//                //set this notification as the summary for the group
+//                .setGroupSummary(true)
+//                .build()
+//        return summaryNotification
+//    }
 
-    fun buildNotificationForNonCallEvent(context: Context, roomName: String, body: String, noisy: Boolean): Notification {
-
-        @ColorInt val highlightColor = ContextCompat.getColor(context, R.color.vector_fuchsia_color)
-        val builder = NotificationCompat.Builder(context, if (noisy) NOISY_NOTIFICATION_CHANNEL_ID else SILENT_NOTIFICATION_CHANNEL_ID)
-                .setWhen(System.currentTimeMillis())
-                .setContentTitle(ensureTitleNotEmpty(context, roomName))
-                .setContentText(body)
-                .setSmallIcon(R.drawable.logo_transparent)
-                .setGroup(context.getString(R.string.riot_app_name))
-                //Compat
-                .setLights(Color.GREEN, 500, 500)
-                //setSound
-                .apply {
-                    if (noisy) {
-                        color = highlightColor
-                    }
-                }
-        return builder.build()
-
-    }
+//    fun buildNotificationForNonCallEvent(context: Context, roomName: String, body: String, noisy: Boolean): Notification {
+//
+//        @ColorInt val highlightColor = ContextCompat.getColor(context, R.color.vector_fuchsia_color)
+//        val builder = NotificationCompat.Builder(context, if (noisy) NOISY_NOTIFICATION_CHANNEL_ID else SILENT_NOTIFICATION_CHANNEL_ID)
+//                .setWhen(System.currentTimeMillis())
+//                .setContentTitle(ensureTitleNotEmpty(context, roomName))
+//                .setContentText(body)
+//                .setSmallIcon(R.drawable.logo_transparent)
+//                .setGroup(context.getString(R.string.riot_app_name))
+//                //Compat
+//                .setLights(Color.GREEN, 500, 500)
+//                //setSound
+//                .apply {
+//                    if (noisy) {
+//                        color = highlightColor
+//                    }
+//                }
+//        return builder.build()
+//
+//    }
 
     /**
      * Build an incoming call notification.
@@ -384,6 +381,7 @@ object NotificationUtils {
      * @param builder            the notification builder
      * @param roomsNotifications the rooms notifications
      */
+    @Deprecated("will be removed")
     private fun addTextStyleWithSeveralRooms(context: Context,
                                              builder: NotificationCompat.Builder,
                                              roomsNotifications: RoomsNotifications) {
@@ -416,10 +414,9 @@ object NotificationUtils {
             roomIntentTap.putExtra(VectorRoomActivity.EXTRA_ROOM_ID, roomsNotifications.mRoomId)
         }
 
-        // the action must be unique else the parameters are ignored
-        roomIntentTap!!.action = TAP_TO_VIEW_ACTION + System.currentTimeMillis().toInt()
+        roomIntentTap!!.action = TAP_TO_VIEW_ACTION
         stackBuilderTap.addNextIntent(roomIntentTap)
-        builder.setContentIntent(stackBuilderTap.getPendingIntent(0, PendingIntent.FLAG_UPDATE_CURRENT))
+        builder.setContentIntent(stackBuilderTap.getPendingIntent(System.currentTimeMillis().toInt(), 0))
 
         // offer to open the rooms list
         run {
@@ -458,6 +455,7 @@ object NotificationUtils {
      * @param builder            the notification builder
      * @param roomsNotifications the rooms notifications
      */
+    @Deprecated("will be removed")
     private fun addTextStyle(context: Context,
                              builder: NotificationCompat.Builder,
                              roomsNotifications: RoomsNotifications) {
@@ -629,21 +627,21 @@ object NotificationUtils {
      * @param isBackground true if it is background notification
      * @return the notification
      */
-    fun buildMessageNotification(context: Context, isBackground: Boolean): Notification? {
-
-        var notification: Notification? = null
-        try {
-            val roomsNotifications = RoomsNotifications.loadRoomsNotifications(context)
-
-            if (null != roomsNotifications) {
-                notification = buildMessageNotification(context, roomsNotifications, BingRule(), isBackground)
-            }
-        } catch (e: Exception) {
-            Log.e(LOG_TAG, "## buildMessageNotification() : failed " + e.message, e)
-        }
-
-        return notification
-    }
+//    fun buildMessageNotification(context: Context, isBackground: Boolean): Notification? {
+//
+//        var notification: Notification? = null
+//        try {
+//            val roomsNotifications = RoomsNotifications.loadRoomsNotifications(context)
+//
+//            if (null != roomsNotifications) {
+//                notification = buildMessageNotification(context, roomsNotifications, BingRule(), isBackground)
+//            }
+//        } catch (e: Exception) {
+//            Log.e(LOG_TAG, "## buildMessageNotification() : failed " + e.message, e)
+//        }
+//
+//        return notification
+//    }
 
 
     /**
@@ -655,23 +653,23 @@ object NotificationUtils {
      * @param isBackground           true if it is background notification (like read receipt)
      * @return the notification
      */
-    fun buildMessageNotification(context: Context,
-                                 notifiedEventsByRoomId: Map<String, List<NotifiedEvent>>,
-                                 eventToNotify: NotifiedEvent,
-                                 isBackground: Boolean): Notification? {
-
-        var notification: Notification? = null
-        try {
-            val roomsNotifications = RoomsNotifications(eventToNotify, notifiedEventsByRoomId)
-            notification = buildMessageNotification(context, roomsNotifications, eventToNotify.mBingRule, isBackground)
-            // cache the value
-            RoomsNotifications.saveRoomNotifications(context, roomsNotifications)
-        } catch (e: Exception) {
-            Log.e(LOG_TAG, "## buildMessageNotification() : failed " + e.message, e)
-        }
-
-        return notification
-    }
+//    fun buildMessageNotification(context: Context,
+//                                 notifiedEventsByRoomId: Map<String, List<NotifiedEvent>>,
+//                                 eventToNotify: NotifiedEvent,
+//                                 isBackground: Boolean): Notification? {
+//
+//        var notification: Notification? = null
+//        try {
+//            val roomsNotifications = RoomsNotifications(eventToNotify, notifiedEventsByRoomId)
+//            notification = buildMessageNotification(context, roomsNotifications, eventToNotify.mBingRule, isBackground)
+//            // cache the value
+//            RoomsNotifications.saveRoomNotifications(context, roomsNotifications)
+//        } catch (e: Exception) {
+//            Log.e(LOG_TAG, "## buildMessageNotification() : failed " + e.message, e)
+//        }
+//
+//        return notification
+//    }
 
 
     /**
@@ -683,64 +681,64 @@ object NotificationUtils {
      * @param isBackground       true if it is background notification (e.g. read receipt)
      * @return the notification
      */
-    private fun buildMessageNotification(context: Context,
-                                         roomsNotifications: RoomsNotifications,
-                                         bingRule: BingRule,
-                                         isBackground: Boolean): Notification? {
-        try {
-            var largeBitmap: Bitmap? = null
-
-            // when the event is an invitation one
-            // don't check if the sender ID is known because the members list are not yet downloaded
-            if (!roomsNotifications.mIsInvitationEvent) {
-                // is there any avatar url
-                if (!TextUtils.isEmpty(roomsNotifications.mRoomAvatarPath)) {
-                    val options = BitmapFactory.Options()
-                    options.inPreferredConfig = Bitmap.Config.ARGB_8888
-                    try {
-                        largeBitmap = BitmapFactory.decodeFile(roomsNotifications.mRoomAvatarPath, options)
-                    } catch (oom: OutOfMemoryError) {
-                        Log.e(LOG_TAG, "decodeFile failed with an oom", oom)
-                    }
-
-                }
-            }
-
-            Log.d(LOG_TAG, "prepareNotification : with sound " + BingRule.isDefaultNotificationSound(bingRule.notificationSound))
-
-            val builder = NotificationCompat.Builder(context, SILENT_NOTIFICATION_CHANNEL_ID)
-                    .setWhen(roomsNotifications.mContentTs)
-                    .setContentTitle(ensureTitleNotEmpty(context, roomsNotifications.mContentTitle))
-                    .setContentText(roomsNotifications.mContentText)
-                    .setSmallIcon(R.drawable.logo_transparent)
-                    .setGroup(context.getString(R.string.riot_app_name))
-                    .setGroupSummary(true)
-                    .setDeleteIntent(PendingIntent.getBroadcast(context.applicationContext,
-                            0, Intent(context.applicationContext, DismissNotificationReceiver::class.java), PendingIntent.FLAG_UPDATE_CURRENT))
-
-            try {
-                addTextStyle(context, builder, roomsNotifications)
-            } catch (e: Exception) {
-                Log.e(LOG_TAG, "## buildMessageNotification() : addTextStyle failed " + e.message, e)
-            }
-
-            // only one room : display the large bitmap (it should be the room avatar)
-            // several rooms : display the Riot avatar
-            if (roomsNotifications.mRoomNotifications.size == 1) {
-                if (null != largeBitmap) {
-                    builder.setLargeIcon(largeBitmap.createSquareBitmap())
-                }
-            }
-
-            manageNotificationSound(context, builder, isBackground, BingRule.isDefaultNotificationSound(bingRule.notificationSound))
-
-            return builder.build()
-        } catch (e: Exception) {
-            Log.e(LOG_TAG, "## buildMessageNotification() : failed" + e.message, e)
-        }
-
-        return null
-    }
+//    private fun buildMessageNotification(context: Context,
+//                                         roomsNotifications: RoomsNotifications,
+//                                         bingRule: BingRule,
+//                                         isBackground: Boolean): Notification? {
+//        try {
+//            var largeBitmap: Bitmap? = null
+//
+//            // when the event is an invitation one
+//            // don't check if the sender ID is known because the members list are not yet downloaded
+//            if (!roomsNotifications.mIsInvitationEvent) {
+//                // is there any avatar url
+//                if (!TextUtils.isEmpty(roomsNotifications.mRoomAvatarPath)) {
+//                    val options = BitmapFactory.Options()
+//                    options.inPreferredConfig = Bitmap.Config.ARGB_8888
+//                    try {
+//                        largeBitmap = BitmapFactory.decodeFile(roomsNotifications.mRoomAvatarPath, options)
+//                    } catch (oom: OutOfMemoryError) {
+//                        Log.e(LOG_TAG, "decodeFile failed with an oom", oom)
+//                    }
+//
+//                }
+//            }
+//
+//            Log.d(LOG_TAG, "prepareNotification : with sound " + BingRule.isDefaultNotificationSound(bingRule.notificationSound))
+//
+//            val builder = NotificationCompat.Builder(context, SILENT_NOTIFICATION_CHANNEL_ID)
+//                    .setWhen(roomsNotifications.mContentTs)
+//                    .setContentTitle(ensureTitleNotEmpty(context, roomsNotifications.mContentTitle))
+//                    .setContentText(roomsNotifications.mContentText)
+//                    .setSmallIcon(R.drawable.logo_transparent)
+//                    .setGroup(context.getString(R.string.riot_app_name))
+//                    .setGroupSummary(true)
+//                    .setDeleteIntent(PendingIntent.getBroadcast(context.applicationContext,
+//                            0, Intent(context.applicationContext, DismissNotificationReceiver::class.java), PendingIntent.FLAG_UPDATE_CURRENT))
+//
+//            try {
+//                addTextStyle(context, builder, roomsNotifications)
+//            } catch (e: Exception) {
+//                Log.e(LOG_TAG, "## buildMessageNotification() : addTextStyle failed " + e.message, e)
+//            }
+//
+//            // only one room : display the large bitmap (it should be the room avatar)
+//            // several rooms : display the Riot avatar
+//            if (roomsNotifications.mRoomNotifications.size == 1) {
+//                if (null != largeBitmap) {
+//                    builder.setLargeIcon(largeBitmap.createSquareBitmap())
+//                }
+//            }
+//
+//            manageNotificationSound(context, builder, isBackground, BingRule.isDefaultNotificationSound(bingRule.notificationSound))
+//
+//            return builder.build()
+//        } catch (e: Exception) {
+//            Log.e(LOG_TAG, "## buildMessageNotification() : failed" + e.message, e)
+//        }
+//
+//        return null
+//    }
 
     /**
      * Build a notification
@@ -750,6 +748,7 @@ object NotificationUtils {
      * @param bingRule        the bing rule
      * @return the notification
      */
+    @Deprecated("will be removed")
     fun buildMessagesListNotification(context: Context, messagesStrings: List<CharSequence>, bingRule: BingRule): Notification? {
         try {
 
@@ -793,75 +792,89 @@ object NotificationUtils {
     }
 
     fun buildMessagesListNotification(context: Context, messageSytle: NotificationCompat.MessagingStyle, roomInfo: RoomEventGroupInfo, largeIcon: Bitmap?, senderDisplayNameForReplyCompat: String?): Notification? {
-        @ColorInt val highlightColor = ContextCompat.getColor(context, R.color.vector_fuchsia_color)
 
-
+        val accentColor = ThemeUtils.getColor(context, R.attr.colorAccent)
         // Build the pending intent for when the notification is clicked
         val openRoomIntent = buildOpenRoomIntent(context, roomInfo.roomId)
+        val smallIcon = if (roomInfo.shouldBing) R.drawable.icon_notif_important else R.drawable.logo_transparent
 
-        return NotificationCompat.Builder(context, if (roomInfo.shouldBing) NOISY_NOTIFICATION_CHANNEL_ID else SILENT_NOTIFICATION_CHANNEL_ID)
-                .apply {
-
-                    setStyle(messageSytle)
-                    setContentTitle(context.getString(R.string.riot_app_name))
-                    setSubText(roomInfo.roomDisplayName)
-                    setNumber(messageSytle.messages.size)
-                    setSmallIcon(R.drawable.logo_transparent)
-                    setGroup(context.getString(R.string.riot_app_name))
-                    setGroupAlertBehavior(NotificationCompat.GROUP_ALERT_SUMMARY)
-
-                    buildQuickReplyIntent(context, roomInfo.roomId, senderDisplayNameForReplyCompat)?.let { replyPendingIntent ->
-
-                        var replyLabel: String = context.getString(R.string.action_quick_reply)
-                        var remoteInput: RemoteInput = RemoteInput.Builder(ReplyNotificationBroadcastReceiver.KEY_TEXT_REPLY).run {
-                            setLabel(replyLabel)
-                            build()
-                        }
-
-                        NotificationCompat.Action.Builder(R.drawable.vector_notification_quick_reply,
-                                context.getString(R.string.action_quick_reply), replyPendingIntent)
-                                .addRemoteInput(remoteInput)
-                                .build()?.let {
-                                    addAction(it)
-                                }
+        val builder = NotificationCompat.Builder(context, if (roomInfo.shouldBing) NOISY_NOTIFICATION_CHANNEL_ID else SILENT_NOTIFICATION_CHANNEL_ID)
+        builder.apply {
+            setStyle(messageSytle)
+            setContentTitle(context.getString(R.string.riot_app_name))
+            setSubText(roomInfo.roomDisplayName)
+            setNumber(messageSytle.messages.size)
+            setGroup(context.getString(R.string.riot_app_name))
+            setGroupAlertBehavior(NotificationCompat.GROUP_ALERT_SUMMARY)
+            setSmallIcon(smallIcon)
+            color = accentColor
+            if (!roomInfo.hasSmartReplyError) {
+                buildQuickReplyIntent(context, roomInfo.roomId, senderDisplayNameForReplyCompat)?.let { replyPendingIntent ->
+                    var replyLabel: String = context.getString(R.string.action_quick_reply)
+                    var remoteInput: RemoteInput = RemoteInput.Builder(ReplyNotificationBroadcastReceiver.KEY_TEXT_REPLY).run {
+                        setLabel(replyLabel)
+                        build()
                     }
-
-                    if (openRoomIntent != null) {
-                        setContentIntent(openRoomIntent)
-                    }
-
-                    if (largeIcon != null) {
-                        setLargeIcon(largeIcon)
-                    }
-
-                    if (roomInfo.shouldBing) {
-                        color = highlightColor
-                        //Compat
-                        priority = NotificationCompat.PRIORITY_DEFAULT
-                        PreferencesManager.getNotificationRingTone(context)?.let {
-                            setSound(it)
-                        }
-                    } else {
-                        priority = NotificationCompat.PRIORITY_LOW
-                    }
+                    NotificationCompat.Action.Builder(R.drawable.vector_notification_quick_reply,
+                            context.getString(R.string.action_quick_reply), replyPendingIntent)
+                            .addRemoteInput(remoteInput)
+                            .build()?.let {
+                                addAction(it)
+                            }
                 }
-                .build()
+            }
 
+            if (openRoomIntent != null) {
+                setContentIntent(openRoomIntent)
+            }
+
+            if (largeIcon != null) {
+                setLargeIcon(largeIcon)
+            }
+
+            if (roomInfo.shouldBing) {
+                //Compat
+                priority = NotificationCompat.PRIORITY_DEFAULT
+                PreferencesManager.getNotificationRingTone(context)?.let {
+                    setSound(it)
+                }
+                setLights(accentColor, 500, 500)
+            } else {
+                priority = NotificationCompat.PRIORITY_LOW
+            }
+
+            val intent = Intent(context, ReplyNotificationBroadcastReceiver::class.java)
+            intent.putExtra(ReplyNotificationBroadcastReceiver.KEY_ROOM_ID,roomInfo.roomId)
+            intent.action = DISMISS_ROOM_NOTIF_ACTION
+            val pendingIntent = PendingIntent.getBroadcast(context.applicationContext,
+                    System.currentTimeMillis().toInt(), intent, PendingIntent.FLAG_UPDATE_CURRENT)
+            setDeleteIntent(pendingIntent)
+        }
+        return builder.build()
     }
 
     private fun buildOpenRoomIntent(context: Context, roomId: String): PendingIntent? {
         val roomIntentTap = Intent(context, VectorRoomActivity::class.java)
         roomIntentTap.putExtra(VectorRoomActivity.EXTRA_ROOM_ID, roomId)
-        // the action must be unique else the parameters are ignored
-        roomIntentTap.action = "${BuildConfig.APPLICATION_ID}.${TAP_TO_VIEW_ACTION}_${roomId}_${System.currentTimeMillis().toInt()}"
+        roomIntentTap.action = TAP_TO_VIEW_ACTION
 
         // Recreate the back stack
         val stackBuilderTap = TaskStackBuilder.create(context)
                 .addNextIntentWithParentStack(Intent(context, VectorHomeActivity::class.java))
                 .addNextIntent(roomIntentTap)
-        return stackBuilderTap.getPendingIntent(0, PendingIntent.FLAG_UPDATE_CURRENT)
+        return stackBuilderTap.getPendingIntent(System.currentTimeMillis().toInt(), PendingIntent.FLAG_UPDATE_CURRENT)
     }
 
+    private fun buildOpenHomePendingIntentForSummary(context: Context): PendingIntent {
+
+        //There is a known bug on android, according to documentation auto cancel should
+        //call the deleteIntent, but it's not. So as a work around we use a broadcast
+        //as content intent that will do the delete action and then start home activity
+        val intent = Intent(context, ReplyNotificationBroadcastReceiver::class.java)
+        intent.action = DISMISS_NOTIF_AND_OPEN_HOME_ACTION
+        return PendingIntent.getBroadcast(context, 100, intent,
+                0)
+    }
 
     /*
         Direct reply is new in Android N, and Android already handles the UI, so the right pending intent
@@ -894,21 +907,42 @@ object NotificationUtils {
     }
 
     fun buildSummaryListNotification(context: Context, inboxSytle: NotificationCompat.InboxStyle, compatSummary: String, noisy: Boolean): Notification? {
-        @ColorInt val highlightColor = ContextCompat.getColor(context, R.color.vector_fuchsia_color)
-        return NotificationCompat.Builder(context, if (noisy) NOISY_NOTIFICATION_CHANNEL_ID else SILENT_NOTIFICATION_CHANNEL_ID)
-                .setStyle(inboxSytle)
+
+        val smallIcon = if (noisy) R.drawable.icon_notif_important else R.drawable.logo_transparent
+
+        val builder = NotificationCompat.Builder(context, if (noisy) NOISY_NOTIFICATION_CHANNEL_ID else SILENT_NOTIFICATION_CHANNEL_ID)
+                .setStyle(inboxSytle) // used in compat < N, after summary is built based on child notifications
                 .setContentTitle(context.getString(R.string.riot_app_name))
-                .setSmallIcon(R.drawable.logo_transparent)
+                .setSmallIcon(smallIcon)
                 //set content text to support devices running API level < 24
                 .setContentText(compatSummary)
                 .setGroup(context.getString(R.string.riot_app_name))
                 //set this notification as the summary for the group
                 .setGroupSummary(true)
+                .setColor(ThemeUtils.getColor(context, R.attr.colorAccent))
                 .apply {
                     if (noisy) {
-                        color = highlightColor
+                        //Compat
+                        priority = NotificationCompat.PRIORITY_DEFAULT
+                        PreferencesManager.getNotificationRingTone(context)?.let {
+                            setSound(it)
+                        }
+                    } else {
+                        //compat
+                        priority = NotificationCompat.PRIORITY_LOW
                     }
-                }.build()
+
+                    setAutoCancel(true)
+                    setContentIntent(buildOpenHomePendingIntentForSummary(context))
+
+                    val intent = Intent(context, ReplyNotificationBroadcastReceiver::class.java)
+                    intent.action = DISMISS_SUMMARY_ACTION
+                    val pendingIntent = PendingIntent.getBroadcast(context.applicationContext,
+                            0, intent, PendingIntent.FLAG_UPDATE_CURRENT)
+                    setDeleteIntent(pendingIntent)
+
+                }
+        return builder.build()
 
     }
 
@@ -937,6 +971,7 @@ object NotificationUtils {
     /**
      * Cancel the notification containing messages
      */
+    @Deprecated("wip")
     fun cancelNotificationMessage(context: Context) {
         NotificationManagerCompat.from(context)
                 .cancel(NOTIFICATION_ID_MESSAGES)

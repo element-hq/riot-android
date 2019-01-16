@@ -33,6 +33,7 @@ data class RoomEventGroupInfo(
     var hasNewEvent: Boolean = false //An event in the list has not yet been display
     var shouldBing: Boolean = false //true if at least one on the not yet displayed event is noisy
     var customSound: String? = null
+    var hasSmartReplyError = false
 }
 
 class NotificationDrawerManager(val context: Context) {
@@ -62,12 +63,37 @@ class NotificationDrawerManager(val context: Context) {
     fun onNotifiableEventReceived(notifiableEvent: NotifiableEvent, userId: String, userDisplayName: String?) {
         //If we support multi session, event list should be per userId
         //Currently only manage single session
-
-        //Log.d(LOG_TAG, "%%%%%%%% onNotifiableEventReceived ${notifiableEvent}")
+        Log.d(LOG_TAG, "%%%%%%%% onNotifiableEventReceived ${notifiableEvent}")
         synchronized(this) {
             myUserDisplayName = userDisplayName ?: userId
             eventList.add(notifiableEvent)
         }
+    }
+
+    /*
+    * Clear all known events and refresh the notification drawer
+     */
+    fun clearAllEvents() {
+        synchronized(this) {
+            eventList.clear()
+        }
+        refreshNotificationDrawer()
+    }
+
+    /*
+    * Clear all known message events for this room and refresh the notification drawer
+     */
+    fun clearMessageEventOfRoom(roomId: String?) {
+        if (roomId != null) {
+            eventList.removeAll { e ->
+                if (e is NotifiableMessageEvent) {
+                    return@removeAll e.roomId == roomId
+                }
+                return@removeAll false
+            }
+            NotificationUtils.cancelNotificationMessage(context, roomId, ROOM_MESSAGES_NOTIFICATION_ID)
+        }
+        refreshNotificationDrawer()
     }
 
     /**
@@ -81,16 +107,7 @@ class NotificationDrawerManager(val context: Context) {
             currentRoomId = roomId
         }
         if (hasChanged) {
-            if (roomId != null) {
-                eventList.removeAll { e ->
-                    if (e is NotifiableMessageEvent) {
-                        return@removeAll e.roomId == roomId
-                    }
-                    return@removeAll false
-                }
-                NotificationUtils.cancelNotificationMessage(context,roomId, ROOM_MESSAGES_NOTIFICATION_ID)
-            }
-            refreshNotificationDrawer()
+            clearMessageEventOfRoom(roomId)
         }
     }
 
@@ -98,10 +115,11 @@ class NotificationDrawerManager(val context: Context) {
     fun refreshNotificationDrawer() {
         synchronized(this) {
 
-            //Log.d(LOG_TAG, "%%%%%%%% REFRESH NOTIFICATION DRAWER ")
+            Log.d(LOG_TAG, "%%%%%%%% REFRESH NOTIFICATION DRAWER ")
             //TMP code
             var hasNewEvent = false
             var summaryIsNoisy = false
+            val summaryInboxStyle = NotificationCompat.InboxStyle()
 
             //group events by room to create a single MessagingStyle notif
             val roomIdToEventMap: MutableMap<String, ArrayList<NotifiableMessageEvent>> = HashMap()
@@ -123,7 +141,7 @@ class NotificationDrawerManager(val context: Context) {
             }
 
 
-            //Log.d(LOG_TAG, "%%%%%%%% REFRESH NOTIFICATION DRAWER ${roomIdToEventMap.size} room groups")
+            Log.d(LOG_TAG, "%%%%%%%% REFRESH NOTIFICATION DRAWER ${roomIdToEventMap.size} room groups")
 
             //events have been grouped
             for ((roomId, events) in roomIdToEventMap) {
@@ -149,14 +167,19 @@ class NotificationDrawerManager(val context: Context) {
                     }
                     roomGroup.hasNewEvent = roomGroup.hasNewEvent || !event.hasBeenDisplayed
                     //TODO update to compat-28 in order to support media and sender as a Person object
-                    style.addMessage(event.body, event.timestamp, event.senderName)
+                    if (event.outGoingMessage && event.outGoingMessageFailed) {
+                        style.addMessage("** Failed to send - please open room", event.timestamp, event.senderName)
+                        roomGroup.hasSmartReplyError = true
+                    } else {
+                        style.addMessage(event.body, event.timestamp, event.senderName)
+                    }
                     event.hasBeenDisplayed = true //we can consider it as displayed
                 }
 
+                summaryInboxStyle.addLine("${roomGroup.roomDisplayName}: ${events.size} notification(s)")
 
-                if (roomGroup.hasNewEvent) { //SHould update displayed notification
-
-                    //Log.d(LOG_TAG, "%%%%%%%% REFRESH NOTIFICATION DRAWER ${roomId} need refresh")
+                if (roomGroup.hasNewEvent) { //Should update displayed notification
+                    Log.d(LOG_TAG, "%%%%%%%% REFRESH NOTIFICATION DRAWER ${roomId} need refresh")
                     NotificationUtils.buildMessagesListNotification(context, style, roomGroup, largeBitmap, myUserDisplayName)?.let {
                         //is there an id for this room?
                         notifications.add(it)
@@ -165,7 +188,7 @@ class NotificationDrawerManager(val context: Context) {
                     hasNewEvent = true
                     summaryIsNoisy = summaryIsNoisy || roomGroup.shouldBing
                 } else {
-                    //Log.d(LOG_TAG, "%%%%%%%% REFRESH NOTIFICATION DRAWER ${roomId} is up to date")
+                    Log.d(LOG_TAG, "%%%%%%%% REFRESH NOTIFICATION DRAWER ${roomId} is up to date")
                 }
             }
 
@@ -186,18 +209,16 @@ class NotificationDrawerManager(val context: Context) {
             if (roomIdToEventMap.isEmpty()) {
                 NotificationUtils.cancelNotificationMessage(context, null, SUMMARY_NOTIFICATION_ID)
             } else {
-                val style = NotificationCompat.InboxStyle()
-                style.setBigContentTitle("${eventList.size} notifications")
+                summaryInboxStyle.setBigContentTitle("${eventList.size} notifications")
                 NotificationUtils.buildSummaryListNotification(
                         context,
-                        style, "${eventList.size} notifications",
+                        summaryInboxStyle, "${eventList.size} notifications",
                         noisy = hasNewEvent && summaryIsNoisy
                 )?.let {
                     notifications.add(it)
                     NotificationUtils.showNotificationMessage(context, null, SUMMARY_NOTIFICATION_ID, it)
                 }
             }
-
             saveEventInfo()
         }
     }

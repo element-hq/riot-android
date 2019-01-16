@@ -27,6 +27,7 @@ import im.vector.services.EventStreamService;
 /**
  * Dismiss notification receiver
  */
+@Deprecated
 public class DismissNotificationReceiver extends BroadcastReceiver {
     private static final String DISMISS_NOTIFICATIONS_TS_KEY = "DISMISS_NOTIFICATIONS_TS_KEY";
     private static final String LATEST_NOTIFIED_MESSAGE_TS_KEY = "LATEST_NOTIFIED_MESSAGE_TS_KEY";

@@ -23,6 +23,7 @@ import android.text.TextUtils
 import android.widget.Toast
 import im.vector.Matrix
 import im.vector.VectorApp
+import im.vector.activity.VectorHomeActivity
 import im.vector.notifications.NotifiableMessageEvent
 import im.vector.notifications.NotificationUtils
 import org.matrix.androidsdk.MXSession
@@ -34,27 +35,54 @@ import org.matrix.androidsdk.rest.model.MatrixError
 import org.matrix.androidsdk.rest.model.message.Message
 import org.matrix.androidsdk.util.Log
 
-
 class ReplyNotificationBroadcastReceiver : BroadcastReceiver() {
 
     override fun onReceive(context: Context?, intent: Intent?) {
-        if (NotificationUtils.SMART_REPLY_ACTION == intent?.action) {
-            val message = getReplyMessage(intent)
-            val roomId = intent?.getStringExtra(KEY_ROOM_ID)
-
-            if (TextUtils.isEmpty(message) || TextUtils.isEmpty(roomId)) {
-                //ignore this event
-                //Can this happen? should we update notification?
-                return
-            }
-            val matrixId = intent?.getStringExtra(EXTRA_MATRIX_ID)
-            Matrix.getInstance(VectorApp.getInstance().baseContext)?.getSession(matrixId)?.let { session ->
-                session?.dataHandler?.getRoom(roomId)?.let { room ->
-                    sendMatrixEvent(message!!, session, roomId, room, context)
+        if (intent == null || context == null) return
+        Log.d(LOG_TAG, "ReplyNotificationBroadcastReceiver received : $intent")
+        val action = intent.action
+        if (action != null) {
+            when (action) {
+                NotificationUtils.SMART_REPLY_ACTION -> {
+                    handleSmartReply(intent, context)
+                }
+                NotificationUtils.DISMISS_NOTIF_AND_OPEN_HOME_ACTION -> {
+                    VectorApp.getInstance().notificationDrawerManager.clearAllEvents()
+                    val homeIntent = Intent(context, VectorHomeActivity::class.java)
+                    homeIntent.flags = Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_SINGLE_TOP
+                    context.startActivity(homeIntent)
+                }
+                NotificationUtils.DISMISS_ROOM_NOTIF_ACTION -> {
+                    intent.getStringExtra(KEY_ROOM_ID)?.let {
+                        VectorApp.getInstance().notificationDrawerManager.clearMessageEventOfRoom(it)
+                    }
+                }
+                NotificationUtils.DISMISS_SUMMARY_ACTION -> {
+                    VectorApp.getInstance().notificationDrawerManager.clearAllEvents()
+                }
+                else -> {
+                    //nop
                 }
             }
-
         }
+    }
+
+    private fun handleSmartReply(intent: Intent?, context: Context?) {
+        val message = getReplyMessage(intent)
+        val roomId = intent?.getStringExtra(KEY_ROOM_ID)
+
+        if (TextUtils.isEmpty(message) || TextUtils.isEmpty(roomId)) {
+            //ignore this event
+            //Can this happen? should we update notification?
+            return
+        }
+        val matrixId = intent?.getStringExtra(EXTRA_MATRIX_ID)
+        Matrix.getInstance(VectorApp.getInstance().baseContext)?.getSession(matrixId)?.let { session ->
+            session?.dataHandler?.getRoom(roomId)?.let { room ->
+                sendMatrixEvent(message!!, session, roomId!!, room, context)
+            }
+        }
+        return
     }
 
     private fun sendMatrixEvent(message: String, session: MXSession, roomId: String, room: Room, context: Context?) {
@@ -136,7 +164,9 @@ class ReplyNotificationBroadcastReceiver : BroadcastReceiver() {
     companion object {
         val KEY_ROOM_ID = "roomID"
         val KEY_TEXT_REPLY = "key_text_reply"
-        val EXTRA_MATRIX_ID = "EXTRA_MATRIX_ID";
+        val EXTRA_MATRIX_ID = "EXTRA_MATRIX_ID"
+//        val EXTRA_DISMISS_ALL = "EXTRA_DISMISS_ALL"
+
         val LOG_TAG = ReplyNotificationBroadcastReceiver::class.java.name
     }
 }
