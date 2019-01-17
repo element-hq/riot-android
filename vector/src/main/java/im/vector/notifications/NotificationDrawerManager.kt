@@ -66,7 +66,7 @@ class NotificationDrawerManager(val context: Context) {
         Log.d(LOG_TAG, "%%%%%%%% onNotifiableEventReceived ${notifiableEvent}")
         synchronized(this) {
             myUserDisplayName = userDisplayName ?: userId
-            val existing = eventList.filter { it.eventId == notifiableEvent.eventId }.firstOrNull()
+            val existing = eventList.firstOrNull { it.eventId == notifiableEvent.eventId }
             if (existing != null) {
                 if (existing.isPushGatewayEvent) {
                     //Use the event coming from the event stream as it may contains more info than
@@ -144,20 +144,18 @@ class NotificationDrawerManager(val context: Context) {
             //group events by room to create a single MessagingStyle notif
             val roomIdToEventMap: MutableMap<String, ArrayList<NotifiableMessageEvent>> = HashMap()
             val simpleEvents: ArrayList<NotifiableEvent> = ArrayList()
-            var notifications: ArrayList<Notification> = ArrayList()
+            val notifications: ArrayList<Notification> = ArrayList()
 
             for (event in eventList) {
                 if (event is NotifiableMessageEvent) {
                     val roomId = event.roomId
-                    if (event is NotifiableMessageEvent) {
-                        if (!shouldIgnoreMessageEventInRoom(roomId)) {
-                            var roomEvents = roomIdToEventMap[roomId]
-                            if (roomEvents == null) {
-                                roomEvents = ArrayList()
-                                roomIdToEventMap[roomId] = roomEvents
-                            }
-                            roomEvents.add(event)
+                    if (!shouldIgnoreMessageEventInRoom(roomId)) {
+                        var roomEvents = roomIdToEventMap[roomId]
+                        if (roomEvents == null) {
+                            roomEvents = ArrayList()
+                            roomIdToEventMap[roomId] = roomEvents
                         }
+                        roomEvents.add(event)
                     }
                 } else {
                     simpleEvents.add(event)
@@ -203,7 +201,7 @@ class NotificationDrawerManager(val context: Context) {
                 summaryInboxStyle.addLine("${roomGroup.roomDisplayName}: ${events.size} notification(s)")
 
                 if (roomGroup.hasNewEvent) { //Should update displayed notification
-                    Log.d(LOG_TAG, "%%%%%%%% REFRESH NOTIFICATION DRAWER ${roomId} need refresh")
+                    Log.d(LOG_TAG, "%%%%%%%% REFRESH NOTIFICATION DRAWER $roomId need refresh")
                     NotificationUtils.buildMessagesListNotification(context, style, roomGroup, largeBitmap, myUserDisplayName)?.let {
                         //is there an id for this room?
                         notifications.add(it)
@@ -263,7 +261,7 @@ class NotificationDrawerManager(val context: Context) {
     }
 
     private fun getRoomBitmap(events: ArrayList<NotifiableMessageEvent>): Bitmap? {
-        if (events.isEmpty()) return null;
+        if (events.isEmpty()) return null
 
         //Use the last event (most recent?)
         val roomAvatarPath = events[events.size - 1].roomAvatarPath
@@ -287,7 +285,7 @@ class NotificationDrawerManager(val context: Context) {
 
 
     private fun saveEventInfo() {
-        if (eventList == null || eventList.isEmpty()) {
+        if (eventList.isEmpty()) {
             deleteCachedRoomNotifications(context)
             return
         }
