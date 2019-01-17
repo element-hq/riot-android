@@ -256,7 +256,7 @@ public class EventStreamService extends Service {
             NotifiableEvent notifiableEvent = mNotifiableEventResolver.resolveEvent(event, roomState, bingRule, session);
             if (notifiableEvent != null) {
                 String userDisplayName = (session.getMyUser() != null) ? session.getMyUser().displayname : "";
-                VectorApp.getInstance().getNotificationDrawerManager().onNotifiableEventReceived(notifiableEvent, session.getMyUserId(), session.getMyUser().displayname);
+                VectorApp.getInstance().getNotificationDrawerManager().onNotifiableEventReceived(notifiableEvent, session.getMyUserId(), userDisplayName);
             }
 
             //prepareNotification(event, bingRule);
@@ -1328,6 +1328,7 @@ public class EventStreamService extends Service {
      * @param messages the messages list, null will hide the messages notification.
      * @param rule     the bing rule to use
      */
+    @Deprecated
     private static void displayMessagesNotificationStatic(Context context, List<CharSequence> messages, BingRule rule) {
         if (!Matrix.getInstance(context).getPushManager().areDeviceNotificationsAllowed()
                 || null == messages

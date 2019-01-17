@@ -30,7 +30,7 @@ class NotifiableEventResolver(val context: Context) {
 
     private val eventDisplay = RiotEventDisplay(context)
 
-    fun resolveEvent(event: Event, roomState: RoomState, bingRule: BingRule, session: MXSession): NotifiableEvent? {
+    fun resolveEvent(event: Event, roomState: RoomState?, bingRule: BingRule?, session: MXSession): NotifiableEvent? {
         val store = session.dataHandler.store
         if (store == null) {
             Log.e(LOG_TAG, "## NotifiableEventResolver, unable to get store")
@@ -48,7 +48,7 @@ class NotifiableEventResolver(val context: Context) {
                 return messageEvent
             }
             Event.EVENT_TYPE_STATE_ROOM_MEMBER -> {
-                return resolveStateRoomEvent(event, bingRule, session)
+                return resolveStateRoomEvent(event, bingRule, store)
             }
             else -> {
 
@@ -56,10 +56,10 @@ class NotifiableEventResolver(val context: Context) {
                 eventDisplay.getTextualDisplay(event, roomState)?.toString()?.let { body ->
                     return SimpleNotifiableEvent(
                             eventId = event.eventId,
-                            noisy = bingRule.notificationSound != null,
+                            noisy = bingRule?.notificationSound != null,
                             timestamp = event.originServerTs,
                             description = body,
-                            soundName = bingRule.notificationSound,
+                            soundName = bingRule?.notificationSound,
                             title = "New Event",
                             type = event.type)
                 }
@@ -71,13 +71,13 @@ class NotifiableEventResolver(val context: Context) {
         }
     }
 
-    private fun resolveMessageEvent(event: Event, bingRule: BingRule, session: MXSession, store: IMXStore): NotifiableEvent? {
+    private fun resolveMessageEvent(event: Event, bingRule: BingRule?, session: MXSession, store: IMXStore): NotifiableEvent? {
         //If we are here, that means that the event should be notified to the user, we check now how it should be presented (sound)
-        val soundName = bingRule.notificationSound
-        val noisy = bingRule.notificationSound != null
+        val soundName = bingRule?.notificationSound
+        val noisy = bingRule?.notificationSound != null
 
         //The event only contains an eventId, and roomId (type is m.room.*) , we need to get the displayable content (names, avatar, text, etc...)
-        val room = store?.getRoom(event.roomId /*roomID cannot be null (see Matrix SDK code)*/)
+        val room = store.getRoom(event.roomId /*roomID cannot be null (see Matrix SDK code)*/)
 
         if (room == null) {
             Log.e(LOG_TAG, "## NotifiableEventResolver: Unable to resolve room for eventId [${event.eventId}] and roomID [${event.roomId}]")
@@ -108,7 +108,7 @@ class NotifiableEventResolver(val context: Context) {
             }
 
             room.state.getMemberByEventId(event.eventId)?.avatarUrl?.let {
-                val userAvatarUrlPath =session.mediaCache?.thumbnailCacheFile(it, 50)
+                val userAvatarUrlPath = session.mediaCache?.thumbnailCacheFile(it, 50)
                 if (userAvatarUrlPath != null) {
                     notifiableEvent.senderAvatarPath = userAvatarUrlPath.path
                 } else {
@@ -119,11 +119,27 @@ class NotifiableEventResolver(val context: Context) {
 
             return notifiableEvent
         }
-
-        return null
     }
 
-    private fun resolveStateRoomEvent(event: Event, bingRule: BingRule, session: MXSession): NotifiableEvent? {
+    private fun resolveStateRoomEvent(event: Event, bingRule: BingRule?, store: IMXStore): NotifiableEvent? {
+        if ("invite" == event.contentAsJsonObject?.getAsJsonPrimitive("membership")?.asString) {
+            val room = store.getRoom(event.roomId /*roomID cannot be null (see Matrix SDK code)*/)
+            val body = eventDisplay.getTextualDisplay(event, room.state)?.toString() ?: "New Event"
+
+            return SimpleNotifiableEvent(
+                    eventId = event.eventId,
+                    timestamp = event.originServerTs,
+                    noisy = bingRule?.notificationSound != null,
+                    title = "New Invation",
+                    description = body,
+                    soundName = bingRule?.notificationSound,
+                    type = event.type,
+                    isPushGatewayEvent = false)
+        } else {
+
+            Log.e(LOG_TAG, "## NotifiableEventResolver: unsupported notifiable event for eventId [${event.eventId}]")
+            //TODO generic handling?
+        }
         return null
     }
 

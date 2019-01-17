@@ -23,6 +23,7 @@ package im.vector.push.fcm
 
 import android.os.Handler
 import android.os.Looper
+import android.text.TextUtils
 import com.google.firebase.messaging.FirebaseMessagingService
 import com.google.firebase.messaging.RemoteMessage
 import com.google.gson.JsonParser
@@ -30,10 +31,15 @@ import im.vector.BuildConfig
 import im.vector.Matrix
 import im.vector.VectorApp
 import im.vector.activity.CommonActivityUtils
+import im.vector.notifications.NotifiableEventResolver
+import im.vector.notifications.NotifiableMessageEvent
+import im.vector.notifications.SimpleNotifiableEvent
+import im.vector.push.PushManager
 import im.vector.services.EventStreamService
 import org.matrix.androidsdk.MXSession
 import org.matrix.androidsdk.data.store.IMXStore
 import org.matrix.androidsdk.rest.model.Event
+import org.matrix.androidsdk.rest.model.bingrules.BingRule
 import org.matrix.androidsdk.util.Log
 
 /**
@@ -43,6 +49,10 @@ class VectorFirebaseMessagingService : FirebaseMessagingService() {
 
     // Tells if the events service running state has been tested
     private var mCheckLaunched: Boolean = false
+
+    private val notifiableEventResolver: NotifiableEventResolver by lazy {
+        NotifiableEventResolver(this)
+    }
 
     // UI handler
     private val mUIHandler by lazy {
@@ -55,20 +65,24 @@ class VectorFirebaseMessagingService : FirebaseMessagingService() {
      * @param message the message
      */
     override fun onMessageReceived(message: RemoteMessage?) {
-        if (message == null || message.data == null) return
+        if (message == null || message.data == null) {
+            Log.e(LOG_TAG, "## onMessageReceivedInternal() : received a null message or message with no data")
+            return
+        }
         if (BuildConfig.DEBUG) {
             Log.i(LOG_TAG, "%%%%%%%% :" + message.data.toString())
             Log.i(LOG_TAG, "%%%%%%%%  ## onMessageReceived() from FCM with priority " + message.priority)
         }
 
-        //TODO if the app is in foreground, we could just ignore this. The sync loop is already going?
-
-        // Ensure event stream service is started
-        if (EventStreamService.getInstance() == null) {
-            CommonActivityUtils.startEventStreamService(this)
+        //safe guard
+        val pushManager = Matrix.getInstance(applicationContext).pushManager
+        if (!pushManager.areDeviceNotificationsAllowed()) {
+            Log.i(LOG_TAG, "## onMessageReceivedInternal() : the notifications are disabled")
+            return
         }
 
-        mUIHandler.post { onMessageReceivedInternal(message.data) }
+        //TODO if the app is in foreground, we could just ignore this. The sync loop is already going?
+        mUIHandler.post { onMessageReceivedInternal(message.data, pushManager) }
     }
 
     /**
@@ -93,104 +107,169 @@ class VectorFirebaseMessagingService : FirebaseMessagingService() {
      * @param data Data map containing message data as key/value pairs.
      * For Set of keys use data.keySet().
      */
-    private fun onMessageReceivedInternal(data: Map<String, String>) {
+    private fun onMessageReceivedInternal(data: Map<String, String>, pushManager: PushManager) {
         try {
-            var unreadCount = 0
-            var roomId: String? = null
-            var eventId: String? = null
-
-            if (null != data && data.containsKey("unread")) {
-                if (data.containsKey("unread")) {
-                    unreadCount = Integer.parseInt(data["unread"])
-                }
-
-                if (data.containsKey("room_id")) {
-                    roomId = data["room_id"]
-                }
-
-                if (data.containsKey("event_id")) {
-                    eventId = data["event_id"]
-                }
+            if (BuildConfig.DEBUG) {
+                Log.i(LOG_TAG, "## onMessageReceivedInternal() : $data")
             }
-
-            Log.i(LOG_TAG, "## onMessageReceivedInternal() : roomId $roomId eventId $eventId unread $unreadCount")
-
             // update the badge counter
+            val unreadCount = data.get("unread")?.let { Integer.parseInt(it) } ?: 0
             CommonActivityUtils.updateBadgeCount(applicationContext, unreadCount)
 
-            val pushManager = Matrix.getInstance(applicationContext).pushManager
-
-            if (!pushManager.areDeviceNotificationsAllowed()) {
-                Log.i(LOG_TAG, "## onMessageReceivedInternal() : the notifications are disabled")
-                return
-            }
-
-
             val session = Matrix.getInstance(applicationContext)?.defaultSession
-            val store = session?.dataHandler?.store
 
             if (VectorApp.isAppInBackground() && !pushManager.isBackgroundSyncAllowed) {
-                //Notification contains metadata and data information
-                handleNotificationWithoutSyncingMode(data, roomId, session, store, unreadCount)
-                return
+                //Notification contains metadata and maybe data information
+                handleNotificationWithoutSyncingMode(data, session)
+            } else {
+                ensureEventStreamServiceStarted(session)
+                // Safe guard... (race?)
+                if (isEventAlreadyKnown(data["event_id"], data["room_id"])) return
+                //Catch up!!
+                CommonActivityUtils.catchupEventStream(this)
             }
-
-            // check if the application has been launched once
-            // the first FCM event could have been triggered whereas the application is not yet launched.
-            // so it is required to create the sessions and to start/resume event stream
-            if (!mCheckLaunched && null != session) {
-                CommonActivityUtils.startEventStreamService(this)
-                mCheckLaunched = true
-            }
-
-            // check if the event was not yet received
-            // a previous catchup might have already retrieved the notified event
-            if (null != eventId && null != roomId) {
-                try {
-                    val sessions = Matrix.getInstance(applicationContext)!!.sessions
-
-                    if (null != sessions && !sessions.isEmpty()) {
-                        for (session in sessions) {
-                            if (session.dataHandler?.store?.isReady == true) {
-                                if (null != session.dataHandler.store!!.getEvent(eventId, roomId)) {
-                                    Log.e(LOG_TAG, "## onMessageReceivedInternal() : ignore the event " + eventId
-                                            + " in room " + roomId + " because it is already known")
-                                    return
-                                }
-                            }
-                        }
-                    }
-                } catch (e: Exception) {
-                    Log.e(LOG_TAG, "## onMessageReceivedInternal() : failed to check if the event was already defined " + e.message, e)
-                }
-
-            }
-
-            CommonActivityUtils.catchupEventStream(this)
         } catch (e: Exception) {
             Log.e(LOG_TAG, "## onMessageReceivedInternal() failed : " + e.message, e)
         }
 
     }
 
-    fun handleNotificationWithoutSyncingMode(data: Map<String, String>, roomId: String?, session: MXSession?, store: IMXStore?, unreadCount: Int) {
-        val eventStreamService = EventStreamService.getInstance()
-        val event = parseEvent(data)
+    //legacy code
+    private fun ensureEventStreamServiceStarted(session: MXSession?) {
+        // Ensure event stream service is started
+        if (EventStreamService.getInstance() == null) {
+            CommonActivityUtils.startEventStreamService(this)
+        }
 
-        var roomName: String? = data["room_name"]
+        // check if the application has been launched once
+        // the first FCM event could have been triggered whereas the application is not yet launched.
+        // so it is required to create the sessions and to start/resume event stream
+        if (!mCheckLaunched && null != session) {
+            CommonActivityUtils.startEventStreamService(this)
+            mCheckLaunched = true
+        }
+    }
+
+
+    // check if the event was not yet received
+    // a previous catchup might have already retrieved the notified event
+    private fun isEventAlreadyKnown(eventId: String?, roomId: String?): Boolean {
+        if (null != eventId && null != roomId) {
+            try {
+                val sessions = Matrix.getInstance(applicationContext).sessions
+
+                if (null != sessions && !sessions.isEmpty()) {
+                    for (session in sessions) {
+                        if (session.dataHandler?.store?.isReady == true) {
+                            session.dataHandler.store?.getEvent(eventId, roomId)?.let {
+                                Log.e(LOG_TAG, "## onMessageReceivedInternal() : ignore the event " + eventId
+                                        + " in room " + roomId + " because it is already known")
+                                return true
+                            }
+                        }
+                    }
+                }
+            } catch (e: Exception) {
+                Log.e(LOG_TAG, "## onMessageReceivedInternal() : failed to check if the event was already defined " + e.message, e)
+            }
+
+        }
+        return false
+    }
+
+    private fun handleNotificationWithoutSyncingMode(data: Map<String, String>, session: MXSession?) {
+
+        if (session == null) {
+            Log.e(LOG_TAG, "VectorFirebaseMessagingService: handleNotificationWithoutSyncingMode cannot find session")
+            return
+        }
+        val notificationDrawerManager = VectorApp.getInstance().notificationDrawerManager
+
+        // The Matrix event ID of the event being notified about.
+        // This is required if the notification is about a particular Matrix event.
+        // It may be omitted for notifications that only contain updated badge counts.
+        // This ID can and should be used to detect duplicate notification requests.
+        val eventId = data["event_id"] ?: return //Just ignore
+
+
+        val eventType = data["type"]
+        if (eventType == null) {
+            //Just add a generic unknown event
+            val simpleNotifiableEvent = SimpleNotifiableEvent(eventId,
+                    true, //It's an issue in this case, all event will bing even if expected to be silent.
+                    title = "New Event",
+                    description = "",
+                    type = null,
+                    timestamp = System.currentTimeMillis(),
+                    soundName = BingRule.ACTION_VALUE_DEFAULT,
+                    isPushGatewayEvent = true
+            )
+            notificationDrawerManager.onNotifiableEventReceived(simpleNotifiableEvent, session?.myUserId
+                    ?: "", session?.myUser?.displayname)
+            notificationDrawerManager.refreshNotificationDrawer()
+
+            return
+        } else {
+
+            val event = parseEvent(data)
+            if (event?.roomId == null) {
+                //unsupported event
+                Log.e(LOG_TAG, "VectorFirebaseMessagingService: Received an event with no room id")
+                return
+            } else {
+
+                var notifiableEvent = notifiableEventResolver.resolveEvent(event, null, session?.fulfillRule(event), session)
+
+                if (notifiableEvent == null) {
+                    Log.e(LOG_TAG, "VectorFirebaseMessagingService: Unsupported notifiable event ${eventId}")
+                } else {
+
+
+                    if (notifiableEvent is NotifiableMessageEvent) {
+                        if (TextUtils.isEmpty(notifiableEvent.senderName)) {
+                            notifiableEvent.senderName = data["sender_display_name"] ?: data["sender"] ?: ""
+                        }
+                        if (TextUtils.isEmpty(notifiableEvent.roomName)) {
+                            notifiableEvent.roomName = findRoomNameBestEffort(data, session) ?: ""
+                        }
+                    }
+
+                    notifiableEvent.isPushGatewayEvent = true
+                    notificationDrawerManager.onNotifiableEventReceived(notifiableEvent, session?.myUserId
+                            ?: "", session?.myUser?.displayname)
+                    notificationDrawerManager.refreshNotificationDrawer()
+                }
+
+
+            }
+
+        }
+    }
+
+    private fun findRoomNameBestEffort(data: Map<String, String>, session: MXSession?): String? {
+        var roomName: String? = data?.get("room_name")
+        val roomId = data?.get("room_id")
         if (null == roomName && null != roomId) {
             // Try to get the room name from our store
-            if (null != session && store != null && store.isReady) {
-                val room = store.getRoom(roomId)
-                if (null != room) {
-                    roomName = room.getRoomDisplayName(this)
-                }
+            if (session?.dataHandler?.store?.isReady == true) {
+                val room = session.dataHandler.getRoom(roomId)
+                roomName = room?.getRoomDisplayName(this)
             }
         }
-//        VectorApp.getInstance().notificationDrawerManager.onNotifiableEventReceived()
-        Log.i(LOG_TAG, "## onMessageReceivedInternal() : the background sync is disabled with eventStreamService " + eventStreamService!!)
+        return roomName
+    }
 
-        EventStreamService.onStaticNotifiedEvent(applicationContext, event, roomName, data["sender_display_name"], unreadCount)
+    private fun findSenderDisplayNameNameBestEffort(data: Map<String, String>, session: MXSession?, store: IMXStore?): String? {
+        var roomName: String? = data?.get("room_name")
+        val roomId = data?.get("room_id")
+        if (null == roomName && null != roomId) {
+            // Try to get the room name from our store
+            if (store?.isReady == true) {
+                val room = store.getRoom(roomId)
+                roomName = room?.getRoomDisplayName(this)
+            }
+        }
+        return roomName
     }
 
     /**
@@ -211,6 +290,7 @@ class VectorFirebaseMessagingService : FirebaseMessagingService() {
             event.sender = data["sender"]
             event.roomId = data["room_id"]
             event.setType(data["type"])
+            event.originServerTs = System.currentTimeMillis()
 
             if (data.containsKey("content")) {
                 event.updateContent(JsonParser().parse(data["content"]).asJsonObject)

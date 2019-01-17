@@ -66,7 +66,27 @@ class NotificationDrawerManager(val context: Context) {
         Log.d(LOG_TAG, "%%%%%%%% onNotifiableEventReceived ${notifiableEvent}")
         synchronized(this) {
             myUserDisplayName = userDisplayName ?: userId
-            eventList.add(notifiableEvent)
+            val existing = eventList.filter { it.eventId == notifiableEvent.eventId }.firstOrNull()
+            if (existing != null) {
+                if (existing.isPushGatewayEvent) {
+                    //Use the event coming from the event stream as it may contains more info than
+                    //the fcm one (like type/content/clear text)
+                    // In this case the message has already been notified, and might have done some noise
+                    // So we want the notification to be updated even if it has already been displayed
+                    // But it should make no noise (e.g when an encrypted message from FCM should be
+                    // update with clear text after a sync)
+                    notifiableEvent.hasBeenDisplayed = false
+                    notifiableEvent.noisy = false
+                    eventList.remove(existing)
+                    eventList.add(notifiableEvent)
+
+                } else {
+                    //keep the existing one, do not replace
+                }
+            } else {
+                eventList.add(notifiableEvent)
+            }
+
         }
     }
 
@@ -123,20 +143,24 @@ class NotificationDrawerManager(val context: Context) {
 
             //group events by room to create a single MessagingStyle notif
             val roomIdToEventMap: MutableMap<String, ArrayList<NotifiableMessageEvent>> = HashMap()
+            val simpleEvents: ArrayList<NotifiableEvent> = ArrayList()
             var notifications: ArrayList<Notification> = ArrayList()
 
             for (event in eventList) {
                 if (event is NotifiableMessageEvent) {
                     val roomId = event.roomId
-                    if (!shouldIgnoreEventInRoom(roomId)) {
-                        val roomId = roomId
-                        var roomEvents = roomIdToEventMap[roomId]
-                        if (roomEvents == null) {
-                            roomEvents = ArrayList()
-                            roomIdToEventMap[roomId] = roomEvents
+                    if (event is NotifiableMessageEvent) {
+                        if (!shouldIgnoreMessageEventInRoom(roomId)) {
+                            var roomEvents = roomIdToEventMap[roomId]
+                            if (roomEvents == null) {
+                                roomEvents = ArrayList()
+                                roomIdToEventMap[roomId] = roomEvents
+                            }
+                            roomEvents.add(event)
                         }
-                        roomEvents.add(event)
                     }
+                } else {
+                    simpleEvents.add(event)
                 }
             }
 
@@ -156,7 +180,7 @@ class NotificationDrawerManager(val context: Context) {
                     style.conversationTitle = roomName
                 }
 
-                var largeBitmap = getRoomBitmap(events)
+                val largeBitmap = getRoomBitmap(events)
 
 
                 for (event in events) {
@@ -188,7 +212,22 @@ class NotificationDrawerManager(val context: Context) {
                     hasNewEvent = true
                     summaryIsNoisy = summaryIsNoisy || roomGroup.shouldBing
                 } else {
-                    Log.d(LOG_TAG, "%%%%%%%% REFRESH NOTIFICATION DRAWER ${roomId} is up to date")
+                    Log.d(LOG_TAG, "%%%%%%%% REFRESH NOTIFICATION DRAWER $roomId is up to date")
+                }
+            }
+
+
+            //Handle simple events
+            for (event in simpleEvents) {
+                //We build a simple event
+                if (!event.hasBeenDisplayed) {
+                    NotificationUtils.buildSimpleEventNotification(context, event, null)?.let {
+                        notifications.add(it)
+                        NotificationUtils.showNotificationMessage(context, event.eventId, ROOM_EVENT_NOTIFICATION_ID, it)
+                        event.hasBeenDisplayed = true //we can consider it as displayed
+                        hasNewEvent = true
+                        summaryIsNoisy = summaryIsNoisy || event.noisy
+                    }
                 }
             }
 
@@ -206,16 +245,16 @@ class NotificationDrawerManager(val context: Context) {
             // To ensure the best experience on all devices and versions, always include a group summary when you create a group
             // https://developer.android.com/training/notify-user/group
 
-            if (roomIdToEventMap.isEmpty()) {
+            if (notifications.isEmpty()) {
                 NotificationUtils.cancelNotificationMessage(context, null, SUMMARY_NOTIFICATION_ID)
             } else {
-                summaryInboxStyle.setBigContentTitle("${eventList.size} notifications")
+                val nbEvents = notifications.size
+                summaryInboxStyle.setBigContentTitle("$nbEvents notifications")
                 NotificationUtils.buildSummaryListNotification(
                         context,
-                        summaryInboxStyle, "${eventList.size} notifications",
+                        summaryInboxStyle, "$nbEvents notifications",
                         noisy = hasNewEvent && summaryIsNoisy
                 )?.let {
-                    notifications.add(it)
                     NotificationUtils.showNotificationMessage(context, null, SUMMARY_NOTIFICATION_ID, it)
                 }
             }
@@ -242,7 +281,7 @@ class NotificationDrawerManager(val context: Context) {
         return null
     }
 
-    private fun shouldIgnoreEventInRoom(roomId: String?): Boolean {
+    private fun shouldIgnoreMessageEventInRoom(roomId: String?): Boolean {
         return roomId != null && roomId == currentRoomId
     }
 
@@ -290,6 +329,7 @@ class NotificationDrawerManager(val context: Context) {
     companion object {
         private const val SUMMARY_NOTIFICATION_ID = 0
         private const val ROOM_MESSAGES_NOTIFICATION_ID = 1
+        private const val ROOM_EVENT_NOTIFICATION_ID = 2
 
         private const val ROOMS_NOTIFICATIONS_FILE_NAME = "im.vector.notifications.cache"
         private val LOG_TAG = NotificationDrawerManager::class.java.simpleName

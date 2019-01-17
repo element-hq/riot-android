@@ -853,6 +853,70 @@ object NotificationUtils {
         return builder.build()
     }
 
+
+    fun buildSimpleEventNotification(context: Context, simpleNotifiableEvent: NotifiableEvent, largeIcon: Bitmap?): Notification? {
+
+        val accentColor = ThemeUtils.getColor(context, R.attr.colorAccent)
+        // Build the pending intent for when the notification is clicked
+//        val openRoomIntent = buildOpenRoomIntent(context, roomInfo.roomId)
+        val smallIcon = if (simpleNotifiableEvent.noisy) R.drawable.icon_notif_important else R.drawable.logo_transparent
+
+        val builder = NotificationCompat.Builder(context, if (simpleNotifiableEvent.noisy) NOISY_NOTIFICATION_CHANNEL_ID else SILENT_NOTIFICATION_CHANNEL_ID)
+        builder.apply {
+            setContentTitle(context.getString(R.string.riot_app_name))
+            setContentText(simpleNotifiableEvent.description)
+            //setSubText(roomInfo.roomDisplayName)
+            //setNumber(messageSytle.messages.size)
+            setGroup(context.getString(R.string.riot_app_name))
+            setGroupAlertBehavior(NotificationCompat.GROUP_ALERT_SUMMARY)
+            setSmallIcon(smallIcon)
+            color = accentColor
+//            if (!roomInfo.hasSmartReplyError) {
+//                buildQuickReplyIntent(context, roomInfo.roomId, senderDisplayNameForReplyCompat)?.let { replyPendingIntent ->
+//                    var replyLabel: String = context.getString(R.string.action_quick_reply)
+//                    var remoteInput: RemoteInput = RemoteInput.Builder(ReplyNotificationBroadcastReceiver.KEY_TEXT_REPLY).run {
+//                        setLabel(replyLabel)
+//                        build()
+//                    }
+//                    NotificationCompat.Action.Builder(R.drawable.vector_notification_quick_reply,
+//                            context.getString(R.string.action_quick_reply), replyPendingIntent)
+//                            .addRemoteInput(remoteInput)
+//                            .build()?.let {
+//                                addAction(it)
+//                            }
+//                }
+//            }
+//
+//            if (openRoomIntent != null) {
+//                setContentIntent(openRoomIntent)
+//            }
+
+            if (largeIcon != null) {
+                setLargeIcon(largeIcon)
+            }
+
+            if (simpleNotifiableEvent.noisy) {
+                //Compat
+                priority = NotificationCompat.PRIORITY_DEFAULT
+                PreferencesManager.getNotificationRingTone(context)?.let {
+                    setSound(it)
+                }
+                setLights(accentColor, 500, 500)
+            } else {
+                priority = NotificationCompat.PRIORITY_LOW
+            }
+            setAutoCancel(true)
+//            val intent = Intent(context, ReplyNotificationBroadcastReceiver::class.java)
+//            intent.putExtra(ReplyNotificationBroadcastReceiver.KEY_ROOM_ID,roomInfo.roomId)
+//            intent.action = DISMISS_ROOM_NOTIF_ACTION
+//            val pendingIntent = PendingIntent.getBroadcast(context.applicationContext,
+//                    System.currentTimeMillis().toInt(), intent, PendingIntent.FLAG_UPDATE_CURRENT)
+//            setDeleteIntent(pendingIntent)
+        }
+        return builder.build()
+    }
+
+
     private fun buildOpenRoomIntent(context: Context, roomId: String): PendingIntent? {
         val roomIntentTap = Intent(context, VectorRoomActivity::class.java)
         roomIntentTap.putExtra(VectorRoomActivity.EXTRA_ROOM_ID, roomId)
