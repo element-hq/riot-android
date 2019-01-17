@@ -380,57 +380,57 @@ object NotificationUtils {
      * @param builder            the notification builder
      * @param roomsNotifications the rooms notifications
      */
-    @Deprecated("will be removed")
-    private fun addTextStyleWithSeveralRooms(context: Context,
-                                             builder: NotificationCompat.Builder,
-                                             roomsNotifications: RoomsNotifications) {
-        val inboxStyle = NotificationCompat.InboxStyle()
-
-
-        for (roomNotifications in roomsNotifications.mRoomNotifications) {
-            val notifiedLine = SpannableString(roomNotifications.mMessagesSummary)
-            notifiedLine.setSpan(StyleSpan(android.graphics.Typeface.BOLD),
-                    0, roomNotifications.mMessageHeader.length, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
-            inboxStyle.addLine(notifiedLine)
-        }
-
-        inboxStyle.setBigContentTitle(context.getString(R.string.riot_app_name))
-        inboxStyle.setSummaryText(roomsNotifications.mSummaryText)
-        builder.setStyle(inboxStyle)
-
-        val stackBuilderTap = TaskStackBuilder.create(context)
-        val roomIntentTap: Intent?
-
-        // add the home page the activity stack
-        stackBuilderTap.addNextIntentWithParentStack(Intent(context, VectorHomeActivity::class.java))
-
-        if (roomsNotifications.mIsInvitationEvent) {
-            // for invitation the room preview must be displayed
-            roomIntentTap = CommonActivityUtils.buildIntentPreviewRoom(roomsNotifications.mSessionId,
-                    roomsNotifications.mRoomId, context, VectorFakeRoomPreviewActivity::class.java)
-        } else {
-            roomIntentTap = Intent(context, VectorRoomActivity::class.java)
-            roomIntentTap.putExtra(VectorRoomActivity.EXTRA_ROOM_ID, roomsNotifications.mRoomId)
-        }
-
-        roomIntentTap!!.action = TAP_TO_VIEW_ACTION
-        stackBuilderTap.addNextIntent(roomIntentTap)
-        builder.setContentIntent(stackBuilderTap.getPendingIntent(System.currentTimeMillis().toInt(), 0))
-
-        // offer to open the rooms list
-        run {
-            val openIntentTap = Intent(context, VectorHomeActivity::class.java)
-
-            // Recreate the back stack
-            val viewAllTask = TaskStackBuilder.create(context)
-                    .addNextIntent(openIntentTap)
-
-            builder.addAction(
-                    R.drawable.ic_home_black_24dp,
-                    context.getString(R.string.bottom_action_home),
-                    viewAllTask.getPendingIntent(0, PendingIntent.FLAG_UPDATE_CURRENT))
-        }
-    }
+//    @Deprecated("will be removed")
+//    private fun addTextStyleWithSeveralRooms(context: Context,
+//                                             builder: NotificationCompat.Builder,
+//                                             roomsNotifications: RoomsNotifications) {
+//        val inboxStyle = NotificationCompat.InboxStyle()
+//
+//
+//        for (roomNotifications in roomsNotifications.mRoomNotifications) {
+//            val notifiedLine = SpannableString(roomNotifications.mMessagesSummary)
+//            notifiedLine.setSpan(StyleSpan(android.graphics.Typeface.BOLD),
+//                    0, roomNotifications.mMessageHeader.length, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
+//            inboxStyle.addLine(notifiedLine)
+//        }
+//
+//        inboxStyle.setBigContentTitle(context.getString(R.string.riot_app_name))
+//        inboxStyle.setSummaryText(roomsNotifications.mSummaryText)
+//        builder.setStyle(inboxStyle)
+//
+//        val stackBuilderTap = TaskStackBuilder.create(context)
+//        val roomIntentTap: Intent?
+//
+//        // add the home page the activity stack
+//        stackBuilderTap.addNextIntentWithParentStack(Intent(context, VectorHomeActivity::class.java))
+//
+//        if (roomsNotifications.mIsInvitationEvent) {
+//            // for invitation the room preview must be displayed
+//            roomIntentTap = CommonActivityUtils.buildIntentPreviewRoom(roomsNotifications.mSessionId,
+//                    roomsNotifications.mRoomId, context, VectorFakeRoomPreviewActivity::class.java)
+//        } else {
+//            roomIntentTap = Intent(context, VectorRoomActivity::class.java)
+//            roomIntentTap.putExtra(VectorRoomActivity.EXTRA_ROOM_ID, roomsNotifications.mRoomId)
+//        }
+//
+//        roomIntentTap!!.action = TAP_TO_VIEW_ACTION
+//        stackBuilderTap.addNextIntent(roomIntentTap)
+//        builder.setContentIntent(stackBuilderTap.getPendingIntent(System.currentTimeMillis().toInt(), 0))
+//
+//        // offer to open the rooms list
+//        run {
+//            val openIntentTap = Intent(context, VectorHomeActivity::class.java)
+//
+//            // Recreate the back stack
+//            val viewAllTask = TaskStackBuilder.create(context)
+//                    .addNextIntent(openIntentTap)
+//
+//            builder.addAction(
+//                    R.drawable.ic_home_black_24dp,
+//                    context.getString(R.string.bottom_action_home),
+//                    viewAllTask.getPendingIntent(0, PendingIntent.FLAG_UPDATE_CURRENT))
+//        }
+//    }
 
     /**
      * Add a text style for a bunch of notified events.
@@ -454,126 +454,126 @@ object NotificationUtils {
      * @param builder            the notification builder
      * @param roomsNotifications the rooms notifications
      */
-    @Deprecated("will be removed")
-    private fun addTextStyle(context: Context,
-                             builder: NotificationCompat.Builder,
-                             roomsNotifications: RoomsNotifications) {
-
-        // nothing to do
-        if (0 == roomsNotifications.mRoomNotifications.size) {
-            return
-        }
-
-        // when there are several rooms, the text style is not the same
-        if (roomsNotifications.mRoomNotifications.size > 1) {
-            addTextStyleWithSeveralRooms(context, builder, roomsNotifications)
-            return
-        }
-
-        var latestText: SpannableString? = null
-        val inboxStyle = NotificationCompat.InboxStyle()
-
-        for (sequence in roomsNotifications.mReversedMessagesList) {
-            inboxStyle.addLine(SpannableString(sequence))
-        }
-
-        inboxStyle.setBigContentTitle(roomsNotifications.mContentTitle)
-
-        // adapt the notification display to the number of notified messages
-        if (1 == roomsNotifications.mReversedMessagesList.size && null != latestText) {
-            builder.setStyle(NotificationCompat.BigTextStyle().bigText(latestText))
-        } else {
-            if (!TextUtils.isEmpty(roomsNotifications.mSummaryText)) {
-                inboxStyle.setSummaryText(roomsNotifications.mSummaryText)
-            }
-            builder.setStyle(inboxStyle)
-        }
-
-        if (roomsNotifications.mIsInvitationEvent) {
-            run {
-                // offer to type a quick reject button
-                val rejectIntent = JoinRoomActivity.getRejectRoomIntent(context, roomsNotifications.mRoomId, roomsNotifications.mSessionId)
-
-                // the action must be unique else the parameters are ignored
-                rejectIntent.action = REJECT_ACTION + System.currentTimeMillis().toInt()
-                val pIntent = PendingIntent.getActivity(context, 0, rejectIntent, 0)
-                builder.addAction(
-                        R.drawable.vector_notification_reject_invitation,
-                        context.getString(R.string.reject),
-                        pIntent)
-            }
-
-            run {
-                // offer to type a quick accept button
-                val joinIntent = JoinRoomActivity.getJoinRoomIntent(context, roomsNotifications.mRoomId, roomsNotifications.mSessionId)
-
-                // the action must be unique else the parameters are ignored
-                joinIntent.action = JOIN_ACTION + System.currentTimeMillis().toInt()
-                val pIntent = PendingIntent.getActivity(context, 0, joinIntent, 0)
-                builder.addAction(
-                        R.drawable.vector_notification_accept_invitation,
-                        context.getString(R.string.join),
-                        pIntent)
-            }
-        } else if (!LockScreenActivity.isDisplayingALockScreenActivity()) {
-            // (do not offer to quick respond if the user did not dismiss the previous one)
-
-            // offer to type a quick answer (i.e. without launching the application)
-            val quickReplyIntent = Intent(context, LockScreenActivity::class.java)
-            quickReplyIntent.putExtra(LockScreenActivity.EXTRA_ROOM_ID, roomsNotifications.mRoomId)
-            quickReplyIntent.putExtra(LockScreenActivity.EXTRA_SENDER_NAME, roomsNotifications.mSenderName)
-            quickReplyIntent.putExtra(LockScreenActivity.EXTRA_MESSAGE_BODY, roomsNotifications.mQuickReplyBody)
-
-            // the action must be unique else the parameters are ignored
-            quickReplyIntent.action = QUICK_LAUNCH_ACTION + System.currentTimeMillis().toInt()
-            val pIntent = PendingIntent.getActivity(context, 0, quickReplyIntent, 0)
-            builder.addAction(
-                    R.drawable.vector_notification_quick_reply,
-                    context.getString(R.string.action_quick_reply),
-                    pIntent)
-        }
-
-        // Build the pending intent for when the notification is clicked
-        val roomIntentTap: Intent
-
-        if (roomsNotifications.mIsInvitationEvent) {
-            // for invitation the room preview must be displayed
-            roomIntentTap = CommonActivityUtils.buildIntentPreviewRoom(roomsNotifications.mSessionId,
-                    roomsNotifications.mRoomId, context, VectorFakeRoomPreviewActivity::class.java)
-        } else {
-            roomIntentTap = Intent(context, VectorRoomActivity::class.java)
-            roomIntentTap.putExtra(VectorRoomActivity.EXTRA_ROOM_ID, roomsNotifications.mRoomId)
-        }
-        // the action must be unique else the parameters are ignored
-        roomIntentTap.action = TAP_TO_VIEW_ACTION + System.currentTimeMillis().toInt()
-
-        // Recreate the back stack
-        val stackBuilderTap = TaskStackBuilder.create(context)
-                .addNextIntentWithParentStack(Intent(context, VectorHomeActivity::class.java))
-                .addNextIntent(roomIntentTap)
-
-        builder.setContentIntent(stackBuilderTap.getPendingIntent(0, PendingIntent.FLAG_UPDATE_CURRENT))
-
-        builder.addAction(
-                R.drawable.vector_notification_open,
-                context.getString(R.string.action_open),
-                stackBuilderTap.getPendingIntent(0, PendingIntent.FLAG_UPDATE_CURRENT))
-
-        // wearable
-        if (!roomsNotifications.mIsInvitationEvent) {
-            try {
-                val wearableExtender = NotificationCompat.WearableExtender()
-                val action = NotificationCompat.Action.Builder(R.drawable.logo_transparent,
-                        roomsNotifications.mWearableMessage,
-                        stackBuilderTap.getPendingIntent(0, PendingIntent.FLAG_UPDATE_CURRENT))
-                        .build()
-                wearableExtender.addAction(action)
-                builder.extend(wearableExtender)
-            } catch (e: Exception) {
-                Log.e(LOG_TAG, "## addTextStyleWithSeveralRooms() : WearableExtender failed " + e.message, e)
-            }
-        }
-    }
+//    @Deprecated("will be removed")
+//    private fun addTextStyle(context: Context,
+//                             builder: NotificationCompat.Builder,
+//                             roomsNotifications: RoomsNotifications) {
+//
+//        // nothing to do
+//        if (0 == roomsNotifications.mRoomNotifications.size) {
+//            return
+//        }
+//
+//        // when there are several rooms, the text style is not the same
+//        if (roomsNotifications.mRoomNotifications.size > 1) {
+//            addTextStyleWithSeveralRooms(context, builder, roomsNotifications)
+//            return
+//        }
+//
+//        var latestText: SpannableString? = null
+//        val inboxStyle = NotificationCompat.InboxStyle()
+//
+//        for (sequence in roomsNotifications.mReversedMessagesList) {
+//            inboxStyle.addLine(SpannableString(sequence))
+//        }
+//
+//        inboxStyle.setBigContentTitle(roomsNotifications.mContentTitle)
+//
+//        // adapt the notification display to the number of notified messages
+//        if (1 == roomsNotifications.mReversedMessagesList.size && null != latestText) {
+//            builder.setStyle(NotificationCompat.BigTextStyle().bigText(latestText))
+//        } else {
+//            if (!TextUtils.isEmpty(roomsNotifications.mSummaryText)) {
+//                inboxStyle.setSummaryText(roomsNotifications.mSummaryText)
+//            }
+//            builder.setStyle(inboxStyle)
+//        }
+//
+//        if (roomsNotifications.mIsInvitationEvent) {
+//            run {
+//                // offer to type a quick reject button
+//                val rejectIntent = JoinRoomActivity.getRejectRoomIntent(context, roomsNotifications.mRoomId, roomsNotifications.mSessionId)
+//
+//                // the action must be unique else the parameters are ignored
+//                rejectIntent.action = REJECT_ACTION + System.currentTimeMillis().toInt()
+//                val pIntent = PendingIntent.getActivity(context, 0, rejectIntent, 0)
+//                builder.addAction(
+//                        R.drawable.vector_notification_reject_invitation,
+//                        context.getString(R.string.reject),
+//                        pIntent)
+//            }
+//
+//            run {
+//                // offer to type a quick accept button
+//                val joinIntent = JoinRoomActivity.getJoinRoomIntent(context, roomsNotifications.mRoomId, roomsNotifications.mSessionId)
+//
+//                // the action must be unique else the parameters are ignored
+//                joinIntent.action = JOIN_ACTION + System.currentTimeMillis().toInt()
+//                val pIntent = PendingIntent.getActivity(context, 0, joinIntent, 0)
+//                builder.addAction(
+//                        R.drawable.vector_notification_accept_invitation,
+//                        context.getString(R.string.join),
+//                        pIntent)
+//            }
+//        } else if (!LockScreenActivity.isDisplayingALockScreenActivity()) {
+//            // (do not offer to quick respond if the user did not dismiss the previous one)
+//
+//            // offer to type a quick answer (i.e. without launching the application)
+//            val quickReplyIntent = Intent(context, LockScreenActivity::class.java)
+//            quickReplyIntent.putExtra(LockScreenActivity.EXTRA_ROOM_ID, roomsNotifications.mRoomId)
+//            quickReplyIntent.putExtra(LockScreenActivity.EXTRA_SENDER_NAME, roomsNotifications.mSenderName)
+//            quickReplyIntent.putExtra(LockScreenActivity.EXTRA_MESSAGE_BODY, roomsNotifications.mQuickReplyBody)
+//
+//            // the action must be unique else the parameters are ignored
+//            quickReplyIntent.action = QUICK_LAUNCH_ACTION + System.currentTimeMillis().toInt()
+//            val pIntent = PendingIntent.getActivity(context, 0, quickReplyIntent, 0)
+//            builder.addAction(
+//                    R.drawable.vector_notification_quick_reply,
+//                    context.getString(R.string.action_quick_reply),
+//                    pIntent)
+//        }
+//
+//        // Build the pending intent for when the notification is clicked
+//        val roomIntentTap: Intent
+//
+//        if (roomsNotifications.mIsInvitationEvent) {
+//            // for invitation the room preview must be displayed
+//            roomIntentTap = CommonActivityUtils.buildIntentPreviewRoom(roomsNotifications.mSessionId,
+//                    roomsNotifications.mRoomId, context, VectorFakeRoomPreviewActivity::class.java)
+//        } else {
+//            roomIntentTap = Intent(context, VectorRoomActivity::class.java)
+//            roomIntentTap.putExtra(VectorRoomActivity.EXTRA_ROOM_ID, roomsNotifications.mRoomId)
+//        }
+//        // the action must be unique else the parameters are ignored
+//        roomIntentTap.action = TAP_TO_VIEW_ACTION + System.currentTimeMillis().toInt()
+//
+//        // Recreate the back stack
+//        val stackBuilderTap = TaskStackBuilder.create(context)
+//                .addNextIntentWithParentStack(Intent(context, VectorHomeActivity::class.java))
+//                .addNextIntent(roomIntentTap)
+//
+//        builder.setContentIntent(stackBuilderTap.getPendingIntent(0, PendingIntent.FLAG_UPDATE_CURRENT))
+//
+//        builder.addAction(
+//                R.drawable.vector_notification_open,
+//                context.getString(R.string.action_open),
+//                stackBuilderTap.getPendingIntent(0, PendingIntent.FLAG_UPDATE_CURRENT))
+//
+//        // wearable
+//        if (!roomsNotifications.mIsInvitationEvent) {
+//            try {
+//                val wearableExtender = NotificationCompat.WearableExtender()
+//                val action = NotificationCompat.Action.Builder(R.drawable.logo_transparent,
+//                        roomsNotifications.mWearableMessage,
+//                        stackBuilderTap.getPendingIntent(0, PendingIntent.FLAG_UPDATE_CURRENT))
+//                        .build()
+//                wearableExtender.addAction(action)
+//                builder.extend(wearableExtender)
+//            } catch (e: Exception) {
+//                Log.e(LOG_TAG, "## addTextStyleWithSeveralRooms() : WearableExtender failed " + e.message, e)
+//            }
+//        }
+//    }
 
     /**
      * Add the notification sound.
@@ -748,47 +748,47 @@ object NotificationUtils {
      * @return the notification
      */
     @Deprecated("will be removed")
-    fun buildMessagesListNotification(context: Context, messagesStrings: List<CharSequence>, bingRule: BingRule): Notification? {
-        try {
-
-            val builder = NotificationCompat.Builder(context, SILENT_NOTIFICATION_CHANNEL_ID)
-                    .setWhen(System.currentTimeMillis())
-                    .setContentTitle(context.getString(R.string.riot_app_name))
-                    .setContentText(messagesStrings[0])
-                    .setSmallIcon(R.drawable.logo_transparent)
-                    .setGroup(context.getString(R.string.riot_app_name))
-                    .setGroupSummary(true)
-
-            val inboxStyle = NotificationCompat.InboxStyle()
-
-            for (i in 0 until Math.min(RoomsNotifications.MAX_NUMBER_NOTIFICATION_LINES, messagesStrings.size)) {
-                inboxStyle.addLine(messagesStrings[i])
-            }
-
-            inboxStyle.setBigContentTitle(context.getString(R.string.riot_app_name))
-                    .setSummaryText(
-                            context.resources
-                                    .getQuantityString(R.plurals.notification_unread_notified_messages, messagesStrings.size, messagesStrings.size))
-
-            builder.setStyle(inboxStyle)
-
-            // open the home activity
-            val stackBuilderTap = TaskStackBuilder.create(context)
-            val roomIntentTap = Intent(context, VectorHomeActivity::class.java)
-            roomIntentTap.action = TAP_TO_VIEW_ACTION + System.currentTimeMillis().toInt()
-            stackBuilderTap.addNextIntent(roomIntentTap)
-
-            builder.setContentIntent(stackBuilderTap.getPendingIntent(0, PendingIntent.FLAG_UPDATE_CURRENT))
-
-            manageNotificationSound(context, builder, false, BingRule.isDefaultNotificationSound(bingRule.notificationSound))
-
-            return builder.build()
-        } catch (e: Exception) {
-            Log.e(LOG_TAG, "## buildMessagesListNotification() : failed" + e.message, e)
-        }
-
-        return null
-    }
+//    fun buildMessagesListNotification(context: Context, messagesStrings: List<CharSequence>, bingRule: BingRule): Notification? {
+//        try {
+//
+//            val builder = NotificationCompat.Builder(context, SILENT_NOTIFICATION_CHANNEL_ID)
+//                    .setWhen(System.currentTimeMillis())
+//                    .setContentTitle(context.getString(R.string.riot_app_name))
+//                    .setContentText(messagesStrings[0])
+//                    .setSmallIcon(R.drawable.logo_transparent)
+//                    .setGroup(context.getString(R.string.riot_app_name))
+//                    .setGroupSummary(true)
+//
+//            val inboxStyle = NotificationCompat.InboxStyle()
+//
+//            for (i in 0 until Math.min(RoomsNotifications.MAX_NUMBER_NOTIFICATION_LINES, messagesStrings.size)) {
+//                inboxStyle.addLine(messagesStrings[i])
+//            }
+//
+//            inboxStyle.setBigContentTitle(context.getString(R.string.riot_app_name))
+//                    .setSummaryText(
+//                            context.resources
+//                                    .getQuantityString(R.plurals.notification_unread_notified_messages, messagesStrings.size, messagesStrings.size))
+//
+//            builder.setStyle(inboxStyle)
+//
+//            // open the home activity
+//            val stackBuilderTap = TaskStackBuilder.create(context)
+//            val roomIntentTap = Intent(context, VectorHomeActivity::class.java)
+//            roomIntentTap.action = TAP_TO_VIEW_ACTION + System.currentTimeMillis().toInt()
+//            stackBuilderTap.addNextIntent(roomIntentTap)
+//
+//            builder.setContentIntent(stackBuilderTap.getPendingIntent(0, PendingIntent.FLAG_UPDATE_CURRENT))
+//
+//            manageNotificationSound(context, builder, false, BingRule.isDefaultNotificationSound(bingRule.notificationSound))
+//
+//            return builder.build()
+//        } catch (e: Exception) {
+//            Log.e(LOG_TAG, "## buildMessagesListNotification() : failed" + e.message, e)
+//        }
+//
+//        return null
+//    }
 
     fun buildMessagesListNotification(context: Context, messageSytle: NotificationCompat.MessagingStyle, roomInfo: RoomEventGroupInfo, largeIcon: Bitmap?, senderDisplayNameForReplyCompat: String?): Notification? {
 

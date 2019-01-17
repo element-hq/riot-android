@@ -31,10 +31,7 @@ import android.os.IBinder;
 import android.os.PowerManager;
 import android.os.SystemClock;
 import android.support.annotation.Nullable;
-import android.text.Spannable;
-import android.text.SpannableString;
 import android.text.TextUtils;
-import android.text.style.StyleSpan;
 import android.view.WindowManager;
 import android.widget.Toast;
 
@@ -50,7 +47,6 @@ import org.matrix.androidsdk.listeners.MXEventListener;
 import org.matrix.androidsdk.rest.model.Event;
 import org.matrix.androidsdk.rest.model.bingrules.BingRule;
 import org.matrix.androidsdk.util.BingRulesManager;
-import org.matrix.androidsdk.util.EventDisplay;
 import org.matrix.androidsdk.util.Log;
 
 import java.util.ArrayList;
@@ -66,11 +62,9 @@ import im.vector.VectorApp;
 import im.vector.notifications.NotifiableEvent;
 import im.vector.notifications.NotifiableEventResolver;
 import im.vector.notifications.NotificationUtils;
-import im.vector.notifications.RoomsNotifications;
 import im.vector.push.PushManager;
 import im.vector.tools.VectorUncaughtExceptionHandler;
 import im.vector.util.CallsManager;
-import im.vector.util.RiotEventDisplay;
 import im.vector.util.SystemUtilsKt;
 
 /**
@@ -1259,68 +1253,68 @@ public class EventStreamService extends Service {
      * @param senderDisplayName   the sender display name
      * @param unreadMessagesCount the unread messages count
      */
-    @Deprecated
-    public static void onStaticNotifiedEvent(Context context,
-                                             @Nullable Event event,
-                                             String roomName,
-                                             String senderDisplayName,
-                                             int unreadMessagesCount) {
-        if (null != event && !mBackgroundNotificationEventIds.contains(event.eventId)) {
-            mBackgroundNotificationEventIds.add(event.eventId);
-            String header = (TextUtils.isEmpty(roomName) ? "" : roomName + ": ");
-            String text;
-
-            if (null == event.content) {
-                // Check whether the room id is available and a room name has been retrieved
-                if (null != event.roomId && !TextUtils.isEmpty(header)) {
-                    // Check whether the previous notification (if any) was from the same room
-                    if (null != mLastBackgroundNotificationRoomId && mLastBackgroundNotificationRoomId.equals(event.roomId)) {
-                        // Remove the last notified line to replace it
-                        mBackgroundNotificationStrings.remove(0);
-                    } else {
-                        // Reset the current count
-                        mLastBackgroundNotificationUnreadCount = 0;
-                        mLastBackgroundNotificationRoomId = event.roomId;
-                    }
-                    mLastBackgroundNotificationUnreadCount++;
-                } else {
-                    // Reset the current notification string, only one notification will be displayed.
-                    mBackgroundNotificationStrings.clear();
-                    // Reset the unread count by considering the size of the event ids array.
-                    mLastBackgroundNotificationUnreadCount = mBackgroundNotificationEventIds.size();
-                }
-                text = context.getResources().getQuantityString(R.plurals.room_new_messages_notification,
-                        mLastBackgroundNotificationUnreadCount, mLastBackgroundNotificationUnreadCount);
-            } else {
-                // Add the potential sender name in the header
-                String senderName = (TextUtils.isEmpty(senderDisplayName) ? event.sender : senderDisplayName);
-                if (!TextUtils.isEmpty(senderName) && !senderName.equalsIgnoreCase(roomName)) {
-                    header += senderName + " ";
-                }
-
-                if (event.isEncrypted()) {
-                    text = context.getString(R.string.encrypted_message);
-                } else {
-                    EventDisplay eventDisplay = new RiotEventDisplay(context);
-                    eventDisplay.setPrependMessagesWithAuthor(false);
-                    text = eventDisplay.getTextualDisplay(event, null).toString();
-                }
-            }
-
-            if (!TextUtils.isEmpty(text)) {
-                SpannableString notifiedLine = new SpannableString(header + text);
-                notifiedLine.setSpan(new StyleSpan(android.graphics.Typeface.BOLD), 0, header.length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
-
-                mBackgroundNotificationStrings.add(0, notifiedLine);
-                displayMessagesNotificationStatic(context, mBackgroundNotificationStrings, new BingRule(null, null, true, true, true));
-            }
-        } else if (0 == unreadMessagesCount) {
-            mBackgroundNotificationStrings.clear();
-            mLastBackgroundNotificationUnreadCount = 0;
-            mLastBackgroundNotificationRoomId = null;
-            displayMessagesNotificationStatic(context, null, null);
-        }
-    }
+//    @Deprecated
+//    public static void onStaticNotifiedEvent(Context context,
+//                                             @Nullable Event event,
+//                                             String roomName,
+//                                             String senderDisplayName,
+//                                             int unreadMessagesCount) {
+//        if (null != event && !mBackgroundNotificationEventIds.contains(event.eventId)) {
+//            mBackgroundNotificationEventIds.add(event.eventId);
+//            String header = (TextUtils.isEmpty(roomName) ? "" : roomName + ": ");
+//            String text;
+//
+//            if (null == event.content) {
+//                // Check whether the room id is available and a room name has been retrieved
+//                if (null != event.roomId && !TextUtils.isEmpty(header)) {
+//                    // Check whether the previous notification (if any) was from the same room
+//                    if (null != mLastBackgroundNotificationRoomId && mLastBackgroundNotificationRoomId.equals(event.roomId)) {
+//                        // Remove the last notified line to replace it
+//                        mBackgroundNotificationStrings.remove(0);
+//                    } else {
+//                        // Reset the current count
+//                        mLastBackgroundNotificationUnreadCount = 0;
+//                        mLastBackgroundNotificationRoomId = event.roomId;
+//                    }
+//                    mLastBackgroundNotificationUnreadCount++;
+//                } else {
+//                    // Reset the current notification string, only one notification will be displayed.
+//                    mBackgroundNotificationStrings.clear();
+//                    // Reset the unread count by considering the size of the event ids array.
+//                    mLastBackgroundNotificationUnreadCount = mBackgroundNotificationEventIds.size();
+//                }
+//                text = context.getResources().getQuantityString(R.plurals.room_new_messages_notification,
+//                        mLastBackgroundNotificationUnreadCount, mLastBackgroundNotificationUnreadCount);
+//            } else {
+//                // Add the potential sender name in the header
+//                String senderName = (TextUtils.isEmpty(senderDisplayName) ? event.sender : senderDisplayName);
+//                if (!TextUtils.isEmpty(senderName) && !senderName.equalsIgnoreCase(roomName)) {
+//                    header += senderName + " ";
+//                }
+//
+//                if (event.isEncrypted()) {
+//                    text = context.getString(R.string.encrypted_message);
+//                } else {
+//                    EventDisplay eventDisplay = new RiotEventDisplay(context);
+//                    eventDisplay.setPrependMessagesWithAuthor(false);
+//                    text = eventDisplay.getTextualDisplay(event, null).toString();
+//                }
+//            }
+//
+//            if (!TextUtils.isEmpty(text)) {
+//                SpannableString notifiedLine = new SpannableString(header + text);
+//                notifiedLine.setSpan(new StyleSpan(android.graphics.Typeface.BOLD), 0, header.length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+//
+//                mBackgroundNotificationStrings.add(0, notifiedLine);
+//                displayMessagesNotificationStatic(context, mBackgroundNotificationStrings, new BingRule(null, null, true, true, true));
+//            }
+//        } else if (0 == unreadMessagesCount) {
+//            mBackgroundNotificationStrings.clear();
+//            mLastBackgroundNotificationUnreadCount = 0;
+//            mLastBackgroundNotificationRoomId = null;
+//            displayMessagesNotificationStatic(context, null, null);
+//        }
+//    }
 
     /**
      * Display a list of messages in the messages notification, when the EventStreamService is not started.
@@ -1328,23 +1322,23 @@ public class EventStreamService extends Service {
      * @param messages the messages list, null will hide the messages notification.
      * @param rule     the bing rule to use
      */
-    @Deprecated
-    private static void displayMessagesNotificationStatic(Context context, List<CharSequence> messages, BingRule rule) {
-        if (!Matrix.getInstance(context).getPushManager().areDeviceNotificationsAllowed()
-                || null == messages
-                || messages.isEmpty()) {
-            NotificationUtils.INSTANCE.cancelNotificationMessage(context);
-            RoomsNotifications.deleteCachedRoomNotifications(VectorApp.getInstance());
-        } else {
-            Notification notification = NotificationUtils.INSTANCE.buildMessagesListNotification(context, messages, rule);
-
-            if (null != notification) {
-                NotificationUtils.INSTANCE.showNotificationMessage(context, notification);
-            } else {
-                NotificationUtils.INSTANCE.cancelNotificationMessage(context);
-            }
-        }
-    }
+//    @Deprecated
+//    private static void displayMessagesNotificationStatic(Context context, List<CharSequence> messages, BingRule rule) {
+//        if (!Matrix.getInstance(context).getPushManager().areDeviceNotificationsAllowed()
+//                || null == messages
+//                || messages.isEmpty()) {
+//            NotificationUtils.INSTANCE.cancelNotificationMessage(context);
+//            RoomsNotifications.deleteCachedRoomNotifications(VectorApp.getInstance());
+//        } else {
+//            Notification notification = NotificationUtils.INSTANCE.buildMessagesListNotification(context, messages, rule);
+//
+//            if (null != notification) {
+//                NotificationUtils.INSTANCE.showNotificationMessage(context, notification);
+//            } else {
+//                NotificationUtils.INSTANCE.cancelNotificationMessage(context);
+//            }
+//        }
+//    }
 
     //================================================================================
     // Call notification management
@@ -1375,7 +1369,7 @@ public class EventStreamService extends Service {
             Notification notification = NotificationUtils.INSTANCE.buildIncomingCallNotification(
                     EventStreamService.this,
                     isVideo,
-                    RoomsNotifications.getRoomName(getApplicationContext(), session, room, event),
+                    room.getRoomDisplayName(this)/*RoomsNotifications.getRoomName(getApplicationContext(), session, room, event)*/,
                     session.getMyUserId(),
                     callId);
             setForegroundNotificationState(ForegroundNotificationState.INCOMING_CALL, notification);
