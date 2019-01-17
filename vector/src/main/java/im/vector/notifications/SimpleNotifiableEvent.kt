@@ -15,21 +15,19 @@
  */
 package im.vector.notifications
 
-import java.io.Serializable
+import android.support.v4.app.NotificationCompat
 
-interface NotifiableEvent : Serializable {
-    val eventId: String
-    var noisy: Boolean
-    val title: String
-    val description: String?
-    val type: String?
-    val timestamp: Long
-    //NotificationCompat.VISIBILITY_PUBLIC , VISIBILITY_PRIVATE , VISIBILITY_SECRET
-    var lockScreenVisibility: Int
-    // Compat: Only for android <7, for newer version the sound is defined in the channel
-    var soundName: String?
-    var hasBeenDisplayed: Boolean
-    //Used to know if event should be replaced with the one coming from eventstream
-    var isPushGatewayEvent : Boolean
+data class SimpleNotifiableEvent(
+        override val eventId: String,
+        override var noisy: Boolean,
+        override val title: String,
+        override val description: String,
+        override val type: String?,
+        override val timestamp: Long,
+        override var soundName: String?,
+        override var isPushGatewayEvent : Boolean = false) : NotifiableEvent {
+
+    override var hasBeenDisplayed: Boolean = false
+    override var lockScreenVisibility = NotificationCompat.VISIBILITY_PUBLIC
+
 }
-
