@@ -104,7 +104,6 @@ import butterknife.OnTouch;
 import im.vector.Matrix;
 import im.vector.R;
 import im.vector.VectorApp;
-import im.vector.ViewedRoomTracker;
 import im.vector.activity.util.RequestCodesKt;
 import im.vector.dialogs.DialogCallAdapter;
 import im.vector.dialogs.DialogListItem;
@@ -1126,8 +1125,6 @@ public class VectorRoomActivity extends MXCActionBarActivity implements
     protected void onResume() {
         Log.d(LOG_TAG, "++ Resume the activity");
         super.onResume();
-
-        ViewedRoomTracker.getInstance().setMatrixId(mSession.getCredentials().userId);
 
         if (null != mRoom) {
             // check if the room has been left from another client.
