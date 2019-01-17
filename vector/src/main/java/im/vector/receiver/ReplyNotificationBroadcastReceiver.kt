@@ -23,7 +23,6 @@ import android.text.TextUtils
 import android.widget.Toast
 import im.vector.Matrix
 import im.vector.VectorApp
-import im.vector.activity.VectorHomeActivity
 import im.vector.notifications.NotifiableMessageEvent
 import im.vector.notifications.NotificationUtils
 import org.matrix.androidsdk.MXSession
@@ -45,12 +44,6 @@ class ReplyNotificationBroadcastReceiver : BroadcastReceiver() {
             when (action) {
                 NotificationUtils.SMART_REPLY_ACTION -> {
                     handleSmartReply(intent, context)
-                }
-                NotificationUtils.DISMISS_NOTIF_AND_OPEN_HOME_ACTION -> {
-                    VectorApp.getInstance().notificationDrawerManager.clearAllEvents()
-                    val homeIntent = Intent(context, VectorHomeActivity::class.java)
-                    homeIntent.flags = Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_SINGLE_TOP
-                    context.startActivity(homeIntent)
                 }
                 NotificationUtils.DISMISS_ROOM_NOTIF_ACTION -> {
                     intent.getStringExtra(KEY_ROOM_ID)?.let {
@@ -165,7 +158,6 @@ class ReplyNotificationBroadcastReceiver : BroadcastReceiver() {
         val KEY_ROOM_ID = "roomID"
         val KEY_TEXT_REPLY = "key_text_reply"
         val EXTRA_MATRIX_ID = "EXTRA_MATRIX_ID"
-//        val EXTRA_DISMISS_ALL = "EXTRA_DISMISS_ALL"
 
         val LOG_TAG = ReplyNotificationBroadcastReceiver::class.java.name
     }

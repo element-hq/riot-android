@@ -178,6 +178,8 @@ public class VectorHomeActivity extends VectorAppCompatActivity implements Searc
     public static final String EXTRA_CALL_ID = "VectorHomeActivity.EXTRA_CALL_ID";
     public static final String EXTRA_CALL_UNKNOWN_DEVICES = "VectorHomeActivity.EXTRA_CALL_UNKNOWN_DEVICES";
 
+    public static final String EXTRA_CLEAR_EXISTING_NOTIFICATION = "VectorHomeActivity.EXTRA_CLEAR_EXISTING_NOTIFICATION";
+
     // the home activity is launched in shared files mode
     // i.e the user tries to send several files with VECTOR
     public static final String EXTRA_SHARED_INTENT_PARAMS = "VectorHomeActivity.EXTRA_SHARED_INTENT_PARAMS";
@@ -408,6 +410,7 @@ public class VectorHomeActivity extends VectorAppCompatActivity implements Searc
             intent.removeExtra(EXTRA_MEMBER_ID);
             intent.removeExtra(EXTRA_GROUP_ID);
             intent.removeExtra(VectorUniversalLinkReceiver.EXTRA_UNIVERSAL_LINK_URI);
+            intent.removeExtra(EXTRA_CLEAR_EXISTING_NOTIFICATION);
         } else {
 
             if (intent.hasExtra(EXTRA_CALL_SESSION_ID) && intent.hasExtra(EXTRA_CALL_ID)) {
@@ -418,6 +421,12 @@ public class VectorHomeActivity extends VectorAppCompatActivity implements Searc
                 intent.removeExtra(EXTRA_CALL_ID);
                 intent.removeExtra(EXTRA_CALL_UNKNOWN_DEVICES);
             }
+
+            if (intent.hasExtra(EXTRA_CLEAR_EXISTING_NOTIFICATION)) {
+                VectorApp.getInstance().getNotificationDrawerManager().clearAllEvents();
+                intent.removeExtra(EXTRA_CLEAR_EXISTING_NOTIFICATION);
+            }
+
 
             // the activity could be started with a spinner
             // because there is a pending action (like universalLink processing)

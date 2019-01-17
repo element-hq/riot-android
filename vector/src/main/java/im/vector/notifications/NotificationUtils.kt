@@ -84,7 +84,6 @@ object NotificationUtils {
     private const val REJECT_ACTION = "NotificationUtils.REJECT_ACTION"
     private const val QUICK_LAUNCH_ACTION = "NotificationUtils.QUICK_LAUNCH_ACTION"
     const val SMART_REPLY_ACTION = "${BuildConfig.APPLICATION_ID}.NotificationUtils.SMART_REPLY_ACTION"
-    const val DISMISS_NOTIF_AND_OPEN_HOME_ACTION = "${BuildConfig.APPLICATION_ID}.NotificationUtils.DISMISS_NOTIF_AND_OPEN_HOME_ACTION"
     const val DISMISS_SUMMARY_ACTION = "${BuildConfig.APPLICATION_ID}.NotificationUtils.DISMISS_SUMMARY_ACTION"
     const val DISMISS_ROOM_NOTIF_ACTION = "${BuildConfig.APPLICATION_ID}.NotificationUtils.DISMISS_ROOM_NOTIF_ACTION"
     const val TAP_TO_VIEW_ACTION = "${BuildConfig.APPLICATION_ID}.NotificationUtils.TAP_TO_VIEW_ACTION"
@@ -930,14 +929,10 @@ object NotificationUtils {
     }
 
     private fun buildOpenHomePendingIntentForSummary(context: Context): PendingIntent {
-
-        //There is a known bug on android, according to documentation auto cancel should
-        //call the deleteIntent, but it's not. So as a work around we use a broadcast
-        //as content intent that will do the delete action and then start home activity
-        val intent = Intent(context, ReplyNotificationBroadcastReceiver::class.java)
-        intent.action = DISMISS_NOTIF_AND_OPEN_HOME_ACTION
-        return PendingIntent.getBroadcast(context, 100, intent,
-                0)
+        val pendingIntent = Intent(context, VectorHomeActivity::class.java)
+        pendingIntent.flags = Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_SINGLE_TOP
+        pendingIntent.putExtra(VectorHomeActivity.EXTRA_CLEAR_EXISTING_NOTIFICATION,true)
+        return PendingIntent.getActivity(context, 0, pendingIntent, 0)
     }
 
     /*
@@ -996,7 +991,6 @@ object NotificationUtils {
                         priority = NotificationCompat.PRIORITY_LOW
                     }
 
-                    setAutoCancel(true)
                     setContentIntent(buildOpenHomePendingIntentForSummary(context))
 
                     val intent = Intent(context, ReplyNotificationBroadcastReceiver::class.java)
