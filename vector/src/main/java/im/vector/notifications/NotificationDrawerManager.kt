@@ -42,7 +42,7 @@ class NotificationDrawerManager(val context: Context) {
         loadEventInfo()
     }
 
-    private var eventList: MutableList<NotifiableEvent> = ArrayList()
+    private lateinit var eventList: MutableList<NotifiableEvent>
     private var myUserDisplayName: String = ""
 
     //Keeps a mapping between a notification ID
@@ -225,6 +225,7 @@ class NotificationDrawerManager(val context: Context) {
                         event.hasBeenDisplayed = true //we can consider it as displayed
                         hasNewEvent = true
                         summaryIsNoisy = summaryIsNoisy || event.noisy
+                        summaryInboxStyle.addLine(event.description)
                     }
                 }
             }
@@ -243,10 +244,10 @@ class NotificationDrawerManager(val context: Context) {
             // To ensure the best experience on all devices and versions, always include a group summary when you create a group
             // https://developer.android.com/training/notify-user/group
 
-            if (notifications.isEmpty()) {
+            if (eventList.isEmpty()) {
                 NotificationUtils.cancelNotificationMessage(context, null, SUMMARY_NOTIFICATION_ID)
             } else {
-                val nbEvents = notifications.size
+                val nbEvents = roomIdToEventMap.size + simpleEvents.size
                 summaryInboxStyle.setBigContentTitle("$nbEvents notifications")
                 NotificationUtils.buildSummaryListNotification(
                         context,
@@ -308,11 +309,14 @@ class NotificationDrawerManager(val context: Context) {
                 val fileIn = FileInputStream(file)
                 val ois = ObjectInputStream(fileIn)
                 val readObject = ois.readObject()
-                (readObject as? ArrayList<NotifiableEvent>)?.let {
-                    this.eventList = it
+                (readObject as? ArrayList<*>)?.let {
+                    this.eventList = ArrayList(it.filter { it is NotifiableEvent }.map { it as NotifiableEvent })
                 }
+            } else {
+                this.eventList = ArrayList()
             }
         } catch (e: Throwable) {
+            this.eventList = ArrayList()
             Log.e(LOG_TAG, "## Failed to load cached notification info", e)
         }
     }
