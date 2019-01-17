@@ -477,6 +477,9 @@ public class BugReporter {
         if (crashFile.exists()) {
             crashFile.delete();
         }
+
+        // Also reset the screenshot
+        mScreenshot = null;
     }
 
     /**
