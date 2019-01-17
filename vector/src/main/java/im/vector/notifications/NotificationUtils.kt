@@ -32,20 +32,19 @@ import android.support.annotation.ColorInt
 import android.support.annotation.StringRes
 import android.support.v4.app.*
 import android.support.v4.content.ContextCompat
-import android.text.Spannable
-import android.text.SpannableString
 import android.text.TextUtils
-import android.text.style.StyleSpan
 import im.vector.BuildConfig
 import im.vector.Matrix
 import im.vector.R
 import im.vector.VectorApp
-import im.vector.activity.*
+import im.vector.activity.JoinRoomActivity
+import im.vector.activity.LockScreenActivity
+import im.vector.activity.VectorHomeActivity
+import im.vector.activity.VectorRoomActivity
 import im.vector.receiver.ReplyNotificationBroadcastReceiver
 import im.vector.ui.themes.ThemeUtils
 import im.vector.util.PreferencesManager
 import im.vector.util.startNotificationChannelSettingsIntent
-import org.matrix.androidsdk.rest.model.bingrules.BingRule
 import org.matrix.androidsdk.util.Log
 import java.util.*
 
@@ -843,7 +842,7 @@ object NotificationUtils {
             }
 
             val intent = Intent(context, ReplyNotificationBroadcastReceiver::class.java)
-            intent.putExtra(ReplyNotificationBroadcastReceiver.KEY_ROOM_ID,roomInfo.roomId)
+            intent.putExtra(ReplyNotificationBroadcastReceiver.KEY_ROOM_ID, roomInfo.roomId)
             intent.action = DISMISS_ROOM_NOTIF_ACTION
             val pendingIntent = PendingIntent.getBroadcast(context.applicationContext,
                     System.currentTimeMillis().toInt(), intent, PendingIntent.FLAG_UPDATE_CURRENT)
@@ -853,7 +852,7 @@ object NotificationUtils {
     }
 
 
-    fun buildSimpleEventNotification(context: Context, simpleNotifiableEvent: NotifiableEvent, largeIcon: Bitmap?): Notification? {
+    fun buildSimpleEventNotification(context: Context, simpleNotifiableEvent: NotifiableEvent, largeIcon: Bitmap?, matrixId: String): Notification? {
 
         val accentColor = ThemeUtils.getColor(context, R.attr.colorAccent)
         // Build the pending intent for when the notification is clicked
@@ -870,25 +869,37 @@ object NotificationUtils {
             setGroupAlertBehavior(NotificationCompat.GROUP_ALERT_SUMMARY)
             setSmallIcon(smallIcon)
             color = accentColor
-//            if (!roomInfo.hasSmartReplyError) {
-//                buildQuickReplyIntent(context, roomInfo.roomId, senderDisplayNameForReplyCompat)?.let { replyPendingIntent ->
-//                    var replyLabel: String = context.getString(R.string.action_quick_reply)
-//                    var remoteInput: RemoteInput = RemoteInput.Builder(ReplyNotificationBroadcastReceiver.KEY_TEXT_REPLY).run {
-//                        setLabel(replyLabel)
-//                        build()
-//                    }
-//                    NotificationCompat.Action.Builder(R.drawable.vector_notification_quick_reply,
-//                            context.getString(R.string.action_quick_reply), replyPendingIntent)
-//                            .addRemoteInput(remoteInput)
-//                            .build()?.let {
-//                                addAction(it)
-//                            }
-//                }
-//            }
-//
-//            if (openRoomIntent != null) {
-//                setContentIntent(openRoomIntent)
-//            }
+
+
+            if (simpleNotifiableEvent is InviteNotifiableEvent) {
+                val roomId = simpleNotifiableEvent.eventId
+                // offer to type a quick reject button
+                val rejectIntent = JoinRoomActivity.getRejectRoomIntent(context, roomId, matrixId)
+
+                // the action must be unique else the parameters are ignored
+                rejectIntent.action = REJECT_ACTION
+                addAction(
+                        R.drawable.vector_notification_reject_invitation,
+                        context.getString(R.string.reject),
+                        PendingIntent.getActivity(context, System.currentTimeMillis().toInt(), rejectIntent, 0))
+
+                // offer to type a quick accept button
+                val joinIntent = JoinRoomActivity.getJoinRoomIntent(context, roomId, matrixId)
+
+                // the action must be unique else the parameters are ignored
+                joinIntent.action = JOIN_ACTION + System.currentTimeMillis().toInt()
+                addAction(
+                        R.drawable.vector_notification_accept_invitation,
+                        context.getString(R.string.join),
+                        PendingIntent.getActivity(context, 0, joinIntent, 0))
+
+            } else {
+                setAutoCancel(true)
+            }
+
+            val contentIntent = Intent(context, VectorHomeActivity::class.java)
+            contentIntent.flags = Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_SINGLE_TOP
+            setContentIntent(PendingIntent.getActivity(context, 0, contentIntent, 0))
 
             if (largeIcon != null) {
                 setLargeIcon(largeIcon)
@@ -931,7 +942,7 @@ object NotificationUtils {
     private fun buildOpenHomePendingIntentForSummary(context: Context): PendingIntent {
         val pendingIntent = Intent(context, VectorHomeActivity::class.java)
         pendingIntent.flags = Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_SINGLE_TOP
-        pendingIntent.putExtra(VectorHomeActivity.EXTRA_CLEAR_EXISTING_NOTIFICATION,true)
+        pendingIntent.putExtra(VectorHomeActivity.EXTRA_CLEAR_EXISTING_NOTIFICATION, true)
         return PendingIntent.getActivity(context, 0, pendingIntent, 0)
     }
 

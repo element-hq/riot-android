@@ -19,8 +19,12 @@ import android.app.Notification
 import android.content.Context
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
+import android.os.PowerManager
 import android.support.v4.app.NotificationCompat
 import android.text.TextUtils
+import android.view.WindowManager
+import im.vector.Matrix
+import im.vector.VectorApp
 import org.matrix.androidsdk.util.Log
 import java.io.*
 
@@ -63,7 +67,7 @@ class NotificationDrawerManager(val context: Context) {
     fun onNotifiableEventReceived(notifiableEvent: NotifiableEvent, userId: String, userDisplayName: String?) {
         //If we support multi session, event list should be per userId
         //Currently only manage single session
-        Log.d(LOG_TAG, "%%%%%%%% onNotifiableEventReceived ${notifiableEvent}")
+        Log.d(LOG_TAG, "%%%%%%%% onNotifiableEventReceived $notifiableEvent")
         synchronized(this) {
             myUserDisplayName = userDisplayName ?: userId
             val existing = eventList.firstOrNull { it.eventId == notifiableEvent.eventId }
@@ -128,6 +132,14 @@ class NotificationDrawerManager(val context: Context) {
         }
         if (hasChanged) {
             clearMessageEventOfRoom(roomId)
+        }
+    }
+
+    public fun homeActivityDidResume(matrixID: String?) {
+        synchronized(this) {
+            eventList.removeAll { e ->
+                return@removeAll !(e is NotifiableMessageEvent) //messages are cleared when entreing room
+            }
         }
     }
 
@@ -219,7 +231,7 @@ class NotificationDrawerManager(val context: Context) {
             for (event in simpleEvents) {
                 //We build a simple event
                 if (!event.hasBeenDisplayed) {
-                    NotificationUtils.buildSimpleEventNotification(context, event, null)?.let {
+                    NotificationUtils.buildSimpleEventNotification(context, event, null, myUserDisplayName)?.let {
                         notifications.add(it)
                         NotificationUtils.showNotificationMessage(context, event.eventId, ROOM_EVENT_NOTIFICATION_ID, it)
                         event.hasBeenDisplayed = true //we can consider it as displayed
@@ -256,8 +268,23 @@ class NotificationDrawerManager(val context: Context) {
                 )?.let {
                     NotificationUtils.showNotificationMessage(context, null, SUMMARY_NOTIFICATION_ID, it)
                 }
+
+                if (hasNewEvent && summaryIsNoisy) {
+                    try {
+                        // turn the screen on for 3 seconds
+                        if (Matrix.getInstance(VectorApp.getInstance())!!.pushManager.isScreenTurnedOn) {
+                            val pm = VectorApp.getInstance().getSystemService(Context.POWER_SERVICE) as PowerManager
+                            val wl = pm.newWakeLock(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON or PowerManager.ACQUIRE_CAUSES_WAKEUP, "riot:manageNotificationSound")
+                            wl.acquire(3000)
+                            wl.release()
+                        }
+                    } catch (e : Throwable) {
+                        Log.e(LOG_TAG, "## Failed to turn screen on", e)
+                    }
+
+                }
             }
-            saveEventInfo()
+            //notice that we can get bit out of sync with actual display but not a big issue
         }
     }
 
@@ -285,7 +312,7 @@ class NotificationDrawerManager(val context: Context) {
     }
 
 
-    private fun saveEventInfo() {
+    fun persistInfo() {
         if (eventList.isEmpty()) {
             deleteCachedRoomNotifications(context)
             return

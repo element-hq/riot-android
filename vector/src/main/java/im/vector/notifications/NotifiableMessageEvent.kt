@@ -28,6 +28,8 @@ data class NotifiableMessageEvent(
         var roomName: String?
 ) : NotifiableEvent {
 
+
+    override var matrixID: String? = null
     override var soundName: String? = null
     override var lockScreenVisibility = NotificationCompat.VISIBILITY_PUBLIC
     override var hasBeenDisplayed: Boolean = false

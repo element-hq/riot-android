@@ -874,5 +874,6 @@ public class VectorApp extends MultiDexApplication {
     private void onAppPause() {
         mDecryptionFailureTracker.dispatch();
         mAppAnalytics.forceDispatch();
+        mNotificationDrawerManager.persistInfo();
     }
 }

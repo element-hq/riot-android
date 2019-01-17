@@ -18,6 +18,7 @@ package im.vector.notifications
 import java.io.Serializable
 
 interface NotifiableEvent : Serializable {
+    var matrixID: String?
     val eventId: String
     var noisy: Boolean
     val title: String

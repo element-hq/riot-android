@@ -579,6 +579,8 @@ public class VectorHomeActivity extends VectorAppCompatActivity implements Searc
         MyPresenceManager.createPresenceManager(this, Matrix.getInstance(this).getSessions());
         MyPresenceManager.advertiseAllOnline();
 
+        VectorApp.getInstance().getNotificationDrawerManager().homeActivityDidResume(mSession != null ? mSession.getMyUserId() : null);
+
         // Broadcast receiver to stop waiting screen
         registerReceiver(mBrdRcvStopWaitingView, new IntentFilter(BROADCAST_ACTION_STOP_WAITING_VIEW));
 

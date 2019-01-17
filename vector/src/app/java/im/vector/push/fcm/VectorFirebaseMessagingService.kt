@@ -195,7 +195,9 @@ class VectorFirebaseMessagingService : FirebaseMessagingService() {
         val eventType = data["type"]
         if (eventType == null) {
             //Just add a generic unknown event
-            val simpleNotifiableEvent = SimpleNotifiableEvent(eventId,
+            val simpleNotifiableEvent = SimpleNotifiableEvent(
+                    session.myUserId,
+                    eventId,
                     true, //It's an issue in this case, all event will bing even if expected to be silent.
                     title = "New Event",
                     description = "",
@@ -204,8 +206,8 @@ class VectorFirebaseMessagingService : FirebaseMessagingService() {
                     soundName = BingRule.ACTION_VALUE_DEFAULT,
                     isPushGatewayEvent = true
             )
-            notificationDrawerManager.onNotifiableEventReceived(simpleNotifiableEvent, session?.myUserId
-                    ?: "", session?.myUser?.displayname)
+            notificationDrawerManager.onNotifiableEventReceived(simpleNotifiableEvent, session.myUserId
+                    ?: "", session.myUser?.displayname)
             notificationDrawerManager.refreshNotificationDrawer()
 
             return
@@ -218,7 +220,7 @@ class VectorFirebaseMessagingService : FirebaseMessagingService() {
                 return
             } else {
 
-                var notifiableEvent = notifiableEventResolver.resolveEvent(event, null, session?.fulfillRule(event), session)
+                var notifiableEvent = notifiableEventResolver.resolveEvent(event, null, session.fulfillRule(event), session)
 
                 if (notifiableEvent == null) {
                     Log.e(LOG_TAG, "VectorFirebaseMessagingService: Unsupported notifiable event ${eventId}")
@@ -235,8 +237,9 @@ class VectorFirebaseMessagingService : FirebaseMessagingService() {
                     }
 
                     notifiableEvent.isPushGatewayEvent = true
-                    notificationDrawerManager.onNotifiableEventReceived(notifiableEvent, session?.myUserId
-                            ?: "", session?.myUser?.displayname)
+                    notifiableEvent.matrixID = session.myUserId
+                    notificationDrawerManager.onNotifiableEventReceived(notifiableEvent, session.myUserId
+                            ?: "", session.myUser?.displayname)
                     notificationDrawerManager.refreshNotificationDrawer()
                 }
 
@@ -247,8 +250,8 @@ class VectorFirebaseMessagingService : FirebaseMessagingService() {
     }
 
     private fun findRoomNameBestEffort(data: Map<String, String>, session: MXSession?): String? {
-        var roomName: String? = data?.get("room_name")
-        val roomId = data?.get("room_id")
+        var roomName: String? = data["room_name"]
+        val roomId = data["room_id"]
         if (null == roomName && null != roomId) {
             // Try to get the room name from our store
             if (session?.dataHandler?.store?.isReady == true) {
@@ -259,18 +262,18 @@ class VectorFirebaseMessagingService : FirebaseMessagingService() {
         return roomName
     }
 
-    private fun findSenderDisplayNameNameBestEffort(data: Map<String, String>, session: MXSession?, store: IMXStore?): String? {
-        var roomName: String? = data?.get("room_name")
-        val roomId = data?.get("room_id")
-        if (null == roomName && null != roomId) {
-            // Try to get the room name from our store
-            if (store?.isReady == true) {
-                val room = store.getRoom(roomId)
-                roomName = room?.getRoomDisplayName(this)
-            }
-        }
-        return roomName
-    }
+//    private fun findSenderDisplayNameNameBestEffort(data: Map<String, String>, session: MXSession?, store: IMXStore?): String? {
+//        var roomName: String? = data?.get("room_name")
+//        val roomId = data?.get("room_id")
+//        if (null == roomName && null != roomId) {
+//            // Try to get the room name from our store
+//            if (store?.isReady == true) {
+//                val room = store.getRoom(roomId)
+//                roomName = room?.getRoomDisplayName(this)
+//            }
+//        }
+//        return roomName
+//    }
 
     /**
      * Try to create an event from the FCM data

@@ -481,7 +481,6 @@
                 <action android:name="android.intent.action.BOOT_COMPLETED" />
             </intent-filter>
         </receiver>
-        <receiver android:name=".receiver.DismissNotificationReceiver" />
 
         <!-- Exported false, should only be accessible from this app!! -->
         <receiver

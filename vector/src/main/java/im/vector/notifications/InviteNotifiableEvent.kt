@@ -17,9 +17,10 @@ package im.vector.notifications
 
 import android.support.v4.app.NotificationCompat
 
-data class SimpleNotifiableEvent(
+data class InviteNotifiableEvent(
         override var matrixID: String?,
         override val eventId: String,
+        var roomId: String,
         override var noisy: Boolean,
         override val title: String,
         override val description: String,
@@ -32,4 +33,3 @@ data class SimpleNotifiableEvent(
     override var lockScreenVisibility = NotificationCompat.VISIBILITY_PUBLIC
 
 }
-
