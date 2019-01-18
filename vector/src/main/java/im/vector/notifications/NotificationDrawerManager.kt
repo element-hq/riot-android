@@ -27,6 +27,7 @@ import android.support.v4.content.ContextCompat
 import android.text.TextUtils
 import android.view.WindowManager
 import im.vector.Matrix
+import im.vector.R
 import im.vector.VectorApp
 import org.matrix.androidsdk.util.Log
 import java.io.*
@@ -44,6 +45,9 @@ data class RoomEventGroupInfo(
 }
 
 class NotificationDrawerManager(val context: Context) {
+
+    //The first time the notification drawer is refreshed, we force re-render of all notifications
+    var firstTime = true
 
     init {
         loadEventInfo()
@@ -217,9 +221,16 @@ class NotificationDrawerManager(val context: Context) {
                     NotificationUtils.cancelNotificationMessage(context, event.eventId, ROOM_EVENT_NOTIFICATION_ID)
                 }
 
-                summaryInboxStyle.addLine("${roomGroup.roomDisplayName}: ${events.size} notification(s)")
+                try {
+                    val summaryLine = context.resources.getQuantityString(R.plurals.notification_compat_summary_line_for_room,events.size ,roomName, events.size)
+                    summaryInboxStyle.addLine(summaryLine)
+                } catch (e: Throwable) {
+                    //String not found or bad format
+                    Log.d(LOG_TAG, "%%%%%%%% REFRESH NOTIFICATION DRAWER failed to resolve string")
+                    summaryInboxStyle.addLine(roomName)
+                }
 
-                if (roomGroup.hasNewEvent) { //Should update displayed notification
+                if (!firstTime || roomGroup.hasNewEvent) { //Should update displayed notification
                     Log.d(LOG_TAG, "%%%%%%%% REFRESH NOTIFICATION DRAWER $roomId need refresh")
                     NotificationUtils.buildMessagesListNotification(context, style, roomGroup, largeBitmap, myUserDisplayName)?.let {
                         //is there an id for this room?
@@ -237,7 +248,7 @@ class NotificationDrawerManager(val context: Context) {
             //Handle simple events
             for (event in simpleEvents) {
                 //We build a simple event
-                if (!event.hasBeenDisplayed) {
+                if (!firstTime || !event.hasBeenDisplayed) {
                     NotificationUtils.buildSimpleEventNotification(context, event, null, myUserDisplayName)?.let {
                         notifications.add(it)
                         NotificationUtils.showNotificationMessage(context, event.eventId, ROOM_EVENT_NOTIFICATION_ID, it)
@@ -253,7 +264,7 @@ class NotificationDrawerManager(val context: Context) {
             //======== Build summary notification =========
             //On Android 7.0 (API level 24) and higher, the system automatically builds a summary for
             // your group using snippets of text from each notification. The user can expand this
-            // notification to see each separate notification, as shown in figure 1.
+            // notification to see each separate notification.
             // To support older versions, which cannot show a nested group of notifications,
             // you must create an extra notification that acts as the summary.
             // This appears as the only notification and the system hides all the others.
@@ -292,6 +303,7 @@ class NotificationDrawerManager(val context: Context) {
                 }
             }
             //notice that we can get bit out of sync with actual display but not a big issue
+            firstTime = false
         }
     }
 

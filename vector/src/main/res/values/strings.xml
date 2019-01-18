@@ -1035,6 +1035,12 @@
         <item quantity="one">1 room</item>
         <item quantity="other">%d rooms</item>
     </plurals>
+
+    <plurals name="notification_compat_summary_line_for_room">
+        <item quantity="one">%1$s: 1 message</item>
+        <item quantity="other">%1$s: %2$d messages</item>
+    </plurals>
+
     <string name="notification_unread_notified_messages_in_room">%1$s in %2$s"</string>
 
     <!-- historical -->

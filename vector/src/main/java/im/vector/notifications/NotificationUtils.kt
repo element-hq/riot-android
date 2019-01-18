@@ -576,7 +576,7 @@ object NotificationUtils {
             }
         }
     }
-    
+
     /**
      * Build a notification
      *
@@ -653,7 +653,7 @@ object NotificationUtils {
      * @param bingRule        the bing rule
      * @return the notification
      */
-    @Deprecated("will be removed")
+//    @Deprecated("will be removed")
 //    fun buildMessagesListNotification(context: Context, messagesStrings: List<CharSequence>, bingRule: BingRule): Notification? {
 //        try {
 //
@@ -709,15 +709,50 @@ object NotificationUtils {
         val channelID = if (roomInfo.shouldBing) NOISY_NOTIFICATION_CHANNEL_ID else SILENT_NOTIFICATION_CHANNEL_ID
         val builder = NotificationCompat.Builder(context, channelID)
         builder.apply {
+            // MESSAGING_STYLE sets title and content for API 16 and above devices.
             setStyle(messageSytle)
-            setContentTitle(context.getString(R.string.riot_app_name))
-            //not sure what to put here, if room display name it will appear twice as the style will put it
-            //setSubText(roomInfo.roomDisplayName)
-            setNumber(messageSytle.messages.size)
+
+            // A category allows groups of notifications to be ranked and filtered – per user or system settings.
+            // For example, alarm notifications should display before promo notifications, or message from known contact
+            // that can be displayed in not disturb mode if white listed (the later will need compat28.x)
+            setCategory(Notification.CATEGORY_MESSAGE)
+
+            // Title for API < 16 devices.
+            setContentTitle(roomInfo.roomDisplayName)
+            // Content for API < 16 devices.
+            setContentText("New Messages") //TODO
+
+            // Number of new notifications for API <24 (M and below) devices.
+            setSubText(context.resources.getQuantityString(R.plurals.room_new_messages_notification,messageSytle.messages.size,messageSytle.messages.size))
+
+            // Auto-bundling is enabled for 4 or more notifications on API 24+ (N+)
+            // devices and all Wear devices. But we want a custom grouping, so we specify the groupID
             setGroup(context.getString(R.string.riot_app_name))
+
+            //In order to avoid notification making sound twice (due to the summary notificaiton)
             setGroupAlertBehavior(NotificationCompat.GROUP_ALERT_SUMMARY)
+
             setSmallIcon(smallIcon)
+
+            // Set primary color (important for Wear 2.0 Notifications).
             color = accentColor
+
+            // Sets priority for 25 and below. For 26 and above, 'priority' is deprecated for
+            // 'importance' which is set in the NotificationChannel. The integers representing
+            // 'priority' are different from 'importance', so make sure you don't mix them.
+            priority = NotificationCompat.PRIORITY_DEFAULT
+            if (roomInfo.shouldBing) {
+                //Compat
+                PreferencesManager.getNotificationRingTone(context)?.let {
+                    setSound(it)
+                }
+                setLights(accentColor, 500, 500)
+            } else {
+                priority = NotificationCompat.PRIORITY_LOW
+            }
+
+            //Add actions and notification intents
+
             if (!roomInfo.hasSmartReplyError) {
                 buildQuickReplyIntent(context, roomInfo.roomId, senderDisplayNameForReplyCompat)?.let { replyPendingIntent ->
                     var replyLabel: String = context.getString(R.string.action_quick_reply)
@@ -740,17 +775,6 @@ object NotificationUtils {
 
             if (largeIcon != null) {
                 setLargeIcon(largeIcon)
-            }
-
-            if (roomInfo.shouldBing) {
-                //Compat
-                priority = NotificationCompat.PRIORITY_DEFAULT
-                PreferencesManager.getNotificationRingTone(context)?.let {
-                    setSound(it)
-                }
-                setLights(accentColor, 500, 500)
-            } else {
-                priority = NotificationCompat.PRIORITY_LOW
             }
 
             val intent = Intent(context, ReplyNotificationBroadcastReceiver::class.java)
@@ -855,7 +879,7 @@ object NotificationUtils {
         val pendingIntent = Intent(context, VectorHomeActivity::class.java)
         pendingIntent.flags = Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_SINGLE_TOP
         pendingIntent.putExtra(VectorHomeActivity.EXTRA_CLEAR_EXISTING_NOTIFICATION, true)
-        return PendingIntent.getActivity(context, 0, pendingIntent, 0)
+        return PendingIntent.getActivity(context, Random().nextInt(1000), pendingIntent, 0)
     }
 
     /*
@@ -888,6 +912,7 @@ object NotificationUtils {
         return null
     }
 
+    //// Number of new notifications for API <24 (M and below) devices.
     fun buildSummaryListNotification(context: Context, inboxSytle: NotificationCompat.InboxStyle, compatSummary: String, noisy: Boolean): Notification? {
 
         val smallIcon = if (noisy) R.drawable.icon_notif_important else R.drawable.logo_transparent
