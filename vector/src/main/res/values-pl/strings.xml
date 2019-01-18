@@ -204,7 +204,7 @@ Utwórz kopię zapasową, zanim się wylogujesz.</string>
     <string name="incoming_call">Połączenie przychodzące</string>
     <string name="incoming_video_call">Przychodzące połączenie wideo</string>
     <string name="incoming_voice_call">Przychodzące połączenie głosowe</string>
-    <string name="call_in_progress">W trakcie połączenia</string>
+    <string name="call_in_progress">W trakcie połączenia…</string>
 
     <string name="call_error_ice_failed">Połączenie multimedialne nie powiodło się</string>
     <string name="call_error_camera_init_failed">Nie udało się zainicjalizować aparatu</string>
@@ -337,7 +337,7 @@ Zauważ, że ta czynność spowoduje ponowne uruchomienie aplikacji i może to t
     <string name="room_recents_join_room_prompt">Wprowadź ID lub nazwę pokoju</string>
 
     <string name="directory_search_results_title">Przeglądaj katalog</string>
-    <string name="directory_searching_title">Wyszukiwanie katalogu..</string>
+    <string name="directory_searching_title">Przeszukiwanie katalogu…</string>
 
     <string name="room_settings_favourite">Dodaj do ulubionych</string>
     <string name="room_settings_de_prioritize">Usuń z priorytetyzowanych</string>
@@ -1156,4 +1156,6 @@ Aby upewnić się, że niczego nie przegapisz, po prostu miej włączone aktuali
     <string name="settings_troubleshoot_test_foreground_service_startedt_success">Usługa Powiadomień jest uruchomiona.</string>
     <string name="settings_troubleshoot_test_foreground_service_started_failed">Usługa Powiadomień nie jest uruchomiona.
 Spróbuj uruchomić ponownie aplikację.</string>
+    <string name="video_call_in_progress">W trakcie połączenia wideo…</string>
+
     </resources>
