@@ -19,8 +19,11 @@ import android.app.Notification
 import android.content.Context
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
+import android.os.Handler
+import android.os.Looper
 import android.os.PowerManager
 import android.support.v4.app.NotificationCompat
+import android.support.v4.content.ContextCompat
 import android.text.TextUtils
 import android.view.WindowManager
 import im.vector.Matrix
@@ -208,6 +211,10 @@ class NotificationDrawerManager(val context: Context) {
                         style.addMessage(event.body, event.timestamp, event.senderName)
                     }
                     event.hasBeenDisplayed = true //we can consider it as displayed
+
+                    //It is possible that this event was previously shown as an 'anonymous' simple notif.
+                    //And now it will be merged in a single MessageStyle notif, so we can clean to be sure
+                    NotificationUtils.cancelNotificationMessage(context, event.eventId, ROOM_EVENT_NOTIFICATION_ID)
                 }
 
                 summaryInboxStyle.addLine("${roomGroup.roomDisplayName}: ${events.size} notification(s)")
