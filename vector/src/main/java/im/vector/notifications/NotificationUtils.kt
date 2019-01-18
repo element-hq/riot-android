@@ -224,47 +224,6 @@ object NotificationUtils {
         return notification
     }
 
-//    fun buildTestSummNotif(context: Context): Notification {
-//        val summaryNotification = NotificationCompat.Builder(context, SILENT_NOTIFICATION_CHANNEL_ID)
-//                .setContentTitle("Summary")
-//                //set content text to support devices running API level < 24
-//                .setContentText("new messages")
-//                .setSmallIcon(R.drawable.logo_transparent)
-//                //build summary info into InboxStyle template
-//                .setStyle(NotificationCompat.InboxStyle()
-////                        .addLine("Line 1")
-////                        .addLine("Line 2")
-////                        .setBigContentTitle("$nId new messages")
-//                        .setSummaryText("summary text"))
-//                //specify which group this notification belongs to
-//                .setGroup(context.getString(R.string.riot_app_name))
-//                //set this notification as the summary for the group
-//                .setGroupSummary(true)
-//                .build()
-//        return summaryNotification
-//    }
-
-//    fun buildNotificationForNonCallEvent(context: Context, roomName: String, body: String, noisy: Boolean): Notification {
-//
-//        @ColorInt val highlightColor = ContextCompat.getColor(context, R.color.vector_fuchsia_color)
-//        val builder = NotificationCompat.Builder(context, if (noisy) NOISY_NOTIFICATION_CHANNEL_ID else SILENT_NOTIFICATION_CHANNEL_ID)
-//                .setWhen(System.currentTimeMillis())
-//                .setContentTitle(ensureTitleNotEmpty(context, roomName))
-//                .setContentText(body)
-//                .setSmallIcon(R.drawable.logo_transparent)
-//                .setGroup(context.getString(R.string.riot_app_name))
-//                //Compat
-//                .setLights(Color.GREEN, 500, 500)
-//                //setSound
-//                .apply {
-//                    if (noisy) {
-//                        color = highlightColor
-//                    }
-//                }
-//        return builder.build()
-//
-//    }
-
     /**
      * Build an incoming call notification.
      * This notification starts the VectorHomeActivity which is in charge of centralizing the incoming call flow.
@@ -617,59 +576,7 @@ object NotificationUtils {
             }
         }
     }
-
-    /**
-     * Build a notification from the cached RoomsNotifications instance.
-     *
-     * @param context      the context
-     * @param isBackground true if it is background notification
-     * @return the notification
-     */
-//    fun buildMessageNotification(context: Context, isBackground: Boolean): Notification? {
-//
-//        var notification: Notification? = null
-//        try {
-//            val roomsNotifications = RoomsNotifications.loadRoomsNotifications(context)
-//
-//            if (null != roomsNotifications) {
-//                notification = buildMessageNotification(context, roomsNotifications, BingRule(), isBackground)
-//            }
-//        } catch (e: Exception) {
-//            Log.e(LOG_TAG, "## buildMessageNotification() : failed " + e.message, e)
-//        }
-//
-//        return notification
-//    }
-
-
-    /**
-     * Build a notification
-     *
-     * @param context                the context
-     * @param notifiedEventsByRoomId the notified events
-     * @param eventToNotify          the latest event to notify
-     * @param isBackground           true if it is background notification (like read receipt)
-     * @return the notification
-     */
-//    fun buildMessageNotification(context: Context,
-//                                 notifiedEventsByRoomId: Map<String, List<NotifiedEvent>>,
-//                                 eventToNotify: NotifiedEvent,
-//                                 isBackground: Boolean): Notification? {
-//
-//        var notification: Notification? = null
-//        try {
-//            val roomsNotifications = RoomsNotifications(eventToNotify, notifiedEventsByRoomId)
-//            notification = buildMessageNotification(context, roomsNotifications, eventToNotify.mBingRule, isBackground)
-//            // cache the value
-//            RoomsNotifications.saveRoomNotifications(context, roomsNotifications)
-//        } catch (e: Exception) {
-//            Log.e(LOG_TAG, "## buildMessageNotification() : failed " + e.message, e)
-//        }
-//
-//        return notification
-//    }
-
-
+    
     /**
      * Build a notification
      *
@@ -789,18 +696,23 @@ object NotificationUtils {
 //        return null
 //    }
 
-    fun buildMessagesListNotification(context: Context, messageSytle: NotificationCompat.MessagingStyle, roomInfo: RoomEventGroupInfo, largeIcon: Bitmap?, senderDisplayNameForReplyCompat: String?): Notification? {
+    fun buildMessagesListNotification(context: Context, messageSytle: NotificationCompat.MessagingStyle,
+                                      roomInfo: RoomEventGroupInfo,
+                                      largeIcon: Bitmap?,
+                                      senderDisplayNameForReplyCompat: String?): Notification? {
 
         val accentColor = ThemeUtils.getColor(context, R.attr.colorAccent)
         // Build the pending intent for when the notification is clicked
         val openRoomIntent = buildOpenRoomIntent(context, roomInfo.roomId)
         val smallIcon = if (roomInfo.shouldBing) R.drawable.icon_notif_important else R.drawable.logo_transparent
 
-        val builder = NotificationCompat.Builder(context, if (roomInfo.shouldBing) NOISY_NOTIFICATION_CHANNEL_ID else SILENT_NOTIFICATION_CHANNEL_ID)
+        val channelID = if (roomInfo.shouldBing) NOISY_NOTIFICATION_CHANNEL_ID else SILENT_NOTIFICATION_CHANNEL_ID
+        val builder = NotificationCompat.Builder(context, channelID)
         builder.apply {
             setStyle(messageSytle)
             setContentTitle(context.getString(R.string.riot_app_name))
-            setSubText(roomInfo.roomDisplayName)
+            //not sure what to put here, if room display name it will appear twice as the style will put it
+            //setSubText(roomInfo.roomDisplayName)
             setNumber(messageSytle.messages.size)
             setGroup(context.getString(R.string.riot_app_name))
             setGroupAlertBehavior(NotificationCompat.GROUP_ALERT_SUMMARY)
