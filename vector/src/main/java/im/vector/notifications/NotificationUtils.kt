@@ -26,6 +26,7 @@ import android.content.Context
 import android.content.Intent
 import android.graphics.Bitmap
 import android.graphics.Color
+import android.net.Uri
 import android.os.Build
 import android.os.PowerManager
 import android.support.annotation.ColorInt
@@ -835,6 +836,8 @@ object NotificationUtils {
 
             val contentIntent = Intent(context, VectorHomeActivity::class.java)
             contentIntent.flags = Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_SINGLE_TOP
+            //pending intent get reused by system, this will mess up the extra params, so put unique info to avoid that
+            contentIntent.data = Uri.parse("foobar://"+simpleNotifiableEvent.eventId)
             setContentIntent(PendingIntent.getActivity(context, 0, contentIntent, 0))
 
             if (largeIcon != null) {
@@ -867,6 +870,8 @@ object NotificationUtils {
         val roomIntentTap = Intent(context, VectorRoomActivity::class.java)
         roomIntentTap.putExtra(VectorRoomActivity.EXTRA_ROOM_ID, roomId)
         roomIntentTap.action = TAP_TO_VIEW_ACTION
+        //pending intent get reused by system, this will mess up the extra params, so put unique info to avoid that
+        roomIntentTap.data = Uri.parse("foobar://openRoom?$roomId")
 
         // Recreate the back stack
         val stackBuilderTap = TaskStackBuilder.create(context)
@@ -876,10 +881,11 @@ object NotificationUtils {
     }
 
     private fun buildOpenHomePendingIntentForSummary(context: Context): PendingIntent {
-        val pendingIntent = Intent(context, VectorHomeActivity::class.java)
-        pendingIntent.flags = Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_SINGLE_TOP
-        pendingIntent.putExtra(VectorHomeActivity.EXTRA_CLEAR_EXISTING_NOTIFICATION, true)
-        return PendingIntent.getActivity(context, Random().nextInt(1000), pendingIntent, 0)
+        val intent = Intent(context, VectorHomeActivity::class.java)
+        intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_SINGLE_TOP
+        intent.putExtra(VectorHomeActivity.EXTRA_CLEAR_EXISTING_NOTIFICATION, true)
+        intent.data = Uri.parse("foobar://tapSummary")
+        return PendingIntent.getActivity(context, Random().nextInt(1000), intent, PendingIntent.FLAG_UPDATE_CURRENT)
     }
 
     /*
@@ -940,16 +946,20 @@ object NotificationUtils {
                     }
 
                     setContentIntent(buildOpenHomePendingIntentForSummary(context))
-
-                    val intent = Intent(context, ReplyNotificationBroadcastReceiver::class.java)
-                    intent.action = DISMISS_SUMMARY_ACTION
-                    val pendingIntent = PendingIntent.getBroadcast(context.applicationContext,
-                            0, intent, PendingIntent.FLAG_UPDATE_CURRENT)
-                    setDeleteIntent(pendingIntent)
+                    setDeleteIntent(getDismissSummaryPendingIntent(context))
 
                 }
         return builder.build()
 
+    }
+
+    private fun getDismissSummaryPendingIntent(context: Context): PendingIntent {
+        val intent = Intent(context, ReplyNotificationBroadcastReceiver::class.java)
+        intent.action = DISMISS_SUMMARY_ACTION
+        intent.data = Uri.parse("foobar://deleteSummary")
+        val pendingIntent = PendingIntent.getBroadcast(context.applicationContext,
+                0, intent, PendingIntent.FLAG_UPDATE_CURRENT)
+        return pendingIntent
     }
 
     /**

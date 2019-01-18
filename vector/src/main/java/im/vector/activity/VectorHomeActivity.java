@@ -395,6 +395,11 @@ public class VectorHomeActivity extends VectorAppCompatActivity implements Searc
         // process intent parameters
         final Intent intent = getIntent();
 
+        if (intent.hasExtra(EXTRA_CLEAR_EXISTING_NOTIFICATION)) {
+            VectorApp.getInstance().getNotificationDrawerManager().clearAllEvents();
+            intent.removeExtra(EXTRA_CLEAR_EXISTING_NOTIFICATION);
+        }
+
         if (!isFirstCreation()) {
             // fix issue #1276
             // if there is a saved instance, it means that onSaveInstanceState has been called.
@@ -410,7 +415,6 @@ public class VectorHomeActivity extends VectorAppCompatActivity implements Searc
             intent.removeExtra(EXTRA_MEMBER_ID);
             intent.removeExtra(EXTRA_GROUP_ID);
             intent.removeExtra(VectorUniversalLinkReceiver.EXTRA_UNIVERSAL_LINK_URI);
-            intent.removeExtra(EXTRA_CLEAR_EXISTING_NOTIFICATION);
         } else {
 
             if (intent.hasExtra(EXTRA_CALL_SESSION_ID) && intent.hasExtra(EXTRA_CALL_ID)) {
@@ -421,12 +425,6 @@ public class VectorHomeActivity extends VectorAppCompatActivity implements Searc
                 intent.removeExtra(EXTRA_CALL_ID);
                 intent.removeExtra(EXTRA_CALL_UNKNOWN_DEVICES);
             }
-
-            if (intent.hasExtra(EXTRA_CLEAR_EXISTING_NOTIFICATION)) {
-                VectorApp.getInstance().getNotificationDrawerManager().clearAllEvents();
-                intent.removeExtra(EXTRA_CLEAR_EXISTING_NOTIFICATION);
-            }
-
 
             // the activity could be started with a spinner
             // because there is a pending action (like universalLink processing)
@@ -922,6 +920,12 @@ public class VectorHomeActivity extends VectorAppCompatActivity implements Searc
             hideWaitingView();
         }
         intent.removeExtra(EXTRA_WAITING_VIEW_STATUS);
+
+
+        if (intent.hasExtra(EXTRA_CLEAR_EXISTING_NOTIFICATION)) {
+            VectorApp.getInstance().getNotificationDrawerManager().clearAllEvents();
+            intent.removeExtra(EXTRA_CLEAR_EXISTING_NOTIFICATION);
+        }
 
     }
 
