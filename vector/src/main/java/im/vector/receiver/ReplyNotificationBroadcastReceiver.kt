@@ -41,37 +41,30 @@ class ReplyNotificationBroadcastReceiver : BroadcastReceiver() {
         Log.d(LOG_TAG, "ReplyNotificationBroadcastReceiver received : $intent")
         val action = intent.action
         if (action != null) {
-            when (action) {
-                NotificationUtils.SMART_REPLY_ACTION -> {
-                    handleSmartReply(intent, context)
+            if (action.startsWith(NotificationUtils.SMART_REPLY_ACTION)) {
+                handleSmartReply(intent,context)
+            } else if (action == NotificationUtils.DISMISS_ROOM_NOTIF_ACTION) {
+                intent.getStringExtra(KEY_ROOM_ID)?.let {
+                    VectorApp.getInstance().notificationDrawerManager.clearMessageEventOfRoom(it)
                 }
-                NotificationUtils.DISMISS_ROOM_NOTIF_ACTION -> {
-                    intent.getStringExtra(KEY_ROOM_ID)?.let {
-                        VectorApp.getInstance().notificationDrawerManager.clearMessageEventOfRoom(it)
-                    }
-                }
-                NotificationUtils.DISMISS_SUMMARY_ACTION -> {
-                    VectorApp.getInstance().notificationDrawerManager.clearAllEvents()
-                }
-                else -> {
-                    //nop
-                }
+            } else if (action == NotificationUtils.DISMISS_SUMMARY_ACTION) {
+                VectorApp.getInstance().notificationDrawerManager.clearAllEvents()
             }
         }
     }
 
-    private fun handleSmartReply(intent: Intent?, context: Context?) {
+    private fun handleSmartReply(intent: Intent, context: Context) {
         val message = getReplyMessage(intent)
-        val roomId = intent?.getStringExtra(KEY_ROOM_ID)
+        val roomId = intent.getStringExtra(KEY_ROOM_ID)
 
         if (TextUtils.isEmpty(message) || TextUtils.isEmpty(roomId)) {
             //ignore this event
             //Can this happen? should we update notification?
             return
         }
-        val matrixId = intent?.getStringExtra(EXTRA_MATRIX_ID)
-        Matrix.getInstance(VectorApp.getInstance().baseContext)?.getSession(matrixId)?.let { session ->
-            session?.dataHandler?.getRoom(roomId)?.let { room ->
+        val matrixId = intent.getStringExtra(EXTRA_MATRIX_ID)
+        Matrix.getInstance(context)?.getSession(matrixId)?.let { session ->
+            session.dataHandler?.getRoom(roomId)?.let { room ->
                 sendMatrixEvent(message!!, session, roomId!!, room, context)
             }
         }

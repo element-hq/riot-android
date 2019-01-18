@@ -957,9 +957,9 @@ object NotificationUtils {
         val intent: Intent
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
             intent = Intent(context, ReplyNotificationBroadcastReceiver::class.java)
-            intent.action = SMART_REPLY_ACTION
+            intent.action = "${SMART_REPLY_ACTION}_$roomId"
             intent.putExtra(ReplyNotificationBroadcastReceiver.KEY_ROOM_ID, roomId)
-            return PendingIntent.getBroadcast(context, 100, intent,
+            return PendingIntent.getBroadcast(context, System.currentTimeMillis().toInt(), intent,
                     PendingIntent.FLAG_UPDATE_CURRENT)
         } else {
             if (!LockScreenActivity.isDisplayingALockScreenActivity()) {
