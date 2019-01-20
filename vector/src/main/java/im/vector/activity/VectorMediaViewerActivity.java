@@ -338,9 +338,6 @@ public class VectorMediaViewerActivity extends MXCActionBarActivity {
             if (requestCode == PermissionsToolsKt.PERMISSION_REQUEST_CODE) {
                 // Request comes from here
                 onAction(mPendingPosition, mPendingAction);
-            } else if (requestCode == PermissionsToolsKt.PERMISSION_REQUEST_OTHER) {
-                // Request comes from adapter
-                mAdapter.downloadMediaAndExportToDownloads();
             }
         }
     }
