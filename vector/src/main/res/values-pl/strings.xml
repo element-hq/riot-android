@@ -534,7 +534,7 @@ Zauważ, że ta czynność spowoduje ponowne uruchomienie aplikacji i może to t
     <string name="has_been_banned">Zostałeś zbanowany z %1$s przez %2$s</string>
     <string name="has_been_kicked">Zostałeś wyrzucony z %1$s przez %2$s</string>
     <string name="group_details_rooms">Pokoje</string>
-    <string name="joined">Dołączył</string>
+    <string name="joined">Dołączeni</string>
     <string name="group_details_people">Ludzie</string>
     <string name="community_name_hint">Przykład</string>
     <string name="community_id_hint">przykład</string>
@@ -926,7 +926,7 @@ Czy chcesz dodać teraz kilka?</string>
     <string name="no_users_placeholder">Brak użytkowników</string>
 
     <string name="rooms">Pokoje</string>
-    <string name="invited">Zaproszony</string>
+    <string name="invited">Zaproszeni</string>
     <string name="filter_group_members">Filtrowanie członków grupy</string>
     <string name="filter_group_rooms">Filtrowanie pokoi grupy</string>
 
