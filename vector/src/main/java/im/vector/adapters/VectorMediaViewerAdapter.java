@@ -62,8 +62,8 @@ import im.vector.view.PieFractionView;
 /**
  * An images slider
  */
-public class VectorMediasViewerAdapter extends PagerAdapter {
-    private static final String LOG_TAG = VectorMediasViewerAdapter.class.getSimpleName();
+public class VectorMediaViewerAdapter extends PagerAdapter {
+    private static final String LOG_TAG = VectorMediaViewerAdapter.class.getSimpleName();
 
     private final Context mContext;
 
@@ -89,12 +89,12 @@ public class VectorMediasViewerAdapter extends PagerAdapter {
 
     private int mAutoPlayItemAt = -1;
 
-    public VectorMediasViewerAdapter(Context context,
-                                     MXSession session,
-                                     MXMediaCache mediasCache,
-                                     List<SlidableMediaInfo> mediaMessagesList,
-                                     int maxImageWidth,
-                                     int maxImageHeight) {
+    public VectorMediaViewerAdapter(Context context,
+                                    MXSession session,
+                                    MXMediaCache mediasCache,
+                                    List<SlidableMediaInfo> mediaMessagesList,
+                                    int maxImageWidth,
+                                    int maxImageHeight) {
         mContext = context;
         mSession = session;
         mMediasCache = mediasCache;
