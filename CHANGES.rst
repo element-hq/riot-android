@@ -20,6 +20,7 @@ Improvements:
 
 
 Other changes:
+ - Update of Light and Dark themes (#2710)
  - Restore the crash report dialog after a crash
 
 Bugfix:
@@ -30,6 +31,8 @@ Bugfix:
  - Fix login button issue (#1568)
  - Fix issue with registration when an email is provided (#2852)
  - Fix issues with Tombstone events (#2866 && #2867)
+ - Fix crash on BugReportActivity if previous Activity is destroyed (#2876)
+
 Translations:
  -
 

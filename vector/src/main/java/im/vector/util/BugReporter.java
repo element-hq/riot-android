@@ -261,7 +261,7 @@ public class BugReporter {
                                 builder.addFormDataPart("file",
                                         logCatScreenshotFile.getName(), RequestBody.create(MediaType.parse("application/octet-stream"), logCatScreenshotFile));
                             } catch (Exception e) {
-                                Log.e(LOG_TAG, "## saveLogCat() : fail to write logcat" + e.toString(), e);
+                                Log.e(LOG_TAG, "## sendBugReport() : fail to write screenshot" + e.toString(), e);
                             }
                         }
                     }
@@ -477,6 +477,9 @@ public class BugReporter {
         if (crashFile.exists()) {
             crashFile.delete();
         }
+
+        // Also reset the screenshot
+        mScreenshot = null;
     }
 
     /**
@@ -567,7 +570,12 @@ public class BugReporter {
         rootView.setDrawingCacheEnabled(true);
 
         try {
-            return rootView.getDrawingCache();
+            Bitmap bitmap = rootView.getDrawingCache();
+
+            // Make a copy, because if Activity is destroyed, the bitmap will be recycled
+            bitmap = Bitmap.createBitmap(bitmap);
+
+            return bitmap;
         } catch (OutOfMemoryError oom) {
             Log.e(LOG_TAG, "Cannot get drawing cache for " + VectorApp.getCurrentActivity() + " OOM.", oom);
         } catch (Exception e) {

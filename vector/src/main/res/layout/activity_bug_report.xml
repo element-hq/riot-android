@@ -82,7 +82,8 @@
                         android:layout_height="wrap_content"
                         android:hint="@string/send_bug_report_placeholder"
                         android:minHeight="40dp"
-                        android:textColor="?attr/vctr_riot_primary_text_color" />
+                        android:textColor="?android:textColorPrimary" />
+
                 </android.support.design.widget.TextInputLayout>
 
                 <TextView

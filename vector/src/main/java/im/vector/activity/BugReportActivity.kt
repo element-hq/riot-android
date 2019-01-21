@@ -76,6 +76,8 @@ class BugReportActivity : MXCActionBarActivity() {
             mScreenShotPreview.setImageBitmap(BugReporter.getScreenshot())
         } else {
             mScreenShotPreview.isVisible = false
+            mIncludeScreenShotButton.isChecked = false
+            mIncludeScreenShotButton.isEnabled = false
         }
     }
 

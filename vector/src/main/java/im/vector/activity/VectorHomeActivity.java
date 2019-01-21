@@ -600,7 +600,7 @@ public class VectorHomeActivity extends VectorAppCompatActivity implements Searc
         // https://github.com/vector-im/vector-android/issues/323
         // the tool bar color is not restored on some devices.
         TypedValue vectorActionBarColor = new TypedValue();
-        getTheme().resolveAttribute(R.attr.vctr_riot_primary_background_color, vectorActionBarColor, true);
+        getTheme().resolveAttribute(android.R.attr.colorBackground, vectorActionBarColor, true);
         mToolbar.setBackgroundResource(vectorActionBarColor.resourceId);
 
         checkDeviceId();
@@ -987,7 +987,10 @@ public class VectorHomeActivity extends VectorAppCompatActivity implements Searc
      * @param primaryColor
      * @param secondaryColor
      */
-    public void updateTabStyle(final int primaryColor, final int secondaryColor) {
+    public void updateTabStyle(final int primaryColor,
+                               final int secondaryColor,
+                               final int fabColor,
+                               final int fabPressedColor) {
         mToolbar.setBackgroundColor(primaryColor);
 
         Class menuClass = FloatingActionsMenu.class;
@@ -997,21 +1000,21 @@ public class VectorHomeActivity extends VectorAppCompatActivity implements Searc
             Field pressed = menuClass.getDeclaredField("mAddButtonColorPressed");
             pressed.setAccessible(true);
 
-            normal.set(mFloatingActionsMenu, primaryColor);
-            pressed.set(mFloatingActionsMenu, secondaryColor);
+            normal.set(mFloatingActionsMenu, fabColor);
+            pressed.set(mFloatingActionsMenu, fabPressedColor);
 
-            mFabMain.setColorNormal(primaryColor);
-            mFabMain.setColorPressed(secondaryColor);
+            mFabMain.setColorNormal(fabColor);
+            mFabMain.setColorPressed(fabPressedColor);
         } catch (Exception ignored) {
 
         }
 
-        mFabJoinRoom.setColorNormal(primaryColor);
-        mFabJoinRoom.setColorPressed(secondaryColor);
-        mFabCreateRoom.setColorNormal(primaryColor);
-        mFabCreateRoom.setColorPressed(secondaryColor);
-        mFabStartChat.setColorNormal(primaryColor);
-        mFabStartChat.setColorPressed(secondaryColor);
+        mFabJoinRoom.setColorNormal(fabColor);
+        mFabJoinRoom.setColorPressed(fabPressedColor);
+        mFabCreateRoom.setColorNormal(fabColor);
+        mFabCreateRoom.setColorPressed(fabPressedColor);
+        mFabStartChat.setColorNormal(fabColor);
+        mFabStartChat.setColorPressed(fabPressedColor);
 
         mVectorPendingCallView.updateBackgroundColor(primaryColor);
         mSyncInProgressView.setBackgroundColor(primaryColor);
@@ -1456,7 +1459,7 @@ public class VectorHomeActivity extends VectorAppCompatActivity implements Searc
         View dialogView = inflater.inflate(R.layout.dialog_join_room_by_id, null);
 
         final EditText textInput = dialogView.findViewById(R.id.join_room_edit_text);
-        textInput.setTextColor(ThemeUtils.INSTANCE.getColor(this, R.attr.vctr_riot_primary_text_color));
+        textInput.setTextColor(ThemeUtils.INSTANCE.getColor(this, android.R.attr.textColorPrimary));
 
         AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(this);
 

@@ -102,7 +102,7 @@
                 android:layout_centerInParent="true"
                 android:rotationY="@integer/rtl_mirror_flip"
                 android:src="@drawable/ic_material_arrow_back_white"
-                android:tint="?attr/vctr_primary_control_color"
+                android:tint="@android:color/white"
                 android:visibility="gone"
                 tools:visibility="visible" />
         </RelativeLayout>

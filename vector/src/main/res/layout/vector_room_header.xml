@@ -48,7 +48,7 @@
         android:gravity="center_horizontal"
         android:maxLines="3"
         android:textColor="@android:color/white"
-        android:textColorLink="@color/vector_dark_grey_color"
+        android:textColorLink="?android:attr/textColorSecondary"
         android:textSize="14sp"
         tools:text="a topic here" />
 
@@ -75,7 +75,7 @@
             android:layout_gravity="center_vertical"
             android:ellipsize="end"
             android:padding="8dp"
-            android:textColor="?attr/vctr_default_text_light_color"
+            android:textColor="?android:attr/textColorSecondary"
             android:textSize="14sp"
             tools:text="a text" />
 

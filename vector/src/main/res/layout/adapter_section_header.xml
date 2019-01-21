@@ -12,7 +12,8 @@
         style="@style/ListHeader"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="#ff1f7c"
         android:tag="sticky"
+        tools:background="#ff1f7c"
         tools:text="Default section header" />
+
 </LinearLayout>
