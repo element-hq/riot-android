@@ -208,7 +208,7 @@ class VectorFirebaseMessagingService : FirebaseMessagingService() {
             )
             notificationDrawerManager.onNotifiableEventReceived(simpleNotifiableEvent, session.myUserId
                     ?: "", session.myUser?.displayname)
-            notificationDrawerManager.refreshNotificationDrawer()
+            notificationDrawerManager.refreshNotificationDrawer(null)
 
             return
         } else {
@@ -240,7 +240,7 @@ class VectorFirebaseMessagingService : FirebaseMessagingService() {
                     notifiableEvent.matrixID = session.myUserId
                     notificationDrawerManager.onNotifiableEventReceived(notifiableEvent, session.myUserId
                             ?: "", session.myUser?.displayname)
-                    notificationDrawerManager.refreshNotificationDrawer()
+                    notificationDrawerManager.refreshNotificationDrawer(null)
                 }
 
 

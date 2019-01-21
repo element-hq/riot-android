@@ -84,6 +84,12 @@ class NotifiableEventResolver(val context: Context) {
             Log.e(LOG_TAG, "## NotifiableEventResolver: Unable to resolve room for eventId [${event.eventId}] and roomID [${event.roomId}]")
             return null
         } else {
+
+            if (room.isEventRead(event.eventId)) {
+                Log.e(LOG_TAG, "## Discard event because it has been already read on other platfom [${event.eventId}] and roomID [${event.roomId}]")
+                return null
+            }
+
             val body = eventDisplay.getTextualDisplay(event, room.state)?.toString() ?: "New Event"
             val roomName = room.getRoomDisplayName(context)
             val senderDisplayName = room.state.getMemberName(event.sender) ?: event.sender ?: ""

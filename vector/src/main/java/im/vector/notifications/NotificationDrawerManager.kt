@@ -108,7 +108,7 @@ class NotificationDrawerManager(val context: Context) {
         synchronized(this) {
             eventList.clear()
         }
-        refreshNotificationDrawer()
+        refreshNotificationDrawer(null)
     }
 
     /*
@@ -124,7 +124,7 @@ class NotificationDrawerManager(val context: Context) {
             }
             NotificationUtils.cancelNotificationMessage(context, roomId, ROOM_MESSAGES_NOTIFICATION_ID)
         }
-        refreshNotificationDrawer()
+        refreshNotificationDrawer(null)
     }
 
     /**
@@ -142,7 +142,7 @@ class NotificationDrawerManager(val context: Context) {
         }
     }
 
-    public fun homeActivityDidResume(matrixID: String?) {
+    fun homeActivityDidResume(matrixID: String?) {
         synchronized(this) {
             eventList.removeAll { e ->
                 return@removeAll !(e is NotifiableMessageEvent) //messages are cleared when entreing room
@@ -151,7 +151,7 @@ class NotificationDrawerManager(val context: Context) {
     }
 
 
-    fun refreshNotificationDrawer() {
+    fun refreshNotificationDrawer(outdatedDetector: OutdatedEventDetector?) {
         synchronized(this) {
 
             Log.d(LOG_TAG, "%%%%%%%% REFRESH NOTIFICATION DRAWER ")
@@ -165,15 +165,24 @@ class NotificationDrawerManager(val context: Context) {
             val simpleEvents: ArrayList<NotifiableEvent> = ArrayList()
             val notifications: ArrayList<Notification> = ArrayList()
 
-            for (event in eventList) {
+            val eventIterator = eventList.listIterator()
+            while (eventIterator.hasNext()) {
+                val event = eventIterator.next()
                 if (event is NotifiableMessageEvent) {
                     val roomId = event.roomId
-                    if (!shouldIgnoreMessageEventInRoom(roomId)) {
-                        var roomEvents = roomIdToEventMap[roomId]
-                        if (roomEvents == null) {
-                            roomEvents = ArrayList()
-                            roomIdToEventMap[roomId] = roomEvents
-                        }
+                    var roomEvents = roomIdToEventMap[roomId]
+                    if (roomEvents == null) {
+                        roomEvents = ArrayList()
+                        roomIdToEventMap[roomId] = roomEvents
+                    }
+
+                    if (outdatedDetector?.isMessageOutdated(event) == true) {
+                        //forget this event
+                        eventIterator.remove()
+                    } else if (shouldIgnoreMessageEventInRoom(roomId)) {
+                        //forget this event
+                        eventIterator.remove()
+                    } else {
                         roomEvents.add(event)
                     }
                 } else {
@@ -186,6 +195,14 @@ class NotificationDrawerManager(val context: Context) {
 
             //events have been grouped
             for ((roomId, events) in roomIdToEventMap) {
+
+                if (events.isEmpty()) {
+                    //Just clear this notification
+                    Log.d(LOG_TAG, "%%%%%%%% REFRESH NOTIFICATION DRAWER ${roomId} has no more events")
+                    NotificationUtils.cancelNotificationMessage(context, roomId, ROOM_MESSAGES_NOTIFICATION_ID)
+                    continue
+                }
+
                 val roomGroup = RoomEventGroupInfo(roomId)
                 roomGroup.hasNewEvent = false
                 roomGroup.shouldBing = false

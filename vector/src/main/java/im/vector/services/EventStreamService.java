@@ -62,6 +62,7 @@ import im.vector.VectorApp;
 import im.vector.notifications.NotifiableEvent;
 import im.vector.notifications.NotifiableEventResolver;
 import im.vector.notifications.NotificationUtils;
+import im.vector.notifications.OutdatedEventDetector;
 import im.vector.push.PushManager;
 import im.vector.tools.VectorUncaughtExceptionHandler;
 import im.vector.util.CallsManager;
@@ -223,11 +224,10 @@ public class EventStreamService extends Service {
     private final MXEventListener mEventsListener = new MXEventListener() {
         @Override
         public void onBingEvent(Event event, RoomState roomState, BingRule bingRule) {
-            Log.e(LOG_TAG, "%%%%%%%%  MXEventListener: the event " + event);
+            Log.d(LOG_TAG, "%%%%%%%%  MXEventListener: the event " + event);
             // privacy
             //Log.d(LOG_TAG, "onBingEvent : the event " + event);
             //Log.d(LOG_TAG, "onBingEvent : the bingRule " + bingRule);
-
 
             Log.d(LOG_TAG, "prepareNotification : " + event.eventId + " in " + roomState.roomId);
             MXSession session = Matrix.getMXSession(getApplicationContext(), event.getMatrixId());
@@ -252,15 +252,13 @@ public class EventStreamService extends Service {
                 String userDisplayName = (session.getMyUser() != null) ? session.getMyUser().displayname : "";
                 VectorApp.getInstance().getNotificationDrawerManager().onNotifiableEventReceived(notifiableEvent, session.getMyUserId(), userDisplayName);
             }
-
-            //prepareNotification(event, bingRule);
         }
 
         @Override
         public void onLiveEventsChunkProcessed(String fromToken, String toToken) {
             Log.e(LOG_TAG, "%%%%%%%%  MXEventListener: onLiveEventsChunkProcessed[" + fromToken + "->" + toToken + "]");
 
-            VectorApp.getInstance().getNotificationDrawerManager().refreshNotificationDrawer();
+            VectorApp.getInstance().getNotificationDrawerManager().refreshNotificationDrawer(new OutdatedEventDetector(EventStreamService.this));
 
             // do not suspend the application if there is some active calls
             if ((StreamAction.CATCHUP == mServiceState) || (StreamAction.PAUSE == mServiceState)) {

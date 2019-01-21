@@ -92,7 +92,7 @@ class ReplyNotificationBroadcastReceiver : BroadcastReceiver() {
                         room.getRoomDisplayName(context))
                 notifiableMessageEvent.outGoingMessage = true
                 VectorApp.getInstance().notificationDrawerManager.onNotifiableEventReceived(notifiableMessageEvent, session.myUserId, session.myUser.displayname)
-                VectorApp.getInstance().notificationDrawerManager.refreshNotificationDrawer()
+                VectorApp.getInstance().notificationDrawerManager.refreshNotificationDrawer(null)
             }
 
             override fun onNetworkError(e: Exception) {
@@ -131,7 +131,7 @@ class ReplyNotificationBroadcastReceiver : BroadcastReceiver() {
                 notifiableMessageEvent.outGoingMessageFailed = true
 
                 VectorApp.getInstance().notificationDrawerManager.onNotifiableEventReceived(notifiableMessageEvent, session.myUserId, session.myUser.displayname)
-                VectorApp.getInstance().notificationDrawerManager.refreshNotificationDrawer()
+                VectorApp.getInstance().notificationDrawerManager.refreshNotificationDrawer(null)
             }
         })
     }
