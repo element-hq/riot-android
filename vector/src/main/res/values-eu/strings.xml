@@ -94,8 +94,8 @@ Hautatu esportatu babes-kopia bat egiteko saioa amaitu aurretik.</string>
     <string name="send_bug_report_description">Azaldu akatsa. Zer egin duzu? Zer espero zenuen? Zer gertatu da benetan?</string>
     <string name="send_bug_report_placeholder">Azaldu zure arazoa hemen</string>
     <string name="send_bug_report_logs_description">Akatsak aztertzeari begira, bezero honen egunkariak arazte-txosten honekin batera bidaliko dira. Arazte-txosten hau, egunkariak eta pantaila-argazkia barne, ez dira publikoki ikusgai egongo. Goiko testua besterik ez baduzu bidali nahi, desmarkatu:</string>
-    <string name="send_bug_report_alert_message">Telefonoa amorruz astintzen zabiltzala dirudi. Akats-tostenen pantaila ireki nahi duzu?</string>
-    <string name="send_bug_report_app_crashed">Azken aldian aplikazioa kraskatu da. Kraskatze txostenen pantaila ireki nahi duzu?</string>
+    <string name="send_bug_report_alert_message">Telefonoa amorruz astintzen zabiltzala dirudi. Arazte-txostena ireki nahi duzu?</string>
+    <string name="send_bug_report_app_crashed">Azken aldian aplikazioa kraskatu da. Kraskatze-txostena ireki nahi duzu?</string>
 
     <string name="send_bug_report_sent">Arazte-txostena ongi bidali da</string>
     <string name="send_bug_report_failed">Huts egin du arazte-txostenaren bidalketak (%s)</string>
@@ -1092,9 +1092,9 @@ Kontuan izan ekintza honek aplikazioa berrabiaraziko duela eta denbora bat behar
     <string name="settings_troubleshoot_diagnostic">Arazoak egiaztatzen</string>
     <string name="settings_troubleshoot_diagnostic_run_button_title">Abiatu probak</string>
     <string name="settings_troubleshoot_diagnostic_running_status">Exekutatzen… (%1$d / %2$d)</string>
-    <string name="settings_troubleshoot_diagnostic_success_status">Oinarrizko diagnostikoa ongi dago. Oraindik ez badituzu jakinarazpenak jasotzen, bidali akats-txosten bat ikertu dezagun.</string>
+    <string name="settings_troubleshoot_diagnostic_success_status">Oinarrizko diagnostikoa ongi dago. Oraindik ez badituzu jakinarazpenak jasotzen, bidali arazte-txosten bat ikertu dezagun.</string>
     <string name="settings_troubleshoot_diagnostic_failure_status_with_quickfix">Gutxienez proba batek kale egin du, saiatu proposatutako konponketa(k).</string>
-    <string name="settings_troubleshoot_diagnostic_failure_status_no_quickfix">Gutxienez proba batek kale egin du, bidali mesedez akats-txosten bat ikertu dezagun.</string>
+    <string name="settings_troubleshoot_diagnostic_failure_status_no_quickfix">Gutxienez proba batek kale egin du, bidali mesedez arazte-txosten bat ikertu dezagun.</string>
 
     <string name="settings_troubleshoot_test_system_settings_title">Sistemaren ezarpenak.</string>
     <string name="settings_troubleshoot_test_system_settings_success">Jakinarazpenak aktibatuta daude sistemaren ezarpenetan.</string>
