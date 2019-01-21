@@ -1725,10 +1725,8 @@ public class VectorMessagesAdapter extends AbstractMessagesAdapter {
             convertView = mLayoutInflater.inflate(mRowTypeToLayoutId.get(ROW_TYPE_VERSIONED_ROOM), parent, false);
         }
         final MessageRow row = getItem(position);
-        // In this case, predecessor cannot be null
-        final RoomCreateContent.Predecessor predecessor = row.getRoomCreateContentPredecessor();
-
-        final String roomLink = PermalinkUtils.createPermalink(predecessor.roomId);
+        final RoomCreateContent roomCreateContent = JsonUtils.toRoomCreateContent(row.getEvent().getContent());
+        final String roomLink = PermalinkUtils.createPermalink(roomCreateContent.predecessor.roomId);
         final ClickableSpan urlSpan = new MatrixURLSpan(roomLink, MXPatterns.PATTERN_CONTAIN_APP_LINK_PERMALINK_ROOM_ID, mVectorMessagesAdapterEventsListener);
         final int textColorInt = ContextCompat.getColor(mContext, R.color.riot_primary_text_color_light);
         final CharSequence text = new Spanny(mContext.getString(R.string.room_tombstone_continuation_description),
@@ -1736,6 +1734,7 @@ public class VectorMessagesAdapter extends AbstractMessagesAdapter {
                 new ForegroundColorSpan(textColorInt))
                 .append("\n")
                 .append(mContext.getString(R.string.room_tombstone_predecessor_link), urlSpan, new ForegroundColorSpan(textColorInt));
+
         final TextView versionedTextView = convertView.findViewById(R.id.messagesAdapter_room_versioned_text);
         versionedTextView.setMovementMethod(LinkMovementMethod.getInstance());
         versionedTextView.setText(text);
