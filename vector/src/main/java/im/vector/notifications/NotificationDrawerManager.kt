@@ -19,11 +19,8 @@ import android.app.Notification
 import android.content.Context
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
-import android.os.Handler
-import android.os.Looper
 import android.os.PowerManager
 import android.support.v4.app.NotificationCompat
-import android.support.v4.content.ContextCompat
 import android.text.TextUtils
 import android.view.WindowManager
 import im.vector.Matrix
@@ -47,7 +44,7 @@ data class RoomEventGroupInfo(
 class NotificationDrawerManager(val context: Context) {
 
     //The first time the notification drawer is refreshed, we force re-render of all notifications
-    var firstTime = true
+    private var firstTime = true
 
     init {
         loadEventInfo()
@@ -145,7 +142,7 @@ class NotificationDrawerManager(val context: Context) {
     fun homeActivityDidResume(matrixID: String?) {
         synchronized(this) {
             eventList.removeAll { e ->
-                return@removeAll !(e is NotifiableMessageEvent) //messages are cleared when entreing room
+                return@removeAll e !is NotifiableMessageEvent //messages are cleared when entering room
             }
         }
     }
@@ -176,10 +173,7 @@ class NotificationDrawerManager(val context: Context) {
                         roomIdToEventMap[roomId] = roomEvents
                     }
 
-                    if (outdatedDetector?.isMessageOutdated(event) == true) {
-                        //forget this event
-                        eventIterator.remove()
-                    } else if (shouldIgnoreMessageEventInRoom(roomId)) {
+                    if (shouldIgnoreMessageEventInRoom(roomId)|| outdatedDetector?.isMessageOutdated(event) == true) {
                         //forget this event
                         eventIterator.remove()
                     } else {
@@ -198,7 +192,7 @@ class NotificationDrawerManager(val context: Context) {
 
                 if (events.isEmpty()) {
                     //Just clear this notification
-                    Log.d(LOG_TAG, "%%%%%%%% REFRESH NOTIFICATION DRAWER ${roomId} has no more events")
+                    Log.d(LOG_TAG, "%%%%%%%% REFRESH NOTIFICATION DRAWER $roomId has no more events")
                     NotificationUtils.cancelNotificationMessage(context, roomId, ROOM_MESSAGES_NOTIFICATION_ID)
                     continue
                 }
@@ -239,7 +233,7 @@ class NotificationDrawerManager(val context: Context) {
                 }
 
                 try {
-                    val summaryLine = context.resources.getQuantityString(R.plurals.notification_compat_summary_line_for_room,events.size ,roomName, events.size)
+                    val summaryLine = context.resources.getQuantityString(R.plurals.notification_compat_summary_line_for_room, events.size, roomName, events.size)
                     summaryInboxStyle.addLine(summaryLine)
                 } catch (e: Throwable) {
                     //String not found or bad format
@@ -313,7 +307,7 @@ class NotificationDrawerManager(val context: Context) {
                             wl.acquire(3000)
                             wl.release()
                         }
-                    } catch (e : Throwable) {
+                    } catch (e: Throwable) {
                         Log.e(LOG_TAG, "## Failed to turn screen on", e)
                     }
 
@@ -372,8 +366,8 @@ class NotificationDrawerManager(val context: Context) {
                 val fileIn = FileInputStream(file)
                 val ois = ObjectInputStream(fileIn)
                 val readObject = ois.readObject()
-                (readObject as? ArrayList<*>)?.let {
-                    this.eventList = ArrayList(it.filter { it is NotifiableEvent }.map { it as NotifiableEvent })
+                (readObject as? ArrayList<*>)?.let { arrayList ->
+                    this.eventList = ArrayList(arrayList.filter { it is NotifiableEvent }.mapNotNull { it as NotifiableEvent })
                 }
             } else {
                 this.eventList = ArrayList()
