@@ -42,7 +42,7 @@ import java.util.List;
 import im.vector.Matrix;
 import im.vector.R;
 import im.vector.VectorApp;
-import im.vector.adapters.VectorMediasViewerAdapter;
+import im.vector.adapters.VectorMediaViewerAdapter;
 import im.vector.db.VectorContentProvider;
 import im.vector.util.PermissionsToolsKt;
 import im.vector.util.SlidableMediaInfo;
@@ -68,7 +68,7 @@ public class VectorMediaViewerActivity extends MXCActionBarActivity {
     private ViewPager mViewPager;
 
     // the pager adapter
-    private VectorMediasViewerAdapter mAdapter;
+    private VectorMediaViewerAdapter mAdapter;
 
     // the medias list
     private List<SlidableMediaInfo> mMediasList;
@@ -162,7 +162,7 @@ public class VectorMediaViewerActivity extends MXCActionBarActivity {
         int maxImageWidth = intent.getIntExtra(KEY_THUMBNAIL_WIDTH, 0);
         int maxImageHeight = intent.getIntExtra(VectorMediaViewerActivity.KEY_THUMBNAIL_HEIGHT, 0);
 
-        mAdapter = new VectorMediasViewerAdapter(this, mSession, mSession.getMediaCache(), mMediasList, maxImageWidth, maxImageHeight);
+        mAdapter = new VectorMediaViewerAdapter(this, mSession, mSession.getMediaCache(), mMediasList, maxImageWidth, maxImageHeight);
         mViewPager.setAdapter(mAdapter);
         mViewPager.setPageTransformer(true, new DepthPageTransformer());
         mAdapter.autoPlayItemAt(position);
@@ -338,9 +338,6 @@ public class VectorMediaViewerActivity extends MXCActionBarActivity {
             if (requestCode == PermissionsToolsKt.PERMISSION_REQUEST_CODE) {
                 // Request comes from here
                 onAction(mPendingPosition, mPendingAction);
-            } else if (requestCode == PermissionsToolsKt.PERMISSION_REQUEST_OTHER) {
-                // Request comes from adapter
-                mAdapter.downloadMediaAndExportToDownloads();
             }
         }
     }
