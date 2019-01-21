@@ -700,7 +700,6 @@ public class VectorRoomActivity extends MXCActionBarActivity implements
                 }
             }
         });
-        Log.d(LOG_TAG, "End of create");
 
         // use a toolbar instead of the actionbar
         // to be able to display an expandable header
@@ -1020,6 +1019,8 @@ public class VectorRoomActivity extends MXCActionBarActivity implements
                         findViewById(R.id.jump_to_first_unread));
             }
         }
+
+        Log.d(LOG_TAG, "End of create");
     }
 
     private void checkIfUserHasBeenKicked() {
