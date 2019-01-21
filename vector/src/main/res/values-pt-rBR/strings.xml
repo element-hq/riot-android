@@ -230,9 +230,9 @@ Exporte estas conversas para o backup antes de sair da Conta se quiser armazená
     <string name="call_connecting">Conectando chamada…</string>
     <string name="call_ended">Chamada terminada</string>
     <string name="call_ring">Chamando…</string>
-    <string name="incoming_call">Chamada recebida</string>
-    <string name="incoming_video_call">Chamada de vídeo recebida</string>
-    <string name="incoming_voice_call">Chamada de voz recebida</string>
+    <string name="incoming_call">Recebendo chamada</string>
+    <string name="incoming_video_call">Recebendo chamada de vídeo</string>
+    <string name="incoming_voice_call">Recebendo chamada de voz</string>
     <string name="call_in_progress">Chamada em andamento…</string>
 
     <string name="call_error_user_not_responding">A outra parte não conseguiu atender.</string>
