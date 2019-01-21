@@ -278,6 +278,7 @@ public class KeyRequestHandler {
                             .setDeviceVerification(MXDeviceInfo.DEVICE_VERIFICATION_UNVERIFIED, mCurrentDevice, mCurrentUser, new SimpleApiCallback<Void>() {
                                 @Override
                                 public void onSuccess(Void info) {
+                                    deviceInfo.mVerified = MXDeviceInfo.DEVICE_VERIFICATION_UNVERIFIED;
                                     displayKeyShareDialog(session, deviceInfo, true);
                                 }
                             });
