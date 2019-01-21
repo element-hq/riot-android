@@ -18,11 +18,9 @@
 package im.vector.adapters;
 
 import android.content.Context;
-import android.content.DialogInterface;
 import android.media.MediaPlayer;
 import android.net.Uri;
 import android.support.v4.view.PagerAdapter;
-import android.support.v7.app.AlertDialog;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -53,9 +51,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import im.vector.R;
-import im.vector.activity.CommonActivityUtils;
-import im.vector.activity.VectorMediaViewerActivity;
-import im.vector.util.PermissionsToolsKt;
 import im.vector.util.SlidableMediaInfo;
 import im.vector.view.PieFractionView;
 
