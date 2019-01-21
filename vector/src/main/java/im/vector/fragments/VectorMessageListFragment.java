@@ -86,6 +86,7 @@ import im.vector.adapters.VectorMessagesAdapter;
 import im.vector.db.VectorContentProvider;
 import im.vector.extensions.MatrixSdkExtensionsKt;
 import im.vector.listeners.IMessagesAdapterActionsListener;
+import im.vector.listeners.YesNoListener;
 import im.vector.receiver.VectorUniversalLinkReceiver;
 import im.vector.ui.themes.ThemeUtils;
 import im.vector.util.ExternalApplicationsUtilKt;
@@ -375,6 +376,18 @@ public class VectorMessageListFragment extends MatrixMessageListFragment<VectorM
         }
     };
 
+    private final YesNoListener mYesNoListener = new YesNoListener() {
+        @Override
+        public void yes() {
+            mAdapter.notifyDataSetChanged();
+        }
+
+        @Override
+        public void no() {
+            mAdapter.notifyDataSetChanged();
+        }
+    };
+
     /**
      * the user taps on the e2e icon
      *
@@ -473,7 +486,7 @@ public class VectorMessageListFragment extends MatrixMessageListFragment<VectorM
                     builder.setNegativeButton(R.string.encryption_information_verify, new DialogInterface.OnClickListener() {
                         public void onClick(DialogInterface dialog, int id) {
                             CommonActivityUtils.displayDeviceVerificationDialog(deviceInfo,
-                                    event.getSender(), mSession, getActivity(), mDeviceVerificationCallback);
+                                    event.getSender(), mSession, getActivity(), mYesNoListener);
                         }
                     });
 
@@ -501,7 +514,7 @@ public class VectorMessageListFragment extends MatrixMessageListFragment<VectorM
                     builder.setNegativeButton(R.string.encryption_information_verify, new DialogInterface.OnClickListener() {
                         public void onClick(DialogInterface dialog, int id) {
                             CommonActivityUtils.displayDeviceVerificationDialog(deviceInfo,
-                                    event.getSender(), mSession, getActivity(), mDeviceVerificationCallback);
+                                    event.getSender(), mSession, getActivity(), mYesNoListener);
                         }
                     });
 

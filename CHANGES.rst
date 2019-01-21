@@ -32,6 +32,7 @@ Bugfix:
  - Fix issue with registration when an email is provided (#2852)
  - Fix issues with Tombstone events (#2866 && #2867)
  - Fix crash on BugReportActivity if previous Activity is destroyed (#2876)
+ - Key share request does not go away when user select "verify" (#2781)
 
 Translations:
  -

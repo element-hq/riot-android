@@ -40,6 +40,7 @@ import im.vector.Matrix;
 import im.vector.R;
 import im.vector.activity.CommonActivityUtils;
 import im.vector.adapters.VectorUnknownDevicesAdapter;
+import im.vector.listeners.YesNoListener;
 
 public class VectorUnknownDevicesFragment extends DialogFragment {
     private static final String ARG_SESSION_ID = "VectorUnknownDevicesFragment.ARG_SESSION_ID";
@@ -169,6 +170,18 @@ public class VectorUnknownDevicesFragment extends DialogFragment {
                 }
             };
 
+            final YesNoListener yesNoListener = new YesNoListener() {
+                @Override
+                public void yes() {
+                    refresh();
+                }
+
+                @Override
+                public void no() {
+                    refresh();
+                }
+            };
+
             @Override
             public void OnVerifyDeviceClick(MXDeviceInfo aDeviceInfo) {
                 switch (aDeviceInfo.mVerified) {
@@ -179,7 +192,7 @@ public class VectorUnknownDevicesFragment extends DialogFragment {
 
                     case MXDeviceInfo.DEVICE_VERIFICATION_UNVERIFIED:
                     default: // Blocked
-                        CommonActivityUtils.displayDeviceVerificationDialog(aDeviceInfo, aDeviceInfo.userId, mSession, getActivity(), mCallback);
+                        CommonActivityUtils.displayDeviceVerificationDialog(aDeviceInfo, aDeviceInfo.userId, mSession, getActivity(), yesNoListener);
                         break;
                 }
             }
