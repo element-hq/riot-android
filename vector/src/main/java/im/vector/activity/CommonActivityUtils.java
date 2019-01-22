@@ -83,6 +83,7 @@ import im.vector.contacts.ContactsManager;
 import im.vector.contacts.PIDsRetriever;
 import im.vector.extensions.MatrixSdkExtensionsKt;
 import im.vector.fragments.VectorUnknownDevicesFragment;
+import im.vector.listeners.YesNoListener;
 import im.vector.push.PushManager;
 import im.vector.services.EventStreamService;
 import im.vector.util.PreferencesManager;
@@ -1401,8 +1402,8 @@ public class CommonActivityUtils {
     static public <T> void displayDeviceVerificationDialog(final MXDeviceInfo deviceInfo,
                                                            final String sender,
                                                            final MXSession session,
-                                                           Activity activiy,
-                                                           final ApiCallback<Void> callback) {
+                                                           Activity activity,
+                                                           @NonNull final YesNoListener yesNoListener) {
 
         // sanity check
         if ((null == deviceInfo) || (null == sender) || (null == session)) {
@@ -1410,8 +1411,7 @@ public class CommonActivityUtils {
             return;
         }
 
-        AlertDialog.Builder builder = new AlertDialog.Builder(activiy);
-        LayoutInflater inflater = activiy.getLayoutInflater();
+        LayoutInflater inflater = activity.getLayoutInflater();
 
         View layout = inflater.inflate(R.layout.dialog_device_verify, null);
 
@@ -1426,21 +1426,26 @@ public class CommonActivityUtils {
         textView = layout.findViewById(R.id.encrypted_device_info_device_key);
         textView.setText(MatrixSdkExtensionsKt.getFingerprintHumanReadable(deviceInfo));
 
-        builder
+        new AlertDialog.Builder(activity)
                 .setTitle(R.string.encryption_information_verify_device)
                 .setView(layout)
                 .setPositiveButton(R.string.encryption_information_verify, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                        session.getCrypto().setDeviceVerification(MXDeviceInfo.DEVICE_VERIFICATION_VERIFIED, deviceInfo.deviceId, sender, callback);
+                        session.getCrypto().setDeviceVerification(MXDeviceInfo.DEVICE_VERIFICATION_VERIFIED, deviceInfo.deviceId, sender,
+                                new SimpleApiCallback<Void>() {
+                                    // Note: onSuccess() is the only method which will be called
+                                    @Override
+                                    public void onSuccess(Void info) {
+                                        yesNoListener.yes();
+                                    }
+                                });
                     }
                 })
                 .setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                        if (null != callback) {
-                            callback.onSuccess(null);
-                        }
+                        yesNoListener.no();
                     }
                 })
                 .show();

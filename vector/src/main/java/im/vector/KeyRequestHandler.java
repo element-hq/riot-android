@@ -40,6 +40,7 @@ import java.util.List;
 import java.util.Map;
 
 import im.vector.activity.CommonActivityUtils;
+import im.vector.listeners.YesNoListener;
 
 /**
  * Manage the key share events
@@ -277,6 +278,7 @@ public class KeyRequestHandler {
                             .setDeviceVerification(MXDeviceInfo.DEVICE_VERIFICATION_UNVERIFIED, mCurrentDevice, mCurrentUser, new SimpleApiCallback<Void>() {
                                 @Override
                                 public void onSuccess(Void info) {
+                                    deviceInfo.mVerified = MXDeviceInfo.DEVICE_VERIFICATION_UNVERIFIED;
                                     displayKeyShareDialog(session, deviceInfo, true);
                                 }
                             });
@@ -346,16 +348,19 @@ public class KeyRequestHandler {
                 .setPositiveButton(R.string.start_verification,
                         new DialogInterface.OnClickListener() {
                             public void onClick(final DialogInterface dialog, int id) {
-                                CommonActivityUtils.displayDeviceVerificationDialog(deviceInfo, mCurrentUser, session, activity, new SimpleApiCallback<Void>() {
-                                    @Override
-                                    public void onSuccess(Void info) {
-                                        if (deviceInfo.isVerified()) {
-                                            onDisplayKeyShareDialogClose(true, false);
-                                        } else {
-                                            displayKeyShareDialog(session, deviceInfo, wasNewDevice);
-                                        }
-                                    }
-                                });
+                                CommonActivityUtils.displayDeviceVerificationDialog(deviceInfo, mCurrentUser, session, activity,
+                                        new YesNoListener() {
+                                            @Override
+                                            public void yes() {
+                                                onDisplayKeyShareDialogClose(true, false);
+                                            }
+
+                                            @Override
+                                            public void no() {
+                                                // Display again the same dialog
+                                                displayKeyShareDialog(session, deviceInfo, wasNewDevice);
+                                            }
+                                        });
                             }
                         })
                 .setOnCancelListener(new DialogInterface.OnCancelListener() {
