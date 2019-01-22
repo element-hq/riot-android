@@ -535,37 +535,37 @@ public class RoomUtils {
 
             if (BingRulesManager.RoomNotificationState.ALL_MESSAGES_NOISY != state) {
                 item = popup.getMenu().findItem(R.id.ic_action_notifications_noisy);
-                item.setIcon(null);
+                item.setIcon(R.drawable.ic_material_transparent);
             }
 
             if (BingRulesManager.RoomNotificationState.ALL_MESSAGES != state) {
                 item = popup.getMenu().findItem(R.id.ic_action_notifications_all_message);
-                item.setIcon(null);
+                item.setIcon(R.drawable.ic_material_transparent);
             }
 
             if (BingRulesManager.RoomNotificationState.MENTIONS_ONLY != state) {
                 item = popup.getMenu().findItem(R.id.ic_action_notifications_mention_only);
-                item.setIcon(null);
+                item.setIcon(R.drawable.ic_material_transparent);
             }
 
             if (BingRulesManager.RoomNotificationState.MUTE != state) {
                 item = popup.getMenu().findItem(R.id.ic_action_notifications_mute);
-                item.setIcon(null);
+                item.setIcon(R.drawable.ic_material_transparent);
             }
 
             if (!isFavorite) {
                 item = popup.getMenu().findItem(R.id.ic_action_select_fav);
-                item.setIcon(null);
+                item.setIcon(R.drawable.ic_material_transparent);
             }
 
             if (!isLowPrior) {
                 item = popup.getMenu().findItem(R.id.ic_action_select_deprioritize);
-                item.setIcon(null);
+                item.setIcon(R.drawable.ic_material_transparent);
             }
 
             if (!room.isDirect()) {
                 item = popup.getMenu().findItem(R.id.ic_action_select_direct_chat);
-                item.setIcon(null);
+                item.setIcon(R.drawable.ic_material_transparent);
             }
 
             // TODO LazyLoading, current user may be null

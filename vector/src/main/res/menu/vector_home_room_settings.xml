@@ -40,7 +40,7 @@
 
         <item
             android:id="@+id/ic_action_select_remove"
-            android:icon="@drawable/vector_leave_room_black"
+            android:icon="@drawable/ic_material_leave"
             android:title="@string/room_settings_leave_conversation" />
 
     </group>
@@ -48,13 +48,14 @@
     <group android:id="@+id/add_shortcut_actions">
         <item
             android:id="@+id/ic_action_add_homescreen_shortcut"
+            android:icon="@drawable/ic_material_transparent"
             android:title="@string/room_settings_add_homescreen_shortcut" />
     </group>
 
     <group android:id="@+id/historical_room_actions">
         <item
             android:id="@+id/action_forget_room"
-            android:icon="@drawable/vector_leave_room_black"
+            android:icon="@drawable/ic_material_leave"
             android:title="@string/room_settings_forget" />
     </group>
 </menu>
