@@ -151,29 +151,36 @@ public class VectorUnknownDevicesFragment extends DialogFragment {
                 switch (aDeviceInfo.mVerified) {
                     case MXDeviceInfo.DEVICE_VERIFICATION_VERIFIED:
                         mSession.getCrypto()
-                                .setDeviceVerification(MXDeviceInfo.DEVICE_VERIFICATION_UNVERIFIED, aDeviceInfo.deviceId, aDeviceInfo.userId, new SimpleApiCallback<Void>() {
-                                    @Override
-                                    public void onSuccess(Void info) {
-                                        aDeviceInfo.mVerified = MXDeviceInfo.DEVICE_VERIFICATION_UNVERIFIED;
-                                        refresh();
-                                    }
-                                });
+                                .setDeviceVerification(MXDeviceInfo.DEVICE_VERIFICATION_UNVERIFIED,
+                                        aDeviceInfo.deviceId,
+                                        aDeviceInfo.userId,
+                                        new SimpleApiCallback<Void>() {
+                                            @Override
+                                            public void onSuccess(Void info) {
+                                                aDeviceInfo.mVerified = MXDeviceInfo.DEVICE_VERIFICATION_UNVERIFIED;
+                                                refresh();
+                                            }
+                                        });
                         break;
 
                     case MXDeviceInfo.DEVICE_VERIFICATION_UNVERIFIED:
                     default: // Blocked
-                        CommonActivityUtils.displayDeviceVerificationDialog(aDeviceInfo, aDeviceInfo.userId, mSession, getActivity(), new YesNoListener() {
-                            @Override
-                            public void yes() {
-                                aDeviceInfo.mVerified = MXDeviceInfo.DEVICE_VERIFICATION_VERIFIED;
-                                refresh();
-                            }
+                        CommonActivityUtils.displayDeviceVerificationDialog(aDeviceInfo,
+                                aDeviceInfo.userId,
+                                mSession,
+                                getActivity(),
+                                new YesNoListener() {
+                                    @Override
+                                    public void yes() {
+                                        aDeviceInfo.mVerified = MXDeviceInfo.DEVICE_VERIFICATION_VERIFIED;
+                                        refresh();
+                                    }
 
-                            @Override
-                            public void no() {
-                                // Nothing to do
-                            }
-                        });
+                                    @Override
+                                    public void no() {
+                                        // Nothing to do
+                                    }
+                                });
                         break;
                 }
             }
@@ -182,22 +189,28 @@ public class VectorUnknownDevicesFragment extends DialogFragment {
             public void OnBlockDeviceClick(MXDeviceInfo aDeviceInfo) {
                 if (aDeviceInfo.mVerified == MXDeviceInfo.DEVICE_VERIFICATION_BLOCKED) {
                     mSession.getCrypto()
-                            .setDeviceVerification(MXDeviceInfo.DEVICE_VERIFICATION_UNVERIFIED, aDeviceInfo.deviceId, aDeviceInfo.userId, new SimpleApiCallback<Void>() {
-                                @Override
-                                public void onSuccess(Void info) {
-                                    aDeviceInfo.mVerified = MXDeviceInfo.DEVICE_VERIFICATION_UNVERIFIED;
-                                    refresh();
-                                }
-                            });
+                            .setDeviceVerification(MXDeviceInfo.DEVICE_VERIFICATION_UNVERIFIED,
+                                    aDeviceInfo.deviceId,
+                                    aDeviceInfo.userId,
+                                    new SimpleApiCallback<Void>() {
+                                        @Override
+                                        public void onSuccess(Void info) {
+                                            aDeviceInfo.mVerified = MXDeviceInfo.DEVICE_VERIFICATION_UNVERIFIED;
+                                            refresh();
+                                        }
+                                    });
                 } else {
                     mSession.getCrypto()
-                            .setDeviceVerification(MXDeviceInfo.DEVICE_VERIFICATION_BLOCKED, aDeviceInfo.deviceId, aDeviceInfo.userId, new SimpleApiCallback<Void>() {
-                                @Override
-                                public void onSuccess(Void info) {
-                                    aDeviceInfo.mVerified = MXDeviceInfo.DEVICE_VERIFICATION_BLOCKED;
-                                    refresh();
-                                }
-                            });
+                            .setDeviceVerification(MXDeviceInfo.DEVICE_VERIFICATION_BLOCKED,
+                                    aDeviceInfo.deviceId,
+                                    aDeviceInfo.userId,
+                                    new SimpleApiCallback<Void>() {
+                                        @Override
+                                        public void onSuccess(Void info) {
+                                            aDeviceInfo.mVerified = MXDeviceInfo.DEVICE_VERIFICATION_BLOCKED;
+                                            refresh();
+                                        }
+                                    });
                 }
             }
         });
