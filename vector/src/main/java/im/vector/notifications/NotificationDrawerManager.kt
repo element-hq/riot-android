@@ -61,12 +61,11 @@ class NotificationDrawerManager(val context: Context) {
     private var currentRoomId: String? = null
 
 
-    /*
-    * Should be called as soon as a new event is ready to be displayed.
-    * The notification corresponding to this event will not be displayed until
-    * #refreshNotificationDrawer() is called.
-    * Events might be grouped and there might not be one notification per event!
-    *
+    /**
+    Should be called as soon as a new event is ready to be displayed.
+    The notification corresponding to this event will not be displayed until
+    #refreshNotificationDrawer() is called.
+    Events might be grouped and there might not be one notification per event!
      */
     fun onNotifiableEventReceived(notifiableEvent: NotifiableEvent, userId: String, userDisplayName: String?) {
         //If we support multi session, event list should be per userId
@@ -98,8 +97,8 @@ class NotificationDrawerManager(val context: Context) {
         }
     }
 
-    /*
-    * Clear all known events and refresh the notification drawer
+    /**
+    Clear all known events and refresh the notification drawer
      */
     fun clearAllEvents() {
         synchronized(this) {
@@ -108,9 +107,7 @@ class NotificationDrawerManager(val context: Context) {
         refreshNotificationDrawer(null)
     }
 
-    /*
-    * Clear all known message events for this room and refresh the notification drawer
-     */
+    /** Clear all known message events for this room and refresh the notification drawer */
     fun clearMessageEventOfRoom(roomId: String?) {
         if (roomId != null) {
             eventList.removeAll { e ->
@@ -125,8 +122,8 @@ class NotificationDrawerManager(val context: Context) {
     }
 
     /**
-     * Should be called when the application is currently opened and showing timeline for the given roomId.
-     * Used to ignore events related to that room (no need to display notification) and clean any existing notification on this room.
+    Should be called when the application is currently opened and showing timeline for the given roomId.
+    Used to ignore events related to that room (no need to display notification) and clean any existing notification on this room.
      */
     fun setCurrentRoom(roomId: String?) {
         var hasChanged = false
@@ -173,7 +170,7 @@ class NotificationDrawerManager(val context: Context) {
                         roomIdToEventMap[roomId] = roomEvents
                     }
 
-                    if (shouldIgnoreMessageEventInRoom(roomId)|| outdatedDetector?.isMessageOutdated(event) == true) {
+                    if (shouldIgnoreMessageEventInRoom(roomId) || outdatedDetector?.isMessageOutdated(event) == true) {
                         //forget this event
                         eventIterator.remove()
                     } else {
@@ -233,7 +230,8 @@ class NotificationDrawerManager(val context: Context) {
                 }
 
                 try {
-                    val summaryLine = context.resources.getQuantityString(R.plurals.notification_compat_summary_line_for_room, events.size, roomName, events.size)
+                    val summaryLine = context.resources.getQuantityString(
+                            R.plurals.notification_compat_summary_line_for_room, events.size, roomName, events.size)
                     summaryInboxStyle.addLine(summaryLine)
                 } catch (e: Throwable) {
                     //String not found or bad format
@@ -303,7 +301,8 @@ class NotificationDrawerManager(val context: Context) {
                         // turn the screen on for 3 seconds
                         if (Matrix.getInstance(VectorApp.getInstance())!!.pushManager.isScreenTurnedOn) {
                             val pm = VectorApp.getInstance().getSystemService(Context.POWER_SERVICE) as PowerManager
-                            val wl = pm.newWakeLock(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON or PowerManager.ACQUIRE_CAUSES_WAKEUP, "riot:manageNotificationSound")
+                            val wl = pm.newWakeLock(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON or PowerManager.ACQUIRE_CAUSES_WAKEUP,
+                                    "riot:manageNotificationSound")
                             wl.acquire(3000)
                             wl.release()
                         }

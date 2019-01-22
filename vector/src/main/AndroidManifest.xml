@@ -484,7 +484,7 @@
 
         <!-- Exported false, should only be accessible from this app!! -->
         <receiver
-            android:name=".receiver.ReplyNotificationBroadcastReceiver"
+            android:name=".receiver.NotificationBroadcastReceiver"
             android:enabled="true"
             android:exported="false" />
 

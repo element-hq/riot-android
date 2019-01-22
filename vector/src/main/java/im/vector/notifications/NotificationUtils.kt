@@ -42,7 +42,7 @@ import im.vector.activity.JoinRoomActivity
 import im.vector.activity.LockScreenActivity
 import im.vector.activity.VectorHomeActivity
 import im.vector.activity.VectorRoomActivity
-import im.vector.receiver.ReplyNotificationBroadcastReceiver
+import im.vector.receiver.NotificationBroadcastReceiver
 import im.vector.ui.themes.ThemeUtils
 import im.vector.util.PreferencesManager
 import im.vector.util.startNotificationChannelSettingsIntent
@@ -757,7 +757,7 @@ object NotificationUtils {
             if (!roomInfo.hasSmartReplyError) {
                 buildQuickReplyIntent(context, roomInfo.roomId, senderDisplayNameForReplyCompat)?.let { replyPendingIntent ->
                     var replyLabel: String = context.getString(R.string.action_quick_reply)
-                    var remoteInput: RemoteInput = RemoteInput.Builder(ReplyNotificationBroadcastReceiver.KEY_TEXT_REPLY).run {
+                    var remoteInput: RemoteInput = RemoteInput.Builder(NotificationBroadcastReceiver.KEY_TEXT_REPLY).run {
                         setLabel(replyLabel)
                         build()
                     }
@@ -778,8 +778,8 @@ object NotificationUtils {
                 setLargeIcon(largeIcon)
             }
 
-            val intent = Intent(context, ReplyNotificationBroadcastReceiver::class.java)
-            intent.putExtra(ReplyNotificationBroadcastReceiver.KEY_ROOM_ID, roomInfo.roomId)
+            val intent = Intent(context, NotificationBroadcastReceiver::class.java)
+            intent.putExtra(NotificationBroadcastReceiver.KEY_ROOM_ID, roomInfo.roomId)
             intent.action = DISMISS_ROOM_NOTIF_ACTION
             val pendingIntent = PendingIntent.getBroadcast(context.applicationContext,
                     System.currentTimeMillis().toInt(), intent, PendingIntent.FLAG_UPDATE_CURRENT)
@@ -898,9 +898,9 @@ object NotificationUtils {
     private fun buildQuickReplyIntent(context: Context, roomId: String, senderName: String?): PendingIntent? {
         val intent: Intent
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-            intent = Intent(context, ReplyNotificationBroadcastReceiver::class.java)
+            intent = Intent(context, NotificationBroadcastReceiver::class.java)
             intent.action = "${SMART_REPLY_ACTION}_$roomId"
-            intent.putExtra(ReplyNotificationBroadcastReceiver.KEY_ROOM_ID, roomId)
+            intent.putExtra(NotificationBroadcastReceiver.KEY_ROOM_ID, roomId)
             return PendingIntent.getBroadcast(context, System.currentTimeMillis().toInt(), intent,
                     PendingIntent.FLAG_UPDATE_CURRENT)
         } else {
@@ -954,7 +954,7 @@ object NotificationUtils {
     }
 
     private fun getDismissSummaryPendingIntent(context: Context): PendingIntent {
-        val intent = Intent(context, ReplyNotificationBroadcastReceiver::class.java)
+        val intent = Intent(context, NotificationBroadcastReceiver::class.java)
         intent.action = DISMISS_SUMMARY_ACTION
         intent.data = Uri.parse("foobar://deleteSummary")
         val pendingIntent = PendingIntent.getBroadcast(context.applicationContext,

@@ -1,11 +1,14 @@
-/*
- * Copyright 2016 OpenMarket Ltd
+/**
+ * Copyright 2019 New Vector Ltd
+ *
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -13,6 +16,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
 package im.vector.receiver
 
 import android.content.BroadcastReceiver
@@ -34,7 +38,7 @@ import org.matrix.androidsdk.rest.model.MatrixError
 import org.matrix.androidsdk.rest.model.message.Message
 import org.matrix.androidsdk.util.Log
 
-class ReplyNotificationBroadcastReceiver : BroadcastReceiver() {
+class NotificationBroadcastReceiver : BroadcastReceiver() {
 
     override fun onReceive(context: Context?, intent: Intent?) {
         if (intent == null || context == null) return
@@ -42,7 +46,7 @@ class ReplyNotificationBroadcastReceiver : BroadcastReceiver() {
         val action = intent.action
         if (action != null) {
             if (action.startsWith(NotificationUtils.SMART_REPLY_ACTION)) {
-                handleSmartReply(intent,context)
+                handleSmartReply(intent, context)
             } else if (action == NotificationUtils.DISMISS_ROOM_NOTIF_ACTION) {
                 intent.getStringExtra(KEY_ROOM_ID)?.let {
                     VectorApp.getInstance().notificationDrawerManager.clearMessageEventOfRoom(it)
@@ -86,12 +90,13 @@ class ReplyNotificationBroadcastReceiver : BroadcastReceiver() {
                         false,
                         System.currentTimeMillis(),
                         session.myUser?.displayname
-                                ?: "Me",
+                                ?: "",
                         message,
                         roomId,
                         room.getRoomDisplayName(context))
                 notifiableMessageEvent.outGoingMessage = true
-                VectorApp.getInstance().notificationDrawerManager.onNotifiableEventReceived(notifiableMessageEvent, session.myUserId, session.myUser.displayname)
+                VectorApp.getInstance().notificationDrawerManager.onNotifiableEventReceived(
+                        notifiableMessageEvent, session.myUserId, session.myUser.displayname)
                 VectorApp.getInstance().notificationDrawerManager.refreshNotificationDrawer(null)
             }
 
@@ -123,14 +128,15 @@ class ReplyNotificationBroadcastReceiver : BroadcastReceiver() {
                         false,
                         System.currentTimeMillis(),
                         session.myUser?.displayname
-                                ?: "Me",
+                                ?: "",
                         message,
                         roomId,
                         room.getRoomDisplayName(context))
                 notifiableMessageEvent.outGoingMessage = true
                 notifiableMessageEvent.outGoingMessageFailed = true
 
-                VectorApp.getInstance().notificationDrawerManager.onNotifiableEventReceived(notifiableMessageEvent, session.myUserId, session.myUser.displayname)
+                VectorApp.getInstance().notificationDrawerManager.onNotifiableEventReceived(
+                        notifiableMessageEvent, session.myUserId, session.myUser.displayname)
                 VectorApp.getInstance().notificationDrawerManager.refreshNotificationDrawer(null)
             }
         })
@@ -148,10 +154,10 @@ class ReplyNotificationBroadcastReceiver : BroadcastReceiver() {
     }
 
     companion object {
-        val KEY_ROOM_ID = "roomID"
-        val KEY_TEXT_REPLY = "key_text_reply"
-        val EXTRA_MATRIX_ID = "EXTRA_MATRIX_ID"
+        const val KEY_ROOM_ID = "roomID"
+        const val KEY_TEXT_REPLY = "key_text_reply"
+        const val EXTRA_MATRIX_ID = "EXTRA_MATRIX_ID"
 
-        val LOG_TAG = ReplyNotificationBroadcastReceiver::class.java.name
+        val LOG_TAG = NotificationBroadcastReceiver::class.java.name
     }
 }
