@@ -5,7 +5,7 @@ MatrixSdk:
  - Upgrade MatrixSdk to version 0.X.Y.
 
 Features:
- -
+ - key backup: Implement setup screen #2883
 
 Improvements:
  - Support Split-screen mode (#1832)
