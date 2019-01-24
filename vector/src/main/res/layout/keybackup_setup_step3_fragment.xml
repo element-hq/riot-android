@@ -82,6 +82,7 @@
                 android:layout_marginLeft="20dp"
                 android:layout_marginRight="20dp"
                 android:textAlignment="center"
+                android:fontFamily="monospace"
                 android:textSize="20sp"
                 tools:text="HHWJ Y8DK OD04 BQEN FQ4V M4O8 BQEN FQ4V M4O8" />
 

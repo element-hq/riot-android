@@ -122,7 +122,11 @@ class KeybackupSetupStep3Fragment : VectorBaseFragment() {
             } else {
                 mSpinner.visibility = View.GONE
                 mSpinnerStatusText.visibility = View.GONE
-                mRecoveryKeyTextView.text = newValue
+                if ("XXXX XXXX XXXX XXXX XXXX XXXX XXXX XXXX XXXX XXXX XXXX XXXX".length == newValue.length) {
+                    mRecoveryKeyTextView.text = String.format("%s\n%s\n%s",newValue.subSequence(0,19),newValue.subSequence(20,39),newValue.subSequence(40,59))
+                } else {
+                    mRecoveryKeyTextView.text = newValue
+                }
                 mCopyButton.visibility = View.VISIBLE
                 mFinishButton.visibility = View.VISIBLE
             }
