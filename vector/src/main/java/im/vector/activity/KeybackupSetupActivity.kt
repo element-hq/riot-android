@@ -15,6 +15,7 @@
  */
 package im.vector.activity
 
+import android.app.Activity
 import android.support.v7.app.AlertDialog
 import android.view.MenuItem
 import im.vector.R
@@ -51,10 +52,11 @@ class KeybackupSetupActivity : MXCActionBarActivity() {
         AlertDialog.Builder(this)
                 .setTitle(R.string.keybackup_setup_skip_title)
                 .setMessage(R.string.keybackup_setup_skip_msg)
-                .setPositiveButton(R.string._continue) { dialog, id ->
+                .setNegativeButton(R.string.cancel) { dialog, id ->
                     //nop
                 }
-                .setNegativeButton(R.string.skip) { dialog, id ->
+                .setPositiveButton(R.string.skip) { dialog, id ->
+                    setResult(Activity.RESULT_CANCELED)
                     finish()
                 }
                 .show();

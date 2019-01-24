@@ -1241,7 +1241,9 @@ Discover truly efficient and open collaboration with Riot.im!"</string>
     <string name="keybackup_setup_step3_copy_button_title">Make a Copy</string>
     <string name="keybackup_setup_step3_please_make_copy">Please make a copy</string>
     <string name="keybackup_setup_step3_share_intent_chooser_title">Share recovery key with</string>
+    <string name="keybackup_setup_step3_generating_key_status">Generating Recovery Key using passphrase, this process can take several seconds.</string>
     <string name="recovery_key">Recovery Key</string>
+    <string name="unexpected_error">Unexpected error</string>
 
     <string name="keybackup_setup_skip_title">Are you sure?</string>
     <string name="keybackup_setup_skip_msg">You may lose secure messages if you log out of lose your device.</string>

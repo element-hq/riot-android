@@ -41,6 +41,7 @@
         android:layout_height="wrap_content"
         android:layout_margin="16dp"
         android:background="?attr/colorAccent"
+        android:minWidth="200dp"
         android:padding="8dp"
         android:text="@string/keybackup_setup_step1_button_title"
         android:textColor="@android:color/white"

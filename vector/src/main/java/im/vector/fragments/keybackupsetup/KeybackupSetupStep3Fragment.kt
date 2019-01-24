@@ -15,12 +15,15 @@
  */
 package im.vector.fragments.keybackupsetup
 
+import android.app.Activity
 import android.arch.lifecycle.Observer
 import android.arch.lifecycle.ViewModelProviders
 import android.content.Intent
 import android.os.Bundle
+import android.support.transition.TransitionManager
 import android.support.v7.app.AlertDialog
 import android.view.View
+import android.view.ViewGroup
 import android.widget.Button
 import android.widget.ProgressBar
 import android.widget.TextView
@@ -46,7 +49,6 @@ class KeybackupSetupStep3Fragment : VectorBaseFragment() {
     @BindView(R.id.keybackupsetup_step3_copy_button)
     lateinit var mCopyButton: Button
 
-
     @BindView(R.id.keybackupsetup_step3_button)
     lateinit var mFinishButton: Button
 
@@ -55,6 +57,12 @@ class KeybackupSetupStep3Fragment : VectorBaseFragment() {
 
     @BindView(R.id.keybackup_recovery_key_spinner)
     lateinit var mSpinner: ProgressBar
+
+    @BindView(R.id.keybackup_recovery_key_spinner_text)
+    lateinit var mSpinnerStatusText: TextView
+
+    @BindView(R.id.keybackupsetup_step3_root)
+    lateinit var mRootLayout : ViewGroup
 
     companion object {
         fun newInstance() = KeybackupSetupStep3Fragment()
@@ -72,11 +80,18 @@ class KeybackupSetupStep3Fragment : VectorBaseFragment() {
         val session = (activity as? MXCActionBarActivity)?.session
                 ?: Matrix.getInstance(context)?.getSession(null)
 
+        viewModel.recoveryKey.value = null
         session?.let { mxSession ->
-            mxSession.crypto?.keysBackup?.prepareKeysBackupVersion(viewModel.passphrase.value!!, object : SuccessErrorCallback<MegolmBackupCreationInfo> {
+            val requestedPass = viewModel.passphrase.value!!
+            mxSession.crypto?.keysBackup?.prepareKeysBackupVersion(requestedPass, object : SuccessErrorCallback<MegolmBackupCreationInfo> {
                 override fun onSuccess(info: MegolmBackupCreationInfo) {
+                    if (requestedPass != viewModel.passphrase.value) {
+                        //this is an old request, we can't cancel but we can ignore
+                        return
+                    }
                     viewModel.recoveryKey.value = info.recoveryKey
                     viewModel.megolmBackupCreationInfo = info
+                    viewModel.copyHasBeenMade = false
                 }
 
                 override fun onUnexpectedError(e: Exception?) {
@@ -96,13 +111,20 @@ class KeybackupSetupStep3Fragment : VectorBaseFragment() {
         }
 
         viewModel.recoveryKey.observe(this, Observer { newValue ->
+            TransitionManager.beginDelayedTransition(mRootLayout)
             if (newValue == null || newValue.isEmpty()) {
                 mSpinner.visibility = View.VISIBLE
+                mSpinnerStatusText.visibility = View.VISIBLE
                 mSpinner.animate()
                 mRecoveryKeyTextView.text = null
+                mCopyButton.visibility = View.GONE
+                mFinishButton.visibility = View.GONE
             } else {
                 mSpinner.visibility = View.GONE
+                mSpinnerStatusText.visibility = View.GONE
                 mRecoveryKeyTextView.text = newValue
+                mCopyButton.visibility = View.VISIBLE
+                mFinishButton.visibility = View.VISIBLE
             }
         })
 
@@ -135,6 +157,7 @@ class KeybackupSetupStep3Fragment : VectorBaseFragment() {
 
                         override fun onSuccess(info: KeysVersion?) {
                             viewModel.isCreatingBackupVersion.value = false
+                            activity?.setResult(Activity.RESULT_OK)
                             activity?.finish()
                         }
 

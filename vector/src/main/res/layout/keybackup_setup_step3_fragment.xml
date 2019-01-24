@@ -2,6 +2,7 @@
 <android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/keybackupsetup_step3_root"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     tools:context=".fragments.keybackupsetup.KeybackupSetupStep3Fragment">
@@ -18,7 +19,8 @@
         app:layout_constraintBottom_toTopOf="@id/keybackup_recovery_key_container"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_chainStyle="spread_inside" />
 
 
     <android.support.constraint.ConstraintLayout
@@ -27,7 +29,7 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="20dp"
         android:layout_marginBottom="20dp"
-        app:layout_constraintBottom_toTopOf="@id/keybackupsetup_step3_button"
+        app:layout_constraintBottom_toTopOf="@id/keybackupsetup_step3_copy_button"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/keybackupsetup_step3_text">
@@ -50,47 +52,58 @@
                 android:layout_margin="6dp"
                 android:background="@color/list_divider_color_light" />
 
-            <RelativeLayout
+
+            <ProgressBar
+                android:id="@+id/keybackup_recovery_key_spinner"
+                android:layout_width="20dp"
+                android:layout_height="20dp"
+                android:layout_gravity="center"
+                android:foregroundTint="?attr/colorAccent"
+                android:indeterminate="true"
+                android:visibility="gone"
+                tools:visibility="visible" />
+
+            <TextView
+                android:id="@+id/keybackup_recovery_key_spinner_text"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="16dp"
-                android:layout_marginRight="16dp">
+                android:layout_marginLeft="20dp"
+                android:layout_marginRight="20dp"
+                android:text="@string/keybackup_setup_step3_generating_key_status"
+                android:textAlignment="center"
+                android:textColor="?attr/colorAccent"
+                android:visibility="gone"
+                tools:visibility="visible" />
 
-                <TextView
-                    android:id="@+id/keybackup_recovery_key_text"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:textAlignment="center"
-                    android:textSize="16sp"
-                    tools:text="HHWJ-Y8DK-OD04-BQEN-FQ4V-M4O8" />
-
-                <ProgressBar
-                    android:id="@+id/keybackup_recovery_key_spinner"
-                    android:layout_width="20dp"
-                    android:layout_height="20dp"
-                    android:layout_centerHorizontal="true"
-                    android:layout_centerVertical="true"
-                    android:foregroundTint="?attr/colorAccent"
-                    android:indeterminate="true"
-                    android:visibility="gone"
-                    tools:visibility="visible" />
-            </RelativeLayout>
-
-
-            <Button
-                android:id="@+id/keybackupsetup_step3_copy_button"
-                android:layout_width="wrap_content"
+            <TextView
+                android:id="@+id/keybackup_recovery_key_text"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:layout_marginTop="8dp"
-                android:layout_marginBottom="8dp"
-                android:background="?attr/colorAccent"
-                android:padding="8dp"
-                android:text="@string/keybackup_setup_step3_copy_button_title"
-                android:textColor="@android:color/white" />
+                android:layout_marginLeft="20dp"
+                android:layout_marginRight="20dp"
+                android:textAlignment="center"
+                android:textSize="20sp"
+                tools:text="HHWJ Y8DK OD04 BQEN FQ4V M4O8 BQEN FQ4V M4O8" />
+
         </LinearLayout>
 
     </android.support.constraint.ConstraintLayout>
+
+    <Button
+        android:id="@+id/keybackupsetup_step3_copy_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:layout_marginBottom="8dp"
+        android:background="?attr/colorAccent"
+        android:minWidth="200dp"
+        android:padding="8dp"
+        android:text="@string/keybackup_setup_step3_copy_button_title"
+        android:textColor="@android:color/white"
+        app:layout_constraintBottom_toTopOf="@id/keybackupsetup_step3_button"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/keybackup_recovery_key_container" />
 
     <Button
         android:id="@+id/keybackupsetup_step3_button"
@@ -99,13 +112,13 @@
         android:layout_marginTop="8dp"
         android:layout_marginBottom="8dp"
         android:background="?attr/colorAccent"
+        android:minWidth="200dp"
         android:padding="8dp"
         android:text="@string/keybackup_setup_step3_button_title"
         android:textColor="@android:color/white"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/keybackup_passphrase_container"
+        app:layout_constraintTop_toBottomOf="@id/keybackupsetup_step3_copy_button" />
 
-        />
 </android.support.constraint.ConstraintLayout>
