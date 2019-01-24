@@ -984,48 +984,60 @@ public class VectorHomeActivity extends VectorAppCompatActivity implements Searc
     /**
      * Update UI colors to match the selected tab
      *
-     * @param primaryColor
-     * @param secondaryColor
+     * @param primaryColor    the primary color
+     * @param secondaryColor  the secondary color. If -1, primary color will be used
+     * @param fabColor        the FAB color. If equals to -1, the FAB color will not be updated
+     * @param fabPressedColor the pressed FAB color
      */
     public void updateTabStyle(final int primaryColor,
                                final int secondaryColor,
                                final int fabColor,
                                final int fabPressedColor) {
+        // Apply primary color
         mToolbar.setBackgroundColor(primaryColor);
-
-        Class menuClass = FloatingActionsMenu.class;
-        try {
-            Field normal = menuClass.getDeclaredField("mAddButtonColorNormal");
-            normal.setAccessible(true);
-            Field pressed = menuClass.getDeclaredField("mAddButtonColorPressed");
-            pressed.setAccessible(true);
-
-            normal.set(mFloatingActionsMenu, fabColor);
-            pressed.set(mFloatingActionsMenu, fabPressedColor);
-
-            mFabMain.setColorNormal(fabColor);
-            mFabMain.setColorPressed(fabPressedColor);
-        } catch (Exception ignored) {
-
-        }
-
-        mFabJoinRoom.setColorNormal(fabColor);
-        mFabJoinRoom.setColorPressed(fabPressedColor);
-        mFabCreateRoom.setColorNormal(fabColor);
-        mFabCreateRoom.setColorPressed(fabPressedColor);
-        mFabStartChat.setColorNormal(fabColor);
-        mFabStartChat.setColorPressed(fabPressedColor);
-
         mVectorPendingCallView.updateBackgroundColor(primaryColor);
         mSyncInProgressView.setBackgroundColor(primaryColor);
+
+        // Apply secondary color
+        int _secondaryColor = secondaryColor;
+        if (_secondaryColor == -1) {
+            _secondaryColor = primaryColor;
+        }
+
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            mSyncInProgressView.setIndeterminateTintList(ColorStateList.valueOf(secondaryColor));
+            mSyncInProgressView.setIndeterminateTintList(ColorStateList.valueOf(_secondaryColor));
         } else {
             mSyncInProgressView.getIndeterminateDrawable().setColorFilter(
-                    secondaryColor, android.graphics.PorterDuff.Mode.SRC_IN);
+                    _secondaryColor, android.graphics.PorterDuff.Mode.SRC_IN);
         }
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            getWindow().setStatusBarColor(secondaryColor);
+            getWindow().setStatusBarColor(_secondaryColor);
+        }
+
+        // FAB button
+        if (fabColor != -1) {
+            Class menuClass = FloatingActionsMenu.class;
+            try {
+                Field normal = menuClass.getDeclaredField("mAddButtonColorNormal");
+                normal.setAccessible(true);
+                Field pressed = menuClass.getDeclaredField("mAddButtonColorPressed");
+                pressed.setAccessible(true);
+
+                normal.set(mFloatingActionsMenu, fabColor);
+                pressed.set(mFloatingActionsMenu, fabPressedColor);
+
+                mFabMain.setColorNormal(fabColor);
+                mFabMain.setColorPressed(fabPressedColor);
+            } catch (Exception ignored) {
+
+            }
+
+            mFabJoinRoom.setColorNormal(fabColor);
+            mFabJoinRoom.setColorPressed(fabPressedColor);
+            mFabCreateRoom.setColorNormal(fabColor);
+            mFabCreateRoom.setColorPressed(fabPressedColor);
+            mFabStartChat.setColorNormal(fabColor);
+            mFabStartChat.setColorPressed(fabPressedColor);
         }
 
         // Set color of toolbar search view

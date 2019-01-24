@@ -126,8 +126,11 @@ public class GroupsFragment extends AbsHomeFragment {
         super.onActivityCreated(savedInstanceState);
 
         mGroupsManager = mSession.getGroupsManager();
-        mPrimaryColor = ContextCompat.getColor(getActivity(), R.color.tab_groups);
-        mSecondaryColor = ContextCompat.getColor(getActivity(), R.color.tab_groups_secondary);
+        mPrimaryColor = ThemeUtils.INSTANCE.getColor(getActivity(), R.attr.vctr_tab_home);
+        mSecondaryColor = ThemeUtils.INSTANCE.getColor(getActivity(), R.attr.vctr_tab_home_secondary);
+
+        mFabColor = ContextCompat.getColor(getActivity(), R.color.tab_groups);
+        mFabPressedColor = ContextCompat.getColor(getActivity(), R.color.tab_groups_secondary);
 
         initViews();
 

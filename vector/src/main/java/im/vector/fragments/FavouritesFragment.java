@@ -46,6 +46,7 @@ import butterknife.BindView;
 import im.vector.R;
 import im.vector.VectorApp;
 import im.vector.adapters.HomeRoomAdapter;
+import im.vector.ui.themes.ThemeUtils;
 import im.vector.util.HomeRoomsViewModel;
 import im.vector.util.RoomUtils;
 import im.vector.view.EmptyViewItemDecoration;
@@ -103,8 +104,8 @@ public class FavouritesFragment extends AbsHomeFragment implements HomeRoomAdapt
     @Override
     public void onActivityCreated(final Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        mPrimaryColor = ContextCompat.getColor(getActivity(), R.color.tab_favourites);
-        mSecondaryColor = ContextCompat.getColor(getActivity(), R.color.tab_favourites_secondary);
+        mPrimaryColor = ThemeUtils.INSTANCE.getColor(getActivity(), R.attr.vctr_tab_home);
+        mSecondaryColor = ThemeUtils.INSTANCE.getColor(getActivity(), R.attr.vctr_tab_home_secondary);
         initViews();
         // Eventually restore the pattern of adapter after orientation change
         mFavoritesAdapter.onFilterDone(mCurrentFilter);
