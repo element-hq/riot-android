@@ -102,15 +102,14 @@ class KeybackupSetupStep2Fragment : VectorBaseFragment() {
         }
     }
 
-    companion object {
-        fun newInstance() = KeybackupSetupStep2Fragment()
-    }
-
-    private lateinit var viewModel: KeybackupSetupStep2ViewModel
+    private lateinit var viewModel: KeybackupSetupSharedViewModel
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
-        viewModel = ViewModelProviders.of(this).get(KeybackupSetupStep2ViewModel::class.java)
+
+        viewModel = activity?.run {
+            ViewModelProviders.of(this).get(KeybackupSetupSharedViewModel::class.java)
+        } ?: throw Exception("Invalid Activity")
 
         bindViewToViewModel()
     }
@@ -160,7 +159,10 @@ class KeybackupSetupStep2Fragment : VectorBaseFragment() {
 
         })
 
+        mPassphraseTextEdit.setText(viewModel.passphrase.value)
         mPassphraseTextEdit.addTextChangedListener(mPassphraseTextWatcher)
+
+        mPassphraseConfirmTextEdit.setText(viewModel.confirmPassphrase.value)
         mPassphraseConfirmTextEdit.addTextChangedListener(mConfirmPassphraseTextWatcher)
 
         viewModel.showPasswordMode.observe(this, Observer {
@@ -176,7 +178,7 @@ class KeybackupSetupStep2Fragment : VectorBaseFragment() {
         })
 
         mToggleVisibilityButton.setOnClickListener {
-            viewModel.toggleVisibilityMode()
+            toggleVisibilityMode()
         }
 
         viewModel.confirmPassphraseError.observe(this, Observer {
@@ -198,21 +200,36 @@ class KeybackupSetupStep2Fragment : VectorBaseFragment() {
         }
     }
 
-    private fun doNext() {
-        if (TextUtils.isEmpty(viewModel.passphrase.value)) {
-            mPassphraseInputLayout.error = context?.getString(R.string.keybackup_setup_step2_passphrase_empty)
-        } else if (viewModel.passphrase.value != viewModel.confirmPassphrase.value) {
-            viewModel.confirmPassphraseError.value = R.string.keybackup_setup_step2_passphrase_no_match
-        } else if (viewModel.passwordStrength.value?.score ?: 0 < 3) {
-            mPassphraseInputLayout.error = context?.getString(R.string.keybackup_setup_step2_passphrase_too_weak)
-        } else {
-            this.activity?.supportFragmentManager?.beginTransaction()?.apply {
-                replace(R.id.container, KeybackupSetupStep3Fragment.newInstance(viewModel.passphrase.value!!))
-                addToBackStack(null)
-                commit()
-            }
+    private fun toggleVisibilityMode() {
+        viewModel.showPasswordMode.value = !(viewModel.showPasswordMode.value ?: false)
+    }
 
+    private fun doNext() {
+        when {
+            TextUtils.isEmpty(viewModel.passphrase.value) -> {
+                mPassphraseInputLayout.error = context?.getString(R.string.keybackup_setup_step2_passphrase_empty)
+            }
+            viewModel.passphrase.value != viewModel.confirmPassphrase.value ->  {
+                viewModel.confirmPassphraseError.value = R.string.keybackup_setup_step2_passphrase_no_match
+            }
+            viewModel.passwordStrength.value?.score ?: 0 < 3 -> {
+                mPassphraseInputLayout.error = context?.getString(R.string.keybackup_setup_step2_passphrase_too_weak)
+            }
+            else -> {
+                viewModel.recoveryKey.value = null
+                viewModel.megolmBackupCreationInfo = null
+                this.activity?.supportFragmentManager?.beginTransaction()?.apply {
+                    replace(R.id.container, KeybackupSetupStep3Fragment.newInstance())
+                    addToBackStack(null)
+                    commit()
+                }
+            }
         }
+    }
+
+
+    companion object {
+        fun newInstance() = KeybackupSetupStep2Fragment()
     }
 
 }

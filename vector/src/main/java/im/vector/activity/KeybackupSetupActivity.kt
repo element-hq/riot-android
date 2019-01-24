@@ -35,6 +35,7 @@ class KeybackupSetupActivity : MXCActionBarActivity() {
                     .commitNow()
         }
         setSupportActionBar(findViewById(R.id.keybackup_toolbar))
+        waitingView = findViewById(R.id.keybackup_waiting_view)
     }
 
 
