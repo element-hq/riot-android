@@ -16,18 +16,22 @@
 
 package im.vector.fragments.keybackupsetup
 
-import android.arch.lifecycle.MediatorLiveData
 import android.arch.lifecycle.MutableLiveData
 import android.arch.lifecycle.ViewModel
-import android.text.TextUtils
 import com.nulabinc.zxcvbn.Strength
+import org.matrix.androidsdk.MXSession
+import org.matrix.androidsdk.crypto.keysbackup.KeysBackup
 import org.matrix.androidsdk.crypto.keysbackup.MegolmBackupCreationInfo
+import org.matrix.androidsdk.rest.callback.ApiCallback
+import org.matrix.androidsdk.rest.callback.SuccessErrorCallback
+import org.matrix.androidsdk.rest.model.MatrixError
+import org.matrix.androidsdk.rest.model.keys.KeysVersion
+import org.matrix.androidsdk.util.Log
 
 /**
  * The shared view model between all fragments.
  */
-class KeybackupSetupSharedViewModel  : ViewModel() {
-
+class KeybackupSetupSharedViewModel : ViewModel() {
 
     // Step 2
     var passphrase: MutableLiveData<String> = MutableLiveData()
@@ -36,39 +40,82 @@ class KeybackupSetupSharedViewModel  : ViewModel() {
     var confirmPassphraseError: MutableLiveData<Int> = MutableLiveData()
     var showPasswordMode: MutableLiveData<Boolean> = MutableLiveData()
 
-
     // Step 3
     var recoveryKey: MutableLiveData<String> = MutableLiveData()
-    var megolmBackupCreationInfo : MegolmBackupCreationInfo? = null
+    var prepareRecoverFailError: MutableLiveData<Exception> = MutableLiveData()
+    var megolmBackupCreationInfo: MegolmBackupCreationInfo? = null
     var copyHasBeenMade = false
     var isCreatingBackupVersion: MutableLiveData<Boolean> = MutableLiveData()
-
-    val formValidLiveData = MediatorLiveData<Boolean>().apply {
-        addSource(passphrase) { value = checkValidity() }
-        addSource(confirmPassphrase) { value = checkValidity() }
-        addSource(passwordStrength) { value = checkValidity() }
-    }
+    var creatingBackupError: MutableLiveData<Exception> = MutableLiveData()
+    var keysVersion: MutableLiveData<KeysVersion> = MutableLiveData()
 
     init {
         showPasswordMode.value = false
         recoveryKey.value = null
         isCreatingBackupVersion.value = false
-    }
-
-    fun checkValidity(): Boolean {
-        if (TextUtils.isEmpty(passphrase.value)) {
-            return false
-        }
-        if (TextUtils.isEmpty(confirmPassphrase.value)) {
-            return false
-        } else if (confirmPassphrase.value != passphrase.value) {
-            return false
-        }
-        if (passwordStrength.value?.score ?: 0 <= 3) {
-            return false
-        }
-        return true
+        prepareRecoverFailError.value = null
+        creatingBackupError.value = null
     }
 
 
+    fun prepareRecoveryKey(session: MXSession?) {
+        recoveryKey.value = null
+        prepareRecoverFailError.value = null
+        session?.let { mxSession ->
+            val requestedPass = passphrase.value!!
+            mxSession.crypto?.keysBackup?.prepareKeysBackupVersion(requestedPass, object : SuccessErrorCallback<MegolmBackupCreationInfo> {
+                override fun onSuccess(info: MegolmBackupCreationInfo) {
+                    if (requestedPass != passphrase.value) {
+                        //this is an old request, we can't cancel but we can ignore
+                        return
+                    }
+                    recoveryKey.value = info.recoveryKey
+                    megolmBackupCreationInfo = info
+                    copyHasBeenMade = false
+                }
+
+                override fun onUnexpectedError(e: java.lang.Exception?) {
+                    if (requestedPass != passphrase.value) {
+                        //this is an old request, we can't cancel but we can ignore
+                        return
+                    }
+                    prepareRecoverFailError.value = e ?: Exception()
+                }
+            })
+        }
+    }
+
+    fun createKeyBackup(keysBackup: KeysBackup) {
+        isCreatingBackupVersion.value = true
+        creatingBackupError.value = null
+        keysBackup.createKeyBackupVersion(megolmBackupCreationInfo!!, object : ApiCallback<KeysVersion> {
+
+            override fun onSuccess(info: KeysVersion) {
+                isCreatingBackupVersion.value = false
+                keysVersion.value = info
+            }
+
+            override fun onUnexpectedError(e: java.lang.Exception) {
+                Log.e(LOG_TAG, "## createKeyBackupVersion ${e.localizedMessage}")
+                isCreatingBackupVersion.value = false
+                creatingBackupError.value = e
+            }
+
+            override fun onNetworkError(e: java.lang.Exception) {
+                Log.e(LOG_TAG, "## createKeyBackupVersion ${e.localizedMessage}")
+                isCreatingBackupVersion.value = false
+                creatingBackupError.value = e
+            }
+
+            override fun onMatrixError(e: MatrixError) {
+                Log.e(LOG_TAG, "## createKeyBackupVersion ${e.mReason}")
+                isCreatingBackupVersion.value = false
+                creatingBackupError.value = Exception(e.message)
+            }
+        })
+    }
+
+    companion object {
+        private val LOG_TAG = KeybackupSetupSharedViewModel::class.java.name
+    }
 }

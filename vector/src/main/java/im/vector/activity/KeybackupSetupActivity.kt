@@ -62,4 +62,7 @@ class KeybackupSetupActivity : MXCActionBarActivity() {
                 .show();
     }
 
+    companion object {
+        val KEY_RESULT = "KEYS_VERSION"
+    }
 }

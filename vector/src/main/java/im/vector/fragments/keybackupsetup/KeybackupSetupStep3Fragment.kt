@@ -31,15 +31,10 @@ import android.widget.Toast
 import butterknife.BindView
 import im.vector.Matrix
 import im.vector.R
+import im.vector.activity.KeybackupSetupActivity
 import im.vector.activity.MXCActionBarActivity
 import im.vector.activity.VectorAppCompatActivity
 import im.vector.fragments.VectorBaseFragment
-import org.matrix.androidsdk.crypto.keysbackup.MegolmBackupCreationInfo
-import org.matrix.androidsdk.rest.callback.ApiCallback
-import org.matrix.androidsdk.rest.callback.SuccessErrorCallback
-import org.matrix.androidsdk.rest.model.MatrixError
-import org.matrix.androidsdk.rest.model.keys.KeysVersion
-import org.matrix.androidsdk.util.Log
 import java.lang.Exception
 
 class KeybackupSetupStep3Fragment : VectorBaseFragment() {
@@ -62,11 +57,10 @@ class KeybackupSetupStep3Fragment : VectorBaseFragment() {
     lateinit var mSpinnerStatusText: TextView
 
     @BindView(R.id.keybackupsetup_step3_root)
-    lateinit var mRootLayout : ViewGroup
+    lateinit var mRootLayout: ViewGroup
 
     companion object {
         fun newInstance() = KeybackupSetupStep3Fragment()
-        private val LOG_TAG = KeybackupSetupStep3Fragment::class.java.name
     }
 
     private lateinit var viewModel: KeybackupSetupSharedViewModel
@@ -77,38 +71,29 @@ class KeybackupSetupStep3Fragment : VectorBaseFragment() {
             ViewModelProviders.of(this).get(KeybackupSetupSharedViewModel::class.java)
         } ?: throw Exception("Invalid Activity")
 
-        val session = (activity as? MXCActionBarActivity)?.session
-                ?: Matrix.getInstance(context)?.getSession(null)
 
-        viewModel.recoveryKey.value = null
-        session?.let { mxSession ->
-            val requestedPass = viewModel.passphrase.value!!
-            mxSession.crypto?.keysBackup?.prepareKeysBackupVersion(requestedPass, object : SuccessErrorCallback<MegolmBackupCreationInfo> {
-                override fun onSuccess(info: MegolmBackupCreationInfo) {
-                    if (requestedPass != viewModel.passphrase.value) {
-                        //this is an old request, we can't cancel but we can ignore
-                        return
-                    }
-                    viewModel.recoveryKey.value = info.recoveryKey
-                    viewModel.megolmBackupCreationInfo = info
-                    viewModel.copyHasBeenMade = false
-                }
-
-                override fun onUnexpectedError(e: Exception?) {
-                    activity?.let {
-                        AlertDialog.Builder(it)
+        viewModel.prepareRecoverFailError.observe(this, Observer { error ->
+            if (error != null) {
+                activity?.run {
+                    runOnUiThread {
+                        AlertDialog.Builder(this)
                                 .setTitle(R.string.unknown_error)
-                                .setMessage(e?.localizedMessage)
+                                .setMessage(error.localizedMessage)
                                 .setPositiveButton(R.string.ok) { _, _ ->
                                     //nop
+                                    viewModel.prepareRecoverFailError.value = null
                                     activity?.onBackPressed()
                                 }
                                 .show()
                     }
-
                 }
-            })
-        }
+            }
+        })
+
+        val session = (activity as? MXCActionBarActivity)?.session
+                ?: Matrix.getInstance(context)?.getSession(null)
+
+        viewModel.prepareRecoveryKey(session)
 
         viewModel.recoveryKey.observe(this, Observer { newValue ->
             TransitionManager.beginDelayedTransition(mRootLayout)
@@ -123,7 +108,7 @@ class KeybackupSetupStep3Fragment : VectorBaseFragment() {
                 mSpinner.visibility = View.GONE
                 mSpinnerStatusText.visibility = View.GONE
                 if ("XXXX XXXX XXXX XXXX XXXX XXXX XXXX XXXX XXXX XXXX XXXX XXXX".length == newValue.length) {
-                    mRecoveryKeyTextView.text = String.format("%s\n%s\n%s",newValue.subSequence(0,19),newValue.subSequence(20,39),newValue.subSequence(40,59))
+                    mRecoveryKeyTextView.text = String.format("%s\n%s\n%s", newValue.subSequence(0, 19), newValue.subSequence(20, 39), newValue.subSequence(40, 59))
                 } else {
                     mRecoveryKeyTextView.text = newValue
                 }
@@ -148,70 +133,34 @@ class KeybackupSetupStep3Fragment : VectorBaseFragment() {
             }
         }
 
-        mFinishButton.setOnClickListener {
-            if (viewModel.megolmBackupCreationInfo == null) {
-                //nothing
-            } else if (viewModel.copyHasBeenMade) {
-                val session = (activity as? MXCActionBarActivity)?.session
-                        ?: Matrix.getInstance(context)?.getSession(null)
-                val keysBackup = session?.crypto?.keysBackup
-                if (keysBackup != null) {
-                    viewModel.isCreatingBackupVersion.value = true
-                    keysBackup.createKeyBackupVersion(viewModel.megolmBackupCreationInfo!!, object : ApiCallback<KeysVersion> {
-
-                        override fun onSuccess(info: KeysVersion?) {
-                            viewModel.isCreatingBackupVersion.value = false
-                            activity?.setResult(Activity.RESULT_OK)
-                            activity?.finish()
-                        }
-
-                        override fun onUnexpectedError(e: Exception?) {
-                            Log.e(LOG_TAG, "## createKeyBackupVersion ${e?.localizedMessage}")
-                            viewModel.isCreatingBackupVersion.value = false
-                            activity?.run {
-                                runOnUiThread {
-                                    AlertDialog.Builder(this)
-                                            .setTitle(getString(R.string.unexpected_error))
-                                            .setMessage(e?.localizedMessage)
-                                            .setPositiveButton(android.R.string.ok, null)
-                                            .show()
-                                }
+        viewModel.creatingBackupError.observe(this, Observer { error ->
+            if (error != null) {
+                activity?.let {
+                    AlertDialog.Builder(it)
+                            .setTitle(R.string.unexpected_error)
+                            .setMessage(error.localizedMessage)
+                            .setPositiveButton(R.string.ok) { _, _ ->
+                                //nop
+                                viewModel.creatingBackupError.value = null
+                                activity?.onBackPressed()
                             }
-                        }
-
-                        override fun onNetworkError(e: Exception?) {
-                            Log.e(LOG_TAG, "## createKeyBackupVersion ${e?.localizedMessage}")
-                            viewModel.isCreatingBackupVersion.value = false
-                            activity?.run {
-                                runOnUiThread {
-                                    AlertDialog.Builder(this)
-                                            .setTitle(getString(R.string.network_error))
-                                            .setMessage(e?.localizedMessage)
-                                            .setPositiveButton(android.R.string.ok, null)
-                                            .show()
-                                }
-                            }
-                        }
-
-                        override fun onMatrixError(e: MatrixError?) {
-                            Log.e(LOG_TAG, "## createKeyBackupVersion ${e?.mReason}")
-                            viewModel.isCreatingBackupVersion.value = false
-                            activity?.run {
-                                runOnUiThread {
-                                    AlertDialog.Builder(this)
-                                            .setTitle(getString(R.string.matrix_error))
-                                            .setMessage(e?.mReason)
-                                            .setPositiveButton(android.R.string.ok, null)
-                                            .show()
-                                }
-                            }
-                        }
-                    })
+                            .show()
                 }
-            } else {
-                Toast.makeText(context, R.string.keybackup_setup_step3_please_make_copy, Toast.LENGTH_LONG).show()
             }
-        }
+        })
+
+        viewModel.keysVersion.observe(this, Observer { keysVersion ->
+            if (keysVersion != null) {
+                activity?.run {
+                    runOnUiThread {
+                        val resultIntent = Intent()
+                        resultIntent.putExtra(KeybackupSetupActivity.KEY_RESULT,keysVersion.version)
+                        setResult(Activity.RESULT_OK,resultIntent)
+                        finish()
+                    }
+                }
+            }
+        })
 
         viewModel.isCreatingBackupVersion.observe(this, Observer { newValue ->
             val isLoading = newValue ?: false
@@ -221,6 +170,22 @@ class KeybackupSetupStep3Fragment : VectorBaseFragment() {
                 (activity as? VectorAppCompatActivity)?.hideWaitingView()
             }
         })
-    }
 
+
+        mFinishButton.setOnClickListener {
+            if (viewModel.megolmBackupCreationInfo == null) {
+                //nothing
+            } else if (viewModel.copyHasBeenMade) {
+                val session = (activity as? MXCActionBarActivity)?.session
+                        ?: Matrix.getInstance(context)?.getSession(null)
+                val keysBackup = session?.crypto?.keysBackup
+                if (keysBackup != null) {
+                    viewModel.createKeyBackup(keysBackup)
+                }
+            } else {
+                Toast.makeText(context, R.string.keybackup_setup_step3_please_make_copy, Toast.LENGTH_LONG).show()
+            }
+        }
+
+    }
 }
