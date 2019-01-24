@@ -16,11 +16,11 @@
 package im.vector.ui
 
 import android.content.Context
-import android.graphics.Color
 import android.util.AttributeSet
 import android.view.LayoutInflater
 import android.view.View
 import android.widget.LinearLayout
+import butterknife.BindColor
 import butterknife.BindView
 import butterknife.ButterKnife
 import im.vector.R
@@ -34,8 +34,11 @@ A password strength bar custom widget
  # 2 Good
  # 3 Strong
  */
-class PasswordStrengthBar(context: Context, attrs: AttributeSet? = null) : LinearLayout(context, attrs) {
-
+class PasswordStrengthBar @JvmOverloads constructor(
+        context: Context,
+        attrs: AttributeSet? = null,
+        defStyleAttr: Int = 0)
+    : LinearLayout(context, attrs, defStyleAttr) {
 
     @BindView(R.id.password_strength_bar_1)
     lateinit var bar1: View
@@ -49,33 +52,51 @@ class PasswordStrengthBar(context: Context, attrs: AttributeSet? = null) : Linea
     @BindView(R.id.password_strength_bar_4)
     lateinit var bar4: View
 
+
+    @BindColor(R.color.password_strength_bar_undefined)
+    @JvmField
+    var bgColor: Int = 0
+    @BindColor(R.color.password_strength_bar_weak)
+    @JvmField
+    var colorWeak: Int = 0
+    @BindColor(R.color.password_strength_bar_low)
+    @JvmField
+    var colorLow: Int = 0
+    @BindColor(R.color.password_strength_bar_ok)
+    @JvmField
+    var colorOk: Int = 0
+    @BindColor(R.color.password_strength_bar_strong)
+    @JvmField
+    var colorStrong: Int = 0
+
+
     var strength = 0
         set(value) {
             if (value < 0) {
-                bar1.setBackgroundColor(backgroundColor)
-                bar2.setBackgroundColor(backgroundColor)
-                bar3.setBackgroundColor(backgroundColor)
-                bar4.setBackgroundColor(backgroundColor)
+                bar1.setBackgroundColor(bgColor)
+                bar2.setBackgroundColor(bgColor)
+                bar3.setBackgroundColor(bgColor)
+                bar4.setBackgroundColor(bgColor)
             } else if (value == 0) {
-                bar1.setBackgroundColor(colors[0])
-                bar2.setBackgroundColor(backgroundColor)
-                bar3.setBackgroundColor(backgroundColor)
-                bar4.setBackgroundColor(backgroundColor)
+                bar1.setBackgroundColor(colorWeak)
+                bar2.setBackgroundColor(bgColor)
+                bar3.setBackgroundColor(bgColor)
+                bar4.setBackgroundColor(bgColor)
             } else if (value == 1) {
-                bar1.setBackgroundColor(colors[1])
-                bar2.setBackgroundColor(colors[1])
-                bar3.setBackgroundColor(backgroundColor)
-                bar4.setBackgroundColor(backgroundColor)
+                bar1.setBackgroundColor(colorLow)
+                bar2.setBackgroundColor(colorLow)
+                bar3.setBackgroundColor(bgColor)
+                bar4.setBackgroundColor(bgColor)
             } else if (value == 2) {
-                bar1.setBackgroundColor(colors[2])
-                bar2.setBackgroundColor(colors[2])
-                bar3.setBackgroundColor(colors[2])
-                bar4.setBackgroundColor(backgroundColor)
+                bar1.setBackgroundColor(colorOk)
+                bar2.setBackgroundColor(colorOk)
+                bar3.setBackgroundColor(colorOk)
+                bar4.setBackgroundColor(bgColor)
             } else {
-                bar1.setBackgroundColor(colors[3])
-                bar2.setBackgroundColor(colors[3])
-                bar3.setBackgroundColor(colors[3])
-                bar4.setBackgroundColor(colors[3])
+                bar1.setBackgroundColor(colorStrong)
+                bar2.setBackgroundColor(colorStrong)
+                bar3.setBackgroundColor(colorStrong)
+                bar4.setBackgroundColor(colorStrong)
             }
         }
 
@@ -87,12 +108,5 @@ class PasswordStrengthBar(context: Context, attrs: AttributeSet? = null) : Linea
         strength = -1
     }
 
-    companion object {
-        private val colors = listOf<Int>(
-                Color.parseColor("#f56679"),
-                Color.parseColor("#ffc666"),
-                Color.parseColor("#f8e71c"),
-                Color.parseColor("#7ac9a1"))
-        private val backgroundColor = Color.parseColor("#9e9e9e")
-    }
+
 }

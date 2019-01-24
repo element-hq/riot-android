@@ -75,17 +75,15 @@ class KeybackupSetupStep3Fragment : VectorBaseFragment() {
         viewModel.prepareRecoverFailError.observe(this, Observer { error ->
             if (error != null) {
                 activity?.run {
-                    runOnUiThread {
-                        AlertDialog.Builder(this)
-                                .setTitle(R.string.unknown_error)
-                                .setMessage(error.localizedMessage)
-                                .setPositiveButton(R.string.ok) { _, _ ->
-                                    //nop
-                                    viewModel.prepareRecoverFailError.value = null
-                                    activity?.onBackPressed()
-                                }
-                                .show()
-                    }
+                    AlertDialog.Builder(this)
+                            .setTitle(R.string.unknown_error)
+                            .setMessage(error.localizedMessage)
+                            .setPositiveButton(R.string.ok) { _, _ ->
+                                //nop
+                                viewModel.prepareRecoverFailError.value = null
+                                activity?.onBackPressed()
+                            }
+                            .show()
                 }
             }
         })
@@ -152,12 +150,10 @@ class KeybackupSetupStep3Fragment : VectorBaseFragment() {
         viewModel.keysVersion.observe(this, Observer { keysVersion ->
             if (keysVersion != null) {
                 activity?.run {
-                    runOnUiThread {
-                        val resultIntent = Intent()
-                        resultIntent.putExtra(KeybackupSetupActivity.KEY_RESULT,keysVersion.version)
-                        setResult(Activity.RESULT_OK,resultIntent)
-                        finish()
-                    }
+                    val resultIntent = Intent()
+                    resultIntent.putExtra(KeybackupSetupActivity.KEY_RESULT, keysVersion.version)
+                    setResult(Activity.RESULT_OK, resultIntent)
+                    finish()
                 }
             }
         })

@@ -22,7 +22,6 @@
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_chainStyle="spread_inside" />
 
-
     <TextView
         android:id="@+id/keybackupsetup_step1_description"
         android:layout_width="0dp"
@@ -33,7 +32,6 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/keybackupsetup_step1_title" />
-
 
     <Button
         android:id="@+id/keybackupsetup_step1_button"
@@ -49,6 +47,5 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/keybackupsetup_step1_description"
-
         app:layout_constraintVertical_bias="0.0" />
 </android.support.constraint.ConstraintLayout>

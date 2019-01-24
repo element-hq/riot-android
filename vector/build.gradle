@@ -241,7 +241,7 @@ dependencies {
     implementation 'com.github.bumptech.glide:glide:4.7.1'
     kapt 'com.github.bumptech.glide:compiler:4.7.1'
 
-    // Key backup helper
+    // Passphrase strength helper
     implementation 'com.nulab-inc:zxcvbn:1.2.5'
 
     implementation 'com.googlecode.libphonenumber:libphonenumber:8.9.12'

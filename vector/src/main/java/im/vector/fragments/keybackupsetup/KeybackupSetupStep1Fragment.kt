@@ -16,10 +16,7 @@
 
 package im.vector.fragments.keybackupsetup
 
-import android.os.Bundle
-import android.view.View
-import android.widget.Button
-import butterknife.BindView
+import butterknife.OnClick
 import im.vector.R
 import im.vector.fragments.VectorBaseFragment
 
@@ -27,19 +24,16 @@ class KeybackupSetupStep1Fragment : VectorBaseFragment() {
 
     override fun getLayoutResId() = R.layout.keybackup_setup_fragment
 
-    @BindView(R.id.keybackupsetup_step1_button)
-    lateinit var mButton: Button
-
     companion object {
         fun newInstance() = KeybackupSetupStep1Fragment()
     }
 
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
-        mButton.setOnClickListener() {
-            val fm = this.activity?.supportFragmentManager
-            fm?.beginTransaction()?.replace(R.id.container, KeybackupSetupStep2Fragment.newInstance())?.addToBackStack(null)?.commit()
-        }
+    @OnClick(R.id.keybackupsetup_step1_button)
+    fun onButtonClick() {
+        activity?.supportFragmentManager
+                ?.beginTransaction()
+                ?.replace(R.id.container, KeybackupSetupStep2Fragment.newInstance())
+                ?.addToBackStack(null)
+                ?.commit()
     }
-
 }

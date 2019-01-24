@@ -35,7 +35,7 @@ class KeybackupSetupActivity : MXCActionBarActivity() {
                     .replace(R.id.container, KeybackupSetupStep1Fragment.newInstance())
                     .commitNow()
         }
-        setSupportActionBar(findViewById(R.id.keybackup_toolbar))
+        configureToolbar()
         waitingView = findViewById(R.id.keybackup_waiting_view)
     }
 
@@ -52,11 +52,8 @@ class KeybackupSetupActivity : MXCActionBarActivity() {
         AlertDialog.Builder(this)
                 .setTitle(R.string.keybackup_setup_skip_title)
                 .setMessage(R.string.keybackup_setup_skip_msg)
-                .setNegativeButton(R.string.cancel) { dialog, id ->
-                    //nop
-                }
-                .setPositiveButton(R.string.skip) { dialog, id ->
-                    setResult(Activity.RESULT_CANCELED)
+                .setNegativeButton(R.string.cancel, null)
+                .setPositiveButton(R.string.skip) { _, _ ->
                     finish()
                 }
                 .show();

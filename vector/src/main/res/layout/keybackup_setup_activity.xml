@@ -3,10 +3,11 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    tools:context="im.vector.activity.KeybackupSetupActivity">
 
     <android.support.v7.widget.Toolbar
-        android:id="@+id/keybackup_toolbar"
+        android:id="@+id/toolbar"
         style="@style/VectorToolbarStyle"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -19,8 +20,7 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/keybackup_toolbar"
-        tools:context="im.vector.activity.KeybackupSetupActivity" />
+        app:layout_constraintTop_toBottomOf="@id/toolbar" />
 
     <include
         android:id="@+id/keybackup_waiting_view"

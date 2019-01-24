@@ -404,9 +404,8 @@
             android:configChanges="orientation|screenSize" />
         <activity
             android:name=".activity.KeybackupSetupActivity"
-            android:configChanges="orientation|screenSize"
             android:label="@string/title_activity_key_backup_setup"
-            android:windowSoftInputMode="stateHidden|adjustResize"></activity>
+            android:windowSoftInputMode="stateHidden|adjustResize" />
 
         <!-- FileProvider -->
         <provider

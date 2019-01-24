@@ -18,119 +18,94 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="20dp"
             android:layout_marginTop="30dp"
+            android:layout_marginBottom="16dp"
             android:layout_marginEnd="20dp"
             android:text="@string/keybackup_setup_step2_text"
             android:textAlignment="center"
-            app:layout_constraintBottom_toTopOf="@id/keybackup_passphrase_container"
+            app:layout_constraintBottom_toTopOf="@id/keybackup_passphrase_enter_til"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
 
-        <android.support.constraint.ConstraintLayout
-            android:id="@+id/keybackup_passphrase_container"
+        <android.support.design.widget.TextInputLayout
+            android:id="@+id/keybackup_passphrase_enter_til"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginTop="20dp"
-            android:layout_marginBottom="20dp"
-            app:layout_constraintBottom_toTopOf="@id/keybackupsetup_step2_button"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/keybackupsetup_step2_text">
+            app:errorEnabled="true"
+            android:layout_marginLeft="16dp"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/keybackupsetup_step2_text"
+            app:layout_constraintRight_toLeftOf="@+id/keybackup_view_password_clickable"
+            android:layout_marginStart="16dp">
 
-            <LinearLayout
+            <android.support.design.widget.TextInputEditText
+                android:id="@+id/keybackup_passphrase_enter_edittext"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="vertical">
+                android:hint="@string/keybackup_setup_step2_passphrase_enter_hint"
+                android:maxLines="3"
+                android:textColor="?android:textColorPrimary" />
 
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="16dp"
-                    android:layout_marginLeft="16dp"
-                    android:baselineAligned="false"
-                    android:orientation="horizontal">
+        </android.support.design.widget.TextInputLayout>
 
-                    <android.support.design.widget.TextInputLayout
-                        android:id="@+id/keybackup_passphrase_enter_til"
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        app:errorEnabled="true">
+        <RelativeLayout
+            android:id="@+id/keybackup_view_password_clickable"
+            android:layout_width="44dp"
+            android:layout_height="0dp"
+            app:layout_constraintLeft_toRightOf="@id/keybackup_passphrase_enter_til"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/keybackup_passphrase_enter_til"
+            app:layout_constraintBottom_toBottomOf="@+id/keybackup_passphrase_enter_til"
+            android:background="?attr/selectableItemBackground">
 
-                        <android.support.design.widget.TextInputEditText
-                            android:id="@+id/keybackup_passphrase_enter_edittext"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:hint="@string/keybackup_setup_step2_passphrase_enter_hint"
-                            android:maxLines="3"
-                            android:textColor="?android:textColorPrimary" />
+            <ImageView
+                android:layout_width="22dp"
+                android:layout_height="18dp"
+                android:layout_centerHorizontal="true"
+                android:layout_centerVertical="true"
+                android:src="@drawable/ic_eye_black"
+                android:tint="?attr/colorAccent" />
+        </RelativeLayout>
 
-                    </android.support.design.widget.TextInputLayout>
+        <im.vector.ui.PasswordStrengthBar
+            android:id="@+id/keybackup_passphrase_security_progress"
+            android:layout_width="0dp"
+            android:layout_height="4dp"
+            app:layout_constraintLeft_toLeftOf="@+id/keybackup_passphrase_enter_til"
+            app:layout_constraintRight_toRightOf="@+id/keybackup_passphrase_enter_til"
+            app:layout_constraintTop_toBottomOf="@+id/keybackup_passphrase_enter_til"/>
 
-                    <RelativeLayout
-                        android:id="@+id/keybackup_view_password_clickable"
-                        android:layout_width="44dp"
-                        android:layout_height="match_parent"
-                        android:background="?attr/selectableItemBackground">
+        <View
+            android:id="@+id/keybackup_step2_separator"
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_margin="6dp"
+            android:background="?vctr_list_divider_color"
+            app:layout_constraintTop_toBottomOf="@+id/keybackup_passphrase_security_progress"/>
 
-                        <ImageView
-                            android:layout_width="22dp"
-                            android:layout_height="18dp"
-                            android:layout_centerHorizontal="true"
-                            android:layout_centerVertical="true"
-                            android:src="@drawable/ic_eye_black"
-                            android:tint="?attr/colorAccent" />
-                    </RelativeLayout>
 
-                </LinearLayout>
+        <android.support.design.widget.TextInputLayout
+            android:id="@+id/keybackup_passphrase_confirm_til"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:layout_marginLeft="16dp"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/keybackup_step2_separator"
+            app:layout_constraintRight_toLeftOf="@+id/keybackup_view_password_clickable"
+            android:layout_marginStart="16dp"
+            app:errorEnabled="true">
 
-                <im.vector.ui.PasswordStrengthBar
-                    android:id="@+id/keybackup_passphrase_security_progress"
-                    android:layout_width="match_parent"
-                    android:layout_height="4dp"
-                    android:layout_marginStart="16dp"
-                    android:layout_marginLeft="16dp"
-                    android:layout_marginEnd="44dp"
-                    android:layout_marginRight="44dp" />
+            <android.support.design.widget.TextInputEditText
+                android:id="@+id/keybackup_passphrase_confirm_edittext"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="@string/keybackup_setup_step2_passphrase_confirm_hint"
+                android:maxLines="3"
+                android:textColor="?android:textColorPrimary" />
 
-                <View
-                    android:layout_width="match_parent"
-                    android:layout_height="1dp"
-                    android:layout_margin="6dp"
-                    android:background="@color/list_divider_color_light" />
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="16dp"
-                    android:layout_marginLeft="16dp"
-                    android:layout_marginEnd="44dp"
-                    android:layout_marginRight="44dp"
-                    android:baselineAligned="false">
-
-                    <android.support.design.widget.TextInputLayout
-                        android:id="@+id/keybackup_passphrase_confirm_til"
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        app:errorEnabled="true">
-
-                        <android.support.design.widget.TextInputEditText
-                            android:id="@+id/keybackup_passphrase_confirm_edittext"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:hint="@string/keybackup_setup_step2_passphrase_confirm_hint"
-                            android:maxLines="3"
-                            android:textColor="?android:textColorPrimary" />
-
-                    </android.support.design.widget.TextInputLayout>
-
-                </LinearLayout>
-
-            </LinearLayout>
-
-        </android.support.constraint.ConstraintLayout>
+        </android.support.design.widget.TextInputLayout>
 
         <Button
             android:id="@+id/keybackupsetup_step2_button"
@@ -144,8 +119,7 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/keybackup_passphrase_container"
+            app:layout_constraintTop_toBottomOf="@id/keybackup_passphrase_confirm_til" />
 
-            />
     </android.support.constraint.ConstraintLayout>
 </ScrollView>
