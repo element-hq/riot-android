@@ -1,5 +1,5 @@
 /*
- * Copyright 2018 New Vector Ltd
+ * Copyright 2019 New Vector Ltd
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -23,34 +23,24 @@ import android.os.PowerManager
 import android.support.v4.app.NotificationCompat
 import android.text.TextUtils
 import android.view.WindowManager
+import im.vector.BuildConfig
 import im.vector.Matrix
 import im.vector.R
 import im.vector.VectorApp
 import org.matrix.androidsdk.util.Log
 import java.io.*
 
-
-data class RoomEventGroupInfo(
-        val roomId: String
-) {
-    var roomDisplayName: String = ""
-    var roomAvatarPath: String? = null
-    var hasNewEvent: Boolean = false //An event in the list has not yet been display
-    var shouldBing: Boolean = false //true if at least one on the not yet displayed event is noisy
-    var customSound: String? = null
-    var hasSmartReplyError = false
-}
-
+/**
+ * The NotificationDrawerManager receives notification events as they arrived (from event stream or fcm) and
+ * organise them in order to display them in the notification drawer.
+ * Events can be grouped into the same notification, old (already read) events can be removed to do some cleaning.
+ */
 class NotificationDrawerManager(val context: Context) {
 
     //The first time the notification drawer is refreshed, we force re-render of all notifications
     private var firstTime = true
 
-    init {
-        loadEventInfo()
-    }
-
-    private lateinit var eventList: MutableList<NotifiableEvent>
+    private var eventList = loadEventInfo()
     private var myUserDisplayName: String = ""
 
     //Keeps a mapping between a notification ID
@@ -70,7 +60,9 @@ class NotificationDrawerManager(val context: Context) {
     fun onNotifiableEventReceived(notifiableEvent: NotifiableEvent, userId: String, userDisplayName: String?) {
         //If we support multi session, event list should be per userId
         //Currently only manage single session
-        Log.d(LOG_TAG, "%%%%%%%% onNotifiableEventReceived $notifiableEvent")
+        if (BuildConfig.LOW_PRIVACY_LOG_ENABLE) {
+            Log.d(LOG_TAG, "%%%%%%%% onNotifiableEventReceived $notifiableEvent")
+        }
         synchronized(this) {
             myUserDisplayName = userDisplayName ?: userId
             val existing = eventList.firstOrNull { it.eventId == notifiableEvent.eventId }
@@ -217,7 +209,7 @@ class NotificationDrawerManager(val context: Context) {
                     roomGroup.hasNewEvent = roomGroup.hasNewEvent || !event.hasBeenDisplayed
                     //TODO update to compat-28 in order to support media and sender as a Person object
                     if (event.outGoingMessage && event.outGoingMessageFailed) {
-                        style.addMessage("** Failed to send - please open room", event.timestamp, event.senderName)
+                        style.addMessage(context.getString(R.string.notification_inline_reply_failed), event.timestamp, event.senderName)
                         roomGroup.hasSmartReplyError = true
                     } else {
                         style.addMessage(event.body, event.timestamp, event.senderName)
@@ -287,10 +279,12 @@ class NotificationDrawerManager(val context: Context) {
                 NotificationUtils.cancelNotificationMessage(context, null, SUMMARY_NOTIFICATION_ID)
             } else {
                 val nbEvents = roomIdToEventMap.size + simpleEvents.size
-                summaryInboxStyle.setBigContentTitle("$nbEvents notifications")
+                val sumTitle = context.resources.getQuantityString(
+                        R.plurals.notification_compat_summary_title, nbEvents, nbEvents)
+                summaryInboxStyle.setBigContentTitle(sumTitle)
                 NotificationUtils.buildSummaryListNotification(
                         context,
-                        summaryInboxStyle, "$nbEvents notifications",
+                        summaryInboxStyle, sumTitle,
                         noisy = hasNewEvent && summaryIsNoisy
                 )?.let {
                     NotificationUtils.showNotificationMessage(context, null, SUMMARY_NOTIFICATION_ID, it)
@@ -302,7 +296,7 @@ class NotificationDrawerManager(val context: Context) {
                         if (Matrix.getInstance(VectorApp.getInstance())!!.pushManager.isScreenTurnedOn) {
                             val pm = VectorApp.getInstance().getSystemService(Context.POWER_SERVICE) as PowerManager
                             val wl = pm.newWakeLock(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON or PowerManager.ACQUIRE_CAUSES_WAKEUP,
-                                    "riot:manageNotificationSound")
+                                    NotificationDrawerManager::class.java.name)
                             wl.acquire(3000)
                             wl.release()
                         }
@@ -337,7 +331,7 @@ class NotificationDrawerManager(val context: Context) {
     }
 
     private fun shouldIgnoreMessageEventInRoom(roomId: String?): Boolean {
-        return roomId != null && roomId == currentRoomId
+        return currentRoomId != null && roomId == currentRoomId
     }
 
 
@@ -358,7 +352,7 @@ class NotificationDrawerManager(val context: Context) {
         }
     }
 
-    private fun loadEventInfo() {
+    private fun loadEventInfo(): ArrayList<NotifiableEvent> {
         try {
             val file = File(context.applicationContext.cacheDir, ROOMS_NOTIFICATIONS_FILE_NAME)
             if (file.exists()) {
@@ -366,15 +360,13 @@ class NotificationDrawerManager(val context: Context) {
                 val ois = ObjectInputStream(fileIn)
                 val readObject = ois.readObject()
                 (readObject as? ArrayList<*>)?.let { arrayList ->
-                    this.eventList = ArrayList(arrayList.filter { it is NotifiableEvent }.mapNotNull { it as NotifiableEvent })
+                    return ArrayList(arrayList.mapNotNull { it as NotifiableEvent })
                 }
-            } else {
-                this.eventList = ArrayList()
             }
         } catch (e: Throwable) {
-            this.eventList = ArrayList()
             Log.e(LOG_TAG, "## Failed to load cached notification info", e)
         }
+        return ArrayList()
     }
 
     private fun deleteCachedRoomNotifications(context: Context) {

@@ -716,12 +716,6 @@ public class VectorRoomActivity extends MXCActionBarActivity implements
         mDefaultTopic = intent.getStringExtra(EXTRA_DEFAULT_TOPIC);
         mIsUnreadPreviewMode = intent.getBooleanExtra(EXTRA_IS_UNREAD_PREVIEW_MODE, false);
 
-        // the user has tapped on the "View" notification button
-//        if ((null != intent.getAction()) && (intent.getAction().startsWith(NotificationUtils.TAP_TO_VIEW_ACTION))) {
-//            // remove any pending notifications
-//            NotificationUtils.INSTANCE.cancelAllNotifications(this);
-//        }
-
         if (mIsUnreadPreviewMode) {
             Log.d(LOG_TAG, "Displaying " + roomId + " in unread preview mode");
         } else if (!TextUtils.isEmpty(mEventId) || (null != sRoomPreviewData)) {

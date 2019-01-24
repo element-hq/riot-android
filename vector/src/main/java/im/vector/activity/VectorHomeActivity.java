@@ -162,9 +162,6 @@ public class VectorHomeActivity extends VectorAppCompatActivity implements Searc
 
     // jump to a group details sheet
     public static final String EXTRA_GROUP_ID = "VectorHomeActivity.EXTRA_GROUP_ID";
-//
-//    // When notification is tapped, to know if notification for messages should be cleared
-//    public static final String EXTRA_CLEAR_ALL_MESSAGES_NOTIFICATIONS = "VectorHomeActivity.EXTRA_CLEAR_ALL_MESSAGES_NOTIFICATIONS";
 
     // there are two ways to open an external link
     // 1- EXTRA_UNIVERSAL_LINK_URI : the link is opened as soon there is an event check processed (application is launched when clicking on the URI link)

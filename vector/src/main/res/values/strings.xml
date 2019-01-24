@@ -1040,8 +1040,17 @@
         <item quantity="one">%1$s: 1 message</item>
         <item quantity="other">%1$s: %2$d messages</item>
     </plurals>
+    <plurals name="notification_compat_summary_title">
+        <item quantity="one">%d notification</item>
+        <item quantity="other">%d notifications</item>
+    </plurals>
 
     <string name="notification_unread_notified_messages_in_room">%1$s in %2$s"</string>
+    <string name="notification_unknown_new_event">New Event</string>
+    <string name="notification_new_messages">New Messages</string>
+    <string name="notification_new_invitation">New Invitation</string>
+    <string name="notification_sender_me">Me</string>
+    <string name="notification_inline_reply_failed">** Failed to send - please open room</string>
 
     <!-- historical -->
     <string name="historical_placeholder">Search for historical</string>

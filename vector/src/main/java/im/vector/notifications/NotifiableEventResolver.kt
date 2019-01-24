@@ -1,5 +1,5 @@
 /*
- * Copyright 2018 New Vector Ltd
+ * Copyright 2019 New Vector Ltd
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -19,13 +19,21 @@ import android.content.Context
 import android.support.v4.app.NotificationCompat
 import android.util.Log
 import android.widget.ImageView
+import im.vector.R
 import im.vector.util.RiotEventDisplay
 import org.matrix.androidsdk.MXSession
 import org.matrix.androidsdk.data.RoomState
 import org.matrix.androidsdk.data.store.IMXStore
 import org.matrix.androidsdk.rest.model.Event
+import org.matrix.androidsdk.rest.model.RoomMember
 import org.matrix.androidsdk.rest.model.bingrules.BingRule
 
+/**
+ * The notifiable event resolver is able to create a NotifiableEvent (view model for notifications) from an sdk Event.
+ * It is used as a bridge between the Event Thread and the NotificationDrawerManager.
+ * The NotifiableEventResolver is the only aware of session/store, the NotificationDrawerManager has no knowledge of that,
+ * this pattern allow decoupling between the object responsible of displaying notifications and the matrix sdk.
+ */
 class NotifiableEventResolver(val context: Context) {
 
     private val eventDisplay = RiotEventDisplay(context)
@@ -61,12 +69,12 @@ class NotifiableEventResolver(val context: Context) {
                             timestamp = event.originServerTs,
                             description = body,
                             soundName = bingRule?.notificationSound,
-                            title = "New Event",
+                            title = context.getString(R.string.notification_unknown_new_event),
                             type = event.type)
                 }
 
                 //Unsupported event
-                Log.i(LOG_TAG, "NotifiableEventResolver Received an unsupported event matching a bing rule")
+                Log.w(LOG_TAG, "NotifiableEventResolver Received an unsupported event matching a bing rule")
                 return null
             }
         }
@@ -81,7 +89,7 @@ class NotifiableEventResolver(val context: Context) {
         val room = store.getRoom(event.roomId /*roomID cannot be null (see Matrix SDK code)*/)
 
         if (room == null) {
-            Log.e(LOG_TAG, "## NotifiableEventResolver: Unable to resolve room for eventId [${event.eventId}] and roomID [${event.roomId}]")
+            Log.e(LOG_TAG, "## Unable to resolve room for eventId [${event.eventId}] and roomID [${event.roomId}]")
             return null
         } else {
 
@@ -90,7 +98,7 @@ class NotifiableEventResolver(val context: Context) {
                 return null
             }
 
-            val body = eventDisplay.getTextualDisplay(event, room.state)?.toString() ?: "New Event"
+            val body = eventDisplay.getTextualDisplay(event, room.state)?.toString() ?: context.getString(R.string.notification_unknown_new_event)
             val roomName = room.getRoomDisplayName(context)
             val senderDisplayName = room.state.getMemberName(event.sender) ?: event.sender ?: ""
 
@@ -130,22 +138,22 @@ class NotifiableEventResolver(val context: Context) {
     }
 
     private fun resolveStateRoomEvent(event: Event, bingRule: BingRule?, session: MXSession, store: IMXStore): NotifiableEvent? {
-        if ("invite" == event.contentAsJsonObject?.getAsJsonPrimitive("membership")?.asString) {
+        if ("invite" == event.contentAsJsonObject?.getAsJsonPrimitive(RoomMember.MEMBERSHIP_INVITE)?.asString) {
             val room = store.getRoom(event.roomId /*roomID cannot be null (see Matrix SDK code)*/)
-            val body = eventDisplay.getTextualDisplay(event, room.state)?.toString() ?: "Invite"
+            val body = eventDisplay.getTextualDisplay(event, room.state)?.toString() ?: context.getString(R.string.notification_new_invitation)
             return InviteNotifiableEvent(
                     session.myUserId,
                     eventId = event.eventId,
                     roomId = event.roomId,
                     timestamp = event.originServerTs,
                     noisy = bingRule?.notificationSound != null,
-                    title = "New Invitation",
+                    title = context.getString(R.string.notification_new_invitation),
                     description = body,
                     soundName = bingRule?.notificationSound,
                     type = event.type,
                     isPushGatewayEvent = false)
         } else {
-            Log.e(LOG_TAG, "## NotifiableEventResolver: unsupported notifiable event for eventId [${event.eventId}]")
+            Log.e(LOG_TAG, "## unsupported notifiable event for eventId [${event.eventId}]")
             //TODO generic handling?
         }
         return null

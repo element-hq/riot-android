@@ -1,14 +1,11 @@
-/**
+/*
  * Copyright 2019 New Vector Ltd
- *
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- *
  * http://www.apache.org/licenses/LICENSE-2.0
- *
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -26,6 +23,7 @@ import android.support.v4.app.RemoteInput
 import android.text.TextUtils
 import android.widget.Toast
 import im.vector.Matrix
+import im.vector.R
 import im.vector.VectorApp
 import im.vector.notifications.NotifiableMessageEvent
 import im.vector.notifications.NotificationUtils
@@ -38,6 +36,9 @@ import org.matrix.androidsdk.rest.model.MatrixError
 import org.matrix.androidsdk.rest.model.message.Message
 import org.matrix.androidsdk.util.Log
 
+/**
+ * Receives actions broadcasted by notification (on click, on dismiss, inline replies)
+ */
 class NotificationBroadcastReceiver : BroadcastReceiver() {
 
     override fun onReceive(context: Context?, intent: Intent?) {
@@ -45,7 +46,7 @@ class NotificationBroadcastReceiver : BroadcastReceiver() {
         Log.d(LOG_TAG, "ReplyNotificationBroadcastReceiver received : $intent")
         val action = intent.action
         if (action != null) {
-            if (action.startsWith(NotificationUtils.SMART_REPLY_ACTION)) {
+            if (action.startsWith(NotificationUtils.SMART_REPLY_ACTION_PREFIX)) {
                 handleSmartReply(intent, context)
             } else if (action == NotificationUtils.DISMISS_ROOM_NOTIF_ACTION) {
                 intent.getStringExtra(KEY_ROOM_ID)?.let {
@@ -90,7 +91,7 @@ class NotificationBroadcastReceiver : BroadcastReceiver() {
                         false,
                         System.currentTimeMillis(),
                         session.myUser?.displayname
-                                ?: "",
+                                ?: context?.getString(R.string.notification_sender_me),
                         message,
                         roomId,
                         room.getRoomDisplayName(context))
@@ -128,7 +129,7 @@ class NotificationBroadcastReceiver : BroadcastReceiver() {
                         false,
                         System.currentTimeMillis(),
                         session.myUser?.displayname
-                                ?: "",
+                                ?: context?.getString(R.string.notification_sender_me),
                         message,
                         roomId,
                         room.getRoomDisplayName(context))

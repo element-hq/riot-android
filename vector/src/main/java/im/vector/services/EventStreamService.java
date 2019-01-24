@@ -45,7 +45,6 @@ import org.matrix.androidsdk.data.store.MXStoreListener;
 import org.matrix.androidsdk.listeners.MXEventListener;
 import org.matrix.androidsdk.rest.model.Event;
 import org.matrix.androidsdk.rest.model.bingrules.BingRule;
-import org.matrix.androidsdk.util.BingRulesManager;
 import org.matrix.androidsdk.util.Log;
 
 import java.util.ArrayList;
@@ -53,6 +52,7 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Random;
 
+import im.vector.BuildConfig;
 import im.vector.Matrix;
 import im.vector.R;
 import im.vector.VectorApp;
@@ -180,22 +180,14 @@ public class EventStreamService extends Service {
     }
 
     /**
-     * Track bing rules updates
-     */
-    private final BingRulesManager.onBingRulesUpdateListener mBingRulesUpdatesListener = new BingRulesManager.onBingRulesUpdateListener() {
-        @Override
-        public void onBingRulesUpdate() {
-
-        }
-    };
-
-    /**
      * Live events listener
      */
     private final MXEventListener mEventsListener = new MXEventListener() {
         @Override
         public void onBingEvent(Event event, RoomState roomState, BingRule bingRule) {
-            Log.d(LOG_TAG, "%%%%%%%%  MXEventListener: the event " + event);
+            if (BuildConfig.LOW_PRIVACY_LOG_ENABLE) {
+                Log.d(LOG_TAG, "%%%%%%%%  MXEventListener: the event " + event);
+            }
             // privacy
             //Log.d(LOG_TAG, "onBingEvent : the event " + event);
             //Log.d(LOG_TAG, "onBingEvent : the bingRule " + bingRule);
@@ -296,7 +288,6 @@ public class EventStreamService extends Service {
                 if (null != session) {
                     session.stopEventStream();
                     session.getDataHandler().removeListener(mEventsListener);
-                    session.getDataHandler().getBingRulesManager().removeBingRulesUpdateListener(mBingRulesUpdatesListener);
                     CallsManager.getSharedInstance().removeSession(session);
                     mSessions.remove(session);
                     mMatrixIds.remove(matrixId);
@@ -563,7 +554,6 @@ public class EventStreamService extends Service {
      */
     private void monitorSession(final MXSession session) {
         session.getDataHandler().addListener(mEventsListener);
-        session.getDataHandler().getBingRulesManager().addBingRulesUpdateListener(mBingRulesUpdatesListener);
         CallsManager.getSharedInstance().addSession(session);
 
         session.getDataHandler().addListener(new MXEventListener() {
@@ -701,7 +691,6 @@ public class EventStreamService extends Service {
                 if (null != session && session.isAlive()) {
                     session.stopEventStream();
                     session.getDataHandler().removeListener(mEventsListener);
-                    session.getDataHandler().getBingRulesManager().removeBingRulesUpdateListener(mBingRulesUpdatesListener);
                     CallsManager.getSharedInstance().removeSession(session);
                 }
             }
@@ -1016,7 +1005,7 @@ public class EventStreamService extends Service {
             Notification notification = NotificationUtils.INSTANCE.buildIncomingCallNotification(
                     EventStreamService.this,
                     isVideo,
-                    room.getRoomDisplayName(this)/*RoomsNotifications.getRoomName(getApplicationContext(), session, room, event)*/,
+                    room.getRoomDisplayName(this),
                     session.getMyUserId(),
                     callId);
             setForegroundNotificationState(ForegroundNotificationState.INCOMING_CALL, notification);
@@ -1029,7 +1018,7 @@ public class EventStreamService extends Service {
                     PowerManager pm = (PowerManager) getSystemService(Context.POWER_SERVICE);
                     PowerManager.WakeLock wl = pm.newWakeLock(
                             WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON | PowerManager.ACQUIRE_CAUSES_WAKEUP,
-                            "riot:MXEventListener");
+                            EventStreamService.class.getSimpleName());
                     wl.acquire(3000);
                     wl.release();
                 } catch (RuntimeException re) {

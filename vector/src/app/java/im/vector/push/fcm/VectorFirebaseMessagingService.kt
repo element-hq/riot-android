@@ -1,4 +1,4 @@
-/**
+/*
  * Copyright 2019 New Vector Ltd
  *
  *
@@ -27,6 +27,7 @@ import com.google.firebase.messaging.RemoteMessage
 import com.google.gson.JsonParser
 import im.vector.BuildConfig
 import im.vector.Matrix
+import im.vector.R
 import im.vector.VectorApp
 import im.vector.activity.CommonActivityUtils
 import im.vector.notifications.NotifiableEventResolver
@@ -35,7 +36,6 @@ import im.vector.notifications.SimpleNotifiableEvent
 import im.vector.push.PushManager
 import im.vector.services.EventStreamService
 import org.matrix.androidsdk.MXSession
-import org.matrix.androidsdk.data.store.IMXStore
 import org.matrix.androidsdk.rest.model.Event
 import org.matrix.androidsdk.rest.model.bingrules.BingRule
 import org.matrix.androidsdk.util.Log
@@ -46,9 +46,9 @@ import org.matrix.androidsdk.util.Log
 class VectorFirebaseMessagingService : FirebaseMessagingService() {
 
     // Tells if the events service running state has been tested
-    private var mCheckLaunched: Boolean = false
+    private var mCheckLaunched = false
 
-    private val notifiableEventResolver: NotifiableEventResolver by lazy {
+    private val notifiableEventResolver by lazy {
         NotifiableEventResolver(this)
     }
 
@@ -64,18 +64,18 @@ class VectorFirebaseMessagingService : FirebaseMessagingService() {
      */
     override fun onMessageReceived(message: RemoteMessage?) {
         if (message == null || message.data == null) {
-            Log.e(LOG_TAG, "## onMessageReceivedInternal() : received a null message or message with no data")
+            Log.e(LOG_TAG, "## onMessageReceived() : received a null message or message with no data")
             return
         }
-        if (BuildConfig.DEBUG) {
-            Log.i(LOG_TAG, "%%%%%%%% :" + message.data.toString())
-            Log.i(LOG_TAG, "%%%%%%%%  ## onMessageReceived() from FCM with priority " + message.priority)
+        if (BuildConfig.LOW_PRIVACY_LOG_ENABLE) {
+            Log.i(LOG_TAG, "## onMessageReceived()" + message.data.toString())
+            Log.i(LOG_TAG, "## onMessageReceived() from FCM with priority " + message.priority)
         }
 
         //safe guard
         val pushManager = Matrix.getInstance(applicationContext).pushManager
         if (!pushManager.areDeviceNotificationsAllowed()) {
-            Log.i(LOG_TAG, "## onMessageReceivedInternal() : the notifications are disabled")
+            Log.i(LOG_TAG, "## onMessageReceived() : the notifications are disabled")
             return
         }
 
@@ -107,7 +107,7 @@ class VectorFirebaseMessagingService : FirebaseMessagingService() {
      */
     private fun onMessageReceivedInternal(data: Map<String, String>, pushManager: PushManager) {
         try {
-            if (BuildConfig.DEBUG) {
+            if (BuildConfig.LOW_PRIVACY_LOG_ENABLE) {
                 Log.i(LOG_TAG, "## onMessageReceivedInternal() : $data")
             }
             // update the badge counter
@@ -129,7 +129,6 @@ class VectorFirebaseMessagingService : FirebaseMessagingService() {
         } catch (e: Exception) {
             Log.e(LOG_TAG, "## onMessageReceivedInternal() failed : " + e.message, e)
         }
-
     }
 
     //legacy code
@@ -160,7 +159,7 @@ class VectorFirebaseMessagingService : FirebaseMessagingService() {
                     for (session in sessions) {
                         if (session.dataHandler?.store?.isReady == true) {
                             session.dataHandler.store?.getEvent(eventId, roomId)?.let {
-                                Log.e(LOG_TAG, "## onMessageReceivedInternal() : ignore the event " + eventId
+                                Log.e(LOG_TAG, "## isEventAlreadyKnown() : ignore the event " + eventId
                                         + " in room " + roomId + " because it is already known")
                                 return true
                             }
@@ -168,7 +167,7 @@ class VectorFirebaseMessagingService : FirebaseMessagingService() {
                     }
                 }
             } catch (e: Exception) {
-                Log.e(LOG_TAG, "## onMessageReceivedInternal() : failed to check if the event was already defined " + e.message, e)
+                Log.e(LOG_TAG, "## isEventAlreadyKnown() : failed to check if the event was already defined " + e.message, e)
             }
 
         }
@@ -178,7 +177,7 @@ class VectorFirebaseMessagingService : FirebaseMessagingService() {
     private fun handleNotificationWithoutSyncingMode(data: Map<String, String>, session: MXSession?) {
 
         if (session == null) {
-            Log.e(LOG_TAG, "VectorFirebaseMessagingService: handleNotificationWithoutSyncingMode cannot find session")
+            Log.e(LOG_TAG, "## handleNotificationWithoutSyncingMode cannot find session")
             return
         }
         val notificationDrawerManager = VectorApp.getInstance().notificationDrawerManager
@@ -197,7 +196,7 @@ class VectorFirebaseMessagingService : FirebaseMessagingService() {
                     session.myUserId,
                     eventId,
                     true, //It's an issue in this case, all event will bing even if expected to be silent.
-                    title = "New Event",
+                    title = getString(R.string.notification_unknown_new_event),
                     description = "",
                     type = null,
                     timestamp = System.currentTimeMillis(),
@@ -214,14 +213,14 @@ class VectorFirebaseMessagingService : FirebaseMessagingService() {
             val event = parseEvent(data)
             if (event?.roomId == null) {
                 //unsupported event
-                Log.e(LOG_TAG, "VectorFirebaseMessagingService: Received an event with no room id")
+                Log.e(LOG_TAG, "Received an event with no room id")
                 return
             } else {
 
                 var notifiableEvent = notifiableEventResolver.resolveEvent(event, null, session.fulfillRule(event), session)
 
                 if (notifiableEvent == null) {
-                    Log.e(LOG_TAG, "VectorFirebaseMessagingService: Unsupported notifiable event ${eventId}")
+                    Log.e(LOG_TAG, "Unsupported notifiable event ${eventId}")
                 } else {
 
 
@@ -259,19 +258,6 @@ class VectorFirebaseMessagingService : FirebaseMessagingService() {
         }
         return roomName
     }
-
-//    private fun findSenderDisplayNameNameBestEffort(data: Map<String, String>, session: MXSession?, store: IMXStore?): String? {
-//        var roomName: String? = data?.get("room_name")
-//        val roomId = data?.get("room_id")
-//        if (null == roomName && null != roomId) {
-//            // Try to get the room name from our store
-//            if (store?.isReady == true) {
-//                val room = store.getRoom(roomId)
-//                roomName = room?.getRoomDisplayName(this)
-//            }
-//        }
-//        return roomName
-//    }
 
     /**
      * Try to create an event from the FCM data
