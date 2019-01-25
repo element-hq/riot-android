@@ -33,7 +33,7 @@ import com.nulabinc.zxcvbn.Zxcvbn
 import im.vector.R
 import im.vector.fragments.VectorBaseFragment
 import im.vector.settings.VectorLocale
-import im.vector.ui.PasswordStrengthBar
+import im.vector.view.PasswordStrengthBar
 
 
 class KeysBackupSetupStep2Fragment : VectorBaseFragment() {
