@@ -35,8 +35,8 @@
             android:layout_marginStart="16dp"
             android:layout_marginLeft="16dp"
             app:errorEnabled="true"
-            app:layout_constraintLeft_toLeftOf="parent"
-            app:layout_constraintRight_toLeftOf="@+id/keybackup_view_password_clickable"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toStartOf="@+id/keybackup_view_password_clickable"
             app:layout_constraintTop_toBottomOf="@id/keybackupsetup_step2_text">
 
             <android.support.design.widget.TextInputEditText
@@ -56,7 +56,7 @@
             android:background="?attr/selectableItemBackground"
             app:layout_constraintBottom_toBottomOf="@+id/keybackup_passphrase_enter_til"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintLeft_toRightOf="@id/keybackup_passphrase_enter_til"
+            app:layout_constraintStart_toEndOf="@id/keybackup_passphrase_enter_til"
             app:layout_constraintTop_toTopOf="@+id/keybackup_passphrase_enter_til">
 
             <ImageView
@@ -72,7 +72,7 @@
             android:id="@+id/keybackup_passphrase_security_progress"
             android:layout_width="0dp"
             android:layout_height="4dp"
-            app:layout_constraintLeft_toLeftOf="@+id/keybackup_passphrase_enter_til"
+            app:layout_constraintStart_toStartOf="@+id/keybackup_passphrase_enter_til"
             app:layout_constraintRight_toRightOf="@+id/keybackup_passphrase_enter_til"
             app:layout_constraintTop_toBottomOf="@+id/keybackup_passphrase_enter_til" />
 
@@ -93,8 +93,8 @@
             android:layout_marginLeft="16dp"
             android:layout_weight="1"
             app:errorEnabled="true"
-            app:layout_constraintLeft_toLeftOf="parent"
-            app:layout_constraintRight_toLeftOf="@+id/keybackup_view_password_clickable"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toStartOf="@+id/keybackup_view_password_clickable"
             app:layout_constraintTop_toBottomOf="@id/keybackup_step2_separator">
 
             <android.support.design.widget.TextInputEditText
