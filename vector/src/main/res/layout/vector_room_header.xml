@@ -29,7 +29,7 @@
         android:gravity="center_horizontal"
         android:padding="8dp"
         android:singleLine="true"
-        android:textColor="@android:color/white"
+        android:textColor="?vctr_toolbar_primary_text_color"
         android:textSize="20sp"
         tools:text="a room name here" />
 
@@ -47,8 +47,8 @@
         android:ellipsize="end"
         android:gravity="center_horizontal"
         android:maxLines="3"
-        android:textColor="@android:color/white"
-        android:textColorLink="?android:attr/textColorSecondary"
+        android:textColor="?vctr_toolbar_primary_text_color"
+        android:textColorLink="?vctr_toolbar_secondary_text_color"
         android:textSize="14sp"
         tools:text="a topic here" />
 
@@ -75,7 +75,7 @@
             android:layout_gravity="center_vertical"
             android:ellipsize="end"
             android:padding="8dp"
-            android:textColor="?android:attr/textColorSecondary"
+            android:textColor="?vctr_toolbar_secondary_text_color"
             android:textSize="14sp"
             tools:text="a text" />
 
