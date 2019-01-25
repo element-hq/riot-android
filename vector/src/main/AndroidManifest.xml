@@ -160,6 +160,9 @@
             android:name=".activity.SplashActivity"
             android:configChanges="orientation|screenSize" />
         <activity
+            android:name=".activity.logout.LogoutActivity"
+            android:label="@string/title_activity_logout" />
+        <activity
             android:name=".activity.LoggingOutActivity"
             android:configChanges="orientation|screenSize" />
         <activity

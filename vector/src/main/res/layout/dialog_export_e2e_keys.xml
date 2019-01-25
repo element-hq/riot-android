@@ -56,5 +56,6 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="10dp"
         android:background="?attr/colorAccent"
-        android:text="@string/encryption_export_export" />
+        android:text="@string/encryption_export_export"
+        android:textColor="@android:color/white" />
 </LinearLayout>

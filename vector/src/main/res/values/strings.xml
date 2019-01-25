@@ -29,6 +29,20 @@
     <string name="title_activity_choose_sticker">Send a sticker</string>
     <string name="title_activity_keys_backup_setup">Message Recovery</string>
 
+    <!-- Logging out screen -->
+    <string name="title_activity_logout">Logging out</string>
+    <string name="logout_activity_warning">For security, logging out will delete any end-to-end encryption keys making previous encrypted chat history unreadable if you log back in.</string>
+    <string name="logout_activity_backup_title">e2e keys backup</string>
+    <string name="logout_activity_backup_status_backuping">Keys backup is not finished, please wait…</string>
+    <string name="logout_activity_backup_status_up_to_date">Your e2e keys has been backed up on your home server, you can logout safely</string>
+    <string name="logout_activity_backup_status_no_backup">Your e2e keys has not been backed up on your home server, you can start to backup them now.</string>
+    <string name="logout_activity_backup_start_backup">Export to Homeserver</string>
+    <string name="logout_activity_export_to_file_title">Export e2e keys to file</string>
+    <string name="logout_activity_export_to_file">You can also choose to export your e2e keys to a file and manage saving this file by yourself.</string>
+    <string name="logout_activity_export_to_file_action">Export to file</string>
+    <string name="logout_activity_logout_anyway_dialog_content">You may not be able to read encrypted chat history it you log in back</string>
+    <string name="logout_activity_logout_anyway_dialog_action">Logout anyway</string>
+
     <string name="dialog_title_third_party_licences">Third party licences</string>
 
     <!-- splash screen accessibility -->
