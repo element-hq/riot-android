@@ -60,10 +60,6 @@ class KeybackupSetupStep2Fragment : VectorBaseFragment() {
     @BindView(R.id.keybackup_passphrase_security_progress)
     lateinit var mPassphraseProgressLevel: PasswordStrengthBar
 
-    @BindView(R.id.keybackup_view_password_clickable)
-    lateinit var mToggleVisibilityButton: View
-
-
     private val zxcvbn = Zxcvbn()
 
     private val mConfirmPassphraseTextWatcher by lazy {
@@ -172,10 +168,6 @@ class KeybackupSetupStep2Fragment : VectorBaseFragment() {
             mPassphraseTextEdit.setSelection(viewModel.passphrase.value?.length ?: 0)
         })
 
-        mToggleVisibilityButton.setOnClickListener {
-            toggleVisibilityMode()
-        }
-
         viewModel.confirmPassphraseError.observe(this, Observer {
             val resId = it ?: -1
             TransitionManager.beginDelayedTransition(rootGroup)
@@ -195,7 +187,8 @@ class KeybackupSetupStep2Fragment : VectorBaseFragment() {
         }
     }
 
-    private fun toggleVisibilityMode() {
+    @OnClick(R.id.keybackup_view_show_password)
+    fun toggleVisibilityMode() {
         viewModel.showPasswordMode.value = !(viewModel.showPasswordMode.value ?: false)
     }
 

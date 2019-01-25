@@ -29,12 +29,14 @@ import android.widget.ProgressBar
 import android.widget.TextView
 import android.widget.Toast
 import butterknife.BindView
+import butterknife.OnClick
 import im.vector.Matrix
 import im.vector.R
 import im.vector.activity.KeybackupSetupActivity
 import im.vector.activity.MXCActionBarActivity
 import im.vector.activity.VectorAppCompatActivity
 import im.vector.fragments.VectorBaseFragment
+import im.vector.util.startSharePlainTextIntent
 import java.lang.Exception
 
 class KeybackupSetupStep3Fragment : VectorBaseFragment() {
@@ -119,22 +121,6 @@ class KeybackupSetupStep3Fragment : VectorBaseFragment() {
             }
         })
 
-        mCopyButton.setOnClickListener {
-            val recoveryKey = viewModel.recoveryKey.value
-            if (recoveryKey != null) {
-                val share = Intent(android.content.Intent.ACTION_SEND)
-                share.type = "text/plain"
-                share.addFlags(Intent.FLAG_ACTIVITY_NEW_DOCUMENT)
-                // Add data to the intent, the receiving app will decide
-                // what to do with it.
-                share.putExtra(Intent.EXTRA_SUBJECT, context?.getString(R.string.recovery_key))
-                share.putExtra(Intent.EXTRA_TEXT, recoveryKey)
-
-                startActivity(Intent.createChooser(share, context?.getString(R.string.keybackup_setup_step3_share_intent_chooser_title)))
-                viewModel.copyHasBeenMade = true
-            }
-        }
-
         viewModel.creatingBackupError.observe(this, Observer { error ->
             if (error != null) {
                 activity?.let {
@@ -170,22 +156,33 @@ class KeybackupSetupStep3Fragment : VectorBaseFragment() {
                 (activity as? VectorAppCompatActivity)?.hideWaitingView()
             }
         })
+    }
 
-
-        mFinishButton.setOnClickListener {
-            if (viewModel.megolmBackupCreationInfo == null) {
-                //nothing
-            } else if (viewModel.copyHasBeenMade) {
-                val session = (activity as? MXCActionBarActivity)?.session
-                        ?: Matrix.getInstance(context)?.getSession(null)
-                val keysBackup = session?.crypto?.keysBackup
-                if (keysBackup != null) {
-                    viewModel.createKeyBackup(keysBackup)
-                }
-            } else {
-                Toast.makeText(context, R.string.keybackup_setup_step3_please_make_copy, Toast.LENGTH_LONG).show()
+    @OnClick(R.id.keybackupsetup_step3_button)
+    fun onFinishButtonClicked() {
+        if (viewModel.megolmBackupCreationInfo == null) {
+            //nothing
+        } else if (viewModel.copyHasBeenMade) {
+            val session = (activity as? MXCActionBarActivity)?.session
+                    ?: Matrix.getInstance(context)?.getSession(null)
+            val keysBackup = session?.crypto?.keysBackup
+            if (keysBackup != null) {
+                viewModel.createKeyBackup(keysBackup)
             }
+        } else {
+            Toast.makeText(context, R.string.keybackup_setup_step3_please_make_copy, Toast.LENGTH_LONG).show()
         }
+    }
 
+    @OnClick(R.id.keybackupsetup_step3_copy_button)
+    fun onCopyButtonClicked() {
+        val recoveryKey = viewModel.recoveryKey.value
+        if (recoveryKey != null) {
+            startSharePlainTextIntent(this,
+                    context?.getString(R.string.keybackup_setup_step3_share_intent_chooser_title),
+                    recoveryKey,
+                    context?.getString(R.string.recovery_key))
+            viewModel.copyHasBeenMade = true
+        }
     }
 }

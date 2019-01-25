@@ -26,7 +26,6 @@ import android.provider.Settings
 import android.support.v4.app.Fragment
 import androidx.core.widget.toast
 import im.vector.R
-import im.vector.fragments.troubleshoot.NotificationTroubleshootTestManager
 import im.vector.notifications.supportNotificationChannels
 import im.vector.settings.VectorLocale
 import org.matrix.androidsdk.util.Log
@@ -144,5 +143,16 @@ fun startAddGoogleAccountIntent(fragment: Fragment, requestCode: Int) {
     } catch (activityNotFoundException: ActivityNotFoundException) {
         fragment.activity?.toast(R.string.error_no_external_application_found)
     }
+}
+
+fun startSharePlainTextIntent(fragment: Fragment, chooserTitle: String?, text: String, subject: String? = null) {
+    val share = Intent(Intent.ACTION_SEND)
+    share.type = "text/plain"
+    share.addFlags(Intent.FLAG_ACTIVITY_NEW_DOCUMENT)
+    // Add data to the intent, the receiving app will decide
+    // what to do with it.
+    share.putExtra(Intent.EXTRA_SUBJECT, subject)
+    share.putExtra(Intent.EXTRA_TEXT, text)
+    fragment.startActivity(Intent.createChooser(share, chooserTitle))
 }
 

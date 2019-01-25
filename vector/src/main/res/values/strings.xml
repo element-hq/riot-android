@@ -73,6 +73,7 @@
     <string name="invite">Invite</string>
     <string name="offline">Offline</string>
     <string name="accept">Accept</string>
+    <string name="skip">Skip</string>
 
     <!-- actions -->
     <string name="action_exit">Exit</string>
@@ -193,6 +194,7 @@
     <string name="auth_login">Log in</string>
     <string name="auth_register">Register</string>
     <string name="auth_submit">Submit</string>
+    <string name="auth_skip">Skip</string>
     <string name="auth_send_reset_email">Send Reset Email</string>
     <string name="auth_return_to_login">Return to login screen</string>
     <string name="auth_user_id_placeholder">Email or user name</string>
@@ -1246,6 +1248,5 @@ Discover truly efficient and open collaboration with Riot.im!"</string>
 
     <string name="keybackup_setup_skip_title">Are you sure?</string>
     <string name="keybackup_setup_skip_msg">You may lose secure messages if you log out of lose your device.</string>
-    <string name="skip">Skip</string>
 
 </resources>
