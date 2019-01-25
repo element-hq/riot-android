@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package im.vector.fragments.keybackupsetup
+package im.vector.fragments.keysbackupsetup
 
 import android.arch.lifecycle.MutableLiveData
 import android.arch.lifecycle.ViewModel
@@ -31,7 +31,7 @@ import org.matrix.androidsdk.util.Log
 /**
  * The shared view model between all fragments.
  */
-class KeybackupSetupSharedViewModel : ViewModel() {
+class KeysBackupSetupSharedViewModel : ViewModel() {
 
     // Step 2
     var passphrase: MutableLiveData<String> = MutableLiveData()
@@ -85,7 +85,7 @@ class KeybackupSetupSharedViewModel : ViewModel() {
         }
     }
 
-    fun createKeyBackup(keysBackup: KeysBackup) {
+    fun createKeysBackup(keysBackup: KeysBackup) {
         isCreatingBackupVersion.value = true
         creatingBackupError.value = null
         keysBackup.createKeyBackupVersion(megolmBackupCreationInfo!!, object : ApiCallback<KeysVersion> {
@@ -116,6 +116,6 @@ class KeybackupSetupSharedViewModel : ViewModel() {
     }
 
     companion object {
-        private val LOG_TAG = KeybackupSetupSharedViewModel::class.java.name
+        private val LOG_TAG = KeysBackupSetupSharedViewModel::class.java.name
     }
 }

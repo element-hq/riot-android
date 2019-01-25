@@ -14,25 +14,25 @@
  * limitations under the License.
  */
 
-package im.vector.fragments.keybackupsetup
+package im.vector.fragments.keysbackupsetup
 
 import butterknife.OnClick
 import im.vector.R
 import im.vector.fragments.VectorBaseFragment
 
-class KeybackupSetupStep1Fragment : VectorBaseFragment() {
+class KeysBackupSetupStep1Fragment : VectorBaseFragment() {
 
-    override fun getLayoutResId() = R.layout.keybackup_setup_fragment
+    override fun getLayoutResId() = R.layout.keys_backup_setup_step1_fragment
 
     companion object {
-        fun newInstance() = KeybackupSetupStep1Fragment()
+        fun newInstance() = KeysBackupSetupStep1Fragment()
     }
 
-    @OnClick(R.id.keybackupsetup_step1_button)
+    @OnClick(R.id.keys_backup_setup_step1_button)
     fun onButtonClick() {
         activity?.supportFragmentManager
                 ?.beginTransaction()
-                ?.replace(R.id.container, KeybackupSetupStep2Fragment.newInstance())
+                ?.replace(R.id.container, KeysBackupSetupStep2Fragment.newInstance())
                 ?.addToBackStack(null)
                 ?.commit()
     }

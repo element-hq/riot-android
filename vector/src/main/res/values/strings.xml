@@ -27,7 +27,7 @@
     <string name="title_activity_bug_report">Bug report</string>
     <string name="title_activity_group_details">Community details</string>
     <string name="title_activity_choose_sticker">Send a sticker</string>
-    <string name="title_activity_key_backup_setup">Message Recovery</string>
+    <string name="title_activity_keys_backup_setup">Message Recovery</string>
 
     <string name="dialog_title_third_party_licences">Third party licences</string>
 
@@ -1225,28 +1225,28 @@ Discover truly efficient and open collaboration with Riot.im!"</string>
 
 
     <!-- Key Backup setup -->
-    <string name="keybackup_setup_step1_title">Never lose encrypted messages</string>
-    <string name="keybackup_setup_step1_description">Set up Secure Message Recovery in case you lose or log out of this device.</string>
-    <string name="keybackup_setup_step1_button_title">Set up</string>
-    <string name="keybackup_setup_step2_text">Secure your encrypted message history with a Recovery Passphrase.\n\nYou’ll need it if you log out, or lose access to this device.</string>
-    <string name="keybackup_setup_step2_button_title">Set Recovery Passphrase</string>
-    <string name="keybackup_setup_step2_passphrase_enter">Enter</string>
-    <string name="keybackup_setup_step2_passphrase_confirm">Confirm</string>
-    <string name="keybackup_setup_step2_passphrase_enter_hint">Enter Passphrase</string>
-    <string name="keybackup_setup_step2_passphrase_confirm_hint">Confirm Passphrase</string>
-    <string name="keybackup_setup_step2_passphrase_empty">Please enter a passphrase</string>
-    <string name="keybackup_setup_step2_passphrase_no_match">Passphrase doesn\'t match</string>
-    <string name="keybackup_setup_step2_passphrase_too_weak">Passphrase is too weak</string>
-    <string name="keybackup_setup_step3_text">Make a copy of this Recovery Key and keep it safe.\n\nAs a safety net, you can use it to restore your encrypted message history if you forget your Recovery Passphrase.</string>
-    <string name="keybackup_setup_step3_button_title">I’ve made a copy</string>
-    <string name="keybackup_setup_step3_copy_button_title">Make a Copy</string>
-    <string name="keybackup_setup_step3_please_make_copy">Please make a copy</string>
-    <string name="keybackup_setup_step3_share_intent_chooser_title">Share recovery key with</string>
-    <string name="keybackup_setup_step3_generating_key_status">Generating Recovery Key using passphrase, this process can take several seconds.</string>
+    <string name="keys_backup_setup_step1_title">Never lose encrypted messages</string>
+    <string name="keys_backup_setup_step1_description">Set up Secure Message Recovery in case you lose or log out of this device.</string>
+    <string name="keys_backup_setup_step1_button_title">Set up</string>
+    <string name="keys_backup_setup_step2_text">Secure your encrypted message history with a Recovery Passphrase.\n\nYou’ll need it if you log out, or lose access to this device.</string>
+    <string name="keys_backup_setup_step2_button_title">Set Recovery Passphrase</string>
+    <string name="keys_backup_setup_step2_passphrase_enter">Enter</string>
+    <string name="keys_backup_setup_step2_passphrase_confirm">Confirm</string>
+    <string name="keys_backup_setup_step2_passphrase_enter_hint">Enter Passphrase</string>
+    <string name="keys_backup_setup_step2_passphrase_confirm_hint">Confirm Passphrase</string>
+    <string name="keys_backup_setup_step2_passphrase_empty">Please enter a passphrase</string>
+    <string name="keys_backup_setup_step2_passphrase_no_match">Passphrase doesn\'t match</string>
+    <string name="keys_backup_setup_step2_passphrase_too_weak">Passphrase is too weak</string>
+    <string name="keys_backup_setup_step3_text">Make a copy of this Recovery Key and keep it safe.\n\nAs a safety net, you can use it to restore your encrypted message history if you forget your Recovery Passphrase.</string>
+    <string name="keys_backup_setup_step3_button_title">I’ve made a copy</string>
+    <string name="keys_backup_setup_step3_copy_button_title">Make a Copy</string>
+    <string name="keys_backup_setup_step3_please_make_copy">Please make a copy</string>
+    <string name="keys_backup_setup_step3_share_intent_chooser_title">Share recovery key with…</string>
+    <string name="keys_backup_setup_step3_generating_key_status">Generating Recovery Key using passphrase, this process can take several seconds.</string>
     <string name="recovery_key">Recovery Key</string>
     <string name="unexpected_error">Unexpected error</string>
 
-    <string name="keybackup_setup_skip_title">Are you sure?</string>
-    <string name="keybackup_setup_skip_msg">You may lose secure messages if you log out of lose your device.</string>
+    <string name="keys_backup_setup_skip_title">Are you sure?</string>
+    <string name="keys_backup_setup_skip_msg">You may lose secure messages if you log out of lose your device.</string>
 
 </resources>

@@ -15,28 +15,27 @@
  */
 package im.vector.activity
 
-import android.app.Activity
 import android.support.v7.app.AlertDialog
 import android.view.MenuItem
 import im.vector.R
-import im.vector.fragments.keybackupsetup.KeybackupSetupStep1Fragment
+import im.vector.fragments.keysbackupsetup.KeysBackupSetupStep1Fragment
 
-class KeybackupSetupActivity : MXCActionBarActivity() {
+class KeysBackupSetupActivity : MXCActionBarActivity() {
 
-    override fun getLayoutRes() = R.layout.keybackup_setup_activity
+    override fun getLayoutRes() = R.layout.keys_backup_setup_activity
 
-    override fun getTitleRes() = R.string.title_activity_key_backup_setup
+    override fun getTitleRes() = R.string.title_activity_keys_backup_setup
 
-    override fun getMenuRes() = R.menu.keybackup_setup
+    override fun getMenuRes() = R.menu.keys_backup_setup
 
     override fun initUiAndData() {
         if (isFirstCreation()) {
             supportFragmentManager.beginTransaction()
-                    .replace(R.id.container, KeybackupSetupStep1Fragment.newInstance())
+                    .replace(R.id.container, KeysBackupSetupStep1Fragment.newInstance())
                     .commitNow()
         }
         configureToolbar()
-        waitingView = findViewById(R.id.keybackup_waiting_view)
+        waitingView = findViewById(R.id.keys_backup_waiting_view)
     }
 
 
@@ -50,16 +49,16 @@ class KeybackupSetupActivity : MXCActionBarActivity() {
 
     private fun onSkip() {
         AlertDialog.Builder(this)
-                .setTitle(R.string.keybackup_setup_skip_title)
-                .setMessage(R.string.keybackup_setup_skip_msg)
+                .setTitle(R.string.keys_backup_setup_skip_title)
+                .setMessage(R.string.keys_backup_setup_skip_msg)
                 .setNegativeButton(R.string.cancel, null)
                 .setPositiveButton(R.string.skip) { _, _ ->
                     finish()
                 }
-                .show();
+                .show()
     }
 
     companion object {
-        val KEY_RESULT = "KEYS_VERSION"
+        const val KEYS_VERSION = "KEYS_VERSION"
     }
 }

@@ -85,11 +85,11 @@
     <color name="avatar_color_2">#FF1E7DDC</color>
     <color name="avatar_color_3">#FF76DDD7</color>
 
-    <!-- Password Strenght bar colors -->
-    <color name="password_strength_bar_weak">#f56679</color>
-    <color name="password_strength_bar_low">#ffc666</color>
-    <color name="password_strength_bar_ok">#f8e71c</color>
-    <color name="password_strength_bar_strong">#7ac9a1</color>
-    <color name="password_strength_bar_undefined">#9e9e9e</color>
+    <!-- Password Strength bar colors -->
+    <color name="password_strength_bar_weak">#FFF56679</color>
+    <color name="password_strength_bar_low">#FFFFC666</color>
+    <color name="password_strength_bar_ok">#FFF8E71C</color>
+    <color name="password_strength_bar_strong">#FF7AC9A1</color>
+    <color name="password_strength_bar_undefined">#FF9E9E9E</color>
 
 </resources>

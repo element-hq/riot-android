@@ -107,7 +107,7 @@ fun getDeviceLocale(context: Context): Locale {
  */
 fun startNotificationSettingsIntent(fragment: Fragment, requestCode: Int) {
     val intent = Intent()
-    if (Build.VERSION.SDK_INT > Build.VERSION_CODES.N_MR1) {
+    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
         intent.action = Settings.ACTION_APP_NOTIFICATION_SETTINGS
         intent.putExtra(Settings.EXTRA_APP_PACKAGE, fragment.context?.packageName)
     } else if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
@@ -126,6 +126,7 @@ fun startNotificationSettingsIntent(fragment: Fragment, requestCode: Int) {
 /**
  * Shows notification system settings for the given channel id.
  */
+@TargetApi(Build.VERSION_CODES.O)
 fun startNotificationChannelSettingsIntent(fragment: Fragment, channelID: String) {
     if (!supportNotificationChannels()) return
     val intent = Intent(Settings.ACTION_CHANNEL_NOTIFICATION_SETTINGS).apply {
@@ -148,11 +149,18 @@ fun startAddGoogleAccountIntent(fragment: Fragment, requestCode: Int) {
 fun startSharePlainTextIntent(fragment: Fragment, chooserTitle: String?, text: String, subject: String? = null) {
     val share = Intent(Intent.ACTION_SEND)
     share.type = "text/plain"
-    share.addFlags(Intent.FLAG_ACTIVITY_NEW_DOCUMENT)
-    // Add data to the intent, the receiving app will decide
-    // what to do with it.
+    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+        share.addFlags(Intent.FLAG_ACTIVITY_NEW_DOCUMENT)
+    } else {
+        share.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_NEW_TASK)
+    }
+    // Add data to the intent, the receiving app will decide what to do with it.
     share.putExtra(Intent.EXTRA_SUBJECT, subject)
     share.putExtra(Intent.EXTRA_TEXT, text)
-    fragment.startActivity(Intent.createChooser(share, chooserTitle))
+    try {
+        fragment.startActivity(Intent.createChooser(share, chooserTitle))
+    } catch (activityNotFoundException: ActivityNotFoundException) {
+        fragment.activity?.toast(R.string.error_no_external_application_found)
+    }
 }
 

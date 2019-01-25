@@ -403,8 +403,8 @@
             android:name=".activity.MediaPreviewerActivity"
             android:configChanges="orientation|screenSize" />
         <activity
-            android:name=".activity.KeybackupSetupActivity"
-            android:label="@string/title_activity_key_backup_setup"
+            android:name=".activity.KeysBackupSetupActivity"
+            android:label="@string/title_activity_keys_backup_setup"
             android:windowSoftInputMode="stateHidden|adjustResize" />
 
         <!-- FileProvider -->

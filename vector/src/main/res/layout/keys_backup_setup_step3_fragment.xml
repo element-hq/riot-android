@@ -1,19 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/keybackupsetup_step3_root"
+    android:id="@+id/keys_backup_setup_step3_root"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:gravity="center"
     android:orientation="vertical"
-    tools:context=".fragments.keybackupsetup.KeybackupSetupStep3Fragment">
+    tools:context=".fragments.keysbackupsetup.KeysBackupSetupStep3Fragment">
 
     <TextView
-        android:id="@+id/keybackupsetup_step3_text"
+        android:id="@+id/keys_backup_setup_step3_text"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_margin="20dp"
-        android:text="@string/keybackup_setup_step3_text"
+        android:text="@string/keys_backup_setup_step3_text"
         android:textAlignment="center" />
 
     <TextView
@@ -27,32 +27,28 @@
         android:layout_width="match_parent"
         android:layout_height="1dp"
         android:layout_margin="6dp"
-        android:background="@color/list_divider_color_light" />
+        android:background="?vctr_list_divider_color" />
 
     <ProgressBar
-        android:id="@+id/keybackup_recovery_key_spinner"
+        android:id="@+id/keys_backup_recovery_key_spinner"
         android:layout_width="20dp"
         android:layout_height="20dp"
         android:layout_gravity="center"
         android:foregroundTint="?attr/colorAccent"
-        android:indeterminate="true"
-        android:visibility="gone"
-        tools:visibility="visible" />
+        android:indeterminate="true" />
 
     <TextView
-        android:id="@+id/keybackup_recovery_key_spinner_text"
+        android:id="@+id/keys_backup_recovery_key_spinner_text"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginLeft="20dp"
         android:layout_marginRight="20dp"
-        android:text="@string/keybackup_setup_step3_generating_key_status"
+        android:text="@string/keys_backup_setup_step3_generating_key_status"
         android:textAlignment="center"
-        android:textColor="?attr/colorAccent"
-        android:visibility="gone"
-        tools:visibility="visible" />
+        android:textColor="?attr/colorAccent" />
 
     <TextView
-        android:id="@+id/keybackup_recovery_key_text"
+        android:id="@+id/keys_backup_recovery_key_text"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginLeft="20dp"
@@ -60,10 +56,10 @@
         android:fontFamily="monospace"
         android:textAlignment="center"
         android:textSize="20sp"
-        tools:text="HHWJ Y8DK OD04 BQEN FQ4V M4O8 BQEN FQ4V M4O8" />
+        tools:text="HHWJ Y8DK OD04\nBQEN FQ4V M4O8\nBQEN FQ4V M4O8" />
 
     <Button
-        android:id="@+id/keybackupsetup_step3_copy_button"
+        android:id="@+id/keys_backup_setup_step3_copy_button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="20dp"
@@ -71,11 +67,11 @@
         android:background="?attr/colorAccent"
         android:minWidth="200dp"
         android:padding="8dp"
-        android:text="@string/keybackup_setup_step3_copy_button_title"
+        android:text="@string/keys_backup_setup_step3_copy_button_title"
         android:textColor="@android:color/white" />
 
     <Button
-        android:id="@+id/keybackupsetup_step3_button"
+        android:id="@+id/keys_backup_setup_step3_button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="8dp"
@@ -83,7 +79,7 @@
         android:background="?attr/colorAccent"
         android:minWidth="200dp"
         android:padding="8dp"
-        android:text="@string/keybackup_setup_step3_button_title"
+        android:text="@string/keys_backup_setup_step3_button_title"
         android:textColor="@android:color/white" />
 
 </LinearLayout>

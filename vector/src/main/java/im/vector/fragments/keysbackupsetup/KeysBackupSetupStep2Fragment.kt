@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package im.vector.fragments.keybackupsetup
+package im.vector.fragments.keysbackupsetup
 
 import android.arch.lifecycle.Observer
 import android.arch.lifecycle.ViewModelProviders
@@ -25,7 +25,6 @@ import android.text.Editable
 import android.text.InputType
 import android.text.TextUtils
 import android.text.TextWatcher
-import android.view.View
 import android.view.ViewGroup
 import android.view.inputmethod.EditorInfo
 import android.widget.EditText
@@ -38,26 +37,26 @@ import im.vector.settings.VectorLocale
 import im.vector.ui.PasswordStrengthBar
 
 
-class KeybackupSetupStep2Fragment : VectorBaseFragment() {
+class KeysBackupSetupStep2Fragment : VectorBaseFragment() {
 
-    override fun getLayoutResId() = R.layout.keybackup_setup_step2_fragment
+    override fun getLayoutResId() = R.layout.keys_backup_setup_step2_fragment
 
-    @BindView(R.id.keybackup_root)
+    @BindView(R.id.keys_backup_root)
     lateinit var rootGroup: ViewGroup
 
-    @BindView(R.id.keybackup_passphrase_enter_edittext)
+    @BindView(R.id.keys_backup_passphrase_enter_edittext)
     lateinit var mPassphraseTextEdit: EditText
 
-    @BindView(R.id.keybackup_passphrase_enter_til)
+    @BindView(R.id.keys_backup_passphrase_enter_til)
     lateinit var mPassphraseInputLayout: TextInputLayout
 
-    @BindView(R.id.keybackup_passphrase_confirm_edittext)
+    @BindView(R.id.keys_backup_passphrase_confirm_edittext)
     lateinit var mPassphraseConfirmTextEdit: EditText
 
-    @BindView(R.id.keybackup_passphrase_confirm_til)
+    @BindView(R.id.keys_backup_passphrase_confirm_til)
     lateinit var mPassphraseConfirmInputLayout: TextInputLayout
 
-    @BindView(R.id.keybackup_passphrase_security_progress)
+    @BindView(R.id.keys_backup_passphrase_security_progress)
     lateinit var mPassphraseProgressLevel: PasswordStrengthBar
 
     private val zxcvbn = Zxcvbn()
@@ -96,27 +95,26 @@ class KeybackupSetupStep2Fragment : VectorBaseFragment() {
         }
     }
 
-    private lateinit var viewModel: KeybackupSetupSharedViewModel
+    private lateinit var viewModel: KeysBackupSetupSharedViewModel
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
 
         viewModel = activity?.run {
-            ViewModelProviders.of(this).get(KeybackupSetupSharedViewModel::class.java)
+            ViewModelProviders.of(this).get(KeysBackupSetupSharedViewModel::class.java)
         } ?: throw Exception("Invalid Activity")
 
         bindViewToViewModel()
     }
 
     private fun bindViewToViewModel() {
-
         viewModel.passwordStrength.observe(this, Observer { strength ->
             if (strength == null) {
-                mPassphraseProgressLevel.strength = -1
+                mPassphraseProgressLevel.setStrength(-1)
                 mPassphraseInputLayout.error = null
             } else {
                 val score = strength.score
-                mPassphraseProgressLevel.strength = score
+                mPassphraseProgressLevel.setStrength(score)
 
                 if (score in 1..2) {
                     val warning = strength.feedback?.getWarning(VectorLocale.applicationLocale)
@@ -187,28 +185,28 @@ class KeybackupSetupStep2Fragment : VectorBaseFragment() {
         }
     }
 
-    @OnClick(R.id.keybackup_view_show_password)
+    @OnClick(R.id.keys_backup_view_show_password)
     fun toggleVisibilityMode() {
         viewModel.showPasswordMode.value = !(viewModel.showPasswordMode.value ?: false)
     }
 
-    @OnClick(R.id.keybackupsetup_step2_button)
+    @OnClick(R.id.keys_backup_setup_step2_button)
     fun doNext() {
         when {
             TextUtils.isEmpty(viewModel.passphrase.value) -> {
-                mPassphraseInputLayout.error = context?.getString(R.string.keybackup_setup_step2_passphrase_empty)
+                mPassphraseInputLayout.error = context?.getString(R.string.keys_backup_setup_step2_passphrase_empty)
             }
             viewModel.passphrase.value != viewModel.confirmPassphrase.value -> {
-                viewModel.confirmPassphraseError.value = R.string.keybackup_setup_step2_passphrase_no_match
+                viewModel.confirmPassphraseError.value = R.string.keys_backup_setup_step2_passphrase_no_match
             }
             viewModel.passwordStrength.value?.score ?: 0 < 3 -> {
-                mPassphraseInputLayout.error = context?.getString(R.string.keybackup_setup_step2_passphrase_too_weak)
+                mPassphraseInputLayout.error = context?.getString(R.string.keys_backup_setup_step2_passphrase_too_weak)
             }
             else -> {
                 viewModel.recoveryKey.value = null
                 viewModel.megolmBackupCreationInfo = null
                 this.activity?.supportFragmentManager?.beginTransaction()?.apply {
-                    replace(R.id.container, KeybackupSetupStep3Fragment.newInstance())
+                    replace(R.id.container, KeysBackupSetupStep3Fragment.newInstance())
                     addToBackStack(null)
                     commit()
                 }
@@ -218,7 +216,6 @@ class KeybackupSetupStep2Fragment : VectorBaseFragment() {
 
 
     companion object {
-        fun newInstance() = KeybackupSetupStep2Fragment()
+        fun newInstance() = KeysBackupSetupStep2Fragment()
     }
-
 }

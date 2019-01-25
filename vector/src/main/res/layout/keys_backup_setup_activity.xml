@@ -4,14 +4,13 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="im.vector.activity.KeybackupSetupActivity">
+    tools:context="im.vector.activity.KeysBackupSetupActivity">
 
     <android.support.v7.widget.Toolbar
         android:id="@+id/toolbar"
         style="@style/VectorToolbarStyle"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        app:layout_constraintTop_toTopOf="parent" />
+        android:layout_height="wrap_content" />
 
     <FrameLayout
         android:id="@+id/container"
@@ -23,12 +22,11 @@
         app:layout_constraintTop_toBottomOf="@id/toolbar" />
 
     <include
-        android:id="@+id/keybackup_waiting_view"
+        android:id="@+id/keys_backup_waiting_view"
         layout="@layout/progress_bar_view"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:visibility="gone"
         tools:visibility="visible" />
-
 
 </android.support.constraint.ConstraintLayout>
