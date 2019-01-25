@@ -91,7 +91,9 @@ class KeybackupSetupStep3Fragment : VectorBaseFragment() {
         val session = (activity as? MXCActionBarActivity)?.session
                 ?: Matrix.getInstance(context)?.getSession(null)
 
-        viewModel.prepareRecoveryKey(session)
+        if (viewModel.recoveryKey.value == null) {
+            viewModel.prepareRecoveryKey(session)
+        }
 
         viewModel.recoveryKey.observe(this, Observer { newValue ->
             TransitionManager.beginDelayedTransition(mRootLayout)
@@ -100,16 +102,18 @@ class KeybackupSetupStep3Fragment : VectorBaseFragment() {
                 mSpinnerStatusText.visibility = View.VISIBLE
                 mSpinner.animate()
                 mRecoveryKeyTextView.text = null
+                mRecoveryKeyTextView.visibility = View.GONE
                 mCopyButton.visibility = View.GONE
                 mFinishButton.visibility = View.GONE
             } else {
                 mSpinner.visibility = View.GONE
                 mSpinnerStatusText.visibility = View.GONE
-                if ("XXXX XXXX XXXX XXXX XXXX XXXX XXXX XXXX XXXX XXXX XXXX XXXX".length == newValue.length) {
-                    mRecoveryKeyTextView.text = String.format("%s\n%s\n%s", newValue.subSequence(0, 19), newValue.subSequence(20, 39), newValue.subSequence(40, 59))
-                } else {
-                    mRecoveryKeyTextView.text = newValue
-                }
+
+                mRecoveryKeyTextView.text = newValue.replace(" ", "").chunked(16).map {
+                    it.chunked(4).joinToString(" ")
+                }.joinToString("\n")
+
+                mRecoveryKeyTextView.visibility = View.VISIBLE
                 mCopyButton.visibility = View.VISIBLE
                 mFinishButton.visibility = View.VISIBLE
             }

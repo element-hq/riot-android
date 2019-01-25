@@ -28,9 +28,9 @@ import android.text.TextWatcher
 import android.view.View
 import android.view.ViewGroup
 import android.view.inputmethod.EditorInfo
-import android.widget.Button
 import android.widget.EditText
 import butterknife.BindView
+import butterknife.OnClick
 import com.nulabinc.zxcvbn.Zxcvbn
 import im.vector.R
 import im.vector.fragments.VectorBaseFragment
@@ -63,8 +63,6 @@ class KeybackupSetupStep2Fragment : VectorBaseFragment() {
     @BindView(R.id.keybackup_view_password_clickable)
     lateinit var mToggleVisibilityButton: View
 
-    @BindView(R.id.keybackupsetup_step2_button)
-    lateinit var mNextButton: Button
 
     private val zxcvbn = Zxcvbn()
 
@@ -115,9 +113,6 @@ class KeybackupSetupStep2Fragment : VectorBaseFragment() {
     }
 
     private fun bindViewToViewModel() {
-        mNextButton.setOnClickListener {
-            doNext()
-        }
 
         viewModel.passwordStrength.observe(this, Observer { strength ->
             if (strength == null) {
@@ -204,12 +199,13 @@ class KeybackupSetupStep2Fragment : VectorBaseFragment() {
         viewModel.showPasswordMode.value = !(viewModel.showPasswordMode.value ?: false)
     }
 
-    private fun doNext() {
+    @OnClick(R.id.keybackupsetup_step2_button)
+    fun doNext() {
         when {
             TextUtils.isEmpty(viewModel.passphrase.value) -> {
                 mPassphraseInputLayout.error = context?.getString(R.string.keybackup_setup_step2_passphrase_empty)
             }
-            viewModel.passphrase.value != viewModel.confirmPassphrase.value ->  {
+            viewModel.passphrase.value != viewModel.confirmPassphrase.value -> {
                 viewModel.confirmPassphraseError.value = R.string.keybackup_setup_step2_passphrase_no_match
             }
             viewModel.passwordStrength.value?.score ?: 0 < 3 -> {
