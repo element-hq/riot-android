@@ -21,20 +21,19 @@ import android.os.AsyncTask
 import android.os.Bundle
 import android.support.design.widget.TextInputLayout
 import android.support.transition.TransitionManager
-import android.text.Editable
 import android.text.InputType
 import android.text.TextUtils
-import android.text.TextWatcher
 import android.view.ViewGroup
 import android.view.inputmethod.EditorInfo
 import android.widget.EditText
 import butterknife.BindView
 import butterknife.OnClick
+import butterknife.OnTextChanged
 import com.nulabinc.zxcvbn.Zxcvbn
 import im.vector.R
 import im.vector.fragments.VectorBaseFragment
 import im.vector.settings.VectorLocale
-import im.vector.ui.PasswordStrengthBar
+import im.vector.view.PasswordStrengthBar
 
 
 class KeysBackupSetupStep2Fragment : VectorBaseFragment() {
@@ -61,38 +60,15 @@ class KeysBackupSetupStep2Fragment : VectorBaseFragment() {
 
     private val zxcvbn = Zxcvbn()
 
-    private val mConfirmPassphraseTextWatcher by lazy {
-        object : TextWatcher {
-            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
-
-            }
-
-            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
-                viewModel.confirmPassphrase.value = mPassphraseConfirmTextEdit.text.toString()
-                viewModel.confirmPassphraseError.value = -1
-            }
-
-            override fun afterTextChanged(s: Editable?) {
-
-            }
-        }
+    @OnTextChanged(R.id.keys_backup_passphrase_enter_edittext)
+    fun onPassphraseChanged(){
+        viewModel.passphrase.value = mPassphraseTextEdit.text.toString()
+        viewModel.confirmPassphraseError.value = null
     }
 
-    private val mPassphraseTextWatcher by lazy {
-        object : TextWatcher {
-            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
-
-            }
-
-            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
-                viewModel.passphrase.value = mPassphraseTextEdit.text.toString()
-                viewModel.confirmPassphraseError.value = -1
-            }
-
-            override fun afterTextChanged(s: Editable?) {
-
-            }
-        }
+    @OnTextChanged(R.id.keys_backup_passphrase_confirm_edittext)
+    fun onConfirmPassphraseChanged(){
+        viewModel.confirmPassphrase.value = mPassphraseConfirmTextEdit.text.toString()
     }
 
     private lateinit var viewModel: KeysBackupSetupSharedViewModel
@@ -149,10 +125,13 @@ class KeysBackupSetupStep2Fragment : VectorBaseFragment() {
         })
 
         mPassphraseTextEdit.setText(viewModel.passphrase.value)
-        mPassphraseTextEdit.addTextChangedListener(mPassphraseTextWatcher)
+
+        viewModel.passphraseError.observe(this, Observer {
+            TransitionManager.beginDelayedTransition(rootGroup)
+            mPassphraseInputLayout.error = it
+        })
 
         mPassphraseConfirmTextEdit.setText(viewModel.confirmPassphrase.value)
-        mPassphraseConfirmTextEdit.addTextChangedListener(mConfirmPassphraseTextWatcher)
 
         viewModel.showPasswordMode.observe(this, Observer {
             val shouldBeVisible = it ?: false
@@ -167,13 +146,8 @@ class KeysBackupSetupStep2Fragment : VectorBaseFragment() {
         })
 
         viewModel.confirmPassphraseError.observe(this, Observer {
-            val resId = it ?: -1
             TransitionManager.beginDelayedTransition(rootGroup)
-            if (it == -1) {
-                mPassphraseConfirmInputLayout.error = null
-            } else {
-                mPassphraseConfirmInputLayout.error = context?.getString(resId)
-            }
+            mPassphraseConfirmInputLayout.error = it
         })
 
         mPassphraseConfirmTextEdit.setOnEditorActionListener { _, actionId, _ ->
@@ -194,22 +168,23 @@ class KeysBackupSetupStep2Fragment : VectorBaseFragment() {
     fun doNext() {
         when {
             TextUtils.isEmpty(viewModel.passphrase.value) -> {
-                mPassphraseInputLayout.error = context?.getString(R.string.keys_backup_setup_step2_passphrase_empty)
+                viewModel.passphraseError.value = context?.getString(R.string.keys_backup_setup_step2_passphrase_empty)
             }
             viewModel.passphrase.value != viewModel.confirmPassphrase.value -> {
-                viewModel.confirmPassphraseError.value = R.string.keys_backup_setup_step2_passphrase_no_match
+                viewModel.confirmPassphraseError.value = context?.getString(R.string.keys_backup_setup_step2_passphrase_no_match)
             }
             viewModel.passwordStrength.value?.score ?: 0 < 3 -> {
-                mPassphraseInputLayout.error = context?.getString(R.string.keys_backup_setup_step2_passphrase_too_weak)
+                viewModel.passphraseError.value = context?.getString(R.string.keys_backup_setup_step2_passphrase_too_weak)
             }
             else -> {
                 viewModel.recoveryKey.value = null
                 viewModel.megolmBackupCreationInfo = null
-                this.activity?.supportFragmentManager?.beginTransaction()?.apply {
-                    replace(R.id.container, KeysBackupSetupStep3Fragment.newInstance())
-                    addToBackStack(null)
-                    commit()
-                }
+                activity
+                        ?.supportFragmentManager
+                        ?.beginTransaction()
+                        ?.replace(R.id.container, KeysBackupSetupStep3Fragment.newInstance())
+                        ?.addToBackStack(null)
+                        ?.commit()
             }
         }
     }

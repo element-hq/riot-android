@@ -35,9 +35,12 @@ class KeysBackupSetupSharedViewModel : ViewModel() {
 
     // Step 2
     var passphrase: MutableLiveData<String> = MutableLiveData()
+    var passphraseError: MutableLiveData<String> = MutableLiveData()
+
     var confirmPassphrase: MutableLiveData<String> = MutableLiveData()
+    var confirmPassphraseError: MutableLiveData<String> = MutableLiveData()
+
     var passwordStrength: MutableLiveData<Strength> = MutableLiveData()
-    var confirmPassphraseError: MutableLiveData<Int> = MutableLiveData()
     var showPasswordMode: MutableLiveData<Boolean> = MutableLiveData()
 
     // Step 3

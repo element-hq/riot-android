@@ -29,6 +29,20 @@
     <string name="title_activity_choose_sticker">Send a sticker</string>
     <string name="title_activity_keys_backup_setup">Message Recovery</string>
 
+    <!-- Signing out screen -->
+    <string name="title_activity_sign_out">Signing out</string>
+    <string name="sign_out_activity_warning">For security, signing out will delete any end-to-end encryption keys making previous encrypted chat history unreadable if you log back in.</string>
+    <string name="sign_out_activity_backup_title">e2e keys backup</string>
+    <string name="sign_out_activity_backup_status_backuping">Keys backup is not finished, please wait…</string>
+    <string name="sign_out_activity_backup_status_up_to_date">Your e2e keys has been backed up on your home server, you can sign out safely</string>
+    <string name="sign_out_activity_backup_status_no_backup">Your e2e keys has not been backed up on your home server, you can start to backup them now.</string>
+    <string name="sign_out_activity_backup_start_backup">Create Backup</string>
+    <string name="sign_out_activity_export_to_file_title">Export e2e keys to file</string>
+    <string name="sign_out_activity_export_to_file">You can also choose to export your e2e keys to a file and manage saving this file by yourself.</string>
+    <string name="sign_out_activity_export_to_file_action">Export to file</string>
+    <string name="sign_out_activity_sign_out_anyway_dialog_content">You may not be able to read encrypted chat history it you log in back</string>
+    <string name="sign_out_activity_sign_out_anyway_dialog_action">Sign out anyway</string>
+
     <string name="dialog_title_third_party_licences">Third party licences</string>
 
     <!-- splash screen accessibility -->
@@ -79,7 +93,7 @@
     <string name="action_exit">Exit</string>
     <string name="actions">Actions</string>
     <string name="action_sign_out">Sign out</string>
-    <string name="action_sign_out_confirmation">For security, logging out will delete any end-to-end encryption keys making previous encrypted chat history unreadable if you log back in.\nSelect export to backup them before signing out.</string>
+    <string name="action_sign_out_confirmation">For security, signing out will delete any end-to-end encryption keys making previous encrypted chat history unreadable if you log back in.\nSelect export to backup them before signing out.</string>
     <string name="action_voice_call">Voice Call</string>
     <string name="action_video_call">Video Call</string>
     <string name="action_global_search">Global search</string>
@@ -162,7 +176,7 @@
     <string name="username">Username</string>
     <string name="create_account">Register</string>
     <string name="login">Log in</string>
-    <string name="logout">Log out</string>
+    <string name="logout">Sign out</string>
     <string name="hs_url">Home Server URL</string>
     <string name="identity_url">Identity Server URL</string>
     <string name="search">Search</string>
@@ -192,7 +206,7 @@
 
     <!-- Authentication -->
     <string name="auth_login">Log in</string>
-    <string name="auth_register">Register</string>
+    <string name="auth_register">Create Account</string>
     <string name="auth_submit">Submit</string>
     <string name="auth_skip">Skip</string>
     <string name="auth_send_reset_email">Send Reset Email</string>

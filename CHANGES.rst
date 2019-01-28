@@ -5,7 +5,8 @@ MatrixSdk:
  - Upgrade MatrixSdk to version 0.X.Y.
 
 Features:
- - key backup: Implement setup screen #2883
+ - keys backup: Implement setup screen (#2883)
+ - keys backup: Display a warning on new sign out screen (#2885)
 
 Improvements:
  - Support Split-screen mode (#1832)
@@ -18,7 +19,6 @@ Improvements:
  - Remove redundant !! , Replace it with null safe operators in VectorSettingsPreferencesFragment.kt
  - `Redact` has been renamed to `Remove` to match riot/web (#2871)
  - Remove long click download action in MediaViewer (#2882)
-
 
 Other changes:
  - Update of Light and Dark themes (#2710)
@@ -41,7 +41,7 @@ Translations:
 Build:
  -
 
-Changes in Riot 0.8.21 (2018-01-02)
+Changes in Riot 0.8.21 (2019-01-02)
 ===================================================
 
 MatrixSdk:
