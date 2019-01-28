@@ -82,8 +82,8 @@
 
     <!-- Avatar colors -->
     <color name="avatar_color_1">#FF7AC9A1</color>
-    <color name="avatar_color_2">#FF1E7DDC</color>
-    <color name="avatar_color_3">#FF76DDD7</color>
+    <color name="avatar_color_2">#FF76DDD7</color>
+    <color name="avatar_color_3">#FF1E7DDC</color>
 
     <!-- Password Strength bar colors -->
     <color name="password_strength_bar_weak">#FFF56679</color>
