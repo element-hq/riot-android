@@ -20,6 +20,7 @@ import android.arch.lifecycle.Observer
 import android.arch.lifecycle.ViewModelProviders
 import android.content.Intent
 import android.support.design.widget.TextInputEditText
+import android.support.v4.content.ContextCompat
 import android.support.v7.app.AlertDialog
 import android.text.Editable
 import android.text.TextUtils
@@ -35,6 +36,7 @@ import im.vector.R
 import im.vector.activity.CommonActivityUtils
 import im.vector.activity.KeysBackupSetupActivity
 import im.vector.activity.MXCActionBarActivity
+import im.vector.ui.themes.ThemeUtils
 import im.vector.util.PERMISSIONS_FOR_WRITING_FILES
 import im.vector.util.PERMISSION_REQUEST_CODE
 import im.vector.util.allGranted
@@ -56,6 +58,9 @@ class SignOutActivity : MXCActionBarActivity() {
 
     @BindView(R.id.sign_out_backup_start)
     lateinit var startBackup: View
+
+    @BindView(R.id.sign_out_sign_out)
+    lateinit var signOut: View
 
     override fun getLayoutRes() = R.layout.activity_sign_out
 
@@ -105,7 +110,27 @@ class SignOutActivity : MXCActionBarActivity() {
                     startBackup.isVisible = true
                 }
             }
+
+            updateSignOutButton()
         })
+
+        viewModel.keysExportedToFile.observe(this, Observer { updateSignOutButton() })
+    }
+
+    private fun updateSignOutButton() {
+        if (canSignOutSafely()) {
+            signOut.setBackgroundColor(ThemeUtils.getColor(this, R.attr.colorAccent))
+        } else {
+            signOut.setBackgroundColor(ContextCompat.getColor(this, R.color.vector_warning_color))
+        }
+    }
+
+    /**
+     * Return true if user has backed up its keys or has exported keys to a file
+     */
+    private fun canSignOutSafely(): Boolean {
+        return viewModel.keysBackupState.value == KeysBackupStateManager.KeysBackupState.ReadyToBackUp
+                || viewModel.keysExportedToFile.value == true
     }
 
     @OnClick(R.id.sign_out_backup_start)
@@ -115,14 +140,8 @@ class SignOutActivity : MXCActionBarActivity() {
 
     @OnClick(R.id.sign_out_sign_out)
     fun signOut() {
-        if (viewModel.keysBackupState.value == KeysBackupStateManager.KeysBackupState.ReadyToBackUp) {
-            // User has backed up its keys, allow sign out
-            doSignOut()
-            return
-        }
-
-        if (viewModel.keysExportedToFile.value == true) {
-            // User has exported keys to a file, allow sign out
+        if (canSignOutSafely()) {
+            // User has backed up its keys or has exported keys to a file, allow sign out
             doSignOut()
             return
         }

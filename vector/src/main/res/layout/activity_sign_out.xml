@@ -129,8 +129,8 @@
                 android:text="@string/logout"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/sign_out_sign_out_title" />
-
+                app:layout_constraintTop_toBottomOf="@+id/sign_out_sign_out_title"
+                tools:background="@color/vector_warning_color" />
 
         </android.support.constraint.ConstraintLayout>
 

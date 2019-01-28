@@ -1,6 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
+    <!-- Error color -->
+    <color name="vector_warning_color">#FFF56679</color>
+    <color name="vector_error_color">#FFF56679</color>
+
     <!-- main app colors -->
     <color name="vector_fuchsia_color">#FFF56679</color>
     <color name="vector_silver_color">#FFC7C7C7</color>
