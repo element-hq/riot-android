@@ -14,14 +14,14 @@
  * limitations under the License.
  */
 
-package im.vector.activity.logout
+package im.vector.activity.signout
 
 import android.arch.lifecycle.MutableLiveData
 import android.arch.lifecycle.ViewModel
 import org.matrix.androidsdk.MXSession
 import org.matrix.androidsdk.crypto.keysbackup.KeysBackupStateManager
 
-class LogoutViewModel : ViewModel(), KeysBackupStateManager.KeysBackupStateListener {
+class SignOutViewModel : ViewModel(), KeysBackupStateManager.KeysBackupStateListener {
     // Keys exported manually
     var keysExportedToFile = MutableLiveData<Boolean>()
 

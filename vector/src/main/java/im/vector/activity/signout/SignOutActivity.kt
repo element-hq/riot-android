@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package im.vector.activity.logout
+package im.vector.activity.signout
 
 import android.arch.lifecycle.Observer
 import android.arch.lifecycle.ViewModelProviders
@@ -41,21 +41,21 @@ import im.vector.util.checkPermissions
 import org.matrix.androidsdk.crypto.keysbackup.KeysBackupStateManager
 import org.matrix.androidsdk.rest.callback.SimpleApiCallback
 
-class LogoutActivity : MXCActionBarActivity() {
-    private lateinit var viewModel: LogoutViewModel
+class SignOutActivity : MXCActionBarActivity() {
+    private lateinit var viewModel: SignOutViewModel
 
-    @BindView(R.id.logout_backup_status)
+    @BindView(R.id.sign_out_backup_status)
     lateinit var backupStatus: TextView
 
-    @BindView(R.id.logout_backup_status_icon)
+    @BindView(R.id.sign_out_backup_status_icon)
     lateinit var backupStatusIcon: ImageView
 
-    @BindView(R.id.logout_backup_status_progress)
+    @BindView(R.id.sign_out_backup_status_progress)
     lateinit var backupStatusProgress: View
 
-    override fun getLayoutRes() = R.layout.activity_logout
+    override fun getLayoutRes() = R.layout.activity_sign_out
 
-    override fun getTitleRes() = R.string.title_activity_logout
+    override fun getTitleRes() = R.string.title_activity_sign_out
 
     override fun initUiAndData() {
         super.initUiAndData()
@@ -69,7 +69,7 @@ class LogoutActivity : MXCActionBarActivity() {
             finish()
         }
 
-        viewModel = ViewModelProviders.of(this).get(LogoutViewModel::class.java)
+        viewModel = ViewModelProviders.of(this).get(SignOutViewModel::class.java)
 
         bindViewToViewModel()
 
@@ -80,19 +80,19 @@ class LogoutActivity : MXCActionBarActivity() {
         viewModel.keysBackupState.observe(this, Observer {
             when (it) {
                 KeysBackupStateManager.KeysBackupState.ReadyToBackUp -> {
-                    backupStatus.setText(R.string.logout_activity_backup_status_up_to_date)
+                    backupStatus.setText(R.string.sign_out_activity_backup_status_up_to_date)
                     backupStatusIcon.setImageResource(R.drawable.unit_test_ok)
                     backupStatusIcon.isVisible = true
                     backupStatusProgress.isVisible = false
                 }
                 KeysBackupStateManager.KeysBackupState.BackingUp,
                 KeysBackupStateManager.KeysBackupState.WillBackUp -> {
-                    backupStatus.setText(R.string.logout_activity_backup_status_backuping)
+                    backupStatus.setText(R.string.sign_out_activity_backup_status_backuping)
                     backupStatusIcon.isVisible = false
                     backupStatusProgress.isVisible = true
                 }
                 else -> {
-                    backupStatus.setText(R.string.logout_activity_backup_status_no_backup)
+                    backupStatus.setText(R.string.sign_out_activity_backup_status_no_backup)
                     backupStatusIcon.setImageResource(R.drawable.unit_test_ko)
                     backupStatusIcon.isVisible = true
                     backupStatusProgress.isVisible = false
@@ -101,54 +101,49 @@ class LogoutActivity : MXCActionBarActivity() {
         })
     }
 
-    @OnClick(R.id.logout_backup_start)
+    @OnClick(R.id.sign_out_backup_start)
     fun startBackup() {
         // TODO
         toast("Start Activity to start and observe backup")
     }
 
-    @OnClick(R.id.logout_logout)
-    fun logout() {
+    @OnClick(R.id.sign_out_sign_out)
+    fun signOut() {
         if (viewModel.keysBackupState.value == KeysBackupStateManager.KeysBackupState.ReadyToBackUp) {
-            // User has backed up its keys, allow logout
-            doLogout()
+            // User has backed up its keys, allow sign out
+            doSignOut()
             return
         }
 
         if (viewModel.keysExportedToFile.value == true) {
-            // User has exported keys to a file, allow logout
-            doLogout()
+            // User has exported keys to a file, allow sign out
+            doSignOut()
             return
         }
 
         // Display a last warning
         AlertDialog.Builder(this)
                 .setTitle(R.string.dialog_title_warning)
-                .setMessage(R.string.logout_activity_logout_anyway_dialog_content)
+                .setMessage(R.string.sign_out_activity_sign_out_anyway_dialog_content)
                 .setCancelable(false)
-                .setPositiveButton(R.string.logout_activity_logout_anyway_dialog_action
+                .setPositiveButton(R.string.sign_out_activity_sign_out_anyway_dialog_action
                 ) { _, _ ->
-                    doLogout()
+                    doSignOut()
                 }
                 .setNegativeButton(R.string.cancel, null)
                 .show()
     }
 
-    private fun doLogout() {
+    private fun doSignOut() {
         showWaitingView()
 
-        // DO NOT COMMIT
-        // CommonActivityUtils.logout(this)
-        toolbar.postDelayed({
-            toast("Logged out!")
-            hideWaitingView()
-        }, 300)
+        CommonActivityUtils.logout(this)
     }
 
     /**
      * Manage the e2e keys export.
      */
-    @OnClick(R.id.logout_export_file)
+    @OnClick(R.id.sign_out_export_file)
     fun exportKeysToFile() {
         if (checkPermissions(PERMISSIONS_FOR_WRITING_FILES, this, PERMISSION_REQUEST_CODE)) {
             doExportKeysToFile()
@@ -193,7 +188,7 @@ class LogoutActivity : MXCActionBarActivity() {
 
                     viewModel.keysExportedToFile.value = true
 
-                    AlertDialog.Builder(this@LogoutActivity)
+                    AlertDialog.Builder(this@SignOutActivity)
                             .setMessage(getString(R.string.encryption_export_saved_as, filename))
                             .setCancelable(false)
                             .setPositiveButton(R.string.ok, null)

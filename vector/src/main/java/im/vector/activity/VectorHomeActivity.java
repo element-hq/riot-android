@@ -114,7 +114,7 @@ import im.vector.MyPresenceManager;
 import im.vector.PublicRoomsManager;
 import im.vector.R;
 import im.vector.VectorApp;
-import im.vector.activity.logout.LogoutActivity;
+import im.vector.activity.signout.SignOutActivity;
 import im.vector.activity.util.RequestCodesKt;
 import im.vector.extensions.ViewExtensionsKt;
 import im.vector.fragments.AbsHomeFragment;
@@ -1762,7 +1762,7 @@ public class VectorHomeActivity extends VectorAppCompatActivity implements Searc
                     }
 
                     case R.id.sliding_menu_sign_out: {
-                        startActivity(new Intent(VectorHomeActivity.this, LogoutActivity.class));
+                        startActivity(new Intent(VectorHomeActivity.this, SignOutActivity.class));
                         break;
                     }
 
