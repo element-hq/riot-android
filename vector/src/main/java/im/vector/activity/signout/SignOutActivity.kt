@@ -18,6 +18,7 @@ package im.vector.activity.signout
 
 import android.arch.lifecycle.Observer
 import android.arch.lifecycle.ViewModelProviders
+import android.content.Intent
 import android.support.design.widget.TextInputEditText
 import android.support.v7.app.AlertDialog
 import android.text.Editable
@@ -28,11 +29,11 @@ import android.widget.Button
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.core.view.isVisible
-import androidx.core.widget.toast
 import butterknife.BindView
 import butterknife.OnClick
 import im.vector.R
 import im.vector.activity.CommonActivityUtils
+import im.vector.activity.KeysBackupSetupActivity
 import im.vector.activity.MXCActionBarActivity
 import im.vector.util.PERMISSIONS_FOR_WRITING_FILES
 import im.vector.util.PERMISSION_REQUEST_CODE
@@ -52,6 +53,9 @@ class SignOutActivity : MXCActionBarActivity() {
 
     @BindView(R.id.sign_out_backup_status_progress)
     lateinit var backupStatusProgress: View
+
+    @BindView(R.id.sign_out_backup_start)
+    lateinit var startBackup: View
 
     override fun getLayoutRes() = R.layout.activity_sign_out
 
@@ -84,18 +88,21 @@ class SignOutActivity : MXCActionBarActivity() {
                     backupStatusIcon.setImageResource(R.drawable.unit_test_ok)
                     backupStatusIcon.isVisible = true
                     backupStatusProgress.isVisible = false
+                    startBackup.isVisible = false
                 }
                 KeysBackupStateManager.KeysBackupState.BackingUp,
                 KeysBackupStateManager.KeysBackupState.WillBackUp -> {
                     backupStatus.setText(R.string.sign_out_activity_backup_status_backuping)
                     backupStatusIcon.isVisible = false
                     backupStatusProgress.isVisible = true
+                    startBackup.isVisible = false
                 }
                 else -> {
                     backupStatus.setText(R.string.sign_out_activity_backup_status_no_backup)
                     backupStatusIcon.setImageResource(R.drawable.unit_test_ko)
                     backupStatusIcon.isVisible = true
                     backupStatusProgress.isVisible = false
+                    startBackup.isVisible = true
                 }
             }
         })
@@ -103,8 +110,7 @@ class SignOutActivity : MXCActionBarActivity() {
 
     @OnClick(R.id.sign_out_backup_start)
     fun startBackup() {
-        // TODO
-        toast("Start Activity to start and observe backup")
+        startActivity(Intent(this, KeysBackupSetupActivity::class.java))
     }
 
     @OnClick(R.id.sign_out_sign_out)

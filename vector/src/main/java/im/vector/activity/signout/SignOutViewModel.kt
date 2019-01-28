@@ -30,15 +30,17 @@ class SignOutViewModel : ViewModel(), KeysBackupStateManager.KeysBackupStateList
     private var mxSession: MXSession? = null
 
     fun init(session: MXSession) {
-        mxSession = session
+        if (mxSession == null) {
+            mxSession = session
+
+            mxSession?.crypto
+                    ?.keysBackup
+                    ?.addListener(this)
+        }
 
         keysBackupState.value = mxSession?.crypto
                 ?.keysBackup
                 ?.state
-
-        mxSession?.crypto
-                ?.keysBackup
-                ?.addListener(this)
     }
 
     override fun onCleared() {
