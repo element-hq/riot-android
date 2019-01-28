@@ -20,24 +20,20 @@ import android.view.MenuItem
 import im.vector.R
 import im.vector.fragments.keysbackupsetup.KeysBackupSetupStep1Fragment
 
-class KeysBackupSetupActivity : MXCActionBarActivity() {
-
-    override fun getLayoutRes() = R.layout.keys_backup_setup_activity
+class KeysBackupSetupActivity : SimpleFragmentActivity() {
 
     override fun getTitleRes() = R.string.title_activity_keys_backup_setup
 
     override fun getMenuRes() = R.menu.keys_backup_setup
 
     override fun initUiAndData() {
+        super.initUiAndData()
         if (isFirstCreation()) {
             supportFragmentManager.beginTransaction()
                     .replace(R.id.container, KeysBackupSetupStep1Fragment.newInstance())
                     .commitNow()
         }
-        configureToolbar()
-        waitingView = findViewById(R.id.keys_backup_waiting_view)
     }
-
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         if (item.itemId == R.id.ic_action_keybackup_setup_skip) {

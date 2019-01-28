@@ -28,6 +28,7 @@
     <string name="title_activity_group_details">Community details</string>
     <string name="title_activity_choose_sticker">Send a sticker</string>
     <string name="title_activity_keys_backup_setup">Message Recovery</string>
+    <string name="title_activity_keys_backup_restore">Secure Messages</string>
 
     <!-- Signing out screen -->
     <string name="title_activity_sign_out">Signing out</string>
@@ -1238,7 +1239,11 @@ For developers:
 Discover truly efficient and open collaboration with Riot.im!"</string>
 
 
-    <!-- Key Backup setup -->
+    <!-- Key Backup -->
+
+    <string name="keys_backup_passphrase_empty_error_message">Please enter a passphrase</string>
+    <string name="keys_backup_no_session_error">No Matrix session available</string>
+
     <string name="keys_backup_setup_step1_title">Never lose encrypted messages</string>
     <string name="keys_backup_setup_step1_description">Set up Secure Message Recovery in case you lose or log out of this device.</string>
     <string name="keys_backup_setup_step1_button_title">Set up</string>
@@ -1248,7 +1253,6 @@ Discover truly efficient and open collaboration with Riot.im!"</string>
     <string name="keys_backup_setup_step2_passphrase_confirm">Confirm</string>
     <string name="keys_backup_setup_step2_passphrase_enter_hint">Enter Passphrase</string>
     <string name="keys_backup_setup_step2_passphrase_confirm_hint">Confirm Passphrase</string>
-    <string name="keys_backup_setup_step2_passphrase_empty">Please enter a passphrase</string>
     <string name="keys_backup_setup_step2_passphrase_no_match">Passphrase doesn\'t match</string>
     <string name="keys_backup_setup_step2_passphrase_too_weak">Passphrase is too weak</string>
     <string name="keys_backup_setup_step3_text">Make a copy of this Recovery Key and keep it safe.\n\nAs a safety net, you can use it to restore your encrypted message history if you forget your Recovery Passphrase.</string>
@@ -1262,5 +1266,26 @@ Discover truly efficient and open collaboration with Riot.im!"</string>
 
     <string name="keys_backup_setup_skip_title">Are you sure?</string>
     <string name="keys_backup_setup_skip_msg">You may lose secure messages if you log out of lose your device.</string>
+
+
+    <string name="keys_backup_restore_with_passphrase">Use your recovery passphrase to unlock your secure message history</string>
+    <string name="keys_backup_restore_use_recovery_key">use your recovery key</string>
+    <!-- %s will be replaced by the keys_backup_restore_use_recovery_key key  -->
+    <string name="keys_backup_restore_with_passphrase_helper_with_link">Don’t know your recovery passphrase, you can %s.</string>
+
+    <string name="keys_backup_restore_with_recovery_key">Use your Recovery Key to unlock your secure message history</string>
+    <string name="keys_backup_restore_key_enter_hint">Enter Recovery Key</string>
+
+    <string name="keys_backup_restore_setup_recovery_key">Message Recovery</string>
+    <!-- %s will be replaced by the keys_backup_restore_setup_recovery_key key  -->
+    <string name="keys_backup_restore_with_key_helper_with_link">Lost your recovery key? You can set up %s for next time.</string>
+    <string name="keys_backup_passphrase_error_decrypt">Backup could not be decrypted with this passphrase: please verify that you entered the correct recovery passphrase (%s).</string>
+    <string name="keys_backup_passphrase_error_network">Network error: please check your connection and retry (%s).</string>
+
+    <string name="keys_backup_restoring_waiting_message">Restoring backup…</string>
+    <string name="keys_backup_unlock_button">Unlock History</string>
+    <string name="keys_backup_recovery_code_empty_error_message">Please enter a recovery key</string>
+    <string name="keys_backup_recovery_code_error_decrypt">Backup could not be decrypted with this recovery key: please verify that you entered the correct recovery key (%s).</string>
+
 
 </resources>

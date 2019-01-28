@@ -237,14 +237,14 @@ abstract class VectorAppCompatActivity : AppCompatActivity() {
     /**
      * Show the waiting view
      */
-    fun showWaitingView() {
+    open fun showWaitingView() {
         waitingView?.isVisible = true
     }
 
     /**
      * Hide the waiting view
      */
-    fun hideWaitingView() {
+    open fun hideWaitingView() {
         waitingView?.isVisible = false
     }
 
