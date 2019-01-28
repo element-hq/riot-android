@@ -78,12 +78,8 @@
             <Button
                 android:id="@+id/logout_backup_start"
                 style="@style/LoginButtonStyle"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
                 android:layout_margin="16dp"
-                android:background="?attr/colorAccent"
                 android:text="@string/logout_activity_backup_start_backup"
-                android:textColor="@android:color/white"
                 android:visibility="gone"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/logout_backup_status"
@@ -112,12 +108,8 @@
             <Button
                 android:id="@+id/logout_export_file"
                 style="@style/LoginButtonStyle"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
                 android:layout_margin="16dp"
-                android:background="?attr/colorAccent"
                 android:text="@string/logout_activity_export_to_file_title"
-                android:textColor="@android:color/white"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/logout_export_file_prompt" />
 
@@ -130,16 +122,11 @@
                 android:text="@string/logout"
                 app:layout_constraintTop_toBottomOf="@+id/logout_export_file" />
 
-
             <Button
                 android:id="@+id/logout_logout"
                 style="@style/LoginButtonStyle"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
                 android:layout_margin="16dp"
-                android:background="?attr/colorAccent"
                 android:text="@string/logout"
-                android:textColor="@android:color/white"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/logout_logout_title" />

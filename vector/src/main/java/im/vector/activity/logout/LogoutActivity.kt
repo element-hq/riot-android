@@ -181,8 +181,6 @@ class LogoutActivity : MXCActionBarActivity() {
         passPhrase1EditText.addTextChangedListener(textWatcher)
         passPhrase2EditText.addTextChangedListener(textWatcher)
 
-        exportButton.isEnabled = false
-
         val exportDialog = builder.show()
 
         exportButton.setOnClickListener {

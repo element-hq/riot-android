@@ -92,4 +92,8 @@
     <color name="password_strength_bar_strong">#FF7AC9A1</color>
     <color name="password_strength_bar_undefined">#FF9E9E9E</color>
 
+    <!-- Button color -->
+    <color name="button_enabled_text_color">#FFFFFFFF</color>
+    <color name="button_disabled_text_color">#FF7F7F7F</color>
+
 </resources>
