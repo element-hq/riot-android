@@ -168,7 +168,7 @@ class KeysBackupSetupStep2Fragment : VectorBaseFragment() {
     fun doNext() {
         when {
             TextUtils.isEmpty(viewModel.passphrase.value) -> {
-                viewModel.passphraseError.value = context?.getString(R.string.keys_backup_setup_step2_passphrase_empty)
+                viewModel.passphraseError.value = context?.getString(R.string.keys_backup_passphrase_empty_error_message)
             }
             viewModel.passphrase.value != viewModel.confirmPassphrase.value -> {
                 viewModel.confirmPassphraseError.value = context?.getString(R.string.keys_backup_setup_step2_passphrase_no_match)
