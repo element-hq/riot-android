@@ -17,6 +17,7 @@ package im.vector.activity
 
 import android.view.View
 import android.widget.TextView
+import androidx.core.view.isGone
 import androidx.core.view.isVisible
 import butterknife.BindView
 import im.vector.R
@@ -32,34 +33,36 @@ open class SimpleFragmentActivity : MXCActionBarActivity() {
     lateinit var waitingStatusText: TextView
 
     override fun initUiAndData() {
-        if (mSession == null) {
-            mSession = getSession(intent)
-        }
+        mSession = getSession(intent)
         configureToolbar()
         waitingView = findViewById(R.id.waiting_view)
     }
 
-
+    /**
+     * Displays a progress indicator with a message to the user.
+     * Blocks user interactions.
+     */
     fun showWaitingView(status: String) {
         waitingStatusText.text = status
         showWaitingView()
     }
 
-
     override fun showWaitingView() {
-        waitingStatusText.visibility = if (waitingStatusText.text.isNullOrBlank()) View.GONE else View.VISIBLE
+        dismissKeyboard(this)
+        waitingStatusText.isGone = waitingStatusText.text.isNullOrBlank()
         super.showWaitingView()
     }
 
     override fun hideWaitingView() {
         waitingStatusText.text = null
-        waitingStatusText.visibility = View.GONE
+        waitingStatusText.isGone = true
         super.hideWaitingView()
     }
 
     //updates the status while is loading
     fun updateWaitingStatus(status: String) {
         waitingStatusText.text = status
+        waitingStatusText.isGone = status.isNullOrBlank()
     }
 
     override fun onBackPressed() {

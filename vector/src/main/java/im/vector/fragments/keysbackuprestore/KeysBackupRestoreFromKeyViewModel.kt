@@ -56,7 +56,7 @@ class KeysBackupRestoreFromKeyViewModel : ViewModel() {
                     object : ApiCallback<ImportRoomKeysResult> {
                         override fun onSuccess(info: ImportRoomKeysResult) {
                             sharedViewModel.loadingEvent.value = null
-                            sharedViewModel.didSuccedWithKey(info)
+                            sharedViewModel.didSucceedWithKey(info)
                         }
 
                         override fun onUnexpectedError(e: Exception) {
@@ -66,7 +66,7 @@ class KeysBackupRestoreFromKeyViewModel : ViewModel() {
 
                         override fun onNetworkError(e: Exception) {
                             sharedViewModel.loadingEvent.value = null
-                            recoveryCodeErrorText.value = context.getString(R.string.keys_backup_passphrase_error_network, e.localizedMessage)
+                            recoveryCodeErrorText.value = context.getString(R.string.network_error_please_check_and_retry, e.localizedMessage)
                         }
 
                         override fun onMatrixError(e: MatrixError) {

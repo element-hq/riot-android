@@ -1282,7 +1282,7 @@ Discover truly efficient and open collaboration with Riot.im!"</string>
     <!-- %s will be replaced by the keys_backup_restore_setup_recovery_key key  -->
     <string name="keys_backup_restore_with_key_helper">Lost your recovery key? You can set up a new one in settings.</string>
     <string name="keys_backup_passphrase_error_decrypt">Backup could not be decrypted with this passphrase: please verify that you entered the correct recovery passphrase (%s).</string>
-    <string name="keys_backup_passphrase_error_network">Network error: please check your connection and retry (%s).</string>
+    <string name="network_error_please_check_and_retry">Network error: please check your connection and retry (%s).</string>
 
     <string name="keys_backup_restoring_waiting_message">Restoring backup…</string>
     <string name="keys_backup_unlock_button">Unlock History</string>

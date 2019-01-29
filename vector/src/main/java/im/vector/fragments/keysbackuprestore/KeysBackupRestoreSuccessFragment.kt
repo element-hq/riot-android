@@ -40,6 +40,7 @@ class KeysBackupRestoreSuccessFragment : VectorBaseFragment() {
         } ?: throw Exception("Invalid Activity")
 
 
+        //We don't put emoji in string xml as it will crash on old devices
         mSuccessText.text = context?.getString(R.string.keys_backup_restore_success_title, "🎉")
     }
 

@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.constraint.ConstraintLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
@@ -11,8 +10,8 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="36dp"
-        android:scaleType="center"
         android:src="@drawable/shield"
+        android:tint="?android:textColorPrimary"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
@@ -22,29 +21,23 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_margin="16dp"
-        tools:text="@string/keys_backup_restore_success_title"
         android:textAlignment="center"
         android:textSize="20sp"
         android:textStyle="bold"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/keys_backup_shield" />
+        app:layout_constraintTop_toBottomOf="@+id/keys_backup_shield"
+        tools:text="@string/keys_backup_restore_success_title" />
 
     <Button
         android:id="@+id/keys_backup_setup_done_button"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        style="@style/VectorButtonStyle"
         android:layout_margin="20dp"
-        style="@style/LoginButtonStyle"
-        android:background="?attr/colorAccent"
         android:minWidth="200dp"
         android:padding="16dp"
         android:text="@string/done"
-        android:textColor="@android:color/white"
-        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/keys_backup_restore_success"
-        app:layout_constraintVertical_bias="0" />
+        app:layout_constraintTop_toBottomOf="@+id/keys_backup_restore_success" />
 
 </android.support.constraint.ConstraintLayout>

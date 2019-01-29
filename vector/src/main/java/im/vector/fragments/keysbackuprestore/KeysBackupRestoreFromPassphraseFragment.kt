@@ -21,7 +21,6 @@ import android.content.Context
 import android.os.Bundle
 import android.support.design.widget.TextInputLayout
 import android.text.Editable
-import android.text.InputType
 import android.text.SpannableString
 import android.text.style.ClickableSpan
 import android.view.View
@@ -33,6 +32,7 @@ import butterknife.BindView
 import butterknife.OnClick
 import butterknife.OnTextChanged
 import im.vector.R
+import im.vector.extensions.showPassword
 import im.vector.fragments.VectorBaseFragment
 
 class KeysBackupRestoreFromPassphraseFragment : VectorBaseFragment() {
@@ -81,17 +81,12 @@ class KeysBackupRestoreFromPassphraseFragment : VectorBaseFragment() {
 
         viewModel.showPasswordMode.observe(this, Observer {
             val shouldBeVisible = it ?: false
-            if (shouldBeVisible) {
-                mPassphraseTextEdit.inputType = InputType.TYPE_CLASS_TEXT or InputType.TYPE_TEXT_VARIATION_VISIBLE_PASSWORD
-            } else {
-                mPassphraseTextEdit.inputType = InputType.TYPE_CLASS_TEXT or InputType.TYPE_TEXT_VARIATION_PASSWORD
-            }
-            mPassphraseTextEdit.setSelection(viewModel.passphrase.value?.length ?: 0)
+            mPassphraseTextEdit.showPassword(shouldBeVisible)
         })
 
-        mPassphraseTextEdit.setOnEditorActionListener { tv, actionId, _ ->
+        mPassphraseTextEdit.setOnEditorActionListener { _, actionId, _ ->
             if (actionId == EditorInfo.IME_ACTION_DONE) {
-                onNext()
+                onRestoreBackup()
                 return@setOnEditorActionListener true
             }
             return@setOnEditorActionListener false
@@ -104,10 +99,10 @@ class KeysBackupRestoreFromPassphraseFragment : VectorBaseFragment() {
         val helperText = context.getString(R.string.keys_backup_restore_with_passphrase_helper_with_link, tapableText)
 
         val spanString = SpannableString(helperText)
-        val clickableSpan = object : ClickableSpan() {
-            override fun onClick(widget: View?) {
 
-            }
+        //used just to have default link representation
+        val clickableSpan = object : ClickableSpan() {
+            override fun onClick(widget: View?) {}
         }
         val start = helperText.indexOf(tapableText)
         val end = start + tapableText.length
@@ -121,7 +116,7 @@ class KeysBackupRestoreFromPassphraseFragment : VectorBaseFragment() {
     }
 
     @OnClick(R.id.keys_backup_setup_step2_button)
-    fun onNext() {
+    fun onRestoreBackup() {
         val value = viewModel.passphrase.value
         if (value.isNullOrBlank()) {
             viewModel.passphraseErrorText.value = context?.getString(R.string.keys_backup_passphrase_empty_error_message)

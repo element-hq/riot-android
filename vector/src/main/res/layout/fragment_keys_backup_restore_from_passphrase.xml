@@ -15,8 +15,8 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="36dp"
-            android:scaleType="center"
             android:src="@drawable/shield"
+            android:tint="?android:textColorPrimary"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
@@ -51,10 +51,11 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:hint="@string/keys_backup_setup_step2_passphrase_enter_hint"
-                tools:inputType="textNoSuggestions|textPassword"
                 android:maxLines="3"
                 android:singleLine="false"
-                android:textColor="?android:textColorPrimary" />
+                android:textColor="?android:textColorPrimary"
+                tools:inputType="textPassword"
+                tools:text="foo" />
 
         </android.support.design.widget.TextInputLayout>
 
@@ -66,12 +67,9 @@
             android:scaleType="center"
             android:src="@drawable/ic_eye_black"
             android:tint="?attr/colorAccent"
-
-            app:layout_constraintTop_toTopOf="@id/keys_backup_passphrase_enter_til"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toEndOf="@id/keys_backup_passphrase_enter_til"
-            />
-
+            app:layout_constraintStart_toEndOf="@+id/keys_backup_passphrase_enter_til"
+            app:layout_constraintTop_toTopOf="@+id/keys_backup_passphrase_enter_til" />
 
         <TextView
             android:id="@+id/keys_backup_passphrase_help_with_link"
@@ -81,26 +79,20 @@
             android:textAlignment="center"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/keys_backup_passphrase_enter_til"
-            tools:text="Don’t know your recovery passphrase? \nYou can use your recovery key." />
-
+            app:layout_constraintTop_toBottomOf="@+id/keys_backup_passphrase_enter_til"
+            tools:text="@string/keys_backup_restore_with_passphrase_helper_with_link" />
 
         <Button
             android:id="@+id/keys_backup_setup_step2_button"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            style="@style/VectorButtonStyle"
             android:layout_margin="20dp"
-            style="@style/LoginButtonStyle"
-            android:background="?attr/colorAccent"
             android:minWidth="200dp"
             android:padding="16dp"
             android:text="@string/keys_backup_unlock_button"
-            android:textColor="@android:color/white"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/keys_backup_passphrase_help_with_link"
-            app:layout_constraintVertical_bias="0" />
+            app:layout_constraintTop_toBottomOf="@+id/keys_backup_passphrase_help_with_link" />
 
     </android.support.constraint.ConstraintLayout>
 </ScrollView>

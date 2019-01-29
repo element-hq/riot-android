@@ -21,40 +21,38 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/toolbar" />
 
-    <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    <RelativeLayout
         android:id="@+id/waiting_view"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:background="#AA9D9D9D"
         android:visibility="gone"
-        tools:visibility="visible" >
+        tools:visibility="visible">
 
         <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:background="@android:color/white"
-            android:padding="16dp"
-            android:orientation="horizontal"
             android:layout_centerInParent="true"
-            >
+            android:background="?attr/colorBackgroundFloating"
+            android:orientation="horizontal"
+            android:padding="16dp">
 
             <ProgressBar
                 android:id="@+id/progress_bar_view"
                 android:layout_width="40dp"
-                android:layout_gravity="center"
-                android:layout_height="40dp" />
+                android:layout_height="40dp"
+                android:layout_gravity="center" />
 
             <TextView
                 android:id="@+id/waiting_view_status_text"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                tools:text="Waiting status..."
-                android:layout_marginLeft="6dp"
-                android:layout_marginStart="6dp"
                 android:layout_gravity="center"
+                android:layout_marginStart="6dp"
+                android:layout_marginLeft="6dp"
                 android:visibility="gone"
-                tools:visibility="visible"
-                />
+                tools:text="Waiting status..."
+                tools:visibility="visible" />
 
         </LinearLayout>
 

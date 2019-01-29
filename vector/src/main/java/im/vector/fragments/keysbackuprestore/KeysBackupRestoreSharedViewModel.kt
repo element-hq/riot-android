@@ -51,7 +51,7 @@ class KeysBackupRestoreSharedViewModel : ViewModel() {
     var loadingEvent: MutableLiveData<LiveEvent<Int>> = MutableLiveData()
 
 
-    var importKeyResult : ImportRoomKeysResult? = null
+    var importKeyResult: ImportRoomKeysResult? = null
     var importRoomKeysFinishWithResult: MutableLiveData<LiveEvent<ImportRoomKeysResult>> = MutableLiveData()
 
 
@@ -66,7 +66,7 @@ class KeysBackupRestoreSharedViewModel : ViewModel() {
     }
 
 
-    fun getLatestVersion(context: Context, session: MXSession) {
+    fun getLatestVersion(context: Context) {
         val keysBackup = session.crypto?.keysBackup
         if (keysBackup == null) {
             //can this happen?
@@ -77,6 +77,7 @@ class KeysBackupRestoreSharedViewModel : ViewModel() {
                 override fun onSuccess(info: KeysVersionResult?) {
                     loadingEvent.value = null
                     if (info?.version.isNullOrBlank()) {
+                        //should not happen
                         _keyVersionResultError.value = LiveEvent(context.getString(R.string.keys_backup_get_version_error, ""))
                     } else {
                         keyVersionResult.value = info
@@ -90,7 +91,7 @@ class KeysBackupRestoreSharedViewModel : ViewModel() {
 
                 override fun onNetworkError(e: Exception) {
                     loadingEvent.value = null
-                    _keyVersionResultError.value = LiveEvent(context.getString(R.string.keys_backup_passphrase_error_network, e.localizedMessage))
+                    _keyVersionResultError.value = LiveEvent(context.getString(R.string.network_error_please_check_and_retry, e.localizedMessage))
                 }
 
                 override fun onMatrixError(e: MatrixError) {
@@ -105,7 +106,7 @@ class KeysBackupRestoreSharedViewModel : ViewModel() {
         _navigateEvent.value = LiveEvent(NAVIGATE_TO_RECOVER_WITH_KEY)
     }
 
-    fun didSuccedWithKey(result: ImportRoomKeysResult) {
+    fun didSucceedWithKey(result: ImportRoomKeysResult) {
         importKeyResult = result
         _navigateEvent.value = LiveEvent(NAVIGATE_TO_SUCCESS)
     }

@@ -37,10 +37,6 @@ class KeysBackupRestoreActivity : SimpleFragmentActivity() {
             intent.putExtra(EXTRA_MATRIX_ID, matrixID)
             return intent
         }
-
-        private const val PASSPHRASE_FRAGMENT_TAG = "PASSPHRASE_FRAGMENT_TAG"
-        private const val RECOVERY_KEY_FRAGMENT_TAG = "RECOVERY_KEY_FRAGMENT_TAG"
-        private const val SUCCESS_FRAGMENT_TAG = "SUCCESS_FRAGMENT_TAG"
     }
 
     override fun getTitleRes() = R.string.title_activity_keys_backup_restore
@@ -54,19 +50,15 @@ class KeysBackupRestoreActivity : SimpleFragmentActivity() {
 
         viewModel.keyVersionResult.observe(this, Observer { keyVersion ->
 
-            if (keyVersion != null) {
+            if (keyVersion != null && supportFragmentManager.fragments.isEmpty()) {
                 val isBackupCreatedFromPassphrase = keyVersion.getAuthDataAsMegolmBackupAuthData()?.privateKeySalt != null
                 if (isBackupCreatedFromPassphrase) {
-                    val fragment = supportFragmentManager.findFragmentByTag(PASSPHRASE_FRAGMENT_TAG)
-                            ?: KeysBackupRestoreFromPassphraseFragment.newInstance()
                     supportFragmentManager.beginTransaction()
-                            .replace(R.id.container, fragment, PASSPHRASE_FRAGMENT_TAG)
+                            .replace(R.id.container, KeysBackupRestoreFromPassphraseFragment.newInstance())
                             .commitNow()
                 } else {
-                    val fragment = supportFragmentManager.findFragmentByTag(RECOVERY_KEY_FRAGMENT_TAG)
-                            ?: KeysBackupRestoreFromKeyFragment.newInstance()
                     supportFragmentManager.beginTransaction()
-                            .replace(R.id.container, fragment, RECOVERY_KEY_FRAGMENT_TAG)
+                            .replace(R.id.container, KeysBackupRestoreFromKeyFragment.newInstance())
                             .commitNow()
                 }
             }
@@ -77,9 +69,10 @@ class KeysBackupRestoreActivity : SimpleFragmentActivity() {
                 AlertDialog.Builder(this)
                         .setTitle(R.string.unknown_error)
                         .setMessage(it)
+                        .setCancelable(false)
                         .setPositiveButton(R.string.ok) { _, _ ->
                             //nop
-                            this.finish()
+                            finish()
                         }
                         .show()
             }
@@ -87,31 +80,22 @@ class KeysBackupRestoreActivity : SimpleFragmentActivity() {
 
         if (viewModel.keyVersionResult.value == null) {
             //We need to fetch from API
-            viewModel.getLatestVersion(this, mSession)
+            viewModel.getLatestVersion(this)
         }
 
         viewModel.navigateEvent.observe(this, Observer { uxStateEvent ->
-            uxStateEvent?.getContentIfNotHandled()?.let {
-                when (it) {
-                    KeysBackupRestoreSharedViewModel.NAVIGATE_TO_RECOVER_WITH_KEY -> {
-                        val fragment = supportFragmentManager.findFragmentByTag(RECOVERY_KEY_FRAGMENT_TAG)
-                                ?: KeysBackupRestoreFromKeyFragment.newInstance()
-                        supportFragmentManager.beginTransaction()
-                                .replace(R.id.container, fragment, RECOVERY_KEY_FRAGMENT_TAG)
-                                .addToBackStack(null)
-                                .commit()
-                    }
-                    KeysBackupRestoreSharedViewModel.NAVIGATE_TO_SUCCESS -> {
-                        supportFragmentManager.popBackStack(null, FragmentManager.POP_BACK_STACK_INCLUSIVE)
-                        val fragment = supportFragmentManager.findFragmentByTag(SUCCESS_FRAGMENT_TAG)
-                                ?: KeysBackupRestoreSuccessFragment.newInstance()
-                        supportFragmentManager.beginTransaction()
-                                .replace(R.id.container, fragment, SUCCESS_FRAGMENT_TAG)
-                                .commit()
-                    }
-                    else -> {
-                        //nop
-                    }
+            when (uxStateEvent?.getContentIfNotHandled()) {
+                KeysBackupRestoreSharedViewModel.NAVIGATE_TO_RECOVER_WITH_KEY -> {
+                    supportFragmentManager.beginTransaction()
+                            .replace(R.id.container, KeysBackupRestoreFromKeyFragment.newInstance())
+                            .addToBackStack(null)
+                            .commit()
+                }
+                KeysBackupRestoreSharedViewModel.NAVIGATE_TO_SUCCESS -> {
+                    supportFragmentManager.popBackStack(null, FragmentManager.POP_BACK_STACK_INCLUSIVE)
+                    supportFragmentManager.beginTransaction()
+                            .replace(R.id.container, KeysBackupRestoreSuccessFragment.newInstance())
+                            .commit()
                 }
             }
         })
@@ -120,7 +104,7 @@ class KeysBackupRestoreActivity : SimpleFragmentActivity() {
             if (it == null) {
                 hideWaitingView()
             } else {
-                showWaitingView(this.getString(it.peekContent()))
+                showWaitingView(getString(it.peekContent()))
             }
         })
 

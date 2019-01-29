@@ -29,6 +29,7 @@ import butterknife.OnClick
 import butterknife.OnTextChanged
 import im.vector.R
 import im.vector.fragments.VectorBaseFragment
+import im.vector.util.startImportTextFromFileIntent
 import org.matrix.androidsdk.util.Log
 
 class KeysBackupRestoreFromKeyFragment : VectorBaseFragment() {
@@ -59,7 +60,7 @@ class KeysBackupRestoreFromKeyFragment : VectorBaseFragment() {
         mKeyTextEdit.setText(viewModel.recoveryCode.value)
         mKeyTextEdit.setOnEditorActionListener { _, actionId, _ ->
             if (actionId == EditorInfo.IME_ACTION_DONE) {
-                onNext()
+                onRestoreFromKey()
                 return@setOnEditorActionListener true
             }
             return@setOnEditorActionListener false
@@ -73,14 +74,14 @@ class KeysBackupRestoreFromKeyFragment : VectorBaseFragment() {
     }
 
     @OnTextChanged(R.id.keys_restore_key_enter_edittext)
-    fun onPassphraseTextEditChange(s: Editable?) {
+    fun onRestoreKeyTextEditChange(s: Editable?) {
         s?.toString()?.let {
             viewModel.updateCode(it)
         }
     }
 
     @OnClick(R.id.keys_restore_button)
-    fun onNext() {
+    fun onRestoreFromKey() {
         val value = viewModel.recoveryCode.value
         if (value.isNullOrBlank()) {
             viewModel.recoveryCodeErrorText.value = context?.getString(R.string.keys_backup_recovery_code_empty_error_message)
@@ -91,13 +92,7 @@ class KeysBackupRestoreFromKeyFragment : VectorBaseFragment() {
 
     @OnClick(R.id.keys_backup_import)
     fun onImport() {
-        val intent = Intent(Intent.ACTION_GET_CONTENT).apply {
-            type = "text/plain"
-        }
-        if (intent.resolveActivity(activity!!.packageManager) != null) {
-            startActivityForResult(intent, REQUEST_TEXT_FILE_GET)
-        }
-
+        startImportTextFromFileIntent(this, REQUEST_TEXT_FILE_GET)
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
@@ -115,7 +110,7 @@ class KeysBackupRestoreFromKeyFragment : VectorBaseFragment() {
                                 mKeyTextEdit.setSelection(it.length)
                             }
                 } catch (e: Exception) {
-                    Log.e(KeysBackupRestoreFromKeyFragment::javaClass.name, "Failed to read recovery kay from text")
+                    Log.e(KeysBackupRestoreFromKeyFragment::javaClass.name, "Failed to read recovery kay from text", e)
                 }
             }
             return
