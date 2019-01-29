@@ -15,61 +15,48 @@
  */
 package im.vector.fragments.keysbackuprestore
 
+import android.app.Activity
 import android.arch.lifecycle.Observer
 import android.arch.lifecycle.ViewModelProviders
-import android.content.Context
+import android.content.Intent
 import android.os.Bundle
 import android.support.design.widget.TextInputLayout
 import android.text.Editable
-import android.text.SpannableString
-import android.text.style.ClickableSpan
-import android.view.View
 import android.view.inputmethod.EditorInfo
 import android.widget.EditText
-import android.widget.TextView
-import androidx.core.text.set
 import butterknife.BindView
 import butterknife.OnClick
 import butterknife.OnTextChanged
 import im.vector.R
 import im.vector.fragments.VectorBaseFragment
-import org.matrix.androidsdk.MXSession
+import org.matrix.androidsdk.util.Log
 
 class KeysBackupRestoreFromKeyFragment : VectorBaseFragment() {
 
     companion object {
         fun newInstance() = KeysBackupRestoreFromKeyFragment()
+
+        private const val REQUEST_TEXT_FILE_GET = 1
     }
 
     override fun getLayoutResId() = R.layout.fragment_keys_backup_restore_from_key
 
     private lateinit var viewModel: KeysBackupRestoreFromKeyViewModel
-
-    private var mInteractionListener: KeysBackupRestoreFromKeyFragment.InteractionListener? = null
+    private lateinit var sharedViewModel: KeysBackupRestoreSharedViewModel
 
     @BindView(R.id.keys_backup_key_enter_til)
     lateinit var mKeyInputLayout: TextInputLayout
     @BindView(R.id.keys_restore_key_enter_edittext)
     lateinit var mKeyTextEdit: EditText
 
-    @BindView(R.id.keys_restore_key_help_with_link)
-    lateinit var helperTextWithLink: TextView
-
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
         viewModel = ViewModelProviders.of(this).get(KeysBackupRestoreFromKeyViewModel::class.java)
+        sharedViewModel = activity?.run {
+            ViewModelProviders.of(this).get(KeysBackupRestoreSharedViewModel::class.java)
+        } ?: throw Exception("Invalid Activity")
 
-        helperTextWithLink.text = spannableStringForHelperText(context!!)
-
-        helperTextWithLink.setOnClickListener {
-            mInteractionListener?.didSelectCreateNewRecoveryCode()
-        }
-
-        viewModel.isRestoring.observe(this, Observer {
-            val isLoading = it ?: false
-            if (isLoading) mInteractionListener!!.setShowWaitingView(context?.getString(R.string.keys_backup_restoring_waiting_message)) else mInteractionListener!!.setHideWaitingView()
-        })
-
+        mKeyTextEdit.setText(viewModel.recoveryCode.value)
         mKeyTextEdit.setOnEditorActionListener { _, actionId, _ ->
             if (actionId == EditorInfo.IME_ACTION_DONE) {
                 onNext()
@@ -78,29 +65,19 @@ class KeysBackupRestoreFromKeyFragment : VectorBaseFragment() {
             return@setOnEditorActionListener false
         }
 
+        mKeyInputLayout.error = viewModel.recoveryCodeErrorText.value
         viewModel.recoveryCodeErrorText.observe(this, Observer { newValue ->
             mKeyInputLayout.error = newValue
         })
 
     }
 
-    override fun onAttach(context: Context?) {
-        super.onAttach(context)
-        if (context is KeysBackupRestoreFromKeyFragment.InteractionListener) {
-            mInteractionListener = context
-        }
-    }
-
-    override fun onDetach() {
-        super.onDetach()
-        mInteractionListener = null
-    }
-
     @OnTextChanged(R.id.keys_restore_key_enter_edittext)
     fun onPassphraseTextEditChange(s: Editable?) {
-        s?.toString()?.let { viewModel.updateCode(it) }
+        s?.toString()?.let {
+            viewModel.updateCode(it)
+        }
     }
-
 
     @OnClick(R.id.keys_restore_button)
     fun onNext() {
@@ -108,34 +85,42 @@ class KeysBackupRestoreFromKeyFragment : VectorBaseFragment() {
         if (value.isNullOrBlank()) {
             viewModel.recoveryCodeErrorText.value = context?.getString(R.string.keys_backup_recovery_code_empty_error_message)
         } else {
-            viewModel.recoverKeys(context!!, mInteractionListener!!.getSession(), mInteractionListener!!.getKeysVersion())
+            viewModel.recoverKeys(context!!, sharedViewModel)
         }
     }
 
+    @OnClick(R.id.keys_backup_import)
+    fun onImport() {
+        val intent = Intent(Intent.ACTION_GET_CONTENT).apply {
+            type = "text/plain"
+        }
+        if (intent.resolveActivity(activity!!.packageManager) != null) {
+            startActivityForResult(intent, REQUEST_TEXT_FILE_GET)
+        }
 
-    //privates
+    }
 
-    private fun spannableStringForHelperText(context: Context): SpannableString {
-        val tapableText = context.getString(R.string.keys_backup_restore_setup_recovery_key)
-        val helperText = context.getString(R.string.keys_backup_restore_with_key_helper_with_link, tapableText)
-
-        val spanString = SpannableString(helperText)
-        val clickableSpan = object : ClickableSpan() {
-            override fun onClick(widget: View?) {
-
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        if (requestCode == REQUEST_TEXT_FILE_GET && resultCode == Activity.RESULT_OK) {
+            val dataURI = data?.data
+            if (dataURI != null) {
+                try {
+                    activity
+                            ?.contentResolver
+                            ?.openInputStream(dataURI)
+                            ?.bufferedReader()
+                            ?.use { it.readText() }
+                            ?.let {
+                                mKeyTextEdit.setText(it)
+                                mKeyTextEdit.setSelection(it.length)
+                            }
+                } catch (e: Exception) {
+                    Log.e(KeysBackupRestoreFromKeyFragment::javaClass.name, "Failed to read recovery kay from text")
+                }
             }
+            return
         }
-        val start = helperText.indexOf(tapableText)
-        val end = start + tapableText.length
-        spanString[start, end] = clickableSpan
-        return spanString
+        super.onActivityResult(requestCode, resultCode, data)
     }
 
-    interface InteractionListener {
-        fun didSelectCreateNewRecoveryCode()
-        fun getSession(): MXSession
-        fun getKeysVersion(): String
-        fun setShowWaitingView(status: String?)
-        fun setHideWaitingView()
-    }
 }

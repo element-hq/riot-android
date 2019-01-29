@@ -33,15 +33,14 @@ import butterknife.BindView
 import butterknife.OnClick
 import butterknife.OnTextChanged
 import im.vector.R
-import im.vector.activity.MXCActionBarActivity
 import im.vector.fragments.VectorBaseFragment
-import org.matrix.androidsdk.MXSession
 
 class KeysBackupRestoreFromPassphraseFragment : VectorBaseFragment() {
 
     override fun getLayoutResId() = R.layout.fragment_keys_backup_restore_from_passphrase
 
     private lateinit var viewModel: KeysBackupRestoreFromPassphraseViewModel
+    private lateinit var sharedViewModel: KeysBackupRestoreSharedViewModel
 
     @BindView(R.id.keys_backup_passphrase_enter_til)
     lateinit var mPassphraseInputLayout: TextInputLayout
@@ -56,24 +55,18 @@ class KeysBackupRestoreFromPassphraseFragment : VectorBaseFragment() {
         viewModel.showPasswordMode.value = !(viewModel.showPasswordMode.value ?: false)
     }
 
-
-    lateinit var mInteractionListener: InteractionListener
-
     companion object {
         fun newInstance() = KeysBackupRestoreFromPassphraseFragment()
-    }
-
-    override fun onAttach(context: Context?) {
-        super.onAttach(context)
-        if (context is InteractionListener) {
-            mInteractionListener = context
-        }
     }
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
 
         viewModel = ViewModelProviders.of(this).get(KeysBackupRestoreFromPassphraseViewModel::class.java)
+        sharedViewModel = activity?.run {
+            ViewModelProviders.of(this).get(KeysBackupRestoreSharedViewModel::class.java)
+        } ?: throw Exception("Invalid Activity")
+
 
         viewModel.passphraseErrorText.observe(this, Observer { newValue ->
             mPassphraseInputLayout.error = newValue
@@ -82,19 +75,15 @@ class KeysBackupRestoreFromPassphraseFragment : VectorBaseFragment() {
         helperTextWithLink.text = spannableStringForHelperText(context!!)
 
         helperTextWithLink.setOnClickListener {
-            mInteractionListener.didSelectRecoveryKeyMode()
+            sharedViewModel.moveToRecoverWithKey()
         }
 
-        viewModel.isRestoring.observe(this, Observer {
-            val isLoading = it ?: false
-            if (isLoading) mInteractionListener.setShowWaitingView(context?.getString(R.string.keys_backup_restoring_waiting_message)) else mInteractionListener.setHideWaitingView()
-        })
 
         viewModel.showPasswordMode.observe(this, Observer {
             val shouldBeVisible = it ?: false
             if (shouldBeVisible) {
                 mPassphraseTextEdit.inputType = InputType.TYPE_CLASS_TEXT or InputType.TYPE_TEXT_VARIATION_VISIBLE_PASSWORD
-             } else {
+            } else {
                 mPassphraseTextEdit.inputType = InputType.TYPE_CLASS_TEXT or InputType.TYPE_TEXT_VARIATION_PASSWORD
             }
             mPassphraseTextEdit.setSelection(viewModel.passphrase.value?.length ?: 0)
@@ -137,15 +126,8 @@ class KeysBackupRestoreFromPassphraseFragment : VectorBaseFragment() {
         if (value.isNullOrBlank()) {
             viewModel.passphraseErrorText.value = context?.getString(R.string.keys_backup_passphrase_empty_error_message)
         } else {
-            viewModel.recoverKeys(context!!, mInteractionListener.getSession(), mInteractionListener.getKeysVersion())
+            viewModel.recoverKeys(context!!, sharedViewModel)
         }
     }
 
-    interface InteractionListener {
-        fun didSelectRecoveryKeyMode()
-        fun getSession(): MXSession
-        fun getKeysVersion(): String
-        fun setShowWaitingView(status: String?)
-        fun setHideWaitingView()
-    }
 }

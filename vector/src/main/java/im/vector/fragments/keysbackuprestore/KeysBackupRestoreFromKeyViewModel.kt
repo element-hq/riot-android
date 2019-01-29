@@ -19,7 +19,7 @@ import android.arch.lifecycle.MutableLiveData
 import android.arch.lifecycle.ViewModel
 import android.content.Context
 import im.vector.R
-import org.matrix.androidsdk.MXSession
+import im.vector.ui.arch.LiveEvent
 import org.matrix.androidsdk.crypto.data.ImportRoomKeysResult
 import org.matrix.androidsdk.rest.callback.ApiCallback
 import org.matrix.androidsdk.rest.model.MatrixError
@@ -31,14 +31,9 @@ class KeysBackupRestoreFromKeyViewModel : ViewModel() {
     var recoveryCode: MutableLiveData<String> = MutableLiveData()
     var recoveryCodeErrorText: MutableLiveData<String> = MutableLiveData()
 
-    var isRestoring: MutableLiveData<Boolean> = MutableLiveData()
-    var importRoomKeysResult: MutableLiveData<ImportRoomKeysResult> = MutableLiveData()
-
     init {
         recoveryCode.value = null
         recoveryCodeErrorText.value = null
-        isRestoring.value = false
-        importRoomKeysResult.value = null
     }
 
     //========= Actions =========
@@ -47,39 +42,42 @@ class KeysBackupRestoreFromKeyViewModel : ViewModel() {
         recoveryCodeErrorText.value = null
     }
 
-    fun recoverKeys(context: Context, session: MXSession, version: String) {
+    fun recoverKeys(context: Context, sharedViewModel: KeysBackupRestoreSharedViewModel) {
+        val session = sharedViewModel.session
         val keysBackup = session.crypto?.keysBackup
         if (keysBackup != null) {
-            isRestoring.value = true
+            sharedViewModel.loadingEvent.value = LiveEvent(R.string.keys_backup_restoring_waiting_message)
             recoveryCodeErrorText.value = null
-            keysBackup.restoreKeyBackupWithRecoveryKey(version,
-                    recoveryCode.value!!,
+            val recoveryKey = recoveryCode.value!!
+            keysBackup.restoreKeyBackupWithRecoveryKey(sharedViewModel.keyVersionResult.value!!.version!!,
+                    recoveryKey,
                     null,
                     session.myUserId,
                     object : ApiCallback<ImportRoomKeysResult> {
                         override fun onSuccess(info: ImportRoomKeysResult) {
-                            isRestoring.value = false
-                            importRoomKeysResult.value = info
+                            sharedViewModel.loadingEvent.value = null
+                            sharedViewModel.didSuccedWithKey(info)
                         }
 
                         override fun onUnexpectedError(e: Exception) {
-                            isRestoring.value = false
+                            sharedViewModel.loadingEvent.value = null
                             recoveryCodeErrorText.value = context.getString(R.string.keys_backup_recovery_code_error_decrypt, e.localizedMessage)
                         }
 
                         override fun onNetworkError(e: Exception) {
-                            isRestoring.value = false
+                            sharedViewModel.loadingEvent.value = null
                             recoveryCodeErrorText.value = context.getString(R.string.keys_backup_passphrase_error_network, e.localizedMessage)
                         }
 
                         override fun onMatrixError(e: MatrixError) {
-                            isRestoring.value = false
+                            sharedViewModel.loadingEvent.value = null
                             recoveryCodeErrorText.value = context.getString(R.string.keys_backup_recovery_code_error_decrypt, e.localizedMessage)
                         }
                     })
         } else {
             //Can this happen?
-            Log.e(KeysBackupRestoreFromPassphraseViewModel::class.java.name, "Cannot find keys backup")
+            Log.e(KeysBackupRestoreFromPassphraseViewModel::class.java.name, "Cannot find keysBackup")
         }
     }
+
 }

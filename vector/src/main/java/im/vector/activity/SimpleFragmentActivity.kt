@@ -47,7 +47,7 @@ open class SimpleFragmentActivity : MXCActionBarActivity() {
 
 
     override fun showWaitingView() {
-        waitingStatusText.visibility = if(waitingStatusText.text.isNullOrBlank()) View.GONE else View.VISIBLE
+        waitingStatusText.visibility = if (waitingStatusText.text.isNullOrBlank()) View.GONE else View.VISIBLE
         super.showWaitingView()
     }
 

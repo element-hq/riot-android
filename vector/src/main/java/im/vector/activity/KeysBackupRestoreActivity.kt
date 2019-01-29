@@ -15,74 +15,122 @@
  */
 package im.vector.activity
 
+import android.app.Activity
+import android.arch.lifecycle.Observer
+import android.arch.lifecycle.ViewModelProviders
 import android.content.Context
 import android.content.Intent
+import android.support.v4.app.FragmentManager
+import android.support.v7.app.AlertDialog
 import im.vector.R
 import im.vector.fragments.keysbackuprestore.KeysBackupRestoreFromKeyFragment
 import im.vector.fragments.keysbackuprestore.KeysBackupRestoreFromPassphraseFragment
+import im.vector.fragments.keysbackuprestore.KeysBackupRestoreSharedViewModel
+import im.vector.fragments.keysbackuprestore.KeysBackupRestoreSuccessFragment
 
-class KeysBackupRestoreActivity : SimpleFragmentActivity(),
-        KeysBackupRestoreFromPassphraseFragment.InteractionListener,
-        KeysBackupRestoreFromKeyFragment.InteractionListener {
+class KeysBackupRestoreActivity : SimpleFragmentActivity() {
 
     companion object {
 
-        private const val KEY_KEYS_VERSION = "KEY_KEYS_VERSION"
-
-        fun intent(context: Context, keysVersion: String, matrixID: String): Intent {
+        fun intent(context: Context, matrixID: String): Intent {
             val intent = Intent(context, KeysBackupRestoreActivity::class.java)
-            intent.putExtra(KEY_KEYS_VERSION, keysVersion)
             intent.putExtra(EXTRA_MATRIX_ID, matrixID)
             return intent
         }
 
+        private const val PASSPHRASE_FRAGMENT_TAG = "PASSPHRASE_FRAGMENT_TAG"
+        private const val RECOVERY_KEY_FRAGMENT_TAG = "RECOVERY_KEY_FRAGMENT_TAG"
+        private const val SUCCESS_FRAGMENT_TAG = "SUCCESS_FRAGMENT_TAG"
     }
 
     override fun getTitleRes() = R.string.title_activity_keys_backup_restore
 
+    private lateinit var viewModel: KeysBackupRestoreSharedViewModel
+
     override fun initUiAndData() {
         super.initUiAndData()
-        //TODO if no salt, can skip to key recovery
-        if (isFirstCreation()) {
-            supportFragmentManager.beginTransaction()
-                    .replace(R.id.container, KeysBackupRestoreFromPassphraseFragment.newInstance())
-                    .commitNow()
+        viewModel = ViewModelProviders.of(this).get(KeysBackupRestoreSharedViewModel::class.java)
+        viewModel.initSession(mSession)
+
+        viewModel.keyVersionResult.observe(this, Observer { keyVersion ->
+
+            if (keyVersion != null) {
+                val isBackupCreatedFromPassphrase = keyVersion.getAuthDataAsMegolmBackupAuthData()?.privateKeySalt != null
+                if (isBackupCreatedFromPassphrase) {
+                    val fragment = supportFragmentManager.findFragmentByTag(PASSPHRASE_FRAGMENT_TAG)
+                            ?: KeysBackupRestoreFromPassphraseFragment.newInstance()
+                    supportFragmentManager.beginTransaction()
+                            .replace(R.id.container, fragment, PASSPHRASE_FRAGMENT_TAG)
+                            .commitNow()
+                } else {
+                    val fragment = supportFragmentManager.findFragmentByTag(RECOVERY_KEY_FRAGMENT_TAG)
+                            ?: KeysBackupRestoreFromKeyFragment.newInstance()
+                    supportFragmentManager.beginTransaction()
+                            .replace(R.id.container, fragment, RECOVERY_KEY_FRAGMENT_TAG)
+                            .commitNow()
+                }
+            }
+        })
+
+        viewModel.keyVersionResultError.observe(this, Observer { uxStateEvent ->
+            uxStateEvent?.getContentIfNotHandled()?.let {
+                AlertDialog.Builder(this)
+                        .setTitle(R.string.unknown_error)
+                        .setMessage(it)
+                        .setPositiveButton(R.string.ok) { _, _ ->
+                            //nop
+                            this.finish()
+                        }
+                        .show()
+            }
+        })
+
+        if (viewModel.keyVersionResult.value == null) {
+            //We need to fetch from API
+            viewModel.getLatestVersion(this, mSession)
         }
-    }
 
-    override fun didSelectRecoveryKeyMode() {
-        supportFragmentManager.beginTransaction()
-                .replace(R.id.container, KeysBackupRestoreFromKeyFragment.newInstance())
-                .setCustomAnimations(R.anim.abc_fade_in, R.anim.abc_fade_out)
-                .addToBackStack(null)
-                .commit()
-    }
+        viewModel.navigateEvent.observe(this, Observer { uxStateEvent ->
+            uxStateEvent?.getContentIfNotHandled()?.let {
+                when (it) {
+                    KeysBackupRestoreSharedViewModel.NAVIGATE_TO_RECOVER_WITH_KEY -> {
+                        val fragment = supportFragmentManager.findFragmentByTag(RECOVERY_KEY_FRAGMENT_TAG)
+                                ?: KeysBackupRestoreFromKeyFragment.newInstance()
+                        supportFragmentManager.beginTransaction()
+                                .replace(R.id.container, fragment, RECOVERY_KEY_FRAGMENT_TAG)
+                                .addToBackStack(null)
+                                .commit()
+                    }
+                    KeysBackupRestoreSharedViewModel.NAVIGATE_TO_SUCCESS -> {
+                        supportFragmentManager.popBackStack(null, FragmentManager.POP_BACK_STACK_INCLUSIVE)
+                        val fragment = supportFragmentManager.findFragmentByTag(SUCCESS_FRAGMENT_TAG)
+                                ?: KeysBackupRestoreSuccessFragment.newInstance()
+                        supportFragmentManager.beginTransaction()
+                                .replace(R.id.container, fragment, SUCCESS_FRAGMENT_TAG)
+                                .commit()
+                    }
+                    else -> {
+                        //nop
+                    }
+                }
+            }
+        })
 
-    override fun getKeysVersion(): String {
-        if (intent.hasExtra(KEY_KEYS_VERSION)) {
-            return intent.getStringExtra(KEY_KEYS_VERSION)
-        } else {
-            //for easy testing
-            return mSession.crypto?.keysBackup?.currentBackupVersion ?: ""
-        }
-    }
+        viewModel.loadingEvent.observe(this, Observer {
+            if (it == null) {
+                hideWaitingView()
+            } else {
+                showWaitingView(this.getString(it.peekContent()))
+            }
+        })
 
-    override fun setShowWaitingView(status: String?) {
-        dismissKeyboard(this)
-        if (status == null) {
-            showWaitingView()
-        } else {
-            showWaitingView(status)
-        }
+        viewModel.importRoomKeysFinishWithResult.observe(this, Observer {
+            it?.getContentIfNotHandled()?.let {
+                //set data?
+                setResult(Activity.RESULT_OK)
+                finish()
+            }
+        })
     }
-
-    override fun setHideWaitingView() {
-        hideWaitingView()
-    }
-
-    override fun didSelectCreateNewRecoveryCode() {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
-    }
-
 
 }
