@@ -167,7 +167,7 @@ class KeysBackupSetupStep2Fragment : VectorBaseFragment() {
             viewModel.passphrase.value != viewModel.confirmPassphrase.value -> {
                 viewModel.confirmPassphraseError.value = context?.getString(R.string.keys_backup_setup_step2_passphrase_no_match)
             }
-            viewModel.passwordStrength.value?.score ?: 0 < 3 -> {
+            viewModel.passwordStrength.value?.score ?: 0 < 4 -> {
                 viewModel.passphraseError.value = context?.getString(R.string.keys_backup_setup_step2_passphrase_too_weak)
             }
             else -> {
