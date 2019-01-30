@@ -92,13 +92,13 @@ class KeysBackupSetupStep2Fragment : VectorBaseFragment() {
                 val score = strength.score
                 mPassphraseProgressLevel.strength = score
 
-                if (score in 1..2) {
+                if (score in 1..3) {
                     val warning = strength.feedback?.getWarning(VectorLocale.applicationLocale)
                     if (warning != null) {
                         mPassphraseInputLayout.error = warning
                     }
 
-                    val suggestions = strength.feedback?.suggestions
+                    val suggestions = strength.feedback?.getSuggestions(VectorLocale.applicationLocale)
                     if (suggestions != null) {
                         mPassphraseInputLayout.error = suggestions.firstOrNull()
                     }
