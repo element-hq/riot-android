@@ -22,6 +22,7 @@ import android.os.Bundle
 import android.support.design.widget.TextInputLayout
 import android.support.transition.TransitionManager
 import android.text.TextUtils
+import android.view.MenuItem
 import android.view.ViewGroup
 import android.view.inputmethod.EditorInfo
 import android.widget.EditText
@@ -29,7 +30,9 @@ import butterknife.BindView
 import butterknife.OnClick
 import butterknife.OnTextChanged
 import com.nulabinc.zxcvbn.Zxcvbn
+import im.vector.Matrix
 import im.vector.R
+import im.vector.activity.MXCActionBarActivity
 import im.vector.extensions.showPassword
 import im.vector.fragments.VectorBaseFragment
 import im.vector.settings.VectorLocale
@@ -61,13 +64,13 @@ class KeysBackupSetupStep2Fragment : VectorBaseFragment() {
     private val zxcvbn = Zxcvbn()
 
     @OnTextChanged(R.id.keys_backup_passphrase_enter_edittext)
-    fun onPassphraseChanged(){
+    fun onPassphraseChanged() {
         viewModel.passphrase.value = mPassphraseTextEdit.text.toString()
         viewModel.confirmPassphraseError.value = null
     }
 
     @OnTextChanged(R.id.keys_backup_passphrase_confirm_edittext)
-    fun onConfirmPassphraseChanged(){
+    fun onConfirmPassphraseChanged() {
         viewModel.confirmPassphrase.value = mPassphraseConfirmTextEdit.text.toString()
     }
 
@@ -82,6 +85,21 @@ class KeysBackupSetupStep2Fragment : VectorBaseFragment() {
 
         bindViewToViewModel()
     }
+
+    /* ==========================================================================================
+     * MENU
+     * ========================================================================================== */
+
+    override fun getMenuRes() = R.menu.keys_backup_setup
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        if (item.itemId == R.id.ic_action_keybackup_setup_skip) {
+            skipPassphrase()
+            return true
+        }
+        return super.onOptionsItemSelected(item)
+    }
+
 
     private fun bindViewToViewModel() {
         viewModel.passwordStrength.observe(this, Observer { strength ->
@@ -171,8 +189,13 @@ class KeysBackupSetupStep2Fragment : VectorBaseFragment() {
                 viewModel.passphraseError.value = context?.getString(R.string.keys_backup_setup_step2_passphrase_too_weak)
             }
             else -> {
-                viewModel.recoveryKey.value = null
                 viewModel.megolmBackupCreationInfo = null
+
+                val session = (activity as? MXCActionBarActivity)?.session
+                        ?: Matrix.getInstance(context)?.getSession(null)
+
+                viewModel.prepareRecoveryKey(session, viewModel.passphrase.value)
+
                 activity
                         ?.supportFragmentManager
                         ?.beginTransaction()
@@ -183,6 +206,29 @@ class KeysBackupSetupStep2Fragment : VectorBaseFragment() {
         }
     }
 
+    private fun skipPassphrase() {
+        when {
+            TextUtils.isEmpty(viewModel.passphrase.value) -> {
+                // Generate a recovery key for the user
+                viewModel.megolmBackupCreationInfo = null
+
+                val session = (activity as? MXCActionBarActivity)?.session
+                        ?: Matrix.getInstance(context)?.getSession(null)
+
+                viewModel.prepareRecoveryKey(session, null)
+                activity
+                        ?.supportFragmentManager
+                        ?.beginTransaction()
+                        ?.replace(R.id.container, KeysBackupSetupStep3Fragment.newInstance())
+                        ?.addToBackStack(null)
+                        ?.commit()
+            }
+            else -> {
+                // User has entered a passphrase but want to skip this step.
+                viewModel.passphraseError.value = context?.getString(R.string.keys_backup_passphrase_not_empty_error_message)
+            }
+        }
+    }
 
     companion object {
         fun newInstance() = KeysBackupSetupStep2Fragment()

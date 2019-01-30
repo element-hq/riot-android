@@ -1245,6 +1245,7 @@ Discover truly efficient and open collaboration with Riot.im!"</string>
     <!-- Key Backup -->
 
     <string name="keys_backup_passphrase_empty_error_message">Please enter a passphrase</string>
+    <string name="keys_backup_passphrase_not_empty_error_message">Please delete the passphrase if you want to skip this step.</string>
     <string name="keys_backup_no_session_error">No Matrix session available</string>
 
     <string name="keys_backup_setup_step1_title">Never lose encrypted messages</string>

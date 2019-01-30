@@ -90,13 +90,6 @@ class KeysBackupSetupStep3Fragment : VectorBaseFragment() {
             }
         })
 
-        val session = (activity as? MXCActionBarActivity)?.session
-                ?: Matrix.getInstance(context)?.getSession(null)
-
-        if (viewModel.recoveryKey.value == null) {
-            viewModel.prepareRecoveryKey(session)
-        }
-
         viewModel.prepareRecoveryProgressProgress.observe(this, Observer { newValue ->
             if (newValue == -1) {
                 // It can happen when a previous recovery key is still in computation

@@ -65,8 +65,7 @@ class KeysBackupSetupSharedViewModel : ViewModel() {
         creatingBackupError.value = null
     }
 
-
-    fun prepareRecoveryKey(session: MXSession?) {
+    fun prepareRecoveryKey(session: MXSession?, withPassphrase: String?) {
         // Update requestId
         currentRequestId.value = System.currentTimeMillis()
 
@@ -77,7 +76,7 @@ class KeysBackupSetupSharedViewModel : ViewModel() {
 
             prepareRecoveryProgressProgress.value = -1
 
-            mxSession.crypto?.keysBackup?.prepareKeysBackupVersion(passphrase.value!!,
+            mxSession.crypto?.keysBackup?.prepareKeysBackupVersion(withPassphrase,
                     object : ProgressListener {
                         override fun onProgress(progress: Int, total: Int) {
                             if (requestedId != currentRequestId.value) {
