@@ -31,6 +31,7 @@ import butterknife.OnClick
 import butterknife.OnTextChanged
 import com.nulabinc.zxcvbn.Zxcvbn
 import im.vector.R
+import im.vector.extensions.showPassword
 import im.vector.fragments.VectorBaseFragment
 import im.vector.settings.VectorLocale
 import im.vector.view.PasswordStrengthBar
@@ -135,14 +136,8 @@ class KeysBackupSetupStep2Fragment : VectorBaseFragment() {
 
         viewModel.showPasswordMode.observe(this, Observer {
             val shouldBeVisible = it ?: false
-            if (shouldBeVisible) {
-                mPassphraseTextEdit.inputType = InputType.TYPE_CLASS_TEXT or InputType.TYPE_TEXT_VARIATION_VISIBLE_PASSWORD
-                mPassphraseConfirmTextEdit.inputType = InputType.TYPE_CLASS_TEXT or InputType.TYPE_TEXT_VARIATION_VISIBLE_PASSWORD
-            } else {
-                mPassphraseTextEdit.inputType = InputType.TYPE_CLASS_TEXT or InputType.TYPE_TEXT_VARIATION_PASSWORD
-                mPassphraseConfirmTextEdit.inputType = InputType.TYPE_CLASS_TEXT or InputType.TYPE_TEXT_VARIATION_PASSWORD
-            }
-            mPassphraseTextEdit.setSelection(viewModel.passphrase.value?.length ?: 0)
+            mPassphraseTextEdit.showPassword(shouldBeVisible)
+            mPassphraseConfirmTextEdit.showPassword(shouldBeVisible, false)
         })
 
         viewModel.confirmPassphraseError.observe(this, Observer {
@@ -168,7 +163,7 @@ class KeysBackupSetupStep2Fragment : VectorBaseFragment() {
     fun doNext() {
         when {
             TextUtils.isEmpty(viewModel.passphrase.value) -> {
-                viewModel.passphraseError.value = context?.getString(R.string.keys_backup_setup_step2_passphrase_empty)
+                viewModel.passphraseError.value = context?.getString(R.string.keys_backup_passphrase_empty_error_message)
             }
             viewModel.passphrase.value != viewModel.confirmPassphrase.value -> {
                 viewModel.confirmPassphraseError.value = context?.getString(R.string.keys_backup_setup_step2_passphrase_no_match)
