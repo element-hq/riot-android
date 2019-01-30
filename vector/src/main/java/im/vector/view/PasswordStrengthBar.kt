@@ -29,11 +29,11 @@ import im.vector.R
 /**
  * A password strength bar custom widget
  *  Strength is an Integer
- *  # -1 No strength
- *  # 0 Weak
- *  # 1 Fair
- *  # 2 Good
- *  # 3 Strong
+ *  -> 0 No strength
+ *  -> 1 Weak
+ *  -> 2 Fair
+ *  -> 3 Good
+ *  -> 4 Strong
  */
 class PasswordStrengthBar @JvmOverloads constructor(
         context: Context,
@@ -70,48 +70,50 @@ class PasswordStrengthBar @JvmOverloads constructor(
     @JvmField
     var colorStrong: Int = 0
 
+    @IntRange(from = 0, to = 4)
+    var strength = 0
+        set(newValue) {
+            field = newValue.coerceIn(0, 4)
 
-    fun setStrength(@IntRange(from = 0, to = 4) value: Int) {
-        when (value) {
-            1 -> {
-                bar1.setBackgroundColor(colorWeak)
-                bar2.setBackgroundColor(colorBackground)
-                bar3.setBackgroundColor(colorBackground)
-                bar4.setBackgroundColor(colorBackground)
-            }
-            2 -> {
-                bar1.setBackgroundColor(colorLow)
-                bar2.setBackgroundColor(colorLow)
-                bar3.setBackgroundColor(colorBackground)
-                bar4.setBackgroundColor(colorBackground)
-            }
-            3 -> {
-                bar1.setBackgroundColor(colorOk)
-                bar2.setBackgroundColor(colorOk)
-                bar3.setBackgroundColor(colorOk)
-                bar4.setBackgroundColor(colorBackground)
-            }
-            4 -> {
-                bar1.setBackgroundColor(colorStrong)
-                bar2.setBackgroundColor(colorStrong)
-                bar3.setBackgroundColor(colorStrong)
-                bar4.setBackgroundColor(colorStrong)
-            }
-            /* 0 */
-            else -> {
-                bar1.setBackgroundColor(colorBackground)
-                bar2.setBackgroundColor(colorBackground)
-                bar3.setBackgroundColor(colorBackground)
-                bar4.setBackgroundColor(colorBackground)
+            when (newValue) {
+                0 -> {
+                    bar1.setBackgroundColor(colorBackground)
+                    bar2.setBackgroundColor(colorBackground)
+                    bar3.setBackgroundColor(colorBackground)
+                    bar4.setBackgroundColor(colorBackground)
+                }
+                1 -> {
+                    bar1.setBackgroundColor(colorWeak)
+                    bar2.setBackgroundColor(colorBackground)
+                    bar3.setBackgroundColor(colorBackground)
+                    bar4.setBackgroundColor(colorBackground)
+                }
+                2 -> {
+                    bar1.setBackgroundColor(colorLow)
+                    bar2.setBackgroundColor(colorLow)
+                    bar3.setBackgroundColor(colorBackground)
+                    bar4.setBackgroundColor(colorBackground)
+                }
+                3 -> {
+                    bar1.setBackgroundColor(colorOk)
+                    bar2.setBackgroundColor(colorOk)
+                    bar3.setBackgroundColor(colorOk)
+                    bar4.setBackgroundColor(colorBackground)
+                }
+                4 -> {
+                    bar1.setBackgroundColor(colorStrong)
+                    bar2.setBackgroundColor(colorStrong)
+                    bar3.setBackgroundColor(colorStrong)
+                    bar4.setBackgroundColor(colorStrong)
+                }
             }
         }
-    }
 
     init {
         LayoutInflater.from(context)
                 .inflate(R.layout.view_password_strength_bar, this, true)
         orientation = HORIZONTAL
         ButterKnife.bind(this)
-        setStrength(0)
+        strength = 0
     }
 }

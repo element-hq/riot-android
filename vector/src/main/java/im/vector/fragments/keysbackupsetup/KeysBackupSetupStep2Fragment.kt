@@ -21,7 +21,6 @@ import android.os.AsyncTask
 import android.os.Bundle
 import android.support.design.widget.TextInputLayout
 import android.support.transition.TransitionManager
-import android.text.InputType
 import android.text.TextUtils
 import android.view.ViewGroup
 import android.view.inputmethod.EditorInfo
@@ -87,11 +86,11 @@ class KeysBackupSetupStep2Fragment : VectorBaseFragment() {
     private fun bindViewToViewModel() {
         viewModel.passwordStrength.observe(this, Observer { strength ->
             if (strength == null) {
-                mPassphraseProgressLevel.setStrength(0)
+                mPassphraseProgressLevel.strength = 0
                 mPassphraseInputLayout.error = null
             } else {
                 val score = strength.score
-                mPassphraseProgressLevel.setStrength(score)
+                mPassphraseProgressLevel.strength = score
 
                 if (score in 1..2) {
                     val warning = strength.feedback?.getWarning(VectorLocale.applicationLocale)
