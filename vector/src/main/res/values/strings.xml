@@ -43,7 +43,7 @@
     <string name="sign_out_activity_sign_out_warning">You’ll lose your secure messages if you sign out now.</string>
     <string name="sign_out_activity_sign_out_ok">You can sign out safely.</string>
     <string name="sign_out_activity_export_to_file_action">Export to file</string>
-    <string name="sign_out_activity_sign_out_anyway_dialog_content">You may not be able to read encrypted chat history it you log in back</string>
+    <string name="sign_out_activity_sign_out_anyway_dialog_content">You may not be able to read encrypted chat history if you log back in.</string>
     <string name="sign_out_activity_sign_out_anyway_dialog_action">Sign out anyway</string>
 
     <string name="dialog_title_third_party_licences">Third party licences</string>
@@ -1248,9 +1248,9 @@ Discover truly efficient and open collaboration with Riot.im!"</string>
     <string name="keys_backup_no_session_error">No Matrix session available</string>
 
     <string name="keys_backup_setup_step1_title">Never lose encrypted messages</string>
-    <string name="keys_backup_setup_step1_description">Set up Secure Message Recovery in case you lose or log out of this device.</string>
+    <string name="keys_backup_setup_step1_description">Set up Secure Message Recovery in case you lose or sign out of this device.</string>
     <string name="keys_backup_setup_step1_button_title">Set up</string>
-    <string name="keys_backup_setup_step2_text">Secure your encrypted message history with a Recovery Passphrase.\n\nYou’ll need it if you log out, or lose access to this device.</string>
+    <string name="keys_backup_setup_step2_text">Secure your encrypted message history with a Recovery Passphrase.\n\nYou’ll need it if you sign out, or lose access to this device.</string>
     <string name="keys_backup_setup_step2_button_title">Set Recovery Passphrase</string>
     <string name="keys_backup_setup_step2_passphrase_enter">Enter</string>
     <string name="keys_backup_setup_step2_passphrase_confirm">Confirm</string>
@@ -1268,7 +1268,7 @@ Discover truly efficient and open collaboration with Riot.im!"</string>
     <string name="unexpected_error">Unexpected error</string>
 
     <string name="keys_backup_setup_skip_title">Are you sure?</string>
-    <string name="keys_backup_setup_skip_msg">You may lose secure messages if you log out of lose your device.</string>
+    <string name="keys_backup_setup_skip_msg">You may lose secure messages if you sign out or lose your device.</string>
 
     <string name="keys_backup_restore_is_getting_backup_version">Fetching backup version…</string>
     <string name="keys_backup_restore_with_passphrase">Use your recovery passphrase to unlock your secure message history</string>
