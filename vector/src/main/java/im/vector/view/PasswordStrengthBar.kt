@@ -16,6 +16,7 @@
 package im.vector.view
 
 import android.content.Context
+import android.support.annotation.IntRange
 import android.util.AttributeSet
 import android.view.LayoutInflater
 import android.view.View
@@ -70,32 +71,33 @@ class PasswordStrengthBar @JvmOverloads constructor(
     var colorStrong: Int = 0
 
 
-    fun setStrength(value: Int) {
+    fun setStrength(@IntRange(from = 0, to = 4) value: Int) {
         when (value) {
-            0 -> {
+            1 -> {
                 bar1.setBackgroundColor(colorWeak)
                 bar2.setBackgroundColor(colorBackground)
                 bar3.setBackgroundColor(colorBackground)
                 bar4.setBackgroundColor(colorBackground)
             }
-            1 -> {
+            2 -> {
                 bar1.setBackgroundColor(colorLow)
                 bar2.setBackgroundColor(colorLow)
                 bar3.setBackgroundColor(colorBackground)
                 bar4.setBackgroundColor(colorBackground)
             }
-            2 -> {
+            3 -> {
                 bar1.setBackgroundColor(colorOk)
                 bar2.setBackgroundColor(colorOk)
                 bar3.setBackgroundColor(colorOk)
                 bar4.setBackgroundColor(colorBackground)
             }
-            3 -> {
+            4 -> {
                 bar1.setBackgroundColor(colorStrong)
                 bar2.setBackgroundColor(colorStrong)
                 bar3.setBackgroundColor(colorStrong)
                 bar4.setBackgroundColor(colorStrong)
             }
+            /* 0 */
             else -> {
                 bar1.setBackgroundColor(colorBackground)
                 bar2.setBackgroundColor(colorBackground)
@@ -110,6 +112,6 @@ class PasswordStrengthBar @JvmOverloads constructor(
                 .inflate(R.layout.view_password_strength_bar, this, true)
         orientation = HORIZONTAL
         ButterKnife.bind(this)
-        setStrength(-1)
+        setStrength(0)
     }
 }

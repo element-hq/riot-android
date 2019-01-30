@@ -87,7 +87,7 @@ class KeysBackupSetupStep2Fragment : VectorBaseFragment() {
     private fun bindViewToViewModel() {
         viewModel.passwordStrength.observe(this, Observer { strength ->
             if (strength == null) {
-                mPassphraseProgressLevel.setStrength(-1)
+                mPassphraseProgressLevel.setStrength(0)
                 mPassphraseInputLayout.error = null
             } else {
                 val score = strength.score
