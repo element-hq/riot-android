@@ -26,6 +26,7 @@ import android.view.MenuItem
 import android.view.ViewGroup
 import android.view.inputmethod.EditorInfo
 import android.widget.EditText
+import android.widget.ImageView
 import butterknife.BindView
 import butterknife.OnClick
 import butterknife.OnTextChanged
@@ -51,6 +52,9 @@ class KeysBackupSetupStep2Fragment : VectorBaseFragment() {
 
     @BindView(R.id.keys_backup_passphrase_enter_til)
     lateinit var mPassphraseInputLayout: TextInputLayout
+
+    @BindView(R.id.keys_backup_view_show_password)
+    lateinit var mPassphraseReveal: ImageView
 
     @BindView(R.id.keys_backup_passphrase_confirm_edittext)
     lateinit var mPassphraseConfirmTextEdit: EditText
@@ -155,6 +159,7 @@ class KeysBackupSetupStep2Fragment : VectorBaseFragment() {
             val shouldBeVisible = it ?: false
             mPassphraseTextEdit.showPassword(shouldBeVisible)
             mPassphraseConfirmTextEdit.showPassword(shouldBeVisible, false)
+            mPassphraseReveal.setImageResource(if(shouldBeVisible) R.drawable.ic_eye_closed_black else R.drawable.ic_eye_black)
         })
 
         viewModel.confirmPassphraseError.observe(this, Observer {
