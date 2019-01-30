@@ -40,7 +40,7 @@ import im.vector.util.startSharePlainTextIntent
 
 class KeysBackupSetupStep3Fragment : VectorBaseFragment() {
 
-    override fun getLayoutResId() = R.layout.keys_backup_setup_step3_fragment
+    override fun getLayoutResId() = R.layout.fragment_keys_backup_setup_step3
 
     @BindView(R.id.keys_backup_setup_step3_copy_button)
     lateinit var mCopyButton: Button

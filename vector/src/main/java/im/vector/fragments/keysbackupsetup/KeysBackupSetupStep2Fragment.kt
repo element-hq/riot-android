@@ -38,7 +38,7 @@ import im.vector.view.PasswordStrengthBar
 
 class KeysBackupSetupStep2Fragment : VectorBaseFragment() {
 
-    override fun getLayoutResId() = R.layout.keys_backup_setup_step2_fragment
+    override fun getLayoutResId() = R.layout.fragment_keys_backup_setup_step2
 
     @BindView(R.id.keys_backup_root)
     lateinit var rootGroup: ViewGroup
