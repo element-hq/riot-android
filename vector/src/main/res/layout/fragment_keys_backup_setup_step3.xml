@@ -6,7 +6,7 @@
     android:layout_height="wrap_content"
     android:gravity="center"
     android:orientation="vertical"
-    tools:context=".fragments.keysbackupsetup.KeysBackupSetupStep3Fragment">
+    tools:context=".fragments.keysbackup.setup.KeysBackupSetupStep3Fragment">
 
     <TextView
         android:id="@+id/keys_backup_setup_step3_text"

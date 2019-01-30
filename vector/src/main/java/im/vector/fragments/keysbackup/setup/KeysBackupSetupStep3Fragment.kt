@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package im.vector.fragments.keysbackupsetup
+package im.vector.fragments.keysbackup.setup
 
 import android.app.Activity
 import android.arch.lifecycle.Observer

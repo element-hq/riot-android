@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package im.vector.fragments.keysbackupsetup
+package im.vector.fragments.keysbackup.setup
 
 import android.arch.lifecycle.MutableLiveData
 import android.arch.lifecycle.ViewModel

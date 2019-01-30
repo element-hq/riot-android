@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package im.vector.fragments.keysbackuprestore
+package im.vector.fragments.keysbackup.restore
 
 import android.arch.lifecycle.ViewModelProviders
 import android.os.Bundle

@@ -18,7 +18,7 @@ package im.vector.activity
 import android.support.v7.app.AlertDialog
 import android.view.MenuItem
 import im.vector.R
-import im.vector.fragments.keysbackupsetup.KeysBackupSetupStep1Fragment
+import im.vector.fragments.keysbackup.setup.KeysBackupSetupStep1Fragment
 
 class KeysBackupSetupActivity : SimpleFragmentActivity() {
 

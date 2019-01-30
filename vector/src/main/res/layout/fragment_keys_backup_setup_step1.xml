@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".fragments.keysbackupsetup.KeysBackupSetupStep1Fragment">
+    tools:context=".fragments.keysbackup.setup.KeysBackupSetupStep1Fragment">
 
     <TextView
         android:id="@+id/keys_backup_setup_step1_title"
