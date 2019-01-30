@@ -63,6 +63,9 @@ class SignOutActivity : MXCActionBarActivity() {
     @BindView(R.id.sign_out_export_file_group)
     lateinit var exportViews: View
 
+    @BindView(R.id.sign_out_sign_out_info)
+    lateinit var signOutInfo: TextView
+
     @BindView(R.id.sign_out_sign_out)
     lateinit var signOut: View
 
@@ -118,16 +121,18 @@ class SignOutActivity : MXCActionBarActivity() {
                 }
             }
 
-            updateSignOutButton()
+            updateSignOutSection()
         })
 
-        viewModel.keysExportedToFile.observe(this, Observer { updateSignOutButton() })
+        viewModel.keysExportedToFile.observe(this, Observer { updateSignOutSection() })
     }
 
-    private fun updateSignOutButton() {
+    private fun updateSignOutSection() {
         if (canSignOutSafely()) {
+            signOutInfo.setText(R.string.sign_out_activity_sign_out_ok)
             signOut.setBackgroundColor(ThemeUtils.getColor(this, R.attr.colorAccent))
         } else {
+            signOutInfo.setText(R.string.sign_out_activity_sign_out_warning)
             signOut.setBackgroundColor(ContextCompat.getColor(this, R.color.vector_warning_color))
         }
     }
@@ -157,7 +162,6 @@ class SignOutActivity : MXCActionBarActivity() {
         AlertDialog.Builder(this)
                 .setTitle(R.string.dialog_title_warning)
                 .setMessage(R.string.sign_out_activity_sign_out_anyway_dialog_content)
-                .setCancelable(false)
                 .setPositiveButton(R.string.sign_out_activity_sign_out_anyway_dialog_action
                 ) { _, _ ->
                     doSignOut()
