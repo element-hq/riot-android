@@ -18,6 +18,7 @@ package im.vector.activity.signout
 
 import android.arch.lifecycle.Observer
 import android.arch.lifecycle.ViewModelProviders
+import android.content.DialogInterface
 import android.content.Intent
 import android.support.design.widget.TextInputEditText
 import android.support.v4.content.ContextCompat
@@ -163,6 +164,9 @@ class SignOutActivity : MXCActionBarActivity() {
                 }
                 .setNegativeButton(R.string.cancel, null)
                 .show()
+                // Red positive button
+                .getButton(DialogInterface.BUTTON_POSITIVE)
+                .setTextColor(ContextCompat.getColor(this, R.color.vector_warning_color))
     }
 
     private fun doSignOut() {
