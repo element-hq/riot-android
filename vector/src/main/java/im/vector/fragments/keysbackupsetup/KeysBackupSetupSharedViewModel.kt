@@ -91,7 +91,7 @@ class KeysBackupSetupSharedViewModel : ViewModel() {
     fun createKeysBackup(keysBackup: KeysBackup) {
         isCreatingBackupVersion.value = true
         creatingBackupError.value = null
-        keysBackup.createKeyBackupVersion(megolmBackupCreationInfo!!, object : ApiCallback<KeysVersion> {
+        keysBackup.createKeysBackupVersion(megolmBackupCreationInfo!!, object : ApiCallback<KeysVersion> {
 
             override fun onSuccess(info: KeysVersion) {
                 isCreatingBackupVersion.value = false

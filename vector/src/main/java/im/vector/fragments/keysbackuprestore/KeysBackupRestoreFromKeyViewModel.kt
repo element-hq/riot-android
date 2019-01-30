@@ -49,7 +49,7 @@ class KeysBackupRestoreFromKeyViewModel : ViewModel() {
             sharedViewModel.loadingEvent.value = LiveEvent(R.string.keys_backup_restoring_waiting_message)
             recoveryCodeErrorText.value = null
             val recoveryKey = recoveryCode.value!!
-            keysBackup.restoreKeyBackupWithRecoveryKey(sharedViewModel.keyVersionResult.value!!.version!!,
+            keysBackup.restoreKeysWithRecoveryKey(sharedViewModel.keyVersionResult.value!!.version!!,
                     recoveryKey,
                     null,
                     session.myUserId,
