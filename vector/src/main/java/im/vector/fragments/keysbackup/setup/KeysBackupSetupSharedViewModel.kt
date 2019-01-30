@@ -45,6 +45,8 @@ class KeysBackupSetupSharedViewModel : ViewModel() {
     var showPasswordMode: MutableLiveData<Boolean> = MutableLiveData()
 
     // Step 3
+    // Var to ignore events from previous request(s) to generate a recovery key
+    private var currentRequestId: MutableLiveData<Long> = MutableLiveData()
     var recoveryKey: MutableLiveData<String> = MutableLiveData()
     var prepareRecoverFailError: MutableLiveData<Exception> = MutableLiveData()
     var prepareRecoveryProgressProgress: MutableLiveData<Int> = MutableLiveData()
@@ -65,20 +67,30 @@ class KeysBackupSetupSharedViewModel : ViewModel() {
 
 
     fun prepareRecoveryKey(session: MXSession?) {
+        // Update requestId
+        currentRequestId.value = System.currentTimeMillis()
+
         recoveryKey.value = null
         prepareRecoverFailError.value = null
         session?.let { mxSession ->
-            val requestedPass = passphrase.value!!
-            mxSession.crypto?.keysBackup?.prepareKeysBackupVersion(requestedPass,
+            val requestedId = currentRequestId.value!!
+
+            prepareRecoveryProgressProgress.value = -1
+
+            mxSession.crypto?.keysBackup?.prepareKeysBackupVersion(passphrase.value!!,
                     object : ProgressListener {
                         override fun onProgress(progress: Int, total: Int) {
+                            if (requestedId != currentRequestId.value) {
+                                //this is an old request, we can't cancel but we can ignore
+                                return
+                            }
                             prepareRecoveryProgressProgress.value = progress
                             prepareRecoveryProgressTotal.value = total
                         }
                     },
                     object : SuccessErrorCallback<MegolmBackupCreationInfo> {
                         override fun onSuccess(info: MegolmBackupCreationInfo) {
-                            if (requestedPass != passphrase.value) {
+                            if (requestedId != currentRequestId.value) {
                                 //this is an old request, we can't cancel but we can ignore
                                 return
                             }
@@ -88,7 +100,7 @@ class KeysBackupSetupSharedViewModel : ViewModel() {
                         }
 
                         override fun onUnexpectedError(e: java.lang.Exception?) {
-                            if (requestedPass != passphrase.value) {
+                            if (requestedId != currentRequestId.value) {
                                 //this is an old request, we can't cancel but we can ignore
                                 return
                             }

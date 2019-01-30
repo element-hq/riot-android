@@ -98,7 +98,14 @@ class KeysBackupSetupStep3Fragment : VectorBaseFragment() {
         }
 
         viewModel.prepareRecoveryProgressProgress.observe(this, Observer { newValue ->
-            mProgress.progress = newValue ?: 0
+            if (newValue == -1) {
+                // It can happen when a previous recovery key is still in computation
+                mProgress.progress = 0
+                mProgress.isIndeterminate = true
+            } else {
+                mProgress.isIndeterminate = false
+                mProgress.progress = newValue ?: 0
+            }
         })
 
         viewModel.prepareRecoveryProgressTotal.observe(this, Observer { newValue ->
