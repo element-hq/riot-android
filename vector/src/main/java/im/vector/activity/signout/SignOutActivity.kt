@@ -59,6 +59,9 @@ class SignOutActivity : MXCActionBarActivity() {
     @BindView(R.id.sign_out_backup_start)
     lateinit var startBackup: View
 
+    @BindView(R.id.sign_out_export_file_group)
+    lateinit var exportViews: View
+
     @BindView(R.id.sign_out_sign_out)
     lateinit var signOut: View
 
@@ -94,6 +97,7 @@ class SignOutActivity : MXCActionBarActivity() {
                     backupStatusIcon.isVisible = true
                     backupStatusProgress.isVisible = false
                     startBackup.isVisible = false
+                    exportViews.isVisible = false
                 }
                 KeysBackupStateManager.KeysBackupState.BackingUp,
                 KeysBackupStateManager.KeysBackupState.WillBackUp -> {
@@ -101,6 +105,7 @@ class SignOutActivity : MXCActionBarActivity() {
                     backupStatusIcon.isVisible = false
                     backupStatusProgress.isVisible = true
                     startBackup.isVisible = false
+                    exportViews.isVisible = false
                 }
                 else -> {
                     backupStatus.setText(R.string.sign_out_activity_backup_status_no_backup)
@@ -108,6 +113,7 @@ class SignOutActivity : MXCActionBarActivity() {
                     backupStatusIcon.isVisible = true
                     backupStatusProgress.isVisible = false
                     startBackup.isVisible = true
+                    exportViews.isVisible = true
                 }
             }
 

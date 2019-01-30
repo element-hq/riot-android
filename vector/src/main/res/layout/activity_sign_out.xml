@@ -85,6 +85,12 @@
                 app:layout_constraintTop_toBottomOf="@+id/sign_out_backup_status"
                 tools:visibility="visible" />
 
+            <android.support.constraint.Group
+                android:id="@+id/sign_out_export_file_group"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:constraint_referenced_ids="sign_out_export_file_title,sign_out_export_file_prompt,sign_out_export_file" />
+
             <TextView
                 android:id="@+id/sign_out_export_file_title"
                 style="@style/ListHeader"
