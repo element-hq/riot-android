@@ -30,12 +30,14 @@
         android:background="?vctr_list_divider_color" />
 
     <ProgressBar
-        android:id="@+id/keys_backup_recovery_key_spinner"
-        android:layout_width="20dp"
+        android:id="@+id/keys_backup_recovery_key_progress"
+        style="?android:attr/progressBarStyleHorizontal"
+        android:layout_width="match_parent"
         android:layout_height="20dp"
-        android:layout_gravity="center"
-        android:foregroundTint="?attr/colorAccent"
-        android:indeterminate="true" />
+        android:layout_marginLeft="20dp"
+        android:layout_marginRight="20dp"
+        tools:max="100"
+        tools:progress="30" />
 
     <TextView
         android:id="@+id/keys_backup_recovery_key_spinner_text"

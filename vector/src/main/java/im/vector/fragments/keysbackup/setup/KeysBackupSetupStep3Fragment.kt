@@ -28,6 +28,7 @@ import android.widget.Button
 import android.widget.ProgressBar
 import android.widget.TextView
 import android.widget.Toast
+import androidx.core.view.isVisible
 import butterknife.BindView
 import butterknife.OnClick
 import im.vector.Matrix
@@ -51,8 +52,8 @@ class KeysBackupSetupStep3Fragment : VectorBaseFragment() {
     @BindView(R.id.keys_backup_recovery_key_text)
     lateinit var mRecoveryKeyTextView: TextView
 
-    @BindView(R.id.keys_backup_recovery_key_spinner)
-    lateinit var mSpinner: ProgressBar
+    @BindView(R.id.keys_backup_recovery_key_progress)
+    lateinit var mProgress: ProgressBar
 
     @BindView(R.id.keys_backup_recovery_key_spinner_text)
     lateinit var mSpinnerStatusText: TextView
@@ -96,18 +97,25 @@ class KeysBackupSetupStep3Fragment : VectorBaseFragment() {
             viewModel.prepareRecoveryKey(session)
         }
 
+        viewModel.prepareRecoveryProgressProgress.observe(this, Observer { newValue ->
+            mProgress.progress = newValue ?: 0
+        })
+
+        viewModel.prepareRecoveryProgressTotal.observe(this, Observer { newValue ->
+            mProgress.max = newValue ?: 100
+        })
+
         viewModel.recoveryKey.observe(this, Observer { newValue ->
             TransitionManager.beginDelayedTransition(mRootLayout)
             if (newValue == null || newValue.isEmpty()) {
-                mSpinner.visibility = View.VISIBLE
+                mProgress.isVisible = true
                 mSpinnerStatusText.visibility = View.VISIBLE
-                mSpinner.animate()
                 mRecoveryKeyTextView.text = null
                 mRecoveryKeyTextView.visibility = View.GONE
                 mCopyButton.visibility = View.GONE
                 mFinishButton.visibility = View.GONE
             } else {
-                mSpinner.visibility = View.GONE
+                mProgress.isVisible = false
                 mSpinnerStatusText.visibility = View.GONE
 
                 mRecoveryKeyTextView.text = newValue
