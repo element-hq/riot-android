@@ -69,7 +69,7 @@
     <string name="ongoing_conference_call_video">视频</string>
     <string name="or">或</string>
 
-    <string name="action_sign_out">注销</string>
+    <string name="action_sign_out">登出</string>
     <string name="disable">禁用</string>
 
     <string name="dialog_title_warning">警告</string>
@@ -80,11 +80,11 @@
 
     <string name="hs_url">主服务器 URL</string>
     <string name="identity_url">身份服务器 URL</string>
-    <string name="auth_login">登录</string>
+    <string name="auth_login">登入</string>
     <string name="auth_register">注册</string>
     <string name="auth_submit">提交</string>
     <string name="auth_skip">跳过</string>
-    <string name="auth_send_reset_email">发送密码重设电子邮件</string>
+    <string name="auth_send_reset_email">发送密码重置电子邮件</string>
     <string name="auth_return_to_login">返回登录页面</string>
     <string name="auth_user_id_placeholder">电子邮箱或用户名</string>
     <string name="auth_password_placeholder">密码</string>
@@ -194,21 +194,21 @@
     <string name="missing_permissions_warning">由于缺少权限，某些功能将无法使用…</string>
     <string name="missing_permissions_title_to_start_conf_call">无法发起通话</string>
     <string name="device_information">设备信息</string>
-    <string name="room_no_conference_call_in_encrypted_rooms">电话会议在启用加密的聊天室中不受支持</string>
+    <string name="room_no_conference_call_in_encrypted_rooms">加密的聊天室不支持电话会议</string>
     <string name="action_sign_out_confirmation">为保证安全，退出登录将会删除任何端对端加密密钥。重新登录后将无法阅读之前的已加密的聊天历史。
 在登出之前，请导出并备份端对端加密密钥。</string>
     <string name="action_open">打开</string>
     <string name="action_close">关闭</string>
     <string name="dialog_title_confirmation">确认</string>
     <string name="send_bug_report_include_crash_logs">发送崩溃日志</string>
-    <string name="send_bug_report_app_crashed">上次启动后本应用发生了崩溃。是否发送崩溃报告？</string>
+    <string name="send_bug_report_app_crashed">上次启动后本应用发生了崩溃。是否打开崩溃报告页面？</string>
 
     <string name="start_voice_call">开始语音通话</string>
     <string name="start_video_call">开始视频通话</string>
 
     <string name="option_take_photo_video">拍摄照片或视频</string>
 
-    <string name="auth_add_email_message">为您的账户添加一个电子邮箱地址以便其他用户发现您，同时可让您重设密码。</string>
+    <string name="auth_add_email_message">为您的账户添加一个电子邮箱地址以便其他用户发现您，同时可让您重置密码。</string>
     <string name="auth_add_phone_message">为您的账户添加一个手机号码以便其他用户发现您。</string>
     <string name="auth_add_email_phone_message">添加一个电子邮箱地址和/或手机号码到您的账户来让用户发现您。
 
@@ -409,8 +409,8 @@
     <string name="active_call">当前通话</string>
     <string name="ongoing_conference_call">正在进行电话会议。请以语音或视频的形式加入。</string>
     <string name="ongoing_conference_call_voice">语音</string>
-    <string name="missing_permissions_to_start_conf_call">您需要权限才可在此聊天室中发起会议</string>
-    <string name="send_anyway">依然发送</string>
+    <string name="missing_permissions_to_start_conf_call">您需要在此聊天室中发起会议的权限</string>
+    <string name="send_anyway">仍然发送</string>
     <string name="send_bug_report">问题反馈</string>
     <string name="send_bug_report_logs_description">为分析此问题，本客户端的日志将会随此问题反馈发送。本问题反馈，包括日志与截图，将不会被公开显示。若您希望仅发送上面的文字，请取消选择：</string>
     <string name="send_bug_report_sent">问题反馈发送成功</string>
@@ -418,7 +418,7 @@
     <string name="read_receipt">阅读</string>
 
     <string name="auth_invalid_token">无效令牌</string>
-    <string name="auth_threepid_warning_message">直到出现相应的 API，暂不支持同时使用电子邮箱地址与手机号码注册。只有手机号码会被添加到此帐户。
+    <string name="auth_threepid_warning_message">在出现相应的 API 前，暂不支持同时使用电子邮箱地址与手机号码注册。只有手机号码会被添加到此帐户。
 
 您可在设置中将电子邮箱添加到你的账户。</string>
     <string name="auth_username_in_use">用户名已被使用</string>
@@ -433,7 +433,7 @@
     <string name="incoming_call">呼入的通话</string>
     <string name="incoming_video_call">呼入的视频通话</string>
     <string name="incoming_voice_call">呼入的语音通话</string>
-    <string name="call_in_progress">呼叫进行中</string>
+    <string name="call_in_progress">通话中…</string>
 
     <string name="call_error_user_not_responding">通话未被接听。</string>
     <string name="call_error_ice_failed">媒体连接失败</string>
@@ -511,7 +511,7 @@
 
     <string name="room_settings_room_access_warning">要链接一个聊天室，必须有一个地址。</string>
     <string name="room_settings_never_send_to_unverified_devices_title">仅向已验证的设备发送加密消息</string>
-    <string name="room_settings_addresses_disable_main_address_prompt_msg">您没有指定主地址。会随机选取这个聊天室的默认主地址</string>
+    <string name="room_settings_addresses_disable_main_address_prompt_msg">您没有指定此房间的主地址。</string>
     <string name="room_settings_addresses_disable_main_address_prompt_title">主地址警告</string>
 
     <string name="room_settings_set_main_address">设置为主地址</string>
@@ -560,7 +560,7 @@
     <string name="room_participants_idle">空闲</string>
 
     <string name="people_search_filter_text">仅 Matrix 用户</string>
-    <string name="ssl_unexpected_existing_expl">您的手机曾信任的证书已被更改。这<b>非常反常</b>。建议您<b>不要接受</b>此新证书。</string>
+    <string name="ssl_unexpected_existing_expl">您的手机信任的证书已被更改。这<b>非常反常</b>。建议您<b>不要接受</b>此新证书。</string>
     <string name="ssl_expected_existing_expl">证书已从以前受信任的更改为不受信任的证书。服务器可能已更新其证书。请联系管理员并核对服务器的指纹。</string>
     <string name="ssl_only_accept">请仅在服务器管理员已经发布了与上述指纹相匹配的指纹的情况下接受该证书。</string>
     <string name="room_details_people">成员</string>
@@ -909,7 +909,7 @@ Matrix 中的消息可见性类似于电子邮件。我们忘记您的消息意�
     <string name="dialog_user_consent_content">要想继续使用主服务器 %1$s 您必须阅读并同意其服务条款。</string>
     <string name="dialog_user_consent_submit">现在阅读</string>
 
-    <string name="dialog_title_third_party_licences">第三方开源协议</string>
+    <string name="dialog_title_third_party_licences">第三方协议</string>
 
     <string name="download">下载</string>
     <string name="clear">清除</string>
@@ -1017,7 +1017,7 @@ Matrix 中的消息可见性类似于电子邮件。我们忘记您的消息意�
 
     <string name="status_theme">Status.im 主题</string>
 
-    <string name="call_anyway">依然通话</string>
+    <string name="call_anyway">仍然呼叫</string>
     <string name="accept">接受</string>
 
     <string name="dialog_title_error">错误</string>
@@ -1138,4 +1138,34 @@ Matrix 中的消息可见性类似于电子邮件。我们忘记您的消息意�
     <string name="markdown_has_been_disabled">已停用 Markdown。</string>
 
     <string name="markdown_has_been_enabled">已启用 Markdown。</string>
+<string name="video_call_in_progress">视频通话中…</string>
+
+    <string name="settings_troubleshoot_test_service_restart_title">自动重启通知服务</string>
+    <string name="settings_troubleshoot_test_service_restart_success">服务被停止，并已自动重启。</string>
+    <string name="settings_troubleshoot_test_service_restart_failed">服务重启失败</string>
+
+    <string name="settings_troubleshoot_test_service_boot_success">服务将在设备重启后启动。</string>
+    <string name="settings_troubleshoot_test_service_boot_failed">服务不会在设备重启后启动，在您打开 Riot 一次之前您将不会收到消息通知。</string>
+    <string name="settings_troubleshoot_test_bg_restricted_success">对 Riot 的后台限制已被关闭。此测试应在移动数据（无Wi-Fi）环境下进行。
+%1$s</string>
+    <string name="settings_troubleshoot_test_bg_restricted_failed">对 Riot 的后台限制已开启。
+Riot 在后台时的工作将被显著的限制，这可能会影响消息通知。
+%1$s</string>
+    <string name="settings_troubleshoot_test_bg_restricted_quickfix">关闭后台限制</string>
+
+    <string name="settings_troubleshoot_test_battery_success">Riot 未被电池优化影响。</string>
+    <string name="settings_troubleshoot_test_battery_failed">"如果设备在未充电的情况下关屏静置一段时间，其将进入 Doze 模式。这将阻止应用访问网络并延后其运行、同步、与响铃。 "</string>
+    <string name="settings_troubleshoot_test_battery_quickfix">忽略电池优化</string>
+
+    <string name="encryption_export_notice">请输入用于加密密钥备份的密码。您在恢复此备份时需要使用此密码。</string>
+    <string name="encryption_export_create_passphrase">创建密码</string>
+    <string name="encryption_export_passphrase_dont_match">密码必须对应</string>
+    <string name="command_problem_with_parameters">指令 %s 需要更多参数，或者有些参数不正确。</string>
+    <string name="no_valid_google_play_services_apk">没有可用的 Google Play Services APK。消息通知可能不能正常工作。</string>
+
+    <string name="store_whats_new">我们在持续改进 Riot.im 的体验。
+完整的 changelog 在这里：%1$s
+为了不错过新改进，请保持更新开启。</string>
+    <string name="store_full_description"/>
+
 </resources>
