@@ -124,7 +124,7 @@ class KeysBackupRestoreFromPassphraseFragment : VectorBaseFragment() {
     fun onRestoreBackup() {
         val value = viewModel.passphrase.value
         if (value.isNullOrBlank()) {
-            viewModel.passphraseErrorText.value = context?.getString(R.string.keys_backup_passphrase_empty_error_message)
+            viewModel.passphraseErrorText.value = context?.getString(R.string.passphrase_empty_error_message)
         } else {
             viewModel.recoverKeys(context!!, sharedViewModel)
         }

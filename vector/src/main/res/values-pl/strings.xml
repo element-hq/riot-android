@@ -492,8 +492,8 @@ Zauważ, że ta czynność spowoduje ponowne uruchomienie aplikacji i może to t
     <string name="encryption_information_ed25519_fingerprint">Odcisk palca Ed25519</string>
 
     <string name="encryption_export_export">Eksportuj</string>
-    <string name="encryption_import_enter_passphrase">Wprowadź hasło</string>
-    <string name="encryption_export_confirm_passphrase">Potwierdź hasło</string>
+    <string name="passphrase_enter_passphrase">Wprowadź hasło</string>
+    <string name="passphrase_confirm_passphrase">Potwierdź hasło</string>
     <string name="encryption_information_not_verified">Nie zweryfikowano</string>
     <string name="encryption_information_verified">Zweryfikowano</string>
     <string name="encryption_information_blocked">Na czarnej liście</string>
@@ -1024,8 +1024,8 @@ Pamiętaj ta akcja może zresetować aplikacje i potrwać jakiś czas.</string>
     <string name="settings_without_flair">Nie jesteś obecnie członkiem żadnej społeczności.</string>
 
     <string name="encryption_export_notice">Utwórz hasło, aby zaszyfrować wyeksportowane klucze. Będziesz musiał wpisać to samo hasło, aby móc zaimportować klucze.</string>
-    <string name="encryption_export_create_passphrase">Utwórz hasło</string>
-    <string name="encryption_export_passphrase_dont_match">Hasło musi się zgadzać</string>
+    <string name="passphrase_create_passphrase">Utwórz hasło</string>
+    <string name="passphrase_passphrase_does_not_match">Hasło musi się zgadzać</string>
     <string name="command_description_emote">Wyświetla akcję</string>
     <string name="command_description_ban_user">Banuje użytkownika z podanym ID</string>
     <string name="command_description_unban_user">Odbanowywuje użytkownika z podanym ID</string>

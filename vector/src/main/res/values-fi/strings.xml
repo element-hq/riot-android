@@ -642,8 +642,8 @@ Salatut viestit eivät näy sovelluksissa, jotka eivät tue salausta.</string> <
     <string name="encryption_export_room_keys">Vie huoneen avaimet</string>
     <string name="encryption_export_room_keys_summary">Säästä avaimet paikalliseen tiedostoon</string>
     <string name="encryption_export_export">Vie</string>
-    <string name="encryption_import_enter_passphrase">Anna salasana</string>
-    <string name="encryption_export_confirm_passphrase">Vahvista salasana</string>
+    <string name="passphrase_enter_passphrase">Anna salasana</string>
+    <string name="passphrase_confirm_passphrase">Vahvista salasana</string>
     <string name="encryption_export_saved_as">Huoneen salausavaimet tallennettiin tiedostoon \'%s\'</string>
 
     <string name="encryption_import_e2e_room_keys">Tuo salatun huoneen avaimet</string>

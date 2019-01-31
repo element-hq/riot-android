@@ -50,12 +50,11 @@
                 android:id="@+id/keys_backup_passphrase_enter_edittext"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:hint="@string/keys_backup_setup_step2_passphrase_enter_hint"
+                android:hint="@string/passphrase_enter_passphrase"
                 android:maxLines="3"
                 android:singleLine="false"
                 android:textColor="?android:textColorPrimary"
-                tools:inputType="textPassword"
-                tools:text="foo" />
+                tools:inputType="textPassword" />
 
         </android.support.design.widget.TextInputLayout>
 
