@@ -13,6 +13,9 @@
         <!-- Default color for text View -->
         <item name="android:textColorTertiary">@color/riot_tertiary_text_color_status</item>
 
+        <!-- Menu text color -->
+        <item name="android:actionMenuTextColor">#FFFFFFFF</item>
+
         <!-- default background color -->
         <item name="android:colorBackground">@color/riot_primary_background_color_status</item>
 

@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package im.vector.fragments.keysbackupsetup
+package im.vector.fragments.keysbackup.setup
 
 import butterknife.OnClick
 import im.vector.R
@@ -22,7 +22,7 @@ import im.vector.fragments.VectorBaseFragment
 
 class KeysBackupSetupStep1Fragment : VectorBaseFragment() {
 
-    override fun getLayoutResId() = R.layout.keys_backup_setup_step1_fragment
+    override fun getLayoutResId() = R.layout.fragment_keys_backup_setup_step1
 
     companion object {
         fun newInstance() = KeysBackupSetupStep1Fragment()

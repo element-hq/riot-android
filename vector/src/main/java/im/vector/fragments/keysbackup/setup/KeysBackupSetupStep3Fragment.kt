@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package im.vector.fragments.keysbackupsetup
+package im.vector.fragments.keysbackup.setup
 
 import android.app.Activity
 import android.arch.lifecycle.Observer
@@ -28,6 +28,7 @@ import android.widget.Button
 import android.widget.ProgressBar
 import android.widget.TextView
 import android.widget.Toast
+import androidx.core.view.isVisible
 import butterknife.BindView
 import butterknife.OnClick
 import im.vector.Matrix
@@ -40,7 +41,7 @@ import im.vector.util.startSharePlainTextIntent
 
 class KeysBackupSetupStep3Fragment : VectorBaseFragment() {
 
-    override fun getLayoutResId() = R.layout.keys_backup_setup_step3_fragment
+    override fun getLayoutResId() = R.layout.fragment_keys_backup_setup_step3
 
     @BindView(R.id.keys_backup_setup_step3_copy_button)
     lateinit var mCopyButton: Button
@@ -51,8 +52,8 @@ class KeysBackupSetupStep3Fragment : VectorBaseFragment() {
     @BindView(R.id.keys_backup_recovery_key_text)
     lateinit var mRecoveryKeyTextView: TextView
 
-    @BindView(R.id.keys_backup_recovery_key_spinner)
-    lateinit var mSpinner: ProgressBar
+    @BindView(R.id.keys_backup_recovery_key_progress)
+    lateinit var mProgress: ProgressBar
 
     @BindView(R.id.keys_backup_recovery_key_spinner_text)
     lateinit var mSpinnerStatusText: TextView
@@ -89,25 +90,32 @@ class KeysBackupSetupStep3Fragment : VectorBaseFragment() {
             }
         })
 
-        val session = (activity as? MXCActionBarActivity)?.session
-                ?: Matrix.getInstance(context)?.getSession(null)
+        viewModel.prepareRecoveryProgressProgress.observe(this, Observer { newValue ->
+            if (newValue == -1) {
+                // It can happen when a previous recovery key is still in computation
+                mProgress.progress = 0
+                mProgress.isIndeterminate = true
+            } else {
+                mProgress.isIndeterminate = false
+                mProgress.progress = newValue ?: 0
+            }
+        })
 
-        if (viewModel.recoveryKey.value == null) {
-            viewModel.prepareRecoveryKey(session)
-        }
+        viewModel.prepareRecoveryProgressTotal.observe(this, Observer { newValue ->
+            mProgress.max = newValue ?: 100
+        })
 
         viewModel.recoveryKey.observe(this, Observer { newValue ->
             TransitionManager.beginDelayedTransition(mRootLayout)
             if (newValue == null || newValue.isEmpty()) {
-                mSpinner.visibility = View.VISIBLE
+                mProgress.isVisible = true
                 mSpinnerStatusText.visibility = View.VISIBLE
-                mSpinner.animate()
                 mRecoveryKeyTextView.text = null
                 mRecoveryKeyTextView.visibility = View.GONE
                 mCopyButton.visibility = View.GONE
                 mFinishButton.visibility = View.GONE
             } else {
-                mSpinner.visibility = View.GONE
+                mProgress.isVisible = false
                 mSpinnerStatusText.visibility = View.GONE
 
                 mRecoveryKeyTextView.text = newValue

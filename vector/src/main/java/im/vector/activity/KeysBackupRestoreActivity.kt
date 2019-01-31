@@ -23,10 +23,10 @@ import android.content.Intent
 import android.support.v4.app.FragmentManager
 import android.support.v7.app.AlertDialog
 import im.vector.R
-import im.vector.fragments.keysbackuprestore.KeysBackupRestoreFromKeyFragment
-import im.vector.fragments.keysbackuprestore.KeysBackupRestoreFromPassphraseFragment
-import im.vector.fragments.keysbackuprestore.KeysBackupRestoreSharedViewModel
-import im.vector.fragments.keysbackuprestore.KeysBackupRestoreSuccessFragment
+import im.vector.fragments.keysbackup.restore.KeysBackupRestoreFromKeyFragment
+import im.vector.fragments.keysbackup.restore.KeysBackupRestoreFromPassphraseFragment
+import im.vector.fragments.keysbackup.restore.KeysBackupRestoreSharedViewModel
+import im.vector.fragments.keysbackup.restore.KeysBackupRestoreSuccessFragment
 
 class KeysBackupRestoreActivity : SimpleFragmentActivity() {
 

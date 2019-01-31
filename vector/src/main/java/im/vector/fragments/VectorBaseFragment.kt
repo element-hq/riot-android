@@ -21,9 +21,7 @@ import android.os.Bundle
 import android.support.annotation.CallSuper
 import android.support.annotation.LayoutRes
 import android.support.v4.app.Fragment
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
+import android.view.*
 import butterknife.ButterKnife
 import butterknife.Unbinder
 import im.vector.activity.VectorAppCompatActivity
@@ -43,6 +41,15 @@ abstract class VectorBaseFragment : Fragment() {
     /* ==========================================================================================
      * Life cycle
      * ========================================================================================== */
+
+    @CallSuper
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+
+        if (getMenuRes() != -1) {
+            setHasOptionsMenu(true)
+        }
+    }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         return inflater.inflate(getLayoutResId(), container, false)
@@ -81,5 +88,19 @@ abstract class VectorBaseFragment : Fragment() {
         super.onDetach()
 
         vectorActivity = null
+    }
+
+    /* ==========================================================================================
+     * MENU MANAGEMENT
+     * ========================================================================================== */
+
+    open fun getMenuRes() = -1
+
+    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
+        val menuRes = getMenuRes()
+
+        if (menuRes != -1) {
+            inflater.inflate(menuRes, menu)
+        }
     }
 }

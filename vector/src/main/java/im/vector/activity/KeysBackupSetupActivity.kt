@@ -16,15 +16,13 @@
 package im.vector.activity
 
 import android.support.v7.app.AlertDialog
-import android.view.MenuItem
 import im.vector.R
-import im.vector.fragments.keysbackupsetup.KeysBackupSetupStep1Fragment
+import im.vector.fragments.keysbackup.setup.KeysBackupSetupStep1Fragment
+import im.vector.fragments.keysbackup.setup.KeysBackupSetupStep2Fragment
 
 class KeysBackupSetupActivity : SimpleFragmentActivity() {
 
     override fun getTitleRes() = R.string.title_activity_keys_backup_setup
-
-    override fun getMenuRes() = R.menu.keys_backup_setup
 
     override fun initUiAndData() {
         super.initUiAndData()
@@ -35,23 +33,21 @@ class KeysBackupSetupActivity : SimpleFragmentActivity() {
         }
     }
 
-    override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        if (item.itemId == R.id.ic_action_keybackup_setup_skip) {
-            onSkip()
-            return true
+    override fun onBackPressed() {
+        // Warn user if he wants to leave step 1 or step 3
+        if (supportFragmentManager.fragments.isEmpty()
+                || supportFragmentManager.fragments[0] is KeysBackupSetupStep2Fragment) {
+            super.onBackPressed()
+        } else {
+            AlertDialog.Builder(this)
+                    .setTitle(R.string.keys_backup_setup_skip_title)
+                    .setMessage(R.string.keys_backup_setup_skip_msg)
+                    .setNegativeButton(R.string.cancel, null)
+                    .setPositiveButton(R.string.action_exit) { _, _ ->
+                        finish()
+                    }
+                    .show()
         }
-        return super.onOptionsItemSelected(item)
-    }
-
-    private fun onSkip() {
-        AlertDialog.Builder(this)
-                .setTitle(R.string.keys_backup_setup_skip_title)
-                .setMessage(R.string.keys_backup_setup_skip_msg)
-                .setNegativeButton(R.string.cancel, null)
-                .setPositiveButton(R.string.skip) { _, _ ->
-                    finish()
-                }
-                .show()
     }
 
     companion object {

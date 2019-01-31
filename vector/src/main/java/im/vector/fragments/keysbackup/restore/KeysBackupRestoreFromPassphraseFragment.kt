@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package im.vector.fragments.keysbackuprestore
+package im.vector.fragments.keysbackup.restore
 
 import android.arch.lifecycle.Observer
 import android.arch.lifecycle.ViewModelProviders
@@ -26,6 +26,7 @@ import android.text.style.ClickableSpan
 import android.view.View
 import android.view.inputmethod.EditorInfo
 import android.widget.EditText
+import android.widget.ImageView
 import android.widget.TextView
 import androidx.core.text.set
 import butterknife.BindView
@@ -46,6 +47,9 @@ class KeysBackupRestoreFromPassphraseFragment : VectorBaseFragment() {
     lateinit var mPassphraseInputLayout: TextInputLayout
     @BindView(R.id.keys_backup_passphrase_enter_edittext)
     lateinit var mPassphraseTextEdit: EditText
+
+    @BindView(R.id.keys_backup_view_show_password)
+    lateinit var mPassphraseReveal: ImageView
 
     @BindView(R.id.keys_backup_passphrase_help_with_link)
     lateinit var helperTextWithLink: TextView
@@ -82,6 +86,7 @@ class KeysBackupRestoreFromPassphraseFragment : VectorBaseFragment() {
         viewModel.showPasswordMode.observe(this, Observer {
             val shouldBeVisible = it ?: false
             mPassphraseTextEdit.showPassword(shouldBeVisible)
+            mPassphraseReveal.setImageResource(if (shouldBeVisible) R.drawable.ic_eye_closed_black else R.drawable.ic_eye_black)
         })
 
         mPassphraseTextEdit.setOnEditorActionListener { _, actionId, _ ->

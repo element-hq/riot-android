@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package im.vector.fragments.keysbackupsetup
+package im.vector.fragments.keysbackup.setup
 
 import android.arch.lifecycle.MutableLiveData
 import android.arch.lifecycle.ViewModel
@@ -22,6 +22,7 @@ import com.nulabinc.zxcvbn.Strength
 import org.matrix.androidsdk.MXSession
 import org.matrix.androidsdk.crypto.keysbackup.KeysBackup
 import org.matrix.androidsdk.crypto.keysbackup.MegolmBackupCreationInfo
+import org.matrix.androidsdk.listeners.ProgressListener
 import org.matrix.androidsdk.rest.callback.ApiCallback
 import org.matrix.androidsdk.rest.callback.SuccessErrorCallback
 import org.matrix.androidsdk.rest.model.MatrixError
@@ -44,8 +45,12 @@ class KeysBackupSetupSharedViewModel : ViewModel() {
     var showPasswordMode: MutableLiveData<Boolean> = MutableLiveData()
 
     // Step 3
+    // Var to ignore events from previous request(s) to generate a recovery key
+    private var currentRequestId: MutableLiveData<Long> = MutableLiveData()
     var recoveryKey: MutableLiveData<String> = MutableLiveData()
     var prepareRecoverFailError: MutableLiveData<Exception> = MutableLiveData()
+    var prepareRecoveryProgressProgress: MutableLiveData<Int> = MutableLiveData()
+    var prepareRecoveryProgressTotal: MutableLiveData<Int> = MutableLiveData()
     var megolmBackupCreationInfo: MegolmBackupCreationInfo? = null
     var copyHasBeenMade = false
     var isCreatingBackupVersion: MutableLiveData<Boolean> = MutableLiveData()
@@ -60,31 +65,47 @@ class KeysBackupSetupSharedViewModel : ViewModel() {
         creatingBackupError.value = null
     }
 
+    fun prepareRecoveryKey(session: MXSession?, withPassphrase: String?) {
+        // Update requestId
+        currentRequestId.value = System.currentTimeMillis()
 
-    fun prepareRecoveryKey(session: MXSession?) {
         recoveryKey.value = null
         prepareRecoverFailError.value = null
         session?.let { mxSession ->
-            val requestedPass = passphrase.value!!
-            mxSession.crypto?.keysBackup?.prepareKeysBackupVersion(requestedPass, object : SuccessErrorCallback<MegolmBackupCreationInfo> {
-                override fun onSuccess(info: MegolmBackupCreationInfo) {
-                    if (requestedPass != passphrase.value) {
-                        //this is an old request, we can't cancel but we can ignore
-                        return
-                    }
-                    recoveryKey.value = info.recoveryKey
-                    megolmBackupCreationInfo = info
-                    copyHasBeenMade = false
-                }
+            val requestedId = currentRequestId.value!!
 
-                override fun onUnexpectedError(e: java.lang.Exception?) {
-                    if (requestedPass != passphrase.value) {
-                        //this is an old request, we can't cancel but we can ignore
-                        return
-                    }
-                    prepareRecoverFailError.value = e ?: Exception()
-                }
-            })
+            prepareRecoveryProgressProgress.value = -1
+
+            mxSession.crypto?.keysBackup?.prepareKeysBackupVersion(withPassphrase,
+                    object : ProgressListener {
+                        override fun onProgress(progress: Int, total: Int) {
+                            if (requestedId != currentRequestId.value) {
+                                //this is an old request, we can't cancel but we can ignore
+                                return
+                            }
+                            prepareRecoveryProgressProgress.value = progress
+                            prepareRecoveryProgressTotal.value = total
+                        }
+                    },
+                    object : SuccessErrorCallback<MegolmBackupCreationInfo> {
+                        override fun onSuccess(info: MegolmBackupCreationInfo) {
+                            if (requestedId != currentRequestId.value) {
+                                //this is an old request, we can't cancel but we can ignore
+                                return
+                            }
+                            recoveryKey.value = info.recoveryKey
+                            megolmBackupCreationInfo = info
+                            copyHasBeenMade = false
+                        }
+
+                        override fun onUnexpectedError(e: java.lang.Exception?) {
+                            if (requestedId != currentRequestId.value) {
+                                //this is an old request, we can't cancel but we can ignore
+                                return
+                            }
+                            prepareRecoverFailError.value = e ?: Exception()
+                        }
+                    })
         }
     }
 
