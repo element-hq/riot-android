@@ -18,6 +18,7 @@ package im.vector.fragments.keysbackup.settings
 import android.arch.lifecycle.Observer
 import android.arch.lifecycle.ViewModelProviders
 import android.os.Bundle
+import android.support.v7.app.AlertDialog
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
 import android.view.View
@@ -107,8 +108,16 @@ class KeysBackupSettingsFragment : VectorBaseFragment(),
     }
 
     override fun didSelectDeleteSetupMessageRecovery() {
-        context?.let {
-            viewModel.deleteCurrentBackup(it)
+        activity?.let {
+            AlertDialog.Builder(it)
+                    .setTitle(R.string.keys_backup_settings_delete_confirm_title)
+                    .setMessage(R.string.keys_backup_settings_delete_confirm_message)
+                    .setCancelable(false)
+                    .setPositiveButton(R.string.keys_backup_settings_delete_confirm_title) { _, _ ->
+                        viewModel.deleteCurrentBackup(it)
+                    }.setNegativeButton(R.string.cancel, null)
+                    .setCancelable(true)
+                    .show()
         }
     }
 
