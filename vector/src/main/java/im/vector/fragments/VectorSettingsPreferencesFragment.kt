@@ -2617,8 +2617,6 @@ class VectorSettingsPreferencesFragment : PreferenceFragmentCompat(), SharedPref
                 }
             })
 
-            importButton.isEnabled = false
-
             val importDialog = builder.show()
             val appContext = thisActivity.applicationContext
 

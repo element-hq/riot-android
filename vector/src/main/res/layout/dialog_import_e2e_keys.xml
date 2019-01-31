@@ -28,9 +28,10 @@
 
     <Button
         android:id="@+id/dialog_e2e_keys_import_button"
+        style="@style/VectorButtonStyle"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="10dp"
-        android:background="?attr/colorAccent"
+        android:enabled="false"
         android:text="@string/encryption_import_import" />
 </LinearLayout>
