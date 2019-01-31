@@ -15,6 +15,8 @@
  */
 package im.vector.activity
 
+import android.content.Context
+import android.content.Intent
 import android.support.v7.app.AlertDialog
 import im.vector.R
 import im.vector.fragments.keysbackup.setup.KeysBackupSetupStep1Fragment
@@ -52,5 +54,11 @@ class KeysBackupSetupActivity : SimpleFragmentActivity() {
 
     companion object {
         const val KEYS_VERSION = "KEYS_VERSION"
+
+        fun intent(context: Context, matrixID: String): Intent {
+            val intent = Intent(context, KeysBackupSetupActivity::class.java)
+            intent.putExtra(EXTRA_MATRIX_ID, matrixID)
+            return intent
+        }
     }
 }

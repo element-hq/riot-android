@@ -413,6 +413,9 @@
             android:name=".activity.KeysBackupRestoreActivity"
             android:label="@string/title_activity_keys_backup_restore"
             android:windowSoftInputMode="stateHidden|adjustResize" />
+        <activity
+            android:name=".activity.KeysBackupManageActivity"
+            android:label="@string/title_activity_keys_backup_manage" />
 
         <!-- FileProvider -->
         <provider

@@ -812,6 +812,15 @@ class VectorSettingsPreferencesFragment : PreferenceFragmentCompat(), SharedPref
 
             false
         }
+
+        findPreference(PreferencesManager.SETTINGS_SECURE_MESSAGE_RECOVERY_PREFERENCE_KEY)
+                .onPreferenceClickListener = Preference.OnPreferenceClickListener {
+            context?.let {
+                startActivity(KeysBackupManageActivity.intent(it,mSession.myUserId))
+            }
+            false
+        }
+
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
