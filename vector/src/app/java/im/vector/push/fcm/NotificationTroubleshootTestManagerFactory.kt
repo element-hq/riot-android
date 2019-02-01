@@ -16,11 +16,10 @@
 package im.vector.push.fcm
 
 import android.support.v4.app.Fragment
-import im.vector.fragments.troubleshoot.NotificationTroubleshootTestManager
-import im.vector.fragments.troubleshoot.TestAccountSettings
-import im.vector.fragments.troubleshoot.TestDeviceSettings
-import im.vector.fragments.troubleshoot.TestSystemSettings
-import im.vector.push.fcm.troubleshoot.*
+import im.vector.fragments.troubleshoot.*
+import im.vector.push.fcm.troubleshoot.TestFirebaseToken
+import im.vector.push.fcm.troubleshoot.TestPlayServices
+import im.vector.push.fcm.troubleshoot.TestTokenRegistration
 import org.matrix.androidsdk.MXSession
 
 class NotificationTroubleshootTestManagerFactory {
@@ -33,6 +32,9 @@ class NotificationTroubleshootTestManagerFactory {
                 mgr.addTest(TestAccountSettings(fragment, session))
             }
             mgr.addTest(TestDeviceSettings(fragment))
+            if (session != null) {
+                mgr.addTest(TestBingRulesSettings(fragment, session))
+            }
             mgr.addTest(TestPlayServices(fragment))
             mgr.addTest(TestFirebaseToken(fragment))
             mgr.addTest(TestTokenRegistration(fragment))

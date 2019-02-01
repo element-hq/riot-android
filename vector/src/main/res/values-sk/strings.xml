@@ -634,8 +634,8 @@ Ak v miestnosti povolíte šifrovanie, šifrovanie nie je viac možné zakázať
     <string name="encryption_export_room_keys">Exportovať kľúče miestností</string>
     <string name="encryption_export_room_keys_summary">Exportovať kľúče miestností do lokálneho súboru</string>
     <string name="encryption_export_export">Exportovať</string>
-    <string name="encryption_import_enter_passphrase">Zadajte heslo</string>
-    <string name="encryption_export_confirm_passphrase">Potvrďte heslo</string>
+    <string name="passphrase_enter_passphrase">Zadajte heslo</string>
+    <string name="passphrase_confirm_passphrase">Potvrďte heslo</string>
     <string name="encryption_export_saved_as">Šifrovacie kľúče miestností boli uložené do %s
 
 Pozor: tento súbor môže byť automaticky zmazaný po odinštalovaní aplikácii Riot.</string>
@@ -741,7 +741,6 @@ Neznáme zariadenia:</string>
 
     <!-- notification statuses -->
     <string name="notification_off">Vypnuté</string>
-    <string name="notification_on">Zapnuté</string>
     <string name="notification_noisy">Hlučné</string>
 
     <string name="encrypted_message">Šifrovaná správa</string>
@@ -1069,8 +1068,8 @@ Pozor! Vykonaním tejto akcie reštartujete aplikáciu a opätovné načítanie 
 
     <string name="room_sliding_menu_version_x">Verzia %s</string>
     <string name="encryption_export_notice">Prosím vytvorte si heslo, ktorým zašifrujete exportované kľúče. Toto isté heslo budete musieť zadať aj pri importe kľúčov z uloženého súboru.</string>
-    <string name="encryption_export_create_passphrase">Vytvoriť heslo</string>
-    <string name="encryption_export_passphrase_dont_match">Heslá sa musia zhodovať</string>
+    <string name="passphrase_create_passphrase">Vytvoriť heslo</string>
+    <string name="passphrase_passphrase_does_not_match">Heslá sa musia zhodovať</string>
     <string name="merged_events_expand">Rozbaliť</string>
     <string name="merged_events_collapse">Zbaliť</string>
 

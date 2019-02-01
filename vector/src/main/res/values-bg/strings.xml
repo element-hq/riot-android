@@ -620,8 +620,8 @@
     <string name="encryption_export_room_keys">Експортиране на ключове за стая</string>
     <string name="encryption_export_room_keys_summary">Експортирай ключовете в локален файл</string>
     <string name="encryption_export_export">Експортирай</string>
-    <string name="encryption_import_enter_passphrase">Въведи парола</string>
-    <string name="encryption_export_confirm_passphrase">Потвърди парола</string>
+    <string name="passphrase_enter_passphrase">Въведи парола</string>
+    <string name="passphrase_confirm_passphrase">Потвърди парола</string>
     <string name="encryption_export_saved_as">E2E ключовете бяха запазени в \'%s\'
 
 Внимание: ако приложението бъде деинсталирано, този файл може да бъде изтрит.</string>
@@ -824,7 +824,6 @@
 
     <!-- notification statuses -->
     <string name="notification_off">Изключено</string>
-    <string name="notification_on">Включено</string>
     <string name="notification_noisy">Шумно</string>
 
     <string name="create">Създай</string>
@@ -1022,8 +1021,8 @@
 
     <string name="room_sliding_menu_version_x">Версия %s</string>
     <string name="encryption_export_notice">Моля, въведете парола за шифроване на екпортираните ключове. Ще е нужно да въведете същата парола за да можете да ги импортирате.</string>
-    <string name="encryption_export_create_passphrase">Създай парола</string>
-    <string name="encryption_export_passphrase_dont_match">Паролите трябва да съвпадат</string>
+    <string name="passphrase_create_passphrase">Създай парола</string>
+    <string name="passphrase_passphrase_does_not_match">Паролите трябва да съвпадат</string>
     <string name="merged_events_expand">разшири</string>
     <string name="merged_events_collapse">свий</string>
 

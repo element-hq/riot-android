@@ -93,7 +93,7 @@ class StickerPickerActivity : AbstractWidgetActivity() {
         super.onActivityResult(requestCode, resultCode, data)
 
         when (requestCode) {
-        // Reload the page, user may have add/remove sticker pack
+            // Reload the page, user may have add/remove sticker pack
             INTEGRATION_MANAGER_ACTIVITY_REQUEST_CODE -> mWebView.reload()
         }
     }

@@ -52,7 +52,7 @@ public class CountryPickerActivity extends VectorAppCompatActivity implements Co
 
     private boolean mWithIndicator;
 
-     /*
+    /*
      * *********************************************************************************************
      * Static methods
      * *********************************************************************************************

@@ -657,8 +657,8 @@ Mensagens cifradas não serão visíveis para clientes que não ainda não imple
     <string name="encryption_export_room_keys">Exportar chaves de sala</string>
     <string name="encryption_export_room_keys_summary">Exportar as chaves para um ficheiro local</string>
     <string name="encryption_export_export">Exportar</string>
-    <string name="encryption_import_enter_passphrase">Insira a frase secreta</string>
-    <string name="encryption_export_confirm_passphrase">Confirme a frase secreta</string>
+    <string name="passphrase_enter_passphrase">Insira a frase secreta</string>
+    <string name="passphrase_confirm_passphrase">Confirme a frase secreta</string>
     <string name="encryption_export_saved_as">As chaves de criptografia de ponta-a-ponta da sala foram guardadas em \'%s\'.
 
 Atenção: este ficheiro poderá ser apagado se a aplicação for desinstalada.</string>
@@ -945,8 +945,8 @@ Note que esta acção reiniciará a aplicação e poderá demorar algum tempo.</
 
 
     <string name="encryption_export_notice">Por favor, crie uma frase-passe para cifrar as chaves exportadas. Precisará de usar a mesma frase-passe para conseguir importar as chaves.</string>
-    <string name="encryption_export_create_passphrase">Criar frase-passe</string>
-    <string name="encryption_export_passphrase_dont_match">As frase-passes devem coincidir</string>
+    <string name="passphrase_create_passphrase">Criar frase-passe</string>
+    <string name="passphrase_passphrase_does_not_match">As frase-passes devem coincidir</string>
     <string name="lock_screen_hint">Escreva aqui…</string>
 
     <plurals name="notification_unread_notified_messages">
@@ -1000,7 +1000,6 @@ Note que esta acção reiniciará a aplicação e poderá demorar algum tempo.</
     <string name="command_description_clear_scalar_token">Repara a gestão de aplicações Matrix</string>
 
     <string name="notification_off">Desactivado</string>
-    <string name="notification_on">Activado</string>
     <string name="notification_noisy">Alto</string>
 
     <string name="encrypted_message">Mensagem cifrada</string>

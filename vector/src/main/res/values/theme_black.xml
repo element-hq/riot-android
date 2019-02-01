@@ -5,9 +5,8 @@
 
     <style name="AppTheme.Base.Black" parent="AppTheme.Base.Dark">
         <!-- Only setting the items we need to override to get the background to be pure black, otherwise inheriting -->
-        <item name="vctr_riot_primary_background_color">@color/riot_primary_background_color_black</item>
+        <item name="android:colorBackground">@color/riot_primary_background_color_black</item>
         <item name="vctr_markdown_block_background_color">#FF4D4D4D</item>
-        <item name="vctr_fenced_code_block_background_color">#FF00FF00</item>
 
         <!-- activities background -->
         <item name="android:windowBackground">@color/riot_primary_background_color_black</item>
@@ -19,13 +18,13 @@
 
     <style name="Theme.Vector.Lock.Black" parent="Theme.Vector.Lock.Dark">
         <item name="colorPrimary">@color/riot_primary_background_color_black</item>
-        <item name="vctr_riot_primary_background_color">@color/riot_primary_background_color_black</item>
+        <item name="android:colorBackground">@color/riot_primary_background_color_black</item>
     </style>
 
     <!-- home activity -->
     <style name="HomeActivityTheme.Black" parent="AppTheme.Black">
-        <item name="editTextColor">?attr/vctr_riot_primary_text_color</item>
-        <item name="android:editTextColor">?attr/vctr_riot_primary_text_color</item>
+        <item name="editTextColor">?android:attr/textColorPrimary</item>
+        <item name="android:editTextColor">?android:attr/textColorPrimary</item>
         <item name="android:textColorHint">?attr/vctr_default_text_hint_color</item>
     </style>
 
@@ -42,12 +41,7 @@
         <item name="android:windowBackground">@android:color/transparent</item>
     </style>
 
-    <!-- login & registration activities -->
-    <style name="LoginAppTheme.Black" parent="AppTheme.Black">
-        <item name="android:editTextStyle">@style/LoginEditTextStyle</item>
-        <item name="android:buttonStyle">@style/LoginButtonStyle</item>
-    </style>
-
+    <!-- Picker activities -->
     <style name="CountryPickerTheme.Black" parent="AppTheme.Black">
         <item name="editTextColor">@android:color/white</item>
         <item name="android:editTextColor">@android:color/white</item>

@@ -373,8 +373,8 @@
     <string name="encryption_information_ed25519_fingerprint">Ed25519 fingrafar</string>
 
     <string name="encryption_export_export">Flytja út</string>
-    <string name="encryption_import_enter_passphrase">Settu inn lykilsetningu (passphrase)</string>
-    <string name="encryption_export_confirm_passphrase">Staðfestu lykilsetningu</string>
+    <string name="passphrase_enter_passphrase">Settu inn lykilsetningu (passphrase)</string>
+    <string name="passphrase_confirm_passphrase">Staðfestu lykilsetningu</string>
     <string name="encryption_import_import">Flytja inn</string>
     <string name="encryption_information_unknown_device">óþekkt tæki</string>
     <string name="encryption_information_none">ekkert</string>
@@ -419,7 +419,6 @@
 
     <!-- notification statuses -->
     <string name="notification_off">Slökkt</string>
-    <string name="notification_on">Kveikt</string>
     <string name="notification_noisy">Hávært</string>
 
     <string name="encrypted_message">Dulrituð skilaboð</string>

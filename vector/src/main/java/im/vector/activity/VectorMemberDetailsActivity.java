@@ -68,6 +68,7 @@ import im.vector.adapters.VectorMemberDetailsAdapter;
 import im.vector.adapters.VectorMemberDetailsDevicesAdapter;
 import im.vector.extensions.MatrixSdkExtensionsKt;
 import im.vector.fragments.VectorUnknownDevicesFragment;
+import im.vector.listeners.YesNoListener;
 import im.vector.util.CallsManager;
 import im.vector.util.PermissionsToolsKt;
 import im.vector.util.SystemUtilsKt;
@@ -1547,29 +1548,33 @@ public class VectorMemberDetailsActivity extends MXCActionBarActivity implements
 
     // ********* IDevicesAdapterListener implementation *********
 
+    private void refreshUserDevicesList() {
+        // Refresh the adapter data
+        List<MXDeviceInfo> deviceList = mSession.getCrypto().getUserDevices(mMemberId);
+
+        mDevicesListViewAdapter.clear();
+        mDevicesListViewAdapter.addAll(deviceList);
+    }
+
     private final ApiCallback<Void> mDevicesVerificationCallback = new ApiCallback<Void>() {
         @Override
         public void onSuccess(Void info) {
-            // Refresh the adapter data
-            List<MXDeviceInfo> deviceList = mSession.getCrypto().getUserDevices(mMemberId);
-
-            mDevicesListViewAdapter.clear();
-            mDevicesListViewAdapter.addAll(deviceList);
+            refreshUserDevicesList();
         }
 
         @Override
         public void onNetworkError(Exception e) {
-            onSuccess(null);
+            refreshUserDevicesList();
         }
 
         @Override
         public void onMatrixError(MatrixError e) {
-            onSuccess(null);
+            refreshUserDevicesList();
         }
 
         @Override
         public void onUnexpectedError(Exception e) {
-            onSuccess(null);
+            refreshUserDevicesList();
         }
     };
 
@@ -1583,7 +1588,17 @@ public class VectorMemberDetailsActivity extends MXCActionBarActivity implements
 
             case MXDeviceInfo.DEVICE_VERIFICATION_UNVERIFIED:
             default: // Blocked
-                CommonActivityUtils.displayDeviceVerificationDialog(aDeviceInfo, mMemberId, mSession, this, mDevicesVerificationCallback);
+                CommonActivityUtils.displayDeviceVerificationDialog(aDeviceInfo, mMemberId, mSession, this, new YesNoListener() {
+                    @Override
+                    public void yes() {
+                        refreshUserDevicesList();
+                    }
+
+                    @Override
+                    public void no() {
+                        // Nothing to do
+                    }
+                });
                 break;
         }
     }

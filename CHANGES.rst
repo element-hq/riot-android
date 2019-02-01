@@ -5,20 +5,39 @@ MatrixSdk:
  - Upgrade MatrixSdk to version 0.X.Y.
 
 Features:
- -
+ - keys backup: Implement setup screen (#2883)
+ - keys backup: Display a warning on new sign out screen (#2885)
+ - keys backup: recover screen (#2887)
+ - keys backup: Add a dedicated section to settings (#2884)
+ - keys backup: Add a banner on Home to setup or recover backup (#2884)
 
 Improvements:
  - Support Split-screen mode (#1832)
  - Enable auto focus when taking picture with the camera (#2831)
  - Better wording in notification for video call (#1421)
  - Improve widget banner (#2129)
+ - Icon for Oreo (#2169)
+ - Notification settings re-organization, added bing rule troubleshoot
+ - Kotlin Code Improvement in VectorSettingsPreferencesFragment.kt
+ - Remove redundant !! , Replace it with null safe operators in VectorSettingsPreferencesFragment.kt
+ - `Redact` has been renamed to `Remove` to match riot/web (#2871)
+ - Remove long click download action in MediaViewer (#2882)
 
 Other changes:
+ - Update of Light and Dark themes (#2710)
  - Restore the crash report dialog after a crash
+ - New application icon! (#2905)
 
 Bugfix:
  - Fix crash when taking picture for user avatar on old device (#2818)
  - Fix crash when adding background to image (#2828)
+ - LED notifications are not working (#2512)
+ - FCM Troubleshoot screen crash in some cases (#2846)
+ - Fix login button issue (#1568)
+ - Fix issue with registration when an email is provided (#2852)
+ - Fix issues with Tombstone events (#2866 && #2867)
+ - Fix crash on BugReportActivity if previous Activity is destroyed (#2876)
+ - Key share request does not go away when user select "verify" (#2781)
 
 Translations:
  -
@@ -26,7 +45,7 @@ Translations:
 Build:
  -
 
-Changes in Riot 0.8.21 (2018-01-02)
+Changes in Riot 0.8.21 (2019-01-02)
 ===================================================
 
 MatrixSdk:

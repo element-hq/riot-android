@@ -589,14 +589,14 @@
     <string name="encryption_export_room_keys">Eksporto kyçe dhome</string>
     <string name="encryption_export_room_keys_summary">Eksportojini kyçet te një kartelë vendore</string>
     <string name="encryption_export_export">Eksporto</string>
-    <string name="encryption_export_create_passphrase">Krijoni frazëkalim</string>
-    <string name="encryption_export_confirm_passphrase">Ripohoni frazëkalimin</string>
-    <string name="encryption_export_passphrase_dont_match">Frazëkalimet duhet të përputhen</string>
+    <string name="passphrase_create_passphrase">Krijoni frazëkalim</string>
+    <string name="passphrase_confirm_passphrase">Ripohoni frazëkalimin</string>
+    <string name="passphrase_passphrase_does_not_match">Frazëkalimet duhet të përputhen</string>
     <string name="encryption_import_e2e_room_keys">Importo kyçe dhome E2E</string>
     <string name="encryption_import_room_keys">Importo kyçe dhome</string>
     <string name="encryption_import_room_keys_summary">Importo kyçe nga një kartelë vendore</string>
     <string name="encryption_import_import">Importo</string>
-    <string name="encryption_import_enter_passphrase">Jepni frazëkalimin</string>
+    <string name="passphrase_enter_passphrase">Jepni frazëkalimin</string>
     <string name="encryption_never_send_to_unverified_devices_title">Fshehtëzoje vetëm për pajisje të verifikuara</string>
     <string name="encryption_information_not_verified">JO i verifikuar</string>
     <string name="encryption_information_verified">I verifikuar</string>
@@ -967,7 +967,6 @@ Kujdes: kjo kartelë mund të fshihet, nëse çinstalohet aplikacioni.</string>
     <string name="command_description_invite_user">Fton te dhoma e tanishme përdoruesin me ID-në e dhënë</string>
     <string name="command_description_clear_scalar_token">Për ndreqje administrimi Aplikacionesh Matrix</string>
 
-    <string name="notification_on">On</string>
     <string name="group_no_long_description">Përgjegjësi i bashkësisë nuk ka dhënë një përshkrim të gjatë për këtë bashkësi.</string>
 
     <string name="deactivate_account_content">Kjo do ta bëjë llogarinë tuaj përgjithmonë të papërdorshme. S’do të jeni në gjendje të hyni në llogarinë tuaj, dhe askush s’do të jetë në gjendje të riregjistrojë të njëjtën ID përdoruesi. Kjo do të shkaktojë daljen e llogarisë tuaj nga krejt dhomat ku merr pjesë, dhe do të heqë hollësitë e llogarisë tuaj nga shërbyesi juaj i identiteteve. <b>Ky veprim është i paprapakthyeshëm</b>.

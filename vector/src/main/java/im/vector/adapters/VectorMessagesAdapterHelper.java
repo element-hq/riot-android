@@ -50,6 +50,7 @@ import org.matrix.androidsdk.rest.callback.ApiCallback;
 import org.matrix.androidsdk.rest.model.Event;
 import org.matrix.androidsdk.rest.model.MatrixError;
 import org.matrix.androidsdk.rest.model.ReceiptData;
+import org.matrix.androidsdk.rest.model.RoomCreateContent;
 import org.matrix.androidsdk.rest.model.RoomMember;
 import org.matrix.androidsdk.rest.model.URLPreview;
 import org.matrix.androidsdk.rest.model.group.Group;
@@ -1048,7 +1049,8 @@ class VectorMessagesAdapterHelper {
             // Matrix apps are enabled
             return true;
         } else if (Event.EVENT_TYPE_STATE_ROOM_CREATE.equals(eventType)) {
-            return row.getRoomCreateContentPredecessor() != null;
+            final RoomCreateContent roomCreateContent = JsonUtils.toRoomCreateContent(event.getContent());
+            return roomCreateContent != null && roomCreateContent.predecessor != null;
         }
         return false;
     }

@@ -23,7 +23,6 @@ import android.webkit.WebResourceError
 import android.webkit.WebResourceRequest
 import android.webkit.WebView
 import android.webkit.WebViewClient
-import org.matrix.androidsdk.util.Log
 
 /**
  * This class inherits from WebViewClient. It has to be used with a WebView.

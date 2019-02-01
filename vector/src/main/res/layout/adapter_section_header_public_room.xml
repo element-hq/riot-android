@@ -12,8 +12,8 @@
         style="@style/ListHeader"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="#22ff0000"
         android:tag="sticky"
+        tools:background="#22ff0000"
         tools:text="Default section header" />
 
     <include

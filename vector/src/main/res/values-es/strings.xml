@@ -657,8 +657,8 @@ Los mensajes cifrados no serán visibles en clientes que aún no implementen el 
     <string name="encryption_export_room_keys">Exportar claves de sala</string>
     <string name="encryption_export_room_keys_summary">Exportar las claves a un archivo local</string>
     <string name="encryption_export_export">Exportar</string>
-    <string name="encryption_import_enter_passphrase">Ingresar frase de contraseña</string>
-    <string name="encryption_export_confirm_passphrase">Confirmar frase de contraseña</string>
+    <string name="passphrase_enter_passphrase">Ingresar frase de contraseña</string>
+    <string name="passphrase_confirm_passphrase">Confirmar frase de contraseña</string>
     <string name="encryption_export_saved_as">Las claves de salas con Cifrado de Extremo a Extremo se guardaron en \'%s\'.
 
 Advertencia: este archivo puede ser eliminado si la aplicación se desinstala.</string>
@@ -800,7 +800,6 @@ Dispositivos desconocidos:</string>
 
     <!-- notification statuses -->
     <string name="notification_off">Desactivado</string>
-    <string name="notification_on">Activado</string>
     <string name="notification_noisy">Ruidoso</string>
 
     <string name="encrypted_message">Mensaje cifrado</string>
@@ -1088,8 +1087,8 @@ Ten en cuenta que esta acción reiniciará la aplicación y puede tardar algo de
 
     <string name="room_sliding_menu_version_x">Versión %s</string>
     <string name="encryption_export_notice">Por favor, crea una frase de contraseña para cifrar las claves exportadas. Necesitarás ingresar la misma frase de contraseña para poder importar las claves.</string>
-    <string name="encryption_export_create_passphrase">Crear frase de contraseña</string>
-    <string name="encryption_export_passphrase_dont_match">Las frases de contraseña deben coincidir</string>
+    <string name="passphrase_create_passphrase">Crear frase de contraseña</string>
+    <string name="passphrase_passphrase_does_not_match">Las frases de contraseña deben coincidir</string>
     <string name="settings_lazy_loading_title">Utiliza carga diferida para los miembros de la sala</string>
     <string name="settings_lazy_loading_description">Aumenta el rendimiento cargando los miembros de la sala solo en la primera vista</string>
     <string name="error_lazy_loading_not_supported_by_home_server">Tu servidor doméstico aún no admite la carga diferida de los miembros de la sala. Prueba más tarde.</string>

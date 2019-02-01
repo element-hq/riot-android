@@ -464,7 +464,7 @@ public class VectorRoomSettingsFragment extends PreferenceFragmentCompat impleme
         }
 
         // seems known issue that the preferences screen does not use the activity theme
-        view.setBackgroundColor(ThemeUtils.INSTANCE.getColor(getActivity(), R.attr.vctr_riot_primary_background_color));
+        view.setBackgroundColor(ThemeUtils.INSTANCE.getColor(getActivity(), android.R.attr.colorBackground));
         return view;
     }
 

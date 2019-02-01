@@ -468,8 +468,8 @@
     <string name="call_error_answered_elsewhere">కాల్ ఎక్కడో ఎత్తారు</string>
     <string name="action_voice_call">వాయిస్ కాల్</string>
     <string name="auth_invalid_password">గుప్తపదం చానా చిన్నది (కనీసం 6)</string>
-    <string name="encryption_import_enter_passphrase">గుప్తపదం ఇవ్వండి</string>
-    <string name="encryption_export_confirm_passphrase">గుప్తపదం మరల ఇవ్వండి</string>
+    <string name="passphrase_enter_passphrase">గుప్తపదం ఇవ్వండి</string>
+    <string name="passphrase_confirm_passphrase">గుప్తపదం మరల ఇవ్వండి</string>
     <string name="room_settings_read_history_entry_members_only_joined">సభ్యులు మాత్రమే (చేరినప్పుడ్నుంచి)</string>
 
     <string name="room_settings_read_history_entry_members_only_invited">సభ్యులు మాత్రమే (ఆహ్వానించినప్పుడ్నించి)</string>

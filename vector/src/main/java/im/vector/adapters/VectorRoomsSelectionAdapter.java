@@ -114,12 +114,12 @@ public class VectorRoomsSelectionAdapter extends ArrayAdapter<RoomSummary> {
         if (roomSummary.getLatestReceivedEvent() != null) {
             EventDisplay eventDisplay = new RiotEventDisplay(mContext);
             eventDisplay.setPrependMessagesWithAuthor(true);
-            roomMessageTxtView.setText(eventDisplay.getTextualDisplay(ThemeUtils.INSTANCE.getColor(mContext, R.attr.vctr_riot_primary_text_color),
+            roomMessageTxtView.setText(eventDisplay.getTextualDisplay(ThemeUtils.INSTANCE.getColor(mContext, android.R.attr.textColorPrimary),
                     roomSummary.getLatestReceivedEvent(),
                     roomSummary.getLatestRoomState()));
 
             timestampTxtView.setText(getFormattedTimestamp(roomSummary.getLatestReceivedEvent()));
-            timestampTxtView.setTextColor(ThemeUtils.INSTANCE.getColor(mContext, R.attr.vctr_default_text_light_color));
+            timestampTxtView.setTextColor(ThemeUtils.INSTANCE.getColor(mContext, android.R.attr.textColorSecondary));
             timestampTxtView.setTypeface(null, Typeface.NORMAL);
             timestampTxtView.setVisibility(View.VISIBLE);
         } else {

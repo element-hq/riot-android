@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="?vctr_list_header_background_color">
+
+    <ImageView
+        android:id="@+id/view_keys_backup_banner_picto"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="24dp"
+        android:layout_marginLeft="24dp"
+        android:layout_marginTop="17dp"
+        android:layout_marginBottom="17dp"
+        android:src="@drawable/shield_small"
+        android:tint="?android:textColorPrimary"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/view_keys_backup_banner_text"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="27dp"
+        android:layout_marginLeft="27dp"
+        android:layout_marginTop="13dp"
+        android:layout_marginEnd="@dimen/layout_horizontal_margin"
+        android:layout_marginRight="@dimen/layout_horizontal_margin"
+        android:layout_marginBottom="10dp"
+        android:text="@string/keys_backup_banner_recover"
+        android:textSize="15sp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@id/view_keys_backup_banner_close"
+        app:layout_constraintStart_toEndOf="@id/view_keys_backup_banner_picto"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <!-- Trick to align the close picto to top of text -->
+    <android.support.constraint.Group
+        android:id="@+id/view_keys_backup_banner_group"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:constraint_referenced_ids="view_keys_backup_banner_close,view_keys_backup_banner_close_image" />
+
+    <View
+        android:id="@+id/view_keys_backup_banner_close"
+        android:layout_width="@dimen/layout_touch_size"
+        android:layout_height="0dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <ImageView
+        android:id="@+id/view_keys_backup_banner_close_image"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
+        android:src="@drawable/ic_small_close"
+        app:layout_constraintEnd_toEndOf="@id/view_keys_backup_banner_close"
+        app:layout_constraintStart_toStartOf="@id/view_keys_backup_banner_close"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="?vctr_line_divider"
+        app:layout_constraintBottom_toBottomOf="parent" />
+
+</android.support.constraint.ConstraintLayout>

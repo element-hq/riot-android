@@ -108,7 +108,7 @@ public class VectorFirebaseMessagingService extends FirebaseMessagingService {
                 }
             }
 
-            Log.d(LOG_TAG, "## onMessageReceivedInternal() : roomId " + roomId + " eventId " + eventId + " unread " + unreadCount);
+            Log.i(LOG_TAG, "## onMessageReceivedInternal() : roomId " + roomId + " eventId " + eventId + " unread " + unreadCount);
 
             // update the badge counter
             CommonActivityUtils.updateBadgeCount(getApplicationContext(), unreadCount);
@@ -116,7 +116,7 @@ public class VectorFirebaseMessagingService extends FirebaseMessagingService {
             PushManager pushManager = Matrix.getInstance(getApplicationContext()).getPushManager();
 
             if (!pushManager.areDeviceNotificationsAllowed()) {
-                Log.d(LOG_TAG, "## onMessageReceivedInternal() : the notifications are disabled");
+                Log.i(LOG_TAG, "## onMessageReceivedInternal() : the notifications are disabled");
                 return;
             }
             if (!pushManager.isBackgroundSyncAllowed() && VectorApp.isAppInBackground()) {
@@ -136,7 +136,7 @@ public class VectorFirebaseMessagingService extends FirebaseMessagingService {
                     }
                 }
 
-                Log.d(LOG_TAG, "## onMessageReceivedInternal() : the background sync is disabled with eventStreamService " + eventStreamService);
+                Log.i(LOG_TAG, "## onMessageReceivedInternal() : the background sync is disabled with eventStreamService " + eventStreamService);
 
                 EventStreamService.onStaticNotifiedEvent(getApplicationContext(), event, roomName, data.get("sender_display_name"), unreadCount);
                 return;
@@ -174,7 +174,7 @@ public class VectorFirebaseMessagingService extends FirebaseMessagingService {
 
             CommonActivityUtils.catchupEventStream(this);
         } catch (Exception e) {
-            Log.d(LOG_TAG, "## onMessageReceivedInternal() failed : " + e.getMessage(), e);
+            Log.e(LOG_TAG, "## onMessageReceivedInternal() failed : " + e.getMessage(), e);
         }
     }
 
@@ -186,7 +186,7 @@ public class VectorFirebaseMessagingService extends FirebaseMessagingService {
      */
     @Override
     public void onNewToken(String refreshedToken) {
-        Log.d(LOG_TAG, "onNewToken: " + refreshedToken);
+        Log.i(LOG_TAG, "onNewToken: FCM Token has been updated");
 
         FcmHelper.storeFcmToken(this, refreshedToken);
 
@@ -200,8 +200,7 @@ public class VectorFirebaseMessagingService extends FirebaseMessagingService {
      */
     @Override
     public void onMessageReceived(RemoteMessage message) {
-        Log.d(LOG_TAG, "## onMessageReceived() from FCM with priority " + message.getPriority()
-                + " from " + message.getFrom());
+        Log.i(LOG_TAG, "## onMessageReceived() from FCM with priority " + message.getPriority());
 
         // Ensure event stream service is started
         if (EventStreamService.getInstance() == null) {

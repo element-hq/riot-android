@@ -22,6 +22,7 @@ import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.annotation.SuppressLint;
 import android.app.SearchManager;
+import android.arch.lifecycle.ViewModelProviders;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -39,7 +40,6 @@ import android.support.design.internal.BottomNavigationItemView;
 import android.support.design.internal.BottomNavigationMenuView;
 import android.support.design.widget.BottomNavigationView;
 import android.support.design.widget.NavigationView;
-import android.support.design.widget.TextInputEditText;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.content.ContextCompat;
@@ -115,6 +115,8 @@ import im.vector.MyPresenceManager;
 import im.vector.PublicRoomsManager;
 import im.vector.R;
 import im.vector.VectorApp;
+import im.vector.activity.signout.SignOutActivity;
+import im.vector.activity.signout.SignOutViewModel;
 import im.vector.activity.util.RequestCodesKt;
 import im.vector.extensions.ViewExtensionsKt;
 import im.vector.fragments.AbsHomeFragment;
@@ -136,6 +138,7 @@ import im.vector.util.PreferencesManager;
 import im.vector.util.RoomUtils;
 import im.vector.util.SystemUtilsKt;
 import im.vector.util.VectorUtils;
+import im.vector.view.KeysBackupBanner;
 import im.vector.view.UnreadCounterBadgeView;
 import im.vector.view.VectorPendingCallView;
 
@@ -143,7 +146,8 @@ import im.vector.view.VectorPendingCallView;
  * Displays the main screen of the app, with rooms the user has joined and the ability to create
  * new rooms.
  */
-public class VectorHomeActivity extends VectorAppCompatActivity implements SearchView.OnQueryTextListener {
+public class VectorHomeActivity extends VectorAppCompatActivity implements SearchView.OnQueryTextListener,
+        KeysBackupBanner.Delegate {
 
     private static final String LOG_TAG = VectorHomeActivity.class.getSimpleName();
 
@@ -197,6 +201,9 @@ public class VectorHomeActivity extends VectorAppCompatActivity implements Searc
     private String mMemberIdToOpen = null;
 
     private String mGroupIdToOpen = null;
+
+    @BindView(R.id.home_keys_backup_banner)
+    KeysBackupBanner mKeysBackupBanner;
 
     @BindView(R.id.floating_action_menu)
     FloatingActionsMenu mFloatingActionsMenu;
@@ -335,6 +342,32 @@ public class VectorHomeActivity extends VectorAppCompatActivity implements Searc
                     .putInt(PreferencesManager.VERSION_BUILD, BuildConfig.VERSION_CODE)
                     .apply();
         }
+
+        // Use the SignOutViewModel, it observe the keys backup state and this is what we need here
+        SignOutViewModel model = ViewModelProviders.of(this).get(SignOutViewModel.class);
+
+        model.init(mSession);
+
+        model.getKeysBackupState().observe(this, keysBackupState -> {
+            if (keysBackupState == null) {
+                mKeysBackupBanner.render(KeysBackupBanner.State.Hidden.INSTANCE, false);
+            } else {
+                switch (keysBackupState) {
+                    case Disabled:
+                        mKeysBackupBanner.render(KeysBackupBanner.State.Setup.INSTANCE, false);
+                        break;
+                    case NotTrusted:
+                    case WrongBackUpVersion:
+                        mKeysBackupBanner.render(KeysBackupBanner.State.Recover.INSTANCE, false);
+                        break;
+                    default:
+                        mKeysBackupBanner.render(KeysBackupBanner.State.Hidden.INSTANCE, false);
+                        break;
+                }
+            }
+        });
+
+        mKeysBackupBanner.setDelegate(this);
 
         // Check whether the user has agreed to the use of analytics tracking
 
@@ -600,14 +633,14 @@ public class VectorHomeActivity extends VectorAppCompatActivity implements Searc
         // https://github.com/vector-im/vector-android/issues/323
         // the tool bar color is not restored on some devices.
         TypedValue vectorActionBarColor = new TypedValue();
-        getTheme().resolveAttribute(R.attr.vctr_riot_primary_background_color, vectorActionBarColor, true);
+        getTheme().resolveAttribute(android.R.attr.colorBackground, vectorActionBarColor, true);
         mToolbar.setBackgroundResource(vectorActionBarColor.resourceId);
 
         checkDeviceId();
 
         mSyncInProgressView.setVisibility(VectorApp.isSessionSyncing(mSession) ? View.VISIBLE : View.GONE);
 
-        displayCryptoCorruption();
+        maybeDisplayCryptoCorruption();
 
         addBadgeEventsListener();
 
@@ -984,50 +1017,65 @@ public class VectorHomeActivity extends VectorAppCompatActivity implements Searc
     /**
      * Update UI colors to match the selected tab
      *
-     * @param primaryColor
-     * @param secondaryColor
+     * @param primaryColor    the primary color
+     * @param secondaryColor  the secondary color. If -1, primary color will be used
+     * @param fabColor        the FAB color. If equals to -1, the FAB color will not be updated
+     * @param fabPressedColor the pressed FAB color
      */
-    public void updateTabStyle(final int primaryColor, final int secondaryColor) {
+    public void updateTabStyle(final int primaryColor,
+                               final int secondaryColor,
+                               final int fabColor,
+                               final int fabPressedColor) {
+        // Apply primary color
         mToolbar.setBackgroundColor(primaryColor);
-
-        Class menuClass = FloatingActionsMenu.class;
-        try {
-            Field normal = menuClass.getDeclaredField("mAddButtonColorNormal");
-            normal.setAccessible(true);
-            Field pressed = menuClass.getDeclaredField("mAddButtonColorPressed");
-            pressed.setAccessible(true);
-
-            normal.set(mFloatingActionsMenu, primaryColor);
-            pressed.set(mFloatingActionsMenu, secondaryColor);
-
-            mFabMain.setColorNormal(primaryColor);
-            mFabMain.setColorPressed(secondaryColor);
-        } catch (Exception ignored) {
-
-        }
-
-        mFabJoinRoom.setColorNormal(primaryColor);
-        mFabJoinRoom.setColorPressed(secondaryColor);
-        mFabCreateRoom.setColorNormal(primaryColor);
-        mFabCreateRoom.setColorPressed(secondaryColor);
-        mFabStartChat.setColorNormal(primaryColor);
-        mFabStartChat.setColorPressed(secondaryColor);
-
         mVectorPendingCallView.updateBackgroundColor(primaryColor);
         mSyncInProgressView.setBackgroundColor(primaryColor);
+
+        // Apply secondary color
+        int _secondaryColor = secondaryColor;
+        if (_secondaryColor == -1) {
+            _secondaryColor = primaryColor;
+        }
+
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            mSyncInProgressView.setIndeterminateTintList(ColorStateList.valueOf(secondaryColor));
+            mSyncInProgressView.setIndeterminateTintList(ColorStateList.valueOf(_secondaryColor));
         } else {
             mSyncInProgressView.getIndeterminateDrawable().setColorFilter(
-                    secondaryColor, android.graphics.PorterDuff.Mode.SRC_IN);
+                    _secondaryColor, android.graphics.PorterDuff.Mode.SRC_IN);
         }
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            getWindow().setStatusBarColor(secondaryColor);
+            getWindow().setStatusBarColor(_secondaryColor);
+        }
+
+        // FAB button
+        if (fabColor != -1) {
+            Class menuClass = FloatingActionsMenu.class;
+            try {
+                Field normal = menuClass.getDeclaredField("mAddButtonColorNormal");
+                normal.setAccessible(true);
+                Field pressed = menuClass.getDeclaredField("mAddButtonColorPressed");
+                pressed.setAccessible(true);
+
+                normal.set(mFloatingActionsMenu, fabColor);
+                pressed.set(mFloatingActionsMenu, fabPressedColor);
+
+                mFabMain.setColorNormal(fabColor);
+                mFabMain.setColorPressed(fabPressedColor);
+            } catch (Exception ignored) {
+
+            }
+
+            mFabJoinRoom.setColorNormal(fabColor);
+            mFabJoinRoom.setColorPressed(fabPressedColor);
+            mFabCreateRoom.setColorNormal(fabColor);
+            mFabCreateRoom.setColorPressed(fabPressedColor);
+            mFabStartChat.setColorNormal(fabColor);
+            mFabStartChat.setColorPressed(fabPressedColor);
         }
 
         // Set color of toolbar search view
         EditText edit = mSearchView.findViewById(android.support.v7.appcompat.R.id.search_src_text);
-        edit.setTextColor(ThemeUtils.INSTANCE.getColor(this, R.attr.vctr_primary_text_color));
+        edit.setTextColor(ThemeUtils.INSTANCE.getColor(this, R.attr.vctr_toolbar_primary_text_color));
         edit.setHintTextColor(ThemeUtils.INSTANCE.getColor(this, R.attr.vctr_primary_hint_text_color));
     }
 
@@ -1225,7 +1273,7 @@ public class VectorHomeActivity extends VectorAppCompatActivity implements Searc
     /**
      * Display an alert to warn the user that some crypto data is corrupted.
      */
-    private void displayCryptoCorruption() {
+    private void maybeDisplayCryptoCorruption() {
         if ((null != mSession) && (null != mSession.getCrypto()) && mSession.getCrypto().isCorrupted()) {
             final String isFirstCryptoAlertKey = "isFirstCryptoAlertKey";
 
@@ -1456,7 +1504,7 @@ public class VectorHomeActivity extends VectorAppCompatActivity implements Searc
         View dialogView = inflater.inflate(R.layout.dialog_join_room_by_id, null);
 
         final EditText textInput = dialogView.findViewById(R.id.join_room_edit_text);
-        textInput.setTextColor(ThemeUtils.INSTANCE.getColor(this, R.attr.vctr_riot_primary_text_color));
+        textInput.setTextColor(ThemeUtils.INSTANCE.getColor(this, android.R.attr.textColorPrimary));
 
         AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(this);
 
@@ -1700,73 +1748,6 @@ public class VectorHomeActivity extends VectorAppCompatActivity implements Searc
      * *********************************************************************************************
      */
 
-    /**
-     * Manage the e2e keys export.
-     */
-    private void exportKeysAndSignOut() {
-        View dialogLayout = getLayoutInflater().inflate(R.layout.dialog_export_e2e_keys, null);
-        AlertDialog.Builder builder = new AlertDialog.Builder(this)
-                .setTitle(R.string.encryption_export_room_keys)
-                .setView(dialogLayout);
-
-        final TextInputEditText passPhrase1EditText = dialogLayout.findViewById(R.id.dialog_e2e_keys_passphrase_edit_text);
-        final TextInputEditText passPhrase2EditText = dialogLayout.findViewById(R.id.dialog_e2e_keys_confirm_passphrase_edit_text);
-        final Button exportButton = dialogLayout.findViewById(R.id.dialog_e2e_keys_export_button);
-        final TextWatcher textWatcher = new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-
-            }
-
-            @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count) {
-                exportButton.setEnabled(!TextUtils.isEmpty(passPhrase1EditText.getText())
-                        && TextUtils.equals(passPhrase1EditText.getText(), passPhrase2EditText.getText()));
-            }
-
-            @Override
-            public void afterTextChanged(Editable s) {
-
-            }
-        };
-
-        passPhrase1EditText.addTextChangedListener(textWatcher);
-        passPhrase2EditText.addTextChangedListener(textWatcher);
-
-        exportButton.setEnabled(false);
-
-        final AlertDialog exportDialog = builder.show();
-
-        exportButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                showWaitingView();
-
-                CommonActivityUtils.exportKeys(mSession, passPhrase1EditText.getText().toString(), new SimpleApiCallback<String>(VectorHomeActivity.this) {
-
-                    @Override
-                    public void onSuccess(final String filename) {
-                        hideWaitingView();
-
-                        new AlertDialog.Builder(VectorHomeActivity.this)
-                                .setMessage(getString(R.string.encryption_export_saved_as, filename))
-                                .setCancelable(false)
-                                .setPositiveButton(R.string.action_sign_out, new DialogInterface.OnClickListener() {
-                                    public void onClick(DialogInterface dialog, int id) {
-                                        showWaitingView();
-                                        CommonActivityUtils.logout(VectorHomeActivity.this);
-                                    }
-                                })
-                                .setNegativeButton(R.string.cancel, null)
-                                .show();
-                    }
-                });
-
-                exportDialog.dismiss();
-            }
-        });
-    }
-
     private void initSlidingMenu() {
         ActionBarDrawerToggle drawerToggle = new ActionBarDrawerToggle(
                 /* host Activity */
@@ -1814,32 +1795,7 @@ public class VectorHomeActivity extends VectorAppCompatActivity implements Searc
                     }
 
                     case R.id.sliding_menu_sign_out: {
-                        new AlertDialog.Builder(VectorHomeActivity.this)
-                                .setMessage(R.string.action_sign_out_confirmation)
-                                .setCancelable(false)
-                                .setPositiveButton(R.string.action_sign_out,
-                                        new DialogInterface.OnClickListener() {
-                                            public void onClick(DialogInterface dialog, int id) {
-                                                showWaitingView();
-                                                CommonActivityUtils.logout(VectorHomeActivity.this);
-                                            }
-                                        })
-                                .setNeutralButton(R.string.encryption_export_export, new DialogInterface.OnClickListener() {
-                                    @Override
-                                    public void onClick(DialogInterface dialog, int which) {
-                                        dialog.cancel();
-
-                                        runOnUiThread(new Runnable() {
-                                            @Override
-                                            public void run() {
-                                                exportKeysAndSignOut();
-                                            }
-                                        });
-                                    }
-                                })
-                                .setNegativeButton(R.string.cancel, null)
-                                .show();
-
+                        startActivity(new Intent(VectorHomeActivity.this, SignOutActivity.class));
                         break;
                     }
 
@@ -2488,5 +2444,20 @@ public class VectorHomeActivity extends VectorAppCompatActivity implements Searc
         if (mSession.isAlive()) {
             mSession.getDataHandler().removeListener(mEventsListener);
         }
+    }
+
+    /* ==========================================================================================
+     * KeysBackupBanner Listener
+     * ========================================================================================== */
+
+    @Override
+    public void setupKeysBackup() {
+        startActivity(KeysBackupManageActivity.Companion.intent(this, mSession.getMyUserId()));
+    }
+
+    @Override
+    public void recoverKeysBackup() {
+        // Same than for setup
+        setupKeysBackup();
     }
 }

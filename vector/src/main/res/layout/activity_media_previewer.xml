@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
@@ -66,10 +67,10 @@
         android:maxLines="1"
         android:padding="8dp"
         android:textAlignment="center"
-        android:textColor="@color/default_text_dark_color_dark"
         app:layout_constraintBottom_toTopOf="@+id/media_previewer_list"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent" />
+        app:layout_constraintStart_toStartOf="parent"
+        tools:text="Filename" />
 
     <android.support.design.widget.FloatingActionButton
         android:id="@+id/media_previewer_send_button"

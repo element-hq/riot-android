@@ -3,8 +3,9 @@
     xmlns:tools="http://schemas.android.com/tools"
     tools:context="org.matrix.vector.activity.RoomActivity">
 
-    <item android:id="@+id/ic_action_send_bug_report"
-        android:title="@string/send_bug_report"
+    <item
+        android:id="@+id/ic_action_send_bug_report"
         android:icon="@drawable/ic_material_send_black"
+        android:title="@string/send_bug_report"
         app:showAsAction="always" />
 </menu>

@@ -37,7 +37,7 @@
                 style="@style/VectorUnifiedSearches.TabLayout"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:background="?attr/vctr_riot_primary_background_color" />
+                android:background="?android:attr/colorBackground" />
 
             <RelativeLayout
                 android:layout_width="match_parent"
@@ -48,7 +48,7 @@
                     android:id="@+id/search_view_pager"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:background="?attr/vctr_riot_primary_background_color" />
+                    android:background="?android:attr/colorBackground" />
 
                 <ProgressBar
                     android:id="@+id/search_load_oldest_progress"

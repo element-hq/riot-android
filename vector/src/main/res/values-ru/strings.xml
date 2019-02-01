@@ -650,8 +650,8 @@ Email также позволит вам при необходимости во�
     <string name="encryption_export_room_keys">Экспорт ключей комнаты</string>
     <string name="encryption_export_room_keys_summary">Экспорт ключей в локальный файл</string>
     <string name="encryption_export_export">Экспорт</string>
-    <string name="encryption_import_enter_passphrase">Введите пароль</string>
-    <string name="encryption_export_confirm_passphrase">Подтвердите пароль</string>
+    <string name="passphrase_enter_passphrase">Введите пароль</string>
+    <string name="passphrase_confirm_passphrase">Подтвердите пароль</string>
     <string name="encryption_export_saved_as">E2E ключи комнаты сохранены в \'%s\'.
 
 Предупреждение: этот файл может быть удален после деинсталляции приложения.</string>
@@ -795,7 +795,6 @@ Email также позволит вам при необходимости во�
 
     <!-- notification statuses -->
     <string name="notification_off">Выкл</string>
-    <string name="notification_on">Вкл</string>
     <string name="notification_noisy">Громко</string>
 
     <string name="encrypted_message">Зашифрованное сообщение</string>
@@ -1105,8 +1104,8 @@ Email также позволит вам при необходимости во�
     <string name="dialog_title_error">Ошибка</string>
 
     <string name="room_sliding_menu_version_x">Версия %s</string>
-    <string name="encryption_export_create_passphrase">Создать парольную фразу</string>
-    <string name="encryption_export_passphrase_dont_match">Парольные фразы должны совпадать</string>
+    <string name="passphrase_create_passphrase">Создать парольную фразу</string>
+    <string name="passphrase_passphrase_does_not_match">Парольные фразы должны совпадать</string>
     <string name="resource_limit_contact_admin">свяжитесь с вашим администратором</string>
 
     <string name="resource_limit_soft_default">Превышен один из ресурсных лимитов сервера, по этому <b>некоторые пользователи не смогут залогиниться</b>.</string>

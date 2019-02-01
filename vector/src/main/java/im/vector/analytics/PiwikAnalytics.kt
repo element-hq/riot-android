@@ -17,7 +17,10 @@
 package im.vector.analytics
 
 import android.content.Context
-import org.piwik.sdk.*
+import org.piwik.sdk.Piwik
+import org.piwik.sdk.QueryParams
+import org.piwik.sdk.Tracker
+import org.piwik.sdk.TrackerConfig
 import org.piwik.sdk.extra.CustomVariables
 import org.piwik.sdk.extra.TrackHelper
 

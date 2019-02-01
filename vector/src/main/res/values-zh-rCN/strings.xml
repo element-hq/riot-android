@@ -382,8 +382,8 @@
     <string name="encryption_export_room_keys">导出聊天室密钥</string>
     <string name="encryption_export_room_keys_summary">导出密钥到本地文件</string>
     <string name="encryption_export_export">导出</string>
-    <string name="encryption_import_enter_passphrase">输入密码</string>
-    <string name="encryption_export_confirm_passphrase">确认密码</string>
+    <string name="passphrase_enter_passphrase">输入密码</string>
+    <string name="passphrase_confirm_passphrase">确认密码</string>
     <string name="encryption_export_saved_as">聊天室的端对端密钥已经被保存到“%s”。
 
 注意：如果本应用程式被卸载，此文件可能将会被移除。</string>
@@ -738,7 +738,6 @@
 
     <!-- notification statuses -->
     <string name="notification_off">关闭</string>
-    <string name="notification_on">打开</string>
     <string name="encrypted_message">已加密消息</string>
 
     <string name="notification_noisy_notifications">铃声通知</string>

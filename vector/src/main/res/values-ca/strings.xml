@@ -682,8 +682,8 @@ Tingueu en compte que aquesta acció reiniciarà l\'aplicació i que pot trigar 
     <string name="encryption_export_room_keys">Exporta les claus de la sala</string>
     <string name="encryption_export_room_keys_summary">Exporta les claus a un fitxer local</string>
     <string name="encryption_export_export">Exporta</string>
-    <string name="encryption_import_enter_passphrase">Introduïu una contrasenya</string>
-    <string name="encryption_export_confirm_passphrase">Confirmeu la contrasenya</string>
+    <string name="passphrase_enter_passphrase">Introduïu una contrasenya</string>
+    <string name="passphrase_confirm_passphrase">Confirmeu la contrasenya</string>
     <string name="encryption_export_saved_as">Les claus E2E de la sala s\'han desat a \'%s\'
 
 Atenció: es podria eliminar aquest fitxer si es desinstal·la l\'aplicació.</string>
@@ -778,7 +778,6 @@ En un futur aquest procés de verificació serà més sofisticat.</string>
 
     <!-- notification statuses -->
     <string name="notification_off">Apagat</string>
-    <string name="notification_on">Encès</string>
     <string name="notification_noisy">Sorrollós</string>
 
     <string name="encrypted_message">Missatge encriptat</string>
@@ -972,8 +971,8 @@ Tingueu en compte que aquesta acció reiniciarà l\'aplicació i pot trigar una 
     <string name="settings_without_flair">No sou ara mateix membre de cap comunitat.</string>
 
     <string name="encryption_export_notice">Si us plau creeu una frase de pas per encriptar les claus exportades. Haureu d\'introduir la mateixa frase de pas per poder importar les claus.</string>
-    <string name="encryption_export_create_passphrase">Crea frase de pas</string>
-    <string name="encryption_export_passphrase_dont_match">Les frases de pas han de coincidir</string>
+    <string name="passphrase_create_passphrase">Crea frase de pas</string>
+    <string name="passphrase_passphrase_does_not_match">Les frases de pas han de coincidir</string>
     <string name="lock_screen_hint">Escriviu aquí…</string>
 
     <string name="widget_integration_missing_parameter">Falta un paràmetre necessari.</string>

@@ -74,10 +74,4 @@ sealed class ActivityOtherThemes(@StyleRes val dark: Int,
             R.style.CallActivityTheme_Black,
             R.style.CallActivityTheme_Status
     )
-
-    object Login : ActivityOtherThemes(
-            R.style.LoginAppTheme_Dark,
-            R.style.LoginAppTheme_Black,
-            R.style.LoginAppTheme_Status
-    )
 }

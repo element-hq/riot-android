@@ -410,8 +410,8 @@ Pode engadir a dirección de correo na sección de configuración de perfil.</st
     <string name="encryption_export_e2e_room_keys">Exportar chaves E2E da sala</string>
     <string name="encryption_export_room_keys">Exportar chaves da sala</string>
     <string name="encryption_export_export">Exportar</string>
-    <string name="encryption_import_enter_passphrase">Introduza a frase de paso</string>
-    <string name="encryption_export_confirm_passphrase">Confirme a frase de paso</string>
+    <string name="passphrase_enter_passphrase">Introduza a frase de paso</string>
+    <string name="passphrase_confirm_passphrase">Confirme a frase de paso</string>
     <string name="encryption_import_e2e_room_keys">Importar chaves E2E da sala</string>
     <string name="encryption_import_room_keys">Importar chaves de sala</string>
     <string name="encryption_import_import">Importar</string>
@@ -499,7 +499,6 @@ Pode engadir a dirección de correo na sección de configuración de perfil.</st
     <string name="unrecognized_command">Comandos que non se recoñecen: %s</string>
 
     <string name="notification_off">Off</string>
-    <string name="notification_on">On</string>
     <string name="notification_noisy">Ruidoso</string>
 
     <string name="encrypted_message">Mensaxe cifrada</string>

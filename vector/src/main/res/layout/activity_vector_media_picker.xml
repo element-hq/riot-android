@@ -3,7 +3,7 @@
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="?attr/vctr_riot_primary_background_color">
+    android:background="?android:attr/colorBackground">
 
     <!-- the height will be computed programmatically-->
     <RelativeLayout
@@ -31,7 +31,7 @@
                 android:id="@+id/media_picker_texture_mask_view"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:background="?attr/vctr_riot_primary_background_color" />
+                android:background="?android:attr/colorBackground" />
 
             <!-- button to record a video -->
             <im.vector.view.VideoRecordView
@@ -58,12 +58,12 @@
                 android:id="@+id/media_picker_switch_camera"
                 android:layout_width="46dp"
                 android:layout_height="46dp"
-                android:layout_alignParentTop="true"
-                android:layout_alignRight="@+id/media_picker_texture_view"
                 android:layout_alignEnd="@+id/media_picker_texture_view"
-                android:layout_marginRight="12dp"
-                android:layout_marginEnd="12dp"
+                android:layout_alignRight="@+id/media_picker_texture_view"
+                android:layout_alignParentTop="true"
                 android:layout_marginTop="12dp"
+                android:layout_marginEnd="12dp"
+                android:layout_marginRight="12dp"
                 android:background="@drawable/vector_medias_picker_button_background">
 
                 <ImageView
@@ -78,8 +78,8 @@
                 android:id="@+id/media_picker_exit"
                 android:layout_width="46dp"
                 android:layout_height="46dp"
-                android:layout_marginLeft="12dp"
                 android:layout_marginStart="12dp"
+                android:layout_marginLeft="12dp"
                 android:layout_marginTop="12dp"
                 android:background="@drawable/vector_medias_picker_button_background"
                 android:onClick="onExitButton">
@@ -97,7 +97,7 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_below="@id/medias_picker_camera_preview_layout"
-            android:background="?attr/vctr_riot_primary_background_color"
+            android:background="?android:attr/colorBackground"
             android:scrollbars="none">
 
             <!-- gallery area container -->

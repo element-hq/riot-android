@@ -18,11 +18,9 @@
 package im.vector.adapters;
 
 import android.content.Context;
-import android.content.DialogInterface;
 import android.media.MediaPlayer;
 import android.net.Uri;
 import android.support.v4.view.PagerAdapter;
-import android.support.v7.app.AlertDialog;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -53,17 +51,14 @@ import java.util.ArrayList;
 import java.util.List;
 
 import im.vector.R;
-import im.vector.activity.CommonActivityUtils;
-import im.vector.activity.VectorMediaViewerActivity;
-import im.vector.util.PermissionsToolsKt;
 import im.vector.util.SlidableMediaInfo;
 import im.vector.view.PieFractionView;
 
 /**
  * An images slider
  */
-public class VectorMediasViewerAdapter extends PagerAdapter {
-    private static final String LOG_TAG = VectorMediasViewerAdapter.class.getSimpleName();
+public class VectorMediaViewerAdapter extends PagerAdapter {
+    private static final String LOG_TAG = VectorMediaViewerAdapter.class.getSimpleName();
 
     private final Context mContext;
 
@@ -89,12 +84,12 @@ public class VectorMediasViewerAdapter extends PagerAdapter {
 
     private int mAutoPlayItemAt = -1;
 
-    public VectorMediasViewerAdapter(Context context,
-                                     MXSession session,
-                                     MXMediaCache mediasCache,
-                                     List<SlidableMediaInfo> mediaMessagesList,
-                                     int maxImageWidth,
-                                     int maxImageHeight) {
+    public VectorMediaViewerAdapter(Context context,
+                                    MXSession session,
+                                    MXMediaCache mediasCache,
+                                    List<SlidableMediaInfo> mediaMessagesList,
+                                    int maxImageWidth,
+                                    int maxImageHeight) {
         mContext = context;
         mSession = session;
         mMediasCache = mediasCache;
@@ -407,22 +402,6 @@ public class VectorMediasViewerAdapter extends PagerAdapter {
         final View videoLayout = view.findViewById(R.id.media_slider_video_layout);
         final ImageView thumbView = view.findViewById(R.id.media_slider_video_thumbnail);
 
-        imageView.setOnLongClickListener(new View.OnLongClickListener() {
-            @Override
-            public boolean onLongClick(View v) {
-                onLongClickOnMedia();
-                return true;
-            }
-        });
-
-        thumbView.setOnLongClickListener(new View.OnLongClickListener() {
-            @Override
-            public boolean onLongClick(View v) {
-                onLongClickOnMedia();
-                return true;
-            }
-        });
-
         final SlidableMediaInfo mediaInfo = mMediasMessagesList.get(position);
         String mediaUrl = mediaInfo.mMediaUrl;
 
@@ -602,90 +581,6 @@ public class VectorMediasViewerAdapter extends PagerAdapter {
                 Log.e(LOG_TAG, "## playVideo() : videoView.start(); failed " + e.getMessage(), e);
             }
         }
-    }
-
-    /**
-     * Download the current media file, and export it to the Download folder of the device
-     */
-    public void downloadMediaAndExportToDownloads() {
-        if (((VectorMediaViewerActivity) mContext).checkWritePermission(PermissionsToolsKt.PERMISSION_REQUEST_OTHER)) {
-            final SlidableMediaInfo mediaInfo = mMediasMessagesList.get(mLatestPrimaryItemPosition);
-
-            if (mMediasCache.isMediaCached(mediaInfo.mMediaUrl, mediaInfo.mMimeType)) {
-                mMediasCache.createTmpDecryptedMediaFile(mediaInfo.mMediaUrl, mediaInfo.mMimeType, mediaInfo.mEncryptedFileInfo, new SimpleApiCallback<File>() {
-                    @Override
-                    public void onSuccess(File file) {
-                        if (null != file) {
-                            CommonActivityUtils.saveMediaIntoDownloads(mContext, file, null, mediaInfo.mMimeType, new SimpleApiCallback<String>() {
-                                @Override
-                                public void onSuccess(String path) {
-                                    Toast.makeText(mContext, R.string.media_slider_saved, Toast.LENGTH_LONG).show();
-                                }
-                            });
-                        }
-                    }
-                });
-            } else {
-                downloadVideo(mLatestPrimaryView, mLatestPrimaryItemPosition, true);
-                final String downloadId = mMediasCache.downloadMedia(mContext,
-                        mSession.getHomeServerConfig(),
-                        mediaInfo.mMediaUrl,
-                        mediaInfo.mMimeType,
-                        mediaInfo.mEncryptedFileInfo);
-
-                if (null != downloadId) {
-                    mMediasCache.addDownloadListener(downloadId, new MXMediaDownloadListener() {
-                        @Override
-                        public void onDownloadError(String downloadId, JsonElement jsonElement) {
-                            MatrixError error = JsonUtils.toMatrixError(jsonElement);
-
-                            if ((null != error) && error.isSupportedErrorCode()) {
-                                Toast.makeText(mContext, error.getLocalizedMessage(), Toast.LENGTH_LONG).show();
-                            }
-                        }
-
-                        @Override
-                        public void onDownloadComplete(String aDownloadId) {
-                            if (aDownloadId.equals(downloadId)) {
-                                if (mMediasCache.isMediaCached(mediaInfo.mMediaUrl, mediaInfo.mMimeType)) {
-                                    mMediasCache.createTmpDecryptedMediaFile(mediaInfo.mMediaUrl, mediaInfo.mMimeType, mediaInfo.mEncryptedFileInfo,
-                                            new SimpleApiCallback<File>() {
-                                                @Override
-                                                public void onSuccess(File file) {
-                                                    if (null != file) {
-                                                        CommonActivityUtils.saveMediaIntoDownloads(mContext, file, null, mediaInfo.mMimeType,
-                                                                new SimpleApiCallback<String>() {
-                                                                    @Override
-                                                                    public void onSuccess(String path) {
-                                                                        Toast.makeText(mContext, R.string.media_slider_saved, Toast.LENGTH_LONG).show();
-                                                                    }
-                                                                });
-                                                    }
-                                                }
-                                            });
-                                }
-                            }
-                        }
-                    });
-                }
-            }
-        }
-    }
-
-    /**
-     * Long click management: propose user to save media to the Downloads folder of the device
-     */
-    private void onLongClickOnMedia() {
-        new AlertDialog.Builder(mContext)
-                .setMessage(R.string.media_slider_saved_message)
-                .setPositiveButton(R.string.yes, new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        downloadMediaAndExportToDownloads();
-                    }
-                })
-                .setNegativeButton(R.string.no, null)
-                .show();
     }
 
     /**

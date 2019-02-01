@@ -53,6 +53,7 @@ import im.vector.activity.RoomDirectoryPickerActivity;
 import im.vector.activity.VectorRoomActivity;
 import im.vector.adapters.AdapterSection;
 import im.vector.adapters.RoomAdapter;
+import im.vector.ui.themes.ThemeUtils;
 import im.vector.util.HomeRoomsViewModel;
 import im.vector.util.RoomDirectoryData;
 import im.vector.view.EmptyViewItemDecoration;
@@ -111,8 +112,11 @@ public class RoomsFragment extends AbsHomeFragment implements AbsHomeFragment.On
     public void onActivityCreated(final Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
 
-        mPrimaryColor = ContextCompat.getColor(getActivity(), R.color.tab_rooms);
-        mSecondaryColor = ContextCompat.getColor(getActivity(), R.color.tab_rooms_secondary);
+        mPrimaryColor = ThemeUtils.INSTANCE.getColor(getActivity(), R.attr.vctr_tab_home);
+        mSecondaryColor = ThemeUtils.INSTANCE.getColor(getActivity(), R.attr.vctr_tab_home_secondary);
+
+        mFabColor = ContextCompat.getColor(getActivity(), R.color.tab_rooms);
+        mFabPressedColor = ContextCompat.getColor(getActivity(), R.color.tab_rooms_secondary);
 
         initViews();
 

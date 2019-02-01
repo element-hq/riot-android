@@ -21,8 +21,8 @@ import android.graphics.Canvas
 import android.graphics.Paint
 import android.support.v4.content.ContextCompat
 import android.text.Layout
-import android.text.style.LineBackgroundSpan
 import android.text.style.LeadingMarginSpan
+import android.text.style.LineBackgroundSpan
 import im.vector.R
 
 /**

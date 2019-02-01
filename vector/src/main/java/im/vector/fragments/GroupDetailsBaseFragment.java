@@ -19,15 +19,11 @@ package im.vector.fragments;
 import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.CallSuper;
-import android.support.annotation.Nullable;
-import android.support.v4.app.Fragment;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 
 import org.matrix.androidsdk.MXSession;
 
-import butterknife.ButterKnife;
-import butterknife.Unbinder;
 import im.vector.Matrix;
 import im.vector.activity.VectorGroupDetailsActivity;
 
@@ -76,5 +72,6 @@ public abstract class GroupDetailsBaseFragment extends VectorBaseFragment {
      */
 
     protected abstract void initViews();
+
     public abstract void refreshViews();
 }

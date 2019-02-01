@@ -668,6 +668,39 @@ public class VectorRoomActivity extends MXCActionBarActivity implements
             }
         });
 
+        mNotificationsArea.setDelegate(new NotificationAreaView.Delegate() {
+            @NotNull
+            @Override
+            public IMessagesAdapterActionsListener providesMessagesActionListener() {
+                return mVectorMessageListFragment;
+            }
+
+            @Override
+            public void resendUnsentEvents() {
+                mVectorMessageListFragment.resendUnsentMessages();
+            }
+
+            @Override
+            public void deleteUnsentEvents() {
+                mVectorMessageListFragment.deleteUnsentEvents();
+            }
+
+            @Override
+            public void closeScreen() {
+                setResult(Activity.RESULT_OK);
+                finish();
+            }
+
+            @Override
+            public void jumpToBottom() {
+                if (mReadMarkerManager != null) {
+                    mReadMarkerManager.handleJumpToBottom();
+                } else {
+                    mVectorMessageListFragment.scrollToBottom(0);
+                }
+            }
+        });
+
         // use a toolbar instead of the actionbar
         // to be able to display an expandable header
         configureToolbar();
@@ -987,38 +1020,6 @@ public class VectorRoomActivity extends MXCActionBarActivity implements
             }
         }
 
-        mNotificationsArea.setDelegate(new NotificationAreaView.Delegate() {
-            @NotNull
-            @Override
-            public IMessagesAdapterActionsListener providesMessagesActionListener() {
-                return mVectorMessageListFragment;
-            }
-
-            @Override
-            public void resendUnsentEvents() {
-                mVectorMessageListFragment.resendUnsentMessages();
-            }
-
-            @Override
-            public void deleteUnsentEvents() {
-                mVectorMessageListFragment.deleteUnsentEvents();
-            }
-
-            @Override
-            public void closeScreen() {
-                setResult(Activity.RESULT_OK);
-                finish();
-            }
-
-            @Override
-            public void jumpToBottom() {
-                if (mReadMarkerManager != null) {
-                    mReadMarkerManager.handleJumpToBottom();
-                } else {
-                    mVectorMessageListFragment.scrollToBottom(0);
-                }
-            }
-        });
         Log.d(LOG_TAG, "End of create");
     }
 
