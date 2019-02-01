@@ -19,6 +19,7 @@ import android.app.Activity
 import android.arch.lifecycle.Observer
 import android.arch.lifecycle.ViewModelProviders
 import android.content.Intent
+import android.net.Uri
 import android.os.Bundle
 import android.support.transition.TransitionManager
 import android.support.v7.app.AlertDialog
@@ -33,11 +34,15 @@ import butterknife.BindView
 import butterknife.OnClick
 import im.vector.Matrix
 import im.vector.R
+import im.vector.activity.CommonActivityUtils
 import im.vector.activity.KeysBackupSetupActivity
 import im.vector.activity.MXCActionBarActivity
 import im.vector.activity.VectorAppCompatActivity
 import im.vector.fragments.VectorBaseFragment
-import im.vector.util.startSharePlainTextIntent
+import im.vector.util.*
+import org.matrix.androidsdk.rest.callback.SimpleApiCallback
+import java.io.ByteArrayInputStream
+import java.io.File
 
 class KeysBackupSetupStep3Fragment : VectorBaseFragment() {
 
@@ -45,6 +50,9 @@ class KeysBackupSetupStep3Fragment : VectorBaseFragment() {
 
     @BindView(R.id.keys_backup_setup_step3_copy_button)
     lateinit var mCopyButton: Button
+    @BindView(R.id.keys_backup_setup_step3_save_button)
+    lateinit var mSaveButton: Button
+
 
     @BindView(R.id.keys_backup_setup_step3_button)
     lateinit var mFinishButton: Button
@@ -112,8 +120,9 @@ class KeysBackupSetupStep3Fragment : VectorBaseFragment() {
                 mSpinnerStatusText.visibility = View.VISIBLE
                 mRecoveryKeyTextView.text = null
                 mRecoveryKeyTextView.visibility = View.GONE
-                mCopyButton.visibility = View.GONE
-                mFinishButton.visibility = View.GONE
+                mCopyButton.isVisible = false
+                mFinishButton.isVisible = false
+                mSaveButton.isVisible = false
             } else {
                 mProgress.isVisible = false
                 mSpinnerStatusText.visibility = View.GONE
@@ -127,9 +136,10 @@ class KeysBackupSetupStep3Fragment : VectorBaseFragment() {
                                     .joinToString(" ")
                         }
 
-                mRecoveryKeyTextView.visibility = View.VISIBLE
-                mCopyButton.visibility = View.VISIBLE
-                mFinishButton.visibility = View.VISIBLE
+                mRecoveryKeyTextView.isVisible = true
+                mCopyButton.isVisible = true
+                mFinishButton.isVisible = true
+                mSaveButton.isVisible = true
             }
         })
 
@@ -151,11 +161,17 @@ class KeysBackupSetupStep3Fragment : VectorBaseFragment() {
 
         viewModel.keysVersion.observe(this, Observer { keysVersion ->
             if (keysVersion != null) {
-                activity?.run {
-                    val resultIntent = Intent()
-                    resultIntent.putExtra(KeysBackupSetupActivity.KEYS_VERSION, keysVersion.version)
-                    setResult(Activity.RESULT_OK, resultIntent)
-                    finish()
+                activity?.let {
+                    AlertDialog.Builder(it)
+                            .setTitle(R.string.keys_backup_setup_backup_started_title)
+                            .setMessage(R.string.keys_backup_setup_backup_started_message)
+                            .setPositiveButton(R.string.ok) { _, _ ->
+                                val resultIntent = Intent()
+                                resultIntent.putExtra(KeysBackupSetupActivity.KEYS_VERSION, keysVersion.version)
+                                it.setResult(Activity.RESULT_OK, resultIntent)
+                                it.finish()
+                            }
+                            .show()
                 }
             }
         })
@@ -195,6 +211,45 @@ class KeysBackupSetupStep3Fragment : VectorBaseFragment() {
                     recoveryKey,
                     context?.getString(R.string.recovery_key))
             viewModel.copyHasBeenMade = true
+        }
+    }
+
+    @OnClick(R.id.keys_backup_setup_step3_save_button)
+    fun onSaveToFileClicked() {
+        if (checkPermissions(PERMISSIONS_FOR_WRITING_FILES, this, PERMISSION_REQUEST_CODE_EXPORT_KEYS)) {
+            viewModel.recoveryKey.value?.let {
+                exportRecoveryKeyToFile(it)
+            }
+        }
+    }
+
+    fun exportRecoveryKeyToFile(it: String) {
+        val stream = ByteArrayInputStream(it.toByteArray())
+        val url = viewModel.session.mediaCache.saveMedia(stream, "recovery-key" + System.currentTimeMillis() + ".txt", "text/plain")
+        stream.close()
+        CommonActivityUtils.saveMediaIntoDownloads(context,
+                File(Uri.parse(url).path!!), "recovery-key.txt", "text/plain", object : SimpleApiCallback<String>() {
+            override fun onSuccess(path: String) {
+                context?.let {
+                    AlertDialog.Builder(it)
+                            .setMessage(getString(R.string.recovery_key_export_saved_as_warning, path))
+                            .setCancelable(false)
+                            .setPositiveButton(R.string.ok, null)
+                            .show()
+                }
+
+                viewModel.copyHasBeenMade = true
+            }
+        })
+    }
+
+    override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<String>, grantResults: IntArray) {
+        if (allGranted(grantResults)) {
+            if (requestCode == PERMISSION_REQUEST_CODE_EXPORT_KEYS) {
+                viewModel.recoveryKey.value?.let {
+                    exportRecoveryKeyToFile(it)
+                }
+            }
         }
     }
 }

@@ -38,7 +38,7 @@
     <string name="sign_out_activity_backup_status_backuping">Keys backup is not finished, please wait…</string>
     <string name="sign_out_activity_backup_status_up_to_date">Your message recovery is configured and all keys has been backed up on your homeserver.</string>
     <string name="sign_out_activity_backup_status_no_backup">Message recovery has not been set up. You can set it up now.</string>
-    <string name="sign_out_activity_backup_start_backup">Set up message recovery</string>
+    <string name="sign_out_activity_backup_manage_backup">Manage message recovery</string>
     <string name="sign_out_activity_export_to_file_title">Export encryption keys</string>
     <string name="sign_out_activity_export_to_file">You can also choose to export your e2e keys to a file and manage saving this file by yourself.</string>
     <string name="sign_out_activity_sign_out_warning">You’ll lose your secure messages if you sign out now.</string>
@@ -1262,13 +1262,19 @@ Discover truly efficient and open collaboration with Riot.im!"</string>
     <string name="keys_backup_setup_step2_text">Secure your encrypted message history with a Recovery Passphrase.\n\nYou’ll need it if you sign out, or lose access to this device.</string>
     <string name="keys_backup_setup_step2_button_title">Set Recovery Passphrase</string>
     <string name="keys_backup_setup_step3_text">Make a copy of this Recovery Key and keep it safe.\n\nAs a safety net, you can use it to restore your encrypted message history if you forget your Recovery Passphrase.</string>
-    <string name="keys_backup_setup_step3_button_title">I’ve made a copy</string>
+    <string name="keys_backup_setup_step3_button_title">Create Backup</string>
     <string name="keys_backup_setup_step3_copy_button_title">Make a Copy</string>
+    <string name="keys_backup_setup_step3_save_button_title">Save as File</string>
+    <string name="recovery_key_export_saved_as_warning">The recovery key has been saved to \'%s\'.\n\nWarning: this file may be deleted if the application is uninstalled.</string>
+
     <string name="keys_backup_setup_step3_please_make_copy">Please make a copy</string>
     <string name="keys_backup_setup_step3_share_intent_chooser_title">Share recovery key with…</string>
     <string name="keys_backup_setup_step3_generating_key_status">Generating Recovery Key using passphrase, this process can take several seconds.</string>
     <string name="recovery_key">Recovery Key</string>
     <string name="unexpected_error">Unexpected error</string>
+    <string name="keys_backup_setup_backup_started_title">Backup Started</string>
+    <string name="keys_backup_setup_backup_started_message">Your encryption keys are now being backed up in the background to your Homeserver. The initial backup could take several minutes.</string>
+
 
     <string name="keys_backup_setup_skip_title">Are you sure?</string>
     <string name="keys_backup_setup_skip_msg">You may lose secure messages if you sign out or lose your device.</string>
@@ -1296,6 +1302,16 @@ Discover truly efficient and open collaboration with Riot.im!"</string>
 
     <!-- %s will be replaced by an emoji -->
     <string name="keys_backup_restore_success_title">Backup Restored %s !</string>
+    <string name="keys_backup_restore_success_description">Restored %1$d session keys, and added %2$d new key(s) that was not known by this device</string>
+    <plurals name="keys_backup_restore_success_description_part1">
+        <item quantity="one">Restored a backup with %d key.</item>
+        <item quantity="other">Restored a backup with %d keys.</item>
+    </plurals>
+    <plurals name="keys_backup_restore_success_description_part2">
+        <item quantity="one">%d new key has been added to this device.</item>
+        <item quantity="other">%d new keys have been added to this device.</item>
+    </plurals>
+
     <string name="keys_backup_get_version_error">Failed to get latest restore keys version (%s).</string>
     <string name="keys_backup_no_keysbackup_sdk_error">Session crypto is not activated</string>
 
@@ -1333,6 +1349,5 @@ Discover truly efficient and open collaboration with Riot.im!"</string>
     <!-- %s will be replaced by keys_backup_banner_recover_colored_part value -->
     <string name="keys_backup_banner_recover">Unlock your secure message history with %s</string>
     <string name="keys_backup_banner_recover_colored_part">your recovery key or passphrase</string>
-
 
 </resources>

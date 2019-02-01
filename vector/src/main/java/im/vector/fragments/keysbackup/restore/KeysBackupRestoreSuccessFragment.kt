@@ -30,6 +30,9 @@ class KeysBackupRestoreSuccessFragment : VectorBaseFragment() {
 
     @BindView(R.id.keys_backup_restore_success)
     lateinit var mSuccessText: TextView
+    @BindView(R.id.keys_backup_restore_success_info)
+    lateinit var mSuccessDetailsText: TextView
+
 
     private lateinit var sharedViewModel: KeysBackupRestoreSharedViewModel
 
@@ -39,6 +42,13 @@ class KeysBackupRestoreSuccessFragment : VectorBaseFragment() {
             ViewModelProviders.of(this).get(KeysBackupRestoreSharedViewModel::class.java)
         } ?: throw Exception("Invalid Activity")
 
+        sharedViewModel.importKeyResult?.let {
+            val part1 = resources.getQuantityString(R.plurals.keys_backup_restore_success_description_part1,
+                    it.totalNumberOfKeys, it.totalNumberOfKeys)
+            val part2 = resources.getQuantityString(R.plurals.keys_backup_restore_success_description_part2,
+                    it.successfullyNumberOfImportedKeys, it.successfullyNumberOfImportedKeys)
+            mSuccessDetailsText.text = String.format("%s %s", part1, part2)
+        }
 
         //We don't put emoji in string xml as it will crash on old devices
         mSuccessText.text = context?.getString(R.string.keys_backup_restore_success_title, "🎉")

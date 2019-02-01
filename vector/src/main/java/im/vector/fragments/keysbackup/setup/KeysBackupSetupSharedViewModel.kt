@@ -34,6 +34,10 @@ import org.matrix.androidsdk.util.Log
  */
 class KeysBackupSetupSharedViewModel : ViewModel() {
 
+
+    lateinit var session: MXSession
+
+
     // Step 2
     var passphrase: MutableLiveData<String> = MutableLiveData()
     var passphraseError: MutableLiveData<String> = MutableLiveData()
@@ -63,6 +67,10 @@ class KeysBackupSetupSharedViewModel : ViewModel() {
         isCreatingBackupVersion.value = false
         prepareRecoverFailError.value = null
         creatingBackupError.value = null
+    }
+
+    fun initSession(session: MXSession) {
+        this.session = session
     }
 
     fun prepareRecoveryKey(session: MXSession?, withPassphrase: String?) {
